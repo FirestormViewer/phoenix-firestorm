@@ -114,6 +114,12 @@
 	<spinner label="Degrés de rotation" name="shinyRot"/>
 	<spinner label="Décalage horizontal" name="shinyOffsetU"/>
 	<spinner label="Décalage vertical" name="shinyOffsetV"/>
+	<spinner label="Échelle u" name="gltfTextureScaleU"/>
+	<spinner label="Échelle v" name="gltfTextureScaleV"/>
+	<spinner label="Répétitions par mètre" name="gltfRptctrl"/>
+	<spinner label="Rotation" name="gltfTextureRotation"/>
+	<spinner label="Décalage u" name="gltfTextureOffsetU"/>
+	<spinner label="Décalage v" name="gltfTextureOffsetV"/>
 	<check_box initial_value="false" label="Aligner les faces Plan" name="checkbox planar align" tool_tip="Aligner les textures sur toutes les faces sélectionnées avec la dernière face sélectionnée. Application de la texture Plan requise."/>
 	<button label="Aligner" label_selected="Aligner les couches de texture actuelles" name="button align textures" tool_tip="Aligner les couches de texture actuelles"/>
 	<button label="Trouver toutes" name="btn_select_same_diff" tool_tip="Sélectionner toutes les faces ayant la même texture diffuse que celle-ci"/>

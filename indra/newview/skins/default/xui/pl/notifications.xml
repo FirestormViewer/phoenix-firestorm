@@ -2832,6 +2832,11 @@ Ponieważ ma to wpływ na wpisywane hasło, możesz chcieć go wyłączyć.
 	<notification name="MaterialNoPermissions">
 		Nie masz uprawnień na zobaczenie tego materiału.
 	</notification>
+	<notification name="MaterialImagesWereScaled">
+		Jedna lub więcej tekstur w tym materiale zostało przeskalowanych, aby mieściły się w limitach.
+Tekstury muszą mieć wymiary będące potęgami dwójki i nie mogą przekraczać [MAX_SIZE]x[MAX_SIZE] pikseli.
+		<usetemplate ignoretext="Ostrzegaj, jeśli tekstury są skalowane podczas przesyłania." name="okignore" />
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Nie masz uprawnień na stworzenie obiektu.
 	</notification>
@@ -3791,7 +3796,7 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
-		Wystąpił problem podczas przesyłania pliku
+		Nie można przesłać pliku materiału. Plik może być uszkodzony, w nieobsługiwanym formacie lub zawierać nieprawidłowe dane. Upewnij się, że używasz prawidłowego pliku GLTF/GLB - z poprawnie zdefiniowanymi materiałami.
 	</notification>
 	<notification label="Zapisz materiał" name="SaveMaterialAs">
 		Nazwij ten materiał:

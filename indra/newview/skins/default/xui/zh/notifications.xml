@@ -3001,6 +3001,11 @@ URL：[AUDIOURL]
 	<notification name="MaterialNoPermissions">
 		您沒有檢視此材質的權限。
 	</notification>
+	<notification name="MaterialImagesWereScaled">
+		模型中的一個或多個貼圖已被縮放，以維持在允許的限制內。
+貼圖尺寸必須為2的次方，且不得超過[MAX_SIZE]x[MAX_SIZE]像素。
+		<usetemplate ignoretext="如果上傳時貼圖被縮放則提醒我。" name="okignore" yestext="確定"/>
+	</notification>
 	<notification name="RezItemNoPermissions">
 		產生物件時發生權限衝突。
 	</notification>
@@ -3993,7 +3998,8 @@ https://wiki.firestormviewer.org/fs_voice
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
-		上傳檔案時出現問題
+		無法上傳材質檔案。該檔案可能已損毀、格式不受支援或包含無效資料。請確保您使用的是具有正確材質定義的有效GLTF/GLB檔案。
+		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification label="儲存材質" name="SaveMaterialAs">
 		為這個材質命名：

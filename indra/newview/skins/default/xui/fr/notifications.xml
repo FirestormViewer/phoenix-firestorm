@@ -2933,6 +2933,16 @@ Cela risque d&apos;impacter votre mot de passe.
 	<notification name="NotecardNoPermissions">
 		Vous n&apos;avez pas le droit de consulter cette note.
 	</notification>
+	<notification name="MaterialMissing">
+		Le matériau est absent de la base de données.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Vous n'avez pas l'autorisation de visualiser ce matériau.
+	</notification>
+	<notification name="MaterialImagesWereScaled">
+		Une ou plusieurs textures de ce matériau ont été mises à l'échelle pour être dans les limites autorisées. Les textures doivent avoir une puissance de deux dimensions et ne doivent pas dépasser [MAX_SIZE]x[MAX_SIZE] pixels..
+		<usetemplate ignoretext="Avertit si les textures seront mises à l'échelle lors du téléchargement." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Droits insuffisants pour rezzer l&apos;objet.
 	</notification>
@@ -3922,7 +3932,7 @@ Texture figée de [RESOLUTION] mise à jour localement pour [BODYREGION] au bout
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
-		Il y a eu un problème pour transférer le fichier
+		Impossible de charger le fichier de matériau. Le fichier peut être corrompu, dans un format non pris en charge ou contenir des données non valides. Veuillez vérifier que vous utilisez un fichier GLTF/GLB valide avec les définitions de matériaux appropriées.
 	</notification>
 	<notification label="Save Material" name="SaveMaterialAs">
 		Nommez ce matériel :
