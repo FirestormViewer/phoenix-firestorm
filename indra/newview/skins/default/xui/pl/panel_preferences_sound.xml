@@ -72,8 +72,19 @@
 			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="To ustawienie pozwala lub zabrania oskryptowanym primom kontrolować Twoje media" label="Pozwalaj skryptom w świecie odtwarzać media"/>
 			<check_box label="Uruchamiaj media dołączone do innych awatarów" name="media_show_on_others_btn" tool_tip="Odznacz tę funkcję by ukryć media załączone do awatarów w pobliżu"/>
+			<check_box name="media_huds_autoplay" tool_tip="Odznacz, aby HUDy stosowały się do standardowego ustawienia automatycznego odtwarzania mediów" label="Autoodtwarzanie mediów w HUDach" />
 			<check_box name="media_filter" tool_tip="Zaznacz tą opcję, aby móc wybierać, czy odtwarzać media z konkretnego hosta, czy nie" label="Włącz filtr mediów (zwiększone bezpieczeństwo)"/>
 			<button label="Zarządzaj witrynami" name="edit_media_lists_button"/>
+			<text tool_tip="To ustawienie kontroluje, które media (po załadowaniu) nie wymagają pierwszego kliknięcia (aktywacji) przed rozpoczęciem interakcji. To ustawienie pozwala na przekazywanie kliknięć bezpośrednio do mediów, pomijając wymóg pierwszego kliknięcia aktywacyjnego." name="media_firstinteract_label">
+				Wymagaj kliknięcia aktywacyjnego dla mediów:
+			</text>
+			<check_box name="media_first_click_all" label="Wszystkie MOAP" />
+			<check_box name="media_first_click_any" label="Obiekty dowolnej osoby" />
+			<check_box name="media_first_click_hud" label="Noszone HUDy" />
+			<check_box name="media_first_click_own" label="Własne obiekty" />
+			<check_box name="media_first_click_group" label="Obiekty grupy" />
+			<check_box name="media_first_click_friend" label="Obiekty znajomych" />
+			<check_box name="media_first_click_land" label="Obiekty właściciela działki" />
 			<text name="Media Rolloff">
 				Rozchodzenie się dźwięku mediów:
 			</text>

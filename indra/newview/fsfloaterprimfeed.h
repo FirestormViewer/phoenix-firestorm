@@ -32,10 +32,12 @@
 #include "lltextbox.h"
 #include "llviewertexture.h"
 
+class LLButton;
 class LLIconCtrl;
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLSnapshotLivePreview;
+class LLSpinCtrl;
 class LLFloaterBigPreview;
 
 /*
@@ -51,12 +53,12 @@ public:
     ~FSPrimfeedPhotoPanel();
 
     bool postBuild() override;
-    S32 notify(const LLSD& info);
+    S32 notify(const LLSD& info) override;
     void draw() override;
     void loadPrimfeedInfo(const LLSD& data);
 
     LLSnapshotLivePreview* getPreviewView();
-    void onVisibilityChange(bool new_visibility);
+    void onVisibilityChange(bool new_visibility) override;
     void onClickNewSnapshot();
     void onClickBigPreview();
     void onSend();
@@ -68,7 +70,7 @@ public:
     void updateControls();
     void updateResolution(bool do_update);
     void checkAspectRatio(S32 index);
-    LLUICtrl* getRefreshBtn();
+    LLButton* getRefreshBtn();
 
     void onOpen(const LLSD& key) override;
     void primfeedAuthResponse(bool success, const LLSD& response);
@@ -82,23 +84,27 @@ private:
 
     LLHandle<LLView> mPreviewHandle;
 
-    LLUICtrl* mResolutionComboBox;
-    LLUICtrl* mFilterComboBox;
-    LLUICtrl* mRefreshBtn;
-    LLUICtrl* mWorkingLabel;
-    LLUICtrl* mThumbnailPlaceholder;
-    LLUICtrl* mDescriptionTextBox;
-    LLUICtrl* mLocationCheckbox;
+    LLComboBox*     mResolutionComboBox{ nullptr };
+    LLComboBox*     mFilterComboBox{ nullptr };
+    LLButton*       mRefreshBtn{ nullptr };
+    LLUICtrl*       mWorkingLabel{ nullptr };
+    LLUICtrl*       mThumbnailPlaceholder{ nullptr };
+    LLUICtrl*       mDescriptionTextBox{ nullptr };
+    LLCheckBoxCtrl* mLocationCheckbox{ nullptr };
 
-    LLUICtrl*   mCommercialCheckbox;
-    LLUICtrl*   mPublicGalleryCheckbox;
-    LLUICtrl*   mRatingComboBox;
-    LLUICtrl*   mPostButton;
-    LLUICtrl*   mCancelButton;
-    LLButton*   mBtnPreview;
-    LLComboBox* mStoresComboBox;
+    LLCheckBoxCtrl* mCommercialCheckbox{ nullptr };
+    LLCheckBoxCtrl* mPublicGalleryCheckbox{ nullptr };
+    LLComboBox*     mRatingComboBox{ nullptr };
+    LLButton*       mPostButton{ nullptr };
+    LLButton*       mCancelButton{ nullptr };
+    LLButton*       mBtnPreview{ nullptr };
+    LLComboBox*     mStoresComboBox{ nullptr };
 
-    LLFloaterBigPreview* mBigPreviewFloater;
+    LLSpinCtrl*     mCustomSnapshotWidth{ nullptr };
+    LLSpinCtrl*     mCustomSnapshotHeight{ nullptr };
+    LLCheckBoxCtrl* mKeepAspectRatioCbx{ nullptr };
+
+    LLFloaterBigPreview* mBigPreviewFloater{ nullptr };
 };
 
 class FSPrimfeedAccountPanel : public LLPanel
@@ -110,7 +116,7 @@ public:
     void draw() override;
 
 private:
-    void onVisibilityChange(bool new_visibility);
+    void onVisibilityChange(bool new_visibility) override;
     void primfeedAuthResponse(bool success, const LLSD& response);
     bool onPrimfeedConnectStateChange(const LLSD& data);
     bool onPrimfeedConnectInfoChange();
@@ -122,12 +128,11 @@ private:
     void showDisconnectedLayout();
     void showConnectedLayout();
 
-    LLTextBox* mAccountConnectedAsLabel;
-    LLTextBox* mAccountNameLink;
-    LLTextBox* mAccountPlan;
-    LLUICtrl*  mPanelButtons;
-    LLUICtrl*  mConnectButton;
-    LLUICtrl*  mDisconnectButton;
+    LLTextBox* mAccountConnectedAsLabel{ nullptr };
+    LLTextBox* mAccountNameLink{ nullptr };
+    LLTextBox* mAccountPlan{ nullptr };
+    LLButton*  mConnectButton{ nullptr };
+    LLButton*  mDisconnectButton{ nullptr };
 };
 
 
@@ -147,11 +152,11 @@ public:
     LLSnapshotLivePreview* getPreviewView();
 
 private:
-    FSPrimfeedPhotoPanel* mPrimfeedPhotoPanel;
-    FSPrimfeedAccountPanel* mPrimfeedAccountPanel;
-    LLTextBox* mStatusErrorText;
-    LLTextBox* mStatusLoadingText;
-    LLUICtrl*  mStatusLoadingIndicator;
+    FSPrimfeedPhotoPanel*   mPrimfeedPhotoPanel{ nullptr };
+    FSPrimfeedAccountPanel* mPrimfeedAccountPanel{ nullptr };
+    LLTextBox*              mStatusErrorText{ nullptr };
+    LLTextBox*              mStatusLoadingText{ nullptr };
+    LLUICtrl*               mStatusLoadingIndicator{ nullptr };
 };
 
 #endif // LL_FSFLOATERPRIMFEED_H

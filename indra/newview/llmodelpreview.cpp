@@ -1928,8 +1928,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
         mModel[lod].resize(mBaseModel.size());
         mVertexBuffer[lod].clear();
 
-        U32 submeshes = 0;
-
         mRequestedTriangleCount[lod] = (S32)((F32)triangle_count / triangle_ratio);
         mRequestedErrorThreshold[lod] = lod_error_threshold;
 
@@ -2073,7 +2071,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                 buff->getIndexStrider(index);
 
                 target_model->setVolumeFaceData(names[i], pos, norm, tc, index, buff->getNumVerts(), buff->getNumIndices());
-                ++submeshes;
 
                 if (!validate_face(target_model->getVolumeFace(names[i])))
                 {

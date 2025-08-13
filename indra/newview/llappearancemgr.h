@@ -156,6 +156,9 @@ public:
     // Attachment link management
     void unregisterAttachment(const LLUUID& item_id);
     void registerAttachment(const LLUUID& item_id);
+// [SL:KB] - Appearance-Fixes
+    bool getAttachmentInvLinkEnable() const { return mAttachmentInvLinkEnabled; }
+// [/SL:KB]
     void setAttachmentInvLinkEnable(bool val);
 
     // Add COF link to individual item.

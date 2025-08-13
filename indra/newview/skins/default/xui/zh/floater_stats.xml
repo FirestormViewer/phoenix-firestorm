@@ -7,12 +7,23 @@
 				<stat_bar label="影格（平均值）" name="frame_mean" />
 				<stat_bar label="影格（中位數）" name="frame_median" />
 				<stat_bar label="抖動" name="framet_jitter" />
+				<stat_bar label="標準會話抖動" name="normalized_cumulative_frametime"/>
+				<stat_bar label="每分鐘影格事件數" name="frame_events_per_minute"/>
+				<stat_bar label="最近1分鐘影格事件數" name="frame_events_last_minute"/>
 				<stat_bar label="接收到的UDP資料" name="bandwidth" />
 				<stat_bar label="封包損失" name="packet_loss" />
 				<stat_bar label="類比主機延遲" name="ping" />
 			</stat_view>
 			<stat_view label="進階" name="advanced">
 				<stat_view label="彩現" name="render">
+					<stat_bar label="累計抖動" name="framet_cumulative"/>
+					<stat_bar label="抖動第99百分位" name="framet_jitter_99th"/>
+					<stat_bar label="抖動第95百分位" name="framet_jitter_95th"/>
+					<stat_bar label="抖動標準差" name="framet_jitter_stddev"/>
+					<stat_bar label="影格時間第99百分位" name="framet_99th"/>
+					<stat_bar label="影格時間第95百分位" name="framet_95th"/>
+					<stat_bar label="影格時間標準差" name="framet_stddev"/>
+					<stat_bar label="影格時間事件數" name="framet_events"/>
 					<stat_bar label="KTris（每影格）" name="ktrisframe" />
 					<stat_bar label="KTris（每秒）" name="ktrissec" />
 					<stat_bar label="物件總計" name="objs" />

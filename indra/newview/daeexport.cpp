@@ -798,7 +798,6 @@ bool DAESaver::saveDAE(std::string filename)
     for (obj_info_t::iterator obj_iter = mObjects.begin(); obj_iter != mObjects.end(); ++obj_iter)
     {
         LLViewerObject* obj = obj_iter->first;
-        S32 total_num_vertices = 0;
 
         std::string name = "";
         if (name.empty()) name = llformat("prim%d", prim_nr++);
@@ -821,7 +820,6 @@ bool DAESaver::saveDAE(std::string filename)
             if (skipFace(obj->getTE(face_num))) continue;
 
             const LLVolumeFace* face = (LLVolumeFace*)&obj->getVolume()->getVolumeFace(face_num);
-            total_num_vertices += face->mNumVertices;
 
             v4adapt verts(face->mPositions);
             v4adapt norms(face->mNormals);

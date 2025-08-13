@@ -2190,7 +2190,7 @@ void LLPanelRegionTerrainInfo::initMaterialCtrl(LLTextureCtrl*& ctrl, const std:
     if (!ctrl) return;
 
     // consume cancel events, otherwise they will trigger commit callbacks
-    ctrl->setOnCancelCallback([](LLUICtrl* ctrl, const LLSD& param) {});
+    ctrl->setOnCancelCallback(+[](LLUICtrl* ctrl, const LLSD& param) {}); // <FS:Beq/> force the empty callback to decay to a function pointer, which triggers warnings on gcc
     ctrl->setCommitCallback(
         [this, index](LLUICtrl* ctrl, const LLSD& param)
     {

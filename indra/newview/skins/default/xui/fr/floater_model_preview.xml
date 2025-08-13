@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="CHARGEMENT DU MODELE">
 <string name="no_havok">téléchargement du maillage avec physique</string>
-<string name="status_parse_error">Erreur : Problème d&apos;analyse de fichier .dae ; reportez-vous au journal pour plus de détails.</string>
+<string name="status_parse_error">Erreur : Problème d&apos;analyse du modèle ; reportez-vous au journal pour plus de détails.</string>
 <string name="status_bind_shape_orientation">Avertissement : la matrice de formes de reliure n&apos;est pas dans l&apos;orientation standard X-avant.</string>
 <string name="status_material_mismatch">Erreur : le matériau du modèle ne correspond pas à un sous-ensemble du modèle de référence.</string>
 <string name="status_lod_model_mismatch">Error: Le modèle LOD n'a pas de parent.</string>
@@ -30,11 +30,12 @@
 <string name="layer_all">Tout</string>
 <string name="decomposing">Analyse...</string>
 <string name="simplifying">Simplification...</string>
+<string name="ModelTextureScaling">Une ou plusieurs textures de ce modèle ont été mises à l'échelle pour rester dans les limites autorisées.</string>
 <string name="TooManyJoint">Le skinning est désactivé en raison d'un trop grand nombre d'articulations : [JOINTS], maximum : [MAX]</string>
 <string name="UnrecognizedJoint">Riggé à une articulation au nom inconnu [NAME]</string>
 <string name="UnknownJoints">Skinning désactivé à cause de [COUNT] articulation  inconnues.</string>
 <string name="ModelLoaded">Modèle [MODEL_NAME] chargé</string>
-
+<string name="InvBindCountMismatch">Les matrices de liens comptent le nombre d'articulations non conformes</string>
 <string name="IncompleteTC">Les données des coordonnées de la texture ne sont pas complètes.</string>
 <string name="PositionNaN">Trouvé NaN lors du chargement des données de position depuis le fichier DAE, modèle invalide.</string>
 <string name="NormalsNaN">Trouvé NaN lors du chargement des normales depuis le fichier DAE, modèle invalide.</string>
@@ -49,8 +50,26 @@
 <string name="ParsingErrorNoRoot">Le document n'a pas de racine</string>
 <string name="ParsingErrorNoScene">Le document n'a pas de visual_scene</string>
 <string name="ParsingErrorPositionInvalidModel">Impossible de traiter le maillage sans données de position. Modèle invalide.</string>
+<string name="UnknownException">L'importateur s'est planté lors du traitement de [FILENAME], si vous rencontrez ce problème et que le fichier est valide, veuillez le signaler au service d'assistance de Second Life. Exception : [EXCEPTION].</string>
 <string name="ParsingErrorEmptyInvBindInvalidModel">Impossible de traiter le maillage riggé sans les données InvBind. Modèle non valide.</string>
-
+<string name="NoScenesFound">Aucune scène n'est définie dans le fichier GLTF</string>
+<string name="InvalidMeshReference">Le nœud [NODE_NAME] fait référence à un maillage invalide [MESH_INDEX] (nombre total de maillages : [TOTAL_MESHES]).</string>
+<string name="InvalidGeometryNonTriangulated">Le maillage [MESH_NAME] primitive [PRIMITIVE_INDEX] : géométrie non valide avec [INDEX_COUNT] indices (doit être triangulé)</string>
+<string name="EmptyVertexArray">Le maillage [MESH_NAME] primitive [PRIMITIVE_INDEX] : Tableau de vertices vide</string>
+<string name="ErrorIndexLimit">Impossible de traiter le maillage [MESH_NAME] en raison de la limite de 65 534 vertex. Nombre de vertex : [VERTEX_COUNT]</string>
+<string name="TextureFound">Texture trouvée : [TEXTURE_NAME] pour le matériau : [MATERIAL_NAME]</string>
+<string name="IgnoredExtension">Le modèle utilise une extension non reconnue : [EXT], les propriétés matérielles associées sont ignorées</string>
+<string name="UnsupportedExtension">Impossible de charger le modèle, extension non reconnue : [EXT]</string>
+<string name="FailedToCreateTempFile">Échec de la création d'un fichier temporaire pour la texture [TEXTURE_TYPE] intégrée [TEXTURE_INDEX] : [TEMP_FILE]</string>
+<string name="SkinJointsOverLimit">La peau [SKIN_INDEX] définit les articulations compatibles [JOINT_COUNT], le maximum étant : [MAX]. Les joints inutilisés seront supprimés pour chaque modèle.</string>
+<string name="SkinUsupportedJoints">La peau [SKIN_INDEX] définit [JOINT_COUNT] articulations, mais seules [LEGAL_COUNT] ont été reconnues et sont compatibles.</string>
+<string name="SkinUnusedJoints">La peau [SKIN_INDEX] définit des articulations compatibles [JOINT_COUNT], dont seules [USED_COUNT] ont été utilisées.</string>
+<string name="ModelTooManyJoints">Le modèle [MODEL_NAME] utilise [JOINT_COUNT], maximum : [MAX], le chargement risque d'échouer</string>
+<string name="ModelSplitPrimitive">Trop de sommets dans la primitive [MODEL_NAME], elle a été divisée en [FACE_COUNT] faces</string>
+<string name="ModelTooManySubmodels">Le modèle [MODEL_NAME] contient [SUBMODEL_COUNT] pièces de maillage générées, les éléments ont été rognés à [SUBMODEL_LIMIT].</string>
+<string name="ParsingErrorMissingBuffer">Le tampon est manquant ou vide [BUFFER_NAME].</string>
+<string name="ParsingErrorMissingBufferBin">La mémoire tampon est soit manquante, soit vide. Vérifier la présence du fichier [BUFFER_URI].</string>
+<string name="ParsingErrorException">L'analyseur n'a pas réussi à traiter [FILENAME], le fichier est peut-être corrompu, incomplet ou protégé contre la lecture. Exception : [EXCEPTION].</string>
 <panel name="left_panel">
 	<panel name="model_name_representation_panel">
 		<text name="name_label">
@@ -283,6 +302,7 @@
 			</text>
 			<check_box label="Activation automatique des poids" tool_tip="Régler automatiquement le poids des mesh avec les informations de rigging" name="mesh_preview_auto_weights"/>
 			<check_box label="Visualisation automatique des poids" tool_tip="Visualiser automatiquement les poids dans l'aperçu des meshes avec les info de rigging" name="mesh_preview_auto_show_weights"/>
+			<check_box label="LOD crédible par défaut" tool_tip="Utiliser la méthode «crédible» (GLOD) par défaut" name="mesh_upload_default_to_reliable"/>
 			<text name="lod_suffix_label">
 				Suffixes LOD :
 			</text>
