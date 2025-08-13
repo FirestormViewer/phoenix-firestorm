@@ -657,7 +657,7 @@
          height="15"
          left="25"
          top_pad="15"
-         width="105"
+         width="275"
          tool_tip="This setting controls which media (once loaded) does not require a first click to focus before interaction can begin. This allows clicks to be passed directly to media bypassing the focus click requirement."
          name="media_firstinteract_label">
             Media first-interact:
