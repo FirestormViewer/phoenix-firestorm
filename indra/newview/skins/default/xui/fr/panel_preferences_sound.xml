@@ -69,7 +69,7 @@
 			<check_box name="media_huds_autoplay" tool_tip="Décochez cette case pour que les HUD respectent le paramètre standard de lecture automatique des médias." label="Lecture automatique des médias attachés à votre HUD"/>
 			<check_box name="media_filter" tool_tip="Activer cette option pour mettre en place une restriction sur le domaine du média autorisé ou non" label="Activer un filtre média par domaine"/>
 			<button label="Gérer les domaines autorisés" name="edit_media_lists_button"/>
-			<text tool_tip="Ce paramètre détermine quels médias (une fois chargés) ne nécessitent pas un premier clic de mise au point avant que l'interaction ne puisse commencer. Les clics peuvent ainsi être transmis directement aux médias, sans qu'il soit nécessaire de cliquer sur le bouton de mise au point.">
+			<text name="media_firstinteract_label" tool_tip="Ce paramètre détermine quels médias (une fois chargés) ne nécessitent pas un premier clic de mise au point avant que l'interaction ne puisse commencer. Les clics peuvent ainsi être transmis directement aux médias, sans qu'il soit nécessaire de cliquer sur le bouton de mise au point.">
 				Premier média à réagir :
 			</text>
 			<check_box name="media_first_click_all" label="Tous les MOAP"/>
