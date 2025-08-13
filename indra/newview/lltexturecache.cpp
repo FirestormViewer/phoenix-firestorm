@@ -1359,6 +1359,7 @@ U32 LLTextureCache::openAndReadEntries(std::vector<Entry>& entries)
             if (bytes_read < sizeof(Entry))
             {
                 LL_WARNS() << "Corrupted header entries, failed at " << idx << " / " << num_entries << LL_ENDL;
+                closeHeaderEntriesFile();
                 return 0;
             }
             entries.push_back(entry);

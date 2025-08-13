@@ -518,6 +518,9 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorCannotAffordUpload">
 		Es kostet L$[COST], um diesen Gegenstand hochzuladen.
 	</notification>
+	<notification name="ErrorEncodingImage">
+		Textur konnte aus folgendem Grund nicht kodiert werden: [REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Es kostet L$[COST], um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
