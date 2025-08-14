@@ -91,8 +91,8 @@ constexpr F32 ALPHA_EMPTY_THRESHOLD_RATIO = 0.999f;
 //-----------------------------------------------------------------------------
 // LLFloaterImagePreview()
 //-----------------------------------------------------------------------------
-LLFloaterImagePreview::LLFloaterImagePreview(const std::string& filename) :
-    LLFloaterNameDesc(filename),
+LLFloaterImagePreview::LLFloaterImagePreview(const LLSD& args) :
+    LLFloaterNameDesc(args),
 
     mAvatarPreview(NULL),
     mSculptedPreview(NULL),
@@ -437,7 +437,9 @@ void LLFloaterImagePreview::onBtnOK()
         }
         else
         {
-            LLNotificationsUtil::add("ErrorEncodingImage");
+            LLSD args;
+            args["REASON"] = LLImage::getLastThreadError();
+            LLNotificationsUtil::add("ErrorEncodingImage", args);
             LL_WARNS() << "Error encoding image" << LL_ENDL;
         }
     }
@@ -601,6 +603,18 @@ bool LLFloaterImagePreview::loadImage(const std::string& src_filename)
     if (!image_info.load(src_filename,codec))
     {
         mImageLoadError = image_info.getLastError();
+        return false;
+    }
+
+    // raw image is limited to 256MB so need at least some upper limit that fits into that
+    constexpr S32 MAX_IMAGE_AREA = 8096 * 8096;
+
+    if (image_info.getWidth() * image_info.getHeight() > MAX_IMAGE_AREA)
+    {
+        LLStringUtil::format_map_t args;
+        args["PIXELS"] = llformat("%dM", (S32)(MAX_IMAGE_AREA / 1000000));
+
+        mImageLoadError = LLTrans::getString("texture_load_dimensions_error", args);
         return false;
     }
 

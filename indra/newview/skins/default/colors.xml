@@ -702,6 +702,9 @@
      name="InventoryBackgroundColor"
      reference="Transparent" />
     <color
+     name="InventoryFavoriteColor"
+     reference="Yellow" />
+    <color
      name="InventoryFocusOutlineColor"
      reference="White_25" />
     <color

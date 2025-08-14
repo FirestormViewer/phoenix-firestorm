@@ -7,6 +7,9 @@
 				<stat_bar name="frame_mean" label="フレーム（平均）" unit_label="㎳"/>
 				<stat_bar name="frame_median" label="フレーム（中央値）" unit_label="㎳"/>
 				<stat_bar name="framet_jitter" label="ジッタ"/>
+				<stat_bar name="normalized_cumulative_frametime" label="正規化済みセッションのジッタ"/>
+				<stat_bar name="frame_events_per_minute" label="フレームイベント／分"/>
+				<stat_bar name="frame_events_last_minute" label="フレームイベントの最終分"/>
 				<stat_bar label="受信したＵＤＰデータ" name="bandwidth"/>
 				<stat_bar label="パケットロス" name="packet_loss"/>
 				<stat_bar label="シムのPing" name="ping"/>
@@ -14,6 +17,14 @@
 			<stat_view label="高度な情報" name="advanced">
 				<stat_view label="描画" name="render">
 					<stat_bar label="フレームあたりのKTris" name="ktrisframe" unit_label="ktris／フレーム"/>
+					<stat_bar name="framet_cumulative" label="累積ジッタ"/>
+					<stat_bar name="framet_jitter_99th" label="ジッタ９９の分布"/>
+					<stat_bar name="framet_jitter_95th" label="ジッタ９５の分布"/>
+					<stat_bar name="framet_jitter_stddev" label="ジッタの標準偏差"/>
+					<stat_bar name="framet_99th" label="フレームタイム９９の分布"/>
+					<stat_bar name="framet_95th" label="フレームタイム９５の分布"/>
+					<stat_bar name="framet_stddev" label="フレームタイムの標準偏差"/>
+					<stat_bar name="framet_events" label="フレームタイムのイベント"/>
 					<stat_bar label="秒あたりのKTris" name="ktrissec"/>
 					<stat_bar name="objs" label="オブジェクトの総計"/>
 					<stat_bar label="キャッシュされたオブジェクト" name="cachedobjs"/>

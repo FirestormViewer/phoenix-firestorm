@@ -169,6 +169,7 @@ protected:
      * Called after inventory item was updated, update panel widgets to reflect inventory changes.
      */
     virtual void updateItem(const std::string& name,
+                            bool favorite,
                             EItemState item_state = IS_DEFAULT);
 
     void setLeftWidgetsWidth(S32 width) { mLeftWidgetsWidth = width; }
@@ -226,8 +227,9 @@ private:
     LLUIImagePtr    mSelectedImage;
     LLUIImagePtr    mSeparatorImage;
 
-    bool            mSelected;
-    bool            mSeparatorVisible;
+    bool            mSelected = false;
+    bool            mSeparatorVisible = false;
+    bool            mIsFavorite = false; // note that any setter needs to update tittle
 
     std::string     mHighlightedText;
 

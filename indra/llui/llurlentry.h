@@ -43,6 +43,11 @@
 class LLAvatarName;
 class LLVector3d;
 
+// <FS:AW> hop:// protocol>
+//#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
+#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))"
+// </FS:AW>
+
 typedef boost::signals2::signal<void (const std::string& url,
                                       const std::string& label,
                                       const std::string& icon)> LLUrlLabelSignal;

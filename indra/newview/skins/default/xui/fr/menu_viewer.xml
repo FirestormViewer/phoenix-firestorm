@@ -436,7 +436,8 @@
 			<menu_item_call label="Forcer une exception logicielle dans une coroutine" name="Force a Crash in a Coroutine"/>
 			<menu_item_call label="Forcer un plantage dans une coroprocédure" name="Force a Crash in a Coroprocedure"/>
 			<menu_item_call label="Forcer un plantage dans une file d'attente" name="Force a Crash in a Work Queue"/>
-			<menu_item_call label="Forcer un plantage dans un processus" name="Force a Crash in a Thread"/>
+			<menu_item_call label="Forcer un plantage LLError dans un processus" name="Force an LLError Crash in a Thread"/>
+			<menu_item_call label="Forcer un plantage d'Exception dans un processus" name="Force an Exception Crash in a Thread"/>
 			<menu_item_call label="Forcer la déconnexion du client" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Simuler une fuite de mémoire" name="Memory Leaking Simulation"/>
 		</menu>

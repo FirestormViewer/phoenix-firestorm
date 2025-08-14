@@ -44,4 +44,5 @@
 	<!-- ## Zi: Filter Links Menu -->
 	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
 	<menu_item_call label="Papierkorb ausleeren" name="empty_trash"/>
+	<menu_item_check label="Inventar-Einstellungen..." name="inv_settings"/>
 </toggleable_menu>

@@ -4350,18 +4350,21 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
     if (isSculpted() && !isMesh())
     {
         LLSculptParams *sculpt_params = (LLSculptParams *)getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-        LLUUID sculpt_id = sculpt_params->getSculptTexture();
-        // <FS:minerjr>        
-        //LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
-        // This isused to fix the textures becoming blury when object interacted with by the user and unselected.
-        // If this is changing the boost level for the sculpted for the first time, store the boost level before modifying it.
-        LLViewerFetchedTexture* sculptedTexture = LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-        if (sculptedTexture->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
+        if (sculpt_params)
         {
-            sculptedTexture->storeBoostLevel();
-        }
-        // </FS:minerjr>
-        sculptedTexture->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+	        LLUUID sculpt_id = sculpt_params->getSculptTexture();
+    	    // <FS:minerjr>        
+        	//LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+        	// This isused to fix the textures becoming blury when object interacted with by the user and unselected.
+        	// If this is changing the boost level for the sculpted for the first time, store the boost level before modifying it.
+        	LLViewerFetchedTexture* sculptedTexture = LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+        	if (sculptedTexture->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
+        	{
+            	sculptedTexture->storeBoostLevel();
+        	}
+        	sculptedTexture->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+        	// </FS:minerjr>
+		}
     }
 
     if (boost_children)

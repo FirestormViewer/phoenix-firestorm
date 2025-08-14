@@ -409,6 +409,8 @@ LLPanelOutfitEdit::LLPanelOutfitEdit()
     mPlusBtn(NULL),
     mWearablesGearMenuBtn(NULL),
     mGearMenuBtn(NULL),
+    mStatus(NULL),
+    mCurrentOutfitName(NULL),
     // <FS:Ansariel> Show avatar complexity in appearance floater
     mAvatarComplexityLabel(NULL),
     mAvatarComplexityAddingLabel(NULL)

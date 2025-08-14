@@ -4,6 +4,8 @@
 	<menu_item_call label="Zu aktuellem Outfit hinzufügen" name="wear_add"/>
 	<menu_item_call label="Von aktuellem Outfit entfernen" name="take_off"/>
 	<menu_item_call label="Abbildung..." name="thumbnail"/>
+	<menu_item_call label="Zu Favoriten hinzufügen" name="favorites_add"/>
+	<menu_item_call label="Aus Favoriten entfernen" name="favorites_remove"/>
 	<menu_item_call label="Outfit bearbeiten" name="edit"/>
 	<menu_item_call label="Outfit neu benennen" name="rename"/>
 	<menu_item_call label="Outfit speichern" name="save"/>
