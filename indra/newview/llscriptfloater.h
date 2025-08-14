@@ -27,13 +27,17 @@
 #ifndef LL_SCRIPTFLOATER_H
 #define LL_SCRIPTFLOATER_H
 
-#include "llmultifloater.h"
+ // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+#include "llmultifloater.h" // Needed as the FSFloaterScriptContainer is a multi-floater inherited object.
+ // </FS:minerjr> [FIRE-35859]
 #include "lltransientdockablefloater.h"
 #include "llnotificationptr.h"
 
 class LLToastPanel;
-class LLTabContainer;
-class FSFloaterScriptContainer;
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+class LLTabContainer; // Needed for the FSFloaterScriptContainer below
+class FSFloaterScriptContainer; // Used to allow the floater script container to be used as parameters for the classes. Used to group script dialogs into a single window
+// </FS:minerjr> [FIRE-35859]
 
 /**
  * Handles script notifications ("ScriptDialog" and "ScriptDialogGroup")

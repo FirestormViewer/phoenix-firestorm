@@ -38,6 +38,9 @@
 #include "lltoolbarview.h"
 #include "llcontrol.h"
 
+// This code is based on the fsfloaterimcontainer class, but modified for the purpose of grouping Script Dialog floaters instead of Instant Messages.
+// Some methods are left in case in the future bugs are discovered and code needs to be updated to be more similar to the fsfloaterimcontainer class.
+
 //
 // FSFloaterScriptContainer
 //

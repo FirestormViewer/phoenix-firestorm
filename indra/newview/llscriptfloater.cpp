@@ -52,9 +52,9 @@
 #include "llnavigationbar.h"
 // </FS:Zi>
 
-// <FS:minerjr> FIRE-35859 - Group Script Dialogs into one Multi-Floater window
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 #include "fsfloaterscriptcontainer.h"
-// </FS:minerjr> FIRE-35859
+// </FS:minerjr> [FIRE-35859]
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -97,23 +97,24 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
     // show existing floater
     if(floater)
     {
-        FSFloaterScriptContainer* container = FSFloaterScriptContainer::getInstance();
+        // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
         static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
+        FSFloaterScriptContainer* container = FSFloaterScriptContainer::getInstance();
+        // </FS:minerjr> [FIRE-35859]
         if(floater->getVisible())
         {
+            // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
             if (container && container->hasFloater(floater))
             {
-                //if (script_dialog_container)
-                {
-                    LLScriptFloater::onClickTearOff(floater);
-                }
-                //container->removeFloater(floater);
+                LLScriptFloater::onClickTearOff(floater);
             }
+            // </FS:minerjr> [FIRE-35859]
             floater->setVisible(false);
             return false;
         }
         else
         {
+            // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
             if (script_dialog_container)
             {
                 if (container && !container->hasFloater(floater))
@@ -137,6 +138,7 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
             {
                 LLScriptFloater::onClickDock(floater);
             }
+            // </FS:minerjr> [FIRE-35859]
             floater->setVisible(true);
             floater->setFocus(false);
         }
@@ -234,13 +236,13 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
     // toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
     eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
     mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    //if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
     static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
 
-    //if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
     // Only animate the script dialog if it is not using the container or the position is set to the TOP.
     if (!script_dialog_container && gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35859]
     {
         mCurrentHeight = 0;
         mStartTime = LLFrameTimer::getElapsedSeconds();
@@ -248,7 +250,7 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
     else
     {
         mCurrentHeight = mDesiredHeight;
-    }    
+    }
     toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), mCurrentHeight);
     // </FS:Zi>
     setShape(toast_rect);
@@ -476,7 +478,6 @@ void LLScriptFloater::hideToastsIfNeeded()
         channel->redrawToasts();
     }
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -984,6 +985,7 @@ void LLScriptFloater::draw()
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
     LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+    floater->setNotificationId(notification_id);
     floater->createForm(notification_id);
 
     //LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
@@ -1087,23 +1089,29 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
         floater->setRect(pos);
     }
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
-
+    // If the script dialog container feature is enabled, then
     if (script_dialog_container)
     {
+        // Get the pointer to the script dialog container registered with the LLFloaterReg class.
         FSFloaterScriptContainer* container = LLFloaterReg::getTypedInstance<FSFloaterScriptContainer>("fs_script_container");
+        // Disable the can dock flag of the floater as it will be replaced with a tear off button from the script dialog container
         floater->setCanDock(false);
 
+        // Get the notification so we can get the name of the object the script belongs to, and set the title and short title to the value
+        // this allows the tab to have the value as well as the multi-floater title to show which tab is active similar to the Conversations floater.
         LLNotificationPtr notification = LLNotifications::getInstance()->find(notification_id);
         if (notification != NULL)
         {
             floater->setShortTitle(LLScriptFloaterManager::getObjectName(notification_id));
             floater->setTitle(floater->getShortTitle());
         }
-
+        // Add the actual floater to the container and display the container in case it is not currently visible.
         container->addFloater(floater, true);
         container->setVisible(true);
     }
+    // </FS:minerjr> [FIRE-35859]
 
     return floater;
 }

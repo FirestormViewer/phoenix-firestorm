@@ -823,10 +823,10 @@ bool LLFloaterPreference::postBuild()
     // </FS:Ansariel>
 
     // <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     //If the user changes the script dialog container, we want to disable the animate script dialog preference option if it is enabled
     gSavedSettings.getControl("FSScriptDialogContainer")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35859]
     gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
     updateAnimatedScriptDialogs();
 
@@ -3250,10 +3250,11 @@ void LLFloaterPreference::onAvatarTagSettingsChanged()
 void LLFloaterPreference::updateAnimatedScriptDialogs()
 {
     S32 position = gSavedSettings.getS32("ScriptDialogsPosition");
-    // <FS:minerjr>
-    // When using the 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    // When using the script dialog container, the animated dialogs don't work correctly, so they need to be disabled.
     static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
     // Set the Script Dialog Position Dropdown to the opposite state of the script dialog container flag
+    // as the value is not valid and not used by the script dialog container
     childSetEnabled("ScriptDialogsPositionDropdown", !script_dialog_container);
     // If the script dialog container is checked, we want to disable the animations, so force it to an invalid position
     if (script_dialog_container)
@@ -3261,7 +3262,7 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
         // Force the position to an invalid value (anything other then 2 or 3)
         position = 0;
     }
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35859]
     childSetEnabled("FSAnimatedScriptDialogs", position == 2 || position == 3);
 }
 // </FS:Ansariel>
