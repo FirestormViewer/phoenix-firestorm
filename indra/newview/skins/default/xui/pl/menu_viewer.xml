@@ -466,7 +466,8 @@
 			<menu_item_call label="Wymuś wyjątek we współprogramie (coroutine)" name="Force Software Exception in Coroutine" />
 			<menu_item_call label="Wymuś wyjątek w koroprocedurze" name="Force a Crash in a Coroprocedure" />
 			<menu_item_call label="Wymuś wyjątek w kolejce roboczej" name="Force a Crash in a Work Queue" />
-			<menu_item_call label="Wymuś awarię w wątku" name="Force a Crash in a Thread" />
+			<menu_item_call label="Wymuś awarię LLError w wątku" name="Force an LLError Crash in a Thread" />
+			<menu_item_call label="Wymuś awarię - wyjątek w wątku" name="Force an Exception Crash in a Thread" />
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Symulacja wycieku pamięci" name="Memory Leaking Simulation"/>
 		</menu>

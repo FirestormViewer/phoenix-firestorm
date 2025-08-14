@@ -204,8 +204,6 @@ public:
     void                    startDefaultMotions();
     void                    dumpAnimationState();
 
-    //<FS:Ansariel> Joint-lookup improvements
-    //virtual LLJoint*      getJoint(const std::string &name);
     virtual LLJoint*        getJoint(std::string_view name);
     LLJoint*                getJoint(S32 num);
     void                    initAllJoints();

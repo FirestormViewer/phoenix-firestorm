@@ -11,6 +11,7 @@
 	<menu_item_call label="Retirer" name="take_off"/>
 	<menu_item_call label="Profil de l'objet" name="object_profile"/>
 	<menu_item_call label="Afficher l'original" name="show_original"/>
+	<menu_item_call label="Supprimer de la tenue" name="delete_from_outfit"/>
 	<menu_item_call label="Créer un nouveau" name="create_new"/>
 	<menu_item_call label="--pas d'options--" name="--no options--"/>
 </context_menu>

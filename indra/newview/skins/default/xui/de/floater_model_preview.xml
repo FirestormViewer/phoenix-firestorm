@@ -5,7 +5,7 @@
 	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
-		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.
+		Fehler: Fehler beim Modell-Parsen – Details siehe Protokoll.
 	</string>
 	<string name="status_bind_shape_orientation">
 		Warnung: Verbundform-Matrix befindet sich nicht in Standard-X-Vorwärtsrichtung.
@@ -93,6 +93,9 @@
 	</string>
 	<string name="tbd">
 		folgt
+	</string>
+	<string name="ModelTextureScaling">
+		Eine oder mehrere Texturen in diesem Modell wurde(n) skaliert, um innerhalb der erlaubten Limits zu bleiben.
 	</string>
 	<string name="TooManyJoint">
 		Skinning wurde wegen zu vieler Gelenke deaktiviert: [JOINTS], Maximum: [MAX]

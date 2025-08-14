@@ -142,15 +142,13 @@
 #include "llavatarname.h"   // <FS:CR> Deeper name cache stuffs
 #include "llclipboard.h"    // <FS:Zi> Support preferences search SLURLs
 #include "lldiriterator.h"  // <Kadah> for populating the fonts combo
-#include "lleventtimer.h"
 #include "llline.h"
 #include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
-#include "llscrolllistctrl.h"
-#include "llsdserialize.h" // KB: SkinsSelector
 #include "llspellcheck.h"
 #include "lltoolbarview.h"
+#include "lltoolpie.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "llviewernetwork.h" // <FS:AW  opensim search support>
 #include "llviewershadermgr.h"
@@ -6291,6 +6289,13 @@ FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
     LLPanelPreference(),
     mOutputDevicePanel(nullptr),
     mOutputDeviceComboBox(nullptr),
+    mMoapInteractionAll(nullptr),
+    mMoapInteractionAny(nullptr),
+    mMoapInteractionHud(nullptr),
+    mMoapInteractionOwnObjects(nullptr),
+    mMoapInteractionGroupObjects(nullptr),
+    mMoapInteractionFriendObjects(nullptr),
+    mMoapInteractionLandownerObjects(nullptr),
     mOutputDeviceListChangedConnection()
 { }
 
@@ -6306,6 +6311,14 @@ bool FSPanelPreferenceSounds::postBuild()
 {
     mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
     mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
+
+    mMoapInteractionAll              = getChild<LLCheckBoxCtrl>("media_first_click_all");
+    mMoapInteractionAny              = getChild<LLCheckBoxCtrl>("media_first_click_any");
+    mMoapInteractionHud              = getChild<LLCheckBoxCtrl>("media_first_click_hud");
+    mMoapInteractionOwnObjects       = getChild<LLCheckBoxCtrl>("media_first_click_own");
+    mMoapInteractionGroupObjects     = getChild<LLCheckBoxCtrl>("media_first_click_group");
+    mMoapInteractionFriendObjects    = getChild<LLCheckBoxCtrl>("media_first_click_friend");
+    mMoapInteractionLandownerObjects = getChild<LLCheckBoxCtrl>("media_first_click_land");
 
 #if LL_FMODSTUDIO
     if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
@@ -6323,6 +6336,17 @@ bool FSPanelPreferenceSounds::postBuild()
         mOutputDevicePanel->setVisible(false);
     }
 #endif
+
+    mMoapInteractionAll->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionAny->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionHud->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionOwnObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionGroupObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionFriendObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+    mMoapInteractionLandownerObjects->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
+
+    gSavedSettings.getControl("MediaFirstClickInteract")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onMoapInteractionChanged, this));
+    onMoapInteractionChanged();
 
     return LLPanelPreference::postBuild();
 }
@@ -6379,5 +6403,49 @@ void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_de
     }
 
     mOutputDeviceComboBox->setSelectedByValue(selected_device, true);
+}
+
+void FSPanelPreferenceSounds::onMoapInteractionChanged()
+{
+    const auto bitvalue = gSavedSettings.getS32("MediaFirstClickInteract");
+
+    mMoapInteractionAll->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG);
+    mMoapInteractionAny->set((bitvalue & LLToolPie::MEDIA_FIRST_CLICK_ANY) == LLToolPie::MEDIA_FIRST_CLICK_ANY);
+    mMoapInteractionHud->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_HUD);
+    mMoapInteractionOwnObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_OWN);
+    mMoapInteractionGroupObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_GROUP);
+    mMoapInteractionFriendObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_FRIEND);
+    mMoapInteractionLandownerObjects->set(bitvalue & LLToolPie::MEDIA_FIRST_CLICK_LAND);
+
+    const bool is_all_selected = (bitvalue & LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG) == LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG;
+    const bool is_any_selected = (bitvalue & LLToolPie::MEDIA_FIRST_CLICK_ANY) == LLToolPie::MEDIA_FIRST_CLICK_ANY;
+    mMoapInteractionAny->setEnabled(!is_all_selected);
+    mMoapInteractionHud->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionOwnObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionGroupObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionFriendObjects->setEnabled(!is_all_selected && !is_any_selected);
+    mMoapInteractionLandownerObjects->setEnabled(!is_all_selected && !is_any_selected);
+}
+
+void FSPanelPreferenceSounds::updateMoapInteractionSetting()
+{
+    if (mMoapInteractionAll->get())
+    {
+        gSavedSettings.setS32("MediaFirstClickInteract", LLToolPie::MEDIA_FIRST_CLICK_BYPASS_MOAP_FLAG | LLToolPie::MEDIA_FIRST_CLICK_ANY);
+    }
+    else if (mMoapInteractionAny->get())
+    {
+        gSavedSettings.setS32("MediaFirstClickInteract", LLToolPie::MEDIA_FIRST_CLICK_ANY);
+    }
+    else
+    {
+        const S32 value = (mMoapInteractionHud->get() ? LLToolPie::MEDIA_FIRST_CLICK_HUD : 0) |
+                          (mMoapInteractionOwnObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_OWN : 0) |
+                          (mMoapInteractionGroupObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_GROUP : 0) |
+                          (mMoapInteractionFriendObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_FRIEND : 0) |
+                          (mMoapInteractionLandownerObjects->get() ? LLToolPie::MEDIA_FIRST_CLICK_LAND : 0);
+
+        gSavedSettings.setS32("MediaFirstClickInteract", value);
+    }
 }
 // </FS:Ansariel>

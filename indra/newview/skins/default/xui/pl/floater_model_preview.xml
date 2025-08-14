@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="Model Preview" title="Przesyłanie modelu">
 <string name="no_havok">przesyłanie meszy z fizyką</string>
-<string name="status_parse_error">Błąd: Problem z parsowaniem Dae, zobacz log.</string>
+<string name="status_parse_error">Błąd: Problem z parsowaniem modelu, zobacz log.</string>
 <string name="status_bind_shape_orientation">Uwaga: Macierz powiązań kształtu nie jest w standardowej orientacji X-forward.</string>
 <string name="status_material_mismatch">Błąd: Materiał nie jest podzbiorem modelu referencyjnego.</string>
 <string name="status_lod_model_mismatch">Błąd: Model LOD nie ma rodzica.</string>
@@ -30,10 +30,12 @@
 <string name="layer_all">Wszystko</string>
 <string name="decomposing">Analizowanie...</string>
 <string name="simplifying">Upraszczanie...</string>
+<string name="ModelTextureScaling">Jedna lub więcej tekstur została przeskalowana, aby mieściła się w dozwolonych limitach.</string>
 <string name="TooManyJoint">Teksturowanie wyłączone, zbyt wiele stawów: [JOINTS], maksimum: [MAX]</string>
 <string name="UnrecognizedJoint">Riggowane do nieznanej nazwy stawu [NAME]</string>
 <string name="UnknownJoints">Teksturowanie wyłączone, zbyt wiele nieznanych stawów ([COUNT])</string>
 <string name="ModelLoaded">Model [MODEL_NAME] załadowany</string>
+<string name="InvBindCountMismatch">Niedopasowane połączenia między macierzami wiążącymi</string>
 <string name="IncompleteTC">Dane współrzędnych tekstury nie są kompletne.</string>
 <string name="PositionNaN">Znaleziono NaN podczas ładowania danych pozycji z DAE, nieprawidłowy model.</string>
 <string name="NormalsNaN">Znaleziono NaN podczas ładowania normalnych z DAE, nieprawidłowy model.</string>
@@ -48,7 +50,26 @@
 <string name="ParsingErrorNoRoot">Dokument nie ma elementu głównego</string>
 <string name="ParsingErrorNoScene">Dokument nie zawiera visual_scene</string>
 <string name="ParsingErrorPositionInvalidModel">Nie można przetworzyć meszu bez danych pozycji. Nieprawidłowy model.</string>
+<string name="UnknownException">Importer uległ awarii podczas przetwarzania pliku [FILENAME]. Jeśli plik jest prawidłowy, to zgłoś to wsparciu Second Life. Wyjątek: [EXCEPTION].</string>
 <string name="ParsingErrorEmptyInvBindInvalidModel">Nie można przetworzyć meszu bez danych InvBind. Nieprawidłowy model.</string>
+<string name="NoScenesFound">Brak zdefiniowanych scen w pliku GLTF</string>
+<string name="InvalidMeshReference">Węzeł [NODE_NAME] odwołuje się do nieprawidłowego meszu [MESH_INDEX] (łącznie meszy: [TOTAL_MESHES])</string>
+<string name="InvalidGeometryNonTriangulated">Mesz [MESH_NAME] prymityw [PRIMITIVE_INDEX]: Nieprawidłowa geometria z [INDEX_COUNT] indeksami (musi być triangulowana)</string>
+<string name="EmptyVertexArray">Mesz [MESH_NAME] prymityw [PRIMITIVE_INDEX]: Pusta tablica wierzchołków</string>
+<string name="ErrorIndexLimit">Nie można przetworzyć meszu [MESH_NAME] z powodu limitu 65 534 wierzchołków. Liczba wierzchołków: [VERTEX_COUNT]</string>
+<string name="TextureFound">Znaleziona tekstura: [TEXTURE_NAME] dla materiału: [MATERIAL_NAME]</string>
+<string name="IgnoredExtension">Model używa nieobsługiwanego rozszerzenia: [EXT], powiązane właściwości materiału są ignorowane</string>
+<string name="UnsupportedExtension">Nie można wczytać modelu, nieobsługiwane rozszerzenie: [EXT]</string>
+<string name="FailedToCreateTempFile">Nie udało się utworzyć pliku tymczasowego dla osadzonej [TEXTURE_TYPE] tekstury [TEXTURE_INDEX]: [TEMP_FILE]</string>
+<string name="SkinJointsOverLimit">Skórka [SKIN_INDEX] definiuje [JOINT_COUNT] zgodnych połączeń, maksimum to: [MAX]. Nieużywane połączenia będą usuwane dla każdego modelu.</string>
+<string name="SkinUsupportedJoints">Skórka [SKIN_INDEX] definiuje [JOINT_COUNT] połączeń, ale rozpoznano tylko [LEGAL_COUNT] zgodnych połączeń</string>
+<string name="SkinUnusedJoints">Skórka [SKIN_INDEX] definiuje [JOINT_COUNT] zgodnych połączeń, użyto z nich tylko [USED_COUNT]</string>
+<string name="ModelTooManyJoints">Model [MODEL_NAME] używa [JOINT_COUNT], maksymalnie: [MAX], przesyłanie może się nie powieść</string>
+<string name="ModelSplitPrimitive">Zbyt wiele wierzchołków w prymitywie [MODEL_NAME], został on podzielony na [FACE_COUNT] stron</string>
+<string name="ModelTooManySubmodels">Model [MODEL_NAME] zawiera [SUBMODEL_COUNT] wygenerowanych części meszu, zostały one przycięte do [SUBMODEL_LIMIT]</string>
+<string name="ParsingErrorMissingBuffer">Brak bufora [BUFFER_NAME] lub jest on pusty.</string>
+<string name="ParsingErrorMissingBufferBin">Brak bufora lub jest on pusty. Sprawdź obecność pliku [BUFFER_URI].</string>
+<string name="ParsingErrorException">Parser nie mógł przetworzyć pliku [FILENAME]. Plik może być uszkodzony, niekompletny lub zabezpieczony przed odczytem. Wyjątek: [EXCEPTION].</string>
 <panel name="left_panel">
     <panel name="model_name_representation_panel">
         <text name="name_label">

@@ -615,7 +615,18 @@
          label="Play media attached to other avatars"
          top_pad="3"
          left="25"/>
-
+        <check_box
+         name="media_huds_autoplay"
+         control_name="MediaAutoPlayHuds"
+         enabled_control="AudioStreamingMedia"
+         follows="left|top"
+         layout="topleft"
+         tool_tip="Uncheck this to make HUDs follow the standard media auto-play setting"
+         label="Auto-play media attached to your HUD"
+         left="25"
+         top_pad="3"
+         width="230"
+         height="16"/>
         <check_box
          name="media_filter"
          control_name="MediaEnableFilter"
@@ -641,6 +652,74 @@
         </button>
 
         <text
+         follows="left|top"
+         layout="topleft"
+         height="15"
+         left="25"
+         top_pad="15"
+         width="275"
+         tool_tip="This setting controls which media (once loaded) does not require a first click to focus before interaction can begin. This allows clicks to be passed directly to media bypassing the focus click requirement."
+         name="media_firstinteract_label">
+            Media first-interact:
+        </text>
+        <check_box
+         name="media_first_click_all"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="All MOAP"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_any"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Anyone's objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_hud"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Worn HUDs only"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_own"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Owned objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_group"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Group objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_friend"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Friend objects"
+         top_pad="3"
+         left="25"/>
+        <check_box
+         name="media_first_click_land"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         label="Landowner objects"
+         top_pad="3"
+         left="25"/>
+
+        <text
          type="string"
          length="1"
          follows="left|top"
@@ -649,7 +728,7 @@
          left="25"
          name="Media Rolloff"
          mouse_opaque="false"
-         top_pad="15"
+         top_pad="10"
          width="450">
             Media source volume rolloff distance:
         </text>

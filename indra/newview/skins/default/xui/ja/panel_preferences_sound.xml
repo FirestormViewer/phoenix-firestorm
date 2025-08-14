@@ -76,8 +76,19 @@
 			</combo_box>
 			<check_box label="インワールドスクリプトによるメディアの再生を許可する" name="media_allowscript_btn" tool_tip="この設定は、スクリプトプリムがメディア接続を制御することを許可／禁止します。"/>
 			<check_box label="他のアバターに装着されたメディアを再生する" name="media_show_on_others_btn" tool_tip="チェックを外すと、近くにある他のアバターに添付されたメディアが非表示になります。"/>
+			<check_box name="media_huds_autoplay" tool_tip="チェックを外すと、ＨＵＤは標準のメディア自動再生設定に従います。" label="ＨＵＤに装着されたメディアを自動再生する"/>
 			<check_box label="メディアフィルタを有効にする（セキュリティレベルが上がります）" name="media_filter" tool_tip="これをチェックすると、特定のホストからメディアを再生するかどうかを選択できるフィルタが有効になります。"/>
 			<button label="メディアサイトの管理" name="edit_media_lists_button"/>
+			<text tool_tip="この設定は、読み込まれたメディアのうち、対象をクリックせずにインタラクションを開始できるメディアを制御します。これにより、対象をクリックする必要がなくなり、メディアに直接クリック情報が渡されるようになります。" name="media_firstinteract_label">
+				メディアの開始インタラクト：
+			</text>
+			<check_box name="media_first_click_all" label="すべてのＭＯＡＰ"/>
+			<check_box name="media_first_click_any" label="誰かのオブジェクト"/>
+			<check_box name="media_first_click_hud" label="装着しているＨＵＤ"/>
+			<check_box name="media_first_click_own" label="自身のオブジェクト"/>
+			<check_box name="media_first_click_group" label="グループのオブジェクト"/>
+			<check_box name="media_first_click_friend" label="フレンドのオブジェクト"/>
+			<check_box name="media_first_click_land" label="土地所有者のオブジェクト"/>
 			<text name="Media Rolloff">
 				メディアソースの音量ロールオフ距離：
 			</text>

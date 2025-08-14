@@ -4,7 +4,7 @@
 		物理網格模型上傳
 	</string>
 	<string name="status_parse_error">
-		錯誤：剖析 dae 時出錯，詳見記錄檔案。
+		錯誤：剖析模型時出錯，詳見記錄檔案。
 	</string>
 	<string name="status_bind_shape_orientation">
 		警告：綁定形狀矩陣並未處於標準的「X-向前」方位。
@@ -93,6 +93,9 @@
 	<string name="tbd">
 		（未定）
 	</string>
+	<string name="ModelTextureScaling">
+		此模型中的一個或多個紋理已被縮放至允許範圍內。
+	</string>
 	<string name="TooManyJoint">
 		由於關節過多，蒙皮已被禁用：[JOINTS]，最大值：[MAX]
 	</string>
@@ -104,6 +107,9 @@
 	</string>
 	<string name="ModelLoaded">
 		模型 [MODEL_NAME] 已載入。
+	</string>
+	<string name="InvBindCountMismatch">
+		綁定矩陣數量與關節數量不匹配
 	</string>
 	<string name="IncompleteTC">
 		紋理座標數據不完整。
@@ -147,8 +153,65 @@
 	<string name="ParsingErrorPositionInvalidModel">
 		沒有位置資料的網格無法處理 - 模型無效。
 	</string>
+	<string name="UnknownException">
+		導入器在處理[FILENAME]時崩潰，如果該檔案有效，請將此問題回報給Second Life支援。異常：[EXCEPTION]。
+	</string>
 	<string name="ParsingErrorEmptyInvBindInvalidModel">
 		沒有InvBind資料的綁定網格無法處理 - 模型無效。
+	</string>
+	<string name="NoScenesFound">
+		GLTF 檔案中未定義任何場景
+	</string>
+	<string name="InvalidMeshReference">
+		節點[NODE_NAME]引用了無效網格[MESH_INDEX]（總網格數：[TOTAL_MESHES]）
+	</string>
+	<string name="InvalidGeometryNonTriangulated">
+		網格[MESH_NAME]元素[PRIMITIVE_INDEX]：索引數為[INDEX_COUNT]的幾何體無效（必須為三角形）
+	</string>
+	<string name="EmptyVertexArray">
+		網格[MESH_NAME]元素[PRIMITIVE_INDEX]：頂點陣列為空
+	</string>
+	<string name="ErrorIndexLimit">
+		由於頂點數超出65,534的限制，無法處理網格[MESH_NAME]。當前頂點數：[VERTEX_COUNT]
+	</string>
+	<string name="TextureFound">
+		已找到紋理[TEXTURE_NAME]，用於材質[MATERIAL_NAME]
+	</string>
+	<string name="IgnoredExtension">
+		模型使用了不支援的擴展[EXT]，相關材質屬性已被忽略
+	</string>
+	<string name="UnsupportedExtension">
+		無法載入模型：不支援的擴展[EXT]
+	</string>
+	<string name="FailedToCreateTempFile">
+		無法為內嵌的[TEXTURE_TYPE]紋理[TEXTURE_INDEX]創建臨時檔案：[TEMP_FILE]
+	</string>
+	<string name="SkinJointsOverLimit">
+		蒙皮[SKIN_INDEX]定義了[JOINT_COUNT]個相容關節，最大允許[MAX]個，多餘的關節將按模型剔除
+	</string>
+	<string name="SkinUsupportedJoints">
+		蒙皮[SKIN_INDEX]定義了[JOINT_COUNT]個關節，僅識別並相容了[LEGAL_COUNT]個
+	</string>
+	<string name="SkinUnusedJoints">
+		蒙皮[SKIN_INDEX]定義了[JOINT_COUNT]個相容關節，其中僅使用了[USED_COUNT]個
+	</string>
+	<string name="ModelTooManyJoints">
+		模型 [MODEL_NAME] 使用了[JOINT_COUNT]個關節，超過最大限制[MAX]，上傳可能失敗
+	</string>
+	<string name="ModelSplitPrimitive">
+		元素[MODEL_NAME]頂點過多，已拆分為[FACE_COUNT]個面
+	</string>
+	<string name="ModelTooManySubmodels">
+		模型[MODEL_NAME]包含[SUBMODEL_COUNT]個子網格，已截減至[SUBMODEL_LIMIT]個
+	</string>
+	<string name="ParsingErrorMissingBuffer">
+		緩衝區[BUFFER_NAME]遺失或為空。
+	</string>
+	<string name="ParsingErrorMissingBufferBin">
+		緩衝區遺失或為空，請檢查檔案[BUFFER_URI]是否存在。
+	</string>
+	<string name="ParsingErrorException">
+		解析器處理[FILENAME]時失敗，檔案可能已損壞、不完整或受保護無法讀取。異常資訊：[EXCEPTION]
 	</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">

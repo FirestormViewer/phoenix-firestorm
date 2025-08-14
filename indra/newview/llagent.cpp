@@ -6682,7 +6682,6 @@ void LLAgent::sendAgentSetAppearance()
     }
 
 
-    S32 transmitted_params = 0;
     for (LLViewerVisualParam* param = (LLViewerVisualParam*)gAgentAvatarp->getFirstVisualParam();
          param;
          param = (LLViewerVisualParam*)gAgentAvatarp->getNextVisualParam())
@@ -6696,7 +6695,6 @@ void LLAgent::sendAgentSetAppearance()
             const F32 param_value = param->getWeight();
             const U8 new_weight = F32_to_U8(param_value, param->getMinWeight(), param->getMaxWeight());
             msg->addU8Fast(_PREHASH_ParamValue, new_weight );
-            transmitted_params++;
         }
     }
 

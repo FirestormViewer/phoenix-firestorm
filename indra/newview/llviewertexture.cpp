@@ -544,7 +544,7 @@ void LLViewerTexture::updateClass()
     bool is_low = is_sys_low || over_pct > 0.f;
 
     static bool was_low = false;
-    static bool was_sys_low = false;
+    //static bool was_sys_low = false; // <FS:Ansariel> Remove unused variable
 
     if (is_low && !was_low)
     {
@@ -562,7 +562,7 @@ void LLViewerTexture::updateClass()
     }
 
     was_low = is_low;
-    was_sys_low = is_sys_low;
+    //was_sys_low = is_sys_low; // <FS:Ansariel> Remove unused variable
 
     if (is_low)
     {

@@ -2877,6 +2877,11 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="MaterialNoPermissions">
 		このマテリアルを見る権限がありません。
 	</notification>
+	<notification name="MaterialImagesWereScaled">
+		このマテリアル内の１つ以上のテクスチャが、許容範囲内に収まるように拡大縮小されました。
+テクスチャの画像サイズは２の倍数かつ、[MAX_SIZE]✕[MAX_SIZE]ピクセルを超えないようにしてください。
+		<usetemplate ignoretext="テクスチャのアップロード時に拡大縮小される場合の警告" name="okignore" yestext="ＯＫ"/>
+	</notification>
 	<notification name="RezItemNoPermissions">
 		この場所では、オブジェクトをRezする権限がありません。
 	</notification>

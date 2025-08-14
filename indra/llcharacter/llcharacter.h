@@ -76,8 +76,6 @@ public:
     // get the specified joint
     // default implementation does recursive search,
     // subclasses may optimize/cache results.
-    //<FS:Ansariel> Joint-lookup improvements
-    // virtual LLJoint *getJoint( const std::string &name );
     virtual LLJoint* getJoint(std::string_view name);
 
     // get the position of the character

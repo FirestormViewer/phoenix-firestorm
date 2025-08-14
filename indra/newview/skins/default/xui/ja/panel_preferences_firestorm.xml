@@ -107,7 +107,7 @@
 			</text>
 			<button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。"/>
 			<combo_box name="BeamColor_combo" tool_tip="選択ビームの色設定を選択します。"/>
-			<button name="BeamColor_new" label="新規作成" tool_tip="色設定を新規作成します"/>
+			<button name="BeamColor_new" label="新規作成" tool_tip="色設定を新規作成します。"/>
 			<button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。"/>
 			<slider name="FSMaxBeamsPerSecond" label="１秒あたりの発生数：" tool_tip="１秒間に発生するビームの数を秒単位で設定します。４０秒がデフォルトです。"/>
 			<check_box label="選択ビームを有効にする" name="SLPartBeam" tool_tip="この設定を無効にすると、選択ビームがローカルで描画されなくなります。選択ビームが他のアバターに送信されるのを防ぐことはできません。選択を表示したくない場合は、「初期設定」＞「プライバシー」＞「視点」＞「選択ターゲットのヒントを送信しない」で無効にできます。"/>
@@ -160,7 +160,7 @@
 				<combo_item name="Medium" label="中"/>
 				<combo_item name="High" label="高"/>
 			</combo_box>
-			<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む"/>
+			<check_box name="FSBuildPrefs_EmbedItem" label="新規作成したプリムにアイテムを埋め込む"/>
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="ここにインベントリをドロップします。">
 				ここにインベントリをドロップ
 			</fs_embedded_item_drop_target>
@@ -177,7 +177,7 @@
 			<check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても５０％、つまり中央に設定されています。" name="FSPivotPercToggle"/>
 			<button label="デフォルトの作成権限" name="fs_default_creation_permissions"/>
 			<text name="text_box_scripting_font">
-			スクリプトエディタのフォント：
+				スクリプトエディタのフォント：
 			</text>
 			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
 				<combo_item name="Monospace" label="等幅"/>
@@ -221,9 +221,9 @@
 			<text name="MinObjectsForUnlinkConfirmText2">
 				個以上
 			</text>
-			<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
-			<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
+			<check_box label="クラシックな「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをＬＳＬ２でなく、Ｍｏｎｏの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="インベントリからディスクにテクスチャを保存する時に、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
 			<check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab"/>
 			<check_box label="ビルドモードにおいて、CapsLockの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、ビルドモードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture"/>
 			<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar"/>
@@ -256,7 +256,7 @@
 				アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
 メニューから「デフォルトのフォルダとして使用」を選択して下さい。
 			</text>
-			<button name="reset_default_folders" label="デフォルトフォルダをリセット"/>
+			<button name="reset_default_folders" label="デフォルトのフォルダにリセット"/>
 		</panel>
 	</tab_container>
 </panel>

@@ -311,10 +311,6 @@ void LLHUDText::renderText()
             }
 
             text_color = segment_iter->mColor;
-            if (mOnHUDAttachment)
-            {
-                text_color = linearColor4(text_color);
-            }
             text_color.mV[VALPHA] *= alpha_factor;
             // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights	
             // If the text object is highlighted and use hover highlight is enabled, then reset the alpha factor (1.0f)

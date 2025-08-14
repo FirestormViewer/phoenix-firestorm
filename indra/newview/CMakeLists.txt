@@ -199,6 +199,7 @@ set(viewer_SOURCE_FILES
     #gltf/accessor.cpp
     #gltf/primitive.cpp
     #gltf/animation.cpp
+    #gltf/llgltfloader.cpp
     # </FS:Ansariel> Group GLTF files into their subfolders
     groupchatlistener.cpp
     llaccountingcostmanager.cpp
@@ -893,6 +894,7 @@ set(viewer_GLTF_SOURCE_FILES
     gltf/accessor.cpp
     gltf/primitive.cpp
     gltf/animation.cpp
+    gltf/llgltfloader.cpp
     )
 
 source_group("Source Files\\GLTF" FILES ${viewer_GLTF_SOURCE_FILES})
@@ -1037,6 +1039,7 @@ set(viewer_HEADER_FILES
     #gltf/buffer_util.h
     #gltf/primitive.h
     #gltf/animation.h
+    #gltf/llgltfloader.h
     # </FS:Ansariel> Group GLTF files into their subfolders
     llaccountingcost.h
     llaccountingcostmanager.h
@@ -1733,6 +1736,7 @@ set(viewer_GLTF_HEADER_FILES
     gltf/buffer_util.h
     gltf/primitive.h
     gltf/animation.h
+    gltf/llgltfloader.h
     )
 
 source_group("Header Files\\GLTF" FILES ${viewer_GLTF_HEADER_FILES})

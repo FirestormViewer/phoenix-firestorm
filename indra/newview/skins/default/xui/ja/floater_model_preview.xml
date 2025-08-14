@@ -22,7 +22,7 @@
 		メッシュを作成しています…
 	</string>
 	<string name="status_vertex_number_overflow">
-		エラー：頂点の数が65534個を超えたので中止しました。
+		エラー：頂点数が65,535個を超えたので中止しました。
 	</string>
 	<string name="bad_element">
 		エラー：要素が無効です。
@@ -64,10 +64,10 @@
 		ＬｏＤ付きのマテリアルは、参考モデルのサブセットではありません。
 	</string>
 	<string name="phys_status_vertex_limit_exceeded">
-		一部の物理的な凸包が、頂点の制限を超えます。
+		一部の物理的外殻が頂点制限（256）を超えています。別の「分析方法」を試してください。
 	</string>
 	<string name="phys_status_hull_limit_exceeded">
-		いくつかのモデルが外殻構造の制限（256）を越えています。もっと単純化して下さい。
+		いくつかのモデルが外殻構造の制限（256）を越えています。もっと「単純化」して下さい。
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		物理メッシュが密すぎるか、極小な三角形が含まれています。この問題を解決するには、分析／簡素化を使用します。
@@ -93,6 +93,9 @@
 	<string name="tbd">
 		未計算
 	</string>
+	<string name="ModelTextureScaling">
+		このモデル内の１つ以上のテクスチャが、許容画像サイズ内に収まるようにスケーリングされました。
+	</string>
 	<!-- Warnings and info from model loader-->
 	<string name="TooManyJoint">
 		ジョイントが多すぎるためスキニングが無効化されました：[MAX]個中[JOINTS]個
@@ -105,6 +108,9 @@
 	</string>
 	<string name="ModelLoaded">
 		[MODEL_NAME]モデルが読み込まれました。
+	</string>
+	<string name="InvBindCountMismatch">
+		バインド行列の数とジョイント数の不一致が検出されました。
 	</string>
 	<string name="IncompleteTC">
 		テクスチャの座標データが不完全です。
@@ -148,11 +154,70 @@
 	<string name="ParsingErrorPositionInvalidModel">
 		位置データがないのでメッシュを処理できません。無効なモデルです。
 	</string>
+	<string name="UnknownException">
+		[FILENAME] の処理中にインポーターがクラッシュしました。この問題が発生した場合、ファイルが有効な場合は、Second Lifeサポートに問題を報告してください。例外：[EXCEPTION]
+	</string>
 	<!-- FS:Beq FIRE-34811 Crash during import due to missing inv_bind_matrices. -->
 	<string name="ParsingErrorEmptyInvBindInvalidModel">
 		InvBindデータがないのでリグメッシュを処理できません。無効なモデルです。
 	</string>
 	<!-- /FS:Beq FIRE-34811 Crash during import due to missing inv_bind_matrices. -->
+
+	<!-- GLTF specific messages -->
+	<string name="NoScenesFound">
+		ＧＬＴＦファイルにシーンが定義されていません。
+	</string>
+	<string name="InvalidMeshReference">
+		ノード「[NODE_NAME]」は無効なメッシュ[MESH_INDEX]を参照しています。（メッシュの合計数：[TOTAL_MESHES]）
+	</string>
+	<string name="InvalidGeometryNonTriangulated">
+		メッシュ「[MESH_NAME]」プリミティブ[PRIMITIVE_INDEX]：[INDEX_COUNT]個のインデックスを持つ無効なジオメトリが検出されました。（三角形にする必要があります）
+	</string>
+	<string name="EmptyVertexArray">
+		メッシュ「[MESH_NAME]」プリミティブ[PRIMITIVE_INDEX]：空の頂点配列
+	</string>
+	<string name="ErrorIndexLimit">
+		頂点数が65,534個に制限されているため、メッシュ「[MESH_NAME]」を処理できません。頂点数：[VERTEX_COUNT]
+	</string>
+	<string name="TextureFound">
+		マテリアル「[MATERIAL_NAME]」のテクスチャが見つかりました：[TEXTURE_NAME]
+	</string>
+	<string name="IgnoredExtension">
+		モデルは、サポートされていない拡張子[EXT]を使用しているため、関連するマテリアルのプロパティは無視されます。
+	</string>
+	<string name="UnsupportedExtension">
+		モデルが読み込めません。サポートされていない拡張子：[EXT]
+	</string>
+	<string name="FailedToCreateTempFile">
+		埋め込まれた[TEXTURE_TYPE]テクスチャ[TEXTURE_INDEX]の一時ファイルの作成に失敗しました：[TEMP_FILE]
+	</string>
+	<string name="SkinJointsOverLimit">
+		スキン[SKIN_INDEX]は、[MAX]箇所中[JOINT_COUNT]箇所の互換ジョイントを定義しています。未使用のジョイントはモデルごとに削除されます。
+	</string>
+	<string name="SkinUsupportedJoints">
+		スキン[SKIN_INDEX]は、[JOINT_COUNT]箇所のジョイントを定義していますが、認識されるのは互換性がある[LEGAL_COUNT]箇所だけです。
+	</string>
+	<string name="SkinUnusedJoints">
+		スキン[SKIN_INDEX]は、[JOINT_COUNT]箇所の互換性のあるジョイントを定義していますが、そのうち[USED_COUNT]箇所のみが使用されています。
+	</string>
+	<string name="ModelTooManyJoints">
+		モデル「[MODEL_NAME]」は、[MAX]箇所中[JOINT_COUNT]箇所のジョイントを使用しています。アップロードに失敗する可能性があります。
+	</string>
+	<string name="ModelSplitPrimitive">
+		プリミティブ「[MODEL_NAME]」は、頂点が多すぎるため[FACE_COUNT]個の面に分割されました。
+	</string>
+	<string name="ModelTooManySubmodels">
+		モデル「[MODEL_NAME]」には、[SUBMODEL_COUNT]箇所の生成されたメッシュパーツが含まれており、パーツは[SUBMODEL_LIMIT]個までトリミングされています。
+	</string>
+	<string name="ParsingErrorMissingBuffer">
+		バッファが見つからないか、空の[BUFFER_NAME]です。
+	</string>
+	<string name="ParsingErrorMissingBufferBin">
+		バッファが見つからないか空です。[BUFFER_URI]ファイルが存在するかどうかを確認してください。
+	</string>
+	<string name="ParsingErrorException">
+		パーサーは、[FILENAME]を処理できませんでした。ファイルが破損しているか、不完全であるか、読み取り保護されている可能性があります。例外：[EXCEPTION]
+	</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
 			<text name="name_label">

@@ -6,7 +6,6 @@
     layout="topleft"
     name="panel_primfeed_photo">
   <combo_box
-      control_name="FSPrimfeedPhotoResolution"
       follows="left|top"
       layout="topleft"
       top="5"

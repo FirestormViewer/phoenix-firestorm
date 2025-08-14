@@ -54,8 +54,19 @@
 			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="啟用此選項允許物件控制您的多媒體連線" label="允許指令碼播放媒體" />
 			<check_box name="media_show_on_others_btn" tool_tip="允許播放附近居民攜帶的媒體" label="播放居民攜帶的媒體" />
+			<check_box name="media_huds_autoplay" tool_tip="取消勾選此選項，可使HUD遵循常規媒體的自動播放設定" label="自動播放附著到HUD的媒體" />
 			<check_box name="media_filter" tool_tip="啟用此選項以對允許或拒絕的媒體設定過濾器" label="啟用媒體過濾器" />
 			<button label="管理允許內容" name="edit_media_lists_button" />
+			<text name="media_firstinteract_label" tool_tip="此設置決定哪些媒體在載入後無需首次點擊即可互動。這樣點擊事件會直接傳遞給媒體，而無需先取得焦點。">
+				媒體首次互動：
+			</text>
+			<check_box name="media_first_click_all" label="物件上的所有媒體"/>
+			<check_box name="media_first_click_any" label="任何人的物件"/>
+			<check_box name="media_first_click_hud" label="僅穿戴的 HUD"/>
+			<check_box name="media_first_click_own" label="自己的物件"/>
+			<check_box name="media_first_click_group" label="群組物件"/>
+			<check_box name="media_first_click_friend" label="朋友的物件"/>
+			<check_box name="media_first_click_land" label="土地所有者的物件"/>
 			<text name="Media Rolloff">聲音衰減啟用距離：</text>
 			<slider label="開始減弱距離：" name="MediaRollOffMin" tool_tip="音訊內容變得不那麼明顯的距離。" />
 			<text name="MinMeters">米</text>
