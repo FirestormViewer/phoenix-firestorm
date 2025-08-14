@@ -132,6 +132,7 @@ set(viewer_SOURCE_FILES
     fsfloaterposestand.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
+    fsfloaterscriptcontainer.cpp
     fsfloatersearch.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
@@ -969,6 +970,7 @@ set(viewer_HEADER_FILES
     fsfloaterposestand.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
+    fsfloaterscriptcontainer.h
     fsfloatersearch.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h

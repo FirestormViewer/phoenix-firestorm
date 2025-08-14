@@ -421,7 +421,7 @@
          layout="topleft"
          left="5"
          name="FSScriptDialogContainer"
-         tool_tip="Set this to make script dialogs appear inside a single multi-floater window. Each tab respresents a different script dialog. Animations are not supported."
+         tool_tip="Set this to make script dialogs appear inside a single multi-floater window. Each tab respresents a different script dialog. 'Animated Script Dialog' and 'Script Dialog Positions' are not supported when this feature is enabled."
          top_pad="9"
          width="256" />
       <text

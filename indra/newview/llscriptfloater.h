@@ -33,6 +33,7 @@
 
 class LLToastPanel;
 class LLTabContainer;
+class FSFloaterScriptContainer;
 
 /**
  * Handles script notifications ("ScriptDialog" and "ScriptDialogGroup")
@@ -263,67 +264,6 @@ public:
 // </FS:Zi>
 
     void onStackClicked();      // <FS:Zi> Dialog Stacking browser
-};
-
-class FSFloaterScriptContainer : public LLMultiFloater
-{
-public:
-    FSFloaterScriptContainer(const LLSD& seed);
-    virtual ~FSFloaterScriptContainer();
-
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void onClose(bool app_quitting);
-    void onCloseFloater(LLUUID& id);
-    /*virtual*/ void draw();
-
-    /*virtual*/ void addFloater(LLFloater* floaterp,
-        bool select_added_floater,
-        LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
-    // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-    /*virtual*/ void removeFloater(LLFloater* floaterp);
-    // [/SL:KB]
-    bool hasFloater(LLFloater* floaterp);
-
-    void addNewSession(LLFloater* floaterp);
-
-    static FSFloaterScriptContainer* findInstance();
-    static FSFloaterScriptContainer* getInstance();
-
-    virtual void setVisible(bool b);
-    /*virtual*/ void setMinimized(bool b);
-
-    void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
-
-    static void reloadEmptyFloaters();
-    void initTabs();
-
-    void addFlashingSession(const LLUUID& session_id);
-
-    void tabOpen(LLFloater* opened_floater, bool from_click);
-
-    void startFlashingTab(LLFloater* floater, const std::string& message);
-
-private:
-
-    LLFloater*  getCurrentScriptFloater();
-
-    typedef std::map<LLUUID, LLFloater*> avatarID_panel_map_t;
-    avatarID_panel_map_t mSessions;
-    boost::signals2::connection mNewMessageConnection;
-
-    void checkFlashing();
-    uuid_vec_t  mFlashingSessions;
-
-    bool        mIsAddingNewSession;
-
-    std::map<LLFloater*, bool> mFlashingTabStates;
-
-    // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
-protected:
-    void onScriptTabRearrange(S32 tab_index, LLPanel* tab_panel);
-    // [/SL:KB]
-
 };
 
 #endif //LL_SCRIPTFLOATER_H
