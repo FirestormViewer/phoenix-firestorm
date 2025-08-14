@@ -237,6 +237,7 @@
 #include "quickprefs.h"
 #include "vjfloaterlocalmesh.h" // local mesh
 #include "fsfloaterwhitelisthelper.h" // fs whitelist helper
+
 // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 #include "fsfloaterscriptcontainer.h"
 // </FS:minerjr> [FIRE-35859]
