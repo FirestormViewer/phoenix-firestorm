@@ -42,6 +42,7 @@ jobs:
           - os: ubuntu-24.04
             container_image: ubuntu:22.04   # only Linux uses a container
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container_image }}
     outputs:
       viewer_channel: ${{ steps.channel.outputs.viewer_channel }}
       viewer_version: ${{ steps.version.outputs.viewer_version }}
