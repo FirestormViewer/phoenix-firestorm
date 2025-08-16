@@ -606,10 +606,10 @@ bool Asset::prep()
 
                                 vertex_count[variant] += primitive.getVertexCount();
                                 index_count[variant] += primitive.getIndexCount();
-
+#ifdef SHOW_ASSERT
                                 // all primitives of a given variant and material should all have the same attribute mask
                                 llassert(attribute_mask == 0 || primitive.mAttributeMask == attribute_mask);
-#ifdef SHOW_ASSERT
+
                                 attribute_mask |= primitive.mAttributeMask;
 #endif
                             }

@@ -29,7 +29,7 @@ env:
   fallback_platform: ${platform}
   FS_RELEASE_CHAN: ${FS_RELEASE_TYPE}x64
   FS_GRID: "GRID FLAGS NOT SET"
-  PYTHON: 
+  PYTHON: Unknown
 
 jobs:
   build_matrix:
@@ -38,7 +38,11 @@ jobs:
         os: [macos-15,ubuntu-24.04,windows-2022]
         grid: [sl,os]
         variant: [regular, avx]
+        include:
+          - os: ubuntu-24.04
+            container_image: ubuntu:22.04   # only Linux uses a container
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container_image }}
     outputs:
       viewer_channel: ${{ steps.channel.outputs.viewer_channel }}
       viewer_version: ${{ steps.version.outputs.viewer_version }}
@@ -101,12 +105,16 @@ jobs:
         with: 
           swap-storage: false
 
-      # - name: Set gcc version on Linux
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     echo "CC=gcc-10" >> $GITHUB_ENV
-      #     echo "CXX=g++-10" >> $GITHUB_ENV
-
+      - name: Install GCC-14
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-14 g++-14
+          echo "CC=gcc-14"  >> $GITHUB_ENV
+          echo "CXX=g++-14" >> $GITHUB_ENV
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
