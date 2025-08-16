@@ -221,13 +221,8 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
     // toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
     eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
     mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
-    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
-    //if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
-    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
 
-    // Only animate the script dialog if it is not using the container or the position is set to the TOP.
-    if (!script_dialog_container && gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
-    // </FS:minerjr> [FIRE-35859]
+    if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
     {
         mCurrentHeight = 0;
         mStartTime = LLFrameTimer::getElapsedSeconds();
@@ -236,6 +231,14 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
     {
         mCurrentHeight = mDesiredHeight;
     }
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
+    // Only animate the script dialog if it is not using the container or the position is set to the TOP.
+    if (script_dialog_container)
+    {
+        mCurrentHeight = mDesiredHeight;
+    }
+    // </FS:minerjr> [FIRE-35859]
     toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), mCurrentHeight);
     // </FS:Zi>
     setShape(toast_rect);
@@ -918,7 +921,7 @@ S32 LLScriptFloaterManager::getTopPad()
 // </FS:Zi>
 
 
-// <FS:minerjr>
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 // Reload floaters when changing the preferences from using multi-floater container
 void LLScriptFloaterManager::reloadFloaters()
 {
@@ -934,15 +937,8 @@ void LLScriptFloaterManager::reloadFloaters()
         }
         toggleScriptFloater(iter->first, false);
     }
-    /*
-    for (script_notification_map_t::iterator iter = mNotifications.begin(); iter != mNotifications.end(); iter++)
-    {
-        // open floater
-        toggleScriptFloater(iter->first, false);
-    }
-    */
 }
-// </FS:minerjr>
+// </FS:minerjr> [FIRE-35859]
 
 //////////////////////////////////////////////////////////////////
 

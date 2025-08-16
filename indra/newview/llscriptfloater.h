@@ -157,10 +157,10 @@ public:
     S32 getTopPad();
 // </FS:Zi>
 
-    // <FS:minerjr>
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     // Reload floaters when changing the preferences from using multi-floater container
     void reloadFloaters();
-    // </FS:minerjr>
+    // </FS:minerjr> [FIRE-35859]
 };
 
 /**
