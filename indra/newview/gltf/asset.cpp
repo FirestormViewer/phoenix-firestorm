@@ -589,7 +589,7 @@ bool Asset::prep()
 
                 for (U32 variant = 0; variant < LLGLSLShader::NUM_GLTF_VARIANTS; ++variant)
                 {
-#if SHOW_ASSERT
+#ifdef SHOW_ASSERT
                     U32 attribute_mask = 0;
 #endif
                     // for each mesh
@@ -606,10 +606,9 @@ bool Asset::prep()
 
                                 vertex_count[variant] += primitive.getVertexCount();
                                 index_count[variant] += primitive.getIndexCount();
-
                                 // all primitives of a given variant and material should all have the same attribute mask
                                 llassert(attribute_mask == 0 || primitive.mAttributeMask == attribute_mask);
-#if SHOW_ASSERT
+#ifdef SHOW_ASSERT
                                 attribute_mask |= primitive.mAttributeMask;
 #endif
                             }
