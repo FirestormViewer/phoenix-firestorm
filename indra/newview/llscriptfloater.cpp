@@ -221,7 +221,6 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
     // toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
     eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
     mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
-
     if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
     {
         mCurrentHeight = 0;
