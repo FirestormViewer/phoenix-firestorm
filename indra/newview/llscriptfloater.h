@@ -156,6 +156,11 @@ public:
 
     S32 getTopPad();
 // </FS:Zi>
+
+    // <FS:minerjr>
+    // Reload floaters when changing the preferences from using multi-floater container
+    void reloadFloaters();
+    // </FS:minerjr>
 };
 
 /**

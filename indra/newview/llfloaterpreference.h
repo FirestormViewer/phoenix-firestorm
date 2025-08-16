@@ -177,6 +177,11 @@ protected:
     // <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
     void onShowGroupNoticesTopRightChanged();
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    // When the script dialog container check box is changed
+    void onScriptDialogContainerEnabled();
+    // </FS:minerjr> [FIRE-35859]
+
 public:
     // This function squirrels away the current values of the controls so that
     // cancel() can restore them.

@@ -170,6 +170,9 @@
 #include "llfiltereditor.h"
 #include "llviewershadermgr.h"
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+#include "llscriptfloater.h"
+// </FS:minerjr> [FIRE-35859]
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
 char const* const VISIBILITY_HIDDEN = "hidden";
@@ -825,7 +828,7 @@ bool LLFloaterPreference::postBuild()
     // <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
     // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     //If the user changes the script dialog container, we want to disable the animate script dialog preference option if it is enabled
-    gSavedSettings.getControl("FSScriptDialogContainer")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
+    gSavedSettings.getControl("FSScriptDialogContainer")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onScriptDialogContainerEnabled, this));
     // </FS:minerjr> [FIRE-35859]
     gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
     updateAnimatedScriptDialogs();
@@ -2165,6 +2168,20 @@ void LLFloaterPreference::onUpdatePopupFilter()
 }
 // <FS:Zi>
 
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+void LLFloaterPreference::onScriptDialogContainerEnabled()
+{    
+    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
+    // Set the Script Dialog Position Dropdown to the opposite state of the script dialog container flag
+    // as the value is not valid and not used by the script dialog container
+    childSetEnabled("ScriptDialogsPositionDropdown", !script_dialog_container);
+    // Call update on the animated script dialogs to disable it
+    updateAnimatedScriptDialogs();
+    // Get the script floater manager to reload the floaters as it has the list of notification ids.
+    LLScriptFloaterManager::getInstance()->reloadFloaters();
+}
+// </FS:minerjr> [FIRE-35859]
+
 void LLFloaterPreference::refreshEnabledState()
 {
     if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures"))
@@ -3253,9 +3270,6 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
     // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     // When using the script dialog container, the animated dialogs don't work correctly, so they need to be disabled.
     static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
-    // Set the Script Dialog Position Dropdown to the opposite state of the script dialog container flag
-    // as the value is not valid and not used by the script dialog container
-    childSetEnabled("ScriptDialogsPositionDropdown", !script_dialog_container);
     // If the script dialog container is checked, we want to disable the animations, so force it to an invalid position
     if (script_dialog_container)
     {

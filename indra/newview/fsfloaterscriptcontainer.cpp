@@ -67,7 +67,10 @@ bool FSFloaterScriptContainer::postBuild()
 
     mTabContainer->setAllowRearrange(true);
     mTabContainer->setRearrangeCallback(boost::bind(&FSFloaterScriptContainer::onScriptTabRearrange, this, _1, _2));
-    mTabContainer->setDoubleClickCallback(boost::bind(&FSFloaterScriptContainer::onDoubleClick, this));
+
+    mInitalHeight = getRect().getHeight();
+    //mTabContainer->setDoubleClickCallback(boost::bind(&FSFloaterScriptContainer::onDoubleClick, this));
+    //gSavedSettings.getControl("FSScriptDialogContainer")->getCommitSignal()->connect(boost::bind(&FSFloaterScriptContainer::onUseContainerChanged, this));
 
     return true;
 }
@@ -114,18 +117,40 @@ void FSFloaterScriptContainer::onOpen(const LLSD& key)
     {
         mTabContainer->setFocus(true);
     }
+
+    growToFit(getRect().getWidth(), mInitalHeight);
 }
 
 void FSFloaterScriptContainer::onClose(bool app_quitting)
 {
+    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
+
     if (app_quitting)
     {
-        for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+        for (S32 i = 0; i < mTabContainer->getTabCount(); i++)
         {
             LLScriptFloater* floater = dynamic_cast<LLScriptFloater*>(mTabContainer->getPanelByIndex(i));
             if (floater)
             {
                 floater->onClose(app_quitting);
+            }
+        }
+    }
+    else
+    {
+        S32 tab_count = mTabContainer->getTabCount();
+        for (S32 i = 0; i < tab_count; i++)
+        {
+            LLScriptFloater* floater = dynamic_cast<LLScriptFloater*>(mTabContainer->getPanelByIndex(0));
+            if (floater)
+            {
+                if (!script_dialog_container)
+                {
+                    floater->setTornOff(false);
+                    floater->setCanDock(true);
+                }
+                LLScriptFloater::onClickTearOff(floater);
+                LLScriptFloater::onClickDock(floater);
             }
         }
     }
@@ -141,7 +166,7 @@ void FSFloaterScriptContainer::onDoubleClick()
     }
 }
 
-void FSFloaterScriptContainer::addFloater(LLFloater* floaterp,
+void FSFloaterScriptContainer::addFloater(LLScriptFloater* floaterp,
     bool select_added_floater,
     LLTabContainer::eInsertionPoint insertion_point)
 {
@@ -160,13 +185,20 @@ void FSFloaterScriptContainer::addFloater(LLFloater* floaterp,
     LLUUID session_id = floaterp->getKey();
     mSessions[session_id] = floaterp;
     floaterp->mCloseSignal.connect(boost::bind(&FSFloaterScriptContainer::onCloseFloater, this, session_id));
+
+    LL_INFOS() << " ScriptFloater Height:" << floaterp->mDesiredHeight << " Multi-Float Height:" << (getRect().getHeight()) << LL_ENDL;
+    if (floaterp->mDesiredHeight > getRect().getHeight())
+    {
+        growToFit(getRect().getWidth(), floaterp->mDesiredHeight);
+    }
 }
 
 void FSFloaterScriptContainer::addNewSession(LLFloater* floaterp)
 {
     // Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
     mIsAddingNewSession = true;
-    addFloater(floaterp, false, LLTabContainer::END);
+    LLScriptFloater* script_floater = dynamic_cast<LLScriptFloater*>(floaterp);
+    addFloater(script_floater, false, LLTabContainer::END);
     mIsAddingNewSession = false;
 }
 
@@ -270,29 +302,11 @@ void FSFloaterScriptContainer::setVisible(bool b)
 
 void FSFloaterScriptContainer::setMinimized(bool b)
 {
-    if (mTabContainer)
-    {
-        if (LLScriptFloater* script_floater = dynamic_cast<LLScriptFloater*>(mTabContainer->getCurrentPanel()); script_floater)
-        {
-            //script_floater->handleMinimized(b);
-        }
-    }
-
     LLMultiFloater::setMinimized(b);
 }
 
 void FSFloaterScriptContainer::reloadEmptyFloaters()
 {
-    LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
-    for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
-        iter != inst_list.end(); ++iter)
-    {
-        LLScriptFloater* floater = dynamic_cast<LLScriptFloater*>(*iter);
-        //if (floater && floater->getLastChatMessageIndex() == -1)
-        {
-            //floater->reloadMessages(true);
-        }
-    }
 
 }
 
@@ -326,7 +340,7 @@ void FSFloaterScriptContainer::addFlashingSession(const LLUUID& session_id)
 
 void FSFloaterScriptContainer::checkFlashing()
 {
-    gToolBarView->flashCommand(LLCommandId("chat"), !mFlashingSessions.empty(), isMinimized());
+    gToolBarView->flashCommand(LLCommandId("script_container"), !mFlashingSessions.empty(), isMinimized());
 }
 
 /*void FSFloaterScriptContainer::sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id)

@@ -38,6 +38,7 @@
 
 class LLToastPanel;
 class LLTabContainer;
+class LLScriptFloater;
 
 /////////////////////////////
 //FSFloaterScriptContainer//
@@ -56,7 +57,7 @@ public:
     void onCloseFloater(LLUUID& id);
     /*virtual*/ void draw();
 
-    /*virtual*/ void addFloater(LLFloater* floaterp,
+    /*virtual*/ void addFloater(LLScriptFloater* floaterp,
         bool select_added_floater,
         LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
     // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
@@ -95,6 +96,7 @@ private:
     uuid_vec_t  mFlashingSessions;
 
     bool        mIsAddingNewSession;
+    S32 mInitalHeight;
 
     std::map<LLFloater*, bool> mFlashingTabStates;
 

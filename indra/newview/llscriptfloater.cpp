@@ -119,24 +119,9 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
             {
                 if (container && !container->hasFloater(floater))
                 {
-                    if (floater->isDockable())
-                    {
-                        floater->setCanDock(false);
-                        LLNotificationPtr notification = LLNotifications::getInstance()->find(notification_id);
-                        if (notification != NULL)
-                        {
-                            floater->setShortTitle(LLScriptFloaterManager::getObjectName(notification_id));
-                            floater->setTitle(floater->getShortTitle());
-                        }
-                    }
-
                     container->addFloater(floater, true);
                     container->setVisible(true);
                 }
-            }
-            else if (!floater->isDockable())
-            {
-                LLScriptFloater::onClickDock(floater);
             }
             // </FS:minerjr> [FIRE-35859]
             floater->setVisible(true);
@@ -932,6 +917,33 @@ S32 LLScriptFloaterManager::getTopPad()
 }
 // </FS:Zi>
 
+
+// <FS:minerjr>
+// Reload floaters when changing the preferences from using multi-floater container
+void LLScriptFloaterManager::reloadFloaters()
+{
+    for (script_notification_map_t::iterator iter = mNotifications.begin(); iter != mNotifications.end(); iter++)
+    {
+        // close floater
+        LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", iter->first);
+        if (floater)
+        {
+            floater->savePosition();
+            floater->setNotificationId(LLUUID::null);
+            floater->closeFloater();
+        }
+        toggleScriptFloater(iter->first, false);
+    }
+    /*
+    for (script_notification_map_t::iterator iter = mNotifications.begin(); iter != mNotifications.end(); iter++)
+    {
+        // open floater
+        toggleScriptFloater(iter->first, false);
+    }
+    */
+}
+// </FS:minerjr>
+
 //////////////////////////////////////////////////////////////////
 
 bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
@@ -984,7 +996,14 @@ void LLScriptFloater::draw()
 // <FS:Zi> script dialogs position
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
+    // </FS:minerjr> [FIRE-35859]
     LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    // Don't register the notification ID with the floater, so that the contaier can handle it and disable docking
+    if (!script_dialog_container)
+    // </FS:minerjr> [FIRE-35859]
     floater->setNotificationId(notification_id);
     floater->createForm(notification_id);
 
@@ -994,6 +1013,14 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
     eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
     bool chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
+
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    // When using the script dialog container, force the position to top right, to not use docking
+    if (script_dialog_container)
+    {
+        dialog_position = POS_TOP_RIGHT;
+    }
+    // </FS:minerjr> [FIRE-35859]
 
     if (dialog_position == POS_DOCKED && chicletsDisabled)
     {
@@ -1090,7 +1117,6 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
     }
 
     // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
-    static LLCachedControl<bool> script_dialog_container(gSavedSettings,"FSScriptDialogContainer", false);
     // If the script dialog container feature is enabled, then
     if (script_dialog_container)
     {
