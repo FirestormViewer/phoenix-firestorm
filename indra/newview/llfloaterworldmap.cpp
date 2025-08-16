@@ -586,8 +586,9 @@ void LLFloaterWorldMap::reshape( S32 width, S32 height, bool called_from_parent 
 void LLFloaterWorldMap::draw()
 {
     // <FS:Ansariel> Performance improvement
-    static LLView* show_destination_btn = getChildView("Show Destination");
-    static LLUICtrl* zoom_slider = getChild<LLUICtrl>("zoom slider");
+    static LLView*   show_destination_btn = getChildView("Show Destination");
+    static LLUICtrl* zoom_slider          = getChild<LLUICtrl>("zoom slider");
+    static LLButton* track_region_btn     = getChild<LLButton>("track_region");
     // </FS:Ansariel> Performance improvement
 
     static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
@@ -663,7 +664,7 @@ void LLFloaterWorldMap::draw()
     mGoHomeButton->setEnabled((!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
     // </FS:Ansariel> Performance improvement
     // <FS:Ansariel> Alchemy region tracker
-    getChild<LLButton>("track_region")->setEnabled((bool) tracking_status || LLWorldMap::getInstance()->isTracking());
+    track_region_btn->setEnabled((bool) tracking_status || LLWorldMap::getInstance()->isTracking());
 
     setMouseOpaque(true);
     getDragHandle()->setMouseOpaque(true);
@@ -1224,13 +1225,13 @@ void LLFloaterWorldMap::buildAvatarIDList()
     //}
 
     std::multimap<std::string, LLUUID> buddymap;
-    for(; it != end; ++it)
+    for (; it != end; ++it)
     {
-        buddymap.insert(std::make_pair((*it).second, (*it).first));
+        buddymap.emplace(it->second, it->first);
     }
-    for (std::multimap<std::string, LLUUID>::iterator bit = buddymap.begin(); bit != buddymap.end(); ++bit)
+    for (const auto& [name, id] : buddymap)
     {
-        mFriendCombo->addSimpleElement((*bit).first, ADD_BOTTOM, (*bit).second);
+        mFriendCombo->addSimpleElement(name, ADD_BOTTOM, id);
     }
     // </FS:Ansariel>
 
@@ -1285,11 +1286,11 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
         // <FS:Ansariel> Filter duplicate landmarks on world map
         if (filterLandmarks)
         {
-            if (used_landmarks.find(item->getAssetUUID()) != used_landmarks.end())
+            if (used_landmarks.contains(item->getAssetUUID()))
             {
                 continue;
             }
-            used_landmarks.insert(item->getAssetUUID());
+            used_landmarks.emplace(item->getAssetUUID());
         }
         // </FS:Ansariel>
 
@@ -1936,7 +1937,7 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 
     if (num_results > 0)
     {
-        // Ansariel: Let's sort the list to make it more user-friendly
+        // <FS:Ansariel> Let's sort the list to make it more user-friendly
         mSearchResults->sortByColumn("sim_name", true);
 
         // if match found, highlight it and go
