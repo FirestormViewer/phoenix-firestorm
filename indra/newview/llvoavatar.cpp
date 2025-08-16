@@ -122,20 +122,21 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
 #include "fsdata.h"
+#include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
+#include "fslslbridge.h" // <FS:PP> Movelock position refresh
 #include "lfsimfeaturehandler.h"    // <FS:CR> Opensim
 #include "lggcontactsets.h"
 #include "llcontrol.h"
 #include "llfilepicker.h"   // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
-#include "llviewermenufile.h"
+#include "llhudeffectresetskeleton.h"
 #include "llnetmap.h"
-#include "llviewernetwork.h"    // [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
-#include "fsavatarrenderpersistence.h"
-#include "fslslbridge.h" // <FS:PP> Movelock position refresh
+#include "llviewermenufile.h"
+#include "llviewernetwork.h"    // [FS:CR] isInSecondlife()
 
-#include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -9140,6 +9141,16 @@ void LLVOAvatar::getOffObject()
         {
             revokePermissionsOnObject(sit_object);
         }
+
+        // <FS:Ansariel> Reset skeleton on stand up option
+        if (gSavedSettings.getBOOL("FSResetSkeletonOnStandUp"))
+        {
+            LLHUDEffectResetSkeleton* effectp = (LLHUDEffectResetSkeleton*)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_RESET_SKELETON, true);
+            effectp->setSourceObject(gAgentAvatarp);
+            effectp->setTargetObject(gAgentAvatarp);
+            effectp->setResetAnimations(false);
+        }
+        // </FS:Ansariel>
     }
 }
 
