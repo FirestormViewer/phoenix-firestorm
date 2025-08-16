@@ -561,7 +561,7 @@ width="430">
 							 label="Unlock Pelvis in BVH"
 							 follows="left|top"
 							 left="5"
-							 tool_tip="When you save this pose to BVH, the Pelvis will not be 'locked', meaning your pose could move in-world."
+							 tool_tip="When you save this pose to BVH, the Pelvis will not be 'locked'. This means other animations in-world can 'move' the whole avatar. Use this if your pose is meant to play 'on top of' another pose."
 							 top_pad="15"
 							 width="134" />
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
@@ -985,11 +985,11 @@ width="430">
 						 control_name="FSPoserSaveExternalFileAlso"
 						 name="also_save_bvh_checkbox"
 						 height="16"
-						 label="Write BVH when saving**"
+						 label="Write BVH when saving"
 						 follows="left|top"
 						 left="5"
 						 tool_tip="When you save your pose, also write a BVH file. BVH can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
-						 top_pad="2"
+						 top_pad="5"
 						 width="134" />
 						<check_box
 						 control_name="FSPoserOnSaveConfirmOverwrite"
@@ -1010,7 +1010,7 @@ width="430">
 						 left="5"
 						 tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
 						 top_pad="5"
-						 width="134" />						 
+						 width="134" />
 						<check_box
 						 control_name="FSManipShowJointMarkers"
 						 name="show_joint_markers_checkbox"
@@ -1020,7 +1020,17 @@ width="430">
 						 left="5"
 						 tool_tip="Show small indicators to aid joint selection when visually posing."
 						 top_pad="5"
-						 width="134" />						 
+						 width="134" />
+						<check_box
+						 control_name="RenderDepthOfFieldInEditMode"
+						 name="dof_edit_mode_checkbox"
+						 height="16"
+						 label="Enable DoF in Edit Mode"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="When using the Manipulator, Depth of Field normally disables automatically. This keeps Depth of Field on when editing poses or prims."
+						 top_pad="5"
+						 width="134" />
 					</panel>
 				</tab_container>
 				<button
