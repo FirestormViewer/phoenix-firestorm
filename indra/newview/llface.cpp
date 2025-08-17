@@ -2337,7 +2337,6 @@ F32 LLFace::getTextureVirtualSize()
         }
     }
     */
-    // </FS:minerjr> [FIRE-35081]
     constexpr S32 MAX_IMAGE_SIZE_DEFAULT = 2048;
     U32 max_tex_res = MAX_IMAGE_SIZE_DEFAULT;
     //if (mBoostLevel < LLGLTexture::BOOST_HIGH)
@@ -2348,6 +2347,7 @@ F32 LLFace::getTextureVirtualSize()
         max_tex_res = (U32)llclamp((U32)max_texture_resolution, 512, MAX_IMAGE_SIZE_DEFAULT);
         face_area = llmin(face_area, (F32)(max_tex_res * max_tex_res));
     }
+    // </FS:minerjr> [FIRE-35081]
     setVirtualSize(face_area) ;
 
     return face_area;
@@ -2472,7 +2472,9 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     // <FS:minerjr> New fp flag now supports NaN's and can mess up values
     if (std::isnormal(dist))
     {
-        dist = llmax(dist - size.getLength3().getF32(), 0.001f);
+    // </FS:minerjr>
+    dist = llmax(dist-size.getLength3().getF32(), 0.001f);
+    // <FS:minerjr> New fp flag now supports NaN's and can mess up values
     }
     else
     {

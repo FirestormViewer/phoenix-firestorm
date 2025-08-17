@@ -2,7 +2,7 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
-  <key>FSSlowTextFetchProtion</key>
+  <key>FSSlowTextFetchProtection</key>
   <map>
     <key>Comment</key>
     <string>Slow texture fetch protection. Use check to skip over waiting for long texture fetch.</string>

@@ -560,6 +560,7 @@ void LLViewerTexture::updateClass()
     {
         // slam to 1.5 bias the moment we hit low memory (discards off screen textures immediately)
         sDesiredDiscardBias = llmax(sDesiredDiscardBias, 1.5f);
+
 #if 0 // <FS:minerjr> This would cause large hitch if the bias was turned on, and if the bias would ride back and forth, it could keep adding many updates to the texture list
         if (is_sys_low || over_pct > 2.f)
         { // if we're low on system memory, emergency purge off screen textures to avoid a death spiral
@@ -2074,9 +2075,8 @@ bool LLViewerFetchedTexture::updateFetch()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     static LLCachedControl<bool> textures_decode_disabled(gSavedSettings,"TextureDecodeDisabled", false);
-    // <FS:minerjr>
     // <FS:minerjr> Use check to skip over waiting for long texture fetch.
-    static LLCachedControl<bool> slow_texture_fetch_protection(gSavedSettings, "FSSlowTextFetchProtion", false);
+    static LLCachedControl<bool> slow_texture_fetch_protection(gSavedSettings, "FSSlowTextFetchProtection", false);
     // <FS:minerjr>
 
     if(textures_decode_disabled) // don't fetch the surface textures in wireframe mode
@@ -2334,8 +2334,6 @@ bool LLViewerFetchedTexture::updateFetch()
         if (mLastPacketTimer.getElapsedTimeF32() > FETCH_IDLE_TIME)
         {
             LL_DEBUGS("Texture") << "exceeded idle time " << FETCH_IDLE_TIME << ", deleting request: " << getID() << LL_ENDL;
-            // <FS:minerjr>
-            LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
             mHasFetcher = false;
         }
