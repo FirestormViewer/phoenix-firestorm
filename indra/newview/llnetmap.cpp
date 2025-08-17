@@ -318,12 +318,12 @@ void LLNetMap::draw()
     }
     // </FS:Ansariel>: Synchronize netmap scale throughout instances
 
-// <FS:Ansariel> Aurora Sim
+    // <FS:Ansariel> Aurora Sim
     if (!LLWorld::getInstance()->getAllowMinimap())
     {
         return;
     }
-// <FS:Ansariel> Aurora Sim
+    // <FS:Ansariel> Aurora Sim
 
     static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
     static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
@@ -699,7 +699,9 @@ void LLNetMap::draw()
         // Draw avatars
         for (U32 i = 0; i < avatar_ids.size(); i++)
         {
-            LLUUID uuid = avatar_ids[i];
+            // <FS:Ansariel> Performance improvement
+            //LLUUID uuid = avatar_ids[i];
+            const LLUUID& uuid = avatar_ids.at(i);
             // Skip self, we'll draw it later
             if (uuid == gAgent.getID()) continue;
 
@@ -872,8 +874,8 @@ void LLNetMap::draw()
         F32 ctr_x = (F32)center_sw_left;
         F32 ctr_y = (F32)center_sw_bottom;
 
-        const F32 steps_per_circle = 40.0f;
-        const F32 steps_per_radian = steps_per_circle / F_TWO_PI;
+        constexpr F32 steps_per_circle = 40.0f;
+        constexpr F32 steps_per_radian = steps_per_circle / F_TWO_PI;
         const F32 arc_start = -(horiz_fov / 2.0f) + F_PI_BY_TWO;
         const F32 arc_end = (horiz_fov / 2.0f) + F_PI_BY_TWO;
         const S32 steps = llmax(1, (S32)((horiz_fov * steps_per_radian) + 0.5f));
@@ -1958,8 +1960,7 @@ void LLNetMap::handleClearMarks()
 // static
 bool LLNetMap::getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color)
 {
-    avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
-    if (found != sAvatarMarksMap.end())
+    if (auto found = sAvatarMarksMap.find(avatar_id); found != sAvatarMarksMap.end())
     {
         color = found->second;
         return true;
@@ -2025,8 +2026,7 @@ LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
     cs_instance.hasFriendColorThatShouldShow(avatar_id, ContactSetType::MINIMAP, color);
 
     // Mark Avatars with special colors
-    avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
-    if (found != sAvatarMarksMap.end())
+    if (auto found = sAvatarMarksMap.find(avatar_id); found != sAvatarMarksMap.end())
     {
         color = found->second;
     }
