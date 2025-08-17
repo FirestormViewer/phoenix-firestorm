@@ -269,7 +269,10 @@ class FSJointPose
             LLQuaternion newPublicRot = joint->getRotation() * invRot;
 
             if (zeroBase)
+            {
+                mUserSpecifiedBaseZero = zeroBase;
                 zeroBaseRotation();
+            }
 
             mRotation.set(newPublicRot);
             mPosition.set(joint->getPosition() - mBasePosition);
