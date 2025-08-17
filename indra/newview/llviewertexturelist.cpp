@@ -1253,8 +1253,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             {
                 imagep->mMaxVirtualSize = 0.f;
             }
-
-
+            // </FS:minerjr>
         }
 
         // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
