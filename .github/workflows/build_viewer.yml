@@ -90,12 +90,11 @@ jobs:
             PY="${{ steps.py311_setup.outputs.python-path }}"
           fi
           echo "python-path=$PY" >> "$GITHUB_OUTPUT"
-          echo "Resolved Python at: $PY"
-            - name: Set PYTHON environment for CMake
-              run: |
-                echo "PYTHON=${{ steps.py311.outputs.python-path }}" >> $GITHUB_ENV
-              shell: bash
-
+          echo "Resolved Python at: $PY"          
+      - name: Set PYTHON environment for CMake
+        run: |
+          echo "PYTHON=${{ steps.py311.outputs.python-path }}" >> $GITHUB_ENV
+        shell: bash
       - name: Install python requirements
         run: |
           python3 -m pip install -r requirements.txt
