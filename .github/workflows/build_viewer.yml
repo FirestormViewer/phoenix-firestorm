@@ -35,12 +35,9 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-15,ubuntu-24.04,windows-2022]
+        os: [macos-15,ubuntu-22.04,windows-2022]
         grid: [sl,os]
         variant: [regular, avx]
-        include:
-          - os: ubuntu-24.04
-            container_image: ubuntu:22.04   # only Linux uses a container
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container_image }}
     outputs:
@@ -115,6 +112,7 @@ jobs:
           sudo apt-get install -y gcc-14 g++-14
           echo "CC=gcc-14"  >> $GITHUB_ENV
           echo "CXX=g++-14" >> $GITHUB_ENV
+
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
