@@ -62,15 +62,39 @@ jobs:
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        id: py311
+      # Use apt-based Python when inside the Ubuntu 22.04 container
+      - name: Install Python 3.11 (container case)
+        if: matrix.container_image == 'ubuntu:22.04'
+        id: py311_apt
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            python3.11 python3.11-venv python3-pip
+          python3.11 -m pip install --upgrade pip setuptools wheel
+          echo "python-path=$(command -v python3.11)" >> "$GITHUB_OUTPUT"
+      # Use setup-python for all other jobs
+      - name: Set up Python (normal case)
+        if: matrix.container_image != 'ubuntu:22.04'
+        id: py311_setup
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Set PYTHON environment for CMake
-        run: |
-          echo "PYTHON=${{ steps.py311.outputs.python-path }}" >> $GITHUB_ENV
+          check-latest: true
+      - name: resolve python path
+        id: py311
         shell: bash
+        run: |
+          if [ -n "${{ steps.py311_apt.outputs.python-path }}" ]; then
+            PY="${{ steps.py311_apt.outputs.python-path }}"
+          else
+            PY="${{ steps.py311_setup.outputs.python-path }}"
+          fi
+          echo "python-path=$PY" >> "$GITHUB_OUTPUT"
+          echo "Resolved Python at: $PY"
+            - name: Set PYTHON environment for CMake
+              run: |
+                echo "PYTHON=${{ steps.py311.outputs.python-path }}" >> $GITHUB_ENV
+              shell: bash
 
       - name: Install python requirements
         run: |
