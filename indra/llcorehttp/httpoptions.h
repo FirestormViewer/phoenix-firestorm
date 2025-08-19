@@ -178,20 +178,19 @@ public:
         return mNoBody;
     }
 
+    // Default:   0
+    void setLastModified(time_t lastModified);
+    time_t getLastModified() const
+    {
+        return mLastModified;
+    }
+
     /// Sets default behavior for verifying that the name in the
     /// security certificate matches the name of the host contacted.
     /// Defaults false if not set, but should be set according to
     /// viewer's initialization options and command argunments, see
     /// NoVerifySSLCert
     static void         setDefaultSSLVerifyPeer(bool verify);
-
-    // <FS:Ansariel> GetIfModified request
-    void                setLastModified(long last_modified);
-    long                getLastModified() const
-    {
-        return mLastModified;
-    }
-    // </FS:Ansariel>
 
 protected:
     bool                mWantHeaders;
@@ -207,10 +206,9 @@ protected:
     bool                mVerifyHost;
     int                 mDNSCacheTimeout;
     bool                mNoBody;
+    time_t              mLastModified;
 
     static bool         sDefaultVerifyPeer;
-
-    long                mLastModified; // <FS:Ansariel> GetIfModified request
 }; // end class HttpOptions
 
 
