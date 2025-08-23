@@ -1455,6 +1455,20 @@ static std::string add_collada_filter_to_gtkchooser(GtkWindow *picker)
                                LLTrans::getString("collada_files") + " (*.dae)");
 }
 
+// <FS:Beq> migrate to GLTF support
+static std::string add_model_filter_to_gtkchooser(GtkWindow *picker)
+{
+// "Model files (*.dae, *.gltf, *.glb)"
+    GtkFileFilter *gfilter = gtk_file_filter_new();
+    gtk_file_filter_add_pattern(gfilter, "*.dae");
+    gtk_file_filter_add_pattern(gfilter, "*.gltf");
+    gtk_file_filter_add_pattern(gfilter, "*.glb");
+    std::string filtername = LLTrans::getString("model_files") + " (*.dae; *.gltf; *.glb)";
+    add_common_filters_to_gtkchooser(gfilter, picker, filtername);
+    return filtername;
+}
+// </FS:Beq>
+
 static std::string add_imageload_filter_to_gtkchooser(GtkWindow *picker)
 {
     GtkFileFilter *gfilter = gtk_file_filter_new();
@@ -1676,7 +1690,7 @@ bool LLFilePicker::getOpenFile( ELoadFilter filter, bool blocking )
             filtername = dead_code_should_blow_up_here(picker);
             break;
         case FFLOAD_COLLADA:
-            filtername = add_collada_filter_to_gtkchooser(picker);
+            filtername = add_model_filter_to_gtkchooser(picker);
             break;
         case FFLOAD_IMAGE:
             filtername = add_imageload_filter_to_gtkchooser(picker);
@@ -1936,6 +1950,9 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
                 file_dialog_filter = "*.raw";
                 break;
             case FFLOAD_MODEL:
+                file_type = "model_files";
+                file_dialog_filter = "*.{dae,gltf,glb}";
+                break;
             case FFLOAD_COLLADA:
                 file_type = "collada_files";
                 file_dialog_filter = "*.dae";
