@@ -8111,10 +8111,10 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>FSPoserResetBaseRotationOnEdit</key>
+  <key>FSPoserPelvisUnlockedForBvhSave</key>
   <map>
     <key>Comment</key>
-    <string>Whether to reset the base-rotation of a joint to zero when a user edits it.</string>
+    <string>Whether the mPelvis joint should be position/rotationally locked when a BVH is created.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

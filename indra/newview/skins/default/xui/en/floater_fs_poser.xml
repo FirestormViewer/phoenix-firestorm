@@ -11,6 +11,11 @@ width="430">
 	<string name="icon_category" translate="false">Inv_BodyShape</string>
 	<string name="icon_bone" translate="false"></string>
 	<string name="icon_object" translate="false">Inv_Object</string>
+	<string name="icon_rotation_bvh_locked_edited" translate="false">Script_Running</string>
+	<string name="icon_rotation_bvh_locked_unedited" translate="false">Script_NotRunning</string>
+	<string name="icon_rotation_bvh_unlocked" translate="false">Script_Error</string>
+	<string name="icon_rotation_is_world_locked" translate="false">Locked_Icon</string>
+	<string name="icon_rotation_does_not_export" translate="false">Conv_toolbar_close</string>
 	<string name="icon_rotation_is_own_work" translate="false">Check_Mark</string>
 	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
 	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
@@ -548,6 +553,17 @@ width="430">
 								 function="Poser.CommitSpinner"
                                  parameter="2"/>
 							</spinner>
+							<check_box
+							 control_name="FSPoserPelvisUnlockedForBvhSave"
+							 name="unlock_pelvis_for_bvh_save_checkbox"
+							 visible="false"
+							 height="16"
+							 label="Unlock Pelvis in BVH"
+							 follows="left|top"
+							 left="5"
+							 tool_tip="When you save this pose to BVH, the Pelvis will not be 'locked'. This means other animations in-world can 'move' the whole avatar. Use this if your pose is meant to play 'on top of' another pose."
+							 top_pad="15"
+							 width="134" />
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list
 							 visible="false"
@@ -966,25 +982,14 @@ width="430">
 						 top_pad="10"
 						 width="134" />
 						<check_box
-						 control_name="FSPoserResetBaseRotationOnEdit"
-						 name="reset_base_rotation_on_edit_checkbox"
-						 height="16"
-						 label="Reset base-rotation on edit"
-						 follows="left|top"
-						 left="5"
-						 tool_tip="When you first edit a rotation, reset it to zero. This means your work can save a pose (and not a diff see load/save). A green tick appears next each joint you have zero-ed export."
-						 top_pad="5"
-						 width="134" />
-						<check_box
 						 control_name="FSPoserSaveExternalFileAlso"
 						 name="also_save_bvh_checkbox"
 						 height="16"
-						 enabled="false"
-						 label="Write BVH when saving**"
+						 label="Write BVH when saving"
 						 follows="left|top"
-						 left="15"
-						 tool_tip="When you save your pose, also write a BVH file, which can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
-						 top_pad="2"
+						 left="5"
+						 tool_tip="When you save your pose, also write a BVH file. BVH can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."
+						 top_pad="5"
 						 width="134" />
 						<check_box
 						 control_name="FSPoserOnSaveConfirmOverwrite"
@@ -1005,7 +1010,7 @@ width="430">
 						 left="5"
 						 tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."
 						 top_pad="5"
-						 width="134" />						 
+						 width="134" />
 						<check_box
 						 control_name="FSManipShowJointMarkers"
 						 name="show_joint_markers_checkbox"
@@ -1015,7 +1020,17 @@ width="430">
 						 left="5"
 						 tool_tip="Show small indicators to aid joint selection when visually posing."
 						 top_pad="5"
-						 width="134" />						 
+						 width="134" />
+						<check_box
+						 control_name="RenderDepthOfFieldInEditMode"
+						 name="dof_edit_mode_checkbox"
+						 height="16"
+						 label="Enable DoF in Edit Mode"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="When using the Manipulator, Depth of Field normally disables automatically. This keeps Depth of Field on when editing poses or prims."
+						 top_pad="5"
+						 width="134" />
 					</panel>
 				</tab_container>
 				<button
@@ -1557,6 +1572,20 @@ width="430">
 					left_pad="1">
 					</button>
 					<button
+					 follows="left|top"
+					 height="21"
+					 layout="topleft"
+					 image_overlay="Locked_Icon"
+					 image_hover_unselected="Toolbar_Middle_Over"
+					 image_selected="Toolbar_Middle_Selected"
+					 image_unselected="Toolbar_Middle_Off"
+					 name="toggle_LockWorldRotation"
+					 left_pad="1"
+					 top_delta="0"
+					 tool_tip="Lock rotation in the world for the selected limb(s). Limbs that are world-locked keep the same rotation in-world when their parent-limbs move. Eg: lock your eyes and turn your head, your eyes keep looking (mostly) in the same direction."
+					 width="18" >
+					</button>
+					<button
 					follows="left|top"
 					height="21"
 					is_toggle="true"
@@ -1573,7 +1602,7 @@ width="430">
 					tool_tip="Mirror changes to the opposite joint."
 					left_pad="1"
 					top_delta="0"
-					width="52" >
+					width="43" >
 						<button.commit_callback
 						function="Poser.ToggleMirrorChanges"/>
 					</button>
@@ -1594,7 +1623,7 @@ width="430">
 					tool_tip="Copy changes to the opposite joint."
 					left_pad="1"
 					top_delta="0"
-					width="52" >
+					width="43" >
 						<button.commit_callback
 						function="Poser.ToggleSympatheticChanges"/>
 					</button>
