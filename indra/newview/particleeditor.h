@@ -43,117 +43,117 @@ class ParticleEditor : public LLFloater
     friend class ParticleScriptCreationCallback;
     friend class ParticleScriptUploadResponder;
 
-    public:
-        ParticleEditor(const LLSD& key);
-        ~ParticleEditor();
+public:
+    ParticleEditor(const LLSD& key);
+    ~ParticleEditor();
 
-        bool postBuild() override;
+    bool postBuild() override;
 
-        void setObject(LLViewerObject* objectp);
-        void scriptInjectReturned( );
+    void setObject(LLViewerObject* objectp);
+    void scriptInjectReturned();
 
-    protected:
-        void clearParticles();
-        void updateParticles();
-        void updateUI();
+protected:
+    void clearParticles();
+    void updateParticles();
+    void updateUI();
 
-        std::string createScript();
-        void createScriptInventoryItem(LLUUID categoryID);
+    std::string createScript();
+    void        createScriptInventoryItem(LLUUID categoryID);
 
-        void onParameterChange();
-        void onCopyButtonClicked();
-        void onInjectButtonClicked();
+    void onParameterChange();
+    void onCopyButtonClicked();
+    void onInjectButtonClicked();
 
-        void onClearTargetButtonClicked();
-        void onTargetPickerButtonClicked();
-        static void startPicking(void* userdata);
-        static void onTargetPicked(void* userdata);
+    void        onClearTargetButtonClicked();
+    void        onTargetPickerButtonClicked();
+    void        startPicking();
+    static void onTargetPicked(void* userdata);
 
-        void callbackReturned(const LLUUID& inv_item);
+    void callbackReturned(const LLUUID& inv_item);
 
-        std::string lslVector(F32 x, F32 y, F32 z);
-        std::string lslColor(const LLColor4& color);
+    std::string lslVector(F32 x, F32 y, F32 z);
+    std::string lslColor(const LLColor4& color);
 
-        LLViewerObject* mObject;
-        LLViewerTexture* mTexture;
-        LLViewerInventoryItem* mParticleScriptInventoryItem;
+    LLViewerObject*        mObject{ nullptr };
+    LLViewerTexture*       mTexture{ nullptr };
+    LLViewerInventoryItem* mParticleScriptInventoryItem{ nullptr };
 
-        LLViewerTexture* mDefaultParticleTexture;
+    LLViewerTexture* mDefaultParticleTexture{ nullptr };
 
-        LLPartSysData mParticles;
+    LLPartSysData mParticles;
 
-        std::map<std::string, U8> mPatternMap;
-        std::map<std::string, std::string> mScriptPatternMap;
+    std::map<std::string, U8>          mPatternMap;
+    std::map<std::string, std::string> mScriptPatternMap;
 
-        std::map<std::string, U8> mBlendMap;
-        std::map<std::string, std::string> mScriptBlendMap;
+    std::map<std::string, U8>          mBlendMap;
+    std::map<std::string, std::string> mScriptBlendMap;
 
-        LLPanel* mMainPanel;
+    LLPanel* mMainPanel{ nullptr };
 
-        LLComboBox* mPatternTypeCombo;
-        LLTextureCtrl* mTexturePicker;
+    LLComboBox*    mPatternTypeCombo{ nullptr };
+    LLTextureCtrl* mTexturePicker{ nullptr };
 
-        LLSpinCtrl* mBurstRateSpinner;
-        LLSpinCtrl* mBurstCountSpinner;
-        LLSpinCtrl* mBurstRadiusSpinner;
-        LLSpinCtrl* mAngleBeginSpinner;
-        LLSpinCtrl* mAngleEndSpinner;
-        LLSpinCtrl* mBurstSpeedMinSpinner;
-        LLSpinCtrl* mBurstSpeedMaxSpinner;
-        LLSpinCtrl* mStartAlphaSpinner;
-        LLSpinCtrl* mEndAlphaSpinner;
-        LLSpinCtrl* mScaleStartXSpinner;
-        LLSpinCtrl* mScaleStartYSpinner;
-        LLSpinCtrl* mScaleEndXSpinner;
-        LLSpinCtrl* mScaleEndYSpinner;
-        LLSpinCtrl* mSourceMaxAgeSpinner;
-        LLSpinCtrl* mParticlesMaxAgeSpinner;
-        LLSpinCtrl* mStartGlowSpinner;
-        LLSpinCtrl* mEndGlowSpinner;
+    LLSpinCtrl* mBurstRateSpinner{ nullptr };
+    LLSpinCtrl* mBurstCountSpinner{ nullptr };
+    LLSpinCtrl* mBurstRadiusSpinner{ nullptr };
+    LLSpinCtrl* mAngleBeginSpinner{ nullptr };
+    LLSpinCtrl* mAngleEndSpinner{ nullptr };
+    LLSpinCtrl* mBurstSpeedMinSpinner{ nullptr };
+    LLSpinCtrl* mBurstSpeedMaxSpinner{ nullptr };
+    LLSpinCtrl* mStartAlphaSpinner{ nullptr };
+    LLSpinCtrl* mEndAlphaSpinner{ nullptr };
+    LLSpinCtrl* mScaleStartXSpinner{ nullptr };
+    LLSpinCtrl* mScaleStartYSpinner{ nullptr };
+    LLSpinCtrl* mScaleEndXSpinner{ nullptr };
+    LLSpinCtrl* mScaleEndYSpinner{ nullptr };
+    LLSpinCtrl* mSourceMaxAgeSpinner{ nullptr };
+    LLSpinCtrl* mParticlesMaxAgeSpinner{ nullptr };
+    LLSpinCtrl* mStartGlowSpinner{ nullptr };
+    LLSpinCtrl* mEndGlowSpinner{ nullptr };
 
-        LLComboBox* mBlendFuncSrcCombo;
-        LLComboBox* mBlendFuncDestCombo;
+    LLComboBox* mBlendFuncSrcCombo{ nullptr };
+    LLComboBox* mBlendFuncDestCombo{ nullptr };
 
-        LLCheckBoxCtrl* mBounceCheckBox;
-        LLCheckBoxCtrl* mEmissiveCheckBox;
-        LLCheckBoxCtrl* mFollowSourceCheckBox;
-        LLCheckBoxCtrl* mFollowVelocityCheckBox;
-        LLCheckBoxCtrl* mInterpolateColorCheckBox;
-        LLCheckBoxCtrl* mInterpolateScaleCheckBox;
-        LLCheckBoxCtrl* mTargetPositionCheckBox;
-        LLCheckBoxCtrl* mTargetLinearCheckBox;
-        LLCheckBoxCtrl* mWindCheckBox;
-        LLCheckBoxCtrl* mRibbonCheckBox;
+    LLCheckBoxCtrl* mBounceCheckBox{ nullptr };
+    LLCheckBoxCtrl* mEmissiveCheckBox{ nullptr };
+    LLCheckBoxCtrl* mFollowSourceCheckBox{ nullptr };
+    LLCheckBoxCtrl* mFollowVelocityCheckBox{ nullptr };
+    LLCheckBoxCtrl* mInterpolateColorCheckBox{ nullptr };
+    LLCheckBoxCtrl* mInterpolateScaleCheckBox{ nullptr };
+    LLCheckBoxCtrl* mTargetPositionCheckBox{ nullptr };
+    LLCheckBoxCtrl* mTargetLinearCheckBox{ nullptr };
+    LLCheckBoxCtrl* mWindCheckBox{ nullptr };
+    LLCheckBoxCtrl* mRibbonCheckBox{ nullptr };
 
-        LLLineEditor* mTargetKeyInput;
-        LLButton* mClearTargetButton;
-        LLButton* mPickTargetButton;
+    LLLineEditor* mTargetKeyInput{ nullptr };
+    LLButton*     mClearTargetButton{ nullptr };
+    LLButton*     mPickTargetButton{ nullptr };
 
-        LLSpinCtrl* mAcellerationXSpinner;
-        LLSpinCtrl* mAcellerationYSpinner;
-        LLSpinCtrl* mAcellerationZSpinner;
+    LLSpinCtrl* mAcellerationXSpinner{ nullptr };
+    LLSpinCtrl* mAcellerationYSpinner{ nullptr };
+    LLSpinCtrl* mAcellerationZSpinner{ nullptr };
 
-        LLSpinCtrl* mOmegaXSpinner;
-        LLSpinCtrl* mOmegaYSpinner;
-        LLSpinCtrl* mOmegaZSpinner;
+    LLSpinCtrl* mOmegaXSpinner{ nullptr };
+    LLSpinCtrl* mOmegaYSpinner{ nullptr };
+    LLSpinCtrl* mOmegaZSpinner{ nullptr };
 
-        LLColorSwatchCtrl* mStartColorSelector;
-        LLColorSwatchCtrl* mEndColorSelector;
+    LLColorSwatchCtrl* mStartColorSelector{ nullptr };
+    LLColorSwatchCtrl* mEndColorSelector{ nullptr };
 
-        LLButton* mCopyToLSLButton;
-        LLButton* mInjectScriptButton;
+    LLButton* mCopyToLSLButton{ nullptr };
+    LLButton* mInjectScriptButton{ nullptr };
 };
 
 class ParticleScriptCreationCallback : public LLInventoryCallback
 {
-    public:
-        ParticleScriptCreationCallback(ParticleEditor* editor);
-        void fire(const LLUUID& inventoryItem);
+public:
+    ParticleScriptCreationCallback(ParticleEditor* editor);
+    void fire(const LLUUID& inventoryItem);
 
-    protected:
-        ~ParticleScriptCreationCallback();
+protected:
+    ~ParticleScriptCreationCallback() = default;
 
-        ParticleEditor* mEditor;
+    ParticleEditor* mEditor;
 };
 
 #endif // PARTICLEEDITOR_H

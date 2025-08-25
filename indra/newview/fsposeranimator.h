@@ -392,7 +392,7 @@ public:
     /// </summary>
     /// <param name="jointName">The name of the joint to match.</param>
     /// <returns>The matching joint if found, otherwise nullptr</returns>
-    const FSPoserJoint* getPoserJointByName(const std::string& jointName);
+    const FSPoserJoint* getPoserJointByName(const std::string& jointName) const;
 
     /// <summary>
     /// Tries to start posing the supplied avatar.
@@ -493,6 +493,19 @@ public:
     LLVector3 getJointRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation) const;
 
     /// <summary>
+    /// Gets the rotation of a joint for the supplied avatar for export.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is being queried.</param>
+    /// <param name="joint">The joint to determine the rotation for.</param>
+    /// <param name="lockWholeAvatar">Whether the whole avatar should be rotation/position locked in the BVH export.</param>
+    /// <returns>The rotation of the requested joint for export.</returns>
+    /// <remarks>
+    /// The BVH export format requires some minimal amount of rotation so it animates the joint on upload.
+    /// The WHOLEAVATAR joint (mPelvis) never exports as 'free'.
+    /// </remarks>
+    LLVector3 getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const;
+
+    /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be set.</param>
@@ -559,8 +572,9 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
     /// <param name="joint">The joint to recapture.</param>
+    /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, E_BoneDeflectionStyles style);
+    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -574,7 +588,34 @@ public:
     /// <param name="avatar">The avatar owning the supplied joint.</param>
     /// <param name="joint">The joint to query.</param>
     /// <returns>True if the supplied joint has a 'base' rotation of zero (thus user-supplied change only), otherwise false.</returns>
-    bool baseRotationIsZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
+    bool userSetBaseRotationToZero(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
+
+    /// <summary>
+    /// Gets whether the supplied joints position will be set in an export.
+    /// </summary>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <returns>True if the export will 'lock' the joint, otherwise false.</returns>
+    /// <remarks>
+    /// BVH import leaves a joint 'free' if its rotation is less than something arbitrary.
+    /// </remarks>
+    bool exportRotationWillLockJoint(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
+
+    /// <summary>
+    /// Gets whether the supplied joint for the supplied avatar is rotationally locked to the world.
+    /// </summary>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <returns>True if the joint is maintaining a fixed-rotation in world, otherwise false.</returns>
+    bool getRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoserJoint& joint) const;
+
+    /// <summary>
+    /// Sets the world-rotation-lock status for supplied joint for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <param name="newState">The lock state to apply.</param>
+    void setRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoserJoint& joint, bool newState);
 
     /// <summary>
     /// Determines if the kind of save to perform should be a 'delta' save, or a complete save.
@@ -691,6 +732,53 @@ public:
     /// <param name="avatar">The avatar to test if it is safe to animate.</param>
     /// <returns>True if the avatar is safe to manipulate, otherwise false.</returns>
     bool isAvatarSafeToUse(LLVOAvatar* avatar) const;
+
+    /// <summary>
+    /// Gets the depth of descendant joints for the supplied joint.
+    /// </summary>
+    /// <param name="joint">The joint to determine the depth for.</param>
+    /// <param name="depth">The depth of the supplied joint.</param>
+    /// <returns>The number of generations of descendents the joint has, if none, then zero.</returns>
+    int getChildJointDepth(const FSPoserJoint* joint, int depth) const;
+
+    /// <summary>
+    /// Derotates the first world-locked child joint to the supplied joint.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="rotation">The rotation the supplied joint was/is being changed by.</param>
+    /// <remarks>
+    /// There are two ways to resolve this problem: before the rotation is applied in the PosingMotion (the animation) or after.
+    /// If performed after, a feedback loop is created, because you're noting the world-rotation in one frame, then correcting it back to that in another.
+    /// This implementation works by applying an opposing-rotation to the locked child joint which is corrected for the relative world-rotations of parent and child.
+    /// </remarks>
+    void deRotateWorldLockedDescendants(const FSPoserJoint* joint, FSPosingMotion* posingMotion, LLQuaternion rotation);
+
+    /// <summary>
+    /// Recursively tests the supplied joint and all its children for their world-locked status, and applies a de-rotation if it is world-locked.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="parentWorldRot">The world-rotation of the joint that was edited.</param>
+    /// <param name="rotation">The rotation the joint was edit is being changed by.</param>
+    void deRotateJointOrFirstLockedChild(const FSPoserJoint* joint, FSPosingMotion* posingMotion, LLQuaternion parentWorldRot,
+                                         LLQuaternion rotation);
+
+    /// <summary>
+    /// Performs an undo or redo of an edit to the supplied joints world-locked descendants.
+    /// </summary>
+    /// <param name="joint">The edited joint, whose children may be world-locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="redo">Whether to redo the edit, otherwise the edit is undone.</param>
+    void undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
+
+    /// <summary>
+    /// Recursively tests the supplied joint and all its children for their world-locked status, and applies an undo or redo if it is world-locked.
+    /// </summary>
+    /// <param name="joint">The joint which will have the undo or redo performed, if it is world locked.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="redo">Whether to redo the edit, otherwise the edit is undone.</param>
+    void undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

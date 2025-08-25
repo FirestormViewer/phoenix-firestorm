@@ -1431,6 +1431,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="collada_files">
 		COLLADA-Modelle
 	</string>
+	<string name="model_files">
+		Mesh-Modelle
+	</string>
 	<string name="csv_files">
 		Komma-separierte Werte
 	</string>
