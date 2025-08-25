@@ -719,6 +719,8 @@ public:
     };
     typedef std::map<LLPointer<LLModel>, instance_list, LLUploadModelInstanceLess> instance_map;
     instance_map    mInstance;
+    typedef std::map<std::string, std::string> lod_sources_map_t;
+    lod_sources_map_t mLodSources;
 
     LLMutex*        mMutex;
     S32             mPendingUploads;
@@ -735,7 +737,8 @@ public:
     std::string     mWholeModelUploadURL;
     LLUUID          mDestinationFolderId;
 
-    LLMeshUploadThread(instance_list& data, LLVector3& scale, bool upload_textures,
+    LLMeshUploadThread(instance_list& data, const lod_sources_map_t& sources_list,
+                       LLVector3& scale, bool upload_textures,
                        bool upload_skin, bool upload_joints, bool lock_scale_if_joint_position,
                        const std::string & upload_url,
                        const LLUUID destination_folder_id = LLUUID::null,
@@ -900,7 +903,8 @@ public:
     bool meshUploadEnabled();
     bool meshRezEnabled();
 
-    void uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
+    void uploadModel(std::vector<LLModelInstance>& data, const std::map<std::string, std::string> &lod_sources,
+                     LLVector3& scale, bool upload_textures,
                      bool upload_skin, bool upload_joints, bool lock_scale_if_joint_position,
                      std::string upload_url,
                      const LLUUID& destination_folder_id = LLUUID::null,

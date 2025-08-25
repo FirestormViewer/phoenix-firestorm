@@ -838,6 +838,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
             // Remove the item's UI.
             LLFolderViewFolder* parent = view_item->getParentFolder();
             removeItemID(viewmodel_item->getUUID());
+            bool was_favorite = view_item->isFavorite();
             view_item->destroyView();
             if(parent)
             {
@@ -851,7 +852,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
                         updateFolderLabel(viewmodel_folder->getUUID());
                     }
                 }
-                if (view_item->isFavorite())
+                if (was_favorite)
                 {
                     parent->updateHasFavorites(false); // favorite was removed
                 }
@@ -2623,6 +2624,7 @@ public:
 
     void removeItemID(const LLUUID& id) override;
     bool isInRootContent(const LLUUID& id, LLFolderViewItem* view_item) override;
+    bool hasPredecessorsInRootContent(const LLInventoryObject* model_item) const;
 
 protected:
     LLInventoryFavoritesItemsPanel(const Params&);
@@ -2667,6 +2669,24 @@ bool LLInventoryFavoritesItemsPanel::isInRootContent(const LLUUID& id, LLFolderV
 
     std::set<LLUUID>::iterator found = mRootContentIDs.find(id);
     return found != mRootContentIDs.end();
+}
+
+bool LLInventoryFavoritesItemsPanel::hasPredecessorsInRootContent(const LLInventoryObject* obj) const
+{
+    LLUUID parent_id = obj->getParentUUID();
+    while (parent_id.notNull())
+    {
+        if (mRootContentIDs.contains(parent_id))
+        {
+            return true;
+        }
+        LLViewerInventoryCategory* cat = mInventory->getCategory(parent_id);
+        if (cat)
+        {
+            parent_id = cat->getParentUUID();
+        }
+    }
+    return false;
 }
 
 void LLInventoryFavoritesItemsPanel::findAndInitRootContent(const LLUUID& id)
@@ -2758,6 +2778,7 @@ bool LLInventoryFavoritesItemsPanel::removeFavorite(const LLUUID& id, const LLIn
         {
             removeItemID(viewmodel_item->getUUID());
         }
+        bool was_favorite = view_item->isFavorite();
         view_item->destroyView();
         if (parent)
         {
@@ -2767,7 +2788,7 @@ bool LLInventoryFavoritesItemsPanel::removeFavorite(const LLUUID& id, const LLIn
             {
                 updateFolderLabel(viewmodel_folder->getUUID());
             }
-            if (view_item->isFavorite())
+            if (was_favorite)
             {
                 parent->updateHasFavorites(false); // favorite was removed
             }
@@ -2820,7 +2841,8 @@ void LLInventoryFavoritesItemsPanel::itemChanged(const LLUUID& id, U32 mask, con
                         }
 
                         LLFolderViewItem* folder_view_item = getItemByID(cat->getUUID());
-                        if (!folder_view_item)
+                        if (!folder_view_item
+                            && !hasPredecessorsInRootContent(model_item))
                         {
                             const LLUUID& parent_id = cat->getParentUUID();
                             mRootContentIDs.emplace(cat->getUUID());
@@ -2832,7 +2854,9 @@ void LLInventoryFavoritesItemsPanel::itemChanged(const LLUUID& id, U32 mask, con
                 else
                 {
                     // New favorite item
-                    if (model_item->getIsFavorite() && typedViewsFilter(id, model_item))
+                    if (model_item->getIsFavorite()
+                        && typedViewsFilter(id, model_item)
+                        && !hasPredecessorsInRootContent(model_item))
                     {
                         const LLUUID& parent_id = model_item->getParentUUID();
                         mRootContentIDs.emplace(id);

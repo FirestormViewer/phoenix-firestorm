@@ -4626,7 +4626,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
             gObjectList.killObject(objectp);
         }
 
-        if(delete_object)
+        if(delete_object && regionp)
         {
             regionp->killCacheEntry(local_id);
         }
