@@ -103,6 +103,15 @@
          width="270"
          control_name="FSPlayDefaultBentoAnimation"/>
         <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Reset avatar skeleton after standing up"
+         name="FSResetSkeletonOnStandUp"
+         tool_tip="If enabled, the viewer will automatically reset your avatar's skeleton after standing up. The reset is also sent to surrounding avatars to update your appearance on the viewer of their users."
+         width="270"
+         control_name="FSResetSkeletonOnStandUp"/>
+        <check_box
          top_pad="10"
          follows="left|top"
          height="16"

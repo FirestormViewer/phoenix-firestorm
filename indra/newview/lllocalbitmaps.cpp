@@ -1127,23 +1127,15 @@ bool LLLocalBitmapMgr::checkTextureDimensions(std::string filename)
     }
 
     // allow loading up to 4x max rez but implicitly downrez to max rez before upload
-    // <FS:Ansariel> Fix broken error message
-    //S32 max_width = gSavedSettings.getS32("max_texture_dimension_X")*4;
-    //S32 max_height = gSavedSettings.getS32("max_texture_dimension_Y")*4;
+    S32 max_width = gSavedSettings.getS32("max_texture_dimension_X")*4;
+    S32 max_height = gSavedSettings.getS32("max_texture_dimension_Y")*4;
 
-    //if ((image_info.getWidth() > max_width) || (image_info.getHeight() > max_height))
-    //{
-    //    LLStringUtil::format_map_t args;
-    //    args["WIDTH"] = llformat("%d", max_width);
-    //    args["HEIGHT"] = llformat("%d", max_height);
-    //    mImageLoadError = LLTrans::getString("texture_load_dimensions_error", args);
-    if (image_info.getWidth() * image_info.getHeight() > MAX_IMAGE_AREA)
+    if ((image_info.getWidth() > max_width) || (image_info.getHeight() > max_height))
     {
         LLStringUtil::format_map_t args;
-        args["PIXELS"] = llformat("%dM", (S32)(MAX_IMAGE_AREA / 1000000));
-
+        args["WIDTH"] = llformat("%d", max_width);
+        args["HEIGHT"] = llformat("%d", max_height);
         mImageLoadError = LLTrans::getString("texture_load_dimensions_error", args);
-    // </FS:Ansariel>
 
         LLSD notif_args;
         notif_args["REASON"] = mImageLoadError;

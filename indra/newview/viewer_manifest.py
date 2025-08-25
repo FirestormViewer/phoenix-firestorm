@@ -204,6 +204,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("skins.xml")
                     # include the entire textures directory recursively
                     with self.prefix(src_dst="*/textures"):
+                            self.path("*/*.jpg") # <FS:TJ> Needed for Firestorm skins
                             self.path("*/*.tga") # <FS:Ansariel> Needed for legacy icons
                             self.path("*/*.png")
                             self.path("*.tga")
