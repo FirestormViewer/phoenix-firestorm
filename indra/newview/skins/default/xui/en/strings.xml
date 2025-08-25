@@ -663,6 +663,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="dictionary_files">Dictionaries</string>
 	<string name="backup_files">Object Backups</string>
 	<string name="collada_files">COLLADA Models</string>
+	<string name="model_files">Mesh Models</string>
 	<string name="csv_files">Comma separated values</string>
 	<string name="recompile_script_verb">Recompile</string>
 
