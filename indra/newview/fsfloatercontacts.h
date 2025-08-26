@@ -70,6 +70,10 @@ public:
     void                    onDisplayNameChanged();
     void                    resetFriendFilter();
 
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    F32 onGetFilterOpacityCallback(ETypeTransparency type, F32 alpha);
+    // </FS:TJ>
+
 private:
     typedef std::vector<LLScrollListItem*> listitem_vec_t;
 
