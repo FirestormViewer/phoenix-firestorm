@@ -1070,6 +1070,7 @@ std::optional<std::string> llstring_getoptenv(const std::string& key)
 long LLStringOps::sPacificTimeOffset = 0;
 long LLStringOps::sLocalTimeOffset = 0;
 bool LLStringOps::sPacificDaylightTime = 0;
+bool LLStringOps::sUsingPacificTime = false; // <FS:TJ/> [FIRE-34775] Use PST/PDT when logged into OpenSim
 std::map<std::string, std::string> LLStringOps::datetimeToCodes;
 
 std::vector<std::string> LLStringOps::sWeekDayList;
@@ -1628,12 +1629,21 @@ bool LLStringUtil::formatDatetime(std::string& replacement, std::string token,
         }
         else
         {
-#if 0
+// <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
+#ifdef OPENSIM
             // EXT-1565 : Zai Lynch, James Linden : 15/Oct/09
             // [BSI] Feedback: Viewer clock mentions SLT, but would prefer it to show PST/PDT
             // "slt" = Second Life Time, which is deprecated.
             // If not utc or user local time, fallback to Pacific time
-            replacement = LLStringOps::getPacificDaylightTime() ? "PDT" : "PST";
+            if (LLStringOps::getUsingPacificTime())
+            {
+                replacement = LLStringOps::getPacificDaylightTime() ? "PDT" : "PST";
+            }
+            else
+            {
+                replacement = "SLT";
+            }
+// </FS:TJ>
 #else
             // SL-20370 : Steeltoe Linden : 29/Sep/23
             // Change "PDT" to "SLT" on menu bar
