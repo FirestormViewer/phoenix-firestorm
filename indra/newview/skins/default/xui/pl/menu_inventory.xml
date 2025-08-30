@@ -109,6 +109,8 @@
 	<menu_item_call label="Usuń folder systemowy" name="Delete System Folder"/>
 	<menu_item_call label="Utwórz folder z wybranych" name="New folder from selected" />
 	<menu_item_call label="Rozgrupuj elementy folderu" name="Ungroup folder items" />
+	<menu_item_call label="Dodaj do ulubionych" name="Add to Favorites" />
+	<menu_item_call label="Usuń z ulubionych" name="Remove from Favorites" />
 	<menu_item_call label="Rozpocznij konferencję czatową" name="Conference Chat Folder"/>
 	<menu_item_call label="Odtwarzaj" name="Sound Play"/>
 	<menu_item_call label="Kopiuj SLurl" name="url_copy"/>

@@ -443,6 +443,9 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	<notification name="ErrorCannotAffordUpload">
 		Potrzebujesz [COST]L$ aby przesłać ten element.
 	</notification>
+	<notification name="ErrorEncodingImage">
+		Nie udało się zakodować obrazu, powód: [REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
 	</notification>
@@ -1224,6 +1227,15 @@ Wprowadź nową nazwę:
 			<button name="SetName" text="Użyj nowej nazwy"/>
 		</form>
 	</notification>
+	<notification label="Usuń listę autokorekty" name="RemoveAutoReplaceList">
+		'[LIST_NAME]' zawiera [MAP_SIZE] wpisów.
+
+Czy na pewno chcesz usunąć tę listę?
+		<form name="form">
+			<button name="DeleteList" text="Usuń" />
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
 	<notification name="InvalidAutoReplaceEntry">
 		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty.
 	</notification>
@@ -1806,9 +1818,8 @@ Obecnie ponowne dołączenie do tej grupy nie wiąże się z żadnymi opłatami.
 	<notification label="Blokowanie obiektów według nazwy nie powiodło się" name="MuteByNameFailed">
 		Rezydent/obiekt jest już zablokowany.
 	</notification>
-	<notification name="RemoveItemWarn">
-		Pomimo, że jest to dozwolone, usunięcie zawartości może uszkodzić obiekt. Chcesz usunąć?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	<notification name="CantModifyContentInNoModTask">
+		Nie masz uprawnień do modyfikowania zawartości tego obiektu
 	</notification>
 	<notification name="CantOfferCallingCard">
 		Nie możesz dać wizytówki w tym momencie. Spróbuj jeszcze raz za chwilę.
@@ -5446,6 +5457,10 @@ Czy chcesz kontynuować?
 	</notification>
 	<notification name="WaterExclusionNoMaterial">
 		Nie można nałożyć materiału na powierzchnię, która ukrywa wodę.
+	</notification>
+	<notification name="ImageUploadResized">
+		Tekstura, którą przesyłasz, została przeskalowana z [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] do [NEW_WIDTH]x[NEW_HEIGHT], aby dopasować się do maksymalnego rozmiaru [MAX_WIDTH]x[MAX_HEIGHT] pikseli.
+		<usetemplate ignoretext="Skalowanie tekstury przy przesyłaniu" name="okignore" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.

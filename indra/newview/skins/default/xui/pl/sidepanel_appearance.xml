@@ -7,5 +7,18 @@
 	<panel name="panel_currentlook">
 		<button name="edit_outfit_btn" tool_tip="Edytuj ten strój"/>
 	</panel>
-	<filter_editor label="Filtruj stroje" name="Filter"/>
+	<layout_stack name="top_menu_panel">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtruj stroje" name="Filter" />
+		</layout_panel>
+		<layout_panel name="options_gear_btn_panel">
+			<menu_button tool_tip="Pokaż dodatkowe opcje" name="options_gear_btn" />
+		</layout_panel>
+		<layout_panel name="options_sort_btn_panel">
+			<menu_button tool_tip="Pokaż opcje sortowania" name="sorting_menu_btn" />
+		</layout_panel>
+		<layout_panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Usuń zaznaczony strój" />
+		</layout_panel>
+	</layout_stack>
 </panel>

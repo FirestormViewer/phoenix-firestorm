@@ -13,13 +13,11 @@
 		Szukam...
 	</text> 
 	<panel name="bottom_panel">
-		<menu_button tool_tip="Pokaż dodatkowe opcje" name="options_gear_btn" />
 		<text name="OutfitcountText">
 			Strojów: [COUNT]
 		</text>
 		<text name="avatar_complexity_label">
 			Złożoność: [WEIGHT]
 		</text>
-		<button name="trash_btn" tool_tip="Usuń wybrany strój" />
 	</panel>
 </panel>
