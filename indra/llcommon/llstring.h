@@ -153,6 +153,7 @@ private:
     static long sPacificTimeOffset;
     static long sLocalTimeOffset;
     static bool sPacificDaylightTime;
+    static bool sUsingPacificTime; // <FS:TJ/> [FIRE-34775] Use PST/PDT when logged into OpenSim
 
     static std::map<std::string, std::string> datetimeToCodes;
 
@@ -204,6 +205,9 @@ public:
     static S32  collate(const llwchar* a, const llwchar* b);
 
     static void setupDatetimeInfo(bool pacific_daylight_time);
+    // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
+    static void setupUsingPacificTime(bool use_pacific_time) { sUsingPacificTime = use_pacific_time; }
+    // </FS:TJ>
 
     static void setupWeekDaysNames(const std::string& data);
     static void setupWeekDaysShortNames(const std::string& data);
@@ -217,6 +221,9 @@ public:
     // Is the Pacific time zone (aka server time zone)
     // currently in daylight savings time?
     static bool getPacificDaylightTime(void) { return sPacificDaylightTime;}
+    // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
+    static bool getUsingPacificTime() { return sUsingPacificTime; }
+    // </FS:TJ>
 
     static std::string getDatetimeCode (std::string key);
 
