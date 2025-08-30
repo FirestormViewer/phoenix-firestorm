@@ -3312,7 +3312,7 @@ Would you be my friend?
 
   <notification
    icon="alertmodal.tga"
-   label="Rename Auto-Replace List"
+   label="Remove Auto-Replace List"
    name="RemoveAutoReplaceList"
    type="alertmodal">
 '[LIST_NAME]' contains [MAP_SIZE] entries.
