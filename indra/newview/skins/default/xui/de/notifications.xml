@@ -4956,6 +4956,10 @@ Diese können anhand von http://opensimulator.org/wiki/inventory die erkannten F
 		Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		Ihr System besitzt [TOTAL_MEM]MB Speicher. Dieser ist eventuell nicht ausreichend, um den Viewer auf höheren Einstellungen zu betreiben und kann zu Problemen führen.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
 	<notification name="DefaultObjectPermissions">
 		Problem beim Speichern der standardmäßigen Objektberechtigungen: [REASON].  Versuchen Sie später, die Standardberechtigungen einzustellen.
 		<usetemplate name="okbutton" yestext="OK"/>

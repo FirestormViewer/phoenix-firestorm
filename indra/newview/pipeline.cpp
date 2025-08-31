@@ -473,6 +473,8 @@ void LLPipeline::init()
     sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
     sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
 
+    mReflectionMapManager.refreshSettings();
+
     mInitialized = true;
 
     stop_glerror();
