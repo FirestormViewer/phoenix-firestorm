@@ -1431,6 +1431,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="collada_files">
 		COLLADA-Modelle
 	</string>
+	<string name="model_files">
+		Mesh-Modelle
+	</string>
 	<string name="csv_files">
 		Komma-separierte Werte
 	</string>
@@ -5383,8 +5386,11 @@ Missbrauchsbericht
 	<string name="DefaultMimeType">
 		Keine/Keiner
 	</string>
+	<string name="texture_load_area_error">
+		Bilder, die mehr als [PIXELS] Pixel haben, können nicht geladen werden.
+	</string>
 	<string name="texture_load_dimensions_error">
-		Bilder, die größer sind als [WIDTH]*[HEIGHT] können nicht geladen werden
+		Bilder, die größer sind als [WIDTH]*[HEIGHT] Pixel, können nicht geladen werden.
 	</string>
 	<string name="texture_load_format_error">
 		Inkorrektes Bildformat.

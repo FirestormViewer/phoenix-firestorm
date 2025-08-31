@@ -41,11 +41,7 @@
 #include "lluicolortable.h"
 #include "message.h"
 #include "llexperiencecache.h"
-
-// <FS:AW> hop:// protocol>
-//#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
-#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))"
-// </FS:AW>
+#include "v3dmath.h"
 
 // Utility functions
 std::string localize_slapp_label(const std::string& url, const std::string& full_name);
@@ -1202,6 +1198,7 @@ LLUUID  LLUrlEntryParcel::sSessionID(LLUUID::null);
 LLHost  LLUrlEntryParcel::sRegionHost;
 bool    LLUrlEntryParcel::sDisconnected(false);
 std::set<LLUrlEntryParcel*> LLUrlEntryParcel::sParcelInfoObservers;
+std::map<LLUUID, LLVector3d> LLUrlEntryParcel::sParcelPos;
 
 ///
 /// LLUrlEntryParcel Describes a Second Life parcel Url, e.g.,
@@ -1294,6 +1291,20 @@ void LLUrlEntryParcel::processParcelInfo(const LLParcelData& parcel_data)
             url_entry->onParcelInfoReceived(parcel_data.parcel_id.asString(), label);
         }
     }
+    if (sParcelPos.find(parcel_data.parcel_id) == sParcelPos.end())
+    {
+        sParcelPos[parcel_data.parcel_id] = LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z);
+    }
+}
+
+// static
+LLVector3d LLUrlEntryParcel::getParcelPos(const LLUUID& parcel_id)
+{
+    if (sParcelPos.find(parcel_id) != sParcelPos.end())
+    {
+        return sParcelPos[parcel_id];
+    }
+    return LLVector3d();
 }
 
 //

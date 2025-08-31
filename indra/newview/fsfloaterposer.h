@@ -264,10 +264,11 @@ public:
     void onClickLoadLeftHandPose();
     void onClickLoadRightHandPose();
     void onClickLoadHandPose(bool isRightHand);
-    void onClickSetBaseRotZero();
+    void onClickSavingToBvh();
     void onCommitSpinner(const LLUICtrl* spinner, const S32 ID);
     void onCommitSlider(const LLUICtrl* slider, const S32 id);
     void onClickSymmetrize(const S32 ID);
+    void onClickLockWorldRotBtn();
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
@@ -351,12 +352,19 @@ public:
     void addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* avatar);
 
     /// <summary>
-    /// Gets whether the user wishes to reset the base-rotation to zero when they start editing a joint.
+    /// Gets a string for a joint on a scroll-list.
     /// </summary>
-    /// <remarks>
-    /// If a joint has a base-rotation of zero, the rotation then appears to be the user's work and qualifies to save to a re-importable format.
-    /// </remarks>
-    bool getWhetherToResetBaseRotationOnEdit();
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="joint">The joint to query.</param>
+    /// <returns>A string naming an icon to present with the joint.</returns>
+    std::string getScrollListIconForJoint(LLVOAvatar* avatar, FSPoserAnimator::FSPoserJoint joint);
+
+    /// <summary>
+    /// Tries to get the named string from the XUI.
+    /// </summary>
+    /// <param name="name">The name of the string.</param>
+    /// <returns>The named string, if it exists, otherwise an empty string.</returns>
+    std::string tryGetString(std::string name);
 
     /// <summary>
     /// Gets the name of an item from the supplied object ID.
@@ -483,6 +491,7 @@ public:
     LLButton* mFlipJointBtn{ nullptr };
     LLButton* mRecaptureBtn{ nullptr };
     LLButton* mTogglePosingBonesBtn{ nullptr };
+    LLButton* mToggleLockWorldRotBtn{ nullptr };
     LLButton* mToggleMirrorRotationBtn{ nullptr };
     LLButton* mToggleSympatheticRotationBtn{ nullptr };
     LLButton* mToggleDeltaModeBtn{ nullptr };
@@ -503,8 +512,8 @@ public:
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
 
-    LLCheckBoxCtrl* mResetBaseRotCbx{ nullptr };
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
+    LLCheckBoxCtrl* mUnlockPelvisInBvhSaveCbx{ nullptr };
 
     LLUICtrl* mTrackpadSensitivitySpnr{ nullptr };
     LLUICtrl* mYawSpnr{ nullptr };

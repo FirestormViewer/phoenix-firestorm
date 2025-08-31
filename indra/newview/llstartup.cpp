@@ -1113,6 +1113,10 @@ bool idle_startup()
             LL_WARNS("AppInit") << "Unreliable timers detected (may be bad PCI chipset)!!" << LL_ENDL;
         }
 
+#ifdef LL_DISCORD
+        LLAppViewer::initDiscordSocial();
+#endif
+
         //
         // Log on to system
         //

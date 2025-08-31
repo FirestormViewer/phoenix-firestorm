@@ -22,8 +22,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "particleeditor.h"
 
-#include <fstream>
-
 #include "llagent.h"
 #include "llappviewer.h"
 #include "llcheckboxctrl.h"
@@ -47,10 +45,7 @@
 #include "llwindow.h"
 #include "llviewerassetupload.h"
 
-ParticleEditor::ParticleEditor(const LLSD& key)
-:   LLFloater(key),
-    mObject(0),
-    mParticleScriptInventoryItem(0)
+ParticleEditor::ParticleEditor(const LLSD& key) : LLFloater(key)
 {
     mPatternMap["drop"] = LLPartSysData::LL_PART_SRC_PATTERN_DROP;
     mPatternMap["explode"] = LLPartSysData::LL_PART_SRC_PATTERN_EXPLODE;
@@ -325,11 +320,11 @@ void ParticleEditor::updateUI()
     bool targetLinear = mTargetLinearCheckBox->getValue();
     bool interpolateColor = mInterpolateColorCheckBox->getValue();
     bool interpolateScale = mInterpolateScaleCheckBox->getValue();
-    bool targetEnabled = targetLinear | (mTargetPositionCheckBox->getValue().asBoolean() ? true : false);
+    bool targetEnabled = targetLinear || (mTargetPositionCheckBox->getValue().asBoolean() ? true : false);
 
-    mBurstRadiusSpinner->setEnabled(!(targetLinear | (mFollowSourceCheckBox->getValue().asBoolean() ? true : false) | dropPattern));
-    mBurstSpeedMinSpinner->setEnabled(!(targetLinear | dropPattern));
-    mBurstSpeedMaxSpinner->setEnabled(!(targetLinear | dropPattern));
+    mBurstRadiusSpinner->setEnabled(!targetLinear && !(mFollowSourceCheckBox->getValue().asBoolean() ? true : false) && !dropPattern);
+    mBurstSpeedMinSpinner->setEnabled(!targetLinear && !dropPattern);
+    mBurstSpeedMaxSpinner->setEnabled(!targetLinear && !dropPattern);
 
     // disabling a color swatch does nothing visually, so we also set alpha
     LLColor4 endColor = mEndColorSelector->get();
@@ -355,8 +350,8 @@ void ParticleEditor::updateUI()
     mOmegaYSpinner->setEnabled(!targetLinear);
     mOmegaZSpinner->setEnabled(!targetLinear);
 
-    mAngleBeginSpinner->setEnabled(!(explodePattern | dropPattern));
-    mAngleEndSpinner->setEnabled(!(explodePattern | dropPattern));
+    mAngleBeginSpinner->setEnabled(!explodePattern && !dropPattern);
+    mAngleEndSpinner->setEnabled(!explodePattern && !dropPattern);
 }
 
 void ParticleEditor::onClearTargetButtonClicked()
@@ -369,15 +364,13 @@ void ParticleEditor::onTargetPickerButtonClicked()
 {
     mPickTargetButton->setToggleState(true);
     mPickTargetButton->setEnabled(false);
-    startPicking(this);
+    startPicking();
 }
 
 // inspired by the LLFloaterReporter object picker
-// static
-void ParticleEditor::startPicking(void* userdata)
+void ParticleEditor::startPicking()
 {
-    ParticleEditor* self = (ParticleEditor*) userdata;
-    LLToolObjPicker::getInstance()->setExitCallback(ParticleEditor::onTargetPicked, self);
+    LLToolObjPicker::getInstance()->setExitCallback(ParticleEditor::onTargetPicked, this);
     LLToolMgr::getInstance()->setTransientTool(LLToolObjPicker::getInstance());
 }
 
@@ -386,14 +379,12 @@ void ParticleEditor::onTargetPicked(void* userdata)
 {
     ParticleEditor* self = (ParticleEditor*)userdata;
 
-    LLUUID picked = LLToolObjPicker::getInstance()->getObjectID();
-
     LLToolMgr::getInstance()->clearTransientTool();
 
     self->mPickTargetButton->setEnabled(true);
     self->mPickTargetButton->setToggleState(false);
 
-    if (picked.notNull())
+    if (LLUUID picked = LLToolObjPicker::getInstance()->getObjectID(); picked.notNull())
     {
         self->mTargetKeyInput->setValue(picked.asString());
         self->onParameterChange();
@@ -522,8 +513,7 @@ default\n\
 
 void ParticleEditor::onCopyButtonClicked()
 {
-    std::string script = createScript();
-    if (!script.empty())
+    if (std::string script = createScript(); !script.empty())
     {
         getWindow()->copyTextToClipboard(utf8str_to_wstring(script));
         LLNotificationsUtil::add("ParticleScriptCopiedToClipboard");
@@ -608,9 +598,7 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
     gInventory.notifyObservers();
 
     //caps import
-    std::string url = gAgent.getRegionCapability("UpdateScriptAgent");
-
-    if (!url.empty())
+    if (std::string url = gAgent.getRegionCapability("UpdateScriptAgent"); !url.empty())
     {
         std::string script = createScript();
 
@@ -633,30 +621,23 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 void ParticleEditor::scriptInjectReturned()
 {
     setCanClose(true);
+    mMainPanel->setEnabled(true);
 
     // play it safe, because some time may have passed
-    LLViewerObject* object = gObjectList.findObject(mObject->getID());
-    if (!object || mObject->isDead())
+    if (LLViewerObject* object = gObjectList.findObject(mObject->getID()); object && mObject&& !mObject->isDead())
+    {
+        mObject->saveScript(mParticleScriptInventoryItem, true, false);
+        LLNotificationsUtil::add("ParticleScriptInjected");
+    }
+    else
     {
         LL_WARNS() << "Can't inject script - object is dead or went away!" << LL_ENDL;
-        mMainPanel->setEnabled(true);
-        return;
     }
-
-    mObject->saveScript(mParticleScriptInventoryItem, true, false);
-    LLNotificationsUtil::add("ParticleScriptInjected");
-
-    delete this;
 }
 
 // ---------------------------------- Callbacks ----------------------------------
 
-ParticleScriptCreationCallback::ParticleScriptCreationCallback(ParticleEditor* editor)
-{
-    mEditor = editor;
-}
-
-ParticleScriptCreationCallback::~ParticleScriptCreationCallback()
+ParticleScriptCreationCallback::ParticleScriptCreationCallback(ParticleEditor* editor) : mEditor(editor)
 {
 }
 

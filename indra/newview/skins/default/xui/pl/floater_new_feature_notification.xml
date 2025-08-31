@@ -4,17 +4,7 @@
 		Nowe funkcje szafy
 	</floater.string>
 	<floater.string name="description_txt_inventory">
-		Możesz teraz dodawać zdjęcia podglądu do elementów szafy i przeglądać foldery w osobnych oknach.
-Dowiedz się więcej w tym [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ poście].
-	</floater.string>
-	<floater.string name="title_txt_gltf">
-		Nowe wsparcie dla materiałów GLTF PBR
-	</floater.string>
-	<floater.string name="description_txt_gltf">
-		Możesz teraz korzystać z rozszerzonej obsługi materiałów z możliwością importowania i edytowania ich dla renderowania PBR - GLTF.
-Aby umożliwić dodanie formatu GLTF, niektóre obszary mogą się teraz wydawać ciemniejsze niż zwykle.
-
-Więcej na temat: [https://wiki.secondlife.com/wiki/PBR_Materials Physically Based Rendering (PBR)]
+		Możesz teraz oznaczać przedmioty i foldery jako ulubione. Ulubione elementy pojawią się w zakładce Ulubione w szafie i domyślnie będą wyróżnione gwiazdką w głównym widoku.
 	</floater.string>
 	<text name="title_txt">
 		Nowa funkcja

@@ -84,11 +84,22 @@
 	</menu>
 	<menu_item_call label="Utwórz folder z wybranych" name="New folder from selected" />
 	<menu_item_call label="Rozgrupuj elementy folderu" name="Ungroup folder items" />
+	<menu_item_call label="Dodaj do ulubionych" name="Add to Favorites" />
+	<menu_item_call label="Usuń z ulubionych" name="Remove from Favorites" />
+	<menu label="Prześlij do folderu" name="upload_options">
+		<menu_item_call label="Teksturę..." name="Upload Image" />
+		<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound" />
+		<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation" />
+		<menu_item_call label="Model meszowy..." name="Upload Model" />
+		<menu_item_call label="Materiał..." name="Upload Material" />
+		<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload" />
+	</menu>
 	<menu label="Ustaw jako domyślne" name="upload_def">
 		<menu_item_call label="Dla nowych obrazów" name="Image uploads" />
 		<menu_item_call label="Dla nowych dźwięków" name="Sound uploads" />
 		<menu_item_call label="Dla nowych animacji" name="Animation uploads" />
 		<menu_item_call label="Dla nowych modeli" name="Model uploads" />
+		<menu_item_call label="Dla nowych materiałów PBR" name="PBR uploads" />
 	</menu>
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy" />
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move" />

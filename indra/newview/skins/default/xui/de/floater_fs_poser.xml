@@ -199,6 +199,7 @@
 								Hinein/Heraus:
 							</text>
 							<slider name="av_position_inout" tool_tip="Bewegt den ausgewählten Avatar herein oder heraus"/>
+							<check_box name="unlock_pelvis_for_bvh_save_checkbox" label="Becken in BHV entsperren" tool_tip="Wenn diese Pose als BHV gespeichert wird, wird das Becken nicht &apos;gesperrt&apos;. Das bedeutet, dass andere Animation In-World den gesamten Avatar &apos;bewegen&apos; können. Benutzen Sie diese Option, wenn die Pose dazu gedacht, &apos;on-top&apos; von anderen Animation abgespielt zu werden." />
 							<!-- so this panel behaves like the others in the code behind, it has an invisible list... -->
 							<scroll_list name="entireAv_joint_scroll">
 								<scroll_list.columns label="Körperteil" name="joint"/>
@@ -253,11 +254,11 @@
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Stellt die Sensitivität der Steuerkugel ein"/>
 						<check_box name="stop_posing_on_close_checkbox" label="Beim Schließen stoppen" tool_tip="Die Pose beim Schließen nicht zu stoppen kann hilfreich sein, um die bisher getätigte Arbeit nicht zu verlieren."/>
-						<check_box name="reset_base_rotation_on_edit_checkbox" label="Basis-Rot. beim Edit. zurück." tool_tip="Wenn das erste Mal eine Pose bearbeitet wird, diese auf Null zurücksetzen. Hierdurch eine eine komplette Pose und nicht nur die Differenz gespeichert werden. Ein grüner Haken erscheint neben jedem Gelenk, dass auf Null-basierend exportiert wurde."/>
-						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt, die via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
+						<check_box name="also_save_bvh_checkbox" label="BHV beim Speichern erst." tool_tip="Wenn die Pose gespeichert wird, wird ebenfalls eine BHV-Datei erstellt. BHV-Dateien können via Bauen > Hochladen > Animation hochgeladen und zum Posieren vom eigenen Avatar oder anderen Avataren verwendet werden kann. Hierzu muss die Basis der Gelenke auf Null gesetzt werden, da BHV nicht von anderen Posen abgeleitet wird."/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Überschreiben bestätigen" tool_tip="Wenn die Pose gespeichert wird und die Datei bereits existiert, muss der Speichern-Button erneut geklickt werden um zu bestätigen, dass Sie die Datei überschreiben möchten."/>
 						<check_box name="natural_direction_checkbox" label="Natürl. Ausrichtung verw." tool_tip="Das Skelett besitzt standardmäßig unnatürliche Gelenk-Rotationen, was das Posieren erschwert. Falls aktiviert, werden die Gelenke in eine natürlichere Rotation versetzt."/>
 						<check_box name="show_joint_markers_checkbox" label="Gelenk-Marker anzeigen" tool_tip="Zeigt Indikatoren an, um das Auswählen von Gelenken beim Posieren zu vereinfachen."/>
+						<check_box name="dof_edit_mode_checkbox" label="Schärfentiefe im Edit-Modus" tool_tip="Beim Verwenden des Manipulators ist Schärfentiefe normalerweise deaktiviert. Mit dieser Option bleibt Schärfentiefe beim Bearbeiten von Posen oder Primitiven aktiviert."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Visuelle Manipulatoren an-/ausschalten" />
@@ -302,6 +303,7 @@
 					<button name="button_redo_change" tool_tip="Letzte Rotationsänderung wiederherstellen"/>
 					<button name="poser_joint_reset" tool_tip="Klicken, um alle ausgewählten Körperteile auf die Ursprungswerte zurückzusetzen."/>
 					<button name="delta_mode_toggle" tool_tip="Falls mehrere Gelenke geändert werden, diese um denselben Wert ändern anstatt in dieselbe Rotation zu versetzen. Wird auch zur Verhinderung von Gimbal Lock verwendet."/>
+					<button name="toggle_LockWorldRotation" tool_tip="Rotation In-World für die ausgewählten Glieder sperren. Gesperrte Glieder behalten dieselbe Rotation, wenn ihre Eltern-Glieder bewegt werden. Beispiel: Wenn die Augen gesperrt sind und der Kopf gedreht wird, schauen die Augen weiterhin (fast) in dieselbe Richtung."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>
 					<button label="Kopie L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Klicken, um Änderung von linker Seite zur rechten Seite zu kopieren." />

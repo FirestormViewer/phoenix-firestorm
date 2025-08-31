@@ -7,16 +7,21 @@
 					<combo_box label="Użytkownik" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine" name="username_combo" />
 					<line_editor name="password_edit" label="Hasło" />
 					<button label="Zaloguj" name="connect_btn" />
-					<text name="sign_up_text">
-						Dołącz
-					</text>
-					<check_box label="Pamiętaj mnie" name="remember_name" tool_tip="Już zapamiętanego użytkownika można zapomnieć w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy." />
-					<check_box label="Pamiętaj hasło" name="remember_password" />
+					<check_box label="Zapamiętaj mnie" name="remember_check" />
 					<text name="forgot_password_text">
 						Zapomniałem/am hasła
 					</text>
-					<text name="forgot_password_text">
-						Pomoc z hasłem
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="parent_panel3">
+			<layout_stack name="images_stack">
+				<layout_panel name="images_container">
+					<text name="image_caption_left">
+						Wyspa Nauki to Twój pierwszy krok. Znajdź portal z wyjściem!
+					</text>
+					<text name="image_caption_right">
+						Potem zwiedź Wyspę Towarzyską i poznaj innych nowych rezydentów!
 					</text>
 				</layout_panel>
 			</layout_stack>

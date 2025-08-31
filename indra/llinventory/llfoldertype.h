@@ -123,6 +123,8 @@ public:
 
     static const std::string&   badLookup(); // error string when a lookup fails
 
+    static LLSD getTypeNames();
+
 protected:
     LLFolderType() {}
     ~LLFolderType() {}

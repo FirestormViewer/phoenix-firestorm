@@ -588,10 +588,6 @@ LLPanelFace::~LLPanelFace()
 
 void LLPanelFace::onVisibilityChange(bool new_visibility)
 {
-    if (new_visibility)
-    {
-        gAgent.showLatestFeatureNotification("gltf");
-    }
     LLPanel::onVisibilityChange(new_visibility);
 }
 
@@ -2305,7 +2301,7 @@ void LLPanelFace::refreshMedia()
 
 
     // check if all faces have media(or, all dont have media)
-    LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo = selected_objects->getSelectedTEValue(&func, bool_has_media);
+    bool identical_has_media_info = selected_objects->getSelectedTEValue(&func, bool_has_media);
 
     const LLMediaEntry default_media_data;
 
@@ -2327,7 +2323,8 @@ void LLPanelFace::refreshMedia()
     } func_media_data(default_media_data);
 
     LLMediaEntry media_data_get;
-    LLFloaterMediaSettings::getInstance()->mMultipleMedia = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_media = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_valid_media = false;
 
     std::string multi_media_info_str = LLTrans::getString("Multiple Media");
     std::string media_title = "";
@@ -2336,12 +2333,12 @@ void LLPanelFace::refreshMedia()
 
     mAddMedia->setEnabled(editable);
     // IF all the faces have media (or all dont have media)
-    if (LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo)
+    if (identical_has_media_info)
     {
         // TODO: get media title and set it.
         mTitleMediaText->clear();
         // if identical is set, all faces are same (whether all empty or has the same media)
-        if (!(LLFloaterMediaSettings::getInstance()->mMultipleMedia))
+        if (!multiple_media)
         {
             // Media data is valid
             if (media_data_get != default_media_data)
@@ -2362,9 +2359,9 @@ void LLPanelFace::refreshMedia()
     else // not all face has media but at least one does.
     {
         // seleted faces have not identical value
-        LLFloaterMediaSettings::getInstance()->mMultipleValidMedia = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
+        multiple_valid_media = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
 
-        if (LLFloaterMediaSettings::getInstance()->mMultipleValidMedia)
+        if (multiple_valid_media)
         {
             media_title = multi_media_info_str;
         }
@@ -2401,7 +2398,7 @@ void LLPanelFace::refreshMedia()
     // load values for media settings
     updateMediaSettings();
 
-    LLFloaterMediaSettings::initValues(mMediaSettings, editable);
+    LLFloaterMediaSettings::initValues(mMediaSettings, editable, identical_has_media_info, multiple_media, multiple_valid_media);
 }
 
 void LLPanelFace::unloadMedia()
@@ -3486,6 +3483,7 @@ void LLPanelFace::onSelectNormalTexture(const LLSD& data)
 // TODO: test if there is media on the item and only allow editing if present
 void LLPanelFace::onClickBtnEditMedia()
 {
+    LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
     refreshMedia();
     LLFloaterReg::showInstance("media_settings");
 }
@@ -3504,6 +3502,7 @@ void LLPanelFace::onClickBtnAddMedia()
     // check if multiple faces are selected
     if (LLSelectMgr::getInstance()->getSelection()->isMultipleTESelected())
     {
+        LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
         refreshMedia();
         LLNotificationsUtil::add("MultipleFacesSelected", LLSD(), LLSD(), multipleFacesSelectedConfirm);
     }

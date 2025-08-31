@@ -4,6 +4,8 @@
 	<menu_item_call label="Zu aktuellem Outfit hinzufügen" name="wear_add"/>
 	<menu_item_call label="Von aktuellem Outfit entfernen" name="take_off"/>
 	<menu_item_call label="Abbildung..." name="thumbnail"/>
+	<menu_item_call label="Zu Favoriten hinzufügen" name="favorites_add"/>
+	<menu_item_call label="Aus Favoriten entfernen" name="favorites_remove"/>
 	<menu_item_call label="Outfit umbenennen" name="rename"/>
 	<menu_item_call label="Outfit speichern" name="save"/>
 	<menu_item_call label="Outfit löschen" name="delete_outfit"/>
@@ -31,4 +33,5 @@
 		<menu_item_call label="Neues Haar" name="New Hair"/>
 		<menu_item_call label="Neue Augen" name="New Eyes"/>
 	</context_menu>
+	<menu_item_check label="Inventar-Einstellungen..." name="inventory_settings"/>
 </toggleable_menu>

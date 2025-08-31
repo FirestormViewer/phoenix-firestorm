@@ -4,12 +4,11 @@
 	<menu_item_call label="Dodaj do bieżącego stroju" name="wear_add"/>
 	<menu_item_call label="Usuń z obecnego stroju" name="take_off"/>
 	<menu_item_call label="Zdjęcie..." name="thumbnail" />
+	<menu_item_call label="Dodaj do ulubionych strojów" name="favorites_add" />
+	<menu_item_call label="Usuń z ulubionych strojów" name="favorites_remove" />
 	<menu_item_call label="Zmień nazwę stroju" name="rename" />
 	<menu_item_call label="Zapisz w tym stroju" name="save" />
 	<menu_item_call label="Usuń strój" name="delete_outfit" />
-	<menu_item_check label="Sortuj foldery zawsze wg. nazwy" name="sort_folders_by_name" />
-	<menu_item_call label="Rozwiń wszystkie foldery" name="expand"/>
-	<menu_item_call label="Zwiń wszystkie foldery" name="collapse"/>
 	<context_menu label="Nowe ubranie" name="New Clothes">
 		<menu_item_call label="Nowa koszula" name="New Shirt"/>
 		<menu_item_call label="Nowe spodnie" name="New Pants"/>
@@ -31,4 +30,5 @@
 		<menu_item_call label="Nowe włosy" name="New Hair"/>
 		<menu_item_call label="Nowe oczy" name="New Eyes"/>
 	</context_menu>
+	<menu_item_check label="Ustawienia szafy..." name="inventory_settings" />
 </toggleable_menu>

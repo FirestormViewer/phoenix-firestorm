@@ -107,6 +107,8 @@
 	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>
 	<menu_item_call label="Neuen Ordner aus Auswahl erstellen" name="New folder from selected"/>
 	<menu_item_call label="Gruppierung durch den Ordner aufheben" name="Ungroup folder items"/>
+	<menu_item_call label="Zu Favoriten hinzufügen" name="Add to Favorites"/>
+	<menu_item_call label="Aus Favoriten entfernen" name="Remove from Favorites"/>
 	<menu_item_call label="Konferenz-Chat starten" name="Conference Chat Folder"/>
 	<menu_item_call label="Abspielen" name="PlayGesture"/>
 	<menu_item_call label="Wiedergeben/Abspielen" name="Sound Play"/>
