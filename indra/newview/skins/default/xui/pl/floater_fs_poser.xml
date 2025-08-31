@@ -194,6 +194,7 @@
 								Przód/Tył:
 							</text>
 							<slider name="av_position_inout" tool_tip="Przesuń wybranego awatara w przód lub w tył" />
+							<check_box name="unlock_pelvis_for_bvh_save_checkbox" label="Odblokuj miednicę w BVH" tool_tip="Po zapisaniu tej pozy w BVH, miednica nie zostanie 'zablokowana'. Oznacza to, że inne animacje w świecie będą mogły 'poruszać' całym awatarem. Użyj tej opcji, jeśli Twoja poza ma być odgrywana 'nad' inną pozą." />
 							<scroll_list name="entireAv_joint_scroll">
 								<scroll_list.columns label="Część ciała" name="joint" />
 							</scroll_list>
@@ -245,11 +246,11 @@
 						<text name="trackpad_sensitivity_label">Czułość trackpada:</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Dostosowuje czułość trackballa / kółka" />
 						<check_box name="stop_posing_on_close_checkbox" label="Stop pozy po zamknięciu" tool_tip="Brak zatrzymywania pozy może być pomocny, jeśli nie chcesz jej przypadkowo stracić." />
-						<check_box name="reset_base_rotation_on_edit_checkbox" label="Reset bazy rotacji na edycji" tool_tip="Gdy po raz pierwszy edytujesz obrót, zresetuj go do zera. Oznacza to, że Twoja praca może zapisać pozę (a nie różnicę, patrz ładowanie / zapisywanie). Zielony 'ptaszek' pojawia się obok każdego wyzerowanego tak, wyeksportowanego stawu." />
-						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu**" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
+						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Potwierdź nadpisanie" tool_tip="Gdy zapisujesz pozę, a plik już istnieje, musisz kliknąć przycisk zapisu ponownie, aby potwierdzić, że na pewno chcesz ją nadpisać." />
 						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
 						<check_box name="show_joint_markers_checkbox" label="Wskaźniki stawów" tool_tip="Pokaż małe wskaźniki ułatwiające wybór stawów podczas pozowania." />
+						<check_box name="dof_edit_mode_checkbox" label="Głębia ostrości podczas edycji" tool_tip="Podczas korzystania z manipulatorów głębia ostrości zazwyczaj wyłącza się automatycznie. To ustawienie pozostawia głębię ostrości włączoną podczas edycji póz lub prim." />
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Włącz / wyłącz manipulatory wizualne." />
@@ -294,6 +295,7 @@
 					<button name="button_redo_change" tool_tip="Ponów ostatnią cofniętą zmianę" />
 					<button name="poser_joint_reset" tool_tip="Kliknij, aby zresetować wszystkie wybrane części ciała do stanu z momentu, w którym po raz pierwszy zacząłeś/aś pozować" />
 					<button name="delta_mode_toggle" tool_tip="Jeśli zmienisz wiele stawów, każdy z nich zmieni się o tę samą wartość, zamiast wszystkie o taki sam obrót. Stosowany również do pozbywania się blokady Gimbala." />
+					<button name="toggle_LockWorldRotation" tool_tip="Blokuje rotacje w świecie dla wybranej kończyny/kończyn. Kończyny zablokowane zachowują ten sam obrót w świecie, podczas gdy ich kończyny nadrzędne się poruszają. Np.: zablokuj oczy i obróć głowę - oczy będą patrzeć dalej w tym samym kierunku." />
 					<button label="Odbij" name="button_toggleMirrorRotation" tool_tip="Zmień przeciwległy staw, jak w lustrze." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Zmień przeciwległy staw, ale w ten sam sposób." />
 					<button label="Kopia L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Kliknij, aby skopiować zmiany z lewej strony na prawą." />

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="object_weights" title="Zaawansowane">
+    <floater.string name="lowest_lod" value="Najniższy" />
+    <floater.string name="low_lod" value="Niski" />
+    <floater.string name="medium_lod" value="Średni" />
+    <floater.string name="high_lod" value="Wysoki" />
+    <floater.string name="multiple_lods" value="Wiele" />
     <text name="selected_text" value="WYBRANE"/>
     <text name="objects_label" value="Obiekty"/>
     <text name="prims_label" value="Primy"/>
@@ -13,5 +18,8 @@
     <text name="rezzed_on_land_label" value="Zrezzowane na ziemi"/>
     <text name="remaining_capacity_label" value="Pozostała pojemność"/>
     <text name="total_capacity_label" value="Całkowita pojemność"/>
-    <text name="help_SLURL" value="[secondlife:///app/help/object_weights Co to jest?...]"/>
+    <text name="rendering_info_text" value="Renderowanie" />
+    <text name="lod_level_label" value="LOD (poziom detali)" />
+    <text name="triangles_shown_label" value="Wyświetlane trójkąty" />
+    <text name="pixel_area_label" value="Obszar pikseli" />
 </floater>
