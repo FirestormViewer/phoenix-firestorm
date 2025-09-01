@@ -86,7 +86,7 @@ jobs:
         shell: bash
       
       - name: Download Setup.exe Files Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: setup-exe-files
           path: setup_exe_files
