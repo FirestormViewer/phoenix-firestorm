@@ -50,7 +50,7 @@ jobs:
     steps:
       # Checkout the Repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Necessary to fetch all history for tagging
 
