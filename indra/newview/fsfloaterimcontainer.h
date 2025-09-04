@@ -82,6 +82,11 @@ public:
 
     void startFlashingTab(LLFloater* floater, const std::string& message);
 
+    // <FS:PP> Restore open IMs from previous session
+    void saveOpenIMs();
+    void restoreOpenIMs();
+    // </FS:PP>
+
 private:
     enum eVoiceState
     {

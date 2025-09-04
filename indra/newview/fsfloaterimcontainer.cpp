@@ -42,6 +42,11 @@
 #include "llurlregistry.h"
 #include "llvoiceclient.h"
 
+// <FS:PP> Restore open IMs from previous session
+#include "llconversationlog.h"
+#include "llimview.h"
+// </FS:PP>
+
 constexpr F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
 //
@@ -162,6 +167,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 {
     LLMultiFloater::onOpen(key);
     initTabs();
+    restoreOpenIMs(); // <FS:PP> Restore open IMs from previous session
     LLFloater* active_floater = getActiveFloater();
     if (active_floater && !active_floater->hasFocus())
     {
@@ -173,6 +179,7 @@ void FSFloaterIMContainer::onClose(bool app_quitting)
 {
     if (app_quitting)
     {
+        saveOpenIMs(); // <FS:PP> Save open IM sessions before closing
         for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
         {
             FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
@@ -616,4 +623,125 @@ void FSFloaterIMContainer::startFlashingTab(LLFloater* floater, const std::strin
     }
     LLMultiFloater::setFloaterFlashing(floater, true, is_alt_flashing);
 }
+
+// <FS:PP> Restore open IMs from previous session
+void FSFloaterIMContainer::saveOpenIMs()
+{
+    static LLCachedControl<bool> fsRestoreOpenIMs(gSavedSettings, "FSRestoreOpenIMs");
+    if (!fsRestoreOpenIMs)
+    {
+        return;
+    }
+
+    LLSD openIMs = LLSD::emptyArray();
+    S32 saved_count = 0;
+
+    // Save all open IM sessions (excluding contacts and nearby chat)
+    for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+    {
+        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
+        if (floater)
+        {
+            LLUUID session_id = floater->getKey();
+            if (session_id.notNull())
+            {
+                // Get the session info to save participant details
+                LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
+                if (session)
+                {
+                    LLSD session_data = LLSD::emptyMap();
+                    session_data["session_type"] = (S32)session->mSessionType;
+                    session_data["other_participant_id"] = session->mOtherParticipantID;
+                    session_data["session_name"] = session->mName;
+
+                    // For group sessions, also save the group ID
+                    if (session->isGroupSessionType())
+                    {
+                        session_data["group_id"] = session->mOtherParticipantID;
+                    }
+
+                    openIMs.append(session_data);
+                    ++saved_count;
+                }
+            }
+        }
+    }
+
+    gSavedPerAccountSettings.setLLSD("FSLastOpenIMs", openIMs);
+    LL_DEBUGS("FSFloaterIMContainer") << "Saved " << saved_count << " open IM sessions for restoration" << LL_ENDL;
+}
+
+void FSFloaterIMContainer::restoreOpenIMs()
+{
+    static LLCachedControl<bool> fsRestoreOpenIMs(gSavedSettings, "FSRestoreOpenIMs");
+    if (!fsRestoreOpenIMs)
+    {
+        return;
+    }
+
+    LLSD openIMs = gSavedPerAccountSettings.getLLSD("FSLastOpenIMs");
+    if (!openIMs.isArray() || openIMs.size() == 0)
+    {
+        return;
+    }
+
+    S32 restored_count = 0;
+
+    // Restore each saved IM session by creating new sessions with the saved participants
+    for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
+    {
+        LLSD session_data = *it;
+        if (session_data.isMap())
+        {
+            LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
+            S32 session_type = session_data["session_type"].asInteger();
+            std::string session_name = session_data["session_name"].asString();
+
+            if (other_participant_id.notNull())
+            {
+                LLUUID new_session_id;
+
+                // Create a new session based on the saved type
+                if (session_type == LLIMModel::LLIMSession::P2P_SESSION)
+                {
+                    // For P2P sessions, start a new IM with the other participant
+                    new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_NOTHING_SPECIAL, other_participant_id);
+                }
+                else if (session_type == LLIMModel::LLIMSession::GROUP_SESSION)
+                {
+                    // For group sessions, start a new group IM
+                    new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_SESSION_GROUP_START, other_participant_id);
+                }
+                else if (session_type == LLIMModel::LLIMSession::ADHOC_SESSION)
+                {
+                    // For ad-hoc sessions, we'd need to restore the participant list
+                    // For now, skip these as they're more complex
+                    continue;
+                }
+
+                if (new_session_id.notNull())
+                {
+                    // Create and show the IM floater
+                    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
+                    if (im_floater)
+                    {
+                        // Add to container if not already there
+                        if (im_floater->getHost() != this)
+                        {
+                            addFloater(im_floater, false);
+                        }
+                        ++restored_count;
+                    }
+                }
+            }
+        }
+    }
+
+    LL_DEBUGS("FSFloaterIMContainer") << "Restored " << restored_count << " IM sessions" << LL_ENDL;
+
+    // Clear the saved list after restoration
+    gSavedPerAccountSettings.setLLSD("FSLastOpenIMs", LLSD::emptyArray());
+}
+// </FS:PP>
+
 // EOF

@@ -23992,6 +23992,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSRestoreOpenIMs</key>
+    <map>
+      <key>Comment</key>
+      <string>Restore open IM windows from the previous session on startup.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>FSUseBuiltInHistory</key>
     <map>
       <key>Comment</key>
