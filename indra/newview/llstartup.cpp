@@ -3385,6 +3385,14 @@ bool idle_startup()
         }
         // </FS:PP>
 
+        // <FS:PP> Restore open IMs from previous session
+        if (gSavedSettings.getBOOL("FSRestoreOpenIMs"))
+        {
+            FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
+            floater_imcontainer->restoreOpenIMs();
+        }
+        // </FS:PP>
+
         return true;
     }
 

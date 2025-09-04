@@ -1153,7 +1153,7 @@
 		 height="18"
 		 name="FSRestoreOpenIMs"
 		 control_name="FSRestoreOpenIMs"
-		 label="Restore open IM windows from previous session"/>
+		 label="Restore conversations with residents from previous session"/>
 		<check_box
 		 enabled="false"
 		 layout="topleft"
