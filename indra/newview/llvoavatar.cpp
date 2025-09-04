@@ -1862,88 +1862,6 @@ void LLVOAvatar::renderBones(const std::string &selected_joint)
 
         gGL.popMatrix();
     }
-
-
-    // draw joint space bounding boxes of rigged attachments in yellow
-    gGL.color3f(1.f, 1.f, 0.f);
-    for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
-    {
-        LLJoint* joint = getJoint(joint_num);
-        LLJointRiggingInfo* rig_info = NULL;
-        if (joint_num < mJointRiggingInfoTab.size())
-        {
-            rig_info = &mJointRiggingInfoTab[joint_num];
-        }
-
-        if (joint && rig_info && rig_info->isRiggedTo())
-        {
-            LLViewerJointAttachment* as_joint_attach = dynamic_cast<LLViewerJointAttachment*>(joint);
-            if (as_joint_attach && as_joint_attach->getIsHUDAttachment())
-            {
-                // Ignore bounding box of HUD joints
-                continue;
-            }
-            gGL.pushMatrix();
-            gGL.multMatrix(&joint->getXform()->getWorldMatrix().mMatrix[0][0]);
-
-            LLVector4a pos;
-            LLVector4a size;
-
-            const LLVector4a* extents = rig_info->getRiggedExtents();
-
-            pos.setAdd(extents[0], extents[1]);
-            pos.mul(0.5f);
-            size.setSub(extents[1], extents[0]);
-            size.mul(0.5f);
-
-            drawBoxOutline(pos, size);
-
-            gGL.popMatrix();
-        }
-    }
-
-    // draw world space attachment rigged bounding boxes in cyan
-    gGL.color3f(0.f, 1.f, 1.f);
-    for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
-         iter != mAttachmentPoints.end();
-         ++iter)
-    {
-        LLViewerJointAttachment* attachment = iter->second;
-
-        if (attachment->getValid())
-        {
-            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-                 attachment_iter != attachment->mAttachedObjects.end();
-                 ++attachment_iter)
-            {
-                LLViewerObject* attached_object = attachment_iter->get();
-                if (attached_object && !attached_object->isHUDAttachment())
-                {
-                    LLDrawable* drawable = attached_object->mDrawable;
-                    if (drawable && drawable->isState(LLDrawable::RIGGED | LLDrawable::RIGGED_CHILD))
-                    {
-                        // get face rigged extents
-                        for (S32 i = 0; i < drawable->getNumFaces(); ++i)
-                        {
-                            LLFace* facep = drawable->getFace(i);
-                            if (facep && facep->isState(LLFace::RIGGED))
-                            {
-                                LLVector4a center, size;
-
-                                LLVector4a* extents = facep->mRiggedExtents;
-
-                                center.setAdd(extents[0], extents[1]);
-                                center.mul(0.5f);
-                                size.setSub(extents[1], extents[0]);
-                                size.mul(0.5f);
-                                drawBoxOutline(center, size);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 void LLVOAvatar::renderOnlySelectedBones(const std::vector<std::string> &selected_joints)
@@ -2282,36 +2200,36 @@ bool LLVOAvatar::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
         {
             mCollisionVolumes[i].updateWorldMatrix();
 
-            glm::mat4 mat(glm::make_mat4((F32*) mCollisionVolumes[i].getXform()->getWorldMatrix().mMatrix));
-            glm::mat4 inverse = glm::inverse(mat);
-            glm::mat4 norm_mat = glm::transpose(inverse);
+            glh::matrix4f mat((F32*) mCollisionVolumes[i].getXform()->getWorldMatrix().mMatrix);
+            glh::matrix4f inverse = mat.inverse();
+            glh::matrix4f norm_mat = inverse.transpose();
 
-            glm::vec3 p1(start);
-            glm::vec3 p2(end);
+            glh::vec3f p1(start.getF32ptr());
+            glh::vec3f p2(end.getF32ptr());
 
-            p1 = mul_mat4_vec3(inverse, p1);
-            p2 = mul_mat4_vec3(inverse, p2);
+            inverse.mult_matrix_vec(p1);
+            inverse.mult_matrix_vec(p2);
 
             LLVector3 position;
             LLVector3 norm;
 
-            if (linesegment_sphere(LLVector3(p1), LLVector3(p2), LLVector3(0,0,0), 1.f, position, norm))
+            if (linesegment_sphere(LLVector3(p1.v), LLVector3(p2.v), LLVector3(0,0,0), 1.f, position, norm))
             {
-                glm::vec3 res_pos(position);
-                res_pos = mul_mat4_vec3(mat, res_pos);
+                glh::vec3f res_pos(position.mV);
+                mat.mult_matrix_vec(res_pos);
 
-                 glm::vec3 res_norm(norm);
-                res_norm = glm::normalize(res_norm);
-                res_norm = glm::mat3(norm_mat) * res_norm;
+                norm.normalize();
+                glh::vec3f res_norm(norm.mV);
+                norm_mat.mult_matrix_dir(res_norm);
 
                 if (intersection)
                 {
-                    intersection->load3(glm::value_ptr(res_pos));
+                    intersection->load3(res_pos.v);
                 }
 
                 if (normal)
                 {
-                    normal->load3(glm::value_ptr(res_norm));
+                    normal->load3(res_norm.v);
                 }
 
                 return true;

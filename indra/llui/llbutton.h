@@ -36,6 +36,7 @@
 #include "llframetimer.h"
 #include "lluiimage.h"
 #include "lluistring.h"
+#include "llfontvertexbuffer.h"
 
 //
 // Constants

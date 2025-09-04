@@ -766,7 +766,7 @@ public:
                 ypos += y_inc;
 
                 // <FS:Ansariel> Mesh debugging
-                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests.load()));
+                addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests));
                 ypos += y_inc;
                 // </FS:Ansariel>
 
@@ -2059,7 +2059,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 
     // fonts use an GL_UNSIGNED_BYTE image format,
     // so they need convertion, init buffers if needed
-    LLImageGL::allocateConversionBuffer();
+    //LLImageGL::allocateConversionBuffer();
 
     // Init font system, load default fonts and generate basic glyphs
     // currently it takes aprox. 0.5 sec and we would load these fonts anyway
@@ -6574,8 +6574,8 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     LLViewerCamera* camera = LLViewerCamera::getInstance();
 
     LLViewerCamera saved_camera = LLViewerCamera::instance();
-    glm::mat4 saved_proj = get_current_projection();
-    glm::mat4 saved_mod = get_current_modelview();
+    glh::matrix4f saved_proj = get_current_projection();
+    glh::matrix4f saved_mod = get_current_modelview();
 
     // camera constants for the square, cube map capture image
     camera->setAspect(1.0); // must set aspect ratio first to avoid undesirable clamping of vertical FoV

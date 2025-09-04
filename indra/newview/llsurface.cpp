@@ -224,10 +224,7 @@ LLViewerTexture* LLSurface::getSTexture()
 
 void LLSurface::createSTexture()
 {
-    // <FS:Ansariel> Fix for minimap world tiles missing
-    //if (!mSTexturep)
-    if (mSTexturep.isNull() || !mSTexturep->hasGLTexture())
-    // </FS:Ansariel>
+    if (!mSTexturep)
     {
         U64 handle = mRegionp->getHandle();
 

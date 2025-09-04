@@ -34,14 +34,12 @@
 #include "llstring.h"
 #include "lluiimage.h"
 #include "llview.h"
-#include "llfontvertexbuffer.h"
 
 //
 // Declarations
 //
 
 class LLFontGL;
-class LLFontVertexBuffer;
 class LLScrollContainer;
 class LLUICtrlFactory;
 
@@ -146,7 +144,6 @@ private:
     LLUIColor               mBorderColor;
 
     const LLFontGL*         mGLFont;
-    LLFontVertexBuffer      mFontBuffer;
 
     LLPointer< LLUIImage >  mImage;
     LLUIColor               mImageColor;

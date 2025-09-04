@@ -43,7 +43,17 @@
 #include "llinstancetracker.h"
 
 #include "llglheaders.h"
-#include "glm/mat4x4.hpp"
+
+#if LL_LINUX && (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 70000
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
+#endif
+
+#include "glh/glh_linear.h"
+
+#if LL_LINUX && (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 70000
+#pragma GCC diagnostic push
+#endif
 
 extern bool gDebugGL;
 extern bool gDebugSession;
@@ -90,7 +100,6 @@ public:
     S32 mGLMaxTextureSize;
     F32 mMaxAnisotropy = 0.f;
     S32 mMaxUniformBlockSize = 0;
-    S32 mMaxVaryingVectors = 0;
 
     // GL 4.x capabilities
     bool mHasCubeMapArray = false;
@@ -106,7 +115,6 @@ public:
     bool mIsAMD;
     bool mIsNVIDIA;
     bool mIsIntel;
-    bool mIsApple = false;
 
     // hints to the render pipe
     U32 mDownScaleMethod = 0; // see settings.xml RenderDownScaleMethod
@@ -322,7 +330,7 @@ class LLGLUserClipPlane
 {
 public:
 
-    LLGLUserClipPlane(const LLPlane& plane, const glm::mat4& modelview, const glm::mat4& projection, bool apply = true);
+    LLGLUserClipPlane(const LLPlane& plane, const glh::matrix4f& modelview, const glh::matrix4f& projection, bool apply = true);
     ~LLGLUserClipPlane();
 
     void setPlane(F32 a, F32 b, F32 c, F32 d);
@@ -331,8 +339,8 @@ public:
 private:
     bool mApply;
 
-    glm::mat4 mProjection;
-    glm::mat4 mModelview;
+    glh::matrix4f mProjection;
+    glh::matrix4f mModelview;
 };
 
 /*
@@ -346,9 +354,9 @@ class LLGLSquashToFarClip
 {
 public:
     LLGLSquashToFarClip();
-    LLGLSquashToFarClip(const glm::mat4& projection, U32 layer = 0);
+    LLGLSquashToFarClip(glh::matrix4f& projection, U32 layer = 0);
 
-    void setProjectionMatrix(glm::mat4 projection, U32 layer);
+    void setProjectionMatrix(glh::matrix4f& projection, U32 layer);
 
     ~LLGLSquashToFarClip();
 };

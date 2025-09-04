@@ -63,6 +63,28 @@ LLTrace::CountStatHandle<> LLViewerCamera::sAngularVelocityStat("camera_angular_
 
 LLViewerCamera::eCameraID LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 
+//glu pick matrix implementation borrowed from Mesa3D
+glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLint* viewport)
+{
+    GLfloat m[16];
+    GLfloat sx, sy;
+    GLfloat tx, ty;
+
+    sx = viewport[2] / width;
+    sy = viewport[3] / height;
+    tx = (viewport[2] + 2.f * (viewport[0] - x)) / width;
+    ty = (viewport[3] + 2.f * (viewport[1] - y)) / height;
+
+    #define M(row,col) m[col*4+row]
+    M(0,0) = sx; M(0,1) = 0.f; M(0,2) = 0.f; M(0,3) = tx;
+    M(1,0) = 0.f; M(1,1) = sy; M(1,2) = 0.f; M(1,3) = ty;
+    M(2,0) = 0.f; M(2,1) = 0.f; M(2,2) = 1.f; M(2,3) = 0.f;
+    M(3,0) = 0.f; M(3,1) = 0.f; M(3,2) = 0.f; M(3,3) = 1.f;
+    #undef M
+
+    return glh::matrix4f(m);
+}
+
 LLViewerCamera::LLViewerCamera() : LLCamera()
 {
     calcProjection(getFar());
@@ -76,14 +98,18 @@ LLViewerCamera::LLViewerCamera() : LLCamera()
     mAverageSpeed = 0.f;
     mAverageAngularSpeed = 0.f;
 
-    LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl("CameraAngle");
-    if (cntrl_ptr.notNull())
-    {
-        cntrl_ptr->getCommitSignal()->connect([](LLControlVariable* control, const LLSD& value, const LLSD& previous)
-        {
-            LLViewerCamera::getInstance()->setDefaultFOV((F32)value.asReal());
-        });
-    }
+    // <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+    // mCameraAngleChangedSignal = gSavedSettings.getControl("CameraAngle")->getCommitSignal()->connect(boost::bind(&LLViewerCamera::updateCameraAngle, this, _2));
+    connectCameraAngleSignal();
+    // </FS:Zi>
+}
+
+LLViewerCamera::~LLViewerCamera()
+{
+    // <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+    // mCameraAngleChangedSignal.disconnect();
+    disconnectCameraAngleSignal();
+    // </FS:Zi>
 }
 
 void LLViewerCamera::updateCameraLocation(const LLVector3 &center, const LLVector3 &up_direction, const LLVector3 &point_of_interest)
@@ -187,52 +213,59 @@ void LLViewerCamera::calcProjection(const F32 far_distance) const
 //static
 void LLViewerCamera::updateFrustumPlanes(LLCamera& camera, bool ortho, bool zflip, bool no_hacks)
 {
-    glm::ivec4 viewport = glm::make_vec4((GLint*) gGLViewport);
-    glm::mat4 model = get_current_modelview();
-    glm::mat4 proj = get_current_projection();
+    GLint* viewport = (GLint*) gGLViewport;
+    F64 model[16];
+    F64 proj[16];
+
+    for (U32 i = 0; i < 16; i++)
+    {
+        model[i] = (F64) gGLModelView[i];
+        proj[i] = (F64) gGLProjection[i];
+    }
+
+    GLdouble objX,objY,objZ;
 
     LLVector3 frust[8];
 
-    glm::vec3 obj;
     if (no_hacks)
     {
-        obj = glm::unProject(glm::vec3(viewport[0], viewport[1], 0), model, proj, viewport);
-        frust[0].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1],0),model,proj,viewport);
-        frust[1].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[2].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[3].setVec(glm::value_ptr(obj));
+        gluUnProject(viewport[0],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[0].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[1].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[2].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[3].setVec((F32)objX,(F32)objY,(F32)objZ);
 
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1],1),model,proj,viewport);
-        frust[4].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1],1),model,proj,viewport);
-        frust[5].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1]+viewport[3],1),model,proj,viewport);
-        frust[6].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1]+viewport[3],1),model,proj,viewport);
-        frust[7].setVec(glm::value_ptr(obj));
+        gluUnProject(viewport[0],viewport[1],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[4].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[5].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1]+viewport[3],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[6].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0],viewport[1]+viewport[3],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[7].setVec((F32)objX,(F32)objY,(F32)objZ);
     }
     else if (zflip)
     {
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[0].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[1].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1],0),model,proj,viewport);
-        frust[2].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1],0),model,proj,viewport);
-        frust[3].setVec(glm::value_ptr(obj));
+        gluUnProject(viewport[0],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[0].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[1].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[2].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[3].setVec((F32)objX,(F32)objY,(F32)objZ);
 
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1]+viewport[3],1),model,proj,viewport);
-        frust[4].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1]+viewport[3],1),model,proj,viewport);
-        frust[5].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1],1),model,proj,viewport);
-        frust[6].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1],1),model,proj,viewport);
-        frust[7].setVec(glm::value_ptr(obj));
+        gluUnProject(viewport[0],viewport[1]+viewport[3],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[4].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1]+viewport[3],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[5].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[6].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0],viewport[1],1,model,proj,viewport,&objX,&objY,&objZ);
+        frust[7].setVec((F32)objX,(F32)objY,(F32)objZ);
 
         for (U32 i = 0; i < 4; i++)
         {
@@ -243,14 +276,14 @@ void LLViewerCamera::updateFrustumPlanes(LLCamera& camera, bool ortho, bool zfli
     }
     else
     {
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1],0),model,proj,viewport);
-        frust[0].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1],0),model,proj,viewport);
-        frust[1].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0]+viewport[2],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[2].setVec(glm::value_ptr(obj));
-        obj = glm::unProject(glm::vec3(viewport[0],viewport[1]+viewport[3],0),model,proj,viewport);
-        frust[3].setVec(glm::value_ptr(obj));
+        gluUnProject(viewport[0],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[0].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[1].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0]+viewport[2],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[2].setVec((F32)objX,(F32)objY,(F32)objZ);
+        gluUnProject(viewport[0],viewport[1]+viewport[3],0,model,proj,viewport,&objX,&objY,&objZ);
+        frust[3].setVec((F32)objX,(F32)objY,(F32)objZ);
 
         if (ortho)
         {
@@ -280,7 +313,7 @@ void LLViewerCamera::setPerspective(bool for_selection,
                                     F32 z_near, F32 z_far)
 {
     F32 fov_y, aspect;
-    fov_y = getView();
+    fov_y = RAD_TO_DEG * getView();
     bool z_default_far = false;
     if (z_far <= 0)
     {
@@ -297,19 +330,20 @@ void LLViewerCamera::setPerspective(bool for_selection,
     gGL.matrixMode(LLRender::MM_PROJECTION);
     gGL.loadIdentity();
 
-    glm::mat4 proj_mat = glm::identity<glm::mat4>();
+    glh::matrix4f proj_mat;
 
     if (for_selection)
     {
         // make a tiny little viewport
         // anything drawn into this viewport will be "selected"
 
-        glm::ivec4 viewport(gViewerWindow->getWorldViewRectRaw().mLeft,
-            gViewerWindow->getWorldViewRectRaw().mBottom,
-            gViewerWindow->getWorldViewRectRaw().getWidth(),
-            gViewerWindow->getWorldViewRectRaw().getHeight());
+        GLint viewport[4];
+        viewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
+        viewport[1] = gViewerWindow->getWorldViewRectRaw().mBottom;
+        viewport[2] = gViewerWindow->getWorldViewRectRaw().getWidth();
+        viewport[3] = gViewerWindow->getWorldViewRectRaw().getHeight();
 
-        proj_mat = glm::pickMatrix(glm::vec2(x + width / 2.f, y_from_bot + height / 2.f), glm::vec2((GLfloat)width, (GLfloat)height), viewport);
+        proj_mat = gl_pick_matrix(x+width/2.f, y_from_bot+height/2.f, (GLfloat) width, (GLfloat) height, viewport);
 
         if (limit_select_distance)
         {
@@ -345,35 +379,37 @@ void LLViewerCamera::setPerspective(bool for_selection,
         float offset = mZoomFactor - 1.f;
         int pos_y = mZoomSubregion / llceil(mZoomFactor);
         int pos_x = mZoomSubregion - (pos_y*llceil(mZoomFactor));
+        glh::matrix4f translate;
+        translate.set_translate(glh::vec3f(offset - (F32)pos_x * 2.f, offset - (F32)pos_y * 2.f, 0.f));
+        glh::matrix4f scale;
+        scale.set_scale(glh::vec3f(mZoomFactor, mZoomFactor, 1.f));
 
-        glm::mat4 translate;
-        translate = glm::translate(glm::vec3(offset - (F32)pos_x * 2.f, offset - (F32)pos_y * 2.f, 0.f));
-        glm::mat4 scale;
-        scale = glm::scale(glm::vec3(mZoomFactor, mZoomFactor, 1.f));
-
-        proj_mat = scale * proj_mat;
-        proj_mat = translate * proj_mat;
+        proj_mat = scale*proj_mat;
+        proj_mat = translate*proj_mat;
     }
 
     calcProjection(z_far); // Update the projection matrix cache
 
-    proj_mat *= glm::perspective(fov_y,aspect,z_near,z_far);
+    proj_mat *= gl_perspective(fov_y,aspect,z_near,z_far);
 
-    gGL.loadMatrix(glm::value_ptr(proj_mat));
+    gGL.loadMatrix(proj_mat.m);
 
-    set_current_projection(proj_mat);
+    for (U32 i = 0; i < 16; i++)
+    {
+        gGLProjection[i] = proj_mat.m[i];
+    }
 
     gGL.matrixMode(LLRender::MM_MODELVIEW);
 
-    glm::mat4 modelview(glm::make_mat4((GLfloat*) OGL_TO_CFR_ROTATION));
+    glh::matrix4f modelview((GLfloat*) OGL_TO_CFR_ROTATION);
 
     GLfloat         ogl_matrix[16];
 
     getOpenGLTransform(ogl_matrix);
 
-    modelview *= glm::make_mat4(ogl_matrix);
+    modelview *= glh::matrix4f(ogl_matrix);
 
-    gGL.loadMatrix(glm::value_ptr(modelview));
+    gGL.loadMatrix(modelview.m);
 
     if (for_selection && (width > 1 || height > 1))
     {
@@ -391,7 +427,10 @@ void LLViewerCamera::setPerspective(bool for_selection,
     if (!for_selection && mZoomFactor == 1.f)
     {
         // Save GL matrices for access elsewhere in code, especially project_world_to_screen
-        set_current_modelview(modelview);
+        for (U32 i = 0; i < 16; i++)
+        {
+            gGLModelView[i] = modelview.m[i];
+        }
     }
 
     updateFrustumPlanes(*this);
@@ -402,8 +441,24 @@ void LLViewerCamera::setPerspective(bool for_selection,
 // screen coordinates to the agent's region.
 void LLViewerCamera::projectScreenToPosAgent(const S32 screen_x, const S32 screen_y, LLVector3* pos_agent) const
 {
-    glm::vec3 agent_coord = glm::unProject(glm::vec3(screen_x, screen_y, 0.f), get_current_modelview(), get_current_projection(), glm::make_vec4(gGLViewport));
-    pos_agent->setVec( (F32)agent_coord.x, (F32)agent_coord.y, (F32)agent_coord.z );
+    GLdouble x, y, z;
+
+    F64 mdlv[16];
+    F64 proj[16];
+
+    for (U32 i = 0; i < 16; i++)
+    {
+        mdlv[i] = (F64) gGLModelView[i];
+        proj[i] = (F64) gGLProjection[i];
+    }
+
+    gluUnProject(
+        GLdouble(screen_x), GLdouble(screen_y), 0.0,
+        mdlv, proj, (GLint*)gGLViewport,
+        &x,
+        &y,
+        &z );
+    pos_agent->setVec( (F32)x, (F32)y, (F32)z );
 }
 
 // Uses the last GL matrices set in set_perspective to project a point from
@@ -412,6 +467,7 @@ void LLViewerCamera::projectScreenToPosAgent(const S32 screen_x, const S32 scree
 bool LLViewerCamera::projectPosAgentToScreen(const LLVector3 &pos_agent, LLCoordGL &out_point, const bool clamp) const
 {
     bool in_front = true;
+    GLdouble    x, y, z;            // object's window coords, GL-style
 
     LLVector3 dir_to_point = pos_agent - getOrigin();
     dir_to_point /= dir_to_point.magVec();
@@ -429,20 +485,35 @@ bool LLViewerCamera::projectPosAgentToScreen(const LLVector3 &pos_agent, LLCoord
     }
 
     LLRect world_view_rect = gViewerWindow->getWorldViewRectRaw();
-    glm::ivec4 viewport(world_view_rect.mLeft, world_view_rect.mBottom, world_view_rect.getWidth(), world_view_rect.getHeight());
-    glm::vec3 win_coord = glm::project(glm::vec3(pos_agent), get_current_modelview(), get_current_projection(), viewport);
+    S32 viewport[4];
+    viewport[0] = world_view_rect.mLeft;
+    viewport[1] = world_view_rect.mBottom;
+    viewport[2] = world_view_rect.getWidth();
+    viewport[3] = world_view_rect.getHeight();
 
+    F64 mdlv[16];
+    F64 proj[16];
+
+    for (U32 i = 0; i < 16; i++)
+    {
+        mdlv[i] = (F64) gGLModelView[i];
+        proj[i] = (F64) gGLProjection[i];
+    }
+
+    if (GL_TRUE == gluProject(pos_agent.mV[VX], pos_agent.mV[VY], pos_agent.mV[VZ],
+                                mdlv, proj, (GLint*)viewport,
+                                &x, &y, &z))
     {
         // convert screen coordinates to virtual UI coordinates
-        win_coord.x /= gViewerWindow->getDisplayScale().mV[VX];
-        win_coord.y /= gViewerWindow->getDisplayScale().mV[VY];
+        x /= gViewerWindow->getDisplayScale().mV[VX];
+        y /= gViewerWindow->getDisplayScale().mV[VY];
 
         // should now have the x,y coords of grab_point in screen space
         LLRect world_rect = gViewerWindow->getWorldViewRectScaled();
 
         // convert to pixel coordinates
-        S32 int_x = lltrunc(win_coord.x);
-        S32 int_y = lltrunc(win_coord.y);
+        S32 int_x = lltrunc(x);
+        S32 int_y = lltrunc(y);
 
         bool valid = true;
 
@@ -504,6 +575,10 @@ bool LLViewerCamera::projectPosAgentToScreen(const LLVector3 &pos_agent, LLCoord
             return in_front && valid;
         }
     }
+    else
+    {
+        return false;
+    }
 }
 
 // Uses the last GL matrices set in set_perspective to project a point from
@@ -522,33 +597,49 @@ bool LLViewerCamera::projectPosAgentToScreenEdge(const LLVector3 &pos_agent,
     }
 
     LLRect world_view_rect = gViewerWindow->getWorldViewRectRaw();
+    S32 viewport[4];
+    viewport[0] = world_view_rect.mLeft;
+    viewport[1] = world_view_rect.mBottom;
+    viewport[2] = world_view_rect.getWidth();
+    viewport[3] = world_view_rect.getHeight();
+    GLdouble    x, y, z;            // object's window coords, GL-style
 
-    glm::ivec4 viewport(world_view_rect.mLeft, world_view_rect.mBottom, world_view_rect.getWidth(), world_view_rect.getHeight());
-    glm::vec3 win_coord = glm::project(glm::vec3(pos_agent), get_current_modelview(), get_current_projection(), viewport);
+    F64 mdlv[16];
+    F64 proj[16];
 
+    for (U32 i = 0; i < 16; i++)
     {
-        win_coord.x /= gViewerWindow->getDisplayScale().mV[VX];
-        win_coord.y /= gViewerWindow->getDisplayScale().mV[VY];
+        mdlv[i] = (F64) gGLModelView[i];
+        proj[i] = (F64) gGLProjection[i];
+    }
+
+    if (GL_TRUE == gluProject(pos_agent.mV[VX], pos_agent.mV[VY],
+                              pos_agent.mV[VZ], mdlv,
+                              proj, (GLint*)viewport,
+                              &x, &y, &z))
+    {
+        x /= gViewerWindow->getDisplayScale().mV[VX];
+        y /= gViewerWindow->getDisplayScale().mV[VY];
         // should now have the x,y coords of grab_point in screen space
         const LLRect& world_rect = gViewerWindow->getWorldViewRectScaled();
 
         // ...sanity check
-        S32 int_x = lltrunc(win_coord.x);
-        S32 int_y = lltrunc(win_coord.y);
+        S32 int_x = lltrunc(x);
+        S32 int_y = lltrunc(y);
 
         // find the center
-        F32 center_x = (F32)world_rect.getCenterX();
-        F32 center_y = (F32)world_rect.getCenterY();
+        GLdouble center_x = (GLdouble)world_rect.getCenterX();
+        GLdouble center_y = (GLdouble)world_rect.getCenterY();
 
-        if (win_coord.x == center_x  && win_coord.y == center_y)
+        if (x == center_x  &&  y == center_y)
         {
             // can't project to edge from exact center
             return false;
         }
 
         // find the line from center to local
-        F32 line_x = win_coord.x - center_x;
-        F32 line_y = win_coord.y - center_y;
+        GLdouble line_x = x - center_x;
+        GLdouble line_y = y - center_y;
 
         int_x = lltrunc(center_x);
         int_y = lltrunc(center_y);
@@ -569,11 +660,11 @@ bool LLViewerCamera::projectPosAgentToScreenEdge(const LLVector3 &pos_agent,
         else if (0 == world_rect.getWidth())
         {
             // the diagonal slope of the view is undefined
-            if (win_coord.y < world_rect.mBottom)
+            if (y < world_rect.mBottom)
             {
                 int_y = world_rect.mBottom;
             }
-            else if (win_coord.y > world_rect.mTop)
+            else if ( y > world_rect.mTop)
             {
                 int_y = world_rect.mTop;
             }
@@ -595,7 +686,7 @@ bool LLViewerCamera::projectPosAgentToScreenEdge(const LLVector3 &pos_agent,
                     // top
                     int_y = world_rect.mTop;
                 }
-                int_x = lltrunc(((F32)int_y - center_y) / line_slope + center_x);
+                int_x = lltrunc(((GLdouble)int_y - center_y) / line_slope + center_x);
             }
             else if (fabs(line_slope) < rect_slope)
             {
@@ -609,7 +700,7 @@ bool LLViewerCamera::projectPosAgentToScreenEdge(const LLVector3 &pos_agent,
                     // right
                     int_x = world_rect.mRight;
                 }
-                int_y = lltrunc(((F32)int_x - center_x) * line_slope + center_y);
+                int_y = lltrunc(((GLdouble)int_x - center_x) * line_slope + center_y);
             }
             else
             {
@@ -830,3 +921,24 @@ bool LLViewerCamera::isDefaultFOVChanged()
     return false;
 }
 
+void LLViewerCamera::updateCameraAngle(const LLSD& value)
+{
+    setDefaultFOV((F32)value.asReal());
+}
+
+// <FS:Zi> add a way to disconnect/reconnect the "CameraAngle" changed signal
+void LLViewerCamera::connectCameraAngleSignal()
+{
+    if (mCameraAngleChangedSignal.connected())
+    {
+        mCameraAngleChangedSignal.disconnect();
+    }
+
+    mCameraAngleChangedSignal = gSavedSettings.getControl("CameraAngle")->getCommitSignal()->connect(boost::bind(&LLViewerCamera::updateCameraAngle, this, _2));
+}
+
+void LLViewerCamera::disconnectCameraAngleSignal()
+{
+    mCameraAngleChangedSignal.disconnect();
+}
+// </FS:Zi>

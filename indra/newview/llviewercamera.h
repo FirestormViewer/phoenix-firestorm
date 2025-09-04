@@ -43,6 +43,7 @@ class alignas(16) LLViewerCamera : public LLCamera, public LLSimpleton<LLViewerC
     LL_ALIGN_NEW
 public:
     LLViewerCamera();
+    ~LLViewerCamera();
 
     typedef enum
     {
@@ -65,6 +66,7 @@ public:
                                 const LLVector3 &point_of_interest);
 
     static void updateFrustumPlanes(LLCamera& camera, bool ortho = false, bool zflip = false, bool no_hacks = false);
+    void updateCameraAngle(const LLSD& value);
     void setPerspective(bool for_selection, S32 x, S32 y_from_bot, S32 width, S32 height, bool limit_select_distance, F32 z_near = 0, F32 z_far = 0);
 
     const LLMatrix4 &getProjection() const;
@@ -124,7 +126,15 @@ protected:
     F32                 mZoomFactor;
     S16                 mZoomSubregion;
 
+    boost::signals2::connection mCameraAngleChangedSignal;
+
 public:
+    // <FS:Zi> Enable external classes to disconnect and connect the "CameraAngle" settings
+    //         changed signal, so classes can copy and overwrite the camera class and restore
+    //         the signal handler
+    void connectCameraAngleSignal();
+    void disconnectCameraAngleSignal();
+    // </FS:Zi>
 };
 
 

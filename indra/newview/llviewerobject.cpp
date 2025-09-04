@@ -6453,7 +6453,7 @@ void LLViewerObject::unpackParticleSource(const S32 block_num, const LLUUID& own
             LLViewerTexture* image;
             if (mPartSourcep->mPartSysData.mPartImageID == LLUUID::null)
             {
-                image = LLViewerFetchedTexture::sDefaultParticleImagep;
+                image = LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.j2c");
             }
             else
             {
@@ -6501,7 +6501,7 @@ void LLViewerObject::unpackParticleSource(LLDataPacker &dp, const LLUUID& owner_
             LLViewerTexture* image;
             if (mPartSourcep->mPartSysData.mPartImageID == LLUUID::null)
             {
-                image = LLViewerFetchedTexture::sDefaultParticleImagep;
+                image = LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.j2c");
             }
             else
             {

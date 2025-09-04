@@ -44,13 +44,6 @@ public:
         IRRADIANCE,
         REFLECTION
     };
-    enum class ProbeLevel
-    {
-        NONE = 0,
-        MANUAL_ONLY,
-        MANUAL_AND_TERRAIN,
-        FULL_SCENE_WITH_AUTO
-    };
 
     // allocate an environment map of the given resolution
     LLReflectionMap();
@@ -65,16 +58,16 @@ public:
     void autoAdjustOrigin();
 
     // return true if given Reflection Map's influence volume intersect's with this one's
-    bool intersects(LLReflectionMap* other) const;
+    bool intersects(LLReflectionMap* other);
 
     // Get the ambiance value to use for this probe
-    F32 getAmbiance() const;
+    F32 getAmbiance();
 
     // Get the near clip plane distance to use for this probe
-    F32 getNearClip() const;
+    F32 getNearClip();
 
     // Return true if this probe should include avatars in its reflection map
-    bool getIsDynamic() const;
+    bool getIsDynamic();
 
     // get the encoded bounding box of this probe's influence volume
     // will only return a box if this probe is associated with a VOVolume
@@ -83,13 +76,13 @@ public:
     bool getBox(LLMatrix4& box);
 
     // return true if this probe is active for rendering
-    bool isActive() const;
+    bool isActive();
 
     // perform occlusion query/readback
     void doOcclusion(const LLVector4a& eye);
 
     // return false if this probe isn't currently relevant (for example, disabled due to graphics preferences)
-    bool isRelevant() const;
+    bool isRelevant();
 
     // point at which environment map was last generated from (in agent space)
     LLVector4a mOrigin;
@@ -131,7 +124,7 @@ public:
     LLSpatialGroup* mGroup = nullptr;
 
     // viewer object this probe is tracking (if any)
-    LLPointer<LLViewerObject> mViewerObject; // <FS:Beq/> remove initialisation here, leave it to the pointer class and avoid issues 
+    LLViewerObject* mViewerObject = nullptr;
 
     // what priority should this probe have (higher is higher priority)
     // currently only 0 or 1

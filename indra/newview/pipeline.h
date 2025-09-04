@@ -350,6 +350,7 @@ public:
     void renderHighlight(const LLViewerObject* obj, F32 fade);
 
     void renderShadow(const glm::mat4& view, const glm::mat4& proj, LLCamera& camera, LLCullResult& result, bool depth_clamp);
+    void renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera& shadow_cam, LLCullResult& result, bool depth_clamp);
     void renderSelectedFaces(const LLColor4& color);
     void renderHighlights();
     bool renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
@@ -691,7 +692,7 @@ public:
     static bool             sRenderDeferred;
     static bool             sReflectionProbesEnabled;
     // <FS:Beq> [FIRE-35070] Address gradual slowdown issue
-    static S32              sReflectionProbeLevel;
+    //static S32              sReflectionProbeLevel;
     // </FS:Beq>
     static S32              sVisibleLightCount;
     static bool             sRenderingHUDs;
@@ -792,10 +793,10 @@ public:
     LLCamera                mShadowCamera[8];
     LLVector3               mShadowExtents[4][2];
     // TODO : separate Sun Shadow and Spot Shadow matrices
-    glm::mat4               mSunShadowMatrix[6];
-    glm::mat4               mShadowModelview[6];
-    glm::mat4               mShadowProjection[6];
-    glm::mat4               mReflectionModelView;
+    glh::matrix4f           mSunShadowMatrix[6];
+    glh::matrix4f           mShadowModelview[6];
+    glh::matrix4f           mShadowProjection[6];
+    glh::matrix4f           mReflectionModelView;
 
     LLPointer<LLDrawable>   mShadowSpotLight[2];
     F32                     mSpotLightFade[2];

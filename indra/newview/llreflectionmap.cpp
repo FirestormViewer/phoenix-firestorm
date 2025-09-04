@@ -52,9 +52,6 @@ LLReflectionMap::~LLReflectionMap()
 void LLReflectionMap::update(U32 resolution, U32 face, bool force_dynamic, F32 near_clip, bool useClipPlane, LLPlane clipPlane)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
-    if (!mCubeArray.notNull())
-        return;
-
     mLastUpdateTime = gFrameTimeSeconds;
     llassert(mCubeArray.notNull());
     llassert(mCubeIndex != -1);
@@ -68,9 +65,8 @@ void LLReflectionMap::update(U32 resolution, U32 face, bool force_dynamic, F32 n
     }
 
     F32 clip = (near_clip > 0) ? near_clip : getNearClip();
-    bool dynamic = force_dynamic || getIsDynamic();
 
-    gViewerWindow->cubeSnapshot(LLVector3(mOrigin), mCubeArray, mCubeIndex, face, clip, dynamic, useClipPlane, clipPlane);
+    gViewerWindow->cubeSnapshot(LLVector3(mOrigin), mCubeArray, mCubeIndex, face, clip, getIsDynamic() || force_dynamic, useClipPlane, clipPlane);
 }
 
 void LLReflectionMap::autoAdjustOrigin()
@@ -177,7 +173,7 @@ void LLReflectionMap::autoAdjustOrigin()
         mPriority = 1;
         mOrigin.load3(mViewerObject->getPositionAgent().mV);
 
-        if (mViewerObject->getVolume() && ((LLVOVolume*)mViewerObject.get())->getReflectionProbeIsBox())
+        if (mViewerObject->getVolume() && ((LLVOVolume*)mViewerObject)->getReflectionProbeIsBox())
         {
             LLVector3 s = mViewerObject->getScale().scaledVec(LLVector3(0.5f, 0.5f, 0.5f));
             mRadius = s.magVec();
@@ -189,7 +185,7 @@ void LLReflectionMap::autoAdjustOrigin()
     }
 }
 
-bool LLReflectionMap::intersects(LLReflectionMap* other) const
+bool LLReflectionMap::intersects(LLReflectionMap* other)
 {
     LLVector4a delta;
     delta.setSub(other->mOrigin, mOrigin);
@@ -205,24 +201,24 @@ bool LLReflectionMap::intersects(LLReflectionMap* other) const
 
 extern LLControlGroup gSavedSettings;
 
-F32 LLReflectionMap::getAmbiance() const
+F32 LLReflectionMap::getAmbiance()
 {
     F32 ret = 0.f;
-    if (mViewerObject && mViewerObject->getVolumeConst())
+    if (mViewerObject && mViewerObject->getVolume())
     {
-        ret = mViewerObject->getReflectionProbeAmbiance();
+        ret = ((LLVOVolume*)mViewerObject)->getReflectionProbeAmbiance();
     }
 
     return ret;
 }
 
-F32 LLReflectionMap::getNearClip() const
+F32 LLReflectionMap::getNearClip()
 {
     const F32 MINIMUM_NEAR_CLIP = 0.1f;
 
     F32 ret = 0.f;
 
-    if (mViewerObject && mViewerObject->getVolumeConst())
+    if (mViewerObject && mViewerObject->getVolume())
     {
         ret = mViewerObject->getReflectionProbeNearClip();
     }
@@ -238,13 +234,11 @@ F32 LLReflectionMap::getNearClip() const
     return llmax(ret, MINIMUM_NEAR_CLIP);
 }
 
-bool LLReflectionMap::getIsDynamic() const
+bool LLReflectionMap::getIsDynamic()
 {
-    static LLCachedControl<S32> detail(gSavedSettings, "RenderReflectionProbeDetail", 1);
-    if (detail() > (S32)LLReflectionMapManager::DetailLevel::STATIC_ONLY &&
+    if (gSavedSettings.getS32("RenderReflectionProbeDetail") > (S32) LLReflectionMapManager::DetailLevel::STATIC_ONLY &&
         mViewerObject &&
-        !mViewerObject->isDead() &&
-        mViewerObject->getVolumeConst())
+        mViewerObject->getVolume())
     {
         return mViewerObject->getReflectionProbeIsDynamic();
     }
@@ -259,22 +253,23 @@ bool LLReflectionMap::getBox(LLMatrix4& box)
         LLVolume* volume = mViewerObject->getVolume();
         if (volume && mViewerObject->getReflectionProbeIsBox())
         {
-            glm::mat4 mv(get_current_modelview());
+            glh::matrix4f mv(gGLModelView);
+            glh::matrix4f scale;
             LLVector3 s = mViewerObject->getScale().scaledVec(LLVector3(0.5f, 0.5f, 0.5f));
             mRadius = s.magVec();
-            glm::mat4 scale = glm::scale(glm::vec3(s));
+            scale.set_scale(glh::vec3f(s.mV));
             if (mViewerObject->mDrawable != nullptr)
             {
                 // object to agent space (no scale)
-                glm::mat4 rm(glm::make_mat4((F32*)mViewerObject->mDrawable->getWorldMatrix().mMatrix));
+                glh::matrix4f rm((F32*)mViewerObject->mDrawable->getWorldMatrix().mMatrix);
 
                 // construct object to camera space (with scale)
                 mv = mv * rm * scale;
 
                 // inverse is camera space to object unit cube
-                mv = glm::inverse(mv);
+                mv = mv.inverse();
 
-                box = LLMatrix4(glm::value_ptr(mv));
+                box = LLMatrix4(mv.m);
 
                 return true;
             }
@@ -284,61 +279,32 @@ bool LLReflectionMap::getBox(LLMatrix4& box)
     return false;
 }
 
-bool LLReflectionMap::isActive() const
+bool LLReflectionMap::isActive()
 {
     return mCubeIndex != -1;
 }
 
-bool LLReflectionMap::isRelevant() const
+bool LLReflectionMap::isRelevant()
 {
-    static LLCachedControl<S32> sRenderReflectionProbeLevel(gSavedSettings, "RenderReflectionProbeLevel", (S32)ProbeLevel::FULL_SCENE_WITH_AUTO);
-    // <FS:Beq> [FIRE-35070] Correct isRelevant() logic for coverage == None and refactor to make it less fragile
-    // if (mViewerObject && RenderReflectionProbeLevel > 0)
-    // { // not an automatic probe
-    //     return true;
-    // }
+    static LLCachedControl<S32> RenderReflectionProbeLevel(gSavedSettings, "RenderReflectionProbeLevel", 3);
 
-    // if (RenderReflectionProbeLevel == 3)
-    // { // all automatics are relevant
-    //     return true;
-    // }
-
-    // if (RenderReflectionProbeLevel == 2)
-    // { // terrain and water only, ignore probes that have a group
-    //     return !mGroup;
-    // }
-
-    // // no automatic probes, yes manual probes
-    // return mViewerObject != nullptr;
-    // Implied logic: a probe has a group if it is either a manual or automatic, it has an object if it is manual
-    //                  hasGroup   hasObject (in parenthesis means condition not checked)
-    // Manual           true       true
-    // Terrain/Water    false      (false)
-    // Automatic        true       false
-
-    const bool is_manual    = mViewerObject != nullptr ;
-    const bool is_automatic = mGroup != nullptr && !is_manual;
-    const bool is_terrain   = mGroup == nullptr;
-    switch (sRenderReflectionProbeLevel)
-    {
-    case (S32)ProbeLevel::NONE:
-        // no probes are relevant
-        return false;
-    case (S32)ProbeLevel::MANUAL_ONLY:
-        // only manual probes are relevant
-        return is_manual;
-    case (S32)ProbeLevel::MANUAL_AND_TERRAIN:
-        // manual probes and terrain/water probes are relevant
-        return !is_automatic;
-    case (S32)ProbeLevel::FULL_SCENE_WITH_AUTO:
-        // all probes are relevant
+    if (mViewerObject && RenderReflectionProbeLevel > 0)
+    { // not an automatic probe
         return true;
-    default:
-        LL_WARNS() << "Unknown RenderReflectionProbeLevel: " << (S32)sRenderReflectionProbeLevel()
-                  << " - returning false" << LL_ENDL;
-        return false;
     }
-    // </FS:Beq>
+
+    if (RenderReflectionProbeLevel == 3)
+    { // all automatics are relevant
+        return true;
+    }
+
+    if (RenderReflectionProbeLevel == 2)
+    { // terrain and water only, ignore probes that have a group
+        return !mGroup;
+    }
+
+    // no automatic probes, yes manual probes
+    return mViewerObject != nullptr;
 }
 
 
