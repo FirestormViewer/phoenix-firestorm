@@ -44,3 +44,11 @@ void LLFilterEditor::handleKeystroke()
     // Commit on every keystroke.
     onCommit();
 }
+
+// <FS:TJ> Allow any UICtrl to override the transparency with a callback
+void LLFilterEditor::setTransparencyOverrideCallback(boost::function<F32(ETypeTransparency, F32)> cb)
+{
+    // Simply setting it on the LLFilterEditor object doesn't work
+    mSearchEditor->setTransparencyOverrideCallback(cb);
+}
+// </FS:TJ>

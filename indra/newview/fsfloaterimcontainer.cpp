@@ -373,6 +373,22 @@ FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
     return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
 }
 
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+F32 FSFloaterIMContainer::getCurrentTransparency()
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    static LLCachedControl<bool> im_active_opacity_override(gSavedSettings, "FSImActiveOpacityOverride", false);
+
+    F32 floater_opacity = LLUICtrl::getCurrentTransparency();
+    if (im_active_opacity_override && getTransparencyType() == TT_ACTIVE)
+    {
+        return floater_opacity;
+    }
+
+    return llmin(im_opacity(), floater_opacity);
+}
+// </FS:TJ>
+
 void FSFloaterIMContainer::setVisible(bool b)
 {
     LLMultiFloater::setVisible(b);

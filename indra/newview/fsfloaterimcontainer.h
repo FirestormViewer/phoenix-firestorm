@@ -60,6 +60,8 @@ public:
     static FSFloaterIMContainer* findInstance();
     static FSFloaterIMContainer* getInstance();
 
+    F32 getCurrentTransparency() override; // <FS:TJ/> [FIRE-35804] Allow the IM floater to have separate transparency
+
     virtual void setVisible(bool b);
     /*virtual*/ void setMinimized(bool b);
 
