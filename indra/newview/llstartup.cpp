@@ -4876,7 +4876,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         //setup map of datetime strings to codes and slt & local time offset from utc
         LLStringOps::setupDatetimeInfo(pacific_daylight_time);
         // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
-        LLStringOps::setupUsingPacificTime(LLGridManager::getInstance()->isInOpenSim());
+        LLStringOps::setupUsingPacificTime(!LLGridManager::getInstance()->isInSecondLife());
         // </FS:TJ>
     }
 
