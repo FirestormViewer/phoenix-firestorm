@@ -95,6 +95,7 @@ public:
      * Updates item name and (worn) suffix.
      */
     /*virtual*/ void updateItem(const std::string& name,
+                                bool favorite,
                                 EItemState item_state = IS_DEFAULT);
 
     void onAddWearable();
@@ -148,6 +149,7 @@ public:
 
     /** Set item title. Joint name is added to the title in parenthesis */
     /*virtual*/ void updateItem(const std::string& name,
+                                bool favorite,
                                 EItemState item_state = IS_DEFAULT);
 
 protected:
@@ -254,7 +256,7 @@ public:
 
     void updateItemWeight(U32 item_weight);
 
-    /*virtual*/ void updateItem(const std::string& name, EItemState item_state = IS_DEFAULT);
+    /*virtual*/ void updateItem(const std::string& name, bool favorite, EItemState item_state = IS_DEFAULT);
 
     /*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
 

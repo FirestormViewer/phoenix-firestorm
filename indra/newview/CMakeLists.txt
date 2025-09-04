@@ -15,6 +15,9 @@ include(CMakeCopyIfDifferent)
 include(CubemapToEquirectangularJS)
 include(GLIB)
 include(DragDrop)
+if (USE_DISCORD)
+  include(Discord)
+endif ()
 include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
@@ -467,6 +470,7 @@ set(viewer_SOURCE_FILES
     llhudeffectpointat.cpp
     llhudeffecttrail.cpp
     llhudeffectblob.cpp
+    llhudeffectresetskeleton.cpp
     llhudicon.cpp
     llhudmanager.cpp
     llhudnametag.cpp
@@ -492,6 +496,7 @@ set(viewer_SOURCE_FILES
     llinventorygallerymenu.cpp
     llinventoryicon.cpp
     llinventoryitemslist.cpp
+    llinventorylistener.cpp
     llinventorylistitem.cpp
     llinventorymodel.cpp
     llinventorymodelbackgroundfetch.cpp
@@ -1310,6 +1315,7 @@ set(viewer_HEADER_FILES
     llhudeffectpointat.h
     llhudeffecttrail.h
     llhudeffectblob.h
+    llhudeffectresetskeleton.h
     llhudicon.h
     llhudmanager.h
     llhudnametag.h
@@ -1334,6 +1340,7 @@ set(viewer_HEADER_FILES
     llinventorygallerymenu.h
     llinventoryicon.h
     llinventoryitemslist.h
+    llinventorylistener.h
     llinventorylistitem.h
     llinventorymodel.h
     llinventorymodelbackgroundfetch.h
@@ -2025,6 +2032,7 @@ if (WINDOWS)
         res/firestorm_icon.BMP
         res/firestorm_icon.ico
         res-sdl/firestorm_icon.BMP
+        res/ll_icon_small.ico
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur
@@ -2319,6 +2327,12 @@ if (WINDOWS)
                )
     endif (ADDRESS_SIZE EQUAL 64)
 
+    if (TARGET ll::discord_sdk)
+        list(APPEND COPY_INPUT_DEPENDENCIES
+             ${SHARED_LIB_STAGING_DIR}/discord_partner_sdk.dll
+             )
+    endif ()
+
     if (TARGET ll::fmodstudio)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/fmod.dll
@@ -2342,6 +2356,7 @@ if (WINDOWS)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
+        "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2383,6 +2398,7 @@ if (WINDOWS)
             --arch=${ARCH}
             --artwork=${ARTWORK_DIR}
             "--bugsplat=${BUGSPLAT_DB}"
+            "--discord=${USE_DISCORD}"
             "--fmodstudio=${USE_FMODSTUDIO}"
             "--openal=${USE_OPENAL}"
             "--tracy=${USE_TRACY}"
@@ -2450,6 +2466,7 @@ if (WINDOWS)
               --arch=${ARCH}
               --artwork=${ARTWORK_DIR}
               "--bugsplat=${BUGSPLAT_DB}"
+              "--discord=${USE_DISCORD}"
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
@@ -2554,6 +2571,10 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         fs::discord # <FS:Ansariel> Discord  support
         )
 
+if (USE_DISCORD)
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+endif ()
+
 if( TARGET ll::intel_memops )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
 endif()
@@ -2637,6 +2658,7 @@ if (LINUX)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
+        "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2665,6 +2687,7 @@ if (LINUX)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
+      "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2761,6 +2784,7 @@ if (DARWIN)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
+      "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2799,6 +2823,7 @@ if (DARWIN)
           --arch=${ARCH}
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
+          "--discord=${USE_DISCORD}"
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
           "--tracy=${USE_TRACY}"

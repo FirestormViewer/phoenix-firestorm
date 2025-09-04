@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Sort Outfit">
+	<menu_item_check label="Favoriten nach oben sortieren" name="sort_favorites_to_top"/>
+	<menu_item_check label="Abbildungen nach oben sortieren" name="sort_images_to_top"/>
+	<menu_item_check label="Nach Namen sortieren" name="sort_by_name"/>
+</toggleable_menu>

@@ -249,6 +249,13 @@
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent" />
 			<menu_item_check label="- Pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
 			<menu_item_check label="Bez obróbki końcowej" name="No Post" />
+			<menu label="Poziom szczegółów zaznaczenia" name="Selection level of detail">
+				<menu_item_check label="Domyślny" name="Default lod setting" />
+				<menu_item_check label="Wysoki" name="High lod setting" />
+				<menu_item_check label="Średni" name="Medium lod setting" />
+				<menu_item_check label="Niski" name="Low lod setting" />
+				<menu_item_check label="Najniższy" name="Lowest lod setting" />
+			</menu>
 			<menu_item_check label="Przyciągaj do siatki" name="Snap to Grid"/>
 			<menu_item_call label="Przeciągnij obiekt XY do siatki" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Wybierz zaznaczenie siatki" name="Use Selection for Grid"/>

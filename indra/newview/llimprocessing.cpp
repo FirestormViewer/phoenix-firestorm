@@ -2273,10 +2273,10 @@ void LLIMProcessing::requestOfflineMessages()
     if (!requested
         && gMessageSystem
         && !gDisconnected
-        && LLMuteList::getInstance()->isLoaded()
         && isAgentAvatarValid()
         && gAgent.getRegion()
-        && gAgent.getRegion()->capabilitiesReceived())
+        && gAgent.getRegion()->capabilitiesReceived()
+        && (LLMuteList::getInstance()->isLoaded() || LLMuteList::getInstance()->getLoadFailed()))
     {
         std::string cap_url = gAgent.getRegionCapability("ReadOfflineMsgs");
 

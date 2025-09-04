@@ -34,6 +34,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "lldrawable.h"
+#include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatar.h"
 #include "message.h"
@@ -249,6 +250,21 @@ bool LLHUDEffectPointAt::setPointAt(EPointAtType target_type, LLViewerObject *ob
     {
         return false;
     }
+
+    // <FS:Ansariel> Prefer custom FS lookat privacy code
+    //static LLCachedControl<bool> enable_selection_hints(gSavedSettings, "EnableSelectionHints", true);
+    //if (!enable_selection_hints)
+    //{
+    //    // Clear the effect so it doesn't linger around if it gets disabled
+    //    if (mTargetType != POINTAT_TARGET_NONE)
+    //    {
+    //        clearPointAtTarget();
+    //        setDuration(1.f);
+    //        setNeedsSendToSim(true);
+    //    }
+    //    return false;
+    //}
+    // </FS:Ansariel>
 
     if (target_type >= POINTAT_NUM_TARGETS)
     {

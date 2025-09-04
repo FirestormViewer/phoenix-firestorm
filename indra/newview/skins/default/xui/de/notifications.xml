@@ -518,6 +518,9 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorCannotAffordUpload">
 		Es kostet L$[COST], um diesen Gegenstand hochzuladen.
 	</notification>
+	<notification name="ErrorEncodingImage">
+		Textur konnte aus folgendem Grund nicht kodiert werden: [REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Es kostet L$[COST], um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
@@ -1292,6 +1295,15 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 		<form name="form">
 			<button name="ReplaceList" text="Aktuelle Liste ersetzen"/>
 			<button name="SetName" text="Neuen Namen verwenden"/>
+		</form>
+	</notification>
+	<notification label="Automatische Ersetzungsliste umbenennen" name="RemoveAutoReplaceList">
+		„[LIST_NAME]“ enthält [MAP_SIZE] Einträge.
+
+Sind Sie sicher, dass Sie diese Liste löschen möchten?
+		<form name="form">
+			<button name="DeleteList" text="Löschen"/>
+			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
@@ -5143,6 +5155,10 @@ Möchten Sie fortfahren?
 	<notification name="WaterExclusionNoMaterial">
 		Material kann nicht auf Wasser-Ausschluss-Oberfläche angewandt werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
+	<notification name="ImageUploadResized">
+		Die von Ihnen hochgeladene Textur wurde von [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] Pixel zu [NEW_WIDTH]x[NEW_HEIGHT] Pixel verkleinert, um innerhalb des Maximums von [MAX_WIDTH]x[MAX_HEIGHT] Pixel zu sein.
+		<usetemplate ignoretext="Hochgeladene Textur wurde verkleinert" name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="NoValidEnvSettingFound">

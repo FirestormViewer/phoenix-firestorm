@@ -22,5 +22,17 @@
 		<radio_item label="In Haupt-Inventarfenster anzeigen" name="false"/>
 		<radio_item label="In neuer Einzel-Ordner-Ansicht anzeigen" name="true"/>
 	</radio_group>
-	<button label="OK" name="ok_btn"/>
+	<text name="favorites_txt">
+		Favoriten
+	</text>
+	<check_box label="Stern anzeigen, wenn Objekt ein Favorit ist" name="favorite_star"/>
+	<check_box label="Stern an Ordner anzeigen, die Favoriten enthalten" name="favorite_hollow_star"/>
+	<check_box label="Farbiger Text" name="favorites_color"/>
+	<text name="attachment_return_txt">
+		Drücken von Eingabetaste bei einem Avatar-Anhang
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="Fügt Anhang hinzu (empfohlen)" name="0"/>
+		<combo_box.item label="Anhängen (entfernt bisherigen Anhang am entsprechenden Punkt)" name="1"/>
+	</combo_box>
 </floater>

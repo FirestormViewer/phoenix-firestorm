@@ -19,7 +19,7 @@ set(cmake_SOURCE_FILES
         Copy3rdPartyLibs.cmake
         DBusGlib.cmake
         DeploySharedLibs.cmake
-        Discord.cmake # <FS:LO> Discord rich presence
+        Discord.cmake
         DragDrop.cmake
         EXPAT.cmake
         FindAutobuild.cmake

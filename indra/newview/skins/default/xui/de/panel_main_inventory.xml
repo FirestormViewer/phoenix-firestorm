@@ -55,7 +55,7 @@
 			<inventory_panel label="Inventar" name="All Items"/>
 			<recent_inventory_panel label="Aktuell" name="Recent Items"/>
 			<worn_inventory_panel label="Angezogen" name="Worn Items"/>
-			<favorites_inventory_panel label="Favoriten" name="Favorite Items"/>
+			<favorites_inventory_panel label="Favoriten" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">

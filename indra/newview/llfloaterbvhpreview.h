@@ -77,7 +77,7 @@ class LLFloaterBvhPreview : public LLFloaterNameDesc
     friend class LLPreviewAnimation;
 
 public:
-    LLFloaterBvhPreview(const std::string& filename);
+    LLFloaterBvhPreview(const LLSD& args);
     virtual ~LLFloaterBvhPreview();
 
     bool postBuild();

@@ -113,7 +113,8 @@ public:
     void        debitBalance(S32 debit);
     void        creditBalance(S32 credit);
 
-    // Request the latest currency balance from the server
+    // Request the latest currency balance from the server.
+    // Reply at process_money_balance_reply()
     static void sendMoneyBalanceRequest();
 
     void        setHealth(S32 percent);
@@ -165,6 +166,7 @@ private:
     void onClickBuyCurrency();
     void onVolumeChanged(const LLSD& newvalue);
     //void onVoiceChanged(const LLSD& newvalue); // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
+    void onObscureBalanceChanged(const LLSD& newvalue);
 
     void onMouseEnterPresetsCamera();
     void onMouseEnterPresets();
@@ -175,7 +177,8 @@ private:
     static void onClickMediaToggle(void* data);
     static void onClickVolume(void* data); // <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
 
-    static void onClickBalance(void* data);
+    static void onClickRefreshBalance(void* data);
+    void onClickToggleBalance();
 
     LLSearchEditor *mFilterEdit;
     LLPanel *mSearchPanel;
@@ -343,13 +346,14 @@ private:
 
     S32             mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
     S32             mBalance;
+    bool            mBalanceClicked;
+    bool            mObscureBalance;
+    LLTimer         mBalanceClickTimer;
     S32             mHealth;
     S32             mSquareMetersCredit;
     S32             mSquareMetersCommitted;
     bool            mAudioStreamEnabled;
     bool            mShowParcelIcons;
-    LLFrameTimer*   mBalanceTimer;
-    LLFrameTimer*   mHealthTimer;
     LLPanelPresetsCameraPulldown* mPanelPresetsCameraPulldown;
     LLPanelPresetsPulldown* mPanelPresetsPulldown;
     LLPanelVolumePulldown* mPanelVolumePulldown;

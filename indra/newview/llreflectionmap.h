@@ -131,7 +131,7 @@ public:
     LLSpatialGroup* mGroup = nullptr;
 
     // viewer object this probe is tracking (if any)
-    LLPointer<LLViewerObject> mViewerObject; // <FS:Beq/> remove initialisation here, leave it to the pointer class and avoid issues 
+    LLPointer<LLViewerObject> mViewerObject;
 
     // what priority should this probe have (higher is higher priority)
     // currently only 0 or 1
