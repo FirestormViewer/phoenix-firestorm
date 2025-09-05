@@ -208,6 +208,8 @@
 			<slider label="有効：" name="active"/>
 			<slider label="無効：" name="inactive"/>
 			<slider label="カメラ／移動：" name="camera_movement"/>
+			<slider label="会話：" name="conversations"/>
+			<check_box name="override_im_active_opacity_checkbox" label="アクティブな会話ウィンドウにフォーカスがあるときに不透明度の値を使用する"/>
 			<text name="console_opacity">
 				コンソールの透過度：
 			</text>
