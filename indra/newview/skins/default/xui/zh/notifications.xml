@@ -3303,7 +3303,7 @@ URL：[AUDIOURL]
 		沒有有效的化身編號。
 	</notification>
 	<notification name="NoValidSession">
-		沒有有效的對談編號。
+		沒有有效的對話編號。
 	</notification>
 	<notification name="NoValidCircuit">
 		沒有有效的線路碼。

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_conversation" title="聊天：">
 	<floater.string name="Title">
-		對談：[NAME]
+		對話：[NAME]
 	</floater.string>
 	<text name="page_label" value="頁" />
 	<button name="open_external_btn" tool_tip="在外部視窗打開聊天記錄" />
