@@ -194,6 +194,7 @@
 								前/後：
 							</text>
 							<slider name="av_position_inout" tool_tip="前後移動選中的化身"/>
+							<check_box name="unlock_pelvis_for_bvh_save_checkbox" label="在BVH中解鎖骨盆" tool_tip="將此姿勢儲存為BVH時，骨盆不會被「鎖定」，因此其他動畫可移動整個化身。若希望將此姿勢疊加播放，請啟用此選項。"/>
 							<scroll_list name="entireAv_joint_scroll">
 								<scroll_list.columns label="身體部位" name="joint"/>
 							</scroll_list>
@@ -247,11 +248,11 @@
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="設定觸控板的敏感度"/>
 						<check_box name="stop_posing_on_close_checkbox" label="關閉時停止" tool_tip="關閉時不停止姿勢可有助於保留目前工作。"/>
-						<check_box name="reset_base_rotation_on_edit_checkbox" label="編輯時重設基礎旋轉" tool_tip="首次編輯旋轉時，將其重設為零。這意味著可以保存完整的姿勢（而不僅僅是差異，請參閱載入/保存）。每個以零為基準匯出的關節旁都會顯示綠色勾選標誌。" />
 						<check_box name="also_save_bvh_checkbox" label="儲存時也儲存BHV" tool_tip="當姿勢被儲存時，將同時創建一個BHV檔案，該檔案可以透過建造 > 上傳 > 動畫上傳，並用於自己或其他化身的姿勢。為了實現此功能，關節的基礎位置必須設為零，因為BHV無法從其他姿勢推導出來。"/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="確認覆蓋" tool_tip="儲存姿勢時，如果檔案已存在，您需要再次點擊保存按鈕以確認覆蓋。" />
 						<check_box name="natural_direction_checkbox" label="使用自然對齊" tool_tip="骨骼預設具有不自然的關節旋轉，這可能會讓姿勢調整變得更複雜。選取此選項後，關節將以更自然的方式旋轉。" />
 						<check_box name="show_joint_markers_checkbox" label="顯示關節標記" tool_tip="顯示關節標記，以便在姿勢編輯時更輕鬆地選擇關節。" />
+						<check_box name="dof_edit_mode_checkbox" label="在編輯模式中啟用景深" tool_tip="使用操控器時，景深通常會自動關閉。啟用此選項可在編輯姿勢或元素時保持景深效果。"/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="啟用 / 停用可視操控器。" />
@@ -296,6 +297,7 @@
 					<button name="button_redo_change" tool_tip="重做上一次變更"/>
 					<button name="poser_joint_reset" tool_tip="點選將選取的身體部位重設為最初開始調整姿勢時的狀態。"/>
 					<button name="delta_mode_toggle" tool_tip="如果改變多個關節，則改變它們相同的值而不是相同的角度。這也用於解決萬向節鎖定的問題。"/>
+					<button name="toggle_LockWorldRotation" tool_tip="鎖定所選肢體在全域座標系下的旋轉。被全域鎖定的肢體在父肢體移動時仍保持相同的全域旋轉。例如：鎖定眼睛後轉動頭部，眼睛仍會（大致）保持原始朝向。"/>
 					<button label="鏡像" name="button_toggleMirrorRotation" tool_tip="將變更鏡像到對側關節。"/>
 					<button label="複製" name="button_toggleSympatheticRotation" tool_tip="將變更複製到對側關節。"/>
 					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="點選將變更從左側複製到右側。" />

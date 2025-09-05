@@ -56,7 +56,7 @@
 			<inventory_panel label="庫存" name="All Items" sort_order_setting="InventorySortOrder" />
 			<recent_inventory_panel label="最近" sort_order_setting="RecentItemsSortOrder" name="Recent Items" />
 			<worn_inventory_panel label="裝扮" name="Worn Items" />
-			<favorites_inventory_panel label="收藏夾" name="Favorite Items" />
+			<favorites_inventory_panel label="收藏" name="Favorites" />
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">

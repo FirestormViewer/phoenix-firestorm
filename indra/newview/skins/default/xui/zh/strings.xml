@@ -1494,13 +1494,16 @@ support@secondlife.com.
 		字典
 	</string>
 	<string name="backup_files">
-		備份物件
+		物件備份
 	</string>
 	<string name="collada_files">
 		collada模型
 	</string>
+	<string name="model_files">
+		網格模型
+	</string>
 	<string name="csv_files">
-		英文逗號分隔
+		CSV檔案
 	</string>
 	<string name="recompile_script_verb">
 		重編譯
@@ -1810,8 +1813,11 @@ support@secondlife.com.
 	<string name="InventoryNoMatchingRecentItems">
 		未找到你想要的？ 嘗試 [secondlife:///app/inventory/filters 更改過濾器].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		您尚未將任何物件標記為收藏。
+	</string>
 	<string name="PlacesNoMatchingItems">
-		未找到你想要的？ 嘗試 [secondlife:///app/search/places/[SEARCH_TERM] 搜尋].
+		要將地點添加到您的地標，請點擊地點名稱右側的星形圖標。
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		將地標拖入此處便可加入「收藏夾」
@@ -2123,17 +2129,20 @@ support@secondlife.com.
 	<string name="InvFolder Gestures">
 		手勢
 	</string>
-	<string name="InvFolder Favorites">
-		收藏夾
+	<string name="InvFolder Favorite">
+		收藏
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
       Also, it can be written as "Favorite" or "Favorites".
   We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
-		收藏夾
+		收藏
+	</string>
+	<string name="InvFolder Favorites">
+		收藏
 	</string>
 	<string name="InvFolder favorites">
-		收藏夾
+		收藏
 	</string>
 	<string name="InvFolder Current Outfit">
 		當前裝扮
@@ -5575,8 +5584,11 @@ support@secondlife.com.
 	<string name="DefaultMimeType">
 		無/無
 	</string>
+	<string name="texture_load_area_error">
+		無法載入大於[PIXELS]像素的圖像。
+	</string>
 	<string name="texture_load_dimensions_error">
-		無法載入大於 [WIDTH]*[HEIGHT] 的圖像
+		無法載入大於 [WIDTH]*[HEIGHT]的圖像
 	</string>
 	<string name="texture_load_format_error">
 		圖像格式不正確。

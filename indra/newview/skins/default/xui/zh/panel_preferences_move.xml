@@ -41,7 +41,7 @@
 			<check_box label="反轉Y軸" name="invert_mouse" />
 		</panel>
 		<panel label="移動" name="tab-movement">
-			<check_box label="始終用方向鍵移動我的化身" name="arrow_keys_move_avatar_check" tool_tip="僅適用於在檢視器底部的本地聊天輸入欄位中，而不適用於聊天索引標籤中的本地聊天。" />
+			<check_box label="在聊天時按方向鍵會移動我的化身" name="arrow_keys_move_avatar_check" tool_tip="僅適用於在檢視器底部的本地聊天輸入欄位中，而不適用於聊天索引標籤中的本地聊天。" />
 			<check_box label="按字母鍵移動我的化身 (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="雙擊方向鍵以跑步" name="tap_tap_hold_to_run" />
 			<check_box label="按住跳躍/下蹲鍵可以起飛/降落" name="automatic_fly" />
