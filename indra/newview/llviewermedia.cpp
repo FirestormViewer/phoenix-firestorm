@@ -3564,6 +3564,46 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 ////////////////////////////////////////////////////////////////////////////////
 // virtual
 void
+LLViewerMediaImpl::undo()
+{
+    if (mMediaSource)
+        mMediaSource->undo();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+bool
+LLViewerMediaImpl::canUndo() const
+{
+    if (mMediaSource)
+        return mMediaSource->canUndo();
+    else
+        return FALSE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+void
+LLViewerMediaImpl::redo()
+{
+    if (mMediaSource)
+        mMediaSource->redo();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+bool
+LLViewerMediaImpl::canRedo() const
+{
+    if (mMediaSource)
+        return mMediaSource->canRedo();
+    else
+        return FALSE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+void
 LLViewerMediaImpl::cut()
 {
     if (mMediaSource)
@@ -3619,6 +3659,46 @@ LLViewerMediaImpl::canPaste() const
         return mMediaSource->canPaste();
     else
         return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+void
+LLViewerMediaImpl::doDelete()
+{
+    if (mMediaSource)
+        mMediaSource->doDelete();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+bool
+LLViewerMediaImpl::canDoDelete() const
+{
+    if (mMediaSource)
+        return mMediaSource->canDoDelete();
+    else
+        return FALSE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+void
+LLViewerMediaImpl::selectAll()
+{
+    if (mMediaSource)
+        mMediaSource->selectAll();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// virtual
+bool
+LLViewerMediaImpl::canSelectAll() const
+{
+    if (mMediaSource)
+        return mMediaSource->canSelectAll();
+    else
+        return FALSE;
 }
 
 void LLViewerMediaImpl::setUpdated(bool updated)
