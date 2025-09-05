@@ -11,6 +11,8 @@
 	<context_menu label="ＨＵＤに装着" name="wearable_attach_to_hud"/>
 	<menu_item_call label="取り外す" name="take_off"/>
 	<menu_item_call label="アイテムのプロフィール" name="object_profile"/>
+	<menu_item_call label="お気に入りに追加" name="favorites_add"/>
+	<menu_item_call label="お気に入りから削除" name="favorites_remove"/>
 	<menu_item_call label="オリジナルを表示" name="show_original"/>
 	<menu_item_call label="アウトフィットから削除" name="delete_from_outfit"/>
 	<menu_item_call label="新規作成" name="create_new"/>
