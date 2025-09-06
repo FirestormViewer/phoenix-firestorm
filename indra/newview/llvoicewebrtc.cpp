@@ -610,6 +610,14 @@ void LLWebRTCVoiceClient::updateNeighboringRegions()
     // add current region.
     mNeighboringRegions.insert(gAgent.getRegion()->getRegionID());
 
+    // <FS:PP> Do not connect to neighbouring regions
+    static LLCachedControl<bool> fsDisableNeighbourRegionConnections(gSavedSettings, "FSDisableNeighbourRegionConnections");
+    if (fsDisableNeighbourRegionConnections)
+    {
+        return;
+    }
+    // </FS:PP>
+
     // base off of speaker position as it'll move more slowly than camera position.
     // Once we have hysteresis, we may be able to track off of speaker and camera position at 50m
     // TODO: Add hysteresis so we don't flip-flop connections to neighbors
