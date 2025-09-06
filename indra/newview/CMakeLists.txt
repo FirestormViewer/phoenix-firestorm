@@ -2502,7 +2502,8 @@ elseif (DARWIN)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         RESOURCE SecondLife.xib
-        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
+        #LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
+        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip"
         #<FS:TS> Force the SDK version in the linked executable to be 10.12. This will fool
         # macOS into using the pre-Mojave display system, avoiding the blurry display that
         # otherwise occurs when upscaling the viewer to Retina resolution levels.
