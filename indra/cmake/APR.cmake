@@ -31,3 +31,9 @@ if(DARWIN)
 endif()
 
 target_include_directories(ll::apr SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/apr-1)
+
+# <FS:Ansariel> Hotfix incorrect check in APR header
+file(READ ${LIBS_PREBUILT_DIR}/include/apr-1/apr.h APR_HEADER_CONTENTS)
+string(REPLACE "#if !(defined(__attribute__) || defined(__has_attribute))" "#if !defined(__attribute__)" APR_HEADER_CONTENTS "${APR_HEADER_CONTENTS}")
+file(WRITE ${LIBS_PREBUILT_DIR}/include/apr-1/apr.h "${APR_HEADER_CONTENTS}")
+# </FS:Ansariel>
