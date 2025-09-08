@@ -8284,7 +8284,7 @@ class LLAvatarEnableResetSkeleton : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        if (LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()))
+        if (find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject())) // <FS:Beq/> set but unused.
         {
             return true;
         }
