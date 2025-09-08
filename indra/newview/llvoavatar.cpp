@@ -5949,7 +5949,7 @@ void LLVOAvatar::updateVisibility()
 
         if (sDebugInvisible)
         {
-            if (LLNameValue* firstname = getNVPair("FirstName"))
+            if (getNVPair("FirstName"))// <FS:Beq/> Fix more Mac whining.
             {
                 LL_DEBUGS("Avatar") << avString() << " updating visibility" << LL_ENDL;
             }
