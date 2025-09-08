@@ -1978,7 +1978,7 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
         if (NULL != bundleInfoDict)
         {
             CFStringRef executable_cfstr = (CFStringRef)CFDictionaryGetValue(bundleInfoDict, CFSTR("CFBundleExecutable"));  // get the name of the actual executable (e.g. TextEdit or firefox-bin)
-            int max_file_length = 256;                                                                                      // (max file name length is 255 in OSX)
+            const int max_file_length = 256;                                                                                      // <FS:Beq/> another new complaint from clang
             char executable_buf[max_file_length];
             if (CFStringGetCString(executable_cfstr, executable_buf, max_file_length, kCFStringEncodingMacRoman))           // convert CFStringRef to char*
             {
