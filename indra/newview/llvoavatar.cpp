@@ -12063,7 +12063,7 @@ void LLVOAvatar::getAssociatedVolumes(std::vector<LLVOVolume*>& volumes)
     for (const auto& iter : mAttachmentPoints)
     {
         LLViewerJointAttachment* attachment = iter.second;
-        LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_end = attachment->mAttachedObjects.end();
+        // LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_end = attachment->mAttachedObjects.end(); // <FS:Beq/> set but not used
 
         for (LLViewerObject* attached_object : attachment->mAttachedObjects)
         {

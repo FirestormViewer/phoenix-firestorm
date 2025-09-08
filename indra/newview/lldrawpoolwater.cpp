@@ -166,8 +166,8 @@ void LLDrawPoolWater::renderPostDeferred(S32 pass)
     //bool                   has_normal_mips = gSavedSettings.getBOOL("RenderWaterMipNormal");
     bool                   has_normal_mips = mRenderWaterMipNormal;
     bool                   underwater      = LLViewerCamera::getInstance()->cameraUnderWater();
-    LLColor4               fog_color       = LLColor4(pwater->getWaterFogColor(), 0.f);
-    LLColor3               fog_color_linear = linearColor3(fog_color);
+    // LLColor4               fog_color       = LLColor4(pwater->getWaterFogColor(), 0.f); // <FS:Beq/> set but unused
+    // LLColor3               fog_color_linear = linearColor3(fog_color); // <FS:Beq/> set but unused
 
     if (sun_up)
     {
@@ -244,11 +244,12 @@ void LLDrawPoolWater::renderPostDeferred(S32 pass)
     F32      fog_density = pwater->getModifiedWaterFogDensity(underwater);
 
     shader->bindTexture(LLShaderMgr::WATER_SCREENTEX, &gPipeline.mWaterDis);
-
-    if (mShaderLevel == 1)
-    {
-        fog_color.mV[VALPHA] = (F32)(log(fog_density) / log(2));
-    }
+    // <FS:Beq> set but unused "fog_color"
+    // if (mShaderLevel == 1)
+    // {
+    //     fog_color.mV[VALPHA] = (F32)(log(fog_density) / log(2));
+    // }
+    // </FS:Beq>
 
     F32 water_height = environment.getWaterHeight();
     F32 camera_height = LLViewerCamera::getInstance()->getOrigin().mV[2];
