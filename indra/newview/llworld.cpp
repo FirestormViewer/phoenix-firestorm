@@ -1594,6 +1594,18 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
     msg->getIPAddrFast(_PREHASH_SimulatorInfo, _PREHASH_IP, ip_u32);
     msg->getIPPortFast(_PREHASH_SimulatorInfo, _PREHASH_Port, port);
 
+    // <FS:PP> Only connect if neighbour connections are not disabled, or if this is the current region being established (login/teleport target)
+    static LLCachedControl<bool> fsDisableNeighbourRegionConnections(gSavedSettings, "FSDisableNeighbourRegionConnections");
+    if (fsDisableNeighbourRegionConnections)
+    {
+        LLViewerRegion* current_region = gAgent.getRegion();
+        if (current_region && current_region->getHandle() != handle)
+        {
+            return;
+        }
+    }
+    // </FS:PP>
+
     // which simulator should we modify?
     LLHost sim(ip_u32, port);
 

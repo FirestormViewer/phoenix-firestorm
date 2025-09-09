@@ -23,7 +23,8 @@
 			<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
 			<check_box label="スクリプト通信時にパーティクル効果を出す" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。"/>
 			<check_box label="目標のアバターが３ｍ以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
-			<check_box label="デフォルトのBentoアニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトのプライオリティ０の Bento アニメーションを再生し、他の Bento アニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。"/>
+			<check_box label="デフォルトのBentoアニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトの優先度０のBentoアニメーションを再生し、他のBentoアニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。"/>
+			<check_box label="立ち上がった時にアバターのスケルトンをリセットする" name="FSResetSkeletonOnStandUp" tool_tip="有効にすると、ビューアは立ち上がった後にアバターのスケルトンを自動的にリセットします。このリセット処理は、周囲のアバターにも送信され、他のユーザのビューアからもあなたの外観が更新されます。"/>
 			<check_box label="ログイン画面を表示しない" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
 			<check_box label="ログアウト画面を表示しない" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
 			<!--

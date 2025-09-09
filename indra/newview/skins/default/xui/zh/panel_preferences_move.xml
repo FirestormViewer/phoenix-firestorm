@@ -23,7 +23,7 @@
 			<check_box label="允許相機穿過物件" name="ignorecameraconstraints" tool_tip="忽略類比主機對相機施加的「推力」，以使其遠離物件。" />
 			<text name="ignorecameraconstraints_requires_restart">(需要重新啟動)</text>
 			<check_box label="始終以不透明方式顯示相機控制視窗" name="FSAlwaysOpaqueCameraControls" />
-			<check_box label="在瞬間傳送後重新顯示暫時隱藏的物件" name="FSTempDerenderUntilTeleport" tool_tip="啟用後，瞬間傳送後暫時隱藏的物件將保持隱藏，直到下一次瞬間傳送。禁用後，這些物件將保持隱藏，直到對談結束或在元素封鎖清單視窗中手動重新顯示。" />
+			<check_box label="在瞬間傳送後重新顯示暫時隱藏的物件" name="FSTempDerenderUntilTeleport" tool_tip="啟用後，瞬間傳送後暫時隱藏的物件將保持隱藏，直到下一次瞬間傳送。禁用後，這些物件將保持隱藏，直到對話結束或在元素封鎖清單視窗中手動重新顯示。" />
 		</panel>
 		<panel label="第一人稱視角" name="tab-mouselook">
 			<check_box label="啟用第一人稱視角" name="EnableMouselook" tool_tip="允許第一人稱視角和使用滑鼠控制相機" />
@@ -41,7 +41,7 @@
 			<check_box label="反轉Y軸" name="invert_mouse" />
 		</panel>
 		<panel label="移動" name="tab-movement">
-			<check_box label="始終用方向鍵移動我的化身" name="arrow_keys_move_avatar_check" tool_tip="僅適用於在檢視器底部的本地聊天輸入欄位中，而不適用於聊天索引標籤中的本地聊天。" />
+			<check_box label="在聊天時按方向鍵會移動我的化身" name="arrow_keys_move_avatar_check" tool_tip="僅適用於在檢視器底部的本地聊天輸入欄位中，而不適用於聊天索引標籤中的本地聊天。" />
 			<check_box label="按字母鍵移動我的化身 (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="雙擊方向鍵以跑步" name="tap_tap_hold_to_run" />
 			<check_box label="按住跳躍/下蹲鍵可以起飛/降落" name="automatic_fly" />

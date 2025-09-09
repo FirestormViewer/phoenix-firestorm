@@ -200,6 +200,7 @@
 								入／出：
 							</text>
 							<slider name="av_position_inout" tool_tip="選択したアバターを内側または外側に移動します。"/>
+							<check_box name="unlock_pelvis_for_bvh_save_checkbox" label="ＢＶＨで骨盤をロック解除" tool_tip="このポーズをＢＶＨに保存すると、骨盤は「ロック」されません。つまり、ワールド内の他のアニメーションでアバター全体を「動かす」ことができます。このポーズを他のポーズの「上」で再生したい場合は、この機能を使用してください。"/>
 							<!-- to make this panel behaves like the others in code-behind, it has an invisible list -->
 							<scroll_list name="entireAv_joint_scroll">
 								<scroll_list.columns label="身体部位" name="joint"/>
@@ -257,11 +258,11 @@
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="トラックボールの感度を調整します。"/>
 						<check_box name="stop_posing_on_close_checkbox" label="閉じたらポーズを止める" tool_tip="ポーズを止めないことは、多くの作業を行っていて、誤ってポーズを失いたくない場合に役に立ちます。"/>
-						<check_box name="reset_base_rotation_on_edit_checkbox" label="編集時にベース回転をリセット" tool_tip="回転を初めて編集するときは、ゼロにリセットします。これにより、作業でポーズを保存できます。（差分ではなく、読み込み／保存を参照）ゼロにエクスポートした各ジョイントの横に緑色のチェックマークが表示されます。"/>
-						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む**" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。"/>
+						<check_box name="also_save_bvh_checkbox" label="保存時にＢＶＨを書き込む" tool_tip="ポーズを保存するときに、ＢＶＨファイルも作成します。このファイルは、「ビルド」＞「アップロード」＞「アニメーション」からアップロードして、自分自身または他のユーザーにインワールドのポーズを与えることができます。ＢＶＨにはオリジナルの作業が必要なので、ジョイントの「ベース」をゼロにリセットする必要があります。"/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="上書きを確認" tool_tip="ポーズを保存するときに、ファイルがすでに存在する場合は、上書きすることを確認するために、もう一度保存ボタンをクリックする必要があります。"/>
 						<check_box name="natural_direction_checkbox" label="自然な配置を使用する" tool_tip="デフォルトでは、スケルトンの関節の回転は不自然です。これにより、ポーズが複雑になります。チェックすると、関節がより自然に回転します。"/>
 						<check_box name="show_joint_markers_checkbox" label="ジョイント部にマーカーを表示" tool_tip="視覚的なポージングにジョイント部の選択を支援するための小さなインジケーターを表示します。"/>
+						<check_box name="dof_edit_mode_checkbox" label="編集モードでＤｏＦを有効化" tool_tip="マニピュレータを使用すると、通常は被写界深度が自動的に無効になります。これにより、ポーズやプリムを編集するときに被写界深度がオンのままになります。"/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="視覚マニピュレータのオン／オフを切り替えます。"/>
@@ -306,6 +307,7 @@
 					<button name="button_redo_change" tool_tip="最後に元に戻した変更をやり直します。"/>
 					<button name="poser_joint_reset" tool_tip="ダブルクリックすると、選択したすべての身体部位が最初にポーズを開始したときの状態に戻ります。"/>
 					<button name="delta_mode_toggle" tool_tip="複数のジョイントを変更する場合、すべてのジョイントが同じ回転になるのではなく、それぞれが同じ量だけ変更されます。ジンバルロックを解除するためにも使用されます。"/>
+					<button name="toggle_LockWorldRotation" tool_tip="選択した手足の回転をワールド内でロックします。ワールド内でロックされた手足は、親側の手足が動いてもワールド内で同じ回転を維持します。例えば、目をロックして頭を回しても、目は（ほぼ）同じ方向を向き続けます。"/>
 					<button label="ミラー" name="button_toggleMirrorRotation" tool_tip="鏡のように反対側の関節を変えます。"/>
 					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。"/>
 					<!-- leftとleft_padは削除しないこと -->

@@ -397,7 +397,7 @@
 					サイズ：
 				</text>
 				<text name="import_dimensions">
-					[X]×[Y]×[Z]
+					[X]✕[Y]✕[Z]
 				</text>
 				<check_box label="テクスチャを含む" name="upload_textures"/>
 				<text name="pelvis_offset_label">

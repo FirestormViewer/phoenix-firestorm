@@ -22,5 +22,17 @@
 		<radio_item label="メインのインベントリウィンドウでアイテムを表示する。" name="false"/>
 		<radio_item label="単一フォルダウィンドウで開きます。" name="true"/>
 	</radio_group>
-	<button label="ＯＫ" name="ok_btn"/>
+	<text name="favorites_txt">
+		お気に入り
+	</text>
+	<check_box label="お気に入りのアイテムにスターを付ける" name="favorite_star"/>
+	<check_box label="お気に入りのあるファルダにスターを付ける" name="favorite_hollow_star"/>
+	<check_box label="文字色を変える" name="favorites_color"/>
+	<text name="attachment_return_txt">
+		アバターの装着物でEnterキーを押したときの動作
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="装着物を追加（推奨）" name="0"/>
+		<combo_box.item label="着用（その場所の装着物を取り除きます）" name="1"/>
+	</combo_box>
 </floater>

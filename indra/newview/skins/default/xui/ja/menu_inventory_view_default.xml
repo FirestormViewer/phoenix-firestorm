@@ -7,5 +7,4 @@
 	<menu_item_check label="リスト表示" name="list_view"/>
 	<menu_item_check label="ギャラリー表示" name="gallery_view"/>
 	<menu_item_check label="複合表示" name="combination_view"/>
-	<menu_item_check label="インベントリの設定…" name="inv_settings"/>
 </toggleable_menu>

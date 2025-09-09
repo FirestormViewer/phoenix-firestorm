@@ -2368,7 +2368,7 @@ bool LLVolume::unpackVolumeFacesInternal(const LLSD& mdl)
 
             const LLSD::Binary& pos = mdl[i]["Position"].asBinary();
             const LLSD::Binary& norm = mdl[i]["Normal"].asBinary();
-            const LLSD::Binary& tangent = mdl[i]["Tangent"].asBinary();
+            // const LLSD::Binary& tangent = mdl[i]["Tangent"].asBinary(); // <FS:Beq/> more set but unused
             const LLSD::Binary& tc = mdl[i]["TexCoord0"].asBinary();
             const LLSD::Binary& idx = mdl[i]["TriangleList"].asBinary();
 

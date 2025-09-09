@@ -4,17 +4,7 @@
 		庫存的新功能
 	</floater.string>
 	<floater.string name="description_txt_inventory">
-		您現在可以為庫存中的物件新增預覽圖像，並在單獨的視窗中顯示一個檔案夾。
-瞭解更多 [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ 部落格文章]
-	</floater.string>
-	<floater.string name="title_txt_gltf">
-	新的 GLTF PBR 材質支援
-	</floater.string>
-	<floater.string name="description_txt_gltf">
-	你現在可以使用擴充的材質支援，能夠匯入和編輯 GLTF 基於物理的彩現 (PBR) 材質。
-為了支援新增 GLTF 格式，檢視器中的某些區域可能看起來比平常更暗。
-
-瞭解更多關於 [https://wiki.secondlife.com/wiki/PBR_Materials 基於物理的彩現(PBR)]
+		您現在可以將物件和資料夾標記為收藏。已收藏的項目會出現在庫存的“收藏”選項卡中，並在主庫存視圖中預設以星標突出顯示。
 	</floater.string>
 	<text name="title_txt">
 		新功能

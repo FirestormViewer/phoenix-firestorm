@@ -11,6 +11,8 @@
 	<menu_item_call label="卸下" name="detach" />
 	<menu_item_call label="脫下" name="take_off" />
 	<menu_item_call label="物件檔案" name="object_profile" />
+	<menu_item_call label="添加到收藏" name="favorites_add" />
+	<menu_item_call label="從收藏中移除" name="favorites_remove" />
 	<menu_item_call label="顯示原件" name="show_original" />
 	<menu_item_call label="從此裝扮中移除" name="delete_from_outfit"/>
 	<menu_item_call label="建立" name="create_new" />

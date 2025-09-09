@@ -5322,7 +5322,7 @@ bool wear_category(const LLSD& query_map, bool append)
     {
         if (LLViewerInventoryCategory* cat = gInventory.getCategory(folder_uuid))
         {
-            if (bool is_library = gInventory.isObjectDescendentOf(folder_uuid, gInventory.getRootFolderID()))
+            if (gInventory.isObjectDescendentOf(folder_uuid, gInventory.getRootFolderID())) // <FS:Beq/>  set and unused
             {
                 LLPointer<LLInventoryCategory> new_category = new LLInventoryCategory(folder_uuid, LLUUID::null, LLFolderType::FT_CLOTHING, "Quick Appearance");
                 LLAppearanceMgr::getInstance()->wearInventoryCategory(new_category, true, append);

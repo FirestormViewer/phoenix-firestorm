@@ -130,6 +130,8 @@
 	<menu_item_call label="区画に適用" name="Settings Apply Parcel"/>
 	<menu_item_call label="選択したもので新しいフォルダを作る" name="New folder from selected"/>
 	<menu_item_call label="フォルダの項目のグループ解除" name="Ungroup folder items"/>
+	<menu_item_call label="お気に入りに追加" name="Add to Favorites"/>
+	<menu_item_call label="お気に入りから削除" name="Remove from Favorites"/>
 	<menu label="以下のデフォルトとして使用" name="upload_def">
 		<menu_item_call label="画像のアップロード" name="Image uploads"/>
 		<menu_item_call label="サウンドのアップロード" name="Sound uploads"/>

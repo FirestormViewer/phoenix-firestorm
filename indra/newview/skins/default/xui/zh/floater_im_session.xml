@@ -12,8 +12,8 @@
 	<floater.string name="tooltip_to_main_window" value="將這個聊天移回到主視窗" />
 	<floater.string name="start_call_button_tooltip" value="建立語音通話" />
 	<floater.string name="end_call_button_tooltip" value="切斷語音通話" />
-	<floater.string name="expcol_button_not_tearoff_tooltip" value="摺疊這個視窗" />
-	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="摺疊參與者清單" />
+	<floater.string name="expcol_button_not_tearoff_tooltip" value="收起這個視窗" />
+	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="收起參與者清單" />
 	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="展開參與者清單" />
 	<view name="contents_view">
 		<layout_stack name="main_stack">
@@ -23,7 +23,7 @@
 				<button name="add_btn" tool_tip="新增某人到聊天" />
 				<button name="voice_call_btn" tool_tip="建立語音通話" />
 				<button name="close_btn" tool_tip="結束該聊天" />
-				<button name="expand_collapse_btn" tool_tip="摺疊/展開這個視窗" />
+				<button name="expand_collapse_btn" tool_tip="收起/展開這個視窗" />
 			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">

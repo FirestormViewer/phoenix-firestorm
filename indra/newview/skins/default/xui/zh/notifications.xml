@@ -527,8 +527,11 @@
 	<notification name="ErrorCannotAffordUpload">
 		上傳這個物件需要花費[COSTL$]。
 	</notification>
+	<notification name="ErrorEncodingImage">
+		無法對圖像進行編碼，原因：[REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
-		你需要[COST] L$才能把紋理存入你的庫存。 你可以購買L$，或者不存入庫存，而把相片存到你的電腦。
+		你需要[COST]L$才能把紋理存入你的庫存。 你可以購買L$，或者不存入庫存，而把相片存到你的電腦。
 	</notification>
 	<notification name="ErrorUploadingPostcard">
 		傳送快照時出問題，原因：[REASON]
@@ -1318,6 +1321,15 @@
 			<button name="SetName" text="使用新名稱"/>
 		</form>
 	</notification>
+	<notification label="刪除自動替換清單" name="RemoveAutoReplaceList">
+		'[LIST_NAME]'包含[MAP_SIZE]個條目。
+
+您確定要刪除此清單嗎？
+		<form name="form">
+			<button name="DeleteList" text="刪除" />
+			<button name="Cancel" text="取消" />
+		</form>
+	</notification>
 	<notification name="InvalidAutoReplaceEntry">
 		關鍵字必須是一個字，替換字不得空白。
 	</notification>
@@ -1904,9 +1916,9 @@ URL:[UNTRUSTED_URL]
 		你已經封鎖/靜音了這個名稱。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
-	<notification name="RemoveItemWarn">
-		雖然允許這麼做，刪除內容可能會破壞物件。 你要刪除該物件嗎？
-		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	<notification name="CantModifyContentInNoModTask">
+		您沒有權限修改此物件的內容
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CantOfferCallingCard">
 		此時無法提供名片。 請稍候再試。
@@ -3291,7 +3303,7 @@ URL：[AUDIOURL]
 		沒有有效的化身編號。
 	</notification>
 	<notification name="NoValidSession">
-		沒有有效的對談編號。
+		沒有有效的對話編號。
 	</notification>
 	<notification name="NoValidCircuit">
 		沒有有效的線路碼。
@@ -5708,6 +5720,13 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 	<notification name="WaterExclusionSurfacesWarning">
 		選中「隱藏水」複選框將覆蓋所選的紋理、凹凸和光澤圖選項。
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
+	</notification>
+	<notification name="WaterExclusionNoMaterial">
+		無法在水面隱藏的表面上應用材質。
+	</notification>
+	<notification name="ImageUploadResized">
+		您上傳的紋理已從[ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT]調整為[NEW_WIDTH]x[NEW_HEIGHT]，以適配最大尺寸[MAX_WIDTH]x[MAX_HEIGHT]像素。
+		<usetemplate ignoretext="上傳時的圖像縮放" name="okignore" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		你即將啟用自動影格率。所有未儲存的圖形設定將會丟失。

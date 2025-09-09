@@ -575,9 +575,9 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 }
 
 //virtual
-void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, EItemState item_state)
+void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, bool favorite, EItemState item_state)
 {
-    LLPanelWearableOutfitItem::updateItem(name, item_state);
+    LLPanelWearableOutfitItem::updateItem(name, favorite, item_state);
     mWeightCtrl->setVisible(true);
     reshapeWidgets();
 }

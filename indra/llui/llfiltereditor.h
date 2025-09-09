@@ -45,6 +45,10 @@ public:
     {};
     virtual ~LLFilterEditor() {}
 
+    // <FS:TJ> Allow any UICtrl to override the transparency with a callback
+    void setTransparencyOverrideCallback(boost::function<F32(ETypeTransparency, F32)> cb) override;
+    // </FS:TJ>
+
 protected:
     LLFilterEditor(const Params&);
     friend class LLUICtrlFactory;

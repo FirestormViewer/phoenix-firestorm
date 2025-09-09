@@ -1494,13 +1494,16 @@ support@secondlife.com.
 		字典
 	</string>
 	<string name="backup_files">
-		備份物件
+		物件備份
 	</string>
 	<string name="collada_files">
 		collada模型
 	</string>
+	<string name="model_files">
+		網格模型
+	</string>
 	<string name="csv_files">
-		英文逗號分隔
+		CSV檔案
 	</string>
 	<string name="recompile_script_verb">
 		重編譯
@@ -1810,8 +1813,11 @@ support@secondlife.com.
 	<string name="InventoryNoMatchingRecentItems">
 		未找到你想要的？ 嘗試 [secondlife:///app/inventory/filters 更改過濾器].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		您尚未將任何物件標記為收藏。
+	</string>
 	<string name="PlacesNoMatchingItems">
-		未找到你想要的？ 嘗試 [secondlife:///app/search/places/[SEARCH_TERM] 搜尋].
+		要將地點添加到您的地標，請點擊地點名稱右側的星形圖標。
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		將地標拖入此處便可加入「收藏夾」
@@ -2123,17 +2129,20 @@ support@secondlife.com.
 	<string name="InvFolder Gestures">
 		手勢
 	</string>
-	<string name="InvFolder Favorites">
-		收藏夾
+	<string name="InvFolder Favorite">
+		收藏
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
       Also, it can be written as "Favorite" or "Favorites".
   We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
-		收藏夾
+		收藏
+	</string>
+	<string name="InvFolder Favorites">
+		收藏
 	</string>
 	<string name="InvFolder favorites">
-		收藏夾
+		收藏
 	</string>
 	<string name="InvFolder Current Outfit">
 		當前裝扮
@@ -5112,10 +5121,10 @@ support@secondlife.com.
 		成功發布到 Flickr。
 	</string>
 	<string name="no_session_message">
-		(私聊對談不存在)
+		(私聊對話不存在)
 	</string>
 	<string name="only_user_message">
-		此對談只有你一人。
+		此對話只有你一人。
 	</string>
 	<string name="offline_message">
 		[NAME] 已離線。
@@ -5136,7 +5145,7 @@ support@secondlife.com.
 		你的權限不足。
 	</string>
 	<string name="session_does_not_exist_error">
-		此對談不再存在
+		此對話不再存在
 	</string>
 	<string name="no_ability_error">
 		你沒有這個能力。
@@ -5154,15 +5163,15 @@ support@secondlife.com.
 		群組主持人已禁止你進行文字聊天。
 	</string>
 	<string name="add_session_event">
-		無法增加使用者加入與 [RECIPIENT] 的聊天對談。
+		無法增加使用者加入與 [RECIPIENT] 的聊天對話。
 	</string>
 	<string name="message">
-		你的訊息無法傳送給與 [RECIPIENT] 的聊天對談。
-如果該訊息在接下來的幾分鐘內沒有出現，則對談可能已被伺服器關閉。
+		你的訊息無法傳送給與 [RECIPIENT] 的聊天對話。
+如果該訊息在接下來的幾分鐘內沒有出現，則對話可能已被伺服器關閉。
 	</string>
 	<string name="message_session_event">
-		你的訊息無法傳送給與 [RECIPIENT] 的聊天對談。
-如果該訊息在接下來的幾分鐘內沒有出現，則對談可能已被伺服器關閉。
+		你的訊息無法傳送給與 [RECIPIENT] 的聊天對話。
+如果該訊息在接下來的幾分鐘內沒有出現，則對話可能已被伺服器關閉。
 	</string>
 	<string name="mute">
 		主持期間發生錯誤。
@@ -5174,7 +5183,7 @@ support@secondlife.com.
 		你已被移出群組。
 	</string>
 	<string name="close_on_no_ability">
-		你已無法進入這個聊天對談。
+		你已無法進入這個聊天對話。
 	</string>
 	<string name="unread_chat_single">
 		[SOURCES] 又說了一些話
@@ -5186,7 +5195,7 @@ support@secondlife.com.
 		你現在位於
 	</string>
 	<string name="session_initialization_timed_out_error">
-		初始化對談逾時，無法完成。
+		初始化對話逾時，無法完成。
 	</string>
 	<string name="Home position set.">
 		我的家位置已設定。
@@ -5575,8 +5584,11 @@ support@secondlife.com.
 	<string name="DefaultMimeType">
 		無/無
 	</string>
+	<string name="texture_load_area_error">
+		無法載入大於[PIXELS]像素的圖像。
+	</string>
 	<string name="texture_load_dimensions_error">
-		無法載入大於 [WIDTH]*[HEIGHT] 的圖像
+		無法載入大於 [WIDTH]*[HEIGHT]的圖像
 	</string>
 	<string name="texture_load_format_error">
 		圖像格式不正確。
@@ -6121,7 +6133,7 @@ support@secondlife.com.
 		聊天
 	</string>
 	<string name="Command_Conversations_Label">
-		對談
+		對話
 	</string>
 	<string name="Command_Compass_Label">
 		指南針
@@ -6267,7 +6279,7 @@ support@secondlife.com.
 		雷達
 	</string>
 	<string name="Command_Conversation_Log_Label">
-		對談日誌
+		對話日誌
 	</string>
 	<string name="Command_Move_Lock_Label">
 		移動鎖定
@@ -6466,7 +6478,7 @@ support@secondlife.com.
 		打開附近化身雷達
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
-		打開對談日誌以及過去聊天記錄
+		打開對話日誌以及過去聊天記錄
 	</string>
 	<string name="Command_Move_Lock_Tooltip">
 		將你的化身鎖定到當前姿勢 (CTRL+ALT+P)

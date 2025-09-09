@@ -25,7 +25,7 @@
 			</tab_container>
 			<layout_stack name="ButtonsStack">
 				<layout_panel name="CondenseAllButtonPanel">
-					<button label="全部摺疊" name="collapse_all_button" />
+					<button label="全部收起" name="collapse_all_button" />
 				</layout_panel>
 				<layout_panel name="GapLayoutPanel">
 					<panel label="間隙佈局" name="GapPanel" />

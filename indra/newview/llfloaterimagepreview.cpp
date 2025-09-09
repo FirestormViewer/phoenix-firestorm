@@ -459,7 +459,7 @@ void LLFloaterImagePreview::onBtnOK()
 void LLFloaterImagePreview::draw()
 {
     LLFloater::draw();
-    LLRect r = getRect();
+    // LLRect r = getRect(); <FS:Beq/> set but unused
 
     if (mRawImagep.notNull())
     {
