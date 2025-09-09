@@ -41,18 +41,16 @@ public:
     FSFloaterIMContainer(const LLSD& seed);
     virtual ~FSFloaterIMContainer();
 
-    bool postBuild() override; // <FS:Beq/> missing overrides
-    void onOpen(const LLSD& key) override; // <FS:Beq/> missing overrides
-    void onClose(bool app_quitting) override; // <FS:Beq/> missing overrides
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void onClose(bool app_quitting) override;
     void onCloseFloater(LLUUID& id);
-    void draw() override; // <FS:Beq/> missing overrides
-    // <FS:Beq> missing overrides
+    void draw() override;
     void addFloater(LLFloater* floaterp, 
                     bool select_added_floater,
                     LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END) override; 
-    // </FS:Beq>
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-    void removeFloater(LLFloater* floaterp) override; // <FS:Beq/> missing overrides
+    void removeFloater(LLFloater* floaterp) override;
 // [/SL:KB]
     bool hasFloater(LLFloater* floaterp);
 
@@ -61,18 +59,18 @@ public:
     static FSFloaterIMContainer* findInstance();
     static FSFloaterIMContainer* getInstance();
 
-    F32 getCurrentTransparency() override; // <FS:TJ/> [FIRE-35804] Allow the IM floater to have separate transparency
+    F32 getCurrentTransparency() override;
 
-    void setVisible(bool b) override; // <FS:Beq/> missing overrides
-    void setMinimized(bool b) override; // <FS:Beq/> missing overrides
+    void setVisible(bool b) override;
+    void setMinimized(bool b) override;
 
-    void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
+    void onNewMessageReceived(const LLSD& msg);
 
-    void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) override; // <FS:Beq/> missing overrides
+    void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) override;
     void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) override {};
     void sessionVoiceOrIMStarted(const LLUUID& session_id) override {};
-    void sessionRemoved(const LLUUID& session_id) override; // <FS:Beq/> missing overrides
-    void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) override; // <FS:Beq/> missing overrides
+    void sessionRemoved(const LLUUID& session_id) override;
+    void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) override;
 
     static void reloadEmptyFloaters();
     void initTabs();
