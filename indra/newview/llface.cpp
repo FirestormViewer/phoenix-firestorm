@@ -608,7 +608,7 @@ void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
             // on faces with GLTF textures we use a spectal vertex buffer with other transforms
             if (const LLTextureEntry* te = getTextureEntry())
             {
-                if (LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial())
+                if (te->getGLTFRenderMaterial())
                 {
                     vertex_buffer = mVertexBufferGLTF.get();
                 }

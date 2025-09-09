@@ -1145,6 +1145,16 @@
 		 control_name="FSOpenIMContainerOnOfflineMessage"
 		 label="Open Conversations when an offline message has been received"/>
 		<check_box
+		 layout="topleft"
+		 follows="left|top"
+		 top_pad="-2"
+		 left="20"
+		 width="400"
+		 height="18"
+		 name="FSRestoreOpenIMs"
+		 control_name="FSRestoreOpenIMs"
+		 label="Restore conversations with residents from previous session"/>
+		<check_box
 		 enabled="false"
 		 layout="topleft"
 		 follows="left|top"

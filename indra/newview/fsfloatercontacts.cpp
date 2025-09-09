@@ -131,6 +131,9 @@ bool FSFloaterContacts::postBuild()
     mFriendsCountTb->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
     mFriendFilter = mFriendsTab->getChild<LLFilterEditor>("friend_filter_input");
     mFriendFilter->setCommitCallback(boost::bind(&FSFloaterContacts::onFriendFilterEdit, this, _2));
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    mFriendFilter->setTransparencyOverrideCallback(boost::bind(&FSFloaterContacts::onGetFilterOpacityCallback, this, _1, _2));
+    // </FS:TJ>
 
     mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
     mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
@@ -163,6 +166,9 @@ bool FSFloaterContacts::postBuild()
     mGroupssCountTb = mGroupsTab->getChild<LLTextBox>("groupcount");
     mGroupFilter = mGroupsTab->getChild<LLFilterEditor>("group_filter_input");
     mGroupFilter->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupFilterEdit, this, _2));
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    mGroupFilter->setTransparencyOverrideCallback(boost::bind(&FSFloaterContacts::onGetFilterOpacityCallback, this, _1, _2));
+    // </FS:TJ>
 
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
@@ -1345,4 +1351,19 @@ void FSFloaterContacts::onGroupFilterEdit(const std::string& search_string)
 {
     mGroupList->setNameFilter(search_string);
 }
+
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+// This is specifically for making the filter editors such as mFriendFilter and mGroupFilter always active opacity when the IM floater is focused
+// Otherwise if they aren't active, it will use either the IM opacity, or inactive opacity, whatever is smaller
+F32 FSFloaterContacts::onGetFilterOpacityCallback(ETypeTransparency type, F32 alpha)
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    if (type != TT_ACTIVE)
+    {
+        return llmin(im_opacity, alpha);
+    }
+
+    return alpha;
+}
+// </FS:TJ>
 // EOF

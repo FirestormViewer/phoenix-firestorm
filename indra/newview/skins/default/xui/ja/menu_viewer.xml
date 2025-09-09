@@ -60,7 +60,7 @@
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
 			<menu_item_check label="アバターの複雑度を表示" name="Avatar Draw Info"/>
-			<menu_item_call label="スクリプトを装着…" name="MyScripts"/>
+			<menu_item_call label="装着されたスクリプト…" name="MyScripts"/>
 			<menu_item_call label="遅延メーター" name="Lag Meter"/>
 			<menu_item_call label="ＬＳＬブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
@@ -243,6 +243,13 @@
 			<menu_item_check label="透過をハイライトする" name="Highlight Transparent"/>
 			<menu_item_check label="‐透過リグを含む" name="Include Transparent Rigged" />
 			<menu_item_check label="ポストプロセッシングを無効化" name="No Post"/>
+			<menu  label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
+				<menu_item_check label="デフォルト" name="Default lod setting"/>
+				<menu_item_check label="高" name="High lod setting"/>
+				<menu_item_check label="中" name="Medium lod setting"/>
+				<menu_item_check label="低" name="Low lod setting"/>
+				<menu_item_check label="最低" name="Lowest lod setting"/>
+			</menu>
 			<menu_item_check label="グリッド吸着" name="Snap to Grid"/>
 			<menu_item_call label="オブジェクトのＸＹ軸をグリッドに吸着させる" name="Snap Object XY to Grid"/>
 			<menu_item_call label="選択をグリッドに使用する" name="Use Selection for Grid"/>
@@ -479,10 +486,10 @@
 			<menu_item_call label="編集…" name="Edit..."/>
 		</menu>
 		<menu label="ビデオ" name="Video">
-			<menu_item_call label="1080×1920" name="1080x1920"/>
-			<menu_item_call label="1920×1080" name="1920x1080"/>
-			<menu_item_call label="1280×720" name="1280x720"/>
-			<menu_item_call label="720×1280" name="720x1280"/>
+			<menu_item_call label="1080✕1920" name="1080x1920"/>
+			<menu_item_call label="1920✕1080" name="1920x1080"/>
+			<menu_item_call label="1280✕720" name="1280x720"/>
+			<menu_item_call label="720✕1280" name="720x1280"/>
 		</menu>
 		<menu label="描画テスト" name="Render Tests">
 			<menu_item_check label="カメラのオフセット" name="Camera Offset"/>

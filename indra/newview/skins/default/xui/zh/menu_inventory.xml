@@ -51,7 +51,7 @@
 		<menu_item_call label="新的水文" name="New Water" />
 		<menu_item_call label="新的晝夜循環" name="New Day Cycle" />
 	</menu>
-	<menu label="作這一用途的預設值：" name="upload_def">
+	<menu label="預設用作" name="upload_def">
 		<menu_item_call label="圖像上傳" name="Image uploads" />
 		<menu_item_call label="聲音上傳" name="Sound uploads" />
 		<menu_item_call label="動畫上傳" name="Animation uploads" />
@@ -107,6 +107,8 @@
 	<menu_item_call label="刪除系統檔案夾" name="Delete System Folder" />
 	<menu_item_call label="從所選內容建立新檔案夾" name="New folder from selected" />
 	<menu_item_call label="取消檔案夾中的物件分組" name="Ungroup folder items" />
+	<menu_item_call label="添加到收藏" name="Add to Favorites" />
+	<menu_item_call label="從收藏中移除" name="Remove from Favorites" />
 	<menu_item_call label="發起多方通話" name="Conference Chat Folder" />
 	<menu_item_call label="播放" name="Sound Play" />
 	<menu_item_call label="複製 SLurl" name="url_copy" />

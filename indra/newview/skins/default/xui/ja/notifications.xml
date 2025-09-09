@@ -466,6 +466,9 @@ L$が不足しているので、このグループに参加することができ
 	<notification name="ErrorCannotAffordUpload">
 		このアイテムをアップロードするには、L$ [COST]が必要です。
 	</notification>
+	<notification name="ErrorEncodingImage">
+		画像のエンコードに失敗しました。原因：[REASON]
+	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		インベントリに写真を保存するには、L$ [COST]が必要です。L$を購入するか、代わりに写真をコンピュータに保存できます。
 	</notification>
@@ -1251,7 +1254,7 @@ L$が不足しているので、このグループに参加することができ
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="コピー"/>
 	</notification>
 	<notification name="ResolutionSwitchFail">
-		解像度を[RESX]×[RESY]に変更することができませんでした。
+		解像度を[RESX]✕[RESY]に変更することができませんでした。
 	</notification>
 	<notification name="ErrorUndefinedGrasses">
 		エラー：未定義の植物：[SPECIES]
@@ -1307,6 +1310,16 @@ L$が不足しているので、このグループに参加することができ
 		<form name="form">
 			<button name="ReplaceList" text="着用中のリストを置き換える"/>
 			<button name="SetName" text="新しい名前を使用"/>
+		</form>
+	</notification>
+	<notification label="自動置換リストの削除" name="RemoveAutoReplaceList">
+		「[LIST_NAME]」は[MAP_SIZE]箇所のエントリがあります。
+
+このリストを削除してもよろしいですか？
+		<tag>confirm</tag>
+		<form name="form">
+			<button name="DeleteList" text="削除する"/>
+			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
@@ -1673,9 +1686,9 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	</notification>
 	<notification name="InvalidTerrainSize">
 		リージョンの地形テクスチャを設定できませんでした：
-地形テクスチャ「[TEXTURE_NUM]」は、[TEXTURE_SIZE_X]×[TEXTURE_SIZE_Y]では大きすぎます。
+地形テクスチャ「[TEXTURE_NUM]」は、[TEXTURE_SIZE_X]✕[TEXTURE_SIZE_Y]では大きすぎます。
 
-テクスチャは、２４ビットの[MAX_SIZE]×[MAX_SIZE]以下の画像を選択し、「適用」ボタンを再度クリックしてください。
+テクスチャは、２４ビットの[MAX_SIZE]✕[MAX_SIZE]以下の画像を選択し、「適用」ボタンを再度クリックしてください。
 	</notification>
 	<notification name="RawUploadStarted">
 		アップロードを開始しました。接続速度によっては、最大２分程度かかります。
@@ -1861,9 +1874,9 @@ https://secondlife.com/support/downloads/
 		この名前は既にブロック／ミュート済みです。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
-	<notification name="RemoveItemWarn">
-		コンテンツを削除すると、許可があってもオブジェクトに損傷を与えることがあります。削除を続けてもよろしいですか？
-		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
+	<notification name="CantModifyContentInNoModTask" >
+		あなたは、このオブジェクトの中身を修正できる権限がありません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="CantOfferCallingCard">
 		現在コーリングカードを送れません。数分後にもう一度お試しください。
@@ -5651,6 +5664,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 	<notification name="WaterExclusionNoMaterial">
 		水面を非表示にした面は、マテリアルを適用できません。
+	</notification>
+	<notification name="ImageUploadResized">
+		アップロードしようとしているテクスチャは、最大サイズ[MAX_WIDTH]✕[MAX_HEIGHT]ピクセルに収まるように[ORIGINAL_WIDTH]✕[ORIGINAL_HEIGHT]から[NEW_WIDTH]✕[NEW_HEIGHT]にリサイズされました。
+		<usetemplate ignoretext="アップロード画像がリサイズされた時" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification label="ポーズ上書きの確認" name="ConfirmPoserOverwrite">
 		「[POSE_NAME]」を上書きしてもよろしいですか？

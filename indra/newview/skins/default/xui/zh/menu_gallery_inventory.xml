@@ -84,11 +84,22 @@
 	</menu>
 	<menu_item_call label="從所選中建立新檔案夾" name="New folder from selected" />
 	<menu_item_call label="取消檔案夾分組" name="Ungroup folder items" />
-	<menu label="預設附著到" name="upload_def">
-		<menu_item_call label="圖像上傳" name="Image uploads" />
-		<menu_item_call label="聲音上傳" name="Sound uploads" />
-		<menu_item_call label="動畫上傳" name="Animation uploads" />
-		<menu_item_call label="模型上傳" name="Model uploads" />
+	<menu_item_call label="添加到收藏" name="Add to Favorites" />
+	<menu_item_call label="從收藏中移除" name="Remove from Favorites" />
+	<menu label="上傳到資料夾" name="upload_options">
+		<menu_item_call label="上傳紋理..." name="Upload Image" />
+		<menu_item_call label="上傳聲音 ([COST]L$)..." name="Upload Sound" />
+		<menu_item_call label="上傳動畫 ([COST]L$)..." name="Upload Animation" />
+		<menu_item_call label="上傳網格模型..." name="Upload Model" />
+		<menu_item_call label="上傳材質..." name="Upload Material" />
+		<menu_item_call label="批量上傳..." name="Bulk Upload" />
+	</menu>
+	<menu label="預設用作" name="upload_def">
+		<menu_item_call label="上傳圖像" name="Image uploads" />
+		<menu_item_call label="上傳聲音" name="Sound uploads" />
+		<menu_item_call label="上傳動畫" name="Animation uploads" />
+		<menu_item_call label="上傳模型" name="Model uploads" />
+		<menu_item_call label="上傳PBR材質" name="PBR uploads" />
 	</menu>
 	<menu_item_call label="複製到市場刊登" name="Marketplace Copy" />
 	<menu_item_call label="移到市場刊登" name="Marketplace Move" />

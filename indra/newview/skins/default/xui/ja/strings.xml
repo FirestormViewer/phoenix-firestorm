@@ -1338,6 +1338,7 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="backup_files">オブジェクトのバックアップ</string>
 	<string name="collada_files">COLLADAモデル</string>
+	<string name="model_files">メッシュモデル</string>
 	<string name="csv_files">カンマ区切り値</string>
 	<string name="recompile_script_verb">
 		再コンパイル
@@ -1635,6 +1636,9 @@ https://secondlife.com/viewer-access-faq
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">
 		お探しのものは見つかりましたか？[secondlife:///app/search/all/[SEARCH_TERM] 検索]をお試しください。
+	</string>
+	<string name="InventoryNoMatchingFavorites">
+		お気に入りとしてマークしたアイテムはありません。
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
@@ -1944,13 +1948,16 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="InvFolder Gestures">
 		ジェスチャー
 	</string>
-	<string name="InvFolder Favorites">
+	<string name="InvFolder Favorite">
 		お気に入り
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
       Also, it can be written as "Favorite" or "Favorites".
   We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
+		お気に入り
+	</string>
+	<string name="InvFolder Favorites">
 		お気に入り
 	</string>
 	<string name="InvFolder favorites">
@@ -3241,7 +3248,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		エラー
 	</string>
 	<string name="MBFullScreenErr">
-		[WIDTH]×[HEIGHT]では全画面で実行することができません。
+		[WIDTH]✕[HEIGHT]では全画面で実行することができません。
 ウィンドウモードで実行中です。
 	</string>
 	<string name="MBDestroyWinFailed">
@@ -5369,8 +5376,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="AvatarBirthDateFormat_legacy">
 		[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日
 	</string>
+	<string name="texture_load_area_error">
+		[PIXELS]ピクセルよりも大きな画像は、読み込むことができません。
+	</string>
 	<string name="texture_load_dimensions_error">
-		[WIDTH]×[HEIGHT]以上の画像は読み込めません。
+		[WIDTH]✕[HEIGHT]以上の画像は読み込めません。
 	</string>
 	<string name="texture_load_format_error">
 		無効な画像ファイル形式です。
@@ -5379,10 +5389,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ファイルが空です。
 	</string>
 	<string name="outfit_photo_load_dimensions_error">
-		アウトフィット画像の最大サイズは、[WIDTH]×[HEIGHT]です。画像のサイズを調整するか、別の画像を使用してください。
+		アウトフィット画像の最大サイズは、[WIDTH]✕[HEIGHT]です。画像のサイズを調整するか、別の画像を使用してください。
 	</string>
 	<string name="outfit_photo_select_dimensions_error">
-		アウトフィット画像の最大サイズは、[WIDTH]×[HEIGHT]です。別のテクスチャを選択してください。
+		アウトフィット画像の最大サイズは、[WIDTH]✕[HEIGHT]です。別のテクスチャを選択してください。
 	</string>
 	<string name="outfit_photo_verify_dimensions_error">
 		画像の寸法を確認できません。画像サイズがピッカーに表示されるまでお待ちください。

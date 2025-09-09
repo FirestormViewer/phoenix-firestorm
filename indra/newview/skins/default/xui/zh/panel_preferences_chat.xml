@@ -139,6 +139,7 @@
 			<text name="FSShowGroupNameLength_label">在記錄中顯示的群組名稱長度</text>
 			<spinner tool_tip="設定為-1表示完整名稱，設定為0表示禁用" name="FSShowGroupNameLength" />
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="連線時顯示離線訊息" />
+			<check_box name="FSRestoreOpenIMs" label="啟動時恢復上次登入時開啟的私聊訊息"/>
 			<text name="email_settings">
 				[https://accounts.secondlife.com/change_email 設定離線私聊的電子郵件通知]
 			</text>

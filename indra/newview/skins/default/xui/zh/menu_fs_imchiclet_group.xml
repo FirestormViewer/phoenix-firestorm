@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="IMChiclet Group Menu">
 	<menu_item_call label="顯示群組資訊" name="Show Profile" />
-	<menu_item_call label="顯示對談" name="Chat" />
+	<menu_item_call label="顯示對話" name="Chat" />
 	<menu_item_call label="暫時休眠" name="Snooze Session" />
-	<menu_item_call label="結束對談" name="End Session" />
+	<menu_item_call label="結束對話" name="End Session" />
 </menu>

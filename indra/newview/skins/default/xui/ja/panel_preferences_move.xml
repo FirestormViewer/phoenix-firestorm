@@ -49,7 +49,7 @@
 		</panel>
 		<!--Movement-->
 		<panel label="移動" name="tab-movement">
-			<check_box label="矢印キー操作で常に移動" name="arrow_keys_move_avatar_check" tool_tip="ビューアの下部にある「近くのチャット」入力フィールドにのみ適用され、「会話」の「近くのチャット」タブには適用されません。"/>
+			<check_box label="チャット中は常に矢印キーで移動する" name="arrow_keys_move_avatar_check" tool_tip="ビューアの下部にある「近くのチャット」入力フィールドにのみ適用され、「会話」の「近くのチャット」タブには適用されません。"/>
 			<check_box label="ＷＳＡＤキー押下時にローカルチャットを始めるのではなく、前後左右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="移動キー２度押し＋長押しで走る" name="tap_tap_hold_to_run"/>
 			<check_box label="上昇（ジャンプ）／下降（しゃがみ）長押しで飛ぶ／着地する" name="automatic_fly"/>

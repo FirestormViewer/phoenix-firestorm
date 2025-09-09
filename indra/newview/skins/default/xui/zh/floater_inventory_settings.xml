@@ -4,7 +4,7 @@
 		在多檔案夾視圖中雙擊一個檔案夾:
 	</text>
 	<radio_group name="multi_double_click_setting">
-		<radio_item label="展開和摺疊檔案夾" name="0" />
+		<radio_item label="展開和收起檔案夾" name="0" />
 		<radio_item label="打開一個新視窗" name="1" />
 		<radio_item label="切換視圖" name="2" />
 	</radio_group>
@@ -22,5 +22,17 @@
 		<radio_item label="在主庫存視窗中顯示" name="false" />
 		<radio_item label="打開一個新的單檔案夾視窗" name="true" />
 	</radio_group>
-	<button label="確定" name="ok_btn" />
+	<text name="favorites_txt">
+		收藏
+	</text>
+	<check_box label="在收藏物件旁顯示星標" name="favorite_star" />
+	<check_box label="在收藏資料夾旁顯示空心星標" name="favorite_hollow_star" />
+	<check_box label="文字顏色" name="favorites_color" />
+	<text name="attachment_return_txt">
+		在化身附件上按下“Enter”鍵
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="添加附件（推薦）" name="0" />
+		<combo_box.item label="穿上（替換附著點上的物件）" name="1" />
+	</combo_box>
 </floater>

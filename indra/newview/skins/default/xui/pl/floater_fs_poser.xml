@@ -250,7 +250,7 @@
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Potwierdź nadpisanie" tool_tip="Gdy zapisujesz pozę, a plik już istnieje, musisz kliknąć przycisk zapisu ponownie, aby potwierdzić, że na pewno chcesz ją nadpisać." />
 						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
 						<check_box name="show_joint_markers_checkbox" label="Wskaźniki stawów" tool_tip="Pokaż małe wskaźniki ułatwiające wybór stawów podczas pozowania." />
-						<check_box name="dof_edit_mode_checkbox" label="Głębia ostrości podczas edycji" tool_tip="Podczas korzystania z manipulatorów głębia ostrości zazwyczaj wyłącza się automatycznie. To ustawienie pozostawia głębię ostrości włączoną podczas edycji póz lub prim." />
+						<check_box name="dof_edit_mode_checkbox" label="Edycja: Głębia ostrości" tool_tip="Podczas korzystania z manipulatorów głębia ostrości zazwyczaj wyłącza się automatycznie. To ustawienie pozostawia głębię ostrości włączoną podczas edycji póz lub prim." />
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Włącz / wyłącz manipulatory wizualne." />

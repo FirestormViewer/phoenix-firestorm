@@ -7,7 +7,9 @@
 				<stat_bar name="frame_mean" label="フレーム（平均）" unit_label="㎳"/>
 				<stat_bar name="frame_median" label="フレーム（中央値）" unit_label="㎳"/>
 				<stat_bar name="framet_jitter" label="ジッタ"/>
-				<stat_bar name="normalized_cumulative_frametime" label="正規化済みセッションのジッタ"/>
+				<stat_bar name="normalized_cumulative_frametime" label="正規化されたセッションのジッタ"/>
+				<stat_bar name="normalized_period_jitter" label="正規化された周期ジッタ"/>
+				<stat_bar name="normalized_frametime_variation" label="正規化されたフレームタイム変動"/>
 				<stat_bar name="frame_events_per_minute" label="フレームイベント／分"/>
 				<stat_bar name="frame_events_last_minute" label="フレームイベントの最終分"/>
 				<stat_bar label="受信したＵＤＰデータ" name="bandwidth"/>
