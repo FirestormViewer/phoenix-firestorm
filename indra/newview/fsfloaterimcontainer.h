@@ -69,8 +69,8 @@ public:
     void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
     void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) override; // <FS:Beq/> missing overrides
-    virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {};
-    virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
+    void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) override {};
+    void sessionVoiceOrIMStarted(const LLUUID& session_id) override {};
     void sessionRemoved(const LLUUID& session_id) override; // <FS:Beq/> missing overrides
     void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) override; // <FS:Beq/> missing overrides
 
@@ -79,7 +79,7 @@ public:
 
     void addFlashingSession(const LLUUID& session_id);
 
-    void tabOpen(LLFloater* opened_floater, bool from_click);
+    void tabOpen(LLFloater* opened_floater, bool from_click) override;
 
     void startFlashingTab(LLFloater* floater, const std::string& message);
 
