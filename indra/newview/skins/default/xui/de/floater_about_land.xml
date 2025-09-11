@@ -71,8 +71,11 @@
 			<panel.string name="no_selection_text">
 				Keine Parzelle ausgewählt.
 			</panel.string>
+			<panel.string name="time_stamp_template_ampm">
+				[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
+			</panel.string>
 			<panel.string name="time_stamp_template">
-				[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+				[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 			</panel.string>
 			<panel.string name="error_resolving_uuid">
 				Parzellen-ID konnte nicht ermittelt werden.

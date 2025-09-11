@@ -2954,7 +2954,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		Soll
 	</string>
 	<string name="GroupMoneyStartDate">
-		Transaktionen seit [weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
+		Transaktionen seit [weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc]. [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Erworbene Artikel
@@ -5430,10 +5430,10 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		[MDAY]
 	</string>
 	<string name="dateTimeAM">
-		Uhr
+		AM
 	</string>
 	<string name="dateTimePM">
-		Uhr
+		PM
 	</string>
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
@@ -7212,17 +7212,20 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="GroupNoticesPanelDateString">
 		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+	<string name="GroupNoticesPanelDateStringAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</string>
 	<string name="GroupNoticesToastDateString">
-		[wkday,datetime,slt]., [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringLocal">
-		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	<string name="GroupNoticesToastDateStringAMPM">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringUTC">
-		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	<string name="NotificationItemDateString">
+		[day,datetime,utc]. [mth,datetime,utc]. [year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
-	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	<string name="NotificationItemDateStringAMPM">
+		[day,datetime,utc]. [mth,datetime,utc]. [year,datetime,utc] [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normal

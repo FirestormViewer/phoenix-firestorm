@@ -6579,17 +6579,20 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="GroupNoticesPanelDateString">
 		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+	<string name="GroupNoticesPanelDateStringAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [timezone,datetime,local]
+	</string>
 	<string name="GroupNoticesToastDateString">
 		[wkday,datetime,slt]., [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringLocal">
-		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]
+	<string name="GroupNoticesToastDateStringAMPM">
+		[wkday,datetime,slt]., [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,local] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringUTC">
+	<string name="NotificationItemDateString">
 		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc], [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
-	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	<string name="NotificationItemDateStringAMPM">
+		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc], [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normalnie

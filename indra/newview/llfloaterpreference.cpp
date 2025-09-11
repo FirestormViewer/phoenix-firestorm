@@ -700,6 +700,8 @@ bool LLFloaterPreference::postBuild()
     // </FS:Ansariel>
 
     getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
+    mTimeFormatCombobox = getChild<LLComboBox>("time_format_combobox");
+    mTimeFormatCombobox->setCommitCallback(boost::bind(&LLFloaterPreference::onTimeFormatChange, this));
 
     // <FS:CR> [CHUI MERGE]
     // We don't use these in FS Communications UI, should we in the future? Disabling for now.
@@ -1723,6 +1725,13 @@ void LLFloaterPreference::onLanguageChange()
     }
 }
 
+void LLFloaterPreference::onTimeFormatChange()
+{
+    std::string val = mTimeFormatCombobox->getValue();
+    gSavedSettings.setBOOL("Use24HourClock", val == "1");
+    onLanguageChange();
+}
+
 void LLFloaterPreference::onNotificationsChange(const std::string& OptionName)
 {
     mNotificationOptions[OptionName] = getChild<LLComboBox>(OptionName)->getSelectedItemLabel();
@@ -2372,6 +2381,8 @@ void LLFloaterPreference::refresh()
         advanced->refresh();
     }
     updateClickActionViews();
+
+    mTimeFormatCombobox->selectByValue(gSavedSettings.getBOOL("Use24HourClock") ? "1" : "0");
 }
 
 void LLFloaterPreference::onCommitWindowedMode()

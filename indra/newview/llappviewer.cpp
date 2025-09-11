@@ -1425,9 +1425,18 @@ bool LLAppViewer::init()
         LLStringOps::setupMonthShortNames(LLTrans::getString("dateTimeMonthShortNames"));
         LLStringOps::setupDayFormat(LLTrans::getString("dateTimeDayFormat"));
 
-        LLStringOps::sAM = LLTrans::getString("dateTimeAM");
-        LLStringOps::sPM = LLTrans::getString("dateTimePM");
+        // <FS:Ansariel> Always override AM/PM because otherwise AM/PM indicator might be empty strings when calling using
+        // [ampm,datetime,...] formatting depending on locale
+        // LLStringOps::sAM = LLTrans::getString("dateTimeAM");
+        // LLStringOps::sPM = LLTrans::getString("dateTimePM");
+        // </FS:Ansariel>
     }
+
+    // <FS:Ansariel> Always override AM/PM because otherwise AM/PM indicator might be empty strings when calling using [ampm,datetime,...]
+    // formatting depending on locale
+    LLStringOps::sAM = LLTrans::getString("dateTimeAM");
+    LLStringOps::sPM = LLTrans::getString("dateTimePM");
+    // </FS:Ansariel>
 
     LLAgentLanguage::init();
 

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect" title="Objekte untersuchen">
+	<floater.string name="timeStampAMPM">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
+	</floater.string>
 	<floater.string name="timeStamp">
-		[wkday,datetime,slt] [day,datetime,slt]. [mth,datetime,slt] [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</floater.string>
 	<floater.string name="Group">
 		(Gruppe)

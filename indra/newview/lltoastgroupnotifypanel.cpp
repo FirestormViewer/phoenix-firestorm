@@ -97,16 +97,28 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
     const std::string& message = payload["message"].asString();
 
     // <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
-    //std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
-    //                      +LLTrans::getString("TimeMth")+"] ["
-    //                      +LLTrans::getString("TimeDay")+"] ["
-    //                      +LLTrans::getString("TimeYear")+"] ["
-    //                      +LLTrans::getString("TimeHour")+"]:["
-    //                      +LLTrans::getString("TimeMin")+"]:["
-    //                      +LLTrans::getString("TimeSec")+"] ["
-    //                      +LLTrans::getString("TimeTimezone")+"]";
-    std::string timeStr = LLTrans::getString("GroupNoticesToastDateString");
+    //std::string timeStr = "[" + LLTrans::getString("TimeWeek") + "], ["
+    //                          + LLTrans::getString("TimeMonth") + "]/["
+    //                          + LLTrans::getString("TimeDay") + "]/["
+    //                          + LLTrans::getString("TimeYear") + "] [";
+    //static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    //if (use_24h)
+    //{
+    //    timeStr += LLTrans::getString("TimeHour") + "]:["
+    //        + LLTrans::getString("TimeMin") + "] ["
+    //        + LLTrans::getString("TimeTimezone") + "]";
+    //}
+    //else
+    //{
+    //    timeStr += LLTrans::getString("TimeHour12") + "]:["
+    //        + LLTrans::getString("TimeMin") + "] ["
+    //        + LLTrans::getString("TimeAMPM") + "] ["
+    //        + LLTrans::getString("TimeTimezone") + "]";
+    //}
+    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    std::string timeStr = use_24h ? LLTrans::getString("GroupNoticesToastDateString") : LLTrans::getString("GroupNoticesToastDateStringAMPM");
     // </FS:Ansariel>
+
     const LLDate timeStamp = notification->getDate();
     LLDate notice_date = timeStamp.notNull() ? timeStamp : payload["received_time"].asDate();
     LLSD substitution;

@@ -204,7 +204,8 @@ std::string build_notice_date(const U32& the_time)
     //                          + LLTrans::getString("LTimeHour") + "]:["
     //                          + LLTrans::getString("LTimeMin") + "]:["
     //                          + LLTrans::getString("LTimeSec") + "]";
-    std::string dateStr = LLTrans::getString("GroupNoticesPanelDateString");
+    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    std::string dateStr = use_24h ? LLTrans::getString("GroupNoticesPanelDateString") : LLTrans::getString("GroupNoticesPanelDateStringAMPM");
     // </FS:Ansariel>
 
     LLSD substitution;

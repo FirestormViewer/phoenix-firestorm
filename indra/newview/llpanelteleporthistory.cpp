@@ -42,6 +42,7 @@
 #include "llnotificationsutil.h"
 #include "lltextbox.h"
 #include "lltoggleablemenu.h"
+#include "llviewercontrol.h"
 #include "llviewermenu.h"
 #include "lllandmarkactions.h"
 #include "llclipboard.h"
@@ -252,15 +253,26 @@ std::string LLTeleportHistoryFlatItem::getTimestamp()
     //// Only show timestamp for today and yesterday
     //if(time_diff < seconds_today + seconds_in_day)
     //{
-    //  timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
-    //                  + LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
-    //  LLSD substitution;
-    //  substitution["datetime"] = (S32) date.secondsSinceEpoch();
-    //  LLStringUtil::format(timestamp, substitution);
+    //    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    //    if (use_24h)
+    //    {
+    //        timestamp = "[" + LLTrans::getString("TimeHour") + "]:["
+    //            + LLTrans::getString("TimeMin") + "]";
+    //    }
+    //    else
+    //    {
+    //        timestamp = "[" + LLTrans::getString("TimeHour12") + "]:["
+    //            + LLTrans::getString("TimeMin") + "] [" + LLTrans::getString("TimeAMPM") + "]";
+    //    }
+
+    //    LLSD substitution;
+    //    substitution["datetime"] = (S32) date.secondsSinceEpoch();
+    //    LLStringUtil::format(timestamp, substitution);
     //}
     LLSD args;
     args["datetime"] = date.secondsSinceEpoch();
-    timestamp = getString("DateFmt");
+    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    timestamp = use_24h ? getString("DateFmt") : getString("DateFmtAMPM");
     //<FS:Beq [timezone support for teleport history]>
     // Check whether we have an override for the timezone
     static const std::string xml_timezone = "utc"; // In case we decide to change the XML default !

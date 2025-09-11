@@ -5,7 +5,8 @@
 	<floater.string name="public">(öffentlich)</floater.string>
 	<floater.string name="you_can">Sie können:</floater.string>
 	<floater.string name="owner_can">Eigentümer kann:</floater.string>
-	<floater.string name="acquiredDate">[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]</floater.string>
+	<floater.string name="acquiredDate">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<floater.string name="acquiredDateAMPM">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]</floater.string>
 	<text name="LabelItemNameTitle">Name:</text>
 	<text name="LabelItemDescTitle">Beschreibung:</text>
 	<text name="LabelCreatorTitle">Ersteller:</text>

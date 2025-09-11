@@ -659,7 +659,7 @@ Möchten Sie den Viewer schließen und anschließend manuell neu starten, um die
 		<usetemplate name="okcancelbuttons" notext="Später" yestext="Jetzt beenden"/>
 	</notification>
 	<notification name="ChangeLanguage">
-		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.
+		Die Änderung der Sprache oder des Uhrzeitformats tritt nach Neustart von [APP_NAME] in Kraft.
 	</notification>
 	<notification name="GoToAuctionPage">
 		Zur [CURRENT_GRID]-Webseite, um Auktionen anzuzeigen oder ein Gebot abzugeben?
