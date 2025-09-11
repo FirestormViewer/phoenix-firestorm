@@ -1204,6 +1204,15 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     bool rlvCanRemove = !RlvActions::isRlvEnabled();
 // [/RLVa:KB]
 
+// <FS:Trish> Fix for "Delete from outfit" context menu option showing in favorites window.
+    bool   is_outfit_menu   = false;
+    LLUUID outfit_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
+    if (!ids.empty())
+    {
+        is_outfit_menu = gInventory.isObjectDescendentOf(ids.front(), outfit_folder_id);
+    }
+// </FS:Trish>
+
     for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
     {
         LLUUID id = *it;
@@ -1315,8 +1324,8 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     setMenuItemVisible(menu, "show_original",       !standalone);
     setMenuItemEnabled(menu, "show_original",       n_items == 1 && n_links == n_items);
 // <AS:Chanayane> Delete from outfit context menu entry
-    setMenuItemVisible(menu, "delete_from_outfit",  n_links > 0);
-    setMenuItemEnabled(menu, "delete_from_outfit",  n_links > 0);
+    setMenuItemVisible(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
+    setMenuItemEnabled(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
 // </AS:Chanayane>
     setMenuItemVisible(menu, "favorites_add",       can_favorite);
     setMenuItemVisible(menu, "favorites_remove",    can_unfavorite);
