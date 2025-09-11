@@ -29,7 +29,7 @@ All installations are done with default settings (unless told explicitly) - if y
 > If you don't own a copy of a commercial edition of Visual Studio 2022 (e.g. Professional), you might consider installing the [Community version](https://visualstudio.microsoft.com/free-developer-offers)
 
 ### Command Prompt vs Powershell
-- Make sure that you use the Windows Command Prompt (cmd.exe) and not Powershell or it won't detect the Visual Studio build tools properly.
+- Make sure that you use the Windows Command Prompt / Terminal (cmd.exe) and not Powershell or it won't detect the Visual Studio build tools properly.
 
 ### Git
 
@@ -107,24 +107,24 @@ pip --version
 
 If they all report sensible values and not "Command not found" errors, then you are in good shape.
 
-### Optional but recommended: Set up a Python virtual environment
+### Optional: Set up a Python virtual environment
 
-We recommend setting up a Python virtual environment so that it doesn't pollute your system when installing Firestorm requirements.
+If you do not want to install the required Python packages into the default Python directory, you can optionally create a virtual environment.
 
-- Create the Python Virtual Environment (only once). Open Windows Command Prompt and enter:
-  `python -m venv .venv`
+- Create the Python Virtual Environment (only once). Open Windows Command Prompt and navigate to the directory where you want to install the virtual environment. To create the virtual environment, enter:
+  `python -m venv <env_name>` (`<env_name>` is a placeholder for the name you want to use for the virtual environment)
 - Activate the virtual environment by typing:
-  `.venv\Scripts\activate.bat`
+  `<env_name>\Scripts\activate.bat`
 - Activate the virtual environment each time you want to build.
 - Type all the subsequent commands in this virtual environment.
-- In case of issue or Python update, you can delete this .venv directory and create a new virtual environment again.
+- In case of issue or Python update, you can delete this directory for the virtual environemt and create a new one again.
 
 ### Set up Autobuild
 
 - Install Autobuild
    You can install autobuild and its dependencies using the `requirements.txt` file that is part of the repo, this will build using the same versions that our official builds use.
   - Open Windows Command Prompt
-  - Activate your Python virtual environment if you created one earlier
+  - If you created a Python virtual environment earlier, activate it
   - Enter: <code>pip install -r requirements.txt</code>
   - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
   - Open Windows Command Prompt and enter:
@@ -260,10 +260,7 @@ RelWithDebInfoFS_open (  no KDU,   no FMOD,   no OpenSim, with debug info)
 RelWithDebInfoOS      (  no KDU,   no FMOD, with OpenSim, with debug info)
 ```
 
-You will probably want to have FMOD enabled and no Kakadu, in that case, you can use the ReleaseFS_open target with the --fmodstudio switch.
-
 > [!TIP]
-> Do not use a premade build target that has Kakadu if you do not have the Kakadu package or it won't work.
 > Configuring the viewer for the first time will take some time to download all the required third-party libraries. The download progress is hidden by default. If you want to watch the download progress, you can use the verbose option to display a more detailed output:
 > `autobuild configure -A 64 -v -c ReleaseFS_open`
 
@@ -274,9 +271,9 @@ There are a number of switches you can use to modify the configuration process. 
 - **-A \<architecture\>** sets the target architecture, that is if you want to build a 32bit or 64bit viewer (32bit is default if omitted). You probably want to set this to `-A 64`.
 - **--avx** will enable AVX optimizations for AVX-enabled CPUs. Mutually exclusive with --avx2.
 - **--avx2** will enable AVX2 optimizations for AVX2-enabled CPUs. Mutually exclusive with --avx.
-- **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages
+- **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages.
 - **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using Autobuild](#fmod-studio-using-autobuild) for this to work. You will not have any sound if you do not include FMOD.
-- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. If you do not have a license for Kakadu, do not use that switch.
+- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling.
 - **--package** makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS. It will also run NSIS to create a setup package.
 - **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
@@ -284,7 +281,7 @@ There are a number of switches you can use to modify the configuration process. 
 > [!TIP]
 > **OFF** and **NO** are the same as **FALSE**; anything else is considered to be **TRUE**
 
-Examples:
+### Examples: ###
 
 - To build a 64bit viewer with FMOD Studio and to create an installer package, run this command in the Windows command window:
 `autobuild configure -A 64 -c ReleaseFS_open -- --fmodstudio --package --chan MyViewer -DLL_TESTS:BOOL=FALSE`
@@ -298,7 +295,7 @@ There are two ways to build the viewer: Via Windows command line or from within 
 
 ### Building from the Windows command line
 
-Make sure that you are using the Windows Command Prompt (cmd.exe) and not Powershell.
+Make sure that you are using the Windows Command Prompt / Terminal (cmd.exe) and not Powershell.
 
 If you are building with FMOD Studio and have followed the previous FMOD Studio setup instructions AND you are now using a new terminal you will need to reset the environment variable with 
 

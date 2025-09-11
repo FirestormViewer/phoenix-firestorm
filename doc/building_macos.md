@@ -29,9 +29,9 @@ XCode is a free download from Apple but you will need an Apple ID to login and a
 - You will need to install the command line links manually. To do this, run from the terminal: `sudo /Applications/CMake.app/Contents/MacOS/CMake --install`
 - Again, test by running: `cmake --version` from the terminal window.
 
-### Optional but recommended: Set up a Python virtual environment
+### Optional: Set up a Python virtual environment
 
-We recommend setting up a Python virtual environment so that it doesn't pollute your system when installing Firestorm requirements.
+If you do not want to install the required Python packages into the default Python directory, you can optionally create a virtual environment.
 
 - Create the Python virtual environment (only once):
   `python -m venv .venv`
@@ -118,8 +118,6 @@ RelWithDebInfoFS      (with KDU, with FMOD,   no OpenSim, with debug info)
 RelWithDebInfoFS_open (  no KDU,   no FMOD,   no OpenSim, with debug info)
 RelWithDebInfoOS      (  no KDU,   no FMOD, with OpenSim, with debug info)
 ```
-
-You will probably want to have FMOD enabled and no Kakadu, in that case, you can use the ReleaseFS_open target with the --fmodstudio switch.
 
 To build firestorm:
 
@@ -218,7 +216,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **-A \<architecture\>** sets the target architecture, that is if you want to build a 32bit or 64bit viewer (32bit is default if omitted). You probably want to set this to `-A 64`.
 - **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages
 - **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using autobuild](#fmod-studio-using-autobuild) for this to work.
-- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. If you do not have a license for Kakadu, do not use that switch.
+- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. 
 - **--package** makes sure all files are copied into viewers output directory. It will also generate a DMG installer package
 - **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
@@ -226,7 +224,7 @@ There are a number of switches you can use to modify the configuration process. 
 > [!TIP]
 > **OFF** and **NO** are the same as **FALSE**; anything else is considered to be **TRUE**
 
-Example:
+### Example: ###
 
 ```
 autobuild configure -A 64 -c ReleaseFS_open -- -DLL_TESTS:BOOL=FALSE -DFMODSTUDIO:BOOL=TRUE
