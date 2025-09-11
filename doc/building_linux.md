@@ -43,9 +43,22 @@ A few packages must be installed on the build system. Some may already be instal
 sudo apt install libgl1-mesa-dev libglu1-mesa-dev libpulse-dev build-essential python3-pip git libssl-dev libxinerama-dev libxrandr-dev libfontconfig-dev libfreetype6-dev gcc-11 cmake
 ```
 
+### Optional but recommended: Set up a Python virtual environment
+
+We recommend setting up a Python virtual environment so that it doesn't pollute your system when installing Firestorm requirements.
+
+- Create the Python virtual environment (only once):
+  `python -m venv .venv`
+- Activate the virtual environment:
+  `source .venv/bin/activate`
+- Activate the virtual environment each time you want to build.
+- Type all the subsequent commands in this virtual environment.
+- In case of issue or Python update, you can delete this .venv directory and create a new virtual environment again.
+
 ### Install Autobuild
 
 Autobuild is a Linden Lab resource that does all the hard work.
+If you created a Python virtual environment, activate it first.
 You can install it using the same versions as our automated builds as follows:
 ```
 sudo pip3 install --upgrade pip
@@ -156,20 +169,31 @@ This will set up to compile with all defaults and without non-default libraries.
 Available premade firestorm-specific build targets:
 
 ```
-ReleaseFS           (includes KDU, FMOD)
-ReleaseFS_open      (no KDU, no FMOD)
-RelWithDebInfoFS_open (no KDU, no FMOD)
+ReleaseFS             (with KDU, with FMOD,   no OpenSim)
+ReleaseFS_AVX         (with KDU, with FMOD,   no OpenSim, optimized for AVX-enabled CPUs)
+ReleaseFS_AVX2        (with KDU, with FMOD,   no OpenSim, optimized for AVX2-enabled CPUs)
+ReleaseFS_open        (  no KDU,   no FMOD,   no OpenSim)
+ReleaseOS             (  no KDU,   no FMOD, with OpenSim)
+RelWithDebInfoFS      (with KDU, with FMOD,   no OpenSim, with debug info)
+RelWithDebInfoFS_open (  no KDU,   no FMOD,   no OpenSim, with debug info)
+RelWithDebInfoOS      (  no KDU,   no FMOD, with OpenSim, with debug info)
 ```
+
+You will probably want to have FMOD enabled and no Kakadu, in that case, you can use the ReleaseFS_open target with the --fmodstudio switch.
 
 ### Configuration Switches
 
 There are a number of switches you can use to modify the configuration process.  The name of each switch is followed by its type and then by the value you want to set.
 
-- **LL_TESTS** (bool) controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
-- **clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages
-- **package** will result in a bzip2 archive of the completed viewer. Enabled by default, you would have to use **-DPACKAGE:BOOL=Off** to disable it
-- **chan** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
-- **fmodstudio** will tell autobuiild to use the FmodStudio package when compiling.
+- **-A \<architecture\>** sets the target architecture, that is if you want to build a 32bit or 64bit viewer (32bit is default if omitted). You probably want to set this to `-A 64`.
+- **--avx** will enable AVX optimizations for AVX-enabled CPUs. Mutually exclusive with --avx2.
+- **--avx2** will enable AVX2 optimizations for AVX2-enabled CPUs. Mutually exclusive with --avx.
+- **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages
+- **--fmodstudio** will tell autobuiild to use the FmodStudio package when compiling.
+- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. If you do not have a license for Kakadu, do not use that switch.
+- **--package** makes sure all files are copied into viewers output directory. It will also result in a bzip2 archive of the completed viewer. Enabled by default, you would have to use **-DPACKAGE:BOOL=Off** to disable it
+- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
+- **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
 
 Most switches start with a double-dash (\--). And if you use any switches you must enclose them with a double-dash at the start and an optional double-dash at the end.
 
