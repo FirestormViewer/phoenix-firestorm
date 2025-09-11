@@ -1599,9 +1599,17 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
     if (fsDisableNeighbourRegionConnections)
     {
         LLViewerRegion* current_region = gAgent.getRegion();
-        if (current_region && current_region->getHandle() != handle)
+        if (current_region)
         {
-            return;
+            F32 regionSize = current_region->getWidth();
+            LLVector3 avPos = gAgent.getPositionAgent();
+            if (avPos.mV[VX] >= 0 && avPos.mV[VX] <= regionSize && avPos.mV[VY] >= 0 && avPos.mV[VY] <= regionSize)
+            {
+                if (current_region->getHandle() != handle)
+                {
+                    return;
+                }
+            }
         }
     }
     // </FS:PP>

@@ -590,13 +590,22 @@
          layout="topleft"
          label_width="170"
          label="Avatar Rotation Turn Speed:"
-         top_pad="2"
+         top_pad="5"
          max_val="100.0"
          min_val="0.0"
          name="av_turn_spd"
          tool_tip="Alters the rate at which your avatar responds to turning. 0-100 as estimated percentage of max turn rate. 0 is default. High values will be snappy/jerky"
          show_text="true"
          width="320" />
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="20"
+         label="Disable connecting to neighbouring regions (important: read tooltip)"
+         name="FSDisableNeighbourRegionConnections"
+         width="270"
+         control_name="FSDisableNeighbourRegionConnections"
+         tool_tip="Shows/loads only the region you are in, which can improve performance and network stability, but region crossings on foot or in vehicles will be less reliable and manual teleporting may be needed." />
         <text
          follows="left|top"
          type="string"
@@ -605,7 +614,7 @@
          layout="topleft"
          name="Region_Crossing_Movement_Label"
          width="210"
-         top_pad="10">
+         top_pad="5">
             Region crossing movement prediction:
         </text>
         <radio_group
