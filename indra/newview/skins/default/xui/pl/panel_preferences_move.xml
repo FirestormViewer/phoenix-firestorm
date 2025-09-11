@@ -55,6 +55,7 @@
 			<check_box label="Awatary mogą chodzić do tyłu na Twoim ekranie (efekt jest wyłącznie lokalny)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Gdy zaznaczysz tą opcję, to zezwolisz awatarom poruszającym się w tył na bycie widzianymi tak, jak gdyby się cofały - bez odwracania się. To ustawienie ma wpływ tylko na to, co pokazuje Twoja przeglądarka, a nie to, co awatar faktycznie robi. Takie ustawienie jest domyślnym dla standardowej przeglądarki Second Life. Jeśli awatar posiada AO zmuszające go do obracania się, to zachowanie to może zostać nadpisane."/>
 			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 			<slider label="Prędkość obrotu awatara:" name="av_turn_spd" tool_tip="Zmienia szybkość, z jaką Twój awatar reaguje na obracanie się. 0-100 to szacunkowy procent maksymalnej szybkości obrotu. Domyślnie: 0. Wysokie wartości będą powodować szarpanie." />
+			<check_box label="Wyłącz łączenie z sąsiednimi regionami (uwaga: zobacz chmurkę pomocy)" name="FSDisableNeighbourRegionConnections" tool_tip="Pokazuje/ładuje tylko region, w którym jesteś. Może to poprawić wydajność i stabilność połączenia, ale przechodzenie do innych regionów pieszo lub pojazdem będzie mniej niezawodne i może wymagać ręcznego teleportu." />
 			<text name="Region_Crossing_Movement_Label">
 				Przewiduj ruch przy zmianie regionu:
 			</text>
