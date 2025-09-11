@@ -28,13 +28,30 @@ All installations are done with default settings (unless told explicitly) - if y
 > [!TIP]
 > If you don't own a copy of a commercial edition of Visual Studio 2022 (e.g. Professional), you might consider installing the [Community version](https://visualstudio.microsoft.com/free-developer-offers)
 
-### Tortoise Git
+### Command Prompt vs Powershell
+- Make sure that you use the Windows Command Prompt (cmd.exe) and not Powershell or it won't detect the Visual Studio build tools properly.
 
--  Download and install [TortoiseGit 2.9.0 or newer](https://tortoisegit.org) (64bit)
+### Git
+
+-  If you prefer having a GUI for Git, download and install [TortoiseGit 2.17.0 or newer](https://tortoisegit.org) (64bit)
   - Note: No option available to install as Administrator
   - Use default options (path, components etc.) for Tortoise Git itself
   - At some point, it will ask you to download and install Git for Windows
     - You can install with default options **EXCEPT** when it asks for "Configuring the line endings conversion": You **MUST** select "Checkout as-is, commit as-is" here!
+
+- If you prefer command line tools, you can also use and install the official [Git for Windows](https://git-scm.com/downloads/win).
+  - Uncheck "associate .sh files to be run with bash"
+  - Choose a good text editor such as VS Code or Sublime Text when asked to
+  - Select "Let Git decide the name of the initial branch"
+  - Select "Git from the command line and also from 3rd party software"
+  - Select "Use External SSH"
+  - Select "Use the native Windows Secure Channel library"
+  - Select "Checkout as-is, commit as-is" for line endings conversion.
+  - Select "Use Windows' default console window"
+  - Select "Fast-forward or merge"
+  - Select "Git Credential Manager"
+  - Check "Enable file system caching"
+  - Once installed, ensure that the git directory (C:\Program Files\Git\cmd) is in your PATH.
 
 ### CMake
 
@@ -56,8 +73,11 @@ All installations are done with default settings (unless told explicitly) - if y
   - Add additional packages:
     - Devel/patch
   - Use default options for everything else
-  - Make sure that the following directory was added to your path and that it is placed before "%SystemRoot%\system32":
+  - Make sure that the following directory was added to your path and that it is placed before "%SystemRoot%\system32" but after CMake path (in case you installed CMake in Cygwin):
     `C:\Cygwin64\bin`
+
+> [!NOTE]
+> The Cygwin terminal is only needed for testing. All commands for actually building the viewer will be run from the Windows command shell.
 
 ### Python
 
@@ -87,14 +107,25 @@ pip --version
 
 If they all report sensible values and not "Command not found" errors, then you are in good shape.
 
-> [!NOTE]
-> The Cygwin terminal is only needed for testing. All commands for actually building the viewer will be run from the Windows command shell.
+### Optional but recommended: Set up a Python virtual environment
+
+We recommend setting up a Python virtual environment so that it doesn't pollute your system when installing Firestorm requirements.
+
+- Create the Python Virtual Environment (only once). Open Windows Command Prompt and enter:
+  `python -m venv .venv`
+- Activate the virtual environment by typing:
+  `.venv\Scripts\activate.bat`
+- Activate the virtual environment each time you want to build.
+- Type all the subsequent commands in this virtual environment.
+- In case of issue or Python update, you can delete this .venv directory and create a new virtual environment again.
 
 ### Set up Autobuild
 
 - Install Autobuild
    You can install autobuild and its dependencies using the `requirements.txt` file that is part of the repo, this will build using the same versions that our official builds use.
-  - Open Windows Command Prompt and enter: <code>pip install -r requirements.txt</code>
+  - Open Windows Command Prompt
+  - Activate your Python virtual environment if you created one earlier
+  - Enter: <code>pip install -r requirements.txt</code>
   - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
   - Open Windows Command Prompt and enter:
     `pip install git+https://github.com/secondlife/autobuild.git#egg=autobuild`
@@ -136,7 +167,7 @@ git clone https://github.com/FirestormViewer/phoenix-firestorm.git
 
 ## Prepare third party libraries
 
-Most third party libraries needed to build the viewer will be automatically downloaded for you and installed into the build directory within your source tree during compilation. Some need to be manually prepared and are not normally required when using an open source configuration (ReleaseFS_open).
+Most third party libraries needed to build the viewer will be automatically downloaded for you and installed into the build directory within your source tree during compilation. Some need to be manually prepared and are not normally required when using an open source configuration (ReleaseFS_open). Some libraries like Kakadu or Havok requires you to purchase a license and you will need to figure out yourself how to build and use them.
 
 > [!IMPORTANT]
 > If you are manually building the third party libraries, you will have to build the correct version (32bit libraries for a 32bit viewer, 64bit versions for a 64bit viewer)!
@@ -219,12 +250,20 @@ This will configure Firestorm to be built with all defaults and without third pa
 Available premade firestorm-specific build targets:
 
 ```
-ReleaseFS             (includes KDU, FMOD)
-ReleaseFS_open        (no KDU, no FMOD)
-RelWithDebInfoFS_open (no KDU, no FMOD)
+ReleaseFS             (with KDU, with FMOD,   no OpenSim)
+ReleaseFS_AVX         (with KDU, with FMOD,   no OpenSim, optimized for AVX-enabled CPUs)
+ReleaseFS_AVX2        (with KDU, with FMOD,   no OpenSim, optimized for AVX2-enabled CPUs)
+ReleaseFS_open        (  no KDU,   no FMOD,   no OpenSim)
+ReleaseOS             (  no KDU,   no FMOD, with OpenSim)
+RelWithDebInfoFS      (with KDU, with FMOD,   no OpenSim, with debug info)
+RelWithDebInfoFS_open (  no KDU,   no FMOD,   no OpenSim, with debug info)
+RelWithDebInfoOS      (  no KDU,   no FMOD, with OpenSim, with debug info)
 ```
 
+You will probably want to have FMOD enabled and no Kakadu, in that case, you can use the ReleaseFS_open target with the --fmodstudio switch.
+
 > [!TIP]
+> Do not use a premade build target that has Kakadu if you do not have the Kakadu package or it won't work.
 > Configuring the viewer for the first time will take some time to download all the required third-party libraries. The download progress is hidden by default. If you want to watch the download progress, you can use the verbose option to display a more detailed output:
 > `autobuild configure -A 64 -v -c ReleaseFS_open`
 
@@ -232,11 +271,15 @@ RelWithDebInfoFS_open (no KDU, no FMOD)
 
 There are a number of switches you can use to modify the configuration process. The name of each switch is followed by its type and then by the value you want to set.
 
-- -A \<architecture\> sets the target architecture, that is if you want to build a 32bit or 64bit viewer (32bit is default if omitted).
-- --fmodstudio controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using Autobuild](#fmod-studio-using-autobuild) for this to work.
-- --package makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS.
-- --chan \<channel name\> lets you define a custom channel name for the viewer
-- -LL_TESTS:BOOL=\<bool\> controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
+- **-A \<architecture\>** sets the target architecture, that is if you want to build a 32bit or 64bit viewer (32bit is default if omitted). You probably want to set this to `-A 64`.
+- **--avx** will enable AVX optimizations for AVX-enabled CPUs. Mutually exclusive with --avx2.
+- **--avx2** will enable AVX2 optimizations for AVX2-enabled CPUs. Mutually exclusive with --avx.
+- **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages
+- **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using Autobuild](#fmod-studio-using-autobuild) for this to work. You will not have any sound if you do not include FMOD.
+- **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. If you do not have a license for Kakadu, do not use that switch.
+- **--package** makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS. It will also run NSIS to create a setup package.
+- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
+- **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
 
 > [!TIP]
 > **OFF** and **NO** are the same as **FALSE**; anything else is considered to be **TRUE**
@@ -254,6 +297,8 @@ Examples:
 There are two ways to build the viewer: Via Windows command line or from within Visual Studio.
 
 ### Building from the Windows command line
+
+Make sure that you are using the Windows Command Prompt (cmd.exe) and not Powershell.
 
 If you are building with FMOD Studio and have followed the previous FMOD Studio setup instructions AND you are now using a new terminal you will need to reset the environment variable with 
 
