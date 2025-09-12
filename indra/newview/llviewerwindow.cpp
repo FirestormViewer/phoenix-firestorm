@@ -491,6 +491,7 @@ public:
         static const std::string beacon_scripted = LLTrans::getString("BeaconScripted");
         static const std::string beacon_scripted_touch = LLTrans::getString("BeaconScriptedTouch");
         static const std::string beacon_sound = LLTrans::getString("BeaconSound");
+        static const std::string beacon_region_corners = LLTrans::getString("BeaconRegionCorners"); // <FS:PP> FIRE-33085 Region corner markers
         static const std::string beacon_media = LLTrans::getString("BeaconMedia");
         static const std::string beacon_sun = LLTrans::getString("BeaconSun");
         static const std::string beacon_moon = LLTrans::getString("BeaconMoon");
@@ -919,6 +920,14 @@ public:
                 addText(xpos, ypos, beacon_sound);
                 ypos += y_inc;
             }
+
+            // <FS:PP> FIRE-33085 Region corner markers
+            if (LLPipeline::getRenderRegionCornerBeacons())
+            {
+                addText(xpos, ypos, beacon_region_corners);
+                ypos += y_inc;
+            }
+            // </FS:PP>
 
             if (LLPipeline::getRenderScriptedBeacons())
             {

@@ -11584,6 +11584,13 @@ class LLViewToggleBeacon : public view_listener_t
             LLPipeline::toggleRenderSoundBeacons();
             gSavedSettings.setBOOL( "soundsbeacon", LLPipeline::getRenderSoundBeacons() );
         }
+        // <FS:PP> FIRE-33085 Region corner markers
+        else if (beacon == "fsregioncornerbeacons")
+        {
+            LLPipeline::toggleRenderRegionCornerBeacons();
+            gSavedSettings.setBOOL( "fsregioncornerbeacons", LLPipeline::getRenderRegionCornerBeacons() );
+        }
+        // </FS:PP>
         else if (beacon == "particlesbeacon")
         {
             LLPipeline::toggleRenderParticleBeacons();
@@ -11661,6 +11668,13 @@ class LLViewCheckBeaconEnabled : public view_listener_t
             new_value = gSavedSettings.getBOOL( "soundsbeacon");
             LLPipeline::setRenderSoundBeacons(new_value);
         }
+        // <FS:PP> FIRE-33085 Region corner markers
+        else if (beacon == "fsregioncornerbeacons")
+        {
+            new_value = gSavedSettings.getBOOL( "fsregioncornerbeacons");
+            LLPipeline::setRenderRegionCornerBeacons(new_value);
+        }
+        // </FS:PP>
         else if (beacon == "particlesbeacon")
         {
             new_value = gSavedSettings.getBOOL( "particlesbeacon");
