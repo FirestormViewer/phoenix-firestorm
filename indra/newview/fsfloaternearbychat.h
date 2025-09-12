@@ -161,7 +161,6 @@ private:
 
     S32 mInputEditorPad;
     S32 mChatLayoutPanelHeight;
-    S32 mFloaterHeight;
 
     std::vector<LLChat> mMessageArchive;
 
