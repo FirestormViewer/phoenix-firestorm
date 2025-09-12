@@ -3932,29 +3932,27 @@ void LLPipeline::postSort(LLCamera &camera)
             LLViewerRegion* region = gAgent.getRegion();
             if (!region)
             {
-                return;
+                LLVector3 origin = region->getOriginAgent();
+                F32 width = region->getWidth();
+
+                LLVector3 corner1 = origin; // Southwest
+                LLVector3 corner2 = origin + LLVector3(width, 0, 0); // Southeast
+                LLVector3 corner3 = origin + LLVector3(0, width, 0); // Northwest
+                LLVector3 corner4 = origin + LLVector3(width, width, 0); // Northeast
+
+                corner1.mV[VZ] = region->getLandHeightRegion(LLVector3(0, 0, 0));
+                corner2.mV[VZ] = region->getLandHeightRegion(LLVector3(width, 0, 0));
+                corner3.mV[VZ] = region->getLandHeightRegion(LLVector3(0, width, 0));
+                corner4.mV[VZ] = region->getLandHeightRegion(LLVector3(width, width, 0));
+
+                LLColor4 corner_color(1.0f, 1.0f, 0.0f, 0.8f);
+                LLColor4 text_color(1.0f, 1.0f, 1.0f, 1.0f);
+
+                gObjectList.addDebugBeacon(corner1, "SW", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner2, "SE", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner3, "NW", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner4, "NE", corner_color, text_color, DebugBeaconLineWidth);
             }
-
-            LLVector3 origin = region->getOriginAgent();
-            F32 width = region->getWidth();
-
-            LLVector3 corner1 = origin; // Southwest
-            LLVector3 corner2 = origin + LLVector3(width, 0, 0); // Southeast
-            LLVector3 corner3 = origin + LLVector3(0, width, 0); // Northwest
-            LLVector3 corner4 = origin + LLVector3(width, width, 0); // Northeast
-
-            corner1.mV[VZ] = region->getLandHeightRegion(LLVector3(0, 0, 0));
-            corner2.mV[VZ] = region->getLandHeightRegion(LLVector3(width, 0, 0));
-            corner3.mV[VZ] = region->getLandHeightRegion(LLVector3(0, width, 0));
-            corner4.mV[VZ] = region->getLandHeightRegion(LLVector3(width, width, 0));
-
-            LLColor4 corner_color(1.0f, 1.0f, 0.0f, 0.8f);
-            LLColor4 text_color(1.0f, 1.0f, 1.0f, 1.0f);
-
-            gObjectList.addDebugBeacon(corner1, "SW", corner_color, text_color, DebugBeaconLineWidth);
-            gObjectList.addDebugBeacon(corner2, "SE", corner_color, text_color, DebugBeaconLineWidth);
-            gObjectList.addDebugBeacon(corner3, "NW", corner_color, text_color, DebugBeaconLineWidth);
-            gObjectList.addDebugBeacon(corner4, "NE", corner_color, text_color, DebugBeaconLineWidth);
         }
         // </FS:PP>
 
