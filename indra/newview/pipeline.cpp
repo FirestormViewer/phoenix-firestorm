@@ -3930,7 +3930,7 @@ void LLPipeline::postSort(LLCamera &camera)
         if (sRenderRegionCornerBeacons)
         {
             LLViewerRegion* region = gAgent.getRegion();
-            if (!region)
+            if (region)
             {
                 LLVector3 origin = region->getOriginAgent();
                 F32 width = region->getWidth();
