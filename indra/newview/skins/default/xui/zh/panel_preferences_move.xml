@@ -50,6 +50,7 @@
 			<check_box label="向後走時不會自動轉身" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="阻止您的化身在向後行走時自動轉身以面向相機。 此選項僅影響您的視角，不與AO相容。" />
 			<check_box label="選中物件時自動轉向" name="FSTurnAvatarToSelectedObject" tool_tip="將您的化身朝向當前選擇的物件。" />
 			<slider label="化身旋轉速度" name="av_turn_spd" tool_tip="更改您的化身響應旋轉的速度。 0-100 以最大旋轉速度的估計百分比。較高的值會導致突然而明顯的結果。" />
+			<check_box label="禁止連接相鄰區域（重要：請閱讀工具提示）" name="FSDisableNeighbourRegionConnections" tool_tip="僅顯示/加載您目前所在的區域，可提升效能和網路穩定性，但步行或駕駛載具穿越區域時穩定性會降低，可能需要手動傳送。" />
 			<text name="Region_Crossing_Movement_Label">區域切換時的移動預測：</text>
 			<radio_group name="Region_Crossing_Movement">
 				<radio_item label="無限制" name="move_predict" />
