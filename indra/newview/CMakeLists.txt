@@ -167,6 +167,7 @@ set(viewer_SOURCE_FILES
     fsparticipantlist.cpp
     fspose.cpp
     fsposeranimator.cpp
+	fsposestate.cpp
     fsposingmotion.cpp
     fsprimfeedauth.cpp
     fsradar.cpp
@@ -1007,6 +1008,7 @@ set(viewer_HEADER_FILES
     fsparticipantlist.h
     fspose.h
     fsposeranimator.h
+	fsposestate.h
     fsposingmotion.h
     fsprimfeedauth.h
     fsradar.h

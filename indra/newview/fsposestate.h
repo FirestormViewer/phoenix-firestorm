@@ -1,0 +1,158 @@
+/**
+ * @file fsposestate.h
+ * @brief a means to save and restore the instantaneous state of animations posing an avatar.
+ *
+ * $LicenseInfo:firstyear=2025&license=viewerlgpl$
+ * Phoenix Firestorm Viewer Source Code
+ * Copyright (c) 2025 Angeldark Raymaker @ Second Life
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * version 2.1 of the License only.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * $/LicenseInfo$
+ */
+
+#ifndef LL_FSPoseState_H
+#define LL_FSPoseState_H
+
+#include "llvoavatar.h"
+#include "fsposingmotion.h"
+
+class FSPoseState
+{
+public:
+    FSPoseState() = default;
+    virtual ~FSPoseState() = default;
+
+public:
+    /// <summary>
+    /// Captures the current animations posing the supplied avatar and how long they have been playing.
+    /// </summary>
+    /// <param name="avatar">The avatar whose animations are to be captured.</param>
+    /// <remarks>
+    /// Only animations owned by the supplied avatar are documented.
+    /// </remarks>
+    void captureMotionStates(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Updates the stored list of animations posing the avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar whose animations are to be captured.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="jointNamesRecaptured">The names of the joints being recaptured.</param>
+    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured);
+
+    /// <summary>
+    /// Removes all current animation states for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar whose animations are to be purged.</param>
+    void purgeMotionStates(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Writes any documented poses for the supplied avatar to the supplied stream.
+    /// </summary>
+    /// <param name="avatar">The avatar whose animations may have been captured.</param>
+    /// <param name="saveRecord">The record to add to.</param>
+    void writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord);
+
+    /// <summary>
+    /// Restores pose state(s) from the supplied record.
+    /// </summary>
+    /// <param name="avatar">The avatar whose animations may have been captured.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="pose">The record to read from.</param>
+    void restoreMotionStates(LLVOAvatar* avatar, LLSD pose);
+
+    /// <summary>
+    /// Applies the motion states for the supplied avatar to the supplied motion.
+    /// </summary>
+    /// <param name="avatar">The avatar to apply the motion state(s) to.</param>
+    /// <param name="posingMotion">The posing motion to apply the state(s) to.</param>
+    /// <returns>True if all the motion states for the supplied avatar have been applied, otherwise false.</returns>
+    /// <remarks>
+    /// In some ways this is like an AO: loading LLKeyframeMotions.
+    /// Once loaded, the LLKeyframeMotion is put at time fsMotionState.lastUpdateTime.
+    /// The joint-rotations for that LLKeyframeMotion are then restored to the base.
+    /// This examines sMotionStates for any avatarId matches; such as after a restoreMotionStates(...).
+    /// This could result in loading assets, thus a particular member of sMotionStates may take several attempts to load.
+    /// Motion(s) that the avatar does not have permissions for are not considered in the return boolean.
+    /// </remarks>
+    bool applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMotion* posingMotion);
+
+    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
+
+private:
+    /// <summary>
+    /// A class documenting the state of an animation for an avatar.
+    /// </summary>
+    class fsMotionState
+    {
+    public:
+        /// <summary>
+        /// The avatar ID this record is associated with.
+        /// </summary>
+        LLUUID avatarId;
+
+        /// <summary>
+        /// The motion ID recorded animating the avatar ID.
+        /// </summary>
+        LLAssetID motionId;
+
+        /// <summary>
+        /// The play-time the motionId had progressed until the motion was captured.
+        /// </summary>
+        F32 lastUpdateTime = 0.f;
+
+        /// <summary>
+        /// Upon reloading, whether this record has been applied to the avatar.
+        /// </summary>
+        bool motionApplied = false;
+
+        /// <summary>
+        /// When reloading, larger numbers are loaded last, nesting order and priority.
+        /// Represents recaptures.
+        /// </summary>
+        int captureOrder = 0;
+
+        /// <summary>
+        /// When reloading, and if not-empty, the names of the bones this motionId should affect.
+        /// </summary>
+        std ::string jointNamesAnimated;
+    };
+
+    /// <summary>
+    /// Gets whether the supplied avatar has ownership of the supplied motion id.
+    /// </summary>
+    /// <param name="avatar">The avatar to query for ownership.</param>
+    /// <param name="motionId">The motion to query for ownership.</param>
+    /// <returns>True if the avatar has ownership of the motion, otherwise false.</returns>
+    bool avatarCanUsePose(LLVOAvatar* avatar, LLUUID motionId);
+
+    struct compareByCaptureOrder
+    {
+        bool operator()(const fsMotionState& a, const fsMotionState& b)
+        {
+            if (a.captureOrder < b.captureOrder)
+                return true; // Ascending order
+
+            return false;
+        }
+    };
+
+    static std::map <LLUUID, std::vector<fsMotionState>> sMotionStates;
+    static std::map<LLUUID, int>      sCaptureOrder;
+};
+
+#endif // LL_FSPoseState_H
