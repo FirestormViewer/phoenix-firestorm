@@ -754,6 +754,10 @@ void LLFloaterCamera::updateItemsSelection()
     getChild<LLPanelCameraItem>("group_view")->setValue(argument);
     argument["selected"] = (preset == CAMERA_PRESET_FRONT_VIEW) && !sFreeCamera;
     getChild<LLPanelCameraItem>("front_view")->setValue(argument);
+// <FS:PP> Third Person Perspective camera
+    argument["selected"] = (preset == CAMERA_PRESET_TPP_VIEW) && !sFreeCamera;
+    getChild<LLPanelCameraItem>("tpp_view")->setValue(argument);
+// </FS:PP>
     argument["selected"] = gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK;
     getChild<LLPanelCameraItem>("mouselook_view")->setValue(argument);
     argument["selected"] = mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA;

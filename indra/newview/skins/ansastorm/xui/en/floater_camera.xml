@@ -20,7 +20,7 @@
  title="Camera Controls"
  chrome="true"
  save_rect="true"
- width="340">
+ width="360">
     <floater.string
      name="rotate_tooltip">
         Rotate Camera Around Focus
@@ -167,7 +167,7 @@
      left_pad="2"
      name="buttons_panel"
      top_delta="18"
-     width="120">
+     width="140">
     <panel_camera_item
       name="front_view"
       tool_tip="Front View"
@@ -205,6 +205,19 @@
         image_name="Cam_Preset_Back_Off" />
       <panel_camera_item.selected_picture
         image_name="Cam_Preset_Back_On" />
+    </panel_camera_item>
+    <panel_camera_item
+      name="tpp_view"
+      tool_tip="TPP View"
+      width="18"
+      left_pad="2">
+      <panel_camera_item.mousedown_callback
+        function="CameraPresets.ChangeView"
+        parameter="TPP View" />
+      <panel_camera_item.picture
+        image_name="Cam_Preset_TPP_Off" />
+      <panel_camera_item.selected_picture
+        image_name="Cam_Preset_TPP_On" />
     </panel_camera_item>
     <panel_camera_item
         name="object_view"
@@ -252,7 +265,7 @@
         mouse_opaque="true"
         name="preset_combo"
         top_pad="7"
-        width="116">
+        width="136">
         <combo_list
         mouse_wheel_opaque="true"/>
         <combo_box.item
@@ -279,10 +292,10 @@
         height="23"
         label="Position..."
         layout="topleft"
-        left_delta="-119"
+        left_delta="-139"
         name="camera_position_btn"
         top_pad="5"
-        width="70">
+        width="80">
         <button.commit_callback
           function="Floater.Show"
           parameter="prefs_view_advanced"/>
@@ -295,7 +308,7 @@
         left_pad="3"
         name="save_btn"
         top_delta="0"
-        width="70">
+        width="80">
         <button.commit_callback
           function="CameraPresets.Save"/>
       </button>
