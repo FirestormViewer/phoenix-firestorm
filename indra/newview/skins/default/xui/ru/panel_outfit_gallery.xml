@@ -12,6 +12,5 @@
       <text name="avatar_complexity_label" width="150">
         Сложность: [WEIGHT]
       </text>
-      <button name="trash_btn" tool_tip="Удалить выбранный комплект" />
     </panel>
 </panel>

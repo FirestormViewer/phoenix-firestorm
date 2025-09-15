@@ -23,4 +23,7 @@
 	<button label="Посмотреть На" name="look_at_btn" left_delta="100" width="95"/>
 	<button label="Стоп" name="stop_btn" right="-10" width="95"/>
 	<button label="Черный список" name="bl_btn" right="-110" width="95"/>
+	<button label="Блок Ав надетые звуки" name="block_avatar_worn_sounds_btn" width="173"/>
+	<button label="Блок Ав звуки объектов" name="block_avatar_rezzed_sounds_btn" width="173"/>
+	<button label="Блок Ав звуки жестов" name="block_avatar_gesture_sounds_btn" width="173"/>
 </floater>

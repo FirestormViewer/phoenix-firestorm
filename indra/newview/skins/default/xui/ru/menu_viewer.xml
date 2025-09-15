@@ -38,6 +38,7 @@
 
 		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
 		<menu_item_call label="Удалить выбранные присоединения" name="Remove Selected Attachments"/>
+		<menu_item_call label="Приветственный пакет Аватара..." name="Avatar Welcome Pack" />
 		<menu_item_call label="Высота смещения" name="HoverHeight"/>
 		<menu label="Движение" name="Movement">
 			<menu_item_call label="Встать" name="Stand up"/>
@@ -284,6 +285,13 @@
 			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
 			<menu_item_check label="- включая ригованное прозрачное" name="Include Transparent Rigged"/>
 			<menu_item_check label="Никакой постобработки" name="No Post"/>
+			<menu label="Выбор уровня детализации" name="Selection level of detail">
+				<menu_item_check label="По умолчанию" name="Default lod setting"/>
+				<menu_item_check label="Высокий" name="High lod setting"/>
+				<menu_item_check label="Средний" name="Medium lod setting"/>
+				<menu_item_check label="Низкий" name="Low lod setting"/>
+				<menu_item_check label="Самый низкий" name="Lowest lod setting"/>
+			</menu>
 			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
 			<menu_item_call label="Привязка XY объекта к сетке" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>

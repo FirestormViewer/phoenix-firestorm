@@ -22,5 +22,17 @@
 		<radio_item label="Показывать предмет в главном окне инвентаря." name="false" width="200"/>
 		<radio_item label="Открывать новое окно с одной папкой." name="true" width="200" />
 	</radio_group>
-	<button label="OK" name="ok_btn" width="90" />
+	<text name="favorites_txt">
+		Избранное
+	</text>
+	<check_box name="favorite_star" label="Звезда на избранных товарах"/>
+	<check_box name="favorite_hollow_star" label="Отмечать звездочкой папки содержащие избранные файлы"/>
+	<check_box name="favorites_color" label="Цветной текст"/>
+	<text name="attachment_return_txt" width="350">
+		Нажатие Enter при прикреплении аватара
+	</text>
+	<combo_box name="attach_combo" width="350">
+		<combo_box.item label="Добавляет прикрепление (рекомендуется)" name="0"/>
+		<combo_box.item label="Заменяет (удаляет прикрепление в этой точке)" name="1"/>
+	</combo_box>
 </floater>

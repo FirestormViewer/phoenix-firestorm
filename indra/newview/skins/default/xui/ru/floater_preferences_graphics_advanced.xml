@@ -115,6 +115,16 @@
 		<combo_box.item label="Вручную + местность" name="2"/>
 		<combo_box.item label="Полная сцена" name="3"/>
 	</combo_box>
+	<text name="ReflectionProbeCount">
+		Макс.датч.отражений:
+	</text>
+	<combo_box label="Макс. датчиков отражений:" name="ProbeCount" width="150">
+		<combo_box.item label="Нет" name="1"/>
+		<combo_box.item label="Низкий" name="32"/>
+		<combo_box.item label="Средний" name="64"/>
+		<combo_box.item label="Высокий" name="128"/>
+		<combo_box.item label="Ультра" name="256"/>
+	</combo_box>
 	<slider label="Экспозиция:" name="RenderExposure"/>
 	<!-- Mirror settings. -->
 	<check_box label="Зеркала" name="Mirrors"/>
