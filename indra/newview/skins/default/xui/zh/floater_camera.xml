@@ -19,10 +19,8 @@
 		<layout_stack name="camera_view_layout_stack">
 			<layout_panel name="camera_rotate_layout_panel">
 				<joystick_rotate name="cam_rotate_stick" tool_tip="相機繞焦點旋轉" />
-				<!-- <FS:Chanayane> Camera roll (from Alchemy) -->
 				<button name="roll_left" tool_tip="向左捲動相機" />
 				<button name="roll_right" tool_tip="向右捲動相機" />
-				<!-- </FS:Chanayane> -->
 			</layout_panel>
 			<layout_panel name="camera_zoom_layout_panel">
 				<slider_bar name="zoom_slider" tool_tip="相機移近焦點" />
@@ -33,24 +31,13 @@
 		</layout_stack>
 	</panel>
 	<panel name="buttons_panel">
-		<panel_camera_item name="front_view" tool_tip="正面視圖">
-			<panel_camera_item.text name="front_view_text"></panel_camera_item.text>
-		</panel_camera_item>
-		<panel_camera_item name="group_view" tool_tip="側面視圖">
-			<panel_camera_item.text name="side_view_text"></panel_camera_item.text>
-		</panel_camera_item>
-		<panel_camera_item name="rear_view" tool_tip="背面視圖">
-			<panel_camera_item.text name="rear_view_text"></panel_camera_item.text>
-		</panel_camera_item>
-		<panel_camera_item name="object_view" tool_tip="物件視圖">
-			<panel_camera_item.text name="object_view_text"></panel_camera_item.text>
-		</panel_camera_item>
-		<panel_camera_item name="mouselook_view" tool_tip="滑鼠觀察">
-			<panel_camera_item.text name="mouselook_view_text"></panel_camera_item.text>
-		</panel_camera_item>
-		<panel_camera_item name="reset_view" tool_tip="重設視圖">
-			<panel_camera_item.text name="reset_view_text"></panel_camera_item.text>
-		</panel_camera_item>
+		<panel_camera_item name="front_view" tool_tip="前視圖" />
+		<panel_camera_item name="group_view" tool_tip="側視圖" />
+		<panel_camera_item name="rear_view" tool_tip="後視圖" />
+		<panel_camera_item name="tpp_view" tool_tip="第三人稱視角" />
+		<panel_camera_item name="object_view" tool_tip="物件視圖" />
+		<panel_camera_item name="mouselook_view" tool_tip="滑鼠觀察" />
+		<panel_camera_item name="reset_view" tool_tip="重設視圖" />
 	</panel>
 	<panel name="preset_buttons_panel">
 		<button label="位置..." name="camera_position_btn" />
