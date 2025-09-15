@@ -1122,10 +1122,10 @@ LLMaterialPtr FSPanelFace::createDefaultMaterial(LLMaterialPtr current_material)
 
 void FSPanelFace::onVisibilityChange(bool new_visibility)
 {
-    if (new_visibility)
+    /* if (new_visibility)
     {
         gAgent.showLatestFeatureNotification("gltf");
-    }
+    } */
     LLPanel::onVisibilityChange(new_visibility);
 
     // Since we allow both PBR and BP textures to be applied at the same time,
