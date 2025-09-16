@@ -62,11 +62,11 @@
 		<menu_item_call label="Масса..." name="Bulk Upload"/>
 	</menu>
 	<menu label="Использовать по умолчанию для" name="upload_def">
-		<menu_item_call label="Загрузки изображений" name="Image uploads"/>
-		<menu_item_call label="Загрузки звука" name="Sound uploads"/>
-		<menu_item_call label="Загрузки анимации" name="Animation uploads"/>
-		<menu_item_call label="Загрузки модели" name="Model uploads"/>
-		<menu_item_call label="Загрузки PBR материала" name="PBR uploads"/>
+		<menu_item_check label="Загрузки изображений" name="Image uploads"/>
+		<menu_item_check label="Загрузки звука" name="Sound uploads"/>
+		<menu_item_check label="Загрузки анимации" name="Animation uploads"/>
+		<menu_item_check label="Загрузки модели" name="Model uploads"/>
+		<menu_item_check label="Загрузки PBR материала" name="PBR uploads"/>
 	</menu>
 	<menu_item_call label="Копировать в списки торговой площадки" name="Marketplace Copy"/>
 	<menu_item_call label="Перейти в списки торговой площадки" name="Marketplace Move"/>

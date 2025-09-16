@@ -51,11 +51,11 @@
 		<menu_item_call label="Новый Цикл дня" name="New Day Cycle"/>
 	</menu>
 	<menu label="Использовать для" name="upload_def">
-		<menu_item_call label="загрузок Изображений" name="Image uploads"/>
-		<menu_item_call label="загрузок Звуков" name="Sound uploads"/>
-		<menu_item_call label="загрузок Анимаций" name="Animation uploads"/>
-		<menu_item_call label="загрузок Моделей" name="Model uploads"/>
-		<menu_item_call label="загрузок Материалов PBR" name="PBR uploads"/>
+		<menu_item_check label="загрузок Изображений" name="Image uploads"/>
+		<menu_item_check label="загрузок Звуков" name="Sound uploads"/>
+		<menu_item_check label="загрузок Анимаций" name="Animation uploads"/>
+		<menu_item_check label="загрузок Моделей" name="Model uploads"/>
+		<menu_item_check label="загрузок Материалов PBR" name="PBR uploads"/>
 	</menu>
 	<menu label="Изменить тип" name="Change Type">
 		<menu_item_call label="По умолчанию" name="Default"/>
