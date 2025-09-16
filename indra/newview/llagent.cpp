@@ -719,6 +719,13 @@ void LLAgent::showLatestFeatureNotification(const std::string key)
             flag = 4;
         }
 
+        // <FS:PP> FIRE-35931 Guard against empty "new feature" popup
+        if (flag == 0)
+        {
+            return;
+        }
+        // </FS:PP>
+
         if ((flags & flag) == 0)
         {
             // Need to open on top even if called from onOpen,

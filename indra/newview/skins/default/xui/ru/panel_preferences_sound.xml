@@ -67,8 +67,19 @@
 			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="Эта настройка разрешает / запрещает скриптовым примам управлять медиа потоками" label="Разрешить скриптам воспроизводить медиа"/>
 			<check_box label="Воспроизведение медиа прикрепленных к другим аватарам" name="media_show_on_others_btn" tool_tip="Воспроизведение медиа прикрепленных к другим аватарам"/>
+			<check_box name="media_huds_autoplay" label="Авто-воспроизведение медиафайлов, подключенных к вашему HUD" tool_tip="Снимите этот флажок, чтобы HUD следовал стандартным настройкам автоматического воспроизведения мультимедиа." width="230"/>
 			<check_box name="media_filter" tool_tip="Выберить это для того, чтобы фильтровать, будет ли играть медиа с определенного хоста" label="Включить медиа фильтр (повышение безопасности)"/>
 			<button label="Управление сайтами с медиа" name="edit_media_lists_button"/>
+			<text name="media_firstinteract_label" tool_tip="Этот параметр определяет, какие медиафайлы (после загрузки) не требуют первого щелчка для фокусировки перед началом взаимодействия. Это позволяет передавать щелчки непосредственно медиафайлам, минуя требование щелчка для фокусировки." width="275">
+				Первое взаимодействие с медиа:
+			</text>
+			<check_box name="media_first_click_all" label="Все"/>
+			<check_box name="media_first_click_any" label="Любые объекты"/>
+			<check_box name="media_first_click_hud" label="Только прикрепленные к HUD"/>
+			<check_box name="media_first_click_own" label="Собственные объекты"/>
+			<check_box name="media_first_click_group" label="Объекты группы"/>
+			<check_box name="media_first_click_friend" label="Объекты друзей"/>
+			<check_box name="media_first_click_land" label="Объекты землевладельца"/>
 			<text name="Media Rolloff">
 				Расстояние уменьшения слышимости источника звука:
 			</text>

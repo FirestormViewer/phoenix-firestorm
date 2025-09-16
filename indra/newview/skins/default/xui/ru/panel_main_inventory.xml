@@ -55,6 +55,7 @@
 			<inventory_panel label="Инвентарь" name="All Items"/>
 			<recent_inventory_panel label="Недавние" name="Recent Items"/>
 			<worn_inventory_panel label="Надетые" name="Worn Items"/>
+			<favorites_inventory_panel label="Избранное" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">

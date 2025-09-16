@@ -51,11 +51,22 @@
 	<menu_item_call name="Настройки применить к участку" label="Apply To Parcel"/>
 	<menu_item_call label="Создать папку из выбранных" name="New folder from selected"/>
 	<menu_item_call label="Разгруппировать элементы папки" name="Ungroup folder items"/>
+	<menu_item_call label="Добавить в избранное" name="Add to Favorites"/>
+	<menu_item_call label="Удалить из избранного" name="Remove from Favorites"/>
+	<menu label="Загрузить в папку" name="upload_options">
+		<menu_item_call label="Изображениe..." name="Upload Image"/>
+		<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
+		<menu_item_call label="Модель..." name="Upload Model"/>
+		<menu_item_call label="Материал..." name="Upload Material"/>
+		<menu_item_call label="Масса..." name="Bulk Upload"/>
+	</menu>
 	<menu label="Использовать по умолчанию для" name="upload_def">
 		<menu_item_call label="Загрузки изображений" name="Image uploads"/>
 		<menu_item_call label="Загрузки звука" name="Sound uploads"/>
 		<menu_item_call label="Загрузки анимации" name="Animation uploads"/>
 		<menu_item_call label="Загрузки модели" name="Model uploads"/>
+		<menu_item_call label="Загрузки PBR материала" name="PBR uploads"/>
 	</menu>
 	<menu_item_call label="Копировать в списки торговой площадки" name="Marketplace Copy"/>
 	<menu_item_call label="Перейти в списки торговой площадки" name="Marketplace Move"/>

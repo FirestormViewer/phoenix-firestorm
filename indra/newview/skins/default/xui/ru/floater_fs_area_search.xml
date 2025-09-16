@@ -73,6 +73,7 @@
 			<check_box name="exclude_childprim" label="Соединенные"/>
 			<check_box name="exclude_neighbor_region" label="Соседний Регион"/>
 			<button name="apply" label="Принять"/>
+			<button name="save_as_default" label="Сохранить по умолчанию"/>
 		</panel>
 		<panel label="Параметры" name="area_search_options_panel">
 			<text name="display_column">Показать колонки:</text>

@@ -20,6 +20,9 @@
 					<text name="sign_up_text">
 						Регистрация
 					</text>
+					<check_box label="Запомнить меня" name="remember_name" tool_tip="Уже запомненного пользователя можно забыть в разделе «Я» > «Настройки» > «Дополнительно» > «Запомненные имена пользователей»."/>
+					<check_box label="Запомнить пароль" name="remember_password" />
+					<text name="forgot_password_text">Забытый пароль</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

@@ -1437,6 +1437,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="collada_files">
 		Модели COLLADA
 	</string>
+	<string name="model_files">
+		Меш модель
+	</string>
 	<string name="csv_files">
 		Значения разделяются запятыми
 	</string>
@@ -1709,8 +1712,11 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="InventoryNoMatchingRecentItems">
 		Не нашли то, что искали? [secondlife:///app/inventory/filters Показать фильтры].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		Вы не отметили ни один элемент как избранный.
+	</string>
 	<string name="PlacesNoMatchingItems">
-		Не нашли того, что вам нужно? Попробуйте [secondlife:///app/search/places/[SEARCH_TERM] Поиск].
+		Чтобы добавить место в список достопримечательностей, нажмите на звездочку справа от названия местоположения.
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		Перетащите закладку сюда, чтобы добавить ее в список избранного.
@@ -2014,6 +2020,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InvFolder Gestures">
 		Жесты
+	</string>
+	<string name="InvFolder Favorite">
+		Избранное
 	</string>
 	<string name="InvFolder Favorites">
 		Избранные
@@ -5333,6 +5342,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="DefaultMimeType">
 		нет/нет
 	</string>
+	<string name="texture_load_area_error">
+		Невозможно загрузить изображения размером более [PIXELS] пикселей.
+	</string>
 	<string name="texture_load_dimensions_error">
 		Нельзя загружать изображения, размер которых превышает [WIDTH]*[HEIGHT]
 	</string>
@@ -5554,6 +5566,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="BeaconSound">
 		Просмотр звуковых меток (желтые)
+	</string>
+	<string name="BeaconRegionCorners">
+		Просмотр углов области (желтый)
 	</string>
 	<string name="BeaconMedia">
 		Просмотр медийных меток (белые)

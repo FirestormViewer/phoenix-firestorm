@@ -91,6 +91,7 @@
         </combo_box>
         <text initial_value="Низкий" name="low_label" value="Низкий"/>
         <combo_box name="lod_source_low">
+          <item name="Load from file" label="Загрузка из файла"/>
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
@@ -104,6 +105,7 @@
         </combo_box>
         <text initial_value="Низший" name="lowest_label" value="Низший"/>
         <combo_box name="lod_source_lowest">
+          <item name="Load from file" label="Загрузка из файла"/>
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
@@ -197,6 +199,9 @@
         <check_box label="Автоматический просмотр весов"
          tool_tip="Автоматически показывать веса в предпросмотре для ригованых мешей"
          name="mesh_preview_auto_show_weights"/>
+        <check_box name="mesh_upload_default_to_reliable"
+         label="По умолчанию установлены «надежные» уровни детализации"
+         tool_tip="Использовать «Надежный» метод (GLOD) по умолчанию"/>
         <text name="lod_suffix_label" width="110">
             LOD суффиксы:
         </text>

@@ -28,6 +28,7 @@
 		<panel_camera_item name="front_view" tool_tip="Widok od przodu"/>
 		<panel_camera_item name="group_view" tool_tip="Widok ponad ramieniem"/>
 		<panel_camera_item name="rear_view" tool_tip="Widok od tyłu"/>
+		<panel_camera_item name="tpp_view" tool_tip="Widok trzecioosobowy"/>
 		<panel_camera_item name="object_view" tool_tip="Pokazywanie obiektu"/>
 		<panel_camera_item name="mouselook_view" tool_tip="Widok pierwszoosobowy"/>
 		<panel_camera_item name="reset_view" tool_tip="Resetuj widok"/>
