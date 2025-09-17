@@ -91,8 +91,6 @@ public:
     /// </remarks>
     bool applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMotion* posingMotion);
 
-    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
-
 private:
     /// <summary>
     /// A class documenting the state of an animation for an avatar.
@@ -121,8 +119,13 @@ private:
         bool motionApplied = false;
 
         /// <summary>
+        /// Whether the avatar owns the pose, or the pose was loaded.
+        /// </summary>
+        bool avatarOwnsPose = false;
+
+        /// <summary>
         /// When reloading, larger numbers are loaded last, nesting order and priority.
-        /// Represents recaptures.
+        /// This is used to represent recaptures, where joints could be animated with different poses.
         /// </summary>
         int captureOrder = 0;
 
@@ -133,12 +136,20 @@ private:
     };
 
     /// <summary>
-    /// Gets whether the supplied avatar has ownership of the supplied motion id.
+    /// Resets the priority for the named joints for the supplied posing motion at the supplied capture order.
     /// </summary>
-    /// <param name="avatar">The avatar to query for ownership.</param>
-    /// <param name="motionId">The motion to query for ownership.</param>
-    /// <returns>True if the avatar has ownership of the motion, otherwise false.</returns>
-    bool avatarCanUsePose(LLVOAvatar* avatar, LLUUID motionId);
+    /// <param name="avatar">The avatar being posed by the motion.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="captureOrder">The order of the capture.</param>
+    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
+
+    /// <summary>
+    /// Gets whether the supplied avatar owns, and thus can save information about the supplied asset ID.
+    /// </summary>
+    /// <param name="avatar">The avatar to query ownership for.</param>
+    /// <param name="motionId">The asset ID of the object.</param>
+    /// <returns>True if the avatar owns the asset, otherwise false.</returns>
+    bool canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId);
 
     struct compareByCaptureOrder
     {
@@ -152,7 +163,7 @@ private:
     };
 
     static std::map <LLUUID, std::vector<fsMotionState>> sMotionStates;
-    static std::map<LLUUID, int>      sCaptureOrder;
+    static std::map<LLUUID, int> sCaptureOrder;
 };
 
 #endif // LL_FSPoseState_H

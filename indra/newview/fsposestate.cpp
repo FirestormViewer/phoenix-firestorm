@@ -18,10 +18,11 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
             continue;
 
         fsMotionState newState;
-        newState.avatarId = avatar->getID();
-        newState.motionId = anim_it->first;
+        newState.avatarId       = avatar->getID();
+        newState.motionId       = anim_it->first;
         newState.lastUpdateTime = motion->getLastUpdateTime();
         newState.captureOrder   = 0;
+        newState.avatarOwnsPose = canSaveMotionId(avatar, anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -78,6 +79,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         newState.lastUpdateTime     = motion->getLastUpdateTime();
         newState.jointNamesAnimated = jointNamesRecaptured;
         newState.captureOrder       = sCaptureOrder[avatar->getID()];
+        newState.avatarOwnsPose     = canSaveMotionId(avatar, anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -107,6 +109,8 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
         if (it->avatarId != avatar->getID())
+            continue;
+        if (!it->avatarOwnsPose)
             continue;
 
         std::string uniqueAnimId                          = "poseState" + std::to_string(animNumber++);
@@ -181,12 +185,6 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
         if (it->motionApplied)
             continue;
 
-        if (!avatarCanUsePose(avatar, it->motionId))
-        {
-            it->motionApplied = true;
-            continue;
-        }
-
         LLKeyframeMotion* kfm = dynamic_cast<LLKeyframeMotion*>(avatar->findMotion(it->motionId));
 
         if (kfm)
@@ -194,7 +192,6 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
             if (needPriorityReset)
             {
                 lastCaptureOrder = it->captureOrder;
-                LL_WARNS("Posing") << "Resetting priority at cap order: " << lastCaptureOrder << LL_ENDL;
                 resetPriorityForCaptureOrder(avatar, posingMotion, lastCaptureOrder);
             }
 
@@ -225,25 +222,37 @@ void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotio
         if (it->captureOrder != captureOrder)
             continue;
 
-        LL_WARNS("Posing") << "Resetting priority for: " << it->jointNamesAnimated << LL_ENDL;
         posingMotion->resetBonePriority(it->jointNamesAnimated);
     }
 }
 
-bool FSPoseState::avatarCanUsePose(LLVOAvatar* avatar, LLUUID motionId)
+bool FSPoseState::canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId)
 {
-    if (!avatar)
-        return true;
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+        return false;
 
-    if (!motionId.notNull())
-        return true;
-
-    if (avatar != gAgentAvatarp)
-        return true;
-
+    // does the animation exist in inventory
     LLInventoryItem* item = gInventory.getItem(motionId);
-    if (!item)
+    if (item && item->getPermissions().getOwner() == avatar->getID())
         return true;
 
-    return item->getPermissions().getOwner() == avatar->getID();
+    for (const auto& [anim_object_id, anim_anim_id] : gAgentAvatarp->mAnimationSources)
+    {
+        if (anim_anim_id != motionId)
+            continue;
+
+        // is the item that started the anim in inventory
+        item = gInventory.getItem(anim_object_id);
+        if (item && item->getPermissions().getOwner() == avatar->getID())
+            return true;
+
+        // is the item that start the animation in-world
+        LLViewerObject* object = gObjectList.findObject(anim_object_id);
+        if (object && object->permYouOwner())
+            return true;
+
+        return false;
+    }
+
+    return false;
 }
