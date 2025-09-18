@@ -5583,7 +5583,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<!-- Mouse button names end -->
 	<!-- llviewerwindow -->
 	<string name="BeaconParticle">
-		パーティクル源ビーコン（青）を表示しています。
+		パーティクル源のビーコン（青）を表示しています。
 	</string>
 	<string name="BeaconPhysical">
 		物理的オブジェクトのビーコン（緑）を表示しています。
@@ -5596,6 +5596,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="BeaconSound">
 		サウンドビーコン（黄）を表示しています。
+	</string>
+	<string name="BeaconRegionCorners">
+		リージョンのコーナー（黄）を表示しています。
 	</string>
 	<string name="BeaconMedia">
 		メディアビーコン（白）を表示しています。
