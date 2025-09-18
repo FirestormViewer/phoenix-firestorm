@@ -112,8 +112,10 @@ indra/newview/pilot.xml
 # Firestorm additions
 indra/newview/exoflickrkeys.h
 indra/newview/fsdiscordkey.h
+indra/tools/vstool/obj/*/*.cache
 my_autobuild.xml
 .vscode
+.vs
 *.srctrlbm
 *.srctrldb
 *.srctrlprj
