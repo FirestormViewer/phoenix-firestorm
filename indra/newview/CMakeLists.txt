@@ -2627,6 +2627,10 @@ if( TARGET ll::nvapi )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::nvapi )
 endif()
 
+if ( TARGET llconvexdecomposition )
+    target_link_libraries(${VIEWER_BINARY_NAME} llconvexdecomposition )
+endif ()
+
 if (LINUX)
     # <FS:Zi> put these additional libraries in the viewer build target here as it didn't
     # work to put them in via their cmake/* files
