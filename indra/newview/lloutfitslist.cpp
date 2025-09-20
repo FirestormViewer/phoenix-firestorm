@@ -1166,7 +1166,18 @@ void LLOutfitListBase::onIdleRefreshList()
         return;
     }
 
-    const F64 MAX_TIME = 0.05f;
+    // <FS:PP> Scale MAX_TIME with FPS to avoid overloading the viewer with function calls at low frame rates
+    // const F64 MAX_TIME = 0.05f;
+    F64 MAX_TIME = 0.05f;
+    const F64 min_time = 0.001f;
+    const F64 threshold_fps = 30.0;
+    const auto current_fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, 1);
+    if (current_fps < threshold_fps)
+    {
+        MAX_TIME = min_time + (current_fps / threshold_fps) * (MAX_TIME - min_time);
+    }
+    // </FS:PP>
+
     F64 curent_time = LLTimer::getTotalSeconds();
     const F64 end_time = curent_time + MAX_TIME;
 
