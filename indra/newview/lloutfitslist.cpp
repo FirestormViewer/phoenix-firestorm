@@ -220,11 +220,7 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
 
     // *TODO: LLUICtrlFactory::defaultBuilder does not use "display_children" from xml. Should be investigated.
     tab->setDisplayChildren(false);
-
-    // <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
-    //mAccordion->addCollapsibleCtrl(tab);
-    mAccordion->addCollapsibleCtrl(tab, false);
-    // </FS:ND>
+    mAccordion->addCollapsibleCtrl(tab);
 
     // Start observing the new outfit category.
     LLWearableItemsList* list = tab->getChild<LLWearableItemsList>("wearable_items_list");
@@ -1121,7 +1117,7 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
 
     // <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
     S32 currentOutfitsAmount = (S32)mRefreshListState.Added.size();
-    S32 maxSuggestedOutfits = 200;
+    constexpr S32 maxSuggestedOutfits = 200;
     if (currentOutfitsAmount > maxSuggestedOutfits)
     {
         LL_WARNS() << "Large amount of outfits found: " << currentOutfitsAmount << " this may cause hangs and disconnects" << LL_ENDL;
@@ -1187,9 +1183,6 @@ void LLOutfitListBase::onIdleRefreshList()
     mRefreshListState.Added.clear();
     mRefreshListState.AddedIterator = mRefreshListState.Added.end();
 
-    // <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
-    arrange();
-
     // Handle removed tabs.
     while (mRefreshListState.RemovedIterator < mRefreshListState.Removed.end())
     {
@@ -1213,8 +1206,8 @@ void LLOutfitListBase::onIdleRefreshList()
 
         // Links aren't supposed to be allowed here, check only cats
         if (cat)
-            {
-        std::string name = cat->getName();
+        {
+            std::string name = cat->getName();
             updateChangedCategoryName(cat, name);
         }
 
