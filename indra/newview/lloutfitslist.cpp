@@ -1120,8 +1120,21 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     }
 
     // <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
-    if (mRefreshListState.Added.size() > 128)
-        LL_WARNS() << "Large amount of outfits found: " << mRefreshListState.Added.size() << " this may cause hangs and disconnects" << LL_ENDL;
+    S32 currentOutfitsAmount = (S32)mRefreshListState.Added.size();
+    S32 maxSuggestedOutfits = 200;
+    if (currentOutfitsAmount > maxSuggestedOutfits)
+    {
+        LL_WARNS() << "Large amount of outfits found: " << currentOutfitsAmount << " this may cause hangs and disconnects" << LL_ENDL;
+        static LLCachedControl<bool> fsLargeOutfitsWarningInThisSession(gSavedSettings, "FSLargeOutfitsWarningInThisSession");
+        if (!fsLargeOutfitsWarningInThisSession)
+        {
+            gSavedSettings.setBOOL("FSLargeOutfitsWarningInThisSession", true);
+            LLSD args;
+            args["AMOUNT"] = currentOutfitsAmount;
+            args["MAX"] = maxSuggestedOutfits;
+            LLNotificationsUtil::add("FSLargeOutfitsWarningInThisSession", args);
+        }
+    }
     // </FS:ND>
 
     // <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
