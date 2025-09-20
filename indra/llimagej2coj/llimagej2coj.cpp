@@ -576,15 +576,6 @@ public:
 
         }
 
-        if (!opj_setup_encoder(encoder, &parameters, image))
-        {
-            return false;
-        }
-
-        opj_set_info_handler(encoder, opj_info, this);
-        opj_set_warning_handler(encoder, opj_warn, this);
-        opj_set_error_handler(encoder, opj_error, this);
-
         U32 width_tiles = (rawImageIn.getWidth() >> 6);
         U32 height_tiles = (rawImageIn.getHeight() >> 6);
 
@@ -597,6 +588,23 @@ public:
         {
             height_tiles = 1;
         }
+
+        if (width_tiles == 1 || height_tiles == 1)
+        {
+            // Images with either dimension less than 32 need less number of resolutions otherwise they error
+            int min_dim = rawImageIn.getWidth() < rawImageIn.getHeight() ? rawImageIn.getWidth() : rawImageIn.getHeight();
+            int max_res = 1 + (int)floor(log2(min_dim));
+            parameters.numresolution = max_res;
+        }
+
+        if (!opj_setup_encoder(encoder, &parameters, image))
+        {
+            return false;
+        }
+
+        opj_set_info_handler(encoder, opj_info, this);
+        opj_set_warning_handler(encoder, opj_warn, this);
+        opj_set_error_handler(encoder, opj_error, this);
 
         U32 tile_count = width_tiles * height_tiles;
         U32 data_size_guess = tile_count * TILE_SIZE;
