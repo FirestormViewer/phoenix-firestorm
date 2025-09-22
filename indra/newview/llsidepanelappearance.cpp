@@ -365,6 +365,12 @@ void LLSidepanelAppearance::toggleMyOutfitsPanel(bool visible, const std::string
     mFilterEditor->setVisible(visible);
     mCurrOutfitPanel->setVisible(visible);
 
+    // <FS:PP> FIRE-35947 Ensure the top menu buttons (gear/sort/trash) are only visible in the outfits panel
+    getChildView("options_gear_btn_panel")->setVisible(visible);
+    getChildView("options_sort_btn_panel")->setVisible(visible);
+    getChildView("trash_btn_panel")->setVisible(visible);
+    // </FS:PP>
+
     if (visible)
     {
         mPanelOutfitsInventory->onOpen(LLSD());

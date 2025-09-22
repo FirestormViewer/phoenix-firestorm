@@ -5,6 +5,7 @@
 			Pokaż:
 		</text>
 		<check_box label="Bryły brzegowe świateł sceny" name="lights_bounding_boxes"/>
+		<check_box label="Narożniki regionu" name="fsregioncornerbeacons" />
 		<check_box label="Emitery" name="beacons"/>
 		<check_box label="Podświetlenia" name="highlights"/>
 		<check_box label="Pokazuj objaśnienia emiterów" name="FSRenderBeaconText"/>

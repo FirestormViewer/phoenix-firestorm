@@ -155,7 +155,7 @@ public:
     void copyScreenSpaceReflections(LLRenderTarget* src, LLRenderTarget* dst);
     void generateLuminance(LLRenderTarget* src, LLRenderTarget* dst);
     void generateExposure(LLRenderTarget* src, LLRenderTarget* dst, bool use_history = true);
-    void tonemap(LLRenderTarget* src, LLRenderTarget* dst);
+    void tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_correct);
     void gammaCorrect(LLRenderTarget* src, LLRenderTarget* dst);
     void generateGlow(LLRenderTarget* src);
     void applyCAS(LLRenderTarget* src, LLRenderTarget* dst);
@@ -435,6 +435,12 @@ public:
     static void setRenderSoundBeacons(bool val);
     static void toggleRenderSoundBeacons();
     static bool getRenderSoundBeacons();
+
+    // <FS:PP> FIRE-33085 Region corner markers
+    static void setRenderRegionCornerBeacons(bool val);
+    static void toggleRenderRegionCornerBeacons();
+    static bool getRenderRegionCornerBeacons();
+    // </FS:PP>
 
     static void setRenderMOAPBeacons(bool val);
     static void toggleRenderMOAPBeacons();
@@ -754,7 +760,8 @@ public:
     LLRenderTarget          mLastExposure;
 
     // tonemapped and gamma corrected render ready for post
-    LLRenderTarget          mPostMap;
+    LLRenderTarget          mPostPingMap;
+    LLRenderTarget          mPostPongMap;
 
     // FXAA helper target
     LLRenderTarget          mFXAAMap;
@@ -1023,6 +1030,7 @@ protected:
     static bool             sRenderScriptedBeacons;
     static bool             sRenderParticleBeacons;
     static bool             sRenderSoundBeacons;
+    static bool             sRenderRegionCornerBeacons; // <FS:PP> FIRE-33085 Region corner markers
 public:
     static bool             sRenderBeacons;
     static bool             sRenderHighlight;

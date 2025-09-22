@@ -20,8 +20,8 @@
  save_visibility="true"
  save_dock_state="false"
  single_instance="true"
- width="155"
- min_width="155">
+ width="165"
+ min_width="165">
     <floater.string
      name="rotate_tooltip">
         Rotate Camera Around Focus
@@ -60,7 +60,7 @@ free_mode_title
        name="zoom"
        follows="all"
        top="25"
-       width="150">
+       width="160">
 
        <layout_stack
              top="0"
@@ -70,7 +70,7 @@ free_mode_title
              mouse_opaque="true"
              name="camera_view_layout_stack"
              orientation="horizontal"
-             width="150"
+             width="160"
              follows="all">
 
             <layout_panel
@@ -219,7 +219,7 @@ free_mode_title
      top="0"
      follows="top|left"
      name="buttons_view"
-     width="56">
+     width="76">
         <panel_camera_item
           name="front_view"
           tool_tip="Front view"
@@ -321,6 +321,41 @@ free_mode_title
             <panel_camera_item.text
             width="0"
             name="rear_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+        <panel_camera_item
+          name="tpp_view"
+          tool_tip="TPP view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="20"
+          top_delta="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="TPP View" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_TPP_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_TPP_On" />
+            <panel_camera_item.text
+            width="0"
+            name="tpp_view_text">
             ""
             </panel_camera_item.text>
         </panel_camera_item>

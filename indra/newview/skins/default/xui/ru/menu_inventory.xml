@@ -51,11 +51,11 @@
 		<menu_item_call label="Новый Цикл дня" name="New Day Cycle"/>
 	</menu>
 	<menu label="Использовать для" name="upload_def">
-		<menu_item_call label="загрузок Изображений" name="Image uploads"/>
-		<menu_item_call label="загрузок Звуков" name="Sound uploads"/>
-		<menu_item_call label="загрузок Анимаций" name="Animation uploads"/>
-		<menu_item_call label="загрузок Моделей" name="Model uploads"/>
-		<menu_item_call label="загрузок Материалов PBR" name="PBR uploads"/>
+		<menu_item_check label="загрузок Изображений" name="Image uploads"/>
+		<menu_item_check label="загрузок Звуков" name="Sound uploads"/>
+		<menu_item_check label="загрузок Анимаций" name="Animation uploads"/>
+		<menu_item_check label="загрузок Моделей" name="Model uploads"/>
+		<menu_item_check label="загрузок Материалов PBR" name="PBR uploads"/>
 	</menu>
 	<menu label="Изменить тип" name="Change Type">
 		<menu_item_call label="По умолчанию" name="Default"/>
@@ -107,6 +107,8 @@
 	<menu_item_call label="Удалить системную папку" name="Delete System Folder"/>
 	<menu_item_call label="Создать папку из выбранных" name="New folder from selected"/>
 	<menu_item_call label="Разгруппировать элементы папки" name="Ungroup folder items"/>
+	<menu_item_call label="Добавить в избранное" name="Add to Favorites"/>
+	<menu_item_call label="Удалить из избранного" name="Remove from Favorites"/>
 	<menu_item_call label="Начать конференц чат" name="Conference Chat Folder"/>
 	<menu_item_call label="Проиграть" name="Sound Play"/>
 	<menu_item_call label="Копировать SLurl" name="url_copy"/>

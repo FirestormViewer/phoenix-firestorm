@@ -5329,6 +5329,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="BeaconSound">
 		Emitery dźwięków (żółty)
 	</string>
+	<string name="BeaconRegionCorners">
+		Narożniki regionu (żółty)
+	</string>
 	<string name="BeaconMedia">
 		Emitery mediów (biały)
 	</string>

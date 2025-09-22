@@ -6101,6 +6101,9 @@ support@secondlife.com.
 	<string name="BeaconSound">
 		檢視聲音檔案的信標（黃色）
 	</string>
+	<string name="BeaconRegionCorners">
+		区域的角落（黄色）
+	</string>
 	<string name="BeaconMedia">
 		檢視多媒體檔案的信標（白色）
 	</string>

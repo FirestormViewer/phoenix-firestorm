@@ -61,11 +61,6 @@ if(WINDOWS)
         glod.dll # <FS:Beq> restore GLOD
         )
 
-    if(LLCOMMON_LINK_SHARED)
-        set(release_files ${release_files} libapr-1.dll)
-        set(release_files ${release_files} libaprutil-1.dll)
-    endif()
-
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
         set(release_files ${release_files} openjp2.dll)
@@ -196,15 +191,6 @@ elseif(DARWIN)
         libgrowl++.dylib
        )
 
-    if(LLCOMMON_LINK_SHARED)
-        set(release_files ${release_files}
-            libapr-1.0.dylib
-            libapr-1.dylib
-            libaprutil-1.0.dylib
-            libaprutil-1.dylib
-            )
-    endif()
-
     if (TARGET ll::discord_sdk)
       list(APPEND release_files libdiscord_partner_sdk.dylib)
     endif ()
@@ -275,13 +261,6 @@ elseif(LINUX)
                  libgmodule-2.0.a
                  libgobject-2.0.a
                  )
-
-        if(LLCOMMON_LINK_SHARED)
-            set(release_files ${release_files}
-                libapr-1.so.0
-                libaprutil-1.so.0
-                )
-        endif()
      endif()
 
     if (TARGET ll::fmodstudio)

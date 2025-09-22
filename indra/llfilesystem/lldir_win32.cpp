@@ -172,7 +172,7 @@ LLDir_Win32::LLDir_Win32()
         {
             w_str[wcslen(w_str)-1] = '\0'; /* Flawfinder: ignore */ // remove trailing slash
         }
-        mTempDir = utf16str_to_utf8str(llutf16string(w_str));
+        mTempDir = ll_convert<std::string>(std::wstring(w_str));
 
         if (mOSUserDir.empty())
         {
@@ -231,7 +231,7 @@ LLDir_Win32::LLDir_Win32()
     if (size)
     {
         w_str[size] = '\0';
-        mExecutablePathAndName = utf16str_to_utf8str(llutf16string(w_str));
+        mExecutablePathAndName = ll_convert<std::string>(std::wstring(w_str));
         auto path_end = mExecutablePathAndName.find_last_of('\\');
         if (path_end != std::string::npos)
         {
@@ -243,19 +243,19 @@ LLDir_Win32::LLDir_Win32()
             mExecutableFilename = mExecutablePathAndName;
         }
         GetCurrentDirectory(MAX_PATH, w_str);
-        mWorkingDir = utf16str_to_utf8str(llutf16string(w_str));
+        mWorkingDir = ll_convert<std::string>(std::wstring(w_str));
 
     }
     else
     {
         LL_WARNS("AppInit") << "Couldn't get APP path, assuming current directory!\n" << LL_ENDL;
         GetCurrentDirectory(MAX_PATH, w_str);
-        mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
+        mExecutableDir = ll_convert<std::string>(std::wstring(w_str));
         // Assume it's the current directory
     }
 #else
     GetCurrentDirectory(MAX_PATH, w_str);
-    mExecutableDir = utf16str_to_utf8str(llutf16string(w_str));
+    mExecutableDir = ll_convert<std::string>(std::wstring(w_str));
 #endif
 
 
@@ -350,8 +350,8 @@ U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &
 
     WIN32_FIND_DATA FileData;
 
-    llutf16string pathname = utf8str_to_utf16str(dirname);
-    pathname += utf8str_to_utf16str(mask);
+    std::wstring pathname = ll_convert<std::wstring>(dirname);
+    pathname += ll_convert<std::wstring>(mask);
 
     if ((count_search_h = FindFirstFile(pathname.c_str(), &FileData)) != INVALID_HANDLE_VALUE)
     {
@@ -377,7 +377,7 @@ bool LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
     fname = "";
 
     WIN32_FIND_DATAW FileData;
-    llutf16string pathname = utf8str_to_utf16str(dirname) + utf8str_to_utf16str(mask);
+    std::wstring pathname = ll_convert<std::wstring>(dirname) + ll_convert<std::wstring>(mask);
 
     if (pathname != mCurrentDir)
     {
@@ -424,7 +424,7 @@ bool LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
     if (fileFound)
     {
         // convert from TCHAR to char
-        fname = utf16str_to_utf8str(FileData.cFileName);
+        fname = ll_convert<std::string>(std::wstring(FileData.cFileName));
     }
 
     return fileFound;
@@ -435,7 +435,7 @@ std::string LLDir_Win32::getCurPath()
     WCHAR w_str[MAX_PATH];
     GetCurrentDirectory(MAX_PATH, w_str);
 
-    return utf16str_to_utf8str(llutf16string(w_str));
+    return ll_convert<std::string>(std::wstring(w_str));
 }
 
 

@@ -14,13 +14,6 @@ include(LibVLCPlugin)
 
 ### media_plugin_libvlc
 
-if(NOT ADDRESS_SIZE EQUAL 32)
-  if(WINDOWS)
-    ##add_definitions(/FIXED:NO)
-  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
-    add_definitions(-fPIC)
-  endif(WINDOWS)
-endif(NOT ADDRESS_SIZE EQUAL 32)
 
 set(media_plugin_libvlc_SOURCE_FILES
     media_plugin_libvlc.cpp
@@ -51,7 +44,7 @@ if (DARWIN)
     PROPERTIES
     PREFIX ""
     BUILD_WITH_INSTALL_RPATH 1
-    INSTALL_NAME_DIR "@executable_path"
+    INSTALL_RPATH "@executable_path/../Frameworks"
     LINK_FLAGS "-exported_symbols_list ${CMAKE_CURRENT_SOURCE_DIR}/../base/media_plugin_base.exp"
   )
 

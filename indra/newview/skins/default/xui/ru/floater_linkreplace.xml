@@ -17,4 +17,5 @@
 	<text name="status_text">Готово...</text>
 	<button name="btn_refresh" label="Обновить"/>
 	<button name="btn_start" label="Старт"/>
+	<button name="btn_stop" label="Стоп"/>
 </floater>

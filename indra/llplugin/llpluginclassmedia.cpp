@@ -132,9 +132,13 @@ void LLPluginClassMedia::reset()
     mLastMouseY = 0;
     mStatus = LLPluginClassMediaOwner::MEDIA_NONE;
     mSleepTime = 1.0f / 100.0f;
+    mCanUndo = false;
+    mCanRedo = false;
     mCanCut = false;
     mCanCopy = false;
     mCanPaste = false;
+    mCanDoDelete = false;
+    mCanSelectAll = false;
     mMediaName.clear();
     mMediaDescription.clear();
     mBackgroundColor = LLColor4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -913,6 +917,18 @@ void LLPluginClassMedia::sendAuthResponse(bool ok, const std::string &username, 
     sendMessage(message);
 }
 
+void LLPluginClassMedia::undo()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_undo");
+    sendMessage(message);
+}
+
+void LLPluginClassMedia::redo()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_redo");
+    sendMessage(message);
+}
+
 void LLPluginClassMedia::cut()
 {
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_cut");
@@ -928,6 +944,24 @@ void LLPluginClassMedia::copy()
 void LLPluginClassMedia::paste()
 {
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_paste");
+    sendMessage(message);
+}
+
+void LLPluginClassMedia::doDelete()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_delete");
+    sendMessage(message);
+}
+
+void LLPluginClassMedia::selectAll()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_select_all");
+    sendMessage(message);
+}
+
+void LLPluginClassMedia::showPageSource()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "edit_show_source");
     sendMessage(message);
 }
 
@@ -1192,6 +1226,14 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
         }
         else if(message_name == "edit_state")
         {
+            if(message.hasValue("undo"))
+            {
+                mCanUndo = message.getValueBoolean("undo");
+            }
+            if(message.hasValue("redo"))
+            {
+                mCanRedo = message.getValueBoolean("redo");
+            }
             if(message.hasValue("cut"))
             {
                 mCanCut = message.getValueBoolean("cut");
@@ -1203,6 +1245,14 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
             if(message.hasValue("paste"))
             {
                 mCanPaste = message.getValueBoolean("paste");
+            }
+            if (message.hasValue("delete"))
+            {
+                mCanDoDelete = message.getValueBoolean("delete");
+            }
+            if (message.hasValue("select_all"))
+            {
+                mCanSelectAll = message.getValueBoolean("select_all");
             }
         }
         else if(message_name == "name_text")
