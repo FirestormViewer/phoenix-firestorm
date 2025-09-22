@@ -12680,7 +12680,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderQualityPerformance</key>
     <map>
       <key>Comment</key>
-      <string>Which graphics settings you've chosen</string>
+      <string>Which graphics settings you've chosen. Don't use this setting to change quality directly from debug settings.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12688,7 +12688,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  
+    <key>DebugQualityPerformance</key>
+    <map>
+        <key>Comment</key>
+        <string>Allows to change performance quality directly from debug settings.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+
   <key>RenderReflectionDetail</key>
     <map>
       <key>Comment</key>

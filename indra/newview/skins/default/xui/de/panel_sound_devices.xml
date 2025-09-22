@@ -9,6 +9,9 @@
 	<string name="name_default_system_device">
 		Standardsystemgerät
 	</string>
+	<string name="device_not_loaded">
+		Gerät nicht geladen
+	</string>
 	<text name="Input">
 		Eingabe
 	</text>

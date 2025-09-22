@@ -207,6 +207,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
     mURLClickSignal(NULL),
     mIsFriendSignal(NULL),
     mIsObjectBlockedSignal(NULL),
+    mIsObjectReachableSignal(NULL),
     mMaxTextByteLength( p.max_text_length ),
     mFont(p.font),
     mFontShadow(p.font_shadow),
@@ -320,6 +321,7 @@ LLTextBase::~LLTextBase()
     delete mURLClickSignal;
     delete mIsFriendSignal;
     delete mIsObjectBlockedSignal;
+    delete mIsObjectReachableSignal;
 }
 
 void LLTextBase::initFromParams(const LLTextBase::Params& p)
@@ -2510,6 +2512,15 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
             }
         }
 
+        if (mIsObjectReachableSignal)
+        {
+            bool is_reachable = *(*mIsObjectReachableSignal)(LLUUID(LLUrlAction::getObjectId(url)));
+            if (LLView* zoom_btn = menu->getChild<LLView>("zoom_in"))
+            {
+                zoom_btn->setEnabled(is_reachable);
+            }
+        }
+
         // <FS:Zi> hide the moderation tools in the context menu unless we are in a group IM floater
         LLFloater* parent_floater = getParentByType<LLFloater>();
         if (!parent_floater || parent_floater->getName() != "panel_im")
@@ -3738,6 +3749,15 @@ boost::signals2::connection LLTextBase::setIsObjectBlockedCallback(const is_bloc
         mIsObjectBlockedSignal = new is_blocked_signal_t();
     }
     return mIsObjectBlockedSignal->connect(cb);
+}
+
+boost::signals2::connection LLTextBase::setIsObjectReachableCallback(const is_obj_reachable_signal_t::slot_type& cb)
+{
+    if (!mIsObjectReachableSignal)
+    {
+        mIsObjectReachableSignal = new is_obj_reachable_signal_t();
+    }
+    return mIsObjectReachableSignal->connect(cb);
 }
 
 //
