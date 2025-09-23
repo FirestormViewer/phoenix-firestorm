@@ -3923,7 +3923,7 @@ LLSD LLAppViewer::getViewerInfo() const
 
     //[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
     info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    info["BANDWIDTH"] = LLViewerThrottle::getMaxBandwidthKbps();
     info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
     //[FIRE 3113 : SJ] Added Settingsfile to info
@@ -4065,7 +4065,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
     //info["UI_SCALE"] = gSavedSettings.getF32("UIScaleFactor");
     //info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    //info["NET_BANDWITH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    //info["NET_BANDWITH"] = LLViewerThrottle::getMaxBandwidthKbps();
     //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
     //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
     //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;

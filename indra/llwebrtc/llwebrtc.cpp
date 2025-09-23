@@ -342,14 +342,27 @@ void LLWebRTCImpl::init()
     mWorkerThread->PostTask(
         [this]()
         {
-            mDeviceModule->EnableBuiltInAEC(false);
-            updateDevices();
+            if (mDeviceModule)
+            {
+                mDeviceModule->EnableBuiltInAEC(false);
+                updateDevices();
+            }
         });
 
 }
 
 void LLWebRTCImpl::terminate()
 {
+    mWorkerThread->BlockingCall(
+        [this]()
+        {
+            if (mDeviceModule)
+            {
+                mDeviceModule->ForceStopRecording();
+                mDeviceModule->StopPlayout();
+            }
+        });
+
     for (auto &connection : mPeerConnections)
     {
         connection->terminate();
@@ -368,8 +381,6 @@ void LLWebRTCImpl::terminate()
         {
             if (mDeviceModule)
             {
-                mDeviceModule->StopRecording();
-                mDeviceModule->StopPlayout();
                 mDeviceModule->Terminate();
             }
             mDeviceModule     = nullptr;
@@ -441,12 +452,13 @@ void LLWebRTCImpl::unsetDevicesObserver(LLWebRTCDevicesObserver *observer)
 // must be run in the worker thread.
 void LLWebRTCImpl::workerDeployDevices()
 {
+    if (!mDeviceModule)
+    {
+        return;
+    }
+
     int16_t recordingDevice = RECORD_DEVICE_DEFAULT;
-#if WEBRTC_WIN
     int16_t recording_device_start = 0;
-#else
-    int16_t recording_device_start = 1;
-#endif
 
     if (mRecordingDevice != "Default")
     {
@@ -455,6 +467,12 @@ void LLWebRTCImpl::workerDeployDevices()
             if (mRecordingDeviceList[i].mID == mRecordingDevice)
             {
                 recordingDevice = i;
+#if !WEBRTC_WIN
+                // linux and mac devices range from 1 to the end of the list, with the index 0 being the
+                // 'default' device.  Windows has a special 'default' device and other devices are indexed
+                // from 0
+                recordingDevice++;
+#endif
                 break;
             }
         }
@@ -479,11 +497,7 @@ void LLWebRTCImpl::workerDeployDevices()
     mDeviceModule->InitRecording();
 
     int16_t playoutDevice = PLAYOUT_DEVICE_DEFAULT;
-#if WEBRTC_WIN
     int16_t playout_device_start = 0;
-#else
-    int16_t playout_device_start = 1;
-#endif
     if (mPlayoutDevice != "Default")
     {
         for (int16_t i = playout_device_start; i < mPlayoutDeviceList.size(); i++)
@@ -491,6 +505,12 @@ void LLWebRTCImpl::workerDeployDevices()
             if (mPlayoutDeviceList[i].mID == mPlayoutDevice)
             {
                 playoutDevice = i;
+#if !WEBRTC_WIN
+                // linux and mac devices range from 1 to the end of the list, with the index 0 being the
+                // 'default' device.  Windows has a special 'default' device and other devices are indexed
+                // from 0
+                playoutDevice++;
+#endif
                 break;
             }
         }
@@ -546,25 +566,24 @@ void LLWebRTCImpl::workerDeployDevices()
 void LLWebRTCImpl::setCaptureDevice(const std::string &id)
 {
 
-    if (mRecordingDevice != id)
-    {
-        mRecordingDevice = id;
-        deployDevices();
-    }
+    mRecordingDevice = id;
+    deployDevices();
 }
 
 void LLWebRTCImpl::setRenderDevice(const std::string &id)
 {
-    if (mPlayoutDevice != id)
-    {
-        mPlayoutDevice = id;
-        deployDevices();
-    }
+    mPlayoutDevice = id;
+    deployDevices();
 }
 
 // updateDevices needs to happen on the worker thread.
 void LLWebRTCImpl::updateDevices()
 {
+    if (!mDeviceModule)
+    {
+        return;
+    }
+
     int16_t renderDeviceCount  = mDeviceModule->PlayoutDevices();
 
     mPlayoutDeviceList.clear();
@@ -609,7 +628,7 @@ void LLWebRTCImpl::updateDevices()
 
 void LLWebRTCImpl::OnDevicesUpdated()
 {
-    deployDevices();
+    updateDevices();
 }
 
 
@@ -1485,6 +1504,7 @@ void terminate()
     if (gWebRTCImpl)
     {
         gWebRTCImpl->terminate();
+        delete gWebRTCImpl;
         gWebRTCImpl = nullptr;
     }
 }
