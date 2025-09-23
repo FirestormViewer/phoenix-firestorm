@@ -103,11 +103,7 @@ public:
     // Call reshape after changing splitter's size
     virtual void reshape(S32 width, S32 height, bool called_from_parent = true);
 
-    // <FS:ND> If adding a lot of controls rapidly, calling arrange will cost a lot of times, as it's running through n! controls.
-    // In that case we can avvoid calling arrange over and over and just call it once when finished.
-    // void addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab);
-    void addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab, bool aArrange = true /*Standard is true as to not mess with old code all over the place*/ );
-    // </FS:ND>
+    void addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab);
     void removeCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab);
     void arrange();
 
