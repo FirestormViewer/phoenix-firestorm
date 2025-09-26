@@ -26,7 +26,7 @@
 	<text name="select_object_label">
 		ボタンをクリックしてから、悪意のあるオブジェクトをクリック：
 	</text>
-	<button name="pick_btn" tool_tip="オブジェクトピッカー‐報告対象のオブジェクトを選択してください。"/>
+	<button name="pick_btn" tool_tip="オブジェクトピッカー－報告対象のオブジェクトを選択してください。"/>
 	<text name="object_name_label">
 		オブジェクト：
 	</text>
@@ -39,7 +39,7 @@
 	<text name="owner_name">
 		ヘンドレリット・ヴルプターテ、かまわしの長い名前
 	</text>
-	<combo_box name="category_combo" tool_tip="カテゴリ‐この報告に最も適したカテゴリを選択してください">
+	<combo_box name="category_combo" tool_tip="カテゴリ－この報告に最も適したカテゴリを選択してください">
 		<combo_box.item label="カテゴリを選択してください" name="Select_category"/>
 		<combo_box.item label="年齢＞年齢偽証" name="Age__Age_play"/>
 		<combo_box.item label="攻撃＞安全エリアで他の住人を銃撃、プッシュ、または突き飛ばす" name="Assault__Safe_area"/>

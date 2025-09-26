@@ -4,7 +4,7 @@
 		物理と一緒にメッシュをアップロードします。
 	</string>
 	<string name="status_parse_error">
-		エラー：DAEファイルに問題が見つかりました。‐詳細につきましてはログをご確認ください。
+		エラー：DAEファイルに問題が見つかりました。－詳細につきましてはログをご確認ください。
 	</string>
 	<string name="status_bind_shape_orientation">
 		警告：バインドシェイプマトリックスは、標準のＸ軸正方向にはありません。
@@ -137,7 +137,7 @@
 		シーンを解析できませんでした。
 	</string>
 	<string name="ParsingErrorCorrupt">
-		DAEファイルでエラーが見つかりました。‐ファイルが破損しているようです。
+		DAEファイルでエラーが見つかりました。－ファイルが破損しているようです。
 	</string>
 	<string name="ParsingErrorNoController">
 		コントローラーを確認できませんでした。
