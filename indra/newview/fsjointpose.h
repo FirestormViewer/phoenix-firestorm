@@ -357,7 +357,6 @@ class FSJointPose
             if (rotation == LLQuaternion::DEFAULT)
                 return;
 
-            LL_WARNS("Posing") << "Loaded rot: " << rotation << " at priority " << priority << LL_ENDL;
             mBasePriority = priority;
             mBaseRotation.set(rotation);
         }
@@ -367,7 +366,6 @@ class FSJointPose
             if (priority < mBasePriority)
                 return;
 
-            LL_WARNS("Posing") << "Loaded pos: " << position << " at priority " << priority << LL_ENDL;
             mBasePriority = priority;
             mBasePosition.set(position);
         }
@@ -380,7 +378,6 @@ class FSJointPose
             if (scale.isExactlyZero())
                 return;
 
-            LL_WARNS("Posing") << "Loaded pos: " << scale << " at priority " << priority << LL_ENDL;
             mBasePriority = priority;
             mBaseScale.set(scale);
         }
