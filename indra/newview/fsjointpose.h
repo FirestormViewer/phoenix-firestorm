@@ -262,15 +262,12 @@ class FSJointPose
             mBaseRotation.set(joint->getRotation());
             mBasePosition.set(joint->getPosition());
             mBaseScale.set(joint->getScale());
-
-            mBasePositionFromAnimation.setZero();
-            mBaseScaleFromAnimation.setZero();
         }
 
         FSJointState() = default;
         LLQuaternion getTargetRotation() const { return mRotation * mBaseRotation; }
-        LLVector3    getTargetPosition() const { return mPosition + mBasePosition + mBasePositionFromAnimation; }
-        LLVector3    getTargetScale() const { return mScale + mBaseScale + mBaseScaleFromAnimation; }
+        LLVector3    getTargetPosition() const { return mPosition + mBasePosition; }
+        LLVector3    getTargetScale() const { return mScale + mBaseScale; }
 
         void reflectRotation()
         {
@@ -310,8 +307,6 @@ class FSJointPose
             mRotation.set(LLQuaternion::DEFAULT);
             mPosition.setZero();
             mScale.setZero();
-            mBasePositionFromAnimation.setZero();
-            mBaseScaleFromAnimation.setZero();
         }
 
         void zeroBaseRotation()
@@ -348,8 +343,8 @@ class FSJointPose
             }
 
             mRotation.set(newPublicRot);
-            mPosition.set(joint->getPosition() - mBasePosition - mBasePositionFromAnimation);
-            mScale.set(joint->getScale() - mBaseScale - mBaseScaleFromAnimation);
+            mPosition.set(joint->getPosition() - mBasePosition);
+            mScale.set(joint->getScale() - mBaseScale);
 
             return newPublicRot *= ~initalPublicRot;
         }
@@ -374,7 +369,7 @@ class FSJointPose
 
             LL_WARNS("Posing") << "Loaded pos: " << position << " at priority " << priority << LL_ENDL;
             mBasePriority = priority;
-            mBasePositionFromAnimation.set(position);
+            mBasePosition.set(position);
         }
 
         void resetBaseScale(LLVector3 scale, LLJoint::JointPriority priority)
@@ -387,7 +382,7 @@ class FSJointPose
 
             LL_WARNS("Posing") << "Loaded pos: " << scale << " at priority " << priority << LL_ENDL;
             mBasePriority = priority;
-            mBaseScaleFromAnimation.set(scale);
+            mBaseScale.set(scale);
         }
 
         void setPriority(LLJoint::JointPriority priority) { mBasePriority = priority; }
@@ -399,8 +394,6 @@ class FSJointPose
             mBaseRotation.set(state->mBaseRotation);
             mBasePosition.set(state->mBasePosition);
             mBaseScale.set(state->mBaseScale);
-            mBasePositionFromAnimation.set(state->mBasePositionFromAnimation);
-            mBaseScaleFromAnimation.set(state->mBaseScaleFromAnimation);
 
             mRotation.set(state->mRotation);
             mPosition.set(state->mPosition);
@@ -443,9 +436,7 @@ class FSJointPose
         LLQuaternion mStartingRotation;
         LLQuaternion mBaseRotation;
         LLVector3    mBasePosition;
-        LLVector3    mBasePositionFromAnimation;
         LLVector3    mBaseScale;
-        LLVector3    mBaseScaleFromAnimation;
         LLJoint::JointPriority mBasePriority = LLJoint::LOW_PRIORITY;
     };
 

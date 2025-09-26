@@ -138,7 +138,8 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, LLSD pose)
             continue;
 
         fsMotionState newState;
-        newState.avatarId = avatar->getID();
+        newState.avatarId       = avatar->getID();
+        newState.avatarOwnsPose = true;
 
         if (control_map.has("animationId"))
         {

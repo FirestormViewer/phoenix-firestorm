@@ -934,7 +934,11 @@ void FSPoserAnimator::loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* 
     if (loadPositionAsDelta)
         jointPose->setPublicPosition(position);
     else
-        jointPose->setPublicPosition(position);
+    {
+        jointPose->setJointPriority(LLJoint::LOW_PRIORITY);
+        jointPose->setBasePosition(position, LLJoint::LOW_PRIORITY);
+        jointPose->setPublicPosition(LLVector3::zero);
+    }
 }
 
 void FSPoserAnimator::loadJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, bool loadScaleAsDelta, LLVector3 scale)
@@ -953,7 +957,11 @@ void FSPoserAnimator::loadJointScale(LLVOAvatar* avatar, const FSPoserJoint* joi
     if (loadScaleAsDelta)
         jointPose->setPublicScale(scale);
     else
-        jointPose->setPublicScale(scale);
+    {
+        jointPose->setJointPriority(LLJoint::LOW_PRIORITY);
+        jointPose->setBaseScale(scale, LLJoint::LOW_PRIORITY);
+        jointPose->setPublicScale(LLVector3::zero);
+    }
 }
 
 bool FSPoserAnimator::loadPosingState(LLVOAvatar* avatar, LLSD pose)
@@ -968,7 +976,6 @@ bool FSPoserAnimator::loadPosingState(LLVOAvatar* avatar, LLSD pose)
     if (!posingMotion)
         return false;
 
-    // TODO: do I need to zero all bases first to reset latent rotations?
     bool loadSuccess = mPosingState.applyMotionStatesToPosingMotion(avatar, posingMotion);
     if (loadSuccess)
         applyJointMirrorToBaseRotations(posingMotion);
