@@ -5784,6 +5784,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		是否覆蓋現有的姿勢「[POSE_NAME]」？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		检测到大量装扮：[AMOUNT]。这可能会导致查看器卡顿或连接断开。请考虑将装扮数量限制在[MAX]以内，以提升性能。
+		<usetemplate ignoretext="装扮过多警告" name="okignore" yestext="确定" />
+	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Primfeed 登錄請求被拒絕。
 	</notification>
