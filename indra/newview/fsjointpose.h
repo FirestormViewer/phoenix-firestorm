@@ -351,6 +351,9 @@ class FSJointPose
 
         void resetBaseRotation(LLQuaternion rotation, LLJoint::JointPriority priority)
         {
+            if (mUserSpecifiedBaseZero)
+                return;
+
             if (priority < mBasePriority)
                 return;
 
