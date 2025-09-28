@@ -937,7 +937,6 @@ void FSPoserAnimator::loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* 
     {
         jointPose->setJointPriority(LLJoint::LOW_PRIORITY);
         jointPose->setBasePosition(position, LLJoint::LOW_PRIORITY);
-        jointPose->setPublicPosition(LLVector3::zero);
     }
 }
 

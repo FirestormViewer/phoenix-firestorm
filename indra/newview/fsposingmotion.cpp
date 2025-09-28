@@ -298,16 +298,10 @@ bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionT
             poserJoint_iter->setBaseRotation(rot, priority);
 
         if (hasPosition)
-        {
             poserJoint_iter->setBasePosition(position, priority);
-            poserJoint_iter->setPublicPosition(LLVector3::zero);
-        }
 
         if (hasScale)
-        {
             poserJoint_iter->setBaseScale(scale, priority);
-            poserJoint_iter->setPublicScale(LLVector3::zero);
-        }
     }
 
     return true;

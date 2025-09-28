@@ -518,7 +518,8 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         record["version"]["value"] = (S32)7;
         record["startFromTeePose"]["value"] = !savingDiff;
 
-        mPoserAnimator.savePosingState(avatar, &record);
+        if (savingDiff)
+            mPoserAnimator.savePosingState(avatar, &record);
 
         LLVector3 rotation, position, scale, zeroVector;
         bool      baseRotationIsZero;
@@ -902,6 +903,7 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
         loadType = SELECTIVE_ROT;
 
     mLoadPoseTimer->tryLoading(poseName, loadType);
+    setLoadingProgress(true);
 }
 
 void FSFloaterPoser::timedReload()
@@ -1171,7 +1173,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 mPoserAnimator.setRotationIsMirrored(avatar, *poserJoint, mirroredJoint);
             }
 
-            if (version > 6)
+            if (version > 6 && !startFromZeroRot)
                 loadSuccess = mPoserAnimator.loadPosingState(avatar, pose);
         }
     }
