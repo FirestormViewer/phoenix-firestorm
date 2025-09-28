@@ -22,19 +22,19 @@
 		このリージョンは経路探索に対応していません。
 	</floater.string>
 	<floater.string name="linkset_terrain_description">
-		‐
+		－
 	</floater.string>
 	<floater.string name="linkset_terrain_owner">
-		‐
+		－
 	</floater.string>
 	<floater.string name="linkset_terrain_scripted">
-		‐
+		－
 	</floater.string>
 	<floater.string name="linkset_terrain_land_impact">
-		‐
+		－
 	</floater.string>
 	<floater.string name="linkset_terrain_dist_from_you">
-		‐
+		－
 	</floater.string>
 	<floater.string name="linkset_owner_loading">
 		［読み込んでいます］

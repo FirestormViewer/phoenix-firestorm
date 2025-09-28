@@ -25,7 +25,7 @@
 						<spinner name="spin_enrollment_fee" tool_tip="入会費にチェックされている場合、新しいメンバーはグループに加入するためにこの料金を支払う必要があります。"/>
 						<combo_box name="group_mature_check" tool_tip="レーティングは、グループで許可されるコンテンツと活動内容の種類を指定します。">
 							<combo_item name="select_mature">
-								‐レーティングの選択‐
+								－レーティングの選択－
 							</combo_item>
 							<combo_box.item label="「Moderate」コンテンツ" name="mature"/>
 							<combo_box.item label="「General」コンテンツ" name="pg"/>

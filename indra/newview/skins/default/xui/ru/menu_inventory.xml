@@ -107,6 +107,8 @@
 	<menu_item_call label="Удалить системную папку" name="Delete System Folder"/>
 	<menu_item_call label="Создать папку из выбранных" name="New folder from selected"/>
 	<menu_item_call label="Разгруппировать элементы папки" name="Ungroup folder items"/>
+	<menu_item_call label="Добавить в избранное" name="Add to Favorites"/>
+	<menu_item_call label="Удалить из избранного" name="Remove from Favorites"/>
 	<menu_item_call label="Начать конференц чат" name="Conference Chat Folder"/>
 	<menu_item_call label="Проиграть" name="Sound Play"/>
 	<menu_item_call label="Копировать SLurl" name="url_copy"/>

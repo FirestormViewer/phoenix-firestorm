@@ -2,16 +2,7 @@
 <floater name="floater_new_feature_notification" title="НОВЫЕ ФУНКЦИИ">
 	<floater.string name="title_txt_inventory">Новые функции инвентаря</floater.string>
 	<floater.string name="description_txt_inventory">
-		Теперь вы можете добавлять изображения для предварительного просмотра к элементам инвентаря и просматривать папку в отдельном окне.
-Узнайте больше здесь [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ blogpost]
-	</floater.string>
-
-	<floater.string name="title_txt_gltf">New GLTF PBR materials support</floater.string>
-	<floater.string name="description_txt_gltf">
-Теперь вы можете использовать расширенную поддержку материалов с возможностью импорта и редактирования GLTF Материалов Рендеринга на Физической Основе (PBR).
-In order to support the addition of the GLTF format, some areas in the viewer may appear darker than usual.
-
-Узнайте больше о [https://wiki.secondlife.com/wiki/PBR_Materials Рендеринг на физической основе (PBR)]
+		Теперь вы можете добавлять предметы и папки в избранное. Избранные предметы будут отображаться на вкладке «Избранное» в инвентаре и по умолчанию будут отмечены звёздочкой в ​​главном окне инвентаря.
 	</floater.string>
 
 	<text name="title_txt">Новая функция</text>

@@ -453,6 +453,9 @@
 	<notification name="ErrorCannotAffordUpload">
 		Чтобы загрузить этот предмет, вам нужно L$[COST].
 	</notification>
+	<notification name="ErrorEncodingImage">
+		Не удалось закодировать изображение, причина: [REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Требуется L$[COST] для сохранения текстуры в вашем инвентаре. Купите L$ или сохраните фото на компьютере.
 	</notification>
@@ -1228,6 +1231,15 @@
 			<button name="SetName" text="Использовать новое имя"/>
 		</form>
 	</notification>
+	<notification label="Удалить список автозамены" name="RemoveAutoReplaceList">
+'[LIST_NAME]' содержит [MAP_SIZE] записей.
+
+Вы уверены, что хотите удалить этот список?
+		<form name="form">
+			<button name="DeleteList" text="Удалить"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
 	<notification name="InvalidAutoReplaceEntry">
 		Ключевое слово должно быть одним словом, а поле замены не может быть пустым.
 	</notification>
@@ -1838,9 +1850,9 @@ URL: [UNTRUSTED_URL]
 	<notification label="Не удалось блокировать объект по имени" name="MuteByNameFailed">
 		Вы уже внесли это имя в черный список.
 	</notification>
-	<notification name="RemoveItemWarn">
-		Удаление содержимого, хотя это и разрешено, может повредить объект. Хотите удалить этот предмет?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
+	<notification name="CantModifyContentInNoModTask">
+		У вас нет разрешения на изменение содержимого этого объекта.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CantOfferCallingCard">
 		Сейчас невозможно предложить визитку. Повторите попытку через минуту.
@@ -5574,6 +5586,20 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="NoSupportGLTFShader">
 		Сцены GLTF пока не поддерживаются на вашем графическом оборудовании.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="WaterExclusionSurfacesWarning">
+		Если поставить галочку в поле «Скрыть воду», параметры текстуры, рельефности и блеска будут перезаписаны.
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Продолжить"/>
+	</notification>
+
+	<notification name="WaterExclusionNoMaterial">
+		Невозможно нанести материал на водонепроницаемую поверхность.
+	</notification>
+
+	<notification name="ImageUploadResized">
+		Размер загружаемой вами текстуры был изменен с [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] на [NEW_WIDTH]x[NEW_HEIGHT], чтобы соответствовать максимальному размеру [MAX_WIDTH]x[MAX_HEIGHT] пикселей.
+		<usetemplate ignoretext="Image Upload Resized" name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="EnableAutoFPSWarning">

@@ -53,6 +53,18 @@
 			<text name="object_name_header_label">
 				Объектов
 			</text>
+			<text name="mention_colors" width="120">
+				Упоминания в чате:
+			</text>
+			<text name="font_mention_label" width="110">
+				Шрифт
+			</text>
+			<text name="resident_mention_label" width="110">
+				Жители
+			</text>
+			<text name="self_mention_label" width="95">
+				Сам
+			</text>
 			<slider label="Фактор исчезновения цвета за границей чата:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor"  />
 			<check_box name="FSColorIMsDistinctly" label="Цвет выделения чата ЛС/Групп в консоли:" />
 			<panel name="im_color_panel">
@@ -196,6 +208,8 @@
 			<slider label="Активных:" name="active"/>
 			<slider label="Неактивных:" name="inactive"/>
 			<slider label="Камера / Движение:" name="camera_movement"/>
+			<slider label="Разговоры:" name="conversations"/>
+			<check_box name="override_im_active_opacity_checkbox" width="450" label="Использовать значение «Активных» когда окно «Разговоры» активно." />
 			<text name="console_opacity">
 				Прозрачность консоли:
 			</text>
@@ -205,7 +219,7 @@
 			<text name="preferences_search_label">
                 Цвета подсветки поиска в настройках:
             </text>
-			<text name="preferences_search_bg_label" width="35">gi
+			<text name="preferences_search_bg_label" width="35">
                 Фон:
             </text>
 			<color_swatch name="preferences_search_bg_color" tool_tip="Выберите цвет фона подсветки поиска в настройках"/>
@@ -220,7 +234,7 @@
 			<text name="notecard_editor_color_label">
 				Цвета Заметок:
 			</text>
-			<text name="notecard_editor_writable_text_color_label" width="30">
+			<text name="notecard_editor_writable_text_color_label" width="35">
 				Текст:
 			</text>
 			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Цвет Текста Заметки"/>

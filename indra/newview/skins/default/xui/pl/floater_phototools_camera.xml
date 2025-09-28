@@ -27,7 +27,7 @@
 						</panel_camera_item>
 						<panel_camera_item name="group_view">
 							<panel_camera_item.text name="side_view_text">
-								Widok ponad ramieniem
+								Widok znad ramienia
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="rear_view">

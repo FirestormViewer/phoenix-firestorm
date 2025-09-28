@@ -22,17 +22,22 @@
 					<panel name="preset_views_list">
 						<panel_camera_item name="front_view">
 							<panel_camera_item.text name="front_view_text">
-								正面視圖
+								前視圖
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="group_view">
 							<panel_camera_item.text name="side_view_text">
-								側面視圖
+								側視圖
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="rear_view">
 							<panel_camera_item.text name="rear_view_text">
 								後視圖
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="tpp_view">
+							<panel_camera_item.text name="tpp_view_text">
+								第三人稱視角
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<combo_box name="preset_combo">
@@ -49,7 +54,7 @@
 						</panel_camera_item>
 						<panel_camera_item name="mouselook_view">
 							<panel_camera_item.text name="mouselook_view_text">
-								滑鼠視角
+								滑鼠觀察
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<combo_box name="preset_combo">

@@ -3238,7 +3238,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="テレポート"/>
 			<button name="Cancel" text="キャンセル"/>
@@ -3248,7 +3248,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 
 このリージョンには[REGION_CONTENT_MATURITY]コンテンツが含まれていますが、現在の初期設定は[REGION_CONTENT_MATURITY]コンテンツを除外するように設定されています。初期設定を変更してテレポートを続けるか、このテレポートを取り消すことができます。
 		<form name="form">
@@ -3260,7 +3260,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 
 ただし、このリージョンには成人のみアクセスできるコンテンツが含まれています。
 	</notification>
@@ -3268,7 +3268,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL]があなたを自分の場所へのテレポートのオファーを出しました（[POS_SLURL]）：
 
 [MESSAGE]
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="テレポート"/>
 			<button name="Cancel" text="キャンセル"/>
@@ -3278,7 +3278,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL]があなたを自分の場所へのテレポートのオファーを出しました（[POS_SLURL]）：
 
 [MESSAGE]
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 
 このリージョンには[REGION_CONTENT_MATURITY]コンテンツが含まれていますが、現在の設定では[REGION_CONTENT_MATURITY]コンテンツを除外するように設定されています。設定を変更してテレポートを続行するか、このテレポートをキャンセルすることができます。
 		<form name="form">
@@ -3290,7 +3290,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		[NAME_SLURL]があなたを自分の場所へのテレポートのオファーを出しました（[POS_SLURL]）：
 
 [MESSAGE]
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
 
 ただし、この領域にはAdultのみがアクセスできるコンテンツが含まれています。
 	</notification>
@@ -4133,13 +4133,13 @@ https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="選択したオブジェクトをフレキシブルパスに変更する際にナビメッシュから削除されることの確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<global name="UnsupportedGPU">
-		‐あなたのグラフィックカードは、必須動作環境の条件を満たしていません。
+		－あなたのグラフィックカードは、必須動作環境の条件を満たしていません。
 	</global>
 	<global name="UnsupportedCPU">
-		‐あなたのＣＰＵは、必須動作環境の条件を満たしていません。
+		－あなたのＣＰＵは、必須動作環境の条件を満たしていません。
 	</global>
 	<global name="UnsupportedRAM">
-		‐あなたのシステムメモリは、必須動作環境の条件を満たしていません。
+		－あなたのシステムメモリは、必須動作環境の条件を満たしていません。
 	</global>
 	<global name="LLLeapUpdaterFailure">
 		アップデーターサービス[UPDATER_APP]の起動に失敗しました。ビューアが正しくインストールされ、実行に必要な権限があることを確認してください。引き続き問題が発生する場合は、[SUPPORT_SITE]をご覧ください。
@@ -4720,31 +4720,31 @@ https://wiki.firestormviewer.org/fs_voice
 		リージョンが埋まっているため、このリージョンに入場できません。
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
-		リンクエラー‐所有者が違います。
+		リンクエラー－所有者が違います。
 	</notification>
 	<notification name="LinkFailedNoModNavmeshAcrossRegions">
-		リンクエラー‐リージョンの境界をまたぐナビメッシュは変更できません。
+		リンクエラー－リージョンの境界をまたぐナビメッシュは変更できません。
 	</notification>
 	<notification name="LinkFailedNoPermToEdit">
-		リンクエラー‐編集権限がありません。
+		リンクエラー－編集権限がありません。
 	</notification>
 	<notification name="LinkFailedTooManyPrims">
-		リンクエラー‐プリミティブが多すぎます。
+		リンクエラー－プリミティブが多すぎます。
 	</notification>
 	<notification name="LinkFailedCantLinkNoCopyNoTrans">
-		リンクエラー‐コピー不可と譲渡不可のオブジェクトをリンクできません。
+		リンクエラー－コピー不可と譲渡不可のオブジェクトをリンクできません。
 	</notification>
 	<notification name="LinkFailedNothingLinkable">
-		リンクエラー‐リンクできるものがありません。
+		リンクエラー－リンクできるものがありません。
 	</notification>
 	<notification name="LinkFailedTooManyPathfindingChars">
-		リンクエラー‐経路探索の文字数が多すぎます。
+		リンクエラー－経路探索の文字数が多すぎます。
 	</notification>
 	<notification name="LinkFailedInsufficientLand">
-		リンクエラー‐土地のリソースが足りません。
+		リンクエラー－土地のリソースが足りません。
 	</notification>
 	<notification name="LinkFailedTooMuchPhysics">
-		オブジェクトが使用する物理リソースが多すぎます‐そのダイナミクスが無効になっています。
+		オブジェクトが使用する物理リソースが多すぎます－そのダイナミクスが無効になっています。
 	</notification>
 	<notification name="EstateManagerFailedllTeleportHome">
 		[SLURL] のオブジェクト「[OBJECT_NAME]」で不動産マネージャーのホームをテレポートできません。
@@ -5672,6 +5672,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="ポーズ上書きの確認" name="ConfirmPoserOverwrite">
 		「[POSE_NAME]」を上書きしてもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="はい"/>
+	</notification>
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		アウトフィットの数が多すぎます：[AMOUNT]個。これにより、ビューアがハングしたり、接続が切断されたりする可能性があります。パフォーマンスを向上させるには、アウトフィットの数を減らすことをご検討ください。（[MAX]個未満）
+		<usetemplate ignoretext="アウトフィット数の警告" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Primfeedへのログインリクエストが拒否されました。

@@ -384,7 +384,7 @@
 			<text name="Teleport Routing: ">
 				テレポート経路：
 			</text>
-			<combo_box name="landing type" tool_tip="テレポート経路‐あなたの土地へのテレポート経路を選択してください。">
+			<combo_box name="landing type" tool_tip="テレポート経路－あなたの土地へのテレポート経路を選択してください。">
 				<combo_box.item label="不可" name="Blocked"/>
 				<combo_box.item label="ランディング地点のみ" name="LandingPoint"/>
 				<combo_box.item label="どこでも可能" name="Anywhere"/>

@@ -14765,6 +14765,18 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
   </notification>
 
   <notification
+   icon="notifytip.tga"
+   name="FSLargeOutfitsWarningInThisSession"
+   type="alertmodal">
+    <unique/>
+    A large number of outfits were detected: [AMOUNT]. This may cause viewer hangs or disconnects. Consider reducing the number of outfits for better performance (below [MAX]).
+    <usetemplate
+     ignoretext="Outfit count warning"
+     name="okignore"
+     yestext="OK" />
+  </notification>
+
+  <notification
    icon="alertmodal.tga"
    name="PrimfeedLoginRequestFailed"
    persist="false"

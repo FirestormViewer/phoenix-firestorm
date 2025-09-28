@@ -241,7 +241,7 @@
 			<menu_item_check label="反射プローブの影響範囲を表示する" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="選択ビームを表示する" name="Show Selection Beam"/>
 			<menu_item_check label="透過をハイライトする" name="Highlight Transparent"/>
-			<menu_item_check label="‐透過リグを含む" name="Include Transparent Rigged" />
+			<menu_item_check label="－透過リグを含む" name="Include Transparent Rigged" />
 			<menu_item_check label="ポストプロセッシングを無効化" name="No Post"/>
 			<menu  label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
 				<menu_item_check label="デフォルト" name="Default lod setting"/>
