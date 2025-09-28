@@ -915,15 +915,14 @@ void FSFloaterPoser::timedReload()
 
     if (loadPoseFromXml(avatar, mLoadPoseTimer->getPosePath(), mLoadPoseTimer->getLoadMethod()))
     {
-        setLoadingProgress(false);
+        mLoadPoseTimer->completeLoading();
         onJointTabSelect();
         refreshJointScrollListMembers();
         setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
     }
-    else
-    {
-        setLoadingProgress(true);
-    }
+
+    if (mLoadPoseTimer->loadCompleteOrFailed())
+        setLoadingProgress(false);
 }
 
 void FSFloaterPoser::setLoadingProgress(bool started)
@@ -1145,22 +1144,25 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                     setJointBaseRotationToZero = startFromZeroRot;
 
                 if (loadPositions && control_map.has("position"))
-                {
                     vec3.setValue(control_map["position"]);
-                    mPoserAnimator.loadJointPosition(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointPosition(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
 
                 if (loadRotations && control_map.has("rotation"))
-                {
                     vec3.setValue(control_map["rotation"]);
-                    mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
 
                 if (loadScales && control_map.has("scale"))
-                {
                     vec3.setValue(control_map["scale"]);
-                    mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
 
                 worldLocked = control_map.has("worldLocked") ? control_map["worldLocked"].asBoolean() : false;
                 mPoserAnimator.setRotationIsWorldLocked(avatar, *poserJoint, worldLocked);
@@ -1823,6 +1825,9 @@ void FSFloaterPoser::setUiSelectedAvatarSaveFileName(const std::string& saveFile
 
 LLVOAvatar* FSFloaterPoser::getAvatarByUuid(const LLUUID& avatarToFind) const
 {
+    if (avatarToFind.isNull())
+        return nullptr;
+
     for (LLCharacter* character : LLCharacter::sInstances)
     {
         if (avatarToFind != character->getID())
@@ -2775,15 +2780,14 @@ bool FSLoadPoseTimer::tick()
 {
     if (!mAttemptLoading)
         return false;
-
-    if (mLoadAttempts > 5)
-        return false;
-
     if (mCallback.empty())
         return false;
 
-    mCallback();
+    if (mLoadAttempts >= mMaxLoadAttempts)
+        mAttemptLoading = false;
+
     mLoadAttempts++;
+    mCallback();
     return false;
 }
 

@@ -542,9 +542,11 @@ public:
     FSLoadPoseTimer(callback_t callback);
     /*virtual*/ bool tick();
 
-    void tryLoading(std::string filePath, E_LoadPoseMethods loadMethod);
-    std::string getPosePath() { return mPoseFullPath; };
-    E_LoadPoseMethods getLoadMethod() { return mLoadType; };
+    void              tryLoading(std::string filePath, E_LoadPoseMethods loadMethod);
+    bool              loadCompleteOrFailed() const { return !mAttemptLoading && mLoadAttempts > 0; }
+    void              completeLoading() { mAttemptLoading = false; }
+    std::string       getPosePath() { return mPoseFullPath; };
+    E_LoadPoseMethods getLoadMethod() const { return mLoadType; };
 
 private:
     callback_t        mCallback;
@@ -552,6 +554,7 @@ private:
     E_LoadPoseMethods mLoadType       = ROT_POS_AND_SCALES;
     std::string       mPoseFullPath;
     int               mLoadAttempts = 0;
+    const int         mMaxLoadAttempts = 5;
 };
 
 #endif

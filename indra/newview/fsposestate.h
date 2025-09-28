@@ -41,9 +41,6 @@ public:
     /// Captures the current animations posing the supplied avatar and how long they have been playing.
     /// </summary>
     /// <param name="avatar">The avatar whose animations are to be captured.</param>
-    /// <remarks>
-    /// Only animations owned by the supplied avatar are documented.
-    /// </remarks>
     void captureMotionStates(LLVOAvatar* avatar);
 
     /// <summary>
@@ -53,6 +50,17 @@ public:
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="jointNamesRecaptured">The names of the joints being recaptured.</param>
     void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured);
+
+    /// <summary>
+    /// Add a new posing state, or updates the matching posing state with the supplied data.
+    /// </summary>
+    /// <param name="avatar">The avatar the posing state is intended for.</param>
+    /// <param name="animId">The ID of the animation.</param>
+    /// <param name="updateTime">The frame-time of the animation.</param>
+    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
+    /// <param name="captureOrder">The capture order.</param>
+    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
+    bool addOrUpdatePosingMotionState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
 
     /// <summary>
     /// Removes all current animation states for the supplied avatar.
@@ -98,11 +106,6 @@ private:
     class fsMotionState
     {
     public:
-        /// <summary>
-        /// The avatar ID this record is associated with.
-        /// </summary>
-        LLUUID avatarId;
-
         /// <summary>
         /// The motion ID recorded animating the avatar ID.
         /// </summary>

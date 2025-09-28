@@ -18,7 +18,6 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
             continue;
 
         fsMotionState newState;
-        newState.avatarId       = avatar->getID();
         newState.motionId       = anim_it->first;
         newState.lastUpdateTime = motion->getLastUpdateTime();
         newState.captureOrder   = 0;
@@ -39,11 +38,10 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
     // this happens on second/subsequent recaptures; the first recapture is no longer needed
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end();)
     {
-        bool avatarMatches    = (*it).avatarId == avatar->getID();
         std::string joints    = (*it).jointNamesAnimated;
         bool recaptureMatches = !joints.empty() && !jointNamesRecaptured.empty() && jointNamesRecaptured.find(joints) != std::string::npos;
 
-        if (avatarMatches && recaptureMatches)
+        if (recaptureMatches)
             it = sMotionStates[avatar->getID()].erase(it);
         else
             it++;
@@ -61,11 +59,10 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         bool foundMatch = false;
         for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
         {
-            bool avatarMatches = (*it).avatarId == avatar->getID();
             bool motionIdMatches = (*it).motionId == anim_it->first;
             bool updateTimesMatch = (*it).lastUpdateTime == motion->getLastUpdateTime(); // consider when recapturing the same animation at different times for a subset of bones
 
-            foundMatch = avatarMatches && motionIdMatches && updateTimesMatch;
+            foundMatch = motionIdMatches && updateTimesMatch;
             if (foundMatch)
                 break;
         }
@@ -74,7 +71,6 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
             continue;
 
         fsMotionState newState;
-        newState.avatarId           = avatar->getID();
         newState.motionId           = anim_it->first;
         newState.lastUpdateTime     = motion->getLastUpdateTime();
         newState.jointNamesAnimated = jointNamesRecaptured;
@@ -85,19 +81,41 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
     }
 }
 
+bool FSPoseState::addOrUpdatePosingMotionState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder)
+{
+    if (!avatar)
+        return false;
+
+    bool foundMatch = false;
+    for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
+    {
+        bool motionIdMatches = (*it).motionId == animId;
+        bool updateTimesMatch = (*it).lastUpdateTime == updateTime;
+        bool jointNamesMatch = (*it).jointNamesAnimated == jointNames;
+        bool captureOrdersMatch  = (*it).captureOrder == captureOrder;
+
+        foundMatch = motionIdMatches && updateTimesMatch && jointNamesMatch && captureOrdersMatch;
+        if (foundMatch)
+            return false;
+    }
+
+    fsMotionState newState;
+    newState.motionId           = animId;
+    newState.lastUpdateTime     = updateTime;
+    newState.jointNamesAnimated = jointNames;
+    newState.captureOrder       = captureOrder;
+    newState.avatarOwnsPose     = false;
+
+    sMotionStates[avatar->getID()].push_back(newState);
+    return true;
+}
+
 void FSPoseState::purgeMotionStates(LLVOAvatar* avatar)
 {
     if (!avatar)
         return;
 
-    std::vector<fsMotionState>::iterator it;
-    for (it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end();)
-    {
-        if ((*it).avatarId == avatar->getID())
-            it = sMotionStates[avatar->getID()].erase(it);
-        else
-            it++;
-    }
+     sMotionStates[avatar->getID()].clear();
 }
 
 void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
@@ -108,8 +126,6 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
     int animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
-        if (it->avatarId != avatar->getID())
-            continue;
         if (!it->avatarOwnsPose)
             continue;
 
@@ -118,7 +134,6 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
         (*saveRecord)[uniqueAnimId]["lastUpdateTime"]     = it->lastUpdateTime;
         (*saveRecord)[uniqueAnimId]["jointNamesAnimated"] = it->jointNamesAnimated;
         (*saveRecord)[uniqueAnimId]["captureOrder"]       = it->captureOrder;
-        (*saveRecord)[uniqueAnimId]["playOrder"]          = animNumber;
     }
 }
 
@@ -131,14 +146,13 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, LLSD pose)
 
     for (auto itr = pose.beginMap(); itr != pose.endMap(); ++itr)
     {
-        std::string const& name        = itr->first;
-        LLSD const&        control_map = itr->second;
+        std::string const& name = itr->first;
+        LLSD const& control_map = itr->second;
 
         if (!name.starts_with("poseState"))
             continue;
 
         fsMotionState newState;
-        newState.avatarId       = avatar->getID();
         newState.avatarOwnsPose = true;
 
         if (control_map.has("animationId"))
@@ -178,9 +192,6 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
     bool needPriorityReset = false;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
     {
-        if (it->avatarId != avatar->getID())
-            continue;
-
         needPriorityReset = it->captureOrder > lastCaptureOrder;
 
         if (it->motionApplied)
@@ -215,8 +226,6 @@ void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotio
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
     {
         if (it->jointNamesAnimated.empty())
-            continue;
-        if (it->avatarId != avatar->getID())
             continue;
         if (it->motionApplied)
             continue;

@@ -735,6 +735,17 @@ public:
     void updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserAnimator::FSPoserJoint*> jointsRecaptured);
 
     /// <summary>
+    /// Add a new posing state, or updates the matching posing state with the supplied data.
+    /// </summary>
+    /// <param name="avatar">The avatar the posing state is intended for.</param>
+    /// <param name="animId">The ID of the animation.</param>
+    /// <param name="updateTime">The frame-time of the animation.</param>
+    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
+    /// <param name="captureOrder">The capture order.</param>
+    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
+    bool addOrUpdatePosingState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
+
+    /// <summary>
     /// Traverses the joints and applies reversals to the base rotations if needed.
     /// </summary>
     /// <param name="posingMotion">The posing motion whose pose states require updating.</param>
