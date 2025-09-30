@@ -1328,9 +1328,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3da1dcd779ab0622d5516082a3fc76cc</string>
+              <string>d9b763952986b176de253e804ffe16ee</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.6-darwin64-252731651.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.6-darwin64-252732257.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
