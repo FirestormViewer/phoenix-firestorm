@@ -238,6 +238,13 @@
 			<menu_item_check label="突出顯示透明物件" name="Highlight Transparent" />
 			<menu_item_check label="-包括已綁定骨骼的透明物件" name="Include Transparent Rigged" />
 			<menu_item_check label="無後期處理" name="No Post" />
+			<menu label="選擇細節層次等級" name="Selection level of detail">
+				<menu_item_check label="預設" name="Default lod setting" />
+				<menu_item_check label="高" name="High lod setting" />
+				<menu_item_check label="中" name="Medium lod setting" />
+				<menu_item_check label="低" name="Low lod setting" />
+				<menu_item_check label="最低" name="Lowest lod setting" />
+			</menu>
 			<menu_item_check label="對齊到網格" name="Snap to Grid" />
 			<menu_item_call label="將物件XY對齊到網格" name="Snap Object XY to Grid" />
 			<menu_item_call label="使用選區為網格" name="Use Selection for Grid" />

@@ -220,11 +220,7 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
 
     // *TODO: LLUICtrlFactory::defaultBuilder does not use "display_children" from xml. Should be investigated.
     tab->setDisplayChildren(false);
-
-    // <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
-    //mAccordion->addCollapsibleCtrl(tab);
-    mAccordion->addCollapsibleCtrl(tab, false);
-    // </FS:ND>
+    mAccordion->addCollapsibleCtrl(tab);
 
     // Start observing the new outfit category.
     LLWearableItemsList* list = tab->getChild<LLWearableItemsList>("wearable_items_list");
@@ -1120,8 +1116,21 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     }
 
     // <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
-    if (mRefreshListState.Added.size() > 128)
-        LL_WARNS() << "Large amount of outfits found: " << mRefreshListState.Added.size() << " this may cause hangs and disconnects" << LL_ENDL;
+    S32 currentOutfitsAmount = (S32)mRefreshListState.Added.size();
+    constexpr S32 maxSuggestedOutfits = 200;
+    if (currentOutfitsAmount > maxSuggestedOutfits)
+    {
+        LL_WARNS() << "Large amount of outfits found: " << currentOutfitsAmount << " this may cause hangs and disconnects" << LL_ENDL;
+        static LLCachedControl<bool> fsLargeOutfitsWarningInThisSession(gSavedSettings, "FSLargeOutfitsWarningInThisSession");
+        if (!fsLargeOutfitsWarningInThisSession)
+        {
+            gSavedSettings.setBOOL("FSLargeOutfitsWarningInThisSession", true);
+            LLSD args;
+            args["AMOUNT"] = currentOutfitsAmount;
+            args["MAX"] = maxSuggestedOutfits;
+            LLNotificationsUtil::add("FSLargeOutfitsWarningInThisSession", args);
+        }
+    }
     // </FS:ND>
 
     // <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
@@ -1157,7 +1166,18 @@ void LLOutfitListBase::onIdleRefreshList()
         return;
     }
 
-    const F64 MAX_TIME = 0.05f;
+    // <FS:PP> Scale MAX_TIME with FPS to avoid overloading the viewer with function calls at low frame rates
+    // const F64 MAX_TIME = 0.05f;
+    F64 MAX_TIME = 0.05f;
+    constexpr F64 min_time = 0.001f;
+    constexpr F64 threshold_fps = 30.0;
+    const auto current_fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, 1);
+    if (current_fps < threshold_fps)
+    {
+        MAX_TIME = min_time + (current_fps / threshold_fps) * (MAX_TIME - min_time);
+    }
+    // </FS:PP>
+
     F64 curent_time = LLTimer::getTotalSeconds();
     const F64 end_time = curent_time + MAX_TIME;
 
@@ -1173,9 +1193,6 @@ void LLOutfitListBase::onIdleRefreshList()
     }
     mRefreshListState.Added.clear();
     mRefreshListState.AddedIterator = mRefreshListState.Added.end();
-
-    // <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
-    arrange();
 
     // Handle removed tabs.
     while (mRefreshListState.RemovedIterator < mRefreshListState.Removed.end())
@@ -1200,8 +1217,8 @@ void LLOutfitListBase::onIdleRefreshList()
 
         // Links aren't supposed to be allowed here, check only cats
         if (cat)
-            {
-        std::string name = cat->getName();
+        {
+            std::string name = cat->getName();
             updateChangedCategoryName(cat, name);
         }
 

@@ -74,7 +74,7 @@
 					 follows="all"
 					 height="102"
 					 layout="topleft"
-					 left="10"
+					 left="6"
 					 name="preset_views_list"
 					 top_pad="0"
 					 right="-1"
@@ -99,7 +99,7 @@
 						<panel_camera_item
 						 name="group_view"
 						 height="20"
-						 top_pad="6">
+						 top_pad="1">
 							<panel_camera_item.mousedown_callback
 							 function="CameraPresets.ChangeView"
 							 parameter="Side View"/>
@@ -115,9 +115,8 @@
 						</panel_camera_item>
 						<panel_camera_item
 						 name="rear_view"
-						 layout="topleft"
 						 height="20"
-						 top_pad="6">
+						 top_pad="1">
 							<panel_camera_item.mousedown_callback
 							 function="CameraPresets.ChangeView"
 							 parameter="Rear View"/>
@@ -131,12 +130,30 @@
 								Rear View
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<panel_camera_item
+						 name="tpp_view"
+						 layout="topleft"
+						 height="20"
+						 top_pad="1">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="TPP View"/>
+							<panel_camera_item.picture
+							 image_name="Cam_Preset_TPP_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Cam_Preset_TPP_On"/>
+							<panel_camera_item.text
+							 name="tpp_view_text"
+							 top="22">
+								TPP View
+							</panel_camera_item.text>
+						</panel_camera_item>
 						<combo_box
-						 height="23"
+						 height="20"
 						 left="0"
 						 mouse_opaque="true"
 						 name="preset_combo"
-						 top_pad="1"
+						 top_pad="-4"
 						 width="122">
 						 <combo_list
 							mouse_wheel_opaque="true"/>
@@ -146,8 +163,8 @@
 							value="default" />
 						</combo_box>
 						<button
-						 height="16"
-						 width="16"  
+						 height="13"
+						 width="13"
 						 layout="topleft"
 						 mouse_opaque="true"
 						 name="gear_btn"
@@ -163,7 +180,7 @@
 						</button>
 						<button
 						 follows="top|left"
-						 height="23"
+						 height="20"
 						 label="Position..."
 						 layout="topleft"
 						 left_pad="5"

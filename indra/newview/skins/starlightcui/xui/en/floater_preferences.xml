@@ -99,7 +99,7 @@ https://accounts.secondlife.com/change_email/
     <tab_container
      follows="all"
      halign="left"
-     height="440"
+     height="480"
      layout="topleft"
      left="0"
      name="pref core"

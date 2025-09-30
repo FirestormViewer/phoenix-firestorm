@@ -243,7 +243,7 @@ if (LINUX OR DARWIN)
   endif ()
 
   if(LINUX)
-    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-pragmas -Wno-deprecated")
   endif()
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)

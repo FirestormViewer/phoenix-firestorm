@@ -328,6 +328,7 @@ bool    LLPipeline::sRenderScriptedBeacons = false;
 bool    LLPipeline::sRenderScriptedTouchBeacons = true;
 bool    LLPipeline::sRenderParticleBeacons = false;
 bool    LLPipeline::sRenderSoundBeacons = false;
+bool    LLPipeline::sRenderRegionCornerBeacons = false; // <FS:PP> FIRE-33085 Region corner markers
 bool    LLPipeline::sRenderBeacons = false;
 bool    LLPipeline::sRenderHighlight = true;
 LLRender::eTexIndex LLPipeline::sRenderHighlightTextureChannel = LLRender::DIFFUSE_MAP;
@@ -470,6 +471,7 @@ void LLPipeline::init()
     sRenderScriptedTouchBeacons = gSavedSettings.getBOOL("scripttouchbeacon");
     sRenderParticleBeacons = gSavedSettings.getBOOL("particlesbeacon");
     sRenderSoundBeacons = gSavedSettings.getBOOL("soundsbeacon");
+    sRenderRegionCornerBeacons = gSavedSettings.getBOOL("fsregioncornerbeacons"); // <FS:PP> FIRE-33085 Region corner markers
     sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
     sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
 
@@ -663,6 +665,9 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("FSFocusPointFollowsPointer");
     connectRefreshCachedSettingsSafe("FSFocusPointLocked");
     // </FS:Beq>
+    // <FS:PP> FIRE-33085 Region corner markers
+    connectRefreshCachedSettingsSafe("fsregioncornerbeacons");
+    // </FS:PP>
 
     LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl("CollectFontVertexBuffers");
     if (cntrl_ptr.notNull())
@@ -1168,6 +1173,9 @@ void LLPipeline::refreshCachedSettings()
     LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
     LLPipeline::sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
     // </FS:Ansariel>
+    // <FS:PP> FIRE-33085 Region corner markers
+    LLPipeline::sRenderRegionCornerBeacons = gSavedSettings.getBOOL("fsregioncornerbeacons");
+    // </FS:PP>
 
     LLPipeline::sUseOcclusion =
             (!gUseWireframe
@@ -3917,6 +3925,37 @@ void LLPipeline::postSort(LLCamera &camera)
             // now deal with highlights for all those seeable sound sources
             forAllVisibleDrawables(renderSoundHighlights);
         }
+
+        // <FS:PP> FIRE-33085 Region corner markers
+        if (sRenderRegionCornerBeacons)
+        {
+            LLViewerRegion* region = gAgent.getRegion();
+            if (region)
+            {
+                LLVector3 origin = region->getOriginAgent();
+                F32 width = region->getWidth();
+
+                LLVector3 corner1 = origin; // Southwest
+                LLVector3 corner2 = origin + LLVector3(width, 0, 0); // Southeast
+                LLVector3 corner3 = origin + LLVector3(0, width, 0); // Northwest
+                LLVector3 corner4 = origin + LLVector3(width, width, 0); // Northeast
+
+                corner1.mV[VZ] = region->getLandHeightRegion(LLVector3(0, 0, 0));
+                corner2.mV[VZ] = region->getLandHeightRegion(LLVector3(width, 0, 0));
+                corner3.mV[VZ] = region->getLandHeightRegion(LLVector3(0, width, 0));
+                corner4.mV[VZ] = region->getLandHeightRegion(LLVector3(width, width, 0));
+
+                LLColor4 corner_color(1.0f, 1.0f, 0.0f, 0.8f);
+                LLColor4 text_color(1.0f, 1.0f, 1.0f, 1.0f);
+
+                gObjectList.addDebugBeacon(corner1, "SW", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner2, "SE", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner3, "NW", corner_color, text_color, DebugBeaconLineWidth);
+                gObjectList.addDebugBeacon(corner4, "NE", corner_color, text_color, DebugBeaconLineWidth);
+            }
+        }
+        // </FS:PP>
+
     }
     }
     LL_PUSH_CALLSTACKS();
@@ -6709,6 +6748,23 @@ bool LLPipeline::getRenderHighlights()
     return sRenderHighlight;
 }
 
+// <FS:PP> FIRE-33085 Region corner markers
+void LLPipeline::setRenderRegionCornerBeacons(bool val)
+{
+    sRenderRegionCornerBeacons = val;
+}
+
+void LLPipeline::toggleRenderRegionCornerBeacons()
+{
+    sRenderRegionCornerBeacons = !sRenderRegionCornerBeacons;
+}
+
+bool LLPipeline::getRenderRegionCornerBeacons()
+{
+    return sRenderRegionCornerBeacons;
+}
+// </FS:PP>
+
 // static
 void LLPipeline::setRenderHighlightTextureChannel(LLRender::eTexIndex channel)
 {
@@ -8821,12 +8877,12 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     shader.uniform1f(LLShaderMgr::DEFERRED_BLUR_SIZE, RenderShadowBlurSize);
 
 // <FS:WW> Compute scale factor to match AO appearance between view and snapshot.
-	F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw() / deferred_target->getHeight();
-	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
-	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale / screen_to_target_scale_factor);
-	//shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
-	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, RenderSSAOMaxScale / screen_to_target_scale_factor);
-	// </FS:WW>
+    F32 screen_to_target_scale_factor = (F32)gViewerWindow->getWindowHeightRaw() / deferred_target->getHeight();
+    //shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale);
+    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_RADIUS, RenderSSAOScale / screen_to_target_scale_factor);
+    //shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, (GLfloat)RenderSSAOMaxScale);
+    shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_MAX_RADIUS, RenderSSAOMaxScale / screen_to_target_scale_factor);
+    // </FS:WW>
 
     F32 ssao_factor = RenderSSAOFactor;
     shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR, ssao_factor);

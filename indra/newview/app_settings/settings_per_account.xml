@@ -876,6 +876,18 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
+	<key>FSLastOpenIMs</key>
+	<map>
+		<key>Comment</key>
+			<string>List of IM session IDs that were open when the viewer was last closed</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>LLSD</string>
+		<key>Value</key>
+			<array>
+			</array>
+	</map>
 	<key>FSKeywordCaseSensitive</key>
 	<map>
 		<key>Comment</key>

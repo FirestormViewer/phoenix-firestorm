@@ -436,6 +436,12 @@ public:
     static void toggleRenderSoundBeacons();
     static bool getRenderSoundBeacons();
 
+    // <FS:PP> FIRE-33085 Region corner markers
+    static void setRenderRegionCornerBeacons(bool val);
+    static void toggleRenderRegionCornerBeacons();
+    static bool getRenderRegionCornerBeacons();
+    // </FS:PP>
+
     static void setRenderMOAPBeacons(bool val);
     static void toggleRenderMOAPBeacons();
     static bool getRenderMOAPBeacons();
@@ -1023,6 +1029,7 @@ protected:
     static bool             sRenderScriptedBeacons;
     static bool             sRenderParticleBeacons;
     static bool             sRenderSoundBeacons;
+    static bool             sRenderRegionCornerBeacons; // <FS:PP> FIRE-33085 Region corner markers
 public:
     static bool             sRenderBeacons;
     static bool             sRenderHighlight;

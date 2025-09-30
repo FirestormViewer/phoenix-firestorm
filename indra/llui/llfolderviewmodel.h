@@ -378,7 +378,7 @@ protected:
     virtual bool hasParent() override { return mParent != NULL; }
 
     // <FS:ND/>
-    virtual LLFolderViewModelItem* getParent() const { return mParent; }
+    virtual LLFolderViewModelItem* getParent() const override { return mParent; }
 
     S32                         mSortVersion;
     bool                        mPassedFilter;

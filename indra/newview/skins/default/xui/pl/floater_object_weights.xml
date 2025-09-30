@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="object_weights" title="Zaawansowane">
-    <floater.string name="lowest_lod" value="Najniższy" />
+    <floater.string name="lowest_lod" value="Najniż." />
     <floater.string name="low_lod" value="Niski" />
     <floater.string name="medium_lod" value="Średni" />
     <floater.string name="high_lod" value="Wysoki" />

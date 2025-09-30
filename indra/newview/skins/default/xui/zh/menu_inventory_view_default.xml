@@ -7,5 +7,4 @@
 	<menu_item_check label="列表視圖" name="list_view" />
 	<menu_item_check label="圖片視圖" name="gallery_view" />
 	<menu_item_check label="組合視圖" name="combination_view" />
-	<menu_item_check label="庫存設定" name="inv_settings" />
 </toggleable_menu>

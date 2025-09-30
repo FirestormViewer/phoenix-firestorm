@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
  legacy_header_height="18"
- height="332"
+ height="363"
  layout="topleft"
  name="beacons"
  help_topic="beacons"
@@ -12,7 +12,7 @@
  width="240">
     <panel
      follows="left|top|right|bottom"
-     height="327"
+     height="358"
      layout="topleft"
      left="10"
      name="beacons_panel"
@@ -40,7 +40,25 @@
            parameter="lights"/>
         </check_box>
         <check_box
+         control_name="fsregioncornerbeacons"
          top_pad="2"
+         height="16"
+         layout="topleft"
+         label="Region corners"
+         name="fsregioncornerbeacons">
+          <check_box.commit_callback
+           function="Beacons.UICheck" />
+        </check_box>
+        <view_border
+         bevel_style="in"
+         height="0"
+         layout="topleft"
+         left="0"
+         name="cost_text_border"
+         top_pad="5"
+         width="220"/>
+        <check_box
+         top_pad="7"
          control_name="renderbeacons"
          height="16"
          width="100"

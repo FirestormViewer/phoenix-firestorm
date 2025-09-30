@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Sort Outfit">
+	<menu_item_check label="收藏置頂" name="sort_favorites_to_top" />
+	<menu_item_check label="圖片置頂" name="sort_images_to_top" />
+	<menu_item_check label="按名稱排序" name="sort_by_name" />
+</toggleable_menu>

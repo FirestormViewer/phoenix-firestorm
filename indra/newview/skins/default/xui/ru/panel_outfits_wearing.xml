@@ -8,7 +8,6 @@
 		<accordion_tab name="tab_temp_attachments" title="Временные прикрепленные объекты"/>
 	</accordion>
 	<panel name="bottom_panel">
-		<menu_button name="options_gear_btn" tool_tip="Показать дополнительные опции"/>
 		<text name="avatar_complexity_label">
 			Сложность: [WEIGHT]
 		</text>

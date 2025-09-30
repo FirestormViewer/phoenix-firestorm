@@ -937,7 +937,7 @@
 	    <menu_item_check
 	    label="Show On-screen Chat Console"
 	    name="Show On-screen Console"
-	    shortcut="shift|`">
+	    shortcut="alt|shift|`">
 	      <menu_item_check.on_check
 	      function="Comm.CheckShowOnscreenConsole" />
 	      <menu_item_check.on_click

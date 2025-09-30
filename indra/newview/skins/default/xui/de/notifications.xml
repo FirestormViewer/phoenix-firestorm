@@ -5896,6 +5896,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		Bestehende Pose „[POSE_NAME]“ überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
 	</notification>
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		Eine große Anzahl an Outfits wurde erkannt: [AMOUNT]. Dies kann zu einem Blockieren des Viewers oder zu Verbindungsabbrüchen führen. Ziehen Sie eine Reduzierung der Outfits für eine bessere Performance in Betracht (unter [MAX]).
+		<usetemplate ignoretext="Warnung bei zu vielen Outfits" name="okignore" yestext="OK" />
+	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Login-Anfrage wurde von Primfeed abgelehnt.
 	</notification>

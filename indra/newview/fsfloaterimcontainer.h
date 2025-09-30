@@ -41,17 +41,16 @@ public:
     FSFloaterIMContainer(const LLSD& seed);
     virtual ~FSFloaterIMContainer();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void onClose(bool app_quitting);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void onClose(bool app_quitting) override;
     void onCloseFloater(LLUUID& id);
-    /*virtual*/ void draw();
-
-    /*virtual*/ void addFloater(LLFloater* floaterp,
-                                bool select_added_floater,
-                                LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
+    void draw() override;
+    void addFloater(LLFloater* floaterp, 
+                    bool select_added_floater,
+                    LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END) override; 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-    /*virtual*/ void removeFloater(LLFloater* floaterp);
+    void removeFloater(LLFloater* floaterp) override;
 // [/SL:KB]
     bool hasFloater(LLFloater* floaterp);
 
@@ -60,25 +59,32 @@ public:
     static FSFloaterIMContainer* findInstance();
     static FSFloaterIMContainer* getInstance();
 
-    virtual void setVisible(bool b);
-    /*virtual*/ void setMinimized(bool b);
+    F32 getCurrentTransparency() override;
 
-    void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
+    void setVisible(bool b) override;
+    void setMinimized(bool b) override;
 
-    virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg);
-    virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {};
-    virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
-    virtual void sessionRemoved(const LLUUID& session_id);
-    virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id);
+    void onNewMessageReceived(const LLSD& msg);
+
+    void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) override;
+    void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) override {};
+    void sessionVoiceOrIMStarted(const LLUUID& session_id) override {};
+    void sessionRemoved(const LLUUID& session_id) override;
+    void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) override;
 
     static void reloadEmptyFloaters();
     void initTabs();
 
     void addFlashingSession(const LLUUID& session_id);
 
-    void tabOpen(LLFloater* opened_floater, bool from_click);
+    void tabOpen(LLFloater* opened_floater, bool from_click) override;
 
     void startFlashingTab(LLFloater* floater, const std::string& message);
+
+    // <FS:PP> Restore open IMs from previous session
+    void saveOpenIMs();
+    void restoreOpenIMs();
+    // </FS:PP>
 
 private:
     enum eVoiceState

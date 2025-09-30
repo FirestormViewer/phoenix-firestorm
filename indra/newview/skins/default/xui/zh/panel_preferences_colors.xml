@@ -100,6 +100,8 @@
 			<slider label="活躍視窗：" name="active" />
 			<slider label="非活躍視窗：" name="inactive" />
 			<slider label="相機 / 移動：" name="camera_movement" />
+			<slider label="聊天視窗：" name="conversations"/>
+			<check_box name="override_im_active_opacity_checkbox" label="當聊天視窗獲得焦點時使用活躍視窗透明度"/>
 			<text name="console_opacity">控制台透明度：</text>
 			<color_swatch name="console_background" tool_tip="選擇控制台的顏色" />
 			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制台背景的透明度" />

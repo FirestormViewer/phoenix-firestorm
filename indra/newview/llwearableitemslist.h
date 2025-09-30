@@ -256,7 +256,7 @@ public:
 
     void updateItemWeight(U32 item_weight);
 
-    /*virtual*/ void updateItem(const std::string& name, EItemState item_state = IS_DEFAULT);
+    /*virtual*/ void updateItem(const std::string& name, bool favorite, EItemState item_state = IS_DEFAULT);
 
     /*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
 

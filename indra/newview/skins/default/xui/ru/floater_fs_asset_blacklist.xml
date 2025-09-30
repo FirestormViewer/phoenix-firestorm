@@ -32,6 +32,7 @@
 		<columns name="name" label="Имя" />
 		<columns name="region" label="Регион"/>
 		<columns name="type" label="Тип" />
+		<columns name="flags" label="Флаги" />
 		<columns name="date" label="Дата" />
 		<columns name="permanent" label="Постоянно"/>
 	</fs_scroll_list>

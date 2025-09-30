@@ -4,9 +4,9 @@
 		新しいグループを作成…
 	</floater.string>
 	<floater.string name="title_loading">
-		グループのプロフィール‐読み込んでいます…
+		グループのプロフィール－読み込んでいます…
 	</floater.string>
 	<floater.string name="title">
-		グループのプロフィール‐[NAME]
+		グループのプロフィール－[NAME]
 	</floater.string>
 </floater>

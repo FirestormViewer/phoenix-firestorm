@@ -5942,7 +5942,7 @@ void LLVOAvatar::updateVisibility()
 
         if (sDebugInvisible)
         {
-            if (LLNameValue* firstname = getNVPair("FirstName"))
+            if (getNVPair("FirstName"))// <FS:Beq/> Fix more Mac whining.
             {
                 LL_DEBUGS("Avatar") << avString() << " updating visibility" << LL_ENDL;
             }
@@ -12052,7 +12052,7 @@ void LLVOAvatar::getAssociatedVolumes(std::vector<LLVOVolume*>& volumes)
     for (const auto& iter : mAttachmentPoints)
     {
         LLViewerJointAttachment* attachment = iter.second;
-        LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_end = attachment->mAttachedObjects.end();
+        // LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_end = attachment->mAttachedObjects.end(); // <FS:Beq/> set but not used
 
         for (LLViewerObject* attached_object : attachment->mAttachedObjects)
         {

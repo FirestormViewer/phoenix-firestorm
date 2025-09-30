@@ -42,6 +42,11 @@
 #include "llurlregistry.h"
 #include "llvoiceclient.h"
 
+// <FS:PP> Restore open IMs from previous session
+#include "llconversationlog.h"
+#include "llimview.h"
+// </FS:PP>
+
 constexpr F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
 //
@@ -173,6 +178,7 @@ void FSFloaterIMContainer::onClose(bool app_quitting)
 {
     if (app_quitting)
     {
+        saveOpenIMs(); // <FS:PP> Save open IM sessions before closing
         for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
         {
             FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
@@ -372,6 +378,22 @@ FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
 {
     return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
 }
+
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+F32 FSFloaterIMContainer::getCurrentTransparency()
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    static LLCachedControl<bool> im_active_opacity_override(gSavedSettings, "FSImActiveOpacityOverride", false);
+
+    F32 floater_opacity = LLUICtrl::getCurrentTransparency();
+    if (im_active_opacity_override && getTransparencyType() == TT_ACTIVE)
+    {
+        return floater_opacity;
+    }
+
+    return llmin(im_opacity(), floater_opacity);
+}
+// </FS:TJ>
 
 void FSFloaterIMContainer::setVisible(bool b)
 {
@@ -600,4 +622,74 @@ void FSFloaterIMContainer::startFlashingTab(LLFloater* floater, const std::strin
     }
     LLMultiFloater::setFloaterFlashing(floater, true, is_alt_flashing);
 }
+
+// <FS:PP> Restore open IMs from previous session
+void FSFloaterIMContainer::saveOpenIMs()
+{
+    if (!gSavedSettings.getBOOL("FSRestoreOpenIMs"))
+    {
+        gSavedPerAccountSettings.setLLSD("FSLastOpenIMs", LLSD::emptyArray());
+        return;
+    }
+
+    LLSD openIMs = LLSD::emptyArray();
+    for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+    {
+        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
+        if (floater)
+        {
+            LLUUID session_id = floater->getKey();
+            if (session_id.notNull())
+            {
+                LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
+                if (session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
+                {
+                    LLSD session_data = LLSD::emptyMap();
+                    session_data["other_participant_id"] = session->mOtherParticipantID;
+                    session_data["session_name"] = session->mName;
+                    openIMs.append(session_data);
+                }
+            }
+        }
+    }
+
+    gSavedPerAccountSettings.setLLSD("FSLastOpenIMs", openIMs);
+}
+
+void FSFloaterIMContainer::restoreOpenIMs()
+{
+    LLSD openIMs = gSavedPerAccountSettings.getLLSD("FSLastOpenIMs");
+    if (!openIMs.isArray() || openIMs.size() == 0)
+    {
+        return;
+    }
+
+    for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
+    {
+        LLSD session_data = *it;
+        if (session_data.isMap())
+        {
+            LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
+            std::string session_name = session_data["session_name"].asString();
+            if (other_participant_id.notNull())
+            {
+                LLUUID new_session_id;
+                new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_NOTHING_SPECIAL, other_participant_id);
+                if (new_session_id.notNull())
+                {
+                    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
+                    if (im_floater)
+                    {
+                        if (im_floater->getHost() != this)
+                        {
+                            addFloater(im_floater, false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// </FS:PP>
+
 // EOF

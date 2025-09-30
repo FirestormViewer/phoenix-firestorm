@@ -3385,6 +3385,14 @@ bool idle_startup()
         }
         // </FS:PP>
 
+        // <FS:PP> Restore open IMs from previous session
+        if (gSavedSettings.getBOOL("FSRestoreOpenIMs"))
+        {
+            FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
+            floater_imcontainer->restoreOpenIMs();
+        }
+        // </FS:PP>
+
         return true;
     }
 
@@ -4875,6 +4883,9 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 
         //setup map of datetime strings to codes and slt & local time offset from utc
         LLStringOps::setupDatetimeInfo(pacific_daylight_time);
+        // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
+        LLStringOps::setupUsingPacificTime(!LLGridManager::getInstance()->isInSecondLife());
+        // </FS:TJ>
     }
 
     // set up the voice configuration.  Ultimately, we should pass this up as part of each voice

@@ -8507,7 +8507,10 @@ void process_script_teleport_request(LLMessageSystem* msg, void**)
             << LL_ENDL;
 
         instance->trackURL(sim_name, (S32)pos.mV[VX], (S32)pos.mV[VY], (S32)pos.mV[VZ]);
-        if (flags & BEACON_SHOW_MAP)
+        // <FS:PP> FIRE-35747 Do not ignore @showworldmap=n for llMapDestination() [RLVa v2.4.2, 2025-09-11]
+        // if (flags & BEACON_SHOW_MAP)
+        if (flags & BEACON_SHOW_MAP && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP))
+        // </FS:PP>
         {
             bool old_auto_focus = instance->getAutoFocus();
             instance->setAutoFocus(flags & BEACON_FOCUS_MAP);
