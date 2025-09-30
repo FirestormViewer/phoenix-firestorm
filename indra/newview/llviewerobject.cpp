@@ -4336,14 +4336,6 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
     S32 tex_count = getNumTEs();
     for (i = 0; i < tex_count; i++)
     {
-        // <FS:minerjr>
-        // This isused to fix the textures becoming blury when object interacted with by the user and unselected.
-        // If this is changing the boost level for the TEImage for the first time, store the boost level before modifying it.
-        if (getTEImage(i)->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
-        {
-            getTEImage(i)->storeBoostLevel();
-        }
-        // </FS:minerjr>
         getTEImage(i)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
     }
 
@@ -4352,19 +4344,9 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
         LLSculptParams *sculpt_params = (LLSculptParams *)getParameterEntry(LLNetworkData::PARAMS_SCULPT);
         if (sculpt_params)
         {
-	        LLUUID sculpt_id = sculpt_params->getSculptTexture();
-    	    // <FS:minerjr>        
-        	//LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
-        	// This isused to fix the textures becoming blury when object interacted with by the user and unselected.
-        	// If this is changing the boost level for the sculpted for the first time, store the boost level before modifying it.
-        	LLViewerFetchedTexture* sculptedTexture = LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-        	if (sculptedTexture->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
-        	{
-            	sculptedTexture->storeBoostLevel();
-        	}
-        	sculptedTexture->setBoostLevel(LLGLTexture::BOOST_SELECTED);
-        	// </FS:minerjr>
-		}
+            LLUUID sculpt_id = sculpt_params->getSculptTexture();
+            LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+        }
     }
 
     if (boost_children)

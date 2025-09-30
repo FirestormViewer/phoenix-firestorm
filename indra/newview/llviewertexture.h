@@ -437,11 +437,6 @@ public:
     void        setInFastCacheList(bool in_list) { mInFastCacheList = in_list; }
     bool        isInFastCacheList() { return mInFastCacheList; }
 
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    F32         getCloseToCamera() const {return mCloseToCamera ;} // Get close to camera value
-    void        setCloseToCamera(F32 value) {mCloseToCamera = value ;} // Set the close to camera value (0.0f or 1.0f)
-    // </FS:minerjr> [FIRE-35081]
-
     /*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
 
     virtual bool scaleDown() { return false; };
@@ -543,9 +538,6 @@ protected:
 
     bool   mForSculpt ; //a flag if the texture is used as sculpt data.
     bool   mIsFetched ; //is loaded from remote or from cache, not generated locally.
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    F32    mCloseToCamera; // Float (0.0f or 1.0f) to indicate if the texture is close to the camera
-    // </FS:minerjr> [FIRE-35081]
 
 public:
     static F32 sMaxVirtualSize; //maximum possible value of mMaxVirtualSize
