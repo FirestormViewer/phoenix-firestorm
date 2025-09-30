@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="performance" title="グラフィックの最適化">
 	<floater.string name="frame_stats">
-		フレーム：[TOT_FRAME_TIME]㎳‐背景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％　ＵＩ[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％
+		フレーム：[TOT_FRAME_TIME]㎳－背景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％　ＵＩ[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％
 	</floater.string>
 	<floater.string name="limit_fps">
 		ユーザによる制限＠[FPSCAP]ＦＰＳ
@@ -54,7 +54,7 @@
 			<text name="targetfps_desc">
 				目標フレームレート（ｆｐｓ）
 			</text>
-			<spinner name="target_fps" tool_tip="目標ＦＰＳ‐希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
+			<spinner name="target_fps" tool_tip="目標ＦＰＳ－希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
 			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。"/>
 			<check_box label="継続的に" name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。"/>
 			<button name="PrefSaveButton" tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。"/>

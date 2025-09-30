@@ -29,7 +29,7 @@
 	<check_box label="他のユーザーが作成" name="check_created_by_others"/>
 	<check_box label="ログオフ以降" name="check_since_logoff"/>
 	<text name="- OR -">
-		‐または‐
+		－または－
 	</text>
 	<radio_group name="date_search_direction">
 		<radio_item label="より新しい" name="newer"/>

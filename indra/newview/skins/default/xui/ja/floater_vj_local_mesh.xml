@@ -17,7 +17,7 @@
 			<text name="lod_suffix_label">
 				ＬＯＤサフィックス：
 			</text>
-			<combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…。｜｜ＳＬのデフォルト‐（最低はLOD0、最高はサフィックスなし)｜｜ゲームエンジン‐Unity／UE5など（最低=LOD3、最高=LOD0）｜｜ＬＯＤ名‐英語のＬＯＤ名（最低=「LOWEST」、最高=「HIGH」）">
+			<combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…。｜｜ＳＬのデフォルト－（最低はLOD0、最高はサフィックスなし)｜｜ゲームエンジン－Unity／UE5など（最低=LOD3、最高=LOD0）｜｜ＬＯＤ名－英語のＬＯＤ名（最低=「LOWEST」、最高=「HIGH」）">
 				<combo_item name="choose_one">
 					現在
 				</combo_item>

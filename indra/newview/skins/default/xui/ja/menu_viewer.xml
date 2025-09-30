@@ -241,7 +241,7 @@
 			<menu_item_check label="反射プローブの影響範囲を表示する" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="選択ビームを表示する" name="Show Selection Beam"/>
 			<menu_item_check label="透過をハイライトする" name="Highlight Transparent"/>
-			<menu_item_check label="‐透過リグを含む" name="Include Transparent Rigged" />
+			<menu_item_check label="－透過リグを含む" name="Include Transparent Rigged" />
 			<menu_item_check label="ポストプロセッシングを無効化" name="No Post"/>
 			<menu  label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
 				<menu_item_check label="デフォルト" name="Default lod setting"/>
@@ -696,9 +696,6 @@
 		<menu_item_call label="管理者ステータスの呼び出し" name="Request Admin Options"/>
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
 		<menu_item_check label="管理者メニューを表示する" name="View Admin Options"/>
-		<menu label="ダンプ" name="Dump">
-			<menu_item_call label="LLViewerTexturelistを実行" name="LLViewerTexturelist"/>
-		</menu>
 	</menu>
 	<menu label="管理" name="Admin">
 		<menu label="オブジェクト" name="AdminObject">

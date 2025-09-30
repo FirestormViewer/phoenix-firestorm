@@ -1853,7 +1853,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<!-- use value="" because they have preceding spaces -->
 	<string name="Chat Message" value="　チャット："/>
 	<string name="Sound" value="　サウンド："/>
-	<string name="Wait" value="‐　待機："/>
+	<string name="Wait" value="－　待機："/>
 	<string name="AnimFlagStop" value="　アニメーションを停止："/>
 	<string name="AnimFlagStart" value="　アニメーションを開始："/>
 	<string name="Wave" value="　手を振る"/>
@@ -1885,7 +1885,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="Modifiable" value="修正可"/>
 	<string name="Copyable" value="コピー可"/>
 	<string name="Transferable" value="再販可"/>
-	<string name="PermissionsFilter" value="‐[PERMISSIONS]のみ"/>
+	<string name="PermissionsFilter" value="－[PERMISSIONS]のみ"/>
 	<!-- </FS:Zi> -->
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">
@@ -3207,7 +3207,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="MBFatalError">
 		致命的なエラー
 	</string>
-	<string name="MBApplicationError">アプリケーションエラー‐慌てないでください</string>
+	<string name="MBApplicationError">アプリケーションエラー－慌てないでください</string>
 	<string name="MBApplicationErrorDetails">申し訳ございませんが、[APP_NAME]はクラッシュしたため、終了する必要があります。この問題が繰り返し発生する場合は、サポートチームに連絡して次のメッセージを送信してください：
 
 [ERROR_DETAILS]
@@ -4810,7 +4810,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<!-- IM system messages -->
 	<string name="IM_logging_string">
-		‐インスタントメッセージの保存開始‐
+		－インスタントメッセージの保存開始－
 	</string>
 	<string name="IM_typing_start_string">
 		[NAME]は入力しています…
@@ -4849,10 +4849,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		オフライン
 	</string>
 	<string name="not_online_msg">
-		ユーザーがオンラインでありません‐メッセージは保存され、後で配信されます。
+		ユーザーがオンラインでありません－メッセージは保存され、後で配信されます。
 	</string>
 	<string name="not_online_inventory">
-		ユーザーがオンラインでありません‐インベントリに保存されました。
+		ユーザーがオンラインでありません－インベントリに保存されました。
 	</string>
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">[NAME]からメッセージが届いています</string>
@@ -5192,91 +5192,91 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<!-- gestures -->
 	<string name="Male - Excuse me">
-		男性‐すみません
+		男性－すみません
 	</string>
 	<string name="Male - Get lost">
-		男性‐あっち行けよ
+		男性－あっち行けよ
 	</string>
 	<string name="Male - Blow kiss">
-		男性‐投げキッス
+		男性－投げキッス
 	</string>
 	<string name="Male - Boo">
-		男性‐ぶー
+		男性－ぶー
 	</string>
 	<string name="Male - Bored">
-		男性‐退屈
+		男性－退屈
 	</string>
 	<string name="Male - Hey">
-		男性‐やぁ
+		男性－やぁ
 	</string>
 	<string name="Male - Laugh">
-		男性‐笑う
+		男性－笑う
 	</string>
 	<string name="Male - Repulsed">
-		男性‐拒絶
+		男性－拒絶
 	</string>
 	<string name="Male - Shrug">
-		男性‐肩をすくめる
+		男性－肩をすくめる
 	</string>
 	<string name="Male - Stick tougue out">
-		男性‐舌を出す
+		男性－舌を出す
 	</string>
 	<string name="Male - Wow">
-		男性‐わぁ
+		男性－わぁ
 	</string>
 	<string name="Female - Chuckle">
-		女性‐クスクス
+		女性－クスクス
 	</string>
 	<string name="Female - Cry">
-		女性‐泣く
+		女性－泣く
 	</string>
 	<string name="Female - Embarrassed">
-		女性‐恥ずかしい
+		女性－恥ずかしい
 	</string>
 	<string name="Female - Excuse me">
-		女性‐すみません
+		女性－すみません
 	</string>
 	<string name="Female - Get lost">
-		女性‐あっち行ってよ
+		女性－あっち行ってよ
 	</string>
 	<string name="Female - Blow kiss">
-		女性‐投げキッス
+		女性－投げキッス
 	</string>
 	<string name="Female - Boo">
-		女性‐ぶー
+		女性－ぶー
 	</string>
 	<string name="Female - Bored">
-		女性‐退屈
+		女性－退屈
 	</string>
 	<string name="Female - Hey">
-		女性‐やぁ
+		女性－やぁ
 	</string>
 	<string name="Female - Hey baby">
-		女性‐ヘイ、ベィビー！
+		女性－ヘイ、ベィビー！
 	</string>
 	<string name="Female - Laugh">
-		女性‐笑う
+		女性－笑う
 	</string>
 	<string name="Female - Looking good">
-		女性‐いい感じ
+		女性－いい感じ
 	</string>
 	<string name="Female - Over here">
-		女性‐こっちよ
+		女性－こっちよ
 	</string>
 	<string name="Female - Please">
-		女性‐プリーズ
+		女性－プリーズ
 	</string>
 	<string name="Female - Repulsed">
-		女性‐拒絶
+		女性－拒絶
 	</string>
 	<string name="Female - Shrug">
-		女性‐肩をすくめる
+		女性－肩をすくめる
 	</string>
 	<string name="Female - Stick tougue out">
-		女性‐舌を出す
+		女性－舌を出す
 	</string>
 	<string name="Female - Wow">
-		女性‐わぁ
+		女性－わぁ
 	</string>
 	<!-- settings -->
 	<string name="New Day">
@@ -5876,7 +5876,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Group_Titles_Tooltip">アクティブなグループタグを変更します。</string>
 	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの着用物のリストを開きます。</string>
 	<string name="Command_RFO_Tooltip">ビューアにはフレンドのアバターのみが表示され、他のすべてのアバターは削除されます。有効にすると、他のユーザを見えるようにするＴＰが必要になります。</string>
-	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）‐現在表示されているすべてのアニメッシュ（アタッチされているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
+	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）－現在表示されているすべてのアニメッシュ（アタッチされているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
 	<string name="Command_Beacons_Tooltip">ビーコンを表示します。</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		現在、下部のツールバー（↓）にあります。
@@ -6207,7 +6207,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		該当なし
 	</string>
 	<string name="preset_combo_label">
-		‐空のリスト‐
+		－空のリスト－
 	</string>
 	<string name="Default">
 		デフォルト
