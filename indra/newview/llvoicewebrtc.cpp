@@ -699,7 +699,10 @@ LLVoiceDeviceList& LLWebRTCVoiceClient::getCaptureDevices()
 
 void LLWebRTCVoiceClient::setCaptureDevice(const std::string& name)
 {
-    mWebRTCDeviceInterface->setCaptureDevice(name);
+    if (mWebRTCDeviceInterface)
+    {
+        mWebRTCDeviceInterface->setCaptureDevice(name);
+    }
 }
 void LLWebRTCVoiceClient::setDevicesListUpdated(bool state)
 {
@@ -786,7 +789,10 @@ LLVoiceDeviceList& LLWebRTCVoiceClient::getRenderDevices()
 
 void LLWebRTCVoiceClient::setRenderDevice(const std::string& name)
 {
-    mWebRTCDeviceInterface->setRenderDevice(name);
+    if (mWebRTCDeviceInterface)
+    {
+        mWebRTCDeviceInterface->setRenderDevice(name);
+    }
 }
 
 void LLWebRTCVoiceClient::tuningStart()

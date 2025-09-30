@@ -3924,7 +3924,7 @@ LLSD LLAppViewer::getViewerInfo() const
 
     //[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
     info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    info["BANDWIDTH"] = LLViewerThrottle::getMaxBandwidthKbps();
     info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
     //[FIRE 3113 : SJ] Added Settingsfile to info
@@ -4066,7 +4066,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
     //info["UI_SCALE"] = gSavedSettings.getF32("UIScaleFactor");
     //info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    //info["NET_BANDWITH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    //info["NET_BANDWITH"] = LLViewerThrottle::getMaxBandwidthKbps();
     //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
     //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
     //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;
@@ -6055,13 +6055,7 @@ void LLAppViewer::idle()
     // objects and camera should be in sync, do LOD calculations now
     {
         LL_RECORD_BLOCK_TIME(FTM_LOD_UPDATE);
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        // Added a max time limit to the object list updates as these updates do affect the texture system
-        //gObjectList.updateApparentAngles(gAgent);
-        F32 max_update_apparent_angles = 0.025f * gFrameIntervalSeconds.value(); // 20 ms/second decode time
-        max_update_apparent_angles = llclamp(max_update_apparent_angles, 0.002f, 0.005f);  // min 2ms/frame, max 5ms/frame)
-        gObjectList.updateApparentAngles(gAgent, max_update_apparent_angles);
-        // </FS:minerjr> [FIRE-35081]
+        gObjectList.updateApparentAngles(gAgent);
     }
 
     // Update AV render info

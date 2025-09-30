@@ -729,7 +729,6 @@
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
 		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
 		<menu_item_check label="Показать меню администратора" name="View Admin Options"/>
-		<menu label="Дамп" name="Dump" />
 	</menu>
 	<menu label="Администратор" name="Admin">
 		<menu label="Объект" name="AdminObject">
