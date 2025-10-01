@@ -312,7 +312,7 @@ void FSPosingMotion::getJointStateAtTime(std::string jointPoseName, F32 timeToLo
                                             bool* hasPosition, LLVector3* jointPosition,
                                             bool* hasScale,    LLVector3* jointScale)
 {
-    if (this == NULL || mJointMotionList == nullptr)
+    if ( mJointMotionList == nullptr)
         return;
 
     for (U32 i = 0; i < mJointMotionList->getNumJointMotions(); i++)
@@ -348,7 +348,7 @@ bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, 
 
 bool FSPosingMotion::motionAnimatesJoints(std::string recapturedJointNames)
 {
-    if (this == NULL || mJointMotionList == nullptr)
+    if (mJointMotionList == nullptr)
         return false;
 
     for (U32 i = 0; i < mJointMotionList->getNumJointMotions(); i++)
