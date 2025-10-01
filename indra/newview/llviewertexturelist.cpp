@@ -372,187 +372,23 @@ void LLViewerTextureList::shutdown()
 
     mInitialized = false ; //prevent loading textures again.
 }
-// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-// static
-// Allows the menu to call the dump method of the texture list
-void LLViewerTextureList::dumpTexturelist()
-{
-    gTextureList.dump();
-}
-// </FS:minerjr> [FIRE-35081]
 
 void LLViewerTextureList::dump()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     LL_INFOS() << "LLViewerTextureList::dump()" << LL_ENDL;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    S32 texture_count = 0;
-    S32 textures_close_to_camera = 0;
-    std::array<S32, MAX_DISCARD_LEVEL * 2 + 2> image_counts{0}; // Double the size for higher discards from textures < 1024 (2048 can make a 7 and 4096 could make an 8)
-    std::array<S32, 12 * 12> size_counts{0}; // Track the 12 possible sizes (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048)
-    std::array<S32, (MAX_DISCARD_LEVEL * 2 + 2) * 12> discard_counts{0}; // Also need to an 1 additional as -1 is a valid discard level (not loaded by reported as a 1x1 texture)
-    std::array<S32, (MAX_DISCARD_LEVEL * 2 + 2) * 12> fullsize_discard_counts{0}; // Also need to an 1 additional as -1 is a valid discard level (not loaded by reported as a 1x1 texture)
-    std::array<S32, LLViewerTexture::BOOST_MAX_LEVEL * 12> boost_counts{0}; // Track the # of textures at boost levels by 12 possible sizes
-    // Don't Init the buffers with 0's like it's the the 1980's...
-    
-    // </FS:minerjr> [FIRE-35081]
     for (image_list_t::iterator it = mImageList.begin(); it != mImageList.end(); ++it)
     {
         LLViewerFetchedTexture* image = *it;
+
         LL_INFOS() << "priority " << image->getMaxVirtualSize()
         << " boost " << image->getBoostLevel()
         << " size " << image->getWidth() << "x" << image->getHeight()
         << " discard " << image->getDiscardLevel()
         << " desired " << image->getDesiredDiscardLevel()
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        << " close to camera " << (image->getCloseToCamera() > 0.0f ? "Y" : "N") // Display the close to camera flag
-        << " FFType " << fttype_to_string(image->getFTType()) // Display the FFType of the camera
-        << " Type " << (S32)image->getType() // Display the type of the image (LOCAL_TEXTURE = 0, MEDIA_TEXTURE = 1, DYNAMIC_TEXTURE = 2, FETCHED_TEXTURE = 3,LOD_TEXTURE = 4)        
-        << " Sculpted " << (image->forSculpt() ? "Y" : "N")
-        << " # of Faces ";
-        for (S32 index = 0; index < LLRender::NUM_TEXTURE_CHANNELS; index++)
-        {
-            LL_CONT << image->getNumFaces(index) << " ";
-        }        
-        LL_CONT << " # of Volumes ";
-        for (S32 index = 0; index < LLRender::NUM_VOLUME_TEXTURE_CHANNELS; index++)
-        {
-            LL_CONT << image->getNumVolumes(index) << " ";
-        }
-        // </FS:minerjr> [FIRE-35081]
-        LL_CONT << " " << image->getID().asString().substr(0, 7)
+        << " http://asset.siva.lindenlab.com/" << image->getID() << ".texture"
         << LL_ENDL;
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        image_counts[(image->getDiscardLevel() + 1)] += 1; // Need to add +1 to make up for -1 being a possible value
-        S32 x_index = (S32)log2(image->getWidth()); // Convert the width into a 0 based index by taking the Log2 of the size to get the exponent of the size. (1 = 2^0, 2 = 2^1, 4 = 2^2...)
-        S32 y_index = (S32)log2(image->getHeight()); // Convert the height into a 0 based index by taking the Log2 of the size to get the exponent of the size. (1 = 2^0, 2 = 2^1, 4 = 2^2...)
-        size_counts[x_index + y_index * 12] += 1; // Add this texture's dimensions to the size count
-        // Onlyuse the largest size for the texture's discard level(for non-square textures)
-        S32 max_dimension = (y_index > x_index ? y_index : x_index);
-        discard_counts[(image->getDiscardLevel() + 1) + max_dimension * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
-        boost_counts[image->getBoostLevel() + max_dimension * (LLViewerTexture::BOOST_MAX_LEVEL)] += 1;
-        S32 full_x_index = (S32)log2(image->getFullWidth());
-        S32 full_y_index = (S32)log2(image->getFullHeight());
-        S32 full_max_dimension = (full_y_index > full_x_index ? full_y_index : full_x_index);
-        fullsize_discard_counts[(image->getDiscardLevel() + 1) + full_max_dimension * (MAX_DISCARD_LEVEL * 2 + 2)] += 1;
-        texture_count++;
-        textures_close_to_camera += S32(image->getCloseToCamera());
-        // </FS:minerjr> [FIRE-35081]
     }
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    // Add overal texture totals
-    LL_INFOS() << "Texture Stats: Textures in Close to Camera " << textures_close_to_camera << " of " << texture_count << " : " << LL_ENDL;
-
-    // Fix for the -1 discard level as well as higher possible discard levels (for 2048+ size textures)
-    for (S32 index = 0; index < MAX_DISCARD_LEVEL * 2 + 2; index++)
-    {
-        LL_INFOS() << " Discard Level: " << (index - 1) << " Number of Textures: " << image_counts[index] << LL_ENDL;
-    }
-
-    // Create a line to break up the header from the content of the table
-    std::string header_break(13 * 8, '-');
-
-    LL_INFOS() << "Size vs Size" << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-    // Create a header that for the Sizes
-    LL_INFOS() << std::setw(8) << "Size";
-    for (S32 x = 1; x <= 2048; x <<= 1)
-    {
-        LL_CONT << std::setw(8) << x;
-    }
-    LL_CONT << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-
-    // Y Axis is the size of the height of the texture
-    for (S32 y = 0; y < 12; y++)
-    {
-        LL_INFOS() << std::setw(8) << (1 << y);
-        //X Axis is the size of the width of the texture
-        for (S32 x = 0; x < 12; x++)
-        {
-            LL_CONT << std::setw(8) << size_counts[x + y * 12];
-
-        }
-        LL_CONT << LL_ENDL;
-    }
-    LL_INFOS() << LL_ENDL;
-
-    // This is the Discard Level Vs Size counts table
-    LL_INFOS() << "Discard Level Vs Size" << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << std::setw(8) << "Discard";
-    for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
-    {
-        LL_CONT << std::setw(8) << (x - 1);
-    }
-    LL_CONT << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-
-    // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
-    for (S32 y = 0; y < 12; y++)
-    {
-        LL_INFOS() << std::setw(8) << (1 << y);
-        // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
-        for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
-        {
-            LL_CONT << std::setw(8) << discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)];
-        }
-        LL_CONT << LL_ENDL;
-    }
-    LL_INFOS() << LL_ENDL;
-    
-
-    // This is the Discard Level Vs Full Size counts table
-    LL_INFOS() << "Discard Level Vs Full Size" << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-    LL_INFOS() << std::setw(8) << "Discard";
-    for (S32 x = 0; x < MAX_DISCARD_LEVEL * 2 + 2; x++)
-    {
-        LL_CONT << std::setw(8) << (x - 1);
-    }
-    LL_CONT << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-
-    // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
-    for (S32 y = 0; y < 12; y++)
-    {
-        LL_INFOS() << std::setw(8) << (1 << y);
-        // X Axis is the discard level starging from -1 up to 10 (2 x MAX_DISCARD_LEVEL + 1 (for negative number) + 1 additional for the fact that the last value actuauly used on not < but <=)
-        for (S32 x = 0; x < (MAX_DISCARD_LEVEL * 2 + 2); x++)
-        {
-            LL_CONT << std::setw(8) << fullsize_discard_counts[x + y * (MAX_DISCARD_LEVEL * 2 + 2)];
-        }
-        LL_CONT << LL_ENDL;
-    }
-    LL_INFOS() << LL_ENDL;
-
-
-    // This is the Boost Level Vs Size counts table
-    LL_INFOS() << "Boost Level Vs Size" << LL_ENDL;
-    header_break.append((LLViewerTexture::BOOST_MAX_LEVEL * 8) - (12 * 8), '-');
-    LL_INFOS() << header_break << LL_ENDL;    
-    LL_INFOS() << std::setw(8) << "Discard";
-    for (S32 x = 0; x < LLViewerTexture::BOOST_MAX_LEVEL; x++)
-    {
-        LL_CONT << std::setw(8) << x;
-    }
-    LL_CONT << LL_ENDL;
-    LL_INFOS() << header_break << LL_ENDL;
-
-    // Y Axis is the current possible max dimension of the textures (X or Y, which ever is larger is used)
-    for (S32 y = 0; y < 12; y++)
-    {
-        LL_INFOS() << std::setw(8) << (1 << y);
-        // X Axis is the boost level starging from BOOST_NONE up to BOOST_MAX_LEVEL
-        for (S32 x = 0; x < (LLViewerTexture::BOOST_MAX_LEVEL); x++)
-        {
-            LL_CONT << std::setw(8) << boost_counts[x + y * (LLViewerTexture::BOOST_MAX_LEVEL)];
-        }
-        LL_CONT << LL_ENDL;
-    }
-    LL_INFOS() << LL_ENDL;
-
-    // </FS:minerjr> [FIRE-35081]
 }
 
 void LLViewerTextureList::destroyGL()
@@ -808,14 +644,6 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
         imagep->setExplicitFormat(internal_format, primary_format);
     }
 
-    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
-    // Sculpted textures use the RGBA data for coodinates, so any compression can cause artifacts.
-    if (boost_priority == LLViewerFetchedTexture::BOOST_SCULPTED)
-    {
-        // Disable the compression of BOOST_SCULPTED textures
-        if (imagep->getGLTexture())imagep->getGLTexture()->setAllowCompression(false);
-    }
-    // </FS:minerjr> [FIRE-35428]
     addImage(imagep, get_element_type(boost_priority));
 
     if (boost_priority != 0)
@@ -843,11 +671,7 @@ LLViewerFetchedTexture* LLViewerTextureList::createImage(const LLUUID &image_id,
     }
 
     // <FS:Ansariel> Keep Fast Cache option
-    // <FS:minerjr> [FIRE-35428] - Mega prim issue - fix compressed sculpted textures
-    //if(fast_cache_fetching_enabled)
-    // If the texture is Sculpted, don't allow it to be added to fast cache as it can affect the texture.
-    if(fast_cache_fetching_enabled && boost_priority != LLViewerFetchedTexture::BOOST_SCULPTED)
-    // </FS:minerjr> [FIRE-35428]
+    if (fast_cache_fetching_enabled)
     {
         mFastCacheList.insert(imagep);
         imagep->setInFastCacheList(true);
@@ -1108,38 +932,8 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         F32 bias = llclamp(max_discard - 2.f, 1.f, LLViewerTexture::sDesiredDiscardBias);
 
         // convert bias into a vsize scaler
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        //bias = (F32) llroundf(powf(4, bias - 1.f));
-        // Pre-divide the bias so you can just use multiply in the loop
-        bias = (F32) 1.0f / llroundf(powf(4, bias - 1.f));
+        bias = (F32) llroundf(powf(4, bias - 1.f));
 
-        // Apply new rules to bias discard, there are now 2 bias, off-screen and on-screen.
-        // On-screen Bias
-        // Only applied to LOD Textures and one that have Discard > 1 (0, 1 protected)
-        // 
-        // Off-screen Bias
-        // Will be using the old method of applying the mMaxVirtualSize, however
-        // only on LOD textures and fetched textures get bias applied.
-        // 
-        // Local (UI & Icons), Media and Dynamic textures should not have any discard applied to them.
-        // 
-        // Without this, textures will become blurry that are on screen, which is one of the #1
-        // user complaints.
-
-        // Store a seperate max on screen vsize without bias applied.
-        F32 max_on_screen_vsize = 0.0f;
-        S32 on_screen_count = 0;
-        // Moved all the variables outside of the loop
-        bool current_on_screen = false;
-        F32 vsize = 0.0f; // Moved outside the loop to save reallocation every loop
-        F32 important_to_camera = 0.0f;
-        F32 close_to_camera = 0.0f; // Track if the texture is close to the cameras
-        F64 animated = 0; // U64 used to track if a pointer is set for the animations. (The texture matrix of the face is null if no animation assigned to the texture)
-                           // So if you keep adding and the final result is 0, there is no animation
-        // </FS:minerjr> [FIRE-35081]
-        // boost resolution of textures that are important to the camera
-        // Can instead of using max for a min of 1.0, just subtract 1 from the boost and just do a 1 + (TextureCameraBoost - 1) * importanceToCamera)
-        static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 7.f);
         LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
         for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
         {
@@ -1152,42 +946,21 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
                 if (face && face->getViewerObject())
                 {
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-                    // No longer needed as we no longer re-calculate the face's virtual texture size, we use it directly from the face
-                    //F32 radius;
-                    //F32 cos_angle_to_view_dir;
-                    // </FS:minerjr> [FIRE-35081]
+                    F32 radius;
+                    F32 cos_angle_to_view_dir;
 
                     if ((gFrameCount - face->mLastTextureUpdate) > 10)
                     { // only call calcPixelArea at most once every 10 frames for a given face
                         // this helps eliminate redundant calls to calcPixelArea for faces that have multiple textures
                         // assigned to them, such as is the case with GLTF materials or Blinn-Phong materials
-
-                        //face->calcPixelArea(cos_angle_to_view_dir, radius);
-                        // The face already has a function to calculate the Texture Virtual Size, which already calls the calcPixelArea method
-                        // so just call this instead. This can be called from outside this loop by LLVolume objects
-                        face->getTextureVirtualSize();
+                        face->mInFrustum = face->calcPixelArea(cos_angle_to_view_dir, radius);
                         face->mLastTextureUpdate = gFrameCount;
                     }
-                                        
-                    // Also moved allocation outside the loop
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-                    //F32 vsize = face->getPixelArea();
 
-                    //on_screen |= face->mInFrustum;
-                    // Get the already calculated face's virtual size, instead of re-calculating it
-                    vsize = face->getVirtualSize();
-                    
-                    current_on_screen = face->mInFrustum; // Create a new var to store the current on screen status                    
-                    on_screen_count += current_on_screen; // Count the number of on sceen faces instead of using brach
-                    important_to_camera = face->mImportanceToCamera; // Store so we don't have to do 2 indirects later on
-                    // If the face/texture is animated, then set the boost level to high, so that it will ways be the best quality
-                    animated += S64(face->mTextureMatrix);
-                    animated += S64(face->hasMedia()); // Add has media for both local and parcel media
-                    animated += S64(imagep->hasParcelMedia());
+                    F32 vsize = face->getPixelArea();
 
-                    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings (It is)
-                    /*
+                    on_screen |= face->mInFrustum;
+
                     // Scale desired texture resolution higher or lower depending on texture scale
                     //
                     // Minimum usage examples: a 1024x1024 texture with aplhabet (texture atlas),
@@ -1196,7 +969,6 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     //
                     // Maximum usage examples: huge chunk of terrain repeats texture
                     // TODO: make this work with the GLTF texture transforms
-
                     S32 te_offset = face->getTEOffset();  // offset is -1 if not inited
                     LLViewerObject* objp = face->getViewerObject();
                     const LLTextureEntry* te = (te_offset < 0 || te_offset >= objp->getNumTEs()) ? nullptr : objp->getTE(te_offset);
@@ -1226,46 +998,17 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     {
                         break;
                     }
-                    */
-
-                    // Use math to skip having to use a conditaional check
-                    // Bools are stored as 0 false, 1 true, use to cheat
-                    // Lerp instead of doing conditional input
-                    // If the image is import to the camera, even a little then make the on screen true                    
-                    on_screen_count += S32(important_to_camera * 1000.0f);
-                    //vsize = vsize + (vsize * (1.0f + important_to_camera * texture_camera_boost) - vsize) * F32(current_on_screen);
-                    // Apply boost of size based upon importance to camera
-                    vsize = vsize + (vsize * important_to_camera * texture_camera_boost);
-                    // Apply second boost based upon if the texture is close to the camera (< 16.1 meters * draw distance multiplier)
-                    vsize = vsize + (vsize * face->mCloseToCamera * texture_camera_boost);
-                    // Update the max on screen vsize based upon the on screen vsize
-                    close_to_camera += face->mCloseToCamera;
-                    // LL_DEBUGS() << face->getViewerObject()->getID() << " TID " << imagep->getID() << " #F " << imagep->getNumFaces(i) << " OS Vsize: " << vsize << " Vsize: " << (vsize * bias) << " CTC: " << face->mCloseToCamera << " Channel " << i << " Face Index " << fi << LL_ENDL;
-                    max_on_screen_vsize = llmax(max_on_screen_vsize, vsize);
-                    max_vsize = llmax(max_vsize, vsize * bias);
-                    // </FS:minerjr> [FIRE-35081]
                 }
             }
 
-            // <FS> [FIRE-35081] Blurry prims not changing with graphics settings
-            //if (max_vsize >= LLViewerFetchedTexture::sMaxVirtualSize
-            //    && (on_screen || LLViewerTexture::sDesiredDiscardBias <= BIAS_TRS_ON_SCREEN))
-            //{
-            //    break;
-            //}
-            // </FS>
+            if (max_vsize >= LLViewerFetchedTexture::sMaxVirtualSize
+                && (on_screen || LLViewerTexture::sDesiredDiscardBias <= BIAS_TRS_ON_SCREEN))
+            {
+                break;
+            }
         }
 
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        // Replaced all the checks for this bool to be only in this 1 place instead of in the loop.
-        // If the on screen counter is greater then 0, then there was at least 1 on screen texture
-        on_screen = bool(on_screen_count);
-        imagep->setCloseToCamera(close_to_camera > 0.0f ? 1.0f : 0.0f);
-
-        //if (face_count > max_faces_to_check)
-        // Add check for if the image is animated to boost to high as well
-        if (face_count > max_faces_to_check || animated != 0)
-        // </FS:minerjr> [FIRE-35081]
+        if (face_count > max_faces_to_check)
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
             max_vsize = MAX_IMAGE_AREA;
@@ -1283,33 +1026,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             }
         }
 
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        //imagep->addTextureStats(max_vsize);
-        // New logic block for the bias system        
-        // Then depending on the type of texture, the higher resolution on_screen_max_vsize is applied.
-        // On Screen (Without Bias applied:
-        //      LOD/Fetch Texture: Discard Levels 0, 1
-        //      Fetch Texture 2, 3, 5 with bias < 2.0
-        //      BoostLevel = Boost_High
-        //      Local, Media, Dynamic Texture        
-        // If the textures are on screen and either 1 are the first 2 levels of discard and are either fetched or LOD textures
-        if (on_screen && ((imagep->getDiscardLevel() < 2 && imagep->getType() >= LLViewerTexture::FETCHED_TEXTURE) || (imagep->getType() == LLViewerTexture::FETCHED_TEXTURE && LLViewerTexture::sDesiredDiscardBias < 2.0f)))
-        {
-            // Always use the best quality of the texture
-            imagep->addTextureStats(max_on_screen_vsize);
-        }
-        // If the boost level just became high, or the texture is (Local, Media Dynamic)
-        else if (imagep->getBoostLevel() >= LLViewerTexture::BOOST_HIGH || imagep->getType() < LLViewerTexture::FETCHED_TEXTURE || close_to_camera)
-        {
-            // Always use the best quality of the texture
-            imagep->addTextureStats(max_on_screen_vsize);
-        }
-        // All other texture cases will use max_vsize with bias applied.
-        else
-        {
-            imagep->addTextureStats(max_vsize);
-        }
-        // </FS:minerjr> [FIRE-35081]
+        imagep->addTextureStats(max_vsize);
     }
 
 #if 0
@@ -1410,11 +1127,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         mCreateTextureList.pop();
 
         if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
-           // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-           //(imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
-           // Add additional restrictions on scaling down (only BOOST_NONE LOD Textures (Also skip media)
-           (imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL) && imagep->getBoostLevel() == LLViewerTexture::BOOST_NONE && imagep->getType() == LLViewerTexture::LOD_TEXTURE && !imagep->hasParcelMedia() && !imagep->isViewerMediaTexture())
-           // </FS:minerjr> [FIRE-35081]
+           (imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
         {
             // NOTE: this may happen if the desired discard reduces while a decode is in progress and does not
             // necessarily indicate a problem, but if log occurrences excede that of dsiplay_stats: FPS,
@@ -1423,7 +1136,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
             imagep->scaleDown();
         }
 
-        if (create_timer.getElapsedTimeF32() > max_time * 0.5f)
+        if (create_timer.getElapsedTimeF32() > max_time)
         {
             break;
         }
@@ -1447,7 +1160,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         // freeze.
         S32 min_count = (S32)mCreateTextureList.size() / 20 + 5;
 
-        //create_timer.reset();
+        create_timer.reset();
         while (!mDownScaleQueue.empty())
         {
             LLViewerFetchedTexture* image = mDownScaleQueue.front();

@@ -13001,9 +13001,6 @@ void initialize_menus()
     // Develop (Fonts debugging)
     commit.add("Develop.Fonts.Dump", boost::bind(&LLFontGL::dumpFonts));
     commit.add("Develop.Fonts.DumpTextures", boost::bind(&LLFontGL::dumpFontTextures));
-    
-    //Develop (dump data)
-    commit.add("Develop.TextureList.Dump", boost::bind(&LLViewerTextureList::dumpTexturelist));
 
     // <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
     view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");
