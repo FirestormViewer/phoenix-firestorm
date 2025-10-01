@@ -73,7 +73,7 @@ jobs:
       - name: Set up Python (normal case)
         if: matrix.container_image != 'ubuntu:22.04'
         id: py311_setup
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           check-latest: true

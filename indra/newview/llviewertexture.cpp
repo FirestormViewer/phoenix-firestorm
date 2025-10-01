@@ -2188,7 +2188,7 @@ bool LLViewerFetchedTexture::updateFetch()
         static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
         const U32 override_tex_discard_level = sTextureDiscardLevel();
         // </FS:Ansariel>
-        if (override_tex_discard_level != 0)
+        if (override_tex_discard_level != 0 && override_tex_discard_level <= MAX_DISCARD_LEVEL)
         {
             desired_discard = override_tex_discard_level;
         }

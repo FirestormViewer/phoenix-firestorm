@@ -641,6 +641,11 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
             if(discard_level > 0)
             {
                 mMaxDiscardLevel = llmax(mMaxDiscardLevel, (S8)discard_level);
+                // <FS:minerjr> [FIRE-35361] RenderMaxTextureResolution caps texture resolution lower than intended
+                // 2K textures could set the mMaxDiscardLevel above MAX_DISCARD_LEVEL, which would
+                // cause them to not be down-scaled so they would get stuck at 0 discard all the time.
+                mMaxDiscardLevel = llmin(mMaxDiscardLevel, (S8)MAX_DISCARD_LEVEL);
+                // </FS:minerjr> [FIRE-35361]
             }
         }
         else
@@ -1543,7 +1548,7 @@ bool LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S
     if (discard_level < 0)
     {
         llassert(mCurrentDiscardLevel >= 0);
-        discard_level = mCurrentDiscardLevel;
+        discard_level = llmin(mCurrentDiscardLevel, MAX_DISCARD_LEVEL);
     }
 
     // Actual image width/height = raw image width/height * 2^discard_level
@@ -1643,6 +1648,7 @@ bool LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, bool data_
         discard_level = mCurrentDiscardLevel;
     }
     discard_level = llclamp(discard_level, 0, (S32)mMaxDiscardLevel);
+    discard_level = llmin(discard_level, MAX_DISCARD_LEVEL);
 
     if (main_thread // <--- always force creation of new_texname when not on main thread ...
         && !defer_copy // <--- ... or defer copy is set
