@@ -1171,7 +1171,7 @@ void LLOutfitListBase::onIdleRefreshList()
     F64 MAX_TIME = 0.05f;
     constexpr F64 min_time = 0.001f;
     constexpr F64 threshold_fps = 30.0;
-    const auto current_fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, 1);
+    const auto current_fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS,10);
     if (current_fps < threshold_fps)
     {
         MAX_TIME = min_time + (current_fps / threshold_fps) * (MAX_TIME - min_time);
