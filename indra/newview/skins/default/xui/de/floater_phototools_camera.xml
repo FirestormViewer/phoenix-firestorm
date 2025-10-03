@@ -36,6 +36,11 @@
 								Rückansicht
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<panel_camera_item name="tpp_view">
+							<panel_camera_item.text name="rear_view_text">
+								TPP-Ansicht
+							</panel_camera_item.text>
+						</panel_camera_item>
 					</panel>
 					<panel name="camera_modes_list">
 						<panel_camera_item name="object_view">

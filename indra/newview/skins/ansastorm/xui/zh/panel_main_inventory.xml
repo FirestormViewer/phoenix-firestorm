@@ -125,6 +125,7 @@
 			<inventory_panel label="庫存" name="All Items"/>
 			<recent_inventory_panel label="最近" name="Recent Items" />
 			<worn_inventory_panel label="裝扮" name="Worn Items" />
+			<favorites_inventory_panel label="收藏" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">

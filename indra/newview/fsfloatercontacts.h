@@ -36,11 +36,13 @@
 #include "rlvhandler.h"
 
 class FSScrollListCtrl;
+class LLButton;
 class LLFilterEditor;
 class LLGroupList;
 class LLRelationship;
 class LLPanel;
 class LLTabContainer;
+class LLTextBox;
 
 class FSFloaterContacts : public LLFloater, LLFriendObserver, LLEventTimer
 {
@@ -48,15 +50,15 @@ public:
     FSFloaterContacts(const LLSD& seed);
     virtual ~FSFloaterContacts();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void draw();
-    /*virtual*/ bool tick();
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void draw() override;
+    bool tick() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override  { return true; }
 
     // LLFriendObserver implementation
-    /*virtual*/ void changed(U32 changed_mask);
+    void changed(U32 changed_mask) override;
 
     static FSFloaterContacts* getInstance();
     static FSFloaterContacts* findInstance();
@@ -67,6 +69,10 @@ public:
     void                    sortFriendList();
     void                    onDisplayNameChanged();
     void                    resetFriendFilter();
+
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    F32 onGetFilterOpacityCallback(ETypeTransparency type, F32 alpha);
+    // </FS:TJ>
 
 private:
     typedef std::vector<LLScrollListItem*> listitem_vec_t;
@@ -112,7 +118,7 @@ private:
     bool                    isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
     // misc callbacks
-    static void             onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
+    static void             onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName>& names);
     void                    onColumnDisplayModeChanged(const std::string& settings_name = "");
     bool                    handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                                             EDragAndDropType cargo_type,
@@ -142,31 +148,51 @@ private:
     void                    onGroupInviteButtonClicked();
     void                    updateGroupButtons();
 
-    LLTabContainer*         mTabContainer;
-    LLFilterEditor*         mFriendFilter;
-    LLFilterEditor*         mGroupFilter;
-    LLPanel*                mFriendsTab;
-    FSScrollListCtrl*       mFriendsList;
-    LLPanel*                mGroupsTab;
-    LLGroupList*            mGroupList;
+    LLTabContainer*         mTabContainer{ nullptr };
+    LLFilterEditor*         mFriendFilter{ nullptr };
+    LLFilterEditor*         mGroupFilter{ nullptr };
+    LLPanel*                mFriendsTab{ nullptr };
+    FSScrollListCtrl*       mFriendsList{ nullptr };
+    LLPanel*                mGroupsTab{ nullptr };
+    LLGroupList*            mGroupList{ nullptr };
 
-    bool                    mAllowRightsChange;
-    size_t                  mNumRightsChanged;
-    bool                    mRightsChangeNotificationTriggered;
+    LLButton*               mFriendsImBtn{ nullptr };
+    LLButton*               mFriendsProfileBtn{ nullptr };
+    LLButton*               mFriendsTpBtn{ nullptr };
+    LLButton*               mFriendsMapBtn{ nullptr };
+    LLButton*               mFriendsPayBtn{ nullptr };
+    LLButton*               mFriendsAddBtn{ nullptr };
+    LLButton*               mFriendsRemoveBtn{ nullptr };
 
-    std::string             mFriendListFontName;
+    LLButton*               mGroupsChatBtn{ nullptr };
+    LLButton*               mGroupsInfoBtn{ nullptr };
+    LLButton*               mGroupsActivateBtn{ nullptr };
+    LLButton*               mGroupsLeaveBtn{ nullptr };
+    LLButton*               mGroupsCreateBtn{ nullptr };
+    LLButton*               mGroupsSearchBtn{ nullptr };
+    LLButton*               mGroupsTitlesBtn{ nullptr };
+    LLButton*               mGroupsInviteBtn{ nullptr };
 
-    std::string             mLastColumnDisplayModeChanged;
-    bool                    mResetLastColumnDisplayModeChanged;
-    bool                    mDirtyNames;
+    LLTextBox*              mFriendsCountTb{ nullptr };
+    LLTextBox*              mGroupssCountTb{ nullptr };
 
-    std::string             mFriendFilterSubString;
-    std::string             mFriendFilterSubStringOrig;
+    bool                    mAllowRightsChange{ true };
+    size_t                  mNumRightsChanged{ 0 };
+    bool                    mRightsChangeNotificationTriggered{ false };
+
+    std::string             mFriendListFontName{};
+
+    std::string             mLastColumnDisplayModeChanged{};
+    bool                    mResetLastColumnDisplayModeChanged{ false };
+    bool                    mDirtyNames{ true };
+
+    std::string             mFriendFilterSubString{ LLStringUtil::null };
+    std::string             mFriendFilterSubStringOrig{ LLStringUtil::null };
 
     void childShowTab(const std::string& id, const std::string& tabname);
 
     void updateRlvRestrictions(ERlvBehaviour behavior);
-    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    boost::signals2::connection mRlvBehaviorCallbackConnection{};
 
     std::string getFullName(const LLAvatarName& av_name);
 

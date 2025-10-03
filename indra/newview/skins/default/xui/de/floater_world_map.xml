@@ -71,6 +71,8 @@
 					<scroll_list.columns label="" name="icon"/>
 					<scroll_list.columns label="" name="sim_name"/>
 				</scroll_list>
+			</panel>
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					Standort:
 				</text>

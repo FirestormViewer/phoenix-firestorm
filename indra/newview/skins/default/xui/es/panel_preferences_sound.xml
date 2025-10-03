@@ -206,18 +206,18 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndSnapshot" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndSnapshot" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Silenciar" name="QuietSnapshotsToDiskCheckBox"/>
-			<text tool_tip="Sonido a reproducir al teleportarse. Esta configuración es compartida por Mover y ver &gt; Movimiento &gt; 'Reproducir efecto de sonido al teleportarme'." name="textFSTeleportOut">
-				Teleporte:
-			</text>
-			<button name="Prev_UISndTeleportOut" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndTeleportOut" label="R" tool_tip="Restablecer al UUID por defecto."/>
-			<check_box label="Reproducir" name="PlayModeUISndTeleportOut"/>
 		</panel>
 		<panel label="Sonidos de IU 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
 Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
 			</text>
+			<text tool_tip="Sonido a reproducir al teleportarse. Esta configuración es compartida por Mover y ver &gt; Movimiento &gt; 'Reproducir efecto de sonido al teleportarme'." name="textFSTeleportOut">
+				Teleporte:
+			</text>
+			<button name="Prev_UISndTeleportOut" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndTeleportOut" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndTeleportOut"/>
 			<text tool_tip="Sonido a reproducir cuando aparece un menú circular." name="textFSPieMenuAppear">
 				Aparición menú circular:
 			</text>
@@ -314,18 +314,18 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndFriendshipOffer" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFriendshipOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndFriendshipOffer"/>
-			<text tool_tip="Sonido a reproducir cuando alguien te ofrece teleportarte a su posición." name="textFSTeleportOffer">
-				Oferta de teleporte:
-			</text>
-			<button name="Prev_UISndTeleportOffer" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
-			<check_box label="Reproducir" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<panel label="Sonidos de IU 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">
 				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
 Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
 			</text>
+			<text tool_tip="Sonido a reproducir cuando alguien te ofrece teleportarte a su posición." name="textFSTeleportOffer">
+				Oferta de teleporte:
+			</text>
+			<button name="Prev_UISndTeleportOffer" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndTeleportOffer"/>
 			<text tool_tip="Sonido a reproducir al recibir una oferta de inventario." name="textFSInventoryOffer">
 				Oferta inventario:
 			</text>

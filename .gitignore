@@ -28,7 +28,6 @@ debian/files
 debian/secondlife-appearance-utility*
 debian/secondlife-viewer*
 indra/.distcc
-indra/cmake/*
 indra/out/*
 
 indra/packages/*
@@ -112,8 +111,10 @@ indra/newview/pilot.xml
 # Firestorm additions
 indra/newview/exoflickrkeys.h
 indra/newview/fsdiscordkey.h
+indra/tools/vstool/obj/*/*.cache
 my_autobuild.xml
 .vscode
+.vs
 *.srctrlbm
 *.srctrldb
 *.srctrlprj

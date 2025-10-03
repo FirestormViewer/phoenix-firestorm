@@ -15,6 +15,10 @@
 	<check_box label="Guide de cadrage" tool_tip="Affiche le guide de cadrage (règle des tiers) à l'intérieur du cadre de la photo." name="show_guides"/>
 	<button label="Actualiser" name="new_snapshot_btn" tool_tip="Cliquez pour actualiser"/>
 	<button label="Aperçu" name="big_preview_btn" tool_tip="Cliquez pour afficher l'aperçu"/>
+	<text name="store_label">
+		Publier en tant que :
+	</text>
+	<combo_box name="stores_combobox" tool_tip="Si vous avez une ou plusieurs boutiques Easy Blogger attribuées sur Primfeed, elles apparaîtront ici."/>
 	<text name="description_label">
 		Description :
 	</text>

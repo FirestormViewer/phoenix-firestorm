@@ -35,7 +35,7 @@
 			<menu_item_call label="すべてを取り外す" name="Detach All"/>
 		</menu>
 		<menu_item_call label="選択した装着物を削除" name="Remove Selected Attachments"/>
-		<menu_item_call label="アバター選択…" name="Avatar Picker"/>
+		<menu_item_call label="アバターウェルカムパック…" name="Avatar Welcome Pack"/>
 		<menu_item_call label="ホバーする高さ" name="HoverHeight"/>
 		<menu label="移動" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
@@ -60,7 +60,7 @@
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
 			<menu_item_check label="アバターの複雑度を表示" name="Avatar Draw Info"/>
-			<menu_item_call label="スクリプトを装着…" name="MyScripts"/>
+			<menu_item_call label="装着されたスクリプト…" name="MyScripts"/>
 			<menu_item_call label="遅延メーター" name="Lag Meter"/>
 			<menu_item_call label="ＬＳＬブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
@@ -241,8 +241,15 @@
 			<menu_item_check label="反射プローブの影響範囲を表示する" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="選択ビームを表示する" name="Show Selection Beam"/>
 			<menu_item_check label="透過をハイライトする" name="Highlight Transparent"/>
-			<menu_item_check label="‐透過リグを含む" name="Include Transparent Rigged" />
+			<menu_item_check label="－透過リグを含む" name="Include Transparent Rigged" />
 			<menu_item_check label="ポストプロセッシングを無効化" name="No Post"/>
+			<menu  label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
+				<menu_item_check label="デフォルト" name="Default lod setting"/>
+				<menu_item_check label="高" name="High lod setting"/>
+				<menu_item_check label="中" name="Medium lod setting"/>
+				<menu_item_check label="低" name="Low lod setting"/>
+				<menu_item_check label="最低" name="Lowest lod setting"/>
+			</menu>
 			<menu_item_check label="グリッド吸着" name="Snap to Grid"/>
 			<menu_item_call label="オブジェクトのＸＹ軸をグリッドに吸着させる" name="Snap Object XY to Grid"/>
 			<menu_item_call label="選択をグリッドに使用する" name="Use Selection for Grid"/>
@@ -467,7 +474,8 @@
 			<menu_item_call label="コルーチンでソフトウェア例外を強制する" name="Force Software Exception in Coroutine"/>
 			<menu_item_call label="並列処理でクラッシュを発生させる" name="Force a Crash in a Coroprocedure"/>
 			<menu_item_call label="ワークキューでクラッシュを発生させる" name="Force a Crash in a Work Queue"/>
-			<menu_item_call label="スレッド内でクラッシュを発生させる" name="Force a Crash in a Thread"/>
+			<menu_item_call label="スレッド内でLLErrorクラッシュを発生させる" name="Force an LLError Crash in a Thread"/>
+			<menu_item_call label="スレッド内で例外クラッシュを発生させる" name="Force an Exception Crash in a Thread"/>
 			<menu_item_call label="ビューアの接続遮断を実行する" name="Force Disconnect Viewer"/>
 			<menu_item_call label="メモリリークをシミュレートする" name="Memory Leaking Simulation"/>
 		</menu>
@@ -478,10 +486,10 @@
 			<menu_item_call label="編集…" name="Edit..."/>
 		</menu>
 		<menu label="ビデオ" name="Video">
-			<menu_item_call label="1080×1920" name="1080x1920"/>
-			<menu_item_call label="1920×1080" name="1920x1080"/>
-			<menu_item_call label="1280×720" name="1280x720"/>
-			<menu_item_call label="720×1280" name="720x1280"/>
+			<menu_item_call label="1080✕1920" name="1080x1920"/>
+			<menu_item_call label="1920✕1080" name="1920x1080"/>
+			<menu_item_call label="1280✕720" name="1280x720"/>
+			<menu_item_call label="720✕1280" name="720x1280"/>
 		</menu>
 		<menu label="描画テスト" name="Render Tests">
 			<menu_item_check label="カメラのオフセット" name="Camera Offset"/>
@@ -545,6 +553,7 @@
 			<menu_item_check label="フル解像度のテクスチャ（危険）" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>
+			<menu_item_check label="ＶＲＡＭに余裕がないときに描画距離を抑制する" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="フォント頂点バッファを収集する" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="シェーダーキャッシュを有効化" name="Enable Shader Cache"/>
 			<menu_item_call label="シェーダーキャッシュをクリア" name="Shader Cache Clear"/>
@@ -687,9 +696,6 @@
 		<menu_item_call label="管理者ステータスの呼び出し" name="Request Admin Options"/>
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
 		<menu_item_check label="管理者メニューを表示する" name="View Admin Options"/>
-		<menu label="ダンプ" name="Dump">
-			<menu_item_call label="LLViewerTexturelistを実行" name="LLViewerTexturelist"/>
-		</menu>
 	</menu>
 	<menu label="管理" name="Admin">
 		<menu label="オブジェクト" name="AdminObject">

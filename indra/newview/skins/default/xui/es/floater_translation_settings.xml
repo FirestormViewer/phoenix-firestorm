@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_translation_settings" title="CONFIGURACIÓN DE LA TRADUCCIÓN DEL CHAT">
-	<string name="bing_api_key_not_verified">La appID de Bing no se ha confirmado. Vuelve a intentarlo.</string>
-	<string name="google_api_key_not_verified">La clave de API de Google no se ha confirmado. Vuelve a intentarlo.</string>
-	<string name="bing_api_key_verified">La appID de Bing ha sido confirmada.</string>
+	<string name="azure_api_key_not_verified">El identificador de servicio de Azure no se ha confirmado. Estado: [STATUS]. Vuelve a intentarlo.</string>
+	<string name="google_api_key_not_verified">La clave de API de Google no se ha confirmado. Estado: [STATUS]. Vuelve a intentarlo.</string>
+	<string name="deepl_api_key_not_verified">La clave de API de DeepL no se ha confirmado. Estado: [STATUS]. Vuelve a intentarlo.</string>
+	<string name="azure_api_key_verified">El identificador de servicio de Azure ha sido confirmado.</string>
 	<string name="google_api_key_verified">La clave de API de Google ha sido confirmada.</string>
+	<string name="deepl_api_key_verified">La clave de API de DeepL ha sido confirmada.</string>
 	<check_box label="Activar la traducción automática durante el chat" name="translate_chat_checkbox"/>
 	<text name="translate_language_label" left="25">
 		Traducir el chat al:

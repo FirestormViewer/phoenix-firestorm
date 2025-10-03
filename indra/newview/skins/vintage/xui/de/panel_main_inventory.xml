@@ -114,6 +114,7 @@
 			<inventory_panel label="Alle Objekte" name="All Items" width="288" />
 			<recent_inventory_panel label="Letzte Objekte" name="Recent Items" width="290" />
 			<worn_inventory_panel label="Angezogene Objekte" name="Worn Items" width="290" />
+			<favorites_inventory_panel label="Favoriten" name="Favorites" width="290" />
 		</tab_container>
 	</panel>
 	<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">

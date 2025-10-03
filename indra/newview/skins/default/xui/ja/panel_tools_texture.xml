@@ -146,7 +146,7 @@
 	<button name="flipTextureScaleU" tool_tip="反転"/>
 	<spinner label="垂直スケール" name="TexScaleV"/>
 	<button name="flipTextureScaleV" tool_tip="反転"/>
-	<spinner label="メーターごとに繰り返す" name="rptctrl"/>
+	<spinner label="メートル毎の繰り返し" name="rptctrl"/>
 	<spinner label="回転度" name="TexRot"/>
 	<spinner label="水平オフセット" name="TexOffsetU"/>
 	<spinner label="垂直オフセット" name="TexOffsetV"/>
@@ -163,6 +163,7 @@
 	<!-- BEGIN PBR Material texture transform parameters -->
 	<spinner label="水平スケール" name="gltfTextureScaleU"/>
 	<spinner label="垂直スケール" name="gltfTextureScaleV"/>
+	<spinner label="メートル毎の繰り返し" name="gltfRptctrl"/>
 	<spinner label="回転度" name="gltfTextureRotation"/>
 	<spinner label="水平オフセット" name="gltfTextureOffsetU"/>
 	<spinner label="垂直オフセット" name="gltfTextureOffsetV"/>

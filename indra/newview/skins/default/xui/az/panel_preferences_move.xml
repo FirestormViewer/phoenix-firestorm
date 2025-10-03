@@ -3,9 +3,13 @@
 	<tab_container label="Hərəkət və görünüş" name="tabs">
 		<panel label="Görünüş" name="tab-view">
 			<slider label="Baxış bucağı" name="camera_fov" tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək."/>
+			<button name="Def_CameraAngle" tool_tip="Susmaya görə olan vəziyyətə qaytarın." />
 			<slider label="Məsafə" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="Susmaya görə olan vəziyyətə qaytarın." />
 			<slider label="Keçid vaxtı" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="Susmaya görə olan vəziyyətə qaytarın." />
 			<slider label="Hamarlaşdırma" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="Susmaya görə olan vəziyyətə qaytarın." />
 			<check_box label="Kamera məhdudiyyətlərini söndürün" name="DisableCameraConstraints" tool_tip="Kameranı normal hüdudlarından kənara və yer səviyyəsindən aşağı hərəkət etdirmək üçün təyin edin."/>
 			<check_box label="Yaxınlaşdırma səviyyəsinə nəzarət etmək üçün siçan çarxından istifadə etməyin" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2" width="380">

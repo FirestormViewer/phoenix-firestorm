@@ -242,9 +242,7 @@ LLJoint *LLJoint::getRoot()
 //-----------------------------------------------------------------------------
 // findJoint()
 //-----------------------------------------------------------------------------
-//<FS:Ansariel> Joint-lookup improvements
-//LLJoint *LLJoint::findJoint( const std::string &name )
-LLJoint *LLJoint::findJoint(std::string_view name)
+LLJoint* LLJoint::findJoint(std::string_view name)
 {
     if (name == getName())
         return this;
@@ -253,15 +251,14 @@ LLJoint *LLJoint::findJoint(std::string_view name)
     {
         if(joint)
         {
-            LLJoint *found = joint->findJoint(name);
-            if (found)
+            if (LLJoint* found = joint->findJoint(name))
             {
                 return found;
             }
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

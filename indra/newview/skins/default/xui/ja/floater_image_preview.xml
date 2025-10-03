@@ -31,7 +31,7 @@
 24bitのTarga（.tga）形式で画像を保存してください。
 	</text>
 	<text name="uploaded_size_text">
-		アップロードしたサイズ：[X_RES]×[Y_RES]，[ALPHA]
+		アップロードしたサイズ：[X_RES]✕[Y_RES]，[ALPHA]
 	</text>
 	<check_box label="可逆圧縮" name="lossless_check"/>
 	<check_box name="temp_check" label="一時的（無料）" tool_tip="アセットを一時的なものに設定します。つまり、アセットは無料ですが、その代わり、アセットが存在しなくなるまでの短期間のみ有効となります。"/>

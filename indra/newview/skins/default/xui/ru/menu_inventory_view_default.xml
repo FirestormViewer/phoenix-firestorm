@@ -7,5 +7,4 @@
     <menu_item_check label="Посмотреть список" name="list_view"/>
     <menu_item_check label="Просмотр галереи" name="gallery_view"/>
     <menu_item_check label="Комбинированный вид" name="combination_view"/>
-    <menu_item_check label="Настройки инвентаря..." name="inv_settings"/>
 </toggleable_menu>

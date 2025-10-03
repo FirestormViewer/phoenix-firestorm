@@ -197,6 +197,16 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
+			<check_box label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" tool_tip="Włącza funkcję zmniejszającą odległość rysowania (pole widzenia), gdy pamięć VRAM jest pełna" />
+			<text name="ExcludeAnimeshImposterLabel">
+				Wyklucz zast. animesz. awatarów:
+			</text>
+			<combo_box tool_tip="Umożliwia wykluczenie animeszowych awatarów Użytkownika lub awatarów Kontrolowanych z mechanizmu zastępowania w renderowaniu." name="FSImpostorAvatarExclude">
+				<combo_box.item label="Brak" name="0" />
+				<combo_box.item label="Użytkownika" name="1" />
+				<combo_box.item label="Kontrolowanych" name="2" />
+				<combo_box.item label="Obu" name="3" />
+			</combo_box>
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund

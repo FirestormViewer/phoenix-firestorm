@@ -5,7 +5,7 @@
 	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
-		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.
+		Fehler: Fehler beim Modell-Parsen – Details siehe Protokoll.
 	</string>
 	<string name="status_bind_shape_orientation">
 		Warnung: Verbundform-Matrix befindet sich nicht in Standard-X-Vorwärtsrichtung.
@@ -94,6 +94,9 @@
 	<string name="tbd">
 		folgt
 	</string>
+	<string name="ModelTextureScaling">
+		Eine oder mehrere Texturen in diesem Modell wurde(n) skaliert, um innerhalb der erlaubten Limits zu bleiben.
+	</string>
 	<string name="TooManyJoint">
 		Skinning wurde wegen zu vieler Gelenke deaktiviert: [JOINTS], Maximum: [MAX]
 	</string>
@@ -144,6 +147,9 @@
 	</string>
 	<string name="ParsingErrorPositionInvalidModel">
 		Netz kann nicht ohne Positionsdaten verarbeitet werden - ungültiges Modell.
+	</string>
+	<string name="ParsingErrorEmptyInvBindInvalidModel">
+		Geriggtes Netz kann nicht ohne InvBind-Daten verarbeitet werden - ungültiges Modell.
 	</string>
 
 	<panel name="left_panel">

@@ -112,6 +112,7 @@
 			<inventory_panel label="インベントリ" name="All Items"/>
 			<recent_inventory_panel label="新着アイテム" name="Recent Items"/>
 			<worn_inventory_panel label="着用中" name="Worn Items"/>
+			<favorites_inventory_panel label="お気に入り" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<text tool_tip="[ITEMS]個のアイテム、[CATEGORIES]個のフォルダがあります。" name="ItemcountText">

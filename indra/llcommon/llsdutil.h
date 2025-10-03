@@ -65,6 +65,9 @@ LL_COMMON_API char* ll_pretty_print_sd(const LLSD& sd);
 
 LL_COMMON_API std::string ll_stream_notation_sd(const LLSD& sd);
 
+// <FS:Ansariel> Create LLSD from CSV
+LL_COMMON_API LLSD ll_sd_from_csv(std::istream& csv, std::string_view delimiters = ",");
+
 //compares the structure of an LLSD to a template LLSD and stores the
 //"valid" values in a 3rd LLSD. Default values
 //are pulled from the template.  Extra keys/values in the test
@@ -552,6 +555,45 @@ inline
 LLSD shallow(LLSD value, LLSD filter=LLSD()) { return llsd_shallow(value, filter); }
 
 } // namespace llsd
+
+/*****************************************************************************
+*   LLSDParam<std::vector<T>>
+*****************************************************************************/
+// Given an LLSD array, return a const std::vector<T>&, where T is a type
+// supported by LLSDParam. Bonus: if the LLSD value is actually a scalar,
+// return a single-element vector containing the converted value.
+template <typename T>
+class LLSDParam<std::vector<T>>: public LLSDParamBase
+{
+public:
+    LLSDParam(const LLSD& array)
+    {
+        // treat undefined "array" as empty vector
+        if (array.isDefined())
+        {
+            // what if it's a scalar?
+            if (! array.isArray())
+            {
+                v.push_back(LLSDParam<T>(array));
+            }
+            else                        // really is an array
+            {
+                // reserve space for the array entries
+                v.reserve(array.size());
+                for (const auto& item : llsd::inArray(array))
+                {
+                    v.push_back(LLSDParam<T>(item));
+                }
+            }
+        }
+    }
+
+    operator const std::vector<T>&() const { return v; }
+
+private:
+    std::vector<T> v;
+};
+
 
 /*****************************************************************************
  *   toArray(), toMap()

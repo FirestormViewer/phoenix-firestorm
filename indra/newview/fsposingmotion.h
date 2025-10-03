@@ -121,7 +121,16 @@ public:
     /// <summary>
     /// Sets all of the non-Collision Volume base-and-delta rotations to zero, and clears the undo/redo queue.
     /// </summary>
+    /// <remarks>
+    /// By default, sets the joint to lock in BVH export.
+    /// </remarks>
     void setAllRotationsToZeroAndClearUndo();
+
+    /// <summary>
+    /// Sets the BVH export state for the supplied joint.
+    /// </summary>
+    /// <param name="lockInBvh">Whether the joint should be locked if exported to BVH.</param>
+    void setJointBvhLock(FSJointPose* joint, bool lockInBvh);
 
 private:
     /// <summary>

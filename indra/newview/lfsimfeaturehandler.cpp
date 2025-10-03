@@ -208,7 +208,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
             }
             else if (LLGridManager::instance().isInSecondLife())
             {
-                mAvatarPickerURL = gSavedSettings.getString("AvatarPickerURL");
+                mAvatarPickerURL = gSavedSettings.getString("AvatarWelcomePack");
             }
             else
             {
@@ -300,7 +300,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
             }
             else if (in_sl)
             {
-                mAvatarPickerURL = gSavedSettings.getString("AvatarPickerURL");
+                mAvatarPickerURL = gSavedSettings.getString("AvatarWelcomePack");
             }
             else
             {

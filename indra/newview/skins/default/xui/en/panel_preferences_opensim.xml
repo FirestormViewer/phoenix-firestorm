@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="440"
+ height="480"
  layout="topleft"
  left="1"
  top="1"
@@ -23,7 +23,7 @@
   <panel
   border="false"
   follows="all"
-  height="440"
+  height="480"
   layout="topleft"
   left="0"
   top="0"

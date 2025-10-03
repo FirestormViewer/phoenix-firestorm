@@ -835,20 +835,13 @@ void LLViewerObjectList::setAllObjectDefaultTextures(U32 nChannel, bool fShowDef
     }
 }
 // [/SL:KB]
-// <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-//void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
-// Added time limit on processing of objects as they affect the texture system (They also calcuate mMaxVirtualSize and mPixelArea)
-void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
-// </FS:minerjr> [FIRE-35081]
+
+void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 {
     S32 i;
     LLViewerObject *objectp;
 
     S32 num_updates, max_value;
-    // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-    // Remove the old code as it worked on fixed number of updates (Total # of Object / 128) per frame
-    // and some objects had nothing to do while others were avatars or volumes and could t
-    /*
     if (NUM_BINS - 1 == mCurBin)
     {
         // Remainder (mObjects.size() could have changed)
@@ -884,46 +877,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent, F32 max_time)
     {
         mCurBin = (mCurBin + 1) % NUM_BINS;
     }
-    */
-    num_updates = 0;    
-    max_value = (S32)mObjects.size();
-    LLTimer timer;
-    // If the number of objects since last being in here has changed (IE objects deleted, then reset the lazy update index)
-    if (mCurLazyUpdateIndex >= max_value)
-    {
-        mCurLazyUpdateIndex = 0;
-    }
-    // Store the index for the current lazy update index as we will loop over the index
-    i = mCurLazyUpdateIndex;    
-    // loop over number of objects in the BIN (128), or below until we run out of time
-    while(num_updates < NUM_BINS)
-    {
-        // Moved to the first to fix up the issue of access violation if the object list chaanges size during processing.
-        if (i >= (S32)mObjects.size())
-        {
-            // Reset the index if we go over the max value
-            i = 0;
-        }
-        objectp = mObjects[i];
-        if (objectp != nullptr && !objectp->isDead())
-        {
-            //LL_DEBUGS() << objectp->getID() << " Update Textures" << LL_ENDL;
-            //  Update distance & gpw
-            objectp->setPixelAreaAndAngle(agent); // Also sets the approx. pixel area
-            objectp->updateTextures();  // Update the image levels of textures for this object.
-        }
-        i++;    
 
-        num_updates++;
-        // Escape either if we run out of time, or loop back onto ourselves.
-        if (timer.getElapsedTimeF32() > max_time || i == mCurLazyUpdateIndex)
-        {
-            break;
-        }
-    }
-    // Update the current lazy update index with the current index, so we can continue next frame from where we left off
-    mCurLazyUpdateIndex = i;
-    // </FS:minerjr> [FIRE-35081]
 #if 0
     // Slam priorities for textures that we care about (hovered, selected, and focused)
     // Hovered

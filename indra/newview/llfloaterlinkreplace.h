@@ -96,6 +96,7 @@ private:
     void checkEnableStart();
     void onStartClicked();
     void onStartClickedResponse(const LLSD& notification, const LLSD& response);
+    void onStopClicked();
     void decreaseOpenItemCount();
     void updateFoundLinks();
     void processBatch(LLInventoryModel::item_array_t items);
@@ -112,6 +113,7 @@ private:
     LLInventoryLinkReplaceDropTarget*   mTargetEditor;
     LLButton*                           mStartBtn;
     LLButton*                           mRefreshBtn;
+    LLButton*                           mStopBtn;
     LLTextBox*                          mStatusText;
     LLCheckBoxCtrl*                     mDeleteOnlyToggle;// <FS:Beq> FIRE-17695 - Delete links capability
 
@@ -123,6 +125,7 @@ private:
 
     LLInventoryModel::item_array_t  mRemainingInventoryItems;
     bool mDeleteOnly;// <FS:Beq> FIRE-17695 - Delete links capability
+    bool mStopRequested;
 };
 
 #endif // LL_FLOATERLINKREPLACE_H

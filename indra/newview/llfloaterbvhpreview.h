@@ -77,7 +77,7 @@ class LLFloaterBvhPreview : public LLFloaterNameDesc
     friend class LLPreviewAnimation;
 
 public:
-    LLFloaterBvhPreview(const std::string& filename);
+    LLFloaterBvhPreview(const LLSD& args);
     virtual ~LLFloaterBvhPreview();
 
     bool postBuild();
@@ -123,7 +123,7 @@ public:
     // </FS:Sei>
 private:
     void setAnimCallbacks() ;
-    std::map <std::string, std::string, std::less<>> getJointAliases();
+    std::map<std::string, std::string, std::less<>> getJointAliases();
 
     // <FS> Reload animation from disk
     bool loadBVH();

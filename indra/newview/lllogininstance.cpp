@@ -254,6 +254,16 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
     }
 
     std::string mfa_hash = gSavedSettings.getString("MFAHash"); //non-persistent to enable testing
+    // <FS:Beq> add some debug output for mfa_hash
+    if (mfa_hash.empty())
+    {
+        LL_DEBUGS("MFA") << "MFA hash from settings is empty (expected)" << LL_ENDL;
+    }
+    else
+    {
+        LL_DEBUGS("MFA") << "MFA hash from settings is set to: " << mfa_hash << LL_ENDL;
+    }
+    // </FS:Beq>
     std::string grid(LLGridManager::getInstance()->getGridId());
     std::string user_id = user_credential->userID();
     if (gSecAPIHandler)
@@ -266,9 +276,20 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
             {
                 mfa_hash = data_map[user_id].asString();
             }
+            // <FS:Beq> add some debug output for mfa_hash            
+            if (mfa_hash.empty())
+            {
+                LL_DEBUGS("MFA") << "MFA hash from secuire store is empty" << LL_ENDL;
+            }
+            else
+            {
+                LL_DEBUGS("MFA") << "MFA hash is from secure store set to: " << mfa_hash << LL_ENDL;
+            }
+            // </FS:Beq>
         }
         else
         {
+            LL_DEBUGS("MFA") << "MFA hash written to protected map" << LL_ENDL; // <FS:Beq/> add some debug output for mfa_hash
             // SL-16888 the mfa_hash is being overridden for testing so save it for consistency for future login requests
             gSecAPIHandler->addToProtectedMap("mfa_hash", grid, user_id, mfa_hash);
         }
@@ -277,8 +298,8 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
     {
         LL_WARNS() << "unable to access protected store for mfa_hash" << LL_ENDL;
     }
-
     request_params["mfa_hash"] = mfa_hash;
+    LL_DEBUGS("MFA") << "mfa_hash in request params is set to: " << request_params["mfa_hash"] << LL_ENDL; // <FS:Beq/> add some debug output for mfa_hash
 
     // Specify desired timeout/retry options
     LLSD http_params;
@@ -622,17 +643,47 @@ void LLLoginInstance::saveMFAHash(LLSD const& response)
 {
     std::string grid(LLGridManager::getInstance()->getGridId());
     std::string user_id(LLStartUp::getUserId());
-
     // Only save mfa_hash for future logins if the user wants their info remembered.
+    // <FS:Beq> add some debug output for mfa_hash
+    LL_DEBUGS("MFA") << "In saveMFAHagsh, grid: " << grid
+                     << ", user_id: " << user_id
+                     << ", remember user: " << (gSavedSettings.getBOOL("RememberUser")? "true" : "false")
+                     << ", saveMFA: " << (LLLoginInstance::getInstance()->saveMFA()? "true" : "false")
+                     << LL_ENDL;
+    if (response.has("mfa_hash"))
+    {
+        LL_DEBUGS("MFA") << "In saveMFAHash, mfa_hash: " << response["mfa_hash"].asString()
+                         << LL_ENDL;
+    }
+    else
+    {
+        LL_DEBUGS("MFA") << "In saveMFAHash, no mfa_hash in response"
+                         << LL_ENDL;
+    }
+    // </FS:Beq>
     if (response.has("mfa_hash") && gSavedSettings.getBOOL("RememberUser") && LLLoginInstance::getInstance()->saveMFA())
     {
+        // <FS:Beq> add some debug output for mfa_hash
+        LL_DEBUGS("MFA") << "In saveMFAHash, mfa_hash: " << response["mfa_hash"].asString()
+                         << LL_ENDL;
+        // </FS:Beq>
         gSecAPIHandler->addToProtectedMap("mfa_hash", grid, user_id, response["mfa_hash"]);
     }
     else if (!LLLoginInstance::getInstance()->saveMFA())
     {
+        // <FS:Beq> add some debug output for mfa_hash
+        LL_DEBUGS("MFA") << "In saveMFAHash, removing mfa_hash from protected map"
+                         << LL_ENDL;
+        
+        // User does not want to save mfa_hash, remove it from the protected map
         gSecAPIHandler->removeFromProtectedMap("mfa_hash", grid, user_id);
     }
+    
     // TODO(brad) - related to SL-17223 consider building a better interface that sync's automatically
+    // <FS:Beq> add some debug output for mfa_hash
+    LL_DEBUGS("MFA") << "In saveMFAHash, syncing protected map"
+                     << LL_ENDL;
+    
     gSecAPIHandler->syncProtectedMap();
 }
 

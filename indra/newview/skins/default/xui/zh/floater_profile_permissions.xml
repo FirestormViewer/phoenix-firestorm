@@ -2,7 +2,7 @@
 <floater name="profile_permissions">
 	<string name="description_string" value="[AGENT_NAME]的權限：" />
 	<text name="perm_description" value="允許居民：" />
-	<check_box name="online_check" label="線上時可見" />
+	<check_box name="online_check" label="在線時可見" />
 	<check_box name="map_check" label="在世界地圖上找到我" />
 	<check_box name="objects_check" label="編輯、刪除或拿走我的物件" />
 	<button name="perms_btn_ok" label="確定" />

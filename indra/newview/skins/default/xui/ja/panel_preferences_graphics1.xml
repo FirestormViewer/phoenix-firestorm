@@ -221,6 +221,16 @@
 			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe"/>
 			<check_box label="装着光源（フェイスライト）を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
 			<check_box label="装着されたパーティクルを描画する" name="Render Attached Particles"/>
+			<check_box label="ＶＲＡＭに余裕がないときに描画距離を抑制する" name="Reduce Draw Distance when VRAM is full" tool_tip="ＶＲＡＭがいっぱいになったときに描画距離を減らす機能を有効にします。"/>
+			<text name="ExcludeAnimeshImposterLabel">
+				アニメッシュインポスターアバターの除外：
+			</text>
+			<combo_box tool_tip="アニメッシュユーザまたはコントロールアバターを、インポスターレンダリングの使用から除外できるようにします。" name="FSImpostorAvatarExclude">
+				<combo_box.item label="なし" name="0"/>
+				<combo_box.item label="ユーザ" name="1"/>
+				<combo_box.item label="コントロール" name="2"/>
+				<combo_box.item label="両方" name="3"/>
+			</combo_box>
 			<slider label="ワールドに表示される前の事前キャッシュの遅延時間" tool_tip="ワールドが見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間を指定します。（6秒がデフォルト）" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				秒

@@ -611,6 +611,27 @@ LLInventoryItem* LLAgentWearables::getWearableInventoryItem(LLWearableType::ETyp
     return item;
 }
 
+const S32 LLAgentWearables::getWearableIdxFromItem(const LLViewerInventoryItem* item) const
+{
+    if (!item) return -1;
+    if (!item->isWearableType()) return -1;
+
+    LLWearableType::EType type = item->getWearableType();
+    U32 wearable_count = getWearableCount(type);
+    if (0 == wearable_count) return -1;
+
+    const LLUUID& asset_id = item->getAssetUUID();
+
+    for (U32 i = 0; i < wearable_count; ++i)
+    {
+        const LLViewerWearable* wearable = getViewerWearable(type, i);
+        if (!wearable) continue;
+        if (wearable->getAssetID() != asset_id) continue;
+        return i;
+    }
+
+    return -1;
+}
 const LLViewerWearable* LLAgentWearables::getWearableFromItemID(const LLUUID& item_id) const
 {
     const LLUUID& base_item_id = gInventory.getLinkedItemID(item_id);
@@ -1230,12 +1251,12 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
     {
         gAgentAvatarp->setCompositeUpdatesEnabled(true);
 
-        // If we have not yet declouded, we may want to use
+        // If we have not yet loaded core parts, we may want to use
         // baked texture UUIDs sent from the first objectUpdate message
-        // don't overwrite these. If we have already declouded, we've saved
-        // these ids as the last known good textures and can invalidate without
-        // re-clouding.
-        if (!gAgentAvatarp->getIsCloud())
+        // don't overwrite these. If we have parts already, we've saved
+        // these texture ids as the last known good textures and can
+        // invalidate without having to recloud avatar.
+        if (!gAgentAvatarp->getHasMissingParts())
         {
             gAgentAvatarp->invalidateAll();
         }
@@ -1650,7 +1671,7 @@ bool LLAgentWearables::moveWearable(const LLViewerInventoryItem* item, bool clos
 
     LLWearableType::EType type = item->getWearableType();
     U32 wearable_count = getWearableCount(type);
-    if (0 == wearable_count) return false;
+    if (wearable_count < 2) return false;
 
     const LLUUID& asset_id = item->getAssetUUID();
 

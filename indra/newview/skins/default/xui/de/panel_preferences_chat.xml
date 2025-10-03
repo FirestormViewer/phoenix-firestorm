@@ -180,6 +180,7 @@
 			</text>
 			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
+			<check_box name="FSRestoreOpenIMs" label="Beim Starten offene Instant Messages der letzten Sitzung wiederherstellen"/>
 			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
 			<text name="email_settings">
 				[https://accounts.secondlife.com/change_email?lang=de-DE Einstellungen für E-Mail-Benachrichtigungs für Offline-IMs öffnen]

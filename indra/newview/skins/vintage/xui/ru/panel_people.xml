@@ -53,7 +53,7 @@
 								<check_box label="Усиление радара с помощью моста LSL" tool_tip="Когда эта опция включена, то функции радара отвечающие за определения высоты, на которой есть аватары, поддерживаются LSL мостом" name="FSRadarEnhanceByBridge"/>
 								<check_box label="Цвета имен основанны на расстоянии" name="FSRadarColorNamesByDistance"/>
 								<check_box label="Ограничить дальность:" tool_tip="Ограничить результаты на заданном расстоянии" name="LimitRadarByRange"/>
-								<slider name="NearMeRangeVintage" left_pad="50"/>
+								<slider name="NearMeRangeVintage" width="125" left_pad="52"/>
 								<text name="radarmap_range_label" value="Формат имен"/>
 								<combo_box name="RadarNameFormat">
 									<combo_box.item name="RadarNameFormat_display" label="Отображаемое имя" />

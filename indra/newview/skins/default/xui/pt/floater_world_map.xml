@@ -65,6 +65,8 @@
 				<search_editor label="Regiões por nome" name="location" tool_tip="Digite o nome da região"/>
 				<button label="Buscar" name="DoSearch" tool_tip="Buscar região"/>
 				<button name="Clear" tool_tip="Limpar linhas e redefinir mapa"/>
+			</panel>
+			<panel name="layout_panel_7">
 				<text name="events_label">
 					Local:
 				</text>

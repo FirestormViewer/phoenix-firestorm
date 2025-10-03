@@ -49,6 +49,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
+#include "llviewerthrottle.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
 #include "llvovolume.h"
@@ -713,7 +714,7 @@ void LLGLTexMemBar::draw()
     //text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d ",
     text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d ",
     // </FS:Ansariel>
-	// <FS:minerjr> Fixed up the missing variables and converted 64bit size_t's to S32's to allow proper numbers to appear
+    // <FS:minerjr> Fixed up the missing variables and converted 64bit size_t's to S32's to allow proper numbers to appear
                     gTextureList.getNumImages(),
                     LLAppViewer::getTextureFetch()->getNumRequests(), LLAppViewer::getTextureFetch()->getNumDeletes(),
                     LLAppViewer::getTextureFetch()->mPacketCount, LLAppViewer::getTextureFetch()->mBadPacketCount,
@@ -727,7 +728,7 @@ void LLGLTexMemBar::draw()
                     (S32)gTextureList.mCreateTextureList.size(),
                     (S32)gTextureList.mFastCacheList.size());
                     // </FS:Ansariel>
-	// </FS:minerjr>
+    // </FS:minerjr>
     x_right = 550.0f;
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0.f, (F32)(v_offset + line_height*3),
                                              text_color, LLFontGL::LEFT, LLFontGL::TOP,
@@ -735,13 +736,9 @@ void LLGLTexMemBar::draw()
 
     // <FS:Ansariel> Move BW figures further to the right to prevent overlapping
     left = 575;
-    F32Kilobits bandwidth( LLAppViewer::getTextureFetch()->getTextureBandwidth() );
-    // <FS:Ansariel> Speed-up
-    //F32Kilobits max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
-    static LLCachedControl<F32> throttleBandwidthKBPS(gSavedSettings, "ThrottleBandwidthKBPS");
-    F32Kilobits max_bandwidth( (F32)throttleBandwidthKBPS );
-    // </FS:Ansariel> Speed-upx
-    color = bandwidth.value() > max_bandwidth.value() ? LLColor4::red : bandwidth.value() > max_bandwidth.value() * .75f ? LLColor4::yellow : text_color;
+    F32Kilobits bandwidth(LLAppViewer::getTextureFetch()->getTextureBandwidth());
+    F32Kilobits max_bandwidth(LLViewerThrottle::getMaxBandwidthKbps());
+    color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth*.75f ? LLColor4::yellow : text_color;
     color[VALPHA] = text_color[VALPHA];
     text = llformat("BW:%.0f/%.0f",bandwidth.value(), max_bandwidth.value());
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, (S32)x_right, v_offset + line_height*3,

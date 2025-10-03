@@ -175,6 +175,8 @@ public:
     // LLUICtrl interface
     void clear() override;
 
+    void setTentative(bool b) override;
+
     // Takes a UUID, wraps get/setImageAssetID
     void setValue(const LLSD& value) override;
     LLSD getValue() const override;
@@ -189,7 +191,7 @@ public:
     void            setAllowNoTexture( bool b )                 { mAllowNoTexture = b; }
     bool            getAllowNoTexture() const                   { return mAllowNoTexture; }
 
-    void            setAllowLocalTexture(bool b)                    { mAllowLocalTexture = b; }
+    void            setAllowLocalTexture(bool b);
     bool            getAllowLocalTexture() const                    { return mAllowLocalTexture; }
 
     const LLUUID&   getImageItemID() { return mImageItemID; }
@@ -262,6 +264,8 @@ public:
 
     // <FS:Ansariel> Mask texture if desired
     void setIsMasked(bool masked) { mIsMasked = masked; }
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    void setIsPreviewDisabled(bool is_preview_disabled) { mIsPreviewDisabled = is_preview_disabled; }
 
     void setLabelColor(const LLColor4& c)           { mTextEnabledColor = c; updateLabelColor();  } // <FS:Zi> Add label/caption colors
     void setDisabledLabelColor(const LLColor4& c)   { mTextDisabledColor = c; updateLabelColor(); } // <FS:Zi> Add label/caption colors
@@ -313,6 +317,8 @@ private:
 
     // <FS:Ansariel> Mask texture if desired
     bool                        mIsMasked;
+    // <FS:TJ> [FIRE-35544] For disabling texture previews for no-mod materials
+    bool                        mIsPreviewDisabled;
 
     LLUIColor                   mTextEnabledColor;      // <FS:Zi> Add label/caption colors
     LLUIColor                   mTextDisabledColor;     // <FS:Zi> Add label/caption colors
@@ -363,7 +369,7 @@ public:
     void setImageID(const LLUUID& image_asset_id, bool set_selection = true);
     bool updateImageStats(); // true if within limits
     const LLUUID&   getAssetID() { return mImageAssetID; }
-    const LLUUID&   findItemID(const LLUUID& asset_id, bool copyable_only, bool ignore_library = false);
+    const LLUUID&   findItemID(const LLUUID& asset_id, bool copyable_only, bool ignore_library = false) const;
     void            setCanApplyImmediately(bool b);
 
     void            setActive(bool active);
@@ -424,6 +430,7 @@ protected:
     void refreshLocalList();
     void refreshInventoryFilter();
     void setImageIDFromItem(const LLInventoryItem* itemp, bool set_selection = true);
+    LLViewerInventoryItem* findInvItem(const LLUUID& asset_id, bool copyable_only, bool ignore_library = false) const;
 
     LLPointer<LLViewerTexture> mTexturep;
     LLPointer<LLFetchedGLTFMaterial> mGLTFMaterial;
@@ -434,7 +441,6 @@ protected:
     LLUIImagePtr        mFallbackImage; // What to show if currently selected texture is null.
     LLUUID              mDefaultImageAssetID;
     LLUUID              mBlankImageAssetID;
-    bool                mTentative;
     bool                mAllowNoTexture;
     LLUUID              mSpecialCurrentImageAssetID;  // Used when the asset id has no corresponding texture in the user's inventory.
     LLUUID              mOriginalImageAssetID;
@@ -492,6 +498,7 @@ private:
     set_on_update_image_stats_callback mOnUpdateImageStatsCallback;
 
     bool mBakeTextureEnabled;
+    bool mLocalTextureEnabled;
 
     static S32 sLastPickerMode;
 };

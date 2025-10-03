@@ -56,6 +56,7 @@ END
 // remains consistent on all systems.
 IDI_LL_ICON             ICON                    "firestorm_icon.ico"
 IDI_LCD_LL_ICON         ICON                    "firestorm_icon.ico"
+IDI_LL_ICON_SMALL       ICON                    "firestorm_icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -267,7 +267,6 @@ void LLPanelProfilePicks::onClickNewBtn()
         label(pick_panel->getPickName()));
     updateButtons();
 
-    // <FS:Ansariel> Keep set location button
     pick_panel->addLocationChangedCallbacks();
 }
 
@@ -670,14 +669,12 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     {
         mPickName->setEnabled(true);
         mPickDescription->setEnabled(true);
-        // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
-        childSetVisible("set_to_curr_location_btn_lp", true);
+        mSetCurrentLocationButton->setVisible(true);
     }
     else
     {
-        // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
-        childSetVisible("set_to_curr_location_btn_lp", false);
         mSnapshotCtrl->setEnabled(false);
+        mSetCurrentLocationButton->setVisible(false);
     }
 }
 
@@ -688,7 +685,8 @@ bool LLPanelProfilePick::postBuild()
     mSaveButton = getChild<LLButton>("save_changes_btn");
     mCreateButton = getChild<LLButton>("create_changes_btn");
     mCancelButton = getChild<LLButton>("cancel_changes_btn");
-    mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn"); // <FS:Ansariel> Keep set location button
+    mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn");
+
     mPreviewButton = getChild<LLButton>("btn_preview"); // <AS:Chanayane> Preview button
 
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
@@ -702,7 +700,8 @@ bool LLPanelProfilePick::postBuild()
     mSaveButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCreateButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCancelButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickCancel, this));
-    mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this)); // <FS:Ansariel> Keep set location button
+    mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this));
+
     // <AS:Chanayane> Preview button
     mPreviewButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickPreview, this));
     // </AS:Chanayane>
@@ -894,7 +893,6 @@ bool LLPanelProfilePick::isDirty() const
     return false;
 }
 
-// <FS:Ansariel> Keep set location button
 void LLPanelProfilePick::onClickSetLocation()
 {
     // Save location for later use.
@@ -920,8 +918,6 @@ void LLPanelProfilePick::onClickSetLocation()
     mLocationChanged = true;
     enableSaveButton(true);
 }
-// </FS:Ansariel>
-
 // <AS:Chanayane> Preview button
 void LLPanelProfilePick::onClickPreview()
 {
@@ -954,12 +950,10 @@ void LLPanelProfilePick::onClickSave()
     {
         mParcelCallbackConnection.disconnect();
     }
-    // <FS:Ansariel> Keep set location button
-    if (mLocationChanged) 
+    if (mLocationChanged)
     {
         onClickSetLocation();
     }
-    // </FS:Ansariel>
     sendUpdate();
 
     mLocationChanged = false;
@@ -1010,6 +1004,12 @@ void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
     }
 }
 
+void LLPanelProfilePick::addLocationChangedCallbacks()
+{
+    mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
+    mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
+}
+
 void LLPanelProfilePick::setParcelID(const LLUUID& parcel_id)
 {
     if (mParcelId != parcel_id)
@@ -1023,14 +1023,6 @@ void LLPanelProfilePick::setParcelID(const LLUUID& parcel_id)
         mRequestedId.setNull();
     }
 }
-
-// <FS:Ansariel> Keep set location button
-void LLPanelProfilePick::addLocationChangedCallbacks()
-{
-    mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
-    mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
-}
-// </FS:Ansariel>
 
 void LLPanelProfilePick::sendUpdate()
 {

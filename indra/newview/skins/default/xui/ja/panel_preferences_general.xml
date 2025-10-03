@@ -11,12 +11,12 @@
 		<combo_box.item label="Polski（ポーランド語）" name="Polish"/>
 		<combo_box.item label="Русский（ロシア語）" name="Russian"/>
 		<combo_box.item label="日本語" name="(Japanese)"/>
-		<combo_box.item label="正體中文（簡体字中国語）" name="Traditional Chinese"/>
+		<combo_box.item label="正體中文（繁体字中国語）" name="Traditional Chinese"/>
 	</combo_box>
 	<text name="language_textbox2">
 		（再起動後に反映）
 	</text>
-	<check_box label="ＩＭＥの入力テキストを表示" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要な国際入力方式エディターを使用します。"/>
+	<check_box label="ＩＭＥの入力テキストを表示" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要なＩＭＥ（国際入力方式エディター）を使用します。"/>
 	<!--maturity-->
 	<text name="maturity_desired_prompt">
 		アクセスしたいコンテンツ：
@@ -59,8 +59,8 @@
 	<check_box label="古い形式の名前の時「Resident」を省略しない" name="legacy_trim_check" tool_tip="古い形式の名前の時「Resident」を省略しないようにします。"/>
 	<check_box label="古い形式の名前タグ位置" name="FSLegacyNametagPosition" tool_tip="ここにチェックを入れると、アニメーションでアバターの見かけの位置が動いた時、名前タグはアバターの頭の位置を追いかけることなく、アバターが立っている本来の位置に留まり続けます。"/>
 	<check_box label="アバターの複雑度を表示" name="FSTagShowARW" tool_tip="ここにチェックを入れると、名前タグに現在のアバター表示の複雑度が表示されます。"/>
-	<check_box label="複雑度が極めて高い場合のみ" name="FSTagShowTooComplexOnlyARW" tool_tip="ここにチェックを入れると、アバターが極めて複雑度ゼリー人形のように見える場合にのみネームタグにそのアバターの複雑さを表示します。"/>
-	<check_box label="自分のアバターの複雑度のみ" name="FSTagShowOwnARW" tool_tip="ここにチェックを入れると、名前タグにあなた自身の現在のアバターの複雑度が表示されます。"/>
+	<check_box label="複雑度が極めて高い場合のみ" name="FSTagShowTooComplexOnlyARW" tool_tip="ここにチェックを入れると、アバターが極めて複雑度が高く、Jerry Dollのように見える場合にのみ名前タグにそのアバターの複雑度を表示します。"/>
+	<check_box label="自分のアバターの複雑度を表示" name="FSTagShowOwnARW" tool_tip="ここにチェックを入れると、名前タグにあなた自身の現在のアバターの複雑度が表示されます。"/>
 	<check_box label="名前タグに自動応答モードを表示" name="FSShowAutorespondInNameTag" tool_tip="ここにチェックを入れると、自分の名前タグに自動応答モードをオンにしているかどうかが表示されます。"/>
 	<text name="title_afk_text">
 		「離席中」とするまでの時間：

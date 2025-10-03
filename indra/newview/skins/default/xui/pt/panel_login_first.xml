@@ -4,7 +4,7 @@
 		http://secondlife.com/account/request.php?lang=pt
 	</panel.string>
 	<panel.string name="sign_up_url">
-		https://www.firestormviewer.org/join-secondlife/
+		https://join.secondlife.com/
 	</panel.string>
 	<layout_stack name="logo_stack">
 		<layout_panel name="parent_panel2">

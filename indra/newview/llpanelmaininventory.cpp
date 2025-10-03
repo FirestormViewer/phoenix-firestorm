@@ -77,6 +77,7 @@ const std::string FILTERS_FILENAME("filters.xml");
 const std::string ALL_ITEMS("All Items");
 const std::string RECENT_ITEMS("Recent Items");
 const std::string WORN_ITEMS("Worn Items");
+const std::string FAVORITES("Favorites");
 
 static LLPanelInjector<LLPanelMainInventory> t_inventory("panel_main_inventory");
 
@@ -87,9 +88,9 @@ static LLPanelInjector<LLPanelMainInventory> t_inventory("panel_main_inventory")
 class LLFloaterInventoryFinder : public LLFloater
 {
 public:
-    LLFloaterInventoryFinder( LLPanelMainInventory* inventory_view);
-    virtual void draw();
-    /*virtual*/ bool    postBuild();
+    LLFloaterInventoryFinder(LLPanelMainInventory* inventory_view);
+    void draw();
+    bool postBuild();
     void changeFilter(LLInventoryFilter* filter);
     void updateElementsFromFilter();
     bool getCheckShowEmpty();
@@ -106,20 +107,44 @@ public:
 
     void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 
-    static void onTimeAgo(LLUICtrl*, void *);
-    static void onCloseBtn(void* user_data);
-    static void selectAllTypes(void* user_data);
-    static void selectNoTypes(void* user_data);
+    void onTimeAgo();
+    void onCloseBtn();
+    void selectAllTypes();
+    void selectNoTypes();
 
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
     void onResetBtn();
 private:
-    LLPanelMainInventory*   mPanelMainInventory;
-    LLSpinCtrl*         mSpinSinceDays;
-    LLSpinCtrl*         mSpinSinceHours;
-    LLCheckBoxCtrl*     mCreatorSelf;
-    LLCheckBoxCtrl*     mCreatorOthers;
-    LLInventoryFilter*  mFilter;
+    LLPanelMainInventory*   mPanelMainInventory{ nullptr };
+    LLSpinCtrl*         mSpinSinceDays{ nullptr };
+    LLSpinCtrl*         mSpinSinceHours{ nullptr };
+    LLCheckBoxCtrl*     mCreatorSelf{ nullptr };
+    LLCheckBoxCtrl*     mCreatorOthers{ nullptr };
+    LLInventoryFilter*  mFilter{ nullptr };
+
+    LLCheckBoxCtrl* mCheckAnimation{ nullptr };
+    LLCheckBoxCtrl* mCheckCallingCard{ nullptr };
+    LLCheckBoxCtrl* mCheckClothing{ nullptr };
+    LLCheckBoxCtrl* mCheckGesture{ nullptr };
+    LLCheckBoxCtrl* mCheckLandmark{ nullptr };
+    LLCheckBoxCtrl* mCheckMaterial{ nullptr };
+    LLCheckBoxCtrl* mCheckNotecard{ nullptr };
+    LLCheckBoxCtrl* mCheckObject{ nullptr };
+    LLCheckBoxCtrl* mCheckScript{ nullptr };
+    LLCheckBoxCtrl* mCheckSounds{ nullptr };
+    LLCheckBoxCtrl* mCheckTexture{ nullptr };
+    LLCheckBoxCtrl* mCheckSnapshot{ nullptr };
+    LLCheckBoxCtrl* mCheckSettings{ nullptr };
+    LLCheckBoxCtrl* mCheckShowEmpty{ nullptr };
+    LLCheckBoxCtrl* mCheckSinceLogoff{ nullptr };
+    // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    LLCheckBoxCtrl* mCheckModify{ nullptr };
+    LLCheckBoxCtrl* mCheckCopy{ nullptr };
+    LLCheckBoxCtrl* mCheckTransfer{ nullptr };
+    // </FS:Zie>
+
+    LLRadioGroup* mRadioDateSearchDirection{ nullptr };
+
     // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
     LLCheckBoxCtrl*     mOnlyCoalescedFilterCheck; // Stores the pointer to the Only Coalesced filter checkbox
     LLComboBox*         mShowLinksFilterCombo; // Stores the pointer to the Show Links filter combo box
@@ -313,6 +338,17 @@ bool LLPanelMainInventory::postBuild()
         }
         // </FS:Ansariel>
     }
+
+    LLInventoryPanel* favorites_panel = getChild<LLInventoryPanel>(FAVORITES);
+    if (favorites_panel)
+    {
+        favorites_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+        LLInventoryFilter& favorites_filter = favorites_panel->getFilter();
+        favorites_filter.setEmptyLookupMessage("InventoryNoMatchingFavorites");
+        favorites_filter.markDefault();
+        favorites_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, favorites_panel, _1, _2));
+    }
+
     // <FS:Ansariel> Only if we actually have it!
     //mSearchTypeCombo  = getChild<LLComboBox>("search_type");
     mSearchTypeCombo  = findChild<LLComboBox>("search_type");
@@ -716,7 +752,8 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
     }
     else
     {
-        menu_create_inventory_item(getPanel(), NULL, userdata);
+        selectAllItemsPanel();
+        menu_create_inventory_item(mAllItemsPanel, NULL, userdata);
     }
 }
 
@@ -963,7 +1000,6 @@ bool LLPanelMainInventory::filtersVisible(void* user_data)
 void LLPanelMainInventory::onClearSearch()
 {
     bool initially_active = false;
-    LLFloater *finder = getFinder();
     // <FS:Ansariel> Worn inventory panel
     //if (mActivePanel && (getActivePanel() != mWornItemsPanel))
     if (mActivePanel)
@@ -978,9 +1014,9 @@ void LLPanelMainInventory::onClearSearch()
         // </FS:Ansariel>
     }
 
-    if (finder)
+    if (LLFloaterInventoryFinder* finder = getFinder())
     {
-        LLFloaterInventoryFinder::selectAllTypes(finder);
+        finder->selectAllTypes();
     }
 
     // re-open folders that were initially open in case filter was active
@@ -1099,7 +1135,7 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
         // update subwindow if it's open
         if (finder)
         {
-            LLFloaterInventoryFinder::selectAllTypes(finder);
+            finder->selectAllTypes();
         }
     }
     // special treatment for "custom" filter
@@ -1562,65 +1598,71 @@ bool LLFloaterInventoryFinder::postBuild()
     const LLRect& viewrect = mPanelMainInventory->getRect();
     setRect(LLRect(viewrect.mLeft - getRect().getWidth(), viewrect.mTop, viewrect.mLeft, viewrect.mTop - getRect().getHeight()));
 
-    childSetAction("All", selectAllTypes, this);
-    childSetAction("None", selectNoTypes, this);
+    childSetAction("All", [this](LLUICtrl*, const LLSD&) { selectAllTypes(); });
+    childSetAction("None", [this](LLUICtrl*, const LLSD&) { selectNoTypes(); });
 
     mSpinSinceHours = getChild<LLSpinCtrl>("spin_hours_ago");
-    childSetCommitCallback("spin_hours_ago", onTimeAgo, this);
+    mSpinSinceHours->setCommitCallback([this](LLUICtrl*, const LLSD&) { onTimeAgo(); });
 
     mSpinSinceDays = getChild<LLSpinCtrl>("spin_days_ago");
-    childSetCommitCallback("spin_days_ago", onTimeAgo, this);
+    mSpinSinceDays->setCommitCallback([this](LLUICtrl*, const LLSD&) { onTimeAgo(); });
 
     mCreatorSelf = getChild<LLCheckBoxCtrl>("check_created_by_me");
     mCreatorOthers = getChild<LLCheckBoxCtrl>("check_created_by_others");
     mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
     mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
 
+    mCheckAnimation = getChild<LLCheckBoxCtrl>("check_animation");
+    mCheckCallingCard = getChild<LLCheckBoxCtrl>("check_calling_card");
+    mCheckClothing = getChild<LLCheckBoxCtrl>("check_clothing");
+    mCheckGesture = getChild<LLCheckBoxCtrl>("check_gesture");
+    mCheckLandmark = getChild<LLCheckBoxCtrl>("check_landmark");
+    mCheckMaterial = getChild<LLCheckBoxCtrl>("check_material");
+    mCheckNotecard = getChild<LLCheckBoxCtrl>("check_notecard");
+    mCheckObject = getChild<LLCheckBoxCtrl>("check_object");
+    mCheckScript = getChild<LLCheckBoxCtrl>("check_script");
+    mCheckSounds = getChild<LLCheckBoxCtrl>("check_sound");
+    mCheckTexture = getChild<LLCheckBoxCtrl>("check_texture");
+    mCheckSnapshot = getChild<LLCheckBoxCtrl>("check_snapshot");
+    mCheckSettings = getChild<LLCheckBoxCtrl>("check_settings");
+    mCheckShowEmpty = getChild<LLCheckBoxCtrl>("check_show_empty");
+    mCheckSinceLogoff = getChild<LLCheckBoxCtrl>("check_since_logoff");
+    mRadioDateSearchDirection = getChild<LLRadioGroup>("date_search_direction");
+
+    childSetAction("Close", [this](LLUICtrl*, const LLSD&) { onCloseBtn(); });
+
     // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
-    // Get the Finder's Only Coalesced check box for use later on, instead of calling getChild everytime accessing it
     mOnlyCoalescedFilterCheck = getChild<LLCheckBoxCtrl>("check_only_coalesced");
-    // If the checkbox could be found, then set the commit callback to onOnlyCoalescedFilterCommit to update the mFilter object
-    // with the value in the checkbox.
-    if (mOnlyCoalescedFilterCheck)
-    {
-        mOnlyCoalescedFilterCheck->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit, this));
-    }
-    // Get the Finder's Show Links Filter combobox for use later as well to also prevent having to call get child everytime accessing it.
+    mOnlyCoalescedFilterCheck->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit, this));
+
     mShowLinksFilterCombo = getChild<LLComboBox>("inventory_filter_show_links_combo");
-    // If the combobox could be found, then set the commit callback to onShowLinksFilterCommit to update the mFilter object
-    // with the value in the checkbox.
-    if (mShowLinksFilterCombo)
-    {
-        mShowLinksFilterCombo->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onShowLinksFilterCommit, this));
-    }
+    mShowLinksFilterCombo->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onShowLinksFilterCommit, this));
     // </FS:minerjr> [FIRE-35042]
-
-    childSetAction("Close", onCloseBtn, this);
-
     // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
     getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
 
-    updateElementsFromFilter();
-
     // <FS:Zi> FIRE-1175 - Filter Permissions Menu
-    getChild<LLUICtrl>("check_modify")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
-    getChild<LLUICtrl>("check_copy")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
-    getChild<LLUICtrl>("check_transfer")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    mCheckModify = getChild<LLCheckBoxCtrl>("check_modify");
+    mCheckCopy = getChild<LLCheckBoxCtrl>("check_copy");
+    mCheckTransfer = getChild<LLCheckBoxCtrl>("check_transfer");
+    mCheckModify->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    mCheckCopy->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    mCheckTransfer->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
     // </FS:Zi>
+
+    updateElementsFromFilter();
 
     return true;
 }
-void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
+
+void LLFloaterInventoryFinder::onTimeAgo()
 {
-    LLFloaterInventoryFinder *self = (LLFloaterInventoryFinder *)user_data;
-    if (!self) return;
-
-    if ( self->mSpinSinceDays->get() ||  self->mSpinSinceHours->get() )
+    if (mSpinSinceDays->get() || mSpinSinceHours->get())
     {
-        self->getChild<LLUICtrl>("check_since_logoff")->setValue(false);
+        mCheckSinceLogoff->setValue(false);
 
-        U32 days = (U32)self->mSpinSinceDays->get();
-        U32 hours = (U32)self->mSpinSinceHours->get();
+        U32 days = (U32)mSpinSinceDays->get();
+        U32 hours = (U32)mSpinSinceHours->get();
         if (hours >= 24)
         {
             // Try to handle both cases of spinner clicking and text input in a sensible fashion as best as possible.
@@ -1636,11 +1678,11 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
                 days = hours / 24;
             }
             hours = (U32)hours % 24;
-            self->mSpinSinceHours->setFocus(false);
-            self->mSpinSinceDays->setFocus(false);
-            self->mSpinSinceDays->set((F32)days);
-            self->mSpinSinceHours->set((F32)hours);
-            self->mSpinSinceHours->setFocus(true);
+            mSpinSinceHours->setFocus(false);
+            mSpinSinceDays->setFocus(false);
+            mSpinSinceDays->set((F32)days);
+            mSpinSinceHours->set((F32)hours);
+            mSpinSinceHours->setFocus(true);
         }
     }
 }
@@ -1679,34 +1721,33 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
     setTitle(LLTrans::getString(mFilter->getName()));
     // </FS:PP>
 
-    getChild<LLUICtrl>("check_animation")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
+    mCheckAnimation->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
+    mCheckCallingCard->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
+    mCheckClothing->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
+    mCheckGesture->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_GESTURE));
+    mCheckLandmark->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
+    mCheckMaterial->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
+    mCheckNotecard->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
+    mCheckObject->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_OBJECT));
+    mCheckScript->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LSL));
+    mCheckSounds->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
+    mCheckTexture->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
+    mCheckSnapshot->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
+    mCheckSettings->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
+    mCheckShowEmpty->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 
-    getChild<LLUICtrl>("check_calling_card")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
-    getChild<LLUICtrl>("check_clothing")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
-    getChild<LLUICtrl>("check_gesture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_GESTURE));
-    getChild<LLUICtrl>("check_landmark")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
-    getChild<LLUICtrl>("check_material")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
-    getChild<LLUICtrl>("check_notecard")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
-    getChild<LLUICtrl>("check_object")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_OBJECT));
-    getChild<LLUICtrl>("check_script")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LSL));
-    getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
-    getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
-    getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
-    getChild<LLUICtrl>("check_settings")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
-    getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
+    mCreatorSelf->setValue(show_created_by_me);
+    mCreatorOthers->setValue(show_created_by_others);
 
-    getChild<LLUICtrl>("check_created_by_me")->setValue(show_created_by_me);
-    getChild<LLUICtrl>("check_created_by_others")->setValue(show_created_by_others);
-
-    getChild<LLUICtrl>("check_since_logoff")->setValue(mFilter->isSinceLogoff());
+    mCheckSinceLogoff->setValue(mFilter->isSinceLogoff());
     mSpinSinceHours->set((F32)(hours % 24));
     mSpinSinceDays->set((F32)(hours / 24));
-    getChild<LLRadioGroup>("date_search_direction")->setSelectedIndex(date_search_direction);
+    mRadioDateSearchDirection->setSelectedIndex(date_search_direction);
 
     // <FS:Zi> FIRE-1175 - Filter Permissions Menu
-    getChild<LLUICtrl>("check_modify")->setValue((bool) (mFilter->getFilterPermissions() & PERM_MODIFY));
-    getChild<LLUICtrl>("check_copy")->setValue((bool) (mFilter->getFilterPermissions() & PERM_COPY));
-    getChild<LLUICtrl>("check_transfer")->setValue((bool) (mFilter->getFilterPermissions() & PERM_TRANSFER));
+    mCheckModify->setValue(mFilter->getFilterPermissions() & PERM_MODIFY);
+    mCheckCopy->setValue(mFilter->getFilterPermissions() & PERM_COPY);
+    mCheckTransfer->setValue(mFilter->getFilterPermissions() & PERM_TRANSFER);
     // </FS:Zi>
 
     // <FS:minerjr> [FIRE-35042] Inventory - Only Coalesced Filter - More accessible
@@ -1735,80 +1776,80 @@ void LLFloaterInventoryFinder::draw()
     U64 filter = 0xffffffffffffffffULL;
     bool filtered_by_all_types = true;
 
-    if (!getChild<LLUICtrl>("check_animation")->getValue())
+    if (!mCheckAnimation->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_ANIMATION);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_calling_card")->getValue())
+    if (!mCheckCallingCard->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_CALLINGCARD);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_clothing")->getValue())
+    if (!mCheckClothing->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_WEARABLE);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_gesture")->getValue())
+    if (!mCheckGesture->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_GESTURE);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_landmark")->getValue())
+    if (!mCheckLandmark->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_LANDMARK);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_material")->getValue())
+    if (!mCheckMaterial->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_MATERIAL);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_notecard")->getValue())
+    if (!mCheckNotecard->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_NOTECARD);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_object")->getValue())
+    if (!mCheckObject->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_OBJECT);
         filter &= ~(0x1 << LLInventoryType::IT_ATTACHMENT);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_script")->getValue())
+    if (!mCheckScript->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_LSL);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_sound")->getValue())
+    if (!mCheckSounds->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_SOUND);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_texture")->getValue())
+    if (!mCheckTexture->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_TEXTURE);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_snapshot")->getValue())
+    if (!mCheckSnapshot->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_SNAPSHOT);
         filtered_by_all_types = false;
     }
 
-    if (!getChild<LLUICtrl>("check_settings")->getValue())
+    if (!mCheckSettings->getValue())
     {
         filter &= ~(0x1 << LLInventoryType::IT_SETTINGS);
         filtered_by_all_types = false;
@@ -1929,17 +1970,17 @@ void LLFloaterInventoryFinder::onPermissionsChanged()
 {
     PermissionMask perms = PERM_NONE;
 
-    if (getChild<LLUICtrl>("check_modify")->getValue().asBoolean())
+    if (mCheckModify->getValue().asBoolean())
     {
         perms |= PERM_MODIFY;
     }
 
-    if (getChild<LLUICtrl>("check_copy")->getValue().asBoolean())
+    if (mCheckCopy->getValue().asBoolean())
     {
         perms |= PERM_COPY;
     }
 
-    if (getChild<LLUICtrl>("check_transfer")->getValue().asBoolean())
+    if (mCheckTransfer->getValue().asBoolean())
     {
         perms |= PERM_TRANSFER;
     }
@@ -1974,65 +2015,56 @@ void LLFloaterInventoryFinder::onShowLinksFilterCommit()
 
 bool LLFloaterInventoryFinder::getCheckShowEmpty()
 {
-    return getChild<LLUICtrl>("check_show_empty")->getValue();
+    return mCheckShowEmpty->getValue();
 }
 
 bool LLFloaterInventoryFinder::getCheckSinceLogoff()
 {
-    return getChild<LLUICtrl>("check_since_logoff")->getValue();
+    return mCheckSinceLogoff->getValue();
 }
 
 U32 LLFloaterInventoryFinder::getDateSearchDirection()
 {
-    return  getChild<LLRadioGroup>("date_search_direction")->getSelectedIndex();
+    return mRadioDateSearchDirection->getSelectedIndex();
 }
 
-void LLFloaterInventoryFinder::onCloseBtn(void* user_data)
+void LLFloaterInventoryFinder::onCloseBtn()
 {
-    LLFloaterInventoryFinder* finderp = (LLFloaterInventoryFinder*)user_data;
-    finderp->closeFloater();
+    closeFloater();
 }
 
-// static
-void LLFloaterInventoryFinder::selectAllTypes(void* user_data)
+void LLFloaterInventoryFinder::selectAllTypes()
 {
-    LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
-    if(!self) return;
-
-    self->getChild<LLUICtrl>("check_animation")->setValue(true);
-    self->getChild<LLUICtrl>("check_calling_card")->setValue(true);
-    self->getChild<LLUICtrl>("check_clothing")->setValue(true);
-    self->getChild<LLUICtrl>("check_gesture")->setValue(true);
-    self->getChild<LLUICtrl>("check_landmark")->setValue(true);
-    self->getChild<LLUICtrl>("check_material")->setValue(true);
-    self->getChild<LLUICtrl>("check_notecard")->setValue(true);
-    self->getChild<LLUICtrl>("check_object")->setValue(true);
-    self->getChild<LLUICtrl>("check_script")->setValue(true);
-    self->getChild<LLUICtrl>("check_sound")->setValue(true);
-    self->getChild<LLUICtrl>("check_texture")->setValue(true);
-    self->getChild<LLUICtrl>("check_snapshot")->setValue(true);
-    self->getChild<LLUICtrl>("check_settings")->setValue(true);
+    mCheckAnimation->setValue(true);
+    mCheckCallingCard->setValue(true);
+    mCheckClothing->setValue(true);
+    mCheckGesture->setValue(true);
+    mCheckLandmark->setValue(true);
+    mCheckMaterial->setValue(true);
+    mCheckNotecard->setValue(true);
+    mCheckObject->setValue(true);
+    mCheckScript->setValue(true);
+    mCheckSounds->setValue(true);
+    mCheckTexture->setValue(true);
+    mCheckSnapshot->setValue(true);
+    mCheckSettings->setValue(true);
 }
 
-//static
-void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
+void LLFloaterInventoryFinder::selectNoTypes()
 {
-    LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
-    if(!self) return;
-
-    self->getChild<LLUICtrl>("check_animation")->setValue(false);
-    self->getChild<LLUICtrl>("check_calling_card")->setValue(false);
-    self->getChild<LLUICtrl>("check_clothing")->setValue(false);
-    self->getChild<LLUICtrl>("check_gesture")->setValue(false);
-    self->getChild<LLUICtrl>("check_landmark")->setValue(false);
-    self->getChild<LLUICtrl>("check_material")->setValue(false);
-    self->getChild<LLUICtrl>("check_notecard")->setValue(false);
-    self->getChild<LLUICtrl>("check_object")->setValue(false);
-    self->getChild<LLUICtrl>("check_script")->setValue(false);
-    self->getChild<LLUICtrl>("check_sound")->setValue(false);
-    self->getChild<LLUICtrl>("check_texture")->setValue(false);
-    self->getChild<LLUICtrl>("check_snapshot")->setValue(false);
-    self->getChild<LLUICtrl>("check_settings")->setValue(false);
+    mCheckAnimation->setValue(false);
+    mCheckCallingCard->setValue(false);
+    mCheckClothing->setValue(false);
+    mCheckGesture->setValue(false);
+    mCheckLandmark->setValue(false);
+    mCheckMaterial->setValue(false);
+    mCheckNotecard->setValue(false);
+    mCheckObject->setValue(false);
+    mCheckScript->setValue(false);
+    mCheckSounds->setValue(false);
+    mCheckTexture->setValue(false);
+    mCheckSnapshot->setValue(false);
+    mCheckSettings->setValue(false);
 }
 
 // <FS:Zi> Inventory Collapse and Expand Buttons

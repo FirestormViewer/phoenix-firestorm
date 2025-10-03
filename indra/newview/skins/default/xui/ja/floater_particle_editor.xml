@@ -56,10 +56,10 @@
 				<combo_box.item label="ブレンド０" name="blend_zero"/>
 				<combo_box.item label="終了色にブレンド" name="blend_dest_color"/>
 				<combo_box.item label="開始色にブレンド" name="blend_src_color"/>
-				<combo_box.item label="ブレンド１‐終了色" name="blend_one_minus_dest_color"/>
-				<combo_box.item label="ブレンド１‐開始色" name="blend_one_minus_src_color"/>
+				<combo_box.item label="ブレンド１－終了色" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="ブレンド１－開始色" name="blend_one_minus_src_color"/>
 				<combo_box.item label="開始色アルファ" name="blend_src_alpha"/>
-				<combo_box.item label="ブレンド１‐開始色アルファ" name="blend_one_minus_src_alpha"/>
+				<combo_box.item label="ブレンド１－開始色アルファ" name="blend_one_minus_src_alpha"/>
 			</combo_box>
 			<text name="End_Glow_Label">
 				終了グロー：
@@ -69,10 +69,10 @@
 				<combo_box.item label="ブレンド０" name="blend_zero"/>
 				<combo_box.item label="終了色にブレンド" name="blend_dest_color"/>
 				<combo_box.item label="開始色にブレンド" name="blend_src_color"/>
-				<combo_box.item label="ブレンド１‐終了色" name="blend_one_minus_dest_color"/>
-				<combo_box.item label="ブレンド１‐開始色" name="blend_one_minus_src_color"/>
+				<combo_box.item label="ブレンド１－終了色" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="ブレンド１－開始色" name="blend_one_minus_src_color"/>
 				<combo_box.item label="開始色アルファ" name="blend_src_alpha"/>
-				<combo_box.item label="ブレンド１‐開始色アルファ" name="blend_one_minus_src_alpha"/>
+				<combo_box.item label="ブレンド１－開始色アルファ" name="blend_one_minus_src_alpha"/>
 			</combo_box>
 			<text name="Scale_Start_Label">
 				開始スケール：

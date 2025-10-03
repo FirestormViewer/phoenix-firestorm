@@ -19,6 +19,18 @@
 			<text name="header_colors">Émetteur :</text>
 			<text name="chat_name_label">Avatars</text>
 			<text name="object_name_header_label">Objets</text>
+			<text name="mention_colors">
+				Mentions dans le chat :
+			</text>
+			<text name="font_mention_label">
+				Police
+			</text>
+			<text name="resident_mention_label">
+				Résidents
+			</text>
+			<text name="self_mention_label">
+				Moi
+			</text>
 			<slider label="Facteur de diminution de couleur hors de portée de chat :" label_width="330" width="460" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Le facteur de diminution de couleur du message si son émetteur n'est pas à proximité."/>
 			<check_box name="FSColorIMsDistinctly" label="Colorer les IM et le chat de groupe distinctivement dans la console :"/>
 			<panel name="im_color_panel">

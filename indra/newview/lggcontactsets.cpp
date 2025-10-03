@@ -767,15 +767,23 @@ void LGGContactSets::setPseudonym(const LLUUID& friend_id, std::string_view pseu
     inst->fetch(friend_id);
     LLVOAvatar::invalidateNameTag(friend_id);
 
-    if (auto it = mAvatarNameCacheConnections.find(friend_id); it != mAvatarNameCacheConnections.end())
+    if (LLAvatarName av_name; LLAvatarNameCache::get(friend_id, &av_name))
     {
-        if (it->second.connected())
-        {
-            it->second.disconnect();
-        }
-        mAvatarNameCacheConnections.erase(it);
+        mChangedSignal(UPDATED_MEMBERS);
     }
-    mAvatarNameCacheConnections[friend_id] = LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1));
+    else
+    {
+        if (auto it = mAvatarNameCacheConnections.find(friend_id); it != mAvatarNameCacheConnections.end())
+        {
+            if (it->second.connected())
+            {
+                it->second.disconnect();
+            }
+            mAvatarNameCacheConnections.erase(it);
+        }
+
+        mAvatarNameCacheConnections.try_emplace(friend_id, LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1)));
+    }
     saveToDisk();
 }
 
@@ -802,15 +810,24 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id, bool save_changes /
             removeNonFriendFromList(friend_id, save_changes);
         }
 
-        if (auto it = mAvatarNameCacheConnections.find(friend_id); it != mAvatarNameCacheConnections.end())
+        if (LLAvatarName av_name; LLAvatarNameCache::get(friend_id, &av_name))
         {
-            if (it->second.connected())
-            {
-                it->second.disconnect();
-            }
-            mAvatarNameCacheConnections.erase(it);
+            mChangedSignal(UPDATED_MEMBERS);
         }
-        mAvatarNameCacheConnections[friend_id] = LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1));
+        else
+        {
+            if (auto it = mAvatarNameCacheConnections.find(friend_id); it != mAvatarNameCacheConnections.end())
+            {
+                if (it->second.connected())
+                {
+                    it->second.disconnect();
+                }
+                mAvatarNameCacheConnections.erase(it);
+            }
+
+            mAvatarNameCacheConnections.try_emplace(friend_id,  LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1)));
+        }
+
         if (save_changes)
         {
             saveToDisk();

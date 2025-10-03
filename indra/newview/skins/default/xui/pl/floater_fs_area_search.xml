@@ -96,6 +96,7 @@
 			<check_box name="exclude_childprim" label="Primami podrzędnymi / potomkami primy głównej"/>
 			<check_box name="exclude_neighbor_region" label="W sąsiadujących regionach"/>
 			<button name="apply" label="Zastosuj"/>
+			<button name="save_as_default" label="Zapisz jako domyślne" />
 		</panel>
 		<panel label="Opcje" name="area_search_options_panel">
 			<text name="display_column">

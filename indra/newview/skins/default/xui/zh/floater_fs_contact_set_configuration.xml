@@ -18,12 +18,12 @@
 		</text>
 		<color_swatch label="顏色" name="global_swatch" tool_tip="點擊以打開顏色選擇" />
 		<text name="label_online">
-			線上通知：
+			在線通知：
 		</text>
-		<check_box label="將所有好友的線上通知顯示在彈出視窗中" name="ChatOnlineNotification" />
-		<check_box label="將所有好友的線上通知顯示在聊天中" name="OnlineOfflinetoNearbyChat" />
-		<check_box label="將特定分組的線上通知顯示為彈出視窗中" name="FSContactSetsNotificationToast" />
-		<check_box label="將特定分組的線上通知顯示在聊天中" name="FSContactSetsNotificationNearbyChat" />
+		<check_box label="將所有好友的在線通知顯示在彈出視窗中" name="ChatOnlineNotification" />
+		<check_box label="將所有好友的在線通知顯示在聊天中" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="將特定分組的在線通知顯示為彈出視窗中" name="FSContactSetsNotificationToast" />
+		<check_box label="將特定分組的在線通知顯示在聊天中" name="FSContactSetsNotificationNearbyChat" />
 		<text name="label_colors">
 			自訂顏色：
 		</text>

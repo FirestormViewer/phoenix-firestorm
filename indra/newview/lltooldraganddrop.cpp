@@ -1139,28 +1139,33 @@ void set_texture_to_material(LLViewerObject* hit_obj,
         case LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR:
         default:
             {
-                material->setBaseColorId(asset_id);
+                material->setBaseColorId(asset_id, true);
             }
             break;
 
         case LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS:
             {
-                material->setOcclusionRoughnessMetallicId(asset_id);
+                material->setOcclusionRoughnessMetallicId(asset_id, true);
             }
             break;
 
         case LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE:
             {
-                material->setEmissiveId(asset_id);
+                material->setEmissiveId(asset_id, true);
             }
             break;
 
         case LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL:
             {
-                material->setNormalId(asset_id);
+                material->setNormalId(asset_id, true);
             }
             break;
     }
+    // Update viewer side, needed for updating mSavedGLTFOverrideMaterials.
+    // Also for parity, we are immediately setting textures and materials,
+    // so we should immediate set overrides to.
+    hit_obj->setTEGLTFMaterialOverride(hit_face, material);
+    // update server
     LLGLTFMaterialList::queueModify(hit_obj, hit_face, material);
 }
 
@@ -2240,7 +2245,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
     {
         if(mSource == SOURCE_LIBRARY)
         {
-//          LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0));
+//          LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0, false));
 // [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-2.2)
             // Make this behave consistent with dad3dWearItem
             LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0, fReplace));
@@ -2259,7 +2264,7 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
             // Make this behave consistent with dad3dWearItem
             rez_attachment(item, 0, !(mask & MASK_CONTROL));
 // [/SL:KB]
-//          rez_attachment(item, 0);
+//          rez_attachment(item, 0, false);
         }
     }
     return ACCEPT_YES_SINGLE;

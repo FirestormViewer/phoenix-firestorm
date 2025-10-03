@@ -150,6 +150,7 @@
 	<spinner label="垂直偏距" name="shinyOffsetV" />
 	<spinner label="水平刻度" name="gltfTextureScaleU" />
 	<spinner label="垂直刻度" name="gltfTextureScaleV" />
+	<spinner label="每米重複次數" name="gltfRptctrl" />
 	<spinner label="旋轉角度" name="gltfTextureRotation" />
 	<spinner label="水平偏距" name="gltfTextureOffsetU" />
 	<spinner label="垂直偏距" name="gltfTextureOffsetV" />

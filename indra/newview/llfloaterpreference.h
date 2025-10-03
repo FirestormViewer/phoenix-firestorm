@@ -315,6 +315,7 @@ private:
     bool mOriginalIMViaEmail;
     bool mLanguageChanged;
     bool mAvatarDataInitialized;
+    U32 mLastQualityLevel = 0;
     std::string mPriorInstantMessageLogPath;
 
     bool mOriginalHideOnlineStatus;
@@ -333,7 +334,7 @@ private:
     std::unique_ptr< ll::prefs::SearchData > mSearchData;
     bool mSearchDataDirty;
 
-    boost::signals2::connection	mImpostorsChangedSignal;
+    boost::signals2::connection mImpostorsChangedSignal;
     boost::signals2::connection mComplexityChangedSignal;
 
     void onUpdateFilterTerm( bool force = false );
@@ -641,9 +642,21 @@ private:
     LLPanel*    mOutputDevicePanel;
     LLComboBox* mOutputDeviceComboBox;
 
+    LLCheckBoxCtrl* mMoapInteractionAll;
+    LLCheckBoxCtrl* mMoapInteractionAny;
+    LLCheckBoxCtrl* mMoapInteractionHud;
+    LLCheckBoxCtrl* mMoapInteractionOwnObjects;
+    LLCheckBoxCtrl* mMoapInteractionGroupObjects;
+    LLCheckBoxCtrl* mMoapInteractionFriendObjects;
+    LLCheckBoxCtrl* mMoapInteractionLandownerObjects;
+
     void onOutputDeviceChanged(const LLSD& new_value);
     void onOutputDeviceSelectionChanged(const LLSD& new_value);
     void onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices);
+
+    void onMoapInteractionChanged();
+    void updateMoapInteractionSetting();
+
     boost::signals2::connection mOutputDeviceListChangedConnection;
 
     LOG_CLASS(FSPanelPreferenceSounds);

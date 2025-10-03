@@ -123,7 +123,7 @@ LLCubeMapArray::LLCubeMapArray(LLCubeMapArray& lhs, U32 width, U32 count) : mTex
             GLint components = GL_RGB;
             if (mImage->getComponents() == 4)
                 components = GL_RGBA;
-            GLint format = GL_RGB;
+            // GLint format = GL_RGB; // <FS:Beq/> unused
 
             // Handle different resolutions by scaling the image
             LLPointer<LLImageRaw> src_image = new LLImageRaw(lhs.mWidth, lhs.mWidth, lhs.mImage->getComponents());

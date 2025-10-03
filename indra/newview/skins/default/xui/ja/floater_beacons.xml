@@ -5,10 +5,11 @@
 			表示：
 		</text>
 		<check_box label="シーン内の光源のバウンディングボックス" name="lights_bounding_boxes"/>
+		<check_box label="リージョンのコーナー" name="fsregioncornerbeacons"/>
 		<check_box label="ビーコン" name="beacons"/>
 		<check_box label="ハイライト" name="highlights"/>
 		<check_box label="ビーコン情報をビューアウィンドウに載せる" name="FSRenderBeaconText"/>
-		<text name="beacon_width_label" tool_tip="ビーコンの幅">
+		<text name="beacon_width_label" tool_tip="ビーコンの幅を設定します。">
 			幅：
 		</text>
 		<text name="label_objects">

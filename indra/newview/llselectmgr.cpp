@@ -102,6 +102,7 @@
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 #include "rlvmodifiers.h"
 // [/RLVa:KB]
 // <FS:CR> Aurora Sim
@@ -274,6 +275,7 @@ LLSelectMgr::LLSelectMgr()
 LLSelectMgr::~LLSelectMgr()
 {
     clearSelections();
+    mSlectionLodModChangedConnection.disconnect();
 }
 
 void LLSelectMgr::clearSelections()
@@ -2393,6 +2395,7 @@ void LLSelectMgr::selectionRevertGLTFMaterials()
             {
                 // Restore base material
                 LLUUID asset_id = nodep->mSavedGLTFMaterialIds[te];
+                LLUUID old_asset_id = objectp->getRenderMaterialID(te);
 
                 // Update material locally
                 objectp->setRenderMaterialID(te, asset_id, false /*wait for LLGLTFMaterialList update*/);
@@ -2403,18 +2406,29 @@ void LLSelectMgr::selectionRevertGLTFMaterials()
                     objectp->setTEGLTFMaterialOverride(te, material);
                 }
 
-                // Enqueue update to server
-                if (asset_id.notNull() && material)
-                {
-                    // Restore overrides and base material
-                    LLGLTFMaterialList::queueApply(objectp, te, asset_id, material);
-                }
-                else
+                if (asset_id.isNull() || !material)
                 {
                     //blank override out
                     LLGLTFMaterialList::queueApply(objectp, te, asset_id);
                 }
-
+                if (old_asset_id != asset_id)
+                {
+                    // Restore overrides and base material
+                    // Note: might not work reliably if asset is already there, might
+                    // have a server sided problem where servers applies override
+                    // first then resets it by adding asset, in which case need
+                    // to create a server ticket and chain asset then override
+                    // application.
+                    LLGLTFMaterialList::queueApply(objectp, te, asset_id, material);
+                }
+                else
+                {
+                    // Enqueue override update to server
+                    // Note: this is suboptimal, better to send asset id as well
+                    // but there seems to be a server problem with queueApply
+                    // that ignores override in some cases
+                    LLGLTFMaterialList::queueModify(objectp, te, material);
+                }
             }
             return true;
         }
@@ -3114,7 +3128,7 @@ void LLSelectMgr::logNoOp(LLSelectNode* node, void *)
 // static
 void LLSelectMgr::logAttachmentRequest(LLSelectNode* node, void *)
 {
-    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
+//    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
 }
 
 // static
@@ -5301,6 +5315,18 @@ void LLSelectMgr::sendDetach()
     {
         return;
     }
+
+// [RLVa:KB]
+    if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
+    {
+        LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
+        RlvSelectHasLockedAttach f;
+        if ( (hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, false) != NULL) )
+        {
+            return;
+        }
+    }
+// [/RLVa:KB]
 
     sendListToRegions(
         "ObjectDetach",

@@ -90,6 +90,8 @@ with the same filename but different name
   <texture name="Cam_Preset_Front_On" file_name="bottomtray/Cam_Preset_Front_On.png" preload="false" />
   <texture name="Cam_Preset_Side_Off" file_name="bottomtray/Cam_Preset_Side_Off.png" preload="false" />
   <texture name="Cam_Preset_Side_On" file_name="bottomtray/Cam_Preset_Side_On.png" preload="false" />
+  <texture name="Cam_Preset_TPP_Off" file_name="bottomtray/Cam_Preset_TPP_Off.png" preload="false" />
+  <texture name="Cam_Preset_TPP_On" file_name="bottomtray/Cam_Preset_TPP_On.png" preload="false" />
 
   <texture name="Cam_Rotate_In" file_name="bottomtray/Cam_Rotate_In.png" preload="false" />
   <texture name="Cam_Rotate_Out" file_name="bottomtray/Cam_Rotate_Out.png" preload="false" />

@@ -13,6 +13,8 @@
 			<!-- Estate Managers buttons -->
 			<button label="追加…" name="add_estate_manager_btn"/>
 			<button label="削除…" name="remove_estate_manager_btn"/>
+			<button label="エクスポート…" name="export_estate_manager_btn"/>
+			<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート…" name="import_estate_manager_btn"/>
 		</panel>
 		<!-- ================================ ALLOWED tab =========================== -->
 		<panel label="許可" name="allowed_panel">
@@ -30,6 +32,8 @@
 			<!-- Always allowed buttons -->
 			<button label="追加…" name="add_allowed_avatar_btn"/>
 			<button label="削除…" name="remove_allowed_avatar_btn"/>
+			<button label="エクスポート…" name="export_allowed_list_btn"/>
+			<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート…" name="import_allowed_list_btn"/>
 		</panel>
 		<!-- ============================= ALLOWED GROUPS tab ======================= -->
 		<panel label="許可するグループ" name="allowed_groups_panel">
@@ -47,6 +51,8 @@
 			<!-- Groups always allowed buttons -->
 			<button label="追加…" name="add_allowed_group_btn"/>
 			<button label="削除…" name="remove_allowed_group_btn"/>
+			<button label="エクスポート…" name="export_allowed_group_btn"/>
+			<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート…" name="import_allowed_group_btn"/>
 		</panel>
 		<!-- ================================ BANNED tab ============================ -->
 		<panel label="バン" name="banned_panel">
@@ -67,6 +73,8 @@
 			<!-- Always banned buttons -->
 			<button label="追加…" name="add_banned_avatar_btn"/>
 			<button label="削除…" name="remove_banned_avatar_btn"/>
+			<button label="エクスポート…" name="export_banned_avatar_btn"/>
+			<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート…" name="import_banned_avatar_btn"/>
 		</panel>
 	</tab_container>
 </panel>

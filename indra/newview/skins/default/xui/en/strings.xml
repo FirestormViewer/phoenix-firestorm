@@ -663,6 +663,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="dictionary_files">Dictionaries</string>
 	<string name="backup_files">Object Backups</string>
 	<string name="collada_files">COLLADA Models</string>
+	<string name="model_files">Mesh Models</string>
 	<string name="csv_files">Comma separated values</string>
 	<string name="recompile_script_verb">Recompile</string>
 
@@ -791,8 +792,9 @@ https://www.firestormviewer.org/support for help fixing this problem.
 
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
-	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Show [secondlife:///app/inventory/filters Filters].</string>
-	<string name="PlacesNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/places/[SEARCH_TERM] Search].</string>
+	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
+  <string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="PlacesNoMatchingItems">To add a place to your landmarks, click the star to the right of the location name.</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoListing">You have no listings yet.</string>
 	<string name="MarketplaceNoMatchingItems">No items found. Check the spelling of your search string and try again.</string>
@@ -964,11 +966,12 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InvFolder Uncompressed Sounds">Uncompressed Sounds</string>
 	<string name="InvFolder Animations">Animations</string>
 	<string name="InvFolder Gestures">Gestures</string>
-	<string name="InvFolder Favorites">Favorites</string>
+	<string name="InvFolder Favorite">Favorites</string>
   <!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
       Also, it can be written as "Favorite" or "Favorites".
   We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">Favorites</string>
+	<string name="InvFolder Favorites">Favorites</string>
 	<string name="InvFolder favorites">Favorites</string>
 	<string name="InvFolder Current Outfit">Current Outfit</string>
 	<string name="InvFolder Initial Outfits">Initial Outfits</string>
@@ -2493,6 +2496,7 @@ Abuse Report</string>
   <string name="AvatarBirthDateFormat_legacy">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]</string>
 
   <string name="DefaultMimeType">none/none</string>
+  <string name="texture_load_area_error">Can't load images larger than [PIXELS] pixels</string>
   <string name="texture_load_dimensions_error">Can't load images larger than [WIDTH]*[HEIGHT]</string>
   <string name="texture_load_format_error">Incorrect image format.</string>
   <string name="texture_load_empty_file">File is empty.</string>
@@ -2699,6 +2703,7 @@ Try enclosing path to the editor with double quotes.
   <string name="BeaconScripted">Viewing scripted object beacons (red)</string>
   <string name="BeaconScriptedTouch">Viewing scripted object with touch function beacons (red)</string>
   <string name="BeaconSound">Viewing sound beacons (yellow)</string>
+  <string name="BeaconRegionCorners">Viewing region corners (yellow)</string>
   <string name="BeaconMedia">Viewing media beacons (white)</string>
   <string name="BeaconSun">Viewing sun direction beacon (orange)</string>
   <string name="BeaconMoon">Viewing moon direction beacon (purple)</string>
@@ -2710,7 +2715,7 @@ Try enclosing path to the editor with double quotes.
 name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_AboutLand_Label">About land</string>
   <string name="Command_Appearance_Label">Appearance</string>
-  <string name="Command_Avatar_Label">Avatar</string>
+  <string name="Command_Avatar_Label">Avatar Welcome Pack</string>
   <string name="Command_Build_Label">Build</string>
   <string name="Command_Chat_Label">Conversations</string>
   <string name="Command_Conversations_Label">Conversations</string>
@@ -3320,4 +3325,10 @@ Your current position: [AVATAR_POS]
   <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
   <string name="OpenSimInventoryValidationErrorGenericHelp">your Grid Operator's support team</string>
   <string name="Unlimited">Unlimited</string>
+
+  <string name="ListEmpty">List is empty</string>
+  <string name="NoValidUUIDs">No valid UUIDs found in the imported file.</string>
+  <string name="ImportListTooLarge">Too many entries. The CSV file has [COUNT] entries and there are [MAX] slots available.</string>
+  <string name="ImportSuccessful">Successfully processed [COUNT] entries.</string>
+
 </strings>

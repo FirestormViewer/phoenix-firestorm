@@ -5,6 +5,8 @@
 	<menu_item_call label="脫下" name="take_off" />
 	<menu_item_call label="卸下" name="detach" />
 	<menu_item_call label="脫下/卸下" name="take_off_or_detach" />
+	<menu_item_call label="添加到收藏" name="favorites_add" />
+	<menu_item_call label="從收藏中移除" name="favorites_remove" />
 	<menu_item_call label="顯示原件" name="show_original" />
 	<menu_item_call label="編輯裝扮" name="edit_outfit" />
 </context_menu>

@@ -434,7 +434,7 @@ void LLGridManager::setGridChoice(const std::string& grid)
     }
 }
 
-std::string LLGridManager::getGrid( const std::string &grid )
+std::string LLGridManager::getGrid( const std::string &grid ) const
 {
     std::string grid_name;
 
@@ -446,7 +446,7 @@ std::string LLGridManager::getGrid( const std::string &grid )
     else
     {
         // search the grid list for a grid with a matching id
-        for(LLSD::map_iterator grid_iter = mGridList.beginMap();
+        for(LLSD::map_const_iterator grid_iter = mGridList.beginMap();
             grid_name.empty() && grid_iter != mGridList.endMap();
             grid_iter++)
         {
@@ -468,7 +468,7 @@ std::string LLGridManager::getGridLabel(const std::string& grid)
 {
     std::string grid_label;
     std::string grid_name = getGrid(grid);
-    if (!grid.empty())
+    if (!grid_name.empty())
     {
         grid_label = mGridList[grid_name][GRID_LABEL_VALUE].asString();
     }
@@ -484,7 +484,7 @@ std::string LLGridManager::getGridId(const std::string& grid)
 {
     std::string grid_id;
     std::string grid_name = getGrid(grid);
-    if (!grid.empty())
+    if (!grid_name.empty())
     {
         grid_id = mGridList[grid_name][GRID_ID_VALUE].asString();
     }
@@ -642,12 +642,12 @@ void LLGridManager::updateIsInProductionGrid()
     }
 }
 
-bool LLGridManager::isInProductionGrid()
+bool LLGridManager::isInProductionGrid() const
 {
     return mIsInProductionGrid;
 }
 
-bool LLGridManager::isSystemGrid(const std::string& grid)
+bool LLGridManager::isSystemGrid(const std::string& grid) const
 {
     std::string grid_name = getGrid(grid);
 

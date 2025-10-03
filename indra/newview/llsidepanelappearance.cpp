@@ -40,6 +40,7 @@
 #include "llfloaterworldmap.h"
 #include "llfolderviewmodel.h"
 #include "llloadingindicator.h"
+#include "llmenubutton.h"
 #include "lloutfitobserver.h"
 #include "llpaneleditwearable.h"
 #include "llpaneloutfitsinventory.h"
@@ -146,6 +147,14 @@ bool LLSidepanelAppearance::postBuild()
     setVisibleCallback(boost::bind(&LLSidepanelAppearance::onVisibilityChanged,this,_2));
 
     setWearablesLoading(gAgentWearables.isCOFChangeInProgress());
+
+
+    LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
+    LLMenuButton* menu_sort_btn = getChild<LLMenuButton>("sorting_menu_btn");
+    LLButton* menu_trash_btn = getChild<LLButton>("trash_btn");
+    LLPanel* menu_sort_btn_panel = getChild<LLPanel>("options_sort_btn_panel");
+    LLPanel* menu_trash_btn_panel = getChild<LLPanel>("trash_btn_panel");
+    mPanelOutfitsInventory->setMenuButtons(menu_gear_btn, menu_sort_btn, menu_trash_btn, menu_sort_btn_panel, menu_trash_btn_panel);
 
     return true;
 }
@@ -355,6 +364,12 @@ void LLSidepanelAppearance::toggleMyOutfitsPanel(bool visible, const std::string
     // so that we don't need to toggle them explicitly.
     mFilterEditor->setVisible(visible);
     mCurrOutfitPanel->setVisible(visible);
+
+    // <FS:PP> FIRE-35947 Ensure the top menu buttons (gear/sort/trash) are only visible in the outfits panel
+    getChildView("options_gear_btn_panel")->setVisible(visible);
+    getChildView("options_sort_btn_panel")->setVisible(visible);
+    getChildView("trash_btn_panel")->setVisible(visible);
+    // </FS:PP>
 
     if (visible)
     {

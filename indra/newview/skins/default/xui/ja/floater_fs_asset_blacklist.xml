@@ -15,6 +15,18 @@
 	<floater.string name="asset_resident">
 		住人
 	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">
+		アバターが着ているオブジェクトのサウンド
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
+		アバターがRezしたオブジェクトのサウンド
+	</floater.string>
+	<floater.string name="blacklist_flag_mute_avatar_gestures_sounds">
+		アバターのジェスチャーのサウンド
+	</floater.string>
+	<floater.string name="blacklist_flag_unknown">
+		不明なフラグ
+	</floater.string>
 	<floater.string name="asset_unknown">
 		不明
 	</floater.string>
@@ -29,6 +41,7 @@
 		<columns name="name" label="名前"/>
 		<columns name="region" label="リージョン"/>
 		<columns name="type" label="種類"/>
+		<columns name="flags" label="フラグ"/>
 		<columns name="date" label="日時"/>
 		<columns name="permanent" label="常時"/>
 	</fs_scroll_list>

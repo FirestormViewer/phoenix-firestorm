@@ -29,16 +29,17 @@ env:
   fallback_platform: ${platform}
   FS_RELEASE_CHAN: ${FS_RELEASE_TYPE}x64
   FS_GRID: "GRID FLAGS NOT SET"
-  PYTHON: 
+  PYTHON: Unknown
 
 jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-14,ubuntu-22.04,windows-2022]
+        os: [macos-15,ubuntu-22.04,windows-2022]
         grid: [sl,os]
         variant: [regular, avx]
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container_image }}
     outputs:
       viewer_channel: ${{ steps.channel.outputs.viewer_channel }}
       viewer_version: ${{ steps.version.outputs.viewer_version }}
@@ -57,17 +58,40 @@ jobs:
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        id: py311
+      - uses: actions/checkout@v5
+      # Use apt-based Python when inside the Ubuntu 22.04 container
+      - name: Install Python 3.11 (container case)
+        if: matrix.container_image == 'ubuntu:22.04'
+        id: py311_apt
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            python3.11 python3.11-venv python3-pip python-is-python3
+          python3.11 -m pip install --upgrade pip setuptools wheel
+          echo "python-path=$(command -v python3.11)" >> "$GITHUB_OUTPUT"
+      # Use setup-python for all other jobs
+      - name: Set up Python (normal case)
+        if: matrix.container_image != 'ubuntu:22.04'
+        id: py311_setup
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
+          check-latest: true
+      - name: resolve python path
+        id: py311
+        shell: bash
+        run: |
+          if [ -n "${{ steps.py311_apt.outputs.python-path }}" ]; then
+            PY="${{ steps.py311_apt.outputs.python-path }}"
+          else
+            PY="${{ steps.py311_setup.outputs.python-path }}"
+          fi
+          echo "python-path=$PY" >> "$GITHUB_OUTPUT"
+          echo "Resolved Python at: $PY"          
       - name: Set PYTHON environment for CMake
         run: |
           echo "PYTHON=${{ steps.py311.outputs.python-path }}" >> $GITHUB_ENV
         shell: bash
-
       - name: Install python requirements
         run: |
           python3 -m pip install -r requirements.txt
@@ -101,13 +125,16 @@ jobs:
         with: 
           swap-storage: false
 
-      # - name: Set gcc version on Linux
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     echo "CC=gcc-10" >> $GITHUB_ENV
-      #     echo "CXX=g++-10" >> $GITHUB_ENV
-
-
+      - name: Install GCC-13
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 130 \
+            --slave /usr/bin/g++ g++ /usr/bin/g++-13
+          echo "CC=gcc-13"  >> $GITHUB_ENV
+          echo "CXX=g++-13" >> $GITHUB_ENV
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
         with:
@@ -158,12 +185,12 @@ jobs:
         shell: bash
     
       - name: Get the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -214,7 +241,7 @@ jobs:
       - name: Install required Ubuntu packages and release some space.
         if: runner.os == 'Linux'
         run: |
-          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
+          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1-dev")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
           sudo apt-get install -y wget apt-transport-https software-properties-common
@@ -283,10 +310,10 @@ jobs:
               EXPIRE_DAYS=14
               ;;
             "Alpha")
-              EXPIRE_DAYS=28
+              EXPIRE_DAYS=14
               ;;
             "Beta")
-              EXPIRE_DAYS=60
+              EXPIRE_DAYS=28
               ;;
             *)
               EXPIRE_DAYS=""
@@ -308,7 +335,17 @@ jobs:
         if: ${{ matrix.variant == 'avx' }}
         shell: bash
         run: echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} --avx2" >> $GITHUB_ENV
-
+      - name: Add custom UA string if provided
+        env:
+          FS_PF_UA: ${{ secrets.FS_PF_UA }}
+        run: |
+          if [ -n "${FS_PF_UA}" ]; then
+            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS }} -DFS_PF_USER_AGENT=\"${FS_PF_UA}\"" >> $GITHUB_ENV
+            echo "Building with custom user-agent string."
+          else
+            echo "No custom user-agent string provided."
+          fi
+        shell: bash
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
@@ -369,13 +406,13 @@ jobs:
       - name: Install Microsoft.Trusted.Signing.Client
         if: runner.os == 'Windows'
         run: |
-          .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.53 -OutputDirectory .
+          .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.86 -OutputDirectory .
         shell: pwsh
 
       - name: Locate Azure.CodeSigning.Dlib.dll
         if: runner.os == 'Windows'
         run: |
-          $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.53\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
+          $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.86\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
           if (-not $dllPath) {
             Write-Error "Azure.CodeSigning.Dlib.dll not found."
             exit 1
@@ -478,7 +515,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           sparse-checkout: |
             fsutils/download_list.py
@@ -492,7 +529,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         id: download
         with:
           path: to_deploy        

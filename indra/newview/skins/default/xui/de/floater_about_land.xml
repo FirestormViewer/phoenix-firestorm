@@ -496,6 +496,8 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				<name_list name="AccessList" tool_tip="([LISTED] aufgeführt, [MAX] max)"/>
 				<button label="Hinzufügen" name="add_allowed"/>
 				<button label="Entfernen" label_selected="Entfernen" name="remove_allowed"/>
+				<button label="Exportieren" label_selected="Exportieren" name="export_allowed"/>
+				<button label="Importieren" label_selected="Importieren" name="import_allowed" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Verbannen" name="BanCheck">
@@ -507,6 +509,8 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				</name_list>
 				<button label="Hinzufügen" name="add_banned"/>
 				<button label="Entfernen" label_selected="Entfernen" name="remove_banned"/>
+				<button label="Exportieren" label_selected="Exportieren" name="export_banned"/>
+				<button label="Importieren" label_selected="Importieren" name="import_banned" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
 			</panel>
 		</panel>
 		<panel label="Erlebnis" name="land_experiences_panel"/>

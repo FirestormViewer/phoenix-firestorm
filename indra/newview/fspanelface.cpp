@@ -33,6 +33,7 @@
 
 #include "llagent.h"
 #include "llagentdata.h"
+#include "llavatarappearancedefines.h"
 #include "llbutton.h"
 #include "llcalc.h"
 #include "llcheckboxctrl.h"
@@ -184,35 +185,7 @@ void readSelectedGLTFMaterial(std::function<T(const LLGLTFMaterial*)> func, T& v
     identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&select_func, value, has_tolerance, tolerance);
 }
 
-void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical)
-{
-    // The All channel should read base color values
-    if (channel == LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_COUNT)
-        channel = LLGLTFMaterial::TextureInfo::GLTF_TEXTURE_INFO_BASE_COLOR;
-
-    struct LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor : public LLSelectedTEGetFunctor<F32>
-    {
-        LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor(LLGLTFMaterial::TextureInfo channel) : mChannel(channel) {}
-        virtual ~LLSelectedTEGetGLTFMaterialMaxRepeatsFunctor() {};
-        F32 get(LLViewerObject* object, S32 face) override
-        {
-            const LLTextureEntry* tep = object->getTE(face);
-            const LLGLTFMaterial* render_material = tep->getGLTFRenderMaterial();
-            if (!render_material)
-                return 0.f;
-
-            U32 s_axis = VX;
-            U32 t_axis = VY;
-            LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
-            F32 repeats_u = render_material->mTextureTransform[mChannel].mScale[VX] / object->getScale().mV[s_axis];
-            F32 repeats_v = render_material->mTextureTransform[mChannel].mScale[VY] / object->getScale().mV[t_axis];
-            return llmax(repeats_u, repeats_v);
-        }
-
-        LLGLTFMaterial::TextureInfo mChannel;
-    } max_repeats_func(channel);
-    identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&max_repeats_func, repeats);
-}
+void getSelectedGLTFMaterialMaxRepeats(LLGLTFMaterial::TextureInfo channel, F32& repeats, bool& identical); // Defined in llpanelface.cpp
 
 //
 // keep LLRenderMaterialFunctor in sync with llmaterialeditor.cpp - Would be nice if we
@@ -760,7 +733,7 @@ void FSPanelFace::onMatTabChange()
         // Since we allow both PBR and BP textures to be applied at the same time,
         // we need to hide or show the GLTF material only locally based on the current tab.
         gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
-        if (curr_mat != MATMEDIA_PBR)
+        if (curr_mat == MATMEDIA_MATERIAL)
             LLSelectMgr::getInstance()->hideGLTFMaterial();
         else
             LLSelectMgr::getInstance()->showGLTFMaterial();
@@ -1149,11 +1122,21 @@ LLMaterialPtr FSPanelFace::createDefaultMaterial(LLMaterialPtr current_material)
 
 void FSPanelFace::onVisibilityChange(bool new_visibility)
 {
-    if (new_visibility)
+    /* if (new_visibility)
     {
         gAgent.showLatestFeatureNotification("gltf");
-    }
+    } */
     LLPanel::onVisibilityChange(new_visibility);
+
+    // Since we allow both PBR and BP textures to be applied at the same time,
+    // we need to keep FSShowSelectedInBlinnPhong in sync in case we open or close the texture panel.
+    static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+    bool should_hide_gltf = new_visibility && !showSelectedinBP && getCurrentMaterialType() == MATMEDIA_MATERIAL;
+    gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", should_hide_gltf);
+    if (should_hide_gltf)
+    {
+        LLSelectMgr::getInstance()->hideGLTFMaterial();
+    }
 }
 
 void FSPanelFace::draw()
@@ -2761,7 +2744,7 @@ void FSPanelFace::refreshMedia()
     } func;
 
     // check if all faces have media (or, all don't have media)
-    LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo = selected_objects->getSelectedTEValue(&func, bool_has_media);
+    bool identical_has_media_info = selected_objects->getSelectedTEValue(&func, bool_has_media);
 
     const LLMediaEntry default_media_data;
 
@@ -2783,7 +2766,8 @@ void FSPanelFace::refreshMedia()
     } func_media_data(default_media_data);
 
     LLMediaEntry media_data_get;
-    LLFloaterMediaSettings::getInstance()->mMultipleMedia = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_media = !(selected_objects->getSelectedTEValue(&func_media_data, media_data_get));
+    bool multiple_valid_media = false;
 
     std::string multi_media_info_str = LLTrans::getString("Multiple Media");
     std::string media_title = "";
@@ -2794,13 +2778,13 @@ void FSPanelFace::refreshMedia()
     mBtnAddMedia->setEnabled(editable);
 
     // IF all the faces have media (or all don't have media)
-    if (LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo)
+    if (identical_has_media_info)
     {
         // TODO: get media title and set it.
         mTitleMediaText->clear();
 
         // if identical is set, all faces are same (whether all empty or has the same media)
-        if (!(LLFloaterMediaSettings::getInstance()->mMultipleMedia))
+        if (!multiple_media)
         {
             // media data is valid
             if (media_data_get != default_media_data)
@@ -2822,9 +2806,9 @@ void FSPanelFace::refreshMedia()
     else // not all faces have media but at least one does
     {
         // selected faces have not identical value
-        LLFloaterMediaSettings::getInstance()->mMultipleValidMedia = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
+        multiple_valid_media = selected_objects->isMultipleTEValue(&func_media_data, default_media_data);
 
-        if (LLFloaterMediaSettings::getInstance()->mMultipleValidMedia)
+        if (multiple_valid_media)
         {
             media_title = multi_media_info_str;
         }
@@ -2861,7 +2845,7 @@ void FSPanelFace::refreshMedia()
     // load values for media settings
     updateMediaSettings();
 
-    LLFloaterMediaSettings::initValues(mMediaSettings, editable);
+    LLFloaterMediaSettings::initValues(mMediaSettings, editable, identical_has_media_info, multiple_media, multiple_valid_media);
 }
 
 void FSPanelFace::unloadMedia()
@@ -6004,13 +5988,9 @@ void FSPanelFace::LLSelectedTE::getTexId(LLUUID& id, bool& identical)
         LLUUID get(LLViewerObject* object, S32 te_index)
         {
             LLTextureEntry *te = object->getTE(te_index);
-            if (te)
+            if (te && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(te->getID()))
             {
-                if ((te->getID() == IMG_USE_BAKED_EYES) || (te->getID() == IMG_USE_BAKED_HAIR) || (te->getID() == IMG_USE_BAKED_HEAD) || (te->getID() == IMG_USE_BAKED_LOWER) || (te->getID() == IMG_USE_BAKED_SKIRT) || (te->getID() == IMG_USE_BAKED_UPPER)
-                    || (te->getID() == IMG_USE_BAKED_LEFTARM) || (te->getID() == IMG_USE_BAKED_LEFTLEG) || (te->getID() == IMG_USE_BAKED_AUX1) || (te->getID() == IMG_USE_BAKED_AUX2) || (te->getID() == IMG_USE_BAKED_AUX3))
-                {
-                    return te->getID();
-                }
+                return te->getID();
             }
 
             LLUUID id;

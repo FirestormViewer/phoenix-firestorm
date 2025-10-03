@@ -1030,7 +1030,7 @@ void LLSurfacePatch::updateGL()
     F32 grids_per_patch_edge = (F32)getSurface()->getGridsPerPatchEdge();
 
     LLViewerRegion *regionp = getSurface()->getRegion();
-    LLVector3d origin_region = getOriginGlobal() - getSurface()->getOriginGlobal();
+    // LLVector3d origin_region = getOriginGlobal() - getSurface()->getOriginGlobal(); // <FS:Beq/> set but not used
 
     LLVLComposition* comp = regionp->getComposition();
 

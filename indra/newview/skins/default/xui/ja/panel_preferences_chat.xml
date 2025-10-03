@@ -179,8 +179,9 @@
 			</text>
 			<spinner tool_tip="完全なグループ名の場合は-1、無効の場合は0にします。" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="オフラインメッセージを受信したら会話ウィンドウを開く"/>
+			<check_box name="FSRestoreOpenIMs" label="前回のセッションで開いたＩＭウィンドウを復元する"/>
 			<check_box label="オフライン時に受け取ったＩＭをメールで受信 ([EMAIL])" name="send_im_to_email"/>
-			<text name="email_settings">[https://accounts.secondlife.com/change_email?lang=ja-JP オフラインＩＭのメール通知設定を開く]</text>
+			<text name="email_settings">[https://accounts.secondlife.com/change_email?lang=ja-JP オフライン時のＩＭのメール通知設定を開く]</text>
 			<text name="email_settings_login_to_change">
 				オフラインＩＭをメール設定に変更したい場合はログインしてください
 			</text>

@@ -172,9 +172,10 @@
 			</text>
 			<spinner tool_tip="-1 Для полного имени группы, 0 для отключения" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Открыть разговоры, если есть сообщения пока вас не было"/>
+			<check_box name="FSRestoreOpenIMs" label="Восстановить разговоры с жителями из предыдущего сеанса"/>
 			<check_box label="Отправлять ЛС на мой e-mail, когда я не в сети ([EMAIL])" name="send_im_to_email"/>
 			<text name="email_settings">[https://accounts.secondlife.com/change_email Открыть настройки уведомлений по электронной почте для офлайн-чатов]</text>
-			<text name="email_settings_login_to_change">Войти для изменения настройки оффлайн сообщений электронной почты</text>
+			<text name="email_settings_login_to_change" width="450">Войти для изменения настройки оффлайн сообщений электронной почты</text>
 			<check_box name="FSShowIMInChatHistory" label="Показывать ЛС в окне общего чата"/>
 			<check_box name="FSLogIMInChatHistory" label="Сохранять ЛС в окне общего чата"/>
 			<text name="FSIMChatHistoryFade_label" width="220">

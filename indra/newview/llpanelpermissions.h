@@ -79,6 +79,7 @@ protected:
 
     void onCommitForSale();
     void onCommitSaleInfo();
+    void onCommitSalePrice();
     void setAllSaleInfo();
     void showMarkForSale(bool show);
 

@@ -5,6 +5,7 @@
 	</panel.string>
 	<layout_stack name="main_pick_stack">
 		<layout_panel name="main_pick_lp">
+			<button name="btn_preview" tool_tip="切換預覽精選地點描述"/>
 			<line_editor name="pick_location">
 				載入中...
 			</line_editor>

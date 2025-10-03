@@ -131,9 +131,6 @@ bool LLToolBarView::postBuild()
     // <FS:Ansariel> Member variable needed for console chat bottom offset
     mBottomChatStack = findChild<LLView>("bottom_chat_stack");
 
-    // <FS:Ansariel> Added to determine if toolbar gets hidden when empty
-    mHideBottomOnEmpty = FSCommon::isLegacySkin();
-
     return true;
 }
 

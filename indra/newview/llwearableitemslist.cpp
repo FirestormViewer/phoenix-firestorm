@@ -191,6 +191,7 @@ LLPanelWearableOutfitItem::LLPanelWearableOutfitItem(LLViewerInventoryItem* item
 
 // virtual
 void LLPanelWearableOutfitItem::updateItem(const std::string& name,
+                                           bool favorite,
                                            EItemState item_state)
 {
     std::string search_label = name;
@@ -254,7 +255,7 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
         }
     }
 
-    LLPanelInventoryListItemBase::updateItem(search_label, item_state);
+    LLPanelInventoryListItemBase::updateItem(search_label, favorite, item_state);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -481,6 +482,7 @@ LLPanelAttachmentListItem* LLPanelAttachmentListItem::create(LLViewerInventoryIt
 }
 
 void LLPanelAttachmentListItem::updateItem(const std::string& name,
+                                           bool favorite,
                                            EItemState item_state)
 {
     std::string title_joint = name;
@@ -498,7 +500,7 @@ void LLPanelAttachmentListItem::updateItem(const std::string& name,
         title_joint =  title_joint + " (" + trans_name + ")";
     }
 
-    LLPanelInventoryListItemBase::updateItem(title_joint, item_state);
+    LLPanelInventoryListItemBase::updateItem(title_joint, favorite, item_state);
 }
 
 // <FS:Ansariel> Show per-item complexity in COF
@@ -573,9 +575,9 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 }
 
 //virtual
-void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, EItemState item_state)
+void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, bool favorite, EItemState item_state)
 {
-    LLPanelWearableOutfitItem::updateItem(name, item_state);
+    LLPanelWearableOutfitItem::updateItem(name, favorite, item_state);
     mWeightCtrl->setVisible(true);
     reshapeWidgets();
 }
@@ -621,7 +623,7 @@ bool LLPanelDummyClothingListItem::postBuild()
     addWidgetToRightSide("btn_add_panel");
 
     setIconImage(LLInventoryIcon::getIcon(LLAssetType::AT_CLOTHING, LLInventoryType::IT_NONE, mWearableType, false));
-    updateItem(wearableTypeToString(mWearableType));
+    updateItem(wearableTypeToString(mWearableType), false);
 
     // Make it look loke clothing item - reserve space for 'delete' button
     setLeftWidgetsWidth(getChildView("item_icon")->getRect().mLeft);
@@ -1141,10 +1143,12 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
     registrar.add("Wearable.Edit", boost::bind(handle_item_edit, selected_id));
     registrar.add("Wearable.CreateNew", boost::bind(createNewWearable, selected_id));
     registrar.add("Wearable.ShowOriginal", boost::bind(show_item_original, selected_id));
+    // <AS:Chanayane> Delete from outfit context menu entry
+    registrar.add("Wearable.DeleteFromOutfit", boost::bind(delete_from_outfit, ids));
+    // </AS:Chanayane>
     registrar.add("Wearable.TakeOffDetach",
                   //boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids, no_op)); // <FS:Ansariel> [SL:KB] - Patch: Appearance-Misc
                   boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
-
     // Register handlers for clothing.
     registrar.add("Clothing.TakeOff",
                   //boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids, no_op)); // <FS:Ansariel> [SL:KB] - Patch: Appearance-Misc
@@ -1156,6 +1160,7 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
     registrar.add("Attachment.Detach",
                   //boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids, no_op)); // <FS:Ansariel> [SL:KB] - Patch: Appearance-Misc
                   boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
+    registrar.add("Attachment.Favorite", boost::bind(toggle_favorites, ids));
     registrar.add("Attachment.Touch", boost::bind(handle_attachment_touch, selected_id));
     registrar.add("Attachment.Profile", boost::bind(show_item_profile, selected_id));
     registrar.add("Object.Attach", boost::bind(LLViewerAttachMenu::attachObjects, ids, _2));
@@ -1189,6 +1194,8 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     U32 n_touchable = 0;                        // number of touchable items among the selected ones
 
     bool can_be_worn = true;
+    bool can_favorite = false;
+    bool can_unfavorite = false;
 
 // [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
     // We'll enable a menu option if at least one item in the selection is wearable/removable
@@ -1196,6 +1203,15 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     bool rlvCanWearAdd = !RlvActions::isRlvEnabled();
     bool rlvCanRemove = !RlvActions::isRlvEnabled();
 // [/RLVa:KB]
+
+// <FS:Trish> Fix for "Delete from outfit" context menu option showing in favorites window.
+    bool   is_outfit_menu   = false;
+    LLUUID outfit_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
+    if (!ids.empty())
+    {
+        is_outfit_menu = gInventory.isObjectDescendentOf(ids.front(), outfit_folder_id);
+    }
+// </FS:Trish>
 
     for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
     {
@@ -1217,6 +1233,15 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
         const bool is_editable = get_is_item_editable(id);
         const bool is_touchable = enable_attachment_touch(id);
         const bool is_already_worn = gAgentWearables.selfHasWearable(wearable_type);
+
+        LLUUID linked_id = item->getLinkedUUID();
+        LLViewerInventoryItem* linked_item = gInventory.getItem(linked_id);
+        if (linked_item)
+        {
+            can_favorite |= !linked_item->getIsFavorite();
+            can_unfavorite |= linked_item->getIsFavorite();
+        }
+
         if (is_worn)
         {
             ++n_worn;
@@ -1240,7 +1265,7 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 
         if (can_be_worn)
         {
-            can_be_worn = get_can_item_be_worn(item->getLinkedUUID());
+            can_be_worn = get_can_item_be_worn(linked_id);
         }
 
 // [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
@@ -1301,6 +1326,12 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     setMenuItemEnabled(menu, "create_new",          LLAppearanceMgr::instance().canAddWearables(ids));
     setMenuItemVisible(menu, "show_original",       !standalone);
     setMenuItemEnabled(menu, "show_original",       n_items == 1 && n_links == n_items);
+// <AS:Chanayane> Delete from outfit context menu entry
+    setMenuItemVisible(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
+    setMenuItemEnabled(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
+// </AS:Chanayane>
+    setMenuItemVisible(menu, "favorites_add",       can_favorite);
+    setMenuItemVisible(menu, "favorites_remove",    can_unfavorite);
     setMenuItemVisible(menu, "take_off",            mask == MASK_CLOTHING && n_worn == n_items);
     setMenuItemVisible(menu, "detach",              mask == MASK_ATTACHMENT && n_worn == n_items);
     setMenuItemVisible(menu, "take_off_or_detach",  mask == (MASK_ATTACHMENT|MASK_CLOTHING));

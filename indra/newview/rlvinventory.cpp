@@ -635,7 +635,7 @@ void RlvGiveToRLVTaskOffer::doneIdle()
 
 void RlvGiveToRLVTaskOffer::onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName)
 {
-    if (const LLViewerInventoryCategory* pTarget = (idDestFolder.notNull()) ? gInventory.getCategory(idDestFolder) : nullptr)
+    if (idDestFolder.notNull())
     {
         moveAndRename(m_Folders.front(), idDestFolder, strName, new LLBoostFuncInventoryCallback(boost::bind(&RlvGiveToRLVTaskOffer::onOfferCompleted, this, _1)));
     }

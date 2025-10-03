@@ -206,6 +206,8 @@
 			<slider label="Aktiv:" name="active"/>
 			<slider label="Inaktiv:" name="inactive"/>
 			<slider label="Kamera / Bewegung:" name="camera_movement"/>
+			<slider label="Gespräche:" name="conversations"/>
+			<check_box name="override_im_active_opacity_checkbox" label="Aktive Deckkraft verwenden, wenn das Gespräche-Fenster den Fokus besitzt"/>
 			<text name="console_opacity">
 				Konsolen-Deckkraft:
 			</text>

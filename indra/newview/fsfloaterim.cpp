@@ -1010,6 +1010,9 @@ bool FSFloaterIM::postBuild()
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
     mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    mInputEditor->setTransparencyOverrideCallback(boost::bind(&FSFloaterIM::onGetChatEditorOpacityCallback, this, _1, _2));
+    // </FS:TJ>
 
     mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
     mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(); });
@@ -2650,3 +2653,18 @@ uuid_vec_t FSFloaterIM::getSessionParticipants() const
 
     return mControlPanel->getParticipants();
 }
+
+// <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+// This is specifically for making the text editors such as chat_editor always active opacity when the IM floater is focused
+// Otherwise if they aren't active, it will use either the IM opacity, or inactive opacity, whatever is smaller
+F32 FSFloaterIM::onGetChatEditorOpacityCallback(ETypeTransparency type, F32 alpha)
+{
+    static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
+    if (type != TT_ACTIVE)
+    {
+        return llmin(im_opacity, alpha);
+    }
+
+    return alpha;
+}
+// </FS:TJ>

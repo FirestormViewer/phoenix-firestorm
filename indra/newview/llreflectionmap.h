@@ -44,6 +44,13 @@ public:
         IRRADIANCE,
         REFLECTION
     };
+    enum class ProbeLevel
+    {
+        NONE = 0,
+        MANUAL_ONLY,
+        MANUAL_AND_TERRAIN,
+        FULL_SCENE_WITH_AUTO
+    };
 
     // allocate an environment map of the given resolution
     LLReflectionMap();
@@ -124,7 +131,7 @@ public:
     LLSpatialGroup* mGroup = nullptr;
 
     // viewer object this probe is tracking (if any)
-    LLViewerObject* mViewerObject = nullptr;
+    LLPointer<LLViewerObject> mViewerObject;
 
     // what priority should this probe have (higher is higher priority)
     // currently only 0 or 1

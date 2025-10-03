@@ -41,6 +41,10 @@
 			<panel_camera_item.text name="rear_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
+		<panel_camera_item name="tpp_view" tool_tip="TPP-Ansicht">
+			<panel_camera_item.text name="tpp_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
 	</panel>
 	<panel name="buttons">
 		<panel_camera_item name="object_view" tool_tip="Objekt-Ansicht">

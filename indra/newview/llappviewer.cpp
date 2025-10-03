@@ -301,6 +301,16 @@ using namespace LL;
 #include "glib.h"
 #endif // (LL_LINUX) && LL_GTK
 
+#ifdef LL_DISCORD
+#define DISCORDPP_IMPLEMENTATION
+#include <discordpp.h>
+static std::shared_ptr<discordpp::Client> gDiscordClient;
+static uint64_t gDiscordTimestampsStart;
+static std::string gDiscordActivityDetails;
+static int32_t gDiscordPartyCurrentSize;
+static int32_t gDiscordPartyMaxSize;
+#endif
+
 const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml"; // <FS:ND/> We need this filename defined here.
 
 static LLAppViewerListener sAppViewerListener(LLAppViewer::instance);
@@ -506,6 +516,12 @@ static bool app_metrics_qa_mode = false;
 
 void idle_afk_check()
 {
+    // Don't check AFK status during startup states
+    if (LLStartUp::getStartupState() < STATE_STARTED)
+    {
+        return;
+    }
+
     // check idle timers
     F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
     // <FS:CR> Cache frequently hit location
@@ -516,11 +532,20 @@ void idle_afk_check()
 // [/RLVa:KB]
 //  static LLCachedControl<S32> afk_timeout(gSavedSettings, "AFKTimeout", 300);
     // <FS:CR> Explicit conversions just cos.
-    //if (afk_timeout() && (current_idle > (F32)afk_timeout()) && !gAgent.getAFK())
-    if (static_cast<S32>(afk_timeout) && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
+    //if (afk_timeout() && (current_idle > afk_timeout()) && !gAgent.getAFK())
+    if (static_cast<S32>(afk_timeout) && (current_idle > static_cast<F32>(afk_timeout)))
     {
-        LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
-        gAgent.setAFK();
+        if (!gAgent.getAFK())
+        {
+            LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
+            gAgent.setAFK();
+        }
+        else
+        {
+            // Refresh timer so that random one click or hover won't clear the status.
+            // But expanding the window still should lift afk status
+            gAwayTimer.reset();
+        }
     }
 }
 
@@ -1168,6 +1193,7 @@ bool LLAppViewer::init()
         return false;
     }
 
+#if defined(LL_X86) || defined(LL_X86_64)
     // Without SSE2 support we will crash almost immediately, warn here.
     if (!gSysCPU.hasSSE2())
     {
@@ -1179,6 +1205,7 @@ bool LLAppViewer::init()
         // quit immediately
         return false;
     }
+#endif
 
     // alert the user if they are using unsupported hardware
     if (gSavedSettings.getBOOL("FSUseLegacyUnsupportedHardwareChecks") && !gSavedSettings.getBOOL("AlertedUnsupportedHardware"))
@@ -1491,7 +1518,7 @@ void LLAppViewer::initMaxHeapSize()
     //------------------------------------------------------------------------------------------
     //currently SL is built under 32-bit setting, we set its max heap size no more than 1.6 GB.
 
- #ifndef LL_X86_64
+ #if !defined(LL_X86_64) && !defined(LL_ARM64)
     F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize") ;
 #else
     F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize64");
@@ -1546,7 +1573,15 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+#ifdef LL_DISCORD
+    {
+        LL_PROFILE_ZONE_NAMED("discord_callbacks");
+        discordpp::RunCallbacks();
+    }
+#endif
+
     LL_RECORD_BLOCK_TIME(FTM_FRAME);
+    LL_PROFILE_GPU_ZONE("Frame");
     {
     // and now adjust the visuals from previous frame.
     if(LLPerfStats::tunables.userAutoTuneEnabled && LLPerfStats::tunables.tuningFlag != LLPerfStats::Tunables::Nothing)
@@ -1670,33 +1705,36 @@ bool LLAppViewer::doFrame()
 
         if (!LLApp::isExiting())
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df MainLoop"); // <FS:Beq/> More appropriate name
-            pingMainloopTimeout("Main:JoystickKeyboard");
-
-            // Scan keyboard for movement keys.  Command keys and typing
-            // are handled by windows callbacks.  Don't do this until we're
-            // done initializing.  JC
-            if (gViewerWindow
-                && (gHeadlessClient || gViewerWindow->getWindow()->getVisible())
-                && gViewerWindow->getActive()
-                && !gViewerWindow->getWindow()->getMinimized()
-                && LLStartUp::getStartupState() == STATE_STARTED
-                && (gHeadlessClient || !gViewerWindow->getShowProgress())
-                && !gFocusMgr.focusLocked())
             {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard"); // <FS:Beq/> Move this to the right place
-                LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
-                joystick->scanJoystick();
-                gKeyboard->scanKeyboard();
-                gViewerInput.scanMouse();
-                // <FS:Ansariel> Chalice Yao's crouch toggle
-                static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
-                static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
-                if (fsCrouchToggle && fsCrouchToggleStatus)
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df MainLoop"); // <FS:Beq/> More appropriate name
+                pingMainloopTimeout("Main:JoystickKeyboard");
+
+                // Scan keyboard for movement keys.  Command keys and typing
+                // are handled by windows callbacks.  Don't do this until we're
+                // done initializing.  JC
+                if (gViewerWindow
+                    && (gHeadlessClient || gViewerWindow->getWindow()->getVisible())
+                    && gViewerWindow->getActive()
+                    && !gViewerWindow->getWindow()->getMinimized()
+                    && LLStartUp::getStartupState() == STATE_STARTED
+                    && (gHeadlessClient || !gViewerWindow->getShowProgress())
+                    && !gFocusMgr.focusLocked())
                 {
-                    gAgent.moveUp(-1);
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df JoystickKeyboard"); // <FS:Beq/> Move this to the right place
+                    LLPerfStats::RecordSceneTime T(LLPerfStats::StatType_t::RENDER_IDLE);
+                    joystick->scanJoystick();
+                    gKeyboard->scanKeyboard();
+                    gViewerInput.scanMouse();
+
+                    // <FS:Ansariel> Chalice Yao's crouch toggle
+                    static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
+                    static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
+                    if (fsCrouchToggle && fsCrouchToggleStatus)
+                    {
+                        gAgent.moveUp(-1);
+                    }
+                    // </FS:Ansariel>
                 }
-                // </FS:Ansariel>
             }
 
             // Update state based on messages, user input, object idle.
@@ -2185,36 +2223,6 @@ bool LLAppViewer::cleanup()
     // Clean up before GL is shut down because we might be holding on to objects with texture references
     LLSelectMgr::cleanupGlobals();
 
-    LL_INFOS() << "Shutting down OpenGL" << LL_ENDL;
-
-    // Shut down OpenGL
-    if( gViewerWindow)
-    {
-        gViewerWindow->shutdownGL();
-
-        // Destroy window, and make sure we're not fullscreen
-        // This may generate window reshape and activation events.
-        // Therefore must do this before destroying the message system.
-        delete gViewerWindow;
-        gViewerWindow = NULL;
-        LL_INFOS() << "ViewerWindow deleted" << LL_ENDL;
-    }
-
-    LLSplashScreen::show();
-    LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
-
-    LL_INFOS() << "Cleaning up Keyboard & Joystick" << LL_ENDL;
-
-    // viewer UI relies on keyboard so keep it aound until viewer UI isa gone
-    delete gKeyboard;
-    gKeyboard = NULL;
-
-    if (LLViewerJoystick::instanceExists())
-    {
-        // Turn off Space Navigator and similar devices
-        LLViewerJoystick::getInstance()->terminate();
-    }
-
     LL_INFOS() << "Cleaning up Objects" << LL_ENDL;
 
     LLViewerObject::cleanupVOClasses();
@@ -2412,6 +2420,36 @@ bool LLAppViewer::cleanup()
 
     sTextureFetch->shutDownTextureCacheThread() ;
     LLLFSThread::sLocal->shutdown();
+
+    LL_INFOS() << "Shutting down OpenGL" << LL_ENDL;
+
+    // Shut down OpenGL
+    if (gViewerWindow)
+    {
+        gViewerWindow->shutdownGL();
+
+        // Destroy window, and make sure we're not fullscreen
+        // This may generate window reshape and activation events.
+        // Therefore must do this before destroying the message system.
+        delete gViewerWindow;
+        gViewerWindow = NULL;
+        LL_INFOS() << "ViewerWindow deleted" << LL_ENDL;
+    }
+
+    LLSplashScreen::show();
+    LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
+
+    LL_INFOS() << "Cleaning up Keyboard & Joystick" << LL_ENDL;
+
+    // viewer UI relies on keyboard so keep it aound until viewer UI isa gone
+    delete gKeyboard;
+    gKeyboard = NULL;
+
+    if (LLViewerJoystick::instanceExists())
+    {
+        // Turn off Space Navigator and similar devices
+        LLViewerJoystick::getInstance()->terminate();
+    }
 
     LL_INFOS() << "Shutting down message system" << LL_ENDL;
     end_messaging_system();
@@ -2666,10 +2704,7 @@ void errorCallback(LLError::ELevel level, const std::string &error_string)
 // Callback for LLError::LLUserWarningMsg
 void errorHandler(const std::string& title_string, const std::string& message_string, S32 code)
 {
-    if (!message_string.empty())
-    {
-        OSMessageBox(message_string, title_string.empty() ? LLTrans::getString("MBFatalError") : title_string, OSMB_OK);
-    }
+    // message is going to hang viewer, create marker first
     switch (code)
     {
     case LLError::LLUserWarningMsg::ERROR_OTHER:
@@ -2677,12 +2712,20 @@ void errorHandler(const std::string& title_string, const std::string& message_st
         break;
     case LLError::LLUserWarningMsg::ERROR_BAD_ALLOC:
         LLAppViewer::instance()->createErrorMarker(LAST_EXEC_BAD_ALLOC);
+        // When system run out of memory and errorHandler gets called from a thread,
+        // main thread might keep going while OSMessageBox freezes the caller.
+        // Todo: handle it better, but for now disconnect to avoid making things worse
+        gDisconnected = true;
         break;
     case LLError::LLUserWarningMsg::ERROR_MISSING_FILES:
         LLAppViewer::instance()->createErrorMarker(LAST_EXEC_MISSING_FILES);
         break;
     default:
         break;
+    }
+    if (!message_string.empty())
+    {
+        OSMessageBox(message_string, title_string.empty() ? LLTrans::getString("MBFatalError") : title_string, OSMB_OK);
     }
 }
 
@@ -3663,15 +3706,15 @@ bool LLAppViewer::initWindow()
         .height(gSavedSettings.getU32("WindowHeight"))
         .min_width(gSavedSettings.getU32("MinWindowWidth"))
         .min_height(gSavedSettings.getU32("MinWindowHeight"))
-/// <FS:CR> Since the 3.6.5 merge, setting fullscreen does terrible bad things on macs like opening
-/// all floaters and menus off the left side of the screen. Let's not do that right now...
-/// Hardcoding full screen OFF until it's fixed. On 10.7+ we have native full screen support anyway.
-#ifndef LL_DARWIN
-        .fullscreen(gSavedSettings.getBOOL("FullScreen"))
-#else // !LL_DARWIN
+#ifdef LL_DARWIN
+        // Setting it to true causes black screen with no UI displayed.
+        // Given that it's a DEBUG settings and application goes fullscreen
+        // on mac simply by expanding it, it was decided to not support/use
+        // this setting on mac.
         .fullscreen(false)
-#endif // !LL_DARWIN
-// </FS:CR>
+#else // LL_DARWIN
+        .fullscreen(gSavedSettings.getBOOL("FullScreen"))
+#endif
         .ignore_pixel_depth(ignorePixelDepth)
         .first_run(mIsFirstRun);
 
@@ -3708,17 +3751,6 @@ bool LLAppViewer::initWindow()
     gSavedSettings.setBOOL("InternalShowGroupNoticesTopRight", gSavedSettings.getBOOL("ShowGroupNoticesTopRight"));
 
     LLNotificationsUI::LLNotificationManager::getInstance();
-
-
-#ifdef LL_DARWIN
-    //Satisfy both MAINT-3135 (OSX 10.6 and earlier) MAINT-3288 (OSX 10.7 and later)
-    LLOSInfo& os_info = LLOSInfo::instance();
-    if (os_info.mMajorVer == 10 && os_info.mMinorVer < 7)
-    {
-        if ( os_info.mMinorVer == 6 && os_info.mBuild < 8 )
-            gViewerWindow->getWindow()->setOldResize(true);
-    }
-#endif
 
     if (gSavedSettings.getBOOL("WindowMaximized"))
     {
@@ -3842,6 +3874,11 @@ LLSD LLAppViewer::getViewerInfo() const
     info["BUILD_TIME"] = __TIME__;
     info["CHANNEL"] = versionInfo.getChannel();
     info["ADDRESS_SIZE"] = ADDRESS_SIZE;
+#if LL_ARM64
+    info["ARCHITECTURE"] = "ARM";
+#else
+    info["ARCHITECTURE"] = "x86";
+#endif
     //std::string build_config = versionInfo.getBuildConfig();
     //if (build_config != "Release")
     //{
@@ -3886,7 +3923,7 @@ LLSD LLAppViewer::getViewerInfo() const
 
     //[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
     info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    info["BANDWIDTH"] = LLViewerThrottle::getMaxBandwidthKbps();
     info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
     //[FIRE 3113 : SJ] Added Settingsfile to info
@@ -4028,7 +4065,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
     //info["UI_SCALE"] = gSavedSettings.getF32("UIScaleFactor");
     //info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
-    //info["NET_BANDWITH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    //info["NET_BANDWITH"] = LLViewerThrottle::getMaxBandwidthKbps();
     //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
     //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
     //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;
@@ -5247,6 +5284,9 @@ bool LLAppViewer::initCache()
     const U32 CACHE_NUMBER_OF_REGIONS_FOR_OBJECTS = 128;
     LLVOCache::getInstance()->initCache(LL_PATH_CACHE, CACHE_NUMBER_OF_REGIONS_FOR_OBJECTS, getObjectCacheVersion());
 
+    // Remove old, stale CEF cache folders
+    purgeCefStaleCaches();
+
     return true;
 }
 
@@ -5271,18 +5311,27 @@ void LLAppViewer::loadKeyBindings()
     LLUrlRegistry::instance().setKeybindingHandler(&gViewerInput);
 }
 
+// As per GHI #4498, remove old, stale CEF cache folders from previous sessions
+void LLAppViewer::purgeCefStaleCaches()
+{
+    // TODO: we really shouldn't use a hard coded name for the cache folder here...
+    const std::string browser_parent_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+    if (LLFile::isdir(browser_parent_cache))
+    {
+        // This is a sledgehammer approach - nukes the cef_cache dir entirely
+        // which is then recreated the first time a CEF instance creates an
+        // individual cache folder. If we ever decide to retain some folders
+        // e.g. Search UI cache - then we will need a more granular approach.
+        gDirUtilp->deleteDirAndContents(browser_parent_cache);
+    }
+}
+
 void LLAppViewer::purgeCache()
 {
     LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << LL_ENDL;
     LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
     LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
     LLViewerShaderMgr::instance()->clearShaderCache();
-    std::string browser_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
-    if (LLFile::isdir(browser_cache))
-    {
-        // cef does not support clear_cache and clear_cookies, so clear what we can manually.
-        gDirUtilp->deleteDirAndContents(browser_cache);
-    }
     gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), "*");
 }
 
@@ -5367,6 +5416,7 @@ void LLAppViewer::forceDisconnect(const std::string& mesg)
     }
     else
     {
+        sendSimpleLogoutRequest();
         args["MESSAGE"] = big_reason;
         LLNotificationsUtil::add("YouHaveBeenLoggedOut", args, LLSD(), &finish_disconnect );
     }
@@ -5996,13 +6046,7 @@ void LLAppViewer::idle()
     // objects and camera should be in sync, do LOD calculations now
     {
         LL_RECORD_BLOCK_TIME(FTM_LOD_UPDATE);
-        // <FS:minerjr> [FIRE-35081] Blurry prims not changing with graphics settings
-        // Added a max time limit to the object list updates as these updates do affect the texture system
-        //gObjectList.updateApparentAngles(gAgent);
-        F32 max_update_apparent_angles = 0.025f * gFrameIntervalSeconds.value(); // 20 ms/second decode time
-        max_update_apparent_angles = llclamp(max_update_apparent_angles, 0.002f, 0.005f);  // min 2ms/frame, max 5ms/frame)
-        gObjectList.updateApparentAngles(gAgent, max_update_apparent_angles);
-        // </FS:minerjr> [FIRE-35081]
+        gObjectList.updateApparentAngles(gAgent);
     }
 
     // Update AV render info
@@ -6183,6 +6227,27 @@ void LLAppViewer::sendLogoutRequest()
         mLogoutRequestSent = true;
 
         LLVoiceClient::setVoiceEnabled(false);
+    }
+}
+
+void LLAppViewer::sendSimpleLogoutRequest()
+{
+    if (!mLogoutRequestSent && gMessageSystem)
+    {
+        gLogoutInProgress = true;
+
+        LLMessageSystem* msg = gMessageSystem;
+        msg->newMessageFast(_PREHASH_LogoutRequest);
+        msg->nextBlockFast(_PREHASH_AgentData);
+        msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+        msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+        gAgent.sendReliableMessage();
+
+        LL_INFOS("Agent") << "Logging out as agent: " << gAgent.getID() << " Session: " << gAgent.getSessionID() << LL_ENDL;
+
+        gLogoutTimer.reset();
+        gLogoutMaxTime = LOGOUT_REQUEST_TIME;
+        mLogoutRequestSent = true;
     }
 }
 
@@ -6519,7 +6584,11 @@ void LLAppViewer::forceErrorBreakpoint()
 #ifdef LL_WINDOWS
     DebugBreak();
 #else
+#if defined(LL_X86) || defined(LL_X86_64)
     asm ("int $3");
+#else
+    __builtin_trap();
+#endif
 #endif
     return;
 }
@@ -6620,12 +6689,31 @@ void LLAppViewer::forceErrorThreadCrash()
     thread->start();
 }
 
-// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
-//void LLAppViewer::initMainloopTimeout(const std::string& state, F32 secs)
-void LLAppViewer::initMainloopTimeout( char const* state, F32 secs)
-// </FS:ND>
+void LLAppViewer::forceExceptionThreadCrash()
 {
-    if(!mMainloopTimeout)
+    class LLCrashTestThread : public LLThread
+    {
+    public:
+
+        LLCrashTestThread() : LLThread("Crash logging test thread")
+        {
+        }
+
+        void run()
+        {
+            const std::string exception_text = "This is a deliberate exception in a thread";
+            throw std::runtime_error(exception_text);
+        }
+    };
+
+    LL_WARNS() << "This is a deliberate exception in a thread" << LL_ENDL;
+    LLCrashTestThread* thread = new LLCrashTestThread();
+    thread->start();
+}
+
+void LLAppViewer::initMainloopTimeout(std::string_view state, F32 secs)
+{
+    if (!mMainloopTimeout)
     {
         mMainloopTimeout = new LLWatchdogTimeout();
         resumeMainloopTimeout(state, secs);
@@ -6634,23 +6722,20 @@ void LLAppViewer::initMainloopTimeout( char const* state, F32 secs)
 
 void LLAppViewer::destroyMainloopTimeout()
 {
-    if(mMainloopTimeout)
+    if (mMainloopTimeout)
     {
         delete mMainloopTimeout;
-        mMainloopTimeout = NULL;
+        mMainloopTimeout = nullptr;
     }
 }
 
-// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
-//void LLAppViewer::resumeMainloopTimeout(const std::string& state, F32 secs)
-void LLAppViewer::resumeMainloopTimeout( char const* state, F32 secs)
-// </FS:ND>
+void LLAppViewer::resumeMainloopTimeout(std::string_view state, F32 secs)
 {
-    if(mMainloopTimeout)
+    if (mMainloopTimeout)
     {
-        if(secs < 0.0f)
+        if (secs < 0.0f)
         {
-            static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+            static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60.f);
             secs = mainloop_timeout;
         }
 
@@ -6661,22 +6746,19 @@ void LLAppViewer::resumeMainloopTimeout( char const* state, F32 secs)
 
 void LLAppViewer::pauseMainloopTimeout()
 {
-    if(mMainloopTimeout)
+    if (mMainloopTimeout)
     {
         mMainloopTimeout->stop();
     }
 }
 
-// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
-//void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
-void LLAppViewer::pingMainloopTimeout( char const* state, F32 secs)
-// </FS:ND>
+void LLAppViewer::pingMainloopTimeout(std::string_view state, F32 secs)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
 
-    if(mMainloopTimeout)
+    if (mMainloopTimeout)
     {
-        if(secs < 0.0f)
+        if (secs < 0.0f)
         {
             static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
             secs = mainloop_timeout;
@@ -6871,3 +6953,103 @@ void LLAppViewer::metricsSend(bool enable_reporting)
     gViewerAssetStats->restart();
 }
 
+#ifdef LL_DISCORD
+
+void LLAppViewer::initDiscordSocial()
+{
+    gDiscordPartyCurrentSize = 1;
+    gDiscordPartyMaxSize = 0;
+    gDiscordTimestampsStart = time(nullptr);
+    gDiscordClient = std::make_shared<discordpp::Client>();
+    gDiscordClient->SetApplicationId(1394782217405862001);
+    updateDiscordActivity();
+}
+
+void LLAppViewer::updateDiscordActivity()
+{
+    LL_PROFILE_ZONE_SCOPED;
+
+    static LLCachedControl<bool> integration_enabled(gSavedSettings, "EnableDiscord", true);
+    if (!integration_enabled)
+    {
+        gDiscordClient->ClearRichPresence();
+        return;
+    }
+
+    discordpp::Activity activity;
+    activity.SetType(discordpp::ActivityTypes::Playing);
+    discordpp::ActivityTimestamps timestamps;
+    timestamps.SetStart(gDiscordTimestampsStart);
+    activity.SetTimestamps(timestamps);
+
+    if (gAgent.getID() == LLUUID::null)
+    {
+        gDiscordClient->UpdateRichPresence(activity, [](discordpp::ClientResult) {});
+        return;
+    }
+
+    static LLCachedControl<bool> show_details(gSavedSettings, "ShowDiscordActivityDetails", false);
+    if (show_details)
+    {
+        if (gDiscordActivityDetails.empty())
+        {
+            LLAvatarName av_name;
+            LLAvatarNameCache::get(gAgent.getID(), &av_name);
+            gDiscordActivityDetails = av_name.getUserName();
+            auto displayName = av_name.getDisplayName();
+            if (gDiscordActivityDetails != displayName)
+                gDiscordActivityDetails = displayName + " (" + gDiscordActivityDetails + ")";
+        }
+        activity.SetDetails(gDiscordActivityDetails);
+    }
+
+    auto agent_pos_region = gAgent.getPositionAgent();
+    S32 pos_x = S32(agent_pos_region.mV[VX] + 0.5f);
+    S32 pos_y = S32(agent_pos_region.mV[VY] + 0.5f);
+    S32 pos_z = S32(agent_pos_region.mV[VZ] + 0.5f);
+    F32 velocity_mag_sq = gAgent.getVelocity().magVecSquared();
+    const F32 FLY_CUTOFF = 6.f;
+    const F32 FLY_CUTOFF_SQ = FLY_CUTOFF * FLY_CUTOFF;
+    const F32 WALK_CUTOFF = 1.5f;
+    const F32 WALK_CUTOFF_SQ = WALK_CUTOFF * WALK_CUTOFF;
+    if (velocity_mag_sq > FLY_CUTOFF_SQ)
+    {
+        pos_x -= pos_x % 4;
+        pos_y -= pos_y % 4;
+    }
+    else if (velocity_mag_sq > WALK_CUTOFF_SQ)
+    {
+        pos_x -= pos_x % 2;
+        pos_y -= pos_y % 2;
+    }
+
+    std::string location = "Hidden Region";
+    static LLCachedControl<bool> show_state(gSavedSettings, "ShowDiscordActivityState", false);
+    if (show_state)
+    {
+        location = llformat("%s (%d, %d, %d)", gAgent.getRegion()->getName().c_str(), pos_x, pos_y, pos_z);
+    }
+    activity.SetState(location);
+
+    discordpp::ActivityParty party;
+    party.SetId(location);
+    party.SetCurrentSize(gDiscordPartyCurrentSize);
+    party.SetMaxSize(gDiscordPartyMaxSize);
+    activity.SetParty(party);
+
+    gDiscordClient->UpdateRichPresence(activity, [](discordpp::ClientResult) {});
+}
+
+void LLAppViewer::updateDiscordPartyCurrentSize(int32_t size)
+{
+    gDiscordPartyCurrentSize = size;
+    updateDiscordActivity();
+}
+
+void LLAppViewer::updateDiscordPartyMaxSize(int32_t size)
+{
+    gDiscordPartyMaxSize = size;
+    updateDiscordActivity();
+}
+
+#endif

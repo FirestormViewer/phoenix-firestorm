@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="object_weights" title="進階">
-	<floater.string name="nothing_selected" value="--" />
+	<floater.string name="lowest_lod" value="最低" />
+	<floater.string name="low_lod" value="低" />
+	<floater.string name="medium_lod" value="中" />
+	<floater.string name="high_lod" value="高" />
+	<floater.string name="multiple_lods" value="多個" />
 	<text name="selected_text" value="已選" />
-	<text name="objects" value="--" />
 	<text name="objects_label" value="物件" />
-	<text name="prims" value="--" />
 	<text name="prims_label" value="元素" />
 	<text name="weights_of_selected_text" value="所選物重量" />
-	<text name="download" value="--" />
 	<text name="download_label" value="下載" />
-	<text name="physics" value="--" />
 	<text name="physics_label" value="物理" />
-	<text name="server" value="--" />
 	<text name="server_label" value="伺服器" />
-	<text name="display" value="--" />
 	<text name="display_label" value="顯示" />
 	<text name="land_impacts_text" value="土地影響" />
-	<text name="selected" value="--" />
 	<text name="selected_label" value="選擇" />
-	<text name="rezzed_on_land" value="--" />
 	<text name="rezzed_on_land_label" value="已產生到土地上" />
-	<text name="remaining_capacity" value="--" />
 	<text name="remaining_capacity_label" value="剩餘容納量" />
-	<text name="total_capacity" value="--" />
 	<text name="total_capacity_label" value="總容納量" />
-	<text name="help_SLURL" value="[secondlife:///app/help/object_weights 這是什麼？]" />
+	<text name="rendering_info_text" value="彩現" />
+	<text name="lod_level_label" value="LOD（細節層次）" />
+	<text name="triangles_shown_label" value="顯示的三角形" />
+	<text name="pixel_area_label" value="像素面積" />
 </floater>

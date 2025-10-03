@@ -61,6 +61,7 @@ public:
         std::map<std::string, std::string, std::less<>>& jointAliasMap,
         U32                                              maxJointsPerMesh,
         U32                                              modelLimit,
+        U32                                              debugMode,
         // <FS:Beq> configrable lod suffix support
         // bool                                          preprocess);
         bool                                             preprocess,
@@ -103,14 +104,13 @@ protected:
     bool loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& models_out, U32 submodel_limit);
 
     static std::string getElementLabel(daeElement *element);
-    static size_t getSuffixPosition(std::string label);
+    static size_t getSuffixPosition(const std::string& label);
     static std::string getLodlessLabel(daeElement *element);
     static LODSuffixArray sLODSuffix; // <FS:Beq/> mesh loader suffix configuration
 public: // <FS:Beq/> open up for local mesh to use
     static std::string preprocessDAE(std::string filename);
 
 private:
-    U32 mGeneratedModelLimit; // Attempt to limit amount of generated submodels
     bool mPreprocessDAE;
 };
 #endif  // LL_LLDAELLOADER_H

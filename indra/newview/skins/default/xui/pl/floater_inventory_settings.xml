@@ -22,4 +22,17 @@
 		<radio_item label="Używa głównego okna szafy" name="false" />
 		<radio_item label="Nowe okno z pojedynczym folderem" name="true" />
 	</radio_group>
+	<text name="favorites_txt">
+		Ulubione
+	</text>
+	<check_box label="Gwiazdka przy ulubionych przedmiotach" name="favorite_star" />
+	<check_box label="Gwiazdka przy folderach z ulubionymi" name="favorite_hollow_star" />
+	<check_box label="Kolor tekstu" name="favorites_color" />
+	<text name="attachment_return_txt">
+		Naciśnięcie "Enter" na dodatku awatara
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="Dodaje (zalecane)" name="0" />
+		<combo_box.item label="Zakłada (usuwa dodatek z tego miejsca)" name="1" />
+	</combo_box>
 </floater>

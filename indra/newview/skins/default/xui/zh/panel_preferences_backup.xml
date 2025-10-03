@@ -4,7 +4,7 @@
 	<button label="設定" name="set_backup_settings_path" />
 	<layout_stack name="ls_account_specific_label">
 		<layout_panel name="lp_account_specific_label">
-			<text name="account_specific_label">您當前處於離線狀態。請注意， 只有當您線上時，才能備份和恢復與您的帳戶相關的設定。 然而，適用於所有帳戶的設定可以在離線狀態下備份。</text>
+			<text name="account_specific_label">您當前處於離線狀態。請注意， 只有當您在線時，才能備份和恢復與您的帳戶相關的設定。 然而，適用於所有帳戶的設定可以在離線狀態下備份。</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">
 			<text name="settings_restored_label">要恢復的設定組（備份始終包括全部）：</text>

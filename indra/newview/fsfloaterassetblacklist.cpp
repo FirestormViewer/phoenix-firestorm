@@ -90,22 +90,48 @@ void FSFloaterAssetBlacklist::onOpen(const LLSD& key)
     buildBlacklist();
 }
 
-std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
+FSAssetBlacklist::eBlacklistFlag FSFloaterAssetBlacklist::getFlagFromLLSD(const LLSD& data)
+{
+    if (data.has("asset_blacklist_flag"))
+    {
+        return static_cast<FSAssetBlacklist::eBlacklistFlag>(data["asset_blacklist_flag"].asInteger());
+    }
+    return FSAssetBlacklist::eBlacklistFlag::NONE;
+}
+
+std::string FSFloaterAssetBlacklist::getTypeString(S32 type) const
 {
     switch (type)
     {
         case LLAssetType::AT_TEXTURE:
             return getString("asset_texture");
-        case LLAssetType::AT_SOUND:
-            return getString("asset_sound");
         case LLAssetType::AT_OBJECT:
             return getString("asset_object");
         case LLAssetType::AT_ANIMATION:
             return getString("asset_animation");
         case LLAssetType::AT_PERSON:
             return getString("asset_resident");
+        case LLAssetType::AT_SOUND:
+            return getString("asset_sound");
         default:
             return getString("asset_unknown");
+    }
+}
+
+std::string FSFloaterAssetBlacklist::getFlagString(FSAssetBlacklist::eBlacklistFlag flag) const
+{
+    switch (flag)
+    {
+        case FSAssetBlacklist::eBlacklistFlag::NONE:
+            return getString("blacklist_flag_none");
+        case FSAssetBlacklist::eBlacklistFlag::WORN:
+            return getString("blacklist_flag_mute_avatar_worn_objects_sounds");
+        case FSAssetBlacklist::eBlacklistFlag::REZZED:
+            return getString("blacklist_flag_mute_avatar_rezzed_objects_sounds");
+        case FSAssetBlacklist::eBlacklistFlag::GESTURE:
+            return getString("blacklist_flag_mute_avatar_gestures_sounds");
+        default:
+            return getString("blacklist_flag_unknown");
     }
 }
 
@@ -123,70 +149,112 @@ void FSFloaterAssetBlacklist::buildBlacklist()
     mResultList->updateSort();
 }
 
-void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& data)
+void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const FSAssetBlacklistData& data)
 {
-    // Undo the persisted date in legacy format...
-    std::string asset_date = data["asset_date"].asString() + "Z";
-    asset_date.replace(asset_date.find(" "), 1, "T");
-    LLDate date(asset_date);
-
     std::string date_str = getString("DateFormatString");
     LLSD substitution;
-    substitution["datetime"] = date.secondsSinceEpoch();
+    substitution["datetime"] = data.date.secondsSinceEpoch();
     LLStringUtil::format(date_str, substitution);
 
-    LLSD element;
-    element["id"] = id;
-    element["columns"][0]["column"] = "name";
-    element["columns"][0]["type"] = "text";
-    element["columns"][0]["value"] = !data["asset_name"].asString().empty() ? data["asset_name"].asString() : getString("unknown_object");
-    element["columns"][1]["column"] = "region";
-    element["columns"][1]["type"] = "text";
-    element["columns"][1]["value"] = !data["asset_region"].asString().empty() ? data["asset_region"].asString() : getString("unknown_region");
-    element["columns"][2]["column"] = "type";
-    element["columns"][2]["type"] = "text";
-    element["columns"][2]["value"] = getTypeString(data["asset_type"].asInteger());
-    element["columns"][3]["column"] = "date";
-    element["columns"][3]["type"] = "text";
-    element["columns"][3]["value"] = date_str;
-    element["columns"][4]["column"] = "permanent";
-    element["columns"][4]["type"] = "text";
-    element["columns"][4]["halign"] = "center";
-    element["columns"][4]["value"] = data["asset_permanent"].asBoolean() ? getString("asset_permanent") : LLStringUtil::null;
-    element["columns"][5]["column"] = "date_sort";
-    element["columns"][5]["type"] = "text";
-    element["columns"][5]["value"] = llformat("%u", (U64)date.secondsSinceEpoch());
-    element["columns"][6]["column"] = "asset_type";
-    element["columns"][6]["type"] = "integer";
-    element["columns"][6]["value"] = data["asset_type"].asInteger();
+    const S32 last_flag_value = static_cast<S32>(FSAssetBlacklist::eBlacklistFlag::LAST_FLAG);
 
-    mResultList->addElement(element, ADD_BOTTOM);
+    for (S32 flag_value = 1; flag_value <= last_flag_value; flag_value <<= 1)
+    {
+        if ((data.flags & flag_value) || data.flags == FSAssetBlacklist::eBlacklistFlag::NONE)
+        {
+            FSAssetBlacklist::eBlacklistFlag flag = static_cast<FSAssetBlacklist::eBlacklistFlag>(flag_value);
+
+            if (data.flags == FSAssetBlacklist::eBlacklistFlag::NONE)
+                flag = FSAssetBlacklist::eBlacklistFlag::NONE;
+
+            LLSD element;
+            element["id"] = id;
+            element["columns"][0]["column"] = "name";
+            element["columns"][0]["type"] = "text";
+            element["columns"][0]["value"] = !data.name.empty() ? data.name : getString("unknown_object");
+
+            element["columns"][1]["column"] = "region";
+            element["columns"][1]["type"] = "text";
+            element["columns"][1]["value"] = !data.region.empty() ? data.region : getString("unknown_region");
+
+            element["columns"][2]["column"] = "type";
+            element["columns"][2]["type"] = "text";
+            element["columns"][2]["value"]  = getTypeString(data.type);
+
+            element["columns"][3]["column"] = "flags";
+            element["columns"][3]["type"]   = "text";
+            element["columns"][3]["value"]  = getFlagString(flag);
+
+            element["columns"][4]["column"] = "date";
+            element["columns"][4]["type"] = "text";
+            element["columns"][4]["value"] = date_str;
+
+            element["columns"][5]["column"] = "permanent";
+            element["columns"][5]["type"] = "text";
+            element["columns"][5]["halign"] = "center";
+            element["columns"][5]["value"] = data.permanent ? getString("asset_permanent") : LLStringUtil::null;
+
+            element["columns"][6]["column"] = "date_sort";
+            element["columns"][6]["type"] = "text";
+            element["columns"][6]["value"] = llformat("%u", (U64)data.date.secondsSinceEpoch());
+
+            element["columns"][7]["column"] = "asset_type";
+            element["columns"][7]["type"] = "integer";
+            element["columns"][7]["value"] = (S32)data.type;
+
+            LLSD value;
+            value["flag"] = static_cast<S32>(flag);
+            element["alt_value"] = value;
+
+            mResultList->addElement(element, ADD_BOTTOM);
+
+            if (data.flags == FSAssetBlacklist::eBlacklistFlag::NONE)
+                break;
+        }
+    }
 }
 
 void FSFloaterAssetBlacklist::removeElements()
 {
-    uuid_vec_t items;
+    std::map<LLUUID, S32> flags_to_remove_by_id;
 
     for (auto listitem : mResultList->getAllSelected())
     {
-        items.emplace_back(listitem->getUUID());
+        LLUUID id = listitem->getUUID();
+        LLSD value = listitem->getAltValue();
+
+        if (value.has("flag"))
+        {
+            S32 flag = value["flag"].asInteger();
+            flags_to_remove_by_id[id] |= flag;
+        }
+        else
+        {
+            // fallback: remove full item
+            FSAssetBlacklist::instance().removeItemsFromBlacklist({ id });
+        }
     }
 
-    FSAssetBlacklist::instance().removeItemsFromBlacklist(items);
+    for (const auto& [id, flags] : flags_to_remove_by_id)
+    {
+        FSAssetBlacklist::instance().removeFlagsFromItem(id, flags);
+    }
 }
 
-void FSFloaterAssetBlacklist::onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op)
+void FSFloaterAssetBlacklist::onBlacklistChanged(const FSAssetBlacklist::changed_signal_data_t& data, FSAssetBlacklist::eBlacklistOperation op)
 {
     if (op == FSAssetBlacklist::eBlacklistOperation::BLACKLIST_ADD)
     {
         bool need_sort = mResultList->isSorted();
         mResultList->setNeedsSort(false);
 
-        for (LLSD::map_const_iterator it = data.beginMap(); it != data.endMap(); ++it)
+        for (const auto& [id, data] : data)
         {
-            LLUUID id = LLUUID(it->first);
-            LLSD insert_data = it->second;
-            addElementToList(id, insert_data);
+            mResultList->deleteItems(id);
+            if (data.has_value())
+            {
+                addElementToList(id, data.value());
+            }
         }
 
         mResultList->setNeedsSort(need_sort);
@@ -194,9 +262,9 @@ void FSFloaterAssetBlacklist::onBlacklistChanged(const LLSD& data, FSAssetBlackl
     }
     else
     {
-        for (LLSD::array_const_iterator it = data.beginArray(); it != data.endArray(); ++it)
+        for (const auto& [id, data] : data)
         {
-            mResultList->deleteItems(*it);
+            mResultList->deleteItems(id);
         }
         mResultList->updateLayout();
     }

@@ -58,7 +58,7 @@ class FSScrollListCtrl;
 struct FSObjectProperties
 {
     LLUUID id;
-    bool listed;
+    bool listed{ false };
     std::string name;
     std::string description;
     std::string touch_name;
@@ -67,9 +67,13 @@ struct FSObjectProperties
     LLUUID owner_id;
     LLUUID group_id;
     LLUUID ownership_id;
-    bool group_owned;
-    U64 creation_date;
-    U32 base_mask, owner_mask, group_mask, everyone_mask, next_owner_mask;
+    bool group_owned{ false };
+    U64 creation_date{ 0 };
+    U32 base_mask{ 0 };
+    U32 owner_mask{ 0 };
+    U32 group_mask{ 0 };
+    U32 everyone_mask{ 0 };
+    U32 next_owner_mask{ 0 };
     LLSaleInfo sale_info;
     LLCategory category;
     LLUUID last_owner_id;
@@ -78,9 +82,9 @@ struct FSObjectProperties
     LLAggregatePermissions ag_texture_perms_owner;
     LLPermissions permissions;
     uuid_vec_t texture_ids;
-    bool name_requested;
-    U32 local_id;
-    U64 region_handle;
+    bool name_requested{ false };
+    U32 local_id{ 0 };
+    U64 region_handle{ 0 };
 
     typedef enum e_object_properties_request
     {
@@ -89,14 +93,7 @@ struct FSObjectProperties
         FINISHED,
         FAILED
     } EObjectPropertiesRequest;
-    EObjectPropertiesRequest request;
-
-    FSObjectProperties() :
-        request(NEED),
-        listed(false),
-        name_requested(false)
-    {
-    }
+    EObjectPropertiesRequest request{ NEED };
 };
 
 //---------------------------------------------------------------------
@@ -110,9 +107,9 @@ public:
     FSAreaSearch(const LLSD &);
     virtual ~FSAreaSearch();
 
-    /*virtual*/ bool postBuild();
-    virtual void draw();
-    virtual void onOpen(const LLSD& key);
+    bool postBuild() override;
+    virtual void draw() override;
+    virtual void onOpen(const LLSD& key) override;
 
     void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
     void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
@@ -126,8 +123,8 @@ public:
     void clearSearchText();
     void onButtonClickedSearch();
     void onCommitCheckboxRegex();
-    bool isSearchableObject (LLViewerObject* objectp, LLViewerRegion* our_region);
-    void setFindOwnerText(std::string value);
+    bool isSearchableObject(LLViewerObject* objectp, LLViewerRegion* our_region) const;
+    void setFindOwnerText(const std::string& value);
 
     std::map<LLUUID, FSObjectProperties> mObjectDetails;
 
@@ -169,10 +166,10 @@ public:
 
     void setFilterAgentParcelOnly(bool b) { mFilterAgentParcelOnly = b; }
 
-    bool isActive() { return mActive; }
+    bool isActive() const { return mActive; }
 
 private:
-    void requestObjectProperties(const std::vector< U32 >& request_list, bool select, LLViewerRegion* regionp);
+    void requestObjectProperties(const std::vector<U32>& request_list, bool select, LLViewerRegion* regionp);
     void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
     void getNameFromUUID(const LLUUID& id, std::string& name, bool group, bool& name_requested);
 
@@ -181,15 +178,15 @@ private:
     void findObjects();
     void processRequestQueue();
 
-    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    boost::signals2::connection mRlvBehaviorCallbackConnection{};
     void updateRlvRestrictions(ERlvBehaviour behavior);
 
-    S32 mRequested;
-    bool mRefresh;
-    S32 mSearchableObjects;
-    bool mActive;
-    bool mRequestQueuePause;
-    bool mRequestNeedsSent;
+    S32 mRequested{ 0 };
+    bool mRefresh{ false };
+    S32 mSearchableObjects{ 0 };
+    bool mActive{ false };
+    bool mRequestQueuePause{ false };
+    bool mRequestNeedsSent{ false };
     std::map<U64,S32> mRegionRequests;
 
     std::string mSearchName;
@@ -199,7 +196,7 @@ private:
     std::string mSearchCreator;
     std::string mSearchLastOwner;
 
-    bool mRegexSearch;
+    bool mRegexSearch{ false };
     boost::regex mRegexSearchName;
     boost::regex mRegexSearchDescription;
     boost::regex mRegexSearchOwner;
@@ -210,57 +207,57 @@ private:
     LLFrameTimer mLastUpdateTimer;
     LLFrameTimer mLastPropertiesReceivedTimer;
 
-    uuid_vec_t mNamesRequested;
+    uuid_set_t mNamesRequested;
 
-    typedef std::map<LLUUID, boost::signals2::connection> name_cache_connection_map_t;
+    using name_cache_connection_map_t = std::map<LLUUID, boost::signals2::connection>;
     name_cache_connection_map_t mNameCacheConnections;
 
-    LLViewerRegion* mLastRegion;
+    LLViewerRegion* mLastRegion{ nullptr };
 
     class FSParcelChangeObserver;
     friend class FSParcelChangeObserver;
     std::unique_ptr<FSParcelChangeObserver> mParcelChangedObserver;
 
-    LLTabContainer* mTab;
-    FSPanelAreaSearchList* mPanelList;
-    FSPanelAreaSearchFind* mPanelFind;
-    FSPanelAreaSearchFilter* mPanelFilter;
-    FSPanelAreaSearchOptions* mPanelOptions;
-    FSPanelAreaSearchAdvanced* mPanelAdvanced;
+    LLTabContainer* mTab{ nullptr };
+    FSPanelAreaSearchList* mPanelList{ nullptr };
+    FSPanelAreaSearchFind* mPanelFind{ nullptr };
+    FSPanelAreaSearchFilter* mPanelFilter{ nullptr };
+    FSPanelAreaSearchOptions* mPanelOptions{ nullptr };
+    FSPanelAreaSearchAdvanced* mPanelAdvanced{ nullptr };
 
-    bool mBeacons;
+    bool mBeacons{ false };
 
-    bool mExcludeAttachment;
-    bool mExcludeTemporary;
-    bool mExcludeReflectionProbe;
-    bool mExcludePhysics;
-    bool mExcludeChildPrims;
-    bool mExcludeNeighborRegions;
+    bool mExcludeAttachment{ false };
+    bool mExcludeTemporary{ false };
+    bool mExcludeReflectionProbe{ false };
+    bool mExcludePhysics{ false };
+    bool mExcludeChildPrims{ true };
+    bool mExcludeNeighborRegions{ true };
 
-    bool mFilterLocked;
-    bool mFilterPhysical;
-    bool mFilterTemporary;
-    bool mFilterPhantom;
-    bool mFilterAttachment;
-    bool mFilterMoaP;
-    bool mFilterReflectionProbe;
+    bool mFilterLocked{ false };
+    bool mFilterPhysical{ true };
+    bool mFilterTemporary{ true };
+    bool mFilterPhantom{ false };
+    bool mFilterAttachment{ false };
+    bool mFilterMoaP{ false };
+    bool mFilterReflectionProbe{ false };
 
-    bool mFilterForSale;
-    S32 mFilterForSaleMin;
-    S32 mFilterForSaleMax;
+    bool mFilterForSale{ false };
+    S32 mFilterForSaleMin{ 0 };
+    S32 mFilterForSaleMax{ 999999 };
 
-    bool mFilterDistance;
-    S32 mFilterDistanceMin;
-    S32 mFilterDistanceMax;
+    bool mFilterDistance{ false };
+    S32 mFilterDistanceMin{ 0 };
+    S32 mFilterDistanceMax{ 0 };
 
-    bool mFilterClickAction;
-    U8 mFilterClickActionType;
+    bool mFilterClickAction{ false };
+    U8 mFilterClickActionType{ 0 };
 
-    bool mFilterPermCopy;
-    bool mFilterPermModify;
-    bool mFilterPermTransfer;
+    bool mFilterPermCopy{ false };
+    bool mFilterPermModify{ false };
+    bool mFilterPermTransfer{ false };
 
-    bool mFilterAgentParcelOnly;
+    bool mFilterAgentParcelOnly{ false };
 
 protected:
     static void* createPanelList(void* data);
@@ -286,7 +283,7 @@ public:
     FSPanelAreaSearchList(FSAreaSearch* pointer);
     virtual ~FSPanelAreaSearchList();
 
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
 
     void setCounterText();
     void setCounterText(LLStringUtil::format_map_t args);
@@ -316,14 +313,14 @@ private:
 
     LLVector3d mAgentLastPosition;
 
-    FSAreaSearch* mFSAreaSearch;
-    LLButton* mRefreshButton;
-    FSScrollListCtrl* mResultList;
-    LLCheckBoxCtrl* mCheckboxBeacons;
-    LLTextBox* mCounterText;
+    FSAreaSearch* mFSAreaSearch{ nullptr };
+    LLButton* mRefreshButton{ nullptr };
+    FSScrollListCtrl* mResultList{ nullptr };
+    LLCheckBoxCtrl* mCheckboxBeacons{ nullptr };
+    LLTextBox* mCounterText{ nullptr };
 
-    std::map<std::string, U32> mColumnBits;
-    boost::signals2::connection mFSAreaSearchColumnConfigConnection;
+    std::map<std::string, U32, std::less<>> mColumnBits;
+    boost::signals2::connection mFSAreaSearchColumnConfigConnection{};
 };
 
 
@@ -339,24 +336,24 @@ public:
     FSPanelAreaSearchFind(FSAreaSearch* pointer);
     virtual ~FSPanelAreaSearchFind() = default;
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ bool handleKeyHere(KEY key,MASK mask);
+    bool postBuild() override;
+    bool handleKeyHere(KEY key,MASK mask) override;
 
-    LLLineEditor* mNameLineEditor;
-    LLLineEditor* mDescriptionLineEditor;
-    LLLineEditor* mOwnerLineEditor;
-    LLLineEditor* mGroupLineEditor;
-    LLLineEditor* mCreatorLineEditor;
-    LLLineEditor* mLastOwnerLineEditor;
-    LLCheckBoxCtrl* mCheckboxRegex;
+    LLLineEditor* mNameLineEditor{ nullptr };
+    LLLineEditor* mDescriptionLineEditor{ nullptr };
+    LLLineEditor* mOwnerLineEditor{ nullptr };
+    LLLineEditor* mGroupLineEditor{ nullptr };
+    LLLineEditor* mCreatorLineEditor{ nullptr };
+    LLLineEditor* mLastOwnerLineEditor{ nullptr };
+    LLCheckBoxCtrl* mCheckboxRegex{ nullptr };
 
 private:
     void onButtonClickedClear();
 
-    FSAreaSearch* mFSAreaSearch;
+    FSAreaSearch* mFSAreaSearch{ nullptr };
 
-    LLButton* mSearchButton;
-    LLButton* mClearButton;
+    LLButton* mSearchButton{ nullptr };
+    LLButton* mClearButton{ nullptr };
 };
 
 
@@ -372,39 +369,40 @@ public:
     FSPanelAreaSearchFilter(FSAreaSearch* pointer);
     virtual ~FSPanelAreaSearchFilter() = default;
 
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
 
 private:
     void onCommitCheckbox();
     void onCommitSpin();
     void onCommitCombo();
+    void onButtonClickedSaveAsDefault();
 
-    FSAreaSearch* mFSAreaSearch;
-    LLCheckBoxCtrl* mCheckboxForSale;
-    LLCheckBoxCtrl* mCheckboxPhysical;
-    LLCheckBoxCtrl* mCheckboxTemporary;
-    LLCheckBoxCtrl* mCheckboxLocked;
-    LLCheckBoxCtrl* mCheckboxPhantom;
-    LLCheckBoxCtrl* mCheckboxMoaP;
-    LLCheckBoxCtrl* mCheckboxReflectionProbe;
-    LLCheckBoxCtrl* mCheckboxDistance;
-    LLSpinCtrl* mSpinDistanceMinValue;
-    LLSpinCtrl* mSpinDistanceMaxValue;
-    LLSpinCtrl* mSpinForSaleMinValue;
-    LLSpinCtrl* mSpinForSaleMaxValue;
-    LLButton* mButtonApply;
-    LLComboBox* mComboClickAction;
-    LLCheckBoxCtrl* mCheckboxAttachment;
-    LLCheckBoxCtrl* mCheckboxExcludeAttachment;
-    LLCheckBoxCtrl* mCheckboxExcludePhysics;
-    LLCheckBoxCtrl* mCheckboxExcludetemporary;
-    LLCheckBoxCtrl* mCheckboxExcludeReflectionProbes;
-    LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
-    LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions;
-    LLCheckBoxCtrl* mCheckboxPermCopy;
-    LLCheckBoxCtrl* mCheckboxPermModify;
-    LLCheckBoxCtrl* mCheckboxPermTransfer;
-    LLCheckBoxCtrl* mCheckboxAgentParcelOnly;
+    FSAreaSearch* mFSAreaSearch{ nullptr };
+    LLCheckBoxCtrl* mCheckboxForSale{ nullptr };
+    LLCheckBoxCtrl* mCheckboxPhysical{ nullptr };
+    LLCheckBoxCtrl* mCheckboxTemporary{ nullptr };
+    LLCheckBoxCtrl* mCheckboxLocked{ nullptr };
+    LLCheckBoxCtrl* mCheckboxPhantom{ nullptr };
+    LLCheckBoxCtrl* mCheckboxMoaP{ nullptr };
+    LLCheckBoxCtrl* mCheckboxReflectionProbe{ nullptr };
+    LLCheckBoxCtrl* mCheckboxDistance{ nullptr };
+    LLSpinCtrl* mSpinDistanceMinValue{ nullptr };
+    LLSpinCtrl* mSpinDistanceMaxValue{ nullptr };
+    LLSpinCtrl* mSpinForSaleMinValue{ nullptr };
+    LLSpinCtrl* mSpinForSaleMaxValue{ nullptr };
+    LLButton* mButtonApply{ nullptr };
+    LLComboBox* mComboClickAction{ nullptr };
+    LLCheckBoxCtrl* mCheckboxAttachment{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludeAttachment{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludePhysics{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludetemporary{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludeReflectionProbes{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludeChildPrim{ nullptr };
+    LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions{ nullptr };
+    LLCheckBoxCtrl* mCheckboxPermCopy{ nullptr };
+    LLCheckBoxCtrl* mCheckboxPermModify{ nullptr };
+    LLCheckBoxCtrl* mCheckboxPermTransfer{ nullptr };
+    LLCheckBoxCtrl* mCheckboxAgentParcelOnly{ nullptr };
 };
 
 
@@ -423,9 +421,9 @@ private:
     void onCommitCheckboxDisplayColumn(const LLSD& userdata);
     bool onEnableColumnVisibilityChecked(const LLSD& userdata);
 
-    FSAreaSearch* mFSAreaSearch;
+    FSAreaSearch* mFSAreaSearch{ nullptr };
 
-    std::map<std::string, LLScrollListColumn::Params> mColumnParms;
+    std::map<std::string, LLScrollListColumn::Params, std::less<>> mColumnParms;
 };
 
 
@@ -440,11 +438,11 @@ public:
     FSPanelAreaSearchAdvanced() = default;
     virtual ~FSPanelAreaSearchAdvanced() = default;
 
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
 
-    LLCheckBoxCtrl* mCheckboxClickTouch;
-    LLCheckBoxCtrl* mCheckboxClickBuy;
-    LLCheckBoxCtrl* mCheckboxClickSit;
+    LLCheckBoxCtrl* mCheckboxClickTouch{ nullptr };
+    LLCheckBoxCtrl* mCheckboxClickBuy{ nullptr };
+    LLCheckBoxCtrl* mCheckboxClickSit{ nullptr };
 };
 
 #endif // FS_AREASEARCH_H

@@ -602,7 +602,7 @@
     <key>KeepConversationLogTranscripts</key>
     	<map>
       	<key>Comment</key>
-      		<string>Keep a conversation log and transcripts</string>
+      		<string>Keep a conversation log and transcripts 2 - both, 1 - logs, 0 - none</string>
       	<key>Persist</key>
       		<integer>1</integer>
       	<key>Type</key>
@@ -875,6 +875,18 @@
 			<string>Boolean</string>
 		<key>Value</key>
 			<integer>0</integer>
+	</map>
+	<key>FSLastOpenIMs</key>
+	<map>
+		<key>Comment</key>
+			<string>List of IM session IDs that were open when the viewer was last closed</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>LLSD</string>
+		<key>Value</key>
+			<array>
+			</array>
 	</map>
 	<key>FSKeywordCaseSensitive</key>
 	<map>
@@ -1456,28 +1468,6 @@
             <string>Integer</string>
         <key>Value</key>
             <integer>1</integer>
-        </map>
-     <key>FSPrimfeedPhotoResolution</key>
-        <map>
-        <key>Comment</key>
-            <string>Last used resolution for Primfeed photos.</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>LLSD</string>
-        <key>Value</key>
-            <array/>
-        </map>
-     <key>FlickrPhotoResolution</key>
-        <map>
-        <key>Comment</key>
-            <string>Last used resolution for Primfeed photos.</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>LLSD</string>
-        <key>Value</key>
-            <array/>
         </map>
      <key>FlickrPhotoRating</key>
         <map>

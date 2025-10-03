@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="440"
+ height="480"
  layout="topleft"
  left="1"
  top="1"
@@ -52,13 +52,27 @@
          layout="topleft"
          label_width="100"
          label="View angle"
-         left_pad="20"
+         left="58"
+         top="12"
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
          tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
          show_text="true"
          width="275" />
+        <button
+         follows="left|top"
+         name="Def_CameraAngle"
+         height="17"
+         label="D"
+         layout="topleft"
+         left_pad="3"
+         width="17"
+         tool_tip="Reset to the default value.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="CameraAngle"/>
+        </button>
         <slider
          can_edit_text="true"
          control_name="CameraOffsetScale"
@@ -69,7 +83,7 @@
          initial_value="1"
          layout="topleft"
          label="Distance"
-         left_delta="0"
+         left="58"
          label_width="100"
          max_val="3"
          min_val="0.5"
@@ -77,6 +91,19 @@
          show_text="true"
          width="275"
          top_pad="5"/>
+        <button
+         follows="left|top"
+         name="Def_CameraOffsetScale"
+         height="17"
+         label="D"
+         layout="topleft"
+         left_pad="3"
+         width="17"
+         tool_tip="Reset to the default value.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="CameraOffsetScale"/>
+        </button>
         <slider
          can_edit_text="true"
          control_name="ZoomTime"
@@ -87,7 +114,7 @@
          initial_value="0.4"
          layout="topleft"
          label="Transition Time"
-         left_delta="0"
+         left="58"
          label_width="100"
          max_val="4"
          min_val="0"
@@ -95,6 +122,19 @@
          show_text="true"
          width="275"
          top_pad="5"/>
+        <button
+         follows="left|top"
+         name="Def_ZoomTime"
+         height="17"
+         label="D"
+         layout="topleft"
+         left_pad="3"
+         width="17"
+         tool_tip="Reset to the default value.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="ZoomTime"/>
+        </button>
         <slider
          can_edit_text="true"
          control_name="CameraPositionSmoothing"
@@ -105,7 +145,7 @@
          initial_value="1"
          layout="topleft"
          label="Smoothing"
-         left_delta="0"
+         left="58"
          label_width="100"
          max_val="9"
          min_val="0"
@@ -113,13 +153,26 @@
          show_text="true"
          width="275"
          top_pad="5"/>
+        <button
+         follows="left|top"
+         name="Def_CameraPositionSmoothing"
+         height="17"
+         label="D"
+         layout="topleft"
+         left_pad="3"
+         width="17"
+         tool_tip="Reset to the default value.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="CameraPositionSmoothing"/>
+        </button>
         <check_box
          control_name="DisableCameraConstraints"
          height="16"
          initial_value="true"
          label="Disable camera constraints"
          layout="topleft"
-         left_delta="0"
+         left="58"
          name="DisableCameraConstraints"
          tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
          top_pad="10"
@@ -451,7 +504,7 @@
          control_name="ArrowKeysAlwaysMove"
          follows="left|top"
          height="20"
-         label="Arrow keys always move me"
+   label="Arrow keys always move me while in chat"
          layout="topleft"
          left_delta="10"
          name="arrow_keys_move_avatar_check"
@@ -537,13 +590,22 @@
          layout="topleft"
          label_width="170"
          label="Avatar Rotation Turn Speed:"
-         top_pad="2"
+         top_pad="5"
          max_val="100.0"
          min_val="0.0"
          name="av_turn_spd"
          tool_tip="Alters the rate at which your avatar responds to turning. 0-100 as estimated percentage of max turn rate. 0 is default. High values will be snappy/jerky"
          show_text="true"
          width="320" />
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="20"
+         label="Disable connecting to neighbouring regions (important: read tooltip)"
+         name="FSDisableNeighbourRegionConnections"
+         width="270"
+         control_name="FSDisableNeighbourRegionConnections"
+         tool_tip="Shows/loads only the region you are in, which can improve performance and network stability, but region crossings on foot or in vehicles will be less reliable and manual teleporting may be needed." />
         <text
          follows="left|top"
          type="string"
@@ -552,7 +614,7 @@
          layout="topleft"
          name="Region_Crossing_Movement_Label"
          width="210"
-         top_pad="10">
+         top_pad="5">
             Region crossing movement prediction:
         </text>
         <radio_group

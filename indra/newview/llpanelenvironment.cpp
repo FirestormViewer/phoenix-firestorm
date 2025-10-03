@@ -1100,7 +1100,7 @@ void LLPanelEnvironmentInfo::onEnvironmentChanged(LLEnvironment::EnvSelection_t 
     else if ((env == LLEnvironment::ENV_PARCEL)
              && (getParcelId() == LLViewerParcelMgr::instance().getAgentParcelId()))
     {
-        if (LLParcel* parcel = getParcel())
+        if (getParcel()) // <FS:Beq/> more set-but-unused
         {
             // first for parcel own settings, second is for case when parcel uses region settings
             if (mCurEnvVersion < new_version

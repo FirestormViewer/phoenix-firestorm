@@ -3,9 +3,13 @@
 	<tab_container label="Mover y ver" name="tabs">
 		<panel label="Vista" name="tab-view">
 			<slider label="Ángulo de visión" name="camera_fov" label_width="120" width="295"/>
+			<button name="Def_CameraAngle" label="R" tool_tip="Restablecer valor por defecto." />
 			<slider label="Distancia" name="camera_offset_scale" label_width="120" width="295"/>
+			<button name="Def_CameraOffsetScale" label="R" tool_tip="Restablecer valor por defecto." />
 			<slider label="Tiempo de transición" name="camera_transition_time" label_width="120" width="295"/>
+			<button name="Def_ZoomTime" label="R" tool_tip="Restablecer valor por defecto." />
 			<slider label="Suavizado" name="camera_position_smoothing" label_width="120" width="295"/>
+			<button name="Def_CameraPositionSmoothing" label="R" tool_tip="Restablecer valor por defecto." />
 			<check_box label="Desactivar restricciones de cámara" name="DisableCameraConstraints" tool_tip="Activa para mover tu cámara más allá de sus límites normales y bajo el nivel del suelo. Si no se te da bien posicionar la cámara, podrías incrementar el número de fotografías con mal ángulo."/>
 			<check_box label="No usar la rueda del ratón para controlar el zoom de la cámara" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">

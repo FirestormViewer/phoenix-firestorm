@@ -9,6 +9,7 @@
 #include "lleventtimer.h"
 #include "llaudioengine.h"
 #include "llavatarnamecache.h"
+#include "fsassetblacklist.h"
 
 class LLCheckBoxCtrl;
 class LLScrollListCtrl;
@@ -22,7 +23,7 @@ public:
 
     bool tick() override;
 
-    LLSoundHistoryItem getItem(const LLUUID& itemID);
+    LLSoundHistoryItem getItem(const LLUUID& itemID) const;
 
 private:
     virtual ~NACLFloaterExploreSounds();
@@ -31,14 +32,14 @@ private:
     void handleStop();
     void handleStopLocally();
     void handleSelection();
-    void blacklistSound();
+    void blacklistSound(FSAssetBlacklist::eBlacklistFlag flag);
 
-    LLScrollListCtrl*   mHistoryScroller;
-    LLCheckBoxCtrl*     mCollisionSounds;
-    LLCheckBoxCtrl*     mRepeatedAssets;
-    LLCheckBoxCtrl*     mAvatarSounds;
-    LLCheckBoxCtrl*     mObjectSounds;
-    LLCheckBoxCtrl*     mPaused;
+    LLScrollListCtrl* mHistoryScroller{ nullptr };
+    LLCheckBoxCtrl*   mCollisionSounds{ nullptr };
+    LLCheckBoxCtrl*   mRepeatedAssets{ nullptr };
+    LLCheckBoxCtrl*   mAvatarSounds{ nullptr };
+    LLCheckBoxCtrl*   mObjectSounds{ nullptr };
+    LLCheckBoxCtrl*   mPaused{ nullptr };
 
     std::list<LLSoundHistoryItem> mLastHistory;
 
@@ -47,7 +48,7 @@ private:
     typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
     blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
-    void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarNameCacheCallback(const LLUUID& request_id, const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name, FSAssetBlacklist::eBlacklistFlag flag);
 };
 
 #endif

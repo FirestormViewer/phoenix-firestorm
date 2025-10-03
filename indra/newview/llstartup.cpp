@@ -61,6 +61,7 @@
 #include "lllocationhistory.h"
 #include "llgltfmateriallist.h"
 #include "llimageworker.h"
+#include "llregex.h"
 
 #include "llloginflags.h"
 #include "llmd5.h"
@@ -396,13 +397,11 @@ void pump_idle_startup_network(void)
 {
     // while there are message to process:
     //     process one then call display_startup()
-    S32 num_messages = 0;
     {
         LockMessageChecker lmc(gMessageSystem);
         while (lmc.checkAllMessages(gFrameCount, gServicePump))
         {
             display_startup();
-            ++num_messages;
         }
         lmc.processAcks();
     }
@@ -652,6 +651,7 @@ bool idle_startup()
         LL_WARNS_ONCE() << "gViewerWindow is not initialized" << LL_ENDL;
         return false; // No world yet
     }
+    LL_PROFILE_ZONE_SCOPED;
 
     const F32 PRECACHING_DELAY = gSavedSettings.getF32("PrecachingDelay");
     static LLTimer timeout;
@@ -741,6 +741,10 @@ bool idle_startup()
         gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
         gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
         // </FS:Ansariel>
+
+        // <FS:Ansariel> Added to determine if toolbar gets hidden when empty
+        if (gToolBarView)
+            gToolBarView->setHideBottomOnEmpty(FSCommon::isLegacySkin());
 
         if (LLFeatureManager::getInstance()->isSafe())
         {
@@ -1057,6 +1061,8 @@ bool idle_startup()
 #if !LL_WINDOWS
             // if (NULL == getenv("LL_BAD_OPENAL_DRIVER"))
             if (!gAudiop && NULL == getenv("LL_BAD_OPENAL_DRIVER"))
+#else
+            if (!gAudiop)
 #endif // !LL_WINDOWS
             {
                 gAudiop = (LLAudioEngine *) new LLAudioEngine_OpenAL();
@@ -1108,6 +1114,10 @@ bool idle_startup()
         {
             LL_WARNS("AppInit") << "Unreliable timers detected (may be bad PCI chipset)!!" << LL_ENDL;
         }
+
+#ifdef LL_DISCORD
+        LLAppViewer::initDiscordSocial();
+#endif
 
         //
         // Log on to system
@@ -2910,9 +2920,6 @@ bool idle_startup()
 
         do_startup_frame();
 
-        // We're successfully logged in.
-        gSavedSettings.setBOOL("FirstLoginThisInstall", false);
-
         LLFloaterReg::showInitialVisibleInstances();
 
         LLFloaterGridStatus::getInstance()->startGridStatusTimer();
@@ -3342,6 +3349,30 @@ bool idle_startup()
 
         LLPerfStats::StatsRecorder::setAutotuneInit();
 
+        // Display Avatar Welcome Pack the first time a user logs in
+        // (or clears their settings....)
+        if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+        {
+            LLFloater* avatar_welcome_pack_floater = LLFloaterReg::findInstance("avatar_welcome_pack");
+            if (avatar_welcome_pack_floater != nullptr)
+            {
+                // There is a (very - 1 in ~50 times) hard to repro bug where the login
+                // page is not hidden when the AWP floater is presented. This (agressive)
+                // approach to always close it seems like the best fix for now.
+                // <FS:Ansariel> [FS Login Panel]
+                //LLPanelLogin::closePanel();
+                FSPanelLogin::closePanel();
+                // </FS:Ansariel> [FS Login Panel]
+
+                avatar_welcome_pack_floater->setVisible(true);
+            }
+        }
+
+        //// We're successfully logged in.
+        // 2025-06 Moved lower down in the state machine so the Avatar Welcome Pack
+        // floater display can be triggered correctly.
+        gSavedSettings.setBOOL("FirstLoginThisInstall", false);
+
         // <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
         if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
         {
@@ -3353,6 +3384,14 @@ bool idle_startup()
         {
             FSCoreHttpUtil::callbackHttpGetRaw(gSavedSettings.getString("AutoQueryGridStatusURL"),
                 downloadGridstatusComplete, [](const LLSD& data) { downloadGridstatusError(data, gSavedSettings.getString("AutoQueryGridStatusURL")); });
+        }
+        // </FS:PP>
+
+        // <FS:PP> Restore open IMs from previous session
+        if (gSavedSettings.getBOOL("FSRestoreOpenIMs"))
+        {
+            FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
+            floater_imcontainer->restoreOpenIMs();
         }
         // </FS:PP>
 
@@ -3455,6 +3494,27 @@ void release_notes_coro(const std::string url)
     LLWeb::loadURLInternal(url);
 }
 
+void validate_release_notes_coro(const std::string url)
+{
+    LLVersionInfo& versionInfo(LLVersionInfo::instance());
+    const boost::regex version_regex(R"(\b\d+\.\d+\.\d+\.\d+\b)");
+
+    if (url.find(versionInfo.getVersion()) == std::string::npos // has no our build version
+        && ll_regex_search(url, version_regex)) // has any version
+    {
+        LL_INFOS() << "Received release notes url \"" << url << "\" wwith mismatching build, falling back to locally generated url" << LL_ENDL;
+        // Updater only provides notes for a most recent version, if it is not
+        // the current one, fall back to the hardcoded URL.
+        LLSD info(LLAppViewer::instance()->getViewerInfo());
+        std::string alt_url = info["VIEWER_RELEASE_NOTES_URL"].asString();
+        release_notes_coro(alt_url);
+    }
+    else
+    {
+        release_notes_coro(url);
+    }
+}
+
 /**
 * Check if user is running a new version of the viewer.
 * Display the Release Notes if it's not overriden by the "UpdaterShowReleaseNotes" setting.
@@ -3488,7 +3548,7 @@ void show_release_notes_if_required()
                 "showrelnotes",
                 [](const LLSD& url) {
                     LLCoros::instance().launch("releaseNotesCoro",
-                    boost::bind(&release_notes_coro, url.asString()));
+                    boost::bind(&validate_release_notes_coro, url.asString()));
                 return false;
             });
         }
@@ -4810,6 +4870,9 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 
         //setup map of datetime strings to codes and slt & local time offset from utc
         LLStringOps::setupDatetimeInfo(pacific_daylight_time);
+        // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
+        LLStringOps::setupUsingPacificTime(!LLGridManager::getInstance()->isInSecondLife());
+        // </FS:TJ>
     }
 
     // set up the voice configuration.  Ultimately, we should pass this up as part of each voice

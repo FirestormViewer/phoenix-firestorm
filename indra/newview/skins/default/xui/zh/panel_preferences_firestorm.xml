@@ -12,6 +12,7 @@
 			<check_box label="當指令碼通訊時建立粒子效果" name="EffectScriptChatParticles" tool_tip="啟用此選項會在與通訊的物件周圍顯示一個小的旋轉雲。" />
 			<check_box label="當您接近特定人物時關閉追蹤標籤 (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="啟用此選項將在您接近人物時自動關閉追蹤標籤 (&lt;= 3m 預設)" />
 			<check_box label="設定閒置便當動畫" name="play_default_bento_idle_animation_toggle" tool_tip="如果啟用此選項，檢視器將在沒有其他便當動畫正在運行時播放預設的便當動畫， 優先度為0，將手、翅膀、嘴和尾巴放在自然位置。" />
+			<check_box label="站立後重置化身骨骼" name="FSResetSkeletonOnStandUp" tool_tip="啟用此選項後，當你站起時，檢視器會自動重置您的化身骨骼，並將重置訊息發送給周圍的其他居民，以便讓他們的用戶端同時更你您的外觀。" />
 			<check_box label="登入時禁用載入螢幕" name="login_screen_toggle" tool_tip="禁用登入時的載入螢幕" />
 			<check_box label="登出時禁用載入螢幕" name="logout_screen_toggle" tool_tip="禁用登出時的載入螢幕" />
 			<check_box label="啟用漸進式遠景剪裁距離" name="FSRenderFarClipStepping" tool_tip="如果啟用，Firestorm 將在傳送後使用逐步遠景剪裁距離。" />

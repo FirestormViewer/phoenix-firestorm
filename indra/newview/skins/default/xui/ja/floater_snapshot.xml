@@ -98,7 +98,7 @@
 		</text>
 	</view>
 	<text name="image_res_text">
-		[WIDTH]px（幅）×[HEIGHT]px（高さ）
+		[WIDTH]px（幅）✕[HEIGHT]px（高さ）
 	</text>
 	<text name="file_size_label">
 		[SIZE]㎅

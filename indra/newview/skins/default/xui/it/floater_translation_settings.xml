@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_translation_settings" title="Impostazioni Traduzione Chat">
-	<string name="azure_api_key_not_verified">Non è stato possibile verificare l'ID Azure. Riprova.</string>
-	<string name="google_api_key_not_verified">Non è stato possibile verificare la chiave API di Google. Riprova.</string>
-	<string name="deepl_api_key_not_verified">Impossibile verificare la chiave DeepL. Stato: [STATUS]. Riprova.</string>
+	<string name="azure_api_key_not_verified">Non è stato possibile verificare l'ID Azure. Stato: [STATUS]. Verifica le impostazioni e riprova.</string>
+	<string name="google_api_key_not_verified">Non è stato possibile verificare la chiave API di Google. Stato: [STATUS]. Verifica la chiave e riprova.</string>
+	<string name="deepl_api_key_not_verified">Impossibile verificare la chiave DeepL. Stato: [STATUS]. Verifica la chiave e riprova.</string>
 	<string name="azure_api_key_verified">ID di Azure verificato.</string>
 	<string name="google_api_key_verified">Chiave API di Google verificata.</string>
 	<string name="deepl_api_key_verified">Chiave di DeepL verificata.</string>

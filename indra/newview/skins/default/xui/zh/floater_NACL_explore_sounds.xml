@@ -12,15 +12,6 @@
 	<floater.string name="Type_Avatar">
 		化身
 	</floater.string>
-	<floater.string name="Type_llTriggerSound">
-		llTriggerSound
-	</floater.string>
-	<floater.string name="Type_llLoopSound">
-		llLoopSound
-	</floater.string>
-	<floater.string name="Type_llPlaySound">
-		llPlaySound
-	</floater.string>
 	<check_box name="avatars_chk" label="化身" />
 	<check_box name="objects_chk" label="物件" />
 	<check_box name="collision_chk" label="預設碰撞聲音" />
@@ -37,4 +28,7 @@
 	<button label="聚焦" name="look_at_btn" />
 	<button label="停止" name="stop_btn" />
 	<button label="封鎖名單" name="bl_btn" />
+	<button label="封鎖化身所附著物件的聲音" name="block_avatar_worn_sounds_btn"/>
+	<button label="封鎖化身放置物件的聲音" name="block_avatar_rezzed_sounds_btn"/>
+	<button label="封鎖化身播放手勢的聲音" name="block_avatar_gesture_sounds_btn"/>
 </floater>

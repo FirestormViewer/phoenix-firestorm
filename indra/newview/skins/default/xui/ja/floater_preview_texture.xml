@@ -18,7 +18,7 @@
 	<button label="プロフィール" name="openprofile"/>
 	<panel name="dimensions_panel">
 		<text name="dimensions">
-			[WIDTH]px×[HEIGHT]px
+			[WIDTH]px✕[HEIGHT]px
 		</text>
 		<button label="ＵＵＩＤ" name="copyuuid" tool_tip="ＵＵＩＤをクリップボードにコピーします。"/>
 		<text name="aspect_ratio">

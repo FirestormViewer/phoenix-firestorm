@@ -1043,6 +1043,10 @@ void LLLocalSpeakerMgr::updateSpeakerList()
     //LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), CHAT_NORMAL_RADIUS);
     LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), (F32)LFSimFeatureHandler::getInstance()->sayRange());
 // </FS:CR> Opensim
+#ifdef LL_DISCORD
+    if (gSavedSettings.getBOOL("EnableDiscord"))
+        LLAppViewer::updateDiscordPartyCurrentSize((S32)avatar_ids.size());
+#endif
     for(U32 i=0; i<avatar_ids.size(); i++)
     {
         setSpeaker(avatar_ids[i]);

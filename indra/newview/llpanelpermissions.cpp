@@ -213,7 +213,7 @@ bool LLPanelPermissions::postBuild()
 
     getChild<LLUICtrl>("sale type")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSaleInfo, this));
 
-    getChild<LLUICtrl>("Edit Cost")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSaleInfo, this));
+    getChild<LLUICtrl>("Edit Cost")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSalePrice, this));
 
     getChild<LLUICtrl>("button mark for sale")->setCommitCallback( boost::bind(&LLPanelPermissions::setAllSaleInfo, this));
 
@@ -638,7 +638,7 @@ void LLPanelPermissions::refresh()
     }
     else
     {
-// FIRE-777:�allow batch edit for name and description
+// FIRE-777:?allow batch edit for name and description
 //      getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
 //      LineEditorObjectDesc->setText(LLStringUtil::null);
         if (keyboard_focus_view != LineEditorObjectName)
@@ -658,7 +658,7 @@ void LLPanelPermissions::refresh()
 
     // figure out the contents of the name, description, & category
     bool edit_name_desc = false;
-// FIRE-777:�allow batch edit for name and description
+// FIRE-777:?allow batch edit for name and description
 //  if (is_one_object && objectp->permModify() && !objectp->isPermanentEnforced())
     if (objectp->permModify())
 // /FIRE-777
@@ -958,7 +958,9 @@ void LLPanelPermissions::refresh()
     {
         if (has_change_sale_ability && (owner_mask_on & PERM_TRANSFER))
         {
-            getChildView("checkbox for sale")->setEnabled(can_transfer || (!can_transfer && num_for_sale));
+            bool change_sale_allowed = can_transfer || (!can_transfer && num_for_sale);
+            getChildView("checkbox for sale")->setEnabled(change_sale_allowed);
+            getChildView("Edit Cost")->setEnabled(change_sale_allowed && !is_for_sale_mixed);
             // Set the checkbox to tentative if the prices of each object selected
             // are not the same.
             getChild<LLUICtrl>("checkbox for sale")->setTentative(              is_for_sale_mixed);
@@ -1394,6 +1396,7 @@ void LLPanelPermissions::onCommitName(LLUICtrl*, void* data)
         {
             LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(item);
             new_item->rename(tb->getText());
+            new_item->setComplete(true); // to not err at updateServer
             new_item->updateServer(false);
             gInventory.updateItem(new_item);
             gInventory.notifyObservers();
@@ -1455,6 +1458,15 @@ void LLPanelPermissions::onCommitSaleInfo()
     else
     {
         showMarkForSale(true);
+    }
+}
+
+void LLPanelPermissions::onCommitSalePrice()
+{
+    LLCheckBoxCtrl *checkPurchase = getChild<LLCheckBoxCtrl>("checkbox for sale");
+    if (checkPurchase && checkPurchase->get())
+    {
+        setAllSaleInfo();
     }
 }
 

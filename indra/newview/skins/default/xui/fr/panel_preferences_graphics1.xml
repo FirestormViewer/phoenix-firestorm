@@ -170,6 +170,16 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			</combo_box>
 			<text name="Miscellaneous Rendering">Divers :</text>
 			<check_box label="HDR et émissivité" tool_tip="Permet des fonctionnalités supplémentaires du pipeline de rendu sur les machines plus récentes, telles que le HDR et les textures émissives sur le contenu PBR." name="VintageMode"/>
+			<check_box label="Réduire la distance d'affichage lorsque la VRAM est pleine" name="Reduce Draw Distance when VRAM is full" tool_tip="Active une fonctionnalité qui réduit la distance d'affichage lorsque la mémoire VRAM est saturée."/>
+			<text name="ExcludeAnimeshImposterLabel">
+				Exclure l'avatar Animesh imposteur :
+			</text>
+			<combo_box tool_tip="Permet d'exclure les utilisateurs Animesh ou les avatars de contrôle de l'utilisation du rendu de substitution." name="FSImpostorAvatarExclude">
+				<combo_box.item label="Aucun" name="0"/>
+				<combo_box.item label="Utilisateur" name="1"/>
+				<combo_box.item label="Contrôle" name="2"/>
+				<combo_box.item label="Les deux" name="3"/>
+			</combo_box>
 			<check_box label="Activer les masques alpha" tool_tip="Si cette option est cochée, le rendu des masques Alpha (bits transparents) est correct." name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Éclat lumineux" tool_tip="Activer l'éclat lumineux. Noter que la force doit être définie sur 0 pour désactiver l'éclat lumineux lorsque les ombres sont activées." name="RenderGlow"/>
 			<slider label="Force :" tool_tip="Force de l'éclat lumineux. Une valeur plus élevée le rends plus diffus et plus doux (2 par défaut)" name="glow_strength"/>

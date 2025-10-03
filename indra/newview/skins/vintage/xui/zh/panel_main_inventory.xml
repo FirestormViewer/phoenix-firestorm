@@ -128,6 +128,7 @@
 			<inventory_panel label="庫存" name="All Items" />
 			<recent_inventory_panel label="最近" name="Recent Items" />
 			<worn_inventory_panel label="裝扮" name="Worn Items" />
+			<favorites_inventory_panel label="收藏" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<text name="ItemcountText" tool_tip="物件 [ITEMS]，檔案夾 [CATEGORIES]">

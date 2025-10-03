@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Sort Outfit">
+	<menu_item_call label="Alle Ordner aufklappen" name="expand"/>
+	<menu_item_call label="Alle Ordner schließen" name="collapse"/>
+	<menu_item_check label="Favoriten nach oben sortieren" name="sort_favorites_to_top"/>
+	<menu_item_check label="Gesamtes Outfit in Suche anzeigen" name="show_entire_outfit_in_search"/>
+</toggleable_menu>

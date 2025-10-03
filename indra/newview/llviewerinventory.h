@@ -232,8 +232,8 @@ public:
     // How many descendents do we currently have information for in the InventoryModel?
     S32 getViewerDescendentCount() const;
 
-    LLSD exportLLSD() const;
-    bool importLLSD(const LLSD& cat_data);
+    virtual void exportLLSD(LLSD &sd) const;
+    virtual bool importLLSD(const std::string& label, const LLSD& value);
 
     void determineFolderType();
     void changeType(LLFolderType::EType new_folder_type);
@@ -264,10 +264,7 @@ public:
 
 class LLViewerJointAttachment;
 
-// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.4)
 void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp, bool replace);
-// [/SL:KB]
-//void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp);
 
 void activate_gesture_cb(const LLUUID& inv_item);
 

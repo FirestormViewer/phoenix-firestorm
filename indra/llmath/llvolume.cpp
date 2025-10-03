@@ -2368,7 +2368,7 @@ bool LLVolume::unpackVolumeFacesInternal(const LLSD& mdl)
 
             const LLSD::Binary& pos = mdl[i]["Position"].asBinary();
             const LLSD::Binary& norm = mdl[i]["Normal"].asBinary();
-            const LLSD::Binary& tangent = mdl[i]["Tangent"].asBinary();
+            // const LLSD::Binary& tangent = mdl[i]["Tangent"].asBinary(); // <FS:Beq/> more set but unused
             const LLSD::Binary& tc = mdl[i]["TexCoord0"].asBinary();
             const LLSD::Binary& idx = mdl[i]["TriangleList"].asBinary();
 
@@ -5760,7 +5760,15 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
         S32 vert_count = 0;
         if (!data.p.empty())
         {
-            vert_count = static_cast<S32>(meshopt_generateVertexRemapMulti(&remap[0], nullptr, data.p.size(), data.p.size(), mos, stream_count));
+            try
+            {
+                vert_count = static_cast<S32>(meshopt_generateVertexRemapMulti(&remap[0], nullptr, data.p.size(), data.p.size(), mos, stream_count));
+            }
+            catch (std::bad_alloc&)
+            {
+                LLError::LLUserWarningMsg::showOutOfMemory();
+                LL_ERRS("LLCoros") << "Failed to allocate memory for VertexRemap: " << (S32)data.p.size() << LL_ENDL;
+            }
         }
 
         if (vert_count < 65535 && vert_count != 0)

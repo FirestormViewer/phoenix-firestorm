@@ -3,9 +3,13 @@
 	<tab_container label="Ruch i widok" name="tabs">
 		<panel label="Widok" name="tab-view">
 			<slider label="Kąt widzenia" name="camera_fov" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator)."/>
+			<button name="Def_CameraAngle" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Dystans" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Czas przejścia" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<slider label="Wygładzanie" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych." />
 			<check_box label="Wyłącz ograniczenia kamery" name="DisableCameraConstraints" tool_tip="Zaznacz, aby móc ustawiać punkt widzenia kamery daleko poza jego normalne granice lub poniżej poziomu terenu. Jeśli nie jesteś dobry/a w operowaniu kamerą, to możesz mieć większe problemy z dobraniem odpowiedniego kątu patrzenia."/>
 			<check_box label="Nie używaj kółka myszki do kontrolowania poziomu zbliżenia kamery" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
@@ -42,7 +46,7 @@
 			<check_box label="Zamień osie myszy" name="invert_mouse"/>
 		</panel>
 		<panel label="Ruch" name="tab-movement">
-			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem" name="arrow_keys_move_avatar_check" tool_tip="Dotyczy tylko pola wprowadzania 'czatu w pobliżu' na dole okna przeglądarki, a nie karty 'czatu w pobliżu' w Rozmowach." />
+			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem podczas czatowania" name="arrow_keys_move_avatar_check" tool_tip="Dotyczy tylko pola wprowadzania 'czatu w pobliżu' na dole okna przeglądarki, a nie karty 'czatu w pobliżu' w Rozmowach." />
 			<check_box label="Naciskanie klawiszy liter wpływa na ruch (tzn. WASD) zamiast rozpoczynać czat" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Puk-puk-trzymaj, aby biec" name="tap_tap_hold_to_run"/>
 			<check_box label="Przytrzymaj klawisz skoku lub kucania, aby zacząć lub przestać latać" name="automatic_fly"/>
@@ -51,6 +55,7 @@
 			<check_box label="Awatary mogą chodzić do tyłu na Twoim ekranie (efekt jest wyłącznie lokalny)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Gdy zaznaczysz tą opcję, to zezwolisz awatarom poruszającym się w tył na bycie widzianymi tak, jak gdyby się cofały - bez odwracania się. To ustawienie ma wpływ tylko na to, co pokazuje Twoja przeglądarka, a nie to, co awatar faktycznie robi. Takie ustawienie jest domyślnym dla standardowej przeglądarki Second Life. Jeśli awatar posiada AO zmuszające go do obracania się, to zachowanie to może zostać nadpisane."/>
 			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 			<slider label="Prędkość obrotu awatara:" name="av_turn_spd" tool_tip="Zmienia szybkość, z jaką Twój awatar reaguje na obracanie się. 0-100 to szacunkowy procent maksymalnej szybkości obrotu. Domyślnie: 0. Wysokie wartości będą powodować szarpanie." />
+			<check_box label="Wyłącz łączenie z sąsiednimi regionami (uwaga: zobacz chmurkę pomocy)" name="FSDisableNeighbourRegionConnections" tool_tip="Pokazuje/ładuje tylko region, w którym jesteś. Może to poprawić wydajność i stabilność połączenia, ale przechodzenie do innych regionów pieszo lub pojazdem będzie mniej niezawodne i może wymagać ręcznego teleportu." />
 			<text name="Region_Crossing_Movement_Label">
 				Przewiduj ruch przy zmianie regionu:
 			</text>

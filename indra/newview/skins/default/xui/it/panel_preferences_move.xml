@@ -3,9 +3,13 @@
 	<tab_container name="tabs">
 		<panel name="tab-view" label="Vista">
 			<slider label="Angolo di visuale" name="camera_fov"/>
+			<button name="Def_CameraAngle" label="R" tool_tip="Ripristina valore." />
 			<slider label="Distanza" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" label="R" tool_tip="Ripristina valore." />
 			<slider label="Transizione" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" label="R" tool_tip="Ripristina valore." />
 			<slider label="Morbidezza" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" label="R" tool_tip="Ripristina valore." />
 			<check_box label="Consenti movimento della cam senza limiti" name="DisableCameraConstraints" tool_tip="Seleziona per poter spostare la camera senza alcun limite. Se non siete bravi a muovere la camera potreste avere dei cattivi risultati"/>
 			<check_box label="Non usare rotella del mouse per lo zoom della camera" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">

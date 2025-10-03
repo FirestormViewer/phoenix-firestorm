@@ -7,12 +7,25 @@
 				<stat_bar name="frame_mean" label="Klatka (średnia)" />
 				<stat_bar name="frame_median" label="Klatka (mediana)" />
 				<stat_bar name="framet_jitter" label="Wahania (jitter)" />
+				<stat_bar name="normalized_cumulative_frametime" label="Znormaliz. wahania sesji" />
+				<stat_bar name="normalized_period_jitter" label="Znormaliz. wahania okresu" />
+				<stat_bar name="normalized_frametime_variation" label="Znormaliz. zmienność klatki" />
+				<stat_bar name="frame_events_per_minute" label="Zdarzenia klatek/min" />
+				<stat_bar name="frame_events_last_minute" label="Zdarzenia w ostatn. min." />
 				<stat_bar label="Otrzymane dane UDP" name="bandwidth"/>
 				<stat_bar label="Utracone pakiety" name="packet_loss"/>
 				<stat_bar label="Ping symulatora" name="ping"/>
 			</stat_view>
 			<stat_view label="Zaawansowane" name="advanced">
 				<stat_view label="Rendering" name="render">
+					<stat_bar name="framet_cumulative" label="wahania łącznie" />
+					<stat_bar name="framet_jitter_99th" label="wahania 99. percentyl" />
+					<stat_bar name="framet_jitter_95th" label="wahania 95. percentyl" />
+					<stat_bar name="framet_jitter_stddev" label="wahania odch. std." />
+					<stat_bar name="framet_99th" label="czas klatki 99. perc." />
+					<stat_bar name="framet_95th" label="czas klatki 95. perc." />
+					<stat_bar name="framet_stddev" label="czas klatki odch. std." />
+					<stat_bar name="framet_events" label="zdarzenia czasu klatki" />
 					<stat_bar label="KTris na klatkę" name="ktrisframe"/>
 					<stat_bar label="KTris na sekundę" name="ktrissec"/>
 					<stat_bar label="Wszystkie obiekty" name="objs"/>

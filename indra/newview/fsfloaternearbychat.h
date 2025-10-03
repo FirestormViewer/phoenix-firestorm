@@ -104,6 +104,10 @@ public:
 
     uuid_vec_t getSessionParticipants() const;
 
+    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
+    F32 onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha);
+    // </FS:TJ>
+
 protected:
     void onChatBoxKeystroke();
     void onChatBoxFocusLost();

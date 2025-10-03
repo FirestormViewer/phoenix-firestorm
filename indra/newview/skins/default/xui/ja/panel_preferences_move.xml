@@ -4,9 +4,13 @@
 		<!--View-->
 		<panel label="視界" name="tab-view">
 			<slider label="視野角" name="camera_fov" tool_tip="ＲＬで言う「ズーム」をするのがこの機能です。これを使うとビューアの画角（ＦＯＶ）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。"/>
+			<button name="Def_CameraAngle" tool_tip="デフォルト値に戻します。" />
 			<slider label="距離" name="camera_offset_scale"/>
+			<button name="Def_CameraOffsetScale" tool_tip="デフォルト値に戻します。" />
 			<slider label="ズーム遷移時間" name="camera_transition_time"/>
+			<button name="Def_ZoomTime" tool_tip="デフォルト値に戻します。" />
 			<slider label="スムージング" name="camera_position_smoothing"/>
+			<button name="Def_CameraPositionSmoothing" tool_tip="デフォルト値に戻します。" />
 			<check_box label="カメラの制約を無効にする" name="DisableCameraConstraints" tool_tip="これを設定すると、カメラが通常の境界を超えて地面より下に移動します。カメラの移動が苦手な場合は、悪い角度で撮影されるショットが多くなります。"/>
 			<check_box label="カメラのズームレベル制御にマウスホイールを使用しない" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
@@ -45,7 +49,7 @@
 		</panel>
 		<!--Movement-->
 		<panel label="移動" name="tab-movement">
-			<check_box label="矢印キー操作で常に移動" name="arrow_keys_move_avatar_check" tool_tip="ビューアの下部にある「近くのチャット」入力フィールドにのみ適用され、「会話」の「近くのチャット」タブには適用されません。"/>
+			<check_box label="チャット中は常に矢印キーで移動する" name="arrow_keys_move_avatar_check" tool_tip="ビューアの下部にある「近くのチャット」入力フィールドにのみ適用され、「会話」の「近くのチャット」タブには適用されません。"/>
 			<check_box label="ＷＳＡＤキー押下時にローカルチャットを始めるのではなく、前後左右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="移動キー２度押し＋長押しで走る" name="tap_tap_hold_to_run"/>
 			<check_box label="上昇（ジャンプ）／下降（しゃがみ）長押しで飛ぶ／着地する" name="automatic_fly"/>
@@ -54,6 +58,7 @@
 			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（ＳＬの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューアでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューアのデフォルトの動きです。アバターがＡＯを使用しているときに、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。"/>
 			<check_box label="選択したオブジェクトにアバターを向ける" name="FSTurnAvatarToSelectedObject" tool_tip="現在選択しているオブジェクトの方を向くようにアバターを回転させます。"/>
 			<slider label="アバターが振り向く速度" name="av_turn_spd" tool_tip="アバターが回転に反応する速度を変更します。最大回転速度の推定パーセンテージとして0～100を指定します。0がデフォルトです。値が高いと、動きがぎくしゃくします。"/>
+			<check_box label="近隣のリージョンへの接続を無効にする（重要：ツールチップ参照）" name="FSDisableNeighbourRegionConnections" tool_tip="現在いるリージョンのみを表示／読み込みます。これにより、パフォーマンスとネットワークの安定性が向上しますが、徒歩または乗り物でのリージョンを横断するときの信頼性が低下し、手動でのテレポートが必要になる場合があります。"/>
 			<text name="Region_Crossing_Movement_Label">
 				リージョンを越える移動の予告：
 			</text>

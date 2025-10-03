@@ -22,17 +22,22 @@
 					<panel name="preset_views_list">
 						<panel_camera_item name="front_view">
 							<panel_camera_item.text name="front_view_text">
-								前面ビュー
+								前方ビュー
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="group_view">
 							<panel_camera_item.text name="side_view_text">
-								側面ビュー
+								サイドビュー
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="rear_view">
 							<panel_camera_item.text name="rear_view_text">
-								背面ビュー
+								後方ビュー
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="tpp_view">
+							<panel_camera_item.text name="tpp_view_text">
+								三人称ビュー
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<combo_box name="preset_combo">

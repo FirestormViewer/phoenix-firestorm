@@ -274,7 +274,8 @@
 				 max_val="4096"
 				 min_val="20"
 				 name="NearMeRange"
-				 visible="True"
+				 visible="true"
+				 can_edit_text="true"
 				 left="10"
 				 top="6"
 				 width="220"/>

@@ -1086,6 +1086,13 @@ F32 LLUICtrl::getCurrentTransparency()
 
     }
 
+    // <FS:TJ> Allow any UICtrl to override the transparency with a callback
+    if (mTransparencyOverrideCallback)
+    {
+        return mTransparencyOverrideCallback(mTransparencyType, alpha);
+    }
+    // </FS:TJ>
+
     return alpha;
 }
 

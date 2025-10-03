@@ -29,6 +29,7 @@
 		<panel_camera_item name="front_view" tool_tip="前面ビューにします。"/>
 		<panel_camera_item name="group_view" tool_tip="サイドビューにします。"/>
 		<panel_camera_item name="rear_view" tool_tip="後方ビューにします。"/>
+		<panel_camera_item name="tpp_view" tool_tip="三人称ビューにします。"/>
 		<panel_camera_item name="object_view" tool_tip="オブジェクトビューにします。"/>
 		<panel_camera_item name="mouselook_view" tool_tip="マウスルックビューにします。"/>
 		<panel_camera_item name="reset_view" tool_tip="視野をリセットします。"/>

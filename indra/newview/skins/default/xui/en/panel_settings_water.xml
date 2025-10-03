@@ -246,7 +246,7 @@
                         Reflection Wavelet Scale
                     </text>
                     <slider
-                            decimal_digits="1"
+                            decimal_digits="2"
                             follows="left|top"
                             increment="0.01"
                             height="16"
@@ -260,7 +260,7 @@
                             width="150"
                             can_edit_text="true"/>
                     <slider
-                            decimal_digits="1"
+                            decimal_digits="2"
                             follows="left|top"
                             increment="0.01"
                             initial_value="0.7"
@@ -273,7 +273,7 @@
                             width="150"
                             can_edit_text="true"/>
                     <slider
-                            decimal_digits="1"
+                            decimal_digits="2"
                             follows="left|top"
                             increment="0.01"
                             initial_value="0.7"

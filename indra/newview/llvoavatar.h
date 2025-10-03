@@ -204,8 +204,6 @@ public:
     void                    startDefaultMotions();
     void                    dumpAnimationState();
 
-    //<FS:Ansariel> Joint-lookup improvements
-    //virtual LLJoint*      getJoint(const std::string &name);
     virtual LLJoint*        getJoint(std::string_view name);
     LLJoint*                getJoint(S32 num);
     void                    initAllJoints();
@@ -237,6 +235,7 @@ public:
     virtual void            onActiveOverrideMeshesChanged();
 
     /*virtual*/ const LLUUID&   getID() const;
+    /*virtual*/ std::string     getDebugName() const;
     /*virtual*/ void            addDebugText(const std::string& text);
     /*virtual*/ F32             getTimeDilation();
     /*virtual*/ void            getGround(const LLVector3 &inPos, LLVector3 &outPos, LLVector3 &outNorm);
@@ -416,16 +415,15 @@ public:
 
     virtual bool    isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
     bool            visualParamWeightsAreDefault();
-    virtual bool    getIsCloud() const;
+    virtual bool    getHasMissingParts() const;
     bool            isFullyTextured() const;
     bool            hasGray() const;
-    S32             getRezzedStatus() const; // 0 = cloud, 1 = gray, 2 = textured, 3 = textured and fully downloaded.
+    S32             getRezzedStatus() const; // 0 = cloud, 1 = gray, 2 = textured, 3 = waiting for attachments, 4 = full.
     void            updateRezzedStatusTimers(S32 status);
     S32             getNumBakes() const;//<FS:Beq/> BOM bake limits
     // U8               getNumTEs() const override;//<FS:Beq/> BOM bake limits
 
     S32             mLastRezzedStatus;
-
 
     void            startPhase(const std::string& phase_name);
     void            stopPhase(const std::string& phase_name, bool err_check = true);
@@ -445,6 +443,7 @@ protected:
 
 private:
     bool            mFirstFullyVisible;
+    bool            mWaitingForMeshes;
     F32             mFirstDecloudTime;
     LLFrameTimer    mFirstAppearanceMessageTimer;
 
@@ -685,6 +684,7 @@ public:
 // [/RLVa:KB]
 //  bool        mNeedsImpostorUpdate;
     S32         mLastImpostorUpdateReason;
+    bool        mIsAnimesh; // <FS:minerjr> FIRE-35735: Imposter/Impostor Avatar Exclusions (Flag to track if avatar or attachments have Animated Mesh flagged)
     F32SecondsImplicit mLastImpostorUpdateFrameTime;
     const LLVector3*  getLastAnimExtents() const { return mLastAnimExtents; }
     void        setNeedsExtentUpdate(bool val) { mNeedsExtentUpdate = val; }
@@ -755,7 +755,7 @@ public:
 
     bool            isFullyBaked();
     static bool     areAllNearbyInstancesBaked(S32& grey_avatars);
-    static void     getNearbyRezzedStats(std::vector<S32>& counts, F32& avg_cloud_time, S32& cloud_avatars);
+    static void     getNearbyRezzedStats(std::vector<S32>& counts, F32& avg_cloud_time, S32& cloud_avatars, S32& pending_meshes, S32& control_avatars);
     static std::string rezStatusToString(S32 status);
 
     //--------------------------------------------------------------------
@@ -981,7 +981,7 @@ public:
     virtual bool        detachObject(LLViewerObject *viewer_object);
     static bool         getRiggedMeshID( LLViewerObject* pVO, LLUUID& mesh_id );
     void                cleanupAttachedMesh( LLViewerObject* pVO );
-    // bool                hasPendingAttachedMeshes(); // <FS:Beq/> remove mesh rezzing delay
+    bool                hasPendingAttachedMeshes();
     static LLVOAvatar*  findAvatarFromAttachment(LLViewerObject* obj);
     /*virtual*/ bool    isWearingWearableType(LLWearableType::EType type ) const;
     LLViewerObject *    findAttachmentByID( const LLUUID & target_id ) const;

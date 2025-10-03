@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_radar">
-	<string name="MiniMapToolTipMsg" value="[REGION] (ダブルクリックでワールドマップを開きます。Shift‐ドラッグで水平・垂直移動します。)"/>
-	<string name="AltMiniMapToolTipMsg" value="[REGION] (ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。)"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (ダブルクリックでワールドマップを開きます。Shift－ドラッグで水平・垂直移動します。)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (ダブルクリックでテレポートします。Shift－ドラッグで水平・垂直移動します。)"/>
 	<string name="avatar_name_count" value="名前　[[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]"/>
 	<panel name="nearby_panel">
 		<panel label="bottom_panel" name="nearby_buttons_panel">

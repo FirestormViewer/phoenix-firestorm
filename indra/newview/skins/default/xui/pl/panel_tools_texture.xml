@@ -143,6 +143,7 @@
 	<spinner label="Wyrównanie pionowe" name="shinyOffsetV" />
 	<spinner label="Skala u" name="gltfTextureScaleU" />
 	<spinner label="Skala v" name="gltfTextureScaleV" />
+	<spinner label="Powtórzenia na metr" name="gltfRptctrl" />
 	<spinner label="Obrót" name="gltfTextureRotation" />
 	<spinner label="Przesun. u" name="gltfTextureOffsetU" />
 	<spinner label="Przesun. v" name="gltfTextureOffsetV" />

@@ -61,7 +61,7 @@
 				<button name="gear_btn" tool_tip="對選擇的人採取操作" />
 				<menu_button name="friends_view_btn" tool_tip="檢查/排序的選項" />
 				<button name="friends_add_btn" tool_tip="向某位居民發出交友邀請" />
-				<button name="GlobalOnlineStatusToggle" tool_tip="切換全域線上狀態可見性" />
+				<button name="GlobalOnlineStatusToggle" tool_tip="切換全域在線狀態可見性" />
 				<dnd_button name="friends_del_btn" tool_tip="將選擇的人從朋友名單移除" />
 			</panel>
 			<accordion name="friends_accordion">

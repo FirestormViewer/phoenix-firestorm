@@ -18,6 +18,7 @@
 	<menu_item_call label="ごみ箱を空に" name="Empty Trash"/>
 	<menu_item_call label="遺失物フォルダを空に" name="Empty Lost And Found"/>
 	<menu_item_call label="新しいフォルダ" name="New Folder"/>
+	<menu_item_call label="新しいフォルダ" name="New Outfit Folder"/>
 	<menu_item_call label="新しいフォルダ" name="New Listing Folder"/>
 	<menu_item_call label="新しいアウトフィット" name="New Outfit"/>
 	<menu_item_call label="新しいスクリプト" name="New Script"/>
@@ -129,14 +130,16 @@
 	<menu_item_call label="区画に適用" name="Settings Apply Parcel"/>
 	<menu_item_call label="選択したもので新しいフォルダを作る" name="New folder from selected"/>
 	<menu_item_call label="フォルダの項目のグループ解除" name="Ungroup folder items"/>
+	<menu_item_call label="お気に入りに追加" name="Add to Favorites"/>
+	<menu_item_call label="お気に入りから削除" name="Remove from Favorites"/>
 	<menu label="以下のデフォルトとして使用" name="upload_def">
-		<menu_item_call label="画像のアップロード" name="Image uploads"/>
-		<menu_item_call label="サウンドのアップロード" name="Sound uploads"/>
-		<menu_item_call label="アニメーションのアップロード" name="Animation uploads"/>
-		<menu_item_call label="モデルのアップロード" name="Model uploads"/>
-		<menu_item_call label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
+		<menu_item_check label="画像のアップロード" name="Image uploads"/>
+		<menu_item_check label="サウンドのアップロード" name="Sound uploads"/>
+		<menu_item_check label="アニメーションのアップロード" name="Animation uploads"/>
+		<menu_item_check label="モデルのアップロード" name="Model uploads"/>
+		<menu_item_check label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
 	</menu>
 	<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
 	<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
-	<menu_item_call label="‐オプション無し‐" name="--no options--"/>
+	<menu_item_call label="－オプション無し－" name="--no options--"/>
 </menu>

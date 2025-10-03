@@ -50,6 +50,18 @@
 			<text name="object_name_header_label">
 				Obiekty
 			</text>
+			<text name="mention_colors">
+				Wzmianki w czacie:
+			</text>
+			<text name="font_mention_label">
+				Czcionka
+			</text>
+			<text name="resident_mention_label">
+				Rezydenci
+			</text>
+			<text name="self_mention_label">
+				Ja
+			</text>
 			<slider label="Współczynnik zanikania koloru poza zasięgiem czatu:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Współczynnik zanikania koloru czcionki czatu dla osób przebywających poza normalnym zasięgiem pisania (0 = ciemny, 1 = jasny)." />
 			<check_box name="FSColorIMsDistinctly" label="Koloruj czat IM/Grup oddzielnie w konsoli:" />
 			<panel name="im_color_panel">
@@ -191,6 +203,8 @@
 			<slider label="Aktywne:" name="active"/>
 			<slider label="Nieaktywne:" name="inactive"/>
 			<slider label="Kamera / ruch:" name="camera_movement" />
+			<slider label="Rozmowy:" name="conversations" />
+			<check_box name="override_im_active_opacity_checkbox" label="Użyj wartości 'aktywne' dla okna rozmów, gdy jest na pierwszym planie" />
 			<text name="console_opacity">
 				Przezroczystość konsoli:
 			</text>

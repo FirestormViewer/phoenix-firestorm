@@ -13,6 +13,8 @@
 	<check_box label="Направляющие кадрирования" tool_tip="Показать направляющую кадрирования (правило третей) внутри рамки снимка." name="show_guides" />
 	<button label="Обновить" name="new_snapshot_btn" tool_tip="Нажмите, чтобы обновить"/>
 	<button label="Просмотр" name="big_preview_btn" tool_tip="Нажмите, чтобы переключить предварительный просмотр"/>
+	<text name="store_label">Опубликовать как:</text>
+	<combo_box name="stores_combobox" tool_tip="Если у вас есть один или несколько простых магазинов блогеров, назначенных на Primfeed, они появятся здесь."/>
 	<text name="description_label">Описание:</text>
 	<check_box label="Включить местоположение" name="add_location_cb"/>
 	<check_box label="Добавить в публичную галерею" name="primfeed_add_to_public_gallery"/>

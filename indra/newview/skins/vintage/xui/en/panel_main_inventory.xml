@@ -866,6 +866,17 @@
 			show_item_link_overlays="true" >
 				<folder double_click_override="true"/>
 		</worn_inventory_panel>
+		<favorites_inventory_panel
+			border="false"
+			bevel_style="in"
+			follows="all"
+			label="Favorites"
+			help_topic="recent_inventory_tab"
+			layout="topleft"
+			name="Favorites"
+			show_item_link_overlays="true">
+				<folder double_click_override="true"/>
+		</favorites_inventory_panel>
 	</tab_container>
 
 	</panel>

@@ -29,10 +29,6 @@
 	<string name="APP_NAME_ABBR">
 		FS
 	</string>
-	<!-- starting up -->
-	<string name="StartupDetectingHardware">
-		硬體檢測中...
-	</string>
 	<string name="StartupLoading">
 		[APP_NAME]載入中...
 	</string>
@@ -681,6 +677,9 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipCantCreateOutfit">
 		一個或者多個物件不能在"服裝目錄"中使用
+	</string>
+	<string name="TooltipCantMoveOutfitIntoOutfit">
+		無法將一套服裝移動到另一套服裝中
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		你不能將檔案夾移動到其子檔案夾內
@@ -1495,13 +1494,16 @@ support@secondlife.com.
 		字典
 	</string>
 	<string name="backup_files">
-		備份物件
+		物件備份
 	</string>
 	<string name="collada_files">
 		collada模型
 	</string>
+	<string name="model_files">
+		網格模型
+	</string>
 	<string name="csv_files">
-		英文逗號分隔
+		CSV檔案
 	</string>
 	<string name="recompile_script_verb">
 		重編譯
@@ -1811,8 +1813,11 @@ support@secondlife.com.
 	<string name="InventoryNoMatchingRecentItems">
 		未找到你想要的？ 嘗試 [secondlife:///app/inventory/filters 更改過濾器].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		您尚未將任何物件標記為收藏。
+	</string>
 	<string name="PlacesNoMatchingItems">
-		未找到你想要的？ 嘗試 [secondlife:///app/search/places/[SEARCH_TERM] 搜尋].
+		要將地點添加到您的地標，請點擊地點名稱右側的星形圖標。
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		將地標拖入此處便可加入「收藏夾」
@@ -2124,17 +2129,20 @@ support@secondlife.com.
 	<string name="InvFolder Gestures">
 		手勢
 	</string>
-	<string name="InvFolder Favorites">
-		收藏夾
+	<string name="InvFolder Favorite">
+		收藏
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
       Also, it can be written as "Favorite" or "Favorites".
   We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
-		收藏夾
+		收藏
+	</string>
+	<string name="InvFolder Favorites">
+		收藏
 	</string>
 	<string name="InvFolder favorites">
-		收藏夾
+		收藏
 	</string>
 	<string name="InvFolder Current Outfit">
 		當前裝扮
@@ -4073,10 +4081,10 @@ support@secondlife.com.
 		更高
 	</string>
 	<string name="Hip Length">
-		腰長
+		臀部長度
 	</string>
 	<string name="Hip Width">
-		腰寬
+		臀部寬度
 	</string>
 	<string name="Hover">
 		漂浮
@@ -5044,10 +5052,10 @@ support@secondlife.com.
 		離線
 	</string>
 	<string name="not_online_msg">
-		使用者不線上上上 - 訊息將留存，稍後傳遞。
+		使用者不在線 - 訊息將留存，稍後傳遞。
 	</string>
 	<string name="not_online_inventory">
-		使用者不線上上上 - 庫存已儲存。
+		使用者不在線 - 庫存已儲存。
 	</string>
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">
@@ -5113,10 +5121,10 @@ support@secondlife.com.
 		成功發布到 Flickr。
 	</string>
 	<string name="no_session_message">
-		(私聊對談不存在)
+		(私聊對話不存在)
 	</string>
 	<string name="only_user_message">
-		此對談只有你一人。
+		此對話只有你一人。
 	</string>
 	<string name="offline_message">
 		[NAME] 已離線。
@@ -5137,7 +5145,7 @@ support@secondlife.com.
 		你的權限不足。
 	</string>
 	<string name="session_does_not_exist_error">
-		此對談不再存在
+		此對話不再存在
 	</string>
 	<string name="no_ability_error">
 		你沒有這個能力。
@@ -5155,15 +5163,15 @@ support@secondlife.com.
 		群組主持人已禁止你進行文字聊天。
 	</string>
 	<string name="add_session_event">
-		無法增加使用者加入與 [RECIPIENT] 的聊天對談。
+		無法增加使用者加入與 [RECIPIENT] 的聊天對話。
 	</string>
 	<string name="message">
-		你的訊息無法傳送給與 [RECIPIENT] 的聊天對談。
-如果該訊息在接下來的幾分鐘內沒有出現，則對談可能已被伺服器關閉。
+		你的訊息無法傳送給與 [RECIPIENT] 的聊天對話。
+如果該訊息在接下來的幾分鐘內沒有出現，則對話可能已被伺服器關閉。
 	</string>
 	<string name="message_session_event">
-		你的訊息無法傳送給與 [RECIPIENT] 的聊天對談。
-如果該訊息在接下來的幾分鐘內沒有出現，則對談可能已被伺服器關閉。
+		你的訊息無法傳送給與 [RECIPIENT] 的聊天對話。
+如果該訊息在接下來的幾分鐘內沒有出現，則對話可能已被伺服器關閉。
 	</string>
 	<string name="mute">
 		主持期間發生錯誤。
@@ -5175,7 +5183,7 @@ support@secondlife.com.
 		你已被移出群組。
 	</string>
 	<string name="close_on_no_ability">
-		你已無法進入這個聊天對談。
+		你已無法進入這個聊天對話。
 	</string>
 	<string name="unread_chat_single">
 		[SOURCES] 又說了一些話
@@ -5187,7 +5195,7 @@ support@secondlife.com.
 		你現在位於
 	</string>
 	<string name="session_initialization_timed_out_error">
-		初始化對談逾時，無法完成。
+		初始化對話逾時，無法完成。
 	</string>
 	<string name="Home position set.">
 		我的家位置已設定。
@@ -5576,8 +5584,11 @@ support@secondlife.com.
 	<string name="DefaultMimeType">
 		無/無
 	</string>
+	<string name="texture_load_area_error">
+		無法載入大於[PIXELS]像素的圖像。
+	</string>
 	<string name="texture_load_dimensions_error">
-		無法載入大於 [WIDTH]*[HEIGHT] 的圖像
+		無法載入大於 [WIDTH]*[HEIGHT]的圖像
 	</string>
 	<string name="texture_load_format_error">
 		圖像格式不正確。
@@ -6090,6 +6101,9 @@ support@secondlife.com.
 	<string name="BeaconSound">
 		檢視聲音檔案的信標（黃色）
 	</string>
+	<string name="BeaconRegionCorners">
+		区域的角落（黄色）
+	</string>
 	<string name="BeaconMedia">
 		檢視多媒體檔案的信標（白色）
 	</string>
@@ -6113,7 +6127,7 @@ support@secondlife.com.
 		編輯外觀
 	</string>
 	<string name="Command_Avatar_Label">
-		化身
+		化身入門禮包
 	</string>
 	<string name="Command_Build_Label">
 		建造
@@ -6122,7 +6136,7 @@ support@secondlife.com.
 		聊天
 	</string>
 	<string name="Command_Conversations_Label">
-		對談
+		對話
 	</string>
 	<string name="Command_Compass_Label">
 		指南針
@@ -6268,7 +6282,7 @@ support@secondlife.com.
 		雷達
 	</string>
 	<string name="Command_Conversation_Log_Label">
-		對談日誌
+		對話日誌
 	</string>
 	<string name="Command_Move_Lock_Label">
 		移動鎖定
@@ -6467,7 +6481,7 @@ support@secondlife.com.
 		打開附近化身雷達
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
-		打開對談日誌以及過去聊天記錄
+		打開對話日誌以及過去聊天記錄
 	</string>
 	<string name="Command_Move_Lock_Tooltip">
 		將你的化身鎖定到當前姿勢 (CTRL+ALT+P)
@@ -7176,7 +7190,7 @@ SecondLife.com網站的「支援」部分
 	</string>
 	<!-- <FS:Ansariel> Radar notifications -->
 	<string name="camera_no_focus">
-		相機無法聚焦於 [AVATARNAME] 使用者，因為他們在你的繪製距離之外。
+		相機無法聚焦於[AVATARNAME]居民，因為他們在你的繪製距離之外。
 	</string>
 	<string name="entering_draw_distance">
 		進入繪製距離 ([DISTANCE] 米).
@@ -7531,12 +7545,24 @@ SecondLife.com網站的「支援」部分
 		1 個元素
 	</string>
 	<string name="FSObjectInventoryElements">
-		[NUM_ELEMENTS] 元素
+		[NUM_ELEMENTS]個元素
 	</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">
 		你的網路運營商支援小組
 	</string>
 	<string name="Unlimited">
 		無限
+	</string>
+	<string name="ListEmpty">
+		清單為空
+	</string>
+	<string name="NoValidUUIDs">
+		在匯入的檔案中未找到有效的UUID。
+	</string>
+	<string name="ImportListTooLarge">
+		項目過多。CSV檔案包含[COUNT]個項目，但僅可使用[MAX]個位置。
+	</string>
+	<string name="ImportSuccessful">
+		[COUNT]個項目已成功處理。
 	</string>
 </strings>

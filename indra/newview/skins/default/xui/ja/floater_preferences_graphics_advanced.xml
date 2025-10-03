@@ -43,7 +43,7 @@
 	<text name="HardwareText">
 		ハードウェア
 	</text>
-	<check_box label="違法構成フィルタリング（有効にすると遅くなります）" name="ani" />
+	<check_box label="異方向性フィルタリング（有効にすると遅くなります）" name="ani"/>
 	<check_box control_name="RenderCompressTextures" label="テクスチャ圧縮の有効化 (再起動後に反映)" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮し、色の品質をある程度犠牲にして、より高解像度のテクスチャを読み込むようにします。"/>
 	<check_box label="HiDPIディスプレイのサポートを有効にする（再起動後に反映）" name="use HiDPI" tool_tip="ＯｐｅｎＧＬの高解像描画を有効化します。"/>
 	<text name="antialiasing label">

@@ -3,13 +3,12 @@
 	<menu_item_call label="替換當前裝扮" name="wear" />
 	<menu_item_call label="新增到當前裝扮" name="wear_add" />
 	<menu_item_call label="從當前裝扮移除" name="take_off" />
-	<menu_item_call label="圖像" name="thumbnail" />
+	<menu_item_call label="縮圖..." name="thumbnail" />
+	<menu_item_call label="添加到收藏" name="favorites_add" />
+	<menu_item_call label="從收藏中移除" name="favorites_remove" />
 	<menu_item_call label="儲存到此裝扮" name="save" />
 	<menu_item_call label="裝扮重新命名" name="rename" />
 	<menu_item_call label="刪除裝扮" name="delete_outfit" />
-	<menu_item_check label="總是按名稱排序檔案夾" name="sort_folders_by_name" />
-	<menu_item_call label="展開全部檔案夾" name="expand" />
-	<menu_item_call label="摺疊全部檔案夾" name="collapse" />
 	<context_menu label="新服裝" name="New Clothes">
 		<menu_item_call label="新襯衫" name="New Shirt" />
 		<menu_item_call label="新褲子" name="New Pants" />
@@ -31,4 +30,5 @@
 		<menu_item_call label="新頭髮" name="New Hair" />
 		<menu_item_call label="新眼睛" name="New Eyes" />
 	</context_menu>
+	<menu_item_check label="庫存設定..." name="inventory_settings" />
 </toggleable_menu>

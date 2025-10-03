@@ -316,11 +316,7 @@ void LLAccordionCtrl::ctrlShiftVertical(LLView* panel, S32 delta)
 
 //---------------------------------------------------------------------------------
 
-// <FS:ND> If adding a lot of controls rapidly, calling arrange will cost a lot of times, as it's running through n! controls.
-// In that case we can avvoid calling arrange over and over and just call it once when finished.
-//void LLAccordionCtrl::addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab)
-void LLAccordionCtrl::addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab, bool aArrange)
-// </FS:ND>
+void LLAccordionCtrl::addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab)
 {
     if (!accordion_tab)
         return;
@@ -329,14 +325,7 @@ void LLAccordionCtrl::addCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab, bool
     mAccordionTabs.push_back(accordion_tab);
 
     accordion_tab->setDropDownStateChangedCallback( boost::bind(&LLAccordionCtrl::onCollapseCtrlCloseOpen, this, (S16)(mAccordionTabs.size() - 1)) );
-
-    // <FS:ND> If adding a lot of controls rapidly, calling arrange will cost a lot of times, as it's running through n! controls.
-    // In that case we can avvoid calling arrange over and over and just call it once when finished.
-
-    // arrange();
-    if( aArrange )
-        arrange();
-    // </FS:ND>
+    arrange();
 }
 
 void LLAccordionCtrl::removeCollapsibleCtrl(LLAccordionCtrlTab* accordion_tab)

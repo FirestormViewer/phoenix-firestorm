@@ -557,23 +557,9 @@ static bool handleRenderDynamicLODChanged(const LLSD& newvalue)
     return true;
 }
 
-// static bool handleReflectionsEnabled(const LLSD& newvalue)
-// {
-//  // <FS:Beq> FIRE-33659 - everything is too dark when reflections are disabled.
-//  if(newvalue.asBoolean())
-//  {
-//      // TODO(Beq): This setting level should probably be governed by render quality settings.
-//      gSavedSettings.setS32("RenderReflectionProbeLevel", 3);
-//  }
-//  else
-//  {
-//      gSavedSettings.setS32("RenderReflectionProbeLevel", 0);
-//  }
-//     return true;
-// }
-
 static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 {
+    gPipeline.mReflectionMapManager.refreshSettings();
     if (gPipeline.isInit())
     {
         LLPipeline::refreshCachedSettings();
@@ -583,6 +569,12 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
         gPipeline.createGLBuffers();
         LLViewerShaderMgr::instance()->setShaders();
     }
+    return true;
+}
+
+static bool handleReflectionProbeCountChanged(const LLSD& newvalue)
+{
+    gPipeline.mReflectionMapManager.refreshSettings();
     return true;
 }
 
@@ -1317,7 +1309,8 @@ void settings_setup_listeners()
 // [/SL:KB]
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeLevel", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
-    // setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionsEnabled); // <FS:Beq/> FIRE-33659 better way to enable/disable reflections
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeCount", handleReflectionProbeCountChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionProbeDetailChanged);
 #if LL_DARWIN
     setting_setup_signal_listener(gSavedSettings, "RenderAppleUseMultGL", handleAppleUseMultGLChanged);
 #endif

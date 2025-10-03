@@ -315,6 +315,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						min_val="20"
 						name="NearMeRangeVintage"
 						visible="true"
+						can_edit_text="true"
 						left_pad="4"
 						width="140" />
 					<text
@@ -323,7 +324,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						layout="topleft"
 						follows="top|left"
 						width="20"
-						left_pad="-6"
+						left_pad="3"
 						height="16"
 						wrap="false" />
 

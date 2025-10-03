@@ -54,8 +54,19 @@
 			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="啟用此選項允許物件控制您的多媒體連線" label="允許指令碼播放媒體" />
 			<check_box name="media_show_on_others_btn" tool_tip="允許播放附近居民攜帶的媒體" label="播放居民攜帶的媒體" />
+			<check_box name="media_huds_autoplay" tool_tip="取消勾選此選項，可使HUD遵循常規媒體的自動播放設定" label="自動播放附著到HUD的媒體" />
 			<check_box name="media_filter" tool_tip="啟用此選項以對允許或拒絕的媒體設定過濾器" label="啟用媒體過濾器" />
 			<button label="管理允許內容" name="edit_media_lists_button" />
+			<text name="media_firstinteract_label" tool_tip="此設置決定哪些媒體在載入後無需首次點擊即可互動。這樣點擊事件會直接傳遞給媒體，而無需先取得焦點。">
+				媒體首次互動：
+			</text>
+			<check_box name="media_first_click_all" label="物件上的所有媒體"/>
+			<check_box name="media_first_click_any" label="任何人的物件"/>
+			<check_box name="media_first_click_hud" label="僅穿戴的 HUD"/>
+			<check_box name="media_first_click_own" label="自己的物件"/>
+			<check_box name="media_first_click_group" label="群組物件"/>
+			<check_box name="media_first_click_friend" label="朋友的物件"/>
+			<check_box name="media_first_click_land" label="土地所有者的物件"/>
 			<text name="Media Rolloff">聲音衰減啟用距離：</text>
 			<slider label="開始減弱距離：" name="MediaRollOffMin" tool_tip="音訊內容變得不那麼明顯的距離。" />
 			<text name="MinMeters">米</text>
@@ -177,6 +188,10 @@
 			<button name="Prev_UISndStartIM" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndStartIM" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndStartIM" />
+			<text tool_tip="聊天中被提及音效的UUID。" name="textChatMention">聊天中提及：</text>
+			<button name="Prev_UISndChatMention" label="▶" tool_tip="播放此聲音。"/>
+			<button name="Def_UISndChatMention" label="↻" tool_tip="重設。"/>
+			<check_box label="啟用" name="PlayModeUISndChatMention"/>
 			<text tool_tip="建立新物件音效的UUID。" name="textFSObjectCreate">建立物件：</text>
 			<button name="Prev_UISndObjectCreate" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndObjectCreate" label="↻" tool_tip="重設。" />
@@ -197,13 +212,13 @@
 			<button name="Prev_UISndSnapshot" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndSnapshot" label="↻" tool_tip="重設。" />
 			<check_box label="禁用" name="QuietSnapshotsToDiskCheckBox" />
+		</panel>
+		<panel label="聲音 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="傳送音效的UUID。此設定與 '移動和相機' &gt; '傳送' 中的 '傳送時播放音效' 共享。" name="textFSTeleportOut">傳送：</text>
 			<button name="Prev_UISndTeleportOut" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndTeleportOut" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndTeleportOut" />
-		</panel>
-		<panel label="聲音 2" name="UI Sounds tab 2">
-			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="圓形選單出現音效的UUID。" name="textFSPieMenuAppear">圓形選單出現：</text>
 			<button name="Prev_UISndPieMenuAppear" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndPieMenuAppear" label="↻" tool_tip="重設。" />
@@ -272,13 +287,13 @@
 			<button name="Prev_UISndFriendshipOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndFriendshipOffer" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndFriendshipOffer" />
+		</panel>
+		<panel label="聲音 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="提出傳送請求音效的UUID。" name="textFSTeleportOffer">傳送請求：</text>
 			<button name="Prev_UISndTeleportOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndTeleportOffer" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndTeleportOffer" />
-		</panel>
-		<panel label="聲音 3" name="UI Sounds tab 3">
-			<text name="textFSExplanation_tab3">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
 			<text tool_tip="提出庫存物件請求音效的UUID。" name="textFSInventoryOffer">庫存物件提供：</text>
 			<button name="Prev_UISndInventoryOffer" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndInventoryOffer" label="↻" tool_tip="重設。" />

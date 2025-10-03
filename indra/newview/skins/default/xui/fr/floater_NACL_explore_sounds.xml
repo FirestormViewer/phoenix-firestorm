@@ -22,4 +22,7 @@
 	<button label="Zoomer" name="look_at_btn"/>
 	<button label="Stop" name="stop_btn"/>
 	<button label="Blacklister" name="bl_btn"/>
+	<button label="Bloquer obj. portés AV" name="block_avatar_worn_sounds_btn"/>
+	<button label="Bloquer sons rezzés AV" name="block_avatar_rezzed_sounds_btn"/>
+	<button label="Bloquer sons gestes AV" name="block_avatar_gesture_sounds_btn"/>
 </floater>

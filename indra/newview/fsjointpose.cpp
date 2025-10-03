@@ -57,9 +57,13 @@ void FSJointPose::setPublicPosition(const LLVector3& pos)
     mCurrentState.mPosition.set(pos);
 }
 
-void FSJointPose::setPublicRotation(const LLQuaternion& rot)
+void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
 {
     addStateToUndo(FSJointState(mCurrentState));
+
+    if (zeroBase)
+        zeroBaseRotation(true);
+
     mCurrentState.mRotation.set(rot);
 }
 
@@ -77,6 +81,12 @@ void FSJointPose::undoLastChange()
 void FSJointPose::redoLastChange()
 {
     mCurrentState = redoLastStateChange(FSJointState(mCurrentState));
+}
+
+void FSJointPose::resetJoint()
+{
+    addStateToUndo(FSJointState(mCurrentState));
+    mCurrentState.resetJoint();
 }
 
 void FSJointPose::addStateToUndo(FSJointState stateToAddToUndo)
@@ -125,7 +135,7 @@ FSJointPose::FSJointState FSJointPose::redoLastStateChange(FSJointState thingToS
 
     mUndoneJointStatesIndex -= 1;
     mUndoneJointStatesIndex = llclamp(mUndoneJointStatesIndex, 0, mLastSetJointStates.size() - 1);
-    auto result             = mLastSetJointStates.at(mUndoneJointStatesIndex);
+    FSJointState result     = mLastSetJointStates.at(mUndoneJointStatesIndex);
     if (mUndoneJointStatesIndex == 0)
         mLastSetJointStates.pop_front();
 
@@ -145,14 +155,14 @@ void FSJointPose::recaptureJoint()
     mCurrentState = FSJointState(joint);
 }
 
-void FSJointPose::recaptureJointAsDelta()
+LLQuaternion FSJointPose::recaptureJointAsDelta(bool zeroBase)
 {
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
-        return;
+        return LLQuaternion::DEFAULT;
 
     addStateToUndo(FSJointState(mCurrentState));
-    mCurrentState.updateFromJoint(joint);
+    return mCurrentState.updateFromJoint(joint, zeroBase);
 }
 
 void FSJointPose::swapRotationWith(FSJointPose* oppositeJoint)
@@ -198,15 +208,13 @@ void FSJointPose::reflectRotation()
     mCurrentState.reflectRotation();
 }
 
-void FSJointPose::zeroBaseRotation()
+void FSJointPose::zeroBaseRotation(bool lockInBvh)
 {
     if (mIsCollisionVolume)
         return;
 
-    if (!isBaseRotationZero())
-        purgeUndoQueue();
-
     mCurrentState.zeroBaseRotation();
+    mCurrentState.mUserSpecifiedBaseZero = lockInBvh;
 }
 
 bool FSJointPose::isBaseRotationZero() const
@@ -219,8 +227,35 @@ bool FSJointPose::isBaseRotationZero() const
 
 void FSJointPose::purgeUndoQueue()
 {
+    if (mIsCollisionVolume)
+        return;
+
     mUndoneJointStatesIndex = 0;
     mLastSetJointStates.clear();
+}
+
+bool FSJointPose::userHasSetBaseRotationToZero() const
+{
+    if (mIsCollisionVolume)
+        return false;
+
+    return mCurrentState.mUserSpecifiedBaseZero;
+}
+
+bool FSJointPose::getWorldRotationLockState() const
+{
+    if (mIsCollisionVolume)
+        return false;
+
+    return mCurrentState.mRotationIsWorldLocked;
+}
+
+void FSJointPose::setWorldRotationLockState(bool newState)
+{
+    if (mIsCollisionVolume)
+        return;
+
+    mCurrentState.mRotationIsWorldLocked = newState;
 }
 
 bool FSJointPose::canPerformUndo() const

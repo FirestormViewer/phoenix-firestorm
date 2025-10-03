@@ -52,7 +52,7 @@ class LGGContactSets : public LLSingleton<LGGContactSets>
 
 public:
     typedef std::vector<std::string> string_vec_t;
-    typedef std::unordered_set<LLUUID, FSUUIDHash> uuid_set_t;
+    typedef std::unordered_set<LLUUID> uuid_set_t;
 
     void loadFromDisk();
 
@@ -157,7 +157,7 @@ private:
     LLSD exportToLLSD();
     void saveToDisk();
 
-    typedef std::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
+    typedef std::unordered_map<LLUUID, std::string> uuid_map_t;
     typedef std::map<std::string, ContactSet*> contact_set_map_t;
     contact_set_map_t mContactSets;
 

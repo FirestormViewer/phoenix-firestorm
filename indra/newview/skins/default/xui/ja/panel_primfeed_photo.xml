@@ -24,6 +24,10 @@
 	<check_box label="フレームのガイドを表示" tool_tip="スナップショットフレーム内にフレームのガイド（三分割法）を表示します。" name="show_guides"/>
 	<button label="リフレッシュ" name="new_snapshot_btn" tool_tip="クリックでリフレッシュします。"/>
 	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックでプレビューを切り替えます。"/>
+	<text name="store_label">
+		投稿者：
+	</text>
+	<combo_box name="stores_combobox" tool_tip="Primfeedに１つ以上の簡単なブロガーストアが割り当てられている場合は、ここに表示されます。"/>
 	<text name="description_label">
 		説明：
 	</text>

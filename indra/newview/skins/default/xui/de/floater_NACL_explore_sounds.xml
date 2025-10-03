@@ -37,4 +37,7 @@
 	<button label="Fokussieren" name="look_at_btn" />
 	<button label="Stop" name="stop_btn"/>
 	<button label="Blacklist" name="bl_btn"/>
+	<button label="Getragene Av. Sounds blocken" name="block_avatar_worn_sounds_btn" />
+	<button label="Gerezzte Av. Sounds blocken" name="block_avatar_rezzed_sounds_btn" />
+	<button label="Av. Gesten-Sounds blocken" name="block_avatar_gesture_sounds_btn" />
 </floater>

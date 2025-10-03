@@ -508,6 +508,21 @@ public:
     // <FS:Ansariel> Moved to public
     static void sendEstateAccessDelta(U32 flags, const LLUUID& agent_id);
 
+    // <FS:PP> Ban and access lists export/import
+    void onClickExportEstateManagerList();
+    void onClickExportAllowedList();
+    void onClickExportAllowedGroupList();
+    void onClickExportBannedList();
+    void onClickExportList(LLNameListCtrl* list, const std::string& filename);
+    void exportListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames);
+    void onClickImportEstateManagerList();
+    void onClickImportAllowedList();
+    void onClickImportAllowedGroupList();
+    void onClickImportBannedList();
+    void onClickImportList(LLNameListCtrl* list);
+    void importListCallback(LLNameListCtrl* list, const std::vector<std::string>& filenames);
+    // </FS:PP> Ban and access lists export/import
+
 private:
     void onClickAddAllowedAgent();
     void onClickRemoveAllowedAgent();

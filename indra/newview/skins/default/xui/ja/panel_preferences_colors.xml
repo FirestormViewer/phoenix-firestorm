@@ -53,6 +53,18 @@
 			<text name="object_name_header_label">
 				オブジェクト
 			</text>
+			<text name="mention_colors">
+				チャットのメンション先：
+			</text>
+			<text name="font_mention_label">
+				フォント
+			</text>
+			<text name="resident_mention_label">
+				住民
+			</text>
+			<text name="self_mention_label">
+				自身
+			</text>
 			<slider label="チャット範囲外低減係数：" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="話している人が通常のチャット範囲の外に出た場合、チャットの色を薄くするのに使用する係数です。"/>
 			<check_box name="FSColorIMsDistinctly" label="コンソール上でＩＭとグループチャットとを色で区別する："/>
 			<panel name="im_color_panel">
@@ -196,6 +208,8 @@
 			<slider label="有効：" name="active"/>
 			<slider label="無効：" name="inactive"/>
 			<slider label="カメラ／移動：" name="camera_movement"/>
+			<slider label="会話：" name="conversations"/>
+			<check_box name="override_im_active_opacity_checkbox" label="アクティブな会話ウィンドウにフォーカスがあるときに不透明度の値を使用する"/>
 			<text name="console_opacity">
 				コンソールの透過度：
 			</text>
@@ -208,7 +222,7 @@
 			<text name="preferences_search_bg_label">
 				背景：
 			</text>
-			<color_swatch name="preferences_search_color" tool_tip="初期設定の検索結果のハイライトの背景色を選択します。"/>
+			<color_swatch name="preferences_search_bg_color" tool_tip="初期設定の検索結果のハイライトの背景色を選択します。"/>
 			<text name="preferences_search_font_label">
 				フォント：
 			</text>

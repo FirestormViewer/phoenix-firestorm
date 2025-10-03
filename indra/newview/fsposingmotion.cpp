@@ -259,9 +259,14 @@ void FSPosingMotion::setAllRotationsToZeroAndClearUndo()
 {
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {
-        poserJoint_iter->zeroBaseRotation();
-        poserJoint_iter->setPublicRotation(LLQuaternion::DEFAULT);
+        poserJoint_iter->purgeUndoQueue();
+        poserJoint_iter->setPublicRotation(true, LLQuaternion::DEFAULT);
     }
+}
+
+void FSPosingMotion::setJointBvhLock(FSJointPose* joint, bool lockInBvh)
+{
+    joint->zeroBaseRotation(lockInBvh);
 }
 
 bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const

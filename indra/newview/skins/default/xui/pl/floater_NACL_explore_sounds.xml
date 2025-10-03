@@ -27,4 +27,7 @@
 	<button label="Zatrzymaj" name="stop_locally_btn" />
 	<button label="Lokalizuj" name="look_at_btn" />
 	<button label="Czarna lista" name="bl_btn" />
+	<button label="Blok: dźwięki dodatków" name="block_avatar_worn_sounds_btn" />
+	<button label="Blok: dźw. zrezowanych obj." name="block_avatar_rezzed_sounds_btn" />
+	<button label="Blok: dźwięki gestów" name="block_avatar_gesture_sounds_btn" />
 </floater>

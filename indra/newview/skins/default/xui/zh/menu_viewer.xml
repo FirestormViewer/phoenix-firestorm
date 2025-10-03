@@ -34,6 +34,7 @@
 			<menu_item_call label="全部卸下" name="Detach All" />
 		</menu>
 		<menu_item_call label="移除選定的附件" name="Remove Selected Attachments" />
+		<menu_item_call label="化身入門禮包" name="Avatar Welcome Pack"/>
 		<menu_item_call label="選擇化身" name="Avatar Picker" />
 		<menu_item_call label="懸浮高度" name="HoverHeight" />
 		<menu label="動作" name="Movement">
@@ -77,7 +78,7 @@
 		<menu_item_call label="退出 [APP_NAME]" name="Quit" />
 	</menu>
 	<menu label="通訊" name="Communicate">
-		<menu label="線上狀態" name="Status">
+		<menu label="在線狀態" name="Status">
 			<menu_item_check label="離開" name="Away" />
 			<menu_item_check label="請勿打擾" name="Do Not Disturb" />
 			<menu_item_check label="自動回復" name="Set Autorespond" />
@@ -237,6 +238,13 @@
 			<menu_item_check label="突出顯示透明物件" name="Highlight Transparent" />
 			<menu_item_check label="-包括已綁定骨骼的透明物件" name="Include Transparent Rigged" />
 			<menu_item_check label="無後期處理" name="No Post" />
+			<menu label="選擇細節層次等級" name="Selection level of detail">
+				<menu_item_check label="預設" name="Default lod setting" />
+				<menu_item_check label="高" name="High lod setting" />
+				<menu_item_check label="中" name="Medium lod setting" />
+				<menu_item_check label="低" name="Low lod setting" />
+				<menu_item_check label="最低" name="Lowest lod setting" />
+			</menu>
 			<menu_item_check label="對齊到網格" name="Snap to Grid" />
 			<menu_item_call label="將物件XY對齊到網格" name="Snap Object XY to Grid" />
 			<menu_item_call label="使用選區為網格" name="Use Selection for Grid" />
@@ -442,7 +450,8 @@
 			<menu_item_call label="強制協程中軟體異常" name="Force Software Exception in Coroutine" />
 			<menu_item_call label="強制協程崩潰" name="Force a Crash in a Coroprocedure" />
 			<menu_item_call label="強制工作隊列崩潰" name="Force a Crash in a Work Queue" />
-			<menu_item_call label="強製程式崩潰" name="Force a Crash in a Thread" />
+			<menu_item_call label="強制執行緒中LLError崩潰" name="Force an LLError Crash in a Thread"/>
+			<menu_item_call label="強制執行緒中異常崩潰" name="Force an Exception Crash in a Thread"/>
 			<menu_item_call label="強制瀏覽器斷線" name="Force Disconnect Viewer" />
 			<menu_item_call label="類比記憶體不足" name="Memory Leaking Simulation" />
 		</menu>
@@ -518,6 +527,7 @@
 			<menu_item_check label="全解析度紋理(有風險)" name="Full Res Textures" />
 			<menu_item_check label="彩現附著的燈光" name="Render Attached Lights" />
 			<menu_item_check label="彩現附著的粒子" name="Render Attached Particles" />
+			<menu_item_check label="當視訊記憶體已滿時減少繪製距離" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="收集字型頂點緩衝區" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
 			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />
@@ -654,9 +664,6 @@
 		<menu_item_call label="要求管理員狀態" name="Request Admin Options" />
 		<menu_item_call label="離開管理員狀態" name="Leave Admin Options" />
 		<menu_item_check label="顯示管理員選項" name="View Admin Options" />
-		<menu label="轉儲" name="Dump">
-			<menu_item_call label="林登檢視器紋理清單" name="LLViewerTexturelist"/>
-		</menu>
 	</menu>
 	<menu label="管理員" name="Admin">
 		<menu label="物件" name="AdminObject">

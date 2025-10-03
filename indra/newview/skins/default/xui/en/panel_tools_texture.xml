@@ -996,6 +996,19 @@
              name="gltfTextureScaleV"
              width="265" />
             <spinner
+             decimal_digits="1"
+             follows="left|top"
+             height="19"
+             initial_value=""
+			 label="Repeats per meter"
+             layout="topleft"
+			 label_width="195"
+             left="10"
+             max_val="100"
+             min_val="-100"
+             name="gltfRptctrl"
+             width="265" />
+            <spinner
              follows="left|top"
              height="19"
              initial_value="0"
@@ -1006,7 +1019,6 @@
              min_val="-360"
              max_val="360"
              name="gltfTextureRotation"
-             top_pad="27"
              width="265" />
             <spinner
              follows="left|top"

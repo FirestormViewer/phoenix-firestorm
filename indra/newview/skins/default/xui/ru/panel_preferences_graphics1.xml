@@ -176,17 +176,14 @@
 			<text name="Texture Rendering">
 				Прорисовка текстур:
 			</text>
-			<check_box width="260" label="Ограничить Макс.разрешение текстур до:" tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры." name="FSRestrictMaxTextureSize"/>
-			<combo_box name="FSRestrictMaxTexturePixels">
+			<text name="FSRestrictMaxTextureSize">
+				Ограничить Макс.разрешение текстур до:
+			</text>
+			<combo_box name="FSRestrictMaxTexturePixels" tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры.">
 				<combo_box.item label="512 пикселя" name="512"/>
 				<combo_box.item label="1024 пикселя" name="1024"/>
-				<!-- 2048 is the current maximum, so this only becomes important if we get 4096 pixel textures
 				<combo_box.item label="2048 пикселя" name="2048"/>
-				-->
 			</combo_box>
-			<text name="FSRestrictMaxTextureSizeRestartText">
-				(требуется перезапуск)
-			</text>
 			<text name="TextureDetailLabel">
 				Уровень качества текстур:
 			</text>
@@ -211,6 +208,16 @@
 			<check_box label="Режим отображения скелета" name="Wireframe"/>
 			<check_box label="Включить прикрепленное освещение" tool_tip="Эта опция включает свет, прикрепленный к аватару, такой как освещение лица. " name="Render Attached Lights"/>
 			<check_box label="Отображать частицы других аватаров" name="Render Attached Particles"/>
+			<check_box label="Уменьшить дальность прорисовки при заполнении видеопамяти" name="Reduce Draw Distance when VRAM is full" tool_tip="Включает функцию, которая уменьшает дальность прорисовки при заполнении видеопамяти."/>
+			<text name="ExcludeAnimeshImposterLabel" width="200">
+				Исключить аватар Animesh Impostor:
+			</text>
+			<combo_box name="FSImpostorAvatarExclude" tool_tip="Позволяет исключить пользователей Animesh или аватары управления из процесса рендеринга импостеров." width="80">
+				<combo_box.item label="Никто" name="0"/>
+				<combo_box.item label="Пользователь" name="1"/>
+				<combo_box.item label="Контроль" name="2"/>
+				<combo_box.item label="Оба" name="3"/>
+			</combo_box>
 			<slider label="Задержка для предварительного кэширования" tool_tip="Как долго задерживается показ мира вам, после того как другим показано, что вы в сети (по умолчанию 6 секунд)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				секунд

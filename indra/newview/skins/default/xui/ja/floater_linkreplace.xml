@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="linkreplace" title="インベントリのリンク置換え">
 	<string name="Ready">
-		準備中…
+		準備しています…
 	</string>
 	<string name="TargetNotFound">
 		置換先のアイテムは見つかりませんでした。
@@ -13,7 +13,7 @@
 		[NUM]箇所のリンクが見つかりました。
 	</string>
 	<string name="ItemsRemaining">
-		残りリンク数：[NUM]箇所
+		残りのリンク数：[NUM]箇所
 	</string>
 	<string name="ReplaceFinished">
 		インベントリのリンクの置換えが完了しました。
@@ -31,8 +31,9 @@
 	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="新しいインベントリ内のアイテムを、ここへドラッグ・アンド・ドロップしてください。"/>
 	<check_box label="リンクのみ削除" name="delete_links_only"/>
 	<text name="status_text">
-		準備中…
+		準備しています…
 	</text>
 	<button name="btn_refresh" label="リフレッシュ"/>
 	<button name="btn_start" label="開始"/>
+	<button name="btn_stop" label="停止"/>
 </floater>

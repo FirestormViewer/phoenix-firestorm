@@ -13,13 +13,11 @@
 		搜尋中...
 	</text>
 	<panel name="bottom_panel">
-		<menu_button name="options_gear_btn" tool_tip="顯示額外選項" />
 		<text name="OutfitcountText">
 			[COUNT] 件裝扮
 		</text>
 		<text name="avatar_complexity_label">
 			複雜度：[WEIGHT]
 		</text>
-		<button name="trash_btn" tool_tip="刪除選定的裝扮" />
 	</panel>
 </panel>

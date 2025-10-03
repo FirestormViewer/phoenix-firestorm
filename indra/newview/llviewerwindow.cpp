@@ -292,9 +292,6 @@ static const F32 MIN_DISPLAY_SCALE = 0.75f;
 // <FS:Ansariel> FIRE-31852: Now it aggressively executes gestures within focussed floaters...
 //static const char KEY_MOUSELOOK = 'M';
 
-static LLCachedControl<std::string> sSnapshotBaseName(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseName", "Snapshot"));
-static LLCachedControl<std::string> sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
-
 LLTrace::SampleStatHandle<> LLViewerWindow::sMouseVelocityStat("Mouse Velocity");
 
 class RecordToChatConsoleRecorder : public LLError::Recorder
@@ -491,6 +488,7 @@ public:
         static const std::string beacon_scripted = LLTrans::getString("BeaconScripted");
         static const std::string beacon_scripted_touch = LLTrans::getString("BeaconScriptedTouch");
         static const std::string beacon_sound = LLTrans::getString("BeaconSound");
+        static const std::string beacon_region_corners = LLTrans::getString("BeaconRegionCorners"); // <FS:PP> FIRE-33085 Region corner markers
         static const std::string beacon_media = LLTrans::getString("BeaconMedia");
         static const std::string beacon_sun = LLTrans::getString("BeaconSun");
         static const std::string beacon_moon = LLTrans::getString("BeaconMoon");
@@ -841,8 +839,16 @@ public:
             addText(xpos, ypos, "Projection Matrix");
             ypos += y_inc;
 
+#if LL_DARWIN
+// For sprintf deprecation
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
             // View last column is always <0,0,0,1>
             MATRIX_ROW_F32_TO_STR(gGLModelView, 12,camera_lines[3]); addText(xpos, ypos, std::string(camera_lines[3])); ypos += y_inc;
+#if LL_DARWIN
+#pragma clang diagnostic pop
+#endif
             MATRIX_ROW_N32_TO_STR(gGLModelView,  8,camera_lines[2]); addText(xpos, ypos, std::string(camera_lines[2])); ypos += y_inc;
             MATRIX_ROW_N32_TO_STR(gGLModelView,  4,camera_lines[1]); addText(xpos, ypos, std::string(camera_lines[1])); ypos += y_inc; mBackRectCamera2.mTop = ypos + 2;
             MATRIX_ROW_N32_TO_STR(gGLModelView,  0,camera_lines[0]); addText(xpos, ypos, std::string(camera_lines[0])); ypos += y_inc;
@@ -919,6 +925,14 @@ public:
                 addText(xpos, ypos, beacon_sound);
                 ypos += y_inc;
             }
+
+            // <FS:PP> FIRE-33085 Region corner markers
+            if (LLPipeline::getRenderRegionCornerBeacons())
+            {
+                addText(xpos, ypos, beacon_region_corners);
+                ypos += y_inc;
+            }
+            // </FS:PP>
 
             if (LLPipeline::getRenderScriptedBeacons())
             {
@@ -1517,10 +1531,16 @@ void LLViewerWindow::handleMouseMove(LLWindow *window,  LLCoordGL pos, MASK mask
 
     mWindow->showCursorFromMouseMove();
 
-    if (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME
-        && !gDisconnected)
+    if (!gDisconnected)
+    {
+        if (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME)
     {
         gAgent.clearAFK();
+    }
+        else
+        {
+            gAwayTriggerTimer.reset();
+        }
     }
 }
 
@@ -1639,6 +1659,10 @@ bool LLViewerWindow::handleTranslatedKeyDown(KEY key,  MASK mask, bool repeated)
     if (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME)
     {
         gAgent.clearAFK();
+    }
+    else
+    {
+        gAwayTriggerTimer.reset();
     }
 
     // *NOTE: We want to interpret KEY_RETURN later when it arrives as
@@ -2137,6 +2161,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 
 std::string LLViewerWindow::getLastSnapshotDir()
 {
+    static LLCachedControl<std::string> sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
     return sSnapshotDir;
 }
 
@@ -2493,13 +2518,13 @@ void LLViewerWindow::initWorldUI()
         //  url = LLWeb::expandURLSubstitutions(url, LLSD());
         //  destinations->navigateTo(url, "text/html");
         // }
-        // LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-        // if (avatar_picker)
+        // LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
+        // if (avatar_welcome_pack)
         // {
-        //  avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-        //  std::string url = gSavedSettings.getString("AvatarPickerURL");
+        //  avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+        //  std::string url = gSavedSettings.getString("AvatarWelcomePack");
         //  url = LLWeb::expandURLSubstitutions(url, LLSD());
-        //  avatar_picker->navigateTo(url, "text/html");
+        //  avatar_welcome_pack->navigateTo(url, "text/html");
         // }
         std::string destination_guide_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
@@ -2514,6 +2539,18 @@ void LLViewerWindow::initWorldUI()
 #endif // OPENSIM  // <FS:AW optional opensim support>
         {
             destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
+        }
+        LLMediaCtrl* search = LLFloaterReg::getInstance("search")->findChild<LLMediaCtrl>("search_contents");
+        if (search)
+        {
+            search->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+        }
+        LLMediaCtrl* marketplace = LLFloaterReg::getInstance("marketplace")->getChild<LLMediaCtrl>("marketplace_contents");
+        if (marketplace)
+        {
+            marketplace->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+            std::string url = gSavedSettings.getString("MarketplaceURL");
+            marketplace->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
         }
 
         if(!destination_guide_url.empty())
@@ -2540,18 +2577,18 @@ void LLViewerWindow::initWorldUI()
         else
 #endif // OPENSIM  // <FS:AW optional opensim support>
         {
-            avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
+            avatar_picker_url = gSavedSettings.getString("AvatarWelcomePack");
         }
 
         if(!avatar_picker_url.empty())
         {
-            LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-            if (avatar_picker)
+            LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
+            if (avatar_welcome_pack)
             {
-                avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+                avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
                 avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
                 LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-                avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+                avatar_welcome_pack->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
             }
         }
         // </FS:AW  opensim destinations and avatar picker>
@@ -3410,7 +3447,8 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
         // <FS:Ansariel> [FS Communication UI]
         //if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
         //{
-        //  if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+        //  LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
+        //  if (key_move())
         //  {
         //      // let Control-Up and Control-Down through for chat line history,
         //      if (!(key == KEY_UP && mask == MASK_CONTROL)
@@ -3435,9 +3473,10 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
         //          }
         //      }
         //  }
+        LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
         if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
            (FSNearbyChat::instance().defaultChatBarIsIdle() ||
-            gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
+            key_move()))
         {
             // let Control-Up and Control-Down through for chat line history,
             //<FS:TS> Control-Right and Control-Left too for chat line editing
@@ -3452,10 +3491,9 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
                     case KEY_RIGHT:
                     case KEY_UP:
                     case KEY_DOWN:
-                    case KEY_PAGE_UP:
-                    case KEY_PAGE_DOWN:
-                    case KEY_HOME:
-                    case KEY_END:
+                    case KEY_PAGE_UP: //jump
+                    case KEY_PAGE_DOWN: // down
+                    case KEY_HOME: // toggle fly
                         // when chatbar is empty or ArrowKeysAlwaysMove set,
                         // pass arrow keys on to avatar...
                         return false;
@@ -5830,6 +5868,7 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
     // Get a base file location if needed.
     if (force_picker || !isSnapshotLocSet())
     {
+        static LLCachedControl<std::string> sSnapshotBaseName(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseName", "Snapshot"));
         std::string proposed_name(sSnapshotBaseName);
 
         // getSaveFile will append an appropriate extension to the proposed name, based on the ESaveFilter constant passed in.
@@ -5884,11 +5923,12 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
 
 // Check if there is enough free space to save snapshot
 #ifdef LL_WINDOWS
-    boost::filesystem::path b_path(utf8str_to_utf16str(lastSnapshotDir));
+    boost::filesystem::path b_path(ll_convert<std::wstring>(lastSnapshotDir));
 #else
     boost::filesystem::path b_path(lastSnapshotDir);
 #endif
-    if (!boost::filesystem::is_directory(b_path))
+    boost::system::error_code ec;
+    if (!boost::filesystem::is_directory(b_path, ec) || ec.failed())
     {
         LLSD args;
         args["PATH"] = lastSnapshotDir;
@@ -5897,7 +5937,16 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         failure_cb();
         return;
     }
-    boost::filesystem::space_info b_space = boost::filesystem::space(b_path);
+    boost::filesystem::space_info b_space = boost::filesystem::space(b_path, ec);
+    if (ec.failed())
+    {
+        LLSD args;
+        args["PATH"] = lastSnapshotDir;
+        LLNotificationsUtil::add("SnapshotToLocalDirNotExist", args);
+        resetSnapshotLoc();
+        failure_cb();
+        return;
+    }
     if (b_space.free < image->getDataSize())
     {
         LLSD args;
@@ -5914,7 +5963,12 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         LLNotificationsUtil::add("SnapshotToComputerFailed", args);
 
         failure_cb();
+
+        // Shouldn't there be a return here?
     }
+
+    static LLCachedControl<std::string> sSnapshotBaseName(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseName", "Snapshot"));
+    static LLCachedControl<std::string> sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
 
     // Look for an unused file name
     auto is_snapshot_name_loc_set = isSnapshotLocSet();
@@ -6052,8 +6106,8 @@ void LLViewerWindow::playSnapshotAnimAndSound()
 
 bool LLViewerWindow::isSnapshotLocSet() const
 {
-    std::string snapshot_dir = sSnapshotDir;
-    return !snapshot_dir.empty();
+    static LLCachedControl<std::string> sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
+    return !sSnapshotDir().empty();
 }
 
 void LLViewerWindow::resetSnapshotLoc() const
@@ -7327,11 +7381,16 @@ void LLViewerWindow::setUIVisibility(bool visible)
     // LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : false);
     mStatusBarContainer->setVisible(visible);
 
-    // <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
-    LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
-    if (utilityBarStack)
+    // <FS:Zi> hide utility bar if we are on a skin that uses it, i.e. Vintage
+    // Beq Note: Added a skin check to fix FIRE-29517 "hitch when entering mouselook"
+    // This was caused having to search for a non-existent childview. If another skin other than vintage
+    // ever needs chat_bar_utility_bar_stack in the future, this will need to be updated.
+    if (FSCommon::isLegacySkin())
     {
-        utilityBarStack->setVisible(visible);
+        if (LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack"); utilityBarStack)
+        {
+            utilityBarStack->setVisible(visible);
+        }
     }
     // </FS:Zi>
 }

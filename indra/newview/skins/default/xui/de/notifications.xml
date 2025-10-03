@@ -518,6 +518,9 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorCannotAffordUpload">
 		Es kostet L$[COST], um diesen Gegenstand hochzuladen.
 	</notification>
+	<notification name="ErrorEncodingImage">
+		Textur konnte aus folgendem Grund nicht kodiert werden: [REASON]
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Es kostet L$[COST], um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
@@ -1292,6 +1295,15 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 		<form name="form">
 			<button name="ReplaceList" text="Aktuelle Liste ersetzen"/>
 			<button name="SetName" text="Neuen Namen verwenden"/>
+		</form>
+	</notification>
+	<notification label="Automatische Ersetzungsliste umbenennen" name="RemoveAutoReplaceList">
+		„[LIST_NAME]“ enthält [MAP_SIZE] Einträge.
+
+Sind Sie sicher, dass Sie diese Liste löschen möchten?
+		<form name="form">
+			<button name="DeleteList" text="Löschen"/>
+			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
@@ -2911,6 +2923,11 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="MaterialNoPermissions">
 		Ihnen fehlt die Berechtigung zur Anzeige dieses Materials.
 	</notification>
+	<notification name="MaterialImagesWereScaled">
+		Eine oder mehrere Texturen in diesem Modell wurde(n) skaliert, um innerhalb der erlaubten Limits zu bleiben.
+Texturen müssen Dimensionen aus 2er-Potenzen haben und dürfen [MAX_SIZE]x[MAX_SIZE] Pixel nicht überschreiten.
+		<usetemplate ignoretext="Warnen, wenn Texturen beim Upload skaliert werden." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
 	</notification>
@@ -3902,7 +3919,8 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
-		Es ist ein Problem beim Hochladen der Datei aufgetreten.
+Material-Datei kann nicht hochgeladen werden. Die Datei ist möglicherweise beschädigt, in einem nicht-unterstützten Format oder enthält ungültige Daten. Bitte stellen Sie sicher, dass Sie eine gültige GLTF/GLB-Datei mit richtigen Material-Definition verwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification label="Material speichern" name="SaveMaterialAs">
 		Material benennen:
@@ -4938,6 +4956,10 @@ Diese können anhand von http://opensimulator.org/wiki/inventory die erkannten F
 		Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		Ihr System besitzt [TOTAL_MEM]MB Speicher. Dieser ist eventuell nicht ausreichend, um den Viewer auf höheren Einstellungen zu betreiben und kann zu Problemen führen.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
 	<notification name="DefaultObjectPermissions">
 		Problem beim Speichern der standardmäßigen Objektberechtigungen: [REASON].  Versuchen Sie später, die Standardberechtigungen einzustellen.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -5137,6 +5159,10 @@ Möchten Sie fortfahren?
 	<notification name="WaterExclusionNoMaterial">
 		Material kann nicht auf Wasser-Ausschluss-Oberfläche angewandt werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortsetzen"/>
+	</notification>
+	<notification name="ImageUploadResized">
+		Die von Ihnen hochgeladene Textur wurde von [ORIGINAL_WIDTH]x[ORIGINAL_HEIGHT] Pixel zu [NEW_WIDTH]x[NEW_HEIGHT] Pixel verkleinert, um innerhalb des Maximums von [MAX_WIDTH]x[MAX_HEIGHT] Pixel zu sein.
+		<usetemplate ignoretext="Hochgeladene Textur wurde verkleinert" name="okignore" yestext="OK"/>
 	</notification>
 
 	<notification name="NoValidEnvSettingFound">
@@ -5873,6 +5899,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="ConfirmPoserOverwrite">
 		Bestehende Pose „[POSE_NAME]“ überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
+	</notification>
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		Eine große Anzahl an Outfits wurde erkannt: [AMOUNT]. Dies kann zu einem Blockieren des Viewers oder zu Verbindungsabbrüchen führen. Ziehen Sie eine Reduzierung der Outfits für eine bessere Performance in Betracht (unter [MAX]).
+		<usetemplate ignoretext="Warnung bei zu vielen Outfits" name="okignore" yestext="OK" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Login-Anfrage wurde von Primfeed abgelehnt.

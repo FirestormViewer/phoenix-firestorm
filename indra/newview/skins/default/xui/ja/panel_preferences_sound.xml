@@ -76,8 +76,19 @@
 			</combo_box>
 			<check_box label="インワールドスクリプトによるメディアの再生を許可する" name="media_allowscript_btn" tool_tip="この設定は、スクリプトプリムがメディア接続を制御することを許可／禁止します。"/>
 			<check_box label="他のアバターに装着されたメディアを再生する" name="media_show_on_others_btn" tool_tip="チェックを外すと、近くにある他のアバターに添付されたメディアが非表示になります。"/>
+			<check_box name="media_huds_autoplay" tool_tip="チェックを外すと、ＨＵＤは標準のメディア自動再生設定に従います。" label="ＨＵＤに装着されたメディアを自動再生する"/>
 			<check_box label="メディアフィルタを有効にする（セキュリティレベルが上がります）" name="media_filter" tool_tip="これをチェックすると、特定のホストからメディアを再生するかどうかを選択できるフィルタが有効になります。"/>
 			<button label="メディアサイトの管理" name="edit_media_lists_button"/>
+			<text tool_tip="この設定は、読み込まれたメディアのうち、対象をクリックせずにインタラクションを開始できるメディアを制御します。これにより、対象をクリックする必要がなくなり、メディアに直接クリック情報が渡されるようになります。" name="media_firstinteract_label">
+				メディアの開始インタラクト：
+			</text>
+			<check_box name="media_first_click_all" label="すべてのＭＯＡＰ"/>
+			<check_box name="media_first_click_any" label="誰かのオブジェクト"/>
+			<check_box name="media_first_click_hud" label="装着しているＨＵＤ"/>
+			<check_box name="media_first_click_own" label="自身のオブジェクト"/>
+			<check_box name="media_first_click_group" label="グループのオブジェクト"/>
+			<check_box name="media_first_click_friend" label="フレンドのオブジェクト"/>
+			<check_box name="media_first_click_land" label="土地所有者のオブジェクト"/>
 			<text name="Media Rolloff">
 				メディアソースの音量ロールオフ距離：
 			</text>
@@ -239,6 +250,12 @@
 			<button name="Prev_UISndStartIM" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndStartIM" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndStartIM"/>
+			<text tool_tip="チャットでメンションされた時に再生するサウンドのＵＵＩＤです。" name="textChatMention">
+				チャットのメンション先：
+			</text>
+			<button name="Prev_UISndChatMention" tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndChatMention" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndChatMention"/>
 			<text tool_tip="新しくオブジェクトを作成した時に再生するサウンドのＵＵＩＤです。" name="textFSObjectCreate">
 				オブジェクト作成：
 			</text>
@@ -269,12 +286,6 @@
 			<button name="Prev_UISndSnapshot" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndSnapshot" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="サウンドを再生しない" name="QuietSnapshotsToDiskCheckBox"/>
-			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤです。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
-				テレポート：
-			</text>
-			<button name="Prev_UISndTeleportOut" tool_tip="このサウンドをプレビューします。"/>
-			<button name="Def_UISndTeleportOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
-			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
 		</panel>
 		<!-- UI Sounds 2 -->
 		<panel label="ＵＩサウンド２" name="UI Sounds tab 2">
@@ -282,6 +293,12 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
+			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤです。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
+				テレポート：
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndTeleportOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
 			<text tool_tip="パイメニューを表示した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuAppear">
 				パイメニューを表示したとき：
 			</text>
@@ -384,12 +401,6 @@
 			<button name="Prev_UISndFriendshipOffer" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndFriendshipOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndFriendshipOffer"/>
-			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤです。" name="textFSTeleportOffer">
-				テレポートのオファーを受けた：
-			</text>
-			<button name="Prev_UISndTeleportOffer" tool_tip="このサウンドをプレビューします。"/>
-			<button name="Def_UISndTeleportOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
-			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<!-- UI Sounds 3 -->
 		<panel label="ＵＩサウンド３" name="UI Sounds tab 3">
@@ -397,6 +408,12 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
+			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤです。" name="textFSTeleportOffer">
+				テレポートのオファーを受けた：
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndTeleportOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
 			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤです。" name="textFSInventoryOffer">
 				インベントリに受け取った：
 			</text>
