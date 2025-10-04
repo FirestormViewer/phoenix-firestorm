@@ -98,6 +98,8 @@ void FSJointPose::resetJoint()
 
 void FSJointPose::addStateToUndo(FSJointState stateToAddToUndo)
 {
+    mModifiedThisSession = true;
+
     auto timeIntervalSinceLastChange = std::chrono::system_clock::now() - mTimeLastUpdatedCurrentState;
     mTimeLastUpdatedCurrentState     = std::chrono::system_clock::now();
 

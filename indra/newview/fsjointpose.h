@@ -253,6 +253,8 @@ class FSJointPose
     /// </summary>
     LLPointer<LLJointState> getJointState() const { return mJointState; }
 
+    bool getJointModified() const { return mModifiedThisSession; }
+
     class FSJointState
     {
       public:
@@ -449,6 +451,11 @@ class FSJointPose
     /// natively.
     /// </summary>
     bool mIsCollisionVolume{ false };
+
+    /// <summary>
+    /// Whether this joint has ever been changed by poser.
+    /// </summary>
+    bool mModifiedThisSession{ false };
 
     std::deque<FSJointState>              mLastSetJointStates;
     size_t                                mUndoneJointStatesIndex      = 0;

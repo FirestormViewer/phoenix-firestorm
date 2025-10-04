@@ -81,35 +81,6 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
     }
 }
 
-bool FSPoseState::addOrUpdatePosingMotionState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder)
-{
-    if (!avatar)
-        return false;
-
-    bool foundMatch = false;
-    for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
-    {
-        bool motionIdMatches = (*it).motionId == animId;
-        bool updateTimesMatch = (*it).lastUpdateTime == updateTime;
-        bool jointNamesMatch = (*it).jointNamesAnimated == jointNames;
-        bool captureOrdersMatch  = (*it).captureOrder == captureOrder;
-
-        foundMatch = motionIdMatches && updateTimesMatch && jointNamesMatch && captureOrdersMatch;
-        if (foundMatch)
-            return false;
-    }
-
-    fsMotionState newState;
-    newState.motionId           = animId;
-    newState.lastUpdateTime     = updateTime;
-    newState.jointNamesAnimated = jointNames;
-    newState.captureOrder       = captureOrder;
-    newState.avatarOwnsPose     = false;
-
-    sMotionStates[avatar->getID()].push_back(newState);
-    return true;
-}
-
 void FSPoseState::purgeMotionStates(LLVOAvatar* avatar)
 {
     if (!avatar)
@@ -118,7 +89,7 @@ void FSPoseState::purgeMotionStates(LLVOAvatar* avatar)
      sMotionStates[avatar->getID()].clear();
 }
 
-void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
+void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord)
 {
     if (!avatar)
         return;
@@ -126,7 +97,7 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord)
     int animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
-        if (!it->avatarOwnsPose)
+        if (!ignoreOwnership  && !it->avatarOwnsPose)
             continue;
 
         std::string uniqueAnimId                          = "poseState" + std::to_string(animNumber++);

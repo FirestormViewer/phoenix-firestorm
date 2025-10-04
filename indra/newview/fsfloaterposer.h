@@ -31,6 +31,7 @@
 #include "llfloater.h"
 #include "lltoolmgr.h"
 #include "fsposeranimator.h"
+#include "fsposercollab.h"
 
 class FSVirtualTrackpad;
 class LLButton;
@@ -86,6 +87,11 @@ public:
     bool canUndo() const override { return true; }
     void redo() override { onRedoLastChange(); };
     bool canRedo() const override { return true; }
+
+    /// <summary>
+    /// The event handler for messages from collab (posing with others).
+    /// </summary>
+    void onPoserCollabEvent(LLUUID avWhosePermsChanged);
  private:
     // Helper function to encapsualte save logic
     void doPoseSave(LLVOAvatar* avatar, const std::string& filename);
@@ -182,6 +188,13 @@ public:
     uuid_vec_t getNearbyAvatarsAndAnimeshes() const;
 
     /// <summary>
+    /// Gets whether the supplied character is within chat range of gAgentAvatar.
+    /// </summary>
+    /// <param name="character">The character to query whether nearby.</param>
+    /// <returns>True if the supplied character is within chat range, otherwise false.</returns>
+    bool avatarIsNearbyMe(LLCharacter* character) const;
+
+    /// <summary>
     /// Gets a collection of UUIDs for avatars currently being presented on the UI.
     /// </summary>
     /// <returns>A the collection of UUIDs.</returns>
@@ -254,6 +267,8 @@ public:
     void onResetJoint(const LLSD data);
     void onSetAvatarToTpose();
     void onPoseStartStop();
+    void onSharingStartStop();
+    void onPoseControlStartStop();
     void onTrackballChanged();
     void onYawPitchRollChanged(bool skipUpdateTrackpad = false);
     void onPositionSet();
@@ -280,6 +295,13 @@ public:
     void enableOrDisableRedoAndUndoButton();
 
     /// <summary>
+    /// Emits a chat message which other posers can interpret for this avatar's pose.
+    /// </summary>
+    /// <param name="avatarWhosePoseChanged">The avatar whose pose should be sent via chat.</param>
+    /// <param name="changeType">The type of change message that should be enqueued.</param>
+    void sendPoseUpdateByChat(LLVOAvatar* avatarWhosePoseChanged, E_CollabPoseChangeType changeType);
+
+    /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar to animate.</param>
@@ -298,6 +320,11 @@ public:
     /// This separates that business from the code-behind the UI.
     /// </summary>
     FSPoserAnimator mPoserAnimator;
+
+    /// <summary>
+    /// Pointer to instance of the class which sends and receives posing messages over chat.
+    /// </summary>
+    FSPoserCollab* mPoserCollaborator;
 
     /// <summary>
     /// The supplied Joint name has a quaternion describing its rotation.
@@ -334,6 +361,13 @@ public:
     /// Refreshes the text on the avatars scroll list based on their state.
     /// </summary>
     void refreshTextHighlightingOnAvatarScrollList();
+
+    /// <summary>
+    /// Gets an appropriate icon for the supplied avatar, based on sharing permission.
+    /// </summary>
+    /// <param name="avatar">The avatar to get an icon for.</param>
+    /// <returns>A string with the name of an icon.</returns>
+    std::string getIconNameForAvatar(LLVOAvatar* avatar);
 
     /// <summary>
     /// Refreshes the text on all joints scroll lists based on their state.
@@ -485,6 +519,8 @@ public:
 
     LLButton* mToggleVisualManipulators{ nullptr };
     LLButton* mStartStopPosingBtn{ nullptr };
+    LLButton* mStartStopSharingBtn{ nullptr };
+    LLButton* mStartStopControlBtn{ nullptr };
     LLButton* mToggleLoadSavePanelBtn{ nullptr };
     LLButton* mBrowserFolderBtn{ nullptr };
     LLButton* mLoadPosesBtn{ nullptr };

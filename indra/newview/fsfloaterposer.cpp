@@ -80,6 +80,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     // Bind requests, other controls are find-and-binds, see postBuild()
     mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
     mCommitCallbackRegistrar.add("Poser.StartStopAnimating", [this](LLUICtrl*, const LLSD&) { onPoseStartStop(); });
+    mCommitCallbackRegistrar.add("Poser.StartStopAnimationSharing", [this](LLUICtrl*, const LLSD&) { onSharingStartStop(); });
+    mCommitCallbackRegistrar.add("Poser.StartStopAnimationControl", [this](LLUICtrl*, const LLSD&) { onPoseControlStartStop(); });
     mCommitCallbackRegistrar.add("Poser.ToggleLoadSavePanel", [this](LLUICtrl*, const LLSD&) { onToggleLoadSavePanel(); });
     mCommitCallbackRegistrar.add("Poser.ToggleVisualManipulators", [this](LLUICtrl*, const LLSD&) { onToggleVisualManipulators(); });
 
@@ -113,6 +115,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.Symmetrize", [this](LLUICtrl*, const LLSD& data) { onClickSymmetrize(data); });
 
     mLoadPoseTimer = new FSLoadPoseTimer(boost::bind(&FSFloaterPoser::timedReload, this));
+
+    mPoserCollaborator = FSPoserCollab::initiateCollaborator(&mPoserAnimator, boost::bind(&FSFloaterPoser::onPoserCollabEvent, this, _1));
 }
 
 bool FSFloaterPoser::postBuild()
@@ -186,6 +190,8 @@ bool FSFloaterPoser::postBuild()
 
     mPosesLoadSavePnl = getChild<LLPanel>("poses_loadSave");
     mStartStopPosingBtn = getChild<LLButton>("start_stop_posing_button");
+    mStartStopSharingBtn = getChild<LLButton>("start_stop_pose_sharing_button");
+    mStartStopControlBtn = getChild<LLButton>("start_stop_pose_control_button");
     mToggleLoadSavePanelBtn = getChild<LLButton>("toggleLoadSavePanel");
     mBrowserFolderBtn = getChild<LLButton>("open_poseDir_button");
     mLoadPosesBtn = getChild<LLButton>("load_poses_button");
@@ -304,6 +310,8 @@ void FSFloaterPoser::onClose(bool app_quitting)
     }
 
     disableVisualManipulators();
+    FSPoserCollab::destroyCollaborator();
+
     delete mLoadPoseTimer;
     LLFloater::onClose(app_quitting);
 }
@@ -376,6 +384,32 @@ void FSFloaterPoser::onPoseFileSelect()
         mLoadPosesBtn->setLabel(tryGetString("LoadDiffLabel"));
     else
         mLoadPosesBtn->setLabel(tryGetString("LoadPoseLabel"));
+}
+
+void FSFloaterPoser::onPoserCollabEvent(LLUUID avWhosePermsChanged)
+{
+    if (!mPoserCollaborator)
+        return;
+
+    LLVOAvatar* avatar = getAvatarByUuid(avWhosePermsChanged);
+    if (!avatar)
+        return;
+
+    E_CollabState state             = mPoserCollaborator->getCollabLocalState(avatar);
+    bool          arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
+
+    if (!arePosingSelected && state >= COLLAB_PERM_GRANTED && couldAnimateAvatar(avatar))
+    {
+        mPoserAnimator.tryPosingAvatar(avatar);
+        
+        sendPoseUpdateByChat(gAgentAvatarp, POSECHANGE_BOTH); // sync them with our posestate
+    }
+
+    if (arePosingSelected && state < COLLAB_PERM_GRANTED)
+        mPoserAnimator.stopPosingAvatar(avatar);
+
+    onAvatarsRefresh();
+    onAvatarSelect();
 }
 
 void FSFloaterPoser::doPoseSave(LLVOAvatar* avatar, const std::string& filename)
@@ -519,7 +553,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         record["startFromTeePose"]["value"] = !savingDiff;
 
         if (savingDiff)
-            mPoserAnimator.savePosingState(avatar, &record);
+            mPoserAnimator.savePosingState(avatar, false, &record);
 
         LLVector3 rotation, position, scale, zeroVector;
         bool      baseRotationIsZero;
@@ -641,6 +675,7 @@ void FSFloaterPoser::onClickFlipSelectedJoints()
     refreshRotationSlidersAndSpinners();
     enableOrDisableRedoAndUndoButton();
     refreshTrackpadCursor();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
 void FSFloaterPoser::onClickFlipPose()
@@ -656,6 +691,7 @@ void FSFloaterPoser::onClickFlipPose()
 
     refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
 void FSFloaterPoser::onClickRecaptureSelectedBones()
@@ -687,6 +723,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     refreshTrackpadCursor();
     refreshTextHighlightingOnJointScrollLists();
     enableOrDisableRedoAndUndoButton();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
 void FSFloaterPoser::updatePosedBones(const std::string& jointName)
@@ -711,6 +748,7 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName)
     refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
     refreshTextHighlightingOnJointScrollLists();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
 }
 
 void FSFloaterPoser::onClickBrowsePoseCache()
@@ -735,6 +773,7 @@ void FSFloaterPoser::onClickSymmetrize(const S32 ID)
     refreshRotationSlidersAndSpinners();
     enableOrDisableRedoAndUndoButton();
     refreshTrackpadCursor();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BONE); // TODO: doesn't work
 
     if (getSavingToBvh())
         refreshTextHighlightingOnJointScrollLists();
@@ -791,6 +830,12 @@ void FSFloaterPoser::onCommitSpinner(const LLUICtrl* spinner, const S32 id)
             LL_WARNS("Posing") << "onCommitSpinner passed invalid parameter: " << id << LL_ENDL;
             break;
     }
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
 }
 
 void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
@@ -868,6 +913,10 @@ void FSFloaterPoser::onCommitSlider(const LLUICtrl* slider, const S32 id)
             LL_WARNS("Posing") << "onCommitSlider passed invalid parameter: " << id << LL_ENDL;
             break;
     }
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (avatar)
+        sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
 }
 
 void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
@@ -921,6 +970,7 @@ void FSFloaterPoser::timedReload()
         onJointTabSelect();
         refreshJointScrollListMembers();
         setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
+        sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
     }
 
     if (mLoadPoseTimer->loadCompleteOrFailed())
@@ -1234,6 +1284,9 @@ void FSFloaterPoser::onPoseStartStop()
     if (arePosingSelected)
     {
         mPoserAnimator.stopPosingAvatar(avatar);
+
+        if (mPoserCollaborator && avatar->isSelf())
+            mPoserCollaborator->stopPosingAvatar();
     }
     else
     {
@@ -1245,6 +1298,32 @@ void FSFloaterPoser::onPoseStartStop()
 
         mPoserAnimator.tryPosingAvatar(avatar);
     }
+
+    onAvatarsRefresh();
+    onAvatarSelect();
+}
+
+void FSFloaterPoser::onSharingStartStop()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar || avatar->isSelf() || !mPoserCollaborator)
+        return;
+
+    bool startSharing = mStartStopSharingBtn->getValue().asBoolean();
+    mPoserCollaborator->updateCollabPermission(avatar, startSharing ? COLLAB_I_ASKED_THEM : COLLAB_PERM_ENDED);
+
+    onAvatarsRefresh();
+    onAvatarSelect();
+}
+
+void FSFloaterPoser::onPoseControlStartStop()
+{
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar || !mPoserCollaborator)
+        return;
+
+    bool giveControl = mStartStopControlBtn->getValue().asBoolean();
+    mPoserCollaborator->updateCollabPermission(avatar, giveControl ? COLLAB_THEY_POSE_ME : COLLAB_PERM_GRANTED);
 
     onAvatarsRefresh();
     onAvatarSelect();
@@ -1465,6 +1544,7 @@ void FSFloaterPoser::onUndoLastChange()
     refreshPositionSlidersAndSpinners();
     refreshScaleSlidersAndSpinners();
     refreshTrackpadCursor();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
     if (getSavingToBvh())
         refreshTextHighlightingOnJointScrollLists();
 }
@@ -1511,6 +1591,7 @@ void FSFloaterPoser::onResetJoint(const LLSD data)
     refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
     refreshTextHighlightingOnJointScrollLists();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
 void FSFloaterPoser::onRedoLastChange()
@@ -1538,6 +1619,7 @@ void FSFloaterPoser::onRedoLastChange()
     refreshTrackpadCursor();
     refreshScaleSlidersAndSpinners();
     refreshPositionSlidersAndSpinners();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
     if (getSavingToBvh())
         refreshTextHighlightingOnJointScrollLists();
 }
@@ -1903,6 +1985,10 @@ void FSFloaterPoser::onTrackballChanged()
     mRollSpnr->setValue(axis3);
 
     onYawPitchRollChanged(true);
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (avatar)
+        sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
 }
 
 F32 FSFloaterPoser::clipRange(F32 value)
@@ -2209,16 +2295,30 @@ S32 FSFloaterPoser::getJointNegation(const std::string& jointName) const
 void FSFloaterPoser::onAvatarSelect()
 {
     LLVOAvatar* avatar = getUiSelectedAvatar();
-    if(avatar)
-    {
-        FSToolCompPose::getInstance()->setAvatar(avatar);
-    }
-    mStartStopPosingBtn->setEnabled(couldAnimateAvatar(avatar));
+    if (!avatar)
+        return;
+
+    bool          isSelf                 = avatar->isSelf();
+    bool          haveImplicitPermission = havePermissionToAnimateAvatar(avatar); // self & control avatars you own
+    E_CollabState state                  = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
+
+    if (haveImplicitPermission)
+        FSToolCompPose::getInstance()->setAvatar(avatar); // TODO: hide manip if not allowed
 
     bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
+
+    mStartStopPosingBtn->setEnabled(haveImplicitPermission);
     mStartStopPosingBtn->setValue(arePosingSelected);
-    mSetToTposeButton->setEnabled(arePosingSelected);
-    poseControlsEnable(arePosingSelected);
+
+    mStartStopSharingBtn->setEnabled(!haveImplicitPermission && state != COLLAB_PERM_DENIED);
+    mStartStopSharingBtn->setValue(state >= COLLAB_PERM_GRANTED);
+
+    mStartStopControlBtn->setEnabled(!isSelf && state >= COLLAB_PERM_GRANTED);
+    mStartStopControlBtn->setValue(state == COLLAB_THEY_POSE_ME || state == COLLAB_POSE_EACH_OTHER);
+
+    mSetToTposeButton->setEnabled(haveImplicitPermission && arePosingSelected);
+    poseControlsEnable(arePosingSelected && (haveImplicitPermission || state >= COLLAB_I_POSE_THEM));
+
     refreshTextHighlightingOnAvatarScrollList();
     refreshTextHighlightingOnJointScrollLists();
     onJointTabSelect();
@@ -2232,13 +2332,23 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
     for (LLCharacter* character : LLCharacter::sInstances)
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
-        if (!havePermissionToAnimateAvatar(avatar))
+        if (!avatarIsNearbyMe(avatar))
             continue;
 
         avatar_ids.emplace_back(character->getID());
     }
 
     return avatar_ids;
+}
+
+bool FSFloaterPoser::avatarIsNearbyMe(LLCharacter* character) const
+{
+    if (!gAgentAvatarp || gAgentAvatarp.isNull() || !character)
+        return false;
+
+    LLVector3 separationVector = character->getCharacterPosition() - gAgentAvatarp->getCharacterPosition();
+
+    return separationVector.magVec() < 50.f;
 }
 
 uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes() const
@@ -2291,10 +2401,6 @@ void FSFloaterPoser::onAvatarsRefresh()
             mAvatarSelectionScrollList->deleteSingleItem(indexToRemove);
     }
 
-    std::string iconCatagoryName = "Inv_BodyShape";
-    if (hasString("icon_category"))
-        iconCatagoryName = getString("icon_category");
-
     std::string iconObjectName = "Inv_Object";
     if (hasString("icon_object"))
         iconObjectName = getString("icon_object");
@@ -2320,7 +2426,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
         row["columns"][COL_ICON]["type"]   = "icon";
-        row["columns"][COL_ICON]["value"]  = iconCatagoryName;
+        row["columns"][COL_ICON]["value"]  = getIconNameForAvatar(avatar);
         row["columns"][COL_NAME]["column"] = "name";
         row["columns"][COL_NAME]["value"]  = av_name.getDisplayName();
         row["columns"][COL_UUID]["column"] = "uuid";
@@ -2363,6 +2469,55 @@ void FSFloaterPoser::onAvatarsRefresh()
     refreshTextHighlightingOnAvatarScrollList();
 }
 
+std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
+{
+    std::string iconName = "Inv_BodyShape";
+    if (hasString("icon_category"))
+        iconName = getString("icon_category");
+
+    if (!avatar)
+        return iconName;
+
+    E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
+    switch (state)
+    {
+        case COLLAB_I_ASKED_THEM:
+            if (hasString("icon_pose_perm_sent"))
+                iconName = getString("icon_pose_perm_sent");
+            break;
+
+        case COLLAB_THEY_ASKED_ME:
+            if (hasString("icon_pose_perm_rec"))
+                iconName = getString("icon_pose_perm_rec");
+            break;
+
+        case COLLAB_POSE_EACH_OTHER:
+        case COLLAB_I_POSE_THEM:
+        case COLLAB_THEY_POSE_ME:
+            if (hasString("icon_pose_perm_all"))
+                iconName = getString("icon_pose_perm_all");
+            break;
+
+        case COLLAB_PERM_GRANTED:
+            if (hasString("icon_pose_perm_collab"))
+                iconName = getString("icon_pose_perm_collab");
+            break;
+
+        case COLLAB_PERM_DENIED:
+            if (hasString("icon_pose_perm_denied"))
+                iconName = getString("icon_pose_perm_denied");
+            break;
+
+        case COLLAB_NONE:
+        default:
+            if (hasString("icon_category"))
+                iconName = getString("icon_category");
+            break;
+    }
+
+    return iconName;
+}
+
 std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
 {
     if (!avatar)
@@ -2395,6 +2550,8 @@ void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()
 
         LLUUID selectedAvatarId = cell->getValue().asUUID();
         LLVOAvatar* listAvatar = getAvatarByUuid(selectedAvatarId);
+
+        ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getIconNameForAvatar(listAvatar));
 
         if (mPoserAnimator.isPosingAvatar(listAvatar))
             ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
@@ -2746,6 +2903,14 @@ void FSFloaterPoser::onClickSavingToBvh()
 {
     mUnlockPelvisInBvhSaveCbx->setVisible(getSavingToBvh());
     refreshTextHighlightingOnJointScrollLists();
+}
+
+void FSFloaterPoser::sendPoseUpdateByChat(LLVOAvatar* avatarWhosePoseChanged, E_CollabPoseChangeType changeType)
+{
+    if (!mPoserCollaborator || !avatarWhosePoseChanged)
+        return;
+
+    mPoserCollaborator->enqueuePoserChatMessage(avatarWhosePoseChanged, changeType);
 }
 
 void FSFloaterPoser::onClickLockWorldRotBtn()

@@ -52,6 +52,25 @@ bool FSPoserAnimator::isPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint
     return posingMotion->currentlyPosingJoint(jointPose);
 }
 
+bool FSPoserAnimator::hasJointBeenChanged(LLVOAvatar* avatar, const FSPoserJoint& joint)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return false;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return false;
+
+    if (posingMotion->isStopped())
+        return false;
+
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
+    if (!jointPose)
+        return false;
+
+    return jointPose->getJointModified();
+}
+
 void FSPoserAnimator::setPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, bool shouldPose)
 {
     if (!isAvatarSafeToUse(avatar))
@@ -971,6 +990,14 @@ bool FSPoserAnimator::loadPosingState(LLVOAvatar* avatar, LLSD pose)
     mPosingState.purgeMotionStates(avatar);
     mPosingState.restoreMotionStates(avatar, pose);
 
+    return applyStatesToPosingMotion(avatar);
+}
+
+bool FSPoserAnimator::applyStatesToPosingMotion(LLVOAvatar* avatar)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return false;
+
     FSPosingMotion* posingMotion = getPosingMotion(avatar);
     if (!posingMotion)
         return false;
@@ -1007,9 +1034,9 @@ void FSPoserAnimator::applyJointMirrorToBaseRotations(FSPosingMotion* posingMoti
     }
 }
 
-void FSPoserAnimator::savePosingState(LLVOAvatar* avatar, LLSD* saveRecord)
+void FSPoserAnimator::savePosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord)
 {
-    mPosingState.writeMotionStates(avatar, saveRecord);
+    mPosingState.writeMotionStates(avatar, ignoreOwnership, saveRecord);
 }
 
 const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(const std::string& jointName) const
@@ -1035,9 +1062,10 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar* avatar)
     if (posingMotion->isStopped())
     {
         if (avatar->isSelf())
+        {
             gAgent.stopFidget();
-
-        mPosingState.captureMotionStates(avatar);
+            mPosingState.captureMotionStates(avatar);
+        }
 
         avatar->startDefaultMotions();
         avatar->startMotion(posingMotion->motionId());
@@ -1219,6 +1247,9 @@ void FSPoserAnimator::undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint
 
 void FSPoserAnimator::undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo)
 {
+    if (!posingMotion)
+        return;
+
     FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint.jointName());
     if (!jointPose)
         return;

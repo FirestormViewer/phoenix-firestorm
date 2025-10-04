@@ -20,6 +20,11 @@ width="430">
 	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
 	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
 	<string name="icon_save_query" translate="false">Info</string>
+	<string name="icon_pose_perm_sent" translate="false">Permission_Edit_Objects_Mine</string>
+	<string name="icon_pose_perm_rec" translate="false">Permission_Edit_Objects_Theirs</string>
+	<string name="icon_pose_perm_collab" translate="false">Check_Mark</string>
+	<string name="icon_pose_perm_denied" translate="false">Parcel_Exp_Color</string>
+	<string name="icon_pose_perm_all" translate="false">Person_Check</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
@@ -873,7 +878,7 @@ width="430">
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="232"
+						 top="221"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
@@ -894,7 +899,7 @@ width="430">
 						 flash_color="0.7 0.7 1 1"
 						 button_flash_count="64"
 						 button_flash_rate="0.5"
-						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
+						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to."
 						 name="start_stop_posing_button"
 						 width="150">
 							<button.commit_callback
@@ -913,6 +918,49 @@ width="430">
 						 width="172">
 							<button.commit_callback
 							 function="Poser.SetToTPose"/>
+						</button>
+						<button
+						 height="21"
+						 follows="top|left"
+						 is_toggle="true"
+						 label="Share Posing"
+						 enabled="false"
+						 top_pad="1"
+						 label_selected="Stop Share"
+						 image_hover_unselected="Toolbar_Middle_Over"
+						 image_selected="Toolbar_Middle_Selected"
+						 image_unselected="Toolbar_Middle_Off"
+						 button_flash_enable="true"
+						 flash_color="0.7 0.7 1 1"
+						 button_flash_count="64"
+						 button_flash_rate="0.5"
+						 tool_tip="Select an avatar and click to ask them share poses. If they agree, they can see you and you can see them. Stop sharing any time. When you stop sharing, they stop seeing your pose."
+						 name="start_stop_pose_sharing_button"
+						 width="85">
+							<button.commit_callback
+							 function="Poser.StartStopAnimationSharing"/>
+						</button>
+						<button
+						 height="21"
+						 follows="top|left"
+						 is_toggle="true"
+						 label="Give Control"
+						 enabled="false"
+						 top_delta="0"
+						 left_pad="2"
+						 label_selected="Stop Control"
+						 image_hover_unselected="Toolbar_Middle_Over"
+						 image_selected="Toolbar_Middle_Selected"
+						 image_unselected="Toolbar_Middle_Off"
+						 button_flash_enable="true"
+						 flash_color="0.7 0.7 1 1"
+						 button_flash_count="64"
+						 button_flash_rate="0.5"
+						 tool_tip="Once you are Sharing with someone, this allows THEM to pose YOU. You can still pose you too. Stop at any time. When you stop, you will still be sharing."
+						 name="start_stop_pose_control_button"
+						 width="85">
+							<button.commit_callback
+							 function="Poser.StartStopAnimationControl"/>
 						</button>
 					</panel>
 					<panel

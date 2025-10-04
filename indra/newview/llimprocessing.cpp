@@ -81,6 +81,9 @@
 #include "llviewernetwork.h"
 #include "sound_ids.h"
 #include "NACLantispam.h"
+// <FS:AR> FIRE-35675: Poser IM
+#include "fsposercollab.h"
+// </FS:AR>
 
 extern void on_new_message(const LLSD& msg);
 
@@ -793,6 +796,14 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 // do nothing -- don't distract newbies in
                 // Prelude with global IMs
             }
+            // <FS:AR> FIRE-35675: Poser IM
+            else if (offline == IM_ONLINE && !is_muted
+                        && to_id.notNull() && from_id.notNull()
+                        && FSPoserCollab::isInstantMessageForPoser(message))
+            {
+                FSPoserCollab::processInstantMessage(from_id, message);
+            }
+            // </FS:AR FIRE-35675>
 // [RLVa:KB] - Checked: RLVa-2.1.0
             else if ( (RlvActions::isRlvEnabled()) && (offline == IM_ONLINE) && (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) &&
                       (message.length() > 3) && (RLV_CMD_PREFIX == message[0]) && (RlvHandler::instance().processIMQuery(from_id, message)) )

@@ -424,6 +424,14 @@ public:
     bool isPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint);
 
     /// <summary>
+    /// Determines whether the supplied PoserJoint for the supplied avatar has been modified this session, even if all change has been reverted.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being queried for.</param>
+    /// <returns>True if this is joint has been changed while posing even if the change has been reverted or undone, otherwise false.</returns>
+    bool hasJointBeenChanged(LLVOAvatar* avatar, const FSPoserJoint& joint);
+
+    /// <summary>
     /// Sets whether the supplied PoserJoint for the supplied avatar should be posed.
     /// </summary>
     /// <param name="avatar">The avatar having the joint to which we refer.</param>
@@ -721,11 +729,19 @@ public:
     bool loadPosingState(LLVOAvatar* avatar, LLSD pose);
 
     /// <summary>
+    /// Applies the posing states to the posing motion for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">That avatar whose posing state should be loaded.</param>
+    /// <returns>True if the state applied successfully, otherwise false.</returns>
+    bool applyStatesToPosingMotion(LLVOAvatar* avatar);
+
+    /// <summary>
     /// Adds the posing state for the supplied avatar to the supplied record.
     /// </summary>
     /// <param name="avatar">That avatar whose posing state should be written.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership while saving.</param>
     /// <param name="saveRecord">The record to write the posing state to.</param>
-    void savePosingState(LLVOAvatar* avatar, LLSD* saveRecord);
+    void savePosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord);
 
     /// <summary>
     /// Purges and recaptures the pose state for the supplied avatar.
@@ -733,17 +749,6 @@ public:
     /// <param name="avatar">The avatar whose pose state is to be recapture.</param>
     /// <param name="jointsRecaptured">The joints which were recaptured.</param>
     void updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserAnimator::FSPoserJoint*> jointsRecaptured);
-
-    /// <summary>
-    /// Add a new posing state, or updates the matching posing state with the supplied data.
-    /// </summary>
-    /// <param name="avatar">The avatar the posing state is intended for.</param>
-    /// <param name="animId">The ID of the animation.</param>
-    /// <param name="updateTime">The frame-time of the animation.</param>
-    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
-    /// <param name="captureOrder">The capture order.</param>
-    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
-    bool addOrUpdatePosingState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
 
     /// <summary>
     /// Traverses the joints and applies reversals to the base rotations if needed.

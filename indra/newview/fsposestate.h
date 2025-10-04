@@ -52,17 +52,6 @@ public:
     void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured);
 
     /// <summary>
-    /// Add a new posing state, or updates the matching posing state with the supplied data.
-    /// </summary>
-    /// <param name="avatar">The avatar the posing state is intended for.</param>
-    /// <param name="animId">The ID of the animation.</param>
-    /// <param name="updateTime">The frame-time of the animation.</param>
-    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
-    /// <param name="captureOrder">The capture order.</param>
-    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
-    bool addOrUpdatePosingMotionState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
-
-    /// <summary>
     /// Removes all current animation states for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose animations are to be purged.</param>
@@ -72,8 +61,9 @@ public:
     /// Writes any documented poses for the supplied avatar to the supplied stream.
     /// </summary>
     /// <param name="avatar">The avatar whose animations may have been captured.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership.</param>
     /// <param name="saveRecord">The record to add to.</param>
-    void writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord);
+    void writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord);
 
     /// <summary>
     /// Restores pose state(s) from the supplied record.

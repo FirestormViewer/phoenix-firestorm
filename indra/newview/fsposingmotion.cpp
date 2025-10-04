@@ -294,7 +294,7 @@ bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionT
         hasRotation = hasPosition = hasScale = false;
         motionToLoadAsFsPosingMotion->getJointStateAtTime(jointName, timeToLoadAt, &hasRotation, &rot, &hasPosition, &position, &hasScale, &scale);
 
-        if (hasRotation)
+        if (hasRotation && !poserJoint_iter->userHasSetBaseRotationToZero())
             poserJoint_iter->setBaseRotation(rot, priority);
 
         if (hasPosition)
