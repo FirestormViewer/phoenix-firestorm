@@ -64,6 +64,8 @@ void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
 
     if (zeroBase)
         zeroBaseRotation(true);
+    else
+        mCurrentState.mUserSpecifiedBaseZero = false;
 
     mCurrentState.mRotation.set(rot);
     mCurrentState.mLastChangeWasRotational = true;

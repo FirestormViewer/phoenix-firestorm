@@ -1056,6 +1056,7 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
         }
 
         addBoldToScrollList(mHandJointsScrollList, avatar);
+        sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
     }
     catch ( const std::exception& e )
     {

@@ -134,6 +134,7 @@ void FSPoserCollab::processEnqueuedMessages()
             continue;
 
         auto changeType = messIt->second;
+        std::string changedAvId = messIt->first.asString();
 
         std::vector<std::string> bodyRotPosScaleText;
         if (changeType == POSECHANGE_BONE || changeType == POSECHANGE_BOTH)
@@ -153,7 +154,7 @@ void FSPoserCollab::processEnqueuedMessages()
             {
                 FSEnqueuedPoseMessage newMessage;
                 newMessage.mRecipient = it->first;
-                newMessage.message    = std::string(POSER_MESSAGE_START_BODY) + ":" + bodyRotPosScaleText[i];
+                newMessage.message    = std::string(POSER_MESSAGE_START_BODY) + ":" + changedAvId + ":" + bodyRotPosScaleText[i];
 
                 mEnqueuedChatMessages.push_back(newMessage);
             }
@@ -162,8 +163,8 @@ void FSPoserCollab::processEnqueuedMessages()
             for (size_t i = 0; i < poseInfoText.size(); i++)
             {
                 FSEnqueuedPoseMessage newMessage;
-                newMessage.mRecipient = it->first;
-                newMessage.message    = std::string(POSER_MESSAGE_START_POSES) + ":" + poseInfoText[i];
+                newMessage.mRecipient     = it->first;
+                newMessage.message    = std::string(POSER_MESSAGE_START_POSES) + ":" + changedAvId + ":" + poseInfoText[i];
 
                 mEnqueuedChatMessages.push_back(newMessage);
             }
@@ -198,7 +199,7 @@ void FSPoserCollab::stopPosingAvatar()
     }
 }
 
-void FSPoserCollab::processPoserMessage(LLUUID avatarId, std::string chatMessage)
+void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage)
 {
     if (chatMessage.empty())
         return;
@@ -211,20 +212,32 @@ void FSPoserCollab::processPoserMessage(LLUUID avatarId, std::string chatMessage
     if (result.size() < 3)
         return;
 
-    LLVOAvatar* avatar = getAvatarByUuid(avatarId);
-    if (!avatar)
+    LLUUID avatarIdMessageWantsToPose;
+    if (!LLUUID::parseUUID(result[2], &avatarIdMessageWantsToPose))
+        avatarIdMessageWantsToPose = senderId;
+
+    bool messageIsFromThemAndAboutThem = avatarIdMessageWantsToPose == senderId;
+    bool messageIsAboutMe = avatarIdMessageWantsToPose == gAgentID;
+    bool senderCanChangeMyPose =
+        sAvatarIdToCollabState[senderId] == COLLAB_THEY_POSE_ME || sAvatarIdToCollabState[senderId] == COLLAB_POSE_EACH_OTHER;
+
+    if (!messageIsFromThemAndAboutThem && !(messageIsAboutMe && senderCanChangeMyPose))
+        return;
+
+    LLVOAvatar* avatarToPose = getAvatarByUuid(avatarIdMessageWantsToPose);
+    if (!avatarToPose)
         return;
 
     std::string messageType = result[1];
 
-    if (std::string(POSER_MESSAGE_START_BODY) == messageType)
-        processBodyMessage(result, avatar);
-    else if (std::string(POSER_MESSAGE_START_POSES) == messageType)
-        processPoseMessage(result, avatar);
-    else if (std::string(POSER_MESSAGE_STOP_POSING) == messageType)
-        processStopMessage(avatar);
-    else if (std::string(POSER_MESSAGE_PERMISSION) == messageType)
-        updateLocalCollabState(result[2], avatar);
+    if (messageType == std::string(POSER_MESSAGE_START_BODY))
+        processBodyMessage(result, avatarToPose);
+    else if (messageType == std::string(POSER_MESSAGE_START_POSES))
+        processPoseMessage(result, avatarToPose);
+    else if (messageType == std::string(POSER_MESSAGE_STOP_POSING))
+        processStopMessage(avatarToPose);
+    else if (messageType == std::string(POSER_MESSAGE_PERMISSION))
+        updateLocalCollabState(result[2], avatarToPose);
 }
 
 void FSPoserCollab::processStopMessage(LLVOAvatar* avatar)
@@ -415,11 +428,14 @@ bool FSPoserCollab::isInstantMessageForPoser(const std::string& strMessage)
 
 void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LLVOAvatar* avatar)
 {
+    if (!avatar || !mPoserAnimator)
+        return;
+
     size_t      size = mesageTokens.size();
     LLVector3   vec3;
     std::string token;
     bool        zeroBaseRot;
-    for (size_t index = 2; index < size - 1; index++)
+    for (size_t index = 3; index < size - 1; index++)
     {
         token = mesageTokens[index];
         if (token.empty())
@@ -459,7 +475,7 @@ void FSPoserCollab::processPoseMessage(std::vector<std::string> mesageTokens, LL
     LLSD   saveRecord;
     int    animNumber = 0;
 
-    for (size_t index = 2; index < size - 1; index++)
+    for (size_t index = 3; index < size - 1; index++)
     {
         if (mesageTokens[index].empty())
             continue;

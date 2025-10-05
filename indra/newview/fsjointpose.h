@@ -97,6 +97,8 @@ class FSJointPose
     /// 'Public rotation' is the amount of rotation the user has added to the initial state.
     /// Public rotation is what a user may save to an external format (such as BVH).
     /// This distinguishes 'private' rotation, which is the state inherited from something like a pose in-world.
+    /// If zeroBase is true, we treat rotations as if in BVH mode: user work.
+    /// If zeroBase is false, we treat as NOT BVH: some existing pose and user work.
     /// </remarks>
     void setPublicRotation(bool zeroBase, const LLQuaternion& rot);
 

@@ -124,8 +124,19 @@ private:
     class FSEnqueuedPoseMessage
     {
     public:
-        LLUUID                 mRecipient;
-        std::string            message;
+        /// <summary>
+        /// The ID of whom the message should be sent to.
+        /// </summary>
+        LLUUID mRecipient;
+
+        /// <summary>
+        /// The message that will be sent to the Recipient.
+        /// </summary>
+        std::string message;
+
+        /// <summary>
+        /// The type of change message(s) that should be sent.
+        /// </summary>
         E_CollabPoseChangeType mMessageType;
     };
 
@@ -173,6 +184,14 @@ private:
     /// </summary>
     /// <param name="avatarId">The avatar ID the chat message may have posing information for.</param>
     /// <param name="chatMessage">The posing information to parse.</param>
+    /// <remarks>
+    /// Messages are semi-colon separated tokens.
+    /// The first 3 tokens are always the same
+    /// Token 1 = POSER_MESSAGE_PREFIX - used at a high level to determine if the IM is intended for poser
+    /// Token 2 = message type, eg POSER_MESSAGE_START_BODY
+    /// Token 3 = LLUUID for whom the message is about, could be blank, implying it is for the sender
+    /// Followed by the tokens for the message, whose parser is chosen by token 2
+    /// </remarks>
     void processPoserMessage(LLUUID avatarId, std::string chatMessage);
 
     /// <summary>
