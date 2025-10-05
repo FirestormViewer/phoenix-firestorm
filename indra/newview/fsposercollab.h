@@ -39,12 +39,12 @@ typedef enum E_CollabState
     COLLAB_NONE             = 0, // default state
     COLLAB_PERM_ENDED       = 1, // stop posing, etc.
     COLLAB_PERM_DENIED      = 2, // we are telling them no
-    COLLAB_I_ASKED_THEM     = 3,
-    COLLAB_THEY_ASKED_ME    = 4,
-    COLLAB_PERM_GRANTED     = 5,
-    COLLAB_THEY_POSE_ME     = 6,
-    COLLAB_I_POSE_THEM      = 7,
-    COLLAB_POSE_EACH_OTHER  = 8,
+    COLLAB_I_ASKED_THEM     = 3, // we have asked them to share
+    COLLAB_THEY_ASKED_ME    = 4, // They have asked us to share
+    COLLAB_PERM_GRANTED     = 5, // there has been an offer and acceptance
+    COLLAB_THEY_POSE_ME     = 6, // we tell them they can pose us
+    COLLAB_I_POSE_THEM      = 7, // we have been told we can pose them
+    COLLAB_POSE_EACH_OTHER  = 8, // we have allowed each other to pose us
     COLLAB_LAST
 } E_CollabState;
 
@@ -81,10 +81,11 @@ public:
     static bool isInstantMessageForPoser(const std::string& strMessage);
 
     /// <summary>
-    /// Makes an ASYNC request to the supplied avatar to pose together.
+    /// Updates the posing permission for the supplied avatar and sends an ASYNC message to them.
     /// </summary>
     /// <param name="avatarToUpdate">The avatar which is to be updated with this client's state.</param>
     /// <remarks>
+    /// This method is for use by this client: by our UI to specify our offers and acceptances.
     /// ASYNC meaning the message is not enqueued and sent when message throttle is ready; it is sent immediately.
     /// </remarks>
     void updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply);
@@ -259,18 +260,11 @@ private:
     FSPoseChatTimer* mPoseChatTimer = nullptr;
 
     /// <summary>
-    /// Updates sAvatarIdToCollabState with the appropriate state.
+    /// Updates Collab State for the supplied avatar with the appropriate state from the supplied avatar.
     /// </summary>
     /// <param name="avatar">That avatar to update.</param>
     /// <param name="newState">The new collab state.</param>
-    void updateLocalCollabState(LLVOAvatar* avatar, E_CollabState newState);
-
-    /// <summary>
-    /// Updates sAvatarIdToCollabState with the appropriate state.
-    /// </summary>
-    /// <param name="avatar">That avatar to update.</param>
-    /// <param name="newState">The new collab state.</param>
-    void updateLocalCollabState(std::string newState, LLVOAvatar* avatar);
+    void processCollabStateMessage(std::string newState, LLVOAvatar* avatar);
 
     /// <summary>
     /// The map collecting the kinds of poser messages that should be sent.

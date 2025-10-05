@@ -537,6 +537,7 @@ public:
     LLButton* mUndoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
     LLButton* mBtnJointRotate{ nullptr };
+    LLButton* mBtnJointReset{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 

@@ -211,6 +211,7 @@ bool FSFloaterPoser::postBuild()
     mRedoChangeBtn = getChild<LLButton>("button_redo_change");
     mUndoChangeBtn = getChild<LLButton>("undo_change");
     mSetToTposeButton = getChild<LLButton>("set_t_pose_button");
+    mBtnJointReset = getChild<LLButton>("poser_joint_reset");
 
     mJointsParentPnl = getChild<LLPanel>("joints_parent_panel");
     mTrackballPnl = getChild<LLPanel>("trackball_panel");
@@ -1362,6 +1363,9 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
     mLoadPosesBtn->setEnabled(enable);
     mSavePosesBtn->setEnabled(enable);
     mPoseSaveNameEditor->setEnabled(enable);
+    mBtnJointReset->setEnabled(enable);
+    mRedoChangeBtn->setEnabled(enable);
+    mUndoChangeBtn->setEnabled(enable);
 }
 
 void FSFloaterPoser::refreshJointScrollListMembers()

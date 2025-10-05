@@ -63,55 +63,130 @@ void FSPoserCollab::onTimedChatMessage()
     sendMessage(avatarToMessage, nextMessageToSend.message);
 }
 
+// this is from our UI, from our point of view: we are telling someone else what we want
 void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply)
 {
     if (!avatarToUpdate)
         return;
 
-    updateLocalCollabState(avatarToUpdate, stateToSupply);
+    bool          shouldSendMessage       = false;
+    LLUUID        avatarWhoseStateChanged = avatarToUpdate->getID();
+    E_CollabState currentState            = sAvatarIdToCollabState[avatarWhoseStateChanged];
 
-    sendMessage(avatarToUpdate, std::string(POSER_MESSAGE_PERMISSION) + ":" + std::to_string(stateToSupply));
+    switch (stateToSupply)
+    {
+        case COLLAB_THEY_ASKED_ME:
+        case COLLAB_I_POSE_THEM:
+        case COLLAB_POSE_EACH_OTHER:
+            // these states cannot be asserted by us
+            break;
+
+        case COLLAB_I_ASKED_THEM:
+            if (currentState == COLLAB_THEY_ASKED_ME)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
+            else
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_I_ASKED_THEM;
+
+            shouldSendMessage = true;
+            break;
+
+        case COLLAB_PERM_GRANTED:
+            if (currentState == COLLAB_POSE_EACH_OTHER)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_I_POSE_THEM;
+            if (currentState == COLLAB_THEY_POSE_ME)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
+
+            shouldSendMessage = true;
+            break;
+
+        case COLLAB_THEY_POSE_ME:
+            if (currentState == COLLAB_I_POSE_THEM)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_POSE_EACH_OTHER;
+            else
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_POSE_ME;
+
+            shouldSendMessage = true;
+            break;
+
+        case COLLAB_NONE:
+        case COLLAB_PERM_ENDED:
+        case COLLAB_PERM_DENIED:
+            sAvatarIdToCollabState[avatarWhoseStateChanged] = stateToSupply;
+            shouldSendMessage = true;
+            break;
+
+        default:
+            break;
+    }
+
+    if (shouldSendMessage)
+        sendMessage(avatarToUpdate, std::string(POSER_MESSAGE_PERMISSION) + ":" + std::to_string(stateToSupply));
+
+    if (!mFloaterPoserCallback.empty())
+        mFloaterPoserCallback(avatarWhoseStateChanged);
 }
 
-void FSPoserCollab::updateLocalCollabState(std::string newState, LLVOAvatar* avatar)
+// this is a message from another client
+void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* avatar)
 {
-    if (newState.empty())
+    if (newState.empty() || !avatar)
         return;
 
     int stateValue;
     if (!tryParseInt(newState, &stateValue))
         return;
 
-    if (stateValue < 1 || stateValue >= COLLAB_LAST)
+    if (stateValue < 0 || stateValue >= COLLAB_LAST)
         return;
 
-    E_CollabState state = static_cast<E_CollabState>(stateValue);
-    if (state == COLLAB_I_ASKED_THEM) // if they sent us 'I asked them', on receipt that means 'they asked me'
-        state = COLLAB_THEY_ASKED_ME;
-
-    if (state == COLLAB_THEY_POSE_ME) // if they sent us 'They may pose me', on receipt that means 'i can pose them'
-        state = COLLAB_I_POSE_THEM;
-
-    updateLocalCollabState(avatar, state);
-}
-
-void FSPoserCollab::updateLocalCollabState(LLVOAvatar* avatar, E_CollabState newState)
-{
-    if (!avatar)
-        return;
-
+    E_CollabState stateTheyWant           = static_cast<E_CollabState>(stateValue);
     LLUUID        avatarWhoseStateChanged = avatar->getID();
     E_CollabState currentState            = sAvatarIdToCollabState[avatarWhoseStateChanged];
 
-    if (newState == COLLAB_I_ASKED_THEM && currentState == COLLAB_THEY_ASKED_ME ||
-        newState == COLLAB_THEY_ASKED_ME && currentState == COLLAB_I_ASKED_THEM) // once we have asked each other, permission is granted
-        sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
-    else if (newState == COLLAB_PERM_GRANTED && currentState == COLLAB_POSE_EACH_OTHER) // if we are posing each other, and I recind your perm to pose me, I can still pose you
-        sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_I_POSE_THEM;
-    else if (newState == COLLAB_THEY_POSE_ME && currentState == COLLAB_I_POSE_THEM) // if I am already posing you, and I give your perm to pose me, we pose each other
-        sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_POSE_EACH_OTHER;
-    else
-        sAvatarIdToCollabState[avatarWhoseStateChanged] = newState;
+    switch (stateTheyWant)
+    {
+        case COLLAB_POSE_EACH_OTHER:
+        case COLLAB_I_POSE_THEM:
+        case COLLAB_THEY_ASKED_ME:
+            break; // these states cannot be asserted by another
+
+        case COLLAB_PERM_GRANTED: // they can use this only to rescind previously granted permission
+            if (currentState == COLLAB_POSE_EACH_OTHER)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_POSE_ME;
+
+            if (currentState == COLLAB_I_POSE_THEM)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
+
+            break;
+
+        case COLLAB_I_ASKED_THEM:
+            // if they sent us 'I asked them', on receipt that means 'they asked me'
+            if (currentState == COLLAB_I_ASKED_THEM)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
+            else
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_ASKED_ME;
+            break;
+
+        case COLLAB_THEY_POSE_ME:
+            // if they sent us 'They may pose me', on receipt that means 'i can pose them'
+            if (currentState == COLLAB_PERM_GRANTED)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_I_POSE_THEM;
+
+            if (currentState == COLLAB_THEY_POSE_ME)
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_POSE_EACH_OTHER;
+
+            break;
+
+        case COLLAB_NONE:
+        case COLLAB_PERM_ENDED:
+        case COLLAB_PERM_DENIED:
+            // it is some kind of 'stop'
+            sAvatarIdToCollabState[avatarWhoseStateChanged] = stateTheyWant;
+            break;
+
+        default:
+            break;
+    }
 
     if (!mFloaterPoserCallback.empty())
         mFloaterPoserCallback(avatarWhoseStateChanged);
@@ -237,13 +312,18 @@ void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage
     else if (messageType == std::string(POSER_MESSAGE_STOP_POSING))
         processStopMessage(avatarToPose);
     else if (messageType == std::string(POSER_MESSAGE_PERMISSION))
-        updateLocalCollabState(result[2], avatarToPose);
+        processCollabStateMessage(result[2], avatarToPose);
 }
 
 void FSPoserCollab::processStopMessage(LLVOAvatar* avatar)
 {
+    if (!avatar)
+        return;
+
     mPoserAnimator->stopPosingAvatar(avatar);
-    updateLocalCollabState(avatar, COLLAB_PERM_ENDED);
+    sAvatarIdToCollabState[avatar->getID()] = COLLAB_PERM_ENDED;
+    if (!mFloaterPoserCallback.empty())
+        mFloaterPoserCallback(avatar->getID());
 }
 
 void FSPoserCollab::sendMessage(LLVOAvatar* recipient, std::string message) const
