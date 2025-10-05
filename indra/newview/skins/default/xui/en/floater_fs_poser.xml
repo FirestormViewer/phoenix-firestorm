@@ -20,11 +20,13 @@ width="430">
 	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
 	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
 	<string name="icon_save_query" translate="false">Info</string>
-	<string name="icon_pose_perm_sent" translate="false">Permission_Edit_Objects_Mine</string>
-	<string name="icon_pose_perm_rec" translate="false">Permission_Edit_Objects_Theirs</string>
-	<string name="icon_pose_perm_collab" translate="false">Check_Mark</string>
+	<string name="icon_pose_perm_sent" translate="false">Chat_History</string>
+	<string name="icon_pose_perm_rec" translate="false">Unknown_Icon</string>
+	<string name="icon_pose_perm_collab" translate="false">Permission_Visible_Online</string>
 	<string name="icon_pose_perm_denied" translate="false">Parcel_Exp_Color</string>
-	<string name="icon_pose_perm_all" translate="false">Person_Check</string>
+	<string name="icon_pose_perm_theyposeme" translate="false">Permission_Edit_Objects_Mine</string>
+	<string name="icon_pose_perm_iposethem" translate="false">Permission_Edit_Objects_Theirs</string>
+	<string name="icon_pose_perm_all" translate="false">Sync_Progress_2</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:

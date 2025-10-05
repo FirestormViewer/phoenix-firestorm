@@ -2497,10 +2497,18 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
             break;
 
         case COLLAB_POSE_EACH_OTHER:
-        case COLLAB_I_POSE_THEM:
-        case COLLAB_THEY_POSE_ME:
             if (hasString("icon_pose_perm_all"))
                 iconName = getString("icon_pose_perm_all");
+            break;
+
+        case COLLAB_I_POSE_THEM:
+            if (hasString("icon_pose_perm_iposethem"))
+                iconName = getString("icon_pose_perm_iposethem");
+            break;
+
+        case COLLAB_THEY_POSE_ME:
+            if (hasString("icon_pose_perm_theyposeme"))
+                iconName = getString("icon_pose_perm_theyposeme");
             break;
 
         case COLLAB_PERM_GRANTED:
