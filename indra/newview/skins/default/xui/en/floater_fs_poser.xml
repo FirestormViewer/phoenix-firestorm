@@ -24,6 +24,7 @@ width="430">
 	<string name="icon_pose_perm_rec" translate="false">Unknown_Icon</string>
 	<string name="icon_pose_perm_collab" translate="false">Permission_Visible_Online</string>
 	<string name="icon_pose_perm_denied" translate="false">Parcel_Exp_Color</string>
+	<string name="icon_pose_perm_stopped" translate="false">Script_Error</string>
 	<string name="icon_pose_perm_theyposeme" translate="false">Permission_Edit_Objects_Mine</string>
 	<string name="icon_pose_perm_iposethem" translate="false">Permission_Edit_Objects_Theirs</string>
 	<string name="icon_pose_perm_all" translate="false">Sync_Progress_2</string>

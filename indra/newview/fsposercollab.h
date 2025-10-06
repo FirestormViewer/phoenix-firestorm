@@ -64,7 +64,7 @@ class FSPoseChatTimer;
 class FSPoserCollab
 {
 public:
-    typedef boost::function<void()> callback_t;
+    typedef boost::function<bool()> callback_t;
     typedef boost::function<void(const LLUUID)> callback_t1;
     FSPoserCollab(FSPoserAnimator* poserAnimator, FSPoserCollab::callback_t1 callback);
     virtual ~FSPoserCollab();
@@ -112,10 +112,11 @@ public:
     /// <summary>
     /// Sends an ASYNC message to everyone we have permitted to see us we have stopped posing.
     /// </summary>
+    /// <param name="quittingPoser">If we are quitting, and should discard all held permissions.</param>
     /// <remarks>
     /// ASYNC meaning the message is not enqueued and sent when message throttle is ready; it is sent immediately.
     /// </remarks>
-    void stopPosingAvatar();
+    void stopPosingMyAvatar(bool quittingPoser);
 
 private:
 
@@ -234,7 +235,8 @@ private:
     /// A timer runs this every second or so, and messages are emitted if any have accumulated.
     /// This effectively throttles the sending of messages from this clients poser to others.
     /// </remarks>
-    void onTimedChatMessage();
+    /// <returns>True if a message was sent, otherwise false.</returns>
+    bool onTimedChatMessage();
 
     bool tryParseFloat(std::string token, F32* number);
     bool tryParseInt(std::string token, int* number);
@@ -288,6 +290,11 @@ public:
 
 private:
     FSPoserCollab::callback_t mCallback;
+
+    /// <summary>
+    /// Counts ticks, an IM can go out if there are 20 ticks.
+    /// </summary>
+    int mTicksSinceLastMessage = 0;
 };
 
 /// <summary>

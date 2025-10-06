@@ -46,6 +46,7 @@
 #include "llinventoryfunctions.h"
 #include "lltoolcomp.h"
 #include "llloadingindicator.h"
+#include "llmutelist.h"
 
 namespace
 {
@@ -736,6 +737,16 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName)
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
+    bool haveImplicitPermission = havePermissionToAnimateAvatar(avatar); // self & control avatars you own
+    if (!haveImplicitPermission)
+    {
+        E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
+
+        bool iCanPoseThem = state >= COLLAB_I_POSE_THEM; // another avatar & given permission
+        if (!iCanPoseThem)
+            return;
+    }
+
     const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator.getPoserJointByName(jointName);
     if (!poserJoint)
         return;
@@ -1273,6 +1284,9 @@ void FSFloaterPoser::stopPosingAllAvatars()
             mPoserAnimator.stopPosingAvatar(listAvatar);
     }
 
+    if (mPoserCollaborator)
+        mPoserCollaborator->stopPosingMyAvatar(true);
+
     onAvatarSelect();
 }
 
@@ -1288,7 +1302,7 @@ void FSFloaterPoser::onPoseStartStop()
         mPoserAnimator.stopPosingAvatar(avatar);
 
         if (mPoserCollaborator && avatar->isSelf())
-            mPoserCollaborator->stopPosingAvatar();
+            mPoserCollaborator->stopPosingMyAvatar(true);
     }
     else
     {
@@ -1814,7 +1828,15 @@ void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimat
     if (!avatarp)
         return;
 
-    if (joints.size() >= 1)
+    bool iCanPoseThem           = false;
+    bool haveImplicitPermission = havePermissionToAnimateAvatar(avatarp); // self & control avatars you own
+    if (!haveImplicitPermission)
+    {
+        E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatarp) : COLLAB_NONE;
+        iCanPoseThem = state >= COLLAB_I_POSE_THEM; // another avatar & given permission
+    }
+
+    if ((joints.size() >= 1) && (haveImplicitPermission || iCanPoseThem))
         FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
     else
         FSToolCompPose::getInstance()->setJoint(nullptr);
@@ -2428,6 +2450,10 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (!LLAvatarNameCache::get(uuid, &av_name))
             continue;
 
+        bool isMuted = LLMuteList::getInstance()->isMuted(uuid);
+        if (isMuted)
+            continue;
+
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
         row["columns"][COL_ICON]["type"]   = "icon";
@@ -2519,6 +2545,11 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
         case COLLAB_PERM_DENIED:
             if (hasString("icon_pose_perm_denied"))
                 iconName = getString("icon_pose_perm_denied");
+            break;
+
+        case COLLAB_PERM_ENDED:
+            if (hasString("icon_pose_perm_stopped"))
+                iconName = getString("icon_pose_perm_stopped");
             break;
 
         case COLLAB_NONE:

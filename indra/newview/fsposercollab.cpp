@@ -44,23 +44,25 @@ void FSPoserCollab::destroyCollaborator()
     gPoserCollaborator = NULL;
 }
 
-void FSPoserCollab::onTimedChatMessage()
+bool FSPoserCollab::onTimedChatMessage()
 {
     if (!gPoserCollaborator)
-        return;
+        return false;
 
     processEnqueuedMessages();
     if (mEnqueuedChatMessages.size() < 1)
-        return;
+        return false;
 
     FSEnqueuedPoseMessage nextMessageToSend = mEnqueuedChatMessages[0];
     mEnqueuedChatMessages.pop_front();
 
     LLVOAvatar* avatarToMessage = getAvatarByUuid(nextMessageToSend.mRecipient);
     if (!avatarToMessage)
-        return;
+        return false;
 
     sendMessage(avatarToMessage, nextMessageToSend.message);
+
+    return true;
 }
 
 // this is from our UI, from our point of view: we are telling someone else what we want
@@ -162,9 +164,17 @@ void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* 
         case COLLAB_I_ASKED_THEM:
             // if they sent us 'I asked them', on receipt that means 'they asked me'
             if (currentState == COLLAB_I_ASKED_THEM)
+            {
                 sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
+
+                // In the instance other party asked while our poser was closed, we send this so they pose.
+                sendMessage(avatar, std::string(POSER_MESSAGE_PERMISSION) + ":" + std::to_string(COLLAB_I_ASKED_THEM));
+            }
             else
-                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_ASKED_ME;
+            {
+                if (currentState != COLLAB_PERM_GRANTED)
+                    sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_ASKED_ME;
+            }
             break;
 
         case COLLAB_THEY_POSE_ME:
@@ -260,18 +270,20 @@ void FSPoserCollab::enqueuePoserChatMessage(LLVOAvatar* avatarWhosePoseChanged, 
         mAvatarIdToMessageType[avatarWhosePoseChanged->getID()] = changeType;
 }
 
-void FSPoserCollab::stopPosingAvatar()
+void FSPoserCollab::stopPosingMyAvatar(bool quittingPoser)
 {
     for (auto it = sAvatarIdToCollabState.begin(); it != sAvatarIdToCollabState.end(); it++)
     {
         LLVOAvatar* avatar = getAvatarByUuid(it->first);
         if (!avatar)
             continue;
-        if (it->second < COLLAB_PERM_GRANTED)
-            continue;
 
-        sendMessage(avatar, std::string(POSER_MESSAGE_STOP_POSING) + ":Stopped");
+        if (it->second >= COLLAB_THEY_ASKED_ME)
+            sendMessage(avatar, std::string(POSER_MESSAGE_STOP_POSING) + ":Stopped");
     }
+
+    if (quittingPoser)
+        sAvatarIdToCollabState.clear();
 }
 
 void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage)
@@ -484,6 +496,8 @@ void FSPoserCollab::processInstantMessage(const LLUUID& idSender, const std::str
         return;
     if (idSender.isNull())
         return;
+    if (strMessage.empty())
+        return;
 
     if (strMessage.find(std::string(POSER_MESSAGE_PREFIX)) != 0)
         return; // the chat must start with our header
@@ -628,16 +642,29 @@ std::vector<std::string> FSPoserCollab::tokenizeChatString(const std::string& s,
     return result;
 }
 
-FSPoseChatTimer::FSPoseChatTimer(FSPoserCollab::callback_t callback) : LLEventTimer(2.0f), mCallback(callback)
+FSPoseChatTimer::FSPoseChatTimer(FSPoserCollab::callback_t callback) : LLEventTimer(0.1f), mCallback(callback)
 {
 }
 
+/// <summary>
+/// We want to throttle IM output similar to llInstantMessage: one per two seconds (script sleep time).
+/// We also want to avoid the feeling of making more lag: make an edit and not sending it for 2 seconds.
+/// </summary>
+/// <returns>False.</returns>
 bool FSPoseChatTimer::tick()
 {
     if (mCallback.empty())
         return false;
 
-    mCallback();
+    mTicksSinceLastMessage++;
+    if (mTicksSinceLastMessage < 20)
+        return false;
+
+    if (mTicksSinceLastMessage > 20)
+        mTicksSinceLastMessage = 20;
+
+    if (mCallback())
+        mTicksSinceLastMessage = 0;
 
     return false;
 }
