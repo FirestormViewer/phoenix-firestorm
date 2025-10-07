@@ -306,6 +306,13 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar to animate.</param>
     /// <returns>True if we have permission to animate, otherwise false.</returns>
+    bool havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) const;
+
+    /// <summary>
+    /// Determines if we have permission to animate the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar to animate.</param>
+    /// <returns>True if we have permission to animate, otherwise false.</returns>
     bool havePermissionToAnimateAvatar(LLVOAvatar* avatar) const;
 
     /// <summary>

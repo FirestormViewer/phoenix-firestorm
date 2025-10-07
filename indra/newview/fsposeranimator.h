@@ -396,6 +396,20 @@ public:
     const FSPoserJoint* getPoserJointByName(const std::string& jointName) const;
 
     /// <summary>
+    /// Get a PoserJoint case-insensitive-matching the supplied name.
+    /// </summary>
+    /// <param name="jointNumber">The name of the joint to match.</param>
+    /// <returns>The matching joint if found, otherwise nullptr</returns>
+    const FSPoserJoint* getPoserJointByNumber(LLVOAvatar* avatar, const int jointNumber) const;
+
+    /// <summary>
+    /// Get a PoserJoint by its LLJoint number.
+    /// </summary>
+    /// <param name="jointNumber">The name of the joint to match.</param>
+    /// <returns>The matching joint if found, otherwise nullptr</returns>
+    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, std::string &jointNumber);
+
+    /// <summary>
     /// Tries to start posing the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar to begin posing.</param>

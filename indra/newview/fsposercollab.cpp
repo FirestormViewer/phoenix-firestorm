@@ -5,12 +5,20 @@
 #include "llimview.h"
 #include "llagentui.h"
 
-constexpr std::string_view POSER_MESSAGE_PREFIX = "#POSER:"; // preamble on all poser messages.
-constexpr std::string_view POSER_MESSAGE_START_BODY = "#SBOD"; // token indicating message has joint rot/pos/scale info
-constexpr std::string_view POSER_MESSAGE_START_POSES = "#SPOS"; // token indicating message has playing animation payload
-constexpr std::string_view POSER_MESSAGE_STOP_POSING = "#STOP"; // token indicating sender is stopping posing
-constexpr std::string_view POSER_MESSAGE_PERMISSION = "#PERM"; // token indicating message has a permission payload
-constexpr size_t POSER_MESSAGE_LENGTH = 950;
+constexpr std::string_view POSER_MESSAGE_PREFIX      = "#POSER:"; // preamble on all poser messages.
+constexpr std::string_view POSER_MESSAGE_START_BODY  = "#SBOD";   // token indicating message has joint rot/pos/scale info
+constexpr std::string_view POSER_MESSAGE_START_POSES = "#SPOS";   // token indicating message has playing animation payload
+constexpr std::string_view POSER_MESSAGE_STOP_POSING = "#STOP";   // token indicating sender is stopping posing
+constexpr std::string_view POSER_MESSAGE_PERMISSION  = "#PERM";   // token indicating message has a permission payload
+constexpr std::string_view DELIM                     = ":";       // delimiter separating message tokens
+constexpr size_t           POSER_MESSAGE_LENGTH      = 950;       // message length tolerated before we stop adding more tokens
+
+/// <summary>
+/// The constant time interval, in seconds, we wait after the last message to update arrived, before we do anything.
+/// UI controls like sliders and track pads send many events, one per frame more-or-less: the user is doing a thing.
+/// We want to wait until they have stopped or paused before enqueuing an update and sending an IM.
+/// </summary>
+constexpr std::chrono::duration<double> EnqueueWaitInterval = std::chrono::duration<double>(0.3);
 
 FSPoserCollab* gPoserCollaborator = NULL;
 std::map<LLUUID, E_CollabState> FSPoserCollab::sAvatarIdToCollabState;
@@ -61,6 +69,7 @@ bool FSPoserCollab::onTimedChatMessage()
         return false;
 
     sendMessage(avatarToMessage, nextMessageToSend.message);
+    LL_WARNS("Posing") << "Sending pose msg: " << nextMessageToSend.message << LL_ENDL;
 
     return true;
 }
@@ -122,7 +131,13 @@ void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabS
     }
 
     if (shouldSendMessage)
-        sendMessage(avatarToUpdate, std::string(POSER_MESSAGE_PERMISSION) + ":" + std::to_string(stateToSupply));
+    {
+        std::string message = std::string(POSER_MESSAGE_PERMISSION);
+        message += DELIM;
+        message += std::to_string(stateToSupply);
+
+        sendMessage(avatarToUpdate, message);
+    }
 
     if (!mFloaterPoserCallback.empty())
         mFloaterPoserCallback(avatarWhoseStateChanged);
@@ -168,7 +183,11 @@ void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* 
                 sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PERM_GRANTED;
 
                 // In the instance other party asked while our poser was closed, we send this so they pose.
-                sendMessage(avatar, std::string(POSER_MESSAGE_PERMISSION) + ":" + std::to_string(COLLAB_I_ASKED_THEM));
+                std::string message = std::string(POSER_MESSAGE_PERMISSION);
+                message += DELIM;
+                message += std::to_string(COLLAB_I_ASKED_THEM);
+
+                sendMessage(avatar, message);
             }
             else
             {
@@ -212,6 +231,10 @@ E_CollabState FSPoserCollab::getCollabLocalState(LLVOAvatar* avatar)
 
 void FSPoserCollab::processEnqueuedMessages()
 {
+    auto timeIntervalSinceLastChange = std::chrono::system_clock::now() - mTimeLastUpdateMessageArrived;
+    if (timeIntervalSinceLastChange < EnqueueWaitInterval)
+        return;
+
     for (auto messIt = mAvatarIdToMessageType.begin(); messIt != mAvatarIdToMessageType.end(); messIt++)
     {
         LLVOAvatar* avatarWhosePoseChanged = getAvatarByUuid(messIt->first);
@@ -239,7 +262,11 @@ void FSPoserCollab::processEnqueuedMessages()
             {
                 FSEnqueuedPoseMessage newMessage;
                 newMessage.mRecipient = it->first;
-                newMessage.message    = std::string(POSER_MESSAGE_START_BODY) + ":" + changedAvId + ":" + bodyRotPosScaleText[i];
+                newMessage.message = std::string(POSER_MESSAGE_START_BODY);
+                newMessage.message += DELIM;
+                newMessage.message += changedAvId;
+                newMessage.message += DELIM;
+                newMessage.message += bodyRotPosScaleText[i];
 
                 mEnqueuedChatMessages.push_back(newMessage);
             }
@@ -248,8 +275,12 @@ void FSPoserCollab::processEnqueuedMessages()
             for (size_t i = 0; i < poseInfoText.size(); i++)
             {
                 FSEnqueuedPoseMessage newMessage;
-                newMessage.mRecipient     = it->first;
-                newMessage.message    = std::string(POSER_MESSAGE_START_POSES) + ":" + changedAvId + ":" + poseInfoText[i];
+                newMessage.mRecipient   = it->first;
+                newMessage.message    = std::string(POSER_MESSAGE_START_POSES);
+                newMessage.message += DELIM;
+                newMessage.message += changedAvId;
+                newMessage.message += DELIM;
+                newMessage.message += poseInfoText[i];
 
                 mEnqueuedChatMessages.push_back(newMessage);
             }
@@ -268,6 +299,9 @@ void FSPoserCollab::enqueuePoserChatMessage(LLVOAvatar* avatarWhosePoseChanged, 
 
     if (changeType > currentType)
         mAvatarIdToMessageType[avatarWhosePoseChanged->getID()] = changeType;
+
+    mTimeLastUpdateMessageArrived = std::chrono::system_clock::now();
+    LL_WARNS("Posing") << "Enqueue poser msg" << LL_ENDL;
 }
 
 void FSPoserCollab::stopPosingMyAvatar(bool quittingPoser)
@@ -295,36 +329,44 @@ void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage
     if (!mPoserAnimator)
         return;
 
-    std::vector<std::string> result = tokenizeChatString(chatMessage, ':');
-    if (result.size() < 3)
-        return;
+    try
+    {
+        std::vector<std::string> result = tokenizeChatString(chatMessage, ':');
+        if (result.size() < 3)
+            return;
 
-    LLUUID avatarIdMessageWantsToPose;
-    if (!LLUUID::parseUUID(result[2], &avatarIdMessageWantsToPose))
-        avatarIdMessageWantsToPose = senderId;
+        LLUUID avatarIdMessageWantsToPose;
+        if (!LLUUID::parseUUID(result[2], &avatarIdMessageWantsToPose))
+            avatarIdMessageWantsToPose = senderId;
 
-    bool messageIsFromThemAndAboutThem = avatarIdMessageWantsToPose == senderId;
-    bool messageIsAboutMe = avatarIdMessageWantsToPose == gAgentID;
-    bool senderCanChangeMyPose =
-        sAvatarIdToCollabState[senderId] == COLLAB_THEY_POSE_ME || sAvatarIdToCollabState[senderId] == COLLAB_POSE_EACH_OTHER;
+        bool messageIsFromThemAndAboutThem = avatarIdMessageWantsToPose == senderId;
+        bool messageIsAboutMe              = avatarIdMessageWantsToPose == gAgentID;
+        bool senderCanChangeMyPose =
+            sAvatarIdToCollabState[senderId] == COLLAB_THEY_POSE_ME || sAvatarIdToCollabState[senderId] == COLLAB_POSE_EACH_OTHER;
 
-    if (!messageIsFromThemAndAboutThem && !(messageIsAboutMe && senderCanChangeMyPose))
-        return;
+        if (!messageIsFromThemAndAboutThem && !(messageIsAboutMe && senderCanChangeMyPose))
+            return;
 
-    LLVOAvatar* avatarToPose = getAvatarByUuid(avatarIdMessageWantsToPose);
-    if (!avatarToPose)
-        return;
+        LLVOAvatar* avatarToPose = getAvatarByUuid(avatarIdMessageWantsToPose);
+        if (!avatarToPose)
+            return;
 
-    std::string messageType = result[1];
+        std::string messageType = result[1];
 
-    if (messageType == std::string(POSER_MESSAGE_START_BODY))
-        processBodyMessage(result, avatarToPose);
-    else if (messageType == std::string(POSER_MESSAGE_START_POSES))
-        processPoseMessage(result, avatarToPose);
-    else if (messageType == std::string(POSER_MESSAGE_STOP_POSING))
-        processStopMessage(avatarToPose);
-    else if (messageType == std::string(POSER_MESSAGE_PERMISSION))
-        processCollabStateMessage(result[2], avatarToPose);
+        if (messageType == std::string(POSER_MESSAGE_START_BODY))
+            processBodyMessage(result, avatarToPose);
+        else if (messageType == std::string(POSER_MESSAGE_START_POSES))
+            processPoseMessage(result, avatarToPose);
+        else if (messageType == std::string(POSER_MESSAGE_STOP_POSING))
+            processStopMessage(avatarToPose);
+        else if (messageType == std::string(POSER_MESSAGE_PERMISSION))
+            processCollabStateMessage(result[2], avatarToPose);
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS("Posing") << "Exception caught trying to parse poser message from sender ID: " << senderId.asString() << e.what() << LL_ENDL;
+    }
+
 }
 
 void FSPoserCollab::processStopMessage(LLVOAvatar* avatar)
@@ -373,14 +415,18 @@ std::vector<std::string> FSPoserCollab::getRotPosScaleDiffAsText(LLVOAvatar* ava
     if (!mPoserAnimator->isPosingAvatar(avatar))
         return result;
 
-    LLVector3 rotation, position, scale;
-    bool      baseRotationIsZero;
+    LLVector3   rotation, position, scale;
+    bool        baseRotationIsZero, jointIsMirrored;
+    std::string jointNumber;
 
     std::string line;
     for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator->PoserJoints)
     {
         bool posingThisJoint = mPoserAnimator->isPosingAvatarJoint(avatar, pj);
         if (!posingThisJoint)
+            continue;
+
+        if (!mPoserAnimator->tryGetJointNumber(avatar, pj, jointNumber))
             continue;
 
         bool jointShouldUpdateChat = mPoserAnimator->hasJointBeenChanged(avatar, pj);
@@ -390,13 +436,21 @@ std::vector<std::string> FSPoserCollab::getRotPosScaleDiffAsText(LLVOAvatar* ava
         if (!mPoserAnimator->tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
             continue;
 
-        if (!line.empty())
-            line += ":";
+        jointIsMirrored = mPoserAnimator->getRotationIsMirrored(avatar, pj);
 
-        line += pj.jointName() + ":";
-        line += baseRotationIsZero ? "true:" : "false:";
-        line += getChatStringForVector(rotation) + ":";
-        line += getChatStringForVector(position) + ":";
+        if (!line.empty())
+            line += DELIM;
+
+        line += jointNumber;
+        line += DELIM;
+        line += baseRotationIsZero ? "t" : "f";
+        line += DELIM;
+        line += jointIsMirrored ? "t" : "f";
+        line += DELIM;
+        line += getChatStringForVector(rotation);
+        line += DELIM;
+        line += getChatStringForVector(position);
+        line += DELIM;
         line += getChatStringForVector(scale);
 
         if (line.size() < POSER_MESSAGE_LENGTH)
@@ -434,22 +488,22 @@ std::vector<std::string> FSPoserCollab::getPoseInfoAsText(LLVOAvatar* avatar)
             continue;
 
         if (!line.empty())
-            line += ":";
+            line += DELIM;
 
         if (control_map.has("animationId"))
             line += control_map["animationId"].asString();
 
-        line += ":";
+        line += DELIM;
 
         if (control_map.has("lastUpdateTime"))
             line += control_map["lastUpdateTime"].asString();
 
-        line += ":";
+        line += DELIM;
 
         if (control_map.has("jointNamesAnimated"))
             line += control_map["jointNamesAnimated"].asString();
 
-        line += ":";
+        line += DELIM;
 
         if (control_map.has("captureOrder"))
             line += control_map["captureOrder"].asString();
@@ -528,36 +582,45 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
     size_t      size = mesageTokens.size();
     LLVector3   vec3;
     std::string token;
-    bool        zeroBaseRot;
+    bool        zeroBaseRot, mirrored;
     for (size_t index = 3; index < size - 1; index++)
     {
         token = mesageTokens[index];
         if (token.empty())
             continue;
 
-        const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator->getPoserJointByName(token);
-        if (!poserJoint)
+        int jointNumber;
+        if (!tryParseInt(token, &jointNumber))
             continue;
 
-        if (index + 4 >= size)
+        const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator->getPoserJointByNumber(avatar, jointNumber);
+        if (!poserJoint)
+            continue;
+         
+        if (index + 5 >= size)
             break;
 
         token = mesageTokens[index + 1];
-        zeroBaseRot = token == "true";
+        zeroBaseRot = token == "t";
 
         token = mesageTokens[index + 2];
-        if (LLVector3::parseVector3(token, &vec3))
-            mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, vec3);
+        mirrored = token == "t";
 
         token = mesageTokens[index + 3];
         if (LLVector3::parseVector3(token, &vec3))
-            mPoserAnimator->loadJointPosition(avatar, poserJoint, true, vec3);
+            mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, vec3);
 
         token = mesageTokens[index + 4];
         if (LLVector3::parseVector3(token, &vec3))
+            mPoserAnimator->loadJointPosition(avatar, poserJoint, true, vec3);
+
+        token = mesageTokens[index + 5];
+        if (LLVector3::parseVector3(token, &vec3))
             mPoserAnimator->loadJointScale(avatar, poserJoint, true, vec3);
 
-        index += 4;
+        mPoserAnimator->setRotationIsMirrored(avatar, *poserJoint, mirrored);
+
+        index += 5;
     }
 }
 
@@ -657,7 +720,7 @@ bool FSPoseChatTimer::tick()
         return false;
 
     mTicksSinceLastMessage++;
-    if (mTicksSinceLastMessage < 20)
+    if (mTicksSinceLastMessage < 19)
         return false;
 
     if (mTicksSinceLastMessage > 20)

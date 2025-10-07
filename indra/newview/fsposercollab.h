@@ -37,14 +37,14 @@
 typedef enum E_CollabState
 {
     COLLAB_NONE             = 0, // default state
-    COLLAB_PERM_ENDED       = 1, // stop posing, etc.
+    COLLAB_PERM_ENDED       = 1, // user has rescinded our permission to view them.
     COLLAB_PERM_DENIED      = 2, // we are telling them no
     COLLAB_I_ASKED_THEM     = 3, // we have asked them to share
     COLLAB_THEY_ASKED_ME    = 4, // They have asked us to share
-    COLLAB_PERM_GRANTED     = 5, // there has been an offer and acceptance
+    COLLAB_PERM_GRANTED     = 5, // there has been an offer to share and an acceptance
     COLLAB_THEY_POSE_ME     = 6, // we tell them they can pose us
     COLLAB_I_POSE_THEM      = 7, // we have been told we can pose them
-    COLLAB_POSE_EACH_OTHER  = 8, // we have allowed each other to pose us
+    COLLAB_POSE_EACH_OTHER  = 8, // we both have allowed the other to pose us
     COLLAB_LAST
 } E_CollabState;
 
@@ -78,6 +78,12 @@ public:
     /// </summary>
     /// <param name="chat">The chat record.</param>
     static void processInstantMessage(const LLUUID& idSender, const std::string& strMessage);
+
+    /// <summary>
+    /// Examines the supplied message and determines if it is for the poser.
+    /// </summary>
+    /// <param name="strMessage">The message to examine.</param>
+    /// <returns>True if the message appears intended for poser, otherwise false.</returns>
     static bool isInstantMessageForPoser(const std::string& strMessage);
 
     /// <summary>
@@ -135,15 +141,10 @@ private:
         /// The message that will be sent to the Recipient.
         /// </summary>
         std::string message;
-
-        /// <summary>
-        /// The type of change message(s) that should be sent.
-        /// </summary>
-        E_CollabPoseChangeType mMessageType;
     };
 
     /// <summary>
-    /// Sends the supplied message to local chat.
+    /// Sends the supplied message as an instant message to the supplied recipient.
     /// </summary>
     /// <param name="recipient">The avatar we are sending a message to.</param>
     /// <param name="message">The message payload.</param>
@@ -187,7 +188,7 @@ private:
     /// <param name="avatarId">The avatar ID the chat message may have posing information for.</param>
     /// <param name="chatMessage">The posing information to parse.</param>
     /// <remarks>
-    /// Messages are semi-colon separated tokens.
+    /// Messages are colon separated tokens.
     /// The first 3 tokens are always the same
     /// Token 1 = POSER_MESSAGE_PREFIX - used at a high level to determine if the IM is intended for poser
     /// Token 2 = message type, eg POSER_MESSAGE_START_BODY
@@ -272,6 +273,11 @@ private:
     /// The map collecting the kinds of poser messages that should be sent.
     /// </summary>
     std::map<LLUUID, E_CollabPoseChangeType> mAvatarIdToMessageType;
+
+    /// <summary>
+    /// The time when the last message to update arrived, normally the last time someone edited a bone.
+    /// </summary>
+    std::chrono::system_clock::time_point mTimeLastUpdateMessageArrived = std::chrono::system_clock::now();
 
     /// <summary>
     /// Maintains the mapping of avatar IDs to posing state

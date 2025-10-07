@@ -738,14 +738,9 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName)
         return;
 
     bool haveImplicitPermission = havePermissionToAnimateAvatar(avatar); // self & control avatars you own
-    if (!haveImplicitPermission)
-    {
-        E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
-
-        bool iCanPoseThem = state >= COLLAB_I_POSE_THEM; // another avatar & given permission
-        if (!iCanPoseThem)
-            return;
-    }
+    bool iCanPoseThem           = havePermissionToAnimateOtherAvatar(avatar);
+    if (!haveImplicitPermission && !iCanPoseThem)
+        return;
 
     const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator.getPoserJointByName(jointName);
     if (!poserJoint)
@@ -1367,6 +1362,15 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar) const
     return false;
 }
 
+bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar *avatar) const
+{
+    if (!avatar || avatar->isDead())
+        return false;
+
+    E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
+    return state >= COLLAB_I_POSE_THEM;
+}
+
 void FSFloaterPoser::poseControlsEnable(bool enable)
 {
     mTrackballPnl->setEnabled(enable);
@@ -1828,13 +1832,9 @@ void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimat
     if (!avatarp)
         return;
 
-    bool iCanPoseThem           = false;
-    bool haveImplicitPermission = havePermissionToAnimateAvatar(avatarp); // self & control avatars you own
-    if (!haveImplicitPermission)
-    {
-        E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatarp) : COLLAB_NONE;
-        iCanPoseThem = state >= COLLAB_I_POSE_THEM; // another avatar & given permission
-    }
+
+    bool haveImplicitPermission = havePermissionToAnimateAvatar(avatarp);
+    bool iCanPoseThem           = havePermissionToAnimateOtherAvatar(avatarp);
 
     if ((joints.size() >= 1) && (haveImplicitPermission || iCanPoseThem))
         FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
