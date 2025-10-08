@@ -230,6 +230,11 @@ private:
     void processEnqueuedMessages();
 
     /// <summary>
+    /// Checks whether all avatar IDs are still online, and if not, preens and informs UI.
+    /// </summary>
+    void verifyOnlineStatusForCollab();
+
+    /// <summary>
     /// The event handler which polls chat messages.
     /// </summary>
     /// <remarks>

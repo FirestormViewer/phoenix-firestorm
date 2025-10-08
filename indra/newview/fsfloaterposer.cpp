@@ -403,7 +403,6 @@ void FSFloaterPoser::onPoserCollabEvent(LLUUID avWhosePermsChanged)
     if (!arePosingSelected && state >= COLLAB_PERM_GRANTED && couldAnimateAvatar(avatar))
     {
         mPoserAnimator.tryPosingAvatar(avatar);
-        
         sendPoseUpdateByChat(gAgentAvatarp, POSECHANGE_BOTH); // sync them with our posestate
     }
 

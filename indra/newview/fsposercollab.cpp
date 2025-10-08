@@ -57,6 +57,7 @@ bool FSPoserCollab::onTimedChatMessage()
     if (!gPoserCollaborator)
         return false;
 
+    verifyOnlineStatusForCollab();
     processEnqueuedMessages();
     if (mEnqueuedChatMessages.size() < 1)
         return false;
@@ -227,6 +228,24 @@ E_CollabState FSPoserCollab::getCollabLocalState(LLVOAvatar* avatar)
         return COLLAB_NONE;
 
     return sAvatarIdToCollabState[avatar->getID()];
+}
+
+void FSPoserCollab::verifyOnlineStatusForCollab()
+{
+    for (auto it = sAvatarIdToCollabState.begin(); it != sAvatarIdToCollabState.end(); it++)
+    {
+        if (gAgentID == it->first)
+            continue;
+
+        bool isOnline = LLAvatarTracker::instance().isBuddyOnline(it->first);
+        if (isOnline)
+            continue;
+
+        it->second = COLLAB_PERM_ENDED;
+
+        if (!mFloaterPoserCallback.empty())
+            mFloaterPoserCallback(it->first);
+    }
 }
 
 void FSPoserCollab::processEnqueuedMessages()
