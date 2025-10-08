@@ -422,11 +422,8 @@ void FSManipRotateJoint::handleSelect()
  */
 bool FSManipRotateJoint::updateVisiblity()
 {
-    if (!mJoint)
-    {
-        // No joint to manipulate, not visible
+    if (!isAvatarJointSafeToUse())
         return false;
-    }
 
     if (!hasMouseCapture())
     {
@@ -697,12 +694,8 @@ void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4& no
  */
 void FSManipRotateJoint::render()
 {
-    // Early-out if no joint or avatar.
-    // Needs more something: if they log out while dots on them, asplode
-    if (!mJoint || !mAvatar || mAvatar->isDead())
-    {
+    if (!isAvatarJointSafeToUse())
         return;
-    }
     
     // update visibility and rotation center.
     bool activeJointVisible = updateVisiblity();
@@ -960,10 +953,8 @@ void FSManipRotateJoint::renderActiveRing( F32 radius, F32 width, const LLColor4
 // Not sure we use it though...TBC (see mouse down on part instead)
 bool FSManipRotateJoint::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-    if (!mJoint)
-    {
+    if (!isAvatarJointSafeToUse())
         return false;
-    }
 
     // Highlight the manipulator as before.
     highlightManipulators(x, y);
@@ -1017,14 +1008,17 @@ bool FSManipRotateJoint::handleMouseDown(S32 x, S32 y, MASK mask)
  */
 bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
 {
-    auto * poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
+    // For joint manipulation, require both a valid joint and avatar.
+    if (!isAvatarJointSafeToUse())
+        return false;
+
+    auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
+    if (!poser)
+        return false;
+
     // Determine which ring (axis) is under the mouse, also highlights selectable joints.
     highlightManipulators(x, y);
-    // For joint manipulation, require both a valid joint and avatar.
-    if (!mJoint || !mAvatar || mAvatar->isDead() || !poser)
-    {
-        return false;
-    }
+
     poser->setFocus(true);
     S32 hit_part = mHighlightedPart;
 
@@ -1143,7 +1137,7 @@ void FSManipRotateJoint::highlightManipulators(S32 x, S32 y)
     mHighlightedPart = LL_NO_PART;
     // Instead of using mObjectSelection->getFirstMoveableObject(),
     // simply require that the joint (and the avatar) is valid.
-    if (!mJoint || !mAvatar || mAvatar->isDead())
+    if (!isAvatarJointSafeToUse())
     {
         highlightHoverSpheres(x, y);
         gViewerWindow->setCursor(UI_CURSOR_ARROW);
@@ -1436,7 +1430,8 @@ LLQuaternion FSManipRotateJoint::dragConstrained(S32 x, S32 y)
 
 void FSManipRotateJoint::drag(S32 x, S32 y)
 {
-    if (!updateVisiblity() || !mJoint) return;
+    if (!updateVisiblity())
+        return;
 
     LLQuaternion delta_rot;
     if (mManipPart == LL_ROT_GENERAL)
@@ -1501,4 +1496,18 @@ LLVector3 FSManipRotateJoint::setConstraintAxis()
     }
     mConstraintAxis = axis;
     return axis;
+}
+
+bool FSManipRotateJoint::isAvatarJointSafeToUse()
+{
+    if (!mJoint || !mAvatar)
+        return false;
+
+    if (mAvatar->isDead() || !mAvatar->isFullyLoaded())
+    {
+        setAvatar(nullptr);
+        return false;
+    }
+
+    return true;
 }

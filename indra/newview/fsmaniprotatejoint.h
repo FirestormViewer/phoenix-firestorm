@@ -138,6 +138,8 @@ private:
     void renderRingPass(const RingRenderParams& params, float radius, float width, int pass);
     void renderAxes(const LLVector3& center, F32 size, const LLQuaternion& rotation);
 
+    bool isAvatarJointSafeToUse();
+
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
 };
