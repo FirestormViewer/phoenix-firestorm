@@ -8552,7 +8552,7 @@ void LLPipeline::renderFinalize()
     };
     // </FS:Beq>
     // <FS:Beq> new shader for snapshot frame helper
-    if (renderSnapshotFrame(targetBuffer, activeBuffer))
+    if (renderSnapshotFrame(activeBuffer, targetBuffer))
     {
         auto prevActiveBuffer = activeBuffer;
         activeBuffer = targetBuffer;
