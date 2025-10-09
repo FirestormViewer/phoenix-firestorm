@@ -49,10 +49,10 @@ void main()
     else
     {
         // Draw border around the snapshot frame
-        if ((tc.x >= border_rect_px.x  && tc.x < frame_rect_px.x) ||
-            (tc.x <= border_rect_px.z  && tc.x > frame_rect_px.z) ||
-            (tc.y >= border_rect_px.y  && tc.y < frame_rect_px.y) ||
-            (tc.y <= border_rect_px.w  && tc.y > frame_rect_px.w))
+        if ((tc.x >= border_rect_px.x && tc.x < frame_rect_px.x) ||
+            (tc.x > frame_rect_px.z && tc.x <= border_rect_px.z) ||
+            (tc.y >= border_rect_px.y && tc.y < frame_rect_px.y) ||
+            (tc.y > frame_rect_px.w && tc.y <= border_rect_px.w))
         {
             diff.rgb = mix(diff.rgb, border_color, 0.5);
         }
