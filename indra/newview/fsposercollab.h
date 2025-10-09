@@ -41,10 +41,11 @@ typedef enum E_CollabState
     COLLAB_PERM_DENIED      = 2, // we are telling them no
     COLLAB_I_ASKED_THEM     = 3, // we have asked them to share
     COLLAB_THEY_ASKED_ME    = 4, // They have asked us to share
-    COLLAB_PERM_GRANTED     = 5, // there has been an offer to share and an acceptance
-    COLLAB_THEY_POSE_ME     = 6, // we tell them they can pose us
-    COLLAB_I_POSE_THEM      = 7, // we have been told we can pose them
-    COLLAB_POSE_EACH_OTHER  = 8, // we both have allowed the other to pose us
+    COLLAB_PARTY_MODE       = 5, // We are posing them in party mode
+    COLLAB_PERM_GRANTED     = 6, // there has been an offer to share and an acceptance
+    COLLAB_THEY_POSE_ME     = 7, // we tell them they can pose us
+    COLLAB_I_POSE_THEM      = 8, // we have been told we can pose them
+    COLLAB_POSE_EACH_OTHER  = 9, // we both have allowed the other to pose us
     COLLAB_LAST
 } E_CollabState;
 
