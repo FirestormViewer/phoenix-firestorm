@@ -112,9 +112,9 @@ private:
         bool motionApplied = false;
 
         /// <summary>
-        /// Whether the avatar owns the pose, or the pose was loaded.
+        /// Whether gAgent owns the pose, or the pose was loaded from XML.
         /// </summary>
-        bool avatarOwnsPose = false;
+        bool gAgentOwnsPose = false;
 
         /// <summary>
         /// When reloading, larger numbers are loaded last, nesting order and priority.
@@ -137,12 +137,12 @@ private:
     void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
 
     /// <summary>
-    /// Gets whether the supplied avatar owns, and thus can save information about the supplied asset ID.
+    /// Gets whether gAgentID owns, and thus can save information about the supplied asset ID.
     /// </summary>
     /// <param name="avatar">The avatar to query ownership for.</param>
     /// <param name="motionId">The asset ID of the object.</param>
     /// <returns>True if the avatar owns the asset, otherwise false.</returns>
-    bool canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId);
+    bool canSaveMotionId(LLAssetID motionId);
 
     struct compareByCaptureOrder
     {

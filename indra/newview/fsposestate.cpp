@@ -21,7 +21,7 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
         newState.motionId       = anim_it->first;
         newState.lastUpdateTime = motion->getLastUpdateTime();
         newState.captureOrder   = 0;
-        newState.avatarOwnsPose = canSaveMotionId(avatar, anim_it->first);
+        newState.gAgentOwnsPose = canSaveMotionId(anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -75,7 +75,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         newState.lastUpdateTime     = motion->getLastUpdateTime();
         newState.jointNamesAnimated = jointNamesRecaptured;
         newState.captureOrder       = sCaptureOrder[avatar->getID()];
-        newState.avatarOwnsPose     = canSaveMotionId(avatar, anim_it->first);
+        newState.gAgentOwnsPose     = canSaveMotionId(anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -97,7 +97,7 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     int animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
-        if (!ignoreOwnership  && !it->avatarOwnsPose)
+        if (!ignoreOwnership && !it->gAgentOwnsPose)
             continue;
 
         std::string uniqueAnimId                          = "poseState" + std::to_string(animNumber++);
@@ -124,14 +124,16 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, LLSD pose)
             continue;
 
         fsMotionState newState;
-        newState.avatarOwnsPose = true;
 
         if (control_map.has("animationId"))
         {
             std::string const name = control_map["animationId"].asString();
             LLUUID animId;
             if (LLUUID::parseUUID(name, &animId))
+            {
                 newState.motionId = animId;
+                newState.gAgentOwnsPose = canSaveMotionId(animId);
+            }
         }
 
         if (control_map.has("lastUpdateTime"))
@@ -207,14 +209,14 @@ void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotio
     }
 }
 
-bool FSPoseState::canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId)
+bool FSPoseState::canSaveMotionId(LLAssetID motionId)
 {
     if (!gAgentAvatarp || gAgentAvatarp.isNull())
         return false;
 
     // does the animation exist in inventory
     LLInventoryItem* item = gInventory.getItem(motionId);
-    if (item && item->getPermissions().getOwner() == avatar->getID())
+    if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
         return true;
 
     for (const auto& [anim_object_id, anim_anim_id] : gAgentAvatarp->mAnimationSources)
@@ -224,7 +226,7 @@ bool FSPoseState::canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId)
 
         // is the item that started the anim in inventory
         item = gInventory.getItem(anim_object_id);
-        if (item && item->getPermissions().getOwner() == avatar->getID())
+        if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
             return true;
 
         // is the item that start the animation in-world

@@ -444,11 +444,14 @@ void FSFloaterPoser::onClickPoseSave()
         mSavePosesBtn->setImageOverlay(tryGetString(ICON_SAVE_FAILED), mSavePosesBtn->getImageOverlayHAlign());
         return;
     }
-    
+
     LLVOAvatar* avatar = getUiSelectedAvatar();
-    if (!avatar)
-    return;
-  
+    if (!havePermissionToAnimateAvatar(avatar) && !havePermissionToAnimateOtherAvatar(avatar))
+    {
+        mSavePosesBtn->setImageOverlay(tryGetString(ICON_SAVE_FAILED), mSavePosesBtn->getImageOverlayHAlign());
+        return;
+    }
+
     // if prompts are disabled or file doesn't exist, do the save immediately:
     const bool prompt = gSavedSettings.getBOOL(POSER_SAVECONFIRMREQUIRED_SAVE_KEY);
 
@@ -1355,8 +1358,17 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar) const
         return false;
     if (avatar->isSelf())
         return true;
+
     if (avatar->isControlAvatar())
-        return true;
+    {
+        LLControlAvatar*      control_av     = dynamic_cast<LLControlAvatar*>(avatar);
+        const LLVOVolume*     rootVolume     = control_av->mRootVolp;
+        const LLViewerObject* rootEditObject = (rootVolume) ? rootVolume->getRootEdit() : NULL;
+        if (!rootEditObject)
+            return false;
+
+        return rootEditObject->permYouOwner();
+    }
 
     return false;
 }
