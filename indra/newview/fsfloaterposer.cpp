@@ -1299,7 +1299,7 @@ void FSFloaterPoser::onPoseStartStop()
         mPoserAnimator.stopPosingAvatar(avatar);
 
         if (mPoserCollaborator && avatar->isSelf())
-            mPoserCollaborator->stopPosingMyAvatar(true);
+            mPoserCollaborator->stopPosingMyAvatar(false);
     }
     else
     {
@@ -1310,6 +1310,7 @@ void FSFloaterPoser::onPoseStartStop()
             return;
 
         mPoserAnimator.tryPosingAvatar(avatar);
+        sendPoseUpdateByChat(gAgentAvatarp, POSECHANGE_BOTH); // sync them with our posestate
     }
 
     onAvatarsRefresh();

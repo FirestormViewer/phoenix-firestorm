@@ -251,6 +251,7 @@ void FSJointPose::reflectRotation()
     if (mIsCollisionVolume)
         return;
 
+    mModifiedThisSession = true;
     mCurrentState.reflectRotation();
 }
 

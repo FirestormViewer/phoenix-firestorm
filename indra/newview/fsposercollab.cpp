@@ -11,7 +11,7 @@ constexpr std::string_view POSER_MESSAGE_START_POSES = "#SPOS";   // token indic
 constexpr std::string_view POSER_MESSAGE_STOP_POSING = "#STOP";   // token indicating sender is stopping posing
 constexpr std::string_view POSER_MESSAGE_PERMISSION  = "#PERM";   // token indicating message has a permission payload
 constexpr std::string_view DELIM                     = ":";       // delimiter separating message tokens
-constexpr size_t           POSER_MESSAGE_LENGTH      = 950;       // message length tolerated before we stop adding more tokens
+constexpr size_t           POSER_MESSAGE_LENGTH      = 970;       // message length tolerated before we stop adding more tokens
 
 /// <summary>
 /// The constant time interval, in seconds, we wait after the last message to update arrived, before we do anything.
@@ -332,7 +332,13 @@ void FSPoserCollab::stopPosingMyAvatar(bool quittingPoser)
             continue;
 
         if (it->second >= COLLAB_THEY_ASKED_ME)
+        {
             sendMessage(avatar, std::string(POSER_MESSAGE_STOP_POSING) + ":Stopped");
+            it->second = COLLAB_PERM_ENDED;
+
+            if (!mFloaterPoserCallback.empty())
+                    mFloaterPoserCallback(it->first);
+        }
     }
 
     if (quittingPoser)
@@ -465,12 +471,20 @@ std::vector<std::string> FSPoserCollab::getRotPosScaleDiffAsText(LLVOAvatar* ava
         line += baseRotationIsZero ? "t" : "f";
         line += DELIM;
         line += jointIsMirrored ? "t" : "f";
+
         line += DELIM;
-        line += getChatStringForVector(rotation);
-        line += DELIM;
-        line += getChatStringForVector(position);
-        line += DELIM;
-        line += getChatStringForVector(scale);
+        if (rotation == LLVector3::zero && position == LLVector3::zero && scale == LLVector3::zero)
+        {
+            line += "z";
+        }
+        else
+        {
+            line += getChatStringForVector(rotation);
+            line += DELIM;
+            line += getChatStringForVector(position);
+            line += DELIM;
+            line += getChatStringForVector(scale);
+        }
 
         if (line.size() < POSER_MESSAGE_LENGTH)
             continue;
@@ -626,20 +640,32 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
         mirrored = token == "t";
 
         token = mesageTokens[index + 3];
-        if (LLVector3::parseVector3(token, &vec3))
+        if (token == "z")
+        {
+            vec3 = LLVector3::zero;
             mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, vec3);
-
-        token = mesageTokens[index + 4];
-        if (LLVector3::parseVector3(token, &vec3))
             mPoserAnimator->loadJointPosition(avatar, poserJoint, true, vec3);
-
-        token = mesageTokens[index + 5];
-        if (LLVector3::parseVector3(token, &vec3))
             mPoserAnimator->loadJointScale(avatar, poserJoint, true, vec3);
 
-        mPoserAnimator->setRotationIsMirrored(avatar, *poserJoint, mirrored);
+            index += 3;
+        }
+        else
+        {
+            if (LLVector3::parseVector3(token, &vec3))
+                mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, vec3);
 
-        index += 5;
+            token = mesageTokens[index + 4];
+            if (LLVector3::parseVector3(token, &vec3))
+                mPoserAnimator->loadJointPosition(avatar, poserJoint, true, vec3);
+
+            token = mesageTokens[index + 5];
+            if (LLVector3::parseVector3(token, &vec3))
+                mPoserAnimator->loadJointScale(avatar, poserJoint, true, vec3);
+
+            index += 5;
+        }
+
+        mPoserAnimator->setRotationIsMirrored(avatar, *poserJoint, mirrored);
     }
 }
 
