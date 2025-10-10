@@ -5667,6 +5667,11 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
 
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		Обнаружено большое количество комплектов: [AMOUNT]. Это может привести к зависанию или отключению устройства. Для повышения производительности рекомендуется уменьшить количество комплектов (ниже [MAX]).
+		<usetemplate ignoretext="Предупреждение о количестве комплектов" name="okignore" yestext="OK" />
+	</notification>
+
 	<notification name="PrimfeedLoginRequestFailed">
 		Запрос на вход отклонен Primfeed.
 	</notification>
