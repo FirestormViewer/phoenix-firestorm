@@ -26650,6 +26650,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
+    <key>FSSnapshotFrameGuideVisibility</key>
+    <map>
+      <key>Comment</key>
+      <string>The visibility/opacity of the composition guides (0.0 = invisible, 1.0 = fully visible)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.05</real>
+    </map>
     <key>FSManipRotateJointUseNaturalDirection</key>
     <map>
       <key>Comment</key>

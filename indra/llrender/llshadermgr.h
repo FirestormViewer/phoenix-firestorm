@@ -359,6 +359,7 @@ public:
         SNAPSHOT_BORDER_THICKNESS,          // "border_thickness"
         SNAPSHOT_GUIDE_COLOR,               // "guide_color"
         SNAPSHOT_GUIDE_THICKNESS,           // "guide_thickness"
+        SNAPSHOT_GUIDE_VISIBILITY,          // "guide_visibility"
         SNAPSHOT_GUIDE_STYLE,               // "guide_style"
         SNAPSHOT_FRAME_RECT,                // "frame_rect"
         // </FS:Beq>

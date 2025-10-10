@@ -7,6 +7,7 @@ uniform vec3 border_color;
 uniform float border_thickness; // in pixels
 uniform vec3 guide_color;
 uniform float guide_thickness; // in pixels
+uniform float guide_visibility; // visibility/opacity of guides (0.0 - 1.0)
 uniform float guide_style; // 0: no guide, 1: rule of thirds, 2: golden spiral
 
 in vec2 vary_fragcoord;
@@ -68,7 +69,7 @@ void main()
                 (tc.y > frame_rect_px.y + third_y - guide_thickness && tc.y < frame_rect_px.y + third_y + guide_thickness) ||
                 (tc.y > frame_rect_px.y + 2.0 * third_y - guide_thickness && tc.y < frame_rect_px.y + 2.0 * third_y + guide_thickness))
             {
-                diff.rgb = mix(diff.rgb, guide_color, 0.5);
+                diff.rgb = mix(diff.rgb, guide_color, guide_visibility);
             }
         }
     }
