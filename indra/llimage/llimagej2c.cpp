@@ -276,28 +276,110 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
     // Estimate the number of layers. This is consistent with what's done for j2c encoding in LLImageJ2CKDU::encodeImpl().
     constexpr S32 precision = 8; // assumed bitrate per component channel, might change in future for HDR support
     constexpr S32 max_components = 4; // assumed the file has four components; three color and alpha
-    // Use MAX_IMAGE_SIZE_DEFAULT (currently 2048) if either dimension is unknown (zero)
-    S32 width  = (w > 0) ? w : 2048;
-    S32 height = (h > 0) ? h : 2048;
-    S32 max_dimension = llmax(width, height); // Find largest dimension
-    S32 block_area = MAX_BLOCK_SIZE * MAX_BLOCK_SIZE; // Calculated initial block area from established max block size (currently 64)
-    S32 max_layers = (S32)llmax(llround(log2f((float)max_dimension) - log2f((float)MAX_BLOCK_SIZE)), 4); // Find number of powers of two between extents and block size to a minimum of 4
-    block_area *= llmax(max_layers, 1); // Adjust initial block area by max number of layers
-    S32 totalbytes = (S32) (MIN_LAYER_SIZE * max_components * precision); // Start estimation with a minimum reasonable size
-    S32 block_layers = 0;
-    while (block_layers <= max_layers) // Walk the layers
+
+    // <FS:Beq> [FIRE-35987] slow textures due to overfetch in j2c header size estimation
+    // Preserve recent LL body for reference (see PRs #2406, #2525, #4018, #4020):
+    // // Use MAX_IMAGE_SIZE_DEFAULT (currently 2048) if either dimension is unknown (zero)
+    // S32 width  = (w > 0) ? w : 2048;
+    // S32 height = (h > 0) ? h : 2048;
+    // S32 max_dimension = llmax(width, height); // Find largest dimension
+    // S32 block_area = MAX_BLOCK_SIZE * MAX_BLOCK_SIZE; // Calculated initial block area from established max block size (currently 64)
+    // S32 max_layers = (S32)llmax(llround(log2f((float)max_dimension) - log2f((float)MAX_BLOCK_SIZE)), 4); // Find number of powers of two between extents and block size to a minimum of 4
+    // block_area *= llmax(max_layers, 1); // Adjust initial block area by max number of layers
+    // S32 totalbytes = (S32) (MIN_LAYER_SIZE * max_components * precision); // Start estimation with a minimum reasonable size
+    // S32 block_layers = 0;
+    // while (block_layers <= max_layers) // Walk the layers
+    // {
+    //     if (block_layers <= (5 - discard_level))  // Walk backwards from discard 5 to required discard layer.
+    //         totalbytes += (S32) (block_area * max_components * precision * rate); // Add each block layer reduced by assumed compression rate
+    //     block_layers++; // Move to next layer
+    //     block_area *= 4; // Increase block area by power of four
+    // }
+    // totalbytes /= 8; // to bytes
+    // totalbytes += calcHeaderSizeJ2C();  // header
+    //
+    // return totalbytes;
+
+    // --- Use 7.1.11 basis with fixes implied by LL PRs ---
+    (void)comp; // retained for parity with the viewer signature
+    const S32 hard_cap = 12; // sanity cap
+    const S64 base_layer_area = static_cast<S64>(MAX_BLOCK_SIZE) * static_cast<S64>(MAX_BLOCK_SIZE); // 64x64 blocks at discard 5
+    const S32 discard_layers = std::max(5 - discard_level, 0);
+    const double rate64 = static_cast<double>(rate);
+    const S64 header_bytes = static_cast<S64>(calcHeaderSizeJ2C());
+    const S64 bits_per_tile = static_cast<S64>(max_components) * static_cast<S64>(precision);
+
+    // helper lambda: layer area to estimated bit budget
+    auto scaled_bits = [rate64, bits_per_tile](S64 layer_area) -> S64
     {
-        if (block_layers <= (5 - discard_level))  // Walk backwards from discard 5 to required discard layer.
-            totalbytes += (S32) (block_area * max_components * precision * rate); // Add each block layer reduced by assumed compression rate
-        block_layers++; // Move to next layer
-        block_area *= 4; // Increase block area by power of four
+        const S64 layer_bits = layer_area * bits_per_tile;
+        return static_cast<S64>(std::llround(static_cast<double>(layer_bits) * rate64));
+    };
+
+    // If dimensions are unknown, provide a *reliable discard-5 estimate* without assuming a 2k texture.
+    // This lets the fetcher skip a header pass for d5 while avoiding the large overfetch seen previously.
+    S64 total_bits = 0;
+    if (w <= 0 || h <= 0)
+    {
+        total_bits = scaled_bits(base_layer_area);
     }
+    else
+    {
+        // Classic surface walk: start at 64x64 and grow by 4x until we cover the surface.
+        const S64 surface = static_cast<S64>(w) * static_cast<S64>(h);
 
-    totalbytes /= 8; // to bytes
-    totalbytes += calcHeaderSizeJ2C();  // header
+        S64 layer_area = base_layer_area;
+        S32 nb_layers  = 1;
 
-    return totalbytes;
+        // First layer (7.1.11 did first-term outside loop). Keep it explicit for clarity.
+        total_bits = scaled_bits(layer_area);
+
+        while (surface > layer_area && nb_layers < hard_cap)
+        {
+            if (nb_layers <= discard_layers)
+            {
+                total_bits += scaled_bits(layer_area);
+            }
+            ++nb_layers;
+            layer_area *= 4;
+        }
+
+        // Allow extra layers for large (2k+) assets uploaded with 7–8 layers (from LL change justification)
+        // If the max dimension implies more pyramid steps than the surface loop used, extend the walk up to that.
+        // Note: this mostly affect long thin textures like 2048x256 as best I can tell.
+        {
+            const S32 max_dimension = std::max(w, h);
+            const float ratio = (max_dimension > 0)
+                                ? static_cast<float>(max_dimension) / static_cast<float>(MAX_BLOCK_SIZE)
+                                : 0.0f;
+            const S32 dimension_layers = (ratio > 0.0f)
+                                        ? std::max(static_cast<S32>(std::floor(std::log2(ratio))) + 1, 1)
+                                        : 1;
+
+            if (dimension_layers > nb_layers)
+            {
+                S32 extra = std::min(dimension_layers, hard_cap) - nb_layers;
+                while (extra-- > 0)
+                {
+                    if (nb_layers <= discard_layers)
+                    {
+                        total_bits += scaled_bits(layer_area);
+                    }
+                    ++nb_layers;
+                    layer_area *= 4;
+                }
+            }
+        }
+    }
+    // Convert to bytes and add header.
+    S64 est = total_bits / 8;
+    est += header_bytes;
+
+    est = llclamp(est, (S64)0, (S64)std::numeric_limits<S32>::max());
+    return static_cast<S32>(est);
+    // </FS:Beq>
 }
+
 
 S32 LLImageJ2C::calcHeaderSize()
 {
