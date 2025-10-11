@@ -225,7 +225,7 @@ void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* 
 
 E_CollabState FSPoserCollab::getCollabLocalState(LLVOAvatar* avatar)
 {
-    if (!avatar)
+    if (!avatar || avatar->isSelf())
         return COLLAB_NONE;
 
     return sAvatarIdToCollabState[avatar->getID()];
@@ -242,7 +242,10 @@ void FSPoserCollab::verifyOnlineStatusForCollab()
         if (isOnline)
             continue;
 
-        it->second = COLLAB_PERM_ENDED;
+        if (sAvatarIdToCollabState[it->first] <= COLLAB_PERM_ENDED)
+            continue;
+
+        sAvatarIdToCollabState[it->first] = it->second >= COLLAB_PERM_ENDED ? COLLAB_PERM_ENDED : COLLAB_NONE;
 
         if (!mFloaterPoserCallback.empty())
             mFloaterPoserCallback(it->first);

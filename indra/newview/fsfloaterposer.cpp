@@ -47,6 +47,7 @@
 #include "lltoolcomp.h"
 #include "llloadingindicator.h"
 #include "llmutelist.h"
+#include "llcallingcard.h"
 
 namespace
 {
@@ -65,6 +66,7 @@ constexpr std::string_view POSER_STOPPOSINGWHENCLOSED_SAVE_KEY = "FSPoserStopPos
 constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExternalFileAlso";
 constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY  = "FSPoserOnSaveConfirmOverwrite";
 constexpr std::string_view POSER_UNLOCKPELVISINBVH_SAVE_KEY    = "FSPoserPelvisUnlockedForBvhSave";
+constexpr std::string_view POSER_ONLYSHOWFRIENDS_SAVE_KEY      = "FSPoserOnlyShowFriendsOnModelsList";
 constexpr char             ICON_SAVE_OK[]                      = "icon_rotation_is_own_work";
 constexpr char             ICON_SAVE_FAILED[]                  = "icon_save_failed_button";
 
@@ -1790,7 +1792,6 @@ LLScrollListCtrl* FSFloaterPoser::getScrollListForTab(LLPanel * tabPanel) const
         return mCollisionVolumesScrollList;
     }
 
-    LL_WARNS() << "Unknown tab panel: " << tabPanel << LL_ENDL;
     return nullptr;
 }
 
@@ -2374,6 +2375,12 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
         if (!avatarIsNearbyMe(avatar))
             continue;
 
+        bool isSelfOrCtrl = avatar->isControlAvatar() || avatar->isSelf();
+        bool onlyFriends  = gSavedSettings.getBOOL(POSER_ONLYSHOWFRIENDS_SAVE_KEY);
+
+        if (!isSelfOrCtrl && onlyFriends && !LLAvatarTracker::instance().isBuddy(avatar->getID()))
+            continue;
+
         avatar_ids.emplace_back(character->getID());
     }
 
@@ -2466,6 +2473,10 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (isMuted)
             continue;
 
+        const bool onlyFriends = gSavedSettings.getBOOL(POSER_ONLYSHOWFRIENDS_SAVE_KEY);
+        if (!avatar->isSelf() && onlyFriends && !LLAvatarTracker::instance().isBuddy(uuid))
+            continue;
+
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
         row["columns"][COL_ICON]["type"]   = "icon";
@@ -2521,6 +2532,9 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
     if (!avatar)
         return iconName;
 
+    if (avatar->isControlAvatar() && hasString("icon_object"))
+        return getString("icon_object");
+
     E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
     switch (state)
     {
@@ -2570,6 +2584,10 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
             break;
 
         case COLLAB_NONE:
+            if (hasString("icon_pose_nearby_person"))
+                iconName = getString("icon_pose_nearby_person");
+            break;
+
         default:
             if (hasString("icon_category"))
                 iconName = getString("icon_category");

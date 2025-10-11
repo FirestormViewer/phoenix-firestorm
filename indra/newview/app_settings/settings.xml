@@ -8166,6 +8166,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserOnlyShowFriendsOnModelsList</key>
+  <map>
+    <key>Comment</key>
+    <string>Only show your friends on poser Models Tab.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSPoserOnSaveConfirmOverwrite</key>
   <map>
     <key>Comment</key>
