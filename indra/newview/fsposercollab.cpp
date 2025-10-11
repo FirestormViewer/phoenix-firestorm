@@ -333,7 +333,7 @@ void FSPoserCollab::stopPosingMyAvatar(bool quittingPoser)
 
         if (it->second >= COLLAB_THEY_ASKED_ME)
         {
-            sendMessage(avatar, std::string(POSER_MESSAGE_STOP_POSING) + std::string(DELIM) +"Stopped");
+            sendMessage(avatar, std::string(POSER_MESSAGE_STOP_POSING) + std::string(DELIM) + "Stopped");
             it->second = COLLAB_PERM_ENDED;
 
             if (!mFloaterPoserCallback.empty())
@@ -452,11 +452,11 @@ std::vector<std::string> FSPoserCollab::getRotPosScaleDiffAsText(LLVOAvatar* ava
         if (!posingThisJoint)
             continue;
 
-        if (!mPoserAnimator->tryGetJointNumber(avatar, pj, jointNumber))
-            continue;
-
         bool jointShouldUpdateChat = mPoserAnimator->hasJointBeenChanged(avatar, pj);
         if (!jointShouldUpdateChat)
+            continue;
+
+        if (!mPoserAnimator->tryGetJointNumber(avatar, pj, jointNumber))
             continue;
 
         if (!mPoserAnimator->tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
@@ -606,6 +606,9 @@ bool FSPoserCollab::tryDecodeJointFromString(std::string token, int& jointNumber
 
         numberAndBools *= 10.f;
         int encodedBools = llfloor(numberAndBools) % 10;
+
+        if (encodedBools > 3)
+            encodedBools -= 4; // unused 3rd bool; in case needed in future
         baseIsZero       = encodedBools > 1;
         if (baseIsZero)
             encodedBools -= 2;
@@ -673,29 +676,6 @@ F32 FSPoserCollab::twoBytesToF32(char upper, char lower)
     roundedNumberTimes1000 -= 3200;
 
     return roundedNumberTimes1000 / 1000.f;
-}
-
-std::string FSPoserCollab::getChatStringForVector(const LLVector3& val)
-{
-    std::string result = "";
-    if (llabs(val[VX]) >= 0.001f)
-        result += std::format("{:.3f}", val[VX]);
-    else
-        result += "0";
-
-    result += " ";
-    if (llabs(val[VY]) >= 0.001f)
-        result += std::format("{:.3f}", val[VY]);
-    else
-        result += "0";
-
-    result += " ";
-    if (llabs(val[VZ]) >= 0.001f)
-        result += std::format("{:.3f}", val[VZ]);
-    else
-        result += "0";
-
-    return result;
 }
 
 void FSPoserCollab::processInstantMessage(const LLUUID& idSender, const std::string& strMessage)

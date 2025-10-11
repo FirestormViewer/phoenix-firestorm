@@ -114,6 +114,17 @@ public:
     /// </summary>
     /// <param name="avatarWhosePoseChanged">The avatar whose pose was updated.</param>
     /// <param name="changeType">The type of change message that should be enqueued.</param>
+    /// <remarks>
+    /// This implementation is like a 2-stage filter.
+    /// First stage concatenates all of the (many) calls a UI-control callback could make over a few seconds into one call.
+    /// The second stage time-filters the UI calls, so only one call is acted on.
+    ///
+    /// The first stage is implemented by a map: whose avatar changed and what kind of change.
+    /// Repeat calls to the same avatar keep updating the same member of the map.
+    /// This is common for spinners, sliders and trackpad: they make a call every frame.
+    /// The second stage is implemented by a time-stamp: the process to compose and send an IM
+    /// only happens once the UI events have stopped for about 0.1 seconds.
+    /// </remarks>
     void enqueuePoserChatMessage(LLVOAvatar* avatarWhosePoseChanged, E_CollabPoseChangeType changeType);
 
     /// <summary>
@@ -177,16 +188,24 @@ private:
     std::vector<std::string> getPoseInfoAsText(LLVOAvatar* avatar);
 
     /// <summary>
-    /// Stringifies the supplied vector, shortening it somewhat for efficient transmission.
+    /// Encodes the supplied joint properties to a variable-length string of chars.
     /// </summary>
-    /// <param name="val">The vector to stringify.</param>
-    /// <returns>A string of the supplied vector</returns>
-    std::string getChatStringForVector(const LLVector3& val);
-
-
+    /// <param name="jointNumber">The number of the joint to encode, needs to be between -320 and 319.</param>
+    /// <param name="isMirrored">Whether the supplied joint is mirrored.</param>
+    /// <param name="baseIsZero">Whether the supplied joint is base-zeroed.</param>
+    /// <param name="rotation">The rotation of the joint; values should be between -3.200 and 3.199; values outside range are clamped. More than 3 decimals in precision is lost.</param>
+    /// <param name="position">The position of the joint; values should be between -3.200 and 3.199; values outside range are clamped. More than 3 decimals in precision is lost.</param>
+    /// <param name="scale">The scale of the joint; values should be between -3.200 and 3.199; values outside range are clamped. More than 3 decimals in precision is lost.</param>
+    /// <returns></returns>
     std::string encodeJointToString(int jointNumber, bool isMirrored, bool baseIsZero, const LLVector3 rotation, const LLVector3 position, const LLVector3 scale);
     bool tryDecodeJointFromString(std::string token, int& jointNumber, bool& isMirrored, bool& baseIsZero, LLVector3& rotation, LLVector3& position,
                                   LLVector3& scale);
+
+    /// <summary>
+    /// Encodes the supplied vector to 6 ASCII printable chars.
+    /// </summary>
+    /// <param name="vector">The vector to encode, whose X/Y/Z values are in range -3.200 and 3.199 or clamped.</param>
+    /// <returns>A string encoding the supplied vector.</returns>
     std::string vectorToSixBytes(const LLVector3 vector);
     LLVector3   sixBytesToVector(const std::string token);
 
@@ -194,7 +213,7 @@ private:
     /// Encodes an F32 of range -3.200 to 3.199 into two bytes preserving three decimal places precision and no accuracy loss.
     /// </summary>
     /// <param name="number">The number to encode.</param>
-    /// <returns>A string of two ASCII-printable bytes from with chars ranging '.' to '~'.</returns>
+    /// <returns>A string of two ASCII-printable bytes with chars ranging '.' to '~'.</returns>
     std::string f32ToTwoBytes(const F32 number);
     F32         twoBytesToF32(char upper, char lower);
 
