@@ -8603,7 +8603,7 @@ void LLPipeline::renderFinalize()
     };
     // </FS:Beq>
     // <FS:Beq> new shader for snapshot frame helper
-    if (renderSnapshotFrame(auxTargetBuffer, auxActiveBuffer))
+    if (renderSnapshotFrame(auxActiveBuffer, auxTargetBuffer))
     {
         std::swap(auxActiveBuffer, auxTargetBuffer);
     };

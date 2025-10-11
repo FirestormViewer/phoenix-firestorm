@@ -39,6 +39,7 @@ class LLLineEditor;
 class LLScrollListCtrl;
 class LLSliderCtrl;
 class LLTabContainer;
+class FSLoadPoseTimer;
 
 /// <summary>
 /// Describes how to load a pose file.
@@ -228,11 +229,12 @@ public:
     bool savePoseToBvh(LLVOAvatar* avatar, const std::string& posePath);
     void onClickBrowsePoseCache();
     void onPoseMenuAction(const LLSD& param);
-    void loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
+    bool loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
-    bool confirmFileOverwrite(std::string fileName);
+    void timedReload();
+    void setLoadingProgress(bool started);
     void startPosingSelf();
     void stopPosingAllAvatars();
     // visual manipulators control
@@ -502,6 +504,8 @@ public:
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
+    FSLoadPoseTimer* mLoadPoseTimer;
+
     LLPanel* mJointsParentPnl{ nullptr };
     LLPanel* mTrackballPnl{ nullptr };
     LLPanel* mPositionRotationPnl{ nullptr };
@@ -528,6 +532,29 @@ public:
     LLUICtrl* mScaleXSpnr{ nullptr };
     LLUICtrl* mScaleYSpnr{ nullptr };
     LLUICtrl* mScaleZSpnr{ nullptr };
+};
+
+class FSLoadPoseTimer : public LLEventTimer
+{
+public:
+    typedef boost::function<void()> callback_t;
+
+    FSLoadPoseTimer(callback_t callback);
+    /*virtual*/ bool tick();
+
+    void              tryLoading(std::string filePath, E_LoadPoseMethods loadMethod);
+    bool              loadCompleteOrFailed() const { return !mAttemptLoading && mLoadAttempts > 0; }
+    void              completeLoading() { mAttemptLoading = false; }
+    std::string       getPosePath() { return mPoseFullPath; };
+    E_LoadPoseMethods getLoadMethod() const { return mLoadType; };
+
+private:
+    callback_t        mCallback;
+    bool              mAttemptLoading = false;
+    E_LoadPoseMethods mLoadType       = ROT_POS_AND_SCALES;
+    std::string       mPoseFullPath;
+    int               mLoadAttempts = 0;
+    const int         mMaxLoadAttempts = 5;
 };
 
 #endif

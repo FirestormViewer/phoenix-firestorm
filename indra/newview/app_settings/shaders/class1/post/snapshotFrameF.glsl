@@ -20,7 +20,7 @@ void main()
     vec4 frame_rect_px = vec4(frame_rect.x * screen_res.x, frame_rect.y * screen_res.y, frame_rect.z * screen_res.x, frame_rect.w * screen_res.y);
     vec4 border_rect_px = vec4(
         (frame_rect.x * screen_res.x) - border_thickness,
-        (frame_rect.y * screen_res.y) - border_thickness, 
+        (frame_rect.y * screen_res.y) - border_thickness,
         (frame_rect.z * screen_res.x) + border_thickness,
         (frame_rect.w * screen_res.y) + border_thickness);
 
@@ -30,7 +30,7 @@ void main()
     {
         // Simple box blur
         vec3 blur_color = vec3(0.0);
-        float blur_size = 2; 
+        float blur_size = 2;
         int blur_samples = 9;
 
         for (int x = -1; x <= 1; ++x)
@@ -44,15 +44,15 @@ void main()
 
         blur_color /= float(blur_samples);
         float gray = dot(blur_color, vec3(0.299, 0.587, 0.114));
-        diff.rgb = vec3(gray);        
+        diff.rgb = vec3(gray);
     }
     else
     {
         // Draw border around the snapshot frame
-        if ((tc.x >= border_rect_px.x  && tc.x < frame_rect_px.x) ||
-            (tc.x <= border_rect_px.z  && tc.x > frame_rect_px.z) ||
-            (tc.y >= border_rect_px.y  && tc.y < frame_rect_px.y) ||
-            (tc.y <= border_rect_px.w  && tc.y > frame_rect_px.w))
+        if ((tc.x >= border_rect_px.x && tc.x < frame_rect_px.x) ||
+            (tc.x > frame_rect_px.z && tc.x <= border_rect_px.z) ||
+            (tc.y >= border_rect_px.y && tc.y < frame_rect_px.y) ||
+            (tc.y > frame_rect_px.w && tc.y <= border_rect_px.w))
         {
             diff.rgb = mix(diff.rgb, border_color, 0.5);
         }
