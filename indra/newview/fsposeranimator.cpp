@@ -1059,14 +1059,14 @@ const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByNumber(LLVO
     if (!posingMotion)
         return nullptr;
 
-    LLJoint* pJoint = avatar->getCharacterJoint(jointNumber);
-    if (!pJoint)
+    FSJointPose* parentJoint = posingMotion->getJointPoseByJointNumber(jointNumber);
+    if (!parentJoint)
         return nullptr;
 
-    return getPoserJointByName(pJoint->getName());
+    return getPoserJointByName(parentJoint->jointName());
 }
 
-bool FSPoserAnimator::tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, std::string &jointNumber)
+bool FSPoserAnimator::tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, int &jointNumber)
 {
     if (!avatar)
         return false;
@@ -1079,12 +1079,8 @@ bool FSPoserAnimator::tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &
     if (!parentJoint)
         return false;
 
-    LLJoint* pJoint = parentJoint->getJointState()->getJoint();
-    if (!pJoint)
-        return false;
-
-    jointNumber = std::to_string(pJoint->getJointNum());
-    return true;
+    jointNumber = parentJoint->getJointNumber();
+    return jointNumber >= 0;
 }
 
 bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar* avatar)

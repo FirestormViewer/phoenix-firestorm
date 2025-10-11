@@ -222,6 +222,24 @@ FSJointPose* FSPosingMotion::getJointPoseByJointName(const std::string& name)
     return nullptr;
 }
 
+FSJointPose* FSPosingMotion::getJointPoseByJointNumber(const S32& number)
+{
+    if (mJointPoses.size() < 1)
+        return nullptr;
+    if (number < 0)
+        return nullptr;
+
+    for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
+        if (poserJoint_iter->getJointNumber() != number)
+            continue;
+
+        return &*poserJoint_iter;
+    }
+
+    return nullptr;
+}
+
 bool FSPosingMotion::currentlyPosingJoint(LLJoint* joint)
 {
     if (mJointPoses.size() < 1)

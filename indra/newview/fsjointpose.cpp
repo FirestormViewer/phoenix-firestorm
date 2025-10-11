@@ -47,6 +47,7 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
 
     mJointName         = joint->getName();
     mIsCollisionVolume = isCollisionVolume;
+    mJointNumber       = joint->getJointNum();
 
     mCurrentState   = FSJointState(joint);
 }

@@ -255,7 +255,17 @@ class FSJointPose
     /// </summary>
     LLPointer<LLJointState> getJointState() const { return mJointState; }
 
+    /// <summary>
+    /// Gets whether this joint has been modified this session.
+    /// </summary>
+    /// <returns>True if the joint has been changed at all, otherwise false.</returns>
     bool getJointModified() const { return mModifiedThisSession; }
+
+    /// <summary>
+    /// Gets the number of the joint represented by this.
+    /// </summary>
+    /// <returns>The joint number, derived from LLjoint.</returns>
+    S32 getJointNumber() const { return mJointNumber; }
 
     class FSJointState
     {
@@ -453,6 +463,8 @@ class FSJointPose
     /// natively.
     /// </summary>
     bool mIsCollisionVolume{ false };
+
+    S32 mJointNumber = -1;
 
     /// <summary>
     /// Whether this joint has ever been changed by poser.

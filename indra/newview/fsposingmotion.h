@@ -109,6 +109,13 @@ public:
     FSJointPose* getJointPoseByJointName(const std::string& name);
 
     /// <summary>
+    /// Gets the joint pose by its LLJoint number.
+    /// </summary>
+    /// <param name="number">The number of the joint to get the pose for.</param>
+    /// <returns>The matching joint pose, if found, otherwise null.</returns>
+    FSJointPose* getJointPoseByJointNumber(const S32& number);
+
+    /// <summary>
     /// Gets the motion identity for this animation.
     /// </summary>
     /// <returns>The unique, per-session, per-character motion identity.</returns>

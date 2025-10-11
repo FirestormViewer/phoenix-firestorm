@@ -183,6 +183,21 @@ private:
     /// <returns>A string of the supplied vector</returns>
     std::string getChatStringForVector(const LLVector3& val);
 
+
+    std::string encodeJointToString(int jointNumber, bool isMirrored, bool baseIsZero, const LLVector3 rotation, const LLVector3 position, const LLVector3 scale);
+    bool tryDecodeJointFromString(std::string token, int& jointNumber, bool& isMirrored, bool& baseIsZero, LLVector3& rotation, LLVector3& position,
+                                  LLVector3& scale);
+    std::string vectorToSixBytes(const LLVector3 vector);
+    LLVector3   sixBytesToVector(const std::string token);
+
+    /// <summary>
+    /// Encodes an F32 of range -3.200 to 3.199 into two bytes preserving three decimal places precision and no accuracy loss.
+    /// </summary>
+    /// <param name="number">The number to encode.</param>
+    /// <returns>A string of two ASCII-printable bytes from with chars ranging '.' to '~'.</returns>
+    std::string f32ToTwoBytes(const F32 number);
+    F32         twoBytesToF32(char upper, char lower);
+
     /// <summary>
     /// Parses the supplied chat message, verifying it is for poser and parsing it for posing information for the supplied avatar ID.
     /// </summary>
@@ -245,7 +260,6 @@ private:
     /// <returns>True if a message was sent, otherwise false.</returns>
     bool onTimedChatMessage();
 
-    bool tryParseFloat(std::string token, F32* number);
     bool tryParseInt(std::string token, int* number);
 
     /// <summary>

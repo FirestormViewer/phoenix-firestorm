@@ -407,7 +407,7 @@ public:
     /// </summary>
     /// <param name="jointNumber">The name of the joint to match.</param>
     /// <returns>The matching joint if found, otherwise nullptr</returns>
-    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, std::string &jointNumber);
+    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, int &jointNumber);
 
     /// <summary>
     /// Tries to start posing the supplied avatar.
