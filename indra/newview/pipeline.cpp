@@ -4539,6 +4539,355 @@ void LLPipeline::recordTrianglesDrawn()
     add(LLStatViewer::TRIANGLES_DRAWN, LLUnits::Triangles::fromValue(count));
 }
 
+// <FS:Beq> Rework Snapshot Guide Rendering
+void LLPipeline::renderSnapshotGuidesOverlay()
+{
+    if (!mSnapshotGuideState.active || !mSnapshotGuideState.show_guides)
+    {
+        mSnapshotGuideState.active = false;
+        return;
+    }
+
+    if (!gViewerWindow || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        mSnapshotGuideState.active = false;
+        return;
+    }
+
+    LLRect view_rect = gViewerWindow->getWorldViewRectRaw();
+    const F32 width = (F32)view_rect.getWidth();
+    const F32 height = (F32)view_rect.getHeight();
+    if (width <= 0.f || height <= 0.f)
+    {
+        mSnapshotGuideState.active = false;
+        return;
+    }
+
+    const F32 left_norm = llmin(mSnapshotGuideState.left, mSnapshotGuideState.right);
+    const F32 right_norm = llmax(mSnapshotGuideState.left, mSnapshotGuideState.right);
+    const F32 bottom_norm = llmin(mSnapshotGuideState.bottom, mSnapshotGuideState.top);
+    const F32 top_norm = llmax(mSnapshotGuideState.bottom, mSnapshotGuideState.top);
+
+    const F32 left_px = left_norm * width;
+    const F32 right_px = right_norm * width;
+    const F32 bottom_px = bottom_norm * height;
+    const F32 top_px = top_norm * height;
+
+    const F32 frame_width = right_px - left_px;
+    const F32 frame_height = top_px - bottom_px;
+    if (frame_width <= 0.f || frame_height <= 0.f)
+    {
+        mSnapshotGuideState.active = false;
+        return;
+    }
+
+    const F32 alpha = llclamp(mSnapshotGuideState.visibility, 0.f, 1.f);
+    if (alpha <= 0.f)
+    {
+        mSnapshotGuideState.active = false;
+        return;
+    }
+
+    LLGLDisable depth(GL_DEPTH_TEST);
+    LLGLDisable cull(GL_CULL_FACE);
+    LLGLDisable stencil(GL_STENCIL_TEST);
+    LLGLEnable blend(GL_BLEND);
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+
+    LLGLSLShader* ui_shader = &gUIProgram;
+    ui_shader->bind();
+
+    if (!LLViewerFetchedTexture::sWhiteImagep.isNull())
+    {
+        gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
+    }
+    else
+    {
+        gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, LLTexUnit::sWhiteTexture);
+    }
+
+    gGL.matrixMode(LLRender::MM_PROJECTION);
+    gGL.pushMatrix();
+    gGL.loadIdentity();
+    gGL.ortho(0.f, width, 0.f, height, -1.f, 1.f);
+
+    gGL.matrixMode(LLRender::MM_MODELVIEW);
+    gGL.pushMatrix();
+    gGL.loadIdentity();
+    gGLLastMatrix = NULL;
+
+    const LLColor4 line_color(mSnapshotGuideState.color, alpha);
+    gGL.color4fv(line_color.mV);
+
+    const F32 thickness = llmax(mSnapshotGuideState.thickness, 0.f);
+    const F32 half_thickness = thickness * 0.5f;
+    auto draw_filled_rect = [&](F32 l, F32 b, F32 r, F32 t)
+    {
+        const S32 left_i = ll_round(l);
+        const S32 right_i = ll_round(r);
+        const S32 top_i = ll_round(t);
+        const S32 bottom_i = ll_round(b);
+        gl_rect_2d(left_i, top_i, right_i, bottom_i, line_color, true);
+    };
+
+    auto draw_vertical_norm = [&](F32 norm)
+    {
+        const F32 x = left_px + frame_width * norm;
+        draw_filled_rect(x - half_thickness, bottom_px, x + half_thickness, top_px);
+    };
+
+    auto draw_horizontal_norm = [&](F32 norm)
+    {
+        const F32 y = bottom_px + frame_height * norm;
+        draw_filled_rect(left_px, y - half_thickness, right_px, y + half_thickness);
+    };
+
+    switch (mSnapshotGuideState.style)
+    {
+    case SnapshotGuideState::Style::RuleOfThirds:
+    {
+        const F32 offsets[] = { 1.f / 3.f, 2.f / 3.f };
+        for (F32 offset : offsets)
+        {
+            draw_vertical_norm(offset);
+            draw_horizontal_norm(offset);
+        }
+        break;
+    }
+    case SnapshotGuideState::Style::GoldenRatio:
+    {
+        constexpr F32 phi = 1.61803398875f;
+        const SnapshotGuideState::GoldenOrientation orientation = mSnapshotGuideState.golden_orientation;
+
+        const F32 scale = llmin(frame_width / phi, frame_height);
+        if (scale <= 0.f)
+        {
+            break;
+        }
+
+        const F32 golden_width = phi * scale;
+        const F32 golden_height = scale;
+        const F32 pad_x = frame_width - golden_width;
+        const F32 pad_y = frame_height - golden_height;
+
+        F32 anchor_x = left_px;
+        F32 anchor_y = bottom_px;
+        switch (orientation)
+        {
+        case SnapshotGuideState::GoldenOrientation::TopLeft:
+            anchor_y += pad_y;
+            break;
+        case SnapshotGuideState::GoldenOrientation::TopRight:
+            anchor_x += pad_x;
+            anchor_y += pad_y;
+            break;
+        case SnapshotGuideState::GoldenOrientation::BottomRight:
+            anchor_x += pad_x;
+            break;
+        case SnapshotGuideState::GoldenOrientation::BottomLeft:
+        default:
+            break;
+        }
+
+        auto map_point = [&](F32 local_x, F32 local_y) -> LLVector2
+        {
+            F32 x = local_x;
+            F32 y = local_y;
+
+            if (orientation == SnapshotGuideState::GoldenOrientation::TopLeft ||
+                orientation == SnapshotGuideState::GoldenOrientation::BottomLeft)
+            {
+                x = golden_width - local_x;
+            }
+
+            if (orientation == SnapshotGuideState::GoldenOrientation::BottomLeft ||
+                orientation == SnapshotGuideState::GoldenOrientation::BottomRight)
+            {
+                y = golden_height - local_y;
+            }
+
+            return LLVector2(anchor_x + x, anchor_y + y);
+        };
+
+        std::vector<std::pair<LLVector2, LLVector2>> line_segments;
+        line_segments.reserve(24);
+
+        auto add_line = [&](F32 x0, F32 y0, F32 x1, F32 y1)
+        {
+            line_segments.emplace_back(map_point(x0, y0), map_point(x1, y1));
+        };
+
+        // Outline of the fitted golden rectangle.
+        add_line(0.f, 0.f, golden_width, 0.f);
+        add_line(0.f, golden_height, golden_width, golden_height);
+        add_line(0.f, 0.f, 0.f, golden_height);
+        add_line(golden_width, 0.f, golden_width, golden_height);
+
+        // Generate subdivision lines while we walk the squares.
+        F32 x0 = 0.f;
+        F32 y0 = 0.f;
+        F32 x1 = golden_width;
+        F32 y1 = golden_height;
+
+        for (U32 step = 0; step < 12; ++step)
+        {
+            const F32 width = x1 - x0;
+            const F32 height = y1 - y0;
+            if (width <= 1.f || height <= 1.f)
+            {
+                break;
+            }
+
+            if (step % 4 == 0)
+            {
+                x0 += height;
+                add_line(x0, y0, x0, y1);
+            }
+            else if (step % 4 == 1)
+            {
+                y0 += width;
+                add_line(x0, y0, x1, y0);
+            }
+            else if (step % 4 == 2)
+            {
+                x1 -= height;
+                add_line(x1, y0, x1, y1);
+            }
+            else
+            {
+                y1 -= width;
+                add_line(x0, y1, x1, y1);
+            }
+        }
+
+        auto draw_golden_spiral = [&](U32 max_depth)
+        {
+            gGL.begin(LLRender::LINE_STRIP);
+
+            F32 spiral_x0 = 0.f;
+            F32 spiral_y0 = 0.f;
+            F32 spiral_x1 = golden_width;
+            F32 spiral_y1 = golden_height;
+
+            for (U32 step = 0; step < max_depth; ++step)
+            {
+                const F32 width = spiral_x1 - spiral_x0;
+                const F32 height = spiral_y1 - spiral_y0;
+                if (width <= 1.f || height <= 1.f)
+                {
+                    break;
+                }
+
+                F32 size = 0.f;
+                F32 cx = 0.f;
+                F32 cy = 0.f;
+                F32 start_angle = 0.f;
+                F32 end_angle = 0.f;
+
+                switch (step % 4)
+                {
+                case 0: // left square
+                    size = height;
+                    cx = spiral_x0 + size;
+                    cy = spiral_y0 + size;
+                    start_angle = F_PI;
+                    end_angle = 1.5f * F_PI;
+                    spiral_x0 += size;
+                    break;
+                case 1: // bottom square
+                    size = width;
+                    cx = spiral_x0;
+                    cy = spiral_y0 + size;
+                    start_angle = 1.5f * F_PI;
+                    end_angle = 2.f * F_PI;
+                    spiral_y0 += size;
+                    break;
+                case 2: // right square
+                    size = height;
+                    cx = spiral_x1 - size;
+                    cy = spiral_y0;
+                    start_angle = 0.f;
+                    end_angle = F_PI_BY_TWO;
+                    spiral_x1 -= size;
+                    break;
+                case 3: // top square
+                default:
+                    size = width;
+                    cx = spiral_x0 + size;
+                    cy = spiral_y1 - size;
+                    start_angle = F_PI_BY_TWO;
+                    end_angle = F_PI;
+                    spiral_y1 -= size;
+                    break;
+                }
+
+                if (size <= 0.f)
+                {
+                    break;
+                }
+
+                const S32 segments = llclamp((S32)(size / 4.f), 12, 64);
+                for (S32 i = 0; i <= segments; ++i)
+                {
+                    const F32 t = start_angle + (end_angle - start_angle) * (F32)i / (F32)segments;
+                    const F32 local_x = cx + cosf(t) * size;
+                    const F32 local_y = cy + sinf(t) * size;
+                    LLVector2 mapped = map_point(local_x, local_y);
+                    gGL.vertex2f(mapped.mV[0], mapped.mV[1]);
+                }
+            }
+
+            gGL.end();
+        };
+
+        gGL.flush();
+        const F32 line_width = llmax(thickness, 1.f);
+        glLineWidth(line_width);
+        draw_golden_spiral(12);
+        glLineWidth(1.f);
+
+        if (!line_segments.empty())
+        {
+            gGL.flush();
+            glLineWidth(line_width);
+            gGL.begin(LLRender::LINES);
+            for (const auto& segment : line_segments)
+            {
+                gGL.vertex2f(segment.first.mV[0], segment.first.mV[1]);
+                gGL.vertex2f(segment.second.mV[0], segment.second.mV[1]);
+            }
+            gGL.end();
+            glLineWidth(1.f);
+        }
+        break;
+    }
+    case SnapshotGuideState::Style::Diagonal:
+    {
+        const F32 line_width = llmax(thickness, 1.f);
+        gGL.flush();
+        glLineWidth(line_width);
+        gGL.begin(LLRender::LINES);
+        gGL.vertex2f(left_px, bottom_px);
+        gGL.vertex2f(right_px, top_px);
+        gGL.vertex2f(left_px, top_px);
+        gGL.vertex2f(right_px, bottom_px);
+        gGL.end();
+        glLineWidth(1.f);
+        break;
+    }
+    }
+
+    gGL.matrixMode(LLRender::MM_MODELVIEW);
+    gGL.popMatrix();
+    gGL.matrixMode(LLRender::MM_PROJECTION);
+    gGL.popMatrix();
+    gGLLastMatrix = NULL;
+
+    ui_shader->unbind();
+
+    mSnapshotGuideState.active = false;
+}
+// </FS:Beq>
 // <FS:Beq> FIRE-32023 Focus Point Rendering
 void LLPipeline::renderFocusPoint()
 {
@@ -8091,6 +8440,9 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     static LLCachedControl<bool> show_frame(gSavedSettings, "FSSnapshotShowCaptureFrame", false);
     static LLCachedControl<bool> show_guides(gSavedSettings, "FSSnapshotShowGuides", false);
 
+    mSnapshotGuideState.active = false;
+    mSnapshotGuideState.show_guides = false;
+
     float left   = 0.f;
     float top    = 0.f;
     float right  = 1.f;
@@ -8101,12 +8453,41 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     static LLCachedControl<LLColor3> guide_color(gSavedSettings, "FSSnapshotFrameGuideColor", LLColor3(1.f, 1.f, 0.f));    
     static LLCachedControl<F32> border_thickness(gSavedSettings, "FSSnapshotFrameBorderWidth", 2.0f);    
     static LLCachedControl<F32> guide_thickness(gSavedSettings, "FSSnapshotFrameGuideWidth", 2.0f);    
+    static LLCachedControl<F32> guide_visibility(gSavedSettings, "FSSnapshotGuideVisibility", 0.5f);
+    static LLCachedControl<std::string> guide_style_setting(gSavedSettings, "FSSnapshotGuideStyle", std::string("rule_of_thirds"));
 
-    F32 guide_style = 1.f; // 0:off, 1:rule_of_thirds, others maybe in the future
-    if (!show_guides)
+    SnapshotGuideState::Style guide_style = SnapshotGuideState::Style::RuleOfThirds;
+    SnapshotGuideState::GoldenOrientation golden_orientation = SnapshotGuideState::GoldenOrientation::TopLeft;
+    const std::string style_value = guide_style_setting();
+    if (style_value == "golden_ratio" || style_value == "golden_ratio_top_left")
     {
-        guide_style = 0.f;
+        guide_style = SnapshotGuideState::Style::GoldenRatio;
+        golden_orientation = SnapshotGuideState::GoldenOrientation::TopLeft;
     }
+    else if (style_value == "golden_ratio_top_right")
+    {
+        guide_style = SnapshotGuideState::Style::GoldenRatio;
+        golden_orientation = SnapshotGuideState::GoldenOrientation::TopRight;
+    }
+    else if (style_value == "golden_ratio_bottom_left")
+    {
+        guide_style = SnapshotGuideState::Style::GoldenRatio;
+        golden_orientation = SnapshotGuideState::GoldenOrientation::BottomLeft;
+    }
+    else if (style_value == "golden_ratio_bottom_right")
+    {
+        guide_style = SnapshotGuideState::Style::GoldenRatio;
+        golden_orientation = SnapshotGuideState::GoldenOrientation::BottomRight;
+    }
+    else if (style_value == "diagonal")
+    {
+        guide_style = SnapshotGuideState::Style::Diagonal;
+    }
+    else
+    {
+        guide_style = SnapshotGuideState::Style::RuleOfThirds;
+    }
+    const F32 guide_visibility_value = show_guides ? (F32)guide_visibility : 0.f;
     const bool simple_snapshot_visible = LLFloaterReg::instanceVisible("simple_snapshot");
     const bool flickr_snapshot_visible = LLFloaterReg::instanceVisible("flickr");
     const bool primfeed_snapshot_visible = LLFloaterReg::instanceVisible("primfeed"); // <FS:Beq/> Primfeed integration
@@ -8220,17 +8601,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
         LLShaderMgr::SNAPSHOT_BORDER_THICKNESS,
         (GLfloat)border_thickness);
 
-    shader->uniform3fv(
-        LLShaderMgr::SNAPSHOT_GUIDE_COLOR,
-        1,
-        guide_color().mV);
-
-    shader->uniform1f(
-        LLShaderMgr::SNAPSHOT_GUIDE_THICKNESS,
-        (GLfloat)guide_thickness);
-    shader->uniform1f(
-        LLShaderMgr::SNAPSHOT_GUIDE_STYLE,
-        (GLfloat)guide_style);
+    // Guides are rendered in a later UI pass; no additional uniforms required here.
 
     mScreenTriangleVB->setBuffer();
     mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
@@ -8239,6 +8610,22 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
     shader->unbind();
     dst->flush();
+
+    if (show_frame && show_guides && gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        mSnapshotGuideState.active = true;
+        mSnapshotGuideState.show_guides = true;
+        mSnapshotGuideState.left = left;
+        mSnapshotGuideState.right = right;
+        mSnapshotGuideState.bottom = bottom;
+        mSnapshotGuideState.top = top;
+        mSnapshotGuideState.color = guide_color();
+        mSnapshotGuideState.thickness = guide_thickness();
+        mSnapshotGuideState.visibility = llclamp(guide_visibility_value, 0.f, 1.f);
+        mSnapshotGuideState.style = guide_style;
+        mSnapshotGuideState.golden_orientation = golden_orientation;
+    }
+
     return true;
 }
 // </FS:Beq>
@@ -8614,7 +9001,8 @@ void LLPipeline::renderFinalize()
     gDeferredPostNoDoFNoiseProgram.unbind();
 
     gGL.setSceneBlendType(LLRender::BT_ALPHA);
-    
+
+    renderSnapshotGuidesOverlay(); // <FS:Beq/> Render snapshot guides as part of UI
     renderFocusPoint(); // <FS:Beq/> FIRE-32023 render focus point
 
     if (hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))

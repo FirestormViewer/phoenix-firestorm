@@ -354,6 +354,7 @@ public:
     void renderHighlights();
     bool renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
     bool renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst); // <FS:Beq/> Add snapshot frame rendering
+    void renderSnapshotGuidesOverlay(); // <FS:Beq/> Add snapshot composition guide rendering
     void renderDebug();
     void renderPhysicsDisplay();
 
@@ -1023,6 +1024,39 @@ protected:
     U32                     mLightMask;
     U32                     mLightMovingMask;
 
+    // <FS:Beq> Add snapshot guides as part of UI rendering to avoid issues in compositor
+    struct SnapshotGuideState
+    {
+        enum class Style : U8
+        {
+            RuleOfThirds,
+            GoldenRatio,
+            Diagonal
+        };
+
+        enum class GoldenOrientation : U8
+        {
+            TopLeft,
+            TopRight,
+            BottomLeft,
+            BottomRight
+        };
+
+        bool        active = false;
+        bool        show_guides = false;
+        F32         left = 0.f;
+        F32         right = 1.f;
+        F32         bottom = 0.f;
+        F32         top = 1.f;
+        LLColor3    color = LLColor3(1.f, 1.f, 1.f);
+        F32         thickness = 0.f;
+        F32         visibility = 0.f;
+        Style       style = Style::RuleOfThirds;
+        GoldenOrientation golden_orientation = GoldenOrientation::TopLeft;
+    };
+
+    SnapshotGuideState      mSnapshotGuideState;
+    // </FS:Beq>
     static bool             sRenderPhysicalBeacons;
     static bool             sRenderMOAPBeacons;
     static bool             sRenderScriptedTouchBeacons;

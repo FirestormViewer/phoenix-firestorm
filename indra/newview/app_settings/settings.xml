@@ -26650,6 +26650,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
+    <key>FSSnapshotGuideVisibility</key>
+    <map>
+      <key>Comment</key>
+      <string>The blend factor used to color the snapshot framing guides</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>FSSnapshotGuideStyle</key>
+    <map>
+      <key>Comment</key>
+      <string>The framing guide layout to display inside the snapshot frame</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>rule_of_thirds</string>
+    </map>
     <key>FSManipRotateJointUseNaturalDirection</key>
     <map>
       <key>Comment</key>
