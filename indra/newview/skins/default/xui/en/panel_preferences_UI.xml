@@ -989,6 +989,15 @@
 		 width="270"
 		 control_name="FSUseSmallCameraFloater"
 		 tool_tip="If enabled, the smaller, legacy camera window without camera preset controls will be used."/>
+		<check_box
+		 top_pad="0"
+		 follows="left|top"
+		 height="16"
+		 label="Disable camera controls reset buttons"
+		 name="DisableCameraJoystickCenterReset"
+		 width="270"
+		 control_name="DisableCameraJoystickCenterReset"
+		 tool_tip="Prevents the center bullseye of the orbit and move camera controls from resetting the camera."/>
 
 		<text
 		type="string"

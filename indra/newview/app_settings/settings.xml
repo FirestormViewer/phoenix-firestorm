@@ -14011,13 +14011,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>SceneLoadRearMaxRadiusFraction</key>
   <map>
     <key>Comment</key>
-    <string>a percentage of draw distance beyond which all objects outside of view frustum will be unloaded, regardless of pixel threshold</string>
+    <string>a fraction of draw distance beyond which all objects outside of view frustum will be unloaded, regardless of pixel threshold</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>75.0</real>
+    <real>0.75</real>
   </map>
     <key>SceneLoadRearPixelThreshold</key>
     <map>
@@ -23397,6 +23397,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>DisableCameraJoystickCenterReset</key>
+  <map>
+    <key>Comment</key>
+    <string>Disable center reset on camera joysticks (bullseye) in camera controls.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSNetMapScripted</key>
   <map>
     <key>Comment</key>
@@ -26569,6 +26580,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, masks the main screen according to the capture frame.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSSnapshotShowGuides</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, shows composition guides inside the snapshot frame.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

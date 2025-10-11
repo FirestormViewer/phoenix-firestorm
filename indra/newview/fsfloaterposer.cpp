@@ -45,6 +45,7 @@
 #include "llvoavatarself.h"
 #include "llinventoryfunctions.h"
 #include "lltoolcomp.h"
+#include "llloadingindicator.h"
 
 namespace
 {
@@ -110,6 +111,8 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
     mCommitCallbackRegistrar.add("Poser.CommitSpinner", [this](LLUICtrl* spinner, const LLSD& data) { onCommitSpinner(spinner, data); });
     mCommitCallbackRegistrar.add("Poser.CommitSlider", [this](LLUICtrl* slider, const LLSD& data) { onCommitSlider(slider, data); });
     mCommitCallbackRegistrar.add("Poser.Symmetrize", [this](LLUICtrl*, const LLSD& data) { onClickSymmetrize(data); });
+
+    mLoadPoseTimer = new FSLoadPoseTimer(boost::bind(&FSFloaterPoser::timedReload, this));
 }
 
 bool FSFloaterPoser::postBuild()
@@ -253,7 +256,6 @@ void FSFloaterPoser::onOpen(const LLSD& key)
     LLFloater::onOpen(key);
 }
 
-
 void FSFloaterPoser::onFocusReceived()
 {
     LLEditMenuHandler::gEditMenuHandler = this;
@@ -302,6 +304,7 @@ void FSFloaterPoser::onClose(bool app_quitting)
     }
 
     disableVisualManipulators();
+    delete mLoadPoseTimer;
     LLFloater::onClose(app_quitting);
 }
 
@@ -512,8 +515,11 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
     {
         bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
         LLSD record;
-        record["version"]["value"] = (S32)6;
+        record["version"]["value"] = (S32)7;
         record["startFromTeePose"]["value"] = !savingDiff;
+
+        if (savingDiff)
+            mPoserAnimator.savePosingState(avatar, &record);
 
         LLVector3 rotation, position, scale, zeroVector;
         bool      baseRotationIsZero;
@@ -523,11 +529,14 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
             std::string bone_name = pj.jointName();
             bool posingThisJoint  = mPoserAnimator.isPosingAvatarJoint(avatar, pj);
             bool jointRotLocked   = mPoserAnimator.getRotationIsWorldLocked(avatar, pj);
+            bool jointRotMirrored = mPoserAnimator.getRotationIsMirrored(avatar, pj);
 
-            record[bone_name]            = bone_name;
-            record[bone_name]["enabled"] = posingThisJoint;
+            record[bone_name]             = bone_name;
+            record[bone_name]["enabled"]  = posingThisJoint;
             if (!posingThisJoint)
                 continue;
+
+            record[bone_name]["mirrored"] = jointRotMirrored;
 
             if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
                 continue;
@@ -562,7 +571,6 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
         LL_WARNS("Posing") << "Exception caught in saveToXml: " << e.what() << LL_ENDL;
         return false;
     }
-
 
     return true;
 }
@@ -662,6 +670,8 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
+
+    mPoserAnimator.updatePosingState(avatar, selectedJoints);
 
     for (auto item : selectedJoints)
     {
@@ -892,14 +902,39 @@ void FSFloaterPoser::onPoseMenuAction(const LLSD& param)
     else if (loadStyle == "selective_rot")
         loadType = SELECTIVE_ROT;
 
+    mLoadPoseTimer->tryLoading(poseName, loadType);
+    setLoadingProgress(true);
+}
+
+void FSFloaterPoser::timedReload()
+{
+    if (!mLoadPoseTimer)
+        return;
+
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
-    loadPoseFromXml(avatar, poseName, loadType);
-    onJointTabSelect();
-    refreshJointScrollListMembers();
-    setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
+    if (loadPoseFromXml(avatar, mLoadPoseTimer->getPosePath(), mLoadPoseTimer->getLoadMethod()))
+    {
+        mLoadPoseTimer->completeLoading();
+        onJointTabSelect();
+        refreshJointScrollListMembers();
+        setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
+    }
+
+    if (mLoadPoseTimer->loadCompleteOrFailed())
+        setLoadingProgress(false);
+}
+
+void FSFloaterPoser::setLoadingProgress(bool started)
+{
+    LLLoadingIndicator* mLoadingIndicator = findChild<LLLoadingIndicator>("progress_indicator");
+    if (!mLoadingIndicator)
+        return;
+
+    mLoadingIndicator->setVisible(started);
+    started ? mLoadingIndicator->start() : mLoadingIndicator->stop();
 }
 
 void FSFloaterPoser::onClickLoadLeftHandPose()
@@ -1020,14 +1055,15 @@ bool FSFloaterPoser::poseFileStartsFromTeePose(const std::string& poseFileName)
     return false;
 }
 
-void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod)
+bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod)
 {
+    bool        loadSuccess = false;
     std::string pathname = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
     if (!gDirUtilp->fileExists(pathname))
-        return;
+        return loadSuccess;
 
     if (!mPoserAnimator.isPosingAvatar(avatar))
-        return;
+        return loadSuccess;
 
     std::string fullPath =
         gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_INTERNAL_FORMAT_FILE_EXT);
@@ -1049,20 +1085,22 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         bool         enabled;
         bool         setJointBaseRotationToZero;
         bool         worldLocked;
+        bool         mirroredJoint;
         S32          version = 0;
         bool startFromZeroRot = true;
 
         infile.open(fullPath);
         if (!infile.is_open())
-            return;
+            return loadSuccess;
 
+        loadSuccess = true;
         while (!infile.eof())
         {
             S32 lineCount = LLSDSerialize::fromXML(pose, infile);
             if (lineCount == LLSDParser::PARSE_FAILURE)
             {
                 LL_WARNS("Posing") << "Failed to parse file: " << poseFileName << LL_ENDL;
-                return;
+                return loadSuccess;
             }
 
             for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
@@ -1108,32 +1146,44 @@ void FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                     setJointBaseRotationToZero = startFromZeroRot;
 
                 if (loadPositions && control_map.has("position"))
-                {
                     vec3.setValue(control_map["position"]);
-                    mPoserAnimator.loadJointPosition(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointPosition(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
 
                 if (loadRotations && control_map.has("rotation"))
-                {
                     vec3.setValue(control_map["rotation"]);
-                    mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
 
                 if (loadScales && control_map.has("scale"))
-                {
                     vec3.setValue(control_map["scale"]);
-                    mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
-                }
+                else
+                    vec3.clear();
+
+                mPoserAnimator.loadJointScale(avatar, poserJoint, loadPositionsAndScalesAsDeltas, vec3);
 
                 worldLocked = control_map.has("worldLocked") ? control_map["worldLocked"].asBoolean() : false;
                 mPoserAnimator.setRotationIsWorldLocked(avatar, *poserJoint, worldLocked);
+
+                mirroredJoint = control_map.has("mirrored") ? control_map["mirrored"].asBoolean() : false;
+                mPoserAnimator.setRotationIsMirrored(avatar, *poserJoint, mirroredJoint);
             }
+
+            if (version > 6 && !startFromZeroRot)
+                loadSuccess = mPoserAnimator.loadPosingState(avatar, pose);
         }
     }
     catch ( const std::exception & e )
     {
+        loadSuccess = false;
         LL_WARNS("Posing") << "Everything caught fire trying to load the pose: " << poseFileName << " exception: " << e.what() << LL_ENDL;
     }
+
+    return loadSuccess;
 }
 
 void FSFloaterPoser::startPosingSelf()
@@ -1777,6 +1827,9 @@ void FSFloaterPoser::setUiSelectedAvatarSaveFileName(const std::string& saveFile
 
 LLVOAvatar* FSFloaterPoser::getAvatarByUuid(const LLUUID& avatarToFind) const
 {
+    if (avatarToFind.isNull())
+        return nullptr;
+
     for (LLCharacter* character : LLCharacter::sInstances)
     {
         if (avatarToFind != character->getID())
@@ -2719,4 +2772,31 @@ void FSFloaterPoser::onClickLockWorldRotBtn()
     }
 
     refreshTextHighlightingOnJointScrollLists();
+}
+
+FSLoadPoseTimer::FSLoadPoseTimer(FSLoadPoseTimer::callback_t callback) : LLEventTimer(0.5f), mCallback(callback)
+{
+}
+
+bool FSLoadPoseTimer::tick()
+{
+    if (!mAttemptLoading)
+        return false;
+    if (mCallback.empty())
+        return false;
+
+    if (mLoadAttempts >= mMaxLoadAttempts)
+        mAttemptLoading = false;
+
+    mLoadAttempts++;
+    mCallback();
+    return false;
+}
+
+void FSLoadPoseTimer::tryLoading(std::string filePath, E_LoadPoseMethods loadMethod)
+{
+    mPoseFullPath   = filePath;
+    mLoadType       = loadMethod;
+    mLoadAttempts   = 0;
+    mAttemptLoading = true;
 }
