@@ -1838,6 +1838,15 @@ width="430">
 					<button.commit_callback
 					 function="Poser.BrowseCache"/>
 				</button>
+				<loading_indicator
+				 visible="false"
+				 follows="left|top"
+				 height="20"
+				 layout="topleft"
+				 name="progress_indicator"
+				 left_pad="1"
+				 top_delta="0"
+				 width="20" />
 				<menu_button
 				 height="21"
 				 follows="top|left"
@@ -1856,7 +1865,7 @@ width="430">
 				 name="load_poses_button"
 				 left_pad="1"
 				 top_delta="0"
-				 width="95"/>
+				 width="85"/>
 				<button
 				 height="21"
 				 follows="top|left"
@@ -1871,7 +1880,7 @@ width="430">
 				 image_selected="Toolbar_Middle_Selected"
 				 image_unselected="Toolbar_Middle_Off"
 				 name="save_poses_button"
-				 width="95"
+				 width="85"
 				 top_delta="0"
 				 left_pad="1">
 					<button.commit_callback

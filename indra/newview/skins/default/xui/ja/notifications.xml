@@ -5515,14 +5515,14 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 圧縮：[PACK_TIME]秒　[PSIZE]㎅
 解凍：[UNPACK_TIME]秒　[USIZE]㎅
 	</notification>
-	<notification label="二段階認証トークンプロンプト" name="PromptMFAToken">
+	<notification label="多段階認証トークンプロンプト" name="PromptMFAToken">
 		[MESSAGE]
 		<form name="form">
 			<button name="continue" text="確認"/>
 			<button name="cancel" text="キャンセル"/>
 		</form>
 	</notification>
-	<notification label="二段階認証トークンプロンプト" name="PromptMFATokenWithSave">
+	<notification label="多段階認証トークンプロンプト" name="PromptMFATokenWithSave">
 		[MESSAGE]
 		<form name="form">
 			<ignore name="ignore" text="このコンピューターを３０日間記録する"/>
@@ -5543,12 +5543,12 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="RiggedMeshAttachedToHUD">
-		ＨＵＤポイント「[POINT]」にアタッチされたオブジェクト「[NAME]」にはリグメッシュが含まれています。
+		ＨＵＤポイント「[POINT]」に装着されたオブジェクト「[NAME]」にはリグメッシュが含まれています。
 
 リグメッシュオブジェクトは、アバターに取り付けるように設計されています。あなたにはこのオブジェクトが表示されますが、他の人には表示されません。
 
-他の人にこのオブジェクトを見てもらいたい場合は、オブジェクトを削除して、アバターのアタッチメントポイントに再度アタッチします。
-		<usetemplate ignoretext="リグメッシュがＨＵＤポイントにアタッチされている場合の警告" name="okignore" yestext="ＯＫ"/>
+他の人にこのオブジェクトを見てもらいたい場合は、オブジェクトを削除して、アバターの装着ポイントに再度装着します。
+		<usetemplate ignoretext="リグメッシュがＨＵＤポイントに装着されている場合の警告" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="ConfirmOverwriteOutfit">
 		これにより、選択したアウトフィットのアイテムが現在着ているアイテムに置き換えられます。
@@ -5642,7 +5642,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 	</notification>
 	<!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
 	<notification label="空のアルファチャンネルが含まれた画像" name="ImageEmptyAlphaLayer">
-		アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透明情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、描画が遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
+		アップロードしようとしている画像には、空またはほぼ空のアルファチャンネル（透過情報）が含まれています。これはほとんどの場合望ましくないため、削除する必要があります。画像にアルファチャンネルを追加すると、異なるカメラ角度でテクスチャが互いに反転し、描画が遅くなります。したがって、このテクスチャに空またはほぼ空のアルファチャンネルが本当に必要な場合を除き、削除することを検討してください。
 		<form name="form">
 			<button name="strip" text="アルファチャンネルを削除"/>
 			<button name="use_as_is" text="このまま使用"/>

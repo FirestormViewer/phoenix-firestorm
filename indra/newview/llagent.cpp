@@ -509,7 +509,7 @@ LLAgent::LLAgent() :
 
     mMouselookModeInSignal(NULL),
     mMouselookModeOutSignal(NULL),
-
+    mFSAreaSearchActive(false), // <FS:minerjr> - Flag was not initialized
     mPhantom(false),
     restoreToWorld(false)
 {

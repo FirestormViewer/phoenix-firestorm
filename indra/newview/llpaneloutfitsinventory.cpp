@@ -429,7 +429,10 @@ void LLPanelOutfitsInventory::onTabChange()
     }
     if (mTrashMenuPanel)
     {
-        mTrashMenuPanel->setVisible(mActivePanel->getTrashMenuVisible());
+        // <FS:PP> FIRE-35947 Ensure the top menu buttons (gear/sort/trash) are only visible in the outfits panel
+        // mTrashMenuPanel->setVisible(mActivePanel->getTrashMenuVisible());
+        mTrashMenuPanel->setVisible(false);
+        // </FS:PP>
     }
 
     updateVerbs();

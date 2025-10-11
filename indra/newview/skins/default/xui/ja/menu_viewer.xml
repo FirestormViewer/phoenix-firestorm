@@ -50,9 +50,9 @@
 		<menu_item_check label="移動操作" name="Movement Controls"/>
 		<menu_item_check label="カメラ操作" name="Camera Controls"/>
 		<menu label="アバターの状態" name="avhealth">
-			<menu_item_call label="自分のアニメーションを停止する" name="Stop Animating My Avatar"/>
-			<menu_item_call label="アニメーションを停止＆権限を取り消し" name="Stop Animating My Avatar With Revoke"/>
-			<menu_item_call label="自分を変形しない" name="undeform_avatar"/>
+			<menu_item_call label="アバターのアニメーションを停止する" name="Stop Animating My Avatar"/>
+			<menu_item_call label="アバターのアニメーションを停止＆権限を取り消す" name="Stop Animating My Avatar With Revoke"/>
+			<menu_item_call label="アバターの変形を解除" name="undeform_avatar"/>
 			<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
 			<menu_item_call label="スケルトンとアニメーションのリセット" name="Reset Skeleton And Animations"/>
 			<menu_item_call label="テクスチャをリベークする" name="Rebake Texture"/>
@@ -141,11 +141,11 @@
 		<menu_item_check label="グラフィック性能の最適化…" name="Performance"/>
 		<menu_item_call label="ホームにテレポート" name="Teleport Home"/>
 		<menu label="自然環境" name="Environment">
-			<menu_item_check label="夜明け" name="Sunrise"/>
-			<menu_item_check label="正午" name="Noon"/>
-			<menu_item_check label="正午（レガシー）" name="legacy noon"/>
+			<menu_item_check label="朝方" name="Sunrise"/>
+			<menu_item_check label="昼間" name="Noon"/>
+			<menu_item_check label="昼間（レガシー）" name="legacy noon"/>
 			<menu_item_check label="夕方" name="Sunset"/>
-			<menu_item_check label="深夜" name="Midnight"/>
+			<menu_item_check label="夜中" name="Midnight"/>
 			<menu_item_check label="共有された環境を使用" name="Use Shared Environment"/>
 			<menu_item_call label="自分の環境…" name="my_environs"/>
 			<menu_item_call label="環境の個人設定…" name="adjustment_tool"/>

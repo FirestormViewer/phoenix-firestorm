@@ -332,7 +332,7 @@ https://secondlife.com/viewer-access-faq
 しばらくしてから再度お試しください。
 	</string>
 	<string name="LoginFailedAuthenticationMFARequired">
-		ログインするには二段階認証アプリから新しいトークンを入力する必要があります。
+		ログインするには多段階認証アプリから新しいトークンを入力する必要があります。
 それでもこのエラーが発生する場合は、support@secondlife.comにお問い合わせください。
 	</string>
 	<!-- Disconnection -->
@@ -5876,7 +5876,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Group_Titles_Tooltip">アクティブなグループタグを変更します。</string>
 	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの着用物のリストを開きます。</string>
 	<string name="Command_RFO_Tooltip">ビューアにはフレンドのアバターのみが表示され、他のすべてのアバターは削除されます。有効にすると、他のユーザを見えるようにするＴＰが必要になります。</string>
-	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）－現在表示されているすべてのアニメッシュ（アタッチされているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
+	<string name="Command_DAO_Tooltip">アニメーションオブジェクトの描画解除（別名アニメッシュ）－現在表示されているすべてのアニメッシュ（装着されているもの、フリーローミングのもの）を一時的に描画解除します。描画解除されたアニメッシュは、ＴＰ後に再び表示されます。</string>
 	<string name="Command_Beacons_Tooltip">ビーコンを表示します。</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		現在、下部のツールバー（↓）にあります。
@@ -5893,10 +5893,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<!-- added Jun.30, 2013 -->
 	<string name="Command_Stop_Animations_Label">
-		自分のアニメーションを停止する
+		アニメーション停止
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
-		自分のアニメーションを停止する
+		自分のアバターのアニメーションを停止させます。
 	</string>
 	<!-- Mesh UI terms -->
 	<string name="Retain%">

@@ -9353,7 +9353,9 @@ void LLRecentItemsFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
         buildContextMenuOptions(flags, items, disabled_items);
 
     items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
-    items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
+    // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+    //items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
+    // </FS:TJ>
 
     hide_context_entries(menu, items, disabled_items);
 }
@@ -9398,7 +9400,9 @@ void LLFavoritesFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
     buildContextMenuOptions(flags, items, disabled_items);
 
     items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
-    items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
+    // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+    //items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
+    // </FS:TJ>
 
     hide_context_entries(menu, items, disabled_items);
 }

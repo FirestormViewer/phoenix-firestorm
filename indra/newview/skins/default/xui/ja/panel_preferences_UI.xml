@@ -156,6 +156,7 @@
 			<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人物」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
 			<check_box label="古いタイプのオブジェクトプロパティを使用" name="FSUseLegacyObjectProperties" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。"/>
 			<check_box label="小さいカメラウィンドウを使用" name="FSUseSmallCameraFloater" tool_tip="ここにチェックを入れると、クラシックなプリセットコントロールのない小さなカメラウィンドウが利用できるようになります。"/>
+			<check_box label="カメラコントロールのリセットボタンを無効化する" name="DisableCameraJoystickCenterReset" tool_tip="軌道の中心を狙い、カメラコントロールを移動してもカメラがリセットされないようにします。"/>
 			<text name="standalone_textbox">
 				次の項目に独立したウィンドウを使用：
 			</text>
