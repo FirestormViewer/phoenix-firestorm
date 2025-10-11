@@ -302,15 +302,15 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
 
     // --- Use 7.1.11 basis with fixes implied by LL PRs ---
     (void)comp; // retained for parity with the viewer signature
-    const S32 hard_cap = 12; // sanity cap
-    const S64 base_layer_area = static_cast<S64>(MAX_BLOCK_SIZE) * static_cast<S64>(MAX_BLOCK_SIZE); // 64x64 blocks at discard 5
+    constexpr S32 hard_cap = 12; // sanity cap
+    constexpr S64 base_layer_area = static_cast<S64>(MAX_BLOCK_SIZE) * static_cast<S64>(MAX_BLOCK_SIZE); // 64x64 blocks at discard 5
+    constexpr S64 bits_per_tile = static_cast<S64>(max_components) * static_cast<S64>(precision);
     const S32 discard_layers = std::max(5 - discard_level, 0);
     const double rate64 = static_cast<double>(rate);
     const S64 header_bytes = static_cast<S64>(calcHeaderSizeJ2C());
-    const S64 bits_per_tile = static_cast<S64>(max_components) * static_cast<S64>(precision);
 
     // helper lambda: layer area to estimated bit budget
-    auto scaled_bits = [rate64, bits_per_tile](S64 layer_area) -> S64
+    auto scaled_bits = [rate64](S64 layer_area) -> S64
     {
         const S64 layer_bits = layer_area * bits_per_tile;
         return static_cast<S64>(std::llround(static_cast<double>(layer_bits) * rate64));
