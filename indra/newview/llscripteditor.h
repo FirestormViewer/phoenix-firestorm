@@ -41,11 +41,11 @@ public:
         Params();
     };
 
-    virtual ~LLScriptEditor() {};
+    ~LLScriptEditor() override {};
 
     // LLView override
-    virtual void    draw();
-    bool postBuild();
+    void    draw() override;
+    bool    postBuild() override;
 
     // <FS> Improved Home-key behavior
     // LLTextBase override
@@ -53,7 +53,7 @@ public:
 
     void    initKeywords(bool luau_language = false);
     void    loadKeywords();
-    /* virtual */ void  clearSegments();
+    void    clearSegments();
     LLKeywords::keyword_iterator_t keywordsBegin();
     LLKeywords::keyword_iterator_t keywordsEnd();
     LLKeywords& getKeywords();
@@ -79,8 +79,8 @@ protected:
 
 private:
     void    drawLineNumbers();
-    /* virtual */ void  updateSegments();
-    /* virtual */ void  drawSelectionBackground();
+    void  updateSegments() override;
+    void  drawSelectionBackground() override;
 
     // <FS:Ansariel> Show keyword help on F1
     /*virtual*/ bool handleKeyHere(KEY key, MASK mask);

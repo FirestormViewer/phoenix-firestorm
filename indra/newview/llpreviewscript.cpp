@@ -66,22 +66,12 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-#include "llkeyboard.h"
-#include "llscrollcontainer.h"
-#include "llcheckboxctrl.h"
 #include "llscripteditor.h"
-#include "llselectmgr.h"
-#include "lltooldraganddrop.h"
-#include "llscrolllistctrl.h"
 #include "lltextbox.h"
-#include "llslider.h"
-#include "lldir.h"
-#include "llcombobox.h"
 #include "llviewerstats.h"
 #include "llviewerwindow.h"
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
-#include "lluictrlfactory.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llappviewer.h"
@@ -92,6 +82,8 @@
 //#include "lltoggleablemenu.h" // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
 //#include "llmenubutton.h" // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
 #include "llinventoryfunctions.h"
+#include "llwebsocketmgr.h"
+#include "llscripteditorws.h"
 #include <regex>
 #include "llloadingindicator.h" // <FS:Kadah> Compile indicator
 #include "lliconctrl.h" // <FS:Kadah> Compile indicator
@@ -1636,11 +1628,11 @@ void LLScriptEdCore::doSaveComplete( void* userdata, bool close_after_save, bool
 
 void LLScriptEdCore::openInExternalEditor()
 {
-    if (mContainer->mLiveFile)
-    {
-        // If already open in an external editor, just return
-        return;
-    }
+    //if (mContainer->mLiveFile)
+    //{
+    //    // If already open in an external editor, just return
+    //    return;
+    //}
     // Open it in external editor.
     {
         LLExternalEditor ed;
@@ -1669,11 +1661,13 @@ void LLScriptEdCore::openInExternalEditor()
 
     // Generate a suitable filename
     std::string script_name = mScriptName;
-    std::string forbidden_chars = "<>:\"\\/|?*";
-    for (std::string::iterator c = forbidden_chars.begin(); c != forbidden_chars.end(); c++)
-    {
-        script_name.erase(std::remove(script_name.begin(), script_name.end(), *c), script_name.end());
-    }
+
+    static const std::set<char> forbidden_chars{ '<', '>', ':', '"', '\\', '/', '|', '?', '*' };
+    script_name.erase(
+        std::remove_if(script_name.begin(), script_name.end(), [](char c) {
+            return forbidden_chars.contains(c);
+        }), script_name.end());
+
     std::string filename = mContainer->getTmpFileName(script_name);
 
     // Save the script to a temporary file.
@@ -1687,9 +1681,18 @@ void LLScriptEdCore::openInExternalEditor()
         writeToFile(filename, gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
     }
 
+    if (mContainer->mLiveFile && mContainer->mLiveFile->filename() != filename)
+    { // The name may have changed if we changed the type of scipt being edited.
+        delete mContainer->mLiveFile;
+        mContainer->mLiveFile = NULL;
+    }
     // Start watching file changes.
-    mContainer->mLiveFile = new LLLiveLSLFile(filename, boost::bind(&LLScriptEdContainer::onExternalChange, mContainer, _1));
-    mContainer->mLiveFile->addToEventTimer();
+    if (!mContainer->mLiveFile)
+    {
+        mContainer->mLiveFile = new LLLiveLSLFile(filename, boost::bind(&LLScriptEdContainer::onExternalChange, mContainer, _1));
+        mContainer->mLiveFile->addToEventTimer();
+    }
+    mContainer->startWebsocketServer();
         // FS:TS FIRE-6122 end
 
         status = ed.run(filename);
@@ -2063,8 +2066,6 @@ void LLScriptEdCore::setAssociatedExperience( const LLUUID& experience_id )
     mAssociatedExperience = experience_id;
 }
 
-
-
 void LLLiveLSLEditor::requestExperiences()
 {
     if (!getIsModifiable())
@@ -2119,6 +2120,11 @@ LLScriptEdContainer::~LLScriptEdContainer()
 
     delete mLiveLogFile;
     mLiveLogFile = nullptr;
+
+    if (!mWebSocketServer.expired())
+    {
+        unsubscribeScript();
+    }
 
     // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
     // Clean up the backup file (unless we've gotten disconnected)
@@ -2185,18 +2191,9 @@ std::string LLScriptEdContainer::getBackupFileName() const
 }
 // [/SL:KB]
 
-std::string LLScriptEdContainer::getTmpFileName(const std::string& script_name)
+std::string LLScriptEdContainer::getTmpFileName(const std::string& script_name) const
 {
-    // Take script inventory item id (within the object inventory)
-    // to consideration so that it's possible to edit multiple scripts
-    // in the same object inventory simultaneously (STORM-781).
-    std::string script_id = mObjectUUID.asString() + "_" + mItemUUID.asString();
-
-    // Use MD5 sum to make the file name shorter and not exceed maximum path length.
-    char script_id_hash_str[33];               /* Flawfinder: ignore */
-    LLMD5 script_id_hash((const U8 *)script_id.c_str());
-    script_id_hash.hex_digest(script_id_hash_str);
-
+    std::string script_id_hash_str(getUniqueHash());
     std::string script_extension = mScriptEd->mEditor->getIsLuauLanguage() ? ".luau" : ".lsl";
 
     if (script_name.empty())
@@ -2207,6 +2204,21 @@ std::string LLScriptEdContainer::getTmpFileName(const std::string& script_name)
     {
         return std::string(LLFile::tmpdir()) + "sl_script_" + script_name + "_" + script_id_hash_str + script_extension;
     }
+}
+
+std::string LLScriptEdContainer::getUniqueHash() const
+{
+    // Take script inventory item id (within the object inventory)
+    // to consideration so that it's possible to edit multiple scripts
+    // in the same object inventory simultaneously (STORM-781).
+    std::string script_id = mObjectUUID.asString() + "_" + mItemUUID.asString();
+
+    // Use MD5 sum to make the file name shorter and not exceed maximum path length.
+    char  script_id_hash_str[33]; /* Flawfinder: ignore */
+    LLMD5 script_id_hash((const U8*)script_id.c_str());
+    script_id_hash.hex_digest(script_id_hash_str);
+
+    return std::string(script_id_hash_str);
 }
 
 std::string LLScriptEdContainer::getErrorLogFileName(const std::string& script_path)
@@ -2295,6 +2307,63 @@ bool LLScriptEdContainer::handleKeyHere(KEY key, MASK mask)
         return mScriptEd->handleKeyHere(key, mask);
     }
     return true;
+}
+
+void LLScriptEdContainer::startWebsocketServer()
+{
+    if (gSavedSettings.getBOOL("ExternalWebsocketSyncEnable"))
+    {
+        // Attempt to find an existing server
+        LLWebsocketMgr&               wsmgr  = LLWebsocketMgr::instance();
+        LLScriptEditorWSServer::ptr_t server =
+            std::static_pointer_cast<LLScriptEditorWSServer>(
+                wsmgr.findServerByName(LLScriptEditorWSServer::DEFAULT_SERVER_NAME));
+
+        if (!server)
+        {   // We couldn't find one, so create it
+            U16 server_port = static_cast<U16>(gSavedSettings.getS32("ExternalWebsocketSyncPort"));
+            bool server_localhost = gSavedSettings.getBOOL("ExternalWebsocketSyncLocal");
+            server = std::make_shared<LLScriptEditorWSServer>(LLScriptEditorWSServer::DEFAULT_SERVER_NAME, server_port, server_localhost);
+            wsmgr.addServer(server);
+        }
+
+        bool is_running = server->isRunning();
+        if (!is_running)
+        {   // Server isn't running, so start it
+            is_running = wsmgr.startServer(LLScriptEditorWSServer::DEFAULT_SERVER_NAME);
+        }
+
+        if (!is_running && !server->isRunning())
+        {   // Failed to start the server
+            LL_WARNS() << "Failed to start script editor websocket server" << LL_ENDL;
+            return;
+        }
+
+        std::string script_id_hash_str(getUniqueHash());
+        server->subscribeScriptEditor(mObjectUUID, mItemUUID, mScriptEd->mScriptName, getHandle(), script_id_hash_str);
+        mWebSocketServer = server;
+    }
+}
+
+void LLScriptEdContainer::unsubscribeScript()
+{
+    auto server = mWebSocketServer.lock();
+    if (server)
+    {
+        std::string script_id_hash_str(getUniqueHash());
+        server->sendUnsubscribeScriptEditor(script_id_hash_str);
+        server->unsubscribeEditor(script_id_hash_str);
+    }
+}
+
+void LLScriptEdContainer::sendCompileResults(LLSD& params)
+{
+    auto server = mWebSocketServer.lock();
+    if (server)
+    {
+        std::string script_id_hash_str(getUniqueHash());
+        server->sendCompileResults(script_id_hash_str, params);
+    }
 }
 
 // <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
@@ -2602,6 +2671,7 @@ void LLPreviewLSL::finishedLSLUpload(LLUUID itemId, LLSD response)
         {
             preview->callbackLSLCompileFailed(response["errors"]);
         }
+        preview->sendCompileResults(response);
     }
 }
 
@@ -2625,6 +2695,12 @@ bool LLPreviewLSL::failedLSLUpload(LLUUID itemId, LLUUID taskId, LLSD response, 
         LLSD errors;
         errors.append(LLTrans::getString("UploadFailed") + reason);
         preview->callbackLSLCompileFailed(errors);
+
+        LLSD message;
+        message["compiled"] = false;
+        message["errors"]   = errors;
+        preview->sendCompileResults(message);
+
         return true;
     }
 
@@ -3265,6 +3341,8 @@ void LLLiveLSLEditor::finishLSLUpload(LLUUID itemId, LLUUID taskId, LLUUID newAs
         {
             preview->callbackLSLCompileFailed(response["errors"]);
         }
+        response["is_running"] = isRunning;
+        preview->sendCompileResults(response);
     }
 }
 

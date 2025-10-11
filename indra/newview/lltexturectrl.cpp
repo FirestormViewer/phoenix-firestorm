@@ -1866,9 +1866,17 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
     mIsPreviewDisabled(false)
 {
     mCaptionHeight = p.show_caption ? BTN_HEIGHT_SMALL : 0;     // <FS:Zi> leave some room underneath the image for the caption
-    // Default of defaults is white image for diff tex
-    //
-    setBlankImageAssetID(IMG_WHITE);
+
+    if (mInventoryPickType == PICK_MATERIAL)
+    {
+        setBlankImageAssetID(BLANK_MATERIAL_ASSET_ID);
+    }
+    else
+    {
+        // Default of defaults is white image for diff tex
+        //
+        setBlankImageAssetID(IMG_WHITE);
+    }
 
     setAllowNoTexture(p.allow_no_texture);
     setCanApplyImmediately(p.can_apply_immediately);

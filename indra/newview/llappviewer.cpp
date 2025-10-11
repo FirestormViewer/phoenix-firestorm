@@ -126,6 +126,7 @@
 #include "lllocalbitmaps.h"
 #include "llperfstats.h"
 #include "llgltfmateriallist.h"
+#include "llwebsocketmgr.h"
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -5641,6 +5642,11 @@ void LLAppViewer::idle()
     LLMortician::updateClass();
     LLFilePickerThread::clearDead();  //calls LLFilePickerThread::notify()
     LLDirPickerThread::clearDead();
+
+    if (LLWebsocketMgr::instanceExists())
+    {
+        LLWebsocketMgr::instance().update();
+    }
     F32 dt_raw = idle_timer.getElapsedTimeAndResetF32();
 
     LLGLTFMaterialList::flushUpdates();
@@ -6462,7 +6468,10 @@ void LLAppViewer::idleNetwork()
     add(LLStatViewer::NUM_NEW_OBJECTS, gObjectList.mNumNewObjects);
 
     // Retransmit unacknowledged packets.
-    gXferManager->retransmitUnackedPackets();
+    if (gXferManager)
+    {
+        gXferManager->retransmitUnackedPackets();
+    }
     gAssetStorage->checkForTimeouts();
     gViewerThrottle.setBufferLoadRate(gMessageSystem->getBufferLoadRate());
     gViewerThrottle.updateDynamicThrottle();

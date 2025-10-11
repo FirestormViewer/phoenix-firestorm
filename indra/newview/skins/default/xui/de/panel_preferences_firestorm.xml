@@ -211,6 +211,12 @@
 			Externer Editor:
 		</text>
 		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetExternalEditor"/>
+
+		<check_box label="WebSocket-Synchronisierung aktivieren" name="websocket_sync_enable"/>
+		<text name="websocket_tip">
+			WebSocket Listen-Port:
+		</text>
+		<check_box label="Skriptfehler und Debug-Meldungen an WebSocket-Clients weiterleiten" name="websocket_forward_debug"/>
 	</panel>
 
 	<!--Build 2-->

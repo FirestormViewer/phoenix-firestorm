@@ -1453,6 +1453,51 @@
          <button.commit_callback
           function="Pref.SetExternalEditor" />
         </button>
+
+        <check_box
+         control_name="ExternalWebsocketSyncEnable"
+         follows="top|left"
+         height="20"
+         label="Enable WebSocket Sync"
+         layout="topleft"
+         left="5"
+         name="websocket_sync_enable"
+         width="200" />
+        <text
+         enabled_control="ExternalWebsocketSyncEnable"
+         follows="top|left"
+         height="15"
+         layout="topleft"
+         left="20"
+         name="websocket_tip"
+         top_pad="5"
+         width="140"
+         wrap="false">
+         WebSocket Listen Port:
+        </text>
+        <line_editor
+         enabled_control="ExternalWebsocketSyncEnable"
+         control_name="ExternalWebsocketSyncPort"
+         follows="top|left"
+         height="23"
+         initial_value="9020"
+         layout="topleft"
+         left_pad="5"
+         name="websocket_port"
+         top_delta="-5"
+         value="9020"
+         width="120" />
+        <check_box
+         control_name="ExternalWebsocketForwardDebug"
+         enabled_control="ExternalWebsocketSyncEnable"
+         follows="top|left"
+         height="20"
+         label="Forward script errors and debug messages to WebSocket clients"
+         layout="topleft"
+         left="17"
+         name="websocket_forward_debug"
+         top_pad="0"
+         width="400" />
   </panel>
 
     <!--Build 2-->

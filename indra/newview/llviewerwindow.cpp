@@ -2039,7 +2039,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         p.ignore_pixel_depth,
         0,
         max_core_count,
-        max_gl_version, //don't use window level anti-aliasing
+        max_gl_version, //don't use window level anti-aliasing, windows only
         useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 
     if (NULL == mWindow)
