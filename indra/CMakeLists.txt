@@ -96,6 +96,7 @@ else (FS_PF_USER_AGENT)
     message(STATUS "Compiling with standard Primfeed user-agent")
 endif (FS_PF_USER_AGENT)
 # </Beq>
+
 # <FS:Ansariel> [AVX Optimization]
 option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
 option(USE_AVX2_OPTIMIZATION "AVX2 optimization support" OFF)
@@ -127,6 +128,9 @@ endif (USE_TRACY)
 add_subdirectory(${LIBS_OPEN_PREFIX}llaudio)
 add_subdirectory(${LIBS_OPEN_PREFIX}llappearance)
 add_subdirectory(${LIBS_OPEN_PREFIX}llcharacter)
+if (NOT HAVOK AND NOT HAVOK_TPV)
+  add_subdirectory(${LIBS_OPEN_PREFIX}llconvexdecomposition)
+endif ()
 add_subdirectory(${LIBS_OPEN_PREFIX}llcommon)
 add_subdirectory(${LIBS_OPEN_PREFIX}llcorehttp)
 add_subdirectory(${LIBS_OPEN_PREFIX}llimage)

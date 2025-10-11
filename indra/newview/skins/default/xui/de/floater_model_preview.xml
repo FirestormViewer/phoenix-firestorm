@@ -282,7 +282,7 @@
 					</combo_box>
 					<button label="Auswählen" name="physics_browse"/>
 				</panel>
-				<panel name="physics analysis">
+				<panel name="physics analysis havok">
 					<text name="method_label">
 						Schritt 2: Zu Hüllen konvertieren (optional)
 					</text>
@@ -296,6 +296,28 @@
 						Glätten:
 					</text>
 					<check_box label="Löcher schließen" name="Close Holes (Slow)"/>
+					<button label="Analysieren" name="Decompose"/>
+					<button label="Abbrechen" name="decompose_cancel"/>
+				</panel>
+				<panel name="physics analysis vhacd">
+					<text name="method_label">
+						Schritt 2: Zu Hüllen konvertieren (optional)
+					</text>
+					<text name="fill_mode_label">
+						Füllmodus:
+					</text>
+					<text name="resolution_label">
+						Aufösung:
+					</text>
+					<text name="hulls_per_mesh_label">
+						Hüllen pro Mesh:
+					</text>
+					<text name="vertices_per_hull_label">
+						Kanten pro Mesh:
+					</text>
+					<text name="tolerance_label">
+						Fehlertoleranz:
+					</text>
 					<button label="Analysieren" name="Decompose"/>
 					<button label="Abbrechen" name="decompose_cancel"/>
 				</panel>

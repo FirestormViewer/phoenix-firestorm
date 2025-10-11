@@ -3,7 +3,7 @@ include(Prebuilt)
 
 # There are three possible solutions to provide the llphysicsextensions:
 # - The full source package, selected by -DHAVOK:BOOL=ON
-# - The stub source package, selected by -DHAVOK:BOOL=OFF 
+# - The stub source package, selected by -DHAVOK:BOOL=OFF
 # - The prebuilt package available to those with sublicenses, selected by -DHAVOK_TPV:BOOL=ON
 
 if (INSTALL_PROPRIETARY)
@@ -23,32 +23,28 @@ if (HAVOK)
    use_prebuilt_binary(llphysicsextensions_source)
    set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/src)
    target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions)
+   target_compile_definitions( llphysicsextensions_impl INTERFACE LL_HAVOK=1 )
 elseif (HAVOK_TPV)
    use_prebuilt_binary(llphysicsextensions_tpv)
-   target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions_tpv)
-   # <FS:ND> include paths for LLs version and ours are different.
-   target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
-   # </FS:ND>
-
-   # <FS:ND> havok lib get installed to packages/lib
-   link_directories( ${LIBS_PREBUILT_DIR}/lib )
-   # </FS:ND>
-
+   if(WINDOWS)
+      target_link_libraries( llphysicsextensions_impl INTERFACE ${ARCH_PREBUILT_DIRS}/llphysicsextensions_tpv.lib)
+   else()
+      target_link_libraries( llphysicsextensions_impl INTERFACE ${ARCH_PREBUILT_DIRS}/libllphysicsextensions_tpv.a)
+   endif()
+   target_compile_definitions( llphysicsextensions_impl INTERFACE LL_HAVOK=1 )
 else (HAVOK)
-   use_prebuilt_binary( ndPhysicsStub )
+   use_prebuilt_binary(llphysicsextensions_stub)
+   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
+   target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensionsstub)
 
-# <FS:ND> Don't set this variable, there is no need to build any stub source if using ndPhysicsStub
-#   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
-# </FS:ND>
-
-   target_link_libraries( llphysicsextensions_impl INTERFACE nd_hacdConvexDecomposition hacd nd_Pathing )
-
-   # <FS:ND> include paths for LLs version and ours are different.
-   target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/ )
-   # </FS:ND>
-
+   # <FS:Ansariel> Hotfix pathing lib header and add missing BOOL typedef
+   file(READ ${LIBS_PREBUILT_DIR}/include/llphysicsextensions/llpathinglib.h PATHINGLIB_HEADER_CONTENTS)
+   string(FIND "${PATHINGLIB_HEADER_CONTENTS}" "typedef int BOOL;" BOOL_TYPEDEF_POS)
+   if (${BOOL_TYPEDEF_POS} EQUAL -1)
+      string(REPLACE "typedef int bool32;" "typedef int bool32;\ntypedef int BOOL;" PATHINGLIB_HEADER_CONTENTS "${PATHINGLIB_HEADER_CONTENTS}")
+      file(WRITE ${LIBS_PREBUILT_DIR}/include/llphysicsextensions/llpathinglib.h "${PATHINGLIB_HEADER_CONTENTS}")
+   endif()
+   # </FS:Ansariel>
 endif (HAVOK)
 
-# <FS:ND> include paths for LLs version and ours are different.
-#target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
-# </FS:ND>
+target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)

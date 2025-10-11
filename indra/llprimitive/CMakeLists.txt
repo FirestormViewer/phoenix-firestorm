@@ -71,6 +71,12 @@ target_link_libraries(llprimitive
         ll::glm
         )
 
+if (TARGET llconvexdecomposition)
+    target_link_libraries(llprimitive
+            llconvexdecomposition
+            )
+endif ()
+
 if(LINUX)
     # GLIB uses pcre, so we need to keep it for Linux
     target_link_libraries(ll::pcre)

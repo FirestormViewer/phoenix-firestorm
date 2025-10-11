@@ -881,6 +881,14 @@ Erwartet wurde [VALIDS]
 		Sounddatei konnte nicht hochgeladen werden:
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+		Das Hochladen von Modellen wird derzeit auf Apple Silicon-Systemen nicht verfügbar, wird jedoch in einem späteren Release unterstützt.
+
+Workaround: Im Finder auf die [APP_NAME] App rechtsklicken, dann "Info anzeigen" wählen und anschließend "Mit Rosette öffnen" aktivieren.
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		Physik-Bibliothek ist nicht vorhanden - einzelne Funktionen für das Hochladen des Modells funktionieren möglicherweise nicht oder nicht korrekt.
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		Die Datei ist anscheinend keine RIFF WAVE-Datei:
 [FILE]

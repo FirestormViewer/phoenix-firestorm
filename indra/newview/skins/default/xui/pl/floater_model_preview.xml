@@ -158,7 +158,7 @@
                     </combo_box>
                     <button name="physics_browse" label="Przeglądaj"/>
                 </panel>
-                <panel name="physics analysis">
+                <panel name="physics analysis havok">
                     <text name="method_label">
                       Krok 2: Konwersja na powłoki (opcjonalne)
                     </text>
