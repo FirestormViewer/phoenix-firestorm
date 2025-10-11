@@ -238,7 +238,8 @@ public:
             LLUUID obj_id = mObjectData["object_id"];
             if (obj_id.notNull())
             {
-                return nullptr != gObjectList.findObject(mAvatarID);
+                LLViewerObject* object = gObjectList.findObject(obj_id);
+                return object && object->isReachable();
             }
             return false;
         }
@@ -1280,6 +1281,11 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
     mUseColor = true;
 
     setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
+    setIsObjectReachableCallback([](const LLUUID& obj_id)
+        {
+            LLViewerObject* object = gObjectList.findObject(obj_id);
+            return object && object->isReachable();
+        });
 }
 
 LLSD FSChatHistory::getValue() const

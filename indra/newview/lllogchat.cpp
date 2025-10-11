@@ -84,13 +84,13 @@ const static std::string MULTI_LINE_PREFIX(" ");
  *
  * Note: "You" was used as an avatar names in viewers of previous versions
  */
-const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
-const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}\\]).*");
+const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
+const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}(\\s[AaPp][Mm])?\\]|\\[\\d{1,2}:\\d{2}(\\s[AaPp][Mm])?\\]).*");
 // <FS:Ansariel> Timestamps in chat
 // Note: In contrast to the TIMESTAMP_AND_STUFF regex, for the TIMESTAMP_AND_STUFF_SEC regex the match
 // on the timestamp is NOT optional. We need this to decide during parsing if we have timestamps or not.
-const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)(.*)$");
-const static boost::regex TIMESTAMP_AND_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}:\\d{2}\\]).*");
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
+const static boost::regex TIMESTAMP_AND_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}(\\s[AaPp][Mm])?\\]|\\[\\d{1,2}:\\d{2}:\\d{2}(\\s[AaPp][Mm])?\\]).*");
 // </FS:Ansariel>
 
 /**
@@ -166,6 +166,10 @@ public:
 
     void checkAndCutOffDate(std::string& time_str)
     {
+        if (time_str.size() < 10) // not enough space for a date
+        {
+            return;
+        }
         // Cuts off the "%Y/%m/%d" from string for todays timestamps.
         // Assume that passed string has at least "%H:%M" time format.
         date log_date(not_a_date_time);
@@ -182,20 +186,12 @@ public:
 
         if ( days_alive == zero_days )
         {
-            // Yep, today's so strip "%Y/%m/%d" info
-            ptime stripped_time(not_a_date_time);
-
-            mTimeStream.str(LLStringUtil::null);
-            mTimeStream << time_str;
-            mTimeStream >> stripped_time;
-            mTimeStream.clear();
-
-            time_str.clear();
-
-            mTimeStream.str(LLStringUtil::null);
-            mTimeStream << stripped_time;
-            mTimeStream >> time_str;
-            mTimeStream.clear();
+            size_t pos = time_str.find_first_of(' ');
+            if (pos != std::string::npos)
+            {
+                time_str.erase(0, pos + 1);
+                LLStringUtil::trim(time_str);
+            }
         }
 
         LL_DEBUGS("LLChatLogParser")
@@ -381,28 +377,29 @@ std::string LLLogChat::timestamp2LogString(U32 timestamp, bool withdate)
     std::string timeStr;
     if (withdate)
     {
-        timeStr = "[" + LLTrans::getString ("TimeYear") + "]/["
-                  + LLTrans::getString ("TimeMonth") + "]/["
-                  + LLTrans::getString ("TimeDay") + "] ["
-                  + LLTrans::getString ("TimeHour") + "]:["
-                  + LLTrans::getString ("TimeMin") + "]";
+        timeStr = "[" + LLTrans::getString("TimeYear") + "]/["
+            + LLTrans::getString("TimeMonth") + "]/["
+            + LLTrans::getString("TimeDay") + "] ";
+    }
+
+    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    if (use_24h)
+    {
+        timeStr += "[" + LLTrans::getString("TimeHour") + "]:["
+            + LLTrans::getString("TimeMin") + "]";
         // <FS> Seconds in timestamps
         if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
         {
-            timeStr += ":[" + LLTrans::getString ("TimeSec") + "]";
+            timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
         }
         // </FS>
     }
     else
     {
-        timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
-                  + LLTrans::getString ("TimeMin")+"]";
-        // <FS> Seconds in timestamps
-        if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
-        {
-            timeStr += ":[" + LLTrans::getString ("TimeSec") + "]";
-        }
-        // </FS>
+        timeStr += "[" + LLTrans::getString("TimeHour12") + "]:["
+            + LLTrans::getString("TimeMin") + "]"
+            + (gSavedSettings.getBOOL("FSSecondsinChatTimestamps") ? ":[" + LLTrans::getString("TimeSec") + "] [" : " [") // <FS> Seconds in timestamps
+            + LLTrans::getString("TimeAMPM") + "]";
     }
 
     LLSD substitution;

@@ -8,6 +8,9 @@
  top="0"
  width="380">
     <panel.string name="DateFmt">
+        [mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc], [hour,datetime,utc]:[min,datetime,utc]
+    </panel.string>
+    <panel.string name="DateFmtAMPM">
         [mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc], [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc]
     </panel.string>
     <icon

@@ -15,8 +15,11 @@
 	<string name="server_forbidden_text">
 		Die Informationen über diesen Standort sind zugriffsbeschränkt.  Bitte wenden Sie sich bezüglich Ihrer Berechtigungen an den Eigentümer der Parzelle.
 	</string>
+	<string name="acquired_date_ampm">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
+	</string>
 	<string name="acquired_date">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</string>
 	<string name="information_text">
 		Traffic: [TRAFFIC] Gebiet: [AREA] m²

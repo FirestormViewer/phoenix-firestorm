@@ -233,10 +233,20 @@ namespace
                 BugSplatAttributes::instance().setAttribute("Location", std::string(fullLocation));
                 // </FS:Beq>
             }
+
             // <FS:Beq> Improve bugsplat reporting with attributes
             LLAppViewer::instance()->writeDebugInfo();            
             sBugSplatSender->sendAdditionalFile(WCSTR(BugSplatAttributes::getCrashContextFileName())); // <FS:Beq/> Add the new attributes file
             // </FS:Beq>
+
+            LLAppViewer* app = LLAppViewer::instance();
+            if (!app->isSecondInstance() && !app->errorMarkerExists())
+            {
+                // If marker doesn't exist, create a marker with 'other' code for next launch
+                // otherwise don't override existing file
+                // Any unmarked crashes will be considered as freezes
+                app->createErrorMarker(LAST_EXEC_OTHER_CRASH);
+            }
         } // MDSCB_EXCEPTIONCODE
 
         return false;

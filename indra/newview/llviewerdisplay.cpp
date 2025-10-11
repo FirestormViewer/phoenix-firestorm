@@ -1652,6 +1652,11 @@ void render_ui(F32 zoom_factor, int subfield)
                 render_disconnected_background();
             }
         }
+        else
+        {
+            // Make sure particle effects disappear
+            LLHUDObject::renderAllForTimer();
+        }
 
         if (render_ui)
         {

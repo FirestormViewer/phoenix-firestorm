@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="teleport_history_item">
 	<panel.string name="DateFmt">
-		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc] [hour24,datetime,utc]:[min,datetime,utc]
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc] [hour,datetime,utc]:[min,datetime,utc]
+	</panel.string>
+	<panel.string name="DateFmtAMPM">
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc] [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc]
 	</panel.string>
 	<layout_stack name="ls_item">
 		<layout_panel name="lp_date">

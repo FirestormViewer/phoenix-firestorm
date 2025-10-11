@@ -3,6 +3,9 @@
 	<panel.string name="DateFmt">
 		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc]
 	</panel.string>
+	<panel.string name="DateFmtAMPM">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc] [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc]
+	</panel.string>
 	<layout_stack name="ls_item">
 		<layout_panel name="lp_date">
 			<text name="timestamp" value="01.01.2000 12:00"/>

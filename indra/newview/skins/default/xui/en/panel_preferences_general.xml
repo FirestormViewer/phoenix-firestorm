@@ -104,7 +104,7 @@
          value="zh" />
     </combo_box>
     <text
-	 top_delta="4"
+     top_delta="4"
      font="SansSerifSmall"
      type="string"
      text_color="White_50"
@@ -114,6 +114,51 @@
      layout="topleft"
      left_pad="5"
      name="language_textbox2"
+     width="130">
+        (Requires restart)
+    </text>
+   <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="300"
+     name="time_format_textbox"
+     top="10"
+     width="200">
+        Time Format:
+    </text>
+    <combo_box
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left="300"
+     max_chars="135"
+     name="time_format_combobox"
+     width="70">
+        <combo_box.item
+         enabled="true"
+         label="1:00 AM"
+         name="12H"
+         value="0" />
+        <combo_box.item
+         enabled="true"
+         label="13:00"
+         name="24H"
+         value="1" />
+    </combo_box>
+    <text
+     top_delta="4"
+     font="SansSerifSmall"
+     type="string"
+     text_color="White_50"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left_pad="5"
+     name="time_format_textbox2"
      width="130">
         (Requires restart)
     </text>

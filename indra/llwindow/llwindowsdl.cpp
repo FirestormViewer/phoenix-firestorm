@@ -2170,7 +2170,7 @@ void LLWindowSDL::gatherInput()
         {
             // *FIX: More informative dialog?
             LL_INFOS() << "Could not recreate context after resize! Quitting..." << LL_ENDL;
-            if(mCallbacks->handleCloseRequest(this))
+            if(mCallbacks->handleCloseRequest(this, false))
                 {
                     // Get the app to initiate cleanup.
                     mCallbacks->handleQuit(this);
@@ -2220,7 +2220,7 @@ void LLWindowSDL::gatherInput()
                 break;
 
             case SDL_QUIT:
-                if(mCallbacks->handleCloseRequest(this))
+                if(mCallbacks->handleCloseRequest(this, true))
                 {
                     // Get the app to initiate cleanup.
                     mCallbacks->handleQuit(this);

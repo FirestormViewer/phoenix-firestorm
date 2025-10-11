@@ -38,6 +38,7 @@
 #include "lluicolortable.h"
 #include "message.h"
 #include "llnotificationsutil.h"
+#include "llviewercontrol.h"
 #include <boost/regex.hpp>
 
 LLNotificationListItem::LLNotificationListItem(const Params& p) : LLPanel(p),
@@ -112,42 +113,60 @@ LLNotificationListItem::~LLNotificationListItem()
 std::string LLNotificationListItem::buildNotificationDate(const LLDate& time_stamp, ETimeType time_type)
 {
     std::string timeStr;
+
+    // <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+    timeStr = use_24h ? LLTrans::getString("NotificationItemDateString") : LLTrans::getString("NotificationItemDateStringAMPM");
+    // </FS:Ansariel>
+
     switch(time_type)
     {
         // <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
         //case Local:
-        //  timeStr = "[" + LLTrans::getString("LTimeMthNum") + "]/["
-        //      +LLTrans::getString("LTimeDay")+"]/["
-        //      +LLTrans::getString("LTimeYear")+"] ["
-        //      +LLTrans::getString("LTimeHour")+"]:["
-        //      +LLTrans::getString("LTimeMin")+ "]";
-        //  break;
+        //    timeStr = "[" + LLTrans::getString("LTimeMthNum") + "]/["
+        //        +LLTrans::getString("LTimeDay")+"]/["
+        //        +LLTrans::getString("LTimeYear")+"] ["
+        //        +LLTrans::getString("LTimeHour")+"]:["
+        //        +LLTrans::getString("LTimeMin")+ "]";
+        //    break;
         //case UTC:
-        //  timeStr = "[" + LLTrans::getString("UTCTimeMth") + "]/["
-        //          +LLTrans::getString("UTCTimeDay")+"]/["
-        //      +LLTrans::getString("UTCTimeYr")+"] ["
-        //      +LLTrans::getString("UTCTimeHr")+"]:["
-        //      +LLTrans::getString("UTCTimeMin")+"] ["
-        //      +LLTrans::getString("UTCTimeTimezone")+"]";
-        //  break;
+        //    timeStr = "[" + LLTrans::getString("UTCTimeMth") + "]/["
+        //        +LLTrans::getString("UTCTimeDay")+"]/["
+        //        +LLTrans::getString("UTCTimeYr")+"] ["
+        //        +LLTrans::getString("UTCTimeHr")+"]:["
+        //        +LLTrans::getString("UTCTimeMin")+"] ["
+        //        +LLTrans::getString("UTCTimeTimezone")+"]";
+        //    break;
         //case SLT:
         //default:
-        //  timeStr = "[" + LLTrans::getString("TimeMonth") + "]/["
-        //      +LLTrans::getString("TimeDay")+"]/["
-        //      +LLTrans::getString("TimeYear")+"] ["
-        //      +LLTrans::getString("TimeHour")+"]:["
-        //      +LLTrans::getString("TimeMin")+"] ["
-        //      +LLTrans::getString("TimeTimezone")+"]";
-        //  break;
+        //    timeStr = "[" + LLTrans::getString("TimeMonth") + "]/["
+        //        +LLTrans::getString("TimeDay")+"]/["
+        //        +LLTrans::getString("TimeYear")+"] [";
+
+        //    static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+        //    if (use_24h)
+        //    {
+        //        timeStr += LLTrans::getString("TimeHour") + "]:["
+        //            + LLTrans::getString("TimeMin") + "] ["
+        //            + LLTrans::getString("TimeTimezone") + "]";
+        //    }
+        //    else
+        //    {
+        //        timeStr += LLTrans::getString("TimeHour12") + "]:["
+        //            + LLTrans::getString("TimeMin") + "] ["
+        //            + LLTrans::getString("TimeAMPM") + "] ["
+        //            + LLTrans::getString("TimeTimezone") + "]";
+        //    }
+        //    break;
         case Local:
-            timeStr = LLTrans::getString("NotificationItemDateStringLocal");
+            LLStringUtil::replaceString(timeStr, "utc", "local");
             break;
         case UTC:
-            timeStr = LLTrans::getString("NotificationItemDateStringUTC");
+            // No-op (utc is default)
             break;
         case SLT:
         default:
-            timeStr = LLTrans::getString("NotificationItemDateStringSLT");
+            LLStringUtil::replaceString(timeStr, "utc", "slt");
             break;
         // </FS:Ansariel>
     }
