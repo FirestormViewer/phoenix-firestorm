@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_pathfinding_console" title="Podgląd odnajdywania ścieżek">
-	<floater.string name="no_havok">
-		wyświetlanie Navmeshu dla systemu odnajdywania ścieżek
-	</floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Nie można znaleźć implementacji biblioteki szukania ścieżek.
 	</floater.string>
