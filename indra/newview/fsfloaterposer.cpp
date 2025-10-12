@@ -2390,6 +2390,10 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
         if (!avatarIsNearbyMe(avatar))
             continue;
 
+        bool isMuted = LLMuteList::getInstance()->isMuted(avatar->getID());
+        if (isMuted)
+            continue;
+
         bool isSelfOrCtrl = avatar->isControlAvatar() || avatar->isSelf();
         bool onlyFriends  = gSavedSettings.getBOOL(POSER_ONLYSHOWFRIENDS_SAVE_KEY);
 
