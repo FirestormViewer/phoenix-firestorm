@@ -559,6 +559,9 @@ public:
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
+    LLPanel* mPositionPnl{ nullptr };
+    LLPanel* mMoveTabPnl{ nullptr };
+    LLPanel* mTrackballButtonPnl{ nullptr };
 
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
     LLCheckBoxCtrl* mUnlockPelvisInBvhSaveCbx{ nullptr };

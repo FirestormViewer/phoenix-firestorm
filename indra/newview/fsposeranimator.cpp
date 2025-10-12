@@ -425,6 +425,7 @@ void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
         return;
 
     posingMotion->setAllRotationsToZeroAndClearUndo();
+    mPosingState.purgeMotionStates(avatar);
 
     for (size_t index = 0; index != PoserJoints.size(); ++index)
     {
@@ -439,7 +440,6 @@ void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
 
         posingMotion->setJointBvhLock(jointPose, false);
     }
-
 }
 
 void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation)

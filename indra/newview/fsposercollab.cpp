@@ -394,7 +394,6 @@ void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage
     {
         LL_WARNS("Posing") << "Exception caught trying to parse poser message from sender ID: " << senderId.asString() << e.what() << LL_ENDL;
     }
-
 }
 
 void FSPoserCollab::processStopMessage(LLVOAvatar* avatar)

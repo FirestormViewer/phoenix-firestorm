@@ -218,6 +218,9 @@ bool FSFloaterPoser::postBuild()
 
     mJointsParentPnl = getChild<LLPanel>("joints_parent_panel");
     mTrackballPnl = getChild<LLPanel>("trackball_panel");
+    mPositionPnl = getChild<LLPanel>("position_panel");
+    mMoveTabPnl = getChild<LLPanel>("move_tab_panel");
+    mTrackballButtonPnl = getChild<LLPanel>("trackball_button_panel");
     mPositionRotationPnl = getChild<LLPanel>("positionRotation_panel");
     mBodyJointsPnl = getChild<LLPanel>("body_joints_panel");
     mFaceJointsPnl = getChild<LLPanel>("face_joints_panel");
@@ -369,6 +372,9 @@ void FSFloaterPoser::onPoseFileSelect()
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
+        return;
+
+    if (!havePermissionToAnimateAvatar(avatar) && !havePermissionToAnimateOtherAvatar(avatar))
         return;
 
     bool enableButtons = mPoserAnimator.isPosingAvatar(avatar);
@@ -975,13 +981,16 @@ void FSFloaterPoser::timedReload()
     if (!avatar)
         return;
 
+    if (!havePermissionToAnimateAvatar(avatar) && !havePermissionToAnimateOtherAvatar(avatar))
+        return;
+
     if (loadPoseFromXml(avatar, mLoadPoseTimer->getPosePath(), mLoadPoseTimer->getLoadMethod()))
     {
         mLoadPoseTimer->completeLoading();
         onJointTabSelect();
         refreshJointScrollListMembers();
         setSavePosesButtonText(!mPoserAnimator.allBaseRotationsAreZero(avatar));
-        sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
+        sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
     }
 
     if (mLoadPoseTimer->loadCompleteOrFailed())
@@ -1024,6 +1033,8 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
 
     LLVOAvatar* avatar   = getUiSelectedAvatar();
     if (!avatar)
+        return;
+    if (!havePermissionToAnimateAvatar(avatar) && !havePermissionToAnimateOtherAvatar(avatar))
         return;
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
@@ -1398,6 +1409,9 @@ void FSFloaterPoser::poseControlsEnable(bool enable)
     mBtnJointReset->setEnabled(enable);
     mRedoChangeBtn->setEnabled(enable);
     mUndoChangeBtn->setEnabled(enable);
+    mPositionPnl->setEnabled(enable);
+    mMoveTabPnl->setEnabled(enable);
+    mTrackballButtonPnl->setEnabled(enable);
 }
 
 void FSFloaterPoser::refreshJointScrollListMembers()
@@ -1596,6 +1610,7 @@ void FSFloaterPoser::onSetAvatarToTpose()
     mPoserAnimator.setAllAvatarStartingRotationsToZero(avatar);
     refreshTextHighlightingOnJointScrollLists();
     enableOrDisableRedoAndUndoButton();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
 void FSFloaterPoser::onResetJoint(const LLSD data)
