@@ -21,14 +21,16 @@ constexpr size_t           POSER_MESSAGE_LENGTH      = 970;       // maximum mes
 /// We want to wait until they have stopped or paused before enqueuing an update and sending an IM.
 /// </summary>
 constexpr std::chrono::duration<double> EnqueueWaitInterval = std::chrono::duration<double>(0.3);
+constexpr std::chrono::duration<double> PoseReloadWaitInterval = std::chrono::duration<double>(0.5);
 
 FSPoserCollab* gPoserCollaborator = NULL;
 std::map<LLUUID, E_CollabState> FSPoserCollab::sAvatarIdToCollabState;
+std::map<LLUUID, int> FSPoserCollab::sAvatarIdToPosingStateReloadTries;
 
 FSPoserCollab::FSPoserCollab(FSPoserAnimator* poserAnimator, FSPoserCollab::callback_t1 callback)
 {
     mPoserAnimator        = poserAnimator;
-    mPoseChatTimer        = new FSPoseChatTimer(boost::bind(&FSPoserCollab::onTimedChatMessage, this));
+    mPoseChatTimer        = new FSPoseChatTimer(boost::bind(&FSPoserCollab::onTimedCollabEvent, this));
     mFloaterPoserCallback = callback;
 }
 
@@ -54,12 +56,13 @@ void FSPoserCollab::destroyCollaborator()
     gPoserCollaborator = NULL;
 }
 
-bool FSPoserCollab::onTimedChatMessage()
+bool FSPoserCollab::onTimedCollabEvent()
 {
     if (!gPoserCollaborator)
         return false;
 
-    verifyOnlineStatusForCollab();
+    checkOnlineStatuses();
+    checkAnyPosesNeedReloading();
     processEnqueuedMessages();
     if (mEnqueuedChatMessages.size() < 1)
         return false;
@@ -231,11 +234,11 @@ E_CollabState FSPoserCollab::getCollabLocalState(LLVOAvatar* avatar)
     return sAvatarIdToCollabState[avatar->getID()];
 }
 
-void FSPoserCollab::verifyOnlineStatusForCollab()
+void FSPoserCollab::checkOnlineStatuses()
 {
-    for (auto it = sAvatarIdToCollabState.begin(); it != sAvatarIdToCollabState.end(); it++)
+    for (auto it = sAvatarIdToPosingStateReloadTries.begin(); it != sAvatarIdToPosingStateReloadTries.end(); it++)
     {
-        if (gAgentID == it->first)
+        if (it->first == gAgentID)
             continue;
 
         bool isOnline = LLAvatarTracker::instance().isBuddyOnline(it->first);
@@ -249,6 +252,37 @@ void FSPoserCollab::verifyOnlineStatusForCollab()
 
         if (!mFloaterPoserCallback.empty())
             mFloaterPoserCallback(it->first);
+    }
+}
+
+void FSPoserCollab::checkAnyPosesNeedReloading()
+{
+    auto timeIntervalSinceLastLoadCheck = std::chrono::system_clock::now() - mTimeLastAttemptedPoseLoad;
+    if (timeIntervalSinceLastLoadCheck < PoseReloadWaitInterval)
+        return;
+
+    mTimeLastAttemptedPoseLoad = std::chrono::system_clock::now();
+
+    for (auto it = sAvatarIdToPosingStateReloadTries.begin(); it != sAvatarIdToPosingStateReloadTries.end(); it++)
+    {
+        if (it->first == gAgentID)
+            continue;
+
+        if (it->second < 1)
+            continue;
+
+        if (sAvatarIdToCollabState[it->first] < COLLAB_PARTY_MODE)
+            continue;
+
+        LLVOAvatar* avatarToPose = getAvatarByUuid(it->first);
+        if (!avatarToPose)
+            continue;
+
+        bool loadSuccess = mPoserAnimator->applyStatesToPosingMotion(avatarToPose);
+        if (loadSuccess)
+            sAvatarIdToPosingStateReloadTries[it->first] = 0;
+        else
+            sAvatarIdToPosingStateReloadTries[it->first] -= 1;
     }
 }
 
@@ -345,7 +379,10 @@ void FSPoserCollab::stopPosingMyAvatar(bool quittingPoser)
     }
 
     if (quittingPoser)
+    {
         sAvatarIdToCollabState.clear();
+        sAvatarIdToPosingStateReloadTries.clear();
+    }
 }
 
 void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage)
@@ -384,7 +421,7 @@ void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage
         if (messageType == std::string(POSER_MESSAGE_START_BODY))
             processBodyMessage(result, avatarToPose);
         else if (messageType == std::string(POSER_MESSAGE_START_POSES))
-            processPoseMessage(result, avatarToPose);
+            processPlayingPosesMessage(result, avatarToPose);
         else if (messageType == std::string(POSER_MESSAGE_STOP_POSING))
             processStopMessage(avatarToPose);
         else if (messageType == std::string(POSER_MESSAGE_PERMISSION))
@@ -604,10 +641,10 @@ bool FSPoserCollab::tryDecodeJointFromString(std::string token, int& jointNumber
     {
         F32 numberAndBools = twoBytesToF32(token[0], token[1]);
         numberAndBools *= 100.f;
-        jointNumber = llfloor(numberAndBools);
+        jointNumber = ll_round(numberAndBools);
 
         numberAndBools *= 10.f;
-        int encodedBools = llfloor(numberAndBools) % 10;
+        int encodedBools = ll_round(numberAndBools) % 10;
 
         if (encodedBools > 3)
             encodedBools -= 4; // unused 3rd bool; in case needed in future
@@ -742,7 +779,7 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
     }
 }
 
-void FSPoserCollab::processPoseMessage(std::vector<std::string> mesageTokens, LLVOAvatar* avatar)
+void FSPoserCollab::processPlayingPosesMessage(std::vector<std::string> mesageTokens, LLVOAvatar* avatar)
 {
     size_t size       = mesageTokens.size();
     bool   needUpdate = false;
@@ -770,7 +807,7 @@ void FSPoserCollab::processPoseMessage(std::vector<std::string> mesageTokens, LL
         index += 2;
     }
 
-    mPoserAnimator->loadPosingState(avatar, saveRecord);
+    sAvatarIdToPosingStateReloadTries[avatar->getID()] = mPoserAnimator->loadPosingState(avatar, saveRecord) ? 0 : 5;
 }
 
 bool FSPoserCollab::tryParseInt(std::string token, int* number)

@@ -244,7 +244,7 @@ private:
     /// </summary>
     /// <param name="mesageTokens">The message tokens containing the animation data.</param>
     /// <param name="avatar">The avatar to which the tokens should be applied.</param>
-    void processPoseMessage(std::vector<std::string> mesageTokens, LLVOAvatar* avatar);
+    void processPlayingPosesMessage(std::vector<std::string> mesageTokens, LLVOAvatar* avatar);
 
     /// <summary>
     /// Processes the command to stop posing the supplied avatar.
@@ -267,7 +267,12 @@ private:
     /// <summary>
     /// Checks whether all avatar IDs are still online, and if not, preens and informs UI.
     /// </summary>
-    void verifyOnlineStatusForCollab();
+    void checkOnlineStatuses();
+
+    /// <summary>
+    /// Checks whether all playing poses have been loaded, and if not, attempts a reload.
+    /// </summary>
+    void checkAnyPosesNeedReloading();
 
     /// <summary>
     /// The event handler which polls chat messages.
@@ -277,7 +282,7 @@ private:
     /// This effectively throttles the sending of messages from this clients poser to others.
     /// </remarks>
     /// <returns>True if a message was sent, otherwise false.</returns>
-    bool onTimedChatMessage();
+    bool onTimedCollabEvent();
 
     bool tryParseInt(std::string token, int* number);
 
@@ -319,9 +324,27 @@ private:
     std::chrono::system_clock::time_point mTimeLastUpdateMessageArrived = std::chrono::system_clock::now();
 
     /// <summary>
-    /// Maintains the mapping of avatar IDs to posing state
+    /// The time when the last attempt load playing-poses was made, see: sAvatarIdToPosingStateReloadTries.
+    /// </summary>
+    std::chrono::system_clock::time_point mTimeLastAttemptedPoseLoad = std::chrono::system_clock::now();
+
+    /// <summary>
+    /// Maintains the mapping of avatar IDs to Collaborator permission state.
     /// </summary>
     static std::map<LLUUID, E_CollabState> sAvatarIdToCollabState;
+
+    /// <summary>
+    /// Maintains the mapping of avatar IDs to playing-pose load state; true meaning their poses need re-loading.
+    /// </summary>
+    /// <remarks>
+    /// When a message arrives from them telling us what LLPosingMotions to load for an avatar and at what time,
+    /// it can be the case this client needs to fetch the LLPosingMotion asset, load and play it.
+    /// This process can take several seconds to complete, and during, the pose presented is incomplete.
+    /// Sometimes it loads first try: for example when they have been sitting on a couch and we are updating the time of that motion.
+    /// Thus we track the load-outcome, and use it to periodically retry loading.
+    /// We will retry loading several times, and eventually give up.
+    /// </remarks>
+    static std::map<LLUUID, int> sAvatarIdToPosingStateReloadTries;
 };
 
 /// <summary>
