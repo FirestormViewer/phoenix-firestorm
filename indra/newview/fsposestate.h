@@ -49,7 +49,7 @@ public:
     /// <param name="avatar">The avatar whose animations are to be captured.</param>
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="jointNamesRecaptured">The names of the joints being recaptured.</param>
-    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured);
+    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::vector<S32> jointNamesRecaptured);
 
     /// <summary>
     /// Removes all current animation states for the supplied avatar.
@@ -123,9 +123,9 @@ private:
         int captureOrder = 0;
 
         /// <summary>
-        /// When reloading, and if not-empty, the names of the bones this motionId should affect.
+        /// When reloading, and if not-empty, the bone-numbers this motionId should affect.
         /// </summary>
-        std ::string jointNamesAnimated;
+        std ::vector<S32> jointNumbersAnimated;
     };
 
     /// <summary>
@@ -142,7 +142,27 @@ private:
     /// <param name="avatar">The avatar to query ownership for.</param>
     /// <param name="motionId">The asset ID of the object.</param>
     /// <returns>True if the avatar owns the asset, otherwise false.</returns>
+    /// <remarks>
+    /// This only works reliably if something other than poser started the animation.
+    /// </remarks>
     bool canSaveMotionId(LLAssetID motionId);
+
+    /// <summary>
+    /// Tests if all the members of supplied vector2 are members of supplied vector1.
+    /// </summary>
+    /// <param name="vector1">The super-set.</param>
+    /// <param name="vector2">The possible sub-set.</param>
+    /// <returns>True if all members of vector2 are members of vector1, otherwise false.</returns>
+    bool vector2IsSubsetOfVector1(std::vector<S32> vector1, std::vector<S32> vector2);
+
+    /// <summary>
+    /// Two symmetric methods for (de)serializing vectors to both XML and collab-safe short-as-possible strings and back again.
+    /// </summary>
+    /// <remarks>
+    /// Collab-safe means ASCII-printable chars, and delimiter usage does not conflict with Collab's delimiter.
+    /// </remarks>
+    std::string encodeVectorToString(std::vector<S32> vector);
+    std::vector<S32> decodeStringToVector(std::string vector);
 
     struct compareByCaptureOrder
     {

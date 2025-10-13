@@ -1118,11 +1118,17 @@ void FSPoserAnimator::updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserA
     if (!posingMotion)
         return;
 
-    std::string jointNamesRecaptured;
+    std::vector<int> jointNumbersRecaptured;
     for (auto item : jointsRecaptured)
-        jointNamesRecaptured += item->jointName();
+    {
+        auto poserJoint = posingMotion->getJointPoseByJointName(item->jointName());
+        if (!poserJoint)
+            continue;
 
-    mPosingState.updateMotionStates(avatar, posingMotion, jointNamesRecaptured);
+        jointNumbersRecaptured.push_back(poserJoint->getJointNumber());
+    }
+
+    mPosingState.updateMotionStates(avatar, posingMotion, jointNumbersRecaptured);
 }
 
 void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)

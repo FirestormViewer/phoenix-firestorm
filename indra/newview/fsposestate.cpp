@@ -27,21 +27,35 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
     }
 }
 
-void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured)
+bool FSPoseState::vector2IsSubsetOfVector1(std::vector<S32> newRecapture, std::vector<S32> oldRecapture)
+{
+    if (newRecapture.size() < 1)
+        return false;
+    if (oldRecapture.size() < 1)
+        return false;
+
+    if (newRecapture.size() < oldRecapture.size())
+        return false;
+
+    for (S32 number : oldRecapture)
+        if (std::find(newRecapture.begin(), newRecapture.end(), number) == newRecapture.end())
+            return false;
+
+    return true;
+}
+
+void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::vector<S32> jointNumbersRecaptured)
 {
     if (!avatar || !posingMotion)
         return;
 
     sCaptureOrder[avatar->getID()]++;
 
-    // if an animation for avatar is a subset of jointNamesRecaptured, delete it
+    // if an animation for avatar is a subset of jointNumbersRecaptured, delete it
     // this happens on second/subsequent recaptures; the first recapture is no longer needed
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end();)
     {
-        std::string joints    = (*it).jointNamesAnimated;
-        bool recaptureMatches = !joints.empty() && !jointNamesRecaptured.empty() && jointNamesRecaptured.find(joints) != std::string::npos;
-
-        if (recaptureMatches)
+        if (vector2IsSubsetOfVector1(jointNumbersRecaptured, (*it).jointNumbersAnimated))
             it = sMotionStates[avatar->getID()].erase(it);
         else
             it++;
@@ -53,7 +67,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         if (!motion)
             continue;
 
-        if (!posingMotion->otherMotionAnimatesJoints(motion, jointNamesRecaptured))
+        if (!posingMotion->otherMotionAnimatesJoints(motion, jointNumbersRecaptured))
             continue;
 
         bool foundMatch = false;
@@ -71,11 +85,11 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
             continue;
 
         fsMotionState newState;
-        newState.motionId           = anim_it->first;
-        newState.lastUpdateTime     = motion->getLastUpdateTime();
-        newState.jointNamesAnimated = jointNamesRecaptured;
-        newState.captureOrder       = sCaptureOrder[avatar->getID()];
-        newState.gAgentOwnsPose     = canSaveMotionId(anim_it->first);
+        newState.motionId             = anim_it->first;
+        newState.lastUpdateTime       = motion->getLastUpdateTime();
+        newState.jointNumbersAnimated = jointNumbersRecaptured;
+        newState.captureOrder         = sCaptureOrder[avatar->getID()];
+        newState.gAgentOwnsPose       = canSaveMotionId(anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -100,11 +114,11 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
         if (!ignoreOwnership && !it->gAgentOwnsPose)
             continue;
 
-        std::string uniqueAnimId                          = "poseState" + std::to_string(animNumber++);
-        (*saveRecord)[uniqueAnimId]["animationId"]        = it->motionId.asString();
-        (*saveRecord)[uniqueAnimId]["lastUpdateTime"]     = it->lastUpdateTime;
-        (*saveRecord)[uniqueAnimId]["jointNamesAnimated"] = it->jointNamesAnimated;
-        (*saveRecord)[uniqueAnimId]["captureOrder"]       = it->captureOrder;
+        std::string uniqueAnimId                            = "poseState" + std::to_string(animNumber++);
+        (*saveRecord)[uniqueAnimId]["animationId"]          = it->motionId.asString();
+        (*saveRecord)[uniqueAnimId]["lastUpdateTime"]       = it->lastUpdateTime;
+        (*saveRecord)[uniqueAnimId]["jointNumbersAnimated"] = encodeVectorToString(it->jointNumbersAnimated);
+        (*saveRecord)[uniqueAnimId]["captureOrder"]         = it->captureOrder;
     }
 }
 
@@ -139,8 +153,8 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, 
         if (control_map.has("lastUpdateTime"))
             newState.lastUpdateTime = (F32)control_map["lastUpdateTime"].asReal();
 
-        if (control_map.has("jointNamesAnimated"))
-            newState.jointNamesAnimated = control_map["jointNamesAnimated"].asString();
+        if (control_map.has("jointNumbersAnimated"))
+            newState.jointNumbersAnimated = decodeStringToVector(control_map["jointNumbersAnimated"].asString());
 
         if (control_map.has("captureOrder"))
             newState.captureOrder = control_map["captureOrder"].asInteger();
@@ -180,7 +194,7 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
                 resetPriorityForCaptureOrder(avatar, posingMotion, lastCaptureOrder);
             }
 
-            it->motionApplied = posingMotion->loadOtherMotionToBaseOfThisMotion(kfm, it->lastUpdateTime, it->jointNamesAnimated);
+            it->motionApplied = posingMotion->loadOtherMotionToBaseOfThisMotion(kfm, it->lastUpdateTime, it->jointNumbersAnimated);
         }
         else
         {
@@ -198,14 +212,14 @@ void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotio
 {
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
     {
-        if (it->jointNamesAnimated.empty())
+        if (it->jointNumbersAnimated.empty())
             continue;
         if (it->motionApplied)
             continue;
         if (it->captureOrder != captureOrder)
             continue;
 
-        posingMotion->resetBonePriority(it->jointNamesAnimated);
+        posingMotion->resetBonePriority(it->jointNumbersAnimated);
     }
 }
 
@@ -238,4 +252,80 @@ bool FSPoseState::canSaveMotionId(LLAssetID motionId)
     }
 
     return false;
+}
+
+std::string FSPoseState::encodeVectorToString(std::vector<S32> vector)
+{
+    std::string encoded = "";
+    if (vector.size() < 1)
+        return encoded;
+
+    for (S32 numberToEncode : vector)
+    {
+        if (numberToEncode > 251) // max 216 at time of writing
+            continue;
+
+        S32 number = numberToEncode;
+
+        if (number >= 189)
+        {
+            encoded += "~";
+            number -= 189;
+        }
+
+        if (number >= 126)
+        {
+            encoded += "}";
+            number -= 126;
+        }
+
+        if (number >= 63)
+        {
+            encoded += "|";
+            number -= 63;
+        }
+
+        encoded += char(number + int('?'));
+    }
+
+    return encoded;
+}
+
+std::vector<S32> FSPoseState::decodeStringToVector(std::string vector)
+{
+    std::vector<S32> decoded;
+    if (vector.empty())
+        return decoded;
+
+    S32 number = 0;
+    for (char ch : vector)
+    {
+        if (ch > '~' || ch < '?')
+            continue;
+
+        if (ch == '~')
+        {
+            number += 189;
+            continue;
+        }
+
+        if (ch == '}')
+        {
+            number += 126;
+            continue;
+        }
+
+        if (ch == '|')
+        {
+            number += 63;
+            continue;
+        }
+
+        number -= int('?');
+        number += S32(ch);
+        decoded.push_back(number);
+        number = 0;
+    }
+
+    return decoded;
 }
