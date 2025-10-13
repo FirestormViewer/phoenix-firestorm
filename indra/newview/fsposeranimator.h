@@ -733,6 +733,7 @@ public:
     /// Loads the posing state (base rotations) to the supplied avatars posing-motion, from the supplied record.
     /// </summary>
     /// <param name="avatar">That avatar whose posing state should be loaded.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when reading a local file.</param>
     /// <param name="pose">The record to read the posing state from.</param>
     /// <returns>True if the pose loaded successfully, otherwise false.</returns>
     /// <remarks>
@@ -740,7 +741,7 @@ public:
     /// it can take several frames for the animation to be loaded and ready.
     /// It may therefore be necessary to attempt this several times.
     /// </remarks>
-    bool loadPosingState(LLVOAvatar* avatar, LLSD pose);
+    bool loadPosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose);
 
     /// <summary>
     /// Applies the posing states to the posing motion for the supplied avatar.

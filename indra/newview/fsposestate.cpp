@@ -108,7 +108,7 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     }
 }
 
-void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, LLSD pose)
+void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose)
 {
     if (!avatar)
         return;
@@ -132,7 +132,7 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, LLSD pose)
             if (LLUUID::parseUUID(name, &animId))
             {
                 newState.motionId = animId;
-                newState.gAgentOwnsPose = canSaveMotionId(animId);
+                newState.gAgentOwnsPose = ignoreOwnership || canSaveMotionId(animId);
             }
         }
 

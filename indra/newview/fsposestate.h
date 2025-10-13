@@ -61,7 +61,7 @@ public:
     /// Writes any documented poses for the supplied avatar to the supplied stream.
     /// </summary>
     /// <param name="avatar">The avatar whose animations may have been captured.</param>
-    /// <param name="ignoreOwnership">Whether to ignore ownership.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when preparing saveRecord to send to another by collab.</param>
     /// <param name="saveRecord">The record to add to.</param>
     void writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord);
 
@@ -69,9 +69,9 @@ public:
     /// Restores pose state(s) from the supplied record.
     /// </summary>
     /// <param name="avatar">The avatar whose animations may have been captured.</param>
-    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when reading a local file.</param>
     /// <param name="pose">The record to read from.</param>
-    void restoreMotionStates(LLVOAvatar* avatar, LLSD pose);
+    void restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose);
 
     /// <summary>
     /// Applies the motion states for the supplied avatar to the supplied motion.

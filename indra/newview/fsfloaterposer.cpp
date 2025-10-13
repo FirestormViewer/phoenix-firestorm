@@ -1247,7 +1247,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
             }
 
             if (version > 6 && !startFromZeroRot)
-                loadSuccess = mPoserAnimator.loadPosingState(avatar, pose);
+                loadSuccess = mPoserAnimator.loadPosingState(avatar, true, pose);
         }
     }
     catch ( const std::exception & e )

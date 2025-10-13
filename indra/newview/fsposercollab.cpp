@@ -807,7 +807,7 @@ void FSPoserCollab::processPlayingPosesMessage(std::vector<std::string> mesageTo
         index += 2;
     }
 
-    sAvatarIdToPosingStateReloadTries[avatar->getID()] = mPoserAnimator->loadPosingState(avatar, saveRecord) ? 0 : 5;
+    sAvatarIdToPosingStateReloadTries[avatar->getID()] = mPoserAnimator->loadPosingState(avatar, false, saveRecord) ? 0 : 5;
 }
 
 bool FSPoserCollab::tryParseInt(std::string token, int* number)

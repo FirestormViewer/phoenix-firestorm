@@ -982,13 +982,13 @@ void FSPoserAnimator::loadJointScale(LLVOAvatar* avatar, const FSPoserJoint* joi
     }
 }
 
-bool FSPoserAnimator::loadPosingState(LLVOAvatar* avatar, LLSD pose)
+bool FSPoserAnimator::loadPosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose)
 {
     if (!isAvatarSafeToUse(avatar))
         return false;
 
     mPosingState.purgeMotionStates(avatar);
-    mPosingState.restoreMotionStates(avatar, pose);
+    mPosingState.restoreMotionStates(avatar, ignoreOwnership, pose);
 
     return applyStatesToPosingMotion(avatar);
 }
