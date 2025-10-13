@@ -1167,8 +1167,8 @@ void LLOutfitListBase::onIdleRefreshList()
     }
 
     // <FS:PP> Scale MAX_TIME with FPS to avoid overloading the viewer with function calls at low frame rates
-    // const F64 MAX_TIME = 0.05f;
-    F64 MAX_TIME = 0.05f;
+    // const F64 MAX_TIME = 0.005f;
+    F64 MAX_TIME = 0.005f;
     constexpr F64 min_time = 0.001f;
     constexpr F64 threshold_fps = 30.0;
     const auto current_fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS,10);
