@@ -11,6 +11,11 @@
 	<text name="working_lbl">
 		Aktualisiere...
 	</text>
+	<panel name="options_panel">
+		<check_box label="Aufnahmerahmen anzeigen" name="show_frame" tool_tip="Zeigt einen Rahmen um den Bereich der Aufnahme an. Teile der Szene, die außerhalb des Aufnahmebereichs liegen, werden entsättigt und leicht verschwommen dargestellt."/>
+		<check_box label="Rahmen-Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
+		<button tool_tip="Einstellungen für Aufnahmerahmen öffnen" name="guide_settings_btn"/>
+	</panel>
 	<check_box label="Rahmen anzeigen" name="show_frame" tool_tip="Zeigt einen Rahmen um den Bereich der Aufnahme an. Teile der Szene, die außerhalb des Aufnahmebereichs liegen, werden entsättigt und leicht verschwommen dargestellt."/>
 	<check_box label="Guide anzeigen" name="show_guides" tool_tip="Zeigt Aufnahme-Guide (Drittel-Regel) innerhalb des Aufnahmebereichs an."/>
 	<button label="Aktualisieren" name="new_snapshot_btn" tool_tip="Zum Aktualisieren klicken"/>
