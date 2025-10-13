@@ -603,7 +603,7 @@ void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4& no
         LLGLDepthTest gls_depth(GL_FALSE);
 
         constexpr int segments = 64;
-        glLineWidth(6.0f); // Set the desired line thickness
+        gGL.setLineWidth(6.0f); // Set the desired line thickness
 
         // Compute a scale factor that already factors in the radius.
         float scale = radius;
@@ -637,7 +637,7 @@ void FSManipRotateJoint::renderCenterCircle(const F32 radius, const LLColor4& no
         }
         gGL.end();
 
-        glLineWidth(1.0f); // Reset the line width.
+        gGL.setLineWidth(1.0f); // Reset the line width.
     }
     gGL.popMatrix();
 }
