@@ -14,8 +14,10 @@
 	<text name="working_lbl">
 		Обновление...
 	</text>
-	<check_box label="Показать кадр" tool_tip="Показать на экране рамку, окружающую области снимка. Части сцены, находящиеся за пределами снимка, будут обесцвечены и слегка размыты." name="show_frame" />
-	<check_box label="Кадрирование" tool_tip="Показать руководство по кадрированию (правило третей) внутри рамки снимка" name="show_guides" />
+	<panel name="options_panel">
+		<check_box label="Показать кадр" tool_tip="Показать на экране рамку, окружающую области снимка. Части сцены, находящиеся за пределами снимка, будут обесцвечены и слегка размыты." name="show_frame" />
+		<check_box label="Кадрирование" tool_tip="Показать руководство по кадрированию (правило третей) внутри рамки снимка" name="show_guides" />
+	</panel>
 	<button label="Обновить" name="new_snapshot_btn" tool_tip="Щелкните для обновления"/>
 	<button label="Просмотр" name="big_preview_btn" tool_tip="Щелкните для смены вида"/>
 	<text name="title_label">
