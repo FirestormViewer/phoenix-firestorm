@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="snapshot_guide_settings" title="Ustawienia pomocy kadrowania">
+	<text name="color_and_appearance_label">
+		Kolor i wygląd
+	</text>
+	<spinner label="Grubość (px)" name="guide_thickness" />
+	<slider label="Przezroczystość" name="guide_opacity" />
+	<text name="style_label">
+		Styl linii
+	</text>
+	<combo_box name="guide_style_combo" tool_tip="Wybierz, którą pomoc kadrowania wyświetlić">
+		<combo_box.item name="rule_of_thirds" label="Zasada trójpodziału" />
+		<combo_box.item name="golden_ratio_top_left" label="Złoty podział (góra lewa)" />
+		<combo_box.item name="golden_ratio_top_right" label="Złoty podział (góra prawa)" />
+		<combo_box.item name="golden_ratio_bottom_left" label="Złoty podział (dół lewy)" />
+		<combo_box.item name="golden_ratio_bottom_right" label="Złoty podział (dół prawy)" />
+		<combo_box.item name="diagonal" label="Przekątna" />
+	</combo_box>
+</floater>
