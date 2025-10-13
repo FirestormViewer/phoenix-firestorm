@@ -177,6 +177,7 @@ private:
 
     static std::map <LLUUID, std::vector<fsMotionState>> sMotionStates;
     static std::map<LLUUID, int> sCaptureOrder;
+    static std::map<LLUUID, bool> sMotionStatesOwnedByMe;
 };
 
 #endif // LL_FSPoseState_H

@@ -7,8 +7,9 @@
 #include "llmath.h"
 
 constexpr std::string_view POSER_MESSAGE_PREFIX      = "#POSER+"; // preamble on all poser messages.
-constexpr std::string_view POSER_MESSAGE_START_BODY  = "#SBOD";   // token indicating message has joint rot/pos/scale info
-constexpr std::string_view POSER_MESSAGE_START_POSES = "#SPOS";   // token indicating message has playing animation payload
+constexpr std::string_view POSER_MESSAGE_START_BODY  = "#S1";   // token indicating message has joint rot/pos/scale info
+constexpr std::string_view POSER_MESSAGE_START_POSES = "#S2";   // token indicating message has playing animation payload
+constexpr std::string_view POSER_MESSAGE_START_COMB  = "#S3";   // token indicating message both payloads
 constexpr std::string_view POSER_MESSAGE_STOP_POSING = "#STOP";   // token indicating sender is stopping posing
 constexpr std::string_view POSER_MESSAGE_PERMISSION  = "#PERM";   // token indicating message has a permission payload
 constexpr std::string_view DELIM                     = "+";       // delimiter separating message tokens
@@ -314,32 +315,54 @@ void FSPoserCollab::processEnqueuedMessages()
             if (it->second < COLLAB_PERM_GRANTED)
                 continue;
 
-            // add body message(s)
-            for (size_t i = 0; i < bodyRotPosScaleText.size(); i++)
+            bool twoMessagesFitInOneIM = changeType == POSECHANGE_BOTH && bodyRotPosScaleText.size() == 1 && poseInfoText.size() == 1 &&
+                                         bodyRotPosScaleText[0].size() + poseInfoText[0].size() <= POSER_MESSAGE_LENGTH;
+
+            if (twoMessagesFitInOneIM)
             {
                 FSEnqueuedPoseMessage newMessage;
                 newMessage.mRecipient = it->first;
-                newMessage.message = std::string(POSER_MESSAGE_START_BODY);
+                newMessage.message    = std::string(POSER_MESSAGE_START_COMB);
                 newMessage.message += DELIM;
                 newMessage.message += changedAvId;
                 newMessage.message += DELIM;
-                newMessage.message += bodyRotPosScaleText[i];
+                newMessage.message += bodyRotPosScaleText[0];
+                newMessage.message += DELIM;
+                newMessage.message += std::string(POSER_MESSAGE_START_POSES);
+                newMessage.message += DELIM;
+                newMessage.message += poseInfoText[0];
 
                 mEnqueuedChatMessages.push_back(newMessage);
             }
-
-            // add pose message(s)
-            for (size_t i = 0; i < poseInfoText.size(); i++)
+            else
             {
-                FSEnqueuedPoseMessage newMessage;
-                newMessage.mRecipient   = it->first;
-                newMessage.message    = std::string(POSER_MESSAGE_START_POSES);
-                newMessage.message += DELIM;
-                newMessage.message += changedAvId;
-                newMessage.message += DELIM;
-                newMessage.message += poseInfoText[i];
+                // add body message(s)
+                for (size_t i = 0; i < bodyRotPosScaleText.size(); i++)
+                {
+                    FSEnqueuedPoseMessage newMessage;
+                    newMessage.mRecipient = it->first;
+                    newMessage.message    = std::string(POSER_MESSAGE_START_BODY);
+                    newMessage.message += DELIM;
+                    newMessage.message += changedAvId;
+                    newMessage.message += DELIM;
+                    newMessage.message += bodyRotPosScaleText[i];
 
-                mEnqueuedChatMessages.push_back(newMessage);
+                    mEnqueuedChatMessages.push_back(newMessage);
+                }
+
+                // add pose message(s)
+                for (size_t i = 0; i < poseInfoText.size(); i++)
+                {
+                    FSEnqueuedPoseMessage newMessage;
+                    newMessage.mRecipient = it->first;
+                    newMessage.message    = std::string(POSER_MESSAGE_START_POSES);
+                    newMessage.message += DELIM;
+                    newMessage.message += changedAvId;
+                    newMessage.message += DELIM;
+                    newMessage.message += poseInfoText[i];
+
+                    mEnqueuedChatMessages.push_back(newMessage);
+                }
             }
         }
     }
@@ -418,7 +441,12 @@ void FSPoserCollab::processPoserMessage(LLUUID senderId, std::string chatMessage
 
         std::string messageType = result[1];
 
-        if (messageType == std::string(POSER_MESSAGE_START_BODY))
+        if (messageType == std::string(POSER_MESSAGE_START_COMB))
+        {
+            processBodyMessage(result, avatarToPose);
+            processPlayingPosesMessage(result, avatarToPose);
+        }
+        else if (messageType == std::string(POSER_MESSAGE_START_BODY))
             processBodyMessage(result, avatarToPose);
         else if (messageType == std::string(POSER_MESSAGE_START_POSES))
             processPlayingPosesMessage(result, avatarToPose);
@@ -763,6 +791,8 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
         token = mesageTokens[index];
         if (token.empty())
             continue;
+        if (token == std::string(POSER_MESSAGE_START_POSES))
+            break; // a combined message
 
         if (!tryDecodeJointFromString(token, jointNumber, mirrored, zeroBaseRot, rotation, position, scale))
             continue;
@@ -787,10 +817,19 @@ void FSPoserCollab::processPlayingPosesMessage(std::vector<std::string> mesageTo
     LLSD   saveRecord;
     int    animNumber = 0;
 
+    bool isCombined              = mesageTokens[1] == std::string(POSER_MESSAGE_START_COMB);
+    bool foundStartOfPosesTokens = false;
+
     for (size_t index = 3; index < size - 1; index++)
     {
         if (mesageTokens[index].empty())
             continue;
+
+        if (isCombined && !foundStartOfPosesTokens)
+        {
+            foundStartOfPosesTokens = mesageTokens[index] == std::string(POSER_MESSAGE_START_POSES);
+            continue;
+        }
 
         if (index + 3 >= size)
             break;

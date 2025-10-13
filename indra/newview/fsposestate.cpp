@@ -3,6 +3,7 @@
 
 std::map<LLUUID, std::vector<FSPoseState::fsMotionState>> FSPoseState::sMotionStates;
 std::map<LLUUID, int> FSPoseState::sCaptureOrder;
+std::map<LLUUID, bool> FSPoseState::sMotionStatesOwnedByMe;
 
 void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
 {
@@ -25,23 +26,6 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
-}
-
-bool FSPoseState::vector2IsSubsetOfVector1(std::vector<S32> newRecapture, std::vector<S32> oldRecapture)
-{
-    if (newRecapture.size() < 1)
-        return false;
-    if (oldRecapture.size() < 1)
-        return false;
-
-    if (newRecapture.size() < oldRecapture.size())
-        return false;
-
-    for (S32 number : oldRecapture)
-        if (std::find(newRecapture.begin(), newRecapture.end(), number) == newRecapture.end())
-            return false;
-
-    return true;
 }
 
 void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::vector<S32> jointNumbersRecaptured)
@@ -147,6 +131,9 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, 
             {
                 newState.motionId = animId;
                 newState.gAgentOwnsPose = ignoreOwnership || canSaveMotionId(animId);
+
+                if (ignoreOwnership)
+                    sMotionStatesOwnedByMe[animId] = true;
             }
         }
 
@@ -228,10 +215,16 @@ bool FSPoseState::canSaveMotionId(LLAssetID motionId)
     if (!gAgentAvatarp || gAgentAvatarp.isNull())
         return false;
 
+    if (sMotionStatesOwnedByMe[motionId])
+        return true;
+
     // does the animation exist in inventory
     LLInventoryItem* item = gInventory.getItem(motionId);
     if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
-        return true;
+    {
+        sMotionStatesOwnedByMe[motionId] = true;
+        return sMotionStatesOwnedByMe[motionId];
+    }
 
     for (const auto& [anim_object_id, anim_anim_id] : gAgentAvatarp->mAnimationSources)
     {
@@ -241,17 +234,40 @@ bool FSPoseState::canSaveMotionId(LLAssetID motionId)
         // is the item that started the anim in inventory
         item = gInventory.getItem(anim_object_id);
         if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
-            return true;
+        {
+            sMotionStatesOwnedByMe[motionId] = true;
+            return sMotionStatesOwnedByMe[motionId];
+        }
 
         // is the item that start the animation in-world
         LLViewerObject* object = gObjectList.findObject(anim_object_id);
         if (object && object->permYouOwner())
-            return true;
+        {
+            sMotionStatesOwnedByMe[motionId] = true;
+            return sMotionStatesOwnedByMe[motionId];
+        }
 
         return false;
     }
 
     return false;
+}
+
+bool FSPoseState::vector2IsSubsetOfVector1(std::vector<S32> newRecapture, std::vector<S32> oldRecapture)
+{
+    if (newRecapture.size() < 1)
+        return false;
+    if (oldRecapture.size() < 1)
+        return false;
+
+    if (newRecapture.size() < oldRecapture.size())
+        return false;
+
+    for (S32 number : oldRecapture)
+        if (std::find(newRecapture.begin(), newRecapture.end(), number) == newRecapture.end())
+            return false;
+
+    return true;
 }
 
 std::string FSPoseState::encodeVectorToString(std::vector<S32> vector)
