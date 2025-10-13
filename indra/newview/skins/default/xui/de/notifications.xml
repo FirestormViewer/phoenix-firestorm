@@ -2703,6 +2703,12 @@ Möchten Sie es mit dem ausgewählten Objekt ersetzen?
 	<notification name="TooManyWearables">
 		Sie können keinen Ordner tragen, der mehr als [AMOUNT] Elemente enthält.  Sie können diesen Höchstwert unter „Erweitert“ &gt; „Debug-Einstellungen anzeigen“ &gt; „WearFolderLimit“ ändern.
 	</notification>
+	<notification name="CantLinkNotecard">
+		Sie müssen die Notizkarte speichern, bevor Sie eine Verknüpfung dorthin herstellen können.
+	</notification>
+	<notification name="CantLinkMaterial">
+		Sie müssen das Material speichern, bevor Sie eine Verknüpfung dorthin herstellen können.
+	</notification>
 	<notification label="Warnung für Nicht-stören-Modus" name="DoNotDisturbModePay">
 		Sie haben den Nicht-stören-Modus aktiviert. Sie erhalten keine Artikel, die im Gegenzug für diese Zahlung angeboten werden.
 

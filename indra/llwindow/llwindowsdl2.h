@@ -74,6 +74,7 @@ public:
     // </FS:Zi>
     /*virtual*/ bool setCursorPosition(LLCoordWindow position);
     /*virtual*/ bool getCursorPosition(LLCoordWindow *position);
+    /*virtual*/ bool isWrapMouse() const override { return true; }
     /*virtual*/ void showCursor();
     /*virtual*/ void hideCursor();
     /*virtual*/ void showCursorFromMouseMove();
