@@ -41,11 +41,12 @@ typedef enum E_CollabState
     COLLAB_PERM_DENIED      = 2, // we are telling them no
     COLLAB_I_ASKED_THEM     = 3, // we have asked them to share
     COLLAB_THEY_ASKED_ME    = 4, // They have asked us to share
-    COLLAB_PARTY_MODE       = 5, // We are posing them in party mode
-    COLLAB_PERM_GRANTED     = 6, // there has been an offer to share and an acceptance
-    COLLAB_THEY_POSE_ME     = 7, // we tell them they can pose us
-    COLLAB_I_POSE_THEM      = 8, // we have been told we can pose them
-    COLLAB_POSE_EACH_OTHER  = 9, // we both have allowed the other to pose us
+    COLLAB_PHOTOG_MODE      = 5,  // We are posing them in photographer mode: no IMs, but we may edit their pose
+    COLLAB_PARTY_MODE       = 6, // We are posing in public "party" mode: no IMs, all local chat
+    COLLAB_PERM_GRANTED     = 7, // there has been an offer to share and an acceptance
+    COLLAB_THEY_POSE_ME     = 8, // we tell them they can pose us
+    COLLAB_I_POSE_THEM      = 9, // we have been told we can pose them
+    COLLAB_POSE_EACH_OTHER  = 10, // we both have allowed the other to pose us
     COLLAB_LAST
 } E_CollabState;
 
@@ -91,11 +92,13 @@ public:
     /// Updates the posing permission for the supplied avatar and sends an ASYNC message to them.
     /// </summary>
     /// <param name="avatarToUpdate">The avatar which is to be updated with this client's state.</param>
+    /// <param name="stateToSupply">The posing state to update them with.</param>
+    /// <param name="courtesyMessage">Any message we want to send in the message, particulary if the receiver does not have poser.</param>
     /// <remarks>
     /// This method is for use by this client: by our UI to specify our offers and acceptances.
     /// ASYNC meaning the message is not enqueued and sent when message throttle is ready; it is sent immediately.
     /// </remarks>
-    void updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply);
+    void updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply, std::string courtesyMessage);
 
     /// <summary>
     /// Gets the collaborator state for the supplied avatar.

@@ -30,6 +30,7 @@ width="430">
 	<string name="icon_pose_perm_all" translate="false">Sync_Progress_2</string>
 	<string name="icon_pose_party_mode" translate="false">Generic_Group</string>
 	<string name="icon_pose_nearby_person" translate="false">Web_Profile_Off</string>
+	<string name="icon_pose_photog_mode" translate="false">Play_Press</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
@@ -365,6 +366,11 @@ width="430">
 	<string name="LoadDiffLabel">Load Diff</string>
 	<string name="SaveDiffLabel">Save Diff</string>
 	<string name="OverWriteLabel">Overwrite?</string>
+	
+	<!-- Messages that will be visible to people asked to pose, but don't have the FS poser. -->
+	<string name="Collab_RequestMessage">Poser message: This person is asking to use your avatar as a photo model. Reply with #POSER+#PERM+5 if you consent to be their model (Caution: it means they can pose you!). Send #POSER+#PERM+1 any time to stop being a model. Send Send #POSER+#PERM+2 to stop them asking. Nothing happens without a #POSER reply.</string>
+	<string name="Collab_StopMessage">Poser message: this person has stopped their poser.</string>
+	<string name="Collab_StopPosingYouMessage">Poser message: this person has stopped posing you.</string>
 
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack

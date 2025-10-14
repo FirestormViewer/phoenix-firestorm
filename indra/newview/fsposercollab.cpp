@@ -81,7 +81,7 @@ bool FSPoserCollab::onTimedCollabEvent()
 }
 
 // this is from our UI, from our point of view: we are telling someone else what we want
-void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply)
+void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabState stateToSupply, std::string courtesyMessage)
 {
     if (!avatarToUpdate)
         return;
@@ -95,6 +95,7 @@ void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabS
         case COLLAB_THEY_ASKED_ME:
         case COLLAB_I_POSE_THEM:
         case COLLAB_POSE_EACH_OTHER:
+        case COLLAB_PHOTOG_MODE:
             // these states cannot be asserted by us
             break;
 
@@ -141,6 +142,11 @@ void FSPoserCollab::updateCollabPermission(LLVOAvatar* avatarToUpdate, E_CollabS
         std::string message = std::string(POSER_MESSAGE_PERMISSION);
         message += DELIM;
         message += std::to_string(stateToSupply);
+        if (!courtesyMessage.empty())
+        {
+            message += DELIM;
+            message += courtesyMessage;
+        }
 
         sendMessage(avatarToUpdate, message);
     }
@@ -171,6 +177,7 @@ void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* 
         case COLLAB_POSE_EACH_OTHER:
         case COLLAB_I_POSE_THEM:
         case COLLAB_THEY_ASKED_ME:
+        case COLLAB_PARTY_MODE:
             break; // these states cannot be asserted by another
 
         case COLLAB_PERM_GRANTED: // they can use this only to rescind previously granted permission
@@ -200,6 +207,12 @@ void FSPoserCollab::processCollabStateMessage(std::string newState, LLVOAvatar* 
                 if (currentState != COLLAB_PERM_GRANTED)
                     sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_THEY_ASKED_ME;
             }
+            break;
+
+        case COLLAB_PHOTOG_MODE:
+            if (currentState == COLLAB_I_ASKED_THEM) // they may only assert photo mode if we have first asked them to model for us
+                sAvatarIdToCollabState[avatarWhoseStateChanged] = COLLAB_PHOTOG_MODE;
+
             break;
 
         case COLLAB_THEY_POSE_ME:

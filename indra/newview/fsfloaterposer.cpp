@@ -408,13 +408,13 @@ void FSFloaterPoser::onPoserCollabEvent(LLUUID avWhosePermsChanged)
     E_CollabState state             = mPoserCollaborator->getCollabLocalState(avatar);
     bool          arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
 
-    if (!arePosingSelected && state >= COLLAB_PERM_GRANTED && couldAnimateAvatar(avatar))
+    if (!arePosingSelected && state >= COLLAB_PHOTOG_MODE && couldAnimateAvatar(avatar))
     {
         mPoserAnimator.tryPosingAvatar(avatar);
         sendPoseUpdateByChat(gAgentAvatarp, POSECHANGE_BOTH); // sync them with our posestate
     }
 
-    if (arePosingSelected && state < COLLAB_PERM_GRANTED)
+    if (arePosingSelected && state < COLLAB_PHOTOG_MODE)
         mPoserAnimator.stopPosingAvatar(avatar);
 
     onAvatarsRefresh();
@@ -1339,7 +1339,10 @@ void FSFloaterPoser::onSharingStartStop()
         return;
 
     bool startSharing = mStartStopSharingBtn->getValue().asBoolean();
-    mPoserCollaborator->updateCollabPermission(avatar, startSharing ? COLLAB_I_ASKED_THEM : COLLAB_PERM_ENDED);
+    E_CollabState stateToSend   = startSharing ? COLLAB_I_ASKED_THEM : COLLAB_PERM_ENDED;
+    std::string   messageToSend = startSharing ? tryGetString("Collab_RequestMessage") : tryGetString("Collab_StopMessage");
+
+    mPoserCollaborator->updateCollabPermission(avatar, stateToSend, messageToSend);
 
     onAvatarsRefresh();
     onAvatarSelect();
@@ -1352,7 +1355,10 @@ void FSFloaterPoser::onPoseControlStartStop()
         return;
 
     bool giveControl = mStartStopControlBtn->getValue().asBoolean();
-    mPoserCollaborator->updateCollabPermission(avatar, giveControl ? COLLAB_THEY_POSE_ME : COLLAB_PERM_GRANTED);
+    E_CollabState   stateToSend = giveControl ? COLLAB_THEY_POSE_ME : COLLAB_PERM_GRANTED;
+    std::string   messageToSend = giveControl ? tryGetString("") : tryGetString("Collab_StopPosingYouMessage");
+
+    mPoserCollaborator->updateCollabPermission(avatar, stateToSend, messageToSend);
 
     onAvatarsRefresh();
     onAvatarSelect();
@@ -1395,7 +1401,7 @@ bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar *avatar) cons
         return false;
 
     E_CollabState state = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
-    return state >= COLLAB_I_POSE_THEM;
+    return state >= COLLAB_I_POSE_THEM || state == COLLAB_PHOTOG_MODE;
 }
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
@@ -2374,7 +2380,7 @@ void FSFloaterPoser::onAvatarSelect()
     mStartStopControlBtn->setValue(state == COLLAB_THEY_POSE_ME || state == COLLAB_POSE_EACH_OTHER);
 
     mSetToTposeButton->setEnabled(haveImplicitPermission && arePosingSelected);
-    poseControlsEnable(arePosingSelected && (haveImplicitPermission || state >= COLLAB_I_POSE_THEM));
+    poseControlsEnable(arePosingSelected && (haveImplicitPermission || state >= COLLAB_I_POSE_THEM || state == COLLAB_PHOTOG_MODE));
 
     refreshTextHighlightingOnAvatarScrollList();
     refreshTextHighlightingOnJointScrollLists();
@@ -2587,6 +2593,11 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
         case COLLAB_PARTY_MODE:
             if (hasString("icon_pose_party_mode"))
                 iconName = getString("icon_pose_party_mode");
+            break;
+
+        case COLLAB_PHOTOG_MODE:
+            if (hasString("icon_pose_photog_mode"))
+                iconName = getString("icon_pose_photog_mode");
             break;
 
         case COLLAB_PERM_GRANTED:
