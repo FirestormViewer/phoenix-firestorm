@@ -156,14 +156,18 @@ FSJointPose::FSJointState FSJointPose::redoLastStateChange(FSJointState thingToS
 
 void FSJointPose::recaptureJoint()
 {
-    if (mIsCollisionVolume)
-        return;
-
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
         return;
 
     addStateToUndo(FSJointState(mCurrentState));
+
+    if (mIsCollisionVolume)
+    {
+        mCurrentState.mPosition.set(LLVector3::zero);
+        mCurrentState.mScale.set(LLVector3::zero);
+    }
+
     mCurrentState = FSJointState(joint);
     mCurrentState.mLastChangeWasRotational = true;
 }

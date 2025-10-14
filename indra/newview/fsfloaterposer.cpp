@@ -732,6 +732,8 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
 
     setSavePosesButtonText(true);
     refreshRotationSlidersAndSpinners();
+    refreshPositionSlidersAndSpinners();
+    refreshScaleSlidersAndSpinners();
     refreshTrackpadCursor();
     refreshTextHighlightingOnJointScrollLists();
     enableOrDisableRedoAndUndoButton();
