@@ -99,11 +99,8 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     int animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
-        if (!NDEBUG)
-        {
-            if (!ignoreOwnership && !it->gAgentOwnsPose)
-                continue;
-        }
+        if (!ignoreOwnership && !it->gAgentOwnsPose)
+            continue;
 
         std::string uniqueAnimId                            = "poseState" + std::to_string(animNumber++);
         (*saveRecord)[uniqueAnimId]["animationId"]          = it->motionId.asString();
