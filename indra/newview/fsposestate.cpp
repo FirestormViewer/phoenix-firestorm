@@ -11,6 +11,7 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
         return;
 
     sCaptureOrder[avatar->getID()] = 0;
+    int animNumber                 = 0;
 
     for (auto anim_it = avatar->mPlayingAnimations.begin(); anim_it != avatar->mPlayingAnimations.end(); ++anim_it)
     {
@@ -22,6 +23,7 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
         newState.motionId       = anim_it->first;
         newState.lastUpdateTime = motion->getLastUpdateTime();
         newState.captureOrder   = 0;
+        newState.inLayerOrder   = animNumber++;
         newState.gAgentOwnsPose = canSaveMotionId(anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
@@ -34,6 +36,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         return;
 
     sCaptureOrder[avatar->getID()]++;
+    int animNumber = 0;
 
     // if an animation for avatar is a subset of jointNumbersRecaptured, delete it
     // this happens on second/subsequent recaptures; the first recapture is no longer needed
@@ -73,6 +76,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         newState.lastUpdateTime       = motion->getLastUpdateTime();
         newState.jointNumbersAnimated = jointNumbersRecaptured;
         newState.captureOrder         = sCaptureOrder[avatar->getID()];
+        newState.inLayerOrder         = animNumber++;
         newState.gAgentOwnsPose       = canSaveMotionId(anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
@@ -95,14 +99,18 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     int animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
-        if (!ignoreOwnership && !it->gAgentOwnsPose)
-            continue;
+        if (!NDEBUG)
+        {
+            if (!ignoreOwnership && !it->gAgentOwnsPose)
+                continue;
+        }
 
         std::string uniqueAnimId                            = "poseState" + std::to_string(animNumber++);
         (*saveRecord)[uniqueAnimId]["animationId"]          = it->motionId.asString();
         (*saveRecord)[uniqueAnimId]["lastUpdateTime"]       = it->lastUpdateTime;
         (*saveRecord)[uniqueAnimId]["jointNumbersAnimated"] = encodeVectorToString(it->jointNumbersAnimated);
         (*saveRecord)[uniqueAnimId]["captureOrder"]         = it->captureOrder;
+        (*saveRecord)[uniqueAnimId]["inLayerOrder"]         = it->inLayerOrder;
     }
 }
 
@@ -145,6 +153,9 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, 
 
         if (control_map.has("captureOrder"))
             newState.captureOrder = control_map["captureOrder"].asInteger();
+
+        if (control_map.has("inLayerOrder"))
+            newState.inLayerOrder = control_map["inLayerOrder"].asInteger();
 
         if (newState.captureOrder > sCaptureOrder[avatar->getID()])
             sCaptureOrder[avatar->getID()] = newState.captureOrder;

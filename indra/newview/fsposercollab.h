@@ -200,9 +200,10 @@ private:
     /// <param name="position">The position of the joint; values should be between -3.200 and 3.199; values outside range are clamped. More than 3 decimals in precision is lost.</param>
     /// <param name="scale">The scale of the joint; values should be between -3.200 and 3.199; values outside range are clamped. More than 3 decimals in precision is lost.</param>
     /// <returns></returns>
-    std::string encodeJointToString(int jointNumber, bool isMirrored, bool baseIsZero, const LLVector3 rotation, const LLVector3 position, const LLVector3 scale);
-    bool tryDecodeJointFromString(std::string token, int& jointNumber, bool& isMirrored, bool& baseIsZero, LLVector3& rotation, LLVector3& position,
-                                  LLVector3& scale);
+    std::string encodeJointToString(int jointNumber, bool jointEnabled, bool isMirrored, bool baseIsZero, const LLVector3 rotation,
+                                    const LLVector3 position, const LLVector3 scale);
+    bool        tryDecodeJointFromString(std::string token, int& jointNumber, bool& jointEnabled, bool& isMirrored, bool& baseIsZero,
+                                         LLVector3& rotation, LLVector3& position, LLVector3& scale);
 
     /// <summary>
     /// Encodes the supplied vector to 6 ASCII printable chars.
@@ -348,6 +349,11 @@ private:
     /// We will retry loading several times, and eventually give up.
     /// </remarks>
     static std::map<LLUUID, int> sAvatarIdToPosingStateReloadTries;
+
+    /// <summary>
+    /// As playing-poses messages can span several IMs, store them here.
+    /// </summary>
+    LLSD mSaveRecord;
 };
 
 /// <summary>

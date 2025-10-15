@@ -643,6 +643,7 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
     refreshRotationSlidersAndSpinners();
     refreshTrackpadCursor();
     refreshTextHighlightingOnJointScrollLists();
+    sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
 }
 
 void FSFloaterPoser::onClickFlipSelectedJoints()

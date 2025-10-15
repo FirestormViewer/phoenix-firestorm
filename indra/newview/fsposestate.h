@@ -117,10 +117,14 @@ private:
         bool gAgentOwnsPose = false;
 
         /// <summary>
-        /// When reloading, larger numbers are loaded last, nesting order and priority.
-        /// This is used to represent recaptures, where joints could be animated with different poses.
+        /// Represents 'capture layers: how the user layers animations 'on top of' others.
         /// </summary>
         int captureOrder = 0;
+
+        /// <summary>
+        /// Represents in-layer order of capture.
+        /// </summary>
+        int inLayerOrder = 0;
 
         /// <summary>
         /// When reloading, and if not-empty, the bone-numbers this motionId should affect.
@@ -170,6 +174,8 @@ private:
         {
             if (a.captureOrder < b.captureOrder)
                 return true; // Ascending order
+            if (a.captureOrder == b.captureOrder && a.inLayerOrder < b.inLayerOrder)
+                return true; // Ascending order in layer
 
             return false;
         }

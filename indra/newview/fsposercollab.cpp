@@ -7,9 +7,9 @@
 #include "llmath.h"
 
 constexpr std::string_view POSER_MESSAGE_PREFIX      = "#POSER+"; // preamble on all poser messages.
-constexpr std::string_view POSER_MESSAGE_START_BODY  = "#S1";   // token indicating message has joint rot/pos/scale info
-constexpr std::string_view POSER_MESSAGE_START_POSES = "#S2";   // token indicating message has playing animation payload
-constexpr std::string_view POSER_MESSAGE_START_COMB  = "#S3";   // token indicating message both payloads
+constexpr std::string_view POSER_MESSAGE_START_BODY  = "#S1";     // token indicating message has joint rot/pos/scale info
+constexpr std::string_view POSER_MESSAGE_START_POSES = "#S2";     // token indicating message has playing animation payload
+constexpr std::string_view POSER_MESSAGE_START_COMB  = "#S3";     // token indicating message both payloads
 constexpr std::string_view POSER_MESSAGE_STOP_POSING = "#STOP";   // token indicating sender is stopping posing
 constexpr std::string_view POSER_MESSAGE_PERMISSION  = "#PERM";   // token indicating message has a permission payload
 constexpr std::string_view DELIM                     = "+";       // delimiter separating message tokens
@@ -364,7 +364,8 @@ void FSPoserCollab::processEnqueuedMessages()
                 }
 
                 // add pose message(s)
-                for (size_t i = 0; i < poseInfoText.size(); i++)
+                int messageCounter = 0;
+                for (int i = 0; i < poseInfoText.size(); i++)
                 {
                     FSEnqueuedPoseMessage newMessage;
                     newMessage.mRecipient = it->first;
@@ -372,9 +373,14 @@ void FSPoserCollab::processEnqueuedMessages()
                     newMessage.message += DELIM;
                     newMessage.message += changedAvId;
                     newMessage.message += DELIM;
+                    newMessage.message += std::to_string(messageCounter);
+                    newMessage.message += DELIM;
+                    newMessage.message += std::to_string(poseInfoText.size() - 1);
+                    newMessage.message += DELIM;
                     newMessage.message += poseInfoText[i];
 
                     mEnqueuedChatMessages.push_back(newMessage);
+                    messageCounter++;
                 }
             }
         }
@@ -493,6 +499,9 @@ void FSPoserCollab::sendMessage(LLVOAvatar* recipient, std::string message) cons
     std::string msg = std::string(POSER_MESSAGE_PREFIX);
     msg.append(message);
 
+    if (msg.length() > 1020)
+        LL_WARNS("Posing") << "Attempting to send message length: " << msg.length() << LL_ENDL;
+
     const LLUUID          idSession  = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, recipient->getID());
     const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(recipient->getID());
     std::string           strAgentName;
@@ -529,25 +538,30 @@ std::vector<std::string> FSPoserCollab::getRotPosScaleDiffAsText(LLVOAvatar* ava
     for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator->PoserJoints)
     {
         bool posingThisJoint = mPoserAnimator->isPosingAvatarJoint(avatar, pj);
-        if (!posingThisJoint)
-            continue;
-
-        bool jointShouldUpdateChat = mPoserAnimator->hasJointBeenChanged(avatar, pj);
-        if (!jointShouldUpdateChat)
-            continue;
-
         if (!mPoserAnimator->tryGetJointNumber(avatar, pj, jointNumber))
             continue;
 
-        if (!mPoserAnimator->tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
-            continue;
+        if (posingThisJoint)
+        {
+            bool jointShouldUpdateChat = mPoserAnimator->hasJointBeenChanged(avatar, pj);
+            if (!jointShouldUpdateChat)
+                continue;
 
-        jointIsMirrored = mPoserAnimator->getRotationIsMirrored(avatar, pj);
+            if (!mPoserAnimator->tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
+                continue;
+
+            jointIsMirrored = mPoserAnimator->getRotationIsMirrored(avatar, pj);
+        }
+        else
+        {
+            rotation = position = scale = LLVector3::zero;
+            jointIsMirrored = baseRotationIsZero = false;
+        }
 
         if (!line.empty())
             line.append(DELIM);
 
-        line.append(encodeJointToString(jointNumber, jointIsMirrored, baseRotationIsZero, rotation, position, scale));
+        line.append(encodeJointToString(jointNumber, posingThisJoint, jointIsMirrored, baseRotationIsZero, rotation, position, scale));
 
         if (line.size() < POSER_MESSAGE_LENGTH)
             continue;
@@ -596,13 +610,18 @@ std::vector<std::string> FSPoserCollab::getPoseInfoAsText(LLVOAvatar* avatar)
 
         line += DELIM;
 
-        if (control_map.has("jointNamesAnimated"))
-            line += control_map["jointNamesAnimated"].asString();
+        if (control_map.has("jointNumbersAnimated"))
+            line += control_map["jointNumbersAnimated"].asString();
 
         line += DELIM;
 
         if (control_map.has("captureOrder"))
             line += control_map["captureOrder"].asString();
+
+        line += DELIM;
+
+        if (control_map.has("inLayerOrder"))
+            line += control_map["inLayerOrder"].asString();
 
         if (line.size() < POSER_MESSAGE_LENGTH)
             continue;
@@ -617,11 +636,18 @@ std::vector<std::string> FSPoserCollab::getPoseInfoAsText(LLVOAvatar* avatar)
     return result;
 }
 
-std::string FSPoserCollab::encodeJointToString(int jointNumber, bool isMirrored, bool baseIsZero, const LLVector3 rotation, const LLVector3 position, const LLVector3 scale)
+std::string FSPoserCollab::encodeJointToString(int jointNumber, bool jointEnabled, bool isMirrored, bool baseIsZero, const LLVector3 rotation, const LLVector3 position, const LLVector3 scale)
 {
     std::string result = "";
 
-    int encodedBools     = isMirrored ? 1 : 0 + baseIsZero ? 2 : 0;
+    int encodedBools = 0;
+    if (isMirrored)
+        encodedBools += 1;
+    if (baseIsZero)
+        encodedBools += 2;
+    if (jointEnabled)
+        encodedBools += 4;
+
     F32 jointNumAndBools = jointNumber * 0.01f + encodedBools * 0.001f; // joint (range 0..150ish) in units, tenths, hundredths, bools in thou
 
     result += f32ToTwoBytes(jointNumAndBools); // two chars
@@ -673,7 +699,7 @@ std::string FSPoserCollab::f32ToTwoBytes(const F32 number)
     return result;
 }
 
-bool FSPoserCollab::tryDecodeJointFromString(std::string token, int& jointNumber, bool& isMirrored, bool& baseIsZero, LLVector3& rotation, LLVector3& position, LLVector3& scale)
+bool FSPoserCollab::tryDecodeJointFromString(std::string token, int& jointNumber, bool& jointEnabled, bool& isMirrored, bool& baseIsZero, LLVector3& rotation, LLVector3& position, LLVector3& scale)
 {
     if (token.empty())
         return false;
@@ -682,16 +708,19 @@ bool FSPoserCollab::tryDecodeJointFromString(std::string token, int& jointNumber
     {
         F32 numberAndBools = twoBytesToF32(token[0], token[1]);
         numberAndBools *= 100.f;
-        jointNumber = ll_round(numberAndBools);
+        jointNumber = ll_round(numberAndBools - 0.3f);
 
         numberAndBools *= 10.f;
         int encodedBools = ll_round(numberAndBools) % 10;
 
-        if (encodedBools > 3)
-            encodedBools -= 4; // unused 3rd bool; in case needed in future
-        baseIsZero       = encodedBools > 1;
+        jointEnabled = encodedBools > 3;
+        if (jointEnabled)
+            encodedBools -= 4;
+
+        baseIsZero = encodedBools > 1;
         if (baseIsZero)
             encodedBools -= 2;
+
         isMirrored = encodedBools > 0;
     }
 
@@ -796,7 +825,7 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
     size_t      size = mesageTokens.size();
     LLVector3   rotation, position, scale;
     std::string token;
-    bool        zeroBaseRot, mirrored;
+    bool        jointEnabled, zeroBaseRot, mirrored;
     int         jointNumber;
 
     for (size_t index = 3; index < size; index++)
@@ -807,18 +836,25 @@ void FSPoserCollab::processBodyMessage(std::vector<std::string> mesageTokens, LL
         if (token == std::string(POSER_MESSAGE_START_POSES))
             break; // a combined message
 
-        if (!tryDecodeJointFromString(token, jointNumber, mirrored, zeroBaseRot, rotation, position, scale))
+        if (!tryDecodeJointFromString(token, jointNumber, jointEnabled, mirrored, zeroBaseRot, rotation, position, scale))
             continue;
 
         const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator->getPoserJointByNumber(avatar, jointNumber);
         if (!poserJoint)
             continue;
 
-        mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, rotation);
-        mPoserAnimator->loadJointPosition(avatar, poserJoint, true, position);
-        mPoserAnimator->loadJointScale(avatar, poserJoint, true, scale);
+        bool posingThisJoint = mPoserAnimator->isPosingAvatarJoint(avatar, *poserJoint);
+        if (jointEnabled != posingThisJoint)
+            mPoserAnimator->setPosingAvatarJoint(avatar, *poserJoint, jointEnabled);
 
-        mPoserAnimator->setRotationIsMirrored(avatar, *poserJoint, mirrored);
+        if (jointEnabled)
+        {
+            mPoserAnimator->loadJointRotation(avatar, poserJoint, zeroBaseRot, rotation);
+            mPoserAnimator->loadJointPosition(avatar, poserJoint, true, position);
+            mPoserAnimator->loadJointScale(avatar, poserJoint, true, scale);
+
+            mPoserAnimator->setRotationIsMirrored(avatar, *poserJoint, mirrored);
+        }
     }
 }
 
@@ -827,13 +863,18 @@ void FSPoserCollab::processPlayingPosesMessage(std::vector<std::string> mesageTo
     size_t size       = mesageTokens.size();
     bool   needUpdate = false;
     LLUUID animId;
-    LLSD   saveRecord;
     int    animNumber = 0;
 
     bool isCombined              = mesageTokens[1] == std::string(POSER_MESSAGE_START_COMB);
     bool foundStartOfPosesTokens = false;
+    int  messageIndex, totalPoseMessages;
+    if (!tryParseInt(mesageTokens[3], &messageIndex) || !tryParseInt(mesageTokens[4], &totalPoseMessages))
+        return;
 
-    for (size_t index = 3; index < size - 1; index++)
+    if (messageIndex == 0)
+        mSaveRecord.clear();
+
+    for (size_t index = 5; index < size - 1; index++)
     {
         if (mesageTokens[index].empty())
             continue;
@@ -844,22 +885,24 @@ void FSPoserCollab::processPlayingPosesMessage(std::vector<std::string> mesageTo
             continue;
         }
 
-        if (index + 3 >= size)
+        if (index + 4 >= size)
             break;
 
        if (!LLUUID::parseUUID(mesageTokens[index], &animId))
            continue;
 
-        std::string uniqueAnimId                         = "poseState" + std::to_string(animNumber++);
-        (saveRecord)[uniqueAnimId]["animationId"]        = mesageTokens[index];
-        (saveRecord)[uniqueAnimId]["lastUpdateTime"]     = mesageTokens[index + 1];
-        (saveRecord)[uniqueAnimId]["jointNamesAnimated"] = mesageTokens[index + 2];
-        (saveRecord)[uniqueAnimId]["captureOrder"]       = mesageTokens[index + 3];
+       std::string uniqueAnimId                            = "poseState" + std::to_string(animNumber++);
+       (mSaveRecord)[uniqueAnimId]["animationId"]          = mesageTokens[index];
+       (mSaveRecord)[uniqueAnimId]["lastUpdateTime"]       = mesageTokens[index + 1];
+       (mSaveRecord)[uniqueAnimId]["jointNumbersAnimated"] = mesageTokens[index + 2];
+       (mSaveRecord)[uniqueAnimId]["captureOrder"]         = mesageTokens[index + 3];
+       (mSaveRecord)[uniqueAnimId]["inLayerOrder"]         = mesageTokens[index + 4];
 
-        index += 2;
+        index += 3;
     }
 
-    sAvatarIdToPosingStateReloadTries[avatar->getID()] = mPoserAnimator->loadPosingState(avatar, false, saveRecord) ? 0 : 5;
+    if (messageIndex == totalPoseMessages)
+        sAvatarIdToPosingStateReloadTries[avatar->getID()] = mPoserAnimator->loadPosingState(avatar, false, mSaveRecord) ? 0 : 5;
 }
 
 bool FSPoserCollab::tryParseInt(std::string token, int* number)
