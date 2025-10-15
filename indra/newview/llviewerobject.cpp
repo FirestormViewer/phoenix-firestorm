@@ -4336,6 +4336,14 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
     S32 tex_count = getNumTEs();
     for (i = 0; i < tex_count; i++)
     {
+        // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+        // This fixes textures becoming blury (Esepecially with Bias > 1.0f) after an object is selected and unselected.
+        // If this is changing the boost level for the TEImage for the first time, store the boost level before modifying it.
+        if (getTEImage(i)->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
+        {
+            getTEImage(i)->storeBoostLevel();
+        }
+        // </FS:minerjr> [FIRE-36016]
         getTEImage(i)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
     }
 
@@ -4345,7 +4353,21 @@ void LLViewerObject::boostTexturePriority(bool boost_children /* = true */)
         if (sculpt_params)
         {
             LLUUID sculpt_id = sculpt_params->getSculptTexture();
-            LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+            // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+            //LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE)->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+            // This fixes textures becoming blury (Esepecially with Bias > 1.0f) after an object is selected and unselected.
+            // If this is changing the boost level for the sculpted for the first time, store the boost level before modifying it.
+            LLViewerFetchedTexture* sculptedTexture = LLViewerTextureManager::getFetchedTexture(sculpt_id, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+            if (sculptedTexture)
+            {
+                // If the texture is already boost selected, don't store the boost level again. Otherwise, it will overwrite the saved boost level with itself.
+                if (sculptedTexture->getBoostLevel() != LLGLTexture::BOOST_SELECTED)
+                {
+                    sculptedTexture->storeBoostLevel();
+                }
+                sculptedTexture->setBoostLevel(LLGLTexture::BOOST_SELECTED);
+            }
+            // </FS:minerjr> [FIRE-36016]
         }
     }
 

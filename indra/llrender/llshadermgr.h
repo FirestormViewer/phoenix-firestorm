@@ -357,9 +357,6 @@ public:
         // <FS:Beq> Uniforms for snapshot frame
         SNAPSHOT_BORDER_COLOR,              // "border_color"
         SNAPSHOT_BORDER_THICKNESS,          // "border_thickness"
-        SNAPSHOT_GUIDE_COLOR,               // "guide_color"
-        SNAPSHOT_GUIDE_THICKNESS,           // "guide_thickness"
-        SNAPSHOT_GUIDE_STYLE,               // "guide_style"
         SNAPSHOT_FRAME_RECT,                // "frame_rect"
         // </FS:Beq>
         END_RESERVED_UNIFORMS

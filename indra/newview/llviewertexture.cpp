@@ -3150,7 +3150,12 @@ void LLViewerLODTexture::processTextureStats()
     // unset it immediately after we consume it
     if (getBoostLevel() == BOOST_SELECTED)
     {
-        setBoostLevel(BOOST_NONE);
+        // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+        //setBoostLevel(BOOST_NONE);
+        // Restore the boost level instead of just setting to BOOST_NONE
+        // Can cause Sculpts and other boosted objects to lose boost and become subject to discard levels with Bias over 1.0f
+        restoreBoostLevel();
+        // </FS:minerjr>> [FIRE-36016]
     }
 }
 

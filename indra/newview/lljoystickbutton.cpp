@@ -38,6 +38,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llviewercamera.h"
+#include "llviewercontrol.h" // <FS:PP> gSavedSettings
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "llviewerwindow.h"
@@ -568,6 +569,12 @@ void LLJoystickCameraRotate::onHeldDown()
 
 void LLJoystickCameraRotate::resetJoystickCamera()
 {
+    // <FS:PP> If user opted to disable center reset buttons, do not reset
+    if (gSavedSettings.getBOOL("DisableCameraJoystickCenterReset"))
+    {
+        return;
+    }
+    // </FS:PP>
     gAgentCamera.resetCameraOrbit();
 }
 
@@ -735,6 +742,12 @@ void LLJoystickCameraTrack::onHeldDown()
 
 void LLJoystickCameraTrack::resetJoystickCamera()
 {
+    // <FS:PP> If user opted to disable center reset buttons, do not reset
+    if (gSavedSettings.getBOOL("DisableCameraJoystickCenterReset"))
+    {
+        return;
+    }
+    // </FS:PP>
     gAgentCamera.resetCameraPan();
 }
 

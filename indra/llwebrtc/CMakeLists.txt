@@ -10,10 +10,6 @@ include(WebRTC)
 
 project(llwebrtc)
 
-if (LINUX)
-    add_compile_options(-Wno-deprecated-declarations) # webrtc::CreateAudioDeviceWithDataObserver is deprecated
-endif (LINUX)
-
 set(llwebrtc_SOURCE_FILES
     llwebrtc.cpp
     )
@@ -27,6 +23,7 @@ set(llwebrtc_HEADER_FILES
 list(APPEND llwebrtc_SOURCE_FILES ${llwebrtc_HEADER_FILES})
 
 add_library (llwebrtc SHARED ${llwebrtc_SOURCE_FILES})
+
 set_target_properties(llwebrtc PROPERTIES PUBLIC_HEADER llwebrtc.h)
 
 if (WINDOWS)
@@ -45,7 +42,7 @@ if (WINDOWS)
                                        iphlpapi
                                        libcmt)
     # as the webrtc libraries are release, build this binary as release as well.
-    target_compile_options(llwebrtc PRIVATE "/MT")
+    target_compile_options(llwebrtc PRIVATE "/MT" "/Zc:wchar_t")
     if (USE_BUGSPLAT)
         set_target_properties(llwebrtc PROPERTIES PDB_OUTPUT_DIRECTORY "${SYMBOLS_STAGING_DIR}")
     endif (USE_BUGSPLAT)
@@ -56,15 +53,16 @@ elseif (DARWIN)
                                                   XCODE_ATTRIBUTE_DWARF_DSYM_FOLDER_PATH "${SYMBOLS_STAGING_DIR}/dSYMs")
     endif (USE_BUGSPLAT)
 elseif (LINUX)
-    target_compile_options(llwebrtc PRIVATE "-Wno-deprecated-declarations")
     target_link_libraries(llwebrtc PRIVATE ll::webrtc)
 endif (WINDOWS)
     
-target_include_directories( llwebrtc  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories( llwebrtc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 if (WINDOWS)
     set_property(TARGET llwebrtc PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+else()
+    target_compile_options(llwebrtc PRIVATE -Wno-deprecated-declarations) # webrtc::CreateAudioDeviceWithDataObserver is deprecated
 endif (WINDOWS)
 
 ADD_CUSTOM_COMMAND(TARGET llwebrtc POST_BUILD

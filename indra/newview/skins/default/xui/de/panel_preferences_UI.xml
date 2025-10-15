@@ -151,6 +151,7 @@
 		<check_box label="„Freunde“ und „Gruppen“ im Menü „Unterhalten“ öffnen die [SHORT_VIEWER_GENERATION]-Version" name="FSUseV2Friends" tool_tip="Falls aktiviert, werden Freunde bzw. Gruppen im „Leute“-Fenster geöffnet - ansonsten im Fenster „Kontakte“."/>
 		<check_box label="Ursprüngliche Version des Objekteigenschaften-Fensters verwenden" name="FSUseLegacyObjectProperties" tool_tip="Falls aktiviert, wird die ursprüngliche Version im Viewer-1-Stil des Eigenschaften-Fensters für Objekte verwendet."/>
 		<check_box label="Kleineres Fenster für Kamerasteuerung verwenden" name="FSUseSmallCameraFloater" tool_tip="Falls aktiviert, wird die ursprüngliche, kleinere Version des Fensters für die Kamerasteuerung ohne die Kontrollen für die Kamera-Voreinstellungen verwendet."/>
+		<check_box label="Zurücksetzbuttons für Kamerasteuerung deaktivieren" name="DisableCameraJoystickCenterReset" tool_tip="Verhindert, dass die Mitte der Orbit- und Bewegungssteuerung die Kamera zurücksetzen."/>
 		<text name="standalone_textbox">
 			Eigene Fenster verwenden für:
 		</text>

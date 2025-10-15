@@ -101,6 +101,10 @@ public:
 
     void setBoostLevel(S32 level);
     S32  getBoostLevel() { return mBoostLevel; }
+    // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+    void restoreBoostLevel(); // Now restores the mBoostLevel with the mPrevBoostLevel
+    void storeBoostLevel(); // Stores the current mBoostLevel in mPrevBoostLevel
+    // </FS:minerjr> [FIRE-36016]
 
     S32 getFullWidth() const { return mFullWidth; }
     S32 getFullHeight() const { return mFullHeight; }
@@ -183,6 +187,9 @@ public:
 
 protected:
     S32 mBoostLevel;                // enum describing priority level
+    // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+    S32 mPrevBoostLevel;            // enum describing priority level (Previous Value for BOOST_SELECTION restore)
+    // </FS:minerjr> [FIRE-36016]
     U32 mFullWidth;
     U32 mFullHeight;
     bool mUseMipMaps;
