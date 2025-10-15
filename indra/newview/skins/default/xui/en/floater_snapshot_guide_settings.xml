@@ -5,24 +5,16 @@
     can_dock="false"
     can_resize="false"
     width="250"
-    height="140"
+    height="120"
     min_height="140"
     min_width="280"
-    layout="topleft"
-    translate="false">
-    <panel
-        follows="all"
-        border="false"
-        top="20"
-        left="10"
-        right="-10"
-        bottom="-10"
-        layout="topleft">
+    layout="topleft">
         <text
-            top="0"
+            name="color_and_appearance_label"
+            top="5"
+            left="10"
             layout="topleft"
             follows="top|left"
-            left="0"
             height="16">
             Guide Color and Appearance
         </text>
@@ -30,7 +22,7 @@
             enabled_control="FSSnapshotShowGuides"
             control_name="FSSnapshotFrameGuideColor"
             layout="topleft"
-            left="0"
+            left="10"
             top_pad="0"
             width="40"
             height="65"
@@ -68,9 +60,10 @@
             decimal_digits="2"
             name="guide_opacity" />
         <text
+            name="style_label"
             layout="topleft"
             follows="top|left"
-            left="0"
+            left="10"
             height="16">
             Guide Style
         </text>
@@ -78,7 +71,7 @@
             enabled_control="FSSnapshotShowGuides"
             control_name="FSSnapshotGuideStyle"
             layout="topleft"
-            left="0"
+            left="10"
             top_pad="4"
             width="180"
             height="23"
@@ -110,5 +103,4 @@
                 value="diagonal" />
         </combo_box>
 
-    </panel>
 </floater>

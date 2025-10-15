@@ -4614,7 +4614,7 @@ void LLPipeline::renderSnapshotGuidesOverlay()
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     gGL.pushMatrix();
     gGL.loadIdentity();
-    gGLLastMatrix = NULL;
+    gGLLastMatrix = nullptr;
 
     const LLColor4 line_color(mSnapshotGuideState.color, alpha);
     gGL.color4fv(line_color.mV);
@@ -4644,261 +4644,260 @@ void LLPipeline::renderSnapshotGuidesOverlay()
 
     switch (mSnapshotGuideState.style)
     {
-    case SnapshotGuideState::Style::RuleOfThirds:
-    {
-        const F32 offsets[] = { 1.f / 3.f, 2.f / 3.f };
-        for (F32 offset : offsets)
+        case SnapshotGuideState::Style::RuleOfThirds:
         {
-            draw_vertical_norm(offset);
-            draw_horizontal_norm(offset);
-        }
-        break;
-    }
-    case SnapshotGuideState::Style::GoldenRatio:
-    {
-        constexpr F32 phi = 1.61803398875f;
-        const SnapshotGuideState::GoldenOrientation orientation = mSnapshotGuideState.golden_orientation;
-
-        const F32 scale = llmin(frame_width / phi, frame_height);
-        if (scale <= 0.f)
-        {
-            break;
-        }
-
-        const F32 golden_width = phi * scale;
-        const F32 golden_height = scale;
-        const F32 pad_x = frame_width - golden_width;
-        const F32 pad_y = frame_height - golden_height;
-
-        F32 anchor_x = left_px;
-        F32 anchor_y = bottom_px;
-        switch (orientation)
-        {
-        case SnapshotGuideState::GoldenOrientation::TopLeft:
-            anchor_y += pad_y;
-            break;
-        case SnapshotGuideState::GoldenOrientation::TopRight:
-            anchor_x += pad_x;
-            anchor_y += pad_y;
-            break;
-        case SnapshotGuideState::GoldenOrientation::BottomRight:
-            anchor_x += pad_x;
-            break;
-        case SnapshotGuideState::GoldenOrientation::BottomLeft:
-        default:
-            break;
-        }
-
-        auto map_point = [&](F32 local_x, F32 local_y) -> LLVector2
-        {
-            F32 x = local_x;
-            F32 y = local_y;
-
-            if (orientation == SnapshotGuideState::GoldenOrientation::TopLeft ||
-                orientation == SnapshotGuideState::GoldenOrientation::BottomLeft)
+            constexpr std::array<F32, 2> offsets = { 1.f / 3.f, 2.f / 3.f };
+            for (F32 offset : offsets)
             {
-                x = golden_width - local_x;
+                draw_vertical_norm(offset);
+                draw_horizontal_norm(offset);
             }
-
-            if (orientation == SnapshotGuideState::GoldenOrientation::BottomLeft ||
-                orientation == SnapshotGuideState::GoldenOrientation::BottomRight)
-            {
-                y = golden_height - local_y;
-            }
-
-            return LLVector2(anchor_x + x, anchor_y + y);
-        };
-
-        std::vector<std::pair<LLVector2, LLVector2>> line_segments;
-        line_segments.reserve(24);
-
-        auto add_line = [&](F32 x0, F32 y0, F32 x1, F32 y1)
+            break;
+        }
+        case SnapshotGuideState::Style::GoldenRatio:
         {
-            line_segments.emplace_back(map_point(x0, y0), map_point(x1, y1));
-        };
+            constexpr F32                               phi         = 1.61803398875f;
+            const SnapshotGuideState::GoldenOrientation orientation = mSnapshotGuideState.golden_orientation;
 
-        // Outline of the fitted golden rectangle.
-        add_line(0.f, 0.f, golden_width, 0.f);
-        add_line(0.f, golden_height, golden_width, golden_height);
-        add_line(0.f, 0.f, 0.f, golden_height);
-        add_line(golden_width, 0.f, golden_width, golden_height);
-
-        // Generate subdivision lines while we walk the squares.
-        F32 x0 = 0.f;
-        F32 y0 = 0.f;
-        F32 x1 = golden_width;
-        F32 y1 = golden_height;
-
-        for (U32 step = 0; step < 12; ++step)
-        {
-            const F32 width = x1 - x0;
-            const F32 height = y1 - y0;
-            if (width <= 1.f || height <= 1.f)
+            const F32 scale = llmin(frame_width / phi, frame_height);
+            if (scale <= 0.f)
             {
                 break;
             }
 
-            if (step % 4 == 0)
-            {
-                x0 += height;
-                add_line(x0, y0, x0, y1);
-            }
-            else if (step % 4 == 1)
-            {
-                y0 += width;
-                add_line(x0, y0, x1, y0);
-            }
-            else if (step % 4 == 2)
-            {
-                x1 -= height;
-                add_line(x1, y0, x1, y1);
-            }
-            else
-            {
-                y1 -= width;
-                add_line(x0, y1, x1, y1);
-            }
-        }
+            const F32 golden_width  = phi * scale;
+            const F32 golden_height = scale;
+            const F32 pad_x         = frame_width - golden_width;
+            const F32 pad_y         = frame_height - golden_height;
 
-        auto draw_golden_spiral = [&](U32 max_depth)
-        {
-            gGL.begin(LLRender::LINE_STRIP);
-
-            F32 spiral_x0 = 0.f;
-            F32 spiral_y0 = 0.f;
-            F32 spiral_x1 = golden_width;
-            F32 spiral_y1 = golden_height;
-
-            for (U32 step = 0; step < max_depth; ++step)
+            F32 anchor_x = left_px;
+            F32 anchor_y = bottom_px;
+            switch (orientation)
             {
-                const F32 width = spiral_x1 - spiral_x0;
-                const F32 height = spiral_y1 - spiral_y0;
+                case SnapshotGuideState::GoldenOrientation::TopLeft:
+                    anchor_y += pad_y;
+                    break;
+                case SnapshotGuideState::GoldenOrientation::TopRight:
+                    anchor_x += pad_x;
+                    anchor_y += pad_y;
+                    break;
+                case SnapshotGuideState::GoldenOrientation::BottomRight:
+                    anchor_x += pad_x;
+                    break;
+                case SnapshotGuideState::GoldenOrientation::BottomLeft:
+                default:
+                    break;
+            }
+
+            auto map_point = [&](F32 local_x, F32 local_y) -> LLVector2
+            {
+                F32 x = local_x;
+                F32 y = local_y;
+
+                if (orientation == SnapshotGuideState::GoldenOrientation::TopLeft ||
+                    orientation == SnapshotGuideState::GoldenOrientation::BottomLeft)
+                {
+                    x = golden_width - local_x;
+                }
+
+                if (orientation == SnapshotGuideState::GoldenOrientation::BottomLeft ||
+                    orientation == SnapshotGuideState::GoldenOrientation::BottomRight)
+                {
+                    y = golden_height - local_y;
+                }
+
+                return LLVector2(anchor_x + x, anchor_y + y);
+            };
+
+            std::vector<std::pair<LLVector2, LLVector2>> line_segments;
+            line_segments.reserve(24);
+
+            auto add_line = [&](F32 x0, F32 y0, F32 x1, F32 y1)
+            {
+                line_segments.emplace_back(map_point(x0, y0), map_point(x1, y1));
+            };
+
+            // Outline of the fitted golden rectangle.
+            add_line(0.f, 0.f, golden_width, 0.f);
+            add_line(0.f, golden_height, golden_width, golden_height);
+            add_line(0.f, 0.f, 0.f, golden_height);
+            add_line(golden_width, 0.f, golden_width, golden_height);
+
+            // Generate subdivision lines while we walk the squares.
+            F32 x0 = 0.f;
+            F32 y0 = 0.f;
+            F32 x1 = golden_width;
+            F32 y1 = golden_height;
+
+            for (U32 step = 0; step < 12; ++step)
+            {
+                const F32 width  = x1 - x0;
+                const F32 height = y1 - y0;
                 if (width <= 1.f || height <= 1.f)
                 {
                     break;
                 }
 
-                F32 size = 0.f;
-                F32 cx = 0.f;
-                F32 cy = 0.f;
-                F32 start_angle = 0.f;
-                F32 end_angle = 0.f;
-
                 switch (step % 4)
                 {
-                case 0: // left square
-                    size = height;
-                    cx = spiral_x0 + size;
-                    cy = spiral_y0 + size;
-                    start_angle = F_PI;
-                    end_angle = 1.5f * F_PI;
-                    spiral_x0 += size;
-                    break;
-                case 1: // bottom square
-                    size = width;
-                    cx = spiral_x0;
-                    cy = spiral_y0 + size;
-                    start_angle = 1.5f * F_PI;
-                    end_angle = 2.f * F_PI;
-                    spiral_y0 += size;
-                    break;
-                case 2: // right square
-                    size = height;
-                    cx = spiral_x1 - size;
-                    cy = spiral_y0;
-                    start_angle = 0.f;
-                    end_angle = F_PI_BY_TWO;
-                    spiral_x1 -= size;
-                    break;
-                case 3: // top square
-                default:
-                    size = width;
-                    cx = spiral_x0 + size;
-                    cy = spiral_y1 - size;
-                    start_angle = F_PI_BY_TWO;
-                    end_angle = F_PI;
-                    spiral_y1 -= size;
-                    break;
-                }
-
-                if (size <= 0.f)
-                {
-                    break;
-                }
-
-                const S32 segments = llclamp((S32)(size / 4.f), 12, 64);
-                for (S32 i = 0; i <= segments; ++i)
-                {
-                    const F32 t = start_angle + (end_angle - start_angle) * (F32)i / (F32)segments;
-                    const F32 local_x = cx + cosf(t) * size;
-                    const F32 local_y = cy + sinf(t) * size;
-                    LLVector2 mapped = map_point(local_x, local_y);
-                    gGL.vertex2f(mapped.mV[0], mapped.mV[1]);
+                    case 0:
+                        x0 += height;
+                        add_line(x0, y0, x0, y1);
+                        break;
+                    case 1:
+                        y0 += width;
+                        add_line(x0, y0, x1, y0);
+                        break;
+                    case 2:
+                        x1 -= height;
+                        add_line(x1, y0, x1, y1);
+                        break;
+                    default:
+                        y1 -= width;
+                        add_line(x0, y1, x1, y1);
+                        break;
                 }
             }
 
-            gGL.end();
-        };
-
-        gGL.flush();
-        const F32 line_width = llmax(thickness, 1.f);
-        glLineWidth(line_width);
-        draw_golden_spiral(12);
-        glLineWidth(1.f);
-
-        if (!line_segments.empty())
-        {
-            gGL.flush();
-            glLineWidth(line_width);
-            gGL.begin(LLRender::LINES);
-            for (const auto& segment : line_segments)
+            auto draw_golden_spiral = [&](U32 max_depth)
             {
-                gGL.vertex2f(segment.first.mV[0], segment.first.mV[1]);
-                gGL.vertex2f(segment.second.mV[0], segment.second.mV[1]);
+                gGL.begin(LLRender::LINE_STRIP);
+
+                F32 spiral_x0 = 0.f;
+                F32 spiral_y0 = 0.f;
+                F32 spiral_x1 = golden_width;
+                F32 spiral_y1 = golden_height;
+
+                for (U32 step = 0; step < max_depth; ++step)
+                {
+                    const F32 width  = spiral_x1 - spiral_x0;
+                    const F32 height = spiral_y1 - spiral_y0;
+                    if (width <= 1.f || height <= 1.f)
+                    {
+                        break;
+                    }
+
+                    F32 size        = 0.f;
+                    F32 cx          = 0.f;
+                    F32 cy          = 0.f;
+                    F32 start_angle = 0.f;
+                    F32 end_angle   = 0.f;
+
+                    switch (step % 4)
+                    {
+                        case 0: // left square
+                            size        = height;
+                            cx          = spiral_x0 + size;
+                            cy          = spiral_y0 + size;
+                            start_angle = F_PI;
+                            end_angle   = 1.5f * F_PI;
+                            spiral_x0 += size;
+                            break;
+                        case 1: // bottom square
+                            size        = width;
+                            cx          = spiral_x0;
+                            cy          = spiral_y0 + size;
+                            start_angle = 1.5f * F_PI;
+                            end_angle   = 2.f * F_PI;
+                            spiral_y0 += size;
+                            break;
+                        case 2: // right square
+                            size        = height;
+                            cx          = spiral_x1 - size;
+                            cy          = spiral_y0;
+                            start_angle = 0.f;
+                            end_angle   = F_PI_BY_TWO;
+                            spiral_x1 -= size;
+                            break;
+                        case 3: // top square
+                        default:
+                            size        = width;
+                            cx          = spiral_x0 + size;
+                            cy          = spiral_y1 - size;
+                            start_angle = F_PI_BY_TWO;
+                            end_angle   = F_PI;
+                            spiral_y1 -= size;
+                            break;
+                    }
+
+                    if (size <= 0.f)
+                    {
+                        break;
+                    }
+
+                    const S32 segments = llclamp((S32)(size / 4.f), 12, 64);
+                    for (S32 i = 0; i <= segments; ++i)
+                    {
+                        const F32 t       = start_angle + (end_angle - start_angle) * (F32)i / (F32)segments;
+                        const F32 local_x = cx + cosf(t) * size;
+                        const F32 local_y = cy + sinf(t) * size;
+                        LLVector2 mapped  = map_point(local_x, local_y);
+                        gGL.vertex2f(mapped.mV[0], mapped.mV[1]);
+                    }
+                }
+
+                gGL.end();
+            };
+
+            gGL.flush();
+            const F32 line_width = llmax(thickness, 1.f);
+            gGL.setLineWidth(line_width);
+            draw_golden_spiral(12);
+            gGL.setLineWidth(1.f);
+
+            if (!line_segments.empty())
+            {
+                gGL.flush();
+                gGL.setLineWidth(line_width);
+                gGL.begin(LLRender::LINES);
+                for (const auto& segment : line_segments)
+                {
+                    gGL.vertex2f(segment.first.mV[VX], segment.first.mV[VY]);
+                    gGL.vertex2f(segment.second.mV[VX], segment.second.mV[VY]);
+                }
+                gGL.end();
+                gGL.setLineWidth(1.f);
             }
-            gGL.end();
-            glLineWidth(1.f);
+            break;
         }
-        break;
-    }
-    case SnapshotGuideState::Style::Diagonal:
-    {
-        const F32 line_width = llmax(thickness, 1.f);
-        gGL.flush();
-        glLineWidth(line_width);
-        gGL.begin(LLRender::LINES);
-        gGL.vertex2f(left_px, bottom_px);
-        gGL.vertex2f(right_px, top_px);
-        gGL.vertex2f(left_px, top_px);
-        gGL.vertex2f(right_px, bottom_px);
-        gGL.end();
-        glLineWidth(1.f);
-        break;
-    }
+        case SnapshotGuideState::Style::Diagonal:
+        {
+            const F32 line_width = llmax(thickness, 1.f);
+            gGL.flush();
+            gGL.setLineWidth(line_width);
+            gGL.begin(LLRender::LINES);
+            gGL.vertex2f(left_px, bottom_px);
+            gGL.vertex2f(right_px, top_px);
+            gGL.vertex2f(left_px, top_px);
+            gGL.vertex2f(right_px, bottom_px);
+            gGL.end();
+            gGL.setLineWidth(1.f);
+            break;
+        }
     }
 
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     gGL.popMatrix();
     gGL.matrixMode(LLRender::MM_PROJECTION);
     gGL.popMatrix();
-    gGLLastMatrix = NULL;
+    gGLLastMatrix = nullptr;
 
     ui_shader->unbind();
 
     mSnapshotGuideState.active = false;
 }
 // </FS:Beq>
+
 // <FS:Beq> FIRE-32023 Focus Point Rendering
 void LLPipeline::renderFocusPoint()
 {
-
     static LLCachedControl<bool> render_focus_point_crosshair(gSavedSettings, "FSFocusPointRender", false);
-    if ( sDoFEnabled && render_focus_point_crosshair && gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    if (sDoFEnabled && render_focus_point_crosshair && gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
     {
         gDebugProgram.bind();
         LLVector3 focus_point = sLastFocusPoint;
         F32 size = 0.02f;
-        LLGLDepthTest gls_depth(GL_FALSE);    
+        LLGLDepthTest gls_depth(GL_FALSE);
         gGL.pushMatrix();
         gGL.translatef(focus_point.mV[VX], focus_point.mV[VY], focus_point.mV[VZ]);
            
@@ -4913,23 +4912,24 @@ void LLPipeline::renderFocusPoint()
         }
         gGL.vertex3f(-size, 0.0f, 0.0f);
         gGL.vertex3f(size, 0.0f, 0.0f);
-    
+
         // Y-axis (Green)
         gGL.vertex3f(0.0f, -size, 0.0f);
         gGL.vertex3f(0.0f, size, 0.0f);
-    
+
         // Z-axis (Blue)
         gGL.vertex3f(0.0f, 0.0f, -size);
         gGL.vertex3f(0.0f, 0.0f, size);
     
         gGL.end();
-    
+
         gGL.popMatrix();
         gGL.flush();
         gDebugProgram.unbind();
-    }      
+    }
 }
 // </FS:Beq>
+
 void LLPipeline::renderPhysicsDisplay()
 {
     if (!hasRenderDebugMask(LLPipeline::RENDER_DEBUG_PHYSICS_SHAPES))
@@ -4940,9 +4940,9 @@ void LLPipeline::renderPhysicsDisplay()
     gGL.flush();
     gDebugProgram.bind();
 
-    LLGLEnable(GL_POLYGON_OFFSET_LINE);
+    LLGLEnable ploygon_offset_line(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(3.f, 3.f);
-    glLineWidth(3.f);
+    gGL.setLineWidth(3.f);
     LLGLEnable blend(GL_BLEND);
     gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
@@ -4984,7 +4984,7 @@ void LLPipeline::renderPhysicsDisplay()
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
     }
-    glLineWidth(1.f);
+    gGL.setLineWidth(1.f);
     gDebugProgram.unbind();
 
 }
