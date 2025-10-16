@@ -25,6 +25,7 @@
 	<menu_item_call label="ズームイン" name="zoom_in"/>
 	<menu_item_call label="グループに招待" name="GroupInvite"/>
 	<menu_item_call label="スクリプト情報取得" name="ScriptInfo"/>
+	<menu_item_call label="チャットの履歴…" name="chat_history"/>
 	<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock"/>
 	<menu_item_call label="報告する" name="report"/>
 	<menu_item_call label="フリーズする" name="freeze"/>
