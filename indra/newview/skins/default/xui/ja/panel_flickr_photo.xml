@@ -17,10 +17,13 @@
 	<text name="working_lbl">
 		更新しています…
 	</text>
-	<check_box label="フレームキャプチャを表示" tool_tip="スナップショットの領域を囲むフレームを画面上に表示します。スナップショットの外側にあるシーンの部分は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
-	<check_box label="フレーミングガイド" tool_tip="スナップショットのフレーム内にフレーミングガイド（三分割法）を表示します。" name="show_guides"/>
+	<panel name="options_panel">
+		<check_box label="フレームを表示" tool_tip="スナップショットの領域を囲むフレームを画面上に表示します。スナップショットの外側にあるシーンの部分は彩度が低くなり、わずかにぼやけます。" name="show_frame"/>
+		<check_box label="構図ガイドを表示" tool_tip="スナップショットのフレーム内に構図ヘルパーを表示します。" name="show_guides"/>
+		<button tool_tip="フレームガイド設定を開きます。" name="guide_settings_btn"/>
+	</panel>
 	<button label="更新" name="new_snapshot_btn" tool_tip="クリックして更新"/>
-	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックしてプレビューを切り替える"/>
+	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックしてプレビューを切り替えます。"/>
 	<text name="title_label">
 		タイトル：
 	</text>

@@ -3936,7 +3936,7 @@ https://wiki.firestormviewer.org/fs_voice
 		サイドパネルから、インベントリや衣装、プロフィールなどに素早くアクセスできます。
 	</notification>
 	<notification label="移動" name="HintMove">
-		歩行や走行は、「移動」パネルを開き、矢印コントロールによって操作します。この操作はキーボードの矢印キーで実行することも可能です。
+		歩いたり走ったりするには、「移動」パネルを開き、矢印コントロールで操作します。この操作はキーボードの矢印キーで実行することも可能です。
 	</notification>
 	<notification name="HintMoveClick">
 		１，クリックで移動

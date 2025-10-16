@@ -219,14 +219,27 @@
          layout="topleft"
          left="30"
          top_pad="7"
-         width="180"
+         width="150"
          name="show_guides" />
+        <button
+         enabled_control="FSSnapshotShowCaptureFrame"
+         layout="topleft"
+         left_pad="5"
+         top_delta="-20"
+         width="24"
+         height="24"
+         label="#"
+         font="SansSerifLarge"
+         tool_tip="Open frame guide settings"
+         name="guide_settings_btn">
+            <button.commit_callback function="Floater.Show" parameter="snapshot_guide_settings" />
+        </button>
         <check_box
          label="Freeze frame (fullscreen)"
          layout="topleft"
 		 height="16"
          left="10"
-         top_pad="1"
+         top_pad="9"
          width="180"
          name="freeze_frame_check" />
         <check_box
