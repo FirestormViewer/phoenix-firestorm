@@ -1766,7 +1766,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
                     plain_sign += glob.glob(resources + "*.dylib")
                     plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
-                    plain_sign += glob.glob( app_in_dmg + "/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib" )
+                    plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
 
                     deep_sign = [
                         # <FS:ND> Firestorm does not ship SLVersionChecker
