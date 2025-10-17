@@ -12,8 +12,9 @@
 		正在更新...
 	</text>
 	<panel name="snapshot_frame_panel">
-		<check_box label="顯示邊框" name="show_frame" tool_tip="顯示拍攝區域的邊框。場景中超出拍攝範圍的部分會被消色並輕微模糊處理。"/>
-		<check_box label="顯示指導線" name="show_guides" tool_tip="在拍攝範圍內顯示拍攝指導線（例如三分法）。"/>
+		<check_box label="顯示捕捉框架" tool_tip="在螢幕上顯示一個框架，圍繞快照區域。場景中超出快照範圍的部分將被去飽和並稍微模糊。" name="show_frame"/>
+		<check_box label="顯示拍攝輔助線" name="show_guides" tool_tip="在取景範圍內顯示拍攝輔助線（井字構圖）。" />
+		<button tool_tip="打開拍攝輔助線設定" name="guide_settings_btn" />
 	</panel>
 	<button label="更新" name="new_snapshot_btn" tool_tip="點擊更新"/>
 	<button label="預覽" name="big_preview_btn" tool_tip="點擊切換預覽狀態"/>
