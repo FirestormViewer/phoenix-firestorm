@@ -22,7 +22,14 @@ if (HAVOK)
    include(Havok)
    use_prebuilt_binary(llphysicsextensions_source)
    set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/src)
-   target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions)
+   if(DARWIN)
+      set(LLPHYSICSEXTENSIONS_STUB_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
+      # can't set these library dependencies per-arch here, need to do it using XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=*] in newview/CMakeLists.txt
+      #target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions)
+      #target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensionsstub)
+   else()
+     target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions)
+   endif()
 elseif (HAVOK_TPV)
    use_prebuilt_binary(llphysicsextensions_tpv)
    target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions_tpv)
@@ -41,7 +48,27 @@ else (HAVOK)
 #   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
 # </FS:ND>
 
-   target_link_libraries( llphysicsextensions_impl INTERFACE nd_hacdConvexDecomposition hacd nd_Pathing )
+   # <FS:TJ> Use find_library to make our lives easier
+   find_library(ND_HACDCONVEXDECOMPOSITION_LIBRARY
+      NAMES
+      nd_hacdConvexDecomposition.lib
+      libnd_hacdConvexDecomposition.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   find_library(HACD_LIBRARY
+      NAMES
+      hacd.lib
+      libhacd.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   find_library(ND_PATHING_LIBRARY
+      NAMES
+      nd_pathing.lib
+      libnd_pathing.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
+   # </FS:TJ>
 
    # <FS:ND> include paths for LLs version and ours are different.
    target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/ )

@@ -321,12 +321,8 @@ public:
     void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 private:
-    LLTextBox   *mTextBalance;
-    LLTextBox   *mTextHealth;
     LLTextBox   *mTextTime;
     LLTextBox   *mFPSText; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
-
-    LLTextBox*  mTextParcelName;
 
     LLStatGraph *mSGBandwidth;
     LLStatGraph *mSGPacketLoss;
@@ -361,7 +357,6 @@ private:
     LLPanelNearByMedia* mPanelNearByMedia;
 
     LLPanel*                mParcelInfoPanel;
-    LLButton*               mInfoBtn;
     LLTextBox*              mParcelInfoText;
     LLTextBox*              mDamageText;
     LLIconCtrl*             mParcelIcon[ICON_COUNT];

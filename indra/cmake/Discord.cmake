@@ -20,13 +20,13 @@ add_library(fs::discord INTERFACE IMPORTED)
 include(Prebuilt)
 use_prebuilt_binary(discord-rpc)
 
-if (WINDOWS)
-  target_link_libraries(fs::discord INTERFACE discord-rpc)
-elseif (LINUX)
-  target_link_libraries(fs::discord INTERFACE discord-rpc)
-elseif (DARWIN)
-  target_link_libraries(fs::discord INTERFACE discord-rpc)
-endif (WINDOWS)
+find_library(DISCORD_LIBRARY
+  NAMES
+  discord-rpc.lib
+  libdiscord-rpc.a
+  PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+target_link_libraries(fs::discord INTERFACE ${DISCORD_LIBRARY})
 
 target_include_directories(fs::discord SYSTEM INTERFACE
         ${AUTOBUILD_INSTALL_DIR}/include/discord-rpc
