@@ -1718,7 +1718,7 @@ Would you like to shutdown the viewer and launch it manually again in order to a
    icon="alertmodal.tga"
    name="ChangeLanguage"
    type="alertmodal">
-The selected language or zime format will be applied after restarting [APP_NAME].
+The selected language or time format will be applied after restarting [APP_NAME].
   </notification>
 
   <notification
