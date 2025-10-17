@@ -1588,12 +1588,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path("*.dylib")
                         self.path("plugins.dat")
 
-                # do this install_name_tool *after* media plugin is copied over
-                dylibexecutablepath = self.dst_path_of('llplugin/media_plugin_cef.dylib')
-                self.run_command_shell('install_name_tool -change '
-                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
-                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
-
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no
         # arguments yields a slightly smaller binary but makes crash logs mostly useless.

@@ -195,14 +195,14 @@
         <string>ndPhysicsStub</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
+          <key>darwin64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7d375112b162e32e37262da4a6c0a702</string>
+              <string>b0f4fd59a72cf04db2cc426241a3850c</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-202330107.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin64-252581439.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -250,9 +250,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>94fc457c46e1fb94b31251bd4747d10f</string>
+              <string>439af4161d99a3d12e0d6d90cb948687</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/glod-1.0pre3.252621603-darwin64-252621603.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -297,14 +297,14 @@
         <string>gntp-growl</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
+          <key>darwin64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33300134846d0f00ac4f31c1a190e3e6</string>
+              <string>5362f98bf0b0c5b12acacd6b7b1e427e</string>
               <key>url</key>
-              <uri>https://3p.firestormviewer.org/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
+              <uri>https://3p.firestormviewer.org/gntp_growl-1.0-darwin64-252631716.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -378,9 +378,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3bc297a0fa47094bb52d361f80186387</string>
+              <string>91b24b83d3f8461286f783f28fcd9a66</string>
               <key>url</key>
-              <uri>https://3p.firestormviewer.org/discord_rpc-3.4.0-darwin64-192522358.tar.bz2</uri>
+              <uri>https://3p.firestormviewer.org/discord_rpc-3.4.0-darwin64-252621453.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>darwin64</string>

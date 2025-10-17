@@ -2508,7 +2508,7 @@ if (WINDOWS)
 elseif (DARWIN)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
-        RESOURCE SecondLife.xib
+        RESOURCE Firestorm.xib
         LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip"
         #<FS:TS> Force the SDK version in the linked executable to be 10.12. This will fool
         # macOS into using the pre-Mojave display system, avoiding the blurry display that

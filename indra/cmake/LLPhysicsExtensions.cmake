@@ -48,7 +48,27 @@ else (HAVOK)
 #   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
 # </FS:ND>
 
-   target_link_libraries( llphysicsextensions_impl INTERFACE nd_hacdConvexDecomposition hacd nd_Pathing )
+   # <FS:TJ> Use find_library to make our lives easier
+   find_library(ND_HACDCONVEXDECOMPOSITION_LIBRARY
+      NAMES
+      nd_hacdConvexDecomposition.lib
+      libnd_hacdConvexDecomposition.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   find_library(HACD_LIBRARY
+      NAMES
+      hacd.lib
+      libhacd.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   find_library(ND_PATHING_LIBRARY
+      NAMES
+      nd_pathing.lib
+      libnd_pathing.a
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+   target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
+   # </FS:TJ>
 
    # <FS:ND> include paths for LLs version and ours are different.
    target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/ )
