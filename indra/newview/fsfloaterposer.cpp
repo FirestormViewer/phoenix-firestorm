@@ -48,6 +48,7 @@
 #include "llloadingindicator.h"
 #include "llmutelist.h"
 #include "llcallingcard.h"
+#include "llappviewer.h"
 
 namespace
 {
@@ -67,6 +68,7 @@ constexpr std::string_view POSER_SAVEEXTERNALFORMAT_SAVE_KEY   = "FSPoserSaveExt
 constexpr std::string_view POSER_SAVECONFIRMREQUIRED_SAVE_KEY  = "FSPoserOnSaveConfirmOverwrite";
 constexpr std::string_view POSER_UNLOCKPELVISINBVH_SAVE_KEY    = "FSPoserPelvisUnlockedForBvhSave";
 constexpr std::string_view POSER_ONLYSHOWFRIENDS_SAVE_KEY      = "FSPoserOnlyShowFriendsOnModelsList";
+constexpr std::string_view POSER_SHOWBONEHIGHLIGHTS_SAVE_KEY   = "FSPoserShowBoneHighlights";
 constexpr char             ICON_SAVE_OK[]                      = "icon_rotation_is_own_work";
 constexpr char             ICON_SAVE_FAILED[]                  = "icon_save_failed_button";
 
@@ -280,6 +282,76 @@ void FSFloaterPoser::onFocusLost()
     {
         LLEditMenuHandler::gEditMenuHandler = nullptr;
     }
+}
+
+void FSFloaterPoser::draw()
+{
+    LLFloater::draw();
+
+    drawOnHoverJointHint();
+}
+
+void FSFloaterPoser::markSelectedJointsToHighlight()
+{
+    bool toolsEnabled = mToggleVisualManipulators->getValue().asBoolean();
+    if (toolsEnabled)
+        return;
+
+    bool showHighlights = gSavedSettings.getBOOL(POSER_SHOWBONEHIGHLIGHTS_SAVE_KEY);
+    if (!showHighlights)
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    if (selectedJoints.size() < 1)
+        return;
+
+    std::string jointName   = selectedJoints[0]->jointName();
+    bool        isRightLimb = jointName.find("Right") != std::string::npos;
+    bool        isLeftLimb  = jointName.find("Left") != std::string::npos;
+
+    if (!(isRightLimb || isLeftLimb))
+        return;
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return;
+
+    mLastSelectedJoint = selectedJoints[0];
+    timeFadeStartedMicrosec = gFrameTime;
+}
+
+void FSFloaterPoser::drawOnHoverJointHint()
+{
+    if (!mLastSelectedJoint)
+        return;
+
+    constexpr U64 GLOW_TIME_US = 800000;
+    U64           fadeTimeUs   = gFrameTime - timeFadeStartedMicrosec;
+    if (fadeTimeUs > GLOW_TIME_US)
+        return;
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return;
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return;
+
+    LLJoint* joint = avatar->getJoint(std::string(mLastSelectedJoint->jointName()));
+    if (!joint)
+        return;
+
+    F32              alphaFade            = 1.f * (GLOW_TIME_US - fadeTimeUs) / GLOW_TIME_US;
+    static LLUIColor mBeaconColor         = LLUIColorTable::getInstance()->getColor("AreaSearchBeaconColor");
+    LLColor4         beaconColour         = mBeaconColor.get();
+    beaconColour.setAlpha(alphaFade);
+    LLVector3        joint_world_position = joint->getWorldPosition();
+
+    static LLCachedControl<S32> beacon_line_width(gSavedSettings, "DebugBeaconLineWidth");
+    gObjectList.addDebugBeacon(joint_world_position, "", beaconColour, beaconColour, beacon_line_width);
 }
 
 void FSFloaterPoser::enableVisualManipulators()
@@ -2300,6 +2372,7 @@ void FSFloaterPoser::onJointTabSelect()
     refreshTrackpadCursor();
     enableOrDisableRedoAndUndoButton();
     refreshScaleSlidersAndSpinners();
+    markSelectedJointsToHighlight();
 }
 
 E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(const std::string& jointName) const

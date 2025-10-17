@@ -100,6 +100,8 @@ public:
     void onClose(bool app_quitting) override;
     void onFocusReceived() override;
     void onFocusLost() override;
+    virtual void draw() override;
+
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
@@ -253,6 +255,10 @@ public:
     // visual manipulators control
     void enableVisualManipulators();
     void disableVisualManipulators();
+
+    // Visual cue for which bone is under the mouse-cursor
+    void drawOnHoverJointHint();
+    void markSelectedJointsToHighlight();
 
     // UI Event Handlers
     void onAvatarsRefresh();
@@ -490,10 +496,12 @@ public:
     /// </remarks>
     static F32 clipRange(F32 value);
 
-    LLToolset*  mLastToolset{ nullptr };
-    LLTool*     mJointRotTool{ nullptr };
-    
-    LLVector3          mLastSliderRotation;
+    LLToolset* mLastToolset{ nullptr };
+    LLTool*    mJointRotTool{ nullptr };
+
+    LLVector3 mLastSliderRotation;
+    FSPoserAnimator::FSPoserJoint* mLastSelectedJoint{ nullptr };
+    U64                            timeFadeStartedMicrosec;
 
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 

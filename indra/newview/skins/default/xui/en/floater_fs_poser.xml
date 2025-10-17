@@ -1103,6 +1103,17 @@ width="430">
 						 <check_box.commit_callback
 							 function="Poser.RefreshAvatars"/>
 						 </check_box>
+						<check_box
+						 control_name="FSPoserShowBoneHighlights"
+						 name="show_bone_highlights_checkbox"
+						 height="16"
+						 label="Show Bone Highlights"
+						 follows="left|top"
+						 left="5"
+						 tool_tip="When you click a Left or Right body part, highlight it for a second. Disables with Manipulator. Uses Preferences > Area Search Beacon colour."
+						 top_pad="5"
+						 width="134">
+						 </check_box>
 					</panel>
 				</tab_container>
 				<button
