@@ -292,7 +292,6 @@ private:
 
     S32 mInputEditorPad;
     S32 mChatLayoutPanelHeight;
-    S32 mFloaterHeight;
 
     uuid_vec_t mInvitedParticipants;
     uuid_vec_t mPendingParticipants;
