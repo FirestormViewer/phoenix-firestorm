@@ -281,6 +281,7 @@ void LLWebRTCVoiceClient::initWebRTC()
     llwebrtc::init(this);
 
     mWebRTCDeviceInterface = llwebrtc::getDeviceInterface();
+    mWebRTCDeviceInterface->unsetDevicesObserver(this); // <FS:Ansariel> initWebRTC() can get multiple times - make sure to unset previous observers before re-adding
     mWebRTCDeviceInterface->setDevicesObserver(this);
     mMainQueue = LL::WorkQueue::getInstance("mainloop");
     refreshDeviceLists();
