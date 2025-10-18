@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <panel
-    height="590"
+    height="610"
     width="272"
     follows="all"
     layout="topleft"
@@ -137,33 +137,59 @@
       width="251">
     Refreshing...
   </text>
-  <check_box
-      control_name="FSSnapshotShowCaptureFrame"
-      label="Show capture frame"
-      tool_tip="Show a frame on-screen that surrounds the areas of the snapshot. Parts of the scene that are outside of the snapshot will be de-saturated and slightly blurred."
-      layout="topleft"
-      left="10"
-      top_pad="7"
-      width="124"
-      name="show_frame" />
-  <check_box
-      enabled_control="FSSnapshotShowCaptureFrame"
-      control_name="FSSnapshotShowGuides"
-      label="Framing guide"
-      tool_tip="Show framing guide (rule of thirds) inside the snapshot frame."
-      layout="topleft"
-      left_pad="10"
-      width="60"
-      name="show_guides" />
-  <view_border
-      bevel_style="in"
-      follows="left|top"
-      layout="topleft"
-      height="1"
-      left="10"
-      name="refresh_border"
-      width="250"
-      top_pad="0" />
+  <panel
+        height="25"
+        width="250"
+        visible="true"
+        name="snapshot_frame_panel"
+        top_pad="3"
+        follows="left|top|right"
+        layout="topleft"
+        right="-10"
+        left="10"
+    >
+        <check_box
+            control_name="FSSnapshotShowCaptureFrame"
+            label="Show Snapshot Frame"
+            tool_tip="Show a frame on-screen that surrounds the areas of the snapshot. Parts of the scene that are outside of the snapshot will be de-saturated and slightly blurred."
+            layout="topleft"
+            left="10"
+            top_pad="8"
+            width="110"
+            name="show_frame" />
+        <check_box
+            top_pad="8"
+            enabled_control="FSSnapshotShowCaptureFrame"
+            control_name="FSSnapshotShowGuides"
+            label="Show Composition Guide"
+            tool_tip="Show composition helper inside the snapshot frame."
+            layout="topleft"
+            left="10"
+            width="110"
+            name="show_guides" />
+        <button
+            enabled_control="FSSnapshotShowCaptureFrame"
+            layout="topleft"
+            left="226"
+            top_delta="-20"
+            width="25"
+            height="25"
+            label="#"
+            font="SansSerifLarge"
+            tool_tip="Open frame guide settings"
+            name="guide_settings_btn">
+            <button.commit_callback function="Floater.Show" parameter="snapshot_guide_settings" />
+        </button>
+    </panel>
+    <view_border
+    bevel_style="in"
+    follows="left|top"
+    layout="topleft"
+    height="1"
+    left="10"
+    name="refresh_border"
+    width="250"
+    top_pad="14" />
   <button
       follows="left|top"
       layout="topleft"
@@ -242,133 +268,155 @@
       type="string"
       word_wrap="true">
   </text_editor>
-  <check_box
-      follows="left|top"
+  <panel
+      height="90"
+      width="250"
+      visible="true"
+      name="options_panel"
+      top_pad="0"
+      follows="left|top|right"
       layout="topleft"
-      initial_value="false"
-      label="Include location"
-      name="add_location_cb"
-      left="9"
-      height="16"
-      top_pad="8" />
-  <check_box
-      control_name="FSPrimfeedAddToPublicGallery"
-      follows="top|left"
-      layout="topleft"
-      initial_value="false"
-      label="Add to public gallery"
-      name="primfeed_add_to_public_gallery"
-      left="9"
-      height="16"
-      top_pad="8" />
-    <button
-     follows="top|left"
-     layout="topleft"
-     height="16"
-     image_pressed="Info_Press"
-     image_unselected="Info_Over"
-     name="info_btn_pub_gallery"
-     right="-3"
-     top_delta="-2"
-     width="16"
-     commit_callback.function="Primfeed.Info"
-     commit_callback.parameter="https://docs.primfeed.com/featured-content/public-gallery"
-     />
-     <check_box
-     enabled_control="FSPrimfeedAddToPublicGallery"
-     control_name="FSPrimfeedCommercialContent"
-     follows="top|left"
-     layout="topleft"
-     initial_value="false"
-     label="Commercial content"
-     name="primfeed_commercial_content"
-     left="9"
-     height="16"
-     top_pad="8" />
-     <button
-      follows="top|left"
-      layout="topleft"
-      height="16"
-      image_pressed="Info_Press"
-      image_unselected="Info_Over"
-      right="-3"
-      top_delta="-2"
-      name="info_btn_commercial_content"
-      width="16"
-      commit_callback.function="Primfeed.Info"
-      commit_callback.parameter="https://docs.primfeed.com/legal/terms-of-service#commercial-content"
-      />
-  <combo_box
-      control_name="FSPrimfeedPhotoRating"
-      follows="left|top"
-      layout="topleft"
-      top_pad="8"
-      left="10"
-      name="rating_combobox"
-      tool_tip="Primfeed content rating"
-      height="21"
-      width="235">
-    <combo_box.item
-        label="General"
-        name="GeneralRating"
-        value="1" />
-    <combo_box.item
-        label="Moderate"
-        name="ModerateRating"
-        value="2" />
-    <combo_box.item
-        label="Adult"
-        name="AdultRating"
-        value="3" />
-    <combo_box.item
-        label="Adult+"
-        name="AdultPlusRating"
-        value="4" />
-  </combo_box>
-  <button
-     follows="top|left"
-     layout="topleft"
-     height="16"
-     image_pressed="Info_Press"
-     image_unselected="Info_Over"
-     right="-3"
-     name="info_btn_ratings"
-     top_delta="0"
-     width="16"
-     commit_callback.function="Primfeed.Info"
-     commit_callback.parameter="https://docs.primfeed.com/help-and-faq/maturity-ratings"
-     />
-  <check_box
-     control_name="FSPrimfeedOpenURLOnPost"
-     follows="top|left"
-     layout="topleft"
-     initial_value="false"
-     label="Open in browser after posting"
-     tool_tip="Automatically open the Primfeed post in your web browser after posting."
-     name="primfeed_open_url_on_post"
-     left="9"
-     height="16"
-     top_pad="8" />
-  <button
-      follows="left|top"
-      layout="topleft"
-      top_pad="8"
-      left="10"
-      height="23"
-      label="Share"
-      name="post_photo_btn"
-      width="100">
-    <button.commit_callback function="SocialSharing.SendPhoto" />
-  </button>
-  <button
-      follows="right|top"
-      layout="topleft"
-      height="23"
-      label="Cancel"
-      name="cancel_photo_btn"
       right="-10"
-      top_delta="0"
-      width="100">
-    <button.commit_callback function="SocialSharing.Cancel" />
-  </button>
+      left="10">
+    <check_box
+        follows="left|top"
+        layout="topleft"
+        initial_value="false"
+        label="Include location"
+        name="add_location_cb"
+        left="9"
+        height="16"
+        top_pad="4" />
+    <check_box
+        control_name="FSPrimfeedAddToPublicGallery"
+        follows="top|left"
+        layout="topleft"
+        initial_value="false"
+        label="Add to public gallery"
+        name="primfeed_add_to_public_gallery"
+        left="9"
+        height="16"
+        top_pad="4" />
+        <button
+        follows="top|left"
+        layout="topleft"
+        height="16"
+        image_pressed="Info_Press"
+        image_unselected="Info_Over"
+        name="info_btn_pub_gallery"
+        right="-3"
+        top_delta="-2"
+        width="16"
+        commit_callback.function="Primfeed.Info"
+        commit_callback.parameter="https://docs.primfeed.com/featured-content/public-gallery"
+        />
+        <check_box
+        enabled_control="FSPrimfeedAddToPublicGallery"
+        control_name="FSPrimfeedCommercialContent"
+        follows="top|left"
+        layout="topleft"
+        initial_value="false"
+        label="Commercial content"
+        name="primfeed_commercial_content"
+        left="9"
+        height="16"
+        top_pad="4" />
+        <button
+        follows="top|left"
+        layout="topleft"
+        height="16"
+        image_pressed="Info_Press"
+        image_unselected="Info_Over"
+        right="-3"
+        top_delta="-2"
+        name="info_btn_commercial_content"
+        width="16"
+        commit_callback.function="Primfeed.Info"
+        commit_callback.parameter="https://docs.primfeed.com/legal/terms-of-service#commercial-content"
+        />
+    <combo_box
+        control_name="FSPrimfeedPhotoRating"
+        follows="left|top"
+        layout="topleft"
+        top_pad="4"
+        left="10"
+        name="rating_combobox"
+        tool_tip="Primfeed content rating"
+        height="21"
+        width="215">
+        <combo_box.item
+            label="General"
+            name="GeneralRating"
+            value="1" />
+        <combo_box.item
+            label="Moderate"
+            name="ModerateRating"
+            value="2" />
+        <combo_box.item
+            label="Adult"
+            name="AdultRating"
+            value="3" />
+        <combo_box.item
+            label="Adult+"
+            name="AdultPlusRating"
+            value="4" />
+    </combo_box>
+    <button
+        follows="top|left"
+        layout="topleft"
+        height="16"
+        image_pressed="Info_Press"
+        image_unselected="Info_Over"
+        right="-3"
+        name="info_btn_ratings"
+        top_delta="0"
+        width="16"
+        commit_callback.function="Primfeed.Info"
+        commit_callback.parameter="https://docs.primfeed.com/help-and-faq/maturity-ratings"
+        />
+  </panel>
+  <panel
+        height="50"
+        width="250"
+        visible="true"
+        name="share_options_panel"
+        top_pad="0"
+        follows="left|top|right"
+        layout="topleft"
+        right="-10"
+        left="10">
+    <check_box
+        control_name="FSPrimfeedOpenURLOnPost"
+        follows="top|left"
+        layout="topleft"
+        initial_value="false"
+        label="Open in browser after posting"
+        tool_tip="Automatically open the Primfeed post in your web browser after posting."
+        name="primfeed_open_url_on_post"
+        left="0"
+        height="16"
+        top="0"/>
+    <button
+        follows="left|top"
+        layout="topleft"
+        top_pad="4"
+        left="0"
+        height="23"
+        label="Share"
+        name="post_photo_btn"
+        width="100">
+        <button.commit_callback function="SocialSharing.SendPhoto" />
+    </button>
+    <button
+        follows="right|top"
+        layout="topleft"
+        height="23"
+        label="Cancel"
+        name="cancel_photo_btn"
+        right="-10"
+        top_delta="0"
+        width="100">
+        <button.commit_callback function="SocialSharing.Cancel" />
+    </button>
+  </panel>
 </panel>

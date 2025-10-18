@@ -11,8 +11,11 @@
 	<text name="working_lbl">
 		更新...
 	</text>
-	<check_box label="顯示捕捉框架" tool_tip="在螢幕上顯示一個框架，圍繞快照區域。場景中超出快照範圍的部分將被去飽和並稍微模糊。" name="show_frame"/>
-	<check_box label="顯示構圖指南" tool_tip="在快照框架內顯示構圖指南（九宮格規則）" name="show_guides"/>
+	<panel name="options_panel">
+		<check_box label="顯示捕捉框架" tool_tip="在螢幕上顯示一個框架，圍繞快照區域。場景中超出快照範圍的部分將被去飽和並稍微模糊。" name="show_frame"/>
+		<check_box label="顯示拍攝輔助線" name="show_guides" tool_tip="在取景範圍內顯示拍攝輔助線（井字構圖）。" />
+		<button tool_tip="打開拍攝輔助線設定" name="guide_settings_btn" />
+	</panel>
 	<button label="更新" name="new_snapshot_btn" tool_tip="點擊即可更新" />
 	<button label="預覽" name="big_preview_btn" tool_tip="點擊即可切換預覽" />
 	<text name="title_label">

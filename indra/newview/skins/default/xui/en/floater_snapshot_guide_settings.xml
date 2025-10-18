@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater
+    name="snapshot_guide_settings"
+    title="Frame Guide Settings"
+    can_dock="false"
+    can_resize="false"
+    width="250"
+    height="120"
+    min_height="140"
+    min_width="280"
+    layout="topleft">
+        <text
+            name="color_and_appearance_label"
+            top="5"
+            left="10"
+            layout="topleft"
+            follows="top|left"
+            height="16">
+            Guide Color and Appearance
+        </text>
+        <color_swatch
+            enabled_control="FSSnapshotShowGuides"
+            control_name="FSSnapshotFrameGuideColor"
+            layout="topleft"
+            left="10"
+            top_pad="0"
+            width="40"
+            height="65"
+            can_apply_immediately="true"
+            name="guide_color"
+            follows="left|top"
+            label="" />
+        <spinner
+            enabled_control="FSSnapshotShowGuides"
+            control_name="FSSnapshotFrameGuideWidth"
+            layout="topleft"
+            left_pad="10"
+            top_delta="0"
+            width="160"
+            label_width="120"
+            height="20"
+            decimal_digits="1"
+            increment="0.1"
+            min_val="0.0"
+            max_val="20.0"
+            label="Thickness (px)"
+            name="guide_thickness" />
+        <slider
+            enabled_control="FSSnapshotShowGuides"
+            control_name="FSSnapshotGuideVisibility"
+            label="Opacity"
+            layout="topleft"
+            left_pad="-160"
+            top_pad="8"
+            width="160"
+            height="18"
+            initial_value="0.5"
+            min_val="0.0"
+            max_val="1.0"
+            decimal_digits="2"
+            name="guide_opacity" />
+        <text
+            name="style_label"
+            layout="topleft"
+            follows="top|left"
+            left="10"
+            height="16">
+            Guide Style
+        </text>
+        <combo_box
+            enabled_control="FSSnapshotShowGuides"
+            control_name="FSSnapshotGuideStyle"
+            layout="topleft"
+            left="10"
+            top_pad="4"
+            width="180"
+            height="23"
+            name="guide_style_combo"
+            tool_tip="Choose which framing guide to display">
+            <combo_box.item
+                name="rule_of_thirds"
+                label="Rule of Thirds"
+                value="rule_of_thirds" />
+            <combo_box.item
+                name="golden_ratio_top_left"
+                label="Golden Ratio (Top Left)"
+                value="golden_ratio_top_left" />
+            <combo_box.item
+                name="golden_ratio_top_right"
+                label="Golden Ratio (Top Right)"
+                value="golden_ratio_top_right" />
+            <combo_box.item
+                name="golden_ratio_bottom_left"
+                label="Golden Ratio (Bottom Left)"
+                value="golden_ratio_bottom_left" />
+            <combo_box.item
+                name="golden_ratio_bottom_right"
+                label="Golden Ratio (Bottom Right)"
+                value="golden_ratio_bottom_right" />
+            <combo_box.item
+                name="diagonal"
+                label="Diagonal"
+                value="diagonal" />
+        </combo_box>
+
+</floater>

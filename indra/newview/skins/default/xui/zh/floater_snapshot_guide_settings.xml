@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="snapshot_guide_settings" title="拍攝輔助線設定">
+	<text name="color_and_appearance_label">
+		框架顏色與外觀
+	</text>
+	<spinner label="線條粗細（像素）" name="guide_thickness"/>
+	<slider label="不透明度" name="guide_opacity"/>
+	<text name="style_label">
+		框架樣式
+	</text>
+	<combo_box name="guide_style_combo" tool_tip="選擇拍攝輔助線樣式">
+		<combo_box.item name="rule_of_thirds" label="井字構圖"/>
+		<combo_box.item name="golden_ratio_top_left" label="黃金分割（左上）"/>
+		<combo_box.item name="golden_ratio_top_right" label="黃金分割（右上）"/>
+		<combo_box.item name="golden_ratio_bottom_left" label="黃金分割（左下）"/>
+		<combo_box.item name="golden_ratio_bottom_right" label="黃金分割（右下）"/>
+		<combo_box.item name="diagonal" label="對角線"/>
+	</combo_box>
+</floater>

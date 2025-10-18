@@ -5672,7 +5672,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ミニマップ
 	</string>
 	<string name="Command_Move_Label">
-		歩行／走行／飛行
+		歩く／走る／飛ぶ
 	</string>
 	<string name="Command_People_Label">
 		人物
@@ -5722,7 +5722,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Settings_Debug_Label">デバッグ設定</string>
 	<string name="Command_Statistics_Label">統計</string>
 	<string name="Command_Region_Label">リージョン／不動産</string>
-	<string name="Command_Fly_Label">飛行</string>
+	<string name="Command_Fly_Label">飛ぶ</string>
 	<string name="Command_Groundsit_Label">地面に座る</string>
 	<string name="Command_Sound_Explorer_Label">サウンドエクスプローラー</string>
 	<string name="Command_Asset_Blacklist_Label">アセットのブロックリスト</string>

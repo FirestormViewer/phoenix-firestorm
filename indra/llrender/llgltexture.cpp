@@ -63,6 +63,10 @@ LLGLTexture::~LLGLTexture()
 void LLGLTexture::init()
 {
     mBoostLevel = LLGLTexture::BOOST_NONE;
+    // <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+    // Added a previous boost level to allow for restoring boost after BOOST_SELECTED is applied
+    mPrevBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:minerjr> [FIRE-36016]
 
     mFullWidth = 0;
     mFullHeight = 0;
@@ -106,6 +110,20 @@ void LLGLTexture::setBoostLevel(S32 level)
         }
     }
 }
+
+// <FS:minerjr> [FIRE-36016] - Re-added Store/Restore boost levels of selected objects
+// Changes the current boost level back to the previous value
+void LLGLTexture::restoreBoostLevel()
+{
+    mBoostLevel = mPrevBoostLevel;
+}
+
+// Stores the current boost level in the previous boost
+void LLGLTexture::storeBoostLevel()
+{
+    mPrevBoostLevel = mBoostLevel;
+}
+// </FS:minerjr> [FIRE-36016]
 
 void LLGLTexture::forceActive()
 {

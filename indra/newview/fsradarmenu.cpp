@@ -37,6 +37,7 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"          // for LLAvatarTracker
+#include "lllogchat.h"
 #include "llnetmap.h"
 #include "llviewermenu.h"           // for gMenuHolder
 #include "rlvactions.h"
@@ -83,6 +84,7 @@ LLContextMenu* FSRadarMenu::createMenu()
         registrar.add("Avatar.Derender",                        boost::bind(&LLAvatarActions::derender,                     id, false));
         registrar.add("Avatar.DerenderPermanent",               boost::bind(&LLAvatarActions::derender,                     id, true));
         registrar.add("Avatar.AddToContactSet",                 boost::bind(&FSRadarMenu::addToContactSet,                  this));
+        registrar.add("Avatar.Calllog",                         boost::bind(&LLAvatarActions::viewChatHistory,              id));
         registrar.add("Nearby.People.TeleportToAvatar",         boost::bind(&FSRadarMenu::teleportToAvatar,                 this));
         registrar.add("Nearby.People.TrackAvatar",              boost::bind(&FSRadarMenu::onTrackAvatarMenuItemClick,       this));
         registrar.add("Nearby.People.SetRenderMode",            boost::bind(&FSRadarMenu::onSetRenderMode,                  this, _2));
@@ -233,6 +235,10 @@ bool FSRadarMenu::enableContextMenuItem(const LLSD& userdata)
     {
         const LLUUID& id = mUUIDs.front();
         return RlvActions::canPayAvatar(id);
+    }
+    else if (item == std::string("can_callog"))
+    {
+        return LLLogChat::isTranscriptExist(mUUIDs.front());
     }
     return false;
 }
