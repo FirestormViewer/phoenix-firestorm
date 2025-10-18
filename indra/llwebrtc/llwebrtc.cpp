@@ -339,7 +339,12 @@ void LLWebRTCImpl::init()
                                                                  nullptr /* video_decoder_factory */,
                                                                  nullptr /* audio_mixer */,
                                                                  mAudioProcessingModule);
-    mWorkerThread->PostTask(
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // It seems that this code is also called by one of the other callback functions
+    // and ends up creating a 2nd observer,which when there was a hardware change,
+    // would cause multiple messages to be dumped to the queue at the same time and
+    // cause a possible race condition/spin lock issue.
+    /*    mWorkerThread->PostTask(
         [this]()
         {
             if (mDeviceModule)
@@ -348,7 +353,8 @@ void LLWebRTCImpl::init()
                 updateDevices();
             }
         });
-
+    */
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCImpl::terminate()
