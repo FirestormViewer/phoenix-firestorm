@@ -4829,7 +4829,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
                 if (allow)
                 {
                     objectp->setRenderMaterialID(te, te_data["te"]["pbr"].asUUID(), false /*managing our own update*/);
-                    tep->setGLTFRenderMaterial(nullptr);
                     tep->setGLTFMaterialOverride(nullptr);
 
                     if (te_data["te"].has("pbr_override"))
@@ -4845,7 +4844,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             else
             {
                 objectp->setRenderMaterialID(te, LLUUID::null, false /*send in bulk later*/ );
-                tep->setGLTFRenderMaterial(nullptr);
                 tep->setGLTFMaterialOverride(nullptr);
 
                 // blank out most override data on the server

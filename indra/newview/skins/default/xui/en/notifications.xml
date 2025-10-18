@@ -2338,7 +2338,7 @@ Could not open uploaded sound file for reading:
 Model upload is not yet available on Apple Silicon, but will be supported in an upcoming release.
 
 Workaround: Right-click the [APP_NAME] app in Finder, select
-"Get Info", then check "Open using Rosetta"
+&apos;Get Info&apos;, then check &apos;Open using Rosetta&apos;
   <tag>fail</tag>
   </notification>
 
