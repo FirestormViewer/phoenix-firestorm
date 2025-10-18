@@ -339,7 +339,7 @@ void LLWebRTCImpl::init()
                                                                  nullptr /* video_decoder_factory */,
                                                                  nullptr /* audio_mixer */,
                                                                  mAudioProcessingModule);
-        mWorkerThread->PostTask(
+    mWorkerThread->PostTask(
         [this]()
         {
             if (mDeviceModule)
