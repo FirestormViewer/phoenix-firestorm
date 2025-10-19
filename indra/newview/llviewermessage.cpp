@@ -4889,7 +4889,7 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
     // <FS:ND> Protect against corrupted sounds
-    if (gAudiop->isCorruptSound(sound_id))
+    if (gAudiop && gAudiop->isCorruptSound(sound_id))
         return;
     // </FS:ND>
 
@@ -4944,7 +4944,7 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
     msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
     // <FS:ND> Protect against corrupted sounds
-    if (gAudiop->isCorruptSound(sound_id))
+    if (gAudiop && gAudiop->isCorruptSound(sound_id))
         return;
     // </FS:ND>
 
