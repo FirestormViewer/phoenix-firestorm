@@ -1206,16 +1206,15 @@ bool LLImageTGA::loadFile( const std::string& path )
     {
         return false;
     }
-    //< FS:ND> FIRE-16342 make sure no one overwrites this file while we load it
 
+    // <FS:ND> FIRE-16342 make sure no one overwrites this file while we load it
     // LLFILE* file = LLFile::fopen(path, "rb");    /* Flawfinder: ignore */
 #ifndef LL_WINDOWS
     LLFILE* file = LLFile::fopen(path, "rb");   /* Flawfinder: ignore */
 #else
-    LLFILE* file = LLFile::_fsopen(path, "rb", _SH_DENYWR);/* Flawfinder: ignore */
+    LLFILE* file = LLFile::fsopen(path, "rb", _SH_DENYWR);/* Flawfinder: ignore */
 #endif
-
-    // </FS:ND:
+    // </FS:ND>
 
     if( !file )
     {
