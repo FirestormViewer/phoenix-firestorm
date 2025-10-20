@@ -56,10 +56,6 @@ include(ColladaDom)
 include(jemalloc)
 include(Discord)
 
-# <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
-if (LLPHYSICSEXTENSIONS_SRC_DIR)
-# </FS:ND>
-
 if (HAVOK)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
 
@@ -87,10 +83,6 @@ if (HAVOK)
       endif (DARWIN)
    endif()
 endif ()
-
-# <FS:ND>
-endif (LLPHYSICSEXTENSIONS_SRC_DIR)
-# </FS:ND>
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
@@ -2506,12 +2498,10 @@ elseif (DARWIN)
         PROPERTIES
         RESOURCE Firestorm.xib
         LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip"
-        #<FS:TS> Force the SDK version in the linked executable to be 10.12. This will fool
+       #<FS:TS> Force the SDK version in the linked executable to be 10.12. This will fool
         # macOS into using the pre-Mojave display system, avoiding the blurry display that
         # otherwise occurs when upscaling the viewer to Retina resolution levels.
         LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -platform_version -Xlinker macos -Xlinker ${CMAKE_OSX_DEPLOYMENT_TARGET} -Xlinker 10.12"
-
-    # <FS:TJ> We can only do these if building with Havok
         )
     if(HAVOK)
       set_target_properties(${VIEWER_BINARY_NAME}
@@ -2521,22 +2511,21 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=arm64]   "$(inherited) -DLLPHYSICSEXTENSIONS_USE_STUB"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${CMAKE_CURRENT_BINARY_DIR}/llphysicsextensions/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensions  -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
-          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsstub/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsstub"
+          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
     elseif(HAVOK_TPV)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
           # arch specific flags for universal builds: https://stackoverflow.com/a/77942065
           XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL -DLL_HAVOK=1"
+          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=arm64]   "$(inherited) -DLLPHYSICSEXTENSIONS_USE_STUB"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
-          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) \
-            ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} \
-            ${HACD_LIBRARY} \
-            ${ND_PATHING_LIBRARY}"
+          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+    else()
+      target_link_libraries(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     endif()
-    # </FS:TJ>
 else (WINDOWS)
         # Linux
     set_target_properties(${VIEWER_BINARY_NAME}

@@ -66,15 +66,18 @@ target_link_libraries(llprimitive
         llxml
         llcharacter
         llrender
-        llphysicsextensions_impl
         ll::colladadom
         ll::glm
         )
 
-if (TARGET llconvexdecomposition)
+if (HAVOK OR HAVOK_TPV)
     target_link_libraries(llprimitive
-            llconvexdecomposition
-            )
+        llphysicsextensions_impl
+        )
+else()
+    target_link_libraries(llprimitive
+        llphysicsextensionsos
+        )
 endif ()
 
 if(LINUX)
