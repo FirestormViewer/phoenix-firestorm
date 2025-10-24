@@ -147,7 +147,8 @@
 			<check_box name="FSChatbarNamePrediction" label="近くのチャットで周りにいる人の名前の自動補完を行う"/>
 			<check_box label="「:」を「/me」の代わりに使う" name="AllowMUpose"/>
 			<check_box label="((ＯＯＣ))のかっこを自動的に閉じる" name="AutoCloseOOC"/>
-			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="チャットバーに入力中に自動絵文字ピッカーウィンドウを有効にする"/>
+			<check_box name="FSUseChatMentionAutoComplete" label="チャットバー入力時に@入力で自動的にメンションウィンドウが表示されるのを有効にする"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="チャットバー入力時に自動的に絵文字ピッカーウィンドウが表示されるのを有効にする"/>
 			<check_box name="FSShowEmojiButton" label="ＩＭセッションと近くのチャットのチャットバーに絵文字ボタンを表示する"/>
 			<check_box name="FSShowIMSendButton" label="ＩＭのチャットバーに「送信」ボタンを表示する"/>
 			<check_box label="近くのチャットウインドウにチャットバーを表示する" name="FSNearbyChatbar"/>
