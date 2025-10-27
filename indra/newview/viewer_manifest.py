@@ -129,6 +129,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+                # <FS:AR> Poser Presets
+                self.path("poses")
+                
                 # <FS:Beq> package static_assets folder
                 if self.fs_is_opensim():
                     self.path("static_assets")
@@ -195,10 +198,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             with self.prefix(src_dst="fs_resources"):
                 self.path("*.lsltxt")
                 self.path("*.dae") # <FS:Beq> FIRE-30963 - better physics defaults
-                
-            # <FS:AR> Poser Presets
-            with self.prefix(src_dst="poses/hand_presets"):
-                self.path("*.xml")
 
             # skins
             with self.prefix(src_dst="skins"):

@@ -462,28 +462,32 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
         gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY);
 
     std::string userHandPresetsPath = userPath + gDirUtilp->getDirDelimiter() + std::string(POSE_PRESETS_HANDS_SUBDIRECTORY);
-    if (gDirUtilp->fileExists(userHandPresetsPath))
-        return;
 
     try
     {
-        if (!gDirUtilp->fileExists(userPath))
-        {
-            LL_WARNS("Poser") << "Couldn't find folder: " << userPath << " - creating one." << LL_ENDL;
-            LLFile::mkdir(userPath);
-        }
-
         if (!gDirUtilp->fileExists(userHandPresetsPath))
         {
-            LL_WARNS("Poser") << "Couldn't find folder: " << userHandPresetsPath << " - creating one." << LL_ENDL;
-            LLFile::mkdir(userHandPresetsPath);
+            if (!gDirUtilp->fileExists(userPath))
+            {
+                LL_WARNS("Poser") << "Couldn't find folder: " << userPath << " - creating one." << LL_ENDL;
+                LLFile::mkdir(userPath);
+            }
+
+            if (!gDirUtilp->fileExists(userHandPresetsPath))
+            {
+                LL_WARNS("Poser") << "Couldn't find folder: " << userHandPresetsPath << " - creating one." << LL_ENDL;
+                LLFile::mkdir(userHandPresetsPath);
+            }
         }
 
         std::string sourcePresetPath =
-            gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
+            gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, POSE_SAVE_SUBDIRECTORY, std::string(POSE_PRESETS_HANDS_SUBDIRECTORY));
 
         if (!gDirUtilp->fileExists(sourcePresetPath))
+        {
+            LL_WARNS("Poser") << "Can not copy poser presets because failed to find path: " << sourcePresetPath << LL_ENDL;
             return;
+        }
 
         auto posesToCopy = gDirUtilp->getFilesInDir(sourcePresetPath);
         for (const auto& pose : posesToCopy)
@@ -491,13 +495,24 @@ void FSFloaterPoser::createUserPoseDirectoryIfNeeded()
             std::string source      = sourcePresetPath + gDirUtilp->getDirDelimiter() + pose;
             std::string destination = userHandPresetsPath + gDirUtilp->getDirDelimiter() + pose;
 
+            S32 sourceVersion = tryGetPoseVersion(source);
+            S32 destinationVersion = tryGetPoseVersion(destination);
+            if (destinationVersion >= sourceVersion)
+                continue;
+
+            if (gDirUtilp->fileExists(destination))
+            {
+                LL_WARNS("Poser") << "Removing pose file " << destination << " to replace with updated version " << LL_ENDL;
+                LLFile::remove(destination);
+            }
+
             if (!LLFile::copy(source, destination))
                 LL_WARNS("Poser") << "Failed to copy " << source << " to " << destination << LL_ENDL;
         }
     }
     catch (const std::exception& e)
     {
-        LL_WARNS("Posing") << "Exception caught trying to create: " << userPath << e.what() << LL_ENDL;
+        LL_WARNS("Posing") << "Exception caught trying to create/update poses: " << e.what() << LL_ENDL;
     }
 }
 
@@ -945,6 +960,51 @@ void FSFloaterPoser::onClickLoadLeftHandPose()
 void FSFloaterPoser::onClickLoadRightHandPose()
 {
     onClickLoadHandPose(true);
+}
+
+S32 FSFloaterPoser::tryGetPoseVersion(std::string pathToPoseFile)
+{
+    S32 version = -1;
+    if (pathToPoseFile.empty())
+        return version;
+
+    if (!gDirUtilp->fileExists(pathToPoseFile))
+        return version;
+
+    try
+    {
+        LLSD       pose;
+        llifstream infile;
+
+        infile.open(pathToPoseFile);
+        if (!infile.is_open())
+            return version;
+
+        while (!infile.eof())
+        {
+            S32 lineCount = LLSDSerialize::fromXML(pose, infile);
+            if (lineCount == LLSDParser::PARSE_FAILURE)
+            {
+                LL_WARNS("Posing") << "Failed to parse pose file: " << pathToPoseFile << LL_ENDL;
+                return version;
+            }
+
+            for (LLSD::map_const_iterator itr = pose.beginMap(); itr != pose.endMap(); ++itr)
+            {
+                std::string const& name        = itr->first;
+                LLSD const&        control_map = itr->second;
+
+                if (name == "version")
+                    return (S32)control_map["value"].asInteger();
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS("Posing") << "Threw an exception trying read the pose file: " << pathToPoseFile << " exception: " << e.what() << LL_ENDL;
+    }
+
+    return version;
 }
 
 void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
