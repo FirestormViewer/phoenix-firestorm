@@ -32,7 +32,18 @@
 #include "llmaniprotate.h"
 
 class LLJoint;
-class LLVOAvatar;  // or LLVOAvatarSelf, etc.
+class LLVOAvatar;  // for LLVOAvatarSelf, etc.
+
+/// <summary>
+/// A set of reference frames for presenting the gimbal within.
+/// </summary>
+typedef enum E_PoserManipReferenceFrame
+{
+    FRAME_BONE   = 0, // frame is the bone the gimbal is centered on
+    FRAME_WORLD  = 1,
+    FRAME_AVATAR = 2, // frame is mPelvis
+    FRAME_CAMERA = 3,
+} E_PoserManipReferenceFrame;
 
 namespace {
     const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 85.f * DEG_TO_RAD ); // cos() is not constexpr til c++26
@@ -74,10 +85,24 @@ public:
     FSManipRotateJoint(LLToolComposite* composite);
     virtual ~FSManipRotateJoint() {}
     static std::string getManipPartString(EManipPart part);
-    // Called to designate which joint we are going to manipulate.
+
+    /// <summary>
+    /// Sets the joint we are going to manipulate.
+    /// </summary>
+    /// <param name="joint">The joint to interact with.</param>
     void setJoint(LLJoint* joint);
 
+    /// <summary>
+    /// Sets the avatar the manip should interact with.
+    /// </summary>
+    /// <param name="avatar">The avatar to interact with.</param>
     void setAvatar(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Sets the avatar the manip should interact with.
+    /// </summary>
+    /// <param name="avatar">The avatar to interact with.</param>
+    void setReferenceFrame(const E_PoserManipReferenceFrame frame) { mReferenceFrame = frame; };
 
     // Overrides
     void handleSelect() override;
@@ -142,6 +167,7 @@ private:
 
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
+    E_PoserManipReferenceFrame mReferenceFrame = FRAME_BONE;
 };
 
 #endif // FS_MANIP_ROTATE_JOINT_H

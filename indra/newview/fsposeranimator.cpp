@@ -29,6 +29,7 @@
 #include "fsposeranimator.h"
 #include "llcharacter.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "fsposingmotion.h"
 
 std::map<LLUUID, LLAssetID> FSPoserAnimator::sAvatarIdToRegisteredAnimationId;
@@ -231,7 +232,8 @@ LLVector3 FSPoserAnimator::getJointPosition(LLVOAvatar* avatar, const FSPoserJoi
     return jointPose->getPublicPosition();
 }
 
-void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_PoserManipReferenceFrame frame,
+                                       E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -250,7 +252,8 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!jointPose)
         return;
 
-    LLVector3 positionDelta = jointPose->getPublicPosition() - position;
+    LLVector3 jointPosition = jointPose->getPublicPosition();
+    LLVector3 positionDelta = jointPosition - position;
 
     switch (style)
     {
@@ -258,13 +261,13 @@ void FSPoserAnimator::setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* j
         case MIRROR_DELTA:
         case SYMPATHETIC_DELTA:
         case SYMPATHETIC:
-            jointPose->setPublicPosition(position);
+            jointPose->setPublicPosition(jointPosition - positionDelta);
             break;
 
         case DELTAMODE:
         case NONE:
         default:
-            jointPose->setPublicPosition(position);
+            jointPose->setPublicPosition(jointPosition - positionDelta);
             return;
     }
 
@@ -442,7 +445,7 @@ void FSPoserAnimator::setAllAvatarStartingRotationsToZero(LLVOAvatar* avatar)
     }
 }
 
-void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation)
+void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -544,12 +547,13 @@ LLVector3 FSPoserAnimator::getJointRotation(LLVOAvatar* avatar, const FSPoserJoi
     if (!jointPose)
         return vec3;
  
-    return translateRotationFromQuaternion(translation, negation, jointPose->getPublicRotation());
+    return translateRotationFromQuaternion(jointPose, translation, negation, jointPose->getPublicRotation());
 }
 
 void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation,
-                                       const LLVector3& deltaRotation, E_BoneDeflectionStyles deflectionStyle,
-                                       E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero, E_RotationStyle rotationStyle)
+                                       const LLVector3& deltaRotation, E_BoneDeflectionStyles style, E_PoserManipReferenceFrame frame,
+                                       E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero,
+                                       E_RotationStyle rotationStyle)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -564,13 +568,15 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!jointPose)
         return;
 
-    LLQuaternion absRot = translateRotationToQuaternion(translation, negation, absRotation);
-    LLQuaternion deltaRot = translateRotationToQuaternion(translation, negation, deltaRotation);
-    switch (deflectionStyle)
+    bool translationRequiresDelta = frame != FRAME_BONE;
+
+    LLQuaternion absRot   = translateRotationToQuaternion(avatar, jointPose, frame, translation, negation, absRotation);
+    LLQuaternion deltaRot = translateRotationToQuaternion(avatar, jointPose, frame, translation, negation, deltaRotation);
+    switch (style)
     {
         case SYMPATHETIC:
         case MIRROR:
-            if (rotationStyle == DELTAIC_ROT)
+            if (rotationStyle == DELTAIC_ROT || translationRequiresDelta)
                 jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
             else
                 jointPose->setPublicRotation(resetBaseRotationToZero, absRot);
@@ -589,7 +595,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
 
         case NONE:
         default:
-            if (rotationStyle == DELTAIC_ROT)
+            if (rotationStyle == DELTAIC_ROT || translationRequiresDelta)
                 jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
             else
                 jointPose->setPublicRotation(resetBaseRotationToZero, absRot);
@@ -606,7 +612,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
         return;
 
     LLQuaternion inv_quat = LLQuaternion(-deltaRot.mQ[VX], deltaRot.mQ[VY], -deltaRot.mQ[VZ], deltaRot.mQ[VW]);
-    switch (deflectionStyle)
+    switch (style)
     {
         case SYMPATHETIC:
             oppositeJointPose->cloneRotationFrom(jointPose);
@@ -728,8 +734,9 @@ void FSPoserAnimator::flipEntirePose(LLVOAvatar* avatar)
     }
 }
 
-// from the UI to the bone, the inverse translation, the un-swap, the backwards
-LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation)
+// from the UI to the bone. Bone rotations we store are relative to the skeleton (or to T-Pose, if you want to visualize).
+LLQuaternion FSPoserAnimator::translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserManipReferenceFrame frame,
+                                                            E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation)
 {
     if (negation & NEGATE_ALL)
     {
@@ -747,7 +754,7 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
             rotation.mV[VZ] *= -1;
     }
 
-    LLMatrix3    rot_mat;
+    LLMatrix3 rot_mat;
     switch (translation)
     {
         case SWAP_YAW_AND_ROLL:
@@ -780,11 +787,63 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(E_BoneAxisTranslatio
     rot_quat = LLQuaternion(rot_mat) * rot_quat;
     rot_quat.normalize();
 
+    rot_quat = changeToRotationFrame(avatar, rot_quat, frame, joint);
+
     return rot_quat;
 }
 
+LLQuaternion FSPoserAnimator::changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserManipReferenceFrame frame, FSJointPose* joint)
+{
+    if (!joint || !avatar)
+        return rotation;
+
+    LLJoint* pelvis = avatar->getJoint("mPelvis");
+    if (!pelvis)
+        return rotation;
+
+    LLVector3 skyward(0.f, 0.f, 1.f);
+    LLVector3 left(1.f, 0.f, 0.f);
+    LLVector3 forwards(0.f, 1.f, 0.f);
+    LLVector3 up, jointToCameraPosition, jointPosition;
+    LLQuaternion worldRotOfWorld(forwards, left, skyward);
+    LLQuaternion differenceInWorldRot, rotDiffInChildFrame, worldRotOfPelvis, worldRotOfCamera;
+    LLQuaternion worldRotOfThisJoint = joint->getJointState()->getJoint()->getWorldRotation();
+
+    switch (frame)
+    {
+        case FRAME_WORLD:
+            differenceInWorldRot = worldRotOfThisJoint * ~worldRotOfWorld;
+            break;
+
+        case FRAME_AVATAR:
+            worldRotOfPelvis     = pelvis->getWorldRotation();
+            differenceInWorldRot = worldRotOfThisJoint * ~worldRotOfPelvis;
+            break;
+
+        case FRAME_CAMERA:
+            jointPosition  = joint->getJointState()->getJoint()->getWorldPosition();
+            jointToCameraPosition = jointPosition - gAgentCamera.getCameraPositionAgent();
+            jointToCameraPosition.normalize();
+            left.setVec(skyward % jointToCameraPosition);
+            up.setVec(jointToCameraPosition % left);
+
+            worldRotOfCamera = LLQuaternion(jointToCameraPosition, left, up);
+            differenceInWorldRot = worldRotOfThisJoint * ~worldRotOfCamera;
+            break;
+
+        case FRAME_BONE:
+        default:
+            return rotation;
+    }
+
+    rotDiffInChildFrame = differenceInWorldRot * rotation * ~differenceInWorldRot;
+    rotDiffInChildFrame.conjugate();
+
+    return rotDiffInChildFrame;
+}
+
 // from the bone to the UI; this is the 'forwards' use of the enum
-LLVector3 FSPoserAnimator::translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, const LLQuaternion& rotation) const
+LLVector3 FSPoserAnimator::translateRotationFromQuaternion(FSJointPose* joint, E_BoneAxisTranslation translation, S32 negation, const LLQuaternion& rotation) const
 {
     LLVector3 vec3;
 
@@ -852,7 +911,8 @@ LLVector3 FSPoserAnimator::getJointScale(LLVOAvatar* avatar, const FSPoserJoint&
     return jointPose->getPublicScale();
 }
 
-void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_BoneDeflectionStyles style)
+void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_PoserManipReferenceFrame frame,
+                                    E_BoneDeflectionStyles style)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -871,24 +931,45 @@ void FSPoserAnimator::setJointScale(LLVOAvatar* avatar, const FSPoserJoint* join
     if (!jointPose)
         return;
 
-    jointPose->setPublicScale(scale);
-    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
-    if (!oppositeJointPose)
-        return;
+    LLVector3 jointScale = jointPose->getPublicScale();
+    LLVector3 scaleDelta = jointScale - scale;
 
     switch (style)
     {
-        case SYMPATHETIC:
         case MIRROR:
-        case SYMPATHETIC_DELTA:
         case MIRROR_DELTA:
-            oppositeJointPose->setPublicScale(scale);
+        case SYMPATHETIC_DELTA:
+        case SYMPATHETIC:
+            jointPose->setPublicScale(jointScale - scaleDelta);
             break;
 
         case DELTAMODE:
         case NONE:
         default:
+            jointPose->setPublicScale(jointScale - scaleDelta);
             return;
+    }
+
+    FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
+    if (!oppositeJointPose)
+        return;
+
+    LLVector3 oppositeJointScale = oppositeJointPose->getPublicScale();
+
+    switch (style)
+    {
+        case MIRROR:
+        case MIRROR_DELTA:
+            oppositeJointPose->setPublicScale(oppositeJointScale + scaleDelta);
+            break;
+
+        case SYMPATHETIC_DELTA:
+        case SYMPATHETIC:
+            oppositeJointPose->setPublicScale(oppositeJointScale - scaleDelta);
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -933,7 +1014,7 @@ void FSPoserAnimator::loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* 
 
     jointPose->purgeUndoQueue();
 
-    LLQuaternion rot = translateRotationToQuaternion(SWAP_NOTHING, NEGATE_NOTHING, rotation);
+    LLQuaternion rot = translateRotationToQuaternion(avatar, jointPose, FRAME_BONE, SWAP_NOTHING, NEGATE_NOTHING, rotation);
     jointPose->setPublicRotation(setBaseToZero, rot);
 }
 

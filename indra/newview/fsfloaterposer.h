@@ -32,6 +32,7 @@
 #include "lltoolmgr.h"
 #include "fsposeranimator.h"
 #include "fsposercollab.h"
+#include "fsmaniprotatejoint.h"
 
 class FSVirtualTrackpad;
 class LLButton;
@@ -266,6 +267,7 @@ public:
     void onJointTabSelect();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
+    void onToggleRotationFrameButton(const LLUICtrl* toggleButton);
     void onToggleVisualManipulators();
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastChange();
@@ -345,6 +347,7 @@ public:
     /// This facilitates 'conceptual' conversion of Euler frame to up/down, left/right and roll and is rather subjective.
     /// Thus, many of these 'conversions' are backed by values in the XML.
     /// </summary>
+    /// <param name="frame">The reference frame for the change.</param>
     /// <param name="jointName">The well-known name of the joint, eg: mChest.</param>
     /// <returns>The axial translation so the oily angles make better sense in terms of up/down/left/right/roll.</returns>
     /// <remarks>
@@ -352,14 +355,21 @@ public:
     /// No the translation isn't untangling all of that, it's not needed until it is.
     /// We're not landing on Mars with this code, just offering a user reasonable thumb-twiddlings.
     /// </remarks>
-    E_BoneAxisTranslation getJointTranslation(const std::string& jointName) const;
+    E_BoneAxisTranslation getJointTranslation(E_PoserManipReferenceFrame frame, const std::string& jointName) const;
 
     /// <summary>
     /// Gets the collection of E_BoneAxisNegation values for the supplied joint.
     /// </summary>
+    /// <param name="frame">The reference frame for the change.</param>
     /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
     /// <returns>The kind of axis transformation to perform.</returns>
-    S32 getJointNegation(const std::string& jointName) const;
+    S32 getJointNegation(E_PoserManipReferenceFrame frame, const std::string& jointName) const;
+
+    /// <summary>
+    /// Gets the reference frame for the rotation/position/scale change.
+    /// </summary>
+    /// <returns>The reference frame for the change.</returns>
+    E_PoserManipReferenceFrame getReferenceFrame() const;
 
     /// <summary>
     /// Gets the axial translation required for joints when saving to BVH.
@@ -413,7 +423,7 @@ public:
     /// </summary>
     /// <param name="name">The name of the string.</param>
     /// <returns>The named string, if it exists, otherwise an empty string.</returns>
-    std::string tryGetString(std::string name);
+    std::string tryGetString(std::string_view name);
 
     /// <summary>
     /// Gets the name of an item from the supplied object ID.
@@ -553,6 +563,9 @@ public:
     LLButton* mSetToTposeButton{ nullptr };
     LLButton* mBtnJointRotate{ nullptr };
     LLButton* mBtnJointReset{ nullptr };
+    LLButton* mBtnWorldFrame{ nullptr };
+    LLButton* mBtnAvatarFrame{ nullptr };
+    LLButton* mBtnScreenFrame{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
