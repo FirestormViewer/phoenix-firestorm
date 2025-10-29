@@ -61,7 +61,7 @@
 // Create an atomic inline flag that will be shared between the various WebRTC threads and co-routines
 // to track of when the audio hardware is being talked to. The co-routine can use it to
 // exit if it too many iterations with the hardware locked indicating that the worker thread died.
-inline std::atomic<bool> iWebRTCUpdateDevices = false;
+inline std::atomic<bool> gWebRTCUpdateDevices = false;
 // </FS:minerjr> [FIRE-36022]
 namespace llwebrtc
 {

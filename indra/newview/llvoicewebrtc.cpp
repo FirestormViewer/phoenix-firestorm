@@ -602,7 +602,7 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                 }
                 // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
                 // If the device locked, count up by 1
-                if (iWebRTCUpdateDevices)
+                if (gWebRTCUpdateDevices)
                 {
                     crash_check++;
                 }
@@ -764,7 +764,7 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
     {
     // Attempt to lock the access to the audio device, wait up to 3 seconds for other threads to unlock.
-    std::unique_lock lock(iAudioDeviceMutex, 3s);
+    std::unique_lock lock(gAudioDeviceMutex, 3s);
     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
     if (!lock.owns_lock())
