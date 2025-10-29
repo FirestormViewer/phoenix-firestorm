@@ -790,6 +790,9 @@ sind erlaubt.
 	<string name="NoneFound">
 		Nicht gefunden.
 	</string>
+	<string name="ServerUnavailable">
+		Service nicht verfügbar.
+	</string>
 	<string name="RetrievingData">
 		Laden...
 	</string>

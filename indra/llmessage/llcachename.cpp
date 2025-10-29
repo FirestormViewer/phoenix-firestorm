@@ -875,6 +875,7 @@ void LLCacheName::Impl::processPendingReplies()
 {
     // First call all the callbacks, because they might send messages.
     // <FS:Ansariel> Fix stale legacy requests
+    //// Todo: needs cleanup logic, otherwise invalid ids might stay here indefinitely
     //for(ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); ++it)
     for (ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); )
     // </FS:Ansariel>
