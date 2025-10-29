@@ -116,8 +116,10 @@ static void set_device(FMOD::System* system, const LLUUID& device_uuid)
     }
 }
 
-FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
 // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+// According to FMOD, not having this method static is very bad.
+//FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
+static FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
 {
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
     {
@@ -357,6 +359,11 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
 
     FMOD_ADVANCEDSETTINGS settings_dump = { };
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // With the FMOD debug library used, turns out this object needs to have a size assigned to it otherwise it will fail.
+    // So the viewer never got any advanced settings for the info below.
+    settings_dump.cbSize = sizeof(FMOD_ADVANCEDSETTINGS);
+    // </FS:minerjr> [FIRE-36022]
     mSystem->getAdvancedSettings(&settings_dump);
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init(): resampler=" << settings_dump.resamplerMethod << " bytes" << LL_ENDL;
 
