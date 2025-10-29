@@ -636,7 +636,7 @@ https://secondlife.com/viewer-access-faq
 		ＩＭ
 	</string>
 	<string name="SLappAgentPay">
-		支払い
+		支払う
 	</string>
 	<string name="SLappAgentOfferTeleport">
 		次の場所へのテレポートのオファーを送ります：
@@ -1824,12 +1824,12 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<!-- use value="" because they have preceding spaces -->
 	<string name="active" value="（アクティブ）"/>
-	<string name="no_transfer" value=" （再販・譲渡不可）"/>
-	<string name="no_modify" value=" （編集不可）"/>
-	<string name="no_copy" value=" （コピー不可）"/>
-	<string name="worn" value=" （着用中）"/>
-	<string name="link" value=" 　リンク"/>
-	<string name="broken_link" value=" 　壊れたリンク"/>
+	<string name="no_transfer" value="（再販・譲渡不可）"/>
+	<string name="no_modify" value="（編集不可）"/>
+	<string name="no_copy" value="（コピー不可）"/>
+	<string name="worn" value="（着用中）"/>
+	<string name="link" value="　リンク"/>
+	<string name="broken_link" value="　壊れたリンク"/>
 	<string name="no_transfer_lbl" value="　再販・譲渡不可"/>
 	<string name="no_modify_lbl" value="　編集不可"/>
 	<string name="no_copy_lbl" value="　コピー不可"/>
@@ -1839,7 +1839,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="NoContents">
 		コンテンツなし
 	</string>
-	<string name="WornOnAttachmentPoint" value=" （[ATTACHMENT_POINT]に装着中）"/>
+	<string name="WornOnAttachmentPoint" value="（[ATTACHMENT_POINT]に装着中）"/>
 	<string name="AttachmentErrorMessage" value="（[ATTACHMENT_ERROR]）"/>
 	<string name="ActiveGesture" value="[GESLABEL]（アクティブ）"/>
 	<!-- Inventory permissions -->
@@ -1853,7 +1853,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<!-- use value="" because they have preceding spaces -->
 	<string name="Chat Message" value="　チャット："/>
 	<string name="Sound" value="　サウンド："/>
-	<string name="Wait" value="－　待機："/>
+	<string name="Wait" value="－待機："/>
 	<string name="AnimFlagStop" value="　アニメーションを停止："/>
 	<string name="AnimFlagStart" value="　アニメーションを開始："/>
 	<string name="Wave" value="　手を振る"/>
@@ -2254,11 +2254,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="hud_render_textures_warning">
 		[HUD_DETAILS]は、使用されているテクスチャが多すぎます。
 	</string>
-	<!-- AgeYearsA = singular,
-						AgeYearsB = plural,
-						AgeYearsC = plural for non-English languages like Russian
-						For example, LLTrans::getCountString("AgeYears", 3) is plural form B
-						in English and form C in Russian -->
 	<string name="AgeYearsA">
 		[COUNT]年
 	</string>
@@ -2476,8 +2471,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="AlreadyInGroup">
 		すでにグループに入っています：
 	</string>
-	<!-- floater IM bonus_info: When a Linden with Admin/god status receives a new IM this displays the estate (Mainland vs. teen grid) of the source avatar.
-						This is to help Lindens when answering questions. -->
 	<string name="IMParentEstate">
 		親の不動産
 	</string>
@@ -4718,7 +4711,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		皺
 	</string>
 	<!-- Navigation bar location input control.
-						Strings are here because widget xml is not localizable -->
+	Strings are here because widget xml is not localizable -->
 	<string name="LocationCtrlAddLandmarkTooltip">
 		ランドマークに追加
 	</string>
@@ -5411,8 +5404,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="dateTimeWeekdaysShortNames">
 		日:月:火:水:木:金:土
 	</string>
-	<!-- overriding datetime formating.
-						didn't translate if this is not needed for current localization -->
 	<string name="dateTimeMonthNames">
 		1:2:3:4:5:6:7:8:9:10:11:12
 	</string>
@@ -5547,18 +5538,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Divide">
 		除算
-	</string>
-	<string name="-">
-		-
-	</string>
-	<string name="=">
-		=
-	</string>
-	<string name="`">
-		`
-	</string>
-	<string name=";">
-		;
 	</string>
 	<!-- Key names end -->
 	<!-- Mouse button names (short) begin -->
@@ -5758,7 +5737,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		アバターの容姿を変更します。
 	</string>
 	<string name="Command_Avatar_Tooltip">
-		アバター一式を選択します。
+		アバターウェルカムパックを開きます。
 	</string>
 	<string name="Command_Build_Tooltip">
 		オブジェクトのビルドや地形の変形をします。
@@ -6126,7 +6105,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		（全[MAXEXPERIENCES]件中[EXPERIENCES]件）
 	</string>
 	<string name="ExperiencePermission1">
-		コントロールを引き継ぐ
+		操作を引き継ぐ
 	</string>
 	<string name="ExperiencePermission3">
 		アバターでアニメーションをトリガー
@@ -6135,10 +6114,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		アバターに装着
 	</string>
 	<string name="ExperiencePermission9">
-		カメラ追従
+		カメラの追従
 	</string>
 	<string name="ExperiencePermission10">
-		カメラのコントロール
+		カメラの制御
 	</string>
 	<string name="ExperiencePermission11">
 		あなたをテレポート
@@ -6156,7 +6135,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		が、不明な操作を実行しました：[Permission]
 	</string>
 	<string name="ExperiencePermissionShort1">
-		コントロールする
+		操作する
 	</string>
 	<string name="ExperiencePermissionShort3">
 		アニメーションをトリガー
@@ -6165,10 +6144,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		取り付ける
 	</string>
 	<string name="ExperiencePermissionShort9">
-		カメラを追跡
+		カメラ追跡
 	</string>
 	<string name="ExperiencePermissionShort10">
-		カメラを制御
+		カメラ制御
 	</string>
 	<string name="ExperiencePermissionShort11">
 		テレポート
@@ -6357,8 +6336,8 @@ Rez時間：[OBJECT_REZ_TIME]
 	<!-- <FS:Zi> Quick preferences default options -->
 	<string name="QP Draw Distance">描画距離</string>
 	<string name="QP Max Particles">最大パーティクル</string>
-	<string name="QP Avatar Physics LOD">アバター物理効果ＬＯＤ</string>
-	<string name="QP LOD Factor">ＬＯＤ係数</string>
+	<string name="QP Avatar Physics LOD">アバター物理効果ＬｏＤ</string>
+	<string name="QP LOD Factor">ＬｏＤ係数</string>
 	<string name="QP Max Avatars">最大アバター数</string>
 	<string name="QP Tags Offset">名前タグのオフセット位置</string>
 	<string name="QP Name Tags">名前タグの表示</string>

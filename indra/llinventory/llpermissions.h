@@ -103,6 +103,8 @@ private:
     // values.
     bool mIsGroupOwned;
 
+    static bool sIsInOpenSim; // <FS:TJ/> [FIRE-36028] Fix OpenSim object permissions
+
     // Correct for fair use - you can never take away the right to
     // move stuff you own, and you can never take away the right to
     // transfer something you cannot otherwise copy.
@@ -287,6 +289,11 @@ public:
 #ifdef OPENSIM
     inline bool allowOpenSimExportBy(const LLUUID& agent_id) const;    // <FS:CR> OpenSim export permission
 #endif
+
+    // <FS:TJ> [FIRE-36028] Fix OpenSim object permissions
+    static bool getIsInOpenSim() { return sIsInOpenSim; }
+    static void setupIsInOpenSim(bool is_in_open_sim) { sIsInOpenSim = is_in_open_sim; }
+    // </FS:TJ>
 
     //
     // MISC METHODS and OPERATORS

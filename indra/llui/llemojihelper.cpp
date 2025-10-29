@@ -58,7 +58,7 @@ bool LLEmojiHelper::isActive(const LLUICtrl* ctrl_p) const
 bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S32* pShortCodePos)
 {
     // <FS:PP> FIRE-33735: Option to suppress emoji chooser window from automatically popping up while typing in chat bars
-    static LLUICachedControl<bool> FSEnableEmojiWindowPopupWhileTyping("FSEnableEmojiWindowPopupWhileTyping");
+    static LLUICachedControl<bool> FSEnableEmojiWindowPopupWhileTyping("FSEnableEmojiWindowPopupWhileTyping", true);
     if (!FSEnableEmojiWindowPopupWhileTyping)
     {
         return false;

@@ -231,6 +231,7 @@ public:
     void onPoseMenuAction(const LLSD& param);
     bool loadPoseFromXml(LLVOAvatar* avatar, const std::string& poseFileName, E_LoadPoseMethods loadMethod);
     bool poseFileStartsFromTeePose(const std::string& poseFileName);
+    S32  tryGetPoseVersion(std::string pathToPoseFile);
     void setPoseSaveFileTextBoxToUiSelectedAvatarSaveFileName();
     void setUiSelectedAvatarSaveFileName(const std::string& saveFileName);
     void timedReload();

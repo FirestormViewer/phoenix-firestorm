@@ -12,6 +12,6 @@
 	<menu_item_call label="グループに招待…." name="Invite"/>
 	<menu_item_call label="マップ" name="Map"/>
 	<menu_item_call label="共有" name="Share"/>
-	<menu_item_call label="支払い" name="Pay"/>
+	<menu_item_call label="支払う" name="Pay"/>
 	<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock"/>
 </toggleable_menu>
