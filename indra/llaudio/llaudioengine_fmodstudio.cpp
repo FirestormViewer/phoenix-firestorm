@@ -44,6 +44,9 @@
 
 #include "sound_ids.h"
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 constexpr U32 EXTRA_SOUND_CHANNELS = 10;
 
 FMOD_RESULT F_CALL windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels);
@@ -114,7 +117,11 @@ static void set_device(FMOD::System* system, const LLUUID& device_uuid)
 }
 
 FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
 {
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+// </FS:minerjr> [FIRE-36022]
     FMOD::System* sys = (FMOD::System*)system;
     LLAudioEngine_FMODSTUDIO* audio_engine = (LLAudioEngine_FMODSTUDIO*)userdata;
 
@@ -124,6 +131,17 @@ FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE
             LL_DEBUGS("FMOD") << "FMOD system callback FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED" << LL_ENDL;
             if (sys && audio_engine)
             {
+                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                // Attempt to lock the access to the audio device, wait up to 3 seconds for other threads to unlock.
+                std::unique_lock lock(iAudioDeviceMutex, 3s);
+                // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+                // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+                if (not lock.owns_lock())
+                {
+                    LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+                    return FMOD_OK; // Could be a FMOD_ERR_ALREADY_LOCKED;
+                }
+                // </FS:minerjr> [FIRE-36022]
                 set_device(sys, audio_engine->getSelectedDeviceUUID());
                 audio_engine->OnOutputDeviceListChanged(audio_engine->getDevices());
             }
@@ -132,6 +150,34 @@ FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE
             break;
     }
     return FMOD_OK;
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+            return FMOD_ERR_ALREADY_LOCKED;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+            return FMOD_ERR_ALREADY_LOCKED;
+        }
+        else
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+
+        return FMOD_ERR_ALREADY_LOCKED;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception FMOD: " << " " << e.what() << LL_ENDL;
+        return FMOD_ERR_ALREADY_LOCKED;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
@@ -373,7 +419,47 @@ LLAudioEngine_FMODSTUDIO::output_device_map_t LLAudioEngine_FMODSTUDIO::getDevic
 void LLAudioEngine_FMODSTUDIO::setDevice(const LLUUID& device_uuid)
 {
     mSelectedDeviceUUID = device_uuid;
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 3 seconds for other threads to unlock.
+    std::unique_lock lock(iAudioDeviceMutex, 3s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (not lock.owns_lock())
+    {
+        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     set_device(mSystem, device_uuid);
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else
+        {
+            LL_WARNS() << "Exception FMOD: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception FMOD: " << " " << e.what() << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
+
 }
 
 std::string LLAudioEngine_FMODSTUDIO::getDriverName(bool verbose)

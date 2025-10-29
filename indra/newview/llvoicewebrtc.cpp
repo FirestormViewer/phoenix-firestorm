@@ -80,6 +80,9 @@
 
 const std::string WEBRTC_VOICE_SERVER_TYPE = "webrtc";
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 namespace {
 
     const F32      MAX_AUDIO_DIST           = 50.0f;
@@ -757,6 +760,19 @@ void LLWebRTCVoiceClient::OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceLi
 void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDeviceList &render_devices,
                                                const llwebrtc::LLWebRTCVoiceDeviceList &capture_devices)
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 3 seconds for other threads to unlock.
+    std::unique_lock lock(iAudioDeviceMutex, 3s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (not lock.owns_lock())
+    {
+        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (sShuttingDown)
     {
         return;
@@ -800,6 +816,34 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     }
 
     setDevicesListUpdated(true);
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // When trying to lock the same lock a second time
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // When the mutex is invalid
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else
+        {
+            // Everything else
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception WebRTC: " << " " << e.what() << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCVoiceClient::clearRenderDevices()
