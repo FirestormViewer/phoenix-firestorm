@@ -459,6 +459,10 @@ void LLWebRTCImpl::workerDeployDevices()
 {
     if (!mDeviceModule)
     {
+        // <FS:minerjr> [FIRE-36022]
+        // If the device is not avaiable, then make sure the flag for the WebRTC updated devices flag is turned off for the co-routine
+        iWebRTCUpdateDevices = false;
+        // </FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
         return;
     }
 
@@ -483,6 +487,10 @@ void LLWebRTCImpl::workerDeployDevices()
         }
     }
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+    iWebRTCUpdateDevices = true;
+    // </FS:minerjr> [FIRE-36022]
     mDeviceModule->StopPlayout();
     mDeviceModule->ForceStopRecording();
 #if WEBRTC_WIN
@@ -546,6 +554,10 @@ void LLWebRTCImpl::workerDeployDevices()
     {
         mDeviceModule->StartPlayout();
     }
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Finally signal to the co-routine everyting is OK.
+    iWebRTCUpdateDevices = false;
+    // </FS:minerjr> [FIRE-36022]
     mSignalingThread->PostTask(
         [this]
         {
@@ -589,6 +601,10 @@ void LLWebRTCImpl::updateDevices()
         return;
     }
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+    iWebRTCUpdateDevices = true;
+    // </FS:minerjr> [FIRE-36022]
     int16_t renderDeviceCount  = mDeviceModule->PlayoutDevices();
 
     mPlayoutDeviceList.clear();
@@ -625,6 +641,10 @@ void LLWebRTCImpl::updateDevices()
         mRecordingDeviceList.emplace_back(name, guid);
     }
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is no longer being interacted with for the Co-routine in case something goes wrong.
+    iWebRTCUpdateDevices = false;
+    // </FS:minerjr> [FIRE-36022]
     for (auto &observer : mVoiceDevicesObserverList)
     {
         observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
@@ -726,7 +746,14 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
             {
                 if (mDeviceModule)
                 {
+                    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+                    iWebRTCUpdateDevices = true;
+                    // </FS:minerjr> [FIRE-36022]
                     mDeviceModule->ForceStopRecording();
+                    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                    // Finally signal to the co-routine everyting is OK.
+                    iWebRTCUpdateDevices = false;
+                    // </FS:minerjr> [FIRE-36022]
                 }
             },
             webrtc::TimeDelta::Millis(delay_ms));
@@ -738,8 +765,16 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
             {
                 if (mDeviceModule)
                 {
+                    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+                    iWebRTCUpdateDevices = true;
+                    // </FS:minerjr> [FIRE-36022]
                     mDeviceModule->InitRecording();
                     mDeviceModule->ForceStartRecording();
+                    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                    // Finally signal to the co-routine everyting is OK.
+                    iWebRTCUpdateDevices = false;
+                    // </FS:minerjr> [FIRE-36022]
                 }
             });
     }

@@ -506,6 +506,12 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
     try
     {
         LLMuteList::getInstance()->addObserver(this);
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        // Add a counter to check if the main thread locked up
+        // to prevent this thread/corutine form filling up
+        // the mMainQueue.
+        static U32 crash_check = 0;
+        // </FS:minerjr> [FIRE-36022]
         while (!sShuttingDown)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_VOICE("voiceConnectionCoroLoop")
@@ -591,6 +597,26 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                     // to send position updates.
                     updatePosition();
                 }
+                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                // If the device locked, count up by 1
+                if (iWebRTCUpdateDevices)
+                {
+                    crash_check++;
+                }
+                // Else if the device is not locked, then reset the counter back to 0
+                else
+                {
+                    crash_check = 0;
+                }
+                // If there are over 10 cycles of the devices being locked, there is a good
+                // chance that the thread failed due to hardware/audio engine issue.
+                if (crash_check > 10)
+                {
+                    LL_WARNS() << "WebRTC detected locked worker thread, will shutdown to prevent total viewer lockup." << LL_ENDL;
+                    // Exit out of the thread and flag WebRTC to shutdown, hopefully clearing the lock and allowing the viewer to continue.
+                    sShuttingDown = true;
+                }
+                // </FS:minerjr> [FIRE-36022]
             }
             LL::WorkQueue::postMaybe(mMainQueue,
                 [=, this] {
@@ -848,6 +874,11 @@ void LLWebRTCVoiceClient::tuningSetSpeakerVolume(float volume)
 
 float LLWebRTCVoiceClient::tuningGetEnergy(void)
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // This can cause an error if device interface can be NULL.
+    if (!mWebRTCDeviceInterface)
+        return 1.0f;
+    // </FS:minerjr> [FIRE-36022]
     float rms = mWebRTCDeviceInterface->getTuningAudioLevel();
     return TUNING_LEVEL_START_POINT - TUNING_LEVEL_SCALE * rms;
 }
