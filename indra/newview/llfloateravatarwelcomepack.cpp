@@ -28,12 +28,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloateravatarwelcomepack.h"
-#include "lluictrlfactory.h"
 #include "llmediactrl.h"
+#include "lluictrlfactory.h"
+#include "llviewercontrol.h"
+#include "llweb.h"
 
 #include "lfsimfeaturehandler.h"
 #include "llhttpconstants.h"
-#include "llweb.h"
+#include "lllogininstance.h"
+#include "llviewernetwork.h"
 
 LLFloaterAvatarWelcomePack::LLFloaterAvatarWelcomePack(const LLSD& key)
     :   LLFloater(key),
@@ -64,6 +67,34 @@ bool LLFloaterAvatarWelcomePack::postBuild()
     if (mAvatarPicker)
     {
         mAvatarPicker->clearCache();
+        mAvatarPicker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+        // <FS:AW> optional opensim support
+        //std::string url = gSavedSettings.getString("AvatarWelcomePack");
+        //url = LLWeb::expandURLSubstitutions(url, LLSD());
+        //mAvatarPicker->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
+
+        std::string avatar_picker_url;
+#ifdef OPENSIM
+        if (LLGridManager::getInstance()->isInOpenSim())
+        {
+            if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+            {
+                avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+            }
+        }
+        else
+#endif // OPENSIM
+        {
+            avatar_picker_url = gSavedSettings.getString("AvatarWelcomePack");
+        }
+
+        if (!avatar_picker_url.empty())
+        {
+            avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
+            LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
+            mAvatarPicker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+        }
+        // </FS:AW> optional opensim support
     }
 
     return true;
