@@ -931,7 +931,9 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
             if (!isItemMovable() || !canMenuCut())
             {
                 disabled_items.push_back(std::string("Cut"));
-                disabled_items.push_back(std::string("New folder from selected"));
+                // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+                //disabled_items.push_back(std::string("New folder from selected"));
+                // </FS:TJ>
             }
         }
         else
@@ -984,7 +986,9 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
             if (!isItemMovable() || !canMenuCut())
             {
                 disabled_items.push_back(std::string("Cut"));
-                disabled_items.push_back(std::string("New folder from selected"));
+                // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+                //disabled_items.push_back(std::string("New folder from selected"));
+                // </FS:TJ>
             }
 
             if (canListOnMarketplace() && !isMarketplaceListingsFolder() && !isInboxFolder())

@@ -353,6 +353,7 @@ void LLWebRTCImpl::init()
                 //updateDevices();
             }
         });
+
 }
 
 void LLWebRTCImpl::terminate()

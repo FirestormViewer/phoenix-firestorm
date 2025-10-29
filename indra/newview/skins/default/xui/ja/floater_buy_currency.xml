@@ -46,7 +46,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[https://accounts.secondlife.com/billing_information/ 支払い情報]｜[https://www.secondlife.com/my/lindex/buy.php L$の購入]
+				[https://accounts.secondlife.com/billing_information/?lang=ja-JP 支払い情報]｜[https://www.secondlife.com/my/lindex/buy.php?lang=ja-JP L$の購入]
 			</text>
 			<text name="exchange_rate_note">
 				金額を再入力して、最新の為替レートを確認してください。
