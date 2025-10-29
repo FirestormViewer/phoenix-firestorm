@@ -38,10 +38,10 @@ endif ()
 # windows) and CMAKE_BUILD_TYPE on Makefile based generators (like linux).  The reason for this is
 # that CMAKE_BUILD_TYPE is essentially meaningless at configuration time for IDE generators and
 # CMAKE_CFG_INTDIR is meaningless at build time for Makefile generators
-if(NOT DARWIN)
-  link_directories(${AUTOBUILD_INSTALL_DIR}/lib/$<LOWER_CASE:$<CONFIG>>)
-  link_directories(${AUTOBUILD_INSTALL_DIR}/lib/release)
-endif(NOT DARWIN)
+
+link_directories(${AUTOBUILD_INSTALL_DIR}/lib/$<LOWER_CASE:$<CONFIG>>)
+link_directories(${AUTOBUILD_INSTALL_DIR}/lib/release)
+
 
 add_library( ll::oslibraries INTERFACE IMPORTED )
 

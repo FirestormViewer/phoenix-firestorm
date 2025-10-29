@@ -189,6 +189,7 @@ void LLOutfitsList::onOpen(const LLSD& info)
 
 void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
 {
+    LL_PROFILE_ZONE_SCOPED;
     LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
     if (!cat) return;
 
@@ -260,7 +261,9 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
 
     if (AISAPI::isAvailable() && LLInventoryModelBackgroundFetch::instance().folderFetchActive())
     {
-        // for reliability just fetch it whole, linked items included
+        // For reliability just fetch it whole, linked items included
+        // Todo: list is not warrantied to exist once callback arrives
+        // Fix it!
         LLInventoryModelBackgroundFetch::instance().fetchFolderAndLinks(cat_id, [cat_id, list]
         {
             if (list)
@@ -1153,6 +1156,7 @@ void LLOutfitListBase::onIdle(void* userdata)
 
 void LLOutfitListBase::onIdleRefreshList()
 {
+    LL_PROFILE_ZONE_SCOPED;
     if (LLAppViewer::instance()->quitRequested())
     {
         mRefreshListState.CategoryUUID.setNull();

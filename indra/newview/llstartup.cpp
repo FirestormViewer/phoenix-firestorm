@@ -4886,6 +4886,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
         // <FS:TJ> [FIRE-34775] Use PST/PDT when logged into OpenSim
         LLStringOps::setupUsingPacificTime(!LLGridManager::getInstance()->isInSecondLife());
         // </FS:TJ>
+        // <FS:TJ> [FIRE-36028] Fix OpenSim object permissions
+        LLPermissions::setupIsInOpenSim(!LLGridManager::getInstance()->isInSecondLife());
+        // </FS:TJ>
+
     }
 
     // set up the voice configuration.  Ultimately, we should pass this up as part of each voice

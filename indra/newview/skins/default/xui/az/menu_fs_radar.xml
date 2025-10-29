@@ -25,6 +25,7 @@
 	<menu_item_call label="Yaxınlaşdır" name="zoom_in"/>
 	<menu_item_call label="Qrupa dəvət et" name="GroupInvite"/>
 	<menu_item_call label="Skriptlər haqqında məlumat" name="ScriptInfo"/>
+	<menu_item_call label="Söhbət tarixi..." name="chat_history" />
 	<menu_item_check label="Blokla/Blokdan çıxart" name="Block/Unblock"/>
 	<menu_item_call label="Şikayət" name="report"/>
 	<menu_item_call label="Dondur" name="freeze"/>

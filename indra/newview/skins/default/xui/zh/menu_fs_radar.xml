@@ -25,6 +25,7 @@
 	<menu_item_call label="放大" name="zoom_in" />
 	<menu_item_call label="邀請加入群組" name="GroupInvite" />
 	<menu_item_call label="顯示指令碼資訊" name="ScriptInfo" />
+	<menu_item_call label="聊天歷史……" name="chat_history" />
 	<menu_item_check label="封鎖/解除封鎖" name="Block/Unblock" />
 	<menu_item_call label="檢舉" name="report" />
 	<menu_item_call label="凍結" name="freeze" />

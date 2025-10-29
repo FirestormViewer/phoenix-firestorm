@@ -82,7 +82,7 @@
 			</text>
 			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="サウンドプリロード要求のイベント乗数を指定します。（デフォルト：４）"/>
 			<button name="AntiSpamUnblock" label="スパム源は全て無視する"/>
-			<check_box label="支払い前に確認する。閾値：" name="FSConfirmPayments" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。"/>
+			<check_box label="支払う前に確認する閾値：" name="FSConfirmPayments" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。"/>
 			<spinner name="FSPaymentConfirmationThreshold" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。"/>
 		</panel>
 		<!-- アバター -->
