@@ -138,7 +138,7 @@ static FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBA
                 std::unique_lock lock(iAudioDeviceMutex, 3s);
                 // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
                 // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-                if (not lock.owns_lock())
+                if (!lock.owns_lock())
                 {
                     LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
                     return FMOD_OK; // Could be a FMOD_ERR_ALREADY_LOCKED;
@@ -433,7 +433,7 @@ void LLAudioEngine_FMODSTUDIO::setDevice(const LLUUID& device_uuid)
     std::unique_lock lock(iAudioDeviceMutex, 3s);
     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-    if (not lock.owns_lock())
+    if (!lock.owns_lock())
     {
         LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
         return;

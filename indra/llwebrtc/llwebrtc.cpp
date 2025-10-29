@@ -481,7 +481,7 @@ void LLWebRTCImpl::workerDeployDevices()
     std::unique_lock lock(iAudioDeviceMutex, 3s);
     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-    if (not lock.owns_lock())
+    if (!lock.owns_lock())
     {
         return;
     }
@@ -664,7 +664,7 @@ void LLWebRTCImpl::updateDevices()
     std::unique_lock lock(iAudioDeviceMutex, 3s);
     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-    if (not lock.owns_lock())
+    if (!lock.owns_lock())
     {
         return;
     }
@@ -859,7 +859,7 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
                     std::unique_lock lock(iAudioDeviceMutex, 3s);
                     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
                     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-                    if (not lock.owns_lock())
+                    if (!lock.owns_lock())
                     {
                         return;
                     }
@@ -920,7 +920,7 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
                     std::unique_lock lock(iAudioDeviceMutex, 3s);
                     // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
                     // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-                    if (not lock.owns_lock())
+                    if (!lock.owns_lock())
                     {
                         return;
                     }
