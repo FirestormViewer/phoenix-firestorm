@@ -660,7 +660,7 @@ bool LLAudioEngine::preloadSound(const LLUUID &uuid)
     LL_DEBUGS("AudioEngine")<<"( "<<uuid<<" )"<<LL_ENDL;
 
     // <FS:ND> Protect against corrupted sounds. Just do a quick exit instead of trying to preload over and over again.
-    if( gAudiop->isCorruptSound( uuid ) )
+    if (gAudiop && gAudiop->isCorruptSound(uuid))
         return false;
     // </FS:ND>
 
@@ -1317,7 +1317,7 @@ std::map<LLUUID, LLSoundHistoryItem> gSoundHistory;
 void LLAudioSource::logSoundPlay(const LLUUID& id, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped)
 {
     // <FS:ND> Corrupt asset, do not bother
-    if( gAudiop->isCorruptSound( assetid ) )
+    if (gAudiop && gAudiop->isCorruptSound(assetid))
         return;
     // </FS:ND>
 
