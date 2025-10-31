@@ -84,7 +84,16 @@ namespace LLProfiler
 
 #if defined(LL_PROFILER_CONFIGURATION) && (LL_PROFILER_CONFIGURATION > LL_PROFILER_CONFIG_NONE)
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY || LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
+    #include "llpreprocessor.h"
+
+#if defined(LL_GNUC) && GCC_VERSION >= 130000
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wnonnull"
+#endif
         #include "tracy/Tracy.hpp"
+#if defined(LL_GNUC) && GCC_VERSION >= 130000
+#   pragma GCC diagnostic push
+#endif
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0

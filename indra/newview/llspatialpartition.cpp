@@ -3807,15 +3807,13 @@ public:
 
 typedef ndOctreeListener< LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry> > ndDrawableOctreeListener;
 typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
-
 // </FS:ND>
 
-LL_ALIGN_PREFIX(16)
-class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
+class alignas(16) LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
 {
 public:
-    LL_ALIGN_16(LLVector4a mStart);
-    LL_ALIGN_16(LLVector4a mEnd);
+    LLVector4a mStart;
+    LLVector4a mEnd;
 
     S32       *mFaceHit;
     LLVector4a *mIntersection;
@@ -4020,7 +4018,7 @@ public:
 
         return false;
     }
-} LL_ALIGN_POSTFIX(16);
+};
 
 LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
                                                      bool pick_transparent,

@@ -266,7 +266,7 @@ public:
 
 
 private: //aligned members
-    LL_ALIGN_16(LLVector4a  mImpostorExtents[2]);
+    LLVector4a  mImpostorExtents[2];
 
     //--------------------------------------------------------------------
     // Updates
@@ -1068,7 +1068,7 @@ public:
     // <FS:Ansariel> Get typing status
     bool            isTyping() const { return mTyping; }
 private:
-    bool            mVisibleChat;
+    bool            mVisibleChat = false;
     bool            mVisibleTyping;
 
     //--------------------------------------------------------------------
@@ -1267,7 +1267,7 @@ public:
     static F32          sGreyUpdateTime; // Last time stats were updated (to prevent multiple updates per frame)
 protected:
     S32                 getUnbakedPixelAreaRank();
-    bool                mHasGrey;
+    bool                mHasGrey = false;
 private:
     F32                 mMinPixelArea;
     F32                 mMaxPixelArea;

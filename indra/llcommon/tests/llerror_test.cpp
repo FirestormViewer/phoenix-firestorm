@@ -61,6 +61,8 @@ namespace
 {
 #ifdef __clang__
 #   pragma clang diagnostic ignored "-Wunused-function"
+#elif defined(LL_GNUC)
+#   pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 #if __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-function"

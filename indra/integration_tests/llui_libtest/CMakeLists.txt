@@ -49,9 +49,14 @@ target_link_libraries(llui_libtest
         llimagej2coj
         )
 
+set_target_properties(llui_libtest
+                    PROPERTIES
+                    FOLDER "Tests"
+                    )
+
 if (WINDOWS)
     set_target_properties(llui_libtest
-        PROPERTIES 
+        PROPERTIES
         LINK_FLAGS "/NODEFAULTLIB:LIBCMT"
         )
 
@@ -72,6 +77,13 @@ if (WINDOWS)
         )
   
 endif (WINDOWS)
+
+if(DARWIN)
+    set_target_properties(llui_libtest
+                        PROPERTIES
+                        OSX_ARCHITECTURES ${LL_MACOS_TEST_ARCHITECTURE}
+                        )
+endif()
 
 # Ensure people working on the viewer don't break this library
 # *NOTE: This could be removed, or only built by Parabuild, if the build

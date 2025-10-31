@@ -58,6 +58,9 @@ class LLDirPicker
 {
 public:
     bool getDir(std::string* filename, bool blocking = true);
+    bool getDirModeless(std::string* filename,
+        void (*callback)(bool, std::string&, void*),
+        void* userdata);
     std::string getDirName();
 
     // clear any lists of buffers or whatever, and make sure the dir
@@ -77,10 +80,7 @@ private:
 
 #if LL_LINUX || LL_DARWIN
     // On Linux we just implement LLDirPicker on top of LLFilePicker
-    // <FS:ND> Seems like on OSX too ... Unless FLTK is used, then nope
-#ifndef LL_FLTK
     LLFilePicker *mFilePicker;
-#endif
 #endif
 
 
@@ -118,6 +118,11 @@ public:
     void getFile();
 
     virtual void run();
+
+    void runModeless();
+    static void modelessStringCallback(bool success,
+        std::string& response,
+        void* user_data);
 
     virtual void notify(const std::vector<std::string>& filenames);
 

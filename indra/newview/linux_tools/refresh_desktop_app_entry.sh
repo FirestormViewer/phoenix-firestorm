@@ -3,7 +3,7 @@
 SCRIPTSRC=`readlink -f "$0" || echo "$0"`
 RUN_PATH=`dirname "${SCRIPTSRC}" || echo .`
 
-install_prefix=${RUN_PATH}/..
+install_prefix="$(realpath -- "${RUN_PATH}/..")"
 
 function install_desktop_entry()
 {
@@ -13,19 +13,25 @@ function install_desktop_entry()
     local desktop_entry="\
 [Desktop Entry]\n\
 Name=Firestorm Viewer\n\
+GenericName=Firestorm Viewer\n\
 Comment=Client for accessing 3D virtual worlds\n\
-Exec=${installation_prefix}/firestorm\n\
+Path=${installation_prefix}\n\
+Exec=secondlife\n\
 Icon=${installation_prefix}/firestorm_icon.png\n\
 Terminal=false\n\
 Type=Application\n\
-Categories=Application;Internet;Network;\n\
+Categories=Game;Simulation;\n\
 StartupNotify=true\n\
-X-Desktop-File-Install-Version=3.0\n\
-StartupWMClass=do-not-directly-run-firestorm-bin"
+StartupWMClass="com.secondlife.indra.viewer"\n\
+X-Desktop-File-Install-Version=3.0"
 
     echo " - Installing menu entries in ${desktop_entries_dir}"
-    mkdir -vp "${desktop_entries_dir}"
-    echo -e $desktop_entry > "${desktop_entries_dir}/firestorm-viewer.desktop" || "Failed to install application menu!"
+    WORK_DIR=`mktemp -d`
+    echo -e $desktop_entry > "${WORK_DIR}/firestorm-viewer.desktop" || "Failed to install application menu!"
+    desktop-file-install --dir="${desktop_entries_dir}" ${WORK_DIR}/firestorm-viewer.desktop
+    rm -r $WORK_DIR
+
+    update-desktop-database "${desktop_entries_dir}"
 }
 
 if [ "$UID" == "0" ]; then

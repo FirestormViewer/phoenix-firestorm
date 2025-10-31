@@ -196,7 +196,6 @@
 #include "llviewerjoystick.h"
 #include "llviewermenufile.h" // LLFilePickerReplyThread
 #include "llviewernetwork.h"
-#include "llpostprocess.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 // </FS:Ansariel> [FS communication UI]
@@ -6832,11 +6831,6 @@ void* LLViewerWindow::getPlatformWindow() const
     return mWindow->getPlatformWindow();
 }
 
-void* LLViewerWindow::getMediaWindow()  const
-{
-    return mWindow->getMediaWindow();
-}
-
 void LLViewerWindow::focusClient()      const
 {
     return mWindow->focusClient();
@@ -7098,11 +7092,6 @@ void LLViewerWindow::stopGL()
         }
 
         gBox.cleanupGL();
-
-        if(gPostProcess)
-        {
-            gPostProcess->invalidate();
-        }
 
         gTextureList.destroyGL();
         stop_glerror();

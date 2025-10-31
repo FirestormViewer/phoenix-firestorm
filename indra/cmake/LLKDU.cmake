@@ -7,12 +7,12 @@ if (INSTALL_PROPRIETARY)
   set(USE_KDU ON CACHE BOOL "Use Kakadu library.")
 endif (INSTALL_PROPRIETARY)
 
-set( ND_KDU_SUFFIX "" )
-if( ADDRESS_SIZE EQUAL 64 )
-  if( WINDOWS OR LINUX )
-    set( ND_KDU_SUFFIX "_x64" )
-  endif( WINDOWS OR LINUX )
-endif( ADDRESS_SIZE EQUAL 64 )
+set(ND_KDU_SUFFIX "")
+if (ADDRESS_SIZE EQUAL 64)
+  if (WINDOWS OR LINUX)
+    set(ND_KDU_SUFFIX "_x64")
+  endif (WINDOWS OR LINUX)
+endif (ADDRESS_SIZE EQUAL 64)
     
 include_guard()
 add_library( ll::kdu INTERFACE IMPORTED )
@@ -21,21 +21,13 @@ if (USE_KDU)
   include(Prebuilt)
   use_prebuilt_binary(kdu)
 
-  if (WINDOWS)
-    find_library(KDU_LIBRARY
-      NAMES
-      kdu
-      kdu${ND_KDU_SUFFIX} // <FS> FS-specific naming
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-  else (WINDOWS)
-    find_library(KDU_LIBRARY
-      NAMES
-      libkdu.a
-      libkdu${ND_KDU_SUFFIX} // <FS> FS-specific naming
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-  endif (WINDOWS)
+  find_library(KDU_LIBRARY
+    NAMES
+    kdu
+    kdu${ND_KDU_SUFFIX}.lib // <FS> FS-specific naming
+    libkdu.a
+    libkdu${ND_KDU_SUFFIX}.a // <FS> FS-specific naming
+    PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
   target_link_libraries(ll::kdu INTERFACE ${KDU_LIBRARY})
 

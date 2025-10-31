@@ -32,6 +32,7 @@ if (USE_OPENAL)
       NAMES
       OpenAL32
       openal
+      OpenAL32.lib
       libopenal.dylib
       libopenal.so
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
@@ -39,6 +40,7 @@ if (USE_OPENAL)
   find_library(ALUT_LIBRARY
       NAMES
       alut
+      alut.lib
       libalut.dylib
       libalut.so
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)

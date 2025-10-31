@@ -1360,7 +1360,7 @@ F32 FSFloaterContacts::onGetFilterOpacityCallback(ETypeTransparency type, F32 al
     static LLCachedControl<F32> im_opacity(gSavedSettings, "FSIMOpacity", 1.0f);
     if (type != TT_ACTIVE)
     {
-        return llmin(im_opacity, alpha);
+        return llmin(im_opacity(), alpha);
     }
 
     return alpha;

@@ -77,7 +77,7 @@ void render_hull_with_outline(LLModel::PhysicsMesh& mesh, const LLColor4& color,
     Make every effort to keep size minimal.
     Member ordering is important for cache coherency
 */
-class LLDrawInfo final : public LLRefCount
+class alignas(16) LLDrawInfo final : public LLRefCount
 {
     LL_ALIGN_NEW;
 protected:
@@ -211,12 +211,13 @@ public:
     };
 };
 
-LL_ALIGN_PREFIX(16)
-class LLSpatialGroup : public LLOcclusionCullingGroup
+class alignas(16) LLSpatialGroup : public LLOcclusionCullingGroup
 {
     using super = LLOcclusionCullingGroup;
     friend class LLSpatialPartition;
     friend class LLOctreeStateCheck;
+
+    LL_ALIGN_NEW
 public:
 
     LLSpatialGroup(const LLSpatialGroup& rhs) : LLOcclusionCullingGroup(rhs)
@@ -351,8 +352,8 @@ public:
     virtual void rebound();
 
 public:
-    LL_ALIGN_16(LLVector4a mViewAngle);
-    LL_ALIGN_16(LLVector4a mLastUpdateViewAngle);
+    LLVector4a mViewAngle;
+    LLVector4a mLastUpdateViewAngle;
 
 protected:
     virtual ~LLSpatialGroup();
@@ -382,7 +383,7 @@ public:
     U32 mRenderOrder = 0;
     // Reflection Probe associated with this node (if any)
     LLPointer<LLReflectionMap> mReflectionProbe = nullptr;
-} LL_ALIGN_POSTFIX(16);
+};
 
 class LLGeometryManager
 {

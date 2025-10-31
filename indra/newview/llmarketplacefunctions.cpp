@@ -451,17 +451,14 @@ LLMarketplaceInventoryImporter::LLMarketplaceInventoryImporter()
     , mImportInProgress(false)
     , mInitialized(false)
     , mMarketPlaceStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED)
-    , mErrorInitSignal(NULL)
-    , mStatusChangedSignal(NULL)
-    , mStatusReportSignal(NULL)
 {
 }
 
 boost::signals2::connection LLMarketplaceInventoryImporter::setInitializationErrorCallback(const status_report_signal_t::slot_type& cb)
 {
-    if (mErrorInitSignal == NULL)
+    if (mErrorInitSignal == nullptr)
     {
-        mErrorInitSignal = new status_report_signal_t();
+        mErrorInitSignal = std::make_unique<status_report_signal_t>();
     }
 
     return mErrorInitSignal->connect(cb);
@@ -469,9 +466,9 @@ boost::signals2::connection LLMarketplaceInventoryImporter::setInitializationErr
 
 boost::signals2::connection LLMarketplaceInventoryImporter::setStatusChangedCallback(const status_changed_signal_t::slot_type& cb)
 {
-    if (mStatusChangedSignal == NULL)
+    if (mStatusChangedSignal == nullptr)
     {
-        mStatusChangedSignal = new status_changed_signal_t();
+        mStatusChangedSignal = std::make_unique<status_changed_signal_t>();
     }
 
     return mStatusChangedSignal->connect(cb);
@@ -479,9 +476,9 @@ boost::signals2::connection LLMarketplaceInventoryImporter::setStatusChangedCall
 
 boost::signals2::connection LLMarketplaceInventoryImporter::setStatusReportCallback(const status_report_signal_t::slot_type& cb)
 {
-    if (mStatusReportSignal == NULL)
+    if (mStatusReportSignal == nullptr)
     {
-        mStatusReportSignal = new status_report_signal_t();
+        mStatusReportSignal = std::make_unique<status_report_signal_t>();
     }
 
     return mStatusReportSignal->connect(cb);
@@ -718,8 +715,6 @@ LLMarketplaceTuple::LLMarketplaceTuple(const LLUUID& folder_id, S32 listing_id, 
 LLMarketplaceData::LLMarketplaceData() :
  mMarketPlaceStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED),
  mMarketPlaceDataFetched(MarketplaceFetchCodes::MARKET_FETCH_NOT_DONE),
- mStatusUpdatedSignal(NULL),
- mDataFetchedSignal(NULL),
  mDirtyCount(false)
 {
     mInventoryObserver = new LLMarketplaceInventoryObserver;
@@ -753,9 +748,9 @@ LLSD LLMarketplaceData::getMarketplaceStringSubstitutions()
 
 void LLMarketplaceData::initializeSLM(const status_updated_signal_t::slot_type& cb)
 {
-    if (mStatusUpdatedSignal == NULL)
+    if (mStatusUpdatedSignal == nullptr)
     {
-        mStatusUpdatedSignal = new status_updated_signal_t();
+        mStatusUpdatedSignal = std::make_unique<status_updated_signal_t>();
     }
     mStatusUpdatedSignal->connect(cb);
 
@@ -843,7 +838,7 @@ void LLMarketplaceData::setDataFetchedSignal(const status_updated_signal_t::slot
 {
     if (mDataFetchedSignal == NULL)
     {
-        mDataFetchedSignal = new status_updated_signal_t();
+        mDataFetchedSignal = std::make_unique<status_updated_signal_t>();
     }
     mDataFetchedSignal->connect(cb);
 }

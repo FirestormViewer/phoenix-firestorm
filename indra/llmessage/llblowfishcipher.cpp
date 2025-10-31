@@ -143,22 +143,20 @@ U32 LLBlowfishCipher::decrypt(const U8* src, U32 src_len, U8* dst, U32 dst_len)
     if (!EVP_DecryptUpdate(context, dst, &out_len, src, src_len))
     {
         LL_WARNS() << "LLBlowfishCipher::decrypt EVP_DecryptUpdate failure" << LL_ENDL;
-        goto ERROR;
+        EVP_CIPHER_CTX_free(context);
+        return 0;
     }
     if (!EVP_DecryptFinal_ex(context, dst + out_len, &tmp_len))
     {
         LL_WARNS() << "LLBlowfishCipher::decrypt EVP_DecryptFinal failure" << LL_ENDL;
-        goto ERROR;
+        EVP_CIPHER_CTX_free(context);
+        return 0;
     }
 
     out_len += tmp_len;
 
     EVP_CIPHER_CTX_free(context);
     return out_len;
-
-ERROR:
-    EVP_CIPHER_CTX_free(context);
-    return 0;
     // </FS:CR>
 }
 
