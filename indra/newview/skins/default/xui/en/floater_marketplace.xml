@@ -164,12 +164,32 @@
       top_delta="0"
       auto_resize="true"
       width="585">
+      <text
+        name="plugin_fail_text"
+        follows="all"
+        layout="topleft"
+        left="60"
+        top="60"
+        right="-60"
+        bottom="-60"
+        wrap="true">
+The web browser plugin seems to be taking a while to open.
+If the plugin never loads, please visit:
+
+https://wiki.firestormviewer.org/fs_search_issues
+
+and
+
+https://wiki.firestormviewer.org/fs_media
+
+for possible steps to resolve this issue.
+      </text>
       <web_browser
         bottom="-2"
         follows="all"
         layout="topleft"
         left="0"
-        name="marketplace_contents"
+        name="webbrowser"
         top="0"/>
     </layout_panel>
     <layout_panel name="status_bar" 
