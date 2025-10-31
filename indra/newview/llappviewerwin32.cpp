@@ -1016,6 +1016,11 @@ bool LLAppViewerWin32::cleanup()
 
     gDXHardware.cleanup();
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Need to unilitialize connection to COM, otherwise it will be treated as a memroy leak.
+    CoUninitialize();
+    // </FS:minerjr> [FIRE-36022]
+
     if (mIsConsoleAllocated)
     {
         FreeConsole();
@@ -1056,6 +1061,19 @@ bool LLAppViewerWin32::initWindow()
             LL_WARNS("AppInit") << "Unable to set WindowWidth and WindowHeight for FullScreen mode" << LL_ENDL;
         }
     }
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Acccording to the FMOD spec, you are suppose to initalize COM on the thead that will talk to FMOD. IE the main thread.
+    // There is a coorisponding CoUninitialize in the shutdown code. Otherwise, FMOD will force the initalize with a warning, but does not clean up COM
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    if (SUCCEEDED(hr))
+    {
+        LL_INFOS() << "WIN32: CoInitializeEx COM as COINIT_APARTMENTTHREADED Successful" << LL_ENDL;
+    }
+    else
+    {
+        LL_INFOS() << "WIN32: CoInitializeEx COM as COINIT_APARTMENTTHREADED Failed" << LL_ENDL;
+    }
+    // </FS:minerjr> [FIRE-36022]
 
     return LLAppViewer::initWindow();
 }
