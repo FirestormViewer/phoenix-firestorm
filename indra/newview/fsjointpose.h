@@ -175,8 +175,11 @@ class FSJointPose
     /// Recalculates the delta reltive to the base for a new rotation.
     /// </summary>
     /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
+    /// <param name="rotation">The rotation of the supplied joint.</param>
+    /// <param name="position">The position of the supplied joint.</param>
+    /// <param name="scale">The scale of the supplied joint.</param>
     /// <returns>The rotation of the public difference between before and after recapture.</returns>
-    LLQuaternion recaptureJointAsDelta(bool zeroBase);
+    LLQuaternion updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
 
     /// <summary>
     /// Sets the base rotation to the supplied rotation if the supplied priority is appropriate.
@@ -340,15 +343,12 @@ class FSJointPose
             joint->setScale(mBaseScale);
         }
 
-        LLQuaternion updateFromJoint(LLJoint* joint, bool zeroBase)
+        LLQuaternion updateFromJointProperties(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
         {
-            if (!joint)
-                return LLQuaternion::DEFAULT;
-
             LLQuaternion initalPublicRot = mRotation;
             LLQuaternion invRot = mBaseRotation;
             invRot.conjugate();
-            LLQuaternion newPublicRot = joint->getRotation() * invRot;
+            LLQuaternion newPublicRot = rotation * invRot;
 
             if (zeroBase)
             {
@@ -357,8 +357,8 @@ class FSJointPose
             }
 
             mRotation.set(newPublicRot);
-            mPosition.set(joint->getPosition() - mBasePosition);
-            mScale.set(joint->getScale() - mBaseScale);
+            mPosition.set(position - mBasePosition);
+            mScale.set(scale - mBaseScale);
 
             return newPublicRot *= ~initalPublicRot;
         }

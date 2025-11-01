@@ -164,10 +164,12 @@ private:
     void renderAxes(const LLVector3& center, F32 size, const LLQuaternion& rotation);
 
     bool isAvatarJointSafeToUse();
+    LLQuaternion getSelectedJointWorldRotation();
 
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
     E_PoserManipReferenceFrame mReferenceFrame = FRAME_BONE;
+    LLQuaternion               mLastSetRotation;
 };
 
 #endif // FS_MANIP_ROTATE_JOINT_H

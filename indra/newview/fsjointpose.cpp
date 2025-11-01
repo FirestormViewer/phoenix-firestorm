@@ -172,15 +172,12 @@ void FSJointPose::recaptureJoint()
     mCurrentState.mLastChangeWasRotational = true;
 }
 
-LLQuaternion FSJointPose::recaptureJointAsDelta(bool zeroBase)
+LLQuaternion FSJointPose::updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
 {
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return LLQuaternion::DEFAULT;
-
     addStateToUndo(FSJointState(mCurrentState));
     mCurrentState.mLastChangeWasRotational = true;
-    return mCurrentState.updateFromJoint(joint, zeroBase);
+
+    return mCurrentState.updateFromJointProperties(zeroBase, rotation, position, scale);
 }
 
 void FSJointPose::setBaseRotation(LLQuaternion rotation, LLJoint::JointPriority priority)

@@ -462,8 +462,9 @@ void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joi
     setPosingAvatarJoint(avatar, joint, true);
 }
 
-void FSPoserAnimator::recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
-                                            E_BoneDeflectionStyles style)
+void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
+                                           E_BoneDeflectionStyles style, const LLQuaternion rotation, const LLVector3 position,
+                                           const LLVector3 scale)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -476,32 +477,61 @@ void FSPoserAnimator::recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoi
     if (!jointPose)
         return;
 
-    LLQuaternion deltaRot = jointPose->recaptureJointAsDelta(resetBaseRotationToZero);
+    jointPose->setPublicRotation(resetBaseRotationToZero, rotation * jointPose->getPublicRotation());
 
-    deRotateWorldLockedDescendants(joint, posingMotion, deltaRot);
+    deRotateWorldLockedDescendants(joint, posingMotion, rotation);
 
     if (style == NONE || style == DELTAMODE)
         return;
 
+    auto         oppositePoserJoint = getPoserJointByName(joint->mirrorJointName());
     FSJointPose* oppositeJointPose = posingMotion->getJointPoseByJointName(joint->mirrorJointName());
     if (!oppositeJointPose)
         return;
 
+    LLQuaternion mirroredRotation = LLQuaternion(-rotation.mQ[VX], rotation.mQ[VY], -rotation.mQ[VZ], rotation.mQ[VW]);
     switch (style)
     {
         case SYMPATHETIC:
         case SYMPATHETIC_DELTA:
-            oppositeJointPose->cloneRotationFrom(jointPose);
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, rotation * oppositeJointPose->getPublicRotation());
+            if (oppositePoserJoint)
+                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, rotation);
             break;
 
         case MIRROR:
         case MIRROR_DELTA:
-            oppositeJointPose->mirrorRotationFrom(jointPose);
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, mirroredRotation * oppositeJointPose->getPublicRotation());
+            if (oppositePoserJoint)
+                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, mirroredRotation);
             break;
 
         default:
             break;
     }
+}
+
+LLQuaternion FSPoserAnimator::getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserManipReferenceFrame frame)
+{
+    LLQuaternion gimbalRot;
+    if (!joint)
+        return gimbalRot;
+    if (!isAvatarSafeToUse(avatar))
+        return gimbalRot;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return gimbalRot;
+
+    FSJointPose* jointPose = posingMotion->getJointPoseByJointName(joint->jointName());
+    if (!jointPose)
+        return gimbalRot;
+
+    LLQuaternion worldRotOfThisJoint = jointPose->getJointState()->getJoint()->getWorldRotation();
+    LLQuaternion publicRotInWorld    = changeToRotationFrame(avatar, jointPose->getPublicRotation(), FRAME_WORLD, jointPose);
+    worldRotOfThisJoint *= publicRotInWorld;
+
+    return worldRotOfThisJoint;
 }
 
 LLVector3 FSPoserAnimator::getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const
@@ -611,7 +641,7 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
     if (!oppositeJointPose)
         return;
 
-    LLQuaternion inv_quat = LLQuaternion(-deltaRot.mQ[VX], deltaRot.mQ[VY], -deltaRot.mQ[VZ], deltaRot.mQ[VW]);
+    LLQuaternion mirroredRotation = LLQuaternion(-deltaRot.mQ[VX], deltaRot.mQ[VY], -deltaRot.mQ[VZ], deltaRot.mQ[VW]);
     switch (style)
     {
         case SYMPATHETIC:
@@ -629,13 +659,13 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
         case MIRROR:
             oppositeJointPose->mirrorRotationFrom(jointPose);
             if (oppositePoserJoint)
-                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, inv_quat);
+                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, mirroredRotation);
             break;
 
         case MIRROR_DELTA:
-            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, inv_quat * oppositeJointPose->getPublicRotation());
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, mirroredRotation * oppositeJointPose->getPublicRotation());
             if (oppositePoserJoint)
-                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, inv_quat);
+                deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, mirroredRotation);
             break;
 
         default:

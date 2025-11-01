@@ -532,6 +532,15 @@ public:
     LLVector3 getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const;
 
     /// <summary>
+    /// Gets the rotation suitable for the Manip gimbal for the supplied avatar and joint.
+    /// </summary>
+    /// <param name="avatar">The avatar having the Manip gimbal placed upon it.</param>
+    /// <param name="joint">The joint on the avatar where the manip should be placed.</param>
+    /// <param name="frame">The frame of reference for the gimbal.</param>
+    /// <returns>The rotation to set the gimbal to.</returns>
+    LLQuaternion getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserManipReferenceFrame frame);
+
+    /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be set.</param>
@@ -601,7 +610,11 @@ public:
     /// <param name="joint">The joint to recapture.</param>
     /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style);
+    /// <param name="rotation">The rotation of the supplied joint.</param>
+    /// <param name="position">The position of the supplied joint.</param>
+    /// <param name="scale">The scale of the supplied joint.</param>
+    void updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style,
+                              const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.

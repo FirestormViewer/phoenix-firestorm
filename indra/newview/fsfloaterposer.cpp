@@ -834,7 +834,7 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     sendPoseUpdateByChat(avatar, POSECHANGE_BOTH);
 }
 
-void FSFloaterPoser::updatePosedBones(const std::string& jointName)
+void FSFloaterPoser::updatePosedBones(const std::string& jointName, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
 {
     LLVOAvatar *avatar = getUiSelectedAvatar();
     if (!avatar)
@@ -853,7 +853,7 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName)
         return;
 
     bool savingToExternal = getSavingToBvh();
-    mPoserAnimator.recaptureJointAsDelta(avatar, poserJoint, savingToExternal, getUiSelectedBoneDeflectionStyle());
+    mPoserAnimator.updateJointFromManip(avatar, poserJoint, savingToExternal, getUiSelectedBoneDeflectionStyle(), rotation, position, scale);
 
     refreshRotationSlidersAndSpinners();
     refreshPositionSlidersAndSpinners();
@@ -862,6 +862,24 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName)
     enableOrDisableRedoAndUndoButton();
     refreshTextHighlightingOnJointScrollLists();
     sendPoseUpdateByChat(avatar, POSECHANGE_BONE);
+}
+
+LLQuaternion FSFloaterPoser::getManipGimbalRotation(const std::string& jointName)
+{
+    LLVOAvatar *avatar = getUiSelectedAvatar();
+    if (!avatar)
+        return LLQuaternion();
+
+    if (!mPoserAnimator.isPosingAvatar(avatar))
+        return LLQuaternion();
+
+    const FSPoserAnimator::FSPoserJoint* poserJoint = mPoserAnimator.getPoserJointByName(jointName);
+    if (!poserJoint)
+        return LLQuaternion();
+
+    E_PoserManipReferenceFrame frame = getReferenceFrame();
+
+    return mPoserAnimator.getManipGimbalRotation(avatar, poserJoint, frame);
 }
 
 void FSFloaterPoser::onClickBrowsePoseCache()

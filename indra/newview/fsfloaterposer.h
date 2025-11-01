@@ -82,7 +82,8 @@ class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
 public:
-    void updatePosedBones(const std::string& jointName);
+    void updatePosedBones(const std::string& jointName, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
+    LLQuaternion getManipGimbalRotation(const std::string& jointName);
     void selectJointByName(const std::string& jointName);
     void undo() override { onUndoLastChange(); };
     bool canUndo() const override { return true; }
