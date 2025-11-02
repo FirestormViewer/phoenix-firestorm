@@ -88,11 +88,12 @@ public:
                            const std::string& inventory_name,
                            LLOfferInfo* inventory_offer);
 
+    void hideBackBtn();
+
     // <FS:Ansariel> CTRL-F focusses local search editor
     /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
     /*virtual*/ bool hasAccelerators() const { return true; }
     // </FS:Ansariel>
-
 
 protected:
     virtual void update(LLGroupChange gc);

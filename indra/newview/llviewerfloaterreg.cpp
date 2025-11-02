@@ -67,6 +67,7 @@
 #include "llfloatercreatelandmark.h"
 #include "llfloaterdeleteprefpreset.h"
 #include "llfloaterdestinations.h"
+#include "llfloaterdirectory.h"
 #include "llfloaterdisplayname.h"
 #include "llfloatereditextdaycycle.h"
 #include "llfloateremojipicker.h"
@@ -290,7 +291,8 @@ public:
                 "upload_model",
                 "upload_script",
                 "upload_sound",
-                "bulk_upload"
+                "bulk_upload",
+                "legacy_search"
             };
             return std::find(blacklist_clicked.begin(), blacklist_clicked.end(), fl_name) == blacklist_clicked.end();
         }
@@ -342,7 +344,8 @@ public:
                 "upload_script",
                 "upload_sound",
                 "bulk_upload",
-                "slapp_test"
+                "slapp_test",
+                "legacy_search"
             };
             return std::find(blacklist_untrusted.begin(), blacklist_untrusted.end(), fl_name) == blacklist_untrusted.end();
         }
@@ -608,6 +611,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("snapshot_guide_settings", "floater_snapshot_guide_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);// <FS:Beq/> photo guide settings
     // <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
+    LLFloaterReg::add("legacy_search", "floater_directory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDirectory>);
     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
     LLFloaterReg::add("guidebook", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHowTo>);
     LLFloaterReg::add("slapp_test", "floater_test_slapp.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSLappTest>);

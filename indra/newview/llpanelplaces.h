@@ -85,6 +85,8 @@ public:
 
     /*virtual*/ S32 notifyParent(const LLSD& info);
 
+    void hideBackBtn();
+
     // <FS:Ansariel> Reset (clear) filter
     void resetFilter();
 

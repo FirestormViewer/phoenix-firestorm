@@ -33,6 +33,24 @@
 class LLEventNotification;
 class LLMessageSystem;
 
+struct LLEventInfo
+{
+    void unpack(LLMessageSystem* msg);
+
+    std::string mName;
+    U32         mID;
+    std::string mDesc;
+    std::string mCategoryStr;
+    U32         mDuration;
+    std::string mTimeStr;
+    LLUUID      mRunByID;
+    std::string mSimName;
+    LLVector3d  mPosGlobal;
+    F64         mUnixTime; // seconds from 1970
+    bool        mHasCover;
+    U32         mCover;
+    U32         mEventFlags;
+};
 
 class LLEventNotifier
 {
@@ -42,10 +60,7 @@ public:
 
     void update();  // Notify the user of the event if it's coming up
     bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName);
-// <FS:CR> FIRE-6310 - Legacy search - send more event info for legacy search to use
-    bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName,
-             const std::string &eventDesc, std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos);
-// </FS:CR>
+    bool add(LLEventInfo event);
     void add(U32 eventId);
 
 
@@ -60,14 +75,13 @@ public:
 
     static void processEventInfoReply(LLMessageSystem *msg, void **);
 
+    typedef boost::signals2::signal<bool(LLEventInfo event)> info_received_signal_t;
+    boost::signals2::connection setEventInfoCallback(const info_received_signal_t::slot_type& cb) { return mEventInfoSignal.connect(cb); };
+
 protected:
     en_map  mEventNotifications;
-    LLFrameTimer    mNotificationTimer;
-
-// <FS:CR> FIRE-6310 - Legacy Search
-private:
-    bool isEventNotice;
-// </FS:CR>
+    LLFrameTimer mNotificationTimer;
+    info_received_signal_t mEventInfoSignal;
 };
 
 

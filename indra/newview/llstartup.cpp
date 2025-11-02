@@ -130,6 +130,7 @@
 // <FS:Ansariel> [FS Login Panel]
 #include "llmutelist.h"
 #include "llavatarpropertiesprocessor.h"
+#include "llpaneldirbrowser.h"
 #include "llpanelgrouplandmoney.h"
 #include "llpanelgroupnotices.h"
 #include "llparcel.h"
@@ -249,9 +250,7 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llfriendcard.h"
 #include "llnotificationmanager.h"
-#include "llpresetsmanager.h"
 #include "llprogressview.h"
-#include "lltoolbarview.h"
 #include "NACLantispam.h"
 #include "streamtitledisplay.h"
 #include "tea.h"
@@ -3828,15 +3827,14 @@ void register_viewer_callbacks(LLMessageSystem* msg)
     msg->setHandlerFunc("PlacesReply", process_places_reply);
     msg->setHandlerFunc("GroupNoticesListReply", LLPanelGroupNotices::processGroupNoticesListReply);
 
-// <FS:CR> FIRE-6310 - Legacy search handlers
-    msg->setHandlerFunc("DirPeopleReply", FSPanelSearchPeople::processSearchReply);
-    msg->setHandlerFunc("DirPlacesReply", FSPanelSearchPlaces::processSearchReply);
-    msg->setHandlerFunc("DirGroupsReply", FSPanelSearchGroups::processSearchReply);
-    msg->setHandlerFunc("DirEventsReply", FSPanelSearchEvents::processSearchReply);
-    msg->setHandlerFunc("DirLandReply",   FSPanelSearchLand::processSearchReply);
-    msg->setHandlerFunc("DirClassifiedReply",  FSPanelSearchClassifieds::processSearchReply);
-// </FS:CR> FIRE-6310
     msg->setHandlerFunc("AvatarPickerReply", LLFloaterAvatarPicker::processAvatarPickerReply);
+
+    msg->setHandlerFunc("DirPlacesReply", LLPanelDirBrowser::processDirPlacesReply);
+    msg->setHandlerFunc("DirPeopleReply", LLPanelDirBrowser::processDirPeopleReply);
+    msg->setHandlerFunc("DirEventsReply", LLPanelDirBrowser::processDirEventsReply);
+    msg->setHandlerFunc("DirGroupsReply", LLPanelDirBrowser::processDirGroupsReply);
+    msg->setHandlerFunc("DirClassifiedReply", LLPanelDirBrowser::processDirClassifiedReply);
+    msg->setHandlerFunc("DirLandReply", LLPanelDirBrowser::processDirLandReply);
 
     msg->setHandlerFunc("MapBlockReply", LLWorldMapMessage::processMapBlockReply);
     msg->setHandlerFunc("MapItemReply", LLWorldMapMessage::processMapItemReply);

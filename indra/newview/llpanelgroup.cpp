@@ -305,6 +305,12 @@ void LLPanelGroup::onBackBtnClick()
     }
 }
 
+void LLPanelGroup::hideBackBtn()
+{
+    childSetVisible("back", false);
+    setBackgroundVisible(false);
+}
+
 void LLPanelGroup::onBtnRefresh(void* user_data)
 {
     LLPanelGroup* self = static_cast<LLPanelGroup*>(user_data);
