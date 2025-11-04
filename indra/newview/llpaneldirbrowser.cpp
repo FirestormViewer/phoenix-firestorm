@@ -296,7 +296,7 @@ void LLPanelDirBrowser::onCommitList(LLUICtrl* ctrl, void* data)
         self->mFloaterDirectory->hideAllDetailPanels();
     }
 
-    if (false == list->getCanSelect())
+    if (!list->getCanSelect())
     {
         return;
     }
