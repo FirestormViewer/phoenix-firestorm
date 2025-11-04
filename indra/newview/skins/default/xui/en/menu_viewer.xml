@@ -2484,8 +2484,7 @@
         name="Search"
         shortcut="control|F">
             <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="search" />
+             function="Avatar.SearchVisible"/>
             <menu_item_check.on_click
              function="Avatar.ToggleSearch"/>
             </menu_item_check>

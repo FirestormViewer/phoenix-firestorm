@@ -285,6 +285,8 @@ void FSFloaterSearch::onOpen(const LLSD& key)
     {
         current_panel->focusDefaultElement();
     }
+
+    mEventInfoConnection = gEventNotifier.setEventInfoCallback(boost::bind(&FSFloaterSearch::displayEventDetails, this, _1));
 }
 
 //virtual
@@ -293,6 +295,11 @@ void FSFloaterSearch::onClose(bool app_quitting)
     if (mTabContainer)
     {
         gSavedSettings.setS32("FSLastSearchTab", mTabContainer->getCurrentPanelIndex());
+    }
+
+    if (mEventInfoConnection.connected())
+    {
+        mEventInfoConnection.disconnect();
     }
 }
 
@@ -422,6 +429,7 @@ void FSFloaterSearch::onSelectedEvent(const S32 selected_event)
 {
     resetVerbs();
     flushDetails();
+    mEventID = selected_event;
 
     gMessageSystem->newMessageFast(_PREHASH_EventInfoRequest);
     gMessageSystem->nextBlockFast(_PREHASH_AgentData);
@@ -560,43 +568,46 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
     }
 }
 
-void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, const std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos)
+bool FSFloaterSearch::displayEventDetails(LLEventInfo event)
 {
-    if (eventFlags == EVENT_FLAG_ADULT)
+    if (event.mID != mEventID)
+        return false;
+
+    switch (event.mEventFlags)
     {
-        mDetailMaturity->setValue("Parcel_R_Dark");
-    }
-    else if (eventFlags == EVENT_FLAG_MATURE)
-    {
-        mDetailMaturity->setValue("Parcel_M_Dark");
-    }
-    else
-    {
-        mDetailMaturity->setValue("Parcel_PG_Dark");
+        case EVENT_FLAG_ADULT:
+            mDetailMaturity->setValue("Parcel_R_Dark");
+            break;
+        case EVENT_FLAG_MATURE:
+            mDetailMaturity->setValue("Parcel_M_Dark");
+            break;
+        default:
+            mDetailMaturity->setValue("Parcel_PG_Dark");
+            break;
     }
 
     S32 region_x;
     S32 region_y;
     S32 region_z;
-    region_x = (S64)ll_round(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
-    region_y = (S64)ll_round(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
-    region_z = (S32)ll_round(eventGlobalPos.mdV[VZ]);
+    region_x = (S64)ll_round(event.mPosGlobal.mdV[VX]) % REGION_WIDTH_UNITS;
+    region_y = (S64)ll_round(event.mPosGlobal.mdV[VY]) % REGION_WIDTH_UNITS;
+    region_z = (S32)ll_round(event.mPosGlobal.mdV[VZ]);
     LLStringUtil::format_map_t map;
-    map["DURATION"] = llformat("%d:%.2d", eventDuration / 60, eventDuration % 60);
-    map["LOCATION"] = llformat("%s (%d, %d, %d)", simName.c_str(), region_x, region_y, region_z);
-    if (eventCover > 0)
+    map["DURATION"] = llformat("%d:%.2d", event.mDuration / 60, event.mDuration % 60);
+    map["LOCATION"] = llformat("%s (%d, %d, %d)", event.mSimName.c_str(), region_x, region_y, region_z);
+    if (event.mHasCover)
     {
-        map["COVERCHARGE"] = llformat("L$%d", eventCover);
+        map["COVERCHARGE"] = llformat("L$%d", event.mCover);
         mDetailAux2->setValue(getString("string.covercharge", map));
     }
 
-    mParcelGlobal = eventGlobalPos;
-    mEventID = eventId;
+    mParcelGlobal = event.mPosGlobal;
+    mEventID = event.mID;
     mDetailsPanel->setVisible(mTabContainer->getCurrentPanel()->getName() == "panel_ls_events");
     mHasSelection = true;
     mDetailMaturity->setVisible(true);
-    mDetailTitle->setValue(eventName);
-    mDetailDesc->setValue(eventDesc);
+    mDetailTitle->setValue(event.mName);
+    mDetailDesc->setValue(event.mDesc);
     mDetailAux1->setValue(getString("string.duration", map));
     mDetailLocation->setValue(getString("string.location", map));
     mDetailSnapshotParcel->setValue(LLUUID::null);
@@ -604,7 +615,9 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
     childSetVisible("map_btn", true);
     childSetVisible("event_reminder_btn", true);
 
-    LLWorldMapMessage::getInstance()->sendNamedRegionRequest(simName, boost::bind(&FSFloaterSearch::regionHandleCallback, this, _1, eventGlobalPos), "", false);
+    LLWorldMapMessage::getInstance()->sendNamedRegionRequest(event.mSimName, boost::bind(&FSFloaterSearch::regionHandleCallback, this, _1, event.mPosGlobal), "", false);
+
+    return true;
 }
 
 void FSFloaterSearch::regionHandleCallback(U64 region_handle, LLVector3d pos_global)
@@ -2719,10 +2732,10 @@ void FSPanelSearchEvents::onSelectItem()
     {
         return;
     }
-    S32 event_id = mSearchResults->getSelectedValue();
-    FSFloaterSearch* search_instance = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search");
-    if (search_instance)
+
+    if (FSFloaterSearch* search_instance = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search"))
     {
+        S32 event_id = mSearchResults->getSelectedValue();
         search_instance->FSFloaterSearch::onSelectedEvent(event_id);
     }
 }

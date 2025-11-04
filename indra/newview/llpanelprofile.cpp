@@ -716,6 +716,7 @@ LLPanelProfileSecondLife::LLPanelProfileSecondLife()
     , mWaitingForImageUpload(false)
     , mAllowPublish(false)
     , mHideAge(false)
+    , mAllowEdit(true)
     , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
     , mPreview(false)                  // <AS:Chanayane> Preview button
 {
@@ -850,20 +851,21 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     LLUUID avatar_id = getAvatarId();
 
     bool own_profile = getSelfProfile();
+    bool allow_edit = own_profile && mAllowEdit;
 
     mGroupList->setShowNone(!own_profile);
 
-    //childSetVisible("notes_panel", !own_profile); // <FS:Ansariel> Doesn't exist (anymore)
+    //childSetVisible("notes_panel", !allow_edit); // <FS:Ansariel> Doesn't exist (anymore)
     // <FS:Ansariel> Fix LL UI/UX design accident
-    //childSetVisible("settings_panel", own_profile);
-    //childSetVisible("about_buttons_panel", own_profile);
-    mSaveDescriptionChanges->setVisible(own_profile);
-    mDiscardDescriptionChanges->setVisible(own_profile);
-    mShowInSearchCheckbox->setVisible(own_profile);
+    //childSetVisible("settings_panel", allow_edit);
+    //childSetVisible("about_buttons_panel", allow_edit);
+    mSaveDescriptionChanges->setVisible(allow_edit);
+    mDiscardDescriptionChanges->setVisible(allow_edit);
+    mShowInSearchCheckbox->setVisible(allow_edit);
     // </FS:Ansariel>
-    mPreviewButton->setVisible(own_profile); // <AS:Chanayane> Preview button
+    mPreviewButton->setVisible(allow_edit); // <AS:Chanayane> Preview button
 
-    if (own_profile)
+    if (allow_edit)
     {
         // Group list control cannot toggle ForAgent loading
         // Less than ideal, but viewing own profile via search is edge case
@@ -912,7 +914,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     mCopyMenuButton->setMenu("menu_fs_profile_name_field.xml", LLMenuButton::MP_BOTTOM_RIGHT);
     // </FS:Ansariel>
 
-    mDescriptionEdit->setParseHTML(!own_profile);
+    mDescriptionEdit->setParseHTML(!allow_edit);
 
     if (!own_profile)
     {
@@ -1797,7 +1799,7 @@ void LLPanelProfileSecondLife::setLoaded()
             mHideAgeCheckbox->setEnabled(true);
         // </FS:Ansariel>
         }
-        mDescriptionEdit->setEnabled(true);
+        mDescriptionEdit->setEnabled(mAllowEdit);
     }
 }
 

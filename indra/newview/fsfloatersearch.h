@@ -50,6 +50,7 @@ class LLSearchComboBox;
 class FSFloaterSearch;
 class LLPanelProfile;
 class FSScrollListCtrl;
+struct LLEventInfo;
 
 struct SearchQuery : public LLInitParam::Block<SearchQuery>
 {
@@ -344,16 +345,7 @@ public:
     void displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info);
     void displayAvatarDetails(LLAvatarData* avatar_data);
     void displayGroupDetails(LLGroupMgrGroupData*& group_data);
-    void displayEventDetails(U32 eventId,
-                             F64 eventEpoch,
-                             const std::string& eventDateStr,
-                             const std::string &eventName,
-                             const std::string &eventDesc,
-                             const std::string &simName,
-                             U32 eventDuration,
-                             U32 eventFlags,
-                             U32 eventCover,
-                             LLVector3d eventGlobalPos);
+    bool displayEventDetails(LLEventInfo event);
     void displayEventParcelImage(const LLParcelData& parcel_data);
     void setLoadingProgress(bool started);
 
@@ -406,6 +398,8 @@ private:
     LLTextureCtrl*  mDetailSnapshotParcel;
     LLIconCtrl*     mDetailMaturity;
     LLTabContainer* mTabContainer;
+
+    boost::signals2::connection mEventInfoConnection;
 };
 
 #endif // FS_FLOATERSEARCH_H

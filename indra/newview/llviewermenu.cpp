@@ -8233,7 +8233,10 @@ class LLAvatarToggleSearch : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLFloater* instance = LLFloaterReg::findInstance("search");
+        // <FS:Ansariel> Legacy search toggle
+        const std::string instance_name = gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search";
+
+        LLFloater* instance = LLFloaterReg::findInstance(instance_name);
         if (LLFloater::isMinimized(instance))
         {
             instance->setMinimized(false);
@@ -8241,7 +8244,7 @@ class LLAvatarToggleSearch : public view_listener_t
         }
         else if (!LLFloater::isShown(instance))
         {
-            LLFloaterReg::showInstance("search");
+            LLFloaterReg::showInstance(instance_name);
         }
         else if (!instance->hasFocus() && !instance->getIsChrome())
         {
@@ -8254,6 +8257,16 @@ class LLAvatarToggleSearch : public view_listener_t
         return true;
     }
 };
+
+// <FS:Ansariel> Legacy search toggle
+class FSAvatarSearchVisible : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        return LLFloaterReg::instanceVisible(gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search", LLSD());
+    }
+};
+// </FS:Ansariel>
 
 class LLAvatarResetSkeleton : public view_listener_t
 {
@@ -13074,6 +13087,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarToggleMyProfile(), "Avatar.ToggleMyProfile");
     view_listener_t::addMenu(new LLAvatarTogglePicks(), "Avatar.TogglePicks");
     view_listener_t::addMenu(new LLAvatarToggleSearch(), "Avatar.ToggleSearch");
+    view_listener_t::addMenu(new FSAvatarSearchVisible(), "Avatar.SearchVisible");
     view_listener_t::addMenu(new LLAvatarResetSkeleton(), "Avatar.ResetSkeleton");
     view_listener_t::addMenu(new LLAvatarEnableResetSkeleton(), "Avatar.EnableResetSkeleton");
     view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
