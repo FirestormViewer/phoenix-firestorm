@@ -133,16 +133,27 @@
 #include "SMAAAreaTex.h"
 #include "SMAASearchTex.h"
 #include "llerror.h"
-#ifndef LL_WINDOWS
-#define A_GCC 1
+
+#if LL_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Wunused-variable"
+#elif LL_GNUC
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-variable"
-#if LL_LINUX
 #pragma GCC diagnostic ignored "-Wrestrict"
 #endif
+#ifndef LL_WINDOWS
+#define A_GCC 1
 #endif
 #define A_CPU 1
 #include "app_settings/shaders/class1/deferred/CASF.glsl" // This is also C++
+#if LL_CLANG
+#pragma clang diagnostic pop
+#elif LL_GNUC
+#pragma GCC diagnostic pop
+#endif
 
 extern bool gSnapshot;
 bool gShiftFrame = false;
@@ -1130,7 +1141,7 @@ bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
                 gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
                 gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
             }
         }
@@ -1147,7 +1158,7 @@ bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
                 gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
                 gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
             }
         }
@@ -5075,8 +5086,7 @@ void LLPipeline::renderDebug()
                     //NavMesh
                     if ( pathfindingConsole->isRenderNavMesh() )
                     {
-                        gGL.flush();
-                        gGL.setLineWidth(2.0f); // <FS> Line width OGL core profile fix by Rye Mutt
+                        gGL.setLineWidth(2.0f);
                         LLGLEnable cull(GL_CULL_FACE);
                         LLGLDisable blend(GL_BLEND);
 
@@ -5100,7 +5110,7 @@ void LLPipeline::renderDebug()
 
                         gGL.flush();
                         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-                        gGL.setLineWidth(1.0f); // <FS> Line width OGL core profile fix by Rye Mutt
+                        gGL.setLineWidth(1.0f);
                         gGL.flush();
                     }
                     //User designated path
@@ -5215,11 +5225,11 @@ void LLPipeline::renderDebug()
                                     gPathfindingProgram.uniform1f(sTint, 1.f);
                                     gPathfindingProgram.uniform1f(sAlphaScale, 1.f);
 
-                                    gGL.setLineWidth(gSavedSettings.getF32("PathfindingLineWidth")); // <FS> Line width OGL core profile fix by Rye Mutt
+                                    gGL.setLineWidth(gSavedSettings.getF32("PathfindingLineWidth"));
                                     LLGLDisable blendOut(GL_BLEND);
                                     llPathingLibInstance->renderNavMeshShapesVBO( render_order[i] );
                                     gGL.flush();
-                                    gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+                                    gGL.setLineWidth(1.f);
                                 }
 
                                 glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
@@ -5242,7 +5252,7 @@ void LLPipeline::renderDebug()
                         LLGLEnable blend(GL_BLEND);
                         LLGLDepthTest depth(GL_TRUE, GL_FALSE, GL_GREATER);
                         gGL.flush();
-                        gGL.setLineWidth(2.0f); // <FS> Line width OGL core profile fix by Rye Mutt
+                        gGL.setLineWidth(2.0f);
                         LLGLEnable cull(GL_CULL_FACE);
 
                         gPathfindingProgram.uniform1f(sTint, gSavedSettings.getF32("PathfindingXRayTint"));
@@ -5269,7 +5279,7 @@ void LLPipeline::renderDebug()
                         gPathfindingProgram.bind();
 
                         gGL.flush();
-                        gGL.setLineWidth(1.0f); // <FS> Line width OGL core profile fix by Rye Mutt
+                        gGL.setLineWidth(1.0f);
                     }
 
                     glPolygonOffset(0.f, 0.f);
@@ -5562,7 +5572,7 @@ void LLPipeline::renderDebug()
             }
 
             /*gGL.flush();
-            gGL.setLineWidth(16-i*2); // <FS> Line width OGL core profile fix by Rye Mutt
+             gGL.setLineWidth(16-i*2);
             for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
                     iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
             {
@@ -5580,7 +5590,7 @@ void LLPipeline::renderDebug()
                 }
             }
             gGL.flush();
-            gGL.setLineWidth(1.f);*/ // <FS> Line width OGL core profile fix by Rye Mutt
+             gGL.setLineWidth(1.f);*/
         }
     }
 
@@ -7613,7 +7623,7 @@ void apply_cube_face_rotation(U32 face)
 void validate_framebuffer_object()
 {
     GLenum status;
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
+    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     switch(status)
     {
         case GL_FRAMEBUFFER_COMPLETE:

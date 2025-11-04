@@ -2253,6 +2253,24 @@ void LLFloaterPreference::refreshEnabledState()
     //getChildView("ReflectionDetailText")->setEnabled(enabled);
     getChildView("ScreenSpaceReflections")->setEnabled(enabled);
 
+    LLComboBox* af_combo = getChild<LLComboBox>("anisotropic_filter");
+    if (2.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("2x");
+    }
+    if (4.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("4x");
+    }
+    if (8.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("8x");
+    }
+    if (16.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("16x");
+    }
+
     // now turn off any features that are unavailable
     disableUnavailableSettings();
 
@@ -2366,6 +2384,11 @@ void LLFloaterPreference::disableUnavailableSettings()
     exposureSlider->setEnabled(is_not_vintage);
     cas_slider->setEnabled(is_not_vintage);
 
+    LLComboBox* ctrl_anisotropic = getChild<LLComboBox>("anisotropic_filter");
+    if (!LLFeatureManager::instance().isFeatureAvailable("RenderAnisotropicLevel"))
+    {
+        ctrl_anisotropic->setEnabled(false);
+    }
 }
 
 void LLFloaterPreference::refresh()

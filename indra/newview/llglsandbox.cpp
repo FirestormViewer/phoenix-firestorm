@@ -825,10 +825,7 @@ void LLViewerObjectList::renderObjectBeacons()
             S32 line_width = debug_beacon.mLineWidth;
             if (line_width != last_line_width)
             {
-                // <FS> Line width OGL core profile fix by Rye Mutt
-                //gGL.flush();
-                //glLineWidth( (F32)line_width );
-                gGL.setLineWidth((F32)line_width);
+                gGL.setLineWidth( (F32)line_width );
                 last_line_width = line_width;
             }
 
@@ -857,10 +854,7 @@ void LLViewerObjectList::renderObjectBeacons()
             S32 line_width = debug_beacon.mLineWidth;
             if (line_width != last_line_width)
             {
-                // <FS> Line width OGL core profile fix by Rye Mutt
-                //gGL.flush();
-                //glLineWidth( (F32)line_width );
-                gGL.setLineWidth((F32)line_width);
+                gGL.setLineWidth( (F32)line_width );
                 last_line_width = line_width;
             }
 
@@ -873,9 +867,7 @@ void LLViewerObjectList::renderObjectBeacons()
             gGL.end();
         }
 
-        // <FS> Line width OGL core profile fix by Rye Mutt
-        //gGL.flush();
-        //glLineWidth(1.f);
+        gGL.flush();
         gGL.setLineWidth(1.f);
 
         for (std::vector<LLDebugBeacon>::iterator iter = mDebugBeacons.begin(); iter != mDebugBeacons.end(); ++iter)
@@ -911,7 +903,7 @@ void LLSky::renderSunMoonBeacons(const LLVector3& pos_agent, const LLVector3& di
     {
         pos_end.mV[i] = pos_agent.mV[i] + (50 * direction.mV[i]);
     }
-    gGL.setLineWidth((F32)LLPipeline::DebugBeaconLineWidth); // <FS> Line width OGL core profile fix by Rye Mutt
+    gGL.setLineWidth((GLfloat)LLPipeline::DebugBeaconLineWidth);
     gGL.begin(LLRender::LINES);
     color.mV[3] *= 0.5f;
     gGL.color4fv(color.mV);
@@ -922,7 +914,7 @@ void LLSky::renderSunMoonBeacons(const LLVector3& pos_agent, const LLVector3& di
     gGL.end();
 
     gGL.flush();
-    gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+    gGL.setLineWidth(1.f);
 
 }
 

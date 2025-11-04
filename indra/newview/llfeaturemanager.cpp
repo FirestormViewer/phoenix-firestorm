@@ -265,7 +265,6 @@ bool LLFeatureManager::loadFeatureTables()
     // *TODO - if I or anyone else adds something else to the skipped list
     // make this data driven.  Put it in the feature table and parse it
     // correctly
-    mSkippedFeatures.insert("RenderAnisotropic");
     mSkippedFeatures.insert("RenderGamma");
     mSkippedFeatures.insert("RenderVBOEnable");
     mSkippedFeatures.insert("RenderFogRatio");
@@ -718,6 +717,10 @@ void LLFeatureManager::applyBaseMasks()
     if (gGLManager.mVRAM < 2048)
     {
         maskFeatures("VRAMLT2GB");
+    }
+    if (!gGLManager.mHasAnisotropic || 2.f > gGLManager.mMaxAnisotropy)
+    {
+        maskFeatures("AnisotropicMissing");
     }
     if (gGLManager.mGLVersion < 3.99f)
     {

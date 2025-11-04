@@ -543,8 +543,7 @@ void FSManipRotateJoint::renderManipulatorRings(const LLVector3& agent_space_cen
     gGL.pushMatrix();
     {
         LLGLEnable cull_face(GL_CULL_FACE);
-        LLGLDepthTest gls_depth(GL_FALSE);        
-        LLGLEnable clip_plane0(GL_CLIP_PLANE0);
+        LLGLDepthTest gls_depth(GL_FALSE);
         gGL.translatef(joint_world_position.mV[VX], joint_world_position.mV[VY], joint_world_position.mV[VZ]);
 
         LLMatrix4 rot_mat(rotation);
@@ -775,8 +774,7 @@ void FSManipRotateJoint::render()
 void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 size, const LLQuaternion& rotation)
 {
     LLGLEnable cull_face(GL_CULL_FACE);
-    LLGLEnable clip_plane0(GL_CLIP_PLANE0);
-    LLGLDepthTest gls_depth(GL_FALSE);    
+    LLGLDepthTest gls_depth(GL_FALSE);
     gGL.pushMatrix();
     gGL.translatef(agent_space_center.mV[VX], agent_space_center.mV[VY], agent_space_center.mV[VZ]);
     

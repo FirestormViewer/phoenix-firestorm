@@ -71,6 +71,7 @@ S32 gGLViewport[4];
 U32 LLRender::sUICalls = 0;
 U32 LLRender::sUIVerts = 0;
 U32 LLTexUnit::sWhiteTexture = 0;
+F32 LLRender::sAnisotropicFilteringLevel = 0.f;
 bool LLRender::sGLCoreProfile = false;
 bool LLRender::sNsightDebugSupport = false;
 LLVector2 LLRender::sUIGLScaleFactor = LLVector2(1.f, 1.f);
@@ -524,90 +525,16 @@ void LLTexUnit::setTextureFilteringOptionFast(LLTexUnit::eTextureFilterOptions o
 
     if (gGLManager.mHasAnisotropic)
     {
-        if (LLImageGL::sGlobalUseAnisotropic && option == TFO_ANISOTROPIC)
+        if (option == TFO_ANISOTROPIC && LLRender::sAnisotropicFilteringLevel > 1.f)
         {
-            glTexParameterf(sGLTextureType[tex_type], GL_TEXTURE_MAX_ANISOTROPY, gGLManager.mMaxAnisotropy);
+            F32 aniso_level = llclamp(LLRender::sAnisotropicFilteringLevel, 1.f, gGLManager.mMaxAnisotropy);
+            glTexParameterf(sGLTextureType[tex_type], GL_TEXTURE_MAX_ANISOTROPY, aniso_level);
+
         }
         else
         {
             glTexParameterf(sGLTextureType[tex_type], GL_TEXTURE_MAX_ANISOTROPY, 1.f);
         }
-    }
-}
-
-GLint LLTexUnit::getTextureSource(eTextureBlendSrc src)
-{
-    switch(src)
-    {
-        // All four cases should return the same value.
-        case TBS_PREV_COLOR:
-        case TBS_PREV_ALPHA:
-        case TBS_ONE_MINUS_PREV_COLOR:
-        case TBS_ONE_MINUS_PREV_ALPHA:
-            return GL_PREVIOUS;
-
-        // All four cases should return the same value.
-        case TBS_TEX_COLOR:
-        case TBS_TEX_ALPHA:
-        case TBS_ONE_MINUS_TEX_COLOR:
-        case TBS_ONE_MINUS_TEX_ALPHA:
-            return GL_TEXTURE;
-
-        // All four cases should return the same value.
-        case TBS_VERT_COLOR:
-        case TBS_VERT_ALPHA:
-        case TBS_ONE_MINUS_VERT_COLOR:
-        case TBS_ONE_MINUS_VERT_ALPHA:
-            return GL_PRIMARY_COLOR;
-
-        // All four cases should return the same value.
-        case TBS_CONST_COLOR:
-        case TBS_CONST_ALPHA:
-        case TBS_ONE_MINUS_CONST_COLOR:
-        case TBS_ONE_MINUS_CONST_ALPHA:
-            return GL_CONSTANT;
-
-        default:
-            LL_WARNS() << "Unknown eTextureBlendSrc: " << src << ".  Using Vertex Color instead." << LL_ENDL;
-            return GL_PRIMARY_COLOR;
-    }
-}
-
-GLint LLTexUnit::getTextureSourceType(eTextureBlendSrc src, bool isAlpha)
-{
-    switch(src)
-    {
-        // All four cases should return the same value.
-        case TBS_PREV_COLOR:
-        case TBS_TEX_COLOR:
-        case TBS_VERT_COLOR:
-        case TBS_CONST_COLOR:
-            return (isAlpha) ? GL_SRC_ALPHA: GL_SRC_COLOR;
-
-        // All four cases should return the same value.
-        case TBS_PREV_ALPHA:
-        case TBS_TEX_ALPHA:
-        case TBS_VERT_ALPHA:
-        case TBS_CONST_ALPHA:
-            return GL_SRC_ALPHA;
-
-        // All four cases should return the same value.
-        case TBS_ONE_MINUS_PREV_COLOR:
-        case TBS_ONE_MINUS_TEX_COLOR:
-        case TBS_ONE_MINUS_VERT_COLOR:
-        case TBS_ONE_MINUS_CONST_COLOR:
-            return (isAlpha) ? GL_ONE_MINUS_SRC_ALPHA : GL_ONE_MINUS_SRC_COLOR;
-
-        // All four cases should return the same value.
-        case TBS_ONE_MINUS_PREV_ALPHA:
-        case TBS_ONE_MINUS_TEX_ALPHA:
-        case TBS_ONE_MINUS_VERT_ALPHA:
-        case TBS_ONE_MINUS_CONST_ALPHA:
-            return GL_ONE_MINUS_SRC_ALPHA;
-
-        default:
-            LL_WARNS() << "Unknown eTextureBlendSrc: " << src << ".  Using Source Color or Alpha instead." << LL_ENDL;
-            return (isAlpha) ? GL_SRC_ALPHA: GL_SRC_COLOR;
     }
 }
 
@@ -795,12 +722,7 @@ LLRender::LLRender()
   : mDirty(false),
     mCount(0),
     mMode(LLRender::TRIANGLES),
-    mCurrTextureUnitIndex(0),
-    mLineWidth(1.f), // <FS> Line width OGL core profile fix by Rye Mutt
-    // <FS:Ansariel> Don't ignore OpenGL max line width
-    mMaxLineWidthSmooth(1.f),
-    mMaxLineWidthAliased(1.f)
-    // </FS:Ansariel>
+    mCurrTextureUnitIndex(0)
 {
     for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
     {
@@ -882,16 +804,6 @@ bool LLRender::init(bool needs_vertex_buffer)
     {
         initVertexBuffer();
     }
-
-    // <FS:Ansariel> Don't ignore OpenGL max line width
-    GLfloat range[2];
-    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
-    stop_glerror();
-    mMaxLineWidthAliased = range[1];
-    glGetFloatv(GL_SMOOTH_LINE_WIDTH_RANGE, range);
-    stop_glerror();
-    mMaxLineWidthSmooth = range[1];
-    // </FS:Ansariel>
 
     return true;
 }
@@ -1502,24 +1414,6 @@ void LLRender::setAmbientLightColor(const LLColor4& color)
     }
 }
 
-// <FS> Line width OGL core profile fix by Rye Mutt
-void LLRender::setLineWidth(F32 line_width)
-{
-    if (line_width > 1.f)
-    {
-        line_width = llmin(line_width, glIsEnabled(GL_LINE_SMOOTH) ? mMaxLineWidthSmooth : mMaxLineWidthAliased);
-    }
-    if (mLineWidth != line_width || mDirty)
-    {
-        if (mMode == LLRender::LINES || mMode == LLRender::LINE_STRIP)
-        {
-            flush();
-        }
-        mLineWidth = line_width;
-        glLineWidth(line_width);
-    }
-}
-// </FS>
 
 bool LLRender::verifyTexUnitActive(U32 unitToVerify)
 {
@@ -2040,6 +1934,31 @@ void LLRender::diffuseColor4ub(U8 r, U8 g, U8 b, U8 a)
     }
 }
 
+void LLRender::setLineWidth(F32 width)
+{
+    gGL.flush();
+
+    // <FS:Ansariel> Line widths > 1.0 in core profile are deprecated, but not removed
+    //if(sGLCoreProfile)
+    //{
+    //    width = 1.f;
+    //}
+    //else
+    //{
+    //    width = llclamp(width, gGLManager.mMinSmoothLineWidth, gGLManager.mMaxSmoothLineWidth);
+    //}
+    if (glIsEnabled(GL_LINE_SMOOTH))
+        width = llclamp(width, gGLManager.mMinSmoothLineWidth, gGLManager.mMaxSmoothLineWidth);
+    else
+        width = llclamp(width, gGLManager.mMinAliasedLineWidth, gGLManager.mMaxAliasedLineWidth);
+    // </FS:Ansariel>
+
+    if(mLineWidth != width)
+    {
+        mLineWidth = width;
+        glLineWidth(width);
+    }
+}
 
 void LLRender::debugTexUnits(void)
 {

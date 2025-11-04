@@ -26,7 +26,6 @@ set(cmake_SOURCE_FILES
         FMODSTUDIO.cmake
         FreeType.cmake
         GLEXT.cmake
-        GLH.cmake
         GLIB.cmake
         GLM.cmake
         GLOD.cmake # <FS:Ansariel> Bring back GLOD

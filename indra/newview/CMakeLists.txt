@@ -48,7 +48,6 @@ include(UI)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
-include(VulkanGltf)
 include(ZLIBNG)
 include(LLPrimitive)
 include(Growl)
@@ -2668,8 +2667,6 @@ if (LINUX)
     linux-crash-logger
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
-  
   add_custom_command(
       OUTPUT ${product}.tar.xz
       COMMAND ${PYTHON_EXECUTABLE}
@@ -2682,7 +2679,7 @@ if (LINUX)
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
-        "--avx2=${USE_AVX2_OPTIMIZATION}"        
+        "--avx2=${USE_AVX2_OPTIMIZATION}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2711,7 +2708,7 @@ if (LINUX)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
-      "--avx2=${USE_AVX2_OPTIMIZATION}"      
+      "--avx2=${USE_AVX2_OPTIMIZATION}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"
