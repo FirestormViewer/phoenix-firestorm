@@ -219,13 +219,25 @@ bool FSFloaterNearbyChat::postBuild()
     return LLFloater::postBuild();
 }
 
-std::string appendTime()
+static std::string appendTime()
 {
     time_t utc_time = time_corrected();
-    std::string timeStr ="[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]";
-    if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+    std::string timeStr{};
+
+    if (gSavedSettings.getBOOL("Use24HourClock"))
     {
-        timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
+        timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]";
+        if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+        {
+            timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
+        }
+    }
+    else
+    {
+        timeStr += "[" + LLTrans::getString("TimeHour12") + "]:["
+            + LLTrans::getString("TimeMin") + "]"
+            + (gSavedSettings.getBOOL("FSSecondsinChatTimestamps") ? ":[" + LLTrans::getString("TimeSec") + "] [" : " [")
+            + LLTrans::getString("TimeAMPM") + "]";
     }
 
     LLSD substitution;
