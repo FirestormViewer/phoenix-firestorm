@@ -52,10 +52,7 @@
 #include <glm/gtc/matrix_access.hpp>
 #include "glm/gtc/type_ptr.hpp"
 
-#if LL_MESA_HEADLESS
-#  include "GL/osmesa.h"
-#  define LL_GET_PROC_ADDRESS(func) OSMesaGetProcAddress(func)
-#elif LL_SDL_WINDOW
+#if LL_SDL_WINDOW
 #  include "llwindowsdl.h"
 #  include "SDL3/SDL.h"
 #  define LL_GET_PROC_ADDRESS(func) SDL_GL_GetProcAddress(func)
@@ -1384,16 +1381,9 @@ bool LLGLManager::initGL()
     glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &mMaxUniformBlockSize);
 
     // If outside the allowed range, glLineWidth fails with "invalid value".
-    // On Darwin, the range is [1, 1].
-    GLfloat line_width_range[2]{0.f};
-    glGetFloatv(GL_SMOOTH_LINE_WIDTH_RANGE, line_width_range);
-    mMinSmoothLineWidth = line_width_range[0];
-    mMaxSmoothLineWidth = line_width_range[1];
-    // <FS:Ansariel> Also query aliased line width
-    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, line_width_range);
-    mMinAliasedLineWidth = line_width_range[0];
-    mMaxAliasedLineWidth = line_width_range[1];
-    // </FS>
+    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, mAliasedLineRange.mV);
+    // <FS:Ansariel> Also query smooth line width
+    glGetFloatv(GL_SMOOTH_LINE_WIDTH_RANGE, mSmoothLineRange.mV);
 
     // sanity clamp max uniform block size to 64k just in case
     // there's some implementation that reports a crazy value

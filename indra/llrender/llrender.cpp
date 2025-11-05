@@ -1938,19 +1938,12 @@ void LLRender::setLineWidth(F32 width)
 {
     gGL.flush();
 
-    // <FS:Ansariel> Line widths > 1.0 in core profile are deprecated, but not removed
-    //if(sGLCoreProfile)
-    //{
-    //    width = 1.f;
-    //}
-    //else
-    //{
-    //    width = llclamp(width, gGLManager.mMinSmoothLineWidth, gGLManager.mMaxSmoothLineWidth);
-    //}
+    // <FS:Ansariel> For for smooth line width
+    //width = llclamp(width, gGLManager.mAliasedLineRange[0], gGLManager.mAliasedLineRange[1]);
     if (glIsEnabled(GL_LINE_SMOOTH))
-        width = llclamp(width, gGLManager.mMinSmoothLineWidth, gGLManager.mMaxSmoothLineWidth);
+        width = llclamp(width, gGLManager.mSmoothLineRange[0], gGLManager.mSmoothLineRange[1]);
     else
-        width = llclamp(width, gGLManager.mMinAliasedLineWidth, gGLManager.mMaxAliasedLineWidth);
+        width = llclamp(width, gGLManager.mAliasedLineRange[0], gGLManager.mAliasedLineRange[1]);
     // </FS:Ansariel>
 
     if(mLineWidth != width)
