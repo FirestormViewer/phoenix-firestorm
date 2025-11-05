@@ -852,8 +852,10 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName, const LLQuat
     if (!poserJoint)
         return;
 
-    bool savingToExternal = getSavingToBvh();
-    mPoserAnimator.updateJointFromManip(avatar, poserJoint, savingToExternal, getUiSelectedBoneDeflectionStyle(), rotation, position, scale);
+    bool                   savingToExternal = getSavingToBvh();
+    E_PoserReferenceFrame  frame            = getReferenceFrame();
+    E_BoneDeflectionStyles defl             = getUiSelectedBoneDeflectionStyle();
+    mPoserAnimator.updateJointFromManip(avatar, poserJoint, savingToExternal, defl, frame, rotation, position, scale); 
 
     refreshRotationSlidersAndSpinners();
     refreshPositionSlidersAndSpinners();
@@ -877,7 +879,7 @@ LLQuaternion FSFloaterPoser::getManipGimbalRotation(const std::string& jointName
     if (!poserJoint)
         return LLQuaternion();
 
-    E_PoserManipReferenceFrame frame = getReferenceFrame();
+    E_PoserReferenceFrame frame = getReferenceFrame();
 
     return mPoserAnimator.getManipGimbalRotation(avatar, poserJoint, frame);
 }
@@ -2335,9 +2337,9 @@ void FSFloaterPoser::setSelectedJointsPosition(F32 x, F32 y, F32 z)
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3                  vec3  = LLVector3(x, y, z);
-    E_BoneDeflectionStyles     defl  = getUiSelectedBoneDeflectionStyle();
-    E_PoserManipReferenceFrame frame = getReferenceFrame();
+    LLVector3              vec3  = LLVector3(x, y, z);
+    E_BoneDeflectionStyles defl  = getUiSelectedBoneDeflectionStyle();
+    E_PoserReferenceFrame  frame = getReferenceFrame();
 
     for (auto item : getUiSelectedPoserJoints())
     {
@@ -2358,10 +2360,10 @@ void FSFloaterPoser::setSelectedJointsRotation(const LLVector3& absoluteRot, con
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    auto                       selectedJoints   = getUiSelectedPoserJoints();
-    bool                       savingToExternal = getSavingToBvh();
-    E_BoneDeflectionStyles     deflection       = getUiSelectedBoneDeflectionStyle();
-    E_PoserManipReferenceFrame frame            = getReferenceFrame();
+    auto                   selectedJoints   = getUiSelectedPoserJoints();
+    bool                   savingToExternal = getSavingToBvh();
+    E_BoneDeflectionStyles deflection       = getUiSelectedBoneDeflectionStyle();
+    E_PoserReferenceFrame  frame            = getReferenceFrame();
 
     for (auto item : selectedJoints)
     {
@@ -2401,9 +2403,9 @@ void FSFloaterPoser::setSelectedJointsScale(F32 x, F32 y, F32 z)
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return;
 
-    LLVector3                  vec3  = LLVector3(x, y, z);
-    E_BoneDeflectionStyles     defl  = getUiSelectedBoneDeflectionStyle();
-    E_PoserManipReferenceFrame frame = getReferenceFrame();
+    LLVector3              vec3  = LLVector3(x, y, z);
+    E_BoneDeflectionStyles defl  = getUiSelectedBoneDeflectionStyle();
+    E_PoserReferenceFrame  frame = getReferenceFrame();
 
     for (auto item : getUiSelectedPoserJoints())
     {
@@ -2429,7 +2431,7 @@ LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint() const
     if (!mPoserAnimator.isPosingAvatar(avatar))
         return rotation;
 
-    E_PoserManipReferenceFrame frame = getReferenceFrame();
+    E_PoserReferenceFrame frame = getReferenceFrame();
 
     rotation = mPoserAnimator.getJointRotation(avatar, *selectedJoints.front(), getJointTranslation(frame, selectedJoints.front()->jointName()),
                                         getJointNegation(frame, selectedJoints.front()->jointName()));
@@ -2483,13 +2485,13 @@ void FSFloaterPoser::onJointTabSelect()
     markSelectedJointsToHighlight();
 }
 
-E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(E_PoserManipReferenceFrame frame, const std::string& jointName) const
+E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(E_PoserReferenceFrame frame, const std::string& jointName) const
 {
     if (jointName.empty())
         return SWAP_NOTHING;
 
     std::string paramName;
-    if (frame == FRAME_BONE)
+    if (frame == POSER_FRAME_BONE)
         paramName = XML_JOINT_TRANSFORM_STRING_PREFIX + jointName;
     else
         paramName = XML_JOINT_FRAME_TRANSFORM_PREFIX + jointName;
@@ -2514,7 +2516,7 @@ E_BoneAxisTranslation FSFloaterPoser::getJointTranslation(E_PoserManipReferenceF
         return SWAP_NOTHING;
 }
 
-S32 FSFloaterPoser::getJointNegation(E_PoserManipReferenceFrame frame, const std::string& jointName) const
+S32 FSFloaterPoser::getJointNegation(E_PoserReferenceFrame frame, const std::string& jointName) const
 {
     S32 result = NEGATE_NOTHING;
 
@@ -2522,7 +2524,7 @@ S32 FSFloaterPoser::getJointNegation(E_PoserManipReferenceFrame frame, const std
         return result;
 
     std::string paramName;
-    if (frame == FRAME_BONE)
+    if (frame == POSER_FRAME_BONE)
         paramName = XML_JOINT_TRANSFORM_STRING_PREFIX + jointName;
     else
         paramName = XML_JOINT_FRAME_TRANSFORM_PREFIX + jointName;
@@ -2545,21 +2547,21 @@ S32 FSFloaterPoser::getJointNegation(E_PoserManipReferenceFrame frame, const std
     return result;
 }
 
-E_PoserManipReferenceFrame FSFloaterPoser::getReferenceFrame() const
+E_PoserReferenceFrame FSFloaterPoser::getReferenceFrame() const
 {
     bool toggleButtonValue = mBtnScreenFrame->getValue().asBoolean();
     if (toggleButtonValue)
-        return FRAME_CAMERA;
+        return POSER_FRAME_CAMERA;
 
     toggleButtonValue = mBtnAvatarFrame->getValue().asBoolean();
     if (toggleButtonValue)
-        return FRAME_AVATAR;
+        return POSER_FRAME_AVATAR;
 
     toggleButtonValue = mBtnWorldFrame->getValue().asBoolean();
     if (toggleButtonValue)
-        return FRAME_WORLD;
+        return POSER_FRAME_WORLD;
 
-    return FRAME_BONE;
+    return POSER_FRAME_BONE;
 }
 
 /// <summary>

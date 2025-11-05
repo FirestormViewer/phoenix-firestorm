@@ -262,7 +262,7 @@ FSManipRotateJoint::BoneAxes FSManipRotateJoint::computeBoneAxes() const
     BoneAxes axes;
 
     // Use 0,0,0 as local start for joint.
-    LLVector3 joint_local_pos (0.f,0.f,0.f);
+    LLVector3 joint_local_pos(0.f,0.f,0.f);
 
     // Transform the local endpoint (mEnd) into world space.
     LLVector3 localEnd = mJoint->getEnd();
@@ -325,13 +325,14 @@ void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
     mHighlightedJoint = nullptr; // reset the highlighted joint
 
     // Iterate through the avatar's joint map.
-    F32 nearest_hit_distance = 0.f;
-    F32 nearest_ray_distance = 0.f;
-    LLJoint * nearest_joint = nullptr;
-    for ( const auto& entry : getSelectableJoints())
+    F32      nearest_hit_distance = 0.f;
+    F32      nearest_ray_distance = 0.f;
+    LLJoint* nearest_joint        = nullptr;
+    LLCachedControl<F32> target_radius(gSavedSettings, "FSManipRotateJointTargetSize", 0.03f);
+
+    for (const auto& entry : getSelectableJoints())
     {
-        
-        LLJoint* joint = mAvatar->getJoint(std::string(entry));  
+        LLJoint* joint = mAvatar->getJoint(std::string(entry));
         if (!joint)
             continue;
 
@@ -341,23 +342,22 @@ void FSManipRotateJoint::highlightHoverSpheres(S32 mouseX, S32 mouseY)
 
         // Retrieve the joint's world position (in agent space).
         LLVector3 jointWorldPos = joint->getWorldPosition();
-        LLCachedControl<F32> target_radius(gSavedSettings, "FSManipRotateJointTargetSize", 0.03f);
         F32 distance_from_camera;
         F32 distance_from_joint;
-        if (isMouseOverJoint(mouseX, mouseY, jointWorldPos, target_radius, distance_from_camera, distance_from_joint) == true)
+        if (!isMouseOverJoint(mouseX, mouseY, jointWorldPos, target_radius, distance_from_camera, distance_from_joint))
+            continue;
+
+        // we want to highlight the closest
+        // If there is no joint or this joint is a closer hit than the previous one
+        if (!nearest_joint || nearest_ray_distance > distance_from_camera || 
+            (nearest_ray_distance == distance_from_camera && nearest_hit_distance > distance_from_joint))
         {
-            // we want to highlight the closest
-            // If there is no joint or
-            // this joint is a closer hit than the previous one
-            if (!nearest_joint || nearest_ray_distance > distance_from_camera || 
-                (nearest_ray_distance == distance_from_camera && nearest_hit_distance > distance_from_joint))
-            {
-                nearest_joint = joint;
-                nearest_hit_distance = distance_from_joint;
-                nearest_ray_distance = distance_from_camera;
-            }
+            nearest_joint = joint;
+            nearest_hit_distance = distance_from_joint;
+            nearest_ray_distance = distance_from_camera;
         }
     }
+
     mHighlightedJoint = nearest_joint;
 }
 
@@ -370,14 +370,14 @@ FSManipRotateJoint::FSManipRotateJoint(LLToolComposite* composite)
 void FSManipRotateJoint::setJoint(LLJoint* joint)
 {
     mJoint = joint;
+    if (!mJoint)
+        return;
 
     // Save initial rotation as baseline for delta rotation
-    if (mJoint)
-    {
-        mSavedJointRot = getSelectedJointWorldRotation();
-        mBoneAxes = computeBoneAxes();
-        mNaturalAlignmentQuat = computeAlignmentQuat(mBoneAxes);
-    }
+    mSavedJointRot        = getSelectedJointWorldRotation();
+    mBoneAxes             = computeBoneAxes();
+    mNaturalAlignmentQuat = computeAlignmentQuat(mBoneAxes);
+
 }
 
 void FSManipRotateJoint::setAvatar(LLVOAvatar* avatar)
@@ -490,21 +490,29 @@ void FSManipRotateJoint::renderRingPass(const RingRenderParams& params, float ra
 {
     gGL.pushMatrix();
     {
-    // If an extra rotation is specified, apply it.
-    if (params.extraRotateAngle != 0.f)
-    {
-        gGL.rotatef(params.extraRotateAngle, params.extraRotateAxis.mV[0],
-                    params.extraRotateAxis.mV[1], params.extraRotateAxis.mV[2]);
-    }        
+        // If an extra rotation is specified, apply it.
+        if (params.extraRotateAngle != 0.f)
+        {
+            gGL.rotatef(params.extraRotateAngle, params.extraRotateAxis.mV[0], params.extraRotateAxis.mV[1], params.extraRotateAxis.mV[2]);
+        }
         // Get the appropriate scale value from mManipulatorScales.
         float scaleVal = 1.f;
         switch (params.scaleIndex)
         {
-            case 0: scaleVal = mManipulatorScales.mV[VX]; break;
-            case 1: scaleVal = mManipulatorScales.mV[VY]; break;
-            case 2: scaleVal = mManipulatorScales.mV[VZ]; break;
-            case 3: scaleVal = mManipulatorScales.mV[VW]; break;
-            default: break;
+            case 0:
+                scaleVal = mManipulatorScales.mV[VX];
+                break;
+            case 1:
+                scaleVal = mManipulatorScales.mV[VY];
+                break;
+            case 2:
+                scaleVal = mManipulatorScales.mV[VZ];
+                break;
+            case 3:
+                scaleVal = mManipulatorScales.mV[VW];
+                break;
+            default:
+                break;
         }
         gGL.scalef(scaleVal, scaleVal, scaleVal);
         gl_ring(radius, width, params.primaryColor, params.secondaryColor, CIRCLE_STEPS, pass);
@@ -542,7 +550,7 @@ void FSManipRotateJoint::renderManipulatorRings(const LLVector3& agent_space_cen
 
         for (int pass = 0; pass < 2; ++pass)
         {
-            if( mManipPart == LL_NO_PART || mManipPart == LL_ROT_ROLL || mHighlightedPart == LL_ROT_ROLL)
+            if (mManipPart == LL_NO_PART || mManipPart == LL_ROT_ROLL || mHighlightedPart == LL_ROT_ROLL)
             {
                 renderCenterSphere( mRadiusMeters);
                 for (auto& ring_params : sRingParams)
@@ -555,16 +563,17 @@ void FSManipRotateJoint::renderManipulatorRings(const LLVector3& agent_space_cen
                     }
                     renderRingPass(params, mRadiusMeters, width_meters, pass);
                 }
+
                 if( mManipPart == LL_ROT_ROLL || mHighlightedPart == LL_ROT_ROLL)
                 {
-                    static const auto roll_color = LLColor4(1.f,0.65f,0.0f,0.4f);
+                    static const auto roll_color = LLColor4(1.f, 0.65f, 0.0f, 0.4f);
                     updateManipulatorScale(mManipPart, mManipulatorScales);
                     gGL.pushMatrix();
                     {
                         // Cancel the rotation applied earlier:
                         LLMatrix4 inv_rot_mat(rotation);
                         inv_rot_mat.invert();
-                        gGL.multMatrix((GLfloat*)inv_rot_mat.mMatrix);                    
+                        gGL.multMatrix((GLfloat*)inv_rot_mat.mMatrix);
                         renderCenterCircle( mRadiusMeters*1.2f, roll_color, roll_color );
                     }
                     gGL.popMatrix();
@@ -654,7 +663,7 @@ void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4& no
             // Use an average of the manipulator scales when no specific part is selected
             scale *= (mManipulatorScales.mV[VX] + mManipulatorScales.mV[VY] + mManipulatorScales.mV[VZ] + mManipulatorScales.mV[VW]) / 4.0f;
         }
-        
+
         gGL.scalef(scale, scale, scale);
         gSphere.render();
 
@@ -691,6 +700,7 @@ void FSManipRotateJoint::render()
 
     // update visibility and rotation center.
     bool activeJointVisible = updateVisiblity();
+
     // Setup GL state.
     LLGLSUIDefault gls_ui;
     gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
@@ -700,54 +710,48 @@ void FSManipRotateJoint::render()
     // Iterate through the avatar's joint map.
     // If a joint other than the currently selected is highlighted, render a pulsing sphere.
     // otherwise a small static sphere
+    LLCachedControl<bool> show_joint_markers(gSavedSettings, "FSManipShowJointMarkers", true);
     for (const auto& entry : getSelectableJoints())
     {
         LLJoint* joint = mAvatar->getJoint(std::string(entry));  
         if (!joint)
             continue;
+
         // Update the joint's world matrix to ensure its position is current.
         joint->updateWorldMatrixParent();
         joint->updateWorldMatrix();
 
-        if( joint == mHighlightedJoint && joint != mJoint )
+        if (joint == mJoint)
+            continue;
+
+        if (joint == mHighlightedJoint)
         {
             renderPulsingSphere(joint->getWorldPosition());
+            continue;
         }
-        else if (joint != mJoint)
-        {
-            // Render a static sphere for the joint being manipulated.
-            LLCachedControl<bool> show_joint_markers(gSavedSettings, "FSManipShowJointMarkers", true);
-            if(show_joint_markers)
-            {
-                renderStaticSphere(joint->getWorldPosition(), LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
-            }
-        }
+
+        if (show_joint_markers)
+            renderStaticSphere(joint->getWorldPosition(), LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
     }
 
     if (!activeJointVisible)
-    {
         return;
-    }
-
-    // Update joint world matrices.
-    mJoint->updateWorldMatrixParent();
-    mJoint->updateWorldMatrix();
 
     const LLQuaternion joint_world_rotation = getSelectedJointWorldRotation();
-
     const LLQuaternion parentWorldRot = (mJoint->getParent()) ? mJoint->getParent()->getWorldRotation() : LLQuaternion::DEFAULT;
 
     LLQuaternion currentLocalRot = mJoint->getRotation();
-    
     LLQuaternion rotatedNaturalAlignment = mNaturalAlignmentQuat * currentLocalRot;
+
     // Compute the final world alignment:
     LLQuaternion final_world_alignment = rotatedNaturalAlignment * parentWorldRot;
 
     const LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
 
-    LLCachedControl<bool> use_natural_direction(gSavedSettings, "FSManipRotateJointUseNaturalDirection", true);    
-    LLQuaternion active_rotation = use_natural_direction? final_world_alignment : joint_world_rotation;
+    LLCachedControl<bool> use_natural_direction(gSavedSettings, "FSManipRotateJointUseNaturalDirection", true);
+    LLQuaternion active_rotation = use_natural_direction ? final_world_alignment : joint_world_rotation;
     active_rotation.normalize();
+
     // Render the manipulator rings in a separate function.
     gGL.matrixMode(LLRender::MM_MODELVIEW);
     renderAxes(agent_space_center, mRadiusMeters * 1.5f, active_rotation);
@@ -764,7 +768,7 @@ void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 siz
     LLGLDepthTest gls_depth(GL_FALSE);    
     gGL.pushMatrix();
     gGL.translatef(agent_space_center.mV[VX], agent_space_center.mV[VY], agent_space_center.mV[VZ]);
-    
+
     LLMatrix4 rot_mat(rotation);
 
     gGL.multMatrix((GLfloat*)rot_mat.mMatrix);
@@ -939,34 +943,35 @@ bool FSManipRotateJoint::handleMouseDown(S32 x, S32 y, MASK mask)
     // Highlight the manipulator as before.
     highlightManipulators(x, y);
 
-    if (mHighlightedPart != LL_NO_PART)
+    if (mHighlightedPart == LL_NO_PART)
+        return false;
+
+    mManipPart = (EManipPart)mHighlightedPart;
+
+    // Get the joint's center in agent space.
+    LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
+
+    // Use the existing function to get the intersection point.
+    LLVector3 intersection = intersectMouseWithSphere(x, y, agent_space_center, mRadiusMeters);
+
+    // Check if the returned intersection is valid.
+    if (intersection.isExactlyZero())
     {
-        mManipPart = (EManipPart)mHighlightedPart;
-
-        // Get the joint's center in agent space.
-        LLVector3 agent_space_center = gAgent.getPosAgentFromGlobal(mRotationCenter);
-
-        // Use the existing function to get the intersection point.
-        LLVector3 intersection = intersectMouseWithSphere(x, y, agent_space_center, mRadiusMeters);
-
-        // Check if the returned intersection is valid.
-        if (intersection.isExactlyZero())
-        {
-            // Treat this as a "raycast miss" and do not capture the mouse.
-            return false;
-        }
-        else
-        {
-            // Save the valid intersection point.
-            mInitialIntersection = intersection;
-            // Also store the joint's current rotation.
-            mSavedJointRot = getSelectedJointWorldRotation();
-
-            // Capture the mouse for dragging.
-            setMouseCapture(true);
-            return true;
-        }
+        // Treat this as a "raycast miss" and do not capture the mouse.
+        return false;
     }
+    else
+    {
+        // Save the valid intersection point.
+        mInitialIntersection = intersection;
+        // Also store the joint's current rotation.
+        mSavedJointRot = getSelectedJointWorldRotation();
+
+        // Capture the mouse for dragging.
+        setMouseCapture(true);
+        return true;
+    }
+
     return false;
 }
 
@@ -1422,6 +1427,22 @@ void FSManipRotateJoint::drag(S32 x, S32 y)
     mLastSetRotation.set(delta_rot);
     delta_send = mSavedJointRot * delta_send * ~mSavedJointRot;
 
+    switch (mReferenceFrame)
+    {
+        case POSER_FRAME_CAMERA:
+        case POSER_FRAME_AVATAR:
+            delta_send.conjugate();
+            break;
+
+        case POSER_FRAME_WORLD:
+            delta_send.mQ[VX] *= -1;
+            break;
+
+        case POSER_FRAME_BONE:
+        default:
+            break;
+    }
+
     auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
     if (poser && mJoint)
         poser->updatePosedBones(mJoint->getName(), delta_send, LLVector3::zero, LLVector3::zero);
@@ -1485,16 +1506,11 @@ LLQuaternion FSManipRotateJoint::getSelectedJointWorldRotation()
     if (!mJoint || !mAvatar)
         return joinRot;
 
-    mJoint->updateWorldMatrixParent();
-    mJoint->updateWorldMatrix();
+    auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
+    if (!poser)
+        return joinRot;
 
-    return mJoint->getWorldRotation();
-
-    //auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
-    //if (!poser)
-    //    return joinRot;
-
-    //return poser->getManipGimbalRotation(mJoint->getName());
+    return poser->getManipGimbalRotation(mJoint->getName());
 }
 
 bool FSManipRotateJoint::isAvatarJointSafeToUse()

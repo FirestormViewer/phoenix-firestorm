@@ -37,17 +37,17 @@ class LLVOAvatar;  // for LLVOAvatarSelf, etc.
 /// <summary>
 /// A set of reference frames for presenting the gimbal within.
 /// </summary>
-typedef enum E_PoserManipReferenceFrame
+typedef enum E_PoserReferenceFrame
 {
-    FRAME_BONE   = 0, // frame is the bone the gimbal is centered on
-    FRAME_WORLD  = 1,
-    FRAME_AVATAR = 2, // frame is mPelvis
-    FRAME_CAMERA = 3,
-} E_PoserManipReferenceFrame;
+    POSER_FRAME_BONE   = 0, // frame is the bone the gimbal is centered on
+    POSER_FRAME_WORLD  = 1, // frame is world North-South-East-West-Up-Down
+    POSER_FRAME_AVATAR = 2, // frame is mPelvis rotation
+    POSER_FRAME_CAMERA = 3, // frame is defined by vector of camera position to bone position
+} E_PoserReferenceFrame;
 
 namespace {
     const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 85.f * DEG_TO_RAD ); // cos() is not constexpr til c++26
-    constexpr F32 RADIUS_PIXELS = 100.f;        // size in screen space
+    constexpr F32 RADIUS_PIXELS = 100.f;                          // size in screen space
     constexpr S32 CIRCLE_STEPS = 100;
     constexpr F32 CIRCLE_STEP_SIZE = 2.0f * F_PI / CIRCLE_STEPS;
     constexpr F32 SQ_RADIUS = RADIUS_PIXELS * RADIUS_PIXELS;
@@ -102,7 +102,7 @@ public:
     /// Sets the avatar the manip should interact with.
     /// </summary>
     /// <param name="avatar">The avatar to interact with.</param>
-    void setReferenceFrame(const E_PoserManipReferenceFrame frame) { mReferenceFrame = frame; };
+    void setReferenceFrame(const E_PoserReferenceFrame frame) { mReferenceFrame = frame; };
 
     // Overrides
     void handleSelect() override;
@@ -168,7 +168,7 @@ private:
 
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
-    E_PoserManipReferenceFrame mReferenceFrame = FRAME_BONE;
+    E_PoserReferenceFrame mReferenceFrame = POSER_FRAME_BONE;
     LLQuaternion               mLastSetRotation;
 };
 

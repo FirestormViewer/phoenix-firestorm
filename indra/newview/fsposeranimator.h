@@ -504,7 +504,7 @@ public:
     /// <param name="position">The position to set the joint to.</param>
     /// <param name="frame">The frame to translate the position to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_PoserManipReferenceFrame frame,
+    void setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_PoserReferenceFrame frame,
                           E_BoneDeflectionStyles style);
 
     /// <summary>
@@ -538,7 +538,7 @@ public:
     /// <param name="joint">The joint on the avatar where the manip should be placed.</param>
     /// <param name="frame">The frame of reference for the gimbal.</param>
     /// <returns>The rotation to set the gimbal to.</returns>
-    LLQuaternion getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserManipReferenceFrame frame);
+    LLQuaternion getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserReferenceFrame frame);
 
     /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
@@ -553,7 +553,7 @@ public:
     /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     /// <param name="rotationStyle">Whether to apply the supplied rotation as a delta to the supplied joint.</param>
     void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation, const LLVector3& deltaRotation,
-                          E_BoneDeflectionStyles style, E_PoserManipReferenceFrame frame, E_BoneAxisTranslation translation, S32 negation,
+                          E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, E_BoneAxisTranslation translation, S32 negation,
                           bool resetBaseRotationToZero, E_RotationStyle rotationStyle);
 
     /// <summary>
@@ -572,7 +572,7 @@ public:
     /// <param name="scale">The scale to set the joint to.</param>
     /// <param name="frame">The frame to translate the position to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_PoserManipReferenceFrame frame,
+    void setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_PoserReferenceFrame frame,
                        E_BoneDeflectionStyles style);
 
     /// <summary>
@@ -614,7 +614,7 @@ public:
     /// <param name="position">The position of the supplied joint.</param>
     /// <param name="scale">The scale of the supplied joint.</param>
     void updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style,
-                              const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
+                              E_PoserReferenceFrame frame, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -803,7 +803,7 @@ public:
       /// <param name="negation">The style of axis-negation.</param>
       /// <param name="rotation">The rotation to translate and transform to quaternion.</param>
       /// <returns>The translated rotation quaternion.</returns>
-      LLQuaternion translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserManipReferenceFrame frame,
+      LLQuaternion translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserReferenceFrame frame,
                                                  E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
 
     /// <summary>
@@ -898,7 +898,7 @@ public:
     /// This method imposes a framing upon the supplied rotation, meaning user input is considered as relative to something like
     /// 'the world', 'avatar pelvis' or the position of the camera relative to the joint.
     /// </remarks>
-    LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserManipReferenceFrame frame, FSJointPose* joint);
+    LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserReferenceFrame frame, FSJointPose* joint);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

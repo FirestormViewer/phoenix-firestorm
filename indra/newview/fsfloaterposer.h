@@ -357,7 +357,7 @@ public:
     /// No the translation isn't untangling all of that, it's not needed until it is.
     /// We're not landing on Mars with this code, just offering a user reasonable thumb-twiddlings.
     /// </remarks>
-    E_BoneAxisTranslation getJointTranslation(E_PoserManipReferenceFrame frame, const std::string& jointName) const;
+    E_BoneAxisTranslation getJointTranslation(E_PoserReferenceFrame frame, const std::string& jointName) const;
 
     /// <summary>
     /// Gets the collection of E_BoneAxisNegation values for the supplied joint.
@@ -365,13 +365,13 @@ public:
     /// <param name="frame">The reference frame for the change.</param>
     /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
     /// <returns>The kind of axis transformation to perform.</returns>
-    S32 getJointNegation(E_PoserManipReferenceFrame frame, const std::string& jointName) const;
+    S32 getJointNegation(E_PoserReferenceFrame frame, const std::string& jointName) const;
 
     /// <summary>
     /// Gets the reference frame for the rotation/position/scale change.
     /// </summary>
     /// <returns>The reference frame for the change.</returns>
-    E_PoserManipReferenceFrame getReferenceFrame() const;
+    E_PoserReferenceFrame getReferenceFrame() const;
 
     /// <summary>
     /// Gets the axial translation required for joints when saving to BVH.

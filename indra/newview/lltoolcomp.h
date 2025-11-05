@@ -273,7 +273,7 @@ public:
     virtual void render() override;
     void setAvatar(LLVOAvatar* avatar) { mManip->setAvatar(avatar); };
     void setJoint(LLJoint* joint) { mManip->setJoint(joint); };
-    void setReferenceFrame(E_PoserManipReferenceFrame frame) { mManip->setReferenceFrame(frame); };
+    void setReferenceFrame(E_PoserReferenceFrame frame) { mManip->setReferenceFrame(frame); };
 
     // Optional override if you have SHIFT/CTRL combos
     virtual LLTool* getOverrideTool(MASK mask) override;
