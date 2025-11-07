@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="snapshot_guide_settings" title="Frame Guide Settings">
+<floater name="snapshot_guide_settings" title="Paramètres du guide de cadrage">
 	<text name="color_and_appearance_label">
 		Couleur et apparence du guide
 	</text>
