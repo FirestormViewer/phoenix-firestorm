@@ -52,7 +52,12 @@ class LLDrawInfo;
 class LLMeshSkinInfo;
 
 const F32 MIN_ALPHA_SIZE = 1024.f;
-const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// <FS:minerjr>
+//const F32 MIN_TEX_ANIM_SIZE = 512.f;
+// Reduce the cut off point of the animated textures down to the size when textures get discarded/set to invalid size.
+// This should prevent "on screen" animated textures from stopping.
+const F32 MIN_TEX_ANIM_SIZE = 16.f;
+// </FS:minerjr>
 const U8 FACE_DO_NOT_BATCH_TEXTURES = 255;
 
 class alignas(16) LLFace
