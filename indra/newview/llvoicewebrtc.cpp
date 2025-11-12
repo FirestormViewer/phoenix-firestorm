@@ -921,7 +921,9 @@ float LLWebRTCVoiceClient::tuningGetEnergy(void)
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     // This can cause an error if device interface can be NULL.
     if (!mWebRTCDeviceInterface)
-        return 1.0f;
+    {
+        return 0.0f;
+    }
     // </FS:minerjr> [FIRE-36022]
     float rms = mWebRTCDeviceInterface->getTuningAudioLevel();
     return TUNING_LEVEL_START_POINT - TUNING_LEVEL_SCALE * rms;
