@@ -967,6 +967,11 @@ void LLDrawable::updateTexture()
         return;
     }
 
+    if (!mVObjp)
+    {
+        return;
+    }
+
     if (getNumFaces() != mVObjp->getNumTEs())
     { //drawable is transitioning its face count
         return;
