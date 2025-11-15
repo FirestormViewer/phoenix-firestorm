@@ -143,7 +143,6 @@ private:
     /// <summary>
     /// Gets whether gAgentID owns, and thus can save information about the supplied asset ID.
     /// </summary>
-    /// <param name="avatar">The avatar to query ownership for.</param>
     /// <param name="motionId">The asset ID of the object.</param>
     /// <returns>True if the avatar owns the asset, otherwise false.</returns>
     /// <remarks>

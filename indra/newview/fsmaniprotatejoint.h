@@ -1,5 +1,5 @@
 /**
- * @file fsmaniproatejoint.h
+ * @file fsmaniprotatejoint.h
  * @brief custom manipulator for rotating joints
  *
  * $LicenseInfo:firstyear=2024&license=viewerlgpl$
@@ -169,7 +169,7 @@ private:
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
     E_PoserReferenceFrame mReferenceFrame = POSER_FRAME_BONE;
-    LLQuaternion               mLastSetRotation;
+    LLQuaternion mLastSetRotation;
 };
 
 #endif // FS_MANIP_ROTATE_JOINT_H

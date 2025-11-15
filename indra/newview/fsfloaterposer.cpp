@@ -1407,7 +1407,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 mPoserAnimator.setRotationIsMirrored(avatar, *poserJoint, mirroredJoint);
             }
 
-            if (version > 6 && !startFromZeroRot)
+            if (version > 6 && !startFromZeroRot && !loadSelective)
                 loadSuccess = mPoserAnimator.loadPosingState(avatar, true, pose);
         }
     }
@@ -2576,10 +2576,13 @@ void FSFloaterPoser::onAvatarSelect()
 
     bool          isSelf                 = avatar->isSelf();
     bool          haveImplicitPermission = havePermissionToAnimateAvatar(avatar); // self & control avatars you own
+    bool          haveExplicitPermission = havePermissionToAnimateOtherAvatar(avatar); // as permissions allow
     E_CollabState state                  = mPoserCollaborator ? mPoserCollaborator->getCollabLocalState(avatar) : COLLAB_NONE;
 
-    if (haveImplicitPermission)
-        FSToolCompPose::getInstance()->setAvatar(avatar); // TODO: hide manip if not allowed
+    if (haveImplicitPermission || haveExplicitPermission)
+        FSToolCompPose::getInstance()->setAvatar(avatar);
+    else
+        FSToolCompPose::getInstance()->setAvatar(nullptr);
 
     bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
 
@@ -2587,7 +2590,7 @@ void FSFloaterPoser::onAvatarSelect()
     mStartStopPosingBtn->setValue(arePosingSelected);
 
     mStartStopSharingBtn->setEnabled(!haveImplicitPermission && state != COLLAB_PERM_DENIED);
-    mStartStopSharingBtn->setValue(state >= COLLAB_PERM_GRANTED);
+    mStartStopSharingBtn->setValue(state == COLLAB_PHOTOG_MODE || state >= COLLAB_PERM_GRANTED);
 
     mStartStopControlBtn->setEnabled(!isSelf && state >= COLLAB_PERM_GRANTED);
     mStartStopControlBtn->setValue(state == COLLAB_THEY_POSE_ME || state == COLLAB_POSE_EACH_OTHER);
