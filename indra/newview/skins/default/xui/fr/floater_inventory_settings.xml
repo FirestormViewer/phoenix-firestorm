@@ -32,7 +32,7 @@
 		Appuyer sur Entrée sur un élément attaché à l'avatar
 	</text>
 	<combo_box name="attach_combo">
-		<combo_box.item label="Ajoute l'élément (recommandé)" name="0"/>
-		<combo_box.item label="Porte (Supprime l'élément attaché à cet endroit)" name="1"/>
+		<combo_box.item label="Ajoute l'élément (recommandé)" name="1"/>
+		<combo_box.item label="Porte (Supprime l'élément attaché à cet endroit)" name="0"/>
 	</combo_box>
 </floater>
