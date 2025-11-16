@@ -111,15 +111,10 @@
 			<check_box name="FSBuildPrefs_EmbedItem" label="Intégrer un objet dans le nouveau prim"/>
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="Glissez un objet ici.">Glissez un objet ici.</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">Actuellement : [ITEM]</text>
-			<text name="text_box_pivotpoint">Point de pivot</text>
-			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
-			<spinner label="Pos. X" name="X pos"/>
-			<spinner label="Pos. Y" name="Y pos"/>
-			<spinner label="Pos. Z" name="Z pos"/>
-			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">Drop a script here.</fs_embedded_item_drop_target>
+			<text name="custom_script_disp_rect_txt">Actuellement: [SCRIPT]</text>
 			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
-		</panel>
-		<panel label="Construction 2" name="BuildTab2">
 			<check_box label="Contours lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
 			<check_box label="Afficher les limites de la parcellle sélectionnée" name="RenderParcelSelection"/>
 			<check_box label="Afficher la limite maximale en hauteur pour construire" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -134,6 +129,14 @@
 			<text name="MinObjectsForUnlinkConfirmText2">objets</text>
 			<check_box label="Utiliser l'ancien fonctionnement de 'Mettre cet objet en vente'" tool_tip="Activer cette option sauvegardera directement les informations de vente de l'objet au lieu de nécessiter une confirmation." name="FSCommitForSaleOnChange_toggle"/>
 			<check_box label="Sauvegarder les textures sur le disque dur au format PNG au lieu de TGA" tool_tip="Utilisé dans l'aperçu de texture et dans le menu contextuel de l'inventaire." name="FSTextureDefaultSaveAsFormat"/>
+			<text name="text_box_pivotpoint">Point de pivot</text>
+			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
+			<spinner label="Pos. X" name="X pos"/>
+			<spinner label="Pos. Y" name="Y pos"/>
+			<spinner label="Pos. Z" name="Z pos"/>
+			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
+		</panel>
+		<panel label="Construction 2" name="BuildTab2">
 			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
 			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
 			<check_box label="Prévisualiser les animations sur son avatar pendant le téléchargement sur le serveur" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le téléchargement sur le serveur" name="FSUploadAnimationOnOwnAvatar"/>

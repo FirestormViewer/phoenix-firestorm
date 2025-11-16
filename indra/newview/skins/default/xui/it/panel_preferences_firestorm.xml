@@ -152,17 +152,14 @@
             <text name="build_item_add_disp_rect_txt">
                 Impostato a: [ITEM]
             </text>
-            <text name="text_box_pivotpoint">
-                Fulcro oggetto
+            <check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+            <fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+                Drop a script here.
+            </fs_embedded_item_drop_target>
+            <text name="custom_script_disp_rect_txt">
+                Impostato a: [SCRIPT]
             </text>
-            <check_box label="Assi al prim radice" tool_tip="Di solito è impostato il centro non sul prim principale ma sul centro dell&apos;intero oggetto, spuntando questa casella il centro verrà settato sul Prim Root." name="FSBuildPrefsActualRoot_toggle" />
-            <spinner label="Pos. X" name="X pos" />
-            <spinner label="Pos. Y" name="Y pos" />
-            <spinner label="Pos. Z" name="Z pos" />
-            <check_box label="Valori in percento" tool_tip="Di solito è impostato a 50%" name="FSPivotPercToggle" />
             <button label="Permessi predefiniti di creazione" name="fs_default_creation_permissions"/>
-        </panel>
-        <panel label="Costruisci 2" name="BuildTab2">
             <check_box label="Evidenzia i prim selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="FSBuildPrefsRenderHighlight_toggle" />
             <check_box label="Evidenzia confini del lotto selezionato" name="RenderParcelSelection"/>
             <check_box label="Mostra confini fino all&apos;altezza max costruita" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -183,6 +180,16 @@
             </text>
             <check_box label="Usa il vecchio metodo &quot;Metti oggetto in vendita&quot;" tool_tip="Quando selezionato, l&apos;oggetto in vendita viene salvato senza chiedere conferma" name="FSCommitForSaleOnChange_toggle" />
             <check_box label="Salva texture da inventario a disco nel formato PNG invece che TGA" tool_tip="Usato nel pannello anteprima texture e nei menu dell&apos;inventario." name="FSTextureDefaultSaveAsFormat"/>
+            <text name="text_box_pivotpoint">
+                Fulcro oggetto
+            </text>
+            <check_box label="Assi al prim radice" tool_tip="Di solito è impostato il centro non sul prim principale ma sul centro dell&apos;intero oggetto, spuntando questa casella il centro verrà settato sul Prim Root." name="FSBuildPrefsActualRoot_toggle" />
+            <spinner label="Pos. X" name="X pos" />
+            <spinner label="Pos. Y" name="Y pos" />
+            <spinner label="Pos. Z" name="Z pos" />
+            <check_box label="Valori in percento" tool_tip="Di solito è impostato a 50%" name="FSPivotPercToggle" />
+        </panel>
+        <panel label="Costruisci 2" name="BuildTab2">
             <check_box label="Usa Ctrl+mouse per afferrare e manipolare oggetti" tool_tip="Permette di afferrare e spostare gli oggetti con il mouse e il tasto CTRL." name="FSEnableGrab"/>
             <check_box label="Permetti clic-trascina o clic-scala (Maiusc) di una texture in modalità costruzione" tool_tip="Permette di usare clic-trascina e clic-Maiusc-trascina sulla faccia di una texture in modo costruzione. Opzione sperimentale da usare con cautela." name="FSExperimentalDragTexture"/>
             <check_box label="Anteprima delle animazioni sull&apos;avatar durante il caricamento" tool_tip="Si possono vedere le animazioni durante il caricamento usando il proprio avatar" name="FSUploadAnimationOnOwnAvatar"/>

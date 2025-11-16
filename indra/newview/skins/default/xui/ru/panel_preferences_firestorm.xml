@@ -157,17 +157,14 @@
         <text name="build_item_add_disp_rect_txt">
          Содержимое: [ITEM]
         </text>
-        <text name="text_box_pivotpoint">
-          Точка опоры
+        <check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+        <fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+         Drop a script here.
+        </fs_embedded_item_drop_target>
+        <text name="custom_script_disp_rect_txt">
+         Содержимое: [SCRIPT]
         </text>
-        <check_box label="Оси на корне" tool_tip="По умолчанию оси отображаются в центре объедененных примов. Если включена эта опция, то оси отображаются в центре корневого прима" name="FSBuildPrefsActualRoot_toggle" />
-        <spinner label="Поз. X" name="X pos" />
-        <spinner label="Поз. Y" name="Y pos" />
-        <spinner label="Поз. Z" name="Z pos" />
-        <check_box label="В процентах" tool_tip="По умолчанию проценты установлены на каждую ось по 50" name="FSPivotPercToggle" />
         <button label="Разрешения создания по умолчанию" name="fs_default_creation_permissions" />
-    </panel>
-    <panel label="Строить 2" name="BuildTab2">
         <check_box label="Включить подсветку выбранного объекта" tool_tip="Включить подсветку выбранного объекта" name="FSBuildPrefsRenderHighlight_toggle" />
         <check_box label="Высветить границы выбранного участка" name="RenderParcelSelection"/>
         <check_box label="Показать границу до максимальной высоты строительства" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -188,6 +185,16 @@
         </text>
         <check_box label="Установить старое поведение для &quot;Установить объект на продажу&quot;" tool_tip="Установить старое поведение для &quot;Установить объект на продажу&quot;" name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" tool_tip="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" name="FSTextureDefaultSaveAsFormat" />
+        <text name="text_box_pivotpoint">
+          Точка опоры
+        </text>
+        <check_box label="Оси на корне" tool_tip="По умолчанию оси отображаются в центре объедененных примов. Если включена эта опция, то оси отображаются в центре корневого прима" name="FSBuildPrefsActualRoot_toggle" />
+        <spinner label="Поз. X" name="X pos" />
+        <spinner label="Поз. Y" name="Y pos" />
+        <spinner label="Поз. Z" name="Z pos" />
+        <check_box label="В процентах" tool_tip="По умолчанию проценты установлены на каждую ось по 50" name="FSPivotPercToggle" />
+    </panel>
+    <panel label="Строить 2" name="BuildTab2">
         <check_box label="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" tool_tip="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" name="FSEnableGrab" />
         <check_box label="Масштабирование при нажатии (вместе с caps lock) для текстур при строительстве" tool_tip="При включении, позволяет тянуть при нажатии или масштаб при нажатии (вместе с caps lock) для текстур в режиме строительства. Эта функция эксперементальная и ее следует использовать с осторожностью." name="FSExperimentalDragTexture" />
         <check_box label="Предварительный просмотр анимации на собственном аватара во время загрузки" tool_tip="Предварительный просмотр анимации на собственном аватара во время загрузки" name="FSUploadAnimationOnOwnAvatar" />
