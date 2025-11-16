@@ -52,8 +52,10 @@
 #include "lltool.h"
 #include "lltoolcomp.h"
 #include "lltoolmgr.h"
+#include "lltooldraganddrop.h" // <FS:FIRE-36059> For custom script template
 #include "lltrans.h"
 #include "llviewerassettype.h"
+#include "llviewercontrol.h" // <FS:FIRE-36059> For custom script template
 #include "llviewerinventory.h"
 #include "llviewermenu.h" // <FS> Script reset in edit floater
 #include "llviewerobject.h"
@@ -279,6 +281,22 @@ void LLPanelContents::onClickNewScript(void *userdata)
             }
         }
 // [/RLVa:KB]
+
+        // <FS:PP> FIRE-36059 Optional custom script template for New Script button
+        if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
+        {
+            LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem"));
+            if (custom_script_id.notNull())
+            {
+                LLInventoryItem* custom_script = dynamic_cast<LLInventoryItem*>(gInventory.getObject(custom_script_id));
+                if (custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
+                {
+                    LLToolDragAndDrop::dropScript(object, custom_script, true, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
+                    return;
+                }
+            }
+        }
+        // </FS:PP>
 
         LLPermissions perm;
         perm.init(gAgent.getID(), gAgent.getID(), LLUUID::null, LLUUID::null);
