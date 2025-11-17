@@ -1,11 +1,10 @@
 /**
  * @file llfloatersearch.cpp
- * @author Martin Reddy
- * @brief Search floater - uses an embedded web browser control
+ * @brief Floater for Search (update 2025, preload)
  *
- * $LicenseInfo:firstyear=2009&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2011, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,16 +26,13 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llfloatersearch.h"
+
+#include "llagent.h"
 #include "llcommandhandler.h"
 #include "llfloaterreg.h"
-#include "llfloatersearch.h"
-#include "llhttpconstants.h"
 #include "llmediactrl.h"
-#include "llnotificationsutil.h"
-#include "lllogininstance.h"
-#include "lluri.h"
-#include "llagent.h"
-#include "llui.h"
+#include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 #include "llweb.h"
 
@@ -44,54 +40,37 @@
 #include "lfsimfeaturehandler.h"    // <FS:CR> Opensim search support
 
 // support secondlife:///app/search/{CATEGORY}/{QUERY} SLapps
-class LLSearchHandler : public LLCommandHandler
-{
-public:
-    // requires trusted browser to trigger
-    LLSearchHandler() : LLCommandHandler("search", UNTRUSTED_CLICK_ONLY) { }
-    bool handle(const LLSD& tokens, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-    {
-        const size_t parts = tokens.size();
+class LLSearchHandler : public LLCommandHandler {
+    public:
+        // requires trusted browser to trigger
+        LLSearchHandler() : LLCommandHandler("search", UNTRUSTED_CLICK_ONLY) { }
+        bool handle(const LLSD& tokens, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web) {
+            const size_t parts = tokens.size();
 
-        // get the (optional) category for the search
-        std::string collection;
-        if (parts > 0)
-        {
-            collection = tokens[0].asString();
+            // get the (optional) category for the search
+            std::string collection;
+            if (parts > 0)
+            {
+                collection = tokens[0].asString();
+            }
+
+            // get the (optional) search string
+            std::string search_text;
+            if (parts > 1)
+            {
+                search_text = tokens[1].asString();
+            }
+
+            // open the search floater and perform the requested search
+            LLFloaterReg::showInstance("search", llsd::map("collection", collection,"query", search_text));
+            return true;
         }
-
-        // get the (optional) search string
-        std::string search_text;
-        if (parts > 1)
-        {
-            search_text = tokens[1].asString();
-        }
-
-        // create the LLSD arguments for the search floater
-        LLFloaterSearch::Params p;
-        p.search.collection = collection;
-        p.search.query = LLURI::unescape(search_text);
-
-        // open the search floater and perform the requested search
-        LLFloaterReg::showInstance("search", p);
-        return true;
-    }
 };
 LLSearchHandler gSearchHandler;
 
-LLFloaterSearch::SearchQuery::SearchQuery()
-:   category("category", ""),
-    collection("collection", ""),
-    query("query")
-{}
-
-LLFloaterSearch::LLFloaterSearch(const Params& key) :
-    LLFloaterWebContent(key),
-    mSearchGodLevel(0)
+LLFloaterSearch::LLFloaterSearch(const LLSD& key)
+    : LLFloaterWebContent(key)
 {
-    // declare a map that transforms a category name into
-    // the URL suffix that is used to search that category
-
     mSearchType.insert("standard");
     mSearchType.insert("land");
     mSearchType.insert("classified");
@@ -103,122 +82,23 @@ LLFloaterSearch::LLFloaterSearch(const Params& key) :
     mCollectionType.insert("people");
 }
 
-bool LLFloaterSearch::postBuild()
+LLFloaterSearch::~LLFloaterSearch()
 {
-    LLFloaterWebContent::postBuild();
-    mWebBrowser->addObserver(this);
-
-    // <FS:Ansariel> Seperate help topic aside from other web content
-    setHelpTopic("floater_search");
-
-    return true;
 }
 
-void LLFloaterSearch::onOpen(const LLSD& key)
+void LLFloaterSearch::onOpen(const LLSD& tokens)
 {
-    Params p(key);
-    p.trusted_content = true;
-// <FS:AW  opensim search support>
-//  p.allow_address_entry = false;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-    bool debug = gSavedSettings.getBOOL("DebugSearch");
-    p.allow_address_entry = debug;
-// <FS:AW optional opensim support>
-#else // OPENSIM
-    p.allow_address_entry = false;
-#endif // OPENSIM
-// </FS:AW optional opensim support>
-
-// </FS:AW  opensim search support>
-    LLFloaterWebContent::onOpen(p);
+    initiateSearch(tokens);
     mWebBrowser->setFocus(true);
-    search(p.search);
 }
 
+// just to override LLFloaterWebContent
 void LLFloaterSearch::onClose(bool app_quitting)
 {
-    LLFloaterWebContent::onClose(app_quitting);
-    // tear down the web view so we don't show the previous search
-    // result when the floater is opened next time
-    destroy();
 }
 
-void LLFloaterSearch::godLevelChanged(U8 godlevel)
+void LLFloaterSearch::initiateSearch(const LLSD& tokens)
 {
-    // search results can change based upon god level - if the user
-    // changes god level, then give them a warning (we don't refresh
-    // the search as this might undo any page navigation or
-    // AJAX-driven changes since the last search).
-
-    //FIXME: set status bar text
-
-    //getChildView("refresh_search")->setVisible( (godlevel != mSearchGodLevel));
-}
-
-void LLFloaterSearch::search(const SearchQuery &p)
-{
-    if (! mWebBrowser || !p.validateBlock())
-    {
-        return;
-    }
-
-    // reset the god level warning as we're sending the latest state
-    getChildView("refresh_search")->setVisible(false);
-    mSearchGodLevel = gAgent.getGodLevel();
-
-    // work out the subdir to use based on the requested category
-    LLSD subs;
-    if (mSearchType.find(p.category) != mSearchType.end())
-    {
-        subs["TYPE"] = p.category;
-    }
-    else
-    {
-        subs["TYPE"] = "standard";
-    }
-
-    // add the search query string
-    subs["QUERY"] = LLURI::escape(p.query);
-
-    subs["COLLECTION"] = "";
-    if (subs["TYPE"] == "standard")
-    {
-        if (mCollectionType.find(p.collection) != mCollectionType.end())
-        {
-            subs["COLLECTION"] = "&collection_chosen=" + std::string(p.collection);
-        }
-        else
-        {
-            std::string collection_args("");
-            for (std::set<std::string>::iterator it = mCollectionType.begin(); it != mCollectionType.end(); ++it)
-            {
-                collection_args += "&collection_chosen=" + std::string(*it);
-            }
-            subs["COLLECTION"] = collection_args;
-        }
-    }
-
-    // add the user's preferred maturity (can be changed via prefs)
-    std::string maturity;
-    if (gAgent.prefersAdult())
-    {
-        maturity = "gma";  // PG,Mature,Adult
-    }
-    else if (gAgent.prefersMature())
-    {
-        maturity = "gm";  // PG,Mature
-    }
-    else
-    {
-        maturity = "g";  // PG
-    }
-    subs["MATURITY"] = maturity;
-
-    // add the user's god status
-    subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
-
-    // get the search URL and expand all of the substitutions
-    // (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
 // <FS:AW  opensim search support>
 //  std::string url = gSavedSettings.getString("SearchURL");
     std::string url;
@@ -236,8 +116,88 @@ void LLFloaterSearch::search(const SearchQuery &p)
     }
 // </FS:AW  opensim search support>
 
+    LLSD subs;
+
+    // Setting this substitution here results in a full set of collections being
+    // substituted into the final URL using the logic from the original search.
+    subs["TYPE"] = "standard";
+
+    std::string collection = tokens.has("collection") ? tokens["collection"].asString() : "";
+
+    std::string search_text = tokens.has("query") ? tokens["query"].asString() : "";
+
+    std::string category = tokens.has("category") ? tokens["category"].asString() : "";
+    if (mSearchType.find(category) != mSearchType.end())
+    {
+        subs["TYPE"] = category;
+    }
+    else
+    {
+        subs["TYPE"] = "standard";
+    }
+
+    subs["QUERY"] = LLURI::escape(search_text);
+
+    subs["COLLECTION"] = "";
+    if (subs["TYPE"] == "standard")
+    {
+        if (mCollectionType.find(collection) != mCollectionType.end())
+        {
+            subs["COLLECTION"] = "&collection_chosen=" + std::string(collection);
+        }
+        else
+        {
+            std::string collection_args("");
+            for (std::set<std::string>::iterator it = mCollectionType.begin(); it != mCollectionType.end(); ++it)
+            {
+                collection_args += "&collection_chosen=" + std::string(*it);
+            }
+            subs["COLLECTION"] = collection_args;
+        }
+    }
+
+    // Default to PG
+    std::string maturity = "g";
+    if (gAgent.prefersAdult())
+    {
+        // PG,Mature,Adult
+        maturity = "gma";
+    }
+    else if (gAgent.prefersMature())
+    {
+        // PG,Mature
+        maturity = "gm";
+    }
+    subs["MATURITY"] = maturity;
+
+    // God status
+    subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
+
+    // This call expands a set of generic substitutions like language, viewer version
+    // etc. and then also does the same with the list of subs passed in.
     url = LLWeb::expandURLSubstitutions(url, subs);
 
-    // and load the URL in the web view
-    mWebBrowser->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
+    // Naviation to the calculated URL - we know it's HTML so we can
+    // tell the media system not to bother with the MIME type check.
+    LLMediaCtrl* search_browser = findChild<LLMediaCtrl>("search_contents");
+    search_browser->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
+}
+
+bool LLFloaterSearch::postBuild()
+{
+    LLFloaterWebContent::postBuild();
+    mWebBrowser = getChild<LLMediaCtrl>("search_contents");
+    mWebBrowser->addObserver(this);
+    getChildView("address")->setEnabled(false);
+    getChildView("popexternal")->setEnabled(false);
+
+    // This call is actioned by the preload code in llViewerWindow
+    // that creates the search floater during the login process
+    // using a generic search with no query
+    initiateSearch(LLSD());
+
+    // <FS:Ansariel> Seperate help topic aside from other web content
+    setHelpTopic("floater_search");
+
+    return true;
 }

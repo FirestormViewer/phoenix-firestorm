@@ -39,6 +39,10 @@
 #include "llframetimer.h"
 #include "llassettype.h"
 #include "llextendedstatus.h"
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+// Need to include for audio device mutex shared with other audio/voice systems.
+#include "inlinemutexs.h"
+// </FS:minerjr> [FIRE-36022]
 
 #include "lllistener.h"
 

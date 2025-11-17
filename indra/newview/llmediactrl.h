@@ -172,6 +172,7 @@ public:
 
         // right click debugging item
         void onOpenWebInspector();
+        void onShowSource();
 
         LLUUID getTextureID() {return mMediaTextureID;}
 

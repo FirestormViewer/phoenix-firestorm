@@ -486,7 +486,13 @@ void LLGLTFLoader::processNodeHierarchy(S32 node_idx, std::map<std::string, S32>
         }
         else
         {
-            setLoadState(ERROR_MODEL + pModel->getStatus());
+            // <FS:Beq> Fix deprecated arithmetic between different enum types (ERROR_MODEL + EModelStatus)
+            // Ugly fix. could use a helper instead but its only called in two places.
+            // setLoadState(ERROR_MODEL + pModel->getStatus());
+            setLoadState(
+                static_cast<LLModelLoader::eLoadState>(
+                            static_cast<S32>(ERROR_MODEL) + static_cast<S32>(pModel->getStatus())));
+            // </FS:Beq>
             delete pModel;
             return;
         }

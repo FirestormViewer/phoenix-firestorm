@@ -2962,7 +2962,7 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 
 bool FSPanelSearchWeb::postBuild()
 {
-    mWebBrowser = getChild<LLMediaCtrl>("search_browser");
+    mWebBrowser = getChild<LLMediaCtrl>("search_contents");
     return true;
 }
 

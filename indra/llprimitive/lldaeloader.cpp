@@ -1131,7 +1131,13 @@ bool LLDAELoader::OpenFile(const std::string& filename)
                 LLModel* mdl = *i;
                 if(mdl->getStatus() != LLModel::NO_ERRORS)
                 {
-                    setLoadState(ERROR_MODEL + mdl->getStatus()) ;
+                    // <FS:Beq> Fix deprecated arithmetic between different enum types (ERROR_MODEL + EModelStatus)
+                    // Ugly fix. could use a helper instead but its only called in two places.
+                    // setLoadState(ERROR_MODEL + mdl->getStatus());
+                    setLoadState(
+                        static_cast<LLModelLoader::eLoadState>(
+                                 static_cast<S32>(ERROR_MODEL) + static_cast<S32>(mdl->getStatus())));
+                    // </FS:Beq>
                     return false; //abort
                 }
 
@@ -1372,7 +1378,7 @@ void LLDAELoader::processDomModel(LLModel* model, DAE* dae, daeElement* root, do
                     {
                         //Build a joint for the resolver to work with
                         char str[64]={0};
-                        sprintf(str,"./%s",(*jointIt).first.c_str() );
+                        snprintf(str, sizeof(str), "./%s",(*jointIt).first.c_str() );
                         //LL_WARNS()<<"Joint "<< str <<LL_ENDL;
 
                         //Setup the resolver

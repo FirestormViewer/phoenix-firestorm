@@ -38,6 +38,10 @@ class LLVOAvatar;
 #include "llcallingcard.h"   // for LLFriendObserver
 #include "llsecapi.h"
 #include "llcontrol.h"
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+// Need to include for audio device mutex shared with other audio/voice systems.
+#include "inlinemutexs.h"
+// </FS:minerjr> [FIRE-36022]
 
 // devices
 

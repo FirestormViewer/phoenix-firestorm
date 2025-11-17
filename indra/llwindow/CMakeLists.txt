@@ -68,7 +68,7 @@ endif()
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
 if (LINUX)
-  if( USE_SDL1 )
+  if (USE_SDL1)
     list(APPEND viewer_SOURCE_FILES
             llkeyboardsdl.cpp
             llwindowsdl.cpp
@@ -122,7 +122,7 @@ if (DARWIN)
       llkeyboardmacosx.cpp
       llwindowmacosx.cpp
       PROPERTIES
-      COMPILE_FLAGS "-Wno-deprecated-declarations -fpascal-strings"
+      COMPILE_FLAGS "-fpascal-strings"
       )
 endif (DARWIN)
 
@@ -189,9 +189,8 @@ endif (llwindow_HEADER_FILES)
 
   target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
   target_include_directories(llwindow INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-  
+
 if (DARWIN)
-  find_library(CARBON_LIBRARY Carbon)
   target_link_libraries(llwindow ${CARBON_LIBRARY})
 endif (DARWIN)
 

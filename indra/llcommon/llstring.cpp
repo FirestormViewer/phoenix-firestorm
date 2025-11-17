@@ -1518,8 +1518,8 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
     std::wstringstream strStream;
     S32 intDecimals = 0;
 
-    std::wstring wDecimals = utf8str_to_utf16str(decimals);
-    std::wstring wNumStr = utf8str_to_utf16str(numStr);
+    std::wstring wDecimals = ll_convert<std::wstring>(decimals);
+    std::wstring wNumStr = ll_convert<std::wstring>(numStr);
     LLStringUtilBase<wchar_t>::convertToS32 (wDecimals, intDecimals);
     if (!sLocale.empty())
     {
@@ -1542,7 +1542,7 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
         if (LLStringUtilBase<wchar_t>::convertToS32(wNumStr, intStr))
         {
             strStream << intStr;
-            numStr = wstring_to_utf8str( strStream.str() );
+            numStr = ll_convert<std::string>(strStream.str());
         }
     }
     else
@@ -1552,7 +1552,7 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
         if (LLStringUtilBase<wchar_t>::convertToF32(wNumStr, floatStr))
         {
             strStream << std::fixed << std::showpoint << std::setprecision(intDecimals) << floatStr;
-            numStr = wstring_to_utf8str( strStream.str() );
+            numStr = ll_convert<std::string>(strStream.str());
         }
     }
 #else

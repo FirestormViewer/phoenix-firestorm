@@ -852,7 +852,7 @@
          bevel_style="none"
          follows="all"
          label="Favorites"
-         help_topic="recent_inventory_tab"
+         help_topic="favorites_inventory_tab"
          layout="topleft"
          name="Favorites"
          show_item_link_overlays="true"

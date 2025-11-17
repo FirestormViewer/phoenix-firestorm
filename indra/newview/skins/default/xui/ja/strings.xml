@@ -6527,6 +6527,7 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="All Items">全てのアイテム</string>
 	<string name="Recent Items">最近のアイテム</string>
 	<string name="Worn Items">着用中</string>
+	<string name="Favorites">お気に入り</string>
 
 	<string name="InvOfferGroupNoticeName">[NAME]というグループメンバー名</string>
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>

@@ -124,7 +124,7 @@ void LLDiskCache::purge()
     std::vector<file_info_t> file_info;
 
 #if LL_WINDOWS
-    std::wstring cache_path(utf8str_to_utf16str(sCacheDir));
+    std::wstring cache_path(ll_convert<std::wstring>(sCacheDir));
 #else
     std::string cache_path(sCacheDir);
 #endif
@@ -420,7 +420,7 @@ void LLDiskCache::clearCache()
      */
     boost::system::error_code ec;
 #if LL_WINDOWS
-    std::wstring cache_path(utf8str_to_utf16str(sCacheDir));
+    std::wstring cache_path(ll_convert<std::wstring>(sCacheDir));
 #else
     std::string cache_path(sCacheDir);
 #endif
@@ -461,7 +461,7 @@ void LLDiskCache::removeOldVFSFiles()
 
     boost::system::error_code ec;
 #if LL_WINDOWS
-    std::wstring cache_path(utf8str_to_utf16str(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "")));
+    std::wstring cache_path(ll_convert<std::wstring>(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "")));
 #else
     std::string cache_path(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""));
 #endif
@@ -526,7 +526,7 @@ uintmax_t LLDiskCache::dirFileSize(const std::string& dir, bool force)
      */
     boost::system::error_code ec;
 #if LL_WINDOWS
-    std::wstring dir_path(utf8str_to_utf16str(dir));
+    std::wstring dir_path(ll_convert<std::wstring>(dir));
 #else
     std::string dir_path(dir);
 #endif

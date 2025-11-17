@@ -376,7 +376,7 @@ std::string bar = std::string([pStr UTF8String]);
 - (void)sendEvent:(NSEvent *)event
 {
     [super sendEvent:event];
-    if ([event type] == NSKeyUp && ([event modifierFlags] & NSCommandKeyMask))
+    if ([event type] == NSEventTypeKeyUp && ([event modifierFlags] & NSEventModifierFlagCommand))
     {   
         [[self keyWindow] sendEvent:event];
     }

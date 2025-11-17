@@ -42,6 +42,7 @@
 #include "llpanelpresetscamerapulldown.h"
 #include "llpanelpresetspulldown.h"
 #include "llpanelvolumepulldown.h"
+#include "llfloatermarketplace.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterscriptdebug.h"
 #include "llhints.h"
@@ -296,7 +297,8 @@ bool LLStatusBar::postBuild()
         boost::bind(&LLStatusBar::onClickBuyCurrency, this));
 
     // <FS:Ansariel> Not used in Firestorm
-    //getChild<LLUICtrl>("goShop")->setCommitCallback(boost::bind(&LLWeb::loadURL, gSavedSettings.getString("MarketplaceURL"), LLStringUtil::null, LLStringUtil::null));
+    //getChild<LLUICtrl>("goShop")->setCommitCallback(
+    //    boost::bind(&LLStatusBar::onClickShop, this));
 
     mBoxBalance = getChild<LLTextBox>("balance");
     mBoxBalance->setClickedCallback(&LLStatusBar::onClickRefreshBalance, this);
@@ -966,6 +968,15 @@ void LLStatusBar::onClickBuyCurrency()
     // value specified in settings.xml
     LLBuyCurrencyHTML::openCurrencyFloater();
     LLFirstUse::receiveLindens(false);
+}
+
+void LLStatusBar::onClickShop()
+{
+    LLFloaterReg::showInstanceOrBringToFront("marketplace");
+    if (LLFloaterMarketplace* marketplace = LLFloaterReg::getTypedInstance<LLFloaterMarketplace>("marketplace"))
+    {
+        marketplace->openMarketplace();
+    }
 }
 
 void LLStatusBar::onMouseEnterPresetsCamera()

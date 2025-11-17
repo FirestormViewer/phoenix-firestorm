@@ -74,7 +74,6 @@
 #define LL_PROFILER_CONFIGURATION           LL_PROFILER_CONFIG_FAST_TIMER
 #endif
 
-extern thread_local bool gProfilerEnabled; // <FS:Beq/> This is being used to control memory allocations
 // <FS:Beq> We use the active flag to control deferred profiling. 
 // It is functionally separate to the (poorly named) gProfilerEnabled flag
 namespace LLProfiler 
@@ -93,14 +92,14 @@ namespace LLProfiler
         #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
 
         // Enable RenderDoc labeling
-        #define LL_PROFILER_ENABLE_RENDER_DOC 0
+        //#define LL_PROFILER_ENABLE_RENDER_DOC 0
 
     #endif
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
         #define LL_PROFILER_FRAME_END                   FrameMark;
         // <FS:Beq> Note: this threadlocal forces memory colelction enabled from the start. It conflicts with deferred profiling.
-        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
+        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );
         // </FS:Beq>
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ); // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name );   // C string
@@ -171,7 +170,7 @@ namespace LLProfiler
     #endif
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
         #define LL_PROFILER_FRAME_END                   FrameMark;
-        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
+        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ); // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name );   // C string
 
@@ -235,32 +234,27 @@ namespace LLProfiler
 #endif // LL_PROFILER
 
 #if LL_PROFILER_ENABLE_TRACY_OPENGL
-#define LL_PROFILE_GPU_ZONE(name)        TracyGpuZone(name);
-#define LL_PROFILE_GPU_ZONEC(name,color) TracyGpuZoneC(name,color);
+#define LL_PROFILE_GPU_ZONE(name)         TracyGpuZone(name);
+#define LL_PROFILE_GPU_ZONEC(name,color)  TracyGpuZoneC(name,color);
 #define LL_PROFILER_GPU_COLLECT           TracyGpuCollect;
 #define LL_PROFILER_GPU_CONTEXT           TracyGpuContext;
 #define LL_PROFILER_GPU_CONTEXT_NS(name, size)           TracyGpuContext;TracyGpuContextName(name,size);
-
-// disable memory tracking (incompatible with GPU tracing
-#define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
-#define LL_PROFILE_FREE(ptr)                    (void)(ptr);
+#define LL_PROFILER_GPU_CONTEXT_NAMED     TracyGpuContextName
 #else
-#define LL_PROFILE_GPU_ZONE(name)        (void)name;
-#define LL_PROFILE_GPU_ZONEC(name,color) (void)name;(void)color;
+#define LL_PROFILE_GPU_ZONE(name)           (void)name;
+#define LL_PROFILE_GPU_ZONEC(name,color)    (void)name;(void)color;
 #define LL_PROFILER_GPU_COLLECT
 #define LL_PROFILER_GPU_CONTEXT
+#define LL_PROFILER_GPU_CONTEXT_NAMED(name) (void)name;
 #define LL_PROFILER_GPU_CONTEXT_NS(name, size)           (void)name;(void)size;
+#endif // LL_PROFILER_ENABLE_TRACY_OPENGL
 
-#define LL_LABEL_OBJECT_GL(type, name, length, label)
-
-#if !LL_DARWIN && LL_PROFILER_CONFIGURATION > 1
+#if LL_PROFILER_CONFIGURATION >= LL_PROFILER_CONFIG_TRACY
 #define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size);
 #define LL_PROFILE_FREE(ptr)                    TracyFree(ptr);
 #else
 #define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
 #define LL_PROFILE_FREE(ptr)                    (void)(ptr);
-#endif
-
 #endif
 
 #if LL_PROFILER_ENABLE_RENDER_DOC

@@ -164,6 +164,7 @@ public:
 private:
 
     void onClickBuyCurrency();
+    void onClickShop();
     void onVolumeChanged(const LLSD& newvalue);
     //void onVoiceChanged(const LLSD& newvalue); // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
     void onObscureBalanceChanged(const LLSD& newvalue);
@@ -320,12 +321,8 @@ public:
     void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 private:
-    LLTextBox   *mTextBalance;
-    LLTextBox   *mTextHealth;
     LLTextBox   *mTextTime;
     LLTextBox   *mFPSText; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
-
-    LLTextBox*  mTextParcelName;
 
     LLStatGraph *mSGBandwidth;
     LLStatGraph *mSGPacketLoss;
@@ -360,7 +357,6 @@ private:
     LLPanelNearByMedia* mPanelNearByMedia;
 
     LLPanel*                mParcelInfoPanel;
-    LLButton*               mInfoBtn;
     LLTextBox*              mParcelInfoText;
     LLTextBox*              mDamageText;
     LLIconCtrl*             mParcelIcon[ICON_COUNT];

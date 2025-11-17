@@ -47,8 +47,8 @@ HttpOptions::HttpOptions() :
     mVerifyPeer(sDefaultVerifyPeer),
     mVerifyHost(false),
     mDNSCacheTimeout(-1L),
-    mNoBody(false),
-    mLastModified(0) // <FS:Ansariel> GetIfModified request
+    mLastModified(0),
+    mNoBody(false)
 {}
 
 
@@ -130,16 +130,14 @@ void HttpOptions::setHeadersOnly(bool nobody)
     }
 }
 
+void HttpOptions::setLastModified(time_t lastModified)
+{
+    mLastModified = lastModified;
+}
+
 void HttpOptions::setDefaultSSLVerifyPeer(bool verify)
 {
     sDefaultVerifyPeer = verify;
 }
-
-// <FS:Ansariel> GetIfModified request
-void HttpOptions::setLastModified(long last_modified)
-{
-    mLastModified = last_modified;
-}
-// </FS:Ansariel>
 
 }   // end namespace LLCore

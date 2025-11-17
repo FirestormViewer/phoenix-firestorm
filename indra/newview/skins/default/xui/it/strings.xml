@@ -6615,6 +6615,9 @@ Assistenza nel sito SecondLife.com e segnala il problema.
 	<string name="Worn Items">
 		Indossati
 	</string>
+	<string name="Favorites">
+		Preferiti
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		Un membro del gruppo di nome [NAME]
 	</string>

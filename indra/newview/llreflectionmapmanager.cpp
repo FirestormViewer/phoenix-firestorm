@@ -211,6 +211,7 @@ void LLReflectionMapManager::update()
     }
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
+    LL_PROFILE_GPU_ZONE("reflection manager update");
     llassert(!gCubeSnapshot); // assert a snapshot is not in progress
     if (LLAppViewer::instance()->logoutRequestSent())
     {
@@ -222,15 +223,11 @@ void LLReflectionMapManager::update()
         resume();
     }
 
-    static LLCachedControl<S32> sDetail(gSavedSettings, "RenderReflectionProbeDetail", -1);
-    // static LLCachedControl<S32> sLevel(gSavedSettings, "RenderReflectionProbeLevel", 3); // <FS:Beq/> No longer required use the pipeline cached version instead
-    static LLCachedControl<U32> sReflectionProbeCount(gSavedSettings, "RenderReflectionProbeCount", 256U);
-    static LLCachedControl<S32> sProbeDynamicAllocation(gSavedSettings, "RenderReflectionProbeDynamicAllocation", -1);
     mResetFade = llmin((F32)(mResetFade + gFrameIntervalSeconds * 2.f), 1.f);
 
     {
         U32 probe_count_temp = mDynamicProbeCount;
-        if (sProbeDynamicAllocation > -1)
+        if (mRenderReflectionProbeDynamicAllocation > -1)
         {
             if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)// <FS:Beq/> No longer required use the pipeline cached version instead
             {
@@ -249,20 +246,20 @@ void LLReflectionMapManager::update()
                 mDynamicProbeCount = 256;
             }
 
-            if (sProbeDynamicAllocation > 1)
+            if (mRenderReflectionProbeDynamicAllocation > 1)
             {
                 // Round mDynamicProbeCount to the nearest increment of 16
-                mDynamicProbeCount = ((mDynamicProbeCount + sProbeDynamicAllocation / 2) / sProbeDynamicAllocation) * 16;
-                mDynamicProbeCount = llclamp(mDynamicProbeCount, 1, sReflectionProbeCount);
+                mDynamicProbeCount = ((mDynamicProbeCount + mRenderReflectionProbeDynamicAllocation / 2) / mRenderReflectionProbeDynamicAllocation) * 16;
+                mDynamicProbeCount = llclamp(mDynamicProbeCount, 1, mRenderReflectionProbeCount);
             }
             else
             {
-                mDynamicProbeCount = llclamp(mDynamicProbeCount + sProbeDynamicAllocation, 1, sReflectionProbeCount);
+                mDynamicProbeCount = llclamp(mDynamicProbeCount + mRenderReflectionProbeDynamicAllocation, 1, mRenderReflectionProbeCount);
             }
         }
         else
         {
-            mDynamicProbeCount = sReflectionProbeCount;
+            mDynamicProbeCount = mRenderReflectionProbeCount;
         }
 
         mDynamicProbeCount = llmin(mDynamicProbeCount, LL_MAX_REFLECTION_PROBE_COUNT);
@@ -328,7 +325,7 @@ void LLReflectionMapManager::update()
 
     bool did_update = false;
 
-    bool realtime = sDetail >= (S32)LLReflectionMapManager::DetailLevel::REALTIME;
+    bool realtime = mRenderReflectionProbeDetail >= (S32)LLReflectionMapManager::DetailLevel::REALTIME;
 
     LLReflectionMap* closestDynamic = nullptr;
 
@@ -458,7 +455,7 @@ void LLReflectionMapManager::update()
         }
         // <FS:Beq> This code is no longer required and this update loop should self-cleanse
         // However: There appears to be something that causes the reference count to be 2 for some probes that should no longer be in use.
-        // if (sLevel == 0)
+        // if (mRenderReflectionProbeLevel == 0)
         // {
         //     // only update default probe when coverage is set to none
         //     llassert(probe == mDefaultProbe);
@@ -520,6 +517,14 @@ void LLReflectionMapManager::update()
         oldestOccluded->autoAdjustOrigin();
         oldestOccluded->mLastUpdateTime = gFrameTimeSeconds;
     }
+}
+
+void LLReflectionMapManager::refreshSettings()
+{
+    mRenderReflectionProbeDetail = gSavedSettings.getS32("RenderReflectionProbeDetail");
+    //mRenderReflectionProbeLevel = gSavedSettings.getS32("RenderReflectionProbeLevel"); // <FS:Beq/> No longer required use the pipeline cached version instead
+    mRenderReflectionProbeCount = gSavedSettings.getU32("RenderReflectionProbeCount");
+    mRenderReflectionProbeDynamicAllocation = gSavedSettings.getS32("RenderReflectionProbeDynamicAllocation");
 }
 
 LLReflectionMap* LLReflectionMapManager::addProbe(LLSpatialGroup* group)
@@ -767,6 +772,8 @@ void LLReflectionMapManager::doProbeUpdate()
 // In effect this simulates single-bounce lighting.
 void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
+    LL_PROFILE_GPU_ZONE("probe update");
     // hacky hot-swap of camera specific render targets
     gPipeline.mRT = &gPipeline.mAuxillaryRT;
 
@@ -793,7 +800,7 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
     }
     else
     {
-        llassert(gSavedSettings.getS32("RenderReflectionProbeLevel") > 0); // should never update a probe that's not the default probe if reflection coverage is none
+        llassert(mRenderReflectionProbeLevel > 0); // should never update a probe that's not the default probe if reflection coverage is none
         probe->update(mRenderTarget.getWidth(), face);
     }
 
@@ -1002,11 +1009,11 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
                     mTexture->bind(channel);
                 }
             }
+
+            gIrradianceGenProgram.unbind();
         }
 
         mMipChain[0].flush();
-
-        gIrradianceGenProgram.unbind();
     }
 }
 
@@ -1082,6 +1089,7 @@ void LLReflectionMapManager::updateUniforms()
     }
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
+    LL_PROFILE_GPU_ZONE("rmmu - uniforms")
 
 
     mReflectionMaps.resize(mReflectionProbeCount);

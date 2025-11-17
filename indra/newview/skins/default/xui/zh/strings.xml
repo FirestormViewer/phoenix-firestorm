@@ -7422,6 +7422,9 @@ SecondLife.com網站的「支援」部分
 	<string name="Worn Items">
 		已穿物件
 	</string>
+	<string name="Favorites">
+		收藏
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		群組成員名 [NAME]
 	</string>

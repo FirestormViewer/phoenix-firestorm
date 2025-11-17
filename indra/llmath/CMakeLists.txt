@@ -6,6 +6,7 @@ include(00-Common)
 include(LLCommon)
 include(bugsplat)
 include(Boost)
+include(SSE2NEON)
 
 set(llmath_SOURCE_FILES
     llbbox.cpp
@@ -103,7 +104,7 @@ list(APPEND llmath_SOURCE_FILES ${llmath_HEADER_FILES})
 
 add_library (llmath ${llmath_SOURCE_FILES})
 
-target_link_libraries(llmath llcommon llmeshoptimizer)
+target_link_libraries(llmath llcommon llmeshoptimizer ll::sse2neon)
 target_include_directories( llmath  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add tests

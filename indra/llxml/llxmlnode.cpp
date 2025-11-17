@@ -1298,7 +1298,7 @@ bool LLXMLNode::getAttributeU8(const char* name, U8& value )
 bool LLXMLNode::getAttributeS8(const char* name, S8& value )
 {
     LLXMLNodePtr node;
-    S32 val;
+    S32 val{};
     if (!(getAttribute(name, node) && node->getIntValue(1, &val)))
     {
         return false;
@@ -1310,7 +1310,7 @@ bool LLXMLNode::getAttributeS8(const char* name, S8& value )
 bool LLXMLNode::getAttributeU16(const char* name, U16& value )
 {
     LLXMLNodePtr node;
-    U32 val;
+    U32 val{};
     if (!(getAttribute(name, node) && node->getUnsignedValue(1, &val)))
     {
         return false;
@@ -1322,7 +1322,7 @@ bool LLXMLNode::getAttributeU16(const char* name, U16& value )
 bool LLXMLNode::getAttributeS16(const char* name, S16& value )
 {
     LLXMLNodePtr node;
-    S32 val;
+    S32 val{};
     if (!(getAttribute(name, node) && node->getIntValue(1, &val)))
     {
         return false;

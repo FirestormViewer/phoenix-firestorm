@@ -32,7 +32,7 @@
 		アバターの装着物でEnterキーを押したときの動作
 	</text>
 	<combo_box name="attach_combo">
-		<combo_box.item label="装着物を追加（推奨）" name="0"/>
-		<combo_box.item label="着用（その場所の装着物を取り除きます）" name="1"/>
+		<combo_box.item label="装着物を追加（推奨）" name="1"/>
+		<combo_box.item label="着用（その場所の装着物を取り除きます）" name="0"/>
 	</combo_box>
 </floater>

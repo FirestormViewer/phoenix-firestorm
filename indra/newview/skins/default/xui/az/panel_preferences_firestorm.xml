@@ -156,6 +156,34 @@
         <text name="build_item_add_disp_rect_txt">
          Məzmun: [ITEM]
         </text>
+        <check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+        <fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+         Drop a script here.
+        </fs_embedded_item_drop_target>
+        <text name="custom_script_disp_rect_txt">
+         Məzmun: [SCRIPT]
+        </text>
+        <button label="Defolt Yaratma İcazələri" name="fs_default_creation_permissions" />
+        <check_box label="Seçilmiş obyektin işıqlandırılması yandırın" tool_tip="Seçilmiş obyektin işıqlandırılması yandırın" name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Seçilmiş ərazinin sərhədlərini işıqlandırın" name="RenderParcelSelection"/>
+        <check_box label="Maksimum tikinti hündürlüyünə sərhəddini göstərin" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+        <check_box label="Seçim məsafəsi həddi:" name="LimitSelectDistance" width="145" />
+        <spinner name="MaxSelectDistance" tool_tip="Maksimum icazə verilən seçim məsafəsi (avatardan metrlə) [Defolt: 128.000]" />
+        <check_box label="Məsafə limitini çəkin:" name="LimitDragDistance" width="145" />
+        <spinner name="MaxDragDistance" tool_tip="Hərəkət alətlərinin bir əməliyyatında icazə verilən maksimum məsafə (başlanğıc nöqtəsindən metrlə) [Defolt: 48.000]" />
+        <text name="RotationStepText1" width="135">
+          Fırlanma məhdudiyyəti
+        </text>
+        <spinner name="RotationStep" tool_tip="[Defolt: 1.0]"/>
+        <text name="RotationStepText2">
+          dərəcə, əgər şəbəkəyə istinad yoxdursa
+        </text>
+        <check_box label="Ən azı neçə obyekt sayında ayırma təsdiq sorğusu" width="305" name="FSUnlinkConfirmEnabled"/>
+        <text name="MinObjectsForUnlinkConfirmText2">
+          obyekt
+        </text>
+        <check_box label=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" tool_tip=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" tool_tip="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" name="FSTextureDefaultSaveAsFormat" />
         <text name="text_box_pivotpoint">
           İstinad nöqtəsi
         </text>
@@ -164,7 +192,14 @@
         <spinner label="Yerl. Y" name="Y pos" />
         <spinner label="Yerl. Z" name="Z pos" />
         <check_box label="Faizlə" tool_tip="Varsayılan olaraq, faizlər hər bir ox üçün 50-yə təyin edilmişdir." name="FSPivotPercToggle" />
-        <button label="Defolt Yaratma İcazələri" name="fs_default_creation_permissions" />
+    </panel>
+    <panel label="Tikinti 2" name="BuildTab2">
+        <check_box label="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" tool_tip="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" name="FSEnableGrab" />
+        <check_box label="Tikinti zamanı teksturlar üçün basdıqda miqyaslama (caps lock ilə birlikdə)." tool_tip="Aktivləşdirildikdə, tikinti rejimində teksturalar üçün basım ilə sürükləməyə və ya basdıqda miqyasına (caps lock ilə) icazə verir. Bu xüsusiyyət eksperimentaldır və ehtiyatla istifadə edilməlidir." name="FSExperimentalDragTexture" />
+        <check_box label="Yükləyərkən öz avatarınızda animasiyaya önbaxış" tool_tip="Yükləyərkən öz avatarınızda animasiyaya önbaxış" name="FSUploadAnimationOnOwnAvatar" />
+        <check_box label="Genişləndirilmiş Skript Məlumatını aktivləşdirin" name="FSScriptInfoExtended" tool_tip="Aktiv edilərsə, əsas skript məlumatı funksiyasını inşaatçılar üçün faydalı olan müxtəlif detallarla genişləndirir"/>
+    </panel>
+    <panel label="Script Editor" name="BuildTabScriptEditor">
         <text name="text_box_scripting_font">
           Skript yazı tipi:
         </text>
@@ -179,11 +214,12 @@
           <combo_item name="Medium" label="Ortam"/>
           <combo_item name="Large" label="Yerkə"/>
         </combo_box>
+        <check_box label="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" tool_tip="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" name="FSSaveInventoryScriptsAsMono_toggle" />
 		<check_box label="LSL Önprosessorunu aktivləşdir" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru işləyəcəkdir." name="preproc_checkbox" />
 		<check_box label="Optimallaşdırma" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru skript tərəfindən istifadə edilən sahəni optimizə edəcəkdir." name="preprocoptimizer_checkbox" />
 		<check_box label="switch() operatoru" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru switch() operatorunun skript axarını idarə edərkən istifadəsinə icazə verəcəkdir." name="preprocswitch_checkbox" />
 		<check_box label="Tənbəl siyahılar" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru siyahılarla işləmək üçün sintaksis genişlətmələrə icazə verəcəkdir." name="preproclazy_checkbox" />
-		<check_box label="Diskdən #include" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru #include operatorunu sizin yerli sürücünüzə göndərilən fayllarla istifadəyə imkan verəcəkdir." name="preprocinclude_checkbox" />
+		<check_box label="Diskdən #include" left_delta="110" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru #include operatorunu sizin yerli sürücünüzə göndərilən fayllarla istifadəyə imkan verəcəkdir." name="preprocinclude_checkbox" />
         <text name="lslpreprocinclude_textbox">
 		  Önprosessor yolu:
         </text>
@@ -192,33 +228,6 @@
           Xarici dəyişdirici:
         </text>
         <button label="Baxış" label_selected="Baxış" name="SetExternalEditor" />
-    </panel>
-    <panel label="Tikinti 2" name="BuildTab2">
-        <check_box label="Seçilmiş obyektin işıqlandırılması yandırın" tool_tip="Seçilmiş obyektin işıqlandırılması yandırın" name="FSBuildPrefsRenderHighlight_toggle" />
-        <check_box label="Seçilmiş ərazinin sərhədlərini işıqlandırın" name="RenderParcelSelection"/>
-        <check_box label="Maksimum tikinti hündürlüyünə sərhəddini göstərin" name="FSRenderParcelSelectionToMaxBuildHeight"/>
-        <check_box label="Seçim məsafəsi həddi:" name="LimitSelectDistance" width="237" />
-        <spinner name="MaxSelectDistance" tool_tip="Maksimum icazə verilən seçim məsafəsi (avatardan metrlə) [Defolt: 128.000]" />
-        <check_box label="Məsafə limitini çəkin:" name="LimitDragDistance" width="237" />
-        <spinner name="MaxDragDistance" tool_tip="Hərəkət alətlərinin bir əməliyyatında icazə verilən maksimum məsafə (başlanğıc nöqtəsindən metrlə) [Defolt: 48.000]" />
-        <text name="RotationStepText1" width="175">
-          Fırlanma məhdudiyyəti
-        </text>
-        <spinner name="RotationStep" tool_tip="[Defolt: 1.0]"/>
-        <text name="RotationStepText2">
-          dərəcə, əgər şəbəkəyə istinad yoxdursa
-        </text>
-        <check_box label="Ən azı neçə obyekt sayında ayırma təsdiq sorğusu" name="FSUnlinkConfirmEnabled"/>
-        <text name="MinObjectsForUnlinkConfirmText2">
-          obyekt
-        </text>
-        <check_box label=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" tool_tip=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" tool_tip="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" name="FSSaveInventoryScriptsAsMono_toggle" />
-        <check_box label="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" tool_tip="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" name="FSTextureDefaultSaveAsFormat" />
-        <check_box label="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" tool_tip="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" name="FSEnableGrab" />
-        <check_box label="Tikinti zamanı teksturlar üçün basdıqda miqyaslama (caps lock ilə birlikdə)." tool_tip="Aktivləşdirildikdə, tikinti rejimində teksturalar üçün basım ilə sürükləməyə və ya basdıqda miqyasına (caps lock ilə) icazə verir. Bu xüsusiyyət eksperimentaldır və ehtiyatla istifadə edilməlidir." name="FSExperimentalDragTexture" />
-        <check_box label="Yükləyərkən öz avatarınızda animasiyaya önbaxış" tool_tip="Yükləyərkən öz avatarınızda animasiyaya önbaxış" name="FSUploadAnimationOnOwnAvatar" />
-        <check_box label="Genişləndirilmiş Skript Məlumatını aktivləşdirin" name="FSScriptInfoExtended" tool_tip="Aktiv edilərsə, əsas skript məlumatı funksiyasını inşaatçılar üçün faydalı olan müxtəlif detallarla genişləndirir"/>
     </panel>
     <!--Uploads-->
     <panel label="Yükləmələr" name="UploadsTab">

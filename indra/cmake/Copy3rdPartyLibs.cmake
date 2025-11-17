@@ -61,11 +61,6 @@ if(WINDOWS)
         glod.dll # <FS:Beq> restore GLOD
         )
 
-    if(LLCOMMON_LINK_SHARED)
-        set(release_files ${release_files} libapr-1.dll)
-        set(release_files ${release_files} libaprutil-1.dll)
-    endif()
-
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
         set(release_files ${release_files} openjp2.dll)
@@ -118,6 +113,9 @@ if(WINDOWS)
     elseif (MSVC_VERSION GREATER_EQUAL 1930 AND MSVC_VERSION LESS 1950) # Visual Studio 2022
         set(MSVC_VER 140)
         set(MSVC_TOOLSET_VER 143)
+    elseif (MSVC_VERSION GREATER_EQUAL 1950 AND MSVC_VERSION LESS 1970) # Visual Studio 2026
+        set(MSVC_VER 140)
+        set(MSVC_TOOLSET_VER 145)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
     endif (MSVC80)
@@ -155,6 +153,7 @@ if(WINDOWS)
             msvcp${MSVC_VER}_atomic_wait.dll
             msvcp${MSVC_VER}_codecvt_ids.dll
             #msvcr${MSVC_VER}.dll # <FS:Ansariel> Can't build with older VS versions anyway - no need trying to copy this file
+            vccorlib${MSVC_VER}.dll
             vcruntime${MSVC_VER}.dll
             vcruntime${MSVC_VER}_1.dll
             vcruntime${MSVC_VER}_threads.dll
@@ -195,15 +194,6 @@ elseif(DARWIN)
         libgrowl.dylib
         libgrowl++.dylib
        )
-
-    if(LLCOMMON_LINK_SHARED)
-        set(release_files ${release_files}
-            libapr-1.0.dylib
-            libapr-1.dylib
-            libaprutil-1.0.dylib
-            libaprutil-1.dylib
-            )
-    endif()
 
     if (TARGET ll::discord_sdk)
       list(APPEND release_files libdiscord_partner_sdk.dylib)
@@ -275,13 +265,6 @@ elseif(LINUX)
                  libgmodule-2.0.a
                  libgobject-2.0.a
                  )
-
-        if(LLCOMMON_LINK_SHARED)
-            set(release_files ${release_files}
-                libapr-1.so.0
-                libaprutil-1.so.0
-                )
-        endif()
      endif()
 
     if (TARGET ll::fmodstudio)

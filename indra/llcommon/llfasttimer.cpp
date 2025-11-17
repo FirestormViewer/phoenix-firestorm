@@ -64,12 +64,7 @@ bool        BlockTimer::sLog             = false;
 std::string BlockTimer::sLogName         = "";
 bool        BlockTimer::sMetricLog       = false;
 
-#ifdef LL_DARWIN
-//AO: Added ability to test this separately from other OS's
-#define USE_RDTSC 0
-#else
-#endif
-#if LL_LINUX || LL_DARWIN // AO: Add LL_DARWIN to this list now
+#if LL_LINUX || (LL_DARWIN && LL_ARM64)
 U64         BlockTimer::sClockResolution = 1000000000; // Nanosecond resolution
 #else
 U64         BlockTimer::sClockResolution = 1000000; // Microsecond resolution

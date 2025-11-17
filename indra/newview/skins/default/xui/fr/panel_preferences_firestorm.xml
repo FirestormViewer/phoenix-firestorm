@@ -111,31 +111,10 @@
 			<check_box name="FSBuildPrefs_EmbedItem" label="Intégrer un objet dans le nouveau prim"/>
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="Glissez un objet ici.">Glissez un objet ici.</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">Actuellement : [ITEM]</text>
-			<text name="text_box_pivotpoint">Point de pivot</text>
-			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
-			<spinner label="Pos. X" name="X pos"/>
-			<spinner label="Pos. Y" name="Y pos"/>
-			<spinner label="Pos. Z" name="Z pos"/>
-			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">Drop a script here.</fs_embedded_item_drop_target>
+			<text name="custom_script_disp_rect_txt">Actuellement: [SCRIPT]</text>
 			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
-			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
-			<combo_box name="FSScriptingFontName" tool_tip="Nom de la police utilisée dans l'éditeur de script LSL" />
-			<combo_box name="FSScriptingFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de script LSL">
-				<combo_item name="Small" label="Petite"/>
-				<combo_item name="Medium" label="Moyenne"/>
-				<combo_item name="Large" label="Grande"/>
-			</combo_box>
-			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
-			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>
-			<check_box label="Condition switch()" left_delta="80" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation de la condition switch() pour le contrôle de flux de scripts." name="preprocswitch_checkbox"/>
-			<check_box label="Simplifications de listes" left_delta="120" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation d'extensions de syntaxe pour la manipulation de listes." name="preproclazy_checkbox"/>
-			<check_box label="#includes depuis le disque" left_delta="150" tool_tip="Quand coché, le préprocesseur LSL permettra à la commande #include de pointer vers des fichiers de votre disque dur." name="preprocinclude_checkbox"/>
-			<text name="lslpreprocinclude_textbox">Chemin d'inclusion du préprocesseur :</text>
-			<button label="Parcourir" label_selected="Parcourir" name="SetPreprocInclude"/>
-			<text name="externaleditor_textbox">Éditeur externe :</text>
-			<button label="Parcourir" label_selected="Parcourir" name="SetExternalEditor"/>
-		</panel>
-		<panel label="Construction 2" name="BuildTab2">
 			<check_box label="Contours lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
 			<check_box label="Afficher les limites de la parcellle sélectionnée" name="RenderParcelSelection"/>
 			<check_box label="Afficher la limite maximale en hauteur pour construire" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -149,8 +128,15 @@
 			<check_box name="FSUnlinkConfirmEnabled" width="400" label="Confirmation de suppression de lien si l'ensemble possède au moins"/>
 			<text name="MinObjectsForUnlinkConfirmText2">objets</text>
 			<check_box label="Utiliser l'ancien fonctionnement de 'Mettre cet objet en vente'" tool_tip="Activer cette option sauvegardera directement les informations de vente de l'objet au lieu de nécessiter une confirmation." name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="Sauvegarder les scripts édités depuis l'inventaire en Mono" tool_tip="Activer cette option sauvegardera directement les scripts situés dans l'inventaire en Mono au lieu de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Sauvegarder les textures sur le disque dur au format PNG au lieu de TGA" tool_tip="Utilisé dans l'aperçu de texture et dans le menu contextuel de l'inventaire." name="FSTextureDefaultSaveAsFormat"/>
+			<text name="text_box_pivotpoint">Point de pivot</text>
+			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
+			<spinner label="Pos. X" name="X pos"/>
+			<spinner label="Pos. Y" name="Y pos"/>
+			<spinner label="Pos. Z" name="Z pos"/>
+			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
+		</panel>
+		<panel label="Construction 2" name="BuildTab2">
 			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
 			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
 			<check_box label="Prévisualiser les animations sur son avatar pendant le téléchargement sur le serveur" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le téléchargement sur le serveur" name="FSUploadAnimationOnOwnAvatar"/>
@@ -158,6 +144,25 @@
 			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
 			<check_box label="Points d'attachement alphabétiques dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus 'Attacher à' sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
 			<check_box label="Nouveau module de texture Firestorm dans la fenêtre d'outils (nécessite un redémarrage)" tool_tip="Si cette option est activée, les outils d'édition de textures utiliseront le flux de travail amélioré de FS et permettront l'édition de textures Blinn-Phong et PBR." name="FSUseNewTexturePanel"/>
+		</panel>
+		<panel label="Script Editor" name="BuildTabScriptEditor">
+			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
+			<combo_box name="FSScriptingFontName" tool_tip="Nom de la police utilisée dans l'éditeur de script LSL" />
+			<combo_box name="FSScriptingFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de script LSL">
+				<combo_item name="Small" label="Petite"/>
+				<combo_item name="Medium" label="Moyenne"/>
+				<combo_item name="Large" label="Grande"/>
+			</combo_box>
+			<check_box label="Sauvegarder les scripts édités depuis l'inventaire en Mono" tool_tip="Activer cette option sauvegardera directement les scripts situés dans l'inventaire en Mono au lieu de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
+			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>
+			<check_box label="Condition switch()" left_delta="80" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation de la condition switch() pour le contrôle de flux de scripts." name="preprocswitch_checkbox"/>
+			<check_box label="Simplifications de listes" left_delta="117" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation d'extensions de syntaxe pour la manipulation de listes." name="preproclazy_checkbox"/>
+			<check_box label="#includes depuis le disque" left_delta="147" tool_tip="Quand coché, le préprocesseur LSL permettra à la commande #include de pointer vers des fichiers de votre disque dur." name="preprocinclude_checkbox"/>
+			<text name="lslpreprocinclude_textbox">Chemin d'inclusion du préprocesseur :</text>
+			<button label="Parcourir" label_selected="Parcourir" name="SetPreprocInclude"/>
+			<text name="externaleditor_textbox">Éditeur externe :</text>
+			<button label="Parcourir" label_selected="Parcourir" name="SetExternalEditor"/>
 		</panel>
 		<panel label="Chargements" name="UploadsTab">
 			<text name="title">Dossiers de destination pour les chargements :</text>

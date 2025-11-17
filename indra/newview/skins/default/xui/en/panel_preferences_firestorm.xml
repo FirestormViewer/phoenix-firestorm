@@ -1151,7 +1151,7 @@
          mouse_opaque="true"
          control_name="FSBuildPrefs_EmbedItem"
          radio_style="false"
-         width="270"/>
+         width="255"/>
         <view_border
          bevel_style="in"
          top_delta="20"
@@ -1160,7 +1160,7 @@
          left_delta="0"
          mouse_opaque="false"
          name="embed_item_drop_target_rect"
-         width="250"/>
+         width="255"/>
         <fs_embedded_item_drop_target
          bg_visible="false"
          border_visible="false"
@@ -1175,7 +1175,7 @@
          name="embed_item"
          tool_tip="Drop an inventory item here."
          v_pad="2"
-         width="250">
+         width="255">
          Drop an inventory item here.
         </fs_embedded_item_drop_target>
         <view_border
@@ -1186,7 +1186,7 @@
          left_delta="0"
          mouse_opaque="false"
          name="build_item_add_disp_rect"
-         width="250"/>
+         width="255"/>
         <text
          bg_visible="false"
          border_visible="false"
@@ -1201,12 +1201,245 @@
          name="build_item_add_disp_rect_txt"
          tool_tip=""
          v_pad="2"
-         width="250">
+         width="255">
          Currently set to: [ITEM]
         </text>
+        <check_box
+         name="FSBuildPrefs_UseCustomScript"
+         top="120"
+         left_pad="5"
+         enabled="false"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         initial_value="false"
+         label="Use custom script for New Script button"
+         mouse_opaque="true"
+         control_name="FSBuildPrefs_UseCustomScript"
+         radio_style="false"
+         width="250"/>
+        <view_border
+         bevel_style="in"
+         top_delta="20"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="custom_script_drop_target_rect"
+         width="250"/>
+        <fs_embedded_item_drop_target
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="custom_script"
+         tool_tip="Drop a script from your inventory here."
+         v_pad="2"
+         width="250">
+         Drop a script here.
+        </fs_embedded_item_drop_target>
+        <view_border
+         bevel_style="in"
+         top_delta="18"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="custom_script_disp_rect"
+         width="250"/>
         <text
-         top_pad="-60"
-         left_pad="125"
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="custom_script_disp_rect_txt"
+         tool_tip=""
+         v_pad="2"
+         width="250">
+         Currently set to: [SCRIPT]
+        </text>
+
+        <button
+         follows="left|top"
+         height="25"
+         label="Default Creation Permissions"
+         layout="topleft"
+         name="fs_default_creation_permissions"
+         left="8"
+         top="185"
+         width="250">
+         <button.commit_callback
+             function="Pref.PermsDefault" />
+        </button>
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         left="8"
+         label="Enable highlighting of selected prims"
+         tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
+         name="FSBuildPrefsRenderHighlight_toggle"
+         control_name="RenderHighlightSelections"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Highlight boundary of currently selected parcel"
+         name="RenderParcelSelection"
+         control_name="RenderParcelSelection"
+         width="190"/>
+        <check_box
+         enabled_control="RenderParcelSelection"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         left="13"
+         label="Show boundary up to maximum build height"
+         name="FSRenderParcelSelectionToMaxBuildHeight"
+         control_name="FSRenderParcelSelectionToMaxBuildHeight"
+         width="190"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         left="8"
+         label="Limit select distance (meters):"
+         name="LimitSelectDistance"
+         control_name="LimitSelectDistance"
+         width="190"/>
+        <spinner
+         enabled_control="LimitSelectDistance"
+         control_name="MaxSelectDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxSelectDistance"
+         width="75"
+         tool_tip="Maximum allowed selection distance (meters from avatar) [Default: 128.000]"/>
+        <check_box
+         left="8"
+         top_pad="13"
+         follows="left|top"
+         height="16"
+         label="Limit drag distance (meters):"
+         name="LimitDragDistance"
+         control_name="LimitDragDistance"
+         width="190"/>
+        <spinner
+         enabled_control="LimitDragDistance"
+         control_name="MaxDragDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxDragDistance"
+         width="75"
+         tool_tip="Maximum allowed distance in a single operation of move tool (meters from start point) [Default: 48.000]"/>
+        <text
+         top_pad="14"
+         follows="left|top"
+         height="16"
+         left="10"
+         name="RotationStepText1"
+         width="190">
+          Constrain rotations to multiples of
+        </text>
+        <spinner
+         control_name="RotationStep"
+         decimal_digits="2"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="359.99"
+         min_val="0.01"
+         name="RotationStep"
+         width="65"
+         tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="RotationStepText2"
+         width="270">
+          degrees, when not using 'snap to grid'
+        </text>
+        <check_box
+         left="8"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Show unlink confirmation dialog if linkset has minimum"
+         name="FSUnlinkConfirmEnabled"
+         control_name="FSUnlinkConfirmEnabled"
+         width="325"/>
+        <spinner
+         enabled_control="FSUnlinkConfirmEnabled"
+         control_name="MinObjectsForUnlinkConfirm"
+         decimal_digits="0"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         max_val="256"
+         min_val="0"
+         name="MinObjectsForUnlinkConfirm"
+         width="65"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="MinObjectsForUnlinkConfirmText2"
+         width="270">
+          objects
+        </text>
+        <check_box
+         left="8"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Use old &quot;Set Object For Sale&quot; behavior"
+         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
+         name="FSCommitForSaleOnChange_toggle"
+         control_name="FSCommitForSaleOnChange"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Save textures from inventory to disk as PNG instead of TGA by default"
+         tool_tip="Used in the texture preview floater and context menu in inventory."
+         name="FSTextureDefaultSaveAsFormat"
+         control_name="FSTextureDefaultSaveAsFormat"/>
+
+        <text
+         top="185"
+         left_delta="377"
          follows="left|top"
          height="10"
          name="text_box_pivotpoint"
@@ -1281,178 +1514,6 @@
          width="100"
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
-        <button
-         follows="left|top"
-         height="25"
-         label="Default Creation Permissions"
-         layout="topleft"
-         name="fs_default_creation_permissions"
-         left="8"
-         top="185"
-         width="250">
-         <button.commit_callback
-             function="Pref.PermsDefault" />
-        </button>
-
-        <text
-         top_pad="10"
-         left="8"
-         follows="left|top"
-         name="text_box_scripting_font"
-         width="100">
-          Script Editor Font:
-        </text>
-        <combo_box
-         allow_text_entry="false"
-         top_delta="-5"
-         left_pad="5"
-         follows="left|top"
-         max_chars="20"
-         mouse_opaque="true"
-         name="FSScriptingFontName"
-         width="100"
-         control_name="FSScriptingFontName"
-         tool_tip="Name of the font used in the LSL script editor">
-             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
-             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
-             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
-        </combo_box>
-        <combo_box
-         allow_text_entry="false"
-         top_delta="0"
-         left_pad="5"
-         follows="left|top"
-         max_chars="20"
-         mouse_opaque="true"
-         name="FSScriptingFontSize"
-         width="100"
-         control_name="FSScriptingFontSize"
-         tool_tip="Size of the font used in the LSL script editor">
-             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
-             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
-             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
-             <combo_item name="Small" value="Small" label="Small"/>
-             <combo_item name="Medium" value="Medium" label="Medium"/>
-             <combo_item name="Large" value="Large" label="Large"/>
-        </combo_box>
-
-        <check_box
-         follows="left|top"
-         height="16"
-         top_pad="10"
-         left="5"
-         label="Enable LSL preprocessor"
-         tool_tip="When checked, the LSL preprocessor is enabled."
-         name="preproc_checkbox"
-         control_name="_NACL_LSLPreprocessor" />
-        <check_box
-         follows="left|top"
-         height="16"
-         left="15"
-         enabled_control="_NACL_LSLPreprocessor"
-         label="Script optimizer"
-         tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."
-         name="preprocoptimizer_checkbox"
-         control_name="_NACL_PreProcLSLOptimizer" />
-        <check_box
-         follows="left|top"
-         height="16"
-         top_delta="0"
-         left_delta="120"
-         enabled_control="_NACL_LSLPreprocessor"
-         label="switch() statement"
-         tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
-         name="preprocswitch_checkbox"
-         control_name="_NACL_PreProcLSLSwitch" />
-        <check_box
-         follows="left|top"
-         height="16"
-         top_delta="0"
-         left_delta="130"
-         enabled_control="_NACL_LSLPreprocessor"
-         label="Lazy lists"
-         tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
-         name="preproclazy_checkbox"
-         control_name="_NACL_PreProcLSLLazyLists" />
-        <check_box
-         follows="left|top"
-         top_delta="0"
-         left_delta="80"
-         height="16"
-         enabled_control="_NACL_LSLPreprocessor"
-         label="#includes from local disk"
-         tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
-         name="preprocinclude_checkbox"
-         control_name="_NACL_PreProcEnableHDDInclude" />
-        <text
-         follows="left|top"
-         height="16"
-         type="string"
-         length="1"
-         layout="topleft"
-         enabled_control="_NACL_PreProcEnableHDDInclude"
-         name="lslpreprocinclude_textbox"
-         left="10"
-         width="256">
-          Preprocessor include path:
-        </text>
-        <line_editor
-         control_name="_NACL_PreProcHDDIncludeLocation"
-         border_style="line"
-         border_thickness="1"
-         follows="left|top"
-         font="SansSerif"
-         height="23"
-         enabled_control="_NACL_PreProcEnableHDDInclude"
-         max_length_chars="4096"
-         name="preprocinclude_location"
-         width="310" />
-        <button
-         follows="left|top"
-         height="23"
-         enabled_control="_NACL_PreProcEnableHDDInclude"
-         label="Browse"
-         label_selected="Browse"
-         left_pad="5"
-         name="SetPreprocInclude"
-         top_delta="0"
-         width="100">
-         <button.commit_callback
-          function="NACL.SetPreprocInclude" />
-        </button>
-        <text
-         follows="left|top"
-         height="16"
-         type="string"
-         length="1"
-         layout="topleft"
-         name="externaleditor_textbox"
-         left="10"
-         width="256">
-          External Editor:
-        </text>
-        <line_editor
-         control_name="ExternalEditor"
-         border_style="line"
-         border_thickness="1"
-         follows="left|top"
-         font="SansSerif"
-         height="23"
-         max_length_chars="4096"
-         name="externaleditor_location"
-         width="310" />
-        <button
-         follows="left|top"
-         height="23"
-         label="Browse"
-         label_selected="Browse"
-         left_pad="5"
-         name="SetExternalEditor"
-         top_delta="0"
-         width="100">
-         <button.commit_callback
-          function="Pref.SetExternalEditor" />
-        </button>
   </panel>
 
     <!--Build 2-->
@@ -1465,167 +1526,8 @@
      label="Build 2"
      name="BuildTab2">
         <check_box
+         left="3"
          top="10"
-         follows="left|top"
-         height="16"
-         left="3"
-         label="Enable highlighting of selected prims"
-         tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
-         name="FSBuildPrefsRenderHighlight_toggle"
-         control_name="RenderHighlightSelections"/>
-        <check_box
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         label="Highlight boundary of currently selected parcel"
-         name="RenderParcelSelection"
-         control_name="RenderParcelSelection"
-         width="190"/>
-        <check_box
-         enabled_control="RenderParcelSelection"
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         left="13"
-         label="Show boundary up to maximum build height"
-         name="FSRenderParcelSelectionToMaxBuildHeight"
-         control_name="FSRenderParcelSelectionToMaxBuildHeight"
-         width="190"/>
-        <check_box
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         left="3"
-         label="Limit select distance (meters):"
-         name="LimitSelectDistance"
-         control_name="LimitSelectDistance"
-         width="190"/>
-        <spinner
-         enabled_control="LimitSelectDistance"
-         control_name="MaxSelectDistance"
-         decimal_digits="3"
-         top_delta="-5"
-         left_pad="0"
-         follows="left|top"
-         height="16"
-         increment="0.01"
-         max_val="1024"
-         min_val="0.001"
-         name="MaxSelectDistance"
-         width="75"
-         tool_tip="Maximum allowed selection distance (meters from avatar) [Default: 128.000]"/>
-        <check_box
-         left="3"
-         top_pad="13"
-         follows="left|top"
-         height="16"
-         label="Limit drag distance (meters):"
-         name="LimitDragDistance"
-         control_name="LimitDragDistance"
-         width="190"/>
-        <spinner
-         enabled_control="LimitDragDistance"
-         control_name="MaxDragDistance"
-         decimal_digits="3"
-         top_delta="-5"
-         left_pad="0"
-         follows="left|top"
-         height="16"
-         increment="0.01"
-         max_val="1024"
-         min_val="0.001"
-         name="MaxDragDistance"
-         width="75"
-         tool_tip="Maximum allowed distance in a single operation of move tool (meters from start point) [Default: 48.000]"/>
-        <text
-         left="3"
-         top_pad="13"
-         follows="left|top"
-         height="16"
-         name="RotationStepText1"
-         width="190">
-          Constrain rotations to multiples of
-        </text>
-        <spinner
-         control_name="RotationStep"
-         decimal_digits="2"
-         top_delta="-5"
-         left_pad="0"
-         follows="left|top"
-         height="16"
-         increment="0.01"
-         max_val="359.99"
-         min_val="0.01"
-         name="RotationStep"
-         width="65"
-         tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
-        <text
-         left_pad="5"
-         top_pad="-11"
-         follows="left|top"
-         height="16"
-         name="RotationStepText2"
-         width="270">
-          degrees, when not using 'snap to grid'
-        </text>
-        <check_box
-         left="3"
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         label="Show unlink confirmation dialog if linkset has minimum"
-         name="FSUnlinkConfirmEnabled"
-         control_name="FSUnlinkConfirmEnabled"
-         width="325"/>
-        <spinner
-         enabled_control="FSUnlinkConfirmEnabled"
-         control_name="MinObjectsForUnlinkConfirm"
-         decimal_digits="0"
-         top_delta="-5"
-         left_pad="0"
-         follows="left|top"
-         height="16"
-         increment="1"
-         max_val="256"
-         min_val="0"
-         name="MinObjectsForUnlinkConfirm"
-         width="65"/>
-        <text
-         left_pad="5"
-         top_pad="-11"
-         follows="left|top"
-         height="16"
-         name="MinObjectsForUnlinkConfirmText2"
-         width="270">
-          objects
-        </text>
-        <check_box
-         left="3"
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         label="Use old &quot;Set Object For Sale&quot; behavior"
-         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
-         name="FSCommitForSaleOnChange_toggle"
-         control_name="FSCommitForSaleOnChange"/>
-        <check_box
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         label="Save scripts edited from inventory as Mono"
-         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
-         name="FSSaveInventoryScriptsAsMono_toggle"
-         control_name="FSSaveInventoryScriptsAsMono"/>
-        <check_box
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         label="Save textures from inventory to disk as PNG instead of TGA by default"
-         tool_tip="Used in the texture preview floater and context menu in inventory."
-         name="FSTextureDefaultSaveAsFormat"
-         control_name="FSTextureDefaultSaveAsFormat"/>
-        <check_box
-         top_pad="8"
          follows="left|top"
          height="16"
          label="Use Ctrl+mouse to grab and manipulate objects"
@@ -1682,6 +1584,198 @@
          tool_tip="If enabled, the texture editing tools will use the refined [APP_NAME] workflow and allow editing of both Blinn-Phong and PBR textures."
          name="FSUseNewTexturePanel"
          control_name="FSUseNewTexturePanel"/>
+    </panel>
+
+    <!--Script Editor-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Script Editor"
+     name="BuildTabScriptEditor">
+        <text
+         top="15"
+         left="10"
+         height="16"
+         follows="left|top"
+         name="text_box_scripting_font"
+         width="100">
+          Script Editor Font:
+        </text>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="-5"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontName"
+         width="100"
+         control_name="FSScriptingFontName"
+         tool_tip="Name of the font used in the LSL script editor">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+        </combo_box>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="0"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontSize"
+         width="100"
+         control_name="FSScriptingFontSize"
+         tool_tip="Size of the font used in the LSL script editor">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+             <combo_item name="Small" value="Small" label="Small"/>
+             <combo_item name="Medium" value="Medium" label="Medium"/>
+             <combo_item name="Large" value="Large" label="Large"/>
+        </combo_box>
+
+        <check_box
+         left="10"
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         label="Save scripts edited from inventory as Mono"
+         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+         name="FSSaveInventoryScriptsAsMono_toggle"
+         control_name="FSSaveInventoryScriptsAsMono"/>
+
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_pad="15"
+         follows="top|left"
+         height="155"
+         left="10"
+         name="PreprocBox"
+         width="515" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="7"
+         left="15"
+         label="Enable LSL preprocessor"
+         tool_tip="When checked, the LSL preprocessor is enabled."
+         name="preproc_checkbox"
+         control_name="_NACL_LSLPreprocessor" />
+        <check_box
+         follows="left|top"
+         height="16"
+         left="20"
+         top_pad="5"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Script optimizer"
+         tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."
+         name="preprocoptimizer_checkbox"
+         control_name="_NACL_PreProcLSLOptimizer" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="120"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="switch() statement"
+         tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
+         name="preprocswitch_checkbox"
+         control_name="_NACL_PreProcLSLSwitch" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="130"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Lazy lists"
+         tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
+         name="preproclazy_checkbox"
+         control_name="_NACL_PreProcLSLLazyLists" />
+        <check_box
+         follows="left|top"
+         top_delta="0"
+         left_delta="80"
+         height="16"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="#includes from local disk"
+         tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
+         name="preprocinclude_checkbox"
+         control_name="_NACL_PreProcEnableHDDInclude" />
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         name="lslpreprocinclude_textbox"
+         left="17"
+         top_pad="10"
+         width="256">
+          Preprocessor include path:
+        </text>
+        <line_editor
+         control_name="_NACL_PreProcHDDIncludeLocation"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         max_length_chars="4096"
+         name="preprocinclude_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         label="Browse"
+         label_selected="Browse"
+         left_pad="5"
+         name="SetPreprocInclude"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="NACL.SetPreprocInclude" />
+        </button>
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         name="externaleditor_textbox"
+         left="17"
+         width="256">
+          External Editor:
+        </text>
+        <line_editor
+         control_name="ExternalEditor"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         max_length_chars="4096"
+         name="externaleditor_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         label="Browse"
+         label_selected="Browse"
+         left_pad="5"
+         name="SetExternalEditor"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="Pref.SetExternalEditor" />
+        </button>
     </panel>
 
     <!--Uploads-->

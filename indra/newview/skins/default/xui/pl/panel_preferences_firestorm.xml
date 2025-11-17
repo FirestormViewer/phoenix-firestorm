@@ -156,42 +156,17 @@
         <text name="build_item_add_disp_rect_txt">
          Obecnie: [ITEM]
         </text>
-        <text name="text_box_pivotpoint">
-          Punkt obracania osi
+        <check_box name="FSBuildPrefs_UseCustomScript" label="Własny skrypt pod przyciskiem Nowy Skrypt"/>
+        <fs_embedded_item_drop_target name="custom_script" tool_tip="Upuść skrypt w tym miejscu.">
+         Upuść skrypt w tym miejscu.
+        </fs_embedded_item_drop_target>
+        <text name="custom_script_disp_rect_txt">
+         Obecnie: [SCRIPT]
         </text>
-        <check_box label="Oś na poz. gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="FSBuildPrefsActualRoot_toggle" />
-        <spinner label="Poz. X" name="X pos" />
-        <spinner label="Poz. Y" name="Y pos" />
-        <spinner label="Poz. Z" name="Z pos" />
-        <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
         <button label="Domyślne uprawnienia tworzenia" name="fs_default_creation_permissions" />
-        <text name="text_box_scripting_font" width="150">
-            Czcionka edytora skryptów:
-        </text>
-        <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
-        <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
-            <combo_item name="Small" label="Mała"/>
-            <combo_item name="Medium" label="Średnia"/>
-            <combo_item name="Large" label="Duża"/>
-        </combo_box>
-        <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
-        <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
-        <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
-        <check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
-        <check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
-        <text name="lslpreprocinclude_textbox">
-          Ścieżka dołączania preprocesora:
-        </text>
-        <button label="Przeglądaj" label_selected="Przeglądaj" name="SetPreprocInclude" />
-        <text name="externaleditor_textbox">
-          Zewnętrzny edytor:
-        </text>
-        <button label="Przeglądaj" label_selected="Przeglądaj" name="SetExternalEditor" />
-    </panel>
-    <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
         <check_box label="Podświetlanie granic wybranej w danej chwili działki" name="RenderParcelSelection" />
-        <check_box label="Pokazuj granice do maksymalnej wysokości, na jakiej można budować" name="FSRenderParcelSelectionToMaxBuildHeight" />
+        <check_box label="Pokazuj granice do maksymalnej wysokości budowania" name="FSRenderParcelSelectionToMaxBuildHeight" />
         <check_box label="Ogranicz dystans selekcji prim (metry):" name="LimitSelectDistance" width="237" />
         <spinner name="MaxSelectDistance" tool_tip="Maksymalna dozwolona odległość zaznaczania obiektów (metry od awatara) [Domyślnie: 128.000]" />
         <check_box label="Ogranicz dystans przeciągania (metry):" name="LimitDragDistance" width="237" />
@@ -208,8 +183,17 @@
           części
         </text>
         <check_box label="Stare zachowanie &quot;ustaw obiekt na sprzedaż&quot; (zmiana ceny od razu, bez kliku na 'Zastosuj')" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
+        <text name="text_box_pivotpoint">
+          Punkt obracania osi
+        </text>
+        <check_box label="Oś na poz. gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="FSBuildPrefsActualRoot_toggle" />
+        <spinner label="Poz. X" name="X pos" />
+        <spinner label="Poz. Y" name="Y pos" />
+        <spinner label="Poz. Z" name="Z pos" />
+        <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
+    </panel>
+    <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
         <check_box label="Podgląd animacji na własnym awatarze podczas przesyłania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas przesyłania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
@@ -217,6 +201,31 @@
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
         <check_box label="Sortuj miejsca dodatków w sekcjach menu &quot;Dołącz do&quot; alfabetycznie (wymaga restartu)" tool_tip="Jeśli ta opcja jest włączona, to lista miejsc dla doczepienia dodatków pojawiająca się w menusach &quot;Dołącz do&quot; będzie posortowana alfabetycznie" name="FSSortAttachmentSpotsAlphabetically" />
         <check_box label="Nowy panel tekstur [APP_NAME] w panelu budowania (wymaga restartu)" tool_tip="Gdy zaznaczysz tą opcję, to narzędzia do edycji tekstur będą korzystać z udoskonalonego panelu [APP_NAME] i pozwolą na edycję tekstur BlinnPhong oraz PBR." name="FSUseNewTexturePanel" />
+    </panel>
+    <panel label="Edytor skryptów" name="BuildTabScriptEditor">
+        <text name="text_box_scripting_font" width="150">
+            Czcionka edytora skryptów:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
+        <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
+            <combo_item name="Small" label="Mała"/>
+            <combo_item name="Medium" label="Średnia"/>
+            <combo_item name="Large" label="Duża"/>
+        </combo_box>
+        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
+        <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
+        <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
+        <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
+        <check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
+        <check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
+        <text name="lslpreprocinclude_textbox">
+          Ścieżka dołączania preprocesora:
+        </text>
+        <button label="Przeglądaj" label_selected="Przeglądaj" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Zewnętrzny edytor:
+        </text>
+        <button label="Przeglądaj" label_selected="Przeglądaj" name="SetExternalEditor" />
     </panel>
     <panel label="Nowe pliki" name="UploadsTab">
         <text name="title">

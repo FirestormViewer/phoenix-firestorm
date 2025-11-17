@@ -1902,7 +1902,6 @@ F32 LLAgentCamera::calcCameraFOVZoomFactor()
 LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
 {
     // Compute base camera position and look-at points.
-    F32         camera_land_height;
     LLVector3d  frame_center_global = !isAgentAvatarValid() ?
         gAgent.getPositionGlobal() :
         gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
@@ -2183,19 +2182,11 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
     }
 // [/RLVa:KB]
 
-    // <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
-    F32 camera_ground_plane{ F_ALMOST_ZERO };
-    // integrate OpenSimExtras.MinSimHeight into the camera ground plane calculation
-    if (auto regionp = LLWorld::getInstance()->getRegionFromPosGlobal(camera_position_global))
-    {
-      camera_ground_plane += regionp->getMinSimHeight();
-    }
-    // </FS:humbletim>
-
-    // Don't let camera go underground
-    F32 camera_min_off_ground = getCameraMinOffGround();
-    camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
-    F32 minZ = llmax(camera_ground_plane, camera_land_height + camera_min_off_ground); // <FS:humbletim/> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
+    // Don't let camera go underground if constrained
+    // If not constrained, permit going 1000m below 0, use case: retrieving objects
+    F32 camera_min_off_ground = getCameraMinOffGround(); // checks isDisableCameraConstraints
+    F32 camera_land_height = LLWorld::getInstance()->resolveLandHeightGlobal(camera_position_global);
+    F32 minZ = camera_land_height + camera_min_off_ground;
     if (camera_position_global.mdV[VZ] < minZ)
     {
         camera_position_global.mdV[VZ] = minZ;

@@ -11,6 +11,12 @@
 ##   We're not there yet, but once done, there is a kludge in Linking.cmake
 #    "if(${CMAKE_VERSION} VERSION_LESS "3.20.0")" that can also be removed
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.29.0")
+    cmake_policy(SET CMP0156 NEW)
+endif()
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.31.0")
+    cmake_policy(SET CMP0179 NEW)
+endif()
 
 set(ROOT_PROJECT_NAME "Firestorm" CACHE STRING
     "The root project/makefile/solution name. Defaults to Firestorm.")
@@ -33,6 +39,14 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 20)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF) # This slows down build massively
+
+set(CMAKE_OPTIMIZE_DEPENDENCIES ON)
+
+set(CMAKE_COLOR_DIAGNOSTICS ON)
+
+# Speeds up cmake generation significantly in some cases
+set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY ON)
 
 include(Variables)
 include(BuildVersion)
@@ -74,7 +88,7 @@ endif(TESTBUILD AND TESTBUILDPERIOD)
 #</FS:Ansariel>
 
 #<FS:Beq> Support for custom Primfeed UA
-option(FS_PF_USER_AGENT "Optional compile‐time Primfeed user‐agent string" "")
+option(FS_PF_USER_AGENT "Optional compile-time Primfeed user-agent string" "")
 if (FS_PF_USER_AGENT)
     add_compile_definitions(FS_PF_USER_AGENT="${FS_PF_USER_AGENT}")
     message(STATUS "Compiling with custom Primfeed user-agent: ${FS_PF_USER_AGENT}")

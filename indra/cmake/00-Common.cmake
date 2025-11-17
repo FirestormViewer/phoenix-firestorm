@@ -34,7 +34,10 @@ add_compile_definitions(BOOST_BIND_GLOBAL_PLACEHOLDERS)
 
 # Force enable SSE2 instructions in GLM per the manual
 # https://github.com/g-truc/glm/blob/master/manual.md#section2_10
-add_compile_definitions(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES=1 GLM_FORCE_SSE2=1 GLM_ENABLE_EXPERIMENTAL=1)
+add_compile_definitions(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES=1 GLM_ENABLE_EXPERIMENTAL=1)
+
+# SSE2NEON throws a pointless warning when compiler optimizations are enabled
+add_compile_definitions(SSE2NEON_SUPPRESS_WARNINGS=1)
 
 # Configure crash reporting
 set(RELEASE_CRASH_REPORTING OFF CACHE BOOL "Enable use of crash reporting in release builds")
@@ -87,6 +90,8 @@ if (WINDOWS)
       NOMINMAX
 #     DOM_DYNAMIC                     # For shared library colladadom
       _CRT_SECURE_NO_WARNINGS         # Allow use of sprintf etc
+      _CRT_NONSTDC_NO_DEPRECATE       # Allow use of sprintf etc
+      _CRT_OBSOLETE_NO_WARNINGS
       _WINSOCK_DEPRECATED_NO_WARNINGS # Disable deprecated WinSock API warnings
       )
   add_compile_options(
@@ -192,69 +197,47 @@ if (LINUX)
   set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
+  # Prefer static libraries on Linux
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.a")
 endif (LINUX)
 
-
 if (DARWIN)
+  # Use rpath loading on macos
+  set(CMAKE_MACOSX_RPATH TRUE)
+
   # Warnings should be fatal -- thanks, Nicky Perian, for spotting reversed default
   set(CLANG_DISABLE_FATAL_WARNINGS OFF)
   set(CMAKE_CXX_LINK_FLAGS "-Wl,-headerpad_max_install_names,-search_paths_first")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_CXX_LINK_FLAGS}")
-  set(DARWIN_extra_cstar_flags "-Wno-unused-local-typedef -Wno-deprecated-declarations")
-  #<FS:TS> Silence some more compiler warnings on Xcode 9
-  set(DARWIN_extra_cstar_flags "${DARWIN_extra_cstar_flags} -Wno-unused-const-variable -Wno-unused-private-field -Wno-potentially-evaluated-expression")
-  # Ensure that CMAKE_CXX_FLAGS has the correct -g debug information format --
-  # see Variables.cmake.
-  string(REPLACE "-gdwarf-2" "-g${CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT}"
-    CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags}")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
-  # NOTE: it's critical that the optimization flag is put in front.
-  # NOTE: it's critical to have both CXX_FLAGS and C_FLAGS covered.
 
-set(ENABLE_SIGNING TRUE)
-set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )
+  # Ensure debug symbols are always generated
+  add_compile_options(-g --debug) # --debug is a clang synonym for -g that bypasses cmake behaviors
 
-  # required for clang-15/xcode-15 since our boost package still uses deprecated std::unary_function/binary_function
-  # see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#C++-Standard-Library
-  add_compile_definitions(_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION)
-endif (DARWIN)
+  # Silence GL deprecation warnings
+  add_compile_definitions(GL_SILENCE_DEPRECATION=1)
+
+  set(ENABLE_SIGNING TRUE)
+  set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )
+endif(DARWIN)
 
 if (LINUX OR DARWIN)
-  if (CMAKE_CXX_COMPILER MATCHES ".*clang")
-    set(CMAKE_COMPILER_IS_CLANGXX 1)
-  endif (CMAKE_CXX_COMPILER MATCHES ".*clang")
+  add_compile_options(-Wall -Wno-sign-compare -Wno-trigraphs -Wno-reorder -Wno-unused-but-set-variable -Wno-unused-variable)
 
-  if (CMAKE_COMPILER_IS_GNUCXX)
-    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
-  elseif (CMAKE_COMPILER_IS_CLANGXX)
-    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    # libstdc++ headers contain deprecated declarations that fail on clang
+    # macOS currently has many deprecated calls
+    add_compile_options(-Wno-unused-local-typedef)
   endif()
 
-  if (NOT GCC_DISABLE_FATAL_WARNINGS)
-    set(GCC_WARNINGS "${GCC_WARNINGS} -Werror")
-  endif (NOT GCC_DISABLE_FATAL_WARNINGS)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-Wno-stringop-truncation -Wno-parentheses -Wno-maybe-uninitialized)
+  endif()
 
-  if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
-    set(GCC_CXX_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-unused-const-variable -Wno-format-extra-args -Wno-unused-private-field -Wno-unused-function -Wno-tautological-compare -Wno-empty-body -Wno-unused-variable -Wno-unused-value")
-  else (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
-  #elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable")
+  if (NOT GCC_DISABLE_FATAL_WARNINGS AND NOT CLANG_DISABLE_FATAL_WARNINGS)
+    add_compile_options(-Werror)
   endif ()
 
-  if(LINUX)
-    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-pragmas -Wno-deprecated")
-  endif()
-
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
-    set(GCC_CXX_WARNINGS "${GCC_CXX_WARNINGS} -Wno-c++20-compat")
-  endif()
-
-  set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
-
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m${ADDRESS_SIZE}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m${ADDRESS_SIZE}")
+  add_compile_options(${GCC_WARNINGS})
+  add_compile_options(-m${ADDRESS_SIZE})
 endif (LINUX OR DARWIN)
-
 
