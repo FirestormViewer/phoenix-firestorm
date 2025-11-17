@@ -809,6 +809,15 @@ Oczekiwane: [VALIDS]
 		Nie można otworzyć przesłanego pliku dźwiękowego:
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+		Przesyłanie modeli nie jest jeszcze dostępne na Apple Silicon, ale będzie obsługiwane w nadchodzącym wydaniu.
+
+Obejście: Kliknij prawym przyciskiem myszy aplikację [APP_NAME] w Finderze,
+wybierz "Pobierz info", a następnie zaznacz "Otwórz przy użyciu Rosetty".
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		Biblioteka fizyki nie jest obecna, dlatego część funkcji narzędzia przesyłania modeli może nie działać lub nie działać poprawnie.
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		Plik nie jest w formacie RIFF WAVE:
 [FILE]
@@ -5041,6 +5050,10 @@ Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać pr
 	<notification name="PreferenceChatPathChanged">
 		Nie można przenieść plików. Przywrócono poprzednią ścieżkę.
 		<usetemplate ignoretext="Nie można przenieść plików. Przywrócono poprzednią ścieżkę." name="okignore" />
+	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		Twój system ma [TOTAL_MEM]MB pamięci, co może nie wystarczyć do uruchamiania przeglądarki na wyższych ustawieniach i może powodować problemy.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Kontynuuj" />
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		Wystąpił problem z zapisywaniem domyślnych zezwoleń obiektu: [REASON]. Spróbuj ustawić je ponownie później.

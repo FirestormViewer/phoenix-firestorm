@@ -238,7 +238,22 @@ private:
         mParents.pop_back();
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mParents == that.mParents; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mParents.empty();
+        const bool that_empty = that.mParents.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mParents == that.mParents;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mParents.back()); }
 
@@ -373,7 +388,22 @@ private:
         mSkipChildren = false;
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.back()); }
 
@@ -474,7 +504,22 @@ private:
         makeCurrent();
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.back().first); }
 
@@ -611,7 +656,22 @@ private:
             mPending.push_back(*chi);
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.front()); }
 

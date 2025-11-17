@@ -168,6 +168,34 @@
 			<text name="build_item_add_disp_rect_txt">
 				現在の設定：[ITEM]
 			</text>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+				Drop a script here.
+			</fs_embedded_item_drop_target>
+			<text name="custom_script_disp_rect_txt">
+				現在の設定: [SCRIPT]
+			</text>
+			<button label="デフォルトの作成権限" name="fs_default_creation_permissions"/>
+			<check_box label="選択したプリムのハイライトを有効にする" tool_tip="チェックを外すと、黄色／青のアウトライン効果は描画されず、多数のプリムが選択された場合のパフォーマンスが向上します。" name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="選択中の区画の境界をハイライトする" name="RenderParcelSelection"/>
+			<check_box label="ビルドできる最大高度の境界を表示する" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+			<check_box label="遠くにあるオブジェクトを選択しない" width="210" name="LimitSelectDistance"/>
+			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）［デフォルト：128.000］"/>
+			<check_box label="ドラッグできる制限距離（ｍ）：" width="210" name="LimitDragDistance"/>
+			<spinner name="MaxDragDistance" tool_tip="移動ツールで１度に移動できる最大距離を入力します。（開始点からのメートル指定）［デフォルト：48.000］"/>
+			<text name="RotationStepText1" width="220">
+				「グリッドにスナップ」を使用していない時
+			</text>
+			<spinner name="RotationStep" tool_tip="回転ツールによるすべての回転はこの単位の倍数に制限されます。［デフォルト：1.0］"/>
+			<text name="RotationStepText2">
+				度の倍数に回転できる範囲を制限する
+			</text>
+			<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" width="360" name="FSUnlinkConfirmEnabled"/>
+			<text name="MinObjectsForUnlinkConfirmText2">
+				個以上
+			</text>
+			<check_box label="クラシックな「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="インベントリからディスクにテクスチャを保存する時に、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
 			<text name="text_box_pivotpoint">
 				中心軸のポイント
 			</text>
@@ -176,7 +204,17 @@
 			<spinner label="Ｙ軸" name="Y pos"/>
 			<spinner label="Ｚ軸" name="Z pos"/>
 			<check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても５０％、つまり中央に設定されています。" name="FSPivotPercToggle"/>
-			<button label="デフォルトの作成権限" name="fs_default_creation_permissions"/>
+		</panel>
+		<panel label="ビルド２" name="BuildTab2">
+			<check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab"/>
+			<check_box label="ビルドモードにおいて、CapsLockの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、ビルドモードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture"/>
+			<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar"/>
+			<check_box label="アニメーションプレビューの詳細情報は常に展開する" tool_tip="アニメーションプレビューフローターの詳細なアニメーション情報をデフォルトで展開します。" name="FSAnimationPreviewExpanded"/>
+			<check_box label="拡張スクリプト情報の詳細を有効にする" tool_tip="有効にすると、ビルダーに役立つさまざまな詳細を含む基本的なスクリプト情報機能が拡張されます。" name="FSScriptInfoExtended"/>
+			<check_box label="「装着先」メニューの装着スポットをアルファベット順に並べ替える（要再起動）" tool_tip="有効にすると、「装着先」メニューの装着物のスポットのリストがアルファベット順に並び替えられます。" name="FSSortAttachmentSpotsAlphabetically"/>
+			<check_box label="ツールフローターで新式の[APP_NAME]テクスチャパネルを使用する（要再起動）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。（要再起動）" name="FSUseNewTexturePanel"/>
+		</panel>
+		<panel label="Script Editor" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font">
 				スクリプトエディタのフォント：
 			</text>
@@ -189,6 +227,7 @@
 				<combo_item name="Medium" label="中"/>
 				<combo_item name="Large" label="大"/>
 			</combo_box>
+			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをＬＳＬ２でなく、Ｍｏｎｏの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="ＬＳＬプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox"/>
 			<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox"/>
 			<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox"/>
@@ -202,36 +241,6 @@
 				外部エディタ：
 			</text>
 			<button label="参照" label_selected="参照" name="SetExternalEditor"/>
-		</panel>
-		<panel label="ビルド２" name="BuildTab2">
-			<check_box label="選択したプリムのハイライトを有効にする" tool_tip="チェックを外すと、黄色／青のアウトライン効果は描画されず、多数のプリムが選択された場合のパフォーマンスが向上します。" name="FSBuildPrefsRenderHighlight_toggle"/>
-			<check_box label="選択中の区画の境界をハイライトする" name="RenderParcelSelection"/>
-			<check_box label="ビルドできる最大高度の境界を表示する" name="FSRenderParcelSelectionToMaxBuildHeight"/>
-			<check_box label="遠くにあるオブジェクトを選択しない" name="LimitSelectDistance"/>
-			<spinner name="MaxSelectDistance" tool_tip="選択可能な最大距離（アバターからのメートル）［デフォルト：128.000］"/>
-			<check_box label="ドラッグできる制限距離（ｍ）：" name="LimitDragDistance"/>
-			<spinner name="MaxDragDistance" tool_tip="移動ツールで１度に移動できる最大距離を入力します。（開始点からのメートル指定）［デフォルト：48.000］"/>
-			<text name="RotationStepText1">
-				「グリッドにスナップ」を使用していない時
-			</text>
-			<spinner name="RotationStep" tool_tip="回転ツールによるすべての回転はこの単位の倍数に制限されます。［デフォルト：1.0］"/>
-			<text name="RotationStepText2">
-				度の倍数に回転できる範囲を制限する
-			</text>
-			<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" name="FSUnlinkConfirmEnabled"/>
-			<text name="MinObjectsForUnlinkConfirmText2">
-				個以上
-			</text>
-			<check_box label="クラシックな「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをＬＳＬ２でなく、Ｍｏｎｏの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
-			<check_box label="インベントリからディスクにテクスチャを保存する時に、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
-			<check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab"/>
-			<check_box label="ビルドモードにおいて、CapsLockの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、ビルドモードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture"/>
-			<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar"/>
-			<check_box label="アニメーションプレビューの詳細情報は常に展開する" tool_tip="アニメーションプレビューフローターの詳細なアニメーション情報をデフォルトで展開します。" name="FSAnimationPreviewExpanded"/>
-			<check_box label="拡張スクリプト情報の詳細を有効にする" tool_tip="有効にすると、ビルダーに役立つさまざまな詳細を含む基本的なスクリプト情報機能が拡張されます。" name="FSScriptInfoExtended"/>
-			<check_box label="「装着先」メニューの装着スポットをアルファベット順に並べ替える（要再起動）" tool_tip="有効にすると、「装着先」メニューの装着物のスポットのリストがアルファベット順に並び替えられます。" name="FSSortAttachmentSpotsAlphabetically"/>
-			<check_box label="ツールフローターで新式の[APP_NAME]テクスチャパネルを使用する（要再起動）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。（要再起動）" name="FSUseNewTexturePanel"/>
 		</panel>
 		<!--Uploads-->
 		<panel label="アップロード" name="UploadsTab">

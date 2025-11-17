@@ -32,7 +32,7 @@
 		Drücken von Eingabetaste bei einem Avatar-Anhang
 	</text>
 	<combo_box name="attach_combo">
-		<combo_box.item label="Fügt Anhang hinzu (empfohlen)" name="0"/>
-		<combo_box.item label="Anhängen (entfernt bisherigen Anhang am entsprechenden Punkt)" name="1"/>
+		<combo_box.item label="Fügt Anhang hinzu (empfohlen)" name="1"/>
+		<combo_box.item label="Anhängen (entfernt bisherigen Anhang am entsprechenden Punkt)" name="0"/>
 	</combo_box>
 </floater>

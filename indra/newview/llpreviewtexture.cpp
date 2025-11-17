@@ -475,7 +475,7 @@ void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenam
 void LLPreviewTexture::saveMultipleToFile(const std::string& file_name)
 {
     std::string texture_location(gSavedSettings.getString("TextureSaveLocation"));
-    std::string texture_name = file_name.empty() ? getItem()->getName() : file_name;
+    std::string texture_name = LLDir::getScrubbedFileName(file_name.empty() ? getItem()->getName() : file_name);
 
     std::string filepath;
     S32 i = 0;

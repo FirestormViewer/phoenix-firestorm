@@ -49,6 +49,7 @@ FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
     mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&FSPanelPrefs::onCommitTrans, this));
 
     mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
+    mCustomScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem");
 }
 
 bool FSPanelPrefs::postBuild()
@@ -74,6 +75,9 @@ bool FSPanelPrefs::postBuild()
 
     mInvDropTarget = getChild<FSEmbeddedItemDropTarget>("embed_item");
     mInvDropTarget->setDADCallback(boost::bind(&FSPanelPrefs::onDADEmbeddedItem, this, _1));
+
+    mCustomScriptDropTarget = getChild<FSEmbeddedItemDropTarget>("custom_script");
+    mCustomScriptDropTarget->setDADCallback(boost::bind(&FSPanelPrefs::onDADCustomScript, this, _1));
 
     return LLPanelPreference::postBuild();
 }
@@ -101,12 +105,35 @@ void FSPanelPrefs::onOpen(const LLSD& key)
                 getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotAvailable"));
             }
         }
+        
+        getChild<LLCheckBoxCtrl>("FSBuildPrefs_UseCustomScript")->setEnabled(true);
+        mCustomScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem");
+        LLUUID script_id(mCustomScriptItem);
+        if (script_id.isNull())
+        {
+            getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotSet"));
+        }
+        else
+        {
+            LLInventoryObject* script = gInventory.getObject(script_id);
+            if (script)
+            {
+                getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", script->getName());
+            }
+            else
+            {
+                getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotAvailable"));
+            }
+        }
+        
         getChild<LLUICtrl>("reset_default_folders")->setEnabled(true);
     }
     else
     {
         getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(false);
         getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotLoggedIn"));
+        getChild<LLCheckBoxCtrl>("FSBuildPrefs_UseCustomScript")->setEnabled(false);
+        getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotLoggedIn"));
         getChild<LLUICtrl>("reset_default_folders")->setEnabled(false);
     }
 }
@@ -118,6 +145,7 @@ void FSPanelPrefs::apply()
     if (LLStartUp::getStartupState() == STATE_STARTED)
     {
         gSavedPerAccountSettings.setString("FSBuildPrefs_Item", mEmbeddedItem);
+        gSavedPerAccountSettings.setString("FSBuildPrefs_CustomScriptItem", mCustomScriptItem);
     }
 }
 
@@ -274,6 +302,16 @@ void FSPanelPrefs::onDADEmbeddedItem(const LLUUID& item_id)
     {
         getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", item->getName());
         mEmbeddedItem = item_id.asString();
+    }
+}
+
+void FSPanelPrefs::onDADCustomScript(const LLUUID& item_id)
+{
+    LLInventoryObject* item = gInventory.getObject(item_id);
+    if (item && item->getType() == LLAssetType::AT_LSL_TEXT)
+    {
+        getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", item->getName());
+        mCustomScriptItem = item_id.asString();
     }
 }
 

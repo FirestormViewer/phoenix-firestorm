@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="snapshot_guide_settings" title="Paramètres du guide de cadrage">
+	<text name="color_and_appearance_label">
+		Couleur et apparence du guide
+	</text>
+	<spinner label="Épaisseur (px)" name="guide_thickness"/>
+	<slider label="Opacité" name="guide_opacity"/>
+	<text name="style_label">
+		Style du guide
+	</text>
+	<combo_box name="guide_style_combo" tool_tip="Choisissez le guide de cadrage à afficher">
+		<combo_box.item name="rule_of_thirds" label="Règle des tiers"/>
+		<combo_box.item name="golden_ratio_top_left" label="Ratio d'or (en haut à gauche)"/>
+		<combo_box.item name="golden_ratio_top_right" label="Ratio d'or (en haut à droite)"/>
+		<combo_box.item name="golden_ratio_bottom_left" label="Ratio d'or (en bas à gauche)"/>
+		<combo_box.item name="golden_ratio_bottom_right" label="Ratio d'or (en bas à droite)"/>
+		<combo_box.item name="diagonal" label="Diagonale"/>
+	</combo_box>
+</floater>

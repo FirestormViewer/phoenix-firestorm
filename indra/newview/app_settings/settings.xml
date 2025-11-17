@@ -23499,7 +23499,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>InventoryAddAttachmentBehavior</key>
   <map>
     <key>Comment</key>
-    <string>Defines behavior when hitting return on an inventory item</string>
+    <string>Defines behavior when hitting return on an inventory item (unused in favour of FSDoubleClickAddInventoryObjects)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
