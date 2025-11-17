@@ -110,13 +110,41 @@
 			<check_box name="FSBuildPrefs_EmbedItem" label="將物件嵌入新的元素" />
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="將物件拖到此處">將物件拖到此處</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">當前: [ITEM]</text>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">Drop a script here.</fs_embedded_item_drop_target>
+			<text name="custom_script_disp_rect_txt">當前: [SCRIPT]</text>
+			<button label="預設建立權限" name="fs_default_creation_permissions" />
+			<check_box label="高亮選定元素邊框" tool_tip="取消選擇將不顯示黃色/藍色邊框，當選擇大量元素時，可提高效能。" name="FSBuildPrefsRenderHighlight_toggle" />
+			<check_box label="顯示所選地塊邊界" name="RenderParcelSelection" />
+			<check_box label="顯示建造的最大高度限制" name="FSRenderParcelSelectionToMaxBuildHeight" />
+			<check_box label="選擇距離限制（米）：" name="LimitSelectDistance" width="140" />
+			<spinner name="MaxSelectDistance" tool_tip="選擇的最大允許距離（從化身出發到，單位：米） [預設值：128.000]" />
+			<check_box label="拖動距離限制（米）：" name="LimitDragDistance" width="140" />
+			<spinner name="MaxDragDistance" tool_tip="單次移動的最大允許距離（從起始點，單位：米） [預設值：48.000]" />
+			<text width="120" name="RotationStepText1">旋轉限制為以下倍數：</text>
+			<spinner name="RotationStep" width="45" tool_tip="透過旋轉工具進行的所有旋轉都將約束為指定數的倍數（預設值：1.0）" />
+			<text name="RotationStepText2">度，如果「對齊到網格」未啟用</text>
+			<check_box width="250" name="FSUnlinkConfirmEnabled" label="如果集合中至少包含以下數量，則刪除聯結時確認" />
+			<text name="MinObjectsForUnlinkConfirmText2">個物件</text>
+			<check_box label="在「設定此物件出售」時使用舊功能" tool_tip="啟用此選項將直接儲存物件的銷售資訊，而不需要確認。" name="FSCommitForSaleOnChange_toggle" />
+			<check_box label="將紋理儲存到硬碟上的 PNG 格式而不是 TGA" tool_tip="用於紋理預覽和庫存上下文選單。" name="FSTextureDefaultSaveAsFormat" />
 			<text name="text_box_pivotpoint">軸心點</text>
 			<check_box label="根元素軸" tool_tip="預設情況下，軸位於聯結集的重心位置。 如果啟用，則軸將位於聯結集的子元素上。" name="FSBuildPrefsActualRoot_toggle" />
 			<spinner label="X 軸" name="X pos" />
 			<spinner label="Y 軸" name="Y pos" />
 			<spinner label="Z 軸" name="Z pos" />
 			<check_box label="百分比" tool_tip="預設情況下，所有值都是百分比，每個軸都固定為 50%" name="FSPivotPercToggle" />
-			<button label="預設建立權限" name="fs_default_creation_permissions" />
+		</panel>
+		<panel label="建造 2" name="BuildTab2">
+			<check_box label="使用 Ctrl+單擊來捕獲和移動物件" tool_tip="勾選此項，您可以使用滑鼠和 Ctrl 鍵來捕獲和移動物件。" name="FSEnableGrab" />
+			<check_box label="在建造模式下按住 Shift+單擊直接拖動紋理" tool_tip="啟用此選項後，您可以在建造模式下直接將紋理拖放到物件的表面上。" name="FSExperimentalDragTexture" />
+			<check_box label="上傳到伺服器時在自己的化身上預覽動畫" tool_tip="如果啟用，您可以在上傳到伺服器時用自己的化身預覽動畫。" name="FSUploadAnimationOnOwnAvatar" />
+			<check_box label="始終展開動畫預覽的詳細資訊" tool_tip="動畫預覽懸浮窗中的詳細資訊預設展開。" name="FSAnimationPreviewExpanded" />
+			<check_box label="為指令碼啟用詳細資訊" tool_tip="啟用後，將向指令碼基本資訊中新增對創造者有用的詳細資訊。" name="FSScriptInfoExtended" />
+			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
+			<check_box label="在工具視窗中使用新的[APP_NAME]紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的[APP_NAME]工作流,並允許編輯BlinnPhong和PBR材質" name="FSUseNewTexturePanel" />
+		</panel>
+		<panel label="Script Editor" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>
 			<combo_box name="FSScriptingFontName" tool_tip="LSL 指令碼編輯器中使用的字型名稱">
 				<combo_item name="Monospace" label="等寬" />
@@ -131,6 +159,7 @@
 				<combo_item name="Medium" label="中" />
 				<combo_item name="Large" label="大" />
 			</combo_box>
+			<check_box label="將編輯的指令碼儲存到 Mono 中" tool_tip="啟用此選項將直接將儲存在庫存中的指令碼儲存為 Mono，而不是 LSL。" name="FSSaveInventoryScriptsAsMono_toggle" />
 			<check_box label="啟用 LSL 前處理器" tool_tip="勾選此項將啟用 LSL 前處理器。" name="preproc_checkbox" />
 			<check_box label="最佳化指令碼" tool_tip="勾選此項，LSL 前處理器將最佳化指令碼所佔用的空間。" name="preprocoptimizer_checkbox" />
 			<check_box label="switch() 語句" tool_tip="勾選後，LSL 前處理器將允許使用 switch() 語句進行指令碼流程控制。" name="preprocswitch_checkbox" />
@@ -140,30 +169,6 @@
 			<button label="瀏覽" label_selected="瀏覽" name="SetPreprocInclude" />
 			<text name="externaleditor_textbox">外部編輯器：</text>
 			<button label="瀏覽" label_selected="瀏覽" name="SetExternalEditor" />
-		</panel>
-		<panel label="建造 2" name="BuildTab2">
-			<check_box label="高亮選定元素邊框" tool_tip="取消選擇將不顯示黃色/藍色邊框，當選擇大量元素時，可提高效能。" name="FSBuildPrefsRenderHighlight_toggle" />
-			<check_box label="顯示所選地塊邊界" name="RenderParcelSelection" />
-			<check_box label="顯示建造的最大高度限制" name="FSRenderParcelSelectionToMaxBuildHeight" />
-			<check_box label="選擇距離限制（米）：" name="LimitSelectDistance" />
-			<spinner name="MaxSelectDistance" tool_tip="選擇的最大允許距離（從化身出發到，單位：米） [預設值：128.000]" />
-			<check_box label="拖動距離限制（米）：" name="LimitDragDistance" />
-			<spinner name="MaxDragDistance" tool_tip="單次移動的最大允許距離（從起始點，單位：米） [預設值：48.000]" />
-			<text name="RotationStepText1">旋轉限制為以下倍數：</text>
-			<spinner name="RotationStep" width="45" tool_tip="透過旋轉工具進行的所有旋轉都將約束為指定數的倍數（預設值：1.0）" />
-			<text name="RotationStepText2">度，如果「對齊到網格」未啟用</text>
-			<check_box name="FSUnlinkConfirmEnabled" label="如果集合中至少包含以下數量，則刪除聯結時確認" />
-			<text name="MinObjectsForUnlinkConfirmText2">個物件</text>
-			<check_box label="使用 Ctrl+單擊來捕獲和移動物件" tool_tip="勾選此項，您可以使用滑鼠和 Ctrl 鍵來捕獲和移動物件。" name="FSEnableGrab" />
-			<check_box label="在建造模式下按住 Shift+單擊直接拖動紋理" tool_tip="啟用此選項後，您可以在建造模式下直接將紋理拖放到物件的表面上。" name="FSExperimentalDragTexture" />
-			<check_box label="在「設定此物件出售」時使用舊功能" tool_tip="啟用此選項將直接儲存物件的銷售資訊，而不需要確認。" name="FSCommitForSaleOnChange_toggle" />
-			<check_box label="將編輯的指令碼儲存到 Mono 中" tool_tip="啟用此選項將直接將儲存在庫存中的指令碼儲存為 Mono，而不是 LSL。" name="FSSaveInventoryScriptsAsMono_toggle" />
-			<check_box label="將紋理儲存到硬碟上的 PNG 格式而不是 TGA" tool_tip="用於紋理預覽和庫存上下文選單。" name="FSTextureDefaultSaveAsFormat" />
-			<check_box label="上傳到伺服器時在自己的化身上預覽動畫" tool_tip="如果啟用，您可以在上傳到伺服器時用自己的化身預覽動畫。" name="FSUploadAnimationOnOwnAvatar" />
-			<check_box label="始終展開動畫預覽的詳細資訊" tool_tip="動畫預覽懸浮窗中的詳細資訊預設展開。" name="FSAnimationPreviewExpanded" />
-			<check_box label="為指令碼啟用詳細資訊" tool_tip="啟用後，將向指令碼基本資訊中新增對創造者有用的詳細資訊。" name="FSScriptInfoExtended" />
-			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
-			<check_box label="在工具視窗中使用新的[APP_NAME]紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的[APP_NAME]工作流,並允許編輯BlinnPhong和PBR材質" name="FSUseNewTexturePanel" />
 		</panel>
 		<panel label="上傳" name="UploadsTab">
 			<text name="title">上傳的目標檔案夾：</text>

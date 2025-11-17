@@ -55,11 +55,14 @@ private:
     void onCommitTrans();
 
     void onDADEmbeddedItem(const LLUUID& item_id);
+    void onDADCustomScript(const LLUUID& item_id);
 
     void onResetDefaultFolders();
 
     FSEmbeddedItemDropTarget*   mInvDropTarget;
+    FSEmbeddedItemDropTarget*   mCustomScriptDropTarget;
     std::string                 mEmbeddedItem;
+    std::string                 mCustomScriptItem;
 };
 
 #endif // FS_PANELPREFS_H

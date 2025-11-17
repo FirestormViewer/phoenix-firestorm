@@ -7203,6 +7203,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="Worn Items">
 		Angezogene Objekte
 	</string>
+	<string name="Favorites">
+		Favoriten
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		Ein Gruppenmitglied namens [NAME]
 	</string>

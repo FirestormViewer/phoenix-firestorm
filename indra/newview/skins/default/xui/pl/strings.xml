@@ -6576,6 +6576,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="Worn Items">
 		Założone
 	</string>
+	<string name="Favorites">
+		Ulubione
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		Osoba z grupy o imieniu [NAME]
 	</string>

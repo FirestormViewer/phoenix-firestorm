@@ -3271,6 +3271,7 @@ Your current position: [AVATAR_POS]
   <string name="All Items">All Items</string>
   <string name="Recent Items">Recent Items</string>
   <string name="Worn Items">Worn Items</string>
+  <string name="Favorites">Favorites</string>
 
   <string name="InvOfferGroupNoticeName">A group member named [NAME]</string>
   <string name="CallingCardOnlineLabelSuffix">(online)</string>

@@ -7899,8 +7899,12 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
         item = (LLViewerInventoryItem*)gInventory.getItem(object_id);
         if(item && gInventory.isObjectDescendentOf(object_id, gInventory.getRootFolderID()))
         {
-            static LLCachedControl<bool> replace_item(gSavedSettings, "InventoryAddAttachmentBehavior", false);
-            rez_attachment(item, NULL, ("attach" == action) ? replace_item() : true); // Replace if "Wear"ing.
+            // <FS> Firestorm's replace on double click
+            // static LLCachedControl<bool> replace_item(gSavedSettings, "InventoryAddAttachmentBehavior", false);
+            // rez_attachment(item, NULL, ("attach" == action) ? replace_item() : true); // Replace if "Wear"ing.
+            static LLCachedControl<bool> replace_item(gSavedSettings, "FSDoubleClickAddInventoryObjects", false);
+            rez_attachment(item, NULL, ("attach" == action) ? !replace_item : true); // Replace if "Wear"ing.
+            // </FS>
         }
         else if(item && item->isFinished())
         {
@@ -7943,11 +7947,13 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 
 void LLObjectBridge::openItem()
 {
+    static LLCachedControl<bool> replace_item(gSavedSettings, "FSDoubleClickAddInventoryObjects", false); // <FS> Double-click add/replace
     // object double-click action is to wear/unwear object
     performAction(getInventoryModel(),
               // <FS> Double-click add/replace
               //get_is_item_worn(mUUID) ? "detach" : "attach");
-              get_is_item_worn(mUUID) ? "detach" : gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects") ? "wear_add" : "attach");
+              get_is_item_worn(mUUID) ? "detach" : replace_item ? "wear_add" : "attach");
+              // </FS>
 }
 
 std::string LLObjectBridge::getLabelSuffix() const
@@ -9164,7 +9170,9 @@ void LLObjectBridgeAction::attachOrDetach()
         // <FS:Ansariel> Double-click add/replace option
         //static LLCachedControl<bool> inventory_linking(gSavedSettings, "InventoryAddAttachmentBehavior", false);
         //LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, inventory_linking()); // Don't replace if adding.
-        LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, !gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects")); // Don't replace if adding.
+        static LLCachedControl<bool> replace_item(gSavedSettings, "FSDoubleClickAddInventoryObjects", false);
+        LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, !replace_item); // Don't replace if adding.
+        // </FS>
     }
 }
 

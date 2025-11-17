@@ -6697,6 +6697,9 @@ Yerləşməniz: [AVATAR_POS]
 	<string name="Worn Items">
 		Daşınan əşyalar
 	</string>
+	<string name="Favorites">
+		Sevimlilərim
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		[NAME] adlı qrup üzvü
 	</string>

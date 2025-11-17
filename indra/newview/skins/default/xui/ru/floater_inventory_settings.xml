@@ -32,7 +32,7 @@
 		Нажатие Enter при прикреплении аватара
 	</text>
 	<combo_box name="attach_combo" width="350">
-		<combo_box.item label="Добавляет прикрепление (рекомендуется)" name="0"/>
-		<combo_box.item label="Заменяет (удаляет прикрепление в этой точке)" name="1"/>
+		<combo_box.item label="Добавляет прикрепление (рекомендуется)" name="1"/>
+		<combo_box.item label="Заменяет (удаляет прикрепление в этой точке)" name="0"/>
 	</combo_box>
 </floater>
