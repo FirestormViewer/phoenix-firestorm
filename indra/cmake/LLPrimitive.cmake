@@ -56,3 +56,11 @@ find_library(COLLADADOM_LIBRARY
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 target_link_libraries(ll::colladadom INTERFACE ${COLLADADOM_LIBRARY} ll::boost ll::libxml ll::minizip-ng)
+
+# <FS> GLIB uses pcre, so we need to keep it for Linux builds
+if (LINUX)
+   add_library( ll::pcre INTERFACE IMPORTED )
+   use_prebuilt_binary(pcre)
+   target_link_libraries( ll::pcre INTERFACE pcrecpp pcre )
+endif ()
+# </FS>
