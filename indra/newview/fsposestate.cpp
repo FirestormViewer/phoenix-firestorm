@@ -24,7 +24,7 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
         newState.lastUpdateTime = motion->getLastUpdateTime();
         newState.captureOrder   = 0;
         newState.inLayerOrder   = animNumber++;
-        newState.gAgentOwnsPose = canSaveMotionId(anim_it->first);
+        newState.gAgentOwnsPose = canSaveMotionId(avatar, anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -77,7 +77,7 @@ void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingM
         newState.jointNumbersAnimated = jointNumbersRecaptured;
         newState.captureOrder         = sCaptureOrder[avatar->getID()];
         newState.inLayerOrder         = animNumber++;
-        newState.gAgentOwnsPose       = canSaveMotionId(anim_it->first);
+        newState.gAgentOwnsPose       = canSaveMotionId(avatar, anim_it->first);
 
         sMotionStates[avatar->getID()].push_back(newState);
     }
@@ -100,7 +100,15 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
         if (!ignoreOwnership && !it->gAgentOwnsPose)
-            continue;
+        {
+            if (it->requeriedAssetInventory)
+                continue;
+
+            it->gAgentOwnsPose          = canSaveMotionId(avatar, it->motionId);
+            it->requeriedAssetInventory = true;
+            if (!it->gAgentOwnsPose)
+                continue;
+        }
 
         std::string uniqueAnimId                            = "poseState" + std::to_string(animNumber++);
         (*saveRecord)[uniqueAnimId]["animationId"]          = it->motionId.asString();
@@ -135,7 +143,7 @@ void FSPoseState::restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, 
             if (LLUUID::parseUUID(name, &animId))
             {
                 newState.motionId = animId;
-                newState.gAgentOwnsPose = ignoreOwnership || canSaveMotionId(animId);
+                newState.gAgentOwnsPose = ignoreOwnership || canSaveMotionId(avatar, animId);
 
                 if (ignoreOwnership)
                     sMotionStatesOwnedByMe[animId] = true;
@@ -218,7 +226,7 @@ void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotio
     }
 }
 
-bool FSPoseState::canSaveMotionId(LLAssetID motionId)
+bool FSPoseState::canSaveMotionId(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId)
 {
     if (!gAgentAvatarp || gAgentAvatarp.isNull())
         return false;
@@ -234,13 +242,27 @@ bool FSPoseState::canSaveMotionId(LLAssetID motionId)
         return sMotionStatesOwnedByMe[motionId];
     }
 
+    if (!avatarPlayingMotionId)
+        return false;
+
+    if (avatarPlayingMotionId->getID() == gAgentAvatarp->getID())
+        return motionIdIsAgentAnimationSource(motionId);
+
+    return motionIdIsFromPrimAgentOwnsAgentIsSittingOn(avatarPlayingMotionId, motionId);
+}
+
+bool FSPoseState::motionIdIsAgentAnimationSource(LLAssetID motionId)
+{
+    if (!gAgentAvatarp || gAgentAvatarp.isNull())
+        return false;
+
     for (const auto& [anim_object_id, anim_anim_id] : gAgentAvatarp->mAnimationSources)
     {
         if (anim_anim_id != motionId)
             continue;
 
         // is the item that started the anim in inventory
-        item = gInventory.getItem(anim_object_id);
+        LLInventoryItem* item = gInventory.getItem(anim_object_id);
         if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
         {
             sMotionStatesOwnedByMe[motionId] = true;
@@ -254,8 +276,42 @@ bool FSPoseState::canSaveMotionId(LLAssetID motionId)
             sMotionStatesOwnedByMe[motionId] = true;
             return sMotionStatesOwnedByMe[motionId];
         }
+    }
 
+    return false;
+}
+
+bool FSPoseState::motionIdIsFromPrimAgentOwnsAgentIsSittingOn(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId)
+{
+    if (!avatarPlayingMotionId)
         return false;
+
+    const LLViewerObject* agentRoot = dynamic_cast<LLViewerObject*>(avatarPlayingMotionId->getRoot());
+    if (!agentRoot)
+        return false;
+
+    const LLUUID& assetIdTheyAreSittingOn = agentRoot->getID();
+    if (assetIdTheyAreSittingOn == avatarPlayingMotionId->getID())
+        return false; // they are not sitting on a thing
+
+    LLViewerObject* object = gObjectList.findObject(assetIdTheyAreSittingOn);
+    if (!object || !object->permYouOwner())
+        return false; // gAgent does not own what they are sitting on
+
+    if (object->isInventoryPending())
+        return false;
+
+    if (object->isInventoryDirty() || !object->getInventoryRoot())
+    {
+        object->requestInventory();
+        return false; // whatever they are sitting on, we don't have the inventory list for yet
+    }
+
+    LLInventoryItem* item = object->getInventoryItemByAsset(motionId, LLAssetType::AT_ANIMATION);
+    if (item && item->getPermissions().getOwner() == gAgentAvatarp->getID())
+    {
+        sMotionStatesOwnedByMe[motionId] = true;
+        return sMotionStatesOwnedByMe[motionId];
     }
 
     return false;

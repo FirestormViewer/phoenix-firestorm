@@ -1226,11 +1226,9 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar* avatar)
     if (posingMotion->isStopped())
     {
         if (avatar->isSelf())
-        {
             gAgent.stopFidget();
-            mPosingState.captureMotionStates(avatar);
-        }
 
+        mPosingState.captureMotionStates(avatar);
         avatar->startDefaultMotions();
         avatar->startMotion(posingMotion->motionId());
 

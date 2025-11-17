@@ -112,6 +112,12 @@ private:
         bool motionApplied = false;
 
         /// <summary>
+        /// For non-gAgent, we permit a query of the inventory of a prim they are sitting on.
+        /// Because this involves latency, we may retry ownership checking at save-time.
+        /// </summary>
+        bool requeriedAssetInventory = false;
+
+        /// <summary>
         /// Whether gAgent owns the pose, or the pose was loaded from XML.
         /// </summary>
         bool gAgentOwnsPose = false;
@@ -141,14 +147,41 @@ private:
     void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
 
     /// <summary>
-    /// Gets whether gAgentID owns, and thus can save information about the supplied asset ID.
+    /// Gets whether gAgentID owns, and thus can save information about the supplied motionId.
     /// </summary>
-    /// <param name="motionId">The asset ID of the object.</param>
-    /// <returns>True if the avatar owns the asset, otherwise false.</returns>
+    /// <param name="avatarPlayingMotionId">The avatar playing the supplied motionId.</param>
+    /// <param name="motionId">The motionId of the animation.</param>
+    /// <returns>True if the gAgent owns the motionId, otherwise false.</returns>
     /// <remarks>
-    /// This only works reliably if something other than poser started the animation.
+    /// This only works reliably for self.
+    /// For motions playing on others, the motion needs to be an asset in gAgent's inventory.
     /// </remarks>
-    bool canSaveMotionId(LLAssetID motionId);
+    bool canSaveMotionId(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId);
+
+    /// <summary>
+    /// Examines gAgent's animation source list for the supplied animation Id.
+    /// </summary>
+    /// <param name="motionId">The ID of the motion to query.</param>
+    /// <returns>True if gAgent is playing the animation, otherwise false.</returns>
+    bool motionIdIsAgentAnimationSource(LLAssetID motionId);
+
+    /// <summary>
+    /// Queries a specific condition of the supplied animation ID.
+    /// </summary>
+    /// <param name="avatarPlayingMotionId">The avatar to query for.</param>
+    /// <param name="motionId">The motion ID to query for.</param>
+    /// <returns>
+    /// True if the supplied avatar is sitting on an object owned by gAgent, and that object
+    /// contains an animation asset with the same assetId.
+    /// </returns>
+    /// <remarks>
+    /// This is intended to test for a situation a photographer might arrange.
+    /// If you are sitting on photographer's prim, playing photographer's pose, and photographer wants to save their work,
+    /// this allows them to save the Animation ID and state to XML.
+    /// It is intended this be called twice at least, as it does not implement a callback onInventoryLoaded.
+    /// Presently this works fine: first time being when posing starts, second when pose is saved.
+    /// </remarks>
+    bool motionIdIsFromPrimAgentOwnsAgentIsSittingOn(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId);
 
     /// <summary>
     /// Tests if all the members of supplied vector2 are members of supplied vector1.
