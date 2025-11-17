@@ -491,8 +491,9 @@ void LLGLTFLoader::processNodeHierarchy(S32 node_idx, std::map<std::string, S32>
             // setLoadState(ERROR_MODEL + pModel->getStatus());
             setLoadState(
                 static_cast<LLModelLoader::eLoadState>(
-                            static_cast<S32>(ERROR_MODEL) + static_cast<S32>(mdl->getStatus())));
-            // </FS:Beq>            delete pModel;
+                            static_cast<S32>(ERROR_MODEL) + static_cast<S32>(pModel->getStatus())));
+            // </FS:Beq>
+            delete pModel;
             return;
         }
     }

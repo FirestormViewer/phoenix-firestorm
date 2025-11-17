@@ -1324,7 +1324,10 @@ void LLPanelOutfitEdit::showFilteredWearablesListView(LLWearableType::EType type
     showWearablesListView();
 
     //e_list_view_item_type implicitly contains LLWearableType::EType starting from LVIT_SHAPE
-    applyListViewFilter(static_cast<EListViewItemType>(LVIT_SHAPE + type));
+    // <FS:Beq> More deprecated enum math
+    // applyListViewFilter(static_cast<EListViewItemType>(LVIT_SHAPE + type));
+    applyListViewFilter(static_cast<EListViewItemType>(static_cast<S32>(LVIT_SHAPE) + static_cast<S32>(type)));
+    // </FS:Beq>
     mWearableItemsList->setMenuWearableType(type);
 }
 
