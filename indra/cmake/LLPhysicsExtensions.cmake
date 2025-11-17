@@ -65,6 +65,7 @@ else (HAVOK)
       NAMES
       nd_pathing.lib
       libnd_pathing.a
+      libnd_Pathing.a
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
    target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
