@@ -1372,8 +1372,8 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
                         std::string browser_name;
                     };
                     struct MediaCookieInstance media_cookie_instances[] = {
-                        {"search", "search_contents" },
-                        {"marketplace", "marketplace_contents" },
+                        {"search", "webbrowser" },
+                        {"marketplace", "webbrowser" },
                         {"destinations", "destination_guide_contents" },
                     };
                     for (MediaCookieInstance mci : media_cookie_instances)
