@@ -172,9 +172,9 @@
 		<text name="build_item_add_disp_rect_txt">
 			Aktuell gesetzt: [ITEM]
 		</text>
-		<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
-		<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
-			Drop a script here.
+		<check_box name="FSBuildPrefs_UseCustomScript" label="Benutzerdef. Skript für Button „Neues Skript“"/>
+		<fs_embedded_item_drop_target name="custom_script" tool_tip="Skript aus Inventar hier hinziehen und ablegen.">
+			Skript hier ablegen.
 		</fs_embedded_item_drop_target>
 		<text name="custom_script_disp_rect_txt">
 			Aktuell gesetzt: [SCRIPT]

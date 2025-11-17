@@ -285,11 +285,9 @@ void LLPanelContents::onClickNewScript(void *userdata)
         // <FS:PP> FIRE-36059 Optional custom script template for New Script button
         if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
         {
-            LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem"));
-            if (custom_script_id.notNull())
+            if (LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
             {
-                LLInventoryItem* custom_script = dynamic_cast<LLInventoryItem*>(gInventory.getObject(custom_script_id));
-                if (custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
+                if (auto custom_script = gInventory.getItem(custom_script_id); custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
                 {
                     LLToolDragAndDrop::dropScript(object, custom_script, true, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
                     return;
