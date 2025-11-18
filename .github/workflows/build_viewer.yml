@@ -10,6 +10,18 @@ on:
         description: 'Manual builds are not signned by default. Force code signing for this run.'
         required: false
         default: 'false'
+      target_os:
+        description: 'Optional: macos-15, ubuntu-22.04, or windows-2022 to run only that OS (manual trigger only)'
+        required: false
+        default: ''
+      target_grid:
+        description: 'Optional: sl or os to run a single grid combo when used with target_os and target_variant'
+        required: false
+        default: ''
+      target_variant:
+        description: 'Optional: regular or avx to run a single build variant when used with target_os and target_grid'
+        required: false
+        default: ''
   push:
     branches:
       - "Firestorm*.*.*"
@@ -34,10 +46,19 @@ env:
 jobs:
   build_matrix:
     strategy:
-      matrix:
-        os: [macos-15,ubuntu-22.04,windows-2022]
-        grid: [sl,os]
-        variant: [regular, avx]
+      matrix: ${{ fromJSON(
+        (github.event_name == 'workflow_dispatch' &&
+         github.event.inputs.target_os != '' &&
+         github.event.inputs.target_grid != '' &&
+         github.event.inputs.target_variant != '') &&
+        format(
+          '[{{"os":"{0}","grid":"{1}","variant":"{2}"}}]',
+          github.event.inputs.target_os,
+          github.event.inputs.target_grid,
+          github.event.inputs.target_variant
+        )
+        || '{"os":["macos-15","ubuntu-22.04","windows-2022"],"grid":["sl","os"],"variant":["regular","avx"]}'
+      ) }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container_image }}
     outputs:
@@ -430,6 +451,12 @@ jobs:
         id: build
         run: autobuild build -c ReleaseFS -A${addrsize} --no-configure
         shell: bash
+      - name: List macOS build tree
+        if: runner.os == 'macOS'
+        run: |
+          echo "macOS build directories for debugging:"
+          ls -R build-darwin-* || true
+        shell: bash
       - name: Extract version number
         id: version
         shell: bash
@@ -601,4 +628,3 @@ jobs:
 
       - name: Copy files to remote host
         run: rclone copy ${{steps.download.outputs.download-path}}/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
-
