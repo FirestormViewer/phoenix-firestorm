@@ -2529,7 +2529,7 @@ elseif (DARWIN)
           # arch specific flags for universal builds: https://stackoverflow.com/a/77942065
           XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL -DLL_HAVOK=1"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
-          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -lllphysicsextensions_tpv"
+          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/lib -lllphysicsextensions_tpv"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) \
             ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} \
             ${HACD_LIBRARY} \
