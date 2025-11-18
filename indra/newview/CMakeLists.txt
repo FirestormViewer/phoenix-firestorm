@@ -60,7 +60,7 @@ include(Discord)
 if (LLPHYSICSEXTENSIONS_SRC_DIR)
 # </FS:ND>
 
-if (NOT HAVOK_TPV)
+if (HAVOK)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
 
    # Stub and probably havok lib itself is a hack, autobuild loads a 3p that really is a source tarball
@@ -86,7 +86,7 @@ if (NOT HAVOK_TPV)
         target_compile_options( llphysicsextensions  PRIVATE -Wno-unused-local-typedef)
       endif (DARWIN)
    endif()
-endif (NOT HAVOK_TPV)
+endif ()
 
 # <FS:ND>
 endif (LLPHYSICSEXTENSIONS_SRC_DIR)
@@ -2233,10 +2233,6 @@ if (WINDOWS)
   list(APPEND viewer_SOURCE_FILES ${viewer_INSTALLER_FILES})
 endif (WINDOWS)
 
-if (HAVOK OR HAVOK_TPV)
-  set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_HAVOK")
-endif (HAVOK OR HAVOK_TPV)
-
 if( DEFINED LLSTARTUP_COMPILE_FLAGS )
    # progress view disables/enables icons based on available packages
    set_source_files_properties(llprogressview.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
@@ -2521,7 +2517,7 @@ elseif (DARWIN)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
           # arch specific flags for universal builds: https://stackoverflow.com/a/77942065
-          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL"
+          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL -DLL_HAVOK=1"
           XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=arm64]   "$(inherited) -DLLPHYSICSEXTENSIONS_USE_STUB"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${CMAKE_CURRENT_BINARY_DIR}/llphysicsextensions/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensions  -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
@@ -2531,9 +2527,9 @@ elseif (DARWIN)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
           # arch specific flags for universal builds: https://stackoverflow.com/a/77942065
-          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL"
+          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL -DLL_HAVOK=1"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
-          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
+          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -lllphysicsextensions_tpv"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) \
             ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} \
             ${HACD_LIBRARY} \
