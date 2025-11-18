@@ -1817,16 +1817,16 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                             print("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
                             raise sign_failed
 
-                       # Copy signed app back into mounted sparse image
-                        print("Copying signed app back into mounted sparse image")
+                        # Signing succeeded, now delete the original app in the mounted sparse image and notarize if needed
                         shutil.rmtree(app_in_dmg)
-                        subprocess.run(['ditto', tmp_app_path, app_in_dmg], check=True)
+                        if not ad_hoc_sign:
+                            # <FS:ND> This fails sometimes and works other times. Even when notarization (down below) is a success
+                            # Remove it for now and investigate after we did notarize  a few times
+                            #self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
+                            self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), tmp_app_path])
 
-                    if not ad_hoc_sign:
-                        # <FS:ND> This fails sometimes and works other times. Even when notarization (down below) is a success
-                        # Remove it for now and investigate after we did notarize  a few times
-                        #self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
-                        self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), app_in_dmg])
+                        print("Copying signed app back into mounted sparse image")
+                        subprocess.run(['ditto', tmp_app_path, app_in_dmg], check=True)
 
         finally:
             # Unmount the image even if exceptions from any of the above 
