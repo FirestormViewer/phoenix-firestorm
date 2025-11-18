@@ -1754,63 +1754,73 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.run_command(['security', 'unlock-keychain',
                                           '-p', keychain_pwd, viewer_keychain])
 
-                    sign_retry_wait=15
-                    resources = app_in_dmg + "/Contents/Resources/"
-                    plain_sign = glob.glob(resources + "llplugin/*.dylib")
+                    with tempfile.TemporaryDirectory() as tmpdir:
+                        tmp_app_path = os.path.join(tmpdir, self.app_name() + ".app")
+                        print("Copying app to temporary folder for signing:", tmp_app_path)
+                        subprocess.run(['ditto', app_in_dmg, tmp_app_path], check=True)
 
-                    # <FS:ND> Even though we got some dylibs in Resources signed by LL, we also got some there that are *NOT*
-                    # At least: fmod, growl, GLOD
-                    # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
-                    plain_sign += glob.glob(resources + "*.dylib")
-                    plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
-                    plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
+                        sign_retry_wait=15
+                        resources = tmp_app_path + "/Contents/Resources/"
+                        plain_sign = glob.glob(resources + "llplugin/*.dylib")
 
-                    deep_sign = [
-                        # <FS:ND> Firestorm does not ship SLVersionChecker
-                        #resources + "updater/SLVersionChecker",
-                        resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
-                        resources + "SLVoice",
-                        app_in_dmg,
-                        ]
-                    for attempt in range(3):
-                        if attempt: # second or subsequent iteration
-                            print("codesign failed, waiting {:d} seconds before retrying".format(sign_retry_wait),
-                                  file=sys.stderr)
-                            time.sleep(sign_retry_wait)
-                            sign_retry_wait*=2
+                        # <FS:ND> Even though we got some dylibs in Resources signed by LL, we also got some there that are *NOT*
+                        # At least: fmod, growl, GLOD
+                        # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
+                        plain_sign += glob.glob(resources + "*.dylib")
+                        plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
+                        plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
 
-                        try:
-                            # Note: See blurb above about names of keychains
-                            for signee in plain_sign:
-                                args = [
-                                    'codesign',
-                                    '--force',
-                                    '--timestamp'
-                                ]
-                                if not ad_hoc_sign:
-                                    args += ['--keychain', viewer_keychain]
-                                args += ['--sign', identity, signee]
-                                self.run_command(args)
-                            for signee in deep_sign:
-                                args = [
-                                    'codesign',
-                                    '--verbose',
-                                    '--deep',
-                                    '--force',
-                                    '--entitlements', self.src_path_of("slplugin.entitlements"),
-                                    '--options', 'runtime'
-                                ]
-                                if not ad_hoc_sign:
-                                    args += ['--keychain', viewer_keychain]
-                                args += ['--sign', identity, signee]
-                                self.run_command(args)
-                            break # if no exception was raised, the codesign worked
-                        except ManifestError as err:
-                            # 'err' goes out of scope
-                            sign_failed = err
-                    else:
-                        print("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
-                        raise sign_failed
+                        deep_sign = [
+                            # <FS:ND> Firestorm does not ship SLVersionChecker
+                            #resources + "updater/SLVersionChecker",
+                            resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
+                            resources + "SLVoice",
+                            tmp_app_path,
+                            ]
+                        for attempt in range(3):
+                            if attempt: # second or subsequent iteration
+                                print("codesign failed, waiting {:d} seconds before retrying".format(sign_retry_wait),
+                                      file=sys.stderr)
+                                time.sleep(sign_retry_wait)
+                                sign_retry_wait*=2
+
+                            try:
+                                # Note: See blurb above about names of keychains
+                                for signee in plain_sign:
+                                    args = [
+                                        'codesign',
+                                        '--force',
+                                        '--timestamp'
+                                    ]
+                                    if not ad_hoc_sign:
+                                        args += ['--keychain', viewer_keychain]
+                                    args += ['--sign', identity, signee]
+                                    self.run_command(args)
+                                for signee in deep_sign:
+                                    args = [
+                                        'codesign',
+                                        '--verbose',
+                                        '--deep',
+                                        '--force',
+                                        '--entitlements', self.src_path_of("slplugin.entitlements"),
+                                        '--options', 'runtime'
+                                    ]
+                                    if not ad_hoc_sign:
+                                        args += ['--keychain', viewer_keychain]
+                                    args += ['--sign', identity, signee]
+                                    self.run_command(args)
+                                break # if no exception was raised, the codesign worked
+                            except ManifestError as err:
+                                # 'err' goes out of scope
+                                sign_failed = err
+                        else:
+                            print("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
+                            raise sign_failed
+
+                       # Copy signed app back into mounted sparse image
+                        print("Copying signed app back into mounted sparse image")
+                        shutil.rmtree(app_in_dmg)
+                        subprocess.run(['ditto', tmp_app_path, app_in_dmg], check=True)
 
                     if not ad_hoc_sign:
                         # <FS:ND> This fails sometimes and works other times. Even when notarization (down below) is a success
