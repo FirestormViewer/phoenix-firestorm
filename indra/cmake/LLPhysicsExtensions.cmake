@@ -40,8 +40,9 @@ elseif (HAVOK_TPV)
    # <FS:ND> havok lib get installed to packages/lib
    link_directories( ${LIBS_PREBUILT_DIR}/lib )
    # </FS:ND>
+endif ()
 
-else (HAVOK)
+if ((NOT HAVOK AND NOT HAVOK_TPV) OR DARWIN) # <FS:TJ> ARM64 requires ndPhyicsStub
    use_prebuilt_binary( ndPhysicsStub )
 
 # <FS:ND> Don't set this variable, there is no need to build any stub source if using ndPhysicsStub
@@ -68,7 +69,9 @@ else (HAVOK)
       libnd_Pathing.a
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
-   target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
+   if (NOT DARWIN) # Done in newview/CMakeLists.txt for darwin
+      target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
+   endif()
    # </FS:TJ>
 
    # <FS:ND> include paths for LLs version and ours are different.

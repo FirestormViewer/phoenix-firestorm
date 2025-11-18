@@ -2532,10 +2532,12 @@ elseif (DARWIN)
           PROPERTIES
           # arch specific flags for universal builds: https://stackoverflow.com/a/77942065
           XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=x86_64]  "$(inherited) -DLLPHYSICSEXTENSIONS_USE_FULL"
-          XCODE_ATTRIBUTE_OTHER_CFLAGS[arch=arm64]   "$(inherited) -DLLPHYSICSEXTENSIONS_USE_STUB"
           # only generate the .MAP file for llphysicsextensions_tpv on x86_64
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
-          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsstub/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsstub"
+          XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) \
+            ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} \
+            ${HACD_LIBRARY} \
+            ${ND_PATHING_LIBRARY}"
           )
     endif()
     # </FS:TJ>
