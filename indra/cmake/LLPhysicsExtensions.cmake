@@ -78,7 +78,7 @@ if ((NOT HAVOK AND NOT HAVOK_TPV) OR DARWIN) # <FS:TJ> ARM64 requires ndPhyicsSt
    target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/ )
    # </FS:ND>
 
-endif (HAVOK)
+endif ()
 
 # <FS:ND> include paths for LLs version and ours are different.
 #target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
