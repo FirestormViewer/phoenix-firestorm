@@ -1,4 +1,4 @@
-name: Build viewer
+name: Build SL+Mac viewer
 on:
   workflow_dispatch:
     inputs:
@@ -35,9 +35,9 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: ["macos-15","ubuntu-22.04","windows-2022"]
-        grid: ["sl","os"]
-        variant: ["regular","avx"]
+        os: ["macos-15"]
+        grid: ["sl"]
+        variant: ["avx"]
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container_image }}
     outputs:
