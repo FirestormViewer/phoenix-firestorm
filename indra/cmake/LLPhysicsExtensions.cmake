@@ -69,7 +69,7 @@ if ((NOT HAVOK AND NOT HAVOK_TPV) OR DARWIN) # <FS:TJ> ARM64 requires ndPhyicsSt
       libnd_Pathing.a
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
-   if (NOT DARWIN) # Done in newview/CMakeLists.txt for darwin
+   if (NOT HAVOK AND NOT HAVOK_TPV) # Done in newview/CMakeLists.txt for darwin if Havok is enabled
       target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
    endif()
    # </FS:TJ>
