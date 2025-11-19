@@ -5,9 +5,6 @@ uniform vec2 screen_res;
 uniform vec4 frame_rect; // x, y, width, height (normalized 0->1)
 uniform vec3 border_color;
 uniform float border_thickness; // in pixels
-uniform vec3 guide_color;
-uniform float guide_thickness; // in pixels
-uniform float guide_style; // 0: no guide, 1: rule of thirds, 2: golden spiral
 
 in vec2 vary_fragcoord;
 
@@ -57,20 +54,6 @@ void main()
             diff.rgb = mix(diff.rgb, border_color, 0.5);
         }
 
-        // Draw guide based on guide_style
-        if (guide_style == 1)
-        {
-            // Draw rule of thirds guide
-            float third_x = (frame_rect_px.z - frame_rect_px.x) / 3.0;
-            float third_y = (frame_rect_px.w - frame_rect_px.y) / 3.0;
-            if ((tc.x > frame_rect_px.x + third_x - guide_thickness && tc.x < frame_rect_px.x + third_x + guide_thickness) ||
-                (tc.x > frame_rect_px.x + 2.0 * third_x - guide_thickness && tc.x < frame_rect_px.x + 2.0 * third_x + guide_thickness) ||
-                (tc.y > frame_rect_px.y + third_y - guide_thickness && tc.y < frame_rect_px.y + third_y + guide_thickness) ||
-                (tc.y > frame_rect_px.y + 2.0 * third_y - guide_thickness && tc.y < frame_rect_px.y + 2.0 * third_y + guide_thickness))
-            {
-                diff.rgb = mix(diff.rgb, guide_color, 0.05);
-            }
-        }
     }
     frag_color = diff;
 }

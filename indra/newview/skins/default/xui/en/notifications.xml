@@ -1718,7 +1718,7 @@ Would you like to shutdown the viewer and launch it manually again in order to a
    icon="alertmodal.tga"
    name="ChangeLanguage"
    type="alertmodal">
-The selected language or zime format will be applied after restarting [APP_NAME].
+The selected language or time format will be applied after restarting [APP_NAME].
   </notification>
 
   <notification
@@ -2328,6 +2328,25 @@ Expected [VALIDS].
    type="alertmodal">
 Could not open uploaded sound file for reading:
 [FILE]
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ModelUploaderMissingPhysicsApple"
+   type="alertmodal">
+Model upload is not yet available on Apple Silicon, but will be supported in an upcoming release.
+
+Workaround: Right-click the [APP_NAME] app in Finder, select
+&apos;Get Info&apos;, then check &apos;Open using Rosetta&apos;
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ModelUploaderMissingPhysics"
+   type="alertmodal">
+Physics library is not present, some of the model uploader's functionality might not work or might not work correctly.
   <tag>fail</tag>
   </notification>
 
@@ -6860,6 +6879,22 @@ Do you want to replace it with the selected object?
    name="TooManyWearables"
    type="alertmodal">
     You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.
+    <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CantLinkNotecard"
+   type="alertmodal">
+    You must save the notecard before creating a link to it.
+    <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CantLinkMaterial"
+   type="alertmodal">
+    You must save the material before creating a link to it.
     <tag>fail</tag>
   </notification>
 

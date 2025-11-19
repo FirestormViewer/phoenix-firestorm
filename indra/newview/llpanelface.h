@@ -395,7 +395,7 @@ private:
 
     LLButton* mBtnAlign { nullptr };
     LLButton* mBtnAlignTex { nullptr };
-    LLButton* mBtnPbrFromInv { nullptr };
+    //LLButton* mBtnPbrFromInv { nullptr }; // <FS/> Done via texture picker
     LLButton* mBtnEditBbr { nullptr };
     LLButton* mBtnSaveBbr { nullptr };
 

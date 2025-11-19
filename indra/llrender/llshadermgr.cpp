@@ -1547,9 +1547,6 @@ void LLShaderMgr::initAttribsAndUniforms()
     // <FS:Beq> reserved uniforms for snapshot frame
     mReservedUniforms.push_back("border_color");
     mReservedUniforms.push_back("border_thickness");
-    mReservedUniforms.push_back("guide_color");
-    mReservedUniforms.push_back("guide_thickness");
-    mReservedUniforms.push_back("guide_style");
     mReservedUniforms.push_back("frame_rect");
     // </FS:Beq>
 
@@ -1566,4 +1563,3 @@ void LLShaderMgr::initAttribsAndUniforms()
         dupe_check.insert(mReservedUniforms[i]);
     }
 }
-

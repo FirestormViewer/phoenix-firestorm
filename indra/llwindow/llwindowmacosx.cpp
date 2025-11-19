@@ -2452,13 +2452,16 @@ bool LLWindowMacOSX::getInputDevices(U32 device_type_filter,
 
 void LLWindowMacOSX::openFile(const std::string& file_name )
 {
-        LL_INFOS() << "Opening file " << file_name << LL_ENDL;
-    FSRef appRef;
-    OSStatus os_result = FSPathMakeRef((UInt8*)file_name.c_str(),
-                       &appRef,NULL);
-    if(os_result >= 0)
+    LL_INFOS() << "Opening file " << file_name << LL_ENDL;
+    CFURLRef url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+                                                           (const UInt8*)file_name.c_str(),
+                                                           (CFIndex)file_name.size(),
+                                                           false);
+
+    if (url)
     {
-        os_result = LSOpenFSRef(&appRef, NULL);
+        OSStatus os_result = LSOpenCFURLRef(url, NULL);
+		CFRelease(url);
     }
 }
 

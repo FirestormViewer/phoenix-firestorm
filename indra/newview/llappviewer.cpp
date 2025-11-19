@@ -2824,7 +2824,6 @@ void LLAppViewer::initLoggingAndGetLastDuration()
         if (gDirUtilp->fileExists(user_data_path_cef_log))
         {
             std::string user_data_path_cef_old = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef.old");
-            LLFile::remove(user_data_path_cef_old, ENOENT);
             LLFile::rename(user_data_path_cef_log, user_data_path_cef_old);
         }
     }
@@ -5208,6 +5207,8 @@ bool LLAppViewer::initCache()
         LL_WARNS("AppCache") << "Unable to set cache location" << LL_ENDL;
         gSavedSettings.setString("CacheLocation", "");
         gSavedSettings.setString("CacheLocationTopFolder", "");
+        gSavedSettings.setString("NewCacheLocation", "");
+        gSavedSettings.setString("NewCacheLocationTopFolder", "");
     }
 
     // <FS:Ansariel> Sound cache

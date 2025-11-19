@@ -39,6 +39,13 @@ bool LLChatMentionHelper::isActive(const LLUICtrl* ctrl) const
 
 bool LLChatMentionHelper::isCursorInNameMention(const LLWString& wtext, S32 cursor_pos, S32* mention_start_pos) const
 {
+    // <FS:PP> Enable auto-completion of @ mentions
+    static LLUICachedControl<bool> useMentionAutoComplete("FSUseChatMentionAutoComplete", true);
+    if (!useMentionAutoComplete)
+    {
+        return false;
+    }
+    // </FS:PP>
     if (cursor_pos <= 0 || cursor_pos > static_cast<S32>(wtext.size()))
         return false;
 

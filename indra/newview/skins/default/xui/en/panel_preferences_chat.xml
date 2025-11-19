@@ -921,6 +921,14 @@
 		 top_pad="1"
 		 height="16"
 		 width="400"
+		 control_name="FSUseChatMentionAutoComplete"
+		 name="FSUseChatMentionAutoComplete"
+		 label="Enable automatic @ mentions window while typing in chat bars"/>
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
 		 control_name="FSEnableEmojiWindowPopupWhileTyping"
 		 name="FSEnableEmojiWindowPopupWhileTyping"
 		 label="Enable automatic emoji picker window while typing in chat bars"/>

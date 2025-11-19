@@ -54,6 +54,7 @@ Dowiedz się więcej o [https://community.secondlife.com/knowledgebase/joining-a
 				<button name="add_friend_btn" tool_tip="Dodaj wybranego Rezydenta do znajomych" />
 				<dnd_button name="nearby_del_btn" tool_tip="Usuń zaznaczoną osobę ze swojej listy znajomych" />
 			</panel>
+			<slider label="Zasięg:" name="near_me_range" tool_tip="Zasięg pokazywania osób w pobliżu" />
 		</panel>
 		<panel label="Znajomi" name="friends_panel">
 			<panel name="friends_buttons_panel">

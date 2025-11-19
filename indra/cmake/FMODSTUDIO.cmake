@@ -33,14 +33,15 @@ if (USE_FMODSTUDIO)
     # as accessing the private LL location will fail if you don't have the credential
     include(Prebuilt)
     use_prebuilt_binary(fmodstudio)
-    if (WINDOWS)
-      target_link_libraries( ll::fmodstudio INTERFACE  fmod_vc)
-    elseif (DARWIN)
-      #despite files being called libfmod.dylib, we are searching for fmod
-      target_link_libraries( ll::fmodstudio INTERFACE  fmod)
-    elseif (LINUX)
-      target_link_libraries( ll::fmodstudio INTERFACE  fmod)
-    endif (WINDOWS)
+
+    find_library(FMOD_LIBRARY
+      NAMES
+      fmod_vc.lib
+      libfmod.dylib
+      libfmod.so
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
+    target_link_libraries(ll::fmodstudio INTERFACE ${FMOD_LIBRARY})
 
     target_include_directories( ll::fmodstudio SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/fmodstudio)
   endif (FMODSTUDIO_LIBRARY AND FMODSTUDIO_INCLUDE_DIR)

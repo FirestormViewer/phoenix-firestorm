@@ -307,7 +307,41 @@
          width="350"
          tool_tip="If enabled, temporary derendered objects will stay derendered until teleport. If disabled, they stay derendered until the end of the session or get manually re-rendered via the asset blacklist window."
          control_name="FSTempDerenderUntilTeleport"/>
-	</panel>
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="25"
+         name="mouse_warp_lbl"
+         width="75"
+         top_pad="10">
+            Mouse Warp:
+        </text>
+        <combo_box
+         control_name="MouseWarpMode"
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-4"
+         name="mouse_warp_combo"
+         tool_tip="Controls warping of the mouse to the center of the screen during alt-zoom and mouse look."
+         width="100">
+         <combo_box.item
+          label="Automatic"
+          name="0"
+          value="0"/>
+         <combo_box.item
+          label="On"
+          name="1"
+          value="1"/>
+         <combo_box.item
+          label="Off"
+          name="2"
+          value="2"/>
+        </combo_box>
+    </panel>
 
     <!--Mouselook-->
     <panel

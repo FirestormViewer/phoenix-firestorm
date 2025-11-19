@@ -114,7 +114,7 @@
 			<check_box name="FSChatbarNamePrediction" label="在本地聊天中啟用名稱自動完成" />
 			<check_box name="AllowMUpose" label="':' 為 '/me' 的同義詞" />
 			<check_box name="AutoCloseOOC" label="自動關閉雙括號 ((OOC))" />
-			<check_box name="FSSuppressEmojiWindowPopupWhileTyping" label="在聊天欄輸入時阻止表情選擇視窗自動彈出" />
+			<check_box name="FSUseChatMentionAutoComplete" label="在聊天欄輸入@時自動打開提及視窗"/>
 			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="在聊天欄輸入時自動打開表情選擇視窗" />
 			<check_box name="FSShowEmojiButton" label="在私聊和附近聊天中顯示表情符號按鈕" />
 			<check_box name="FSShowIMSendButton" label="在私聊中顯示傳送按鈕" />

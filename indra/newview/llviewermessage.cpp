@@ -4029,7 +4029,10 @@ void process_crossed_region(LLMessageSystem* msg, void**)
         return;
     }
     LL_INFOS("Messaging") << "process_crossed_region()" << LL_ENDL;
-    gAgentAvatarp->resetRegionCrossingTimer();
+    if (isAgentAvatarValid())
+    {
+        gAgentAvatarp->resetRegionCrossingTimer();
+    }
     // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; this is apparently the place to
     //               hook in for region crossings - we get an info from the simulator that we
     //               crossed a region and then the viewer starts the handover process. We only
@@ -4897,7 +4900,7 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
     msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
     // <FS:ND> Protect against corrupted sounds
-    if (gAudiop->isCorruptSound(sound_id))
+    if (gAudiop && gAudiop->isCorruptSound(sound_id))
         return;
     // </FS:ND>
 
@@ -4952,7 +4955,7 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
     msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
     // <FS:ND> Protect against corrupted sounds
-    if (gAudiop->isCorruptSound(sound_id))
+    if (gAudiop && gAudiop->isCorruptSound(sound_id))
         return;
     // </FS:ND>
 

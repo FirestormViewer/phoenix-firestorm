@@ -1073,7 +1073,13 @@ bool LLInventoryItem::fromLLSD(const LLSD& sd, bool is_new)
     // TODO - figure out if this should be moved into the noclobber fields above
     mThumbnailUUID.setNull();
     mFavorite = false;
-    mPermissions.init(LLUUID::null, LLUUID::null, LLUUID::null, LLUUID::null);
+    // <FS:TJ> [FIRE-36028] Fix OpenSim object permissions
+    //mPermissions.init(LLUUID::null, LLUUID::null, LLUUID::null, LLUUID::null);
+    if (!LLPermissions::getIsInOpenSim())
+    {
+        mPermissions.init(LLUUID::null, LLUUID::null, LLUUID::null, LLUUID::null);
+    }
+    // </FS:TJ>
 
     // iterate as map to avoid making unnecessary temp copies of everything
     LLSD::map_const_iterator i, end;

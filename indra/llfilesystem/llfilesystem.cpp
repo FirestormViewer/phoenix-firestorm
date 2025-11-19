@@ -113,9 +113,6 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
     const std::string old_filename = LLDiskCache::metaDataToFilepath(old_file_id, old_file_type);
     const std::string new_filename = LLDiskCache::metaDataToFilepath(new_file_id, new_file_type);
 
-    // Rename needs the new file to not exist.
-    LLFileSystem::removeFile(new_file_id, new_file_type, ENOENT);
-
     if (LLFile::rename(old_filename, new_filename) != 0)
     {
         // We would like to return false here indicating the operation
@@ -142,10 +139,9 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
     //    file.seekg(0, std::ios::end);
     //    file_size = (S32)file.tellg();
     //}
-    llstat file_stat;
-    if (LLFile::stat(filename, &file_stat) == 0)
+    if (llstat file_stat; LLFile::stat(filename, &file_stat) == 0)
     {
-        file_size = file_stat.st_size;
+        file_size = static_cast<S32>(file_stat.st_size);
     }
     // </FS:Ansariel>
 

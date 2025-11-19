@@ -157,44 +157,14 @@
         <text name="build_item_add_disp_rect_txt">
          Содержимое: [ITEM]
         </text>
-        <text name="text_box_pivotpoint">
-          Точка опоры
+        <check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+        <fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+         Drop a script here.
+        </fs_embedded_item_drop_target>
+        <text name="custom_script_disp_rect_txt">
+         Содержимое: [SCRIPT]
         </text>
-        <check_box label="Оси на корне" tool_tip="По умолчанию оси отображаются в центре объедененных примов. Если включена эта опция, то оси отображаются в центре корневого прима" name="FSBuildPrefsActualRoot_toggle" />
-        <spinner label="Поз. X" name="X pos" />
-        <spinner label="Поз. Y" name="Y pos" />
-        <spinner label="Поз. Z" name="Z pos" />
-        <check_box label="В процентах" tool_tip="По умолчанию проценты установлены на каждую ось по 50" name="FSPivotPercToggle" />
         <button label="Разрешения создания по умолчанию" name="fs_default_creation_permissions" />
-        <text name="text_box_scripting_font">
-          Шрифт скриптов:
-        </text>
-        <combo_box name="FSScriptingFontName" tool_tip="Имя шрифта используемого в редакторе LSL-скриптов">
-          <combo_item name="Monospace" label="Моноширный"/>
-          <combo_item name="Scripting" label="Скриптовый"/>
-        </combo_box>
-        <combo_box name="FSScriptingFontSize" tool_tip="Размер шрифта используемого в редакторе LSL-скриптов">
-          <combo_item name="Monospace" label="Моноширный"/>
-          <combo_item name="Scripting" label="Скриптовый"/>
-          <combo_item name="Small" label="Мелкий"/>
-          <combo_item name="Medium" label="Средний"/>
-          <combo_item name="Large" label="Крупный"/>
-        </combo_box>
-        <check_box label="Включить процессор предварительной обработки LSL" tool_tip="Включить процессор предварительной обработки LSL." name="preproc_checkbox" />
-        <check_box label="Оптимизатор" tool_tip="Препроцессор LSL позволит оптимизировать пространство, используемое скриптами за счет чтения." name="preprocoptimizer_checkbox" />
-        <check_box label="Инструкция switch()" left_delta="110" width="150" tool_tip="Препроцессор LSL позволит использовать switch() statement для контроля потока скриптов" name="preprocswitch_checkbox" />
-        <check_box label="Ленивые списки" left_delta="145" width="150" tool_tip="Препроцессор LSL позволит использовать расширений синтаксис для обработки списка." name="preproclazy_checkbox" />
-        <check_box label="#includes с диска" left_delta="125" tool_tip="Препроцессор LSL разрешает использовать #include для ссылок на файлы на локальном диске." name="preprocinclude_checkbox" />
-        <text name="lslpreprocinclude_textbox">
-          Путь для препроцессора:
-        </text>
-        <button label="Просмотреть" label_selected="Просмотреть" name="SetPreprocInclude" />
-        <text name="externaleditor_textbox">
-          Внешний Редактор:
-        </text>
-        <button label="Просмотреть" label_selected="Просмотреть" name="SetExternalEditor" />
-    </panel>
-    <panel label="Строить 2" name="BuildTab2">
         <check_box label="Включить подсветку выбранного объекта" tool_tip="Включить подсветку выбранного объекта" name="FSBuildPrefsRenderHighlight_toggle" />
         <check_box label="Высветить границы выбранного участка" name="RenderParcelSelection"/>
         <check_box label="Показать границу до максимальной высоты строительства" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -214,8 +184,17 @@
           объектов
         </text>
         <check_box label="Установить старое поведение для &quot;Установить объект на продажу&quot;" tool_tip="Установить старое поведение для &quot;Установить объект на продажу&quot;" name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Сохранять скрипты редактируемые в инвенторе как Моно" name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" tool_tip="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" name="FSTextureDefaultSaveAsFormat" />
+        <text name="text_box_pivotpoint">
+          Точка опоры
+        </text>
+        <check_box label="Оси на корне" tool_tip="По умолчанию оси отображаются в центре объедененных примов. Если включена эта опция, то оси отображаются в центре корневого прима" name="FSBuildPrefsActualRoot_toggle" />
+        <spinner label="Поз. X" name="X pos" />
+        <spinner label="Поз. Y" name="Y pos" />
+        <spinner label="Поз. Z" name="Z pos" />
+        <check_box label="В процентах" tool_tip="По умолчанию проценты установлены на каждую ось по 50" name="FSPivotPercToggle" />
+    </panel>
+    <panel label="Строить 2" name="BuildTab2">
         <check_box label="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" tool_tip="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" name="FSEnableGrab" />
         <check_box label="Масштабирование при нажатии (вместе с caps lock) для текстур при строительстве" tool_tip="При включении, позволяет тянуть при нажатии или масштаб при нажатии (вместе с caps lock) для текстур в режиме строительства. Эта функция эксперементальная и ее следует использовать с осторожностью." name="FSExperimentalDragTexture" />
         <check_box label="Предварительный просмотр анимации на собственном аватара во время загрузки" tool_tip="Предварительный просмотр анимации на собственном аватара во время загрузки" name="FSUploadAnimationOnOwnAvatar" />
@@ -223,6 +202,36 @@
         <check_box label="Включить расширенную информацию скрипта" name="FSScriptInfoExtended" tool_tip="Если включено, расширяет базовую функцию информации скрипта с различными деталями, полезными для строителей"/>
         <check_box label="Сортировка прикреплений в &quot;Прикрепить к&quot; меню по алфавиту (нужна перезагрузка)" tool_tip="Если этот параметр включен, список прикреплений в &quot;Прикрепить к&quot; меню будут отсортированы по алфавиту" name="FSSortAttachmentSpotsAlphabetically"/>
         <check_box label="Новая панель текстур [APP_NAME] в Инструментах (нужна перезагрузка)" tool_tip="Если этот параметр включен, инструменты редактирования текстур будут использовать усовершенствованный рабочий процесс [APP_NAME] и позволят редактировать БлиннФонг и PBR-текстуры." name="FSUseNewTexturePanel"/>
+    </panel>
+    <panel label="Script Editor" name="BuildTabScriptEditor">
+        <text name="text_box_scripting_font">
+          Шрифт скриптов:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="Имя шрифта используемого в редакторе LSL-скриптов">
+          <combo_item name="Monospace" label="Моноширный"/>
+          <combo_item name="Scripting" label="Скриптовый"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="Размер шрифта используемого в редакторе LSL-скриптов">
+          <combo_item name="Monospace" label="Моноширный"/>
+          <combo_item name="Scripting" label="Скриптовый"/>
+          <combo_item name="Small" label="Мелкий"/>
+          <combo_item name="Medium" label="Средний"/>
+          <combo_item name="Large" label="Крупный"/>
+        </combo_box>
+        <check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Сохранять скрипты редактируемые в инвенторе как Моно" name="FSSaveInventoryScriptsAsMono_toggle" />
+        <check_box label="Включить процессор предварительной обработки LSL" tool_tip="Включить процессор предварительной обработки LSL." name="preproc_checkbox" />
+        <check_box label="Оптимизатор" tool_tip="Препроцессор LSL позволит оптимизировать пространство, используемое скриптами за счет чтения." name="preprocoptimizer_checkbox" />
+        <check_box label="Инструкция switch()" left_delta="110" width="150" tool_tip="Препроцессор LSL позволит использовать switch() statement для контроля потока скриптов" name="preprocswitch_checkbox" />
+        <check_box label="Ленивые списки" left_delta="145" width="150" tool_tip="Препроцессор LSL позволит использовать расширений синтаксис для обработки списка." name="preproclazy_checkbox" />
+        <check_box label="#includes с диска" left_delta="125" tool_tip="Препроцессор LSL разрешает использовать #include для ссылок на файлы на локальном диске." name="preprocinclude_checkbox" />
+        <text name="lslpreprocinclude_textbox">
+          Путь для препроцессора:
+        </text>
+        <button label="Просмотреть" label_selected="Просмотреть" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Внешний Редактор:
+        </text>
+        <button label="Просмотреть" label_selected="Просмотреть" name="SetExternalEditor" />
     </panel>
     <!--Uploads-->
     <panel label="Загрузки" name="UploadsTab">

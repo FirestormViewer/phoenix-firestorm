@@ -169,7 +169,7 @@ private:
     // <FS:Ansariel> FIRE-4740: Friend counter in people panel
     LLTabContainer*         mFriendsTabContainer;
 
-    LLAccordionCtrl* mFriendsAccordion = nullptr;
+    //LLAccordionCtrl* mFriendsAccordion = nullptr; // <FS:Ansariel/> Friend list accordion replacement
     LLAccordionCtrlTab*     mFriendsAllTab = nullptr;
     LLAccordionCtrlTab*     mFriendsOnlineTab = nullptr;
 

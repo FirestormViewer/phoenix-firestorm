@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="使用者界面偏好設定" name="Display panel">
 	<tab_container label="Firestorm偏好設定" name="tabs">
-		<!-- 3D世界 -->
 		<panel label="3D世界" name="UI Prefs Panel">
 			<text name="HoverTipText">
 				懸停提示：
@@ -41,7 +40,6 @@
 				<combo_box.item label="所有物件" name="ScriptDialogOption_2"/>
 			</combo_box>
 		</panel>
-		<!-- 2D覆蓋 -->
 		<panel label="2D覆蓋" name="ui-2d-overlay">
 			<text name="UI Size:" width="95">
 				使用者界面大小：
@@ -105,7 +103,6 @@
 				秒
 			</text>
 		</panel>
-		<!-- 頂部欄 -->
 		<panel label="頂部欄" name="UI-interface-top-bars">
 			<text name="statusbar_textbox">
 				狀態列：
@@ -140,13 +137,13 @@
 			<check_box label="顯示導航和搜尋欄" name="ShowNavbarNavigationPanel" />
 			<check_box label="顯示搜尋欄" name="ShowSearchTopBar" />
 		</panel>
-		<!-- 界面視窗 -->
 		<panel label="視窗" name="UI-interface-windows-tab">
 			<check_box label="點擊化身名稱直接打開個人檔案" name="FSInspectAvatarSlurlOpensProfile" tool_tip="如果啟用，單擊化身名稱連結將直接打開該化身的完整個人檔案。" />
 			<check_box label="禁用自動打開封鎖列表" name="FSDisableBlockListAutoOpen" tool_tip="禁用當封鎖了化身或物件時自動打開封鎖列表的功能。" />
 			<check_box label="在「聊天」選單中的「好友」和「群組」使用 [SHORT_VIEWER_GENERATION] 版本" name="FSUseV2Friends" tool_tip="如果啟用，將在「人物」視窗中打開好友和群組 - 否則在「聯絡人」視窗中打開。" />
 			<check_box label="使用原始版本的物件屬性視窗" name="FSUseLegacyObjectProperties" tool_tip="如果啟用，將使用原始的Viewer-1風格的物件屬性視窗。" />
 			<check_box label="使用較小的相機控制視窗" name="FSUseSmallCameraFloater" tool_tip="如果啟用，將使用不帶相機預設控制項的原始較小版本的相機控制視窗。" />
+			<check_box label="禁用相機控制台的重置按鈕" name="DisableCameraJoystickCenterReset" tool_tip="禁用相機旋轉與移動操縱桿中央的重置按鈕。"/>
 			<text name="standalone_textbox">
 				為以下內容使用單獨視窗：
 			</text>
@@ -192,7 +189,6 @@
 			<check_box label="始終在庫存視窗中顯示「收件箱」按鈕" name="FSAlwaysShowInboxButton" tool_tip="如果啟用，即使庫存中顯示檔案夾，也將始終在庫存視窗中顯示「收件箱」按鈕。" />
 			<check_box label="允許在每個索引標籤中使用不同的庫存搜尋術語" name="FSSplitInventorySearchOverTabs" tool_tip="如果啟用，可以在庫存視窗的每個索引標籤中輸入不同的搜尋術語。" />
 		</panel>
-		<!-- 提示框 -->
 		<panel label="提示框" name="UI-toasts-tab">
 			<text name="ToastSettings">
 				通知設定（彈出視窗，控制台，提示框）：
@@ -246,7 +242,6 @@
 			<check_box label="在區域重新啟動時不搖動螢幕" name="FSNoScreenShakeOnRegionRestart" />
 			<check_box label="向頻道傳送區域重新啟動通知：" width="265" name="FSReportRegionRestartToChat" />
 		</panel>
-		<!-- 字型 -->
 		<panel label="字型" name="UI-font-tab">
 			<text name="tooltip_textbox1">
 				字型方案：

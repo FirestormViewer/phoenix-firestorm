@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="経路探索の表示／テスト">
-	<floater.string name="no_havok">
-		経路探索のためのナビメッシュ
-	</floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		経路探索ライブラリの実装が見つかりません。
 	</floater.string>

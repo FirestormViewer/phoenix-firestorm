@@ -4106,6 +4106,7 @@ void FSPanelFace::onCancelSpecularTexture()
 //       onClickBtnAddMedia() where needed, so the naming is probably just old cruft -Zi
 void FSPanelFace::onClickBtnEditMedia()
 {
+    LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
     refreshMedia();
     LLFloaterReg::showInstance("media_settings");
 }
@@ -4124,6 +4125,7 @@ void FSPanelFace::onClickBtnAddMedia()
     // check if multiple faces are selected
     if (LLSelectMgr::getInstance()->getSelection()->isMultipleTESelected())
     {
+        LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
         refreshMedia();
         LLNotificationsUtil::add("MultipleFacesSelected", LLSD(), LLSD(), boost::bind(&FSPanelFace::multipleFacesSelectedConfirm, this, _1, _2));
     }
@@ -5365,7 +5367,6 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             if (te_data["te"].has("pbr"))
             {
                 objectp->setRenderMaterialID(te, te_data["te"]["pbr"].asUUID(), false /*managing our own update*/);
-                tep->setGLTFRenderMaterial(nullptr);
                 tep->setGLTFMaterialOverride(nullptr);
 
                 LLSD override_data;
@@ -5387,7 +5388,6 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             else
             {
                 objectp->setRenderMaterialID(te, LLUUID::null, false /*send in bulk later*/ );
-                tep->setGLTFRenderMaterial(nullptr);
                 tep->setGLTFMaterialOverride(nullptr);
 
                 // blank out most override data on the server

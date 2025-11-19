@@ -1072,6 +1072,15 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
         return;
     }
     bool wasNull = mRefreshListState.CategoryUUID.isNull();
+
+    // <FS:PP> FIRE-36116 (saving a second outfit freezes Firestorm indefinitely)
+    static LLCachedControl<bool> fsExperimentalOutfitsReturn(gSavedSettings, "FSExperimentalOutfitsReturn");
+    if (fsExperimentalOutfitsReturn && !wasNull && mRefreshListState.CategoryUUID == category_id)
+    {
+        return;
+    }
+    // </FS:PP>
+
     mRefreshListState.CategoryUUID.setNull();
 
     LLInventoryModel::cat_array_t cat_array;
@@ -1780,11 +1789,18 @@ bool LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
     // <FS:Ansariel> Make thumbnail tooltip work properly
     //if (y >= getLocalRect().getHeight() - getHeaderHeight())
     static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
-    if (showInventoryThumbnailTooltips && y >= getLocalRect().getHeight() - getHeaderHeight() && gInventory.getCategory(mFolderID)->getThumbnailUUID().notNull())
+    if (showInventoryThumbnailTooltips && y >= getLocalRect().getHeight() - getHeaderHeight())
     {
         LLSD params;
         params["inv_type"] = LLInventoryType::IT_CATEGORY;
         LLViewerInventoryCategory* cat = gInventory.getCategory(mFolderID);
+        // <FS:TJ> Make thumbnail tooltip work properly
+        if (!cat || cat->getThumbnailUUID().isNull())
+        {
+            return LLAccordionCtrlTab::handleToolTip(x, y, mask);
+        }
+        // </FS:TJ>
+
         if (cat)
         {
             params["thumbnail_id"] = cat->getThumbnailUUID();

@@ -11,8 +11,11 @@
 	<text name="working_lbl">
 		Odświeżanie...
 	</text>
-	<check_box label="Ramka migawki" tool_tip="Pokaż na ekranie ramkę otaczającą obszary migawki. Części sceny, które są poza migawką, zostaną odbarwione i lekko rozmyte." name="show_frame" />
-	<check_box label="Prowadnice" tool_tip="Pokaż prowadnicę kadrowania (zasadę trójpodziału) wewnątrz ramki migawki." name="show_guides" />
+	<panel name="options_panel">
+		<check_box label="Ramka migawki" tool_tip="Pokaż na ekranie ramkę otaczającą obszary migawki. Części sceny, które są poza migawką, zostaną odbarwione i lekko rozmyte." name="show_frame" />
+		<check_box label="Pomoce" tool_tip="Pokaż pomoce kadrowania (np. zasadę trójpodziału) wewnątrz ramki migawki." name="show_guides" />
+		<button tool_tip="Pokaż opcje pomocy kadrowania" name="guide_settings_btn" />
+	</panel>
 	<button label="Odśwież" name="new_snapshot_btn" tool_tip="Kliknij, aby odświeżyć" />
 	<button label="Podgląd" name="big_preview_btn" tool_tip="Kliknij, aby przełączyć podgląd" />
 	<text name="title_label">

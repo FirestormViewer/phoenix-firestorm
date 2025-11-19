@@ -80,6 +80,9 @@
 
 const std::string WEBRTC_VOICE_SERVER_TYPE = "webrtc";
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 namespace {
 
     const F32      MAX_AUDIO_DIST           = 50.0f;
@@ -273,9 +276,15 @@ void LLWebRTCVoiceClient::cleanupSingleton()
 void LLWebRTCVoiceClient::init(LLPumpIO* pump)
 {
     // constructor will set up LLVoiceClient::getInstance()
+    initWebRTC();
+}
+
+void LLWebRTCVoiceClient::initWebRTC()
+{
     llwebrtc::init(this);
 
     mWebRTCDeviceInterface = llwebrtc::getDeviceInterface();
+    mWebRTCDeviceInterface->unsetDevicesObserver(this); // <FS:Ansariel> initWebRTC() can get multiple times - make sure to unset previous observers before re-adding
     mWebRTCDeviceInterface->setDevicesObserver(this);
     mMainQueue = LL::WorkQueue::getInstance("mainloop");
     refreshDeviceLists();
@@ -293,6 +302,8 @@ void LLWebRTCVoiceClient::terminate()
     mVoiceEnabled = false;
     sShuttingDown = true; // so that coroutines won't post more work.
     llwebrtc::terminate();
+
+    mWebRTCDeviceInterface = nullptr;
 }
 
 //---------------------------------------------------
@@ -389,7 +400,7 @@ void LLWebRTCVoiceClient::updateSettings()
             config.mNoiseSuppressionLevel = noiseSuppressionLevel;
             audioConfigChanged            = true;
         }
-        if (audioConfigChanged)
+        if (audioConfigChanged && mWebRTCDeviceInterface)
         {
             mWebRTCDeviceInterface->setAudioConfig(config);
         }
@@ -498,6 +509,12 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
     try
     {
         LLMuteList::getInstance()->addObserver(this);
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        // Add a counter to check if the main thread locked up
+        // to prevent this thread/corutine form filling up
+        // the mMainQueue.
+        static U32 crash_check = 0;
+        // </FS:minerjr> [FIRE-36022]
         while (!sShuttingDown)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_VOICE("voiceConnectionCoroLoop")
@@ -583,6 +600,26 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                     // to send position updates.
                     updatePosition();
                 }
+                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                // If the device locked, count up by 1
+                if (gWebRTCUpdateDevices)
+                {
+                    crash_check++;
+                }
+                // Else if the device is not locked, then reset the counter back to 0
+                else
+                {
+                    crash_check = 0;
+                }
+                // If there are over 10 cycles of the devices being locked, there is a good
+                // chance that the thread failed due to hardware/audio engine issue.
+                if (crash_check > 10)
+                {
+                    LL_WARNS() << "WebRTC detected locked worker thread, will shutdown to prevent total viewer lockup." << LL_ENDL;
+                    // Exit out of the thread and flag WebRTC to shutdown, hopefully clearing the lock and allowing the viewer to continue.
+                    sShuttingDown = true;
+                }
+                // </FS:minerjr> [FIRE-36022]
             }
             LL::WorkQueue::postMaybe(mMainQueue,
                 [=, this] {
@@ -723,6 +760,19 @@ void LLWebRTCVoiceClient::OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceLi
 void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDeviceList &render_devices,
                                                const llwebrtc::LLWebRTCVoiceDeviceList &capture_devices)
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+    std::unique_lock lock(gAudioDeviceMutex, 1s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (!lock.owns_lock())
+    {
+        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (sShuttingDown)
     {
         return;
@@ -766,6 +816,34 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     }
 
     setDevicesListUpdated(true);
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // When trying to lock the same lock a second time
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // When the mutex is invalid
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else
+        {
+            // Everything else
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception WebRTC: " << " " << e.what() << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCVoiceClient::clearRenderDevices()
@@ -798,7 +876,10 @@ void LLWebRTCVoiceClient::tuningStart()
 {
     if (!mIsInTuningMode)
     {
-        mWebRTCDeviceInterface->setTuningMode(true);
+        if (mWebRTCDeviceInterface)
+        {
+            mWebRTCDeviceInterface->setTuningMode(true);
+        }
         mIsInTuningMode = true;
     }
 }
@@ -807,7 +888,10 @@ void LLWebRTCVoiceClient::tuningStop()
 {
     if (mIsInTuningMode)
     {
-        mWebRTCDeviceInterface->setTuningMode(false);
+        if (mWebRTCDeviceInterface)
+        {
+            mWebRTCDeviceInterface->setTuningMode(false);
+        }
         mIsInTuningMode = false;
     }
 }
@@ -840,6 +924,10 @@ void LLWebRTCVoiceClient::tuningSetSpeakerVolume(float volume)
 
 float LLWebRTCVoiceClient::tuningGetEnergy(void)
 {
+    if (!mWebRTCDeviceInterface)
+    {
+        return 0.f;
+    }
     float rms = mWebRTCDeviceInterface->getTuningAudioLevel();
     return TUNING_LEVEL_START_POINT - TUNING_LEVEL_SCALE * rms;
 }
@@ -867,7 +955,10 @@ void LLWebRTCVoiceClient::refreshDeviceLists(bool clearCurrentList)
         clearCaptureDevices();
         clearRenderDevices();
     }
-    mWebRTCDeviceInterface->refreshDevices();
+    if (mWebRTCDeviceInterface)
+    {
+        mWebRTCDeviceInterface->refreshDevices();
+    }
 }
 
 
@@ -1175,7 +1266,7 @@ void LLWebRTCVoiceClient::sendPositionUpdate(bool force)
 void LLWebRTCVoiceClient::updateOwnVolume()
 {
     F32 audio_level = 0.0f;
-    if (!mMuteMic)
+    if (!mMuteMic && mWebRTCDeviceInterface)
     {
         float rms = mWebRTCDeviceInterface->getPeerConnectionAudioLevel();
         audio_level = LEVEL_START_POINT - LEVEL_SCALE * rms;
@@ -1809,6 +1900,15 @@ void LLWebRTCVoiceClient::onChangeDetailed(const LLMute& mute)
     {
         bool muted = ((mute.mFlags & LLMute::flagVoiceChat) == 0);
         sessionState::for_each(boost::bind(predSetUserMute, _1, mute.mID, muted));
+    }
+}
+
+void LLWebRTCVoiceClient::userAuthorized(const std::string& user_id, const LLUUID& agentID)
+{
+    if (sShuttingDown)
+    {
+        sShuttingDown = false; // was terminated, restart
+        initWebRTC();
     }
 }
 

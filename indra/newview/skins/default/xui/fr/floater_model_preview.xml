@@ -200,7 +200,7 @@
 				</combo_box>
 				<button label="Parcourir..." name="physics_browse"/>
 			</panel>
-			<panel name="physics analysis">
+			<panel name="physics analysis havok">
 				<text name="method_label">
 					Étape 2 : Analyser
 				</text>

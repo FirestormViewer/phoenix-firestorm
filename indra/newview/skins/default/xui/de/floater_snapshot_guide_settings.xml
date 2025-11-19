@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="snapshot_guide_settings" title="Einstellungen Aufnahmerahmen">
+	<text name="color_and_appearance_label">
+		Rahmen Farbe und Aussehen
+	</text>
+	<spinner label="Dicke (px)" name="guide_thickness"/>
+	<slider label="Deckkraft" name="guide_opacity"/>
+	<text name="style_label">
+		Rahmen Stil
+	</text>
+	<combo_box name="guide_style_combo" tool_tip="Aufnahmerahmen auswählen">
+		<combo_box.item name="rule_of_thirds" label="Drittel-Regel"/>
+		<combo_box.item name="golden_ratio_top_left" label="Goldener Schnitt (Oben-Links)"/>
+		<combo_box.item name="golden_ratio_top_right" label="Goldener Schnitt (Oben-Rechts)"/>
+		<combo_box.item name="golden_ratio_bottom_left" label="Goldener Schnitt (Unten-Links)"/>
+		<combo_box.item name="golden_ratio_bottom_right" label="Goldener Schnitt (Unten-Rechts)"/>
+		<combo_box.item name="diagonal" label="Diagonal"/>
+	</combo_box>
+</floater>

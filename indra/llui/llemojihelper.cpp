@@ -58,7 +58,7 @@ bool LLEmojiHelper::isActive(const LLUICtrl* ctrl_p) const
 bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S32* pShortCodePos)
 {
     // <FS:PP> FIRE-33735: Option to suppress emoji chooser window from automatically popping up while typing in chat bars
-    static LLUICachedControl<bool> FSEnableEmojiWindowPopupWhileTyping("FSEnableEmojiWindowPopupWhileTyping");
+    static LLUICachedControl<bool> FSEnableEmojiWindowPopupWhileTyping("FSEnableEmojiWindowPopupWhileTyping", true);
     if (!FSEnableEmojiWindowPopupWhileTyping)
     {
         return false;
@@ -139,7 +139,17 @@ void LLEmojiHelper::showHelper(LLUICtrl* hostctrl_p, S32 local_x, S32 local_y, c
     S32 top = floater_y - HELPER_FLOATER_OFFSET_Y + rect.getHeight();
     rect.setLeftTopAndSize(left, top, rect.getWidth(), rect.getHeight());
     pHelperFloater->setRect(rect);
+
+    // Hack: Trying to open floater, search for a match,
+    // and hide floater immediately if no match found,
+    // instead of checking prior to opening
+    //
+    // Supress sounds in case floater won't be shown.
+    // Todo: add some kind of shouldShow(short_code)
+    U8 sound_flags = pHelperFloater->getSoundFlags();
+    pHelperFloater->setSoundFlags(LLView::SILENT);
     pHelperFloater->openFloater(LLSD().with("hint", short_code));
+    pHelperFloater->setSoundFlags(sound_flags);
 }
 
 void LLEmojiHelper::hideHelper(const LLUICtrl* ctrl_p, bool strict)

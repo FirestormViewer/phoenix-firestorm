@@ -615,7 +615,16 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             make -j $JOBS | tee -a "$LOG"
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
-        msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+        # VS2026+ now uses .slnx so determine which one exists
+        if [ -f "Firestorm.slnx" ]; then
+          SOLUTION="Firestorm.slnx"
+        elif [ -f "Firestorm.sln" ]; then
+          SOLUTION="Firestorm.sln"
+        else
+          echo "Build failed! No Firestorm.slnx or Firestorm.sln found"
+          exit 1
+        fi
+        msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
             -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
             -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
     fi

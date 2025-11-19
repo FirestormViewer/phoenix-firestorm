@@ -96,6 +96,7 @@ else (FS_PF_USER_AGENT)
     message(STATUS "Compiling with standard Primfeed user-agent")
 endif (FS_PF_USER_AGENT)
 # </Beq>
+
 # <FS:Ansariel> [AVX Optimization]
 option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
 option(USE_AVX2_OPTIMIZATION "AVX2 optimization support" OFF)
@@ -136,6 +137,7 @@ add_subdirectory(${LIBS_OPEN_PREFIX}llinventory)
 add_subdirectory(${LIBS_OPEN_PREFIX}llmath)
 add_subdirectory(${LIBS_OPEN_PREFIX}llmeshoptimizer)
 add_subdirectory(${LIBS_OPEN_PREFIX}llmessage)
+add_subdirectory(${LIBS_OPEN_PREFIX}llphysicsextensionsos)
 add_subdirectory(${LIBS_OPEN_PREFIX}llprimitive)
 add_subdirectory(${LIBS_OPEN_PREFIX}llrender)
 add_subdirectory(${LIBS_OPEN_PREFIX}llfilesystem)
