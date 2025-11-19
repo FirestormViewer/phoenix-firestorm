@@ -20,7 +20,7 @@
 		</message>
 		<message name="NoHelpIslandTP">
  Vous ne pouvez pas vous téléporter à nouveau vers Welcome Island.
- Pour recommencer le didacticiel, retournez à Welcome Island Public.
+ Pour recommencer le didacticiel, retournez à [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial].
 		</message>
 		<message name="noaccess_tport">Désolé, vous n'avez pas accès à cette destination.</message>
 		<message name="missing_attach_tport">Vos pièces-jointes ne sont pas encore arrivées. Attendez quelques secondes de plus ou déconnectez-vous puis reconnectez-vous avant d'essayer de vous téléporter.</message>
