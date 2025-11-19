@@ -341,7 +341,7 @@
 					</combo_box>
 					<button label="瀏覽…" name="physics_browse" />
 				</panel>
-				<panel name="physics analysis">
+				<panel name="physics analysis havok">
 					<text name="method_label">
 						步驟 2：分析
 					</text>

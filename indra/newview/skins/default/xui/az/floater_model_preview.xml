@@ -136,7 +136,7 @@
 			</combo_box>
           <button label="İcmal..." name="physics_browse"/>
         </panel>
-        <panel name="physics analysis">
+        <panel name="physics analysis havok">
           <text name="method_label">Addım 2. Analiz</text>
           <text name="analysis_method_label">Üsul:</text>
           <text name="quality_label">Keyfiyyət:</text>
