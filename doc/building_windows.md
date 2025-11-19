@@ -55,7 +55,7 @@ All installations are done with default settings (unless told explicitly) - if y
 
 ### CMake
 
-- Download and install at least [CMake 3.16.0](http://www.cmake.org/download)
+- Download and install at least [CMake 4.1.2](http://www.cmake.org/download)
   - Note: No option available to install as Administrator
   - At the "Install options" screen, select "Add CMake to the system PATH for all users"
   - For everything else, use the default options (path, etc.)
