@@ -3387,7 +3387,7 @@ void LLModelPreview::updateStatusMessages()
     //        physStatusIcon->setImage(img);
     //    }
     //}
-#ifndef HAVOK_TPV
+#if !LL_HAVOK
     has_physics_error |= PhysicsError::NOHAVOK;
 #endif
 
