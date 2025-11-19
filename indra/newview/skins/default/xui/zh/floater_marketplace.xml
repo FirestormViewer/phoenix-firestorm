@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Marketplace">
+	<layout_stack name="stack1">
+		<layout_panel name="nav_controls">
+			<button tool_tip="後退" name="back" />
+			<button tool_tip="前進" name="forward" />
+			<button tool_tip="停止" name="stop" />
+			<button tool_tip="刷新頁面" name="reload" />
+			<combo_box name="address" tool_tip="在此輸入網址" />
+			<icon name="media_secure_lock_flag" tool_tip="安全瀏覽" />
+			<button tool_tip="在外部瀏覽器中打開當前網址" name="popexternal" />
+		</layout_panel>
+	</layout_stack>
+</floater>

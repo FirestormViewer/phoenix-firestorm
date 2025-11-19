@@ -64,10 +64,10 @@
 		細節層次材料並非參考模型的子集合。
 	</string>
 	<string name="phys_status_vertex_limit_exceeded">
-		有些具體殼面超出頂點限制。
+		有些具體凸包超出頂點限制。
 	</string>
 	<string name="phys_status_hull_limit_exceeded">
-		一些模型超過了外殼限制（256）。嘗試使用「簡化」功能。
+		一些模型超過了凸包限制（256）。嘗試使用「簡化」功能。
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		物理網格包含退化三角形。嘗試「分析/簡化」。
@@ -76,7 +76,7 @@
 		此版本不包含Havok支援，不推薦用於上傳Second Life的物理內容。可能會出現不可預測的結果！
 	</string>
 	<string name="phys_status_too_thin">
-		一個或多個次元小於0.5公尺 - 只有基於外殼的（分析過的）物理形狀才會正確工作。
+		一個或多個次元小於0.5公尺 - 只有基於凸包的（分析過的）物理形狀才會正確工作。
 	</string>
 	<string name="phys_status_unknown_error">
 		發生未知錯誤。
@@ -264,8 +264,6 @@
 					<item label="三角形上限" name="Triangle Limit" />
 					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="medium_triangles" value="0" />
-				<text initial_value="0" name="medium_vertices" value="0" />
 				<text initial_value="低" name="low_label" value="低" />
 				<combo_box name="lod_source_low">
 					<item label="從檔案載入" name="Load from file" />
@@ -280,8 +278,6 @@
 					<item label="三角形上限" name="Triangle Limit" />
 					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="low_triangles" value="0" />
-				<text initial_value="0" name="low_vertices" value="0" />
 				<text initial_value="最低" name="lowest_label" value="最低" />
 				<combo_box name="lod_source_lowest">
 					<item label="從檔案載入" name="Load from file" />
@@ -296,8 +292,6 @@
 					<item label="三角形上限" name="Triangle Limit" />
 					<item label="錯誤門檻" name="Error Threshold" />
 				</combo_box>
-				<text initial_value="0" name="lowest_triangles" value="0" />
-				<text initial_value="0" name="lowest_vertices" value="0" />
 				<check_box label="產生法線" name="gen_normals" />
 				<text initial_value="皺褶角度：" name="crease_label" value="皺褶角度：" />
 				<spinner name="crease_angle" value="75" />
@@ -343,7 +337,7 @@
 				</panel>
 				<panel name="physics analysis havok">
 					<text name="method_label">
-						步驟 2：分析
+						步驟 2：轉換為凸包（可選）
 					</text>
 					<text name="analysis_method_label">
 						方法：
@@ -357,6 +351,28 @@
 					<check_box label="封閉孔洞" name="Close Holes (Slow)" />
 					<button label="分析" name="Decompose" />
 					<button label="取消" name="decompose_cancel" />
+				</panel>
+				<panel name="physics analysis vhacd">
+					<text name="method_label">
+						步驟 2：轉換為凸包（可選）
+					</text>
+					<text name="fill_mode_label">
+						填充方式：
+					</text>
+					<text name="resolution_label">
+						解析度：
+					</text>
+					<text name="hulls_per_mesh_label">
+						凸包數/網格：
+					</text>
+					<text name="vertices_per_hull_label">
+						頂點數/凸包：
+					</text>
+					<text name="tolerance_label">
+						容錯閾值：
+					</text>
+					<button label="分析" name="Analyze" />
+					<button label="取消" name="analyze_cancel" />
 				</panel>
 				<panel name="physics simplification">
 					<text name="second_step_label">
@@ -374,7 +390,6 @@
 					<text name="Retain%_label">
 						保留：
 					</text>
-					<combo_box name="Combine Quality" value="1" />
 					<button label="簡化" name="Simplify" />
 					<button label="取消" name="simplify_cancel" />
 				</panel>
@@ -389,7 +404,7 @@
 						頂點：[POINTS]，
 					</text>
 					<text name="physics_hulls">
-						殼面：[HULLS]
+						凸包：[HULLS]
 					</text>
 				</panel>
 			</panel>
@@ -410,7 +425,6 @@
 				<text name="scale_label">
 					縮放比例 (1=無):
 				</text>
-				<spinner name="import_scale" value="1.0" />
 				<text name="dimensions_label">
 					尺寸:
 				</text>
@@ -433,7 +447,6 @@
 				<text name="pelvis_offset_label">
 					Z 偏距（升高或降低化身）：
 				</text>
-				<spinner name="pelvis_offset" value="0.0" />
 				<text name="skin_too_many_joints" text_color="Orange">
 					皮膚權重關節過多
 				</text>
@@ -564,7 +577,7 @@
 					物理成本
 				</text>
 				<text name="physics_breakdown_labels">
-基礎外殼:
+基礎凸包:
 網格:
 分析:
 				</text>
@@ -588,7 +601,6 @@
 				<text name="exploder_label" width="105">
 					展開預覽:
 				</text>
-				<slider name="physics_explode" width="75" />
 				<check_box label="關節位置" name="show_joint_positions" />
 				<check_box label="關節位置覆蓋" name="show_joint_overrides" />
 				<check_box label="皮膚權重" name="show_skin_weight" />
