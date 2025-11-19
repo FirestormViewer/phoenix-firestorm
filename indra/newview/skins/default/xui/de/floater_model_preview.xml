@@ -318,8 +318,8 @@
 					<text name="tolerance_label">
 						Fehlertoleranz:
 					</text>
-					<button label="Analysieren" name="Decompose"/>
-					<button label="Abbrechen" name="decompose_cancel"/>
+					<button label="Analysieren" name="Analyze"/>
+					<button label="Abbrechen" name="analyze_cancel"/>
 				</panel>
 				<panel name="physics simplification">
 					<text name="second_step_label">
