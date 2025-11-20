@@ -128,6 +128,8 @@ LLObjectIMHandler gObjectIMHandler;
 class FSChatHistoryHeader: public LLPanel
 {
 public:
+    typedef boost::function<void (const std::string& speaker_id)> insert_mention_callback_t;
+
     FSChatHistoryHeader()
     :   LLPanel(),
         mInfoCtrl(NULL),
@@ -150,6 +152,7 @@ public:
         mTimeBoxTextBox(NULL),
         mHeaderLayoutStack(NULL),
         mAvatarNameCacheConnection(),
+        mInsertMentionCallback(NULL),
         mTime(0)
     {}
 
@@ -177,6 +180,24 @@ public:
         {
             menu->die();
             mPopupMenuHandleObject.markDead();
+        }
+    }
+
+    void setInsertMentionCallback(insert_mention_callback_t cb)
+    {
+        mInsertMentionCallback = cb;
+    }
+
+    void copyURLToClipboard()
+    {
+        LLUrlAction::copyURLToClipboard("secondlife:///app/agent/" + mAvatarID.asString() + "/mention");
+    }
+
+    void insertMentionAtCursor()
+    {
+        if (mInsertMentionCallback)
+        {
+            mInsertMentionCallback("secondlife:///app/agent/" + mAvatarID.asString() + "/mention");
         }
     }
 
@@ -1069,6 +1090,9 @@ protected:
             registrar_enable.add("AvatarIcon.Enable", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemEnabled, this, _2));
             registrar_enable.add("AvatarIcon.Visible", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemVisible, this, _2));
 
+            registrar.add("Mention.CopyURI", boost::bind(&FSChatHistoryHeader::copyURLToClipboard, this));
+            registrar.add("Mention.Chat", boost::bind(&FSChatHistoryHeader::insertMentionAtCursor, this));
+
             menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
             if (menu)
             {
@@ -1256,6 +1280,8 @@ protected:
 
 private:
     boost::signals2::connection mAvatarNameCacheConnection;
+
+    insert_mention_callback_t mInsertMentionCallback;
 };
 
 FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
@@ -1353,6 +1379,17 @@ void FSChatHistory::initFromParams(const FSChatHistory::Params& p)
     setShowContextMenu(true);
 }
 
+// virtual
+void FSChatHistory::insertMentionAtCursor(const std::string& str)
+{
+    updateChatInputLine();
+    if (mChatInputLine)
+    {
+        mChatInputLine->insertMentionAtCursor(str);
+        mChatInputLine->setFocus(true);
+    }
+}
+
 LLView* FSChatHistory::getSeparator()
 {
     LLPanel* separator = LLUICtrlFactory::getInstance()->createFromFile<LLPanel>(mMessageSeparatorFilename, NULL, LLPanel::child_registry_t::instance());
@@ -1365,6 +1402,7 @@ LLView* FSChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style
     if (header)
     {
         header->setup(chat, style_params, args);
+        header->setInsertMentionCallback(boost::bind(&FSChatHistory::insertMentionAtCursor, this, _1));
     }
     return header;
 }

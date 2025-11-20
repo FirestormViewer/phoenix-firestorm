@@ -53,6 +53,7 @@ public:
     };
 
     typedef boost::function<bool (const LLUUID& speaker_id)> validate_speaker_callback_t;
+    typedef boost::function<void (const LLUUID& speaker_id)> insert_mention_callback_t;
 
     FSParticipantList(LLSpeakerMgr* data_source,
                       LLAvatarList* avatar_list,
@@ -94,6 +95,7 @@ public:
      * @see onAddItemEvent()
      */
     void setValidateSpeakerCallback(validate_speaker_callback_t cb);
+    void setInsertMentionCallback(insert_mention_callback_t cb);
 
     EConversationType const getType() const { return mConvType; }
 
@@ -240,6 +242,10 @@ protected:
         static void confirmMuteAllCallback(const LLSD& notification, const LLSD& response);
 
         void handleAddToContactSet();
+
+        // mentions support
+        void copyURLToClipboard(const LLUUID& avatar_id);
+        void insertMentionAtCursor(const LLUUID& avatar_id);
     };
 
     /**
@@ -299,6 +305,8 @@ private:
 
     LLPointer<LLAvatarItemRecentSpeakerComparator> mSortByRecentSpeakers;
     validate_speaker_callback_t mValidateSpeakerCallback;
+
+    insert_mention_callback_t mInsertMentionCallback;
 
     EConversationType mConvType;
 };

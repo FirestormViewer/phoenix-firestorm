@@ -727,6 +727,9 @@ protected:
     void                            appendAndHighlightTextImpl(const std::string &new_text, S32 highlight_part, const LLStyle::Params& style_params, e_underline underline_link = e_underline::UNDERLINE_ALWAYS);
     S32 normalizeUri(std::string& uri);
 
+    // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+    virtual void                    insertMentionAtCursor(const std::string& str);
+
 protected:
     // virtual
     std::string _getSearchText() const override
