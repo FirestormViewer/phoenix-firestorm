@@ -1360,11 +1360,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         "Info.plist")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
-            # self.path("Info.plist", dst="Info.plist")
-
-            # copy additional libs in <bundle>/Contents/MacOS/
-            self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-
             # CEF framework goes inside Contents/Frameworks.
             # Remember where we parked this car.
             with self.prefix(src=relpkgdir, dst="Frameworks"):
@@ -1569,6 +1564,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     self.path2basename("../media_plugins/cef/" + self.args['configuration'],
                                        "media_plugin_cef.dylib")
 
+                    # copy LibVLC plugin
+                    self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
+                                       "media_plugin_libvlc.dylib")
+
                     # CEF framework and vlc libraries goes inside Contents/Frameworks.
                     with self.prefix(src=os.path.join(pkgdir, 'lib', 'release')):
                         self.path("Chromium Embedded Framework.framework")
@@ -1578,14 +1577,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path("DullahanHelper (Renderer).app")
                         self.path("DullahanHelper (Plugin).app")
 
-                    # copy LibVLC dynamic libraries
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
+                        # Copy libvlc
                         self.path( "libvlc*.dylib*" )
-
-                    # copy LibVLC plugins folder
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release', 'plugins' ), dst="lib"):
-                        self.path("*.dylib")
-                        self.path("plugins.dat")
+                        # copy LibVLC plugins folder
+                        with self.prefix(src='plugins', dst="plugins"):
+                            self.path( "*.dylib" )
+                            self.path( "plugins.dat" )
 
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no
