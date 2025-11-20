@@ -895,6 +895,15 @@
 		無法開啟並讀取上傳的聲音檔案：
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+		Apple Silicon 暫不支援模型上傳，但在未來的版本中將提供支援。
+
+解決方法：在 Finder 中按右鍵點擊 [APP_NAME] 應用程式，選擇
+"取得資訊"，然後勾選 "使用 Rosetta 打開"。
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		缺少物理庫，模型上傳器的部分功能可能無法使用或無法正常運作。
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		檔案似乎不是 RIFF WAVE 檔案：
 [FILE]
@@ -5277,6 +5286,10 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	<notification name="PreferenceChatPathChanged">
 		無法移動檔案。 已恢復前一個路徑。
 		<usetemplate ignoretext="無法移動檔案。 已恢復前一個路徑。" name="okignore" yestext="確定"/>
+	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		您的系統記憶體為[TOTAL_MEM]MB，可能不足以在高設定下運行檢視器，可能會導致問題。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續"/>
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		儲存預設物件許可權時出問題，原因：[REASON]。  請稍後再嘗試儲存預設許可權。

@@ -29,54 +29,18 @@ if (HAVOK)
       #target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensionsstub)
    else()
      target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions)
+     target_compile_definitions( llphysicsextensions_impl INTERFACE LL_HAVOK=1 )
    endif()
+   target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
 elseif (HAVOK_TPV)
    use_prebuilt_binary(llphysicsextensions_tpv)
-   target_link_libraries( llphysicsextensions_impl INTERFACE llphysicsextensions_tpv)
-   # <FS:ND> include paths for LLs version and ours are different.
-   target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
-   # </FS:ND>
-
-   # <FS:ND> havok lib get installed to packages/lib
-   link_directories( ${LIBS_PREBUILT_DIR}/lib )
-   # </FS:ND>
-
-else (HAVOK)
-   use_prebuilt_binary( ndPhysicsStub )
-
-# <FS:ND> Don't set this variable, there is no need to build any stub source if using ndPhysicsStub
-#   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
-# </FS:ND>
-
-   # <FS:TJ> Use find_library to make our lives easier
-   find_library(ND_HACDCONVEXDECOMPOSITION_LIBRARY
-      NAMES
-      nd_hacdConvexDecomposition.lib
-      libnd_hacdConvexDecomposition.a
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-   find_library(HACD_LIBRARY
-      NAMES
-      hacd.lib
-      libhacd.a
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-   find_library(ND_PATHING_LIBRARY
-      NAMES
-      nd_pathing.lib
-      libnd_pathing.a
-      libnd_Pathing.a
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-   target_link_libraries(llphysicsextensions_impl INTERFACE ${ND_HACDCONVEXDECOMPOSITION_LIBRARY} ${HACD_LIBRARY} ${ND_PATHING_LIBRARY})
-   # </FS:TJ>
-
-   # <FS:ND> include paths for LLs version and ours are different.
-   target_include_directories( llphysicsextensions_impl INTERFACE ${LIBS_PREBUILT_DIR}/include/ )
-   # </FS:ND>
-
-endif (HAVOK)
-
-# <FS:ND> include paths for LLs version and ours are different.
-#target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
-# </FS:ND>
+   if (NOT DARWIN)
+      if(WINDOWS)
+         target_link_libraries( llphysicsextensions_impl INTERFACE ${ARCH_PREBUILT_DIRS}/llphysicsextensions_tpv.lib)
+      elseif(LINUX)
+         target_link_libraries( llphysicsextensions_impl INTERFACE ${ARCH_PREBUILT_DIRS}/libllphysicsextensions_tpv.a)
+      endif()
+      target_compile_definitions( llphysicsextensions_impl INTERFACE LL_HAVOK=1 )
+   endif()
+   target_include_directories( llphysicsextensions_impl INTERFACE   ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
+endif ()

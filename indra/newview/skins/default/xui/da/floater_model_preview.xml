@@ -191,7 +191,7 @@
 				</combo_box>
 				<button label="Browse..." name="physics_browse"/>
 			</panel>
-			<panel name="physics analysis">
+			<panel name="physics analysis havok">
 				<slider label="Smooth:" name="Smooth"/>
 				<check_box label="Close Holes (slow)" name="Close Holes (Slow)"/>
 				<button label="Analyze" name="Decompose"/>

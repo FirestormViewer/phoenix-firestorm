@@ -110,8 +110,8 @@
 			<check_box name="FSBuildPrefs_EmbedItem" label="將物件嵌入新的元素" />
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="將物件拖到此處">將物件拖到此處</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">當前: [ITEM]</text>
-			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
-			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">Drop a script here.</fs_embedded_item_drop_target>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="使用自訂指令碼作為新增指令碼按鈕"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="拖放您庫存中的指令碼到此處。">拖放指令碼到此。</fs_embedded_item_drop_target>
 			<text name="custom_script_disp_rect_txt">當前: [SCRIPT]</text>
 			<button label="預設建立權限" name="fs_default_creation_permissions" />
 			<check_box label="高亮選定元素邊框" tool_tip="取消選擇將不顯示黃色/藍色邊框，當選擇大量元素時，可提高效能。" name="FSBuildPrefsRenderHighlight_toggle" />
@@ -144,7 +144,7 @@
 			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
 			<check_box label="在工具視窗中使用新的[APP_NAME]紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的[APP_NAME]工作流,並允許編輯BlinnPhong和PBR材質" name="FSUseNewTexturePanel" />
 		</panel>
-		<panel label="Script Editor" name="BuildTabScriptEditor">
+		<panel label="指令碼編輯器" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>
 			<combo_box name="FSScriptingFontName" tool_tip="LSL 指令碼編輯器中使用的字型名稱">
 				<combo_item name="Monospace" label="等寬" />

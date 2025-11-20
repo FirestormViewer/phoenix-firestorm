@@ -179,7 +179,7 @@
 					</combo_box>
 					<button label="Gözat..." name="physics_browse"/>
 				</panel>
-				<panel name="physics analysis">
+				<panel name="physics analysis havok">
 					<text name="method_label">
 						2. Adım: Çözümle
 					</text>

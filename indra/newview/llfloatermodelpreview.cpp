@@ -328,7 +328,7 @@ bool LLFloaterModelPreview::postBuild()
     // </Ansariel>
 
 // <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
-#ifndef HAVOK_TPV
+#if !LL_HAVOK
     LLSD args;
     args["FEATURE"] = getString("no_havok");
     LLNotificationsUtil::add("NoHavok", args);
@@ -1136,8 +1136,13 @@ void LLFloaterModelPreview::onPhysicsStageExecute(LLUICtrl* ctrl, void* data)
                 gMeshRepo.mDecompThread->submitRequest(request);
             }
         }
-
-        if (stage == "Decompose")
+        if (stage == "Analyze")
+        {
+            sInstance->setStatusMessage(sInstance->getString("decomposing"));
+            sInstance->childSetVisible("Analyze", false);
+            sInstance->childSetVisible("analyze_cancel", true);
+        }
+        else if (stage == "Decompose")
         {
             sInstance->setStatusMessage(sInstance->getString("decomposing"));
             sInstance->childSetVisible("Decompose", false);
@@ -1320,6 +1325,7 @@ void LLFloaterModelPreview::initDecompControls()
 
     childSetCommitCallback("simplify_cancel", onPhysicsStageCancel, NULL);
     childSetCommitCallback("decompose_cancel", onPhysicsStageCancel, NULL);
+    childSetCommitCallback("analyze_cancel", onPhysicsStageCancel, NULL);
 
     childSetCommitCallback("physics_lod_combo", onPhysicsUseLOD, NULL);
     childSetCommitCallback("physics_browse", onPhysicsBrowse, NULL);
@@ -2214,7 +2220,7 @@ void LLFloaterModelPreview::DecompRequest::completed()
 { //called from the main thread
     if (mContinue)
     {
-        mModel->setConvexHullDecomposition(mHull);
+        mModel->setConvexHullDecomposition(mHull, mHullMesh);
 
         if (sInstance)
         {

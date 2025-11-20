@@ -139,7 +139,7 @@
           </combo_box>
           <button label="Обзор..." name="physics_browse"/>
         </panel>
-        <panel name="physics analysis">
+        <panel name="physics analysis havok">
           <text name="method_label">2 этап. Анализ</text>
           <text name="analysis_method_label">Метод:</text>
           <text name="quality_label">Качество:</text>

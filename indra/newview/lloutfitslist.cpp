@@ -1072,6 +1072,15 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
         return;
     }
     bool wasNull = mRefreshListState.CategoryUUID.isNull();
+
+    // <FS:PP> FIRE-36116 (saving a second outfit freezes Firestorm indefinitely)
+    static LLCachedControl<bool> fsExperimentalOutfitsReturn(gSavedSettings, "FSExperimentalOutfitsReturn");
+    if (fsExperimentalOutfitsReturn && !wasNull && mRefreshListState.CategoryUUID == category_id)
+    {
+        return;
+    }
+    // </FS:PP>
+
     mRefreshListState.CategoryUUID.setNull();
 
     LLInventoryModel::cat_array_t cat_array;

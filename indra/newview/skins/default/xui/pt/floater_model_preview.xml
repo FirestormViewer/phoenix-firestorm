@@ -179,7 +179,7 @@
 					</combo_box>
 					<button label="Procurar..." name="physics_browse"/>
 				</panel>
-				<panel name="physics analysis">
+				<panel name="physics analysis havok">
 					<text name="method_label">
 						Etapa 2: Analisar
 					</text>

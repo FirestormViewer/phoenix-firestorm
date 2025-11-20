@@ -47,13 +47,14 @@
 	</string>
 	<tab_container name="tabs">
 		<panel label="附近" name="nearby_panel">
-			<!--<panel label="bottom_panel" name="nearby_buttons_panel">
+			<panel label="bottom_panel" name="nearby_buttons_panel">
 				<filter_editor label="人員過濾器" name="nearby_filter_input"/>
 				<button name="gear_btn" tool_tip="對選擇的人採取操作"/>
 				<menu_button name="nearby_view_btn" tool_tip="檢查/排序的選項"/>
 				<button name="add_friend_btn" tool_tip="向某位居民發出交友邀請"/>
 				<dnd_button name="nearby_del_btn" tool_tip="將選擇的人從朋友名單移除"/>
-			</panel>-->
+			</panel>
+			<slider label="範圍:" name="near_me_range" tool_tip="顯示附近人員的範圍" />
 		</panel>
 		<panel label="朋友" name="friends_panel">
 			<panel label="bottom_panel" name="friends_buttons_panel">

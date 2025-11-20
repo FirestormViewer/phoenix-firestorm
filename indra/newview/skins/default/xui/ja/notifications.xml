@@ -869,6 +869,15 @@ L$が不足しているので、このグループに参加することができ
 		読み込みのためにアップロードされたサウンドファイルを開けません：
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+		Apple Siliconでは、まだモデルのアップロードは利用できませんが、今後のリリースでサポートされる予定です。
+
+回避策：Finderで[APP_NAME]アプリを右クリックし、
+「情報を見る」を選択して、「Rosettaを使用して開く」にチェックを入れます。
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		物理ライブラリが存在しないため、モデルアップローダの一部の機能が動作しないか、正しく動作しない可能性があります。
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		RIFF WAVEファイルとして認識されません：
 [FILE]
@@ -5143,6 +5152,9 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 	<notification name="PreferenceChatPathChanged">
 		ファイルを移動できません。以前のパスに復帰させました。
 		<usetemplate ignoretext="ファイルを移動できないとき" name="okignore" yestext="ＯＫ"/>
+	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		お使いのシステムには [TOTAL_MEM]㎆のメモリが搭載されていますが、より高い設定でビューアを実行するにはメモリが足りず、問題が発生する可能性があります。
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		デフォルトのオブジェクト権限を保存するときに問題が発生しました：[REASON]

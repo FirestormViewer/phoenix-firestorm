@@ -335,7 +335,7 @@
 					-->
 				</panel>
 				<!-- ==== STEP 2: Analyze ==== -->
-				<panel name="physics analysis">
+				<panel name="physics analysis havok">
 					<text name="method_label">
 						ステップ２：分析
 					</text>
