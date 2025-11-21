@@ -12,7 +12,8 @@
 	<menu_item_call label="Freund verfolgen" name="track_agent"/>
 	<menu_item_call label="Freund entfernen..." name="remove_friend"/>
 	<menu_item_call label="Name in Zwischenablage kopieren" name="url_copy_label"/>
-	<menu_item_call label="SLurl in die Zwischenablage kopieren" name="url_copy"/>
+	<menu_item_call label="Url in die Zwischenablage kopieren" name="url_copy"/>
+	<menu_item_call label="Erwähnung-Url in Zwischenablage kopieren" name="mention_copy_label"/>
 	<menu name="options" label="Optionen...">
 		<menu_item_check label="Benutzername anzeigen" name="show_username"/>
 		<menu_item_check label="Anzeigename anzeigen" name="show_displayname"/>
