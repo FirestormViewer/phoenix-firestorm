@@ -1129,7 +1129,7 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
 
     // <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
     S32 currentOutfitsAmount = (S32)mRefreshListState.Added.size();
-    constexpr S32 maxSuggestedOutfits = 200;
+    constexpr S32 maxSuggestedOutfits = 1000;
     if (currentOutfitsAmount > maxSuggestedOutfits)
     {
         LL_WARNS() << "Large amount of outfits found: " << currentOutfitsAmount << " this may cause hangs and disconnects" << LL_ENDL;
