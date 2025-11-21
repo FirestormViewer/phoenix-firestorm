@@ -742,7 +742,10 @@ std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAva
     }
     else
     {
-        return ( (fRlvCanShowName) ? av_name.getCompleteName(false, force_use_complete_name) : RlvStrings::getAnonym(av_name) );
+        // <FS:Zi> fix People / Friends showing [ user.name ] instead of (user.name)
+        // return ( (fRlvCanShowName) ? av_name.getCompleteName(false, force_use_complete_name) : RlvStrings::getAnonym(av_name) );
+        return ( (fRlvCanShowName) ? av_name.getCompleteName(true, force_use_complete_name) : RlvStrings::getAnonym(av_name) );
+        // </FS:Zi>
     }
 }
 // </FS:Ansariel>
