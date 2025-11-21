@@ -337,7 +337,7 @@
 				<!-- ==== STEP 2: Analyze ==== -->
 				<panel name="physics analysis havok">
 					<text name="method_label">
-						ステップ２：分析
+						ステップ２：殻への変換（オプション）
 					</text>
 					<text name="analysis_method_label">
 						方法：
@@ -351,6 +351,28 @@
 					<check_box label="穴を閉じる" name="Close Holes (Slow)"/>
 					<button label="分析" name="Decompose"/>
 					<button label="キャンセル" name="decompose_cancel"/>
+				</panel>
+				<panel name="physics analysis vhacd">
+					<text name="method_label">
+						ステップ２：殻への変換（オプション）
+					</text>
+					<text name="fill_mode_label">
+						埋め立てモード：
+					</text>
+					<text name="resolution_label">
+						解像度：
+					</text>
+					<text name="hulls_per_mesh_label">
+						メッシュあたりの殻：
+					</text>
+					<text name="vertices_per_hull_label">
+						頂点あたりの殻：
+					</text>
+					<text name="tolerance_label">
+						エラーしきい値：
+					</text>
+					<button label="分析" name="Analyze"/>
+					<button label="キャンセル" name="analyze_cancel"/>
 				</panel>
 				<!-- ==== STEP 3: Simplify ==== -->
 				<panel name="physics simplification">
@@ -539,14 +561,14 @@
 インスタンス数：
 テクスチャ数：
 モデル：
-</text>
+				</text>
 				<text name="price_breakdown">
 					[STREAMING]
 [PHYSICS]箇所
 [INSTANCES]個
 [TEXTURES]枚
 [MODEL]個
-</text>
+				</text>
 			</panel>
 			<!--
 			Streaming breakdown numbers are available but not fully understood

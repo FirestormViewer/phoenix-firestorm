@@ -13,6 +13,7 @@
 	<menu_item_call label="Usuń ze znajomych" name="remove_friend" />
 	<menu_item_call label="Kopiuj nazwę do schowka" name="url_copy_label" />
 	<menu_item_call label="Kopiuj Url do schowka" name="url_copy" />
+	<menu_item_call label="Kopiuj URI dla wzmianki do schowka" name="mention_copy_label" />
 	<menu name="options" label="Opcje...">
 		<menu_item_check label="Pokaż kolumnę: Nazwa konta" name="show_username" />
 		<menu_item_check label="Pokaż kolumnę: Wyświetlane Imię" name="show_displayname" />

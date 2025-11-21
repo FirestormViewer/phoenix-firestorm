@@ -17,7 +17,8 @@
 	<menu_item_call label="分享" name="Share" />
 	<menu_item_call label="支付" name="Pay" />
 	<menu_item_call label="複製名稱" name="copy name" />
-	<menu_item_call label="複製 URL" name="copy url" />
+	<menu_item_call label="複製URL" name="copy url" />
+	<menu_item_call label="複製提及URI到剪貼簿" name="mention_copy_label" />
 	<menu_item_call label="違規檢舉" name="Report Abuse" />
 	<menu_item_check label="封鎖" name="Block Unblock" />
 	<menu_item_check label="封鎖文字" name="Mute Text" />
@@ -28,4 +29,5 @@
 		<menu_item_call label="取消此參與者的靜音" name="ModerateVoiceUnMuteSelected" />
 	</context_menu>
 	<menu_item_call label="封鎖成員" name="BanMember" />
+	<menu_item_call label="在聊天中提及用戶" name="mention_in_chat" />
 </toggleable_menu>
