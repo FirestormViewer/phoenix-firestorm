@@ -10656,7 +10656,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAvatarCloth</key>
     <map>
       <key>Comment</key>
-      <string>DEPRECATED - only false supported - Controls if avatars use wavy cloth</string>
+      <string>Controls if system avatar clothes use wavy cloth</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

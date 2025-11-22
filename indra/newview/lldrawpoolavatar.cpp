@@ -903,7 +903,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
         return;
     }
 
-    if ((sShaderLevel >= SHADER_LEVEL_CLOTH))
+    if (LLPipeline::RenderAvatarCloth)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("shader level > CLOTH"); // <FS:Beq/> Tracy markup
         LLMatrix4 rot_mat;

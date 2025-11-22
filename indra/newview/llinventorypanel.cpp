@@ -695,7 +695,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
     // This could be anything.  For now, just refresh the item.
     if (mask & LLInventoryObserver::INTERNAL)
     {
-        if (view_item)
+        if (view_item && view_item->getViewModelItem())
         {
             view_item->refresh();
         }
@@ -714,7 +714,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
 
     if (mask & LLInventoryObserver::UPDATE_FAVORITE)
     {
-        if (view_item)
+        if (view_item && view_item->getViewModelItem())
         {
             view_item->refresh();
             LLFolderViewFolder* parent = view_item->getParentFolder();

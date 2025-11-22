@@ -755,14 +755,12 @@ LLAppViewer::LLAppViewer()
     // that touches files should really go through the lldir API
 
     // <FS:ND> Init our custom directories, not from SecondLife
-
     // gDirUtilp->initAppDirs("SecondLife");
 #if ADDRESS_SIZE == 64
-    gDirUtilp->initAppDirs( APP_NAME + "_x64" );
+    gDirUtilp->initAppDirs(APP_NAME + "_x64");
 #else
     gDirUtilp->initAppDirs(APP_NAME);
 #endif
-
     // </FS:ND>
 
     //
@@ -4378,13 +4376,18 @@ void LLAppViewer::writeSystemInfo()
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
-    // <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
-// #if LL_WINDOWS && !LL_BUGSPLAT
-//  gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
-// #else
-//     //Not ideal but sufficient for good reporting.
-//     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
-// #endif
+    // <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log)
+//#if LL_DARWIN
+//    // crash processing in CrashMetadataSingleton reads SLLog
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.crash");
+//#elif LL_WINDOWS && !LL_BUGSPLAT
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
+//#else
+//    // Far from ideal, especially when multiple instances get involved.
+//    // Note that attachmentsForBugSplat expects .old extendion.
+//    // Todo: improve.
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
+//#endif
     // </FS:ND>
 
     gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::instance().getChannel();
@@ -4817,6 +4820,24 @@ void LLAppViewer::processMarkerFiles()
         }
         LLAPRFile::remove(error_marker_file);
     }
+
+    // <FS:Ansariel> Looks like we are not using this at all!?
+//#if LL_DARWIN
+//    if (!mSecondInstance && gLastExecEvent != LAST_EXEC_NORMAL)
+//    {
+//        // While windows reports crashes immediately, mac reports next run and
+//        // may take a while to trigger crash report so it has a special file.
+//        // Remove .crash file if exists
+//        std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+//            "SecondLife.old");
+//        std::string crash_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+//            "SecondLife.crash");
+//        LLFile::remove(crash_log_file);
+//        // Rename ".old" log file to ".crash"
+//        LLFile::rename(old_log_file, crash_log_file);
+//    }
+//#endif
+    // </FS:Ansariel>
 }
 
 void LLAppViewer::removeMarkerFiles()
@@ -5206,6 +5227,8 @@ bool LLAppViewer::initCache()
         LL_WARNS("AppCache") << "Unable to set cache location" << LL_ENDL;
         gSavedSettings.setString("CacheLocation", "");
         gSavedSettings.setString("CacheLocationTopFolder", "");
+        gSavedSettings.setString("NewCacheLocation", "");
+        gSavedSettings.setString("NewCacheLocationTopFolder", "");
     }
 
     // <FS:Ansariel> Sound cache

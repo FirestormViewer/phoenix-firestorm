@@ -737,6 +737,10 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     {
         mAvatarNameCacheConnection.disconnect();
     }
+    if (mMenuNameCacheConnection.connected())
+    {
+        mMenuNameCacheConnection.disconnect();
+    }
 
     // <FS:Ansariel> RLVa support
     if (mRlvBehaviorCallbackConnection.connected())
@@ -2045,7 +2049,7 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     }
     else if (item_name == "edit_display_name")
     {
-        LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCacheSetName, this, _1, _2));
+        mMenuNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCacheSetName, this, _1, _2));
         LLFirstUse::setDisplayName(false);
     }
     else if (item_name == "edit_partner")

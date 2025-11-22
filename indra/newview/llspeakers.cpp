@@ -82,7 +82,7 @@ void LLSpeaker::lookupName()
         if(!gCacheName)
             return;
         // </FS:Zi>
-        LLAvatarNameCache::get(mID, boost::bind(&LLSpeaker::onNameCache, this, _1, _2)); // todo: can be group???
+        mAvatarNameCacheConnection = LLAvatarNameCache::get(mID, boost::bind(&LLSpeaker::onNameCache, this, _1, _2)); // todo: can be group???
     }
 }
 

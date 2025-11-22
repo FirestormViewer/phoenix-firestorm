@@ -237,6 +237,7 @@ S32 LLPipeline::RenderBufferVisualization;
 bool LLPipeline::RenderMirrors;
 S32 LLPipeline::RenderHeroProbeUpdateRate;
 S32 LLPipeline::RenderHeroProbeConservativeUpdateMultiplier;
+bool LLPipeline::RenderAvatarCloth;
 LLTrace::EventStatHandle<S64> LLPipeline::sStatBatchSize("renderbatchsize");
 
 // const U32 LLPipeline::MAX_PREVIEW_WIDTH = 512;
@@ -658,6 +659,7 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderMirrors");
     connectRefreshCachedSettingsSafe("RenderHeroProbeUpdateRate");
     connectRefreshCachedSettingsSafe("RenderHeroProbeConservativeUpdateMultiplier");
+    connectRefreshCachedSettingsSafe("RenderAvatarCloth");
     connectRefreshCachedSettingsSafe("FSRenderVignette");   // <FS:CR> Import Vignette from Exodus
     // <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
     connectRefreshCachedSettingsSafe("RenderAttachedLights");
@@ -1274,6 +1276,8 @@ void LLPipeline::refreshCachedSettings()
     RenderMirrors = gSavedSettings.getBOOL("RenderMirrors");
     RenderHeroProbeUpdateRate = gSavedSettings.getS32("RenderHeroProbeUpdateRate");
     RenderHeroProbeConservativeUpdateMultiplier = gSavedSettings.getS32("RenderHeroProbeConservativeUpdateMultiplier");
+    RenderAvatarCloth = gSavedSettings.getBOOL("RenderAvatarCloth");
+
     sReflectionProbesEnabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionsEnabled") && gSavedSettings.getBOOL("RenderReflectionsEnabled");
     // <FS:Beq> [FIRE-35070] Instead of using the above we'll add a new static level variable to save some lookups. Making the above "work" with ProbeLevel will break everything.
     sReflectionProbeLevel = gSavedSettings.getS32("RenderReflectionProbeLevel");
@@ -3100,7 +3104,7 @@ void LLPipeline::markMoved(LLDrawable *drawablep, bool damped_motion)
 
 void LLPipeline::markShift(LLDrawable *drawablep)
 {
-    if (!drawablep || drawablep->isDead())
+    if (!drawablep || drawablep->isDead() || !drawablep->getVObj())
     {
         return;
     }
@@ -3134,7 +3138,7 @@ void LLPipeline::shiftObjects(const LLVector3 &offset)
             iter != mShiftList.end(); iter++)
     {
         LLDrawable *drawablep = *iter;
-        if (drawablep->isDead())
+        if (drawablep->isDead() || !drawablep->getVObj())
         {
             continue;
         }

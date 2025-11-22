@@ -289,6 +289,7 @@ private:
     LLUUID              mImageId;
 
     boost::signals2::connection mAvatarNameCacheConnection;
+    boost::signals2::connection mMenuNameCacheConnection;
 
     // <FS:Ansariel> RLVa support
     boost::signals2::connection mRlvBehaviorCallbackConnection;

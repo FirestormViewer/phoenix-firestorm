@@ -4733,8 +4733,7 @@
             </menu_item_check>
             <menu_item_check
              label="Object-Object Occlusion"
-             name="Object-Object Occlusion"
-             shortcut="control|shift|O">
+             name="Object-Object Occlusion">
                 <menu_item_check.on_check
                  function="CheckControl"
                  parameter="UseOcclusion" />
@@ -4855,6 +4854,16 @@
                 <menu_item_check.on_click
                  function="Advanced.HandleAttachedLightParticles"
                  parameter="RenderAttachedParticles" />
+            </menu_item_check>
+            <menu_item_check
+              label="Render Animated Avatar System Cloth"
+             name="Render Avatar Cloth">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="RenderAvatarCloth" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="RenderAvatarCloth" />
             </menu_item_check>
             <menu_item_check
              label="Reduce Draw Distance when VRAM is full"
