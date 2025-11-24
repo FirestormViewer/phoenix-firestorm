@@ -6676,4 +6676,19 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="ImportSuccessful">
 		Pomyślnie przetworzono [COUNT] rekordów.
 	</string>
+	<string name="Flood">
+		Zalewanie
+	</string>
+	<string name="Surface Only">
+		Tylko powierzchnia
+	</string>
+	<string name="Raycast">
+		Rzutowanie
+	</string>
+	<string name="Very High">
+		Bardzo wysoko
+	</string>
+	<string name="Maximum">
+		Maksymalnie
+	</string>
 </strings>

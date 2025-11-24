@@ -3332,4 +3332,12 @@ Your current position: [AVATAR_POS]
   <string name="ImportListTooLarge">Too many entries. The CSV file has [COUNT] entries and there are [MAX] slots available.</string>
   <string name="ImportSuccessful">Successfully processed [COUNT] entries.</string>
 
+  <!-- VHACD enum strings -->
+  <string name="Flood">Flood</string>
+  <string name="Surface Only">Surface Only</string>
+  <string name="Raycast">Raycast</string>
+  <string name="Very High">Very High</string>
+  <string name="Ultra">Ultra</string>
+  <string name="Maximum">Maximum</string>
+
 </strings>
