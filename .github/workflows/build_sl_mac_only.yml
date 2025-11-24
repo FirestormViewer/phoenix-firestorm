@@ -16,8 +16,6 @@ on:
       - "*alpha"
       - "*nightly"
       - "*preview"
-  schedule:
-    - cron: '00 03 * * *' # Run every day at 3am UTC
 env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
   EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
