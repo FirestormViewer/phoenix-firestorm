@@ -14130,6 +14130,19 @@ the region &quot;[REGION]&quot;?
   </notification>
   <notification
    icon="alertmodal.tga"
+   name="ConfirmGlobalOnlineStatusToggle"
+   type="alertmodal">
+Are you sure you want to change your online status visibility for all friends at once?
+
+Due to server load, this mass change can take a while to become effective and may cause temporary issues for some friends seeing your online status.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
    name="GlobalOnlineStatusToggle"
    type="alertmodal">
 Due to server load, mass toggling online status visibility can take a while to become effective. Please be patient.
