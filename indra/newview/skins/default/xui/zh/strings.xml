@@ -7568,4 +7568,22 @@ SecondLife.com網站的「支援」部分
 	<string name="ImportSuccessful">
 		[COUNT]個項目已成功處理。
 	</string>
+	<string name="Flood">
+		泛洪填充
+	</string>
+	<string name="Surface Only">
+		僅表面
+	</string>
+	<string name="Raycast">
+		射線投射
+	</string>
+	<string name="Very High">
+		非常高
+	</string>
+	<string name="Ultra">
+		極致
+	</string>
+	<string name="Maximum">
+		最大值
+	</string>
 </strings>

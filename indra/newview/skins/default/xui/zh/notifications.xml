@@ -5534,6 +5534,12 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 		無法建立新的選擇，因為已達到選擇的最大數量。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="ConfirmGlobalOnlineStatusToggle">
+		是否確定要一次性修改所有好友的在線狀態可見性？
+
+由於伺服器負載限制，此批次變更可能需要較長時間才能生效，部分好友可能會暫時無法正常查看您的在線狀態。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		根據伺服器負載情況，切換在線狀態的可見性可能需要一段時間才能生效。
 		<usetemplate ignoretext="提醒我切換在線狀態的可見性可能需要一些時間。" name="okignore" yestext="確定"/>
