@@ -5538,7 +5538,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]).
+		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]). TO JEST TYLKO SUGESTIA - jeśli twój komputer działa prawidłowo, możesz ją bezpiecznie zignorować.
 		<usetemplate ignoretext="Ostrzeżenie o liczbie strojów" name="okignore" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">

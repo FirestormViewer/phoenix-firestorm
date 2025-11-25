@@ -14812,7 +14812,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
    name="FSLargeOutfitsWarningInThisSession"
    type="alertmodal">
     <unique/>
-    A large number of outfits were detected: [AMOUNT]. This may cause viewer hangs or disconnects. Consider reducing the number of outfits for better performance (below [MAX]).
+    A large number of outfits were detected: [AMOUNT]. This may cause viewer hangs or disconnects. Consider reducing the number of outfits for better performance (below [MAX]). THIS IS ONLY A SUGGESTION - if your computer is functioning normally, you can safely ignore it.
     <usetemplate
      ignoretext="Outfit count warning"
      name="okignore"
