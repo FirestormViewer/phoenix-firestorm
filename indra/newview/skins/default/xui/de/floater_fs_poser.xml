@@ -186,7 +186,7 @@
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Beweg." name="positionRotation_panel">
-						<panel name="title">
+						<panel name="move_tab_panel">
 							<text name="av_position_updown_label">
 								Hoch/Runter:
 							</text>
@@ -245,7 +245,7 @@
 							<scroll_list.columns label="Auswahl..." name="name"/>
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="Liste der Avatar und Animeshe aktualisieren"/>
-						<button label="Posieren starten" label_selected="Posieren stoppen" tool_tip="Posieren des ausgewählten Avatar oder Animesh starten sofern berechtigt" name="start_stop_posing_button"/>
+						<button label="Posieren starten" label_selected="Posieren stoppen" tool_tip="Posieren des ausgewählten Avatar oder Animesh starten sofern berechtigt." name="start_stop_posing_button"/>
 						<button label="Auf T-Pose setzen" tool_tip="Klicken, um den ausgewählten Avatar auf eine T-Pose zu setzen" name="set_t_pose_button"/>
 					</panel>
 					<panel title="Einst." name="settings_panel">
@@ -306,6 +306,9 @@
 					<button name="toggle_LockWorldRotation" tool_tip="Rotation In-World für die ausgewählten Glieder sperren. Gesperrte Glieder behalten dieselbe Rotation, wenn ihre Eltern-Glieder bewegt werden. Beispiel: Wenn die Augen gesperrt sind und der Kopf gedreht wird, schauen die Augen weiterhin (fast) in dieselbe Richtung."/>
 					<button label="Spieg." name="button_toggleMirrorRotation" tool_tip="Änderungen an gegenüberliegendem Gelenk spiegeln."/>
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Gegenüberliegendes Gelenk gleichermaßen anpassen."/>
+					<button label="W" name="poser_world_frame_toggle" tool_tip="Rotationsänderung relativ zur Welt durchführen"/>
+					<button label="A" name="poser_avatar_frame_toggle" tool_tip="Rotationsänderung relativ zum Avatar durchführen"/>
+					<button label="B" name="poser_screen_frame_toggle" tool_tip="Rotationsänderung relativ zum Bildschirm durchführen"/>
 					<button label="Kopie L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Klicken, um Änderung von linker Seite zur rechten Seite zu kopieren." />
 					<button label="Kopie P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Klicken, um Änderung von rechter Seite zur linken Seite zu kopieren." />
 				</panel>
