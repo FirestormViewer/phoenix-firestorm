@@ -8177,6 +8177,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPoserShowBoneHighlights</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to highlight a bone with the debug beacon on selection from the UI.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>FSPoserStopPosingWhenClosed</key>
   <map>
     <key>Comment</key>

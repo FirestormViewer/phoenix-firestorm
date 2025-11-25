@@ -47,6 +47,7 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
 
     mJointName         = joint->getName();
     mIsCollisionVolume = isCollisionVolume;
+    mJointNumber       = joint->getJointNum();
 
     mCurrentState   = FSJointState(joint);
 }
@@ -64,6 +65,8 @@ void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
 
     if (zeroBase)
         zeroBaseRotation(true);
+    else
+        mCurrentState.mUserSpecifiedBaseZero = false;
 
     mCurrentState.mRotation.set(rot);
     mCurrentState.mLastChangeWasRotational = true;
@@ -98,6 +101,8 @@ void FSJointPose::resetJoint()
 
 void FSJointPose::addStateToUndo(FSJointState stateToAddToUndo)
 {
+    mModifiedThisSession = true;
+
     auto timeIntervalSinceLastChange = std::chrono::system_clock::now() - mTimeLastUpdatedCurrentState;
     mTimeLastUpdatedCurrentState     = std::chrono::system_clock::now();
 
@@ -151,27 +156,28 @@ FSJointPose::FSJointState FSJointPose::redoLastStateChange(FSJointState thingToS
 
 void FSJointPose::recaptureJoint()
 {
-    if (mIsCollisionVolume)
-        return;
-
     LLJoint* joint = mJointState->getJoint();
     if (!joint)
         return;
 
     addStateToUndo(FSJointState(mCurrentState));
+
+    if (mIsCollisionVolume)
+    {
+        mCurrentState.mPosition.set(LLVector3::zero);
+        mCurrentState.mScale.set(LLVector3::zero);
+    }
+
     mCurrentState = FSJointState(joint);
     mCurrentState.mLastChangeWasRotational = true;
 }
 
-LLQuaternion FSJointPose::recaptureJointAsDelta(bool zeroBase)
+LLQuaternion FSJointPose::updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
 {
-    LLJoint* joint = mJointState->getJoint();
-    if (!joint)
-        return LLQuaternion::DEFAULT;
-
     addStateToUndo(FSJointState(mCurrentState));
     mCurrentState.mLastChangeWasRotational = true;
-    return mCurrentState.updateFromJoint(joint, zeroBase);
+
+    return mCurrentState.updateFromJointProperties(zeroBase, rotation, position, scale);
 }
 
 void FSJointPose::setBaseRotation(LLQuaternion rotation, LLJoint::JointPriority priority)
@@ -247,6 +253,7 @@ void FSJointPose::reflectRotation()
     if (mIsCollisionVolume)
         return;
 
+    mModifiedThisSession = true;
     mCurrentState.reflectRotation();
 }
 

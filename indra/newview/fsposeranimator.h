@@ -30,6 +30,7 @@
 #include "fsposingmotion.h"
 #include "fsposestate.h"
 #include "llvoavatar.h"
+#include "fsmaniprotatejoint.h"
 
 /// <summary>
 /// Describes how we will cluster the joints/bones/thingos.
@@ -396,6 +397,20 @@ public:
     const FSPoserJoint* getPoserJointByName(const std::string& jointName) const;
 
     /// <summary>
+    /// Get a PoserJoint case-insensitive-matching the supplied name.
+    /// </summary>
+    /// <param name="jointNumber">The name of the joint to match.</param>
+    /// <returns>The matching joint if found, otherwise nullptr</returns>
+    const FSPoserJoint* getPoserJointByNumber(LLVOAvatar* avatar, const int jointNumber) const;
+
+    /// <summary>
+    /// Get a PoserJoint by its LLJoint number.
+    /// </summary>
+    /// <param name="jointNumber">The name of the joint to match.</param>
+    /// <returns>The matching joint if found, otherwise nullptr</returns>
+    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, int &jointNumber);
+
+    /// <summary>
     /// Tries to start posing the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar to begin posing.</param>
@@ -422,6 +437,14 @@ public:
     /// <param name="joint">The joint being queried for.</param>
     /// <returns>True if this is joint is being posed for the supplied avatar, otherwise false.</returns>
     bool isPosingAvatarJoint(LLVOAvatar* avatar, const FSPoserJoint& joint);
+
+    /// <summary>
+    /// Determines whether the supplied PoserJoint for the supplied avatar has been modified this session, even if all change has been reverted.
+    /// </summary>
+    /// <param name="avatar">The avatar having the joint to which we refer.</param>
+    /// <param name="joint">The joint being queried for.</param>
+    /// <returns>True if this is joint has been changed while posing even if the change has been reverted or undone, otherwise false.</returns>
+    bool hasJointBeenChanged(LLVOAvatar* avatar, const FSPoserJoint& joint);
 
     /// <summary>
     /// Sets whether the supplied PoserJoint for the supplied avatar should be posed.
@@ -479,8 +502,10 @@ public:
     /// <param name="avatar">The avatar whose joint is to be set.</param>
     /// <param name="joint">The joint to set.</param>
     /// <param name="position">The position to set the joint to.</param>
+    /// <param name="frame">The frame to translate the position to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_BoneDeflectionStyles style);
+    void setJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& position, E_PoserReferenceFrame frame,
+                          E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Gets the rotation of a joint for the supplied avatar.
@@ -507,6 +532,15 @@ public:
     LLVector3 getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const;
 
     /// <summary>
+    /// Gets the rotation suitable for the Manip gimbal for the supplied avatar and joint.
+    /// </summary>
+    /// <param name="avatar">The avatar having the Manip gimbal placed upon it.</param>
+    /// <param name="joint">The joint on the avatar where the manip should be placed.</param>
+    /// <param name="frame">The frame of reference for the gimbal.</param>
+    /// <returns>The rotation to set the gimbal to.</returns>
+    LLQuaternion getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserReferenceFrame frame);
+
+    /// <summary>
     /// Sets the rotation of a joint for the supplied avatar.
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be set.</param>
@@ -518,8 +552,9 @@ public:
     /// <param name="negation">The style of negation to apply to the set.</param>
     /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     /// <param name="rotationStyle">Whether to apply the supplied rotation as a delta to the supplied joint.</param>
-    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation, const LLVector3& deltaRotation, E_BoneDeflectionStyles style,
-                          E_BoneAxisTranslation translation, S32 negation, bool resetBaseRotationToZero, E_RotationStyle rotationStyle);
+    void setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& absRotation, const LLVector3& deltaRotation,
+                          E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, E_BoneAxisTranslation translation, S32 negation,
+                          bool resetBaseRotationToZero, E_RotationStyle rotationStyle);
 
     /// <summary>
     /// Gets the scale of a joint for the supplied avatar.
@@ -535,8 +570,10 @@ public:
     /// <param name="avatar">The avatar whose joint is to be set.</param>
     /// <param name="joint">The joint to set.</param>
     /// <param name="scale">The scale to set the joint to.</param>
+    /// <param name="frame">The frame to translate the position to.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_BoneDeflectionStyles style);
+    void setJointScale(LLVOAvatar* avatar, const FSPoserJoint* joint, const LLVector3& scale, E_PoserReferenceFrame frame,
+                       E_BoneDeflectionStyles style);
 
     /// <summary>
     /// Reflects the joint with its opposite if it has one, or just mirror the rotation of itself.
@@ -564,9 +601,7 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose joint is to be recaptured.</param>
     /// <param name="joint">The joint to recapture.</param>
-    /// <param name="translation">The axial translation form the supplied joint.</param>
-    /// <param name="negation">The style of negation to apply to the recapture.</param>
-    void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint, E_BoneAxisTranslation translation, S32 negation);
+    void recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joint);
 
     /// <summary>
     /// Recaptures any change in joint state.
@@ -575,7 +610,11 @@ public:
     /// <param name="joint">The joint to recapture.</param>
     /// <param name="resetBaseRotationToZero">Whether to set the base rotation to zero on setting the rotation.</param>
     /// <param name="style">Any ancilliary action to be taken with the change to be made.</param>
-    void recaptureJointAsDelta(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style);
+    /// <param name="rotation">The rotation of the supplied joint.</param>
+    /// <param name="position">The position of the supplied joint.</param>
+    /// <param name="scale">The scale of the supplied joint.</param>
+    void updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style,
+                              E_PoserReferenceFrame frame, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -711,6 +750,7 @@ public:
     /// Loads the posing state (base rotations) to the supplied avatars posing-motion, from the supplied record.
     /// </summary>
     /// <param name="avatar">That avatar whose posing state should be loaded.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when reading a local file.</param>
     /// <param name="pose">The record to read the posing state from.</param>
     /// <returns>True if the pose loaded successfully, otherwise false.</returns>
     /// <remarks>
@@ -718,14 +758,22 @@ public:
     /// it can take several frames for the animation to be loaded and ready.
     /// It may therefore be necessary to attempt this several times.
     /// </remarks>
-    bool loadPosingState(LLVOAvatar* avatar, LLSD pose);
+    bool loadPosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose);
+
+    /// <summary>
+    /// Applies the posing states to the posing motion for the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">That avatar whose posing state should be loaded.</param>
+    /// <returns>True if the state applied successfully, otherwise false.</returns>
+    bool applyStatesToPosingMotion(LLVOAvatar* avatar);
 
     /// <summary>
     /// Adds the posing state for the supplied avatar to the supplied record.
     /// </summary>
     /// <param name="avatar">That avatar whose posing state should be written.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership while saving.</param>
     /// <param name="saveRecord">The record to write the posing state to.</param>
-    void savePosingState(LLVOAvatar* avatar, LLSD* saveRecord);
+    void savePosingState(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord);
 
     /// <summary>
     /// Purges and recaptures the pose state for the supplied avatar.
@@ -733,17 +781,6 @@ public:
     /// <param name="avatar">The avatar whose pose state is to be recapture.</param>
     /// <param name="jointsRecaptured">The joints which were recaptured.</param>
     void updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserAnimator::FSPoserJoint*> jointsRecaptured);
-
-    /// <summary>
-    /// Add a new posing state, or updates the matching posing state with the supplied data.
-    /// </summary>
-    /// <param name="avatar">The avatar the posing state is intended for.</param>
-    /// <param name="animId">The ID of the animation.</param>
-    /// <param name="updateTime">The frame-time of the animation.</param>
-    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
-    /// <param name="captureOrder">The capture order.</param>
-    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
-    bool addOrUpdatePosingState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
 
     /// <summary>
     /// Traverses the joints and applies reversals to the base rotations if needed.
@@ -755,14 +792,19 @@ public:
     void applyJointMirrorToBaseRotations(FSPosingMotion* posingMotion);
 
   private:
-    /// <summary>
-    /// Translates a rotation vector from the UI to a Quaternion for the bone.
-    /// This also performs the axis-swapping the UI needs for up/down/left/right to make sense.
-    /// </summary>
-    /// <param name="translation">The axis translation to perform.</param>
-    /// <param name="rotation">The rotation to transform to quaternion.</param>
-    /// <returns>The rotation quaternion.</returns>
-    LLQuaternion translateRotationToQuaternion(E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
+      /// <summary>
+      /// Translates the supplied rotation vector from UI to a Quaternion for the bone.
+      /// Also performs the axis-swapping and other transformations for up/down/left/right to make sense.
+      /// </summary>
+      /// <param name="avatar">The avatar whose joint is being manipulated.</param>
+      /// <param name="joint">The joint which is being altered.</param>
+      /// <param name="frame">The frame of reference the translation should be performed in.</param>
+      /// <param name="translation">The axis translation to perform.</param>
+      /// <param name="negation">The style of axis-negation.</param>
+      /// <param name="rotation">The rotation to translate and transform to quaternion.</param>
+      /// <returns>The translated rotation quaternion.</returns>
+      LLQuaternion translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserReferenceFrame frame,
+                                                 E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
 
     /// <summary>
     /// Translates a bone-rotation quaternion to a vector usable easily on the UI.
@@ -770,7 +812,7 @@ public:
     /// <param name="translation">The axis translation to perform.</param>
     /// <param name="rotation">The rotation to transform to matrix.</param>
     /// <returns>The rotation vector.</returns>
-    LLVector3 translateRotationFromQuaternion(E_BoneAxisTranslation translation, S32 negation, const LLQuaternion& rotation) const;
+    LLVector3 translateRotationFromQuaternion(FSJointPose* joint, E_BoneAxisTranslation translation, S32 negation, const LLQuaternion& rotation) const;
 
     /// <summary>
     /// Creates a posing motion for the supplied avatar.
@@ -843,6 +885,20 @@ public:
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="redo">Whether to redo the edit, otherwise the edit is undone.</param>
     void undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
+
+    /// <summary>
+    /// Converts the supplied rotation into the desired frame.
+    /// </summary>
+    /// <param name="avatar">The avatar owning the supplied joint.</param>
+    /// <param name="rotation">The rotation to convert.</param>
+    /// <param name="frame">The frame to translate the rotation to.</param>
+    /// <param name="joint">The joint whose rotation is being changed.</param>
+    /// <remarks>
+    /// Input rotations have no implicit frame: it's just a rotation and ordinarily applied, inherits the joint's rotational framing.
+    /// This method imposes a framing upon the supplied rotation, meaning user input is considered as relative to something like
+    /// 'the world', 'avatar pelvis' or the position of the camera relative to the joint.
+    /// </remarks>
+    LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserReferenceFrame frame, FSJointPose* joint);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

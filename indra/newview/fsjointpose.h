@@ -97,6 +97,8 @@ class FSJointPose
     /// 'Public rotation' is the amount of rotation the user has added to the initial state.
     /// Public rotation is what a user may save to an external format (such as BVH).
     /// This distinguishes 'private' rotation, which is the state inherited from something like a pose in-world.
+    /// If zeroBase is true, we treat rotations as if in BVH mode: user work.
+    /// If zeroBase is false, we treat as NOT BVH: some existing pose and user work.
     /// </remarks>
     void setPublicRotation(bool zeroBase, const LLQuaternion& rot);
 
@@ -173,8 +175,11 @@ class FSJointPose
     /// Recalculates the delta reltive to the base for a new rotation.
     /// </summary>
     /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
+    /// <param name="rotation">The rotation of the supplied joint.</param>
+    /// <param name="position">The position of the supplied joint.</param>
+    /// <param name="scale">The scale of the supplied joint.</param>
     /// <returns>The rotation of the public difference between before and after recapture.</returns>
-    LLQuaternion recaptureJointAsDelta(bool zeroBase);
+    LLQuaternion updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
 
     /// <summary>
     /// Sets the base rotation to the supplied rotation if the supplied priority is appropriate.
@@ -253,6 +258,18 @@ class FSJointPose
     /// </summary>
     LLPointer<LLJointState> getJointState() const { return mJointState; }
 
+    /// <summary>
+    /// Gets whether this joint has been modified this session.
+    /// </summary>
+    /// <returns>True if the joint has been changed at all, otherwise false.</returns>
+    bool getJointModified() const { return mModifiedThisSession; }
+
+    /// <summary>
+    /// Gets the number of the joint represented by this.
+    /// </summary>
+    /// <returns>The joint number, derived from LLjoint.</returns>
+    S32 getJointNumber() const { return mJointNumber; }
+
     class FSJointState
     {
       public:
@@ -326,15 +343,12 @@ class FSJointPose
             joint->setScale(mBaseScale);
         }
 
-        LLQuaternion updateFromJoint(LLJoint* joint, bool zeroBase)
+        LLQuaternion updateFromJointProperties(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
         {
-            if (!joint)
-                return LLQuaternion::DEFAULT;
-
             LLQuaternion initalPublicRot = mRotation;
             LLQuaternion invRot = mBaseRotation;
             invRot.conjugate();
-            LLQuaternion newPublicRot = joint->getRotation() * invRot;
+            LLQuaternion newPublicRot = rotation * invRot;
 
             if (zeroBase)
             {
@@ -343,8 +357,8 @@ class FSJointPose
             }
 
             mRotation.set(newPublicRot);
-            mPosition.set(joint->getPosition() - mBasePosition);
-            mScale.set(joint->getScale() - mBaseScale);
+            mPosition.set(position - mBasePosition);
+            mScale.set(scale - mBaseScale);
 
             return newPublicRot *= ~initalPublicRot;
         }
@@ -449,6 +463,13 @@ class FSJointPose
     /// natively.
     /// </summary>
     bool mIsCollisionVolume{ false };
+
+    S32 mJointNumber = -1;
+
+    /// <summary>
+    /// Whether this joint has ever been changed by poser.
+    /// </summary>
+    bool mModifiedThisSession{ false };
 
     std::deque<FSJointState>              mLastSetJointStates;
     size_t                                mUndoneJointStatesIndex      = 0;

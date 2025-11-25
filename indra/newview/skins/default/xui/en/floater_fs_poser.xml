@@ -83,8 +83,6 @@ width="430">
 	<string name="joint_transform_mFaceCheekLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceCheekUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceCheekLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
-	<string name="joint_transform_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
-	<string name="joint_transform_mFaceLipUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mHandThumb1Left" translate="false">SWAP_ROLL_AND_PITCH</string>
 	<string name="joint_transform_mHandThumb1Right" translate="false">SWAP_ROLL_AND_PITCH NEGATE_PITCH</string>
 	<string name="joint_transform_mHandThumb2Left" translate="false">SWAP_ROLL_AND_PITCH</string>
@@ -160,6 +158,105 @@ width="430">
 	<string name="joint_transform_mFaceForeheadCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 	<string name="joint_transform_mFaceForeheadRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_PITCH</string>
 
+	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:
+			SWAP_NOTHING, SWAP_YAW_AND_ROLL, SWAP_YAW_AND_PITCH , SWAP_ROLL_AND_PITCH, SWAP_X2Y_Y2Z_Z2X, SWAP_X2Z_Y2X_Z2Y -->
+	<string name="joint_frame_mPelvis" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mTorso" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mChest" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mNeck" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHead" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mCollarLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mShoulderLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mElbowLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mWristLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mCollarRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mShoulderRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mElbowRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mWristRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mHipLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mKneeLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mAnkleLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mFootLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mToeLeft" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mHipRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mKneeRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mAnkleRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mFootRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mToeRight" translate="false">NEGATE_ROLL NEGATE_PITCH</string>
+	<string name="joint_frame_mHandThumb1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandThumb1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandThumb2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandThumb2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandThumb3Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandThumb3Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex3Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandIndex3Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle3Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandMiddle3Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing3Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandRing3Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky3Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mHandPinky3Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mEyeRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mEyeLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceTeethLower" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceTeethUpper" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipCornerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipCornerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipUpperCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipLowerCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceLipLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyeLidUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyeLidUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyecornerInnerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyecornerInnerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyeLidLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyeLidLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowOuterLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowOuterRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowCenterLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowCenterRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowInnerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEyebrowInnerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceCheekUpperLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceCheekLowerLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceCheekUpperRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceCheekLowerRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceTongueBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceTongueTip" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEar1Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEar2Left" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEar1Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceEar2Right" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceNoseBase" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceNoseBridge" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceNoseLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceNoseCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceNoseRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceForeheadLeft" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceForeheadCenter" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceForeheadRight" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	<string name="joint_frame_mFaceJaw" translate="false">SWAP_YAW_AND_ROLL NEGATE_ALL</string>
+	
 	<!-- For the joints/bones/thingos that are apt to Gimbal Lock, we may instead apply rotations as deltas by default, which never lock -->
 	<string name="joint_delta_rotate_mHipLeft">true</string>
 	<string name="joint_delta_rotate_mHipRight">true</string>
@@ -416,7 +513,7 @@ width="430">
 						 layout="topleft"
 						 mouse_opaque="false"
 						 left="5"
-						 name="title"
+						 name="move_tab_panel"
 						 top="0"
 						 width="235">
 							<text follows="left|top"
@@ -873,7 +970,7 @@ width="430">
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="232"
+						 top="221"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
@@ -894,7 +991,7 @@ width="430">
 						 flash_color="0.7 0.7 1 1"
 						 button_flash_count="64"
 						 button_flash_rate="0.5"
-						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to"
+						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to."
 						 name="start_stop_posing_button"
 						 width="150">
 							<button.commit_callback
@@ -1018,7 +1115,7 @@ width="430">
 						 label="Show joint markers"
 						 follows="left|top"
 						 left="5"
-						 tool_tip="Show small indicators to aid joint selection when visually posing."
+						 tool_tip="Show small indicators to aid joint selection when posing."
 						 top_pad="5"
 						 width="134" />
 						<check_box
@@ -1628,29 +1725,107 @@ width="430">
 						function="Poser.ToggleSympatheticChanges"/>
 					</button>
 					<button
+					 follows="left|top"
+					 height="18"
+					 is_toggle="true"
+					 layout="topleft"
+					 label="W"
+					 image_hover_unselected="Toolbar_Middle_Over"
+					 image_selected="Toolbar_Middle_Selected"
+					 image_unselected="Toolbar_Middle_Off"
+					 button_flash_enable="true"
+					 flash_color="0.7 0.7 1 1"
+					 button_flash_count="64"
+					 button_flash_rate="0.5"
+					 name="poser_world_frame_toggle"
+					 left_pad="1"
+					 left="2"
+					 top_pad="0"
+					 tool_tip="Make rotational changes relative to World"
+					 width="18" >
+						<button.commit_callback
+						 function="Poser.ToggleRotationFrame"/>
+					</button>
+					<button
+					 follows="left|top"
+					 height="18"
+					 is_toggle="true"
+					 layout="topleft"
+					 label="A"
+					 image_hover_unselected="Toolbar_Middle_Over"
+					 image_selected="Toolbar_Middle_Selected"
+					 image_unselected="Toolbar_Middle_Off"
+					 button_flash_enable="true"
+					 flash_color="0.7 0.7 1 1"
+					 button_flash_count="64"
+					 button_flash_rate="0.5"
+					 name="poser_avatar_frame_toggle"
+					 left_pad="0"
+					 top_delta="0"
+					 tool_tip="Make rotational changes relative to Avatar"
+					 width="15" >
+						<button.commit_callback
+						 function="Poser.ToggleRotationFrame"/>
+					</button>
+					<button
+					 follows="left|top"
+					 height="18"
+					 is_toggle="true"
+					 layout="topleft"
+					 label="S"
+					 image_hover_unselected="Toolbar_Middle_Over"
+					 image_selected="Toolbar_Middle_Selected"
+					 image_unselected="Toolbar_Middle_Off"
+					 button_flash_enable="true"
+					 flash_color="0.7 0.7 1 1"
+					 button_flash_count="64"
+					 button_flash_rate="0.5"
+					 name="poser_screen_frame_toggle"
+					 left_pad="0"
+					 top_delta="0"
+					 tool_tip="Make rotational changes relative to Screen"
+					 width="15" >
+						<button.commit_callback
+						 function="Poser.ToggleRotationFrame"/>
+					</button>
+					<button
 					follows="left|top"
 					height="18"
 					layout="topleft"
 					label="Copy L &gt; R"
 					name="button_symmetrize_left_to_right"
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
 					tool_tip="Click to copy change from left side to right side."
-					left="14"
-					top_pad="0"
-					width="70" >
+					left_pad="1"
+					top_delta="0"
+					width="67" >
 						<button.commit_callback
 						function="Poser.Symmetrize"
 						parameter="1"/>
 					</button>
 					<button
 					follows="left|top"
-					height="19"
+					height="18"
 					layout="topleft"
 					label="Copy R &gt; L"
 					name="button_symmetrize_right_to_left"
+					image_hover_unselected="Toolbar_Middle_Over"
+					image_selected="Toolbar_Middle_Selected"
+					image_unselected="Toolbar_Middle_Off"
+					button_flash_enable="true"
+					flash_color="0.7 0.7 1 1"
+					button_flash_count="64"
+					button_flash_rate="0.5"
 					tool_tip="Click to copy change from right side to left side."
-					left_pad="23"
+					left_pad="1"
 					top_delta="0"
-					width="70" >
+					width="67" >
 						<button.commit_callback
 						function="Poser.Symmetrize"
 						parameter="2"/>
@@ -1795,7 +1970,7 @@ width="430">
 				 left_pad="0"
 				 top_delta="0"
 				 name="button_spacer_panel"
-				 width="80"/>
+				 width="82"/>
 				<button
 				 follows="left|top"
 				 height="21"
