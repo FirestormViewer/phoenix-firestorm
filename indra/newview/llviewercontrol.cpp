@@ -896,13 +896,15 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
-    if (!gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
+    if (gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
     {
-        bool visible = newvalue.asBoolean();
-        LLSD payload;
-        payload["visible"] = visible;
-        LLNotificationsUtil::add("ConfirmGlobalOnlineStatusToggle", LLSD(), payload, applyGlobalOnlineStatusChange);
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
+        return;
     }
+    bool visible = newvalue.asBoolean();
+    LLSD payload;
+    payload["visible"] = visible;
+    LLNotificationsUtil::add("ConfirmGlobalOnlineStatusToggle", LLSD(), payload, applyGlobalOnlineStatusChange);
 }
 
 void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& response)
@@ -913,7 +915,6 @@ void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& respons
     {
         gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", true);
         gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusToggle", !visible);
-        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
         return;
     }
 
