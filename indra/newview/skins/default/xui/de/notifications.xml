@@ -5830,6 +5830,12 @@ Welche Bezeichnung soll für die Region
 		Neue Auswahl kann nicht erstellt werden, da bereits die maximale Anzahl an Auswahlen erstellt wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmGlobalOnlineStatusToggle">
+		Sind Sie sicher, dass Sie die Sichtbarkeit Ihres Online-Status für alle Ihre Freunde auf einmal ändern möchten?
+
+Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird, und es kann zeitweise zu Problemen mit Ihrem Online-Status für Ihre Freunde führen.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird.
 		<usetemplate ignoretext="Weise mich darauf hin, dass das Umschalten der Sichtbarkeit des Online-Status etwas dauern kann." name="okignore" yestext="OK"/>
@@ -5901,7 +5907,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		Eine große Anzahl an Outfits wurde erkannt: [AMOUNT]. Dies kann zu einem Blockieren des Viewers oder zu Verbindungsabbrüchen führen. Ziehen Sie eine Reduzierung der Outfits für eine bessere Performance in Betracht (unter [MAX]). DIES IST NUR EIN VORSCHLAG - wenn dein Computer normal funktioniert, kannst du das bedenkenlos ignorieren.
+		Eine große Anzahl an Outfits wurde erkannt: [AMOUNT]. Dies kann zu einem Blockieren des Viewers oder zu Verbindungsabbrüchen führen. Ziehen Sie eine Reduzierung der Outfits für eine bessere Performance in Betracht (unter [MAX]). DIES IST NUR EIN VORSCHLAG - wenn Ihr Computer normal funktioniert, können Sie diesen Vorschlag bedenkenlos ignorieren.
 		<usetemplate ignoretext="Warnung bei zu vielen Outfits" name="okignore" yestext="OK" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
