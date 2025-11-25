@@ -36,7 +36,7 @@ FSPosingMotion::FSPosingMotion(const LLUUID& id) : LLKeyframeMotion(id)
     mJointMotionList = &dummyMotionList;
 }
 
-LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character)
+LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter* character)
 {
     if (!character)
         return STATUS_FAILURE;
@@ -184,7 +184,7 @@ void FSPosingMotion::removeJointFromState(LLJoint* joint)
 
 void FSPosingMotion::setJointState(LLJoint* joint, U32 state)
 {
-    if (mJointPoses.size() < 1)
+    if (mJointPoses.empty())
         return;
     if (!joint)
         return;
@@ -208,7 +208,7 @@ void FSPosingMotion::setJointState(LLJoint* joint, U32 state)
 
 FSJointPose* FSPosingMotion::getJointPoseByJointName(const std::string& name)
 {
-    if (name.empty() || mJointPoses.size() < 1)
+    if (name.empty() || mJointPoses.empty())
         return nullptr;
 
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
@@ -222,9 +222,9 @@ FSJointPose* FSPosingMotion::getJointPoseByJointName(const std::string& name)
     return nullptr;
 }
 
-FSJointPose* FSPosingMotion::getJointPoseByJointNumber(const S32& number)
+FSJointPose* FSPosingMotion::getJointPoseByJointNumber(const S32 number)
 {
-    if (mJointPoses.size() < 1)
+    if (mJointPoses.empty())
         return nullptr;
     if (number < 0)
         return nullptr;
@@ -242,13 +242,13 @@ FSJointPose* FSPosingMotion::getJointPoseByJointNumber(const S32& number)
 
 bool FSPosingMotion::currentlyPosingJoint(LLJoint* joint)
 {
-    if (mJointPoses.size() < 1)
+    if (mJointPoses.empty())
         return false;
 
     if (!joint)
         return false;
 
-    LLPose* pose = this->getPose();
+    LLPose* pose = getPose();
     if (!pose)
         return false;
 
@@ -288,7 +288,7 @@ void FSPosingMotion::setJointBvhLock(FSJointPose* joint, bool lockInBvh)
     joint->zeroBaseRotation(lockInBvh);
 }
 
-bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, std::vector<S32> selectedJointNumbers)
+bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, const std::vector<S32>& selectedJointNumbers)
 {
     FSPosingMotion* motionToLoadAsFsPosingMotion = static_cast<FSPosingMotion*>(motionToLoad);
     if (!motionToLoadAsFsPosingMotion)
@@ -357,7 +357,7 @@ void FSPosingMotion::getJointStateAtTime(std::string jointPoseName, F32 timeToLo
     }
 }
 
-bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, std::vector<S32> recapturedJointNumbers)
+bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, const std::vector<S32>& recapturedJointNumbers)
 {
     FSPosingMotion* motionToLoadAsFsPosingMotion = static_cast<FSPosingMotion*>(motionToQuery);
     if (!motionToLoadAsFsPosingMotion)
@@ -367,7 +367,7 @@ bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, 
 }
 
 // Do not try to access FSPosingMotion state; you are a LLKeyframeMotion cast as a FSPosingMotion, NOT an FSPosingMotion.
-bool FSPosingMotion::motionAnimatesJoints(std::vector<int> recapturedJointNumbers)
+bool FSPosingMotion::motionAnimatesJoints(const std::vector<S32>& recapturedJointNumbers)
 {
     if (mJointMotionList == nullptr)
         return false;
@@ -387,7 +387,7 @@ bool FSPosingMotion::motionAnimatesJoints(std::vector<int> recapturedJointNumber
     return false;
 }
 
-void FSPosingMotion::resetBonePriority(std::vector<S32> boneNumbersToReset)
+void FSPosingMotion::resetBonePriority(const std::vector<S32>& boneNumbersToReset)
 {
     for (S32 boneNumber : boneNumbersToReset)
     {
@@ -399,7 +399,7 @@ void FSPosingMotion::resetBonePriority(std::vector<S32> boneNumbersToReset)
     }
 }
 
-bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const
+bool FSPosingMotion::vectorsNotQuiteEqual(const LLVector3& v1, const LLVector3& v2) const
 {
     if (vectorAxesAlmostEqual(v1.mV[VX], v2.mV[VX]) &&
         vectorAxesAlmostEqual(v1.mV[VY], v2.mV[VY]) &&

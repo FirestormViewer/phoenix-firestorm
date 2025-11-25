@@ -463,8 +463,8 @@ void FSPoserAnimator::recaptureJoint(LLVOAvatar* avatar, const FSPoserJoint& joi
 }
 
 void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
-                                           E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, const LLQuaternion rotation,
-                                           const LLVector3 position, const LLVector3 scale)
+                                           E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, const LLQuaternion& rotation,
+                                           const LLVector3& position, const LLVector3& scale)
 {
     if (!isAvatarSafeToUse(avatar))
         return;
@@ -848,7 +848,7 @@ LLQuaternion FSPoserAnimator::translateRotationToQuaternion(LLVOAvatar* avatar, 
     return rot_quat;
 }
 
-LLQuaternion FSPoserAnimator::changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserReferenceFrame frame, FSJointPose* joint)
+LLQuaternion FSPoserAnimator::changeToRotationFrame(LLVOAvatar* avatar, const LLQuaternion& rotation, E_PoserReferenceFrame frame, FSJointPose* joint)
 {
     if (!joint || !avatar)
         return rotation;
@@ -1187,7 +1187,7 @@ const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByName(const 
     return nullptr;
 }
 
-const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByNumber(LLVOAvatar* avatar, const int jointNumber) const
+const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByNumber(LLVOAvatar* avatar, const S32 jointNumber) const
 {
     if (!avatar)
         return nullptr;
@@ -1203,7 +1203,7 @@ const FSPoserAnimator::FSPoserJoint* FSPoserAnimator::getPoserJointByNumber(LLVO
     return getPoserJointByName(parentJoint->jointName());
 }
 
-bool FSPoserAnimator::tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, int &jointNumber)
+bool FSPoserAnimator::tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, S32& jointNumber)
 {
     if (!avatar)
         return false;
@@ -1244,7 +1244,7 @@ bool FSPoserAnimator::tryPosingAvatar(LLVOAvatar* avatar)
     return false;
 }
 
-void FSPoserAnimator::updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserAnimator::FSPoserJoint*> jointsRecaptured)
+void FSPoserAnimator::updatePosingState(LLVOAvatar* avatar, const std::vector<FSPoserAnimator::FSPoserJoint*>& jointsRecaptured)
 {
     if (!avatar)
         return;
@@ -1253,7 +1253,7 @@ void FSPoserAnimator::updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserA
     if (!posingMotion)
         return;
 
-    std::vector<int> jointNumbersRecaptured;
+    std::vector<S32> jointNumbersRecaptured;
     for (auto item : jointsRecaptured)
     {
         auto poserJoint = posingMotion->getJointPoseByJointName(item->jointName());
@@ -1266,7 +1266,7 @@ void FSPoserAnimator::updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserA
     mPosingState.updateMotionStates(avatar, posingMotion, jointNumbersRecaptured);
 }
 
-void FSPoserAnimator::stopPosingAvatar(LLVOAvatar *avatar)
+void FSPoserAnimator::stopPosingAvatar(LLVOAvatar* avatar)
 {
     if (!avatar || avatar->isDead())
         return;
@@ -1330,7 +1330,7 @@ bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar* avatar) const
     return true;
 }
 
-int FSPoserAnimator::getChildJointDepth(const FSPoserJoint* joint, int depth) const
+int FSPoserAnimator::getChildJointDepth(const FSPoserJoint* joint, S32 depth) const
 {
     size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     if (numberOfBvhChildNodes < 1)
@@ -1340,7 +1340,7 @@ int FSPoserAnimator::getChildJointDepth(const FSPoserJoint* joint, int depth) co
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = getPoserJointByName(joint->bvhChildren()[index]);
+        auto nextJoint = getPoserJointByName(joint->bvhChildren().at(index));
         if (!nextJoint)
             continue;
 
@@ -1364,7 +1364,7 @@ void FSPoserAnimator::deRotateWorldLockedDescendants(const FSPoserJoint* joint, 
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = getPoserJointByName(joint->bvhChildren()[index]);
+        auto nextJoint = getPoserJointByName(joint->bvhChildren().at(index));
         if (!nextJoint)
             continue;
 
@@ -1395,7 +1395,7 @@ void FSPoserAnimator::deRotateJointOrFirstLockedChild(const FSPoserJoint* joint,
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = getPoserJointByName(joint->bvhChildren()[index]);
+        auto nextJoint = getPoserJointByName(joint->bvhChildren().at(index));
         if (!nextJoint)
             continue;
 
@@ -1411,7 +1411,7 @@ void FSPoserAnimator::undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = getPoserJointByName(joint.bvhChildren()[index]);
+        auto nextJoint = getPoserJointByName(joint.bvhChildren().at(index));
         if (!nextJoint)
             continue;
 
@@ -1444,7 +1444,7 @@ void FSPoserAnimator::undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& join
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = getPoserJointByName(joint.bvhChildren()[index]);
+        auto nextJoint = getPoserJointByName(joint.bvhChildren().at(index));
         if (!nextJoint)
             continue;
 

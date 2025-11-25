@@ -30,13 +30,13 @@ void FSPoseState::captureMotionStates(LLVOAvatar* avatar)
     }
 }
 
-void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::vector<S32> jointNumbersRecaptured)
+void FSPoseState::updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, const std::vector<S32>& jointNumbersRecaptured)
 {
     if (!avatar || !posingMotion)
         return;
 
     sCaptureOrder[avatar->getID()]++;
-    int animNumber = 0;
+    S32 animNumber = 0;
 
     // if an animation for avatar is a subset of jointNumbersRecaptured, delete it
     // this happens on second/subsequent recaptures; the first recapture is no longer needed
@@ -96,7 +96,7 @@ void FSPoseState::writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LL
     if (!avatar)
         return;
 
-    int animNumber = 0;
+    S32 animNumber = 0;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); ++it)
     {
         if (!ignoreOwnership && !it->gAgentOwnsPose)
@@ -178,7 +178,7 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
 
     std::sort(sMotionStates[avatar->getID()].begin(), sMotionStates[avatar->getID()].end(), compareByCaptureOrder());
 
-    int lastCaptureOrder   = 0;
+    S32 lastCaptureOrder   = 0;
     bool needPriorityReset = false;
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
     {
@@ -211,7 +211,7 @@ bool FSPoseState::applyMotionStatesToPosingMotion(LLVOAvatar* avatar, FSPosingMo
     return allMotionsApplied;
 }
 
-void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder)
+void FSPoseState::resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, S32 captureOrder)
 {
     for (auto it = sMotionStates[avatar->getID()].begin(); it != sMotionStates[avatar->getID()].end(); it++)
     {
@@ -319,9 +319,9 @@ bool FSPoseState::motionIdIsFromPrimAgentOwnsAgentIsSittingOn(LLVOAvatar* avatar
 
 bool FSPoseState::vector2IsSubsetOfVector1(std::vector<S32> newRecapture, std::vector<S32> oldRecapture)
 {
-    if (newRecapture.size() < 1)
+    if (newRecapture.empty())
         return false;
-    if (oldRecapture.size() < 1)
+    if (oldRecapture.empty())
         return false;
 
     if (newRecapture.size() < oldRecapture.size())
@@ -334,10 +334,10 @@ bool FSPoseState::vector2IsSubsetOfVector1(std::vector<S32> newRecapture, std::v
     return true;
 }
 
-std::string FSPoseState::encodeVectorToString(std::vector<S32> vector)
+std::string FSPoseState::encodeVectorToString(const std::vector<S32>& vector)
 {
     std::string encoded = "";
-    if (vector.size() < 1)
+    if (vector.empty())
         return encoded;
 
     for (S32 numberToEncode : vector)
@@ -371,7 +371,7 @@ std::string FSPoseState::encodeVectorToString(std::vector<S32> vector)
     return encoded;
 }
 
-std::vector<S32> FSPoseState::decodeStringToVector(std::string vector)
+std::vector<S32> FSPoseState::decodeStringToVector(std::string_view vector)
 {
     std::vector<S32> decoded;
     if (vector.empty())

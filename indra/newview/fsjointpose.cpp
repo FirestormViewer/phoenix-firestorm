@@ -25,7 +25,6 @@
  */
 
 #include <deque>
-#include <boost/algorithm/string.hpp>
 #include "fsposingmotion.h"
 #include "llcharacter.h"
 
@@ -49,19 +48,19 @@ FSJointPose::FSJointPose(LLJoint* joint, U32 usage, bool isCollisionVolume)
     mIsCollisionVolume = isCollisionVolume;
     mJointNumber       = joint->getJointNum();
 
-    mCurrentState   = FSJointState(joint);
+    mCurrentState = FSJointState(joint);
 }
 
 void FSJointPose::setPublicPosition(const LLVector3& pos)
 {
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
     mCurrentState.mPosition.set(pos);
     mCurrentState.mLastChangeWasRotational = false;
 }
 
 void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
 {
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
 
     if (zeroBase)
         zeroBaseRotation(true);
@@ -74,7 +73,7 @@ void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
 
 void FSJointPose::setPublicScale(const LLVector3& scale)
 {
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
     mCurrentState.mScale.set(scale);
     mCurrentState.mLastChangeWasRotational = false;
 }
@@ -82,29 +81,30 @@ void FSJointPose::setPublicScale(const LLVector3& scale)
 bool FSJointPose::undoLastChange()
 {
     bool changeType = mCurrentState.mLastChangeWasRotational;
-    mCurrentState   = undoLastStateChange(FSJointState(mCurrentState));
+    mCurrentState   = undoLastStateChange(mCurrentState);
 
     return changeType;
 }
 
 void FSJointPose::redoLastChange()
 {
-    mCurrentState = redoLastStateChange(FSJointState(mCurrentState));
+    mCurrentState = redoLastStateChange(mCurrentState);
 }
 
 void FSJointPose::resetJoint()
 {
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
     mCurrentState.resetJoint();
     mCurrentState.mLastChangeWasRotational = true;
 }
 
-void FSJointPose::addStateToUndo(FSJointState stateToAddToUndo)
+void FSJointPose::addStateToUndo(const FSJointState& stateToAddToUndo)
 {
     mModifiedThisSession = true;
 
-    auto timeIntervalSinceLastChange = std::chrono::system_clock::now() - mTimeLastUpdatedCurrentState;
-    mTimeLastUpdatedCurrentState     = std::chrono::system_clock::now();
+    auto now = std::chrono::system_clock::now();
+    auto timeIntervalSinceLastChange = now - mTimeLastUpdatedCurrentState;
+    mTimeLastUpdatedCurrentState     = now;
 
     if (timeIntervalSinceLastChange < UndoUpdateInterval)
         return;
@@ -124,7 +124,7 @@ void FSJointPose::addStateToUndo(FSJointState stateToAddToUndo)
         mLastSetJointStates.pop_back();
 }
 
-FSJointPose::FSJointState FSJointPose::undoLastStateChange(FSJointState thingToSet)
+FSJointPose::FSJointState FSJointPose::undoLastStateChange(const FSJointState& thingToSet)
 {
     if (mLastSetJointStates.empty())
         return thingToSet;
@@ -138,7 +138,7 @@ FSJointPose::FSJointState FSJointPose::undoLastStateChange(FSJointState thingToS
     return mLastSetJointStates.at(mUndoneJointStatesIndex);
 }
 
-FSJointPose::FSJointState FSJointPose::redoLastStateChange(FSJointState thingToSet)
+FSJointPose::FSJointState FSJointPose::redoLastStateChange(const FSJointState& thingToSet)
 {
     if (mLastSetJointStates.empty())
         return thingToSet;
@@ -160,37 +160,37 @@ void FSJointPose::recaptureJoint()
     if (!joint)
         return;
 
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
 
     if (mIsCollisionVolume)
     {
-        mCurrentState.mPosition.set(LLVector3::zero);
-        mCurrentState.mScale.set(LLVector3::zero);
+        mCurrentState.mPosition.clear();
+        mCurrentState.mScale.clear();
     }
 
     mCurrentState = FSJointState(joint);
     mCurrentState.mLastChangeWasRotational = true;
 }
 
-LLQuaternion FSJointPose::updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
+LLQuaternion FSJointPose::updateJointAsDelta(bool zeroBase, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale)
 {
-    addStateToUndo(FSJointState(mCurrentState));
+    addStateToUndo(mCurrentState);
     mCurrentState.mLastChangeWasRotational = true;
 
     return mCurrentState.updateFromJointProperties(zeroBase, rotation, position, scale);
 }
 
-void FSJointPose::setBaseRotation(LLQuaternion rotation, LLJoint::JointPriority priority)
+void FSJointPose::setBaseRotation(const LLQuaternion& rotation, LLJoint::JointPriority priority)
 {
     mCurrentState.resetBaseRotation(rotation, priority);
 }
 
-void FSJointPose::setBasePosition(LLVector3 position, LLJoint::JointPriority priority)
+void FSJointPose::setBasePosition(const LLVector3& position, LLJoint::JointPriority priority)
 {
     mCurrentState.resetBasePosition(position, priority);
 }
 
-void FSJointPose::setBaseScale(LLVector3 scale, LLJoint::JointPriority priority)
+void FSJointPose::setBaseScale(const LLVector3& scale, LLJoint::JointPriority priority)
 {
     mCurrentState.resetBaseScale(scale, priority);
 }

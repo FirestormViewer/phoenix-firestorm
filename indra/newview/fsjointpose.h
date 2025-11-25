@@ -179,28 +179,28 @@ class FSJointPose
     /// <param name="position">The position of the supplied joint.</param>
     /// <param name="scale">The scale of the supplied joint.</param>
     /// <returns>The rotation of the public difference between before and after recapture.</returns>
-    LLQuaternion updateJointAsDelta(bool zeroBase, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
+    LLQuaternion updateJointAsDelta(bool zeroBase, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale);
 
     /// <summary>
     /// Sets the base rotation to the supplied rotation if the supplied priority is appropriate.
     /// </summary>
     /// <param name="rotation">The base rotation to set; zero is ignored.</param>
     /// <param name="priority">The priority of the base rotation; only priority equal or higher than any prior sets have any effect.</param>
-    void setBaseRotation(LLQuaternion rotation, LLJoint::JointPriority priority);
+    void setBaseRotation(const LLQuaternion& rotation, LLJoint::JointPriority priority);
 
     /// <summary>
     /// Sets the base position to the supplied position if the supplied priority is appropriate.
     /// </summary>
     /// <param name="position">The base position to set; zero is ignored.</param>
     /// <param name="priority">The priority of the base rotation; only priority equal or higher than any prior sets have any effect.</param>
-    void setBasePosition(LLVector3 position, LLJoint::JointPriority priority);
+    void setBasePosition(const LLVector3& position, LLJoint::JointPriority priority);
 
     /// <summary>
     /// Sets the base scale to the supplied scale if the supplied priority is appropriate.
     /// </summary>
     /// <param name="scale">The base scale to set; zero is ignored.</param>
     /// <param name="priority">The priority of the base rotation; only priority equal or higher than any prior sets have any effect.</param>
-    void setBaseScale(LLVector3 scale, LLJoint::JointPriority priority);
+    void setBaseScale(const LLVector3& scale, LLJoint::JointPriority priority);
 
     /// <summary>
     /// Sets the priority of the bone to the supplied value.
@@ -455,7 +455,7 @@ class FSJointPose
     };
 
   private:
-    std::string             mJointName = "";  // expected to be a match to LLJoint.getName() for a joint implementation.
+    std::string             mJointName = ""; // expected to be a match to LLJoint.getName() for a joint implementation.
     LLPointer<LLJointState> mJointState{ nullptr };
 
     /// <summary>
@@ -477,9 +477,9 @@ class FSJointPose
 
     FSJointState mCurrentState;
 
-    void addStateToUndo(FSJointState stateToAddToUndo);
-    FSJointState undoLastStateChange(FSJointState currentState);
-    FSJointState redoLastStateChange(FSJointState currentState);
+    void addStateToUndo(const FSJointState& stateToAddToUndo);
+    FSJointState undoLastStateChange(const FSJointState& currentState);
+    FSJointState redoLastStateChange(const FSJointState& currentState);
 };
 
 #endif // FS_JOINTPPOSE_H

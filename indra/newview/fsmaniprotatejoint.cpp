@@ -505,7 +505,7 @@ void FSManipRotateJoint::renderRingPass(const RingRenderParams& params, float ra
         // If an extra rotation is specified, apply it.
         if (params.extraRotateAngle != 0.f)
         {
-            gGL.rotatef(params.extraRotateAngle, params.extraRotateAxis.mV[0], params.extraRotateAxis.mV[1], params.extraRotateAxis.mV[2]);
+            gGL.rotatef(params.extraRotateAngle, params.extraRotateAxis.mV[VX], params.extraRotateAxis.mV[VY], params.extraRotateAxis.mV[VZ]);
         }
         // Get the appropriate scale value from mManipulatorScales.
         float scaleVal = 1.f;
@@ -878,7 +878,7 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
     S32 vertical_offset = window_center_y - VERTICAL_OFFSET;
 
     LLVector3 euler_angles;
-    rot.getEulerAngles(&euler_angles.mV[0], &euler_angles.mV[1], &euler_angles.mV[2]);
+    rot.getEulerAngles(&euler_angles.mV[VX], &euler_angles.mV[VY], &euler_angles.mV[VZ]);
     euler_angles *= RAD_TO_DEG;
     for (S32 i = 0; i < 3; ++i)
     {
@@ -1011,7 +1011,7 @@ bool FSManipRotateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
     if (!isAvatarJointSafeToUse())
         return false;
 
-    auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
+    auto* poser = LLFloaterReg::findTypedInstance<FSFloaterPoser>("fs_poser");
     if (!poser)
         return false;
 
@@ -1463,7 +1463,7 @@ void FSManipRotateJoint::drag(S32 x, S32 y)
             break;
     }
 
-    auto* poser = dynamic_cast<FSFloaterPoser*>(LLFloaterReg::findInstance("fs_poser"));
+    auto* poser = LLFloaterReg::findTypedInstance<FSFloaterPoser>("fs_poser");
     if (poser && mJoint)
         poser->updatePosedBones(mJoint->getName(), delta_send, LLVector3::zero, LLVector3::zero);
 }

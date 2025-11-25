@@ -300,7 +300,7 @@ void FSFloaterPoser::markSelectedJointsToHighlight()
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     std::string jointName   = selectedJoints[0]->jointName();
@@ -682,7 +682,7 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
 void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
 {
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -706,7 +706,7 @@ void FSFloaterPoser::onClickToggleSelectedBoneEnabled()
 void FSFloaterPoser::onClickFlipSelectedJoints()
 {
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -765,7 +765,7 @@ void FSFloaterPoser::onClickFlipPose()
 void FSFloaterPoser::onClickRecaptureSelectedBones()
 {
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -795,9 +795,9 @@ void FSFloaterPoser::onClickRecaptureSelectedBones()
     enableOrDisableRedoAndUndoButton();
 }
 
-void FSFloaterPoser::updatePosedBones(const std::string& jointName, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale)
+void FSFloaterPoser::updatePosedBones(const std::string& jointName, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale)
 {
-    LLVOAvatar *avatar = getUiSelectedAvatar();
+    LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return;
 
@@ -828,7 +828,7 @@ void FSFloaterPoser::updatePosedBones(const std::string& jointName, const LLQuat
 
 LLQuaternion FSFloaterPoser::getManipGimbalRotation(const std::string& jointName)
 {
-    LLVOAvatar *avatar = getUiSelectedAvatar();
+    LLVOAvatar* avatar = getUiSelectedAvatar();
     if (!avatar)
         return LLQuaternion();
 
@@ -1431,7 +1431,7 @@ void FSFloaterPoser::onPoseStartStop()
     onAvatarSelect();
 }
 
-bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar) const
+bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar* avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
@@ -1441,7 +1441,7 @@ bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar *avatar) const
     return true;
 }
 
-bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar) const
+bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar* avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
@@ -1462,7 +1462,7 @@ bool FSFloaterPoser::havePermissionToAnimateAvatar(LLVOAvatar *avatar) const
     return false;
 }
 
-bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar *avatar) const
+bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
@@ -1566,13 +1566,13 @@ void FSFloaterPoser::addHeaderRowToScrollList(const std::string& jointName, LLSc
         return;
 
     LLScrollListItem *hdrRow = bodyJointsScrollList->addElement(headerRow);
-    hdrRow->setEnabled(FALSE);
+    hdrRow->setEnabled(false);
 }
 
 LLSD FSFloaterPoser::createRowForJoint(const std::string& jointName, bool isHeaderRow)
 {
     if (jointName.empty())
-        return NULL;
+        return {};
 
     std::string headerValue = "";
     if (isHeaderRow)
@@ -1583,7 +1583,7 @@ LLSD FSFloaterPoser::createRowForJoint(const std::string& jointName, bool isHead
     if (hasString(parameterName))
         jointValue = getString(parameterName);
     else
-        return NULL;
+        return {};
 
     LLSD row;
     row["columns"][COL_ICON]["column"] = "icon";
@@ -1649,8 +1649,7 @@ void FSFloaterPoser::onToggleRotationFrameButton(const LLUICtrl* toggleButton)
     if (!toggleButton)
         return;
 
-    bool buttonDown = toggleButton->getValue().asBoolean();
-    if (buttonDown)
+    if (bool buttonDown = toggleButton->getValue().asBoolean())
     {
         mBtnAvatarFrame->setValue(toggleButton == mBtnAvatarFrame);
         mBtnScreenFrame->setValue(toggleButton == mBtnScreenFrame);
@@ -1671,7 +1670,7 @@ void FSFloaterPoser::onUndoLastChange()
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     for (auto item : selectedJoints)
@@ -1702,7 +1701,7 @@ void FSFloaterPoser::onSetAvatarToTpose()
     enableOrDisableRedoAndUndoButton();
 }
 
-void FSFloaterPoser::onResetJoint(const LLSD data)
+void FSFloaterPoser::onResetJoint(const LLSD& data)
 {
     int resetType = data.asInteger();
 
@@ -1714,7 +1713,7 @@ void FSFloaterPoser::onResetJoint(const LLSD data)
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     for (auto item : selectedJoints)
@@ -1744,7 +1743,7 @@ void FSFloaterPoser::onRedoLastChange()
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     for (auto item : selectedJoints)
@@ -1776,7 +1775,7 @@ void FSFloaterPoser::enableOrDisableRedoAndUndoButton()
         return;
 
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     bool shouldEnableRedoButton = false;
@@ -1867,7 +1866,7 @@ void FSFloaterPoser::selectJointByName(const std::string& jointName)
     LL_WARNS() << "Joint not found: " << jointName << LL_ENDL;
 }
 
-LLScrollListCtrl* FSFloaterPoser::getScrollListForTab(LLPanel * tabPanel) const
+LLScrollListCtrl* FSFloaterPoser::getScrollListForTab(LLPanel* tabPanel) const
 {
     if (tabPanel == mPositionRotationPnl)
     {
@@ -1929,8 +1928,7 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
 
     for (auto item : scrollList->getAllSelected())
     {
-        auto* userData = static_cast<FSPoserAnimator::FSPoserJoint*>(item->getUserdata());
-        if (userData)
+        if (auto* userData = static_cast<FSPoserAnimator::FSPoserJoint*>(item->getUserdata()))
         {
             joints.push_back(userData);
         }
@@ -1941,7 +1939,7 @@ std::vector<FSPoserAnimator::FSPoserJoint*> FSFloaterPoser::getUiSelectedPoserJo
     return joints;
 }
 
-void FSFloaterPoser::updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const
+void FSFloaterPoser::updateManipWithFirstSelectedJoint(const std::vector<FSPoserAnimator::FSPoserJoint*>& joints) const
 {
     auto avatarp = getUiSelectedAvatar();
     if (!avatarp)
@@ -2320,7 +2318,7 @@ LLVector3 FSFloaterPoser::getRotationOfFirstSelectedJoint() const
 {
     LLVector3 rotation;
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return rotation;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -2342,7 +2340,7 @@ LLVector3 FSFloaterPoser::getPositionOfFirstSelectedJoint() const
 {
     LLVector3 position;
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return position;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -2360,7 +2358,7 @@ LLVector3 FSFloaterPoser::getScaleOfFirstSelectedJoint() const
 {
     LLVector3 scale;
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return scale;
 
     LLVOAvatar *avatar = getUiSelectedAvatar();
@@ -2586,13 +2584,13 @@ void FSFloaterPoser::onAvatarsRefresh()
         iconObjectName = getString("icon_object");
 
     // Add non-Animesh avatars
-    for (LLCharacter *character : LLCharacter::sInstances)
+    for (LLCharacter* character : LLCharacter::sInstances)
     {
         LLUUID uuid = character->getID();
         if (std::find(avatarsToAddToList.begin(), avatarsToAddToList.end(), uuid) == avatarsToAddToList.end())
             continue;
 
-        LLVOAvatar *avatar = dynamic_cast<LLVOAvatar *>(character);
+        LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
         if (!couldAnimateAvatar(avatar))
             continue;
 
@@ -2603,8 +2601,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (!LLAvatarNameCache::get(uuid, &av_name))
             continue;
 
-        bool isMuted = LLMuteList::getInstance()->isMuted(uuid);
-        if (isMuted)
+        if (LLMuteList::getInstance()->isMuted(uuid))
             continue;
 
         if (!avatar->isSelf())
@@ -2630,7 +2627,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (std::find(avatarsToAddToList.begin(), avatarsToAddToList.end(), uuid) == avatarsToAddToList.end())
             continue;
 
-        LLControlAvatar *avatar = dynamic_cast<LLControlAvatar *>(character);
+        LLControlAvatar* avatar = dynamic_cast<LLControlAvatar* >(character);
         if (!couldAnimateAvatar(avatar))
             continue;
 
@@ -2674,15 +2671,15 @@ std::string FSFloaterPoser::getIconNameForAvatar(LLVOAvatar* avatar)
 std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
 {
     if (!avatar)
-        return "";
+        return {};
 
-    const LLVOVolume*     rootVolume     = avatar->mRootVolp;
-    const LLViewerObject* rootEditObject = (rootVolume) ? rootVolume->getRootEdit() : NULL;
+    const LLVOVolume* rootVolume = avatar->mRootVolp;
+    const LLViewerObject* rootEditObject = rootVolume ? rootVolume->getRootEdit() : nullptr;
     if (!rootEditObject)
-        return "";
+        return {};
 
     const LLViewerInventoryItem* attachedItem =
-        (rootEditObject->isAttachment()) ? gInventory.getItem(rootEditObject->getAttachmentItemID()) : NULL;
+        (rootEditObject->isAttachment()) ? gInventory.getItem(rootEditObject->getAttachmentItemID()) : nullptr;
 
     if (attachedItem)
         return attachedItem->getName();
@@ -2690,7 +2687,7 @@ std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
     if (rootEditObject->permYouOwner())
         return avatar->getFullname();
 
-    return "";
+    return {};
 }
 
 void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()
@@ -2707,9 +2704,9 @@ void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()
         ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getIconNameForAvatar(listAvatar));
 
         if (mPoserAnimator.isPosingAvatar(listAvatar))
-            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+            ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
         else
-            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
+            ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
 }
 
@@ -2737,34 +2734,34 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
     if (!list)
         return;
 
-    std::string iconValue   = "";
+    std::string iconValue                    = "";
     bool        considerExternalFormatSaving = getSavingToBvh();
 
     for (auto listItem : list->getAllData())
     {
-        FSPoserAnimator::FSPoserJoint *poserJoint = static_cast<FSPoserAnimator::FSPoserJoint *>(listItem->getUserdata());
+        FSPoserAnimator::FSPoserJoint* poserJoint = static_cast<FSPoserAnimator::FSPoserJoint*>(listItem->getUserdata());
         if (!poserJoint)
             continue;
 
         ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getScrollListIconForJoint(avatar, *poserJoint));
 
         if (mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint))
-            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
+            ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
         else
-            ((LLScrollListText *) listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
+            ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::NORMAL);
     }
 }
 
 std::string FSFloaterPoser::getScrollListIconForJoint(LLVOAvatar* avatar, FSPoserAnimator::FSPoserJoint joint)
 {
     if (!avatar)
-        return "";
+        return {};
 
     if (mPoserAnimator.getRotationIsWorldLocked(avatar, joint))
         return tryGetString("icon_rotation_is_world_locked");
 
     if (!getSavingToBvh())
-        return "";
+        return {};
 
     if (joint.boneType() == COL_VOLUMES)
         return tryGetString("icon_rotation_does_not_export");
@@ -2783,7 +2780,7 @@ std::string FSFloaterPoser::getScrollListIconForJoint(LLVOAvatar* avatar, FSPose
 std::string FSFloaterPoser::tryGetString(std::string_view name)
 {
     if (name.empty())
-        return "";
+        return {};
 
     return hasString(name) ? getString(name) : "";
 }
@@ -2810,8 +2807,7 @@ bool FSFloaterPoser::savePoseToBvh(LLVOAvatar* avatar, const std::string& poseFi
         std::string fullSavePath =
             gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, POSE_SAVE_SUBDIRECTORY, poseFileName + POSE_EXTERNAL_FORMAT_FILE_EXT);
 
-        llofstream file;
-        file.open(fullSavePath.c_str());
+        llofstream file(fullSavePath.c_str());
         if (!file.is_open())
         {
             LL_WARNS("Poser") << "Unable to save pose!" << LL_ENDL;
@@ -2908,7 +2904,7 @@ void FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
     {
         for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
         {
-            auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+            auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren().at(index));
             writeBvhFragment(fileStream, avatar, nextJoint, tabStops + 1);
         }
     }
@@ -2943,7 +2939,7 @@ void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FS
     size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren().at(index));
         writeFirstFrameOfBvhMotion(fileStream, nextJoint);
     }
 }
@@ -2972,15 +2968,15 @@ void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, 
     size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
-        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren()[index]);
+        auto nextJoint = mPoserAnimator.getPoserJointByName(joint->bvhChildren().at(index));
         writeBvhMotion(fileStream, avatar, nextJoint);
     }
 }
 
 std::string FSFloaterPoser::positionToString(const LLVector3& val)
 {
-    const float metresToInches = 39.37008f;
-    return std::to_string(metresToInches * val[VY]) + " " + std::to_string(metresToInches * val[VZ]) + " " + std::to_string(metresToInches * val[VX]);
+    constexpr F32 metersToInches = 39.37008f;
+    return std::to_string(metersToInches * val[VY]) + " " + std::to_string(metersToInches * val[VZ]) + " " + std::to_string(metersToInches * val[VX]);
 }
 
 std::string FSFloaterPoser::rotationToString(const LLVector3& val)
@@ -3047,7 +3043,7 @@ S32 FSFloaterPoser::getBvhJointNegation(const std::string& jointName) const
     return result;
 }
 
-bool FSFloaterPoser::getSavingToBvh()
+bool FSFloaterPoser::getSavingToBvh() const
 {
     return gSavedSettings.getBOOL(POSER_SAVEEXTERNALFORMAT_SAVE_KEY);
 }
@@ -3061,7 +3057,7 @@ void FSFloaterPoser::onClickSavingToBvh()
 void FSFloaterPoser::onClickLockWorldRotBtn()
 {
     auto selectedJoints = getUiSelectedPoserJoints();
-    if (selectedJoints.size() < 1)
+    if (selectedJoints.empty())
         return;
 
     LLVOAvatar* avatar = getUiSelectedAvatar();
