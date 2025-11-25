@@ -528,7 +528,7 @@
 					物理問題：
 				</text>
 				<color_swatch label="不良邊緣" tool_tip="預覽視窗中退化（細）三角形邊緣的顏色" name="mesh_preview_degenerate_edge_color" />
-				<color_swatch label="不良三角形" tool_tip="預覽視窗中退化（細）三角形的填充顏色" name="mesh_degenerate_fill_color" />
+				<color_swatch label="不良三角形" tool_tip="預覽視窗中退化（細）三角形的填充顏色" name="mesh_preview_degenerate_fill_color" />
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">

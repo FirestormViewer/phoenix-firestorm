@@ -364,7 +364,7 @@
 				Pb des physiques :
 			</text>
 			<color_swatch label="Mauvaises arêtes" tool_tip="Couleur des arêtes pour les triangles dégénérés (fin) dans l'aperçu de l'uploader" name="mesh_preview_degenerate_edge_color"/>
-			<color_swatch label="Mauvais triangles" tool_tip="Couleur de remplissage pour les triangles dégénérés (fin) dans l'aperçu de l'uploader" name="mesh_degenerate_fill_color"/>
+			<color_swatch label="Mauvais triangles" tool_tip="Couleur de remplissage pour les triangles dégénérés (fin) dans l'aperçu de l'uploader" name="mesh_preview_degenerate_fill_color"/>
 		</panel>
 	</tab_container>
 	<panel name="weights_and_warning_panel">

@@ -526,7 +526,7 @@
 					物理効果の問題：
 				</text>
 				<color_swatch label="不正な三角形の縁" tool_tip="メッシュアップローダーのプレビューウィンドウの縮退した（細い）三角形の縁の色を指定します。" name="mesh_preview_degenerate_edge_color"/>
-				<color_swatch label="不正な三角形の塗りつぶし" tool_tip="メッシュアップローダーのプレビューウィンドウの縮退した（細い）三角形の塗りつぶし色を指定します。" name="mesh_degenerate_fill_color"/>
+				<color_swatch label="不正な三角形の塗りつぶし" tool_tip="メッシュアップローダーのプレビューウィンドウの縮退した（細い）三角形の塗りつぶし色を指定します。" name="mesh_preview_degenerate_fill_color"/>
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
