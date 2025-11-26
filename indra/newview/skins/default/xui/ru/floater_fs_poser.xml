@@ -149,7 +149,7 @@
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Сдвиг" name="positionRotation_panel">
-						<panel name="title">
+						<panel name="move_tab_panel">
 							<text name="av_position_updown_label">Вверх/Вниз:</text>
 							<slider name="av_position_updown" tool_tip="Двигать выбранный аватар вверх или вниз"/>
 							<text name="av_position_leftright_label">Влево/Вправо:</text>
