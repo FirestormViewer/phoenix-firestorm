@@ -271,7 +271,7 @@ void FSFloaterContacts::onOpen(const LLSD& key)
     LLFloater::onOpen(key);
 }
 
-void FSFloaterContacts::openTab(const std::string& name)
+void FSFloaterContacts::openTab(std::string_view name)
 {
     if (name == "friends")
     {
@@ -291,8 +291,7 @@ void FSFloaterContacts::openTab(const std::string& name)
         return;
     }
 
-    FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(getHost());
-    if (floater_container)
+    if (auto floater_container = dynamic_cast<FSFloaterIMContainer*>(getHost()))
     {
         floater_container->setVisible(true);
         floater_container->showFloater(this);
@@ -391,7 +390,7 @@ void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<
 {
     if (!names.empty() && !ids.empty())
     {
-        LLAvatarActions::requestFriendshipDialog(ids[0], names[0].getCompleteName());
+        LLAvatarActions::requestFriendshipDialog(ids.front(), names.front().getCompleteName());
     }
 }
 
@@ -405,8 +404,7 @@ void FSFloaterContacts::onAddFriendWizButtonClicked(LLUICtrl* ctrl)
         picker->setOkBtnEnableCb(boost::bind(&FSFloaterContacts::isItemsFreeOfFriends, this, _1));
     }
 
-    LLFloater* root_floater = gFloaterView->getParentFloater(this);
-    if (root_floater)
+    if (auto root_floater = gFloaterView->getParentFloater(this))
     {
         root_floater->addDependentFloater(picker);
     }
@@ -474,7 +472,7 @@ std::string FSFloaterContacts::getActiveTabName() const
     return mTabContainer->getCurrentPanel()->getName();
 }
 
-LLPanel* FSFloaterContacts::getPanelByName(const std::string& panel_name)
+LLPanel* FSFloaterContacts::getPanelByName(std::string_view panel_name)
 {
     return mTabContainer->getPanelByName(panel_name);
 }
@@ -518,10 +516,9 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 
 void FSFloaterContacts::getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) const
 {
-    listitem_vec_t selected = mFriendsList->getAllSelected();
-    for (listitem_vec_t::iterator itr = selected.begin(); itr != selected.end(); ++itr)
+    for (auto list_item : mFriendsList->getAllSelected())
     {
-        selected_uuids.push_back((*itr)->getUUID());
+        selected_uuids.push_back(list_item->getUUID());
     }
 }
 
@@ -786,7 +783,7 @@ void FSFloaterContacts::refreshRightsChangeList()
     bool can_offer_teleport = num_selected >= 1;
     bool selected_friends_online = true;
 
-    const LLRelationship* friend_status = NULL;
+    const LLRelationship* friend_status = nullptr;
     for (const auto& id : friends)
     {
         friend_status = LLAvatarTracker::instance().getBuddyInfo(id);
@@ -1064,8 +1061,8 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
     // setup message header
     msg->newMessageFast(_PREHASH_GrantUserRights);
     msg->nextBlockFast(_PREHASH_AgentData);
-    msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-    msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->addUUID(_PREHASH_AgentID, gAgentID);
+    msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
 
     for (const auto& [id, rights] : ids)
     {
@@ -1078,7 +1075,7 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
     gAgent.sendReliableMessage();
 }
 
-void FSFloaterContacts::childShowTab(const std::string& id, const std::string& tabname)
+void FSFloaterContacts::childShowTab(std::string_view id, std::string_view tabname)
 {
     if (LLTabContainer* child = findChild<LLTabContainer>(id))
     {

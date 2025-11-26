@@ -49,7 +49,7 @@ public:
     /// <param name="avatar">The avatar whose animations are to be captured.</param>
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="jointNamesRecaptured">The names of the joints being recaptured.</param>
-    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::vector<S32> jointNamesRecaptured);
+    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, const std::vector<S32>& jointNamesRecaptured);
 
     /// <summary>
     /// Removes all current animation states for the supplied avatar.
@@ -125,12 +125,12 @@ private:
         /// <summary>
         /// Represents 'capture layers: how the user layers animations 'on top of' others.
         /// </summary>
-        int captureOrder = 0;
+        S32 captureOrder = 0;
 
         /// <summary>
         /// Represents in-layer order of capture.
         /// </summary>
-        int inLayerOrder = 0;
+        S32 inLayerOrder = 0;
 
         /// <summary>
         /// When reloading, and if not-empty, the bone-numbers this motionId should affect.
@@ -144,7 +144,7 @@ private:
     /// <param name="avatar">The avatar being posed by the motion.</param>
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="captureOrder">The order of the capture.</param>
-    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
+    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, S32 captureOrder);
 
     /// <summary>
     /// Gets whether gAgentID owns, and thus can save information about the supplied motionId.
@@ -197,8 +197,8 @@ private:
     /// <remarks>
     /// Collab-safe means ASCII-printable chars, and delimiter usage does not conflict with Collab's delimiter.
     /// </remarks>
-    std::string encodeVectorToString(std::vector<S32> vector);
-    std::vector<S32> decodeStringToVector(std::string vector);
+    std::string encodeVectorToString(const std::vector<S32>& vector);
+    std::vector<S32> decodeStringToVector(std::string_view vector);
 
     struct compareByCaptureOrder
     {
@@ -213,8 +213,8 @@ private:
         }
     };
 
-    static std::map <LLUUID, std::vector<fsMotionState>> sMotionStates;
-    static std::map<LLUUID, int> sCaptureOrder;
+    static std::map<LLUUID, std::vector<fsMotionState>> sMotionStates;
+    static std::map<LLUUID, S32> sCaptureOrder;
     static std::map<LLUUID, bool> sMotionStatesOwnedByMe;
 };
 

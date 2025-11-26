@@ -401,14 +401,14 @@ public:
     /// </summary>
     /// <param name="jointNumber">The name of the joint to match.</param>
     /// <returns>The matching joint if found, otherwise nullptr</returns>
-    const FSPoserJoint* getPoserJointByNumber(LLVOAvatar* avatar, const int jointNumber) const;
+    const FSPoserJoint* getPoserJointByNumber(LLVOAvatar* avatar, const S32 jointNumber) const;
 
     /// <summary>
     /// Get a PoserJoint by its LLJoint number.
     /// </summary>
     /// <param name="jointNumber">The name of the joint to match.</param>
     /// <returns>The matching joint if found, otherwise nullptr</returns>
-    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, int &jointNumber);
+    bool tryGetJointNumber(LLVOAvatar* avatar, const FSPoserJoint &poserJoint, S32& jointNumber);
 
     /// <summary>
     /// Tries to start posing the supplied avatar.
@@ -614,7 +614,7 @@ public:
     /// <param name="position">The position of the supplied joint.</param>
     /// <param name="scale">The scale of the supplied joint.</param>
     void updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero, E_BoneDeflectionStyles style,
-                              E_PoserReferenceFrame frame, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
+                              E_PoserReferenceFrame frame, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale);
 
     /// <summary>
     /// Sets all of the joint rotations of the supplied avatar to zero.
@@ -780,7 +780,7 @@ public:
     /// </summary>
     /// <param name="avatar">The avatar whose pose state is to be recapture.</param>
     /// <param name="jointsRecaptured">The joints which were recaptured.</param>
-    void updatePosingState(LLVOAvatar* avatar, std::vector<FSPoserAnimator::FSPoserJoint*> jointsRecaptured);
+    void updatePosingState(LLVOAvatar* avatar, const std::vector<FSPoserAnimator::FSPoserJoint*>& jointsRecaptured);
 
     /// <summary>
     /// Traverses the joints and applies reversals to the base rotations if needed.
@@ -845,7 +845,7 @@ public:
     /// <param name="joint">The joint to determine the depth for.</param>
     /// <param name="depth">The depth of the supplied joint.</param>
     /// <returns>The number of generations of descendents the joint has, if none, then zero.</returns>
-    int getChildJointDepth(const FSPoserJoint* joint, int depth) const;
+    int getChildJointDepth(const FSPoserJoint* joint, S32 depth) const;
 
     /// <summary>
     /// Derotates the first world-locked child joint to the supplied joint.
@@ -898,7 +898,7 @@ public:
     /// This method imposes a framing upon the supplied rotation, meaning user input is considered as relative to something like
     /// 'the world', 'avatar pelvis' or the position of the camera relative to the joint.
     /// </remarks>
-    LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, LLQuaternion rotation, E_PoserReferenceFrame frame, FSJointPose* joint);
+    LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, const LLQuaternion& rotation, E_PoserReferenceFrame frame, FSJointPose* joint);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

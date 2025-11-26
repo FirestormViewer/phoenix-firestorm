@@ -81,7 +81,7 @@ class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
 public:
-    void updatePosedBones(const std::string& jointName, const LLQuaternion rotation, const LLVector3 position, const LLVector3 scale);
+    void updatePosedBones(const std::string& jointName, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale);
     LLQuaternion getManipGimbalRotation(const std::string& jointName);
     void selectJointByName(const std::string& jointName);
     void undo() override { onUndoLastChange(); };
@@ -143,7 +143,7 @@ public:
     /// Updates the visual with the first selected joint from the supplied collection, if any.
     /// </summary>
     /// <param name="joints">The collection of selected joints.</param>
-    void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const;
+    void updateManipWithFirstSelectedJoint(const std::vector<FSPoserAnimator::FSPoserJoint*>& joints) const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
@@ -229,7 +229,7 @@ public:
     LLVector3 getPositionOfFirstSelectedJoint() const;
     LLVector3 getScaleOfFirstSelectedJoint() const;
 
-    LLScrollListCtrl* getScrollListForTab(LLPanel * tabPanel) const;
+    LLScrollListCtrl* getScrollListForTab(LLPanel* tabPanel) const;
     // Pose load/save
     void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
@@ -268,7 +268,7 @@ public:
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastChange();
     void onRedoLastChange();
-    void onResetJoint(const LLSD data);
+    void onResetJoint(const LLSD& data);
     void onSetAvatarToTpose();
     void onPoseStartStop();
     void onTrackballChanged();
@@ -422,7 +422,7 @@ public:
     /// Gets whether the pose should also write a BVH file when saved.
     /// </summary>
     /// <returns>True if the user wants to additionally save a BVH file, otherwise false.</returns>
-    bool getSavingToBvh();
+    bool getSavingToBvh() const;
 
     /// <summary>
     /// Writes the current pose in BVH-format to the supplied stream.
