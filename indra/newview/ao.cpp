@@ -365,7 +365,7 @@ void FloaterAO::onClose(bool app_quitting)
 
 void FloaterAO::onSelectSet()
 {
-    AOSet* set = AOEngine::instance().getSetByName(mSetSelectorSmall->getSelectedItemLabel());
+    AOSet* set = AOEngine::instance().getSetByName(mSetSelector->getSelectedItemLabel());
     if (!set)
     {
         onRenameSet();
