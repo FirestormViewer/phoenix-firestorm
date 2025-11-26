@@ -1559,19 +1559,26 @@ void AOEngine::update()
                 continue;
             }
 
-            AOSet* newSet = getSetByName(params[0]);
+            auto setName{ params[0] };
+            AOSet* newSet = getSetByName(setName);
             if (!newSet)
             {
                 LL_DEBUGS("AOEngine") << "Adding set " << setFolderName << " to AO." << LL_ENDL;
                 newSet = new AOSet(currentCategory->getUUID());
-                newSet->setName(params[0]);
+                newSet->setName(setName);
                 mSets.emplace_back(newSet);
+
+                if (auto currentSetName = gSavedPerAccountSettings.getString("FSCurrentAOSet"); currentSetName == setName)
+                {
+                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << currentSetName << LL_ENDL;
+                    mCurrentSet = newSet;
+                }
             }
             else
             {
                 if (newSet->getComplete())
                 {
-                    LL_DEBUGS("AOEngine") << "Set " << params[0] << " already complete. Skipping." << LL_ENDL;
+                    LL_DEBUGS("AOEngine") << "Set " << setName << " already complete. Skipping." << LL_ENDL;
                     continue;
                 }
                 LL_DEBUGS("AOEngine") << "Updating set " << setFolderName << " in AO." << LL_ENDL;
@@ -1599,7 +1606,11 @@ void AOEngine::update()
                 else if (params[num] == "**")
                 {
                     mDefaultSet = newSet;
-                    mCurrentSet = newSet;
+                    if (!mCurrentSet)
+                    {
+                        LL_DEBUGS("AOEngine") << "No set selected as current yet - setting default set as current: " << setName << LL_ENDL;
+                        mCurrentSet = newSet;
+                    }
                 }
                 else
                 {
@@ -1671,7 +1682,7 @@ void AOEngine::update()
             }
             else
             {
-                LL_DEBUGS("AOEngine") << "Set " << params[0] << " is incomplete, fetching descendents" << LL_ENDL;
+                LL_DEBUGS("AOEngine") << "Set " << setName << " is incomplete, fetching descendents" << LL_ENDL;
                 gInventory.fetchDescendentsOf(currentCategory->getUUID());
             }
         }
@@ -1683,7 +1694,7 @@ void AOEngine::update()
 
         if (!mCurrentSet && !mSets.empty())
         {
-            LL_DEBUGS("AOEngine") << "No default set defined, choosing the first in the list." << LL_ENDL;
+            LL_DEBUGS("AOEngine") << "No set currently selected, choosing the first in the list." << LL_ENDL;
             selectSet(mSets[0]);
         }
 
@@ -1723,16 +1734,15 @@ void AOEngine::reload(bool aFromTimer)
 
 AOSet* AOEngine::getSetByName(const std::string& name) const
 {
-    AOSet* found = nullptr;
     for (auto set : mSets)
     {
-        if (set->getName().compare(name) == 0)
+        if (set->getName() == name)
         {
-            found = set;
-            break;
+            return set;
         }
     }
-    return found;
+
+    return nullptr;
 }
 
 const std::string AOEngine::getCurrentSetName() const
@@ -1753,8 +1763,7 @@ void AOEngine::selectSet(AOSet* set)
 {
     if (mEnabled && mCurrentSet)
     {
-        AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
-        if (state)
+        if (AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion))
         {
             gAgent.sendAnimationRequest(state->mCurrentAnimationID, ANIM_REQUEST_STOP);
             state->mCurrentAnimationID.setNull();
@@ -1763,6 +1772,7 @@ void AOEngine::selectSet(AOSet* set)
     }
 
     mCurrentSet = set;
+    gSavedPerAccountSettings.setString("FSCurrentAOSet", mCurrentSet->getName());
 
     if (mEnabled)
     {
@@ -1773,8 +1783,7 @@ void AOEngine::selectSet(AOSet* set)
 
 AOSet* AOEngine::selectSetByName(const std::string& name)
 {
-    AOSet* set = getSetByName(name);
-    if (set)
+    if (AOSet* set = getSetByName(name))
     {
         selectSet(set);
         return set;
