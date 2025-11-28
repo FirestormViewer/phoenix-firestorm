@@ -164,7 +164,7 @@ LLVolatileAPRPool::LLVolatileAPRPool(bool is_local, apr_pool_t *parent, apr_size
     // </FS:ND>
 
     {
-        mMutexp.reset(new std::mutex());
+        mMutexp = std::make_unique<std::mutex>();
     }
 }
 

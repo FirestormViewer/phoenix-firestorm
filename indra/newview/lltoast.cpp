@@ -120,7 +120,7 @@ LLToast::LLToast(const LLToast::Params& p)
     mIsFading(false),
     mIsHovered(false)
 {
-    mTimer.reset(new LLToastLifeTimer(this, p.lifetime_secs));
+    mTimer = std::make_unique<LLToastLifeTimer>(this, p.lifetime_secs);
 
     buildFromFile("panel_toast.xml");
 

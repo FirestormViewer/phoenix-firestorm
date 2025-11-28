@@ -1395,7 +1395,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
                 if (! url.empty())
                 {
-                    LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(folder_request_body, recursive_cats));
+                    LLCore::HttpHandler::ptr_t handler = std::make_shared<BGFolderHttpHandler>(folder_request_body, recursive_cats);
                     gInventory.requestPost(false, url, folder_request_body, handler, "Inventory Folder");
                 }
             }
@@ -1406,7 +1406,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
                 if (! url.empty())
                 {
-                    LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(folder_request_body_lib, recursive_cats));
+                    LLCore::HttpHandler::ptr_t handler = std::make_shared<BGFolderHttpHandler>(folder_request_body_lib, recursive_cats);
                     gInventory.requestPost(false, url, folder_request_body_lib, handler, "Library Folder");
                 }
             }
@@ -1422,7 +1422,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                 {
                     LLSD body;
                     body["items"] = item_request_body;
-                    LLCore::HttpHandler::ptr_t  handler(new BGItemHttpHandler(body));
+                    LLCore::HttpHandler::ptr_t handler = std::make_shared<BGItemHttpHandler>(body);
                     gInventory.requestPost(false, url, body, handler, "Inventory Item");
                 }
             }
@@ -1435,7 +1435,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                 {
                     LLSD body;
                     body["items"] = item_request_body_lib;
-                    LLCore::HttpHandler::ptr_t handler(new BGItemHttpHandler(body));
+                    LLCore::HttpHandler::ptr_t handler = std::make_shared<BGItemHttpHandler>(body);
                     gInventory.requestPost(false, url, body, handler, "Library Item");
                 }
             }
@@ -1734,7 +1734,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
                 {
                     LLSD request_body;
                     request_body["folders"] = folders;
-                    LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(request_body, recursive_cats));
+                    LLCore::HttpHandler::ptr_t handler = std::make_shared<BGFolderHttpHandler>(request_body, recursive_cats);
                     gInventory.requestPost(false, url, request_body, handler, "Inventory Folder");
                     recursive_cats.clear();
                     folders.clear();
@@ -1744,7 +1744,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
 
             LLSD request_body;
             request_body["folders"] = folders;
-            LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(request_body, recursive_cats));
+            LLCore::HttpHandler::ptr_t handler = std::make_shared<BGFolderHttpHandler>(request_body, recursive_cats);
             gInventory.requestPost(false, url, request_body, handler, "Inventory Folder");
             return;
         }

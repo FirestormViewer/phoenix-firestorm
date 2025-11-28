@@ -974,13 +974,13 @@ LLMeshRepoThread::LLMeshRepoThread()
     mSkinMapMutex = new LLMutex();
     mSignal = new LLCondition();
     mHttpRequest = new LLCore::HttpRequest;
-    mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+    mHttpOptions = std::make_shared<LLCore::HttpOptions>();
     mHttpOptions->setTransferTimeout(SMALL_MESH_XFER_TIMEOUT);
     mHttpOptions->setUseRetryAfter(gSavedSettings.getBOOL("MeshUseHttpRetryAfter"));
-    mHttpLargeOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+    mHttpLargeOptions = std::make_shared<LLCore::HttpOptions>();
     mHttpLargeOptions->setTransferTimeout(LARGE_MESH_XFER_TIMEOUT);
     mHttpLargeOptions->setUseRetryAfter(gSavedSettings.getBOOL("MeshUseHttpRetryAfter"));
-    mHttpHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders);
+    mHttpHeaders = std::make_shared<LLCore::HttpHeaders>();
     mHttpHeaders->append(HTTP_OUT_HEADER_ACCEPT, HTTP_CONTENT_VND_LL_MESH);
     mHttpPolicyClass = app_core_http.getPolicy(LLAppCoreHttp::AP_MESH2);
     mHttpLegacyPolicyClass = app_core_http.getPolicy(LLAppCoreHttp::AP_MESH1); // <FS:Ansariel> [UDP Assets]
@@ -988,7 +988,7 @@ LLMeshRepoThread::LLMeshRepoThread()
 
     // Lod processing is expensive due to the number of requests
     // and a need to do expensive cacheOptimize().
-    mMeshThreadPool.reset(new LL::ThreadPool("MeshLodProcessing", 2));
+    mMeshThreadPool = std::make_unique<LL::ThreadPool>("MeshLodProcessing", 2);
     mMeshThreadPool->start();
 }
 
@@ -1729,7 +1729,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id)
 
             if (!http_url.empty())
             {
-                LLMeshHandlerBase::ptr_t handler(new LLMeshSkinInfoHandler(mesh_id, offset, size));
+                LLMeshHandlerBase::ptr_t handler = std::make_shared<LLMeshSkinInfoHandler>(mesh_id, offset, size);
                 // <FS:Ansariel> [UDP Assets]
                 //LLCore::HttpHandle handle = getByteRange(http_url, offset, size, handler);
                 LLCore::HttpHandle handle = getByteRange(http_url, legacy_cap_version, offset, size, handler);
@@ -1844,7 +1844,7 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 
             if (!http_url.empty())
             {
-                LLMeshHandlerBase::ptr_t handler(new LLMeshDecompositionHandler(mesh_id, offset, size));
+                LLMeshHandlerBase::ptr_t handler = std::make_shared<LLMeshDecompositionHandler>(mesh_id, offset, size);
                 // <FS:Ansariel> [UDP Assets]
                 //LLCore::HttpHandle handle = getByteRange(http_url, offset, size, handler);
                 LLCore::HttpHandle handle = getByteRange(http_url, legacy_cap_version, offset, size, handler);
@@ -1950,7 +1950,7 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 
             if (!http_url.empty())
             {
-                LLMeshHandlerBase::ptr_t handler(new LLMeshPhysicsShapeHandler(mesh_id, offset, size));
+                LLMeshHandlerBase::ptr_t handler = std::make_shared<LLMeshPhysicsShapeHandler>(mesh_id, offset, size);
                 // <FS:Ansariel> [UDP Assets]
                 //LLCore::HttpHandle handle = getByteRange(http_url, offset, size, handler);
                 LLCore::HttpHandle handle = getByteRange(http_url, legacy_cap_version, offset, size, handler);
@@ -2085,7 +2085,7 @@ bool LLMeshRepoThread::fetchMeshHeader(const LLVolumeParams& mesh_params)
         //within the first 4KB
         //NOTE -- this will break of headers ever exceed 4KB
 
-        LLMeshHandlerBase::ptr_t handler(new LLMeshHeaderHandler(mesh_params, 0, MESH_HEADER_SIZE));
+        LLMeshHandlerBase::ptr_t handler = std::make_shared<LLMeshHeaderHandler>(mesh_params, 0, MESH_HEADER_SIZE);
         // <FS:Ansariel> [UDP Assets]
         //LLCore::HttpHandle handle = getByteRange(http_url, 0, MESH_HEADER_SIZE, handler);
         LLCore::HttpHandle handle = getByteRange(http_url, legacy_cap_version, 0, MESH_HEADER_SIZE, handler);
@@ -2268,7 +2268,7 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod)
             {
                 LL_DEBUGS(LOG_MESH) << "Mesh/Cache: Mesh body for ID " << mesh_id << " - was retrieved from the simulator." << LL_ENDL;
 
-                LLMeshHandlerBase::ptr_t handler(new LLMeshLODHandler(mesh_params, lod, offset, size));
+                LLMeshHandlerBase::ptr_t handler = std::make_shared<LLMeshLODHandler>(mesh_params, lod, offset, size);
                 // <FS:Ansariel> [UDP Assets]
                 //LLCore::HttpHandle handle = getByteRange(http_url, offset, size, handler);
                 LLCore::HttpHandle handle = getByteRange(http_url, legacy_cap_version, offset, size, handler);
@@ -2718,11 +2718,11 @@ LLMeshUploadThread::LLMeshUploadThread(LLMeshUploadThread::instance_list_t& data
     mMeshUploadTimeOut = gSavedSettings.getS32("MeshUploadTimeOut");
 
     mHttpRequest = new LLCore::HttpRequest;
-    mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+    mHttpOptions = std::make_shared<LLCore::HttpOptions>();
     mHttpOptions->setTransferTimeout(mMeshUploadTimeOut);
     mHttpOptions->setUseRetryAfter(gSavedSettings.getBOOL("MeshUseHttpRetryAfter"));
     mHttpOptions->setRetries(UPLOAD_RETRY_LIMIT);
-    mHttpHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders);
+    mHttpHeaders = std::make_shared<LLCore::HttpHeaders>();
     mHttpHeaders->append(HTTP_OUT_HEADER_CONTENT_TYPE, HTTP_CONTENT_LLSD_XML);
     mHttpPolicyClass = LLAppViewer::instance()->getAppCoreHttp().getPolicy(LLAppCoreHttp::AP_UPLOADS);
 }
@@ -4429,7 +4429,7 @@ S32 LLMeshRepository::loadMesh(LLVOVolume* vobj, const LLVolumeParams& mesh_para
         else
         {
             //first request for this mesh
-            std::shared_ptr<PendingRequestBase> request(new PendingRequestLOD(mesh_params, new_lod));
+            std::shared_ptr<PendingRequestBase> request = std::make_shared<PendingRequestLOD>(mesh_params, new_lod);
             mPendingRequests.emplace_back(request);
             mLoadingMeshes[new_lod][mesh_id].initData(vobj, request);
             LLMeshRepository::sLODPending++;
@@ -4997,7 +4997,7 @@ const LLMeshSkinInfo* LLMeshRepository::getSkinInfo(const LLUUID& mesh_id, LLVOV
             else
             {
                 //first request for this mesh
-                std::shared_ptr<PendingRequestBase> request(new PendingRequestUUID(mesh_id, MESH_REQUEST_SKIN));
+                std::shared_ptr<PendingRequestBase> request = std::make_shared<PendingRequestUUID>(mesh_id, MESH_REQUEST_SKIN);
                 mLoadingSkins[mesh_id].initData(requesting_obj, request);
                 mPendingRequests.emplace_back(request);
             }

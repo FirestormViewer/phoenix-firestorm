@@ -106,7 +106,7 @@ public:
     static const std::string sCheckUpdateListenerName;
 
     static void startFetchServerReleaseNotes();
-    static void fetchServerReleaseNotesCoro(std::string cap_url);
+    static void fetchServerReleaseNotesCoro(const std::string cap_url);
     static void handleServerReleaseNotes(LLSD results);
 };
 
@@ -230,12 +230,12 @@ void LLFloaterAbout::startFetchServerReleaseNotes()
 }
 
 /*static*/
-void LLFloaterAbout::fetchServerReleaseNotesCoro(std::string cap_url)
+void LLFloaterAbout::fetchServerReleaseNotesCoro(const std::string cap_url)
 {
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("fetchServerReleaseNotesCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("fetchServerReleaseNotesCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
     httpOpts->setWantHeaders(true);
     httpOpts->setFollowRedirects(false);
