@@ -310,7 +310,7 @@ void FSData::startDownload()
             last_modified = stat_data.st_mtime;
         }
         LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(mFSDataURL, boost::bind(downloadComplete, _1, mFSDataURL, true), boost::bind(downloadComplete, _1, mFSDataURL, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
@@ -326,7 +326,7 @@ void FSData::startDownload()
         std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str());
         mFSdataDefaultsUrl = mBaseURL + "/" + filename;
         LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(mFSdataDefaultsUrl, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, true), boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
@@ -345,7 +345,7 @@ void FSData::startDownload()
         }
         std::string url = mBaseURL + "/" + script_name;
         LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( downloadCompleteScript, _1, url, filename ), boost::bind( downloadError, _1, url ), LLCore::HttpHeaders::ptr_t(), httpOpts);
@@ -389,7 +389,7 @@ void FSData::downloadAgents()
             last_modified = stat_data.st_mtime;
         }
         LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(mAgentsURL, boost::bind(downloadComplete, _1, mAgentsURL, true), boost::bind(downloadComplete, _1, mAgentsURL, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
@@ -405,7 +405,7 @@ void FSData::downloadAgents()
             last_modified = stat_data.st_mtime;
         }
         LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(mAssetsURL, boost::bind(downloadComplete, _1, mAssetsURL, true), boost::bind(downloadComplete, _1, mAssetsURL, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
@@ -476,7 +476,7 @@ void FSData::processData(const LLSD& fs_data)
             last_modified = stat_data.st_mtime;
         }
         LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modified of " << last_modified << LL_ENDL;
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
         httpOpts->setWantHeaders(true);
         httpOpts->setLastModified((long)last_modified);
         FSCoreHttpUtil::callbackHttpGetRaw(LEGACY_CLIENT_LIST_URL, boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, true), boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, false), LLCore::HttpHeaders::ptr_t(), httpOpts);

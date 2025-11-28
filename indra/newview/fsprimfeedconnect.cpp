@@ -112,12 +112,12 @@ void FSPrimfeedConnect::uploadPhotoCoro(const LLSD& params, LLImageFormatted* im
     LL_DEBUGS("primfeed") << "Preparing HTTP request" << LL_ENDL;
     LLCore::HttpRequest::policy_t policy = LLCore::HttpRequest::DEFAULT_POLICY_ID;
     LLCoreHttpUtil::HttpCoroutineAdapter adapter("PrimfeedUpload", policy);
-    LLCore::HttpRequest::ptr_t request(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions);
+    LLCore::HttpRequest::ptr_t request = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t options = std::make_shared<LLCore::HttpOptions>();
     options->setWantHeaders(true);
 
     LL_DEBUGS("primfeed") << "Setting HTTP headers" << LL_ENDL;
-    LLCore::HttpHeaders::ptr_t headers(new LLCore::HttpHeaders);
+    LLCore::HttpHeaders::ptr_t headers = std::make_shared<LLCore::HttpHeaders>();
     std::string token  = gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken");
     std::string apiKey = gSavedSettings.getString("FSPrimfeedViewerApiKey");
     headers->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);

@@ -17,7 +17,7 @@
  * $/LicenseInfo$
  */
 
-#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 // This class's function is described by the flow chart at
 // https://www.flickr.com/services/api/auth.oauth.html

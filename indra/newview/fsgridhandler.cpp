@@ -632,7 +632,7 @@ void LLGridManager::addGrid(GridEntry* grid_entry, AddState state)
                 LLDate saved_value = grid_entry->grid["LastModified"];
                 last_modified      = (time_t)saved_value.secondsSinceEpoch();
             }
-            LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+            LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
             httpOpts->setWantHeaders(true);
             httpOpts->setLastModified((long)last_modified);
 

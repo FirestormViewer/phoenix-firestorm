@@ -118,7 +118,7 @@ public:
         {
             if (!mImpl.get())                                       // if no extrapolation implementor
             {
-                mImpl.reset(new RegionCrossExtrapolateImpl(vo));    // add an extrapolator
+                mImpl = std::make_unique<RegionCrossExtrapolateImpl>(vo);    // add an extrapolator
             }
         }
         else                                                        // not a vehicle
