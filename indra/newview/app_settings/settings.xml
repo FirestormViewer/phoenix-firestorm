@@ -2219,6 +2219,20 @@
         <key>Value</key>
         <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/vawp/index.html</string>
     </map>
+    <!--AvatarBakedTextureUploadTimeout is in use by QA-->
+    <key>AvatarBakedTextureUploadTimeout</key>
+    <map>
+      <key>Comment</key>
+      <string>Specifies the maximum time in seconds to wait before sending your baked textures for avatar appearance.  Set to 0 to disable and wait until all baked textures are at highest resolution.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>70</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>AvatarRotateThresholdSlow</key>
     <map>
       <key>Comment</key>
@@ -2240,20 +2254,6 @@
       <string>F32</string>
       <key>Value</key>
       <integer>2</integer>
-    </map>
-    <!--AvatarBakedTextureUploadTimeout is in use by QA-->
-    <key>AvatarBakedTextureUploadTimeout</key>
-    <map>
-      <key>Comment</key>
-      <string>Specifies the maximum time in seconds to wait before sending your baked textures for avatar appearance.  Set to 0 to disable and wait until all baked textures are at highest resolution.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>70</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>AvatarPhysics</key>
     <map>
@@ -12585,6 +12585,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>16</integer>
   </map>
+    <key>RenderReflectionProbeShowTransparent</key>
+    <map>
+        <key>Comment</key>
+        <string>Show reflection probes in the transparency debug view</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
     <key>RenderReflectionProbeVolumes</key>
     <map>
       <key>Comment</key>

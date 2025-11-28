@@ -6224,6 +6224,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                         }
                         else
                         {
+                            static LLCachedControl<bool> render_reflection_object(gSavedSettings, "RenderReflectionProbeShowTransparent", false);
                             F32 alpha;
                             if (is_pbr)
                             {
@@ -6242,7 +6243,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                 drawablep->setState(LLDrawable::HAS_ALPHA);
                                 add_face(sAlphaFaces, alpha_count, facep);
                             }
-                            else if (LLDrawPoolAlpha::sShowDebugAlpha ||
+                            else if ((LLDrawPoolAlpha::sShowDebugAlpha && (render_reflection_object || !vobj->isReflectionProbe())) ||
                                 (gPipeline.sRenderHighlight && !drawablep->getParent() &&
                                 //only root objects are highlighted with red color in this case
                                 drawablep->getVObj() && drawablep->getVObj()->flagScripted() &&

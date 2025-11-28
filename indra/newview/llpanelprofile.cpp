@@ -1361,7 +1361,7 @@ void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
     {
         mAllowPublish = avatar_data->flags & AVATAR_ALLOW_PUBLISH;
         // <FS:Ansariel> Fix LL UI/UX design accident
-        //mShowInSearchCombo->setValue(mAllowPublish);
+        //mShowInSearchCombo->setValue(mAllowPublish ? LLSD::Integer(1) : LLSD::Integer(0));
         mShowInSearchCheckbox->setValue(mAllowPublish);
         // </FS:Ansariel>
     }

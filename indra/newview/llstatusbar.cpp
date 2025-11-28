@@ -672,6 +672,9 @@ void LLStatusBar::refresh()
         // time_t utc_time;
         // utc_time = time_corrected();
 
+        // static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
+        // std::string timeStr = use_24h ? getString("time") : getString("time_ampm");
+
         // std::string timeStr = getString("time");
         // LLSD substitution;
         // substitution["datetime"] = (S32) utc_time;
