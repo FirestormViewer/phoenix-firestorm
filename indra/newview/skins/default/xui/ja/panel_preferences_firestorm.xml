@@ -168,9 +168,9 @@
 			<text name="build_item_add_disp_rect_txt">
 				現在の設定：[ITEM]
 			</text>
-			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
-			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
-				Drop a script here.
+			<check_box name="FSBuildPrefs_UseCustomScript" label="新しいスクリプトボタンを押したときにカスタムスクリプトを使用"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="インベントリ内のスクリプトをここにドロップします。">
+				ここにスクリプトをドロップ
 			</fs_embedded_item_drop_target>
 			<text name="custom_script_disp_rect_txt">
 				現在の設定: [SCRIPT]
@@ -214,7 +214,7 @@
 			<check_box label="「装着先」メニューの装着スポットをアルファベット順に並べ替える（要再起動）" tool_tip="有効にすると、「装着先」メニューの装着物のスポットのリストがアルファベット順に並び替えられます。" name="FSSortAttachmentSpotsAlphabetically"/>
 			<check_box label="ツールフローターで新式の[APP_NAME]テクスチャパネルを使用する（要再起動）" tool_tip="有効にすると、テクスチャ編集ツールは改良されたＦＳワークフローを使用し、BlinnPhongの編集が可能になります。（要再起動）" name="FSUseNewTexturePanel"/>
 		</panel>
-		<panel label="Script Editor" name="BuildTabScriptEditor">
+		<panel label="スクリプトエディタ" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font">
 				スクリプトエディタのフォント：
 			</text>

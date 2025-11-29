@@ -6588,4 +6588,12 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="NoValidUUIDs">インポートされたファイル内に有効なＵＵＩＤが見つかりません。</string>
 	<string name="ImportListTooLarge">エントリが多すぎます。ＣＳＶファイルには[COUNT]個のエントリがあり、残り使用可能なスロット数は[MAX]個です。</string>
 	<string name="ImportSuccessful">[COUNT]件のエントリを正常に処理しました。</string>
+
+	<!-- VHACD enum strings -->
+	<string name="Flood">乱立</string>
+	<string name="Surface Only">表面のみ</string>
+	<string name="Raycast">レイキャスト</string>
+	<string name="Very High">高品位</string>
+	<string name="Ultra">ウルトラ</string>
+	<string name="Maximum">最大</string>
 </strings>
