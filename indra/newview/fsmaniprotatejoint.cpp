@@ -387,14 +387,11 @@ void FSManipRotateJoint::setJoint(LLJoint* joint)
 void FSManipRotateJoint::setAvatar(LLVOAvatar* avatar)
 {
     mAvatar = avatar;
-
     if (!avatar)
         mJoint = nullptr;
 
-    if (!mJoint)
-        return;
-
-    setJoint(avatar->getJoint(mJoint->getJointNum()));
+    if (mAvatar && mJoint)
+        setJoint(avatar->getJoint(mJoint->getJointNum()));
 }
 
 /**
