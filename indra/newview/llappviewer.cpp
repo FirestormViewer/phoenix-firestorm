@@ -292,10 +292,10 @@ using namespace LL;
 #include "nd/ndetw.h" // <FS:ND/> Windows Event Tracing, does nothing on OSX/Linux.
 #include "nd/ndlogthrottle.h"
 
+#include "aoengine.h"
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 #include "bugsplatattributes.h"
-// #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
 
 #if LL_LINUX && LL_GTK
 #include "glib.h"
@@ -2269,6 +2269,8 @@ bool LLAppViewer::cleanup()
         //Store environment settings if necessary
         LLEnvironment::getInstance()->saveToSettings();
     }
+
+    AOEngine::deleteSingleton();
 
     // Must do this after all panels have been deleted because panels that have persistent rects
     // save their rects on delete.

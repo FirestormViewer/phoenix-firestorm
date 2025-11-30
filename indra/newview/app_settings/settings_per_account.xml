@@ -1517,16 +1517,16 @@
         <key>Value</key>
             <integer>1</integer>
         </map>
-    <key>FSCurrentAOSet</key>
+    <key>FSCurrentAOState</key>
         <map>
             <key>Comment</key>
-            <string>The currently active AO set</string>
+            <string>The currently active AO set and animation per state</string>
             <key>Persist</key>
             <integer>1</integer>
             <key>Type</key>
-            <string>String</string>
+            <string>LLSD</string>
             <key>Value</key>
-            <string/>
+            <map/>
         </map>
     </map>
 </llsd>
