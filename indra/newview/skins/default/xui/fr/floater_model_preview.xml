@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="CHARGEMENT DU MODELE">
+<floater name="Model Preview" title="Chargement du modèle">
 <string name="no_havok">téléchargement du maillage avec physique</string>
 <string name="status_parse_error">Erreur : Problème d&apos;analyse du modèle ; reportez-vous au journal pour plus de détails.</string>
 <string name="status_bind_shape_orientation">Avertissement : la matrice de formes de reliure n&apos;est pas dans l&apos;orientation standard X-avant.</string>
@@ -216,6 +216,28 @@
 				<check_box label="Fermer les trous" name="Close Holes (Slow)"/>
 				<button label="Analyser" name="Decompose"/>
 				<button label="Annuler" name="decompose_cancel"/>
+			</panel>
+			<panel name="physics analysis vhacd">
+				<text name="method_label">
+					Étape 2 : Convertir en hulls (facultatif)
+				</text>
+				<text name="fill_mode_label">
+					Mode remplissage :
+				</text>
+				<text name="resolution_label">
+					Résolution :
+				</text>
+				<text name="hulls_per_mesh_label">
+					Hulls par Mesh :
+				</text>
+				<text name="vertices_per_hull_label">
+					Vertices par hull :
+				</text>
+				<text name="tolerance_label">
+					Tolérance erreurs :
+				</text>
+				<button label="Analyser" name="Analyze"/>
+				<button label="Annuler" name="analyze_cancel"/>
 			</panel>
 			<panel name="physics simplification">
 				<text name="second_step_label">

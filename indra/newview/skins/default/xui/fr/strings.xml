@@ -3809,7 +3809,7 @@ Veuillez réinstaller la visionneuse à partir de [DOWNLOAD_URL] et contacter [S
 		Taille
 	</string>
 	<string name="High">
-		Haut
+		Élevée
 	</string>
 	<string name="High Heels">
 		Talons hauts
@@ -4013,7 +4013,7 @@ Veuillez réinstaller la visionneuse à partir de [DOWNLOAD_URL] et contacter [S
 		Poignées d&apos;amour
 	</string>
 	<string name="Low">
-		Bas
+		Basse
 	</string>
 	<string name="Low Heels">
 		Talons bas
@@ -6222,7 +6222,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Aperçu
 	</string>
 	<string name="Normal">
-		Normal
+		Normale
 	</string>
 	<string name="Pathfinding_Wiki_URL">
 		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
@@ -7166,6 +7166,22 @@ Votre position actuelle : [AVATAR_POS]
 		Trop d'entrées. Le fichier CSV contient [COUNT] entrées et il y a [MAX] emplacements disponibles.
 	</string>
 	<string name="ImportSuccessful">
-		Successfully processed [COUNT] entries.
+		[COUNT] entrées traitées avec succès.
+	</string>
+	<!-- VHACD enum strings -->
+	<string name="Flood">
+		Inondation
+	</string>
+	<string name="Surface Only">
+		Surface seulement
+	</string>
+	<string name="Raycast">
+		Diffusion de rayons
+	</string>
+	<string name="Very High">
+		Très élevée
+	</string>
+	<string name="Maximum">
+		Maximale
 	</string>
 </strings>

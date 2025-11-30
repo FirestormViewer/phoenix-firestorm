@@ -13,6 +13,14 @@
 	<menu_item_call label="Supprimer cet ami" name="remove_friend"/>
 	<menu_item_call label="Signaler une infraction" name="report_abuse"/>
 	<menu_item_check label="Ignorer" name="Block"/>
+	<context_menu label="Moderator Options" name="GroupModerationSubmenu">
+		<menu_item_call label="Autoriser les échanges écrits" name="AllowGroupChat"/>
+		<menu_item_call label="Interdire les échanges écrits" name="ForbidGroupChat"/>
+		<menu_item_call label="Bannir le membre" name="BanGroupMember"/>
+		<menu_item_call label="Éjecter le membre" name="BanEjectMember"/>
+	</context_menu>
 	<menu_item_call label="Copier le nom" name="url_copy_label"/>
-	<menu_item_call label="Copier l'adresse" name="url_copy"/>
+	<menu_item_call label="Copier l'URL" name="url_copy"/>
+	<menu_item_call label="Copier l'URI de la mention" name="mention_copy_label"/>
+	<menu_item_call label="Mentioner le résident dans la discussion" name="mention_in_chat"/>
 </context_menu>

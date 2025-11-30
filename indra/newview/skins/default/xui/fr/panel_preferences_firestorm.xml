@@ -109,10 +109,10 @@
 				<combo_item name="High" label="Haut"/>
 			</combo_box>
 			<check_box name="FSBuildPrefs_EmbedItem" label="Intégrer un objet dans le nouveau prim"/>
-			<fs_embedded_item_drop_target name="embed_item" tool_tip="Glissez un objet ici.">Glissez un objet ici.</fs_embedded_item_drop_target>
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="Déposez ici un objet provenant de votre inventaire.">Déposez un objet ici.</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">Actuellement : [ITEM]</text>
-			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
-			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">Drop a script here.</fs_embedded_item_drop_target>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Script personnalisé pour bouton Nouveau script"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Déposez ici un script provenant de votre inventaire.">Déposez un script ici.</fs_embedded_item_drop_target>
 			<text name="custom_script_disp_rect_txt">Actuellement: [SCRIPT]</text>
 			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
 			<check_box label="Contours lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
@@ -145,7 +145,7 @@
 			<check_box label="Points d'attachement alphabétiques dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus 'Attacher à' sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
 			<check_box label="Nouveau module de texture Firestorm dans la fenêtre d'outils (nécessite un redémarrage)" tool_tip="Si cette option est activée, les outils d'édition de textures utiliseront le flux de travail amélioré de FS et permettront l'édition de textures Blinn-Phong et PBR." name="FSUseNewTexturePanel"/>
 		</panel>
-		<panel label="Script Editor" name="BuildTabScriptEditor">
+		<panel label="Éditeur de script" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
 			<combo_box name="FSScriptingFontName" tool_tip="Nom de la police utilisée dans l'éditeur de script LSL" />
 			<combo_box name="FSScriptingFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de script LSL">
@@ -168,6 +168,7 @@
 			<text name="title">Dossiers de destination pour les chargements :</text>
 			<text name="title_sounds">Sons</text>
 			<text name="title_models">Modèles</text>
+			<text name="title_pbr">Matériaux PBR</text>
 			<text name="upload_help">Pour changer le dossier de destination, cliquez droit dessus dans l'inventaire et sélectionnez
 "Par défaut pour"
 			</text>
