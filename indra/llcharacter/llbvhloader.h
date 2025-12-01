@@ -312,10 +312,7 @@ public:
 
 protected:
     // Consumes one line of input from file.
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // bool getLine(apr_file_t *fp);
-    bool getLine(LLAPRFile::tFiletype *fp);
-    // </FS:ND>
+    bool getLine(apr_file_t *fp);
 
     // parser state
     char        mLine[BVH_PARSER_LINE_SIZE];        /* Flawfinder: ignore */

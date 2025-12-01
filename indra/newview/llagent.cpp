@@ -6450,13 +6450,8 @@ void LLAgent::dumpSentAppearance(const std::string& dump_prefix)
 
     LLAPRFile outfile;
     std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-    outfile.open(fullpath, LL_APR_WB );
-
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* file = outfile.getFileHandle();
-    LLAPRFile::tFiletype* file = outfile.getFileHandle();
-    // </FS:ND>
-
+    outfile.open(fullpath, LL_APR_WB);
+    apr_file_t* file = outfile.getFileHandle();
     if (!file)
     {
         return;

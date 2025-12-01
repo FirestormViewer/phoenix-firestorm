@@ -4550,7 +4550,6 @@ void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
 
     // record the viewer version in the marker file
     marker_file.write(marker_version.data(), static_cast<S32>(marker_version.length()));
-
     marker_file.flush(); // <FS:ND/> Make sure filesystem reflects what we wrote.
 }
 
@@ -4695,10 +4694,7 @@ void LLAppViewer::processMarkerFiles()
         // now test to see if this file is locked by a running process (try to open for write)
         marker_log_stream << "Checking exec marker file for lock...";
         mMarkerFile.open(mMarkerFileName, LL_APR_WB);
-        // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-        //apr_file_t* fMarker = mMarkerFile.getFileHandle() ;
-        LLAPRFile::tFiletype* fMarker = mMarkerFile.getFileHandle() ;
-        // </FS:ND>
+        apr_file_t* fMarker = mMarkerFile.getFileHandle();
         if (!fMarker)
         {
             marker_log_stream << "Exec marker file open failed - assume it is locked.";

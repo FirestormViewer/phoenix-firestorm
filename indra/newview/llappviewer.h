@@ -334,13 +334,11 @@ private:
     std::string mLogoutMarkerFileName;
     LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running.
 
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    //LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running.
-    // </FS:ND>
-
-    //-TT The skin and theme we are using at startup. might want to make them static.
+    // <FS:TT> The skin and theme we are using at startup. might want to make them static.
     std::string mCurrentSkin;
     std::string mCurrentSkinTheme;
+    // </FS:TT>
+
     bool mReportedCrash;
 
     std::string mServerReleaseNotesURL;

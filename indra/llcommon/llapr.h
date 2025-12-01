@@ -152,10 +152,6 @@ private:
     LLVolatileAPRPool *mCurrentFilePoolp ; //currently in use apr_pool, could be one of them: sAPRFilePoolp, or a temp pool.
 
 public:
-    // <FS:ND> typedef for underlying primitive
-    typedef apr_file_t tFiletype;
-    // </FS:ND>
-
     LLAPRFile();
     LLAPRFile(const std::string& filename, apr_int32_t flags, LLVolatileAPRPool* pool = NULL);
     ~LLAPRFile();

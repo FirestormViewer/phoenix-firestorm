@@ -204,11 +204,7 @@ bool LLStateDiagram::saveDotFile(const std::string& filename)
 {
     LLAPRFile outfile ;
     outfile.open(filename, LL_APR_W);
-
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* dot_file = outfile.getFileHandle() ;
-    LLAPRFile::tFiletype* dot_file = outfile.getFileHandle() ;
-    // </FS:ND>
+    apr_file_t* dot_file = outfile.getFileHandle() ;
 
     if (!dot_file)
     {

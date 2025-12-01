@@ -10625,10 +10625,7 @@ bool LLVOAvatar::visualParamWeightsAreDefault()
     return rtn;
 }
 
-// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-//void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value)
-void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, F32 value)
-// </FS:ND>
+void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value)
 {
     std::string type_string = "unknown";
     if (dynamic_cast<LLTexLayerParamAlpha*>(viewer_param))
@@ -10665,12 +10662,7 @@ void LLVOAvatar::dumpAppearanceMsgParams( const std::string& dump_prefix,
     LLAPRFile outfile;
     std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, outfilename);
     outfile.open(fullpath, LL_APR_WB );
-
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* file = outfile.getFileHandle();
-    LLAPRFile::tFiletype* file = outfile.getFileHandle();
-    // </FS:ND>
-
+    apr_file_t* file = outfile.getFileHandle();
     if (!file)
     {
         return;
@@ -10756,8 +10748,8 @@ void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMe
 
         if (attachment_id.notNull())
         {
-        mSimAttachments[attachment_id] = attach_point;
-    }
+            mSimAttachments[attachment_id] = attach_point;
+        }
         else
         {
             // at the moment viewer is only interested in non-null attachments
@@ -11608,11 +11600,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 // </FS:CR>
     if (APR_SUCCESS == outfile.open(fullpath, LL_APR_WB ))
     {
-        // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-        //apr_file_t* file = outfile.getFileHandle();
-        LLAPRFile::tFiletype* file = outfile.getFileHandle();
-        // </FS:ND>
-
+        apr_file_t* file = outfile.getFileHandle();
         LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
 
         apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );

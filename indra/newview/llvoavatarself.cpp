@@ -3499,11 +3499,7 @@ void LLVOAvatarSelf::dumpScratchTextureByteCount()
 
 void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 {
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* file = outfile.getFileHandle();
-    LLAPRFile::tFiletype* file = outfile.getFileHandle();
-    // </FS:ND>
-
+    apr_file_t* file = outfile.getFileHandle();
     if (!file)
     {
         return;
