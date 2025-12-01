@@ -35,7 +35,6 @@
 #include <set>
 #include <map>
 #include <boost/tokenizer.hpp>
-#include "../newview/llviewernetwork.h" // <FS:Ansariel> Log getting spammed with experience requests from other grids; Yes, it IS ugly!
 
 //=========================================================================
 namespace LLExperienceCacheImpl
@@ -87,6 +86,9 @@ const int LLExperienceCache::SEARCH_PAGE_SIZE     = 30;
 
 bool LLExperienceCache::sShutdown = false;
 
+std::string LLExperienceCache::sCurrentGridId = ""; // <FS:Ansariel> Log getting spammed with experience requests from other grids
+bool LLExperienceCache::sIsInOpenSim = false; // <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
+
 //=========================================================================
 LLExperienceCache::LLExperienceCache()
 {
@@ -102,9 +104,7 @@ void LLExperienceCache::initSingleton()
 {
     // <FS:Ansariel> Log getting spammed with experience requests from other grids
     //mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache.xml");
-    const std::string grid_id_str = LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGridId());
-    const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
-    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache." + grid_id_lower + ".xml");
+    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache." + utf8str_tolower(sCurrentGridId) + ".xml");
     // </FS:Ansariel>
 
     LL_INFOS("ExperienceCache") << "Loading " << mCacheFileName << LL_ENDL;
@@ -336,9 +336,9 @@ void LLExperienceCache::requestExperiences()
     {
 // <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
 #ifdef OPENSIM
-        if( LLGridManager::instance().isInOpenSim() )
+        if (sIsInOpenSim)
         {
-// In Opensim this can occur if the grid does not have experiences capability. make it a debug
+            // In Opensim this can occur if the grid does not have experiences capability. make it a debug
             LL_DEBUGS("ExperienceCache") << "No Experience capability." << LL_ENDL;
         }
         else
@@ -921,6 +921,14 @@ void LLExperienceCache::updateExperienceCoro(LLCoreHttpUtil::HttpCoroutineAdapte
 
     fn(result);
 }
+
+// <FS:Ansariel> Log getting spammed with experience requests from other grids
+void LLExperienceCache::setCurrentGrid(std::string_view gridId, bool isInOpenSim)
+{
+    sCurrentGridId = gridId;
+    sIsInOpenSim = isInOpenSim;
+}
+// </FS:Ansariel>
 
 //=========================================================================
 void LLExperienceCacheImpl::mapKeys(const LLSD& legacyKeys)

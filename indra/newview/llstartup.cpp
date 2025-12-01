@@ -4223,6 +4223,9 @@ void LLStartUp::initNameCache()
 
 void LLStartUp::initExperiences()
 {
+    // <FS:Ansariel> Log getting spammed with experience requests from other grids
+    LLExperienceCache::setCurrentGrid(LLGridManager::instance().getGridId(), !LLGridManager::instance().isInSecondLife());
+
     // Should trigger loading the cache.
     LLExperienceCache::instance().setCapabilityQuery(
         boost::bind(&LLAgent::getRegionCapability, &gAgent, _1));
