@@ -69,26 +69,29 @@ AOEngine::AOEngine() :
 
 AOEngine::~AOEngine()
 {
-    LLSD currentState = LLSD().with("CurrentSet", mCurrentSet->getName());
-    LLSD currentAnimations;
-    for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
+    LLSD currentState = LLSD::emptyMap();
+    if (mCurrentSet)
     {
-        if (auto state = mCurrentSet->getState(index); state && !state->mAnimations.empty())
+        currentState = LLSD().with("CurrentSet", mCurrentSet->getName());
+        LLSD currentAnimations;
+        for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
         {
-            LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Animation index " << state->mCurrentAnimation << LL_ENDL;
-            LLUUID shadow_id{ state->mAnimations[state->mCurrentAnimation].mAssetUUID };
-            LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
-            cipher.encrypt(shadow_id.mData, UUID_BYTES);
-            currentAnimations.insert(state->mName, shadow_id);
+            if (auto state = mCurrentSet->getState(index); state && !state->mAnimations.empty())
+            {
+                LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Animation index " << state->mCurrentAnimation << LL_ENDL;
+                LLUUID shadow_id{ state->mAnimations[state->mCurrentAnimation].mAssetUUID };
+                LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
+                cipher.encrypt(shadow_id.mData, UUID_BYTES);
+                currentAnimations.insert(state->mName, shadow_id);
+            }
+            else
+            {
+                LL_DEBUGS("AOEngine") << "No state " << index << " or no animations defined for this state" << LL_ENDL;
+            }
         }
-        else
-        {
-            LL_DEBUGS("AOEngine") << "No state " << index << " or no animations defined for this state" << LL_ENDL;
-        }
+        currentState.insert("CurrentStateAnimations", currentAnimations);
     }
-    currentState.insert("CurrentStateAnimations", currentAnimations);
     LL_DEBUGS("AOEngine") << "Stored AO state: " << currentState << LL_ENDL;
-
     gSavedPerAccountSettings.setLLSD("FSCurrentAOState", currentState);
 
     clear(false);
