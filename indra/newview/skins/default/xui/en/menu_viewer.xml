@@ -575,7 +575,7 @@
              parameter="snapshot" />
         </menu_item_call>
         <menu_item_call
-         label="360° Snapshot"
+         label="360Â° Snapshot"
          name="Capture 360">
             <menu_item_call.on_click
              function="Floater.Show"
