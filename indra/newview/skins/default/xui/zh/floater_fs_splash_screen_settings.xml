@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="登入啟動畫面設定">
+	<text name="description">
+		在這裡配置登入啟動畫面的顯示選項。這些設定將在您下次重新啟動查看器時生效。
+	</text>
+	<text name="section_visibility">
+		區域可見性：
+	</text>
+	<check_box label="隱藏頂部欄" name="hide_top_bar" />
+	<check_box label="隱藏部落格區域" name="hide_blogs" />
+	<check_box label="隱藏目的地" name="hide_destinations" />
+	<text name="section_accessibility">
+		輔助使用選項：
+	</text>
+	<check_box label="啟用灰階模式" name="use_gray_mode" />
+	<check_box label="啟用高對比模式" name="use_high_contrast" />
+	<check_box label="啟用全大寫模式" name="use_all_caps" />
+	<check_box label="使用較大字型" name="use_larger_fonts"/>
+	<check_box label="關閉透明效果" name="no_transparency" />
+</floater>

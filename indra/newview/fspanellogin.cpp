@@ -929,6 +929,23 @@ void FSPanelLogin::loadLoginPage()
         params["noversionpopup"] = "true";
     }
 
+	// Splash screen settings
+	static const std::pair<std::string, std::string> mappings[] = {
+		{"FSSplashScreenHideTopBar", "hidetopbar"},
+		{"FSSplashScreenHideBlogs", "hideblogs"},
+		{"FSSplashScreenHideDestinations", "hidedestinations"},
+		{"FSSplashScreenUseGrayMode", "usegraymode"},
+		{"FSSplashScreenUseHighContrast", "usehighcontrast"},
+		{"FSSplashScreenUseAllCaps", "useallcaps"},
+		{"FSSplashScreenUseLargerFonts", "uselargerfonts"},
+		{"FSSplashScreenNoTransparency", "notransparency"},
+	};
+
+	for (const auto &m : mappings)
+	{
+		params[m.second] = gSavedSettings.getBOOL(m.first) ? "1" : "0";
+	}
+
     // Make an LLURI with this augmented info
     std::string url = login_page.scheme().empty()? login_page.authority() : login_page.scheme() + "://" + login_page.authority();
     LLURI login_uri(LLURI::buildHTTP(url,
