@@ -205,7 +205,7 @@ public:
     void setIgnoreReshape(bool ignore) { mIgnoreReshape = ignore; }
 
     // <FS:Ansariel> Add callback for reshaping
-    typedef boost::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_panel_callback_t;
+    typedef std::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_panel_callback_t;
     void setReshapePanelCallback(reshape_panel_callback_t cb) { mReshapePanelCallback = cb; }
     // </FS:Ansariel>
 

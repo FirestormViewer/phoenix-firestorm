@@ -89,7 +89,7 @@ public:
      * Member variables
      */
 protected:
-    typedef boost::function<void(bool)> behaviour_handler_t;
+    typedef std::function<void(bool)> behaviour_handler_t;
     typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
     behaviour_handler_map_t m_Handlers;
 

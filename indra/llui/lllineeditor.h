@@ -203,7 +203,7 @@ public:
     /*virtual*/ bool    setLabelArg(const std::string& key, const LLStringExplicit& text) override;
 
     //<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
-    typedef boost::function<void(S32&, S32&, LLWString&, S32&, const LLWString&)> autoreplace_callback_t;
+    typedef std::function<void(S32&, S32&, LLWString&, S32&, const LLWString&)> autoreplace_callback_t;
     autoreplace_callback_t mAutoreplaceCallback;
     void            setAutoreplaceCallback (autoreplace_callback_t cb) { mAutoreplaceCallback = cb; }
     //</FS:TS> FIRE-11373

@@ -240,8 +240,8 @@ public:
     ETypeTransparency   getTransparencyType() const {return mTransparencyType;}
 
     // <FS:TJ> Allow any UICtrl to override the transparency with a callback
-    boost::function<F32(ETypeTransparency, F32)> mTransparencyOverrideCallback;
-    virtual void setTransparencyOverrideCallback(boost::function<F32(ETypeTransparency, F32)> cb) { mTransparencyOverrideCallback = cb; }
+    std::function<F32(ETypeTransparency, F32)> mTransparencyOverrideCallback;
+    virtual void setTransparencyOverrideCallback(std::function<F32(ETypeTransparency, F32)> cb) { mTransparencyOverrideCallback = cb; }
     // </FS:TJ>
 
     bool    focusNextItem(bool text_entry_only);

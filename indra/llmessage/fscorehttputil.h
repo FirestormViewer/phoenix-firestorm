@@ -32,7 +32,7 @@
 
 namespace FSCoreHttpUtil
 {
-    typedef boost::function<void(const LLSD&)> completionCallback_t;
+    typedef std::function<void(const LLSD&)> completionCallback_t;
 
     void callbackHttpPostRaw(const std::string& url, std::string postData, completionCallback_t success = {}, completionCallback_t failure = {},
                              LLCore::HttpHeaders::ptr_t aHeader = LLCore::HttpHeaders::ptr_t(), LLCore::HttpOptions::ptr_t options = LLCore::HttpOptions::ptr_t());

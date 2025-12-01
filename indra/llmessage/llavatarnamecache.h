@@ -45,7 +45,7 @@ public:
     typedef std::function<void (const LLUUID id, const LLAvatarName& av_name)> account_name_changed_callback_t;
 
     // <FS:Ansariel> Contact sets
-    typedef boost::function<bool(const LLUUID& id, bool& dn_removed, std::string& custom_name)> custom_name_check_callback_t;
+    typedef std::function<bool(const LLUUID& id, bool& dn_removed, std::string& custom_name)> custom_name_check_callback_t;
     void setCustomNameCheckCallback(custom_name_check_callback_t cb)
     {
         mCustomNameCheckCallback = cb;

@@ -144,7 +144,7 @@ static bool have_script_upload_cap(LLUUID& object_id)
 class LLCallbackTimer : public LLEventTimer
 {
 public:
-    typedef boost::function<bool()> bool_func_t;
+    typedef std::function<bool()> bool_func_t;
 public:
     LLCallbackTimer(F32 nPeriod, bool_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
     /*virtual*/ bool tick() { return m_Callback(); }

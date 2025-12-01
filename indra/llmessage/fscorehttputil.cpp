@@ -57,7 +57,7 @@ void trivialPostCoroRaw(std::string                   url,
     if (!status)
     {
         // If a failure routine is provided do it.
-        if (!failure.empty())
+        if (failure)
         {
             failure(httpResults);
         }
@@ -65,7 +65,7 @@ void trivialPostCoroRaw(std::string                   url,
     else
     {
         // If a success routine is provided do it.
-        if (!success.empty())
+        if (success)
         {
             success(result);
         }
@@ -113,14 +113,14 @@ void trivialGetCoroRaw(std::string                   url,
 
     if (!status)
     {
-        if (!failure.empty())
+        if (failure)
         {
             failure(httpResults);
         }
     }
     else
     {
-        if (!success.empty())
+        if (success)
         {
             success(result);
         }
@@ -155,14 +155,14 @@ void trivialGetCoro(std::string url, time_t last_modified, completionCallback_t 
 
     if (!status)
     {
-        if (!failure.empty())
+        if (failure)
         {
             failure(httpResults);
         }
     }
     else
     {
-        if (!success.empty())
+        if (success)
         {
             success(result);
         }

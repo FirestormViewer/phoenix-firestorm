@@ -80,7 +80,7 @@ public:
     void    refreshLineHeight();
 
 
-    typedef boost::function<bool(S32, S32, MASK, bool, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
+    typedef std::function<bool(S32, S32, MASK, bool, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
     void setHandleDaDCallback(const handle_dad_callback_signal_t& func)
     {
         mHandleDaDCallback = func;
