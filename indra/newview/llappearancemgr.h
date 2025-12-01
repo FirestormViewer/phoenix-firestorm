@@ -254,9 +254,9 @@ public:
     std::string getAppearanceServiceURL() const;
 
     // <FS:Ansariel> Better attachment list
-    //typedef boost::function<void ()> attachments_changed_callback_t;
+    //typedef std::function<void()> attachments_changed_callback_t;
     //typedef boost::signals2::signal<void ()> attachments_changed_signal_t;
-    typedef boost::function<void (const LLUUID& item_id)> attachments_changed_callback_t;
+    typedef std::function<void(const LLUUID& item_id)> attachments_changed_callback_t;
     typedef boost::signals2::signal<void (const LLUUID& item_id)> attachments_changed_signal_t;
     // </FS:Ansariel>
     boost::signals2::connection setAttachmentsChangedCallback(attachments_changed_callback_t cb);

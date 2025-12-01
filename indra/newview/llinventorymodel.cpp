@@ -1123,7 +1123,7 @@ void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
         {
             if (new_category.isNull())
             {
-                if (callback && !callback.empty())
+                if (callback)
                 {
                     callback(new_category);
                 }
@@ -1150,7 +1150,7 @@ void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
                 updateCategory(cat);
             }
 
-            if (callback && !callback.empty())
+            if (callback)
             {
                 callback(new_category);
             }

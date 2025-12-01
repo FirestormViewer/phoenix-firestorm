@@ -35,7 +35,6 @@
 #include <set>
 #include <map>
 #include <boost/tokenizer.hpp>
-#include <boost/concept_check.hpp>
 #include "../newview/llviewernetwork.h" // <FS:Ansariel> Log getting spammed with experience requests from other grids; Yes, it IS ugly!
 
 //=========================================================================
@@ -326,7 +325,7 @@ void LLExperienceCache::requestExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdap
 
 void LLExperienceCache::requestExperiences()
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -556,7 +555,7 @@ void LLExperienceCache::get(const LLUUID& key, LLExperienceCache::ExperienceGetF
 //=========================================================================
 void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const LLUUID& itemId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -568,7 +567,7 @@ void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const 
 
 void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const LLUUID& itemId, std::string url, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -618,8 +617,10 @@ void LLExperienceCache::fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCorout
             failure["error"] = -1;
             failure["message"] = "no experience";
         }
-        if (fn && !fn.empty())
+        if (fn != nullptr)
+        {
             fn(failure);
+        }
         return;
     }
 
@@ -630,7 +631,7 @@ void LLExperienceCache::fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCorout
 //-------------------------------------------------------------------------
 void LLExperienceCache::findExperienceByName(const std::string text, int page, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -673,7 +674,7 @@ void LLExperienceCache::findExperienceByNameCoro(LLCoreHttpUtil::HttpCoroutineAd
 //-------------------------------------------------------------------------
 void LLExperienceCache::getGroupExperiences(const LLUUID &groupId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -761,7 +762,7 @@ void LLExperienceCache::regionExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapt
 //-------------------------------------------------------------------------
 void LLExperienceCache::getExperiencePermission(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -785,7 +786,7 @@ void LLExperienceCache::getExperiencePermission(const LLUUID &experienceId, Expe
 
 void LLExperienceCache::setExperiencePermission(const LLUUID &experienceId, const std::string &permission, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -815,7 +816,7 @@ void LLExperienceCache::setExperiencePermission(const LLUUID &experienceId, cons
 
 void LLExperienceCache::forgetExperiencePermission(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -859,7 +860,7 @@ void LLExperienceCache::experiencePermissionCoro(LLCoreHttpUtil::HttpCoroutineAd
 //-------------------------------------------------------------------------
 void LLExperienceCache::getExperienceAdmin(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -891,7 +892,7 @@ void LLExperienceCache::getExperienceAdminCoro(LLCoreHttpUtil::HttpCoroutineAdap
 //-------------------------------------------------------------------------
 void LLExperienceCache::updateExperience(LLSD updateData, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;

@@ -487,8 +487,8 @@ LLAgent::LLAgent() :
     mAutoPilotTargetDist(0.f),
     mAutoPilotNoProgressFrameCount(0),
     mAutoPilotRotationThreshold(0.f),
-    mAutoPilotFinishedCallback(NULL),
-    mAutoPilotCallbackData(NULL),
+    mAutoPilotFinishedCallback(nullptr),
+    mAutoPilotCallbackData(nullptr),
 
     mMovementKeysLocked(false),
 
@@ -508,8 +508,8 @@ LLAgent::LLAgent() :
     // <FS:Ansariel> [Legacy Bake]
     mAppearanceSerialNum(0),
 
-    mMouselookModeInSignal(NULL),
-    mMouselookModeOutSignal(NULL),
+    mMouselookModeInSignal(nullptr),
+    mMouselookModeOutSignal(nullptr),
     mFSAreaSearchActive(false), // <FS:minerjr> - Flag was not initialized
     mPhantom(false),
     restoreToWorld(false)

@@ -99,7 +99,7 @@ public:
     static void createAgentCallingCard();
 
 private:
-    typedef boost::function<void()> callback_t;
+    typedef std::function<void()> callback_t;
 
 
 

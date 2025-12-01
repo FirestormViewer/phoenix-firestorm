@@ -30,8 +30,8 @@
 #include "llrect.h"
 #include "llsd.h"
 
+#include <functional>
 #include <list>
-#include <boost/function.hpp>
 // [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
 #include <boost/signals2.hpp>
 #include "llboost.h"
@@ -45,7 +45,7 @@
 class LLFloater;
 class LLUICtrl;
 
-typedef boost::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
+typedef std::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
 // [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
 typedef boost::function<const std::string& (void)> LLFloaterFileFunc;
 // [/SL:KB]

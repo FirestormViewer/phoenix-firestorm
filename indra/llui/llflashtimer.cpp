@@ -72,7 +72,7 @@ void LLFlashTimer::onUpdateFlashSettings()
 void LLFlashTimer::unset()
 {
     mUnset = true;
-    mCallback = NULL;
+    mCallback = nullptr;
 }
 
 bool LLFlashTimer::tick()

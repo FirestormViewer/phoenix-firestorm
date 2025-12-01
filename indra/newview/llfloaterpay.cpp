@@ -136,8 +136,8 @@ const S32 FASTPAY_BUTTON_WIDTH = 80;
 LLFloaterPay::LLFloaterPay(const LLSD& key)
     : LLFloater(key),
       mCallbackData(),
-      mCallback(NULL),
-      mObjectNameText(NULL),
+      mCallback(nullptr),
+      mObjectNameText(nullptr),
       mTargetUUID(key.asUUID()),
       mTargetIsGroup(false),
       mHaveName(false)
