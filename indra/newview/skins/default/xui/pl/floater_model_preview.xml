@@ -325,7 +325,7 @@
             Problemy z fizyką:
         </text>
         <color_swatch label="Złe krawędzie" tool_tip="Kolor krawędzi zdegenerowanych (cienkich) trójkątów w oknie podglądu podczas przesyłania meszu" name="mesh_preview_degenerate_edge_color" />
-        <color_swatch label="Złe wypełnienia" tool_tip="Kolor wypełnienia zdegenerowanych (cienkich) trójkątów w oknie podglądu podczas przesyłania meszu" name="mesh_degenerate_fill_color" />
+        <color_swatch label="Złe wypełnienia" tool_tip="Kolor wypełnienia zdegenerowanych (cienkich) trójkątów w oknie podglądu podczas przesyłania meszu" name="mesh_preview_degenerate_fill_color" />
      </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">

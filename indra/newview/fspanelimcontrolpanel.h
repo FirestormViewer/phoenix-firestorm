@@ -69,6 +69,7 @@ public:
     void draw() override;
 
     uuid_vec_t getParticipants() const override;
+    void insertMentionAtCursor(const LLUUID& url);
 
 protected:
     LLUUID mGroupID;

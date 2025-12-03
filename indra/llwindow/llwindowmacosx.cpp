@@ -1268,9 +1268,11 @@ bool LLWindowMacOSX::setCursorPosition(const LLCoordWindow position)
     // trigger mouse move callback
     LLCoordGL gl_pos;
     convertCoords(position, &gl_pos);
-    float scale = getSystemUISize();
-    gl_pos.mX *= scale;
-    gl_pos.mY *= scale;
+    // <FS:TJ> gl_pos is not meant to be scaled and breaks our pie menu and possibly other things
+    //float scale = getSystemUISize();
+    //gl_pos.mX *= scale;
+    //gl_pos.mY *= scale;
+    // </FS:TJ>
     mCallbacks->handleMouseMove(this, gl_pos, (MASK)0);
 
     return result;

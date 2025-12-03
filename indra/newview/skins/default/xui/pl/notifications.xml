@@ -5280,6 +5280,12 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 	<notification name="PickLimitReached">
 		Nie można utworzyć kolejnego Miejsca, ponieważ limit ich ilości został osiągnięty.
 	</notification>
+	<notification name="ConfirmGlobalOnlineStatusToggle">
+		Czy na pewno chcesz zmienić widoczność swojego statusu online dla wszystkich znajomych naraz?
+
+Ze względu na obciążenie serwera taka masowa zmiana może chwilę potrwać i tymczasowo powodować problemy z wyświetlaniem Twojego statusu online u niektórych znajomych.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.
 		<usetemplate ignoretext="Informuj mnie, że masowa zmiana widoczności online może zająć trochę czasu" name="okignore" />
@@ -5532,7 +5538,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]).
+		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]). TO JEST TYLKO SUGESTIA - jeśli twój komputer działa prawidłowo, możesz ją bezpiecznie zignorować.
 		<usetemplate ignoretext="Ostrzeżenie o liczbie strojów" name="okignore" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">

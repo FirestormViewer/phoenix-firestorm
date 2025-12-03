@@ -2,6 +2,7 @@
 <context_menu name="Object Pie">
 	<menu_item_call label="Toucher" name="Object Touch"/>
 	<menu_item_call label="Modifier" name="Edit..."/>
+	<menu_item_call label="Modifier le matériau PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Construire" name="Build"/>
 	<menu_item_call label="Ouvrir" name="Open"/>
 	<menu_item_call label="S'asseoir ici" name="Object Sit"/>
@@ -21,7 +22,7 @@
 		<menu_item_call label="Supprimer les scripts" name="Remove Scripts From Selection"/>
 	</context_menu>
 	<menu_item_call label="Zoomer" name="Zoom In"/>
-	<menu_item_call label="Afficher dans les ensembles définis" name="show_in_linksets"/>
+	<menu_item_call label="Afficher dans les objets de la région" name="show_in_linksets"/>
 	<menu_item_call label="Show in characters" name="show_in_characters"/>
 	<context_menu label="Mettre" name="Put On">
 		<menu_item_call label="Porter" name="Wear"/>

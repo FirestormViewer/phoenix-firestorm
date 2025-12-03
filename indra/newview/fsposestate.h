@@ -49,18 +49,7 @@ public:
     /// <param name="avatar">The avatar whose animations are to be captured.</param>
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="jointNamesRecaptured">The names of the joints being recaptured.</param>
-    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, std::string jointNamesRecaptured);
-
-    /// <summary>
-    /// Add a new posing state, or updates the matching posing state with the supplied data.
-    /// </summary>
-    /// <param name="avatar">The avatar the posing state is intended for.</param>
-    /// <param name="animId">The ID of the animation.</param>
-    /// <param name="updateTime">The frame-time of the animation.</param>
-    /// <param name="jointNames">The names of the joints, if any, the animation should specifically be applied to.</param>
-    /// <param name="captureOrder">The capture order.</param>
-    /// <returns>True if the posing state was added or changed by the update data, otherwise false.</returns>
-    bool addOrUpdatePosingMotionState(LLVOAvatar* avatar, LLUUID animId, F32 updateTime, std::string jointNames, int captureOrder);
+    void updateMotionStates(LLVOAvatar* avatar, FSPosingMotion* posingMotion, const std::vector<S32>& jointNamesRecaptured);
 
     /// <summary>
     /// Removes all current animation states for the supplied avatar.
@@ -72,16 +61,17 @@ public:
     /// Writes any documented poses for the supplied avatar to the supplied stream.
     /// </summary>
     /// <param name="avatar">The avatar whose animations may have been captured.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when preparing saveRecord to send to another by collab.</param>
     /// <param name="saveRecord">The record to add to.</param>
-    void writeMotionStates(LLVOAvatar* avatar, LLSD* saveRecord);
+    void writeMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD* saveRecord);
 
     /// <summary>
     /// Restores pose state(s) from the supplied record.
     /// </summary>
     /// <param name="avatar">The avatar whose animations may have been captured.</param>
-    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="ignoreOwnership">Whether to ignore ownership. For use when reading a local file.</param>
     /// <param name="pose">The record to read from.</param>
-    void restoreMotionStates(LLVOAvatar* avatar, LLSD pose);
+    void restoreMotionStates(LLVOAvatar* avatar, bool ignoreOwnership, LLSD pose);
 
     /// <summary>
     /// Applies the motion states for the supplied avatar to the supplied motion.
@@ -122,20 +112,30 @@ private:
         bool motionApplied = false;
 
         /// <summary>
-        /// Whether the avatar owns the pose, or the pose was loaded.
+        /// For non-gAgent, we permit a query of the inventory of a prim they are sitting on.
+        /// Because this involves latency, we may retry ownership checking at save-time.
         /// </summary>
-        bool avatarOwnsPose = false;
+        bool requeriedAssetInventory = false;
 
         /// <summary>
-        /// When reloading, larger numbers are loaded last, nesting order and priority.
-        /// This is used to represent recaptures, where joints could be animated with different poses.
+        /// Whether gAgent owns the pose, or the pose was loaded from XML.
         /// </summary>
-        int captureOrder = 0;
+        bool gAgentOwnsPose = false;
 
         /// <summary>
-        /// When reloading, and if not-empty, the names of the bones this motionId should affect.
+        /// Represents 'capture layers: how the user layers animations 'on top of' others.
         /// </summary>
-        std ::string jointNamesAnimated;
+        S32 captureOrder = 0;
+
+        /// <summary>
+        /// Represents in-layer order of capture.
+        /// </summary>
+        S32 inLayerOrder = 0;
+
+        /// <summary>
+        /// When reloading, and if not-empty, the bone-numbers this motionId should affect.
+        /// </summary>
+        std ::vector<S32> jointNumbersAnimated;
     };
 
     /// <summary>
@@ -144,15 +144,61 @@ private:
     /// <param name="avatar">The avatar being posed by the motion.</param>
     /// <param name="posingMotion">The posing motion.</param>
     /// <param name="captureOrder">The order of the capture.</param>
-    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, int captureOrder);
+    void resetPriorityForCaptureOrder(LLVOAvatar* avatar, FSPosingMotion* posingMotion, S32 captureOrder);
 
     /// <summary>
-    /// Gets whether the supplied avatar owns, and thus can save information about the supplied asset ID.
+    /// Gets whether gAgentID owns, and thus can save information about the supplied motionId.
     /// </summary>
-    /// <param name="avatar">The avatar to query ownership for.</param>
-    /// <param name="motionId">The asset ID of the object.</param>
-    /// <returns>True if the avatar owns the asset, otherwise false.</returns>
-    bool canSaveMotionId(LLVOAvatar* avatar, LLAssetID motionId);
+    /// <param name="avatarPlayingMotionId">The avatar playing the supplied motionId.</param>
+    /// <param name="motionId">The motionId of the animation.</param>
+    /// <returns>True if the gAgent owns the motionId, otherwise false.</returns>
+    /// <remarks>
+    /// This only works reliably for self.
+    /// For motions playing on others, the motion needs to be an asset in gAgent's inventory.
+    /// </remarks>
+    bool canSaveMotionId(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId);
+
+    /// <summary>
+    /// Examines gAgent's animation source list for the supplied animation Id.
+    /// </summary>
+    /// <param name="motionId">The ID of the motion to query.</param>
+    /// <returns>True if gAgent is playing the animation, otherwise false.</returns>
+    bool motionIdIsAgentAnimationSource(LLAssetID motionId);
+
+    /// <summary>
+    /// Queries a specific condition of the supplied animation ID.
+    /// </summary>
+    /// <param name="avatarPlayingMotionId">The avatar to query for.</param>
+    /// <param name="motionId">The motion ID to query for.</param>
+    /// <returns>
+    /// True if the supplied avatar is sitting on an object owned by gAgent, and that object
+    /// contains an animation asset with the same assetId.
+    /// </returns>
+    /// <remarks>
+    /// This is intended to test for a situation a photographer might arrange.
+    /// If you are sitting on photographer's prim, playing photographer's pose, and photographer wants to save their work,
+    /// this allows them to save the Animation ID and state to XML.
+    /// It is intended this be called twice at least, as it does not implement a callback onInventoryLoaded.
+    /// Presently this works fine: first time being when posing starts, second when pose is saved.
+    /// </remarks>
+    bool motionIdIsFromPrimAgentOwnsAgentIsSittingOn(LLVOAvatar* avatarPlayingMotionId, LLAssetID motionId);
+
+    /// <summary>
+    /// Tests if all the members of supplied vector2 are members of supplied vector1.
+    /// </summary>
+    /// <param name="vector1">The super-set.</param>
+    /// <param name="vector2">The possible sub-set.</param>
+    /// <returns>True if all members of vector2 are members of vector1, otherwise false.</returns>
+    bool vector2IsSubsetOfVector1(std::vector<S32> vector1, std::vector<S32> vector2);
+
+    /// <summary>
+    /// Two symmetric methods for (de)serializing vectors to both XML and collab-safe short-as-possible strings and back again.
+    /// </summary>
+    /// <remarks>
+    /// Collab-safe means ASCII-printable chars, and delimiter usage does not conflict with Collab's delimiter.
+    /// </remarks>
+    std::string encodeVectorToString(const std::vector<S32>& vector);
+    std::vector<S32> decodeStringToVector(std::string_view vector);
 
     struct compareByCaptureOrder
     {
@@ -160,13 +206,16 @@ private:
         {
             if (a.captureOrder < b.captureOrder)
                 return true; // Ascending order
+            if (a.captureOrder == b.captureOrder && a.inLayerOrder < b.inLayerOrder)
+                return true; // Ascending order in layer
 
             return false;
         }
     };
 
-    static std::map <LLUUID, std::vector<fsMotionState>> sMotionStates;
-    static std::map<LLUUID, int> sCaptureOrder;
+    static std::map<LLUUID, std::vector<fsMotionState>> sMotionStates;
+    static std::map<LLUUID, S32> sCaptureOrder;
+    static std::map<LLUUID, bool> sMotionStatesOwnedByMe;
 };
 
 #endif // LL_FSPoseState_H

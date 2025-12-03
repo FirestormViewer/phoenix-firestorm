@@ -133,6 +133,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
+    fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
     fsfloaterteleporthistory.cpp
@@ -974,6 +975,7 @@ set(viewer_HEADER_FILES
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
+    fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h
     fsfloaterteleporthistory.h
@@ -2514,6 +2516,7 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${CMAKE_CURRENT_BINARY_DIR}/llphysicsextensions/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensions  -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     elseif(HAVOK_TPV)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
@@ -2524,6 +2527,7 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     else()
       target_link_libraries(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     endif()

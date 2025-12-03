@@ -913,7 +913,27 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
+    if (gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
+    {
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
+        return;
+    }
     bool visible = newvalue.asBoolean();
+    LLSD payload;
+    payload["visible"] = visible;
+    LLNotificationsUtil::add("ConfirmGlobalOnlineStatusToggle", LLSD(), payload, applyGlobalOnlineStatusChange);
+}
+
+void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& response)
+{
+    bool visible = notification["payload"]["visible"].asBoolean();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option != 0)
+    {
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", true);
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusToggle", !visible);
+        return;
+    }
 
     LLAvatarTracker::buddy_map_t all_buddies;
     LLAvatarTracker::instance().copyBuddyList(all_buddies);

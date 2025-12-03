@@ -71,6 +71,9 @@ public:
     // <FS:Ansariel> Changed to public so we can update history when using modifier keys
     void    updateHistory();
 
+    // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+    void    insertMentionAtCursor(const std::string& str);
+
     // <FS:Ansariel> Fix linefeed pasting
     /*virtual*/ void    paste();
 

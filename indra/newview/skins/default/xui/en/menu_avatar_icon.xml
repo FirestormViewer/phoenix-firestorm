@@ -129,6 +129,14 @@
      name="copy url">
        <on_click function="AvatarIcon.Action" parameter="copy_url" />
     </menu_item_call>
+    <!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
+    <menu_item_call
+     label="Copy Mention URI to clipboard"
+     layout="topleft"
+     name="mention_copy_label">
+        <on_click function="Mention.CopyURI" />
+    </menu_item_call>
+    <!-- </FS:Zi> -->
     <menu_item_separator layout="topleft" name="separator_block"/>
     <menu_item_call
      label="Report Abuse"
@@ -195,4 +203,16 @@
       <on_click function="AvatarIcon.Action" parameter="ban_member" />
       <on_enable function="AvatarIcon.Enable" parameter="can_ban_member" />
     </menu_item_call>
+    <!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
+    <menu_item_separator
+     name="MentionURISeparator"
+     layout="topleft" />
+    <menu_item_call
+     label="Mention User in Chat"
+     layout="topleft"
+     name="mention_in_chat">
+        <menu_item_call.on_click
+         function="Mention.Chat" />
+    </menu_item_call>
+    <!-- </FS:Zi> -->
 </toggleable_menu>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Impostazioni Schermata Iniziale">
+	<text name="description">
+		Configura qui le opzioni di visualizzazione della schermata iniziale. Queste impostazioni avranno effetto dopo il prossimo riavvio del visualizzatore.
+	</text>
+	<text name="section_visibility">
+		Visibilità sezione:
+	</text>
+	<check_box label="Nascondi barra superiore" name="hide_top_bar" />
+	<check_box label="Nascondi sezione blog" name="hide_blogs" />
+	<check_box label="Nascondi destinazioni" name="hide_destinations" />
+	<text name="section_accessibility">
+		Opzioni di Accessibilità:
+	</text>
+	<check_box label="Abilita modalità scala di grigi" name="use_gray_mode" />
+	<check_box label="Abilita modalità contrasto elevato" name="use_high_contrast" />
+	<check_box label="Abilita la modalità &quot;TUTTO MAIUSCOLO&quot;" name="use_all_caps" />
+	<check_box label="Usa caratteri più grandi" name="use_larger_fonts"/>
+	<check_box label="Disabilita effetti di trasparenza" name="no_transparency" />
+</floater>

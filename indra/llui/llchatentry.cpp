@@ -278,3 +278,18 @@ void LLChatEntry::paste()
     }
 }
 // </FS:Ansariel>
+
+// <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+void LLChatEntry::insertMentionAtCursor(const std::string& str)
+{
+    S32 cursor_from_end = getLength() - getCursorPos();
+
+    insertText(str);
+
+    std::string new_text(wstring_to_utf8str(getConvertedText()));
+    clear();
+    appendTextImpl(new_text, LLStyle::Params(), true);
+
+    setCursorPos(getLength() - cursor_from_end);
+}
+// </FS:Zi>

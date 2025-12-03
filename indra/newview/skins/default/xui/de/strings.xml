@@ -7303,4 +7303,22 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="ImportSuccessful">
 		[COUNT] Einträge erfolgreich verarbeitet.
 	</string>
+	<string name="Flood">
+		Füllen
+	</string>
+	<string name="Surface Only">
+		Nur Oberfläche
+	</string>
+	<string name="Raycast">
+		Raycast
+	</string>
+	<string name="Very High">
+		Sehr Hoch
+	</string>
+	<string name="Ultra">
+		Ultra
+	</string>
+	<string name="Maximum">
+		Maximum
+	</string>
 </strings>

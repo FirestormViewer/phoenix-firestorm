@@ -181,7 +181,7 @@
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Dépl." name="positionRotation_panel">
-						<panel name="title">
+						<panel name="move_tab_panel">
 							<text name="av_position_updown_label">
 								Haut/bas :
 							</text>
@@ -248,7 +248,7 @@
 						<check_box name="also_save_bvh_checkbox" label="Ajouter BVH à l'enregis.**" tool_tip="Lorsque vous enregistrez votre pose, écrivez également un fichier BVH, qui peut être téléchargé via 'Construire > Charger > Animation' pour poser vous-même ou d'autres personnes dans le monde. Pour ce faire, les articulations doivent remettre leur « base » à zéro, car le BVH nécessite que l'on travaille sur l'original."/>
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmer l'écrasement" tool_tip="Lorsque vous enregistrez une pose, si le fichier existe déjà, vous devez cliquer à nouveau sur le bouton d'enregistrement pour confirmer que vous êtes sûr de vouloir l'écraser."/>
 						<check_box name="natural_direction_checkbox" label="Utiliser l'alignement naturel" tool_tip="Le squelette a des rotations d'articulations non naturelles par défaut. Cela complique la pose. Si cette option est cochée, les articulations tourneront de manière plus naturelle."/>
-						<check_box name="show_joint_markers_checkbox" label="Aff. marqueurs de jointure" tool_tip="Afficher de petits indicateurs pour faciliter la sélection des articulations lors de la pose visuelle."/>
+						<check_box name="show_joint_markers_checkbox" label="Aff. marqueurs de jointure" tool_tip="Afficher de petits indicateurs pour faciliter la sélection des articulations lors de la pose."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Activer et désactiver les manipulateurs visuels"/>
@@ -295,6 +295,9 @@
 					<button name="delta_mode_toggle" tool_tip="Si vous modifiez plusieurs articulations, chacune d'entre elles sera modifiée de la même manière, au lieu de toutes les modifier du même coup. Sert également à déverrouiller le Gimbal Lock." />
 					<button label="Miroir" name="button_toggleMirrorRotation" tool_tip="Changer l'articulation opposée, comme dans un miroir." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Copier les modifications sur l'articulation opposée." />
+					<button label="M" name="poser_world_frame_toggle" tool_tip="Effectuer des changements de rotation par rapport au Monde"/>
+					<button label="A" name="poser_avatar_frame_toggle" tool_tip="Effectuer des changements de rotation par rapport à l'Avatar"/>
+					<button label="É" name="poser_screen_frame_toggle" tool_tip="Effectuer des changements de rotation par rapport à l'Écran"/>
 					<button label="Cop. G &gt; D" name="button_symmetrize_left_to_right" tool_tip="Cliquez pour copier la modification du côté gauche vers le côté droit."/>
 					<button label="Cop. D &gt; G" name="button_symmetrize_right_to_left" tool_tip="Cliquez pour copier la modification du côté droit vers le côté gauche."/>
 				</panel>

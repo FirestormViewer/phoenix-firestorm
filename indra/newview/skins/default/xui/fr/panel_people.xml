@@ -47,6 +47,7 @@ Pour rechercher des résidents avec qui passer du temps, utilisez [secondlife://
 				<button name="add_friend_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
 				<dnd_button name="nearby_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
+			<slider label="Distance :" name="near_me_range" tool_tip="Distance des personnes à proximité"/>
 -->
 		</panel>
 		<panel label="Amis" name="friends_panel">

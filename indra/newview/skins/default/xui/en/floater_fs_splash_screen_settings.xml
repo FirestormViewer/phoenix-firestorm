@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="splash_screen_settings"
+ title="Splash Screen Settings"
+ width="350"
+ height="320"
+ min_width="350"
+ min_height="300"
+ save_rect="true"
+ single_instance="true"
+ can_resize="false"
+ can_minimize="true"
+ can_close="true"
+ can_drag_on_left="false">
+
+    <text
+     follows="left|top"
+     height="40"
+     layout="topleft"
+     left="10"
+     name="description"
+     top="10"
+     word_wrap="true"
+     width="330">
+        Configure splash screen display options here. These settings will take effect after the next viewer restart.
+    </text>
+
+    <text
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="section_visibility"
+     top_pad="10"
+     width="330"
+     font="SansSerifBold">
+        Section Visibility:
+    </text>
+
+    <check_box
+     control_name="FSSplashScreenHideTopBar"
+     height="20"
+     label="Hide top bar"
+     layout="topleft"
+     left="20"
+     name="hide_top_bar"
+     top_pad="5"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenHideBlogs"
+     height="20"
+     label="Hide blogs section"
+     layout="topleft"
+     left="20"
+     name="hide_blogs"
+     top_pad="2"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenHideDestinations"
+     height="20"
+     label="Hide destinations section"
+     layout="topleft"
+     left="20"
+     name="hide_destinations"
+     top_pad="2"
+     width="310"/>
+
+    <text
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="section_accessibility"
+     top_pad="15"
+     width="330"
+     font="SansSerifBold">
+        Accessibility Options:
+    </text>
+
+    <check_box
+     control_name="FSSplashScreenUseGrayMode"
+     height="20"
+     label="Enable grayscale mode"
+     layout="topleft"
+     left="20"
+     name="use_gray_mode"
+     top_pad="5"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenUseHighContrast"
+     height="20"
+     label="Enable high contrast mode"
+     layout="topleft"
+     left="20"
+     name="use_high_contrast"
+     top_pad="2"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenUseAllCaps"
+     height="20"
+     label="Enable all caps mode"
+     layout="topleft"
+     left="20"
+     name="use_all_caps"
+     top_pad="2"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenUseLargerFonts"
+     height="20"
+     label="Use larger fonts"
+     layout="topleft"
+     left="20"
+     name="use_larger_fonts"
+     top_pad="2"
+     width="310"/>
+
+    <check_box
+     control_name="FSSplashScreenNoTransparency"
+     height="20"
+     label="Disable transparency effects"
+     layout="topleft"
+     left="20"
+     name="no_transparency"
+     top_pad="2"
+     width="310"/>
+
+</floater>

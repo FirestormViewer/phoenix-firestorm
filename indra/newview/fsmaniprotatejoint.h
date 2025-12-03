@@ -1,5 +1,5 @@
 /**
- * @file fsmaniproatejoint.h
+ * @file fsmaniprotatejoint.h
  * @brief custom manipulator for rotating joints
  *
  * $LicenseInfo:firstyear=2024&license=viewerlgpl$
@@ -32,11 +32,22 @@
 #include "llmaniprotate.h"
 
 class LLJoint;
-class LLVOAvatar;  // or LLVOAvatarSelf, etc.
+class LLVOAvatar;  // for LLVOAvatarSelf, etc.
+
+/// <summary>
+/// A set of reference frames for presenting the gimbal within.
+/// </summary>
+typedef enum E_PoserReferenceFrame
+{
+    POSER_FRAME_BONE   = 0, // frame is the bone the gimbal is centered on
+    POSER_FRAME_WORLD  = 1, // frame is world North-South-East-West-Up-Down
+    POSER_FRAME_AVATAR = 2, // frame is mPelvis rotation
+    POSER_FRAME_CAMERA = 3, // frame is defined by vector of camera position to bone position
+} E_PoserReferenceFrame;
 
 namespace {
     const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 85.f * DEG_TO_RAD ); // cos() is not constexpr til c++26
-    constexpr F32 RADIUS_PIXELS = 100.f;        // size in screen space
+    constexpr F32 RADIUS_PIXELS = 100.f;                          // size in screen space
     constexpr S32 CIRCLE_STEPS = 100;
     constexpr F32 CIRCLE_STEP_SIZE = 2.0f * F_PI / CIRCLE_STEPS;
     constexpr F32 SQ_RADIUS = RADIUS_PIXELS * RADIUS_PIXELS;
@@ -74,10 +85,24 @@ public:
     FSManipRotateJoint(LLToolComposite* composite);
     virtual ~FSManipRotateJoint() {}
     static std::string getManipPartString(EManipPart part);
-    // Called to designate which joint we are going to manipulate.
+
+    /// <summary>
+    /// Sets the joint we are going to manipulate.
+    /// </summary>
+    /// <param name="joint">The joint to interact with.</param>
     void setJoint(LLJoint* joint);
 
+    /// <summary>
+    /// Sets the avatar the manip should interact with.
+    /// </summary>
+    /// <param name="avatar">The avatar to interact with.</param>
     void setAvatar(LLVOAvatar* avatar);
+
+    /// <summary>
+    /// Sets the reference frame for the manipulator.
+    /// </summary>
+    /// <param name="avatar">The E_PoserReferenceFrame to use.</param>
+    void setReferenceFrame(const E_PoserReferenceFrame frame) { mReferenceFrame = frame; };
 
     // Overrides
     void handleSelect() override;
@@ -138,8 +163,13 @@ private:
     void renderRingPass(const RingRenderParams& params, float radius, float width, int pass);
     void renderAxes(const LLVector3& center, F32 size, const LLQuaternion& rotation);
 
+    bool isAvatarJointSafeToUse();
+    LLQuaternion getSelectedJointWorldRotation();
+
     float mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
+    E_PoserReferenceFrame mReferenceFrame = POSER_FRAME_BONE;
+    LLQuaternion mLastSetRotation;
 };
 
 #endif // FS_MANIP_ROTATE_JOINT_H
