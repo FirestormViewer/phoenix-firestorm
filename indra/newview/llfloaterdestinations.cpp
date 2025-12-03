@@ -28,12 +28,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterdestinations.h"
+#include "llmediactrl.h"
 #include "lluictrlfactory.h"
+#include "llviewercontrol.h"
+#include "llweb.h"
 
 #include "lfsimfeaturehandler.h"
 #include "llhttpconstants.h"
-#include "llmediactrl.h"
-#include "llweb.h"
+#include "lllogininstance.h"
+#include "llviewernetwork.h"
 
 LLFloaterDestinations::LLFloaterDestinations(const LLSD& key)
     :   LLFloater(key),
@@ -54,6 +57,39 @@ LLFloaterDestinations::~LLFloaterDestinations()
 bool LLFloaterDestinations::postBuild()
 {
     enableResizeCtrls(true, true, false);
+    LLMediaCtrl* destinations = getChild<LLMediaCtrl>("destination_guide_contents");
+    destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    // <FS:AW> optional opensim support
+    //std::string url = gSavedSettings.getString("DestinationGuideURL");
+    //url = LLWeb::expandURLSubstitutions(url, LLSD());
+    //destinations->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
+
+    std::string destination_guide_url;
+#ifdef OPENSIM
+    if (LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+        {
+            destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+        }
+    }
+    else
+#endif // OPENSIM
+    {
+        destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
+    }
+
+    if (!destination_guide_url.empty())
+    {
+        destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
+        LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
+        destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
+    }
+    // </FS:AW> optional opensim support
+
+    // If cookie is there, will set it now. Otherwise will have to wait for login completion
+    // which will also update destinations instance if it already exists.
+    LLViewerMedia::getInstance()->getOpenIDCookie(destinations);
     return true;
 }
 

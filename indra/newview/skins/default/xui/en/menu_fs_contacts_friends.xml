@@ -115,6 +115,15 @@
         <menu_item_call.on_click
          function="Contacts.Friends.CopyUrl"/>
     </menu_item_call>
+    <!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
+    <menu_item_call
+     label="Copy Mention URI to clipboard"
+     layout="topleft"
+     name="mention_copy_label">
+        <menu_item_call.on_click
+         function="Mention.CopyURI" />
+    </menu_item_call>
+    <!-- </FS:Zi> -->
     <menu_item_separator/>
     <menu name="options" label="Options...">
         <menu_item_check

@@ -152,11 +152,12 @@ void FloaterAO::updateList()
     mCurrentBoldItem = nullptr;
     reloading(false);
 
+    static std::string no_sets_label = getString("ao_no_sets_loaded");
     if (mSetList.empty())
     {
         LL_DEBUGS("AOEngine") << "empty set list" << LL_ENDL;
-        mSetSelector->add(getString("ao_no_sets_loaded"));
-        mSetSelectorSmall->add(getString("ao_no_sets_loaded"));
+        mSetSelector->add(no_sets_label);
+        mSetSelectorSmall->add(no_sets_label);
         mSetSelector->selectNthItem(0);
         mSetSelectorSmall->selectNthItem(0);
         enableSetControls(false);
@@ -164,13 +165,13 @@ void FloaterAO::updateList()
     }
 
     // make sure we have an animation set name to display
-    if (currentSetName.empty())
+    if (currentSetName.empty() || currentSetName == no_sets_label)
     {
         // selected animation set was empty, get the currently active animation set from the engine
         currentSetName = AOEngine::instance().getCurrentSetName();
         LL_DEBUGS("AOEngine") << "Current set name was empty, fetched name \"" << currentSetName << "\" from AOEngine" << LL_ENDL;
 
-        if(currentSetName.empty())
+        if (currentSetName.empty())
         {
             // selected animation set was empty, get the name of the first animation set in the list
             currentSetName = mSetList[0]->getName();
@@ -374,7 +375,7 @@ void FloaterAO::onSelectSet()
     // only update the interface when we actually selected a different set - FIRE-29542
     if (mSelectedSet != set)
     {
-        mSelectedSet=set;
+        mSelectedSet = set;
 
         updateSetParameters();
         updateAnimationList();

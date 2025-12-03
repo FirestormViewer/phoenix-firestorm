@@ -305,6 +305,14 @@ bool LLPanelWearing::postBuild()
     // <FS:Ansariel> Show avatar complexity in appearance floater
     mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
 
+    // <FS:PP> FIRE-36089: Connect bottom gear menu button to the gear menu
+    LLMenuButton* gear_btn = findChild<LLMenuButton>("options_gear_btn");
+    if (gear_btn)
+    {
+        gear_btn->setMenu(mGearMenu->getMenu());
+    }
+    // </FS:PP>
+
     return true;
 }
 

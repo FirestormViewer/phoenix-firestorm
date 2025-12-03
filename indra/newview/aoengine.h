@@ -39,7 +39,7 @@ class AOTimerCollection
 {
     public:
         AOTimerCollection();
-        ~AOTimerCollection();
+        ~AOTimerCollection() = default;
 
         virtual bool tick();
 
@@ -64,7 +64,7 @@ class AOSitCancelTimer
 {
     public:
         AOSitCancelTimer();
-        ~AOSitCancelTimer();
+        ~AOSitCancelTimer() = default;
 
         void oneShot();
         void stop();
@@ -101,7 +101,7 @@ class AOEngine
         void tick();
         void update();
         void reload(bool);
-        void reloadStateAnimations(AOSet::AOState* state);
+        void reloadStateAnimations(AOSet* set, AOSet::AOState* state);
         void clear(bool from_timer);
 
         const LLUUID& getAOFolder() const;
@@ -195,6 +195,8 @@ class AOEngine
         static void onNotecardLoadComplete(const LLUUID& assetUUID, LLAssetType::EType type,
                                                 void* userdata, S32 status, LLExtStat extStatus);
         void parseNotecard(const char* buffer);
+
+        void updatePersistedStateAnimations();
 
         updated_signal_t mUpdatedSignal;
         animation_changed_signal_t mAnimationChangedSignal;

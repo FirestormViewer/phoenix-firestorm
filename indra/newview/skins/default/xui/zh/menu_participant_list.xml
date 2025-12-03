@@ -23,4 +23,6 @@
 		<menu_item_call label="取消所有人的靜音" name="ModerateVoiceUnmute" />
 	</context_menu>
 	<menu_item_call label="封鎖居民" name="BanMember" />
+	<menu_item_call label="複製提及URI到剪貼簿" name="mention_copy_label" />
+	<menu_item_call label="在聊天中提及用戶" name="mention_in_chat" />
 </context_menu>

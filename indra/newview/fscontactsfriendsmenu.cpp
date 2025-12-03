@@ -61,6 +61,7 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
         registrar.add("Contacts.Friends.CopyLabel",             boost::bind(&FSContactsFriendsMenu::copyNameToClipboard,        this, id));
         registrar.add("Contacts.Friends.CopyUrl",               boost::bind(&FSContactsFriendsMenu::copySLURLToClipboard,       this, id));
         registrar.add("Contacts.Friends.SelectOption",          boost::bind(&FSContactsFriendsMenu::selectOption,               this, _2));
+        registrar.add("Mention.CopyURI",                        boost::bind(&FSContactsFriendsMenu::copyURLToClipboard,         this));
 
         enable_registrar.add("Contacts.Friends.EnableItem",     boost::bind(&FSContactsFriendsMenu::enableContextMenuItem,      this, _2));
         enable_registrar.add("Contacts.Friends.EnableZoomIn",   boost::bind(&LLAvatarActions::canZoomIn,                        id));
@@ -236,4 +237,9 @@ bool FSContactsFriendsMenu::checkOption(const LLSD& userdata)
     }
 
     return false;
+}
+
+void FSContactsFriendsMenu::copyURLToClipboard()
+{
+    LLUrlAction::copyURLToClipboard("secondlife:///app/agent/" + mUUIDs.front().asString() + "/mention");
 }

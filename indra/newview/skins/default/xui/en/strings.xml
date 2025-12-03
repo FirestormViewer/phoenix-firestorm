@@ -3272,6 +3272,7 @@ Your current position: [AVATAR_POS]
   <string name="All Items">All Items</string>
   <string name="Recent Items">Recent Items</string>
   <string name="Worn Items">Worn Items</string>
+  <string name="Favorites">Favorites</string>
 
   <string name="InvOfferGroupNoticeName">A group member named [NAME]</string>
   <string name="CallingCardOnlineLabelSuffix">(online)</string>
@@ -3332,5 +3333,13 @@ Your current position: [AVATAR_POS]
   <string name="NoValidUUIDs">No valid UUIDs found in the imported file.</string>
   <string name="ImportListTooLarge">Too many entries. The CSV file has [COUNT] entries and there are [MAX] slots available.</string>
   <string name="ImportSuccessful">Successfully processed [COUNT] entries.</string>
+
+  <!-- VHACD enum strings -->
+  <string name="Flood">Flood</string>
+  <string name="Surface Only">Surface Only</string>
+  <string name="Raycast">Raycast</string>
+  <string name="Very High">Very High</string>
+  <string name="Ultra">Ultra</string>
+  <string name="Maximum">Maximum</string>
 
 </strings>

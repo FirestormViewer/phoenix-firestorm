@@ -407,7 +407,7 @@
 					Problemi di fisica:
 				</text>
 				<color_swatch label="Bordi triangoli difettosi" tool_tip="Colore dei bordi per triangoli degenerati (sottili) nella finestra di anteprima per il caricamento della mesh" name="mesh_preview_degenerate_edge_color" />
-				<color_swatch label="Riempim. triangoli difet." tool_tip="Colore di riempimento per triangoli degenerati (sottili) nella finestra di anteprima per il caricamento della mesh" name="mesh_degenerate_fill_color" />
+				<color_swatch label="Riempim. triangoli difet." tool_tip="Colore di riempimento per triangoli degenerati (sottili) nella finestra di anteprima per il caricamento della mesh" name="mesh_preview_degenerate_fill_color" />
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">

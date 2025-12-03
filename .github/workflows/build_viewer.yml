@@ -7,7 +7,7 @@ on:
         required: false
         default: 'false'
       override_signing:
-        description: 'Manual builds are not signned by default. Force code signing for this run.'
+        description: 'Manual builds are not signed by default. Force code signing for this run.'
         required: false
         default: 'false'
   push:
@@ -35,9 +35,9 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-15,ubuntu-22.04,windows-2022]
-        grid: [sl,os]
-        variant: [regular, avx]
+        os: ["macos-15","ubuntu-22.04","windows-2022"]
+        grid: ["sl","os"]
+        variant: ["regular","avx"]
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container_image }}
     outputs:
@@ -58,7 +58,7 @@ jobs:
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
         if: matrix.container_image == 'ubuntu:22.04'
@@ -185,12 +185,12 @@ jobs:
         shell: bash
     
       - name: Get the code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -430,6 +430,12 @@ jobs:
         id: build
         run: autobuild build -c ReleaseFS -A${addrsize} --no-configure
         shell: bash
+      - name: List macOS build tree
+        if: runner.os == 'macOS'
+        run: |
+          echo "macOS build directories for debugging:"
+          ls -R build-darwin-* || true
+        shell: bash
       - name: Extract version number
         id: version
         shell: bash
@@ -482,7 +488,7 @@ jobs:
           dumpSyms: false
       - name: Publish artifacts
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{ matrix.grid }}-artifacts.zip
           path: |
@@ -491,7 +497,7 @@ jobs:
 
       - name: publish Linux artifacts
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: | 
@@ -500,7 +506,7 @@ jobs:
 
       - name: publish MacOS artifacts
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: |
@@ -515,7 +521,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           sparse-checkout: |
             fsutils/download_list.py
@@ -529,7 +535,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         id: download
         with:
           path: to_deploy        
@@ -581,7 +587,7 @@ jobs:
 
       # Upload Build Info Artifact (note that this file is expected to be identical for each matrix run, so items like OS and VARIANT cannot be in this file.)
       - name: Upload Tag Info
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build_info
           path: build_info.json
@@ -601,4 +607,3 @@ jobs:
 
       - name: Copy files to remote host
         run: rclone copy ${{steps.download.outputs.download-path}}/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
-

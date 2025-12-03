@@ -122,6 +122,7 @@ set(llcommon_HEADER_FILES
     fsyspath.h
     function_types.h
     indra_constants.h
+    inlinemutexs.h
     lazyeventapi.h
     linden_common.h
     llalignedarray.h

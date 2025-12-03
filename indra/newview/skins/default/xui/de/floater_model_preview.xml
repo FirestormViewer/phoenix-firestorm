@@ -318,8 +318,8 @@
 					<text name="tolerance_label">
 						Fehlertoleranz:
 					</text>
-					<button label="Analysieren" name="Decompose"/>
-					<button label="Abbrechen" name="decompose_cancel"/>
+					<button label="Analysieren" name="Analyze"/>
+					<button label="Abbrechen" name="analyze_cancel"/>
 				</panel>
 				<panel name="physics simplification">
 					<text name="second_step_label">
@@ -481,7 +481,7 @@
 					Physik-Probleme:
 				</text>
 				<color_swatch label="Schlechte Kante" tool_tip="Farbe für degenerierte (dünne) Dreiecks-Kanten im Vorschau-Fenster" name="mesh_preview_degenerate_edge_color"/>
-				<color_swatch label="Schlechte Dreiecke" tool_tip="Füllfarbe für degenerierte (dünne) Dreiecke im Vorschau-Fenster" name="mesh_degenerate_fill_color"/>
+				<color_swatch label="Schlechte Dreiecke" tool_tip="Füllfarbe für degenerierte (dünne) Dreiecke im Vorschau-Fenster" name="mesh_preview_degenerate_fill_color"/>
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">

@@ -133,6 +133,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
+    fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
     fsfloaterteleporthistory.cpp
@@ -984,6 +985,7 @@ set(viewer_HEADER_FILES
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
+    fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h
     fsfloaterteleporthistory.h

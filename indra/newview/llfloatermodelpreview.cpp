@@ -368,7 +368,12 @@ void LLFloaterModelPreview::reshape(S32 width, S32 height, bool called_from_pare
 {
     LLFloaterModelUploadBase::reshape(width, height, called_from_parent);
 
-    LLView* preview_panel = getChild<LLView>("preview_panel");
+    // <FS:Ansariel> This can get called before the floater is actually built
+    //LLView* preview_panel = getChild<LLView>("preview_panel");
+    LLView* preview_panel = findChild<LLView>("preview_panel");
+    if (!preview_panel)
+        return;
+    // </FS:Ansariel>
     LLRect rect = preview_panel->getRect();
 
     if (rect != mPreviewRect)

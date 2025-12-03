@@ -197,6 +197,8 @@ if (LINUX)
   set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
+  # Prefer static libraries on Linux
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.a")
 endif (LINUX)
 
 if (DARWIN)

@@ -40,10 +40,11 @@
 #include "llnotificationsutil.h"
 #include "llstring.h"
 #include "llviewercontrol.h"
+#include "llxorcipher.h"
 
-#define ROOT_AO_FOLDER          "#AO"
-#include <boost/graph/graph_concepts.hpp>
+#define ROOT_AO_FOLDER "#AO"
 
+static const LLUUID ENCRYPTION_MAGIC_ID("4b552ff5-fd63-408c-8288-cd09429852ba");
 constexpr F32 INVENTORY_POLLING_INTERVAL = 5.0f;
 
 AOEngine::AOEngine() :
@@ -68,6 +69,31 @@ AOEngine::AOEngine() :
 
 AOEngine::~AOEngine()
 {
+    LLSD currentState = LLSD::emptyMap();
+    if (mCurrentSet)
+    {
+        currentState = LLSD().with("CurrentSet", mCurrentSet->getName());
+        LLSD currentAnimations;
+        for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
+        {
+            if (auto state = mCurrentSet->getState(index); state && !state->mAnimations.empty())
+            {
+                LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Animation index " << state->mCurrentAnimation << LL_ENDL;
+                LLUUID shadow_id{ state->mAnimations[state->mCurrentAnimation].mAssetUUID };
+                LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
+                cipher.encrypt(shadow_id.mData, UUID_BYTES);
+                currentAnimations.insert(state->mName, shadow_id);
+            }
+            else
+            {
+                LL_DEBUGS("AOEngine") << "No state " << index << " or no animations defined for this state" << LL_ENDL;
+            }
+        }
+        currentState.insert("CurrentStateAnimations", currentAnimations);
+    }
+    LL_DEBUGS("AOEngine") << "Stored AO state: " << currentState << LL_ENDL;
+    gSavedPerAccountSettings.setLLSD("FSCurrentAOState", currentState);
+
     clear(false);
 
     if (mRegionChangeConnection.connected())
@@ -458,11 +484,9 @@ void AOEngine::enable(bool enable)
         // stop all overriders, catch leftovers
         for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
         {
-            state = mCurrentSet->getState(index);
-            if (state)
+            if (auto state = mCurrentSet->getState(index))
             {
-                LLUUID animation = state->mCurrentAnimationID;
-                if (animation.notNull())
+                if (LLUUID animation = state->mCurrentAnimationID; animation.notNull())
                 {
                     LL_DEBUGS("AOEngine") << "Stopping leftover animation from state " << state->mName << LL_ENDL;
                     gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
@@ -488,7 +512,7 @@ void AOEngine::enable(bool enable)
 
 void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 {
-    F32 timeout = (F32)state->mCycleTime;
+    F32 timeout = state->mCycleTime;
     LL_DEBUGS("AOEngine") << "Setting cycle timeout for state " << state->mName << " of " << timeout << LL_ENDL;
     if (timeout > 0.0f)
     {
@@ -583,7 +607,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
     // case, as it plays at the same time as other motions
     if (motion != ANIM_AGENT_TYPE)
     {
-        constexpr S32 cleanupStates[]=
+        constexpr S32 cleanupStates[] =
         {
             AOSet::Standing,
             AOSet::Walking,
@@ -615,15 +639,14 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
         while ((stateNum = cleanupStates[index]) != AOSet::AOSTATES_MAX)
         {
             // check if the next state is the one we are currently animating and skip that
-            AOSet::AOState* stateToCheck = mCurrentSet->getState(stateNum);
-            if (stateToCheck != state)
+            if (AOSet::AOState* stateToCheck = mCurrentSet->getState(stateNum); stateToCheck != state)
             {
                 // check if there is an animation left over for that state
                 if (!stateToCheck->mCurrentAnimationID.isNull())
                 {
                     LL_WARNS() << "cleaning up animation in state " << stateToCheck->mName << LL_ENDL;
 
-                    // stop  the leftover animation locally and in the region for everyone
+                    // stop the leftover animation locally and in the region for everyone
                     gAgent.sendAnimationRequest(stateToCheck->mCurrentAnimationID, ANIM_REQUEST_STOP);
                     gAgentAvatarp->LLCharacter::stopMotion(stateToCheck->mCurrentAnimationID);
 
@@ -702,7 +725,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
         }
 
         state->mCurrentAnimationID = animation;
-        LL_DEBUGS("AOEngine")   << "overriding " <<  gAnimLibrary.animationName(motion)
+        LL_DEBUGS("AOEngine") << "overriding " <<  gAnimLibrary.animationName(motion)
                     << " with " << animation
                     << " in state " << state->mName
                     << " of set " << mCurrentSet->getName()
@@ -803,22 +826,21 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 
 void AOEngine::checkSitCancel()
 {
-    if (foreignAnimations())
+    if (!foreignAnimations())
+        return;
+
+    if (AOSet::AOState* aoState = mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT))
     {
-        if (AOSet::AOState* aoState = mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT); aoState)
+        if (LLUUID animation = aoState->mCurrentAnimationID; animation.notNull())
         {
-            LLUUID animation = aoState->mCurrentAnimationID;
-            if (animation.notNull())
-            {
-                LL_DEBUGS("AOEngine") << "Stopping sit animation due to foreign animations running" << LL_ENDL;
-                gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-                // remove cycle point cover-up
-                gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
-                gAgentAvatarp->LLCharacter::stopMotion(animation);
-                mSitCancelTimer.stop();
-                // stop cycle tiemr
-                mCurrentSet->stopTimer();
-            }
+            LL_DEBUGS("AOEngine") << "Stopping sit animation due to foreign animations running" << LL_ENDL;
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
+            // remove cycle point cover-up
+            gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
+            gAgentAvatarp->LLCharacter::stopMotion(animation);
+            mSitCancelTimer.stop();
+            // stop cycle tiemr
+            mCurrentSet->stopTimer();
         }
     }
 }
@@ -918,7 +940,7 @@ void AOEngine::cycle(eCycleMode cycleMode)
         {
             LL_DEBUGS("AOEngine") << "Asset UUID for cycled animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
 
-            if(LLViewerInventoryItem* item = gInventory.getItem(anim.mOriginalUUID) ; item)
+            if (LLViewerInventoryItem* item = gInventory.getItem(anim.mOriginalUUID); item)
             {
                 LL_DEBUGS("AOEngine") << "Found asset UUID for cycled animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
                 anim.mAssetUUID = item->getAssetUUID();
@@ -992,14 +1014,13 @@ void AOEngine::playAnimation(const LLUUID& animation)
         return;
     }
 
-    if (!state->mAnimations.size())
+    if (state->mAnimations.empty())
     {
         LL_DEBUGS("AOEngine") << "cycle without animations in state." << LL_ENDL;
         return;
     }
 
     LLViewerInventoryItem* item = gInventory.getItem(animation);
-
     if (!item)
     {
         LL_WARNS("AOEngine") << "Inventory item for animation " << animation << " not found." << LL_ENDL;
@@ -1007,10 +1028,10 @@ void AOEngine::playAnimation(const LLUUID& animation)
     }
 
     AOSet::AOAnimation anim;
-    anim.mName = item->LLInventoryItem::getName();
+    anim.mName = item->getName();
     anim.mInventoryUUID = item->getUUID();
     anim.mOriginalUUID = item->getLinkedUUID();
-    anim.mAssetUUID = LLUUID::null;
+    anim.mAssetUUID.setNull();
 
     // if we can find the original animation already right here, save its asset ID, otherwise this will
     // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
@@ -1100,7 +1121,7 @@ void AOEngine::updateSortOrder(AOSet::AOState* state)
             std::ostringstream numStr("");
             numStr << index;
 
-            LL_DEBUGS("AOEngine")   << "sort order is " << sortOrder << " but index is " << index
+            LL_DEBUGS("AOEngine") << "sort order is " << sortOrder << " but index is " << index
                         << ", setting sort order description: " << numStr.str() << LL_ENDL;
 
             state->mAnimations[index].mSortOrder = index;
@@ -1111,8 +1132,8 @@ void AOEngine::updateSortOrder(AOSet::AOState* state)
                 LL_WARNS("AOEngine") << "NULL inventory item found while trying to copy " << state->mAnimations[index].mInventoryUUID << LL_ENDL;
                 continue;
             }
-            LLPointer<LLViewerInventoryItem> newItem = new LLViewerInventoryItem(item);
 
+            LLPointer<LLViewerInventoryItem> newItem = new LLViewerInventoryItem(item);
             newItem->setDescription(numStr.str());
             newItem->setComplete(true);
             newItem->updateServer(false);
@@ -1181,7 +1202,7 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
     bool success = createAnimationLink(state, item);
     gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
-    if(success)
+    if (success)
     {
         if (reload)
         {
@@ -1197,7 +1218,7 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
     state->mAddQueue.push_back(item);
 
     // if this is the first queued animation for this state, create the folder asyncronously
-    if(state->mAddQueue.size() == 1)
+    if (state->mAddQueue.size() == 1)
     {
         gInventory.createNewCategory(set->getInventoryUUID(), LLFolderType::FT_NONE, state->mName, [this, state, reload, wasProtected](const LLUUID &new_cat_id)
         {
@@ -1440,7 +1461,7 @@ bool AOEngine::swapWithNext(AOSet::AOState* state, S32 index)
     return true;
 }
 
-void AOEngine::reloadStateAnimations(AOSet::AOState* state)
+void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
 {
     LLInventoryModel::item_array_t* items;
     LLInventoryModel::cat_array_t* dummy;
@@ -1458,11 +1479,10 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
                 << " asset " << item->getAssetUUID() << LL_ENDL;
 
             AOSet::AOAnimation anim;
-            anim.mName = item->LLInventoryItem::getName();
+            anim.mName = item->getName();
             anim.mInventoryUUID = item->getUUID();
             anim.mOriginalUUID = item->getLinkedUUID();
-
-            anim.mAssetUUID = LLUUID::null;
+            anim.mAssetUUID.setNull();
 
             // if we can find the original animation already right here, save its asset ID, otherwise this will
             // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
@@ -1509,6 +1529,24 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
     }
 
     updateSortOrder(state);
+
+    if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
+        currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == set->getName() &&
+        currentState.has("CurrentStateAnimations") && currentState["CurrentStateAnimations"].has(state->mName))
+    {
+        auto        currentStateAnimId{ currentState["CurrentStateAnimations"][state->mName].asUUID() };
+        LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
+        cipher.decrypt(currentStateAnimId.mData, UUID_BYTES);
+
+        for (const auto& animation : state->mAnimations)
+        {
+            if (animation.mAssetUUID == currentStateAnimId)
+            {
+                state->mCurrentAnimation = animation.mSortOrder;
+                break;
+            }
+        }
+    }
 }
 
 void AOEngine::update()
@@ -1559,19 +1597,27 @@ void AOEngine::update()
                 continue;
             }
 
-            AOSet* newSet = getSetByName(params[0]);
+            auto setName{ params[0] };
+            AOSet* newSet = getSetByName(setName);
             if (!newSet)
             {
                 LL_DEBUGS("AOEngine") << "Adding set " << setFolderName << " to AO." << LL_ENDL;
                 newSet = new AOSet(currentCategory->getUUID());
-                newSet->setName(params[0]);
+                newSet->setName(setName);
                 mSets.emplace_back(newSet);
+
+                if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
+                    currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == setName)
+                {
+                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << setName << LL_ENDL;
+                    mCurrentSet = newSet;
+                }
             }
             else
             {
                 if (newSet->getComplete())
                 {
-                    LL_DEBUGS("AOEngine") << "Set " << params[0] << " already complete. Skipping." << LL_ENDL;
+                    LL_DEBUGS("AOEngine") << "Set " << setName << " already complete. Skipping." << LL_ENDL;
                     continue;
                 }
                 LL_DEBUGS("AOEngine") << "Updating set " << setFolderName << " in AO." << LL_ENDL;
@@ -1599,7 +1645,11 @@ void AOEngine::update()
                 else if (params[num] == "**")
                 {
                     mDefaultSet = newSet;
-                    mCurrentSet = newSet;
+                    if (!mCurrentSet)
+                    {
+                        LL_DEBUGS("AOEngine") << "No set selected as current yet - setting default set as current: " << setName << LL_ENDL;
+                        mCurrentSet = newSet;
+                    }
                 }
                 else
                 {
@@ -1666,12 +1716,12 @@ void AOEngine::update()
                         newSet->setComplete(false);
                         continue;
                     }
-                    reloadStateAnimations(state);
+                    reloadStateAnimations(newSet, state);
                 }
             }
             else
             {
-                LL_DEBUGS("AOEngine") << "Set " << params[0] << " is incomplete, fetching descendents" << LL_ENDL;
+                LL_DEBUGS("AOEngine") << "Set " << setName << " is incomplete, fetching descendents" << LL_ENDL;
                 gInventory.fetchDescendentsOf(currentCategory->getUUID());
             }
         }
@@ -1683,7 +1733,7 @@ void AOEngine::update()
 
         if (!mCurrentSet && !mSets.empty())
         {
-            LL_DEBUGS("AOEngine") << "No default set defined, choosing the first in the list." << LL_ENDL;
+            LL_DEBUGS("AOEngine") << "No set currently selected, choosing the first in the list." << LL_ENDL;
             selectSet(mSets[0]);
         }
 
@@ -1723,16 +1773,15 @@ void AOEngine::reload(bool aFromTimer)
 
 AOSet* AOEngine::getSetByName(const std::string& name) const
 {
-    AOSet* found = nullptr;
     for (auto set : mSets)
     {
-        if (set->getName().compare(name) == 0)
+        if (set->getName() == name)
         {
-            found = set;
-            break;
+            return set;
         }
     }
-    return found;
+
+    return nullptr;
 }
 
 const std::string AOEngine::getCurrentSetName() const
@@ -1753,8 +1802,7 @@ void AOEngine::selectSet(AOSet* set)
 {
     if (mEnabled && mCurrentSet)
     {
-        AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
-        if (state)
+        if (AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion))
         {
             gAgent.sendAnimationRequest(state->mCurrentAnimationID, ANIM_REQUEST_STOP);
             state->mCurrentAnimationID.setNull();
@@ -1773,8 +1821,7 @@ void AOEngine::selectSet(AOSet* set)
 
 AOSet* AOEngine::selectSetByName(const std::string& name)
 {
-    AOSet* set = getSetByName(name);
-    if (set)
+    if (AOSet* set = getSetByName(name))
     {
         selectSet(set);
         return set;
@@ -2176,8 +2223,7 @@ void AOEngine::onNotecardLoadComplete(const LLUUID& assetUUID, LLAssetType::ETyp
     char* buffer = new char[notecardSize + 1];
     buffer[notecardSize] = 0;
 
-    bool ret = file.read((U8*)buffer, notecardSize);
-    if (ret)
+    if (file.read((U8*)buffer, notecardSize))
     {
         AOEngine::instance().parseNotecard(buffer);
     }
@@ -2478,6 +2524,11 @@ void AOEngine::onRegionChange()
     gAgent.sendAnimationRequest(mLastMotion, ANIM_REQUEST_START);
 }
 
+void AOEngine::updatePersistedStateAnimations()
+{
+
+}
+
 // ----------------------------------------------------
 
 AOSitCancelTimer::AOSitCancelTimer()
@@ -2485,10 +2536,6 @@ AOSitCancelTimer::AOSitCancelTimer()
     mTickCount(0)
 {
     mEventTimer.stop();
-}
-
-AOSitCancelTimer::~AOSitCancelTimer()
-{
 }
 
 void AOSitCancelTimer::oneShot()
@@ -2523,10 +2570,6 @@ AOTimerCollection::AOTimerCollection()
     mImportTimer(false)
 {
     updateTimers();
-}
-
-AOTimerCollection::~AOTimerCollection()
-{
 }
 
 bool AOTimerCollection::tick()

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Настройки Экрана Приветствия">
+	<text name="description">
+		Здесь настраиваются параметры отображения экрана приветствия. Эти настройки вступят в силу при следующем перезапуске вьюера.
+	</text>
+	<text name="section_visibility">
+		Видимость раздела:
+	</text>
+	<check_box label="Скрыть верхнюю панель" name="hide_top_bar" />
+	<check_box label="Скрыть раздел блогов" name="hide_blogs" />
+	<check_box label="Скрыть пункты назначения" name="hide_destinations" />
+	<text name="section_accessibility">
+		Параметры Доступности:
+	</text>
+	<check_box label="Включить режим оттенков серого" name="use_gray_mode" />
+	<check_box label="Включить режим высокой контрастности" name="use_high_contrast" />
+	<check_box label="Включить режим «ВСЕ ЗАГЛАВНЫЕ БУКВЫ»" name="use_all_caps" />
+	<check_box label="Используйте более крупные шрифты" name="use_larger_fonts"/>
+	<check_box label="Отключить эффекты прозрачности" name="no_transparency" />
+</floater>

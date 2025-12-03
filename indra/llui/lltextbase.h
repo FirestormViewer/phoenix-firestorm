@@ -89,6 +89,7 @@ public:
     virtual void                updateLayout(const class LLTextBase& editor);
     virtual F32                 draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRectf& draw_rect);
     virtual bool                canEdit() const;
+    //virtual bool                getPermitsEmoji() const; // <FS:Ansariel> LL merge error
     virtual void                unlinkFromDocument(class LLTextBase* editor);
     virtual void                linkToDocument(class LLTextBase* editor);
 
@@ -259,6 +260,7 @@ public:
     /*virtual*/ void        updateLayout(const class LLTextBase& editor);
     /*virtual*/ F32         draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRectf& draw_rect);
     /*virtual*/ bool        canEdit() const { return false; }
+    ///*virtual*/ bool        getPermitsEmoji() const { return false; } // <FS:Ansariel> LL merge error
     /*virtual*/ void        unlinkFromDocument(class LLTextBase* editor);
     /*virtual*/ void        linkToDocument(class LLTextBase* editor);
 
@@ -732,6 +734,9 @@ protected:
     void                            appendTextImpl(const std::string &new_text, const LLStyle::Params& input_params = LLStyle::Params(), bool force_slurl = false);
     void                            appendAndHighlightTextImpl(const std::string &new_text, S32 highlight_part, const LLStyle::Params& style_params, e_underline underline_link = e_underline::UNDERLINE_ALWAYS);
     S32 normalizeUri(std::string& uri);
+
+    // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+    virtual void                    insertMentionAtCursor(const std::string& str);
 
 protected:
     // virtual

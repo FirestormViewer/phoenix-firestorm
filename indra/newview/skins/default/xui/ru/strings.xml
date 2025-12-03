@@ -6821,6 +6821,9 @@ ID объекта: [INSPECTING_KEY]
 	<string name="Worn Items">
 		Надетые предметы
 	</string>
+	<string name="Favorites">
+		Избранные
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		Член группы по имени [NAME]
 	</string>

@@ -32,7 +32,7 @@ if (USE_KDU)
     find_library(KDU_LIBRARY
       NAMES
       libkdu.a
-      libkdu${ND_KDU_SUFFIX} // <FS> FS-specific naming
+      libkdu${ND_KDU_SUFFIX}.a // <FS> FS-specific naming
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
   endif (WINDOWS)

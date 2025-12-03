@@ -181,7 +181,7 @@
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="移動" name="positionRotation_panel">
-						<panel name="title">
+						<panel name="move_tab_panel">
 							<text name="av_position_updown_label">
 								上/下：
 							</text>
@@ -239,7 +239,7 @@
 							<scroll_list.columns label="選擇..." name="name"/>
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="更新化身和動畫物件的列表"/>
-						<button label="開始姿勢" label_selected="停止姿勢" tool_tip="若有許可權，開始/停止選定的化身或動畫物件的姿勢" name="start_stop_posing_button"/>
+						<button label="開始姿勢" label_selected="停止姿勢" tool_tip="若有許可權，開始/停止選定的化身或動畫物件的姿勢。" name="start_stop_posing_button"/>
 						<button label="設為T姿勢" tool_tip="點選將選定的化身設為T姿勢" name="set_t_pose_button"/>
 					</panel>
 					<panel title="設定" name="settings_panel">
@@ -300,6 +300,9 @@
 					<button name="toggle_LockWorldRotation" tool_tip="鎖定所選肢體在全域座標系下的旋轉。被全域鎖定的肢體在父肢體移動時仍保持相同的全域旋轉。例如：鎖定眼睛後轉動頭部，眼睛仍會（大致）保持原始朝向。"/>
 					<button label="鏡像" name="button_toggleMirrorRotation" tool_tip="將變更鏡像到對側關節。"/>
 					<button label="複製" name="button_toggleSympatheticRotation" tool_tip="將變更複製到對側關節。"/>
+					<button label="W" name="poser_world_frame_toggle" tool_tip="相對於世界執行旋轉調整"/>
+					<button label="A" name="poser_avatar_frame_toggle" tool_tip="相對於化身執行旋轉調整"/>
+					<button label="B" name="poser_screen_frame_toggle" tool_tip="相對於螢幕執行旋轉調整"/>
 					<button label="複製左側&gt;右" name="button_symmetrize_left_to_right" tool_tip="點選將變更從左側複製到右側。" />
 					<button label="複製右側&gt;左" name="button_symmetrize_right_to_left" tool_tip="點選將變更從右側複製到左側。" />
 				</panel>

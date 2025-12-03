@@ -25,7 +25,7 @@
 	<menu_item_call label="Activer le groupe" name="activate_group"/>
 	<menu_item_call label="Quitter le groupe" name="leave_group"/>
 	<context_menu label="Options de modération" name="Moderator Options">
-		<menu_item_check label="Autoriser le chat écrit" name="AllowTextChat"/>
+		<menu_item_check label="Autoriser les échanges écrits" name="AllowTextChat"/>
 		<menu_item_call label="Muter ce participant" name="ModerateVoiceMuteSelected"/>
 		<menu_item_call label="Ecouter ce participant" name="ModerateVoiceUnMuteSelected"/>
 		<menu_item_call label="Muter tout le monde" name="ModerateVoiceMute"/>

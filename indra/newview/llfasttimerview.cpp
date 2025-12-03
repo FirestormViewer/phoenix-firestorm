@@ -1295,7 +1295,10 @@ void LLFastTimerView::drawLegend()
                 timer_label = llformat("%s (%d)",idp->getName().c_str(),calls);
                 break;
             case DISPLAY_HZ:
-                timer_label = llformat("%.1f", ms.value() ? (1.f / ms.value()) : 0.f);
+                // <FS:PP> FIRE-36066 No labels in Fast Timers Console in Hz mode
+                // timer_label = llformat("%.1f", ms.value() ? (1.f / ms.value()) : 0.f);
+                timer_label = llformat("%s [%.1f Hz]", idp->getName().c_str(), ms.value() ? (1.f / ms.value()) : 0.f);
+                // </FS:PP>
                 break;
             }
             dx = (TEXT_HEIGHT+4) + get_depth(idp)*8;

@@ -68,7 +68,7 @@ public:
     // run-time (post constructor) initialization,
     // called after parameters have been set
     // must return true to indicate success and be available for activation
-    virtual LLMotionInitStatus onInitialize(LLCharacter *character);
+    virtual LLMotionInitStatus onInitialize(LLCharacter* character);
 
     // called when a motion is activated
     // must return TRUE to indicate success, or else
@@ -109,6 +109,13 @@ public:
     FSJointPose* getJointPoseByJointName(const std::string& name);
 
     /// <summary>
+    /// Gets the joint pose by its LLJoint number.
+    /// </summary>
+    /// <param name="number">The number of the joint to get the pose for.</param>
+    /// <returns>The matching joint pose, if found, otherwise null.</returns>
+    FSJointPose* getJointPoseByJointNumber(const S32 number);
+
+    /// <summary>
     /// Gets the motion identity for this animation.
     /// </summary>
     /// <returns>The unique, per-session, per-character motion identity.</returns>
@@ -139,9 +146,9 @@ public:
     /// </summary>
     /// <param name="motionToLoad">The motion whose joint rotations (etc) we want to copy to this.</param>
     /// <param name="timeToLoadAt">The play-time the animation should be advanced to derive the correct joint state.</param>
-    /// <param name="selectedJointNames">If only some of the joints should be animated by this motion, name them here.</param>
+    /// <param name="selectedJointNumbers">If only some of the joints should be animated by this motion, number them here.</param>
     /// <returns></returns>
-    bool loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, std::string selectedJointNames);
+    bool loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, const std::vector<S32>& selectedJointNumbers);
 
     /// <summary>
     /// Tries to get the rotation, position and scale for the supplied joint name at the supplied time.
@@ -164,27 +171,27 @@ public:
     /// <summary>
     /// Resets the bone priority to zero for the joints named in the supplied string.
     /// </summary>
-    /// <param name="boneNamesToReset">The string containg bone names (like mPelvis).</param>
-    void resetBonePriority(std::string boneNamesToReset);
+    /// <param name="boneNumbersToReset">The vector containing bone numbers.</param>
+    void resetBonePriority(const std::vector<S32>& boneNumbersToReset);
 
     /// <summary>
     /// Queries whether the supplied motion animates any of the joints named in the supplied string.
     /// </summary>
     /// <param name="motionToQuery">The motion to query.</param>
-    /// <param name="recapturedJointNames">A string containing all of the joint names.</param>
+    /// <param name="recapturedJointNumbers">A string containing all of the joint numbers.</param>
     /// <returns>True if the motion animates any of the bones named, otherwise false.</returns>
-    bool otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, std::string recapturedJointNames);
+    bool otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, const std::vector<S32>& recapturedJointNumbers);
 
     /// <summary>
     /// Queries whether the this motion animates any of the joints named in the supplied string.
     /// </summary>
-    /// <param name="recapturedJointNames">A string containing all of the joint names.</param>
+    /// <param name="recapturedJointNames">A vector containing all of the joint numbers this motion animates.</param>
     /// <returns>True if the motion animates any of the bones named, otherwise false.</returns>
     /// <remarks>
     /// The most significant thing this method does is provide access to protected properties of an LLPosingMotion.
     /// Thus its most common usage would be to access those properties for an arbitrary animation.
     /// </remarks>
-    bool motionAnimatesJoints(std::string recapturedJointNames);
+    bool motionAnimatesJoints(const std::vector<S32>& recapturedJointNumbers);
 
 private:
     /// <summary>
@@ -267,7 +274,7 @@ private:
     /// <param name="v1">The first vector to compare.</param>
     /// <param name="v2">The sceond vector to compare.</param>
     /// <returns>true if the vectors are "close enough", otherwise false.</returns>
-    bool vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const;
+    bool vectorsNotQuiteEqual(const LLVector3& v1, const LLVector3& v2) const;
 
     /// <summary>
     /// Determines if two quaternions are near enough to equal.

@@ -4,6 +4,8 @@
 	<menu_item_call label="Ajouter à la tenue actuelle" name="wear_add"/>
 	<menu_item_call label="Supprimer de la tenue actuelle" name="take_off"/>
 	<menu_item_call label="Image..." name="thumbnail"/>
+	<menu_item_call label="Ajouter aux favoris" name="favorites_add"/>
+	<menu_item_call label="Supprimer des favoris" name="favorites_remove"/>
 	<menu_item_call label="Modifier la tenue" name="edit"/>
 	<menu_item_call label="Renommer la tenue" name="rename"/>
 	<menu_item_call label="Enregister dans cette tenue" name="save"/>

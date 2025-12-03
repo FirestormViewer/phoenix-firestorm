@@ -6576,6 +6576,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="Worn Items">
 		Założone
 	</string>
+	<string name="Favorites">
+		Ulubione
+	</string>
 	<string name="InvOfferGroupNoticeName">
 		Osoba z grupy o imieniu [NAME]
 	</string>
@@ -6675,5 +6678,20 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="ImportSuccessful">
 		Pomyślnie przetworzono [COUNT] rekordów.
+	</string>
+	<string name="Flood">
+		Zalewanie
+	</string>
+	<string name="Surface Only">
+		Tylko powierzchnia
+	</string>
+	<string name="Raycast">
+		Rzutowanie
+	</string>
+	<string name="Very High">
+		Bardzo wysoko
+	</string>
+	<string name="Maximum">
+		Maksymalnie
 	</string>
 </strings>

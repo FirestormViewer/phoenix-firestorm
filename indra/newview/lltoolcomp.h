@@ -272,7 +272,8 @@ public:
     virtual bool handleDoubleClick(S32 x, S32 y, MASK mask) override;
     virtual void render() override;
     void setAvatar(LLVOAvatar* avatar) { mManip->setAvatar(avatar); };
-    void setJoint( LLJoint * joint ) { mManip->setJoint( joint ); };
+    void setJoint(LLJoint* joint) { mManip->setJoint(joint); };
+    void setReferenceFrame(E_PoserReferenceFrame frame) { mManip->setReferenceFrame(frame); };
 
     // Optional override if you have SHIFT/CTRL combos
     virtual LLTool* getOverrideTool(MASK mask) override;

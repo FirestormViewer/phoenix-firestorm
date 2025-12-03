@@ -129,33 +129,41 @@
 			<text name="build_item_add_disp_rect_txt">
 				Actualmente establecido a: [ITEM]
 			</text>
+			<check_box name="FSBuildPrefs_UseCustomScript" label="Use custom script for New Script button"/>
+			<fs_embedded_item_drop_target name="custom_script" tool_tip="Drop a script from your inventory here.">
+				Drop a script here.
+			</fs_embedded_item_drop_target>
+			<text name="custom_script_disp_rect_txt">
+				Actualmente establecido a: [SCRIPT]
+			</text>
+			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Limitar la distancia de selección:" width="200" name="LimitSelectDistance"/>
+			<check_box label="Modo antiguo de &quot;Poner en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="Guardar texturas del inventario a disco como PNG en vez de TGA por defecto" tool_tip="Utilizado en la ventana de previsualización de textura y en el menú contextual en el inventario." name="FSTextureDefaultSaveAsFormat"/>
 			<text name="text_box_pivotpoint">
 				Punto de pivotaje
 			</text>
-			<view_border name="PivotBorder" width="142"/>
 			<check_box label="Eje en prim raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="FSBuildPrefsActualRoot_toggle"/>
 			<spinner label="Pos. X" name="X pos"/>
 			<spinner label="Pos. Y" name="Y pos"/>
 			<spinner label="Pos. Z" name="Z pos"/>
 			<check_box label="Valores porcent." tool_tip="Los valores por defecto son porcentajes y cada eje se establece en 50" name="FSPivotPercToggle"/>
+		</panel>
+		<panel label="Constr. 2" name="BuildTab2">
+			<check_box label="Usar Ctrl+ratón para sujetar y manipular objetos" tool_tip="Si lo activas, podrás tomar y mover objetos con tu ratón y la tecla CTRL." name="FSEnableGrab"/>
+			<check_box label="Permitir Bloq. Mayús. + arrastrar o escalar en una cara de textura en modo de construcción" tool_tip="Si lo activas, permite pulsar-arrastrar o pulsar-escalar de la textura de una cara en el modo de construcción. Esta característica es todavía experimental y debe ser usada con precaución." name="FSExperimentalDragTexture"/>
+		</panel>
+		<panel label="Script Editor" name="BuildTabScriptEditor">
+			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Activar el preprocesador LSL" tool_tip="Marcar para activar el preprocesador LSL." name="preproc_checkbox"/>
 			<check_box label="Optimizar scripts" tool_tip="Marcar para que el preprocesador LSL optimice el espacio utilizado por los scripts, a costa de su legibilidad." name="preprocoptimizer_checkbox"/>
 			<check_box label="Instrucción switch()" tool_tip="Marcar para que el preprocesador LSL permita el uso de la instrucción switch() para controlar el flujo de los scripts." name="preprocswitch_checkbox"/>
 			<check_box label="Lazy lists" tool_tip="Marcar para que el preprocesador LSL permita el uso de extensiones de sintaxis para el manejo de listas." name="preproclazy_checkbox"/>
-			<check_box label="#includes desde el disco local" tool_tip="Marcar para que el preprocesador LSL permita instrucciones #include para referenciar ficheros en tu sistema local." name="preprocinclude_checkbox"/>
+			<check_box label="#includes desde el disco local" left_delta="75" tool_tip="Marcar para que el preprocesador LSL permita instrucciones #include para referenciar ficheros en tu sistema local." name="preprocinclude_checkbox"/>
 			<text name="lslpreprocinclude_textbox">
 				Ruta include del preprocesador:
 			</text>
 			<button label="Examinar" label_selected="Examinar" name="SetPreprocInclude"/>
-		</panel>
-		<panel label="Constr. 2" name="BuildTab2">
-			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="FSBuildPrefsRenderHighlight_toggle"/>
-			<check_box label="Limitar la distancia de selección:" width="200" name="LimitSelectDistance"/>
-			<check_box label="Modo antiguo de &quot;Poner en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
-			<check_box label="Guardar texturas del inventario a disco como PNG en vez de TGA por defecto" tool_tip="Utilizado en la ventana de previsualización de textura y en el menú contextual en el inventario." name="FSTextureDefaultSaveAsFormat"/>
-			<check_box label="Usar Ctrl+ratón para sujetar y manipular objetos" tool_tip="Si lo activas, podrás tomar y mover objetos con tu ratón y la tecla CTRL." name="FSEnableGrab"/>
-			<check_box label="Permitir Bloq. Mayús. + arrastrar o escalar en una cara de textura en modo de construcción" tool_tip="Si lo activas, permite pulsar-arrastrar o pulsar-escalar de la textura de una cara en el modo de construcción. Esta característica es todavía experimental y debe ser usada con precaución." name="FSExperimentalDragTexture"/>
 		</panel>
 	</tab_container>
 </panel>

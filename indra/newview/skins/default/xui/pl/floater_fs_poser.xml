@@ -181,7 +181,7 @@
 			<panel name="joints_parent_panel">
 				<tab_container name="joints_tabs">
 					<panel title="Ruch" name="positionRotation_panel">
-						<panel name="title">
+						<panel name="move_tab_panel">
 							<text name="av_position_updown_label">
 								Góra/Dół:
 							</text>
@@ -239,7 +239,7 @@
 							<scroll_list.columns label="Wybierz kogoś..." name="name" />
 						</scroll_list>
 						<button name="refresh_avatars" tool_tip="Odśwież listę awatarów i animeszy" />
-						<button label="Zacznij pozować" label_selected="Przestań pozować" tool_tip="Rozpocznij pozowanie wybranego awatara lub animesza, jeśli masz na to prawa" name="start_stop_posing_button" />
+						<button label="Zacznij pozować" label_selected="Przestań pozować" tool_tip="Rozpocznij pozowanie wybranego awatara lub animesza, jeśli masz na to prawa." name="start_stop_posing_button" />
 						<button label="Ustaw na T-Pozę" name="set_t_pose_button" tool_tip="Kliknij, aby ustawić wybranego awatara w pozycji 'T'." />
 					</panel>
 					<panel title="Inne" name="settings_panel">
@@ -298,6 +298,9 @@
 					<button name="toggle_LockWorldRotation" tool_tip="Blokuje rotacje w świecie dla wybranej kończyny/kończyn. Kończyny zablokowane zachowują ten sam obrót w świecie, podczas gdy ich kończyny nadrzędne się poruszają. Np.: zablokuj oczy i obróć głowę - oczy będą patrzeć dalej w tym samym kierunku." />
 					<button label="Odbij" name="button_toggleMirrorRotation" tool_tip="Zmień przeciwległy staw, jak w lustrze." />
 					<button label="Sym." name="button_toggleSympatheticRotation" tool_tip="Zmień przeciwległy staw, ale w ten sam sposób." />
+					<button label="Ś" name="poser_world_frame_toggle" tool_tip="Wprowadzaj zmiany obrotu względem świata" />
+					<button label="A" name="poser_avatar_frame_toggle" tool_tip="Wprowadzaj zmiany obrotu względem awatara" />
+					<button label="E" name="poser_screen_frame_toggle" tool_tip="Wprowadzaj zmiany obrotu względem ekranu" />
 					<button label="Kopia L &gt; P" name="button_symmetrize_left_to_right" tool_tip="Kliknij, aby skopiować zmiany z lewej strony na prawą." />
 					<button label="Kopia P &gt; L" name="button_symmetrize_right_to_left" tool_tip="Kliknij, aby skopiować zmiany z prawej strony na lewą." />
 				</panel>

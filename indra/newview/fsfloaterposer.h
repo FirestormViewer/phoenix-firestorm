@@ -31,6 +31,7 @@
 #include "llfloater.h"
 #include "lltoolmgr.h"
 #include "fsposeranimator.h"
+#include "fsmaniprotatejoint.h"
 
 class FSVirtualTrackpad;
 class LLButton;
@@ -80,7 +81,8 @@ class FSFloaterPoser : public LLFloater, public LLEditMenuHandler
     friend class LLFloaterReg;
     FSFloaterPoser(const LLSD &key);
 public:
-    void updatePosedBones(const std::string& jointName);
+    void updatePosedBones(const std::string& jointName, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale);
+    LLQuaternion getManipGimbalRotation(const std::string& jointName);
     void selectJointByName(const std::string& jointName);
     void undo() override { onUndoLastChange(); };
     bool canUndo() const override { return true; }
@@ -94,6 +96,8 @@ public:
     void onClose(bool app_quitting) override;
     void onFocusReceived() override;
     void onFocusLost() override;
+    virtual void draw() override;
+
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.
     /// </summary>
@@ -139,7 +143,7 @@ public:
     /// Updates the visual with the first selected joint from the supplied collection, if any.
     /// </summary>
     /// <param name="joints">The collection of selected joints.</param>
-    void updateManipWithFirstSelectedJoint(std::vector<FSPoserAnimator::FSPoserJoint*> joints) const;
+    void updateManipWithFirstSelectedJoint(const std::vector<FSPoserAnimator::FSPoserJoint*>& joints) const;
 
     /// <summary>
     /// Gets a detectable avatar by its UUID.
@@ -182,6 +186,13 @@ public:
     uuid_vec_t getNearbyAvatarsAndAnimeshes() const;
 
     /// <summary>
+    /// Gets whether the supplied character is within chat range of gAgentAvatar.
+    /// </summary>
+    /// <param name="character">The character to query whether nearby.</param>
+    /// <returns>True if the supplied character is within chat range, otherwise false.</returns>
+    bool avatarIsNearbyMe(LLCharacter* character) const;
+
+    /// <summary>
     /// Gets a collection of UUIDs for avatars currently being presented on the UI.
     /// </summary>
     /// <returns>A the collection of UUIDs.</returns>
@@ -218,7 +229,7 @@ public:
     LLVector3 getPositionOfFirstSelectedJoint() const;
     LLVector3 getScaleOfFirstSelectedJoint() const;
 
-    LLScrollListCtrl* getScrollListForTab(LLPanel * tabPanel) const;
+    LLScrollListCtrl* getScrollListForTab(LLPanel* tabPanel) const;
     // Pose load/save
     void createUserPoseDirectoryIfNeeded();
     void onToggleLoadSavePanel();
@@ -242,17 +253,22 @@ public:
     void enableVisualManipulators();
     void disableVisualManipulators();
 
+    // Visual cue for which bone is under the mouse-cursor
+    void drawOnHoverJointHint();
+    void markSelectedJointsToHighlight();
+
     // UI Event Handlers
     void onAvatarsRefresh();
     void onAvatarSelect();
     void onJointTabSelect();
     void onToggleMirrorChange();
     void onToggleSympatheticChange();
+    void onToggleRotationFrameButton(const LLUICtrl* toggleButton);
     void onToggleVisualManipulators();
     void setRotationChangeButtons(bool mirror, bool sympathetic);
     void onUndoLastChange();
     void onRedoLastChange();
-    void onResetJoint(const LLSD data);
+    void onResetJoint(const LLSD& data);
     void onSetAvatarToTpose();
     void onPoseStartStop();
     void onTrackballChanged();
@@ -280,6 +296,14 @@ public:
     void refreshTrackpadCursor();
     void enableOrDisableRedoAndUndoButton();
 
+
+    /// <summary>
+    /// Determines if we have permission to animate the supplied avatar.
+    /// </summary>
+    /// <param name="avatar">The avatar to animate.</param>
+    /// <returns>True if we have permission to animate, otherwise false.</returns>
+    bool havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) const;
+
     /// <summary>
     /// Determines if we have permission to animate the supplied avatar.
     /// </summary>
@@ -306,6 +330,7 @@ public:
     /// This facilitates 'conceptual' conversion of Euler frame to up/down, left/right and roll and is rather subjective.
     /// Thus, many of these 'conversions' are backed by values in the XML.
     /// </summary>
+    /// <param name="frame">The reference frame for the change.</param>
     /// <param name="jointName">The well-known name of the joint, eg: mChest.</param>
     /// <returns>The axial translation so the oily angles make better sense in terms of up/down/left/right/roll.</returns>
     /// <remarks>
@@ -313,14 +338,21 @@ public:
     /// No the translation isn't untangling all of that, it's not needed until it is.
     /// We're not landing on Mars with this code, just offering a user reasonable thumb-twiddlings.
     /// </remarks>
-    E_BoneAxisTranslation getJointTranslation(const std::string& jointName) const;
+    E_BoneAxisTranslation getJointTranslation(E_PoserReferenceFrame frame, const std::string& jointName) const;
 
     /// <summary>
     /// Gets the collection of E_BoneAxisNegation values for the supplied joint.
     /// </summary>
+    /// <param name="frame">The reference frame for the change.</param>
     /// <param name="jointName">The name of the joind to get the axis transformation for.</param>
     /// <returns>The kind of axis transformation to perform.</returns>
-    S32 getJointNegation(const std::string& jointName) const;
+    S32 getJointNegation(E_PoserReferenceFrame frame, const std::string& jointName) const;
+
+    /// <summary>
+    /// Gets the reference frame for the rotation/position/scale change.
+    /// </summary>
+    /// <returns>The reference frame for the change.</returns>
+    E_PoserReferenceFrame getReferenceFrame() const;
 
     /// <summary>
     /// Gets the axial translation required for joints when saving to BVH.
@@ -335,6 +367,13 @@ public:
     /// Refreshes the text on the avatars scroll list based on their state.
     /// </summary>
     void refreshTextHighlightingOnAvatarScrollList();
+
+    /// <summary>
+    /// Gets an appropriate icon for the supplied avatar, based on sharing permission.
+    /// </summary>
+    /// <param name="avatar">The avatar to get an icon for.</param>
+    /// <returns>A string with the name of an icon.</returns>
+    std::string getIconNameForAvatar(LLVOAvatar* avatar);
 
     /// <summary>
     /// Refreshes the text on all joints scroll lists based on their state.
@@ -367,7 +406,7 @@ public:
     /// </summary>
     /// <param name="name">The name of the string.</param>
     /// <returns>The named string, if it exists, otherwise an empty string.</returns>
-    std::string tryGetString(std::string name);
+    std::string tryGetString(std::string_view name);
 
     /// <summary>
     /// Gets the name of an item from the supplied object ID.
@@ -383,7 +422,7 @@ public:
     /// Gets whether the pose should also write a BVH file when saved.
     /// </summary>
     /// <returns>True if the user wants to additionally save a BVH file, otherwise false.</returns>
-    bool getSavingToBvh();
+    bool getSavingToBvh() const;
 
     /// <summary>
     /// Writes the current pose in BVH-format to the supplied stream.
@@ -450,10 +489,12 @@ public:
     /// </remarks>
     static F32 clipRange(F32 value);
 
-    LLToolset*  mLastToolset{ nullptr };
-    LLTool*     mJointRotTool{ nullptr };
-    
-    LLVector3          mLastSliderRotation;
+    LLToolset* mLastToolset{ nullptr };
+    LLTool*    mJointRotTool{ nullptr };
+
+    LLVector3 mLastSliderRotation;
+    FSPoserAnimator::FSPoserJoint* mLastSelectedJoint{ nullptr };
+    U64                            timeFadeStartedMicrosec;
 
     FSVirtualTrackpad* mAvatarTrackball{ nullptr };
 
@@ -502,6 +543,10 @@ public:
     LLButton* mUndoChangeBtn{ nullptr };
     LLButton* mSetToTposeButton{ nullptr };
     LLButton* mBtnJointRotate{ nullptr };
+    LLButton* mBtnJointReset{ nullptr };
+    LLButton* mBtnWorldFrame{ nullptr };
+    LLButton* mBtnAvatarFrame{ nullptr };
+    LLButton* mBtnScreenFrame{ nullptr };
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
@@ -516,6 +561,9 @@ public:
     LLPanel* mMiscJointsPnl{ nullptr };
     LLPanel* mCollisionVolumesPnl{ nullptr };
     LLPanel* mPosesLoadSavePnl{ nullptr };
+    LLPanel* mPositionPnl{ nullptr };
+    LLPanel* mMoveTabPnl{ nullptr };
+    LLPanel* mTrackballButtonPnl{ nullptr };
 
     LLCheckBoxCtrl* mAlsoSaveBvhCbx{ nullptr };
     LLCheckBoxCtrl* mUnlockPelvisInBvhSaveCbx{ nullptr };

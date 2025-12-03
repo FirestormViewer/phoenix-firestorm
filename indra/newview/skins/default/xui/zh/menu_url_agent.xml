@@ -20,5 +20,7 @@
 		<menu_item_call label="從群組移除成員" name="BanEjectMember" />
 	</context_menu>
 	<menu_item_call label="複製名稱到剪貼簿" name="url_copy_label" />
-	<menu_item_call label="複製SLurl到剪貼簿" name="url_copy" />
+	<menu_item_call label="複製URI到剪貼簿" name="url_copy" />
+	<menu_item_call label="複製提及URI到剪貼簿" name="mention_copy_label" />
+	<menu_item_call label="在聊天中提及用戶" name="mention_in_chat" />
 </context_menu>

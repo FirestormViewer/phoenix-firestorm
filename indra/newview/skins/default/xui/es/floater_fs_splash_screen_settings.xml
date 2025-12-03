@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Ajustes de la Pantalla de Inicio">
+	<text name="description">
+		Configure aquí las opciones de visualización de la pantalla de inicio. Estos ajustes tendrán efecto después del próximo reinicio del visor.
+	</text>
+	<text name="section_visibility">
+		Visibilidad de la sección:
+	</text>
+	<check_box label="Ocultar barra superior" name="hide_top_bar" />
+	<check_box label="Ocultar sección de blogs" name="hide_blogs" />
+	<check_box label="Ocultar destinos" name="hide_destinations" />
+	<text name="section_accessibility">
+		Opciones de Accesibilidad:
+	</text>
+	<check_box label="Habilitar el modo de escala de grises" name="use_gray_mode" />
+	<check_box label="Habilitar el modo de alto contraste" name="use_high_contrast" />
+	<check_box label="Habilitar el modo &quot;TODO EN MAYÚSCULAS&quot;" name="use_all_caps" />
+	<check_box label="Usa fuentes más grandes" name="use_larger_fonts"/>
+	<check_box label="Deshabilitar efectos de transparencia" name="no_transparency" />
+</floater>

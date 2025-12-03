@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Splash Screen Einstellungen">
+	<text name="description">
+		Konfigurieren Sie hier die Anzeigeoptionen für den Splash Screen. Diese Einstellungen werden beim nächsten Neustart des Viewers wirksam.
+	</text>
+	<text name="section_visibility">
+		Sichtbarkeit des Bereichs:
+	</text>
+	<check_box label="Obere Leiste ausblenden" name="hide_top_bar" />
+	<check_box label="Blogbereich ausblenden" name="hide_blogs" />
+	<check_box label="Ziele ausblenden" name="hide_destinations" />
+	<text name="section_accessibility">
+		Barrierefreiheitsoptionen:
+	</text>
+	<check_box label="Graustufenmodus aktivieren" name="use_gray_mode" />
+	<check_box label="Modus für hohen Kontrast aktivieren" name="use_high_contrast" />
+	<check_box label="„GROSSBUCHSTABEN“-Modus aktivieren" name="use_all_caps" />
+	<check_box label="Größere Schriftarten verwenden" name="use_larger_fonts"/>
+	<check_box label="Transparenzeffekte deaktivieren" name="no_transparency" />
+</floater>
