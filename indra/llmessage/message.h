@@ -28,6 +28,7 @@
 #define LL_MESSAGE_H
 
 #include <cstring>
+#include <functional>
 #include <set>
 
 #if LL_LINUX
@@ -55,7 +56,6 @@
 #include "llmessagesenderinterface.h"
 
 #include "llstoredmessage.h"
-#include "boost/function.hpp"
 #include "llpounceable.h"
 #include "llcoros.h"
 #include LLCOROS_MUTEX_HEADER
@@ -829,7 +829,7 @@ public:
     void setIsInSecondLife(bool in_second_life) { mIsInSecondLife = in_second_life; }
 
 private:
-    typedef boost::function<void(S32)>  UntrustedCallback_t;
+    typedef std::function<void(S32)>  UntrustedCallback_t;
     void sendUntrustedSimulatorMessageCoro(std::string url, std::string message, LLSD body, UntrustedCallback_t callback);
 
 

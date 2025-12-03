@@ -343,12 +343,7 @@ bool LLKeyframeMotionParam::loadMotions()
     S32 fileSize = 0;
     LLAPRFile infile ;
     infile.open(path, LL_APR_R, NULL, &fileSize);
-
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* fp = infile.getFileHandle() ;
-    LLAPRFile::tFiletype* fp = infile.getFileHandle() ;
-    // </FS:ND>
-
+    apr_file_t* fp = infile.getFileHandle() ;
     if (!fp || fileSize == 0)
     {
         LL_INFOS() << "ERROR: can't open: " << path << LL_ENDL;

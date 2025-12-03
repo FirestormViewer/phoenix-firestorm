@@ -305,6 +305,14 @@ bool LLPanelWearing::postBuild()
     // <FS:Ansariel> Show avatar complexity in appearance floater
     mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
 
+    // <FS:PP> FIRE-36089: Connect bottom gear menu button to the gear menu
+    LLMenuButton* gear_btn = findChild<LLMenuButton>("options_gear_btn");
+    if (gear_btn)
+    {
+        gear_btn->setMenu(mGearMenu->getMenu());
+    }
+    // </FS:PP>
+
     return true;
 }
 
@@ -519,8 +527,8 @@ void LLPanelWearing::getAttachmentLimitsCoro(std::string url)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-    httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("getAttachmentLimitsCoro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("getAttachmentLimitsCoro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     LLSD result = httpAdapter->getAndSuspend(httpRequest, url);
 

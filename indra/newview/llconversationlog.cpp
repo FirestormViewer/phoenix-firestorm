@@ -165,9 +165,12 @@ void LLConversation::setListenIMFloaterOpened()
     // if floater is already opened or this conversation doesn't have unread offline messages
     if (mHasOfflineIMs && !offline_ims_visible)
     {
-        //mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversation::onIMFloaterShown, this, _1));
-        mIMFloaterShowedConnection = FSFloaterIM::setIMFloaterShowedCallback(boost::bind(&LLConversation::onIMFloaterShown, this, _1));
+        //mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback([this](const LLUUID& session_id)
+        mIMFloaterShowedConnection = FSFloaterIM::setIMFloaterShowedCallback([this](const LLUUID& session_id)
         // </FS:CR>
+        {
+            onIMFloaterShown(session_id);
+        });
     }
     else
     {

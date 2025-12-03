@@ -17,14 +17,14 @@
  * $/LicenseInfo$
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 // This class's function is described by the flow chart at
 // https://www.flickr.com/services/api/auth.oauth.html
 class exoFlickrAuth
 {
 public:
-    typedef boost::function<void(bool success, const LLSD& params)> authorized_callback_t;
+    typedef std::function<void(bool success, const LLSD& params)> authorized_callback_t;
 
     exoFlickrAuth(authorized_callback_t callback);
     ~exoFlickrAuth();

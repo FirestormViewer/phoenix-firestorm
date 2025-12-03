@@ -29,10 +29,10 @@
 	<check_box label="在收藏資料夾旁顯示空心星標" name="favorite_hollow_star" />
 	<check_box label="文字顏色" name="favorites_color" />
 	<text name="attachment_return_txt">
-		在化身附件上按下“Enter”鍵
+		按下Enter鍵或雙擊化身附件
 	</text>
 	<combo_box name="attach_combo">
-		<combo_box.item label="添加附件（推薦）" name="0" />
-		<combo_box.item label="穿上（替換附著點上的物件）" name="1" />
+		<combo_box.item label="添加附件（推薦）" name="1" />
+		<combo_box.item label="穿上（替換附著點上的物件）" name="0" />
 	</combo_box>
 </floater>

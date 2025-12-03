@@ -82,6 +82,9 @@ extern void handle_voice_morphing_subscribe();
 
 const std::string VIVOX_VOICE_SERVER_TYPE = "vivox";
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 namespace {
     const F32 VOLUME_SCALE_VIVOX = 0.01f;
 
@@ -1263,9 +1266,9 @@ bool LLVivoxVoiceClient::provisionVoiceAccount()
 
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("voiceAccountProvision", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("voiceAccountProvision", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
     int retryCount(0);
 
     LLSD result;
@@ -1675,8 +1678,8 @@ bool LLVivoxVoiceClient::requestParcelVoiceInfo()
 
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("parcelVoiceInfoRequest", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("parcelVoiceInfoRequest", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     LLSD result = httpAdapter->postAndSuspend(httpRequest, url, LLSD());
 
@@ -2412,6 +2415,19 @@ void LLVivoxVoiceClient::sendCaptureAndRenderDevices()
 {
     if (mCaptureDeviceDirty || mRenderDeviceDirty)
     {
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+        {
+        // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+        std::unique_lock lock(gAudioDeviceMutex, 1s);
+        // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+        // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+        if (!lock.owns_lock())
+        {
+            LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+            return;
+        }
+        // </FS:minerjr> [FIRE-36022]
         std::ostringstream stream;
 
         buildSetCaptureDevice(stream);
@@ -2423,6 +2439,35 @@ void LLVivoxVoiceClient::sendCaptureAndRenderDevices()
         }
 
         llcoro::suspendUntilTimeout(UPDATE_THROTTLE_SECONDS);
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        }
+        // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
+        catch (const std::system_error& e)
+        {
+            if (e.code() == std::errc::resource_deadlock_would_occur)
+            {
+                // When trying to lock the same lock a second time
+                LL_WARNS() << "Exception Vinvox: " << e.code() << " " << e.what() << LL_ENDL;
+            }
+            else if (e.code() == std::errc::operation_not_permitted)
+            {
+                // When the mutex is invalid
+                LL_WARNS() << "Exception Vinvox: " << e.code() << " " << e.what() << LL_ENDL;
+            }
+            else
+            {
+                // Everything else
+                LL_WARNS() << "Exception Vinvox: " << e.code() << " " << e.what() << LL_ENDL;
+            }
+
+            return;
+        }
+        catch (const std::exception& e)
+        {
+            LL_WARNS() << "Exception Vinvox: " << " " << e.what() << LL_ENDL;
+            return;
+        }
+        // </FS:minerjr> [FIRE-36022]
     }
 }
 
@@ -4761,7 +4806,7 @@ LLVivoxVoiceClient::participantStatePtr_t LLVivoxVoiceClient::sessionState::addP
     if(!result)
     {
         // participant isn't already in one list or the other.
-        result.reset(new participantState(useAlternateURI?mSIPURI:uri));
+        result = std::make_shared<participantState>(useAlternateURI?mSIPURI:uri);
         mParticipantsByURI.insert(participantMap::value_type(result->mURI, result));
         mParticipantsChanged = true;
 

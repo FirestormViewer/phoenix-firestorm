@@ -191,8 +191,8 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mRlvCheckShowNames(false)
 // [/RLVa:KB]
 , mShowVoiceVolume(p.show_voice_volume)
-, mShowUsername((bool)gSavedSettings.getBOOL("NameTagShowUsernames"))
-, mShowDisplayName((bool)gSavedSettings.getBOOL("UseDisplayNames"))
+, mShowUsername(gSavedSettings.getBOOL("NameTagShowUsernames"))
+, mShowDisplayName(gSavedSettings.getBOOL("UseDisplayNames"))
 {
     setCommitOnSelectionChange(true);
 
@@ -219,13 +219,13 @@ LLAvatarList::LLAvatarList(const Params& p)
 void LLAvatarList::handleDisplayNamesOptionChanged()
 {
     // <FS:Ansariel> FIRE-1089: Set the proper name options for the AvatarListItem before we update the list.
-    mShowUsername = (bool)gSavedSettings.getBOOL("NameTagShowUsernames");
-    mShowDisplayName = (bool)gSavedSettings.getBOOL("UseDisplayNames");
+    mShowUsername = gSavedSettings.getBOOL("NameTagShowUsernames");
+    mShowDisplayName = gSavedSettings.getBOOL("UseDisplayNames");
     std::vector<LLPanel*> items;
     getItems(items);
-    for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+    for (auto panel : items)
     {
-        LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+        LLAvatarListItem* item = static_cast<LLAvatarListItem*>(panel);
         item->showUsername(mShowUsername, false);
         item->showDisplayName(mShowDisplayName, false);
     }
@@ -265,9 +265,9 @@ void LLAvatarList::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType t
     {
         std::vector<LLPanel*> items;
         getItems(items);
-        for (std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+        for (auto panel : items)
         {
-            LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+            LLAvatarListItem* item = static_cast<LLAvatarListItem*>(panel);
             item->updateRlvRestrictions();
         }
     }
@@ -559,11 +559,11 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
         return 1;
     }
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-    else if ( (info.has("select")) && (info["select"].isUUID()) )
+    else if (info.has("select") && info["select"].isUUID())
     {
         const LLSD& sdValue = getSelectedValue();
         const LLUUID idItem = info["select"].asUUID();
-        if ( (!sdValue.isDefined()) || ((sdValue.isUUID()) && (sdValue.asUUID() != idItem)) )
+        if (!sdValue.isDefined() || (sdValue.isUUID() && sdValue.asUUID() != idItem))
         {
             resetSelection();
             selectItemByUUID(info["select"].asUUID());
@@ -731,18 +731,18 @@ void LLAvatarList::onItemClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 // static
 std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAvatarName& av_name, bool show_displayname, bool show_username, bool force_use_complete_name, bool rlv_check_shownames)
 {
-    bool fRlvCanShowName = (!rlv_check_shownames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar_id));
+    const bool fRlvCanShowName = (!rlv_check_shownames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar_id));
     if (show_displayname && !show_username)
     {
-        return ( (fRlvCanShowName) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+        return (fRlvCanShowName ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name));
     }
     else if (!show_displayname && show_username)
     {
-        return ( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+        return (fRlvCanShowName ? av_name.getUserName() : RlvStrings::getAnonym(av_name));
     }
     else
     {
-        return ( (fRlvCanShowName) ? av_name.getCompleteName(false, force_use_complete_name) : RlvStrings::getAnonym(av_name) );
+        return (fRlvCanShowName ? av_name.getCompleteName(true, force_use_complete_name) : RlvStrings::getAnonym(av_name));
     }
 }
 // </FS:Ansariel>

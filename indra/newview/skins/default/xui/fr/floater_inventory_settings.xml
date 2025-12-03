@@ -16,11 +16,23 @@
 		<radio_item label="Ouvre une nouvelle fenêtre" name="true"/>
 	</radio_group>
 	<text name="find_original_txt">
-		Cliquer sur "Afficher dans l'inventaire" ou "Trouver l'original":
+		Clic "Afficher dans l'inventaire" ou "Trouver l'original":
 	</text>
 	<radio_group name="find_original_settings">
 		<radio_item label="Afficher dans la fenêtre d'inventaire principale" name="false"/>
 		<radio_item label="Ouvre une nouvelle fenêtre à dossier unique" name="true"/>
 	</radio_group>
-	<button label="OK" name="ok_btn"/>
+	<text name="favorites_txt">
+		Favoris
+	</text>
+	<check_box label="Étoile sur les favoris" name="favorite_star"/>
+	<check_box label="Étoile sur les dossiers contenant un favori" name="favorite_hollow_star"/>
+	<check_box label="Texte coloré" name="favorites_color"/>
+	<text name="attachment_return_txt">
+		Appuyer sur Entrée ou cliquer deux fois sur un élément attaché à l'avatar
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="Ajoute l'élément (recommandé)" name="1"/>
+		<combo_box.item label="Porte (Supprime l'élément attaché à cet endroit)" name="0"/>
+	</combo_box>
 </floater>

@@ -29,10 +29,10 @@
 	<check_box label="Gwiazdka przy folderach z ulubionymi" name="favorite_hollow_star" />
 	<check_box label="Kolor tekstu" name="favorites_color" />
 	<text name="attachment_return_txt">
-		Naciśnięcie "Enter" na dodatku awatara
+		Naciśnięcie "Enter" lub podwójne klikanie na dodatku awatara
 	</text>
 	<combo_box name="attach_combo">
-		<combo_box.item label="Dodaje (zalecane)" name="0" />
-		<combo_box.item label="Zakłada (usuwa dodatek z tego miejsca)" name="1" />
+		<combo_box.item label="Dodaje (zalecane)" name="1" />
+		<combo_box.item label="Zastępuje (usuwa dodatek z tego miejsca)" name="0" />
 	</combo_box>
 </floater>

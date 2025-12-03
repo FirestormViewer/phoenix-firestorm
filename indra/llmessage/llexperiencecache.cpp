@@ -37,8 +37,6 @@
 #include <set>
 #include <map>
 #include <boost/tokenizer.hpp>
-#include <boost/concept_check.hpp>
-#include "../newview/llviewernetwork.h" // <FS:Ansariel> Log getting spammed with experience requests from other grids; Yes, it IS ugly!
 
 //=========================================================================
 namespace LLExperienceCacheImpl
@@ -90,6 +88,9 @@ const int LLExperienceCache::SEARCH_PAGE_SIZE     = 30;
 
 bool LLExperienceCache::sShutdown = false;
 
+std::string LLExperienceCache::sCurrentGridId = ""; // <FS:Ansariel> Log getting spammed with experience requests from other grids
+bool LLExperienceCache::sIsInOpenSim = false; // <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
+
 //=========================================================================
 LLExperienceCache::LLExperienceCache()
 {
@@ -105,9 +106,7 @@ void LLExperienceCache::initSingleton()
 {
     // <FS:Ansariel> Log getting spammed with experience requests from other grids
     //mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache.xml");
-    const std::string grid_id_str = LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGridId());
-    const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
-    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache." + grid_id_lower + ".xml");
+    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache." + utf8str_tolower(sCurrentGridId) + ".xml");
     // </FS:Ansariel>
 
     LL_INFOS("ExperienceCache") << "Loading " << mCacheFileName << LL_ENDL;
@@ -257,7 +256,7 @@ const LLExperienceCache::cache_t& LLExperienceCache::getCached()
 
 void LLExperienceCache::requestExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, std::string url, RequestQueue_t requests)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     //LL_INFOS("requestExperiencesCoro") << "url: " << url << LL_ENDL;
 
@@ -328,7 +327,7 @@ void LLExperienceCache::requestExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdap
 
 void LLExperienceCache::requestExperiences()
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -339,9 +338,9 @@ void LLExperienceCache::requestExperiences()
     {
 // <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
 #ifdef OPENSIM
-        if( LLGridManager::instance().isInOpenSim() )
+        if (sIsInOpenSim)
         {
-// In Opensim this can occur if the grid does not have experiences capability. make it a debug
+            // In Opensim this can occur if the grid does not have experiences capability. make it a debug
             LL_DEBUGS("ExperienceCache") << "No Experience capability." << LL_ENDL;
         }
         else
@@ -547,7 +546,7 @@ void LLExperienceCache::get(const LLUUID& key, LLExperienceCache::ExperienceGetF
 
     fetch(key);
 
-    signal_ptr signal = signal_ptr(new callback_signal_t());
+    signal_ptr signal = std::make_shared<callback_signal_t>();
 
     std::pair<signal_map_t::iterator, bool> result = mSignalMap.insert(signal_map_t::value_type(key, signal));
     if (!result.second)
@@ -558,7 +557,7 @@ void LLExperienceCache::get(const LLUUID& key, LLExperienceCache::ExperienceGetF
 //=========================================================================
 void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const LLUUID& itemId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -570,7 +569,7 @@ void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const 
 
 void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const LLUUID& itemId, std::string url, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -582,7 +581,7 @@ void LLExperienceCache::fetchAssociatedExperience(const LLUUID& objectId, const 
 
 void LLExperienceCache::fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, LLUUID objectId, LLUUID itemId, std::string url, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     if (url.empty())
     {
@@ -620,8 +619,10 @@ void LLExperienceCache::fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCorout
             failure["error"] = -1;
             failure["message"] = "no experience";
         }
-        if (fn && !fn.empty())
+        if (fn != nullptr)
+        {
             fn(failure);
+        }
         return;
     }
 
@@ -632,7 +633,7 @@ void LLExperienceCache::fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCorout
 //-------------------------------------------------------------------------
 void LLExperienceCache::findExperienceByName(const std::string text, int page, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -644,7 +645,7 @@ void LLExperienceCache::findExperienceByName(const std::string text, int page, E
 
 void LLExperienceCache::findExperienceByNameCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, std::string text, int page, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
     std::ostringstream url;
 
 
@@ -675,7 +676,7 @@ void LLExperienceCache::findExperienceByNameCoro(LLCoreHttpUtil::HttpCoroutineAd
 //-------------------------------------------------------------------------
 void LLExperienceCache::getGroupExperiences(const LLUUID &groupId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -687,7 +688,7 @@ void LLExperienceCache::getGroupExperiences(const LLUUID &groupId, ExperienceGet
 
 void LLExperienceCache::getGroupExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, LLUUID groupId, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     // search for experiences owned by the current group
     std::string url = mCapability("GroupExperiences");
@@ -730,7 +731,7 @@ void LLExperienceCache::setRegionExperiences(CapabilityQuery_t regioncaps, const
 void LLExperienceCache::regionExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter,
     CapabilityQuery_t regioncaps, bool update, LLSD experiences, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     // search for experiences owned by the current group
     std::string url = regioncaps("RegionExperiences");
@@ -763,7 +764,7 @@ void LLExperienceCache::regionExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapt
 //-------------------------------------------------------------------------
 void LLExperienceCache::getExperiencePermission(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -787,7 +788,7 @@ void LLExperienceCache::getExperiencePermission(const LLUUID &experienceId, Expe
 
 void LLExperienceCache::setExperiencePermission(const LLUUID &experienceId, const std::string &permission, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -817,7 +818,7 @@ void LLExperienceCache::setExperiencePermission(const LLUUID &experienceId, cons
 
 void LLExperienceCache::forgetExperiencePermission(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -842,7 +843,7 @@ void LLExperienceCache::forgetExperiencePermission(const LLUUID &experienceId, E
 
 void LLExperienceCache::experiencePermissionCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, permissionInvoker_fn invokerfn, std::string url, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     // search for experiences owned by the current group
 
@@ -861,7 +862,7 @@ void LLExperienceCache::experiencePermissionCoro(LLCoreHttpUtil::HttpCoroutineAd
 //-------------------------------------------------------------------------
 void LLExperienceCache::getExperienceAdmin(const LLUUID &experienceId, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -873,7 +874,7 @@ void LLExperienceCache::getExperienceAdmin(const LLUUID &experienceId, Experienc
 
 void LLExperienceCache::getExperienceAdminCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, LLUUID experienceId, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     std::string url = mCapability("IsExperienceAdmin");
     if (url.empty())
@@ -893,7 +894,7 @@ void LLExperienceCache::getExperienceAdminCoro(LLCoreHttpUtil::HttpCoroutineAdap
 //-------------------------------------------------------------------------
 void LLExperienceCache::updateExperience(LLSD updateData, ExperienceGetFn_t fn)
 {
-    if (mCapability.empty())
+    if (mCapability == nullptr)
     {
         LL_WARNS("ExperienceCache") << "Capability query method not set." << LL_ENDL;
         return;
@@ -905,7 +906,7 @@ void LLExperienceCache::updateExperience(LLSD updateData, ExperienceGetFn_t fn)
 
 void LLExperienceCache::updateExperienceCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter, LLSD updateData, ExperienceGetFn_t fn)
 {
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     std::string url = mCapability("UpdateExperience");
     if (url.empty())
@@ -922,6 +923,14 @@ void LLExperienceCache::updateExperienceCoro(LLCoreHttpUtil::HttpCoroutineAdapte
 
     fn(result);
 }
+
+// <FS:Ansariel> Log getting spammed with experience requests from other grids
+void LLExperienceCache::setCurrentGrid(std::string_view gridId, bool isInOpenSim)
+{
+    sCurrentGridId = gridId;
+    sIsInOpenSim = isInOpenSim;
+}
+// </FS:Ansariel>
 
 //=========================================================================
 void LLExperienceCacheImpl::mapKeys(const LLSD& legacyKeys)

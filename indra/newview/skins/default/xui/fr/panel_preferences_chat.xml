@@ -79,7 +79,7 @@
 				<combo_box.item label="Italique &amp; Souligné" name="ITALICUNDERLINE"/>
 				<combo_box.item label="Gras, Italique &amp; Souligné" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
-			<text name="Moderator Text Style">Text :</text>
+			<text name="Moderator Text Style">Texte :</text>
 			<combo_box name="mod_text_style">
 				<combo_box.item label="Normal" name="normal"/>
 				<combo_box.item label="Gras" name="BOLD"/>
@@ -114,6 +114,7 @@
 			<check_box name="FSChatbarNamePrediction" label="Activer l'autocomplétion des noms dans le Chat local"/>
 			<check_box name="AllowMUpose" label="':' est un synonyme pour '/me'"/>
 			<check_box name="AutoCloseOOC" label="Fermer automatiquement les doubles parenthèses ((OOC))"/>
+			<check_box name="FSUseChatMentionAutoComplete" label="Activer la fenêtre de mentions @ automatiques lors de la saisie dans les barres de discussion"/>
 			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Activer la fenêtre de sélection auto des émojis lors de la saisie dans la barre de chat"/>
 			<check_box name="FSShowEmojiButton" label="Afficher le bouton emoji dans la barre de chat pour les IM et les discussions de proximité"/>
 			<check_box name="FSShowIMSendButton" label="Afficher le bouton d'envoi dans la barre de chat pour les sessions d'IM"/>
@@ -138,6 +139,7 @@
 			<text name="FSShowGroupNameLength_label" width="340">Longueur de nom de groupe à afficher dans les transcriptions</text>
 			<spinner tool_tip="-1 pour le nom complet, 0 pour désactiver" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Afficher les messages reçus hors-ligne à la connexion"/>
+			<check_box name="FSRestoreOpenIMs" label="Restaurer les conversations de la session précédente avec les résidents"/>
 			<check_box label="Envoyer les IMs par email si je suis déconnecté ([EMAIL])" name="send_im_to_email"/>
 			<check_box name="FSShowIMInChatHistory" label="Afficher les IMs dans le Chat local"/>
 			<check_box name="FSLogIMInChatHistory" label="Sauvegarder les IMs dans le Chat local"/>

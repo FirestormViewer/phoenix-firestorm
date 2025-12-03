@@ -809,6 +809,15 @@ Oczekiwane: [VALIDS]
 		Nie można otworzyć przesłanego pliku dźwiękowego:
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+		Przesyłanie modeli nie jest jeszcze dostępne na Apple Silicon, ale będzie obsługiwane w nadchodzącym wydaniu.
+
+Obejście: Kliknij prawym przyciskiem myszy aplikację [APP_NAME] w Finderze,
+wybierz "Pobierz info", a następnie zaznacz "Otwórz przy użyciu Rosetty".
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		Biblioteka fizyki nie jest obecna, dlatego część funkcji narzędzia przesyłania modeli może nie działać lub nie działać poprawnie.
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		Plik nie jest w formacie RIFF WAVE:
 [FILE]
@@ -5042,6 +5051,10 @@ Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać pr
 		Nie można przenieść plików. Przywrócono poprzednią ścieżkę.
 		<usetemplate ignoretext="Nie można przenieść plików. Przywrócono poprzednią ścieżkę." name="okignore" />
 	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		Twój system ma [TOTAL_MEM]MB pamięci, co może nie wystarczyć do uruchamiania przeglądarki na wyższych ustawieniach i może powodować problemy.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Kontynuuj" />
+	</notification>
 	<notification name="DefaultObjectPermissions">
 		Wystąpił problem z zapisywaniem domyślnych zezwoleń obiektu: [REASON]. Spróbuj ustawić je ponownie później.
 	</notification>
@@ -5266,6 +5279,12 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 	</notification>
 	<notification name="PickLimitReached">
 		Nie można utworzyć kolejnego Miejsca, ponieważ limit ich ilości został osiągnięty.
+	</notification>
+	<notification name="ConfirmGlobalOnlineStatusToggle">
+		Czy na pewno chcesz zmienić widoczność swojego statusu online dla wszystkich znajomych naraz?
+
+Ze względu na obciążenie serwera taka masowa zmiana może chwilę potrwać i tymczasowo powodować problemy z wyświetlaniem Twojego statusu online u niektórych znajomych.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.
@@ -5519,7 +5538,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]).
+		Została wykryta duża liczba strojów: [AMOUNT]. Może to powodować zawieszanie się lub rozłączanie przeglądarki. Rozważ zmniejszenie liczby strojów dla lepszej wydajności (poniżej [MAX]). TO JEST TYLKO SUGESTIA - jeśli twój komputer działa prawidłowo, możesz ją bezpiecznie zignorować.
 		<usetemplate ignoretext="Ostrzeżenie o liczbie strojów" name="okignore" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">

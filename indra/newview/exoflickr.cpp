@@ -233,8 +233,8 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
     }
 
     // We have a post body! Now we can go about building the actual request...
-    LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
-    LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
+    LLCore::HttpHeaders::ptr_t pHeader = std::make_shared<LLCore::HttpHeaders>();
+    LLCore::HttpOptions::ptr_t options = std::make_shared<LLCore::HttpOptions>();
     pHeader->append("Content-Type", "multipart/form-data; boundary=" + boundary);
     options->setWantHeaders(true);
     options->setRetries(0);

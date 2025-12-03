@@ -4106,6 +4106,7 @@ void FSPanelFace::onCancelSpecularTexture()
 //       onClickBtnAddMedia() where needed, so the naming is probably just old cruft -Zi
 void FSPanelFace::onClickBtnEditMedia()
 {
+    LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
     refreshMedia();
     LLFloaterReg::showInstance("media_settings");
 }
@@ -4124,6 +4125,7 @@ void FSPanelFace::onClickBtnAddMedia()
     // check if multiple faces are selected
     if (LLSelectMgr::getInstance()->getSelection()->isMultipleTESelected())
     {
+        LLFloaterMediaSettings::getInstance(); // make sure floater we are about to open exists before refreshMedia
         refreshMedia();
         LLNotificationsUtil::add("MultipleFacesSelected", LLSD(), LLSD(), boost::bind(&FSPanelFace::multipleFacesSelectedConfirm, this, _1, _2));
     }

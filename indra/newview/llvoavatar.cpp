@@ -3738,7 +3738,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 void LLVOAvatar::idleUpdateWindEffect()
 {
     // update wind effect
-    if ((LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR) >= LLDrawPoolAvatar::SHADER_LEVEL_CLOTH))
+    if (LLPipeline::RenderAvatarCloth)
     {
         F32 hover_strength = 0.f;
         F32 time_delta = mRippleTimer.getElapsedTimeF32() - mRippleTimeLast;
@@ -5302,14 +5302,10 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
 
             LLVector3 pelvisDir( mRoot->getWorldMatrix().getFwdRow4().mV );
 
-            // <FS:Beq> FIRE-34196 Restore the pelvis rotation threshold config removed by LL as "unused"
-            // const F32 AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW = 60.0f;
-            // const F32 AVATAR_PELVIS_ROTATE_THRESHOLD_FAST = 2.0f;
-            static LLCachedControl<F32> AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW(gSavedSettings, "AvatarRotateThresholdSlow", 60.0);
-            static LLCachedControl<F32> AVATAR_PELVIS_ROTATE_THRESHOLD_FAST(gSavedSettings, "AvatarRotateThresholdFast", 2.0);
-            // </FS:Beq>
+            static LLCachedControl<F32> s_pelvis_rot_threshold_slow(gSavedSettings, "AvatarRotateThresholdSlow", 60.0);
+            static LLCachedControl<F32> s_pelvis_rot_threshold_fast(gSavedSettings, "AvatarRotateThresholdFast", 2.0);
 
-            F32 pelvis_rot_threshold = clamp_rescale(speed, 0.1f, 1.0f, AVATAR_PELVIS_ROTATE_THRESHOLD_SLOW, AVATAR_PELVIS_ROTATE_THRESHOLD_FAST);
+            F32 pelvis_rot_threshold = clamp_rescale(speed, 0.1f, 1.0f, s_pelvis_rot_threshold_slow, s_pelvis_rot_threshold_fast);
 
             if (self_in_mouselook)
             {
@@ -10629,10 +10625,7 @@ bool LLVOAvatar::visualParamWeightsAreDefault()
     return rtn;
 }
 
-// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-//void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value)
-void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, F32 value)
-// </FS:ND>
+void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value)
 {
     std::string type_string = "unknown";
     if (dynamic_cast<LLTexLayerParamAlpha*>(viewer_param))
@@ -10669,12 +10662,7 @@ void LLVOAvatar::dumpAppearanceMsgParams( const std::string& dump_prefix,
     LLAPRFile outfile;
     std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, outfilename);
     outfile.open(fullpath, LL_APR_WB );
-
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    // apr_file_t* file = outfile.getFileHandle();
-    LLAPRFile::tFiletype* file = outfile.getFileHandle();
-    // </FS:ND>
-
+    apr_file_t* file = outfile.getFileHandle();
     if (!file)
     {
         return;
@@ -10760,8 +10748,8 @@ void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMe
 
         if (attachment_id.notNull())
         {
-        mSimAttachments[attachment_id] = attach_point;
-    }
+            mSimAttachments[attachment_id] = attach_point;
+        }
         else
         {
             // at the moment viewer is only interested in non-null attachments
@@ -11612,11 +11600,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 // </FS:CR>
     if (APR_SUCCESS == outfile.open(fullpath, LL_APR_WB ))
     {
-        // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-        //apr_file_t* file = outfile.getFileHandle();
-        LLAPRFile::tFiletype* file = outfile.getFileHandle();
-        // </FS:ND>
-
+        apr_file_t* file = outfile.getFileHandle();
         LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
 
         apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );

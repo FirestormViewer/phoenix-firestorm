@@ -348,9 +348,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         channel_type=self.channel_type()
         #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
         #if channel_type == 'release':
-        #    app_suffix='Viewer'
+        #    return CHANNEL_VENDOR_BASE
         #else:
-        #    app_suffix=self.channel_variant()
+        #    return CHANNEL_VENDOR_BASE + ' ' + self.channel_variant()
         app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
@@ -1357,24 +1357,18 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
-                # Inject BugsplatServerURL into Info.plist if provided.
+                # Inject Bugsplat's db into Info.plist if provided.
                 Info_plist = self.dst_path_of("Info.plist")
                 with open(Info_plist, 'rb') as f:
                     Info = plistlib.load(f)
                     # https://www.bugsplat.com/docs/platforms/os-x#configuration
-                    Info["BugsplatServerURL"] = \
-                        "https://{}.bugsplat.com/".format(bugsplat_db)
+                    Info["BugSplatDatabase"] = bugsplat_db
                     self.put_in_file(
                         plistlib.dumps(Info),
                         os.path.basename(Info_plist),
                         "Info.plist")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
-            # self.path("Info.plist", dst="Info.plist")
-
-            # copy additional libs in <bundle>/Contents/MacOS/
-            self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-
             # CEF framework goes inside Contents/Frameworks.
             # Remember where we parked this car.
             with self.prefix(src=relpkgdir, dst="Frameworks"):
@@ -1382,6 +1376,8 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
                 if self.args.get('bugsplat'):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")
+                    self.path2basename(relpkgdir, "CrashReporter.framework")
+                    self.path2basename(relpkgdir, "HockeySDK.framework")
 
                 # OpenAL dylibs
                 if self.args['openal'] == 'ON':
@@ -1419,6 +1415,24 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     # stamped into the framework.
                     # Let exception, if any, propagate -- if this doesn't
                     # work, we need the build to noisily fail!
+                    oldpath = subprocess.check_output(
+                        ['objdump', '--macho', '--dylib-id', '--non-verbose',
+                         os.path.join(relpkgdir, "HockeySDK.framework", "HockeySDK")],
+                        text=True
+                        ).splitlines()[-1]  # take the last line of output
+                    self.run_command(
+                        ['install_name_tool', '-change', oldpath,
+                         '@executable_path/../Frameworks/HockeySDK.framework/HockeySDK',
+                         executable])
+                    oldpath = subprocess.check_output(
+                        ['objdump', '--macho', '--dylib-id', '--non-verbose',
+                         os.path.join(relpkgdir, "CrashReporter.framework", "CrashReporter")],
+                        text=True
+                        ).splitlines()[-1]  # take the last line of output
+                    self.run_command(
+                        ['install_name_tool', '-change', oldpath,
+                         '@executable_path/../Frameworks/CrashReporter.framework/CrashReporter',
+                         executable])
                     oldpath = subprocess.check_output(
                         ['objdump', '--macho', '--dylib-id', '--non-verbose',
                          os.path.join(relpkgdir, "BugsplatMac.framework", "BugsplatMac")],
@@ -1579,6 +1593,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     self.path2basename("../media_plugins/cef/" + self.args['configuration'],
                                        "media_plugin_cef.dylib")
 
+                    # copy LibVLC plugin
+                    self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
+                                       "media_plugin_libvlc.dylib")
+
                     # CEF framework and vlc libraries goes inside Contents/Frameworks.
                     with self.prefix(src=os.path.join(pkgdir, 'lib', 'release')):
                         self.path("Chromium Embedded Framework.framework")
@@ -1588,14 +1606,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path("DullahanHelper (Renderer).app")
                         self.path("DullahanHelper (Plugin).app")
 
-                    # copy LibVLC dynamic libraries
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
+                        # Copy libvlc
                         self.path( "libvlc*.dylib*" )
-
-                    # copy LibVLC plugins folder
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release', 'plugins' ), dst="lib"):
-                        self.path("*.dylib")
-                        self.path("plugins.dat")
+                        # copy LibVLC plugins folder
+                        with self.prefix(src='plugins', dst="plugins"):
+                            self.path( "*.dylib" )
+                            self.path( "plugins.dat" )
 
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no
@@ -1764,69 +1780,79 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.run_command(['security', 'unlock-keychain',
                                           '-p', keychain_pwd, viewer_keychain])
 
-                    sign_retry_wait=15
-                    resources = app_in_dmg + "/Contents/Resources/"
-                    plain_sign = glob.glob(resources + "llplugin/*.dylib")
+                    with tempfile.TemporaryDirectory() as tmpdir:
+                        tmp_app_path = os.path.join(tmpdir, self.app_name() + ".app")
+                        print("Copying app to temporary folder for signing:", tmp_app_path)
+                        subprocess.run(['ditto', app_in_dmg, tmp_app_path], check=True)
 
-                    # <FS:ND> Even though we got some dylibs in Resources signed by LL, we also got some there that are *NOT*
-                    # At least: fmod, growl, GLOD
-                    # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
-                    plain_sign += glob.glob(resources + "*.dylib")
-                    plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
-                    plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
+                        sign_retry_wait=15
+                        resources = tmp_app_path + "/Contents/Resources/"
+                        plain_sign = glob.glob(resources + "llplugin/*.dylib")
 
-                    deep_sign = [
-                        # <FS:ND> Firestorm does not ship SLVersionChecker
-                        #resources + "updater/SLVersionChecker",
-                        resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
-                        resources + "SLVoice",
-                        app_in_dmg,
-                        ]
-                    for attempt in range(3):
-                        if attempt: # second or subsequent iteration
-                            print("codesign failed, waiting {:d} seconds before retrying".format(sign_retry_wait),
-                                  file=sys.stderr)
-                            time.sleep(sign_retry_wait)
-                            sign_retry_wait*=2
+                        # <FS:ND> Even though we got some dylibs in Resources signed by LL, we also got some there that are *NOT*
+                        # At least: fmod, growl, GLOD
+                        # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
+                        plain_sign += glob.glob(resources + "*.dylib")
+                        plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
+                        plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
 
-                        try:
-                            # Note: See blurb above about names of keychains
-                            for signee in plain_sign:
-                                args = [
-                                    'codesign',
-                                    '--force',
-                                    '--timestamp'
-                                ]
-                                if not ad_hoc_sign:
-                                    args += ['--keychain', viewer_keychain]
-                                args += ['--sign', identity, signee]
-                                self.run_command(args)
-                            for signee in deep_sign:
-                                args = [
-                                    'codesign',
-                                    '--verbose',
-                                    '--deep',
-                                    '--force',
-                                    '--entitlements', self.src_path_of("slplugin.entitlements"),
-                                    '--options', 'runtime'
-                                ]
-                                if not ad_hoc_sign:
-                                    args += ['--keychain', viewer_keychain]
-                                args += ['--sign', identity, signee]
-                                self.run_command(args)
-                            break # if no exception was raised, the codesign worked
-                        except ManifestError as err:
-                            # 'err' goes out of scope
-                            sign_failed = err
-                    else:
-                        print("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
-                        raise sign_failed
+                        deep_sign = [
+                            # <FS:ND> Firestorm does not ship SLVersionChecker
+                            #resources + "updater/SLVersionChecker",
+                            resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
+                            resources + "SLVoice",
+                            tmp_app_path,
+                            ]
+                        for attempt in range(3):
+                            if attempt: # second or subsequent iteration
+                                print("codesign failed, waiting {:d} seconds before retrying".format(sign_retry_wait),
+                                      file=sys.stderr)
+                                time.sleep(sign_retry_wait)
+                                sign_retry_wait*=2
 
-                    if not ad_hoc_sign:
-                        # <FS:ND> This fails sometimes and works other times. Even when notarization (down below) is a success
-                        # Remove it for now and investigate after we did notarize  a few times
-                        #self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
-                        self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), app_in_dmg])
+                            try:
+                                # Note: See blurb above about names of keychains
+                                for signee in plain_sign:
+                                    args = [
+                                        'codesign',
+                                        '--force',
+                                        '--timestamp'
+                                    ]
+                                    if not ad_hoc_sign:
+                                        args += ['--keychain', viewer_keychain]
+                                    args += ['--sign', identity, signee]
+                                    self.run_command(args)
+                                for signee in deep_sign:
+                                    args = [
+                                        'codesign',
+                                        '--verbose',
+                                        '--deep',
+                                        '--force',
+                                        '--entitlements', self.src_path_of("slplugin.entitlements"),
+                                        '--options', 'runtime'
+                                    ]
+                                    if not ad_hoc_sign:
+                                        args += ['--keychain', viewer_keychain]
+                                    args += ['--sign', identity, signee]
+                                    self.run_command(args)
+                                break # if no exception was raised, the codesign worked
+                            except ManifestError as err:
+                                # 'err' goes out of scope
+                                sign_failed = err
+                        else:
+                            print("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
+                            raise sign_failed
+
+                        # Signing succeeded, now delete the original app in the mounted sparse image and notarize if needed
+                        shutil.rmtree(app_in_dmg)
+                        if not ad_hoc_sign:
+                            # <FS:ND> This fails sometimes and works other times. Even when notarization (down below) is a success
+                            # Remove it for now and investigate after we did notarize  a few times
+                            #self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
+                            self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), tmp_app_path])
+
+                        print("Copying signed app back into mounted sparse image")
+                        subprocess.run(['ditto', tmp_app_path, app_in_dmg], check=True)
 
         finally:
             # Unmount the image even if exceptions from any of the above 

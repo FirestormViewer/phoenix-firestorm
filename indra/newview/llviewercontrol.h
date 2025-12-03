@@ -61,4 +61,8 @@ extern LLControlGroup gCrashSettings;
 // Set after settings loaded
 extern std::string gLastRunVersion;
 
+// <FS> Global online status toggle
+void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& response);
+// </FS>
+
 #endif // LL_LLVIEWERCONTROL_H

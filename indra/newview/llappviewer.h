@@ -77,6 +77,8 @@ typedef enum
     LAST_EXEC_BAD_ALLOC,
     LAST_EXEC_MISSING_FILES,
     LAST_EXEC_GRAPHICS_INIT,
+    LAST_EXEC_UNKNOWN,
+    LAST_EXEC_LOGOUT_UNKNOWN,
     LAST_EXEC_COUNT
 } eLastExecEvent;
 
@@ -205,11 +207,13 @@ public:
     // For thread debugging.
     // llstartup needs to control init.
     // llworld, send_agent_pause() also controls pause/resume.
-    void initMainloopTimeout(std::string_view state, F32 secs = -1.0f);
+    void initMainloopTimeout(std::string_view state);
     void destroyMainloopTimeout();
     void pauseMainloopTimeout();
-    void resumeMainloopTimeout(std::string_view state = "", F32 secs = -1.0f);
-    void pingMainloopTimeout(std::string_view state, F32 secs = -1.0f);
+    void resumeMainloopTimeout(std::string_view state = "");
+    void pingMainloopTimeout(std::string_view state);
+
+    F32 getMainloopTimeoutSec() const;
 
     // Handle the 'login completed' event.
     // *NOTE:Mani Fix this for login abstraction!!
@@ -223,7 +227,7 @@ public:
         return mOnLoginCompleted.connect(cb);
     }
 
-    void addOnIdleCallback(const boost::function<void()>& cb); // add a callback to fire (once) when idle
+    void addOnIdleCallback(const std::function<void()>& cb); // add a callback to fire (once) when idle
 
     void initGeneralThread();
     void purgeUserDataOnExit() { mPurgeUserDataOnExit = true; }
@@ -334,13 +338,11 @@ private:
     std::string mLogoutMarkerFileName;
     LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running.
 
-    // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-    //LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running.
-    // </FS:ND>
-
-    //-TT The skin and theme we are using at startup. might want to make them static.
+    // <FS:TT> The skin and theme we are using at startup. might want to make them static.
     std::string mCurrentSkin;
     std::string mCurrentSkinTheme;
+    // </FS:TT>
+
     bool mReportedCrash;
 
     std::string mServerReleaseNotesURL;

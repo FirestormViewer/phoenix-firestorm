@@ -72,7 +72,7 @@ if (WINDOWS)
   # Don't build DLLs.
   set(BUILD_SHARED_LIBS OFF)
 
-  if( USE_COMPILERCACHE )
+  if (USE_COMPILERCACHE)
     string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
     string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
     string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_REELASE}")
@@ -212,6 +212,8 @@ if (LINUX)
           "LINKER:--as-needed"
           "LINKER:--no-undefined"
   )
+  # Prefer static libraries on Linux
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.a")
 endif (LINUX)
 
 if (DARWIN)

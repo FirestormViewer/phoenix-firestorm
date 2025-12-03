@@ -241,4 +241,21 @@
 			<on_click function="Avatar.BanMember" parameter="ban_member" />
 			<on_enable function="ParticipantList.EnableItem" parameter="can_ban_member" />
 	</menu_item_call>		
+   <!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
+   <menu_item_separator layout="topleft" name="MentionURISeparator"/>
+   <menu_item_call
+         label="Copy Mention URI to clipboard"
+         layout="topleft"
+         name="mention_copy_label">
+        <menu_item_call.on_click
+         function="Mention.CopyURI" />
+   </menu_item_call>
+   <menu_item_call
+         label="Mention User in Chat"
+         layout="topleft"
+         name="mention_in_chat">
+        <menu_item_call.on_click
+         function="Mention.Chat" />
+   </menu_item_call>
+   <!-- </FS:Zi> -->
 </context_menu>

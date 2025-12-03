@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Giriş Ekranı Seçimləri">
+	<text name="description">
+		Giriş ekranının göstərilmə seçimlərini burada tənzimləyin. Bu seçimlər baxış proqramını növbəti dəfə yenidən başlatdığınız zaman qüvvəyə minəcək.
+	</text>
+	<text name="section_visibility">
+		Bölmənin Görünürlüyü:
+	</text>
+	<check_box label="Üst paneli gizlət" name="hide_top_bar" />
+	<check_box label="Bloqlar bölməsini gizlət" name="hide_blogs" />
+	<check_box label="Təyinat yerlərini gizlət" name="hide_destinations" />
+	<text name="section_accessibility">
+		Əlçatanlıq Seçimləri:
+	</text>
+	<check_box label="Boz rəng rejimini aktivləşdir" name="use_gray_mode" />
+	<check_box label="Yüksək kontrast rejimini aktivləşdir" name="use_high_contrast" />
+	<check_box label="&quot;BÖYÜK HƏRİFLƏR&quot; rejimini aktivləşdirin" name="use_all_caps" />
+	<check_box label="Daha böyük şriftlərdən istifadə edin" name="use_larger_fonts"/>
+	<check_box label="Şəffaflıq effektlərini söndürün" name="no_transparency" />
+</floater>

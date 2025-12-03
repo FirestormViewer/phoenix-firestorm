@@ -29,10 +29,10 @@
 #ifndef FS_GRIDHANDLER_H
 #define FS_GRIDHANDLER_H
 
-#include "../llxml/llxmlnode.h"
+#include "llxmlnode.h"
 #include "llsingleton.h"
 
-#include <boost/function.hpp>
+#include <functional>
 #include <boost/signals2.hpp>
 
 extern const char* DEFAULT_LOGIN_PAGE;
@@ -68,9 +68,6 @@ const std::string GRID_MESSAGE              = "message";
 // forms.
 const std::string GRID_SLURL_BASE     = "slurl_base";
 const std::string GRID_APP_SLURL_BASE = "app_slurl_base";
-
-// Inworldz special
-#define INWORLDZ_URI "inworldz.com:8002"
 
 class GridInfoRequestResponder;
 
@@ -227,7 +224,7 @@ public:
     }
     bool isSystemGrid() const { return isSystemGrid(mGrid); }
 
-    typedef boost::function<void(bool success)>         grid_list_changed_callback_t;
+    typedef std::function<void(bool success)>           grid_list_changed_callback_t;
     typedef boost::signals2::signal<void(bool success)> grid_list_changed_signal_t;
 
     boost::signals2::connection addGridListChangedCallback(grid_list_changed_callback_t cb);

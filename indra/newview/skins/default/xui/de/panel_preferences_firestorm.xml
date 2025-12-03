@@ -172,49 +172,14 @@
 		<text name="build_item_add_disp_rect_txt">
 			Aktuell gesetzt: [ITEM]
 		</text>
-		<text name="text_box_pivotpoint">
-			Drehpunkt
+		<check_box name="FSBuildPrefs_UseCustomScript" label="Benutzerdef. Skript für Button „Neues Skript“"/>
+		<fs_embedded_item_drop_target name="custom_script" tool_tip="Skript aus Inventar hier hinziehen und ablegen.">
+			Skript hier ablegen.
+		</fs_embedded_item_drop_target>
+		<text name="custom_script_disp_rect_txt">
+			Aktuell gesetzt: [SCRIPT]
 		</text>
-		<view_border name="PivotBorder" width="145"/>
-		<check_box label="Pfeilachsen an Wurzel" tool_tip="Standardverhalten ist, die Achse am Massenzentrum eines Linksets anzuzeigen. Aktivieren, um die Achse am Wurzel-Prim anzuzeigen." name="FSBuildPrefsActualRoot_toggle"/>
-		<spinner label="X-Position" name="X pos" label_width="60" width="135"/>
-		<spinner label="Y-Position" name="Y pos" label_width="60" width="135"/>
-		<spinner label="Z-Position" name="Z pos" label_width="60" width="135"/>
-		<check_box label="Werte sind in Prozent" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="FSPivotPercToggle"/>
 		<button label="Standard-Erstellungsberechtigungen" name="fs_default_creation_permissions"/>
-		<text name="text_box_scripting_font" width="130">
-			Schrift für Skript-Editor:
-		</text>
-		<combo_box name="FSScriptingFontName" tool_tip="Name der Schrift, die für den Skript-Editor verwendet wird">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
-		</combo_box>
-		<combo_box name="FSScriptingFontSize" tool_tip="Größe der Schrift, die für den Skript-Editor verwendet wird">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
-			<combo_item name="Small" label="Klein"/>
-			<combo_item name="Medium" label="Mittel"/>
-			<combo_item name="Large" label="Groß"/>
-		</combo_box>
-		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
-		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz." name="preprocoptimizer_checkbox"/>
-		<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>
-		<check_box label="Lazy Lists" tool_tip="Aktiviert eine erweiterte Syntax für Listen-Operationen." name="preproclazy_checkbox"/>
-		<check_box label="#includes von der Festplatte" tool_tip="Aktiviert #include-Befehle zum Einbinden von Dateien auf der lokalen Festplatte." name="preprocinclude_checkbox"/>
-		<text name="lslpreprocinclude_textbox">
-			Include-Verzeichnis für Präprozessor:
-		</text>
-		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetPreprocInclude"/>
-		<text name="externaleditor_textbox">
-			Externer Editor:
-		</text>
-		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetExternalEditor"/>
-	</panel>
-
-	<!--Build 2-->
-	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
 		<check_box label="Grenze der aktuell selektierten Parzelle hervorheben" name="RenderParcelSelection"/>
 		<check_box label="Hervorherbung bis zur maximalen Bauhöhe anzeigen" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -233,16 +198,61 @@
 		<text name="MinObjectsForUnlinkConfirmText2">
 			Einzelobjekten bestätigen
 		</text>
+		<check_box label="Altes Verhalten für „Zum Verkauf:“ akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
+		<check_box label="Texturen standardmäßig im PNG-Format anstelle von TGA speichern" tool_tip="Falls aktiviert, werden Texturen in der Vorschau standardmäßig im PNG-Format gespeichert" name="FSTextureDefaultSaveAsFormat"/>
+		<text name="text_box_pivotpoint" left_delta="362">
+			Drehpunkt
+		</text>
+		<view_border name="PivotBorder" width="150"/>
+		<check_box label="Pfeilachsen an Wurzel" tool_tip="Standardverhalten ist, die Achse am Massenzentrum eines Linksets anzuzeigen. Aktivieren, um die Achse am Wurzel-Prim anzuzeigen." name="FSBuildPrefsActualRoot_toggle"/>
+		<spinner label="X-Position" name="X pos" label_width="60" width="135"/>
+		<spinner label="Y-Position" name="Y pos" label_width="60" width="135"/>
+		<spinner label="Z-Position" name="Z pos" label_width="60" width="135"/>
+		<check_box label="Werte sind in Prozent" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="FSPivotPercToggle"/>
+	</panel>
+
+	<!--Build 2-->
+	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
-		<check_box label="Altes Verhalten für „Zum Verkauf:“ akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
-		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
-		<check_box label="Texturen standardmäßig im PNG-Format anstelle von TGA speichern" tool_tip="Falls aktiviert, werden Texturen in der Vorschau standardmäßig im PNG-Format gespeichert" name="FSTextureDefaultSaveAsFormat"/>
 		<check_box label="Vorschau von Animation beim Upload am eigenen Avatar" tool_tip="Falls aktiviert, werden Animationen in der Vorschau am eigenen Avatar abgespielt" name="FSUploadAnimationOnOwnAvatar"/>
 		<check_box label="Immer erweiterte Informationen zu Animationen anzeigen" tool_tip="Erweiterte Informationen zu Animation im Eigentschaftsfenster anzeigen" name="FSAnimationPreviewExpanded"/>
 		<check_box label="Erweiterte Skript-Informationen aktivieren" tool_tip="Falls aktiviert, werden die Skript-Informationen um weitergehende Details ergänzt." name="FSScriptInfoExtended"/>
 		<check_box label="Anhänge-Punkte in „Anhängen an“-Menüs alphabetisch sortieren (Erfordert Neustart)" tool_tip="Falls aktiviert, werden die Einträge in den „Anhängen an“-Menüs alphabetisch sortiert." name="FSSortAttachmentSpotsAlphabetically"/>
 		<check_box label="Neues [APP_NAME] Textur-Panel im Werkzeug-Fenster verwenden (Erforder Neustart)" tool_tip="Falls aktiviert, werden die Werkzeuge zum Bearbeiten von Texturen den von [APP_NAME] verbesserten Workflow benutzen und gleichzeitiges Bearbeiten von Blinn-Phong- und PBR-Texturen erlauben." name="FSUseNewTexturePanel"/>
+	</panel>
+
+	<panel label="Script Editor" name="BuildTabScriptEditor">
+		<text name="text_box_scripting_font" width="130">
+			Schrift für Skript-Editor:
+		</text>
+		<combo_box name="FSScriptingFontName" tool_tip="Name der Schrift, die für den Skript-Editor verwendet wird">
+			<combo_item name="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
+		</combo_box>
+		<combo_box name="FSScriptingFontSize" tool_tip="Größe der Schrift, die für den Skript-Editor verwendet wird">
+			<combo_item name="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item name="Small" label="Klein"/>
+			<combo_item name="Medium" label="Mittel"/>
+			<combo_item name="Large" label="Groß"/>
+		</combo_box>
+		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
+		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz." name="preprocoptimizer_checkbox"/>
+		<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>
+		<check_box label="Lazy Lists" left_delta="110" tool_tip="Aktiviert eine erweiterte Syntax für Listen-Operationen." name="preproclazy_checkbox"/>
+		<check_box label="#includes von der Festplatte" tool_tip="Aktiviert #include-Befehle zum Einbinden von Dateien auf der lokalen Festplatte." name="preprocinclude_checkbox"/>
+		<text name="lslpreprocinclude_textbox">
+			Include-Verzeichnis für Präprozessor:
+		</text>
+		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetPreprocInclude"/>
+		<text name="externaleditor_textbox">
+			Externer Editor:
+		</text>
+		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetExternalEditor"/>
 	</panel>
 
 	<!--Uploads-->

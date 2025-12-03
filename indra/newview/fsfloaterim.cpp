@@ -97,7 +97,7 @@ FSFloaterIMTimer::FSFloaterIMTimer(FSFloaterIMTimer::callback_t callback) :
 
 bool FSFloaterIMTimer::tick()
 {
-    if (!mCallback.empty())
+    if (mCallback)
     {
         mCallback();
     }

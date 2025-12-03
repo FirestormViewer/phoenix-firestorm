@@ -30,7 +30,8 @@
 #include "v3math.h"
 #include "llstring.h"
 #include "llxmltree.h"
-#include <boost/function.hpp>
+
+#include <functional>
 
 class LLPolyMesh;
 class LLXmlTreeNode;
@@ -103,7 +104,7 @@ protected:
 class alignas(16) LLVisualParam
 {
 public:
-    typedef boost::function<LLVisualParam*(S32)> visual_param_mapper;
+    typedef std::function<LLVisualParam*(S32)> visual_param_mapper;
 
     LLVisualParam();
     virtual ~LLVisualParam();

@@ -164,7 +164,7 @@ LLVolatileAPRPool::LLVolatileAPRPool(bool is_local, apr_pool_t *parent, apr_size
     // </FS:ND>
 
     {
-        mMutexp.reset(new std::mutex());
+        mMutexp = std::make_unique<std::mutex>();
     }
 }
 
@@ -760,12 +760,11 @@ bool LLAPRFile::removeDir(const std::string& dirname, LLVolatileAPRPool* pool)
 //end of static components of LLAPRFile
 //*******************************************************************************************************************************
 //
+
 // <FS:ND> Allow file to be flushed
 void LLAPRFile::flush()
 {
-    if( mFile )
-        apr_file_flush( mFile );
-
+    if (mFile)
+        apr_file_flush(mFile);
 }
-
 // </FS:ND>

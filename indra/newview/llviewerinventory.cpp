@@ -519,7 +519,7 @@ void LLViewerInventoryItem::fetchFromServer(void) const
                 body["items"][0]["owner_id"] = mPermissions.getOwner();
                 body["items"][0]["item_id"] = mUUID;
 
-                LLCore::HttpHandler::ptr_t handler(new LLInventoryModel::FetchItemHttpHandler(body));
+                LLCore::HttpHandler::ptr_t handler = std::make_shared<LLInventoryModel::FetchItemHttpHandler>(body);
                 gInventory.requestPost(true, url, body, handler, "Inventory Item");
             }
             // </FS:Ansariel> OpenSim compatibility
@@ -2044,7 +2044,7 @@ void create_new_item(const std::string& name,
                    LLAssetType::EType asset_type,
                    LLInventoryType::EType inv_type,
                    U32 next_owner_perm,
-                   std::function<void(const LLUUID&)> created_cb = NULL)
+                   std::function<void(const LLUUID&)> created_cb = nullptr)
 {
     std::string desc;
     LLViewerAssetType::generateDescriptionFor(asset_type, desc);
@@ -2268,7 +2268,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
             parent_id = gInventory.getRootFolderID();
         }
 
-        std::function<void(const LLUUID&)> callback_cat_created = NULL;
+        std::function<void(const LLUUID&)> callback_cat_created = nullptr;
         if (panel)
         {
             LLHandle<LLPanel> handle = panel->getHandle();
@@ -2296,12 +2296,50 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
     else if ("lsl" == type_name)
     {
         const LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_LSL_TEXT);
+
+        // <FS:PP> FIRE-36164 Apply the custom "New Script" setting for inventory scripts
+        bool custom_script_inserted = false;
+        if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
+        {
+            if (LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
+            {
+                if (auto custom_script = gInventory.getItem(custom_script_id); custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
+                {
+                    LLPointer<LLBoostFuncInventoryCallback> cb = NULL;
+                    if (created_cb != NULL)
+                    {
+                        cb = new LLBoostFuncInventoryCallback(create_script_cb);
+                        cb->addOnFireFunc(created_cb);
+                    }
+                    else
+                    {
+                        cb = new LLBoostFuncInventoryCallback(create_script_cb);
+                    }
+                    copy_inventory_item(
+                        gAgent.getID(),
+                        custom_script->getPermissions().getOwner(),
+                        custom_script_id,
+                        parent_id,
+                        NEW_LSL_NAME,
+                        cb);
+                    custom_script_inserted = true;
+                }
+            }
+        }
+        if (!custom_script_inserted)
+        {
+        // </FS:PP>
+
         create_new_item(NEW_LSL_NAME,
                       parent_id,
                       LLAssetType::AT_LSL_TEXT,
                       LLInventoryType::IT_LSL,
                       PERM_MOVE | PERM_TRANSFER,
                       created_cb);    // overridden in create_new_item
+
+        // <FS:PP>
+        }
+        // </FS:PP>
     }
     else if ("notecard" == type_name)
     {

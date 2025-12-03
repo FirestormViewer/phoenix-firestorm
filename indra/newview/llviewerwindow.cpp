@@ -50,7 +50,6 @@
 #include "llviewerinput.h"
 #include "llviewermenu.h"
 //<FS:Beq> physics display changes
-#include "llspatialpartition.h"
 #include "llphysicsshapebuilderutil.h"
 #include "llvolumemgr.h"
 //</FS:Beq>
@@ -92,6 +91,7 @@
 
 // newview includes
 #include "fscommon.h"
+#include "llaccordionctrl.h"
 #include "llbox.h"
 #include "llchicletbar.h"
 #include "llconsole.h"
@@ -218,7 +218,6 @@
 #include "llviewerwindowlistener.h"
 #include "llcleanup.h"
 #include "llimview.h"
-#include "llviewermenufile.h"
 
 // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
 #include "rlvactions.h"
@@ -1997,8 +1996,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     // pass its value right now. Instead, pass it a nullary function that
     // will, when we later need it, return the value of gKeyboard.
     // boost::lambda::var() constructs such a functor on the fly.
-    mWindowListener.reset(new LLWindowListener(this, boost::lambda::var(gKeyboard)));
-    mViewerWindowListener.reset(new LLViewerWindowListener(this));
+    LLWindowListener::KeyboardGetter getter = [](){ return gKeyboard; };
+    mWindowListener = std::make_unique<LLWindowListener>(this, getter);
+    mViewerWindowListener = std::make_unique<LLViewerWindowListener>(this);
 
     mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
     mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
@@ -2526,91 +2526,23 @@ void LLViewerWindow::initWorldUI()
         gToolBarView->setVisible(true);
     }
 
-    if (!gNonInteractive)
+    // Don't preload cef instances on low end hardware
+    const F32Gigabytes MIN_PHYSICAL_MEMORY(8);
+    F32Gigabytes physical_mem = LLMemory::getMaxMemKB();
+    if (physical_mem <= 0)
     {
-        // <FS:AW  opensim destinations and avatar picker>
-        // LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-        // if (destinations)
-        // {
-        //  destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-        //  std::string url = gSavedSettings.getString("DestinationGuideURL");
-        //  url = LLWeb::expandURLSubstitutions(url, LLSD());
-        //  destinations->navigateTo(url, "text/html");
-        // }
-        // LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
-        // if (avatar_welcome_pack)
-        // {
-        //  avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-        //  std::string url = gSavedSettings.getString("AvatarWelcomePack");
-        //  url = LLWeb::expandURLSubstitutions(url, LLSD());
-        //  avatar_welcome_pack->navigateTo(url, "text/html");
-        // }
-        std::string destination_guide_url;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-        if (LLGridManager::getInstance()->isInOpenSim())
-        {
-            if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
-            {
-                destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
-            }
-        }
-        else
-#endif // OPENSIM  // <FS:AW optional opensim support>
-        {
-            destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
-        }
-        LLMediaCtrl* search = LLFloaterReg::getInstance("search")->findChild<LLMediaCtrl>("search_contents");
-        if (search)
-        {
-            search->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-        }
-        LLMediaCtrl* marketplace = LLFloaterReg::getInstance("marketplace")->getChild<LLMediaCtrl>("marketplace_contents");
-        if (marketplace)
-        {
-            marketplace->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-            std::string url = gSavedSettings.getString("MarketplaceURL");
-            marketplace->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
-        }
+        LLMemory::updateMemoryInfo();
+        physical_mem = LLMemory::getMaxMemKB();
+    }
 
-        if(!destination_guide_url.empty())
-        {
-            LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-            if (destinations)
-            {
-                destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-                destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
-                LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
-                destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
-            }
-        }
+    if (!gNonInteractive && physical_mem > MIN_PHYSICAL_MEMORY)
+    {
+        LL_INFOS() << "Preloading cef instances" << LL_ENDL;
 
-        std::string avatar_picker_url;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-        if (LLGridManager::getInstance()->isInOpenSim())
-        {
-            if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
-            {
-                avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
-            }
-        }
-        else
-#endif // OPENSIM  // <FS:AW optional opensim support>
-        {
-            avatar_picker_url = gSavedSettings.getString("AvatarWelcomePack");
-        }
-
-        if(!avatar_picker_url.empty())
-        {
-            LLMediaCtrl* avatar_welcome_pack = LLFloaterReg::getInstance("avatar_welcome_pack")->findChild<LLMediaCtrl>("avatar_picker_contents");
-            if (avatar_welcome_pack)
-            {
-                avatar_welcome_pack->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-                avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
-                LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-                avatar_welcome_pack->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
-            }
-        }
-        // </FS:AW  opensim destinations and avatar picker>
+        LLFloaterReg::getInstance("destinations");
+        LLFloaterReg::getInstance("avatar_welcome_pack");
+        LLFloaterReg::getInstance("search");
+        LLFloaterReg::getInstance("marketplace");
     }
 
     // <FS:Zi> Autohide main chat bar if applicable
@@ -3899,6 +3831,8 @@ void LLViewerWindow::updateUI()
 
     LLConsole::updateClass();
 
+    // execute postponed arrange calls
+    LLAccordionCtrl::updateClass();
     // animate layout stacks so we have up to date rect for world view
     LLLayoutStack::updateClass();
 
@@ -7439,7 +7373,7 @@ bool LLViewerWindow::getUIVisibility()
 //
 LLPickInfo::LLPickInfo()
     : mKeyMask(MASK_NONE),
-      mPickCallback(NULL),
+      mPickCallback(nullptr),
       mPickType(PICK_INVALID),
       mWantSurfaceInfo(false),
       mObjectFace(-1),
@@ -7450,7 +7384,7 @@ LLPickInfo::LLPickInfo()
       mNormal(),
       mTangent(),
       mBinormal(),
-      mHUDIcon(NULL),
+      mHUDIcon(nullptr),
       mPickTransparent(false),
       mPickRigged(false),
       mPickParticle(false)

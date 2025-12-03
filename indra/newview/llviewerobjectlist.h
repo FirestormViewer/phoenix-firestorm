@@ -142,7 +142,7 @@ public:
     void clearDebugText();
 
     // <FS:CR> Import
-    typedef boost::function<bool (LLViewerObject* object)> new_object_callback_t;
+    typedef std::function<bool (LLViewerObject* object)> new_object_callback_t;
     typedef boost::signals2::signal<bool (LLViewerObject* object)> new_object_signal_t;
     boost::signals2::connection setNewObjectCallback(new_object_callback_t cb);
     new_object_signal_t mNewObjectSignal;

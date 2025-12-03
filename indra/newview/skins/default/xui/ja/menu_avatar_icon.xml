@@ -18,6 +18,9 @@
 	<menu_item_call label="支払う" name="Pay"/>
 	<menu_item_call label="名前をコピー" name="copy name"/>
 	<menu_item_call label="ＵＲＬをコピー" name="copy url"/>
+	<!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
+	<menu_item_call label="メンション先のＵＲＩをクリップボードにコピー" name="mention_copy_label"/>
+	<!-- </FS:Zi> -->
 	<menu_item_call label="嫌がらせの報告" name="Report Abuse"/>
 	<menu_item_check label="ボイスをブロック" name="Block Unblock"/>
 	<menu_item_check label="テキストをブロック" name="Mute Text"/>
@@ -28,4 +31,5 @@
 		<menu_item_call label="この参加者のミュートを解除する" name="ModerateVoiceUnMuteSelected"/>
 	</context_menu>
 	<menu_item_call label="メンバーをバン" name="BanMember"/>
+	<menu_item_call label="メンション先のユーザをチャットに" name="mention_in_chat"/>
 </toggleable_menu>

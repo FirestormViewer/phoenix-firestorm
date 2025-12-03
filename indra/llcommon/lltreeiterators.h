@@ -60,10 +60,10 @@
 #define LL_LLTREEITERATORS_H
 
 #include "llptrto.h"
+#include <functional>
 #include <vector>
 #include <deque>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/function.hpp>
 #include <boost/static_assert.hpp>
 
 namespace LLTreeIter
@@ -93,7 +93,7 @@ protected:
     typedef typename LLPtrTo<NODE>::type ptr_type;
     /// function that advances from this node to next accepts a node pointer
     /// and returns another
-    typedef boost::function<ptr_type(const ptr_type&)> func_type;
+    typedef std::function<ptr_type(const ptr_type&)> func_type;
     typedef SELFTYPE self_type;
 };
 
@@ -238,7 +238,22 @@ private:
         mParents.pop_back();
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mParents == that.mParents; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mParents.empty();
+        const bool that_empty = that.mParents.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mParents == that.mParents;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mParents.back()); }
 
@@ -330,7 +345,7 @@ protected:
     typedef typename super::ptr_type ptr_type;
     // The func_type is different for this: from a NODE pointer, we must
     // obtain a CHILDITER.
-    typedef boost::function<CHILDITER(const ptr_type&)> func_type;
+    typedef std::function<CHILDITER(const ptr_type&)> func_type;
 private:
     typedef std::vector<ptr_type> list_type;
 public:
@@ -373,7 +388,22 @@ private:
         mSkipChildren = false;
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.back()); }
 
@@ -435,7 +465,7 @@ protected:
     typedef typename super::ptr_type ptr_type;
     // The func_type is different for this: from a NODE pointer, we must
     // obtain a CHILDITER.
-    typedef boost::function<CHILDITER(const ptr_type&)> func_type;
+    typedef std::function<CHILDITER(const ptr_type&)> func_type;
 private:
     // Upon reaching a given node in our pending list, we need to know whether
     // we've already pushed that node's children, so we must associate a bool
@@ -474,7 +504,22 @@ private:
         makeCurrent();
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.back().first); }
 
@@ -574,7 +619,7 @@ protected:
     typedef typename super::ptr_type ptr_type;
     // The func_type is different for this: from a NODE pointer, we must
     // obtain a CHILDITER.
-    typedef boost::function<CHILDITER(const ptr_type&)> func_type;
+    typedef std::function<CHILDITER(const ptr_type&)> func_type;
 private:
     // We need a FIFO queue rather than a LIFO stack. Use a deque rather than
     // a vector, since vector can't implement pop_front() efficiently.
@@ -611,7 +656,22 @@ private:
             mPending.push_back(*chi);
     }
     /// equality
-    bool equal(const self_type& that) const { return this->mPending == that.mPending; }
+    bool equal(const self_type& that) const
+    {
+        if (this == &that)
+        {
+            return true;
+        }
+
+        const bool empty = mPending.empty();
+        const bool that_empty = that.mPending.empty();
+        if (empty || that_empty)
+        {
+            return empty && that_empty;
+        }
+
+        return mPending == that.mPending;
+    }
     /// implement dereference/indirection operators
     ptr_type& dereference() const { return const_cast<ptr_type&>(mPending.front()); }
 

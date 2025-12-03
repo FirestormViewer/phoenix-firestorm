@@ -278,11 +278,11 @@
    name="attachment_return_txt"
    font="SansSerifMedium"
    text_color="White"
-   width="350">
-   Pressing enter on an avatar attachment
+   width="420">
+   Pressing enter or double clicking on an avatar attachment
   </text>
   <combo_box
-   control_name="InventoryAddAttachmentBehavior"
+   control_name="FSDoubleClickAddInventoryObjects"
    layout="topleft"
    follows="left|top"
    top_pad="8"
@@ -292,11 +292,11 @@
    width="350">
     <combo_box.item
       label="Adds attachment (recommended)"
-      name="0"
-      value="0"/>
-    <combo_box.item
-      label="Wear (removes attachment at that point)"
       name="1"
       value="1"/>
+    <combo_box.item
+      label="Wear (removes attachment at that point)"
+      name="0"
+      value="0"/>
   </combo_box>
 </floater>

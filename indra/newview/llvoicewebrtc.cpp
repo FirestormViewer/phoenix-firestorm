@@ -80,6 +80,9 @@
 
 const std::string WEBRTC_VOICE_SERVER_TYPE = "webrtc";
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 namespace {
 
     const F32      MAX_AUDIO_DIST           = 50.0f;
@@ -506,6 +509,12 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
     try
     {
         LLMuteList::getInstance()->addObserver(this);
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        // Add a counter to check if the main thread locked up
+        // to prevent this thread/corutine form filling up
+        // the mMainQueue.
+        static U32 crash_check = 0;
+        // </FS:minerjr> [FIRE-36022]
         while (!sShuttingDown)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_VOICE("voiceConnectionCoroLoop")
@@ -591,6 +600,26 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                     // to send position updates.
                     updatePosition();
                 }
+                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                // If the device locked, count up by 1
+                if (gWebRTCUpdateDevices)
+                {
+                    crash_check++;
+                }
+                // Else if the device is not locked, then reset the counter back to 0
+                else
+                {
+                    crash_check = 0;
+                }
+                // If there are over 10 cycles of the devices being locked, there is a good
+                // chance that the thread failed due to hardware/audio engine issue.
+                if (crash_check > 10)
+                {
+                    LL_WARNS() << "WebRTC detected locked worker thread, will shutdown to prevent total viewer lockup." << LL_ENDL;
+                    // Exit out of the thread and flag WebRTC to shutdown, hopefully clearing the lock and allowing the viewer to continue.
+                    sShuttingDown = true;
+                }
+                // </FS:minerjr> [FIRE-36022]
             }
             LL::WorkQueue::postMaybe(mMainQueue,
                 [=, this] {
@@ -732,6 +761,19 @@ void LLWebRTCVoiceClient::OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceLi
 void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDeviceList &render_devices,
                                                const llwebrtc::LLWebRTCVoiceDeviceList &capture_devices)
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+    std::unique_lock lock(gAudioDeviceMutex, 1s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (!lock.owns_lock())
+    {
+        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (sShuttingDown)
     {
         return;
@@ -778,6 +820,34 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     }
 
     setDevicesListUpdated(true);
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // When trying to lock the same lock a second time
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // When the mutex is invalid
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else
+        {
+            // Everything else
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception WebRTC: " << " " << e.what() << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCVoiceClient::clearRenderDevices()
@@ -1318,7 +1388,7 @@ LLWebRTCVoiceClient::participantStatePtr_t LLWebRTCVoiceClient::sessionState::ad
     if (!result)
     {
         // participant isn't already in one list or the other.
-        result.reset(new participantState(agent_id, region));
+        result = std::make_shared<participantState>(agent_id, region);
         mParticipantsByUUID.insert(participantUUIDMap::value_type(agent_id, result));
         result->mAvatarID = agent_id;
     }
@@ -2182,7 +2252,7 @@ bool LLWebRTCVoiceClient::estateSessionState::processConnectionStates()
             // Only connect if the region supports WebRTC voice server type
             if (isRegionWebRTCEnabled(neighbor))
             {
-                connectionPtr_t connection(new LLVoiceWebRTCSpatialConnection(neighbor, INVALID_PARCEL_ID, mChannelID));
+                connectionPtr_t connection = std::make_shared<LLVoiceWebRTCSpatialConnection>(neighbor, INVALID_PARCEL_ID, mChannelID);
 
                 mWebRTCConnections.push_back(connection);
                 connection->setMuteMic(mMuted);  // mute will be set for primary connection when that connection comes up
@@ -2459,11 +2529,11 @@ void LLVoiceWebRTCConnection::processIceUpdatesCoro(connectionPtr_t connection)
         body["viewer_session"]    = connection->mViewerSession;
         body["voice_server_type"] = WEBRTC_VOICE_SERVER_TYPE;
 
-        LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(
-            new LLCoreHttpUtil::HttpCoroutineAdapter("LLVoiceWebRTCAdHocConnection::processIceUpdatesCoro",
-                                                        LLCore::HttpRequest::DEFAULT_POLICY_ID));
-        LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-        LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+        LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
+            std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("LLVoiceWebRTCAdHocConnection::processIceUpdatesCoro",
+                                                                   LLCore::HttpRequest::DEFAULT_POLICY_ID);
+        LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+        LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
         httpOpts->setWantHeaders(true);
 
@@ -2675,11 +2745,11 @@ void LLVoiceWebRTCConnection::breakVoiceConnectionCoro(connectionPtr_t connectio
     body["viewer_session"] = connection->mViewerSession;
     body["voice_server_type"] = WEBRTC_VOICE_SERVER_TYPE;
 
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(
-        new LLCoreHttpUtil::HttpCoroutineAdapter("LLVoiceWebRTCAdHocConnection::breakVoiceConnection",
-                                                 LLCore::HttpRequest::DEFAULT_POLICY_ID));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
+        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("LLVoiceWebRTCAdHocConnection::breakVoiceConnection",
+                                                               LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
     httpOpts->setWantHeaders(true);
 
@@ -2744,11 +2814,11 @@ void LLVoiceWebRTCSpatialConnection::requestVoiceConnection()
     }
     body["channel_type"]      = "local";
     body["voice_server_type"] = WEBRTC_VOICE_SERVER_TYPE;
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(
-        new LLCoreHttpUtil::HttpCoroutineAdapter("LLVoiceWebRTCAdHocConnection::requestVoiceConnection",
-                                                 LLCore::HttpRequest::DEFAULT_POLICY_ID));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
+        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("LLVoiceWebRTCAdHocConnection::requestVoiceConnection",
+                                                               LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
     httpOpts->setWantHeaders(true);
     LLSD result = httpAdapter->postAndSuspend(httpRequest, url, body, httpOpts);
@@ -3354,11 +3424,11 @@ void LLVoiceWebRTCAdHocConnection::requestVoiceConnection()
     body["channel_type"] = "multiagent";
     body["voice_server_type"] = WEBRTC_VOICE_SERVER_TYPE;
 
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(
-        new LLCoreHttpUtil::HttpCoroutineAdapter("LLVoiceWebRTCAdHocConnection::requestVoiceConnection",
-                                                 LLCore::HttpRequest::DEFAULT_POLICY_ID));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
+        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("LLVoiceWebRTCAdHocConnection::requestVoiceConnection",
+                                                               LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
     httpOpts->setWantHeaders(true);
 

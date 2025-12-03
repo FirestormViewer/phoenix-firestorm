@@ -41,6 +41,7 @@ class HttpThread
 {
 public:
     HttpThread() = delete;                              // Not defined
+    HttpThread(const HttpThread&) = delete;             // Not defined
     void operator=(const HttpThread &) = delete;        // Not defined
 
 private:

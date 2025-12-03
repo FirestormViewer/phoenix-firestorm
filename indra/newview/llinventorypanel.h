@@ -37,6 +37,7 @@
 #include "llinventorymodel.h"
 #include "llscrollcontainer.h"
 #include "lluictrlfactory.h"
+#include <functional>
 #include <set>
 
 class LLInvFVBridge;
@@ -183,7 +184,7 @@ public:
     void openAllFolders();
     void closeAllFolders();
     void setSelection(const LLUUID& obj_id, bool take_keyboard_focus);
-    void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, bool user_action)>& cb);
+    void setSelectCallback(const std::function<void (const std::deque<LLFolderViewItem*>& items, bool user_action)>& cb);
     void clearSelection();
     selected_items_t getSelectedItems() const;
 
@@ -393,7 +394,7 @@ protected:
     virtual LLFolderViewFolder* createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop);
     virtual LLFolderViewItem*   createFolderViewItem(LLInvFVBridge * bridge);
 
-    boost::function<void(const std::deque<LLFolderViewItem*>& items, bool user_action)> mSelectionCallback;
+    std::function<void(const std::deque<LLFolderViewItem*>& items, bool user_action)> mSelectionCallback;
 
     // buildViewsTree does not include some checks and is meant
     // for recursive use, use buildNewViews() for first call
@@ -455,7 +456,7 @@ public:
     std::list<LLUUID> getNavBackwardList() { return mBackwardFolders; }
     std::list<LLUUID> getNavForwardList() { return mForwardFolders; }
 
-    typedef boost::function<void()> root_changed_callback_t;
+    typedef std::function<void()> root_changed_callback_t;
     boost::signals2::connection setRootChangedCallback(root_changed_callback_t cb);
 
 protected:

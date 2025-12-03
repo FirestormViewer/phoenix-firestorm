@@ -925,7 +925,7 @@ LLStoredMessagePtr LLMessageSystem::getReceivedMessage() const
     const std::string& name = mMessageReader->getMessageName();
     LLSD message = wrapReceivedTemplateData();
 
-    return LLStoredMessagePtr(new LLStoredMessage(name, message));
+    return std::make_shared<LLStoredMessage>(name, message);
 }
 
 LLStoredMessagePtr LLMessageSystem::getBuiltMessage() const
@@ -933,7 +933,7 @@ LLStoredMessagePtr LLMessageSystem::getBuiltMessage() const
     const std::string& name = mMessageBuilder->getMessageName();
     LLSD message = wrapBuiltTemplateData();
 
-    return LLStoredMessagePtr(new LLStoredMessage(name, message));
+    return std::make_shared<LLStoredMessage>(name, message);
 }
 
 S32 LLMessageSystem::sendMessage(const LLHost &host, LLStoredMessagePtr message)
@@ -1174,7 +1174,7 @@ S32 LLMessageSystem::sendMessage(const LLHost &host)
     {
         LLSD message = mLLSDMessageBuilder->getMessage();
 
-        UntrustedCallback_t cb = NULL;
+        UntrustedCallback_t cb = nullptr;
         if ((mSendReliable) && (mReliablePacketParams.mCallback))
         {
             cb = boost::bind(mReliablePacketParams.mCallback, mReliablePacketParams.mCallbackData, _1);
@@ -1371,7 +1371,7 @@ S32 LLMessageSystem::sendMessage(
         return 0;
     }
 
-    UntrustedCallback_t cb = NULL;
+    UntrustedCallback_t cb = nullptr;
     if ((mSendReliable) && (mReliablePacketParams.mCallback))
     {
         cb = boost::bind(mReliablePacketParams.mCallback, mReliablePacketParams.mCallbackData, _1);
@@ -4042,9 +4042,9 @@ void LLMessageSystem::sendUntrustedSimulatorMessageCoro(std::string url, std::st
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("untrustedSimulatorMessage", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("untrustedSimulatorMessage", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
 
     // <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
     if (!mIsInSecondLife)
@@ -4071,8 +4071,10 @@ void LLMessageSystem::sendUntrustedSimulatorMessageCoro(std::string url, std::st
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
-    if ((callback) && (!callback.empty()))
+    if (callback != nullptr)
+    {
         callback((status) ? LL_ERR_NOERR : LL_ERR_TCP_TIMEOUT);
+    }
 }
 
 

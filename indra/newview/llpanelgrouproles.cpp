@@ -1973,7 +1973,7 @@ void LLPanelGroupMembersSubTab::onExportMembersToXMLCallback(const std::vector<s
 
     LLAPRFile outfile;
     outfile.open(fullpath, LL_APR_WB);
-    LLAPRFile::tFiletype* file = outfile.getFileHandle();
+    apr_file_t* file = outfile.getFileHandle();
     if (!file)
     {
         return;

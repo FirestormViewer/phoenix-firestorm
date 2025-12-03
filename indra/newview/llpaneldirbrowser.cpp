@@ -426,7 +426,7 @@ void LLPanelDirBrowser::processDirPeopleReply(LLMessageSystem *msg, void**)
     for (S32 i = 0; i < rows; i++)
     {
         msg->getStringFast(_PREHASH_QueryReplies,_PREHASH_FirstName, first_name, i);
-        msg->getStringFast(_PREHASH_QueryReplies,_PREHASH_LastName,	last_name, i);
+        msg->getStringFast(_PREHASH_QueryReplies,_PREHASH_LastName, last_name, i);
         msg->getUUIDFast(  _PREHASH_QueryReplies,_PREHASH_AgentID, agent_id, i);
         // msg->getU8Fast(    _PREHASH_QueryReplies,_PREHASH_Online, online, i);
         // unused
@@ -475,10 +475,10 @@ void LLPanelDirBrowser::processDirPlacesReply(LLMessageSystem* msg, void**)
 {
     FSPanelSearchPlaces::processSearchReply(msg, nullptr); // <FS:Ansariel> FS legacy search
 
-    LLUUID	agent_id;
-    LLUUID	query_id;
-    LLUUID	parcel_id;
-    std::string	name;
+    LLUUID  agent_id;
+    LLUUID  query_id;
+    LLUUID  parcel_id;
+    std::string name;
     bool is_for_sale = false;
     bool is_auction = false;
     F32 dwell;
@@ -565,8 +565,8 @@ void LLPanelDirBrowser::processDirEventsReply(LLMessageSystem* msg, void**)
     LLUUID agent_id;
     LLUUID query_id;
     LLUUID owner_id;
-    std::string	name;
-    std::string	date;
+    std::string name;
+    std::string date;
     bool show_pg = gSavedSettings.getBOOL("ShowPGEvents");
     bool show_mature = gSavedSettings.getBOOL("ShowMatureEvents");
     bool show_adult = gSavedSettings.getBOOL("ShowAdultEvents");
@@ -713,7 +713,7 @@ void LLPanelDirBrowser::processDirGroupsReply(LLMessageSystem* msg, void**)
 
     LLUUID query_id;
     LLUUID group_id;
-    std::string	group_name;
+    std::string group_name;
     S32 members;
     F32 search_order;
 
@@ -743,10 +743,10 @@ void LLPanelDirBrowser::processDirGroupsReply(LLMessageSystem* msg, void**)
 
     for (i = 0; i < rows; i++)
     {
-        msg->getUUIDFast(_PREHASH_QueryReplies, _PREHASH_GroupID,		group_id, i );
-        msg->getStringFast(_PREHASH_QueryReplies, _PREHASH_GroupName,	group_name,		i);
-        msg->getS32Fast(_PREHASH_QueryReplies, _PREHASH_Members,		members, i );
-        msg->getF32Fast(_PREHASH_QueryReplies, _PREHASH_SearchOrder,	search_order, i );
+        msg->getUUIDFast(_PREHASH_QueryReplies, _PREHASH_GroupID,       group_id, i );
+        msg->getStringFast(_PREHASH_QueryReplies, _PREHASH_GroupName,   group_name,     i);
+        msg->getS32Fast(_PREHASH_QueryReplies, _PREHASH_Members,        members, i );
+        msg->getF32Fast(_PREHASH_QueryReplies, _PREHASH_SearchOrder,    search_order, i );
 
         if (group_id.isNull())
         {
@@ -843,8 +843,8 @@ void LLPanelDirBrowser::processDirClassifiedReply(LLMessageSystem* msg, void**)
     {
         LLUUID classified_id;
         std::string name;
-        U32 creation_date = 0;	// unix timestamp
-        U32 expiration_date = 0;	// future use
+        U32 creation_date = 0;  // unix timestamp
+        U32 expiration_date = 0;    // future use
         S32 price_for_listing = 0;
         msg->getUUID("QueryReplies", "ClassifiedID", classified_id, i);
         msg->getString("QueryReplies", "Name", name, i);
@@ -877,7 +877,7 @@ void LLPanelDirBrowser::processDirLandReply(LLMessageSystem *msg, void**)
     LLUUID agent_id;
     LLUUID query_id;
     LLUUID parcel_id;
-    std::string	name;
+    std::string name;
     std::string land_sku;
     std::string land_type;
     bool auction = false;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Search" title="検索">
+	<layout_stack name="stack1">
+		<layout_panel name="nav_controls">
+			<button tool_tip="戻る" name="back"/>
+			<button tool_tip="進む" name="forward"/>
+			<button tool_tip="停止" name="stop"/>
+			<button tool_tip="リロード" name="reload"/>
+			<combo_box name="address" tool_tip="ＵＲＬを入力します。"/>
+			<icon name="media_secure_lock_flag" tool_tip="セキュアブラウジング"/>
+			<button tool_tip="現在のＵＲＬをデスクトップブラウザで開きます。" name="popexternal"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

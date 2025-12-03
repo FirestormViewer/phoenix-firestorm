@@ -121,7 +121,7 @@ protected:
 class LLInvPanelComplObserver : public LLInventoryCompletionObserver
 {
 public:
-    typedef boost::function<void()> callback_t;
+    typedef std::function<void()> callback_t;
 
     LLInvPanelComplObserver(callback_t cb)
     :   mCallback(cb)
@@ -695,7 +695,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
     // This could be anything.  For now, just refresh the item.
     if (mask & LLInventoryObserver::INTERNAL)
     {
-        if (view_item)
+        if (view_item && view_item->getViewModelItem())
         {
             view_item->refresh();
         }
@@ -714,7 +714,7 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
 
     if (mask & LLInventoryObserver::UPDATE_FAVORITE)
     {
-        if (view_item)
+        if (view_item && view_item->getViewModelItem())
         {
             view_item->refresh();
             LLFolderViewFolder* parent = view_item->getParentFolder();
@@ -1752,7 +1752,7 @@ void LLInventoryPanel::setSelection(const LLUUID& obj_id, bool take_keyboard_foc
     setSelectionByID(obj_id, take_keyboard_focus);
 }
 
-void LLInventoryPanel::setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, bool user_action)>& cb)
+void LLInventoryPanel::setSelectCallback(const std::function<void (const std::deque<LLFolderViewItem*>& items, bool user_action)>& cb)
 {
     if (mFolderRoot.get())
     {
@@ -3087,7 +3087,7 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
             mFolderRoot.get()->setFollowsAll();
             mFolderRoot.get()->addChild(mFolderRoot.get()->mStatusTextBox);
 
-            if (!mSelectionCallback.empty())
+            if (mSelectionCallback != nullptr)
             {
                 mFolderRoot.get()->setSelectCallback(mSelectionCallback);
             }

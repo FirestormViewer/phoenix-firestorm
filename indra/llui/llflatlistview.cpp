@@ -553,6 +553,7 @@ bool LLFlatListView::postBuild()
 
 void LLFlatListView::rearrangeItems()
 {
+    LL_PROFILE_ZONE_SCOPED;
     static LLUICachedControl<S32> scrollbar_size ("UIScrollbarSize", 0);
 
     setNoItemsCommentVisible(0==size());
@@ -1154,6 +1155,7 @@ bool LLFlatListView::removeItemPair(item_pair_t* item_pair, bool rearrange)
 
 void LLFlatListView::notifyParentItemsRectChanged()
 {
+    LL_PROFILE_ZONE_SCOPED;
     S32 comment_height = 0;
 
     // take into account comment text height if exists
@@ -1425,7 +1427,7 @@ bool LLFlatListViewEx::updateItemVisibility(LLPanel* item, const LLSD &action)
     return false;
 }
 
-void LLFlatListViewEx::filterItems(bool re_sort, bool notify_parent)
+bool LLFlatListViewEx::filterItems(bool re_sort, bool notify_parent)
 {
     std::string cur_filter = mFilterSubString;
     LLStringUtil::toUpper(cur_filter);
@@ -1450,7 +1452,9 @@ void LLFlatListViewEx::filterItems(bool re_sort, bool notify_parent)
     {
         rearrangeItems();
         notifyParentItemsRectChanged();
+        return true;
     }
+    return false;
 }
 
 bool LLFlatListViewEx::hasMatchedItems()
