@@ -16,7 +16,6 @@ set(llmessage_SOURCE_FILES
     llassetstorage.cpp
     llavatarname.cpp
     llavatarnamecache.cpp
-    llblowfishcipher.cpp
     llbuffer.cpp
     llbufferstream.cpp
     llcachename.cpp
@@ -38,7 +37,6 @@ set(llmessage_SOURCE_FILES
     lliopipe.cpp
     lliosocket.cpp
     llioutil.cpp
-    llmail.cpp
     llmessagebuilder.cpp
     llmessageconfig.cpp
     llmessagereader.cpp
@@ -96,7 +94,6 @@ set(llmessage_HEADER_FILES
     llassetstorage.h
     llavatarname.h
     llavatarnamecache.h
-    llblowfishcipher.h
     llbuffer.h
     llbufferstream.h
     llcachename.h
@@ -126,7 +123,6 @@ set(llmessage_HEADER_FILES
     lliosocket.h
     llioutil.h
     llloginflags.h
-    llmail.h
     llmessagebuilder.h
     llmessageconfig.h
     llmessagereader.h
@@ -196,6 +192,10 @@ target_link_libraries(
         llxml #<FS:Ansariel> For accessing settings
 )
 target_include_directories( llmessage  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
+
+if (USE_PRECOMPILED_HEADERS)
+  target_precompile_headers(llmessage REUSE_FROM llprecompiled)
+endif ()
 
 # tests
 if (LL_TESTS)

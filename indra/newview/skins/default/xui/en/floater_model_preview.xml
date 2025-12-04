@@ -1559,7 +1559,6 @@
          height="306"
          layout="topleft"
          left="3"
-         ignore_tab="false"
          right="-21"
          name="log_tab_border"
          top_pad="0"
@@ -1605,7 +1604,6 @@
          height="306"
          layout="topleft"
          left="3"
-         ignore_tab="false"
          right="-21"
          name="mesh_preview_settings_tab_border"
          top_pad="0"
@@ -1952,7 +1950,7 @@
         can_apply_immediately="true"
         label="Bad Triangle Fill"
         tool_tip="Fill color for degenerate (thin) triangles in preview window on the Mesh uploader"
-        name="mesh_degenerate_fill_color"/>
+        name="mesh_preview_degenerate_fill_color"/>
       </panel>
     </tab_container>
     <panel
@@ -2213,7 +2211,6 @@ Analysed:
             Preview controls
           </text>
           <combo_box
-              can_resize="false"
               follows="top|left"
             left="-85"
             top_delta="-2"
@@ -2236,7 +2233,6 @@ Analysed:
       left="3"
       name="preview_controls_border"
       top_pad="5"
-      halign="center"
       width="250"/>
       <check_box
         follows="top|left"

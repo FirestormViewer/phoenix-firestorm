@@ -1,11 +1,22 @@
+include_guard()
 
 include(Prebuilt)
 
+add_library( ll::glib INTERFACE IMPORTED )
+add_library( ll::glib_headers INTERFACE IMPORTED )
+add_library( ll::gio INTERFACE IMPORTED )
+
 if( LINUX )
-  use_prebuilt_binary(glib)
-  set(GLIB_FOUND ON CACHE BOOL "Build against glib 2")
-  set(GLIB_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/glib-2.0 ${LIBS_PREBUILT_DIR}/lib/release/glib-2.0/include ) 
-  set(GLIB_LIBRARIES libgobject-2.0.a libglib-2.0.a libffi.a libpcre.a)
-  set(GIO_LIBRARIES libgio-2.0.a libgmodule-2.0.a -lresolv ${GLIB_LIBRARIES} )
-  add_definitions(-DLL_GLIB=1)
+  find_package(PkgConfig REQUIRED)
+  pkg_search_module(GLIB REQUIRED glib-2.0)
+  pkg_search_module(GIO REQUIRED gio-2.0)
+
+  target_include_directories( ll::glib SYSTEM INTERFACE ${GLIB_INCLUDE_DIRS}  )
+  target_link_libraries( ll::glib INTERFACE ${GLIB_LDFLAGS} )
+  target_compile_definitions( ll::glib INTERFACE -DLL_GLIB=1)
+
+  target_include_directories( ll::glib_headers SYSTEM INTERFACE ${GLIB_INCLUDE_DIRS}  )
+  target_compile_definitions( ll::glib_headers INTERFACE -DLL_GLIB=1)
+
+  target_link_libraries( ll::gio INTERFACE ${GIO_LDFLAGS} )
 endif()

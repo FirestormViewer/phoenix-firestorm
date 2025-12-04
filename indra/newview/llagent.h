@@ -38,12 +38,11 @@
 #include "v3dmath.h"
 #include "httprequest.h"
 #include "llcorehttputil.h"
-
 #include "llviewerinventory.h"  // <FS:CR> Needed for LLViewerInventoryItem
 
-
-#include <boost/function.hpp>
 #include <boost/signals2.hpp>
+
+#include <functional>
 
 extern const bool   ANIMATE;
 extern const U8     AGENT_STATE_TYPING;  // Typing indication
@@ -258,7 +257,7 @@ public:
     void changeParcels(); // called by LLViewerParcelMgr when we cross a parcel boundary
 
     // Register a boost callback to be called when the agent changes parcels
-    typedef boost::function<void()> parcel_changed_callback_t;
+    typedef std::function<void()> parcel_changed_callback_t;
     boost::signals2::connection     addParcelChangedCallback(parcel_changed_callback_t);
 
 private:
@@ -872,7 +871,7 @@ public:
     void            requestEnterGodMode();
     void            requestLeaveGodMode();
 
-    typedef boost::function<void (U8)>         god_level_change_callback_t;
+    typedef std::function<void(U8)>            god_level_change_callback_t;
     typedef boost::signals2::signal<void (U8)> god_level_change_signal_t;
     typedef boost::signals2::connection        god_level_change_slot_t;
 
@@ -1094,8 +1093,8 @@ public:
 
     /// Utilities for allowing the the agent sub managers to post and get via
     /// HTTP using the agent's policy settings and headers.
-    bool requestPostCapability(const std::string &capName, LLSD &postData, httpCallback_t cbSuccess = NULL, httpCallback_t cbFailure = NULL);
-    bool requestGetCapability(const std::string &capName, httpCallback_t cbSuccess = NULL, httpCallback_t cbFailure = NULL);
+    bool requestPostCapability(const std::string &capName, LLSD &postData, httpCallback_t cbSuccess = nullptr, httpCallback_t cbFailure = nullptr);
+    bool requestGetCapability(const std::string& capName, httpCallback_t cbSuccess = nullptr, httpCallback_t cbFailure = nullptr);
 
     LLCore::HttpRequest::policy_t getAgentPolicy() const { return mHttpPolicy; }
 

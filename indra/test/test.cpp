@@ -77,12 +77,14 @@ public:
     virtual void replay(std::ostream&) {}
 };
 
-class RecordToTempFile : public LLError::Recorder, public boost::noncopyable
+class RecordToTempFile : public LLError::Recorder
 {
 public:
+    RecordToTempFile(const RecordToTempFile&)        = delete;
+    RecordToTempFile& operator=(const RecordToTempFile&) = delete;
+
     RecordToTempFile()
         : LLError::Recorder(),
-        boost::noncopyable(),
         mTempFile("log", ""),
         mFile(mTempFile.getName().c_str())
     {
@@ -108,7 +110,7 @@ public:
     void replay(std::ostream& out)
     {
         mFile.close();
-        std::ifstream inf(mTempFile.getName().c_str());
+        llifstream  inf(mTempFile.getName().c_str());
         std::string line;
         while (std::getline(inf, line))
         {
@@ -121,12 +123,14 @@ private:
     llofstream mFile;
 };
 
-class LLReplayLogReal: public LLReplayLog, public boost::noncopyable
+class LLReplayLogReal: public LLReplayLog
 {
 public:
+    LLReplayLogReal(const LLReplayLogReal&)            = delete;
+    LLReplayLogReal& operator=(const LLReplayLogReal&) = delete;
+
     LLReplayLogReal(LLError::ELevel level)
         : LLReplayLog(),
-        boost::noncopyable(),
         mOldSettings(LLError::saveAndResetSettings()),
         mRecorder(new RecordToTempFile())
     {
@@ -505,6 +509,11 @@ static LLTrace::ThreadRecorder* sMasterThreadRecorder = NULL;
 
 int main(int argc, char **argv)
 {
+    // Call Tracy first thing to have it allocate memory
+    // https://github.com/wolfpld/tracy/issues/196
+    LL_PROFILER_FRAME_END;
+    LL_PROFILER_SET_THREAD_NAME("App");
+
     ll_init_apr();
     apr_getopt_t* os = NULL;
     if(APR_SUCCESS != apr_getopt_init(&os, gAPRPoolp, argc, argv))

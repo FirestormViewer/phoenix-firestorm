@@ -171,8 +171,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 {
     if (state)
     {
-        auto numOfAnimations = state->mAnimations.size();
-        if (numOfAnimations)
+        if (auto numOfAnimations = state->mAnimations.size(); numOfAnimations > 0)
         {
             if (state->mCycle)
             {
@@ -198,7 +197,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
             {
                 LL_DEBUGS("AOEngine") << "Asset UUID for chosen animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
 
-                if(LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID) ; item)
+                if (LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID))
                 {
                     LL_DEBUGS("AOEngine") << "Found asset UUID for chosen animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
                     anim.mAssetUUID = item->getAssetUUID();
@@ -256,7 +255,7 @@ const std::string& AOSet::getName() const
 
 void AOSet::setName(const std::string& name)
 {
-    mName=name;
+    mName = name;
 }
 
 bool AOSet::getSitOverride() const

@@ -428,7 +428,7 @@ bool LLGLTFPreviewTexture::render()
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    LLGLDepthTest(GL_FALSE);
+    LLGLDepthTest depth(GL_FALSE);
     LLGLDisable stencil(GL_STENCIL_TEST);
     LLGLDisable scissor(GL_SCISSOR_TEST);
     SetTemporarily<bool> no_dof(&LLPipeline::RenderDepthOfField, false);
@@ -462,7 +462,7 @@ bool LLGLTFPreviewTexture::render()
     // Set up camera and viewport
     const LLVector3 origin(0.0, 0.0, 0.0);
     camera.lookAt(origin, object_position);
-    camera.setAspect((F32)(mFullHeight / mFullWidth));
+    camera.setAspect((F32)(mFullWidth / mFullHeight));
     const LLRect texture_rect(0, mFullHeight, mFullWidth, 0);
     camera.setPerspective(NOT_FOR_SELECTION, texture_rect.mLeft, texture_rect.mBottom, texture_rect.getWidth(), texture_rect.getHeight(), false, camera.getNear(), MAX_FAR_CLIP*2.f);
 
@@ -520,21 +520,17 @@ bool LLGLTFPreviewTexture::render()
     // *HACK: Hide mExposureMap from generateExposure
     gPipeline.mExposureMap.swapFBORefs(gPipeline.mLastExposure);
 
-    gPipeline.copyScreenSpaceReflections(&screen, &gPipeline.mSceneMap);
     gPipeline.generateLuminance(&screen, &gPipeline.mLuminanceMap);
     gPipeline.generateExposure(&gPipeline.mLuminanceMap, &gPipeline.mExposureMap, /*use_history = */ false);
     gPipeline.gammaCorrect(&screen, &gPipeline.mPostPingMap);
     LLVertexBuffer::unbind();
     gPipeline.generateGlow(&gPipeline.mPostPingMap);
     gPipeline.combineGlow(&gPipeline.mPostPingMap, &screen);
-    gPipeline.renderDoF(&screen, &gPipeline.mPostPingMap);
-    gPipeline.applyFXAA(&gPipeline.mPostPingMap, &screen);
 
     // *HACK: Restore mExposureMap (it will be consumed by generateExposure next frame)
     gPipeline.mExposureMap.swapFBORefs(gPipeline.mLastExposure);
 
     // Final render
-
     gDeferredPostNoDoFProgram.bind();
 
     // From LLPipeline::renderFinalize: "Whatever is last in the above post processing chain should _always_ be rendered directly here.  If not, expect problems."

@@ -33,9 +33,10 @@
 #include "../llviewertexturelist.h"
 #include "../pipeline.h"
 #include "buffer_util.h"
-#include <boost/url.hpp>
 #include "llimagejpeg.h"
 #include "../llskinningutil.h"
+
+#include <future>
 
 using namespace LL::GLTF;
 using namespace boost::json;
@@ -927,7 +928,7 @@ bool Asset::save(const std::string& filename)
     object obj;
     serialize(obj);
     std::string buffer = boost::json::serialize(obj, {});
-    std::ofstream file(filename, std::ios::binary);
+    llofstream file(filename, std::ios::binary);
     file.write(buffer.c_str(), buffer.size());
 
     return true;
@@ -960,8 +961,40 @@ LLViewerFetchedTexture* fetch_texture(const LLUUID& id);
 bool Image::prep(Asset& asset, bool loadIntoVRAM)
 {
     mLoadIntoTexturePipe = loadIntoVRAM;
+
     LLUUID id;
     if (mUri.size() == UUID_STR_SIZE && LLUUID::parseUUID(mUri, &id) && id.notNull())
+    { // loaded from an asset, fetch the texture from the asset system
+        LL_DEBUGS("GLTF") << "Loading image from an id" << id<< LL_ENDL;
+    }
+    else if (mUri.find("data:") == 0)
+    { // embedded in a data URI, load the texture from the URI
+        LL_WARNS("GLTF") << "Data URIs not yet supported" << LL_ENDL;
+        return false;
+    }
+
+    // Image::prepImpl containes code that must run on the main thread
+    std::promise<bool> prep_promise;
+    std::future<bool> prep_future = prep_promise.get_future();
+
+    LLAppViewer::instance()->postToMainCoro([this, &asset, id, &prep_promise]() mutable {
+        try {
+            bool result = prepImpl(asset, id);
+            prep_promise.set_value(result);
+        }
+        catch (...) {
+            // Propagate exception to the waiting thread
+            prep_promise.set_exception(std::current_exception());
+        }
+    });
+
+    // Block until prep is done on the main thread
+    return prep_future.get();
+}
+
+bool Image::prepImpl(Asset& asset, const LLUUID& id)
+{
+    if (id.notNull())
     { // loaded from an asset, fetch the texture from the asset system
         mTexture = fetch_texture(id);
     }
@@ -1089,7 +1122,7 @@ bool Image::save(Asset& asset, const std::string& folder)
         // set URI to non-j2c file for now, but later we'll want to reference the j2c hash
         mUri = name + extension;
 
-        std::ofstream file(filename, std::ios::binary);
+        llofstream file(filename, std::ios::binary);
         file.write((const char*)buffer.mData.data() + bufferView.mByteOffset, bufferView.mByteLength);
     }
     else if (mTexture.notNull())

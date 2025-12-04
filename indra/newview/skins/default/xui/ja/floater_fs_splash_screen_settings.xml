@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="ログイン画面の設定">
+	<text name="description">
+		ログイン画面の表示オプションをここで設定してください。これらの設定は、ビューアを次回再起動したときに有効になります。
+	</text>
+	<text name="section_visibility">
+		セクションの表示：
+	</text>
+	<check_box label="トップバーを非表示にする" name="hide_top_bar" />
+	<check_box label="ブログセクションを非表示にする" name="hide_blogs" />
+	<check_box label="宛先を非表示にする" name="hide_destinations" />
+	<text name="section_accessibility">
+		アクセシビリティ オプション：
+	</text>
+	<check_box label="グレースケールモードを有効にする" name="use_gray_mode" />
+	<check_box label="ハイコントラストモードを有効にする" name="use_high_contrast" />
+	<check_box label="「オールキャップス」モードを有効にする" name="use_all_caps" />
+	<check_box label="より大きなフォントを使用する" name="use_larger_fonts"/>
+	<check_box label="透明効果を無効にする" name="no_transparency" />
+</floater>

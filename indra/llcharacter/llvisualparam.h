@@ -30,7 +30,8 @@
 #include "v3math.h"
 #include "llstring.h"
 #include "llxmltree.h"
-#include <boost/function.hpp>
+
+#include <functional>
 
 class LLPolyMesh;
 class LLXmlTreeNode;
@@ -100,11 +101,10 @@ protected:
 // An interface class for a generalized parametric modification of the avatar mesh
 // Contains data that is specific to each Avatar
 //-----------------------------------------------------------------------------
-LL_ALIGN_PREFIX(16)
-class LLVisualParam
+class alignas(16) LLVisualParam
 {
 public:
-    typedef boost::function<LLVisualParam*(S32)> visual_param_mapper;
+    typedef std::function<LLVisualParam*(S32)> visual_param_mapper;
 
     LLVisualParam();
     virtual ~LLVisualParam();
@@ -186,6 +186,6 @@ protected:
     S32                 mID;                // id for storing weight/morphtarget compares compactly
     LLVisualParamInfo   *mInfo;
     EParamLocation      mParamLocation;     // where does this visual param live?
-} LL_ALIGN_POSTFIX(16);
+};
 
 #endif // LL_LLVisualParam_H

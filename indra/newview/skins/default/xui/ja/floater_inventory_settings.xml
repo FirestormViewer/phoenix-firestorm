@@ -29,7 +29,7 @@
 	<check_box label="お気に入りのあるファルダにスターを付ける" name="favorite_hollow_star"/>
 	<check_box label="文字色を変える" name="favorites_color"/>
 	<text name="attachment_return_txt">
-		アバターの装着物でEnterキーを押したときの動作
+		アバターの装着物でEnterキー押下かダブルクリックしたときの動作
 	</text>
 	<combo_box name="attach_combo">
 		<combo_box.item label="装着物を追加（推奨）" name="1"/>

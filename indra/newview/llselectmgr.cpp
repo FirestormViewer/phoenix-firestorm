@@ -6901,7 +6901,7 @@ void LLSelectMgr::renderSilhouettes(bool for_hud)
         gGL.popMatrix();
         gGL.popMatrix();
 
-        gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+        gGL.setLineWidth(1.f);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         if (shader)

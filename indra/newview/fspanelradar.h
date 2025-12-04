@@ -62,7 +62,7 @@ public:
         return mChangeSignal.connect(cb);
     }
 
-    typedef boost::function<bool()> visible_check_function_t;
+    typedef std::function<bool()> visible_check_function_t;
     void                    setVisibleCheckFunction(const visible_check_function_t& func)
     {
         mVisibleCheckFunction = func;

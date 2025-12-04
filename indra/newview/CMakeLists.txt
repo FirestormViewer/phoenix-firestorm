@@ -48,7 +48,6 @@ include(UI)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
-include(VulkanGltf)
 include(ZLIBNG)
 include(LLPrimitive)
 include(Growl)
@@ -83,6 +82,8 @@ if (HAVOK)
       endif (DARWIN)
    endif()
 endif ()
+
+configure_file(llversioninfovars.h.in llversioninfovars.h @ONLY)
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
@@ -133,6 +134,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
+    fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
     fsfloaterteleporthistory.cpp
@@ -336,6 +338,7 @@ set(viewer_SOURCE_FILES
     llfloatercreatelandmark.cpp
     llfloaterdeleteprefpreset.cpp
     llfloaterdestinations.cpp
+    llfloaterdirectory.cpp
     llfloaterdisplayname.cpp
     llfloatereditenvironmentbase.cpp
     llfloatereditextdaycycle.cpp
@@ -397,7 +400,6 @@ set(viewer_SOURCE_FILES
     # llfloaterperformance.cpp
     fsfloaterperformance.cpp # <FS:Beq> restore fs perf floater
     llfloaterperms.cpp
-    llfloaterpostprocess.cpp
     llfloaterprofile.cpp
     llfloaterpreference.cpp
     # llfloaterpreferencesgraphicsadvanced.cpp
@@ -563,11 +565,20 @@ set(viewer_SOURCE_FILES
     llpanelblockedlist.cpp
     llpanelclassified.cpp
     llpanelcontents.cpp
+    llpaneldirbrowser.cpp
+    llpaneldirclassified.cpp
+    llpaneldirevents.cpp
+    llpaneldirgroups.cpp
+    llpaneldirland.cpp
+    llpaneldirpeople.cpp
+    llpaneldirplaces.cpp
+    llpaneldirweb.cpp
     llpaneleditsky.cpp
     llpaneleditwater.cpp
     llpaneleditwearable.cpp
     llpanelemojicomplete.cpp
     llpanelenvironment.cpp
+    llpaneleventinfo.cpp
     llpanelexperiencelisteditor.cpp
     llpanelexperiencelog.cpp
     llpanelexperiencepicker.cpp
@@ -647,6 +658,7 @@ set(viewer_SOURCE_FILES
     llpathfindingobjectlist.cpp
     llpathfindingpathtool.cpp
     llpbrterrainfeatures.cpp
+    llperfstats.cpp
     llpersistentnotificationstorage.cpp
     llphysicsmotion.cpp
     llphysicsshapebuilderutil.cpp
@@ -842,7 +854,6 @@ set(viewer_SOURCE_FILES
     llvoiceclient.cpp
     llvoicevisualizer.cpp
     llvoicevivox.cpp
-    llvoicewebrtc.cpp
     llvoinventorylistener.cpp
     llvopartgroup.cpp
     llvosky.cpp
@@ -976,6 +987,7 @@ set(viewer_HEADER_FILES
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
+    fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h
     fsfloaterteleporthistory.h
@@ -1183,6 +1195,7 @@ set(viewer_HEADER_FILES
     llfloatercreatelandmark.h
     llfloaterdeleteprefpreset.h
     llfloaterdestinations.h
+    llfloaterdirectory.h
     llfloaterdisplayname.h
     llfloatereditenvironmentbase.h
     llfloatereditextdaycycle.h
@@ -1248,7 +1261,6 @@ set(viewer_HEADER_FILES
     # llfloaterperformance.h <FS:Beq/> replaced with fs version due to large changes and likelihood that LL version will not release.
     fsfloaterperformance.h
     llfloaterperms.h
-    llfloaterpostprocess.h
     llfloaterprofile.h
     llfloaterpreference.h
     # llfloaterpreferencesgraphicsadvanced.h
@@ -1402,11 +1414,20 @@ set(viewer_HEADER_FILES
     llpanelblockedlist.h
     llpanelclassified.h
     llpanelcontents.h
+    llpaneldirbrowser.h
+    llpaneldirclassified.h
+    llpaneldirevents.h
+    llpaneldirgroups.h
+    llpaneldirland.h
+    llpaneldirpeople.h
+    llpaneldirplaces.h
+    llpaneldirweb.h
     llpaneleditsky.h
     llpaneleditwater.h
     llpaneleditwearable.h
     llpanelemojicomplete.h
     llpanelenvironment.h
+    llpaneleventinfo.h
     llpanelexperiencelisteditor.h
     llpanelexperiencelog.h
     llpanelexperiencepicker.h
@@ -1481,6 +1502,7 @@ set(viewer_HEADER_FILES
     llpathfindingobject.h
     llpathfindingobjectlist.h
     llpathfindingpathtool.h
+    llperfstats.h
     llpbrterrainfeatures.h
     llpersistentnotificationstorage.h
     llphysicsmotion.h
@@ -1681,7 +1703,6 @@ set(viewer_HEADER_FILES
     llvoiceclient.h
     llvoicevisualizer.h
     llvoicevivox.h
-    llvoicewebrtc.h
     llvoinventorylistener.h
     llvopartgroup.h
     llvosky.h
@@ -1738,9 +1759,6 @@ set(viewer_HEADER_FILES
     NACLfloaterexploresounds.h
     )
 
-  list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
-  list(APPEND viewer_HEADER_FILES llperfstats.h)
-
 # <FS:Ansariel> Group GLTF files into their subfolders
 set(viewer_GLTF_HEADER_FILES
     gltf/asset.h
@@ -1764,7 +1782,7 @@ if (USE_BUGSPLAT)
         )
 endif (USE_BUGSPLAT)
 
-# <FS:Ansariel> Flickr / Discord keys and fsversionvalues headers are generated in here
+# <FS:Ansariel> Flickr / Discord keys headers are generated in here
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 # <exodus>
@@ -1788,15 +1806,6 @@ LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
 LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
 #</FS:LO>
 
-# <FS:TS> Generate the version information header file.
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/fsversionvalues.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h
-    @ONLY
-)
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
-# </FS:TS>
-
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 #build_data.json creation moved to viewer_manifest.py MAINT-6413
@@ -1804,15 +1813,10 @@ source_group("CMake Rules" FILES ViewerInstall.cmake)
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt"
            "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}\n")
 
-set_source_files_properties(
-   llversioninfo.cpp tests/llversioninfo_test.cpp
-   PROPERTIES
-# <FS:TS> The next line causes a full rebuild of the entire newview
-#         directory every time the Mercurial revision number changes.
-#         Instead of doing that, we use the configure tool to build
-#         fsversionstrings.h with the right numbers in it.
-#   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
-   )
+if (NOT DISABLE_WEBRTC)
+  LIST(APPEND viewer_SOURCE_FILES llvoicewebrtc.cpp)
+  LIST(APPEND viewer_HEADER_FILES llvoicewebrtc.h)
+endif()
 
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
@@ -1839,7 +1843,6 @@ if (DARWIN)
     llappdelegate-objc.mm
     PROPERTIES
     SKIP_PRECOMPILE_HEADERS TRUE
-    COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
     # BugsplatMac is a module, imported with @import. That language feature
     # demands these -f switches.
     # Xcode 10.2 requires that Objective-C++ headers declare nullability of
@@ -1880,22 +1883,11 @@ endif (DARWIN)
 
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
-    set_source_files_properties(
-      llappviewerlinux.cpp
-      PROPERTIES
-# <FS:TS> The next line causes a full rebuild of the entire newview
-#         directory every time the Mercurial revision number changes.
-#         Instead of doing that, we use the configure tool to build
-#         fsversionstrings.h with the right numbers in it.
-#      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
-      )
+
 # [FS] Growl support
     LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
 # [FS] Growl support
-
-    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
-
 
     # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
     if( ND_CTAGS )
@@ -1945,11 +1937,6 @@ if (WINDOWS)
          llappviewerwin32.cpp
          llwindebug.cpp
          )
-    set_source_files_properties(
-      llappviewerwin32.cpp
-      PROPERTIES
-      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
-      )
 
     set_source_files_properties( llappviewer.cpp llviewermenu.cpp PROPERTIES COMPILE_FLAGS /bigobj )
 
@@ -2193,6 +2180,15 @@ set_source_files_properties(${viewer_CHARACTER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 list(APPEND viewer_SOURCE_FILES ${viewer_CHARACTER_FILES})
 
+set(viewer_MISC_FILES
+    viewer_manifest.py
+    )
+
+set_source_files_properties(${viewer_MISC_FILES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+
+list(APPEND viewer_SOURCE_FILES ${viewer_MISC_FILES})
+
 # <FS:Ansariel> Add Firestorm folders
 file(GLOB viewer_FONT_FILES fonts/*.xml)
 source_group("Fonts" FILES ${viewer_FONT_FILES})
@@ -2232,16 +2228,6 @@ if (WINDOWS)
   list(APPEND viewer_SOURCE_FILES ${viewer_INSTALLER_FILES})
 endif (WINDOWS)
 
-if( DEFINED LLSTARTUP_COMPILE_FLAGS )
-   # progress view disables/enables icons based on available packages
-   set_source_files_properties(llprogressview.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-
-   set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-  # <FS:Ansariel> Output device selection
-  set_source_files_properties(llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-  # </FS:Ansariel>
-endif()
-
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
 
 add_executable(${VIEWER_BINARY_NAME}
@@ -2249,6 +2235,8 @@ add_executable(${VIEWER_BINARY_NAME}
     MACOSX_BUNDLE
     ${viewer_SOURCE_FILES}
     )
+
+target_include_directories(${VIEWER_BINARY_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
@@ -2521,6 +2509,7 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${CMAKE_CURRENT_BINARY_DIR}/llphysicsextensions/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensions  -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     elseif(HAVOK_TPV)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
@@ -2531,15 +2520,18 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     else()
       target_link_libraries(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     endif()
 else (WINDOWS)
-        # Linux
-    set_target_properties(${VIEWER_BINARY_NAME}
-        PROPERTIES
-        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Wl,--Map=${VIEWER_BINARY_NAME}.MAP"
-        )
+    if (HAVOK OR HAVOK_TPV)
+    	# Linux
+    	set_target_properties(${VIEWER_BINARY_NAME}
+        	PROPERTIES
+        	LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -no-pie -Wl,--Map=${VIEWER_BINARY_NAME}.MAP"
+        	)
+    endif ()
 endif (WINDOWS)
 
 # *NOTE: - this list is very sensitive to ordering, test carefully on all
@@ -2587,7 +2579,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         llcorehttp
         llcommon
         llmeshoptimizer
-        llwebrtc
         lllogin
         llprimitive
         llappearance
@@ -2600,12 +2591,16 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         fs::discord # <FS:Ansariel> Discord  support
         )
 
+if (NOT DISABLE_WEBRTC)
+    target_link_libraries(${VIEWER_BINARY_NAME} llwebrtc )
+endif()
+
 if (USE_DISCORD)
-   target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+    target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
 endif ()
 
 if( TARGET ll::intel_memops )
-   target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
+    target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
 endif()
 
 if (USE_BUGSPLAT)
@@ -2621,7 +2616,7 @@ endif (WINDOWS OR DARWIN)
 # </FS:Ansariel>
 
 if( TARGET ll::nvapi )
-   target_link_libraries(${VIEWER_BINARY_NAME} ll::nvapi )
+    target_link_libraries(${VIEWER_BINARY_NAME} ll::nvapi )
 endif()
 
 if ( TARGET llconvexdecomposition )
@@ -2677,12 +2672,12 @@ if (LINUX)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer10
-    llcommon
+    media_plugin_libvlc
+    media_plugin_example
+    llwebrtc
     linux-crash-logger
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
-  
   add_custom_command(
       OUTPUT ${product}.tar.xz
       COMMAND ${PYTHON_EXECUTABLE}
@@ -2695,7 +2690,7 @@ if (LINUX)
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
-        "--avx2=${USE_AVX2_OPTIMIZATION}"        
+        "--avx2=${USE_AVX2_OPTIMIZATION}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2724,7 +2719,7 @@ if (LINUX)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
-      "--avx2=${USE_AVX2_OPTIMIZATION}"      
+      "--avx2=${USE_AVX2_OPTIMIZATION}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"

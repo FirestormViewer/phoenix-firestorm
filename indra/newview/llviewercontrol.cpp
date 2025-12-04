@@ -376,9 +376,14 @@ static bool handleLUTBufferChanged(const LLSD& newvalue)
     return true;
 }
 
-static bool handleAnisotropicChanged(const LLSD& newvalue)
+static bool handleAnisotropicFilteringChanged(const LLSD& newval)
 {
-    LLImageGL::sGlobalUseAnisotropic = newvalue.asBoolean();
+    F32 val = static_cast<F32>(newval.asReal());
+    if (val > gGLManager.mMaxAnisotropy)
+    {
+        val = llclamp(val, 0.f, gGLManager.mMaxAnisotropy);
+    }
+    LLRender::sAnisotropicFilteringLevel = val;
     LLImageGL::dirtyTexOptions();
     return true;
 }
@@ -398,6 +403,12 @@ static bool handleVSyncChanged(const LLSD& newvalue)
     }
 
     return true;
+}
+
+static bool validateAnisotropicFiltering(const LLSD& val)
+{
+    S32 filter_level = val.asInteger();
+    return filter_level == 0 || filter_level == 2 || filter_level == 4 || filter_level == 8 || filter_level == 16;
 }
 
 static bool handleVolumeLODChanged(const LLSD& newvalue)
@@ -913,7 +924,27 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
+    if (gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
+    {
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
+        return;
+    }
     bool visible = newvalue.asBoolean();
+    LLSD payload;
+    payload["visible"] = visible;
+    LLNotificationsUtil::add("ConfirmGlobalOnlineStatusToggle", LLSD(), payload, applyGlobalOnlineStatusChange);
+}
+
+void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& response)
+{
+    bool visible = notification["payload"]["visible"].asBoolean();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option != 0)
+    {
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", true);
+        gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusToggle", !visible);
+        return;
+    }
 
     LLAvatarTracker::buddy_map_t all_buddies;
     LLAvatarTracker::instance().copyBuddyList(all_buddies);
@@ -1294,7 +1325,8 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResX", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAnisotropicLevel", handleAnisotropicFilteringChanged);
+    gSavedSettings.getControl("RenderAnisotropicLevel")->getValidateSignal()->connect(boost::bind(&validateAnisotropicFiltering, _2));
     setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
@@ -1337,6 +1369,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAvatarCloth", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged); // <FS:Ansariel> Keep custom chat persist time
     setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);

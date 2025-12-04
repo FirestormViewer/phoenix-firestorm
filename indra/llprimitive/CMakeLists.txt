@@ -85,6 +85,10 @@ if(LINUX)
     target_link_libraries(ll::pcre)
 endif(LINUX)
 
+if (USE_PRECOMPILED_HEADERS)
+    target_precompile_headers(llprimitive REUSE_FROM llprecompiled)
+endif ()
+
 #add unit tests
 if (LL_TESTS)
     INCLUDE(LLAddBuildTest)

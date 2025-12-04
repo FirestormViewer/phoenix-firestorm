@@ -161,7 +161,7 @@ static bool is_lua_script(const std::string& code)
 class LLCallbackTimer : public LLEventTimer
 {
 public:
-    typedef boost::function<bool()> bool_func_t;
+    typedef std::function<bool()> bool_func_t;
 public:
     LLCallbackTimer(F32 nPeriod, bool_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
     /*virtual*/ bool tick() { return m_Callback(); }

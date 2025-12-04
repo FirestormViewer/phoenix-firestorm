@@ -5686,7 +5686,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="はい"/>
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		アウトフィットの数が多すぎます：[AMOUNT]個。これにより、ビューアがハングしたり、接続が切断されたりする可能性があります。パフォーマンスを向上させるには、アウトフィットの数を減らすことをご検討ください。（[MAX]個未満）
+		アウトフィットの数が多すぎます：[AMOUNT]個。これにより、ビューアがハングしたり、接続が切断されたりする可能性があります。パフォーマンスを向上させるには、アウトフィットの数を減らすことをご検討ください。（[MAX]個未満）これはあくまで提案です。お使いのコンピュータが正常に動作している場合は、無視して構いません。
 		<usetemplate ignoretext="アウトフィット数の警告" name="okignore" yestext="ＯＫ"/>
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">

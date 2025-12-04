@@ -27,10 +27,9 @@
 #ifndef LL_LLKEYBOARD_H
 #define LL_LLKEYBOARD_H
 
+#include <functional>
 #include <map>
-#include <boost/function.hpp>
 
-#include "llstringtable.h"
 #include "lltimer.h"
 #include "indra_constants.h"
 
@@ -41,7 +40,7 @@ enum EKeystate
     KEYSTATE_UP
 };
 
-typedef boost::function<bool(EKeystate keystate)> LLKeyFunc;
+typedef std::function<bool(EKeystate keystate)> LLKeyFunc;
 typedef std::string (LLKeyStringTranslatorFunc)(std::string_view);
 
 enum EKeyboardInsertMode
@@ -55,14 +54,13 @@ class LLWindowCallbacks;
 class LLKeyboard
 {
 public:
-    // <FS:ND> For SDL2 input is widened to U32 symbols
-#ifndef LL_SDL2
-    typedef U16 NATIVE_KEY_TYPE;
-#else
+#ifdef LL_SDL_WINDOW
+    // linux relies on SDL2 which uses U32 for its native key type
     typedef U32 NATIVE_KEY_TYPE;
+#else
+    // on non-linux platforms we can get by with a smaller native key type
+    typedef U16 NATIVE_KEY_TYPE;
 #endif
-    // </FS:MD>
-
     LLKeyboard();
     virtual ~LLKeyboard();
 
@@ -75,23 +73,15 @@ public:
     bool            getKeyDown(const KEY key) { return mKeyLevel[key]; }
     bool            getKeyRepeated(const KEY key) { return mKeyRepeated[key]; }
 
-    // <FS:ND> SDL2 compat
-    //bool          translateKey(const U16 os_key, KEY *translated_key);
-    //U16       inverseTranslateKey(const KEY translated_key);
     bool            translateKey(const NATIVE_KEY_TYPE os_key, KEY *translated_key);
-    NATIVE_KEY_TYPE     inverseTranslateKey(const KEY translated_key);
-    // </FS:ND>
-    bool            handleTranslatedKeyUp(KEY translated_key, U32 translated_mask);     // Translated into "Linden" keycodes
-    bool            handleTranslatedKeyDown(KEY translated_key, U32 translated_mask);   // Translated into "Linden" keycodes
+    NATIVE_KEY_TYPE inverseTranslateKey(const KEY translated_key);
+    bool            handleTranslatedKeyUp(KEY translated_key, MASK translated_mask);     // Translated into "Linden" keycodes
+    bool            handleTranslatedKeyDown(KEY translated_key, MASK translated_mask);   // Translated into "Linden" keycodes
 
-    // <FS:ND> SDL2 compat
-    //virtual bool  handleKeyUp(const U16 key, MASK mask) = 0;
-    //virtual bool  handleKeyDown(const U16 key, MASK mask) = 0;
     virtual bool    handleKeyUp(const NATIVE_KEY_TYPE key, MASK mask) = 0;
     virtual bool    handleKeyDown(const NATIVE_KEY_TYPE key, MASK mask) = 0;
-    // </FS:ND>
 
-#ifdef LL_DARWIN
+#if LL_DARWIN && !LL_SDL_WINDOW
     // We only actually use this for macOS.
     virtual void    handleModifier(MASK mask) = 0;
 #endif // LL_DARWIN
@@ -126,13 +116,8 @@ protected:
     void            addKeyName(KEY key, const std::string& name);
 
 protected:
-    // <FS:ND> SDL2 compat
-    //std::map<U16, KEY>    mTranslateKeyMap;       // Map of translations from OS keys to Linden KEYs
-    //std::map<KEY, U16>    mInvTranslateKeyMap;    // Map of translations from Linden KEYs to OS keys
     std::map<NATIVE_KEY_TYPE, KEY>  mTranslateKeyMap;       // Map of translations from OS keys to Linden KEYs
     std::map<KEY, NATIVE_KEY_TYPE>  mInvTranslateKeyMap;    // Map of translations from Linden KEYs to OS keys
-    //</FS:ND>
-
     LLWindowCallbacks *mCallbacks;
 
     LLTimer         mKeyLevelTimer[KEY_COUNT];  // Time since level was set

@@ -1131,13 +1131,7 @@ bool LLDAELoader::OpenFile(const std::string& filename)
                 LLModel* mdl = *i;
                 if(mdl->getStatus() != LLModel::NO_ERRORS)
                 {
-                    // <FS:Beq> Fix deprecated arithmetic between different enum types (ERROR_MODEL + EModelStatus)
-                    // Ugly fix. could use a helper instead but its only called in two places.
-                    // setLoadState(ERROR_MODEL + mdl->getStatus());
-                    setLoadState(
-                        static_cast<LLModelLoader::eLoadState>(
-                                 static_cast<S32>(ERROR_MODEL) + static_cast<S32>(mdl->getStatus())));
-                    // </FS:Beq>
+                    setLoadState(static_cast<U32>(ERROR_MODEL) + static_cast<U32>(mdl->getStatus()));
                     return false; //abort
                 }
 

@@ -56,6 +56,32 @@ if (NOT CMAKE_BUILD_TYPE)
       "Build type.  One of: Release RelWithDebInfo" FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+if (LL_TESTS)
+  set(CMAKE_SKIP_TEST_ALL_DEPENDENCY FALSE)
+  include(ProcessorCount)
+  ProcessorCount(NUM_CORES)
+
+  # Set parallel level to decrease test runtime
+  set(CMAKE_CTEST_ARGUMENTS -j${NUM_CORES} --output-on-failure)
+
+  # Set up our test targets
+  set(CTEST_TEST_TARGET_ALIAS BUILD_AND_RUN_TESTS)
+  include(CTest)
+
+  set_target_properties(BUILD_AND_RUN_TESTS
+        PROPERTIES
+        FOLDER "CMakePredefinedTargets"
+        )
+
+  add_custom_target(BUILD_TESTS)
+  add_dependencies(BUILD_AND_RUN_TESTS BUILD_TESTS)
+
+  set_target_properties(BUILD_TESTS
+        PROPERTIES
+        FOLDER "CMakePredefinedTargets"
+        )
+endif ()
+
 #<FS:AW optional opensim support>
 option(OPENSIM "OpenSim support" OFF)
 if (OPENSIM)
@@ -117,6 +143,10 @@ endif (USE_AVX_OPTIMIZATION)
 
 add_subdirectory(cmake)
 
+if (USE_PRECOMPILED_HEADERS)
+  add_subdirectory(${LIBS_OPEN_PREFIX}llprecompiled)
+endif ()
+
 # <FS:Beq> Tracy Profiler support
 if (USE_TRACY)
   message(STATUS "Compiling with Tracy profiler")
@@ -174,16 +204,8 @@ add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
 endif (ENABLE_MEDIA_PLUGINS)
 
 if (LINUX)
-  if (INSTALL_PROPRIETARY)
-      include(LLAppearanceUtility)
-      add_subdirectory(${LLAPPEARANCEUTILITY_SRC_DIR} ${LLAPPEARANCEUTILITY_BIN_DIR})
-  endif (INSTALL_PROPRIETARY)
-elseif (WINDOWS)
-  # cmake EXISTS requires an absolute path, see indra/cmake/Variables.cmake
-  if (EXISTS ${VIEWER_DIR}win_setup)
-    add_subdirectory(${VIEWER_DIR}win_setup)
-  endif (EXISTS ${VIEWER_DIR}win_setup)
-endif (LINUX)
+  add_subdirectory(llappearanceutility)
+endif()
 
 if (WINDOWS)
     # cmake EXISTS requires an absolute path, see indra/cmake/Variables.cmake

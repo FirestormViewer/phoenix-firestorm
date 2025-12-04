@@ -204,6 +204,7 @@ HKL     LLWindowWin32::sWinInputLocale = 0;
 DWORD   LLWindowWin32::sWinIMEConversionMode = IME_CMODE_NATIVE;
 DWORD   LLWindowWin32::sWinIMESentenceMode = IME_SMODE_AUTOMATIC;
 LLCoordWindow LLWindowWin32::sWinIMEWindowPosition(-1,-1);
+HMODULE LLWindowWin32::sGLDLLHandle = nullptr;
 
 static HWND sWindowHandleForMessageBox = NULL;
 
@@ -459,7 +460,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     mWindowThread = new LLWindowWin32Thread();
 
     //MAINT-516 -- force a load of opengl32.dll just in case windows went sideways
-    LoadLibrary(L"opengl32.dll");
+    sGLDLLHandle = LoadLibrary(L"opengl32.dll");
 
 
     if (mMaxCores != 0)
@@ -1700,6 +1701,8 @@ const   S32   max_format  = (S32)num_formats - 1;
         return false;
     }
 
+    gGLManager.initWGL(); // Reinit WGL functions once we have our full context
+
     if (!gGLManager.initGL())
     {
         LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
@@ -2594,16 +2597,13 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             // Comes after WM_QUERYENDSESSION
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_ENDSESSION");
             LL_INFOS("Window") << "Received WM_ENDSESSION with wParam: " << (U32)w_param << " lParam: " << (U32)l_param << LL_ENDL;
-            unsigned int end_session_flags = (U32)w_param;
-            if (end_session_flags == 0)
-            {
-                // session is not actually ending
-                return 0;
-            }
+            unsigned int end_session_flags = (U32)l_param;
 
-            if ((end_session_flags & ENDSESSION_CLOSEAPP)
-                || (end_session_flags & ENDSESSION_CRITICAL)
-                || (end_session_flags & ENDSESSION_LOGOFF))
+            if (w_param == TRUE // if true, session is ending
+                || end_session_flags == 0 // not possible to determine type of the event
+                // || (end_session_flags & ENDSESSION_CLOSEAPP)) system update or low resources, must be acompanied by w_param == TRUE
+                || (end_session_flags & ENDSESSION_CRITICAL) // will shutdown regardless of app state
+                || (end_session_flags & ENDSESSION_LOGOFF)) // logoff, can delay shutdown
             {
                 window_imp->post([=]()
                 {
@@ -2612,13 +2612,13 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     {
                         // Get the app to initiate cleanup.
                         window_imp->mCallbacks->handleQuit(window_imp);
-                        // The app is responsible for calling destroyWindow when done with GL
                     }
                 });
                 // Give app a second to finish up. That's not enough for a clean exit,
                 // but better than nothing.
                 // Todo: sync this better, some kind of waitForResult? Can't wait forever,
-                // but can potentially use ShutdownBlockReasonCreate for a bigger delay.
+                // but for ENDSESSION_LOGOFF can potentially use ShutdownBlockReasonCreate
+                // for a bigger delay.
                 ms_sleep(1000);
             }
             // Don't need to post quit or destroy window,
@@ -4801,6 +4801,18 @@ F32 LLWindowWin32::getSystemUISize()
 
     ReleaseDC(hWnd, hdc);
     return scale_value;
+}
+
+//static
+PROC WINAPI LLWindowWin32::getProcAddress(const char* func)
+{
+    PROC ret_func = wglGetProcAddress(func);
+    if (!ret_func && sGLDLLHandle)
+    {
+        // Try to fallback to OpenGL32.dll
+        ret_func = GetProcAddress(sGLDLLHandle, func);
+    }
+    return ret_func;
 }
 
 //static

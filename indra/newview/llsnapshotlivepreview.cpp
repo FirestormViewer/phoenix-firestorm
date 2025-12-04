@@ -244,11 +244,11 @@ void LLSnapshotLivePreview::drawPreviewRect(S32 offset_x, S32 offset_y, LLColor4
 {
     F32 line_width ;
     glGetFloatv(GL_LINE_WIDTH, &line_width) ;
-    gGL.setLineWidth(2.0f * line_width) ; // <FS> Line width OGL core profile fix by Rye Mutt
+    gGL.setLineWidth(2.0f * line_width) ;
     LLColor4 color(0.0f, 0.0f, 0.0f, 1.0f) ;
     gl_rect_2d( mPreviewRect.mLeft + offset_x, mPreviewRect.mTop + offset_y,
         mPreviewRect.mRight + offset_x, mPreviewRect.mBottom + offset_y, color, false ) ;
-    gGL.setLineWidth(line_width) ; // <FS> Line width OGL core profile fix by Rye Mutt
+    gGL.setLineWidth(line_width) ;
 
     //draw four alpha rectangles to cover areas outside of the snapshot image
     if(!mKeepAspectRatio)
@@ -1102,11 +1102,11 @@ void LLSnapshotLivePreview::saveTexture(bool outfit_snapshot, std::string name)
         LLFolderType::EType folder_type = outfit_snapshot ? LLFolderType::FT_NONE : LLFolderType::FT_SNAPSHOT_CATEGORY;
         LLInventoryType::EType inv_type = outfit_snapshot ? LLInventoryType::IT_NONE : LLInventoryType::IT_SNAPSHOT;
 
-        LLResourceUploadInfo::ptr_t assetUploadInfo(new LLResourceUploadInfo(
+        LLResourceUploadInfo::ptr_t assetUploadInfo = std::make_shared<LLResourceUploadInfo>(
             tid, LLAssetType::AT_TEXTURE, res_name, res_desc, 0,
             folder_type, inv_type,
             PERM_ALL, LLFloaterPerms::getGroupPerms("Uploads"), LLFloaterPerms::getEveryonePerms("Uploads"),
-            expected_upload_cost, LLUUID::null, !outfit_snapshot));
+            expected_upload_cost, LLUUID::null, !outfit_snapshot);
 
         upload_new_resource(assetUploadInfo);
 

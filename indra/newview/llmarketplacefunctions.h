@@ -28,15 +28,11 @@
 #ifndef LL_LLMARKETPLACEFUNCTIONS_H
 #define LL_LLMARKETPLACEFUNCTIONS_H
 
-
-#include <llsd.h>
-#include <boost/function.hpp>
-#include <boost/signals2.hpp>
-
+#include "llsd.h"
 #include "llsingleton.h"
 #include "llstring.h"
 
-
+#include <boost/signals2.hpp>
 
 namespace MarketplaceErrorCodes
 {
@@ -113,9 +109,9 @@ private:
     bool mInitialized;
     U32  mMarketPlaceStatus;
 
-    status_report_signal_t *    mErrorInitSignal;
-    status_changed_signal_t *   mStatusChangedSignal;
-    status_report_signal_t *    mStatusReportSignal;
+    std::unique_ptr<status_report_signal_t>    mErrorInitSignal;
+    std::unique_ptr<status_changed_signal_t>   mStatusChangedSignal;
+    std::unique_ptr<status_report_signal_t>    mStatusReportSignal;
 };
 
 
@@ -276,13 +272,13 @@ private:
     // Handling Marketplace connection and inventory connection
     U32  mMarketPlaceStatus;
     std::string mMarketPlaceFailureReason;
-    status_updated_signal_t* mStatusUpdatedSignal;
+    std::unique_ptr<status_updated_signal_t> mStatusUpdatedSignal;
     LLInventoryObserver* mInventoryObserver;
     bool mDirtyCount;   // If true, stock count value need to be updated at the next check
 
     // Update data
     U32 mMarketPlaceDataFetched;
-    status_updated_signal_t* mDataFetchedSignal;
+    std::unique_ptr<status_updated_signal_t> mDataFetchedSignal;
     std::set<LLUUID> mPendingUpdateSet;
 
     // Listing folders waiting for validation

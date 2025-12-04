@@ -1268,6 +1268,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         p.button_flash_count(LLUI::getInstance()->mSettingGroups["config"]->getS32("FlashCount"));
         p.button_flash_rate(LLUI::getInstance()->mSettingGroups["config"]->getF32("FlashPeriod"));
         // </FS:Ansariel>
+        p.handle_right_mouse = false;   // <FS:Zi> Fix tab rearranging when active tab was right clicked before
 
         // *TODO : It seems wrong not to use p in both cases considering the way p is initialized
         if (mCustomIconCtrlUsed)

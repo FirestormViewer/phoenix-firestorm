@@ -68,7 +68,7 @@ set(llcommon_SOURCE_FILES
     llmetricperformancetester.cpp
     llmortician.cpp
     llmutex.cpp
-    llptrto.cpp 
+    llptrto.cpp
     llpredicate.cpp
     llprocess.cpp
     llprocessor.cpp
@@ -108,7 +108,7 @@ set(llcommon_SOURCE_FILES
     workqueue.cpp
     StackWalker.cpp
     )
-    
+
 set(llcommon_HEADER_FILES
     CMakeLists.txt
 
@@ -256,10 +256,16 @@ set(llcommon_HEADER_FILES
     workqueue.h
     StackWalker.h
     )
-    
+
 if (DARWIN)
   list(APPEND llcommon_HEADER_FILES llsys_objc.h)
   list(APPEND llcommon_SOURCE_FILES llsys_objc.mm)
+
+  set_source_files_properties(
+    llsys_objc.mm
+    PROPERTIES
+    SKIP_PRECOMPILE_HEADERS TRUE
+  )
 endif (DARWIN)
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
@@ -288,6 +294,14 @@ list(APPEND llcommon_HEADER_FILES "tea.h" )
 
 if (USE_TRACY)
   list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
+
+  # Skip precompiled headers on these files due to special compilation needs
+  set_source_files_properties(
+    llfasttimer.cpp
+    llprofiler.cpp
+    PROPERTIES
+    SKIP_PRECOMPILE_HEADERS TRUE
+  )
 endif ()
 
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
@@ -315,8 +329,12 @@ target_link_libraries(
         ll::sse2neon
     )
 
-target_include_directories(llcommon INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(llcommon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(llcommon PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(llcommon PRIVATE ${CMAKE_SOURCE_DIR}/llmath)
+
+if (USE_PRECOMPILED_HEADERS)
+  target_precompile_headers(llcommon REUSE_FROM llprecompiled)
+endif ()
 
 add_dependencies(llcommon stage_third_party_libs)
 

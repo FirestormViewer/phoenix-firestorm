@@ -39,6 +39,7 @@
 #include "llnotificationsutil.h"
 #include "lloutputmonitorctrl.h"
 #include "llspeakers.h"
+#include "llurlaction.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h"
 #include "llvoiceclient.h"
@@ -69,6 +70,7 @@ FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source,
     mParticipantListMenu(NULL),
     mExcludeAgent(exclude_agent),
     mValidateSpeakerCallback(NULL),
+    mInsertMentionCallback(NULL),
     mConvType(CONV_UNKNOWN)
 {
     mSpeakerAddListener = new SpeakerAddListener(*this);
@@ -301,6 +303,11 @@ void FSParticipantList::setValidateSpeakerCallback(validate_speaker_callback_t c
     mValidateSpeakerCallback = cb;
 }
 
+void FSParticipantList::setInsertMentionCallback(insert_mention_callback_t cb)
+{
+    mInsertMentionCallback = cb;
+}
+
 void FSParticipantList::update()
 {
     mSpeakerMgr->update(true);
@@ -530,6 +537,9 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
 
     registrar.add("ParticipantList.ModerateVoice", boost::bind(&FSParticipantList::FSParticipantListMenu::moderateVoice, this, _2));
 
+    registrar.add("Mention.CopyURI", boost::bind(&FSParticipantList::FSParticipantListMenu::copyURLToClipboard, this, mUUIDs.front()));
+    registrar.add("Mention.Chat", boost::bind(&FSParticipantList::FSParticipantListMenu::insertMentionAtCursor, this, mUUIDs.front()));
+
     enable_registrar.add("ParticipantList.EnableItem", boost::bind(&FSParticipantList::FSParticipantListMenu::enableContextMenuItem,    this, _2));
     enable_registrar.add("ParticipantList.EnableItem.Moderate", boost::bind(&FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem,   this, _2));
     enable_registrar.add("ParticipantList.CheckItem",  boost::bind(&FSParticipantList::FSParticipantListMenu::checkContextMenuItem, this, _2));
@@ -554,6 +564,19 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
     main_menu->arrangeAndClear();
 
     return main_menu;
+}
+
+void FSParticipantList::FSParticipantListMenu::copyURLToClipboard(const LLUUID& avatar_id)
+{
+    LLUrlAction::copyURLToClipboard("secondlife:///app/agent/" + mUUIDs.front().asString() + "/mention");
+}
+
+void FSParticipantList::FSParticipantListMenu::insertMentionAtCursor(const LLUUID& avatar_id)
+{
+    if (mParent.mInsertMentionCallback)
+    {
+        mParent.mInsertMentionCallback(avatar_id);
+    }
 }
 
 void FSParticipantList::FSParticipantListMenu::show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y)

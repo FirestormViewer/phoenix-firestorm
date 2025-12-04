@@ -1,4 +1,4 @@
-/** 
+/**
  * @file media_plugin_gstreamer10.cpp
  * @brief GStreamer-1.0 plugin for LLMedia API plugin system
  *
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2016&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2016, Linden Research, Inc. / Nicky Dasmijn
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  * @endcond
@@ -41,11 +41,11 @@
 extern "C" {
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
-
 }
 
-#include "llmediaimplgstreamer.h"
-#include "llmediaimplgstreamer_syms.h"
+SymbolGrabber gstSymbolGrabber;
+
+#include "llmediaimplgstreamer_syms_raw.inc"
 
 static inline void llgst_caps_unref( GstCaps * caps )
 {
@@ -77,7 +77,7 @@ private:
     bool navigateTo( const std::string urlIn );
     bool seek( double time_sec );
     bool setVolume( float volume );
-    
+
     // misc
     bool pause();
     bool stop();
@@ -86,7 +86,7 @@ private:
 
     double MIN_LOOP_SEC = 1.0F;
     U32 INTERNAL_TEXTURE_SIZE = 1024;
-    
+
     bool mIsLooping;
 
     enum ECommand {
@@ -110,9 +110,9 @@ private:
     void mouseMove( int x, int y );
 
     static bool mDoneInit;
-    
+
     guint mBusWatchID;
-    
+
     float mVolume;
 
     int mDepth;
@@ -120,10 +120,10 @@ private:
     // padded texture size we need to write into
     int mTextureWidth;
     int mTextureHeight;
-    
+
     bool mSeekWanted;
     double mSeekDestination;
-    
+
     // Very GStreamer-specific
     GMainLoop *mPump; // event pump for this media
     GstElement *mPlaybin;
@@ -139,16 +139,16 @@ MediaPluginGStreamer10::MediaPluginGStreamer10( LLPluginInstance::sendMessageFun
     , mBusWatchID ( 0 )
     , mSeekWanted(false)
     , mSeekDestination(0.0)
-    , mPump ( NULL )
-    , mPlaybin ( NULL )
-    , mAppSink ( NULL )
+    , mPump ( nullptr )
+    , mPlaybin ( nullptr )
+    , mAppSink ( nullptr )
     , mCommand ( COMMAND_NONE )
 {
 }
 
 gboolean MediaPluginGStreamer10::processGSTEvents(GstBus *bus, GstMessage *message)
 {
-    if (!message) 
+    if (!message)
         return TRUE; // shield against GStreamer bug
 
     switch (GST_MESSAGE_TYPE (message))
@@ -193,8 +193,8 @@ gboolean MediaPluginGStreamer10::processGSTEvents(GstBus *bus, GstMessage *messa
         }
         case GST_MESSAGE_ERROR:
         {
-            GError *err = NULL;
-            gchar *debug = NULL;
+            GError *err = nullptr;
+            gchar *debug = nullptr;
 
             llgst_message_parse_error (message, &err, &debug);
             if (err)
@@ -211,9 +211,9 @@ gboolean MediaPluginGStreamer10::processGSTEvents(GstBus *bus, GstMessage *messa
         {
             if (llgst_message_parse_info)
             {
-                GError *err = NULL;
-                gchar *debug = NULL;
-            
+                GError *err = nullptr;
+                gchar *debug = nullptr;
+
                 llgst_message_parse_info (message, &err, &debug);
                 if (err)
                     llg_error_free (err);
@@ -223,9 +223,9 @@ gboolean MediaPluginGStreamer10::processGSTEvents(GstBus *bus, GstMessage *messa
         }
         case GST_MESSAGE_WARNING:
         {
-            GError *err = NULL;
-            gchar *debug = NULL;
-            
+            GError *err = nullptr;
+            gchar *debug = nullptr;
+
             llgst_message_parse_warning (message, &err, &debug);
             if (err)
                 llg_error_free (err);
@@ -239,7 +239,7 @@ gboolean MediaPluginGStreamer10::processGSTEvents(GstBus *bus, GstMessage *messa
             {
                 double eos_pos_sec = 0.0F;
                 bool got_eos_position = getTimePos(eos_pos_sec);
-                
+
                 if (got_eos_position && eos_pos_sec < MIN_LOOP_SEC)
                 {
                     // if we know that the movie is really short, don't
@@ -293,13 +293,13 @@ bool MediaPluginGStreamer10::navigateTo ( const std::string urlIn )
 
     mSeekWanted = false;
 
-    if (NULL == mPump ||  NULL == mPlaybin)
+    if (nullptr == mPump ||  nullptr == mPlaybin)
     {
         setStatus(STATUS_ERROR);
         return false; // error
     }
 
-    llg_object_set (G_OBJECT (mPlaybin), "uri", urlIn.c_str(), NULL);
+    llg_object_set (G_OBJECT (mPlaybin), "uri", urlIn.c_str(), nullptr);
 
     // navigateTo implicitly plays, too.
     play(1.0);
@@ -326,9 +326,9 @@ bool MediaPluginGStreamer10::update(int milliseconds)
         return false; // error
 
     //  DEBUGMSG("updating media...");
-    
+
     // sanity check
-    if (NULL == mPump || NULL == mPlaybin)
+    if (nullptr == mPump || nullptr == mPlaybin)
     {
         return false;
     }
@@ -353,13 +353,13 @@ bool MediaPluginGStreamer10::update(int milliseconds)
     }
 
     // check for availability of a new frame
-    
+
     if( !mAppSink )
         return true;
 
     if( GST_STATE(mPlaybin) != GST_STATE_PLAYING) // Do not try to pull a sample if not in playing state
         return true;
-    
+
     GstSample *pSample = llgst_app_sink_pull_sample( mAppSink );
     if(!pSample)
         return false; // Done playing
@@ -369,15 +369,17 @@ bool MediaPluginGStreamer10::update(int milliseconds)
     if (!pCaps)
         return false;
 
-    gint width, height;
+    gint width = 0, height = 0;
     GstStructure *pStruct = llgst_caps_get_structure ( pCaps, 0);
 
-    int res = llgst_structure_get_int ( pStruct, "width", &width);
-    res |= llgst_structure_get_int ( pStruct, "height", &height);
+    if(!llgst_structure_get_int ( pStruct, "width", &width) )
+        width = 0;
+    if(!llgst_structure_get_int ( pStruct, "height", &height) )
+        height = 0;
 
-    if( !mPixels )
+    if( !mPixels || width == 0 || height == 0)
         return true;
-    
+
     GstBuffer *pBuffer = llgst_sample_get_buffer ( pSample );
     GstMapInfo map;
     llgst_buffer_map ( pBuffer, &map, GST_MAP_READ);
@@ -394,7 +396,7 @@ bool MediaPluginGStreamer10::update(int milliseconds)
         U8 *pTexelOut = mPixels + (row * mTextureWidth * mDepth );
 #else
         U8 *pTexelOut = mPixels + ((mTextureHeight-row-1) * mTextureWidth * mDepth );
-#endif      
+#endif
         for( int col = 0; col < mTextureWidth; ++col )
         {
             pTexelOut[ 0 ] = pTexelIn[0];
@@ -473,7 +475,7 @@ bool MediaPluginGStreamer10::setVolume( float volume )
     mVolume = volume;
     if (mDoneInit && mPlaybin)
     {
-        llg_object_set(mPlaybin, "volume", mVolume, NULL);
+        llg_object_set(mPlaybin, "volume", mVolume, nullptr);
         return true;
     }
 
@@ -504,7 +506,7 @@ bool MediaPluginGStreamer10::getTimePos(double &sec_out)
         got_position =
             llgst_element_query_position &&
             llgst_element_query_position(mPlaybin,
-                             &timefmt,
+                             timefmt,
                              &pos);
         got_position = got_position
             && (timefmt == GST_FORMAT_TIME);
@@ -525,7 +527,7 @@ bool MediaPluginGStreamer10::getTimePos(double &sec_out)
             {
                 got_position = false;
             }
-            
+
         }
         // If all the preconditions succeeded... we can trust the result.
         if (got_position)
@@ -547,7 +549,7 @@ bool MediaPluginGStreamer10::load()
     mVolume = 0.1234567f; // minor hack to force an initial volume update
 
     // Create a pumpable main-loop for this media
-    mPump = llg_main_loop_new (NULL, FALSE);
+    mPump = llg_main_loop_new (nullptr, FALSE);
     if (!mPump)
     {
         setStatus(STATUS_ERROR);
@@ -580,7 +582,7 @@ bool MediaPluginGStreamer10::load()
                                             "format", G_TYPE_STRING, "RGB",
                                             "width", G_TYPE_INT, INTERNAL_TEXTURE_SIZE,
                                             "height", G_TYPE_INT, INTERNAL_TEXTURE_SIZE,
-                                            NULL );
+                                            nullptr );
 
     llgst_app_sink_set_caps( mAppSink, pCaps );
     llgst_caps_unref( pCaps );
@@ -590,8 +592,8 @@ bool MediaPluginGStreamer10::load()
         setStatus(STATUS_ERROR);
         return false;
     }
-    
-    llg_object_set(mPlaybin, "video-sink", mAppSink, NULL);
+
+    llg_object_set(mPlaybin, "video-sink", mAppSink, nullptr);
 
     return true;
 }
@@ -609,16 +611,16 @@ bool MediaPluginGStreamer10::unload ()
     {
         llgst_element_set_state (mPlaybin, GST_STATE_NULL);
         llgst_object_unref (GST_OBJECT (mPlaybin));
-        mPlaybin = NULL;
+        mPlaybin = nullptr;
     }
 
     if (mPump)
     {
         llg_main_loop_quit(mPump);
-        mPump = NULL;
+        mPump = nullptr;
     }
 
-    mAppSink = NULL;
+    mAppSink = nullptr;
 
     setStatus(STATUS_NONE);
 
@@ -626,20 +628,15 @@ bool MediaPluginGStreamer10::unload ()
 }
 
 void LogFunction(GstDebugCategory *category, GstDebugLevel level, const gchar *file, const gchar *function, gint line, GObject *object, GstDebugMessage *message, gpointer user_data )
-#ifndef LL_LINUX // Docu says we need G_GNUC_NO_INSTRUMENT, but GCC says 'error'
-    G_GNUC_NO_INSTRUMENT
-#endif
 {
-#ifdef LL_LINUX
     std::cerr << file << ":" << line << "(" << function << "): " << llgst_debug_message_get( message ) << std::endl;
-#endif
 }
 
 //static
 bool MediaPluginGStreamer10::startup()
 {
     // first - check if GStreamer is explicitly disabled
-    if (NULL != getenv("LL_DISABLE_GSTREAMER"))
+    if (nullptr != getenv("LL_DISABLE_GSTREAMER"))
         return false;
 
     // only do global GStreamer initialization once.
@@ -649,28 +646,18 @@ bool MediaPluginGStreamer10::startup()
 
         // Get symbols!
         std::vector< std::string > vctDSONames;
-#if LL_DARWIN
-#elif LL_WINDOWS
-        vctDSONames.push_back( "libgstreamer-1.0-0.dll"  );
-        vctDSONames.push_back( "libgstapp-1.0-0.dll"  );
-        vctDSONames.push_back( "libglib-2.0-0.dll" );
-        vctDSONames.push_back( "libgobject-2.0-0.dll" );
-#else // linux or other ELFy unixoid
         vctDSONames.push_back( "libgstreamer-1.0.so.0"  );
         vctDSONames.push_back( "libgstapp-1.0.so.0"  );
         vctDSONames.push_back( "libglib-2.0.so.0" );
         vctDSONames.push_back( "libgobject-2.0.so" );
-#endif
-        if( !grab_gst_syms( vctDSONames ) )
-        {
+        if( !gstSymbolGrabber.grabSymbols( vctDSONames ) )
             return false;
-        }
 
         if (llgst_segtrap_set_enabled)
         {
             llgst_segtrap_set_enabled(FALSE);
         }
-#if LL_LINUX
+
         // Gstreamer tries a fork during init, waitpid-ing on it,
         // which conflicts with any installed SIGCHLD handler...
         struct sigaction tmpact, oldact;
@@ -687,39 +674,32 @@ bool MediaPluginGStreamer10::startup()
             tmpact.sa_flags = SA_SIGINFO;
             sigaction(SIGCHLD, &tmpact, &oldact);
         }
-#endif // LL_LINUX
         // Protect against GStreamer resetting the locale, yuck.
         static std::string saved_locale;
-        saved_locale = setlocale(LC_ALL, NULL);
-        
-//      _putenv_s( "GST_PLUGIN_PATH", "E:\\gstreamer\\1.0\\x86\\lib\\gstreamer-1.0" );
+        saved_locale = setlocale(LC_ALL, nullptr);
 
         llgst_debug_set_default_threshold( GST_LEVEL_WARNING );
-        llgst_debug_add_log_function( LogFunction, NULL, NULL );
+        llgst_debug_add_log_function( LogFunction, nullptr, nullptr );
         llgst_debug_set_active( false );
 
         // finally, try to initialize GStreamer!
-        GError *err = NULL;
-        gboolean init_gst_success = llgst_init_check(NULL, NULL, &err);
+        GError *err = nullptr;
+        gboolean init_gst_success = llgst_init_check(nullptr, nullptr, &err);
 
         // restore old locale
         setlocale(LC_ALL, saved_locale.c_str() );
 
-#if LL_LINUX
         // restore old SIGCHLD handler
         if (!llgst_registry_fork_set_enabled)
-            sigaction(SIGCHLD, &oldact, NULL);
-#endif // LL_LINUX
+            sigaction(SIGCHLD, &oldact, nullptr);
 
         if (!init_gst_success) // fail
         {
             if (err)
-            {
                 llg_error_free(err);
-            }
             return false;
         }
-        
+
         mDoneInit = true;
     }
 
@@ -732,8 +712,7 @@ bool MediaPluginGStreamer10::closedown()
     if (!mDoneInit)
         return false; // error
 
-    ungrab_gst_syms();
-
+    gstSymbolGrabber.ungrabSymbols();
     mDoneInit = false;
 
     return true;
@@ -743,7 +722,6 @@ MediaPluginGStreamer10::~MediaPluginGStreamer10()
 {
     closedown();
 }
-
 
 std::string MediaPluginGStreamer10::getVersion()
 {
@@ -793,7 +771,7 @@ void MediaPluginGStreamer10::receiveMessage(const char *message_string)
             {
                 // no response is necessary here.
                 double time = message_in.getValueReal("time");
-                
+
                 // Convert time to milliseconds for update()
                 update((int)(time * 1000.0f));
             }
@@ -821,7 +799,7 @@ void MediaPluginGStreamer10::receiveMessage(const char *message_string)
                     if(mPixels == iter->second.mAddress)
                     {
                         // This is the currently active pixel buffer.  Make sure we stop drawing to it.
-                        mPixels = NULL;
+                        mPixels = nullptr;
                         mTextureSegmentName.clear();
                     }
                     mSharedSegments.erase(iter);
@@ -885,7 +863,7 @@ void MediaPluginGStreamer10::receiveMessage(const char *message_string)
                         mTextureHeight = texture_height;
                         memset( mPixels, 0, mTextureWidth*mTextureHeight*mDepth );
                     }
-                    
+
                     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "size_change_request");
                     message.setValue("name", mTextureSegmentName);
                     message.setValueS32("width", INTERNAL_TEXTURE_SIZE );
@@ -898,14 +876,14 @@ void MediaPluginGStreamer10::receiveMessage(const char *message_string)
             {
                 std::string uri = message_in.getValue("uri");
                 navigateTo( uri );
-                sendStatus();       
+                sendStatus();
             }
             else if(message_name == "mouse_event")
             {
                 std::string event = message_in.getValue("event");
                 S32 x = message_in.getValueS32("x");
                 S32 y = message_in.getValueS32("y");
-                
+
                 if(event == "down")
                 {
                     mouseDown(x, y);
@@ -970,10 +948,10 @@ int init_media_plugin(LLPluginInstance::sendMessageFunction host_send_func, void
         MediaPluginGStreamer10 *self = new MediaPluginGStreamer10(host_send_func, host_user_data);
         *plugin_send_func = MediaPluginGStreamer10::staticReceiveMessage;
         *plugin_user_data = (void*)self;
-        
+
         return 0; // okay
     }
-    else 
+    else
     {
         return -1; // failed to init
     }

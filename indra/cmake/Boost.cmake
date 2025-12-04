@@ -1,5 +1,6 @@
 # -*- cmake -*-
 include(Prebuilt)
+include(Linking)
 
 include_guard()
 
@@ -18,48 +19,66 @@ set(addrsfx "-x${ADDRESS_SIZE}")
 
 find_library(BOOST_CONTEXT_LIBRARY
     NAMES
+    libboost_context-mt
+    libboost_context-mt${addrsfx}
     boost_context-mt
     boost_context-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 find_library(BOOST_FIBER_LIBRARY
     NAMES
+    libboost_fiber-mt
+    libboost_fiber-mt${addrsfx}
     boost_fiber-mt
     boost_fiber-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 find_library(BOOST_FILESYSTEM_LIBRARY
     NAMES
+    libboost_filesystem-mt
+    libboost_filesystem-mt${addrsfx}
     boost_filesystem-mt
     boost_filesystem-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 find_library(BOOST_PROGRAMOPTIONS_LIBRARY
     NAMES
+    libboost_program_options-mt
+    libboost_program_options-mt${addrsfx}
     boost_program_options-mt
     boost_program_options-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 find_library(BOOST_REGEX_LIBRARY
     NAMES
+    libboost_regex-mt
+    libboost_regex-mt${addrsfx}
     boost_regex-mt
     boost_regex-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 find_library(BOOST_SYSTEM_LIBRARY
     NAMES
+    libboost_system-mt
+    libboost_system-mt${addrsfx}
     boost_system-mt
     boost_system-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
+# <FS:Ansariel> LSL Preprocessor support
 find_library(BOOST_THREAD_LIBRARY
     NAMES
+    libboost_thread-mt
+    libboost_thread-mt${addrsfx}
     boost_thread-mt
     boost_thread-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+# </FS:Ansariel>
 
 find_library(BOOST_URL_LIBRARY
     NAMES
+    libboost_url-mt
+    libboost_url-mt${addrsfx}
     boost_url-mt
     boost_url-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
@@ -67,6 +86,8 @@ find_library(BOOST_URL_LIBRARY
 # <FS:Ansariel> LSL Preprocessor support
 find_library(BOOST_WAVE_LIBRARY
     NAMES
+    libboost_wave-mt
+    libboost_wave-mt${addrsfx}
     boost_wave-mt
     boost_wave-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
@@ -79,7 +100,7 @@ target_link_libraries(ll::boost INTERFACE
     ${BOOST_PROGRAMOPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
     ${BOOST_SYSTEM_LIBRARY}
-    ${BOOST_THREAD_LIBRARY}
+    ${BOOST_THREAD_LIBRARY} # <FS:Ansariel> LSL Preprocessor support
     ${BOOST_URL_LIBRARY}
     ${BOOST_WAVE_LIBRARY}) # <FS:Ansariel> LSL Preprocessor support
 

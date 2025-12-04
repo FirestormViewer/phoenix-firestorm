@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Ustawienia ekranu powitalnego">
+	<text name="description">
+		Skonfiguruj tutaj opcje wyświetlania strony logowania. Te ustawienia zaczną obowiązywać po następnym restarcie przeglądarki.
+	</text>
+	<text name="section_visibility">
+		Widoczność sekcji:
+	</text>
+	<check_box label="Ukryj górny pasek" name="hide_top_bar" />
+	<check_box label="Ukryj sekcję blogów" name="hide_blogs" />
+	<check_box label="Ukryj cele podróży" name="hide_destinations" />
+	<text name="section_accessibility">
+		Opcje dostępności:
+	</text>
+	<check_box label="Włącz tryb odcieni szarości" name="use_gray_mode" />
+	<check_box label="Włącz tryb wysokiego kontrastu" name="use_high_contrast" />
+	<check_box label="Włącz tryb &quot;WSZYSTKO WERSALIKAMI&quot;" name="use_all_caps" />
+	<check_box label="Użyj większych czcionek" name="use_larger_fonts"/>
+	<check_box label="Wyłącz efekty przezroczystości" name="no_transparency" />
+</floater>

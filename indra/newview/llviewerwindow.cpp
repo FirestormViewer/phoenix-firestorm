@@ -91,6 +91,7 @@
 
 // newview includes
 #include "fscommon.h"
+#include "llaccordionctrl.h"
 #include "llbox.h"
 #include "llchicletbar.h"
 #include "llconsole.h"
@@ -195,7 +196,6 @@
 #include "llviewerjoystick.h"
 #include "llviewermenufile.h" // LLFilePickerReplyThread
 #include "llviewernetwork.h"
-#include "llpostprocess.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 // </FS:Ansariel> [FS communication UI]
@@ -837,14 +837,14 @@ public:
             addText(xpos, ypos, "Projection Matrix");
             ypos += y_inc;
 
-#if LL_DARWIN
+#if LL_CLANG
 // For sprintf deprecation
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
             // View last column is always <0,0,0,1>
             MATRIX_ROW_F32_TO_STR(gGLModelView, 12,camera_lines[3]); addText(xpos, ypos, std::string(camera_lines[3])); ypos += y_inc;
-#if LL_DARWIN
+#if LL_CLANG
 #pragma clang diagnostic pop
 #endif
             MATRIX_ROW_N32_TO_STR(gGLModelView,  8,camera_lines[2]); addText(xpos, ypos, std::string(camera_lines[2])); ypos += y_inc;
@@ -1996,8 +1996,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     // pass its value right now. Instead, pass it a nullary function that
     // will, when we later need it, return the value of gKeyboard.
     // boost::lambda::var() constructs such a functor on the fly.
-    mWindowListener.reset(new LLWindowListener(this, boost::lambda::var(gKeyboard)));
-    mViewerWindowListener.reset(new LLViewerWindowListener(this));
+    LLWindowListener::KeyboardGetter getter = [](){ return gKeyboard; };
+    mWindowListener = std::make_unique<LLWindowListener>(this, getter);
+    mViewerWindowListener = std::make_unique<LLViewerWindowListener>(this);
 
     mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
     mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
@@ -2049,13 +2050,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
         ms_sleep(5000) ; //wait for 5 seconds.
 
         LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
-#if LL_LINUX
-        LL_WARNS() << "Unable to create window, be sure screen is set at 32-bit color and your graphics driver is configured correctly.  See README-linux.txt for further information."
-                << LL_ENDL;
-#else
         LL_WARNS("Window") << "Unable to create window, be sure screen is set at 32-bit color in Control Panels->Display->Settings"
                 << LL_ENDL;
-#endif
         LLAppViewer::instance()->fastQuit(1);
     }
     else if (!LLViewerShaderMgr::sInitialized)
@@ -3402,7 +3398,7 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
         // <FS:Ansariel> [FS Communication UI]
         //if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
         //{
-        //  LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
+        //  static LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
         //  if (key_move())
         //  {
         //      // let Control-Up and Control-Down through for chat line history,
@@ -3428,7 +3424,7 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
         //          }
         //      }
         //  }
-        LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
+        static LLCachedControl<bool> key_move(gSavedSettings, "ArrowKeysAlwaysMove");
         if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
            (FSNearbyChat::instance().defaultChatBarIsIdle() ||
             key_move()))
@@ -3732,7 +3728,7 @@ void LLViewerWindow::clearPopups()
 void LLViewerWindow::moveCursorToCenter()
 {
     bool mouse_warp = false;
-    LLCachedControl<S32> mouse_warp_mode(gSavedSettings, "MouseWarpMode", 1);
+    static LLCachedControl<S32> mouse_warp_mode(gSavedSettings, "MouseWarpMode", 1);
 
     switch (mouse_warp_mode())
     {
@@ -3835,6 +3831,8 @@ void LLViewerWindow::updateUI()
 
     LLConsole::updateClass();
 
+    // execute postponed arrange calls
+    LLAccordionCtrl::updateClass();
     // animate layout stacks so we have up to date rect for world view
     LLLayoutStack::updateClass();
 
@@ -5157,7 +5155,7 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
                 // setup opengl common parameters before we iterate over each object
                 gGL.pushMatrix();
                 //Need to because crash on ATI 3800 (and similar cards) MAINT-5018
-                LLGLDisable multisample(LLPipeline::RenderFSAAType > 0 ? GL_MULTISAMPLE_ARB : 0);
+                LLGLDisable multisample(LLPipeline::RenderFSAAType > 0 ? GL_MULTISAMPLE : 0);
                 LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
                 if (shader)
                 {
@@ -6762,11 +6760,6 @@ void* LLViewerWindow::getPlatformWindow() const
     return mWindow->getPlatformWindow();
 }
 
-void* LLViewerWindow::getMediaWindow()  const
-{
-    return mWindow->getMediaWindow();
-}
-
 void LLViewerWindow::focusClient()      const
 {
     return mWindow->focusClient();
@@ -7028,11 +7021,6 @@ void LLViewerWindow::stopGL()
         }
 
         gBox.cleanupGL();
-
-        if(gPostProcess)
-        {
-            gPostProcess->invalidate();
-        }
 
         gTextureList.destroyGL();
         stop_glerror();
@@ -7385,7 +7373,7 @@ bool LLViewerWindow::getUIVisibility()
 //
 LLPickInfo::LLPickInfo()
     : mKeyMask(MASK_NONE),
-      mPickCallback(NULL),
+      mPickCallback(nullptr),
       mPickType(PICK_INVALID),
       mWantSurfaceInfo(false),
       mObjectFace(-1),
@@ -7396,7 +7384,7 @@ LLPickInfo::LLPickInfo()
       mNormal(),
       mTangent(),
       mBinormal(),
-      mHUDIcon(NULL),
+      mHUDIcon(nullptr),
       mPickTransparent(false),
       mPickRigged(false),
       mPickParticle(false)

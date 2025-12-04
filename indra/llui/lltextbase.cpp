@@ -2482,6 +2482,11 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
     enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT));
     // </FS:Ansariel>
 
+    // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+    registrar.add("Mention.CopyURI", boost::bind(&LLUrlAction::copyURLToClipboard, "secondlife:///app/agent/" + target_id_str + "/mention"));
+    registrar.add("Mention.Chat", boost::bind(&LLTextBase::insertMentionAtCursor, this, "secondlife:///app/agent/" + target_id_str + "/mention"));
+    // </FS:Zi>
+
     // <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu
     registrar.add("FS.JoinGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupjoin", true));
     registrar.add("FS.LeaveGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupleave", true));
@@ -2558,6 +2563,14 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
         {
             menu->getChild<LLView>("GroupModerationSubmenu")->setVisible(false);
             menu->getChild<LLView>("GroupModerationSeparator")->setVisible(false);
+        }
+        // </FS:Zi>
+
+        // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+        if (!parent_floater || (parent_floater->getName() != "panel_im" && parent_floater->getName() != "nearby_chat"))
+        {
+            menu->getChild<LLView>("MentionURISeparator")->setVisible(false);
+            menu->getChild<LLView>("mention_in_chat")->setVisible(false);
         }
         // </FS:Zi>
 
@@ -3830,7 +3843,6 @@ S32 LLTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offs
 void LLTextSegment::updateLayout(const LLTextBase& editor) {}
 F32 LLTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRectf& draw_rect) { return draw_rect.mLeft; }
 bool LLTextSegment::canEdit() const { return false; }
-bool LLTextSegment::getPermitsEmoji() const { return true; }
 void LLTextSegment::unlinkFromDocument(LLTextBase*) {}
 void LLTextSegment::linkToDocument(LLTextBase*) {}
 const LLUIColor& LLTextSegment::getColor() const { static const LLUIColor white = LLUIColorTable::instance().getColor("White", LLColor4::white); return white; }
@@ -3874,6 +3886,11 @@ LLNormalTextSegment::LLNormalTextSegment( LLStyleConstSP style, S32 start, S32 e
 {
     mFontHeight = mStyle->getFont()->getLineHeight();
     mCanEdit = !mStyle->getDrawHighlightBg();
+    if (!mCanEdit)
+    {
+        // Emoji shouldn't split the segment with the mention.
+        mPermitsEmoji = false;
+    }
 
     LLUIImagePtr image = mStyle->getImage();
     if (image.notNull())
@@ -4407,6 +4424,7 @@ LLInlineViewSegment::LLInlineViewSegment(const Params& p, S32 start, S32 end)
     mTopPad(p.top_pad),
     mBottomPad(p.bottom_pad)
 {
+    mPermitsEmoji = false;
 }
 
 LLInlineViewSegment::~LLInlineViewSegment()
@@ -4627,3 +4645,10 @@ void LLTextBase::setWordWrap(bool wrap)
 {
     mWordWrap = wrap;
 }
+
+// <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
+// virtual
+void LLTextBase::insertMentionAtCursor(const std::string& str)
+{
+}
+// </FS:Zi>

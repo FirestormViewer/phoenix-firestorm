@@ -17,6 +17,7 @@
 #ifndef RLV_HANDLER_H
 #define RLV_HANDLER_H
 
+#include "llevent.h"
 #include "llgroupmgr.h"
 #include <stack>
 

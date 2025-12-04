@@ -334,11 +334,11 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
     }
     else if ("copy_slurl" == action)
     {
-        boost::function<void(LLLandmark*)> copy_slurl_cb = [](LLLandmark* landmark)
+        std::function<void(LLLandmark*)> copy_slurl_cb = [](LLLandmark* landmark)
         {
             LLVector3d global_pos;
             landmark->getGlobalPos(global_pos);
-            boost::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
+            std::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
             {
                gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
                LLSD args;
@@ -374,7 +374,7 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
     }
     else if ("show_on_map" == action)
     {
-        boost::function<void(LLLandmark*)> show_on_map_cb = [](LLLandmark* landmark)
+        std::function<void(LLLandmark*)> show_on_map_cb = [](LLLandmark* landmark)
         {
             LLVector3d landmark_global_pos;
             if (landmark->getGlobalPos(landmark_global_pos))

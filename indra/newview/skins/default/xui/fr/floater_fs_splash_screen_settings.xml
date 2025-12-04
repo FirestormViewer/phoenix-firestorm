@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Réglages de l'écran d'accueil">
+	<text name="description">
+		Configurez ici les options d'affichage de l'écran d'accueil. Ces réglages prendront effet après le prochain redémarrage du client.
+	</text>
+	<text name="section_visibility">
+		Visibilité des sections :
+	</text>
+	<check_box label="Masquer la barre supérieure" name="hide_top_bar" />
+	<check_box label="Masquer la section des blogs" name="hide_blogs" />
+	<check_box label="Masquer les destinations" name="hide_destinations" />
+	<text name="section_accessibility">
+		Options d'accessibilité :
+	</text>
+	<check_box label="Activer le mode niveaux de gris" name="use_gray_mode" />
+	<check_box label="Activer le mode contraste élevé" name="use_high_contrast" />
+	<check_box label="Activer le mode &quot;TOUT EN MAJUSCULES&quot;" name="use_all_caps" />
+	<check_box label="Utiliser des polices plus grandes" name="use_larger_fonts"/>
+	<check_box label="Désactiver les effets de transparence" name="no_transparency" />
+</floater>

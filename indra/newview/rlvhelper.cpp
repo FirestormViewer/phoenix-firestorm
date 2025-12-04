@@ -1054,7 +1054,7 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
             if (pObj->isAttachment())
                 m_idItems.push_back(pObj->getAttachmentItemID());
         }
-        else if (!cb.empty())
+        else if (cb)
         {
             new RlvCommandOptionGetPathCallback(rlvCmd.getObjectID(), cb);
             m_fCallback = true;
@@ -1067,7 +1067,7 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
         return;
     }
 
-    if (!cb.empty())
+    if (cb)
     {
         cb(getItemIDs());
     }

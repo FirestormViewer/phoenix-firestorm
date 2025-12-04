@@ -4,4 +4,5 @@
 	<menu_item_call label="Copier" name="Copy"/>
 	<menu_item_call label="Coller" name="Paste"/>
 	<menu_item_call label="Ouvrir l'inspecteur Web" name="open_webinspector"/>
+	<menu_item_call label="Afficher le code" name="show_page_source"/>
 </context_menu>

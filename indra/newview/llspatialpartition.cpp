@@ -1681,13 +1681,11 @@ void renderOctree(LLSpatialGroup* group)
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
             gGL.diffuseColor4f(1,0,0,group->mBuilt);
-            gGL.flush();
-            gGL.setLineWidth(5.f); // <FS> Line width OGL core profile fix by Rye Mutt
+            gGL.setLineWidth(5.f);
 
             const LLVector4a* bounds = group->getObjectBounds();
             drawBoxOutline(bounds[0], bounds[1]);
-            gGL.flush();
-            gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+            gGL.setLineWidth(1.f);
             gGL.flush();
 
             const LLVOAvatar* lastAvatar = nullptr;
@@ -1996,13 +1994,11 @@ void renderBoundingBox(LLDrawable* drawable, bool set_color = true)
     LLViewerObject* vobj = drawable->getVObj();
     if (vobj && vobj->onActiveList())
     {
-        gGL.flush();
-        gGL.setLineWidth(llmax(4.f*sinf(gFrameTimeSeconds*2.f)+1.f, 1.f)); // <FS> Line width OGL core profile fix by Rye Mutt
-        //gGL.setLineWidth(4.f*(sinf(gFrameTimeSeconds*2.f)*0.25f+0.75f)); // <FS> Line width OGL core profile fix by Rye Mutt
+        gGL.setLineWidth(llmax(4.f*sinf(gFrameTimeSeconds*2.f)+1.f, 1.f));
+        //gGL.setLineWidth(4.f*(sinf(gFrameTimeSeconds*2.f)*0.25f+0.75f));
         stop_glerror();
         drawBoxOutline(pos,size);
-        gGL.flush();
-        gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+        gGL.setLineWidth(1.f);
     }
     else
     {
@@ -2594,12 +2590,11 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume, bool wireframe
 
             llassert(LLGLSLShader::sCurBoundShader != 0);
             LLVertexBuffer::unbind();
-            glVertexPointer(3, GL_FLOAT, 16, phys_volume->mHullPoints);
 
             gGL.diffuseColor4fv(color.mV);
-
             gGL.syncMatrices();
-            glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
+
+            LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, nullptr, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
         }
         else
         {
@@ -2991,8 +2986,7 @@ public:
 
             if (i == 1)
             {
-                gGL.flush();
-                gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
+                gGL.setLineWidth(3.f);
             }
 
             gGL.begin(LLRender::TRIANGLES);
@@ -3010,8 +3004,7 @@ public:
 
             if (i == 1)
             {
-                gGL.flush();
-                gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+                gGL.setLineWidth(1.f);
             }
         }
     }
@@ -3807,15 +3800,13 @@ public:
 
 typedef ndOctreeListener< LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry> > ndDrawableOctreeListener;
 typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
-
 // </FS:ND>
 
-LL_ALIGN_PREFIX(16)
-class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
+class alignas(16) LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
 {
 public:
-    LL_ALIGN_16(LLVector4a mStart);
-    LL_ALIGN_16(LLVector4a mEnd);
+    LLVector4a mStart;
+    LLVector4a mEnd;
 
     S32       *mFaceHit;
     LLVector4a *mIntersection;
@@ -4020,7 +4011,7 @@ public:
 
         return false;
     }
-} LL_ALIGN_POSTFIX(16);
+};
 
 LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
                                                      bool pick_transparent,

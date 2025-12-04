@@ -74,6 +74,7 @@ LLPanelInventoryListItemBase::Params::Params()
 
 LLPanelInventoryListItemBase* LLPanelInventoryListItemBase::create(LLViewerInventoryItem* item)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     LLPanelInventoryListItemBase* list_item = NULL;
     if (item)
     {
@@ -194,6 +195,7 @@ void LLPanelInventoryListItemBase::setShowWidget(LLUICtrl* ctrl, bool show)
 
 bool LLPanelInventoryListItemBase::postBuild()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     LLViewerInventoryItem* inv_item = getItem();
     if (inv_item)
     {

@@ -187,7 +187,7 @@ std::shared_ptr<FSPrimfeedAuth> FSPrimfeedAuth::create(authorized_callback_t cal
         return sPrimfeedAuth;
     }
     auto auth = std::shared_ptr<FSPrimfeedAuth>(new FSPrimfeedAuth(callback));
-    if(!auth)
+    if (!auth)
     {
         return nullptr;
     }
@@ -217,8 +217,8 @@ void FSPrimfeedAuth::beginLoginRequest()
     std::string post_data = ""; // No body parameters required.
 
     // Create the headers object.
-    LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
-    LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
+    LLCore::HttpHeaders::ptr_t pHeader = std::make_shared<LLCore::HttpHeaders>();
+    LLCore::HttpOptions::ptr_t options = std::make_shared<LLCore::HttpOptions>();
 
     pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
@@ -321,14 +321,14 @@ void FSPrimfeedAuth::validateRequest()
     std::string viewer_api_key = gSavedSettings.getString("FSPrimfeedViewerApiKey");
 
     // Create and populate the headers.
-    LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
+    LLCore::HttpHeaders::ptr_t pHeader = std::make_shared<LLCore::HttpHeaders>();
     pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("Authorization", "Bearer " + mOauthToken);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
     pHeader->append("pf-viewer-request-id", mRequestId);
 
     // Set HTTP options
-    LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
+    LLCore::HttpOptions::ptr_t options = std::make_shared<LLCore::HttpOptions>();
     options->setWantHeaders(true);
     options->setRetries(0);
     options->setTimeout(PRIMFEED_CONNECT_TIMEOUT); 
@@ -394,13 +394,13 @@ void FSPrimfeedAuth::checkUserStatus()
     LL_DEBUGS("Primfeed") << "URL: " << url << LL_ENDL;
 
     // Create and populate the headers.
-    LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
+    LLCore::HttpHeaders::ptr_t pHeader = std::make_shared<LLCore::HttpHeaders>();
     pHeader->append(HTTP_OUT_HEADER_USER_AGENT, FS_PF_USER_AGENT);
     pHeader->append("Authorization", "Bearer " + mOauthToken);
     pHeader->append("pf-viewer-api-key", viewer_api_key);
 
     // Set HTTP options.
-    LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
+    LLCore::HttpOptions::ptr_t options = std::make_shared<LLCore::HttpOptions>();
     options->setWantHeaders(true);
     options->setRetries(0);
     options->setTimeout(PRIMFEED_CONNECT_TIMEOUT);

@@ -259,7 +259,7 @@
          name="mesh_preview_degenerate_edge_color"/>
         <color_swatch label="Pis doldurma"
          tool_tip="Önizləmə pəncərəsində degenerativ (nazik) üçbucaqların rəngini doldurun"
-         name="mesh_degenerate_fill_color"/>
+         name="mesh_preview_degenerate_fill_color"/>
       </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">

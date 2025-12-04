@@ -265,7 +265,7 @@
          name="mesh_preview_degenerate_edge_color"/>
         <color_swatch label="Плохая заливка"
          tool_tip="Цвет заливки вырожденных (тонких) треугольников в окне предварительного просмотра"
-         name="mesh_degenerate_fill_color"/>
+         name="mesh_preview_degenerate_fill_color"/>
       </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">

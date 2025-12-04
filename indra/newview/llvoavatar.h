@@ -266,7 +266,7 @@ public:
 
 
 private: //aligned members
-    LL_ALIGN_16(LLVector4a  mImpostorExtents[2]);
+    LLVector4a  mImpostorExtents[2];
 
     //--------------------------------------------------------------------
     // Updates
@@ -702,8 +702,6 @@ private:
     LLVector3   mLastAnimExtents[2];
     LLVector3   mLastAnimBasePos;
 
-    LLCachedControl<bool> mRenderUnloadedAvatar;
-
     //--------------------------------------------------------------------
     // Wind rippling in clothes
     //--------------------------------------------------------------------
@@ -1068,7 +1066,7 @@ public:
     // <FS:Ansariel> Get typing status
     bool            isTyping() const { return mTyping; }
 private:
-    bool            mVisibleChat;
+    bool            mVisibleChat = false;
     bool            mVisibleTyping;
 
     //--------------------------------------------------------------------
@@ -1267,7 +1265,7 @@ public:
     static F32          sGreyUpdateTime; // Last time stats were updated (to prevent multiple updates per frame)
 protected:
     S32                 getUnbakedPixelAreaRank();
-    bool                mHasGrey;
+    bool                mHasGrey = false;
 private:
     F32                 mMinPixelArea;
     F32                 mMaxPixelArea;
@@ -1325,11 +1323,7 @@ extern const F32 MIN_HOVER_Z;
 std::string get_sequential_numbered_file_name(const std::string& prefix,
                                               const std::string& suffix);
 void dump_sequential_xml(const std::string outprefix, const LLSD& content);
-
-// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
 void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value);
-void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, F32 value);
-//</FS:ND>
 
 #endif // LL_VOAVATAR_H
 

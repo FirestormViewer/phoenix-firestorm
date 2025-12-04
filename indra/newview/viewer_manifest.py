@@ -348,9 +348,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         channel_type=self.channel_type()
         #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
         #if channel_type == 'release':
-        #    app_suffix='Viewer'
+        #    return CHANNEL_VENDOR_BASE
         #else:
-        #    app_suffix=self.channel_variant()
+        #    return CHANNEL_VENDOR_BASE + ' ' + self.channel_variant()
         app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
@@ -1357,24 +1357,18 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
-                # Inject BugsplatServerURL into Info.plist if provided.
+                # Inject Bugsplat's db into Info.plist if provided.
                 Info_plist = self.dst_path_of("Info.plist")
                 with open(Info_plist, 'rb') as f:
                     Info = plistlib.load(f)
                     # https://www.bugsplat.com/docs/platforms/os-x#configuration
-                    Info["BugsplatServerURL"] = \
-                        "https://{}.bugsplat.com/".format(bugsplat_db)
+                    Info["BugSplatDatabase"] = bugsplat_db
                     self.put_in_file(
                         plistlib.dumps(Info),
                         os.path.basename(Info_plist),
                         "Info.plist")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
-            # self.path("Info.plist", dst="Info.plist")
-
-            # copy additional libs in <bundle>/Contents/MacOS/
-            self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-
             # CEF framework goes inside Contents/Frameworks.
             # Remember where we parked this car.
             with self.prefix(src=relpkgdir, dst="Frameworks"):
@@ -1382,6 +1376,8 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
                 if self.args.get('bugsplat'):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")
+                    self.path2basename(relpkgdir, "CrashReporter.framework")
+                    self.path2basename(relpkgdir, "HockeySDK.framework")
 
                 # OpenAL dylibs
                 if self.args['openal'] == 'ON':
@@ -1419,6 +1415,24 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     # stamped into the framework.
                     # Let exception, if any, propagate -- if this doesn't
                     # work, we need the build to noisily fail!
+                    oldpath = subprocess.check_output(
+                        ['objdump', '--macho', '--dylib-id', '--non-verbose',
+                         os.path.join(relpkgdir, "HockeySDK.framework", "HockeySDK")],
+                        text=True
+                        ).splitlines()[-1]  # take the last line of output
+                    self.run_command(
+                        ['install_name_tool', '-change', oldpath,
+                         '@executable_path/../Frameworks/HockeySDK.framework/HockeySDK',
+                         executable])
+                    oldpath = subprocess.check_output(
+                        ['objdump', '--macho', '--dylib-id', '--non-verbose',
+                         os.path.join(relpkgdir, "CrashReporter.framework", "CrashReporter")],
+                        text=True
+                        ).splitlines()[-1]  # take the last line of output
+                    self.run_command(
+                        ['install_name_tool', '-change', oldpath,
+                         '@executable_path/../Frameworks/CrashReporter.framework/CrashReporter',
+                         executable])
                     oldpath = subprocess.check_output(
                         ['objdump', '--macho', '--dylib-id', '--non-verbose',
                          os.path.join(relpkgdir, "BugsplatMac.framework", "BugsplatMac")],
@@ -1579,6 +1593,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                     self.path2basename("../media_plugins/cef/" + self.args['configuration'],
                                        "media_plugin_cef.dylib")
 
+                    # copy LibVLC plugin
+                    self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
+                                       "media_plugin_libvlc.dylib")
+
                     # CEF framework and vlc libraries goes inside Contents/Frameworks.
                     with self.prefix(src=os.path.join(pkgdir, 'lib', 'release')):
                         self.path("Chromium Embedded Framework.framework")
@@ -1588,14 +1606,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path("DullahanHelper (Renderer).app")
                         self.path("DullahanHelper (Plugin).app")
 
-                    # copy LibVLC dynamic libraries
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
+                        # Copy libvlc
                         self.path( "libvlc*.dylib*" )
-
-                    # copy LibVLC plugins folder
-                    with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release', 'plugins' ), dst="lib"):
-                        self.path("*.dylib")
-                        self.path("plugins.dat")
+                        # copy LibVLC plugins folder
+                        with self.prefix(src='plugins', dst="plugins"):
+                            self.path( "*.dylib" )
+                            self.path( "plugins.dat" )
 
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no
@@ -1871,6 +1887,9 @@ class LinuxManifest(ViewerManifest):
         self.args["actions"] = savedActions # Restore old actions
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+        if "package_dir" in self.args:
+            pkgdir = self.args['package_dir']
+
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
@@ -1879,22 +1898,18 @@ class LinuxManifest(ViewerManifest):
         self.path("LGPL-license.txt")
         self.path("res/firestorm_icon.png","firestorm_icon.png")
         with self.prefix("linux_tools"):
-            self.path("client-readme.txt","README-linux.txt")
             self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
-            self.path("client-readme-voice.txt","README-linux-voice.txt")
-            self.path("client-readme-joystick.txt","README-linux-joystick.txt")
+            self.path("wrapper.sh","secondlife")
             self.path("wrapper.sh","firestorm")
             with self.prefix(dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
                 self.path("refresh_desktop_app_entry.sh")
-                self.path("launch_url.sh")
             self.path("install.sh")
 
         with self.prefix(dst="bin"):
             self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
-            self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP
@@ -1905,6 +1920,8 @@ class LinuxManifest(ViewerManifest):
         # recurses, packaged again
         self.path("res-sdl")
 
+        # We  copy ll_icon.BMP in CMakeLists.txt to newview/res-sdl and this will let the above self.path step take  care of copying
+        # the correct branded icon
         # Get the icons based on the channel type
         icon_path = self.icon_path()
         print("DEBUG: icon_path '%s'" % icon_path)
@@ -1913,12 +1930,29 @@ class LinuxManifest(ViewerManifest):
             #with self.prefix(dst="res-sdl") :
             #    self.path("firestorm_256.bmp","ll_icon.BMP")
 
-        # plugins
-        with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            self.path("gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer.so")
-            self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+        with self.prefix(src=os.path.join(self.args['build'], os.pardir, "llwebrtc" ), dst="lib"):
+            self.path("libllwebrtc.so")
 
-        # CEF files 
+        # plugins
+        with self.prefix(dst="bin/llplugin"):
+            with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins')):
+                with self.prefix(src='cef'):
+                    self.path("libmedia_plugin_cef.so")
+
+                # Media plugins - LibVLC
+                with self.prefix(src='libvlc'):
+                    self.path("libmedia_plugin_libvlc.so")
+
+                # GStreamer 1.0 Media Plugin
+                with self.prefix(src='gstreamer10'):
+                    self.path("libmedia_plugin_gstreamer10.so")
+
+                # Media plugins - Example (useful for debugging - not shipped with release viewer)
+                if self.channel_type() != 'release':
+                    with self.prefix(src='example'):
+                        self.path("libmedia_plugin_example.so")
+
+
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
             self.path( "libEGL*" )
@@ -2034,6 +2068,9 @@ class LinuxManifest(ViewerManifest):
     def package_finish(self):
         # a standard map of strings for replacing in the templates
 
+        # When running as a GitHub Action job, RUNNER_TEMP is defined as the tmp dir
+        RUNNER_TEMP = os.getenv('RUNNER_TEMP')
+
         #installer_name = self.installer_base_name()
         installer_name = self.fs_installer_basename()
 
@@ -2054,8 +2091,18 @@ class LinuxManifest(ViewerManifest):
         # temporarily move directory tree so that it has the right
         # name in the tarfile
         realname = self.get_dst_prefix()
-        tempname = self.build_path_of(installer_name)
-        self.run_command(["mv", realname, tempname])
+        versionedName = self.build_path_of(installer_name)
+
+        tarName = versionedName + ".tar.xz"
+
+        # If using a github runner we divert packaging a little. Considering this wil be a VM/docker image
+        # we can just pack the final installer into RUNNER_TEMP and not into the usual stop we'd pick when
+        # not building a GHA release
+        if RUNNER_TEMP:
+            tarName = os.path.join(RUNNER_TEMP, self.package_file)
+
+        self.run_command(["mv", realname, versionedName])
+
         try:
             # only create tarball if it's a release build.
             if self.args['buildtype'].lower() == 'release':
@@ -2063,16 +2110,17 @@ class LinuxManifest(ViewerManifest):
                 # security etc.
                 self.run_command(['tar', '-C', self.get_build_prefix(),
                                   '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
-                                 tempname + '.tar.xz', installer_name])
+                                 tarName, installer_name])
+                self.set_github_output_path('viewer_app', tarName)
             else:
                 print("Skipping %s.tar.xz for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype']))
         finally:
-            self.run_command(["mv", tempname, realname])
+            self.run_command(["mv", versionedName, realname])
 
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
-            print("* Going strip-crazy on the packaged binaries, since this is a RELEASE build")
+            print("* Going strip-crazy on the packaged binaries, since this is a Release build")
             # makes some small assumptions about our packaged dir structure
             self.run_command(
                 ["find"] +
@@ -2081,65 +2129,40 @@ class LinuxManifest(ViewerManifest):
                 # ['-type', 'f', '!', '-name', '*.py',
                 ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin", "!", "-name", "*.lib", "!", "-name", "*.pdb",
                 # </FS:Ansariel> Remove VMP
+                 '!', '-name', '*.pak',
+                 '!', '-name', '*.bin',
+                 '!', '-name', '*.dat',
+                 '!', '-name', '*.crt',
+                 '!', '-name', '*.dll',
+                 '!', '-name', '*.lib',
+                 '!', '-name', '*.json',
                  '!', '-name', 'update_install', '-exec', 'strip', '-S', '{}', ';'])
 
-class Linux_i686_Manifest(LinuxManifest):
-    address_size = 32
+class Linux_x86_64_Manifest(LinuxManifest):
+    address_size = 64
 
     def construct(self):
-        super(Linux_i686_Manifest, self).construct()
+        super(Linux_x86_64_Manifest, self).construct()
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+        if "package_dir" in self.args:
+            pkgdir = self.args['package_dir']
+
         relpkgdir = os.path.join(pkgdir, "lib", "release")
-        debpkgdir = os.path.join(pkgdir, "lib", "debug")
+        #debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         with self.prefix(src=relpkgdir, dst="lib"):
-            self.path("libdb*.so")
-            self.path("libGLOD.so")
-            self.path("libuuid.so*")
-            self.path("libSDL-1.2.so.*")
-            self.path("libdirectfb-1.*.so.*")
-            self.path("libfusion-1.*.so.*")
-            self.path("libdirect-1.*.so.*")
-            #self.path("libopenjp2.so*")
-            self.path("libdirectfb-1.4.so.5")
-            self.path("libfusion-1.4.so.5")
-            self.path("libdirect-1.4.so.5*")
+            self.path("libSDL*.so.*")
+
             self.path("libalut.so*")
             self.path("libopenal.so*")
 
             # <FS:ND> Linking this breaks voice as stock openal.so does not have alcGetMixedBuffer
             #self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
             # </FS:ND>
-            
-            # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
-            # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
-            # and libfontconfig.so. Before we added support for library-file
-            # wildcards, though, this self.path() call specifically named
-            # libfontconfig.so.1.4.4 WITHOUT also copying the symlinks. When I
-            # (nat) changed the call to self.path("libfontconfig.so.*"), we
-            # ended up with the libfontconfig.so.1 symlink in the target
-            # directory as well. But guess what! At least on Ubuntu 10.04,
-            # certain viewer fonts look terrible with libfontconfig.so.1
-            # present in the target directory. Removing that symlink suffices
-            # to improve them. I suspect that means we actually do better when
-            # the viewer fails to find our packaged libfontconfig.so*, falling
-            # back on the system one instead -- but diagnosing and fixing that
-            # is a bit out of scope for the present project. Meanwhile, this
-            # particular wildcard specification gets us exactly what the
-            # previous call did, without having to explicitly state the
-            # version number.
-            # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
-            # Include libfreetype.so. but have it work as libfontconfig does.
-            self.path("libfreetype.so.*.*")
-
-            try:
-                self.path("libtcmalloc.so*") #formerly called google perf tools
-                pass
-            except:
-                print("tcmalloc files not found, skipping")
-                pass
+            if self.args['discord'] == 'ON':
+                self.path("libdiscord_partner_sdk.so*")
 
             # if self.args['fmodstudio'] == 'ON':
             if self.args['fmodstudio'].lower() == 'on':
@@ -2162,42 +2185,6 @@ class Linux_i686_Manifest(LinuxManifest):
 
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
-
-
-class Linux_x86_64_Manifest(LinuxManifest):
-    address_size = 64
-
-    def construct(self):
-        super(Linux_x86_64_Manifest, self).construct()
-
-        pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-        relpkgdir = os.path.join(pkgdir, "lib", "release")
-        debpkgdir = os.path.join(pkgdir, "lib", "debug")
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            #self.path("libffi*.so*")
-            # vivox 32-bit hack.
-            # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
-            # and place it in the prebuilt lib/release directory
-            # <FS:TS> No, we don't need to dink with this. A usable library
-            # is now in the slvoice package, and we need to just use it as is.
-            # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-
-            # if self.args['fmodstudio'] == 'ON':
-            if self.args['fmodstudio'].lower() == 'on':
-                try:
-                    self.path("libfmod.so")
-                    self.path("libfmod.so*")
-                    pass
-                except:
-                    print ("Skipping libfmod.so - not found")
-                    pass
-
-        with self.prefix(dst="bin"):
-            self.path2basename("../llplugin/slplugin", "SLPlugin")
-
-        self.path("secondlife-i686.supp")
-
 ################################################################
 # <FS:Ansariel> Added back for Mac compatibility reason
 def symlinkf(src, dst):

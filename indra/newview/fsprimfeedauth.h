@@ -61,7 +61,7 @@ public:
     void checkUserStatus();
     static bool isPendingAuth(){ return (sPrimfeedAuth != nullptr); }
     static bool isAuthorized(){ return (!gSavedPerAccountSettings.getString("FSPrimfeedOAuthToken").empty()); }
-    static void initiateAuthRequest();    
+    static void initiateAuthRequest();
     static void resetAuthStatus();
     
 private:

@@ -73,6 +73,8 @@
 #include <fstream>
 #include <exception>
 
+#include "llversioninfovars.h"
+
 // Bugsplat (http://bugsplat.com) crash reporting tool
 #ifdef LL_BUGSPLAT
 #include "bugsplatattributes.h"
@@ -242,7 +244,7 @@ namespace
             LLAppViewer* app = LLAppViewer::instance();
             if (!app->isSecondInstance() && !app->errorMarkerExists())
             {
-                // If marker doesn't exist, create a marker with 'other' code for next launch
+                // If marker doesn't exist, create a marker with 'other' or 'logout' code for next launch
                 // otherwise don't override existing file
                 // Any unmarked crashes will be considered as freezes
                 if (app->logoutRequestSent())

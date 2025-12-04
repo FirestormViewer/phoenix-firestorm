@@ -45,7 +45,6 @@ LLFloaterNotificationsTabbed::LLFloaterNotificationsTabbed(const LLSD& key) : LL
     mGroupNoticeMessageList(NULL),
     mTransactionMessageList(NULL),
     mSystemMessageList(NULL),
-    mNotificationsSeparator(NULL),
     mNotificationsTabContainer(NULL),
     mNotificationsToGo(), // <FS:Beq/> FIRE-35130 bugsplat in notification::idle updates. 
     NOTIFICATION_TABBED_ANCHOR_NAME("notification_well_panel"),
@@ -55,7 +54,7 @@ LLFloaterNotificationsTabbed::LLFloaterNotificationsTabbed(const LLSD& key) : LL
 {
     setOverlapsScreenChannel(true);
     mNotificationUpdates.reset(new NotificationTabbedChannel(this));
-    mNotificationsSeparator = new LLNotificationSeparator();
+    mNotificationsSeparator = std::make_unique<LLNotificationSeparator>();
 }
 
 //---------------------------------------------------------------------------------
@@ -122,6 +121,8 @@ LLFloaterNotificationsTabbed::~LLFloaterNotificationsTabbed()
 {
     // <FS:Ansariel> Remember last tab used
     gSavedPerAccountSettings.setS32("FSLastNotificationsTab", mNotificationsTabContainer->getCurrentPanelIndex());
+
+    mNotificationsSeparator.reset();
 }
 
 //---------------------------------------------------------------------------------

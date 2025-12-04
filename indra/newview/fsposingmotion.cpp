@@ -36,7 +36,7 @@ FSPosingMotion::FSPosingMotion(const LLUUID& id) : LLKeyframeMotion(id)
     mJointMotionList = &dummyMotionList;
 }
 
-LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter *character)
+LLMotion::LLMotionInitStatus FSPosingMotion::onInitialize(LLCharacter* character)
 {
     if (!character)
         return STATUS_FAILURE;
@@ -184,7 +184,7 @@ void FSPosingMotion::removeJointFromState(LLJoint* joint)
 
 void FSPosingMotion::setJointState(LLJoint* joint, U32 state)
 {
-    if (mJointPoses.size() < 1)
+    if (mJointPoses.empty())
         return;
     if (!joint)
         return;
@@ -208,7 +208,7 @@ void FSPosingMotion::setJointState(LLJoint* joint, U32 state)
 
 FSJointPose* FSPosingMotion::getJointPoseByJointName(const std::string& name)
 {
-    if (mJointPoses.size() < 1)
+    if (name.empty() || mJointPoses.empty())
         return nullptr;
 
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
@@ -222,15 +222,33 @@ FSJointPose* FSPosingMotion::getJointPoseByJointName(const std::string& name)
     return nullptr;
 }
 
+FSJointPose* FSPosingMotion::getJointPoseByJointNumber(const S32 number)
+{
+    if (mJointPoses.empty())
+        return nullptr;
+    if (number < 0)
+        return nullptr;
+
+    for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    {
+        if (poserJoint_iter->getJointNumber() != number)
+            continue;
+
+        return &*poserJoint_iter;
+    }
+
+    return nullptr;
+}
+
 bool FSPosingMotion::currentlyPosingJoint(LLJoint* joint)
 {
-    if (mJointPoses.size() < 1)
+    if (mJointPoses.empty())
         return false;
 
     if (!joint)
         return false;
 
-    LLPose* pose = this->getPose();
+    LLPose* pose = getPose();
     if (!pose)
         return false;
 
@@ -270,14 +288,14 @@ void FSPosingMotion::setJointBvhLock(FSJointPose* joint, bool lockInBvh)
     joint->zeroBaseRotation(lockInBvh);
 }
 
-bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, std::string selectedJointNames)
+bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionToLoad, F32 timeToLoadAt, const std::vector<S32>& selectedJointNumbers)
 {
     FSPosingMotion* motionToLoadAsFsPosingMotion = static_cast<FSPosingMotion*>(motionToLoad);
     if (!motionToLoadAsFsPosingMotion)
         return false;
 
     LLJoint::JointPriority priority = motionToLoad->getPriority();
-    bool                   motionIsForAllJoints = selectedJointNames.empty();
+    bool                   motionIsForAllJoints = selectedJointNumbers.empty();
 
     LLQuaternion rot;
     LLVector3    position, scale;
@@ -285,16 +303,18 @@ bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionT
 
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {
-        std::string jointName = poserJoint_iter->jointName();
+        S32         jointNumber = poserJoint_iter->getJointNumber();
+        std::string jointName   = poserJoint_iter->jointName();
 
-        bool motionIsForThisJoint = selectedJointNames.find(jointName) != std::string::npos;
+        bool motionIsForThisJoint =
+            std::find(selectedJointNumbers.begin(), selectedJointNumbers.end(), jointNumber) != selectedJointNumbers.end();
         if (!motionIsForAllJoints && !motionIsForThisJoint)
             continue;
 
         hasRotation = hasPosition = hasScale = false;
         motionToLoadAsFsPosingMotion->getJointStateAtTime(jointName, timeToLoadAt, &hasRotation, &rot, &hasPosition, &position, &hasScale, &scale);
 
-        if (hasRotation)
+        if (hasRotation && !poserJoint_iter->userHasSetBaseRotationToZero())
             poserJoint_iter->setBaseRotation(rot, priority);
 
         if (hasPosition)
@@ -337,16 +357,17 @@ void FSPosingMotion::getJointStateAtTime(std::string jointPoseName, F32 timeToLo
     }
 }
 
-bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, std::string recapturedJointNames)
+bool FSPosingMotion::otherMotionAnimatesJoints(LLKeyframeMotion* motionToQuery, const std::vector<S32>& recapturedJointNumbers)
 {
     FSPosingMotion* motionToLoadAsFsPosingMotion = static_cast<FSPosingMotion*>(motionToQuery);
     if (!motionToLoadAsFsPosingMotion)
         return false;
 
-    return motionToLoadAsFsPosingMotion->motionAnimatesJoints(recapturedJointNames);
+    return motionToLoadAsFsPosingMotion->motionAnimatesJoints(recapturedJointNumbers);
 }
 
-bool FSPosingMotion::motionAnimatesJoints(std::string recapturedJointNames)
+// Do not try to access FSPosingMotion state; you are a LLKeyframeMotion cast as a FSPosingMotion, NOT an FSPosingMotion.
+bool FSPosingMotion::motionAnimatesJoints(const std::vector<S32>& recapturedJointNumbers)
 {
     if (mJointMotionList == nullptr)
         return false;
@@ -354,7 +375,9 @@ bool FSPosingMotion::motionAnimatesJoints(std::string recapturedJointNames)
     for (U32 i = 0; i < mJointMotionList->getNumJointMotions(); i++)
     {
         JointMotion* jm = mJointMotionList->getJointMotion(i);
-        if (recapturedJointNames.find(jm->mJointName) == std::string::npos)
+        LLJoint*     joint = mCharacter->getJoint(jm->mJointName);
+
+        if (std::find(recapturedJointNumbers.begin(), recapturedJointNumbers.end(), joint->getJointNum()) == recapturedJointNumbers.end())
             continue;
 
         if (jm->mRotationCurve.mNumKeys > 0)
@@ -364,20 +387,19 @@ bool FSPosingMotion::motionAnimatesJoints(std::string recapturedJointNames)
     return false;
 }
 
-void FSPosingMotion::resetBonePriority(std::string boneNamesToReset)
+void FSPosingMotion::resetBonePriority(const std::vector<S32>& boneNumbersToReset)
 {
-    if (boneNamesToReset.empty())
-        return;
-
-    for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+    for (S32 boneNumber : boneNumbersToReset)
     {
-        std::string jointName = poserJoint_iter->jointName();
-        if (boneNamesToReset.find(jointName) != std::string::npos)
-            poserJoint_iter->setJointPriority(LLJoint::LOW_PRIORITY);
+        for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
+        {
+            if (poserJoint_iter->getJointNumber() == boneNumber)
+                poserJoint_iter->setJointPriority(LLJoint::LOW_PRIORITY);
+        }
     }
 }
 
-bool FSPosingMotion::vectorsNotQuiteEqual(LLVector3 v1, LLVector3 v2) const
+bool FSPosingMotion::vectorsNotQuiteEqual(const LLVector3& v1, const LLVector3& v2) const
 {
     if (vectorAxesAlmostEqual(v1.mV[VX], v2.mV[VX]) &&
         vectorAxesAlmostEqual(v1.mV[VY], v2.mV[VY]) &&

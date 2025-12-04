@@ -247,6 +247,7 @@
 			<menu_item_check label="Auswahlstrahl anzeigen" name="Show Selection Beam"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
 			<menu_item_check label="- Durchsichtige geriggte Netze einschließen" name="Include Transparent Rigged"/>
+			<menu_item_check label="Durchsichtig Reflexionstests hervorheben" name="Highlight Transparent Probes"/>
 			<menu_item_check label="Keine Nachverabeitung" name="No Post"/>
 			<menu label="Detaillevel auswählen" name="Selection level of detail">
 				<menu_item_check label="Standard" name="Default lod setting"/>
@@ -560,6 +561,7 @@
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
+			<menu_item_check label="Animierte Avatar-System-Kleidung rendern" name="Render Avatar Cloth"/>
 			<menu_item_check label="Sammeln von Vertex Buffern für Schrift aktivieren" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>

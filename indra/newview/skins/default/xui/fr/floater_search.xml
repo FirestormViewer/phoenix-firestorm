@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Search" title="Recherche">
+	<layout_stack name="stack1">
+		<layout_panel name="nav_controls">
+			<button tool_tip="Revenir en arrière" name="back"/>
+			<button tool_tip="Aller vers l'avant" name="forward"/>
+			<button tool_tip="Arrêter la navigation" name="stop"/>
+			<button tool_tip="Recharger la page" name="reload"/>
+			<combo_box name="address" tool_tip="Entrez l'URL ici"/>
+			<icon name="media_secure_lock_flag" tool_tip="Navigation sécurisée"/>
+			<button tool_tip="Ouvrir l'URL dans le navigateur de votre ordinateur" name="popexternal"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

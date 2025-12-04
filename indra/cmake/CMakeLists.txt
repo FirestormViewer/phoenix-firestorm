@@ -11,24 +11,25 @@ set(cmake_SOURCE_FILES
         Audio.cmake
         Boost.cmake
         bugsplat.cmake
+        BuildPackagesInfo.cmake
         BuildVersion.cmake
         CEFPlugin.cmake
         CMakeCopyIfDifferent.cmake
-        ConfigurePkgConfig.cmake
-        CURL.cmake
         Copy3rdPartyLibs.cmake
-        DBusGlib.cmake
+        CURL.cmake
         DeploySharedLibs.cmake
         Discord.cmake
         DragDrop.cmake
         EXPAT.cmake
         FindAutobuild.cmake
+        FindPipeWire.cmake
         FMODSTUDIO.cmake
         FreeType.cmake
         GLEXT.cmake
-        GLH.cmake
+        GLIB.cmake
         GLM.cmake
         GLOD.cmake # <FS:Ansariel> Bring back GLOD
+        GStreamer10Plugin.cmake
         Havok.cmake
         Hunspell.cmake
         LLAddBuildTest.cmake
@@ -55,6 +56,7 @@ set(cmake_SOURCE_FILES
         Prebuilt.cmake
         PulseAudio.cmake
         Python.cmake
+        SDL3.cmake
         SSE2NEON.cmake
         TemplateCheck.cmake
         TinyEXR.cmake

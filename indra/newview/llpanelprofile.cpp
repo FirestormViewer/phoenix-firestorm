@@ -110,11 +110,11 @@ LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::stri
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("post_profile_image_coro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("post_profile_image_coro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
     httpOpts->setFollowRedirects(true);
 
     LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, first_data, httpOpts, httpHeaders);
@@ -142,9 +142,9 @@ LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::stri
     }
 
     // Upload the image
-    LLCore::HttpRequest::ptr_t uploaderhttpRequest(new LLCore::HttpRequest);
-    LLCore::HttpHeaders::ptr_t uploaderhttpHeaders(new LLCore::HttpHeaders);
-    LLCore::HttpOptions::ptr_t uploaderhttpOpts(new LLCore::HttpOptions);
+    LLCore::HttpRequest::ptr_t uploaderhttpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpHeaders::ptr_t uploaderhttpHeaders = std::make_shared<LLCore::HttpHeaders>();
+    LLCore::HttpOptions::ptr_t uploaderhttpOpts = std::make_shared<LLCore::HttpOptions>();
     S64 length;
 
     {
@@ -716,6 +716,7 @@ LLPanelProfileSecondLife::LLPanelProfileSecondLife()
     , mWaitingForImageUpload(false)
     , mAllowPublish(false)
     , mHideAge(false)
+    , mAllowEdit(true)
     , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
     , mPreview(false)                  // <AS:Chanayane> Preview button
 {
@@ -735,6 +736,10 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     if (mAvatarNameCacheConnection.connected())
     {
         mAvatarNameCacheConnection.disconnect();
+    }
+    if (mMenuNameCacheConnection.connected())
+    {
+        mMenuNameCacheConnection.disconnect();
     }
 
     // <FS:Ansariel> RLVa support
@@ -850,20 +855,21 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     LLUUID avatar_id = getAvatarId();
 
     bool own_profile = getSelfProfile();
+    bool allow_edit = own_profile && mAllowEdit;
 
     mGroupList->setShowNone(!own_profile);
 
-    //childSetVisible("notes_panel", !own_profile); // <FS:Ansariel> Doesn't exist (anymore)
+    //childSetVisible("notes_panel", !allow_edit); // <FS:Ansariel> Doesn't exist (anymore)
     // <FS:Ansariel> Fix LL UI/UX design accident
-    //childSetVisible("settings_panel", own_profile);
-    //childSetVisible("about_buttons_panel", own_profile);
-    mSaveDescriptionChanges->setVisible(own_profile);
-    mDiscardDescriptionChanges->setVisible(own_profile);
-    mShowInSearchCheckbox->setVisible(own_profile);
+    //childSetVisible("settings_panel", allow_edit);
+    //childSetVisible("about_buttons_panel", allow_edit);
+    mSaveDescriptionChanges->setVisible(allow_edit);
+    mDiscardDescriptionChanges->setVisible(allow_edit);
+    mShowInSearchCheckbox->setVisible(allow_edit);
     // </FS:Ansariel>
-    mPreviewButton->setVisible(own_profile); // <AS:Chanayane> Preview button
+    mPreviewButton->setVisible(allow_edit); // <AS:Chanayane> Preview button
 
-    if (own_profile)
+    if (allow_edit)
     {
         // Group list control cannot toggle ForAgent loading
         // Less than ideal, but viewing own profile via search is edge case
@@ -912,7 +918,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     mCopyMenuButton->setMenu("menu_fs_profile_name_field.xml", LLMenuButton::MP_BOTTOM_RIGHT);
     // </FS:Ansariel>
 
-    mDescriptionEdit->setParseHTML(!own_profile);
+    mDescriptionEdit->setParseHTML(!allow_edit);
 
     if (!own_profile)
     {
@@ -1355,7 +1361,7 @@ void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
     {
         mAllowPublish = avatar_data->flags & AVATAR_ALLOW_PUBLISH;
         // <FS:Ansariel> Fix LL UI/UX design accident
-        //mShowInSearchCombo->setValue(mAllowPublish);
+        //mShowInSearchCombo->setValue(mAllowPublish ? LLSD::Integer(1) : LLSD::Integer(0));
         mShowInSearchCheckbox->setValue(mAllowPublish);
         // </FS:Ansariel>
     }
@@ -1797,7 +1803,7 @@ void LLPanelProfileSecondLife::setLoaded()
             mHideAgeCheckbox->setEnabled(true);
         // </FS:Ansariel>
         }
-        mDescriptionEdit->setEnabled(true);
+        mDescriptionEdit->setEnabled(mAllowEdit);
     }
 }
 
@@ -2043,7 +2049,7 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     }
     else if (item_name == "edit_display_name")
     {
-        LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCacheSetName, this, _1, _2));
+        mMenuNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCacheSetName, this, _1, _2));
         LLFirstUse::setDisplayName(false);
     }
     else if (item_name == "edit_partner")

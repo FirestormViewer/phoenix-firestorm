@@ -44,26 +44,20 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
     std::string cmd = findCommand(env_var, override);
     if (cmd.empty())
     {
-        LL_WARNS() << "Editor command is empty or not set" << LL_ENDL;
-// <FS:CR> FIRE-10320 If no editor is set, fallback on the system open handler
-        //return EC_NOT_SPECIFIED;
-        LL_WARNS() << "Falling back on generic open handler" << LL_ENDL;
+        LL_INFOS() << "Editor command is empty or not set, falling back to OS open handler" << LL_ENDL;
 #if LL_WINDOWS
-        std::string comspec(getenv("COMSPEC"));
-        comspec.append(" /C START \"%s\"");
-        cmd = findCommand("", comspec);
+        static const std::string os_cmd = "%SystemRoot%\\explorer.exe \"%s\"";
 #elif LL_DARWIN
-        cmd = findCommand("", "/usr/bin/open \"%s\"");
+        static const std::string os_cmd = "/usr/bin/open \"%s\"";
 #elif LL_LINUX
-        // xdg-open might not actually be installed, but it's out best shot
-        cmd = findCommand("", "/usr/bin/xdg-open \"%s\"");
+        static const std::string os_cmd = "/usr/bin/xdg-open \"%s\"";
 #endif
+        cmd = findCommand("", os_cmd);
         if (cmd.empty())
         {
-            LL_WARNS() << "Failed to find generic open handler: " << cmd << LL_ENDL;
+            LL_WARNS() << "Failed to find OS open handler \"" << cmd << "\"" << LL_ENDL;
             return EC_NOT_SPECIFIED;
         }
-// </FS:CR>
     }
 
     string_vec_t tokens;

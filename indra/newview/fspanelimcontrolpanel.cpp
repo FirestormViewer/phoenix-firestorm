@@ -32,6 +32,8 @@
 
 #include "fsparticipantlist.h"
 #include "llagent.h"
+#include "llchatentry.h"
+#include "fsfloaterim.h"
 #include "llimview.h"
 #include "llspeakers.h"
 
@@ -88,7 +90,16 @@ void FSPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
             return;
 
         mParticipantList = new FSParticipantList(speaker_manager, getChild<LLAvatarList>("grp_speakers_list"), true,false);
+        if (mParticipantList)
+        {
+            mParticipantList->setInsertMentionCallback(boost::bind(&FSPanelGroupControlPanel::insertMentionAtCursor, this, _1));
+        }
     }
+}
+
+void FSPanelGroupControlPanel::insertMentionAtCursor(const LLUUID& avatar_id)
+{
+    FSFloaterIM::getInstance(getSessionId())->findChild<LLChatEntry>("chat_editor")->insertMentionAtCursor("secondlife:///app/agent/" + avatar_id.asString() + "/mention");
 }
 
 uuid_vec_t FSPanelGroupControlPanel::getParticipants() const

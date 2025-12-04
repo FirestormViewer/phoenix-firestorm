@@ -37,13 +37,12 @@
 #include "llviewercontrol.h"
 #include "llwin32headers.h"
 
-#if LL_LINUX || LL_DARWIN
-# include "llfilepicker.h"
+#if LL_SDL_WINDOW
+#include "SDL3/SDL.h"
 #endif
 
-#ifdef LL_FLTK
-  #include "FL/Fl.H"
-  #include "FL/Fl_Native_File_Chooser.H"
+#if LL_LINUX || LL_DARWIN
+# include "llfilepicker.h"
 #endif
 
 #if LL_WINDOWS
@@ -70,7 +69,103 @@ bool LLDirPicker::check_local_file_access_enabled()
     return true;
 }
 
-#if LL_WINDOWS
+#if LL_SDL_WINDOW
+
+LLDirPicker::LLDirPicker() :
+    mFileName(NULL),
+    mLocked(false)
+{
+    reset();
+}
+
+LLDirPicker::~LLDirPicker()
+{
+}
+
+void LLDirPicker::reset()
+{
+}
+
+bool LLDirPicker::getDir(std::string* filename, bool blocking)
+{
+    return false;
+}
+
+std::string LLDirPicker::getDirName()
+{
+    return {};
+}
+
+bool LLDirPicker::getDirModeless(std::string* filename,
+    void (*callback)(bool, std::string&, void*),
+    void* userdata)
+{
+    if (mLocked)
+    {
+        return false;
+    }
+
+    // if local file browsing is turned off, return without opening dialog
+    if (!check_local_file_access_enabled())
+    {
+        return false;
+    }
+
+    {
+        struct LLSDLFileUserdata
+        {
+            LLSDLFileUserdata(void (*callback_func)(bool, std::string&, void*), void* callback_userdata)
+                : mCallback(callback_func), mUserdata(callback_userdata)
+            {
+            }
+            void (*mCallback)(bool, std::string&, void*);
+            void* mUserdata;
+        };
+
+        auto sdl_callback = [](void* userdata, const char* const* filelist, int filter)
+            {
+                LLSDLFileUserdata* callback_struct = (LLSDLFileUserdata*)userdata;
+
+                auto* callback_func = callback_struct->mCallback;
+                auto* callback_data = callback_struct->mUserdata;
+                delete callback_struct; // delete callback container
+
+                std::string rtn;
+                if (!filelist)
+                {
+                    LL_WARNS() << "Error during SDL folder picking: " << SDL_GetError() << LL_ENDL;
+                    callback_func(false, rtn, callback_data);
+                    return;
+                }
+                else if (!*filelist)
+                {
+                    LL_INFOS() << "User did not select any folders. Dialog likely cancelled." << LL_ENDL;
+                    callback_func(false, rtn, callback_data);
+                    return;
+                }
+
+                while (*filelist) {
+                    rtn = std::string(*filelist);
+                    break;
+                }
+                callback_func(true, rtn, callback_data);
+
+            };
+
+        LLSDLFileUserdata* llfilecallback = new LLSDLFileUserdata(callback, userdata);
+
+        SDL_PropertiesID props = SDL_CreateProperties();
+        SDL_SetPointerProperty(props, SDL_PROP_FILE_DIALOG_WINDOW_POINTER, SDL_GL_GetCurrentWindow());
+        SDL_ShowFileDialogWithProperties(SDL_FILEDIALOG_OPENFOLDER, sdl_callback, llfilecallback, props);
+
+        SDL_DestroyProperties(props);
+    }
+
+    return true;
+}
+
+
+#elif LL_WINDOWS
 
 LLDirPicker::LLDirPicker() :
     mFileName(NULL),
@@ -172,6 +267,13 @@ bool LLDirPicker::getDir(std::string* filename, bool blocking)
     return success;
 }
 
+bool LLDirPicker::getDirModeless(std::string* filename,
+    void (*callback)(bool, std::string&, void*),
+    void* userdata)
+{
+    return false;
+}
+
 std::string LLDirPicker::getDirName()
 {
     return mDir;
@@ -200,12 +302,18 @@ void LLDirPicker::reset()
 }
 
 
-//static
 bool LLDirPicker::getDir(std::string* filename, bool blocking)
 {
     LLFilePicker::ELoadFilter filter=LLFilePicker::FFLOAD_DIRECTORY;
 
     return mFilePicker->getOpenFile(filter, true);
+}
+
+bool LLDirPicker::getDirModeless(std::string* filename,
+    void (*callback)(bool, std::string&, void*),
+    void* userdata)
+{
+    return false;
 }
 
 std::string LLDirPicker::getDirName()
@@ -219,95 +327,49 @@ LLDirPicker::LLDirPicker() :
     mFileName(NULL),
     mLocked(false)
 {
-#ifndef LL_FLTK
     mFilePicker = new LLFilePicker();
-#endif
-
     reset();
 }
 
 LLDirPicker::~LLDirPicker()
 {
-#ifndef LL_FLTK
     delete mFilePicker;
-#endif
 }
 
 
 void LLDirPicker::reset()
 {
-#ifndef LL_FLTK
     if (mFilePicker)
         mFilePicker->reset();
-#else
-    mDir = "";
-#endif
 }
 
 bool LLDirPicker::getDir(std::string* filename, bool blocking)
 {
     reset();
+
     // if local file browsing is turned off, return without opening dialog
     if (!check_local_file_access_enabled())
     {
         return false;
     }
 
-#ifndef LL_FLTK
-#if !LL_MESA_HEADLESS
-
-    if (mFilePicker)
-    {
-        GtkWindow* picker = mFilePicker->buildFilePicker(false, true,
-                                 "dirpicker");
-
-        if (picker)
-        {
-           gtk_window_set_title(GTK_WINDOW(picker), LLTrans::getString("choose_the_directory").c_str());
-           gtk_widget_show_all(GTK_WIDGET(picker));
-           gtk_main();
-           return (!mFilePicker->getFirstFile().empty());
-        }
-    }
-#endif // !LL_MESA_HEADLESS
-
     return false;
-#else
-    gViewerWindow->getWindow()->beforeDialog();
-    Fl_Native_File_Chooser flDlg;
-    flDlg.title(LLTrans::getString("choose_the_directory").c_str());
-    flDlg.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY );
+}
 
-    int res = flDlg.show();
-
-    gViewerWindow->getWindow()->afterDialog();
-
-    if( res == 0 )
-    {
-        char const *pDir = flDlg.filename(0);
-        if( pDir )
-            mDir = pDir;
-    }
-    else if( res == -1 )
-    {
-        LL_WARNS() << "FLTK failed: " <<  flDlg.errmsg() << LL_ENDL;
-    }
-
-    return !mDir.empty();
-#endif
+bool LLDirPicker::getDirModeless(std::string* filename,
+    void (*callback)(bool, std::string&, void*),
+    void* userdata)
+{
+    return false;
 }
 
 std::string LLDirPicker::getDirName()
 {
-#ifndef LL_FLTK
     if (mFilePicker)
     {
         return mFilePicker->getFirstFile();
     }
     return "";
-#else
-    return mDir;
-#endif
 }
 
 #else // not implemented
@@ -331,6 +393,13 @@ bool LLDirPicker::getDir(std::string* filename, bool blocking)
     return false;
 }
 
+bool LLDirPicker::getDirModeless(std::string* filename,
+    void (*callback)(bool, std::string&, void*),
+    void* userdata)
+{
+    return false;
+}
+
 std::string LLDirPicker::getDirName()
 {
     return "";
@@ -344,7 +413,9 @@ std::queue<LLDirPickerThread*> LLDirPickerThread::sDeadQ;
 
 void LLDirPickerThread::getFile()
 {
-#if LL_WINDOWS
+#if LL_SDL_WINDOW
+    runModeless();
+#elif LL_WINDOWS
     start();
 #else
     run();
@@ -372,6 +443,32 @@ void LLDirPickerThread::run()
         sDeadQ.push(this);
     }
 
+}
+
+void LLDirPickerThread::runModeless()
+{
+    LLDirPicker picker;
+    bool result = picker.getDirModeless(&mProposedName, modelessStringCallback, this);
+    if (!result)
+    {
+        LLMutexLock lock(sMutex);
+        sDeadQ.push(this);
+    }
+}
+
+void LLDirPickerThread::modelessStringCallback(bool success,
+    std::string& response,
+    void* user_data)
+{
+    LLDirPickerThread* picker = (LLDirPickerThread*)user_data;
+    {
+        LLMutexLock lock(sMutex);
+        if (success)
+        {
+            picker->mResponses.push_back(response);
+        }
+        sDeadQ.push(picker);
+    }
 }
 
 //static

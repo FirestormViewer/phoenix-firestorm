@@ -21,7 +21,6 @@
 // external library headers
 #include "llapr.h"
 #include "apr_thread_proc.h"
-#include <boost/function.hpp>
 #include <boost/algorithm/string/find_iterator.hpp>
 #include <boost/algorithm/string/finder.hpp>
 // other Linden headers
@@ -95,7 +94,7 @@ static std::string readfile(const std::string& pathname, const std::string& desc
     {
         use_desc = "in " + pathname;
     }
-    std::ifstream inf(pathname.c_str());
+    llifstream  inf(pathname.c_str());
     std::string output;
     if (!std::getline(inf, output))
     {
@@ -126,6 +125,8 @@ void waitfor(LLProcess& proc, int timeout=60)
     {
         yield();
     }
+    // Pump once more after the process exits to flush any final events such as EOF.
+    yield(0);
     std::string msg = "process took longer than " + std::to_string(timeout) + " seconds to terminate";
     tut::ensure(msg, i < timeout);
 }
@@ -137,6 +138,8 @@ void waitfor(LLProcess::handle h, const std::string& desc, int timeout=60)
     {
         yield();
     }
+    // Pump once more after the process exits to flush any final events such as EOF.
+    yield(0);
     std::string msg = "process took longer than " + std::to_string(timeout) + " seconds to terminate";
     tut::ensure(msg, i < timeout);
 }
@@ -182,7 +185,7 @@ struct PythonProcessLauncher
             const char* APR_LOG = getenv("APR_LOG");
             if (APR_LOG && *APR_LOG)
             {
-                std::ifstream inf(APR_LOG);
+                llifstream inf(APR_LOG);
                 if (! inf.is_open())
                 {
                     LL_WARNS() << "Couldn't open '" << APR_LOG << "'" << LL_ENDL;
@@ -260,9 +263,12 @@ static std::string python_out(const std::string& desc, const CONTENT& script)
 }
 
 /// Create a temporary directory and clean it up later.
-class NamedTempDir: public boost::noncopyable
+class NamedTempDir
 {
 public:
+    NamedTempDir(const NamedTempDir&) = delete;
+    NamedTempDir& operator=(const NamedTempDir&) = delete;
+
     NamedTempDir():
         mPath(NamedTempFile::temp_path()),
         mCreated(boost::filesystem::create_directories(mPath))
@@ -834,7 +840,7 @@ namespace tut
         // How do we know it's not terminated? By making it respond to
         // a specific stimulus in a specific way.
         {
-            std::ofstream outf(to.getName().c_str());
+            llofstream outf(to.getName().c_str());
             outf << "go";
         } // flush and close.
         // now wait for the script to terminate... one way or another.
@@ -897,7 +903,7 @@ namespace tut
         // How do we know it's not terminated? By making it respond to
         // a specific stimulus in a specific way.
         {
-            std::ofstream outf(to.getName().c_str());
+            llofstream outf(to.getName().c_str());
             outf << "go";
         } // flush and close.
         // now wait for the script to terminate... one way or another.
@@ -1091,8 +1097,11 @@ namespace tut
         ensure_equals("bad child exit code",   py.mPy->getStatus().mData,  0);
     }
 
-    struct EventListener: public boost::noncopyable
+    struct EventListener
     {
+        EventListener(const EventListener&) = delete;
+        EventListener& operator=(const EventListener&) = delete;
+
         EventListener(LLEventPump& pump)
         {
             mConnection =
@@ -1203,8 +1212,8 @@ namespace tut
     {
         set_test_name("ReadPipe \"eof\" event");
         PythonProcessLauncher py(get_test_name(),
-            "from __future__ import print_function\n"
-            "print('Hello from Python!')\n");
+            "import time\n"
+            "time.sleep(1.5)\n");
         py.mParams.files.add(LLProcess::FileParam()); // stdin
         py.mParams.files.add(LLProcess::FileParam("pipe")); // stdout
         py.launch();

@@ -151,12 +151,14 @@
 #include "llcoros.h"
 #include "llexception.h"
 #include "cef/dullahan_version.h"
-#if !LL_LINUX
 #include "vlc/libvlc_version.h"
-#endif // LL_LINUX
 
 #if LL_DARWIN
 #include "llwindowmacosx.h"
+#endif
+
+#if LL_SDL_WINDOW
+#include "llwindowsdl.h"
 #endif
 
 // Third party library includes
@@ -200,7 +202,6 @@
 #include "lltracker.h"
 #include "llviewerparcelmgr.h"
 #include "llworldmapview.h"
-#include "llpostprocess.h"
 
 #include "lldebugview.h"
 #include "llconsole.h"
@@ -238,7 +239,6 @@
 #include "llfloaterflickr.h"
 #include "fsfloaterprimfeed.h" // <FS:Beq/> Primfeed Floater
 #include "llsidepanelinventory.h"
-#include "llatmosphere.h"
 
 // includes for idle() idleShutdown()
 #include "llviewercontrol.h"
@@ -293,14 +293,10 @@ using namespace LL;
 #include "nd/ndetw.h" // <FS:ND/> Windows Event Tracing, does nothing on OSX/Linux.
 #include "nd/ndlogthrottle.h"
 
+#include "aoengine.h"
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 #include "bugsplatattributes.h"
-// #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
-
-#if LL_LINUX && LL_GTK
-#include "glib.h"
-#endif // (LL_LINUX) && LL_GTK
 
 #ifdef LL_DISCORD
 #define DISCORDPP_IMPLEMENTATION
@@ -329,7 +325,7 @@ extern bool gRandomizeFramerate;
 extern bool gPeriodicSlowFrame;
 extern bool gDebugGL;
 
-#if LL_DARWIN
+#if LL_DARWIN || LL_SDL_WINDOW
 extern bool gHiDPISupport;
 #endif
 
@@ -623,7 +619,7 @@ static void settings_to_globals()
     LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLContextCoreProfile");
 #endif
     LLRender::sNsightDebugSupport = gSavedSettings.getBOOL("RenderNsightDebugSupport");
-    LLImageGL::sGlobalUseAnisotropic    = gSavedSettings.getBOOL("RenderAnisotropic");
+    LLRender::sAnisotropicFilteringLevel = static_cast<F32>(gSavedSettings.getU32("RenderAnisotropicLevel"));
     LLImageGL::sCompressTextures        = gSavedSettings.getBOOL("RenderCompressTextures");
     LLVOVolume::sLODFactor              = llclamp(gSavedSettings.getF32("RenderVolumeLODFactor"), 0.01f, MAX_LOD_FACTOR);
     LLVOVolume::sDistanceFactor         = 1.f-LLVOVolume::sLODFactor * 0.1f;
@@ -649,6 +645,9 @@ static void settings_to_globals()
 
 #if LL_DARWIN
     LLWindowMacOSX::sUseMultGL = gSavedSettings.getBOOL("RenderAppleUseMultGL");
+#endif
+
+#if LL_DARWIN || LL_SDL_WINDOW
     gHiDPISupport = gSavedSettings.getBOOL("RenderHiDPI");
 #endif
 }
@@ -756,14 +755,12 @@ LLAppViewer::LLAppViewer()
     // that touches files should really go through the lldir API
 
     // <FS:ND> Init our custom directories, not from SecondLife
-
     // gDirUtilp->initAppDirs("SecondLife");
 #if ADDRESS_SIZE == 64
-    gDirUtilp->initAppDirs( APP_NAME + "_x64" );
+    gDirUtilp->initAppDirs(APP_NAME + "_x64");
 #else
     gDirUtilp->initAppDirs(APP_NAME);
 #endif
-
     // </FS:ND>
 
     //
@@ -1317,7 +1314,7 @@ bool LLAppViewer::init()
     gGLActive = false;
 
     // <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD
+//#if LL_RELEASE_FOR_DOWNLOAD && !LL_LINUX
 //    // Skip updater if this is a non-interactive instance
 //    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
@@ -1437,8 +1434,8 @@ bool LLAppViewer::init()
     /// Tell the Coprocedure manager how to discover and store the pool sizes
     // what I wanted
     LLCoprocedureManager::getInstance()->setPropertyMethods(
-        boost::bind(&LLControlGroup::getU32, boost::ref(gSavedSettings), _1),
-        boost::bind(&LLControlGroup::declareU32, boost::ref(gSavedSettings), _1, _2, _3, LLControlVariable::PERSIST_ALWAYS));
+        std::bind(&LLControlGroup::getU32, std::ref(gSavedSettings), std::placeholders::_1),
+        std::bind(&LLControlGroup::declareU32, std::ref(gSavedSettings), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, LLControlVariable::PERSIST_ALWAYS));
 
     // initializing the settings sanity checker
     SanityCheck::instance().init();
@@ -1575,6 +1572,8 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+    LL_RECORD_BLOCK_TIME(FTM_FRAME);
+    LL_PROFILE_GPU_ZONE("Frame");
 #ifdef LL_DISCORD
     {
         LL_PROFILE_ZONE_NAMED("discord_callbacks");
@@ -1582,8 +1581,6 @@ bool LLAppViewer::doFrame()
     }
 #endif
 
-    LL_RECORD_BLOCK_TIME(FTM_FRAME);
-    LL_PROFILE_GPU_ZONE("Frame");
     {
     // and now adjust the visuals from previous frame.
     if(LLPerfStats::tunables.userAutoTuneEnabled && LLPerfStats::tunables.tuningFlag != LLPerfStats::Tunables::Nothing)
@@ -1999,8 +1996,6 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
-    LLAtmosphere::cleanupClass();
-
     //ditch LLVOAvatarSelf instance
     gAgentAvatarp = NULL;
 
@@ -2231,8 +2226,6 @@ bool LLAppViewer::cleanup()
 
     SUBSYSTEM_CLEANUP(LLAvatarAppearance);
 
-    SUBSYSTEM_CLEANUP(LLPostProcess);
-
     LLTracker::cleanupInstance();
 
     // *FIX: This is handled in LLAppViewerWin32::cleanup().
@@ -2271,6 +2264,8 @@ bool LLAppViewer::cleanup()
         //Store environment settings if necessary
         LLEnvironment::getInstance()->saveToSettings();
     }
+
+    AOEngine::deleteSingleton();
 
     // Must do this after all panels have been deleted because panels that have persistent rects
     // save their rects on delete.
@@ -3725,7 +3720,7 @@ bool LLAppViewer::initWindow()
 
     // Need to load feature table before cheking to start watchdog.
     bool use_watchdog = false;
-    int watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
+    S32 watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
     if (watchdog_enabled_setting == -1)
     {
         use_watchdog = !LLFeatureManager::getInstance()->isFeatureAvailable("WatchdogDisabled");
@@ -4072,7 +4067,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;
     // </FS>
 
-#if LL_DARWIN
+#if LL_DARWIN || LL_SDL_WINDOW
     info["HIDPI"] = gHiDPISupport;
 #endif
 
@@ -4102,7 +4097,6 @@ LLSD LLAppViewer::getViewerInfo() const
         info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
     }
 
-//#if !LL_LINUX
     std::ostringstream cef_ver_codec;
     cef_ver_codec << "Dullahan: ";
     cef_ver_codec << DULLAHAN_VERSION_MAJOR;
@@ -4128,11 +4122,7 @@ LLSD LLAppViewer::getViewerInfo() const
     cef_ver_codec << CHROME_VERSION_PATCH;
 
     info["LIBCEF_VERSION"] = cef_ver_codec.str();
-//#else
-//  info["LIBCEF_VERSION"] = "Undefined";
-//#endif
 
-#if !LL_LINUX
     std::ostringstream vlc_ver_codec;
     vlc_ver_codec << LIBVLC_VERSION_MAJOR;
     vlc_ver_codec << ".";
@@ -4140,9 +4130,6 @@ LLSD LLAppViewer::getViewerInfo() const
     vlc_ver_codec << ".";
     vlc_ver_codec << LIBVLC_VERSION_REVISION;
     info["LIBVLC_VERSION"] = vlc_ver_codec.str();
-#else
-    info["LIBVLC_VERSION"] = "Using gstreamer 1.0";
-#endif
 
     S32 packets_in = (S32)LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
     if (packets_in > 0)
@@ -4379,13 +4366,18 @@ void LLAppViewer::writeSystemInfo()
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
-    // <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
-// #if LL_WINDOWS && !LL_BUGSPLAT
-//  gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
-// #else
-//     //Not ideal but sufficient for good reporting.
-//     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
-// #endif
+    // <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log)
+//#if LL_DARWIN
+//    // crash processing in CrashMetadataSingleton reads SLLog
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.crash");
+//#elif LL_WINDOWS && !LL_BUGSPLAT
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
+//#else
+//    // Far from ideal, especially when multiple instances get involved.
+//    // Note that attachmentsForBugSplat expects .old extendion.
+//    // Todo: improve.
+//    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
+//#endif
     // </FS:ND>
 
     gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::instance().getChannel();
@@ -4548,7 +4540,6 @@ void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
 
     // record the viewer version in the marker file
     marker_file.write(marker_version.data(), static_cast<S32>(marker_version.length()));
-
     marker_file.flush(); // <FS:ND/> Make sure filesystem reflects what we wrote.
 }
 
@@ -4693,10 +4684,7 @@ void LLAppViewer::processMarkerFiles()
         // now test to see if this file is locked by a running process (try to open for write)
         marker_log_stream << "Checking exec marker file for lock...";
         mMarkerFile.open(mMarkerFileName, LL_APR_WB);
-        // <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-        //apr_file_t* fMarker = mMarkerFile.getFileHandle() ;
-        LLAPRFile::tFiletype* fMarker = mMarkerFile.getFileHandle() ;
-        // </FS:ND>
+        apr_file_t* fMarker = mMarkerFile.getFileHandle();
         if (!fMarker)
         {
             marker_log_stream << "Exec marker file open failed - assume it is locked.";
@@ -4734,7 +4722,7 @@ void LLAppViewer::processMarkerFiles()
 #if LL_WINDOWS && LL_BUGSPLAT
             // bugsplat will set correct state in bugsplatSendLog
             // Might be more accurate to rename this one into 'unknown'
-            gLastExecEvent = LAST_EXEC_FROZE;
+            gLastExecEvent = LAST_EXEC_UNKNOWN;
 #else
             gLastExecEvent = LAST_EXEC_OTHER_CRASH;
 #endif // LL_WINDOWS
@@ -4780,7 +4768,8 @@ void LLAppViewer::processMarkerFiles()
     {
         if (markerIsSameVersion(logout_marker_file))
         {
-            gLastExecEvent = LAST_EXEC_LOGOUT_FROZE;
+            // Either froze, got killed or somehow crash was not caught
+            gLastExecEvent = LAST_EXEC_LOGOUT_UNKNOWN;
             LL_INFOS("MarkerFile") << "Logout crash marker '"<< logout_marker_file << "', changing LastExecEvent to LOGOUT_FROZE" << LL_ENDL;
         }
         else
@@ -4818,6 +4807,24 @@ void LLAppViewer::processMarkerFiles()
         }
         LLAPRFile::remove(error_marker_file);
     }
+
+    // <FS:Ansariel> Looks like we are not using this at all!?
+//#if LL_DARWIN
+//    if (!mSecondInstance && gLastExecEvent != LAST_EXEC_NORMAL)
+//    {
+//        // While windows reports crashes immediately, mac reports next run and
+//        // may take a while to trigger crash report so it has a special file.
+//        // Remove .crash file if exists
+//        std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+//            "SecondLife.old");
+//        std::string crash_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+//            "SecondLife.crash");
+//        LLFile::remove(crash_log_file);
+//        // Rename ".old" log file to ".crash"
+//        LLFile::rename(old_log_file, crash_log_file);
+//    }
+//#endif
+    // </FS:Ansariel>
 }
 
 void LLAppViewer::removeMarkerFiles()
@@ -5300,7 +5307,7 @@ bool LLAppViewer::initCache()
     return true;
 }
 
-void LLAppViewer::addOnIdleCallback(const boost::function<void()>& cb)
+void LLAppViewer::addOnIdleCallback(const std::function<void()>& cb)
 {
     gMainloopWork.post(cb);
 }
@@ -6736,12 +6743,12 @@ void LLAppViewer::forceExceptionThreadCrash()
     thread->start();
 }
 
-void LLAppViewer::initMainloopTimeout(std::string_view state, F32 secs)
+void LLAppViewer::initMainloopTimeout(std::string_view state)
 {
     if (!mMainloopTimeout)
     {
         mMainloopTimeout = new LLWatchdogTimeout();
-        resumeMainloopTimeout(state, secs);
+        resumeMainloopTimeout(state);
     }
 }
 
@@ -6754,17 +6761,11 @@ void LLAppViewer::destroyMainloopTimeout()
     }
 }
 
-void LLAppViewer::resumeMainloopTimeout(std::string_view state, F32 secs)
+void LLAppViewer::resumeMainloopTimeout(std::string_view state)
 {
     if (mMainloopTimeout)
     {
-        if (secs < 0.0f)
-        {
-            static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60.f);
-            secs = mainloop_timeout;
-        }
-
-        mMainloopTimeout->setTimeout(secs);
+        mMainloopTimeout->setTimeout(getMainloopTimeoutSec());
         mMainloopTimeout->start(state);
     }
 }
@@ -6777,20 +6778,30 @@ void LLAppViewer::pauseMainloopTimeout()
     }
 }
 
-void LLAppViewer::pingMainloopTimeout(std::string_view state, F32 secs)
+void LLAppViewer::pingMainloopTimeout(std::string_view state)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
 
     if (mMainloopTimeout)
     {
-        if (secs < 0.0f)
-        {
-            static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
-            secs = mainloop_timeout;
-        }
-
-        mMainloopTimeout->setTimeout(secs);
+        mMainloopTimeout->setTimeout(getMainloopTimeoutSec());
         mMainloopTimeout->ping(state);
+    }
+}
+
+
+F32 LLAppViewer::getMainloopTimeoutSec() const
+{
+    if (LLStartUp::getStartupState() == STATE_STARTED
+        && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
+    {
+        static LLCachedControl<F32> mainloop_started(gSavedSettings, "MainloopTimeoutStarted", 30.f);
+        return mainloop_started();
+    }
+    else
+    {
+        static LLCachedControl<F32> mainloop_default(gSavedSettings, "MainloopTimeoutDefault", 120.f);
+        return mainloop_default();
     }
 }
 

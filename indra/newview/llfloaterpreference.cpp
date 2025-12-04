@@ -628,11 +628,11 @@ void LLFloaterPreference::saveAvatarPropertiesCoro(const std::string cap_url, bo
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("put_avatar_properties_coro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("put_avatar_properties_coro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
     httpOpts->setFollowRedirects(true);
 
     std::string finalUrl = cap_url + "/" + gAgentID.asString();
@@ -2254,6 +2254,24 @@ void LLFloaterPreference::refreshEnabledState()
     //getChildView("ReflectionDetailText")->setEnabled(enabled);
     getChildView("ScreenSpaceReflections")->setEnabled(enabled);
 
+    LLComboBox* af_combo = getChild<LLComboBox>("anisotropic_filter");
+    if (2.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("2x");
+    }
+    if (4.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("4x");
+    }
+    if (8.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("8x");
+    }
+    if (16.f > gGLManager.mMaxAnisotropy)
+    {
+        af_combo->remove("16x");
+    }
+
     // now turn off any features that are unavailable
     disableUnavailableSettings();
 
@@ -2367,6 +2385,11 @@ void LLFloaterPreference::disableUnavailableSettings()
     exposureSlider->setEnabled(is_not_vintage);
     cas_slider->setEnabled(is_not_vintage);
 
+    LLComboBox* ctrl_anisotropic = getChild<LLComboBox>("anisotropic_filter");
+    if (!LLFeatureManager::instance().isFeatureAvailable("RenderAnisotropicLevel"))
+    {
+        ctrl_anisotropic->setEnabled(false);
+    }
 }
 
 void LLFloaterPreference::refresh()
@@ -2409,7 +2432,7 @@ void LLFloaterPreference::onChangeQuality(const LLSD& data)
     if (level >= LVL_HIGH && mLastQualityLevel < level)
     {
         constexpr U32 LOW_MEM_THRESHOLD = 4097;
-        U32 total_mem = (U32Megabytes)LLMemory::getMaxMemKB();
+        U32 total_mem = U32Megabytes(LLMemory::getMaxMemKB());
         if (total_mem < LOW_MEM_THRESHOLD)
         {
             LLSD args;
@@ -3347,7 +3370,7 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
 
 //public:
 
-//  typedef boost::function<bool(const LLSD&)> callback_t;
+//  typedef std::function<bool(const LLSD&)> callback_t;
 
 //  Updater(callback_t cb, F32 period)
 //  :LLEventTimer(period),
@@ -5089,7 +5112,7 @@ void LLFloaterPreference::collectSearchableItems()
     LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
     if( mFilterEdit && pRoot )
     {
-        mSearchData.reset(new ll::prefs::SearchData() );
+        mSearchData = std::make_unique<ll::prefs::SearchData>();
 
         ll::prefs::TabContainerDataPtr pRootTabcontainer = ll::prefs::TabContainerDataPtr( new ll::prefs::TabContainerData );
         pRootTabcontainer->mTabContainer = pRoot;

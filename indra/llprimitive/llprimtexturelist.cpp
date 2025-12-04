@@ -137,8 +137,14 @@ S32 LLPrimTextureList::copyTexture(const U8 index, const LLTextureEntry& te)
         // we're changing an existing entry
     llassert(mEntryList[index]);
     delete (mEntryList[index]);
-    mEntryList[index] = te.newCopy();
-
+    if  (te != LLTextureEntry::null)
+    {
+        mEntryList[index] = te.newCopy();
+    }
+    else
+    {
+        mEntryList[index] = LLPrimTextureList::newTextureEntry();
+    }
     return TEM_CHANGE_TEXTURE;
 }
 

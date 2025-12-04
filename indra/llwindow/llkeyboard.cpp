@@ -30,6 +30,8 @@
 
 #include "llwindowcallbacks.h"
 
+#include "llstl.h"
+
 //
 // Globals
 //
@@ -40,7 +42,6 @@ LLKeyboard *gKeyboard = NULL;
 std::map<KEY,std::string> LLKeyboard::sKeysToNames;
 std::map<std::string,KEY> LLKeyboard::sNamesToKeys;
 LLKeyStringTranslatorFunc*  LLKeyboard::mStringTranslator = NULL;   // Used for l10n + PC/Mac/Linux accelerator labeling
-
 
 //
 // Class Implementation
@@ -162,6 +163,7 @@ void LLKeyboard::resetKeyDownAndHandle()
             mCallbacks->handleTranslatedKeyUp(i, mask);
         }
     }
+    mCurTranslatedKey = KEY_NONE;
 }
 
 // BUG this has to be called when an OS dialog is shown, otherwise modifier key state
@@ -195,8 +197,6 @@ void LLKeyboard::resetKeys()
 }
 
 
-// <FS:ND/> SDL2 compat
-//bool LLKeyboard::translateKey(const U16 os_key, KEY *out_key)
 bool LLKeyboard::translateKey(const NATIVE_KEY_TYPE os_key, KEY *out_key)
 {
     // Only translate keys in the map, ignore all other keys for now
@@ -214,9 +214,6 @@ bool LLKeyboard::translateKey(const NATIVE_KEY_TYPE os_key, KEY *out_key)
     }
 }
 
-
-// <FS:ND/> SDL2 compat
-//U16 LLKeyboard::inverseTranslateKey(const KEY translated_key)
 LLKeyboard::NATIVE_KEY_TYPE LLKeyboard::inverseTranslateKey(const KEY translated_key)
 {
     auto iter = mInvTranslateKeyMap.find(translated_key);
@@ -231,7 +228,7 @@ LLKeyboard::NATIVE_KEY_TYPE LLKeyboard::inverseTranslateKey(const KEY translated
 }
 
 
-bool LLKeyboard::handleTranslatedKeyDown(KEY translated_key, U32 translated_mask)
+bool LLKeyboard::handleTranslatedKeyDown(KEY translated_key, MASK translated_mask)
 {
     bool handled = false;
     bool repeated = false;
@@ -259,7 +256,7 @@ bool LLKeyboard::handleTranslatedKeyDown(KEY translated_key, U32 translated_mask
 }
 
 
-bool LLKeyboard::handleTranslatedKeyUp(KEY translated_key, U32 translated_mask)
+bool LLKeyboard::handleTranslatedKeyUp(KEY translated_key, MASK translated_mask)
 {
     bool handled = false;
     if( mKeyLevel[translated_key] )

@@ -80,7 +80,7 @@ LLGestureMgr::LLGestureMgr()
     mLoadingCount(0)
 {
     gInventory.addObserver(this);
-    mListener.reset(new LLGestureListener());
+    mListener = std::make_shared<LLGestureListener>();
 }
 
 

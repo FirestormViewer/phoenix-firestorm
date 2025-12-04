@@ -920,7 +920,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 
                 keyEvent(key_event, native_key_data);
 
-//#elif LL_WINDOWS // <FS:ND/> Windows & Linux
 #else
                 std::string event = message_in.getValue("event");
                 LLSD native_key_data = message_in.getValueLLSD("native_key_data");
@@ -943,6 +942,13 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
             {
                 mEnableMediaPluginDebugging = message_in.getValueBoolean("enable");
             }
+#if LL_LINUX
+            else if (message_name == "enable_pipewire_volume_catcher")
+            {
+                bool enable = message_in.getValueBoolean("enable");
+                mVolumeCatcher.onEnablePipeWireVolumeCatcher(enable);
+            }
+#endif
             if (message_name == "pick_file_response")
             {
                 LLSD file_list_llsd = message_in.getValueLLSD("file_list");
@@ -1106,9 +1112,7 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
     mCEFLib->nativeKeyboardEventWin(msg, wparam, lparam);
 #endif
 
-// <FS:ND> Keyboard handling for Linux.
 #if LL_LINUX
-#if LL_SDL2
 
     uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());       // this is actually the SDL event.key.keysym.sym;
     uint32_t native_virtual_key_win = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
@@ -1124,21 +1128,11 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
             keypad = true;
         }
 
-        mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key_win, native_modifiers, keypad);
+        // yes, we send native_virtual_key_win twice because native_virtual_key breaks it
+        mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key, native_modifiers, keypad);
     }
 
-#else
-
-    uint32_t native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
-    uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
-    uint32_t native_modifiers = (uint32_t)(native_key_data["cef_modifiers"].asInteger());
-    if( native_scan_code == '\n' )
-        native_scan_code = '\r';
-    mCEFLib->nativeKeyboardEvent(key_event, native_scan_code, native_virtual_key, native_modifiers);
-
-#endif // LL_SDL2
 #endif // LL_LINUX
-// </FS:ND>
 };
 
 void MediaPluginCEF::unicodeInput(std::string event, LLSD native_key_data = LLSD::emptyMap())
@@ -1171,7 +1165,6 @@ void MediaPluginCEF::unicodeInput(std::string event, LLSD native_key_data = LLSD
 #endif
 
 #if LL_LINUX
-# if LL_SDL2
 
     uint32_t native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
     uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
@@ -1179,7 +1172,6 @@ void MediaPluginCEF::unicodeInput(std::string event, LLSD native_key_data = LLSD
 
     mCEFLib->nativeKeyboardEvent(dullahan::KE_KEY_DOWN, native_scan_code, native_virtual_key, native_modifiers);
 
-#endif // LL_SDL2
 #endif // LL_LINUX
 };
 

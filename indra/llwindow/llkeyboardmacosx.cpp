@@ -166,7 +166,7 @@ LLKeyboardMacOSX::LLKeyboardMacOSX()
 
 void LLKeyboardMacOSX::resetMaskKeys()
 {
-    U32 mask = getModifiers();
+    MASK mask = getModifiers();
 
     // MBW -- XXX -- This mirrors the operation of the Windows version of resetMaskKeys().
     //    It looks a bit suspicious, as it won't correct for keys that have been released.
@@ -191,7 +191,7 @@ void LLKeyboardMacOSX::resetMaskKeys()
 }
 
 /*
-static bool translateKeyMac(const U16 key, const U32 mask, KEY &outKey, U32 &outMask)
+static bool translateKeyMac(const U16 key, const MASK mask, KEY &outKey, U32 &outMask)
 {
     // Translate the virtual keycode into the keycodes the keyboard system expects.
     U16 virtualKey = (mask >> 24) & 0x0000007F;
@@ -207,7 +207,7 @@ void LLKeyboardMacOSX::handleModifier(MASK mask)
     updateModifiers(mask);
 }
 
-MASK LLKeyboardMacOSX::updateModifiers(const U32 mask)
+MASK LLKeyboardMacOSX::updateModifiers(const MASK mask)
 {
     // translate the mask
     MASK out_mask = 0;
@@ -230,7 +230,7 @@ MASK LLKeyboardMacOSX::updateModifiers(const U32 mask)
     return out_mask;
 }
 
-bool LLKeyboardMacOSX::handleKeyDown(const U16 key, const U32 mask)
+bool LLKeyboardMacOSX::handleKeyDown(const U16 key, MASK mask)
 {
     KEY     translated_key = 0;
     U32     translated_mask = 0;
@@ -247,7 +247,7 @@ bool LLKeyboardMacOSX::handleKeyDown(const U16 key, const U32 mask)
 }
 
 
-bool LLKeyboardMacOSX::handleKeyUp(const U16 key, const U32 mask)
+bool LLKeyboardMacOSX::handleKeyUp(const U16 key, MASK mask)
 {
     KEY     translated_key = 0;
     U32     translated_mask = 0;
@@ -266,7 +266,7 @@ bool LLKeyboardMacOSX::handleKeyUp(const U16 key, const U32 mask)
 MASK LLKeyboardMacOSX::currentMask(bool for_mouse_event)
 {
     MASK result = MASK_NONE;
-    U32 mask = getModifiers();
+    MASK mask = getModifiers();
 
     if (mask & MAC_SHIFT_KEY)           result |= MASK_SHIFT;
     if (mask & MAC_CTRL_KEY)            result |= MASK_CONTROL;
@@ -295,6 +295,7 @@ void LLKeyboardMacOSX::scanKeyboard()
             mCallbacks->handleScanKey(key, mKeyDown[key], mKeyUp[key], mKeyLevel[key]);
         }
     }
+    mCurScanKey = KEY_NONE;
 
     // Reset edges for next frame
     for (key = 0; key < KEY_COUNT; key++)

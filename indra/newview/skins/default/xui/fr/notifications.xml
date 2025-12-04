@@ -882,6 +882,15 @@ Assurez-vous que le fichier a l&apos;extension correcte.
 		Impossible de lire le fichier son chargé :
 [FILE]
 	</notification>
+	<notification name="ModelUploaderMissingPhysicsApple">
+Le chargement de modèles n'est pas encore disponible sur Apple Silicon, mais sera pris en charge dans une prochaine version.
+
+Solution de contournement : cliquez avec le bouton droit sur l'application [APP_NAME] dans le Finder, sélectionnez
+« Obtenir des informations », puis cochez « Ouvrir avec Rosetta ».
+	</notification>
+	<notification name="ModelUploaderMissingPhysics">
+		La bibliothèque physique n'est pas présente, certaines fonctionnalités du programme de chargement de modèles peuvent ne pas fonctionner ou ne pas fonctionner correctement.
+	</notification>
 	<notification name="SoundFileNotRIFF">
 		Il semble que le fichier ne soit pas un fichier RIFF WAVE :
 [FILE]
@@ -5187,6 +5196,10 @@ Ils peuvent utiliser http://opensimulator.org/wiki/inventory pour résoudre les 
 		Impossible de déplacer les fichiers. Chemin précédent rétabli.
 		<usetemplate ignoretext="Impossible de déplacer les fichiers. Chemin précédent rétabli." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="PreferenceQualityWithLowMemory">
+		Votre système dispose de [TOTAL_MEM] Mo de mémoire, ce qui peut s'avérer insuffisant pour exécuter la visionneuse avec des paramètres élevés et risque d'entraîner des problèmes.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Continuer"/>
+	</notification>
 	<notification name="DefaultObjectPermissions">
 		Problème lors de l&apos;enregistrement des droits d&apos;objet par défaut : [REASON].  Réessayez de définir les droits par défaut ultérieurement.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -5403,6 +5416,12 @@ la région &quot;[REGION]&quot; ?
 	<notification name="PickLimitReached">
 		Impossible de créer un autre favori car le nombre maximum de favoris a déjà été créé.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ConfirmGlobalOnlineStatusToggle">
+Êtes-vous sûr de vouloir modifier la visibilité de votre statut en ligne pour tous vos amis à la fois ?
+
+En raison de la charge du serveur, cette modification en masse peut prendre un certain temps avant de prendre effet et peut entraîner des problèmes temporaires pour certains amis qui voient votre statut en ligne.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		En raison de la charge du serveur, le basculement massif de la visibilité du statut en ligne peut prendre un certain temps avant d'être effectif. Veuillez être patient.
@@ -5654,6 +5673,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">
 		Remplacer la pose “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
+	</notification>
+	<notification name="FSLargeOutfitsWarningInThisSession">
+		Un grand nombre de tenues ont été détectées : [AMOUNT]. Cela peut entraîner des blocages ou des déconnexions de la visionneuse. Envisagez de réduire le nombre de tenues pour améliorer les performances (en dessous de [MAX]). IL S'AGIT UNIQUEMENT D'UNE SUGGESTION. Si votre ordinateur fonctionne normalement, vous pouvez ignorer cette recommandation.
+		<usetemplate ignoretext="Avertissement nombre de tenues" name="okignore" yestext="OK" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Demande de connexion refusée par Primfeed.

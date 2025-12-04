@@ -739,32 +739,7 @@ private:
             }
         }
 
-        // *NOTE:Mani - I didn't find any docs that assure me that machdep.cpu.feature_bits will always be
-        // The feature bits I think it is. Here's a test:
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-    #if defined(__i386__) && defined(__PIC__)
-            /* %ebx may be the PIC register.  */
-        #define __cpuid(level, a, b, c, d)          \
-        __asm__ ("xchgl\t%%ebx, %1\n\t"         \
-                "cpuid\n\t"                 \
-                "xchgl\t%%ebx, %1\n\t"          \
-                : "=a" (a), "=r" (b), "=c" (c), "=d" (d)    \
-                : "0" (level))
-    #else
-        #define __cpuid(level, a, b, c, d)          \
-        __asm__ ("cpuid\n\t"                    \
-                 : "=a" (a), "=b" (b), "=c" (c), "=d" (d)   \
-                 : "0" (level))
-    #endif
-
-        unsigned int eax, ebx, ecx, edx;
-        __cpuid(0x1, eax, ebx, ecx, edx);
-        if(feature_infos[0] != (S32)edx)
-        {
-            LL_WARNS() << "machdep.cpu.feature_bits doesn't match expected cpuid result!" << LL_ENDL;
-        }
-#endif // LL_RELEASE_FOR_DOWNLOAD
-
+        // @TODO: Audit our usage of machdep.cpu.feature_bits.
 
         uint64_t ext_feature_info = getSysctlInt64("machdep.cpu.extfeature_bits");
         S32 *ext_feature_infos = (S32*)(&ext_feature_info);
@@ -808,6 +783,20 @@ private:
 };
 
 #elif LL_LINUX
+
+// *NOTE:Mani - eww, macros! srry.
+#define LLPI_SET_INFO_STRING(llpi_id, cpuinfo_id) \
+        if (!cpuinfo[cpuinfo_id].empty()) \
+        { setInfo(llpi_id, cpuinfo[cpuinfo_id]);}
+
+#define LLPI_SET_INFO_INT(llpi_id, cpuinfo_id) \
+        {\
+            S32 result; \
+            if (!cpuinfo[cpuinfo_id].empty() \
+                && LLStringUtil::convertToS32(cpuinfo[cpuinfo_id], result)) \
+            { setInfo(llpi_id, result);} \
+        }
+
 const char CPUINFO_FILE[] = "/proc/cpuinfo";
 
 class LLProcessorInfoLinuxImpl : public LLProcessorInfoImpl
@@ -819,7 +808,31 @@ public:
     }
 
     virtual ~LLProcessorInfoLinuxImpl() {}
+
 private:
+
+    F64 getCPUMaxMHZ()
+    {
+        // Nicky: We just look into cpu0. In theory we could iterate over all cores
+        // "/sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq"
+        // But those should not fluctuate that much?
+        llifstream fIn{ "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq" };
+
+        if( !fIn.is_open() )
+            return 0.0;
+
+        std::string strLine;
+        fIn >> strLine;
+        if( strLine.empty() )
+            return 0.0l;
+
+        F64 mhz {};
+        if( !LLStringUtil::convertToF64(strLine, mhz ) )
+            return 0.0;
+
+        mhz = mhz / 1000.0;
+        return mhz;
+    }
 
     void get_proc_cpuinfo()
     {
@@ -853,24 +866,17 @@ private:
             }
             fclose(cpuinfo_fp);
         }
-// *NOTE:Mani - eww, macros! srry.
-#define LLPI_SET_INFO_STRING(llpi_id, cpuinfo_id) \
-        if (!cpuinfo[cpuinfo_id].empty()) \
-        { setInfo(llpi_id, cpuinfo[cpuinfo_id]);}
-
-#define LLPI_SET_INFO_INT(llpi_id, cpuinfo_id) \
-        {\
-            S32 result; \
-            if (!cpuinfo[cpuinfo_id].empty() \
-                && LLStringUtil::convertToS32(cpuinfo[cpuinfo_id], result)) \
-            { setInfo(llpi_id, result);} \
-        }
-
-        F64 mhz;
-        if (LLStringUtil::convertToF64(cpuinfo["cpu mhz"], mhz)
-            && 200.0 < mhz && mhz < 10000.0)
+        F64 mhzFromSys = getCPUMaxMHZ();
+        F64 mhzFromProc {};
+        if( !LLStringUtil::convertToF64(cpuinfo["cpu mhz"], mhzFromProc ) )
+            mhzFromProc = 0.0;
+        if (mhzFromSys > 1.0 && mhzFromSys > mhzFromProc )
         {
-            setInfo(eFrequency,(F64)(mhz));
+            setInfo( eFrequency, mhzFromSys );
+        }
+        else if (  200.0 < mhzFromProc && mhzFromProc < 10000.0)
+        {
+            setInfo(eFrequency,(F64)(mhzFromProc));
         }
 
         LLPI_SET_INFO_STRING(eBrandName, "model name");
@@ -880,7 +886,7 @@ private:
         LLPI_SET_INFO_INT(eModel, "model");
 
 
-        S32 family{0};
+        S32 family{};
         if (!cpuinfo["cpu family"].empty()
             && LLStringUtil::convertToS32(cpuinfo["cpu family"], family))
         {
