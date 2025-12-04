@@ -252,12 +252,71 @@
             </map>
             <map>
               <key>name</key>
+              <string>once</string>
+              <key>parameters</key>
+              <array>
+                <map>
+                  <key>name</key>
+                  <string>self</string>
+                </map>
+                <map>
+                  <key>name</key>
+                  <string>eventName</string>
+                  <key>type</key>
+                  <string>DetectedEventName</string>
+                </map>
+                <map>
+                  <key>name</key>
+                  <string>handler</string>
+                  <key>type</key>
+                  <string>DetectedEventHandler</string>
+                </map>
+              </array>
+              <key>returnType</key>
+              <string>EventHandler</string>
+              <key>overloads</key>
+              <array>
+                <map>
+                  <key>name</key>
+                  <string>once</string>
+                  <key>parameters</key>
+                  <array>
+                    <map>
+                      <key>name</key>
+                      <string>self</string>
+                    </map>
+                    <map>
+                      <key>name</key>
+                      <string>eventName</string>
+                      <key>type</key>
+                      <string>NonDetectedEventName</string>
+                    </map>
+                    <map>
+                      <key>name</key>
+                      <string>handler</string>
+                      <key>type</key>
+                      <string>EventHandler</string>
+                    </map>
+                  </array>
+                  <key>returnType</key>
+                  <string>EventHandler</string>
+                </map>
+              </array>
+            </map>
+            <map>
+              <key>name</key>
               <string>off</string>
               <key>parameters</key>
               <array>
                 <map>
                   <key>name</key>
                   <string>self</string>
+                </map>
+                <map>
+                  <key>name</key>
+                  <string>eventName</string>
+                  <key>type</key>
+                  <string>EventName</string>
                 </map>
                 <map>
                   <key>name</key>
@@ -908,6 +967,35 @@
         </map>
         <key>comment</key>
         <string>Creates a vector from a string argument in format `&lt;1,1,1&gt;`  Invalid strings will return `nil`  #### Caveat  Due to an old error from lsl strings that match upto the closing `&gt;` are interpreted as valid  So `&lt;1,1,1`, `&lt;1,1,1,1` and `&lt;1,1,1spoon` are all cast to `&lt;1,1,1&gt;`  When testing if a string is a quaternion or a vector, you should test with `toquaternion` first.</string>
+      </map>
+      <map>
+        <key>name</key>
+        <string>vector</string>
+        <key>parameters</key>
+        <array>
+          <map>
+            <key>name</key>
+            <string>x</string>
+            <key>type</key>
+            <string>number</string>
+          </map>
+          <map>
+            <key>name</key>
+            <string>y</string>
+            <key>type</key>
+            <string>number</string>
+          </map>
+          <map>
+            <key>name</key>
+            <string>z</string>
+            <key>type</key>
+            <string>number</string>
+          </map>
+        </array>
+        <key>returnType</key>
+        <string>vector</string>
+        <key>comment</key>
+        <string>Creates a vector from x,y,z</string>
       </map>
       <map>
         <key>name</key>
