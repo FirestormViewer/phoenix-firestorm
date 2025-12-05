@@ -19,7 +19,13 @@
 		<combo_box.item label="正體中文 (Tradycyjny chiński)" name="Traditional Chinese"/>
 	</combo_box>
 	<text name="language_textbox2">
-		(Restart wymagany)
+		(wymagany restart)
+	</text>
+	<text name="time_format_textbox">
+		Format czasu:
+	</text>
+	<text name="time_format_textbox2">
+		(wymagany restart)
 	</text>
 	<check_box label="Wprowadzanie tekstu IME" name="use_ime" tool_tip="Użyj edytora międzynarodowych metod wprowadzania. Jest potrzebny tylko w przypadku określonych języków, takich jak japoński, chiński itp." />
 	<text name="maturity_desired_prompt">

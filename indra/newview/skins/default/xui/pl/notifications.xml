@@ -571,7 +571,7 @@ Czy chcesz zamknąć przeglądarkę i uruchomić ją ponownie, ręcznie, aby zas
 		<usetemplate name="okcancelbuttons" notext="Później" yestext="Zamknij teraz"/>
 	</notification>
 	<notification name="ChangeLanguage">
-		Zmiana języka zadziała po restarcie [APP_NAME].
+		Zmiana języka lub formatu czasu zadziała po restarcie [APP_NAME].
 	</notification>
 	<notification name="GoToAuctionPage">
 		Odwiedzić stronę internetową [CURRENT_GRID] żeby zobaczyć szczegóły aukcji lub zgłosić ofertę?
@@ -813,7 +813,7 @@ Oczekiwane: [VALIDS]
 		Przesyłanie modeli nie jest jeszcze dostępne na Apple Silicon, ale będzie obsługiwane w nadchodzącym wydaniu.
 
 Obejście: Kliknij prawym przyciskiem myszy aplikację [APP_NAME] w Finderze,
-wybierz "Pobierz info", a następnie zaznacz "Otwórz przy użyciu Rosetty".
+wybierz &apos;Pobierz info&apos;, a następnie zaznacz &apos;Otwórz przy użyciu Rosetty&apos;.
 	</notification>
 	<notification name="ModelUploaderMissingPhysics">
 		Biblioteka fizyki nie jest obecna, dlatego część funkcji narzędzia przesyłania modeli może nie działać lub nie działać poprawnie.
@@ -2555,6 +2555,12 @@ Chcesz go zamienić na wybrany obiekt?
 	</notification>
 	<notification name="TooManyWearables">
 		Nie możesz założyć folderu, który zawiera więcej niż [AMOUNT] przedmiotów. Możesz zmienić ten limit w Zaawansowane &gt; Pokaż ustawienia debugowania &gt; WearFolderLimit.
+	</notification>
+	<notification name="CantLinkNotecard">
+		Przed utworzeniem linku do notki należy ją zapisać.
+	</notification>
+	<notification name="CantLinkMaterial">
+		Przed utworzeniem linku do materiału należy go zapisać.
 	</notification>
 	<notification label="Ostrzeżenie Trybu Zajętości" name="DoNotDisturbModePay">
 		Jesteś w Trybie Zajętości co oznacza, że nie dostaniesz żadnych obiektów w zamian za tą opłatę.

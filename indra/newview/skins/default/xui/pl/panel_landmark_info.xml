@@ -14,6 +14,12 @@
 	<string name="server_forbidden_text">
 		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.
 	</string>
+	<string name="acquired_date_ampm">
+		[wkday,datetime,slt], [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
+	</string>
+	<string name="acquired_date">
+		[wkday,datetime,slt], [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</string>
 	<string name="information_text">
 		Ruch: [TRAFFIC] Obszar: [AREA] m²
 	</string>
