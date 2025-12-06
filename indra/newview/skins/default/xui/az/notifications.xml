@@ -2385,7 +2385,7 @@ Element(lər) daşınılsın?
 	</notification>
 	<notification name="PayConfirmation">
 		[TARGET] üçün L$[AMOUNT] ödəmək istədiyinizi təsdiq edin.
-		<usetemplate ignoretext="Ödənişdən əvvəl təsdiqləmə (200 L$-dan yuxarı məbləğ)" name="okcancelignore" notext="Ləğv et" yestext="Ödə"/>
+		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Ödə"/>
 	</notification>
 	<notification name="PayObjectFailed">
 		Ödəniş xətası: obyekt tapılmadı.
