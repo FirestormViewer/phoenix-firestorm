@@ -6533,10 +6533,11 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
 
 	<string name="GroupNoticesPanelDateString">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</string>
-	<string name="GroupNoticesToastDateString">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]</string>
-	<string name="NotificationItemDateStringLocal">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]</string>
-	<string name="NotificationItemDateStringUTC">[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[hour,datetime,utc]：[min,datetime,utc]　[timezone,datetime,utc]</string>
-	<string name="NotificationItemDateStringSLT">[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日　[hour,datetime,slt]：[min,datetime,slt]　[timezone,datetime,slt]</string>
+	<string name="GroupNoticesPanelDateStringAMPM">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour12,datetime,local]：[min,datetime,local]：[second,datetime,local]　[timezone,datetime,local]</string>
+	<string name="GroupNoticesToastDateString">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]</string>
+	<string name="GroupNoticesToastDateStringAMPM">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]</string>
+	<string name="NotificationItemDateString">[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[hour,datetime,utc]：[min,datetime,utc]　[timezone,datetime,utc]</string>
+	<string name="NotificationItemDateStringAMPM">[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[ampm,datetime,ampm][hour12,datetime,utc]：[min,datetime,utc]　[timezone,datetime,utc]</string>
 
 	<string name="Pie_av_render_normally">通常</string>
 	<string name="Pie_av_render_never">しない</string>

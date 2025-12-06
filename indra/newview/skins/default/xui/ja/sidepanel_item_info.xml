@@ -18,6 +18,9 @@
 	<panel.string name="owner_can">
 		所有者ができること：
 	</panel.string>
+	<panel.string name="acquiredDateAMPM">
+		[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
+	</panel.string>
 	<panel.string name="acquiredDate">
 		[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]
 	</panel.string>

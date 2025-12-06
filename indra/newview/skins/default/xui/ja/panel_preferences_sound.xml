@@ -51,16 +51,16 @@
 					デフォルト
 				</panel.string>
 				<panel.string name="output_no_device">
-					機器がありません
+					デバイスがありません
 				</panel.string>
 				<panel.string name="output_name_no_device">
-					名前のない機器
+					名前のないデバイス
 				</panel.string>
 				<panel.string name="output_device_unavailable">
-					使用できない機器
+					使用できないデバイス
 				</panel.string>
 				<text name="output_label">
-					出力機器
+					出力デバイス
 				</text>
 			</panel>
 		</panel>
@@ -154,7 +154,7 @@
 				<item label="高" name="noise_suppression_high"/>
 				<item label="最高" name="noise_suppression_max"/>
 			</combo_box>
-			<button label="入力・出力機器" name="device_settings_btn"/>
+			<button label="入力・出力デバイス" name="device_settings_btn"/>
 			<panel label="デバイス設定" name="device_settings_panel"/>
 		</panel>
 		<!-- UI Sounds 1 -->
