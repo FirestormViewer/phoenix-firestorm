@@ -49,7 +49,7 @@
 	<button
 	 top="2"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="IM/Call"
 	 layout="topleft"
 	 right="-1"
@@ -59,7 +59,7 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Profile"
 	 layout="topleft"
 	 name="info_btn"
@@ -67,7 +67,7 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Group Titles"
 	 layout="topleft"
 	 name="titles_btn"
@@ -75,7 +75,7 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Activate"
 	 layout="topleft"
 	 name="activate_btn"
@@ -83,15 +83,24 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
+	 label="Pin"
+	 layout="topleft"
+	 name="favorite_btn"
+	 tool_tip="Add or remove group from favorites"
+	 width="80" />
+	<button
+	 top_delta="25"
+	 follows="top|right"
+	 height="20"
 	 label="Leave"
 	 layout="topleft"
 	 name="leave_btn"
 	 width="80" />
 	<button
-	 top_delta="35"
+	 top_delta="31"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Create..."
 	 layout="topleft"
 	 name="create_btn"
@@ -99,7 +108,7 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Search..."
 	 layout="topleft"
 	 name="search_btn"
@@ -107,7 +116,7 @@
 	<button
 	 top_delta="25"
 	 follows="top|right"
-	 height="22"
+	 height="20"
 	 label="Invite..."
 	 layout="topleft"
 	 name="invite_btn"

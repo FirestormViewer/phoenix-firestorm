@@ -233,6 +233,7 @@
 #include "fscommon.h"
 #include "fscorehttputil.h"
 #include "fsdata.h"
+#include "fsfavoritegroups.h" // <FS:PP> Group favorites / pinning
 #include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
@@ -3314,6 +3315,10 @@ bool idle_startup()
         // Need we really clear the Auth response data?
         // Clean up the userauth stuff.
         // LLUserAuth::getInstance()->reset();
+
+        // <FS:PP> Group favorites / pinning
+        FSFavoriteGroups::getInstance()->loadFavorites();
+        // </FS:PP>
 
         LLStartUp::setStartupState( STATE_STARTED );
         do_startup_frame();

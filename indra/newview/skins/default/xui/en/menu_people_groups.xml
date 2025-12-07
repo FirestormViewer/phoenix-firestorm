@@ -52,6 +52,32 @@
      function="People.Groups.Enable"
      parameter="call" />
   </menu_item_call>
+  <menu_item_call
+   label="Pin group"
+   name="Favorite">
+    <menu_item_call.on_click
+     function="People.Groups.Action"
+     parameter="favorite" />
+    <menu_item_call.on_enable
+     function="People.Groups.Enable"
+     parameter="favorite" />
+    <menu_item_call.on_visible
+     function="People.Groups.Visible"
+     parameter="favorite" />
+  </menu_item_call>
+  <menu_item_call
+   label="Unpin group"
+   name="Unfavorite">
+    <menu_item_call.on_click
+     function="People.Groups.Action"
+     parameter="unfavorite" />
+    <menu_item_call.on_enable
+     function="People.Groups.Enable"
+     parameter="unfavorite" />
+    <menu_item_call.on_visible
+     function="People.Groups.Visible"
+     parameter="unfavorite" />
+  </menu_item_call>
   <menu_item_separator />
   <menu_item_call
    label="Leave"
