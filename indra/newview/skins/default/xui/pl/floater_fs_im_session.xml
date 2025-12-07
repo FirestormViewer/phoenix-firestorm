@@ -69,12 +69,12 @@
 						<layout_panel name="input_button_layout_panel">
 							<button name="send_chat" label="Wyślij" tool_tip="Wyślij wiadomość IM" />
 						</layout_panel>
-						<layout_panel name="emoji_recent_layout_panel">
-							<text name="emoji_recent_empty_text">
-								Tutaj pojawią się ostatnio używane emoji
-							</text>
-						</layout_panel>
 					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Tutaj pojawią się ostatnio używane emoji
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
