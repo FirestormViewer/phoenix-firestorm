@@ -41,7 +41,7 @@
 					<stat_bar label="Interface" name="LLView"/>
 					<stat_bar label="Polices" name="LLFontFreetype"/>
 					<stat_bar label="Inventaire" name="LLInventoryObject"/>
-					<stat_bar label="Objets du Viewer" name="LLViewerObject"/>
+					<stat_bar label="Objets du client" name="LLViewerObject"/>
 					<stat_bar label="Objets de Groupe Octree" name="LLViewerOctreeGroup"/>
 					<stat_bar label="Données Octree" name="LLViewerOctreeEntry"/>
 					<stat_bar label="Cache d'Objets du Client" name="LLVOCacheEntry"/>

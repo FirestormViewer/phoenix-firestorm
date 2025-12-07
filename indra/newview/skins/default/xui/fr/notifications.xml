@@ -92,7 +92,7 @@ Veuillez vérifier votre connexion Internet.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedToParse">
-		Le visualiseur a reçu une réponse brouillée du serveur. Assurez-vous que votre connexion Internet fonctionne correctement et réessayez plus tard.
+		Le client a reçu une réponse brouillée du serveur. Assurez-vous que votre connexion Internet fonctionne correctement et réessayez plus tard.
 
 Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assistance.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -263,7 +263,7 @@ Veuillez ne sélectionner qu&apos;un seul objet.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AllowMultipleViewers">
-		L&apos;exécution de plusieurs visualiseurs Second Life n&apos;est pas prise en charge. Cela peut entraîner des collisions de cache de texture, une corruption et une dégradation des visuels et des performances.
+		L&apos;exécution de plusieurs clients Second Life n&apos;est pas prise en charge. Cela peut entraîner des collisions de cache de texture, une corruption et une dégradation des visuels et des performances.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GrantModifyRights">
@@ -641,7 +641,7 @@ Remarque : cela videra le cache.
 	</notification>
 	<notification name="ChangeSkin">
 		Le nouveau thème apparaîtra après le redémarrage de [APP_NAME].
-Voulez-vous arrêter le visualiseur et le relancer manuellement afin d'appliquer cette modification ?
+Voulez-vous arrêter le client et le relancer manuellement afin d'appliquer cette modification ?
 		<usetemplate name="okcancelbuttons" notext="Plus tard" yestext="Quitter maintenant"/>
 	</notification>
 	<notification name="ChangeLanguage">
@@ -970,7 +970,7 @@ Le fichier est peut-être trop lourd, essayez de réduire la résolution, la qua
 	<notification name="CannotOpenFileTooBig">
 		Impossible d'ouvrir le fichier.
 
-La visionneuse a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est peut-être trop lourd.
+Le client a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est peut-être trop lourd.
 	</notification>
 	<notification name="LandmarkCreated">
 		Vous avez ajouté [LANDMARK_NAME] à votre dossier [FOLDER_NAME].
@@ -2720,7 +2720,7 @@ Voulez-vous les jouer ?
 		La SLurl suivante a été copiée dans votre presse-papiers :
  [SLURL]
 
-Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apos;accéder facilement à cet endroit ou bien collez-la dans la barre d&apos;adresse de votre navigateur.
+Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apos;accéder facilement à cet endroit ou bien collez-la dans la barre d&apos;adresse de votre client.
 		<form name="form">
 			<ignore name="ignore" text="La SLurl est copiée dans mon presse-papiers"/>
 		</form>
@@ -3874,7 +3874,7 @@ Mise à jour de votre apparence transmise au bout de [TIME] secondes.
 [STATUS]
 	</notification>
 	<notification name="AvatarRezSelfBakeForceUpdateNotification">
-		Le visualiseur a détecté que vous pouvez apparaître comme un nuage et tente de corriger cela automatiquement.
+		Le client a détecté que vous pouvez apparaître comme un nuage et tente de corriger cela automatiquement.
 	</notification>
 	<notification name="AvatarRezCloudNotification">
 		([EXISTENCE] secondes d&apos;existence)
@@ -4219,7 +4219,7 @@ Si vous avez toujours des problèmes, veuillez consulter la page [SUPPORT_SITE].
 		- Votre mémoire système ne remplit pas les conditions minimum requises.
 	</global>
 	<global name="LLLeapUpdaterFailure">
-		Le lancement du service de mise à jour [UPDATER_APP] a échoué. Veuillez vérifier que le visualiseur est correctement installé et qu'il dispose des autorisations nécessaires pour s'exécuter. Si vous continuez à rencontrer des problèmes, veuillez consulter le [SUPPORT_SITE].
+		Le lancement du service de mise à jour [UPDATER_APP] a échoué. Veuillez vérifier que le client est correctement installé et qu'il dispose des autorisations nécessaires pour s'exécuter. Si vous continuez à rencontrer des problèmes, veuillez consulter le [SUPPORT_SITE].
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Si vous possédez un terrain, vous pouvez le définir comme domicile.
@@ -4440,16 +4440,16 @@ Consultez FIRE-17710 pour plus de détails.
 		Impossible de suivre cet avatar, car il est hors de portée des radars.
 	</notification>
 	<notification name="CacheEmpty">
-		Le cache du visualiseur est vide. Le téléchargement du nouveau contenu peut entraîner un ralentissement de la vitesse d'affichage et du chargement de l'inventaire pendant une courte période.
+		Le cache du client est vide. Le téléchargement du nouveau contenu peut entraîner un ralentissement de la vitesse d'affichage et du chargement de l'inventaire pendant une courte période.
 	</notification>
 	<notification name="FirstJoinSupportGroup2">
 		Bienvenue dans le groupe de support aux téléspectateurs de Phoenix/Firestorm !
 
-Pour faciliter le support, il est recommandé d'annoncer la version de votre visualiseur au groupe. Ces informations comprennent la version actuelle du visualiseur, le skin du visualiseur, le système d'exploitation et le statut RLVa. Vous pouvez choisir d'afficher la version de votre visualiseur en face de toute discussion que vous envoyez au groupe. Nos membres de l'assistance peuvent vous donner immédiatement des conseils plus pertinents s'ils connaissent la version du visualiseur que vous utilisez.
+Pour faciliter le support, il est recommandé d'annoncer la version de votre client au groupe. Ces informations comprennent la version actuelle du client, le skin du client, le système d'exploitation et le statut RLVa. Vous pouvez choisir d'afficher la version de votre client en face de toute discussion que vous envoyez au groupe. Nos membres de l'assistance peuvent vous donner immédiatement des conseils plus pertinents s'ils connaissent la version du client que vous utilisez.
 
 Vous pouvez activer et désactiver cette fonction à tout moment en utilisant la case à cocher dans la fenêtre de conversation de groupe.
 
-Voulez-vous activer l'affichage automatique de la version du visualiseur ?
+Voulez-vous activer l'affichage automatique de la version du client ?
 
 		<form name="form">
 			<button name="OK_okcancelignore" text="Oui"/>
@@ -5197,7 +5197,7 @@ Ils peuvent utiliser http://opensimulator.org/wiki/inventory pour résoudre les 
 		<usetemplate ignoretext="Impossible de déplacer les fichiers. Chemin précédent rétabli." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="PreferenceQualityWithLowMemory">
-		Votre système dispose de [TOTAL_MEM] Mo de mémoire, ce qui peut s'avérer insuffisant pour exécuter la visionneuse avec des paramètres élevés et risque d'entraîner des problèmes.
+		Votre système dispose de [TOTAL_MEM] Mo de mémoire, ce qui peut s'avérer insuffisant pour exécuter le client avec des paramètres élevés et risque d'entraîner des problèmes.
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Continuer"/>
 	</notification>
 	<notification name="DefaultObjectPermissions">
@@ -5283,11 +5283,11 @@ Toutes les sauvegardes existantes dans cet emplacement seront écrasées !
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Sauvegarder"/>
 	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
-		Settings restore requires a viewer restart. Do you want to restore your settings and quit the viewer now?
+		La restauration des paramètres nécessite un redémarrage du client. Voulez-vous restaurer vos paramètres et quitter le client maintenant ?
 		<usetemplate name="okcancelbuttons" notext="Cancel" yestext="Restore and Quit"/>
 	</notification>
 	<notification name="RestoreFinished">
-		Restauration terminée ! Veuillez redémarrer votre visualiseur maintenant.
+		Restauration terminée ! Veuillez redémarrer votre client maintenant.
 		<usetemplate name="okbutton" yestext="Quit"/>
 	</notification>
 	<notification name="ConfirmRestoreQuickPrefsDefaults">
@@ -5441,7 +5441,7 @@ Facteur LOD >8: N'a pas d'effet réel. Peut provoquer des erreurs.
 	<notification name="OverrideVRAMWarning">
 		AVERTISSEMENT : Le fait de passer outre la détection de la VRAM peut entraîner de l'instabilité.
 
-La plupart des utilisateurs devraient laisser ce paramètre désactivé et laisser la visionneuse et le système d'exploitation déterminer la valeur correcte.
+La plupart des utilisateurs devraient laisser ce paramètre désactivé et laisser le client et le système d'exploitation déterminer la valeur correcte.
 
 Ce paramètre est destiné aux cas où la détection de la VRAM indique des valeurs incorrectes. À utiliser avec précaution. En cas de doute, demandez l'aide de l'assistance technique.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -5450,7 +5450,7 @@ Ce paramètre est destiné aux cas où la détection de la VRAM indique des vale
 		Cette région a choisi de spécifier un portail monétaire tiers.
 Veuillez noter que les achats de devises effectués par le biais de Firestorm Viewer sont des transactions entre vous (l'utilisateur) et le(s) fournisseur(s) ou vendeur(s) de la devise.
 Ni Firestorm Viewer, ni le Phoenix Firestorm Viewer Project Inc. ni son équipe ne peuvent être tenus responsables de tout coût ou dommage résultant directement ou indirectement d'une telle transaction.
-Si vous n'acceptez pas ces conditions d'utilisation, vous ne devez pas effectuer de transactions financières en utilisant ce visualiseur.
+Si vous n'acceptez pas ces conditions d'utilisation, vous ne devez pas effectuer de transactions financières en utilisant ce client.
 		<usetemplate ignoretext="When the region sets a new currency helper." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="EnableHiDPI">
@@ -5664,7 +5664,7 @@ L'image que vous essayez de télécharger contient un canal alpha (informations 
 	<notification name="WhitelistReminder">
 Pour améliorer les performances de [APP_NAME], veuillez la mettre sur liste blanche.
 
-Certains programmes antivirus peuvent bloquer par erreur des parties de [APP_NAME], ralentissant ainsi ses performances et provoquant le dysfonctionnement de certaines fonctions. Pour éviter ces problèmes, nous vous recommandons vivement d'ajouter [APP_NAME] à la liste blanche (ou liste d'exclusion) de votre programme antivirus. Cela garantira le bon fonctionnement de la visionneuse.
+Certains programmes antivirus peuvent bloquer par erreur des parties de [APP_NAME], ralentissant ainsi ses performances et provoquant le dysfonctionnement de certaines fonctions. Pour éviter ces problèmes, nous vous recommandons vivement d'ajouter [APP_NAME] à la liste blanche (ou liste d'exclusion) de votre programme antivirus. Cela garantira le bon fonctionnement du client.
 
 Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] sur liste blanche - y compris une liste de fichiers et de dossiers à exclure - veuillez consulter notre guide :
 
@@ -5675,7 +5675,7 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		Un grand nombre de tenues ont été détectées : [AMOUNT]. Cela peut entraîner des blocages ou des déconnexions de la visionneuse. Envisagez de réduire le nombre de tenues pour améliorer les performances (en dessous de [MAX]). IL S'AGIT UNIQUEMENT D'UNE SUGGESTION. Si votre ordinateur fonctionne normalement, vous pouvez ignorer cette recommandation.
+		Un grand nombre de tenues ont été détectées : [AMOUNT]. Cela peut entraîner des blocages ou des déconnexions du client. Envisagez de réduire le nombre de tenues pour améliorer les performances (en dessous de [MAX]). IL S'AGIT UNIQUEMENT D'UNE SUGGESTION. Si votre ordinateur fonctionne normalement, vous pouvez ignorer cette recommandation.
 		<usetemplate ignoretext="Avertissement nombre de tenues" name="okignore" yestext="OK" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">

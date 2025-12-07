@@ -61,22 +61,22 @@
 				<text name="beyond_shout_distance_tag_label">Hors de portée de cri</text>
 			</panel>
 			<panel name="client_tags_panel">
-				<text name="client_tags_colors">Couleur selon la visionneuse : (OpenSim/AuroraSim seulement)</text>
+				<text name="client_tags_colors">Couleur selon le client : (OpenSim/AuroraSim seulement)</text>
 				<text name="whattagstoshow">Quelles étiquettes voulez-vous voir ?</text>
 				<combo_box name="ClientTagsVisibility">
 					<combo_box.item name="No Viewertags" label=" Aucun"/>
-					<combo_box.item name="TPVD Viewer" label="Les 'Third-Party Viewers' officiels"/>
-					<combo_box.item name="All known Viewers" label="Toutes les visionneuses connues (définies par une liste)"/>
-					<combo_box.item name="All Viewers" label="Toutes les visionneuses"/>
+					<combo_box.item name="TPVD Viewer" label="Les clients tiers officiels"/>
+					<combo_box.item name="All known Viewers" label="Tous les clients connues (définies par une liste)"/>
+					<combo_box.item name="All Viewers" label="Tous les clients"/>
 				</combo_box>
-				<text name="colorbasedonviewer">Couleur d'étiquette par visionneuse</text>
+				<text name="colorbasedonviewer">Couleur d'étiquette par client</text>
 				<combo_box name="ColorClienttags">
 					<combo_box.item name="Color not based on Viewer" label="Non"/>
-					<combo_box.item name="Single color per Viewer" label="Une couleur par visionneuse"/>
-					<combo_box.item name="Multiple colors per Viewer" label="Plusieurs couleurs par visionneuse"/>
+					<combo_box.item name="Single color per Viewer" label="Une couleur par client"/>
+					<combo_box.item name="Multiple colors per Viewer" label="Plusieurs couleurs par client"/>
 					<combo_box.item name="Userdefined color" label="Couleurs définies par l'utilisateur"/>
 				</combo_box>
-				<text name="listtodisplayviewertags_txt">Liste prédéf. d'étiquettes de visionneuse ?</text>
+				<text name="listtodisplayviewertags_txt">Liste prédéf. d'étiquettes du client ?</text>
 				<combo_box name="UseLegacyClienttags">
 					<combo_box.item name="Don't use a list" label="Non"/>
 					<combo_box.item name="Local Clienttags" label="Liste statique"/>

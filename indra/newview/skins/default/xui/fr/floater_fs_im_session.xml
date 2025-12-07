@@ -42,7 +42,7 @@
 		</layout_panel>
 		<layout_panel name="support_panel" width="135">
 			<icon name="dummy_icon_support_group" width="133"/>
-			<check_box label="Spécifier la version" name="FSSupportGroupChatPrefix_toggle" tool_tip="Indique la version de votre Viewer et son thème au début de vos messages envoyés à ce groupe pour aider le diagnostic des équipes de support afin d'améliorer la précision des réponses à vos questions"/>
+			<check_box label="Spécifier la version" name="FSSupportGroupChatPrefix_toggle" tool_tip="Indique la version de votre client et son thème au début de vos messages envoyés à ce groupe pour aider le diagnostic des équipes de support afin d'améliorer la précision des réponses à vos questions"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">

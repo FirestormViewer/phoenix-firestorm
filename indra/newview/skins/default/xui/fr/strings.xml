@@ -63,7 +63,7 @@ Mémoire de carte graphique (Capacité): [VRAM_BUDGET]
 	</string>
 	<string name="AboutSettings">
 Mode de réglage : [MODE]
-Skin du visualiseur: [SKIN] ([THEME])
+Skin du client : [SKIN] ([THEME])
 Taille de la fenêtre : [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
 Police utilisée : [FONT] ([FONT_SCREEN_DPI] dpi)
 Taille de la police : [FONT_SIZE] pt
@@ -2718,16 +2718,16 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 		Ce résident a activé Ne pas déranger et verra votre message plus tard.
 	</string>
 	<string name="AutoResponseModeDefault">
-		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
+		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du client [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
-		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
+		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du client [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
-		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les offres ou demandes de téléportation du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les offres ou demandes de téléportations. Vous pouvez quand même lui envoyer un message privé.
+		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les offres ou demandes de téléportation du client [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les offres ou demandes de téléportations. Vous pouvez quand même lui envoyer un message privé.
 	</string>
 	<string name="RejectFriendshipRequestsResponseDefault">
-		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les demandes d'amitié du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les demandes de d'amitié. Vous pouvez quand même lui envoyer un message privé.
+		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les demandes d'amitié du client [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les demandes de d'amitié. Vous pouvez quand même lui envoyer un message privé.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Le résident à qui vous avez envoyé un message a bloqué l'envoi de tous message de votre part.
@@ -3242,7 +3242,7 @@ Si la mémoire vive de votre ordinateur est faible, quittez les applications lou
 	<string name="MBMissingFile">
 		[APP_NAME] n'a pas pu accéder ou trouver certains des fichiers dont il a besoin et sera fermé.
 
-Veuillez réinstaller la visionneuse à partir de [DOWNLOAD_URL] et contacter [SUPPORT_SITE] si le problème persiste après la réinstallation.
+Veuillez réinstaller la le clientuse à partir de [DOWNLOAD_URL] et contacter [SUPPORT_SITE] si le problème persiste après la réinstallation.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Ombre de 5 heures
@@ -6105,7 +6105,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Changer les paramètres de débogage du logiciel (CTRL+ALT+SHIFT+S)
 	</string>
 	<string name="Command_Statistics_Tooltip">
-		Affiche les statistiques du navigateur (CTRL+SHIFT+1)
+		Affiche les statistiques du client (CTRL+SHIFT+1)
 	</string>
 	<string name="Command_Region_Tooltip">
 		Ouvre les outils de gestion région et domaine (ALT+R)
@@ -6583,7 +6583,7 @@ correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez v
 		Relancer
 	</string>
 	<string name="FSCmdLineRollDiceFreezeGuard">
-		Cette opération ne peut être réalisée car le viewer se figerait dans une boucle infinie. Veuillez modifier les critères.
+		Cette opération ne peut être réalisée car le client se figerait dans une boucle infinie. Veuillez modifier les critères.
 	</string>
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' n'est pas une expression valable pour RAND(min,max). MAX doit être supérieur à MIN, les deux dans une fourchette de -10000 à 10000.
@@ -6834,7 +6834,7 @@ Votre position actuelle : [AVATAR_POS]
 		Mute de la discussion de groupe de [NAME].
 	</string>
 	<string name="IgnoredAdHocSession">
-		Vous avez été invité à une conférence (ad-hoc) par [AVATAR_NAME], mais la visionneuse l'a automatiquement ignoré à cause de vos réglages.
+		Vous avez été invité à une conférence (ad-hoc) par [AVATAR_NAME], mais le client l'a automatiquement ignoré à cause de vos réglages.
 	</string>
 
 	<!-- <FS:Ansariel> Radar notifications -->

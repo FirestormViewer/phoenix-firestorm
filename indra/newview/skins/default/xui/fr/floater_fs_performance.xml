@@ -40,15 +40,15 @@
 			</text>
 		</panel>
 		<panel name="target_subpanel">
-			<text name="settings_lbl" tool_tip="Ajustement automatique des paramètres pour maintenir la fréquence d'images. Réglez la cible sur la fréquence d'images souhaitée et la visionneuse tentera de s'y conformer en modifiant dynamiquement vos paramètres.">
+			<text name="settings_lbl" tool_tip="Ajustement automatique des paramètres pour maintenir la fréquence d'images. Réglez la cible sur la fréquence d'images souhaitée et le client tentera de s'y conformer en modifiant dynamiquement vos paramètres.">
 				Auto :
 			</text>
 			<text name="targetfps_desc">
 				Fréquence d'images cible (fps)
 			</text>
-			<spinner name="target_fps" tool_tip="FPS cible - Le niveau de FPS souhaité. Le visualisateur essaiera d'atteindre ce niveau en ajustant vos paramètres graphiques.." />
-			<button label="Lancer" label_selected="Stop" name="AutoTuneFPS" tool_tip="La visionneuse tentera d'ajuster les paramètres pour atteindre la FPS cible." width="72" />
-			<check_box label="Continu" name="AutoTuneContinuous" tool_tip="La visionneuse adaptera continuellement les paramètres pour atteindre l'objectif FPS jusqu'à ce qu'elle s'arrête, même avec le flotteur fermé. Lorsqu'il est désactivé, un clic sur le bouton Réglage auto ajustera les paramètres actuels puis s'arrêtera." width="64" />
+			<spinner name="target_fps" tool_tip="FPS cible - Le niveau de FPS souhaité. Le client essaiera d'atteindre ce niveau en ajustant vos paramètres graphiques.." />
+			<button label="Lancer" label_selected="Stop" name="AutoTuneFPS" tool_tip="Le client tentera d'ajuster les paramètres pour atteindre la FPS cible." width="72" />
+			<check_box label="Continu" name="AutoTuneContinuous" tool_tip="Le client adaptera continuellement les paramètres pour atteindre l'objectif FPS jusqu'à ce qu'elle s'arrête, même avec le flotteur fermé. Lorsqu'il est désactivé, un clic sur le bouton Réglage auto ajustera les paramètres actuels puis s'arrêtera." width="64" />
 			<button name="PrefSaveButton" tool_tip="Sauvegarder les paramètres actuels par défaut pour une utilisation ultérieure."/>
 			<button name="PrefLoadButton" tool_tip="Charger un préréglage existant."/>
 			<button tool_tip="Rechargez les paramètres graphiques par défaut de votre ordinateur." name="Defaults"/>

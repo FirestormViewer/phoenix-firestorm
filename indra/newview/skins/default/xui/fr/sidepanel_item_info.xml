@@ -44,7 +44,7 @@
 			<text name="LabelItemDescTitle">
 				Description :
 			</text>
-			<text_editor name="LabelItemDesc" tool_tip="Lorsque les utilisateurs ont sélectionné &apos;Afficher les infobulles sur tous les objets&apos; dans les paramètres de la visionneuse, ils verront la description de l'objet s'afficher pour tout objet placé sous le pointeur de leur souris. La description de l'objet est limitée à 127 octets. Toute chaîne de caractères plus longue sera tronquée." />
+			<text_editor name="LabelItemDesc" tool_tip="Lorsque les utilisateurs ont sélectionné &apos;Afficher les infobulles sur tous les objets&apos; dans les paramètres du client, ils verront la description de l'objet s'afficher pour tout objet placé sous le pointeur de leur souris. La description de l'objet est limitée à 127 octets. Toute chaîne de caractères plus longue sera tronquée." />
 			<text name="LabelItemExperienceTitle">
 				Expérience :
 			</text>
