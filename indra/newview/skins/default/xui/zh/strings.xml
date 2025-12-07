@@ -115,10 +115,10 @@ Voice Server Version: [VOICE_VERSION]
 		Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
 	<string name="AboutTime">
-		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
+		[year, datetime, slt] [month, datetime, slt] [day, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
 	</string>
 	<string name="LocalTime">
-		[month, datetime, local] [day, datetime, local] [year, datetime, local] [hour, datetime, local]:[min, datetime, local]:[second,datetime, local]
+		[year, datetime, local] [month, datetime, local] [day, datetime, local] [hour, datetime, local]:[min, datetime, local]:[second,datetime, local]
 	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		取得伺服器發行檔案URL失敗.
@@ -2642,7 +2642,7 @@ support@secondlife.com.
 	</string>
 	<!-- god tools -->
 	<string name="GodToolsObjectOwnedBy">
-		物件 [OBJECT] 所有者為 [OWNER]
+		物件[OBJECT]所有者為[OWNER]
 	</string>
 	<!-- groups -->
 	<string name="GroupsNone">
@@ -2655,7 +2655,7 @@ support@secondlife.com.
 	<string name="SummaryForTheWeek" value="本週總結，開始於 " />
 	<string name="NextStipendDay" value="下一個津貼日是 " />
 	<string name="GroupPlanningDate">
-		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc]
 	</string>
 	<string name="GroupIndividualShare" value="                      群組       個人份額" />
 	<string name="GroupColumn" value="                      群組" />
@@ -2943,14 +2943,14 @@ support@secondlife.com.
 	</string>
 	<!-- script editor -->
 	<string name="CursorPos">
-		橫排 [LINE], 豎排 [COLUMN]
+		橫排[LINE], 豎排[COLUMN]
 	</string>
 	<!-- panel dir browser -->
 	<string name="PanelDirCountFound">
-		找到 [COUNT]
+		找到[COUNT]
 	</string>
 	<string name="PanelDirTimeStr">
-		[hour12,datetime,slt]:[min,datetime,slt] [ampm,datetime,slt]
+		[ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]
 	</string>
 	<!-- panel dir events -->
 	<string name="PanelDirEventsDateText">
@@ -2962,28 +2962,6 @@ support@secondlife.com.
 	</string>
 	<string name="PanelContentsNewScript">
 		新指令碼
-	</string>
-	<!-- panel preferences general -->
-	<string name="DoNotDisturbModeResponseDefault">
-		該居民處於「請勿打擾」狀態，不會立即看到你的訊息。
-	</string>
-	<string name="AutoResponseModeDefault">
-		當前居民已開啟 [APP_NAME] 檢視器的' '自動回復模式' 這意味著對方目前不想被打擾，你傳送的私聊資訊仍會顯示在對方的聊天界面中，以便對方稍後檢視。
-	</string>
-	<string name="AutoResponseModeNonFriendsDefault">
-		當前居民已開啟 [APP_NAME] 檢視器的' '自動回復模式' 這意味著對方目前不想被打擾，你傳送的私聊資訊仍會顯示在對方的聊天界面中，以便對方稍後檢視。
-	</string>
-	<string name="RejectTeleportOffersResponseDefault">
-		當前居民已開啟 [APP_NAME] 檢視器的' '禁止接收瞬間傳送請求和邀請模式' 這意味著對方目前不想受到傳送請求或邀請的打擾，但你仍可繼續傳送私聊資訊。
-	</string>
-	<string name="RejectFriendshipRequestsResponseDefault">
-		當前居民已開啟 [APP_NAME] 檢視器的' '拒絕所有好友請求模式' 這意味著對方被好友邀請打擾。但你仍可繼續傳送私聊資訊。
-	</string>
-	<string name="MutedAvatarsResponseDefault">
-		你已被當前居民阻止向其傳送任何資訊。
-	</string>
-	<string name="AwayAvatarResponseDefault">
-		當前居民不在電腦前，你傳送的私聊資訊仍會顯示在對方的聊天界面中，以便對方稍後檢視。
 	</string>
 	<!-- Mute -->
 	<string name="MuteByName">
@@ -3150,7 +3128,7 @@ support@secondlife.com.
 		支付額
 	</string>
 	<string name="GroupMoneyStartDate">
-		交易開始於 [weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
+		交易開始於[year,datetime,utc] [weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc],
 	</string>
 	<!-- Viewer menu -->
 	<string name="AcquiredItems">
@@ -5573,13 +5551,13 @@ support@secondlife.com.
 	</string>
 	<!-- birth date format shared by avatar inspector and profile panels -->
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc]
 	</string>
 	<string name="AvatarBirthDateFormatShort">
 		[mthnum,datetime,utc]/[day,datetime,utc]
 	</string>
 	<string name="AvatarBirthDateFormat_legacy">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[year,datetime,slt]/[mthnum,datetime,slt]/[day,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		無/無
@@ -7434,17 +7412,20 @@ SecondLife.com網站的「支援」部分
 	<string name="GroupNoticesPanelDateString">
 		[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+	<string name="GroupNoticesPanelDateStringAMPM">
+		[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [timezone,datetime,local]
+	</string>
 	<string name="GroupNoticesToastDateString">
-		[wkday,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]
+		[year,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringLocal">
-		[mthnum,datetime,local]/[day,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	<string name="GroupNoticesToastDateStringAMPM">
+		[year,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</string>
-	<string name="NotificationItemDateStringUTC">
-		[mth,datetime,utc]/[day,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	<string name="NotificationItemDateString">
+		[year,datetime,utc]/[mth,datetime,utc]/[day,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
-	<string name="NotificationItemDateStringSLT">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	<string name="NotificationItemDateStringAMPM">
+	[year,datetime,utc]/[mth,datetime,utc]/[day,datetime,utc] [ampm,datetime,utc] [hour12,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="Pie_av_render_normally">
 		正常

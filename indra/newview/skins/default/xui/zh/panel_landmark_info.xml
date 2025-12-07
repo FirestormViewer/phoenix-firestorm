@@ -15,11 +15,14 @@
 	<string name="server_forbidden_text">
 		權限不足，無法取得此位置的資訊。  請向地塊所有者尋找你的權限。
 	</string>
+	<string name="acquired_date_ampm">
+		[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</string>
 	<string name="acquired_date">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+		[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</string>
 	<string name="information_text">
-		流量：[TRAFFIC] 區域：[AREA] 平方公尺
+		流量：[TRAFFIC]區域：[AREA]平方公尺
 	</string>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">

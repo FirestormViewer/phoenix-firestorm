@@ -18,8 +18,11 @@
 	<panel.string name="owner_can">
 		所有者可以：
 	</panel.string>
+	<panel.string name="acquiredDateAMPM">
+		[year,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</panel.string>
 	<panel.string name="acquiredDate">
-		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+		[year,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</panel.string>
 	<panel.string name="origin_inventory">
 		（庫存）

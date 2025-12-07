@@ -630,7 +630,7 @@
 			</menu>
 			<menu_item_call label="強制參數為預設值" name="Force Params to Default" />
 			<menu_item_check label="動畫資訊" name="Animation Info" />
-			<menu_item_check label="顯示注視點" name="Show Look At" />
+			<menu_item_check label="顯示注視目標" name="Show Look At" />
 			<menu_item_check label="顯示目標選擇指示" name="Show Point At" />
 			<menu_item_check label="旋軸的更新除錯" name="Debug Joint Updates" />
 			<menu_item_check label="停用細節層次" name="Disable LOD" />

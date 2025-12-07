@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Display Name" title="變更顯示名">
 	<floater.string name="LockOutDateFormat">
-		[month,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]
+		[year,datetime,slt] [month,datetime,slt] [day,datetime,slt] [ampm,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
 	<text name="info_text">
 		你為你的化身取的名字叫做「顯示名」。 一星期可以修改一次。

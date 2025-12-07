@@ -37,7 +37,7 @@
 		未知地塊
 	</floater.string>
 	<floater.string name="DateFormatString">
-		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+		[year,datetime,local].[mthnum,datetime,local].[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</floater.string>
 	<filter_editor label="篩選資源封鎖清單" name="filter_input" />
 	<fs_scroll_list name="result_list">

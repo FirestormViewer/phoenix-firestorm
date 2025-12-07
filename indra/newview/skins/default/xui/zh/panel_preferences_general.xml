@@ -21,6 +21,16 @@
 	<text name="language_textbox2">
 		（須重新啟動）
 	</text>
+	<text name="time_format_textbox">
+		時間格式：
+	</text>
+	<combo_box name="time_format_combobox">
+		<combo_box.item label="上午 1:00" name="12H"/>
+		<combo_box.item label="13:00" name="24H"/>
+	</combo_box>
+	<text name="time_format_textbox2">
+		（需重新啟動）
+	</text>
 	<check_box label="顯示 IME 文字輸入" name="use_ime" tool_tip="使用國際輸入法編輯器（IME），僅在需要特定語言如日語或中文時使用。" />
 	<text name="maturity_desired_prompt">
 		我能進入區域的內容分級：

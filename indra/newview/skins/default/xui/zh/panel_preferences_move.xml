@@ -24,6 +24,14 @@
 			<text name="ignorecameraconstraints_requires_restart">(需要重新啟動)</text>
 			<check_box label="始終以不透明方式顯示相機控制視窗" name="FSAlwaysOpaqueCameraControls" />
 			<check_box label="在瞬間傳送後重新顯示暫時隱藏的物件" name="FSTempDerenderUntilTeleport" tool_tip="啟用後，瞬間傳送後暫時隱藏的物件將保持隱藏，直到下一次瞬間傳送。禁用後，這些物件將保持隱藏，直到對話結束或在元素封鎖清單視窗中手動重新顯示。" />
+			<text name="mouse_warp_lbl">
+				滑鼠歸位：
+			</text>
+			<combo_box name="mouse_warp_combo" tooltip="控制在Alt縮放和滑鼠觀察模式下，滑鼠是否自動跳轉至螢幕中心。">
+				<combo_box.item label="自動" name="0"/>
+				<combo_box.item label="開啟" name="1"/>
+				<combo_box.item label="關閉" name="2"/>
+			</combo_box>
 		</panel>
 		<panel label="第一人稱視角" name="tab-mouselook">
 			<check_box label="啟用第一人稱視角" name="EnableMouselook" tool_tip="允許第一人稱視角和使用滑鼠控制相機" />

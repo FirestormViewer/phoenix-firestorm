@@ -7,10 +7,10 @@
 		複製到庫存
 	</floater.string>
 	<floater.string name="DateTime">
-		[weekday,datetime,slt], [day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+		[year,datetime,slt], [month,datetime,slt] [day,datetime,slt] [weekday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
 	<floater.string name="UploaderDateTime">
-		由 [UPLOADER] 上傳於 [DATE_TIME]。
+		由[UPLOADER]上傳於[DATE_TIME]。
 	</floater.string>
 	<text name="desc txt">
 		描述:

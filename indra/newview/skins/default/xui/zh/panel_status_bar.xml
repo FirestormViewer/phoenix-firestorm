@@ -10,10 +10,10 @@
 		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
+		[year, datetime, slt], [month, datetime, slt] [day, datetime, slt] [weekday, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] L$
+		[AMT]L$
 	</panel.string>
 	<panel name="menu_search_panel">
 		<search_editor label="搜尋選項" name="search_menu_edit" tool_tip="在這裡輸入你想搜尋的字詞。 若在選項中有全文配對到結果，將會顯示部分結果。" />

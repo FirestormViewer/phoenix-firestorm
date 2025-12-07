@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="teleport_history_item">
+	<panel.string name="DateFmt">
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc], [hour,datetime,utc]:[min,datetime,utc]
+	</panel.string>
+	<panel.string name="DateFmtAMPM">
+		[year,datetime,utc]/[mthnum,datetime,utc]/[day,datetime,utc], [ampm,datetime,utc] [hour12,datetime,utc]:[min,datetime,utc]
+	</panel.string>
 	<button name="profile_btn" tool_tip="顯示物件資訊" />
 </panel>
