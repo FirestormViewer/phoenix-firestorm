@@ -30,8 +30,6 @@
 
 #include "llsingleton.h"
 #include "lluuid.h"
-#include <boost/signals2.hpp>
-#include <set>
 
 class FSFavoriteGroups : public LLSingleton<FSFavoriteGroups>
 {
@@ -43,7 +41,7 @@ public:
     void addFavorite(const LLUUID& group_id);
     void removeFavorite(const LLUUID& group_id);
     void toggleFavorite(const LLUUID& group_id);
-    const std::set<LLUUID>& getFavorites() const { return mFavoriteGroups; }
+    const uuid_set_t& getFavorites() const { return mFavoriteGroups; }
     bool hasFavorites() const { return !mFavoriteGroups.empty(); }
     void loadFavorites();
     void saveFavorites();
@@ -55,7 +53,7 @@ public:
     }
 
 private:
-    std::set<LLUUID> mFavoriteGroups;
+    uuid_set_t mFavoriteGroups;
     favorites_changed_signal_t mFavoritesChangedSignal;
 };
 

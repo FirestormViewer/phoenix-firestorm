@@ -43,7 +43,7 @@ FSFavoriteGroups::~FSFavoriteGroups()
 
 bool FSFavoriteGroups::isFavorite(const LLUUID& group_id) const
 {
-    return mFavoriteGroups.find(group_id) != mFavoriteGroups.end();
+    return mFavoriteGroups.contains(group_id);
 }
 
 void FSFavoriteGroups::addFavorite(const LLUUID& group_id)
@@ -85,15 +85,14 @@ void FSFavoriteGroups::loadFavorites()
 {
     mFavoriteGroups.clear();
 
-    LLSD favorites = gSavedPerAccountSettings.getLLSD("FSFavoriteGroups");
 
-    if (favorites.isArray())
+    if (LLSD favorites = gSavedPerAccountSettings.getLLSD("FSFavoriteGroups"); favorites.isArray())
     {
-        for (LLSD::array_const_iterator it = favorites.beginArray(); it != favorites.endArray(); ++it)
+        for (const auto& groupId : llsd::inArray(favorites))
         {
-            if (it->isUUID())
+            if (groupId.isUUID())
             {
-                mFavoriteGroups.insert(it->asUUID());
+                mFavoriteGroups.insert(groupId.asUUID());
             }
         }
     }
@@ -103,8 +102,7 @@ void FSFavoriteGroups::loadFavorites()
 
 void FSFavoriteGroups::saveFavorites()
 {
-
-    std::set<LLUUID> stale_groups;
+    uuid_set_t stale_groups;
     for (const auto& group_id : mFavoriteGroups)
     {
         if (!gAgent.isInGroup(group_id))
@@ -133,5 +131,3 @@ void FSFavoriteGroups::saveFavorites()
 
     LL_DEBUGS("FavoriteGroups") << "Saved " << mFavoriteGroups.size() << " favorite groups to per-account settings" << LL_ENDL;
 }
-
-
