@@ -24,6 +24,12 @@
 	<string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
+    <string
+     name="favorite_label"
+     value="Pin" />
+    <string
+     name="unfavorite_label"
+     value="Unpin" />
     <tab_container
      follows="all"
      height="390"
