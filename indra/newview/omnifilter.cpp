@@ -263,7 +263,7 @@ void Omnifilter::onNeedleCheckboxChanged(LLUICtrl* ctrl)
 
 void Omnifilter::onLogLine(time_t time, const std::string& log_line)
 {
-    LLDate date(time);
+    LLDate date((F64)time);
 
     LLSD substitution;
     substitution["datetime"] = date;

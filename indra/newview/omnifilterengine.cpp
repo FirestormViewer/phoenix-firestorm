@@ -58,7 +58,7 @@ void OmnifilterEngine::init()
 
 const OmnifilterEngine::Needle* OmnifilterEngine::logMatch(const std::string& needle_name, const Needle& needle)
 {
-    time_t now = LLDate::now().secondsSinceEpoch();
+    time_t now = (time_t)LLDate::now().secondsSinceEpoch();
     mLog.push_back(std::make_pair(now, needle_name));
     mLogSignal(now, needle_name);
 
