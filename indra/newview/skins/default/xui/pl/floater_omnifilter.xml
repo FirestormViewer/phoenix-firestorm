@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="Edytor reguł Omnifiltra">
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="Włącz Wszystkofiltr" />
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="Wł" />
+				<fs_scroll_list.columns name="needle_name" label="Reguła" />
+			</fs_scroll_list>
+			<button name="add_needle" label="Dodaj" />
+			<button name="remove_needle" label="Usuń" />
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="Czas (SLT)" />
+				<fs_scroll_list.columns name="log_entry" label="Reguła" />
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="Nazwa reguły:" />
+		<text name="sender_name_label" value="Nadawca:" />
+		<combo_box name="sender_match_type">
+			<combo_item name="sender_exact">
+				<column name="longtext" label="Dopasuj cały tekst" />
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="longtext" label="Dopasuj fragment" />
+			</combo_item>
+			<combo_item name="sender_regex">
+				<column name="longtext" label="Dopasuj wyraż. regularne" />
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="Treść:" />
+		<combo_box name="content_match_type">
+			<combo_item name="content_exact">
+				<column name="longtext" label="Dopasuj cały tekst" />
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="longtext" label="Dopasuj fragment" />
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="longtext" label="Dopasuj wyraż. regularne" />
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="Region:" />
+		<text name="owner_label" value="Właściciel:" />
+		<text name="match_source_label" value="Dopasuj z:" />
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="Czat lokalny" tool_tip="Zwykły publiczny czat awatarów w pobliżu." />
+				<button name="type_im" tool_tip="Wiadomości prywatne od użytkowników." />
+				<button name="type_group_im" label="Czat grupy" tool_tip="Czat grupowy od użytkowników." />
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="Ogłoszenie" tool_tip="Powiadomienia / ogłoszenia grupowe." />
+				<button name="type_invite" label="Zaproszenie" tool_tip="Zaproszenia do grupy." />
+				<button name="type_object_chat" label="Czat obiektu" tool_tip="Czat lokalny od obiektów." />
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="IM obiektu" tool_tip="Wiadomości IM od obiektów." />
+				<button name="type_script_error" label="Błąd" tool_tip="Komunikaty błędów ze skryptów." />
+				<button name="type_dialog" label="Okno skryptu" tool_tip="Dopasowuje pola w oknach dialogowych / komunikatach skryptów." />
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="Oferta" tool_tip="Dopasowuje pola w ofertach ekwipunku szafy." />
+				<button name="type_friendship" label="Znajomy" tool_tip="Prośby o dodanie do znajomych." />
+				<button name="type_lure" label="Oferta TP" tool_tip="Oferty teleportacji od użytkowników." />
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="Prośba TP" tool_tip="Prośby użytkowników o wysłanie oferty teleportu." />
+				<button name="type_load_url" label="Ładuj URL" tool_tip="Skryptowe prośby o otwarcie strony internetowej." />
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="Zastąp czatem:" />
+		<text name="button_reply_label" value="Wybierz przycisk:" />
+		<text name="text_box_reply_label" value="Odp. textboxem:" />
+	</panel>
+</floater>

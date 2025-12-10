@@ -121,33 +121,33 @@
 
 <text         name="match_source_label"   layout="topleft" follows="left|bottom" width="100" height="20" top_pad="4"      left="0"     valign="center" value="Match Source:" />
 
-<layout_stack orientation="horizontal" left="104" top_delta="0" right="-4" height="68" follows="left|right|bottom" layout="topleft">
+<layout_stack name="buttons_stack" orientation="horizontal" left="104" top_delta="0" right="-4" height="68" follows="left|right|bottom" layout="topleft">
 
-<layout_panel width="72" layout="topleft" follows="all">
+<layout_panel width="72" layout="topleft" follows="all" name="buttons_group_1">
 <button       name="type_nearby"          layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="0" label="Nearby Chat" tool_tip="Regular public avatar chat nearby." />
 <button       name="type_im"              layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4" label="IM" tool_tip="Instant messages from users." />
 <button       name="type_group_im"        layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4" label="Group Chat" tool_tip="Group chat from users." />
 </layout_panel>
 
-<layout_panel>
+<layout_panel name="buttons_group_2">
 <button       name="type_group_notice"    layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top="0"     label="Notice" tool_tip="Group notices." />
 <button       name="type_invite"          layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4" label="Invite" tool_tip="Group invitations." />
 <button       name="type_object_chat"     layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4" label="Object Chat" tool_tip="Nearby chat from objects." />
 </layout_panel>
 
-<layout_panel>
+<layout_panel name="buttons_group_3">
 <button       name="type_object_im"       layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top="0"      label="Object IM" tool_tip="Instant messages from objects." />
 <button       name="type_script_error"    layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4"  label="Error" tool_tip="Debug chat coming from scripts." />
 <button       name="type_dialog"          layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4"  label="Dialog" tool_tip="Matches fields in script dialogs." />
 </layout_panel>
 
-<layout_panel>
+<layout_panel name="buttons_group_4">
 <button       name="type_inventory_offer" layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top="0"      label="Offer" tool_tip="Matches fields in inventory offers." />
 <button       name="type_friendship"      layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4"  label="Friendship" tool_tip="Friend requests from users." />
 <button       name="type_lure"            layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4"  label="TP Lure" tool_tip="Teleport offers from users." />
 </layout_panel>
 
-<layout_panel>
+<layout_panel name="buttons_group_5">
 <button       name="type_tp_request"      layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top="0"      label="TP Request" tool_tip="Requests from users to send them a teleport offer." />
 <button       name="type_load_url"        layout="topleft" follows="left|right|top" width= "72" height="20" is_toggle="true" top_pad="4"  label="Load URL" tool_tip="Scripted requests to visit a website." />
 </layout_panel>

@@ -5533,6 +5533,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Primfeed_Tooltip">
 		Publikuj bezpośrednio na swoim koncie Primfeed.
 	</string>
+	<string name="Command_Omnifilter_Label">
+		Wszystkofiltr
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°
 	</string>
@@ -5718,6 +5721,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Pokaż emitery
+	</string>
+	<string name="Command_Omnifilter_Tooltip">
+		Edytuj reguły Wszystkofiltra
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
@@ -6693,5 +6699,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="Maximum">
 		Maksymalnie
+	</string>
+	<string name="OmnifilterNewNeedle">
+		NOWA REGUŁA
 	</string>
 </strings>

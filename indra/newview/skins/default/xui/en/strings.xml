@@ -2784,8 +2784,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Primfeed_Tooltip">Post directly to your Primfeed account.</string>
   <string name="Command_Omnifilter_Label">Omnifilter</string>
 
-  <string 
-name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
+  <string name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
   <string name="Command_Avatar_Tooltip">Choose a complete avatar</string>

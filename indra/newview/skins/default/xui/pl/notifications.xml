@@ -5568,4 +5568,47 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="PrimfeedUserStatusFailed">
 		Zalogowanie użytkownika w Primfeed powiodło się, ale sprawdzenie statusu już nie. Sprawdź, czy Primfeed działa.
 	</notification>
+	<notification name="NotRegularFileError">
+		Oczekiwano zwykłego pliku w:
+[FILE_NAME]
+	</notification>
+	<notification name="NotFolderError">
+		Oczekiwano zwykłego folderu w:
+[FILE_NAME]
+	</notification>
+	<notification name="GenericFileEmptyError">
+		Plik istnieje, ale jest pusty:
+[FILE_NAME]
+
+Komunikat błędu:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenReadError">
+		Nie można otworzyć pliku do odczytu:
+[FILE_NAME]
+
+Komunikat błędu:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenWriteError">
+		Nie można otworzyć pliku do zapisu:
+[FILE_NAME]
+
+Komunikat błędu:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileReadError">
+		Nie można odczytać pliku:
+[FILE_NAME]
+
+Komunikat błędu:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileWriteError">
+		Nie można zapisać do pliku:
+[FILE_NAME]
+
+Komunikat błędu:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
 </notifications>
