@@ -125,7 +125,7 @@ class OmnifilterEngine
         void loadNeedles();
         void saveNeedles();
 
-        virtual bool tick();
+        bool tick() override;
 
     protected:
         needle_list_t mNeedles;
