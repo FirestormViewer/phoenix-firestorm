@@ -187,6 +187,8 @@ set(viewer_SOURCE_FILES
     lfsimfeaturehandler.cpp
     llflickrconnect.cpp
     llfloaterflickr.cpp
+    omnifilter.cpp
+    omnifilterengine.cpp
     fsprimfeedconnect.cpp
     fsfloaterprimfeed.cpp
     llpanelopenregionsettings.cpp
@@ -1036,6 +1038,8 @@ set(viewer_HEADER_FILES
     fsfloaterprimfeed.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
+    omnifilter.h
+    omnifilterengine.h
     vjlocalmesh.h
     vjfloaterlocalmesh.h
     vjlocalmeshimportdae.h

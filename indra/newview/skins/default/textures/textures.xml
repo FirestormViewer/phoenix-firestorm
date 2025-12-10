@@ -165,6 +165,7 @@ with the same filename but different name
   <texture name="Command_MiniMap_Icon"      file_name="toolbar_icons/mini_map.png"     preload="true" />
   <texture name="Command_Move_Icon"         file_name="toolbar_icons/move.png"         preload="true" />
   <texture name="Command_Environments_Icon" file_name="toolbar_icons/environments.png" preload="true" />
+  <texture name="Command_Omnifilter_Icon"   file_name="toolbar_icons/omnifilter.png"   preload="true" />     <!-- FS:Zi: Omnifilter -->
   <texture name="Command_People_Icon"       file_name="toolbar_icons/people.png"       preload="true" />
   <texture name="Command_Performance_Icon"  file_name="toolbar_icons/performance.png"  preload="true" />
   <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
@@ -886,6 +887,7 @@ with the same filename but different name
   <texture name="Wearable_Favorites_Icon" file_name="toolbar_icons/wearable_favorites.png" preload="true" />
   <texture name="beacons" file_name="toolbar_icons/beacons.png" preload="true" />
   <texture name="Stop_Animations_Icon" file_name="toolbar_icons/stop_animations.png" preload="true" />
+  <texture name="omnifilter" file_name="toolbar_icons/omnifilter.png" preload="true" />
 
   <texture name="skin ansastorm blood" file_name="skinspreview/ansa_blood.jpg" preload="true" />
   <texture name="skin ansastorm bright blue" file_name="skinspreview/ansa_blue.jpg" preload="true" />

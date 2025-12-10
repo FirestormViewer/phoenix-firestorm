@@ -8559,6 +8559,13 @@ void handle_edit_shape()
     LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_shape"));
 }
 
+// <FS:Zi> Omnifilter support
+void handle_omnifilter()
+{
+    LLFloaterReg::showInstance("omnifilter");
+}
+// </FS:Zi>
+
 void handle_hover_height()
 {
     LLFloaterReg::showInstance("edit_hover_height");
@@ -12638,6 +12645,7 @@ void initialize_menus()
     commit.add("NowWearing", boost::bind(&handle_now_wearing));
     commit.add("EditOutfit", boost::bind(&handle_edit_outfit));
     commit.add("EditShape", boost::bind(&handle_edit_shape));
+    commit.add("Omnifilter", boost::bind(&handle_omnifilter));      // <FS:Zi> Omnifilter support
     commit.add("HoverHeight", boost::bind(&handle_hover_height));
     commit.add("EditPhysics", boost::bind(&handle_edit_physics));
     // <FS:TT> Client LSL Bridge

@@ -50,6 +50,7 @@
 #include "dialogstack.h"
 #include "llbutton.h"
 #include "llnavigationbar.h"
+#include "omnifilterengine.h"   // Omnifilter support
 // </FS:Zi>
 
 //////////////////////////////////////////////////////////////////////////
@@ -472,6 +473,74 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 
     // get scripted Object's ID
     LLUUID object_id = notification_id_to_object_id(notification_id);
+
+    // <FS:Zi> Omnifilter support
+    LLNotificationPtr notification = LLNotifications::instance().find(notification_id);
+
+    OmnifilterEngine::Haystack haystack;
+    haystack.mContent = notification->getMessage();
+
+    if(notification->getName() == "ScriptDialog")   // ScriptDialogGroup seems not to be in use anymore?
+    {
+        haystack.mType = OmnifilterEngine::eType::ScriptDialog;
+        haystack.mSenderName = notification->getPayload()["object_name"].asString();
+        haystack.mOwnerID = notification->getPayload()["owner_id"];
+    }
+    else if(notification->getName() == "ObjectGiveItem")    // what about OwnObjectGiveItem?
+    {
+		// "description":"\'Object Name\'  ( http://slurl.com/secondlife/Region%20Name/x/y/z )"
+        std::vector<std::string> params;
+        std::string description = notification->asLLSD()["responder_sd"]["description"].asString();
+        if (!description.empty())
+        {
+            LLStringUtil::getTokens(description, params, "/");
+            haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+        }
+
+        haystack.mType = OmnifilterEngine::eType::URLRequest;
+        haystack.mSenderName = notification->asLLSD()["responder_sd"]["from_name"].asString();
+        haystack.mOwnerID = notification->getPayload()["from_id"];
+    }
+    else if(notification->getName() == "LoadWebPage")
+    {
+        haystack.mType = OmnifilterEngine::eType::ScriptDialog;
+        haystack.mSenderName = notification->getPayload()["object_name"].asString();
+        haystack.mOwnerID = notification->getPayload()["owner_id"];
+    }
+    else
+    {
+        LL_WARNS("Omnifilter") << "unknown notification name: " << notification->getName() << LL_ENDL;
+    }
+
+    const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+    if(needle)
+    {
+        LLSD response = notification->getResponseTemplate();
+
+        if(response.has(TEXTBOX_MAGIC_TOKEN))
+        {
+            response[TEXTBOX_MAGIC_TOKEN] = needle->mTextBoxReply;
+            if (response[TEXTBOX_MAGIC_TOKEN].asString().empty())
+            {
+                // so we can distinguish between a successfully
+                // submitted blank textbox, and an ignored toast
+                response[TEXTBOX_MAGIC_TOKEN] = true;
+            }
+        }
+        else
+        {
+            if (!needle->mButtonReply.empty())
+            {
+                response[needle->mButtonReply] = true;
+            }
+        }
+
+        // this will result in DialogStack complaining that there is no matching dialog to remove
+        // but that should not break anything
+        notification->respond(response);
+        return;
+    }
+    // </FS:Zi>
 
     // Need to indicate of "new message" for object chiclets according to requirements
     // specified in the Message Bar design specification. See EXT-3142.

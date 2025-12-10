@@ -254,6 +254,7 @@
 #include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
+#include "omnifilterengine.h"       // <FS:Zi> Omnifilter support
 #include "streamtitledisplay.h"
 #include "tea.h"
 
@@ -1280,6 +1281,8 @@ bool idle_startup()
             init_menus();
         }
         show_release_notes_if_required();
+
+        OmnifilterEngine::getInstance()->init();    // <FS:Zi> Omnifilter support
 
         if (show_connect_box)
         {

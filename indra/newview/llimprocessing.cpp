@@ -79,6 +79,7 @@
 #include "llgiveinventory.h"
 #include "lllandmarkactions.h"
 #include "llviewernetwork.h"
+#include "omnifilterengine.h"   // <FS:Zi> Omnifilter support
 #include "sound_ids.h"
 #include "NACLantispam.h"
 
@@ -720,6 +721,100 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     }
     *-----------------------------------------------------
     */
+
+    // <FS:Zi> Omnifilter support
+    OmnifilterEngine::Haystack haystack;
+    haystack.mContent = message;
+    haystack.mSenderName = agentName;
+    haystack.mOwnerID = from_id;
+
+    switch (dialog)
+    {
+        case IM_NOTHING_SPECIAL:        // this is the type for regular IMs
+        {
+            haystack.mType = OmnifilterEngine::eType::InstantMessage;
+            break;
+        }
+        case IM_SESSION_SEND:           // this is the type for regular group IMs
+        case IM_SESSION_INVITE:         // this is the type for group IM sessions started by ourselves or conferences
+        case IM_DO_NOT_DISTURB_AUTO_RESPONSE:
+        {
+            haystack.mType = OmnifilterEngine::eType::GroupChat;
+            break;
+        }
+        case IM_FROM_TASK:
+        {
+            // haystack.mSenderName = agentName;    // Object name
+            // haystack.mOwnerID = from_id;         // object owner UUID
+            // haystack.mContent = message;         // IM content
+            haystack.mType = OmnifilterEngine::eType::ObjectInstantMessage;
+            break;
+        }
+        case IM_GROUP_INVITATION:
+        {
+            // haystack.mSenderName = agentName;    // Inviter "first.last"
+            // haystack.mOwnerID = from_id;         // group ID
+            haystack.mType = OmnifilterEngine::eType::GroupInvite;
+            break;
+        }
+        case IM_INVENTORY_OFFERED:
+        {
+            // haystack.mSenderName = agentName;    // Sender "First Last"
+            // haystack.mOwnerID = from_id;         // Sender UUID
+            // haystack.mContent = message;         // item/folder name
+            haystack.mType = OmnifilterEngine::eType::InventoryOffer;
+            break;
+        }
+        case IM_FRIENDSHIP_OFFERED:
+        {
+            // haystack.mSenderName = agentName;    // Sender "First Last"
+            // haystack.mOwnerID = from_id;         // Sender UUID
+            // haystack.mContent = message;         // friendship message
+            haystack.mType = OmnifilterEngine::eType::FriendshipOffer;
+            break;
+        }
+        case IM_LURE_USER:
+        {
+            // haystack.mSenderName = agentName;    // Sender "First Last"
+            // haystack.mOwnerID = from_id;         // Sender UUID
+            // haystack.mContent = message;         // teleport message
+            haystack.mType = OmnifilterEngine::eType::Lure;
+            break;
+        }
+        case IM_TELEPORT_REQUEST:
+        {
+            // haystack.mSenderName = agentName;    // Sender "First Last"
+            // haystack.mOwnerID = from_id;         // Sender UUID
+            // haystack.mContent = message;         // teleport message
+            haystack.mType = OmnifilterEngine::eType::TeleportRequest;
+            break;
+        }
+        case IM_GROUP_NOTICE:
+        {
+            // haystack.mSenderName = agentName;    // Notice Sender "First Last"
+            // haystack.mOwnerID = from_id;         // Notice Sender UUID
+            // haystack.mContent = message;         // notice message
+            haystack.mType = OmnifilterEngine::eType::GroupNotice;
+            break;
+        }
+        default:
+        {
+            LL_DEBUGS("Omnifilter") << "unhandled IM type " << (U32)dialog << LL_ENDL;
+            break;
+        }
+    }
+
+    const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+    if (needle)
+    {
+        if (needle->mChatReplace.empty())
+        {
+            return;
+        }
+
+        message = needle->mChatReplace;
+    }
+    // </FS:Zi>
 
     std::string notice_name;
     LLSD notice_args;

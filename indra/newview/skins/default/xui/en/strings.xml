@@ -2782,6 +2782,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Poser_Tooltip">Pose your avatar and animated objects</string>
   <string name="Command_Primfeed_Label">Primfeed</string>
   <string name="Command_Primfeed_Tooltip">Post directly to your Primfeed account.</string>
+  <string name="Command_Omnifilter_Label">Omnifilter</string>
 
   <string 
 name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
@@ -2847,6 +2848,7 @@ name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string
   <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
   <string name="Command_DAO_Tooltip">Derender Animated Objects (aka Animesh) - Temporarily derenders all currently visible Animesh (attached and free roaming). Derendered animesh will reappear after a TP</string>
   <string name="Command_Beacons_Tooltip">Show beacons</string>
+  <string name="Command_Omnifilter_Tooltip">Edit the Omnifilter rules</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
@@ -3341,4 +3343,5 @@ Your current position: [AVATAR_POS]
   <string name="Ultra">Ultra</string>
   <string name="Maximum">Maximum</string>
 
+  <string name="OmnifilterNewNeedle">NEW RULE</string>    <!-- <FS:Zi> Omnifilter -->
 </strings>
