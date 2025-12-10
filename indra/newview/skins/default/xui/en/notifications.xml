@@ -14891,4 +14891,89 @@ You have already linked this account to Primfeed. Use the reset button if you wi
    type="alertmodal">
 Primfeed user login successful, but status checks have failed. Please check the Primfeed is working.
   </notification>
+<!-- <FS:Zi> generic error notifications for file system issues -->
+  <notification
+   icon="alertmodal.tga"
+   name="NotRegularFileError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Expected to find a regular file at:
+[FILE_NAME]
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="NotFolderError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Expected to find a regular folder at:
+[FILE_NAME]
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="GenericFileEmptyError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+File exists but is empty:
+[FILE_NAME]
+
+Error message:
+[ERROR_MESSAGE] ([ERROR_CODE])
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="GenericFileOpenReadError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Could not open file for reading:
+[FILE_NAME]
+
+Error message:
+[ERROR_MESSAGE] ([ERROR_CODE])
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="GenericFileOpenWriteError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Could not open file for writing:
+[FILE_NAME]
+
+Error message:
+[ERROR_MESSAGE] ([ERROR_CODE])
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="GenericFileReadError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Could not read from file:
+[FILE_NAME]
+
+Error message:
+[ERROR_MESSAGE] ([ERROR_CODE])
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="GenericFileWriteError"
+   persist="false"
+   tag="fail"
+   type="alertmodal">
+Could not write to file:
+[FILE_NAME]
+
+Error message:
+[ERROR_MESSAGE] ([ERROR_CODE])
+  </notification>
+<!-- </FS:Zi> -->
 </notifications>
