@@ -28,10 +28,10 @@
 #include "llfloater.h"
 #include "lltextureentry.h"
 #include "lltexturecache.h"
-#include <dom/domElements.h>
 
 class LLViewerObject;
 class LLObjectSelection;
+class  daeElement;
 
 class DAESaver
 {
@@ -43,7 +43,7 @@ public:
         LLColor4 color;
         std::string name;
 
-        bool matches(LLTextureEntry* te)
+        bool matches(LLTextureEntry* te) const
         {
             return (textureID == te->getID()) && (color == te->getColor());
         }
@@ -58,7 +58,7 @@ public:
             return !(*this == rhs);
         }
 
-        MaterialInfo() {}
+        MaterialInfo() = default;
 
         MaterialInfo(const MaterialInfo& rhs)
         {
@@ -133,7 +133,6 @@ private:
     void onClickExport();
     void onExportFileSelected(const std::vector<std::string>& filenames);
     void onTextureExportCheck();
-    void onCommitTextureType();
     void saveTextures();
     void addSelectedObjects();
     void addTexturePreview();
