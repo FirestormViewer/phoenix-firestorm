@@ -298,7 +298,7 @@ void FSPanelRadar::requestUpdate()
 
 void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stats)
 {
-    if (!mVisibleCheckFunction)
+    if (mVisibleCheckFunction && !mVisibleCheckFunction())
     {
         return;
     }
