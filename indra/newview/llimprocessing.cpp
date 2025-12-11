@@ -723,13 +723,16 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     */
 
     // <FS:Zi> Omnifilter support
-    OmnifilterEngine::Haystack haystack;
-    haystack.mContent = message;
-    haystack.mSenderName = agentName;
-    haystack.mOwnerID = from_id;
-
-    switch (dialog)
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    if (use_omnifilter)
     {
+        OmnifilterEngine::Haystack haystack;
+        haystack.mContent = message;
+        haystack.mSenderName = agentName;
+        haystack.mOwnerID = from_id;
+
+        switch (dialog)
+        {
         case IM_NOTHING_SPECIAL:        // this is the type for regular IMs
         {
             haystack.mType = OmnifilterEngine::eType::InstantMessage;
@@ -802,17 +805,18 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             LL_DEBUGS("Omnifilter") << "unhandled IM type " << (U32)dialog << LL_ENDL;
             break;
         }
-    }
-
-    const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
-    if (needle)
-    {
-        if (needle->mChatReplace.empty())
-        {
-            return;
         }
 
-        message = needle->mChatReplace;
+        const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+        if (needle)
+        {
+            if (needle->mChatReplace.empty())
+            {
+                return;
+            }
+
+            message = needle->mChatReplace;
+        }
     }
     // </FS:Zi>
 

@@ -3253,13 +3253,16 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
         }
 
         // <FS:Zi> Omnifilter support
-        OmnifilterEngine::Haystack haystack;
-        haystack.mContent = chat.mText;
-        haystack.mSenderName = from_name;   // we don't use chat.mFromName here because that will include display names etc.
-        haystack.mOwnerID = chat.mFromID;
-
-        switch (chat.mChatType)
+        static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+        if (use_omnifilter)
         {
+            OmnifilterEngine::Haystack haystack;
+            haystack.mContent = chat.mText;
+            haystack.mSenderName = from_name;   // we don't use chat.mFromName here because that will include display names etc.
+            haystack.mOwnerID = chat.mFromID;
+
+            switch (chat.mChatType)
+            {
             case CHAT_TYPE_WHISPER:
             case CHAT_TYPE_NORMAL:
             case CHAT_TYPE_SHOUT:
@@ -3270,21 +3273,21 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
             {
                 switch (chat.mSourceType)
                 {
-                    case CHAT_SOURCE_AGENT:        // this is the type for regular chat
-                    {
-                        haystack.mType = OmnifilterEngine::eType::NearbyChat;
-                        break;
-                    }
-                    case CHAT_SOURCE_OBJECT:       // this is the type for object chat
-                    {
-                        haystack.mType = OmnifilterEngine::eType::ObjectChat;
-                        break;
-                    }
-                    default:
-                    {
-                        LL_DEBUGS("Omnifilter") << "unhandled source type " << (U32)chat.mSourceType << LL_ENDL;
-                        break;
-                    }
+                case CHAT_SOURCE_AGENT:        // this is the type for regular chat
+                {
+                    haystack.mType = OmnifilterEngine::eType::NearbyChat;
+                    break;
+                }
+                case CHAT_SOURCE_OBJECT:       // this is the type for object chat
+                {
+                    haystack.mType = OmnifilterEngine::eType::ObjectChat;
+                    break;
+                }
+                default:
+                {
+                    LL_DEBUGS("Omnifilter") << "unhandled source type " << (U32)chat.mSourceType << LL_ENDL;
+                    break;
+                }
                 }
                 const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
 
@@ -3311,6 +3314,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
             {
                 LL_DEBUGS("Omnifilter") << "unhandled chat type " << (U32)chat.mChatType << LL_ENDL;
                 break;
+            }
             }
         }
         // </FS:Zi>

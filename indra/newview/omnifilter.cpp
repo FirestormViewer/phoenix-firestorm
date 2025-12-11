@@ -29,7 +29,6 @@
 #include "llcombobox.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
-#include "lltrans.h"
 
 #include "fsscrolllistctrl.h"
 
@@ -41,10 +40,6 @@ static constexpr S32 LOG_CONTENT_COLUMN = 1;
 
 Omnifilter::Omnifilter(const LLSD& key) :
     LLFloater(key)
-{
-}
-
-Omnifilter::~Omnifilter()
 {
 }
 
@@ -194,7 +189,7 @@ void Omnifilter::onNeedleChanged()
 
 void Omnifilter::onAddNeedleClicked()
 {
-    std::string new_needle_string = LLTrans::getString("OmnifilterNewNeedle");
+    std::string new_needle_string = getString("OmnifilterNewNeedle");
     if (!mNeedleListCtrl->selectItemByLabel(new_needle_string, true, NEEDLE_NAME_COLUMN))
     {
         OmnifilterEngine::Needle& new_needle = OmnifilterEngine::getInstance()->newNeedle(new_needle_string);
@@ -336,19 +331,18 @@ bool Omnifilter::postBuild()
 
     mFilterLogCtrl->deleteAllItems();
 
-    for (auto const& needle_entry : OmnifilterEngine::getInstance()->getNeedleList())
+    auto& instance = OmnifilterEngine::instance();
+    for (const auto& [needle_name, needle] : instance.getNeedleList())
     {
-        const std::string& needle_name = needle_entry.first;
-        const OmnifilterEngine::Needle& needle = needle_entry.second;
         addNeedle(needle_name, needle);
     }
 
-    for (auto logLine : OmnifilterEngine::getInstance()->mLog)
+    for (const auto& [log_time, log_message] : instance.mLog)
     {
-        onLogLine(logLine.first, logLine.second);
+        onLogLine(log_time, log_message);
     }
 
-    OmnifilterEngine::getInstance()->mLogSignal.connect(boost::bind(&Omnifilter::onLogLine, this, _1, _2));
+    instance.mLogSignal.connect(boost::bind(&Omnifilter::onLogLine, this, _1, _2));
 
     if (mNeedleListCtrl->getItemCount())
     {

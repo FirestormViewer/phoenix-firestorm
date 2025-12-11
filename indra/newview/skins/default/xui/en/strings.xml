@@ -3341,6 +3341,4 @@ Your current position: [AVATAR_POS]
   <string name="Very High">Very High</string>
   <string name="Ultra">Ultra</string>
   <string name="Maximum">Maximum</string>
-
-  <string name="OmnifilterNewNeedle">NEW RULE</string>    <!-- <FS:Zi> Omnifilter -->
 </strings>

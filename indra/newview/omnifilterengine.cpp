@@ -28,6 +28,7 @@
 
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
+#include "llviewercontrol.h"
 
 #include <fstream>
 #include <filesystem>
@@ -59,15 +60,15 @@ void OmnifilterEngine::init()
 const OmnifilterEngine::Needle* OmnifilterEngine::logMatch(const std::string& needle_name, const Needle& needle)
 {
     time_t now = (time_t)LLDate::now().secondsSinceEpoch();
-    mLog.push_back(std::make_pair(now, needle_name));
+    mLog.emplace_back(now, needle_name);
     mLogSignal(now, needle_name);
 
     return &needle;
 }
 
-bool OmnifilterEngine::matchStrings(const std::string& needle_string, const std::string& haystack_string, eMatchType match_type, bool case_insensitive)
+bool OmnifilterEngine::matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive)
 {
-    static LLCachedControl<bool> use_omnifilter(*LLControlGroup::getInstance("Global"), "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
     if (!use_omnifilter)
     {
         return false;
@@ -98,8 +99,8 @@ bool OmnifilterEngine::matchStrings(const std::string& needle_string, const std:
             {
                 re_flags |= boost::regex::icase;
             }
-            boost::regex re(needle_string, re_flags);
-            if (boost::regex_match(haystack_string, re))
+            boost::regex re(std::string(needle_string), re_flags);
+            if (boost::regex_match(std::string(haystack_string), re))
             {
                 return true;
             }
@@ -132,11 +133,8 @@ bool OmnifilterEngine::matchStrings(const std::string& needle_string, const std:
 
 const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack)
 {
-    for (auto const& needle_entry : mNeedles)
+    for (const auto& [needle_name, needle]: mNeedles)
     {
-        const Needle& needle = needle_entry.second;
-        const std::string& needle_name = needle_entry.first;
-
         if (!needle.mEnabled)
         {
             continue;
@@ -166,7 +164,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack
             }
         }
 
-        if (!needle.mTypes.empty() && needle.mTypes.find(haystack.mType) == needle.mTypes.end())
+        if (!needle.mTypes.empty() && !needle.mTypes.contains(haystack.mType))
         {
             continue;
         }
@@ -182,7 +180,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack
 
 OmnifilterEngine::Needle& OmnifilterEngine::newNeedle(const std::string& needle_name)
 {
-    if (mNeedles.find(needle_name) != mNeedles.end())
+    if (mNeedles.contains(needle_name))
     {
         Needle new_needle;
         new_needle.mEnabled = false;
@@ -263,8 +261,7 @@ void OmnifilterEngine::loadNeedles()
 
     LL_DEBUGS("Omnifilter") << "Loading needles" << mNeedlesXMLPath << LL_ENDL;
 
-    std::ifstream file;
-    file.open(mNeedlesXMLPath.c_str());
+    llifstream file(mNeedlesXMLPath.c_str());
     if (file.fail())
     {
         LL_DEBUGS("Omnifilter") << "Unable to open Omnifilter storage at '" << mNeedlesXMLPath << "' for reading." << LL_ENDL;
@@ -294,11 +291,8 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
-    for (LLSD::map_iterator iter = needles_llsd.beginMap(); iter != needles_llsd.endMap(); ++iter)
+    for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
     {
-        const std::string& new_needle_name = (*iter).first;
-        LLSD needle_data = (*iter).second;
-
         Needle new_needle;
         new_needle.mSenderName = needle_data["sender_name"].asString();
         new_needle.mContent = needle_data["content"].asString();
@@ -311,9 +305,9 @@ void OmnifilterEngine::loadNeedles()
 
         LLSD types_llsd = needle_data["types"];
 
-        for (LLSD::array_iterator aiter = types_llsd.beginArray(); aiter != types_llsd.endArray(); ++aiter)
+        for (const auto& needle_type : llsd::inArray(types_llsd))
         {
-            new_needle.mTypes.insert(static_cast<OmnifilterEngine::eType>((*aiter).asInteger()));
+            new_needle.mTypes.insert(static_cast<OmnifilterEngine::eType>(needle_type.asInteger()));
         }
 
         new_needle.mEnabled = needle_data["enabled"].asBoolean();
@@ -333,9 +327,7 @@ void OmnifilterEngine::saveNeedles()
 
     LL_DEBUGS("Omnifilter") << "Saving needles" << mNeedlesXMLPath << LL_ENDL;
 
-    std::ofstream file;
-
-    file.open(mNeedlesXMLPath.c_str());
+    llofstream file(mNeedlesXMLPath.c_str());
     if (file.fail())
     {
         LL_DEBUGS("Omnifilter") << "Unable to open Omnifilter storage at '" << mNeedlesXMLPath << "' for writing." << LL_ENDL;
@@ -349,11 +341,8 @@ void OmnifilterEngine::saveNeedles()
 
     LLSD needles_llsd;
 
-    for (auto const& needle_entry : mNeedles)
+    for (const auto& [needle_name, needle] : mNeedles)
     {
-        const std::string& needle_name = needle_entry.first;
-        const Needle& needle = needle_entry.second;
-
         needles_llsd[needle_name]["sender_name"] = needle.mSenderName;
         needles_llsd[needle_name]["content"] = needle.mContent;
         needles_llsd[needle_name]["region_name"] = needle.mRegionName;

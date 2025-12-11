@@ -101,7 +101,7 @@ class OmnifilterEngine
                 bool mContentCaseInsensitive = false;
         };
 
-        typedef std::map<std::string, OmnifilterEngine::OmnifilterEngine::Needle> needle_list_t;
+        typedef std::map<std::string, OmnifilterEngine::OmnifilterEngine::Needle, std::less<>> needle_list_t;
         needle_list_t& getNeedleList();
 
         Needle& newNeedle(const std::string& needle_name);
@@ -116,11 +116,11 @@ class OmnifilterEngine
         typedef boost::signals2::signal<void(time_t, const std::string&)> log_signal_t;
         log_signal_t mLogSignal;
 
-        std::list<std::pair<time_t, std::string>> mLog;
+        std::vector<std::pair<time_t, std::string>> mLog;
 
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
-        bool matchStrings(const std::string& needle_string, const std::string& haystack_string, eMatchType match_type, bool case_insensitive);
+        bool matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
 
         void loadNeedles();
         void saveNeedles();
