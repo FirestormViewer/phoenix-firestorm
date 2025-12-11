@@ -9,7 +9,7 @@
  *         make an instance with arguments of arbitrary type. llmake()
  *         eliminates the need to declare a new helper function for every such
  *         class template.
- * 
+ *
  *         also relevant:
  *
  *         Template argument deduction for class templates (C++17)
@@ -62,22 +62,4 @@ POINTER_TEMPLATE<CLASS_TEMPLATE<ARGS...>> llmake_heap(ARGS&&... args)
         new CLASS_TEMPLATE<ARGS...>(std::forward<ARGS>(args)...));
 }
 
-#endif // VS 2013 workaround
-
-/// dumb pointer template just in case that's what's wanted
-
-/**
- * Same as llmake(), but returns a pointer to a new heap instance of
- * SomeTemplate<T...>(args...) using the pointer of your choice.
- *
- * @code
- * auto* dumb  = llmake_heap<SomeTemplate>(args...);
- * auto shared = llmake_heap<SomeTemplate, std::shared_ptr>(args...);
- * auto unique = llmake_heap<SomeTemplate, std::unique_ptr>(args...);
- * @endcode
- */
-// POINTER_TEMPLATE is characterized as template<typename...> rather than as
-// template<typename T> because (e.g.) std::unique_ptr has multiple template
-// arguments. Even though we only engage one, std::unique_ptr doesn't match a
-// template template parameter that itself takes only one template parameter.
-
+#endif /* ! defined(LL_LLMAKE_H) */
