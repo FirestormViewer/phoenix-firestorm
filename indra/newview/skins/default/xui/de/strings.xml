@@ -6111,6 +6111,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Primfeed_Label">
 		Primfeed
 	</string>
+	<string name="Command_Omnifilter_Label">
+		Omni-Filter
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6314,6 +6317,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Primfeed_Tooltip">
 		Auf Primfeed posten
+	</string>
+	<string name="Command_Omnifilter_Tooltip">
+		Regel für Omni-Filter bearbeiten
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -7320,5 +7326,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="Maximum">
 		Maximum
+	</string>
+	<string name="OmnifilterNewNeedle">
+		NEUE REGEL
 	</string>
 </strings>

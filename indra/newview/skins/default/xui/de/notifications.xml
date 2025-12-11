@@ -5945,4 +5945,47 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="PrimfeedUserStatusFailed">
 		Primfeed-Benutzeranmeldung erfolgreich, allerdings ist die Statusprüfung fehlgeschlagen. Bitte prüfen Sie, ob Primfeed korrekt funktioniert.
 	</notification>
+	<notification name="NotRegularFileError">
+		Es wurde eine reguläre Datei erwartet:
+[FILE_NAME]
+	</notification>
+	<notification name="NotFolderError">
+		Es wurde ein reguläres Verzeichnis erwartet:
+[FILE_NAME]
+	</notification>
+	<notification name="GenericFileEmptyError">
+		Datei existiert, aber ist leer:
+[FILE_NAME]
+
+Fehlermeldung:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenReadError">
+		Datei konnte nicht zum Lesen geöffnet werden:
+[FILE_NAME]
+
+Fehlermeldung:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenWriteError">
+		Datei konnte nicht zum Schreiben geöffnet werden:
+[FILE_NAME]
+
+Fehlermeldung:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileReadError">
+		Datei konnte nicht gelesen werden:
+[FILE_NAME]
+
+Fehlermeldung:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileWriteError">
+		Datei konnte nicht geschrieben werden:
+[FILE_NAME]
+
+Fehlermeldung:
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
 </notifications>
