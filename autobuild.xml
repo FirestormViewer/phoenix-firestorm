@@ -1015,38 +1015,6 @@
         <key>description</key>
         <string>glext headers define function prototypes and constants for OpenGL extensions</string>
       </map>
-      <key>glh_linear</key>
-      <map>
-        <key>platforms</key>
-        <map>
-          <key>common</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>066625e7aa7f697a4b6cd461aad960c57181011f</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-glh_linear/releases/download/v1.0.1-dev4-984c397/glh_linear-1.0.1-dev4-common-984c397.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>common</string>
-          </map>
-        </map>
-        <key>license</key>
-        <string>BSD</string>
-        <key>license_file</key>
-        <string>LICENSES/glh-linear.txt</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2000 Cass Everitt</string>
-        <key>version</key>
-        <string>1.0.1-dev4</string>
-        <key>name</key>
-        <string>glh_linear</string>
-        <key>description</key>
-        <string>glh - is a platform-indepenedent C++ OpenGL helper library</string>
-      </map>
       <key>glm</key>
       <map>
         <key>platforms</key>

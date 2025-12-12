@@ -2358,6 +2358,12 @@ bool idle_startup()
         update_static_eyes();
         // </FS:KC>
 
+        // <FS:Ansariel> Optional B/W emoji support
+        LLFontDescriptor::setIsUsingBWEmojiFunction([]() {
+            static LLCachedControl<bool> emoji_use_bw(gSavedSettings, "FSUseEmojiBW", false);
+            return emoji_use_bw();
+            });
+        // </FS:Ansariel>
 
         gAgent.addRegionChangedCallback(boost::bind(&LLPerfStats::StatsRecorder::clearStats));
 

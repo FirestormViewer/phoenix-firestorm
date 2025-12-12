@@ -47,30 +47,23 @@ bool init_from_xml(LLFontRegistry* registry, LLXMLNodePtr node);
 const std::string MACOSX_FONT_PATH_LIBRARY = "/Library/Fonts/";
 const std::string MACOSX_FONT_SUPPLEMENTAL = "Supplemental/";
 
-
-
-/*
-// *TODO* Zi: Not sure how to make the linker pick up gSavedSettings here, it always complains
-//            it can not be resolved. So revert to LL original here for now and live with no
-//            proper emoji support.
 // <FS:Beq> font functors with UI control access
+LLFontDescriptor::is_using_bw_emoji_callback_t LLFontDescriptor::sIsUsingBWEmojiFunction{ nullptr };
+
 static bool isEmojiUseBW(llwchar wch)
 {
-    static LLCachedControl<bool> emoji_use_bw(gSavedSettings, "FSUseEmojiBW", false);
-    if(emoji_use_bw)
+    if (LLFontDescriptor::sIsUsingBWEmojiFunction && LLFontDescriptor::sIsUsingBWEmojiFunction())
     {
-        return (LLStringOps::isEmoji(wch));
+        return LLStringOps::isEmoji(wch);
     }
     return false;
 }
 
-
 static bool isEmojiUseColor(llwchar wch)
 {
-    static LLCachedControl<bool> emoji_use_bw(gSavedSettings, "FSUseEmojiBW", false);
-    if(!emoji_use_bw)
+    if (!LLFontDescriptor::sIsUsingBWEmojiFunction || !LLFontDescriptor::sIsUsingBWEmojiFunction())
     {
-        return (LLStringOps::isEmoji(wch));
+        return LLStringOps::isEmoji(wch);
     }
     return false;
 }
@@ -80,13 +73,6 @@ LLFontDescriptor::char_functor_map_t LLFontDescriptor::mCharFunctors({
     { "is_emoji", LLStringOps::isEmoji }
     , { "is_emoji_use_color", isEmojiUseColor }
     , { "is_emoji_use_bw", isEmojiUseBW }
-});
-*/
-
-LLFontDescriptor::char_functor_map_t LLFontDescriptor::mCharFunctors({
-    { "is_emoji", LLStringOps::isEmoji }
-    , { "is_emoji_use_color", LLStringOps::isEmoji }    // <FS:Zi> See gSavedSettings comment above
-    , { "is_emoji_use_bw", LLStringOps::isEmoji }       // <FS:Zi> See gSavedSettings comment above
 });
 
 LLFontDescriptor::LLFontDescriptor():

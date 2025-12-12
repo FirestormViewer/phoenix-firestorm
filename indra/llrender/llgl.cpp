@@ -1648,9 +1648,7 @@ void LLGLManager::initExtensions()
     mHasATIMemInfo = mGLExtensions.contains("GL_ATI_meminfo"); //Basic AMD method, also see mHasAMDAssociations
 // FIRE-34655 - VRAM detection failing on Linux. Load all the GL functions we need.
 #if LL_LINUX && !LL_MESA_HEADLESS
-    // *TODO* Zi: Not sure if we need this? It requires glh_extensions.h and that causes
-    //            a huge mess when compiling
-    // mHasAMDAssociations = ExtensionExists("WGL_AMD_gpu_association", gGLHExts.mSysExts);
+    mHasAMDAssociations = mGLExtensions.contains("WGL_AMD_gpu_association");
 #endif
 
     // Misc
