@@ -114,7 +114,7 @@
 			 name="filter_log"
 			 layout="topleft"
 			 follows="all"
-			 height="150"
+			 height="127"
 			 top="0"
 			 draw_heading="true"
 			 draw_stripes="true"
