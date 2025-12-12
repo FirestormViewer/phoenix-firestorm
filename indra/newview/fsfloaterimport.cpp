@@ -42,8 +42,6 @@
 #include "llinventoryfunctions.h"
 #include "llmultigesture.h"
 #include "llnotificationsutil.h"
-#include "llparcel.h"
-#include "llprimlinkinfo.h"
 #include "llsdserialize.h"
 #include "llsdutil_math.h"
 #include "llsdutil.h"
@@ -54,18 +52,15 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
-#include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
 #include "llviewerregion.h"
 #include "llfilesystem.h"
 #include "llvolumemessage.h"
 #include "lltrace.h"
 #include "fsexportperms.h"
-#include <boost/algorithm/string_regex.hpp>
 #include <boost/lexical_cast.hpp>
 #include "llcoros.h"
 #include "llcoproceduremanager.h"
-#include "llsdutil.h"
 
 struct FSResourceData
 {
@@ -79,14 +74,15 @@ struct FSResourceData
     FSFloaterImport *mFloater;
 };
 
-void resourceDeleter( LLResourceData *aData )
+static void resourceDeleter(LLResourceData* resourcedata)
 {
-    FSResourceData *data = (FSResourceData*)aData->mUserData;
+    FSResourceData* data = (FSResourceData*)resourcedata->mUserData;
     delete data;
-    delete aData;
+    delete resourcedata;
 }
 
-void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL,  LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, boost::shared_ptr< LLResourceData > aResourceData );
+void uploadCoroutine(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t& a_httpAdapter, std::string aURL, LLSD aBody, LLAssetID aAssetId,
+                     LLAssetType::EType aAssetType, std::shared_ptr<LLResourceData> aResourceData);
 
 FSFloaterImport::FSFloaterImport(const LLSD& filename) :
     LLFloater(filename),
@@ -628,6 +624,7 @@ void FSFloaterImport::importPrims()
         mObjectSize++;
     }
     LL_DEBUGS("import") << "Object size is " << mObjectSize << LL_ENDL;
+    constexpr S32 MAX_PRIMS_PER_OBJECT = 256;
     if (mObjectSize > MAX_PRIMS_PER_OBJECT)
     {
         LL_WARNS("import") << "Object size is to large to link. " << mObjectSize << " is greater then max linking size of " << MAX_PRIMS_PER_OBJECT << LL_ENDL;
@@ -1507,8 +1504,8 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
             body["everyone_mask"] = LLSD::Integer(LLFloaterPerms::getEveryonePerms(perms_prefix));
         }
 
-        boost::shared_ptr< LLResourceData> pData(data, resourceDeleter);
-        LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage", "Upload asset", boost::bind( uploadCoroutine, _1, url, body, new_asset_id, asset_type, pData));
+        std::shared_ptr<LLResourceData> pData(data, resourceDeleter);
+        LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage", "Upload asset", boost::bind(uploadCoroutine, _1, url, body, new_asset_id, asset_type, pData));
 
         LL_DEBUGS("import") << "Asset upload via capability of " << new_asset_id.asString() << " to " << url << " of " << asset_id.asString() << LL_ENDL;
     }
@@ -1868,7 +1865,8 @@ public:
     }
 };
 
-void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL, LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, boost::shared_ptr< LLResourceData > aResourceData )
+void uploadCoroutine(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t& a_httpAdapter, std::string aURL, LLSD aBody, LLAssetID aAssetId,
+                     LLAssetType::EType aAssetType, std::shared_ptr<LLResourceData> aResourceData)
 {
     FSResourceData* fs_data = (FSResourceData*)aResourceData->mUserData;
     FSFloaterImport* self = fs_data->mFloater;
