@@ -52,7 +52,10 @@ private:
     S32         getCompositeOriginY() const override { return 0; }
     S32         getCompositeWidth() const override { return getFullWidth(); }
     S32         getCompositeHeight() const override { return getFullHeight(); }
-    void        midRenderTexLayerSet(bool success) override;
+    // <FS:Ansariel> [Legacy Bake]
+    // void        midRenderTexLayerSet(bool success) override;
+    void        midRenderTexLayerSet(bool success, LLRenderTarget* bound_target) override;
+    // </FS:Ansariel> [Legacy Bake]
 
     LLPointer<LLImageJ2C> mCompressedImage;
 };

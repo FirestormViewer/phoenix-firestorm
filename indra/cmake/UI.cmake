@@ -30,9 +30,9 @@ if (LINUX)
 
 
   target_link_libraries( ll::uilibraries INTERFACE
-          ll::fontconfig
+#          ll::fontconfig     # <FS:Zi> doesn't build with this enabled
           ll::freetype
-          ll::SDL3
+#          ll::SDL3           # <FS:Zi> doesn't build with this enabled
           ll::glib
           ll::gio
   )

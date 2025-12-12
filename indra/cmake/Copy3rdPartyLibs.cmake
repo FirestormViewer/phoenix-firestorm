@@ -240,8 +240,8 @@ elseif(LINUX)
         #libdb-5.1.so
         libopenal.so
         #libopenjp2.so
-        libuuid.so.16
-        libuuid.so.16.0.22
+        #libuuid.so.16           # <FS:Zi> no longer used
+        #libuuid.so.16.0.22      # <FS:Zi> no longer used
         #libfontconfig.so.1.10.1 # <FS:PC> fontconfig and freetype should be taken from the
         #libfontconfig.so.1      #         user's system, and not be packaged with the viewer
         libaprutil-1.so.0

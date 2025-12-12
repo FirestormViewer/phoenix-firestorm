@@ -372,7 +372,7 @@ void LLPluginClassMedia::setSizeInternal(void)
         mRequestedMediaHeight = nextPowerOf2(mRequestedMediaHeight);
     }
 
-#if LL_DARWIN || LL_LINUX
+#if LL_DARWIN
     if (!gHiDPISupport)
 #endif
 //<FS:TS> FIRE-30019: This clamp doesn't make sense on Linux, which can have

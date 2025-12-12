@@ -62,6 +62,12 @@ set(llwindow_LINK_LIBRARIES
         ll::uilibraries
         )
 
+if (LINUX)
+  list(APPEND llwindow_LINK_LIBRARIES
+        ll::fontconfig
+        )
+endif ()
+
 if (USE_SDL_WINDOW)
   list(APPEND viewer_SOURCE_FILES
        llsdl.cpp

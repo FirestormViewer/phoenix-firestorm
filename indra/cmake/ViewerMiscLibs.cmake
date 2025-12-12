@@ -2,7 +2,7 @@
 include(Prebuilt)
 
 if (LINUX)
-  use_prebuilt_binary(libuuid)
+  # use_prebuilt_binary(libuuid)      # <FS:Zi> no longer used
   add_library( ll::fontconfig INTERFACE IMPORTED )
 
   find_package(Fontconfig REQUIRED)

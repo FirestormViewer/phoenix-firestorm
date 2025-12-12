@@ -2084,3 +2084,9 @@ void LLWindowSDL::setUseMultGL(bool use_mult_gl)
 }
 #endif
 
+// <FS:Zi> all other OSes have this, too, and it was declared in the header
+void LLWindowSDL::openFile(const std::string& file_name)
+{
+    spawnWebBrowser("file://"+file_name,true);
+}
+// </FS:Zi>

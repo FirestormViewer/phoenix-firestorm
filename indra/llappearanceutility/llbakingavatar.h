@@ -77,15 +77,34 @@ public:
 public:
     void    applyMorphMask(const U8* tex_data, S32 width, S32 height, S32 num_components,
                             LLAvatarAppearanceDefines::EBakedTextureIndex index) override;
-    void    invalidateComposite(LLTexLayerSet* layerset) override;
+    // <FS:Ansariel> [Legacy Bake]
+    // void    invalidateComposite(LLTexLayerSet* layerset) override;
+    void    invalidateComposite(LLTexLayerSet* layerset, bool upload_result) override;
+    // </FS:Ansariel> [Legacy Bake]
     void    updateMeshTextures() override;
     void    dirtyMesh() override; // Dirty the avatar mesh
-    void    onGlobalColorChanged(const LLTexGlobalColor* global_color) override;
+    // <FS:Ansariel> [Legacy Bake]
+    // void    onGlobalColorChanged(const LLTexGlobalColor* global_color) override;
+    void    onGlobalColorChanged(const LLTexGlobalColor* global_color, bool upload_bake) override;
+    // </FS:Ansariel> [Legacy Bake]
     bool    isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex type, U32 index = 0) const override;
     bool    isUsingLocalAppearance() const override { return false; }
     bool    isEditingAppearance() const override { return false; }
+
+    // <FS:Ansariel> [Legacy Bake]
+    // *TODO* Zi: It looks like these two functions are never called for this subclass
+    bool isUsingServerBakes() const;
+    void bodySizeChanged();
+    // </FS:Ansariel> [Legacy Bake]
+
 private:
     void    dirtyMesh(S32 priority) override; // Dirty the avatar mesh, with priority
+
+    // <FS:Ansariel> [Legacy Bake]
+    // *TODO* Zi: It looks like the above two functions are never called for this subclass
+    //            so this variable is not needed
+    // bool mUseServerBakes;
+    // </FS:Ansariel> [Legacy Bake]
 
     // LLAvatarAppearance instance factories:
 protected:

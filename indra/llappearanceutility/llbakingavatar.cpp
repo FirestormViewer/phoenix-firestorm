@@ -93,17 +93,37 @@ void LLBakingAvatar::bakedTextureDatasAsLLSD(LLSD& sd) const
 
 void LLBakingAvatar::applyMorphMask(const U8* tex_data, S32 width, S32 height, S32 num_components,
         LLAvatarAppearanceDefines::EBakedTextureIndex index) {}
-void LLBakingAvatar::invalidateComposite(LLTexLayerSet* layerset) {}
+// <FS:Ansariel> [Legacy Bake]
+// void LLBakingAvatar::invalidateComposite(LLTexLayerSet* layerset) {}
+void LLBakingAvatar::invalidateComposite(LLTexLayerSet* layerset, bool upload_result) {}
+// </FS:Ansarial> [Legacy Bake]
 void LLBakingAvatar::updateMeshTextures() {}
 void LLBakingAvatar::dirtyMesh() {}
 void LLBakingAvatar::dirtyMesh(S32 priority) {}
-void LLBakingAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color) {}
+// <FS:Ansariel> [Legacy Bake]
+// void LLBakingAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color) {}
+void LLBakingAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color, bool upload_bake) {}
+// </FS:Ansarial> [Legacy Bake]
 
 bool LLBakingAvatar::isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex type, U32 index) const
 {
     return true;
 }
 
+// <FS:Ansariel> [Legacy Bake]
+// *TODO* Zi: It looks like these two functions are never called for this subclass
+bool LLBakingAvatar::isUsingServerBakes() const
+{
+    /* see LLVOAvatar::isUsingServerBakes() */
+    return false;
+}
+
+// virtual
+// *TODO* Zi: It looks like these two functions are never called for this subclass
+void LLBakingAvatar::bodySizeChanged()
+{
+}
+// </FS:Ansariel> [Legacy Bake]
 
 //-----------------------------------------------------------------------------
 // (LLERR) Non-implemented methods.
