@@ -3668,7 +3668,7 @@ LLViewerMediaImpl::canUndo() const
     if (mMediaSource)
         return mMediaSource->canUndo();
     else
-        return FALSE;
+        return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3688,7 +3688,7 @@ LLViewerMediaImpl::canRedo() const
     if (mMediaSource)
         return mMediaSource->canRedo();
     else
-        return FALSE;
+        return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3768,7 +3768,7 @@ LLViewerMediaImpl::canDoDelete() const
     if (mMediaSource)
         return mMediaSource->canDoDelete();
     else
-        return FALSE;
+        return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3788,7 +3788,7 @@ LLViewerMediaImpl::canSelectAll() const
     if (mMediaSource)
         return mMediaSource->canSelectAll();
     else
-        return FALSE;
+        return false;
 }
 
 void LLViewerMediaImpl::setUpdated(bool updated)
