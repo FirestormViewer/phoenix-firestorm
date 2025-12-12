@@ -259,7 +259,7 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
-    LL_DEBUGS("Omnifilter") << "Loading needles" << mNeedlesXMLPath << LL_ENDL;
+    LL_DEBUGS("Omnifilter") << "Loading needles from: " << mNeedlesXMLPath << LL_ENDL;
 
     llifstream file(mNeedlesXMLPath.c_str());
     if (file.fail())
@@ -325,7 +325,7 @@ void OmnifilterEngine::saveNeedles()
         return;
     }
 
-    LL_DEBUGS("Omnifilter") << "Saving needles" << mNeedlesXMLPath << LL_ENDL;
+    LL_DEBUGS("Omnifilter") << "Saving needles to: " << mNeedlesXMLPath << LL_ENDL;
 
     llofstream file(mNeedlesXMLPath.c_str());
     if (file.fail())
@@ -364,6 +364,8 @@ void OmnifilterEngine::saveNeedles()
         needles_llsd[needle_name]["sender_name_case_insensitive"] = needle.mSenderNameCaseInsensitive;
         needles_llsd[needle_name]["content_case_insensitive"] = needle.mContentCaseInsensitive;
     }
+
+    LLSDSerialize::toXML(needles_llsd, file);
 
     file.close();
 
