@@ -5,5 +5,7 @@
 	<menu_item_call label="複製SLurl到剪貼簿" name="Copy SLurl to clipboard" />
 	<menu_item_call label="聊天" name="Chat" />
 	<menu_item_call label="語音通話" name="Call" />
+	<menu_item_call label="釘選群組" name="Favorite" />
+	<menu_item_call label="取消釘選群組" name="Unfavorite" />
 	<menu_item_call label="退出" name="Leave" />
 </toggleable_menu>

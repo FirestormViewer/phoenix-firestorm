@@ -5722,4 +5722,49 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="PrimfeedUserStatusFailed">
 		Primfeedへのユーザログインは成功しましたが、ステータスチェックに失敗しました。Primfeedが機能しているかどうかを確認してください。
 	</notification>
+	<!-- <FS:Zi> generic error notifications for file system issues -->
+	<notification name="NotRegularFileError">
+通常のファイルは、以下の場所にあります：
+[FILE_NAME]
+	</notification>
+	<notification name="NotFolderError">
+通常のフォルダは、以下の場所にあります：
+[FILE_NAME]
+	</notification>
+	<notification name="GenericFileEmptyError">
+ファイルは存在しますが中身が空です：
+[FILE_NAME]
+
+エラーメッセージ：
+[ERROR_MESSAGE]（[ERROR_CODE]）
+	</notification>
+	<notification name="GenericFileOpenReadError">
+読み込み用にファイルを開けませんでした：
+[FILE_NAME]
+
+エラーメッセージ：
+[ERROR_MESSAGE]（[ERROR_CODE]）
+	</notification>
+	<notification name="GenericFileOpenWriteError">
+書き込み用にファイルを開けませんでした：
+[FILE_NAME]
+
+エラーメッセージ：
+[ERROR_MESSAGE]（[ERROR_CODE]）
+	</notification>
+	<notification name="GenericFileReadError">
+以下のファイルを読み込めませんでした：
+[FILE_NAME]
+
+エラーメッセージ：
+[ERROR_MESSAGE]（[ERROR_CODE]）
+	</notification>
+	<notification name="GenericFileWriteError">
+以下のファイルに書き込めませんでした：
+[FILE_NAME]
+
+エラーメッセージ：
+[ERROR_MESSAGE]（[ERROR_CODE]）
+	</notification>
+	<!-- </FS:Zi> -->
 </notifications>

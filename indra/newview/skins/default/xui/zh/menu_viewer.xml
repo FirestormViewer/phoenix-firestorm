@@ -10,6 +10,7 @@
 		<menu_item_check label="裝扮收藏夾" name="WearableFavorites" />
 		<menu_item_call label="精選" name="Picks" />
 		<menu_item_call label="體驗" name="Experiences" />
+		<menu_item_call label="全方位過濾器" name="Omnifilter" />
 		<menu_item_call label="檔案" name="Profile" />
 		<menu_item_call label="當前裝扮" name="NowWearing" />
 		<menu_item_check label="更換裝扮" name="ChangeOutfit" />

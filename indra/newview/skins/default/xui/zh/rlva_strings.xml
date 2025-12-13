@@ -36,7 +36,7 @@
 		<key>blocked_sendim</key>
 		<map>
 			<key>value</key>
-			<string>*** 私聊已被髮送者的檢視器阻止。</string>
+			<string>*** 私聊已被發送者的檢視器阻止。</string>
 			<key>description</key>
 			<string>當一個發送的私聊被阻止時，此訊息將顯示併發送給接收方。</string>
 			<key>label</key>

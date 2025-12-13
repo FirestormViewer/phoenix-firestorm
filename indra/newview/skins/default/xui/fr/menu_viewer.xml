@@ -87,7 +87,7 @@
 		</menu>
 		<menu_item_call label="Amis" name="My Friends"/>
 		<menu_item_check label="Contacts" name="Contacts"/>
-		<menu_item_call label="Groupes de contacts" name="Contact Sets"/>
+		<menu_item_call label="Cercles de contacts" name="Contact Sets"/>
 		<menu_item_call label="Groupes" name="My Groups"/>
 		<menu_item_check label="Chat près de moi..." name="Nearby Chat"/>
 		<menu_item_check label="Personnes" name="People"/>

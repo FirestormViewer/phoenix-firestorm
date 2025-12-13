@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="全方位過濾器規則編輯">
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="啟用全方位過濾器"/>
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="啟用"/>
+				<fs_scroll_list.columns name="needle_name" label="規則"/>
+			</fs_scroll_list>
+			<button name="add_needle" label="新增"/>
+			<button name="remove_needle" label="刪除"/>
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="時間 (SLT)"/>
+				<fs_scroll_list.columns name="log_entry" label="規則"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="規則名稱:"/>
+		<text name="sender_name_label" value="傳送者名稱:"/>
+		<check_box name="sender_case" label="區分大小寫"/>
+		<combo_box name="sender_match_type">
+			<combo_item name="sender_exact">
+				<column name="longtext" label="完全匹配"/>
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="longtext" label="部分匹配"/>
+			</combo_item>
+			<combo_item  name="sender_regex">
+				<column name="longtext" label="正規表示式"/>
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="內容:"/>
+		<check_box name="content_case" label="區分大小寫"/>
+		<combo_box name="content_match_type">
+			<combo_item name="content_exact">
+				<column name="longtext" label="完全匹配"/>
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="longtext" label="部分匹配"/>
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="longtext" label="正規表示式"/>
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="區域名稱:"/>
+		<text name="owner_label" value="所有者:"/>
+		<text name="match_source_label" value="來源:"/>
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="本地聊天" tool_tip="來自附近化身的普通聊天訊息。"/>
+				<button name="type_im" label="私聊" tool_tip="來自居民的私聊訊息。"/>
+				<button name="type_group_im" label="群組" tool_tip="來自居民的群組訊息。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="通知" tool_tip="群組通知。"/>
+				<button name="type_invite" label="邀請" tool_tip="群組邀請。"/>
+				<button name="type_object_chat" label="物件聊天" tool_tip="物件附近的聊天訊息。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="物件訊息" tool_tip="來自物件的私聊訊息。"/>
+				<button name="type_script_error" label="錯誤" tool_tip="腳本的除錯訊息。"/>
+				<button name="type_dialog" label="對話框" tool_tip="匹配腳本對話框中的字符。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="接收物件" tool_tip="匹配物件接收請求中的字符。"/>
+				<button name="type_friendship" label="好友請求" tool_tip="來自居民的好友請求。"/>
+				<button name="type_lure" label="瞬間傳送邀請" tool_tip="來自居民的傳送邀請。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="瞬間傳送請求" tool_tip="來自居民的瞬間傳送請求。"/>
+				<button name="type_load_url" label="開啟網址" tool_tip="腳本存取網頁的請求。"/>
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="聊天訊息替換:"/>
+		<text name="button_reply_label" value="按鈕回覆:"/>
+		<text name="text_box_reply_label" value="文字框回覆:"/>
+	</panel>
+</floater>

@@ -6301,6 +6301,12 @@ support@secondlife.com.
 	<string name="Command_Primfeed_Tooltip">
 		直接發佈到您的Primfeed賬戶。
 	</string>
+	<string name="Command_Omnifilter_Label">
+		全方位過濾器
+	</string>
+	<string name="Command_Omnifilter_Tooltip">
+		編輯全方位過濾器規則
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		拍攝360°旋轉圖像
 	</string>

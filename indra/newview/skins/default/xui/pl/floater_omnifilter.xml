@@ -46,8 +46,8 @@
 				<column name="longtext" label="Dopasuj wyraż. regularne" />
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="Region:" />
-		<text name="owner_label" value="Właściciel:" />
+		<text name="region_name_label" value="Region:" tool_tip="Nazwa regionu źródła. Dostępne tylko dla ofert przedmiotów." />
+		<text name="owner_label" value="UUID właściciela:" tool_tip="Dla zaproszeń do grupy: UUID grupy. Dla czatu obiektów, wypowiedzi właściciela, czatu debug lub czatu bezpośredniego: UUID obiektu. Dla IM-ów obiektów: UUID właściciela obiektu. Dla wszystkich pozostałych przypadków: UUID awatara nadawcy" />
 		<text name="match_source_label" value="Dopasuj z:" />
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">

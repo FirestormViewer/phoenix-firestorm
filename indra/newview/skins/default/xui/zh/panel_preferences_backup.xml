@@ -37,6 +37,9 @@
 						<row name="restore_global_row_controls">
 							<column name="restore_global_files_label">按鍵分配</column>
 						</row>
+						<row name="restore_global_row_omnifilter">
+							<column name="restore_global_files_label">全方位过滤器</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">

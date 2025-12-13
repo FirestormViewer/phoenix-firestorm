@@ -4,6 +4,7 @@
 	<button label="Informations" name="info_btn"/>
 	<button label="Titres" name="titles_btn"/>
 	<button label="Activer" name="activate_btn"/>
+	<button label="Épingler" name="favorite_btn" tool_tip="Ajouter ou supprimer un groupe des favoris"/>
 	<button label="Quitter" name="leave_btn"/>
 	<button label="Créer..." name="create_btn"/>
 	<button label="Rechercher..." name="search_btn"/>

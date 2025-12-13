@@ -5834,4 +5834,47 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="PrimfeedUserStatusFailed">
 		Primfeed 用戶已成功登錄，但狀態檢查失敗。請確認 Primfeed 服務是否正常運作。
 	</notification>
+	<notification name="NotRegularFileError">
+		預期路徑應是常規檔案：
+[FILE_NAME]
+	</notification>
+	<notification name="NotFolderError">
+		預期路徑應是常規資料夾：
+[FILE_NAME]
+	</notification>
+	<notification name="GenericFileEmptyError">
+		檔案存在但內容為空：
+[FILE_NAME]
+
+錯誤詳情：
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenReadError">
+		無法以讀取模式開啟檔案：
+[FILE_NAME]
+
+錯誤詳情：
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileOpenWriteError">
+		無法以寫入模式開啟檔案：
+[FILE_NAME]
+
+錯誤詳情：
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileReadError">
+		檔案讀取失敗：
+[FILE_NAME]
+
+錯誤詳情：
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="GenericFileWriteError">
+		檔案寫入失敗：
+[FILE_NAME]
+
+錯誤詳情：
+[ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
 </notifications>
