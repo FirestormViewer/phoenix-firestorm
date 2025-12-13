@@ -180,7 +180,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack
 
 OmnifilterEngine::Needle& OmnifilterEngine::newNeedle(const std::string& needle_name)
 {
-    if (mNeedles.contains(needle_name))
+    if (!mNeedles.contains(needle_name))
     {
         Needle new_needle;
         new_needle.mEnabled = false;
