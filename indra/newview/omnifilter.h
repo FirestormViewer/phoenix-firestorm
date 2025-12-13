@@ -58,6 +58,7 @@ class Omnifilter
         void onRemoveNeedleClicked();
         void onNeedleNameChanged();
         void onNeedleCheckboxChanged(LLUICtrl* ctrl);
+        void onOwnerChanged();
 
         void onLogLine(time_t time, const std::string& logLine);
 

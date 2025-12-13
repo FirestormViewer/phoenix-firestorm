@@ -123,6 +123,7 @@ void Omnifilter::onSelectNeedle()
     {
         mOwnerCtrl->setText(needle->mOwnerID.asString());
     }
+    onOwnerChanged();
 
     mTypeNearbyBtn->setToggleState(needle->mTypes.find(OmnifilterEngine::eType::NearbyChat) != needle->mTypes.end());
     mTypeIMBtn->setToggleState(needle->mTypes.find(OmnifilterEngine::eType::InstantMessage) != needle->mTypes.end());
@@ -256,6 +257,20 @@ void Omnifilter::onNeedleCheckboxChanged(LLUICtrl* ctrl)
     OmnifilterEngine::getInstance()->setDirty(true);
 }
 
+void Omnifilter::onOwnerChanged()
+{
+    static LLColor4 default_text_color = mOwnerCtrl->getFgColor();
+
+    if (LLUUID::validate(mOwnerCtrl->getValue()))
+    {
+        mOwnerCtrl->setFgColor(default_text_color);
+    }
+    else
+    {
+        mOwnerCtrl->setFgColor(LLUIColorTable::getInstance()->getColor("EmphasisColor"));
+    }
+}
+
 void Omnifilter::onLogLine(time_t time, const std::string& log_line)
 {
     LLDate date((F64)time);
@@ -368,6 +383,7 @@ bool Omnifilter::postBuild()
     mButtonReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mTextBoxReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mOwnerCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
+    mOwnerCtrl->setKeystrokeCallback(boost::bind(&Omnifilter::onOwnerChanged, this), nullptr);
     mTypeNearbyBtn->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mTypeIMBtn->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mTypeGroupIMBtn->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));

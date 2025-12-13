@@ -330,7 +330,8 @@
 		 follows="left|right|bottom"
 		 height="20"
 		 left_pad="4"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="The region name of the source. Only available for inventory offers."/>
 		<text
 		 name="owner_label"
 		 layout="topleft"
@@ -338,14 +339,16 @@
 		 height="20"
 		 width="100"
 		 left="0"
+		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."
 		 top_pad="2"
 		 valign="center"
-		 value="Owner:"/>
+		 value="Owner Key:"/>
 		<line_editor
 		 name="owner_uuid"
 		 layout="topleft"
 		 follows="left|right|bottom"
 		 height="20"
+		 label="00000000-0000-0000-0000-000000000000"
 		 left_pad="4"
 		 right="-4"/>
 		<text
