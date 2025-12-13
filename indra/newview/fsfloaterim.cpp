@@ -1595,7 +1595,7 @@ void FSFloaterIM::updateMessages()
             // See also LLSpeakers::updateSpeakers() for own "has_spoken" extension. -Zi
             if (!is_history && !pIMSession->mSpeakers->findSpeaker(from_id))
             {
-                const std::string& from_id_str = from_id.asString();
+                const std::string from_id_str = from_id.asString();
                 LLSD new_speaker;
                 new_speaker["session_id"] = mSessionID;
                 new_speaker["agent_updates"][from_id_str]["transition"] = "ENTER";
