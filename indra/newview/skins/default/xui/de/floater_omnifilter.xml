@@ -54,8 +54,8 @@
 				<column name="longtext" label="Regulärer Ausdruck"/>
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="Name Region:"/>
-		<text name="owner_label" value="Eigentümer:"/>
+		<text name="region_name_label" value="Name Region:" tool_tip="Der Regionsname der Quelle. Nur verfügbar für Inventar-Angebote."/>
+		<text name="owner_label" value="Eigentümer-UUID:" tool_tip="Für Gruppen-Einladungen: Die UUID der Gruppe. Für Objekt-Chat, Eigentümer-Nachrichten, Debug-Chat oder Direkt-Chat: Die UUID des Objekts. Für Objekt-IMs: Die UUID des Objekt-Eigentümers. Für alles andere: Die UUID des sendenden Einwohners."/>
 		<text name="match_source_label" value="Quelle:"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
