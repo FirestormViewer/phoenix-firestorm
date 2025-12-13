@@ -1801,8 +1801,7 @@ static void renderChatRangeSphere(const LLVector3& center, F32 radius, const LLC
 
 static void drawChatRangeSpheres()
 {
-    static LLCachedControl<bool> show_spheres(gSavedSettings, "FSShowChatRangeSpheres", false);
-    if (!show_spheres() || !isAgentAvatarValid())
+    if (!isAgentAvatarValid())
     {
         return;
     }
@@ -1855,7 +1854,11 @@ void render_ui_3d()
     }
 
     // <FS:PP> Render chat range spheres in 3D world
-    drawChatRangeSpheres();
+    static LLCachedControl<bool> show_spheres(gSavedSettings, "FSShowChatRangeSpheres", false);
+    if (show_spheres())
+    {
+        drawChatRangeSpheres();
+    }
     // </FS:PP>
 
     gViewerWindow->renderSelections(false, false, true); // Non HUD call in render_hud_elements
