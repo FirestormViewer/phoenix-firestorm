@@ -184,6 +184,11 @@ OmnifilterEngine::Needle& OmnifilterEngine::newNeedle(const std::string& needle_
     {
         Needle new_needle;
         new_needle.mEnabled = false;
+        new_needle.mSenderNameCaseInsensitive = true;
+        new_needle.mSenderNameMatchType = eMatchType::Substring;
+        new_needle.mContentCaseInsensitive = true;
+        new_needle.mContentMatchType = eMatchType::Substring;
+
         mNeedles[needle_name] = new_needle;
     }
     setDirty(true);
