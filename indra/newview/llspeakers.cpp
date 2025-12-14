@@ -765,7 +765,7 @@ void LLIMSpeakerMgr::updateSpeakers(const LLSD& update)
                     speakerp = setSpeaker(agent_id);
 
                     // <FS:Zi> add new speakers to participants list
-                    if (agent_data.has("has_spoken"))
+                    if (speakerp.notNull() && agent_data.has("has_spoken"))
                     {
                         speakerp->mLastSpokeTime = mSpeechTimer.getElapsedTimeF32();
                         speakerp->mHasSpoken = true;
