@@ -731,18 +731,22 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         haystack.mSenderName = agentName;
         haystack.mOwnerID = from_id;
 
+        bool forbid_chat_replacement = false;
+
         switch (dialog)
         {
         case IM_NOTHING_SPECIAL:        // this is the type for regular IMs
         {
             haystack.mType = OmnifilterEngine::eType::InstantMessage;
+            forbid_chat_replacement = true;
             break;
         }
         case IM_SESSION_SEND:           // this is the type for regular group IMs
-        case IM_SESSION_INVITE:         // this is the type for group IM sessions started by ourselves or conferences
+        case IM_SESSION_INVITE:         // this is the type for new group IM sessions - see LLIMMgr::addMessage()
         case IM_DO_NOT_DISTURB_AUTO_RESPONSE:
         {
             haystack.mType = OmnifilterEngine::eType::GroupChat;
+            forbid_chat_replacement = true;
             break;
         }
         case IM_FROM_TASK:
@@ -810,12 +814,17 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
         if (needle)
         {
-            if (needle->mChatReplace.empty())
+            if (
+                forbid_chat_replacement             // no text replacement for agent messages to prevent forgery attempts
+                || needle->mChatReplace.empty()     // no replacement defined, just suppress the message
+            )
             {
                 return;
             }
 
-            message = needle->mChatReplace;
+            LLSD args;
+            args["REPLACEMENT"] = needle->mChatReplace;
+            message = LLTrans::getString("OmnifilterReplacement", args);
         }
     }
     // </FS:Zi>

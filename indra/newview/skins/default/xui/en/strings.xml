@@ -2849,6 +2849,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Beacons_Tooltip">Show beacons</string>
   <string name="Command_Omnifilter_Tooltip">Edit the Omnifilter rules</string>
 
+  <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
+
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
   <string name="Toolbar_Right_Tooltip" >currently in your right toolbar</string>

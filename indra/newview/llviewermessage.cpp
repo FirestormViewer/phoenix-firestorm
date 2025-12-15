@@ -3300,12 +3300,17 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                         ((LLVOAvatar*)chatter)->stopTyping();
                     }
 
-                    if (needle->mChatReplace.empty())
+                    if (
+                        chat.mSourceType == CHAT_SOURCE_AGENT   // no text replacement for agent chat to prevent forgery attempts
+                        || needle->mChatReplace.empty()         // no replacement defined, just suppress the message
+                    )
                     {
                         return;
                     }
 
-                    chat.mText = needle->mChatReplace;
+                    LLSD args;
+                    args["REPLACEMENT"] = needle->mChatReplace;
+                    chat.mText = LLTrans::getString("OmnifilterReplacement", args);
                 }
 
                 break;
