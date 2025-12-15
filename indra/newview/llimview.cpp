@@ -94,6 +94,8 @@
 #include "llgiveinventory.h"
 #include "llinventoryfunctions.h"
 
+#include "omnifilterengine.h"   // <FS:Zi> Omnifilter support
+
 #include <array>
 
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
@@ -3474,6 +3476,30 @@ void LLIMMgr::addMessage(
     bool is_announcement, // <FS:Ansariel> Special parameter indicating announcements
     bool keyword_alert_performed) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
+    // <FS:Zi> Omnifilter support
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    if (use_omnifilter)
+    {
+        // this is the type for new group IM sessions started - apparently this is the only place
+        // we get this type of message
+        if (dialog == IM_SESSION_INVITE)
+        {
+            OmnifilterEngine::Haystack haystack;
+            haystack.mContent = msg;
+            haystack.mSenderName = from;
+            haystack.mOwnerID = target_id;
+            haystack.mType = OmnifilterEngine::eType::GroupChat;
+
+            const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+            if (needle)
+            {
+                // no text replacement for agent messages to prevent forgery attempts
+                return;
+            }
+        }
+    }
+    // </FS:Zi>
+
     LLUUID other_participant_id = target_id;
     std::string message_display_name = (display_name.empty()) ? from : std::string(display_name);
     if (display_id.isNull() && (display_name.empty()))
