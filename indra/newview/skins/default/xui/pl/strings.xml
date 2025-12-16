@@ -5725,6 +5725,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Omnifilter_Tooltip">
 		Edytuj reguły Wszystkofiltra
 	</string>
+	<string name="OmnifilterReplacement">
+		Wszystkofiltr: [REPLACEMENT]
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
 	</string>

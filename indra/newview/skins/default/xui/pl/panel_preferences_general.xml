@@ -27,7 +27,6 @@
 	<text name="time_format_textbox2">
 		(wymagany restart)
 	</text>
-	<check_box label="Wprowadzanie tekstu IME" name="use_ime" tool_tip="Użyj edytora międzynarodowych metod wprowadzania. Jest potrzebny tylko w przypadku określonych języków, takich jak japoński, chiński itp." />
 	<text name="maturity_desired_prompt">
 		Chcę mieć dostęp do miejsc:
 	</text>
@@ -36,6 +35,7 @@
 		<combo_box.item label="General (dla wszystkich) i Moderate (umiarkowanych)" name="Desired_Mature"/>
 		<combo_box.item label="General (dla wszystkich)" name="Desired_PG"/>
 	</combo_box>
+	<check_box label="Wprowadzanie tekstu IME" name="use_ime" tool_tip="Użyj edytora międzynarodowych metod wprowadzania. Jest potrzebny tylko w przypadku określonych języków, takich jak japoński, chiński itp." />
 	<text name="start_location_textbox">
 		Miejsce Startu:
 	</text>

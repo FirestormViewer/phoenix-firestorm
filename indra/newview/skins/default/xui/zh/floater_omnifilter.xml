@@ -45,8 +45,8 @@
 				<column name="longtext" label="正規表示式"/>
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="區域名稱:"/>
-		<text name="owner_label" value="所有者:"/>
+		<text name="region_name_label" value="区域名称：" tool_tip="来源的区域名称。仅适用于物件接收请求相关功能。"/>
+		<text name="owner_label" value="所有者UUID：" tool_tip="群组邀请场景：填写群组UUID&#10;物件聊天消息/所有者消息/调试消息/私聊消息：填写物品UUID&#10;物件私聊消息：填写物件所有者UUID&#10;其他所有场景：填写发送者的UUID"/>
 		<text name="match_source_label" value="來源:"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -57,10 +57,10 @@
 			<layout_panel name="buttons_group_2">
 				<button name="type_group_notice" label="通知" tool_tip="群組通知。"/>
 				<button name="type_invite" label="邀請" tool_tip="群組邀請。"/>
-				<button name="type_object_chat" label="物件聊天" tool_tip="物件附近的聊天訊息。"/>
+				<button name="type_object_chat" label="物件聊天訊息" tool_tip="來自物件的本地聊天訊息。"/>
 			</layout_panel>
 			<layout_panel name="buttons_group_3">
-				<button name="type_object_im" label="物件訊息" tool_tip="來自物件的私聊訊息。"/>
+				<button name="type_object_im" label="物件私聊訊息" tool_tip="來自物件的私聊訊息。"/>
 				<button name="type_script_error" label="錯誤" tool_tip="腳本的除錯訊息。"/>
 				<button name="type_dialog" label="對話框" tool_tip="匹配腳本對話框中的字符。"/>
 			</layout_panel>
