@@ -798,7 +798,17 @@ void LLFloater::closeFloater(bool app_quitting)
             && !app_quitting
             && floaterName != "toast") // <FS:PP> FIRE-10373 / BUG-6437
         {
-            make_ui_sound("UISndWindowClose");
+            // <FS:Zi> UI Sounds connection
+            // make_ui_sound("UISndWindowClose");
+            if (getName() == "script_floater")
+            {
+                make_ui_sound("UISndScriptFloaterClose");
+            }
+            else
+            {
+                make_ui_sound("UISndWindowClose");
+            }
+            // </FS:Zi>
         }
 
         gFocusMgr.clearLastFocusForGroup(this);

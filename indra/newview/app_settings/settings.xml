@@ -16979,6 +16979,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>c80260ba-41fd-8a46-768a-6bf236360e3a</string>
     </map>
+    <key>UISndScriptFloaterClose</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file for closing a script dialog (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>2c346eda-b60c-ab33-1119-b8941916a499</string>
+    </map>
     <key>UISpinctrlBtnHeight</key>
     <map>
       <key>Comment</key>
@@ -22740,6 +22751,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndScriptFloaterOpen.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>PlayModeUISndScriptFloaterClose</key>
+    <map>
+      <key>Comment</key>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndScriptFloaterClose.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

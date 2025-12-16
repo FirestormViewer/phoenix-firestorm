@@ -435,6 +435,7 @@ void init_audio()
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndChatMention")));
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestartOpenSim"))); // <FS:Ansariel> Preload OpenSim restart sound
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndScriptFloaterOpen"))); // <FS:PP> Separate sound for opening script dialogs
+        gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndScriptFloaterClose"))); // <FS:Zi> Separate sound for closing script dialogs
         // <FS:Zi> Pie menu
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuAppear")));
         gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuHide")));

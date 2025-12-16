@@ -3146,7 +3146,7 @@ Hover your mouse cursor over UUID field to show its default value.
          width="150"
          tool_tip="Sound UUID played when script opens a dialog window."
          name="textFSScriptFloaterOpen">
-            Script dialog:
+            Script dialog opens:
         </text>
         <line_editor
          follows="left|top"
@@ -3190,6 +3190,62 @@ Hover your mouse cursor over UUID field to show its default value.
          label="Play this sound"
          layout="topleft"
          name="PlayModeUISndScriptFloaterOpen"
+         left_pad="1"
+         width="120" />
+
+         <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played when script closes a dialog window."
+         name="textFSScriptFloaterClose">
+            Script dialog closes:
+        </text>
+        <line_editor
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndScriptFloaterClose"
+         control_name="UISndScriptFloaterClose"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndScriptFloaterClose"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         sound_flags="0"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndScriptFloaterClose"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndScriptFloaterClose"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="17"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndScriptFloaterClose"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndScriptFloaterClose"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndScriptFloaterClose"
          left_pad="1"
          width="120" />
 
