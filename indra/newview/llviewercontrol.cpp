@@ -913,6 +913,11 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
+    if (LLStartUp::getStartupState() < STATE_STARTED)
+    {
+        // Skip the checks if not inworld; Ignore startup-time setting application, if it somehow fires
+        return;
+    }
     if (gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
     {
         gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
