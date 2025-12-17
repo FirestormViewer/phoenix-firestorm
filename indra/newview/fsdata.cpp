@@ -36,7 +36,6 @@
 #include "fsassetblacklist.h"
 
 /* boost: will not compile unless equivalent is undef'd, beware. */
-#include "fix_macros.h"
 #include <boost/filesystem.hpp>
 
 #include "llappviewer.h"

@@ -80,7 +80,6 @@ set(llmessage_SOURCE_FILES
     message_prehash.cpp
     message_string_table.cpp
     net.cpp
-    partsyspacket.cpp
     patch_code.cpp
     patch_dct.cpp
     patch_idct.cpp
@@ -173,7 +172,6 @@ set(llmessage_HEADER_FILES
     message.h
     message_prehash.h
     net.h
-    partsyspacket.h
     patch_code.h
     patch_dct.h
     sound_ids.h

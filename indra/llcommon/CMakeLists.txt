@@ -22,7 +22,6 @@ set(llcommon_SOURCE_FILES
     llapr.cpp
     llassettype.cpp
     llatomic.cpp
-    llbase32.cpp
     llbase64.cpp
     llbitpack.cpp
     llcallbacklist.cpp
@@ -85,7 +84,6 @@ set(llcommon_SOURCE_FILES
     llsdutil.cpp
     llsingleton.cpp
     llstacktrace.cpp
-    llstreamqueue.cpp
     llstreamtools.cpp
     llstring.cpp
     llstringtable.cpp
@@ -117,8 +115,6 @@ set(llcommon_HEADER_FILES
     chrono.h
     classic_callback.h
     commoncontrol.h
-    ctype_workaround.h
-    fix_macros.h
     fsyspath.h
     function_types.h
     indra_constants.h
@@ -130,7 +126,6 @@ set(llcommon_HEADER_FILES
     llapr.h
     llassettype.h
     llatomic.h
-    llbase32.h
     llbase64.h
     llbitpack.h
     llboost.h
@@ -218,7 +213,6 @@ set(llcommon_HEADER_FILES
     llsingleton.h
     llstacktrace.h
     llstl.h
-    llstreamqueue.h
     llstreamtools.h
     llstrider.h
     llstring.h
@@ -250,7 +244,6 @@ set(llcommon_HEADER_FILES
     threadpool.h
     threadpool_fwd.h
     threadsafeschedule.h
-    timer.h
     tuple.h
     u64.h
     workqueue.h
@@ -379,7 +372,6 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(llsdserialize "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llsdutil "" "llcommon;llmath")
   LL_ADD_INTEGRATION_TEST(llsingleton "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(llstreamqueue "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llstreamtools "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llstring "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lltrace "" "${test_libs}")

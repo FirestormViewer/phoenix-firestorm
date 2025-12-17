@@ -197,8 +197,6 @@ void LLPanelDirLand::performQuery()
     if (list)
     {
         std::string sort_name = list->getSortColumnName();
-        // <FS:Zi> another BOOL removed
-        // BOOL sort_asc = list->getSortAscending();
         bool sort_asc = list->getSortAscending();
 
         if (sort_name == "name")

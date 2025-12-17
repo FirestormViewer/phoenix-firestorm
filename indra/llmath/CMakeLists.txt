@@ -24,7 +24,6 @@ set(llmath_SOURCE_FILES
     llquaternion.cpp
     llrigginginfo.cpp
     llrect.cpp
-    llsphere.cpp
     llvector4a.cpp
     llvolume.cpp
     llvolumemgr.cpp
@@ -46,8 +45,6 @@ set(llmath_SOURCE_FILES
 set(llmath_HEADER_FILES
     CMakeLists.txt
 
-    camera.h
-    coordframe.h
     llbbox.h
     llbboxlocal.h
     llcalc.h
@@ -74,7 +71,6 @@ set(llmath_HEADER_FILES
     llsimdmath.h
     llsimdtypes.h
     llsimdtypes.inl
-    llsphere.h
     lltreenode.h
     llvector4a.h
     llvector4a.inl
