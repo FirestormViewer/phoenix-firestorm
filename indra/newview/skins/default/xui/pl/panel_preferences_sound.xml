@@ -409,6 +409,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndScriptFloaterOpen" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndScriptFloaterOpen"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy okno jest zamykane przez skrypt." name="textFSScriptFloaterClose">
+				Skrypt zamyka okno:
+			</text>
+			<button name="Prev_UISndScriptFloaterClose" tool_tip="Preview this sound." />
+			<button name="Def_UISndScriptFloaterClose" tool_tip="Resetuj do domyślnego UUID." />
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndScriptFloaterClose" />
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy loguje się znajomy." name="textFSFriendOnline">
 				Znajomy się loguje:
 			</text>
