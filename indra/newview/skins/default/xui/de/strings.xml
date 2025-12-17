@@ -7327,4 +7327,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="Maximum">
 		Maximum
 	</string>
+	<string name="OmnifilterReplacement">
+		Omni-Filter-Ersetzung: [REPLACEMENT]
+	</string>
 </strings>

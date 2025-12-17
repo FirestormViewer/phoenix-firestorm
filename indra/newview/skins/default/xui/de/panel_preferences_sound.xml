@@ -414,11 +414,18 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<check_box label="Abspielen" name="PlayModeUISndWindowOpen"/>
 
 		<text tool_tip="UUID des Klangs beim Öffnen eines Skript-Dialogs." name="textFSScriptFloaterOpen">
-			Skript-Dialog:
+			Öffnen Skript-Dialog:
 		</text>
 		<button label="V" name="Prev_UISndScriptFloaterOpen" tool_tip="Vorschau zu diesem Klang."/>
 		<button label="S" name="Def_UISndScriptFloaterOpen" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndScriptFloaterOpen"/>
+
+		<text tool_tip="UUID des Klangs beim Schließen eines Skript-Dialogs." name="textFSScriptFloaterClose">
+			Schließen Skript-Dialog:
+		</text>
+		<button label="V" name="Prev_UISndScriptFloaterClose" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Def_UISndScriptFloaterClose" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndScriptFloaterClose"/>
 
 		<text tool_tip="UUID des Klangs beim Einloggen eines Freundes." name="textFSFriendOnline">
 			Einloggen Freund:
