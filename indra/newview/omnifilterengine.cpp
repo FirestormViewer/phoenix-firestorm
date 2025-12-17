@@ -169,7 +169,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack
             continue;
         }
 
-        if (matchStrings(needle.mContent, haystack.mContent, needle.mContentMatchType, needle.mContentCaseInsensitive))
+        if (needle.mContent.empty() || matchStrings(needle.mContent, haystack.mContent, needle.mContentMatchType, needle.mContentCaseInsensitive))
         {
             return logMatch(needle_name, needle);
         }
