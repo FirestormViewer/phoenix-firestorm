@@ -297,6 +297,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndSnapshot" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Wyciszaj dźwięk" name="QuietSnapshotsToDiskCheckBox"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
+				Domyślny odgłos kroków:
+			</text>
+			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
+
 		</panel>
 		<panel label="Interfejs 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
@@ -499,13 +506,6 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Prev_UISndMovelockToggle" tool_tip="Podgląd dźwięku."/>
 			<button name="Def_UISndMovelockToggle" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndMovelockToggle"/>
-
-			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
-				Domyślny odgłos kroków:
-			</text>
-			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
 
 			<text tool_tip="UUID dźwięku odgrywany, gdy aktywny jest emiter śledzenia awatarów, obiektów lub miejsc. Odtwarzany jest z większą częstotliwością, gdy awatar jest bliżej miejsca docelowego." name="textFSTrackerBeacon">
 				Emiter śledzenia:
