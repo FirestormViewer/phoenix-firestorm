@@ -89,7 +89,7 @@ const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\
 // <FS:Ansariel> Timestamps in chat
 // Note: In contrast to the TIMESTAMP_AND_STUFF regex, for the TIMESTAMP_AND_STUFF_SEC regex the match
 // on the timestamp is NOT optional. We need this to decide during parsing if we have timestamps or not.
-const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\s[AaPp][Mm]\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)(.*)$");
 const static boost::regex TIMESTAMP_AND_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}(\\s[AaPp][Mm])?\\]|\\[\\d{1,2}:\\d{2}:\\d{2}(\\s[AaPp][Mm])?\\]).*");
 // </FS:Ansariel>
 
