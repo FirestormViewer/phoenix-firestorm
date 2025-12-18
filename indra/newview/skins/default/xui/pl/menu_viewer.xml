@@ -10,7 +10,6 @@
 		<menu_item_check label="Ulubione rzeczy" name="WearableFavorites"/>
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
-		<menu_item_check label="Wszystkofiltr" name="Omnifilter" />
 		<menu_item_call label="Mój profil" name="Profile"/>
 		<menu_item_call label="Mój wygląd" name="NowWearing" />
 		<menu_item_check label="Moje stroje" name="ChangeOutfit"/>
@@ -93,6 +92,7 @@
 		<menu_item_check label="Czat w pobliżu..." name="Nearby Chat"/>
 		<menu_item_check label="Ludzie" name="People"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
+		<menu_item_check label="Wszystkofiltr" name="Omnifilter" />
 		<menu_item_check label="Gesty" name="Gestures"/>
 		<menu_item_check name="Conversation Log..." label="Dziennik rozmów..."/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
