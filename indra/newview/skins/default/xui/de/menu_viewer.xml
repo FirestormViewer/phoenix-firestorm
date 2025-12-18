@@ -16,7 +16,6 @@
 		<menu_item_check label="Kleidungsfavoriten" name="WearableFavorites"/>
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
-		<menu_item_call label="Omni-Filter" name="Omnifilter"/>
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_check label="Aktuelles Outfit" name="NowWearing"/>
 		<menu_item_check label="Outfits" name="ChangeOutfit"/>
@@ -88,11 +87,8 @@
 		<menu_item_call label="Gruppen" name="My Groups"/>
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Leute" name="People"/>
-		<!--
-        <menu_item_call label="Teleport-Liste" name="Teleport History"/>
-        <menu_item_check label="Orte" name="Places"/>
-		-->
         <menu_item_check label="Gespräche" name="Conversations"/>
+		<menu_item_call label="Omni-Filter" name="Omnifilter"/>
         <menu label="Online-Status" name="Status">
             <menu_item_check label="Abwesend" name="Away"/>
             <menu_item_check label="Nicht stören" name="Do Not Disturb"/>
