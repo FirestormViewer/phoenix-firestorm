@@ -15,7 +15,7 @@ name="panel_ls_web">
 	 right="-5"
 	 layout="topleft"
 	 follows="all"
-	 name="search_contents"
+	 name="webbrowser"
 	 trusted_content="true"
 	 start_url="about:blank" />
 </panel>

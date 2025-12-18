@@ -1375,6 +1375,7 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
                         {"search", "webbrowser" },
                         {"marketplace", "webbrowser" },
                         {"destinations", "destination_guide_contents" },
+                        {"avatarinfo", "profile_html" }, // <FS:PP> Load openId cookie in the profile, in feed tab
                     };
                     for (MediaCookieInstance mci : media_cookie_instances)
                     {

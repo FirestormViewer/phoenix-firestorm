@@ -2962,7 +2962,9 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 
 bool FSPanelSearchWeb::postBuild()
 {
-    mWebBrowser = getChild<LLMediaCtrl>("search_contents");
+    mWebBrowser = getChild<LLMediaCtrl>("webbrowser");
+    mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
     return true;
 }
 

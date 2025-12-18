@@ -2600,6 +2600,11 @@ bool LLPanelProfileWeb::postBuild()
     mWebBrowser->addObserver(this);
     mWebBrowser->setHomePageUrl("about:blank");
 
+    // <FS:PP> Load cookies in the profile, in feed tab
+    mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
+    // </FS:PP>
+
     return true;
 }
 
