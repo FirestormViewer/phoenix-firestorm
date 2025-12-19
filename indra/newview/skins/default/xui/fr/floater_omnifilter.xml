@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="Éditeur de règles omnifiltre">
+	<floater.string name="OmnifilterNewNeedle">
+		NOUVELLE RÈGLE
+	</floater.string>
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="Activer omnifiltre"/>
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="On"/>
+				<fs_scroll_list.columns name="needle_name" label="Règle"/>
+			</fs_scroll_list>
+			<button name="add_needle" label="Ajouter"/>
+			<button name="remove_needle" label="Supprimer"/>
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="Heure (SLT)"/>
+				<fs_scroll_list.columns name="log_entry" label="Règle"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="Nom de la règle"/>
+		<text name="sender_name_label" value="Émetteur"/>
+		<combo_box name="sender_match_type">
+			<combo_item name="sender_exact">
+				<column name="longtext" label="Correspondance intégrale"/>
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="longtext" label="Correspondance de sous-chaîne"/>
+			</combo_item>
+			<combo_item name="sender_regex">
+				<column name="longtext" label="Correspondance d'expression régulière"/>
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="Contenu"/>
+		<combo_box name="content_match_type">
+			<combo_item name="content_exact">
+				<column name="longtext" label="Correspondance intégrale"/>
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="longtext" label="Correspondance de sous-chaîne"/>
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="longtext" label="Correspondance d'expression régulière"/>
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="Nom de la région"/>
+		<line_editor name="region_name" tool_tip="Nom de la région de la source. Disponible uniquement pour les offres d'inventaire."/>
+		<text name="owner_label" tool_tip="Pour les invitations de groupe : l'UUID du groupe. Pour le chat d'objet, le message du propriétaire, le chat de débogage ou le chat direct : l'UUID de l'objet. Pour les messages instantanés d'objet : l'UUID du propriétaire de l'objet. Pour tout le reste, l'UUID de l'avatar de l'expéditeur." value="Clé du propriétaire :"/>
+		<text name="match_source_label" value="Correspond source :"/>
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="Chat local" tool_tip="Discussion publique régulière avec les avatars à proximité."/>
+				<button name="type_im" label="IM" tool_tip="Messages instantanés des résidents."/>
+				<button name="type_group_im" label="Chat de grpe" tool_tip="Discussion de groupe entre résidents."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="Notice" tool_tip="Notice de groupe."/>
+				<button name="type_invite" label="Invitation" tool_tip="Invitation de groupe."/>
+				<button name="type_object_chat" label="Chat d'objet" tool_tip="Message à proximité à partir d'objets."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="IM d'objet" tool_tip="Message instantanés provenant d'objets."/>
+				<button name="type_script_error" label="Erreur" tool_tip="Messages de débogage provenant des scripts."/>
+				<button name="type_dialog" label="Dialogue" tool_tip="Correspond aux champs dans les boîtes de dialogue du script."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="Offre" tool_tip="Correspond aux champs des offres d'inventaire."/>
+				<button name="type_friendship" label="Amitié" tool_tip="Demandes d'ajout à la liste d'amis provenant des résidents."/>
+				<button name="type_lure" label="TP" tool_tip="Offres de téléportation proposées par les résidents."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="Demande TP" tool_tip="Demandes des résidents pour leur envoyer une offre de téléportation."/>
+				<button name="type_load_url" label="Charger URL" tool_tip="Demandes générées par script pour visiter un site Web."/>
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="Remplacer le chat"/>
+		<text name="button_reply_label" value="Sélect. le bouton"/>
+		<text name="text_box_reply_label" value="Sélect. bte de texte"/>
+	</panel>
+</floater>

@@ -5990,6 +5990,18 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Beacons_Label">
 		Balises
 	</string>
+	<string name="Command_Poser_Label">
+		Poseur
+	</string>
+	<string name="Command_Poser_Tooltip">
+		Posez votre avatar et vos objets animés
+	</string>
+	<string name="Command_Primfeed_Tooltip">
+		Postez directement sur votre compte Primfeed.
+	</string>
+	<string name="Command_Omnifilter_Label">
+		Omnifiltre
+	</string>
 	 <string name="Command_360_Capture_Tooltip">
 		Capturez une image équirectangulaire de 360°.
 	</string>
@@ -6175,6 +6187,9 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Montrer les balises
+	</string>
+	<string name="Command_Omnifilter_Tooltip">
+		Modifier les règles omnifiltre
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actuellement dans la barre d&apos;outils du bas
@@ -7183,5 +7198,8 @@ Votre position actuelle : [AVATAR_POS]
 	</string>
 	<string name="Maximum">
 		Maximale
+	</string>
+	<string name="OmnifilterReplacement">
+		Remplacement omnifiltre : [REPLACEMENT]
 	</string>
 </strings>

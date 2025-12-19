@@ -369,13 +369,13 @@ Passez votre curseur de souris sur le champ UUID pour afficher sa valeur par dé
 			<button name="Def_UISndWindowOpen" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndWindowOpen"/>
 			<text tool_tip="UUID du son joué quand un script ouvre une fenêtre de dialogue de script." width="180" name="textFSScriptFloaterOpen">
-				Dialogue de script :
+				Le dialogue de script s'ouvre :
 			</text>
 			<button name="Prev_UISndScriptFloaterOpen" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndScriptFloaterOpen" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndScriptFloaterOpen"/>
-			<text tool_tip="Sound UUID played when script closes a dialog window." width="180" name="textFSScriptFloaterClose">
-				Script dialog closes:
+			<text tool_tip=" Son UUID joué lorsque le script ferme une fenêtre de dialogue." width="180" name="textFSScriptFloaterClose">
+				Le dialogue de script se ferme :
 			</text>
 			<button name="Prev_UISndScriptFloaterClose" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndScriptFloaterClose" tool_tip="Réinitialiser."/>
