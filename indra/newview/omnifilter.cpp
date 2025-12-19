@@ -261,7 +261,7 @@ void Omnifilter::onOwnerChanged()
 {
     static LLColor4 default_text_color = mOwnerCtrl->getFgColor();
 
-    if (LLUUID::validate(mOwnerCtrl->getValue()))
+    if (LLUUID::validate(mOwnerCtrl->getValue().asString()))
     {
         mOwnerCtrl->setFgColor(default_text_color);
     }
@@ -372,7 +372,6 @@ bool Omnifilter::postBuild()
     mRemoveNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveNeedleClicked, this));
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
     mSenderNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
-    mContentCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mSenderCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mSenderMatchTypeCombo->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mContentCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));

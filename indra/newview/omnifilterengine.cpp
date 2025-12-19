@@ -319,6 +319,12 @@ void OmnifilterEngine::loadNeedles()
         new_needle.mSenderNameCaseInsensitive = needle_data["sender_name_case_insensitive"].asBoolean();
         new_needle.mContentCaseInsensitive = needle_data["content_case_insensitive"].asBoolean();
 
+        const std::string owner_id_str = needle_data["owner_id"].asString();
+        if (!owner_id_str.empty())
+        {
+            new_needle.mOwnerID.set(owner_id_str);
+        }
+
         mNeedles[new_needle_name] = new_needle;
     }
 }
