@@ -20,7 +20,7 @@
 							<column name="restore_global_files_label">顏色</column>
 						</row>
 						<row name="restore_global_row_dialogs">
-							<column name="restore_global_files_label">忽略對話方塊</column>
+							<column name="restore_global_files_label">忽略彈窗</column>
 						</row>
 						<row name="restore_global_row_grids">
 							<column name="restore_global_files_label">使用者定義的網格</column>

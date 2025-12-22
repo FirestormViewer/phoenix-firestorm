@@ -7573,4 +7573,7 @@ SecondLife.com網站的「支援」部分
 	<string name="Maximum">
 		最大值
 	</string>
+	<string name="OmnifilterReplacement">
+		全方位過濾器替換：[REPLACEMENT]
+	</string>
 </strings>

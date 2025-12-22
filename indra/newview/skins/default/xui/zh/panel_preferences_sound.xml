@@ -275,10 +275,14 @@
 			<button name="Prev_UISndWindowOpen" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndWindowOpen" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndWindowOpen" />
-			<text tool_tip="打開指令碼對話方塊音效的UUID。" name="textFSScriptFloaterOpen">指令碼對話方塊：</text>
+			<text tool_tip="指令碼彈窗打開音效的UUID。" name="textFSScriptFloaterOpen">指令碼彈窗打開：</text>
 			<button name="Prev_UISndScriptFloaterOpen" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndScriptFloaterOpen" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndScriptFloaterOpen" />
+			<text tool_tip="腳本彈窗關閉音效的UUID。" name="textFSScriptFloaterClose">腳本彈窗關閉：</text>
+			<button label="▶" name="Prev_UISndScriptFloaterClose" tool_tip="播放此聲音"/>
+			<button label="↻" name="Def_UISndScriptFloaterClose" tool_tip="重置"/>
+			<check_box label="啟用" name="PlayModeUISndScriptFloaterClose"/>
 			<text tool_tip="好友上線音效的UUID。" name="textFSFriendOnline">好友上線：</text>
 			<button name="Prev_UISndFriendOnline" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndFriendOnline" label="↻" tool_tip="重設。" />

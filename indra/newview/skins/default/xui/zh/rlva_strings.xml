@@ -139,7 +139,7 @@
 		<key>blocked_scriptdialog</key>
 		<map>
 			<key>value</key>
-			<string>由於RLV限制，無法顯示指令碼對話方塊或文字框。</string>
+			<string>由於RLV限制，無法顯示指令碼彈窗或文字框。</string>
 		</map>
 		<key>blocked_share</key>
 		<map>

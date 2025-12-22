@@ -48,7 +48,7 @@
 				HUD大小：
 			</text>
 			<text name="ScriptDialogsPerObjectLabel">
-				每個物件的指令碼對話方塊：
+				每個物件的指令碼彈窗：
 			</text>
 			<combo_box name="ScriptDialogPerObjectDropdown">
 				<combo_box.item label="每個物件一個" name="ScriptDialogOption_0" />
@@ -60,17 +60,17 @@
 			</combo_box>
 			<check_box label="移除「封鎖」按鈕" name="FSRemoveScriptBlockButton" />
 			<text name="ScriptDialogsPositionLabel">
-				指令碼對話方塊位置：
+				指令碼彈窗位置：
 			</text>
-			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="選擇指令碼對話方塊（選單）出現在螢幕上的位置。">
+			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="選擇指令碼彈窗（選單）出現在螢幕上的位置。">
 				<combo_box.item label="靠近化身標籤" name="ScriptDialogPositionOption_1" />
 				<combo_box.item label="左上角" name="ScriptDialogPositionOption_2" />
 				<combo_box.item label="右上角" name="ScriptDialogPositionOption_3" />
 				<combo_box.item label="左下角" name="ScriptDialogPositionOption_4" />
 				<combo_box.item label="右下角" name="ScriptDialogPositionOption_5" />
 			</combo_box>
-			<check_box label="啟用指令碼對話方塊動畫" name="FSAnimatedScriptDialogs" tool_tip="以動畫方式顯示指令碼對話方塊（經典的 V1.x 行為）。" />
-			<slider label="每個指令碼對話方塊可見行數：" name="FSRowsPerScriptDialog" tool_tip="每個指令碼對話方塊中同時可見的最大行數。" />
+			<check_box label="啟用指令碼彈窗動畫" name="FSAnimatedScriptDialogs" tool_tip="以動畫方式顯示指令碼彈窗（經典的 V1.x 行為）。" />
+			<slider label="每個指令碼彈窗可見行數：" name="FSRowsPerScriptDialog" tool_tip="每個指令碼彈窗中同時可見的最大行數。" />
 			<check_box label="啟用圓形選單" name="UsePieMenu" tool_tip="啟用經典V1上下文選單，以圓形選單形式顯示，而不是標準上下文選單。" />
 			<check_box label="啟用文字動畫效果" name="PieMenuPopupFontEffect" tool_tip="在打開經典V1上下文選單時，啟用選單內文字的動畫效果。" />
 			<check_box label="啟用外環陰影" name="PieMenuOuterRingShade" tool_tip="為經典V1上下文選單的外環啟用額外的陰影，以支援子選單的視覺化。" />
