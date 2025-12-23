@@ -142,7 +142,7 @@ bool LLPanelEventInfo::processEventInfoReply(LLEventInfo event)
         const auto region_handle = to_region_handle(event.mPosGlobal);
         LLWorldMapMessage::getInstance()->sendHandleRegionRequest(
             region_handle,
-            [=](U64 requested_region_handle, const std::string&, const LLUUID&, bool)
+            [=, this](U64 requested_region_handle, const std::string&, const LLUUID&, bool)
             {
                 if (region_handle != requested_region_handle)
                     return;

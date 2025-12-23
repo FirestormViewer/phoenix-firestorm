@@ -68,7 +68,10 @@ bool LLBakingTexLayerSetBuffer::render()
 
 static LLFastTimer::DeclareTimer FTM_MID_RENDER("midRenderTexLayerSet");
 static LLFastTimer::DeclareTimer FTM_CREATE_J2C("Encode J2C image.");
-void LLBakingTexLayerSetBuffer::midRenderTexLayerSet(bool success)
+// <FS:Ansariel> [Legacy Bake]
+// void LLBakingTexLayerSetBuffer::midRenderTexLayerSet(bool success)
+void LLBakingTexLayerSetBuffer::midRenderTexLayerSet(bool success, LLRenderTarget* bound_target)
+// </FS:Ansariel> [Legacy Bake]
 {
     LL_RECORD_BLOCK_TIME(FTM_MID_RENDER);
     if (!mTexLayerSet->isVisible())

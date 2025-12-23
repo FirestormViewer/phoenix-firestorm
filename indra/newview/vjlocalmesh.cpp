@@ -40,7 +40,6 @@
 // STL headers
 #include <chrono>
 // boost headers
-#include "fix_macros.h"
 #include <boost/filesystem.hpp>
 
 // local mesh headers

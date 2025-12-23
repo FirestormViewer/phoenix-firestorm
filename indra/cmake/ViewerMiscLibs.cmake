@@ -2,7 +2,7 @@
 include(Prebuilt)
 
 if (LINUX)
-  use_prebuilt_binary(libuuid)
+  #use_prebuilt_binary(libuuid)
   add_library( ll::fontconfig INTERFACE IMPORTED )
 
   find_package(Fontconfig REQUIRED)
@@ -14,6 +14,7 @@ if( NOT USE_CONAN )
 endif()
 
 use_prebuilt_binary(slvoice)
+
 use_prebuilt_binary(nanosvg)
 use_prebuilt_binary(viewer-fonts)
 use_prebuilt_binary(emoji_shortcodes)

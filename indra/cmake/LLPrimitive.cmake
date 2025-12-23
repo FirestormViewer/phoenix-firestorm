@@ -53,6 +53,7 @@ find_library(COLLADADOM_LIBRARY
     NAMES
     libcollada14dom23-s.lib
     collada14dom
+    collada14dom.a
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
 target_link_libraries(ll::colladadom INTERFACE ${COLLADADOM_LIBRARY} ll::boost ll::libxml ll::minizip-ng)

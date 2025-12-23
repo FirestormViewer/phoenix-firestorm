@@ -24,10 +24,16 @@ if (USE_KDU)
   find_library(KDU_LIBRARY
     NAMES
     kdu
+    kdu.lib
     kdu${ND_KDU_SUFFIX}.lib // <FS> FS-specific naming
     libkdu.a
     libkdu${ND_KDU_SUFFIX}.a // <FS> FS-specific naming
-    PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+    PATHS
+      "${ARCH_PREBUILT_DIRS_RELEASE}"
+      "${AUTOBUILD_INSTALL_DIR}/lib"
+    PATH_SUFFIXES release
+    REQUIRED
+    NO_DEFAULT_PATH)
 
   target_link_libraries(ll::kdu INTERFACE ${KDU_LIBRARY})
 

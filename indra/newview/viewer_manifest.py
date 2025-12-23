@@ -1899,7 +1899,6 @@ class LinuxManifest(ViewerManifest):
         self.path("res/firestorm_icon.png","firestorm_icon.png")
         with self.prefix("linux_tools"):
             self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
-            self.path("wrapper.sh","secondlife")
             self.path("wrapper.sh","firestorm")
             with self.prefix(dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
@@ -2008,7 +2007,7 @@ class LinuxManifest(ViewerManifest):
             #self.path("libssl.so*")
             #self.path("libGLOD.so")
             #self.fs_path("libminizip.so")
-            self.path("libuuid.so*")
+            #self.path("libuuid.so*")        # <FS:Zi> no longer used
             self.path("libSDL*.so*")
             self.path_optional("libdirectfb*.so*")
             self.path_optional("libfusion*.so*")

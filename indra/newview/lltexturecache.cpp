@@ -342,7 +342,16 @@ bool LLTextureCacheRemoteWorker::doRead()
             mDataSize = local_size;
         }
         // Allocate read buffer
+// <FS:Zi> Linux gcc 14.2 (at least) complains here
+#if defined(LL_GNUC) && GCC_VERSION >= 140000
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+#endif
         mReadData = (U8*)ll_aligned_malloc_16(mDataSize);
+#if defined(LL_GNUC) && GCC_VERSION >= 140000
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 
         if (mReadData)
         {

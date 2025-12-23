@@ -1753,8 +1753,6 @@ set(viewer_HEADER_FILES
     sanitycheck.h
     streamtitledisplay.h
     utilitybar.h
-    VertexCache.h
-    VorbisFramework.h
     NACLantispam.h
     NACLfloaterexploresounds.h
     )
@@ -2966,7 +2964,7 @@ if (LL_TESTS)
     lldateutil.cpp
 #    llmediadataclient.cpp
     lllogininstance.cpp
-#    llremoteparcelrequest.cpp
+    llremoteparcelrequest.cpp
     llviewerhelputil.cpp
     llversioninfo.cpp
 #    llvocache.cpp
@@ -2991,30 +2989,24 @@ if (LL_TESTS)
 #  )
 
   set(test_libs
-          llcommon
-          llfilesystem
-          llxml
-          llmessage
-          llcharacter
-          llui
-          lllogin
-          llplugin
-          llappearance
-    )
-
-  set_source_files_properties(
-    llworldmap.cpp
-    llworldmipmap.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_SOURCE_FILES 
-    tests/llviewertexture_stub.cpp
-    #llviewertexturelist.cpp
+    llfilesystem
+    llmath
+    llcommon
+    llmessage
+    llcorehttp
+    llxml
+    llui
+    llplugin
+    llappearance
+    llprimitive
+    lllogin
   )
 
-  set_source_files_properties(
-    llmediadataclient.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES "${test_libs}"
+  set_property(SOURCE
+    ${viewer_TEST_SOURCE_FILES}
+    PROPERTY
+    LL_TEST_ADDITIONAL_LIBRARIES 
+    ${test_libs}
   )
 
   set_source_files_properties(
@@ -3026,56 +3018,29 @@ if (LL_TESTS)
   )
 
   set_source_files_properties(
-    llmediadataclient.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES llprimitive
-  )
-
-  set_source_files_properties(
     lllogininstance.cpp
     PROPERTIES
-    LL_TEST_ADDITIONAL_SOURCE_FILES llversioninfo.cpp
-  )
-
-  set_property( SOURCE
-          ${viewer_TEST_SOURCE_FILES}
-          PROPERTY
-          LL_TEST_ADDITIONAL_LIBRARIES ${test_libs}
+    LL_TEST_ADDITIONAL_SOURCE_FILES
+    llversioninfo.cpp
   )
 
   LL_ADD_PROJECT_UNIT_TESTS(${VIEWER_BINARY_NAME} "${viewer_TEST_SOURCE_FILES}")
 
   #set(TEST_DEBUG on)
-
-  set(test_libs
-          llfilesystem
-          llmath
-          llcommon
-          llmessage
-          llcorehttp
-          llxml
-          llui
-          llplugin
-          llappearance
-          lllogin
-          llprimitive
-          lllogin
-          )
-
   LL_ADD_INTEGRATION_TEST(cppfeatures
     ""
     "${test_libs}"
-    )
+  )
 
   LL_ADD_INTEGRATION_TEST(llsechandler_basic
     llsechandler_basic.cpp
     "${test_libs}"
-    )
+  )
 
   LL_ADD_INTEGRATION_TEST(llsecapi
-     llsecapi.cpp
+    llsecapi.cpp
     "${test_libs}"
-    )
+  )
   if (NOT OPENSIM)#<FS:AW optional opensim support>
     set(llslurl_test_sources
         llslurl.cpp
@@ -3083,11 +3048,15 @@ if (LL_TESTS)
     )
   endif (NOT OPENSIM)#<FS:AW optional opensim support>
 
-# RLVa - incompatible
-#  LL_ADD_INTEGRATION_TEST(llslurl
-#     "${llslurl_test_sources}"
-#    "${test_libs}"
-#    )
+  set(llslurl_test_sources
+    llslurl.cpp
+    llviewernetwork.cpp
+  )
+
+  LL_ADD_INTEGRATION_TEST(llslurl
+    "${llslurl_test_sources}"
+    "${test_libs}"
+  )
 
   set(llviewercontrollistener_test_sources
     llviewercontrollistener.cpp
@@ -3095,31 +3064,34 @@ if (LL_TESTS)
     ../llxml/llxmltree.cpp
     ../llxml/llxmlparser.cpp
     ../llcommon/commoncontrol.cpp
-    )
+  )
 
   LL_ADD_INTEGRATION_TEST(llviewercontrollistener
     "${llviewercontrollistener_test_sources}"
     "${test_libs}"
-    )
+  )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
-     llviewernetwork.cpp
+    llviewernetwork.cpp
     "${test_libs}"
-    )
+  )
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
     llviewerassetstats.cpp
     "${test_libs}"
-    )
+  )
 
-# LL_ADD_INTEGRATION_TEST(llhttpretrypolicy "llhttpretrypolicy.cpp" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(llhttpretrypolicy "llhttpretrypolicy.cpp" "${test_libs}")
 
-  #ADD_VIEWER_BUILD_TEST(llmemoryview viewer)
-  #ADD_VIEWER_BUILD_TEST(llagentaccess viewer)
-  #ADD_VIEWER_BUILD_TEST(lltextureinfo viewer)
-  #ADD_VIEWER_BUILD_TEST(lltextureinfodetails viewer)
-
-
+  set(lltextureinfo_test_sources
+    lltextureinfo.cpp
+    ../llxml/llcontrol.cpp
+    ../llxml/llxmltree.cpp
+    ../llxml/llxmlparser.cpp
+    ../llcommon/commoncontrol.cpp
+  )
+  LL_ADD_INTEGRATION_TEST(lltextureinfo "${lltextureinfo_test_sources}" "${test_libs}")
+  #LL_ADD_INTEGRATION_TEST(lltextureinfodetails "" "${test_libs}") test cases currently empty
 endif (LL_TESTS)
 
 check_message_template(${VIEWER_BINARY_NAME})

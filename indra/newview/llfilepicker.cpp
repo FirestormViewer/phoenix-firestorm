@@ -569,7 +569,7 @@ bool LLFilePicker::getSaveFileModeless(ESaveFilter filter,
         }
         file_filters.push_back({ "OXP Backup Files (*.oxp)", "oxp" });
         break;
-    case FFSAVE_EXPORT:
+    case FFSAVE_CSV:
         if (default_filename.empty())
         {
             default_filename = "untitled.csv";
