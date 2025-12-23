@@ -149,9 +149,9 @@ private:
     static std::string sCurrentGridId; // <FS:Ansariel> Log getting spammed with experience requests from other grids
     static bool        sIsInOpenSim; // <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
 
-    void idleCoro();
+    static void idleCoro();
     void eraseExpired();
-    void requestExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &, std::string, RequestQueue_t);
+    static void requestExperiencesCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &, std::string, RequestQueue_t);
     void requestExperiences();
 
     void fetchAssociatedExperienceCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &, LLUUID, LLUUID, std::string, ExperienceGetFn_t);
