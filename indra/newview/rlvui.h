@@ -58,7 +58,7 @@ protected:
      */
 public:
 #ifdef CATZNIP_STRINGVIEW
-    bool addGenericFloaterFilter(const std::string& strFloaterName, const boost::string_view& strRlvNotification);
+    bool addGenericFloaterFilter(const std::string& strFloaterName, const std::string_view& strRlvNotification);
 #else
     bool addGenericFloaterFilter(const std::string& strFloaterName, const std::string& strRlvNotification);
 #endif // CATZNIP_STRINGVIEW

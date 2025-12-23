@@ -65,7 +65,7 @@ class RlvGCTimer;
 //
 
 #ifdef CATZNIP_STRINGVIEW
-template<typename T> inline T rlvGetSetting(const boost::string_view& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetSetting(const std::string_view& strSetting, const T& defaultValue)
 #else
 template<typename T> inline T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
 #endif // CATZNIP_STRINGVIEW
@@ -75,7 +75,7 @@ template<typename T> inline T rlvGetSetting(const std::string& strSetting, const
 }
 
 #ifdef CATZNIP_STRINGVIEW
-template<typename T> inline T rlvGetPerUserSetting(const boost::string_view& strSetting, const T& defaultValue)
+template<typename T> inline T rlvGetPerUserSetting(const std::string_view& strSetting, const T& defaultValue)
 #else
 template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting, const T& defaultValue)
 #endif // CATZNIP_STRINGVIEW
@@ -155,7 +155,7 @@ public:
     static std::string getAnonym(const LLAvatarName& avName);       // @shownames
     static std::string getAnonym(const std::string& strName);       // @shownames
 #ifdef CATZNIP_STRINGVIEW
-    static const std::string& getString(const boost::string_view& strStringName);
+    static const std::string& getString(const std::string_view& strStringName);
 #else
     static const std::string& getString(const std::string& strStringName);
 #endif // CATZNIP_STRINGVIEW
@@ -194,8 +194,8 @@ public:
     static void forceTp(const LLVector3d& posDest);                                 // Ignores restrictions that might otherwise prevent tp'ing
 
 #ifdef CATZNIP_STRINGVIEW
-    static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false) { notifyBlocked(boost::string_view(strNotifcation), sdArgs, fLogToChat); }
-    static void notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
+    //static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false) { notifyBlocked(std::string_view(strNotifcation), sdArgs, fLogToChat); }
+    static void notifyBlocked(const std::string_view& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
 #else
     static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
 #endif // CATZNIP_STRINGVIEW
