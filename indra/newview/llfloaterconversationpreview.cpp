@@ -307,7 +307,15 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 // <FS:CR> Open chat history externally
 void LLFloaterConversationPreview::onBtnOpenExternal()
 {
-    gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mChatHistoryFileName));
+    std::string log_file_name = LLLogChat::makeLogFileName(mChatHistoryFileName);
+    if (gDirUtilp->fileExists(log_file_name))
+    {
+        gViewerWindow->getWindow()->openFile(log_file_name);
+    }
+    else
+    {
+        LLNotificationsUtil::add("ChatHistoryIsMissing");
+    }
 }
 
 // [FS:CR] FIRE-6545

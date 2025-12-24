@@ -14976,4 +14976,16 @@ Error message:
 [ERROR_MESSAGE] ([ERROR_CODE])
   </notification>
 <!-- </FS:Zi> -->
+  <!-- <FS:TJ>-->
+  <notification
+   icon="alert.tga"
+   name="ChatHistoryIsMissing"
+   type="alertmodal">
+Chat transcript file is missing. Either there are no transcripts for this chat, or transcripts aren't being saved.
+You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp; Transcripts
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <!-- </FS:TJ>-->
 </notifications>
