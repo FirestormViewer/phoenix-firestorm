@@ -5988,4 +5988,8 @@ Fehlermeldung:
 Fehlermeldung:
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
+	<notification name="ChatHistoryIsMissing">
+		Chat-Verlauf-Datei ist nicht vorhanden. Entweder existiert kein Verlauf für diesen Chat oder Verläufe werden nicht gespeichert.
+Sie können das Speichern von Verläufen einschalten unter Einstellungen &gt; Privatsphäre &gt; Protokoll und Verläufe
+	</notification>
 </notifications>
