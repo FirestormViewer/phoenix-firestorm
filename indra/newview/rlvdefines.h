@@ -396,7 +396,7 @@ enum ERlvAttachGroupType
 
 #ifdef CATZNIP_STRINGVIEW
 using namespace std::literals;
-#define make_string_view(s) "#s"sv
+#define make_string_view(s) s##sv
 #endif
 
 namespace RlvSettingNames
