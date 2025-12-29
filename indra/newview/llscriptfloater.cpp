@@ -496,8 +496,27 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
             std::string description = notification->asLLSD()["responder_sd"]["description"].asString();
             if (!description.empty())
             {
-                LLStringUtil::getTokens(description, params, "/");
-                haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                if (LLGridManager::instance().isInSecondLife())
+                {
+                    LLStringUtil::getTokens(description, params, "/");
+                    haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                }
+                else
+                {
+                    // OpenSim handles notification descriptions a little differently
+                    constexpr std::string_view location_key = "located at ";
+                    auto location_pos_start = description.find(location_key);
+                    auto location_pos_end = description.find(" <", location_pos_start);
+                    if (location_pos_start != std::string_view::npos && location_pos_end != std::string_view::npos)
+                    {
+                        location_pos_start += location_key.size();
+                        haystack.mRegionName = description.substr(location_pos_start, location_pos_end - location_pos_start);
+                    }
+                    else
+                    {
+                        haystack.mRegionName.clear();
+                    }
+                }
             }
 
             haystack.mType = OmnifilterEngine::eType::URLRequest;
