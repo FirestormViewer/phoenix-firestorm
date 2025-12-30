@@ -3462,7 +3462,10 @@ void LLIMMgr::addMessage(
     const LLUUID& session_id,
     const LLUUID& target_id,
     const std::string& from,
-    const std::string& msg,
+    // </FS:Zi> Omnifilter support
+    // const std::string& msg,
+    const std::string& original_msg,
+    // </FS:Zi>
     bool  is_offline_msg,
     const std::string& session_name,
     EInstantMessage dialog,
@@ -3477,6 +3480,8 @@ void LLIMMgr::addMessage(
     bool keyword_alert_performed) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
     // <FS:Zi> Omnifilter support
+    std::string msg = original_msg;
+
     static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
     if (use_omnifilter)
     {
@@ -3485,7 +3490,7 @@ void LLIMMgr::addMessage(
         if (dialog == IM_SESSION_INVITE)
         {
             OmnifilterEngine::Haystack haystack;
-            haystack.mContent = msg;
+            haystack.mContent = original_msg;
             haystack.mSenderName = from;
             haystack.mOwnerID = target_id;
             haystack.mType = OmnifilterEngine::eType::GroupChat;
@@ -3493,8 +3498,14 @@ void LLIMMgr::addMessage(
             const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
             if (needle)
             {
-                // no text replacement for agent messages to prevent forgery attempts
-                return;
+                if (needle->mChatReplace.empty())       // no replacement defined, just suppress the message
+                {
+                    return;
+                }
+
+                LLSD args;
+                args["REPLACEMENT"] = needle->mChatReplace;
+                msg = LLTrans::getString("OmnifilterReplacement", args);
             }
         }
     }

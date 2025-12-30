@@ -3300,10 +3300,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                         ((LLVOAvatar*)chatter)->stopTyping();
                     }
 
-                    if (
-                        chat.mSourceType == CHAT_SOURCE_AGENT   // no text replacement for agent chat to prevent forgery attempts
-                        || needle->mChatReplace.empty()         // no replacement defined, just suppress the message
-                    )
+                    if (needle->mChatReplace.empty())       // no replacement defined, just suppress the message
                     {
                         return;
                     }
