@@ -254,6 +254,7 @@ protected:
 
 // Subclass of LLToolComposite
 #include "fsmaniprotatejoint.h"   // For FSManipRotateJoint
+#include "fsmaniptranslatejoint.h"
 #include "fsfloaterposer.h"
 class FSToolCompPose : public LLToolComposite
 {
@@ -290,6 +291,41 @@ protected:
 
     // Track mouse state similarly to LLToolCompRotate
     bool                mMouseDown = false;
+};
+
+class FSToolCompPoseTranslate : public LLToolComposite
+{
+public:
+    // Typical pattern: pass a name like "Pose"
+    FSToolCompPoseTranslate();
+    virtual ~FSToolCompPoseTranslate();
+
+    // For some viewer patterns, we create a static singleton:
+    static FSToolCompPoseTranslate* getInstance();
+
+    // Overriding base events:
+    virtual bool handleHover(S32 x, S32 y, MASK mask) override;
+    virtual bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    virtual bool handleMouseUp(S32 x, S32 y, MASK mask) override;
+    virtual bool handleDoubleClick(S32 x, S32 y, MASK mask) override;
+    virtual void render() override;
+    void setAvatar(LLVOAvatar* avatar) { mManip->setAvatar(avatar); };
+    void setJoint(LLJoint* joint) { mManip->setJoint(joint); };
+    void setReferenceFrame(E_PoserReferenceFrame frame) { mManip->setReferenceFrame(frame); };
+
+    // Optional override if you have SHIFT/CTRL combos
+    virtual LLTool* getOverrideTool(MASK mask) override;
+
+    // The pick callback invoked on async pick
+    static void pickCallback(const LLPickInfo& pick_info);
+    void setPoserFloater(FSFloaterPoser* poser){ mPoser = poser; };
+    FSFloaterPoser* getPoserFloater(){ return mPoser; };
+protected:
+    // Tools within this composite
+    FSManipTranslateJoint* mManip      = nullptr;
+    LLToolSelectRect*      mSelectRect = nullptr;
+    FSFloaterPoser*        mPoser      = nullptr;
+    bool                   mMouseDown  = false;
 };
 
 

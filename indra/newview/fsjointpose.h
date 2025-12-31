@@ -32,6 +32,17 @@
 //-----------------------------------------------------------------------------
 #include "llmotion.h"
 
+/// <summary>
+/// Describes the kind of pose-change.
+/// Useful for undoing complex changes.
+/// </summary>
+typedef enum E_PoserChangeType
+{
+    POSER_CHANGE_DEFAULT = 0, // a simple change to pos/rot/scale
+    POSER_CHANGE_CHILDMOVE = 1, // position change of a child by rotating its 2 antecedent joints
+    POSER_CHANGE_ROTATION = 2, // a rotation change
+} E_PoserChangeType;
+
 //-----------------------------------------------------------------------------
 // class FSJointPose
 //-----------------------------------------------------------------------------
@@ -70,13 +81,14 @@ class FSJointPose
     /// <summary>
     /// Undoes the last position set, if any.
     /// </summary>
-    /// <returns>true if the change we un-did was rotational.</returns>
-    bool undoLastChange();
+    /// <returns>A value indicating what kind of change was undone (important for undo).</returns>
+    E_PoserChangeType undoLastChange();
 
     /// <summary>
     /// Undoes the last position set, if any.
     /// </summary>
-    void redoLastChange();
+    /// <returns>A value indicating what kind of change was redone.</returns>
+    E_PoserChangeType redoLastChange();
 
     /// <summary>
     /// Resets the joint to its conditions when posing started.
@@ -100,7 +112,7 @@ class FSJointPose
     /// If zeroBase is true, we treat rotations as if in BVH mode: user work.
     /// If zeroBase is false, we treat as NOT BVH: some existing pose and user work.
     /// </remarks>
-    void setPublicRotation(bool zeroBase, const LLQuaternion& rot);
+    void setPublicRotation(bool zeroBase, E_PoserChangeType changeType, const LLQuaternion& rot);
 
     /// <summary>
     /// Reflects the base and delta rotation of the represented joint left-right.
@@ -319,7 +331,7 @@ class FSJointPose
             mUserSpecifiedBaseZero   = false;
             mRotationIsWorldLocked   = false;
             mJointRotationIsMirrored = false;
-            mLastChangeWasRotational = true;
+            mPoserChangeType         = POSER_CHANGE_DEFAULT;
             mBaseRotation.set(mStartingRotation);
             mRotation.set(LLQuaternion::DEFAULT);
             mPosition.setZero();
@@ -417,15 +429,15 @@ class FSJointPose
             mRotationIsWorldLocked   = state->mRotationIsWorldLocked;
             mBasePriority            = state->mBasePriority;
             mJointRotationIsMirrored = state->mJointRotationIsMirrored;
-            mLastChangeWasRotational = state->mLastChangeWasRotational;
+            mPoserChangeType = state->mPoserChangeType;
         }
 
       public:
-        LLQuaternion mRotation;
-        LLVector3    mPosition;
-        LLVector3    mScale;
-        bool         mRotationIsWorldLocked = false;
-        bool         mLastChangeWasRotational = false;
+        LLQuaternion      mRotation;
+        LLVector3         mPosition;
+        LLVector3         mScale;
+        bool              mRotationIsWorldLocked = false;
+        E_PoserChangeType mPoserChangeType       = POSER_CHANGE_DEFAULT;
 
         /// <summary>
         /// Whether the joint has been mirrored.
