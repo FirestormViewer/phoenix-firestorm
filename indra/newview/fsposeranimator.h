@@ -937,7 +937,7 @@ public:
     /// dot-product to determine the angle change.
     /// Cross product of the change-vector and AC determines the axis of rotation.
     /// </remarks>
-    LLQuaternion getAbcFrameRotation(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC);
+    LLQuaternion getAbcFrameRotation(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC);
 
     /// <summary>
     /// Determines the rotation changes for the grandparent and parent joints to position the child when the parent joint is a hinge.
@@ -957,7 +957,7 @@ public:
     /// Child movement is along vector AC (grandparent-child), and does not account for 'world movement' differences in C because of changeAtC,
     /// as that is handled by getAbcFrameRotation.
     /// </remarks>
-    bool getPlanarRotationAtAandB(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC,
+    bool getPlanarRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
                                              LLQuaternion& changeAtA, LLQuaternion& changeAtB);
 
     /// <summary>
@@ -973,14 +973,14 @@ public:
     /// <remarks>
     /// Moves the child spherically in the specified direction by rotating the parent and grandparent.
     /// </remarks>
-    bool getFreeRotationAtAandB(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC,
+    bool getFreeRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
                                              LLQuaternion& changeAtA, LLQuaternion& changeAtB);
 
-    LLQuaternion getQuaternionFromWorldVector(const LLVector3 worldVector);
+    LLQuaternion getQuaternionFromWorldVector(const LLVector3& worldVector);
 
     bool parentJointIsHinge(LLJoint* parentJoint);
     bool jointIsPelvis(const LLJoint* joint);
-    bool canMoveToNewPosition(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 posNewC);
+    bool canMoveToNewPosition(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& posNewC);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

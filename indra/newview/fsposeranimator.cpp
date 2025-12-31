@@ -24,7 +24,6 @@
  * $/LicenseInfo$
  */
 
-#include <deque>
 #include <boost/algorithm/string.hpp>
 #include "fsposeranimator.h"
 #include "llcharacter.h"
@@ -380,7 +379,7 @@ void FSPoserAnimator::setRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoser
 
 bool FSPoserAnimator::exportRotationWillLockJoint(LLVOAvatar* avatar, const FSPoserJoint& joint) const
 {
-    const F32 ROTATION_KEYFRAME_THRESHOLD = 0.01f; // this is a guestimate: see BVH loader
+    constexpr F32 ROTATION_KEYFRAME_THRESHOLD = 0.01f; // this is a guestimate: see BVH loader
 
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -630,7 +629,7 @@ void FSPoserAnimator::updateJointPositionFromManip(LLVOAvatar* avatar, const FSP
     deRotateWorldLockedDescendants(grandParentPoserJoint, posingMotion, grandParentLengthRotChange);
 }
 
-bool FSPoserAnimator::getFreeRotationAtAandB(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC,
+bool FSPoserAnimator::getFreeRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
                                              LLQuaternion& changeAtA, LLQuaternion& changeAtB)
 {
     LLVector3 vectorAC   = posC - posA;
@@ -653,7 +652,7 @@ bool FSPoserAnimator::getFreeRotationAtAandB(const LLVector3 posA, const LLVecto
     return true;
 }
 
-bool FSPoserAnimator::getPlanarRotationAtAandB(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC,
+bool FSPoserAnimator::getPlanarRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
                                                LLQuaternion& changeAtA, LLQuaternion& changeAtB)
 {
     LLVector3 vectorAC = posC - posA;
@@ -686,7 +685,7 @@ bool FSPoserAnimator::getPlanarRotationAtAandB(const LLVector3 posA, const LLVec
     return true;
 }
 
-LLQuaternion FSPoserAnimator::getAbcFrameRotation(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 changeAtC)
+LLQuaternion FSPoserAnimator::getAbcFrameRotation(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC)
 {
     LLVector3 vectorAC    = posC - posA;
     LLVector3 vectorAnewC = vectorAC + changeAtC;
@@ -726,7 +725,7 @@ bool FSPoserAnimator::jointIsPelvis(const LLJoint* joint)
     return jointName == "mPelvis" || jointName == "mRoot";
 }
 
-bool FSPoserAnimator::canMoveToNewPosition(const LLVector3 posA, const LLVector3 posB, const LLVector3 posC, const LLVector3 posNewC)
+bool FSPoserAnimator::canMoveToNewPosition(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& posNewC)
 {
     F32 lengthAC = (posNewC - posA).length();
     if (lengthAC < 0.04f)
@@ -783,7 +782,7 @@ LLQuaternion FSPoserAnimator::getManipGimbalRotation(LLVOAvatar* avatar, const F
     return getQuaternionFromWorldVector(llJoint->getWorldPosition() - gAgentCamera.getCameraPositionAgent());
 }
 
-LLQuaternion FSPoserAnimator::getQuaternionFromWorldVector(const LLVector3 worldVector)
+LLQuaternion FSPoserAnimator::getQuaternionFromWorldVector(const LLVector3& worldVector)
 {
     LLVector3 skyward(0.f, 0.f, 1.f);
     LLVector3 left(1.f, 0.f, 0.f);

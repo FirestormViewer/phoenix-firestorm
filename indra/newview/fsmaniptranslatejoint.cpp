@@ -26,38 +26,28 @@
  */
 
 #include "fsmaniptranslatejoint.h"
-#include "llgl.h"
-#include "llrender.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llviewercontrol.h"
-#include "llcriticaldamp.h"
 #include "llcylinder.h"
 #include "llfloatertools.h"
-#include "llfontgl.h"
-#include "llhudrender.h"
-#include "llresmgr.h"
 #include "llselectmgr.h"
-#include "llviewercamera.h"
-#include "llviewerobject.h"
 #include "llviewerwindow.h"
 #include "llworld.h"
-#include "llui.h"
-#include "lltrans.h"
 #include "fsfloaterposer.h"
 #include "llfloaterreg.h"
 
-const S32 NUM_AXES = 3;
-const S32 MOUSE_DRAG_SLOP = 2;       // pixels
-const F32 SELECTED_ARROW_SCALE = 1.3f;
-const F32 MANIPULATOR_HOTSPOT_START = 0.2f;
-const F32 MANIPULATOR_HOTSPOT_END = 1.2f;
-const F32 MIN_PLANE_MANIP_DOT_PRODUCT = 0.25f;
-const F32 PLANE_TICK_SIZE = 0.4f;
+constexpr S32 NUM_AXES = 3;
+constexpr S32 MOUSE_DRAG_SLOP = 2;       // pixels
+constexpr F32 SELECTED_ARROW_SCALE = 1.3f;
+constexpr F32 MANIPULATOR_HOTSPOT_START = 0.2f;
+constexpr F32 MANIPULATOR_HOTSPOT_END = 1.2f;
+constexpr F32 MIN_PLANE_MANIP_DOT_PRODUCT = 0.25f;
+constexpr F32 PLANE_TICK_SIZE = 0.4f;
 
-static LLPointer<LLViewerTexture> sGridTex = NULL ;
+static LLPointer<LLViewerTexture> sGridTex = nullptr;
 
-const LLManip::EManipPart MANIPULATOR_IDS[9] =
+constexpr LLManip::EManipPart MANIPULATOR_IDS[9] =
 {
     LLManip::LL_X_ARROW,
     LLManip::LL_Y_ARROW,
@@ -70,7 +60,7 @@ const LLManip::EManipPart MANIPULATOR_IDS[9] =
     LLManip::LL_XY_PLANE
 };
 
-const U32 ARROW_TO_AXIS[4] =
+constexpr U32 ARROW_TO_AXIS[4] =
 {
     VX,
     VX,
@@ -89,22 +79,7 @@ struct ClosestToCamera
 };
 
 FSManipTranslateJoint::FSManipTranslateJoint(LLToolComposite* composite) :
-    LLManipTranslate(composite),
-    mLastHoverMouseX(-1),
-    mLastHoverMouseY(-1),
-    mMouseOutsideSlop(false),
-    mCopyMadeThisDrag(false),
-    mMouseDownX(-1),
-    mMouseDownY(-1),
-    mAxisArrowLength(50),
-    mConeSize(0),
-    mArrowLengthMeters(0.f),
-    mPlaneManipOffsetMeters(0.f),
-    mUpdateTimer(),
-    mSnapOffsetMeters(0.f),
-    mArrowScales(1.f, 1.f, 1.f),
-    mPlaneScales(1.f, 1.f, 1.f),
-    mPlaneManipPositions(1.f, 1.f, 1.f, 1.f)
+    LLManipTranslate(composite)
 {
     if (sGridTex.isNull())
     {
@@ -125,12 +100,12 @@ void FSManipTranslateJoint::setJoint(LLJoint* joint)
 //static
 U32 FSManipTranslateJoint::getGridTexName()
 {
-    if(sGridTex.isNull())
+    if (sGridTex.isNull())
     {
-        restoreGL() ;
+        restoreGL();
     }
 
-    return sGridTex.isNull() ? 0 : sGridTex->getTexName() ;
+    return sGridTex.isNull() ? 0 : sGridTex->getTexName();
 }
 
 //static
@@ -138,7 +113,7 @@ void FSManipTranslateJoint::destroyGL()
 {
     if (sGridTex)
     {
-        sGridTex = NULL ;
+        sGridTex = nullptr;
     }
 }
 
@@ -149,22 +124,22 @@ void FSManipTranslateJoint::restoreGL()
     U32 rez = 512;
     U32 mip = 0;
 
-    destroyGL() ;
-    sGridTex = LLViewerTextureManager::getLocalTexture() ;
-    if(!sGridTex->createGLTexture())
+    destroyGL();
+    sGridTex = LLViewerTextureManager::getLocalTexture();
+    if (!sGridTex->createGLTexture())
     {
-        sGridTex = NULL ;
-        return ;
+        sGridTex = nullptr;
+        return;
     }
 
-    GLuint* d = new GLuint[rez*rez];
+    GLuint* d = new GLuint[rez * rez];
 
     gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, sGridTex->getTexName(), true);
     gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_TRILINEAR);
 
     while (rez >= 1)
     {
-        for (U32 i = 0; i < rez*rez; i++)
+        for (U32 i = 0; i < rez * rez; i++)
         {
             d[i] = 0x00FFFFFF;
         }
@@ -174,25 +149,23 @@ void FSManipTranslateJoint::restoreGL()
         {   //large grain grid
             for (U32 i = 0; i < rez; i++)
             {
-                if (rez <= 16)
+                if (rez == 16)
                 {
-                    if (rez == 16)
-                    {
-                        subcol = 0xA0FFFFFF;
-                    }
-                    else if (rez == 8)
-                    {
-                        subcol = 0x80FFFFFF;
-                    }
-                    else
-                    {
-                        subcol = 0x40FFFFFF;
-                    }
+                    subcol = 0xA0FFFFFF;
+                }
+                else if (rez == 8)
+                {
+                    subcol = 0x80FFFFFF;
+                }
+                else if (rez < 16)
+                {
+                    subcol = 0x40FFFFFF;
                 }
                 else
                 {
                     subcol = 0xFFFFFFFF;
                 }
+
                 d[i         *rez+ 0      ] = subcol;
                 d[0         *rez+ i      ] = subcol;
                 if (rez >= 32)
@@ -259,7 +232,7 @@ void FSManipTranslateJoint::restoreGL()
         rez = rez >> 1;
         mip++;
     }
-    delete [] d;
+    delete[] d;
 }
 
 void FSManipTranslateJoint::handleSelect()
@@ -274,17 +247,17 @@ void FSManipTranslateJoint::handleSelect()
 
 bool FSManipTranslateJoint::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-    bool    handled = false;
+    bool handled = false;
 
     // didn't click in any UI object, so must have clicked in the world
-    if( (mHighlightedPart == LL_X_ARROW ||
+    if ((mHighlightedPart == LL_X_ARROW ||
          mHighlightedPart == LL_Y_ARROW ||
          mHighlightedPart == LL_Z_ARROW ||
          mHighlightedPart == LL_YZ_PLANE ||
          mHighlightedPart == LL_XZ_PLANE ||
-         mHighlightedPart == LL_XY_PLANE ) )
+         mHighlightedPart == LL_XY_PLANE))
     {
-        handled = handleMouseDownOnPart( x, y, mask );
+        handled = handleMouseDownOnPart(x, y, mask);
     }
 
     return handled;
@@ -302,12 +275,12 @@ bool FSManipTranslateJoint::handleMouseDownOnPart(S32 x, S32 y, MASK mask)
     highlightManipulators(x, y);
     S32 hit_part = mHighlightedPart;
 
-    if( (hit_part != LL_X_ARROW) &&
+    if ((hit_part != LL_X_ARROW) &&
         (hit_part != LL_Y_ARROW) &&
         (hit_part != LL_Z_ARROW) &&
         (hit_part != LL_YZ_PLANE) &&
         (hit_part != LL_XZ_PLANE) &&
-        (hit_part != LL_XY_PLANE) )
+        (hit_part != LL_XY_PLANE))
     {
         return true;
     }
@@ -387,7 +360,7 @@ bool FSManipTranslateJoint::handleHover(S32 x, S32 y, MASK mask)
 
     // Handle auto-rotation if necessary.
     LLRect world_rect = gViewerWindow->getWorldViewRectScaled();
-    const F32 ROTATE_ANGLE_PER_SECOND = 30.f * DEG_TO_RAD;
+    constexpr F32 ROTATE_ANGLE_PER_SECOND = 30.f * DEG_TO_RAD;
     const S32 ROTATE_H_MARGIN = world_rect.getWidth() / 20;
     const F32 rotate_angle = ROTATE_ANGLE_PER_SECOND / gFPSClamped;
     bool rotated = false;
@@ -487,7 +460,7 @@ bool FSManipTranslateJoint::handleHover(S32 x, S32 y, MASK mask)
     return true;
 }
 
-LLVector3 FSManipTranslateJoint::getChangeInPosition(LLVector3 newPosition) const
+LLVector3 FSManipTranslateJoint::getChangeInPosition(const LLVector3& newPosition) const
 {
     LLVector3 rawChange = newPosition - mDragCursorLastGlobal;
 
@@ -691,7 +664,7 @@ void FSManipTranslateJoint::highlightManipulators(S32 x, S32 y)
         ClosestToCamera() );
 
     std::vector<ManipulatorHandle>::iterator it = projected_manipulators.begin();
-    for ( ; it != projected_manipulators.end(); ++it)
+    for (; it != projected_manipulators.end(); ++it)
     {
         ManipulatorHandle& manipulator = *it;
         {
@@ -908,7 +881,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                 }
                 gGL.end();
 
-                LLUI::setLineWidth(3.0f);
+                gGL.setLineWidth(3.0f);
                 gGL.begin(LLRender::LINES);
                 {
                     gGL.color4f(0.f, 0.f, 0.f, 0.3f);
@@ -927,7 +900,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                     gGL.vertex3f(0.f, mPlaneManipOffsetMeters * -PLANE_TICK_SIZE * 0.4f,  mPlaneManipOffsetMeters * PLANE_TICK_SIZE * 0.1f);
                 }
                 gGL.end();
-                LLUI::setLineWidth(1.0f);
+                gGL.setLineWidth(1.0f);
                 gGL.popMatrix();
             }
 
@@ -963,7 +936,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                 }
                 gGL.end();
 
-                LLUI::setLineWidth(3.0f);
+                gGL.setLineWidth(3.0f);
                 gGL.begin(LLRender::LINES);
                 {
                     gGL.color4f(0.f, 0.f, 0.f, 0.3f);
@@ -982,7 +955,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                     gGL.vertex3f(mPlaneManipOffsetMeters * -PLANE_TICK_SIZE * 0.4f,   0.f, mPlaneManipOffsetMeters * PLANE_TICK_SIZE * 0.1f);
                 }
                 gGL.end();
-                LLUI::setLineWidth(1.0f);
+                gGL.setLineWidth(1.0f);
 
                 gGL.popMatrix();
             }
@@ -1034,7 +1007,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                     }
                     gGL.end();
 
-                    LLUI::setLineWidth(3.0f);
+                    gGL.setLineWidth(3.0f);
                     gGL.begin(LLRender::LINES);
                     {
                         gGL.color4f(0.f, 0.f, 0.f, 0.3f);
@@ -1055,7 +1028,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
                         gGL.vertex3fv((v23 + (v0-v23)*.3f + (v2-v23)*.3f).mV);
                     }
                     gGL.end();
-                    LLUI::setLineWidth(1.0f);
+                    gGL.setLineWidth(1.0f);
 
                 gGL.popMatrix();
             }
@@ -1084,7 +1057,7 @@ void FSManipTranslateJoint::renderTranslationHandles()
             // 2 & 4
 
             // Table of order to draw faces, based on nearest vertex
-            static U32 face_list[8][NUM_AXES*2] = {
+            constexpr U32 face_list[8][NUM_AXES * 2] = {
                 { 2,0,1, 4,5,3 }, // v6  F201 F453
                 { 2,0,3, 4,5,1 }, // v7  F203 F451
                 { 4,0,1, 2,5,3 }, // v5  F401 F253
@@ -1094,13 +1067,13 @@ void FSManipTranslateJoint::renderTranslationHandles()
                 { 4,5,1, 2,0,3 }, // v1  F451 F203
                 { 4,5,3, 2,0,1 }, // v0  F453 F201
             };
-            static const EManipPart which_arrow[6] = {
+            constexpr EManipPart which_arrow[6] = {
                 LL_Z_ARROW,
                 LL_X_ARROW,
                 LL_Y_ARROW,
                 LL_X_ARROW,
                 LL_Y_ARROW,
-                LL_Z_ARROW};
+                LL_Z_ARROW };
 
             // draw arrows for deeper faces first, closer faces last
             LLVector3 camera_axis;
@@ -1151,26 +1124,26 @@ void FSManipTranslateJoint::renderArrow(S32 which_arrow, S32 selected_arrow, F32
         }
         else
         {
-            color.mV[index] = pass == 1 ? .8f : .35f ;          // red, green, or blue
+            color.mV[index] = pass == 1 ? .8f : .35f;          // red, green, or blue
             color.mV[VALPHA] = 0.6f;
         }
-        gGL.color4fv( color.mV );
+        gGL.color4fv(color.mV);
 
         LLVector3 vec;
 
         {
-            LLUI::setLineWidth(2.0f);
+            gGL.setLineWidth(2.0f);
             gGL.begin(LLRender::LINES);
                 vec.mV[index] = box_size;
-                gGL.vertex3f(vec.mV[0], vec.mV[1], vec.mV[2]);
+                gGL.vertex3f(vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
 
                 vec.mV[index] = arrow_size;
-                gGL.vertex3f(vec.mV[0], vec.mV[1], vec.mV[2]);
+                gGL.vertex3f(vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
             gGL.end();
-            LLUI::setLineWidth(1.0f);
+            gGL.setLineWidth(1.0f);
         }
 
-        gGL.translatef(vec.mV[0], vec.mV[1], vec.mV[2]);
+        gGL.translatef(vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
         gGL.scalef(handle_size, handle_size, handle_size);
 
         F32 rot = 0.0f;
@@ -1196,7 +1169,7 @@ void FSManipTranslateJoint::renderArrow(S32 which_arrow, S32 selected_arrow, F32
         }
 
         gGL.diffuseColor4fv(color.mV);
-        gGL.rotatef(rot, axis.mV[0], axis.mV[1], axis.mV[2]);
+        gGL.rotatef(rot, axis.mV[VX], axis.mV[VY], axis.mV[VZ]);
         gGL.scalef(mArrowScales.mV[index], mArrowScales.mV[index], mArrowScales.mV[index] * 1.5f);
 
         gCone.render();

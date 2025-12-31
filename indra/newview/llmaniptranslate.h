@@ -82,7 +82,10 @@ protected:
                                      LLColor4 inner_color);
     F32         getMinGridScale();
 
-private:
+// <FS:Ansariel> Changed to protected for poser
+//private:
+protected:
+// </FS:Ansariel>
     S32         mLastHoverMouseX;
     S32         mLastHoverMouseY;
     bool        mMouseOutsideSlop;      // true after mouse goes outside slop region

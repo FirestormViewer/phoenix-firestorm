@@ -28,7 +28,6 @@
 #ifndef FS_MANIP_TRANSLATE_JOINT_H
 #define FS_MANIP_TRANSLATE_JOINT_H
 
-#include "llselectmgr.h"
 #include "fsmaniprotatejoint.h"
 #include "llmaniptranslate.h"
 
@@ -38,20 +37,8 @@ class LLVOAvatar; // for LLVOAvatarSelf, etc.
 class FSManipTranslateJoint : public LLManipTranslate
 {
 public:
-    class ManipulatorHandle
-    {
-    public:
-        LLVector3   mStartPosition;
-        LLVector3   mEndPosition;
-        EManipPart  mManipID;
-        F32         mHotSpotRadius;
-
-        ManipulatorHandle(LLVector3 start_pos, LLVector3 end_pos, EManipPart id, F32 radius):mStartPosition(start_pos), mEndPosition(end_pos), mManipID(id), mHotSpotRadius(radius){}
-    };
-
-
     FSManipTranslateJoint(LLToolComposite* composite);
-    virtual ~FSManipTranslateJoint() {};
+    virtual ~FSManipTranslateJoint() = default;
 
     /// <summary>
     /// Sets the joint we are going to manipulate.
@@ -71,29 +58,23 @@ public:
     /// <param name="avatar">The avatar to interact with.</param>
     void setReferenceFrame(const E_PoserReferenceFrame frame) { mReferenceFrame = frame; };
 
-    static  U32     getGridTexName() ;
-    static  void    destroyGL();
-    static  void    restoreGL();
-    virtual bool    handleMouseDown(S32 x, S32 y, MASK mask);
-    virtual bool    handleMouseUp(S32 x, S32 y, MASK mask);
-    virtual bool    handleHover(S32 x, S32 y, MASK mask);
-    virtual void    render();
-    virtual void    handleSelect();
+    static U32  getGridTexName();
+    static void destroyGL();
+    static void restoreGL();
+    bool        handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool        handleMouseUp(S32 x, S32 y, MASK mask) override;
+    bool        handleHover(S32 x, S32 y, MASK mask) override;
+    void        render() override;
+    void        handleSelect() override;
 
-    virtual void    highlightManipulators(S32 x, S32 y);
-    virtual bool    handleMouseDownOnPart(S32 x, S32 y, MASK mask);
-    virtual bool    canAffectSelection();
+    void highlightManipulators(S32 x, S32 y) override;
+    bool handleMouseDownOnPart(S32 x, S32 y, MASK mask) override;
+    bool canAffectSelection() override;
 
 protected:
-    enum EHandleType {
-        HANDLE_CONE,
-        HANDLE_BOX,
-        HANDLE_SPHERE
-    };
-
-    void        renderArrow(S32 which_arrow, S32 selected_arrow, F32 box_size, F32 arrow_size, F32 handle_size, bool reverse_direction);
-    void        renderTranslationHandles();
-    void        renderText();
+    void renderArrow(S32 which_arrow, S32 selected_arrow, F32 box_size, F32 arrow_size, F32 handle_size, bool reverse_direction);
+    void renderTranslationHandles();
+    void renderText();
 
 private:
     bool isAvatarJointSafeToUse();
@@ -103,35 +84,12 @@ private:
     /// </summary>
     /// <returns>True if we can move the joint with manip, otherwise false.</returns>
     bool isMoveableJoint();
-    void getManipJointNormal(LLJoint* joint, EManipPart manip, LLVector3& normal) { getManipNormal(nullptr, manip, normal);};
+    void getManipJointNormal(LLJoint* joint, EManipPart manip, LLVector3& normal) { getManipNormal(nullptr, manip, normal); };
     bool getManipJointAxis(LLJoint* joint, EManipPart manip, LLVector3& axis) { return getManipAxis(nullptr, manip, axis); };
 
-    LLVector3 getChangeInPosition(LLVector3 newPosition) const;
+    LLVector3 getChangeInPosition(const LLVector3& newPosition) const;
 
-    S32         mLastHoverMouseX;
-    S32         mLastHoverMouseY;
-    bool        mMouseOutsideSlop;      // true after mouse goes outside slop region
-    bool        mCopyMadeThisDrag;
-    S32         mMouseDownX;
-    S32         mMouseDownY;
-    F32         mAxisArrowLength;       // pixels
-    F32         mConeSize;              // meters, world space
-    F32         mArrowLengthMeters;     // meters
-    F32         mPlaneManipOffsetMeters;
-    LLVector3   mManipNormal;
-    LLVector3   mDragCursorLastGlobal;
-    LLVector3d  mDragCursorStartGlobal;
-    LLVector3d  mDragSelectionStartGlobal;
-    LLTimer     mUpdateTimer;
-    LLVector4   mManipulatorVertices[18];
-    F32         mSnapOffsetMeters;
-    LLVector3   mSnapOffsetAxis;
-    LLQuaternion mGridRotation;
-    LLVector3   mGridOrigin;
-    LLVector3   mGridScale;
-    LLVector3   mArrowScales;
-    LLVector3   mPlaneScales;
-    LLVector4   mPlaneManipPositions;
+    LLVector3 mDragCursorLastGlobal;
 
     LLJoint*              mJoint          = nullptr;
     LLVOAvatar*           mAvatar         = nullptr;
