@@ -533,7 +533,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         id: download
         with:
           path: to_deploy        

@@ -369,13 +369,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download viewer exe
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: Windows-app
           path: _artifacts
       - name: Download Windows Symbols
         if: env.BUGSPLAT_USER && env.BUGSPLAT_PASS
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: Windows-symbols
       - name: Extract viewer pdb
@@ -405,7 +405,7 @@ jobs:
     steps:
       - name: Download Mac Symbols
         if: env.BUGSPLAT_USER && env.BUGSPLAT_PASS
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: macOS-symbols
       - name: Post Mac symbols
@@ -425,11 +425,11 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.setup.outputs.release_run
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           pattern: "*-installer"
 
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           pattern: "*-metadata"
 
