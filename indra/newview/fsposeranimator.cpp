@@ -643,7 +643,7 @@ bool FSPoserAnimator::getFreeRotationAtAandB(const LLVector3& posA, const LLVect
     rotationAxis.normalize();
 
     F32 angle = asin(lengthMove / lengthAC);
-    if (std::isnan(angle))
+    if (llisnan(angle))
         return false;
 
     changeAtA = LLQuaternion(angle, rotationAxis);
@@ -694,7 +694,7 @@ LLQuaternion FSPoserAnimator::getAbcFrameRotation(const LLVector3& posA, const L
     LLVector3 rotationAxis = vectorAC % changeAtC;
     rotationAxis.normalize();
 
-    if (std::isnan(angle))
+    if (llisnan(angle))
         angle = 0.f;
 
     return LLQuaternion(angle, rotationAxis);
