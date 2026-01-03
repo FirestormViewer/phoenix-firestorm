@@ -173,6 +173,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcheckboxctrl.h"
 #include "llfloatergridstatus.h"
+#include "llfloatermarketplace.h"
 #include "llfloaterpreference.h"
 #include "llkeyconflict.h"
 #include "lllogininstance.h"
@@ -8798,6 +8799,29 @@ class LLPromptShowURL : public view_listener_t
     }
 };
 
+// <FS:TJ> For the SL Marketplace, use the already preloaded CEF instance
+class FSLoadSLMarketplace : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        static LLCachedControl<std::string> marketplace_url(gSavedSettings, "MarketplaceURL", "https://marketplace.secondlife.com/");
+        if (LLWeb::useExternalBrowser(marketplace_url))
+        {
+            LLWeb::loadURL(marketplace_url);
+        }
+        else
+        {
+            LLFloaterReg::showInstanceOrBringToFront("marketplace");
+            if (LLFloaterMarketplace* marketplace = LLFloaterReg::getTypedInstance<LLFloaterMarketplace>("marketplace"))
+            {
+                marketplace->openMarketplace();
+            }
+        }
+        return true;
+    }
+};
+// </FS:TJ>
+
 bool callback_show_file(const LLSD& notification, const LLSD& response)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -13240,6 +13264,9 @@ void initialize_menus()
     commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
     commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
     // </FS:Ansariel>
+
+    // <FS:TJ> For the SL Marketplace, use the already preloaded CEF instance
+    view_listener_t::addMenu(new FSLoadSLMarketplace(), "LoadSLMarketplace");
 
     // <FS:Ansariel> Script debug floater
     commit.add("ShowScriptDebug", boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
