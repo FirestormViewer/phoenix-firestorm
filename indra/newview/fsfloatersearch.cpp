@@ -2965,6 +2965,8 @@ bool FSPanelSearchWeb::postBuild()
     mWebBrowser = getChild<LLMediaCtrl>("webbrowser");
     mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
     LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
+    loadURL(SearchQuery());
+
     return true;
 }
 
@@ -3042,12 +3044,16 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 
     // Get the search URL and expand all of the substitutions
     // (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
-    std::string url;
+    std::string url = LFSimFeatureHandler::instance().searchURL();
+    if (url.empty())
+    {
+        url = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+    }
 
     // add the maturity and category variables to the new Second Life search URL
     if (LLGridManager::getInstance()->isInSecondLife())
     {
-        url = LFSimFeatureHandler::instance().searchURL() + "&maturity=" + maturity + "&" + mCategoryPaths[p.category()].asString();
+        url += "&maturity=" + maturity + "&" + mCategoryPaths[p.category()].asString();
     }
     // for OpenSim, do the same as in earlier versions
     else
@@ -3056,10 +3062,6 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
         if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
         {
             url = debug_url;
-        }
-        else
-        {
-            url = LFSimFeatureHandler::instance().searchURL();
         }
     }
 
