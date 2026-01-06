@@ -1039,6 +1039,12 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
             new_distance = llclamp(new_distance, APPEARANCE_MIN_ZOOM, APPEARANCE_MAX_ZOOM);
         }
     }
+    else
+    {
+        // <FS:TJ> FIRE-23470: Fix camera controls zoom glitch
+        //new_distance = llmin(new_distance, getCameraMaxZoomDistance());
+        new_distance = llmin(new_distance, getCameraMaxZoomDistance(true));
+    }
 
 // [RLVa:KB] - Checked: 2.0.0
     if ( (RlvActions::isRlvEnabled()) && (!allowFocusOffsetChange(new_distance * camera_offset_unit)) )
@@ -1108,6 +1114,12 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
             {
                 new_distance = llclamp(new_distance, APPEARANCE_MIN_ZOOM, APPEARANCE_MAX_ZOOM);
             }
+        }
+        else
+        {
+            // <FS:TJ> FIRE-23470: Fix camera controls zoom glitch
+            //new_distance = llmin(new_distance, getCameraMaxZoomDistance());
+            new_distance = llmin(new_distance, getCameraMaxZoomDistance(true));
         }
 
 // [RLVa:KB] - Checked: 2.0.0
