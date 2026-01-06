@@ -3,6 +3,8 @@
 	<string name="no_friends" value="keine Freunde"/>
 	<string name="no_filtered_groups_msg" value="Keine Gruppe „[SEARCH_TERM]“ gefunden."/>
 	<string name="no_groups_msg" value="Du suchst nach Gruppen zum Beitreten? Versuche die [secondlife:///app/search/groups Suche]."/>
+	<string name="favorite_label">Anheften</string>
+	<string name="unfavorite_label">Abheften</string>
 	<tab_container name="friends_and_groups">
 		<panel label="Freunde" name="friends_panel"/>
 		<panel label="Gruppen" name="groups_panel"/>

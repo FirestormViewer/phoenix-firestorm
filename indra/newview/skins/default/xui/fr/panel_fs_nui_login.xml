@@ -47,7 +47,7 @@
 							<text name="mode_selection_text">
 								Mode :
 							</text>
-							<combo_box name="mode_combo" tool_tip="Sélectionnez quel style de navigateur vous sied le mieux pour régler vos paramètres par défaut de manière appropriée.">
+							<combo_box name="mode_combo" tool_tip="Sélectionnez quel style de client vous sied le mieux pour régler vos paramètres par défaut de manière appropriée.">
 								<combo_box.item label="Hybride" name="Hybrid"/>
 								<combo_box.item label="Texte" name="Text"/>
 							</combo_box>

@@ -3734,7 +3734,7 @@ void LLViewerWindow::clearPopups()
 void LLViewerWindow::moveCursorToCenter()
 {
     bool mouse_warp = false;
-    LLCachedControl<S32> mouse_warp_mode(gSavedSettings, "MouseWarpMode", 1);
+    static LLCachedControl<S32> mouse_warp_mode(gSavedSettings, "MouseWarpMode", 1);
 
     switch (mouse_warp_mode())
     {
@@ -5109,9 +5109,12 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
     }
     // <FS:Beq> render the poser manipulator guides
     // if we have something selected those toosl should override
-    if ( (!for_hud) && (selection->isEmpty()) && (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance()) )
+    if (!for_hud && selection->isEmpty())
     {
-        FSToolCompPose::getInstance()->render();
+        if (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance())
+            FSToolCompPose::getInstance()->render();
+        if (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPoseTranslate::getInstance())
+            FSToolCompPoseTranslate::getInstance()->render();
     }
     // </FS:Beq>
 

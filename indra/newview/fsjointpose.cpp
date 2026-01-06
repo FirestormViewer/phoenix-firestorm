@@ -55,47 +55,49 @@ void FSJointPose::setPublicPosition(const LLVector3& pos)
 {
     addStateToUndo(mCurrentState);
     mCurrentState.mPosition.set(pos);
-    mCurrentState.mLastChangeWasRotational = false;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
-void FSJointPose::setPublicRotation(bool zeroBase, const LLQuaternion& rot)
+void FSJointPose::setPublicRotation(bool zeroBase, E_PoserChangeType changeType, const LLQuaternion& rot)
 {
     addStateToUndo(mCurrentState);
 
     if (zeroBase)
         zeroBaseRotation(true);
     else
-        mCurrentState.mUserSpecifiedBaseZero = false;
+        mCurrentState.mUserSpecifiedBaseZero = POSER_CHANGE_DEFAULT;
 
     mCurrentState.mRotation.set(rot);
-    mCurrentState.mLastChangeWasRotational = true;
+    mCurrentState.mPoserChangeType = changeType;
 }
 
 void FSJointPose::setPublicScale(const LLVector3& scale)
 {
     addStateToUndo(mCurrentState);
     mCurrentState.mScale.set(scale);
-    mCurrentState.mLastChangeWasRotational = false;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
-bool FSJointPose::undoLastChange()
+E_PoserChangeType FSJointPose::undoLastChange()
 {
-    bool changeType = mCurrentState.mLastChangeWasRotational;
+    E_PoserChangeType changeType = mCurrentState.mPoserChangeType;
     mCurrentState   = undoLastStateChange(mCurrentState);
 
     return changeType;
 }
 
-void FSJointPose::redoLastChange()
+E_PoserChangeType FSJointPose::redoLastChange()
 {
     mCurrentState = redoLastStateChange(mCurrentState);
+
+    return mCurrentState.mPoserChangeType;
 }
 
 void FSJointPose::resetJoint()
 {
     addStateToUndo(mCurrentState);
     mCurrentState.resetJoint();
-    mCurrentState.mLastChangeWasRotational = true;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
 void FSJointPose::addStateToUndo(const FSJointState& stateToAddToUndo)
@@ -169,13 +171,13 @@ void FSJointPose::recaptureJoint()
     }
 
     mCurrentState = FSJointState(joint);
-    mCurrentState.mLastChangeWasRotational = true;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
 LLQuaternion FSJointPose::updateJointAsDelta(bool zeroBase, const LLQuaternion& rotation, const LLVector3& position, const LLVector3& scale)
 {
     addStateToUndo(mCurrentState);
-    mCurrentState.mLastChangeWasRotational = true;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 
     return mCurrentState.updateFromJointProperties(zeroBase, rotation, position, scale);
 }
@@ -231,7 +233,7 @@ void FSJointPose::cloneRotationFrom(FSJointPose* fromJoint)
 
     addStateToUndo(FSJointState(mCurrentState));
     mCurrentState.cloneRotationFrom(fromJoint->mCurrentState);
-    mCurrentState.mLastChangeWasRotational = true;
+    mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
 void FSJointPose::mirrorRotationFrom(FSJointPose* fromJoint)

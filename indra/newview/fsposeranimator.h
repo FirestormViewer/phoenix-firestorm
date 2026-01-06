@@ -792,19 +792,19 @@ public:
     void applyJointMirrorToBaseRotations(FSPosingMotion* posingMotion);
 
   private:
-      /// <summary>
-      /// Translates the supplied rotation vector from UI to a Quaternion for the bone.
-      /// Also performs the axis-swapping and other transformations for up/down/left/right to make sense.
-      /// </summary>
-      /// <param name="avatar">The avatar whose joint is being manipulated.</param>
-      /// <param name="joint">The joint which is being altered.</param>
-      /// <param name="frame">The frame of reference the translation should be performed in.</param>
-      /// <param name="translation">The axis translation to perform.</param>
-      /// <param name="negation">The style of axis-negation.</param>
-      /// <param name="rotation">The rotation to translate and transform to quaternion.</param>
-      /// <returns>The translated rotation quaternion.</returns>
-      LLQuaternion translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserReferenceFrame frame,
-                                                 E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
+    /// <summary>
+    /// Translates the supplied rotation vector from UI to a Quaternion for the bone.
+    /// Also performs the axis-swapping and other transformations for up/down/left/right to make sense.
+    /// </summary>
+    /// <param name="avatar">The avatar whose joint is being manipulated.</param>
+    /// <param name="joint">The joint which is being altered.</param>
+    /// <param name="frame">The frame of reference the translation should be performed in.</param>
+    /// <param name="translation">The axis translation to perform.</param>
+    /// <param name="negation">The style of axis-negation.</param>
+    /// <param name="rotation">The rotation to translate and transform to quaternion.</param>
+    /// <returns>The translated rotation quaternion.</returns>
+    LLQuaternion translateRotationToQuaternion(LLVOAvatar* avatar, FSJointPose* joint, E_PoserReferenceFrame frame,
+                                               E_BoneAxisTranslation translation, S32 negation, LLVector3 rotation);
 
     /// <summary>
     /// Translates a bone-rotation quaternion to a vector usable easily on the UI.
@@ -899,6 +899,88 @@ public:
     /// 'the world', 'avatar pelvis' or the position of the camera relative to the joint.
     /// </remarks>
     LLQuaternion changeToRotationFrame(LLVOAvatar* avatar, const LLQuaternion& rotation, E_PoserReferenceFrame frame, FSJointPose* joint);
+
+    void updateJointRotationFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
+                                                       E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, const LLQuaternion& rotation);
+
+    void updateJointPositionFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
+                                      E_BoneDeflectionStyles style, const LLVector3& position);
+
+    /// <summary>
+    /// Undoes or re-does the parent and grandparent joint rotations from a updateJointPositionFromManip(...)
+    /// </summary>
+    /// <param name="joint">The joint whose parent and grandparent need to undo.</param>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="redo">Whether to redo the rotation.</param>
+    void undoOrRedoRotatedParents(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo);
+
+    /// <summary>
+    /// Finds a jointPose using the supplied name.
+    /// </summary>
+    /// <param name="posingMotion">The posing motion.</param>
+    /// <param name="jointName">The name of the joint.</param>
+    /// <returns>The jointPose if found, otherwise nullptr.</returns>
+    FSJointPose* findParentJointPose(FSPosingMotion* posingMotion, std::string jointName);
+
+    /// <summary>
+    /// Determines the rotation of the grand-parent joint to move a system containing a 'hinge' joint.
+    /// </summary>
+    /// <param name="posA">The world position of the grand-parent joint.</param>
+    /// <param name="posC">The world position of the parent joint.</param>
+    /// <param name="posC">The world position of the moved joint.</param>
+    /// <param name="changeAtC">The world-referenced movement of the moved joint.</param>
+    /// <returns>The rotation required for the system of moved-joint, parent and grandparent.</returns>
+    /// <remarks>
+    /// The first of a 2-part treatment to move a joint by changing the rotation of its two parents.
+    /// This method determines the rotation for the entire frame (a triangle) of joint-parent-grandparent.
+    /// It finds the vector of the grand-parent to child (vectorAC) before and after moment, then uses
+    /// dot-product to determine the angle change.
+    /// Cross product of the change-vector and AC determines the axis of rotation.
+    /// </remarks>
+    LLQuaternion getAbcFrameRotation(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC);
+
+    /// <summary>
+    /// Determines the rotation changes for the grandparent and parent joints to position the child when the parent joint is a hinge.
+    /// </summary>
+    /// <param name="posA">The world position of the grand-parent joint.</param>
+    /// <param name="posB">The world position of the parent joint.</param>
+    /// <param name="posC">The world position of the moved joint.</param>
+    /// <param name="changeAtC">The world-referenced movement of the moved joint.</param>
+    /// <param name="changeAtA">The rotation at the grandparent to extend or retract the moved joint.</param>
+    /// <param name="changeAtB">The rotation at the parent to extend or retract the moved joint.</param>
+    /// <returns>True if the rotation can be made, otherwise false.</returns>
+    /// <remarks>
+    /// The second of a 2-part treatment to move a joint by changing the rotation of its two parents.
+    /// This method calculates rotations at grandparent and parent so that the length AC (grandparent to child) changes.
+    /// Both rotations are in the plane created by grandparent-parent-child.
+    /// This emulates the behaviour of a 'hinge' joint, like 'flexing' an elbow or knee.
+    /// Child movement is along vector AC (grandparent-child), and does not account for 'world movement' differences in C because of changeAtC,
+    /// as that is handled by getAbcFrameRotation.
+    /// </remarks>
+    bool getPlanarRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
+                                             LLQuaternion& changeAtA, LLQuaternion& changeAtB);
+
+    /// <summary>
+    /// Determines the rotation changes for the grandparent and parent joints to position the child when all joints are 'socket' joints.
+    /// </summary>
+    /// <param name="posA">The world position of the grand-parent joint.</param>
+    /// <param name="posB">The world position of the parent joint.</param>
+    /// <param name="posC">The world position of the moved joint.</param>
+    /// <param name="changeAtC">The world-referenced movement of the moved joint.</param>
+    /// <param name="changeAtA">The rotation at the grandparent to extend or retract the moved joint.</param>
+    /// <param name="changeAtB">The rotation at the parent to extend or retract the moved joint.</param>
+    /// <returns>True if the rotation can be made, otherwise false.</returns>
+    /// <remarks>
+    /// Moves the child spherically in the specified direction by rotating the parent and grandparent.
+    /// </remarks>
+    bool getFreeRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
+                                             LLQuaternion& changeAtA, LLQuaternion& changeAtB);
+
+    LLQuaternion getQuaternionFromWorldVector(const LLVector3& worldVector);
+
+    bool parentJointIsHinge(LLJoint* parentJoint);
+    bool jointIsPelvis(const LLJoint* joint);
+    bool canMoveToNewPosition(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& posNewC);
 
     /// <summary>
     /// Maps the avatar's ID to the animation registered to them.

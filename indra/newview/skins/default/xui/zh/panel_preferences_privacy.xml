@@ -39,8 +39,8 @@
 			<check_box label="在記錄檔案名中新增日期" name="LogFileNamewithDate" tool_tip="在聊天和訊息記錄中新增日期，格式為聊天-YYYY-MM-DD和'私聊檔案名'-YYYY-MM。" />
 			<check_box label="使用內建的紀錄檢視器" name="FSUseBuiltInHistory" tool_tip="使用內建的紀錄檢視器檢視記錄。如果禁用，記錄將在作業系統中定義的文字編輯器中打開。" />
 		</panel>
-		<panel label="注視點" name="tab-lookat">
-			<check_box label="顯示誰在看誰：" name="showlookat" tool_tip="注視點允許您的檢視器知道您的眼睛、頭部和化身的朝向。它也可以用來確定化身的相機焦點。" />
+		<panel label="注視目標" name="tab-lookat">
+			<check_box label="顯示誰在看誰：" name="showlookat" tool_tip="注視目標允許您的檢視器知道您的眼睛、頭部和化身的朝向。它也可以用來確定化身的相機焦點。" />
 			<text name="lookatshownames" tool_tip="顯示凝視時顯示的名稱格式">顯示名稱：</text>
 			<combo_box name="lookatshownames_combobox">
 				<combo_box.item label="無" name="None" />
@@ -49,13 +49,13 @@
 				<combo_box.item label="繼承名稱" name="Legacy_Name" />
 				<combo_box.item label="使用者名稱" name="User_Name" />
 			</combo_box>
-			<check_box label="不顯示自己的注視點" name="LookAtHideOwn" tool_tip="不顯示自己的注視點" />
-			<check_box label="從化身到注視點繪製一條直線" name="ExodusLookAtLines" tool_tip="從化身到注視點繪製一條直線" />
-			<text name="mylookat">我的注視點：</text>
-			<check_box label="不向其他人公開我的注視點" name="privatelookat" tool_tip="不向其他人公開您的注視點" />
-			<check_box label="不共享注視點，包括自己" name="privateLocalLookat" tool_tip="防止您化身的頭部看向到您的相機對準的點。無論是否啟用此選項，其他人都不一定能看到頭部的移動" />
+			<check_box label="不顯示自己的注視目標" name="LookAtHideOwn" tool_tip="不顯示自己的注視目標" />
+			<check_box label="從化身到注視目標繪製一條直線" name="ExodusLookAtLines" tool_tip="從化身到注視目標繪製一條直線" />
+			<text name="mylookat">我的注視目標：</text>
+			<check_box label="不向其他人公開我的注視目標" name="privatelookat" tool_tip="不向其他人公開您的注視目標" />
+			<check_box label="不共享注視目標，包括自己" name="privateLocalLookat" tool_tip="防止您化身的頭部看向到您的相機對準的點。無論是否啟用此選項，其他人都不一定能看到頭部的移動" />
 			<check_box label="不共享我的目標選擇指示" name="privatepointat" tool_tip="不向其他人顯示選擇指示" />
-			<check_box label="限制與頭部的距離限制：" name="LimitLookAt" tool_tip="將你的注視點鎖定在目標的頭部周圍。" />
+			<check_box label="限制與頭部的距離限制：" name="LimitLookAt" tool_tip="將你的注視目標鎖定在目標的頭部周圍。" />
 		</panel>
 		<panel label="自動回復 1" name="tab-autoresponse-1">
 			<text name="autorespond_toggle_location_tip">注意：要啟用自動回覆訊息，請在「通訊」選單中設定您的在線狀態</text>

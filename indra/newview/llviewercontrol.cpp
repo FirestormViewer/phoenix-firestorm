@@ -913,6 +913,11 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
+    if (LLStartUp::getStartupState() < STATE_STARTED)
+    {
+        // Skip the checks if not inworld; Ignore startup-time setting application, if it somehow fires
+        return;
+    }
     if (gSavedPerAccountSettings.getBOOL("GlobalOnlineStatusCurrentlyReverting"))
     {
         gSavedPerAccountSettings.setBOOL("GlobalOnlineStatusCurrentlyReverting", false);
@@ -1495,7 +1500,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
-    setting_setup_signal_listener(gSavedSettings, RlvSettingNames::Main, RlvSettings::onChangedSettingMain);
+    setting_setup_signal_listener(gSavedSettings, static_cast<std::string>(RlvSettingNames::Main), RlvSettings::onChangedSettingMain);
 // [/RLVa:KB]
     // NaCl - Antispam Registry
     setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamGlobalQueue", handleNaclAntiSpamGlobalQueueChanged);

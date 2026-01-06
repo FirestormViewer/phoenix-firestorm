@@ -180,7 +180,7 @@
 			<text name="Description:">
 				Description :
 			</text>
-			<line_editor name="Object Description" tool_tip="Lorsque les utilisateurs sélectionnent &apos;Conseils de survol sur tous les objets&apos; dans les paramètres de la visionneuse, la description contextuelle de chaque objet apparaît sous le pointeur de la souris. La description de la prim est limitée à 127 octets, toute chaîne supérieure à cette limite sera tronquée."/>
+			<line_editor name="Object Description" tool_tip="Lorsque les utilisateurs sélectionnent &apos;Conseils de survol sur tous les objets&apos; dans les paramètres du client, la description contextuelle de chaque objet apparaît sous le pointeur de la souris. La description de la prim est limitée à 127 octets, toute chaîne supérieure à cette limite sera tronquée."/>
 			<text name="Creator:">
 				Créateur :
 			</text>
@@ -413,10 +413,10 @@ Le plus bas:
 			<text name="ObjectLODbehaviourLabel" value="Comportement LOD de l'objet :"/>
 			<text name="object_radius" value="Rayon objet :"/>
 			<text name="LOD_swap_factors_label" value="Facteurs LOD"/>
-			<text name="LOD_swap_defaults_label" value="Par défaut" tool_tip="Le paramètre par défaut du facteur LOD qui sera appliqué par la plupart des visualiseurs.."/>
+			<text name="LOD_swap_defaults_label" value="Par défaut" tool_tip="Le paramètre par défaut du facteur LOD qui sera appliqué par la plupart des clients.."/>
 			<text name="LOD_swap_usr_label" tool_tip="Vos paramètres, tiré de RenderVolumeLODFactor" value="Vôtres"/>
 			<text name="LOD_swap_label" value="Swap LOD"/>
-			<string name="ll_lod_tooltip_msg">Paramètres par défaut du visualiseur de Linden Lab Second Life ([FACTOR])</string>
+			<string name="ll_lod_tooltip_msg">Paramètres par défaut du client de Linden Lab Second Life ([FACTOR])</string>
 			<string name="fs_lod_tooltip_msg">Paramètres par défaut de [APP_NAME] ([FACTOR])</string>
 			<text name="LOD_swap_usr_current" tool_tip="Votre facteur de LOD actuel" value="[FACTOR]"/>
 			<text name="LOD_swap_LOD_Change_label">
@@ -424,7 +424,7 @@ Haut ↔ Moy.
 Moy. ↔ Bas
 Bas ↔ + bas
 			</text>
-			<text name="LODSwapTableDscriptionsText" tool_tip="Bonne conduite : Les créateurs doivent assurer un bon comportement LOD pour les paramètres par défaut dans toutes les visualiseurs.">
+			<text name="LODSwapTableDscriptionsText" tool_tip="Bonne conduite : Les créateurs doivent assurer un bon comportement LOD pour les paramètres par défaut dans tous les clients.">
 				Ce tableau indique les limites de changement de niveau de détail en mètres à partir de la caméra.
 			</text>
 		</panel>

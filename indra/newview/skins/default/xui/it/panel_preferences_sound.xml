@@ -261,6 +261,13 @@ Passare sui campi UUID per leggere le impostazioni predefinite.
 			<button name="Prev_UISndSnapshot" label="S" tool_tip="Anteprima suono."/>
 			<button name="Def_UISndSnapshot" label="R" tool_tip="Ripristina suono predefinito."/>
 			<check_box label="Disattiva suono" name="QuietSnapshotsToDiskCheckBox"/>
+			<check_box label="Attiva suono" name="PlayModeUISndMovelockToggle"/>
+			<text tool_tip="UUID del suono per i passi. La modifica richiede il riavvio." name="textFSFootsteps">
+				Passi predefiniti:
+			</text>
+			<button name="Prev_UISndFootsteps" label="S" tool_tip="Anteprima suono."/>
+			<button name="Def_UISndFootsteps" label="R" tool_tip="Ripristina suono predefinito."/>
+			<check_box label="Attiva suono" name="PlayModeUISndFootsteps" />
 		</panel>
 		<panel label="Suoni UI 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
@@ -428,13 +435,6 @@ Passare sui campi UUID per leggere le impostazioni predefinite.
 			</text>
 			<button name="Prev_UISndMovelockToggle" label="S" tool_tip="Anteprima suono."/>
 			<button name="Def_UISndMovelockToggle" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndMovelockToggle"/>
-			<text tool_tip="UUID del suono per i passi. La modifica richiede il riavvio." name="textFSFootsteps">
-				Passi predefiniti:
-			</text>
-			<button name="Prev_UISndFootsteps" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndFootsteps" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndFootsteps" />
 			<text tool_tip="UUID del suono per il raggio tracciante. Accelera quando l&apos;avatar si avvicina alla destinazione." name="textFSTrackerBeacon">
 				Raggio tracciante:
 			</text>

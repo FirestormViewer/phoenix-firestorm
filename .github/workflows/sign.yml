@@ -41,7 +41,7 @@ jobs:
         setup_files: ${{ steps.get-files.outputs.setup_files }}
     steps:        
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v11
+        uses: dawidd6/action-download-artifact@v12
         id: download
         with:
             workflow: build_viewer.yml
@@ -62,7 +62,7 @@ jobs:
             files_json=$(ls setup_exe_files | jq -R . | jq -s -c .)
             echo "setup_files=$files_json" >> $GITHUB_OUTPUT
       - name: Upload Setup.exe Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: setup-exe-files
           path: setup_exe_files/
@@ -86,7 +86,7 @@ jobs:
         shell: bash
       
       - name: Download Setup.exe Files Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: setup-exe-files
           path: setup_exe_files
@@ -97,7 +97,7 @@ jobs:
         shell: bash
       # - name: Upload unsigned artifact
       #   id: upload-unsigned-artifact
-      #   uses: actions/upload-artifact@v5
+      #   uses: actions/upload-artifact@v6
       #   with:
       #     name: unsigned-artifact-${{ matrix.file }}
       #     path: to_sign/${{ matrix.file }}          
@@ -115,7 +115,7 @@ jobs:
         #   wait-for-completion: true
         #   output-artifact-directory: 'application-signed'
       - name: Azure Trusted Signing
-        uses: azure/trusted-signing-action@v0.5.10
+        uses: azure/trusted-signing-action@v0.5.11
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -129,14 +129,14 @@ jobs:
           files-folder-filter: exe
           
       # - name: Upload signed artifact
-      #   uses: actions/upload-artifact@v5
+      #   uses: actions/upload-artifact@v6
       #   with:
       #     name: signed-artifact-${{ matrix.file }}
       #     path: ./application-signed
             # - name: Upload unsigned artifact
       - name: Upload signed artifact
         id: upload-unsigned-artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: unsigned-artifact-${{ matrix.file }}
           path: to_sign\${{ matrix.file }}          

@@ -32,6 +32,7 @@
 #include "llgroupactions.h"
 #include "llconversationloglist.h"
 #include "llconversationloglistitem.h"
+#include "llnotificationsutil.h" // <FS:TJ/>
 #include "llviewermenu.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"    // <FS:CR>
@@ -360,8 +361,16 @@ void LLConversationLogList::onCustomAction(const LLSD& userdata)
     // <FS:CR> Open conversation history externally
     else if ("chat_history_external" == command_name)
     {
-        gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(
-            LLConversationLog::getInstance()->getConversation(selected_conversation_session_id)->getHistoryFileName()));
+        std::string log_file_name = LLLogChat::makeLogFileName(
+            LLConversationLog::getInstance()->getConversation(selected_conversation_session_id)->getHistoryFileName());
+        if (gDirUtilp->fileExists(log_file_name))
+        {
+            gViewerWindow->getWindow()->openFile(log_file_name);
+        }
+        else
+        {
+            LLNotificationsUtil::add("ChatHistoryIsMissing");
+        }
     }
     // </FS:CR>
 }

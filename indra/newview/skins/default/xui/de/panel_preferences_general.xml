@@ -24,13 +24,12 @@
 		Uhrzeitformat:
 	</text>
 	<combo_box name="time_format_combobox">
-		<combo_box.item label="1:00 AM" name="12H"/>
+		<combo_box.item label="1:00 PM" name="12H"/>
 		<combo_box.item label="13:00" name="24H"/>
 	</combo_box>
 	<text name="time_format_textbox2">
 		(Erfordert Neustart)
 	</text>
-	<check_box label="IME-Texteingabe aktivieren" name="use_ime" tool_tip="Input Method Editor für Texteingabe aktivieren - nur für spezielle Sprachen wie z.B. Japanisch oder Chinesisch benötigt."/>
 	<text name="maturity_desired_prompt" width="320">
 		Auf Inhalte mit folgender Einstufung zugreifen:
 	</text>
@@ -40,6 +39,7 @@
 		<combo_box.item label="Generell und Moderat" name="Desired_Mature"/>
 		<combo_box.item label="Generell" name="Desired_PG"/>
 	</combo_box>
+	<check_box label="IME-Texteingabe aktivieren" name="use_ime" tool_tip="Input Method Editor für Texteingabe aktivieren - nur für spezielle Sprachen wie z.B. Japanisch oder Chinesisch benötigt."/>
 	<text name="start_location_textbox">
 		Startstandort:
 	</text>

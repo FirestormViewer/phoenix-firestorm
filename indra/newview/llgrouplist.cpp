@@ -46,6 +46,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.3
 #include "rlvactions.h"
 // [/RLVa:KB]
+#include "fsfavoritegroups.h" // <FS:PP> Group favorites / pinning
 #include "llslurl.h"
 #include "llurlaction.h"
 
@@ -59,8 +60,37 @@ public:
     /** Returns true if item1 < item2, false otherwise */
     /*virtual*/ bool compare(const LLPanel* item1, const LLPanel* item2) const
     {
-        std::string name1 = static_cast<const LLGroupListItem*>(item1)->getGroupName();
-        std::string name2 = static_cast<const LLGroupListItem*>(item2)->getGroupName();
+        // <FS:PP> Group favorites / pinning
+        // std::string name1 = static_cast<const LLGroupListItem*>(item1)->getGroupName();
+        // std::string name2 = static_cast<const LLGroupListItem*>(item2)->getGroupName();
+
+        const LLGroupListItem* group_item1 = dynamic_cast<const LLGroupListItem*>(item1);
+        const LLGroupListItem* group_item2 = dynamic_cast<const LLGroupListItem*>(item2);
+
+        if (!group_item1 || !group_item2)
+        {
+            if (!group_item1 && group_item2)
+            {
+                return group_item2->isFavorite() ? false : true;
+            }
+            if (group_item1 && !group_item2)
+            {
+                return group_item1->isFavorite() ? true : false;
+            }
+            return false;
+        }
+
+        bool fav1 = group_item1->isFavorite();
+        bool fav2 = group_item2->isFavorite();
+
+        if (fav1 != fav2)
+        {
+            return fav1 > fav2;
+        }
+
+        std::string name1 = group_item1->getGroupName();
+        std::string name2 = group_item2->getGroupName();
+        // </FS:PP>
 
         LLStringUtil::toUpper(name1);
         LLStringUtil::toUpper(name2);
@@ -76,11 +106,22 @@ public:
 
     /*virtual*/ bool compare(const LLPanel* item1, const LLPanel* item2) const
     {
-        const LLGroupListItem* group_item1 = static_cast<const LLGroupListItem*>(item1);
+        // <FS:PP> Group favorites / pinning
+        const LLGroupListItem* group_item1 = dynamic_cast<const LLGroupListItem*>(item1);
+        const LLGroupListItem* group_item2 = dynamic_cast<const LLGroupListItem*>(item2);
+        if (!group_item1 || !group_item2)
+        {
+            // Sorting doesn't matter, as we hit a separator that shouldn't be visible in this view
+            return false;
+        }
+
+        // const LLGroupListItem* group_item1 = static_cast<const LLGroupListItem*>(item1);
+        // </FS:PP>
+
         std::string name1 = group_item1->getGroupName();
         bool item1_shared = gAgent.isInGroup(group_item1->getGroupID(), true);
 
-        const LLGroupListItem* group_item2 = static_cast<const LLGroupListItem*>(item2);
+        // const LLGroupListItem* group_item2 = static_cast<const LLGroupListItem*>(item2); - <FS:PP> Group favorites / pinning
         std::string name2 = group_item2->getGroupName();
         bool item2_shared = gAgent.isInGroup(group_item2->getGroupID(), true);
 
@@ -134,6 +175,12 @@ LLGroupList::~LLGroupList()
 {
     if (mForAgent) gAgent.removeListener(this);
     if (mContextMenuHandle.get()) mContextMenuHandle.get()->die();
+    // <FS:PP> Group favorites / pinning
+    if (mFavoritesChangedConnection.connected())
+    {
+        mFavoritesChangedConnection.disconnect();
+    }
+    // </FS:PP>
 }
 
 void LLGroupList::enableForAgent(bool show_icons)
@@ -151,6 +198,11 @@ void LLGroupList::enableForAgent(bool show_icons)
 
     registrar.add("People.Groups.Action",           boost::bind(&LLGroupList::onContextMenuItemClick,   this, _2));
     enable_registrar.add("People.Groups.Enable",    boost::bind(&LLGroupList::onContextMenuItemEnable,  this, _2));
+
+    // <FS:PP> Group favorites / pinning
+    mFavoritesChangedConnection = FSFavoriteGroups::getInstance()->setFavoritesChangedCallback(boost::bind(&LLGroupList::onFavoritesChanged, this));
+    enable_registrar.add("People.Groups.Visible", boost::bind(&LLGroupList::onContextMenuItemVisible, this, _2));
+    // </FS:PP>
 
     LLToggleableMenu* context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_groups.xml",
             gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
@@ -174,6 +226,13 @@ bool LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
     if (mForAgent)
     {
+        // <FS:PP> Group favorites / pinning
+        LLPanel* selected_item = getSelectedItem();
+        if (dynamic_cast<LLGroupListSeparator*>(selected_item))
+        {
+            return handled;
+        }
+        // </FS:PP>
         LLToggleableMenu* context_menu = mContextMenuHandle.get();
         if (context_menu && size() > 0)
         {
@@ -234,24 +293,53 @@ void LLGroupList::refresh()
 
         clear();
 
+        // <FS:PP> Group favorites / pinning
+        bool has_favorites = false;
+        bool has_non_favorites = false;
+        // </FS:PP>
+
         for(S32 i = 0; i < count; ++i)
         {
             id = gAgent.mGroups.at(i).mID;
             const LLGroupData& group_data = gAgent.mGroups.at(i);
             if (have_filter && !findInsensitive(group_data.mName, mNameFilter))
                 continue;
-            addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, group_data.mListInProfile);
+
+            // <FS:PP> Group favorites / pinning
+            // addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, group_data.mListInProfile);
+            bool is_favorite = FSFavoriteGroups::getInstance()->isFavorite(id);
+            if (is_favorite)
+            {
+                has_favorites = true;
+            }
+            else
+            {
+                has_non_favorites = true;
+            }
+            addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, group_data.mListInProfile, is_favorite);
+            // </FS:PP>
+
         }
 
         // Sort the list.
         sort();
+
+        // <FS:PP> Group favorites / pinning
+        if (has_favorites && has_non_favorites && !have_filter)
+        {
+            addFavoritesSeparator();
+        }
+        // </FS:PP>
 
         // Add "none" to list at top if filter not set (what's the point of filtering "none"?).
         // but only if some real groups exists. EXT-4838
         if (!have_filter && count > 0 && mShowNone)
         {
             std::string loc_none = LLTrans::getString("GroupsNone");
-            addNewItem(LLUUID::null, loc_none, LLUUID::null, ADD_TOP);
+            // <FS:PP> Group favorites / pinning
+            // addNewItem(LLUUID::null, loc_none, LLUUID::null, ADD_TOP);
+            addNewItem(LLUUID::null, loc_none, LLUUID::null, ADD_TOP, true, false);
+            // </FS:PP>
         }
 
         selectItemByUUID(highlight_id);
@@ -298,13 +386,17 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
 // PRIVATE Section
 //////////////////////////////////////////////////////////////////////////
 
-void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile)
+// <FS:PP> Group favorites / pinning
+// void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile)
+void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile, bool is_favorite)
+// </FS:PP>
 {
     LLGroupListItem* item = new LLGroupListItem(mForAgent, mShowIcons);
 
     item->setGroupID(id);
     item->setName(name, mNameFilter);
     item->setGroupIconID(icon_id);
+    item->setFavorite(is_favorite); // <FS:PP> Group favorites / pinning
 
     item->getChildView("info_btn")->setVisible( false);
     item->getChildView("profile_btn")->setVisible( false);
@@ -390,6 +482,16 @@ bool LLGroupList::onContextMenuItemClick(const LLSD& userdata)
         LLUrlAction::copyURLToClipboard(LLSLURL("group", selected_group, "about").getSLURLString());
     }
     // </FS:Ansariel>
+    // <FS:PP> Group favorites / pinning
+    else if (action == "favorite")
+    {
+        FSFavoriteGroups::getInstance()->addFavorite(selected_group);
+    }
+    else if (action == "unfavorite")
+    {
+        FSFavoriteGroups::getInstance()->removeFavorite(selected_group);
+    }
+    // </FS:PP>
 
     return true;
 }
@@ -412,8 +514,83 @@ bool LLGroupList::onContextMenuItemEnable(const LLSD& userdata)
     if (userdata.asString() == "call")
       return real_group_selected && LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 
+    // <FS:PP> Group favorites / pinning
+    if (userdata.asString() == "favorite" || userdata.asString() == "unfavorite")
+        return real_group_selected; // Just in case
+    // </FS:PP>
+
     return real_group_selected;
 }
+
+// <FS:PP> Group favorites / pinning
+bool LLGroupList::onContextMenuItemVisible(const LLSD& userdata)
+{
+    std::string action = userdata.asString();
+    LLUUID selected_group_id = getSelectedUUID();
+
+    if (action == "favorite")
+    {
+        return selected_group_id.notNull() && !FSFavoriteGroups::getInstance()->isFavorite(selected_group_id);
+    }
+    else if (action == "unfavorite")
+    {
+        return selected_group_id.notNull() && FSFavoriteGroups::getInstance()->isFavorite(selected_group_id);
+    }
+
+    return true;
+}
+
+void LLGroupList::onFavoritesChanged()
+{
+    setDirty();
+}
+
+void LLGroupList::refreshFavorites()
+{
+    setDirty();
+}
+
+void LLGroupList::addFavoritesSeparator()
+{
+    // Find the position to insert the separator (after the last favorite)
+    std::vector<LLPanel*> items;
+    getItems(items);
+
+    // Count favorite items to find where separator should go
+    S32 favorite_count = 0;
+    for (auto* panel : items)
+    {
+        LLGroupListItem* item = dynamic_cast<LLGroupListItem*>(panel);
+        if (item && item->isFavorite())
+        {
+            ++favorite_count;
+        }
+    }
+
+    if (favorite_count > 0)
+    {
+        LLGroupListSeparator* separator = new LLGroupListSeparator();
+        static const LLUUID SEPARATOR_UUID("00000000-0000-0000-0000-000000000001");
+        addItem(separator, SEPARATOR_UUID, ADD_BOTTOM, false);
+        sort();
+    }
+}
+
+/************************************************************************/
+/*          LLGroupListSeparator implementation                         */
+/************************************************************************/
+
+LLGroupListSeparator::LLGroupListSeparator()
+    : LLPanel()
+{
+    buildFromFile("panel_group_list_separator.xml");
+}
+
+bool LLGroupListSeparator::postBuild()
+{
+    return true;
+}
+// </FS:PP>
 
 /************************************************************************/
 /*          LLGroupListItem implementation                              */

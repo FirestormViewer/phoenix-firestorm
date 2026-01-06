@@ -49,7 +49,7 @@ ou en spécifiant son chemin dans le champ "Editor Path".
 			<text name="diff_file_label">
 				Fich. delta :
 			</text>
-			<line_editor name="vlt_diff_path_field" tool_tip="Le chemin d'accès complet à un fichier de différence de localisation XML D0 ou D1 généré par le Viewer Localization Toolkit."/>
+			<line_editor name="vlt_diff_path_field" tool_tip="Le chemin d'accès complet à un fichier de différence de localisation XML D0 ou D1 généré par le client Localization Toolkit."/>
 			<button label="Parcourir..." label_selected="Parcourir..." name="browse_for_vlt_diffs" tool_tip="Recherche d'un fichier de différence D0 ou D1 généré par le VLT pour mettre en évidence les fichiers et les éléments modifiés."/>
 			<button label="Mises en évidence des différences" label_selected="Ne pus mettre en évidence les différences" name="toggle_vlt_diff_highlight" tool_tip="Mise en évidence des fichiers et des éléments contenant des données de localisation modifiées."/>
 		</panel>

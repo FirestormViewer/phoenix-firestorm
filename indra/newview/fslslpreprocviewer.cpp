@@ -37,6 +37,13 @@ FSLSLPreProcViewer::FSLSLPreProcViewer(const Params& p)
 
 bool FSLSLPreProcViewer::handleKeyHere(KEY key, MASK mask )
 {
+    // Handle Ctrl/Cmd+A for select all
+    if ((key == 'A') && (MASK_CONTROL == (mask & MASK_MODIFIERS)))
+    {
+        selectAll();
+        return true;
+    }
+
     // Normal key handling
     bool handled = handleNavigationKey( key, mask )
                     || handleSelectionKey(key, mask)

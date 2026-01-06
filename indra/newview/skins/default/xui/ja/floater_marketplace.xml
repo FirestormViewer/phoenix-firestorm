@@ -10,5 +10,21 @@
 			<icon name="media_secure_lock_flag" tool_tip="セキュアブラウジング"/>
 			<button tool_tip="現在のＵＲＬをデスクトップブラウザで開きます。" name="popexternal"/>
 		</layout_panel>
+		<layout_panel name="external_controls" >
+			<text name="plugin_fail_text">
+Webブラウザプラグインの起動に時間がかかっているようです。
+プラグインが読み込まれない場合は、次のサイトをご覧ください。
+
+この問題を解決するための可能な手順については、
+
+https://wiki.firestormviewer.org/fs_search_issues
+
+と
+
+https://wiki.firestormviewer.org/fs_media
+
+をご覧ください。
+			</text>
+		</layout_panel>
 	</layout_stack>
 </floater>

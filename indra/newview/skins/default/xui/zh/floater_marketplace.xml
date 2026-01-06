@@ -10,5 +10,17 @@
 			<icon name="media_secure_lock_flag" tool_tip="安全瀏覽" />
 			<button tool_tip="在外部瀏覽器中打開當前網址" name="popexternal" />
 		</layout_panel>
+		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+網頁瀏覽器插件正在載入中。
+若插件載入失敗，請訪問以下連結取得故障排除指南：
+
+https://wiki.firestormviewer.org/fs_search_issues
+
+及
+
+https://wiki.firestormviewer.org/fs_media
+			</text>
+		</layout_panel>
 	</layout_stack>
 </floater>

@@ -310,6 +310,9 @@
 					<button name="toggle_LockWorldRotation" tool_tip="選択した手足の回転をワールド内でロックします。ワールド内でロックされた手足は、親側の手足が動いてもワールド内で同じ回転を維持します。例えば、目をロックして頭を回しても、目は（ほぼ）同じ方向を向き続けます。"/>
 					<button label="ミラー" name="button_toggleMirrorRotation" tool_tip="鏡のように反対側の関節を変えます。"/>
 					<button label="対称" name="button_toggleSympatheticRotation" tool_tip="反対側のジョイントも同様に変更します。"/>
+					<button label="Ｗ" name="poser_world_frame_toggle" tool_tip="ワールドを基準に回転変更を行います。"/>
+					<button label="Ａ" name="poser_avatar_frame_toggle" tool_tip="アバターを基準に回転変更を行います。"/>
+					<button label="Ｓ" name="poser_screen_frame_toggle" tool_tip="スクリーンを基準に回転変更を行います。"/>
 					<!-- leftとleft_padは削除しないこと -->
 					<button label="左→右にコピー" name="button_symmetrize_left_to_right" tool_tip="ダブルクリックすると、左側から右側に変更がコピーされます。" width="80"/>
 					<button label="右→左にコピー" name="button_symmetrize_right_to_left" tool_tip="ダブルクリックすると、右側から左側に変更がコピーされます。" left_pad="13" width="80"/>

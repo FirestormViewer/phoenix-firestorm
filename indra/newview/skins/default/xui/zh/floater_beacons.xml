@@ -6,6 +6,7 @@
 		</text>
 		<check_box label="光源邊界框" name="lights_bounding_boxes" />
 		<check_box label="區域的角落" name="fsregioncornerbeacons" />
+		<check_box label="聊天範圍視覺化" name="FSShowChatRangeSpheres"/>
 		<check_box label="信標" name="beacons" />
 		<check_box label="高亮顯示" name="highlights" />
 		<check_box label="瀏覽器視窗中的游標資訊文字" name="FSRenderBeaconText" />

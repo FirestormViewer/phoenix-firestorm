@@ -507,6 +507,18 @@
     <integer>0</integer>
   </map>
 
+  <key>PlayModeUISndScriptFloaterClose</key>
+  <map>
+    <key>Comment</key>
+    <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndScriptFloaterClose.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <key>FSLegacyNotificationWell</key>
   <map>
     <key>Comment</key>

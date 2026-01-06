@@ -3658,6 +3658,7 @@ LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLS
             if (cell_p.width.isProvided())
             {
                 new_column.width.pixel_width = cell_p.width;
+                new_column.width.pixel_width.choose();      // <FS:Zi> fix multi column comboboxes not honoring width parameter
             }
             addColumn(new_column);
             columnp = mColumns[column];

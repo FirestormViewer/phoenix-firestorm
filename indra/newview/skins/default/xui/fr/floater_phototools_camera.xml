@@ -79,7 +79,7 @@
 			</panel>
 
 			<panel name="P_Zoom">
-				<text name="T_Zoom" tool_tip="Dans le monde réel, il s'agit d'une fonction de zoom. Elle modifie l'angle de vue dans la fenêtre du viewer. Elle a le même résultat que d'appuyer sur Ctrl 0 ou Ctrl 8. NOTE : Cette fonction n'a aucun effet lorsque Flycam est activée (3D SpaceNavigator).">
+				<text name="T_Zoom" tool_tip="Dans le monde réel, il s'agit d'une fonction de zoom. Elle modifie l'angle de vue dans la fenêtre du client. Elle a le même résultat que d'appuyer sur Ctrl 0 ou Ctrl 8. NOTE : Cette fonction n'a aucun effet lorsque Flycam est activée (3D SpaceNavigator).">
 					Angle de vue
 				</text>
 				<button name="Reset_Camera_Angle" label="S" tool_tip="Rétablir la valeur par défaut."/>

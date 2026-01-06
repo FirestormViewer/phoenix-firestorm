@@ -2063,7 +2063,7 @@ void LLWindowSDL::gatherInput()
                 break;
             }
             case SDL_QUIT:
-                if(mCallbacks->handleCloseRequest(this))
+                if(mCallbacks->handleCloseRequest(this, true))
                 {
                     // Get the app to initiate cleanup.
                     mCallbacks->handleQuit(this);

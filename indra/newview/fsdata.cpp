@@ -368,6 +368,7 @@ void FSData::downloadAgents()
         // TODO: Let the opensim devs and opensim group figure out the best way
         // to add "agents.xml" URL to the gridinfo protocol.
         //getAgentsURL();
+        mAgentsDone = true; // Avoid +15s llstartup STATE_AGENT_WAIT delay --ht
 
         // there is no need for assets.xml URL for opensim grids as the grid owner can just delete
         // the bad asset itself.

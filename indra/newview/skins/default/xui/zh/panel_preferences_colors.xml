@@ -95,7 +95,7 @@
 		</panel>
 		<panel label="其他" name="tab-misc">
 			<text name="effects_color_textbox">選擇游標：</text>
-			<text left="240" name="ScriptDialogFgLabel" width="300">指令碼對話方塊的前景和背景：</text>
+			<text left="240" name="ScriptDialogFgLabel" width="300">指令碼彈窗的前景和背景：</text>
 			<text name="floater_opacity">視窗透明度：</text>
 			<slider label="活躍視窗：" name="active" />
 			<slider label="非活躍視窗：" name="inactive" />
@@ -132,7 +132,7 @@
 				選擇：
 			</text>
 			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="選擇記事本中所選文字的顏色" />
-			<check_box name="FSScriptDialogNoTransparency" label="始終在不透明背景上顯示指令碼對話方塊" />
+			<check_box name="FSScriptDialogNoTransparency" label="始終在不透明背景上顯示指令碼彈窗" />
 			<check_box name="FSGroupNotifyNoTransparency" label="始終使用不透明背景顯示群組通知" />
 			<check_box name="override_pie_color_checkbox" label="設定圓形選單的背景顏色和透明度：" />
 			<panel name="tab-colorize">

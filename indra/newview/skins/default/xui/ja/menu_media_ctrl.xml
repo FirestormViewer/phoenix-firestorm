@@ -3,5 +3,6 @@
 	<menu_item_call label="カット" name="Cut"/>
 	<menu_item_call label="コピー" name="Copy"/>
 	<menu_item_call label="ペースト" name="Paste"/>
-	<menu_item_call label="Webインスペクターを開く" name="open_webinspector"/>
+	<menu_item_call label="Webインスペクタを開く" name="open_webinspector"/>
+	<menu_item_call label="ソースを表示" name="show_page_source"/>
 </context_menu>

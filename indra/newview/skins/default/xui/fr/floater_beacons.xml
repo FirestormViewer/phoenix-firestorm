@@ -5,6 +5,8 @@
 			Afficher :
 		</text>
 		<check_box label="Btes de délimitation pour les lumières" name="lights_bounding_boxes"/>
+		<check_box label="Coins de la région" name="fsregioncornerbeacons"/>
+		<check_box label="Sphères de portée de conversation" name="FSShowChatRangeSpheres"/>
 		<check_box label="Balises" name="beacons"/>
 		<check_box label="Surbrillances" name="highlights"/>
 		<check_box label="Infos sur les balises dans la fenêtre" name="FSRenderBeaconText"/>

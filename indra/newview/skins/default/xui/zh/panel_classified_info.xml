@@ -10,10 +10,10 @@
 		[PRICE] L$
 	</panel.string>
 	<panel.string name="click_through_text_fmt">
-		[TELEPORT] 瞬間傳送，[MAP] 地圖，[PROFILE] 檔案
+		[TELEPORT]瞬間傳送，[MAP]地圖，[PROFILE]檔案
 	</panel.string>
 	<panel.string name="date_fmt">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[year,datetime,slt]/[mthnum,datetime,slt]/[day,datetime,slt]
 	</panel.string>
 	<panel.string name="auto_renew_on">
 		已啟用

@@ -1011,6 +1011,10 @@ void LLLineEditor::removeWord(bool prev)
         {
             mText.erase(pos, diff);
         }
+
+        mFontBufferPreSelection.reset();
+        mFontBufferSelection.reset();
+        mFontBufferPostSelection.reset();
     }
     else
     {

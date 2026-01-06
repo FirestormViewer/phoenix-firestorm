@@ -26,39 +26,17 @@
 #include "daeexport.h"
 
 //colladadom includes
-#if LL_MSVC
-#pragma warning (push)
-#pragma warning (disable : 4068)
-#pragma warning (disable : 4263)
-#pragma warning (disable : 4264)
-#endif
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
 
-#include "fix_macros.h"
 #include "dae.h"
-//#include "dom.h"
 #include "dom/domAsset.h"
-#include "dom/domBind_material.h"
 #include "dom/domCOLLADA.h"
-#include "dom/domConstants.h"
 #include "dom/domController.h"
 #include "dom/domEffect.h"
 #include "dom/domGeometry.h"
-#include "dom/domInstance_geometry.h"
-#include "dom/domInstance_material.h"
-#include "dom/domInstance_node.h"
-#include "dom/domInstance_effect.h"
-#include "dom/domMaterial.h"
 #include "dom/domMatrix.h"
-#include "dom/domNode.h"
-#include "dom/domProfile_COMMON.h"
-#include "dom/domRotate.h"
-#include "dom/domScale.h"
-#include "dom/domTranslate.h"
-#include "dom/domVisual_scene.h"
-#if LL_MSVC
-#pragma warning (pop)
-#endif
 
 // llimage includes
 #include "llimagej2c.h"
@@ -66,7 +44,6 @@
 #include "llimagetga.h"
 
 // llui includes
-#include "llscrollcontainer.h"
 #include "lltexturectrl.h"
 
 // newview includes
@@ -77,21 +54,18 @@
 #include "llnotificationsutil.h"
 #include "llselectmgr.h"
 #include "lltexturecache.h"
-#include "lltrans.h"
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
 #include "llviewermenufile.h"
 #include "llviewernetwork.h"
-#include "llviewerregion.h"
 #include "llviewertexturelist.h"
-#include "llvovolume.h"
 #include "fsexportperms.h"
 
-static const F32 TEXTURE_DOWNLOAD_TIMEOUT = 60.f;
+static constexpr F32 TEXTURE_DOWNLOAD_TIMEOUT = 60.f;
 
 // *FIXME: Don't hard code these and allow the floater to resize. Right now, I'm too lazy. <FS:CR>
-static const S32 EXPANDED_WIDTH = 500;
-static const S32 COLLAPSED_WIDTH = 250;
+static constexpr S32 EXPANDED_WIDTH = 500;
+static constexpr S32 COLLAPSED_WIDTH = 250;
 
 namespace DAEExportUtil
 {

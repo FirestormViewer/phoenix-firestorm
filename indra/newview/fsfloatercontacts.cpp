@@ -31,6 +31,7 @@
 
 #include "fscommon.h"
 #include "fscontactsfriendsmenu.h"
+#include "fsfavoritegroups.h"
 #include "fsfloaterimcontainer.h"
 #include "fsscrolllistctrl.h"
 #include "llagent.h"
@@ -147,6 +148,7 @@ bool FSFloaterContacts::postBuild()
     mGroupsChatBtn     = mGroupsTab->getChild<LLButton>("chat_btn");
     mGroupsInfoBtn     = mGroupsTab->getChild<LLButton>("info_btn");
     mGroupsActivateBtn = mGroupsTab->getChild<LLButton>("activate_btn");
+    mGroupsFavoriteBtn = mGroupsTab->getChild<LLButton>("favorite_btn");
     mGroupsLeaveBtn    = mGroupsTab->getChild<LLButton>("leave_btn");
     mGroupsCreateBtn   = mGroupsTab->getChild<LLButton>("create_btn");
     mGroupsSearchBtn   = mGroupsTab->getChild<LLButton>("search_btn");
@@ -156,6 +158,7 @@ bool FSFloaterContacts::postBuild()
     mGroupsChatBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
     mGroupsInfoBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupInfoButtonClicked, this));
     mGroupsActivateBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupActivateButtonClicked, this));
+    mGroupsFavoriteBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupFavoriteButtonClicked, this));
     mGroupsLeaveBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupLeaveButtonClicked, this));
     mGroupsCreateBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked, this));
     mGroupsSearchBtn->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked, this));
@@ -247,6 +250,12 @@ void FSFloaterContacts::updateGroupButtons()
     mGroupsLeaveBtn->setEnabled(isGroup);
     mGroupsCreateBtn->setEnabled((!gMaxAgentGroups) || (gAgent.mGroups.size() < gMaxAgentGroups));
     mGroupsInviteBtn->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_MEMBER_INVITE));
+    mGroupsFavoriteBtn->setEnabled(isGroup);
+    if (isGroup)
+    {
+        bool is_favorite = FSFavoriteGroups::getInstance()->isFavorite(groupId);
+        mGroupsFavoriteBtn->setLabel(is_favorite ? getString("unfavorite_label") : getString("favorite_label"));
+    }
 }
 
 void FSFloaterContacts::onOpen(const LLSD& key)
@@ -430,6 +439,15 @@ void FSFloaterContacts::onGroupInfoButtonClicked()
 void FSFloaterContacts::onGroupActivateButtonClicked()
 {
     LLGroupActions::activate(mGroupList->getSelectedUUID());
+}
+
+void FSFloaterContacts::onGroupFavoriteButtonClicked()
+{
+    if (LLUUID group_id = getCurrentItemID(); group_id.notNull())
+    {
+        FSFavoriteGroups::getInstance()->toggleFavorite(group_id);
+        updateGroupButtons();
+    }
 }
 
 void FSFloaterContacts::onGroupLeaveButtonClicked()

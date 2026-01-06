@@ -255,6 +255,13 @@ Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini bas�
 			<button name="Def_UISndSnapshot" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
 			<check_box label="Səsin söndürülməsi" name="QuietSnapshotsToDiskCheckBox"/>
 
+			<text tool_tip="Gəzinti zamanı addımların səsləndirilən UUID səsi." name="textFSFootsteps">
+				Susmaya görə addımlar:
+			</text>
+			<button name="Prev_UISndFootsteps" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndFootsteps" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndFootsteps"/>
+
 		</panel>
 		<panel label="İnteerfeys 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
@@ -450,13 +457,6 @@ Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini bas�
 			<button name="Prev_UISndMovelockToggle" tool_tip="Bu səsi oxut."/>
 			<button name="Def_UISndMovelockToggle" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
 			<check_box label="Səsi yandır" name="PlayModeUISndMovelockToggle"/>
-
-			<text tool_tip="Gəzinti zamanı addımların səsləndirilən UUID səsi." name="textFSFootsteps">
-				Susmaya görə addımlar:
-			</text>
-			<button name="Prev_UISndFootsteps" tool_tip="Bu səsi oxut."/>
-			<button name="Def_UISndFootsteps" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
-			<check_box label="Səsi yandır" name="PlayModeUISndFootsteps"/>
 
 			<text tool_tip="İzləyici mayak yaxın olduğu zaman səsləndirilən UUID səsi. Avatar təyinat yerinə yaxın olduqda artır." name="textFSTrackerBeacon">
 				İzləyici mayak:

@@ -26,6 +26,11 @@
 	 name="activate_btn"
 	 width="85" />
 	<button
+	 label="Anheften"
+	 name="favorite_btn"
+	 tool_tip="Gruppe zu Favoriten hinzufügen oder von Favoriten entfernen"
+	 width="85" />
+	<button
 	 label="Verlassen"
 	 name="leave_btn"
 	 width="85" />

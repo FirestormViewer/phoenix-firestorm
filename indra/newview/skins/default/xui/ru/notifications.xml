@@ -2478,7 +2478,7 @@ URL: [UNTRUSTED_URL]
 	</notification>
 	<notification name="PayConfirmation">
 		Подтвердите что вы хотите заплатить L$[AMOUNT] для [TARGET].
-		<usetemplate ignoretext="Подтвердить перед оплатой (сумма выше L$200)" name="okcancelignore" notext="Отмена" yestext="Pay"/>
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Pay"/>
 	</notification>
 	<notification name="PayObjectFailed">
 		Ошибка платежа: объект не найден.

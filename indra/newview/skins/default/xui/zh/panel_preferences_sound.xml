@@ -212,6 +212,10 @@
 			<button name="Prev_UISndSnapshot" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndSnapshot" label="↻" tool_tip="重設。" />
 			<check_box label="禁用" name="QuietSnapshotsToDiskCheckBox" />
+			<text tool_tip="腳步聲音效的 UUID。需要重新啟動才能生效。" name="textFSFootsteps">腳步聲：</text>
+			<button name="Prev_UISndFootsteps" label="▶" tool_tip="播放此聲音。" />
+			<button name="Def_UISndFootsteps" label="↻" tool_tip="重設。" />
+			<check_box label="啟用" name="PlayModeUISndFootsteps" />
 		</panel>
 		<panel label="聲音 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
@@ -271,10 +275,14 @@
 			<button name="Prev_UISndWindowOpen" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndWindowOpen" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndWindowOpen" />
-			<text tool_tip="打開指令碼對話方塊音效的UUID。" name="textFSScriptFloaterOpen">指令碼對話方塊：</text>
+			<text tool_tip="指令碼彈窗打開音效的UUID。" name="textFSScriptFloaterOpen">指令碼彈窗打開：</text>
 			<button name="Prev_UISndScriptFloaterOpen" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndScriptFloaterOpen" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndScriptFloaterOpen" />
+			<text tool_tip="腳本彈窗關閉音效的UUID。" name="textFSScriptFloaterClose">腳本彈窗關閉：</text>
+			<button label="▶" name="Prev_UISndScriptFloaterClose" tool_tip="播放此聲音"/>
+			<button label="↻" name="Def_UISndScriptFloaterClose" tool_tip="重置"/>
+			<check_box label="啟用" name="PlayModeUISndScriptFloaterClose"/>
 			<text tool_tip="好友上線音效的UUID。" name="textFSFriendOnline">好友上線：</text>
 			<button name="Prev_UISndFriendOnline" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndFriendOnline" label="↻" tool_tip="重設。" />
@@ -322,10 +330,6 @@
 			<button name="Prev_UISndMovelockToggle" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndMovelockToggle" label="↻" tool_tip="重設。" />
 			<check_box label="啟用" name="PlayModeUISndMovelockToggle" />
-			<text tool_tip="腳步聲音效的 UUID。需要重新啟動才能生效。" name="textFSFootsteps">腳步聲：</text>
-			<button name="Prev_UISndFootsteps" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndFootsteps" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndFootsteps" />
 			<text tool_tip="追蹤標記啟用音效的UUID。隨著角色接近目的地，聲音會變得更頻繁。" name="textFSTrackerBeacon">追蹤標記：</text>
 			<button name="Prev_UISndTrackerBeacon" label="▶" tool_tip="播放此聲音。" />
 			<button name="Def_UISndTrackerBeacon" label="↻" tool_tip="重設。" />

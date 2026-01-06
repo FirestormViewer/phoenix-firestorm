@@ -27,6 +27,14 @@
 				(wymaga restartu)
 			</text>
 			<check_box label="Po teleportacji pokaż ponownie tymczasowo zderenderowane obiekty" name="FSTempDerenderUntilTeleport" tool_tip="Gdy włączysz tą opcję, to tymczasowo zderenderowane obiekty pozostaną niewidoczne do momentu teleportacji. Gdy ją wyłączysz, to pozostaną niewidoczne do końca sesji lub do momentu, gdy zostaną ręcznie zrenderowane ponownie przez okno czarnej listy zasobów danych." />
+			<text name="mouse_warp_lbl">
+				Skok kursora:
+			</text>
+			<combo_box name="mouse_warp_combo" tool_tip="Określa, czy kursor ma być automatycznie przenoszony na środek ekranu podczas alt-zoomu i w widoku pierwszoosobowym.">
+				<combo_box.item label="Automatyczny" name="0" />
+				<combo_box.item label="Włącz" name="1" />
+				<combo_box.item label="Wyłącz" name="2" />
+			</combo_box>
 		</panel>
 		<panel label="Widok pierwszoosobowy" name="tab-mouselook">
 			<check_box label="Włącz funkcjonalność widoku pierwszoosobowego" name="EnableMouselook" tool_tip="Zezwól przeglądarce na używanie perspektywy pierwszej osoby oraz sterowanie w niej kamerą za pomocą myszy"/>

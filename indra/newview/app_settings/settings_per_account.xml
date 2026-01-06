@@ -1374,6 +1374,17 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+     <key>FSFavoriteGroups</key>
+        <map>
+        <key>Comment</key>
+            <string>List of favorite/pinned group UUIDs</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array></array>
+        </map>
      <key>FSMaxSharedMaturity</key>
         <map>
         <key>Comment</key>

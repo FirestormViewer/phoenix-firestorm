@@ -4,8 +4,9 @@
 	<button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタントメッセージのセッションを開きます。"/>
 	<button label="情報" name="info_btn"/>
 	<button label="タイトル" name="titles_btn"/>
-	<button label="アクティブ化" name="activate_btn"/>
-	<button label="脱退する" name="leave_btn"/>
+	<button label="有効化" name="activate_btn"/>
+	<button label="ピン"  name="favorite_btn" tool_tip="お気に入りにグループを追加または削除します。"/>
+	<button label="脱退" name="leave_btn"/>
 	<button label="作成…" name="create_btn"/>
 	<button label="検索…" name="search_btn"/>
 	<button label="招待…" name="invite_btn"/>

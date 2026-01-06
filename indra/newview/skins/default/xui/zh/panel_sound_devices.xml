@@ -9,6 +9,9 @@
 	<string name="name_default_system_device">
 		預設系統裝置
 	</string>
+	<string name="device_not_loaded">
+		裝置未載入
+	</string>
 	<text name="Input">
 		輸入
 	</text>

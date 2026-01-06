@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ legacy_header_height="18"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true"
+ height="400"
+ min_height="348"
+ min_width="668"
+ layout="topleft"
+ name="omnifilter"
+ help_topic="omnifilter"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Omnifilter Rules Editor"
+ width="700">
+	<floater.string name="OmnifilterNewNeedle">
+		NEW RULE
+	</floater.string>
+
+	<layout_stack
+	 name="needle_list_stack"
+	 layout="topleft"
+	 follows="left|top|bottom"
+	 height="374"
+	 top="20"
+	 left="8"
+	 width="190"
+	 orientation="vertical"
+	 show_drag_handle="true">
+		<layout_panel
+		 name="needle_list_layout"
+		 layout="topleft"
+		 height="150"
+		 min_height="94"
+		 user_resize="true">
+			<check_box
+			 name="enable_omnifilter"
+			 layout="topleft"
+			 follows="left|top"
+			 height="20"
+			 top="0"
+			 right="-1"
+			 label="Enable Omnifilter"
+			 control_name="OmnifilterEnabled"/>
+			<fs_scroll_list
+			 name="needle_list"
+			 layout="topleft"
+			 follows="all"
+			 height="100"
+			 top_pad="4"
+			 draw_heading="true"
+			 draw_stripes="true"
+			 desired_line_height="18">
+				<fs_scroll_list.columns
+				 name="enabled"
+				 label="On"
+				 width="24"/>
+				<fs_scroll_list.columns
+				 name="needle_name"
+				 label="Rule"
+				 width="175"/>
+				<!-- example entries for UI editing -->
+				<row>
+					<column
+					 name="enabled"
+					 column="enabled"
+					 type="checkbox"
+					 value="true"/>
+					<column
+					 name="needle_name"
+					 column="needle_name">
+						Example Rule 1
+					</column>
+				</row>
+				<row>
+					<column
+					 name="enabled"
+					 column="enabled"
+					 type="checkbox"/>
+					<column
+					 name="needle_name"
+					 column="needle_name">
+						Example Rule 2
+					</column>
+				</row>
+			</fs_scroll_list>
+
+			<button
+			 name="add_needle"
+			 layout="topleft"
+			 follows="left|bottom"
+			 height="20"
+			 top_pad="4"
+			 width="96"
+			 label="Add"/>
+			<button
+			 name="remove_needle"
+			 layout="topleft"
+			 follows="right|bottom"
+			 height="20"
+			 left_pad="0"
+			 width="96"
+			 label="Remove"/>
+		</layout_panel>
+		<layout_panel
+		 name="filter_log_layout"
+		 layout="topleft"
+		 height="130"
+		 min_height="50">
+			<fs_scroll_list
+			 name="filter_log"
+			 layout="topleft"
+			 follows="all"
+			 height="127"
+			 top="0"
+			 draw_heading="true"
+			 draw_stripes="true"
+			 can_sort="false">
+				<fs_scroll_list.columns
+				 name="timestamp"
+				 label="Time (SLT)"
+				 width="64"/>
+				<fs_scroll_list.columns
+				 name="log_entry"
+				 label="Rule"/>
+				<!-- example entries for UI editing -->
+				<row>
+					<column
+					 name="timestamp"
+					 column="timestamp"
+					 tool_tip="2015-11-24 00:01:02">
+						00:01:02
+					</column>
+					<column
+					 name="log_entry"
+					 column="log_entry">
+						Example Rule 1
+					</column>
+				</row>
+				<row>
+					<column
+					 name="timestamp"
+					 column="timestamp"
+					 tool_tip="2015-11-24 01:02:03">
+						01:02:03
+					</column>
+					<column
+					 name="log_entry"
+					 column="log_entry">
+						Example Rule 2
+					</column>
+				</row>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+
+	<panel
+	 name="panel_details"
+	 layout="topleft"
+	 follows="all"
+	 height="374"
+	 left_pad="4"
+	 right="-4">
+		<text
+		 name="needle_name_label"
+		 layout="topleft"
+		 follows="left|top"
+		 height="20"
+		 width="100"
+		 left="0"
+		 top_pad="0"
+		 valign="center"
+		 value="Rule Name:"/>
+		<line_editor
+		 name="needle_name"
+		 layout="topleft"
+		 follows="left|right|top"
+		 height="20"
+		 left_pad="4"
+		 right="-4"/>
+		<text
+		 name="sender_name_label"
+		 layout="topleft"
+		 follows="left|top"
+		 height="20"
+		 width="100"
+		 left="0"
+		 top_pad="2"
+		 valign="center"
+		 value="Sender Name:"/>
+		<line_editor
+		 name="sender_name"
+		 layout="topleft"
+		 follows="left|right|top"
+		 height="20"
+		 left_pad="4"
+		 right="-110"/>
+		<check_box
+		 name="sender_case"
+		 layout="topleft"
+		 follows="right|top"
+		 height="20"
+		 left_pad="4"
+		 width="30"
+		 label="Aa"/>
+		<combo_box
+		 name="sender_match_type"
+		 layout="topleft"
+		 follows="right|top"
+		 height="20"
+		 left_pad="8"
+		 right="-4">
+			<combo_item
+			 name="sender_exact"
+			 value="0">
+				<column
+				 width="40"
+				 name="label"
+				 label="|Abc|"/>
+				<column
+				 name="longtext"
+				 label="Match full text"/>
+			</combo_item>
+			<combo_item
+			 name="sender_substring"
+			 value="1">
+				<column
+				 name="label"
+				 label="*Abc*"/>
+				<column
+				 name="longtext"
+				 label="Match substring"/>
+			</combo_item>
+			<combo_item
+			 name="sender_regex"
+			 value="2">
+				<column
+				 name="label"
+				 label="/ *. /"/>
+				<column
+				 name="longtext"
+				 label="Match regular expression"
+				 width.width="400"
+				 width.pixel_width="300"/>
+			</combo_item>
+		</combo_box>
+		<text
+		 name="content_label"
+		 layout="topleft"
+		 follows="left|top"
+		 height="20"
+		 left="0"
+		 width="100"
+		 top_pad="3"
+		 valign="center"
+		 value="Content:"/>
+		<text_editor
+		 name="content"
+		 layout="topleft"
+		 follows="all"
+		 height="74"
+		 left_pad="4"
+		 right="-4"
+		 top_delta="0"/>
+		<check_box
+		 name="content_case"
+		layout="topleft"
+		follows="right|bottom"
+		height="20"
+		width="30"
+		right="-76"
+		top_pad="4"
+		label="Aa"/>
+		<combo_box
+		 name="content_match_type"
+		 layout="topleft"
+		 follows="right|bottom"
+		 height="20"
+		 left_pad="8"
+		 right="-4">
+			<combo_item
+			 name="content_exact"
+			 value="0">
+				<column
+				 width="40"
+				 name="label"
+				 label="|Abc|"/>
+				<column
+				 name="longtext"
+				 label="Match full text"/>
+			</combo_item>
+			<combo_item
+			 name="content_substring"
+			 value="1">
+				<column
+				 name="label"
+				 label="*Abc*"/>
+				<column
+				 name="longtext"
+				 label="Match substring"/>
+			</combo_item>
+			<combo_item
+			 name="content_regex"
+			 value="2">
+				<column
+				 name="label"
+				 label="/ *. /"/>
+				<column
+				 name="longtext"
+				 label="Match regular expression"/>
+			</combo_item>
+		</combo_box>
+
+		<text
+		 name="region_name_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 height="20"
+		 width="100"
+		 left="0"
+		 top_pad="2"
+		 valign="center"
+		 value="Region Name:"/>
+		<line_editor
+		 name="region_name"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 height="20"
+		 left_pad="4"
+		 right="-4"
+		 tool_tip="The region name of the source. Only available for inventory offers."/>
+		<text
+		 name="owner_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 height="20"
+		 width="100"
+		 left="0"
+		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."
+		 top_pad="2"
+		 valign="center"
+		 value="Owner Key:"/>
+		<line_editor
+		 name="owner_uuid"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 height="20"
+		 label="00000000-0000-0000-0000-000000000000"
+		 left_pad="4"
+		 right="-4"/>
+		<text
+		 name="match_source_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 width="100"
+		 height="20"
+		 top_pad="4"
+		 left="0"
+		 valign="center"
+		 value="Match Source:"/>
+		<layout_stack
+		 name="buttons_stack"
+		 orientation="horizontal"
+		 left="104"
+		 top_delta="0"
+		 right="-4"
+		 height="68"
+		 follows="left|right|bottom"
+		 layout="topleft">
+			<layout_panel
+			 width="72"
+			 layout="topleft"
+			 follows="all"
+			 name="buttons_group_1">
+				<button
+				 name="type_nearby"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="0"
+				 label="Local Chat"
+				 tool_tip="Regular public avatar chat nearby."/>
+				<button
+				 name="type_im"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="IM"
+				 tool_tip="Instant messages from residents."/>
+				<button
+				 name="type_group_im"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Group Chat"
+				 tool_tip="Group chat from residents."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button
+				 name="type_group_notice"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top="0"
+				 label="Notice"
+				 tool_tip="Group notices."/>
+				<button
+				 name="type_invite"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Invite"
+				 tool_tip="Group invitations."/>
+				<button
+				 name="type_object_chat"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Object Chat"
+				 tool_tip="Nearby chat from objects."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button
+				 name="type_object_im"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top="0"
+				 label="Object IM"
+				 tool_tip="Instant messages from objects."/>
+				<button
+				 name="type_script_error"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72" height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Error"
+				 tool_tip="Debug chat coming from scripts."/>
+				<button
+				 name="type_dialog"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Dialog"
+				 tool_tip="Matches fields in script dialogs."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button
+				 name="type_inventory_offer"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top="0"
+				 label="Offer"
+				 tool_tip="Matches fields in inventory offers."/>
+				<button
+				 name="type_friendship"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Friendship"
+				 tool_tip="Friend requests from residents."/>
+				<button
+				 name="type_lure"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="TP Lure"
+				 tool_tip="Teleport offers from residents."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button
+				 name="type_tp_request"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top="0"
+				 label="TP Request"
+				 tool_tip="Requests from residents to send them a teleport offer."/>
+				<button
+				 name="type_load_url"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "72"
+				 height="20"
+				 is_toggle="true"
+				 top_pad="4"
+				 label="Load URL"
+				 tool_tip="Scripted requests to visit a website."/>
+			</layout_panel>
+		</layout_stack>
+
+		<view_border
+		 layout="topleft"
+		 right="-4"
+		 follows="left|bottom|right"
+		 left="0"
+		 height="1"
+		 top_pad="4"/>
+
+		<text
+		 name="chat_replace_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 left="0"
+		 height="20"
+		 width="100"
+		 top_pad="2"
+		 value="Chat Replace:"
+		 valign="center"/>
+		<line_editor
+		 name="chat_replace"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 left_pad="4"
+		 height="20"
+		 right="-4"/>
+		<text
+		 name="button_reply_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 left="0"
+		 height="20"
+		 width="100"
+		 top_pad="2"
+		 value="Button Reply:"
+		 valign="center"/>
+		<line_editor
+		 name="button_reply"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 left_pad="4"
+		 height="20"
+		 right="-4"/>
+		<text
+		 name="text_box_reply_label"
+		 layout="topleft"
+		 follows="left|bottom"
+		 left="0"
+		 height="20"
+		 width="100"
+		 top_pad="3"
+		 value="Text Box Reply:"
+		 valign="center"/>
+		<text_editor
+		 name="text_box_reply"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 left_pad="4"
+		 height="60"
+		 right="-4"
+		 top_delta="0"/>
+	</panel>
+</floater>

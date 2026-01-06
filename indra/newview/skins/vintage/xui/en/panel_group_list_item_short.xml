@@ -55,30 +55,33 @@
 <!--
     We don't want the "hover buttons" to appear, since they only waste space
     and their function is redundant
+-->
 
     <button
+     enabled="false"
      follows="right"
-     height="16"
-     image_pressed="Info_Press"
-     image_unselected="Info_Over"
+     height="0"
      left_pad="3"
-     right="-31"
      name="info_btn"
      tab_stop="false"
-     top_delta="-2"
-     width="16" />
+     width="0" />
 
     <button
+     enabled="false"
      follows="right"
-     height="20"
-     image_overlay="ForwardArrow_Off"
-     layout="topleft"
-     left_pad="5"
-     right="-3"
+     height="0"
+     left_pad="3"
      name="profile_btn"
      tab_stop="false"
-     tool_tip="View profile"
-     top_delta="-2"
-     width="20" />
--->
+     width="0" />
+
+    <button
+     enabled="false"
+     follows="right"
+     height="0"
+     left_pad="3"
+     name="notices_btn"
+     tab_stop="false"
+     width="0" />
+
 </panel>
