@@ -63,10 +63,10 @@ class FSSettingsCollector : public LLInventoryCollectFunctor
 public:
     FSSettingsCollector()
     {
-        mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        mMarketplaceFolderUUID = gInventory.getMarketplaceListingsUUID();
     }
 
-    virtual ~FSSettingsCollector() {}
+    virtual ~FSSettingsCollector() = default;
 
     bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
     {
@@ -85,7 +85,7 @@ public:
 
 protected:
     LLUUID mMarketplaceFolderUUID;
-    std::set<LLUUID> mSeen;
+    uuid_set_t mSeen;
 };
 
 

@@ -1002,7 +1002,7 @@ void LLLocalMeshSystem::clearVObject(const LLUUID& viewer_object_id)
     target_object->mIsLocalMesh = false;
 
     // get original params
-    auto sculpt_params = (LLSculptParams*)target_object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+    auto sculpt_params = target_object->getSculptParams();
     auto sculpt_id = sculpt_params->getSculptTexture();
 
     LLVolumeParams volume_params;

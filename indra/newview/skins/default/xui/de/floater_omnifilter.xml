@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="Omni-Filter Regel-Editor">
+	<floater.string name="OmnifilterNewNeedle">
+		NEUE REGEL
+	</floater.string>
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="Omnifilter aktivieren"/>
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="Aktiv"/>
+				<fs_scroll_list.columns name="needle_name" label="Regel"/>
+			</fs_scroll_list>
+			<button name="add_needle" label="Hinzufügen"/>
+			<button name="remove_needle" label="Entfernen"/>
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="Zeit (SLT)"/>
+				<fs_scroll_list.columns name="log_entry" label="Regel"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="Regel-Name:"/>
+		<text name="sender_name_label" value="Sender-Name:"/>
+		<check_box name="sender_case" label="Aa"/>
+		<combo_box name="sender_match_type">
+			<combo_item name="sender_exact">
+				<column width="40" name="label" label="|Abc|"/>
+				<column name="longtext" label="Übereinstimmung ganzer Text"/>
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="label" label="*Abc*"/>
+				<column name="longtext" label="Teilweise Übereinstimmung"/>
+			</combo_item>
+			<combo_item  name="sender_regex">
+				<column name="label" label="/ *. /"/>
+				<column name="longtext" label="Regulärer Ausdruck"/>
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="Inhalt:"/>
+		<check_box name="content_case" label="Aa"/>
+		<combo_box name="content_match_type">
+			<combo_item name="content_exact">
+				<column name="label" label="|Abc|"/>
+				<column name="longtext" label="Übereinstimmung ganzer Text"/>
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="label" label="*Abc*"/>
+				<column name="longtext" label="Teilweise Übereinstimmung"/>
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="label" label="/ *. /"/>
+				<column name="longtext" label="Regulärer Ausdruck"/>
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="Name Region:" tool_tip="Der Regionsname der Quelle. Nur verfügbar für Inventar-Angebote."/>
+		<text name="owner_label" value="Eigentümer-UUID:" tool_tip="Für Gruppen-Einladungen: Die UUID der Gruppe. Für Objekt-Chat, Eigentümer-Nachrichten, Debug-Chat oder Direkt-Chat: Die UUID des Objekts. Für Objekt-IMs: Die UUID des Objekt-Eigentümers. Für alles andere: Die UUID des sendenden Einwohners."/>
+		<text name="match_source_label" value="Quelle:"/>
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="Lok. Chat" tool_tip="Regulärer Chat von Avataren in der Nähe."/>
+				<button name="type_im" label="IM" tool_tip="Instant Messages von Einwohnern."/>
+				<button name="type_group_im" label="Gruppen" tool_tip="Gruppen-Nachrichten von Einwohnern."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="Mitteilungen" tool_tip="Gruppen-Mitteilungen."/>
+				<button name="type_invite" label="Einladungen" tool_tip="Gruppen-Einladungen."/>
+				<button name="type_object_chat" label="Objekt-Chat" tool_tip="Chat in der Nähe von Objekten."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="Objekt-IM" tool_tip="Instant Messages von Objekten."/>
+				<button name="type_script_error" layout="topleft" label="Fehler" tool_tip="Debug-Chat von Skripten."/>
+				<button name="type_dialog" label="Dialoge" tool_tip="Übereinstimmung von Feldern in Skript-Dialogen."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="Inv.-Angeb." tool_tip="Übereinstimmung von Feldern in Inventar-Angeboten."/>
+				<button name="type_friendship" label="Freundsch." tool_tip="Freundschatsanfragen von Einwohnern."/>
+				<button name="type_lure" label="TP-Angebot" tool_tip="Teleport-Angebote von Einwohnern."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="TP-Anfrage" tool_tip="Anfragen von Einwohnern, ein Teleport-Angebot gesendet zu bekommen."/>
+				<button name="type_load_url" label="URL öffnen" tool_tip="Aufforderung von Skripten, eine Webseite zu besuchen."/>
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="Chat-Ersetzung:"/>
+		<text name="button_reply_label" value="Button-Antwort:"/>
+		<text name="text_box_reply_label" value="Textbox-Antwort:"/>
+	</panel>
+</floater>

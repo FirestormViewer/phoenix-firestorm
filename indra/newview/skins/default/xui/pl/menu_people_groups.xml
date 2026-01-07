@@ -5,5 +5,7 @@
 	<menu_item_call label="Kopiuj SLurl do schowka" name="Copy SLurl to clipboard"/>
 	<menu_item_call label="Czat" name="Chat"/>
 	<menu_item_call label="Rozmowa głosowa" name="Call"/>
+	<menu_item_call label="Przypnij grupę" name="Favorite" />
+	<menu_item_call label="Odepnij grupę" name="Unfavorite" />
 	<menu_item_call label="Opuść" name="Leave"/>
 </toggleable_menu>

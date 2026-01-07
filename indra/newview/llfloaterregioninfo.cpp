@@ -569,23 +569,18 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
     panel->getChildView("access_combo")->setEnabled(gAgent.isGodlike() || (region && region->canManageEstate() && !teen_grid));
     panel->setCtrlsEnabled(allow_modify);
 
-    // <FS:Zi> Add estate ID and region grid position to Region panel
-    S32 grid_pos_x=-1;
-    S32 grid_pos_y=-1;
-    U32 estate_id;
-    if(region)
-    {
-        //compute the grid position of the region
-        LLVector3d global_pos = region->getPosGlobalFromRegion(LLVector3::zero);
-        grid_pos_x = (S32) (global_pos.mdV[VX]/256.0f);
-        grid_pos_y = (S32) (global_pos.mdV[VY]/256.0f);
-    }
-    msg->getU32Fast(_PREHASH_RegionInfo, _PREHASH_EstateID, estate_id);
+    panel->getChild<LLLineEditor>("estate_id")->setValue((S32)region_info.mEstateID);
 
-    panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD::Integer(estate_id));
-    panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD::Integer(grid_pos_x));
-    panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD::Integer(grid_pos_y));
-    // </FS:Zi>
+    if (region)
+    {
+        panel->getChild<LLLineEditor>("grid_position_x")->setValue((S32)(region->getOriginGlobal()[VX] / 256));
+        panel->getChild<LLLineEditor>("grid_position_y")->setValue((S32)(region->getOriginGlobal()[VY] / 256));
+    }
+    else
+    {
+        panel->getChild<LLLineEditor>("grid_position_x")->setDefaultText();
+        panel->getChild<LLLineEditor>("grid_position_y")->setDefaultText();
+    }
 
     // DEBUG PANEL
     panel = tab->getChild<LLPanel>("Debug");
@@ -962,6 +957,9 @@ bool LLPanelRegionGeneralInfo::refreshFromRegion(LLViewerRegion* region)
     getChildView("apply_btn")->setEnabled(false);
     getChildView("access_text")->setEnabled(allow_modify);
     // getChildView("access_combo")->setEnabled(allow_modify);
+    getChildView("estate_id")->setEnabled(false);
+    getChildView("grid_position_x")->setEnabled(false);
+    getChildView("grid_position_y")->setEnabled(false);
     // now set in processRegionInfo for teen grid detection
     getChildView("kick_btn")->setEnabled(allow_modify);
     getChildView("kick_all_btn")->setEnabled(allow_modify);

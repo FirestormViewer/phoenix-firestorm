@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="imcontacts" title="Contacts">
+	<string name="no_friends" value="Aucun ami(e)s"/>
+	<string name="no_filtered_groups_msg" value="Aucun groupe contenant &quot;[SEARCH_TERM]&quot; n'a été trouvé'."/>
+	<string name="no_groups_msg" value="Vous chercher à rejoindre un groupe ? Essayez [secondlife:///app/search/groups Search]."/>
+	<string name="favorite_label" value="Épingler"/>
+	<string name="unfavorite_label" value="Désépingler"/>
 	<tab_container name="friends_and_groups">
 		<panel label="Amis" name="friends_panel"/>
 		<panel label="Groupes" name="groups_panel"/>

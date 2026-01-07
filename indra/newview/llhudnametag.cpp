@@ -303,7 +303,7 @@ void LLHUDNameTag::renderText()
         label_top_rect.mBottom = label_top_rect.mTop - label_height;
         LLColor4 label_top_color = text_color;
         // <FS:Ansariel> Performance improvement
-        //label_top_color.mV[VALPHA] = gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor;
+        //label_top_color.mV[VALPHA] = bubble_opacity() * alpha_factor;
         label_top_color.mV[VALPHA] = color_alpha;
         // </FS:Ansariel>
 

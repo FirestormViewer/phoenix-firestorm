@@ -26,6 +26,7 @@
 #ifndef LL_LLPANELGROUP_H
 #define LL_LLPANELGROUP_H
 
+#include "llevent.h"
 #include "llgroupmgr.h"
 #include "llpanel.h"
 #include "lltimer.h"
@@ -44,7 +45,8 @@ class LLAgent;
 
 class LLPanelGroup : public LLPanel,
                      public LLGroupMgrObserver,
-                     public LLVoiceClientStatusObserver
+                     public LLVoiceClientStatusObserver,
+                     public LLOldEvents::LLSimpleListener
 {
 public:
     LLPanelGroup();
@@ -77,7 +79,6 @@ public:
     void refreshData();
     void callGroup();
     void chatGroup();
-    void activateGroup(); // <FS:PP> FIRE-33939: Activate button
 
     virtual void reshape(S32 width, S32 height, bool called_from_parent = true);
 
@@ -100,12 +101,12 @@ protected:
 
     void onBackBtnClick();
     void onBtnJoin();
+    void onBtnActivate();
 
     static void onBtnApply(void*);
     static void onBtnRefresh(void*);
     static void onBtnGroupCallClicked(void*);
     static void onBtnGroupChatClicked(void*);
-    static void onBtnActivateClicked(void*); // <FS:PP> FIRE-33939: Activate button
 
     void reposButton(LLButton* button);
     void reposButtons();
@@ -127,15 +128,18 @@ protected:
 
     LLUICtrl*       mGroupNameCtrl = nullptr;
     LLButton*       mButtonJoin = nullptr;
+    LLButton*       mButtonActivate = nullptr;
     LLButton*       mButtonApply = nullptr;
     LLButton*       mButtonCall = nullptr;
     LLButton*       mButtonChat = nullptr;
     LLButton*       mButtonRefresh = nullptr;
-    LLButton*       mButtonActivate = nullptr; // <FS:PP> FIRE-33939: Activate button
     LLUICtrl*       mJoinText;
 
     // <FS:Ansariel> TabContainer switch
     bool    mIsUsingTabContainer;
+
+private:
+    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // for agent group list changes
 };
 
 class LLPanelGroupTab : public LLPanel

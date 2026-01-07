@@ -38,8 +38,11 @@
 	<string name="server_forbidden_text">
 		權限不足，無法取得此位置的資訊。  請向地塊所有者尋找你的權限。
 	</string>
+	<string name="acquired_date_ampm">
+		[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [ampm,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
 	<string name="acquired_date">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+		[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">

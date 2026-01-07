@@ -49,7 +49,7 @@
 			<button label="Ouvrir" label_selected="Ouvrir" name="open_sound_cache"/>
 			<button label="Définir" width="55" label_selected="Définir" name="set_sound_cache"/>
 			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_sound_cache"/>
-			<check_box label="Ne pas supprimer le cache DSF (audio) décompressé à la déconnexion" tool_tip="Si activé, le viewer ne supprimera pas les sons décompressés du cache à la déconnexion, ce qui se traduira par une lecture plus rapide. Veuillez noter : Activer cette option remplira votre cache très rapidement, et est exclus du quota défini. Cela résultera donc en un potentiel usage excessif du disque. Désactivé par défaut." name="keep_unpacked_cache"/>
+			<check_box label="Ne pas supprimer le cache DSF (audio) décompressé à la déconnexion" tool_tip="Si activé, le client ne supprimera pas les sons décompressés du cache à la déconnexion, ce qui se traduira par une lecture plus rapide. Veuillez noter : Activer cette option remplira votre cache très rapidement, et est exclus du quota défini. Cela résultera donc en un potentiel usage excessif du disque. Désactivé par défaut." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">Emplacement des journaux et transcriptions de chats :</text>
 			<button label="Ouvrir" label_selected="Ouvrir" name="open_log_path_button-panelsetup"/>
 			<button label="Définir" width="55" label_selected="Définir" name="log_path_button-panelsetup"/>

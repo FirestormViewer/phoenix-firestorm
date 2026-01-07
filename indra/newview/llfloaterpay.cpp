@@ -526,7 +526,7 @@ void LLFloaterPay::onGive(give_money_ptr info)
     }
 
     // <FS:Ansariel> FIRE-16092: Make payment confirmation customizable
-    //if (amount > PAY_AMOUNT_NOTIFICATION && gStatusBar && gStatusBar->getBalance() > amount)
+    //if (amount > PAY_AMOUNT_NOTIFICATION)
     if (gSavedSettings.getBOOL("FSConfirmPayments") && amount > gSavedSettings.getS32("FSPaymentConfirmationThreshold") && gStatusBar && gStatusBar->getBalance() >= amount)
     // </FS:Ansariel>
     {

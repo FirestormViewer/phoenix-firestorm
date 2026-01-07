@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="機器の設定" name="device_settings_panel">
+<panel label="デバイス設定" name="device_settings_panel">
 	<panel.string name="default_text">
 		デフォルト
 	</panel.string>
 	<string name="name_no_device">
-		機器が設定されていません。
+		デバイスが設定されていません。
+	</string>
+	<string name="device_not_loaded">
+		デバイスが読み込まれていません。
 	</string>
 	<string name="name_default_system_device">
-		デフォルトのシステム機器
+		デフォルトのシステムデバイス
 	</string>
 	<text name="Input">
 		入力

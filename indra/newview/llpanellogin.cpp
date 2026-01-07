@@ -190,7 +190,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     mUsernameLength(0),
     mPasswordLength(0),
     mLocationLength(0),
-    mShowFavorites(false)
+    mShowFavorites(false),
+    mAlertNotif(false)
 {
     setBackgroundVisible(false);
     setBackgroundOpaque(true);
@@ -299,8 +300,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
     childSetAction("connect_btn", onClickConnect, this);
 
-    LLButton* def_btn = getChild<LLButton>("connect_btn");
-    setDefaultBtn(def_btn);
+    mLoginBtn = getChild<LLButton>("connect_btn");
+    setDefaultBtn(mLoginBtn);
 
     std::string channel = LLVersionInfo::instance().getChannel();
     std::string version = stringize(LLVersionInfo::instance().getShortVersion(), " (",
@@ -329,6 +330,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     LLCheckBoxCtrl* remember_name = getChild<LLCheckBoxCtrl>("remember_name");
     remember_name->setCommitCallback(boost::bind(&LLPanelLogin::onRememberUserCheck, this));
     getChild<LLCheckBoxCtrl>("remember_password")->setCommitCallback(boost::bind(&LLPanelLogin::onRememberPasswordCheck, this));
+
+    mAlertListener = LLNotifications::instance().getChannel("Alerts")->connectChanged([this](const LLSD& notify){ return onUpdateNotification(notify); });
 }
 
 void LLPanelLogin::addFavoritesToStartLocation()
@@ -411,7 +414,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
                 gSavedSettings.setBOOL("RememberPassword", save_password);
                 if (!save_password)
                 {
-                    getChild<LLButton>("connect_btn")->setEnabled(false);
+                    mLoginBtn->setEnabled(false);
                 }
                 update_password_setting = false;
             }
@@ -938,7 +941,7 @@ void LLPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent ev
 // static
 void LLPanelLogin::onClickConnect(bool commit_fields)
 {
-    if (sInstance && sInstance->mCallback)
+    if (sInstance && sInstance->mCallback && !sInstance->mAlertNotif)
     {
         if (commit_fields)
         {
@@ -1195,9 +1198,7 @@ void LLPanelLogin::updateServer()
 
 void LLPanelLogin::updateLoginButtons()
 {
-    LLButton* login_btn = getChild<LLButton>("connect_btn");
-
-    login_btn->setEnabled(mUsernameLength != 0 && mPasswordLength != 0);
+    mLoginBtn->setEnabled(mUsernameLength != 0 && mPasswordLength != 0 && !mAlertNotif);
 
     if (!mFirstLoginThisInstall)
     {
@@ -1367,5 +1368,25 @@ std::string LLPanelLogin::getUserName(LLPointer<LLCredential> &cred)
     }
 
     return "unknown";
+}
+
+bool LLPanelLogin::onUpdateNotification(const LLSD& notify)
+{
+    // disable Login button while alert notification is displayed
+    LLNotificationPtr notifyp = LLNotifications::instance().find(notify["id"].asUUID());
+    if (notifyp && notifyp->getName() == "PromptOptionalUpdate")
+    {
+        std::string sigtype = notify["sigtype"].asString();
+        if (sigtype == "add")
+        {
+            mAlertNotif = true;
+        }
+        else if (sigtype == "delete")
+        {
+            mAlertNotif = false;
+        }
+        updateLoginButtons();
+    }
+    return false;
 }
 #endif

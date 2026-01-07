@@ -62,6 +62,9 @@
 			<panel.string name="no_selection_text">
 				区画が選択されていません。
 			</panel.string>
+			<panel.string name="time_stamp_template_ampm">
+				[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
+			</panel.string>
 			<panel.string name="time_stamp_template">
 				[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
 			</panel.string>
@@ -180,7 +183,7 @@
 				リージョン名：
 			</text>
 			<text name="region_name_text">
-				EricaVille
+				読み込んでいます…
 			</text>
 			<text name="region_landtype_lbl">
 				種類：
@@ -322,6 +325,7 @@
 			<text name="allow_label">
 				他の住人への許可設定：
 			</text>
+			<!-- <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land -->
 			<text name="allow_label1">
 				地形の編集：
 			</text>
@@ -329,6 +333,7 @@
 			<text name="caution_text">
 				（使用には注意してください！）
 			</text>
+			<!-- <FS:WF> FIRE-6604 END -->
 			<text name="allow_label0">
 				飛行：
 			</text>

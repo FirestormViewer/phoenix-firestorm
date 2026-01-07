@@ -279,7 +279,7 @@ void FSPosingMotion::setAllRotationsToZeroAndClearUndo()
     for (auto poserJoint_iter = mJointPoses.begin(); poserJoint_iter != mJointPoses.end(); ++poserJoint_iter)
     {
         poserJoint_iter->purgeUndoQueue();
-        poserJoint_iter->setPublicRotation(true, LLQuaternion::DEFAULT);
+        poserJoint_iter->setPublicRotation(true, POSER_CHANGE_ROTATION, LLQuaternion::DEFAULT);
     }
 }
 

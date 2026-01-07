@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="splash_screen_settings" title="登入啟動畫面設定">
 	<text name="description">
-		在這裡配置登入啟動畫面的顯示選項。這些設定將在您下次重新啟動查看器時生效。
+		在這裡配置登入啟動畫面的顯示選項。這些設定將在您下次重新啟動檢視器時生效。
 	</text>
 	<text name="section_visibility">
 		區域可見性：

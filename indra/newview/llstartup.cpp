@@ -233,6 +233,7 @@
 #include "fscommon.h"
 #include "fscorehttputil.h"
 #include "fsdata.h"
+#include "fsfavoritegroups.h" // <FS:PP> Group favorites / pinning
 #include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
@@ -251,6 +252,7 @@
 #include "llnotificationmanager.h"
 #include "llprogressview.h"
 #include "NACLantispam.h"
+#include "omnifilterengine.h"       // <FS:Zi> Omnifilter support
 #include "streamtitledisplay.h"
 #include "tea.h"
 
@@ -1303,6 +1305,8 @@ bool idle_startup()
             init_menus();
         }
         show_release_notes_if_required();
+
+        OmnifilterEngine::getInstance()->init();    // <FS:Zi> Omnifilter support
 
         if (show_connect_box)
         {
@@ -3340,6 +3344,10 @@ bool idle_startup()
         // Need we really clear the Auth response data?
         // Clean up the userauth stuff.
         // LLUserAuth::getInstance()->reset();
+
+        // <FS:PP> Group favorites / pinning
+        FSFavoriteGroups::getInstance()->loadFavorites();
+        // </FS:PP>
 
         LLStartUp::setStartupState( STATE_STARTED );
         do_startup_frame();

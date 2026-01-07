@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="包括フィルタのルールエディタ">
+	<floater.string name="OmnifilterNewNeedle">
+		新しいルール
+	</floater.string>
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="包括フィルタを有効化"/>
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="有効"/>
+				<fs_scroll_list.columns name="needle_name" label="ルール"/>
+				<!-- example entries for UI editing -->
+				<row>
+					<column name="needle_name">ルールの例１</column>
+				</row>
+				<row>
+					<column name="needle_name">ルールの例２</column>
+				</row>
+			</fs_scroll_list>
+			<button name="add_needle" label="追加"/>
+			<button name="remove_needle" label="削除"/>
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="時刻（ＳＬＴ）"/>
+				<fs_scroll_list.columns name="log_entry" label="ルール"/>
+				<!-- example entries for UI editing -->
+				<row>
+					<column name="timestamp" tool_tip="2015年11月24日　00：01：02">00:01:02</column>
+					<column name="log_entry">ルールの例１</column>
+				</row>
+				<row>
+					<column name="timestamp" tool_tip="2015年11月24日　00：01：02">01:02:03</column>
+					<column name="log_entry">ルールの例２</column>
+				</row>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="ルール名："/>
+		<text name="sender_name_label" value="送信者名："/>
+		<combo_box name="sender_match_type">
+			<combo_item name="sender_exact">
+				<column name="longtext" label="全文一致"/>
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="longtext" label="部分一致"/>
+			</combo_item>
+			<combo_item name="sender_regex">
+				<column name="longtext" label="正規表現"/>
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="内容："/>
+		<combo_box name="content_match_type">
+			<combo_item name="content_exact">
+				<column name="longtext" label="全文一致"/>
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="longtext" label="部分一致"/>
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="longtext" label="正規表現"/>
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="リージョン名："/>
+		<text name="owner_label" value="所有者："/>
+		<text name="match_source_label" value="一致するソース："/>
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="近くのチャット" tool_tip="近くのアバターの日常的な公開チャットです。"/>
+				<button name="type_im" label="ＩＭ" tool_tip="ユーザからのインスタントメッセージです。"/>
+				<button name="type_group_im" label="グループチャット" tool_tip="ユーザからのグループチャットです。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="通知" tool_tip="グループからの通知です。"/>
+				<button name="type_invite" label="招待" tool_tip="グループへからの招待です。"/>
+				<button name="type_object_chat" label="オブジェクトチャット" tool_tip="オブジェクトからの近くのチャットです。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="オブジェクトＩＭ" tool_tip="オブジェクトからのインスタントメッセージです。"/>
+				<button name="type_script_error" label="エラー" tool_tip="スクリプトからのデバッグチャットです。"/>
+				<button name="type_dialog" label="ダイアログ" tool_tip="スクリプトのダイアログ内のフィールドを一致させます。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="オファー" tool_tip="インベントリオファー内のフィールドと一致します。"/>
+				<button name="type_friendship" label="フレンドシップ" tool_tip="ユーザからのフレンドのリクエストです。"/>
+				<button name="type_lure" label="ＴＰルアー" tool_tip="他のユーザからのテレポートのファーです。"/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="ＴＰリクエスト" tool_tip="テレポートのオファーを送信するよう求めるユーザーからのリクエストです。"/>
+				<button name="type_load_url" label="Load URL" tool_tip="Webサイトにアクセスするためのスクリプト化されたリクエストです。"/>
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="チャットの置き換え："/>
+		<text name="button_reply_label" value="返信ボタン："/>
+		<text name="text_box_reply_label" value="返信テキストボックス："/>
+	</panel>
+</floater>

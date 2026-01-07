@@ -1043,6 +1043,15 @@ const LLUUID LLInventoryModel::findLibraryCategoryUUIDForType(LLFolderType::ETyp
     return findCategoryUUIDForTypeInRoot(preferred_type, gInventory.getLibraryRootFolderID());
 }
 
+const LLUUID LLInventoryModel::getMarketplaceListingsUUID()
+{
+    if (mMarketplaceListingsUUID.isNull())
+    {
+        mMarketplaceListingsUUID = findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    }
+    return mMarketplaceListingsUUID;
+}
+
 LLUUID LLInventoryModel::findCategoryByName(std::string_view name)
 {
     if (LLUUID root_id = gInventory.getRootFolderID(); root_id.notNull())
@@ -1842,7 +1851,7 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
             mask |= LLInventoryObserver::LABEL;
         }
         // Under marketplace, category labels are quite complex and need extra upate
-        const LLUUID marketplace_id = findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        const LLUUID marketplace_id = getMarketplaceListingsUUID();
         if (marketplace_id.notNull() && isObjectDescendentOf(cat->getUUID(), marketplace_id))
         {
             mask |= LLInventoryObserver::LABEL;
