@@ -494,47 +494,47 @@ bool LLFloaterUIPreview::postBuild()
     bool found_en_us = false;
     std::string language_directory;
     std::string xui_dir = get_xui_dir();    // directory containing localizations -- don't forget trailing delim
-    mLanguageSelection->removeall();                                                                                // clear out anything temporarily in list from XML
+    mLanguageSelection->removeall();                                           // clear out anything temporarily in list from XML
 
     LLDirIterator iter(xui_dir, "*");
-    while(found)                                                                                                    // for every directory
+    while (found)                                                              // for every directory
     {
-        if((found = iter.next(language_directory)))                         // get next directory
+        if ((found = iter.next(language_directory)))                           // get next directory
         {
             std::string full_path = gDirUtilp->add(xui_dir, language_directory);
-            if(LLFile::isfile(full_path.c_str()))                                                                   // if it's not a directory, skip it
+            if (!LLFile::isdir(full_path.c_str()))                             // if it's not a directory, skip it
             {
                 continue;
             }
 
-            if(strncmp("template",language_directory.c_str(),8) && -1 == language_directory.find("."))              // if it's not the template directory or a hidden directory
+            if (strncmp("template",language_directory.c_str(), 8) && -1 == language_directory.find(".")) // if it's not the template directory or a hidden directory
             {
-                if(!strncmp("en",language_directory.c_str(),5))                                                 // remember if we've seen en, so we can make it default
+                if (!strncmp("en",language_directory.c_str(), 5))              // remember if we've seen en, so we can make it default
                 {
                     found_en_us = true;
                 }
                 else
                 {
-                    mLanguageSelection->add(std::string(language_directory));                                           // add it to the language selection dropdown menu
+                    mLanguageSelection->add(std::string(language_directory));  // add it to the language selection dropdown menu
                     mLanguageSelection_2->add(std::string(language_directory));
                 }
             }
         }
     }
-    if(found_en_us)
+    if (found_en_us)
     {
-        mLanguageSelection->add(std::string("en"),ADD_TOP);                                                         // make en first item if we found it
-        mLanguageSelection_2->add(std::string("en"),ADD_TOP);
+        mLanguageSelection->add(std::string("en"), ADD_TOP);                   // make en first item if we found it
+        mLanguageSelection_2->add(std::string("en"), ADD_TOP);
     }
     else
     {
         std::string warning = std::string("No EN localization found; check your XUI directories!");
         popupAndPrintWarning(warning);
     }
-    mLanguageSelection->selectFirstItem();                                                                          // select the first item
+    mLanguageSelection->selectFirstItem();                                     // select the first item
     mLanguageSelection_2->selectFirstItem();
 
-    refreshList();                                                                                                  // refresh the list of available floaters
+    refreshList();                                                             // refresh the list of available floaters
 
     return true;
 }
@@ -584,7 +584,7 @@ void LLFloaterUIPreview::onClickExportSchema()
 
     //  std::string file_name(template_path + gDirUtilp->getDirDelimiter() + widget_name + ".rng");
 
-    //  LLFILE* rng_file = LLFile::fopen(file_name.c_str(), "w");
+    //  LLFILE* rng_file = LLFile::fopen(file_name.c_str(), LLFILE_MODE("w"));
     //  {
     //      LLXMLNode::writeHeaderToFile(rng_file);
     //      const bool use_type_decorations = false;
@@ -923,8 +923,7 @@ void LLFloaterUIPreview::displayFloater(bool click, S32 ID)
     // Add localization to title so user knows whether it's localized or defaulted to en
     std::string full_path = getLocalizedDirectory() + path;
     std::string floater_lang = "EN";
-    llstat dummy;
-    if(!LLFile::stat(full_path.c_str(), &dummy))    // if the file does not exist
+    if (LLFile::isfile(full_path.c_str()))    // use localized language if the file exists
     {
         floater_lang = getLocStr(ID);
     }
@@ -1002,17 +1001,14 @@ void LLFloaterUIPreview::onClickEditFloater()
         file_path = getLocalizedDirectory(gDirUtilp->getSkinFolder().c_str()) + file_name;
         // </FS:Zi>
 
-        // stat file to see if it exists (some localized versions may not have it there are no diffs, and then we try to open an nonexistent file)
-        llstat dummy;
-
         // <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
-        if (LLFile::stat(file_path.c_str(), &dummy))
+        if (!LLFile::isfile(file_path.c_str()))
         {
             file_path = getLocalizedDirectory() + file_name;
         }
         // </FS:Zi>
 
-        if(LLFile::stat(file_path.c_str(), &dummy))                             // if the file does not exist
+        if(!LLFile::isfile(file_path.c_str()))                             // if the file does not exist
         {
             popupAndPrintWarning("No file for this floater exists in the selected localization.  Opening the EN version instead.");
             file_path = get_xui_dir() + mDelim + "en" + mDelim + file_name; // open the en version instead, by default
@@ -1163,15 +1159,14 @@ void LLFloaterUIPreview::onClickToggleDiffHighlighting()
         std::string path_in_textfield = mDiffPathTextBox->getText();    // get file path
         bool error = false;
 
-        if(std::string("") == path_in_textfield)                                    // check for blank file
+        if(std::string("") == path_in_textfield)                        // check for blank file
         {
             std::string warning = "Unable to highlight differences because no file was provided; fill in the relevant text field";
             popupAndPrintWarning(warning);
             error = true;
         }
 
-        llstat dummy;
-        if(LLFile::stat(path_in_textfield.c_str(), &dummy) && !error)           // check if the file exists (empty check is reduntant but useful for the informative error message)
+        if (!LLFile::isfile(path_in_textfield.c_str()) && !error)       // check if the file exists (empty check is redundant but useful for the informative error message)
         {
             std::string warning = std::string("Unable to highlight differences because an invalid path to a difference file was provided:\"") + path_in_textfield + "\"";
             popupAndPrintWarning(warning);

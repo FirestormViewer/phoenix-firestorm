@@ -692,19 +692,19 @@
          height="15"
          increment="1"
          initial_value="8"
-         label="Post process quality"
+         label="Glow quality"
          label_width="185"
          layout="topleft"
          left="200"
          max_val="9"
          min_val="8"
-         name="RenderPostProcess"
+         name="GlowResolution"
          show_text="false"
          top_pad="5"
          width="281">
           <slider.commit_callback
            function="Pref.UpdateSliderText"
-           parameter="PostProcessText" />
+           parameter="GlowResolutionText" />
         </slider>
         <text
          type="string"
@@ -713,7 +713,7 @@
          height="12"
          layout="topleft"
          left="485"
-         name="PostProcessText"
+         name="GlowResolutionText"
          top_delta="0"
          width="128">
           Low
@@ -860,23 +860,37 @@
          top_pad="3"
          width="324"/>
         <slider
-         control_name="WLSkyDetail"
-         enabled_control="WindLightUseAtmosShaders"
-         decimal_digits="3"
+         control_name="RenderHighPrecisionPostProcess"
+         decimal_digits="0"
          follows="left|top"
          height="15"
-         increment="8"
-         initial_value="160"
-         label="  Sky"
+         increment="1"
+         label="  Post Process Quality"
          label_width="140"
          layout="topleft"
          left_delta="0"
-         max_val="128"
-         min_val="16"
-         name="SkyMeshDetail"
-         show_text="true"
+         max_val="1"
+         min_val="0"
+         name="RenderPostProcess"
+         show_text="false"
          top_pad="3"
-         width="335"/>
+         width="285">
+            <slider.commit_callback
+              function="Pref.UpdateSliderText"
+              parameter="PostProcessText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="485"
+         name="PostProcessText"
+         top_delta="0"
+         width="128">
+            Low
+        </text>
         <text
          type="string"
          length="1"

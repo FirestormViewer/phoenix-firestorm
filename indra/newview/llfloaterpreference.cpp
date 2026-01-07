@@ -263,7 +263,7 @@ bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& respon
         // use a marker file instead of a settings variable to prevent logout crashes and
         // dual log ins from messing with the flag. -Zi
         std::string delete_cache_marker = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, gAgentID.asString() + "_DELETE_INV_GZ");
-        FILE* fd = LLFile::fopen(delete_cache_marker, "w");
+        FILE* fd = LLFile::fopen(delete_cache_marker, LLFILE_MODE("w"));
         LLFile::close(fd);
         LLNotificationsUtil::add("CacheWillClear");
     }
@@ -2222,10 +2222,6 @@ void LLFloaterPreference::refreshEnabledState()
         fsaa_ctrl->setEnabled(false);
     }
 
-    // WindLight
-    LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-    sky->setEnabled(true);
-
     LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
     LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
     LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
@@ -2396,8 +2392,9 @@ void LLFloaterPreference::refresh()
     LLPanel::refresh();
 
     // <FS:Ansariel> Improved graphics preferences
-    getChild<LLUICtrl>("fsaa")->setValue((LLSD::Integer)  gSavedSettings.getU32("RenderFSAAType"));
-    updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",    true), getChild<LLTextBox>("PostProcessText",           true));
+    getChild<LLUICtrl>("fsaa")->setValue((LLSD::Integer)gSavedSettings.getU32("RenderFSAAType"));
+    updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess", true), getChild<LLTextBox>("PostProcessText", true));
+    updateSliderText(getChild<LLSliderCtrl>("GlowResolution", true), getChild<LLTextBox>("GlowResolutionText", true));
     LLAvatarComplexityControls::setIndirectControls();
     // </FS:Ansariel>
 
@@ -2610,7 +2607,7 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
         //Couldn't move the log and created a new directory so remove the new directory
         if(madeDirectory)
         {
-            LLFile::rmdir(chatLogPath);
+            LLFile::remove(chatLogPath);
         }
         return false;
     }
@@ -2636,7 +2633,7 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 
         if(madeDirectory)
         {
-            LLFile::rmdir(chatLogPath);
+            LLFile::remove(chatLogPath);
         }
 
         return false;
@@ -3299,17 +3296,19 @@ void LLFloaterPreference::changed()
 {
     if (LLConversationLog::instance().getIsLoggingEnabled())
     {
-    getChild<LLButton>("clear_log")->setEnabled(LLConversationLog::instance().getConversations().size() > 0);
+        getChild<LLButton>("clear_log")->setEnabled(LLConversationLog::instance().getConversations().size() > 0);
     }
     else
     {
         // onClearLog clears list, then notifies changed() and only then clears file,
         // so check presence of conversations before checking file, file will cleared later.
-        llstat st;
-        bool has_logs = LLConversationLog::instance().getConversations().size() > 0
-                        && LLFile::stat(LLConversationLog::instance().getFileName(), &st) == 0
-                        && S_ISREG(st.st_mode)
-                        && st.st_size > 0;
+        bool has_logs = false;
+        if (LLConversationLog::instance().getConversations().size() > 0)
+        {
+            std::filesystem::path file_path = fsyspath(LLConversationLog::instance().getFileName());
+            has_logs = LLFile::isfile(file_path)
+                        && LLFile::size(file_path) > 0;
+        }
         getChild<LLButton>("clear_log")->setEnabled(has_logs);
     }
 

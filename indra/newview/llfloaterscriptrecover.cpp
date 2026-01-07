@@ -277,7 +277,7 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
         if (0 == LLFile::stat(strFilePath, &stat) && stat.st_size > 0)
         {
             buffer.resize(stat.st_size);
-            LLFILE *pFile = LLFile::fopen(strFileName, "rb");
+            LLFILE *pFile = LLFile::fopen(strFileName, LLFILE_MODE("rb"));
 
             if (pFile)
             {
