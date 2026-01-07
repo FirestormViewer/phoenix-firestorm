@@ -35,6 +35,7 @@
 
 #include "fslslpreproc.h"
 
+#include "fsyspath.h"
 #include "fslslpreprocviewer.h"
 #include "llagent.h"
 #include "llappviewer.h"
@@ -535,7 +536,7 @@ struct ProcCacheInfo
 
 static inline std::string shortfile(const std::string& in)
 {
-    return boost::filesystem::path(in).filename().string();
+    return std::filesystem::path(fsyspath(in)).filename().string();
 }
 
 

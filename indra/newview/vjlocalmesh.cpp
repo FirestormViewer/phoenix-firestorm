@@ -27,6 +27,7 @@
 // linden headers
 #include "llviewerprecompiledheaders.h"
 
+#include "fsyspath.h"
 #include "llcallbacklist.h"
 #include "llsdutil.h"
 #include "llviewerobjectlist.h"
@@ -34,13 +35,6 @@
 #include "llmeshrepository.h"
 #include "llvolumemgr.h"
 #include "pipeline.h"
-#include "llviewercontrol.h"
-#include "llmodelpreview.h"
-
-// STL headers
-#include <chrono>
-// boost headers
-#include <boost/filesystem.hpp>
 
 // local mesh headers
 #include "vjlocalmesh.h"
@@ -446,14 +440,14 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     mLoadedObjectList.clear();
     mSavedObjectSculptIDs.clear();
 
-    mShortName = std::string(boost::filesystem::path(filename).stem().string());
+    mShortName = std::string(std::filesystem::path(fsyspath(filename)).stem().string());
     std::string stripSuffix(std::string);
     auto base_lod_filename {stripSuffix(mShortName)};
     pushLog("LLLocalMeshFile", "Initializing with base filename: " + base_lod_filename);
 
     // check if main filename exists, just in case
-    boost::system::error_code ec;
-    if (!boost::filesystem::exists(filename, ec) || ec.failed())
+    std::error_code ec;
+    if (!std::filesystem::exists(filename, ec) || ec)
     {
         // filename provided doesn't exist, just stop.
         mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
@@ -519,11 +513,11 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
     mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_LOADING;
     mLocalMeshFileNeedsUIUpdate = true;
 
-    boost::system::error_code ec;
+    std::error_code ec;
 
     // another recheck that mFilenames[3] main file is present,
     // in case the file got deleted and the user hits reload - it'll error out here.
-    if (!boost::filesystem::exists(mFilenames[LOCAL_LOD_HIGH]) || ec.failed())
+    if (!std::filesystem::exists(fsyspath(mFilenames[LOCAL_LOD_HIGH])) || ec)
     {
         // filename provided doesn't exist, just stop.
         mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
@@ -539,15 +533,16 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
         for (S32 lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_HIGH; ++lodfile_iter)
         {
             // lod filenames may be empty because this is first time through or because the lod didn't exist before.
-            if( mFilenames[lodfile_iter].empty() )
+            if (mFilenames[lodfile_iter].empty())
             {
-                auto filepath { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).parent_path() };
+                auto lod_file = std::filesystem::path(fsyspath(mFilenames[LOCAL_LOD_HIGH]));
+                auto filepath { lod_file.parent_path() };
                 std::string getLodSuffix(S32);
                 auto lod_suffix { getLodSuffix(lodfile_iter) };
-                auto extension { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).extension() };
+                auto extension { lod_file.extension() };
 
-                boost::filesystem::path   current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
-                if (boost::filesystem::exists(current_lod_filename, ec) && !ec.failed())
+                std::filesystem::path current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
+                if (std::filesystem::exists(current_lod_filename, ec) && !ec)
                 {
                     pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " found, adding.");
                     mFilenames[lodfile_iter] = current_lod_filename.string();
@@ -724,24 +719,22 @@ void LLLocalMeshFile::reloadLocalMeshObjectsCallback()
 
 bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
 {
-    bool file_updated = false;
     LLSD current_last_modified = mLastModified[lod];
     std::string current_filename = mFilenames[lod];
 
-    boost::system::error_code ec;
-    #ifndef LL_WINDOWS
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(current_filename), ec);
-    #else
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(ll_convert<std::wstring>(current_filename)), ec);
-    #endif
+    std::error_code ec;
+    auto file_time = std::filesystem::last_write_time(std::filesystem::path(fsyspath(current_filename)), ec);
+    if (ec)
+        return false;
 
-    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString() && !ec.failed())
+    std::time_t temp_time = std::chrono::system_clock::to_time_t(std::chrono::clock_cast<std::chrono::system_clock>(file_time));
+    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString())
     {
-        file_updated = true;
         mLastModified[lod] = new_last_modified;
+        return true;
     }
 
-    return file_updated;
+    return false;
 }
 
 bool LLLocalMeshFile::notifyNeedsUIUpdate()
