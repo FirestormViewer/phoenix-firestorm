@@ -894,7 +894,37 @@ int LLFile::rename(const std::filesystem::path& file_path, const std::filesystem
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FILE;
     std::error_code ec;
     std::filesystem::rename(file_path, new_path, ec);
-    return warnif("rename", file_path, ec, suppress_warning);
+    //<FS:Beq/Zi> FIRE-21669 & FIRE-11276 cross volume link rename workaround.
+    // return warnif("rename", file_path, ec, suppress_warning);
+
+    // Note: This workaround generalises the solution previously applied in llxfer_file.
+    // In doing this we add more failure modes to the operation, the copy can fail, the unlink can fail, in fact the copy can fail for multiple reasons.
+    // "A common mistake that people make when trying to design something completely foolproof is to underestimate the ingenuity of complete fools." - Douglas Adams, Mostly harmless
+
+    if (ec != std::make_error_code(std::errc::cross_device_link))
+    {
+        return warnif("rename", file_path, ec, suppress_warning);
+    }
+
+    LL_INFOS("LLFile") << "Rename failure (" << ec.value() << ") - " << ec.message() << " - " << file_path << " - " << new_path << LL_ENDL;
+    LL_INFOS("LLFile") << "Rename across mounts not supported; copying + unlinking the file instead." << LL_ENDL;
+
+    ec.clear();
+    std::filesystem::copy(file_path, new_path, std::filesystem::copy_options::overwrite_existing | std::filesystem::copy_options::recursive , ec);
+    if (ec)
+    {
+        return warnif("copy", file_path, ec, suppress_warning);
+    }
+
+    ec.clear();
+    std::filesystem::remove_all(file_path, ec);
+    if (ec)
+    {
+        return warnif("remove", file_path, ec, suppress_warning);
+    }
+
+    return 0;
+    // </FS:Beq/Zi>
 }
 
 // static
