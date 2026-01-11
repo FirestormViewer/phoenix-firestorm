@@ -259,11 +259,11 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
             payload["message"].asString().c_str()
         );
 
-        logToIM(IM_SESSION_GROUP_START, group_name + GROUP_CHAT_SUFFIX, sender_name, msg, payload["group_id"], sender_id);
+        logToIM(IM_SESSION_GROUP_START, group_name, sender_name, msg, payload["group_id"], sender_id);
     }
     else
     {
-        logToIM(IM_SESSION_GROUP_START, group_name + GROUP_CHAT_SUFFIX, sender_name, payload["message"],
+        logToIM(IM_SESSION_GROUP_START, group_name, sender_name, payload["message"],
                 payload["group_id"], sender_id);
     }
     // </FS:KC> Better group notices to IM log
