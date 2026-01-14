@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="可穿裝扮" name="panel_edit_wearable">
+<panel label="已穿裝扮" name="panel_edit_wearable">
 	<string name="edit_shape_title">
 		身形編輯中
 	</string>

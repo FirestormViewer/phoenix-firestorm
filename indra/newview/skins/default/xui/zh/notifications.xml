@@ -1281,11 +1281,11 @@
 		錯誤：未定義的樹種：[SPECIES]
 	</notification>
 	<notification name="CannotSaveWearableOutOfSpace">
-		無法將「[NAME]」儲存為可穿裝扮檔案。  你需要空出一些電腦空間，再試著儲存可穿裝扮。
+		無法將「[NAME]」儲存為服装檔案。你需要空出一些電腦空間，再試著儲存服装。
 	</notification>
 	<notification name="CannotSaveToAssetStore">
 		無法將「[NAME]」儲存到中央資源儲庫。
-這異常狀況通常只是暫時的。 請稍待幾分鐘後，再自訂並儲存可穿裝扮。
+這異常狀況通常只是暫時的。請稍待幾分鐘後，再自訂並儲存服装。
 	</notification>
 	<notification name="OutOfDiskSpace">
 		系統磁碟空間不足。您需要釋放電腦上的一些空間或清理快取。
@@ -1369,8 +1369,8 @@
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
-	<notification label="儲存可穿裝扮" name="SaveWearableAs">
-		儲存物件到我的庫存為：
+	<notification label="儲存服装" name="SaveWearableAs">
+		將項目儲存到我的庫存中：
 		<form name="form">
 			<input name="message">
 				[DESC](NEW)
@@ -3633,7 +3633,7 @@ URL：[AUDIOURL]
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		警告：物件 „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;「  要求全權存取你的林登幣帳戶。 你如果允許存取帳戶，它將可在任何時候從你帳戶取走資金，或完全加以清空，或定期取走部分資金，且不會發出警告。
+		警告：物件「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」要求全權存取你的林登幣帳戶。 你如果允許存取帳戶，它將可在任何時候從你帳戶取走資金，或完全加以清空，或定期取走部分資金，且不會發出警告。
 
 如果你不完全瞭解它為何要求存取你的帳戶，請勿允許。
 		<form name="form">
@@ -5876,5 +5876,10 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 
 錯誤詳情：
 [ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="ChatHistoryIsMissing">
+		聊天記錄檔案缺失。目前會話可能尚未產生記錄，或未啟用儲存功能。
+請前往偏好設定 &gt; 隱私 &gt; 記錄與聊天內容中啟用聊天內容儲存功能
+		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 </notifications>

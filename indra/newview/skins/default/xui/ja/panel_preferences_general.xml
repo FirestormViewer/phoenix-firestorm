@@ -26,7 +26,6 @@
 	<text name="time_format_textbox2">
 		（再起動後に反映）
 	</text>
-	<check_box label="ＩＭＥの入力テキストを表示" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要なＩＭＥ（国際入力方式エディター）を使用します。"/>
 	<!--maturity-->
 	<text name="maturity_desired_prompt">
 		アクセスしたいコンテンツ：
@@ -36,6 +35,7 @@
 		<combo_box.item label="GeneralとModerate" name="Desired_Mature"/>
 		<combo_box.item label="General" name="Desired_PG"/>
 	</combo_box>
+	<check_box label="ＩＭＥ入力のテキストを表示" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要なＩＭＥ（国際入力方式エディタ）を使用します。"/>
 	<!--start location-->
 	<text name="start_location_textbox">
 		開始位置：
@@ -78,7 +78,7 @@
 		「離席中」とするまでの時間：
 	</text>
 	<text name="title_afk_quit_text">
-		退席になったらログアウトする
+		離席になったらログアウトする
 	</text>
 	<combo_box label="「離席中」とするまでの時間：" name="afk">
 		<combo_box.item label="２分" name="item0"/>
@@ -98,7 +98,7 @@
 		<combo_box.item label="６０分" name="item4"/>
 		<combo_box.item label="一時退席設定なし" name="item5"/>
 	</combo_box>
-	<check_box label="退席中は座る" name="AvatarSitOnAway"/>
+	<check_box label="離席中は座る" name="AvatarSitOnAway"/>
 	<combo_box name="quitafk">
 		<combo_box.item label="２分" name="item0"/>
 		<combo_box.item label="５分" name="item1"/>

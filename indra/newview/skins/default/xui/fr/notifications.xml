@@ -5718,28 +5718,32 @@ Message d'erreur :
 Impossible d'ouvrir le fichier en lecture :
 [FILE_NAME]
 
-Error message:
+Message d'erreur:
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileOpenWriteError">
 Impossible d'ouvrir le fichier en écriture :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileReadError">
 Impossible de lire le fichier :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileWriteError">
 Impossible d'écrire dans le fichier :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="ChatHistoryIsMissing">
+		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
+Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
 </notifications>
