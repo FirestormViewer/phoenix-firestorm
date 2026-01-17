@@ -527,6 +527,11 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
     bool appearance_camera_movement = gSavedSettings.getBOOL("AppearanceCameraMovement");
     bool edit_camera_movement = gSavedSettings.getBOOL("EditCameraMovement");
 
+    // <FS:TJ> [FIRE-35390] Old presets may contain bad defaults causing graphical inconsistencies, so don't load them
+    bool render_sky_auto_adjust_legacy = gSavedSettings.getBOOL("RenderSkyAutoAdjustLegacy");
+    F32 render_sky_ambient_scale = gSavedSettings.getF32("RenderSkyAmbientScale");
+    // </FS:TJ>
+
     mIsLoadingPreset = true; // <FS:Ansariel> Graphic preset controls independent from XUI
     mIgnoreChangedSignal = true;
     if(gSavedSettings.loadFromFile(full_path, false, true) > 0)
@@ -549,6 +554,10 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
                 phototools->refreshSettings();
             }
             // </FS:Ansariel>
+            // <FS:TJ> [FIRE-35390] Old presets may contain bad defaults causing graphical inconsistencies, so don't load them
+            gSavedSettings.setBOOL("RenderSkyAutoAdjustLegacy", render_sky_auto_adjust_legacy);
+            gSavedSettings.setF32("RenderSkyAmbientScale", render_sky_ambient_scale);
+            // </FS:TJ>
             triggerChangeSignal();
         }
         if(PRESETS_CAMERA == subdirectory)
