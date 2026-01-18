@@ -1217,7 +1217,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 #if LL_LINUX
     // Lixux doesn't support automatic mode
-    LLComboBox* combo = getChild<LLComboBox>("double_click_action_combo");
+    LLComboBox* combo = getChild<LLComboBox>("mouse_warp_combo"); // <FS:Beq/> FIRE-36303 - Linux users cannot set double click on land to "no action"
     S32 mode = gSavedSettings.getS32("MouseWarpMode");
     if (mode == 0)
     {
