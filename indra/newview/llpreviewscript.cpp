@@ -1213,6 +1213,8 @@ void LLScriptEdCore::draw()
         S32 line = 0;
         S32 column = 0;
         mEditor->getCurrentLineAndColumn( &line, &column, false );  // don't include wordwrap
+        line = mEditor->getIsLuauLanguage() ? (line + 1) : line;
+        column = mEditor->getIsLuauLanguage() ? (column + 1) : column;
         LLStringUtil::format_map_t args;
         std::string cursor_pos;
         args["[LINE]"] = llformat ("%d", line);
@@ -1730,6 +1732,7 @@ void LLScriptEdCore::onErrorList(LLUICtrl*, void* user_data)
         sscanf(line.c_str(), "%d %d", &row, &column);
         //LL_INFOS() << "LLScriptEdCore::onErrorList() - " << row << ", "
         //<< column << LL_ENDL;
+        row = (self->mEditor->getIsLuauLanguage() ? row - 1 : row);
         // NaCl - LSL Preprocessor
         if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor && self->mPreprocTab)
         {

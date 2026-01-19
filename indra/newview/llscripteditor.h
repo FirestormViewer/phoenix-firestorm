@@ -29,6 +29,7 @@
 #define LL_SCRIPTEDITOR_H
 
 #include "lltexteditor.h"
+#include <cstddef>
 
 class LLScriptEditor : public LLTextEditor
 {
@@ -41,7 +42,7 @@ public:
         Params();
     };
 
-    ~LLScriptEditor() override {};
+    ~LLScriptEditor() override;
 
     // LLView override
     void    draw() override;
@@ -59,6 +60,8 @@ public:
     LLKeywords& getKeywords();
     bool    getIsLuauLanguage() { return mLuauLanguage; }
     void    setLuauLanguage(bool luau_language) { mLuauLanguage = luau_language; }
+    U32     getKeywordsGeneration() const { return mKeywordsGeneration; }
+    void    applySyntaxSegments(const LLWString& text, const LLKeywords::segment_ops_t& ops);
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //static std::string getScriptFontSize();
@@ -75,12 +78,29 @@ public:
 
 protected:
     friend class LLUICtrlFactory;
+    friend class LLScriptEditorSyntaxWorker;
     LLScriptEditor(const Params& p);
 
 private:
+    enum class SyntaxApplyState
+    {
+        Idle,
+        Building,
+        Inserting
+    };
     void    drawLineNumbers();
     void  updateSegments() override;
     void  drawSelectionBackground() override;
+    void    ensureSyntaxWorker();
+    void    queueSyntaxParse();
+    void    queueSyntaxApply(LLWString text,
+                             LLKeywords::segment_ops_t ops,
+                             S32 text_generation,
+                             U32 keywords_generation,
+                             bool disable_highlight,
+                             LLKeywords* keywords);
+    void    processPendingSyntaxApply();
+    void    resetPendingSyntaxApply();
 
     // <FS:Ansariel> Show keyword help on F1
     /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
@@ -91,6 +111,24 @@ private:
 
     bool        mShowLineNumbers;
     bool mUseDefaultFontSize;
+    U32         mKeywordsGeneration;
+    S32         mLastQueuedTextGeneration;
+    U32         mLastQueuedKeywordsGeneration;
+    bool        mLastQueuedDisableHighlight;
+    LLKeywords* mLastQueuedKeywords;
+    class LLScriptEditorSyntaxWorker* mSyntaxWorker;
+    SyntaxApplyState mSyntaxApplyState;
+    LLWString   mPendingApplyText;
+    LLKeywords::segment_ops_t mPendingApplyOps;
+    segment_vec_t mPendingApplySegments;
+    segment_set_t mPendingApplySegmentSet;
+    size_t      mPendingApplyOpIndex;
+    size_t      mPendingApplySegmentIndex;
+    LLStyleConstSP mPendingApplyStyle;
+    S32         mPendingApplyTextGeneration;
+    U32         mPendingApplyKeywordsGeneration;
+    bool        mPendingApplyDisableHighlight;
+    LLKeywords* mPendingApplyKeywords;
 };
 
 #endif // LL_SCRIPTEDITOR_H

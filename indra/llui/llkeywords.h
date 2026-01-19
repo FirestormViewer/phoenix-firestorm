@@ -36,7 +36,8 @@
 #include <map>
 #include <list>
 #include <deque>
-#include <regex>
+#include <vector>
+#include <cstddef>
 #include "llpointer.h"
 
 // <FS:Ansariel> Script editor ignoring font selection
@@ -58,11 +59,7 @@ public:
      * - TT_ONE_SIDED_DELIMITER are for open-ended delimiters which are terminated by EOL.
      * - TT_TWO_SIDED_DELIMITER are for delimiters that end with a different delimiter than they open with.
      * - TT_DOUBLE_QUOTATION_MARKS are for delimiting areas using the same delimiter to open and close.
-     * - TT_REGEX_MATCH are for pattern-based matching using regular expressions.
-     *      For TT_REGEX_MATCH: mToken contains the start pattern, mDelimiter contains the end pattern (if any).
-     *      If mDelimiter is empty, the entire match is considered one segment.
-     *      If mDelimiter contains capture group references (e.g. \1, \2), these will be replaced with
-     *      the corresponding capture groups from the start pattern match.
+     * - TT_LONG_BRACKET are for Lua tokens that use brackets with counted equals signs.
      */
     typedef enum e_token_type
     {
@@ -72,7 +69,7 @@ public:
         TT_TWO_SIDED_DELIMITER,
         TT_ONE_SIDED_DELIMITER,
         TT_DOUBLE_QUOTATION_MARKS,
-        TT_REGEX_MATCH,
+        TT_LONG_BRACKET,                    // Lua long brackets: --[=*[ or [=*[
         // Following constants are more specific versions of the preceding ones
         TT_CONSTANT,                        // WORD
         TT_CONTROL,                         // WORD
@@ -89,18 +86,12 @@ public:
         mToken( token ),
         mColor( color ),
         mToolTip( tool_tip ),
-        mDelimiter( delimiter ),     // right delimiter
-        mCompiledRegex( nullptr )
+        mDelimiter( delimiter )     // right delimiter
     {
     }
 
     ~LLKeywordToken()
     {
-        if (mCompiledRegex)
-        {
-            delete mCompiledRegex;
-            mCompiledRegex = nullptr;
-        }
     }
 
     S32                 getLengthHead() const   { return static_cast<S32>(mToken.size()); }
@@ -112,8 +103,6 @@ public:
     ETokenType          getType()  const        { return mType; }
     const LLWString&    getToolTip() const      { return mToolTip; }
     const LLWString&    getDelimiter() const    { return mDelimiter; }
-    std::regex*         getCompiledRegex() const { return mCompiledRegex; }
-    void                setCompiledRegex(std::regex* regex) { mCompiledRegex = regex; }
 
 #ifdef _DEBUG
     void        dump();
@@ -125,7 +114,6 @@ private:
     LLUIColor    mColor;
     LLWString   mToolTip;
     LLWString   mDelimiter;
-    std::regex* mCompiledRegex;
 };
 
 class LLKeywords
@@ -144,6 +132,32 @@ public:
                              const LLWString& text,
                              class LLTextEditor& editor,
                              LLStyleConstSP style);
+    struct SegmentOp
+    {
+        enum EOpType
+        {
+            OP_LINE_BREAK,
+            OP_TOKEN
+        };
+        EOpType         type;
+        S32             start;
+        S32             end;
+        LLKeywordToken* token;
+    };
+    typedef std::vector<SegmentOp> segment_ops_t;
+    void        collectSegmentOps(segment_ops_t& ops, const LLWString& text, bool disable_syntax_highlighting) const;
+    void        applySegmentOps(std::vector<LLTextSegmentPtr> *seg_list,
+                                const LLWString& text,
+                                const segment_ops_t& ops,
+                                class LLTextEditor& editor,
+                                LLStyleConstSP style);
+    bool        applySegmentOpsRange(std::vector<LLTextSegmentPtr> *seg_list,
+                                     const LLWString& text,
+                                     const segment_ops_t& ops,
+                                     size_t& op_index,
+                                     size_t max_ops,
+                                     class LLTextEditor& editor,
+                                     LLStyleConstSP style);
     void        initialize(LLSD SyntaxXML, bool luau_language = false);
     void        processTokens();
 
@@ -220,7 +234,9 @@ protected:
     typedef std::deque<LLKeywordToken*> token_list_t;
     token_list_t mLineTokenList;
     token_list_t mDelimiterTokenList;
-    token_list_t mRegexTokenList;
+    typedef std::map<llwchar, token_list_t> token_by_first_char_map_t;
+    token_by_first_char_map_t mLineTokenByFirstChar;
+    token_by_first_char_map_t mDelimiterTokenByFirstChar;
 
     typedef  std::map<std::string, std::string, std::less<>> element_attributes_t;
     typedef element_attributes_t::const_iterator attribute_iterator_t;

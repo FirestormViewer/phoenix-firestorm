@@ -31,8 +31,180 @@
 #include "llsyntaxid.h"
 #include "lllocalcliprect.h"
 #include "llviewercontrol.h"
-
+#include "llworkerthread.h"
+#include <algorithm>
+#include <utility>
 #include "llpreviewscript.h"
+
+static LLWorkerThread& getSyntaxWorkerThread()
+{
+    static LLWorkerThread* sThread = new LLWorkerThread("SyntaxParse", true);
+    return *sThread;
+}
+
+class LLScriptEditorSyntaxWorker final : public LLWorkerClass
+{
+public:
+    struct Request
+    {
+        LLWString       text;
+        S32             text_generation = 0;
+        U32             keywords_generation = 0;
+        bool            disable_highlight = false;
+        LLKeywords*     keywords = nullptr;
+    };
+
+    struct Result
+    {
+        LLWString                   text;
+        LLKeywords::segment_ops_t   ops;
+        S32                         text_generation = 0;
+        U32                         keywords_generation = 0;
+        bool                        disable_highlight = false;
+        LLKeywords*                 keywords = nullptr;
+    };
+
+    LLScriptEditorSyntaxWorker(LLWorkerThread* thread, LLScriptEditor* editor)
+    :   LLWorkerClass(thread, "ScriptEditorSyntax"),
+        mEditor(editor),
+        mHasPending(false),
+        mDropResults(false)
+    {
+    }
+
+    void queueRequest(const Request& request)
+    {
+        bool should_add = false;
+        {
+            LLMutexLock lock(&mRequestMutex);
+            mPendingRequest = request;
+            mHasPending = true;
+            should_add = (!haveWork() && !isWorking());
+        }
+        if (should_add)
+        {
+            addWork(0);
+        }
+    }
+
+    void pump()
+    {
+        checkWork();
+        bool should_add = false;
+        {
+            LLMutexLock lock(&mRequestMutex);
+            should_add = (!haveWork() && !isWorking() && mHasPending);
+        }
+        if (should_add)
+        {
+            addWork(0);
+        }
+    }
+
+    void waitForIdle(bool drop_results)
+    {
+        mDropResults = drop_results;
+        {
+            LLMutexLock lock(&mRequestMutex);
+            mHasPending = false;
+        }
+        if (mRequestHandle != LLWorkerThread::nullHandle())
+        {
+            mWorkerThread->waitForResult(mRequestHandle, false);
+            checkWork();
+        }
+        mDropResults = false;
+    }
+
+    void shutdown()
+    {
+        mEditor = nullptr;
+        waitForIdle(true);
+        scheduleDelete();
+    }
+
+private:
+    void startWork(S32 param) override
+    {
+        LLMutexLock lock(&mRequestMutex);
+        if (!mHasPending)
+        {
+            return;
+        }
+        mActiveRequest = mPendingRequest;
+        mHasPending = false;
+    }
+
+    bool doWork(S32 param) override
+    {
+        Request request;
+        {
+            LLMutexLock lock(&mRequestMutex);
+            request = mActiveRequest;
+        }
+
+        Result result;
+        result.text = request.text;
+        result.text_generation = request.text_generation;
+        result.keywords_generation = request.keywords_generation;
+        result.disable_highlight = request.disable_highlight;
+        result.keywords = request.keywords;
+
+        if (request.keywords)
+        {
+            request.keywords->collectSegmentOps(result.ops, request.text, request.disable_highlight);
+        }
+
+        {
+            LLMutexLock lock(&mResultMutex);
+            mResult = std::move(result);
+        }
+        return true;
+    }
+
+    void endWork(S32 param, bool aborted) override
+    {
+        if (aborted || mDropResults || !mEditor)
+        {
+            return;
+        }
+
+        Result result;
+        {
+            LLMutexLock lock(&mResultMutex);
+            result = std::move(mResult);
+        }
+
+        if (mEditor->getTextGeneration() != result.text_generation)
+        {
+            return;
+        }
+        if (mEditor->getKeywordsGeneration() != result.keywords_generation)
+        {
+            return;
+        }
+        if (&mEditor->getKeywords() != result.keywords)
+        {
+            return;
+        }
+
+        mEditor->queueSyntaxApply(std::move(result.text),
+                                  std::move(result.ops),
+                                  result.text_generation,
+                                  result.keywords_generation,
+                                  result.disable_highlight,
+                                  result.keywords);
+    }
+
+    LLScriptEditor* mEditor;
+    LLMutex mRequestMutex;
+    LLMutex mResultMutex;
+    Request mPendingRequest;
+    Request mActiveRequest;
+    Result mResult;
+    bool mHasPending;
+    bool mDropResults;
+};
 
 // <FS:Ansariel> FIRE-23047: Increase width of line number column
 //const S32 UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 32;
@@ -50,7 +222,20 @@ LLScriptEditor::LLScriptEditor(const Params& p)
 :   LLTextEditor(p)
 ,   mShowLineNumbers(p.show_line_numbers),
     mUseDefaultFontSize(p.default_font_size),
-    mLuauLanguage(false)
+    mLuauLanguage(false),
+    mKeywordsGeneration(0),
+    mLastQueuedTextGeneration(-1),
+    mLastQueuedKeywordsGeneration(0),
+    mLastQueuedDisableHighlight(false),
+    mLastQueuedKeywords(nullptr),
+    mSyntaxWorker(nullptr),
+    mSyntaxApplyState(SyntaxApplyState::Idle),
+    mPendingApplyOpIndex(0),
+    mPendingApplySegmentIndex(0),
+    mPendingApplyTextGeneration(-1),
+    mPendingApplyKeywordsGeneration(0),
+    mPendingApplyDisableHighlight(false),
+    mPendingApplyKeywords(nullptr)
 {
     if (mShowLineNumbers)
     {
@@ -59,11 +244,26 @@ LLScriptEditor::LLScriptEditor(const Params& p)
     }
 }
 
+LLScriptEditor::~LLScriptEditor()
+{
+    if (mSyntaxWorker)
+    {
+        mSyntaxWorker->shutdown();
+        getSyntaxWorkerThread().update(0.f);
+        mSyntaxWorker = nullptr;
+    }
+}
+
 bool LLScriptEditor::postBuild()
 {
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
     //gSavedSettings.getControl("LSLFontSizeName")->getCommitSignal()->connect(boost::bind(&LLScriptEditor::onFontSizeChange, this));
-    return LLTextEditor::postBuild();
+    bool result = LLTextEditor::postBuild();
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //setFont(getScriptFont());
+    setFont(getFont());
+    // </FS:Ansariel>
+    return result;
 }
 
 void LLScriptEditor::draw()
@@ -128,7 +328,7 @@ void LLScriptEditor::drawLineNumbers()
             // draw the line numbers
             if(line.mLineNum != last_line_num && line.mRect.mTop <= scrolled_view_rect.mTop)
             {
-                const LLWString ltext = utf8str_to_wstring(llformat("%d", line.mLineNum ));
+                const LLWString ltext = utf8str_to_wstring(llformat("%d", mLuauLanguage ? line.mLineNum + 1 : line.mLineNum));
                 bool is_cur_line = cursor_line == line.mLineNum;
                 const U8 style = is_cur_line ? LLFontGL::BOLD : LLFontGL::NORMAL;
                 const LLColor4& fg_color = is_cur_line ? mCursorColor : mReadOnlyFgColor;
@@ -162,21 +362,24 @@ void LLScriptEditor::initKeywords(bool luau_language)
 void LLScriptEditor::loadKeywords()
 {
     LL_PROFILE_ZONE_SCOPED;
+    ensureSyntaxWorker();
+    mSyntaxWorker->waitForIdle(true);
+    resetPendingSyntaxApply();
     getKeywords().processTokens();
+    ++mKeywordsGeneration;
 
-    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
-    //LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
-    LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
-
-    segment_vec_t segment_list;
-    getKeywords().findSegments(&segment_list, getWText(), *this, style);
-
-    mSegments.clear();
-    segment_set_t::iterator insert_it = mSegments.begin();
-    for (segment_vec_t::iterator list_it = segment_list.begin(); list_it != segment_list.end(); ++list_it)
+    LLKeywords::segment_ops_t ops;
+    const LLWString& text = getWText();
+    const llwchar* base = text.c_str();
+    for (const llwchar* cur = base; *cur; ++cur)
     {
-        insert_it = mSegments.insert(insert_it, *list_it);
+        if (*cur == '\n')
+        {
+            ops.push_back({LLKeywords::SegmentOp::OP_LINE_BREAK, (S32)(cur - base), 0, nullptr});
+        }
     }
+    applySyntaxSegments(text, ops);
+    queueSyntaxParse();
 }
 
 // <FS:Ansariel> Re-add legacy format support
@@ -210,26 +413,194 @@ void LLScriptEditor::loadKeywords(const std::string& filename,
 
 void LLScriptEditor::updateSegments()
 {
-    if (mReflowIndex < S32_MAX && getKeywords().isLoaded() && mParseOnTheFly)
+    if (getKeywords().isLoaded() && mParseOnTheFly)
     {
         LL_PROFILE_ZONE_SCOPED;
-
-        // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
-        //LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
-        LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
-
-        // HACK:  No non-ascii keywords for now
-        segment_vec_t segment_list;
-        getKeywords().findSegments(&segment_list, getWText(), *this, style);
-
-        clearSegments();
-        for (segment_vec_t::iterator list_it = segment_list.begin(); list_it != segment_list.end(); ++list_it)
+        ensureSyntaxWorker();
+        mSyntaxWorker->pump();
+        if (mReflowIndex < S32_MAX)
         {
-            insertSegment(*list_it);
+            queueSyntaxParse();
         }
+        processPendingSyntaxApply();
     }
 
     LLTextBase::updateSegments();
+}
+
+void LLScriptEditor::ensureSyntaxWorker()
+{
+    if (!mSyntaxWorker)
+    {
+        mSyntaxWorker = new LLScriptEditorSyntaxWorker(&getSyntaxWorkerThread(), this);
+    }
+}
+
+void LLScriptEditor::queueSyntaxParse()
+{
+    static LLCachedControl<bool> sDisableSyntaxHighlighting(gSavedSettings, "ScriptEditorDisableSyntaxHighlight", false);
+    const bool disable_syntax_highlighting = sDisableSyntaxHighlighting;
+
+    LLKeywords* keywords = &getKeywords();
+    const S32 text_generation = getTextGeneration();
+
+    if (mLastQueuedTextGeneration == text_generation
+        && mLastQueuedKeywordsGeneration == mKeywordsGeneration
+        && mLastQueuedDisableHighlight == disable_syntax_highlighting
+        && mLastQueuedKeywords == keywords)
+    {
+        return;
+    }
+
+    mLastQueuedTextGeneration = text_generation;
+    mLastQueuedKeywordsGeneration = mKeywordsGeneration;
+    mLastQueuedDisableHighlight = disable_syntax_highlighting;
+    mLastQueuedKeywords = keywords;
+
+    LLScriptEditorSyntaxWorker::Request request;
+    request.text = getWText();
+    request.text_generation = text_generation;
+    request.keywords_generation = mKeywordsGeneration;
+    request.disable_highlight = disable_syntax_highlighting;
+    request.keywords = keywords;
+    mSyntaxWorker->queueRequest(request);
+}
+
+void LLScriptEditor::queueSyntaxApply(LLWString text,
+                                      LLKeywords::segment_ops_t ops,
+                                      S32 text_generation,
+                                      U32 keywords_generation,
+                                      bool disable_highlight,
+                                      LLKeywords* keywords)
+{
+    if (text_generation != getTextGeneration()
+        || keywords_generation != mKeywordsGeneration
+        || keywords != &getKeywords())
+    {
+        return;
+    }
+
+    resetPendingSyntaxApply();
+
+    // Small updates can apply synchronously; larger ones use background slices.
+    constexpr size_t kImmediateOpsThreshold = 500;
+    if (ops.size() <= kImmediateOpsThreshold)
+    {
+        applySyntaxSegments(text, ops);
+        return;
+    }
+
+    mPendingApplyText = std::move(text);
+    mPendingApplyOps = std::move(ops);
+    mPendingApplyTextGeneration = text_generation;
+    mPendingApplyKeywordsGeneration = keywords_generation;
+    mPendingApplyDisableHighlight = disable_highlight;
+    mPendingApplyKeywords = keywords;
+    mPendingApplyOpIndex = 0;
+    mPendingApplySegmentIndex = 0;
+    mPendingApplySegments.clear();
+    mPendingApplySegmentSet.clear();
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //mPendingApplyStyle = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
+    mPendingApplyStyle = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
+    // </FS:Ansariel>
+    mSyntaxApplyState = SyntaxApplyState::Building;
+}
+
+void LLScriptEditor::processPendingSyntaxApply()
+{
+    if (mSyntaxApplyState == SyntaxApplyState::Idle)
+    {
+        return;
+    }
+
+    static LLCachedControl<bool> sDisableSyntaxHighlighting(gSavedSettings, "ScriptEditorDisableSyntaxHighlight", false);
+    if (mPendingApplyTextGeneration != getTextGeneration()
+        || mPendingApplyKeywordsGeneration != mKeywordsGeneration
+        || mPendingApplyKeywords != &getKeywords()
+        || mPendingApplyDisableHighlight != sDisableSyntaxHighlighting)
+    {
+        resetPendingSyntaxApply();
+        return;
+    }
+
+    // Slice sizes control UI budget while applying large highlight updates.
+    constexpr size_t kOpsPerSlice = 250;
+    constexpr size_t kSegmentsPerSlice = 250;
+
+    if (mSyntaxApplyState == SyntaxApplyState::Building)
+    {
+        if (mPendingApplyStyle.isNull())
+        {
+            // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+            //mPendingApplyStyle = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
+            mPendingApplyStyle = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
+            // </FS:Ansariel>
+        }
+        bool done = getKeywords().applySegmentOpsRange(&mPendingApplySegments,
+                                                      mPendingApplyText,
+                                                      mPendingApplyOps,
+                                                      mPendingApplyOpIndex,
+                                                      kOpsPerSlice,
+                                                      *this,
+                                                      mPendingApplyStyle);
+        if (done)
+        {
+            mSyntaxApplyState = SyntaxApplyState::Inserting;
+        }
+        return;
+    }
+
+    size_t end_index = std::min(mPendingApplySegmentIndex + kSegmentsPerSlice, mPendingApplySegments.size());
+    for (; mPendingApplySegmentIndex < end_index; ++mPendingApplySegmentIndex)
+    {
+        LLTextSegmentPtr segment = mPendingApplySegments[mPendingApplySegmentIndex];
+        segment->linkToDocument(this);
+        mPendingApplySegmentSet.insert(segment);
+    }
+
+    if (mPendingApplySegmentIndex >= mPendingApplySegments.size())
+    {
+        S32 saved_scroll_index = mScrollIndex;
+        segment_set_t old_segments;
+        old_segments.swap(mSegments);
+        mSegments.swap(mPendingApplySegmentSet);
+        mScrollIndex = saved_scroll_index;
+        needsReflow(0);
+        resetPendingSyntaxApply();
+    }
+}
+
+void LLScriptEditor::resetPendingSyntaxApply()
+{
+    mSyntaxApplyState = SyntaxApplyState::Idle;
+    mPendingApplyText.clear();
+    mPendingApplyOps.clear();
+    mPendingApplySegments.clear();
+    mPendingApplySegmentSet.clear();
+    mPendingApplyOpIndex = 0;
+    mPendingApplySegmentIndex = 0;
+    mPendingApplyStyle = LLStyleConstSP();
+    mPendingApplyTextGeneration = -1;
+    mPendingApplyKeywordsGeneration = 0;
+    mPendingApplyDisableHighlight = false;
+    mPendingApplyKeywords = nullptr;
+}
+
+void LLScriptEditor::applySyntaxSegments(const LLWString& text, const LLKeywords::segment_ops_t& ops)
+{
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getScriptFont()).color(mDefaultColor.get()));
+    LLStyleConstSP style = new LLStyle(LLStyle::Params().font(getFont()).color(mDefaultColor.get()));
+
+    segment_vec_t segment_list;
+    getKeywords().applySegmentOps(&segment_list, text, ops, *this, style);
+
+    clearSegments();
+    for (segment_vec_t::iterator list_it = segment_list.begin(); list_it != segment_list.end(); ++list_it)
+    {
+        insertSegment(*list_it);
+    }
 }
 
 void LLScriptEditor::clearSegments()
@@ -302,6 +673,7 @@ void LLScriptEditor::drawSelectionBackground()
 //{
 //    if (!mUseDefaultFontSize)
 //    {
+//        setFont(getScriptFont());
 //        needsReflow();
 //    }
 //}

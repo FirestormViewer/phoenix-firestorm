@@ -194,6 +194,7 @@ protected:
     LLSD handleSyntaxRequest(const LLSD &params) const;
     LLSD handleScriptSubscribe(U32 connection_id, const LLSD& params);
     LLSD handleScriptUnsubscribe(U32 connection_id, const LLSD& params);
+    LLSD handleFileWatcherFileListRequest() const;
 
 private:
     struct EditorSubscription

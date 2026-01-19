@@ -168,17 +168,14 @@ void LLScriptEditorWSServer::unsubscribeEditor(const std::string &script_id)
 
 void LLScriptEditorWSServer::unsubscribeConnection(U32 connection_id)
 {
-    for (auto it = mSubscriptions.begin(); it != mSubscriptions.end(); )
+    for (auto it = mSubscriptions.begin(); it != mSubscriptions.end(); ++it)
     {
         if (it->second.mConnectionID == connection_id)
         {
             LL_DEBUGS("ScriptEditorWS") << "Unsubscribing script " << it->first
                                        << " from connection ID " << connection_id << LL_ENDL;
-            it = mSubscriptions.erase(it);
-        }
-        else
-        {
-            ++it;
+            it->second.mConnectionID = 0;
+            it->second.mConnection.reset();
         }
     }
 }
@@ -287,6 +284,16 @@ void LLScriptEditorWSServer::setupConnectionMethods(LLJSONRPCConnection::ptr_t c
             });
         script_connection->registerMethod("script.unsubscribe", [](const std::string&, const LLSD&, const LLSD& params) -> LLSD
             {   // this is a notification, no response expected
+                return LLSD();
+            });
+        script_connection->registerMethod("script.list",
+            [that](const std::string&, const LLSD&, const LLSD& params) -> LLSD
+            {
+                auto server = that.lock();
+                if (server)
+                {
+                    return server->handleFileWatcherFileListRequest();
+                }
                 return LLSD();
             });
         // script_connection->registerMethod("language.syntax", )
@@ -409,6 +416,25 @@ LLSD LLScriptEditorWSServer::handleScriptUnsubscribe(U32 connection_id, const LL
         unsubscribeEditor(script_id);
     }
     return LLSD();
+}
+
+LLSD LLScriptEditorWSServer::handleFileWatcherFileListRequest() const
+{
+    LLSD response;
+
+    response["temp_dir"] = LLFile::tmpdir();
+
+    // Add array of script_id's from active scripts
+    LLSD script_ids_array = LLSD::emptyArray();
+    for (const auto& [script_id, subinfo] : mSubscriptions)
+    {
+        script_ids_array.append(script_id);
+    }
+    response["script_ids"] = script_ids_array;
+
+    response["success"] = true;
+
+    return response;
 }
 
 void LLScriptEditorWSServer::notifyScript(const std::string& script_id, const std::string &method, const LLSD& message) const
