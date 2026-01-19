@@ -3543,9 +3543,10 @@ Mit diesem Erlebnis verknüpfte Skripts können in Regionen, in denen dieses Erl
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
-  
-Bevor Sie den Zugriff erlauben, sollten Sie wissen, um was für ein Objekt es sich handelt, warum es den Zugriff benötigt und ob Sie dem Ersteller vertrauen. Falls Sie unsicher sind, klicken Sie auf Verweigern.
+		Warnung:
+[WARNING]
+
+Erlauben Sie keinen Zugriff wenn Sie sich nicht vollständig sicher sind, warum ein Zugriff auf Ihr Konto benötigt wird.
 		<form name="form">
 			<button name="Grant" text="Vollen Zugriff erlauben"/>
 			<button name="Deny" text="Verweigern"/>

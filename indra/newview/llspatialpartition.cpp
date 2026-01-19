@@ -141,9 +141,10 @@ void LLSpatialGroup::clearDrawMap()
     mDrawMap.clear();
 }
 
-bool LLSpatialGroup::isHUDGroup()
+bool LLSpatialGroup::isHUDGroup() const
 {
-    return getSpatialPartition() && getSpatialPartition()->isHUDPartition() ;
+    LLSpatialPartition* part = (LLSpatialPartition*)mSpatialPartition;
+    return part && part->isHUDPartition();
 }
 
 void LLSpatialGroup::validate()

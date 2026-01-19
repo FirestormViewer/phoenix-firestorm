@@ -35,7 +35,7 @@
 	<string name="BuildConfig">
 		Build-Konfiguration [BUILD_CONFIG]
 	</string>
-	<string name="AboutPosition">
+	<string name="AboutPosition">ScriptQuestionCautionChatDenied
 		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (globale Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
@@ -1265,6 +1265,12 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="ScriptQuestionCautionChatDenied">
 		Dem Objekt „[OBJECTNAME]“, ein Objekt von „[OWNERNAME]“, in [REGIONNAME] [REGIONPOS], wurde folgende Berechtigung verweigert: [PERMISSIONS].
 	</string>
+	<string name="ScriptTakeMoneyCaution">
+		Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
+	</string>
+	<string name="PrivilegedLandAccessCaution">
+		Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht privilegierten Zugriff auf Ihr Land. Wenn Sie dies erlauben, kann es Ihr Land verkaufen ohne eine weitere Warnung.
+	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		Falls Sie den Zugriff auf Ihr Konto erlauben, erlauben Sie dem Objekt ebenfalls:
 	</string>
@@ -1309,6 +1315,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="ChangeEnvSettings">
 		Umgebungseinstellungen ändern
+	</string>
+	<string name="PrivilegedLandAccess">
+		Land in Ihrem Auftrag verkaufen
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden

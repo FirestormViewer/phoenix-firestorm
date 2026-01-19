@@ -96,6 +96,17 @@ public:
     virtual void updateAddedCategory(LLUUID cat_id) = 0;
     virtual void updateRemovedCategory(LLUUID cat_id) = 0;
     virtual void updateChangedCategoryName(LLViewerInventoryCategory *cat, std::string name) = 0;
+
+    /*
+     * Optional hook for derived classes to perform additional processing.
+     * This is called by the outfit list update logic after the core
+     * bookkeeping for an outfit has been handled.
+     *
+     * @return true if update processing should continue,
+     *         false if no additional work is required.
+     *         The base implementation returns false.
+     */
+    virtual bool updateOneOutfit() { return false; };
     virtual void sortOutfits();
     virtual void arrange() {} // <FS:Ansariel> Arrange accordions after all have been added
 
@@ -143,6 +154,7 @@ protected:
 
     bool isOutfitFolder(LLViewerInventoryCategory* cat) const;
 
+    void startIdleLoop(const LLUUID cat_id);
     static void onIdle(void* userdata);
     void onIdleRefreshList();
 
@@ -155,6 +167,7 @@ protected:
         uuid_vec_t::const_iterator  RemovedIterator;
     } mRefreshListState;
     std::set<LLUUID>                mChangedItems;
+    std::set<LLUUID>                mPendingOutfitRefreshes;
 
     bool                            mIsInitialized;
     LLInventoryCategoriesObserver*  mCategoriesObserver;
