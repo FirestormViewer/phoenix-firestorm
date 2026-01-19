@@ -6,6 +6,7 @@
 		</text>
 		<check_box label="シーン内の光源のバウンディングボックス" name="lights_bounding_boxes"/>
 		<check_box label="リージョンのコーナー" name="fsregioncornerbeacons"/>
+		<check_box label="チャット範囲のスフィア" name="FSShowChatRangeSpheres" />
 		<check_box label="ビーコン" name="beacons"/>
 		<check_box label="ハイライト" name="highlights"/>
 		<check_box label="ビーコン情報をビューアウィンドウに載せる" name="FSRenderBeaconText"/>

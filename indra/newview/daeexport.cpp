@@ -338,8 +338,8 @@ void ColladaExportFloater::saveTextures()
     mSaver.mImageFormat = DAEExportUtil::image_format_ext[gSavedSettings.getS32("DAEExportTexturesFormat")];
 
     LL_DEBUGS("export") << "Starting to save textures" << LL_ENDL;
-    mTimer.setTimerExpirySec(TEXTURE_DOWNLOAD_TIMEOUT);
     mTimer.start();
+    mTimer.setTimerExpirySec(TEXTURE_DOWNLOAD_TIMEOUT);
     updateTitleProgress();
     gIdleCallbacks.addFunction(CacheReadResponder::saveTexturesWorker, this);
 }
@@ -468,6 +468,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
         me->mTexturesToSave.erase(id);
         me->updateTitleProgress();
         me->mTimer.reset();
+        me->mTimer.setTimerExpirySec(TEXTURE_DOWNLOAD_TIMEOUT);
     }
     else
     {
@@ -491,6 +492,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
             me->mTexturesToSave.erase(id);
             me->updateTitleProgress();
             me->mTimer.reset();
+            me->mTimer.setTimerExpirySec(TEXTURE_DOWNLOAD_TIMEOUT);
         }
         else if (me->mTimer.hasExpired())
         {
@@ -498,6 +500,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
             me->mTexturesToSave.erase(id);
             me->updateTitleProgress();
             me->mTimer.reset();
+            me->mTimer.setTimerExpirySec(TEXTURE_DOWNLOAD_TIMEOUT);
         }
     }
 }

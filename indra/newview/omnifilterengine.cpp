@@ -26,6 +26,7 @@
 
 #include "omnifilterengine.h"
 
+#include "fsyspath.h"
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
@@ -237,13 +238,13 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
-    if (!std::filesystem::exists(mNeedlesXMLPath))
+    if (!std::filesystem::exists(fsyspath(mNeedlesXMLPath)))
     {
         // file does not exist (yet), just return empty
         return;
     }
 
-    if (!std::filesystem::is_regular_file(mNeedlesXMLPath))
+    if (!std::filesystem::is_regular_file(fsyspath(mNeedlesXMLPath)))
     {
         LL_DEBUGS("Omnifilter") << "Omnifilter storage at '" << mNeedlesXMLPath << "' is not a regular file." << LL_ENDL;
         LLSD args;
@@ -252,7 +253,7 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
-    if (std::filesystem::file_size(mNeedlesXMLPath) == 0)
+    if (std::filesystem::file_size(fsyspath(mNeedlesXMLPath)) == 0)
     {
         // file exists but is empty, this should not happen, so alert the user, they might have lost their needles
         LL_DEBUGS("Omnifilter") << "Omnifilter storage file is empty." << mNeedlesXMLPath << LL_ENDL;

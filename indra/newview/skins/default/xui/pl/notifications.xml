@@ -5611,4 +5611,8 @@ Komunikat błędu:
 Komunikat błędu:
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
+	<notification name="ChatHistoryIsMissing">
+		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
+Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
+	</notification>
 </notifications>

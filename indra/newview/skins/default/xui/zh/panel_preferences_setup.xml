@@ -50,7 +50,7 @@
 			<button label="設定" width="55" label_selected="設定" name="set_sound_cache" />
 			<button label="重設" width="75" label_selected="重設" name="reset_sound_cache" />
 			<check_box label="退出時不刪除解壓的 DSF（音訊）快取" tool_tip="如果啟用，檢視器將在退出時不刪除解壓的快取聲音，從而實作更快的播放。 請注意：啟用此選項將快速填滿您的快取，並且不會受到定義的配額限制。這可能導致磁碟使用過量。預設情況下未啟用。" name="keep_unpacked_cache" />
-			<text name="log_path_desc">聊天記錄和記錄路徑：</text>
+			<text name="log_path_desc">聊天記錄和內容的路徑：</text>
 			<button label="打開" label_selected="打開" name="open_log_path_button-panelsetup" />
 			<button label="設定" label_selected="設定" name="log_path_button-panelsetup" />
 			<button label="重設" label_selected="重設" name="reset_logpath" />

@@ -63,7 +63,8 @@
 			</combo_item>
 		</combo_box>
 		<text name="region_name_label" value="リージョン名："/>
-		<text name="owner_label" value="所有者："/>
+		<line_editor name="region_name" tool_tip="ソースのリージョン名を入力します。インベントリのオファーでのみ使用できます。"/>
+		<text name="owner_label" value="所有者のキー：" tool_tip="グループ招待の場合：グループのＵＵＩＤを入力します。オブジェクトによるチャット、オブジェクト所有者の発言、デバッグチャット、またはダイレクトチャットの場合：オブジェクトのＵＵＩＤを入力します。オブジェクトＩＭの場合：オブジェクト所有者のＵＵＩＤを入力します。その他：送信者アバターのＵＵＩＤを入力します。"/>
 		<text name="match_source_label" value="一致するソース："/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -84,11 +85,11 @@
 			<layout_panel name="buttons_group_4">
 				<button name="type_inventory_offer" label="オファー" tool_tip="インベントリオファー内のフィールドと一致します。"/>
 				<button name="type_friendship" label="フレンドシップ" tool_tip="ユーザからのフレンドのリクエストです。"/>
-				<button name="type_lure" label="ＴＰルアー" tool_tip="他のユーザからのテレポートのファーです。"/>
+				<button name="type_lure" label="ＴＰルアー" tool_tip="他のユーザからのテレポートのオファーです。"/>
 			</layout_panel>
 			<layout_panel name="buttons_group_5">
 				<button name="type_tp_request" label="ＴＰリクエスト" tool_tip="テレポートのオファーを送信するよう求めるユーザーからのリクエストです。"/>
-				<button name="type_load_url" label="Load URL" tool_tip="Webサイトにアクセスするためのスクリプト化されたリクエストです。"/>
+				<button name="type_load_url" label="ＵＲＬ読み込み" tool_tip="Webサイトにアクセスするためのスクリプト化されたリクエストです。"/>
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="チャットの置き換え："/>

@@ -94,5 +94,5 @@ jobs:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - name: Copy files to remote host
-        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
+        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:downloads/${{ env.FS_RELEASE_FOLDER }}
 
