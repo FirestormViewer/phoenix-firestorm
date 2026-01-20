@@ -1017,7 +1017,7 @@
          label="Show grid coordinates on the World Map"
          name="FSShowRegionGridCoordinates"
          width="270"
-         control_name="FSShowRegionGridCoordinates"
+         control_name="MapShowGridCoords"
          tool_tip="Shows the grid coordinates (in units of regions) on the World Map."/>
 		 
         <check_box top_pad="5"

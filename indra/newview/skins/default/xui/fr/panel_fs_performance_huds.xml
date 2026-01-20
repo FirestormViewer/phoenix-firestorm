@@ -7,7 +7,7 @@
 		Vos HUDs actifs
 	</text>
 	<text name="huds_desc1">
-		Détacher les HUDs inutilisés économise de la mémoire et peut rendre le visualiseur plus rapide.
+		Détacher les HUDs inutilisés économise de la mémoire et peut rendre le client plus rapide.
 	</text>
 	<text name="huds_desc2">
 		Les HUD sont souvent très scriptés et contribuent également au lag côté serveur.

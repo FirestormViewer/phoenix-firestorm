@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="土地資訊">
-	<floater.string name="maturity_icon_general">
-		"Parcel_PG_Dark"
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		"Parcel_M_Dark"
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		"Parcel_R_Dark"
-	</floater.string>
 	<floater.string name="Hours">
 		[HOURS]小時
 	</floater.string>
@@ -16,13 +7,13 @@
 		小時
 	</floater.string>
 	<floater.string name="Minutes">
-		[MINUTES] 分鐘
+		[MINUTES]分
 	</floater.string>
 	<floater.string name="Minute">
-		分鐘
+		分
 	</floater.string>
 	<floater.string name="Seconds">
-		[SECONDS] 秒
+		[SECONDS]秒
 	</floater.string>
 	<floater.string name="Remaining">
 		剩餘時間
@@ -71,8 +62,11 @@
 			<panel.string name="no_selection_text">
 				未選擇地塊。
 			</panel.string>
+			<panel.string name="time_stamp_template_ampm">
+				[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+			</panel.string>
 			<panel.string name="time_stamp_template">
-				[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+				[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 			</panel.string>
 			<panel.string name="error_resolving_uuid">
 				地塊ID無法確定。

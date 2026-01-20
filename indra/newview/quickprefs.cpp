@@ -63,10 +63,10 @@ class FSSettingsCollector : public LLInventoryCollectFunctor
 public:
     FSSettingsCollector()
     {
-        mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        mMarketplaceFolderUUID = gInventory.getMarketplaceListingsUUID();
     }
 
-    virtual ~FSSettingsCollector() {}
+    virtual ~FSSettingsCollector() = default;
 
     bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
     {
@@ -85,7 +85,7 @@ public:
 
 protected:
     LLUUID mMarketplaceFolderUUID;
-    std::set<LLUUID> mSeen;
+    uuid_set_t mSeen;
 };
 
 
@@ -1571,8 +1571,7 @@ void FloaterQuickPrefs::onEditModeChanged()
     // Write the resulting XML to file
     if (!output_node->isNull())
     {
-        LLFILE* fp = LLFile::fopen(settings_path, "w");
-        if (fp)
+        if (LLFILE* fp = LLFile::fopen(settings_path, LLFILE_MODE("w")))
         {
             LLXMLNode::writeHeaderToFile(fp);
             output_node->writeToFile(fp);

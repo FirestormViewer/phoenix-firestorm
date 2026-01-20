@@ -24,7 +24,6 @@
  * $/LicenseInfo$
  */
 
-#include <deque>
 #include <boost/algorithm/string.hpp>
 #include "fsposeranimator.h"
 #include "llcharacter.h"
@@ -114,8 +113,25 @@ void FSPoserAnimator::undoLastJointChange(LLVOAvatar* avatar, const FSPoserJoint
     if (!jointPose)
         return;
 
-    if (jointPose->undoLastChange())
+    E_PoserChangeType changeType = jointPose->undoLastChange();
+    if (changeType == POSER_CHANGE_ROTATION)
         undoOrRedoWorldLockedDescendants(joint, posingMotion, false);
+
+    if (changeType == POSER_CHANGE_CHILDMOVE)
+    {
+        undoOrRedoRotatedParents(joint, posingMotion, false);
+
+        FSJointPose* parentJointPose = findParentJointPose(posingMotion, joint.jointName());
+        if (parentJointPose)
+        {
+            FSJointPose* grandParentJointPose = findParentJointPose(posingMotion, parentJointPose->jointName());
+            if (grandParentJointPose)
+            {
+                auto grandParentPoserJoint = getPoserJointByName(grandParentJointPose->jointName());
+                undoOrRedoWorldLockedDescendants(*grandParentPoserJoint, posingMotion, false);
+            }
+        }
+    }
 
     if (style == NONE || style == DELTAMODE)
         return;
@@ -124,7 +140,8 @@ void FSPoserAnimator::undoLastJointChange(LLVOAvatar* avatar, const FSPoserJoint
     if (!oppositeJointPose)
         return;
 
-    if (!oppositeJointPose->undoLastChange())
+    changeType = oppositeJointPose->undoLastChange();
+    if (changeType != POSER_CHANGE_ROTATION)
         return;
 
     auto oppositePoserJoint = getPoserJointByName(joint.mirrorJointName());
@@ -198,8 +215,10 @@ void FSPoserAnimator::redoLastJointChange(LLVOAvatar* avatar, const FSPoserJoint
     if (!jointPose)
         return;
 
-    jointPose->redoLastChange();
+    E_PoserChangeType changeType = jointPose->redoLastChange();
     undoOrRedoWorldLockedDescendants(joint, posingMotion, true);
+    if (changeType == POSER_CHANGE_CHILDMOVE)
+        undoOrRedoRotatedParents(joint, posingMotion, true);
 
     if (style == NONE || style == DELTAMODE)
         return;
@@ -360,7 +379,7 @@ void FSPoserAnimator::setRotationIsWorldLocked(LLVOAvatar* avatar, const FSPoser
 
 bool FSPoserAnimator::exportRotationWillLockJoint(LLVOAvatar* avatar, const FSPoserJoint& joint) const
 {
-    const F32 ROTATION_KEYFRAME_THRESHOLD = 0.01f; // this is a guestimate: see BVH loader
+    constexpr F32 ROTATION_KEYFRAME_THRESHOLD = 0.01f; // this is a guestimate: see BVH loader
 
     if (!isAvatarSafeToUse(avatar))
         return false;
@@ -466,6 +485,15 @@ void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoin
                                            E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, const LLQuaternion& rotation,
                                            const LLVector3& position, const LLVector3& scale)
 {
+    if (!position.isExactlyZero())
+        updateJointPositionFromManip(avatar, joint, resetBaseRotationToZero, style, position);
+    else
+        updateJointRotationFromManip(avatar, joint, resetBaseRotationToZero, style, frame, rotation);
+}
+
+void FSPoserAnimator::updateJointRotationFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
+                                           E_BoneDeflectionStyles style, E_PoserReferenceFrame frame, const LLQuaternion& rotation)
+{
     if (!isAvatarSafeToUse(avatar))
         return;
 
@@ -478,7 +506,7 @@ void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoin
         return;
 
     LLQuaternion framedRotation = changeToRotationFrame(avatar, rotation, frame, jointPose);
-    jointPose->setPublicRotation(resetBaseRotationToZero, framedRotation * jointPose->getPublicRotation());
+    jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION, framedRotation * jointPose->getPublicRotation());
 
     deRotateWorldLockedDescendants(joint, posingMotion, framedRotation);
 
@@ -495,14 +523,16 @@ void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoin
     {
         case SYMPATHETIC:
         case SYMPATHETIC_DELTA:
-            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, framedRotation * oppositeJointPose->getPublicRotation());
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION,
+                                                 framedRotation * oppositeJointPose->getPublicRotation());
             if (oppositePoserJoint)
                 deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, framedRotation);
             break;
 
         case MIRROR:
         case MIRROR_DELTA:
-            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, mirroredRotation * oppositeJointPose->getPublicRotation());
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION,
+                                                 mirroredRotation * oppositeJointPose->getPublicRotation());
             if (oppositePoserJoint)
                 deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, mirroredRotation);
             break;
@@ -510,6 +540,207 @@ void FSPoserAnimator::updateJointFromManip(LLVOAvatar* avatar, const FSPoserJoin
         default:
             break;
     }
+}
+
+void FSPoserAnimator::updateJointPositionFromManip(LLVOAvatar* avatar, const FSPoserJoint* joint, bool resetBaseRotationToZero,
+                                                   E_BoneDeflectionStyles style, const LLVector3& position)
+{
+    if (!isAvatarSafeToUse(avatar))
+        return;
+
+    FSPosingMotion* posingMotion = getPosingMotion(avatar);
+    if (!posingMotion)
+        return;
+
+    LLJoint* movedJoint = avatar->getJoint(joint->jointName());
+    if (!movedJoint)
+        return;
+
+    LLJoint* parentJoint = movedJoint->getParent();
+    if (!parentJoint)
+        return;
+
+    if (jointIsPelvis(movedJoint))
+    {
+        auto         movedPoserJoint = getPoserJointByName(joint->jointName());
+        LLVector3    currentPosition = getJointPosition(avatar, *movedPoserJoint);
+        LLQuaternion rootWorldRot    = parentJoint->getWorldRotation();
+        currentPosition += position * ~rootWorldRot;
+
+        setJointPosition(avatar, movedPoserJoint, currentPosition, POSER_FRAME_WORLD, NONE);
+
+        return;
+    }
+
+    if (jointIsPelvis(parentJoint))
+        return;
+
+    LLJoint* grandParentJoint = parentJoint->getParent();
+    if (!grandParentJoint || jointIsPelvis(grandParentJoint))
+        return;
+
+    LLVector3    oldMovedJointPosition = movedJoint->getWorldPosition();
+    LLVector3    parentPosition        = parentJoint->getWorldPosition();
+    LLVector3    grandParentPosition   = grandParentJoint->getWorldPosition();
+    LLVector3    newMovedJointPosition = oldMovedJointPosition + position;
+    LLQuaternion grandParentWorldRot   = grandParentJoint->getWorldRotation();
+    LLQuaternion parentWorldRot        = parentJoint->getWorldRotation();
+
+    FSJointPose* grandParentJointPose = posingMotion->getJointPoseByJointName(grandParentJoint->getName());
+    FSJointPose* parentJointPose      = posingMotion->getJointPoseByJointName(parentJoint->getName());
+    FSJointPose* movedJointPose       = posingMotion->getJointPoseByJointName(movedJoint->getName());
+    if (!grandParentJointPose || !parentJointPose)
+        return;
+
+    LLQuaternion grandParentFrameRotChange, grandParentLengthRotChange, parentLengthRotChange;
+    if (parentJointIsHinge(parentJoint))
+    {
+        if (!canMoveToNewPosition(grandParentPosition, parentPosition, oldMovedJointPosition, newMovedJointPosition))
+            return;
+
+        grandParentFrameRotChange = getAbcFrameRotation(grandParentPosition, parentPosition, oldMovedJointPosition, position);
+
+        if (!getPlanarRotationAtAandB(grandParentPosition, parentPosition, oldMovedJointPosition, position, grandParentLengthRotChange,
+                                      parentLengthRotChange))
+            return;
+    }
+    else
+    {
+        grandParentFrameRotChange.loadIdentity(); // unused here
+        if (!getFreeRotationAtAandB(grandParentPosition, parentPosition, oldMovedJointPosition, position, grandParentLengthRotChange,
+                                      parentLengthRotChange))
+            return;
+    }
+
+    // convert rotations to local frame
+    grandParentFrameRotChange = grandParentWorldRot * grandParentFrameRotChange * ~grandParentWorldRot;
+    grandParentLengthRotChange = grandParentWorldRot * grandParentLengthRotChange * ~grandParentWorldRot;
+    parentLengthRotChange      = parentWorldRot * parentLengthRotChange * ~parentWorldRot;
+
+    movedJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_CHILDMOVE, movedJointPose->getPublicRotation()); // set up undo
+    parentJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION,
+                                       parentLengthRotChange * parentJointPose->getPublicRotation());
+    grandParentJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION,
+                                            grandParentLengthRotChange * grandParentJointPose->getPublicRotation());
+    grandParentJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_ROTATION,
+                                            grandParentFrameRotChange * grandParentJointPose->getPublicRotation());
+
+    auto grandParentPoserJoint = getPoserJointByName(grandParentJoint->getName());
+    deRotateWorldLockedDescendants(grandParentPoserJoint, posingMotion, grandParentLengthRotChange);
+}
+
+bool FSPoserAnimator::getFreeRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
+                                             LLQuaternion& changeAtA, LLQuaternion& changeAtB)
+{
+    LLVector3 vectorAC   = posC - posA;
+    LLVector3 vectorAB   = posB - posA;
+    F32       lengthAC   = vectorAC.length();
+    F32       lengthAB   = vectorAB.length();
+    F32       lengthBC   = (posC - posB).length();
+    F32       lengthMove = changeAtC.length();
+
+    LLVector3 rotationAxis = vectorAC % changeAtC;
+    rotationAxis.normalize();
+
+    F32 angle = asin(lengthMove / lengthAC);
+    if (llisnan(angle))
+        return false;
+
+    changeAtA = LLQuaternion(angle, rotationAxis);
+    changeAtB = LLQuaternion(-angle, rotationAxis);
+
+    return true;
+}
+
+bool FSPoserAnimator::getPlanarRotationAtAandB(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC,
+                                               LLQuaternion& changeAtA, LLQuaternion& changeAtB)
+{
+    LLVector3 vectorAC = posC - posA;
+    LLVector3 vectorAB = posB - posA;
+    F32       lengthAC = vectorAC.length();
+    F32       lengthAB = vectorAB.length();
+    F32       lengthBC = (posC - posB).length();
+
+    F32       lengthACbeforeRot = vectorAC.length();
+    F32       lengthACafterRot = (posC + changeAtC - posA).length();
+    LLVector3 rotationAxis = vectorAB % vectorAC;
+
+    rotationAxis.normalize();
+
+    // Distance from posA, along AC, to where B is perpendicular to AC (right angle triangle), before and after moving C; intersecting spheres
+    F32 dist1 = (lengthAB * lengthAB - lengthBC * lengthBC + lengthACbeforeRot * lengthACbeforeRot) / (2.f * lengthACbeforeRot);
+    F32 dist2 = (lengthAB * lengthAB - lengthBC * lengthBC + lengthACafterRot * lengthACafterRot) / (2.f * lengthACafterRot);
+
+    if (dist1 == dist2)
+        return false;
+
+    F32 angle1 = acos(dist1 / lengthAB);
+    F32 angle2 = acos(dist2 / lengthAB);
+    changeAtA = LLQuaternion((angle1 - angle2), rotationAxis);
+
+    angle1 = acos((lengthACbeforeRot - dist1) / lengthBC);
+    angle2 = acos((lengthACafterRot - dist2) / lengthBC);
+    changeAtB = LLQuaternion((angle2 - angle1), rotationAxis);
+
+    return true;
+}
+
+LLQuaternion FSPoserAnimator::getAbcFrameRotation(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& changeAtC)
+{
+    LLVector3 vectorAC    = posC - posA;
+    LLVector3 vectorAnewC = vectorAC + changeAtC;
+
+    F32       angle       = acos((vectorAC * vectorAnewC) / (vectorAC.length() * vectorAnewC.length()));
+    LLVector3 rotationAxis = vectorAC % changeAtC;
+    rotationAxis.normalize();
+
+    if (llisnan(angle))
+        angle = 0.f;
+
+    return LLQuaternion(angle, rotationAxis);
+}
+
+bool FSPoserAnimator::parentJointIsHinge(LLJoint* parentJoint)
+{
+    if (!parentJoint)
+        return false;
+
+    std::string jointName = parentJoint->getName();
+    if (jointName.find("Elbow") != std::string::npos)
+        return true;
+    if (jointName.find("Knee") != std::string::npos)
+        return true;
+    if (jointName.find("Hand") != std::string::npos && jointName.find("2") != std::string::npos) // eg: mHandIndex2Right, the second 'knuckle'
+        return true;
+
+    return false;
+}
+
+bool FSPoserAnimator::jointIsPelvis(const LLJoint* joint)
+{
+    if (!joint)
+        return false;
+
+    std::string jointName = joint->getName();
+    return jointName == "mPelvis" || jointName == "mRoot";
+}
+
+bool FSPoserAnimator::canMoveToNewPosition(const LLVector3& posA, const LLVector3& posB, const LLVector3& posC, const LLVector3& posNewC)
+{
+    F32 lengthAC = (posNewC - posA).length();
+    if (lengthAC < 0.04f)
+        return false; // don't allow C and A to converge
+
+    F32 lengthAB = (posB - posA).length();
+    F32 lengthBC = (posC - posB).length();
+
+    if (lengthAC > lengthAB + lengthBC - 0.002f)
+        return false; // if the limbs become fully extended then moving back is non-trivial because the 3 joints are not a triangle
+
+    if (lengthAC < fabs(lengthAB - lengthBC))
+        return false; // absurdity
+
+    return true;
 }
 
 LLQuaternion FSPoserAnimator::getManipGimbalRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, E_PoserReferenceFrame frame)
@@ -548,16 +779,19 @@ LLQuaternion FSPoserAnimator::getManipGimbalRotation(LLVOAvatar* avatar, const F
     if (frame == POSER_FRAME_BONE)
         return llJoint->getWorldRotation();
 
+    return getQuaternionFromWorldVector(llJoint->getWorldPosition() - gAgentCamera.getCameraPositionAgent());
+}
+
+LLQuaternion FSPoserAnimator::getQuaternionFromWorldVector(const LLVector3& worldVector)
+{
     LLVector3 skyward(0.f, 0.f, 1.f);
     LLVector3 left(1.f, 0.f, 0.f);
-    LLVector3 up, jointToCameraPosition, jointPosition;
-    jointPosition         = llJoint->getWorldPosition();
-    jointToCameraPosition = jointPosition - gAgentCamera.getCameraPositionAgent();
-    jointToCameraPosition.normalize();
-    left.setVec(skyward % jointToCameraPosition);
-    up.setVec(jointToCameraPosition % left);
+    LLVector3 up, normVector(worldVector);
+    normVector.normalize();
+    left.setVec(skyward % normVector);
+    up.setVec(normVector % left);
 
-    return LLQuaternion(jointToCameraPosition, left, up);
+    return LLQuaternion(normVector, left, up);
 }
 
 LLVector3 FSPoserAnimator::getJointExportRotation(LLVOAvatar* avatar, const FSPoserJoint& joint, bool lockWholeAvatar) const
@@ -633,28 +867,28 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
         case SYMPATHETIC:
         case MIRROR:
             if (rotationStyle == DELTAIC_ROT || translationRequiresDelta)
-                jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
+                jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, deltaRot * jointPose->getPublicRotation());
             else
-                jointPose->setPublicRotation(resetBaseRotationToZero, absRot);
+                jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, absRot);
 
             break;
 
         case SYMPATHETIC_DELTA:
         case MIRROR_DELTA:
-            jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
+            jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, deltaRot * jointPose->getPublicRotation());
             break;
 
         case DELTAMODE:
-            jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
+            jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, deltaRot * jointPose->getPublicRotation());
             deRotateWorldLockedDescendants(joint, posingMotion, deltaRot);
             return;
 
         case NONE:
         default:
             if (rotationStyle == DELTAIC_ROT || translationRequiresDelta)
-                jointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * jointPose->getPublicRotation());
+                jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, deltaRot * jointPose->getPublicRotation());
             else
-                jointPose->setPublicRotation(resetBaseRotationToZero, absRot);
+                jointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT, absRot);
 
             deRotateWorldLockedDescendants(joint, posingMotion, deltaRot);
             return;
@@ -677,7 +911,8 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
             break;
 
         case SYMPATHETIC_DELTA:
-            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, deltaRot * oppositeJointPose->getPublicRotation());
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT,
+                                                 deltaRot * oppositeJointPose->getPublicRotation());
             if (oppositePoserJoint)
                 deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, deltaRot);
             break;
@@ -689,7 +924,8 @@ void FSPoserAnimator::setJointRotation(LLVOAvatar* avatar, const FSPoserJoint* j
             break;
 
         case MIRROR_DELTA:
-            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, mirroredRotation * oppositeJointPose->getPublicRotation());
+            oppositeJointPose->setPublicRotation(resetBaseRotationToZero, POSER_CHANGE_DEFAULT,
+                                                 mirroredRotation * oppositeJointPose->getPublicRotation());
             if (oppositePoserJoint)
                 deRotateWorldLockedDescendants(oppositePoserJoint, posingMotion, mirroredRotation);
             break;
@@ -1071,7 +1307,7 @@ void FSPoserAnimator::loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* 
     jointPose->purgeUndoQueue();
 
     LLQuaternion rot = translateRotationToQuaternion(avatar, jointPose, POSER_FRAME_BONE, SWAP_NOTHING, NEGATE_NOTHING, rotation);
-    jointPose->setPublicRotation(setBaseToZero, rot);
+    jointPose->setPublicRotation(setBaseToZero, POSER_CHANGE_DEFAULT, rot);
 }
 
 void FSPoserAnimator::loadJointPosition(LLVOAvatar* avatar, const FSPoserJoint* joint, bool loadPositionAsDelta, LLVector3 position)
@@ -1332,10 +1568,10 @@ bool FSPoserAnimator::isAvatarSafeToUse(LLVOAvatar* avatar) const
 
 int FSPoserAnimator::getChildJointDepth(const FSPoserJoint* joint, S32 depth) const
 {
-    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
-    if (numberOfBvhChildNodes < 1)
+    if (joint->bvhChildren().empty())
         return depth;
 
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     depth++;
 
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
@@ -1352,10 +1588,10 @@ int FSPoserAnimator::getChildJointDepth(const FSPoserJoint* joint, S32 depth) co
 
 void FSPoserAnimator::deRotateWorldLockedDescendants(const FSPoserJoint* joint, FSPosingMotion* posingMotion, LLQuaternion rotationChange)
 {
-    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
-    if (numberOfBvhChildNodes < 1)
+    if (joint->bvhChildren().empty())
         return;
 
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     FSJointPose* parentJoint = posingMotion->getJointPoseByJointName(joint->jointName());
     if (!parentJoint)
         return;
@@ -1385,14 +1621,14 @@ void FSPoserAnimator::deRotateJointOrFirstLockedChild(const FSPoserJoint* joint,
         LLQuaternion rotDiffInChildFrame  = differenceInWorldRot * rotationChange * ~differenceInWorldRot;
         rotDiffInChildFrame.conjugate();
 
-        jointPose->setPublicRotation(false, rotDiffInChildFrame * jointPose->getPublicRotation());
+        jointPose->setPublicRotation(false, POSER_CHANGE_ROTATION, rotDiffInChildFrame * jointPose->getPublicRotation());
         return;
     }
 
-    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
-    if (numberOfBvhChildNodes < 1)
+    if (joint->bvhChildren().empty())
         return;
 
+    size_t numberOfBvhChildNodes = joint->bvhChildren().size();
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
         auto nextJoint = getPoserJointByName(joint->bvhChildren().at(index));
@@ -1403,12 +1639,54 @@ void FSPoserAnimator::deRotateJointOrFirstLockedChild(const FSPoserJoint* joint,
     }
 }
 
-void FSPoserAnimator::undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo)
+void FSPoserAnimator::undoOrRedoRotatedParents(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo)
 {
-    size_t numberOfBvhChildNodes = joint.bvhChildren().size();
-    if (numberOfBvhChildNodes < 1)
+    if (!posingMotion)
         return;
 
+    FSJointPose* parentJointPose = findParentJointPose(posingMotion, joint.jointName());
+    if (!parentJointPose)
+        return;
+
+    if (redo)
+        parentJointPose->redoLastChange();
+    else
+        parentJointPose->undoLastChange();
+
+    FSJointPose* grandParentJointPose = findParentJointPose(posingMotion, parentJointPose->jointName());
+    if (!grandParentJointPose)
+        return;
+
+    if (redo)
+        grandParentJointPose->redoLastChange();
+    else
+        grandParentJointPose->undoLastChange();
+}
+
+FSJointPose* FSPoserAnimator::findParentJointPose(FSPosingMotion* posingMotion, std::string jointName)
+{
+    if (jointName.empty() || !posingMotion)
+        return nullptr;
+
+    for (size_t index = 0; index != PoserJoints.size(); ++index)
+    {
+        auto children = PoserJoints[index].bvhChildren();
+        auto it       = std::find(children.begin(), children.end(), jointName);
+        if (it == children.end())
+            continue;
+
+        return posingMotion->getJointPoseByJointName(PoserJoints[index].jointName());
+    }
+
+    return nullptr;
+}
+
+void FSPoserAnimator::undoOrRedoWorldLockedDescendants(const FSPoserJoint& joint, FSPosingMotion* posingMotion, bool redo)
+{
+    if (joint.bvhChildren().empty())
+        return;
+
+    size_t numberOfBvhChildNodes = joint.bvhChildren().size();
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
         auto nextJoint = getPoserJointByName(joint.bvhChildren().at(index));
@@ -1438,10 +1716,10 @@ void FSPoserAnimator::undoOrRedoJointOrFirstLockedChild(const FSPoserJoint& join
         return;
     }
 
-    size_t numberOfBvhChildNodes = joint.bvhChildren().size();
-    if (numberOfBvhChildNodes < 1)
+    if (joint.bvhChildren().empty())
         return;
 
+    size_t numberOfBvhChildNodes = joint.bvhChildren().size();
     for (size_t index = 0; index != numberOfBvhChildNodes; ++index)
     {
         auto nextJoint = getPoserJointByName(joint.bvhChildren().at(index));

@@ -298,7 +298,7 @@ void LLUIColorTable::saveUserSettings() const
     if(!output_node->isNull())
     {
         const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
-        LLFILE *fp = LLFile::fopen(filename, "w");
+        LLFILE *fp = LLFile::fopen(filename, LLFILE_MODE("w"));
 
         if(fp != NULL)
         {
@@ -310,6 +310,7 @@ void LLUIColorTable::saveUserSettings() const
     }
 }
 
+// <FS>
 void LLUIColorTable::saveUserSettingsPaletteOnly() const
 {
     Params params;
@@ -330,8 +331,8 @@ void LLUIColorTable::saveUserSettingsPaletteOnly() const
 
     if (!output_node->isNull())
     {
-        const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
-        LLFILE* fp = LLFile::fopen(filename, "w");
+        const std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml");
+        LLFILE* fp = LLFile::fopen(filename, LLFILE_MODE("w"));
 
         if (fp)
         {
@@ -342,6 +343,7 @@ void LLUIColorTable::saveUserSettingsPaletteOnly() const
         }
     }
 }
+// </FS>
 
 bool LLUIColorTable::colorExists(std::string_view color_name) const
 {

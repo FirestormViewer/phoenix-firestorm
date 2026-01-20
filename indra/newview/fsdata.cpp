@@ -35,13 +35,10 @@
 #include "fscorehttputil.h"
 #include "fsassetblacklist.h"
 
-/* boost: will not compile unless equivalent is undef'd, beware. */
-#include <boost/filesystem.hpp>
-
+#include "fsyspath.h"
 #include "llappviewer.h"
 #include "llagent.h"
 #include "llagentui.h"
-#include "llfloaterabout.h"
 #include "llimview.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
@@ -52,7 +49,6 @@
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
-#include "llfilesystem.h"
 #include "message.h"
 
 // [RLVa:KB]
@@ -367,6 +363,7 @@ void FSData::downloadAgents()
         // TODO: Let the opensim devs and opensim group figure out the best way
         // to add "agents.xml" URL to the gridinfo protocol.
         //getAgentsURL();
+        mAgentsDone = true; // Avoid +15s llstartup STATE_AGENT_WAIT delay --ht
 
         // there is no need for assets.xml URL for opensim grids as the grid owner can just delete
         // the bad asset itself.
@@ -754,13 +751,8 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
     }
     file.close();
 
-    const std::time_t new_time = (std::time_t)last_modified.secondsSinceEpoch();
-
-#ifdef LL_WINDOWS
-    boost::filesystem::last_write_time(boost::filesystem::path(ll_convert<std::wstring>(filename)), new_time);
-#else
-    boost::filesystem::last_write_time(boost::filesystem::path(filename), new_time);
-#endif
+    std::filesystem::file_time_type new_time = std::chrono::clock_cast<std::chrono::file_clock>(std::chrono::utc_time(std::chrono::seconds((U64)last_modified.secondsSinceEpoch())));
+    std::filesystem::last_write_time(fsyspath(filename), new_time);
 }
 
 S32 FSData::getAgentFlags(const LLUUID& avatar_id) const

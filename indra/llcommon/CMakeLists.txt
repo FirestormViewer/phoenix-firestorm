@@ -67,6 +67,7 @@ set(llcommon_SOURCE_FILES
     llmetricperformancetester.cpp
     llmortician.cpp
     llmutex.cpp
+    llpointer.cpp
     llptrto.cpp
     llpredicate.cpp
     llprocess.cpp
@@ -99,6 +100,7 @@ set(llcommon_SOURCE_FILES
     lluri.cpp
     lluriparser.cpp
     lluuid.cpp
+    llwatchdog.cpp
     llworkerthread.cpp
     hbxxh.cpp
     u64.cpp
@@ -235,6 +237,7 @@ set(llcommon_HEADER_FILES
     lluri.h
     lluriparser.h
     lluuid.h
+    llwatchdog.h
     llwin32headers.h
     llworkerthread.h
     hbxxh.h
@@ -357,6 +360,7 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(lleventdispatcher "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lleventfilter "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llevents "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(llfile "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llframetimer "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llhttpdate "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llheteromap "" "${test_libs}")

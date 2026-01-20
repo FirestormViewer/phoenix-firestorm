@@ -112,8 +112,8 @@
 		</combo_box>
 		<slider label="Max. Komplexität:" name="IndirectMaxComplexity" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als JellyDoll dargestellt wird."/>
 		<slider label="Max. voll dargestellte Avatare:" name="IndirectMaxNonImpostors"/>
-		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
-		<text name="PostProcessText">
+		<slider label="Qualität Leuchten:" name="GlowResolution"/>
+		<text name="GlowResolutionText">
 			Niedrig
 		</text>
 		<slider label="Max. Lichter in der Nähe:" name="MaxLights"/>
@@ -122,13 +122,16 @@
 		<text name="MeshDetailText">
 			Darstellungsgrad:
 		</text>
-		<slider label="   Objekte:" name="ObjectMeshDetail" tool_tip="Legt fest, wann ein niedrigerer Detailgrad von Objekten verwendet wird, um Renderkosten zu reduzieren. Bitte mit Vorsicht verwenden: Höhere Werte verschlechtern die Performance."/>
-		<slider label="   Flexiprimitiva:" name="FlexibleMeshDetail"/>
-		<slider label="   Bäume:" name="TreeMeshDetail"/>
-		<slider label="   Avatare:" name="AvatarMeshDetail"/>
-		<slider label="   Terrain:" name="TerrainMeshDetail"/>
-		<slider label="   Himmel:" name="SkyMeshDetail"/>
-		<text name="Presets_Label" width="200">
+		<slider label="  Objekte:" name="ObjectMeshDetail" tool_tip="Legt fest, wann ein niedrigerer Detailgrad von Objekten verwendet wird, um Renderkosten zu reduzieren. Bitte mit Vorsicht verwenden: Höhere Werte verschlechtern die Performance."/>
+		<slider label="  Flexiprimitiva:" name="FlexibleMeshDetail"/>
+		<slider label="  Bäume:" name="TreeMeshDetail"/>
+		<slider label="  Avatare:" name="AvatarMeshDetail"/>
+		<slider label="  Terrain:" name="TerrainMeshDetail"/>
+		<slider label="  Post-Processing-Qualität:" name="RenderPostProcess"/>
+        <text name="PostProcessText">
+            Niedrig
+        </text>
+        <text name="Presets_Label" width="200">
 			Voreinstellungen:
 		</text>
 		<button label="Speichern" left="300" name="PrefSaveButton" width="72"/>

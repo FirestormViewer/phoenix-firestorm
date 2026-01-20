@@ -20,7 +20,7 @@
 							<column name="restore_global_files_label">顏色</column>
 						</row>
 						<row name="restore_global_row_dialogs">
-							<column name="restore_global_files_label">忽略對話方塊</column>
+							<column name="restore_global_files_label">忽略彈窗</column>
 						</row>
 						<row name="restore_global_row_grids">
 							<column name="restore_global_files_label">使用者定義的網格</column>
@@ -36,6 +36,9 @@
 						</row>
 						<row name="restore_global_row_controls">
 							<column name="restore_global_files_label">按鍵分配</column>
+						</row>
+						<row name="restore_global_row_omnifilter">
+							<column name="restore_global_files_label">全方位过滤器</column>
 						</row>
 					</scroll_list>
 				</layout_panel>

@@ -352,7 +352,7 @@ bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
     auto volume_params{volp->getParams()};
 
     object->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, true, true);
-    auto *sculpt_params = (LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+    auto *sculpt_params = object->getSculptParams();
 
     if (sculpt_params)
     {

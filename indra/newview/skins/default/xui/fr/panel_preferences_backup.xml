@@ -31,6 +31,15 @@
 						<row name="restore_global_row_quickprefs">
 							<column name="restore_global_files_label">Préférences rapides</column>
 						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_label">Favoris</column>
+						</row>
+						<row name="restore_global_row_controls">
+							<column name="restore_global_files_label">Contrôles</column>
+						</row>
+						<row name="restore_global_row_omnifilter">
+							<column name="restore_global_files_label">Omnifiltre</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">
@@ -96,6 +105,9 @@
 						</row>
 						<row name="restore_folders_row_waters">
 							<column name="restore_global_folders_label">Eaux Windlight</column>
+						</row>
+						<row name="restore_folders_row_presets">
+							<column name="restore_global_folders_label">Préréglages</column>
 						</row>
 					</scroll_list>
 				</layout_panel>

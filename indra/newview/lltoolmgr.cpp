@@ -125,6 +125,7 @@ void LLToolMgr::initTools()
     gBasicToolset->addTool( LLToolCompInspect::getInstance() );
     gFaceEditToolset->addTool( LLToolCamera::getInstance() );
     gPoserToolset->addTool( FSToolCompPose::getInstance() );
+    gPoserToolset->addTool( FSToolCompPoseTranslate::getInstance() );
 
     // On startup, use "select" tool
     setCurrentToolset(gBasicToolset);

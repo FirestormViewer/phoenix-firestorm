@@ -98,7 +98,7 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
 
         if (volobjp && volobjp->isSculpted())
         {
-            const LLSculptParams* sculpt_params = (const LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+            const LLSculptParams* sculpt_params = object->getSculptParams();
             if (LLGridManager::getInstance()->isInSecondLife())
             {
                 if (volobjp->isMesh())

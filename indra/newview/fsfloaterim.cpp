@@ -1589,6 +1589,23 @@ void FSFloaterIM::updateMessages()
             S32 is_history = msg["is_history"].asInteger();
             bool is_region_msg = msg["is_region_msg"].asBoolean();
 
+            // LL removed updates to the participants list on bigger groups, so at least keep track of
+            // users who chatted in the group, so mentions and moderatoin tools can work better. This can
+            // be removed once participants lists work as designed once again.
+            // See also LLSpeakers::updateSpeakers() for own "has_spoken" extension. -Zi
+            if (!is_history && !pIMSession->mSpeakers->findSpeaker(from_id))
+            {
+                const std::string from_id_str = from_id.asString();
+                LLSD new_speaker;
+                new_speaker["session_id"] = mSessionID;
+                new_speaker["agent_updates"][from_id_str]["transition"] = "ENTER";
+
+                // add our own flag so the sorting by last chatters works
+                new_speaker["agent_updates"][from_id_str]["has_spoken"] = true;
+
+                pIMSession->mSpeakers->updateSpeakers(new_speaker);
+            }
+
             LLChat chat;
             chat.mFromID = from_id;
             chat.mSessionID = mSessionID;

@@ -233,7 +233,10 @@ bool LLPanelGroup::postBuild()
 
     // <FS:PP> FIRE-33939: Activate button
     mButtonActivate = getChild<LLButton>("btn_activate");
-    mButtonActivate->setClickedCallback(onBtnActivateClicked, this);
+    mButtonActivate->setVisible(false);
+    mButtonActivate->setEnabled(gAgent.getGroupID() != mID);
+    mButtonActivate->setCommitCallback(boost::bind(&LLPanelGroup::onBtnActivate, this));
+    gAgent.addListener(this, "new group");
     // <FS:PP>
 
     childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
@@ -261,6 +264,15 @@ bool LLPanelGroup::postBuild()
         mButtonJoin->setCommitCallback(boost::bind(&LLPanelGroup::onBtnJoin,this));
 
         mJoinText = panel_general->getChild<LLUICtrl>("join_cost_text");
+
+        // <FS:Ansariel> FIRE-33939: Move this out of general tab
+        //mButtonActivate = panel_general->getChild<LLButton>("btn_activate");
+        //mButtonActivate->setVisible(false);
+        //mButtonActivate->setEnabled(gAgent.getGroupID() != mID);
+        //mButtonActivate->setCommitCallback(boost::bind(&LLPanelGroup::onBtnActivate, this));
+
+        //gAgent.addListener(this, "new group");
+        // </FS:Ansariel>
     }
 
     LLVoiceClient::addObserver(this);
@@ -344,26 +356,24 @@ void LLPanelGroup::onBtnGroupChatClicked(void* user_data)
     self->chatGroup();
 }
 
-// <FS:PP> FIRE-33939: Activate button
-void LLPanelGroup::onBtnActivateClicked(void* user_data)
-{
-    LLPanelGroup* self = static_cast<LLPanelGroup*>(user_data);
-    self->activateGroup();
-    self->refreshData();
-}
-// </FS:PP>
-
 void LLPanelGroup::onBtnJoin()
 {
     if (LLGroupActions::isInGroup(mID))
     {
         LLGroupActions::leave(mID);
+        mButtonActivate->setVisible(false);
     }
     else
     {
         LL_DEBUGS() << "joining group: " << mID << LL_ENDL;
         LLGroupActions::join(mID);
     }
+}
+
+void LLPanelGroup::onBtnActivate()
+{
+    LLGroupActions::activate(mID);
+    mButtonActivate->setEnabled(false);
 }
 
 void LLPanelGroup::changed(LLGroupChange gc)
@@ -419,6 +429,8 @@ void LLPanelGroup::update(LLGroupChange gc)
         bool join_btn_visible = is_member || gdatap->mOpenEnrollment;
 
         mButtonJoin->setVisible(join_btn_visible);
+        mButtonActivate->setEnabled(gAgent.getGroupID() != mID);
+        mButtonActivate->setVisible(is_member);
         mJoinText->setVisible(join_btn_visible);
 
         if (is_member)
@@ -479,14 +491,6 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
     if(mButtonChat)
             mButtonChat->setVisible(!is_null_group_id);
 
-    // <FS:PP> FIRE-33939: Activate button
-    if (mButtonActivate)
-    {
-        mButtonActivate->setVisible(!is_null_group_id);
-        mButtonActivate->setEnabled(group_id != gAgent.getGroupID());
-    }
-    // </FS:PP>
-
     getChild<LLUICtrl>("prepend_founded_by")->setVisible(!is_null_group_id);
 
     // <FS:Ansariel> TabContainer switch
@@ -522,6 +526,8 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 
     if(mButtonJoin)
         mButtonJoin->setVisible(false);
+    if (mButtonActivate)
+        mButtonActivate->setVisible(false);
 
 
     if(is_null_group_id)//creating new group
@@ -564,10 +570,6 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
             mButtonCall->setVisible(false);
         if(mButtonChat)
             mButtonChat->setVisible(false);
-        // <FS:PP> FIRE-33939: Activate button
-        if(mButtonActivate)
-            mButtonActivate->setVisible(false);
-        // </FS:PP>
     }
     else
     {
@@ -627,10 +629,6 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
             mButtonCall->setVisible(is_member);
         if(mButtonChat)
             mButtonChat->setVisible(is_member);
-        // <FS:PP> FIRE-33939: Activate button
-        if(mButtonActivate)
-            mButtonActivate->setVisible(is_member);
-        // </FS:PP>
     }
 
     // <FS:Ansariel> TabContainer switch
@@ -715,12 +713,6 @@ void LLPanelGroup::draw()
         mRefreshTimer.stop();
         if(mButtonRefresh) mButtonRefresh->setEnabled(true);
         if(mGroupsAccordion) mGroupsAccordion->setEnabled(true);
-        // <FS:PP> FIRE-33939: Activate button
-        if (gAgent.getGroupID() != getID() && mButtonActivate)
-        {
-            mButtonActivate->setEnabled(true);
-        }
-        // </FS:PP>
     }
 
     if(mButtonApply && mButtonApply->getVisible())
@@ -763,17 +755,6 @@ void LLPanelGroup::chatGroup()
 {
     LLGroupActions::startIM(getID());
 }
-
-// <FS:PP> FIRE-33939: Activate button
-void LLPanelGroup::activateGroup()
-{
-    LLUUID group_id = getID();
-    if (gAgent.getGroupID() != group_id)
-    {
-        LLGroupActions::activate(group_id);
-    }
-}
-// </FS:PP>
 
 void LLPanelGroup::showNotice(const std::string& subject,
                   const std::string& message,
@@ -832,6 +813,23 @@ void LLPanelGroup::showNotice(const std::string& subject,
 
 }
 
+bool LLPanelGroup::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+{
+    if (event->desc() == "new group")
+    {
+        mButtonActivate->setEnabled(gAgent.getGroupID() != mID);
+        return true;
+    }
+
+    if (event->desc() == "value_changed")
+    {
+        mButtonActivate->setEnabled(gAgent.getGroupID() != mID);
+        return true;
+    }
+
+    return false;
+}
+
 // <FS:Ansariel> CTRL-F focusses local search editor
 bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 {
@@ -860,4 +858,3 @@ bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
     return LLPanel::handleKeyHere(key, mask);
 }
 // </FS:Ansariel>
-

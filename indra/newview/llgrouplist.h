@@ -37,6 +37,8 @@
 
 #include "llgroupmgr.h"
 
+#include <boost/signals2.hpp> // <FS:PP> Group favorites / pinning
+
 /**
  * Auto-updating list of agent groups.
  *
@@ -72,14 +74,22 @@ public:
 
     LLToggleableMenu* getContextMenu() const { return mContextMenuHandle.get(); }
 
+    void refreshFavorites(); // <FS:PP> Group favorites / pinning
+
 private:
     void setDirty(bool val = true)      { mDirty = val; }
     void refresh();
-    void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true);
+// <FS:PP> Group favorites / pinning
+    // void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true);
+    void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true, bool is_favorite = false);
+    void addFavoritesSeparator();
+    void onFavoritesChanged();
+// </FS:PP>
     bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
 
     bool onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);
+    bool onContextMenuItemVisible(const LLSD& userdata); // <FS:PP> Group favorites / pinning
 
     LLHandle<LLToggleableMenu>  mContextMenuHandle;
 
@@ -91,11 +101,28 @@ private:
     bool mShowNone;
     typedef std::map< std::string,LLUUID>   group_map_t;
     group_map_t             mGroups;
+
+    boost::signals2::connection mFavoritesChangedConnection; // <FS:PP> Group favorites / pinning
 };
 
 class LLButton;
 class LLGroupIconCtrl;
 class LLTextBox;
+
+// <FS:PP> Group favorites / pinning
+class LLGroupListSeparator : public LLPanel
+{
+public:
+    LLGroupListSeparator();
+    /*virtual*/ bool postBuild();
+    // Ignore all mouse interactions on the separator
+    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleRightMouseUp(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleDoubleClick(S32 x, S32 y, MASK mask) { return true; }
+};
+// </FS:PP>
 
 class LLGroupListItem : public LLPanel
     , public LLGroupMgrObserver
@@ -110,11 +137,13 @@ public:
 
     const LLUUID& getGroupID() const            { return mGroupID; }
     const std::string& getGroupName() const     { return mGroupName; }
+    bool isFavorite() const                     { return mIsFavorite; } // <FS:PP> Group favorites / pinning
 
     void setName(const std::string& name, const std::string& highlight = LLStringUtil::null);
     void setGroupID(const LLUUID& group_id);
     void setGroupIconID(const LLUUID& group_icon_id);
     void setGroupIconVisible(bool visible);
+    void setFavorite(bool favorite)             { mIsFavorite = favorite; } // <FS:PP> Group favorites / pinning
 
     virtual void changed(LLGroupChange gc);
 
@@ -137,6 +166,7 @@ private:
 
     std::string mGroupName;
     bool        mForAgent;
+    bool        mIsFavorite{ false }; // <FS:PP> Group favorites / pinning
     LLStyle::Params mGroupNameStyle;
 
     S32 mIconWidth;

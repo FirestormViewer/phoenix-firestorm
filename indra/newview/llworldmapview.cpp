@@ -380,10 +380,6 @@ void LLWorldMapView::draw()
     LL_PROFILE_ZONE_SCOPED;
     static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 
-    // Ansariel: Replaced slow calls to gSavedSettings with faster LLCachedControl
-    static LLCachedControl<bool> drawAdvancedRegionInfo(gSavedSettings, "FSAdvancedWorldmapRegionInfo");
-    static LLCachedControl<bool> sDrawRegionGridCoordinates(gSavedSettings, "FSShowRegionGridCoordinates", false);
-
     LLTextureView::clearDebugImages();
 
     F64 current_time = LLTimer::getElapsedSeconds();
@@ -562,25 +558,47 @@ void LLWorldMapView::draw()
         // Draw the region name in the lower left corner
         if (mMapScale >= DRAW_TEXT_THRESHOLD)
         {
-            std::string mesg;
+            static LLCachedControl<bool> print_coords(gSavedSettings, "MapShowGridCoords");
+            static LLFontGL* font = LLFontGL::getFontSansSerifSmallBold();
+
+            auto print = [&](std::string text, F32 x, F32 y, bool use_ellipses)
+                {
+                    font->renderUTF8(text, 0,
+                        (F32)llfloor(left + x), (F32)llfloor(bottom + y),
+                        LLColor4::white,
+                        LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW,
+                        S32_MAX, //max_chars
+                        (S32)mMapScale, //max_pixels
+                        NULL,
+                        use_ellipses);
+                };
+
+            // <FS> Better region infos
+            //std::string grid_name = info->getName();
+            //if (info->isDown())
+            //{
+            //    grid_name += " (" + sStringsMap["offline"] + ")";
+            //}
+
+            //if (print_coords)
+            //{
+            //    print(grid_name, 3, 14, true);
+            //    // Obtain and print the grid map coordinates
+            //    LLVector3d region_pos = info->getGlobalOrigin();
+            //    std::string grid_coords = llformat("[%.0f, %.0f]", region_pos[VX] / 256, region_pos[VY] / 256);
+            //    print(grid_coords, 3, 2, false);
+            //}
+            //else
+            //{
+            //    print(grid_name, 3, 2, true);
+            //}
+
+            static LLCachedControl<bool> drawAdvancedRegionInfo(gSavedSettings, "FSAdvancedWorldmapRegionInfo");
+
+            std::string mesg = info->getName();
+            if (!mesg.empty() && RlvActions::canShowLocation())
             {
-                mesg = info->getName();
-            }
-//          if (!mesg.empty())
-// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
-            if ( (!mesg.empty()) && (RlvActions::canShowLocation()) )
-// [/RLVa:KB]
-            {
-                LLFontGL::getFontSansSerifSmallBold()->renderUTF8(
-                    mesg, 0,
-                    //(F32)llfloor(left + 3), (F32)llfloor(bottom + 2),
-                    (F32)llfloor(left + 3.f), (F32)llfloor(bottom + (drawAdvancedRegionInfo ? 16.f : 2.f)),
-                    LLColor4::white,
-                    LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW,
-                    S32_MAX, //max_chars
-                    (S32)mMapScale, //max_pixels
-                    NULL,
-                    /*use_ellipses*/true);
+                print(mesg, 3.f, drawAdvancedRegionInfo ? 16.f : 2.f, true);
 
                 if (drawAdvancedRegionInfo)
                 {
@@ -602,29 +620,18 @@ void LLWorldMapView::draw()
                     }
 
                     advanced_info += llformat("%s)", info->getAccessString().c_str());
-
-                    LLFontGL::getFontSansSerifSmallBold()->renderUTF8(
-                        advanced_info, 0,
-                        (F32)llfloor(left + 3.f), (F32)llfloor(bottom + 2.f),
-                        LLColor4::white,
-                        LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW,
-                        S32_MAX, //max_chars
-                        (S32)mMapScale, //max_pixels
-                        NULL,
-                        true, //use ellipses
-                        false);
+                    print(advanced_info, 3.f, 2.f, true);
                 }
             }
-// <FS:CR> Show the grid coordinates (in units of regions)
-            if (sDrawRegionGridCoordinates)
+
+            if (print_coords)
             {
                 LLVector3d origin = info->getGlobalOrigin();
                 std::ostringstream coords;
                 coords << "(" << origin.mdV[VX] / REGION_WIDTH_METERS << "," << origin.mdV[VY] / REGION_WIDTH_METERS << ")";
-                LLFontGL::getFontSansSerifSmallBold()->renderUTF8(coords.str(), 0, llfloor(left + 3), llfloor(bottom + (drawAdvancedRegionInfo ? 30.f : 16.f)), LLColor4::white,
-                                 LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
+                print(coords.str(), 3.f, drawAdvancedRegionInfo ? 30.f : 16.f, false);
             }
-// </FS:CR>
+            // </FS>
         }
     }
 

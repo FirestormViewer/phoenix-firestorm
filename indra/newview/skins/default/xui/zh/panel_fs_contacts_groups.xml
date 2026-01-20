@@ -5,6 +5,7 @@
 	<button label="個人檔案" name="info_btn" />
 	<button label="群組頭銜" name="titles_btn" />
 	<button label="啟用" name="activate_btn" />
+	<button label="釘選" name="favorite_btn" tool_tip="將群組加入收藏或從收藏中移除" />
 	<button label="離開" name="leave_btn" />
 	<button label="建立..." name="create_btn" />
 	<button label="搜尋..." name="search_btn" />

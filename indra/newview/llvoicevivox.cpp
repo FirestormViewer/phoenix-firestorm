@@ -1019,8 +1019,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         // </FS:ND>
 #endif
         // See if the vivox executable exists
-        llstat s;
-        if (!LLFile::stat(exe_path, &s))
+        if (LLFile::isfile(exe_path))
         {
             // vivox executable exists.  Build the command line and launch the daemon.
             LLProcess::Params params;

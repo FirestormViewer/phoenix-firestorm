@@ -28,6 +28,14 @@
 				（要再起動）
 			</text>
 			<check_box label="テレポート後に一時的に描画解除されたオブジェクトを再描画する" name="FSTempDerenderUntilTeleport" tool_tip="有効にすると、一時的に描画解除されたオブジェクトはテレポートするまで描画解除されたままになります。無効にすると、セッションの終了まで描画解除されたままになるか、アセットのブラックリストウィンドウから手動で再描画されます。"/>
+			<text name="mouse_warp_lbl">
+				マウスワープ：
+			</text>
+			<combo_box name="mouse_warp_combo" tool_tip="Altキーを押しながらズームしたり、マウスルックを実行したりするときに、マウスを画面の中央に移動する動作を制御します。">
+				<combo_box.item label="自動" name="0"/>
+				<combo_box.item label="オン" name="1"/>
+				<combo_box.item label="オフ" name="2"/>
+			</combo_box>
 		</panel>
 		<!--Mouselook-->
 		<panel label="マウスルック" name="tab-mouselook">

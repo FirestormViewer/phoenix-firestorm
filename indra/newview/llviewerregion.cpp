@@ -1038,14 +1038,14 @@ std::string LLViewerRegion::regionFlagsToString(U64 flags)
 std::string LLViewerRegion::accessToString(U8 sim_access)
 {
     // <FS:ND> Prevent querying LLTrans each frame
-    static std::vector< std::string > vcAccess;
-    if( vcAccess.empty() )
+    static std::vector<std::string> vcAccess;
+    if (vcAccess.empty())
     {
-        vcAccess.push_back( LLTrans::getString("SIM_ACCESS_PG") );
-        vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MATURE") );
-        vcAccess.push_back( LLTrans::getString("SIM_ACCESS_ADULT") );
-        vcAccess.push_back( LLTrans::getString("SIM_ACCESS_DOWN") );
-        vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MIN") );
+        vcAccess.push_back(LLTrans::getString("SIM_ACCESS_PG"));
+        vcAccess.push_back(LLTrans::getString("SIM_ACCESS_MATURE"));
+        vcAccess.push_back(LLTrans::getString("SIM_ACCESS_ADULT"));
+        vcAccess.push_back(LLTrans::getString("SIM_ACCESS_DOWN"));
+        vcAccess.push_back(LLTrans::getString("SIM_ACCESS_MIN"));
     }
     // </FS:ND>
 

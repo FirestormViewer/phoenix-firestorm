@@ -25,7 +25,7 @@
 		<key>blocked_recvim</key>
 		<map>
 			<key>value</key>
-			<string>*** IM bloqué par votre viewer</string>
+			<string>*** IM bloqué par votre client</string>
 			<key>description</key>
 			<string>Affiché à la place du message original lorsqu'un IM entrant est bloqué.</string>
 			<key>label</key>
@@ -36,7 +36,7 @@
 		<key>blocked_sendim</key>
 		<map>
 			<key>value</key>
-			<string>*** IM bloqué par le viewer de l'expéditeur</string>
+			<string>*** IM bloqué par le client de l'expéditeur</string>
 			<key>description</key>
 			<string>Affiché (et envoyé à l'interlocuteur distant) lorsqu'un im sortant est bloqué.</string>
 			<key>label</key>

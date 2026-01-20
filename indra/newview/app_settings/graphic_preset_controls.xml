@@ -50,6 +50,7 @@
 		<string>RenderHeroProbeDistance</string>
 		<string>RenderHeroProbeUpdateRate</string>
 		<string>RenderHeroProbeConservativeUpdateMultiplier</string>
+		<string>RenderHighPrecisionPostProcess</string>
 		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
 		<string>RenderMaxTextureResolution</string>
@@ -107,6 +108,5 @@
 		<string>TextureDiscardLevel</string>
 		<string>TextureDiscardBackgroundedTime</string>
 		<string>TextureDiscardMinimizedTime</string>
-		<string>WLSkyDetail</string>
 	</array>
 </llsd>

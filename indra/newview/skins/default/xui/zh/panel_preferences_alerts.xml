@@ -24,7 +24,7 @@
 		</panel>
 		<!-- Objects & Scripts -->
 		<panel label="物件&amp;指令碼" name="tab-objects">
-			<check_box label="當在後臺打開指令碼對話方塊時，閃爍應用圖示" name="FSFlashOnScriptDialog" />
+			<check_box label="當在後臺打開指令碼彈窗時，閃爍應用圖示" name="FSFlashOnScriptDialog" />
 			<check_box label="在本地聊天中報告碰撞通知" name="FSCollisionMessagesInChat" />
 			<check_box label="在以下情況下報告指令碼錯誤：" name="show_script_errors" />
 			<radio_group name="show_script_errors_location">

@@ -467,7 +467,7 @@ bool LLAssetStorage::findInCacheAndInvokeCallback(const LLUUID& uuid, LLAssetTyp
         else
         {
             LL_WARNS("AssetStorage") << "Asset vfile " << uuid << ":" << type
-                                     << " found in static cache with bad size " << file.getSize() << ", ignoring" << LL_ENDL;
+                                     << " found in static cache with bad size " << size << ", ignoring" << LL_ENDL;
         }
     }
     return false;
@@ -1316,6 +1316,9 @@ const char* LLAssetStorage::getErrorString(S32 status)
         case LL_ERR_ASSET_REQUEST_NOT_IN_DATABASE:
             return "Asset request: asset not found in database";
 
+        case LL_ERR_NO_CAP:
+            return "Asset request: region or asset capability not available";
+
         case LL_ERR_EOF:
             return "End of file";
 
@@ -1402,7 +1405,7 @@ void LLAssetStorage::legacyGetDataCallback(const LLUUID &uuid,
         uuid.toString(uuid_str);
         filename = llformat("%s.%s",gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str).c_str(),LLAssetType::lookup(type));
 
-        LLFILE* fp = LLFile::fopen(filename, "wb");     /* Flawfinder: ignore */
+        LLFILE* fp = LLFile::fopen(filename, LLFILE_MODE("wb")); /* Flawfinder: ignore */
         if (fp)
         {
             const S32 buf_size = 65536;

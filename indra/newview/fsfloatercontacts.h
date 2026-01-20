@@ -141,6 +141,7 @@ private:
     void                    onGroupChatButtonClicked();
     void                    onGroupInfoButtonClicked();
     void                    onGroupActivateButtonClicked();
+    void                    onGroupFavoriteButtonClicked();
     void                    onGroupLeaveButtonClicked();
     void                    onGroupCreateButtonClicked();
     void                    onGroupSearchButtonClicked();
@@ -167,6 +168,7 @@ private:
     LLButton*               mGroupsChatBtn{ nullptr };
     LLButton*               mGroupsInfoBtn{ nullptr };
     LLButton*               mGroupsActivateBtn{ nullptr };
+    LLButton*               mGroupsFavoriteBtn{ nullptr };
     LLButton*               mGroupsLeaveBtn{ nullptr };
     LLButton*               mGroupsCreateBtn{ nullptr };
     LLButton*               mGroupsSearchBtn{ nullptr };

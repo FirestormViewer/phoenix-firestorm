@@ -18,6 +18,9 @@
 	<floater.string name="acquiredDate">
 		[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]
 	</floater.string>
+	<floater.string name="acquiredDateAMPM">
+		[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）[ampm,datetime,local][hour12,datetime,local]：[min,datetime,local]：[second,datetime,local]
+	</floater.string>
 	<text name="LabelItemNameTitle">
 		名前：
 	</text>

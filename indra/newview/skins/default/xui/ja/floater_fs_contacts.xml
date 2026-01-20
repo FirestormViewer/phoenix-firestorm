@@ -3,6 +3,8 @@
 	<string name="no_friends" value="フレンドはいません" />
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。" />
 	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。" />
+	<string name="favorite_label" value="ピン" />
+	<string name="unfavorite_label" value="ピン解除" />
 	<tab_container name="friends_and_groups">
 		<panel label="フレンド" name="friends_panel" />
 		<panel label="グループ" name="groups_panel"/>

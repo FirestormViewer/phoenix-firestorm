@@ -417,7 +417,7 @@ void update_all_marketplace_count(const LLUUID& cat_id)
 void update_all_marketplace_count()
 {
     // Get the marketplace root and launch the recursive exploration
-    const LLUUID marketplace_listings_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    const LLUUID marketplace_listings_uuid = gInventory.getMarketplaceListingsUUID();
     if (!marketplace_listings_uuid.isNull())
     {
         update_all_marketplace_count(marketplace_listings_uuid);
@@ -1204,11 +1204,7 @@ void open_marketplace_listings()
 
 S32 depth_nesting_in_marketplace(LLUUID cur_uuid)
 {
-    // Get the marketplace listings root, exit with -1 (i.e. not under the marketplace listings root) if none
-    // Todo: findCategoryUUIDForType is somewhat expensive with large
-    // flat root folders yet we use depth_nesting_in_marketplace at
-    // every turn, find a way to correctly cache this id.
-    const LLUUID marketplace_listings_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    const LLUUID marketplace_listings_uuid = gInventory.getMarketplaceListingsUUID();
     if (marketplace_listings_uuid.isNull())
     {
         return -1;
@@ -3626,7 +3622,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 
     if ("delete" == action)
     {
-        const LLUUID &marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        const LLUUID &marketplacelistings_id = gInventory.getMarketplaceListingsUUID();
         bool marketplacelistings_item = false;
         bool has_worn = false;
         bool needs_replacement = false;
@@ -3940,7 +3936,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     if (action == "wear" || action == "wear_add")
     {
         const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-        const LLUUID mp_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        const LLUUID mp_id = gInventory.getMarketplaceListingsUUID();
         std::copy_if(selected_uuid_set.begin(),
             selected_uuid_set.end(),
             std::back_inserter(ids),
@@ -4362,7 +4358,7 @@ void LLInventoryAction::buildMarketplaceFolders(LLFolderView* root)
     // target listing *and* the original listing. So we need to keep track of both.
     // Note: do not however put the marketplace listings root itself in this list or the whole marketplace data will be rebuilt.
     sMarketplaceFolders.clear();
-    const LLUUID &marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    const LLUUID& marketplacelistings_id = gInventory.getMarketplaceListingsUUID();
     if (marketplacelistings_id.isNull())
     {
         return;

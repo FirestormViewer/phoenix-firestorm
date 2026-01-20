@@ -5,6 +5,7 @@
 	<button label="Profil" name="info_btn"/>
 	<button label="Tytuły grup" name="titles_btn"/>
 	<button label="Aktywuj" name="activate_btn"/>
+	<button label="Przypnij" name="favorite_btn" tool_tip="Dodaj lub usuń grupę z ulubionych" />
 	<button label="Opuść" name="leave_btn"/>
 	<button label="Utwórz..." name="create_btn"/>
 	<button label="Szukaj..." name="search_btn"/>

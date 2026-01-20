@@ -682,7 +682,7 @@ void LLFloaterInspect::getObjectTextureMemory(LLViewerObject* object, U32& objec
     // sculpt map
     if (object->isSculpted() && !object->isMesh())
     {
-        LLSculptParams *sculpt_params = (LLSculptParams *)(object->getParameterEntry(LLNetworkData::PARAMS_SCULPT));
+        LLSculptParams *sculpt_params = object->getSculptParams();
         uuid = sculpt_params->getSculptTexture();
         LLViewerTexture* img = gTextureList.getImage(uuid);
         if (img)

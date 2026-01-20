@@ -276,10 +276,8 @@ void FSFloaterPoser::onFocusReceived()
 
 void FSFloaterPoser::onFocusLost()
 {
-    if( LLEditMenuHandler::gEditMenuHandler == this )
-    {
+    if (LLEditMenuHandler::gEditMenuHandler == this)
         LLEditMenuHandler::gEditMenuHandler = nullptr;
-    }
 }
 
 void FSFloaterPoser::draw()
@@ -361,22 +359,33 @@ void FSFloaterPoser::enableVisualManipulators()
     }
 
     if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)
-    {
         mLastToolset = LLToolMgr::getInstance()->getCurrentToolset();
-    }
 
     LLToolMgr::getInstance()->setCurrentToolset(gPoserToolset);
     LLToolMgr::getInstance()->getCurrentToolset()->selectTool(FSToolCompPose::getInstance());
-    FSToolCompPose::getInstance()->setAvatar(gAgentAvatarp);
+
+    LLVOAvatar* avatar = getUiSelectedAvatar();
+    setVisualManipulators(avatar);
 }
 
 void FSFloaterPoser::disableVisualManipulators()
 {
     if (mLastToolset)
-    {
         LLToolMgr::getInstance()->setCurrentToolset(mLastToolset);
-    }
-    FSToolCompPose::getInstance()->setAvatar(nullptr);
+
+    setVisualManipulators(nullptr);
+}
+
+void FSFloaterPoser::setVisualManipulators(LLVOAvatar* avatar)
+{
+    FSToolCompPose::getInstance()->setAvatar(avatar);
+    FSToolCompPoseTranslate::getInstance()->setAvatar(avatar);
+
+    if (!avatar)
+        return;
+
+    auto selectedJoints = getUiSelectedPoserJoints();
+    updateManipWithFirstSelectedJoint(selectedJoints);
 }
 
 void FSFloaterPoser::onClose(bool app_quitting)
@@ -1657,6 +1666,7 @@ void FSFloaterPoser::onToggleRotationFrameButton(const LLUICtrl* toggleButton)
     }
 
     FSToolCompPose::getInstance()->setReferenceFrame(getReferenceFrame());
+    FSToolCompPoseTranslate::getInstance()->setReferenceFrame(getReferenceFrame());
     refreshRotationSlidersAndSpinners();
 }
 
@@ -1949,9 +1959,15 @@ void FSFloaterPoser::updateManipWithFirstSelectedJoint(const std::vector<FSPoser
     bool iCanPoseThem           = havePermissionToAnimateOtherAvatar(avatarp);
 
     if ((joints.size() >= 1) && (haveImplicitPermission || iCanPoseThem))
+    {
         FSToolCompPose::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
+        FSToolCompPoseTranslate::getInstance()->setJoint(avatarp->getJoint(joints[0]->jointName()));
+    }
     else
+    {
         FSToolCompPose::getInstance()->setJoint(nullptr);
+        FSToolCompPoseTranslate::getInstance()->setJoint(nullptr);
+    }
 }
 
 E_RotationStyle FSFloaterPoser::getUiSelectedBoneRotationStyle(const std::string& jointName) const
@@ -2476,9 +2492,15 @@ void FSFloaterPoser::onAvatarSelect()
     bool          haveExplicitPermission = havePermissionToAnimateOtherAvatar(avatar); // as permissions allow
 
     if (haveImplicitPermission || haveExplicitPermission)
+    {
         FSToolCompPose::getInstance()->setAvatar(avatar);
+        FSToolCompPoseTranslate::getInstance()->setAvatar(avatar);
+    }
     else
+    {
         FSToolCompPose::getInstance()->setAvatar(nullptr);
+        FSToolCompPoseTranslate::getInstance()->setAvatar(nullptr);
+    }
 
     bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
 

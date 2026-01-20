@@ -252,6 +252,7 @@ public:
     // visual manipulators control
     void enableVisualManipulators();
     void disableVisualManipulators();
+    void setVisualManipulators(LLVOAvatar* avatar);
 
     // Visual cue for which bone is under the mouse-cursor
     void drawOnHoverJointHint();

@@ -33,9 +33,6 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <boost/filesystem.hpp>
-#include <boost/lambda/core.hpp>
-#include <boost/regex.hpp>
 
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -1435,7 +1432,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
                                 // Check the whitelist, if there's media (otherwise just show it)
                                 if (te->getMediaData() == NULL || te->getMediaData()->checkCandidateUrl(url))
                                 {
-                                    if ( obj != mDragHoveredObject.get())
+                                    if (obj != mDragHoveredObject)
                                     {
                                         // Highlight the dragged object
                                         LLSelectMgr::getInstance()->unhighlightObjectOnly(mDragHoveredObject);
@@ -3803,13 +3800,11 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
     }
 }
 
-static LLTrace::BlockTimerStatHandle ftm("Update UI");
-
 // Update UI based on stored mouse position from mouse-move
 // event processing.
 void LLViewerWindow::updateUI()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI; //LL_RECORD_BLOCK_TIME(ftm);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
     static std::string last_handle_msg;
 
@@ -3829,12 +3824,15 @@ void LLViewerWindow::updateUI()
     //}
     // </FS:Ansariel>
 
-    LLConsole::updateClass();
+    {
+        LL_PROFILE_ZONE_NAMED("UI updateClass");
+        LLConsole::updateClass();
 
-    // execute postponed arrange calls
-    LLAccordionCtrl::updateClass();
-    // animate layout stacks so we have up to date rect for world view
-    LLLayoutStack::updateClass();
+        // execute postponed arrange calls
+        LLAccordionCtrl::updateClass();
+        // animate layout stacks so we have up to date rect for world view
+        LLLayoutStack::updateClass();
+    }
 
     // use full window for world view when not rendering UI
     bool world_view_uses_full_window = gAgentCamera.cameraMouselook() || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI);
@@ -4262,6 +4260,7 @@ void LLViewerWindow::updateUI()
 
 void LLViewerWindow::updateLayout()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
     if (gFloaterTools != NULL
         && tool != NULL
@@ -5103,9 +5102,12 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
     }
     // <FS:Beq> render the poser manipulator guides
     // if we have something selected those toosl should override
-    if ( (!for_hud) && (selection->isEmpty()) && (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance()) )
+    if (!for_hud && selection->isEmpty())
     {
-        FSToolCompPose::getInstance()->render();
+        if (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPose::getInstance())
+            FSToolCompPose::getInstance()->render();
+        if (LLToolMgr::getInstance()->getCurrentTool() == FSToolCompPoseTranslate::getInstance())
+            FSToolCompPoseTranslate::getInstance()->render();
     }
     // </FS:Beq>
 
@@ -5898,14 +5900,10 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         return;
     }
 
-// Check if there is enough free space to save snapshot
-#ifdef LL_WINDOWS
-    boost::filesystem::path b_path(ll_convert<std::wstring>(lastSnapshotDir));
-#else
-    boost::filesystem::path b_path(lastSnapshotDir);
-#endif
-    boost::system::error_code ec;
-    if (!boost::filesystem::is_directory(b_path, ec) || ec.failed())
+    // Check if there is enough free space to save snapshot
+    std::filesystem::path b_path = fsyspath(lastSnapshotDir);
+    std::error_code ec;
+    if (!std::filesystem::is_directory(b_path, ec) || ec)
     {
         LLSD args;
         args["PATH"] = lastSnapshotDir;
@@ -5914,8 +5912,8 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         failure_cb();
         return;
     }
-    boost::filesystem::space_info b_space = boost::filesystem::space(b_path, ec);
-    if (ec.failed())
+    std::filesystem::space_info b_space = std::filesystem::space(b_path, ec);
+    if (ec)
     {
         LLSD args;
         args["PATH"] = lastSnapshotDir;

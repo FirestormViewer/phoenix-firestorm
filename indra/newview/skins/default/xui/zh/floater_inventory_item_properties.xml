@@ -5,7 +5,8 @@
 	<floater.string name="public">（公開）</floater.string>
 	<floater.string name="you_can">你可以：</floater.string>
 	<floater.string name="owner_can">所有者可以：</floater.string>
-	<floater.string name="acquiredDate">[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]</floater.string>
+	<floater.string name="acquiredDate">[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<floater.string name="acquiredDateAMPM">[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [ampm,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
 	<text name="LabelItemNameTitle">名稱：</text>
 	<text name="LabelItemDescTitle">描述：</text>
 	<text name="LabelCreatorTitle">創造者：</text>

@@ -9,6 +9,9 @@
     <string name="name_default_system_device">
         Domyślne systemowe
     </string>
+    <string name="device_not_loaded">
+        Urządzenie niezaładowane
+    </string>
     <text name="Input">
         Wejście
     </text>

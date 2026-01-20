@@ -27,20 +27,17 @@
 
 #include "linden_common.h"
 
-#include "llapr.h" // thread-related functions
+#include "fsyspath.h"
 #include "llcrashlock.h"
 #include "lldir.h"
 #include "llsd.h"
 #include "llsdserialize.h"
 #include "llframetimer.h"
-#include <boost/filesystem.hpp>
 #include <string>
-#include <iostream>
 #include <stdio.h>
 
 
 #if LL_WINDOWS   //For windows platform.
-#include <llwin32headers.h>
 #include <TlHelp32.h>
 
 bool LLCrashLock::isProcessAlive(U32 pid, const std::string& pname)
@@ -188,22 +185,12 @@ LLSD LLCrashLock::getProcessList()
 //static
 bool LLCrashLock::fileExists(std::string filename)
 {
-#ifdef LL_WINDOWS // or BOOST_WINDOWS_API
-    boost::filesystem::path file_path(ll_convert<std::wstring>(filename));
-#else
-    boost::filesystem::path file_path(filename);
-#endif
-    return boost::filesystem::exists(file_path);
+    return std::filesystem::exists(fsyspath(filename));
 }
 
 void LLCrashLock::cleanupProcess(std::string proc_dir)
 {
-#ifdef LL_WINDOWS // or BOOST_WINDOWS_API
-    boost::filesystem::path dir_path(ll_convert<std::wstring>(proc_dir));
-#else
-    boost::filesystem::path dir_path(proc_dir);
-#endif
-    boost::filesystem::remove_all(dir_path);
+    std::filesystem::remove_all(fsyspath(proc_dir));
 }
 
 bool LLCrashLock::putProcessList(const LLSD& proc_sd)
