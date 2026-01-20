@@ -11,6 +11,11 @@
 		<combo_box.item label="1024x768" name="1024x768"/>
 		<combo_box.item label="1280x1024" name="1280x1024"/>
 		<combo_box.item label="1600x1200" name="1600x1200"/>
+		<combo_box.item label="1920x1080" name="1920x1080"/>
+		<combo_box.item label="2560x1440" name="2560x1440"/>
+		<combo_box.item label="3840x2160" name="3840x2160"/>
+		<combo_box.item label="5120x2880" name="5120x2880"/>
+		<combo_box.item label="7680x4320" name="7680x4320"/>
 		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
 	<spinner label="Breite x Höhe" name="local_snapshot_width"/>
