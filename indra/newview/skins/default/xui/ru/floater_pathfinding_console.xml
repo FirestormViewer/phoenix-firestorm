@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Просмотр/тестирование поиска пути">
+    <floater.string name="no_havok">
+        Просмотр/тестирование поиска пути
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Не удалось найти реализацию библиотеки поиска пути
 	</floater.string>

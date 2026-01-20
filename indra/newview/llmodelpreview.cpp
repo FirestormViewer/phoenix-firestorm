@@ -3387,9 +3387,6 @@ void LLModelPreview::updateStatusMessages()
     //        physStatusIcon->setImage(img);
     //    }
     //}
-#if !LL_HAVOK
-    has_physics_error |= PhysicsError::NOHAVOK;
-#endif
 
     auto physStatusIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
 
@@ -3424,12 +3421,6 @@ void LLModelPreview::updateStatusMessages()
             physStatusIcon->setImage(img);
         }
 // </FS:Beq>
-        else if (has_physics_error & PhysicsError::NOHAVOK)
-        {
-            mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_no_havok"));
-            LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Warning");
-            physStatusIcon->setImage(img);
-        }
         else
         {
             // This should not happen
