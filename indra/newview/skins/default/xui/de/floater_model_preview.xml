@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Modell hochladen">
-	<string name="no_havok">
-		Mesh-Upload mit Physics
-	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Fehler: Fehler beim Modell-Parsen – Details siehe Protokoll.
@@ -72,9 +69,6 @@
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		Das Physik-Netz enthält degenerierte Dreiecke. Probieren Sie Analysieren/Vereinfachen.
-	</string>
-	<string name="phys_status_no_havok">
-		Diese Version enthält keine Havok-Unterstützung und wird nicht für das Hochladen von Physik in Second Life empfohlen. Unvorhersehbare Ergebnisse sind möglich!
 	</string>
 	<string name="phys_status_too_thin">
 		Eine oder mehrere Dimensionen sind kleiner als 0,5m - nur Hüllen-basierte (analysierte) physische Formen werden korrekt funktionieren.

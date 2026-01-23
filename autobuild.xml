@@ -1280,9 +1280,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d9b763952986b176de253e804ffe16ee</string>
+              <string>68b1eae7b0f0b1c689f867ccc0045816</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.6-darwin64-252732257.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.6.1-darwin64-260220143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1292,9 +1292,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>989865df0a7730ec89666e648916ddb1</string>
+              <string>b06b152529a216491b954bc91850de0c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.6-linux64-252731650.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.6.1-linux64-260220142.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1304,9 +1304,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ab733beda1aa6b2b5ee756df57758846</string>
+              <string>7b042bef7b06f122ac9755c02ee40f7d</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.6-windows64-252731650.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.6.1-windows64-260220142.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

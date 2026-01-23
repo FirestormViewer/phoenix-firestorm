@@ -6897,7 +6897,10 @@ class LLToolsEnablePathfindingView : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        return (LLPathfindingManager::getInstance() != NULL) && LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion() && LLPathfindingManager::getInstance()->isPathfindingViewEnabled();
+        // <FS:TJ> We still want the menu option to be enabled so we can warn the user when there is no Pathfinding support
+        //return (LLPathfindingManager::getInstance() != NULL) && LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion() && LLPathfindingManager::getInstance()->isPathfindingViewEnabled();
+        return (LLPathfindingManager::getInstance() != NULL) && LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion();
+        // </FS:TJ>
     }
 };
 

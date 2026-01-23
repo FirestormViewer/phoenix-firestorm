@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="上傳模型">
-	<string name="no_havok">
-		物理網格模型上傳
-	</string>
 	<string name="status_parse_error">
 		錯誤：剖析模型時出錯，詳見記錄檔案。
 	</string>
@@ -71,9 +68,6 @@
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		物理網格包含退化三角形。嘗試「分析/簡化」。
-	</string>
-	<string name="phys_status_no_havok">
-		此版本不包含Havok支援，不推薦用於上傳Second Life的物理內容。可能會出現不可預測的結果！
 	</string>
 	<string name="phys_status_too_thin">
 		一個或多個次元小於0.5公尺 - 只有基於凸包的（分析過的）物理形狀才會正確工作。

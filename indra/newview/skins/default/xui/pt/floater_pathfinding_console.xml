@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Visualização/teste do pathfinding">
+    <floater.string name="no_havok">
+        Visualização/teste do pathfinding
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Impossível encontrar a implementação de biblioteca de pathing.
 	</floater.string>

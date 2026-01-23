@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Vue/Test de recherche de chemin">
+    <floater.string name="no_havok">
+        Vue/Test de recherche de chemin
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Implémentation de la bibliothèque de recherche de chemin introuvable
 	</floater.string>
