@@ -219,7 +219,7 @@ protected:
     uuid_multiset_t   mDeadObjects;
     // </FS:Beq>
 
-    std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
+    std::unordered_map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
 
     //set of objects that need to update their cost
     uuid_set_t   mStaleObjectCost;
@@ -236,7 +236,7 @@ protected:
     static U32 sSimulatorMachineIndex;
     std::map<U64, U32> mIPAndPortToIndex;
 
-    std::map<U64, LLUUID> mIndexAndLocalIDToUUID;
+    std::unordered_map<U64, LLUUID> mIndexAndLocalIDToUUID;
 
     friend class LLViewerObject;
 

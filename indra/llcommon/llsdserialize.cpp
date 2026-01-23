@@ -776,7 +776,8 @@ S32 LLSDNotationParser::parseMap(std::istream& istr, LLSD& map, S32 max_depth) c
                     // There must be a value for every key, thus
                     // child_count must be greater than 0.
                     parse_count += count;
-                    map.insert(name, child);
+                    map.insert(std::move(name), std::move(child)); // Move as name will be filled on next iteration
+                    name.clear();
                 }
                 else
                 {
@@ -823,7 +824,7 @@ S32 LLSDNotationParser::parseArray(std::istream& istr, LLSD& array, S32 max_dept
             else
             {
                 parse_count += count;
-                array.append(child);
+                array.append(std::move(child));
             }
             c = get(istr);
         }
@@ -842,7 +843,7 @@ bool LLSDNotationParser::parseString(std::istream& istr, LLSD& data) const
     auto count = deserialize_string(istr, value, mMaxBytesLeft);
     if(PARSE_FAILURE == count) return false;
     account(count);
-    data = value;
+    data = std::move(value);
     return true;
 }
 
@@ -873,10 +874,10 @@ bool LLSDNotationParser::parseBinary(std::istream& istr, LLSD& data) const
         if(len)
         {
             value.resize(len);
-            account(fullread(istr, (char *)&value[0], len));
+            account(fullread(istr, (char*)value.data(), len));
         }
         c = get(istr); // strip off the trailing double-quote
-        data = value;
+        data = std::move(value);
     }
     else if(0 == strncmp("b64", buf, 3))
     {
@@ -886,7 +887,7 @@ bool LLSDNotationParser::parseBinary(std::istream& istr, LLSD& data) const
         std::stringstream coded_stream;
         get(istr, *(coded_stream.rdbuf()), '\"');
         c = get(istr);
-        std::string encoded(coded_stream.str());
+        std::string encoded(std::move(coded_stream).str());
         S32 len = apr_base64_decode_len(encoded.c_str());
         std::vector<U8> value;
         if(len)
@@ -895,7 +896,7 @@ bool LLSDNotationParser::parseBinary(std::istream& istr, LLSD& data) const
             len = apr_base64_decode_binary(&value[0], encoded.c_str());
             value.resize(len);
         }
-        data = value;
+        data = std::move(value);
     }
     else if(0 == strncmp("b16", buf, 3))
     {
@@ -926,7 +927,7 @@ bool LLSDNotationParser::parseBinary(std::istream& istr, LLSD& data) const
             // copy the data out of the byte buffer
             value.insert(value.end(), byte_buffer, write);
         }
-        data = value;
+        data = std::move(value);
     }
     else
     {
@@ -1078,7 +1079,7 @@ S32 LLSDBinaryParser::doParse(std::istream& istr, LLSD& data, S32 max_depth) con
         }
         else
         {
-            data = value;
+            data = std::move(value);
             account(cnt);
         }
         if(istr.fail())
@@ -1095,7 +1096,7 @@ S32 LLSDBinaryParser::doParse(std::istream& istr, LLSD& data, S32 max_depth) con
         std::string value;
         if(parseString(istr, value))
         {
-            data = value;
+            data = std::move(value);
         }
         else
         {
@@ -1160,7 +1161,7 @@ S32 LLSDBinaryParser::doParse(std::istream& istr, LLSD& data, S32 max_depth) con
                 value.resize(size);
                 account(fullread(istr, (char*)&value[0], size));
             }
-            data = value;
+            data = std::move(value);
         }
         if(istr.fail())
         {
@@ -1219,7 +1220,7 @@ S32 LLSDBinaryParser::parseMap(std::istream& istr, LLSD& map, S32 max_depth) con
             // There must be a value for every key, thus child_count
             // must be greater than 0.
             parse_count += child_count;
-            map.insert(name, child);
+            map.insert(std::move(name), std::move(child));
         }
         else
         {
@@ -1239,13 +1240,12 @@ S32 LLSDBinaryParser::parseMap(std::istream& istr, LLSD& map, S32 max_depth) con
 
 S32 LLSDBinaryParser::parseArray(std::istream& istr, LLSD& array, S32 max_depth) const
 {
-    array = LLSD::emptyArray();
     U32 value_nbo = 0;
     read(istr, (char*)&value_nbo, sizeof(U32));      /*Flawfinder: ignore*/
     S32 size = (S32)ntohl(value_nbo);
 
-    // *FIX: This would be a good place to reserve some space in the
-    // array...
+    // Preallocate array to avoid incremental allocation
+    array = LLSD::emptyReservedArray(size);
 
     S32 parse_count = 0;
     S32 count = 0;
@@ -1261,7 +1261,7 @@ S32 LLSDBinaryParser::parseArray(std::istream& istr, LLSD& array, S32 max_depth)
         if(child_count)
         {
             parse_count += child_count;
-            array.append(child);
+            array.append(std::move(child));
         }
         ++count;
         c = istr.peek();
@@ -1280,18 +1280,15 @@ bool LLSDBinaryParser::parseString(
     std::istream& istr,
     std::string& value) const
 {
-    // *FIX: This is memory inefficient.
     U32 value_nbo = 0;
     read(istr, (char*)&value_nbo, sizeof(U32));      /*Flawfinder: ignore*/
     S32 size = (S32)ntohl(value_nbo);
     if(mCheckLimits && (size > mMaxBytesLeft)) return false;
     if(size < 0) return false;
-    std::vector<char> buf;
     if(size)
     {
-        buf.resize(size);
-        account(fullread(istr, &buf[0], size));
-        value.assign(buf.begin(), buf.end());
+        value.resize(size);
+        account(fullread(istr, value.data(), size));
     }
     return true;
 }
@@ -1786,7 +1783,7 @@ llssize deserialize_string_delim(
         }
     }
 
-    value = write_buffer.str();
+    value = std::move(write_buffer).str();
     return count;
 }
 
@@ -1807,15 +1804,12 @@ llssize deserialize_string_raw(
     {
         // We probably have a valid raw string. determine
         // the size, and read it.
-        // *FIX: This is memory inefficient.
-        auto len = strtol(buf + 1, NULL, 0);
+        auto len = strtol(buf + 1, nullptr, 0);
         if((max_bytes>0)&&(len>max_bytes)) return LLSDParser::PARSE_FAILURE;
-        std::vector<char> buf;
         if(len)
         {
-            buf.resize(len);
-            count += fullread(istr, (char *)&buf[0], len);
-            value.assign(buf.begin(), buf.end());
+            value.resize(len);
+            count += fullread(istr, value.data(), len);
         }
         c = istr.get();
         ++count;
@@ -2171,7 +2165,7 @@ std::string zip_llsd(LLSD& data)
         return std::string();
     }
 
-    std::string source = llsd_strm.str();
+    std::string source = std::move(llsd_strm).str();
 
     U8 out[CHUNK];
 

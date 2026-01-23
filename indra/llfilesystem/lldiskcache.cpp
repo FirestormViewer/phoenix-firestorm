@@ -112,6 +112,8 @@ LLDiskCache::LLDiskCache(const std::string& cache_dir,
 // asset will have to be re-requested.
 void LLDiskCache::purge()
 {
+    LL_PROFILE_ZONE_SCOPED;
+
     if (mEnableCacheDebugInfo)
     {
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(sCacheDir) << LL_ENDL;
@@ -139,6 +141,10 @@ void LLDiskCache::purge()
         while (iter != boost::filesystem::recursive_directory_iterator() && !ec.failed())
         // </FS:Ansariel>
         {
+            if(!LLApp::isRunning())
+            {
+                return;
+            }
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
                 if ((*iter).path().string().find(CACHE_FILENAME_PREFIX) != std::string::npos)
@@ -201,6 +207,10 @@ void LLDiskCache::purge()
     // uintmax_t file_size_total = 0;
     // for (file_info_t& entry : file_info)
     // {
+    //    if (!LLApp::isRunning())
+    //    {
+    //        return;
+    //    }
     //     file_size_total += entry.second.first;
 
     //     bool should_remove = file_size_total > mMaxSizeBytes;
@@ -211,6 +221,11 @@ void LLDiskCache::purge()
     uintmax_t deleted_size_total = 0;
     for (const file_info_t& entry : file_info)
     {
+        if (!LLApp::isRunning())
+        {
+            return;
+        }
+
         // first check if we still need to delete more files
         bool should_remove = (file_size_total - deleted_size_total) > target_size;
 
@@ -268,6 +283,10 @@ void LLDiskCache::purge()
         uintmax_t deleted_so_far{ 0 }; // <FS:Beq/> update the debug logging to be more useful
         for (size_t i = 0; i < file_info.size(); ++i)
         {
+            if (!LLApp::isRunning())
+            {
+                return;
+            }
             const file_info_t& entry = file_info[i];
             // <FS> Static asset stuff
             deleted_so_far += entry.second.first; // <FS:Beq/> update the debug logging to be more useful
