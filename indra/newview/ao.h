@@ -48,12 +48,12 @@ class FloaterAO
 
     private:
         FloaterAO(const LLSD& key);
-        ~FloaterAO();
+        ~FloaterAO() = default;
 
     public:
-        /*virtual*/ bool postBuild();
-        virtual void onOpen(const LLSD& key);
-        virtual void onClose(bool app_quitting);
+        bool postBuild() override;
+        void onOpen(const LLSD& key) override;
+        void onClose(bool app_quitting) override;
         void updateList();
         void updateScrollListData();
         void updateSetParameters();
@@ -90,10 +90,7 @@ class FloaterAO
 
         void onClickMore();
         void onClickLess();
-
-// <AS:Chanayane> Double click on animation in AO
         void onDoubleClick();
-// </AS:Chanayane>
 
         void onAnimationChanged(const LLUUID& animation);
 
@@ -108,7 +105,7 @@ class FloaterAO
         bool newSetCallback(const LLSD& notification, const LLSD& response);
         bool removeSetCallback(const LLSD& notification, const LLSD& response);
 
-        virtual bool tick();
+        bool tick() override;
 
         std::vector<AOSet*> mSetList;
         AOSet* mSelectedSet;
