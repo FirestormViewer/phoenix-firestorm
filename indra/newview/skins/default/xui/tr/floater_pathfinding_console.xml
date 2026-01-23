@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Yol bulma görüntüleme / test">
+    <floater.string name="no_havok">
+        Yol bulma görüntüleme / test
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Yol bulma kütüphanesi uygulaması bulunamıyor.
 	</floater.string>

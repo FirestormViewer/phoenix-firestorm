@@ -88,7 +88,7 @@ LLPanelWearableListItem::LLPanelWearableListItem(LLViewerInventoryItem* item, co
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelWearableOutfitItem(&typeid(LLPanelWearableOutfitItem::Params), "wearable_outfit_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelWearableOutfitItem(typeid(LLPanelWearableOutfitItem::Params), "wearable_outfit_list_item");
 
 LLPanelWearableOutfitItem::Params::Params()
 :   add_btn("add_btn"),
@@ -261,7 +261,7 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelClothingListItem(&typeid(LLPanelClothingListItem::Params), "clothing_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelClothingListItem(typeid(LLPanelClothingListItem::Params), "clothing_list_item");
 
 
 LLPanelClothingListItem::Params::Params()
@@ -348,7 +348,7 @@ bool LLPanelClothingListItem::postBuild()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelBodyPartsListItem(&typeid(LLPanelBodyPartsListItem::Params), "bodyparts_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelBodyPartsListItem(typeid(LLPanelBodyPartsListItem::Params), "bodyparts_list_item");
 
 
 LLPanelBodyPartsListItem::Params::Params()
@@ -419,7 +419,7 @@ bool LLPanelBodyPartsListItem::postBuild()
     return true;
 }
 
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelDeletableWearableListItem(&typeid(LLPanelDeletableWearableListItem::Params), "deletable_wearable_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelDeletableWearableListItem(typeid(LLPanelDeletableWearableListItem::Params), "deletable_wearable_list_item");
 
 LLPanelDeletableWearableListItem::Params::Params()
 :   delete_btn("delete_btn")
@@ -507,7 +507,7 @@ void LLPanelAttachmentListItem::updateItem(const std::string& name,
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelCOFWearableOutfitListItem(&typeid(FSPanelCOFWearableOutfitListItem::Params), "cof_wearable_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelCOFWearableOutfitListItem(typeid(FSPanelCOFWearableOutfitListItem::Params), "cof_wearable_list_item");
 
 FSPanelCOFWearableOutfitListItem::Params::Params()
 :   item_weight("item_weight")
@@ -601,7 +601,7 @@ const LLPanelInventoryListItemBase::Params& FSPanelCOFWearableOutfitListItem::ge
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelDummyClothingListItem(&typeid(LLPanelDummyClothingListItem::Params), "dummy_clothing_list_item");
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelDummyClothingListItem(typeid(LLPanelDummyClothingListItem::Params), "dummy_clothing_list_item");
 
 LLPanelDummyClothingListItem::Params::Params()
 :   add_panel("add_panel"),

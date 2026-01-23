@@ -279,15 +279,15 @@
 		</panel>
 		<panel label="物件" name="Object">
 			<panel.string name="paste_position">
-黏貼位置
+貼上位置
 [VALUE]
 			</panel.string>
 			<panel.string name="paste_size">
-黏貼大小
+貼上尺寸
 [VALUE]
 			</panel.string>
 			<panel.string name="paste_rotation">
-黏貼旋轉
+貼上旋轉
 [VALUE]
 			</panel.string>
 			<check_box label="鎖定" name="checkbox locked" tool_tip="避免物件被移動或刪除。 這在建造過程中非常有用，可避免意外的編輯更動。" />

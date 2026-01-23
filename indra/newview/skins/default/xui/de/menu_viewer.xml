@@ -439,7 +439,6 @@
 			<menu_item_check label="Debug-Fenster" name="Debug Console"/>
 			<menu_item_call label="Meldungen" name="Notifications"/>
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
-			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
 			<menu_item_check label="Monitor zum Laden von Szenen" name="Scene Loading Monitor"/>
 			<menu_item_check label="Region-Debug-Konsole" name="Region Debug Console"/>

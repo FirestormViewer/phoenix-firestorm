@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Загрузка модели">
-  <string name="no_havok">загрузка меша с физикой</string>
   <string name="status_parse_error">Ошибка: Проблема при анализе файла DAE – см. подробности в журнале.</string>
   <string name="status_bind_shape_orientation">Предупреждение: форма матрицы стандартно не ориентирована по координате X.</string>
   <string name="status_material_mismatch">Ошибка: Материал модели не входит в эталонную модель.</string>
@@ -24,7 +23,6 @@
   <string name="phys_status_vertex_limit_exceeded">Для некоторых физических оболочек превышен лимит вершин(256); попробуйте другой 'Метод Анализа'.</string>
   <string name="phys_status_hull_limit_exceeded">Некоторые модели превышают предел оболочек (256); попробуйте 'Упрощение'.</string>
   <string name="phys_status_degenerate_triangles">Физика меша слишком плотная или содержит вырожденные треугольники. Используйте Анализ/Упрощение для решения.</string>
-  <string name="phys_status_no_havok">Эта версия не поддерживает Havok и не рекомендуется для загрузки физики в Second Life. Результаты могут быть непредсказуемыми.</string>
   <string name="phys_status_too_thin">Один или несколько размеров меньше 0,5м, корректно будут работать только физические формы, основанные на корпусе (проанализированные).</string>
   <string name="phys_status_unknown_error">Обнаружена нераспознанная ошибка.</string>
   <string name="layer_all">Все</string>

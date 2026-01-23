@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Vista/prueba de pathfinding">
+    <floater.string name="no_havok">
+        Vista/prueba de pathfinding
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		No se encuentra la implementación de la biblioteca de localización de rutas.
 	</floater.string>
