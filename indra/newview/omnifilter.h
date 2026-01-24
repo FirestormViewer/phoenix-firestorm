@@ -37,63 +37,62 @@ class LLLineEditor;
 class LLPanel;
 class LLTextEditor;
 
-class Omnifilter
-:   public LLFloater
+class Omnifilter : public LLFloater
 {
     friend class LLFloaterReg;
 
-    private:
-        Omnifilter(const LLSD& key);
+private:
+    Omnifilter(const LLSD& key);
 
-    public:
-        bool postBuild() override final;
-        LLScrollListItem* addNeedle(const std::string& name, const OmnifilterEngine::Needle& needle);
+public:
+    bool              postBuild() override final;
+    LLScrollListItem* addNeedle(const std::string& name, const OmnifilterEngine::Needle& needle);
 
-    protected:
-        OmnifilterEngine::Needle* getSelectedNeedle();
+protected:
+    OmnifilterEngine::Needle* getSelectedNeedle();
 
-        void onSelectNeedle();
-        void onNeedleChanged();
-        void onAddNeedleClicked();
-        void onRemoveNeedleClicked();
-        void onNeedleNameChanged();
-        void onNeedleCheckboxChanged(LLUICtrl* ctrl);
-        void onOwnerChanged();
+    void onSelectNeedle();
+    void onNeedleChanged();
+    void onAddNeedleClicked();
+    void onRemoveNeedleClicked();
+    void onNeedleNameChanged();
+    void onNeedleCheckboxChanged(LLUICtrl* ctrl);
+    void onOwnerChanged();
 
-        void onLogLine(time_t time, const std::string& logLine);
+    void onLogLine(time_t time, const std::string& logLine);
 
-        FSScrollListCtrl* mNeedleListCtrl{ nullptr };
-        LLButton* mAddNeedleBtn{ nullptr };
-        LLButton* mRemoveNeedleBtn{ nullptr };
-        FSScrollListCtrl* mFilterLogCtrl{ nullptr };
-        LLPanel* mPanelDetails{ nullptr };
-        LLLineEditor* mNeedleNameCtrl{ nullptr };
-        LLLineEditor* mSenderNameCtrl{ nullptr };
-        LLCheckBoxCtrl* mSenderCaseSensitiveCheck{ nullptr };
-        LLComboBox* mSenderMatchTypeCombo{ nullptr };
-        LLTextEditor* mContentCtrl{ nullptr };
-        LLCheckBoxCtrl* mContentCaseSensitiveCheck{ nullptr };
-        LLComboBox* mContentMatchTypeCombo{ nullptr };
-        LLLineEditor* mRegionNameCtrl{ nullptr };
-        LLLineEditor* mOwnerCtrl{ nullptr };
+    FSScrollListCtrl* mNeedleListCtrl{ nullptr };
+    LLButton*         mAddNeedleBtn{ nullptr };
+    LLButton*         mRemoveNeedleBtn{ nullptr };
+    FSScrollListCtrl* mFilterLogCtrl{ nullptr };
+    LLPanel*          mPanelDetails{ nullptr };
+    LLLineEditor*     mNeedleNameCtrl{ nullptr };
+    LLLineEditor*     mSenderNameCtrl{ nullptr };
+    LLCheckBoxCtrl*   mSenderCaseSensitiveCheck{ nullptr };
+    LLComboBox*       mSenderMatchTypeCombo{ nullptr };
+    LLTextEditor*     mContentCtrl{ nullptr };
+    LLCheckBoxCtrl*   mContentCaseSensitiveCheck{ nullptr };
+    LLComboBox*       mContentMatchTypeCombo{ nullptr };
+    LLLineEditor*     mRegionNameCtrl{ nullptr };
+    LLLineEditor*     mOwnerCtrl{ nullptr };
 
-        LLButton* mTypeNearbyBtn{ nullptr };
-        LLButton* mTypeIMBtn{ nullptr };
-        LLButton* mTypeGroupIMBtn{ nullptr };
-        LLButton* mTypeObjectChatBtn{ nullptr };
-        LLButton* mTypeObjectIMBtn{ nullptr };
-        LLButton* mTypeScriptErrorBtn{ nullptr };
-        LLButton* mTypeDialogBtn{ nullptr };
-        LLButton* mTypeOfferBtn{ nullptr };
-        LLButton* mTypeInviteBtn{ nullptr };
-        LLButton* mTypeLureBtn{ nullptr };
-        LLButton* mTypeLoadURLBtn{ nullptr };
-        LLButton* mTypeFriendshipOfferBtn{ nullptr };
-        LLButton* mTypeTeleportRequestBtn{ nullptr };
-        LLButton* mTypeGroupNoticeBtn{ nullptr };
+    LLButton* mTypeNearbyBtn{ nullptr };
+    LLButton* mTypeIMBtn{ nullptr };
+    LLButton* mTypeGroupIMBtn{ nullptr };
+    LLButton* mTypeObjectChatBtn{ nullptr };
+    LLButton* mTypeObjectIMBtn{ nullptr };
+    LLButton* mTypeScriptErrorBtn{ nullptr };
+    LLButton* mTypeDialogBtn{ nullptr };
+    LLButton* mTypeOfferBtn{ nullptr };
+    LLButton* mTypeInviteBtn{ nullptr };
+    LLButton* mTypeLureBtn{ nullptr };
+    LLButton* mTypeLoadURLBtn{ nullptr };
+    LLButton* mTypeFriendshipOfferBtn{ nullptr };
+    LLButton* mTypeTeleportRequestBtn{ nullptr };
+    LLButton* mTypeGroupNoticeBtn{ nullptr };
 
-        LLLineEditor* mChatReplaceCtrl{ nullptr };
-        LLLineEditor* mButtonReplyCtrl{ nullptr };
-        LLTextEditor* mTextBoxReplyCtrl{ nullptr };
+    LLLineEditor* mChatReplaceCtrl{ nullptr };
+    LLLineEditor* mButtonReplyCtrl{ nullptr };
+    LLTextEditor* mTextBoxReplyCtrl{ nullptr };
 };
 #endif // OMNIFILTER_H

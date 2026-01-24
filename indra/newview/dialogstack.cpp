@@ -25,7 +25,6 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "dialogstack.h"
-
 #include "llviewercontrol.h"
 
 void DialogStack::update()
@@ -55,8 +54,7 @@ void DialogStack::pop(const LLUUID& uuid)
 
 const LLUUID& DialogStack::flip(const LLUUID& uuid)
 {
-    std::list<LLUUID>::iterator found = std::find(mNotificationIDs.begin(), mNotificationIDs.end(), uuid);
-    if (found != mNotificationIDs.end())
+    if (auto found = std::find(mNotificationIDs.begin(), mNotificationIDs.end(), uuid); found != mNotificationIDs.end())
     {
         if (found == mNotificationIDs.begin())
         {

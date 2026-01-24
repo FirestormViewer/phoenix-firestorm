@@ -148,7 +148,7 @@ class ParticleScriptCreationCallback : public LLInventoryCallback
 {
 public:
     ParticleScriptCreationCallback(ParticleEditor* editor);
-    void fire(const LLUUID& inventoryItem);
+    void fire(const LLUUID& inventoryItem) override;
 
 protected:
     ~ParticleScriptCreationCallback() = default;

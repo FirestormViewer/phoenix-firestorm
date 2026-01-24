@@ -34,15 +34,12 @@
 #include "llscrolllistctrl.h"
 #include "llsd.h"
 #include "llsdserialize.h"
-#include "llsdserialize_xml.h"
-#include "lltextbox.h"
 
 // newview
 #include "llagent.h"
 #include "llfloaterworldmap.h"
 #include "llfloaterreg.h"
 #include "llnotificationsutil.h"
-#include "llviewermessage.h"
 #include "llworldmap.h"
 #include "llworldmapmessage.h"
 
@@ -52,10 +49,10 @@ const F64 REGION_UPDATE_TIMER = 60.0;
 ALFloaterRegionTracker::ALFloaterRegionTracker(const LLSD& key)
     : LLFloater(key),
       LLEventTimer(5.f),
-      mRefreshRegionListBtn(NULL),
-      mRemoveRegionBtn(NULL),
-      mOpenMapBtn(NULL),
-      mRegionScrollList(NULL),
+      mRefreshRegionListBtn(nullptr),
+      mRemoveRegionBtn(nullptr),
+      mOpenMapBtn(nullptr),
+      mRegionScrollList(nullptr),
       mLastRegionUpdate(0.0)
 {
     loadFromJSON();
@@ -128,10 +125,8 @@ void ALFloaterRegionTracker::refresh()
         mLastRegionUpdate = time_now;
     }
 
-    for (LLSD::map_const_iterator it = mRegionMap.beginMap(); it != mRegionMap.endMap(); it++)
+    for (const auto& [sim_name, data] : llsd::inMap(mRegionMap))
     {
-        const std::string& sim_name = it->first;
-        const LLSD& data = it->second;
         if (data.isMap()) // Assume the rest is correct.
         {
             LLScrollListCell::Params label;
@@ -174,7 +169,8 @@ void ALFloaterRegionTracker::refresh()
                 count.color(LLColor4::grey);
 
                 LLWorldMapMessage::getInstance()->sendNamedRegionRequest(sim_name);
-                if (!mEventTimer.getStarted()) mEventTimer.start();
+                if (!mEventTimer.getStarted())
+                    mEventTimer.start();
             }
             LLScrollListItem::Params row;
             row.value = sim_name;
@@ -203,9 +199,8 @@ void ALFloaterRegionTracker::requestRegionData()
     if (!mRegionMap.size())
         return;
 
-    for (LLSD::map_const_iterator it = mRegionMap.beginMap(); it != mRegionMap.endMap(); it++)
+    for (const auto& [name, data] : llsd::inMap(mRegionMap))
     {
-        const std::string& name = it->first;
         if (LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromName(name))
         {
             info->updateAgentCount(LLTimer::getElapsedSeconds());
@@ -220,11 +215,9 @@ void ALFloaterRegionTracker::requestRegionData()
 
 void ALFloaterRegionTracker::removeRegions()
 {
-    typedef std::vector<LLScrollListItem*> item_t;
-    item_t items = mRegionScrollList->getAllSelected();
-    for (item_t::const_iterator it = items.begin(); it != items.end(); ++it)
+    for (auto item : mRegionScrollList->getAllSelected())
     {
-        mRegionMap.erase((*it)->getValue().asString());
+        mRegionMap.erase(item->getValue().asString());
     }
     mRegionScrollList->deleteSelectedItems();
     saveToJSON();
@@ -234,9 +227,7 @@ void ALFloaterRegionTracker::removeRegions()
 bool ALFloaterRegionTracker::saveToJSON()
 {
     const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, TRACKER_FILE);
-    llofstream out_file;
-    out_file.open(filename.c_str());
-    if (out_file.is_open())
+    if (llofstream out_file(filename.c_str()); out_file.is_open())
     {
         LLSDSerialize::toPrettyNotation(mRegionMap, out_file);
         out_file.close();
@@ -248,9 +239,7 @@ bool ALFloaterRegionTracker::saveToJSON()
 bool ALFloaterRegionTracker::loadFromJSON()
 {
     const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, TRACKER_FILE);
-    llifstream in_file;
-    in_file.open(filename.c_str());
-    if (in_file.is_open())
+    if (llifstream in_file(filename.c_str()); in_file.is_open())
     {
         LLSDSerialize::fromNotation(mRegionMap, in_file, LLSDSerialize::SIZE_UNLIMITED);
         in_file.close();
@@ -266,8 +255,7 @@ std::string ALFloaterRegionTracker::getRegionLabelIfExists(const std::string& na
 
 void ALFloaterRegionTracker::onRegionAddedCallback(const LLSD& notification, const LLSD& response)
 {
-    const S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    if (option == 0)
+    if (const S32 option = LLNotificationsUtil::getSelectedOption(notification, response); option == 0)
     {
         const std::string& name = notification["payload"]["name"].asString();
         std::string label = response["label"].asString();
@@ -276,8 +264,9 @@ void ALFloaterRegionTracker::onRegionAddedCallback(const LLSD& notification, con
         {
             if (mRegionMap.has(name))
             {
-                for (LLSD::map_iterator it = mRegionMap.beginMap(); it != mRegionMap.endMap(); it++)
-                    if (it->first == name) it->second["label"] = label;
+                for (auto& [sim_name, data] : llsd::inMap(mRegionMap))
+                    if (sim_name == name)
+                        data["label"] = label;
             }
             else
             {
@@ -300,7 +289,7 @@ void ALFloaterRegionTracker::openMap()
     else
     {
         const std::string& region = mRegionScrollList->getFirstSelected()->getValue().asString();
-        LLFloaterWorldMap* worldmap_floaterp = LLFloaterWorldMap::getInstance();
+        LLFloaterWorldMap* worldmap_floaterp = LLFloaterReg::findTypedInstance<LLFloaterWorldMap>("world_map");
         if (!region.empty() && worldmap_floaterp)
         {
             worldmap_floaterp->trackURL(region, 128, 128, 0);

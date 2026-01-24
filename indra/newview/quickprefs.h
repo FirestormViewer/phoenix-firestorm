@@ -97,8 +97,8 @@ private:
     void setDefaultPresetsEnabled(bool enabled);
 
 public:
-    /*virtual*/ bool postBuild();
-    virtual void onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
     void setSelectedSky(const std::string& preset_name);
     void setSelectedWater(const std::string& preset_name);
@@ -196,7 +196,7 @@ private:
     boost::signals2::connection mRegionChangedSlot;
 
 public:
-    virtual void onClose(bool app_quitting);
+    void onClose(bool app_quitting) override;
 
 protected:
     enum ControlType
@@ -277,14 +277,14 @@ protected:
     std::string getSettingsPath(bool save_mode);
 
     // adds a new control and returns a pointer to the chosen widget
-    LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, bool integer = false, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
+    LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = nullptr, ControlType type = ControlTypeRadio, bool integer = false, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
     // removes a control
     void removeControl(const std::string& controlName, bool remove_slot = true);
     // updates a single control
     void updateControl(const std::string& controlName, ControlEntry& entry);
 
     // make this control the currently selected one
-    void selectControl(std::string controlName);
+    void selectControl(const std::string& controlName);
 
     // toggles edit mode
     void onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel);
@@ -305,8 +305,9 @@ protected:
     // swaps two controls, used for move up and down
     void swapControls(const std::string& control1, const std::string& control2);
 
-    bool hasControl( std::string const &aName ) const
-    { return mControlsList.end() != mControlsList.find( aName ); }
-
+    bool hasControl(std::string const &aName) const
+    {
+        return mControlsList.end() != mControlsList.find(aName);
+    }
 };
 #endif // QUICKPREFS_H
