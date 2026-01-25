@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="尋路檢視 / 測試">
-	<floater.string name="no_havok">
-		路徑尋路導航網格生成失敗
-	</floater.string>
+    <floater.string name="no_havok">
+        尋路檢視 / 測試
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		找不到尋路函式庫的實作。
 	</floater.string>

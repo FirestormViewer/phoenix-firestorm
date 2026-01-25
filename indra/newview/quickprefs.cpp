@@ -35,16 +35,13 @@
 #include "fscommon.h"
 #include "llagent.h"
 #include "llappviewer.h"
-#include "llcallbacklist.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
-#include "llcubemap.h"
 #include "llenvironment.h"
 #include "llf32uictrl.h"
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h" // for LLAvatarComplexityControls
-#include "llfloaterreg.h"
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
 #include "llnotificationsutil.h"
@@ -66,7 +63,7 @@ public:
         mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
     }
 
-    virtual ~FSSettingsCollector() {}
+    ~FSSettingsCollector() = default;
 
     bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
     {
@@ -85,7 +82,7 @@ public:
 
 protected:
     LLUUID mMarketplaceFolderUUID;
-    std::set<LLUUID> mSeen;
+    uuid_set_t mSeen;
 };
 
 
@@ -106,8 +103,8 @@ FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 // </FS:Zi>
 
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
-:   LLTransientDockableFloater(NULL, false, key),
-    mAvatarZOffsetSlider(NULL),
+:   LLTransientDockableFloater(nullptr, false, key),
+    mAvatarZOffsetSlider(nullptr),
     mRlvBehaviorCallbackConnection(),
     mEnvChangedConnection(),
     mRegionChangedSlot()
@@ -166,20 +163,16 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 
     // Scan widgets and reapply control variables because some control types
     // (LLSliderCtrl for example) don't update their GUI when hidden
-    control_list_t::iterator it;
-    for (it = mControlsList.begin(); it != mControlsList.end(); ++it)
+    for (const auto& [name, entry] : mControlsList)
     {
-        const ControlEntry& entry = it->second;
-
         LLUICtrl* current_widget = entry.widget;
         if (!current_widget)
         {
-            LL_WARNS() << "missing widget for control " << it->first << LL_ENDL;
+            LL_WARNS() << "missing widget for control " << name << LL_ENDL;
             continue;
         }
 
-        LLControlVariable* var = current_widget->getControlVariable();
-        if (var)
+        if (LLControlVariable* var = current_widget->getControlVariable())
         {
             current_widget->setValue(var->getValue());
         }
@@ -283,17 +276,15 @@ void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLU
     mDayCyclePresetsCombo->addSeparator();
 
     // Add setting presets.
-    for (std::multimap<std::string, LLUUID>::const_iterator it = daycycle_map.begin(); it != daycycle_map.end(); ++it)
+    for (const auto& [preset_name, asset_id] : daycycle_map)
     {
-        const std::string& preset_name = (*it).first;
-        const LLUUID& asset_id = (*it).second;
-
         if (!preset_name.empty())
         {
             mDayCyclePresetsCombo->add(preset_name, LLSD(asset_id));
         }
     }
-// <FS:Beq> Opensim legacy windlight support
+
+    // <FS:Beq> Opensim legacy windlight support
 // Opensim may support both environment and extenvironment caps on the same region
 // we also need these disabled in SL on the OpenSim build.
 #ifdef OPENSIM
@@ -305,7 +296,7 @@ void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLU
         {
             mDayCyclePresetsCombo->addSeparator();
         }
-        for(const auto& preset_name : LLEnvironment::getInstance()->mLegacyDayCycles)
+        for (const auto& preset_name : LLEnvironment::getInstance()->mLegacyDayCycles)
         {
             // we add by name and only build the envp on demand
             LL_DEBUGS("WindlightCaps") << "Adding legacy day cycle " << preset_name << LL_ENDL;
@@ -324,17 +315,15 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
     mWLPresetsCombo->addSeparator();
 
     // Add setting presets.
-    for (std::multimap<std::string, LLUUID>::const_iterator it = sky_map.begin(); it != sky_map.end(); ++it)
+    for (const auto& [preset_name, asset_id] : sky_map)
     {
-        const std::string& preset_name = (*it).first;
-        const LLUUID& asset_id = (*it).second;
-
         if (!preset_name.empty())
         {
             mWLPresetsCombo->add(preset_name, LLSD(asset_id));
         }
     }
-// <FS:Beq> Opensim legacy windlight support
+
+    // <FS:Beq> Opensim legacy windlight support
 // Opensim may support both environment and extenvironment caps on the same region
 // we also need these disabled in SL on the OpenSim build.
 #ifdef OPENSIM
@@ -346,7 +335,7 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
         {
             mWLPresetsCombo->addSeparator();
         }
-        for(const auto& preset_name : LLEnvironment::getInstance()->mLegacySkies)
+        for (const auto& preset_name : LLEnvironment::getInstance()->mLegacySkies)
         {
             // we add by name and only build the envp on demand
             LL_DEBUGS("WindlightCaps") << "Adding legacy sky " << preset_name << LL_ENDL;
@@ -366,17 +355,15 @@ void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID
     mWaterPresetsCombo->addSeparator();
 
     // Add setting presets.
-    for (std::multimap<std::string, LLUUID>::const_iterator it = water_map.begin(); it != water_map.end(); ++it)
+    for (const auto& [preset_name, asset_id] : water_map)
     {
-        const std::string& preset_name = (*it).first;
-        const LLUUID& asset_id = (*it).second;
-
         if (!preset_name.empty())
         {
             mWaterPresetsCombo->add(preset_name, LLSD(asset_id));
         }
     }
-// <FS:Beq> Opensim legacy windlight support
+
+    // <FS:Beq> Opensim legacy windlight support
 // Opensim may support both environment and extenvironment caps on the same region
 // we also need these disabled in SL on the OpenSim build.
 #ifdef OPENSIM
@@ -388,7 +375,7 @@ void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID
         {
             mWaterPresetsCombo->addSeparator();
         }
-        for(const auto& preset_name : LLEnvironment::getInstance()->mLegacyWater)
+        for (const auto& preset_name : LLEnvironment::getInstance()->mLegacyWater)
         {
             // we add by name and only build the envp on demand
             LL_DEBUGS("WindlightCaps") << "Adding legacy water " << preset_name << LL_ENDL;
@@ -414,21 +401,19 @@ void FloaterQuickPrefs::loadPresets()
     std::multimap<std::string, LLUUID> water_map;
     std::multimap<std::string, LLUUID> daycycle_map;
 
-    for (LLInventoryModel::item_array_t::const_iterator it = items.begin(); it != items.end(); ++it)
+    for (const auto& item : items)
     {
-        LLInventoryItem* item = *it;
-
         LLSettingsType::type_e type = LLSettingsType::fromInventoryFlags(item->getFlags());
         switch (type)
         {
             case LLSettingsType::ST_SKY:
-                sky_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+                sky_map.emplace(item->getName(), item->getAssetUUID());
                 break;
             case LLSettingsType::ST_WATER:
-                water_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+                water_map.emplace(item->getName(), item->getAssetUUID());
                 break;
             case LLSettingsType::ST_DAYCYCLE:
-                daycycle_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+                daycycle_map.emplace(item->getName(), item->getAssetUUID());
                 break;
             default:
                 LL_WARNS() << "Found invalid setting: " << item->getName() << LL_ENDL;
@@ -443,25 +428,23 @@ void FloaterQuickPrefs::loadPresets()
 
 void FloaterQuickPrefs::setDefaultPresetsEnabled(bool enabled)
 {
-    LLScrollListItem* item{ nullptr };
+    if (auto item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT)))
+        item->setEnabled(enabled);
 
-    item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
-    if (item) item->setEnabled(enabled);
+    if (auto item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE)))
+        item->setEnabled(enabled);
 
-    item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE));
-    if (item) item->setEnabled(enabled);
+    if (auto item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT)))
+        item->setEnabled(enabled);
 
-    item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
-    if (item) item->setEnabled(enabled);
+    if (auto item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE)))
+        item->setEnabled(enabled);
 
-    item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE));
-    if (item) item->setEnabled(enabled);
+    if (auto item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT)))
+        item->setEnabled(enabled);
 
-    item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
-    if (item) item->setEnabled(enabled);
-
-    item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_NONE));
-    if (item) item->setEnabled(enabled);
+    if (auto item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_NONE)))
+        item->setEnabled(enabled);
 }
 
 void FloaterQuickPrefs::setSelectedEnvironment()
@@ -480,11 +463,10 @@ void FloaterQuickPrefs::setSelectedEnvironment()
         // the sky and water settings in a day cycle, so check them after the
         // day cycle. If no fixed sky or fixed water is set, they are either
         // defined in the day cycle or inherited from a higher environment level.
-        LLSettingsDay::ptr_t day = LLEnvironment::instance().getEnvironmentDay(LLEnvironment::ENV_LOCAL);
-        if (day)
+        if (LLSettingsDay::ptr_t day = LLEnvironment::instance().getEnvironmentDay(LLEnvironment::ENV_LOCAL))
         {
             //LL_INFOS() << "EEP: day name = " << day->getName() << " - asset id = " << day->getAssetId() << LL_ENDL;
-            if( day->getAssetId().notNull())
+            if (day->getAssetId().notNull())
             { // EEP processing
                 mDayCyclePresetsCombo->selectByValue(LLSD(day->getAssetId()));
                 // Sky and Water are part of a day cycle in EEP
@@ -504,13 +486,11 @@ void FloaterQuickPrefs::setSelectedEnvironment()
                 // Sky is part of day so treat that as day cycle
                 mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
                 // Water is not part of legacy day so we need to hunt around
-                LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
-                if (water)
+                if (LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL))
                 {
                     // This is going to be possible. OS will support both Legacy and EEP
                     // so having a water EEP asset with a Legacy day cycle could happen.
-                    LLUUID asset_id = water->getAssetId();
-                    if (asset_id.notNull())
+                    if (LLUUID asset_id = water->getAssetId(); asset_id.notNull())
                     {
                         mWaterPresetsCombo->selectByValue(LLSD(asset_id));
                     }
@@ -532,11 +512,10 @@ void FloaterQuickPrefs::setSelectedEnvironment()
             mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_NONE));
         }
 
-        LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
-        if (sky)
+        if (LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL))
         {
             //LL_INFOS() << "EEP: sky name = " << sky->getName() << " - asset id = " << sky->getAssetId() << LL_ENDL;
-            if(sky->getAssetId().notNull())
+            if (sky->getAssetId().notNull())
             {
                 mWLPresetsCombo->selectByValue(LLSD(sky->getAssetId()));
             }
@@ -554,11 +533,9 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 #endif
         }
         // Water is not part of legacy day so we need to hunt around
-        LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
-        if (water)
+        if (LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL))
         {
-            LLUUID asset_id = water->getAssetId();
-            if (asset_id.notNull())
+            if (LLUUID asset_id = water->getAssetId(); asset_id.notNull())
             {
                 mWaterPresetsCombo->selectByValue(LLSD(asset_id));
             }
@@ -713,7 +690,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
     QuickPrefsXML xml;
     LLXMLNodePtr root;
 
-    if (!LLXMLNode::parseFile(settings_path, root, NULL))
+    if (!LLXMLNode::parseFile(settings_path, root, nullptr))
     {
         LL_WARNS() << "Unable to load quick preferences from file: " << settings_path << LL_ENDL;
     }
@@ -754,7 +731,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
                     addControl(
                         xml_entry.control_name,
                         label,
-                        NULL,
+                        nullptr,
                         (ControlType)type,
                         xml_entry.integer,
                         xml_entry.min_value,
@@ -771,7 +748,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
                     addControl(
                         "IndirectMaxNonImpostors",
                         label,
-                        NULL,
+                        nullptr,
                         (ControlType)type,
                         xml_entry.integer,
                         1,
@@ -800,14 +777,17 @@ bool FloaterQuickPrefs::isValidPreset(const LLSD& preset)
 {
     if (preset.isUUID())
     {
-        if(!preset.asUUID().isNull()){ return true;}
+        if (!preset.asUUID().isNull())
+        {
+            return true;
+        }
     }
     else if (preset.isString())
     {
-        if(!preset.asString().empty() &&
-            preset.asString() != PRESET_NAME_REGION_DEFAULT &&
-            preset.asString() != PRESET_NAME_DAY_CYCLE &&
-            preset.asString() != PRESET_NAME_NONE)
+        if (!preset.asString().empty() &&
+             preset.asString() != PRESET_NAME_REGION_DEFAULT &&
+             preset.asString() != PRESET_NAME_DAY_CYCLE &&
+             preset.asString() != PRESET_NAME_NONE)
         {
             return true;
         }
@@ -840,22 +820,20 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 
 void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 {
-// Opensim continued W/L support
+    auto& instance = LLEnvironment::instance();
+
+    // Opensim continued W/L support
 #ifdef OPENSIM
     if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
     {
-        LLSettingsSky::ptr_t legacy_sky = nullptr;
         LLSD messages;
-
-        legacy_sky = LLEnvironment::createSkyFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", preset.asString() + ".xml"), messages);
-
-        if (legacy_sky)
+        if (auto legacy_sky = LLEnvironment::createSkyFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", preset.asString() + ".xml"), messages))
         {
             // Need to preserve current sky manually in this case in contrast to asset-based settings
-            LLSettingsWater::ptr_t current_water = LLEnvironment::instance().getCurrentWater();
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacy_sky, current_water);
-            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-            LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
+            LLSettingsWater::ptr_t current_water = instance.getCurrentWater();
+            instance.setEnvironment(LLEnvironment::ENV_LOCAL, legacy_sky, current_water);
+            instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            instance.updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
         }
         else
         {
@@ -866,26 +844,26 @@ void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
     else // note the else here bridges the endif
 #endif
     {
-        LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-        LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+        instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+        instance.setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
     }
 }
 
 void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 {
+    auto& instance = LLEnvironment::instance();
+
 #ifdef OPENSIM
     if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
     {
-        LLSettingsWater::ptr_t legacy_water = nullptr;
         LLSD messages;
-        legacy_water = LLEnvironment::createWaterFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", preset.asString() + ".xml"), messages);
-        if (legacy_water)
+        if (auto legacy_water = LLEnvironment::createWaterFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", preset.asString() + ".xml"), messages))
         {
             // Need to preserve current sky manually in this case in contrast to asset-based settings
-            LLSettingsSky::ptr_t current_sky = LLEnvironment::instance().getCurrentSky();
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, current_sky, legacy_water);
-            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-            LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
+            LLSettingsSky::ptr_t current_sky = instance.getCurrentSky();
+            instance.setEnvironment(LLEnvironment::ENV_LOCAL, current_sky, legacy_water);
+            instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            instance.updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
         }
         else
         {
@@ -896,24 +874,24 @@ void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
     else // beware the trailing else here.
 #endif
     {
-        LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-        LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+        instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+        instance.setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
     }
 }
 
 void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 {
+    auto& instance = LLEnvironment::instance();
+
 #ifdef OPENSIM
     if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
     {
-        LLSettingsDay::ptr_t legacyday = nullptr;
         LLSD messages;
-        legacyday = LLEnvironment::createDayCycleFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", preset.asString() + ".xml"), messages);
-        if (legacyday)
+        if (auto legacyday = LLEnvironment::createDayCycleFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", preset.asString() + ".xml"), messages))
         {
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacyday);
-            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-            LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
+            instance.setEnvironment(LLEnvironment::ENV_LOCAL, legacyday);
+            instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            instance.updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
         }
         else
         {
@@ -924,8 +902,8 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
     else // beware trailing else that bridges the endif
 #endif
     {
-        LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-        LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+        instance.setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+        instance.setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
     }
 }
 
@@ -1176,11 +1154,11 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 
     // hide all widget types except for the one the user wants
     LLUICtrl* widget{ nullptr };
-    for (it = typeMap.begin(); it != typeMap.end(); ++it)
+    for (const auto& [control_type, control_name] : typeMap)
     {
-        if (entry.type != it->first)
+        if (entry.type != control_type)
         {
-            widget = entry.panel->getChild<LLUICtrl>(it->second);
+            widget = entry.panel->findChild<LLUICtrl>(control_name);
 
             if (widget)
             {
@@ -1317,7 +1295,7 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName, const st
     if (!panel)
     {
         LL_WARNS() << "could not add panel" << LL_ENDL;
-        return NULL;
+        return nullptr;
     }
 
     // sanity checks
@@ -1335,8 +1313,8 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName, const st
     // create a new internal entry for this control
     ControlEntry newControl;
     newControl.panel = panel->getChild<LLPanel>("option_ordering_panel");
-    newControl.widget = NULL;
-    newControl.label_textbox = NULL;
+    newControl.widget = nullptr;
+    newControl.label_textbox = nullptr;
     newControl.label = controlLabel;
     newControl.type = type;
     newControl.integer = integer;
@@ -1419,7 +1397,7 @@ void FloaterQuickPrefs::removeControl(const std::string& controlName, bool remov
     }
 }
 
-void FloaterQuickPrefs::selectControl(std::string controlName)
+void FloaterQuickPrefs::selectControl(const std::string& controlName)
 {
     // remove previously selected marker, if any
     if (!mSelectedControl.empty() && hasControl(mSelectedControl))
@@ -1492,8 +1470,7 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
             }
             // the rest will not need them
             default:
-            {
-            }
+                break;
         }
     }
 
@@ -1544,14 +1521,13 @@ void FloaterQuickPrefs::onEditModeChanged()
     std::string settings_path = getSettingsPath(true);
 
     // loop through the list of controls, in the displayed order
-    std::list<std::string>::iterator it;
-    for (it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
+    for (const auto& control_name : mControlsOrder)
     {
-        const ControlEntry& entry = mControlsList[*it];
+        const ControlEntry& entry = mControlsList[control_name];
         QuickPrefsXMLEntry xml_entry;
 
         // add control values to the XML entry
-        xml_entry.control_name = *it;
+        xml_entry.control_name = control_name;
         xml_entry.label = entry.label;
         xml_entry.control_type = (U32)entry.type;
         xml_entry.integer = entry.integer;
@@ -1571,8 +1547,7 @@ void FloaterQuickPrefs::onEditModeChanged()
     // Write the resulting XML to file
     if (!output_node->isNull())
     {
-        LLFILE* fp = LLFile::fopen(settings_path, "w");
-        if (fp)
+        if (LLFILE* fp = LLFile::fopen(settings_path, "w"))
         {
             LLXMLNode::writeHeaderToFile(fp);
             output_node->writeToFile(fp);
@@ -1614,12 +1589,11 @@ void FloaterQuickPrefs::onValuesChanged()
         // disable selection so the border doesn't cause a crash
         selectControl("");
         // rename the old ordering entry
-        std::list<std::string>::iterator it;
-        for (it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
+        for (auto& control_name : mControlsOrder)
         {
-            if (*it == old_control_name)
+            if (control_name == old_control_name)
             {
-                *it = new_control_name;
+                control_name = new_control_name;
                 break;
             }
         }
@@ -1689,6 +1663,7 @@ void FloaterQuickPrefs::onValuesChanged()
                 case TYPE_U32:
                 {
                     min_value = 0.0f;
+                    [[fallthrough]];
                 }
                 // Fallthrough, S32 and U32 are integer values
                 case TYPE_S32:
@@ -1701,7 +1676,8 @@ void FloaterQuickPrefs::onValuesChanged()
                 // Everything else gets a text widget for now
                 default:
                 {
-                    type=ControlTypeText;
+                    type = ControlTypeText;
+                    break;
                 }
             }
 
@@ -1805,8 +1781,7 @@ void FloaterQuickPrefs::swapControls(const std::string& control1, const std::str
 void FloaterQuickPrefs::onMoveUpClicked()
 {
     // find the control in the ordering list
-    std::list<std::string>::iterator it;
-    for (it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
+    for (auto it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
     {
         if (*it == mSelectedControl)
         {
@@ -1835,8 +1810,7 @@ void FloaterQuickPrefs::onMoveUpClicked()
 void FloaterQuickPrefs::onMoveDownClicked()
 {
     // find the control in the ordering list
-    std::list<std::string>::iterator it;
-    for (it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
+    for (auto it = mControlsOrder.begin(); it != mControlsOrder.end(); ++it)
     {
         if (*it == mSelectedControl)
         {
@@ -2050,8 +2024,7 @@ void FloaterQuickPrefs::onClickResetRenderSSAOEffectX()
 
 void FloaterQuickPrefs::callbackRestoreDefaults(const LLSD& notification, const LLSD& response)
 {
-    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    if ( option == 0 ) // YES
+    if (S32 option = LLNotificationsUtil::getSelectedOption(notification, response); option == 0) // YES
     {
         selectControl("");
         for (const auto& control : mControlsOrder)

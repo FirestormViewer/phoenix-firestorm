@@ -37,19 +37,15 @@
 UtilityBar::UtilityBar() :
     LLSingleton<UtilityBar>(),
     LLEventTimer(0.5f),
-    mAOInterfaceButton(NULL),
-    mVolumeControlsInterfaceButton(NULL),
-    mParcelMediaPlayButton(NULL),
-    mParcelStreamPlayButton(NULL),
-    mTalkButton(NULL),
-    mPTTButton(NULL)
+    mAOInterfaceButton(nullptr),
+    mVolumeControlsInterfaceButton(nullptr),
+    mParcelMediaPlayButton(nullptr),
+    mParcelStreamPlayButton(nullptr),
+    mTalkButton(nullptr),
+    mPTTButton(nullptr)
 {
     // Tried to do this cleanly with callbacks and controls, but ran into dead ends on every approach.
     // This helper class works, but I am not at all satisfied with it. -Zi
-}
-
-UtilityBar::~UtilityBar()
-{
 }
 
 void UtilityBar::init()

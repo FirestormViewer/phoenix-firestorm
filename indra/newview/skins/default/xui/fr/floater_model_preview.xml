@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Chargement du modèle">
-<string name="no_havok">téléchargement du maillage avec physique</string>
 <string name="status_parse_error">Erreur : Problème d&apos;analyse du modèle ; reportez-vous au journal pour plus de détails.</string>
 <string name="status_bind_shape_orientation">Avertissement : la matrice de formes de reliure n&apos;est pas dans l&apos;orientation standard X-avant.</string>
 <string name="status_material_mismatch">Erreur : le matériau du modèle ne correspond pas à un sous-ensemble du modèle de référence.</string>
@@ -24,7 +23,6 @@
 <string name="phys_status_vertex_limit_exceeded">Certaines enveloppes physiques dépassent les limites de sommets.</string>
 <string name="phys_status_hull_limit_exceeded">Certains modèles dépassent la limite de la coque (256) ; essayez de "simplifier"..</string>
 <string name="phys_status_degenerate_triangles">Le maillage physique est trop dense ou contient des triangles non cohérents. Utilisez Analyser/Simplifier pour résoudre ce problème.</string>
-<string name="phys_status_no_havok">Cette version ne contient pas de support Havok et n'est pas recommandée pour le chargement de physiques dans Second Life. Les résultats peuvent être imprévisibles.</string>
 <string name="phys_status_too_thin">Une ou plusieurs dimensions sont inférieures à 0,5 m, seules les formes physiques basées sur la coque (analysées) fonctionneront correctement.</string>
 <string name="phys_status_unknown_error">Une erreur inconnue a été détectée.</string>
 <string name="layer_all">Tout</string>

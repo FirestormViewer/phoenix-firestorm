@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Yol tapma önizləməsi/yoxlanması">
+    <floater.string name="no_havok">
+        Yol tapma önizləməsi/yoxlanması
+    </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Yol tapma kitabxanasının həyata keçirilməsi tapılmadı
 	</floater.string>

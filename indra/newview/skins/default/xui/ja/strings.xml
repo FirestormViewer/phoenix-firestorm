@@ -6600,4 +6600,7 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Very High">高品位</string>
 	<string name="Ultra">ウルトラ</string>
 	<string name="Maximum">最大</string>
+
+	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
+
 </strings>

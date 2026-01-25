@@ -163,55 +163,55 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
-			<text tool_tip="Firestormが通知／警告した時に再生するデフォルトのサウンドＵＵＩＤです。" name="textFSSndAlert">
+			<text tool_tip="Firestormが通知／警告した時に再生するデフォルトのサウンドＵＵＩＤを指定します。" name="textFSSndAlert">
 				デフォルトの警告音：
 			</text>
 			<button name="Prev_UISndAlert" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndAlert" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndAlert"/>
-			<text tool_tip="無効なキーを押した時に再生するサウンドのＵＵＩＤです。" name="textFSBadKeystroke">
+			<text tool_tip="無効なキーを押した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSBadKeystroke">
 				無効なキー打鍵音：
 			</text>
 			<button name="Prev_UISndBadKeystroke" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndBadKeystroke" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndBadKeystroke"/>
-			<text tool_tip="マウスのボタンをクリックした時に再生するサウンドのＵＵＩＤです。" name="textFSClick">
+			<text tool_tip="マウスのボタンをクリックした時に再生するサウンドのＵＵＩＤを指定します。" name="textFSClick">
 				マウスボタンのクリック：
 			</text>
 			<button name="Prev_UISndClick" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndClick" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndClick"/>
-			<text tool_tip="マウスのボタンから手を離した時に再生するサウンドのＵＵＩＤです。" name="textFSClickRelease">
+			<text tool_tip="マウスのボタンから手を離した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSClickRelease">
 				マウスボタンのリリース：
 			</text>
 			<button name="Prev_UISndClickRelease" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndClickRelease" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndClickRelease"/>
-			<text tool_tip="女性アバターがダメージを受けた時に再生するサウンドのＵＵＩＤです。" name="textFSHealthReductionF">
+			<text tool_tip="女性アバターがダメージを受けた時に再生するサウンドのＵＵＩＤを指定します。" name="textFSHealthReductionF">
 				女性のうめき声：
 			</text>
 			<button name="Prev_UISndHealthReductionF" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndHealthReductionF" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndHealthReductionF"/>
-			<text tool_tip="男性アバターがダメージを受けた時に再生するサウンドのＵＵＩＤです。" name="textFSHealthReductionM">
+			<text tool_tip="男性アバターがダメージを受けた時に再生するサウンドのＵＵＩＤを指定します。" name="textFSHealthReductionM">
 				男性のうめき声：
 			</text>
 			<button name="Prev_UISndHealthReductionM" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndHealthReductionM" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndHealthReductionM"/>
-			<text tool_tip="リンデンドル残高が減少した時に再生するサウンドのＵＵＩＤです。" name="textFSMoneyChangeDown">
+			<text tool_tip="リンデンドル残高が減少した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSMoneyChangeDown">
 				リンデンドル残高減少：
 			</text>
 			<button name="Prev_UISndMoneyChangeDown" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndMoneyChangeDown" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndMoneyChangeDown"/>
-			<text tool_tip="リンデンドル残高が増加した時に再生するサウンドのＵＵＩＤです。" name="textFSMoneyChangeUp">
+			<text tool_tip="リンデンドル残高が増加した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSMoneyChangeUp">
 				リンデンドル残高増加：
 			</text>
 			<button name="Prev_UISndMoneyChangeUp" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndMoneyChangeUp" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndMoneyChangeUp"/>
-			<text tool_tip="ＩＭを受信した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「通知」にある「ＩＭを受信した時」と共通になっています。" name="textFSNewIncomingIMSession">
+			<text tool_tip="ＩＭを受信した時に再生するサウンドのＵＵＩＤを指定します。この設定は「チャット」＞「通知」にある「ＩＭを受信した時」と共通になっています。" name="textFSNewIncomingIMSession">
 				ＩＭを受信した時：
 			</text>
 			<button name="Prev_UISndNewIncomingIMSession" tool_tip="このサウンドをプレビューします。"/>
@@ -222,7 +222,7 @@
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
 			</combo_box>
-			<text tool_tip="グループのＩＭを受信した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「通知」にある「グループのＩＭを受信した時:」と共通になっています。" name="textFSNewGroupIncomingIMSession">
+			<text tool_tip="グループのＩＭを受信した時に再生するサウンドのＵＵＩＤを指定します。この設定は「チャット」＞「通知」にある「グループのＩＭを受信した時:」と共通になっています。" name="textFSNewGroupIncomingIMSession">
 				グループＩＭ受信した時：
 			</text>
 			<button name="Prev_UISndNewIncomingGroupIMSession" tool_tip="このサウンドをプレビューします。"/>
@@ -233,7 +233,7 @@
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
 			</combo_box>
-			<text tool_tip="会話ＩＭを受信した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「通知」にある「会話ＩＭを受信した時：」と共通になっています。" name="textFSNewConferenceIncomingIMSession">
+			<text tool_tip="会話ＩＭを受信した時に再生するサウンドのＵＵＩＤを指定します。この設定は「チャット」＞「通知」にある「会話ＩＭを受信した時：」と共通になっています。" name="textFSNewConferenceIncomingIMSession">
 				会話ＩＭを受信した時：
 			</text>
 			<button name="Prev_UISndNewIncomingConfIMSession" tool_tip="このサウンドをプレビューします。"/>
@@ -244,43 +244,43 @@
 				<combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3"/>
 				<combo_box.item label="通知音は鳴らさない" name="0"/>
 			</combo_box>
-			<text tool_tip="新しいＩＭセッションを開始した時に再生するサウンドのＵＵＩＤです。" name="textFSStartIM">
+			<text tool_tip="新しいＩＭセッションを開始した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSStartIM">
 				ＩＭ新規開始：
 			</text>
 			<button name="Prev_UISndStartIM" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndStartIM" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndStartIM"/>
-			<text tool_tip="チャットでメンションされた時に再生するサウンドのＵＵＩＤです。" name="textChatMention">
+			<text tool_tip="チャットでメンションされた時に再生するサウンドのＵＵＩＤを指定します。" name="textChatMention">
 				チャットのメンション先：
 			</text>
 			<button name="Prev_UISndChatMention" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndChatMention" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndChatMention"/>
-			<text tool_tip="新しくオブジェクトを作成した時に再生するサウンドのＵＵＩＤです。" name="textFSObjectCreate">
+			<text tool_tip="新しくオブジェクトを作成した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSObjectCreate">
 				オブジェクト作成：
 			</text>
 			<button name="Prev_UISndObjectCreate" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndObjectCreate" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndObjectCreate"/>
-			<text tool_tip="オブジェクトを削除した時に再生するサウンドのＵＵＩＤです。" name="textFSObjectDelete">
+			<text tool_tip="オブジェクトを削除した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSObjectDelete">
 				オブジェクト削除：
 			</text>
 			<button name="Prev_UISndObjectDelete" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndObjectDelete" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndObjectDelete"/>
-			<text tool_tip="オブジェクトをRezした時に再生するサウンドのＵＵＩＤです。" name="textFSObjectRezIn">
+			<text tool_tip="オブジェクトをRezした時に再生するサウンドのＵＵＩＤを指定します。" name="textFSObjectRezIn">
 				オブジェクトRez：
 			</text>
 			<button name="Prev_UISndObjectRezIn" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndObjectRezIn" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndObjectRezIn"/>
-			<text tool_tip="オブジェクトをDeRezした時に再生するサウンドのＵＵＩＤです。" name="textFSObjectRezOut">
+			<text tool_tip="オブジェクトをDeRezした時に再生するサウンドのＵＵＩＤを指定します。" name="textFSObjectRezOut">
 				オブジェクトのDeRez：
 			</text>
 			<button name="Prev_UISndObjectRezOut" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndObjectRezOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndObjectRezOut"/>
-			<text tool_tip="スナップショットを撮った時に再生するサウンドのＵＵＩＤです。この設定は「アドバンス」メニューの「シャッター音とアニメーションなしでスナップショットをディスクに保存する」と共通になっています。" name="textFSSnapshot">
+			<text tool_tip="スナップショットを撮った時に再生するサウンドのＵＵＩＤを指定します。この設定は「高度な操作」メニューの「シャッター音を出さずにスナップショットをディスクに保存」と共通になっています。" name="textFSSnapshot">
 				スナップショットを撮る：
 			</text>
 			<button name="Prev_UISndSnapshot" tool_tip="このサウンドをプレビューします。"/>
@@ -299,109 +299,115 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
-			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤです。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
+			<text tool_tip="テレポートした時に再生するサウンドのＵＵＩＤを指定します。この設定は「移動と表示」＞「テレポート」の「テレポートサウンドを鳴らす」と共通になっています。" name="textFSTeleportOut">
 				テレポート：
 			</text>
 			<button name="Prev_UISndTeleportOut" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndTeleportOut" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOut"/>
-			<text tool_tip="パイメニューを表示した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuAppear">
+			<text tool_tip="パイメニューを表示した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuAppear">
 				パイメニューを表示したとき：
 			</text>
 			<button name="Prev_UISndPieMenuAppear" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuAppear" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuAppear"/>
-			<text tool_tip="パイメニューが消える時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuHide">
+			<text tool_tip="パイメニューが消える時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuHide">
 				パイメニューを消した時：
 			</text>
 			<button name="Prev_UISndPieMenuHide" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuHide" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuHide"/>
-			<text tool_tip="パイメニューの１番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight0">
+			<text tool_tip="パイメニューの１番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight0">
 				パイメニュー選択１：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight0" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight0" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight0"/>
-			<text tool_tip="パイメニューの２番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight1">
+			<text tool_tip="パイメニューの２番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight1">
 				パイメニュー選択２：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight1" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight1" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight1"/>
-			<text tool_tip="パイメニューの３番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight2">
+			<text tool_tip="パイメニューの３番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight2">
 				パイメニュー選択３：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight2" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight2" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight2"/>
-			<text tool_tip="パイメニューの４番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight3">
+			<text tool_tip="パイメニューの４番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight3">
 				パイメニュー選択４：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight3" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight3" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight3"/>
-			<text tool_tip="パイメニューの５番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight4">
+			<text tool_tip="パイメニューの５番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight4">
 				パイメニュー選択５：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight4" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight4" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight4"/>
-			<text tool_tip="パイメニューの６番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight5">
+			<text tool_tip="パイメニューの６番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight5">
 				パイメニュー選択６：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight5" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight5" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight5"/>
-			<text tool_tip="パイメニューの７番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight6">
+			<text tool_tip="パイメニューの７番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight6">
 				パイメニュー選択７：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight6" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight6" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight6"/>
-			<text tool_tip="パイメニューの８番目のアイテムを選択した時に再生するサウンドのＵＵＩＤです。" name="textFSPieMenuSliceHighlight7">
+			<text tool_tip="パイメニューの８番目のアイテムを選択した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight7">
 				パイメニュー選択８：
 			</text>
 			<button name="Prev_UISndPieMenuSliceHighlight7" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndPieMenuSliceHighlight7" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight7"/>
-			<text tool_tip="チャットの入力を開始した時に再生するサウンドのＵＵＩＤです。この設定は「チャット」＞「タイピング」の「人が会話している時にタイピング音が聞こえるようにする」と共通になっています。" name="textFSTyping">
+			<text tool_tip="チャットの入力を開始した時に再生するサウンドのＵＵＩＤを指定します。この設定は「チャット」＞「タイピング」の「人が会話している時にタイピング音が聞こえるようにする」と共通になっています。" name="textFSTyping">
 				チャット入力：
 			</text>
 			<button name="Prev_UISndTyping" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndTyping" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="FSPlayTypingSoundCheckBox"/>
-			<text tool_tip="ウィンドウを閉じる時に再生するサウンドのＵＵＩＤです。" name="textFSWindowClose">
+			<text tool_tip="ウィンドウを閉じる時に再生するサウンドのＵＵＩＤを指定します。" name="textFSWindowClose">
 				ウィンドウを閉じる：
 			</text>
 			<button name="Prev_UISndWindowClose" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndWindowClose" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndWindowClose"/>
-			<text tool_tip="ウィンドウを開く時に再生するサウンドのＵＵＩＤです。" name="textFSWindowOpen">
-				ウィンドウを開く：
+			<text tool_tip="ウィンドウを開く時に再生するサウンドのＵＵＩＤを指定します。" name="textFSWindowOpen">
+				ウィンドウを開いたとき：
 			</text>
 			<button name="Prev_UISndWindowOpen" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndWindowOpen" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndWindowOpen"/>
-			<text tool_tip="スクリプトのダイアログが開く時に再生するサウンドのＵＵＩＤです。" name="textFSScriptFloaterOpen">
-				スクリプトのダイアログ：
+			<text tool_tip="スクリプトがダイアログを開く時に再生するサウンドのＵＵＩＤを指定します。" name="textFSScriptFloaterOpen">
+				スクリプトダイアログが開いたとき：
 			</text>
 			<button name="Prev_UISndScriptFloaterOpen" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndScriptFloaterOpen" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndScriptFloaterOpen"/>
-			<text tool_tip="フレンドがオンラインになった時に再生するサウンドのＵＵＩＤです。" name="textFSFriendOnline">
+			<text  tool_tip="スクリプトがダイアログウィンドウを閉じるときに再生されるサウンドのＵＵＩＤを指定します。" name="textFSScriptFloaterClose">
+				スクリプトダイアログを閉じたとき：
+			</text>
+			<button name="Prev_UISndScriptFloaterClose"  tool_tip="このサウンドをプレビューします。"/>
+			<button name="Def_UISndScriptFloaterClose" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
+			<check_box label="このサウンドを再生" name="PlayModeUISndScriptFloaterClose" />
+			<text tool_tip="フレンドがオンラインになった時に再生するサウンドのＵＵＩＤを指定します。" name="textFSFriendOnline">
 				フレンドがオンラインになった：
 			</text>
 			<button name="Prev_UISndFriendOnline" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndFriendOnline" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndFriendOnline"/>
-			<text tool_tip="フレンドがオフラインになった時に再生するサウンドのＵＵＩＤです。" name="textFSFriendOffline">
+			<text tool_tip="フレンドがオフラインになった時に再生するサウンドのＵＵＩＤを指定します。" name="textFSFriendOffline">
 				フレンドがオフラインになった：
 			</text>
 			<button name="Prev_UISndFriendOffline" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndFriendOffline" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndFriendOffline"/>
-			<text tool_tip="フレンドの申請があった時に再生するサウンドのＵＵＩＤです。" name="textFSFriendshipOffer">
+			<text tool_tip="フレンドの申請があった時に再生するサウンドのＵＵＩＤを指定します。" name="textFSFriendshipOffer">
 				フレンド申請：
 			</text>
 			<button name="Prev_UISndFriendshipOffer" tool_tip="このサウンドをプレビューします。"/>
@@ -414,73 +420,73 @@
 				ここから（サウンドのＵＵＩＤを指定することで）デフォルトのインターフェイスサウンドを変更したり、
 有効、無効にすることができます。初期設定値を確認するにはマウスをＵＵＩＤフィールドの上に乗せて下さい。
 			</text>
-			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤです。" name="textFSTeleportOffer">
+			<text tool_tip="テレポートで呼ばれた時に再生するサウンドのＵＵＩＤを指定します。" name="textFSTeleportOffer">
 				テレポートのオファーを受けた：
 			</text>
 			<button name="Prev_UISndTeleportOffer" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndTeleportOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndTeleportOffer"/>
-			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤです。" name="textFSInventoryOffer">
+			<text tool_tip="インベントリに物が送られて来た時に再生するサウンドのＵＵＩＤを指定します。" name="textFSInventoryOffer">
 				インベントリに受け取った：
 			</text>
 			<button name="Prev_UISndInventoryOffer" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndInventoryOffer" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndInventoryOffer"/>
-			<text tool_tip="ボイスコールを受信した時に再生するサウンドのＵＵＩＤです。" name="textFSIncomingVoiceCall">
+			<text tool_tip="ボイスコールを受信した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSIncomingVoiceCall">
 				ボイスコールを受けた：
 			</text>
 			<button name="Prev_UISndIncomingVoiceCall" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndIncomingVoiceCall" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndIncomingVoiceCall"/>
-			<text tool_tip="グループ招待があった時に再生するサウンドのＵＵＩＤです。" name="textFSGroupInvitation">
+			<text tool_tip="グループ招待があった時に再生するサウンドのＵＵＩＤを指定します。" name="textFSGroupInvitation">
 				グループに招待された：
 			</text>
 			<button name="Prev_UISndGroupInvitation" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndGroupInvitation" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndGroupInvitation"/>
-			<text tool_tip="グループ通知を受信した時に再生するサウンドのＵＵＩＤです。" name="textFSGroupNotice">
+			<text tool_tip="グループ通知を受信した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSGroupNotice">
 				グループ通知を受け取った：
 			</text>
 			<button name="Prev_UISndGroupNotice" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndGroupNotice" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndGroupNotice"/>
-			<text tool_tip="新しい体験の通知を受信した時に再生するサウンドのＵＵＩＤです。" name="textFSQuestionExperience">
+			<text tool_tip="新しい体験の通知を受信した時に再生するサウンドのＵＵＩＤを指定します。" name="textFSQuestionExperience">
 				新しい体験：
 			</text>
 			<button name="Prev_UISndQuestionExperience" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndQuestionExperience" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndQuestionExperience"/>
-			<text tool_tip="無効な操作を行った時に再生するサウンドのＵＵＩＤです。" name="textFSInvalidOp">
+			<text tool_tip="無効な操作を行った時に再生するサウンドのＵＵＩＤを指定します。" name="textFSInvalidOp">
 				無効な操作：
 			</text>
 			<button name="Prev_UISndInvalidOp" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndInvalidOp" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndInvalidOp"/>
-			<text tool_tip="移動ロックを有効にした時に再生するサウンドのＵＵＩＤです。" name="textFSMovelockToggle">
+			<text tool_tip="移動ロックを有効にした時に再生するサウンドのＵＵＩＤを指定します。" name="textFSMovelockToggle">
 				移動ロック：
 			</text>
 			<button name="Prev_UISndMovelockToggle" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndMovelockToggle" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndMovelockToggle"/>
-			<text tool_tip="追跡ビーコンが有効になっている時に再生されるサウンドのＵＵＩＤです。アバターが目的地に近付くほど再生周期が短くなります。" name="textFSTrackerBeacon">
+			<text tool_tip="追跡ビーコンが有効になっている時に再生されるサウンドのＵＵＩＤを指定します。アバターが目的地に近付くほど再生周期が短くなります。" name="textFSTrackerBeacon">
 				追跡ビーコン：
 			</text>
 			<button name="Prev_UISndTrackerBeacon" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndTrackerBeacon" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndTrackerBeacon"/>
-			<text tool_tip="マイクがオンまたはオフに切り替わったときに再生されるサウンドのＵＵＩＤです。" name="textFSMicToggle">
+			<text tool_tip="マイクがオンまたはオフに切り替わったときに再生されるサウンドのＵＵＩＤを指定します。" name="textFSMicToggle">
 				マイクロフォン切り替え：
 			</text>
 			<button name="Prev_UISndMicToggle" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndMicToggle" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndMicToggle"/>
-			<text tool_tip="ＳＩＭ再起動の警告が表示される時に再生するサウンドのＵＵＩＤです。" name="textFSRestart">
+			<text tool_tip="ＳＩＭ再起動の警告が表示される時に再生するサウンドのＵＵＩＤを指定します。" name="textFSRestart">
 				ＳＩＭの再起動
 			</text>
 			<button name="Prev_UISndRestart" tool_tip="このサウンドをプレビューします。"/>
 			<button name="Def_UISndRestart" tool_tip="デフォルトのＵＵＩＤにリセットします。"/>
 			<check_box label="このサウンドを再生" name="PlayModeUISndRestart"/>
-			<text tool_tip="ＳＩＭ再起動の警告が表示される時に再生するサウンドのＵＵＩＤです。（OpenSimの場合）" name="textFSRestartOpenSim">
+			<text tool_tip="ＳＩＭ再起動の警告が表示される時に再生するサウンドのＵＵＩＤを指定します。（OpenSimの場合）" name="textFSRestartOpenSim">
 				ＳＩＭ再起動（OpenSim）：
 			</text>
 			<button name="Prev_UISndRestartOpenSim" tool_tip="このサウンドをプレビューします。"/>

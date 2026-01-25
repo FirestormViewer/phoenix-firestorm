@@ -39,6 +39,7 @@
 #include "llfloaterpathfindinglinksets.h"
 #include "llfloaterreg.h"
 #include "llhandle.h"
+#include "llnotificationsutil.h" // <FS:TJ/>
 #include "llpanel.h"
 #include "llpathfindingnavmeshzone.h"
 #include "llpathfindingpathtool.h"
@@ -203,6 +204,12 @@ void LLFloaterPathfindingConsole::onOpen(const LLSD& pKey)
     {
         setConsoleState(kConsoleStateLibraryNotImplemented);
         LL_WARNS() <<"Errror: cannot find pathing library implementation."<<LL_ENDL;
+
+        // <FS:TJ> Show an alert dialog if using a viewer without pathfinding view / test support
+        LLSD args;
+        args["FEATURE"] = getString("no_havok");
+        LLNotificationsUtil::add("NoHavok", args);
+        // </FS:TJ>
     }
     else
     {

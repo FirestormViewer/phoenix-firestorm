@@ -35,7 +35,6 @@
 #include "llnotificationsutil.h"
 #include "llspinctrl.h"
 #include "llviewercontrol.h"
-#include "llviewerinventory.h"
 #include "utilitybar.h"
 
 FloaterAO::FloaterAO(const LLSD& key)
@@ -49,10 +48,6 @@ FloaterAO::FloaterAO(const LLSD& key)
     mMore(true)
 {
     mEventTimer.stop();
-}
-
-FloaterAO::~FloaterAO()
-{
 }
 
 void FloaterAO::reloading(bool reload)
@@ -283,9 +278,7 @@ bool FloaterAO::postBuild()
     mPreviousButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious, this));
     mNextButtonSmall->setCommitCallback(boost::bind(&FloaterAO::onClickNext, this));
 
-// <AS:Chanayane> Double click on animation in AO
     mAnimationList->setDoubleClickCallback(boost::bind(&FloaterAO::onDoubleClick, this));
-// </AS:Chanayane>
 
     updateSmart();
 
@@ -777,15 +770,14 @@ void FloaterAO::onChangeCycleTime()
 
 void FloaterAO::onClickPrevious()
 {
-    AOEngine::instance().cycle(AOEngine::CyclePrevious);
+    AOEngine::instance().cycle(AOEngine::CyclePrevious, true);
 }
 
 void FloaterAO::onClickNext()
 {
-    AOEngine::instance().cycle(AOEngine::CycleNext);
+    AOEngine::instance().cycle(AOEngine::CycleNext, true);
 }
 
-// <AS:Chanayane> Double click on animation in AO
 void FloaterAO::onDoubleClick()
 {
     LLScrollListItem* item = mAnimationList->getFirstSelected();
@@ -817,7 +809,6 @@ void FloaterAO::onDoubleClick()
 
     AOEngine::instance().playAnimation(*animUUID);
 }
-// </AS:Chanayane>
 
 void FloaterAO::onClickMore()
 {
@@ -872,7 +863,6 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 
     if (mCurrentBoldItem)
     {
-// <AS:Chanayane> Safer casts
         if (LLScrollListCell* icon_cell = mCurrentBoldItem->getColumn(0))
         {
             if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(icon_cell))
@@ -888,7 +878,6 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
                 text->setFontStyle(LLFontGL::NORMAL);
             }
         }
-// </AS:Chanayane>
 
         mCurrentBoldItem = nullptr;
     }
@@ -898,23 +887,17 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
         return;
     }
 
-// <AS:Chanayane> Fix potential nullptr
     if (!mAnimationList)
     {
         LL_WARNS("AO") << "Animation list control is null." << LL_ENDL;
         return;
     }
-// </AS:Chanayane>
 
-// <AS:Chanayane> Safer casts
     // why do we have no LLScrollListCtrl::getItemByUserdata() ? -Zi
     for (LLScrollListItem* item : mAnimationList->getAllData())
     {
         LLUUID* id = static_cast<LLUUID*>(item->getUserdata());
-        // <AS:Chanayane> compares the LLUUID values instead of pointer values
-        //if (id == &animation)
         if (id && *id == animation)
-        // </AS:Chanayane>
         {
             mCurrentBoldItem = item;
 
@@ -937,7 +920,6 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
             return;
         }
     }
-// </AS:Chanayane>
 }
 
 // virtual
