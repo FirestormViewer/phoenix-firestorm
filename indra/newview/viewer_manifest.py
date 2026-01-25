@@ -348,10 +348,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         channel_type=self.channel_type()
         #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
         #if channel_type == 'release':
-        #    return CHANNEL_VENDOR_BASE
+        #    app_suffix='Viewer'
         #else:
-        #    return CHANNEL_VENDOR_BASE + ' ' + self.channel_variant()
-        app_suffix=self.channel_variant()
+        #    app_suffix=self.channel_variant()
+        #return CHANNEL_VENDOR_BASE + ' ' + app_suffix
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_is_opensim():

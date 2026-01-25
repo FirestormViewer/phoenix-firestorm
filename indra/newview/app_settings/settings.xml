@@ -2217,7 +2217,7 @@
         <key>Type</key>
         <string>String</string>
         <key>Value</key>
-        <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/vawp/index.html</string>
+        <string>https://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/vawp/index.html</string>
     </map>
     <!--AvatarBakedTextureUploadTimeout is in use by QA-->
     <key>AvatarBakedTextureUploadTimeout</key>
@@ -4858,7 +4858,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/guide.html</string>
+      <string>https://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/guide.html</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -5211,7 +5211,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://events.[GRID]/viewer/embed/event/[EVENT_ID]</string>
+      <string>https://events.[GRID]/viewer/embed/event/[EVENT_ID]</string>
     </map>
     <key>FastCacheFetchEnabled</key>
     <map>
@@ -6720,7 +6720,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://wiki.secondlife.com/wiki/[LSL_STRING]</string>
+      <string>https://wiki.secondlife.com/wiki/[LSL_STRING]</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -7323,7 +7323,7 @@
         <key>Type</key>
         <string>F32</string>
         <key>Value</key>
-        <real>30.0</real>
+        <real>60.0</real>
     </map>
     <key>MapScale</key>
     <map>
@@ -10717,7 +10717,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>32.0</real>
+    <real>48.0</real>
   </map>
   <key>RenderCPUBasis</key>
   <map>
@@ -12612,7 +12612,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Comment</key>
         <string>Show reflection probes in the transparency debug view</string>
         <key>Persist</key>
-        <integer>1</integer>
+        <integer>0</integer>
         <key>Type</key>
         <string>Boolean</string>
         <key>Value</key>
@@ -19703,7 +19703,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://common-flash-secondlife-com.s3.amazonaws.com/viewer/v2.6/agni/404.html</string>
+      <string>https://common-flash-secondlife-com.s3.amazonaws.com/viewer/v2.6/agni/404.html</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>

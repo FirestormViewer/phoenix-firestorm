@@ -1571,6 +1571,7 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+    resumeMainloopTimeout("Main:doFrameStart");
 #ifdef LL_DISCORD
     {
         LL_PROFILE_ZONE_NAMED("discord_callbacks");
@@ -1955,6 +1956,11 @@ bool LLAppViewer::doFrame()
         LL_INFOS() << "Exiting main_loop" << LL_ENDL;
     }
     }LLPerfStats::StatsRecorder::endFrame();
+
+    // Not viewer's fault if something outside frame
+    // pauses viewer (ex: macOS doesn't call oneFrame),
+    // so stop tracking on exit.
+    pauseMainloopTimeout();
     LL_PROFILER_FRAME_END;
 
     return ! LLApp::isRunning();
@@ -6829,7 +6835,8 @@ F32 LLAppViewer::getMainloopTimeoutSec() const
     if (LLStartUp::getStartupState() == STATE_STARTED
         && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
     {
-        static LLCachedControl<F32> mainloop_started(gSavedSettings, "MainloopTimeoutStarted", 30.f);
+        // consider making this value match 'disconnected' timout.
+        static LLCachedControl<F32> mainloop_started(gSavedSettings, "MainloopTimeoutStarted", 60.f);
         return mainloop_started();
     }
     else
