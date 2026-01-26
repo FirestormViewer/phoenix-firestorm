@@ -12509,8 +12509,11 @@ void LLPipeline::rebuildDrawInfo()
     const U32 types_to_traverse[] =
     {
         LLViewerRegion::PARTITION_VOLUME,
-        LLViewerRegion::PARTITION_BRIDGE,
-        LLViewerRegion::PARTITION_AVATAR
+        // <FS:Beq> Fix for alpha blend issues with highlight transparent resulting from fix for LL#2577
+        // LLViewerRegion::PARTITION_BRIDGE,
+        // LLViewerRegion::PARTITION_AVATAR,
+        LLViewerRegion::PARTITION_BRIDGE
+        // </FS:Beq>
     };
 
     LLOctreeDirty dirty;
