@@ -20,7 +20,7 @@ top="0">
 	layout="topleft"
 	top_pad="3"
 	left="0"
-	width="288"
+	width="300"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -40,7 +40,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="87"
 	border_visible="true"
 	background_visible="true">
@@ -65,7 +65,7 @@ top="0">
 		left_pad="0"
 		name="ambient_light"
 		top_delta="-5"
-		width="166" />
+		width="178" />
 
 		<text
 		name="blue_horizon_label"
@@ -87,7 +87,7 @@ top="0">
 		left_pad="0"
 		name="blue_horizon"
 		top_delta="-5"
-		width="166" />
+		width="178" />
 
 		<text
 		name="blue_density_label"
@@ -109,7 +109,7 @@ top="0">
 		left_pad="0"
 		name="blue_density"
 		top_delta="-5"
-		width="166" />
+		width="178" />
 	</panel>
 
 	<panel
@@ -118,7 +118,7 @@ top="0">
 	layout="topleft"
 	top_pad="3"
 	left="0"
-	width="288"
+	width="300"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -139,7 +139,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="149"
 	border_visible="true"
 	background_visible="true">
@@ -151,15 +151,15 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="7"
-		width="100">
+		width="110">
 		Haze Horizon:
 		</text>
 
 		<slider
-		decimal_digits="3"
+		decimal_digits="2"
 		follows="left|top"
 		height="16"
-		increment="0.001"
+		increment="0.01"
 		initial_value="0"
 		layout="topleft"
 		min_val="0"
@@ -175,7 +175,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Haze Density:
 		</text>
 
@@ -199,7 +199,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Density Multiplier:
 		</text>
 
@@ -223,7 +223,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Distance Multiplier:
 		</text>
 
@@ -247,12 +247,12 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
-		Maximum Altitide:
+		width="110">
+		Maximum Altitude:
 		</text>
 
 		<slider
-		decimal_digits="1"
+		decimal_digits="2"
 		follows="left|top"
 		height="16"
 		increment="0.01"
@@ -271,7 +271,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Brightness:
 		</text>
 
@@ -279,10 +279,10 @@ top="0">
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
-		increment="0.1"
+		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		max_val="100"
+		max_val="20"
 		name="scene_gamma"
 		left_pad="0"
 		width="171"
@@ -295,7 +295,7 @@ top="0">
 		layout="topleft"
 		left="5"
 		tool_tip="Irradiance control.  When not zero, enables HDR lighting model."
-		width="100"
+		width="110"
 		word_wrap="true">
 		Reflection Probe Ambiance (HDR):
 		</text>
@@ -304,10 +304,10 @@ top="0">
 		decimal_digits="2"
 		follows="left|top"
 		height="16"
-		increment="0.5"
+		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		max_val="100"
+		max_val="10"
 		name="probe_ambiance"
 		left_pad="0"
 		width="171"
@@ -320,7 +320,7 @@ top="0">
 	layout="topleft"
 	top_pad="3"
 	left="0"
-	width="288"
+	width="300"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -343,7 +343,7 @@ top="0">
 		layout="topleft"
 		top_pad="1"
 		left="3"
-		width="280"
+		width="292"
 		height="63"
 		border_visible="true"
 		background_visible="true">
@@ -355,7 +355,7 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="7"
-		width="100">
+		width="110">
 		Moisture Level:
 		</text>
 
@@ -379,7 +379,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Droplet Radius:
 		</text>
 
@@ -387,11 +387,11 @@ top="0">
 		decimal_digits="3"
 		follows="left|top"
 		height="16"
-		increment="0.001"
+		increment="0.01"
 		initial_value="0"
 		left_pad="0"
 		layout="topleft"
-		min_val="0"
+		min_val="5"
 		max_val="1000.0"
 		name="droplet_radius"
 		width="171"
@@ -403,7 +403,7 @@ top="0">
 		height="15"
 		layout="topleft"
 		left="5"
-		width="100">
+		width="110">
 		Ice Level:
 		</text>
 
