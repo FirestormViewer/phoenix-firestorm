@@ -652,6 +652,15 @@ void do_bulk_upload(std::vector<std::string> filenames, bool allow_2k)
 
                     LLPointer<LLImageJ2C> formatted = new LLImageJ2C;
 
+                    // <FS:TJ> [FIRE-36296] Bulk uploading small textures should use lossless by default
+                    static LLCachedControl<bool> lossless_j2c_upload(gSavedSettings, "LosslessJ2CUpload", true);
+                    if (lossless_j2c_upload &&
+                        (raw_image->getWidth() * raw_image->getHeight() <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF))
+                    {
+                        formatted->setReversible(true);
+                    }
+                    // </FS:TJ>
+
                     if (formatted->encode(raw_image, 0.0f))
                     {
                         LLFileSystem fmt_file(new_asset_id, LLAssetType::AT_TEXTURE, LLFileSystem::WRITE);
