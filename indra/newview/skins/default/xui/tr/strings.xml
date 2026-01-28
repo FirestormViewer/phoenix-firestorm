@@ -37,6 +37,7 @@
 	<string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Second Life Viewer ile uyumluluk: [VIEWER_VERSION_LL]
 	</string>
 	<string name="BuildConfig">
 		Yapı Konfigürasyonu [BUILD_CONFIG]

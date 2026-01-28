@@ -74,6 +74,8 @@ public:
     /// return the viewer version as a string like "2.0.0"
     std::string getShortVersion() const;
 
+    std::string getLLViewerVersion() const; // <FS:PP>
+
     /// return the viewer version and channel as a string
     /// like "Second Life Release 2.0.0.200030"
     std::string getChannelAndVersion();
