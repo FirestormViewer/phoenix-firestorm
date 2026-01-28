@@ -426,7 +426,7 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     for (size_t lod_iter = 0; lod_iter < LOCAL_NUM_LODS; ++lod_iter)
     {
         mFilenames[lod_iter].clear();
-        mLastModified[lod_iter].clear();
+        mLastModified[lod_iter] = 0ul;
         mLoadedSuccessfully[lod_iter] = false;
     }
 
@@ -719,7 +719,7 @@ void LLLocalMeshFile::reloadLocalMeshObjectsCallback()
 
 bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
 {
-    LLSD current_last_modified = mLastModified[lod];
+    U64 current_last_modified = mLastModified[lod];
     std::string current_filename = mFilenames[lod];
 
     std::error_code ec;
@@ -727,8 +727,8 @@ bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
     if (ec)
         return false;
 
-    std::time_t temp_time = std::chrono::system_clock::to_time_t(std::chrono::clock_cast<std::chrono::system_clock>(file_time));
-    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString())
+    const auto new_last_modified = std::chrono::duration_cast<std::chrono::seconds>(file_time.time_since_epoch()).count();
+    if (new_last_modified != current_last_modified)
     {
         mLastModified[lod] = new_last_modified;
         return true;

@@ -200,7 +200,7 @@ public:
 
 private:
     std::array<std::string, LOCAL_NUM_LODS> mFilenames;
-    std::array<LLSD, LOCAL_NUM_LODS>        mLastModified;
+    std::array<U64, LOCAL_NUM_LODS>         mLastModified;
     std::array<bool, LOCAL_NUM_LODS>        mLoadedSuccessfully;
     bool                                    mTryLODFiles;
     std::string                             mShortName;
