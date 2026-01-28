@@ -244,7 +244,7 @@ void LLStreamingAudio_FMODSTUDIO::update()
                         }
                         case FMOD_TAGTYPE_FMOD:
                         {
-                            if (name != "Sample Rate Change")
+                            if (name == "Sample Rate Change")
                             {
                                 LL_INFOS() << "Stream forced changing sample rate to " << *((float*)tag.data) << LL_ENDL;
                                 mFMODInternetStreamChannelp->setFrequency(*((float*)tag.data));
