@@ -1615,7 +1615,7 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="16"
              layout="topleft"
-             left="255"
+             left="245"
              top_pad="10"
              name="Teleport Routing: "
              width="200">
