@@ -236,13 +236,9 @@ void LLAgentWearables::setAvatarObject(LLVOAvatarSelf *avatar)
 {
     llassert(avatar);
     // <FS:Ansariel> [Legacy Bake]
-#ifdef OPENSIM
-    if (!LLGridManager::getInstance()->isInSecondLife())
-    {
+    // <FS:Lotek> This also needs to fire in Second Life for wearables consistency
     avatar->outputRezTiming("Sending wearables request");
     sendAgentWearablesRequest();
-    }
-#endif
     // </FS:Ansariel> [Legacy Bake]
     setAvatarAppearance(avatar);
 }
@@ -279,7 +275,8 @@ void LLAgentWearables::AddWearableToAgentInventoryCallback::fire(const LLUUID& i
     // <FS:Ansariel> [Legacy Bake]
     if (mTodo & CALL_UPDATE)
     {
-        gAgentWearables.sendAgentWearablesUpdate();
+        //gAgentWearables.sendAgentWearablesUpdate();
+        gAgentWearables.updateServer(); // </FS:Lotek> wearables consistency
     }
     if (mTodo & CALL_RECOVERDONE)
     {
