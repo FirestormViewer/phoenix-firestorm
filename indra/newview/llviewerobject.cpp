@@ -4835,9 +4835,10 @@ const LLQuaternion LLViewerObject::getRenderRotation() const
     }
     else
     {
-        if (!mDrawable->isRoot())
+        LLDrawable* parent = mDrawable->getParent();
+        if (!mDrawable->isRoot() && parent)
         {
-            ret = getRotation() * LLQuaternion(mDrawable->getParent()->getWorldMatrix());
+            ret = getRotation() * LLQuaternion(parent->getWorldMatrix());
         }
         else
         {
