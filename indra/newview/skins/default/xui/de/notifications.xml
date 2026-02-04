@@ -3730,6 +3730,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="SnapshotToLocalDirNotExist">
 		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis existiert nicht.
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		Bildes gespeichert unter:
+[FILEPATH]
+
+Klicken, um Verzeichnis zu öffnen.
+	</notification>
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].
 	</notification>
