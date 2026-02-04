@@ -1296,7 +1296,7 @@ Only large parcels can be listed in search.
           follows="left|top"
           height="16"
           layout="topleft"
-          left_pad="-55"
+          left_pad="-45"
           name="caution_text"
           width="200">
            (Use with caution!)
@@ -1569,12 +1569,12 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="16"
              layout="topleft"
-             left="255"
+             left="245"
              top="282"
              text_color="White"
              name="landing_point"
              word_wrap="true"
-             width="200">
+             width="240">
                 Landing Point: [LANDING]
             </text>
             <button
@@ -1585,9 +1585,9 @@ Only large parcels can be listed in search.
              label_selected="Set"
              layout="topleft"
              name="Set"
-             left="255"
+             left="245"
              tool_tip="Sets the landing point where visitors arrive. Sets to your avatar&apos;s location inside this parcel."
-             width="50" />
+             width="60" />
             <button
              follows="right|top"
              height="23"
@@ -1597,7 +1597,7 @@ Only large parcels can be listed in search.
              left_pad="5"
              name="Clear"
              tool_tip="Clear the landing point"
-             width="55" />
+             width="60" />
             <button
              follows="right|top"
              height="23"
@@ -1607,7 +1607,7 @@ Only large parcels can be listed in search.
              left_pad="5"
              name="teleport_to_landing_point"
              tool_tip="Teleport to the landing point"
-             width="55" />
+             width="60" />
             <text
              type="string"
              length="1"
@@ -1615,7 +1615,7 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="16"
              layout="topleft"
-             left="255"
+             left="245"
              top_pad="10"
              name="Teleport Routing: "
              width="200">

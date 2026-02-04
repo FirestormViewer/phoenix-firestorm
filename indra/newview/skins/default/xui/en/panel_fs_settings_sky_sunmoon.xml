@@ -15,7 +15,7 @@ top="0">
 		layout="topleft"
 		top_pad="3"
 		left="0"
-		width="288"
+		width="300"
 		height="22"
 		bg_alpha_color="EmphasisColor"
 		border_visible="true"
@@ -36,7 +36,7 @@ top="0">
 		layout="topleft"
 		top_pad="5"
 		left="3"
-		width="280"
+		width="292"
 		height="35"
 		border_visible="true"
 		background_visible="true">
@@ -68,7 +68,7 @@ top="0">
 		layout="topleft"
 		top_pad="3"
 		left="0"
-		width="288"
+		width="300"
 		height="22"
 		bg_alpha_color="EmphasisColor"
 		border_visible="true"
@@ -89,8 +89,8 @@ top="0">
 		layout="topleft"
 		top_pad="1"
 		left="3"
-		width="280"
-		height="145"
+		width="292"
+		height="157"
 		border_visible="true"
 		background_visible="true">
 
@@ -145,7 +145,7 @@ top="0">
 			max_val="2"
 			name="glow_focus"
 			left_pad="0"
-			width="120"
+			width="132"
 			can_edit_text="true"/>
 
 			<text
@@ -167,9 +167,9 @@ top="0">
 			layout="topleft"
 			left_pad="0"
 			min_val="0"
-			max_val="10"
+			max_val="1.99"
 			name="glow_size"
-			width="120"
+			width="132"
 			can_edit_text="true"/>
 
 			<text
@@ -186,14 +186,14 @@ top="0">
 			decimal_digits="0"
 			follows="left|top"
 			height="16"
-			increment="1"
+			increment="0.01"
 			initial_value="0"
 			layout="topleft"
 			left_pad="0"
 			min_val="0"
-			max_val="50000"
+			max_val="500"
 			name="star_brightness"
-			width="120"
+			width="132"
 			can_edit_text="true"/>
 
 			<text
@@ -215,10 +215,10 @@ top="0">
 			initial_value="0"
 			layout="topleft"
 			left_pad="0"
-			min_val="0.0"
-			max_val="100"
+			min_val="0.25"
+			max_val="20"
 			name="sun_scale"
-			width="215"
+			width="227"
 			can_edit_text="true"/>
 
 			<text
@@ -242,7 +242,7 @@ top="0">
 			min_val="0"
 			max_val="359.99"
 			name="sun_azimuth"
-			width="215"
+			width="227"
 			can_edit_text="true"/>
 
 			<text
@@ -266,7 +266,7 @@ top="0">
 			max_val="90"
 			name="sun_elevation"
 			left_pad="0"
-			width="215"
+			width="227"
 			can_edit_text="true"/>
 		</panel>
 
@@ -276,7 +276,7 @@ top="0">
 		layout="topleft"
 		top_pad="3"
 		left="0"
-		width="288"
+		width="300"
 		height="22"
 		bg_alpha_color="EmphasisColor"
 		border_visible="true"
@@ -297,7 +297,7 @@ top="0">
 		layout="topleft"
 		top_pad="1"
 		left="3"
-		width="280"
+		width="292"
 		height="125"
 		border_visible="true"
 		background_visible="true">
@@ -351,10 +351,10 @@ top="0">
 			initial_value="0"
 			layout="topleft"
 			left_pad="0"
-			min_val="0"
+			min_val="0.25"
 			max_val="20"
 			name="moon_scale"
-			width="145"
+			width="157"
 			can_edit_text="true"/>
 
 			<text
@@ -378,7 +378,7 @@ top="0">
 			max_val="1.0"
 			name="moon_brightness"
 			left_pad="0"
-			width="145"
+			width="157"
 			can_edit_text="true"/>
 
 			<text
@@ -402,7 +402,7 @@ top="0">
 			min_val="0"
 			max_val="359.99"
 			name="moon_azimuth"
-			width="215"
+			width="227"
 			can_edit_text="true"/>
 
 			<text
@@ -426,7 +426,7 @@ top="0">
 			max_val="90"
 			name="moon_elevation"
 			left_pad="0"
-			width="215"
+			width="227"
 			can_edit_text="true"/>
 		</panel>
 </panel>

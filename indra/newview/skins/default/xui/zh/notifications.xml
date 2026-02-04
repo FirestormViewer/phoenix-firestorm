@@ -3633,9 +3633,14 @@ URL：[AUDIOURL]
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		警告：物件「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」要求全權存取你的林登幣帳戶。 你如果允許存取帳戶，它將可在任何時候從你帳戶取走資金，或完全加以清空，或定期取走部分資金，且不會發出警告。
+		警告：物件「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」請求訪問你的林登幣賬戶，以便從中提取資金。如果你允許，它將能夠隨時提取你賬戶中的部分或全部資金，而不會再給出任何警告或請求。
 
-如果你不完全瞭解它為何要求存取你的帳戶，請勿允許。
+在決定是否允許此訪問之前，請務必了解該物件的性質以及它為何提出這樣的請求。此外，仔細考慮你是否信任這個物件的創造者。如果你對此沒有把握，請點擊「拒絕」以防止任何未經授權的資金提取。
+
+
+
+
+
 		<form name="form">
 			<button name="Grant" text="允許全權存取"/>
 			<button name="Deny" text="拒絕"/>

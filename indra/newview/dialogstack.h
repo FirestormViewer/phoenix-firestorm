@@ -31,7 +31,7 @@ class DialogStack
 :   public LLSingleton<DialogStack>
 {
     LLSINGLETON_EMPTY_CTOR(DialogStack);
-    ~DialogStack() {}
+    ~DialogStack() = default;
 
 protected:
     void update();

@@ -42,7 +42,7 @@ public:
 protected:
     void initSingleton() override;
     void checkMetadata(const LLSD& metadata);
-    void sendStreamTitleToChat(std::string_view Title);
+    void sendStreamTitleToChat(std::string_view title);
 
     boost::signals2::connection mMetadataUpdateConnection{};
 };

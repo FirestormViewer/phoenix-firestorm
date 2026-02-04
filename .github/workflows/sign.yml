@@ -41,7 +41,7 @@ jobs:
         setup_files: ${{ steps.get-files.outputs.setup_files }}
     steps:        
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v13
         id: download
         with:
             workflow: build_viewer.yml
@@ -115,7 +115,7 @@ jobs:
         #   wait-for-completion: true
         #   output-artifact-directory: 'application-signed'
       - name: Azure Trusted Signing
-        uses: azure/trusted-signing-action@v0.5.11
+        uses: azure/trusted-signing-action@v1.0.0
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}

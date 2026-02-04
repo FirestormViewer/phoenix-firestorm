@@ -29,7 +29,7 @@ class LLControlVariable;
 class SanityCheck : public LLSingleton<SanityCheck>
 {
     LLSINGLETON_EMPTY_CTOR(SanityCheck);
-    ~SanityCheck() { };
+    ~SanityCheck() = default;
 
 public:
     void init();

@@ -151,7 +151,7 @@ void AOEngine::onPauseAO()
     }
 }
 
-void AOEngine::clear(bool from_timer)
+void AOEngine::clear(bool fromTimer)
 {
     std::move(mSets.begin(), mSets.end(), std::back_inserter(mOldSets));
     mSets.clear();
@@ -160,7 +160,7 @@ void AOEngine::clear(bool from_timer)
 
     //<ND/> FIRE-3801; We cannot delete any AOSet object if we're called from a timer tick. AOSet is derived from LLEventTimer and destruction will
     // fail in ~LLInstanceTracker when a destructor runs during iteration.
-    if (!from_timer)
+    if (!fromTimer)
     {
         std::for_each(mOldSets.begin(), mOldSets.end(), DeletePointer());
         mOldSets.clear();
@@ -222,7 +222,7 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
     }
 }
 
-bool AOEngine::foreignAnimations()
+bool AOEngine::foreignAnimations() const
 {
     // checking foreign animations only makes sense when smart sit is enabled
     if (!mCurrentSet->getSmart())
@@ -520,7 +520,7 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
     }
 }
 
-const LLUUID AOEngine::override(const LLUUID& motion, bool start)
+LLUUID AOEngine::override(const LLUUID& motion, bool start)
 {
     LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(motion) << "," << start << ")" << LL_ENDL;
 
@@ -861,7 +861,7 @@ void AOEngine::cycleTimeout(const AOSet* set)
     cycle(CycleAny);
 }
 
-void AOEngine::cycle(eCycleMode cycleMode)
+void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
 {
     if (!mEnabled)
     {
@@ -980,9 +980,13 @@ void AOEngine::cycle(eCycleMode cycleMode)
         gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
         gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
     }
+
+    if (resetTimer)
+    {
+        mCurrentSet->resetTimer();
+    }
 }
 
-// <AS:Chanayane> Double click on animation in AO
 void AOEngine::playAnimation(const LLUUID& animation)
 {
     if (!mEnabled)
@@ -1098,6 +1102,8 @@ void AOEngine::playAnimation(const LLUUID& animation)
         gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
         gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
     }
+
+    mCurrentSet->resetTimer();
 }
 
 const AOSet* AOEngine::getCurrentSet() const
@@ -1108,7 +1114,6 @@ const AOSet::AOState* AOEngine::getCurrentState() const
 {
     return mCurrentSet->getStateByRemapID(mLastMotion);
 }
-// </AS:Chanayane>
 
 void AOEngine::updateSortOrder(AOSet::AOState* state)
 {
@@ -1746,7 +1751,7 @@ void AOEngine::update()
     }
 }
 
-void AOEngine::reload(bool aFromTimer)
+void AOEngine::reload(bool fromTimer)
 {
     bool wasEnabled = mEnabled;
 
@@ -1760,7 +1765,7 @@ void AOEngine::reload(bool aFromTimer)
     gAgent.stopCurrentAnimations();
     mLastOverriddenMotion = ANIM_AGENT_STAND;
 
-    clear(aFromTimer);
+    clear(fromTimer);
     mAOFolder.setNull();
     mTimerCollection.enableInventoryTimer(true);
     tick();
@@ -1771,7 +1776,7 @@ void AOEngine::reload(bool aFromTimer)
     }
 }
 
-AOSet* AOEngine::getSetByName(const std::string& name) const
+AOSet* AOEngine::getSetByName(std::string_view name) const
 {
     for (auto set : mSets)
     {
@@ -1819,7 +1824,7 @@ void AOEngine::selectSet(AOSet* set)
     }
 }
 
-AOSet* AOEngine::selectSetByName(const std::string& name)
+AOSet* AOEngine::selectSetByName(std::string_view name)
 {
     if (AOSet* set = getSetByName(name))
     {
@@ -1880,9 +1885,9 @@ void AOEngine::saveSet(const AOSet* set)
     mUpdatedSignal();
 }
 
-bool AOEngine::renameSet(AOSet* set, const std::string& name)
+bool AOEngine::renameSet(AOSet* set, std::string_view name)
 {
-    if (name.empty() || name.find(":") != std::string::npos)
+    if (name.empty() || name.find(":") != std::string_view::npos)
     {
         return false;
     }

@@ -14,7 +14,7 @@
         save_visibility="false"
         help_topic="fs_fixed_environment"
         single_instance="true" 
-        width="288">
+        width="300">
     <string name="edit_sky">Edit Sky:</string>
     <string name="edit_water">Edit Water:</string>
     <layout_stack name="floater_stack"
@@ -28,11 +28,11 @@
                 auto_resize="false"
                 user_resize="false"
                 height="23"
-				width="288">
+				width="300">
             <text
                     follows="left|top"
                     top="5"
-                    left="0"
+                    left="5"
                     width="40"
                     height="15"
                     name="info_panel_label"
@@ -105,7 +105,7 @@
                     left="0"
                     orientation="horizontal"
                     top="0"
-                    width="288">
+                    width="300">
                 <layout_panel  
                         follows="bottom|left|right"
                         height="25"
@@ -113,7 +113,7 @@
                         left="0"
                         mouse_opaque="false"
                         name="load_btn_lp"
-                        width="288"> 
+                        width="300"> 
 
 						<button
 						 height="23"
