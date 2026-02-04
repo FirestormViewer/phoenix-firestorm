@@ -119,7 +119,7 @@ public:
     void updateLanguageTextInputArea() override;
     void interruptLanguageTextInput() override;
     void spawnWebBrowser(const std::string& escaped_url, bool async) override;
-                void openFile(const std::string& file_name);
+    void openFile(const std::string& file_name) override;
 
     F32 getSystemUISize() override;
 
