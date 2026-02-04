@@ -161,7 +161,7 @@
 	     mouse_opaque="false"
 	     name="location_combo"
 	     top="0"
-	     width="587">
+	     width="580">
          <combo_list
 		 height="24"
          mouse_wheel_opaque="true"/>

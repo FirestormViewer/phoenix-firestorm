@@ -16,7 +16,7 @@ top="0">
 	layout="topleft"
 	top_pad="3"
 	left="0"
-	width="288"
+	width="300"
 	height="22"
 	bg_alpha_color="EmphasisColor"
 	border_visible="true"
@@ -37,7 +37,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="35"
 	border_visible="true"
 	background_visible="true">
@@ -61,7 +61,7 @@ top="0">
 		left_pad="0"
 		name="cloud_color"
 		top_delta="-5"
-		width="166" /> 
+		width="178" /> 
 	</panel>
 
 	<panel
@@ -70,7 +70,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="63"
 	border_visible="true"
 	background_visible="true">
@@ -96,7 +96,7 @@ top="0">
 		max_val="1"
 		name="cloud_coverage"
 		left_pad="0"
-		width="171"
+		width="183"
 		can_edit_text="true"/>
 
 		<text
@@ -116,11 +116,11 @@ top="0">
 		increment="0.01"
 		initial_value="0"
 		layout="topleft"
-		min_val="0"
+		min_val="0.01"
 		max_val="3"
 		name="cloud_scale"
 		left_pad="0"
-		width="171"
+		width="183"
 		can_edit_text="true"/>
 
 		<text
@@ -144,7 +144,7 @@ top="0">
 		max_val="1.0"
 		name="cloud_variance"
 		left_pad="0"
-		width="171"
+		width="183"
 		can_edit_text="true"/>
 	</panel>
 
@@ -154,7 +154,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="77"
 	border_visible="true"
 	background_visible="true">
@@ -194,7 +194,7 @@ top="0">
 		min_val="0"
 		max_val="1"
 		name="cloud_density_x"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 
 		<text
@@ -218,7 +218,7 @@ top="0">
 		min_val="0"
 		max_val="1"
 		name="cloud_density_y"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 
 		<text
@@ -242,7 +242,7 @@ top="0">
 		min_val="0"
 		max_val="3"
 		name="cloud_density_d"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 	</panel>
 
@@ -252,7 +252,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="77"
 	border_visible="true"
 	background_visible="true">
@@ -291,7 +291,7 @@ top="0">
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_x"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 
 		<text
@@ -315,7 +315,7 @@ top="0">
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_y"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 
 		<text
@@ -339,7 +339,7 @@ top="0">
 		min_val="0"
 		max_val="1"
 		name="cloud_detail_d"
-		width="255"
+		width="267"
 		can_edit_text="true"/>
 	</panel>
 
@@ -349,7 +349,7 @@ top="0">
 	layout="topleft"
 	top_pad="1"
 	left="3"
-	width="280"
+	width="292"
 	height="103"
 	border_visible="true"
 	background_visible="true">

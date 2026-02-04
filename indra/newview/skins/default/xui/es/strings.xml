@@ -33,6 +33,7 @@
 	<string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Paridad con Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>
 	<string name="BuildConfig">
 		Configuración de constitución [BUILD_CONFIG]
