@@ -1611,7 +1611,7 @@ void AOEngine::update()
                 newSet = new AOSet(currentCategory->getUUID());
                 newSet->setName(setName);
                 mSets.emplace_back(newSet);
-                setsToWrite.push_back({ currentCategory->getUUID(), newSet });
+                setsToWrite.emplace_back(currentCategory->getUUID(), newSet);
             }
             else
             {
@@ -2372,7 +2372,7 @@ void AOEngine::parseNotecard(const char* buffer)
                 continue;
             }
             animation.mSortOrder = animIndex;
-            newState->mAnimations.push_back(animation);
+            newState->mAnimations.push_back(std::move(animation));
             isValid = true;
         }
     }
