@@ -529,7 +529,7 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
     {
         return false;
     }
-    else if (
+    if (
         !LLTextValidate::validateASCIIPrintableNoPipe.validate(new_set_name.getWString()) ||        // only allow ASCII
         newSetName.find_first_of(":|") != std::string::npos)                            // don't allow : or |
     {
@@ -539,14 +539,14 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
         return false;
     }
 
-    if (AOEngine::instance().getSetByName(newSetName))
-    {
-        LLNotificationsUtil::add("NewAONameCantExist");
-        return false;
-    }
-
     if (option == 0)
     {
+        if (AOEngine::instance().getSetByName(newSetName))
+        {
+            LLNotificationsUtil::add("NewAONameCantExist");
+            return false;
+        }
+
         AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
         {
             reloading(true);
