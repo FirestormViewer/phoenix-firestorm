@@ -11083,6 +11083,16 @@ The name may only contain ASCII characters, excluding ":" and "|".
      yestext="OK"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="NewAONameCantExist"
+   type="alertmodal">
+An animation set with this name already exists.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
 <notification
    icon="alertmodal.tga"
    name="RemoveAOSet"

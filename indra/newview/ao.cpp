@@ -539,6 +539,12 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
         return false;
     }
 
+    if (AOEngine::instance().getSetByName(newSetName))
+    {
+        LLNotificationsUtil::add("NewAONameCantExist");
+        return false;
+    }
+
     if (option == 0)
     {
         AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)

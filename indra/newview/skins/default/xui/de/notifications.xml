@@ -5218,6 +5218,10 @@ Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enha
      yestext="OK"/>
   </notification>
 
+  <notification name="NewAONameCantExist">
+Ein Animationsset mit diesem Namen existiert bereits.
+  </notification>
+
 <notification name="RemoveAOSet">
 Animationsset „[AO_SET_NAME]“ aus Liste löschen?
     <usetemplate
