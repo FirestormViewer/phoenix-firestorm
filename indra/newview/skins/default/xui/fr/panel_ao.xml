@@ -3,7 +3,7 @@
 	<panel name="animation_overrider_panel">
 		<combo_box name="ao_set_selection_combo" tool_tip="Sélectionner un ensemble d'animations à éditer."/>
 		<button name="ao_activate" tool_tip="Activer cet ensemble d'animations maintenant."/>
-		<check_box name="ao_default" label="Par défaut" tool_tip="Faire de cet ensemble d'animation celui qui se lancera par défaut à la connexion."/>
+		<check_box name="ao_default" label="Par défaut" tool_tip="Faire de cet ensemble d'animation celui qui se lancera par défaut à la connexion. Si aucun ensemble d'animations n'est défini par défaut, utilisez celui de la dernière session."/>
 		<button name="ao_add" tool_tip="Créer un nouveau ensemble d'animations."/>
 		<button name="ao_remove" tool_tip="Effacer cet ensemble d'animations."/>
 		<check_box name="ao_sit_override" label="Outrepasser assis." tool_tip="Activer cette option pour que les animations de l'ao soient prioritaires sur celles de l'objet."/>
