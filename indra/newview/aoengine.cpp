@@ -1584,7 +1584,7 @@ void AOEngine::update()
 
     if (categories)
     {
-        std::vector<std::pair<LLUUID, AOSet*>> setsToRead;
+        std::vector<std::pair<LLUUID, AOSet*>> setsToWrite;
         for (const auto& currentCategory : *categories)
         {
             const std::string& setFolderName = currentCategory->getName();
@@ -1611,7 +1611,7 @@ void AOEngine::update()
                 newSet = new AOSet(currentCategory->getUUID());
                 newSet->setName(setName);
                 mSets.emplace_back(newSet);
-                setsToRead.push_back({ currentCategory->getUUID(), newSet });
+                setsToWrite.push_back({ currentCategory->getUUID(), newSet });
             }
             else
             {
@@ -1654,7 +1654,7 @@ void AOEngine::update()
             }
         }
 
-        for (const auto& [categoryUUID, newSet] : setsToRead)
+        for (const auto& [categoryUUID, newSet] : setsToWrite)
         {
             if (!mDefaultSet)
             {
