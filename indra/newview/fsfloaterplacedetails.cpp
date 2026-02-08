@@ -490,11 +490,11 @@ void FSFloaterPlaceDetails::showAddedLandmarkInfo(const uuid_set_t& items)
         if (item && (LLAssetType::AT_LANDMARK == item->getType()) )
         {
             // Created landmark is passed to Places panel to allow its editing.
-            // If the panel is closed we don't reopen it until created landmark is loaded.
-            //if("create_landmark" == getPlaceInfoType() && !getItem())
-            //{
+            // Only forward the landmark to a panel without a loaded landmark in case we have FSUseStandalonePlaceDetailsFloater enabled
+            if (mDisplayInfo == CREATE_LANDMARK && mItem.isNull())
+            {
                 setItem(item);
-            //}
+            }
         }
     }
 }
