@@ -110,6 +110,7 @@ private:
     bool                mIsInCreateMode;
     LLVector3d          mGlobalPos;
     ePlaceDisplayInfo   mDisplayInfo;
+    LLUUID              mExpectedLandmarkItemId;
 
     boost::signals2::connection mAgentParcelChangedConnection;
 };
