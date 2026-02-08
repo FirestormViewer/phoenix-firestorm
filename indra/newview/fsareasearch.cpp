@@ -65,6 +65,7 @@
 #include "llviewermediafocus.h"
 #include "lltoolmgr.h"
 #include "rlvhandler.h"
+#include "llclipboard.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 constexpr S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1397,6 +1398,98 @@ FSPanelAreaSearchList::~FSPanelAreaSearchList()
 void FSPanelAreaSearchList::onClickRefresh()
 {
     mFSAreaSearch->refreshList(true);
+}
+
+// Handle keyboard shortcuts for the Area Search results list
+// CTRL+C: Copy selected rows to clipboard in tab-separated format
+// CTRL+A: Select all items in the list
+// - Neremyn
+bool FSPanelAreaSearchList::handleKeyHere(KEY key, MASK mask)
+{
+    if (key == 'C' && mask == MASK_CONTROL)
+    {
+        onCopyToClipboard();
+        return true;
+    }
+
+    if (key == 'A' && mask == MASK_CONTROL)
+    {
+        if (mResultList)
+        {
+            mResultList->selectAll();
+            return true;
+        }
+    }
+	
+    return LLPanel::handleKeyHere(key, mask);
+}
+
+// Copy selected rows from the Area Search results to the system clipboard
+// Output format: tab-separated values with header row, suitable for Excel/Spreadsheets
+// Column order: Distance, Name, Description, Price, Land Impact, Prim Count, Owner, Group, Creator, Last Owner
+// - Neremyn
+void FSPanelAreaSearchList::onCopyToClipboard()
+{
+    if (!mResultList)
+    {
+        LL_WARNS("FSAreaSearch") << "Result list control not found" << LL_ENDL;
+        return;
+    }
+
+    // Get all selected items
+    std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
+
+    if (selected_items.empty())
+    {
+        return;
+    }
+
+    std::string clipboard_text;
+
+    clipboard_text = "Distance\tName\tDescription\tPrice\tLand Impact\tPrim Count\tOwner\tGroup\tCreator\tLast Owner\n";
+
+    for (const auto& item : selected_items)
+    {
+        if (!item)
+        {
+            continue;
+        }
+
+        // Extract data from each column based on the column order from matchObject()
+        // Column order: distance, name, description, price, land_impact, prim_count, owner, group, creator, last_owner
+        std::string distance = item->getColumn(0) ? item->getColumn(0)->getValue().asString() : "";
+        std::string name = item->getColumn(1) ? item->getColumn(1)->getValue().asString() : "";
+        std::string description = item->getColumn(2) ? item->getColumn(2)->getValue().asString() : "";
+        std::string price = item->getColumn(3) ? item->getColumn(3)->getValue().asString() : "";
+        std::string land_impact = item->getColumn(4) ? item->getColumn(4)->getValue().asString() : "";
+        std::string prim_count = item->getColumn(5) ? item->getColumn(5)->getValue().asString() : "";
+        std::string owner = item->getColumn(6) ? item->getColumn(6)->getValue().asString() : "";
+        std::string group = item->getColumn(7) ? item->getColumn(7)->getValue().asString() : "";
+        std::string creator = item->getColumn(8) ? item->getColumn(8)->getValue().asString() : "";
+        std::string last_owner = item->getColumn(9) ? item->getColumn(9)->getValue().asString() : "";
+
+        // Tab-separated format
+        clipboard_text += distance + "\t" + 
+                         name + "\t" + 
+                         description + "\t" + 
+                         price + "\t" + 
+                         land_impact + "\t" + 
+                         prim_count + "\t" + 
+                         owner + "\t" + 
+                         group + "\t" + 
+                         creator + "\t" + 
+                         last_owner + "\n";
+    }
+
+    // Remove trailing newline
+    if (!clipboard_text.empty() && clipboard_text.back() == '\n')
+    {
+        clipboard_text.pop_back();
+    }
+
+    // Copy to system clipboard
+	LLWString wstr = utf8str_to_wstring(clipboard_text);
+	LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.length()));
 }
 
 void FSPanelAreaSearchList::onCommitCheckboxBeacons()
