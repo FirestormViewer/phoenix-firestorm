@@ -757,19 +757,21 @@ void RlvFloaterStrings::refresh()
         if (m_sdStringsInfo[m_strStringCurrent].has("description"))
             pStringDescr->setText(m_sdStringsInfo[m_strStringCurrent]["description"].asString());
         std::string value;
-        if (m_sdPendingStrings.has(m_strStringCurrent))
+        const bool has_pending = m_sdPendingStrings.has(m_strStringCurrent);
+        if (has_pending)
         {
             value = m_sdPendingStrings[m_strStringCurrent].asString();
-            if (value.empty())
+            // Empty pending value means "reset to default", so skip custom overrides.
+            if (value.empty() && m_sdStringsInfo[m_strStringCurrent].has("value"))
             {
-                value.clear();
+                value = m_sdStringsInfo[m_strStringCurrent]["value"].asString();
             }
         }
-        if (value.empty() && m_sdCustomStrings.has(m_strStringCurrent) && m_sdCustomStrings[m_strStringCurrent].has("value"))
+        else if (m_sdCustomStrings.has(m_strStringCurrent) && m_sdCustomStrings[m_strStringCurrent].has("value"))
         {
             value = m_sdCustomStrings[m_strStringCurrent]["value"].asString();
         }
-        if (value.empty() && m_sdStringsInfo[m_strStringCurrent].has("value"))
+        else if (m_sdStringsInfo[m_strStringCurrent].has("value"))
         {
             value = m_sdStringsInfo[m_strStringCurrent]["value"].asString();
         }
