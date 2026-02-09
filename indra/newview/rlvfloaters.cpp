@@ -649,6 +649,17 @@ bool RlvFloaterStrings::postBuild()
         fileStream.close();
     }
 
+    // Load the current custom string overrides (from user settings)
+    llifstream userFileStream(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE).c_str(), std::ios::binary); LLSD sdUserData;
+    if ( (userFileStream.is_open()) && (LLSDSerialize::fromXMLDocument(sdUserData, userFileStream)) )
+    {
+        if (sdUserData.has("strings"))
+        {
+            m_sdCustomStrings = sdUserData["strings"];
+        }
+        userFileStream.close();
+    }
+
     // Populate the combo box
     for (LLSD::map_const_iterator itString = m_sdStringsInfo.beginMap(); itString != m_sdStringsInfo.endMap(); ++itString)
     {
@@ -669,8 +680,35 @@ void RlvFloaterStrings::onClose(bool fQuitting)
     checkDirty(false);
     if (m_fDirty)
     {
-        // Save the custom string overrides
-        RlvStrings::saveToFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE));
+        // Save the custom string overrides without applying them in-session
+        LLSD sdFileData;
+        LLSD& sdStrings = sdFileData["strings"];
+
+        for (LLSD::map_const_iterator itString = m_sdCustomStrings.beginMap(); itString != m_sdCustomStrings.endMap(); ++itString)
+        {
+            if (itString->second.has("value"))
+                sdStrings[itString->first]["value"] = itString->second["value"].asString();
+        }
+
+        for (LLSD::map_const_iterator itString = m_sdPendingStrings.beginMap(); itString != m_sdPendingStrings.endMap(); ++itString)
+        {
+            const std::string value = itString->second.asString();
+            if (value.empty())
+            {
+                sdStrings.erase(itString->first);
+            }
+            else
+            {
+                sdStrings[itString->first]["value"] = value;
+            }
+        }
+
+        llofstream fileStream(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE).c_str());
+        if (fileStream.good())
+        {
+            LLSDSerialize::toPrettyXML(sdFileData, fileStream);
+            fileStream.close();
+        }
 
         // Remind the user their changes require a relog to take effect
         LLNotificationsUtil::add("RLVaChangeStrings");
@@ -682,7 +720,7 @@ void RlvFloaterStrings::onStringRevertDefault()
 {
     if (!m_strStringCurrent.empty())
     {
-        RlvStrings::setCustomString(m_strStringCurrent, LLStringUtil::null);
+        m_sdPendingStrings[m_strStringCurrent] = LLStringUtil::null;
         m_fDirty = true;
     }
     refresh();
@@ -692,9 +730,9 @@ void RlvFloaterStrings::onStringRevertDefault()
 void RlvFloaterStrings::checkDirty(bool fRefresh)
 {
     LLTextEditor* pStringValue = findChild<LLTextEditor>("string_value");
-    if (!pStringValue->isPristine())
+    if ( (!pStringValue->isPristine()) && (!m_strStringCurrent.empty()) )
     {
-        RlvStrings::setCustomString(m_strStringCurrent, pStringValue->getText());
+        m_sdPendingStrings[m_strStringCurrent] = pStringValue->getText();
         m_fDirty = true;
     }
 
@@ -718,7 +756,28 @@ void RlvFloaterStrings::refresh()
     {
         if (m_sdStringsInfo[m_strStringCurrent].has("description"))
             pStringDescr->setText(m_sdStringsInfo[m_strStringCurrent]["description"].asString());
-        pStringValue->setText(RlvStrings::getString(m_strStringCurrent));
+        std::string value;
+        if (m_sdPendingStrings.has(m_strStringCurrent))
+        {
+            value = m_sdPendingStrings[m_strStringCurrent].asString();
+            if (value.empty())
+            {
+                value.clear();
+            }
+        }
+        if (value.empty() && m_sdCustomStrings.has(m_strStringCurrent) && m_sdCustomStrings[m_strStringCurrent].has("value"))
+        {
+            value = m_sdCustomStrings[m_strStringCurrent]["value"].asString();
+        }
+        if (value.empty() && m_sdStringsInfo[m_strStringCurrent].has("value"))
+        {
+            value = m_sdStringsInfo[m_strStringCurrent]["value"].asString();
+        }
+        if (value.empty())
+        {
+            value = RlvStrings::getString(m_strStringCurrent);
+        }
+        pStringValue->setText(value);
         pStringValue->makePristine();
     }
 
