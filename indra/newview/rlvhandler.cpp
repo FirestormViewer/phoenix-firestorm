@@ -37,6 +37,7 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"          // @shownames
 #include "llavatarlist.h"               // @shownames
+#include "llchatmentionhelper.h"
 #include "llfloatercamera.h"            // @setcam family
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"            // @list IM query
@@ -72,6 +73,7 @@
 // <FS:Ansariel> [FS communication UI]
 #include "fsfloatervoicecontrols.h"
 // </FS:Ansariel> [FS communication UI]
+#include "fsfloaternearbychat.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
 
@@ -2630,6 +2632,14 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviou
 
     // Update the shownames context
     RlvActions::setShowName(RlvActions::SNC_DEFAULT, !fHasBhvr);
+    if (fHasBhvr)
+    {
+        LLChatMentionHelper::instance().hideHelper();
+    }
+    if (FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::findInstance())
+    {
+        nearby_chat->setChatMentionPickerEnabled(!fHasBhvr);
+    }
 
     // Refresh the nearby people list
     // <FS:Ansariel> [Standalone radar]

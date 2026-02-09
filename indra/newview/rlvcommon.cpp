@@ -18,6 +18,7 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llavatarnamecache.h"
+#include "llcachename.h"
 #include "llcallingcard.h"
 #include "llimview.h"
 #include "llinstantmessage.h"
@@ -26,6 +27,8 @@
 #include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
+#include "llurlentry.h"
+#include "llurlregistry.h"
 #include "llversioninfo.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
@@ -541,6 +544,81 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy, bool fCl
             }
         }
     }
+
+    filterMentions(strUTF8Text);
+}
+
+// Checked: 2026-02-09 (RLVa-2.6.2) | Added: RLVa-2.6.2
+void RlvUtil::filterMentions(std::string& strUTF8Text)
+{
+    if (!RlvActions::isRlvEnabled())
+        return;
+    if (RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+        return;
+
+    static const boost::regex mention_regex(APP_HEADER_REGEX
+                                            "/agent/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"
+                                            "/mention(?=/|\\?|$)",
+                                            boost::regex::perl);
+    boost::sregex_iterator it(strUTF8Text.begin(), strUTF8Text.end(), mention_regex);
+    boost::sregex_iterator end;
+
+    if (it == end)
+        return;
+
+    std::string result;
+    result.reserve(strUTF8Text.size());
+    size_t last_pos = 0;
+
+    for (; it != end; ++it)
+    {
+        const boost::smatch& match = *it;
+        const size_t start = match.position();
+        const size_t length = match.length();
+
+        result.append(strUTF8Text, last_pos, start - last_pos);
+
+        const LLUUID agent_id(match[1].str());
+        std::string label;
+        if (agent_id.notNull() && !RlvActions::canShowName(RlvActions::SNC_DEFAULT, agent_id))
+        {
+            LLAvatarName av_name;
+            const std::string anonym = (LLAvatarNameCache::get(agent_id, &av_name)) ? RlvStrings::getAnonym(av_name)
+                                                                                    : RlvStrings::getAnonym(agent_id.asString());
+            label = "@" + anonym;
+        }
+        else if (agent_id.notNull())
+        {
+            LLAvatarName av_name;
+            if (LLAvatarNameCache::get(agent_id, &av_name))
+            {
+                label = "@" + av_name.getCompleteName();
+            }
+            else
+            {
+                std::string legacy_name;
+                if (gCacheName && gCacheName->getFullName(agent_id, legacy_name))
+                {
+                    label = "@" + legacy_name;
+                }
+                else
+                {
+                    label = "@" + RlvStrings::getAnonym(agent_id.asString());
+                }
+            }
+        }
+        else
+        {
+            label = "@" + RlvStrings::getAnonym(agent_id.asString());
+        }
+
+        result += label;
+
+        last_pos = start + length;
+    }
+
+    result.append(strUTF8Text, last_pos, std::string::npos);
+    strUTF8Text.swap(result);
 }
 
 // Checked: 2012-08-19 (RLVa-1.4.7)
