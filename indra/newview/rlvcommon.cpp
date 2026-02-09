@@ -26,6 +26,7 @@
 #include "llregex.h"
 #include "llregionhandle.h"
 #include "llsdserialize.h"
+#include "lluri.h"
 #include "lltrans.h"
 #include "llurlentry.h"
 #include "llurlregistry.h"
@@ -578,41 +579,35 @@ void RlvUtil::filterMentions(std::string& strUTF8Text)
 
         result.append(strUTF8Text, last_pos, start - last_pos);
 
-        const LLUUID agent_id(match[1].str());
-        std::string label;
-        if (agent_id.notNull() && !RlvActions::canShowName(RlvActions::SNC_DEFAULT, agent_id))
+        const std::string match_url = match.str();
+        std::string agent_id_str;
         {
-            LLAvatarName av_name;
-            const std::string anonym = (LLAvatarNameCache::get(agent_id, &av_name)) ? RlvStrings::getAnonym(av_name)
-                                                                                    : RlvStrings::getAnonym(agent_id.asString());
-            label = "@" + anonym;
+            LLURI uri(match_url);
+            LLSD path_array = uri.pathArray();
+            if (path_array.size() == 4)
+            {
+                agent_id_str = path_array.get(2).asString();
+            }
         }
-        else if (agent_id.notNull())
+        const LLUUID agent_id(agent_id_str);
+        const bool can_show =
+            agent_id.notNull() &&
+            (RlvActions::canShowName(RlvActions::SNC_DEFAULT, agent_id));
+
+        if (can_show)
         {
-            LLAvatarName av_name;
-            if (LLAvatarNameCache::get(agent_id, &av_name))
-            {
-                label = "@" + av_name.getCompleteName();
-            }
-            else
-            {
-                std::string legacy_name;
-                if (gCacheName && gCacheName->getFullName(agent_id, legacy_name))
-                {
-                    label = "@" + legacy_name;
-                }
-                else
-                {
-                    label = "@" + RlvStrings::getAnonym(agent_id.asString());
-                }
-            }
+            // Preserve the original mention URI for exceptions so URL-aware floaters keep it clickable.
+            result.append(strUTF8Text, start, length);
         }
         else
         {
-            label = "@" + RlvStrings::getAnonym(agent_id.asString());
+            // Remove the URI and replace with anonymized name if names are hidden
+            LLAvatarName av_name;
+            const std::string anonym = (agent_id.notNull() && LLAvatarNameCache::get(agent_id, &av_name))
+                                           ? RlvStrings::getAnonym(av_name)
+                                           : RlvStrings::getAnonym(agent_id_str.empty() ? LLUUID::null.asString() : agent_id_str);
+            result += "@" + anonym;
         }
-
-        result += label;
 
         last_pos = start + length;
     }
