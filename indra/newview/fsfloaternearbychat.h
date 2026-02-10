@@ -90,6 +90,7 @@ public:
     static bool isWordsName(const std::string& name);
 
     LLChatEntry* getChatBox() { return mInputEditor; }
+    void setChatMentionPickerEnabled(bool enabled);
 
     S32 getMessageArchiveLength() { return static_cast<S32>(mMessageArchive.size()); }
 
