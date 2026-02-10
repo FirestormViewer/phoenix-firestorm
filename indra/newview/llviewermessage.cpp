@@ -3252,7 +3252,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
         }
 
         // <FS:Zi> Omnifilter support
-        static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+        static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
         if (use_omnifilter)
         {
             OmnifilterEngine::Haystack haystack;

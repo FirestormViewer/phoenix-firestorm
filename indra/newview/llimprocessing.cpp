@@ -723,7 +723,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     */
 
     // <FS:Zi> Omnifilter support
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
         OmnifilterEngine::Haystack haystack;

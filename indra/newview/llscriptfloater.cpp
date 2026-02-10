@@ -475,7 +475,7 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
     LLUUID object_id = notification_id_to_object_id(notification_id);
 
     // <FS:Zi> Omnifilter support
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
         LLNotificationPtr notification = LLNotifications::instance().find(notification_id);
