@@ -99,6 +99,7 @@ private:
     typedef std::map<LLUUID, S32> rights_map_t;
     void                    refreshRightsChangeList();
     void                    refreshUI();
+    void                    updateFriendCount();
     void                    onSelectName();
     void                    applyRightsToFriends();
     void                    addFriend(const LLUUID& agent_id);
