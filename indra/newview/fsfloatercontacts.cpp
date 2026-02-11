@@ -1354,6 +1354,7 @@ void FSFloaterContacts::onFriendFilterEdit(const std::string& search_string)
 
     // Apply new filter.
     mFriendsList->setFilterString(mFriendFilterSubStringOrig);
+    mFriendsCountTb->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
 }
 
 void FSFloaterContacts::resetFriendFilter()
