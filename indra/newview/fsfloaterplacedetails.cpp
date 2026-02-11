@@ -190,7 +190,8 @@ FSFloaterPlaceDetails::FSFloaterPlaceDetails(const LLSD& seed)
     mIsInEditMode(false),
     mIsInCreateMode(false),
     mGlobalPos(),
-    mDisplayInfo(NONE)
+    mDisplayInfo(NONE),
+    mExpectedLandmarkItemId(LLUUID::null)
 {
     mParcelObserver = new FSPlaceDetailsPlacesParcelObserver(this);
     mRemoteParcelObserver = new FSPlaceDetailsRemoteParcelInfoObserver(this);
@@ -275,6 +276,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 {
     mIsInCreateMode = false;
     mIsInEditMode = false;
+    mExpectedLandmarkItemId.setNull();
 
     if (key.size() != 0)
     {
@@ -285,6 +287,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
             mDisplayInfo = LANDMARK;
             setTitle(getString("title_landmark"));
 
+            mExpectedLandmarkItemId = key["id"].asUUID();
             LLInventoryItem* item = gInventory.getItem(key["id"].asUUID());
             if (!item)
             {
@@ -490,11 +493,16 @@ void FSFloaterPlaceDetails::showAddedLandmarkInfo(const uuid_set_t& items)
         if (item && (LLAssetType::AT_LANDMARK == item->getType()) )
         {
             // Created landmark is passed to Places panel to allow its editing.
-            // If the panel is closed we don't reopen it until created landmark is loaded.
-            //if("create_landmark" == getPlaceInfoType() && !getItem())
-            //{
+            if (mDisplayInfo == CREATE_LANDMARK && mItem.isNull())
+            {
                 setItem(item);
-            //}
+            }
+            else if (mDisplayInfo == LANDMARK && mItem.isNull()
+                     && !mExpectedLandmarkItemId.isNull()
+                     && item_id == mExpectedLandmarkItemId)
+            {
+                setItem(item);
+            }
         }
     }
 }
