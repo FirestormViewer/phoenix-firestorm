@@ -115,6 +115,11 @@ FSFloaterNearbyChat::~FSFloaterNearbyChat()
     }
 
     mEmojiCloseConn.disconnect();
+    
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
 
     LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
@@ -148,6 +153,8 @@ bool FSFloaterNearbyChat::postBuild()
     mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
     mInputEditor->setPassDelete(true);
     mInputEditor->setShowChatMentionPicker(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourToggleCallback(
+        boost::bind(&FSFloaterNearbyChat::updateRlvRestrictions, this, _1, _2));
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->setLabel(getString("chatbox_label"));
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -220,6 +227,17 @@ bool FSFloaterNearbyChat::postBuild()
     gSavedSettings.getControl("FSShowMutedChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
 
     return LLFloater::postBuild();
+}
+
+void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+    (void)type;
+    if (behavior != RLV_BHVR_SHOWNAMES)
+    {
+        return;
+    }
+
+    setChatMentionPickerEnabled(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
 }
 
 void FSFloaterNearbyChat::setChatMentionPickerEnabled(bool enabled)

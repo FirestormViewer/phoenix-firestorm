@@ -18,7 +18,6 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llavatarnamecache.h"
-#include "llcachename.h"
 #include "llcallingcard.h"
 #include "llimview.h"
 #include "llinstantmessage.h"

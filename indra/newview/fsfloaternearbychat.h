@@ -34,6 +34,7 @@
 #include "llfloater.h"
 #include "llviewerchat.h"
 #include "fschatparticipants.h"
+#include "rlvhandler.h"
 
 class FSChatHistory;
 class LLChatEntry;
@@ -109,6 +110,8 @@ public:
     F32 onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha);
     // </FS:TJ>
 
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+
 protected:
     void onChatBoxKeystroke();
     void onChatBoxFocusLost();
@@ -169,6 +172,7 @@ private:
 
     boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
     boost::signals2::connection mEmojiCloseConn{};
+    boost::signals2::connection mRlvBehaviorCallbackConnection{};
     U32 mEmojiHelperLastCallbackFrame{ 0 };
 };
 
