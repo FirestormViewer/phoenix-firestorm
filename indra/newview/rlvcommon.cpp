@@ -25,7 +25,10 @@
 #include "llregex.h"
 #include "llregionhandle.h"
 #include "llsdserialize.h"
+#include "lluri.h"
 #include "lltrans.h"
+#include "llurlentry.h"
+#include "llurlregistry.h"
 #include "llversioninfo.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
@@ -541,6 +544,75 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy, bool fCl
             }
         }
     }
+
+    filterMentions(strUTF8Text);
+}
+
+// Checked: 2026-02-09 (RLVa-2.6.2) | Added: RLVa-2.6.2
+void RlvUtil::filterMentions(std::string& strUTF8Text)
+{
+    if (!RlvActions::isRlvEnabled())
+        return;
+    if (RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+        return;
+
+    static const boost::regex mention_regex(APP_HEADER_REGEX
+                                            "/agent/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"
+                                            "/mention(?=/|\\?|$)",
+                                            boost::regex::perl);
+    boost::sregex_iterator it(strUTF8Text.begin(), strUTF8Text.end(), mention_regex);
+    boost::sregex_iterator end;
+
+    if (it == end)
+        return;
+
+    std::string result;
+    result.reserve(strUTF8Text.size());
+    size_t last_pos = 0;
+
+    for (; it != end; ++it)
+    {
+        const boost::smatch& match = *it;
+        const size_t start = match.position();
+        const size_t length = match.length();
+
+        result.append(strUTF8Text, last_pos, start - last_pos);
+
+        const std::string match_url = match.str();
+        std::string agent_id_str;
+        {
+            LLURI uri(match_url);
+            LLSD path_array = uri.pathArray();
+            if (path_array.size() == 4)
+            {
+                agent_id_str = path_array.get(2).asString();
+            }
+        }
+        const LLUUID agent_id(agent_id_str);
+        const bool can_show =
+            agent_id.notNull() &&
+            (RlvActions::canShowName(RlvActions::SNC_DEFAULT, agent_id));
+
+        if (can_show)
+        {
+            // Preserve the original mention URI for exceptions so URL-aware floaters keep it clickable.
+            result.append(strUTF8Text, start, length);
+        }
+        else
+        {
+            // Remove the URI and replace with anonymized name if names are hidden
+            LLAvatarName av_name;
+            const std::string anonym = (agent_id.notNull() && LLAvatarNameCache::get(agent_id, &av_name))
+                                           ? RlvStrings::getAnonym(av_name)
+                                           : RlvStrings::getAnonym(agent_id_str.empty() ? LLUUID::null.asString() : agent_id_str);
+            result += "@" + anonym;
+        }
+
+        last_pos = start + length;
+    }
+
+    result.append(strUTF8Text, last_pos, std::string::npos);
+    strUTF8Text.swap(result);
 }
 
 // Checked: 2012-08-19 (RLVa-1.4.7)
