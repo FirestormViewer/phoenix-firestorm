@@ -154,7 +154,7 @@ bool FSFloaterNearbyChat::postBuild()
     mInputEditor->setPassDelete(true);
     mInputEditor->setShowChatMentionPicker(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourToggleCallback(
-        boost::bind(&FSFloaterNearbyChat::updateRlvRestrictions, this, _1, _2));
+        boost::bind(&FSFloaterNearbyChat::updateRlvRestrictions, this, _1));
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->setLabel(getString("chatbox_label"));
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -229,7 +229,7 @@ bool FSFloaterNearbyChat::postBuild()
     return LLFloater::postBuild();
 }
 
-void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType)
+void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior)
 {
     if (behavior != RLV_BHVR_SHOWNAMES)
     {
