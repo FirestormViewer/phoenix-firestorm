@@ -110,7 +110,7 @@ public:
     F32 onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha);
     // </FS:TJ>
 
-    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType);
 
 protected:
     void onChatBoxKeystroke();

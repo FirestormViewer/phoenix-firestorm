@@ -229,9 +229,8 @@ bool FSFloaterNearbyChat::postBuild()
     return LLFloater::postBuild();
 }
 
-void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType)
 {
-    (void)type;
     if (behavior != RLV_BHVR_SHOWNAMES)
     {
         return;
