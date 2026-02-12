@@ -130,6 +130,8 @@ protected:
     std::string m_strStringCurrent;
     LLComboBox* m_pStringList;
     LLSD        m_sdStringsInfo;
+    LLSD        m_sdCustomStrings;
+    LLSD        m_sdPendingStrings;
 };
 
 // ============================================================================
