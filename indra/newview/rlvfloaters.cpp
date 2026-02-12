@@ -684,10 +684,10 @@ void RlvFloaterStrings::onClose(bool fQuitting)
         LLSD sdFileData;
         LLSD& sdStrings = sdFileData["strings"];
 
-        for (LLSD::map_const_iterator itString = m_sdCustomStrings.beginMap(); itString != m_sdCustomStrings.endMap(); ++itString)
+        for (const auto& [key, data] : llsd::inMap(m_sdCustomStrings))
         {
-            if (itString->second.has("value"))
-                sdStrings[itString->first]["value"] = itString->second["value"].asString();
+            if (data.has("value"))
+                sdStrings[key]["value"] = data["value"].asString();
         }
 
         for (LLSD::map_const_iterator itString = m_sdPendingStrings.beginMap(); itString != m_sdPendingStrings.endMap(); ++itString)
