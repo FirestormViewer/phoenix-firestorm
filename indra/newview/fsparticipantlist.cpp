@@ -35,6 +35,7 @@
 #include "llgroupactions.h"
 // [/SL:KB]
 #include "llimview.h"
+#include "llnearbyvoicemoderation.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lloutputmonitorctrl.h"
@@ -73,6 +74,8 @@ FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source,
     mInsertMentionCallback(NULL),
     mConvType(CONV_UNKNOWN)
 {
+    LLNearbyVoiceModeration::getInstance();
+
     mSpeakerAddListener = new SpeakerAddListener(*this);
     mSpeakerRemoveListener = new SpeakerRemoveListener(*this);
     mSpeakerClearListener = new SpeakerClearListener(*this);
@@ -543,6 +546,7 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
     enable_registrar.add("ParticipantList.EnableItem", boost::bind(&FSParticipantList::FSParticipantListMenu::enableContextMenuItem,    this, _2));
     enable_registrar.add("ParticipantList.EnableItem.Moderate", boost::bind(&FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem,   this, _2));
     enable_registrar.add("ParticipantList.CheckItem",  boost::bind(&FSParticipantList::FSParticipantListMenu::checkContextMenuItem, this, _2));
+    enable_registrar.add("ParticipantList.VisibleItem", boost::bind(&FSParticipantList::FSParticipantListMenu::visibleContextMenuItem, this, _2));
 
     // create the context menu from the XUI
     LLContextMenu* main_menu = createFromFile("menu_participant_list.xml");
@@ -552,10 +556,12 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
     // <FS:Ansariel> Hide SortBy separator
     main_menu->setItemVisible("Sort Separator", is_sort_visible);
     // </FS:Ansariel>
+
+    const bool is_moderation_visible = (LLNearbyVoiceModeration::getInstance()->isNearbyChatModerator() && isNearbyChatSession()) || isGroupModerator();
     main_menu->setItemVisible("SortByName", is_sort_visible);
     main_menu->setItemVisible("SortByRecentSpeakers", is_sort_visible);
-    main_menu->setItemVisible("Moderator Options Separator", isGroupModerator());
-    main_menu->setItemVisible("Moderator Options", isGroupModerator());
+    main_menu->setItemVisible("Moderator Options Separator", is_moderation_visible);
+    main_menu->setItemVisible("Moderator Options", is_moderation_visible);
     main_menu->setItemVisible("View Icons Separator", mParent.mAvatarListToggleIconsConnection.connected());
     main_menu->setItemVisible("View Icons", mParent.mAvatarListToggleIconsConnection.connected());
     bool show_ban_member = mParent.getType() == FSParticipantList::CONV_SESSION_GROUP && hasAbilityToBan();
@@ -790,9 +796,39 @@ bool FSParticipantList::FSParticipantListMenu::isMuted(const LLUUID& avatar_id)
 
 void FSParticipantList::FSParticipantListMenu::moderateVoice(const LLSD& userdata)
 {
-    if (!gAgent.getRegion()) return;
+    if (!gAgent.getRegion())
+    {
+        return;
+    }
 
-    bool moderate_selected = userdata.asString() == "selected";
+    const std::string command = userdata.asString();
+
+    if (isNearbyChatSession())
+    {
+        if ("selected" == command)
+        {
+            // Request a mute/unmute using a capability request via the simulator
+            LLNearbyVoiceModeration::getInstance()->requestMuteIndividual(mUUIDs.front(), !isMuted(mUUIDs.front()));
+        }
+        else
+            if ("mute_all" == command)
+            {
+                // Send the mute_all request to the server
+                const bool mute_state = true;
+                LLNearbyVoiceModeration::getInstance()->requestMuteAll(mute_state);
+            }
+            else
+                if ("unmute_all" == command)
+                {
+                    // Send the unmute_all request to the server
+                    const bool mute_state = false;
+                    LLNearbyVoiceModeration::getInstance()->requestMuteAll(mute_state);
+                }
+
+        return;
+    }
+
+    bool moderate_selected = command == "selected";
 
     if (moderate_selected)
     {
@@ -918,6 +954,17 @@ bool FSParticipantList::FSParticipantListMenu::enableContextMenuItem(const LLSD&
     return true;
 }
 
+bool FSParticipantList::FSParticipantListMenu::visibleContextMenuItem(const LLSD& userdata)
+{
+    std::string item = userdata.asString();
+    if (item == "can_allow_text_chat")
+    {
+        return !isNearbyChatSession();
+    }
+
+    return true;
+}
+
 /*
   Processed menu items with such parameters:
   can_allow_text_chat
@@ -925,8 +972,36 @@ bool FSParticipantList::FSParticipantListMenu::enableContextMenuItem(const LLSD&
 */
 bool FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem(const LLSD& userdata)
 {
-    // only group moderators can perform actions related to this "enable callback"
-    if (!isGroupModerator()) return false;
+    const std::string item    = userdata.asString();
+    const bool        is_self = mUUIDs.front() == gAgentID;
+
+    if (LLNearbyVoiceModeration::getInstance()->isNearbyChatModerator() && isNearbyChatSession())
+    {
+        // Determine here which actions are allowed
+        if ("can_moderate_voice" == item)
+        {
+            return true;
+        }
+        else if (("can_mute" == item))
+        {
+            return !is_self;
+        }
+        else if ("can_unmute" == item)
+        {
+            return true;
+        }
+        else if ("can_allow_text_chat" == item)
+        {
+            return false;
+        }
+
+        return false;
+    }
+    else if (!isGroupModerator())
+    {
+        // only group moderators can perform actions related to this "enable callback"
+        return false;
+    }
 
     const LLUUID& participant_id = mUUIDs.front();
     LLPointer<LLSpeaker> speakerp = mParent.mSpeakerMgr->findSpeaker(participant_id);
@@ -934,7 +1009,6 @@ bool FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem(con
     // not in voice participants can not be moderated
     bool speaker_in_voice = speakerp.notNull() && speakerp->isInVoiceChannel();
 
-    const std::string& item = userdata.asString();
 
     if ("can_moderate_voice" == item)
     {
@@ -985,6 +1059,11 @@ bool FSParticipantList::FSParticipantListMenu::checkContextMenuItem(const LLSD& 
 void FSParticipantList::FSParticipantListMenu::handleAddToContactSet()
 {
     LLAvatarActions::addToContactSet(mUUIDs);
+}
+
+bool FSParticipantList::FSParticipantListMenu::isNearbyChatSession() const
+{
+    return mParent.mSpeakerMgr->getSessionID().isNull();
 }
 
 bool FSParticipantList::LLAvatarItemRecentSpeakerComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
