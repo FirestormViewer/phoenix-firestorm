@@ -1448,38 +1448,22 @@ void FSPanelAreaSearchList::onCopyToClipboard()
 
     clipboard_text = "Distance\tName\tDescription\tPrice\tLand Impact\tPrim Count\tOwner\tGroup\tCreator\tLast Owner\n";
 
-    for (const auto& item : selected_items)
-    {
-        if (!item)
-        {
-            continue;
-        }
+	for (const auto& item : selected_items)
+	{
+		if (!item)
+			continue;
 
-        // Extract data from each column based on the column order from matchObject()
-        // Column order: distance, name, description, price, land_impact, prim_count, owner, group, creator, last_owner
-        std::string distance = item->getColumn(0) ? item->getColumn(0)->getValue().asString() : "";
-        std::string name = item->getColumn(1) ? item->getColumn(1)->getValue().asString() : "";
-        std::string description = item->getColumn(2) ? item->getColumn(2)->getValue().asString() : "";
-        std::string price = item->getColumn(3) ? item->getColumn(3)->getValue().asString() : "";
-        std::string land_impact = item->getColumn(4) ? item->getColumn(4)->getValue().asString() : "";
-        std::string prim_count = item->getColumn(5) ? item->getColumn(5)->getValue().asString() : "";
-        std::string owner = item->getColumn(6) ? item->getColumn(6)->getValue().asString() : "";
-        std::string group = item->getColumn(7) ? item->getColumn(7)->getValue().asString() : "";
-        std::string creator = item->getColumn(8) ? item->getColumn(8)->getValue().asString() : "";
-        std::string last_owner = item->getColumn(9) ? item->getColumn(9)->getValue().asString() : "";
+		auto getColumnValue = [&](S32 column_idx) {
+			return item->getColumn(column_idx) ? item->getColumn(column_idx)->getValue().asString() : "";
+		};
 
-        // Tab-separated format
-        clipboard_text += distance + "\t" + 
-                         name + "\t" + 
-                         description + "\t" + 
-                         price + "\t" + 
-                         land_impact + "\t" + 
-                         prim_count + "\t" + 
-                         owner + "\t" + 
-                         group + "\t" + 
-                         creator + "\t" + 
-                         last_owner + "\n";
-    }
+		const S32 column_count =  item->getNumColumns();
+		for (S32 i = 0; i < column_count; ++i)
+		{
+			clipboard_text += getColumnValue(i);
+			clipboard_text += (i < column_count - 1) ? "\t" : "\n";
+		}
+	}
 
     // Remove trailing newline
     if (!clipboard_text.empty() && clipboard_text.back() == '\n')
