@@ -690,16 +690,16 @@ void RlvFloaterStrings::onClose(bool fQuitting)
                 sdStrings[key]["value"] = data["value"].asString();
         }
 
-        for (LLSD::map_const_iterator itString = m_sdPendingStrings.beginMap(); itString != m_sdPendingStrings.endMap(); ++itString)
+        for (const auto& [key, data] : llsd::inMap(m_sdPendingStrings))
         {
-            const std::string value = itString->second.asString();
+            const std::string value = data.asString();
             if (value.empty())
             {
-                sdStrings.erase(itString->first);
+                sdStrings.erase(key);
             }
             else
             {
-                sdStrings[itString->first]["value"] = value;
+                sdStrings[key]["value"] = value;
             }
         }
 
