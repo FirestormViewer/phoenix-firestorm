@@ -519,13 +519,13 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 }
             }
 
-            haystack.mType = OmnifilterEngine::eType::URLRequest;
+            haystack.mType = OmnifilterEngine::eType::InventoryOffer;
             haystack.mSenderName = notification->asLLSD()["responder_sd"]["from_name"].asString();
             haystack.mOwnerID = notification->getPayload()["from_id"];
         }
         else if (notification->getName() == "LoadWebPage")
         {
-            haystack.mType = OmnifilterEngine::eType::ScriptDialog;
+            haystack.mType = OmnifilterEngine::eType::URLRequest;
             haystack.mSenderName = notification->getPayload()["object_name"].asString();
             haystack.mOwnerID = notification->getPayload()["owner_id"];
         }
