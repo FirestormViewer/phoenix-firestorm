@@ -351,7 +351,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         #    app_suffix='Viewer'
         #else:
         #    app_suffix=self.channel_variant()
-        #return CHANNEL_VENDOR_BASE + ' ' + app_suffix
+        app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_is_opensim():
