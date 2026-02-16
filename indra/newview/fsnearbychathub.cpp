@@ -356,7 +356,7 @@ void FSNearbyChat::showDefaultChatBar(bool visible, const char* text) const
     if (mDefaultChatBar->getText().empty())
     {
         mDefaultChatBar->setText(LLStringExplicit(text));
-        mDefaultChatBar->setCursorToEnd();
+        mDefaultChatBar->setCursorAndScrollToEnd();
     }
     // </FS:KC> Fix for bad edge snapping
 }

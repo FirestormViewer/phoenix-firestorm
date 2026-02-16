@@ -28,17 +28,23 @@
 #ifndef FS_NEARBYCHATCONTROL_H
 #define FS_NEARBYCHATCONTROL_H
 
-#include "lllineeditor.h"
+#include "llchatentry.h"
+#include "fschatparticipants.h"
+#include "rlvhandler.h"
 
-class FSNearbyChatControl : public LLLineEditor
+class FSNearbyChatControl : public LLChatEntry, public FSChatParticipants
 {
 public:
-    struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
+    struct Params : public LLInitParam::Block<Params, LLChatEntry::Params>
     {
         Optional<bool>  is_default;
+        Optional<S32>   text_pad_left;
+        Optional<S32>   text_pad_right;
 
         Params()
             : is_default("default", false)
+            , text_pad_left("text_pad_left", 0)
+            , text_pad_right("text_pad_right", 0)
         {
         }
     };
@@ -49,19 +55,33 @@ public:
     virtual void onFocusReceived();
     virtual void onFocusLost();
     virtual void setFocus(bool focus);
+    virtual void draw();
 
     virtual bool handleKeyHere(KEY key, MASK mask);
 
     bool    isDefault() const { return mDefault; }
 
+    void    setTextPadding(S32 left, S32 right);
+
+    uuid_vec_t getSessionParticipants() const override;
+
 private:
     // Typing in progress, expand gestures etc.
-    static void onKeystroke(LLLineEditor* caller, void* userdata);
+    void    onKeystroke(LLTextEditor* caller);
+
+    void    applyTextPadding();
 
     // Unfocus and autohide chat bar accordingly if we are the default chat bar
     void    autohide();
 
+    void    updateRlvRestrictions(ERlvBehaviour behavior);
+    void    updateEmojiHelperSetting(const LLSD& data);
+
     bool    mDefault;
+    S32     mTextPadLeft;
+    S32     mTextPadRight;
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    boost::signals2::connection mEmojiHelperSettingConnection;
 };
 
 #endif // FS_NEARBYCHATCONTROL_H
