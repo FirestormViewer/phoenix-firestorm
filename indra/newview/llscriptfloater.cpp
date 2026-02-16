@@ -499,7 +499,18 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 if (LLGridManager::instance().isInSecondLife())
                 {
                     LLStringUtil::getTokens(description, params, "/");
-                    haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                    if (params.size() != 7)
+                    {
+                        LL_WARNS("Omnifilter")
+                            << "Description parameter tokens not expected size of 7: " << params.size()
+                            << " - Request was: " << notification->asLLSD()
+                            << LL_ENDL;
+                        haystack.mRegionName = LLTrans::getString("UnknownRegion");
+                    }
+                    else
+                    {
+                        haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                    }
                 }
                 else
                 {
