@@ -1,6 +1,6 @@
 /**
 * @file   llfloaterbigpreview.h
-* @brief  Display of extended (big) preview for snapshots
+* @brief  Display of extended (big) preview for snapshots; originally llfloaterbigpreview.h
 * @author merov@lindenlab.com
 *
 * $LicenseInfo:firstyear=2013&license=viewerlgpl$
@@ -24,19 +24,19 @@
 * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
 * $/LicenseInfo$
 */
-#ifndef LL_LLFLOATERBIGPREVIEW_H
-#define LL_LLFLOATERBIGPREVIEW_H
+#ifndef FS_FLOATERBIGPREVIEW_H
+#define FS_FLOATERBIGPREVIEW_H
 
 #include "llfloater.h"
 
-class LLFloaterBigPreview : public LLFloater
+class FSFloaterBigPreview : public LLFloater
 {
 public:
-    LLFloaterBigPreview(const LLSD& key);
-    ~LLFloaterBigPreview();
+    FSFloaterBigPreview(const LLSD& key);
+    ~FSFloaterBigPreview();
 
-    bool postBuild();
-    void draw();
+    bool postBuild() override;
+    void draw() override;
     void onCancel();
 
     void setPreview(LLView* previewp) { mPreviewHandle = previewp->getHandle(); }
@@ -50,5 +50,5 @@ private:
     LLFloater* mFloaterOwner;
 };
 
-#endif // LL_LLFLOATERBIGPREVIEW_H
+#endif // FS_FLOATERBIGPREVIEW_H
 
