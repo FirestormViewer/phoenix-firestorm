@@ -40,7 +40,7 @@ class FSFloaterAddToContactSet : public LLFloater
 {
 public:
     FSFloaterAddToContactSet(const LLSD& target);
-    bool postBuild();
+    bool postBuild() override;
 
 private:
     ~FSFloaterAddToContactSet();

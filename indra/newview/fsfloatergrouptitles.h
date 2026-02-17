@@ -43,7 +43,7 @@ public:
     FSGroupTitlesObserver(const LLGroupData& group_data, LLHandle<FSFloaterGroupTitles> parent);
     virtual ~FSGroupTitlesObserver();
 
-    virtual void changed(LLGroupChange gc);
+    void changed(LLGroupChange gc) override;
 
 protected:
     LLHandle<FSFloaterGroupTitles>  mParent;
@@ -57,12 +57,12 @@ public:
     FSFloaterGroupTitles(const LLSD &);
     virtual ~FSFloaterGroupTitles();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
-    virtual void changed(LLGroupChange gc);
+    void changed(LLGroupChange gc) override;
     bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
 
     void processGroupTitleResults(const LLGroupData& group_data);

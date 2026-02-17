@@ -34,10 +34,10 @@ static LLDefaultChildRegistry::Register<FSScrollListCtrl> r("fs_scroll_list");
 
 FSScrollListCtrl::FSScrollListCtrl(const Params& p)
 :   LLScrollListCtrl(p),
-    mContextMenu(NULL),
+    mContextMenu(nullptr),
     mDesiredLineHeight(p.desired_line_height),
     mContentType(p.content_type),
-    mHandleDaDCallback(NULL)
+    mHandleDaDCallback()
 {
 }
 

@@ -46,10 +46,10 @@ public:
     FSPanelBlockList();
     ~FSPanelBlockList();
 
-    virtual bool postBuild();
-    virtual void onOpen(const LLSD& key);
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
     void selectBlocked(const LLUUID& id);
 
@@ -62,7 +62,7 @@ public:
     static void showPanelAndSelect(const LLUUID& idToSelect = LLUUID::null);
 
     // LLMuteListObserver callback interface implementation.
-    /* virtual */ void onChange() { refreshBlockedList();}
+    void onChange() override { refreshBlockedList();}
 
 private:
     typedef enum e_sort_oder

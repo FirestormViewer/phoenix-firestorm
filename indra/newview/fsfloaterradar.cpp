@@ -34,10 +34,6 @@ FSFloaterRadar::FSFloaterRadar(const LLSD& key)
 {
 }
 
-FSFloaterRadar::~FSFloaterRadar()
-{
-}
-
 bool FSFloaterRadar::postBuild()
 {
     mRadarPanel = findChild<FSPanelRadar>("panel_radar");

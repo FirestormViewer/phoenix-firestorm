@@ -45,9 +45,6 @@
 #include "llvoiceclient.h"
 
 //FSParticipantList retrieves add, clear and remove events and updates view accordingly
-#if LL_MSVC
-#pragma warning (disable : 4355) // 'this' used in initializer list: yes, intentionally
-#endif
 
 // helper function to update AvatarList Item's indicator in the voice participant list
 static void update_speaker_indicator(const LLAvatarList* const avatar_list, const LLUUID& avatar_uuid, bool is_muted)

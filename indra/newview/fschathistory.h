@@ -104,13 +104,13 @@ class FSChatHistory : public LLTextEditor   // <FS:Zi> FIRE-8600: TAB out of cha
 
 #if LL_SDL2
         // IME - International input compositing, i.e. for Japanese / Chinese text input
-        /* virtual */ void  setFocus(bool b);
+        void  setFocus(bool b) override;
 #endif
 
         LLSD getValue() const;
         void initFromParams(const Params&);
 
-        virtual void insertMentionAtCursor(const std::string& str);
+        void insertMentionAtCursor(const std::string& str) override;
 
         /**
          * Appends a widget message.
@@ -124,8 +124,8 @@ class FSChatHistory : public LLTextEditor   // <FS:Zi> FIRE-8600: TAB out of cha
          * @param input_append_params - font style.
          */
         void appendMessage(const LLChat& chat, const LLSD &args = LLSD(), const LLStyle::Params& input_append_params = LLStyle::Params());
-        /*virtual*/ void clear();
-        /*virtual*/ void draw();
+        void clear() override;
+        void draw() override;
 
         typedef boost::signals2::signal<void(S32 unread_messages)> unread_messages_update_callback_t;
         boost::signals2::connection setUnreadMessagesUpdateCallback(const unread_messages_update_callback_t::slot_type& cb)

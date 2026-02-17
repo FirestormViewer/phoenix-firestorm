@@ -48,16 +48,16 @@ public:
         Params();
     };
 
-    virtual ~FSVirtualTrackpad();
-    bool         postBuild();
-    virtual bool handleHover(S32 x, S32 y, MASK mask);
-    virtual bool handleMouseUp(S32 x, S32 y, MASK mask);
-    virtual bool handleMouseDown(S32 x, S32 y, MASK mask);
-    virtual bool handleRightMouseUp(S32 x, S32 y, MASK mask);
-    virtual bool handleRightMouseDown(S32 x, S32 y, MASK mask);
-    virtual bool handleScrollWheel(S32 x, S32 y, S32 clicks);
-    virtual void draw();
-    virtual void setValue(const LLSD& value);
+    virtual ~FSVirtualTrackpad() = default;
+    bool postBuild();
+    bool handleHover(S32 x, S32 y, MASK mask) override;
+    bool handleMouseUp(S32 x, S32 y, MASK mask) override;
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleRightMouseUp(S32 x, S32 y, MASK mask) override;
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleScrollWheel(S32 x, S32 y, S32 clicks) override;
+    void draw() override;
+    void setValue(const LLSD& value) override;
 
     /// <summary>
     /// Sets the position of the cursor.
@@ -78,7 +78,7 @@ public:
     /// <summary>
     /// Gets the current position of the first 3-axis cursor.
     /// </summary>
-    virtual LLSD getValue() const;
+    LLSD getValue() const override;
 
     /// <summary>
     /// Gets the most recent delta of position of the first 3-axis cursor.

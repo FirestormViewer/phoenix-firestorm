@@ -1,4 +1,4 @@
- /**
+/**
  * @file fsfloaternearbychat.h
  * @brief Nearby chat history scrolling panel implementation
  *
@@ -45,25 +45,24 @@ class LLPanelEmojiComplete;
 class LLResizeBar;
 class LLTextBox;
 
-
-class FSFloaterNearbyChat: public LLFloater, FSChatParticipants
+class FSFloaterNearbyChat : public LLFloater, FSChatParticipants
 {
 public:
     FSFloaterNearbyChat(const LLSD& key);
     ~FSFloaterNearbyChat();
 
-    bool    postBuild();
+    bool postBuild() override;
 
     /** @param archive true - to save a message to the chat history log */
-    void    addMessage(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
+    void addMessage(const LLChat& message, bool archive = true, const LLSD& args = LLSD());
 
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void setVisible(bool visible);
-    /*virtual*/ void setMinimized(bool b);
+    void onOpen(const LLSD& key) override;
+    void setVisible(bool visible) override;
+    void setMinimized(bool b) override;
 
-    void    openFloater(const LLSD& key);
+    void openFloater(const LLSD& key);
 
-    void clearChatHistory();
+    void         clearChatHistory();
     virtual void updateChatHistoryStyle();
 
     static void processChatHistoryStyleUpdate(const LLSD& newvalue);
@@ -85,30 +84,28 @@ public:
     void onSearchButtonClicked();
 
     // overridden to fix the multitab focus bug -Zi
-    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override;
 
-    void updateFSUseNearbyChatConsole(const LLSD &data);
+    void        updateFSUseNearbyChatConsole(const LLSD& data);
     static bool isWordsName(const std::string& name);
 
     LLChatEntry* getChatBox() { return mInputEditor; }
-    void setChatMentionPickerEnabled(bool enabled);
+    void         setChatMentionPickerEnabled(bool enabled);
 
     S32 getMessageArchiveLength() { return static_cast<S32>(mMessageArchive.size()); }
 
-    virtual bool handleKeyHere( KEY key, MASK mask );
+    bool handleKeyHere(KEY key, MASK mask) override;
 
     static void stopChat();
 
     void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
-    void updateShowMutedChatHistory(const LLSD &data);
+    void updateShowMutedChatHistory(const LLSD& data);
 
     void handleMinimized(bool minimized);
 
     uuid_vec_t getSessionParticipants() const;
 
-    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
     F32 onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha);
-    // </FS:TJ>
 
     void updateRlvRestrictions(ERlvBehaviour behavior);
 
@@ -117,7 +114,7 @@ protected:
     void onChatBoxFocusLost();
     void onChatBoxFocusReceived();
 
-    void sendChat( EChatType type );
+    void sendChat(EChatType type);
     void sendChatFromViewer(const std::string& utf8text, EChatType type, bool animate);
     void onChatBoxCommit();
     void onChatTypeChanged();
@@ -139,29 +136,29 @@ private:
     void initEmojiRecentPanel();
     void onRecentEmojiPicked(const LLSD& value);
 
-    void onFocusLost();
-    void onFocusReceived();
+    void onFocusLost() override;
+    void onFocusReceived() override;
 
-    FSChatHistory*      mChatHistory;
-    FSChatHistory*      mChatHistoryMuted;
-    LLChatEntry*        mInputEditor;
+    FSChatHistory* mChatHistory;
+    FSChatHistory* mChatHistoryMuted;
+    LLChatEntry*   mInputEditor;
 
     // chat type selector and send chat buttons
-    LLButton*           mEmojiRecentPanelToggleBtn;
-    LLButton*           mEmojiPickerToggleBtn;
-    LLLayoutPanel*      mEmojiRecentPanel;
-    LLTextBox*          mEmojiRecentEmptyText;
+    LLButton*             mEmojiRecentPanelToggleBtn;
+    LLButton*             mEmojiPickerToggleBtn;
+    LLLayoutPanel*        mEmojiRecentPanel;
+    LLTextBox*            mEmojiRecentEmptyText;
     LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
-    LLButton*           mSendChatButton;
-    LLComboBox*         mChatTypeCombo;
+    LLButton*             mSendChatButton;
+    LLComboBox*           mChatTypeCombo;
 
-    LLLayoutPanel*      mChatLayoutPanel;
-    LLLayoutStack*      mInputPanels;
+    LLLayoutPanel* mChatLayoutPanel;
+    LLLayoutStack* mInputPanels;
 
-    LLLayoutPanel*      mUnreadMessagesNotificationPanel;
-    LLTextBox*          mUnreadMessagesNotificationTextBox;
-    S32                 mUnreadMessages;
-    S32                 mUnreadMessagesMuted;
+    LLLayoutPanel* mUnreadMessagesNotificationPanel;
+    LLTextBox*     mUnreadMessagesNotificationTextBox;
+    S32            mUnreadMessages;
+    S32            mUnreadMessagesMuted;
 
     S32 mInputEditorPad;
     S32 mChatLayoutPanelHeight;
@@ -173,7 +170,7 @@ private:
     boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
     boost::signals2::connection mEmojiCloseConn{};
     boost::signals2::connection mRlvBehaviorCallbackConnection{};
-    U32 mEmojiHelperLastCallbackFrame{ 0 };
+    U32                         mEmojiHelperLastCallbackFrame{ 0 };
 };
 
 #endif // FS_FLOATERNEARBYCHAT_H

@@ -40,11 +40,11 @@ public:
     explicit LLFloaterLocalMesh(const LLSD& key);
     ~LLFloaterLocalMesh() final;
 
-    void onOpen(const LLSD& key) final;
-    void onClose(bool app_quitting) final;
+    void onOpen(const LLSD& key) override final;
+    void onClose(bool app_quitting) override final;
     void onSelectionChangedCallback();
-    bool postBuild() final;
-    void draw() final;
+    bool postBuild() override final;
+    void draw() override final;
 
     /* add    - loads a new file, adds it to the list and reads it.
        reload - re-loads a selected file, reapplies it to viewer objects.

@@ -496,13 +496,13 @@ public:
 
     virtual bool isOpen();
 
-    void needsArrange() { mNeedsArrange = true; }
+    virtual void needsArrange() { mNeedsArrange = true; } // <FS:Ansariel> Made virtual
     // Shape this menu to fit the current state of the children, and
     // adjust the child rects to fit. This is called automatically
     // when you add items. *FIX: We may need to deal with visibility
     // arrangement.
     virtual void arrange( void );
-    void arrangeAndClear( void );
+    virtual void arrangeAndClear( void ); // <FS:Ansariel> Made virtual
 
     // remove all items on the menu
     void empty( void );

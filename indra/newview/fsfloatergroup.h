@@ -37,7 +37,7 @@ class FSFloaterGroup : public LLFloater
 {
 public:
     FSFloaterGroup(const LLSD& seed);
-    /*virtual*/ ~FSFloaterGroup();
+    ~FSFloaterGroup() = default;
     void onOpen(const LLSD& key) override;
 
     bool postBuild() override;

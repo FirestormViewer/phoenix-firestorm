@@ -40,7 +40,6 @@
 #include "llcommandhandler.h"
 #include "llgesturemgr.h"
 #include "lllineeditor.h"
-#include "llspinctrl.h"
 #include "llviewercontrol.h"
 #include "llviewerinput.h"
 #include "llviewerstats.h"

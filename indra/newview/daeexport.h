@@ -112,7 +112,7 @@ class ColladaExportFloater : public LLFloater
 {
 public:
     ColladaExportFloater(const LLSD& key);
-    bool postBuild();
+    bool postBuild() override;
     void updateSelection();
 
 protected:
@@ -126,9 +126,9 @@ protected:
 
 private:
     virtual ~ColladaExportFloater();
-    /* virtual */ void draw();
-    /* virtual */ void onOpen(const LLSD& key);
-    void refresh();
+    void draw() override;
+    void onOpen(const LLSD& key) override;
+    void refresh() override;
     void dirty();
     void onClickExport();
     void onExportFileSelected(const std::vector<std::string>& filenames);
@@ -138,7 +138,7 @@ private:
     void addTexturePreview();
     void updateTitleProgress();
     void updateUI();
-    S32 getNumExportableTextures();
+    S32 getNumExportableTextures() const;
 
     DAESaver mSaver;
     S32 mTotal;
@@ -163,8 +163,8 @@ private:
     public:
         CacheReadResponder(const LLUUID& id, LLImageFormatted* image, std::string name, S32 img_type);
 
-        void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal);
-        virtual void completed(bool success);
+        void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal) override;
+        void completed(bool success) override;
         static void saveTexturesWorker(void* data);
     };
 };

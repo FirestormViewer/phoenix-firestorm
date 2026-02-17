@@ -41,7 +41,7 @@ public:
     static bool handleAddDomainCallback(const LLSD& notification, const LLSD& response);
 
 private:
-    ~FloaterMediaLists() {};
+    ~FloaterMediaLists() = default;
 
     void onWhitelistAdd();
     void onWhitelistRemove();

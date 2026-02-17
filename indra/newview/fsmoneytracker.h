@@ -38,16 +38,16 @@ class FSMoneyTracker: public LLFloater
 {
 public:
     FSMoneyTracker(const LLSD& key);
-    virtual ~FSMoneyTracker() {};
-    virtual void onClose(bool app_quitting);
+    virtual ~FSMoneyTracker() = default;
+    void onClose(bool app_quitting) override;
 
-    bool postBuild();
+    bool postBuild() override;
     void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
 
 private:
     void clear();
-    std::string getTime(time_t utc_time);
-    std::string getDate(time_t utc_time);
+    std::string getTime(time_t utc_time) const;
+    std::string getDate(time_t utc_time) const;
 
     LLNameListCtrl* mTransactionHistory;
     LLTextBox*      mSummary;
@@ -59,7 +59,7 @@ private:
 class FSMoneyTrackerListMenu : public LLListContextMenu
 {
 public:
-    /*virtual*/ LLContextMenu* createMenu();
+    LLContextMenu* createMenu() override;
 private:
     void onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);

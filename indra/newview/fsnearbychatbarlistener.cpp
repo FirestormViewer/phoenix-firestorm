@@ -33,7 +33,6 @@
 #include "fsnearbychatbarlistener.h"
 #include "fsnearbychathub.h"
 
-#include "llagent.h"
 #include "llchat.h"
 #include "llviewercontrol.h"
 #include "stringize.h"

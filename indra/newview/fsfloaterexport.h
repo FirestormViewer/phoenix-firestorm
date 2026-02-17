@@ -53,7 +53,7 @@ class FSFloaterObjectExport : public LLFloater, public LLVOInventoryListener
     LOG_CLASS(FSFloaterObjectExport);
 public:
     FSFloaterObjectExport(const LLSD& key);
-    bool postBuild();
+    bool postBuild() override;
     void updateSelection();
 
     static void onImageLoaded(bool success,
@@ -67,10 +67,10 @@ public:
     void saveFormattedImage(LLPointer<LLImageFormatted> mFormattedImage, LLUUID id);
     void removeRequestedTexture(LLUUID texture_id);
     static void onIdle(void *user_data);
-    /*virtual*/ void inventoryChanged(LLViewerObject* object,
+    void inventoryChanged(LLViewerObject* object,
                                       LLInventoryObject::object_list_t* inventory,
                                       S32 serial_num,
-                                      void* user_data);
+                                      void* user_data) override;
     static void onLoadComplete(const LLUUID& asset_uuid,
                                LLAssetType::EType type,
                                void* user_data, S32 status, LLExtStat ext_status);
@@ -78,8 +78,8 @@ public:
 private:
     typedef enum {IDLE, INVENTORY_DOWNLOAD, ASSET_DOWNLOAD, TEXTURE_DOWNLOAD} FSExportState;
     virtual ~FSFloaterObjectExport();
-    /* virtual */ void draw();
-    /* virtual */ void onOpen(const LLSD& key);
+    void draw() override;
+    void onOpen(const LLSD& key) override;
     void refresh();
     void dirty();
     bool exportSelection();
@@ -88,7 +88,7 @@ private:
     void onClickExport();
     void onExportFileSelected(const std::vector<std::string>& filenames);
     void addTexturePreview();
-    S32 getNumExportableTextures();
+    S32 getNumExportableTextures() const;
     void addObject(const LLViewerObject* prim, const std::string name);
     void updateTextureInfo();
     void updateUI();
@@ -143,8 +143,8 @@ private:
     public:
         FSExportCacheReadResponder(const LLUUID& id, LLImageFormatted* image, FSFloaterObjectExport* parent);
 
-        void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal);
-        virtual void completed(bool success);
+        void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal) override;
+        void completed(bool success) override;
 
     private:
         LLPointer<LLImageFormatted> mFormattedImage;

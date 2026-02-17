@@ -15,22 +15,17 @@
 #include "llagentcamera.h"
 #include "llbox.h"
 #include "llcylinder.h"
-#include "llfloatertools.h"
 #include "llselectmgr.h"
 #include "llviewercamera.h"
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "llviewerwindow.h"
 
-const F32 MANIPULATOR_SIZE = 5.0f;
-const F32 MANIPULATOR_SELECT_SIZE = 20.0f;
+constexpr F32 MANIPULATOR_SIZE = 5.0f;
+constexpr F32 MANIPULATOR_SELECT_SIZE = 20.0f;
 
 QToolAlign::QToolAlign()
 :   LLTool(std::string("Align"))
-{
-}
-
-QToolAlign::~QToolAlign()
 {
 }
 

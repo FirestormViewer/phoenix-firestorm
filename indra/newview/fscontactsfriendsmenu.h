@@ -33,7 +33,8 @@
 class FSContactsFriendsMenu : public LLListContextMenu
 {
 public:
-    /*virtual*/ LLContextMenu* createMenu();
+    LLContextMenu* createMenu() override;
+
 private:
     bool enableContextMenuItem(const LLSD& userdata);
     void offerTeleport();

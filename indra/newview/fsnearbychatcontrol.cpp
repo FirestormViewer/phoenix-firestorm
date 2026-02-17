@@ -36,7 +36,6 @@
 #include "llchatmentionhelper.h"
 #include "llemojihelper.h"
 #include "llfloaterchatmentionpicker.h"
-#include "llfloaterimnearbychathandler.h"
 #include "llscrollcontainer.h"
 #include "llworld.h"
 #include "rlvactions.h"

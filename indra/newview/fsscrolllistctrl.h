@@ -65,19 +65,16 @@ public:
         }
     };
 
-    virtual ~FSScrollListCtrl() {};
-    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleHover(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                      EDragAndDropType cargo_type,
-                                      void* cargo_data,
-                                      EAcceptance* accept,
-                                      std::string& tooltip_msg);
+    virtual ~FSScrollListCtrl() = default;
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleMouseUp(S32 x, S32 y, MASK mask) override;
+    bool handleHover(S32 x, S32 y, MASK mask) override;
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept,
+                           std::string& tooltip_msg) override;
 
-    void    setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
-    void    refreshLineHeight();
+    void setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
+    void refreshLineHeight();
 
 
     typedef boost::function<bool(S32, S32, MASK, bool, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;

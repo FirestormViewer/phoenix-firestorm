@@ -41,7 +41,7 @@ class FSPanelContactSets : public LLPanel
 {
 public:
     FSPanelContactSets();
-    bool postBuild();
+    bool postBuild() override;
     void refreshSetList();
 
 private:

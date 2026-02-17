@@ -67,17 +67,17 @@ public:
     virtual ~FSFloaterIM();
 
     // LLView overrides
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void setVisible(bool visible);
-    /*virtual*/ bool getVisible();
-    /*virtual*/ void setMinimized(bool b);
+    bool postBuild() override;
+    void setVisible(bool visible) override;
+    bool getVisible();
+    void setMinimized(bool b) override;
 
     // LLFloater overrides
-    /*virtual*/ void onClose(bool app_quitting);
-    /*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
-    /*virtual*/ void onSnooze();
+    void onClose(bool app_quitting) override;
+    void setDocked(bool docked, bool pop_on_undock = true) override;
+    void onSnooze() override;
 
-    /*virtual*/ bool tick();
+    bool tick() override;
 
     // Make IM conversion visible and update the message history
     static FSFloaterIM* show(const LLUUID& session_id);
@@ -104,14 +104,14 @@ public:
 
     //AO: Callbacks for voice handling formerly in llPanelImControlPanel
     void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
-    void onChange(EStatusType status, const LLSD& channelInfo, bool proximal);
+    void onChange(EStatusType status, const LLSD& channelInfo, bool proximal) override;
     void updateButtons(bool is_call_started);
     void updateCallButton();
-    void changed(U32 mask);
+    void changed(U32 mask) override;
     // ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
-    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true ) override;
 
-    void onVisibilityChange(bool new_visibility);
+    void onVisibilityChange(bool new_visibility) override;
     void processIMTyping(const LLUUID& from_id, bool typing);
     void processAgentListUpdates(const LLSD& body);
 
@@ -123,11 +123,11 @@ public:
     void onChatSearchButtonClicked();
 
     bool handleDragAndDrop(S32 x, S32 y, MASK mask,
-                               bool drop, EDragAndDropType cargo_type,
-                               void *cargo_data, EAcceptance *accept,
-                               std::string& tooltip_msg);
+                           bool drop, EDragAndDropType cargo_type,
+                           void *cargo_data, EAcceptance *accept,
+                           std::string& tooltip_msg) override;
 
-    virtual bool handleKeyHere( KEY key, MASK mask );
+    bool handleKeyHere( KEY key, MASK mask ) override;
 
     /**
      * Returns true if chat is displayed in multi tabbed floater
@@ -143,7 +143,7 @@ public:
 
     static void onNewIMReceived(const LLUUID& session_id);
 
-    virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
+    LLTransientFloaterMgr::ETransientGroup getGroup() override { return LLTransientFloaterMgr::IM; }
 
     static boost::signals2::connection setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb);
     static floater_showed_signal_t sIMFloaterShowedSignal;
@@ -164,14 +164,11 @@ public:
 
     uuid_vec_t getSessionParticipants() const;
 
-    // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
     F32 onGetChatEditorOpacityCallback(ETypeTransparency type, F32 alpha);
-    // </FS:TJ>
 
 protected:
-    /* virtual */
-    void    onClickCloseBtn(bool app_quitting = false);
-    /*virtual*/ bool applyRectControl();
+    void onClickCloseBtn(bool app_quitting = false) override;
+    bool applyRectControl() override;
 
     // support sysinfo button -Zi
     void    onSysinfoButtonVisibilityChanged(const LLSD& yes);
@@ -182,8 +179,8 @@ protected:
     void reshapeChatLayoutPanel();
 private:
     // process focus events to set a currently active session
-    /* virtual */ void onFocusLost();
-    /* virtual */ void onFocusReceived();
+    void onFocusLost() override;
+    void onFocusReceived() override;
 
     // Update the window title, input field help text, etc.
     void updateSessionName(const std::string& ui_title, const std::string& ui_label);
@@ -313,7 +310,7 @@ public:
     typedef boost::function<void()> callback_t;
 
     FSFloaterIMTimer(callback_t callback);
-    /*virtual*/ bool tick();
+    bool tick() override;
 
 private:
     callback_t mCallback;

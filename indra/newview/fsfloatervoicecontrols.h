@@ -64,17 +64,17 @@ public:
     FSFloaterVoiceControls(const LLSD& key);
     ~FSFloaterVoiceControls();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void draw();
-    /*virtual*/ void setFocus( bool b );
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void draw() override;
+    void setFocus( bool b ) override;
 
     /**
      * Is called by LLVoiceClient::notifyParticipantObservers when voice participant list is changed.
      *
      * Refreshes list to display participants not in voice as disabled.
      */
-    /*virtual*/ void onParticipantsChanged();
+    void onParticipantsChanged() override;
 
     static void sOnCurrentChannelChanged(const LLUUID& session_id);
 

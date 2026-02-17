@@ -96,7 +96,7 @@ public:
     void onClose(bool app_quitting) override;
     void onFocusReceived() override;
     void onFocusLost() override;
-    virtual void draw() override;
+    void draw() override;
 
     /// <summary>
     /// Refreshes the supplied pose list from the supplued subdirectory.

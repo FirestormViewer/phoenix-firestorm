@@ -29,10 +29,6 @@ FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 {
 }
 
-FSFloaterPoseStand::~FSFloaterPoseStand()
-{
-}
-
 bool FSFloaterPoseStand::postBuild()
 {
     mComboPose = getChild<LLComboBox>("pose_combo");
