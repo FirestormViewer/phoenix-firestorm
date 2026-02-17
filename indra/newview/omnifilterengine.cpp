@@ -69,7 +69,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::logMatch(const std::string& ne
 
 bool OmnifilterEngine::matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive)
 {
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (!use_omnifilter)
     {
         return false;

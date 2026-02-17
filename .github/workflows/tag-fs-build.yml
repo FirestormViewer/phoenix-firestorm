@@ -52,6 +52,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0  # Necessary to fetch all history for tagging
 
       # Install jq for JSON Parsing
@@ -61,10 +62,10 @@ jobs:
       - name: Get Run Number
         id: get_run_number
         run: |
-          if [ ${{ github.event_name == 'workflow_run' }} ]; then
+          if [ "${{ github.event_name }}" == "workflow_run" ]; then
             echo "Triggered by workflow_run event."
             echo "Using run number of triggering workflow"
-            echo "build_run_number=${{ github.event.inputs.build_run_number  }}"  >> "$GITHUB_OUTPUT"
+            echo "build_run_number=${{ github.event.workflow_run.run_number }}"  >> "$GITHUB_OUTPUT"
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "Triggered by workflow_dispatch event."
             echo "Using run number of manual dispatch"
@@ -104,7 +105,7 @@ jobs:
                 DRY_RUN=${{ github.event.inputs.dry_run }}
             fi
             # Set outputs
-            echo "build_run_number=$BUILD_RUN_NUMBER" >> $GITHUB_OUTPUT
+            echo "build_run_number=${{ steps.get_run_number.outputs.build_run_number }}" >> $GITHUB_OUTPUT
             echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
             echo "viewer_version=$VIEWER_VERSION" >> $GITHUB_OUTPUT
             echo "viewer_build=$VIEWER_BUILD" >> $GITHUB_OUTPUT
@@ -147,6 +148,9 @@ jobs:
       # Push the Tag to the Repository (Conditional)
       - name: Push tag
         if: >
+          steps.get_inputs.outputs.release_type != 'Nightly' &&
+          steps.get_inputs.outputs.release_type != 'Manual' &&
+          steps.get_inputs.outputs.release_type != 'Profiling' &&
           steps.get_inputs.outputs.dry_run != 'true' &&
           steps.check_tag.outputs.tag_exists == 'false'
         env:

@@ -472,9 +472,18 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
     LLSelectedTEGetmatId() :
         mHasFacesWithoutPBR(false),
         mHasFacesWithPBR(false),
+        mIdenticalMaterial(true),
+        mIdenticalBaseColor(true),
+        mIdenticalMetallic(true),
+        mIdenticalRoughness(true),
+        mIdenticalEmissive(true),
+        mIdenticalDoubleSided(true),
+        mIdenticalAlphaMode(true),
+        mIdenticalAlphaCutoff(true),
         mInitialized(false),
         mMaterial(nullptr)
     {
+        mIdenticalMap.fill(true);
     }
 
     bool apply(LLViewerObject* object, S32 te_index) override
@@ -567,17 +576,6 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
         }
         else
         {
-            LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000012 << LL_ENDL;
-
-            mIdenticalMaterial = true;
-            mIdenticalBaseColor = true;
-            mIdenticalMetallic = true;
-            mIdenticalRoughness = true;
-            mIdenticalEmissive = true;
-            mIdenticalDoubleSided = true;
-            mIdenticalAlphaMode = true;
-            mIdenticalAlphaCutoff = true;
-
             LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000013 << LL_ENDL;
 
             LLGLTFMaterial* mat = object->getTE(te_index)->getGLTFMaterial();
@@ -596,9 +594,6 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
 
             for(U32 map = 0; map < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; map++)
             {
-                // initialize array to say "all PBR maps are the same"
-                mIdenticalMap[map] = true;
-
                 LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000017 << " map:" << map << LL_ENDL;
 
                 if (override && override->mTextureId[map].notNull())
@@ -643,7 +638,7 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
 
     bool mIdenticalMaterial;
 
-    bool mIdenticalMap[LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT];
+    std::array<bool, LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT> mIdenticalMap;
     bool mIdenticalBaseColor;
     bool mIdenticalMetallic;
     bool mIdenticalRoughness;

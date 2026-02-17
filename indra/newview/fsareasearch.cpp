@@ -65,6 +65,7 @@
 #include "llviewermediafocus.h"
 #include "lltoolmgr.h"
 #include "rlvhandler.h"
+#include "llclipboard.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 constexpr S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1397,6 +1398,82 @@ FSPanelAreaSearchList::~FSPanelAreaSearchList()
 void FSPanelAreaSearchList::onClickRefresh()
 {
     mFSAreaSearch->refreshList(true);
+}
+
+// Handle keyboard shortcuts for the Area Search results list
+// CTRL+C: Copy selected rows to clipboard in tab-separated format
+// CTRL+A: Select all items in the list
+// - Neremyn
+bool FSPanelAreaSearchList::handleKeyHere(KEY key, MASK mask)
+{
+    if (key == 'C' && mask == MASK_CONTROL)
+    {
+        onCopyToClipboard();
+        return true;
+    }
+
+    if (key == 'A' && mask == MASK_CONTROL)
+    {
+        if (mResultList)
+        {
+            mResultList->selectAll();
+            return true;
+        }
+    }
+	
+    return LLPanel::handleKeyHere(key, mask);
+}
+
+// Copy selected rows from the Area Search results to the system clipboard
+// Output format: tab-separated values with header row, suitable for Excel/Spreadsheets
+// Column order: Distance, Name, Description, Price, Land Impact, Prim Count, Owner, Group, Creator, Last Owner
+// - Neremyn
+void FSPanelAreaSearchList::onCopyToClipboard()
+{
+    if (!mResultList)
+    {
+        LL_WARNS("FSAreaSearch") << "Result list control not found" << LL_ENDL;
+        return;
+    }
+
+    // Get all selected items
+    std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
+
+    if (selected_items.empty())
+    {
+        return;
+    }
+
+    std::string clipboard_text;
+
+    clipboard_text = "Distance\tName\tDescription\tPrice\tLand Impact\tPrim Count\tOwner\tGroup\tCreator\tLast Owner\n";
+
+	for (const auto& item : selected_items)
+	{
+		if (!item)
+			continue;
+
+		auto getColumnValue = [&](S32 column_idx) {
+			return item->getColumn(column_idx) ? item->getColumn(column_idx)->getValue().asString() : "";
+		};
+
+		const S32 column_count =  item->getNumColumns();
+		for (S32 i = 0; i < column_count; ++i)
+		{
+			clipboard_text += getColumnValue(i);
+			clipboard_text += (i < column_count - 1) ? "\t" : "\n";
+		}
+	}
+
+    // Remove trailing newline
+    if (!clipboard_text.empty() && clipboard_text.back() == '\n')
+    {
+        clipboard_text.pop_back();
+    }
+
+    // Copy to system clipboard
+	LLWString wstr = utf8str_to_wstring(clipboard_text);
+	LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.length()));
 }
 
 void FSPanelAreaSearchList::onCommitCheckboxBeacons()

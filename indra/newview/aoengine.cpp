@@ -1584,6 +1584,7 @@ void AOEngine::update()
 
     if (categories)
     {
+        std::vector<std::pair<LLUUID, AOSet*>> setsToWrite;
         for (const auto& currentCategory : *categories)
         {
             const std::string& setFolderName = currentCategory->getName();
@@ -1610,13 +1611,7 @@ void AOEngine::update()
                 newSet = new AOSet(currentCategory->getUUID());
                 newSet->setName(setName);
                 mSets.emplace_back(newSet);
-
-                if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
-                    currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == setName)
-                {
-                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << setName << LL_ENDL;
-                    mCurrentSet = newSet;
-                }
+                setsToWrite.emplace_back(currentCategory->getUUID(), newSet);
             }
             else
             {
@@ -1650,31 +1645,41 @@ void AOEngine::update()
                 else if (params[num] == "**")
                 {
                     mDefaultSet = newSet;
-                    if (!mCurrentSet)
-                    {
-                        LL_DEBUGS("AOEngine") << "No set selected as current yet - setting default set as current: " << setName << LL_ENDL;
-                        mCurrentSet = newSet;
-                    }
+                    mCurrentSet = newSet;
                 }
                 else
                 {
                     LL_WARNS("AOEngine") << "Unknown AO set option " << params[num] << LL_ENDL;
                 }
             }
+        }
 
-            if (gInventory.isCategoryComplete(currentCategory->getUUID()))
+        for (const auto& [categoryUUID, newSet] : setsToWrite)
+        {
+            if (!mDefaultSet)
             {
-                LL_DEBUGS("AOEngine") << "Set " << params[0] << " is complete, reading states ..." << LL_ENDL;
+                // No default is set, so instead use the set saved in FSCurrentAOState
+                if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
+                    currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == newSet->getName())
+                {
+                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << newSet->getName() << LL_ENDL;
+                    mCurrentSet = newSet;
+                }
+            }
+
+            if (gInventory.isCategoryComplete(categoryUUID))
+            {
+                LL_DEBUGS("AOEngine") << "Set " << newSet->getName() << " is complete, reading states ..." << LL_ENDL;
 
                 LLInventoryModel::cat_array_t* stateCategories;
-                gInventory.getDirectDescendentsOf(currentCategory->getUUID(), stateCategories, items);
+                gInventory.getDirectDescendentsOf(categoryUUID, stateCategories, items);
                 newSet->setComplete(true);
 
                 for (const auto& stateCategory : *stateCategories)
                 {
                     std::vector<std::string> state_params;
                     LLStringUtil::getTokens(stateCategory->getName(), state_params, ":");
-                    if (params.empty())
+                    if (state_params.empty())
                     {
                         LL_WARNS("AOEngine") << "Unexpected state folder found in ao set: " << stateCategory->getName() << LL_ENDL;
                         continue;
@@ -1726,8 +1731,8 @@ void AOEngine::update()
             }
             else
             {
-                LL_DEBUGS("AOEngine") << "Set " << setName << " is incomplete, fetching descendents" << LL_ENDL;
-                gInventory.fetchDescendentsOf(currentCategory->getUUID());
+                LL_DEBUGS("AOEngine") << "Set " << newSet->getName() << " is incomplete, fetching descendents" << LL_ENDL;
+                gInventory.fetchDescendentsOf(categoryUUID);
             }
         }
     }
@@ -2367,7 +2372,7 @@ void AOEngine::parseNotecard(const char* buffer)
                 continue;
             }
             animation.mSortOrder = animIndex;
-            newState->mAnimations.push_back(animation);
+            newState->mAnimations.push_back(std::move(animation));
             isValid = true;
         }
     }

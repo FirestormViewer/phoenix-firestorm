@@ -4364,6 +4364,9 @@ https://wiki.firestormviewer.org/fs_voice
 名稱只能包含ASCII字元，不包括「:」和「|」。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="NewAONameCantExist">
+		已經存在同名的動畫集。
+	</notification>
 	<notification name="RemoveAOSet">
 		刪除名為「[AO_SET_NAME]」的動畫覆蓋集？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="刪除"/>

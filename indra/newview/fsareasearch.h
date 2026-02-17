@@ -303,6 +303,9 @@ private:
     void buyObject(FSObjectProperties& details, LLViewerObject* objectp);
     void sitOnObject(FSObjectProperties& details, LLViewerObject* objectp);
     void onCommitCheckboxBeacons();
+	
+	void onCopyToClipboard();
+	bool handleKeyHere(KEY key, MASK mask) override;
 
     bool onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);

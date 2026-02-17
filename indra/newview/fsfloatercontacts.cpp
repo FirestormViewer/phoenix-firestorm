@@ -129,7 +129,7 @@ bool FSFloaterContacts::postBuild()
     mFriendsTab->setDefaultBtn(mFriendsImBtn);
 
     mFriendsCountTb = mFriendsTab->getChild<LLTextBox>("friend_count");
-    mFriendsCountTb->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
+    updateFriendCount();
     mFriendFilter = mFriendsTab->getChild<LLFilterEditor>("friend_filter_input");
     mFriendFilter->setCommitCallback(boost::bind(&FSFloaterContacts::onFriendFilterEdit, this, _2));
     // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
@@ -637,6 +637,7 @@ void FSFloaterContacts::changed(U32 changed_mask)
         default:;
     }
 
+    updateFriendCount();
     refreshUI();
 }
 
@@ -876,11 +877,19 @@ void FSFloaterContacts::refreshUI()
     }
     mFriendsMapBtn->setEnabled(mappable && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
     mFriendsPayBtn->setEnabled(payable);
-
-    // Set friend count
-    mFriendsCountTb->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
-
     refreshRightsChangeList();
+}
+
+void FSFloaterContacts::updateFriendCount()
+{
+    if (!mFriendsCountTb)
+    {
+        return;
+    }
+
+    LLAvatarTracker::buddy_map_t all_buddies;
+    LLAvatarTracker::instance().copyBuddyList(all_buddies);
+    mFriendsCountTb->setTextArg("COUNT", llformat("%d", static_cast<S32>(all_buddies.size())));
 }
 
 void FSFloaterContacts::onSelectName()

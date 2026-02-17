@@ -9437,8 +9437,8 @@ void LLFavoritesFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
     menuentry_vec_t disabled_items, items;
     buildContextMenuOptions(flags, items, disabled_items);
 
-    items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
-    // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+    // <FS:TJ> [FIRE-35996] Restore allowing creating new folder and folder from selected on favorites panel
+    //items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
     //items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
     // </FS:TJ>
 

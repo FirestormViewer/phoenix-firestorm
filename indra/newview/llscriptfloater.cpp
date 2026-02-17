@@ -475,7 +475,7 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
     LLUUID object_id = notification_id_to_object_id(notification_id);
 
     // <FS:Zi> Omnifilter support
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
         LLNotificationPtr notification = LLNotifications::instance().find(notification_id);
@@ -499,7 +499,18 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 if (LLGridManager::instance().isInSecondLife())
                 {
                     LLStringUtil::getTokens(description, params, "/");
-                    haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                    if (params.size() != 7)
+                    {
+                        LL_WARNS("Omnifilter")
+                            << "Description parameter tokens not expected size of 7: " << params.size()
+                            << " - Request was: " << notification->asLLSD()
+                            << LL_ENDL;
+                        haystack.mRegionName = LLTrans::getString("UnknownRegion");
+                    }
+                    else
+                    {
+                        haystack.mRegionName = LLURI::unescape(params.at(params.size() - 4));
+                    }
                 }
                 else
                 {
@@ -519,13 +530,13 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 }
             }
 
-            haystack.mType = OmnifilterEngine::eType::URLRequest;
+            haystack.mType = OmnifilterEngine::eType::InventoryOffer;
             haystack.mSenderName = notification->asLLSD()["responder_sd"]["from_name"].asString();
             haystack.mOwnerID = notification->getPayload()["from_id"];
         }
         else if (notification->getName() == "LoadWebPage")
         {
-            haystack.mType = OmnifilterEngine::eType::ScriptDialog;
+            haystack.mType = OmnifilterEngine::eType::URLRequest;
             haystack.mSenderName = notification->getPayload()["object_name"].asString();
             haystack.mOwnerID = notification->getPayload()["owner_id"];
         }
