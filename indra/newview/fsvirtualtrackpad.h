@@ -49,7 +49,7 @@ public:
     };
 
     virtual ~FSVirtualTrackpad() = default;
-    bool postBuild();
+    bool postBuild() override;
     bool handleHover(S32 x, S32 y, MASK mask) override;
     bool handleMouseUp(S32 x, S32 y, MASK mask) override;
     bool handleMouseDown(S32 x, S32 y, MASK mask) override;

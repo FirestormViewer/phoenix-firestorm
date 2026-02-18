@@ -162,7 +162,7 @@ public:
 
     void timedUpdate();
 
-    uuid_vec_t getSessionParticipants() const;
+    uuid_vec_t getSessionParticipants() const override;
 
     F32 onGetChatEditorOpacityCallback(ETypeTransparency type, F32 alpha);
 

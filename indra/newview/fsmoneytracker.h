@@ -45,7 +45,7 @@ public:
     void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
 
 private:
-    void clear();
+    void clear() override;
     std::string getTime(time_t utc_time) const;
     std::string getDate(time_t utc_time) const;
 

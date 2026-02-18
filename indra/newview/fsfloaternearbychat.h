@@ -103,7 +103,7 @@ public:
 
     void handleMinimized(bool minimized);
 
-    uuid_vec_t getSessionParticipants() const;
+    uuid_vec_t getSessionParticipants() const override;
 
     F32 onGetChatBoxOpacityCallback(ETypeTransparency type, F32 alpha);
 

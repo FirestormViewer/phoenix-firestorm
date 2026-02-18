@@ -80,7 +80,7 @@ private:
     virtual ~FSFloaterObjectExport();
     void draw() override;
     void onOpen(const LLSD& key) override;
-    void refresh();
+    void refresh() override;
     void dirty();
     bool exportSelection();
     void addSelectedObjects();

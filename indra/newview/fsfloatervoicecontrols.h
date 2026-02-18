@@ -296,7 +296,7 @@ private:
     static LLVoiceChannel* sCurrentVoiceChannel;
 
     /* virtual */
-    LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
+    LLTransientFloaterMgr::ETransientGroup getGroup() override { return LLTransientFloaterMgr::IM; }
 
     boost::signals2::connection mVoiceChannelStateChangeConnection;
 };

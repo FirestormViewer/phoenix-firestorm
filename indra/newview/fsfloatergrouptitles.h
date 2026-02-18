@@ -63,7 +63,7 @@ public:
     bool hasAccelerators() const override { return true; }
 
     void changed(LLGroupChange gc) override;
-    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
+    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata) override; // called on agent group list changes
 
     void processGroupTitleResults(const LLGroupData& group_data);
 

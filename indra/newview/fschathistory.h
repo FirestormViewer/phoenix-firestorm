@@ -107,7 +107,7 @@ class FSChatHistory : public LLTextEditor   // <FS:Zi> FIRE-8600: TAB out of cha
         void  setFocus(bool b) override;
 #endif
 
-        LLSD getValue() const;
+        LLSD getValue() const override;
         void initFromParams(const Params&);
 
         void insertMentionAtCursor(const std::string& str) override;
@@ -162,7 +162,7 @@ class FSChatHistory : public LLTextEditor   // <FS:Zi> FIRE-8600: TAB out of cha
 
     // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
     public:
-        virtual bool    handleUnicodeCharHere(llwchar uni_char);
+        virtual bool    handleUnicodeCharHere(llwchar uni_char) override;
 
         LLChatEntry* mChatInputLine;
     // </FS:Zi>

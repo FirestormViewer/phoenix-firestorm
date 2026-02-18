@@ -42,7 +42,7 @@ public:
 
     bool postBuild() override;
 
-    virtual void onProperties(LLSelectNode const*);
+    virtual void onProperties(LLSelectNode const*) override;
 
     void onIdle();
 
