@@ -41,13 +41,13 @@ class FSFloaterContactSetConfiguration : public LLFloater
 {
 public:
     FSFloaterContactSetConfiguration(const LLSD& target_set);
-    bool postBuild();
-    void onOpen(const LLSD& target_set);
-    void draw();
+    bool postBuild() override;
+    void onOpen(const LLSD& target_set) override;
+    void draw() override;
     void setFrustumOrigin(LLView* frustumOrigin);
 
 private:
-    ~FSFloaterContactSetConfiguration(){};
+    ~FSFloaterContactSetConfiguration() = default;
     void onCommitSetColor();
     void onCommitSetNotifications();
     void onCommitDefaultColor();

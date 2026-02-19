@@ -45,7 +45,6 @@ private:
     void sendChat(LLSD const& chat_data);
 
     F64 mLastThrottleTime{ 0.0 };
-//  LLNearbyChatBar & mChatbar;
 };
 
 #endif // FS_NEARBYCHATBARLISTENER_H

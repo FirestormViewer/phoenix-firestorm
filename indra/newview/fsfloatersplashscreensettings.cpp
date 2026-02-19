@@ -43,10 +43,6 @@ FSFloaterSplashScreenSettings::FSFloaterSplashScreenSettings(const LLSD& key) :
 {
 }
 
-FSFloaterSplashScreenSettings::~FSFloaterSplashScreenSettings()
-{
-}
-
 bool FSFloaterSplashScreenSettings::postBuild()
 {
     mHideTopBarCheck = getChild<LLCheckBoxCtrl>("hide_top_bar");

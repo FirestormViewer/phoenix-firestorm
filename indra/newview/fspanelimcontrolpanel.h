@@ -39,7 +39,7 @@ class FSPanelChatControlPanel
 public:
     FSPanelChatControlPanel() :
         mSessionId(LLUUID()) {};
-    ~FSPanelChatControlPanel() { }
+    ~FSPanelChatControlPanel() = default;
 
     virtual void setSessionId(const LLUUID& session_id);
     const LLUUID& getSessionId() { return mSessionId; }
@@ -54,8 +54,8 @@ private:
 class FSPanelIMControlPanel : public FSPanelChatControlPanel
 {
 public:
-    FSPanelIMControlPanel() { }
-    ~FSPanelIMControlPanel() { }
+    FSPanelIMControlPanel() = default;
+    ~FSPanelIMControlPanel() = default;
 };
 
 

@@ -46,10 +46,6 @@ FSKeywords::FSKeywords()
     updateKeywords();
 }
 
-FSKeywords::~FSKeywords()
-{
-}
-
 void FSKeywords::updateKeywords()
 {
     bool match_whole_words = gSavedPerAccountSettings.getBOOL("FSKeywordMatchWholeWords");

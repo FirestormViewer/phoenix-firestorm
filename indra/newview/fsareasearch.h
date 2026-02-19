@@ -108,8 +108,8 @@ public:
     virtual ~FSAreaSearch();
 
     bool postBuild() override;
-    virtual void draw() override;
-    virtual void onOpen(const LLSD& key) override;
+    void draw() override;
+    void onOpen(const LLSD& key) override;
 
     void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
     void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
