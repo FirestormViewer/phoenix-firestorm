@@ -239,6 +239,13 @@ enum ERenderName
     RENDER_NAME_FADE
 };
 
+enum ERenderGroupTitle
+{
+    RENDER_GROUP_TITLE_NEVER,
+    RENDER_GROUP_TITLE_SELF,
+    RENDER_GROUP_TITLE_ALWAYS
+};
+
 // <FS:minerjr> [FIRE-35735] Imposter/Impostor Avatar Exclusions
 // Different settings based on FSImpostorAvatarExclude
 enum EImpostorAvatarExclude
@@ -640,7 +647,7 @@ const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 };
 
 S32 LLVOAvatar::sRenderName = RENDER_NAME_ALWAYS;
-bool LLVOAvatar::sRenderGroupTitles = true;
+S32 LLVOAvatar::sRenderGroupTitles = RENDER_GROUP_TITLE_ALWAYS;
 S32 LLVOAvatar::sNumVisibleChatBubbles = 0;
 bool LLVOAvatar::sDebugInvisible = false;
 bool LLVOAvatar::sShowAttachmentPoints = false;
@@ -4178,12 +4185,13 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
             addNameTagLine(line, name_tag_color, LLFontGL::NORMAL,
                 LLFontGL::getFontSansSerifSmall());
         }
+        bool render_title = (sRenderGroupTitles == RENDER_GROUP_TITLE_ALWAYS) ||
+                            (isSelf() && (sRenderGroupTitles == RENDER_GROUP_TITLE_SELF));
 
-//      if (sRenderGroupTitles
+//      if (render_title && title && title->getString() && title->getString()[0] != '\0')
 // [RLVa:KB] - Checked: RLVa-1.2.2
-        if (sRenderGroupTitles && fRlvShowAvName
+        if (render_title && fRlvShowAvName && title && title->getString() && title->getString()[0] != '\0')
 // [/RLVa:KB]
-            && title && title->getString() && title->getString()[0] != '\0')
         {
             std::string title_str = title->getString();
             LLStringFn::replace_ascii_controlchars(title_str,LL_UNKNOWN_CHAR);

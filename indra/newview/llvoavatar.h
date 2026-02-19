@@ -366,7 +366,7 @@ public:
     //--------------------------------------------------------------------
 public:
     static S32      sRenderName;
-    static bool     sRenderGroupTitles;
+    static S32      sRenderGroupTitles;
     static const U32 NON_IMPOSTORS_MAX_SLIDER; /* Must equal the maximum allowed the RenderAvatarMaxNonImpostors
                                                 * slider in panel_preferences_graphics1.xml */
     static U32      sMaxNonImpostors; // affected by control "RenderAvatarMaxNonImpostors"
@@ -1182,7 +1182,7 @@ private:
     bool            mNameCloud;
     F32             mNameAlpha;
     LLColor4        mNameColor;
-    bool            mRenderGroupTitles;
+    S32             mRenderGroupTitles;
     std::string     mDistanceString;
     // <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
     U32             mNameArc;
