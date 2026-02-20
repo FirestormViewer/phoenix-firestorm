@@ -5976,6 +5976,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 
     bool you_paid_someone = (source_id == gAgentID);
     std::string gift_suffix = (transaction_type == TRANS_GIFT ? "_gift" : "");
+    bool is_muted = false;
     if (you_paid_someone)
     {
         if(!gSavedSettings.getBOOL("NotifyMoneySpend"))
@@ -6097,7 +6098,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 
         // <FS:Ansariel> FIRE-21803: Prevent cheating IM restriction via pay message
         //if (!reason.empty() && !LLMuteList::getInstance()->isMuted(source_id))
-        bool is_muted = LLMuteList::getInstance()->isMuted(source_id);
+        is_muted = LLMuteList::getInstance()->isMuted(source_id);
         if (!reason.empty() && !is_muted && RlvActions::canReceiveIM(source_id))
         // </FS:Ansariel>
         {
@@ -6163,6 +6164,10 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
     }
     else
     {
+        if (is_muted && gSavedSettings.getBOOL("FSBlockPaymentNotificationFromMutedAvatars"))
+        {
+            return;
+        }
         LLAvatarNameCache::get(name_id, boost::bind(&money_balance_avatar_notify, _1, _2, notification, final_args, payload));
     }
 }
