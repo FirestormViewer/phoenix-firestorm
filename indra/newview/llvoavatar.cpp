@@ -4682,14 +4682,7 @@ bool LLVOAvatar::isVisuallyMuted()
     // * check against the render cost and attachment limits
     if (!isSelf())
     {
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-        if (isRlvSilhouette())
-        {
-            muted = true;
-        }
-        else if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
-// [/RLVa:KB]
-//      if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+        if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
         {
             muted = false;
         }
@@ -9729,6 +9722,12 @@ bool LLVOAvatar::hasFirstFullAttachmentData() const
 
 bool LLVOAvatar::isTooComplex() const
 {
+    // [RLVa] FIRE-35778 @camavdist:1=n RLVa command turns avatars invisible in stead of a silhouette (fix from Ellie Sable)
+    if (isRlvSilhouette())
+    {
+        return true;
+    }
+    // [/RLVa]
     bool too_complex;
     static LLCachedControl<S32> complexity_render_mode(gSavedSettings, "RenderAvatarComplexityMode");
     bool render_friend =  (isBuddy() && complexity_render_mode > AV_RENDER_LIMIT_BY_COMPLEXITY);
