@@ -1199,6 +1199,14 @@ LLFlatListView* LLTeleportHistoryPanel::getFlatListViewFromTab(LLAccordionCtrlTa
 
 void LLTeleportHistoryPanel::gotSLURLCallback(const std::string& slurl)
 {
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    if (slurl.empty())
+    {
+        LLNotificationsUtil::add("CopySLURLEmpty");
+        return;
+    }
+    // </FS:Zi>
+
     LLClipboard::instance().copyToClipboard(utf8str_to_wstring(slurl), 0, static_cast<S32>(slurl.size()));
 
     LLSD args;

@@ -7131,6 +7131,19 @@ Link to this from a web page to give others easy access to this location, or try
     </form>
   </notification>
 
+  <!-- <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know -->
+  <notification
+   icon="alertmodal.tga"
+   name="CopySLURLEmpty"
+   type="alertmodal">
+There was a problem copying this SLurl. The destination region might no longer exist.
+    <form name="form">
+      <ignore name="ignore"
+       text="Copying a SLurl failed"/>
+    </form>
+  </notification>
+  <!-- </FS:Zi> -->
+
   <notification
    icon="alertmodal.tga"
    name="WLSavePresetAlert"

@@ -340,6 +340,14 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
             landmark->getGlobalPos(global_pos);
             boost::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
             {
+                // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+                if (slurl.empty())
+                {
+                    LLNotificationsUtil::add("CopySLURLEmpty");
+                    return;
+                }
+                // </FS:Zi>
+
                gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
                LLSD args;
                args["SLURL"] = slurl;
