@@ -1729,14 +1729,6 @@ bool FSPanelAreaSearchList::onContextMenuItemVisibleRLV(const LLSD& userdata)
     std::vector<std::string> behavs;
     LLStringUtil::getTokens(parameter, behavs, "|");
 
-    if (std::find(behavs.begin(), behavs.end(), "delete") != behavs.end())
-    {
-        if (!rlvCanDeleteOrReturn())
-        {
-            return false;
-        }
-    }
-
     std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
     for (const auto* item : selected)
     {
@@ -1757,6 +1749,13 @@ bool FSPanelAreaSearchList::onContextMenuItemVisibleRLV(const LLSD& userdata)
         else if (
             std::find(behavs.begin(), behavs.end(), "edit") != behavs.end()
             && !RlvActions::canEdit(objectp)
+        )
+        {
+            return false;
+        }
+        else if (
+            std::find(behavs.begin(), behavs.end(), "delete") != behavs.end()
+            && !rlvCanDeleteOrReturn(objectp)
         )
         {
             return false;
