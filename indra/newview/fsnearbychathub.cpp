@@ -40,7 +40,6 @@
 #include "llcommandhandler.h"
 #include "llgesturemgr.h"
 #include "lllineeditor.h"
-#include "llspinctrl.h"
 #include "llviewercontrol.h"
 #include "llviewerinput.h"
 #include "llviewerstats.h"
@@ -356,7 +355,7 @@ void FSNearbyChat::showDefaultChatBar(bool visible, const char* text) const
     if (mDefaultChatBar->getText().empty())
     {
         mDefaultChatBar->setText(LLStringExplicit(text));
-        mDefaultChatBar->setCursorToEnd();
+        mDefaultChatBar->setCursorAndScrollToEnd();
     }
     // </FS:KC> Fix for bad edge snapping
 }

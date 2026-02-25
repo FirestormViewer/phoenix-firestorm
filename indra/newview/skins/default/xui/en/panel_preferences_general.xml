@@ -394,24 +394,36 @@
      width="100"
      top_delta="0" />
 
-    <check_box
-     control_name="NameTagShowGroupTitles"
-     enabled_control="AvatarNameTagMode"
-     height="16"
-     label="Group titles"
+     <combo_box
+     height="20"
      layout="topleft"
+     control_name="GroupTitlesTagMode"
+     enabled_control="AvatarNameTagMode"
      left="30"
-     width="140"
-     name="show_all_title_checkbox1"
      tool_tip="Show group titles, like Officer or Member"
-     top_pad="3" />
+     top_pad="0"
+     name="group_title"
+     width="180">
+        <combo_box.item
+         label="No group tags"
+         name="no_tags"
+         value="0" />
+        <combo_box.item
+         label="Only my group tag"
+         name="my_tag"
+         value="1" />
+        <combo_box.item
+         label="All group tags"
+         name="all_tags"
+         value="2" />
+    </combo_box>
 
     <check_box
      control_name="RenderHideGroupTitle"
      height="16"
      label="Hide own group title"
      layout="topleft"
-     left_pad="50"
+     left_pad="10"
      name="RenderHideGroupTitle"
      tool_tip="Shows or hides your own group title for yourself and everyone else."/>
 

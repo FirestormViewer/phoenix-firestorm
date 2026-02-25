@@ -4205,6 +4205,9 @@ https://wiki.firestormviewer.org/fs_voice
 名前には、「:」または「|」を除く任意のアスキー文字を含めることができます。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
+	<notification name="NewAONameCantExist">
+		この名前のアニメーションセットはすでに存在します。
+	</notification>
 	<notification name="RemoveAOSet">
 		リストからＡＯセット「[AO_SET_NAME]」を削除してもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="削除する"/>

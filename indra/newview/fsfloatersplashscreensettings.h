@@ -35,10 +35,10 @@ class FSFloaterSplashScreenSettings : public LLFloater
 {
 public:
     FSFloaterSplashScreenSettings(const LLSD& key);
-    virtual ~FSFloaterSplashScreenSettings();
+    virtual ~FSFloaterSplashScreenSettings() = default;
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
 private:
     void onSettingChanged();

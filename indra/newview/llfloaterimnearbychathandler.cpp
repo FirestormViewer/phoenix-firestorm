@@ -579,6 +579,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
             RlvUtil::filterNames(tmp_chat.mText);
             tmp_chat.mRlvNamesFiltered = true;
         }
+        RlvUtil::filterMentions(tmp_chat.mText);
     }
 // [/RLVa:KB]
 

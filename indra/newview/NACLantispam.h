@@ -48,8 +48,8 @@ class NACLAntiSpamQueueEntry
     friend class NACLAntiSpamRegistry;
 
 public:
-    U32 getEntryAmount();
-    U32 getEntryTime();
+    U32 getEntryAmount() const;
+    U32 getEntryTime() const;
 
 protected:
     NACLAntiSpamQueueEntry();
@@ -57,13 +57,13 @@ protected:
     void clearEntry();
     void updateEntryAmount();
     void updateEntryTime();
-    bool getBlocked();
+    bool getBlocked() const;
     void setBlocked();
 
 private:
-    U32     mEntryAmount;
-    U32     mEntryTime;
-    bool    mBlocked;
+    U32  mEntryAmount;
+    U32  mEntryTime;
+    bool mBlocked;
 };
 
 typedef std::unordered_map<LLUUID, NACLAntiSpamQueueEntry*> spam_queue_entry_map_t;
@@ -74,8 +74,8 @@ class NACLAntiSpamQueue
     friend class NACLAntiSpamRegistry;
 
 public:
-    U32 getAmount();
-    U32 getTime();
+    U32 getAmount() const;
+    U32 getTime() const;
 
 protected:
     NACLAntiSpamQueue(U32 time, U32 amount);
@@ -92,9 +92,9 @@ protected:
     void purgeEntries();
 
 private:
-    spam_queue_entry_map_t  mEntries;
-    U32                     mQueueAmount;
-    U32                     mQueueTime;
+    spam_queue_entry_map_t mEntries;
+    U32                    mQueueAmount;
+    U32                    mQueueTime;
 };
 
 class NACLAntiSpamRegistry : public LLSingleton<NACLAntiSpamRegistry>

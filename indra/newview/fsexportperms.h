@@ -27,7 +27,7 @@
 
 #include "llselectmgr.h"
 
-const S32 OXP_FORMAT_VERSION = 2;
+constexpr S32 OXP_FORMAT_VERSION = 2;
 
 namespace FSExportPermsCheck
 {

@@ -575,6 +575,7 @@ private:
     S32             mControlsTakenCount[TOTAL_CONTROLS];
     S32             mControlsTakenPassedOnCount[TOTAL_CONTROLS];
     U32             mControlFlags;                  // Replacement for the mFooKey's
+    F64             mLastJumpInputTime;             // Time of last jump input (key-down) in seconds from LLTimer::getTotalSeconds()
 
     // <FS> Ignore prejump and always fly
     bool            mIgnorePrejump;

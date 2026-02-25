@@ -34,7 +34,7 @@ class LLChat;
 class FSKeywords : public LLSingleton<FSKeywords>
 {
     LLSINGLETON(FSKeywords);
-    virtual ~FSKeywords();
+    virtual ~FSKeywords() = default;
 
 public:
     void updateKeywords();

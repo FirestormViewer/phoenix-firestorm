@@ -1,6 +1,6 @@
 /**
-* @file llfloaterbigpreview.cpp
-* @brief Display of extended (big) preview for snapshots and SL Share
+* @file fsfloaterbigpreview.cpp
+* @brief Display of extended (big) preview for snapshots and SL Share; originally llfloaterbigpreview.cpp
 * @author merov@lindenlab.com
 *
 * $LicenseInfo:firstyear=2013&license=viewerlgpl$
@@ -27,20 +27,20 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llfloaterbigpreview.h"
+#include "fsfloaterbigpreview.h"
 #include "llsnapshotlivepreview.h"
 
 ///////////////////////
-//LLFloaterBigPreview//
+//FSFloaterBigPreview//
 ///////////////////////
 
-LLFloaterBigPreview::LLFloaterBigPreview(const LLSD& key) : LLFloater(key),
-    mPreviewPlaceholder(NULL),
-    mFloaterOwner(NULL)
+FSFloaterBigPreview::FSFloaterBigPreview(const LLSD& key) : LLFloater(key),
+    mPreviewPlaceholder(nullptr),
+    mFloaterOwner(nullptr)
 {
 }
 
-LLFloaterBigPreview::~LLFloaterBigPreview()
+FSFloaterBigPreview::~FSFloaterBigPreview()
 {
     if (mPreviewHandle.get())
     {
@@ -48,12 +48,12 @@ LLFloaterBigPreview::~LLFloaterBigPreview()
     }
 }
 
-void LLFloaterBigPreview::onCancel()
+void FSFloaterBigPreview::onCancel()
 {
     closeFloater();
 }
 
-void LLFloaterBigPreview::closeOnFloaterOwnerClosing(LLFloater* floaterp)
+void FSFloaterBigPreview::closeOnFloaterOwnerClosing(LLFloater* floaterp)
 {
     if (isFloaterOwner(floaterp))
     {
@@ -61,17 +61,17 @@ void LLFloaterBigPreview::closeOnFloaterOwnerClosing(LLFloater* floaterp)
     }
 }
 
-bool LLFloaterBigPreview::postBuild()
+bool FSFloaterBigPreview::postBuild()
 {
     mPreviewPlaceholder = getChild<LLUICtrl>("big_preview_placeholder");
     return LLFloater::postBuild();
 }
 
-void LLFloaterBigPreview::draw()
+void FSFloaterBigPreview::draw()
 {
     LLFloater::draw();
 
-    LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
+    LLSnapshotLivePreview* previewp = static_cast<LLSnapshotLivePreview*>(mPreviewHandle.get());
 
     // Display the preview if one is available
     if (previewp && previewp->getBigThumbnailImage())

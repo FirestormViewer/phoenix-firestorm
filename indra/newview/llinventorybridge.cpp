@@ -2067,6 +2067,14 @@ void LLItemBridge::doShowOnMap(LLLandmark* landmark)
 
 void copy_slurl_to_clipboard_callback_inv(const std::string& slurl)
 {
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    if (slurl.empty())
+    {
+        LLNotificationsUtil::add("CopySLURLEmpty");
+        return;
+    }
+    // </FS:Zi>
+
     gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
     LLSD args;
     args["SLURL"] = slurl;
@@ -9444,8 +9452,8 @@ void LLFavoritesFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
     menuentry_vec_t disabled_items, items;
     buildContextMenuOptions(flags, items, disabled_items);
 
-    items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
-    // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+    // <FS:TJ> [FIRE-35996] Restore allowing creating new folder and folder from selected on favorites panel
+    //items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
     //items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
     // </FS:TJ>
 

@@ -3482,7 +3482,7 @@ void LLIMMgr::addMessage(
     // <FS:Zi> Omnifilter support
     std::string msg = original_msg;
 
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
         // this is the type for new group IM sessions started - apparently this is the only place

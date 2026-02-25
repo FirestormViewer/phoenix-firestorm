@@ -3711,6 +3711,41 @@ bool enable_object_show_original()
 }
 // </FS:Ansariel>
 
+void handle_object_set_favorite(const LLSD& userdata)
+{
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (!object)
+    {
+        return;
+    }
+    LLViewerObject *parent = (LLViewerObject*)object->getParent();
+    while (parent)
+    {
+        if(parent->isAvatar())
+        {
+            break;
+        }
+        object = parent;
+        parent = (LLViewerObject*)parent->getParent();
+    }
+    if (!object || object->isAvatar())
+    {
+        return;
+    }
+
+    LLUUID item_id = gInventory.getLinkedItemID(object->getAttachmentItemID());
+
+    std::string action = userdata.asString();
+    if (action == "Add")
+    {
+        set_favorite(item_id, true);
+    }
+    if (action == "Remove")
+    {
+        set_favorite(item_id, false);
+    }
+}
+
 static void init_default_item_label(LLUICtrl* ctrl)
 {
     const std::string& item_name = ctrl->getName();
@@ -3773,6 +3808,41 @@ bool enable_object_touch(LLUICtrl* ctrl)
 
     return new_value;
 };
+
+bool enable_object_favorite(const LLSD& userdata)
+{
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (!object)
+    {
+        return false;
+    }
+    LLViewerObject* parent = (LLViewerObject*)object->getParent();
+    while (parent)
+    {
+        if (parent->isAvatar())
+        {
+            break;
+        }
+        object = parent;
+        parent = (LLViewerObject*)parent->getParent();
+    }
+    if (!object || object->isAvatar())
+    {
+        return false;
+    }
+
+    std::string action = userdata.asString();
+    LLUUID item_id = gInventory.getLinkedItemID(object->getAttachmentItemID());
+    if (action == "Add")
+    {
+        return !get_is_favorite(item_id);
+    }
+    if (action == "Remove")
+    {
+        return get_is_favorite(item_id);
+    }
+    return false;
+}
 
 //void label_touch(std::string& label, void*)
 //{
@@ -12246,16 +12316,6 @@ class LLWorldEnableEnvPreset : public view_listener_t
     }
 };
 
-/// Post-Process callbacks
-class LLWorldPostProcess : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        LLFloaterReg::showInstance("env_post_process");
-        return true;
-    }
-};
-
 class LLWorldCheckBanLines : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12850,7 +12910,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLWorldEnableEnvSettings(), "World.EnableEnvSettings");
     view_listener_t::addMenu(new LLWorldEnvPreset(), "World.EnvPreset");
     view_listener_t::addMenu(new LLWorldEnableEnvPreset(), "World.EnableEnvPreset");
-    view_listener_t::addMenu(new LLWorldPostProcess(), "World.PostProcess");
     view_listener_t::addMenu(new LLWorldCheckBanLines() , "World.CheckBanLines");
     view_listener_t::addMenu(new LLWorldShowBanLines() , "World.ShowBanLines");
 
@@ -13211,6 +13270,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLObjectBuild(), "Object.Build");
     commit.add("Object.Touch", boost::bind(&handle_object_touch));
     commit.add("Object.ShowOriginal", boost::bind(&handle_object_show_original));
+    commit.add("Object.SetFavorite", boost::bind(&handle_object_set_favorite, _2));
     commit.add("Object.SitOrStand", boost::bind(&handle_object_sit_or_stand));
     commit.add("Object.Delete", boost::bind(&handle_object_delete));
     view_listener_t::addMenu(new LLObjectAttachToAvatar(true), "Object.AttachToAvatar");
@@ -13245,6 +13305,7 @@ void initialize_menus()
     enable.add("Object.EnableEditGLTFMaterial", boost::bind(&enable_object_edit_gltf_material));
     enable.add("Object.EnableOpen", boost::bind(&enable_object_open));
     enable.add("Object.EnableTouch", boost::bind(&enable_object_touch, _1));
+    enable.add("Object.EnableFavorites", boost::bind(&enable_object_favorite, _2));
     enable.add("Object.EnableDelete", boost::bind(&enable_object_delete));
     enable.add("Object.EnableWear", boost::bind(&object_is_wearable));
 

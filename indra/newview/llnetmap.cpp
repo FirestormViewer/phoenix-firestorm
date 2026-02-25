@@ -47,8 +47,8 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llappviewer.h" // for gDisconnected
-// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 #include "llavataractions.h"
+// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 #include "llfloatersidepanelcontainer.h"
 // [/SL:KB]
 #include "llcallingcard.h" // LLAvatarTracker
@@ -696,22 +696,46 @@ void LLNetMap::draw()
 
         LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgentCamera.getCameraPositionGlobal());
 
-        // Draw avatars
+        std::vector<std::pair<U32, bool>> indexed_avatars;
+        indexed_avatars.reserve(avatar_ids.size());
         for (U32 i = 0; i < avatar_ids.size(); i++)
+        {
+            indexed_avatars.emplace_back(i, LLAvatarActions::isFriend(avatar_ids[i]));
+        }
+
+        // Sort avatars so non-friends are drawn first and friend dots will appear on top
+        std::sort(indexed_avatars.begin(), indexed_avatars.end(),
+                    [](const auto& a, const auto& b) { return a.second < b.second; });
+
+        uuid_vec_t sorted_avatar_ids;
+        std::vector<LLVector3d> sorted_positions;
+        sorted_avatar_ids.reserve(avatar_ids.size());
+        sorted_positions.reserve(positions.size());
+
+        // Reorder avatar_ids and positions based on sorted indices
+        for (const auto& indexed_avatar : indexed_avatars)
+        {
+            sorted_avatar_ids.push_back(avatar_ids[indexed_avatar.first]);
+            sorted_positions.push_back(positions[indexed_avatar.first]);
+        }
+
+        // Draw avatars
+        for (U32 i = 0; i < sorted_avatar_ids.size(); i++)
         {
             // <FS:Ansariel> Performance improvement
             //LLUUID uuid = avatar_ids[i];
             const LLUUID& uuid = avatar_ids.at(i);
+
             // Skip self, we'll draw it later
             if (uuid == gAgent.getID()) continue;
 
-            pos_map = globalPosToView(positions[i]);
+            pos_map = globalPosToView(sorted_positions[i]);
 
             // <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
-            //unknown_relative_z = positions[i].mdV[VZ] >= COARSEUPDATE_MAX_Z &&
+            //unknown_relative_z = sorted_positions[i].mdV[VZ] >= COARSEUPDATE_MAX_Z &&
             //      camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z;
             unknown_relative_z = false;
-            if (positions[i].mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)
+            if (sorted_positions[i].mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)
             {
                 if (camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z)
                 {

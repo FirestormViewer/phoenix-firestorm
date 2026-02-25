@@ -77,20 +77,11 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
     LL_PROFILE_ZONE_SCOPED;
     const std::string filename = LLDiskCache::metaDataToFilepath(file_id, file_type);
 
-    // <FS:Ansariel> IO-streams replacement
-    //llifstream file(filename, std::ios::binary);
-    //if (file.is_open())
-    //{
-    //    file.seekg(0, std::ios::end);
-    //    return file.tellg() > 0;
-    //}
-    llstat file_stat;
-    if (LLFile::stat(filename, &file_stat) == 0)
+    boost::system::error_code ec;
+    if (boost::filesystem::exists(filename, ec) && boost::filesystem::is_regular_file(filename, ec))
     {
-        return S_ISREG(file_stat.st_mode) && file_stat.st_size > 0;
+        return boost::filesystem::file_size(filename, ec) > 0;
     }
-    // </FS:Ansariel>
-
     return false;
 }
 
@@ -131,21 +122,12 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
     LL_PROFILE_ZONE_COLOR(tracy::Color::Gold); // <FS:Beq> measure cache performance
     const std::string filename = LLDiskCache::metaDataToFilepath(file_id, file_type);
 
-    S32 file_size = 0;
-    // <FS:Ansariel> IO-streams replacement
-    //llifstream file(filename, std::ios::binary);
-    //if (file.is_open())
-    //{
-    //    file.seekg(0, std::ios::end);
-    //    file_size = (S32)file.tellg();
-    //}
-    if (llstat file_stat; LLFile::stat(filename, &file_stat) == 0)
+    boost::system::error_code ec;
+    if (boost::filesystem::exists(filename, ec) && boost::filesystem::is_regular_file(filename, ec))
     {
-        file_size = static_cast<S32>(file_stat.st_size);
+        return static_cast<S32>(boost::filesystem::file_size(filename, ec));
     }
-    // </FS:Ansariel>
-
-    return file_size;
+    return 0;
 }
 
 bool LLFileSystem::read(U8* buffer, S32 bytes)

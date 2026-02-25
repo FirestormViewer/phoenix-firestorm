@@ -34,7 +34,7 @@ class FSFloaterBlocklist : public LLFloater
 {
 public:
     FSFloaterBlocklist(const LLSD& seed);
-    /*virtual*/ ~FSFloaterBlocklist();
+    ~FSFloaterBlocklist() = default;
     void onOpen(const LLSD& key) override;
 
     bool postBuild() override;

@@ -78,8 +78,6 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     addChild(mTouchArea);
 }
 
-FSVirtualTrackpad::~FSVirtualTrackpad() {}
-
 bool FSVirtualTrackpad::postBuild()
 {
     return true;
