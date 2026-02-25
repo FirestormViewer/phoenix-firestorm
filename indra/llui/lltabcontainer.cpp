@@ -2488,6 +2488,19 @@ void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
     updateMaxScrollPos();
 }
 
+bool LLTabContainer::getTabVisibility(const LLPanel* panel) const
+{
+    for (tuple_list_t::const_iterator itr = mTabList.begin(); itr != mTabList.end(); ++itr)
+    {
+        LLTabTuple const* pTT = *itr;
+        if (pTT->mTabPanel == panel)
+        {
+            return pTT->mVisible;
+        }
+    }
+    return false;
+}
+
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
 boost::signals2::connection LLTabContainer::setRearrangeCallback(const tab_rearrange_signal_t::slot_type& cb)
 {
