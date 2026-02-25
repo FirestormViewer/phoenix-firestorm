@@ -810,6 +810,7 @@ bool RlvFloaterConsole::postBuild()
     m_pInputEdit->setTextExpandedCallback(boost::bind(&RlvFloaterConsole::reshapeLayoutPanel, this));
     m_pInputEdit->setFocus(true);
     m_pInputEdit->setCommitOnFocusLost(false);
+    m_pInputEdit->setShowChatMentionPicker(false);
 
     m_pInputPanel = getChild<LLLayoutPanel>("input_panel");
     m_nInputEditPad = m_pInputPanel->getRect().getHeight() - m_pInputEdit->getRect().getHeight();

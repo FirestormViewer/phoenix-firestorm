@@ -2015,7 +2015,14 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
             {
                 LLVector3d global_pos;
                 landmark->getGlobalPos(global_pos);
-                LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                if (!global_pos.isExactlyZero())
+                {
+                    LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                }
+                else
+                {
+                    LLNotificationsUtil::add("LandmarkLocationUnknown");
+                }
             }
         }
     }
@@ -2060,6 +2067,14 @@ void LLItemBridge::doShowOnMap(LLLandmark* landmark)
 
 void copy_slurl_to_clipboard_callback_inv(const std::string& slurl)
 {
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    if (slurl.empty())
+    {
+        LLNotificationsUtil::add("CopySLURLEmpty");
+        return;
+    }
+    // </FS:Zi>
+
     gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
     LLSD args;
     args["SLURL"] = slurl;
