@@ -41,7 +41,7 @@ class FSFloaterRadar
     LOG_CLASS(FSFloaterRadar);
 public:
     FSFloaterRadar(const LLSD &);
-    ~FSFloaterRadar() override;
+    ~FSFloaterRadar() override = default;
 
     bool postBuild() override;
     void onOpen(const LLSD& key) override;

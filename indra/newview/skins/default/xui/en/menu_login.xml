@@ -121,6 +121,13 @@
         <menu_item_separator/>       
 -->
         <menu_item_call
+            name="whitelist_folders"
+            label="Whitelist adviser">
+            <menu_item_call.on_click
+               function="Floater.Show"
+               parameter="fs_whitelist_floater" />
+        </menu_item_call>
+        <menu_item_call
              label="Report Problem"
              name="Report Bug">
                 <menu_item_call.on_click

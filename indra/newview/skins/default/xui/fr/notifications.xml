@@ -4265,6 +4265,9 @@ Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="NewAONameCantExist">
+		Un ensemble d'animations portant ce nom existe déjà.
+	</notification>
 	<notification name="RemoveAOSet">
 		Retirer l'ensemble d'AO "[AO_SET_NAME]" de la liste ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Supprimer"/>

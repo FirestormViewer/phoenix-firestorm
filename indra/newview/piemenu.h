@@ -65,21 +65,21 @@ public:
 
     PieMenu(const Params& p);
 
-    /*virtual*/ void setVisible(bool visible);
+    void setVisible(bool visible) override;
 
     // adding and removing "child" slices to the pie
-    /*virtual*/ bool addChild(LLView* child, S32 tab_group = 0);
-    /*virtual*/ void removeChild(LLView* child);
+    bool addChild(LLView* child, S32 tab_group = 0) override;
+    void removeChild(LLView* child) override;
 
-    /*virtual*/ bool handleHover(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
-    /*virtual*/ bool handleRightMouseUp(S32 x, S32 y, MASK mask);
+    bool handleHover(S32 x, S32 y, MASK mask) override;
+    bool handleMouseUp(S32 x, S32 y, MASK mask) override;
+    bool handleRightMouseUp(S32 x, S32 y, MASK mask) override;
 
     // does all the hard work of bringing the menu on the screen
-    void draw();
+    void draw() override;
 
     // showing/hiding the menu
-    void show(S32 x, S32 y, LLView* spawning_view = NULL);
+    void show(S32 x, S32 y, LLView* spawning_view = nullptr);
     void hide();
 
     // our item list type definition
@@ -93,11 +93,11 @@ public:
     bool appendContextSubMenu(PieMenu* menu);
 
     // we never rearrange our menu
-    void needsArrange() {};
+    void needsArrange() override {};
     // arranging does nothing
-    virtual void arrange( void ) {};
+    void arrange() override {};
     // arranging does nothing
-    void arrangeAndClear( void ) {};
+    void arrangeAndClear() override {};
 
 protected:
     // general mouse button handling

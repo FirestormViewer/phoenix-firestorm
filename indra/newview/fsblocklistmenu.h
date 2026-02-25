@@ -37,10 +37,10 @@ public:
         : LLListContextMenu(),
         mSpawningCtrl(NULL)
     { }
-    virtual ~FSBlockListMenu() { };
+    virtual ~FSBlockListMenu() = default;
 
-    /*virtual*/ LLContextMenu* createMenu();
-    /*virtual*/ void show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y);
+    LLContextMenu* createMenu() override;
+    void show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y) override;
 
 private:
     void onContextMenuItemClick(const LLSD& userdata);

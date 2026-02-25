@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llavataractions.h"            // LLAvatarActions::profileVisible()
+#include "llchatmentionhelper.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"                  // LLHUDText::refreshAllObjectText()
 #include "llimview.h"                   // LLIMMgr::computeSessionID()
@@ -61,6 +62,7 @@ RlvUIEnabler::RlvUIEnabler()
 
     // onToggleXXX
     m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
+    m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this)));
     m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
     m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
     m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
@@ -174,6 +176,16 @@ void RlvUIEnabler::onToggleShowLoc()
     {
         m_ConnFloaterShowLoc.disconnect();
         m_ConnPanelShowLoc.disconnect();
+    }
+}
+
+// Checked: 2026-02-12 (RLVa-2.4.2)
+void RlvUIEnabler::onToggleShowNames()
+{
+    const bool can_show = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+    if (!can_show)
+    {
+        LLChatMentionHelper::instance().hideHelper();
     }
 }
 

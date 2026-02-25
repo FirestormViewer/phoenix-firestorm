@@ -213,6 +213,14 @@ void LLStreamingAudio_FMODSTUDIO::update()
                     if (Check_FMOD_Error(sound->getTag(nullptr, i, &tag), "FMOD::Sound::getTag"))
                         continue;
 
+                    // <FS:TJ> [FIRE-36403] Sometimes tag.data is nullptr and causes a crash
+                    if (!tag.data)
+                    {
+                        LL_WARNS("StreamMetadata") << tag.name << ": " << "NULL data with datalen: " << tag.datalen << LL_ENDL;
+                        continue;
+                    }
+                    // </FS:TJ>
+
                     LL_DEBUGS("StreamMetadata") << "Tag name: " << tag.name << " - Tag type: " << tag.type << " - Tag data type: " << tag.datatype << LL_ENDL;
 
                     std::string name = tag.name;
@@ -254,6 +262,7 @@ void LLStreamingAudio_FMODSTUDIO::update()
                         default:
                             break;
                     }
+
                     switch (tag.datatype)
                     {
                         case FMOD_TAGDATATYPE_INT:

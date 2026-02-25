@@ -4654,15 +4654,18 @@ Por favor, copia a tu propio inventario y vuelve a intentarlo.
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
-	<notification name="NewAOCantContainColon">
+	<notification name="NewAOCantContainNonASCII">
 		No se ha podido crear el nuevo AO "[AO_SET_NAME]".
 El nombre NO puede contener los caracteres ":" o "|".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification name="RenameAOCantContainColon">
+	<notification name="RenameAOMustBeASCII">
 		No se ha podido renombrar el nueov AO a "[AO_SET_NAME]".
 El nombre NO puede contener los caracteres ":" o "|".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="NewAONameCantExist">
+		Ya existe una configuración de AO con ese nombre.
 	</notification>
 	<notification name="RemoveAOSet">
 		¿Eliminar la configuración de AO "[AO_SET_NAME]" de la lista?

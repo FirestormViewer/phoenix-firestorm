@@ -35,10 +35,6 @@ FSFloaterBlocklist::FSFloaterBlocklist(const LLSD& seed)
 {
 }
 
-FSFloaterBlocklist::~FSFloaterBlocklist()
-{
-}
-
 bool FSFloaterBlocklist::postBuild()
 {
     mBlockedListPanel = getChild<LLPanel>("panel_block_list_sidetray");

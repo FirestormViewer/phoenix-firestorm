@@ -44,9 +44,9 @@ public:
     GrowlNotifierWin();
     virtual ~GrowlNotifierWin();
 
-    void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type);
-    bool isUsable();
-    void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes);
+    void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type) override;
+    bool isUsable() override;
+    void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes) override;
 
 private:
     std::string mApplicationName;

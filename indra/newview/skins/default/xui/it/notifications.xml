@@ -3999,6 +3999,9 @@ Il nome può contenere solo caratteri ASCII esclusi : e | .
 		Impossibile rinominare il set AO "[AO_SET_NAME]".
 Il nome può contenere solo caratteri ASCII esclusi : e | .
 	</notification>
+	<notification name="NewAONameCantExist">
+		Esiste già un set AO con questo nome.
+	</notification>
 	<notification name="RemoveAOSet">
 		Rimuovere il set AO  "[AO_SET_NAME]" dalla lista?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Rimuovi"/>

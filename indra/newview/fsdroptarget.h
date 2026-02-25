@@ -45,7 +45,7 @@ public:
     FSCopyTransInventoryDropTarget(const Params& p)
         : LLLineEditor(p) {}
 
-    ~FSCopyTransInventoryDropTarget() {}
+    ~FSCopyTransInventoryDropTarget() = default;
 
     typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
     boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
@@ -53,17 +53,17 @@ public:
         return mDADSignal.connect(cb);
     }
 
-    virtual bool postBuild()
+    bool postBuild() override
     {
         setEnabled(false);
         return LLLineEditor::postBuild();
     }
 
-    virtual bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                   EDragAndDropType cargo_type,
-                                   void* cargo_data,
-                                   EAcceptance* accept,
-                                   std::string& tooltip_msg);
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
+                           EDragAndDropType cargo_type,
+                           void* cargo_data,
+                           EAcceptance* accept,
+                           std::string& tooltip_msg) override;
 
 private:
     item_dad_callback_t mDADSignal;
@@ -80,7 +80,7 @@ public:
     };
 
     FSEmbeddedItemDropTarget(const Params& p) : LLTextBox(p) {}
-    ~FSEmbeddedItemDropTarget() {}
+    ~FSEmbeddedItemDropTarget() = default;
 
     typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
     boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
@@ -88,11 +88,11 @@ public:
         return mDADSignal.connect(cb);
     }
 
-    virtual bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                   EDragAndDropType cargo_type,
-                                   void* cargo_data,
-                                   EAcceptance* accept,
-                                   std::string& tooltip_msg);
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
+                           EDragAndDropType cargo_type,
+                           void* cargo_data,
+                           EAcceptance* accept,
+                           std::string& tooltip_msg) override;
 
 protected:
     item_dad_callback_t mDADSignal;

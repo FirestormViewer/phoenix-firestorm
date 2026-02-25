@@ -41,10 +41,6 @@ FSFloaterGroup::FSFloaterGroup(const LLSD& seed)
 {
 }
 
-FSFloaterGroup::~FSFloaterGroup()
-{
-}
-
 bool FSFloaterGroup::postBuild()
 {
     mGroupPanel = findChild<LLPanelGroup>("panel_group_info_sidetray");

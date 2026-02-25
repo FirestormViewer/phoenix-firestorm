@@ -41,7 +41,7 @@ public:
         {}
     };
 
-    virtual ~FSRadarListCtrl() {}
+    virtual ~FSRadarListCtrl() = default;
     bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 
 protected:

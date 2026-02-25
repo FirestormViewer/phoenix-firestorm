@@ -1,7 +1,7 @@
-<floater name="whitelist_floater" title="Liste blanche de dossiers et programmes">
+<floater name="whitelist_floater" title="Listes blanches de dossiers et programmes">
 	<text name="whitelist_intro">
 Les antivirus et les anti-logiciels malveillants sont un élément essentiel d'une utilisation sûre de l'internet, mais ils peuvent causer toute une série de problèmes au client.
-Pour réduire les interférences et améliorer la stabilité et les performances, nous conseillonsPour réduire les interférences et améliorer la stabilité et les performances, nous conseillons vivement à tous les utilisateurs de veiller à ce qu'il y ait des exclusions (connues sous le nom de liste blanche) pour les dossiers et les programmes importants que le client utilise.
+Pour réduire les interférences et améliorer la stabilité et les performances, nous conseillons vivement à tous les utilisateurs de veiller à ce qu'il y ait des exclusions (connues sous le nom de liste blanche) pour les dossiers et les programmes importants que le client utilise.
 
 Pour plus d'informations, visitez le site
 https://wiki.firestormviewer.org/antivirus_whitelisting

@@ -280,7 +280,7 @@ void ColladaExportFloater::updateSelection()
     refresh();
 }
 
-S32 ColladaExportFloater::getNumExportableTextures()
+S32 ColladaExportFloater::getNumExportableTextures() const
 {
     S32 res = 0;
     for (DAESaver::string_list_t::const_iterator t = mSaver.mTextureNames.begin(); t != mSaver.mTextureNames.end(); ++t)
