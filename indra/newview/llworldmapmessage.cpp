@@ -87,7 +87,10 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name)
     msg->nextBlockFast(_PREHASH_AgentData);
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-    msg->addU32Fast(_PREHASH_Flags, LAYER_FLAG);
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
+    // msg->addU32Fast(_PREHASH_Flags, LAYER_FLAG);
+    msg->addU32Fast(_PREHASH_Flags, 0x01);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
     msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
     msg->nextBlockFast(_PREHASH_NameData);
@@ -148,7 +151,7 @@ void LLWorldMapMessage::sendMapBlockRequest(U16 min_x, U16 min_y, U16 max_x, U16
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
     // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistant
+    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
     // U32 flags = LAYER_FLAG;
     U32 flags = 0x01;
     // </FS:Zi>
