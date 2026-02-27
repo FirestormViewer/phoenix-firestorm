@@ -554,6 +554,60 @@
                  (requires restart)
             </text>
 
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="3"
+             left="20"
+             width="150"
+             height="20"
+             control_name="FSAutoOrderIMTabs"
+             name="FSAutoOrderIMTabs"
+             label="Order IM tabs by type"
+             tool_tip="Use automatic tab ordering for IM tabs inside the conversations floater." />
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             left_pad="20"
+             width="150"
+             height="20"
+             control_name="FSAutoOrderIMTabsAtTop"
+             name="FSAutoOrderIMTabsAtTop"
+             enabled_control="FSAutoOrderIMTabs"
+             label="Add new tabs as first"
+             tool_tip="Add new IM tabs as first in their chat type group." />
+
+            <combo_box
+             control_name="FSAutoOrderIMTabsPriorities"
+             enabled_control="FSAutoOrderIMTabs"
+             layout="topleft"
+             follows="left|top"
+             height="16"
+             left_pad="10"
+             top_delta="2"
+             name="FSAutoOrderIMTabsPriorities"
+             width="180">
+                <combo_box.item
+                 label="Groups, Conferences, IMs"
+                 value="210" />
+                <combo_box.item
+                 label="Groups, IMs, Conferences"
+                 value="201" />
+                <combo_box.item
+                 label="Conferences, Groups, IMs"
+                 value="120" />
+                <combo_box.item
+                 label="Conferences, IMs, Groups"
+                 value="021" />
+                <combo_box.item
+                 label="IMs, Groups, Conferences"
+                 value="102" />
+                <combo_box.item
+                 label="IMs, Conferences, Groups"
+                 value="012" />
+            </combo_box>
+
 			<text
 			 name="FSIMTabNameFormat_label"
 			 follows="left|top"

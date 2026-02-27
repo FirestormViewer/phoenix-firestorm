@@ -123,7 +123,7 @@ void FSFloaterIMContainer::initTabs()
         }
         else
         {
-            addFloater(floater_contacts, true);
+            addFloater(floater_contacts, true, IM_NOTHING_SPECIAL);
         }
     }
 
@@ -141,7 +141,7 @@ void FSFloaterIMContainer::initTabs()
         }
         else
         {
-            addFloater(floater_chat, true);
+            addFloater(floater_chat, true, IM_NOTHING_SPECIAL);
         }
     }
 }
@@ -195,6 +195,27 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
                                     LLTabContainer::eInsertionPoint insertion_point)
 {
     if (!floaterp)
+    {
+        return;
+    }
+
+    EInstantMessage type{ IM_NOTHING_SPECIAL };
+
+    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(floaterp->getKey());
+    if (session)
+    {
+        type = session->mType;
+    }
+
+    addFloater(floaterp, select_added_floater, type, insertion_point);
+}
+
+void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
+                                    bool select_added_floater,
+                                    EInstantMessage type,
+                                    LLTabContainer::eInsertionPoint no_auto_insertion_point)
+{
+    if (!floaterp)
         return;
 
     // already here
@@ -239,11 +260,79 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
         floaterp->setCanClose(false);
         return;
     }
+
+    LLTabContainer::eInsertionPoint insertion_point =  no_auto_insertion_point;
+
+    if (mIsAddingNewSession)
+    {
+        if (gSavedSettings.getBOOL("FSAutoOrderIMTabs"))
+        {
+            const std::string order_priorities = gSavedSettings.getString("FSAutoOrderIMTabsPriorities");
+
+            // sort order uses the ascii values for 0, 1 and 2, just to make it simpler to store as a string
+            // and the values can be easily compared via greater or less than
+            std::map<EInstantMessage, S32> sort_order;
+            sort_order[IM_SESSION_GROUP_START] = order_priorities[0];
+            sort_order[IM_SESSION_CONFERENCE_START] =  order_priorities[1];
+            sort_order[IM_NOTHING_SPECIAL] = order_priorities[2];
+
+            bool insert_at_top = gSavedSettings.getBOOL("FSAutoOrderIMTabsAtTop");
+
+            if (type == IM_SESSION_INVITE)
+            {
+                // make sure group IMs are always the same value
+                type = IM_SESSION_GROUP_START;
+            }
+            bool type_found{ false };
+
+            S32 index;
+            for (index = mTabContainer->getNumLockedTabs(); index < mTabContainer->getTabCount(); index++)
+            {
+                FSFloaterIM* tab = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(index));
+                if (!tab)
+                {
+                    continue;
+                }
+
+                const LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(tab->getKey());
+                if (!session)
+                {
+                    continue;
+                }
+
+                EInstantMessage session_type = session->mType;
+                if (session_type == IM_SESSION_INVITE)
+                {
+                    // make sure group IMs are always the same value
+                    session_type = IM_SESSION_GROUP_START;
+                }
+
+                if (session_type == type)
+                {
+                    if (insert_at_top)
+                    {
+                        break;
+                    }
+                    type_found = true;
+                }
+                else if (type_found)
+                {
+                    break;
+                }
+                else if (sort_order[session_type] < sort_order[type])
+                {
+                    break;
+                }
+            }
+
+            insertion_point = (LLTabContainer::eInsertionPoint)index;
+        }
+    }
     else
     {
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3.0)
         // If we're redocking a torn off IM floater, return it back to its previous place
-        if (!mIsAddingNewSession && (floaterp->isTornOff()) && (LLTabContainer::END == insertion_point) )
+        if (floaterp->isTornOff())
         {
             LLChicletPanel* pChicletPanel = LLChicletBar::instance().getChicletPanel();
 
@@ -283,11 +372,11 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
     floaterp->mCloseSignal.connect(boost::bind(&FSFloaterIMContainer::onCloseFloater, this, session_id));
 }
 
-void FSFloaterIMContainer::addNewSession(LLFloater* floaterp)
+void FSFloaterIMContainer::addNewSession(LLFloater* floaterp, EInstantMessage type)
 {
     // Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
     mIsAddingNewSession = true;
-    addFloater(floaterp, false, LLTabContainer::END);
+    addFloater(floaterp, false, type);
     mIsAddingNewSession = false;
 }
 
@@ -682,7 +771,7 @@ void FSFloaterIMContainer::restoreOpenIMs()
                     {
                         if (im_floater->getHost() != this)
                         {
-                            addFloater(im_floater, false);
+                            addFloater(im_floater, false, IM_NOTHING_SPECIAL);
                         }
                     }
                 }

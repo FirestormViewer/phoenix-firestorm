@@ -32,6 +32,7 @@
 
 #include "llmultifloater.h"
 #include "llimview.h"
+#include "llinstantmessage.h"
 
 class LLTabContainer;
 
@@ -48,13 +49,19 @@ public:
     void draw() override;
     void addFloater(LLFloater* floaterp, 
                     bool select_added_floater,
-                    LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END) override; 
+                    LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END) override;
+
+    void addFloater(LLFloater* floaterp,
+                    bool select_added_floater,
+                    EInstantMessage type,
+                    LLTabContainer::eInsertionPoint no_auto_insertion_point = LLTabContainer::END);
+
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
     void removeFloater(LLFloater* floaterp) override;
 // [/SL:KB]
     bool hasFloater(LLFloater* floaterp);
 
-    void addNewSession(LLFloater* floaterp);
+    void addNewSession(LLFloater* floaterp, EInstantMessage type);
 
     static FSFloaterIMContainer* findInstance();
     static FSFloaterIMContainer* getInstance();
