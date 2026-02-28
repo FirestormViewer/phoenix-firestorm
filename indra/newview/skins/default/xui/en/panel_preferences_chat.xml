@@ -589,21 +589,27 @@
              name="FSAutoOrderIMTabsPriorities"
              width="180">
                 <combo_box.item
+                 name="group_conf_im"
                  label="Groups, Conferences, IMs"
                  value="210" />
                 <combo_box.item
+                 name="group_im_conf"
                  label="Groups, IMs, Conferences"
                  value="201" />
                 <combo_box.item
+                 name="conf_group_im"
                  label="Conferences, Groups, IMs"
                  value="120" />
                 <combo_box.item
+                 name="conf_im_group"
                  label="Conferences, IMs, Groups"
                  value="021" />
                 <combo_box.item
+                 name="im_group_conf"
                  label="IMs, Groups, Conferences"
                  value="102" />
                 <combo_box.item
+                 name="im_conf_group"
                  label="IMs, Conferences, Groups"
                  value="012" />
             </combo_box>
