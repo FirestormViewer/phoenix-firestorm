@@ -60,6 +60,16 @@
 				<radio_item label="垂直" name="radio_vertical" />
 			</radio_group>
 			<text name="req_restart_chattabs" width="140">(需要重新啟動)</text>
+			<check_box name="FSAutoOrderIMTabs" label="按類型排序私聊分頁" tool_tip="在會話視窗內自動對私聊分頁進行排序。" />
+			<check_box name="FSAutoOrderIMTabsAtTop" label="新分頁置頂" tool_tip="在對應聊天類型群組中，將新的私聊分頁新增為第一個。" />
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="群組、會議、私聊" />
+				<combo_box.item name="group_im_conf" label="群組、私聊、會議" />
+				<combo_box.item name="conf_group_im" label="會議、群組、私聊" />
+				<combo_box.item name="conf_im_group" label="會議、私聊、群組" />
+				<combo_box.item name="im_group_conf" label="私聊、群組、會議" />
+				<combo_box.item name="im_conf_group" label="私聊、會議、群組" />
+			</combo_box>
 			<text name="FSIMTabNameFormat_label" width="180">索引標籤名稱格式：</text>
 			<combo_box name="FSIMTabNameFormat">
 				<combo_box.item label="顯示名" name="display_name" />
