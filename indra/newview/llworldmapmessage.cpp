@@ -87,10 +87,7 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name)
     msg->nextBlockFast(_PREHASH_AgentData);
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
-    // msg->addU32Fast(_PREHASH_Flags, LAYER_FLAG);
-    msg->addU32Fast(_PREHASH_Flags, 0x01);
+    msg->addU32Fast(_PREHASH_Flags, LAYER_FLAG);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
     msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
     msg->nextBlockFast(_PREHASH_NameData);
@@ -150,12 +147,15 @@ void LLWorldMapMessage::sendMapBlockRequest(U16 min_x, U16 min_y, U16 max_x, U16
     msg->nextBlockFast(_PREHASH_AgentData);
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    U32 flags = LAYER_FLAG;
     // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
-    // U32 flags = LAYER_FLAG;
-    U32 flags = 0x01;
+    // flags |= (return_nonexistent ? 0x10000 : 0);
+    // - use 0x01 (prims) when return_nonexistent is set because LAYER_FLAG (terrain) does not come back on nonexistent
+    if (return_nonexistent)
+    {
+        flags = 0x10001;
+    }
     // </FS:Zi>
-    flags |= (return_nonexistent ? 0x10000 : 0);
     msg->addU32Fast(_PREHASH_Flags, flags);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
     msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
@@ -187,24 +187,12 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
 
     // There's only one flag that we ever use here
     // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // - use 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
+    // - also check for 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
     // if (agent_flags != LAYER_FLAG)
-    if (agent_flags != 0x01)
+    if (agent_flags != 0x01 && agent_flags != LAYER_FLAG)
     // <FS:Zi>
     {
         LL_WARNS() << "Invalid map image type returned! layer = " << agent_flags << LL_ENDL;
-        // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-        // Handle the SLURL callback if any
-        url_callback_t callback = LLWorldMapMessage::getInstance()->mSLURLCallback;
-        if(callback != NULL)
-        {
-            LLWorldMapMessage::getInstance()->mSLURLCallback = NULL;
-            LLWorldMapMessage::getInstance()->mSLURLRegionName.clear();
-            LLWorldMapMessage::getInstance()->mSLURLRegionHandle = 0;
-
-            callback(0, LLWorldMapMessage::getInstance()->mSLURL, LLUUID::null, false);
-        }
-        // </FS:Zi>
         return;
     }
 
