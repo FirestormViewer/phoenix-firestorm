@@ -2725,12 +2725,6 @@ Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apo
 			<ignore name="ignore" text="La SLurl est copiée dans mon presse-papiers"/>
 		</form>
 	</notification>
-	<notification name="CopySLURLEmpty">
-		Un problème est survenu lors de la copie de cette SLurl. La région de destination n'existe peut-être plus.
-		<form name="form">
-			<ignore name="ignore" text="Échec de la copie de la SLurl"/>
-		</form>
-	</notification>
 	<notification name="WLSavePresetAlert">
 		Voulez-vous écraser l&apos;option précédemment enregistrée ?
 		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>

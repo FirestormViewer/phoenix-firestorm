@@ -2783,12 +2783,6 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 			<ignore name="ignore" text="Slurl wurde in meine Zwischenablage kopiert"/>
 		</form>
 	</notification>
-	<notification name="CopySLURLEmpty">
-		Es gab ein Problem beim Kopieren der SLurl. Die Zielregion existiert möglicherweise nicht mehr.
-		<form name="form">
-			<ignore name="ignore" text="Kopieren einer Slurl ist fehlgeschlagen"/>
-		</form>
-	</notification>
 	<notification name="WLSavePresetAlert">
 		Die gespeicherte Voreinstellung überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>

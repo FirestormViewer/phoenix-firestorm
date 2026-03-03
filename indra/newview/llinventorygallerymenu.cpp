@@ -343,7 +343,7 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
                 // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
                 if (slurl.empty())
                 {
-                    LLNotificationsUtil::add("CopySLURLEmpty");
+                    LLNotificationsUtil::add("LandmarkLocationUnknown");
                     return;
                 }
                 // </FS:Zi>

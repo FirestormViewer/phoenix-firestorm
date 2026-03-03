@@ -2807,12 +2807,6 @@ URL:[UNTRUSTED_URL]
 			<ignore name="ignore" text="SLurl 已經複製到我的剪貼簿。"/>
 		</form>
 	</notification>
-	<notification name="CopySLURLEmpty">
-		複製此 SLurl 時發生問題。目標區域可能已不存在。
-		<form name="form">
-			<ignore name="ignore" text="複製 SLurl 失敗"/>
-		</form>
-	</notification>
 	<notification name="WLSavePresetAlert">
 		你要覆蓋已儲存的預設配置嗎？
 		<usetemplate name="okcancelbuttons" notext="否" yestext="是"/>

@@ -2647,12 +2647,6 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 			<ignore name="ignore" text="SLurl skopiowany do schowka"/>
 		</form>
 	</notification>
-	<notification name="CopySLURLEmpty">
-		Wystąpił problem z kopiowaniem tego SLurl. Region docelowy może już nie istnieć.
-		<form name="form">
-			<ignore name="ignore" text="Kopiowanie SLurl nie powiodło się" />
-		</form>
-	</notification>
 	<notification name="WLSavePresetAlert">
 		Chcesz nadpisać zapisane ustawienia?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>

@@ -38,7 +38,8 @@
 // </FS:CR> Aurora Sim
 #include "fsworldmapmessage.h" // <FS:humbletim/> FIRE-31368: [OPENSIM] ... Search returns more than one result
 
-const U32 LAYER_FLAG = 2;
+constexpr U32 LAYER_FLAG = 2;
+constexpr S32 MAP_SIM_RETURN_NULL_SIMS = 0x00010000;
 
 //---------------------------------------------------------------------------
 // World Map Message Handling
@@ -148,14 +149,11 @@ void LLWorldMapMessage::sendMapBlockRequest(U16 min_x, U16 min_y, U16 max_x, U16
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
     U32 flags = LAYER_FLAG;
-    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // flags |= (return_nonexistent ? 0x10000 : 0);
-    // - use 0x01 (prims) when return_nonexistent is set because LAYER_FLAG (terrain) does not come back on nonexistent
     if (return_nonexistent)
     {
-        flags = 0x10001;
+        // overwrite LAYER_FLAG, otherwise server won't respond to missing regions
+        flags = MAP_SIM_RETURN_NULL_SIMS;
     }
-    // </FS:Zi>
     msg->addU32Fast(_PREHASH_Flags, flags);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
     msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
@@ -185,19 +183,17 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
 #endif
     // </FS:humbletim>
 
-    // There's only one flag that we ever use here
-    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
-    // - also check for 0x01 (prims) because LAYER_FLAG (terrain) does not come back on nonexistent
-    // if (agent_flags != LAYER_FLAG)
-    if (agent_flags != 0x01 && agent_flags != LAYER_FLAG)
-    // <FS:Zi>
+    S32 num_blocks = msg->getNumberOfBlocksFast(_PREHASH_Data);
+
+    // There's only one flag that we ever use here, unless we also want an existence check.
+    if (agent_flags != LAYER_FLAG
+        && num_blocks != 1) // we check existence for a single region
     {
         LL_WARNS() << "Invalid map image type returned! layer = " << agent_flags << LL_ENDL;
         return;
     }
 
-    S32 num_blocks = msg->getNumberOfBlocksFast(_PREHASH_Data);
-    //LL_INFOS("WorldMap") << "num_blocks = " << num_blocks << LL_ENDL;
+    LL_DEBUGS("WorldMap") << "num_blocks = " << num_blocks << LL_ENDL;
 
     bool found_null_sim = false;
 
@@ -239,36 +235,42 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
         U32 x_world = (U32)(x_regions) * REGION_WIDTH_UNITS;
         U32 y_world = (U32)(y_regions) * REGION_WIDTH_UNITS;
 
-        // name shouldn't be empty, see EXT-4568
-// <AW: opensim>
-        // was: llassert(!name.empty())
-        // which made debug builds impossible to use on OpenSim
-        if (name.empty() && accesscode != 255)
+        // Name shouldn't be empty unless region doesn't exist
+        if (!name.empty())
         {
-            LL_WARNS() << "MapBlockReply returned empty region name, not inserting in  the world map" << LL_ENDL;
-            continue;
-        }
-// </AW: opensim>
-        // Insert that region in the world map, if failure, flag it as a "null_sim"
-// <FS:CR> Aurora Sim
-        //if (!(LLWorldMap::getInstance()->insertRegion(x_world, y_world, name, image_id, (U32)accesscode, region_flags)))
-        if (!(LLWorldMap::getInstance()->insertRegion(x_world, y_world, x_size, y_size, name, image_id, (U32)accesscode, region_flags)))
-// </FS:CR> Aurora Sim
-        {
-            found_null_sim = true;
-        }
+            // Insert that region in the world map, if failure, flag it as a "null_sim"
 
-        // If we hit a valid tracking location, do what needs to be done app level wise
-        if (LLWorldMap::getInstance()->isTrackingValidLocation())
-        {
-            LLVector3d pos_global = LLWorldMap::getInstance()->getTrackedPositionGlobal();
-            if (LLWorldMap::getInstance()->isTrackingDoubleClick())
+            // <FS:CR> Aurora Sim
+            //if (!(LLWorldMap::getInstance()->insertRegion(x_world, y_world, name, image_id, (U32)accesscode, region_flags)))
+            if (!(LLWorldMap::getInstance()->insertRegion(x_world, y_world, x_size, y_size, name, image_id, (U32)accesscode, region_flags)))
+            // </FS:CR> Aurora Sim
             {
-                // Teleport if the user double clicked
-                gAgent.teleportViaLocation(pos_global);
+                found_null_sim = true;
             }
-            // Update the "real" tracker information
-            gFloaterWorldMap->trackLocation(pos_global);
+
+            // If we hit a valid tracking location, do what needs to be done app level wise
+            if (LLWorldMap::getInstance()->isTrackingValidLocation())
+            {
+                LLVector3d pos_global = LLWorldMap::getInstance()->getTrackedPositionGlobal();
+                if (LLWorldMap::getInstance()->isTrackingDoubleClick())
+                {
+                    // Teleport if the user double clicked
+                    gAgent.teleportViaLocation(pos_global);
+                }
+                // Update the "real" tracker information
+                gFloaterWorldMap->trackLocation(pos_global);
+            }
+        }
+        else
+        {
+            // <AW: opensim>
+            if (accesscode != 255)
+            {
+                LL_WARNS() << "MapBlockReply returned empty region name, not inserting in the world map" << LL_ENDL;
+                continue;
+            }
+            // </AW: opensim>
+            found_null_sim = true;
         }
 
         // Handle the SLURL callback if any
