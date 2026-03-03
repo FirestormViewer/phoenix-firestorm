@@ -236,10 +236,7 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
         U32 y_world = (U32)(y_regions) * REGION_WIDTH_UNITS;
 
         // Name shouldn't be empty unless region doesn't exist
-        // <AW: opensim>
-        // if (!name.empty())
-        if (!name.empty() || accesscode == 255)
-        // </AW: opensim>
+        if (!name.empty())
         {
             // Insert that region in the world map, if failure, flag it as a "null_sim"
 
