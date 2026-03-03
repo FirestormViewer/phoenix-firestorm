@@ -80,8 +80,7 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="Sortuj karty IM według typu" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
-			<check_box name="FSAutoOrderIMTabsAtTop" label="Nowe karty na początku" tool_tip="Dodawaj nowe karty IM jako pierwsze w swojej grupie typu czatu." />
+			<check_box name="FSAutoOrderIMTabs" label="Sortuj karty IM według typu:" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Grupy, Konferencje, IM" />
 				<combo_box.item name="group_im_conf" label="Grupy, IM, Konferencje" />
@@ -90,6 +89,7 @@
 				<combo_box.item name="im_group_conf" label="IM, Grupy, Konferencje" />
 				<combo_box.item name="im_conf_group" label="IM, Konferencje, Grupy" />
 			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="Nowe karty na początku" tool_tip="Dodawaj nowe karty IM jako pierwsze w swojej grupie typu czatu." />
 			<text name="FSIMTabNameFormat_label">
 				Format imion dla kart IM:
 			</text>

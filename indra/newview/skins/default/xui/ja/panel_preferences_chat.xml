@@ -82,8 +82,7 @@
 			<text name="req_restart_chattabs">
 				（要再起動）
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="ＩＭタブを種類別に並べ替える" tool_tip="会話フローター内のＩＭタブに自動タブ順序を使用します。"/>
-			<check_box name="FSAutoOrderIMTabsAtTop" label="新しいタブを先頭に追加する" tool_tip="新しいＩＭタブをそのチャットタイプのグループの先頭に追加します。"/>
+			<check_box name="FSAutoOrderIMTabs" label="ＩＭタブを種類別に並べ替える:" tool_tip="会話フローター内のＩＭタブに自動タブ順序を使用します。"/>
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="グループ、会話、ＩＭ"/>
 				<combo_box.item name="group_im_conf" label="グループ、ＩＭ、会話"/>
@@ -92,6 +91,7 @@
 				<combo_box.item name="im_group_conf" label="ＩＭ、グループ、会話"/>
 				<combo_box.item name="im_conf_group" label="ＩＭ、会話、グループ"/>
 			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="新しいタブを先頭に追加する" tool_tip="新しいＩＭタブをそのチャットタイプのグループの先頭に追加します。"/>
 			<text name="FSIMTabNameFormat_label">
 				ＩＭタブの名前のフォーマット：
 			</text>
