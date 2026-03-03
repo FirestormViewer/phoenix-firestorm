@@ -628,14 +628,14 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
     {
         bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
         LLSD record;
-        record["version"]["value"] = (S32)7;
+        record["version"]["value"] = (S32)8;
         record["startFromTeePose"]["value"] = !savingDiff;
 
         if (savingDiff)
             mPoserAnimator.savePosingState(avatar, false, &record);
 
         LLVector3 rotation, position, scale, zeroVector;
-        bool      baseRotationIsZero;
+        bool      baseRotationIsZero, userSetBaseRotationToZero;
 
         for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator.PoserJoints)
         {
@@ -651,7 +651,8 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
 
             record[bone_name]["mirrored"] = jointRotMirrored;
 
-            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
+            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero,
+                                                       &userSetBaseRotationToZero))
                 continue;
 
             bool jointRotPosScaleAllZero = rotation == zeroVector && position == zeroVector && scale == zeroVector;
@@ -659,11 +660,12 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
             if (savingDiff && jointRotPosScaleAllZero)
                 continue;
 
-            record[bone_name]["jointBaseRotationIsZero"] = baseRotationIsZero;
-            record[bone_name]["rotation"]                = rotation.getValue();
-            record[bone_name]["position"]                = position.getValue();
-            record[bone_name]["scale"]                   = scale.getValue();
-            record[bone_name]["worldLocked"]             = jointRotLocked;
+            record[bone_name]["jointBaseRotationIsZero"]   = baseRotationIsZero;
+            record[bone_name]["userSetBaseRotationToZero"] = userSetBaseRotationToZero;
+            record[bone_name]["rotation"]                  = rotation.getValue();
+            record[bone_name]["position"]                  = position.getValue();
+            record[bone_name]["scale"]                     = scale.getValue();
+            record[bone_name]["worldLocked"]               = jointRotLocked;
         }
 
         std::string fullSavePath =
@@ -1191,7 +1193,7 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
                     continue;
 
                 vec3.setValue(control_map["rotation"]);
-                mPoserAnimator.loadJointRotation(avatar, poserJoint, true, vec3);
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, true, true, vec3);
             }
         }
 
@@ -1274,6 +1276,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         LLQuaternion quat;
         bool         enabled;
         bool         setJointBaseRotationToZero;
+        bool         userSetBaseRotationToZero;
         bool         worldLocked;
         bool         mirroredJoint;
         S32          version = 0;
@@ -1335,6 +1338,11 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 else
                     setJointBaseRotationToZero = startFromZeroRot;
 
+                if (control_map.has("userSetBaseRotationToZero"))
+                    userSetBaseRotationToZero = control_map["userSetBaseRotationToZero"].asBoolean();
+                else
+                    userSetBaseRotationToZero = startFromZeroRot;
+
                 if (loadPositions && control_map.has("position"))
                     vec3.setValue(control_map["position"]);
                 else
@@ -1347,7 +1355,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 else
                     vec3.clear();
 
-                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, userSetBaseRotationToZero, vec3);
 
                 if (loadScales && control_map.has("scale"))
                     vec3.setValue(control_map["scale"]);
