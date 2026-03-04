@@ -3297,13 +3297,14 @@ Your current position: [AVATAR_POS]
   <string name="Nametag_Texture_Area_Label">Texture Area: [TEXTURE_AREA] m²</string>
 
   <string name="font_unknown">Unknown Font</string>
-  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts.xml">Inter</string>
   <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
   <string name="font_fonts_liberation.xml">Liberation</string>
   <string name="font_fonts_droid.xml">Droid Sans</string>
   <string name="font_fonts_mobi.xml">Mobi Sans</string>
   <string name="font_fonts_roboto.xml">Roboto</string>
   <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu.xml">Deja Vu</string>
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>

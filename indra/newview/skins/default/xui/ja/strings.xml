@@ -6555,17 +6555,6 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Nametag_Texture_Area_Label">テクスチャ面積：[TEXTURE_AREA]㎡</string>
 
 	<string name="font_unknown">不明なフォント</string>
-	<string name="font_fonts.xml">Deja Vu</string>
-	<string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
-	<string name="font_fonts_liberation.xml">Liberation</string>
-	<string name="font_fonts_droid.xml">Droid Sans</string>
-	<string name="font_fonts_mobi.xml">Mobi Sans</string>
-	<string name="font_fonts_roboto.xml">Roboto</string>
-	<string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
-	<string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
-	<string name="font_fonts_noto.xml">Noto Sans</string>
-	<string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
-	<string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
 	<string name="mode_unknown">不明なモード</string>
 	<string name="mode_settings_firestorm.xml">[APP_NAME]</string>
 	<string name="mode_settings_phoenix.xml">Phoenix</string>
