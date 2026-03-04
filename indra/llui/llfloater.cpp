@@ -186,7 +186,6 @@ LLFloater::Params::Params()
     can_snooze("can_snooze", false),        // <FS:Ansariel> FIRE-11724: Snooze group chat
     can_drag_on_left("can_drag_on_left", false),
     drop_shadow("drop_shadow",true),        // <FS:Zi> Optional Drop Shadows
-    label_v_padding("label_v_padding", -1), // <FS:Zi> Make vertical label padding a per-skin option
     can_tear_off("can_tear_off", true),
     save_dock_state("save_dock_state", false),
     save_rect("save_rect", false),
@@ -195,8 +194,10 @@ LLFloater::Params::Params()
     show_title("show_title", true),
     auto_close("auto_close", false),
     positioning("positioning", LLFloaterEnums::POSITIONING_RELATIVE),
+    header_font("header_font", LLFontGL::getFontSansSerif()),
     header_height("header_height", 0),
     legacy_header_height("legacy_header_height", 0),
+    header_vpad("header_vpad", 7),
     close_image("close_image"),
     snooze_image("snooze_image"),       // <FS:Ansariel> FIRE-11724: Snooze group chat
     restore_image("restore_image"),
@@ -259,7 +260,6 @@ static LLWidgetNameRegistry::StaticRegistrar sRegisterFloaterParams(typeid(LLFlo
 LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 :   LLPanel(),  // intentionally do not pass params here, see initFromParams
     mDragHandle(NULL),
-    mLabelVPadding(p.label_v_padding),  // <FS:Zi> Make vertical label padding a per-skin optional
     mTitle(p.title),
     mShortTitle(p.short_title),
     mSingleInstance(p.single_instance),
@@ -311,15 +311,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
     memset(mButtonsEnabled, 0, BUTTON_COUNT * sizeof(bool));
     memset(mButtons, 0, BUTTON_COUNT * sizeof(LLButton*));
 
-    // <FS:Zi> Make vertical label padding a per-skin option
-    // if no padding is set, use default from settings.xml
-    if (mLabelVPadding == -1)
-    {
-        mLabelVPadding = LLUI::getInstance()->mSettingGroups["config"]->getS32("UIFloaterTitleVPad");
-    }
-    // </FS:Zi>
-
-    addDragHandle();
+    addDragHandle(p);
     addResizeCtrls();
 
     initFromParams(p);
@@ -372,7 +364,7 @@ void LLFloater::initFloater(const Params& p)
     }
 }
 
-void LLFloater::addDragHandle()
+void LLFloater::addDragHandle(const LLFloater::Params& floater_params)
 {
     if (!mDragHandle)
     {
@@ -382,6 +374,8 @@ void LLFloater::addDragHandle()
             p.name("drag");
             p.follows.flags(FOLLOWS_ALL);
             p.label(mTitle);
+            p.font(floater_params.header_font);
+            p.label_vpad(floater_params.header_vpad);
             mDragHandle = LLUICtrlFactory::create<LLDragHandleLeft>(p);
         }
         else // drag on top
@@ -390,7 +384,8 @@ void LLFloater::addDragHandle()
             p.name("Drag Handle");
             p.follows.flags(FOLLOWS_ALL);
             p.label(mTitle);
-            p.label_v_padding = mLabelVPadding;     // <FS:Zi> Make vertical label padding a per-skin option
+            p.font(floater_params.header_font);
+            p.label_vpad(floater_params.header_vpad);
             mDragHandle = LLUICtrlFactory::create<LLDragHandleTop>(p);
         }
         addChild(mDragHandle);

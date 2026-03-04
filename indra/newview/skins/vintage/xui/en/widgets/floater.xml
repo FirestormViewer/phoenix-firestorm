@@ -23,5 +23,5 @@
  dock_pressed_image="Icon_Dock_Press"
  help_pressed_image="Icon_Help_Press"
  focus_root="true"
- label_v_padding="3"
+ header_vpad="3"
   />

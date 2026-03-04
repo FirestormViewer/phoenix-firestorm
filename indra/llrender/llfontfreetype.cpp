@@ -143,16 +143,17 @@ LLFontFreetype::LLFontFreetype()
     mDescender(0.f),
     mLineHeight(0.f),
     mIsFallback(false),
+    mHinting(EFontHinting::FORCE_AUTOHINT),
     mFTFace(nullptr),
     mRenderGlyphCount(0),
     mStyle(0),
     mPointSize(0)
 {
     // <FS:ND> Set up kerning cache, size is 256x256, the initial cache lines are all null
-    mKerningCache = new F32*[ 256 ];
+    mKerningCache = new F32*[512];
 
-    for( int i = 0; i < 256; ++i )
-        mKerningCache[i] = NULL;
+    for (int i = 0; i < 512; ++i)
+        mKerningCache[i] = nullptr;
     // </FS:ND>
 }
 
@@ -172,14 +173,14 @@ LLFontFreetype::~LLFontFreetype()
     // mFallbackFonts cleaned up by LLPointer destructor
 
     // <FS:ND> Delete the kerning cache
-    for( int i = 0; i < 256; ++i )
+    for (S32 i = 0; i < 512; ++i)
         delete[] mKerningCache[i];
 
     delete[] mKerningCache;
     // </FS:ND>
 }
 
-bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, bool is_fallback, S32 face_n)
+bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags)
 {
     // Don't leak face objects.  This is also needed to deal with
     // changed font file names.
@@ -203,6 +204,8 @@ bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
         return false;
 
     mIsFallback = is_fallback;
+    mHinting = hinting;
+    mFontFlags = flags;
     F32 pixels_per_em = (point_size / 72.f)*vert_dpi; // Size in inches * dpi
 
     error = FT_Set_Char_Size(mFTFace,    /* handle to face object           */
@@ -256,6 +259,12 @@ bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
     mStyle = LLFontGL::NORMAL;
     if(mFTFace->style_flags & FT_STYLE_FLAG_BOLD)
     {
+        mStyle |= LLFontGL::BOLD;
+    }
+    else if (flags & LLFontGL::BOLD)
+    {
+        // FontGL applies programmatic bolding to fonts that are a part of 'bold' descriptor but don't have the bold style set.
+        // Ex: Inter SemiBold doesn't have FT_STYLE_FLAG_BOLD and without this style it would be bolded programmatically.
         mStyle |= LLFontGL::BOLD;
     }
 
@@ -362,10 +371,11 @@ F32 LLFontFreetype::getXKerning(llwchar char_left, llwchar char_right) const
     U32 right_glyph = right_glyph_info ? right_glyph_info->mGlyphIndex : 0;
 
     // <FS:ND> Use cached kerning if possible, only do so for glyphs < 256 for now
-    if( right_glyph < 256 && left_glyph < 256 )
+    if (right_glyph < 256 && left_glyph < 256)
     {
-        if( mKerningCache[ left_glyph ] && mKerningCache[ left_glyph ][ right_glyph ] < FLT_MAX )
-            return mKerningCache[ left_glyph ][ right_glyph ];
+        const U32 right_glyph_pos = right_glyph * 2 + ((mFTFace->face_flags & FT_FACE_FLAG_SCALABLE) ? 1 : 0);
+        if (mKerningCache[left_glyph] && mKerningCache[left_glyph][right_glyph_pos] < FLT_MAX)
+            return mKerningCache[left_glyph][right_glyph_pos];
     }
     // </FS:ND>
 
@@ -374,20 +384,27 @@ F32 LLFontFreetype::getXKerning(llwchar char_left, llwchar char_right) const
     llverify(!FT_Get_Kerning(mFTFace, left_glyph, right_glyph, ft_kerning_unfitted, &delta));
 
     // <FS:ND> Cache kerning if possible, only do so for glyphs < 256 for now
-    if( right_glyph < 256 && left_glyph < 256 )
+    if (right_glyph < 256 && left_glyph < 256)
     {
-        if( !mKerningCache[ left_glyph ] )
+        if (!mKerningCache[left_glyph])
         {
-            mKerningCache[ left_glyph ] = new F32[ 256 ];
-            for( int i = 0; i < 256; ++i )
-                mKerningCache[ left_glyph ][ i ] = FLT_MAX;
+            mKerningCache[left_glyph] = new F32[512];
+            for (S32 i = 0; i < 512; ++i)
+                mKerningCache[left_glyph][i] = FLT_MAX;
         }
 
-        mKerningCache[ left_glyph ][ right_glyph ] = delta.x*(1.f / 64.f);
+        // Strided array for right glyph: non-scalable first, scalable version second
+        mKerningCache[left_glyph][right_glyph * 2] = (F32)delta.x ;
+        mKerningCache[left_glyph][right_glyph * 2 + 1] = delta.x * (1.f / 64.f);
     }
     // </FS:ND>
 
-    return delta.x*(1.f/64.f);
+    if (mFTFace->face_flags & FT_FACE_FLAG_SCALABLE)
+    {
+        // Return the X advance
+        return (F32)(delta.x * (1.0 / 64.0));
+    }
+    return (F32)delta.x;
 }
 
 F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LLFontGlyphInfo* right_glyph_info) const
@@ -399,10 +416,11 @@ F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LL
     U32 right_glyph = right_glyph_info ? right_glyph_info->mGlyphIndex : 0;
 
     // <FS:ND> Use cached kerning if possible, only do so for glyphs < 256 for now
-    if( right_glyph < 256 && left_glyph < 256 )
+    if (right_glyph < 256 && left_glyph < 256)
     {
-        if( mKerningCache[ left_glyph ] && mKerningCache[ left_glyph ][ right_glyph ] < FLT_MAX )
-            return mKerningCache[ left_glyph ][ right_glyph ];
+        const U32 right_glyph_pos = right_glyph * 2 + ((mFTFace->face_flags & FT_FACE_FLAG_SCALABLE) ? 1 : 0);
+        if (mKerningCache[left_glyph] && mKerningCache[left_glyph][right_glyph_pos] < FLT_MAX)
+            return mKerningCache[left_glyph][right_glyph_pos];
     }
     // </FS:ND>
 
@@ -411,19 +429,27 @@ F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LL
     llverify(!FT_Get_Kerning(mFTFace, left_glyph, right_glyph, ft_kerning_unfitted, &delta));
 
     // <FS:ND> Cache kerning if possible, only do so for glyphs < 256 for now
-    if( right_glyph < 256 && left_glyph < 256 )
+    if (right_glyph < 256 && left_glyph < 256)
     {
-        if( !mKerningCache[ left_glyph ] )
+        if (!mKerningCache[left_glyph])
         {
-            mKerningCache[ left_glyph ] = new F32[ 256 ];
-            for( int i = 0; i < 256; ++i )
-                mKerningCache[ left_glyph ][ i ] = FLT_MAX;
+            mKerningCache[left_glyph] = new F32[512];
+            for (S32 i = 0; i < 512; ++i)
+                mKerningCache[left_glyph][i] = FLT_MAX;
         }
 
-        mKerningCache[ left_glyph ][ right_glyph ] = delta.x*(1.f / 64.f);
+        // Strided array for right glyph: non-scalable first, scalable version second
+        mKerningCache[left_glyph][right_glyph * 2] = (F32)delta.x;
+        mKerningCache[left_glyph][right_glyph * 2 + 1] = delta.x * (1.f / 64.f);
     }
     // </FS:ND>
-    return delta.x*(1.f/64.f);
+
+    if (mFTFace->face_flags & FT_FACE_FLAG_SCALABLE)
+    {
+        // Return the X advance
+        return (F32)(delta.x * (1.0 / 64.0));
+    }
+    return (F32)delta.x;
 }
 
 bool LLFontFreetype::hasGlyph(llwchar wch) const
@@ -693,7 +719,7 @@ void LLFontFreetype::renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index, ll
     if (mFTFace == nullptr)
         return;
 
-    FT_Int32 load_flags = FT_LOAD_FORCE_AUTOHINT;
+    FT_Int32 load_flags = (FT_Int32)mHinting;
     if (EFontGlyphType::Color == bitmap_type)
     {
         // We may not actually get a color render so our caller should always examine mFTFace->glyph->bitmap.pixel_mode
@@ -745,7 +771,7 @@ void LLFontFreetype::renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index, ll
 void LLFontFreetype::reset(F32 vert_dpi, F32 horz_dpi)
 {
     resetBitmapCache();
-    loadFace(mName, mPointSize, vert_dpi ,horz_dpi, mIsFallback, 0);
+    loadFace(mName, mPointSize, vert_dpi ,horz_dpi, mIsFallback, 0, mHinting, mFontFlags);
     if (!mIsFallback)
     {
         // This is the head of the list - need to rebuild ourself and all fallbacks.

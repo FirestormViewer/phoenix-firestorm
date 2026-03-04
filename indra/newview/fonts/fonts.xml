@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <fonts>
 
-  <font name="default" comment="default font files (global fallbacks)">
-    <file>DejaVuSans.ttf</file>
+  <font
+      name="default"
+      comment="default font files (global fallbacks)">
+    <file load_collection="true" font_hinting="default">Inter_18pt-Regular.ttf</file>
+    <file size_delta="-0.5">DejaVuSans.ttf</file>
     <file functor="is_emoji_use_color">TwemojiSVG.ttf</file>
     <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">
@@ -35,9 +38,11 @@
     </os>
   </font>
 
-  <font name="SansSerifBold"
-	comment="Name of bold sans-serif font">
-    <file>DejaVuSans-Bold.ttf</file>
+  <font
+      name="SansSerifBold"
+      comment="Name of bold sans-serif font">
+      <file load_collection="true" font_hinting="default" flags="bold">Inter_18pt-ExtraBold.ttf</file>
+      <file size_delta="-0.5">DejaVuSans-Bold.ttf</file>
     <os name="Windows">
       <file>arialbd.ttf</file>
       </os>
@@ -46,8 +51,11 @@
       </os>
   </font>
 
-  <font name="SansSerif" comment="Name of san-serif font (Truetype file name)">
-    <file>DejaVuSans.ttf</file>
+  <font
+      name="SansSerif"
+      comment="Name of san-serif font (Truetype file name)">
+    <file load_collection="true" font_hinting="default">Inter_18pt-Regular.ttf</file>
+    <file size_delta="-0.5">DejaVuSans.ttf</file>
     <os name="Windows">
       <file>arial.ttf</file>
       </os>
@@ -56,51 +64,63 @@
       </os>
   </font>
 
-  <font name="SansSerif"
-	comment="Name of bold sans-serif font"
-	font_style="BOLD">
-    <file>DejaVuSans-Bold.ttf</file>
+  <font
+      name="SansSerif"
+      comment="Name of bold sans-serif font"
+      font_style="BOLD">
+    <file load_collection="true" font_hinting="default" flags="bold">Inter_18pt-Bold.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-Bold.ttf</file>
   </font>
 
-  <font name="SansSerif"
-	comment="Name of italic sans-serif font"
-	font_style="ITALIC">
-    <file>DejaVuSans-Oblique.ttf</file>
+  <font
+      name="SansSerif"
+      comment="Name of italic sans-serif font"
+      font_style="ITALIC">
+    <file load_collection="true">Inter_18pt-Italic.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-Oblique.ttf</file>
   </font>
 
-  <font name="SansSerif"
-	comment="Name of bold italic sans-serif font"
-	font_style="BOLD|ITALIC">
-    <file>DejaVuSans-BoldOblique.ttf</file>
+  <font
+      name="SansSerif"
+      comment="Name of bold italic sans-serif font"
+      font_style="BOLD|ITALIC">
+    <file load_collection="true">Inter_18pt-BoldItalic.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-BoldOblique.ttf</file>
   </font>
 
-  <font name="Emoji"
-	comment="Name of emoji font">
+  <font
+      name="Emoji"
+      comment="Name of emoji font">
     <file>TwemojiSVG.ttf</file>
   </font>
 
-  <font name="EmojiBW"
-	comment="Name of emoji font">
+  <font
+      name="EmojiBW"
+      comment="Name of emoji font">
     <file>NotoEmoji-Regular.ttf</file>
   </font>
 
-  <font name="Monospace"
-	comment="Name of monospace font">
+  <font
+      name="Monospace"
+      comment="Name of monospace font">
     <file>DejaVuSansMono.ttf</file>
   </font>
 
-  <font name="Scripting"
-	comment="Name of an optional font used for the script editor">
+  <font
+      name="Scripting"
+      comment="Name of an optional font used for the script editor">
     <file>SourceCodePro-Regular.ttf</file>
   </font>
 
-  <font name="OCRA"
-  comment="OCRA machine character recognition used in script editor compile errors">
+  <font
+      name="OCRA"
+      comment="OCRA machine character recognition used in script editor compile errors">
     <file>ocra.ttf</file>
   </font>
 
-  <font name="Cascadia"
-	comment="Name of an optional Cascadia Code font used for the script editor">
+  <font
+      name="Cascadia"
+      comment="Name of an optional Cascadia Code font used for the script editor">
     <file>CascadiaCode-Light.ttf</file>
   </font>
 
@@ -127,9 +147,11 @@
     <file>DejaVuSans-BoldOblique.ttf</file>
   </font>
 
-  <font name="Helvetica"
-	comment="Name of Helvetica font">
-    <file>DejaVuSans.ttf</file>
+  <font
+      name="Helvetica"
+      comment="Name of Helvetica font">
+    <file font_hinting="default">Inter_18pt-Regular.ttf</file>
+    <file size_delta="-0.5">DejaVuSans.ttf</file>
     <os name="Windows">
       <file>arial.ttf</file>
       </os>
@@ -138,10 +160,12 @@
       </os>
   </font>
 
-  <font name="Helvetica"
-	comment="Name of Helvetica font (bold)"
-	font_style="BOLD">
-    <file>DejaVuSans-Bold.ttf</file>
+  <font
+      name="Helvetica"
+      comment="Name of Helvetica font (bold)"
+      font_style="BOLD">
+    <file font_hinting="default" flags="bold">Inter_18pt-ExtraBold.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-Bold.ttf</file>
     <os name="Windows">
       <file>arialbd.ttf</file>
       </os>
@@ -150,10 +174,12 @@
       </os>
   </font>
 
-  <font name="Helvetica"
-	comment="Name of Helvetica font (italic)"
-	font_style="ITALIC">
-    <file>DejaVuSans-Oblique.ttf</file>
+  <font
+      name="Helvetica"
+      comment="Name of Helvetica font (italic)"
+      font_style="ITALIC">
+    <file>Inter_18pt-Italic.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-Oblique.ttf</file>
     <os name="Windows">
       <file>ariali.ttf</file>
       </os>
@@ -162,10 +188,12 @@
       </os>
   </font>
 
-  <font name="Helvetica"
-	comment="Name of Helvetica font (bold italic)"
-	font_style="BOLD|ITALIC">
-    <file>DejaVuSans-BoldOblique.ttf</file>
+  <font
+      name="Helvetica"
+      comment="Name of Helvetica font (bold italic)"
+      font_style="BOLD|ITALIC">
+    <file>Inter_18pt-BoldItalic.ttf</file>
+    <file size_delta="-0.5">DejaVuSans-BoldOblique.ttf</file>
     <os name="Windows">
       <file>arialbi.ttf</file>
       </os>
@@ -174,42 +202,49 @@
       </os>
   </font>
 
-  <font name="OverrideTest"
-	comment="Name of font to test overriding">
+  <font
+      name="OverrideTest"
+      comment="Name of font to test overriding">
     <file>times.ttf</file>
-    <file>DejaVuSans.ttf</file>
+    <file font_hinting="default">Inter_18pt-Regular.ttf</file>
   </font>
 
-  <font_size name="Scripting"
-	     comment="Size of script editor font (points, or 1/72 of an inch)"
-	     size="8.6"
-	     />
+  <font_size
+         name="Scripting"
+         comment="Size of script editor font (points, or 1/72 of an inch)"
+         size="8.6"
+         />
   <font_size name="Monospace"
-	     comment="Size for monospaced font (points, or 1/72 of an inch)"
-	     size="8.0"
-	     />
-  <font_size name="Cascadia"
-	     comment="Size for monospaced font (points, or 1/72 of an inch)"
-	     size="8.6"
-	     />
+         comment="Size for monospaced font (points, or 1/72 of an inch)"
+         size="8.0"
+         />
+  <font_size
+         name="Cascadia"
+         comment="Size for monospaced font (points, or 1/72 of an inch)"
+         size="8.6"
+         />
   <font_size name="Huge"
-	     comment="Size of huge font (points, or 1/72 of an inch)"
-	     size="16.0"
-	     />
+         comment="Size of huge font (points, or 1/72 of an inch)"
+         size="16.0"
+         />
   <font_size name="Large"
-	     comment="Size of large font (points, or 1/72 of an inch)"
-	     size="10.6"
-	     />
+         comment="Size of large font (points, or 1/72 of an inch)"
+         size="11.0"
+         />
   <font_size name="Medium"
-	     comment="Size of medium font (points, or 1/72 of an inch)"
-	     size="8.6"
-	     />
+         comment="Size of medium font (points, or 1/72 of an inch)"
+         size="10"
+         />
   <font_size name="Small"
-	     comment="Size of small font (points, or 1/72 of an inch)"
-	     size="7.6"
-	     />
+         comment="Size of small font (points, or 1/72 of an inch)"
+         size="9"
+         />
+   <font_size name="LSmall"
+         comment="Legacy size of small font (points, or 1/72 of an inch)"
+         size="7.6"
+         />
   <font_size name="Pie"
-	     comment="Size of pie menu font (points, or 1/72 of an inch)"
-	     size="7.3"
-	     />
+         comment="Size of pie menu font (points, or 1/72 of an inch)"
+         size="8.7"
+         />
 </fonts>

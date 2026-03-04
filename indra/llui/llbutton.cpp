@@ -912,8 +912,7 @@ void LLButton::draw()
     // overlay with keyboard focus border
     if (hasFocus())
     {
-        F32 lerp_amt = gFocusMgr.getFocusFlashAmt();
-        drawBorder(imagep, gFocusMgr.getFocusColor() % alpha, ll_round(lerp(1.f, 3.f, lerp_amt)));
+        drawBorder(imagep, gFocusMgr.getFocusColor() % alpha, gFocusMgr.getFocusFlashWidth());
     }
 
     if (use_glow_effect)

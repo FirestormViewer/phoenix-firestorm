@@ -108,15 +108,17 @@
     image_unselected="PushButton_Login"
     image_pressed="PushButton_Login_Pressed"
     image_hover_unselected="PushButton_Login_Over"
-    label="Log In"
+    label="Log in"
     label_color="White"
     font="SansSerifMedium"
+	font.style="BOLD"
     name="connect_btn"
     enabled="true"    
     width="120"
     height="32"
   	left_pad="15"
-    bottom_delta="0" />
+    bottom_delta="0"
+    pad_bottom="1" />
   <text
     follows="left|top"
     font="SansSerifLarge"
@@ -164,7 +166,9 @@
     label="Select grid"    
     layout="topleft"
     name="server_combo"
-    width="149" />
+    width="149" >
+    <combo_box.drop_down_button pad_right="21" />
+  </combo_box>
   <text
     follows="left|top"
     font="SansSerifMedium"

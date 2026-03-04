@@ -92,11 +92,14 @@
      left="10"
      name="button focus"
      tool_tip="Focus"
-     width="35">
-	  <button.commit_callback
-	     function="BuildTool.setTool"
-	     parameter="Focus" />
-	</button>
+     width="35"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
+        <button.commit_callback
+         function="BuildTool.setTool"
+         parameter="Focus" />
+    </button>
     <button
      follows="left|top"
       height="25"
@@ -107,7 +110,10 @@
      left_pad="10"
      name="button move"
      tool_tip="Move"
-     width="35">
+     width="35"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.setTool"
 	     parameter="Move" />
@@ -122,7 +128,10 @@
      left_pad="10"
      name="button edit"
      tool_tip="Edit"
-     width="35">
+     width="35"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.setTool"
 	     parameter="Edit" />
@@ -137,7 +146,10 @@
      left_pad="10"
      name="button create"
      tool_tip="Create"
-     width="35">
+     width="35"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.setTool"
 	     parameter="Create" />
@@ -152,7 +164,10 @@
      left_pad="10"
      name="button land"
      tool_tip="Land"
-     width="35">
+     width="35"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.setTool"
 	     parameter="Land" />
@@ -169,15 +184,19 @@
      left="8"
      name="text status"
      top_pad="3"
-     width="285">
+     width="285"
+     font="DejaVu"
+     font.size="LSmall">
         Drag to move, shift-drag to copy
     </text>
    <radio_group
      layout="topleft"
      left="10"
-      height="70"
-      top="59"
-     name="focus_radio_group">
+     height="70"
+     top="59"
+     name="focus_radio_group"
+     font="DejaVu"
+     font.size="LSmall" >
         <radio_item
          top_pad="6"
          label="Zoom"
@@ -206,16 +225,20 @@
      top_delta="-2"
      left_delta="100"
      name="slider zoom"
-     width="134">
+     width="134"
+     font="DejaVu"
+     font.size="LSmall">
 	 <slider_bar.commit_callback
 	     function="BuildTool.commitZoom"/>
 	</slider_bar>
    <radio_group
-      left="10"
-      height="70"
-      top="59"
+     left="10"
+     height="70"
+     top="59"
      layout="topleft"
-     name="move_radio_group">
+     name="move_radio_group"
+     font="DejaVu"
+     font.size="LSmall" >
         <radio_item
          top_pad="6"
          label="Move"
@@ -240,7 +263,9 @@
 	 top="55"
 	 height="70"
      layout="topleft"
-	 name="edit_radio_group">
+	 name="edit_radio_group"
+     font="DejaVu"
+     font.size="LSmall" >
         <radio_item
 		 label="Move"
 		 layout="topleft"
@@ -276,7 +301,9 @@
      label="Edit linked"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="0">
+     top_pad="0"
+     font="DejaVu"
+     font.size="LSmall">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
@@ -314,7 +341,10 @@
      left_pad="2"
      layout="topleft"
      name="link_btn"
-     width="50">
+     width="50"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.LinkObjects"/>
     </button>
@@ -325,11 +355,14 @@
      layout="topleft"
      left_pad="2"
      name="unlink_btn"
-     width="90">
+     width="90"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.UnlinkObjects"/>
     </button>
-        <combo_box
+    <combo_box
      height="20"
      layout="topleft"
      left_pad="4"
@@ -337,7 +370,9 @@
      name="combobox grid mode"
      tool_tip="Choose the type of grid ruler for positioning the object"
      top_delta="0"
-     width="108">
+     width="108"
+     drop_down_button.font="DejaVu"
+     drop_down_button.font.size="LSmall">
       <combo_box.item
        label="World grid"
        name="World"
@@ -363,7 +398,9 @@
      top="52"
      label_text.wrap="true"
      label_text.width="120"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <check_box
      control_name="ScaleStretchTextures"
      height="17"
@@ -374,7 +411,9 @@
      name="checkbox stretch textures"
      top_pad="-2"
      follows="left|top"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
    <check_box
      control_name="SnapEnabled"
      height="17"
@@ -383,7 +422,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox snap to grid"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
   <check_box
      control_name="FSBuildPrefs_ActualRoot"
      height="17"
@@ -392,7 +433,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox actual root"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
   <check_box
      height="17"
      initial_value="true"
@@ -400,7 +443,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox show highlight"
-     width="134" >
+     width="134"
+     font="DejaVu"
+     font.size="LSmall">
 		  <check_box.commit_callback
 			function="BuildTool.commitShowHighlight"/>
 	</check_box>
@@ -412,7 +457,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox select probes"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
@@ -633,7 +680,9 @@
      left="155"
      name="checkbox sticky"
      top="55"
-     width="128" />
+     width="128"
+     font="DejaVu"
+     font.size="LSmall" />
     <check_box
      control_name="CreateToolCopySelection"
      height="19"
@@ -642,7 +691,9 @@
      left_delta="0"
      name="checkbox copy selection"
      top_delta="15"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <check_box
      control_name="CreateToolCopyCenters"
      height="19"
@@ -652,7 +703,9 @@
      left_delta="18"
      name="checkbox copy centers"
      top="85"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <check_box
      control_name="CreateToolCopyRotates"
      height="19"
@@ -661,7 +714,9 @@
      left_delta="0"
      name="checkbox copy rotates"
      top_delta="16"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <combo_box
      height="20"
      layout="topleft"
@@ -669,7 +724,9 @@
      follows="left|top"
      name="tree_grass_combo"
      top_pad="4"
-     width="130">
+     width="130"
+     drop_down_button.font="DejaVu"
+     drop_down_button.font.size="LSmall">
       <combo_box.commit_callback
        function="BuildTool.TreeGrass"/>
     </combo_box>
@@ -679,7 +736,9 @@
      left="4"
      name="land_radio_group"
      top="54"
-     width="114">
+     width="114"
+     font="DejaVu"
+     font.size="LSmall" >
         <radio_item
          height="19"
          label="Select Land"
@@ -748,7 +807,9 @@
      left="135"
      name="Bulldozer:"
      top="57"
-     width="100">
+     width="100"
+     font="DejaVu"
+     font.size="LSmall">
         Bulldozer:
     </text>
     <text
@@ -760,7 +821,9 @@
      name="Dozer Size:"
      left="135"
      top_pad="5"
-     width="50">
+     width="50"
+     font="DejaVu"
+     font.size="LSmall">
         Size
     </text>
     <slider_bar
@@ -784,7 +847,9 @@
      name="Strength:"
      left="135"
      top_pad="5"
-     width="50">
+     width="50"
+     font="DejaVu"
+     font.size="LSmall">
         Strength
     </text>
     <slider_bar
@@ -811,7 +876,9 @@
      left="135"
      name="button apply to selection"
      tool_tip="Modify selected land"
-     width="82">
+     width="82"
+     font="DejaVu"
+     font.size="LSmall">
 	  <button.commit_callback
 	     function="BuildTool.applyToSelection"/>
     </button>
@@ -820,6 +887,8 @@
      length="1"
      height="10"
      follows="left|top"
+     font="DejaVu"
+     font.size="LSmall"
      layout="topleft"
      top_pad="28"
      left="10"
@@ -833,7 +902,8 @@
 	  length="1"
 	  height="16"
 	  follows="left|top"
-	  font="SansSerifSmall"
+      font="DejaVu"
+      font.size="LSmall"
 	  layout="topleft"
 	  left="10"
 	  name="selection_empty"
@@ -847,7 +917,8 @@
 	  length="1"
 	  height="16"
 	  follows="left|top"
-	  font="SansSerifSmall"
+	  font="DejaVu"
+      font.size="LSmall"
 	  layout="topleft"
 	  left="10"
 	  name="selection_faces"
@@ -862,7 +933,8 @@
 	  length="1"
 	  height="16"
 	  follows="left|top"
-	  font="SansSerifSmall"
+	  font="DejaVu"
+      font.size="LSmall"
 	  layout="topleft"
 	  left="10"
 	  name="selection_count"
@@ -875,7 +947,8 @@
 	  length="1"
 	  height="16"
 	  follows="left|top"
-	  font="SansSerifSmall"
+	  font="DejaVu"
+      font.size="LSmall"
 	  layout="topleft"
 	  left="10"
 	  name="more info label"
@@ -905,7 +978,9 @@
      tab_height="20"
      open_tabs_on_drag_and_drop="true"
      top="203"
-     width="295">
+     width="295"
+     font="DejaVu"
+     font.size="LSmall">
 	
 <panel
 	 border="false"
@@ -917,7 +992,7 @@
 	 name="General"
 	 top="16"
 	 width="295">
-<panel.string
+	 <panel.string
 	  name="text deed continued">
 		Deed
 	 </panel.string>
@@ -983,7 +1058,9 @@
              left="10"
              name="Name:"
              top="5"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall">
                 Name:
             </text>
             <line_editor
@@ -1002,7 +1079,9 @@
              left="10"
              name="Description:"
              top_pad="3"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall">
                 Description:
             </text>
             <line_editor
@@ -1023,7 +1102,9 @@
              height="29"
              layout="topleft"
              name="Creator:"
-             width="75">
+             width="75"
+             font="DejaVu"
+             font.size="LSmall">
                 Creator:
             </text>
             <!-- *NOTE: Intentionally wide for long names -->
@@ -1051,7 +1132,9 @@
              layout="topleft"
              name="Owner:"
              top_pad="7"
-             width="75">
+             width="75"
+             font="DejaVu"
+             font.size="LSmall">
                 Owner:
             </text>
             <!-- *NOTE: Intentionally wide for long names -->
@@ -1062,6 +1145,8 @@
              height="24"
              layout="topleft"
              name="Owner Name"
+	         font="DejaVu"
+             font.size="LSmall"
              left_pad="0"
              top_delta="0"
              translate="false"
@@ -1078,6 +1163,8 @@
              height="19"
              layout="topleft"
              name="Last Owner:"
+	         font="DejaVu"
+             font.size="LSmall"
              top_pad="7"
              width="75">
                 Last Owner:
@@ -1090,6 +1177,8 @@
              height="22"
              layout="topleft"
              name="Last Owner Name"
+	         font="DejaVu"
+             font.size="LSmall"
              left_pad="0"
              top_delta="0"
              translate="false"
@@ -1105,7 +1194,9 @@
              height="18"
              name="Group:"
              top_pad="-2"
-             width="75">
+             width="75"
+             font="DejaVu"
+             font.size="LSmall">
                 Group:
             </text>
             <!--<name_box
@@ -1123,6 +1214,8 @@
              height="22"
              layout="topleft"
              name="Group Name"
+	         font="DejaVu"
+             font.size="LSmall"
              left_pad="0"
              top_delta="0"
              translate="false"
@@ -1140,7 +1233,9 @@
 			 name="button set group"
 			 tab_stop="false"
 			 tool_tip="Choose a group to share this object's permissions"
-			 width="18" />
+			 width="18"
+             font="DejaVu"
+             font.size="LSmall"/>
             <check_box
              height="19"
              follows="left|top"
@@ -1150,7 +1245,9 @@
              tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions."
              top_pad="3"
              left="85"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1161,7 +1258,10 @@
              right="-5"
 			 top_delta="-1"
              tool_tip="Deeding gives this item away with next owner permissions. Group shared objects can be deeded by a group officer."
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall"
+             pad_bottom="1" />
             <text
              type="string"
              length="1"
@@ -1171,7 +1271,9 @@
              top_pad="10"
              left="10"
              name="label click action"
-             width="82">
+             width="82"
+             font="DejaVu"
+             font.size="LSmall" >
                 Click to:
             </text>
             <combo_box
@@ -1182,7 +1284,9 @@
              width="148"
              top_delta="-4"
              left_pad="10"
-             tool_tip="A click action enables you to interact with an object with a single left click. Each click action has a special cursor indicating what it does. Some click actions have requirements to function. For example Touch and Pay require scripts" >
+             tool_tip="A click action enables you to interact with an object with a single left click. Each click action has a special cursor indicating what it does. Some click actions have requirements to function. For example Touch and Pay require scripts"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Touch  (default)"
                  name="Touch/grab(default)"
@@ -1233,7 +1337,9 @@
              name="checkbox for sale"
              left="7"
              width="100"
-             tool_tip="Lets people buy this object, its content or it copy inworld for specified price." />
+             tool_tip="Lets people buy this object, its content or it copy inworld for specified price."
+             font="DejaVu"
+             font.size="LSmall" />
   <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
             left_pad="8"
@@ -1247,7 +1353,9 @@
             mouse_opaque="true"
             name="sale type"
             width="168"
-            tool_tip="Select whether purchaser will receive a copy, copy of the content or item itself." >
+            tool_tip="Select whether purchaser will receive a copy, copy of the content or item itself."
+            drop_down_button.font="DejaVu"
+            drop_down_button.font.size="LSmall" >
         <combo_box.item
            name="Copy"
            label="Copy"
@@ -1279,7 +1387,9 @@ even though the user gets a free copy.
       min_val="0"
       height="20"
       max_val="999999999"
-      tool_tip="Object cost." />
+      tool_tip="Object cost."
+      font="DejaVu"
+      font.size="LSmall" />
 	<button
 	 left_pad="10"
 	 enabled="false"
@@ -1287,6 +1397,8 @@ even though the user gets a free copy.
 	 height="20"
 	 label="Apply"
 	 name="button mark for sale"
+             font="DejaVu"
+             font.size="LSmall"
 	 tool_tip="Mark/Update object(s) for sale."
 	 width="100"/>
 	<button
@@ -1296,6 +1408,8 @@ even though the user gets a free copy.
 	 height="20"
 	 label="Copy Keys"
 	 name="btnCopyKeys"
+             font="DejaVu"
+             font.size="LSmall"
      tool_tip="Copies the selected object's root key to the clipboard. Shift-click copies all of the selected objects' keys" width="80">
 		<button.commit_callback
 		function="BuildTool.CopyKeys"/>
@@ -1307,7 +1421,9 @@ even though the user gets a free copy.
        layout="topleft"
 	   left_pad="15"
        name="search_check"
-       tool_tip="Let people see this object in search results" />
+       tool_tip="Let people see this object in search results"
+       font="DejaVu"
+       font.size="LSmall" />
 		<panel
          border="false"
          follows="left|top"
@@ -1331,7 +1447,9 @@ even though the user gets a free copy.
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
-             width="214">
+             width="214"
+             font="DejaVu"
+             font.size="LSmall" >
                 You can modify this object
             </text>
             <text
@@ -1339,7 +1457,9 @@ even though the user gets a free copy.
                follows="left|top"
                name="Anyone can:"
                width="250"
-               left="10">
+               left="10"
+               font="DejaVu"
+               font.size="LSmall" >
                  Anyone:
             </text>
             <check_box
@@ -1349,7 +1469,9 @@ even though the user gets a free copy.
              name="checkbox allow everyone move"
              tool_tip="Anyone can move the object."
              left="10"
-             width="85" />
+             width="85"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Copy"
@@ -1357,7 +1479,9 @@ even though the user gets a free copy.
              left_pad="0"
              name="checkbox allow everyone copy"
              tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive."
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Export"
@@ -1365,14 +1489,18 @@ even though the user gets a free copy.
              left_pad="0"
              name="checkbox allow export"
              tool_tip="Anyone can export this Object."
-             width="90" />
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
                type="string"
                follows="left|top"
                height="19"
                name="Next owner can:"
                width="250"
-               left="10">
+               left="10"
+               font="DejaVu"
+               font.size="LSmall" >
                   Next owner:
             </text>
             <check_box
@@ -1383,7 +1511,9 @@ even though the user gets a free copy.
              height="10"
              name="checkbox next owner can modify"
              tool_tip="Next owner can edit properties like item name or scale of this object."
-             width="85" />
+             width="85"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              follows="left|top|right"
              height="19"
@@ -1392,7 +1522,9 @@ even though the user gets a free copy.
              left_pad="0"
              name="checkbox next owner can copy"
              tool_tip="Next owner can make unlimited copies of this object. Copies maintain creator information, and can never be more permissive than the item being copied."
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              follows="left|top|right"
              height="19"
@@ -1402,7 +1534,9 @@ even though the user gets a free copy.
              left_pad="0"
              top_delta="0"
              tool_tip="Next owner can give away or resell this object."
-             width="100" />
+             width="100"
+             font="DejaVu"
+             font.size="LSmall" />
 <!-- *NOTE: These "B/O/G/E/N/F fields may overlap "perm_modify" above, 
      but that's OK, this is used only for debugging. -->
             <text
@@ -1415,7 +1549,9 @@ even though the user gets a free copy.
              left="230"
              name="B:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 B:
             </text>
             <text
@@ -1428,7 +1564,9 @@ even though the user gets a free copy.
              top_pad="2"
              name="O:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 O:
             </text>
             <text
@@ -1441,7 +1579,9 @@ even though the user gets a free copy.
              top_pad="2"
              name="G:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 G:
             </text>
             <text
@@ -1454,7 +1594,9 @@ even though the user gets a free copy.
              layout="topleft"
              name="E:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 E:
             </text>
             <text
@@ -1467,7 +1609,9 @@ even though the user gets a free copy.
              top_pad="2"
              name="N:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 N:
             </text>
             <text
@@ -1480,7 +1624,9 @@ even though the user gets a free copy.
              top_pad="2"
              name="F:"
              height="10"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 F:
             </text>
         </panel>
@@ -1500,7 +1646,9 @@ even though the user gets a free copy.
          name="pathfinding_attributes_label"
          top_pad="4"
          width="150"
-         left="10">
+         left="10"
+         font="DejaVu"
+         font.size="LSmall" >
         Pathfinding attributes:
       </text>
       <text
@@ -1510,7 +1658,9 @@ even though the user gets a free copy.
          name="pathfinding_attributes_value"
          width="130"
          word_wrap="false"
-         left_pad="0">
+         left_pad="0"
+         font="DejaVu"
+         font.size="LSmall" >
       </text>
     </panel>
   </panel>
@@ -1547,7 +1697,9 @@ Paste Rotation
              tool_tip="Prevents object from being moved or deleted. Frequently useful during building to avoid unintended edits."
              top_pad="5"
              left="10"
-             width="123" />
+             width="123"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Physical"
@@ -1555,7 +1707,9 @@ Paste Rotation
              name="Physical Checkbox Ctrl"
              tool_tip="Allows object to be pushed and affected by gravity"
              top_pad="0"
-             width="123" />
+             width="123"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Temporary"
@@ -1563,7 +1717,9 @@ Paste Rotation
              name="Temporary Checkbox Ctrl"
              tool_tip="Causes object to be deleted 1 minute after creation"
              top_pad="0"
-             width="123" />
+             width="123"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Phantom"
@@ -1571,7 +1727,9 @@ Paste Rotation
              name="Phantom Checkbox Ctrl"
              tool_tip="Causes object to not collide with other objects or avatars"
              top_pad="0"
-             width="123" />
+             width="123"
+             font="DejaVu"
+             font.size="LSmall" />
         <text
              type="string"
              length="1"
@@ -1580,7 +1738,9 @@ Paste Rotation
              layout="topleft"
              name="label position"
              top_pad="10"
-             width="121">
+             width="121"
+             font="DejaVu"
+             font.size="LSmall" >
                 Position (meters)
             </text> 
             <spinner
@@ -1598,7 +1758,9 @@ Paste Rotation
              name="Pos X"
              text_enabled_color="Red"
              top_pad="5"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1614,7 +1776,9 @@ Paste Rotation
              name="Pos Y"
              text_enabled_color="EmphasisColor"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1630,7 +1794,9 @@ Paste Rotation
              name="Pos Z"
              text_enabled_color="SL-MidBlue"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19" 
@@ -1640,7 +1806,9 @@ Paste Rotation
              label="C"
              name="copy_pos_btn"
              tool_tip="Copy Position"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1649,7 +1817,9 @@ Paste Rotation
              label="P"
              name="paste_pos_btn"
              tool_tip="Paste Position"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1659,7 +1829,9 @@ Paste Rotation
              label="p"
              name="paste_pos_clip_btn"
              tool_tip="Try pasting Position from Clipboard"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -1669,7 +1841,9 @@ Paste Rotation
              left="10"
              name="label size"
              top_pad="6"
-             width="121">
+             width="121"
+             font="DejaVu"
+             font.size="LSmall">
                 Size (meters)
             </text>
             <spinner
@@ -1687,7 +1861,9 @@ Paste Rotation
              name="Scale X"
              text_enabled_color="White"
              top_pad="5"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1703,7 +1879,9 @@ Paste Rotation
              name="Scale Y"
              text_enabled_color="White"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1719,7 +1897,9 @@ Paste Rotation
              name="Scale Z"
              text_enabled_color="White"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19" 
@@ -1729,7 +1909,9 @@ Paste Rotation
              label="C"
              name="copy_size_btn"
              tool_tip="Copy Size"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1738,7 +1920,9 @@ Paste Rotation
              label="P"
              name="paste_size_btn"
              tool_tip="Paste Size"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1747,7 +1931,9 @@ Paste Rotation
              label="p"
              name="paste_size_clip_btn"
              tool_tip="Try pasting Size from Clipboard"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -1757,7 +1943,9 @@ Paste Rotation
              left="10"
              name="label rotation"
              top_pad="10"
-             width="121">
+             width="121"
+             font="DejaVu"
+             font.size="LSmall" >
                 Rotation (degrees)
             </text>
             <spinner
@@ -1775,7 +1963,9 @@ Paste Rotation
              name="Rot X"
              text_enabled_color="White"
              top_pad="5"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="3"
              follows="left|top"
@@ -1791,7 +1981,9 @@ Paste Rotation
              name="Rot Y"
              text_enabled_color="White"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="3"
              follows="left|top"
@@ -1807,7 +1999,9 @@ Paste Rotation
              name="Rot Z"
              text_enabled_color="White"
              top_pad="3"
-             width="87" />
+             width="87"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1817,7 +2011,9 @@ Paste Rotation
              label="C"
              name="copy_rot_btn"
              tool_tip="Copy Rotation"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1826,7 +2022,9 @@ Paste Rotation
              label="P"
              name="paste_rot_btn"
              tool_tip="Paste Rotation"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="19"
@@ -1835,7 +2033,9 @@ Paste Rotation
              label="p"
              name="paste_rot_clip_btn"
              tool_tip="Try pasting Rotation from Clipboard"
-             width="20" />
+             width="20"
+             font="DejaVu"
+             font.size="LSmall" />
 
  <!--           <text
              type="string"
@@ -1883,7 +2083,9 @@ Paste Rotation
              name="comboBaseType"
              top_pad="5"
              left="125"
-             width="149">
+             width="149"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Box"
                  name="Box"
@@ -1984,7 +2186,9 @@ Paste Rotation
              left_delta="0"
              name="text cut"
              top_pad="5"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Path Cut (begin/end)
             </text>
             <spinner
@@ -1999,7 +2203,9 @@ Paste Rotation
              max_val="0.98"
              name="cut begin"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="16"
@@ -2012,7 +2218,9 @@ Paste Rotation
              min_val="0.02"
              name="cut end"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -2022,7 +2230,9 @@ Paste Rotation
              left="125"
              name="text hollow"
              top_pad="6"
-             width="68">
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" >
                 Hollow
             </text>
             <text
@@ -2033,7 +2243,9 @@ Paste Rotation
              layout="topleft"
              left_pad="10"
              name="text skew"
-             width="63">
+             width="63"
+             font="DejaVu"
+             font.size="LSmall" >
                 Skew
             </text>
             <spinner
@@ -2047,7 +2259,9 @@ Paste Rotation
              max_val="95"
              name="Scale 1"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="2"
              follows="left|top"
@@ -2060,7 +2274,9 @@ Paste Rotation
              min_val="-0.95"
              name="Skew"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -2070,7 +2286,9 @@ Paste Rotation
              left="125"
              name="Hollow Shape"
              top_pad="4"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Hollow Shape
             </text>
             <combo_box
@@ -2079,7 +2297,9 @@ Paste Rotation
              left_delta="0"
              name="hole"
              top_pad="-2"
-             width="150">
+             width="150"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Default"
                  name="Default"
@@ -2106,7 +2326,9 @@ Paste Rotation
              left_delta="0"
              name="text twist"
              top_pad="5"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Twist (begin/end)
             </text>
             <spinner
@@ -2123,7 +2345,9 @@ Paste Rotation
              min_val="-180"
              name="Twist Begin"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="0"
              follows="left|top"
@@ -2148,11 +2372,13 @@ Paste Rotation
              left="125"
              name="scale_taper"
              top_pad="3"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Taper
             </text>
             <text
-			 visible="false"
+             visible="false"
              type="string"
              length="1"
              follows="left|top"
@@ -2161,7 +2387,9 @@ Paste Rotation
              left_delta="0"
              name="scale_hole"
              top_delta="0"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Hole Size
             </text>
             <spinner
@@ -2177,7 +2405,9 @@ Paste Rotation
              min_val="-1"
              name="Taper Scale X"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="3"
              follows="left|top"
@@ -2191,7 +2421,9 @@ Paste Rotation
              min_val="-1"
              name="Taper Scale Y"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -2201,7 +2433,9 @@ Paste Rotation
              left="125"
              name="text topshear"
              top_pad="3"
-             width="141">
+             width="141"
+             font="DejaVu"
+             font.size="LSmall" >
                 Top Shear
             </text>
             <spinner
@@ -2218,7 +2452,9 @@ Paste Rotation
              min_val="-0.5"
              name="Shear X"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="3"
              follows="left|top"
@@ -2233,7 +2469,9 @@ Paste Rotation
              min_val="-0.5"
              name="Shear Y"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
 			 visible="false"
              type="string"
@@ -2244,11 +2482,13 @@ Paste Rotation
              left="125"
              name="advanced_cut"
              top_pad="3"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Profile Cut (begin/end)
             </text>
             <text
-			 visible="false"
+             visible="false"
              type="string"
              length="1"
              follows="left|top"
@@ -2257,7 +2497,9 @@ Paste Rotation
              left_delta="0"
              name="advanced_dimple"
              top_delta="0"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Dimple (begin/end)
             </text>
             <text
@@ -2269,7 +2511,9 @@ Paste Rotation
              left_delta="0"
              name="advanced_slice"
              top_delta="0"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Slice (begin/end)
             </text>
             <spinner
@@ -2284,7 +2528,9 @@ Paste Rotation
              max_val="0.98"
              name="Path Limit Begin"
              top_pad="3"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2297,7 +2543,9 @@ Paste Rotation
              min_val="0.02"
              name="Path Limit End"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
 			 visible="false"
              type="string"
@@ -2308,8 +2556,10 @@ Paste Rotation
              left="125"
              name="text taper2"
              top_pad="3"
-			 tool_tip="Does not work on all prim types."
-             width="150">
+             tool_tip="Does not work on all prim types."
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Taper Profile
             </text>
             <spinner
@@ -2326,7 +2576,9 @@ Paste Rotation
              min_val="-1"
              name="Taper X"
              top_pad="3"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
 			 visible="false"
              decimal_digits="3"
@@ -2341,7 +2593,9 @@ Paste Rotation
              min_val="-1"
              name="Taper Y"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
 			 visible="false"
              type="string"
@@ -2352,7 +2606,9 @@ Paste Rotation
              left="125"
              name="text radius delta"
              top_pad="2"
-             width="78">
+             width="78"
+             font="DejaVu"
+             font.size="LSmall" >
                 Radius
             </text>
             <text
@@ -2364,7 +2620,9 @@ Paste Rotation
              layout="topleft"
              left_delta="78"
              name="text revolutions"
-             width="68">
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" >
                 Revolutions
             </text>
             <spinner
@@ -2378,7 +2636,9 @@ Paste Rotation
              min_val="-1"
              name="Radius Offset"
              top_pad="4"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
 			 visible="false"
              decimal_digits="2"
@@ -2391,7 +2651,9 @@ Paste Rotation
              min_val="1"
              name="Revolutions"
              top_delta="0"
-             width="68" />
+             width="68"
+             font="DejaVu"
+             font.size="LSmall" />
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"
@@ -2404,7 +2666,9 @@ Paste Rotation
              tool_tip="Click to choose a picture"
              top="70"
              visible="false"
-             width="145" />
+             width="145"
+             caption_text.font="DejaVu"
+             caption_text.font.size="LSmall" />
             <check_box
              height="19"
              label="Mirror"
@@ -2414,7 +2678,9 @@ Paste Rotation
              tool_tip="Flips sculpted prim along the X axis"
              top_pad="8"
              visible="false"
-             width="130" />
+             width="130"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Inside-out"
@@ -2424,7 +2690,9 @@ Paste Rotation
              tool_tip="Inverts the sculpted prims normals, making it appear inside-out"
              top_pad="4"
              visible="false"
-             width="121" />
+             width="121"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -2435,7 +2703,9 @@ Paste Rotation
              name="label sculpt type"
              top_pad="10"
              visible="false"
-             width="130">
+             width="130"
+             font="DejaVu"
+             font.size="LSmall" >
                 Stitching type
             </text>
             <combo_box
@@ -2445,8 +2715,10 @@ Paste Rotation
              name="sculpt type control"
              top_pad="4"
              visible="false"
-			 tool_tip="The &quot;none&quot; option has been removed because it is identical with &quot;Plane&quot;."
-             width="150">
+             tool_tip="The &quot;none&quot; option has been removed because it is identical with &quot;Plane&quot;."
+             width="150"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Sphere"
                  name="Sphere"
@@ -2473,6 +2745,8 @@ Paste Rotation
           layout="topleft"
           left="125"
           name="mesh_info_label"
+          font="DejaVu"
+          font.size="LSmall"
           top="30"
           width="100"
           visible="false">
@@ -2485,6 +2759,8 @@ Paste Rotation
           layout="topleft"
           left="125"
           name="lod_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"
           value="LOD:"
           visible="false"
@@ -2496,6 +2772,8 @@ Paste Rotation
           left_pad="10"
           halign="right"
           name="lod_num_tris"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="Num Triangles"
           visible="false"
@@ -2507,6 +2785,8 @@ Paste Rotation
           layout="topleft"
           left="125"
           name="mesh_lod_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"
           visible="false"
           width="60" >
@@ -2528,6 +2808,8 @@ Lowest:
           left_pad="10"
           halign="right"
           name="mesh_lod_num_tris"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="--"
           visible="false"
@@ -2539,7 +2821,9 @@ Lowest:
              top_pad="20"
              left="125"
              width="150"
-             visible="false">
+             visible="false"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
           <combo_box.item
                label="Default"
                name="Default"
@@ -2569,6 +2853,8 @@ Lowest:
           top_pad="16"
           left="125"
           name="ObjectLODbehaviourLabel"
+          font="DejaVu"
+          font.size="LSmall"
           value="Object LOD behaviour:"
           visible="true"
           width="180"/>
@@ -2580,6 +2866,8 @@ Lowest:
           top_pad="10"
           left="125"
           name="object_radius"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="Object radius:"
           visible="false"
@@ -2591,6 +2879,8 @@ Lowest:
           left_pad="10"
           halign="right"
           name="object_radius_value"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="--"
           visible="false"
@@ -2602,6 +2892,8 @@ Lowest:
           left="190"
           halign="center"
           name="LOD_swap_factors_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"
           value="LOD Factors"
           visible="true"
@@ -2613,6 +2905,8 @@ Lowest:
           left="190"
           halign="center"
           name="LOD_swap_defaults_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"
           value="Default"
           tool_tip="The default LOD factor setting that will be applied by most viewers."
@@ -2625,6 +2919,8 @@ Lowest:
           left_pad="5"
           halign="center"
           name="LOD_swap_usr_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           tool_tip="Your current setting, taken from RenderVolumeLODFactor"
           value="Yours"
@@ -2637,6 +2933,8 @@ Lowest:
           left="125"
           halign="left"
           name="LOD_swap_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"	
           value="LOD Swap"
           visible="false"
@@ -2649,6 +2947,8 @@ Lowest:
           left_pad="5"
           halign="center"
           name="LOD_swap_ll_default"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="LL"
           visible="false"
@@ -2661,6 +2961,8 @@ Lowest:
           left_pad="5"
           halign="center"
           name="LOD_swap_fs_default"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           visible="false"
           width="30" >
@@ -2674,6 +2976,8 @@ Lowest:
           left_pad="5"
           halign="center"
           name="LOD_swap_usr_current"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           tool_tip="Your current LOD Factor"
           value="[FACTOR]"
@@ -2686,6 +2990,8 @@ Lowest:
           left="125"
           halign="left"
           name="LOD_swap_LOD_Change_label"
+          font="DejaVu"
+          font.size="LSmall"
           top_pad="3"
           visible="false"
           width="65" >
@@ -2707,6 +3013,8 @@ Low ↔ Lwst
           left_pad="0"
           halign="right"
           name="LOD_swap_ll_values"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           visible="false"
           width="30" />
@@ -2717,6 +3025,8 @@ Low ↔ Lwst
           left_pad="5"
           halign="right"
           name="LOD_swap_fs_values"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="--"
           visible="false"
@@ -2728,12 +3038,16 @@ Low ↔ Lwst
           left_pad="5"
           halign="right"
           name="LOD_swap_usr_values"
+          font="DejaVu"
+          font.size="LSmall"
           top_delta="0"
           value="--"
           visible="false"
           width="30" />
          <text
           name="LODSwapTableDscriptionsText"
+          font="DejaVu"
+          font.size="LSmall"
           follows="top|left"
           layout="topleft"
           left="125"
@@ -2770,7 +3084,10 @@ Low ↔ Lwst
              left="10"
              name="select_single"
              top="5"
-             width="270">
+             width="270"
+             word_wrap="true"
+             font="DejaVu"
+             font.size="LSmall" >
                 Select only one primitive to edit features.
             </text>
             <text
@@ -2782,7 +3099,9 @@ Low ↔ Lwst
              left="10"
              name="edit_object"
              top="5"
-             width="252">
+             width="252"
+             font="DejaVu"
+             font.size="LSmall" >
                 Edit object features:
             </text>
             <check_box
@@ -2793,7 +3112,9 @@ Low ↔ Lwst
              name="Animated Mesh Checkbox Ctrl"
              tool_tip="Allows rigged mesh objects to be animated independently"
              top_pad="5"
-             width="121" />
+             width="121"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="10"
              label="Flexible Path"
@@ -2803,7 +3124,9 @@ Low ↔ Lwst
              name="Flexible1D Checkbox Ctrl"
              tool_tip="Allows object to flex about the Z axis (Client-side only)"
              top_pad="5"
-             width="121" />
+             width="121"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="23"
@@ -2844,7 +3167,9 @@ Low ↔ Lwst
              max_val="3"
              name="FlexNumSections"
              top_pad="9"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2858,7 +3183,9 @@ Low ↔ Lwst
              min_val="-10"
              name="FlexGravity"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2871,7 +3198,9 @@ Low ↔ Lwst
              max_val="10"
              name="FlexFriction"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2884,7 +3213,9 @@ Low ↔ Lwst
              max_val="10"
              name="FlexWind"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2897,7 +3228,9 @@ Low ↔ Lwst
              max_val="10"
              name="FlexTension"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2911,7 +3244,9 @@ Low ↔ Lwst
              min_val="-10"
              name="FlexForceX"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2925,7 +3260,9 @@ Low ↔ Lwst
              min_val="-10"
              name="FlexForceY"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -2939,7 +3276,9 @@ Low ↔ Lwst
              min_val="-10"
              name="FlexForceZ"
              top_pad="4"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
 
             <check_box
              height="16"
@@ -2949,7 +3288,9 @@ Low ↔ Lwst
              name="Light Checkbox Ctrl"
              tool_tip="Causes object to emit light"
              top_pad="10"
-             width="60" />
+             width="60"
+             font="DejaVu"
+             font.size="LSmall" />
             <color_swatch
              can_apply_immediately="true"
              color="SL-MidDkGray"
@@ -2961,7 +3302,9 @@ Low ↔ Lwst
              top_pad="-21"
              name="colorswatch"
              tool_tip="Click to open color picker"
-             width="40" />
+             width="40"
+             font="DejaVu"
+             font.size="LSmall" />
          <texture_picker
             allow_no_texture="true"
             top_delta="0"
@@ -2985,7 +3328,9 @@ Low ↔ Lwst
              left="10"
              name="Light Intensity"
              top_delta="30"
-             width="128" />
+             width="128"
+             font="DejaVu"
+             font.size="LSmall" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -2999,7 +3344,9 @@ Low ↔ Lwst
                    min_val="0"
                    mouse_opaque="true"
                    name="Light FOV"
-                   width="120" />
+                   width="120"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <spinner follows="left|top"
                    height="19"
                    initial_value="5"
@@ -3010,7 +3357,9 @@ Low ↔ Lwst
                    max_val="20"
                    name="Light Radius"
                    top_pad="3"
-                   width="128" />
+                   width="128"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -3024,7 +3373,9 @@ Low ↔ Lwst
                    min_val="-20"
                    mouse_opaque="true"
                    name="Light Focus"
-                   width="120" />
+                   width="120"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <spinner follows="left|top"
                    height="19"
                    increment="0.25"
@@ -3036,7 +3387,9 @@ Low ↔ Lwst
                    max_val="2"
                    name="Light Falloff"
                    top_pad="3"
-                   width="128" />
+                   width="128"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -3050,7 +3403,9 @@ Low ↔ Lwst
                    min_val="0"
                    mouse_opaque="true"
                    name="Light Ambiance"
-                   width="120" />
+                   width="120"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <check_box
              height="16"
              label="Reflection Probe"
@@ -3059,15 +3414,19 @@ Low ↔ Lwst
              name="Reflection Probe"
              tool_tip="Adjusts how objects within this volume receive reflections when PBR is enabled"
              top_pad="9"
-             width="60" />
+             width="60"
+             font="DejaVu"
+             font.size="LSmall" />
           <combo_box
 			   height="19"
 			   top_delta="0"
-         left="144"
+               left="144"
 			   follows="left|top"
 			   name="Probe Volume Type"
 			   tool_tip="Choose the probe influence volume"
-			   width="140">
+			   width="140"
+               drop_down_button.font="DejaVu"
+               drop_down_button.font.size="LSmall" >
             <combo_box.item
              label="Sphere"
              name="Sphere"
@@ -3077,6 +3436,7 @@ Low ↔ Lwst
              name="Box"
              value="Box"/>
           </combo_box>
+
           <check_box
              height="16"
              label="Dynamic"
@@ -3086,7 +3446,9 @@ Low ↔ Lwst
              name="Probe Dynamic"
              tool_tip="When enabled, Avatars will appear in reflections within this probe's influence volume."
              top_delta="19"
-             width="60" />
+           width="60"
+           font="DejaVu"
+           font.size="LSmall" />
           <text
              type="string"
              length="1"
@@ -3097,7 +3459,9 @@ Low ↔ Lwst
              name="Probe Update Label"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
-             width="100">
+             width="100"
+             font="DejaVu"
+             font.size="LSmall" >
             Probe Update
           </text>
           <combo_box
@@ -3107,7 +3471,9 @@ Low ↔ Lwst
 			   follows="left|top"
 			   name="Probe Update Type"
 			   tool_tip="Determines how the probe updates.  Static updates the slowest and without avatars.  Dynamic updates more frequently, with avatars visible in the probes.  Mirror (Environment) turns this probe into a realtime planar projected probe that only reflects the environment, but does not calculate ambiance.  Mirror (Everything) is similar to Mirror (Environment), but it reflects particles and avatars."
-			   width="140">
+			   width="140"
+               drop_down_button.font="DejaVu"
+               drop_down_button.font.size="LSmall" >
             <combo_box.item
              label="Static"
              name="Static"
@@ -3138,7 +3504,9 @@ Low ↔ Lwst
                    min_val="0"
                    mouse_opaque="true"
                    name="Probe Ambiance"
-                   width="120" />
+                   width="120"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <spinner top_delta="0"
                    decimal_digits="3"
                    follows="left|top"
@@ -3152,7 +3520,9 @@ Low ↔ Lwst
                    min_val="0"
                    mouse_opaque="true"
                    name="Probe Near Clip"
-                   width="120" />
+                   width="120"
+                   font="DejaVu"
+                   font.size="LSmall" />
           <text
              type="string"
              length="1"
@@ -3161,7 +3531,9 @@ Low ↔ Lwst
              layout="topleft"
              name="label physicsshapetype"
              top="50"
-             width="130">
+             width="130"
+             font="DejaVu"
+             font.size="LSmall" >
                 Physics Shape Type:
           </text>
 				  <combo_box
@@ -3170,7 +3542,9 @@ Low ↔ Lwst
 				     follows="left|top"
 				     name="Physics Shape Type Combo Ctrl"
 				     tool_tip="Choose the physics shape type"
-				     width="108"/>
+			   width="108"
+               drop_down_button.font="DejaVu"
+               drop_down_button.font.size="LSmall" />
           <button
               follows="left|top"
               height="19"
@@ -3191,7 +3565,9 @@ Low ↔ Lwst
              name="material"
              top_pad="5"
              width="134"
-             left="144">
+             left="144"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Stone"
                  name="Stone"
@@ -3234,7 +3610,9 @@ Low ↔ Lwst
              max_val="28"
              name="Physics Gravity"
              top_pad="10"
-             width="132" />
+             width="132"
+             font="DejaVu"
+             font.size="LSmall" />
 
             <spinner
              follows="left|top"
@@ -3249,7 +3627,9 @@ Low ↔ Lwst
              min_val="0"
              name="Physics Friction"
              top_pad="4"
-             width="132" />
+             width="132"
+             font="DejaVu"
+             font.size="LSmall" />
 
             <spinner
              follows="left|top"
@@ -3265,7 +3645,9 @@ Low ↔ Lwst
              min_val="1"
              name="Physics Density"
              top_pad="4"
-             width="132" />
+             width="132"
+             font="DejaVu"
+             font.size="LSmall" />
 
             <spinner
              follows="left|top"
@@ -3280,13 +3662,15 @@ Low ↔ Lwst
              min_val="0"
              name="Physics Restitution"
              top_pad="8"
-             width="132" />
+             width="132"
+             font="DejaVu"
+             font.size="LSmall" />
         </panel>
 <!--	<FS:Zi> switchable edit texture/materials panel
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture">
+         name="Texture"
          filename="panel_tools_texture.xml">
 	   </panel>
 -->
@@ -3310,7 +3694,9 @@ Low ↔ Lwst
              left="10"
              name="button new script"
              top="8"
-             width="90" />
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="left|top"
              height="35"
@@ -3318,7 +3704,9 @@ Low ↔ Lwst
              layout="topleft"
              left_pad="5"
              name="button permissions"
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              top="8"
              follows="left|top"
@@ -3327,7 +3715,9 @@ Low ↔ Lwst
              layout="topleft"
              left_pad="5"
              name="button refresh"
-             width="90" />
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="left|top"
              height="16"
@@ -3335,7 +3725,9 @@ Low ↔ Lwst
              layout="topleft"
              top_pad="1"
              name="btn_reset_scripts"
-             width="90" />
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
             <filter_editor
              follows="left|top|right"
              label="Enter filter text"
@@ -3371,7 +3763,8 @@ Low ↔ Lwst
     <text
          type="string"
          length="1"
-         font="SansSerifBig"
+         font="DejaVu"
+         font.size="Small"
          follows="left|top"
          height="19"
          layout="topleft"
@@ -3390,7 +3783,9 @@ Low ↔ Lwst
          left="30"
          name="label_area_price"
          top="48"
-         width="150">
+         width="150"
+         font="DejaVu"
+         font.size="LSmall" >
             Price: L$[PRICE] for [AREA] m²
         </text>
         <text
@@ -3402,7 +3797,9 @@ Low ↔ Lwst
          left_delta="0"
          name="label_area"
          top_delta="0"
-         width="150">
+         width="150"
+         font="DejaVu"
+         font.size="LSmall" >
             Area: [AREA] m²
         </text>
         <button
@@ -3414,7 +3811,10 @@ Low ↔ Lwst
          left_delta="0"
          name="button about land"
          top_pad="4"
-         width="125" />
+         width="125"
+         font="DejaVu"
+         font.size="LSmall"
+         pad_bottom="1" />
         <check_box
          control_name="ShowParcelOwners"
          height="19"
@@ -3424,11 +3824,14 @@ Low ↔ Lwst
          name="checkbox show owners"
          tool_tip="Colorize the parcels according to the type of owner: &#10;&#10;Green = Your land &#10;Aqua = Your group&apos;s land &#10;Red = Owned by others &#10;Yellow = For sale &#10;Purple = For auction &#10;Grey = Public"
          top_pad="8"
-         width="205" />
+         width="205"
+         font="DejaVu"
+         font.size="LSmall" />
         <text
          type="string"
          length="1"
-         font="SansSerifBig"
+         font="DejaVu"
+         font.size="Small"
          follows="left|top"
          height="19"
          layout="topleft"
@@ -3447,7 +3850,10 @@ Low ↔ Lwst
          left="30"
          name="button subdivide land"
          top="172"
-         width="125" />
+         width="125"
+         font="DejaVu"
+         font.size="LSmall"
+         pad_bottom="1" />
         <button
          follows="left|top"
          height="23"
@@ -3457,11 +3863,15 @@ Low ↔ Lwst
          left_delta="0"
          name="button join land"
          top_pad="4"
-         width="125" />
+         width="125"
+         font="DejaVu"
+         font.size="LSmall"
+         pad_bottom="1" />
         <text
          type="string"
          length="1"
-         font="SansSerifBig"
+         font="DejaVu"
+         font.size="Small"
          follows="left|top"
          height="19"
          layout="topleft"
@@ -3480,7 +3890,10 @@ Low ↔ Lwst
          left="30"
          name="button buy land"
          top="276"
-         width="125" />
+         width="125"
+         font="DejaVu"
+         font.size="LSmall"
+         pad_bottom="1" />
         <button
          follows="left|top"
          height="23"
@@ -3490,7 +3903,10 @@ Low ↔ Lwst
          left_delta="0"
          name="button abandon land"
          top_pad="4"
-         width="125" />
+         width="125"
+         font="DejaVu"
+         font.size="LSmall"
+         pad_bottom="1" />
  </panel>
 <!-- end of tabs -->
 	<button
