@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_jacket_panel">
+	<panel name="avatar_jacket_color_panel">
+		<texture_picker label="Верх" name="Upper Fabric" tool_tip="Нажмите, чтобы выбрать изображение"/>
+		<texture_picker label="Низ" name="Lower Fabric" tool_tip="Нажмите, чтобы выбрать изображение"/>
+		<color_swatch label="Цвет" name="Color/Tint" tool_tip="Нажмите, чтобы выбрать цвет"/>
+	</panel>
+	<panel name="jacket_main_tab_holder">
+		<accordion name="jacket_main_accordion">
+			<accordion_tab name="jacket_main_tab" title="Куртка"/>
+		</accordion>
+	</panel>
+</panel>

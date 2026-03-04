@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ follows="all"
+ height="430"
+ layout="topleft"
+ left="0"
+ name="Wearing"
+ top="0"
+ width="312">
+<panel.string
+    name="no_attachments">
+    No attachments worn.
+   </panel.string>
+     <accordion
+     fit_parent="true"
+     follows="all"
+     height="400"
+     layout="topleft"
+     left="0"
+     single_expansion="true"
+     top="0"
+     name="wearables_accordion"
+     width="309">
+     <accordion_tab
+     layout="topleft"
+     name="tab_wearables"
+     title="Wearables">
+    <wearable_items_list
+     follows="all"
+     height="400"
+     layout="topleft"
+     left="3"
+     multi_select="true"
+     name="cof_items_list"
+     show_item_widgets="true"
+     standalone="false"
+     top="0"
+     width="309"
+     show_complexity="true"
+     worn_indication_enabled="true" />
+     </accordion_tab>
+     <accordion_tab
+     layout="topleft"
+     name="tab_temp_attachments"
+     title="Temporary attachments">
+    <scroll_list
+     draw_heading="false"
+     left="3"
+     width="309"
+     height="400"
+     follows="all"
+     name="temp_attachments_list">
+        <scroll_list.columns
+         name="icon"
+         width="15" />
+        <scroll_list.columns
+         name="text"
+         dynamic_width="true" />
+        <scroll_list.columns
+         name="weight"
+         width="70" />
+  </scroll_list>
+     </accordion_tab>
+     </accordion>
+    <panel
+     background_visible="false"
+     follows="bottom|left|right"
+     height="28"
+     layout="topleft"
+     left="4"
+     name="bottom_panel"
+     top_pad="0"
+     width="312">
+        <icon
+         follows="bottom|left|right"
+         height="25"
+         image_name="Toolbar_Right_Off"
+         layout="topleft"
+         left="0"
+         name="dummy_icon"
+         width="305" />
+        <text
+         top_delta="0"
+         type="string"
+         length="1"
+         height="25"
+         layout="topleft"
+         right="-10"
+         name="avatar_complexity_label"
+         font="SansSerifMedium"
+         follows="bottom|right"
+         halign="right"
+         v_pad="6"
+         width="150">
+            Complexity: [WEIGHT]
+        </text>
+    </panel>
+</panel>

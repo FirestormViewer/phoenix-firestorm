@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Textura" name="Texture" tool_tip="Toque para escolher uma imagem"/>
+	</panel>
+	<accordion name="wearable_accordion">
+		<panel name="hair_color_tab_holder" title="Cor">
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="Cor"/>
+			</accordion>
+		</panel>
+		<panel name="hair_style_tab_holder" title="Estilo">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="Estilo"/>
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="Sobrancelhas">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="Sobrancelhas"/>
+			</accordion>
+		</panel>
+		<panel name="hair_facial_tab_holder" title="Faciais">
+			<text name="hair_facial_not_available">
+				As opções de pelos faciais
+estão disponíveis apenas para avatares masculinos.
+			</text>
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="Faciais"/>
+			</accordion>
+		</panel>
+	</accordion>
+</panel>

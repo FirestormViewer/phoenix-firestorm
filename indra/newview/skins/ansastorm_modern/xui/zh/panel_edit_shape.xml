@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		米
+	</string>
+	<string name="feet">
+		腳
+	</string>
+	<string name="height">
+		身高：
+	</string>
+	<text name="avatar_height" />
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="身體">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="身體" />
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="頭部">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="頭部" />
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="眼睛">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="眼睛" />
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="耳朵">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="耳朵" />
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="鼻子">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="鼻子" />
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="嘴巴">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="嘴巴" />
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="下巴">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="下巴" />
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="軀幹">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="軀幹" />
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="腿部">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="腿部" />
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

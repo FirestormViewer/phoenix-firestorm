@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skirt_panel">
+	<panel name="avatar_skirt_color_panel">
+		<texture_picker label="Texture" name="Fabric" tool_tip="Clicca per scegliere una texture"/>
+		<color_swatch label="Colore" name="Color/Tint" tool_tip="Clicca per scegliere il colore"/>
+	</panel>
+	<panel name="skirt_main_tab_holder">
+		<accordion name="skirt_main_accordion">
+			<accordion_tab name="skirt_main_tab" title="Gonna"/>
+		</accordion>
+	</panel>
+</panel>
