@@ -2037,11 +2037,17 @@ void LLLineEditor::draw()
             width = llmin(width, mTextRightEdge - ll_round(rendered_pixels_right));
             gl_rect_2d(ll_round(rendered_pixels_right), cursor_top, ll_round(rendered_pixels_right)+width, cursor_bottom, color);
 
+            // <FS:Ansariel> Fix back text color within selection to not black
+            LLColor4 selection_text_color(1.f - text_color.mV[VRED], 1.f - text_color.mV[VGREEN], 1.f - text_color.mV[VBLUE], alpha);
+
             rendered_text += mFontBufferSelection.render(
                 mGLFont,
                 mText, mScrollHPos + rendered_text,
                 rendered_pixels_right, text_bottom,
-                LLColor4::black,
+                // <FS:Ansariel> Fix back text color within selection to not black
+                //LLColor4::black,
+                selection_text_color,
+                // </FS:Ansariel>
                 LLFontGL::LEFT, LLFontGL::BOTTOM,
                 0,
                 LLFontGL::NO_SHADOW,
