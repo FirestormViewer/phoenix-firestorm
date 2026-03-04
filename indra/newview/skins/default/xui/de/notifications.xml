@@ -3769,8 +3769,15 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
-		Sie wurden vom Moderator stummgeschaltet.
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
+Einwohner an diesem Ort werden Sie nicht hören können.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		Einwohner an diesem Ort können Ihren Sprachchat jetzt hören.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
