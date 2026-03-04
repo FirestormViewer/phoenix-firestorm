@@ -105,6 +105,7 @@ LLLineEditor::Params::Params()
     text_tentative_color("text_tentative_color"),
     highlight_color("highlight_color"),
     preedit_bg_color("preedit_bg_color"),
+    highlight_text_color("highlight_text_color"), // <FS:Ansariel> Customizable text color for highlighted segments
     border(""),
     bg_visible("bg_visible"),
     text_pad_left("text_pad_left"),
@@ -172,6 +173,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
     mTentativeFgColor(p.text_tentative_color()),
     mHighlightColor(p.highlight_color()),
     mPreeditBgColor(p.preedit_bg_color()),
+    mHighlightTextColor(p.highlight_text_color.isProvided() ? std::make_optional(p.highlight_text_color()) : std::nullopt), // <FS:Ansariel> Customizable text color for highlighted segments
     mGLFont(p.font),
     mContextMenuHandle(),
     mShowContextMenu(true),
@@ -2038,7 +2040,7 @@ void LLLineEditor::draw()
             gl_rect_2d(ll_round(rendered_pixels_right), cursor_top, ll_round(rendered_pixels_right)+width, cursor_bottom, color);
 
             // <FS:Ansariel> Fix back text color within selection to not black
-            LLColor4 selection_text_color(1.f - text_color.mV[VRED], 1.f - text_color.mV[VGREEN], 1.f - text_color.mV[VBLUE], alpha);
+            LLColor4 selection_text_color = mHighlightTextColor.value_or(LLColor4(1.f - text_color.mV[VRED], 1.f - text_color.mV[VGREEN], 1.f - text_color.mV[VBLUE], alpha));
 
             rendered_text += mFontBufferSelection.render(
                 mGLFont,
