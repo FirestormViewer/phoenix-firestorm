@@ -40,6 +40,7 @@
 #endif
 
 LLFloaterHoverHeight::LLFloaterHoverHeight(const LLSD& key) : LLFloater(key)
+,   mModifiers(MASK_NONE)  // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
 {
 }
 
@@ -71,6 +72,11 @@ bool LLFloaterHoverHeight::postBuild()
     sldrCtrl->setSliderMouseUpCallback(boost::bind(&LLFloaterHoverHeight::onFinalCommit,this));
     sldrCtrl->setSliderEditorCommitCallback(boost::bind(&LLFloaterHoverHeight::onFinalCommit,this));
     childSetCommitCallback("HoverHeightSlider", &LLFloaterHoverHeight::onSliderMoved, NULL);
+    // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
+    childSetCommitCallback("PlusButton", boost::bind(&LLFloaterHoverHeight::onPlusButtonClicked, this), nullptr);
+    childSetCommitCallback("MinusButton", boost::bind(&LLFloaterHoverHeight::onMinusButtonClicked, this), nullptr);
+    childSetCommitCallback("ResetButton", boost::bind(&LLFloaterHoverHeight::onResetButtonClicked, this), nullptr);
+    // </FS:Zi>
 
     // Initialize slider from pref setting.
     syncFromPreferenceSetting(this);
@@ -145,6 +151,66 @@ void LLFloaterHoverHeight::onFinalCommit()
     gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ",value);
 }
 
+// <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
+bool LLFloaterHoverHeight::handleKey(KEY key, MASK mask, bool called_from_parent)
+{
+    mModifiers = mask;
+    return LLUICtrl::handleKey(key, mask, called_from_parent);
+}
+
+bool LLFloaterHoverHeight::handleKeyUp(KEY key, MASK mask, bool called_from_parent)
+{
+    mModifiers = mask;
+    return LLUICtrl::handleKeyUp(key, mask, called_from_parent);
+}
+
+void LLFloaterHoverHeight::onResetButtonClicked()
+{
+    onButtonClicked(0.0f);
+}
+
+void LLFloaterHoverHeight::onPlusButtonClicked()
+{
+    onButtonClicked(0.01f);
+}
+
+void LLFloaterHoverHeight::onMinusButtonClicked()
+{
+    onButtonClicked(-0.01f);
+}
+
+void LLFloaterHoverHeight::onButtonClicked(F32 value)
+{
+    LLSliderCtrl* sldrCtrl = getChild<LLSliderCtrl>("HoverHeightSlider");
+
+    if (value == 0.0f)
+    {
+        sldrCtrl->setValue(0.0f);
+    }
+    else
+    {
+        switch (mModifiers)
+        {
+            case MASK_ALT:
+            {
+                value *= 10.0f;
+                break;
+            }
+            case MASK_CONTROL:
+            case MASK_SHIFT:
+            {
+                value *= 0.1f;
+                break;
+            }
+        }
+        sldrCtrl->setValue(sldrCtrl->getValueF32() + value);
+    }
+
+    onSliderMoved(sldrCtrl, nullptr);
+    onFinalCommit();
+}
+// </FS:Zi>
+
 void LLFloaterHoverHeight::onRegionChanged()
 {
     LLViewerRegion *region = gAgent.getRegion();
@@ -178,6 +244,14 @@ void LLFloaterHoverHeight::updateEditEnabled()
     // </FS:Ansariel>
     LLSliderCtrl* sldrCtrl = getChild<LLSliderCtrl>("HoverHeightSlider");
     sldrCtrl->setEnabled(enabled);
+    // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
+    LLButton* button = getChild<LLButton>("PlusButton");
+    button->setEnabled(enabled);
+    button = getChild<LLButton>("MinusButton");
+    button->setEnabled(enabled);
+    button = getChild<LLButton>("ResetButton");
+    button->setEnabled(enabled);
+    // </FS:Zi>
     if (enabled)
     {
         syncFromPreferenceSetting(this);
