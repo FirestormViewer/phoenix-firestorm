@@ -1071,7 +1071,7 @@ with the same filename but different name
   <texture name="badge_warn.j2c" />
   <texture name="badge_ok.j2c" />
   <texture name="materials_ui_x_24.png" />
-  <texture name="locked_image" file_name="locked_image_dark.png" preload="true"/>
+  <texture name="locked_image" file_name="locked_image.j2c" preload="true"/>
 
   <texture name="Progress_1" file_name="icons/Progress_1.png" preload="true" />
   <texture name="Progress_2" file_name="icons/Progress_2.png" preload="true" />

@@ -246,7 +246,10 @@ void LLColorSwatchCtrl::draw()
     {
         if (mFallbackImage.notNull())
         {
-            mFallbackImage->draw(interior.mLeft - 1, interior.mBottom - 1, mFallbackImage->getWidth(), mFallbackImage->getHeight(), LLColor4::white % alpha);
+            // <FS:Ansariel> Use interior width so the image gets actually scaled to fix the color swatch
+            //mFallbackImage->draw(interior.mLeft - 1, interior.mBottom - 1, mFallbackImage->getWidth(), mFallbackImage->getHeight(), LLColor4::white % alpha);
+            mFallbackImage->draw(interior.mLeft - 1, interior.mBottom - 1, interior.getWidth(), interior.getHeight(), LLColor4::white % alpha);
+            // </FS:Ansariel>
             gl_border_color = LLUIColorTable::instance().getColor("ColorSwatchBorderColorGray").get();
             show_border_ctrl = false;
         }
