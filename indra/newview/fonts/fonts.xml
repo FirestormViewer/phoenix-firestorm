@@ -229,15 +229,15 @@
          />
   <font_size name="Large"
          comment="Size of large font (points, or 1/72 of an inch)"
-         size="11.0"
+         size="11.2"
          />
   <font_size name="Medium"
          comment="Size of medium font (points, or 1/72 of an inch)"
-         size="10"
+         size="10.2"
          />
   <font_size name="Small"
          comment="Size of small font (points, or 1/72 of an inch)"
-         size="9"
+         size="9.2"
          />
    <font_size name="LSmall"
          comment="Legacy size of small font (points, or 1/72 of an inch)"
