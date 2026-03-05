@@ -10,7 +10,7 @@
  save_rect="true"
  single_instance="true"
  title="Preferences"
- width="662">
+ width="673">
     <floater.string
      name="email_unverified_tooltip">
         Please verify your email to enable IM to Email by visiting
