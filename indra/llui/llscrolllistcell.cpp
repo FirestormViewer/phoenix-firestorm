@@ -493,6 +493,9 @@ LLScrollListCheck::LLScrollListCheck(const LLScrollListCell::Params& p)
     checkbox_p.rect = LLRect(0, p.width, p.width, 0);
     checkbox_p.enabled(p.enabled);
     checkbox_p.initial_value(p.value());
+    // <FS:Ansariel> Fix checkbox not being properly aligned vertically
+    checkbox_p.label_text.rect.bottom = 0;
+    checkbox_p.check_button.rect.bottom = 0;
 
     mCheckBox = LLUICtrlFactory::create<LLCheckBoxCtrl>(checkbox_p);
 
