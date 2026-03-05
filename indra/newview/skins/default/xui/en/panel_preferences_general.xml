@@ -304,7 +304,7 @@
      width="200"
      layout="topleft"
      left="30"
-     top_pad="0"
+     top_pad="3"
      name="Name_Tag_Preference">
         <radio_item
          label="Off"
@@ -641,7 +641,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="13"
+     height="30"
      layout="topleft"
      left="30"
      mouse_opaque="false"

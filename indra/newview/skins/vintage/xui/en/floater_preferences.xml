@@ -96,9 +96,9 @@ https://accounts.secondlife.com/change_email/
      tab_group="1"
 	 tab_height="12"
      tab_position="left"
-     tab_width="115"
+     tab_width="125"
      top="42"
-     width="658">
+     width="668">
         <panel
           class="panel_preference"
          filename="panel_preferences_general.xml"
