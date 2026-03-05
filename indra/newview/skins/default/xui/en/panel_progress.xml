@@ -109,7 +109,6 @@
                          text_color="LoginProgressBoxTextColor"
                          word_wrap="true"/>
                         <progress_bar
-                         color_bar="1 1 1 0.96"
                          follows="left|right|top"
                          layout="topleft"
                          height="16"
