@@ -25,9 +25,6 @@
 	<color
 	 name="EmphasisColor_35"
 	 value="0.426 0.729 1.0 0.368" />
-	<color
-	 name="EmphasisColorLight"
-	 reference="EmphasisColor_35" />
     <color
      name="SelectionColor"
      value="0.706 0.851 1 1" />
@@ -686,7 +683,7 @@
      reference="Black_50" />
     <color
      name="FocusColor"
-     reference="EmphasisColor" />
+     reference="EmphasisColor_35" />
     <color
      name="FolderViewLoadingMessageTextColor"
      reference="EmphasisColor" />
@@ -904,7 +901,7 @@
      reference="EmphasisColor" />
     <color
      name="MultiSliderThumbCenterSelectedColor"
-     reference="EmphasisColorLight" />
+     reference="EmphasisColor_35" />
     <color
      name="MultiSliderThumbOutlineColor"
      reference="EmphasisColor" />
