@@ -1394,7 +1394,7 @@
       reference="EmphasisColor_35" />
   <color
       name="Slidermark"
-      reference="EmphasisColor" />
+      reference="DkGray0" />
   <color
       name="MoneyTrackerIncrease"
       reference="Green" />
