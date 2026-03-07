@@ -2250,8 +2250,40 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
                     if (idRlvRoot.notNull())
                         mFolderID = idRlvRoot;
 
+                    std::string expected_name;
+                    std::string::size_type idxToken = mDesc.find("'  ( http://");
+                    if (std::string::npos != idxToken && idxToken > 1)
+                    {
+                        expected_name = mDesc.substr(1, idxToken - 1);
+                    }
+                    else
+                    {
+                        std::string::size_type start = mDesc.find('\'');
+                        std::string::size_type end = mDesc.find_last_of('\'');
+                        if ((std::string::npos != start) && (std::string::npos != end) && (end > start + 1))
+                        {
+                            expected_name = mDesc.substr(start + 1, end - start - 1);
+                        }
+                    }
+                    if (expected_name.find(RLV_PUTINV_PREFIX) != 0)
+                    {
+                        expected_name.clear();
+                    }
+
+                    if (expected_name.empty())
+                    {
+                        std::string::size_type idxPrefix = mDesc.find(RLV_PUTINV_PREFIX);
+                        if (std::string::npos != idxPrefix)
+                        {
+                            std::string::size_type idxEnd = mDesc.find('\'', idxPrefix);
+                            if (std::string::npos == idxEnd)
+                                idxEnd = mDesc.length();
+                            expected_name = mDesc.substr(idxPrefix, idxEnd - idxPrefix);
+                        }
+                    }
+
                     // "accepted_in_rlv" is sent from RlvGiveToRLVTaskOffer *after* we have the folder
-                    RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID);
+                    RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID, expected_name);
                     gInventory.addObserver(pOfferObserver);
                 }
                 else
