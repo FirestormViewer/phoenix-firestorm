@@ -412,7 +412,7 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
     if (subDirectory.has_value())
         gDirUtilp->append(dir, std::string(subDirectory.value()));
 
-    bool          using_24_hour_clock = gSavedSettings.getBOOL("Use24HourClock");
+    static const std::string date_format_str = getString(gSavedSettings.getBOOL("Use24HourClock") ? "FiledateFormat" : "FiledateFormatAMPM");
     std::string   file;
     llstat        stat_data;
     time_t        last_modified = 0;
@@ -427,7 +427,7 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
         else
             last_modified = stat_data.st_mtime;
 
-        std::string date_str = getString(using_24_hour_clock ? "FiledateFormat" : "FiledateFormatAMPM");
+        std::string date_str = date_format_str;
         LLSD substitution;
         substitution["datetime"] = (F64)last_modified;
         LLStringUtil::format(date_str, substitution);
