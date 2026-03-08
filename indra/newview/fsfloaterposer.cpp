@@ -411,16 +411,28 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
     if (subDirectory.has_value())
         gDirUtilp->append(dir, std::string(subDirectory.value()));
 
-    std::string file;
+    std::string   file;
+    llstat        stat_data;
+    time_t        last_modified = 0;
     LLDirIterator dir_iter(dir, POSE_INTERNAL_FORMAT_FILE_MASK);
     while (dir_iter.next(file))
     {
         std::string path = gDirUtilp->add(dir, file);
         std::string name = gDirUtilp->getBaseFileName(LLURI::unescape(path), true);
 
+        if (LLFile::stat(path, &stat_data))
+            last_modified = 0;
+        else
+            last_modified = stat_data.st_mtime;
+
+        struct tm*  timeData = gmtime(&last_modified);
+        std::string date     = llformat("%02d-%02d %02d:%02d", timeData->tm_mon + 1, timeData->tm_mday, timeData->tm_hour, timeData->tm_min);
+
         LLSD row;
-        row["columns"][0]["column"] = "name";
+        row["columns"][0]["column"] = "load_file_name_column";
         row["columns"][0]["value"] = name;
+        row["columns"][1]["column"] = "load_file_date_column";
+        row["columns"][1]["value"] = date;
 
         llifstream infile;
         infile.open(path);

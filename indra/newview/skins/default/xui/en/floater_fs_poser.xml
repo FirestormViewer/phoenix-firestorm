@@ -1850,12 +1850,19 @@
 				 layout="topleft"
 				 tool_tip="Load a pose for who you are animating."
 				 width="225"
-				 multi_select="true"
+				 multi_select="false"
+				 draw_heading="true"
 				 name="poses_scroll"
+				 sort_column="load_file_name_column"
 				 top="0">
 					<scroll_list.columns
-					 label="Pose Name"
-					 name="name"/>
+					 label="Name"
+					 name="load_file_name_column"
+					 relative_width="0.7"/>
+					<scroll_list.columns
+					 label="Date"
+					 name="load_file_date_column"
+					 relative_width="0.3"/>
 				</scroll_list>
 				<line_editor
 				 follows="top|left"
