@@ -27,27 +27,28 @@
 #include "fsfloaterposer.h"
 #include "fsposeranimator.h"
 #include "fsvirtualtrackpad.h"
-#include "v4color.h"
 #include "llagent.h"
+#include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llcheckboxctrl.h"
 #include "llcommonutils.h"
 #include "llcontrolavatar.h"
-#include "llnotificationsutil.h"
 #include "lldiriterator.h"
-#include "llsdserialize.h"
-#include "llscrolllistctrl.h"
-#include "llsliderctrl.h"
-#include "lltabcontainer.h"
-#include "llviewercontrol.h"
-#include "llviewerwindow.h"
-#include "llwindow.h"
-#include "llvoavatarself.h"
 #include "llinventoryfunctions.h"
-#include "lltoolcomp.h"
 #include "llloadingindicator.h"
 #include "llmutelist.h"
-#include "llappviewer.h"
+#include "llnotificationsutil.h"
+#include "llscrolllistctrl.h"
+#include "llsdserialize.h"
+#include "llsliderctrl.h"
+#include "llstring.h"
+#include "lltabcontainer.h"
+#include "lltoolcomp.h"
+#include "llviewercontrol.h"
+#include "llviewerwindow.h"
+#include "llvoavatarself.h"
+#include "llwindow.h"
+#include "v4color.h"
 
 namespace
 {
@@ -131,7 +132,7 @@ bool FSFloaterPoser::postBuild()
         {
             onJointTabSelect();
             setRotationChangeButtons(false, false);
-        });        
+        });
 
     mAvatarSelectionScrollList = getChild<LLScrollListCtrl>("avatarSelection_scroll");
     mAvatarSelectionScrollList->setCommitOnSelectionChange(true);
@@ -411,6 +412,7 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
     if (subDirectory.has_value())
         gDirUtilp->append(dir, std::string(subDirectory.value()));
 
+    bool          using_24_hour_clock = gSavedSettings.getBOOL("Use24HourClock");
     std::string   file;
     llstat        stat_data;
     time_t        last_modified = 0;
@@ -425,17 +427,20 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
         else
             last_modified = stat_data.st_mtime;
 
-        struct tm*  timeData = gmtime(&last_modified);
-        std::string date     = llformat("%02d-%02d %02d:%02d", timeData->tm_mon + 1, timeData->tm_mday, timeData->tm_hour, timeData->tm_min);
+        std::string date_str = getString(using_24_hour_clock ? "FiledateFormat" : "FiledateFormatAMPM");
+        LLSD substitution;
+        substitution["datetime"] = (F64)last_modified;
+        LLStringUtil::format(date_str, substitution);
 
         LLSD row;
         row["columns"][0]["column"] = "load_file_name_column";
         row["columns"][0]["value"] = name;
         row["columns"][1]["column"] = "load_file_date_column";
-        row["columns"][1]["value"] = date;
+        row["columns"][1]["value"] = date_str;
+        row["columns"][2]["column"] = "load_file_date_sort_column";
+        row["columns"][2]["value"] = llformat("%u", (U64)last_modified);
 
-        llifstream infile;
-        infile.open(path);
+        llifstream infile(path.c_str());
         if (!infile.is_open())
         {
             LL_WARNS("Posing") << "Skipping: Cannot read file in: " << path << LL_ENDL;
