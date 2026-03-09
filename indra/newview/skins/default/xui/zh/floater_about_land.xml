@@ -130,7 +130,7 @@
 			</text>
 			<button label="取消土地出售" label_selected="取消土地出售" name="Cancel Land Sale" />
 			<text name="Claimed:">
-				已收取：
+				認領於：
 			</text>
 			<text name="DateClaimText">
 				星期二 8月 15 13:47:25 2006
@@ -240,37 +240,37 @@
 				[COUNT]
 			</text>
 			<text name="Primitives on parcel:">
-				地塊土地影響：
+				地塊土地佔用：
 			</text>
 			<text name="total_objects_text">
 				[COUNT]
 			</text>
 			<text name="Owned by parcel owner:">
-				地塊所有者所擁有：
+				地塊所有者佔用：
 			</text>
 			<text name="owner_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOwner" />
-			<button label="退回" label_selected="退回中..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnOwner..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Set to group:">
-				設定群組：
+				已設定的群組占用：
 			</text>
 			<text name="group_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowGroup" />
-			<button label="退回" label_selected="退回中..." name="ReturnGroup..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnGroup..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Owned by others:">
-				其他人所擁有：
+				其他人佔用：
 			</text>
 			<text name="other_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOther" />
-			<button label="退回" label_selected="退回中..." name="ReturnOther..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnOther..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Selected / sat upon:">
-				已選 / 坐在上面：
+				已選 / 被人坐著：
 			</text>
 			<text name="selected_objects_text">
 				[COUNT]
@@ -278,7 +278,6 @@
 			<text name="Autoreturn">
 				自動送返其他居民的物件（分鐘，設為 0 可取消自動）：
 			</text>
-			<line_editor name="clean other time" />
 			<text name="Object Owners:">
 				物件所有者：
 			</text>

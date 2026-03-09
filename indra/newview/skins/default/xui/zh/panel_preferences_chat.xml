@@ -59,8 +59,8 @@
 				<radio_item label="水平" name="radio_horizontal" width="130" />
 				<radio_item label="垂直" name="radio_vertical" />
 			</radio_group>
-			<text name="req_restart_chattabs" width="140">(需要重新啟動)</text>
-			<check_box name="FSAutoOrderIMTabs" label="按類型排序私聊分頁:" tool_tip="在會話視窗內自動對私聊分頁進行排序。" />
+			<text name="req_restart_chattabs">(需要重新啟動)</text>
+			<check_box name="FSAutoOrderIMTabs" label="按類型排序私聊分頁：" tool_tip="在會話視窗內自動對私聊分頁進行排序。" />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="群組、會議、私聊" />
 				<combo_box.item name="group_im_conf" label="群組、私聊、會議" />
