@@ -4,7 +4,7 @@
 	<panel name="animation_overrider_panel">
 		<combo_box name="ao_set_selection_combo" tool_tip="編集したいアニメーションを選択してください。"/>
 		<button name="ao_activate" tool_tip="このアニメーションを今すぐ有効化します。"/>
-		<check_box name="ao_default" label="デフォルト" tool_tip="このアニメーションセットを、ログイン時に再生されるデフォルトのセットにします。"/>
+		<check_box name="ao_default" label="デフォルト" tool_tip="このアニメーションセットを、ログイン時に再生されるデフォルトのセットにします。デフォルトのアニメーションセットがない場合は、前回のセッションのアニメーションセットを使用します。"/>
 		<button name="ao_add" tool_tip="新しいアニメーションセットを追加します。"/>
 		<button name="ao_remove" tool_tip="このアニメーションセットを削除します。"/>
 		<check_box name="ao_sit_override" label="座るを上書き" tool_tip="座るアニメーションをオーバーライドする場合は、これをチェックします。"/>

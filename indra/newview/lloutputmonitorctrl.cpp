@@ -432,9 +432,8 @@ void NearbyVoiceMonitor::draw()
     mSpeakerMgr->update(true);
     mSpeakerMgr->getSpeakerList(&speaker_list, false);
 
-    for (LLSpeakerMgr::speaker_list_t::const_iterator it = speaker_list.begin(); it != speaker_list.end(); ++it)
+    for (const auto& speaker : speaker_list)
     {
-        LLPointer<LLSpeaker> speaker = *it;
         if (speaker->mSpeechVolume > 0.f || speaker->mStatus == LLSpeaker::STATUS_SPEAKING)
         {
             draw = true;
@@ -450,6 +449,12 @@ void NearbyVoiceMonitor::draw()
         LLOutputMonitorCtrl::draw();
     }
 }
+
+bool NearbyVoiceMonitor::handleMouseUp(S32 x, S32 y, MASK mask)
+{
+    return true;
+}
+
 // </FS:Zi> Add new control to have a nearby voice output monitor
 //////////////////////////////////////////////////////////////////////////
 
