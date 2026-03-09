@@ -905,6 +905,9 @@ Podczas otwierania pliku w przeglądarce zabrakło pamięci. Plik może być za 
 	<notification name="LandmarkAlreadyExists">
 		Posiadasz już landmark dla tej lokalizacji.
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Przeglądarka nie była w stanie pobrać lokalizacji regionu. Region może być tymczasowo niedostępny lub został usunięty.
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel działki nie pozwala na to.
 	</notification>

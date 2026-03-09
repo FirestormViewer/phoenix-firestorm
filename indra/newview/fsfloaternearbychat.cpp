@@ -524,7 +524,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
         }
         else
         {
-            floater_container->addFloater(this, false);
+            floater_container->addFloater(this, false, IM_NOTHING_SPECIAL);
         }
     }
 

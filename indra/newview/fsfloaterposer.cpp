@@ -27,27 +27,28 @@
 #include "fsfloaterposer.h"
 #include "fsposeranimator.h"
 #include "fsvirtualtrackpad.h"
-#include "v4color.h"
 #include "llagent.h"
+#include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llcheckboxctrl.h"
 #include "llcommonutils.h"
 #include "llcontrolavatar.h"
-#include "llnotificationsutil.h"
 #include "lldiriterator.h"
-#include "llsdserialize.h"
-#include "llscrolllistctrl.h"
-#include "llsliderctrl.h"
-#include "lltabcontainer.h"
-#include "llviewercontrol.h"
-#include "llviewerwindow.h"
-#include "llwindow.h"
-#include "llvoavatarself.h"
 #include "llinventoryfunctions.h"
-#include "lltoolcomp.h"
 #include "llloadingindicator.h"
 #include "llmutelist.h"
-#include "llappviewer.h"
+#include "llnotificationsutil.h"
+#include "llscrolllistctrl.h"
+#include "llsdserialize.h"
+#include "llsliderctrl.h"
+#include "llstring.h"
+#include "lltabcontainer.h"
+#include "lltoolcomp.h"
+#include "llviewercontrol.h"
+#include "llviewerwindow.h"
+#include "llvoavatarself.h"
+#include "llwindow.h"
+#include "v4color.h"
 
 namespace
 {
@@ -131,7 +132,7 @@ bool FSFloaterPoser::postBuild()
         {
             onJointTabSelect();
             setRotationChangeButtons(false, false);
-        });        
+        });
 
     mAvatarSelectionScrollList = getChild<LLScrollListCtrl>("avatarSelection_scroll");
     mAvatarSelectionScrollList->setCommitOnSelectionChange(true);
@@ -411,19 +412,35 @@ void FSFloaterPoser::refreshPoseScroll(LLScrollListCtrl* posesScrollList, std::o
     if (subDirectory.has_value())
         gDirUtilp->append(dir, std::string(subDirectory.value()));
 
-    std::string file;
+    static const std::string date_format_str = getString(gSavedSettings.getBOOL("Use24HourClock") ? "FiledateFormat" : "FiledateFormatAMPM");
+    std::string   file;
+    llstat        stat_data;
+    time_t        last_modified = 0;
     LLDirIterator dir_iter(dir, POSE_INTERNAL_FORMAT_FILE_MASK);
     while (dir_iter.next(file))
     {
         std::string path = gDirUtilp->add(dir, file);
         std::string name = gDirUtilp->getBaseFileName(LLURI::unescape(path), true);
 
-        LLSD row;
-        row["columns"][0]["column"] = "name";
-        row["columns"][0]["value"] = name;
+        if (LLFile::stat(path, &stat_data))
+            last_modified = 0;
+        else
+            last_modified = stat_data.st_mtime;
 
-        llifstream infile;
-        infile.open(path);
+        std::string date_str = date_format_str;
+        LLSD substitution;
+        substitution["datetime"] = (F64)last_modified;
+        LLStringUtil::format(date_str, substitution);
+
+        LLSD row;
+        row["columns"][0]["column"] = "load_file_name_column";
+        row["columns"][0]["value"] = name;
+        row["columns"][1]["column"] = "load_file_date_column";
+        row["columns"][1]["value"] = date_str;
+        row["columns"][2]["column"] = "load_file_date_sort_column";
+        row["columns"][2]["value"] = llformat("%u", (U64)last_modified);
+
+        llifstream infile(path.c_str());
         if (!infile.is_open())
         {
             LL_WARNS("Posing") << "Skipping: Cannot read file in: " << path << LL_ENDL;
@@ -628,14 +645,14 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
     {
         bool savingDiff = !mPoserAnimator.allBaseRotationsAreZero(avatar);
         LLSD record;
-        record["version"]["value"] = (S32)7;
+        record["version"]["value"] = (S32)8;
         record["startFromTeePose"]["value"] = !savingDiff;
 
         if (savingDiff)
             mPoserAnimator.savePosingState(avatar, false, &record);
 
         LLVector3 rotation, position, scale, zeroVector;
-        bool      baseRotationIsZero;
+        bool      baseRotationIsZero, userSetBaseRotationToZero;
 
         for (const FSPoserAnimator::FSPoserJoint& pj : mPoserAnimator.PoserJoints)
         {
@@ -651,7 +668,8 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
 
             record[bone_name]["mirrored"] = jointRotMirrored;
 
-            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero))
+            if (!mPoserAnimator.tryGetJointSaveVectors(avatar, pj, &rotation, &position, &scale, &baseRotationIsZero,
+                                                       &userSetBaseRotationToZero))
                 continue;
 
             bool jointRotPosScaleAllZero = rotation == zeroVector && position == zeroVector && scale == zeroVector;
@@ -659,11 +677,12 @@ bool FSFloaterPoser::savePoseToXml(LLVOAvatar* avatar, const std::string& poseFi
             if (savingDiff && jointRotPosScaleAllZero)
                 continue;
 
-            record[bone_name]["jointBaseRotationIsZero"] = baseRotationIsZero;
-            record[bone_name]["rotation"]                = rotation.getValue();
-            record[bone_name]["position"]                = position.getValue();
-            record[bone_name]["scale"]                   = scale.getValue();
-            record[bone_name]["worldLocked"]             = jointRotLocked;
+            record[bone_name]["jointBaseRotationIsZero"]   = baseRotationIsZero;
+            record[bone_name]["userSetBaseRotationToZero"] = userSetBaseRotationToZero;
+            record[bone_name]["rotation"]                  = rotation.getValue();
+            record[bone_name]["position"]                  = position.getValue();
+            record[bone_name]["scale"]                     = scale.getValue();
+            record[bone_name]["worldLocked"]               = jointRotLocked;
         }
 
         std::string fullSavePath =
@@ -1191,7 +1210,7 @@ void FSFloaterPoser::onClickLoadHandPose(bool isRightHand)
                     continue;
 
                 vec3.setValue(control_map["rotation"]);
-                mPoserAnimator.loadJointRotation(avatar, poserJoint, true, vec3);
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, true, true, vec3);
             }
         }
 
@@ -1274,6 +1293,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
         LLQuaternion quat;
         bool         enabled;
         bool         setJointBaseRotationToZero;
+        bool         userSetBaseRotationToZero;
         bool         worldLocked;
         bool         mirroredJoint;
         S32          version = 0;
@@ -1335,6 +1355,11 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 else
                     setJointBaseRotationToZero = startFromZeroRot;
 
+                if (control_map.has("userSetBaseRotationToZero"))
+                    userSetBaseRotationToZero = control_map["userSetBaseRotationToZero"].asBoolean();
+                else
+                    userSetBaseRotationToZero = startFromZeroRot;
+
                 if (loadPositions && control_map.has("position"))
                     vec3.setValue(control_map["position"]);
                 else
@@ -1347,7 +1372,7 @@ bool FSFloaterPoser::loadPoseFromXml(LLVOAvatar* avatar, const std::string& pose
                 else
                     vec3.clear();
 
-                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, vec3);
+                mPoserAnimator.loadJointRotation(avatar, poserJoint, setJointBaseRotationToZero, userSetBaseRotationToZero, vec3);
 
                 if (loadScales && control_map.has("scale"))
                     vec3.setValue(control_map["scale"]);

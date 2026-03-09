@@ -453,6 +453,13 @@
 	<string name="SaveDiffLabel">Save Diff</string>
 	<string name="OverWriteLabel">Overwrite?</string>
 
+	<floater.string name="FiledateFormat">
+		[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<floater.string name="FiledateFormatAMPM">
+		[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</floater.string>
+
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack
 	 follows="top|left|right"
@@ -1842,20 +1849,32 @@
 			 visible="false"
 			 name="poses_loadSave"
 			 top="0"
-			 width="225">
+			 width="275">
 				<scroll_list
 				 column_padding="0"
 				 height="280"
 				 follows="left|top|right"
 				 layout="topleft"
 				 tool_tip="Load a pose for who you are animating."
-				 width="225"
-				 multi_select="true"
+				 width="275"
+				 multi_select="false"
+				 draw_heading="true"
 				 name="poses_scroll"
+				 sort_column="load_file_name_column"
 				 top="0">
 					<scroll_list.columns
-					 label="Pose Name"
-					 name="name"/>
+					 label="Name"
+					 name="load_file_name_column"
+					 width="150"/>
+					<scroll_list.columns
+					 label="Date"
+					 name="load_file_date_column"
+					 sort_column="load_file_date_sort_column"
+					 width="125"/>
+					<scroll_list.columns
+					 label="Date"
+					 name="load_file_date_sort_column"
+					 width="-1"/>
 				</scroll_list>
 				<line_editor
 				 follows="top|left"
@@ -1865,7 +1884,7 @@
 				 commit_on_focus_lost="false"
 				 label="Enter Pose Name To Save..."
 				 name="pose_save_name"
-				 width="225"/>
+				 width="275"/>
 			</panel>
 		</layout_panel>
 		<layout_panel
@@ -2038,9 +2057,9 @@
 				 menu_filename="menu_fs_poser_poses_btn.xml"
 				 menu_position="topright"
 				 name="load_poses_button"
-				 left_pad="1"
+				 left_pad="5"
 				 top_delta="0"
-				 width="85"/>
+				 width="105"/>
 				<button
 				 height="21"
 				 follows="top|left"
@@ -2055,7 +2074,7 @@
 				 image_selected="Toolbar_Middle_Selected"
 				 image_unselected="Toolbar_Middle_Off"
 				 name="save_poses_button"
-				 width="85"
+				 width="105"
 				 top_delta="0"
 				 left_pad="1">
 					<button.commit_callback

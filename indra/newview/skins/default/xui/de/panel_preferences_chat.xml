@@ -84,6 +84,16 @@
 			<text name="req_restart_chattabs" width="120">
 				(Erfordert Neustart)
 			</text>
+			<check_box name="FSAutoOrderIMTabs" label="IM-Tabs nach Typ sortieren:" tool_tip="Aktiviert automatische Sortierung für IM-Tabs innerhalb des „Gespräche“-Fensters." width="170"/>
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="Gruppen, Konferenzen, IMs"/>
+				<combo_box.item name="group_im_conf" label="Gruppen, IMs, Konferenzen"/>
+				<combo_box.item name="conf_group_im" label="Konferenzen, Gruppen, IMs"/>
+				<combo_box.item name="conf_im_group" label="Konferenzen, IMs, Gruppen"/>
+				<combo_box.item name="im_group_conf" label="IMs, Gruppen, Konferenzen"/>
+				<combo_box.item name="im_conf_group" label="IMs, Konferenzen, Gruppen"/>
+			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="Neue Tabs als erste einfügen"  tool_tip="Fügt neue IM-Tabs als erstes Tab in der jeweiligen Gruppe hinzu."/>
 			<text name="FSIMTabNameFormat_label">
 				Namensformat für IM-Tabs:
 			</text>

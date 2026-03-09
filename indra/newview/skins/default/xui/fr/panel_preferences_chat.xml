@@ -60,6 +60,16 @@
 				<radio_item label="Verticale" name="radio_vertical"/>
 			</radio_group>
 			<text name="req_restart_chattabs" width="140">(Redémarrage requis)</text>
+			<check_box name="FSAutoOrderIMTabs" label="Trier les onglets IM par type:" tool_tip="Utilisez le classement automatique des onglets pour les onglets de messagerie instantanée dans la fenêtre flottante des conversations."/>
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="Groupes, Conférences, IMs" />
+				<combo_box.item name="group_im_conf" label="Groupes, IMs, Conférences" />
+				<combo_box.item name="conf_group_im" label="Conférences, Groupes, IMs" />
+				<combo_box.item name="conf_im_group" label="Conférences, IMs, Groupes" />
+				<combo_box.item name="im_group_conf" label="IMs, Groupes, Conférences" />
+				<combo_box.item name="im_conf_group" label="IMs, Conférences, Groupes" />
+			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="Nouveaux onglets au début" tool_tip="Ajouter les nouveaux onglets de messagerie instantanée en tant que premiers dans leur groupe de type de chat."/>
 			<text name="FSIMTabNameFormat_label" width="180">Format du nom sur les onglets :</text>
 			<combo_box name="FSIMTabNameFormat">
 				<combo_box.item label="Nom d'affichage" name="display_name"/>

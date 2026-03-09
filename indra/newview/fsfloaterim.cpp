@@ -1320,11 +1320,10 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
         {
             //      LLTabContainer::eInsertionPoint i_pt = user_initiated ? LLTabContainer::RIGHT_OF_CURRENT : LLTabContainer::END;
             // TODO: mantipov: use LLTabContainer::RIGHT_OF_CURRENT if it exists
-            LLTabContainer::eInsertionPoint i_pt = LLTabContainer::END;
 
             if (floater_container)
             {
-                floater_container->addFloater(floater, true, i_pt);
+                floater_container->addFloater(floater, true, session->mType);
             }
         }
 
@@ -2289,7 +2288,15 @@ void FSFloaterIM::onNewIMReceived(const LLUUID& session_id)
         }
 
         FSFloaterIM* new_tab = FSFloaterIM::getInstance(session_id);
-        FSFloaterIMContainer::getInstance()->addNewSession(new_tab);
+
+        EInstantMessage type{ IM_NOTHING_SPECIAL };
+        LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
+        if (session)
+        {
+            type = session->mType;
+        }
+
+        FSFloaterIMContainer::getInstance()->addNewSession(new_tab, type);
     }
 }
 

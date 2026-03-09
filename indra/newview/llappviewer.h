@@ -378,6 +378,7 @@ private:
 
     // For performance and metric gathering
     class LLThread* mFastTimerLogThread;
+    class LLThread* mCefCachePurgeThread; // <FS:TJ/> For CEF cache purging in a background thread
 
     // for tracking viewer<->region circuit death
     bool mAgentRegionLastAlive;
@@ -397,6 +398,7 @@ private:
 
     // <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
     virtual void startCachePurge() {}
+    void startCefCachePurge(); // <FS:TJ/> Purge this in another thread to prevent very slow startup times
 };
 
 // Globals with external linkage. From viewer.h

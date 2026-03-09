@@ -977,6 +977,10 @@ Dem Viewer ist beim Öffnen der Datei der Speicher ausgegangen. Die Datei ist ve
 		Sie besitzen für diesen Standort bereits eine Landmarke.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Die Position der Region konnte nicht ermittelt werden. Die Region ist möglicherweise temporär nicht verfügbar oder wurde entfernt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Sie können hier keine Landmarke erstellen, da der Landeigentümer dies verboten hat.
 	</notification>
@@ -2781,12 +2785,6 @@ Sind Sie sicher, dass Sie fortfahren möchten?
 Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dieser Position zu ermöglichen. Oder versuchen Sie es selbst: kopieren Sie die SLurl in die Adressleiste eines Webbrowsers.
 		<form name="form">
 			<ignore name="ignore" text="Slurl wurde in meine Zwischenablage kopiert"/>
-		</form>
-	</notification>
-	<notification name="CopySLURLEmpty">
-		Es gab ein Problem beim Kopieren der SLurl. Die Zielregion existiert möglicherweise nicht mehr.
-		<form name="form">
-			<ignore name="ignore" text="Kopieren einer Slurl ist fehlgeschlagen"/>
 		</form>
 	</notification>
 	<notification name="WLSavePresetAlert">
