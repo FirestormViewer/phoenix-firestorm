@@ -146,4 +146,7 @@
 	<texture name="Radar_VoicePTT_Lvl3"		file_name="icons/Radar_Voice_Lvl3.png" preload="false" />
 	<texture name="Radar_VoicePTT_Off"		file_name="icons/Radar_Voice_Off.png" preload="false" />
 	<texture name="Radar_VoicePTT_On"		file_name="icons/Radar_Voice_On.png" preload="false" />
+
+	<!-- Flat UI override -->
+	<texture name="PushButton_Selected" file_name="widgets/PushButton_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
 </textures>
