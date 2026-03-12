@@ -1432,7 +1432,7 @@ void FSLSLBridge::checkBridgeScriptName()
     }
 
     LL_INFOS("FSLSLBridge") << "Saving script " << mScriptItemID.asString() << " in object" << LL_ENDL;
-    obj->saveScript(gInventory.getItem(mScriptItemID), true, true);
+    obj->saveScript(gInventory.getItem(mScriptItemID), true, true, LLUUID::null);
     new FSLSLBridgeCleanupTimer();
 }
 

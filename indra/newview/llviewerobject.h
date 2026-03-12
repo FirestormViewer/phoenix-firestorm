@@ -25,8 +25,7 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLVIEWEROBJECT_H
-#define LL_LLVIEWEROBJECT_H
+#pragma once
 
 #include <map>
 #include <unordered_map>
@@ -580,7 +579,10 @@ public:
     // save a script, which involves removing the old one, and rezzing
     // in the new one. This method should be called with the asset id
     // of the new and old script AFTER the bytecode has been saved.
-    void saveScript(const LLViewerInventoryItem* item, bool active, bool is_new);
+    // The simulator treats the script as new when item->getAssetUUID().isNull() is true; in that case
+    // template_id will be used (if non-null) to copy an existing script asset, otherwise the
+    // script subtype in the item will be used to select the correct template.
+    void saveScript(const LLViewerInventoryItem* item, bool active, bool is_new, const LLUUID& template_id);
 
     // move an inventory item out of the task and into agent
     // inventory. This operation is based on messaging. No permissions
@@ -1147,5 +1149,3 @@ public:
     virtual void updateDrawable(bool force_damped);
 };
 
-
-#endif

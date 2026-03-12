@@ -191,7 +191,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     mPasswordLength(0),
     mLocationLength(0),
     mShowFavorites(false),
-    mAlertNotif(false)
+    mAlertNotif(false),
+    mLoginBtn(nullptr)
 {
     setBackgroundVisible(false);
     setBackgroundOpaque(true);
@@ -221,6 +222,11 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     password_edit->setKeystrokeCallback(onPassKey, this);
     // STEAM-14: When user presses Enter with this field in focus, initiate login
     password_edit->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, false));
+
+    childSetAction("connect_btn", onClickConnect, this);
+
+    mLoginBtn = getChild<LLButton>("connect_btn");
+    setDefaultBtn(mLoginBtn);
 
     // change z sort of clickable text to be behind buttons
     sendChildToBack(getChildView("forgot_password_text"));
@@ -297,11 +303,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     {
         onUpdateStartSLURL(start_slurl); // updates grid if needed
     }
-
-    childSetAction("connect_btn", onClickConnect, this);
-
-    mLoginBtn = getChild<LLButton>("connect_btn");
-    setDefaultBtn(mLoginBtn);
 
     std::string channel = LLVersionInfo::instance().getChannel();
     std::string version = stringize(LLVersionInfo::instance().getShortVersion(), " (",
@@ -1198,6 +1199,10 @@ void LLPanelLogin::updateServer()
 
 void LLPanelLogin::updateLoginButtons()
 {
+    if (!mLoginBtn)
+    {
+        return;
+    }
     mLoginBtn->setEnabled(mUsernameLength != 0 && mPasswordLength != 0 && !mAlertNotif);
 
     if (!mFirstLoginThisInstall)

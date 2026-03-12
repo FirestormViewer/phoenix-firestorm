@@ -148,9 +148,14 @@ void LLSyntaxIdLSL::fetchKeywordsFileCoro(std::string url, std::string fileSpec)
 
     if (isSupportedVersion(result))
     {
-        setKeywordsXml(result);
-        cacheFile(fileSpec, result);
-        loadKeywordsIntoLLSD();
+        // Shuttle this task to the main coro/worker.
+        // loadKeywordsIntoLLSD will attempt to get a mutex which is not coro aware.
+        LLAppViewer::instance()->postToMainCoro([this, result, fileSpec]()
+            {
+                setKeywordsXml(result);
+                cacheFile(fileSpec, result);
+                loadKeywordsIntoLLSD();
+            });
     }
     else
     {

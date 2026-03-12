@@ -42,6 +42,8 @@ class LLViewerInventoryCategory;
 class LLInventoryCallback;
 class LLAvatarName;
 
+constexpr U8 NO_INV_SUBTYPE{ 0 };
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLViewerInventoryItem
 //
@@ -358,8 +360,6 @@ public:
 };
 extern LLInventoryCallbackManager gInventoryCallbacks;
 
-
-const U8 NO_INV_SUBTYPE{ 0 };
 
 // *TODO: Find a home for these
 void create_inventory_item(const LLUUID& agent_id, const LLUUID& session_id,

@@ -2882,10 +2882,15 @@ void LLViewerObject::doUpdateInventory(
 // save a script, which involves removing the old one, and rezzing
 // in the new one. This method should be called with the asset id
 // of the new and old script AFTER the bytecode has been saved.
-void LLViewerObject::saveScript(
-    const LLViewerInventoryItem* item,
-    bool active,
-    bool is_new)
+// When creating a new script, the asset should be null.  The server
+// will create the new script based on the script_language (LSL or Lua)
+// If a template_id is provided, the new script will be a copy of that item.
+//
+// *IMPORTANT* If template_id is provided, it must be the ITEM ID of a
+// copy/mod-able script in the user's inventory. The simulator will verify
+// permissions.
+void LLViewerObject::saveScript(const LLViewerInventoryItem* item,
+    bool active, bool is_new, const LLUUID& template_id)
 {
     /*
      * XXXPAM Investigate not making this copy.  Seems unecessary, but I'm unsure about the
@@ -2914,6 +2919,15 @@ void LLViewerObject::saveScript(
     msg->addBOOLFast(_PREHASH_Enabled, enabled);
     msg->nextBlockFast(_PREHASH_InventoryBlock);
     task_item->packMessage(msg);
+
+    // This is a completely new script (no asset id) and we've provided a template.
+    // Note that the script subtype on the template will override any subtype on the item.
+    if (task_item->getAssetUUID().isNull() && template_id.notNull())
+    {
+        msg->nextBlock("NewScriptInfo");
+        msg->addUUID("TemplateID", template_id);
+    }
+
     msg->sendReliable(mRegionp->getHost());
 
     // do the internal logic

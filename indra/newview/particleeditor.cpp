@@ -626,7 +626,7 @@ void ParticleEditor::scriptInjectReturned()
     // play it safe, because some time may have passed
     if (LLViewerObject* object = gObjectList.findObject(mObject->getID()); object && mObject&& !mObject->isDead())
     {
-        mObject->saveScript(mParticleScriptInventoryItem, true, false);
+        mObject->saveScript(mParticleScriptInventoryItem, true, false, LLUUID::null);
         LLNotificationsUtil::add("ParticleScriptInjected");
     }
     else

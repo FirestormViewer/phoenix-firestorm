@@ -1127,19 +1127,6 @@ void set_default_permissions(LLViewerInventoryItem* item, std::string perm_type)
     }
 }
 
-// See below comment in `create_script_cb()` about this hack :(
-static const std::string DEFAULT_SLUA_SCRIPT = R"(
-function LLEvents.touch_start(detected)
-    ll.Say(0, "Touched.")
-end
-
-local function main()
-    print("Hello, Avatar!")
-end
-
-main()
-)";
-
 void create_script_cb(const LLUUID& inv_item)
 {
     if (!inv_item.isNull())
@@ -1147,40 +1134,6 @@ void create_script_cb(const LLUUID& inv_item)
         LLViewerInventoryItem* item = gInventory.getItem(inv_item);
         if (item)
         {
-            // ------------------------------------------------------------------------------------
-            // Begin hack
-            //
-            // The current state of the server doesn't allow specifying a default script template,
-            // so we have to update its code immediately after creation instead.
-            //
-            // This temporary workaround should be removed after a server-side fix.
-            // See https://github.com/secondlife/viewer/issues/3731 for more information.
-            //
-            LLViewerRegion* region = gAgent.getRegion();
-            if (region && region->simulatorFeaturesReceived())
-            {
-                LLSD simulatorFeatures;
-                region->getSimulatorFeatures(simulatorFeatures);
-                if (simulatorFeatures["LuaScriptsEnabled"].asBoolean())
-                {
-                    std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-                    if (!url.empty())
-                    {
-                        LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(
-                            item->getUUID(),
-                            "luau",
-                            DEFAULT_SLUA_SCRIPT,
-                            nullptr,
-                            nullptr));
-
-                        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
-                    }
-                }
-            }
-            //
-            // End hack
-            // ------------------------------------------------------------------------------------
-
             set_default_permissions(item, "Scripts");
 
             // item was just created, update even if permissions did not changed
@@ -2095,6 +2048,7 @@ void create_new_item(const std::string& name,
                    std::function<void(const LLUUID&)> created_cb = nullptr)
 {
     std::string desc;
+    U8 subtype = NO_INV_SUBTYPE;
     LLViewerAssetType::generateDescriptionFor(asset_type, desc);
     next_owner_perm = (next_owner_perm) ? next_owner_perm : PERM_MOVE | PERM_TRANSFER;
 
@@ -2106,6 +2060,20 @@ void create_new_item(const std::string& name,
         {
             cb = new LLBoostFuncInventoryCallback(create_script_cb);
             next_owner_perm = LLFloaterPerms::getNextOwnerPerms("Scripts");
+
+            LLViewerRegion* region = gAgent.getRegion();
+            if (region && region->simulatorFeaturesReceived())
+            {
+                // *TODO* Setting the subtype for the script will cause the server to select
+                // either the LSL or Lua default script.  We should perhaps allow the user to
+                // select which type of script they want to create.
+                LLSD simulatorFeatures;
+                region->getSimulatorFeatures(simulatorFeatures);
+                if (simulatorFeatures["LuaScriptsEnabled"].asBoolean())
+                {
+                    subtype = SST_LUA;
+                }
+            }
             break;
         }
 
@@ -2148,7 +2116,7 @@ void create_new_item(const std::string& name,
                           desc,
                           asset_type,
                           inv_type,
-                          NO_INV_SUBTYPE,
+                          subtype,
                           next_owner_perm,
                           cb);
 }

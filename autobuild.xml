@@ -1638,6 +1638,50 @@
         <key>name</key>
         <string>llphysicsextensions_tpv</string>
       </map>
+      <key>lsl_definitions</key>
+      <map>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/lsl-definitions</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2026, Linden Lab</string>
+        <key>description</key>
+        <string>LSL definitions</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/lsl_definitions.txt</string>
+        <key>name</key>
+        <string>lsl_definitions</string>
+        <key>platforms</key>
+        <map>
+          <key>common</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>6e4e3b86f5daf6dc2e7d7b2b59deaaad293b7232</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/lsl-definitions/releases/download/v0.4.1/lsl_definitions-0.4.1-common-22871771849.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>common</string>
+          </map>
+        </map>
+        <key>source_type</key>
+        <string>git</string>
+        <key>use_scm_version</key>
+        <boolean>true</boolean>
+        <key>vcs_branch</key>
+        <string>refs/tags/v0.4.1</string>
+        <key>vcs_revision</key>
+        <string>03006fb488cba2bae502e9baed051bfc8d00144d</string>
+        <key>vcs_url</key>
+        <string>git://github.com/secondlife/lsl-definitions.git</string>
+        <key>version</key>
+        <string>0.4.1</string>
+      </map>
       <key>meshoptimizer</key>
       <map>
         <key>platforms</key>

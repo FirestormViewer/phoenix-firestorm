@@ -261,19 +261,6 @@ void LLPanelContents::clearContents()
 // Static functions
 //
 
-// See below comment in `onClickNewScript()` about this hack :(
-static const std::string DEFAULT_SLUA_SCRIPT = R"(
-function LLEvents.touch_start(detected)
-    ll.Say(0, "Touched.")
-end
-
-local function main()
-    print("Hello, Avatar!")
-end
-
-main()
-)";
-
 // static
 void LLPanelContents::onClickNewScript(void *userdata)
 {
@@ -323,20 +310,9 @@ void LLPanelContents::onClickNewScript(void *userdata)
         std::string desc;
         LLViewerAssetType::generateDescriptionFor(LLAssetType::AT_LSL_TEXT, desc);
 
-        // --------------------------------------------------------------------------------------------------
-        // Begin hack
-        //
-        // The current state of the server doesn't allow specifying a default script template,
-        // so we have to update its code immediately after creation instead.
-        //
-        // Moreover, _PREHASH_RezScript has more complex server-side logic than _PREHASH_CreateInventoryItem,
-        // which changes the item's attributes, such as its name and UUID. The simplest way to mitigate this
-        // is to create a temporary item in the user's inventory, modify it as in create_inventory_item()'s
-        // callback, and then call _PREHASH_RezScript to move it into the object's inventory.
-        //
-        // This temporary workaround should be removed after a server-side fix.
-        // See https://github.com/secondlife/viewer/issues/3731 for more information.
-        //
+        U8 script_language = SST_LSL;
+        LLUUID template_id;
+
         LLViewerRegion* region = object->getRegion();
         if (region && region->simulatorFeaturesReceived())
         {
@@ -344,78 +320,11 @@ void LLPanelContents::onClickNewScript(void *userdata)
             region->getSimulatorFeatures(simulatorFeatures);
             if (simulatorFeatures["LuaScriptsEnabled"].asBoolean())
             {
-                if (std::string::size_type pos = desc.find("lsl2"); pos != std::string::npos)
-                {
-                    desc.replace(pos, 4, "SLua");
-                }
-
-                auto scriptCreationCallback = [object](const LLUUID& inv_item)
-                    {
-                        if (!inv_item.isNull())
-                        {
-                            LLViewerInventoryItem* item = gInventory.getItem(inv_item);
-                            if (item)
-                            {
-                                auto scriptUploadFinished = [object, item](LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
-                                    {
-                                        LLPointer<LLViewerInventoryItem> new_script = new LLViewerInventoryItem(item);
-                                        object->saveScript(new_script, true, true);
-
-                                        // Delete the temporary item from the user's inventory after rezzing it in the object's inventory
-                                        ms_sleep(50);
-                                        LLMessageSystem* msg = gMessageSystem;
-                                        msg->newMessageFast(_PREHASH_RemoveInventoryItem);
-                                        msg->nextBlockFast(_PREHASH_AgentData);
-                                        msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-                                        msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-                                        msg->nextBlockFast(_PREHASH_InventoryData);
-                                        msg->addUUIDFast(_PREHASH_ItemID, item->getUUID());
-                                        gAgent.sendReliableMessage();
-
-                                        gInventory.deleteObject(item->getUUID());
-                                        gInventory.notifyObservers();
-                                    };
-
-                                std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-                                if (!url.empty())
-                                {
-                                    LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(
-                                        item->getUUID(),
-                                        "luau",
-                                        DEFAULT_SLUA_SCRIPT,
-                                        scriptUploadFinished,
-                                        nullptr));
-
-                                    LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
-                                }
-                            }
-                        }
-                    };
-                LLPointer<LLBoostFuncInventoryCallback> cb = new LLBoostFuncInventoryCallback(scriptCreationCallback);
-
-                LLMessageSystem* msg = gMessageSystem;
-                msg->newMessageFast(_PREHASH_CreateInventoryItem);
-                msg->nextBlock(_PREHASH_AgentData);
-                msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-                msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-                msg->nextBlock(_PREHASH_InventoryBlock);
-                msg->addU32Fast(_PREHASH_CallbackID, gInventoryCallbacks.registerCB(cb));
-                msg->addUUIDFast(_PREHASH_FolderID, gInventory.getRootFolderID());
-                msg->addUUIDFast(_PREHASH_TransactionID, LLTransactionID::tnull);
-                msg->addU32Fast(_PREHASH_NextOwnerMask, PERM_MOVE | PERM_TRANSFER);
-                msg->addS8Fast(_PREHASH_Type, LLAssetType::AT_LSL_TEXT);
-                msg->addS8Fast(_PREHASH_InvType, LLInventoryType::IT_LSL);
-                msg->addU8Fast(_PREHASH_WearableType, NO_INV_SUBTYPE);
-                msg->addStringFast(_PREHASH_Name, "New Script");
-                msg->addStringFast(_PREHASH_Description, desc);
-
-                gAgent.sendReliableMessage();
-                return;
+                script_language = SST_LUA;
             }
         }
-        //
-        // End hack
-        // --------------------------------------------------------------------------------------------------
+        // *TODO* Get a template ID and script_language based on user preferences.  Template ID is the inventory item UUID of a script
+        // in the user's inventory that is used as a template for new scripts.
 
         LLPointer<LLViewerInventoryItem> new_item =
             new LLViewerInventoryItem(
@@ -428,9 +337,9 @@ void LLPanelContents::onClickNewScript(void *userdata)
                 "New Script",
                 desc,
                 LLSaleInfo::DEFAULT,
-                LLInventoryItemFlags::II_FLAGS_NONE,
+                LLInventoryItemFlags::II_FLAGS_SUBTYPE_MASK & script_language,
                 time_corrected());
-        object->saveScript(new_item, true, true);
+        object->saveScript(new_item, true, true, template_id);
 
         std::string name = new_item->getName();
 
