@@ -127,6 +127,40 @@ std::vector<std::string> LLDir::getFilesInDir(const std::string &dirname)
     return v;
 }
 
+// <FS:TJ> For CEF cache purging in a background thread
+std::vector<std::string> LLDir::getDirectoriesInDir(const std::string &dirname)
+{
+    //Returns a vector of directory names.
+
+#ifdef LL_WINDOWS // or BOOST_WINDOWS_API
+    boost::filesystem::path p(ll_convert<std::wstring>(dirname));
+#else
+    boost::filesystem::path p(dirname);
+#endif
+
+    std::vector<std::string> v;
+
+    boost::system::error_code ec;
+    if (exists(p, ec) && !ec.failed())
+    {
+        if (is_directory(p, ec) && !ec.failed())
+        {
+            boost::filesystem::directory_iterator end_iter;
+            for (boost::filesystem::directory_iterator dir_itr(p);
+                 dir_itr != end_iter;
+                 ++dir_itr)
+            {
+                if (boost::filesystem::is_directory(dir_itr->status()))
+                {
+                    v.push_back(dir_itr->path().filename().string());
+                }
+            }
+        }
+    }
+    return v;
+}
+// </FS:TJ>
+
 S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 {
     if (!fileExists(dirname)) return 0;

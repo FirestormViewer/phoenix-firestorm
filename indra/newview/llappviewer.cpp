@@ -688,6 +688,44 @@ public:
     }
 };
 
+// <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+class FSCefCachePurgeThread : public LLThread
+{
+public:
+    std::string mCefCachePath;
+
+    FSCefCachePurgeThread(const std::string& cef_cache_path) : LLThread("cef cache purge")
+    {
+        mCefCachePath = cef_cache_path;
+    }
+
+    void run()
+    {
+        // Check if the entire cache path can be purged
+        std::string cef_cache_path_old = mCefCachePath + "_old";
+        if (LLFile::isdir(cef_cache_path_old))
+        {
+            gDirUtilp->deleteDirAndContents(cef_cache_path_old);
+            return;
+        }
+
+        // Otherwise, purge individual folders that aren't in use
+        std::vector<std::string> cef_caches = gDirUtilp->getDirectoriesInDir(mCefCachePath);
+        for (const auto& cache_dir : cef_caches)
+        {
+            if (!LLAppViewer::instance()->isQuitting())
+            {
+                if (cache_dir.ends_with("_old"))
+                {
+                    std::string cef_cache_path = mCefCachePath + "\\" + cache_dir;
+                    gDirUtilp->deleteDirAndContents(cef_cache_path);
+                }
+            }
+        }
+    }
+};
+// </FS:TJ>
+
 //virtual
 bool LLAppViewer::initSLURLHandler()
 {
@@ -739,6 +777,7 @@ LLAppViewer::LLAppViewer()
     mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", false)),
     mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", false)),
     mFastTimerLogThread(NULL),
+    mCefCachePurgeThread(NULL), // <FS:TJ/> For CEF cache purging in a background thread
     mSettingsLocationList(NULL),
     mIsFirstRun(false),
     mSaveSettingsOnExit(true),      // <FS:Zi> Backup Settings
@@ -2488,6 +2527,10 @@ bool LLAppViewer::cleanup()
     sPurgeDiskCacheThread = NULL;
     delete mGeneralThreadPool;
     mGeneralThreadPool = NULL;
+    // <FS:TJ> For CEF cache purging in a background thread
+    delete mCefCachePurgeThread;
+    mCefCachePurgeThread = NULL;
+    // </FS:TJ>
 
     if (LLFastTimerView::sAnalyzePerformance)
     {
@@ -5354,7 +5397,10 @@ bool LLAppViewer::initCache()
     LLVOCache::getInstance()->initCache(LL_PATH_CACHE, CACHE_NUMBER_OF_REGIONS_FOR_OBJECTS, getObjectCacheVersion());
 
     // Remove old, stale CEF cache folders
-    purgeCefStaleCaches();
+    // <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+    //purgeCefStaleCaches();
+    startCefCachePurge();
+    // </FS:TJ>
 
     return true;
 }
@@ -5394,6 +5440,33 @@ void LLAppViewer::purgeCefStaleCaches()
         gDirUtilp->deleteDirAndContents(browser_parent_cache);
     }
 }
+
+// <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+void LLAppViewer::startCefCachePurge()
+{
+    const std::string browser_parent_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+    if (LLFile::isdir(browser_parent_cache))
+    {
+        // Try rename the entire cef cache folder to be purged in the background thread
+        if (LLFile::rename(browser_parent_cache, browser_parent_cache + "_old", -1) == -1)
+        {
+            // Otherwise rename the individual cache folders to be purged in the background thread
+            std::vector<std::string> cef_caches = gDirUtilp->getDirectoriesInDir(browser_parent_cache);
+            for (const auto& cache_dir : cef_caches)
+            {
+                if (!cache_dir.ends_with("_old"))
+                {
+                    std::string cef_cache_path = browser_parent_cache + "\\" + cache_dir;
+                    LLFile::rename(cef_cache_path, cef_cache_path + "_old", -1);
+                }
+            }
+        }
+
+        mCefCachePurgeThread = new FSCefCachePurgeThread(browser_parent_cache);
+        mCefCachePurgeThread->start();
+    }
+}
+// </FS:TJ>
 
 void LLAppViewer::purgeCache()
 {
