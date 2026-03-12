@@ -39,7 +39,6 @@
 #include "fsworldmapmessage.h" // <FS:humbletim/> FIRE-31368: [OPENSIM] ... Search returns more than one result
 
 constexpr U32 LAYER_FLAG = 2;
-constexpr S32 MAP_SIM_RETURN_NULL_SIMS = 0x00010000;
 
 //---------------------------------------------------------------------------
 // World Map Message Handling
