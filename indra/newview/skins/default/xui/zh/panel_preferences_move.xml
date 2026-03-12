@@ -17,7 +17,7 @@
 			<check_box label="修改外觀" name="appearance_camera_movement" tool_tip="當編輯外觀時，將相機轉向正面" />
 			<check_box label="視覺指示" name="FSAppearanceShowHints" tool_tip="啟用或禁用顯示正在編輯外觀時的視覺指示。" />
 			<check_box label="單擊您的化身不會影響相機" name="clickonavatarkeepscamera" tool_tip="啟用此選項會阻止單擊您的化身時相機重新設定。" />
-			<check_box label="在區域內瞬間傳送後重設相機" name="FSResetCameraOnTP" tool_tip="啟用此選項將在在同一區域內瞬間傳送後重設相機的縮放級別。" />
+			<check_box label="在區域內瞬間傳送後重設相機" name="FSResetCameraOnTP" tool_tip="啟用此選項將在同一區域內瞬間傳送後重設相機的縮放級別。" />
 			<check_box label="在化身移動時重新定位相機" name="FSResetCameraOnMovement" />
 			<check_box label="重設相機時將化身轉向" name="resetviewturnsavatar" tool_tip="啟用此選項不會移動相機，而是將您的化身朝向相機的方向。" />
 			<check_box label="允許相機穿過物件" name="ignorecameraconstraints" tool_tip="忽略類比主機對相機施加的「推力」，以使其遠離物件。" />

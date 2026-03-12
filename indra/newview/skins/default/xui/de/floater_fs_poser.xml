@@ -180,6 +180,13 @@
 	<string name="SaveDiffLabel">Diff. speichern</string>
 	<string name="OverWriteLabel">Überschreiben?</string>
 
+	<floater.string name="FiledateFormat">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<floater.string name="FiledateFormatAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</floater.string>
+
 <!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
@@ -315,7 +322,8 @@
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Pose für ausgewählten Avatar laden." name="poses_scroll">
-					<scroll_list.columns label="Name Pose" name="name"/>
+					<scroll_list.columns label="Name" name="load_file_name_column"/>
+					<scroll_list.columns label="Datum" name="load_file_date_column"/>
 				</scroll_list>
 				<line_editor label="Name für Pose zum Speichern eingeben..." name="pose_save_name"/>
 			</panel>
@@ -329,7 +337,7 @@
 				<button label="Eigene Posen" name="toggleLoadSavePanel" tool_tip="Laden, speichern under verwalten der eigenen erstellten Posen"/>
 				<button tool_tip="Posen-Verzeichnis verwalten" name="open_poseDir_button"/>
 				<menu_button label="Pose laden" tool_tip="Lädt die aktuell ausgewählte Pose." name="load_poses_button"/>
-				<button label="Diff. speich." tool_tip="Speichert die Differenz zu einer bestehenden Pose. Aus einer T-Pose heraus starten, um ein neues Werk zu beginnen." name="save_poses_button"/>
+				<button label="Diff. speichern" tool_tip="Speichert die Differenz zu einer bestehenden Pose. Aus einer T-Pose heraus starten, um ein neues Werk zu beginnen." name="save_poses_button"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>

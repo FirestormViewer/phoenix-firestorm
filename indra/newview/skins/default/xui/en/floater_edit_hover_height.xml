@@ -6,7 +6,7 @@
  can_close="true"
  can_resize="true"
  min_height="75"
- min_width="515"
+ min_width="280"
  height="75"
  layout="topleft"
  name="HoverHeight"
@@ -19,7 +19,7 @@
       <slider
      enabled="false"
      decimal_digits="3"
-     follows="top|left"
+     follows="top|left|right"
      height="15"
      increment="0.001"
      initial_value="0.0"
@@ -42,4 +42,33 @@
      name="BindCameraCheck"
      top_pad="10"
      width="237"/>
+
+  <button
+     layout="topleft"
+     enabled="false"
+     follows="top|right"
+     right="-60"
+     label="+"
+     name="PlusButton"
+     height="15"
+     top_delta="0"
+     width="24"/>
+  <button
+     layout="topleft"
+     enabled="false"
+     follows="top|right"
+     left_pad="4"
+     label="0"
+     name="ResetButton"
+     height="15"
+     width="24"/>
+  <button
+     layout="topleft"
+     enabled="false"
+     follows="top|right"
+     left_pad="4"
+     label="-"
+     name="MinusButton"
+     height="15"
+     width="24"/>
 </floater>

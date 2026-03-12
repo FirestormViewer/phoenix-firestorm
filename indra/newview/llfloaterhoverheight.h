@@ -45,6 +45,18 @@ public:
     void onSimulatorFeaturesReceived(const LLUUID &region_id);
     void updateEditEnabled();
 
+    // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
+    bool handleKey(KEY key, MASK mask, bool called_from_parent);
+    bool handleKeyUp(KEY key, MASK mask, bool called_from_parent);
+
+    void onResetButtonClicked();
+    void onPlusButtonClicked();
+    void onMinusButtonClicked();
+    void onButtonClicked(F32 value);
+
+    MASK mModifiers;
+    // </FS:Zi>
+
     /*virtual*/ void onClose(bool app_quitting);
     boost::signals2::connection mRegionChangedSlot;
 };

@@ -176,6 +176,12 @@
 	<string name="LoadDiffLabel">Ładuj różn.</string>
 	<string name="SaveDiffLabel">Zapis różn.</string>
 	<string name="OverWriteLabel">Nadpisać?</string>
+	<floater.string name="FiledateFormat">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<floater.string name="FiledateFormatAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</floater.string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -307,7 +313,8 @@
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Załaduj pozę dla animowanej postaci." name="poses_scroll">
-					<scroll_list.columns label="Poza" name="name" />
+					<scroll_list.columns label="Nazwa" name="load_file_name_column" />
+					<scroll_list.columns label="Data" name="load_file_date_column" />
 				</scroll_list>
 				<line_editor label="Nazwa pozy do zapisu..." name="pose_save_name" />
 			</panel>

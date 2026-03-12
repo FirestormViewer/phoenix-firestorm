@@ -979,6 +979,9 @@ Le client a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est 
 		Vous avez déjà un repère pour cet emplacement.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Le client n'a pas pu obtenir l'emplacement de la région. La région est peut-être temporairement indisponible ou a été supprimée.
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Vous ne pouvez pas créer de repère ici car le propriétaire du terrain ne l&apos;autorise pas.
 	</notification>

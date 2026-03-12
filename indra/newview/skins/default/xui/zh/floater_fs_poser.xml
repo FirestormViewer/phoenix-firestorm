@@ -309,7 +309,8 @@
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="為選定的化身載入姿勢。" name="poses_scroll">
-					<scroll_list.columns label="姿勢名稱" name="name"/>
+					<scroll_list.columns label="名稱" name="load_file_name_column"/>
+					<scroll_list.columns label="日期" name="load_file_date_column"/>
 				</scroll_list>
 				<line_editor label="輸入姿勢儲存名稱..." name="pose_save_name"/>
 			</panel>

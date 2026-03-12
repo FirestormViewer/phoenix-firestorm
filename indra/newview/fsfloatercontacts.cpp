@@ -272,7 +272,7 @@ void FSFloaterContacts::onOpen(const LLSD& key)
     }
     else
     {
-        floater_container->addFloater(this, true);
+        floater_container->addFloater(this, true, IM_NOTHING_SPECIAL);
     }
 
     openTab(key.asString());

@@ -2564,7 +2564,7 @@ You already have a landmark for this location.
    icon="alert.tga"
    name="LandmarkLocationUnknown"
    type="alert">
-Viewer wasn't able to get region's location. Region might be temporarily unavailable, was removed or landmark failed to load.
+Viewer wasn't able to get region's location. Region might be temporarily unavailable or was removed.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -7141,19 +7141,6 @@ Link to this from a web page to give others easy access to this location, or try
        text="SLurl is copied to my clipboard"/>
     </form>
   </notification>
-
-  <!-- <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know -->
-  <notification
-   icon="alertmodal.tga"
-   name="CopySLURLEmpty"
-   type="alertmodal">
-There was a problem copying this SLurl. The destination region might no longer exist.
-    <form name="form">
-      <ignore name="ignore"
-       text="Copying a SLurl failed"/>
-    </form>
-  </notification>
-  <!-- </FS:Zi> -->
 
   <notification
    icon="alertmodal.tga"
