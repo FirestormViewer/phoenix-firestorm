@@ -365,7 +365,14 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 // [/SL:KB]
     }
 
+    LLFloater* active_floater = getActiveFloater();
+
     LLMultiFloater::addFloater(floaterp, select_added_floater, insertion_point);
+
+    if (!select_added_floater && active_floater)
+    {
+        selectFloater(active_floater);
+    }
 
     LLUUID session_id = floaterp->getKey();
     mSessions[session_id] = floaterp;

@@ -977,7 +977,7 @@
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="221"
+						 top="244"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
@@ -1196,7 +1196,7 @@
 						top="2"
 						height="160"
 						width="160"
-						left="30"
+						left="26"
 						tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"
 						pinch_mode="false"
 						infinite_scroll_mode="true"/>

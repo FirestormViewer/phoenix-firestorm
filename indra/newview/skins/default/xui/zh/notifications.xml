@@ -992,6 +992,10 @@
 		你已經有這個位置的地標。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		無法確定該地區的位置。該地區可能暫時不可用或已被移除。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		你不能創造地標，因為土地所有者並不允許你這樣做。
 	</notification>

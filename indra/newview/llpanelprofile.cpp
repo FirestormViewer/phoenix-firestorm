@@ -2307,6 +2307,13 @@ void LLPanelProfileSecondLife::onHideAgeCallback()
 
 void LLPanelProfileSecondLife::onSaveDescriptionChanges()
 {
+    // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+    if (mPreview)
+    {
+        onCommitMenu(LLSD("preview"));
+    }
+    // </FS:Trish>
+
     mDescriptionText = mDescriptionEdit->getValue().asString();
     if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
@@ -2972,6 +2979,13 @@ void LLPanelProfileFirstLife::onSetDescriptionDirty()
 
 void LLPanelProfileFirstLife::onSaveDescriptionChanges()
 {
+    // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+    if (mPreview)
+    {
+        onClickPreview();
+    }
+    // </FS:Trish>
+
     mCurrentDescription = mDescriptionEdit->getValue().asString();
     if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {

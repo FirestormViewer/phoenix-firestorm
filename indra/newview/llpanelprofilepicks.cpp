@@ -784,6 +784,12 @@ void LLPanelProfilePick::apply()
 {
     if ((mNewPick || getIsLoaded()) && isDirty())
     {
+        // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+        if (mPreview)
+        {
+            onClickPreview();
+        }
+        // </FS:Trish>
         sendUpdate();
     }
 }
@@ -847,6 +853,13 @@ void LLPanelProfilePick::onClickTeleport()
 
 void LLPanelProfilePick::enableSaveButton(bool enable)
 {
+    //<FS:Trish> Fix Save Buttons being enabled in various cases while preview mode is on
+    if (mPreview)
+    {
+        enable = false;
+    }
+    //</FS:Trish>
+    
     childSetVisible("save_changes_lp", enable);
 
     childSetVisible("save_btn_lp", enable && !mNewPick);
