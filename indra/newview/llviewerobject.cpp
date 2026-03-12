@@ -2988,8 +2988,8 @@ void LLViewerObject::fetchInventoryFromCapCoro(const LLUUID task_inv)
     {
         LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
         LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-                                   httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("TaskInventoryRequest", httpPolicy));
-        LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+                                   httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("TaskInventoryRequest", httpPolicy);
+        LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
         std::string url = obj->mRegionp->getCapability("RequestTaskInventory") + "?task_id=" + obj->mID.asString();
         // If we already have a copy of the inventory then add it so the server won't re-send something we already have.
         // We expect this case to crop up in the case of failed inventory mutations, but it might happen otherwise as well.
@@ -7235,7 +7235,7 @@ void LLAlphaObject::getBlendFunc(S32 face, LLRender::eBlendFactor& src, LLRender
 void LLStaticViewerObject::updateDrawable(bool force_damped)
 {
     // Force an immediate rebuild on any update
-    if (mDrawable.notNull())
+    if (mDrawable.notNull() && mDrawable->getVObj())
     {
         mDrawable->updateXform(true);
         gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL);

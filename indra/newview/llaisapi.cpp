@@ -861,8 +861,8 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         return;
     }
 
-    LLCore::HttpOptions::ptr_t httpOptions(new LLCore::HttpOptions);
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+    LLCore::HttpOptions::ptr_t httpOptions = std::make_shared<LLCore::HttpOptions>();
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
     httpOptions->setTimeout(HTTP_TIMEOUT);
@@ -950,7 +950,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     LL_DEBUGS("Inventory", "AIS3") << "Result: " << result << LL_ENDL;
     onUpdateReceived(result, type, body);
 
-    if (callback && !callback.empty())
+    if (callback != nullptr)
     {
         bool needs_callback = true;
         LLUUID id(LLUUID::null);
@@ -1060,7 +1060,12 @@ void AISUpdate::checkTimeout()
 {
     if (mTimer.hasExpired())
     {
-        llcoro::suspend();
+        // If we are taking too long, don't starve other tasks,
+        // yield to mainloop.
+        // If we use normal suspend(), there will be a chance of
+        // waking up from other suspends, before main coro had
+        // a chance, so wait for a frame tick instead.
+        llcoro::suspendUntilNextFrame();
         LLCoros::checkStop();
         mTimer.setTimerExpirySec(AIS_EXPIRY_SECONDS);
     }

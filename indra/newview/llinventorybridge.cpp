@@ -1860,7 +1860,14 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
             {
                 LLVector3d global_pos;
                 landmark->getGlobalPos(global_pos);
-                LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                if (!global_pos.isExactlyZero())
+                {
+                    LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                }
+                else
+                {
+                    LLNotificationsUtil::add("LandmarkLocationUnknown");
+                }
             }
         }
     }
@@ -3316,7 +3323,7 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
 
     if (drop && accept)
     {
-        std::shared_ptr<LLMoveInv> move_inv(new LLMoveInv);
+        std::shared_ptr<LLMoveInv> move_inv = std::make_shared<LLMoveInv>();
         move_inv->mObjectID = object_id;
         move_inv->mCategoryID = category_id;
         move_inv->mCallback = callback;
@@ -5989,7 +5996,7 @@ bool LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
         if (accept && drop)
         {
             LLUUID item_id = inv_item->getUUID();
-            std::shared_ptr<LLMoveInv> move_inv (new LLMoveInv());
+            std::shared_ptr<LLMoveInv> move_inv = std::make_shared<LLMoveInv>();
             move_inv->mObjectID = inv_item->getParentUUID();
             two_uuids_t item_pair(mUUID, item_id);
             move_inv->mMoveList.push_back(item_pair);

@@ -219,6 +219,7 @@ set(viewer_SOURCE_FILES
     llfloatercreatelandmark.cpp
     llfloaterdeleteprefpreset.cpp
     llfloaterdestinations.cpp
+    llfloaterdirectory.cpp
     llfloaterdisplayname.cpp
     llfloatereditenvironmentbase.cpp
     llfloatereditextdaycycle.cpp
@@ -441,11 +442,20 @@ set(viewer_SOURCE_FILES
     llpanelblockedlist.cpp
     llpanelclassified.cpp
     llpanelcontents.cpp
+    llpaneldirbrowser.cpp
+    llpaneldirclassified.cpp
+    llpaneldirevents.cpp
+    llpaneldirgroups.cpp
+    llpaneldirland.cpp
+    llpaneldirpeople.cpp
+    llpaneldirplaces.cpp
+    llpaneldirweb.cpp
     llpaneleditsky.cpp
     llpaneleditwater.cpp
     llpaneleditwearable.cpp
     llpanelemojicomplete.cpp
     llpanelenvironment.cpp
+    llpaneleventinfo.cpp
     llpanelexperiencelisteditor.cpp
     llpanelexperiencelog.cpp
     llpanelexperiencepicker.cpp
@@ -726,7 +736,6 @@ set(viewer_SOURCE_FILES
     llvovolume.cpp
     llvowater.cpp
     llvowlsky.cpp
-    llwatchdog.cpp
     llwearableitemslist.cpp
     llwearablelist.cpp
     llweb.cpp
@@ -894,6 +903,7 @@ set(viewer_HEADER_FILES
     llfloatercreatelandmark.h
     llfloaterdeleteprefpreset.h
     llfloaterdestinations.h
+    llfloaterdirectory.h
     llfloaterdisplayname.h
     llfloatereditenvironmentbase.h
     llfloatereditextdaycycle.h
@@ -1108,11 +1118,20 @@ set(viewer_HEADER_FILES
     llpanelblockedlist.h
     llpanelclassified.h
     llpanelcontents.h
+    llpaneldirbrowser.h
+    llpaneldirclassified.h
+    llpaneldirevents.h
+    llpaneldirgroups.h
+    llpaneldirland.h
+    llpaneldirpeople.h
+    llpaneldirplaces.h
+    llpaneldirweb.h
     llpaneleditsky.h
     llpaneleditwater.h
     llpaneleditwearable.h
     llpanelemojicomplete.h
     llpanelenvironment.h
+    llpaneleventinfo.h
     llpanelexperiencelisteditor.h
     llpanelexperiencelog.h
     llpanelexperiencepicker.h
@@ -1394,7 +1413,6 @@ set(viewer_HEADER_FILES
     llvovolume.h
     llvowater.h
     llvowlsky.h
-    llwatchdog.h
     llwearableitemslist.h
     llwearablelist.h
     llweb.h
@@ -1963,6 +1981,7 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${CMAKE_CURRENT_BINARY_DIR}/llphysicsextensions/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensions  -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     elseif(HAVOK_TPV)
       set_target_properties(${VIEWER_BINARY_NAME}
           PROPERTIES
@@ -1973,6 +1992,7 @@ elseif (DARWIN)
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=x86_64] "$(inherited) -L${ARCH_PREBUILT_DIRS}/ -lllphysicsextensions_tpv"
           XCODE_ATTRIBUTE_OTHER_LDFLAGS[arch=arm64]  "$(inherited) -L${CMAKE_BINARY_DIR}/llphysicsextensionsos/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_CFG_INTDIR}>/ -lllphysicsextensionsos"
           )
+      add_dependencies(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     else()
       target_link_libraries(${VIEWER_BINARY_NAME} llphysicsextensionsos)
     endif()

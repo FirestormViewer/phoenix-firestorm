@@ -600,7 +600,7 @@ std::string LLCacheName::buildLegacyName(const std::string& complete_name)
 
 // This is a little bit kludgy. LLCacheNameCallback is a slot instead of a function pointer.
 //  The reason it is a slot is so that the legacy get() function below can bind an old callback
-//  and pass it as a slot. The reason it isn't a boost::function is so that trackable behavior
+//  and pass it as a slot. The reason it isn't a std::function is so that trackable behavior
 //  doesn't get lost. As a result, we have to bind the slot to a signal to call it, even when
 //  we call it immediately. -Steve
 // NOTE: Even though passing first and last name is a bit of extra overhead, it eliminates the
@@ -780,6 +780,7 @@ void LLCacheName::Impl::processPendingAsks()
 void LLCacheName::Impl::processPendingReplies()
 {
     // First call all the callbacks, because they might send messages.
+    // Todo: needs cleanup logic, otherwise invalid ids might stay here indefinitely
     for(ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); ++it)
     {
         PendingReply* reply = *it;

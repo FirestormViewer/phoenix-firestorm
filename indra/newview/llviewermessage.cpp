@@ -162,8 +162,8 @@ void accept_friendship_coro(std::string url, LLSD notification)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("friendshipResponceErrorProcessing", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("friendshipResponceErrorProcessing", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
     if (url.empty())
     {
         LL_WARNS("Friendship") << "Empty capability!" << LL_ENDL;
@@ -212,8 +212,8 @@ void decline_friendship_coro(std::string url, LLSD notification, S32 option)
     }
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("friendshipResponceErrorProcessing", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("friendshipResponceErrorProcessing", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     LLSD payload = notification["payload"];
     url += "?from=" + payload["from_id"].asString();
@@ -570,8 +570,8 @@ void response_group_invitation_coro(std::string url, LLUUID group_id, bool notif
 
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("responseGroupInvitation", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("responseGroupInvitation", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
 
     LLSD payload;
     payload["group"] = group_id;
@@ -1558,6 +1558,7 @@ void LLOfferInfo::sendReceiveResponse(bool accept, const LLUUID &destination_fol
     if (mTransactionID.isNull())
     {
         // Not provided, message won't work
+        LL_WARNS("Messaging") << "Missing transaction id, response for " << mIM << " won't work" << LL_ENDL;
         return;
     }
 
@@ -1600,6 +1601,8 @@ void LLOfferInfo::sendReceiveResponse(bool accept, const LLUUID &destination_fol
         msg->addU8Fast(_PREHASH_Dialog, (U8)(im + 1));
         msg->addBinaryDataFast(_PREHASH_BinaryBucket, &(destination_folder_id.mData),
                                 sizeof(destination_folder_id.mData));
+
+        LL_DEBUGS("Messaging") << "Processing" << (U8)(im + 1) << " with transaction id " << mTransactionID << LL_ENDL;
     }
     else
     {
@@ -2014,7 +2017,7 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 
     if (notification_ptr)
     {
-        LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+        LLNotificationFormPtr modified_form = std::make_shared<LLNotificationForm>(*notification_ptr->getForm());
         modified_form->setElementEnabled("Teleport", false);
         modified_form->setElementEnabled("Cancel", false);
         notification_ptr->updateForm(modified_form);

@@ -1223,7 +1223,7 @@ bool LLViewerMedia::parseRawCookie(const std::string raw_cookie, std::string& na
 /////////////////////////////////////////////////////////////////////////////////////////
 LLCore::HttpHeaders::ptr_t LLViewerMedia::getHttpHeaders()
 {
-    LLCore::HttpHeaders::ptr_t headers(new LLCore::HttpHeaders);
+    LLCore::HttpHeaders::ptr_t headers = std::make_shared<LLCore::HttpHeaders>();
 
     headers->append(HTTP_OUT_HEADER_ACCEPT, "*/*");
     headers->append(HTTP_OUT_HEADER_CONTENT_TYPE, HTTP_CONTENT_XML);
@@ -1299,10 +1299,10 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("getOpenIDCookieCoro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
-    LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("getOpenIDCookieCoro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
+    LLCore::HttpHeaders::ptr_t httpHeaders = std::make_shared<LLCore::HttpHeaders>();
 
     httpOpts->setFollowRedirects(true);
     httpOpts->setWantHeaders(true);
@@ -1441,10 +1441,10 @@ void LLViewerMedia::openIDSetupCoro(std::string openidUrl, std::string openidTok
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("openIDSetupCoro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
-    LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("openIDSetupCoro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
+    LLCore::HttpHeaders::ptr_t httpHeaders = std::make_shared<LLCore::HttpHeaders>();
 
     httpOpts->setWantHeaders(true);
 
@@ -2715,10 +2715,10 @@ void LLViewerMediaImpl::mimeDiscoveryCoro(std::string url)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("mimeDiscoveryCoro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
-    LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
+        httpAdapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("mimeDiscoveryCoro", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
+    LLCore::HttpHeaders::ptr_t httpHeaders = std::make_shared<LLCore::HttpHeaders>();
 
     // Increment our refcount so that we do not go away while the coroutine is active.
     this->ref();
