@@ -689,6 +689,44 @@ public:
     }
 };
 
+// <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+class FSCefCachePurgeThread : public LLThread
+{
+public:
+    std::string mCefCachePath;
+
+    FSCefCachePurgeThread(const std::string& cef_cache_path) : LLThread("cef cache purge")
+    {
+        mCefCachePath = cef_cache_path;
+    }
+
+    void run()
+    {
+        // Check if the entire cache path can be purged
+        std::string cef_cache_path_old = mCefCachePath + "_old";
+        if (LLFile::isdir(cef_cache_path_old))
+        {
+            gDirUtilp->deleteDirAndContents(cef_cache_path_old);
+            return;
+        }
+
+        // Otherwise, purge individual folders that aren't in use
+        std::vector<std::string> cef_caches = gDirUtilp->getDirectoriesInDir(mCefCachePath);
+        for (const auto& cache_dir : cef_caches)
+        {
+            if (!LLAppViewer::instance()->isQuitting())
+            {
+                if (cache_dir.ends_with("_old"))
+                {
+                    std::string cef_cache_path = mCefCachePath + "\\" + cache_dir;
+                    gDirUtilp->deleteDirAndContents(cef_cache_path);
+                }
+            }
+        }
+    }
+};
+// </FS:TJ>
+
 //virtual
 bool LLAppViewer::initSLURLHandler()
 {
@@ -740,6 +778,7 @@ LLAppViewer::LLAppViewer()
     mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", false)),
     mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", false)),
     mFastTimerLogThread(NULL),
+    mCefCachePurgeThread(NULL), // <FS:TJ/> For CEF cache purging in a background thread
     mSettingsLocationList(NULL),
     mIsFirstRun(false),
     mSaveSettingsOnExit(true),      // <FS:Zi> Backup Settings
@@ -1571,8 +1610,6 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
-    LL_RECORD_BLOCK_TIME(FTM_FRAME);
-    LL_PROFILE_GPU_ZONE("Frame");
     resumeMainloopTimeout("Main:doFrameStart");
 #ifdef LL_DISCORD
     {
@@ -1937,17 +1974,20 @@ bool LLAppViewer::doFrame()
 
     if (LLApp::isExiting())
     {
+        pingMainloopTimeout("Main:qSnapshot");
         // Save snapshot for next time, if we made it through initialization
         if (STATE_STARTED == LLStartUp::getStartupState())
         {
             saveFinalSnapshot();
         }
 
+        pingMainloopTimeout("Main:TerminateVoice");
         if (LLVoiceClient::instanceExists())
         {
             LLVoiceClient::getInstance()->terminate();
         }
 
+        pingMainloopTimeout("Main:TerminatePump");
         delete gServicePump;
         gServicePump = NULL;
 
@@ -2483,6 +2523,10 @@ bool LLAppViewer::cleanup()
     sPurgeDiskCacheThread = NULL;
     delete mGeneralThreadPool;
     mGeneralThreadPool = NULL;
+    // <FS:TJ> For CEF cache purging in a background thread
+    delete mCefCachePurgeThread;
+    mCefCachePurgeThread = NULL;
+    // </FS:TJ>
 
     if (LLFastTimerView::sAnalyzePerformance)
     {
@@ -3775,7 +3819,6 @@ bool LLAppViewer::initWindow()
                 app->createErrorMarker(LAST_EXEC_FROZE);
             }
         });
-        gViewerWindow->getWindow()->initWatchdog();
     }
 
     // <FS:Ansariel> Init group notices, IMs and chiclets position before the
@@ -3902,6 +3945,7 @@ LLSD LLAppViewer::getViewerInfo() const
     info["VIEWER_VERSION"] = llsd::array(versionInfo.getMajor(), versionInfo.getMinor(),
                                          versionInfo.getPatch(), stringize(versionInfo.getBuild()));
     info["VIEWER_VERSION_STR"] = versionInfo.getVersion();
+    info["VIEWER_VERSION_LL"] = versionInfo.getLLViewerVersion(); // <FS:PP>
     info["BUILD_DATE"] = __DATE__;
     info["BUILD_TIME"] = __TIME__;
     info["CHANNEL"] = versionInfo.getChannel();
@@ -4963,6 +5007,7 @@ void LLAppViewer::requestQuit()
         return;
     }
 
+    pingMainloopTimeout("Main:qMetrics");
     // Try to send metrics back to the grid
     metricsSend(!gDisconnected);
 
@@ -4978,6 +5023,7 @@ void LLAppViewer::requestQuit()
     LLHUDManager::getInstance()->sendEffects();
     effectp->markDead() ;//remove it.
 
+    pingMainloopTimeout("Main:qFloaters");
     // Attempt to close all floaters that might be
     // editing things.
     if (gFloaterView)
@@ -4986,6 +5032,7 @@ void LLAppViewer::requestQuit()
         gFloaterView->closeAllChildren(true);
         mClosingFloaters = true;
     }
+    pingMainloopTimeout("Main:qStats");
 
     // Send preferences once, when exiting
     // <FS:Ansariel> Don't send all non-default settings which might result in a violation of GDPR
@@ -4995,6 +5042,7 @@ void LLAppViewer::requestQuit()
 
     gLogoutTimer.reset();
     mQuitRequested = true;
+    pingMainloopTimeout("Main:LoggingOut");
 }
 
 static bool finish_quit(const LLSD& notification, const LLSD& response)
@@ -5338,7 +5386,10 @@ bool LLAppViewer::initCache()
     LLVOCache::getInstance()->initCache(LL_PATH_CACHE, CACHE_NUMBER_OF_REGIONS_FOR_OBJECTS, getObjectCacheVersion());
 
     // Remove old, stale CEF cache folders
-    purgeCefStaleCaches();
+    // <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+    //purgeCefStaleCaches();
+    startCefCachePurge();
+    // </FS:TJ>
 
     return true;
 }
@@ -5378,6 +5429,33 @@ void LLAppViewer::purgeCefStaleCaches()
         gDirUtilp->deleteDirAndContents(browser_parent_cache);
     }
 }
+
+// <FS:TJ> Purge CEF cache in another thread to prevent very slow startup times
+void LLAppViewer::startCefCachePurge()
+{
+    const std::string browser_parent_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+    if (LLFile::isdir(browser_parent_cache))
+    {
+        // Try rename the entire cef cache folder to be purged in the background thread
+        if (LLFile::rename(browser_parent_cache, browser_parent_cache + "_old", -1) == -1)
+        {
+            // Otherwise rename the individual cache folders to be purged in the background thread
+            std::vector<std::string> cef_caches = gDirUtilp->getDirectoriesInDir(browser_parent_cache);
+            for (const auto& cache_dir : cef_caches)
+            {
+                if (!cache_dir.ends_with("_old"))
+                {
+                    std::string cef_cache_path = browser_parent_cache + "\\" + cache_dir;
+                    LLFile::rename(cef_cache_path, cef_cache_path + "_old", -1);
+                }
+            }
+        }
+
+        mCefCachePurgeThread = new FSCefCachePurgeThread(browser_parent_cache);
+        mCefCachePurgeThread->start();
+    }
+}
+// </FS:TJ>
 
 void LLAppViewer::purgeCache()
 {
@@ -6404,6 +6482,7 @@ void LLAppViewer::outOfMemorySoftQuit()
         LLLFSThread::sLocal->pause();
         gLogoutTimer.reset();
         mQuitRequested = true;
+        destroyMainloopTimeout();
 
         LLError::LLUserWarningMsg::showOutOfMemory();
     }
@@ -6840,6 +6919,11 @@ void LLAppViewer::pingMainloopTimeout(std::string_view state)
 
 F32 LLAppViewer::getMainloopTimeoutSec() const
 {
+    if (isQuitting() || mQuitRequested)
+    {
+        constexpr F32 QUITTING_SECONDS = 240.f;
+        return QUITTING_SECONDS;
+    }
     if (LLStartUp::getStartupState() == STATE_STARTED
         && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
     {
@@ -6858,6 +6942,11 @@ void LLAppViewer::handleLoginComplete()
 {
     gLoggedInTime.start();
     initMainloopTimeout("Mainloop Init");
+    LLWindow* viewer_window = gViewerWindow->getWindow();
+    if (viewer_window) // in case of a headless client
+    {
+        viewer_window->initWatchdog();
+    }
 
     // Store some data to DebugInfo in case of a freeze.
     gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::instance().getChannel();

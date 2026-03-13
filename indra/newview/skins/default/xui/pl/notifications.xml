@@ -905,6 +905,9 @@ Podczas otwierania pliku w przeglądarce zabrakło pamięci. Plik może być za 
 	<notification name="LandmarkAlreadyExists">
 		Posiadasz już landmark dla tej lokalizacji.
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Przeglądarka nie była w stanie pobrać lokalizacji regionu. Region może być tymczasowo niedostępny lub został usunięty.
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel działki nie pozwala na to.
 	</notification>
@@ -4128,6 +4131,9 @@ Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 		Nie można zmienić nazwy zestawu AO "[AO_SET_NAME]".
 Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 	</notification>
+	<notification name="NewAONameCantExist">
+		Zestaw animacji o tej nazwie już istnieje.
+	</notification>
 	<notification name="RemoveAOSet">
 		Usunąć zestaw AO "[AO_SET_NAME]" z listy?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Usuń"/>
@@ -5610,5 +5616,9 @@ Komunikat błędu:
 
 Komunikat błędu:
 [ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="ChatHistoryIsMissing">
+		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
+Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
 	</notification>
 </notifications>

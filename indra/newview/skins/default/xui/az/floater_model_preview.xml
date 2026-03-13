@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Model yüklənməsi">
-  <string name="no_havok">fizikası olan mesh yüklənir</string>
   <string name="status_parse_error">Xəta: DAE faylının təhlilində problem var - Ətraflı məlumatlar üçün jurnalı baxın.</string>
   <string name="status_bind_shape_orientation">Xəbərdarlıq: Matrix formu standart olaraq X koordinatına uyğun deyil.</string>
   <string name="status_material_mismatch">Xəta: Modelin materialı standart modeldə yoxdur.</string>
@@ -24,7 +23,6 @@
   <string name="phys_status_vertex_limit_exceeded">Bəzi fiziki qabıqlar üçün vertex limiti aşıldı (256); Digər 'Analiz Metodu'nu sınayın.</string>
   <string name="phys_status_hull_limit_exceeded">Bəzi modellər qabığın limitini keçir (256); 'Sadələşdirmə'ni sınayın.</string>
   <string name="phys_status_degenerate_triangles">Mesh fizikası çox sıxdır və ya degenerativ üçbucaqları ehtiva edir. Həll etmək üçün Analiz/Sadələşdirmədən istifadə edin.</string>
-  <string name="phys_status_no_havok">Bu versiya Havok-u dəstəkləmir və fizikanı Second Life-a yükləmək üçün tövsiyə edilmir. Nəticələr gözlənilməz ola bilər.</string>
   <string name="phys_status_too_thin">0,5 m-dən kiçik bir və ya bir neçə ölçü, yalnız gövdəyə əsaslanan fiziki formalar (təhlil edilmiş) düzgün işləyəcək.</string>
   <string name="phys_status_unknown_error">Tanınmamış xəta tapıldı.</string>
   <string name="layer_all">Hamısı</string>

@@ -4002,6 +4002,9 @@ Davam edilsin?
 		"[AO_SET_NAME]" AO dəstinin adını dəyişmək mümkün deyil.
 (Ad ":" və ya "|" istisna olmaqla istənilən ASCII simvolunu ehtiva edə bilər)
 	</notification>
+	<notification name="NewAONameCantExist">
+		Bu adda animasiya dəsti artıq mövcuddur.
+	</notification>
 	<notification name="RemoveAOSet">
 		AO dəsti "[AO_SET_NAME]" siyahıdan silinsin?
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Sil"/>

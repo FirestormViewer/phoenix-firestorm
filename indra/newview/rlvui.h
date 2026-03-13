@@ -46,6 +46,7 @@ protected:
     void onRefreshHoverText();                                          // showloc, shownames, showhovertext(all|world|hud)
     void onToggleMovement();                                            // fly, alwaysrun and temprun
     void onToggleShowLoc();                                             // showloc
+    void onToggleShowNames();                                           // shownames
     void onToggleShowMinimap();                                         // showminimap
     void onToggleShowWorldMap();                                        // showworldmap
     void onToggleTp();                                                  // tploc and tplm

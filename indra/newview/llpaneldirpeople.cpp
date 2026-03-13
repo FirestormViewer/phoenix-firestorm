@@ -34,6 +34,8 @@
 #include "llqueryflags.h"
 #include "llnotificationsutil.h"
 
+#include "llavataractions.h"
+
 static LLPanelInjector<LLPanelDirPeople> t_panel_dir_people("panel_dir_people");
 
 LLPanelDirPeople::LLPanelDirPeople()
@@ -103,3 +105,10 @@ void LLPanelDirPeople::performQuery()
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirPeople::openProfile()
+{
+    LLAvatarActions::showProfile(mSelectedID);
+}
+// </FS:Ansariel>

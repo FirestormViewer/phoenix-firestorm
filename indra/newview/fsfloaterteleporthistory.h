@@ -53,8 +53,8 @@ private:
 
     LLTeleportHistoryPanel* mHistoryPanel;
     LLFilterEditor*         mFilterEditor;
-    LLMenuButton*               mGearMenuButton;
-    LLMenuButton*               mSortingMenuButton;
+    LLMenuButton*           mGearMenuButton;
+    LLMenuButton*           mSortingMenuButton;
 };
 
 #endif // FS_FLOATERTELEPORTHISTORY_H

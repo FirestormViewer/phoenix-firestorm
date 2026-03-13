@@ -17,6 +17,7 @@
 		<menu_item_call label="Портал поддержки" name="Support portal"/>
 		<menu_item_call label="Блоги: [SECOND_LIFE]" name="Second Life Blogs"/>
 		 -->
+		<menu_item_call label="Советник Белого Списка" name="whitelist_folders"/>
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
 		<menu_item_call label="Информация о [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Помощь для [CURRENT_GRID]" name="current_grid_help_login"/>

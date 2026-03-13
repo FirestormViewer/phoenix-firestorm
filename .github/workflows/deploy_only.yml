@@ -45,7 +45,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v16
         id: download
         with:
           workflow: build_viewer.yml
@@ -94,5 +94,5 @@ jobs:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - name: Copy files to remote host
-        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
+        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:downloads/${{ env.FS_RELEASE_FOLDER }}
 

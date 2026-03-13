@@ -27,7 +27,6 @@
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
-#include "lldir.h"
 #include "llfoldertype.h"
 #include "llinventoryfunctions.h"   // for ROOT_FIRESTORM_FOLDER
 #include "llinventorytype.h"
@@ -41,7 +40,6 @@
 #include "llviewerobject.h"
 #include "llviewerpartsim.h"
 #include "llviewerpartsource.h"
-#include "llviewerregion.h"
 #include "llwindow.h"
 #include "llviewerassetupload.h"
 

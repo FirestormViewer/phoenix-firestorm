@@ -4206,6 +4206,9 @@ https://wiki.firestormviewer.org/fs_voice
 		Невозможно переименовать набор АО "[AO_SET_NAME]".
 Имя может содержать любые ASCII символ, за исключением ":" или "|"
 	</notification>
+	<notification name="NewAONameCantExist">
+		АО с данным именем уже существует.
+	</notification>
 	<notification name="RemoveAOSet">
 		Удалить набор АО "[AO_SET_NAME]" из списка?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Удалить"/>

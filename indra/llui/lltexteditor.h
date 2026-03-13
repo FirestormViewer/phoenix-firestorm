@@ -228,7 +228,10 @@ public:
     void            hideEmojiHelper();
     void            setShowEmojiHelper(bool show);
     bool            getShowEmojiHelper() const { return mShowEmojiHelper; }
-
+    // <FS:Trish> RLV: Used to toggle mentionPicker on/off when under shownames restriction
+    void            setShowChatMentionPicker(bool show) { mShowChatMentionPicker = show; }
+    bool            getShowChatMentionPicker() const { return mShowChatMentionPicker; }
+    // </FS:Trish>
     void            setPassDelete(bool b) { mPassDelete = b; }
 
     LLWString       getConvertedText() const;

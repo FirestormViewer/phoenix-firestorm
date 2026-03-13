@@ -151,7 +151,7 @@ void AOEngine::onPauseAO()
     }
 }
 
-void AOEngine::clear(bool from_timer)
+void AOEngine::clear(bool fromTimer)
 {
     std::move(mSets.begin(), mSets.end(), std::back_inserter(mOldSets));
     mSets.clear();
@@ -160,7 +160,7 @@ void AOEngine::clear(bool from_timer)
 
     //<ND/> FIRE-3801; We cannot delete any AOSet object if we're called from a timer tick. AOSet is derived from LLEventTimer and destruction will
     // fail in ~LLInstanceTracker when a destructor runs during iteration.
-    if (!from_timer)
+    if (!fromTimer)
     {
         std::for_each(mOldSets.begin(), mOldSets.end(), DeletePointer());
         mOldSets.clear();
@@ -222,7 +222,7 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
     }
 }
 
-bool AOEngine::foreignAnimations()
+bool AOEngine::foreignAnimations() const
 {
     // checking foreign animations only makes sense when smart sit is enabled
     if (!mCurrentSet->getSmart())
@@ -520,7 +520,7 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
     }
 }
 
-const LLUUID AOEngine::override(const LLUUID& motion, bool start)
+LLUUID AOEngine::override(const LLUUID& motion, bool start)
 {
     LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(motion) << "," << start << ")" << LL_ENDL;
 
@@ -861,7 +861,7 @@ void AOEngine::cycleTimeout(const AOSet* set)
     cycle(CycleAny);
 }
 
-void AOEngine::cycle(eCycleMode cycleMode)
+void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
 {
     if (!mEnabled)
     {
@@ -980,9 +980,13 @@ void AOEngine::cycle(eCycleMode cycleMode)
         gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
         gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
     }
+
+    if (resetTimer)
+    {
+        mCurrentSet->resetTimer();
+    }
 }
 
-// <AS:Chanayane> Double click on animation in AO
 void AOEngine::playAnimation(const LLUUID& animation)
 {
     if (!mEnabled)
@@ -1098,6 +1102,8 @@ void AOEngine::playAnimation(const LLUUID& animation)
         gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
         gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
     }
+
+    mCurrentSet->resetTimer();
 }
 
 const AOSet* AOEngine::getCurrentSet() const
@@ -1108,7 +1114,6 @@ const AOSet::AOState* AOEngine::getCurrentState() const
 {
     return mCurrentSet->getStateByRemapID(mLastMotion);
 }
-// </AS:Chanayane>
 
 void AOEngine::updateSortOrder(AOSet::AOState* state)
 {
@@ -1579,6 +1584,7 @@ void AOEngine::update()
 
     if (categories)
     {
+        std::vector<std::pair<LLUUID, AOSet*>> setsToWrite;
         for (const auto& currentCategory : *categories)
         {
             const std::string& setFolderName = currentCategory->getName();
@@ -1605,13 +1611,7 @@ void AOEngine::update()
                 newSet = new AOSet(currentCategory->getUUID());
                 newSet->setName(setName);
                 mSets.emplace_back(newSet);
-
-                if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
-                    currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == setName)
-                {
-                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << setName << LL_ENDL;
-                    mCurrentSet = newSet;
-                }
+                setsToWrite.emplace_back(currentCategory->getUUID(), newSet);
             }
             else
             {
@@ -1645,31 +1645,41 @@ void AOEngine::update()
                 else if (params[num] == "**")
                 {
                     mDefaultSet = newSet;
-                    if (!mCurrentSet)
-                    {
-                        LL_DEBUGS("AOEngine") << "No set selected as current yet - setting default set as current: " << setName << LL_ENDL;
-                        mCurrentSet = newSet;
-                    }
+                    mCurrentSet = newSet;
                 }
                 else
                 {
                     LL_WARNS("AOEngine") << "Unknown AO set option " << params[num] << LL_ENDL;
                 }
             }
+        }
 
-            if (gInventory.isCategoryComplete(currentCategory->getUUID()))
+        for (const auto& [categoryUUID, newSet] : setsToWrite)
+        {
+            if (!mDefaultSet)
             {
-                LL_DEBUGS("AOEngine") << "Set " << params[0] << " is complete, reading states ..." << LL_ENDL;
+                // No default is set, so instead use the set saved in FSCurrentAOState
+                if (auto currentState = gSavedPerAccountSettings.getLLSD("FSCurrentAOState");
+                    currentState.has("CurrentSet") && currentState["CurrentSet"].asString() == newSet->getName())
+                {
+                    LL_DEBUGS("AOEngine") << "Selecting current set from settings: " << newSet->getName() << LL_ENDL;
+                    mCurrentSet = newSet;
+                }
+            }
+
+            if (gInventory.isCategoryComplete(categoryUUID))
+            {
+                LL_DEBUGS("AOEngine") << "Set " << newSet->getName() << " is complete, reading states ..." << LL_ENDL;
 
                 LLInventoryModel::cat_array_t* stateCategories;
-                gInventory.getDirectDescendentsOf(currentCategory->getUUID(), stateCategories, items);
+                gInventory.getDirectDescendentsOf(categoryUUID, stateCategories, items);
                 newSet->setComplete(true);
 
                 for (const auto& stateCategory : *stateCategories)
                 {
                     std::vector<std::string> state_params;
                     LLStringUtil::getTokens(stateCategory->getName(), state_params, ":");
-                    if (params.empty())
+                    if (state_params.empty())
                     {
                         LL_WARNS("AOEngine") << "Unexpected state folder found in ao set: " << stateCategory->getName() << LL_ENDL;
                         continue;
@@ -1721,8 +1731,8 @@ void AOEngine::update()
             }
             else
             {
-                LL_DEBUGS("AOEngine") << "Set " << setName << " is incomplete, fetching descendents" << LL_ENDL;
-                gInventory.fetchDescendentsOf(currentCategory->getUUID());
+                LL_DEBUGS("AOEngine") << "Set " << newSet->getName() << " is incomplete, fetching descendents" << LL_ENDL;
+                gInventory.fetchDescendentsOf(categoryUUID);
             }
         }
     }
@@ -1746,7 +1756,7 @@ void AOEngine::update()
     }
 }
 
-void AOEngine::reload(bool aFromTimer)
+void AOEngine::reload(bool fromTimer)
 {
     bool wasEnabled = mEnabled;
 
@@ -1760,7 +1770,7 @@ void AOEngine::reload(bool aFromTimer)
     gAgent.stopCurrentAnimations();
     mLastOverriddenMotion = ANIM_AGENT_STAND;
 
-    clear(aFromTimer);
+    clear(fromTimer);
     mAOFolder.setNull();
     mTimerCollection.enableInventoryTimer(true);
     tick();
@@ -1771,7 +1781,7 @@ void AOEngine::reload(bool aFromTimer)
     }
 }
 
-AOSet* AOEngine::getSetByName(const std::string& name) const
+AOSet* AOEngine::getSetByName(std::string_view name) const
 {
     for (auto set : mSets)
     {
@@ -1819,7 +1829,7 @@ void AOEngine::selectSet(AOSet* set)
     }
 }
 
-AOSet* AOEngine::selectSetByName(const std::string& name)
+AOSet* AOEngine::selectSetByName(std::string_view name)
 {
     if (AOSet* set = getSetByName(name))
     {
@@ -1880,9 +1890,9 @@ void AOEngine::saveSet(const AOSet* set)
     mUpdatedSignal();
 }
 
-bool AOEngine::renameSet(AOSet* set, const std::string& name)
+bool AOEngine::renameSet(AOSet* set, std::string_view name)
 {
-    if (name.empty() || name.find(":") != std::string::npos)
+    if (name.empty() || name.find(":") != std::string_view::npos)
     {
         return false;
     }
@@ -2362,7 +2372,7 @@ void AOEngine::parseNotecard(const char* buffer)
                 continue;
             }
             animation.mSortOrder = animIndex;
-            newState->mAnimations.push_back(animation);
+            newState->mAnimations.push_back(std::move(animation));
             isValid = true;
         }
     }

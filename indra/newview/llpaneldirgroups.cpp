@@ -33,6 +33,8 @@
 #include "llviewercontrol.h"
 #include "llsearcheditor.h"
 
+#include "llgroupactions.h"
+
 static LLPanelInjector<LLPanelDirGroups> t_panel_dir_groups("panel_dir_groups");
 
 LLPanelDirGroups::LLPanelDirGroups()
@@ -88,3 +90,10 @@ void LLPanelDirGroups::performQuery()
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirGroups::openProfile()
+{
+    LLGroupActions::show(mSelectedID);
+}
+// </FS:Ansariel>

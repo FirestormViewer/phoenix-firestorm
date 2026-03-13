@@ -188,6 +188,7 @@ public:
 
     static void filterLocation(std::string& strUTF8Text);                           // @showloc
     static void filterNames(std::string& strUTF8Text, bool fFilterLegacy = true, bool fClearMatches = false);   // @shownames
+    static void filterMentions(std::string& strUTF8Text);                           // @shownames (mention URIs)
     static void filterScriptQuestions(S32& nQuestions, LLSD& sdPayload);
 
     static bool isForceTp() { return m_fForceTp; }

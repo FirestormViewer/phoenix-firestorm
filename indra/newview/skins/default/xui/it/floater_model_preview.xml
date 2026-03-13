@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Caricamento Modello Mesh">
-	<string name="no_havok">
-		caricamento mesh con fisica
-	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Errore: Errore elaborazione Dae - vedere il registro per informazioni dettagliate.
@@ -72,9 +69,6 @@
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		La mesh fisica è troppo densa o contiene triangoli degenerati. Utilizzare Analizza/Semplifica per risolvere.
-	</string>
-	<string name="phys_status_no_havok">
-		Questa versione non contiene supporto Havok e non è consigliata per il caricamento di dati fisici in Second Life. I risultati potrebbero essere imprevedibili.
 	</string>
 	<string name="phys_status_too_thin">
 		Una o più dimensioni sono inferiori a 0,5 m, solo le forme fisiche basate sull'hull (analizzate) funzioneranno correttamente.

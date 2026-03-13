@@ -29,7 +29,7 @@
 #include "llanimationstates.h"
 #include "llinventorymodel.h"
 
-AOSet::AOSet(const LLUUID inventoryID)
+AOSet::AOSet(const LLUUID& inventoryID)
 :   LLEventTimer(10000.0f),
     mInventoryID(inventoryID),
     mName("** New AO Set **"),
@@ -232,6 +232,12 @@ void AOSet::stopTimer()
     mEventTimer.stop();
 }
 
+void AOSet::resetTimer()
+{
+    LL_DEBUGS("AOEngine") << "Resetting timer for " << getName() << "." << LL_ENDL;
+    mEventTimer.reset();
+}
+
 bool AOSet::tick()
 {
     AOEngine::instance().cycleTimeout(this);
@@ -253,7 +259,7 @@ const std::string& AOSet::getName() const
     return mName;
 }
 
-void AOSet::setName(const std::string& name)
+void AOSet::setName(std::string_view name)
 {
     mName = name;
 }

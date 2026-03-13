@@ -18,6 +18,11 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	<string name="AboutHeader">
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Second Life Viewer との互換性: [VIEWER_VERSION_LL]
+	</string>
 	<string name="AboutCompiler">
 		コンパイラのバージョン：[COMPILER] [COMPILER_VERSION]
 	</string>
@@ -6600,4 +6605,7 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Very High">高品位</string>
 	<string name="Ultra">ウルトラ</string>
 	<string name="Maximum">最大</string>
+
+	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
+
 </strings>

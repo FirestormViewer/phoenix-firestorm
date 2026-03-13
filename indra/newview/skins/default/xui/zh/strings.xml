@@ -48,6 +48,7 @@
 	<string name="AboutHeader">
 [APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+与 Second Life Viewer 保持一致: [VIEWER_VERSION_LL]
 	</string>
 	<string name="AboutCompiler">
 		Built with [COMPILER] version [COMPILER_VERSION]
@@ -5329,7 +5330,7 @@ support@secondlife.com.
 		新身體物理
 	</string>
 	<string name="Invalid Wearable">
-		無效的可穿裝扮
+		無效的服装
 	</string>
 	<string name="New Gesture">
 		新手勢

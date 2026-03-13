@@ -25,9 +25,9 @@
 			<check_box label="在庫存中的物件轉讓給其他化身時建立粒子效果" name="FSCreateGiveInventoryParticleEffect" />
 			<button label="管理已封鎖/靜音的內容" name="block_list" />
 		</panel>
-		<panel label="記錄與記錄" name="tab-logging">
+		<panel label="記錄與聊天內容" name="tab-logging">
 			<text name="logging_label">儲存：</text>
-			<combo_box tool_tip="記錄（聊天歷史記錄）：您和另一個人之間的所有聊天列表。聊天內容：當前螢幕上顯示的文字。" name="conversation_log_combo">
+			<combo_box tool_tip="記錄（聊天歷史記錄）：您和另一個人之間的所有聊天歷史。聊天內容：當前螢幕上顯示的文字。" name="conversation_log_combo">
 				<item name="log_and_transcripts" label="記錄和聊天內容" />
 				<item name="log_only" label="僅記錄" />
 				<item name="no_log_or_transcript" label="無記錄或聊天內容" />

@@ -13,7 +13,10 @@
         Searching...
     </string>
     <string name="not_found_text">
-        None Found.
+        None found.
+    </string>
+    <string name="found_text">
+        [COUNT] found.
     </string>
     <text
      bg_visible="false"

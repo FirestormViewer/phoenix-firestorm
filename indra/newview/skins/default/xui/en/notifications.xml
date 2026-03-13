@@ -2564,7 +2564,7 @@ You already have a landmark for this location.
    icon="alert.tga"
    name="LandmarkLocationUnknown"
    type="alert">
-Viewer wasn't able to get region's location. Region might be temporarily unavailable, was removed or landmark failed to load.
+Viewer wasn't able to get region's location. Region might be temporarily unavailable or was removed.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -11089,6 +11089,16 @@ The name may only contain ASCII characters, excluding ":" and "|".
    type="alertmodal">
 Could not rename AO set "[AO_SET_NAME]".
 The name may only contain ASCII characters, excluding ":" and "|".
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="NewAONameCantExist"
+   type="alertmodal">
+An animation set with this name already exists.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

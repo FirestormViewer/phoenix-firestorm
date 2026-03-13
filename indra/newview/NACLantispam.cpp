@@ -31,12 +31,12 @@ void NACLAntiSpamQueueEntry::clearEntry()
     mBlocked = false;
 }
 
-U32 NACLAntiSpamQueueEntry::getEntryAmount()
+U32 NACLAntiSpamQueueEntry::getEntryAmount() const
 {
     return mEntryAmount;
 }
 
-U32 NACLAntiSpamQueueEntry::getEntryTime()
+U32 NACLAntiSpamQueueEntry::getEntryTime() const
 {
     return mEntryTime;
 }
@@ -56,7 +56,7 @@ void NACLAntiSpamQueueEntry::setBlocked()
     mBlocked = true;
 }
 
-bool NACLAntiSpamQueueEntry::getBlocked()
+bool NACLAntiSpamQueueEntry::getBlocked() const
 {
     return mBlocked;
 }
@@ -84,12 +84,12 @@ void NACLAntiSpamQueue::setTime(U32 time)
     mQueueTime = time;
 }
 
-U32 NACLAntiSpamQueue::getTime()
+U32 NACLAntiSpamQueue::getTime() const
 {
     return mQueueTime;
 }
 
-U32 NACLAntiSpamQueue::getAmount()
+U32 NACLAntiSpamQueue::getAmount() const
 {
     return mQueueAmount;
 }
@@ -473,7 +473,7 @@ bool NACLAntiSpamRegistry::checkNewlineFlood(EAntispamQueue queue, const LLUUID&
     return true;
 }
 
-bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source)
+bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source) 
 {
     // skip all checks if we're we've been administratively turned off
     static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");

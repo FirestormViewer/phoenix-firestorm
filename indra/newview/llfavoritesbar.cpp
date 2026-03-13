@@ -1542,6 +1542,14 @@ bool LLFavoritesBarCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 }
 void copy_slurl_to_clipboard_cb(std::string& slurl)
 {
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    if (slurl.empty())
+    {
+        LLNotificationsUtil::add("LandmarkLocationUnknown");
+        return;
+    }
+    // </FS:Zi>
+
     LLClipboard::instance().copyToClipboard(utf8str_to_wstring(slurl), 0, static_cast<S32>(slurl.size()));
 
     LLSD args;

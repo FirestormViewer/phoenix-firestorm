@@ -47,13 +47,10 @@ public:
         {}
     };
 
-    virtual ~FSWearableFavoritesItemsList() {}
+    virtual ~FSWearableFavoritesItemsList() = default;
 
-    /* virtual */ bool  handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                   EDragAndDropType cargo_type,
-                                   void* cargo_data,
-                                   EAcceptance* accept,
-                                   std::string& tooltip_msg);
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept,
+                           std::string& tooltip_msg) override;
 
     typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
     boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
@@ -79,11 +76,11 @@ public:
     FSFloaterWearableFavorites(const LLSD& key);
     virtual ~FSFloaterWearableFavorites();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& info);
-    /*virtual*/ void draw();
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    void onOpen(const LLSD& info) override;
+    void draw() override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
     static void initCategory(inventory_func_type callback = no_op_inventory_func);
     static LLUUID getFavoritesFolder();

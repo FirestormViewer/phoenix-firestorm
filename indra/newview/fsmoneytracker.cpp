@@ -101,7 +101,7 @@ void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount
     }
 }
 
-std::string FSMoneyTracker::getTime(time_t utc_time)
+std::string FSMoneyTracker::getTime(time_t utc_time) const
 {
     std::string timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]:[" + LLTrans::getString("TimeSec") + "]";
 
@@ -112,7 +112,7 @@ std::string FSMoneyTracker::getTime(time_t utc_time)
     return timeStr;
 }
 
-std::string FSMoneyTracker::getDate(time_t utc_time)
+std::string FSMoneyTracker::getDate(time_t utc_time) const
 {
     LLDate curdate = LLDate((double)utc_time);
     return curdate.asString();

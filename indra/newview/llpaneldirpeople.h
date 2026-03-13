@@ -43,6 +43,8 @@ public:
 
     static void onClickSearch(void *userdata);
     static void onKeystrokeName(LLLineEditor* line, void* data);
+
+    void openProfile(); // <FS:Ansariel> Add "open profile" button
 };
 
 #endif

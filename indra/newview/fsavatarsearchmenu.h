@@ -33,7 +33,8 @@
 class FSAvatarSearchMenu : public LLListContextMenu
 {
 public:
-    /*virtual*/ LLContextMenu* createMenu();
+    LLContextMenu* createMenu() override;
+
 private:
     bool onContextMenuItemEnable(const LLSD& userdata);
     bool onContextMenuItemCheck(const LLSD& userdata);

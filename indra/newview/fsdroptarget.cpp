@@ -70,10 +70,10 @@ bool FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, 
 }
 
 bool FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                                EDragAndDropType cargo_type,
-                                                void* cargo_data,
-                                                EAcceptance* accept,
-                                                std::string& tooltip_msg)
+                                                 EDragAndDropType cargo_type,
+                                                 void* cargo_data,
+                                                 EAcceptance* accept,
+                                                 std::string& tooltip_msg)
 {
     LLInventoryItem* item = (LLInventoryItem*)cargo_data;
 

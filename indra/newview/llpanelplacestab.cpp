@@ -82,6 +82,14 @@ void LLPanelPlacesTab::onRegionResponse(const LLVector3d& landmark_global_pos,
         sl_url = "";
     }
 
+    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+    if (sl_url.empty())
+    {
+        LLNotificationsUtil::add("LandmarkLocationUnknown");
+        return;
+    }
+    // </FS:Zi>
+
     LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(sl_url));
 
     LLSD args;

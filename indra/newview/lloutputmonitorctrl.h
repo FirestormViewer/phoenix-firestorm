@@ -188,6 +188,7 @@ public:
     NearbyVoiceMonitor(const Params& p);
 
     void draw();
+    bool handleMouseUp(S32 x, S32 y, MASK mask);
 
 protected:
     bool mAutoHide;

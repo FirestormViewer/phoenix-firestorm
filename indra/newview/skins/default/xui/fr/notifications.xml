@@ -979,6 +979,9 @@ Le client a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est 
 		Vous avez déjà un repère pour cet emplacement.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Le client n'a pas pu obtenir l'emplacement de la région. La région est peut-être temporairement indisponible ou a été supprimée.
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Vous ne pouvez pas créer de repère ici car le propriétaire du terrain ne l&apos;autorise pas.
 	</notification>
@@ -4265,6 +4268,9 @@ Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="NewAONameCantExist">
+		Un ensemble d'animations portant ce nom existe déjà.
+	</notification>
 	<notification name="RemoveAOSet">
 		Retirer l'ensemble d'AO "[AO_SET_NAME]" de la liste ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Supprimer"/>
@@ -5718,28 +5724,32 @@ Message d'erreur :
 Impossible d'ouvrir le fichier en lecture :
 [FILE_NAME]
 
-Error message:
+Message d'erreur:
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileOpenWriteError">
 Impossible d'ouvrir le fichier en écriture :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileReadError">
 Impossible de lire le fichier :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
 	</notification>
 	<notification name="GenericFileWriteError">
 Impossible d'écrire dans le fichier :
 [FILE_NAME]
 
-Error message:
+Message d'erreur :
 [ERROR_MESSAGE] ([ERROR_CODE])
+	</notification>
+	<notification name="ChatHistoryIsMissing">
+		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
+Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
 </notifications>

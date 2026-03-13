@@ -13,7 +13,10 @@
         Searching...
     </string>
     <string name="not_found_text">
-        None Found.
+        None found.
+    </string>
+    <string name="found_text">
+        [COUNT] found.
     </string>
     <text
      bg_visible="false"
@@ -166,7 +169,7 @@
         <column label="" name="icon" width="24" />
         <column label="" name="type" width="-1" />
         <column label="Name" name="name" width="225" />
-        <column label="Price" name="price" width="55" />
+        <column label="Price" name="price" width="81" />
     </scroll_list>
     <text
      bg_visible="false"

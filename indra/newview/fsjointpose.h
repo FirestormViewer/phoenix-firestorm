@@ -104,6 +104,8 @@ class FSJointPose
     /// Sets the 'public' rotation of the joint.
     /// </summary>
     /// <param name="zeroBase">Whether to zero the base rotation on setting the supplied rotation.</param>
+    /// <param name="zeroBaseAsUser">Whether to indicate base was zeroed by action of the user; used for BVH export.</param>
+    /// <param name="changeType">The type change, hinting at the kind of undo action expected.</param>
     /// <param name="rot">The change in rotation to apply.</param>
     /// <remarks>
     /// 'Public rotation' is the amount of rotation the user has added to the initial state.
@@ -112,7 +114,7 @@ class FSJointPose
     /// If zeroBase is true, we treat rotations as if in BVH mode: user work.
     /// If zeroBase is false, we treat as NOT BVH: some existing pose and user work.
     /// </remarks>
-    void setPublicRotation(bool zeroBase, E_PoserChangeType changeType, const LLQuaternion& rot);
+    void setPublicRotation(bool zeroBase, bool zeroBaseAsUser, E_PoserChangeType changeType, const LLQuaternion& rot);
 
     /// <summary>
     /// Reflects the base and delta rotation of the represented joint left-right.
