@@ -1,0 +1,36 @@
+<panel label="Anzeigen" name="panel_dir_classified">
+    <string name="searching_text">
+        Suche...
+    </string>
+    <string name="not_found_text">
+        Nichts gefunden.
+    </string>
+    <string name="found_text">
+        [COUNT] gefunden.
+    </string>
+    <text name="find">
+        Suchbegriffe eingeben:
+    </text>
+    <combo_box name="Category">
+        <combo_item name="AnyCategory" label="Alle Kategorien"/>
+        <combo_item name="Shopping" label="Shopping"/>
+        <combo_item name="LandRental" label="Land mieten"/>
+        <combo_item name="PropertyRental" label="Immobilie mieten"/>
+        <combo_item name="SpecialAttraction" label="Spezielle Attraktionen"/>
+        <combo_item name="NewProducts" label="Neue Produkte"/>
+        <combo_item name="Employment" label="Stellenangebote"/>
+        <combo_item name="Wanted" label="Gesucht"/>
+        <combo_item name="Service" label="Dienstleistungen"/>
+        <combo_item name="Personal" label="Sonstiges"/>
+     </combo_box>
+    <icon tool_tip="Generell" name="rating_icon_general"/>
+    <icon tool_tip="Moderat" name="rating_icon_moderate"/>
+    <icon tool_tip="Adult" name="rating_icon_adult"/>
+    <button label="Suchen" name="Search"/>
+    <scroll_list name="results">
+        <column label="Name" name="name" width="215"/>
+        <column label="Anzeigenpreis" name="price" width="91"/>
+    </scroll_list>
+    <button tool_tip="Vorherige Seite" name="prev_btn"/>
+    <button tool_tip="Nächste Seite" name="next_btn"/>
+</panel>
