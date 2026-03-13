@@ -54,6 +54,9 @@ class LLPanelGroup;
 class LLPanelPlaces;
 class LLPanelClassifiedInfo;
 
+class LLButton;
+class LLTabContainer;
+
 // Floater to find people, places, things
 class LLFloaterDirectory : public LLFloater
 {
@@ -65,12 +68,18 @@ public:
 
     bool postBuild() override;
 
+    void updateProfileButtonVisibility(); // <FS:Ansariel> Add "open profile" button
+
 public:
     LLPanelProfileSecondLife* mPanelAvatarp;
     LLPanelEventInfo* mPanelEventp;
     LLPanelGroup* mPanelGroupp;
     LLPanelPlaces* mPanelPlacep;
     LLPanelClassifiedInfo* mPanelClassifiedp;
+
+    // <FS:Ansariel> Add "open profile" button
+    LLButton* mOpenProfileBtn;
+    LLTabContainer* mDirectoryTabs;
 
 private:
     static LLFloaterDirectory *sInstance;

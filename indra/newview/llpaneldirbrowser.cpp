@@ -372,6 +372,10 @@ void LLPanelDirBrowser::showDetailPanel(S32 type, LLSD id)
         }
         break;
     }
+
+    // <FS:Ansariel> Add "open profile" button
+    mSelectedID = id;
+    mFloaterDirectory->updateProfileButtonVisibility();
 }
 
 

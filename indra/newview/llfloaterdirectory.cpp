@@ -44,13 +44,18 @@
 #include "llpanelplaces.h"
 #include "llpanelprofile.h"
 
+#include "lltabcontainer.h"
+
 LLFloaterDirectory::LLFloaterDirectory(const std::string& name)
 :   LLFloater(name),
     mPanelAvatarp(nullptr),
     mPanelGroupp(nullptr),
     mPanelPlacep(nullptr),
     mPanelClassifiedp(nullptr),
-    mPanelEventp(nullptr)
+    mPanelEventp(nullptr),
+    // <FS:Ansariel> Add "open profile" button
+    mOpenProfileBtn(nullptr),
+    mDirectoryTabs(nullptr)
 {
 }
 
@@ -87,6 +92,17 @@ bool LLFloaterDirectory::postBuild()
     mPanelClassifiedp->setBackgroundVisible(false);
     mPanelEventp = findChild<LLPanelEventInfo>("panel_event_info");
 
+    // <FS:Ansariel> Add "open profile" button
+    mOpenProfileBtn = getChild<LLButton>("open_profile_btn");
+    mOpenProfileBtn->setCommitCallback([&](LLUICtrl*, const LLSD&) {
+        auto* currentDirBrowserPanel = dynamic_cast<LLPanelDirBrowser*>(mDirectoryTabs->getCurrentPanel());
+        if (currentDirBrowserPanel)
+            currentDirBrowserPanel->openProfile();
+        });
+    mDirectoryTabs  = getChild<LLTabContainer>("Directory Tabs");
+    mDirectoryTabs->setCommitCallback([&](LLUICtrl*, const LLSD&) { updateProfileButtonVisibility(); });
+    // </FS:Ansariel>
+
     return true;
 }
 
@@ -97,4 +113,19 @@ void LLFloaterDirectory::hideAllDetailPanels()
     if (mPanelPlacep) mPanelPlacep->setVisible(false);
     if (mPanelClassifiedp) mPanelClassifiedp->setVisible(false);
     if (mPanelEventp) mPanelEventp->setVisible(false);
+
+    mOpenProfileBtn->setVisible(false); // <FS:Ansariel> Add "open profile" button
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLFloaterDirectory::updateProfileButtonVisibility()
+{
+    std::string selected_tab = mDirectoryTabs->getCurrentPanel()->getName();
+    if (selected_tab == "panel_dir_people")
+        mOpenProfileBtn->setVisible(mPanelAvatarp->getVisible());
+    else if (selected_tab == "panel_dir_groups")
+        mOpenProfileBtn->setVisible(mPanelGroupp->getVisible());
+    else
+        mOpenProfileBtn->setVisible(false);
+}
+// </FS:Ansariel>

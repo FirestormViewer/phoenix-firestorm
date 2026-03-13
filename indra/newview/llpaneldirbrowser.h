@@ -101,6 +101,8 @@ public:
 
     std::string filterShortWords( const std::string source_string, int shortest_word_length, bool& was_filtered );
 
+    virtual void openProfile() {}; // <FS:Ansariel> Add "open profile" button
+
 protected:
     void updateResultCount();
 
@@ -137,6 +139,8 @@ protected:
     LLFloaterDirectory* mFloaterDirectory;
     LLButton* mPrevPageBtn;
     LLButton* mNextPageBtn;
+
+    LLUUID mSelectedID; // <FS:Ansariel> Add "open profile" button
 };
 
 constexpr S32 RESULTS_PER_PAGE_DEFAULT = 100;
