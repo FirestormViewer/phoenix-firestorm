@@ -1529,7 +1529,7 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
     // updating "Call" button from group/ad-hoc control panel here to enable it without placing into draw() (EXT-4796)
     if (LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im_session_id); session)
     {
-        if ((session->isGroupSessionType() && gAgent.isInGroup(im_session_id)) || session->isAdHocSessionType())
+        if ((session->isGroupSessionType() && gAgent.isInGroup(im_session_id)) || session->isAdHocSessionType() || session->isP2PSessionType())
         {
             updateCallButton();
         }
