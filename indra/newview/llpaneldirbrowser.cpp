@@ -176,11 +176,19 @@ void LLPanelDirBrowser::updateResultCount()
     {
         // Item count be off by a few if bogus items sent from database
         // Just use the number of results per page. JC
-        result_text = llformat(">%d found", mResultsPerPage);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat(">%d found", mResultsPerPage);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat(">%d", mResultsPerPage);
+        result_text = getString("found_text", args);
     }
     else
     {
-        result_text = llformat("%d found", result_count);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat("%d found", result_count);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat("%d", mResultsPerPage);
+        result_text = getString("found_text", args);
     }
 
     childSetValue("result_text", result_text);
@@ -190,7 +198,9 @@ void LLPanelDirBrowser::updateResultCount()
         // add none found response
         if (list->getItemCount() == 0)
         {
-            list->setCommentText(std::string("None found.")); // *TODO: Translate
+            // <FS:Ansariel> Make this localizable
+            //list->setCommentText(std::string("None found.")); // *TODO: Translate
+            list->setCommentText(getString("not_found_text"));
             list->operateOnAll(LLCtrlListInterface::OP_DESELECT);
         }
     }
@@ -1068,7 +1078,9 @@ void LLPanelDirBrowser::setupNewSearch()
 
     // ready the list for results
     list->operateOnAll(LLCtrlListInterface::OP_DELETE);
-    list->setCommentText(LLTrans::getString("Searching"));
+    // <FS:Ansariel> Make this localizable
+    //list->setCommentText(LLTrans::getString("Searching"));
+    list->setCommentText(getString("searching_text"));
     list->setEnabled(false);
 
     mResultsReceived = 0;

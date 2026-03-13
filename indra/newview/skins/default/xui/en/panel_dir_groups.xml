@@ -8,6 +8,15 @@
  mouse_opaque="false"
  name="panel_dir_groups"
  width="778">
+    <string name="searching_text">
+        Searching...
+    </string>
+    <string name="not_found_text">
+        None found.
+    </string>
+    <string name="found_text">
+        [COUNT] found.
+    </string>
     <button
      image_overlay="Arrow_Left_Off"
      image_disabled="PushButton_Disabled"
