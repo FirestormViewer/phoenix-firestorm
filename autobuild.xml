@@ -2819,6 +2819,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       </map>
       <key>webrtc</key>
       <map>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-webrtc-build</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/webrtc-license.txt</string>
+        <key>name</key>
+        <string>webrtc</string>
         <key>platforms</key>
         <map>
           <key>darwin64</key>
@@ -2864,24 +2874,14 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <string>windows64</string>
           </map>
         </map>
-        <key>license</key>
-        <string>MIT</string>
-        <key>license_file</key>
-        <string>LICENSES/webrtc-license.txt</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
-        <key>version</key>
-        <string>m137.7151.04.23.22004231636</string>
-        <key>name</key>
-        <string>webrtc</string>
         <key>vcs_branch</key>
         <string>secondlife</string>
         <key>vcs_revision</key>
         <string>d3f62d32bac8694d3c7423c731ae30c113bf6a11</string>
         <key>vcs_url</key>
         <string>https://github.com/secondlife/3p-webrtc-build</string>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/3p-webrtc-build</string>
+        <key>version</key>
+        <string>m137.7151.04.23.22004231636</string>
       </map>
       <key>xxhash</key>
       <map>
