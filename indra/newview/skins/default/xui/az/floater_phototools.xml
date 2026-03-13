@@ -338,7 +338,6 @@
 				<check_box label="Çəkmə Məsafəsini Aktivləşdir" name="UseFarClip" tool_tip="Məsafəni çəkmək imkanı verir, bu funksiyanı deaktiv etsəniz, əvvəlki Çəkmə Məsafəsi seçimləri istifadə olunacaq."/>
 				<check_box label="Dinamik LOD" name="RednerLod1" tool_tip="Bu, obyektlərdən uzaqlaşdıqca səhnədəki detalların səviyyəsini dinamik şəkildə tənzimləməyə imkan verən funksiyanı təmin edir. Bu, performansı yaxşılaşdırmağa kömək edir və həmçinin səhnədəki obyektlərin keyfiyyəti ."/>
 				<check_box label="Yalnız görünən obyektləri çəkin" tool_tip="Bu, başqa bir şeyin arxasında gizlənmək əvəzinə, yalnız kameranın baxış sahəsində olan obyektləri emal etməyə/çəkməyə imkan verir. Bu, adətən, performans gücləndiricisidir. Bəzən bu, həqiqətən də ola bilər. performansı aşağı salın, xüsusən də səhnədə/sim çoxlu obyekt olduqda. Bunun kömək edib-etmədiyini görmək üçün keçid edin!" name="UssOcclusion1"/>
-				<check_box label="Anizotrop Filtrləmə (Teksturalar)" tool_tip="Bu, teksturaları kəskinləşdirəcək." name="Anisotropic"/>
 				<check_box label="Avatarlara əlavə edilmiş hissəcikləri göstər" tool_tip="Digər avatarlara əlavə edilmiş bütün hissəcikləri göstərməyə imkan verir." name="Render Attached Hissecle"/>
 			</panel>
 
@@ -353,6 +352,10 @@
 					<combo_box.item label="8x (Daha çox hamar kənarlar)" name="8x"/>
 					<combo_box.item label="16x (Çox hamar kənarlar)" name="16x"/>
 				</combo_box>
+
+				<text name="Anisotropic" tool_tip="Bu, teksturaları kəskinləşdirəcək.">
+					Anizotrop Filtrləmə
+				</text>
 
 				<text name="T_Texture_Bumpiness" tool_tip="Normalların və qabarıq xəritələrin gücünə və həllinə nəzarət edir.">
 					Tekstura qabarıqlığı

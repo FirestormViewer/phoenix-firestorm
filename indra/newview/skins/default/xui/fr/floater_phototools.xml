@@ -345,7 +345,6 @@
 				<check_box label="Activer la distance d'affichage" name="UseFarClip" tool_tip="Active la limite de la distance de dessin, restreignant la distance à laquelle le client rendra les objets en fonction de la distance de dessin définie. Si cette option est désactivée, le client rendra les objets au-delà de la distance définie, ce qui peut réduire considérablement les performances dans les environnements vastes et détaillés."/>
 				<check_box label="Ajuster dynamiquement le niveau de détail" name="RednerLod1" tool_tip="Permet au client d'ajuster automatiquement le niveau de détail (LOD) des objets en fonction de la distance qui vous sépare d'eux. Cette fonction améliore les performances en réduisant le niveau de détail des objets éloignés tout en conservant un niveau de détail élevé pour les objets proches. Cependant, il peut entraîner des réductions notables de la qualité des objets lorsque vous vous déplacez rapidement ou dans des scènes de grande taille."/>
 				<check_box label="Afficher slt les objets visibles par la caméra" tool_tip="Active l'occlusion culling, qui optimise les performances en ne rendant que les objets situés dans le champ de vision de la caméra et qui ne sont pas cachés derrière d'autres objets. Cela peut améliorer les performances dans les scènes complexes, mais peut parfois réduire les performances dans les zones peu peuplées. Faites basculer ce paramètre pour voir s'il améliore les performances dans votre environnement spécifique." name="UssOcclusion1"/>
-				<check_box label="Filtrage anisotropique (netteté de la texture)" tool_tip="Améliore la netteté et la clarté des textures vues sous un certain angle, rendant les surfaces telles que les sols, les routes et les murs plus nettes. Tout en améliorant la qualité visuelle, l'activation du filtrage anisotropique peut avoir un léger impact sur les performances, en particulier sur le matériel graphique d'entrée de gamme." name="Anisotropic"/>
 				<check_box label="Aff. les part. attachées à d'autres avatars" tool_tip="Permet le rendu d'effets de particules attachés à d'autres avatars ou émis par eux, tels que des effets de lueur, des traînées de particules ou des effets visuels basés sur l'avatar. Cela inclut également les particules attachées aux meubles ou aux objets sur lesquels les avatars sont assis. La désactivation de ce paramètre peut améliorer les performances dans les zones encombrées, mais masquera ces effets de particules." name="Render Attached Particle"/>
 			</panel>
 			<panel name="P_Anti-aliasing">
@@ -364,6 +363,9 @@
 					<combo_box.item label="Élevée" name="High"/>
 					<combo_box.item label="Ultra" name="Ultra"/>
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Améliore la netteté et la clarté des textures vues sous un certain angle, rendant les surfaces telles que les sols, les routes et les murs plus nettes. Tout en améliorant la qualité visuelle, l'activation du filtrage anisotropique peut avoir un léger impact sur les performances, en particulier sur le matériel graphique d'entrée de gamme.">
+					Filtrage anisotropique
+				</text>
 				<text name="T_Texture_Bumpiness" tool_tip="Contrôle la force et la résolution des cartes de normales et de relief, qui ajoutent des détails de texture aux surfaces sans augmenter le nombre de polygones. Des paramètres plus élevés améliorent les détails des surfaces, tandis que des paramètres plus bas améliorent les performances en réduisant la complexité visuelle.">
 					Relief
 				</text>

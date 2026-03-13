@@ -344,7 +344,6 @@
 				<check_box label="Nie renderuj poza polem widzenia" name="UseFarClip" tool_tip="Włącza limit odległości rysowania (pola widzenia) ograniczając odległość, na jaką przeglądarka będzie renderować obiekty w oparciu o ustawioną odległość rysowania. Wyłączenie tej opcji spowoduje, że przeglądarka będzie renderować obiekty poza określoną odległość, co może znacząco obniżyć wydajność w dużych, szczegółowych środowiskach." />
 				<check_box label="Dynamicznie dobieraj poziom detali" name="RednerLod1" tool_tip="Umożliwia przeglądarce automatyczne dostosowanie poziomu szczegółowości (LOD) obiektów w oparciu o odległość od nich. Poprawia to wydajność poprzez zmniejszenie szczegółowości odległych obiektów, a jednocześnie utrzymanie wysokiej szczegółowości pobliskich. Może to jednak powodować zauważalne obniżenie jakości obiektów podczas szybkiego poruszania się lub w dużych scenach." />
 				<check_box label="Renderuj tylko obiekty widoczne dla kamery" tool_tip="Włącza occlusion culling, który optymalizuje wydajność poprzez renderowanie tylko obiektów znajdujących się w polu widzenia kamery, ale nieukrytych za innymi obiektami. Może to zwiększyć wydajność w złożonych scenach, ale czasami może ją też zmniejszyć w bardziej pustych obszarach. Przetestuj to ustawienie, aby sprawdzić, czy poprawia ono wydajność w Twoim konkretnym przypadku." name="UssOcclusion1" />
-				<check_box label="Filtr anizotropowy (wyraźniejsze tekstury)" tool_tip="Poprawia ostrość i klarowność tekstur oglądanych pod kątem, dzięki czemu powierzchnie takie jak podłogi, drogi i ściany wydają się wyraźniejsze. Włączenie filtrowania anizotropowego może nieznacznie wpłynąć na wydajność, szczególnie na słabszym sprzęcie." name="Anisotropic" />
 				<check_box label="Renderuj cząsteczki innych awatarów" tool_tip="Włącza renderowanie efektów cząsteczkowych dołączonych do innych awatarów lub przez nie emitowanych, takich jak efekty blasku, ślady lub efekty wizualne oparte na awatarach. Dotyczy to także cząsteczek przyczepionych do mebli lub przedmiotów, na których siedzą awatary. Wyłączenie tej opcji może poprawić wydajność w zatłoczonych obszarach, ale spowoduje ukrycie tych efektów." name="Render Attached Particle" />
 			</panel>
 			<panel name="P_Anti-aliasing">
@@ -362,6 +361,9 @@
 					<combo_box.item label="Średnia" name="Medium" />
 					<combo_box.item label="Wysoka" name="High" />
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Poprawia ostrość i klarowność tekstur oglądanych pod kątem, dzięki czemu powierzchnie takie jak podłogi, drogi i ściany wydają się wyraźniejsze. Włączenie filtrowania anizotropowego może nieznacznie wpłynąć na wydajność, szczególnie na słabszym sprzęcie.">
+					Filtr anizotropowy
+				</text>
 				<text name="T_Texture_Bumpiness" tool_tip="Kontroluje siłę i rozdzielczość map normalnych i wypukłości, które dodają szczegóły tekstur do powierzchni bez zwiększania liczby wielokątów. Wyższe ustawienia zwiększają szczegółowość powierzchni, podczas gdy niższe ustawienia poprawiają wydajność poprzez zmniejszenie złożoności wizualnej.">
 					Wypukłości tekstur
 				</text>

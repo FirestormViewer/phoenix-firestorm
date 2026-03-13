@@ -300,7 +300,6 @@
 				<check_box label="Abilita Distanza di Disegno" name="UseFarClip" tool_tip="Abilita la distanza di disegno. Senza questa spunta, il viewer renderizzerà anche oltre la distanza indicata."/>
 				<check_box label="Regola dinamicamente livello dettaglio" name="RednerLod1"	 tool_tip="Abilita la regolazione dinamica dei livelli di dettaglio della scena quando ci si avvicina o allontana dagli oggetti. Aiuta a migliorare le prestazioni ma può peggiorare la qualità degli oggetti visualizzati."/>
 				<check_box label="Renderizza solo Oggetti visibili alla Cam" tool_tip="Disegna/elabora soltanto gli oggetti che sono entro il campo di vista della camera e non nascosti dietro a qualcos'altro. Di solito aumenta le prestazioni, ma potrebbe peggiorarle specialmente quando ci sono pochi oggetti. Provare per credere." name="UssOcclusion1"/>
-				<check_box label="Filtro Anisotropico (nettezza texture)" tool_tip="Aumenta il dettaglio delle texture." name="Anisotropic"/>
 				<check_box label="Renderizza Particelle generate da altri Avatar" tool_tip="Visualizza tutte le particelle, anche quelle provenienti da oggetti indossati da altri avatar." name="Render Attached Particle"/>
 			</panel>
 			<panel name="P_Anti-aliasing">
@@ -314,6 +313,9 @@
 					<combo_box.item label="8x" name="8x"/>
 					<combo_box.item label="16x (bordi lisci)" name="16x"/>
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Aumenta il dettaglio delle texture.">
+					Filtro Anisotropico
+				</text>
 				<text name="T_Texture_Bumpiness" tool_tip="Forza e risoluzione delle normal-map e delle bump-map.">
 					Rilievo Texture
 				</text>

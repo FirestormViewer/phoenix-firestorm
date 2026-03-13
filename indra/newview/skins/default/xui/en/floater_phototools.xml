@@ -3343,7 +3343,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="87"
+			 height="69"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3381,17 +3381,6 @@
 				 top_pad="0"
 				 width="240"/>
 				<check_box
-				 follows="left|top"
-				 control_name="RenderAnisotropic"
-				 height="16"
-				 label="Anisotropic Filtering (texture crispness)"
-				 layout="topleft"
-				 left="3"
-				 tool_tip="Improves the sharpness and clarity of textures viewed at angles, making surfaces like floors, roads, and walls appear crisper. While enhancing visual quality, enabling anisotropic filtering may slightly impact performance, especially on lower-end graphics hardware."
-				 name="Anisotropic"
-				 top_pad="0"
-				 width="240"/>
-				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="3"
@@ -3416,7 +3405,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="105"
+			 height="123"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3495,6 +3484,49 @@
 						 label="Ultra"
 						 name="Ultra"
 						 value="3" />
+				</combo_box>
+				<text
+				 type="string"
+				 length="1"
+				 name="Anisotropic"
+				 follows="left|top"
+				 height="15"
+				 left="5"
+				 top_pad="5"
+				 width="185"
+				 layout="topleft"
+				 tool_tip="Improves the sharpness and clarity of textures viewed at angles, making surfaces like floors, roads, and walls appear crisper. While enhancing visual quality, enabling anisotropic filtering may slightly impact performance, especially on lower-end graphics hardware.">
+					Anisotropic Filtering
+				</text>
+				<combo_box
+				 control_name="RenderAnisotropicLevel"
+				 height="20"
+				 layout="topleft"
+				 follows="left|top"
+				 left_pad="0"
+				 name="Anisotropic_level"
+				 top_delta="-5"
+				 width="85">
+					<combo_box.item
+					 label="Disabled"
+					 name="disabled"
+					 value="0" />
+					<combo_box.item
+					 label="2x"
+					 name="2x"
+					 value="2" />
+					<combo_box.item
+					 label="4x"
+					 name="4x"
+					 value="4" />
+					<combo_box.item
+					 label="8x"
+					 name="8x"
+					 value="8" />
+					<combo_box.item
+					 label="16x"
+					 name="16x"
+					 value="16" />
 				</combo_box>
 				<text
 				 name="T_Texture_Bumpiness"
