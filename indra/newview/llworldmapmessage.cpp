@@ -39,6 +39,7 @@
 #include "fsworldmapmessage.h" // <FS:humbletim/> FIRE-31368: [OPENSIM] ... Search returns more than one result
 
 constexpr U32 LAYER_FLAG = 2;
+constexpr U32 MAP_SIM_PRIMS = 0x01;
 constexpr S32 MAP_SIM_RETURN_NULL_SIMS = 0x00010000;
 
 //---------------------------------------------------------------------------
@@ -88,7 +89,7 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name)
     msg->nextBlockFast(_PREHASH_AgentData);
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-    msg->addU32Fast(_PREHASH_Flags, LAYER_FLAG);
+    msg->addU32Fast(_PREHASH_Flags, MAP_SIM_PRIMS);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
     msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
     msg->nextBlockFast(_PREHASH_NameData);
@@ -186,7 +187,9 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
     S32 num_blocks = msg->getNumberOfBlocksFast(_PREHASH_Data);
 
     // There's only one flag that we ever use here, unless we also want an existence check.
+    // LAYER_FLAG (2) = terrain/tile loading; MAP_SIM_PRIMS (0x01) = MapNameRequest/Find-by-name
     if (agent_flags != LAYER_FLAG
+        && agent_flags != MAP_SIM_PRIMS
         && num_blocks != 1) // we check existence for a single region
     {
         LL_WARNS() << "Invalid map image type returned! layer = " << agent_flags << LL_ENDL;
