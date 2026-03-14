@@ -1,0 +1,39 @@
+<panel label="Miejsca" name="panel_dir_places">
+	<string name="searching_text">
+		Szukanie...
+	</string>
+	<string name="not_found_text">
+		Brak wyników.
+	</string>
+	<string name="found_text">
+		[COUNT] wyników.
+	</string>
+	<text name="find">
+		Szukana fraza:
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="Każda kategoria"/>
+		<combo_item name="LindenLocation" label="Lokalizacja Lindenów"/>
+		<combo_item name="Arts&amp;Culture" label="Sztuka i kultura"/>
+		<combo_item name="Business" label="Biznes"/>
+		<combo_item name="Educational" label="Edukacyjna"/>
+		<combo_item name="Gaming" label="Gry"/>
+		<combo_item name="Hangout" label="Poznawanie ludzi"/>
+		<combo_item name="NewcomerFriendly" label="Przyjazne dla nowych"/>
+		<combo_item name="Parks&amp;Nature" label="Parki i natura"/>
+		<combo_item name="Residential" label="Mieszkalne"/>
+		<combo_item name="Shopping" label="Zakupy"/>
+		<combo_item name="Adult" label="Dla dorosłych"/>
+		<combo_item name="Other" label="Inne"/>
+	</combo_box>
+	<icon tool_tip="General (dla wszystkich)" name="rating_icon_general" />
+	<icon tool_tip="Moderate (umiarkowane)" name="rating_icon_moderate" />
+	<icon tool_tip="Adult (dla dorosłych)" name="rating_icon_adult" />
+	<button label="Szukaj" name="Search" />
+	<scroll_list name="results">
+		<column label="Nazwa" name="name" />
+		<column label="Ruch" name="dwell" />
+	</scroll_list>
+	<button tool_tip="Poprzednia strona" name="prev_btn" />
+	<button tool_tip="Następna strona" name="next_btn" />
+</panel>

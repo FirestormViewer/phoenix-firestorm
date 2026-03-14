@@ -1,0 +1,22 @@
+<panel label="Grupy" name="panel_dir_groups">
+	<string name="searching_text">
+		Szukanie...
+	</string>
+	<string name="not_found_text">
+		Brak wyników.
+	</string>
+	<string name="found_text">
+		[COUNT] wyników.
+	</string>
+	<button tool_tip="Poprzednia strona" name="prev_btn" />
+	<button tool_tip="Następna strona" name="next_btn" />
+	<text name="find">
+		Szukana fraza:
+	</text>
+	<check_box label="Dołącz grupy dla dorosłych" name="incmature" />
+	<button label="Szukaj" name="Search" />
+	<scroll_list name="results">
+		<column label="Nazwa" name="name" />
+		<column label="Osób" name="members" />
+	</scroll_list>
+</panel>

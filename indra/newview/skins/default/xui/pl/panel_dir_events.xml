@@ -1,0 +1,46 @@
+<panel label="Wydarzenia" name="panel_dir_events">
+	<string name="searching_text">
+		Szukanie...
+	</string>
+	<string name="not_found_text">
+		Brak wyników.
+	</string>
+	<string name="found_text">
+		[COUNT] wyników.
+	</string>
+	<text name="find">
+		Szukana fraza:
+	</text>
+	<combo_box name="category_combo">
+		<combo_item name="All" label="Wszystkie kategorie"/>
+		<combo_item name="Discussion" label="Dyskusje"/>
+		<combo_item name="Sports" label="Sportowe"/>
+		<combo_item name="LiveMusic" label="Muzyka na żywo"/>
+		<combo_item name="LiveDJ" label="DJ na żywo"/>
+		<combo_item name="Commercial" label="Handlowe"/>
+		<combo_item name="Nightlife/Entertainment" label="Życie nocne / Rozrywka"/>
+		<combo_item name="Games/Contests" label="Gry / Konkursy"/>
+		<combo_item name="Pageants" label="Pokazy / Widowiska"/>
+		<combo_item name="Education" label="Edukacyjne"/>
+		<combo_item name="ArtsandCulture" label="Sztuka i kultura"/>
+		<combo_item name="Charity/SupportGroups" label="Dobroczynność / Wsparcie"/>
+		<combo_item name="Miscellaneous" label="Różne"/>
+	</combo_box>
+	<icon tool_tip="General (dla wszystkich)" name="rating_icon_general" />
+	<icon tool_tip="Moderate (umiarkowane)" name="rating_icon_moderate" />
+	<icon tool_tip="Adult (dla dorosłych)" name="rating_icon_adult" />
+	<button label="Szukaj" name="Search" />
+	<scroll_list name="results">
+		<column label="Nazwa" name="name" />
+		<column label="Czas (PT)" name="date" />
+		<column label="Czas" name="time" />
+	</scroll_list>
+	<button tool_tip="Poprzednia strona" name="prev_btn" />
+	<button tool_tip="Następna strona" name="next_btn" />
+	<radio_group name="date_mode">
+		<radio_item name="current" label="W trakcie i nadchodzące" />
+		<radio_item name="date" label="Data" />
+	</radio_group>
+	<button name="back_btn" tool_tip="Wróć o dzień wstecz" />
+	<button name="forward_btn" tool_tip="Idź do przodu o jeden dzień" />
+</panel>
