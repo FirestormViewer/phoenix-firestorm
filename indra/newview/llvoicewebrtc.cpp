@@ -2892,7 +2892,6 @@ static llwebrtc::LLWebRTCPeerConnectionInterface::InitOptions getConnectionOptio
     {
         LLViewerRegion* regionp = gAgent.getRegion();
         if (regionp) {
-            std::vector<std::string> stunServers = regionp->GetStunServers();
             servers.mUrls = regionp->GetStunServers();
         }
         options.mServers.push_back(servers);
