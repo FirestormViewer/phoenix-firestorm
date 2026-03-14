@@ -2887,17 +2887,17 @@ static llwebrtc::LLWebRTCPeerConnectionInterface::InitOptions getConnectionOptio
     std::string grid = LLGridManager::getInstance()->getGridLoginID();
     std::transform(grid.begin(), grid.end(), grid.begin(), [](unsigned char c){ return std::tolower(c); });
     // <FS:TJ> [FIRE-36421] Add OpenSim STUN server support
-    #ifdef OPENSIM
+#ifdef OPENSIM
     if (!LLGridManager::getInstance()->isInSecondLife())
     {
-        LLViewerRegion* regionp = gAgent.getRegion();
-        if (regionp) {
-            servers.mUrls = regionp->GetStunServers();
+        if (LLViewerRegion* regionp = gAgent.getRegion())
+        {
+            servers.mUrls = regionp->getStunServers();
         }
         options.mServers.push_back(servers);
         return options;
     }
-    #endif
+#endif
     // </FS:TJ>
     int num_servers = 2;
     if (grid == "agni")

@@ -381,7 +381,7 @@ public:
 // </FS:CR>
 #ifdef OPENSIM
     const std::set<std::string, std::less<>>& getGods() const { return mGodNames; }
-    const std::vector<std::string> GetStunServers() const { return mStunServers; }
+    const std::vector<std::string> getStunServers() const { return mStunServers; }
 #endif // OPENSIM
 // </FS:CR>
 
