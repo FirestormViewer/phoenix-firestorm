@@ -2715,6 +2715,12 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
                 }
             }
         }
+
+        mStunServers.clear();
+        if (mSimulatorFeatures.has("stun-servers"))
+        {
+            LLStringUtil::getTokens(mSimulatorFeatures["stun-servers"].asString(), mStunServers, ",");
+        }
     }
 #endif
 
