@@ -177,33 +177,36 @@
     </text>
     <text_editor
      top_pad="10"
-     follows="left|top"
+     follows="all"
      layout="topleft"
-     height="220"
+     height="340"
      left="20"
      enabled="false"
      max_length="1024"
      name="event_desc"
-     width="400" />
+     right="-5" />
     <button
-     bottom_delta="-24"
-     follows="left|top"
+     layout="topleft"
+     bottom="-2"
+     follows="left|bottom"
      height="20"
      label="Teleport"
      left="20"
      name="teleport_btn"
      width="130" />
     <button
-     bottom_delta="0"
-     follows="left|top"
+     layout="topleft"
+     bottom="-2"
+     follows="left|bottom"
      height="20"
      label="Show on Map"
      left="155"
      name="map_btn"
      width="130" />
     <button
-     bottom_delta="0"
-     follows="left|top"
+     layout="topleft"
+     bottom="-2"
+     follows="left|bottom"
      height="20"
      label="Notify"
      left="290"
