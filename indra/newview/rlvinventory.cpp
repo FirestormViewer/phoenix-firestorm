@@ -20,6 +20,7 @@
 #include "llstartup.h"
 #include "llviewerfoldertype.h"
 #include "llviewermessage.h"
+#include "llcallbacklist.h"
 
 #include "rlvinventory.h"
 
@@ -603,17 +604,59 @@ void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDe
 
 void RlvGiveToRLVTaskOffer::changed(U32 mask)
 {
-    if ( (mask & LLInventoryObserver::ADD) && (gInventory.getTransactionId().notNull()) && (m_idTransaction == gInventory.getTransactionId()) )
-    {    // BulkUpdateInventory
-        const auto& idItems = gInventory.getAddedIDs();
-        for (const LLUUID& idItem : idItems)
+    if (!(mask & LLInventoryObserver::ADD))
+    {
+        return;
+    }
+
+    const LLUUID& transaction_id = gInventory.getTransactionId();
+    if (transaction_id.notNull() && (m_idTransaction != transaction_id))
+    {
+        // Some inventory updates report a different transaction id (or reuse one).
+        // If we have an exact expected name, allow a fallback match; otherwise bail.
+        if (m_strExpectedName.empty())
         {
-            if (LLInventoryCategory* pCategory = gInventory.getCategory(idItem))
+            return;
+        }
+    }
+
+    const LLUUID id_rlv_root = RlvInventory::instance().getSharedRootID();
+    bool found_folder = false;
+    const auto& idItems = gInventory.getAddedIDs();
+    for (const LLUUID& idItem : idItems)
+    {
+        LLInventoryCategory* pCategory = gInventory.getCategory(idItem);
+        if (!pCategory)
+        {
+            continue;
+        }
+
+        if (!m_strExpectedName.empty())
+        {
+            if (pCategory->getName() != m_strExpectedName)
             {
-                if (std::find(m_Folders.begin(), m_Folders.end(), pCategory->getUUID()) == m_Folders.end())
-                    m_Folders.push_back(pCategory->getUUID());
+                continue;
+            }
+
+            if (id_rlv_root.notNull() && !gInventory.isObjectDescendentOf(pCategory->getUUID(), id_rlv_root))
+            {
+                continue;
             }
         }
+        else if (pCategory->getName().find(RLV_PUTINV_PREFIX) != 0)
+        {
+            continue;
+        }
+
+        if (std::find(m_Folders.begin(), m_Folders.end(), pCategory->getUUID()) == m_Folders.end())
+        {
+            m_Folders.push_back(pCategory->getUUID());
+            found_folder = true;
+        }
+    }
+
+    if (!m_Folders.empty())
+    {
         done();
     }
 }
@@ -637,6 +680,8 @@ void RlvGiveToRLVTaskOffer::onDestinationCreated(const LLUUID& idDestFolder, con
 {
     if (idDestFolder.notNull())
     {
+        m_idExpectedParent = idDestFolder;
+        m_strExpectedLeaf = strName;
         moveAndRename(m_Folders.front(), idDestFolder, strName, new LLBoostFuncInventoryCallback(boost::bind(&RlvGiveToRLVTaskOffer::onOfferCompleted, this, _1)));
     }
     else
@@ -650,7 +695,54 @@ void RlvGiveToRLVTaskOffer::onOfferCompleted(const LLUUID& idOfferedFolder)
     if (idOfferedFolder.notNull())
     {
         RlvBehaviourNotifyHandler::sendNotification("accepted_in_rlv inv_offer " + RlvInventory::instance().getSharedPath(idOfferedFolder));
+
+        // AIS can apply the initial folder update after our rename, causing the
+        // full path name to reappear or the folder to land in #RLV. Retry a few times.
+        const LLUUID expected_parent = m_idExpectedParent;
+        const std::string expected_leaf = m_strExpectedLeaf;
+        auto schedule_retry = [idOfferedFolder, expected_parent, expected_leaf](F32 delay)
+        {
+            doAfterInterval([idOfferedFolder, expected_parent, expected_leaf]()
+            {
+                LLViewerInventoryCategory* pFolder = gInventory.getCategory(idOfferedFolder);
+                if (!pFolder)
+                {
+                    return;
+                }
+
+                const std::string& cur_name = pFolder->getName();
+                const bool needs_move = expected_parent.notNull() && (pFolder->getParentUUID() != expected_parent);
+                const bool needs_rename = !expected_leaf.empty() && (cur_name != expected_leaf);
+
+                if (!needs_move && !needs_rename)
+                {
+                    return;
+                }
+
+                if (needs_move)
+                {
+                    gInventory.changeCategoryParent(pFolder, expected_parent, false);
+                    gInventory.addChangedMask(LLInventoryObserver::STRUCTURE, idOfferedFolder);
+                    gInventory.notifyObservers();
+                    gInventory.fetchDescendentsOf(expected_parent);
+                }
+
+                if (needs_rename)
+                {
+                    rename_category(&gInventory, idOfferedFolder, expected_leaf, nullptr);
+                    if (expected_parent.notNull())
+                    {
+                        gInventory.fetchDescendentsOf(expected_parent);
+                    }
+                }
+            }, delay);
+        };
+
+        schedule_retry(1.0f);
+        schedule_retry(5.0f);
+        schedule_retry(10.0f);
     }
+
     delete this;
 }
 
