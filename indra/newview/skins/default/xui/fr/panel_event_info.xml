@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_event_info" title="Événement">
+	<string name="none">
+		aucun
+	</string>
+	<string name="notify">
+		Prévenir
+	</string>
+	<string name="dont_notify">
+		Ne pas prévenir
+	</string>
+	<text name="event_name">
+		(aucun)
+	</text>
+	<text name="event_category_label">
+		Type :
+	</text>
+	<text name="event_category">
+		(aucun)
+	</text>
+	<text name="event_mature_label">
+		Contenu adulte :
+	</text>
+	<text name="event_mature_yes">
+		Oui
+	</text>
+	<text name="event_mature_no">
+		Non
+	</text>
+	<text name="event_date_label">
+		Date :
+	</text>
+	<text name="event_date">
+		(aucun)
+	</text>
+	<text name="event_duration_label">
+		Durée :
+	</text>
+	<text name="event_duration">
+		(aucune)
+	</text>
+	<text name="event_runby_label">
+		Organisé par :
+	</text>
+	<text name="event_runby">
+		(aucun)
+	</text>
+	<text name="event_location_label">
+		Lieu:
+	</text>
+	<text name="event_location">
+		(aucun)
+	</text>
+	<text name="event_cover_label">
+		Prix d'entrée :
+	</text>
+	<text name="event_cover">
+		(aucun)
+	</text>
+	<text name="event_desc_label">
+		Description:
+	</text>
+	<button label="Se téléporter" name="teleport_btn"/>
+	<button label="Aff. sur la carte" name="map_btn"/>
+	<button label="Prévenir" name="notify_btn"/>
+</panel>

@@ -1,0 +1,35 @@
+<panel label="Petites annonces" name="panel_dir_classified">
+	<string name="searching_text">
+		Recherche en cours...
+	</string>
+	<string name="not_found_text">
+		Pas de résultats.
+	</string>
+	<string name="found_text">
+		[COUNT] trouvé(s).
+	</string>
+	<text name="find">
+		Termes de la recherche :
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="Toutes catégories"/>
+		<combo_item name="Shopping" label="Achats"/>
+		<combo_item name="LandRental" label="Location de terrain"/>
+		<combo_item name="PropertyRental" label="Location immobilière"/>
+		<combo_item name="SpecialAttraction" label="Attraction spéciale"/>
+		<combo_item name="NewProducts" label="Nouveaux produits"/>
+		<combo_item name="Employment" label="Emploi"/>
+		<combo_item name="Wanted" label="Recherché"/>
+		<combo_item name="Service" label="Service"/>
+		<combo_item name="Personal" label="Personnel"/>
+	</combo_box>
+	<icon tool_tip="Général" name="rating_icon_general"/>
+	<icon tool_tip="Modéré" name="rating_icon_moderate"/>
+	<icon tool_tip="Adulte" name="rating_icon_adult"/>
+	<scroll_list name="results">
+		<column label="Nom" name="name" width="225" />
+		<column label="Prix" name="price" width="55" />
+	</scroll_list>
+	<button tool_tip="Page précédente" name="prev_btn"/>
+	<button tool_tip="Page suivante" name="next_btn"/>
+</panel>
