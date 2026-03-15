@@ -33,30 +33,14 @@
      width="150">
         Enter search terms:
     </text>
-    <line_editor
-     bevel_style="in"
-     border_style="line"
-     border_thickness="1"
-     top_pad="5"
-     follows="left|right|top"
-     font="SansSerif"
-     height="18"
-     left="5"
-     max_length="63"
-     mouse_opaque="true"
-     name="name"
-     width="650" />
-    <button
-     follows="right|top"
+    <search_combo_box
      layout="topleft"
-     font="SansSerif"
-     top_delta="0"
-     left_pad="5"
-     height="20"
-     label="Search"
-     mouse_opaque="true"
-     name="Search"
-     width="105" />
+     follows="left|top|right"
+     height="23"
+     left="5"
+     name="name"
+     top="26"
+     width="770"/>
     <scroll_list
      background_visible="true"
      layout="topleft"

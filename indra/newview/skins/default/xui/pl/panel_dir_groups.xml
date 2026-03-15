@@ -14,7 +14,6 @@
 		Szukana fraza:
 	</text>
 	<check_box label="Dołącz grupy dla dorosłych" name="incmature" />
-	<button label="Szukaj" name="Search" />
 	<scroll_list name="results">
 		<column label="Nazwa" name="name" />
 		<column label="Osób" name="members" />

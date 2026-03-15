@@ -30,6 +30,7 @@
 #include "llpanel.h"
 
 #include "llframetimer.h"
+#include "llsearchcombobox.h"
 
 class LLMessageSystem;
 class LLFloaterDirectory;
@@ -116,6 +117,9 @@ protected:
     // rows to display.
     S32 showNextButton(S32 rows);
 
+    // <FS:Ansariel> Port over search term history
+    void fillSearchComboBox();
+
 protected:
     LLUUID mSearchID; // Unique ID for a pending search
     LLUUID mWantSelectID; // scroll item to select on arrival
@@ -141,6 +145,7 @@ protected:
     LLButton* mNextPageBtn;
 
     LLUUID mSelectedID; // <FS:Ansariel> Add "open profile" button
+    LLSearchComboBox* mSearchComboBox{ nullptr }; // <FS:Ansariel> Port over search term history
 };
 
 constexpr S32 RESULTS_PER_PAGE_DEFAULT = 100;

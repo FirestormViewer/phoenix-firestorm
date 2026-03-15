@@ -14,7 +14,6 @@
         Suchbegriffe eingeben:
     </text>
     <check_box label="Moderate Gruppen einschließen" name="incmature"/>
-    <button label="Suchen" name="Search"/>
     <scroll_list name="results">
         <column label="Name" name="name"/>
         <column label="Mitglieder" name="members"/>

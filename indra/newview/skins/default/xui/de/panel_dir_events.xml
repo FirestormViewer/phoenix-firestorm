@@ -29,7 +29,6 @@
     <icon tool_tip="Generell" name="rating_icon_general"/>
     <icon tool_tip="Moderat" name="rating_icon_moderate"/>
     <icon tool_tip="Adult" name="rating_icon_adult"/>
-    <button label="Suchen" name="Search"/>
     <scroll_list name="results">
         <column label="Name" name="name" />
         <column label="Zeit (PT)" name="date"/>
