@@ -440,9 +440,9 @@ jobs:
         id: version
         shell: bash
         run: |
-          if [ -r "indra/newview/VIEWER_VERSION.txt" ]
+          if [ -r "indra/newview/VIEWER_VERSION_FS.txt" ]
           then
-              viewer_version="$(<"indra/newview/VIEWER_VERSION.txt")"
+              viewer_version="$(<"indra/newview/VIEWER_VERSION_FS.txt")"
               echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
           fi
           viewer_build=$(git rev-list --count HEAD)
