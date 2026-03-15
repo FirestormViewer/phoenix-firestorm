@@ -55,6 +55,7 @@ class FSPanelRadar;
 
 class LLPanelPeople
     : public LLPanel
+    , public LLFriendObserver // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
     , public LLVoiceClientStatusObserver
 {
     LOG_CLASS(LLPanelPeople);
@@ -68,6 +69,7 @@ public:
     // Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
     // when voice is available
     void onChange(EStatusType status, const LLSD& channelInfo, bool proximal) override;
+    void changed(U32 mask) override; // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
 
     // <FS:Ansariel> CTRL-F focusses local search editor
     bool handleKeyHere(KEY key, MASK mask) override;
@@ -207,6 +209,8 @@ private:
     void                    refreshContactSets();
     void                    generateContactList(const std::string& contact_set);
     void                    generateCurrentContactList();
+    void                    updateContactSetListSorting();
+    bool                    shouldSortByOnlineStatusForCurrentSet() const;
 
     void                    updateContactSets(LGGContactSets::EContactSetUpdate type);
     boost::signals2::connection mContactSetChangedConnection;

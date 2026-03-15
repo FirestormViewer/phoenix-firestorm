@@ -10,6 +10,7 @@
 		<button name="rename_btn" label="Rinomina"/>
 		<color_swatch name="set_swatch" tool_tip="Clic per scegliere colore"/>
 		<check_box label="Mostra notifiche" name="show_set_notifications"/>
+		<check_box label="Ordina per stato online" name="sort_by_online_status"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">

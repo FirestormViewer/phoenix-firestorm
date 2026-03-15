@@ -110,6 +110,7 @@ LLSD LGGContactSets::exportContactSet(std::string_view set_name)
         ret["groupname"] = set->mName;
         ret["color"] = set->mColor.getValue();
         ret["notices"] = set->mNotify;
+        ret["sort_by_online_status"] = set->mSortByOnlineStatus;
         for (const auto& friend_id : set->mFriends)
         {
             ret["friends"][friend_id.asString()] = "";
@@ -212,6 +213,7 @@ LLSD LGGContactSets::exportToLLSD()
     {
         output[name]["color"] = set->mColor.getValue();
         output[name]["notify"] = set->mNotify;
+        output[name]["sort_by_online_status"] = set->mSortByOnlineStatus;
         for (const auto& friend_id : set->mFriends)
         {
             output[name]["friends"][friend_id.asString()] = "";
@@ -275,6 +277,13 @@ void LGGContactSets::importFromLLSD(const LLSD& data)
                 notify = set_data["notify"].asBoolean();
             }
             new_set->mNotify = notify;
+
+            bool sort_by_online_status = false;
+            if (set_data.has("sort_by_online_status"))
+            {
+                sort_by_online_status = set_data["sort_by_online_status"].asBoolean();
+            }
+            new_set->mSortByOnlineStatus = sort_by_online_status;
 
             if (set_data.has("friends"))
             {
@@ -931,6 +940,7 @@ void LGGContactSets::addSet(std::string_view set_name)
         set->mName = set_name;
         set->mColor = LLColor4::red;
         set->mNotify = false;
+        set->mSortByOnlineStatus = false;
         mContactSets[set_name.data()] = set;
         saveToDisk();
         mChangedSignal(UPDATED_LISTS);
@@ -998,6 +1008,26 @@ bool LGGContactSets::getNotifyForSet(std::string_view set_name) const
     if (ContactSet* set = getContactSet(set_name); set)
     {
         return set->mNotify;
+    }
+    return false;
+}
+
+void LGGContactSets::setSortByOnlineStatusForSet(std::string_view set_name, bool sort_by_online_status)
+{
+    ContactSet* set = getContactSet(set_name);
+    if (set)
+    {
+        set->mSortByOnlineStatus = sort_by_online_status;
+        saveToDisk();
+        mChangedSignal(UPDATED_MEMBERS);
+    }
+}
+
+bool LGGContactSets::getSortByOnlineStatusForSet(std::string_view set_name) const
+{
+    if (ContactSet* set = getContactSet(set_name); set)
+    {
+        return set->mSortByOnlineStatus;
     }
     return false;
 }

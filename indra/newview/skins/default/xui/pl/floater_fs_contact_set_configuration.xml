@@ -11,6 +11,7 @@
 		<button name="rename_btn" width="85" label="Zmień nazwę"/>
 		<color_swatch label="Ustaw kolor" name="set_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
 		<check_box label="Pokazuj powiadomienia" name="show_set_notifications" />
+		<check_box label="Sortuj według statusu online" name="sort_by_online_status" />
 	</panel>
 	<panel name="bottom_panel" width="450">
 		<text name="global_label">

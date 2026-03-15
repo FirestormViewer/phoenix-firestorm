@@ -11,6 +11,7 @@
 		<button name="rename_btn" width="85" label="重新命名" />
 		<color_swatch label="顏色選擇" name="set_swatch" tool_tip="點擊以打開顏色選擇" />
 		<check_box label="顯示通知" name="show_set_notifications" />
+		<check_box label="依在線狀態排序" name="sort_by_online_status" />
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">

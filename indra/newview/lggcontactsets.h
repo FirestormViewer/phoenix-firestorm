@@ -99,6 +99,8 @@ public:
     bool notifyForFriend(const LLUUID& friend_id) const;
     void setNotifyForSet(std::string_view set_name, bool notify);
     bool getNotifyForSet(std::string_view set_name) const;
+    void setSortByOnlineStatusForSet(std::string_view set_name, bool sort_by_online_status);
+    bool getSortByOnlineStatusForSet(std::string_view set_name) const;
 
     bool callbackAliasReset(const LLSD& notification, const LLSD& response);
 
@@ -116,6 +118,7 @@ public:
         std::string     mName;
         uuid_set_t      mFriends;
         bool            mNotify;
+        bool            mSortByOnlineStatus;
         LLColor4        mColor;
     };
     ContactSet* getContactSet(std::string_view set_name) const;

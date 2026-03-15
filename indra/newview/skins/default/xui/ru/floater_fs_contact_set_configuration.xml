@@ -11,6 +11,7 @@
 		<button name="rename_btn" width="85" label="Переименовать"/>
 		<color_swatch label="Задать цвет" name="set_swatch" tool_tip="Нажмите, чтобы открыть палитру цветов" />
 		<check_box label="Показывать уведомления" name="show_set_notifications" />
+		<check_box label="Сортировать по онлайн-статусу" name="sort_by_online_status" />
 	</panel>
 	<panel name="bottom_panel" width="450">
 		<text name="global_label">

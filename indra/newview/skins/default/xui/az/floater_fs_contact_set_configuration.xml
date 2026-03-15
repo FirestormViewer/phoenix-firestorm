@@ -11,6 +11,7 @@
 		<button name="rename_btn" width="85" label="Adı dəyişdir"/>
 		<color_swatch label="Rəngi təyin et" name="set_swatch" tool_tip="Rəng seçimini açmaq üçün toxunun" />
 		<check_box label="Bildirişlər göstər" name="show_set_notifications" />
+		<check_box label="Onlayn statusa görə sırala" name="sort_by_online_status" />
 	</panel>
 	<panel name="bottom_panel" width="450">
 		<text name="global_label">

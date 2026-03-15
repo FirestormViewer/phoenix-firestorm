@@ -64,6 +64,15 @@ Contact Set Settings:
      name="show_set_notifications"
      top_delta="0"
      width="400" />
+    <check_box
+     height="16"
+     label="Sort by online status"
+     layout="topleft"
+     left_delta="0"
+     initial_value="false"
+     name="sort_by_online_status"
+     top_pad="4"
+     width="400" />
     </panel>
     <panel
      name="bottom_panel"

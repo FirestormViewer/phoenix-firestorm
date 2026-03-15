@@ -32,17 +32,19 @@
 
 #include "lggcontactsets.h"
 #include "llavatarlist.h"
+#include "llcallingcard.h"
 #include "llcombobox.h"
 #include "llpanel.h"
 
 #include <boost/signals2.hpp>
 
-class FSPanelContactSets : public LLPanel
+class FSPanelContactSets : public LLPanel, public LLFriendObserver
 {
 public:
     FSPanelContactSets();
     bool postBuild() override;
     void refreshSetList();
+    void changed(U32 changed_mask) override;
 
 private:
     ~FSPanelContactSets();
@@ -64,6 +66,8 @@ private:
 
     void refreshContactSets();
     void resetControls();
+    void updateAvatarListSorting();
+    bool shouldSortByOnlineStatus() const;
 
     void updateSets(LGGContactSets::EContactSetUpdate type);
     boost::signals2::connection mContactSetChangedConnection;

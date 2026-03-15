@@ -50,6 +50,7 @@ private:
     ~FSFloaterContactSetConfiguration() = default;
     void onCommitSetColor();
     void onCommitSetNotifications();
+    void onCommitSetSortByOnlineStatus();
     void onCommitDefaultColor();
     void onRenameSet();
 
@@ -59,6 +60,7 @@ private:
     std::string mContactSet;
 
     LLCheckBoxCtrl*     mNotificationCheckBox;
+    LLCheckBoxCtrl*     mSortByOnlineStatusCheckBox;
     LLColorSwatchCtrl*  mSetSwatch;
     LLColorSwatchCtrl*  mGlobalSwatch;
     LLLineEditor*       mSetName;
