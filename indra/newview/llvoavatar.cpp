@@ -9712,10 +9712,7 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
 
 bool LLVOAvatar::isFullyLoaded() const
 {
-// [SL:KB] - Appearance-Fixes
     return (mRenderUnloadedAvatar && !isSelf()) || mFullyLoaded;
-// [/SL:KB]
-//    return (mRenderUnloadedAvatar || mFullyLoaded);
 }
 
 bool LLVOAvatar::hasFirstFullAttachmentData() const

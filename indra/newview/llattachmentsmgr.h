@@ -90,20 +90,16 @@ public:
     void onDetachRequested(const LLUUID& inv_item_id);
     void onDetachCompleted(const LLUUID& inv_item_id);
 
-// [SL:KB] - Appearance-Fixes
     void clearPendingAttachmentLink(const LLUUID& idItem);
     bool getPendingAttachments(std::set<LLUUID>& ids) const;
-// [/SL:KB]
     bool isAttachmentStateComplete() const;
 
     // [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
     void refreshAttachments();
 
-// [SL:KB] - Appearance-Fixes
 protected:
     void onRegisterAttachmentComplete(const LLUUID& id_item_link);
     friend class LLRegisterAttachmentCallback;
-// [/SL:KB]
 
 private:
 
@@ -127,7 +123,6 @@ private:
     void linkRecentlyArrivedAttachments();
     void expireOldAttachmentRequests();
     void expireOldDetachRequests();
-//    void checkInvalidCOFLinks();
     void spamStatusInfo();
 
     // Attachments that we are planning to rez but haven't requested from the server yet.
@@ -142,13 +137,8 @@ private:
     // Attachments that have arrived but have not been linked in the COF yet.
     std::set<LLUUID> mRecentlyArrivedAttachments;
     LLTimer mCOFLinkBatchTimer;
-
-// [Sl:KB] - Appearance-Fixes
     // Attachments that have pending COF link creation
     std::set<LLUUID> mPendingAttachLinks;
-// [/SL:KB]
-//    // Attachments that are linked in the COF but may be invalid.
-//    LLItemRequestTimes mQuestionableCOFLinks;
 };
 
 #endif
