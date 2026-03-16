@@ -64,7 +64,7 @@
      tool_tip="Remove selected contact set"
      width="20" />
 	<view_border
-	 top="22"
+	 top="50"
 	 left="4"
 	 right="-92"
 	 bottom="-26"
@@ -72,10 +72,20 @@
 	 follows="all"
 	 bevel_style="in"
 	 name="info_border" />
+    <filter_editor
+     follows="left|top|right"
+     height="23"
+     layout="topleft"
+     left="4"
+     label="Filter People"
+     max_length_chars="300"
+     name="contact_sets_filter_input"
+     right="-92"
+     top="23" />
 	<avatar_list
      left="6"
      width="255"
-     top="25"
+     top="53"
      bottom="-29"
 	 follows="all"
 	 layout="topleft"

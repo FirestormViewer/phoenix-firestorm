@@ -1,0 +1,44 @@
+<panel label="Events" name="panel_dir_events">
+    <string name="searching_text">
+        Suche...
+    </string>
+    <string name="not_found_text">
+        Nichts gefunden.
+    </string>
+    <string name="found_text">
+        [COUNT] gefunden.
+    </string>
+    <text name="find">
+        Suchbegriffe eingeben:
+    </text>
+    <combo_box name="category_combo">
+        <combo_item name="All" label="Alle Kategorien"/>
+        <combo_item name="Discussion" label="Diskussion"/>
+        <combo_item name="Sports" label="Sport"/>
+        <combo_item name="LiveMusic" label="Live-Musik"/>
+        <combo_item name="LiveDJ" label="Live-DJ"/>
+        <combo_item name="Commercial" label="Gewerblich"/>
+        <combo_item name="Nightlife/Entertainment" label="Nachtleben/Unterhaltung"/>
+        <combo_item name="Games/Contests" label="Spiele/Wettbewerbe"/>
+        <combo_item name="Pageants" label="Schönheitswettbewerbe"/>
+        <combo_item name="Education" label="Bildung"/>
+        <combo_item name="ArtsandCulture" label="Kunst und Kultur"/>
+        <combo_item name="Charity/SupportGroups" label="Wohltätigkeits-/Support-Gruppen"/>
+        <combo_item name="Miscellaneous" label="Sonstiges"/>
+    </combo_box>
+    <icon tool_tip="Generell" name="rating_icon_general"/>
+    <icon tool_tip="Moderat" name="rating_icon_moderate"/>
+    <icon tool_tip="Adult" name="rating_icon_adult"/>
+    <scroll_list name="results">
+        <column label="Name" name="name" />
+        <column label="Zeit (PT)" name="date"/>
+    </scroll_list>
+    <button tool_tip="Vorherige Seite" name="prev_btn"/>
+    <button tool_tip="Nächste Seite" name="next_btn"/>
+    <radio_group name="date_mode">
+        <radio_item name="current" label="Aktuell und demnächst"/>
+        <radio_item name="date" label="Datum"/>
+    </radio_group>
+    <button label="&lt;&lt;" label_selected="&lt;&lt;" name="back_btn" tool_tip="Einen Tag zurück"/>
+    <button label="&gt;&gt;" label_selected="&gt;&gt;" name="forward_btn" tool_tip="Einen Tag vor"/>
+</panel>

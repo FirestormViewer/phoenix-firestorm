@@ -5,8 +5,8 @@
  can_drag_on_left="false"
  single_instance="true"
  can_resize="true"
- height="570"
- min_height="570"
+ height="577"
+ min_height="577"
  width="780"
  min_width="780"
  name="directory"
@@ -15,7 +15,7 @@
      top="0"
      left="0"
      follows="left|top|right|bottom"
-     height="550"
+     height="573"
      width="780"
      mouse_opaque="false"
      name="Directory Tabs"
@@ -100,7 +100,7 @@
 </tab_container>
     <panel
      top="65"
-     follows="right|top"
+     follows="bottom|right|top"
      height="486"
      left="345"
      visible="false"
@@ -148,4 +148,13 @@
      class="panel_event_info"
      filename="panel_event_info.xml"
      width="425" />
+    <button
+     follows="bottom|right"
+     height="20"
+     label="Open Profile"
+     name="open_profile_btn"
+     visible="false"
+     bottom="-5"
+     left="353"
+     width="133" />
 </floater>

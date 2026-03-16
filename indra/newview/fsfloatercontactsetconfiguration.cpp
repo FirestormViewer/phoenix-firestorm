@@ -67,6 +67,9 @@ bool FSFloaterContactSetConfiguration::postBuild()
 
     mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
     mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
+
+    mSortByOnlineStatusCheckBox = getChild<LLCheckBoxCtrl>("sort_by_online_status");
+    mSortByOnlineStatusCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetSortByOnlineStatus, this));
     return true;
 }
 
@@ -82,6 +85,7 @@ void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
     mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
     mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
     mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
+    mSortByOnlineStatusCheckBox->set(LGGContactSets::getInstance()->getSortByOnlineStatusForSet(mContactSet));
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetColor()
@@ -92,6 +96,11 @@ void FSFloaterContactSetConfiguration::onCommitSetColor()
 void FSFloaterContactSetConfiguration::onCommitSetNotifications()
 {
     LGGContactSets::getInstance()->setNotifyForSet(mContactSet, mNotificationCheckBox->getValue().asBoolean());
+}
+
+void FSFloaterContactSetConfiguration::onCommitSetSortByOnlineStatus()
+{
+    LGGContactSets::getInstance()->setSortByOnlineStatusForSet(mContactSet, mSortByOnlineStatusCheckBox->getValue().asBoolean());
 }
 
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()

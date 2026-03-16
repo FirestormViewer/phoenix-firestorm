@@ -66,8 +66,10 @@ bool LLPanelDirEvents::postBuild()
 
     childSetCommitCallback("mature", onCommitMature, this);
 
-    childSetAction("Search", LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn("Search");
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn("Search");
+    // </FS:Ansariel>
 
     onDateModeCallback(NULL, this);
 

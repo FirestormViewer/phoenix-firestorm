@@ -6,6 +6,7 @@
 		<button name="rename_btn" label="Renommer"/>
 		<color_swatch label="Couleur" name="set_swatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
 		<check_box label="Afficher les notifications" name="show_set_notifications"/>
+		<check_box label="Trier par statut en ligne" name="sort_by_online_status"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">Paramètres généraux :</text>

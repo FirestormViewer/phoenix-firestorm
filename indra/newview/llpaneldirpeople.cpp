@@ -34,6 +34,8 @@
 #include "llqueryflags.h"
 #include "llnotificationsutil.h"
 
+#include "llavataractions.h"
+
 static LLPanelInjector<LLPanelDirPeople> t_panel_dir_people("panel_dir_people");
 
 LLPanelDirPeople::LLPanelDirPeople()
@@ -48,8 +50,10 @@ bool LLPanelDirPeople::postBuild()
 
     //getChild<LLLineEditor>("name")->setKeystrokeCallback(boost::bind(&LLPanelDirBrowser::onKeystrokeName, _1, _2), NULL);
 
-    childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn( "Search" );
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn( "Search" );
+    // </FS:Ansariel>
 
     return true;
 }
@@ -103,3 +107,10 @@ void LLPanelDirPeople::performQuery()
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirPeople::openProfile()
+{
+    LLAvatarActions::showProfile(mSelectedID);
+}
+// </FS:Ansariel>

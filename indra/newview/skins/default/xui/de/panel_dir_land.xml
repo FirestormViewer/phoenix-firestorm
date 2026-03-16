@@ -1,0 +1,41 @@
+<panel label="Land Sales" name="panel_dir_land">
+    <string name="searching_text">
+        Suche...
+    </string>
+    <string name="not_found_text">
+        Nichts gefunden.
+    </string>
+    <string name="found_text">
+        [COUNT] gefunden.
+    </string>
+    <text name="find">
+        Suchbegriffe eingeben:
+    </text>
+    <combo_box name="type">
+        <combo_item name="AllTypes" label="Alle Typen"/>
+        <combo_item name="Auction" label="Auktionen"/>
+        <combo_item name="MainlandSales" label="Verkauf Mainland"/>
+        <combo_item name="EstateSales" label="Verkauf Estate"/>
+    </combo_box>
+    <icon tool_tip="Generell" name="rating_icon_general"/>
+    <icon tool_tip="Moderat" name="rating_icon_moderate"/>
+    <icon tool_tip="Adult" name="rating_icon_adult"/>
+    <check_box label="Preis &#8804; " name="pricecheck"/>
+    <text name="pricecheck_symbol">
+        L$
+    </text>
+    <check_box label="Größe &#8805; " name="areacheck" width="65"/>
+    <text name="areacheck_symbol">
+        m²
+    </text>
+    <button label="Suchen" name="Search"/>
+    <scroll_list name="results">
+        <column label="Name" name="name" />
+        <column label="Typ" name="landtype" />
+        <column label="Preis L$" name="price"/>
+        <column label="Größe" name="area"/>
+        <column label="L$/m²" name="per_meter"/>
+    </scroll_list>
+    <button tool_tip="Vorherige Seite" name="prev_btn"/>
+    <button tool_tip="Nächste Seite" name="next_btn"/>
+</panel>

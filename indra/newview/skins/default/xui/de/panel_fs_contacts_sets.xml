@@ -19,6 +19,7 @@
 	<button name="config_btn" tool_tip="Ausgewähltes Kontakt-Set konfigurieren"/>
 	<button name="add_set_btn" tool_tip="Neues Kontakt-Set hinzufügen"/>
 	<button name="remove_set_btn" tool_tip="Ausgewähltes Kontakt-Set entfernen"/>
+	<filter_editor label="Nach Personen filtern" name="contact_sets_filter_input"/>
 	<avatar_list name="contact_list" right="-90"/>
 	<button label="Hinzufügen..." name="add_btn" tool_tip="Einen Avatar zum aktuellen Kontakt-Set hinzufügen" width="85" left_delta="265"/>
 	<button label="Entfernen..." name="remove_btn" tool_tip="Avatar aus dem aktuellen Kontakt-Set entfernen" width="85"/>

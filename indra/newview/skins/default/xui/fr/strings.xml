@@ -734,6 +734,9 @@ peuvent être joints aux notes.
 	<string name="NoneFound">
 		Aucun résultat.
 	</string>
+	<string name="ServerUnavailable">
+		Service indisponible
+	</string>
 	<string name="RetrievingData">
 		En cours d&apos;extraction...
 	</string>

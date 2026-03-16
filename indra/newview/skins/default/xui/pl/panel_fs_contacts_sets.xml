@@ -18,6 +18,7 @@
 	<button name="config_btn" tool_tip="Konfiguruj wybrany zestaw kontaktów" />
 	<button name="add_set_btn" tool_tip="Dodaj nowy zestaw kontaktów" />
 	<button name="remove_set_btn" tool_tip="Usuń wybrany zestaw kontaktów" />
+	<filter_editor label="Filtruj ludzi" name="contact_sets_filter_input" />
 	<button label="Dodaj..." name="add_btn" tool_tip="Dodaj awatara do obecnego zestawu kontaktów" />
 	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tego awatara z obecnego zestawu kontaktów" />
 	<button label="Profil..." name="profile_btn" tool_tip="Otwórz profil tego awatara" />

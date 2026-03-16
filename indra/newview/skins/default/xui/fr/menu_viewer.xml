@@ -241,7 +241,15 @@
 			<menu_item_check label="Afficher le faisceau de sélection lumineux" name="Show Selection Beam"/>
 			<menu_item_check label="Mettre la transparence en surbrillance" name="Highlight Transparent"/>
 			<menu_item_check label="- Inclure les transparents riggés" name="Include Transparent Rigged"/>
+			<menu_item_check label="Mettre les sondes transparentes en surbrillance" name="Highlight Transparent Probes"/>
 			<menu_item_check label="Pas de post-traitement" name="No Post"/>
+			<menu label="Niveau de détail sélectionné" name="Selection level of detail">
+				<menu_item_check label="Par défaut" name="Default lod setting"/>
+				<menu_item_check label="Élevé" name="High lod setting"/>
+				<menu_item_check label="Moyen" name="Medium lod setting"/>
+				<menu_item_check label="Faible" name="Low lod setting"/>
+				<menu_item_check label="Le plus faible" name="Lowest lod setting"/>
+			</menu>
 			<menu_item_check label="Fixer sur la grille" name="Snap to Grid"/>
 			<menu_item_call label="Fixer les coordonnées XY de l&apos;objet sur la grille" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Utiliser la sélection pour la grille" name="Use Selection for Grid"/>
@@ -510,6 +518,7 @@
 			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
 			<menu_item_check label="Rendu des particules jointes" name="Render Attached Particles"/>
+			<menu_item_check label="Réduire la distance d'affichage lorsque la VRAM est pleine" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="Collecter les buffers de vertex des polices" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Activer le cache des shaders" name="Enable Shader Cache"/>
 			<menu_item_call label="Vider le cache des shaders" name="Shader Cache Clear"/>
@@ -570,6 +579,7 @@
 			<menu_item_check label="Débogage WindowProc" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">
+			<menu_item_call label="Afficher les paramètres de couleur" name="Color Settings"/>
 			<menu_item_call label="Recharger les paramètres de couleurs" name="Reload Color Settings"/>
 			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>
 			<menu_item_call label="Afficher le test SLapps" name="Show SLapps Test"/>

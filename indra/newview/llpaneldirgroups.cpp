@@ -33,6 +33,8 @@
 #include "llviewercontrol.h"
 #include "llsearcheditor.h"
 
+#include "llgroupactions.h"
+
 static LLPanelInjector<LLPanelDirGroups> t_panel_dir_groups("panel_dir_groups");
 
 LLPanelDirGroups::LLPanelDirGroups()
@@ -48,8 +50,10 @@ bool LLPanelDirGroups::postBuild()
 
     //getChild<LLLineEditor>("name")->setKeystrokeCallback(boost::bind(&LLPanelDirBrowser::onKeystrokeName, _1, _2), NULL);
 
-    childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn( "Search" );
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn( "Search" );
+    // </FS:Ansariel>
 
     return true;
 }
@@ -88,3 +92,10 @@ void LLPanelDirGroups::performQuery()
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirGroups::openProfile()
+{
+    LLGroupActions::show(mSelectedID);
+}
+// </FS:Ansariel>

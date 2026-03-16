@@ -38,6 +38,7 @@
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
+#include "llfiltereditor.h"
 #include "llnotificationsutil.h"
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
@@ -45,13 +46,40 @@
 constexpr U32 MAX_SELECTIONS = 20;
 static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
+class FSAvatarItemOnlineStatusComparator : public LLAvatarItemComparator
+{
+public:
+    virtual ~FSAvatarItemOnlineStatusComparator() = default;
+
+protected:
+    bool doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const override
+    {
+        const bool online_1 = LLAvatarTracker::instance().isBuddyOnline(avatar_item1->getAvatarId());
+        const bool online_2 = LLAvatarTracker::instance().isBuddyOnline(avatar_item2->getAvatarId());
+        if (online_1 != online_2)
+        {
+            return online_1;
+        }
+
+        std::string name1 = avatar_item1->getAvatarName();
+        std::string name2 = avatar_item2->getAvatarName();
+        LLStringUtil::toUpper(name1);
+        LLStringUtil::toUpper(name2);
+        return name1 < name2;
+    }
+};
+
+static const FSAvatarItemOnlineStatusComparator FS_ONLINE_STATUS_COMPARATOR;
+
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
 {
+    LLAvatarTracker::instance().addObserver(this);
     mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSPanelContactSets::updateSets, this, _1));
 }
 
 FSPanelContactSets::~FSPanelContactSets()
 {
+    LLAvatarTracker::instance().removeObserver(this);
     if (mContactSetChangedConnection.connected())
     {
         mContactSetChangedConnection.disconnect();
@@ -75,6 +103,11 @@ bool FSPanelContactSets::postBuild()
     mContactSetCombo = getChild<LLComboBox>("combo_sets");
     mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
     refreshContactSets();
+
+    if (LLFilterEditor* filter = getChild<LLFilterEditor>("contact_sets_filter_input", false))
+    {
+        filter->setCommitCallback(boost::bind(&FSPanelContactSets::onFilterEdit, this, _2));
+    }
 
     mAvatarList = getChild<LLAvatarList>("contact_list");
     mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
@@ -151,8 +184,17 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
         }
     }
     getChild<LLTextBox>("member_count")->setTextArg("[COUNT]", llformat("%d", avatars.size()));
+    updateAvatarListSorting();
     mAvatarList->setDirty();
     resetControls();
+}
+
+void FSPanelContactSets::changed(U32 changed_mask)
+{
+    if ((changed_mask & LLFriendObserver::ONLINE) && mAvatarList && shouldSortByOnlineStatus())
+    {
+        mAvatarList->sort();
+    }
 }
 
 void FSPanelContactSets::resetControls()
@@ -216,6 +258,40 @@ void FSPanelContactSets::refreshSetList()
     mAvatarList->refreshNames();
     generateAvatarList(mContactSetCombo->getValue().asString());
     resetControls();
+}
+
+void FSPanelContactSets::updateAvatarListSorting()
+{
+    if (!mAvatarList)
+    {
+        return;
+    }
+
+    if (shouldSortByOnlineStatus())
+    {
+        mAvatarList->setComparator(&FS_ONLINE_STATUS_COMPARATOR);
+        mAvatarList->sort();
+    }
+    else
+    {
+        mAvatarList->sortByName();
+    }
+}
+
+bool FSPanelContactSets::shouldSortByOnlineStatus() const
+{
+    if (!mContactSetCombo)
+    {
+        return false;
+    }
+
+    const std::string selected_set = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(selected_set))
+    {
+        return false;
+    }
+
+    return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(selected_set);
 }
 
 void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
@@ -338,5 +414,24 @@ void FSPanelContactSets::onClickRemoveDisplayName()
         {
             contact_sets.removeDisplayName(id);
         }
+    }
+}
+
+void FSPanelContactSets::onFilterEdit(const std::string& search_string)
+{
+    std::string trimmed_search = search_string;
+    LLStringUtil::trimHead(trimmed_search);
+
+    std::string search_upper = trimmed_search;
+    LLStringUtil::toUpper(search_upper);
+    if (mFilterSubString == search_upper)
+    {
+        return;
+    }
+
+    mFilterSubString = search_upper;
+    if (mAvatarList)
+    {
+        mAvatarList->setNameFilter(trimmed_search);
     }
 }

@@ -1,0 +1,5 @@
+<panel label="Web-Suche" name="panel_dir_web">
+    <button tool_tip="Zurück navigieren" name="back_btn"/>
+    <button tool_tip="Vorwärts navigieren" name="forward_btn"/>
+    <button name="home_btn" tool_tip="Startseite"/>
+</panel>
