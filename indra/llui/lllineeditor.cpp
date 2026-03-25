@@ -97,6 +97,7 @@ LLLineEditor::Params::Params()
     ignore_tab("ignore_tab", true),
     is_password("is_password", false),
     allow_emoji("allow_emoji", true),
+    draw_focus_border("draw_focus_border", true),
     cursor_color("cursor_color"),
     use_bg_color("use_bg_color", false),
     bg_color("bg_color"),
@@ -148,6 +149,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
     mIgnoreTab( p.ignore_tab ),
     mDrawAsterixes( p.is_password ),
     mAllowEmoji( p.allow_emoji ),
+    mDrawFocusBorder(p.draw_focus_border),
     mSpellCheck( p.spellcheck ),
     mSpellCheckStart(-1),
     mSpellCheckEnd(-1),
@@ -1879,7 +1881,7 @@ void LLLineEditor::drawBackground()
 
         if (!image) return;
         // optionally draw programmatic border
-        if (has_focus)
+        if (has_focus && mDrawFocusBorder)
         {
             LLColor4 tmp_color = gFocusMgr.getFocusColor();
             tmp_color.setAlpha(alpha);

@@ -97,6 +97,9 @@
 	<color
 	 name="DkGray2"
 	 value="0.169 0.169 0.169 1" />
+    <color
+	 name="DkGrayLogin"
+	 value="0.129 0.133 0.137 1" />
 	<color
 	 name="MouseGray"
 	 value="0.191 0.191 0.191 1" />
@@ -1303,6 +1306,9 @@
   <color
     name="PanelGray"
     value="0.27 0.27 0.27 1" />
+  <color
+    name="PanelDark"
+    value="0.078 0.078 0.078 1" />
   <color
     name="PerformanceMid"
     value="1 0.8 0 1" />

@@ -176,6 +176,19 @@ public:
 };
 LLLoginLocationAutoHandler gLoginLocationAutoHandler;
 
+std::string getShortGridLabel(const std::string& slurl_grid)
+{
+    if (slurl_grid == MAINGRID)
+    {
+        return LLTrans::getString("AgniGridLabelShort");
+    }
+    if (slurl_grid == BETAGRID)
+    {
+        return LLTrans::getString("AditiGridLabelShort");
+    }
+    return LLGridManager::getInstance()->getGridLabel(slurl_grid);
+}
+
 //---------------------------------------------------------------------------
 // Public methods
 //---------------------------------------------------------------------------
@@ -223,13 +236,16 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
     password_edit->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, false));
 
     childSetAction("connect_btn", onClickConnect, this);
+    childSetAction("sign_btn", onClickSignUp, this);
 
     mLoginBtn = getChild<LLButton>("connect_btn");
     setDefaultBtn(mLoginBtn);
 
     // change z sort of clickable text to be behind buttons
     sendChildToBack(getChildView("forgot_password_text"));
-    sendChildToBack(getChildView("sign_up_text"));
+
+    mLoginStack = getChild<LLLayoutStack>("login_stack");
+    mGridPanel = getChild<LLLayoutPanel>("grid_panel");
 
     std::string current_grid = LLGridManager::getInstance()->getGrid();
     if (!mFirstLoginThisInstall)
@@ -253,13 +269,13 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
             if (!grid_choice->first.empty() && current_grid != grid_choice->first)
             {
                 LL_DEBUGS("AppInit") << "adding " << grid_choice->first << LL_ENDL;
-                server_choice_combo->add(grid_choice->second, grid_choice->first);
+                server_choice_combo->add(getShortGridLabel(grid_choice->first), grid_choice->first);
             }
         }
         server_choice_combo->sortByName();
 
         LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
-        server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
+        server_choice_combo->add(getShortGridLabel(current_grid),
             current_grid,
             ADD_TOP);
         server_choice_combo->selectFirstItem();
@@ -309,9 +325,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
     LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
     forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
-
-    LLTextBox* sign_up_text = getChild<LLTextBox>("sign_up_text");
-    sign_up_text->setClickedCallback(onClickSignUp, NULL);
 
     // get the web browser control
     LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
@@ -754,6 +767,11 @@ void LLPanelLogin::updateLocationSelectorsVisibility()
         {
             server_combo->setVisible(show_server);
         }
+        if (LLTextBox* grid_txt = sInstance->getChild<LLTextBox>("grid_text"))
+        {
+            grid_txt->setVisible(show_server);
+        }
+        sInstance->collapseGridPanel(!show_server);
     }
 }
 
@@ -789,7 +807,7 @@ void LLPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
 
                 // update the grid selector to match the slurl
                 LLComboBox* server_combo = sInstance->getChild<LLComboBox>("server_combo");
-                std::string server_label(LLGridManager::getInstance()->getGridLabel(slurl_grid));
+                std::string server_label(getShortGridLabel(slurl_grid));
                 server_combo->setSimple(server_label);
 
                 updateServer(); // to change the links and splash screen
@@ -1388,5 +1406,15 @@ bool LLPanelLogin::onUpdateNotification(const LLSD& notify)
         updateLoginButtons();
     }
     return false;
+}
+
+void LLPanelLogin::collapseGridPanel(bool collapse)
+{
+    if (mGridPanel->isCollapsed() == collapse)
+    {
+        return;
+    }
+    mLoginStack->collapsePanel(mGridPanel, collapse);
+    mLoginStack->updateLayout();
 }
 #endif

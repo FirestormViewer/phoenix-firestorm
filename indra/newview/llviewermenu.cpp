@@ -790,7 +790,7 @@ void init_menus()
     menuBarRect.setLeftTopAndSize(0, menu_bar_holder->getRect().getHeight(), menuBarRect.getWidth(), menuBarRect.getHeight());
     gLoginMenuBarView->setRect(menuBarRect);
     // do not set colors in code, always lat the skin decide. -Zi
-    // gLoginMenuBarView->setBackgroundColor( color );
+    // gLoginMenuBarView->setBackgroundColor(LLColor4::black);
     menu_bar_holder->addChild(gLoginMenuBarView);
 
     // tooltips are on top of EVERYTHING, including menus
