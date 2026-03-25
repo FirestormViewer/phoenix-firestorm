@@ -67,17 +67,6 @@
      layout="topleft"
      name="running"
      width="80" />
-    <check_box
-     left_pad="0"
-     enabled="true"
-     follows="left|bottom"
-     font="SansSerif"
-     height="18"
-     initial_value="true"
-     label="Mono"
-     layout="topleft"
-     name="mono"
-     width="80" />
     <button
      follows="right|bottom"
      label="Reset"

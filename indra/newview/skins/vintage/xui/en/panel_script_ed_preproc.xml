@@ -448,6 +448,30 @@
      name="Insert..."
      top_pad="0"
      width="128" />
+    <combo_box
+      name="compile_target"
+      follows="left|bottom"
+      height="23"
+      layout="topleft"
+      left_pad="4"
+      width="140">
+      <combo_box.item
+        label="LSL: Legacy (LSO2)"
+        name="compile_target_lsl2"
+        value="lsl2" />
+      <combo_box.item
+        label="LSL: Mono"
+        name="compile_target_mono"
+        value="mono" />
+      <combo_box.item
+        label="LSL: 2025 VM"
+        name="compile_target_lsl_luau"
+        value="lsl-luau" />
+      <combo_box.item
+        label="SLua"
+        name="compile_target_luau"
+        value="luau" />
+    </combo_box>
     <button
      enabled="false"
      follows="right|bottom"
