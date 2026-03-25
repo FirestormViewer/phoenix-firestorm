@@ -236,17 +236,25 @@ bool LLFloaterColorPicker::postBuild()
     childSetCommitCallback("sspin", onTextCommit, (void*)this );
     childSetCommitCallback("lspin", onTextCommit, (void*)this );
 
+    mPipetteConnection = LLToolPipette::getInstance()->setToolSelectCallback(
+        [this](LLPointer<LLViewerObject> object, S32 te_index)
+    {
+        const LLTextureEntry* entry = object->getTE(te_index);
+        if (entry)
+        {
+            onColorSelect(entry->getColor());
+        }
+    });
+
     // <FS:Zi> Add float LSL color entry widgets
-    mCopyLSLBtn = getChild<LLButton>( "copy_lsl_btn" );
-    mCopyLSLBtn->setClickedCallback ( onClickCopyLSL, this );
+    mCopyLSLBtn = getChild<LLButton>("copy_lsl_btn");
+    mCopyLSLBtn->setClickedCallback(onClickCopyLSL, this);
 
-    childSetCommitCallback("rspin_lsl", onTextCommit, (void*)this );
-    childSetCommitCallback("gspin_lsl", onTextCommit, (void*)this );
-    childSetCommitCallback("bspin_lsl", onTextCommit, (void*)this );
-    childSetCommitCallback("hex_value", onTextCommit, (void*)this );
+    childSetCommitCallback("rspin_lsl", onTextCommit, this);
+    childSetCommitCallback("gspin_lsl", onTextCommit, this);
+    childSetCommitCallback("bspin_lsl", onTextCommit, this);
+    childSetCommitCallback("hex_value", onTextCommit, this);
     // </FS:Zi>
-
-    LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterColorPicker::onColorSelect, this, _1));
 
     return true;
 }
@@ -473,10 +481,10 @@ void LLFloaterColorPicker::onImmediateCheck( LLUICtrl* ctrl, void* data)
     }
 }
 
-void LLFloaterColorPicker::onColorSelect( const LLTextureEntry& te )
+// From pipette
+void LLFloaterColorPicker::onColorSelect( const LLColor4 &color )
 {
-    // Pipete
-    selectCurRgb(te.getColor().mV[VRED], te.getColor().mV[VGREEN], te.getColor().mV[VBLUE]);
+    selectCurRgb(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE]);
 }
 
 void LLFloaterColorPicker::onMouseCaptureLost()

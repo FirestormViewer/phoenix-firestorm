@@ -247,6 +247,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
     mTrustedContent(p.trusted_content),
     mAlwaysShowIcons(p.always_show_icons),
     mTrackEnd( p.track_end ),
+    mTrackValueChange(true),
     mScrollIndex(-1),
     mSelectionStart( 0 ),
     mSelectionEnd( 0 ),
@@ -1109,7 +1110,10 @@ void LLTextBase::drawText()
 
 S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::segment_vec_t* segments )
 {
-    beforeValueChange();
+    if (mTrackValueChange)
+    {
+        beforeValueChange();
+    }
 
     S32 old_len = getLength();      // length() returns character length
     S32 insert_len = static_cast<S32>(wstr.length());
@@ -1233,12 +1237,14 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 
     getViewModel()->getEditableDisplay().insert(pos, wstr);
 
-    if ( truncate() )
+    if (mTrackValueChange)
     {
-        insert_len = getLength() - old_len;
+        if (truncate())
+        {
+            insert_len = getLength() - old_len;
+        }
+        onValueChange(pos, pos + insert_len);
     }
-
-    onValueChange(pos, pos + insert_len);
     needsReflow(pos);
 
     return insert_len;
@@ -1254,7 +1260,10 @@ S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
     // Clamp length to not go past the end of the text
     length = std::min(length, text_length - pos);
 
-    beforeValueChange();
+    if (mTrackValueChange)
+    {
+        beforeValueChange();
+    }
     segment_set_t::iterator seg_iter = getSegIterContaining(pos);
     while(seg_iter != mSegments.end())
     {
@@ -1305,7 +1314,10 @@ S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
     // recreate default segment in case we erased everything
     createDefaultSegment();
 
-    onValueChange(pos, pos);
+    if (mTrackValueChange)
+    {
+        onValueChange(pos, pos);
+    }
     needsReflow(pos);
 
     return -length; // This will be wrong if someone calls removeStringNoUndo with an excessive length
@@ -1313,7 +1325,10 @@ S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
 
 S32 LLTextBase::overwriteCharNoUndo(S32 pos, llwchar wc)
 {
-    beforeValueChange();
+    if (mTrackValueChange)
+    {
+        beforeValueChange();
+    }
 
     if (pos > (S32)getLength())
     {
@@ -1321,7 +1336,10 @@ S32 LLTextBase::overwriteCharNoUndo(S32 pos, llwchar wc)
     }
     getViewModel()->getEditableDisplay()[pos] = wc;
 
-    onValueChange(pos, pos + 1);
+    if (mTrackValueChange)
+    {
+        onValueChange(pos, pos + 1);
+    }
     needsReflow(pos);
 
     return 1;
@@ -2581,6 +2599,10 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 
 void LLTextBase::setText(const LLStringExplicit &utf8str, const LLStyle::Params& input_params)
 {
+    beforeValueChange();
+    // Can insert a lot of different segments, don't want to spam events.
+    mTrackValueChange = false;
+
     // clear out the existing text and segments
     getViewModel()->setDisplay(LLWStringUtil::null);
 
@@ -2601,6 +2623,8 @@ void LLTextBase::setText(const LLStringExplicit &utf8str, const LLStyle::Params&
         startOfDoc();
     }
 
+    truncate(); // was postponed to avoid micro truncations and expensive checks
+    mTrackValueChange = true;
     onValueChange(0, getLength());
 }
 
@@ -2630,6 +2654,10 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     LLStyle::Params style_params(getStyleParams());
     style_params.overwriteFrom(input_params);
+
+    // todo: this does not check for maximum size, might
+    // want to stop once maximum size was reached to avoid
+    // expensive findUrl, replaceUrl calls.
 
     S32 part = (S32)LLTextParser::WHOLE;
     if ((mParseHTML || force_slurl) && !style_params.is_link) // Don't search for URLs inside a link segment (STORM-358).
@@ -2853,6 +2881,10 @@ void LLTextBase::copyContents(const LLTextBase* source)
     beforeValueChange();
     deselect();
 
+    // Can insert a lot of different segments, don't want to spam events.
+    // Do one full length onValueChange() at the end of this function.
+    mTrackValueChange = false;
+
     mSegments.clear();
     for (const LLTextSegmentPtr& segp : source->mSegments)
     {
@@ -2867,6 +2899,8 @@ void LLTextBase::copyContents(const LLTextBase* source)
 
     getViewModel()->setDisplay(source->getViewModel()->getDisplay());
 
+    truncate(); // was postponed to avoid micro truncations and expensive checks
+    mTrackValueChange = true;
     onValueChange(0, getLength());
     needsReflow();
 }
