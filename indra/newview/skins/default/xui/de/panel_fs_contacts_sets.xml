@@ -22,6 +22,7 @@
 	<filter_editor label="Nach Personen filtern" name="contact_sets_filter_input"/>
 	<avatar_list name="contact_list" right="-90"/>
 	<button label="Hinzufügen..." name="add_btn" tool_tip="Einen Avatar zum aktuellen Kontakt-Set hinzufügen" width="85" left_delta="265"/>
+	<button label="Verschieben..." name="move_btn" tool_tip="Diesen Avatar in ein anderes Kontakt-Set verschieben" width="85"/>
 	<button label="Entfernen..." name="remove_btn" tool_tip="Avatar aus dem aktuellen Kontakt-Set entfernen" width="85"/>
 	<button label="Profil..." name="profile_btn" tool_tip="Avatarprofil öffnen" width="85"/>
 	<button label="IM..." name="start_im_btn" tool_tip="Öffnet eine Instant-Message-Sitzung" width="85"/>

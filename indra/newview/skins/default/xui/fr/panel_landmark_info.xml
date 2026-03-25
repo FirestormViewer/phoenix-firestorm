@@ -31,6 +31,7 @@
 				<text name="title_label" value="Titre :" width="70"/>
 				<text name="notes_label" value="Remarques :"/>
 				<text name="folder_label" value="Dossier du repère :"/>
+				<button label="Modifier" name="edit_btn" tool_tip="Modifier les informations relatives au repère"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>

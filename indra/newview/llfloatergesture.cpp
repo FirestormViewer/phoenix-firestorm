@@ -56,6 +56,14 @@ bool item_name_precedes( LLInventoryItem* a, LLInventoryItem* b )
     return LLStringUtil::precedesDict( a->getName(), b->getName() );
 }
 
+// <FS:PP> FIRE-36169 Gestures enable/disable switch
+static bool are_gestures_enabled()
+{
+    static LLCachedControl<bool> gestures_enabled(gSavedPerAccountSettings, "FSGesturesEnabled", true);
+    return gestures_enabled;
+}
+// </FS:PP>
+
 class LLFloaterGestureObserver : public LLGestureManagerObserver
 {
 public:
@@ -207,6 +215,7 @@ bool LLFloaterGesture::postBuild()
     getChild<LLButton>("activate_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onActivateBtnClick, this));
 
     getChild<LLUICtrl>("FSShowOnlyActiveGestures")->setCommitCallback(boost::bind(&LLFloaterGesture::refreshForActiveSort, this)); // <FS:PP> FIRE-5646: Option to show only active gestures
+    getChild<LLUICtrl>("FSGesturesEnabled")->setCommitCallback(boost::bind(&LLFloaterGesture::onGesturesEnabledChanged, this)); // <FS:PP> FIRE-36169 Gestures enable/disable switch
 
     getChild<LLUICtrl>("new_gesture_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickNew, this));
     getChild<LLButton>("del_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onDeleteSelected, this));
@@ -236,6 +245,7 @@ bool LLFloaterGesture::postBuild()
 
     // Update button labels
     onCommitList();
+    updateGesturesEnabledState(); // <FS:PP> FIRE-36169 Gestures enable/disable switch
 
     return true;
 }
@@ -465,6 +475,13 @@ void LLFloaterGesture::getSelectedIds(uuid_vec_t& ids)
 
 bool LLFloaterGesture::isActionEnabled(const LLSD& command)
 {
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    if (!are_gestures_enabled())
+    {
+        return false;
+    }
+    // </FS:PP>
+
     // paste copy_uuid edit_gesture
     std::string command_name = command.asString();
     if("paste" == command_name)
@@ -507,6 +524,8 @@ bool LLFloaterGesture::isActionEnabled(const LLSD& command)
 
 void LLFloaterGesture::onClickPlay()
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     const LLUUID& item_id = mGestureList->getCurrentID();
     if(item_id.isNull()) return;
 
@@ -533,6 +552,8 @@ void LLFloaterGesture::onClickPlay()
 
 void LLFloaterGesture::onClickNew()
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     LLPointer<LLInventoryCallback> cb = new GestureShowCallback();
     create_inventory_item(gAgent.getID(),
                           gAgent.getSessionID(),
@@ -549,6 +570,8 @@ void LLFloaterGesture::onClickNew()
 
 void LLFloaterGesture::onActivateBtnClick()
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     uuid_vec_t ids;
     getSelectedIds(ids);
     if(ids.empty())
@@ -626,6 +649,8 @@ void LLFloaterGesture::onGestureRename(const LLSD& notification, const LLSD& res
 
 void LLFloaterGesture::onCopyPasteAction(const LLSD& command)
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     std::string command_name  = command.asString();
     // Since we select this command, the inventory items must have already arrived
     if("copy_gesture" == command_name)
@@ -676,6 +701,8 @@ void LLFloaterGesture::onCopyPasteAction(const LLSD& command)
 
 void LLFloaterGesture::onClickEdit()
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     const LLUUID& item_id = mGestureList->getCurrentID();
 
     LLInventoryItem* item = gInventory.getItem(item_id);
@@ -703,10 +730,36 @@ void LLFloaterGesture::onCommitList()
         getChildView("play_btn")->setVisible( true);
         getChildView("stop_btn")->setVisible( false);
     }
+
+    updateGesturesEnabledState(); // <FS:PP> FIRE-36169 Gestures enable/disable switch
 }
+
+// <FS:PP> FIRE-36169 Gestures enable/disable switch
+void LLFloaterGesture::onGesturesEnabledChanged()
+{
+    updateGesturesEnabledState();
+}
+
+void LLFloaterGesture::updateGesturesEnabledState()
+{
+    const bool gestures_enabled = are_gestures_enabled();
+
+    mGestureList->setEnabled(gestures_enabled);
+    getChildView("edit_btn")->setEnabled(gestures_enabled);
+    getChildView("play_btn")->setEnabled(gestures_enabled);
+    getChildView("stop_btn")->setEnabled(gestures_enabled);
+    getChildView("new_gesture_btn")->setEnabled(gestures_enabled);
+    getChildView("del_btn")->setEnabled(gestures_enabled);
+    getChildView("activate_btn")->setEnabled(gestures_enabled);
+    getChildView("gear_btn")->setEnabled(gestures_enabled);
+    getChildView("FSShowOnlyActiveGestures")->setEnabled(gestures_enabled);
+}
+// </FS:PP>
 
 void LLFloaterGesture::onDeleteSelected()
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     uuid_vec_t ids;
     getSelectedIds(ids);
     if(ids.empty())
@@ -771,15 +824,17 @@ void LLFloaterGesture::playGesture(LLUUID item_id)
 
 // <FS:ND> Try to update an item that already exists. Return true on success, false if such an item does not exist yet.
 
-#define COL_TRIGGER 0
-#define COL_SHORTCUT 1
-#define COL_KEY 2
-#define COL_NAME 3
+#define COL_ACTIVE 0
+#define COL_NAME 1
+#define COL_TRIGGER 2
+#define COL_KEY 3
+#define COL_SHORTCUT 4
 
-#define UI_COL_NAME 0
-#define UI_COL_TRIGGER 1
-#define UI_COL_KEY 2
-#define UI_COL_SHORTCUT 3
+#define UI_COL_ACTIVE 0
+#define UI_COL_NAME 1
+#define UI_COL_TRIGGER 2
+#define UI_COL_KEY 3
+#define UI_COL_SHORTCUT 4
 
 bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
 {
@@ -793,11 +848,14 @@ bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
     if( !pItem )
         return false;
 
-    std::string sDummyShortcut = "---";
-    std::string sDummyKey = "~~~";
+    const std::string sDummyShortcut = "---";
+    const std::string sDummyKey = "~~~";
 
     if( aData[ "columns" ][ COL_NAME ][ "value" ] != "" )
         pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
+
+    if( aData[ "columns" ][ COL_TRIGGER ][ "value" ] != "" )
+        pItem->getColumn( UI_COL_TRIGGER )->setValue( aData[ "columns" ][ COL_TRIGGER ][ "value" ] );
 
     if( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] != sDummyShortcut )
         pItem->getColumn( UI_COL_SHORTCUT )->setValue( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] );
@@ -807,7 +865,15 @@ bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
 
     pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
 
-    LLFontGL::StyleFlags oStyle = LLGestureMgr::getInstance()->isGestureActive(aItem) ? LLFontGL::BOLD : LLFontGL::NORMAL;
+    bool is_gesture_active = LLGestureMgr::getInstance()->isGestureActive(aItem);
+    LLFontGL::StyleFlags oStyle = is_gesture_active ? LLFontGL::BOLD : LLFontGL::NORMAL;
+
+    pItem->getColumn(UI_COL_ACTIVE)->setValue(is_gesture_active ? "Activate_Checkmark" : "");
+    LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(pItem->getColumn(UI_COL_ACTIVE));
+    if (is_gesture_active && icon)
+    {
+        icon->setIconSize(10);
+    }
 
     LLScrollListText *pTextItem = dynamic_cast< LLScrollListText* >( pItem->getColumn( UI_COL_NAME ) );
 

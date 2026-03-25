@@ -1218,7 +1218,8 @@ Sizin aktiv qrupunuz üçün torpaq almaq hüququnuz yoxdur.
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz.
+		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz. Açar sözdə icazə verilən durğu işarələri: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Yanlış əvəzetmə siyahısı.
@@ -5082,6 +5083,13 @@ Bu əməliyyatı geri qaytara bilməzsiniz.
 		[AVATAR] üçün ləqəb daxil edin:
 		<form name="form">
 			<input name="message" type="text"/>
+			<button name="Create" text="Yarat"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		[COUNT] avatar üçün ləqəb daxil edin:
+		<form name="form">
 			<button name="Create" text="Yarat"/>
 			<button name="Cancel" text="Ləğv et"/>
 		</form>

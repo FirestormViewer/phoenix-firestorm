@@ -1210,7 +1210,8 @@ Etkin grubunuz adına arazi satın almak için gerekli izne sahip değilsiniz.
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Anahtar kelime tek bir kelime olmalıdır; değiştirme boş olamaz.
+		Anahtar kelime tek bir kelime olmalıdır; değiştirme boş olamaz. Anahtar kelimede izin verilen noktalama: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Bu değiştirme listesi geçerli değil.

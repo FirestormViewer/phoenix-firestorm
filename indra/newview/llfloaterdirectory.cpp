@@ -106,6 +106,31 @@ bool LLFloaterDirectory::postBuild()
     return true;
 }
 
+// <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+void LLFloaterDirectory::onOpen(const LLSD& key)
+{
+    LLFloater::onOpen(key);
+
+    if (!key.has("query"))
+    {
+        return;
+    }
+
+    LLPanelDirWeb* panel_dir_web = findChild<LLPanelDirWeb>("panel_dir_web");
+    if (!panel_dir_web || !mDirectoryTabs)
+    {
+        return;
+    }
+
+    const std::string category = key.has("category") ? key["category"].asString() : "standard";
+    const std::string query = key["query"].asString();
+    const std::string collection = key.has("collection") ? key["collection"].asString() : "";
+
+    mDirectoryTabs->selectTabByName("panel_dir_web");
+    panel_dir_web->navigateToSearchPage(category, query, collection);
+}
+// </FS:PP>
+
 void LLFloaterDirectory::hideAllDetailPanels()
 {
     if (mPanelAvatarp) mPanelAvatarp->setVisible(false);

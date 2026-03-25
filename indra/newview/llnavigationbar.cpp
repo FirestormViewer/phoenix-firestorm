@@ -876,7 +876,10 @@ void LLNavigationBar::invokeSearch(std::string search_text)
     collections.append("destinations");
     collections.append("places");
     key["collections"] = collections;
-    LLFloaterReg::showInstance("search", key);
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    //LLFloaterReg::showInstance("search", key);
+    LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search", key);
+    // </FS:PP>
 }
 
 void LLNavigationBar::clearHistoryCache()

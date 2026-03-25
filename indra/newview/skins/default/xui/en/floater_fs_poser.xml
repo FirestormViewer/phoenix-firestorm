@@ -822,8 +822,17 @@
 							 top="0">
 								<scroll_list.columns
 								 label="Preset Name"
-								 name="name"
-								 relative_width="0.9"/>
+								 name="load_file_name_column"
+								 width="170"/>
+								<scroll_list.columns
+								 label="Date"
+								 name="load_file_date_column"
+								 sort_column="load_file_date_sort_column"
+								 width="-1"/>
+								<scroll_list.columns
+								 label="Date"
+								 name="load_file_date_sort_column"
+								 width="-1"/>
 							</scroll_list>
 							<button
 							 follows="top|left"

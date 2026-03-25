@@ -2,6 +2,7 @@
 <toggleable_menu name="Teleport History Item Menu">
 	<menu_item_call label="Téléporter" name="Teleport"/>
 	<menu_item_call label="Plus d'informations" name="More Information"/>
+	<menu_item_call label="Afficher sur la carte" name="show_on_map"/>
 	<menu_item_call label="Copier la SLurl" name="CopyToClipboard"/>
 	<menu_item_call label="Supprimer de l'historique" name="remove_from_history"/>
 </toggleable_menu>

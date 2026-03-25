@@ -39,6 +39,9 @@
 				<columns label="Nom d'utilisateur" name="usernameUUID"/>
 			</fs_scroll_list>
 		</panel>
+		<panel label="Cercles" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">Sélectionnez un cercle :</text>
+		</panel>
 	</tab_container>
 	<button label="Annuler" label_selected="Annuler" name="cancel_btn"/>
 </floater>

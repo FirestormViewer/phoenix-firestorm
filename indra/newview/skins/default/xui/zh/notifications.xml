@@ -1344,7 +1344,8 @@
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		關鍵字必須是一個字，替換字不得空白。
+		關鍵字必須是一個字，替換字不得空白。關鍵字允許的標點符號：
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		該替換清單無效。
@@ -5474,6 +5475,13 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		為 [AVATAR] 輸入別名：
+		<form name="form">
+			<button name="Create" text="建立"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		為 [COUNT] 位化身輸入別名：
 		<form name="form">
 			<button name="Create" text="建立"/>
 			<button name="Cancel" text="取消"/>

@@ -207,11 +207,13 @@ private:
     bool                    onContactSetsEnable(const LLSD& userdata);
     void                    onContactSetsMenuItemClicked(const LLSD& userdata);
     void                    handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
+    void                    moveSelectedContactsToSet();
     void                    refreshContactSets();
     void                    generateContactList(const std::string& contact_set);
     void                    generateCurrentContactList();
     void                    updateContactSetListSorting();
     bool                    shouldSortByOnlineStatusForCurrentSet() const;
+    bool                    handleAvatarDropToCurrentContactSet(const LLUUID& avatar_id, bool drop);
 
     void                    updateContactSets(LGGContactSets::EContactSetUpdate type);
     boost::signals2::connection mContactSetChangedConnection;

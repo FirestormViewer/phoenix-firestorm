@@ -36,6 +36,8 @@
 #include "llvoiceclient.h"
 #include "rlvhandler.h"
 
+#include <set> // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+
 // class LLPanelProfileClassifieds;
 // class LLTabContainer;
 
@@ -147,6 +149,7 @@ protected:
      */
     // <FS> OpenSim
     void processGroupProperties(const LLAvatarGroups* avatar_groups);
+    void refreshGroupAndContactSetList(); // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
     /**
      * Fills common for Avatar profile and My Profile fields.
@@ -231,6 +234,7 @@ private:
 private:
     typedef std::map<std::string, LLUUID> group_map_t;
     group_map_t             mGroups;
+    std::set<std::string>   mProfileContactSets; // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
     void                    openGroupProfile();
 
     LLTextBox*          mStatusText; // <FS:Ansariel> Fix LL UI/UX design accident

@@ -4,4 +4,5 @@
 	<menu_item_call label="Kontakt entfernen..." name="remove_contact"/>
 	<menu_item_call label="Alias entfernen..." name="remove_alias"/>
 	<menu_item_call label="Anzeigename entfernen..." name="remove_display_name"/>
+	<menu_item_call label="Kontakt verschieben..." name="move_contact"/>
 </toggleable_menu>

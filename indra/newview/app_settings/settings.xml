@@ -24,6 +24,17 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>FSEventPollCoreRetries</key>
+  <map>
+    <key>Comment</key>
+    <string>DEBUG: EventQueueGet llcorehttp retry count. 0 keeps current 7.2.3 behavior; 5 matches 7.2.2 behaviour.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>5</integer>
+  </map>
   <key>FSUseV2Friends</key>
   <map>
     <key>Comment</key>
@@ -458,6 +469,17 @@
     <map>
       <key>Comment</key>
       <string>Whether to color a friends chat based on their friends groups</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSContactSetsColorizeFriends</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to color a friends list entry based on their friends groups</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

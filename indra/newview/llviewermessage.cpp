@@ -2573,7 +2573,10 @@ void send_do_not_disturb_message (LLMessageSystem* msg, const LLUUID& from_id, c
     {
         std::string my_name;
         LLAgentUI::buildFullname(my_name);
-        std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+        // <FS> FS autoresponse feature
+        // std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+        std::string response = LLIMProcessing::getAutoresponseTextForAvatar(from_id, true, false, false, false, false, false);
+        // </FS>
         pack_instant_message(
             msg,
             gAgent.getID(),

@@ -3563,6 +3563,9 @@ bool LLAppViewer::initConfiguration()
         // </FS:Ansariel>
         {
             // successfully handed off URL to existing instance, exit
+            // <FS:PP> FIRE-36191: Mark this helper process for clean shutdown so platform startup code can exit without treating this path as a launch failure
+            forceQuit();
+            // </FS:PP>
             return false;
         }
     }

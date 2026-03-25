@@ -1191,7 +1191,8 @@ Offri l&apos;amicizia a [NAME]?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota.
+		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota. Punteggiatura consentita nella parola chiave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista di sostituzione non è valida.
@@ -5073,6 +5074,13 @@ L'azione non può essere annullata.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Inserire un alias per [AVATAR]:
+		<form name="form">
+			<button name="Create" text="Crea"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Inserire un alias per [COUNT] avatar:
 		<form name="form">
 			<button name="Create" text="Crea"/>
 			<button name="Cancel" text="Annulla"/>

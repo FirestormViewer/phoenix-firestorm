@@ -32,6 +32,7 @@
 #include "llbutton.h"
 #include "llfloaterdirectory.h"
 #include "lltextbox.h"
+#include "lluri.h" // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
 #include "llviewercontrol.h"
 #include "llweb.h"
 
@@ -89,11 +90,27 @@ void LLPanelDirWeb::onVisibilityChange(bool new_visibility)
 
 void LLPanelDirWeb::navigateToDefaultPage()
 {
+// <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    navigateToSearchPage("standard", "");
+}
+
+void LLPanelDirWeb::navigateToSearchPage(const std::string& category, const std::string& query, const std::string& collection)
+{
+// </FS:PP>
     std::string url = gSavedSettings.getString("SearchURL");
 
     LLSD subs;
-    subs["QUERY"] = "";
-    subs["TYPE"] = "standard";
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    // subs["QUERY"] = "";
+    // subs["TYPE"] = "standard";
+    subs["QUERY"] = LLURI::escape(query);
+    subs["TYPE"] = category.empty() ? "standard" : category;
+    subs["COLLECTION"] = "";
+    if (subs["TYPE"].asString() == "standard" && !collection.empty())
+    {
+        subs["COLLECTION"] = "&collection_chosen=" + collection;
+    }
+    // </FS:PP>
     // Default to PG
     std::string maturity = "g";
     if (gAgent.prefersAdult())

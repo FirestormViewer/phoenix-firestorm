@@ -1153,7 +1153,8 @@ Oferecer amizade para [NAME]?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		A palavra-chave deve ser uma palavra única e a substituição não pode estar vazia.
+		A palavra-chave deve ser uma palavra única e a substituição não pode estar vazia. Pontuação permitida na palavra-chave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		A lista de substituição é inválida.

@@ -32,6 +32,7 @@
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "llfloater.h"
+#include "lggcontactsets.h"
 #include "llscrolllistcolumn.h"
 #include "rlvhandler.h"
 
@@ -105,6 +106,7 @@ private:
     void                    addFriend(const LLUUID& agent_id);
     void                    updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
     void                    updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id);
+    void                    updateFriendItemColor(LLScrollListItem* item, const LLUUID& agent_id) const;
 
     typedef enum
     {
@@ -128,6 +130,7 @@ private:
                                                             std::string& tooltip_msg);
     void                    onFriendFilterEdit(const std::string& search_string);
     void                    onGroupFilterEdit(const std::string& search_string);
+    void                    onContactSetsChanged(LGGContactSets::EContactSetUpdate type);
 
     // friend buttons
     void                    onViewProfileButtonClicked();
@@ -196,6 +199,7 @@ private:
 
     void updateRlvRestrictions(ERlvBehaviour behavior);
     boost::signals2::connection mRlvBehaviorCallbackConnection{};
+    boost::signals2::connection mContactSetChangedConnection{};
 
     std::string getFullName(const LLAvatarName& av_name);
 

@@ -52,10 +52,19 @@
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "llviewerassetupload.h"
+#include "llviewercontrol.h" // <FS:PP> FIRE-36169 Gestures enable/disable switch
 
 std::string NONE_LABEL;
 std::string SHIFT_LABEL;
 std::string CTRL_LABEL;
+
+// <FS:PP> FIRE-36169 Gestures enable/disable switch
+static bool are_gestures_enabled()
+{
+    static LLCachedControl<bool> gestures_enabled(gSavedPerAccountSettings, "FSGesturesEnabled", true);
+    return gestures_enabled;
+}
+// </FS:PP>
 
 void dialog_refresh_all();
 
@@ -656,7 +665,11 @@ void LLPreviewGesture::refresh()
         mSaveBtn->setEnabled(false);
 
         // Make sure preview button is enabled, so we can stop it
-        mPreviewBtn->setEnabled(true);
+        // <FS:PP> FIRE-36169 Gestures enable/disable switch
+        // mPreviewBtn->setEnabled(true);
+        mPreviewBtn->setEnabled(are_gestures_enabled());
+        // </FS:PP>
+
         return;
     }
 
@@ -774,7 +787,10 @@ void LLPreviewGesture::refresh()
     mActiveCheck->set(active);
 
     // Can only preview if there are steps
-    mPreviewBtn->setEnabled(step_count > 0);
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    // mPreviewBtn->setEnabled(step_count > 0);
+    mPreviewBtn->setEnabled(step_count > 0 && are_gestures_enabled());
+    // </FS:PP>
 
     // And can only save if changes have been made
     mSaveBtn->setEnabled(mDirty);
@@ -1783,6 +1799,7 @@ void LLPreviewGesture::onClickSave(void* data)
 void LLPreviewGesture::onClickPreview(void* data)
 {
     LLPreviewGesture* self = (LLPreviewGesture*)data;
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
 
     if (!self->mPreviewGesture)
     {

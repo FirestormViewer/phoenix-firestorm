@@ -68,6 +68,11 @@
 				<columns label="ユーザ名" name="usernameUUID" />
 			</fs_scroll_list>
 		</panel>
+		<panel label="コンタクトセット" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				コンタクトセットを選択：
+			</text>
+		</panel>
 	</tab_container>
 	<button label="ＯＫ" label_selected="ＯＫ" name="ok_btn"/>
 	<button label="キャンセル" label_selected="キャンセル" name="cancel_btn"/>

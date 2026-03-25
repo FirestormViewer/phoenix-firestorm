@@ -65,7 +65,12 @@ LLPanelDirGroups::~LLPanelDirGroups()
 // virtual
 void LLPanelDirGroups::performQuery()
 {
-    if (childGetValue("name").asString().length() < mMinSearchChars)
+    // <FS:PP> Improve query sanitization
+    // if (childGetValue("name").asString().length() < mMinSearchChars)
+    std::string search_text = childGetValue("name").asString();
+    LLStringUtil::trim(search_text);
+    if (search_text.length() < mMinSearchChars)
+    // </FS:PP>
     {
         return;
     }
@@ -88,7 +93,10 @@ void LLPanelDirGroups::performQuery()
     sendDirFindQuery(
         gMessageSystem,
         mSearchID,
-        childGetValue("name").asString(),
+        // <FS:PP> Search by UUID
+        // childGetValue("name").asString(),
+        search_text,
+        // </FS:PP>
         scope,
         mSearchStart);
 }

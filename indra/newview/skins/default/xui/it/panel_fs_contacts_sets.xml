@@ -18,7 +18,9 @@
 	<button name="config_btn" tool_tip="Configura il set di contatti selezionato" />
 	<button name="add_set_btn" tool_tip="Aggiungi un nuovo set di contatti" />
 	<button name="remove_set_btn" tool_tip="Elimina il set di contatti selezionato" />
+	<filter_editor label="Filtra persone" name="contact_sets_filter_input" />
 	<button label="Aggiungi" name="add_btn" tool_tip="Aggiungi un avatar a questo set di contatti" />
+	<button label="Sposta" name="move_btn" tool_tip="Sposta questo avatar in un altro set di contatti" />
 	<button label="Rimuovi" name="remove_btn" tool_tip="Rimuovi l'avatar selezionato da questo set di contatti" />
 	<button label="Profilo" name="profile_btn" tool_tip="Apri il profilo dell'avatar selezionato" />
 	<button label="IM / Chiama" name="start_im_btn" tool_tip="Invia IM all'avatar selezionato" />

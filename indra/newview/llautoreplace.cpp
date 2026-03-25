@@ -32,6 +32,22 @@
 
 const char* LLAutoReplace::SETTINGS_FILE_NAME = "autoreplace.xml";
 
+// <FS:PP> FIRE-36304 Allow some punctuation in autoreplace keywords
+namespace
+{
+    bool isAutoReplaceKeywordChar(llwchar character)
+    {
+        return LLWStringUtil::isPartOfWord(character)
+            || character == L'('
+            || character == L')'
+            || character == L'.'
+            || character == L','
+            || character == L'-'
+            || character == L'_';
+    }
+}
+// </FS:PP>
+
 void LLAutoReplace::autoreplaceCallback(S32& replacement_start, S32& replacement_length, LLWString& replacement_string, S32& cursor_pos, const LLWString& input_text)
 {
     // make sure these returned values are cleared in case there is no replacement
@@ -46,7 +62,10 @@ void LLAutoReplace::autoreplaceCallback(S32& replacement_start, S32& replacement
         if (word_end < 0 ) { word_end = 0; }; // <FS:Beq/> FIRE-34765
 
         bool at_space  = (input_text[word_end] == ' ');
-        bool have_word = (LLWStringUtil::isPartOfWord(input_text[word_end]));
+        // <FS:PP> FIRE-36304 Allow some punctuation in autoreplace keywords
+        // bool have_word = (LLWStringUtil::isPartOfWord(input_text[word_end]));
+        bool have_word = isAutoReplaceKeywordChar(input_text[word_end]);
+        // </FS:PP>
 
         if (at_space || have_word)
         {
@@ -54,7 +73,10 @@ void LLAutoReplace::autoreplaceCallback(S32& replacement_start, S32& replacement
             {
                 // find out if this space immediately follows a word
                 word_end--;
-                have_word  = (LLWStringUtil::isPartOfWord(input_text[word_end]));
+                // <FS:PP> FIRE-36304 Allow some punctuation in autoreplace keywords
+                // have_word  = (LLWStringUtil::isPartOfWord(input_text[word_end]));
+                have_word  = isAutoReplaceKeywordChar(input_text[word_end]);
+                // </FS:PP>
             }
             if (have_word)
             {
@@ -62,7 +84,10 @@ void LLAutoReplace::autoreplaceCallback(S32& replacement_start, S32& replacement
                 std::string word;
                 S32 word_start = word_end;
                 for (S32 back_one = word_start - 1;
-                     back_one >= 0 && LLWStringUtil::isPartOfWord(input_text[back_one]);
+                     // <FS:PP> FIRE-36304 Allow some punctuation in autoreplace keywords
+                     // back_one >= 0 && LLWStringUtil::isPartOfWord(input_text[back_one]);
+                     back_one >= 0 && isAutoReplaceKeywordChar(input_text[back_one]);
+                     // </FS:PP>
                      back_one--
                     )
                 {
@@ -717,7 +742,10 @@ bool LLAutoReplaceSettings::addEntryToList(LLWString keyword, LLWString replacem
         bool isOneWord = true;
         for (S32 character = 0; isOneWord && character < keyword.size(); character++ )
         {
-            if ( ! LLWStringUtil::isPartOfWord(keyword[character]) )
+            // <FS:PP> FIRE-36304 Allow some punctuation in autoreplace keywords
+            // if ( ! LLWStringUtil::isPartOfWord(keyword[character]) )
+            if ( ! isAutoReplaceKeywordChar(keyword[character]) )
+            // </FS:PP>
             {
                 LL_WARNS("AutoReplace") << "keyword '" << wstring_to_utf8str(keyword) << "' not a single word (len "<<keyword.size()<<" '"<<character<<"')" << LL_ENDL;
                 isOneWord = false;

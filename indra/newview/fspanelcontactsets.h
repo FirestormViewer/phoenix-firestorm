@@ -53,6 +53,7 @@ private:
     void generateAvatarList(const std::string& contact_set);
     void onClickAddAvatar(LLUICtrl* ctrl);
     void handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
+    void onClickMoveAvatar();
     void onClickRemoveAvatar();
     void onClickOpenProfile();
     void onClickStartIM();
@@ -64,6 +65,7 @@ private:
     void onClickSetPseudonym();
     void onClickRemovePseudonym();
     void onFilterEdit(const std::string& search_string);
+    bool handleAvatarDrop(const LLUUID& avatar_id, bool drop);
 
     void refreshContactSets();
     void resetControls();

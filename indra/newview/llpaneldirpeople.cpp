@@ -34,6 +34,11 @@
 #include "llqueryflags.h"
 #include "llnotificationsutil.h"
 
+// <FS:PP> Search by UUID
+#include "llavatarnamecache.h"
+#include "llscrolllistctrl.h"
+// </FS:PP>
+
 #include "llavataractions.h"
 
 static LLPanelInjector<LLPanelDirPeople> t_panel_dir_people("panel_dir_people");
@@ -60,15 +65,52 @@ bool LLPanelDirPeople::postBuild()
 
 LLPanelDirPeople::~LLPanelDirPeople()
 {
+    // <FS:PP> Search by UUID
+    if (mAvatarNameCallbackConnection.connected())
+    {
+        mAvatarNameCallbackConnection.disconnect();
+    }
+    // </FS:PP>
 }
 
 // virtual
 void LLPanelDirPeople::performQuery()
 {
-    if (childGetValue("name").asString().length() < mMinSearchChars)
+    // <FS:PP> Improve query sanitization
+    // if (childGetValue("name").asString().length() < mMinSearchChars)
+    // {
+    //     return;
+    // }
+    std::string search_text = childGetValue("name").asString();
+    LLStringUtil::replaceChar(search_text, '.', ' ');
+    LLStringUtil::trim(search_text);
+    if (search_text.length() < mMinSearchChars)
     {
         return;
     }
+
+    if (LLUUID::validate(search_text))
+    {
+        setupNewSearch();
+
+        if (mAvatarNameCallbackConnection.connected())
+        {
+            mAvatarNameCallbackConnection.disconnect();
+        }
+
+        const LLUUID avatar_id(search_text);
+        LLAvatarName av_name;
+        if (LLAvatarNameCache::get(avatar_id, &av_name))
+        {
+            addUUIDAvatarResult(avatar_id, av_name);
+        }
+        else
+        {
+            mAvatarNameCallbackConnection = LLAvatarNameCache::get(avatar_id, boost::bind(&LLPanelDirPeople::onAvatarNameCallback, this, _1, _2));
+        }
+        return;
+    }
+    // </FS:PP>
 
     // filter short words out of the query string
     // and indidate if we did have to filter it
@@ -76,7 +118,10 @@ void LLPanelDirPeople::performQuery()
     const S32 SHORTEST_WORD_LEN = 2;
     bool query_was_filtered = false;
     std::string query_string = LLPanelDirBrowser::filterShortWords(
-            childGetValue("name").asString(),
+            // <FS:PP> Improve query sanitization
+            // childGetValue("name").asString(),
+            search_text,
+            // </FS:PP>
             SHORTEST_WORD_LEN,
             query_was_filtered );
 
@@ -107,6 +152,57 @@ void LLPanelDirPeople::performQuery()
         scope,
         mSearchStart);
 }
+
+// <FS:PP> Search by UUID
+void LLPanelDirPeople::onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name)
+{
+    if (mAvatarNameCallbackConnection.connected())
+    {
+        mAvatarNameCallbackConnection.disconnect();
+    }
+    addUUIDAvatarResult(id, av_name);
+}
+
+void LLPanelDirPeople::addUUIDAvatarResult(const LLUUID& id, const LLAvatarName& av_name)
+{
+    LLScrollListCtrl* list = getChild<LLScrollListCtrl>("results");
+    if (!list)
+    {
+        return;
+    }
+
+    std::string avatar_name = av_name.getUserName();
+    if (avatar_name.empty())
+    {
+        avatar_name = av_name.getDisplayName();
+    }
+    if (avatar_name.empty())
+    {
+        avatar_name = id.asString();
+    }
+
+    LLSD content;
+    content["type"] = AVATAR_CODE;
+    content["name"] = avatar_name;
+
+    LLSD row;
+    row["id"] = id;
+    row["columns"][0]["column"] = "icon";
+    row["columns"][0]["type"] = "icon";
+    row["columns"][0]["value"] = "icon_avatar_offline.tga";
+    row["columns"][1]["column"] = "name";
+    row["columns"][1]["value"] = avatar_name;
+    row["columns"][1]["font"] = "SANSSERIF";
+
+    list->addElement(row);
+    mResultsContents[id.asString()] = content;
+    mHaveSearchResults = true;
+    updateResultCount();
+    list->setEnabled(true);
+    list->selectFirstItem();
+    onCommitList(nullptr, this);
+}
+// </FS:PP>
 
 // <FS:Ansariel> Add "open profile" button
 void LLPanelDirPeople::openProfile()

@@ -35,6 +35,7 @@
 class LLColorSwatchCtrl;
 class LLCheckBoxCtrl;
 class LLLineEditor;
+class LLTextEditor;
 class LLButton;
 
 class FSFloaterContactSetConfiguration : public LLFloater
@@ -52,7 +53,11 @@ private:
     void onCommitSetNotifications();
     void onCommitSetSortByOnlineStatus();
     void onCommitDefaultColor();
+    void onCommitSetAutoresponseBusy();
+    void onCommitSetAutoresponseMode();
+    void onCommitSetAutoresponseNonFriends();
     void onRenameSet();
+    void updateAutoresponseEditorEnabledState();
 
     void updateTitle();
 
@@ -61,6 +66,12 @@ private:
 
     LLCheckBoxCtrl*     mNotificationCheckBox;
     LLCheckBoxCtrl*     mSortByOnlineStatusCheckBox;
+    LLCheckBoxCtrl*     mAutoresponseBusyEnabledCheckBox;
+    LLTextEditor*       mAutoresponseBusyEditor;
+    LLCheckBoxCtrl*     mAutoresponseModeEnabledCheckBox;
+    LLTextEditor*       mAutoresponseModeEditor;
+    LLCheckBoxCtrl*     mAutoresponseNonFriendsEnabledCheckBox;
+    LLTextEditor*       mAutoresponseNonFriendsEditor;
     LLColorSwatchCtrl*  mSetSwatch;
     LLColorSwatchCtrl*  mGlobalSwatch;
     LLLineEditor*       mSetName;

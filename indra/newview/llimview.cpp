@@ -60,6 +60,7 @@
 #include "llmd5.h"
 #include "llmutelist.h"
 #include "llrecentpeople.h"
+#include "llimprocessing.h" // <FS> FS autoresponse feature
 #include "llviewermessage.h"
 #include "llviewerwindow.h"
 #include "llnotifications.h"
@@ -4754,26 +4755,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
         std::string my_name;
         std::string response;
         LLAgentUI::buildFullname(my_name);
-        if (is_busy)
-        {
-            response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
-        }
-        else if (is_autorespond_nonfriends && !is_friend)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
-        }
-        else if (is_autorespond)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-        }
-        else if (is_afk && FSSendAwayAvatarResponse)
-        {
-            response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
-        }
-        else
-        {
-            LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
-        }
+        response = LLIMProcessing::getAutoresponseTextForAvatar(av_id, is_busy, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),

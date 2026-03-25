@@ -4,4 +4,5 @@
 	<menu_item_call label="Kontaktı sil..." name="remove_contact" />
 	<menu_item_call label="Ləqəbi sil..." name="remove_alias" />
 	<menu_item_call label="Göstərilən adı sil..." name="remove_display_name" />
+	<menu_item_call label="Kontaktı köçür..." name="move_contact" />
 </toggleable_menu>

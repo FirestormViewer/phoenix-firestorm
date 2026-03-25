@@ -129,7 +129,7 @@
 			<check_box label="リンデンドルの残高を表示" name="FSShowCurrencyBalanceInStatusbar"/>
 			<check_box label="ステータスバーのメニューアイコンにマウスをロールオーバーでポップアップを表示" name="FSStatusBarMenuButtonPopupOnRollover"/>
 			<text name="statusbar_timeformat_textbox">
-				時刻の形式：
+				時計の形式：
 			</text>
 			<combo_box name="FSStatusBarTimeFormat" tool_tip="メインメニューバーで使用した時刻形式を選択します。">
 				<combo_box.item label="言語デフォルト" name="Language"/>

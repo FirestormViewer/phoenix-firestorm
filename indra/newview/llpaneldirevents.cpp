@@ -175,7 +175,10 @@ void LLPanelDirEvents::performQueryOrDelete(U32 event_id)
     U32 cat_id = childGetValue("category_combo").asInteger();
 
     params << cat_id << "|";
-    params << childGetValue("event_search_text").asString();
+    // <FS:PP> FIRE-36501 Events don't have line_editor "event_search_text", but search_combo_box "name"
+    // params << childGetValue("event_search_text").asString();
+    params << childGetValue("name").asString();
+    // </FS:PP>
 
     // send the message
     if (0 == event_id)

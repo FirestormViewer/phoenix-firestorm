@@ -1319,7 +1319,8 @@ Sind Sie sicher, dass Sie diese Liste löschen möchten?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein.
+		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein. Erlaubte Satzzeichen im Schlüsselwort: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Diese Ersetzungsliste ist nicht gültig.
@@ -5775,6 +5776,13 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Alias für [AVATAR] eingeben:
+		<form name="form">
+			<button name="Create" text="Erstellen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Alias für [COUNT] Avatare eingeben:
 		<form name="form">
 			<button name="Create" text="Erstellen"/>
 			<button name="Cancel" text="Abbrechen"/>

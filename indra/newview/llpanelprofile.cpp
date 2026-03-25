@@ -81,6 +81,7 @@
 #include "llvoiceclient.h"
 #include "llweb.h"
 #include "llviewernetwork.h" // <FS:Beq> For LLGridManager
+#include "lggcontactsets.h" // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
 #include "fsdata.h"
 #include "fsradar.h"        // <FS:Zi> Update notes in radar when edited
@@ -1043,7 +1044,10 @@ void LLPanelProfileSecondLife::resetData()
 
     setDescriptionText(LLStringUtil::null);
     mGroups.clear();
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
 
     bool own_profile = getSelfProfile();
     mCanSeeOnlineIcon->setVisible(false);
@@ -1169,7 +1173,11 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
         mGroups[group_data.group_name] = group_data.group_id;
     }
 
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
+
     } // </FS>
 
 // <FS:Beq> Restore UDP profiles
@@ -1213,15 +1221,73 @@ void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
         mGroups[group_data.group_name] = group_data.group_id;
     }
 
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
+
 }
 // </FS>
 
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+void LLPanelProfileSecondLife::refreshGroupAndContactSetList()
+{
+    std::vector<std::string> profile_contact_sets = LGGContactSets::instance().getFriendSets(getAvatarId());
+    std::vector<std::string> filtered_contact_sets;
+    std::map<std::string, LLColor4> profile_contact_set_colors;
+
+    mProfileContactSets.clear();
+    for (const std::string& set_name : profile_contact_sets)
+    {
+        if (set_name.empty() || LGGContactSets::instance().isInternalSetName(set_name))
+        {
+            continue;
+        }
+        filtered_contact_sets.push_back(set_name);
+        mProfileContactSets.insert(set_name);
+    }
+
+    static LLCachedControl<bool> fsContactSetsColorizeFriends(gSavedSettings, "FSContactSetsColorizeFriends", false);
+    if (fsContactSetsColorizeFriends)
+    {
+        for (const std::string& set_name : filtered_contact_sets)
+        {
+            profile_contact_set_colors[set_name] = LGGContactSets::instance().getSetColor(set_name);
+        }
+    }
+
+    mGroupList->setShowFavoritesSeparator(!getSelfProfile());
+    mGroupList->setGroups(mGroups);
+    mGroupList->setSecondaryGroups(filtered_contact_sets, profile_contact_set_colors);
+}
+
+// void LLPanelProfileSecondLife::openGroupProfile()
+// {
+//     LLUUID group_id = mGroupList->getSelectedUUID();
+//     LLGroupActions::show(group_id);
+// }
+
 void LLPanelProfileSecondLife::openGroupProfile()
 {
+    const std::string selected_name = mGroupList->getSelectedGroupName();
+    if (selected_name.empty())
+    {
+        return;
+    }
+
     LLUUID group_id = mGroupList->getSelectedUUID();
-    LLGroupActions::show(group_id);
+    if (group_id.notNull())
+    {
+        LLGroupActions::show(group_id);
+        return;
+    }
+
+    if (!selected_name.empty() && mProfileContactSets.find(selected_name) != mProfileContactSets.end())
+    {
+        LLFloaterReg::showInstance("imcontacts", LLSD("contact_sets"));
+    }
 }
+// </FS:PP>
 
 void LLPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {

@@ -27,9 +27,11 @@
 #ifndef LL_LLPANELDIRPEOPLE_H
 #define LL_LLPANELDIRPEOPLE_H
 
+#include <boost/signals2/connection.hpp> // <FS:PP> Search by UUID
 #include "llpaneldirbrowser.h"
 class LLLineEditor;
 class LLFloaterDirectory;
+class LLAvatarName; // <FS:PP> Search by UUID
 
 class LLPanelDirPeople : public LLPanelDirBrowser
 {
@@ -45,6 +47,14 @@ public:
     static void onKeystrokeName(LLLineEditor* line, void* data);
 
     void openProfile(); // <FS:Ansariel> Add "open profile" button
+
+// <FS:PP> Search by UUID
+private:
+    void onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name);
+    void addUUIDAvatarResult(const LLUUID& id, const LLAvatarName& av_name);
+    boost::signals2::connection mAvatarNameCallbackConnection;
+// </FS:PP>
+
 };
 
 #endif

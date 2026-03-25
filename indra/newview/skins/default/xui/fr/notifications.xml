@@ -1312,7 +1312,8 @@ Saisissez un nouveau nom unique :
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée.
+		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée. Ponctuation autorisée dans le mot-clé : 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Liste de remplacement non valide.
@@ -5343,7 +5344,7 @@ Vous ne pouvez pas annuler cette action.
 		Créer un nouveau groupe de contacts avec le nom :
 		<form name="form">
 			<input name="message">
-				Nouveau groupe de contacts
+				Nouveau cercle de contacts
 			</input>
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
@@ -5369,6 +5370,13 @@ Vous ne pouvez pas annuler cette action.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Entrez un alias pour [AVATAR] :
+		<form name="form">
+			<button name="Create" text="Créer"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Entrez un alias pour [COUNT] avatars :
 		<form name="form">
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>

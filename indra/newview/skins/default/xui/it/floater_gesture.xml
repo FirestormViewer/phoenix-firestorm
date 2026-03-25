@@ -19,7 +19,8 @@
 		<button name="new_gesture_btn" tool_tip="Crea nuovo gesto"/>
 		<button name="activate_btn" tool_tip="Attiva/Disattiva gesto selezionato"/>
 		<button name="del_btn" tool_tip="Elimina questo gesto"/>
-		<check_box label="Solo attivi" name="FSShowOnlyActiveGestures"/>
+		<check_box label="Mostra solo attivi" name="FSShowOnlyActiveGestures"/>
+		<check_box label="I miei gesti sono abilitati" name="FSGesturesEnabled"/>
 	</panel>
 	<button label="Modifica" name="edit_btn" tool_tip="Apri la finestra per modificare il movimento selezionato."/>
 	<button label="Esegui" name="play_btn" tool_tip="Esegui il movimento selezionato nel mondo virtuale."/>

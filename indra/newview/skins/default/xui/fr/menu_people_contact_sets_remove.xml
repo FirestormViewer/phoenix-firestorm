@@ -4,4 +4,5 @@
 	<menu_item_call label="Supprimer le contact" name="remove_contact"/>
 	<menu_item_call label="Supprimer le surnom" name="remove_alias"/>
 	<menu_item_call label="Supprimer le nom d'affichage" name="remove_display_name"/>
+	<menu_item_call label="Déplacer le contact" name="move_contact"/>
 </toggleable_menu>

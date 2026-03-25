@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="directory" title="搜尋">
+	<tab_container name="Directory Tabs">
+		<panel label="人物" name="panel_dir_people"/>
+		<panel label="群組" name="panel_dir_groups"/>
+		<panel label="地點" name="panel_dir_places"/>
+		<panel label="土地出售" name="panel_dir_land"/>
+		<panel label="活動" name="panel_dir_events"/>
+		<panel label="分類廣告" name="panel_dir_classified"/>
+		<panel label="網頁搜尋" name="panel_dir_web"/>
+	</tab_container>
+	<button label="開啟個人檔案" name="open_profile_btn"/>
+</floater>

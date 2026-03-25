@@ -117,7 +117,7 @@
         <check_box label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar" />
         <check_box label="Włącz autorozwijanie menusów przy wskazywaniu ikon na pasku" name="FSStatusBarMenuButtonPopupOnRollover" />
         <text name="statusbar_timeformat_textbox">
-            Format czasu:
+            Format zegara:
         </text>
         <combo_box name="FSStatusBarTimeFormat" tool_tip="Wybierz format czasu używany na pasku głównego menu.">
             <combo_box.item label="Domyślny języka" name="Language" />

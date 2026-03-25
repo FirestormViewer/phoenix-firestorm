@@ -61,10 +61,8 @@ protected:
             return online_1;
         }
 
-        std::string name1 = avatar_item1->getAvatarName();
-        std::string name2 = avatar_item2->getAvatarName();
-        LLStringUtil::toUpper(name1);
-        LLStringUtil::toUpper(name2);
+        std::string name1 = getComparableName(avatar_item1);
+        std::string name2 = getComparableName(avatar_item2);
         return name1 < name2;
     }
 };
@@ -92,6 +90,7 @@ bool FSPanelContactSets::postBuild()
     childSetAction("remove_set_btn",        boost::bind(&FSPanelContactSets::onClickRemoveSet,          this));
     childSetAction("config_btn",            boost::bind(&FSPanelContactSets::onClickConfigureSet,       this, _1));
     childSetAction("add_btn",               boost::bind(&FSPanelContactSets::onClickAddAvatar,          this, _1));
+    childSetAction("move_btn",              boost::bind(&FSPanelContactSets::onClickMoveAvatar,         this));
     childSetAction("remove_btn",            boost::bind(&FSPanelContactSets::onClickRemoveAvatar,       this));
     childSetAction("profile_btn",           boost::bind(&FSPanelContactSets::onClickOpenProfile,        this));
     childSetAction("start_im_btn",          boost::bind(&FSPanelContactSets::onClickStartIM,            this));
@@ -110,6 +109,9 @@ bool FSPanelContactSets::postBuild()
     }
 
     mAvatarList = getChild<LLAvatarList>("contact_list");
+    mAvatarList->setUseContactSetColors(true);
+    mAvatarList->setUseContactSetListStyle(true);
+    mAvatarList->setAvatarDropCallback(boost::bind(&FSPanelContactSets::handleAvatarDrop, this, _1, _2));
     mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
     mAvatarList->setItemDoubleClickCallback(boost::bind(&FSPanelContactSets::onClickStartIM, this));
     mAvatarList->setNoItemsCommentText(getString("empty_list"));
@@ -140,17 +142,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 
     if (contact_set == CS_SET_ALL_SETS)
     {
-        avatars = LGGContactSets::getInstance()->getListOfNonFriends();
-
-        // "All sets" includes buddies
-        LLAvatarTracker::buddy_map_t all_buddies;
-        LLAvatarTracker::instance().copyBuddyList(all_buddies);
-        for (LLAvatarTracker::buddy_map_t::const_iterator buddy = all_buddies.begin();
-             buddy != all_buddies.end();
-             ++buddy)
-        {
-            avatars.push_back(buddy->first);
-        }
+        avatars = LGGContactSets::getInstance()->getFriendsInAnySet();
     }
     else if (contact_set == CS_SET_NO_SETS)
     {
@@ -206,11 +198,12 @@ void FSPanelContactSets::resetControls()
     childSetEnabled("remove_set_btn", mutable_set);
     childSetEnabled("config_btn", mutable_set);
     childSetEnabled("add_btn", mutable_set);
+    childSetEnabled("move_btn", (mutable_set && has_selection));
     childSetEnabled("remove_btn", (mutable_set && has_selection));
     childSetEnabled("profile_btn", has_selection);
     childSetEnabled("start_im_btn", has_selection);
     childSetEnabled("offer_teleport_btn", has_selection);   // Should probably check if they're online...
-    childSetEnabled("set_pseudonym_btn", (mAvatarSelections.size() == 1));
+    childSetEnabled("set_pseudonym_btn", has_selection);
     childSetEnabled("remove_pseudonym_btn", (has_selection
                                              && LGGContactSets::getInstance()->hasPseudonym(mAvatarSelections)));
     childSetEnabled("remove_displayname_btn", (has_selection
@@ -294,6 +287,28 @@ bool FSPanelContactSets::shouldSortByOnlineStatus() const
     return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(selected_set);
 }
 
+bool FSPanelContactSets::handleAvatarDrop(const LLUUID& avatar_id, bool drop)
+{
+    if (!mContactSetCombo || avatar_id.isNull())
+    {
+        return false;
+    }
+
+    const std::string set_name = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set_name))
+    {
+        return false;
+    }
+
+    if (drop)
+    {
+        uuid_vec_t ids{ avatar_id };
+        LGGContactSets::instance().addToSet(ids, set_name);
+    }
+
+    return true;
+}
+
 void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
 {
     LLFloater* root_floater = gFloaterView->getParentFloater(this);
@@ -333,6 +348,22 @@ void FSPanelContactSets::onClickRemoveAvatar()
         payload["ids"].append(id);
     }
     LLNotificationsUtil::add((selected_size > 1 ? "RemoveContactsFromSet" : "RemoveContactFromSet"), args, payload, &LGGContactSets::handleRemoveAvatarFromSetCallback);
+}
+
+void FSPanelContactSets::onClickMoveAvatar()
+{
+    if (!(mContactSetCombo && !mAvatarSelections.empty()))
+    {
+        return;
+    }
+
+    const std::string set = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set))
+    {
+        return;
+    }
+
+    LLAvatarActions::moveToContactSet(mAvatarSelections, set);
 }
 
 void FSPanelContactSets::onClickAddSet()
@@ -387,10 +418,26 @@ void FSPanelContactSets::onClickOfferTeleport()
 
 void FSPanelContactSets::onClickSetPseudonym()
 {
+    if (mAvatarSelections.empty())
+    {
+        return;
+    }
+
     LLSD payload, args;
-    args["AVATAR"] = LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString();
-    payload["id"] = mAvatarSelections.front();
-    LLNotificationsUtil::add("SetAvatarPseudonym", args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
+    if (mAvatarSelections.size() == 1)
+    {
+        args["AVATAR"] = LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString();
+        payload["id"] = mAvatarSelections.front();
+    }
+    else
+    {
+        args["COUNT"] = llformat("%d", static_cast<S32>(mAvatarSelections.size()));
+        for (const LLUUID& id : mAvatarSelections)
+        {
+            payload["ids"].append(id);
+        }
+    }
+    LLNotificationsUtil::add((mAvatarSelections.size() > 1 ? "SetAvatarPseudonymMultiple" : "SetAvatarPseudonym"), args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
 }
 
 void FSPanelContactSets::onClickRemovePseudonym()

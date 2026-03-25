@@ -48,6 +48,10 @@ public:
 
     void navigateToDefaultPage();
 
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    void navigateToSearchPage(const std::string& category, const std::string& query, const std::string& collection = "");
+    // </FS:PP>
+
     void setFloaterDirectory(LLFloaterDirectory* floater) { mFloaterDirectory = floater; }
 
 protected:

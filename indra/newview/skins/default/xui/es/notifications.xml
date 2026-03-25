@@ -1203,7 +1203,8 @@ no tienes permiso para comprar terreno para el grupo que tienes activado actualm
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La palabra clave debe ser una única palabra y el reemplazo no puede estar vacío.
+		La palabra clave debe ser una sola palabra y el reemplazo no puede estar vacío. Signos de puntuación permitidos en la palabra clave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista de reemplazo no es válida.

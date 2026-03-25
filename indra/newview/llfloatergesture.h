@@ -98,6 +98,11 @@ private:
     void onDeleteSelected();
     void onRenameSelected();
 
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    void onGesturesEnabledChanged();
+    void updateGesturesEnabledState();
+    // </FS:PP>
+
     static void onGestureRename(const LLSD& notification, const LLSD& response);
 
     LLUUID mSelectedID;

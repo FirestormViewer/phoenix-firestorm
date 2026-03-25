@@ -113,6 +113,7 @@ public:
     virtual bool            isText() const { return false; }
     virtual bool            needsToolTip() const { return ! mToolTip.empty(); }
     virtual void            setColor(const LLColor4&) {}
+    virtual void            setUseColor(bool) {} // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     virtual void            onCommit() {};
 
     virtual bool            handleClick() { return false; }
@@ -151,6 +152,7 @@ public:
     /*virtual*/ void    highlightText(S32 offset, S32 num_chars);
 
     /*virtual*/ void    setColor(const LLColor4&);
+    /*virtual*/ void    setUseColor(bool use_color) { mUseColor = use_color; } // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     /*virtual*/ bool    isText() const;
     /*virtual*/ const std::string & getToolTip() const;
     /*virtual*/ bool    needsToolTip() const;

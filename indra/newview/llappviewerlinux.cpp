@@ -133,6 +133,12 @@ int main( int argc, char **argv )
     bool ok = viewer_app_ptr->init();
     if(!ok)
     {
+        // <FS:PP> FIRE-36191: A secondary helper process can intentionally quit after handing an external SLURL to the already-running viewer instance
+        if (LLApp::isQuitting())
+        {
+            return 0;
+        }
+        // </FS:PP>
         LL_WARNS() << "Application init failed." << LL_ENDL;
         return -1;
     }

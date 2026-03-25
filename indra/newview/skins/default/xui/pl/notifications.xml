@@ -1249,7 +1249,8 @@ Czy na pewno chcesz usunąć tę listę?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty.
+		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty. Dozwolona interpunkcja w słowie kluczowym: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Lista zamienników nie jest prawidłowa.
@@ -5222,6 +5223,13 @@ Nie można tego cofnąć.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Wprowadź alias dla [AVATAR]:
+		<form name="form">
+			<button name="Create" text="Ustaw"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Wprowadź alias dla [COUNT] awatarów:
 		<form name="form">
 			<button name="Create" text="Ustaw"/>
 			<button name="Cancel" text="Anuluj"/>

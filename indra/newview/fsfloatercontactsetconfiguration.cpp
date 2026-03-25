@@ -37,6 +37,7 @@
 #include "llcolorswatch.h"
 #include "lllineeditor.h"
 #include "llnotificationsutil.h"
+#include "lltexteditor.h"
 #include "llviewercontrol.h"
 
 FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& target_set)
@@ -70,6 +71,21 @@ bool FSFloaterContactSetConfiguration::postBuild()
 
     mSortByOnlineStatusCheckBox = getChild<LLCheckBoxCtrl>("sort_by_online_status");
     mSortByOnlineStatusCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetSortByOnlineStatus, this));
+
+    mAutoresponseBusyEnabledCheckBox = getChild<LLCheckBoxCtrl>("set_autoresponse_busy_enabled");
+    mAutoresponseBusyEnabledCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseBusy, this));
+    mAutoresponseBusyEditor = getChild<LLTextEditor>("set_autoresponse_busy");
+    mAutoresponseBusyEditor->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseBusy, this));
+
+    mAutoresponseModeEnabledCheckBox = getChild<LLCheckBoxCtrl>("set_autoresponse_mode_enabled");
+    mAutoresponseModeEnabledCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseMode, this));
+    mAutoresponseModeEditor = getChild<LLTextEditor>("set_autoresponse_mode");
+    mAutoresponseModeEditor->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseMode, this));
+
+    mAutoresponseNonFriendsEnabledCheckBox = getChild<LLCheckBoxCtrl>("set_autoresponse_nonfriends_enabled");
+    mAutoresponseNonFriendsEnabledCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseNonFriends, this));
+    mAutoresponseNonFriendsEditor = getChild<LLTextEditor>("set_autoresponse_nonfriends");
+    mAutoresponseNonFriendsEditor->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetAutoresponseNonFriends, this));
     return true;
 }
 
@@ -82,10 +98,26 @@ void FSFloaterContactSetConfiguration::draw()
 
 void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
 {
+    bool enabled = false;
+    std::string response;
+
     mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
     mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
     mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
     mSortByOnlineStatusCheckBox->set(LGGContactSets::getInstance()->getSortByOnlineStatusForSet(mContactSet));
+
+    LGGContactSets::getInstance()->getAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::BUSY, enabled, response);
+    mAutoresponseBusyEnabledCheckBox->set(enabled);
+    mAutoresponseBusyEditor->setText(response);
+
+    LGGContactSets::getInstance()->getAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::AUTORESPONSE, enabled, response);
+    mAutoresponseModeEnabledCheckBox->set(enabled);
+    mAutoresponseModeEditor->setText(response);
+
+    LGGContactSets::getInstance()->getAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::AUTORESPONSE_NONFRIENDS, enabled, response);
+    mAutoresponseNonFriendsEnabledCheckBox->set(enabled);
+    mAutoresponseNonFriendsEditor->setText(response);
+    updateAutoresponseEditorEnabledState();
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetColor()
@@ -106,6 +138,24 @@ void FSFloaterContactSetConfiguration::onCommitSetSortByOnlineStatus()
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()
 {
     LGGContactSets::getInstance()->setDefaultColor(mGlobalSwatch->get());
+}
+
+void FSFloaterContactSetConfiguration::onCommitSetAutoresponseBusy()
+{
+    LGGContactSets::getInstance()->setAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::BUSY, mAutoresponseBusyEnabledCheckBox->getValue().asBoolean(), mAutoresponseBusyEditor->getText());
+    updateAutoresponseEditorEnabledState();
+}
+
+void FSFloaterContactSetConfiguration::onCommitSetAutoresponseMode()
+{
+    LGGContactSets::getInstance()->setAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::AUTORESPONSE, mAutoresponseModeEnabledCheckBox->getValue().asBoolean(), mAutoresponseModeEditor->getText());
+    updateAutoresponseEditorEnabledState();
+}
+
+void FSFloaterContactSetConfiguration::onCommitSetAutoresponseNonFriends()
+{
+    LGGContactSets::getInstance()->setAutoresponseForSet(mContactSet, ContactSetAutoresponseMode::AUTORESPONSE_NONFRIENDS, mAutoresponseNonFriendsEnabledCheckBox->getValue().asBoolean(), mAutoresponseNonFriendsEditor->getText());
+    updateAutoresponseEditorEnabledState();
 }
 
 void FSFloaterContactSetConfiguration::onRenameSet()
@@ -140,4 +190,11 @@ void FSFloaterContactSetConfiguration::setFrustumOrigin(LLView* frustumOrigin)
     {
         mFrustumOrigin = frustumOrigin->getHandle();
     }
+}
+
+void FSFloaterContactSetConfiguration::updateAutoresponseEditorEnabledState()
+{
+    mAutoresponseBusyEditor->setEnabled(mAutoresponseBusyEnabledCheckBox->getValue().asBoolean());
+    mAutoresponseModeEditor->setEnabled(mAutoresponseModeEnabledCheckBox->getValue().asBoolean());
+    mAutoresponseNonFriendsEditor->setEnabled(mAutoresponseNonFriendsEnabledCheckBox->getValue().asBoolean());
 }

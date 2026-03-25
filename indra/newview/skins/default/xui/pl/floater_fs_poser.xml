@@ -225,6 +225,8 @@
 						<panel title="Ustawienia" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Ustawienie" name="name" />
+								<scroll_list.columns label="Data" name="load_file_date_column" />
+								<scroll_list.columns label="Data" name="load_file_date_sort_column" />
 							</scroll_list>
 							<button label="Ustaw: Lewa" name="button_loadHandPoseLeft" tool_tip="Kliknij, aby ustawić lewą rękę na wybranym ustawieniu" />
 							<button label="Ustaw: Prawa" name="button_loadHandPoseRight" tool_tip="Kliknij, aby ustawić prawą rękę na wybranym ustawieniu" />
@@ -315,6 +317,7 @@
 				<scroll_list tool_tip="Załaduj pozę dla animowanej postaci." name="poses_scroll">
 					<scroll_list.columns label="Nazwa" name="load_file_name_column" />
 					<scroll_list.columns label="Data" name="load_file_date_column" />
+					<scroll_list.columns label="Data" name="load_file_date_sort_column" />
 				</scroll_list>
 				<line_editor label="Nazwa pozy do zapisu..." name="pose_save_name" />
 			</panel>

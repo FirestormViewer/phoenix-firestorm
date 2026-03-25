@@ -47,6 +47,7 @@
 #include "llavatarnamecache.h"  // IDEVO
 #include "llbutton.h"
 #include "llcachename.h"
+#include "llcombobox.h" // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
 #include "lllineeditor.h"
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
@@ -62,6 +63,7 @@
 
 #include "fsavatarsearchmenu.h"
 #include "fsscrolllistctrl.h"
+#include "lggcontactsets.h" // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
 #include "lltransientfloatermgr.h"
 
 static const U32 AVATAR_PICKER_SEARCH_TIMEOUT = 180U;
@@ -118,6 +120,7 @@ LLFloaterAvatarPicker::LLFloaterAvatarPicker(const LLSD& key)
     mNearMeListComplete(false),
     mCloseOnSelect(false),
     mExcludeAgentFromSearchResults(false),
+    mAllowMultipleSelection(false), // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
     mContextConeOpacity (0.f),
     mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
     mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
@@ -193,6 +196,11 @@ bool LLFloaterAvatarPicker::postBuild()
 
     getChild<LLPanel>("SearchPanelUUID")->setDefaultBtn("FindUUID");
     // </FS:Ansariel>
+
+    // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+    getChild<LLComboBox>("ContactSetSelector")->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onContactSetSelected, this));
+    populateContactSets();
+    // </FS:PP>
 
     setAllowMultiple(false);
 
@@ -333,38 +341,80 @@ void LLFloaterAvatarPicker::onBtnSelect()
     if(mSelectionCallback)
     {
         std::string acvtive_panel_name;
-        LLScrollListCtrl* list =  NULL;
+        // LLScrollListCtrl* list =  NULL; - <FS:PP> FIRE-34809 Contact Sets support in avatar picker
         LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
         if(active_panel)
         {
             acvtive_panel_name = active_panel->getName();
         }
-        if(acvtive_panel_name == "SearchPanel")
+        // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+        uuid_vec_t avatar_ids;
+        std::vector<LLAvatarName> avatar_names;
+        if (acvtive_panel_name == "ContactSetsPanel")
         {
-            list = getChild<LLScrollListCtrl>("SearchResults");
+            if (!mAllowMultipleSelection)
+            {
+                return;
+            }
+            LLComboBox* contact_sets_combo = getChild<LLComboBox>("ContactSetSelector");
+            if (contact_sets_combo)
+            {
+                const std::string set_name = contact_sets_combo->getSimple();
+                if (LGGContactSets::ContactSet* contact_set = LGGContactSets::instance().getContactSet(set_name); contact_set)
+                {
+                    avatar_ids.reserve(contact_set->mFriends.size());
+                    avatar_names.reserve(contact_set->mFriends.size());
+                    for (const LLUUID& avatar_id : contact_set->mFriends)
+                    {
+                        if (avatar_id.isNull())
+                        {
+                            continue;
+                        }
+                        avatar_ids.push_back(avatar_id);
+                        LLAvatarName av_name;
+                        LLAvatarNameCache::get(avatar_id, &av_name);
+                        avatar_names.push_back(av_name);
+                    }
+                }
+            }
+            if (!avatar_ids.empty())
+            {
+                mSelectionCallback(avatar_ids, avatar_names);
+            }
         }
-        else if(acvtive_panel_name == "NearMePanel")
+        else
         {
-            list = getChild<LLScrollListCtrl>("NearMe");
-        }
-        else if (acvtive_panel_name == "FriendsPanel")
-        {
-            list = getChild<LLScrollListCtrl>("Friends");
-        }
-        // <FS:Ansariel> Search by UUID
-        else if (acvtive_panel_name == "SearchPanelUUID")
-        {
-            list = getChild<LLScrollListCtrl>("SearchResultsUUID");
-        }
-        // </FS:Ansariel>
+            LLScrollListCtrl* list =  NULL;
+        // </FS:PP>
+            if(acvtive_panel_name == "SearchPanel")
+            {
+                list = getChild<LLScrollListCtrl>("SearchResults");
+            }
+            else if(acvtive_panel_name == "NearMePanel")
+            {
+                list = getChild<LLScrollListCtrl>("NearMe");
+            }
+            else if (acvtive_panel_name == "FriendsPanel")
+            {
+                list = getChild<LLScrollListCtrl>("Friends");
+            }
+            // <FS:Ansariel> Search by UUID
+            else if (acvtive_panel_name == "SearchPanelUUID")
+            {
+                list = getChild<LLScrollListCtrl>("SearchResultsUUID");
+            }
+            // </FS:Ansariel>
 
-        if(list)
-        {
-            uuid_vec_t          avatar_ids;
-            std::vector<LLAvatarName>   avatar_names;
-            getSelectedAvatarData(list, avatar_ids, avatar_names);
-            mSelectionCallback(avatar_ids, avatar_names);
-        }
+            if(list)
+            {
+                // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+                // uuid_vec_t          avatar_ids;
+                // std::vector<LLAvatarName>   avatar_names;
+                // </FS:PP>
+                getSelectedAvatarData(list, avatar_ids, avatar_names);
+                mSelectionCallback(avatar_ids, avatar_names);
+            }
+        } // <FS:PP> End bracket only; FIRE-34809 Contact Sets support in avatar picker
     }
     getChild<LLScrollListCtrl>("SearchResults")->deselectAllItems(true);
     getChild<LLScrollListCtrl>("NearMe")->deselectAllItems(true);
@@ -516,6 +566,44 @@ void LLFloaterAvatarPicker::populateFriend()
     // </FS:Ansariel>
 }
 
+// <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+void LLFloaterAvatarPicker::populateContactSets()
+{
+    LLComboBox* contact_sets_combo = getChild<LLComboBox>("ContactSetSelector");
+    if (!contact_sets_combo)
+    {
+        return;
+    }
+
+    contact_sets_combo->clearRows();
+
+    const LGGContactSets::string_vec_t contact_sets = LGGContactSets::instance().getAllContactSets();
+    for (const std::string& set_name : contact_sets)
+    {
+        contact_sets_combo->add(set_name);
+    }
+
+    contact_sets_combo->sortByName();
+
+    const bool has_contact_sets = !contact_sets.empty();
+    contact_sets_combo->setEnabled(has_contact_sets);
+
+    if (!has_contact_sets)
+    {
+        onList();
+        return;
+    }
+
+    contact_sets_combo->selectFirstItem();
+    onContactSetSelected();
+}
+
+void LLFloaterAvatarPicker::onContactSetSelected()
+{
+    onList();
+}
+// </FS:PP>
+
 void LLFloaterAvatarPicker::drawFrustum()
 {
     static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
@@ -567,6 +655,25 @@ bool LLFloaterAvatarPicker::visibleItemsSelected() const
         return getChild<LLScrollListCtrl>("SearchResultsUUID")->getFirstSelectedIndex() >= 0;
     }
     // </FS:Ansariel>
+    // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+    else if (active_panel == getChild<LLPanel>("ContactSetsPanel"))
+    {
+        if (!mAllowMultipleSelection)
+        {
+            return false;
+        }
+        LLComboBox* contact_sets_combo = getChild<LLComboBox>("ContactSetSelector");
+        if (!contact_sets_combo)
+        {
+            return false;
+        }
+        const std::string set_name = contact_sets_combo->getSimple();
+        if (LGGContactSets::ContactSet* contact_set = LGGContactSets::instance().getContactSet(set_name); contact_set)
+        {
+            return !contact_set->mFriends.empty();
+        }
+    }
+    // </FS:PP>
     return false;
 }
 
@@ -758,6 +865,24 @@ void LLFloaterAvatarPicker::setAllowMultiple(bool allow_multiple)
     getChild<LLScrollListCtrl>("Friends")->setAllowMultipleSelection(allow_multiple);
     // <FS:Ansariel> Search by UUID
     getChild<LLScrollListCtrl>("SearchResultsUUID")->setAllowMultipleSelection(allow_multiple);
+
+    // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+    mAllowMultipleSelection = allow_multiple;
+    LLTabContainer* tabs = getChild<LLTabContainer>("ResidentChooserTabs");
+    LLPanel* contact_sets_panel = getChild<LLPanel>("ContactSetsPanel");
+    if (tabs && contact_sets_panel)
+    {
+        const S32 tab_index = tabs->getIndexForPanel(contact_sets_panel);
+        if (tab_index >= 0)
+        {
+            tabs->enableTabButton(tab_index, allow_multiple);
+            if (!allow_multiple && tabs->getCurrentPanel() == contact_sets_panel)
+            {
+                tabs->selectTabByName("FriendsPanel");
+            }
+        }
+    }
+    // </FS:PP>
 }
 
 LLScrollListCtrl* LLFloaterAvatarPicker::getActiveList()
@@ -1083,6 +1208,16 @@ bool LLFloaterAvatarPicker::isSelectBtnEnabled()
             list = getChild<LLScrollListCtrl>("SearchResultsUUID");
         }
         // </FS:Ansariel>
+        // <FS:PP> FIRE-34809 Contact Sets support in avatar picker
+        else if (acvtive_panel_name == "ContactSetsPanel")
+        {
+            if (!mAllowMultipleSelection)
+            {
+                return false;
+            }
+            return mOkButtonValidateSignal.num_slots() ? mOkButtonValidateSignal(uuid_vec_t{}) : true;
+        }
+        // </FS:PP>
 
         if(list)
         {

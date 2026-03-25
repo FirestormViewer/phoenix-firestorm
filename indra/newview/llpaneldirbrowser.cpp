@@ -99,7 +99,7 @@ bool LLPanelDirBrowser::postBuild()
     mSearchComboBox = findChild<LLSearchComboBox>("name");
     if (mSearchComboBox)
     {
-        mSearchComboBox->setCommitCallback(boost::bind(&LLPanelDirBrowser::performQuery, this));
+        mSearchComboBox->setCommitCallback(boost::bind(&LLPanelDirBrowser::onClickSearchCore, this));
         fillSearchComboBox();
     }
     // </FS:Ansariel>

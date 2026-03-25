@@ -1241,7 +1241,8 @@
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Ключевое слово должно быть одним словом, а поле замены не может быть пустым.
+		Ключевое слово должно быть одним словом, а поле замены не может быть пустым. Разрешенная пунктуация в ключевом слове: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Недопустимый список замены.
@@ -5295,6 +5296,13 @@ https://wiki.firestormviewer.org/fs_voice
 		Введите псевдоним для [AVATAR]:
 		<form name="form">
 			<input name="message" type="text"/>
+			<button name="Create" text="Создать"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Введите псевдоним для [COUNT] аватаров:
+		<form name="form">
 			<button name="Create" text="Создать"/>
 			<button name="Cancel" text="Отмена"/>
 		</form>

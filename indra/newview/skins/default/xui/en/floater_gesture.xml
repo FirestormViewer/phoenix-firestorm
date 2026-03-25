@@ -4,15 +4,15 @@
  save_rect="true"
  legacy_header_height="18"
  can_resize="true"
- height="465"
+ height="485"
  name="gestures"
  help_topic="gestures"
  title="Gestures"
  background_visible="true"
  label="Places"
  layout="topleft"
- min_height="180"
- min_width="200"
+ min_height="200"
+ min_width="300"
  width="313">
     <floater.string
      name="loading">
@@ -60,7 +60,7 @@
              bevel_style="none"
              top_pad="0"
              follows="left|right|bottom"
-             height="30"
+             height="50"
              label="bottom_panel"
              layout="topleft"
              left="0"
@@ -108,16 +108,25 @@
               <check_box
                  control_name="FSShowOnlyActiveGestures"
                  height="18"
-                 label="Active only"
+                 label="Show active only"
                  layout="topleft"
                  follows="bottom|left"
                  left_pad="25"
                  top="5"
                  name="FSShowOnlyActiveGestures"
-                 width="100">
+                 width="140">
                    <check_box.commit_callback
                     function="Gesture.Action.RefreshList" />
               </check_box>
+              <check_box
+                 control_name="FSGesturesEnabled"
+                 height="18"
+                 label="My gestures are enabled"
+                 layout="topleft"
+                 follows="bottom|left"
+                 left="10"
+                 name="FSGesturesEnabled"
+                 width="180" />
               <button
                  follows="bottom|right"
                  font="SansSerifBigBold"
@@ -129,7 +138,7 @@
                  name="del_btn"
                  right="-5"
                  tool_tip="Delete this gesture"
-                 top_delta="0"
+                 top="5"
                  width="18" />
             </panel>
     <button

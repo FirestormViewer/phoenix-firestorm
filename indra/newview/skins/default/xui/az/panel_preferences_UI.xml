@@ -103,7 +103,7 @@
 		<check_box label="Cari L$ balansını göstər" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Üst menyu nişanlarında siçan menyusunun açılan menyusunu aktivləşdirin" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
 		<text name="statusbar_timeformat_textbox" width="100">
-			Vaxt formatı:
+			Saat formatı:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Əsas menyu çubuğunda istifadə olunan vaxt formatını seçir." width="250">
 			<combo_box.item label="Seçilmiş dil standartı" name="Language"/>
