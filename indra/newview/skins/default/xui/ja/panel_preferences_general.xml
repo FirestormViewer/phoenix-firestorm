@@ -74,7 +74,7 @@
 		（再起動後に反映）
 	</text>
 	<text name="time_format_clock_note">
-		トップバーの時計表示形式は「ユーザーインターフェイス」-「トップバー」にあります。
+		トップバーの時計の表示形式は「インターフェイス」＞「トップバー」にあります。
 	</text>
 	<!--away/logout-->
 	<text name="title_afk_text">

@@ -29,7 +29,7 @@
 		</text>
 		<check_box label="ミニマップのアイコンをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeMiniMap"/>
 		<check_box label="名前タグをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeNameTag"/>
-		<check_box label="レーダーと「近く」のリストをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeRadar"/>
+		<check_box label="レーダーと近くにいる人のリストをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeRadar"/>
 		<check_box label="チャットをコンタクトリストに指定した色で表示する" name="FSContactSetsColorizeChat"/>
 		<check_box label="フレンドリストをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeFriends"/>
 	</panel>

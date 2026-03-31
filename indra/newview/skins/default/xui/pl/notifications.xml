@@ -5629,4 +5629,16 @@ Komunikat błędu:
 		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
 Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Wpisz dokładną nazwę regionu, aby przypisać go do wybranego tytułu grupy.
+Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
+	</notification>
+
 </notifications>

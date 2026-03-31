@@ -86,13 +86,12 @@ public:
     class Updater
     {
     public:
-        typedef std::function<void()> callback_t;
+        using callback_t = std::function<void()>;
         Updater(callback_t cb)
         : mCallback(cb)
         { }
 
-        virtual ~Updater()
-        { }
+        virtual ~Updater() = default;
 
     protected:
         void update()

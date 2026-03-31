@@ -9,6 +9,180 @@
 	<panel.string name="button5_mouse">
 		Pulsante del mouse 5
 	</panel.string>
+	<panel.string name="ui_sound_copy_uuid">
+		Copia UUID suono
+	</panel.string>
+	<panel.string name="ui_sound_select_prompt">
+		Seleziona un suono dell'interfaccia
+	</panel.string>
+	<panel.string name="ui_sound_play_this">
+		Attiva suono
+	</panel.string>
+	<panel.string name="ui_sound_playmode_new_session">
+		Solo a inizio sessione
+	</panel.string>
+	<panel.string name="ui_sound_playmode_every_message">
+		Ogni messaggio
+	</panel.string>
+	<panel.string name="ui_sound_playmode_not_focus">
+		Se non in primo piano
+	</panel.string>
+	<panel.string name="ui_sound_playmode_mute">
+		Non suonare
+	</panel.string>
+	<panel.string name="textFSChatMention">
+		Menzioni in chat:
+	</panel.string>
+	<panel.string name="textFSBadKeystroke">
+		Tasto non valido:
+	</panel.string>
+	<panel.string name="textFSClick">
+		Clic mouse:
+	</panel.string>
+	<panel.string name="textFSClickRelease">
+		Rilascio mouse:
+	</panel.string>
+	<panel.string name="textFSFootsteps">
+		Passi predefiniti:
+	</panel.string>
+	<panel.string name="textFSFriendOffline">
+		Esce un amico:
+	</panel.string>
+	<panel.string name="textFSFriendOnline">
+		Entra un amico:
+	</panel.string>
+	<panel.string name="textFSFriendshipOffer">
+		Offerta amicizia:
+	</panel.string>
+	<panel.string name="textFSGroupInvitation">
+		Invito gruppo:
+	</panel.string>
+	<panel.string name="textFSGroupNotice">
+		Avviso di gruppo:
+	</panel.string>
+	<panel.string name="textFSHealthReductionF">
+		Urto femmina:
+	</panel.string>
+	<panel.string name="textFSHealthReductionM">
+		Urto maschio:
+	</panel.string>
+	<panel.string name="textFSIncomingVoiceCall">
+		Chiamata in voce:
+	</panel.string>
+	<panel.string name="textFSInvalidOp">
+		Operazione non valida:
+	</panel.string>
+	<panel.string name="textFSInventoryOffer">
+		Offerta inventario:
+	</panel.string>
+	<panel.string name="textFSMicToggle">
+		Accendi/spegni microfono:
+	</panel.string>
+	<panel.string name="textFSMoneyChangeDown">
+		Diminuzione soldi:
+	</panel.string>
+	<panel.string name="textFSMoneyChangeUp">
+		Aumento soldi:
+	</panel.string>
+	<panel.string name="textFSMovelockToggle">
+		Blocco movimento:
+	</panel.string>
+	<panel.string name="textFSNearbyChat">
+		Nuovo mess. chat locale:
+	</panel.string>
+	<panel.string name="textFSNewIncomingConfIMSession">
+		IM conferenza (Ad-hoc):
+	</panel.string>
+	<panel.string name="textFSNewIncomingGroupIMSession">
+		IM di gruppo:
+	</panel.string>
+	<panel.string name="textFSNewIncomingIMSession">
+		IM in arrivo:
+	</panel.string>
+	<panel.string name="textFSObjectCreate">
+		Creazione oggetto:
+	</panel.string>
+	<panel.string name="textFSObjectDelete">
+		Cancellazione oggetto:
+	</panel.string>
+	<panel.string name="textFSObjectRezIn">
+		Rez oggetto:
+	</panel.string>
+	<panel.string name="textFSObjectRezOut">
+		De-rez oggetto:
+	</panel.string>
+	<panel.string name="textFSPieMenuAppear">
+		Apri menu tondo:
+	</panel.string>
+	<panel.string name="textFSPieMenuHide">
+		Chiudi menu tondo:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight0">
+		Menu tondo opz 1:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight1">
+		Menu tondo opz 2:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight2">
+		Menu tondo opz 3:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight3">
+		Menu tondo opz 4:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight4">
+		Menu tondo opz 5:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight5">
+		Menu tondo opz 6:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight6">
+		Menu tondo opz 7:
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight7">
+		Menu tondo opz 8:
+	</panel.string>
+	<panel.string name="textFSQuestionExperience">
+		Nuova esperienza:
+	</panel.string>
+	<panel.string name="textFSRestart">
+		Riavvio regione:
+	</panel.string>
+	<panel.string name="textFSRestartOpenSim">
+		Riavvio regione (OpenSim):
+	</panel.string>
+	<panel.string name="textFSScriptFloaterClose">
+		Script dialog closes:
+	</panel.string>
+	<panel.string name="textFSScriptFloaterOpen">
+		Dialogo script:
+	</panel.string>
+	<panel.string name="textFSSnapshot">
+		Scatta foto:
+	</panel.string>
+	<panel.string name="textFSAlert">
+		Segnale generico:
+	</panel.string>
+	<panel.string name="textFSStartIM">
+		Avvio sessione IM:
+	</panel.string>
+	<panel.string name="textFSTeleportOffer">
+		Offerta TP:
+	</panel.string>
+	<panel.string name="textFSTeleportOut">
+		Teleport:
+	</panel.string>
+	<panel.string name="textFSTrackerBeacon">
+		Raggio tracciante:
+	</panel.string>
+	<panel.string name="textFSTyping">
+		Scrittura messaggio:
+	</panel.string>
+	<panel.string name="textFSWindowClose">
+		Chiude finestra:
+	</panel.string>
+	<panel.string name="textFSWindowOpen">
+		Apre finestra:
+	</panel.string>
 	<tab_container label="Preferenze Firestorm" name="tabs">
 		<panel label="Generale" name="Media Sounds Panel">
 			<slider label="Volume Generale" name="System Volume"/>
@@ -139,326 +313,19 @@
 			</combo_box>
 			<button label="Impostazioni periferiche audio" name="device_settings_btn"/>
 		</panel>
-		<panel label="Suoni UI 1" name="UI Sounds tab 1">
+		<panel label="Suoni UI" name="UI Sounds tab">
 			<text name="textFSExplanation_tab1">
 				Si possono cambiare qui (indicando gli UUID) ed abilitare/disabilitare i suoni di sistema.
 Passare sui campi UUID per leggere le impostazioni predefinite.
 			</text>
-			<text tool_tip="UUID del suono di avviso generico di Firestorm." name="textFSSndAlert">
-				Segnale generico:
-			</text>
-			<button name="Prev_UISndAlert" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndAlert" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndAlert"/>
-			<text tool_tip="UUID del suono per un tasto non valido." name="textFSBadKeystroke">
-				Tasto non valido:
-			</text>
-			<button name="Prev_UISndBadKeystroke" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndBadKeystroke" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndBadKeystroke"/>
-			<text tool_tip="UUID del suono per il clic del mouse." name="textFSClick">
-				Clic mouse:
-			</text>
-			<button name="Prev_UISndClick" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndClick" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndClick" />
-			<text tool_tip="UUID del suono per il rilascio del tasto mouse." name="textFSClickRelease">
-				Rilascio mouse:
-			</text>
-			<button name="Prev_UISndClickRelease" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndClickRelease" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndClickRelease"/>
-			<text tool_tip="UUID del suono per un danno ad avatar femminile." name="textFSHealthReductionF">
-				Urto femmina:
-			</text>
-			<button name="Prev_UISndHealthReductionF" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndHealthReductionF" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndHealthReductionF" />
-			<text tool_tip="UUID del suono per un danno ad avatar maschile." name="textFSHealthReductionM">
-				Urto maschio:
-			</text>
-			<button name="Prev_UISndHealthReductionM" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndHealthReductionM" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndHealthReductionM" />
-			<text tool_tip="UUID del suono per una diminuzione del saldo." name="textFSMoneyChangeDown">
-				Diminuzione soldi:
-			</text>
-			<button name="Prev_UISndMoneyChangeDown" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndMoneyChangeDown" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndMoneyChangeDown" />
-			<text tool_tip="UUID del suono per un aumento del saldo." name="textFSMoneyChangeUp">
-				Aumento soldi:
-			</text>
-			<button name="Prev_UISndMoneyChangeUp" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndMoneyChangeUp" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndMoneyChangeUp"/>
-			<text tool_tip="UUID del suono eseguito quando arriva un messaggio IM. L&apos;impostazione è condivisa con Chat &gt; Notifiche" name="textFSNewIncomingIMSession">
-				IM in arrivo:
-			</text>
-			<button name="Prev_UISndNewIncomingIMSession" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndNewIncomingIMSession" label="R" tool_tip="Ripristina suono predefinito."/>
-			<combo_box name="PlayModeUISndNewIncomingIMSession">
-				<combo_box.item label="Solo a inizio sessione" name="1"/>
-				<combo_box.item label="Ogni messaggio" name="2"/>
-				<combo_box.item label="Se non in primo piano" name="3"/>
-				<combo_box.item label="Non suonare" name="0"/>
-			</combo_box>
-			<text tool_tip="UUID del suono eseguito quando arriva un messaggio IM di gruppo. L&apos;impostazione è condivisa con Chat &gt; Notifiche." name="textFSNewGroupIncomingIMSession">
-				IM di gruppo:
-			</text>
-			<button name="Prev_UISndNewIncomingGroupIMSession" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndNewIncomingGroupIMSession" label="R" tool_tip="Ripristina suono predefinito."/>
-			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
-				<combo_box.item label="Solo a inizio sessione" name="1"/>
-				<combo_box.item label="Ogni messaggio" name="2"/>
-				<combo_box.item label="Se non in primo piano" name="3"/>
-				<combo_box.item label="Non suonare" name="0"/>
-			</combo_box>
-			<text tool_tip="UUID del suono per un messaggio IM in conferenza L&apos;impostazione è condivisa con Chat &gt; Notifiche" name="textFSNewConferenceIncomingIMSession">
-				IM conferenza (Ad-hoc):
-			</text>
-			<button name="Prev_UISndNewIncomingConfIMSession" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndNewIncomingConfIMSession" label="R" tool_tip="Ripristina suono predefinito."/>
-			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
-				<combo_box.item label="Solo a inizio sessione" name="1"/>
-				<combo_box.item label="Ogni messaggio" name="2"/>
-				<combo_box.item label="Se non in primo piano" name="3"/>
-				<combo_box.item label="Non suonare" name="0"/>
-			</combo_box>
-			<text tool_tip="UUID del suono per l&apos;avvio di una nuova sessione IM." name="textFSStartIM">
-				Avvio sessione IM:
-			</text>
-			<button name="Prev_UISndStartIM" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndStartIM" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndStartIM" />
-			<text tool_tip="UUID del suono per la creazione di un nuovo oggetto." name="textFSObjectCreate">
-				Creazione oggetto:
-			</text>
-			<button name="Prev_UISndObjectCreate" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndObjectCreate" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndObjectCreate" />
-			<text tool_tip="UUID del suono per la cancellazione di un oggetto." name="textFSObjectDelete">
-				Cancellazione oggetto:
-			</text>
-			<button name="Prev_UISndObjectDelete" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndObjectDelete" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndObjectDelete"/>
-			<text tool_tip="UUID del suono per quando si posa un oggetto a terra." name="textFSObjectRezIn">
-				Rez oggetto:
-			</text>
-			<button name="Prev_UISndObjectRezIn" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndObjectRezIn" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndObjectRezIn" />
-			<text tool_tip="UUID del suono per quando si prende un oggetto da terra." name="textFSObjectRezOut">
-				De-rez oggetto:
-			</text>
-			<button name="Prev_UISndObjectRezOut" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndObjectRezOut" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndObjectRezOut" />
-			<text tool_tip="UUID del suono per quando si scatta una fotografia. Questa impostazione è influenzata dall&apos;opzione &apos;Scatta foto senza avvisi&apos; del menu Avanzato." name="textFSSnapshot">
-				Scatta foto:
-			</text>
-			<button name="Prev_UISndSnapshot" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndSnapshot" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Disattiva suono" name="QuietSnapshotsToDiskCheckBox"/>
-			<check_box label="Attiva suono" name="PlayModeUISndMovelockToggle"/>
-			<text tool_tip="UUID del suono per i passi. La modifica richiede il riavvio." name="textFSFootsteps">
-				Passi predefiniti:
-			</text>
-			<button name="Prev_UISndFootsteps" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndFootsteps" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndFootsteps" />
+			<filter_editor name="ui_sound_filter" label="Filtra suoni dell'interfaccia" />
+			<scroll_list name="ui_sounds_list">
+				<column label="Suono" name="ui_sound_label" />
+				<column label="Stato" name="ui_sound_status" />
+			</scroll_list>
+			<button name="ui_sound_preview" tool_tip="Anteprima suono." />
+			<button name="ui_sound_default" tool_tip="Ripristina suono predefinito." />
 		</panel>
-		<panel label="Suoni UI 2" name="UI Sounds tab 2">
-			<text name="textFSExplanation_tab2">
-				Si possono cambiare qui (indicando gli UUID) ed abilitare/disabilitare i suoni di sistema.
-Passare sui campi UUID per leggere le impostazioni predefinite.
-			</text>
-			<text tool_tip="UUID del suono per il teleport. Questa impostazione è condivisa con Movimento e vista &gt; Teleport &gt; &apos;Effetto sonoro quando teleport&apos;." name="textFSTeleportOut">
-				Teleport:
-			</text>
-			<button name="Prev_UISndTeleportOut" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTeleportOut" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndTeleportOut" />
-			<text tool_tip="UUID del suono per l&apos;apertura del menu a torta." name="textFSPieMenuAppear">
-				Apri menu tondo:
-			</text>
-			<button name="Prev_UISndPieMenuAppear" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuAppear" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuAppear" />
-			<text tool_tip="UUID del suono per la chiusura del menu a torta." name="textFSPieMenuHide">
-				Chiudi menu tondo:
-			</text>
-			<button name="Prev_UISndPieMenuHide" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuHide" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuHide"/>
-			<text tool_tip="UUID del suono per la scelta della voce 1 del menu a torta." name="textFSPieMenuSliceHighlight0">
-				Menu tondo opz 1:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight0" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight0" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight0" />
-			<text tool_tip="UUID del suono per la scelta della voce 2 del menu a torta." name="textFSPieMenuSliceHighlight1">
-				Menu tondo opz 2:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight1" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight1" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight1" />
-			<text tool_tip="UUID del suono per la scelta della voce 3 del menu a torta." name="textFSPieMenuSliceHighlight2">
-				Menu tondo opz 3:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight2" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight2" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight2" />
-			<text tool_tip="UUID del suono per la scelta della voce 4 del menu a torta." name="textFSPieMenuSliceHighlight3">
-				Menu tondo opz 4:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight3" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight3" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight3" />
-			<text tool_tip="UUID del suono per la scelta della voce 5 del menu a torta." name="textFSPieMenuSliceHighlight4">
-				Menu tondo opz 5:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight4" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight4" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight4"/>
-			<text tool_tip="UUID del suono per la scelta della voce 6 del menu a torta." name="textFSPieMenuSliceHighlight5">
-				Menu tondo opz 6:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight5" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight5" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight5" />
-			<text tool_tip="UUID del suono per la scelta della voce 7 del menu a torta." name="textFSPieMenuSliceHighlight6">
-				Menu tondo opz 7:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight6" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight6" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight6" />
-			<text tool_tip="UUID del suono per la scelta della voce 8 del menu a torta." name="textFSPieMenuSliceHighlight7">
-				Menu tondo opz 8:
-			</text>
-			<button name="Prev_UISndPieMenuSliceHighlight7" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndPieMenuSliceHighlight7" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndPieMenuSliceHighlight7" />
-			<text tool_tip="UUID del suono per quando si inizia a scrivere in chat. L&apos;impostazione è condivisa con Chat &gt; Scrittura &gt; Attiva suono tastiera." name="textFSTyping">
-				Scrittura messaggio:
-			</text>
-			<button name="Prev_UISndTyping" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTyping" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="FSPlayTypingSoundCheckBox"/>
-			<text tool_tip="UUID del suono per la chiusura di una finestra." name="textFSWindowClose">
-				Chiude finestra:
-			</text>
-			<button name="Prev_UISndWindowClose" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndWindowClose" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndWindowClose"/>
-			<text tool_tip="UUID del suono per l&apos;apertura di una finestra." name="textFSWindowOpen">
-				Apre finestra:
-			</text>
-			<button name="Prev_UISndWindowOpen" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndWindowOpen" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndWindowOpen" />
-			<text tool_tip="UUID del suono quando uno script apre una finestra di dialogo." name="textFSScriptFloaterOpen">
-				Dialogo script:
-			</text>
-			<button name="Prev_UISndScriptFloaterOpen" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndScriptFloaterOpen" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndScriptFloaterOpen"/>
-			<text tool_tip="UUID del suono per quando un amico entra." name="textFSFriendOnline">
-				Entra un amico:
-			</text>
-			<button name="Prev_UISndFriendOnline" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndFriendOnline" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndFriendOnline"/>
-			<text tool_tip="UUID del suono per quando un amico esce." name="textFSFriendOffline">
-				Esce un amico:
-			</text>
-			<button name="Prev_UISndFriendOffline" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndFriendOffline" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndFriendOffline"/>
-			<text tool_tip="UUID del suono per un&apos;offerta di amicizia." name="textFSFriendshipOffer">
-				Offerta amicizia:
-			</text>
-			<button name="Prev_UISndFriendshipOffer" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndFriendshipOffer" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndFriendshipOffer"/>
-		</panel>
-		<panel label="Suoni UI 3" name="UI Sounds tab 3">
-			<text name="textFSExplanation_tab3">
-				Si possono cambiare qui (indicando gli UUID) ed abilitare/disabilitare i suoni di sistema.
-Passare sui campi UUID per leggere le impostazioni predefinite.
-			</text>
-			<text tool_tip="UUID del suono per un&apos;offerta di teleport." name="textFSTeleportOffer">
-				Offerta TP:
-			</text>
-			<button name="Prev_UISndTeleportOffer" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndTeleportOffer"/>
-			<text tool_tip="UUID del suono per un&apos;offerta da inventario." name="textFSInventoryOffer">
-				Offerta inventario:
-			</text>
-			<button name="Prev_UISndInventoryOffer" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndInventoryOffer" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndInventoryOffer"/>
-			<text tool_tip="UUID del suono per una chiamata vocale in arrivo." name="textFSIncomingVoiceCall">
-				Chiamata in voce:
-			</text>
-			<button name="Prev_UISndIncomingVoiceCall" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndIncomingVoiceCall" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndIncomingVoiceCall"/>
-			<text tool_tip="UUID del suono per un invito a un gruppo." name="textFSGroupInvitation">
-				Invito gruppo:
-			</text>
-			<button name="Prev_UISndGroupInvitation" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndGroupInvitation" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndGroupInvitation"/>
-			<text tool_tip="UUID del suono per un avviso di gruppo." name="textFSGroupNotice">
-				Avviso di gruppo:
-			</text>
-			<button name="Prev_UISndGroupNotice" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndGroupNotice" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndGroupNotice"/>
-			<text tool_tip="UUID del suono per un avviso di esperienza." name="textFSQuestionExperience">
-				Nuova esperienza:
-			</text>
-			<button name="Prev_UISndQuestionExperience" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndQuestionExperience" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndQuestionExperience"/>
-			<text tool_tip="UUID del suono per un&apos;operazione non valida." name="textFSInvalidOp">
-				Operazione non valida:
-			</text>
-			<button name="Prev_UISndInvalidOp" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndInvalidOp" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndInvalidOp"/>
-			<text tool_tip="UUID del suono per la commutazione del blocco di movimento." name="textFSMovelockToggle">
-				Blocco movimento:
-			</text>
-			<button name="Prev_UISndMovelockToggle" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndMovelockToggle" label="R" tool_tip="Ripristina suono predefinito."/>
-			<text tool_tip="UUID del suono per il raggio tracciante. Accelera quando l&apos;avatar si avvicina alla destinazione." name="textFSTrackerBeacon">
-				Raggio tracciante:
-			</text>
-			<button name="Prev_UISndTrackerBeacon" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndTrackerBeacon" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndTrackerBeacon"/>
-			<text tool_tip="UUID del suono riprodotto quando il microfono viene acceso o spento." name="textFSMicToggle">
-				Accendi/spegni  microfono:
-			</text>
-			<button name="Prev_UISndMicToggle" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndMicToggle" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndMicToggle"/>
-			<text tool_tip="UUID del suono per la comparsa dell&apos;avviso di riavvio della regione." name="textFSRestart">
-				Riavvio regione:
-			</text>
-			<button name="Prev_UISndRestart" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndRestart" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndRestart"/>
-			<text tool_tip="UUID del suono per la comparsa dell&apos;avviso di riavvio della regione (OpenSim)." name="textFSRestartOpenSim">
-				Riavvio regione (OpenSim):
-			</text>
-			<button name="Prev_UISndRestartOpenSim" label="S" tool_tip="Anteprima suono."/>
-			<button name="Def_UISndRestartOpenSim" label="R" tool_tip="Ripristina suono predefinito."/>
-			<check_box label="Attiva suono" name="PlayModeUISndRestartOpenSim"/>
-		</panel>
+
 	</tab_container>
 </panel>

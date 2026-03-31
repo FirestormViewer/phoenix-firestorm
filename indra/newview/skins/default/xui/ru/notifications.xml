@@ -5705,4 +5705,18 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		Вход пользователя Primfeed успешен, но проверки статуса не пройдены. Проверьте, работает ли Primfeed.
 	</notification>
 
+
+	<notification name="FSSetTitleRegion">
+		Введите точное название региона для привязки к выбранному титулу группы.
+Название будет проверено перед сохранением.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Регион «[REGION]» не найден. Пожалуйста, проверьте название и попробуйте снова.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

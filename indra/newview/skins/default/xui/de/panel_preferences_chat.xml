@@ -167,6 +167,8 @@
 			<check_box name="FSShowChatType" label="Chat-Typ/Senden-Button anzeigen"/>
 			<check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
 			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
+			<check_box label="Nur im Mouselook" name="FSCloseChatOnReturnInMouselook" tool_tip="Wenn „Chatleiste nach Senden deaktivieren“ aktiv ist, Chat nur während des Mouselook deaktivieren."/>
+			<check_box label="Nur für Chat in der Nähe" name="FSCloseChatOnReturnOnlyForNearbyChatControl" tool_tip="Wenn „Chatleiste nach Senden deaktivieren“ aktiv ist, Chat nur für „Chat in der Nähe“ deaktivieren."/>
 			<check_box label="Chatverlauf ebenfalls deaktivieren" name="FSUnfocusChatHistoryOnReturn"/>
 			<text name="textUseKeyboardShortcuts">
 				Tastatur-Shortcuts verwenden:

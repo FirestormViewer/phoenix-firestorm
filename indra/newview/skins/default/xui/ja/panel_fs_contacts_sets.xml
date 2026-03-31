@@ -21,7 +21,7 @@
 	<filter_editor label="人物をフィルタ" name="contact_sets_filter_input"/>
 	<!-- Action buttons -->
 	<button label="追加…" name="add_btn" tool_tip="アバターを現在のコンタクトセットに追加します。"/>
-	<button label="移動…" name="move_btn" tool_tip="このアバターを別のコンタクトセットへ移動します。"/>
+	<button label="移動…" name="move_btn" tool_tip="このアバターを別のコンタクトセットに移動させます。"/>
 	<button label="削除…" name="remove_btn" tool_tip="このアバターを現在のコンタクトセットから削除します。"/>
 	<button label="プロフィール…" name="profile_btn" tool_tip="このアバターのプロフィールを開きます。"/>
 	<button label="ＩＭ…" name="start_im_btn" tool_tip="ＩＭを開始します。"/>

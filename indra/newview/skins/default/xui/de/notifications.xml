@@ -6015,4 +6015,18 @@ Fehlermeldung:
 		Chat-Verlauf-Datei ist nicht vorhanden. Entweder existiert kein Verlauf für diesen Chat oder Verläufe werden nicht gespeichert.
 Sie können das Speichern von Verläufen einschalten unter Einstellungen &gt; Privatsphäre &gt; Protokoll und Verläufe
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Geben Sie den genauen Namen einer Region ein, um ihn dem ausgewählten Gruppentitel zuzuweisen.
+Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

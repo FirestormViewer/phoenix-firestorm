@@ -1,0 +1,35 @@
+<panel label="場所" name="panel_dir_places">
+	<string name="searching_text">
+		検索しています…
+	</string>
+	<string name="not_found_text">
+		見つかりませんでした。
+	</string>
+	<string name="found_text">
+		[COUNT]件見つかりました。
+	</string>
+	<text name="find">
+		検索語句を入力：
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="全カテゴリ"/>
+		<combo_item name="LindenLocation" label="Linden所在地"/>
+		<combo_item name="Arts&amp;Culture" label="芸術と文化"/>
+		<combo_item name="Business" label="ビジネス"/>
+		<combo_item name="Educational" label="教育的"/>
+		<combo_item name="Gaming" label="ゲーム"/>
+		<combo_item name="Hangout" label="たまり場"/>
+		<combo_item name="NewcomerFriendly" label="新住民歓迎"/>
+		<combo_item name="Parks&amp;Nature" label="公園と自然"/>
+		<combo_item name="Residential" label="住居用"/>
+		<combo_item name="Shopping" label="ショッピング"/>
+		<combo_item name="Adult" label="アダルト"/>
+		<combo_item name="Other" label="その他"/>
+	</combo_box>
+	<scroll_list name="results">
+		<column label="名前" name="name"/>
+		<column label="トラフィック" name="dwell"/>
+	</scroll_list>
+	<button tool_tip="前のページに戻ります。" name="prev_btn"/>
+	<button tool_tip="次のページに進みます。" name="next_btn"/>
+</panel>

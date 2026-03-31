@@ -50,7 +50,6 @@
 #include "lltracker.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"        // for gSavedSettings
-#include "llviewermenu.h"           // for gMenuHolder
 #include "llviewerparcelmgr.h"
 #include "llvoavatar.h"
 #include "llvoiceclient.h"
@@ -60,13 +59,14 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
-constexpr F32 FS_RADAR_LIST_UPDATE_INTERVAL = 1.f;
-
 /**
  * Periodically updates the nearby people list while the Nearby tab is active.
  *
  * The period is defined by FS_RADAR_LIST_UPDATE_INTERVAL constant.
  */
+
+constexpr F32 FS_RADAR_LIST_UPDATE_INTERVAL = 1.f;
+
 class FSRadarListUpdater : public FSRadar::Updater, public LLEventTimer
 {
     LOG_CLASS(FSRadarListUpdater);
@@ -80,7 +80,7 @@ public:
         mEventTimer.start();
     }
 
-    /*virtual*/ bool tick()
+    bool tick() override
     {
         update();
         return false;

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="Титулы групп">
 	<floater.string name="NoGroupTitle" value="&lt;Нет титула группы&gt;" />
+	<floater.string name="ClearAllRegions" value="Очистить все регионы"/>
 	<filter_editor label="Фильтр Титулов групп" name="filter_input"/>
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Титул" />
 		<column name="groupname" label="Группа" />
+		<column name="regionname" label="Авто-регион" />
 	</scroll_list>
 	<button tool_tip="Обновить список доступных титулов групп" name="btnRefresh" />
-	<button name="btnInfo" label="Информация" tool_tip="Показать информацию о группе,связанную с выбранным титулом" />
+	<button name="btnSetRegion" label="Этот рег." tool_tip="Назначить текущий регион выбранному титулу" />
+	<button name="btnSetRegionManual" label="Ввести рег." tool_tip="Введите название региона для назначения выбранному титулу" />
+	<button name="btnClearRegion" label="Очистить рег." tool_tip="Удалить привязку региона для выбранного титула" />
+	<button name="btnInfo" label="инфо" tool_tip="Показать информацию о группе, связанную с выбранным титулом" />
 	<button name="btnActivate" label="Активировать" tool_tip="Активировать выбранный титул группы" />
+	<check_box label="«Нет» в регионах без назначения" name="none_on_unassigned" />
 </floater>

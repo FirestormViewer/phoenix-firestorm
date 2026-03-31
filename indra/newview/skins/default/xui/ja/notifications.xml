@@ -1332,7 +1332,7 @@ L$が不足しているので、このグループに参加することができ
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		キーワードは一語でなければならず、置換は空にできません。キーワードで使える句読点:
+		キーワードは、単語一つでなければならず、置換文字列を空白にすることはできません。キーワードで使用可能な句読点：
 ( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
@@ -5785,4 +5785,18 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<!-- </FS:TJ>-->
+
+	<notification name="FSSetTitleRegion">
+		選択したグループタイトルに割り当てる地域の正確な名前を入力してください。
+割り当てが保存される前に名前が確認されます。
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		地域 '[REGION]' が見つかりませんでした。名前を確認してもう一度お試しください。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

@@ -4366,4 +4366,16 @@ Tente selecionar uma quantidade menor de terreno.
 		[REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+
+<!-- Firestorm Region Group Titles -->
+  <notification name="FSSetTitleRegion">
+Digite o nome exato de uma região para atribuir ao título de grupo selecionado.
+O nome será verificado antes de salvar a atribuição.
+  </notification>
+
+  <notification name="FSSetTitleRegionNotFound">
+A região '[REGION]' não foi encontrada. Verifique o nome e tente novamente.
+  </notification>
+<!-- Firestorm Region Group Titles -->
+
 </notifications>

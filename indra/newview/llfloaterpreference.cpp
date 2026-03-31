@@ -35,6 +35,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterpreference.h"
+#include "fspanelpreferenceuisounds.h"  // <FS:PP> UI Sounds
 
 #include "message.h"
 #include "llfloaterautoreplacesettings.h"
@@ -78,6 +79,7 @@
 #include "llsky.h"
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
+#include "llscrolllistcell.h"  // <FS:PP> UI Sounds
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
 #include "lltrans.h"
@@ -3131,9 +3133,6 @@ void LLFloaterPreference::onLogChatHistorySaved()
 // <FS:PP> Load UI Sounds tabs settings
 void LLFloaterPreference::updateUISoundsControls()
 {
-    getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Instant Messages"
-    getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Group Instant Messages"
-    getChild<LLComboBox>("PlayModeUISndNewIncomingConfIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingConfIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving AdHoc Instant Messages"
 #ifdef OPENSIM
     // <FS:Beq> OpenSim has option to not attenuate nearby local voice by distance
     auto earPosGroup = findChild<LLRadioGroup>("ear_location");
@@ -3145,13 +3144,13 @@ void LLFloaterPreference::updateUISoundsControls()
         earPosGroup->setIndexEnabled(hearNearbyVoiceFullVolume, LLGridManager::instance().isInOpenSim());
     }
     // <FS:Beq>
-    getChild<LLTextBox>("textFSRestartOpenSim")->setVisible(true);
-    getChild<LLLineEditor>("UISndRestartOpenSim")->setVisible(true);
-    getChild<LLButton>("Prev_UISndRestartOpenSim")->setVisible(true);
-    getChild<LLButton>("Def_UISndRestartOpenSim")->setVisible(true);
-    getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(true);
 #endif
     getChild<LLComboBox>("UseLSLFlightAssist")->setValue((int)gSavedPerAccountSettings.getF32("UseLSLFlightAssist")); // Flight Assist combo box; Not sound-related, but better to place it here instead of creating whole new void
+
+    if (FSPanelPreferenceUISounds* ui_sounds_panel = findChild<FSPanelPreferenceUISounds>("UI Sounds tab"))
+    {
+        ui_sounds_panel->refreshList();
+    }
 
     // FIRE-9856: Mute sound effects disable plays sound from collisions and plays sound from gestures checkbox not disable after restart/relog
     bool mute_sound_effects = gSavedSettings.getBOOL("MuteSounds");

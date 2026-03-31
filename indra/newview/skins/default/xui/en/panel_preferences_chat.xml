@@ -1047,20 +1047,42 @@
 		 layout="topleft"
 		 name="AutohideChatBar"
 		 tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed." />
+ 		<check_box
+ 		 control_name="CloseChatOnReturn"
+ 		 label="Deselect chat after sending a message"
+ 		 layout="topleft"
+ 		 top_pad="1"
+ 		 height="16"
+ 		 width="400"
+ 		 name="CloseChatOnReturn" />
 		<check_box
-		 control_name="CloseChatOnReturn"
-		 label="Deselect chat after sending a message"
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 name="CloseChatOnReturn" />
-		<check_box
-		 control_name="FSUnfocusChatHistoryOnReturn"
-		 label="De-focus chat history as well"
+		 control_name="FSCloseChatOnReturnInMouselook"
+		 label="Only in mouselook"
 		 layout="topleft"
 		 top_pad="1"
 		 left="30"
+		 height="16"
+		 width="400"
+		 name="FSCloseChatOnReturnInMouselook"
+		 tool_tip="When 'Deselect chat after sending a message' is checked, only deselect chat in mouselook."
+		 enabled_control="CloseChatOnReturn" />
+		<check_box
+		 control_name="FSCloseChatOnReturnOnlyForNearbyChatControl"
+		 label="Only for nearby chat bar"
+		 layout="topleft"
+		 top_pad="1"
+		 left="30"
+		 height="16"
+		 width="400"
+		 name="FSCloseChatOnReturnOnlyForNearbyChatControl"
+		 tool_tip="When 'Deselect chat after sending a message' is checked, only deselect for the nearby chat bar."
+		 enabled_control="CloseChatOnReturn" />
+ 		<check_box
+ 		 control_name="FSUnfocusChatHistoryOnReturn"
+ 		 label="De-focus chat history as well"
+ 		 layout="topleft"
+ 		 top_pad="1"
+ 		 left="30"
 		 height="16"
 		 width="400"
 		 name="FSUnfocusChatHistoryOnReturn"

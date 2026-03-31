@@ -5384,4 +5384,18 @@ Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenc
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Inserisci il nome esatto di una regione da assegnare al titolo del gruppo selezionato.
+Il nome verrà verificato prima di salvare l'assegnazione.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La regione '[REGION]' non è stata trovata. Controlla il nome e riprova.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

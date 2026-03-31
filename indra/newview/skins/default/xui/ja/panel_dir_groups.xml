@@ -1,0 +1,21 @@
+<panel label="グループ" name="panel_dir_groups">
+	<string name="searching_text">
+		検索しています…
+	</string>
+	<string name="not_found_text">
+		見つかりませんでした。
+	</string>
+	<string name="found_text">
+		[COUNT]件見つかりました。
+	</string>
+	<button tool_tip="前のページに戻ります。" name="prev_btn"/>
+	<button tool_tip="次のページに進みます。" name="next_btn"/>
+	<text name="find">
+		検索語句を入力：
+	</text>
+	<check_box label="成人向けグループを含む" name="incmature"/>
+	<scroll_list name="results">
+		<column label="名前" name="name"/>
+		<column label="メンバー" name="members"/>
+	</scroll_list>
+</panel>

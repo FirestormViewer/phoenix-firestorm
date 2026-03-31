@@ -5299,8 +5299,20 @@ URL defolt olaraq sıfırlansın?
 		<usetemplate name="okcancelbuttons" notext="Növbəti dəfə mənə xatırlat" yestext="Sıfırla"/>
 	</notification>
 	<notification name="WarnScriptedCamera">
-Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
+		Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
 
 [SOURCES]
+	</notification>
+	<notification name="FSSetTitleRegion">
+		Seçilmiş qrup başlığına təyin etmək üçün bölgənin dəqiq adını daxil edin.
+Ad təyinat saxlanmadan əvvəl yoxlanılacaq.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		'[REGION]' bölgəsi tapılmadı. Zəhmət olmasa adı yoxlayın və yenidən cəhd edin.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>

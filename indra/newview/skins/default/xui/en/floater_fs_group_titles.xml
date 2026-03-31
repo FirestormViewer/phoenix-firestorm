@@ -3,10 +3,10 @@
  name="group_titles"
  help_topic="fs_group_titles"
  title="Group Titles"
- width="250"
- height="300"
- min_width="250"
- min_height="150"
+ width="505"
+ height="340"
+ min_width="505"
+ min_height="200"
  save_rect="true"
  single_instance="true"
  can_resize="true"
@@ -15,6 +15,7 @@
  can_drag_on_left="false">
  
 	<floater.string name="NoGroupTitle" value="&lt;No group title&gt;"/>
+	<floater.string name="ClearAllRegions" value="Clear All Regions"/>
 
 	<filter_editor
 	 follows="left|top|right"
@@ -34,7 +35,7 @@
 	 layout="topleft"
 	 right="-5"
 	 left="5"
-	 height="238">
+	 height="255">
 		<column
 		 name="grouptitle"
 		 sort_column="title_sort_column"
@@ -43,6 +44,10 @@
 		 name="groupname"
 		 sort_column="name_sort_column"
 		 label="Group"/>
+		<column
+		 name="regionname"
+		 label="Auto Region"
+		 width="140" />
 		<column
 		 name="role_id"
 		 width="-1"/>
@@ -56,30 +61,72 @@
 		 name="name_sort_column"
 		 width="-1"/>
 	</scroll_list>
+
 	<button
-	 image_overlay="Refresh_Off"
-	 tool_tip="Refresh list of available group titles"
-	 name="btnRefresh"
+	 name="btnSetRegion"
+	 label="This Region"
+	 font="SansSerifSmall"
+	 tool_tip="Assign the region you are currently in"
 	 height="22"
-	 width="25"
+	 width="80"
 	 left="5"
 	 follows="left|bottom"/>
+	<button
+	 name="btnSetRegionManual"
+	 label="Type Region"
+	 font="SansSerifSmall"
+	 tool_tip="Manually enter a region name to assign"
+	 height="22"
+	 width="105"
+	 left_pad="1"
+	 top_delta="0"
+	 follows="left|bottom"/>
+	<button
+	 name="btnClearRegion"
+	 label="Clear Region"
+	 font="SansSerifSmall"
+	 tool_tip="Remove region assignment from the selected title"
+	 height="22"
+	 width="95"
+	 left_pad="1"
+	 top_delta="0"
+	 follows="left|bottom"/>
+
 	<button
 	 name="btnInfo"
 	 label="Info"
 	 tool_tip="Show info about group of selected title"
+	 font="SansSerifSmall"
 	 height="22"
-	 width="100"
-	 right="-110"
+	 width="75"
+	 right="-131"
 	 top_delta="0"
 	 follows="right|bottom"/>
 	<button
 	 name="btnActivate"
 	 label="Activate"
 	 tool_tip="Activate selected group title"
+	 font="SansSerifSmall"
 	 height="22"
 	 width="100"
+	 right="-30"
+	 top_delta="0"
+	 follows="right|bottom"/>
+	<button
+	 image_overlay="Refresh_Off"
+	 tool_tip="Refresh list of available group titles"
+	 name="btnRefresh"
+	 height="22"
+	 width="25"
 	 right="-4"
 	 top_delta="0"
 	 follows="right|bottom"/>
+
+	<check_box
+	 follows="left|bottom"
+	 height="16"
+	 label="Set to 'none' in unassigned regions"
+	 layout="topleft"
+	 left="5"
+	 name="none_on_unassigned" />
 </floater>

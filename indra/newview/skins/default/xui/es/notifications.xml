@@ -5007,4 +5007,18 @@ No se podrá deshacer.
 	<notification name="ExodusFlickrUploadComplete">
 		Tu instantánea puede ser vista ahora [https://www.flickr.com/photos/me/[ID] aquí].
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Ingrese el nombre exacto de una región para asignar al título de grupo seleccionado.
+El nombre será verificado antes de guardar la asignación.
+		<form name="form">
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		No se encontró la región '[REGION]'. Por favor, verifique el nombre e intente de nuevo.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+
 </notifications>

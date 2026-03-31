@@ -5760,4 +5760,18 @@ Message d'erreur :
 		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
+Le nom sera vérifié avant l'enregistrement de l'assignation.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La région '[REGION]' n'a pas été trouvée. Veuillez vérifier le nom et réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

@@ -3418,6 +3418,21 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
         if (mesg != "")
         {
+
+            // <FS:PP> FIRE-36367 Ability to play a sound when someone talks in Nearby Chat
+            if (chat.mSourceType == CHAT_SOURCE_AGENT &&
+                chat.mFromID.notNull() &&
+                chat.mFromID != gAgentID &&
+                !chat.mMuted &&
+                (chat.mChatType == CHAT_TYPE_WHISPER ||
+                 chat.mChatType == CHAT_TYPE_NORMAL ||
+                 chat.mChatType == CHAT_TYPE_SHOUT ||
+                 chat.mChatType == CHAT_TYPE_DIRECT))
+            {
+                make_ui_sound("UISndNearbyChat");
+            }
+            // </FS:PP>
+
             LLSD msg_notify = LLSD(LLSD::emptyMap());
             msg_notify["session_id"] = LLUUID();
             msg_notify["from_id"] = chat.mFromID;

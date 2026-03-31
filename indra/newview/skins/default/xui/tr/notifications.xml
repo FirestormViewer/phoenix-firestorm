@@ -4544,4 +4544,16 @@ Lütfen kendi envanterinize kopyalayın ve yeniden deneyin.
 	<notification name="TrackLoadMismatch">
 		Rota [TRACK1] kaynağından [TRACK2] hedefine yüklenemiyor.
 	</notification>
+
+<!-- Firestorm Region Group Titles -->
+  <notification name="FSSetTitleRegion">
+Seçilen grup unvanına atamak için bir bölgenin tam adını girin.
+Atama kaydedilmeden önce ad doğrulanacaktır.
+  </notification>
+
+  <notification name="FSSetTitleRegionNotFound">
+'[REGION]' bölgesi bulunamadı. Lütfen adı kontrol edip tekrar deneyin.
+  </notification>
+<!-- Firestorm Region Group Titles -->
+
 </notifications>

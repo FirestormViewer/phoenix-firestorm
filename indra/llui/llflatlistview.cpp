@@ -443,6 +443,7 @@ void LLFlatListView::sort()
 
     mItemPairs.sort(ComparatorAdaptor(*mItemComparator));
     rearrangeItems();
+    notifyParentItemsRectChanged(); // <FS:PP> FIRE-36479 Multiple nested scrollbars in Appearance window
 }
 
 bool LLFlatListView::updateValue(const LLSD& old_value, const LLSD& new_value)
