@@ -1191,7 +1191,8 @@ Offri l&apos;amicizia a [NAME]?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota.
+		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota. Punteggiatura consentita nella parola chiave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista di sostituzione non è valida.
@@ -5078,6 +5079,13 @@ L'azione non può essere annullata.
 			<button name="Cancel" text="Annulla"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Inserire un alias per [COUNT] avatar:
+		<form name="form">
+			<button name="Create" text="Crea"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		Non è stato possible rinominare il set di contatti &apos;[SET]&apos; come &apos;[NEW_NAME]&apos;. Esiste già un set con lo stesso nome, oppure il nuovo nome non è valido.
 	</notification>
@@ -5376,4 +5384,18 @@ Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenc
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Inserisci il nome esatto di una regione da assegnare al titolo del gruppo selezionato.
+Il nome verrà verificato prima di salvare l'assegnazione.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La regione '[REGION]' non è stata trovata. Controlla il nome e riprova.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

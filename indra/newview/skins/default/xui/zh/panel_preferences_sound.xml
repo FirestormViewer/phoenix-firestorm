@@ -9,6 +9,180 @@
 	<panel.string name="button5_mouse">
 		滑鼠按鍵 5
 	</panel.string>
+	<panel.string name="ui_sound_copy_uuid">
+		複製音效 UUID
+	</panel.string>
+	<panel.string name="ui_sound_select_prompt">
+		選擇介面音效
+	</panel.string>
+	<panel.string name="ui_sound_play_this">
+		播放此音效
+	</panel.string>
+	<panel.string name="ui_sound_playmode_new_session">
+		僅在新會話時播放
+	</panel.string>
+	<panel.string name="ui_sound_playmode_every_message">
+		每條訊息都播放
+	</panel.string>
+	<panel.string name="ui_sound_playmode_not_focus">
+		在背景時播放
+	</panel.string>
+	<panel.string name="ui_sound_playmode_mute">
+		靜音此音效
+	</panel.string>
+	<panel.string name="textFSChatMention">
+		聊天提及：
+	</panel.string>
+	<panel.string name="textFSBadKeystroke">
+		無效按鍵：
+	</panel.string>
+	<panel.string name="textFSClick">
+		滑鼠點擊：
+	</panel.string>
+	<panel.string name="textFSClickRelease">
+		滑鼠釋放：
+	</panel.string>
+	<panel.string name="textFSFootsteps">
+		預設腳步聲：
+	</panel.string>
+	<panel.string name="textFSFriendOffline">
+		好友離線：
+	</panel.string>
+	<panel.string name="textFSFriendOnline">
+		好友上線：
+	</panel.string>
+	<panel.string name="textFSFriendshipOffer">
+		好友請求：
+	</panel.string>
+	<panel.string name="textFSGroupInvitation">
+		群組邀請：
+	</panel.string>
+	<panel.string name="textFSGroupNotice">
+		群組通知：
+	</panel.string>
+	<panel.string name="textFSHealthReductionF">
+		女性角色受傷：
+	</panel.string>
+	<panel.string name="textFSHealthReductionM">
+		男性角色受傷：
+	</panel.string>
+	<panel.string name="textFSIncomingVoiceCall">
+		語音通話：
+	</panel.string>
+	<panel.string name="textFSInvalidOp">
+		無效操作：
+	</panel.string>
+	<panel.string name="textFSInventoryOffer">
+		庫存物品提供：
+	</panel.string>
+	<panel.string name="textFSMicToggle">
+		麥克風切換：
+	</panel.string>
+	<panel.string name="textFSMoneyChangeDown">
+		支付貨幣：
+	</panel.string>
+	<panel.string name="textFSMoneyChangeUp">
+		獲得貨幣：
+	</panel.string>
+	<panel.string name="textFSMovelockToggle">
+		啟用/停用移動鎖定：
+	</panel.string>
+	<panel.string name="textFSNearbyChat">
+		附近聊天新訊息：
+	</panel.string>
+	<panel.string name="textFSNewIncomingConfIMSession">
+		新臨時會議：
+	</panel.string>
+	<panel.string name="textFSNewIncomingGroupIMSession">
+		新群組聊天：
+	</panel.string>
+	<panel.string name="textFSNewIncomingIMSession">
+		新私聊：
+	</panel.string>
+	<panel.string name="textFSObjectCreate">
+		建立物件：
+	</panel.string>
+	<panel.string name="textFSObjectDelete">
+		刪除物件：
+	</panel.string>
+	<panel.string name="textFSObjectRezIn">
+		放置物件：
+	</panel.string>
+	<panel.string name="textFSObjectRezOut">
+		拾取物件：
+	</panel.string>
+	<panel.string name="textFSPieMenuAppear">
+		環形選單出現：
+	</panel.string>
+	<panel.string name="textFSPieMenuHide">
+		環形選單隱藏：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight0">
+		環形選單選項 1：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight1">
+		環形選單選項 2：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight2">
+		環形選單選項 3：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight3">
+		環形選單選項 4：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight4">
+		環形選單選項 5：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight5">
+		環形選單選項 6：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight6">
+		環形選單選項 7：
+	</panel.string>
+	<panel.string name="textFSPieMenuSliceHighlight7">
+		環形選單選項 8：
+	</panel.string>
+	<panel.string name="textFSQuestionExperience">
+		新體驗：
+	</panel.string>
+	<panel.string name="textFSRestart">
+		區域重新啟動：
+	</panel.string>
+	<panel.string name="textFSRestartOpenSim">
+		區域重新啟動 (OpenSim)：
+	</panel.string>
+	<panel.string name="textFSScriptFloaterClose">
+		腳本彈窗關閉：
+	</panel.string>
+	<panel.string name="textFSScriptFloaterOpen">
+		腳本彈窗開啟：
+	</panel.string>
+	<panel.string name="textFSSnapshot">
+		拍照：
+	</panel.string>
+	<panel.string name="textFSAlert">
+		預設警報：
+	</panel.string>
+	<panel.string name="textFSStartIM">
+		開始私聊：
+	</panel.string>
+	<panel.string name="textFSTeleportOffer">
+		傳送邀請：
+	</panel.string>
+	<panel.string name="textFSTeleportOut">
+		傳送：
+	</panel.string>
+	<panel.string name="textFSTrackerBeacon">
+		追蹤標記：
+	</panel.string>
+	<panel.string name="textFSTyping">
+		輸入訊息：
+	</panel.string>
+	<panel.string name="textFSWindowClose">
+		關閉視窗：
+	</panel.string>
+	<panel.string name="textFSWindowOpen">
+		開啟視窗：
+	</panel.string>
 	<tab_container label="Firestorm 偏好設定" name="tabs">
 		<panel label="常規" name="Media Sounds Panel">
 			<slider label="主音量" name="System Volume" />
@@ -121,231 +295,18 @@
 			<button label="音訊裝置設定" name="device_settings_btn" />
 			<panel label="裝置設定" name="device_settings_panel" />
 		</panel>
-		<panel label="聲音 1" name="UI Sounds tab 1">
+		<panel label="介面音效" name="UI Sounds tab">
 			<text name="textFSExplanation_tab1">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。
 將其 UUID 輸入或將滑鼠懸停在欄位上檢視其預設值。
 			</text>
-			<text tool_tip="Firestorm 警報的預設音效 UUID。" name="textFSSndAlert">預設警報：</text>
-			<button name="Prev_UISndAlert" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndAlert" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndAlert" />
-			<text tool_tip="無效按鍵音效的UUID。" name="textFSBadKeystroke">無效按鍵：</text>
-			<button name="Prev_UISndBadKeystroke" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndBadKeystroke" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndBadKeystroke" />
-			<text tool_tip="滑鼠點擊音效的UUID。" name="textFSClick">滑鼠點擊：</text>
-			<button name="Prev_UISndClick" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndClick" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndClick" />
-			<text tool_tip="釋放滑鼠點擊音效的UUID。" name="textFSClickRelease">滑鼠釋放：</text>
-			<button name="Prev_UISndClickRelease" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndClickRelease" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndClickRelease" />
-			<text tool_tip="女性角色受到傷害音效的UUID。" name="textFSHealthReductionF">女性受傷：</text>
-			<button name="Prev_UISndHealthReductionF" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndHealthReductionF" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndHealthReductionF" />
-			<text tool_tip="男性角色受到傷害音效的UUID。" name="textFSHealthReductionM">男性受傷：</text>
-			<button name="Prev_UISndHealthReductionM" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndHealthReductionM" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndHealthReductionM" />
-			<text tool_tip="花費貨幣音效的UUID。" name="textFSMoneyChangeDown">支付貨幣：</text>
-			<button name="Prev_UISndMoneyChangeDown" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndMoneyChangeDown" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndMoneyChangeDown" />
-			<text tool_tip="獲得貨幣音效的UUID。" name="textFSMoneyChangeUp">得到貨幣：</text>
-			<button name="Prev_UISndMoneyChangeUp" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndMoneyChangeUp" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndMoneyChangeUp" />
-			<text tool_tip="接收新私聊音效的UUID。此設定與 '聊天 &gt; 通知 &gt; '收到新訊息時播放提示音：私聊' 共享。" name="textFSNewIncomingIMSession">新私聊：</text>
-			<button name="Prev_UISndNewIncomingIMSession" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndNewIncomingIMSession" label="↻" tool_tip="重設。" />
-			<combo_box name="PlayModeUISndNewIncomingIMSession">
-				<combo_box.item label="新訊息" name="1" />
-				<combo_box.item label="每條訊息" name="2" />
-				<combo_box.item label="如果在後臺" name="3" />
-				<combo_box.item label="禁用" name="0" />
-			</combo_box>
-			<text tool_tip="接收新群組訊息音效的UUID。此設定與 '聊天 &gt; 通知 &gt; '收到新訊息時播放提示音：群組聊天' 共享。" name="textFSNewGroupIncomingIMSession">新群組聊天：</text>
-			<button name="Prev_UISndNewIncomingGroupIMSession" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndNewIncomingGroupIMSession" label="↻" tool_tip="重設。" />
-			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
-				<combo_box.item label="新訊息" name="1" />
-				<combo_box.item label="每條訊息" name="2" />
-				<combo_box.item label="如果在後臺" name="3" />
-				<combo_box.item label="禁用" name="0" />
-			</combo_box>
-			<text tool_tip="接收新會議訊息音效的UUID。" name="textFSNewConferenceIncomingIMSession">會議：</text>
-			<button name="Prev_UISndNewIncomingConfIMSession" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndNewIncomingConfIMSession" label="↻" tool_tip="重設。" />
-			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
-				<combo_box.item label="新訊息" name="1" />
-				<combo_box.item label="每條訊息" name="2" />
-				<combo_box.item label="如果在後臺" name="3" />
-				<combo_box.item label="禁用" name="0" />
-			</combo_box>
-			<text tool_tip="開始新私聊音效的UUID。" name="textFSStartIM">開始私聊：</text>
-			<button name="Prev_UISndStartIM" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndStartIM" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndStartIM" />
-			<text tool_tip="聊天中被提及音效的UUID。" name="textChatMention">聊天中提及：</text>
-			<button name="Prev_UISndChatMention" label="▶" tool_tip="播放此聲音。"/>
-			<button name="Def_UISndChatMention" label="↻" tool_tip="重設。"/>
-			<check_box label="啟用" name="PlayModeUISndChatMention"/>
-			<text tool_tip="建立新物件音效的UUID。" name="textFSObjectCreate">建立物件：</text>
-			<button name="Prev_UISndObjectCreate" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndObjectCreate" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndObjectCreate" />
-			<text tool_tip="刪除物件音效的UUID。" name="textFSObjectDelete">刪除物件：</text>
-			<button name="Prev_UISndObjectDelete" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndObjectDelete" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndObjectDelete" />
-			<text tool_tip="放置物件音效的UUID。" name="textFSObjectRezIn">放置物件：</text>
-			<button name="Prev_UISndObjectRezIn" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndObjectRezIn" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndObjectRezIn" />
-			<text tool_tip="撿起物件音效的UUID。" name="textFSObjectRezOut">撿起物件：</text>
-			<button name="Prev_UISndObjectRezOut" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndObjectRezOut" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndObjectRezOut" />
-			<text tool_tip="拍照音效的UUID。此設定與 '進階' 選單中的 '靜默拍照' 共享。" name="textFSSnapshot">拍照：</text>
-			<button name="Prev_UISndSnapshot" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndSnapshot" label="↻" tool_tip="重設。" />
-			<check_box label="禁用" name="QuietSnapshotsToDiskCheckBox" />
-			<text tool_tip="腳步聲音效的 UUID。需要重新啟動才能生效。" name="textFSFootsteps">腳步聲：</text>
-			<button name="Prev_UISndFootsteps" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndFootsteps" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndFootsteps" />
+			<filter_editor name="ui_sound_filter" label="篩選介面音效" />
+			<scroll_list name="ui_sounds_list">
+				<column label="音效" name="ui_sound_label" />
+				<column label="狀態" name="ui_sound_status" />
+			</scroll_list>
+			<button name="ui_sound_preview" tool_tip="播放此聲音。" />
+			<button name="ui_sound_default" tool_tip="重設。" />
 		</panel>
-		<panel label="聲音 2" name="UI Sounds tab 2">
-			<text name="textFSExplanation_tab2">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
-			<text tool_tip="傳送音效的UUID。此設定與 '移動和相機' &gt; '傳送' 中的 '傳送時播放音效' 共享。" name="textFSTeleportOut">傳送：</text>
-			<button name="Prev_UISndTeleportOut" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndTeleportOut" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndTeleportOut" />
-			<text tool_tip="圓形選單出現音效的UUID。" name="textFSPieMenuAppear">圓形選單出現：</text>
-			<button name="Prev_UISndPieMenuAppear" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuAppear" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuAppear" />
-			<text tool_tip="圓形選單消失音效的UUID。" name="textFSPieMenuHide">圓形選單隱藏：</text>
-			<button name="Prev_UISndPieMenuHide" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuHide" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuHide" />
-			<text tool_tip="圓形選單選擇第 1 項音效的UUID。" name="textFSPieMenuSliceHighlight0">圓形選單選項 1：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight0" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight0" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight0" />
-			<text tool_tip="圓形選單選擇第 2 項音效的UUID。" name="textFSPieMenuSliceHighlight1">圓形選單選項 2：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight1" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight1" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight1" />
-			<text tool_tip="圓形選單選擇第 3 項音效的UUID。" name="textFSPieMenuSliceHighlight2">圓形選單選項 3：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight2" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight2" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight2" />
-			<text tool_tip="圓形選單選擇第 4 項音效的UUID。" name="textFSPieMenuSliceHighlight3">圓形選單選項 4：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight3" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight3" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight3" />
-			<text tool_tip="圓形選單選擇第 5 項音效的UUID。" name="textFSPieMenuSliceHighlight4">圓形選單選項 5：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight4" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight4" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight4" />
-			<text tool_tip="圓形選單選擇第 6 項音效的UUID。" name="textFSPieMenuSliceHighlight5">圓形選單選項 6：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight5" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight5" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight5" />
-			<text tool_tip="圓形選單選擇第 7 項音效的UUID。" name="textFSPieMenuSliceHighlight6">圓形選單選項 7：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight6" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight6" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight6" />
-			<text tool_tip="圓形選單選擇第 8 項音效的UUID。" name="textFSPieMenuSliceHighlight7">圓形選單選項 8：</text>
-			<button name="Prev_UISndPieMenuSliceHighlight7" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndPieMenuSliceHighlight7" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndPieMenuSliceHighlight7" />
-			<text tool_tip="開始輸入訊息音效的UUID。此設定與 '聊天' &gt; '輸入' &gt; '當附近的人在輸入時播放鍵盤聲音' 共享。" name="textFSTyping">輸入訊息：</text>
-			<button name="Prev_UISndTyping" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndTyping" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="FSPlayTypingSoundCheckBox" />
-			<text tool_tip="關閉視窗音效的UUID。" name="textFSWindowClose">關閉視窗：</text>
-			<button name="Prev_UISndWindowClose" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndWindowClose" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndWindowClose" />
-			<text tool_tip="打開視窗音效的UUID。" name="textFSWindowOpen">打開視窗：</text>
-			<button name="Prev_UISndWindowOpen" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndWindowOpen" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndWindowOpen" />
-			<text tool_tip="指令碼彈窗打開音效的UUID。" name="textFSScriptFloaterOpen">指令碼彈窗打開：</text>
-			<button name="Prev_UISndScriptFloaterOpen" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndScriptFloaterOpen" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndScriptFloaterOpen" />
-			<text tool_tip="腳本彈窗關閉音效的UUID。" name="textFSScriptFloaterClose">腳本彈窗關閉：</text>
-			<button label="▶" name="Prev_UISndScriptFloaterClose" tool_tip="播放此聲音"/>
-			<button label="↻" name="Def_UISndScriptFloaterClose" tool_tip="重置"/>
-			<check_box label="啟用" name="PlayModeUISndScriptFloaterClose"/>
-			<text tool_tip="好友上線音效的UUID。" name="textFSFriendOnline">好友上線：</text>
-			<button name="Prev_UISndFriendOnline" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndFriendOnline" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndFriendOnline" />
-			<text tool_tip="好友下線音效的UUID。" name="textFSFriendOffline">好友下線：</text>
-			<button name="Prev_UISndFriendOffline" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndFriendOffline" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndFriendOffline" />
-			<text tool_tip="好友請求音效的UUID。" name="textFSFriendshipOffer">好友請求：</text>
-			<button name="Prev_UISndFriendshipOffer" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndFriendshipOffer" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndFriendshipOffer" />
-		</panel>
-		<panel label="聲音 3" name="UI Sounds tab 3">
-			<text name="textFSExplanation_tab3">您可以在此處修改界面產生的每個聲音，並決定是否啟用它們。</text>
-			<text tool_tip="提出傳送請求音效的UUID。" name="textFSTeleportOffer">傳送請求：</text>
-			<button name="Prev_UISndTeleportOffer" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndTeleportOffer" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndTeleportOffer" />
-			<text tool_tip="提出庫存物件請求音效的UUID。" name="textFSInventoryOffer">庫存物件提供：</text>
-			<button name="Prev_UISndInventoryOffer" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndInventoryOffer" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndInventoryOffer" />
-			<text tool_tip="接收語音呼叫音效的UUID。" name="textFSIncomingVoiceCall">語音呼叫：</text>
-			<button name="Prev_UISndIncomingVoiceCall" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndIncomingVoiceCall" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndIncomingVoiceCall" />
-			<text tool_tip="收到群組邀請音效的UUID。" name="textFSGroupInvitation">群組邀請：</text>
-			<button name="Prev_UISndGroupInvitation" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndGroupInvitation" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndGroupInvitation" />
-			<text tool_tip="接收群組通知音效的UUID。" name="textFSGroupNotice">群組通知：</text>
-			<button name="Prev_UISndGroupNotice" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndGroupNotice" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndGroupNotice" />
-			<text tool_tip="接收新體驗通知音效的UUID。" name="textFSQuestionExperience">新體驗：</text>
-			<button name="Prev_UISndQuestionExperience" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndQuestionExperience" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndQuestionExperience" />
-			<text tool_tip="執行無效操作音效的UUID。" name="textFSInvalidOp">無效操作：</text>
-			<button name="Prev_UISndInvalidOp" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndInvalidOp" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndInvalidOp" />
-			<text tool_tip="啟用/禁用角色鎖定音效的UUID。" name="textFSMovelockToggle">啟用/禁用鎖定：</text>
-			<button name="Prev_UISndMovelockToggle" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndMovelockToggle" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndMovelockToggle" />
-			<text tool_tip="追蹤標記啟用音效的UUID。隨著角色接近目的地，聲音會變得更頻繁。" name="textFSTrackerBeacon">追蹤標記：</text>
-			<button name="Prev_UISndTrackerBeacon" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndTrackerBeacon" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndTrackerBeacon" />
-			<text tool_tip="當麥克風開啟或關閉時播放音效的UUID。" name="textFSMicToggle">麥克風切換：</text>
-			<button name="Prev_UISndMicToggle" tool_tip="預覽此聲音。" />
-			<button name="Def_UISndMicToggle" tool_tip="重設為預設UUID。" />
-			<check_box label="播放此聲音" name="PlayModeUISndMicToggle" />
-			<text tool_tip="區域重新啟動警報啟動音效的UUID。" name="textFSRestart">區域重新啟動：</text>
-			<button name="Prev_UISndRestart" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndRestart" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndRestart" />
-			<text tool_tip="OpenSim中區域新啟動警報出現音效的UUID。" name="textFSRestartOpenSim">區域重新啟動 (OpenSim)：</text>
-			<button name="Prev_UISndRestartOpenSim" label="▶" tool_tip="播放此聲音。" />
-			<button name="Def_UISndRestartOpenSim" label="↻" tool_tip="重設。" />
-			<check_box label="啟用" name="PlayModeUISndRestartOpenSim" />
-		</panel>
+
 	</tab_container>
 </panel>

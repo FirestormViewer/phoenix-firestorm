@@ -1,0 +1,5 @@
+<panel label="Sieć" name="panel_dir_web">
+	<button tool_tip="Nawiguj wstecz" name="back_btn" />
+	<button tool_tip="Nawiguj w przód" name="forward_btn" />
+	<button name="home_btn" tool_tip="Strona wyszukiwania" />
+</panel>

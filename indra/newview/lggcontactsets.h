@@ -32,7 +32,15 @@ enum class ContactSetType
     IM,
     TAG,
     RADAR,
-    MINIMAP
+    MINIMAP,
+    FRIENDS
+};
+
+enum class ContactSetAutoresponseMode
+{
+    BUSY,
+    AUTORESPONSE,
+    AUTORESPONSE_NONFRIENDS
 };
 
 constexpr char CS_SET_ALL_SETS[] = "All Sets";
@@ -93,12 +101,18 @@ public:
     void removeNonFriendFromList(const LLUUID& non_friend_id, bool save_changes = true);
     bool isNonFriend(const LLUUID& non_friend_id) const;
     bool isFriendInAnySet(const LLUUID& friend_id) const;
+    uuid_vec_t getFriendsInAnySet() const;
     uuid_vec_t getListOfNonFriends() const;
     uuid_vec_t getListOfPseudonymAvs() const;
 
     bool notifyForFriend(const LLUUID& friend_id) const;
     void setNotifyForSet(std::string_view set_name, bool notify);
     bool getNotifyForSet(std::string_view set_name) const;
+    void setSortByOnlineStatusForSet(std::string_view set_name, bool sort_by_online_status);
+    bool getSortByOnlineStatusForSet(std::string_view set_name) const;
+    void setAutoresponseForSet(std::string_view set_name, ContactSetAutoresponseMode mode, bool enabled, std::string_view response);
+    void getAutoresponseForSet(std::string_view set_name, ContactSetAutoresponseMode mode, bool& enabled, std::string& response) const;
+    bool getAutoresponseForFriend(const LLUUID& friend_id, ContactSetAutoresponseMode mode, std::string& response) const;
 
     bool callbackAliasReset(const LLSD& notification, const LLSD& response);
 
@@ -116,7 +130,14 @@ public:
         std::string     mName;
         uuid_set_t      mFriends;
         bool            mNotify;
+        bool            mSortByOnlineStatus;
         LLColor4        mColor;
+        bool            mAutoresponseBusyEnabled;
+        std::string     mAutoresponseBusy;
+        bool            mAutoresponseModeEnabled;
+        std::string     mAutoresponseMode;
+        bool            mAutoresponseNonFriendsEnabled;
+        std::string     mAutoresponseNonFriends;
     };
     ContactSet* getContactSet(std::string_view set_name) const;
 
@@ -142,7 +163,6 @@ public:
 private:
     void toneDownColor(LLColor4& color) const;
     uuid_vec_t getFriendsInSet(std::string_view set_name) const;
-    uuid_vec_t getFriendsInAnySet() const;
 
     void setPseudonym(const LLUUID& friend_id, std::string_view pseudonym);
     bool hasVisuallyDifferentPseudonym(const LLUUID& friend_id) const;

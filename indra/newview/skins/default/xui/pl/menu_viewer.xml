@@ -249,6 +249,7 @@
 			<menu_item_check label="Pokaż promień selekcji" name="Show Selection Beam"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent" />
 			<menu_item_check label="- Pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
+			<menu_item_check label="Pokaż sondy refleksyjne" name="Highlight Transparent Probes" />
 			<menu_item_check label="Bez obróbki końcowej" name="No Post" />
 			<menu label="Poziom szczegółów zaznaczenia" name="Selection level of detail">
 				<menu_item_check label="Domyślny" name="Default lod setting" />
@@ -546,6 +547,7 @@
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
+			<menu_item_check label="Renderowanie animowanej odzieży systemowej" name="Render Avatar Cloth" />
 			<menu_item_check label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="Zbierz Vertex Buffer czcionek" name="Collect Font Vertex Buffers" />
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />

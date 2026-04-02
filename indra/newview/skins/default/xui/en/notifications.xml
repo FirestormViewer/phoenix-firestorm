@@ -3367,7 +3367,8 @@ Are you sure you want to delete this list?
    icon="alertmodal.tga"
    name="InvalidAutoReplaceEntry"
    type="alertmodal">
-    The keyword must be a single word, and the replacement may not be empty.
+    The keyword must be a single word, and the replacement may not be empty. Allowed punctuation in keywords: 
+( ) . , - _
     <tag>fail</tag>
   </notification>
 
@@ -11399,6 +11400,40 @@ Flight Assist is enabled
   </notification>
 <!-- Firestorm Reset Settings -->
 
+<!-- Firestorm Region Group Titles -->
+  <notification
+    icon="alertmodal.tga"
+    name="FSSetTitleRegion"
+    type="alertmodal">
+Enter the exact name of a region to assign to the selected group title.
+The name will be verified before the assignment is saved.
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="region_name" type="text">
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+    icon="alertmodal.tga"
+    name="FSSetTitleRegionNotFound"
+    type="alertmodal">
+The region '[REGION]' could not be found. Please check the name and try again.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+<!-- Firestorm Region Group Titles -->
+
 <!-- AW: opensim -->
   <notification icon="alertmodal.tga"
 		name="CantAddGrid"
@@ -13995,6 +14030,27 @@ Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
    type="alertmodal">
     <tag>contact set</tag>
 Enter an alias for [AVATAR]:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true" />
+      <button
+       default="true"
+       index="0"
+       name="Create"
+       text="Create"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SetAvatarPseudonymMultiple"
+   type="alertmodal">
+    <tag>contact set</tag>
+Enter an alias for [COUNT] avatars:
     <tag>confirm</tag>
     <form name="form">
       <input name="message" type="text" default="true" />

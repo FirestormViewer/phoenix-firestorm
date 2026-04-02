@@ -218,7 +218,9 @@
 						</panel>
 						<panel title="預設" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
-								<scroll_list.columns label="預設名稱" name="name"/>
+								<scroll_list.columns label="預設名稱" name="load_file_name_column"/>
+								<scroll_list.columns label="日期" name="load_file_date_column"/>
+								<scroll_list.columns label="日期" name="load_file_date_sort_column"/>
 							</scroll_list>
 							<button label="設定左手" name="button_loadHandPoseLeft" tool_tip="點選將左手設定為選定的預設"/>
 							<button label="設定右手" name="button_loadHandPoseRight" tool_tip="點選將右手設定為選定的預設"/>

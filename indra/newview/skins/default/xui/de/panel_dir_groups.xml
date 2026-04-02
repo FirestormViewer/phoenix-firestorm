@@ -1,0 +1,21 @@
+<panel label="Gruppen" name="panel_dir_groups">
+    <string name="searching_text">
+        Suche...
+    </string>
+    <string name="not_found_text">
+        Nichts gefunden.
+    </string>
+    <string name="found_text">
+        [COUNT] gefunden.
+    </string>
+    <button tool_tip="Vorherige Seite" name="prev_btn"/>
+    <button tool_tip="Nächste Seite" name="next_btn"/>
+    <text name="find">
+        Suchbegriffe eingeben:
+    </text>
+    <check_box label="Moderate Gruppen einschließen" name="incmature"/>
+    <scroll_list name="results">
+        <column label="Name" name="name"/>
+        <column label="Mitglieder" name="members"/>
+    </scroll_list>
+</panel>

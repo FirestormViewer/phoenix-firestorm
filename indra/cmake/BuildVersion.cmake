@@ -2,7 +2,9 @@
 # Construct the viewer version number based on the indra/VIEWER_VERSION file
 
 if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/newview/
-    set(VIEWER_VERSION_BASE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/newview/VIEWER_VERSION.txt")
+    # <FS:Ansariel> Use own version file to avoid LL's year-as-major-version thing
+    # set(VIEWER_VERSION_BASE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/newview/VIEWER_VERSION.txt")
+    set(VIEWER_VERSION_BASE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/newview/VIEWER_VERSION_FS.txt")
 
     if ( EXISTS ${VIEWER_VERSION_BASE_FILE} )
         file(STRINGS ${VIEWER_VERSION_BASE_FILE} VIEWER_SHORT_VERSION REGEX "^[0-9]+\\.[0-9]+\\.[0-9]+")
@@ -47,7 +49,7 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
     endif ("${VIEWER_VERSION_REVISION}" STREQUAL "")
 
     # <FS:PP>
-    set(VIEWER_VERSION_LL_FILE "${CMAKE_CURRENT_SOURCE_DIR}/newview/VIEWER_VERSION_LL.txt")
+    set(VIEWER_VERSION_LL_FILE "${CMAKE_CURRENT_SOURCE_DIR}/newview/VIEWER_VERSION.txt")
     if (EXISTS ${VIEWER_VERSION_LL_FILE})
         file(STRINGS ${VIEWER_VERSION_LL_FILE} VIEWER_VERSION_LL LIMIT_COUNT 1)
         string(STRIP "${VIEWER_VERSION_LL}" VIEWER_VERSION_LL)

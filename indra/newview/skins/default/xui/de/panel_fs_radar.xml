@@ -14,8 +14,8 @@
 		value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<panel name="nearby_panel">
 		<panel name="nearby_buttons_panel">
-			<filter_editor label="Nach Leuten filtern" name="nearby_filter_input"/>
-			<button name="gear_btn" tool_tip="Aktionen auf ausgewählten Leuten"/>
+			<filter_editor label="Nach Personen filtern" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Aktionen auf ausgewählten Personen"/>
 			<menu_button name="options_btn" tool_tip="Radar-Optionen"/>
 			<button name="add_friend_btn" tool_tip="Ausgewählten Einwohner zur Freundeliste hinzufügen"/>
 		</panel>

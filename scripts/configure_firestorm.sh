@@ -434,12 +434,12 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     fi
     export revision=${buildVer}
 
-    majorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 1`
-    minorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 2`
-    patchVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 3`
+    majorVer=`cat indra/newview/VIEWER_VERSION_FS.txt | cut -d "." -f 1`
+    minorVer=`cat indra/newview/VIEWER_VERSION_FS.txt | cut -d "." -f 2`
+    patchVer=`cat indra/newview/VIEWER_VERSION_FS.txt | cut -d "." -f 3`
     gitHash=`git describe --always --exclude '*'`
-    echo "Channel : ${CHANNEL}"
-    echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer} [${gitHash}]"
+    echo "Channel: ${CHANNEL}"
+    echo "Version: ${majorVer}.${minorVer}.${patchVer}.${buildVer} [${gitHash}]"
     GITHASH=-DVIEWER_VERSION_GITHASH=\"${gitHash}\"
     popd
 fi

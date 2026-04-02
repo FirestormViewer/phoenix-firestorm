@@ -79,6 +79,9 @@
 						<row name="restore_per_account_row_avatar_render_settings">
 							<column name="restore_per_account_files_label">Paramètres de rendu de l'avatar</column>
 						</row>
+						<row name="restore_per_account_row_regiongrouptitles">
+							<column name="restore_per_account_files_label">Titres de groupe par région</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_folders">

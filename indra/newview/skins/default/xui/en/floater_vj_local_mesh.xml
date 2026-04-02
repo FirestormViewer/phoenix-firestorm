@@ -111,32 +111,64 @@
         follows="top|left"
         top="8"
         left="8"
-        width="300"
+        width="220"
         label="Assume scale is in meters."
         tool_tip="Ignore the cm scale units used by tools such as Maya" />
       <check_box name="checkbox_apply_joint_offsets"
         height="15"
         control_name="FSLocalMeshApplyJointOffsets"
         follows="top|left"
-        top_pad="5"
+        top="28"
         left="8"
-        width="300"
+        width="220"
         label="Apply joint offsets."
         tool_tip="Apply any joint offsets in the mesh, by default these are ignored." />
+      <check_box name="checkbox_auto_reload"
+        height="15"
+        control_name="FSLocalMeshAutoReload"
+        follows="top|left"
+        top="8"
+        left="255"
+        width="220"
+        label="Auto-reload changed files."
+        tool_tip="Watch local mesh files on disk and reload them automatically when they change." />
+      <text name="auto_reload_period_label"
+        follows="left|top"
+        layout="topleft"
+        left="255"
+        height="12"
+        top="35"
+        width="120">
+          Scan period (sec):
+      </text>
+      <spinner name="auto_reload_period"
+        control_name="FSLocalMeshAutoReloadPeriod"
+        decimal_digits="2"
+        increment="0.25"
+        min_val="0.25"
+        max_val="60"
+        follows="left|top"
+        layout="topleft"
+        left="380"
+        top="31"
+        width="80"
+        height="20"
+        tool_tip="How often to scan watched local mesh files for changes." />
       <text name="lod_suffix_label"
         follows="left|top"
         layout="topleft"
         left="8"
         height="12"
-        top_pad="5"
+        top="53"
         width="110">
           LOD Suffixes:
       </text>
       <combo_box name="lod_suffix_combo"
         height="18"
         follows="left|top"
-        width="180"
-        top_pad="5"
+        left="8"
+        width="190"
+        top="70"
         tool_tip="Choose a standard or manually edit... || SL default - (Lowest is LOD0, High has no suffix). || Game Engine - Unity/UE5, etc. (Lowest=LOD3, High=LOD0). || LOD Names - English LOD names, (Lowest='LOWEST', High='HIGH').">
         <combo_item name="choose_one">Current</combo_item>
         <combo_item name="suff_sl">SL Standard</combo_item>
@@ -148,7 +180,7 @@
         layout="topleft"
         left="8"
         height="12"
-        top_pad="10"
+        top="98"
         halign="right"
         width="60">
           Lowest:
@@ -160,9 +192,9 @@
         follows="left|top"
         font="SansSerif"
         height="23"
-        top_delta="-5"
+        top="93"
         layout="topleft"
-        left_pad="5"
+        left="73"
         max_length_chars="10"
         tool_tip="The Suffix used to identify the Lowest LOD file on disk and models within a file."
         width="60" />
@@ -172,7 +204,7 @@
         halign="right"
         height="12"
         left="8"
-        top_pad="5"
+        top="126"
         width="60">
         Low:
       </text>
@@ -183,16 +215,16 @@
         follows="left|top"
         font="SansSerif"
         height="23"
-        top_delta="-5"
+        top="121"
         layout="topleft"
-        left_pad="5"
+        left="73"
         max_length_chars="10"
         tool_tip="The Suffix used to identify the Low LOD file on disk and models within a file."
         width="60" />
       <text name="suf_medium_lab"
         follows="left|top"
-        top_pad="5"
         left="8"
+        top="154"
         layout="topleft"
         height="12"
         halign="right"
@@ -206,9 +238,9 @@
         follows="left|top"
         font="SansSerif"
         height="23"
-        top_delta="-5"
+        top="149"
         layout="topleft"
-        left_pad="5"
+        left="73"
         max_length_chars="10"
         tool_tip="The Suffix used to identify the Medium LOD file on disk and models within a file."
         width="60" />
@@ -217,8 +249,8 @@
         layout="topleft"
         height="12"
         halign="right"
-        top_pad="5"
         left="8"
+        top="182"
         width="60">
       High:
       </text>
@@ -229,9 +261,9 @@
         follows="left|top"
         font="SansSerif"
         height="23"
-        top_delta="-5"
+        top="177"
         layout="topleft"
-        left_pad="5"
+        left="73"
         max_length_chars="10"
         tool_tip="The Suffix used to identify the High LOD file on disk and models within a file."
         width="60" />
@@ -241,7 +273,7 @@
         layout="topleft"
         height="12"
         halign="right"
-        top_pad="5"
+        top="210"
         width="60">
         Physics:
       </text>
@@ -252,9 +284,9 @@
         follows="left|top"
         font="SansSerif"
         height="23"
-        top_delta="-5"
+        top="205"
         layout="topleft"
-        left_pad="5"
+        left="73"
         max_length_chars="10"
         tool_tip="The Suffix used to identify the Physics file on disk and models within a file."
         width="60" />
@@ -297,7 +329,8 @@
     left="200"
     top_delta="0"
     width="90"
-    visible="true" />
+    visible="true"
+    checkbox_control="FSLocalMeshAutoReload" />
   <button name="btn_clear"
     height="18"
     label="Clear"

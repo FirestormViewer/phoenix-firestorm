@@ -31,7 +31,6 @@
 
 #include "fsradar.h"
 #include "fsradarlistctrl.h"
-#include "llcallingcard.h" // for avatar tracker
 
 class LLButton;
 class LLFilterEditor;

@@ -123,7 +123,7 @@
 		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Menüleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="statusbar_timeformat_textbox">
-			Zeitformat:
+			Uhrformat:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Bestimmt das Zeitformat, das in der Menüleiste verwendet wird.">
 			<combo_box.item label="Standard ausgewählter Sprache" name="Language"/>

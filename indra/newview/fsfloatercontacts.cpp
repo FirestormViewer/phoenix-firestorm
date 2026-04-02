@@ -50,6 +50,7 @@
 #include "lltooldraganddrop.h"
 #include "llviewermenu.h"
 #include "llvoiceclient.h"
+#include "lggcontactsets.h"
 // [RLVa:KB] - @pay
 #include "rlvactions.h"
 // [/RLVa:KB]
@@ -73,6 +74,7 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
     LLAvatarTracker::instance().addObserver(this);
     // For notification when SIP online status changes.
     LLVoiceClient::addObserver(this);
+    mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterContacts::onContactSetsChanged, this, _1));
 }
 
 FSFloaterContacts::~FSFloaterContacts()
@@ -80,6 +82,11 @@ FSFloaterContacts::~FSFloaterContacts()
     // For notification when SIP online status changes.
     LLVoiceClient::removeObserver(this);
     LLAvatarTracker::instance().removeObserver(this);
+
+    if (mContactSetChangedConnection.connected())
+    {
+        mContactSetChangedConnection.disconnect();
+    }
 
     if (mRlvBehaviorCallbackConnection.connected())
     {
@@ -181,6 +188,7 @@ bool FSFloaterContacts::postBuild()
     gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
     gSavedSettings.getControl("FSFriendListColumnShowFullName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowFullName"));
     gSavedSettings.getControl("FSFriendListColumnShowPermissions")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, std::string()));
+    gSavedSettings.getControl("FSContactSetsColorizeFriends")->getSignal()->connect(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
     onColumnDisplayModeChanged();
 
     LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
@@ -266,7 +274,7 @@ void FSFloaterContacts::onOpen(const LLSD& key)
         // first set the tear-off host to the conversations container
         setHost(floater_container);
         // clear the tear-off host right after, the "last host used" will still stick
-        setHost(NULL);
+        setHost(nullptr);
         // reparent to floater view
         gFloaterView->addChild(this);
     }
@@ -381,7 +389,7 @@ void FSFloaterContacts::onDeleteFriendButtonClicked()
     }
 }
 
-bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
+bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids) const
 {
     const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
     for (const auto& id : uuids)
@@ -715,7 +723,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
     update_gen_column["column"]             = "friend_last_update_generation";
     update_gen_column["value"]              = relationInfo->getChangeSerialNum();
 
-    mFriendsList->addElement(element, ADD_BOTTOM);
+    updateFriendItemColor(mFriendsList->addElement(element, ADD_BOTTOM), agent_id);
 }
 
 void FSFloaterContacts::onMapButtonClicked()
@@ -767,6 +775,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
     itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue(av_name.getUserNameForDisplay());
     itemp->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
     itemp->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+    updateFriendItemColor(itemp, agent_id);
 
     // render name of online friends in bold text
     LLFontGL::StyleFlags font_style = ((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);
@@ -784,6 +793,30 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 
     // enable this item, in case it was disabled after user input
     itemp->setEnabled(true);
+}
+
+void FSFloaterContacts::updateFriendItemColor(LLScrollListItem* item, const LLUUID& agent_id) const
+{
+    LLColor4 name_color;
+    const bool has_contact_set_color = LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id, ContactSetType::FRIENDS, name_color);
+    LLScrollListCell* user_name_cell = item->getColumn(LIST_FRIEND_USER_NAME);
+    LLScrollListCell* display_name_cell = item->getColumn(LIST_FRIEND_DISPLAY_NAME);
+    LLScrollListCell* full_name_cell = item->getColumn(LIST_FRIEND_NAME);
+    if (has_contact_set_color)
+    {
+        user_name_cell->setColor(name_color);
+        display_name_cell->setColor(name_color);
+        full_name_cell->setColor(name_color);
+        user_name_cell->setUseColor(true);
+        display_name_cell->setUseColor(true);
+        full_name_cell->setUseColor(true);
+    }
+    else
+    {
+        user_name_cell->setUseColor(false);
+        display_name_cell->setUseColor(false);
+        full_name_cell->setUseColor(false);
+    }
 }
 
 void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id)
@@ -899,7 +932,7 @@ void FSFloaterContacts::onSelectName()
     applyRightsToFriends();
 }
 
-void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke command)
+void FSFloaterContacts::confirmModifyRights(const rights_map_t& ids, EGrantRevoke command)
 {
     if (ids.empty())
     {
@@ -907,48 +940,44 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
     }
 
     LLSD args;
-    if (ids.size() > 0)
-    {
-        rights_map_t* rights = new rights_map_t(ids);
+    rights_map_t* rights = new rights_map_t(ids);
 
-        // for single friend, show their name
-        if (ids.size() == 1)
+    // for single friend, show their name
+    if (ids.size() == 1)
+    {
+        args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
+        if (command == GRANT)
         {
-            args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
-            if (command == GRANT)
-            {
-                LLNotificationsUtil::add("GrantModifyRights",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
-            else
-            {
-                LLNotificationsUtil::add("RevokeModifyRights",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
+            LLNotificationsUtil::add("GrantModifyRights",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
         }
         else
         {
-            if (command == GRANT)
-            {
-                LLNotificationsUtil::add("GrantModifyRightsMultiple",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
-            else
-            {
-                LLNotificationsUtil::add("RevokeModifyRightsMultiple",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
+            LLNotificationsUtil::add("RevokeModifyRights",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
         }
     }
-
+    else
+    {
+        if (command == GRANT)
+        {
+            LLNotificationsUtil::add("GrantModifyRightsMultiple",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
+        }
+        else
+        {
+            LLNotificationsUtil::add("RevokeModifyRightsMultiple",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
+        }
+    }
 }
 
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
@@ -1076,7 +1105,7 @@ void FSFloaterContacts::applyRightsToFriends()
     }
 }
 
-void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
+void FSFloaterContacts::sendRightsGrant(const rights_map_t& ids)
 {
     if (ids.empty())
     {
@@ -1264,6 +1293,7 @@ void FSFloaterContacts::onDisplayNameChanged()
             item->getColumn(LIST_FRIEND_USER_NAME)->setValue(av_name.getUserNameForDisplay());
             item->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
             item->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+            updateFriendItemColor(item, item->getUUID());
         }
         else
         {
@@ -1274,7 +1304,7 @@ void FSFloaterContacts::onDisplayNameChanged()
     mFriendsList->setNeedsSort();
 }
 
-std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
+std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name) const
 {
     if (av_name.isDisplayNameDefault() || !gSavedSettings.getBOOL("UseDisplayNames"))
     {
@@ -1374,6 +1404,18 @@ void FSFloaterContacts::resetFriendFilter()
 void FSFloaterContacts::onGroupFilterEdit(const std::string& search_string)
 {
     mGroupList->setNameFilter(search_string);
+}
+
+void FSFloaterContacts::onContactSetsChanged(LGGContactSets::EContactSetUpdate type)
+{
+    if (!mFriendsList)
+    {
+        return;
+    }
+    if (type == LGGContactSets::UPDATED_LISTS || type == LGGContactSets::UPDATED_MEMBERS)
+    {
+        onDisplayNameChanged();
+    }
 }
 
 // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency

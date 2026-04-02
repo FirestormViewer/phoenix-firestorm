@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llcallbacklist.h"
+#include "lleventtimer.h"
 #include "llsdutil.h"
 #include "llviewerobjectlist.h"
 #include "llvovolume.h"
@@ -49,7 +50,7 @@
 
 // local mesh importers
 #include "vjlocalmeshimportdae.h"
-
+#include "fslocalmeshimportgltf.h"
 
 /*==========================================*/
 /*  LLLocalMeshFace: aka submesh denoted by */
@@ -129,6 +130,18 @@ void LLLocalMeshFace::logFaceInfo() const
     }
 }
 
+std::unique_ptr<LLLocalMeshFace> LLLocalMeshFace::clone() const
+{
+    auto cloned_face = std::make_unique<LLLocalMeshFace>();
+    cloned_face->mIndices = mIndices;
+    cloned_face->mPositions = mPositions;
+    cloned_face->mNormals = mNormals;
+    cloned_face->mUVs = mUVs;
+    cloned_face->mSkin = mSkin;
+    cloned_face->mFaceBoundingBox = mFaceBoundingBox;
+    return cloned_face;
+}
+
 /*==========================================*/
 /*  LLLocalMeshObject: collection of faces  */
 /*  has object name, transform & skininfo,  */
@@ -143,6 +156,37 @@ LLLocalMeshObject::LLLocalMeshObject(std::string_view name):
 }
 
 LLLocalMeshObject::~LLLocalMeshObject() = default;
+
+std::unique_ptr<LLLocalMeshObject> LLLocalMeshObject::clone() const
+{
+    auto cloned_object = std::make_unique<LLLocalMeshObject>(mObjectName);
+
+    for (S32 lod_iter = LOCAL_LOD_LOWEST; lod_iter < LOCAL_NUM_LODS; ++lod_iter)
+    {
+        auto current_lod = static_cast<LLLocalMeshFileLOD>(lod_iter);
+        auto& cloned_faces = cloned_object->getFaces(current_lod);
+        const auto& source_faces = mFaces[lod_iter];
+        cloned_faces.reserve(source_faces.size());
+        for (const auto& face : source_faces)
+        {
+            cloned_faces.push_back(face ? face->clone() : nullptr);
+        }
+    }
+
+    cloned_object->mObjectBoundingBox = mObjectBoundingBox;
+    cloned_object->mObjectTranslation = mObjectTranslation;
+    cloned_object->mObjectSize = mObjectSize;
+    cloned_object->mObjectScale = mObjectScale;
+    cloned_object->mSculptID = mSculptID;
+    cloned_object->mVolumeParams = mVolumeParams;
+
+    if (mMeshSkinInfoPtr.notNull())
+    {
+        cloned_object->mMeshSkinInfoPtr = new LLMeshSkinInfo(*mMeshSkinInfoPtr);
+    }
+
+    return cloned_object;
+}
 
 void LLLocalMeshObject::logObjectInfo() const
 {
@@ -228,10 +272,11 @@ void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
 
     // object scale is the inverse of the object size
     mObjectScale.set(1.f, 1.f, 1.f,1.f);
-    for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
+    for (S32 vec_iter = 0; vec_iter < 3; ++vec_iter)
     {
         mObjectScale[vec_iter] /= mObjectSize[vec_iter];
     }
+    mObjectScale[3] = 1.f;
 }
 
 void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
@@ -256,7 +301,7 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
         current_submesh_bbox.second += mObjectTranslation;
 
         LL_INFOS("LocalMesh") << "before squish:" << current_submesh_bbox.first << " " << current_submesh_bbox.second << LL_ENDL;
-        for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
+        for (S32 vec_iter = 0; vec_iter < 3; ++vec_iter)
         {
             current_submesh_bbox.first.mV[vec_iter] *= mObjectScale.mV[vec_iter];
             current_submesh_bbox.second.mV[vec_iter] *= mObjectScale.mV[vec_iter];
@@ -268,7 +313,7 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
         for (auto& current_position : current_face_positions)
         {
             current_position += mObjectTranslation;
-            for (S32 vec_iter = 0; vec_iter < 4; ++vec_iter)
+            for (S32 vec_iter = 0; vec_iter < 3; ++vec_iter)
             {
                 current_position.mV[vec_iter] *= mObjectScale.mV[vec_iter];
             }
@@ -289,7 +334,7 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
                 continue;
             }
 
-            for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
+            for (int vec_iter = 0; vec_iter < 3; ++vec_iter)
             {
                 current_normal.mV[vec_iter] *= mObjectSize.mV[vec_iter];
             }
@@ -445,7 +490,7 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     mLocalMeshFileID.setNull();
     mLocalMeshFileNeedsUIUpdate = false;
     mLoadedObjectList.clear();
-    mSavedObjectSculptIDs.clear();
+    mSavedObjectBindings.clear();
 
     mShortName = std::string(boost::filesystem::path(filename).stem().string());
     std::string stripSuffix(std::string);
@@ -472,6 +517,11 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
         mExtension = LLLocalMeshFileExtension::EXTEN_DAE;
         pushLog("LLLocalMeshFile", "Extension found: COLLADA");
     }
+    else if (boost::iequals(exten_str, ".gltf") || boost::iequals(exten_str, ".glb"))
+    {
+        mExtension = LLLocalMeshFileExtension::EXTEN_GLTF;
+        pushLog("LLLocalMeshFile", "Extension found: GLTF");
+    }
     // add more ifs for different types, in lieu of a better approach?
 
     // if no extensions found, stop.
@@ -485,12 +535,12 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     mLocalMeshFileID.generate();
 
     // actually loads the files
-    reloadLocalMeshObjects(true);
+    reloadLocalMeshObjects(true, true, false);
 }
 
 LLLocalMeshFile::~LLLocalMeshFile() = default;
 
-void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
+void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load, bool force_reload, bool auto_reload)
 {
     // if we're already loading - nothing should be calling for a reload,
     // but just in case..
@@ -503,173 +553,207 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
     if (!initial_load)
     {
         mLoadingLog.clear();
-
-        // before reloading (and regenerating sculpt ids for each object) save these ids
-        // we'll need them to find the list of vobjects affected by each local object,
-        // that so we can update vobjects with the new local objects.
-
-        // clear it first just in case
-        mSavedObjectSculptIDs.clear();
-
-        for (const auto& local_object : mLoadedObjectList)
-        {
-            mSavedObjectSculptIDs.emplace_back(local_object->getVolumeParams().getSculptID());
-        }
     }
+
+    mSavedObjectBindings = collectReloadBindings();
 
     mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_LOADING;
     mLocalMeshFileNeedsUIUpdate = true;
+    std::array<std::string, LOCAL_NUM_LODS> reload_filenames = mFilenames;
+    discoverLodFilenames(mFilenames, reload_filenames);
 
-    boost::system::error_code ec;
-
-    // another recheck that mFilenames[3] main file is present,
-    // in case the file got deleted and the user hits reload - it'll error out here.
-    if (!boost::filesystem::exists(mFilenames[LOCAL_LOD_HIGH]) || ec.failed())
+    std::array<LLSD, LOCAL_NUM_LODS> reload_last_modified;
+    for (S32 lod_idx = LOCAL_LOD_LOWEST; lod_idx < LOCAL_NUM_LODS; ++lod_idx)
     {
-        // filename provided doesn't exist, just stop.
-        mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
-        pushLog("LLLocalMeshFile", "Couldn't find filename: " + mFilenames[LOCAL_LOD_HIGH], true);
+        if (!readLastModified(reload_filenames[lod_idx], reload_last_modified[lod_idx]))
+        {
+            reload_last_modified[lod_idx].clear();
+        }
+    }
+
+    const bool has_active_reload_target = !mLoadedObjectList.empty() && mLoadedSuccessfully[LOCAL_LOD_HIGH];
+    if (reload_filenames[LOCAL_LOD_HIGH].empty() || reload_last_modified[LOCAL_LOD_HIGH].asString().empty())
+    {
+        const std::string warning = "Couldn't find filename: " + mFilenames[LOCAL_LOD_HIGH];
+        if (has_active_reload_target)
+        {
+            pushLog("LLLocalMeshFile", "WARNING: " + warning + ". Keeping last good local mesh active.");
+            mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ACTIVE;
+        }
+        else
+        {
+            pushLog("LLLocalMeshFile", warning, true);
+            mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
+        }
+        mLocalMeshFileNeedsUIUpdate = true;
+        mSavedObjectBindings.clear();
         return;
     }
 
-    // check for lod filenames
-    if (mTryLODFiles)
+    std::array<bool, LOCAL_NUM_LODS> changed_lods = { false, false, false, false };
+    bool reload_detected = initial_load || force_reload;
+    if (!reload_detected)
     {
-        pushLog("LLLocalMeshFile", "Seeking LOD files...");
-        // up to LOD2, LOD3 being the highest is always done by this point.
-        for (S32 lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_HIGH; ++lodfile_iter)
-        {
-            // lod filenames may be empty because this is first time through or because the lod didn't exist before.
-            if( mFilenames[lodfile_iter].empty() )
-            {
-                auto filepath { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).parent_path() };
-                std::string getLodSuffix(S32);
-                auto lod_suffix { getLodSuffix(lodfile_iter) };
-                auto extension { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).extension() };
-
-                boost::filesystem::path   current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
-                if (boost::filesystem::exists(current_lod_filename, ec) && !ec.failed())
-                {
-                    pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " found, adding.");
-                    mFilenames[lodfile_iter] = current_lod_filename.string();
-                }
-
-                else
-                {
-                    pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " not found, skipping.");
-                    mFilenames[lodfile_iter].clear();
-                }
-            }
-        }
+        reload_detected = detectReloadChanges(reload_filenames, reload_last_modified, changed_lods);
     }
     else
     {
-        pushLog("LLLocalMeshFile", "Skipping LOD 2-0 files, as specified.");
+        changed_lods.fill(true);
     }
 
-    // if we are here we can assume at least mFilenames[3] is present
-    // here we'll define a lambda to call through std::async, accessible through mAsyncFuture.
-    // the lamnda returns bool if change happened, individual lod logs, and their status.
-    auto lambda_loadfiles = [&]() mutable -> LLLocalMeshLoaderReply
+    if (!reload_detected)
     {
-        bool change_happened = false;
-        std::vector<std::string> log;
-        std::array<bool, 4> lod_success = {false, false, false, false};
+        mLocalMeshFileStatus = has_active_reload_target
+            ? LLLocalMeshFileStatus::STATUS_ACTIVE
+            : LLLocalMeshFileStatus::STATUS_ERROR;
+        mLocalMeshFileNeedsUIUpdate = true;
+        mSavedObjectBindings.clear();
+        return;
+    }
 
-        // iterate over every lod
-        // we're counting back because LOD3 is most likely to have showstopper problems,
-        // so i'd rather not load other lods if LOD3 is found to be broken.
-        // int rather than size_t because we're iterating over LODS 3 to 0, stopping at -1
-        for (signed int lod_idx = LOCAL_LOD_HIGH; lod_idx >= LOCAL_LOD_LOWEST; --lod_idx)
+    const bool reload_all_lods = initial_load || force_reload || changed_lods[LOCAL_LOD_HIGH];
+    auto working_object_list = reload_all_lods ? std::vector<std::unique_ptr<LLLocalMeshObject>>()
+                                               : cloneLoadedObjects();
+    const auto previous_status = mLoadedSuccessfully;
+    const auto extension = mExtension;
+
+    auto lambda_loadfiles = [reload_filenames,
+                             reload_last_modified,
+                             changed_lods,
+                             reload_all_lods,
+                             initial_load,
+                             auto_reload,
+                             has_active_reload_target,
+                             previous_status,
+                             extension,
+                             object_list = std::move(working_object_list)]() mutable -> LLLocalMeshLoaderReply
+    {
+        bool change_happened = reload_all_lods;
+        std::vector<std::string> log;
+        std::array<bool, LOCAL_NUM_LODS> lod_success = previous_status;
+        if (reload_all_lods)
+        {
+            lod_success.fill(false);
+        }
+
+        for (S32 lod_idx = LOCAL_LOD_HIGH; lod_idx >= LOCAL_LOD_LOWEST; --lod_idx)
         {
             auto current_lod = static_cast<LLLocalMeshFileLOD>(lod_idx);
+            const bool should_reload_lod = reload_all_lods || changed_lods[lod_idx];
 
-            // do we have a filename for this lod?
-            if (mFilenames[lod_idx].empty())
-            {
-                log.push_back("[ LLLocalMeshFile ] File for LOD " + std::to_string(lod_idx) + " was not found, skipping.");
-                continue;
-            }
-
-            // has the file been modified since we last checked?
-            bool file_modified = updateLastModified(current_lod);
-            if (!file_modified)
+            if (!should_reload_lod)
             {
                 log.push_back("[ LLLocalMeshFile ] File for LOD " + std::to_string(lod_idx) + " was not modified, skipping.");
-                lod_success[lod_idx] = mLoadedSuccessfully[lod_idx];
                 continue;
             }
 
-            // up until here, skipping loading a lod is fine, after here - it's a sign of an error.
-
-            // clear the old objects, if any.
-            if (lod_idx == LLLocalMeshFileLOD::LOCAL_LOD_HIGH)
+            if (reload_filenames[lod_idx].empty())
             {
-                mLoadedObjectList.clear();
+                log.push_back("[ LLLocalMeshFile ] File for LOD " + std::to_string(lod_idx) + " was not found, clearing.");
+                if (!reload_all_lods)
+                {
+                    for (auto& current_object : object_list)
+                    {
+                        current_object->getFaces(current_lod).clear();
+                    }
+                }
+                lod_success[lod_idx] = false;
+                change_happened = true;
+                continue;
+            }
+
+            if (!reload_all_lods)
+            {
+                for (auto& current_object : object_list)
+                {
+                    current_object->getFaces(current_lod).clear();
+                }
             }
 
             log.push_back("[ LLLocalMeshFile ] Attempting to load file for LOD " + std::to_string(lod_idx));
-            switch (mExtension)
+            auto handle_import = [&](auto& importer)
+            {
+                auto importer_result = importer.loadFile(reload_filenames[lod_idx], current_lod, object_list);
+                lod_success[lod_idx] = importer_result.first;
+                if (lod_success[lod_idx])
+                {
+                    change_happened = true;
+                }
+
+                const auto& importer_log = importer_result.second;
+                log.reserve(log.size() + importer_log.size());
+                log.insert(log.end(), importer_log.begin(), importer_log.end());
+            };
+
+            switch (extension)
             {
                 case LLLocalMeshFileExtension::EXTEN_DAE:
                 {
-                    // pass it over to dae loader
                     LLLocalMeshImportDAE importer;
-                    auto importer_result = importer.loadFile(this, current_lod);
-                    lod_success[lod_idx] = importer_result.first;
-
-                    // NOTE: if not success - do not indicate change as not to affect existing vobjects?
-                    if (lod_success[lod_idx])
-                    {
-                        change_happened = true;
-                    }
-
-                    const auto& importer_log = importer_result.second;
-                    log.reserve(log.size() + importer_log.size());
-                    log.insert(log.end(), importer_log.begin(), importer_log.end());
+                    handle_import(importer);
                     break;
                 }
-
+                case LLLocalMeshFileExtension::EXTEN_GLTF:
+                {
+                    FSLocalMeshImportGLTF importer;
+                    handle_import(importer);
+                    break;
+                }
                 default:
                 {
                     log.push_back("[ LLLocalMeshFile ] ERROR, Loader for LOD " + std::to_string(lod_idx) + " called with invalid extension.");
+                    lod_success[lod_idx] = false;
                     break;
                 }
             }
 
-            // by this point, it's only false if there's an actual error loading the file.
             if (!lod_success[lod_idx])
             {
                 log.push_back("[ LLLocalMeshFile ] ERROR, attempted and failed to load LOD " + std::to_string(lod_idx) + ", stopping.");
-                break;
+                LLLocalMeshLoaderReply result;
+                result.mChanged = false;
+                result.mLoaded = false;
+                result.mPreserveActiveOnFailure = !initial_load && has_active_reload_target;
+                result.mAutoReload = auto_reload;
+                result.mLog = std::move(log);
+                result.mStatus = lod_success;
+                result.mFilenames = reload_filenames;
+                result.mLastModified = reload_last_modified;
+                return result;
             }
         }
 
-
-        // just in case, recheck if we actually ended up loading anything
-        auto& object_list = getObjectVector();
         if (object_list.empty())
         {
             log.push_back("[ LLLocalMeshFile ] ERROR, no objects loaded, stopping.");
+            lod_success.fill(false);
 
-            // seems like a pretty serious error, error out all the lods manually,
-            // and set change happened to false.
-            for (size_t lod_iter = 0; lod_iter < 4; ++lod_iter)
-            {
-                lod_success[lod_iter] = false;
-            }
-
-            change_happened = false;
+            LLLocalMeshLoaderReply result;
+            result.mChanged = false;
+            result.mLoaded = false;
+            result.mPreserveActiveOnFailure = !initial_load && has_active_reload_target;
+            result.mAutoReload = auto_reload;
+            result.mLog = std::move(log);
+            result.mStatus = lod_success;
+            result.mFilenames = reload_filenames;
+            result.mLastModified = reload_last_modified;
+            return result;
         }
 
         LLLocalMeshLoaderReply result;
         result.mChanged = change_happened;
-        result.mLog = log;
+        result.mLoaded = true;
+        result.mPreserveActiveOnFailure = false;
+        result.mAutoReload = auto_reload;
+        result.mLog = std::move(log);
         result.mStatus = lod_success;
+        result.mFilenames = reload_filenames;
+        result.mLastModified = reload_last_modified;
+        result.mLoadedObjectList = std::move(object_list);
         return result;
     };
 
-    mAsyncFuture = std::async(std::launch::async, lambda_loadfiles);
+    mAsyncFuture = std::async(std::launch::async, std::move(lambda_loadfiles));
 }
 
 LLLocalMeshFile::LLLocalMeshFileStatus LLLocalMeshFile::reloadLocalMeshObjectsCheck()
@@ -704,45 +788,269 @@ void LLLocalMeshFile::reloadLocalMeshObjectsCallback()
     LLLocalMeshLoaderReply reply = mAsyncFuture.get();
     mLoadingLog.reserve(mLoadingLog.size() + reply.mLog.size());
     mLoadingLog.insert(mLoadingLog.end(), reply.mLog.begin(), reply.mLog.end());
-    mLoadedSuccessfully = reply.mStatus;
-
-    // if LOD3 is ok, we're technically fine.
-    if (mLoadedSuccessfully[3])
+    if (reply.mLoaded)
     {
-        mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ACTIVE;
-        if (reply.mChanged)
+        std::string failure_reason;
+        if (!canApplyReloadBindings(reply.mLoadedObjectList, failure_reason))
         {
-            updateVObjects();
+            pushLog("LLLocalMeshFile", "WARNING: " + failure_reason + " Keeping last good local mesh active.");
+            mLocalMeshFileStatus = mLoadedSuccessfully[LOCAL_LOD_HIGH]
+                ? LLLocalMeshFileStatus::STATUS_ACTIVE
+                : LLLocalMeshFileStatus::STATUS_ERROR;
         }
+        else
+        {
+            mFilenames = reply.mFilenames;
+            mLastModified = reply.mLastModified;
+            mLoadedSuccessfully = reply.mStatus;
+            mLoadedObjectList = std::move(reply.mLoadedObjectList);
+
+            if (mLoadedSuccessfully[LOCAL_LOD_HIGH])
+            {
+                mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ACTIVE;
+                if (reply.mChanged)
+                {
+                    updateVObjects();
+                }
+            }
+            else
+            {
+                mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
+            }
+        }
+    }
+    else if (reply.mPreserveActiveOnFailure)
+    {
+        if (reply.mAutoReload)
+        {
+            pushLog("LLLocalMeshFile", "WARNING: Auto-reload failed. Keeping last good local mesh active.");
+        }
+        mLocalMeshFileStatus = mLoadedSuccessfully[LOCAL_LOD_HIGH]
+            ? LLLocalMeshFileStatus::STATUS_ACTIVE
+            : LLLocalMeshFileStatus::STATUS_ERROR;
     }
     else
     {
         mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
     }
 
+    mSavedObjectBindings.clear();
     mLocalMeshFileNeedsUIUpdate = true;
 }
 
-bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
+bool LLLocalMeshFile::readLastModified(const std::string& filename, LLSD& last_modified) const
 {
-    bool file_updated = false;
-    LLSD current_last_modified = mLastModified[lod];
-    std::string current_filename = mFilenames[lod];
-
-    boost::system::error_code ec;
-    #ifndef LL_WINDOWS
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(current_filename), ec);
-    #else
-        const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(ll_convert<std::wstring>(current_filename)), ec);
-    #endif
-
-    if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString() && !ec.failed())
+    last_modified.clear();
+    if (filename.empty())
     {
-        file_updated = true;
-        mLastModified[lod] = new_last_modified;
+        return false;
     }
 
-    return file_updated;
+    boost::system::error_code ec;
+ #ifndef LL_WINDOWS
+    const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(filename), ec);
+ #else
+    const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(ll_convert<std::wstring>(filename)), ec);
+ #endif
+
+    if (ec.failed())
+    {
+        return false;
+    }
+
+    last_modified = std::to_string(static_cast<long long>(temp_time));
+    return true;
+}
+
+void LLLocalMeshFile::discoverLodFilenames(const std::array<std::string, LOCAL_NUM_LODS>& seed_filenames,
+                                           std::array<std::string, LOCAL_NUM_LODS>& discovered_filenames) const
+{
+    discovered_filenames = seed_filenames;
+    discovered_filenames[LOCAL_LOD_HIGH] = seed_filenames[LOCAL_LOD_HIGH];
+
+    if (seed_filenames[LOCAL_LOD_HIGH].empty())
+    {
+        for (S32 lod_iter = LOCAL_LOD_LOWEST; lod_iter < LOCAL_LOD_HIGH; ++lod_iter)
+        {
+            discovered_filenames[lod_iter].clear();
+        }
+        return;
+    }
+
+    if (!mTryLODFiles)
+    {
+        for (S32 lod_iter = LOCAL_LOD_LOWEST; lod_iter < LOCAL_LOD_HIGH; ++lod_iter)
+        {
+            discovered_filenames[lod_iter].clear();
+        }
+        return;
+    }
+
+    const auto high_path = boost::filesystem::path(seed_filenames[LOCAL_LOD_HIGH]);
+    const auto filepath = high_path.parent_path();
+    const auto extension = high_path.extension();
+
+    std::string getLodSuffix(S32);
+    for (S32 lod_iter = LOCAL_LOD_LOWEST; lod_iter < LOCAL_LOD_HIGH; ++lod_iter)
+    {
+        const auto lod_suffix = getLodSuffix(lod_iter);
+        const auto current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
+
+        boost::system::error_code ec;
+        if (boost::filesystem::exists(current_lod_filename, ec) && !ec.failed())
+        {
+            discovered_filenames[lod_iter] = current_lod_filename.string();
+        }
+        else
+        {
+            discovered_filenames[lod_iter].clear();
+        }
+    }
+}
+
+bool LLLocalMeshFile::detectReloadChanges(const std::array<std::string, LOCAL_NUM_LODS>& candidate_filenames,
+                                          const std::array<LLSD, LOCAL_NUM_LODS>& candidate_last_modified,
+                                          std::array<bool, LOCAL_NUM_LODS>& changed_lods) const
+{
+    bool reload_required = false;
+    changed_lods.fill(false);
+
+    for (S32 lod_idx = LOCAL_LOD_LOWEST; lod_idx < LOCAL_NUM_LODS; ++lod_idx)
+    {
+        const bool filename_changed = candidate_filenames[lod_idx] != mFilenames[lod_idx];
+        const bool timestamp_changed = candidate_last_modified[lod_idx].asString() != mLastModified[lod_idx].asString();
+
+        if (filename_changed || timestamp_changed)
+        {
+            changed_lods[lod_idx] = true;
+            reload_required = true;
+        }
+    }
+
+    return reload_required;
+}
+
+std::vector<std::unique_ptr<LLLocalMeshObject>> LLLocalMeshFile::cloneLoadedObjects() const
+{
+    std::vector<std::unique_ptr<LLLocalMeshObject>> cloned_objects;
+    cloned_objects.reserve(mLoadedObjectList.size());
+    for (const auto& object : mLoadedObjectList)
+    {
+        cloned_objects.push_back(object ? object->clone() : nullptr);
+    }
+    return cloned_objects;
+}
+
+std::vector<LLLocalMeshFile::LLLocalMeshReloadBinding> LLLocalMeshFile::collectReloadBindings() const
+{
+    std::vector<LLLocalMeshReloadBinding> bindings;
+    bindings.reserve(mLoadedObjectList.size());
+
+    for (size_t object_idx = 0; object_idx < mLoadedObjectList.size(); ++object_idx)
+    {
+        const auto& local_object = mLoadedObjectList[object_idx];
+        if (!local_object)
+        {
+            continue;
+        }
+
+        const LLUUID sculpt_id = local_object->getVolumeParams().getSculptID();
+        if (gObjectList.findMeshObjectsBySculptID(sculpt_id).empty())
+        {
+            continue;
+        }
+
+        bindings.push_back({
+            sculpt_id,
+            static_cast<S32>(object_idx),
+            local_object->getObjectName()
+        });
+    }
+
+    return bindings;
+}
+
+bool LLLocalMeshFile::resolveBindingObjectIndex(const LLLocalMeshReloadBinding& binding,
+                                                const std::vector<std::unique_ptr<LLLocalMeshObject>>& object_list,
+                                                S32& object_index) const
+{
+    object_index = -1;
+
+    S32 name_match = -1;
+    bool found_duplicate_name = false;
+    for (size_t candidate_idx = 0; candidate_idx < object_list.size(); ++candidate_idx)
+    {
+        const auto& candidate = object_list[candidate_idx];
+        if (!candidate || candidate->getObjectName() != binding.mObjectName)
+        {
+            continue;
+        }
+
+        if (name_match == -1)
+        {
+            name_match = static_cast<S32>(candidate_idx);
+        }
+        else
+        {
+            found_duplicate_name = true;
+            break;
+        }
+    }
+
+    if (name_match >= 0 && !found_duplicate_name)
+    {
+        object_index = name_match;
+        return true;
+    }
+
+    if (binding.mObjectIndex >= 0 && binding.mObjectIndex < static_cast<S32>(object_list.size()))
+    {
+        object_index = binding.mObjectIndex;
+        return object_index >= 0;
+    }
+
+    return false;
+}
+
+bool LLLocalMeshFile::canApplyReloadBindings(const std::vector<std::unique_ptr<LLLocalMeshObject>>& object_list,
+                                             std::string& failure_reason) const
+{
+    for (const auto& binding : mSavedObjectBindings)
+    {
+        S32 object_index = -1;
+        if (!resolveBindingObjectIndex(binding, object_list, object_index))
+        {
+            failure_reason = "Unable to remap submesh \"" + binding.mObjectName
+                + "\" after reload.";
+            return false;
+        }
+    }
+
+    failure_reason.clear();
+    return true;
+}
+
+bool LLLocalMeshFile::needsReload() const
+{
+    if (mLocalMeshFileStatus == LLLocalMeshFileStatus::STATUS_LOADING)
+    {
+        return false;
+    }
+
+    std::array<std::string, LOCAL_NUM_LODS> candidate_filenames = mFilenames;
+    discoverLodFilenames(mFilenames, candidate_filenames);
+
+    std::array<LLSD, LOCAL_NUM_LODS> candidate_last_modified;
+    for (S32 lod_idx = LOCAL_LOD_LOWEST; lod_idx < LOCAL_NUM_LODS; ++lod_idx)
+    {
+        if (!readLastModified(candidate_filenames[lod_idx], candidate_last_modified[lod_idx]))
+        {
+            candidate_last_modified[lod_idx].clear();
+        }
+    }
+
+    std::array<bool, LOCAL_NUM_LODS> changed_lods = { false, false, false, false };
+    return detectReloadChanges(candidate_filenames, candidate_last_modified, changed_lods);
 }
 
 bool LLLocalMeshFile::notifyNeedsUIUpdate()
@@ -783,13 +1091,22 @@ LLLocalMeshFile::LLLocalMeshFileInfo LLLocalMeshFile::getFileInfo()
 
 void LLLocalMeshFile::updateVObjects()
 {
-    for (size_t object_iter = 0; object_iter < mSavedObjectSculptIDs.size(); ++object_iter)
+    for (const auto& saved_binding : mSavedObjectBindings)
     {
-        const auto& local_obj_sculpt_id = mSavedObjectSculptIDs[object_iter];
-        auto affected_vobject_ids = gObjectList.findMeshObjectsBySculptID(local_obj_sculpt_id);
+        S32 object_index = -1;
+        if (!resolveBindingObjectIndex(saved_binding, mLoadedObjectList, object_index))
+        {
+            continue;
+        }
+
+        auto affected_vobject_ids = gObjectList.findMeshObjectsBySculptID(saved_binding.mSculptID);
         for (const auto& current_vobject_id : affected_vobject_ids)
         {
             auto target_object_ptr = static_cast<LLVOVolume*>(gObjectList.findObject(current_vobject_id));
+            if (!target_object_ptr)
+            {
+                continue;
+            }
 
             if (!target_object_ptr->mIsLocalMesh)
             {
@@ -799,11 +1116,10 @@ void LLLocalMeshFile::updateVObjects()
             }
 
             bool using_scale = target_object_ptr->mIsLocalMeshUsingScale;
-            applyToVObject(current_vobject_id, static_cast<int>(object_iter), using_scale);
+            applyToVObject(current_vobject_id, object_index, using_scale);
         }
 
-        // also, remove old skin from
-        gMeshRepo.mSkinMap.erase(local_obj_sculpt_id);
+        gMeshRepo.mSkinMap.erase(saved_binding.mSculptID);
     }
 }
 
@@ -906,10 +1222,33 @@ LLLocalMeshSystem::LLLocalMeshSystem()
     mLoadedFileList.clear();
     mFileAsyncsOngoing = false;
     mFloaterPtr = nullptr;
+    mAutoReloadTimer = nullptr;
+
+    mAutoReloadConnection = gSavedSettings.getControl("FSLocalMeshAutoReload")->getCommitSignal()->connect(
+        [this](LLControlVariable*, const LLSD&, const LLSD&)
+        {
+            refreshAutoReloadTimer();
+        });
+
+    mAutoReloadPeriodConnection = gSavedSettings.getControl("FSLocalMeshAutoReloadPeriod")->getCommitSignal()->connect(
+        [this](LLControlVariable*, const LLSD&, const LLSD&)
+        {
+            refreshAutoReloadTimer();
+        });
+
+    refreshAutoReloadTimer();
 }
 
 LLLocalMeshSystem::~LLLocalMeshSystem()
 {
+    if (mAutoReloadTimer)
+    {
+        delete mAutoReloadTimer;
+        mAutoReloadTimer = nullptr;
+    }
+    mAutoReloadConnection.disconnect();
+    mAutoReloadPeriodConnection.disconnect();
+
     /* clear files, triggers releasing donor objects
        and destructs any held localmesh objects. */
     mLoadedFileList.clear();
@@ -920,6 +1259,7 @@ void LLLocalMeshSystem::addFile(const std::string& filename, bool try_lods)
     auto loaded_file = std::make_unique<LLLocalMeshFile>(filename, try_lods);
     mLoadedFileList.push_back(std::move(loaded_file));
     triggerFloaterRefresh(false);
+    refreshAutoReloadTimer();
 
     triggerCheckFileAsyncStatus();
 }
@@ -955,6 +1295,7 @@ void LLLocalMeshSystem::deleteFile(const LLUUID& local_file_id)
     if (delete_done)
     {
         triggerFloaterRefresh();
+        refreshAutoReloadTimer();
     }
 }
 
@@ -976,7 +1317,7 @@ void LLLocalMeshSystem::reloadFile(const LLUUID& local_file_id)
             }
 
             // found the requested by id file, it's not loading, let's make it loading.
-            current_file->reloadLocalMeshObjects();
+            current_file->reloadLocalMeshObjects(false, true, false);
             reload_started = true;
         }
     }
@@ -1079,6 +1420,50 @@ void LLLocalMeshSystem::checkFileAsyncStatus()
     }
 }
 
+void LLLocalMeshSystem::refreshAutoReloadTimer()
+{
+    if (mAutoReloadTimer)
+    {
+        delete mAutoReloadTimer;
+        mAutoReloadTimer = nullptr;
+    }
+
+    if (!gSavedSettings.getBOOL("FSLocalMeshAutoReload") || mLoadedFileList.empty())
+    {
+        return;
+    }
+
+    const F32 period = llmax(0.1f, gSavedSettings.getF32("FSLocalMeshAutoReloadPeriod"));
+    mAutoReloadTimer = LLEventTimer::run_every(period, [this]()
+    {
+        checkAutoReloadFiles();
+    });
+}
+
+void LLLocalMeshSystem::checkAutoReloadFiles()
+{
+    if (!gSavedSettings.getBOOL("FSLocalMeshAutoReload"))
+    {
+        refreshAutoReloadTimer();
+        return;
+    }
+
+    bool reload_started = false;
+    for (auto& current_file : mLoadedFileList)
+    {
+        if (current_file->needsReload())
+        {
+            current_file->reloadLocalMeshObjects(false, false, true);
+            reload_started = true;
+        }
+    }
+
+    if (reload_started)
+    {
+        triggerCheckFileAsyncStatus();
+    }
+}
+
 void LLLocalMeshSystem::registerFloaterPointer(LLFloaterLocalMesh* floater_ptr)
 {
     // not checking for nullptr here, we use this to both register and de-register a floater,
@@ -1118,4 +1503,3 @@ std::vector<std::string> LLLocalMeshSystem::getFileLog(const LLUUID& local_file_
 
     return {};
 }
-

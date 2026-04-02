@@ -246,6 +246,7 @@
 #include "fsregistrarutils.h"
 #include "fsscriptlibrary.h"
 #include "lfsimfeaturehandler.h"
+#include "fsgrouptitleregionmgr.h" // <FS:PP> Region-based group titles
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
@@ -2742,6 +2743,8 @@ bool idle_startup()
         cs_instance->loadFromDisk();
         LLAvatarNameCache::instance().setCustomNameCheckCallback(boost::bind(&LGGContactSets::checkCustomName, cs_instance, _1, _2, _3));
         // </FS:Ansariel>
+
+        FSGroupTitleRegionMgr::getInstance()->loadFromDisk(); // <FS:PP> Region-based group titles
 
         bool show_hud = false;
         LLSD tutorial_setting = response["tutorial_setting"];

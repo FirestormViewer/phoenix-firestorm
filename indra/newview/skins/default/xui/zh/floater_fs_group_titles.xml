@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="群組頭銜">
 	<floater.string name="NoGroupTitle" value="&lt;無頭銜&gt;" />
+	<floater.string name="ClearAllRegions" value="清除所有區域"/>
 	<filter_editor label="根據群組頭銜過濾" name="filter_input" />
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="頭銜" />
 		<column name="groupname" label="群組" />
+		<column name="regionname" label="自動區域" />
 	</scroll_list>
 	<button tool_tip="更新可用群組頭銜列表" name="btnRefresh" />
+	<button name="btnSetRegion" label="此區域" tool_tip="將您目前所在的區域指定給選擇的頭銜" />
+	<button name="btnSetRegionManual" label="輸入區域" tool_tip="輸入要指定給選擇頭銜的區域名稱" />
+	<button name="btnClearRegion" label="清除區域" tool_tip="從選擇的頭銜中移除區域指定" />
 	<button name="btnInfo" label="資訊" tool_tip="顯示當前選擇的頭銜所屬群組的資訊" />
 	<button name="btnActivate" label="啟用" tool_tip="啟用當前選擇的群組頭銜" />
+	<check_box label="在未指定區域設為「無」" name="none_on_unassigned" />
 </floater>

@@ -117,7 +117,7 @@
 			<check_box label="顯示貨幣餘額" name="FSShowCurrencyBalanceInStatusbar" />
 			<check_box label="當滑鼠懸停在選單欄圖示上時彈出視窗" name="FSStatusBarMenuButtonPopupOnRollover" />
 			<text name="statusbar_timeformat_textbox">
-				時間格式：
+				時鐘格式：
 			</text>
 			<combo_box name="FSStatusBarTimeFormat" tool_tip="確定選單欄中使用的時間格式。">
 				<combo_box.item label="預設語言選擇" name="Language" />

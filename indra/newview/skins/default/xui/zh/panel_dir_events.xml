@@ -1,0 +1,44 @@
+<panel label="活動" name="panel_dir_events">
+	<string name="searching_text">
+		搜尋中...
+	</string>
+	<string name="not_found_text">
+		未找到結果。
+	</string>
+	<string name="found_text">
+		找到[COUNT]條結果。
+	</string>
+	<text name="find">
+		輸入搜尋關鍵字：
+	</text>
+	<combo_box name="category_combo">
+		<combo_item name="All" label="所有分類"/>
+		<combo_item name="Discussion" label="討論"/>
+		<combo_item name="Sports" label="體育"/>
+		<combo_item name="LiveMusic" label="音樂現場"/>
+		<combo_item name="LiveDJ" label="DJ現場"/>
+		<combo_item name="Commercial" label="商業"/>
+		<combo_item name="Nightlife/Entertainment" label="夜生活/娛樂"/>
+		<combo_item name="Games/Contests" label="遊戲/比賽"/>
+		<combo_item name="Pageants" label="選美比賽"/>
+		<combo_item name="Education" label="教育"/>
+		<combo_item name="ArtsandCulture" label="藝術與文化"/>
+		<combo_item name="Charity/SupportGroups" label="慈善/互助團體"/>
+		<combo_item name="Miscellaneous" label="其他"/>
+	</combo_box>
+	<icon tool_tip="普級" name="rating_icon_general"/>
+	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
+	<icon tool_tip="完全成人" name="rating_icon_adult"/>
+	<scroll_list name="results">
+		<column label="名稱" name="name" />
+		<column label="時間 (PT)" name="date"/>
+	</scroll_list>
+	<button tool_tip="上一頁" name="prev_btn"/>
+	<button tool_tip="下一頁" name="next_btn"/>
+	<radio_group name="date_mode">
+		<radio_item name="current" label="目前及即將開始"/>
+		<radio_item name="date" label="日期"/>
+	</radio_group>
+	<button label="&lt;&lt;" label_selected="&lt;&lt;" name="back_btn" tool_tip="後退一天"/>
+	<button label="&gt;&gt;" label_selected="&gt;&gt;" name="forward_btn" tool_tip="前進一天"/>
+</panel>

@@ -4,4 +4,5 @@
 	<menu_item_call label="Usuń osobę..." name="remove_contact" />
 	<menu_item_call label="Usuń alias..." name="remove_alias" />
 	<menu_item_call label="Usuń Wyświetlane Imię..." name="remove_display_name" />
+	<menu_item_call label="Przenieś osobę..." name="move_contact" />
 </toggleable_menu>

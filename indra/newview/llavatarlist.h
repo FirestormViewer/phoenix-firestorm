@@ -27,6 +27,8 @@
 #ifndef LL_LLAVATARLIST_H
 #define LL_LLAVATARLIST_H
 
+#include <functional> // <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
+
 #include "llflatlistview.h"
 #include "llavatarlistitem.h"
 #include "rlvdefines.h"
@@ -48,6 +50,8 @@ class LLAvatarList : public LLFlatListViewEx
 {
     LOG_CLASS(LLAvatarList);
 public:
+    using avatar_drop_cb_t = std::function<bool(const LLUUID&, bool)>; // <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
+
     struct Params : public LLInitParam::Block<Params, LLFlatListViewEx::Params>
     {
         Optional<bool>  ignore_online_status, // show all items as online
@@ -85,6 +89,8 @@ public:
     void showDisplayName(bool visible);
     void showUsername(bool visible);
     void showVoiceVolume(bool visible);
+    void setUseContactSetColors(bool use_colors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    void setUseContactSetListStyle(bool use_style); // <FS:PP> FIRE-31733: Make contact sets lists more readable
     // <FS:Ansariel> [FS Communication UI]
     //void sortByName();
     void sortByName(bool agent_on_top = false);
@@ -99,6 +105,11 @@ public:
     /*virtual*/ bool handleMouseDown( S32 x, S32 y, MASK mask );
     /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
     /*virtual*/ bool handleHover(S32 x, S32 y, MASK mask);
+
+    // <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept, std::string& tooltip_msg);
+    void setAvatarDropCallback(const avatar_drop_cb_t& cb) { mAvatarDropCallback = cb; }
+    // </FS:PP>
 
     // Return true if filter has at least one match.
     bool filterHasMatches();
@@ -161,6 +172,8 @@ private:
 // [/RLVa:KB]
     bool mShowDisplayName;
     bool mShowUsername;
+    bool mUseContactSetColors; // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    bool mUseContactSetListStyle; // <FS:PP> FIRE-31733: Make contact sets lists more readable
 
     LLTimer*                mLITUpdateTimer; // last interaction time update timer
     std::string             mIconParamName;
@@ -173,6 +186,7 @@ private:
     commit_signal_t mRefreshCompleteSignal;
     mouse_signal_t mItemDoubleClickSignal;
     mouse_signal_t mItemClickedSignal;
+    avatar_drop_cb_t mAvatarDropCallback; // <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
 
     // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
     boost::signals2::connection mRlvBehaviorCallbackConnection;
@@ -192,6 +206,7 @@ public:
     virtual bool compare(const LLPanel* item1, const LLPanel* item2) const;
 
 protected:
+    static std::string getComparableName(const LLAvatarListItem* avatar_item); // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
 
     /**
      * Returns true if avatar_item1 < avatar_item2, false otherwise

@@ -1,0 +1,19 @@
+<panel label="人物" name="panel_dir_people">
+	<string name="searching_text">
+		検索しています…
+	</string>
+	<string name="not_found_text">
+		見つかりませんでした。
+	</string>
+	<string name="found_text">
+		[COUNT]件見つかりました。
+	</string>
+	<text name="find">
+		検索語句を入力：
+	</text>
+	<scroll_list name="results">
+		<column label="名前" name="name"/>
+	</scroll_list>
+	<button tool_tip="前のページに戻ります。" name="prev_btn"/>
+	<button tool_tip="次のページに進みます。" name="next_btn"/>
+</panel>

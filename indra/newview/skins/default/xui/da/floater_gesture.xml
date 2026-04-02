@@ -19,6 +19,8 @@
 		<menu_button name="gear_btn" tool_tip="Flere muligheder"/>
 		<button name="new_gesture_btn" tool_tip="Lav ny bevægelse"/>
 		<button name="activate_btn" tool_tip="Aktivér/Deaktivér valgte bevægelse"/>
+		<check_box label="Vis kun aktive" name="FSShowOnlyActiveGestures"/>
+		<check_box label="Mine bevægelser er aktiveret" name="FSGesturesEnabled"/>
 		<button name="del_btn" tool_tip="Slet denne bevægelse"/>
 	</panel>
 	<button label="Redigér" name="edit_btn"/>

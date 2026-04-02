@@ -226,6 +226,8 @@
 						<panel title="プリセット" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="プリセット名" name="name"/>
+								<scroll_list.columns label="日付" name="load_file_date_column"/>
+								<scroll_list.columns label="日付" name="load_file_date_sort_column"/>
 							</scroll_list>
 							<button label="左にセット" name="button_loadHandPoseLeft" tool_tip="ダブルクリックして左手を選択したプリセットに設定します。"/>
 							<button label="右にセット" name="button_loadHandPoseRight" tool_tip="ダブルクリックして右手を選択したプリセットに設定します。"/>

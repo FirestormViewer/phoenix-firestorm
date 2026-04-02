@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="Tytuły grup">
 	<floater.string name="NoGroupTitle" value="&lt;Brak tytułu grupy&gt;" />
+	<floater.string name="ClearAllRegions" value="Wyczyść wszystkie regiony"/>
 	<filter_editor label="Filtruj tytuły grup" name="filter_input" />
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Tytuł" />
 		<column name="groupname" label="Grupa" />
+		<column name="regionname" label="Auto-region" />
 	</scroll_list>
 	<button tool_tip="Odśwież listę dostępnych tytułów grup" name="btnRefresh" />
+	<button name="btnSetRegion" label="Ten region" tool_tip="Przypisz bieżący region do wybranego tytułu" />
+	<button name="btnSetRegionManual" label="Wpisz region" tool_tip="Wpisz nazwę regionu do przypisania do wybranego tytułu" />
+	<button name="btnClearRegion" label="Wyczyść region" tool_tip="Usuń przypisanie regionu z wybranego tytułu" />
 	<button name="btnInfo" label="Info" tool_tip="Pokaż informacje o grupie związanej z wybranym tytułem" />
 	<button name="btnActivate" label="Aktywuj" tool_tip="Aktywuj wybrany tytuł grupy" />
+	<check_box label="Ustaw 'brak' w regionach bez przypisania" name="none_on_unassigned" />
 </floater>

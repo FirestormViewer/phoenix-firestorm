@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="Títulos de grupo">
 	<floater.string name="NoGroupTitle" value="&lt;Sin título&gt;"/>
+	<floater.string name="ClearAllRegions" value="Borrar todas las regiones"/>
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Título"/>
 		<column name="groupname" label="Grupo"/>
+		<column name="regionname" label="Región auto"/>
 	</scroll_list>
 	<button tool_tip="Actualizar lista de títulos de grupo disponibles" name="btnRefresh"/>
+	<button name="btnSetRegion" label="Esta región" tool_tip="Asignar su región actual al título seleccionado"/>
+	<button name="btnSetRegionManual" label="Escribir región" tool_tip="Escribir un nombre de región para asignar al título seleccionado"/>
+	<button name="btnClearRegion" label="Borrar región" tool_tip="Eliminar la asignación de región del título seleccionado"/>
 	<button name="btnInfo" label="Información" tool_tip="Muestra información sobre el grupo del título seleccionado"/>
 	<button name="btnActivate" label="Activar" tool_tip="Activa el título de grupo seleccionado"/>
+	<check_box label="'Ninguno' en regiones sin preajuste" name="none_on_unassigned" />
 </floater>

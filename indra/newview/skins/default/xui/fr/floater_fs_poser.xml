@@ -249,6 +249,7 @@
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmer l'écrasement" tool_tip="Lorsque vous enregistrez une pose, si le fichier existe déjà, vous devez cliquer à nouveau sur le bouton d'enregistrement pour confirmer que vous êtes sûr de vouloir l'écraser."/>
 						<check_box name="natural_direction_checkbox" label="Utiliser l'alignement naturel" tool_tip="Le squelette a des rotations d'articulations non naturelles par défaut. Cela complique la pose. Si cette option est cochée, les articulations tourneront de manière plus naturelle."/>
 						<check_box name="show_joint_markers_checkbox" label="Aff. marqueurs de jointure" tool_tip="Afficher de petits indicateurs pour faciliter la sélection des articulations lors de la pose."/>
+						<check_box name="dof_edit_mode_checkbox" label="Activer PdF en mode édition" tool_tip="Normalement, lorsque vous utilisez le manipulateur, la profondeur de champ est désactivée automatiquement. Cette option permet de conserver la profondeur de champ activée lors de la modification des poses ou des prims."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Activer et désactiver les manipulateurs visuels"/>
@@ -304,7 +305,8 @@
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Charge une pose pour le personnage animé." name="poses_scroll">
-					<scroll_list.columns label="Pose" name="name" />
+					<scroll_list.columns label="Nom" name="load_file_name_column" />
+					<scroll_list.columns label="Date" name="load_file_date_column"/>
 				</scroll_list>
 				<line_editor label="Nom de la pose à enregistrer..." name="pose_save_name" />
 			</panel>
