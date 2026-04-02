@@ -223,6 +223,7 @@ public:
      */
     static void addToContactSet(const LLUUID& agent_id);
     static void addToContactSet(const uuid_vec_t& agent_ids);
+    static void moveToContactSet(const uuid_vec_t& agent_ids, const std::string& source_set);
 
     /**
      * Checks whether we can offer a teleport to the avatar, only offline friends

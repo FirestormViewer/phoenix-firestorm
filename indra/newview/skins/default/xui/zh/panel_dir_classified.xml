@@ -1,0 +1,35 @@
+<panel label="分類廣告" name="panel_dir_classified">
+	<string name="searching_text">
+		搜尋中...
+	</string>
+	<string name="not_found_text">
+		未找到結果。
+	</string>
+	<string name="found_text">
+		找到[COUNT]條結果。
+	</string>
+	<text name="find">
+		輸入搜尋關鍵字：
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="所有分類"/>
+		<combo_item name="Shopping" label="購物"/>
+		<combo_item name="LandRental" label="土地租賃"/>
+		<combo_item name="PropertyRental" label="房產租賃"/>
+		<combo_item name="SpecialAttraction" label="特色景點"/>
+		<combo_item name="NewProducts" label="新品"/>
+		<combo_item name="Employment" label="招聘"/>
+		<combo_item name="Wanted" label="求購"/>
+		<combo_item name="Service" label="服務"/>
+		<combo_item name="Personal" label="其他"/>
+	 </combo_box>
+	<icon tool_tip="普級" name="rating_icon_general"/>
+	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
+	<icon tool_tip="完全成人" name="rating_icon_adult"/>
+	<scroll_list name="results">
+		<column label="名稱" name="name" width="215"/>
+		<column label="價格" name="price" width="91"/>
+	</scroll_list>
+	<button tool_tip="上一頁" name="prev_btn"/>
+	<button tool_tip="下一頁" name="next_btn"/>
+</panel>

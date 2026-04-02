@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_event_info" title="活動">
+	<string name="none">
+		無
+	</string>
+	<string name="notify">
+		通知
+	</string>
+	<string name="dont_notify">
+		不通知
+	</string>
+	<text name="event_name">
+		（無）
+	</text>
+	<text name="event_category_label">
+		類型：
+	</text>
+	<text name="event_category">
+		（無）
+	</text>
+	<text name="event_mature_label">
+		內容（適度成人）：
+	</text>
+	<text name="event_mature_yes">
+		是
+	</text>
+	<text name="event_mature_no">
+		否
+	</text>
+	<text name="event_date_label">
+		日期：
+	</text>
+	<text name="event_date">
+		（無）
+	</text>
+	<text name="event_duration_label">
+		活動時長：
+	</text>
+	<text name="event_duration">
+		（無）
+	</text>
+	<text name="event_runby_label">
+		主辦方：
+	</text>
+	<text name="event_runby">
+		（無）
+	</text>
+	<text name="event_location_label">
+		地點：
+	</text>
+	<text name="event_location">
+		（無）
+	</text>
+	<text name="event_cover_label">
+		入場費：
+	</text>
+	<text name="event_cover">
+		（無）
+	</text>
+	<text name="event_desc_label">
+		描述：
+	</text>
+	<button label="傳送" name="teleport_btn"/>
+	<button label="在地圖中顯示" name="map_btn"/>
+	<button label="通知" name="notify_btn"/>
+</panel>

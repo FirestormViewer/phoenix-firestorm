@@ -34,10 +34,16 @@
 #include "llpanel.h"
 #include "llstyle.h"
 #include "lltoggleablemenu.h"
+#include "v4color.h" // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
 #include "llgroupmgr.h"
 
 #include <boost/signals2.hpp> // <FS:PP> Group favorites / pinning
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+#include <map>
+#include <vector>
+class LLGroupListItem;
+// </FS:PP>
 
 /**
  * Auto-updating list of agent groups.
@@ -70,7 +76,12 @@ public:
     bool getIconsVisible() const { return mShowIcons; }
     void setIconsVisible(bool show_icons) { mShowIcons = show_icons; }
     void setShowNone(bool show_none) { mShowNone = show_none; }
+    void setShowFavoritesSeparator(bool show) { mShowFavoritesSeparator = show; setDirty(true); } // <FS:PP> Group favorites / pinning
     void setGroups(const std::map< std::string,LLUUID> group_list);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    void setSecondaryGroups(const std::vector<std::string>& group_names, const std::map<std::string, LLColor4>& group_colors = {});
+    std::string getSelectedGroupName();
+    // </FS:PP>
 
     LLToggleableMenu* getContextMenu() const { return mContextMenuHandle.get(); }
 
@@ -79,9 +90,9 @@ public:
 private:
     void setDirty(bool val = true)      { mDirty = val; }
     void refresh();
-// <FS:PP> Group favorites / pinning
+// <FS:PP> Group favorites / pinning; FIRE-32401: Contact Sets on groups list in profile
     // void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true);
-    void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true, bool is_favorite = false);
+    LLGroupListItem* addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true, bool is_favorite = false);
     void addFavoritesSeparator();
     void onFavoritesChanged();
 // </FS:PP>
@@ -99,8 +110,13 @@ private:
 
     bool mForAgent;
     bool mShowNone;
+    bool mShowFavoritesSeparator{ true }; // <FS:PP> Group favorites / pinning
     typedef std::map< std::string,LLUUID>   group_map_t;
     group_map_t             mGroups;
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    std::vector<std::string> mSecondaryGroups;
+    std::map<std::string, LLColor4> mSecondaryGroupColors;
+    // </FS:PP>
 
     boost::signals2::connection mFavoritesChangedConnection; // <FS:PP> Group favorites / pinning
 };
@@ -144,6 +160,7 @@ public:
     void setGroupIconID(const LLUUID& group_icon_id);
     void setGroupIconVisible(bool visible);
     void setFavorite(bool favorite)             { mIsFavorite = favorite; } // <FS:PP> Group favorites / pinning
+    void setCustomTextColor(const LLColor4& color); // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
     virtual void changed(LLGroupChange gc);
 

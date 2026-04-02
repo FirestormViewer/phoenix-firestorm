@@ -26,7 +26,6 @@
  */
 
 /*
-
  * App-wide preferences.  Note that these are not per-user,
  * because we need to load many preferences before we have
  * a login name.
@@ -38,7 +37,6 @@
 
 #include "message.h"
 #include "llfloaterautoreplacesettings.h"
-#include "llviewertexturelist.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llcheckboxctrl.h"
@@ -58,8 +56,6 @@
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
-#include "fsfloaterim.h"
-#include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llkeyboard.h"
 #include "llmodaldialog.h"
@@ -136,17 +132,16 @@
 #include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
+#include "fspanelpreferenceuisounds.h"  // <FS:PP> UI Sounds
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
-#include "llavatarname.h"   // <FS:CR> Deeper name cache stuffs
 #include "llclipboard.h"    // <FS:Zi> Support preferences search SLURLs
 #include "lldiriterator.h"  // <Kadah> for populating the fonts combo
-#include "llline.h"
+#include "llfiltereditor.h" // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
-#include "llspellcheck.h"
 #include "lltoolbarview.h"
 #include "lltoolpie.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
@@ -166,9 +161,6 @@
 #endif
 // </FS:LO>
 
-// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
-#include "llfiltereditor.h"
-#include "llviewershadermgr.h"
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
@@ -970,7 +962,7 @@ LLFloaterPreference::~LLFloaterPreference()
 //  bool has_first_selected = (mDisabledPopups->getFirstSelected()!=NULL);
 //  mEnablePopupBtn->setEnabled(has_first_selected);
 //
-//  has_first_selected = (mEnabledPopups.getFirstSelected()!=NULL);
+//  has_first_selected = (mEnabledPopups->getFirstSelected()!=NULL);
 //  mDisablePopupBtn->setEnabled(has_first_selected);
 //
 //  LLFloater::draw();
@@ -3131,9 +3123,6 @@ void LLFloaterPreference::onLogChatHistorySaved()
 // <FS:PP> Load UI Sounds tabs settings
 void LLFloaterPreference::updateUISoundsControls()
 {
-    getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Instant Messages"
-    getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Group Instant Messages"
-    getChild<LLComboBox>("PlayModeUISndNewIncomingConfIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingConfIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving AdHoc Instant Messages"
 #ifdef OPENSIM
     // <FS:Beq> OpenSim has option to not attenuate nearby local voice by distance
     auto earPosGroup = findChild<LLRadioGroup>("ear_location");
@@ -3145,13 +3134,13 @@ void LLFloaterPreference::updateUISoundsControls()
         earPosGroup->setIndexEnabled(hearNearbyVoiceFullVolume, LLGridManager::instance().isInOpenSim());
     }
     // <FS:Beq>
-    getChild<LLTextBox>("textFSRestartOpenSim")->setVisible(true);
-    getChild<LLLineEditor>("UISndRestartOpenSim")->setVisible(true);
-    getChild<LLButton>("Prev_UISndRestartOpenSim")->setVisible(true);
-    getChild<LLButton>("Def_UISndRestartOpenSim")->setVisible(true);
-    getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(true);
 #endif
     getChild<LLComboBox>("UseLSLFlightAssist")->setValue((int)gSavedPerAccountSettings.getF32("UseLSLFlightAssist")); // Flight Assist combo box; Not sound-related, but better to place it here instead of creating whole new void
+
+    if (FSPanelPreferenceUISounds* ui_sounds_panel = findChild<FSPanelPreferenceUISounds>("UI Sounds tab"))
+    {
+        ui_sounds_panel->refreshList();
+    }
 
     // FIRE-9856: Mute sound effects disable plays sound from collisions and plays sound from gestures checkbox not disable after restart/relog
     bool mute_sound_effects = gSavedSettings.getBOOL("MuteSounds");
@@ -4036,11 +4025,6 @@ void LLPanelPreferenceGraphics::onPresetsListChange()
     //{
     //  instance->saveSettings(); //make cancel work correctly after changing the preset
     //}
-    //else
-    //{
-    //  std::string dummy;
-    //  instance->saveGraphicsPreset(dummy);
-    //}
 }
 
 void LLPanelPreferenceGraphics::setPresetText()
@@ -4128,6 +4112,7 @@ bool LLPanelPreferenceGraphics::hasDirtyChilds()
             view_stack.push_back(*iter);
         }
     }
+
     return false;
 }
 

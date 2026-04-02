@@ -35,6 +35,7 @@
 #include "llcheckboxctrl.h"
 #include "llviewertexteditor.h"
 #include "llcombobox.h"
+#include "llspinctrl.h"
 #include "lltoolmgr.h"
 #include "lltoolcomp.h"
 #include "llmodelpreview.h"
@@ -62,7 +63,7 @@ private:
 };
 
 LLFloaterLocalMeshFilePicker::LLFloaterLocalMeshFilePicker(LLFloaterLocalMesh* parent_floater)
-    : LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+    : LLFilePickerThread(LLFilePicker::FFLOAD_MODEL)
 {
     mParentFloater = parent_floater;
 }
@@ -153,6 +154,11 @@ void LLFloaterLocalMesh::update_selected_target(const LLUUID& selected_id)
 
 void LLFloaterLocalMesh::draw()
 {
+    if (auto auto_reload_spinner = getChild<LLSpinCtrl>("auto_reload_period"))
+    {
+        auto_reload_spinner->setEnabled(gSavedSettings.getBOOL("FSLocalMeshAutoReload"));
+    }
+
     // check if selection has changed.
     if (auto current_object = LLSelectMgr::getInstance()->getSelection()->getFirstObject())
     {
@@ -712,5 +718,3 @@ LLUUID LLFloaterLocalMesh::getCurrentSelectionIfValid() const
     result = mLastSelectedObject;
     return result;
 }
-
-

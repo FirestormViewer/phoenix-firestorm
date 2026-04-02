@@ -52,6 +52,7 @@
 
 #include "lfsimfeaturehandler.h"    // <FS:CR> Opensim
 #include "llavatarlist.h"
+#include "lggcontactsets.h" // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -298,6 +299,20 @@ void LLAvatarListItem::setAvatarName(const std::string& name)
 {
     setNameInternal(name, mHighlihtSubstring);
 }
+
+// <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+void LLAvatarListItem::setUseContactSetColors(bool use_colors)
+{
+    mUseContactSetColors = use_colors;
+    setNameInternal(mAvatarName->getText(), mHighlihtSubstring);
+}
+
+void LLAvatarListItem::setUseContactSetListStyle(bool use_style)
+{
+    mUseContactSetListStyle = use_style;
+    setNameInternal(mAvatarName->getText(), mHighlihtSubstring);
+}
+// </FS:PP>
 
 void LLAvatarListItem::setAvatarToolTip(const std::string& tooltip)
 {
@@ -586,7 +601,28 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
     //{
     //    LLTextUtil::textboxSetHighlightedVal(mAvatarName, mAvatarNameStyle, name, highlight);
     //}
-    LLTextUtil::textboxSetHighlightedVal(mAvatarName, mAvatarNameStyle, name, highlight);
+    LLStyle::Params avatar_name_style = mAvatarNameStyle;
+    if (mUseContactSetListStyle)
+    {
+        const LLAvatarListItem::Params& params = LLUICtrlFactory::getDefaultParams<LLAvatarListItem>();
+        if (mOnlineStatus == E_ONLINE && params.group_moderator_style.isProvided() && params.group_moderator_style().font.isProvided())
+        {
+            avatar_name_style.font = params.group_moderator_style().font();
+        }
+        if (params.online_style.isProvided() && params.online_style().color.isProvided())
+        {
+            avatar_name_style.color = params.online_style().color();
+        }
+    }
+    if (mUseContactSetColors)
+    {
+        LLColor4 contact_set_color;
+        if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(mAvatarId, ContactSetType::FRIENDS, contact_set_color))
+        {
+            avatar_name_style.color = contact_set_color;
+        }
+    }
+    LLTextUtil::textboxSetHighlightedVal(mAvatarName, avatar_name_style, name, highlight);
     // </FS:Ansariel>
 }
 

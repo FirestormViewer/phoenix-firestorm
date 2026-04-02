@@ -811,6 +811,7 @@ bool RlvFloaterConsole::postBuild()
     m_pInputEdit->setFocus(true);
     m_pInputEdit->setCommitOnFocusLost(false);
     m_pInputEdit->setShowChatMentionPicker(false);
+    m_pInputEdit->setShowEmojiHelper(false);
 
     m_pInputPanel = getChild<LLLayoutPanel>("input_panel");
     m_nInputEditPad = m_pInputPanel->getRect().getHeight() - m_pInputEdit->getRect().getHeight();

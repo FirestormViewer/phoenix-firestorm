@@ -124,7 +124,7 @@
 		<check_box label="Показать текущий баланс L$" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Включить выпадающие окна меню мыши на значках верхнего меню" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
 		<text name="statusbar_timeformat_textbox" width="100">
-			Формат времени:
+			Формат часов:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Выбирает формат времени, используемый в строке главного меню." width="250">
 			<combo_box.item label="Стандарт выбранного языка" name="Language"/>

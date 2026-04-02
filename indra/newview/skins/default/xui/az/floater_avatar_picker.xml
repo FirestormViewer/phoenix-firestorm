@@ -65,6 +65,11 @@
              <columns label="İstifadəçi adı" name="usernameUUID"/>
           </fs_scroll_list>
         </panel>
+        <panel label="Kontakt dəstləri" name="ContactSetsPanel">
+             <text name="SelectContactSetLabel">
+                Kontakt dəstini seçin:
+             </text>
+        </panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>

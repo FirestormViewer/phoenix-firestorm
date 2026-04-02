@@ -979,6 +979,9 @@ Le client a épuisé sa mémoire lors de l'ouverture du fichier. Le fichier est 
 		Vous avez déjà un repère pour cet emplacement.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Le client n'a pas pu obtenir l'emplacement de la région. La région est peut-être temporairement indisponible ou a été supprimée.
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Vous ne pouvez pas créer de repère ici car le propriétaire du terrain ne l&apos;autorise pas.
 	</notification>
@@ -1309,7 +1312,8 @@ Saisissez un nouveau nom unique :
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée.
+		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée. Ponctuation autorisée dans le mot-clé : 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Liste de remplacement non valide.
@@ -5340,7 +5344,7 @@ Vous ne pouvez pas annuler cette action.
 		Créer un nouveau groupe de contacts avec le nom :
 		<form name="form">
 			<input name="message">
-				Nouveau groupe de contacts
+				Nouveau cercle de contacts
 			</input>
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
@@ -5366,6 +5370,13 @@ Vous ne pouvez pas annuler cette action.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Entrez un alias pour [AVATAR] :
+		<form name="form">
+			<button name="Create" text="Créer"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Entrez un alias pour [COUNT] avatars :
 		<form name="form">
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
@@ -5749,4 +5760,18 @@ Message d'erreur :
 		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
+Le nom sera vérifié avant l'enregistrement de l'assignation.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La région '[REGION]' n'a pas été trouvée. Veuillez vérifier le nom et réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

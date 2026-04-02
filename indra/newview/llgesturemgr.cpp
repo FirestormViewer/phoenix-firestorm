@@ -50,6 +50,7 @@
 #include "lldelayedgestureerror.h"
 #include "llinventorymodel.h"
 #include "llviewermessage.h"
+#include "llviewercontrol.h" // <FS:PP> FIRE-36169 Gestures enable/disable switch
 #include "llvoavatarself.h"
 #include "llviewerstats.h"
 // <FS:Ansariel> [FS Communication UI]
@@ -70,6 +71,14 @@ const F32 MAX_WAIT_ANIM_SECS = 60.f;
 // Longest time, in seconds, to wait for a key release.
 // This should be relatively long, but not too long. 10 minutes is enough
 const F32 MAX_WAIT_KEY_SECS = 60.f * 10.f;
+
+// <FS:PP> FIRE-36169 Gestures enable/disable switch
+static bool are_gestures_enabled()
+{
+    static LLCachedControl<bool> gestures_enabled(gSavedPerAccountSettings, "FSGesturesEnabled", true);
+    return gestures_enabled;
+}
+// </FS:PP>
 
 // Lightweight constructor.
 // init() does the heavy lifting.
@@ -543,6 +552,7 @@ void LLGestureMgr::replaceGesture(const LLUUID& item_id, const LLUUID& new_asset
 void LLGestureMgr::playGesture(LLMultiGesture* gesture, bool fromKeyPress)
 {
     if (!gesture) return;
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
 
 // [RLVa:KB] - Checked: RLVa-2.0.0 | Handles: @sendgesture
     if (!RlvActions::canPlayGestures())
@@ -627,6 +637,8 @@ void LLGestureMgr::playGesture(LLMultiGesture* gesture, bool fromKeyPress)
 // Convenience function that looks up the item_id for you.
 void LLGestureMgr::playGesture(const LLUUID& item_id)
 {
+    if (!are_gestures_enabled()) return; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     const LLUUID& base_item_id = gInventory.getLinkedItemID(item_id);
 
     item_map_t::iterator it = mActive.find(base_item_id);
@@ -644,6 +656,17 @@ void LLGestureMgr::playGesture(const LLUUID& item_id)
 // and (as a minor side effect) has multiple spaces in a row replaced by single spaces.
 bool LLGestureMgr::triggerAndReviseString(const std::string &utf8str, std::string* revised_string)
 {
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    if (!are_gestures_enabled())
+    {
+        if (revised_string)
+        {
+            *revised_string = utf8str;
+        }
+        return false;
+    }
+    // </FS:PP>
+
     std::string tokenized = utf8str;
 
     bool found_gestures = false;
@@ -737,6 +760,8 @@ bool LLGestureMgr::triggerAndReviseString(const std::string &utf8str, std::strin
 
 bool LLGestureMgr::triggerGesture(KEY key, MASK mask)
 {
+    if (!are_gestures_enabled()) return false; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     std::vector <LLMultiGesture *> matching;
     item_map_t::iterator it;
 
@@ -772,6 +797,8 @@ bool LLGestureMgr::triggerGesture(KEY key, MASK mask)
 
 bool LLGestureMgr::triggerGestureRelease(KEY key, MASK mask)
 {
+    if (!are_gestures_enabled()) return false; // <FS:PP> FIRE-36169 Gestures enable/disable switch
+
     std::vector <LLMultiGesture *> matching;
     item_map_t::iterator it;
 
@@ -811,6 +838,21 @@ struct IsGesturePlaying
 
 void LLGestureMgr::update()
 {
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    if (!are_gestures_enabled())
+    {
+        if (!mPlaying.empty())
+        {
+            std::vector<LLMultiGesture*> playing_copy = mPlaying;
+            for (LLMultiGesture* gesture : playing_copy)
+            {
+                stopGesture(gesture);
+            }
+        }
+        return;
+    }
+    // </FS:PP>
+
     S32 i;
     for (i = 0; i < (S32)mPlaying.size(); ++i)
     {
@@ -1487,6 +1529,13 @@ void LLGestureMgr::notifyObservers()
 
 bool LLGestureMgr::matchPrefix(const std::string& in_str, std::string* out_str)
 {
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    if (!are_gestures_enabled())
+    {
+        return false;
+    }
+    // </FS:PP>
+
     auto in_len = in_str.length();
 
     //return whole trigger, if received text equals to it

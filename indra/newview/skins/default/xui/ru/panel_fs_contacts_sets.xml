@@ -18,7 +18,9 @@
 	<button name="config_btn" tool_tip="Конфигурация выбранного набора" />
 	<button name="add_set_btn" tool_tip="Добавить новый набор контактов" />
 	<button name="remove_set_btn" tool_tip="Удалить выбранный набор контактов" />
+	<filter_editor label="Фильтр людей" name="contact_sets_filter_input" />
 	<button label="Добавить..." name="add_btn" tool_tip="Добавить аватара в текущей набор контактов" />
+	<button label="Переместить..." name="move_btn" tool_tip="Переместить этого аватара в другой набор контактов" />
 	<button label="Удалить..." name="remove_btn" tool_tip="Удалить аватара из текущего набора контактов" />
 	<button label="Профиль..." name="profile_btn" tool_tip="Открыть профиль аватара" />
 	<button label="ЛС..." name="start_im_btn" tool_tip="Отправить личное сообщение (ЛС)" />

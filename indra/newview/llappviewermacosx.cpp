@@ -90,7 +90,13 @@ bool initViewer()
     bool ok = gViewerAppPtr->init();
     if(!ok)
     {
-        LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        // <FS:PP> FIRE-36191: A secondary helper process can intentionally quit after handing an external SLURL to the already-running viewer instance
+        // LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        if (!LLApp::isQuitting())
+        {
+            LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        }
+        // </FS:PP>
     }
     else if (!gHandleSLURL.empty())
     {

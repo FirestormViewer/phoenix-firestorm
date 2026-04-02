@@ -95,6 +95,15 @@ bool LLPanelDirBrowser::postBuild()
     mNextPageBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { nextPage(); });
     mNextPageBtn->setVisible(false);
 
+    // <FS:Ansariel> Port over search term history
+    mSearchComboBox = findChild<LLSearchComboBox>("name");
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setCommitCallback(boost::bind(&LLPanelDirBrowser::onClickSearchCore, this));
+        fillSearchComboBox();
+    }
+    // </FS:Ansariel>
+
     return true;
 }
 
@@ -176,11 +185,19 @@ void LLPanelDirBrowser::updateResultCount()
     {
         // Item count be off by a few if bogus items sent from database
         // Just use the number of results per page. JC
-        result_text = llformat(">%d found", mResultsPerPage);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat(">%d found", mResultsPerPage);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat(">%d", mResultsPerPage);
+        result_text = getString("found_text", args);
     }
     else
     {
-        result_text = llformat("%d found", result_count);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat("%d found", result_count);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat("%d", mResultsPerPage);
+        result_text = getString("found_text", args);
     }
 
     childSetValue("result_text", result_text);
@@ -190,7 +207,9 @@ void LLPanelDirBrowser::updateResultCount()
         // add none found response
         if (list->getItemCount() == 0)
         {
-            list->setCommentText(std::string("None found.")); // *TODO: Translate
+            // <FS:Ansariel> Make this localizable
+            //list->setCommentText(std::string("None found.")); // *TODO: Translate
+            list->setCommentText(getString("not_found_text"));
             list->operateOnAll(LLCtrlListInterface::OP_DESELECT);
         }
     }
@@ -372,6 +391,10 @@ void LLPanelDirBrowser::showDetailPanel(S32 type, LLSD id)
         }
         break;
     }
+
+    // <FS:Ansariel> Add "open profile" button
+    mSelectedID = id;
+    mFloaterDirectory->updateProfileButtonVisibility();
 }
 
 
@@ -1064,7 +1087,9 @@ void LLPanelDirBrowser::setupNewSearch()
 
     // ready the list for results
     list->operateOnAll(LLCtrlListInterface::OP_DELETE);
-    list->setCommentText(LLTrans::getString("Searching"));
+    // <FS:Ansariel> Make this localizable
+    //list->setCommentText(LLTrans::getString("Searching"));
+    list->setCommentText(getString("searching_text"));
     list->setEnabled(false);
 
     mResultsReceived = 0;
@@ -1083,6 +1108,13 @@ void LLPanelDirBrowser::onClickSearchCore(void* userdata)
 {
     LLPanelDirBrowser* self = (LLPanelDirBrowser*)userdata;
     if (!self) return;
+
+    // <FS:Ansariel> Port over search term history
+    if (self->mSearchComboBox && !self->mSearchComboBox->getValue().asString().empty())
+    {
+        LLSearchHistory::getInstance()->addEntry(self->mSearchComboBox->getValue().asString());
+    }
+    // </FS:Ansariel>
 
     self->resetSearchStart();
     self->performQuery();
@@ -1157,3 +1189,19 @@ S32 LLPanelDirBrowser::showNextButton(S32 rows)
     }
     return rows;
 }
+
+// <FS:Ansariel> Port over search term history
+void LLPanelDirBrowser::fillSearchComboBox()
+{
+    if (!mSearchComboBox)
+    {
+        return;
+    }
+
+    LLSearchHistory::getInstance()->load();
+    for (const auto& item : LLSearchHistory::getInstance()->getSearchHistoryList())
+    {
+        mSearchComboBox->add(item.search_query);
+    }
+}
+// </FS:Ansariel>

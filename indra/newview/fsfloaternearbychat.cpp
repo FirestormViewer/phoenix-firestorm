@@ -40,6 +40,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsnearbychathub.h"
 #include "llagent.h"            // gAgent
+#include "llagentcamera.h"  // gAgentCamera
 #include "llanimationstates.h"  // ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
 #include "llautoreplace.h"
 #include "llavatarnamecache.h"
@@ -923,7 +924,11 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 
     // If the user wants to stop chatting on hitting return, lose focus
     // and go out of chat mode.
-    if (gSavedSettings.getBOOL("CloseChatOnReturn") && gSavedSettings.getBOOL("FSUnfocusChatHistoryOnReturn"))
+    const bool in_mouselook = gAgentCamera.cameraMouselook();
+    const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn") 
+                         && !(!in_mouselook && gSavedSettings.getBOOL("FSCloseChatOnReturnInMouselook"))
+                         && !gSavedSettings.getBOOL("FSCloseChatOnReturnOnlyBar");
+    if (closeChatOnReturn && gSavedSettings.getBOOL("FSUnfocusChatHistoryOnReturn"))
     {
         stopChat();
     }

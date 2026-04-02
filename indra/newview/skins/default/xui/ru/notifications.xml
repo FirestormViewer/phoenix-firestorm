@@ -1241,7 +1241,8 @@
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Ключевое слово должно быть одним словом, а поле замены не может быть пустым.
+		Ключевое слово должно быть одним словом, а поле замены не может быть пустым. Разрешенная пунктуация в ключевом слове: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Недопустимый список замены.
@@ -5299,6 +5300,13 @@ https://wiki.firestormviewer.org/fs_voice
 			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Введите псевдоним для [COUNT] аватаров:
+		<form name="form">
+			<button name="Create" text="Создать"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		Невозможно переименовать &apos;[SET]&apos; в &apos;[NEW_NAME]&apos;: Набор с таким именем уже существует, или новое имя является недействительным.
 	</notification>
@@ -5695,6 +5703,20 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 	<notification name="PrimfeedUserStatusFailed">
 		Вход пользователя Primfeed успешен, но проверки статуса не пройдены. Проверьте, работает ли Primfeed.
+	</notification>
+
+
+	<notification name="FSSetTitleRegion">
+		Введите точное название региона для привязки к выбранному титулу группы.
+Название будет проверено перед сохранением.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Регион «[REGION]» не найден. Пожалуйста, проверьте название и попробуйте снова.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
 </notifications>

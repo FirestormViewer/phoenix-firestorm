@@ -1319,7 +1319,8 @@ Sind Sie sicher, dass Sie diese Liste löschen möchten?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein.
+		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein. Erlaubte Satzzeichen im Schlüsselwort: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Diese Ersetzungsliste ist nicht gültig.
@@ -5787,6 +5788,13 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Alias für [COUNT] Avatare eingeben:
+		<form name="form">
+			<button name="Create" text="Erstellen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		Kontakt-Set „[SET]“ konnte nicht in „[NEW_NAME]“ umbenannt werden, da entweder bereits ein Kontakt-Set mit demselben Namen existiert oder der neue Name ungültig ist.
 	</notification>
@@ -6014,4 +6022,18 @@ Fehlermeldung:
 		Chat-Verlauf-Datei ist nicht vorhanden. Entweder existiert kein Verlauf für diesen Chat oder Verläufe werden nicht gespeichert.
 Sie können das Speichern von Verläufen einschalten unter Einstellungen &gt; Privatsphäre &gt; Protokoll und Verläufe
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Geben Sie den genauen Namen einer Region ein, um ihn dem ausgewählten Gruppentitel zuzuweisen.
+Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

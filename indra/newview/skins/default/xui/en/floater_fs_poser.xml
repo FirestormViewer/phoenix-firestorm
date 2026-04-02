@@ -822,8 +822,17 @@
 							 top="0">
 								<scroll_list.columns
 								 label="Preset Name"
-								 name="name"
-								 relative_width="0.9"/>
+								 name="load_file_name_column"
+								 width="170"/>
+								<scroll_list.columns
+								 label="Date"
+								 name="load_file_date_column"
+								 sort_column="load_file_date_sort_column"
+								 width="-1"/>
+								<scroll_list.columns
+								 label="Date"
+								 name="load_file_date_sort_column"
+								 width="-1"/>
 							</scroll_list>
 							<button
 							 follows="top|left"
@@ -977,7 +986,7 @@
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="221"
+						 top="244"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
@@ -1196,7 +1205,7 @@
 						top="2"
 						height="160"
 						width="160"
-						left="30"
+						left="26"
 						tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"
 						pinch_mode="false"
 						infinite_scroll_mode="true"/>

@@ -767,6 +767,9 @@ są dozwolone.
 	<string name="NoneFound">
 		Nie nie znaleziono.
 	</string>
+	<string name="ServerUnavailable">
+		Usługa niedostępna.
+	</string>
 	<string name="RetrievingData">
 		Pobieranie...
 	</string>
@@ -2981,7 +2984,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 		W dół
 	</string>
 	<string name="Any Category">
-		Każda Kategoria
+		Każda kategoria
 	</string>
 	<string name="Shopping">
 		Zakupy
@@ -2993,7 +2996,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 		Wynajem działek
 	</string>
 	<string name="Special Attraction">
-		Specjalne Oferty
+		Specjalne oferty
 	</string>
 	<string name="New Products">
 		Nowe produkty
@@ -3021,7 +3024,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	</string>
 	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Arts and Culture">
-		Sztuka i Kultura
+		Sztuka i kultura
 	</string>
 	<string name="Business">
 		Biznes
@@ -3030,7 +3033,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 		Edukacyjna
 	</string>
 	<string name="Gaming">
-		Gra
+		Gry
 	</string>
 	<string name="Hangout">
 		Poznawanie ludzi
@@ -3040,16 +3043,16 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	</string>
 	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Parks and Nature">
-		Parki i Natura
+		Parki i natura
 	</string>
 	<string name="Residential">
-		Mieszkalna
+		Mieszkalne
 	</string>
 	<string name="Stage">
 		Scena
 	</string>
 	<string name="Other">
-		Inna
+		Inne
 	</string>
 	<string name="Rental">
 		Wynajem

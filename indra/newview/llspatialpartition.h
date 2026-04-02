@@ -116,7 +116,7 @@ public:
     const LLMatrix4* mModelMatrix = nullptr;
 
     LLPointer<LLVOAvatar> mAvatar = nullptr;
-    LLMeshSkinInfo* mSkinInfo = nullptr;
+    LLConstPointer<LLMeshSkinInfo> mSkinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
     // Material pointer here is likely for debugging only and are immaterial (zing!)
     LLPointer<LLMaterial> mMaterial;
@@ -773,4 +773,3 @@ extern const F32 SG_MAX_OBJ_RAD;
 
 
 #endif //LL_LLSPATIALPARTITION_H
-

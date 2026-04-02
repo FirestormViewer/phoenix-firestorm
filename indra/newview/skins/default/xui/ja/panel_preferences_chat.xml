@@ -165,8 +165,9 @@
 			<check_box label="チャットバーにチャンネル選択を表示" name="FSShowChatChannel"/>
 			<check_box name="FSShowChatType" label="チャットバーにチャットの種類と送信ボタンを表示"/>
 			<check_box label="チャットバーを自動的に非表示にする" name="AutohideChatBar" tool_tip="チャットバーを画面下のボタンバーに表示しないようにし、必要な時だけ表示されるようにします。"/>
-			<check_box label="メッセージ送信後はチャットバーが選択されていない状態にする" name="CloseChatOnReturn"/>
-			<check_box label="メッセージ送信後はチャット履歴も選択されていない状態にする" name="FSUnfocusChatHistoryOnReturn"/>
+			<check_box label="メッセージ送信後はチャットバーの選択を解除する" name="CloseChatOnReturn"/>
+			<check_box label="マウスルック時のみ" name="FSCloseChatOnReturnInMouselook" tool_tip="「メッセージ送信後はチャットバーの選択を解除する」が有効な場合、マウスルック時のみチャットバーの選択を解除します。"/>
+			<check_box label="チャット履歴も選択解除する" name="FSUnfocusChatHistoryOnReturn"/>
 			<text name="textUseKeyboardShortcuts">
 				キーボードショートカットを利用
 			</text>

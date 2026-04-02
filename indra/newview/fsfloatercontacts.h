@@ -32,7 +32,7 @@
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "llfloater.h"
-#include "llscrolllistcolumn.h"
+#include "lggcontactsets.h"
 #include "rlvhandler.h"
 
 class FSScrollListCtrl;
@@ -66,16 +66,16 @@ public:
     void openTab(std::string_view name);
     LLPanel* getPanelByName(std::string_view panel_name);
 
-    void                    sortFriendList();
-    void                    onDisplayNameChanged();
-    void                    resetFriendFilter();
+    void sortFriendList();
+    void onDisplayNameChanged();
+    void resetFriendFilter();
 
     // <FS:TJ> [FIRE-35804] Allow the IM floater to have separate transparency
     F32 onGetFilterOpacityCallback(ETypeTransparency type, F32 alpha);
     // </FS:TJ>
 
 private:
-    typedef std::vector<LLScrollListItem*> listitem_vec_t;
+    using listitem_vec_t = std::vector<LLScrollListItem*>;
 
     std::string             getActiveTabName() const;
     LLUUID                  getCurrentItemID() const;
@@ -96,7 +96,7 @@ private:
         LIST_FRIEND_UPDATE_GEN
     };
 
-    typedef std::map<LLUUID, S32> rights_map_t;
+    using rights_map_t = std::map<LLUUID, S32>;
     void                    refreshRightsChangeList();
     void                    refreshUI();
     void                    updateFriendCount();
@@ -105,18 +105,19 @@ private:
     void                    addFriend(const LLUUID& agent_id);
     void                    updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
     void                    updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id);
+    void                    updateFriendItemColor(LLScrollListItem* item, const LLUUID& agent_id) const;
 
-    typedef enum
+    enum EGrantRevoke
     {
         GRANT,
         REVOKE
-    } EGrantRevoke;
-    void                    confirmModifyRights(rights_map_t& ids, EGrantRevoke command);
-    void                    sendRightsGrant(rights_map_t& ids);
+    };
+    void                    confirmModifyRights(const rights_map_t& ids, EGrantRevoke command);
+    void                    sendRightsGrant(const rights_map_t& ids);
     bool                    modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights);
 
 
-    bool                    isItemsFreeOfFriends(const uuid_vec_t& uuids);
+    bool                    isItemsFreeOfFriends(const uuid_vec_t& uuids) const;
 
     // misc callbacks
     static void             onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName>& names);
@@ -128,6 +129,7 @@ private:
                                                             std::string& tooltip_msg);
     void                    onFriendFilterEdit(const std::string& search_string);
     void                    onGroupFilterEdit(const std::string& search_string);
+    void                    onContactSetsChanged(LGGContactSets::EContactSetUpdate type);
 
     // friend buttons
     void                    onViewProfileButtonClicked();
@@ -196,12 +198,13 @@ private:
 
     void updateRlvRestrictions(ERlvBehaviour behavior);
     boost::signals2::connection mRlvBehaviorCallbackConnection{};
+    boost::signals2::connection mContactSetChangedConnection{};
 
-    std::string getFullName(const LLAvatarName& av_name);
+    std::string getFullName(const LLAvatarName& av_name) const;
 
     void setDirtyNames(const LLUUID& request_id);
 
-    typedef std::map<LLUUID, LLAvatarNameCache::callback_connection_t> avatar_name_cb_t;
+    using avatar_name_cb_t = std::map<LLUUID, LLAvatarNameCache::callback_connection_t>;
     avatar_name_cb_t    mAvatarNameCacheConnections;
     void                disconnectAvatarNameCacheConnection(const LLUUID& request_id);
 };

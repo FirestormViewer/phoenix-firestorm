@@ -33,6 +33,8 @@
 #include "llviewercontrol.h"
 #include "llsearcheditor.h"
 
+#include "llgroupactions.h"
+
 static LLPanelInjector<LLPanelDirGroups> t_panel_dir_groups("panel_dir_groups");
 
 LLPanelDirGroups::LLPanelDirGroups()
@@ -48,8 +50,10 @@ bool LLPanelDirGroups::postBuild()
 
     //getChild<LLLineEditor>("name")->setKeystrokeCallback(boost::bind(&LLPanelDirBrowser::onKeystrokeName, _1, _2), NULL);
 
-    childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn( "Search" );
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn( "Search" );
+    // </FS:Ansariel>
 
     return true;
 }
@@ -61,7 +65,12 @@ LLPanelDirGroups::~LLPanelDirGroups()
 // virtual
 void LLPanelDirGroups::performQuery()
 {
-    if (childGetValue("name").asString().length() < mMinSearchChars)
+    // <FS:PP> Improve query sanitization
+    // if (childGetValue("name").asString().length() < mMinSearchChars)
+    std::string search_text = childGetValue("name").asString();
+    LLStringUtil::trim(search_text);
+    if (search_text.length() < mMinSearchChars)
+    // </FS:PP>
     {
         return;
     }
@@ -84,7 +93,17 @@ void LLPanelDirGroups::performQuery()
     sendDirFindQuery(
         gMessageSystem,
         mSearchID,
-        childGetValue("name").asString(),
+        // <FS:PP> Search by UUID
+        // childGetValue("name").asString(),
+        search_text,
+        // </FS:PP>
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirGroups::openProfile()
+{
+    LLGroupActions::show(mSelectedID);
+}
+// </FS:Ansariel>

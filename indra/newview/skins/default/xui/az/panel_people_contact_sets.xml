@@ -4,5 +4,6 @@
 		<menu_button name="contact_sets_gear_btn" tool_tip="Seçilmiş şəxs və ya qrup üçün hərəkətlər" />
 		<menu_button name="contact_sets_plus_btn" tool_tip="Qrup və ya istifadəçi əlavə edin" />
 		<menu_button name="contact_sets_remove_btn" tool_tip="Qrupu və ya istifadəçini silin" />
+		<filter_editor label="İnsanların filtri" name="contact_sets_filter_input" />
 	</panel>
 </panel>

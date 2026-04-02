@@ -117,7 +117,7 @@
 		<check_box label="Mostra saldo denaro" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Abilita menu a comparsa sulle icone della barra di stato" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="statusbar_timeformat_textbox">
-			Orologio:
+			Formato orologio:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Seleziona il formato dell'ora utilizzato nella barra dei menu.">
 			<combo_box.item label="Default lingua del viewer" name="Language" />

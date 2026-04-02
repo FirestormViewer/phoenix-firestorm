@@ -992,6 +992,10 @@
 		你已經有這個位置的地標。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		無法確定該地區的位置。該地區可能暫時不可用或已被移除。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		你不能創造地標，因為土地所有者並不允許你這樣做。
 	</notification>
@@ -1340,7 +1344,8 @@
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		關鍵字必須是一個字，替換字不得空白。
+		關鍵字必須是一個字，替換字不得空白。關鍵字允許的標點符號：
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		該替換清單無效。
@@ -5475,6 +5480,13 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		為 [COUNT] 位化身輸入別名：
+		<form name="form">
+			<button name="Create" text="建立"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		無法將聯絡人分組 「[SET]」 重新命名為 「[NEW_NAME]」，因為已存在同名的聯絡人分組或新名稱無效。
 	</notification>
@@ -5890,4 +5902,18 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 請前往偏好設定 &gt; 隱私 &gt; 記錄與聊天內容中啟用聊天內容儲存功能
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		請輸入要指定給選擇群組頭銜的區域的確切名稱。
+在儲存指定之前，會先驗證名稱。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		找不到區域「[REGION]」。請檢查名稱後重試。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+
 </notifications>

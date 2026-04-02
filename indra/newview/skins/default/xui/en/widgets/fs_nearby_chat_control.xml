@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<chat_editor max_length="3070">
+<chat_editor
+  max_length="3070"
+  v_pad="0"
+  valign="center"
+  text_valign="center">
 </chat_editor>

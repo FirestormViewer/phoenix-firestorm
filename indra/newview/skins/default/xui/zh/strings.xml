@@ -822,53 +822,45 @@ support@secondlife.com.
 僅允許複製和轉移權限
 不受限制的紋理。
 	</string>
-	<!-- searching - generic -->
 	<string name="Searching">
 		搜尋中...
 	</string>
 	<string name="NoneFound">
 		查無結果.
 	</string>
-	<!-- Indicates that an avatar name or other similar datum is being retrieved. General usage. -->
+	<string name="ServerUnavailable">
+		服務不可用。
+	</string>
 	<string name="RetrievingData">
 		正在檢索...
 	</string>
 	<string name="ReleaseNotes">
 		發行說明
 	</string>
-	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
 	<string name="RELEASE_NOTES_BASE_URL" translate="false">
 		https://wiki.firestormviewer.org/changelog:firestorm_change_log_
 	</string>
-	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">
 		載入中...
 	</string>
-	<!-- Indicates a locked Inventory folder. ## Zi: Animation Overrider -->
 	<string name="LockedFolder">
 		鎖定
 	</string>
 	<string name="ProtectedFolder">
 		受保護的
 	</string>
-	<!-- namecache -->
-	<!-- Avatar name: text shown for LLUUID::null -->
 	<string name="AvatarNameNobody">
 		(沒有人)
 	</string>
-	<!-- Avatar name: text shown while fetching name -->
 	<string name="AvatarNameWaiting">
 		(載入中...)
 	</string>
-	<!-- Avatar name: More than one avatar is selected/used here -->
 	<string name="AvatarNameMultiple">
 		(多個)
 	</string>
-	<!-- Group name: text shown for LLUUID::null -->
 	<string name="GroupNameNone">
 		(無)
 	</string>
-	<!-- Asset errors. Used in llassetstorage.cpp, translation from error code to error message. -->
 	<string name="AssetErrorNone">
 		無錯誤
 	</string>

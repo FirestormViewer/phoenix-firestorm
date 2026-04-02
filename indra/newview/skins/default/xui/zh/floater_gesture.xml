@@ -18,7 +18,8 @@
 		<menu_button name="gear_btn" tool_tip="更多選項" />
 		<button name="new_gesture_btn" tool_tip="製作新手勢" />
 		<button name="activate_btn" tool_tip="啟用/停止所選手勢" />
-		<check_box label="僅顯示活動的" name="FSShowOnlyActiveGestures" />
+		<check_box label="僅顯示啟用中" name="FSShowOnlyActiveGestures" />
+		<check_box label="啟用我的手勢" name="FSGesturesEnabled" />
 		<button name="del_btn" tool_tip="刪除這個手勢" />
 	</panel>
 	<button label="編輯" name="edit_btn" tool_tip="開啟視窗以便編輯所選手勢。" />

@@ -54,6 +54,9 @@ class LLPanelGroup;
 class LLPanelPlaces;
 class LLPanelClassifiedInfo;
 
+class LLButton;
+class LLTabContainer;
+
 // Floater to find people, places, things
 class LLFloaterDirectory : public LLFloater
 {
@@ -64,6 +67,9 @@ public:
     void hideAllDetailPanels();
 
     bool postBuild() override;
+    void onOpen(const LLSD& key) override; // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+
+    void updateProfileButtonVisibility(); // <FS:Ansariel> Add "open profile" button
 
 public:
     LLPanelProfileSecondLife* mPanelAvatarp;
@@ -71,6 +77,10 @@ public:
     LLPanelGroup* mPanelGroupp;
     LLPanelPlaces* mPanelPlacep;
     LLPanelClassifiedInfo* mPanelClassifiedp;
+
+    // <FS:Ansariel> Add "open profile" button
+    LLButton* mOpenProfileBtn;
+    LLTabContainer* mDirectoryTabs;
 
 private:
     static LLFloaterDirectory *sInstance;

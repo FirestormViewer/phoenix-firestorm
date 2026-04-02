@@ -504,7 +504,10 @@ void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
         item = (LLViewerInventoryItem*)model->getItem(bridge->getUUID());
         if (item)
         {
-            if(LLAssetType::AT_GESTURE == item->getType())
+            // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+            // if(LLAssetType::AT_GESTURE == item->getType())
+            if(LLAssetType::AT_GESTURE == item->getType() && !item->getIsLinkType())
+            // </FS:PP>
             {
                 LLGestureMgr::instance().deactivateGesture(item->getUUID());
             }
@@ -520,7 +523,10 @@ void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
             gInventory.collectDescendents( cat->getUUID(), descendent_categories, descendent_items, false );
             for (j=0; j<descendent_items.size(); j++)
             {
-                if(LLAssetType::AT_GESTURE == descendent_items[j]->getType())
+                // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+                // if(LLAssetType::AT_GESTURE == descendent_items[j]->getType())
+                if(LLAssetType::AT_GESTURE == descendent_items[j]->getType() && !descendent_items[j]->getIsLinkType())
+                // </FS:PP>
                 {
                     LLGestureMgr::instance().deactivateGesture(descendent_items[j]->getUUID());
                 }
@@ -3301,6 +3307,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
                 {
                     LLInventoryItem* item = descendent_items[i];
                     if (item->getType() == LLAssetType::AT_GESTURE
+                        && !item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                         && LLGestureMgr::instance().isGestureActive(item->getUUID()))
                     {
                         LLGestureMgr::instance().deactivateGesture(item->getUUID());
@@ -4894,6 +4901,8 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     const LLUUID& marketplace_listings_id = model->getMarketplaceListingsUUID();
     const LLUUID &outfits_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
 
+    const bool is_mp_listings_folder = isMarketplaceListingsFolder(); // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+
     // <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
     if (mUUID == AOEngine::instance().getAOFolder())
     {
@@ -4939,7 +4948,10 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     {
         disabled_items.push_back(std::string("New Folder"));
     }
-    if (isMarketplaceListingsFolder())
+    // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+    // if (isMarketplaceListingsFolder())
+    if (is_mp_listings_folder)
+    // </FS:PP>
     {
         addMarketplaceContextMenuOptions(flags, items, disabled_items);
         if (LLMarketplaceData::instance().isUpdating(mUUID))
@@ -5077,10 +5089,20 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                         // Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
                         if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
                         {
-                            items.push_back(std::string("New Folder"));
-                            menu_items_added = true;
+                            // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+                            // items.push_back(std::string("New Folder"));
+                            // menu_items_added = true;
+                            if (!is_mp_listings_folder)
+                            {
+                                items.push_back(std::string("New Folder"));
+                                menu_items_added = true;
+                            }
+                            // </FS:PP>
                         }
-                        if (!isMarketplaceListingsFolder())
+                        // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+                        // if (!isMarketplaceListingsFolder())
+                        if (!is_mp_listings_folder)
+                        // </FS:PP>
                         {
                             items.push_back(std::string("upload_options"));
                             items.push_back(std::string("upload_def"));
@@ -6435,6 +6457,7 @@ bool LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
         if (accept && drop)
         {
             if (inv_item->getType() == LLAssetType::AT_GESTURE
+                && !inv_item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                 && LLGestureMgr::instance().isGestureActive(inv_item->getUUID()) && move_is_into_trash)
             {
                 LLGestureMgr::instance().deactivateGesture(inv_item->getUUID());
@@ -7671,7 +7694,15 @@ bool LLGestureBridge::removeItem()
 
     // This will also force close the preview window, if it exists.
     // This may actually delete *this, if mUUID is in the COF.
-    LLGestureMgr::instance().deactivateGesture(item_id);
+
+    // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+    // LLGestureMgr::instance().deactivateGesture(item_id);
+    LLViewerInventoryItem* item = getItem();
+    if (item && !item->getIsLinkType())
+    {
+        LLGestureMgr::instance().deactivateGesture(item_id);
+    }
+    // </FS:PP>
 
     // If deactivateGesture deleted *this, then return out immediately.
     if (!model->getObject(item_id))

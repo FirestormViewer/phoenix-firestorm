@@ -1249,7 +1249,8 @@ Czy na pewno chcesz usunąć tę listę?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty.
+		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty. Dozwolona interpunkcja w słowie kluczowym: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Lista zamienników nie jest prawidłowa.
@@ -5227,6 +5228,13 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Wprowadź alias dla [COUNT] awatarów:
+		<form name="form">
+			<button name="Create" text="Ustaw"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		Nie można zmienić nazwy zestawu &apos;[SET]&apos; na &apos;[NEW_NAME]&apos;, ponieważ zestaw z taką nazwą już istnieje lub nowa nazwa nie jest poprawna.
 	</notification>
@@ -5621,4 +5629,16 @@ Komunikat błędu:
 		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
 Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Wpisz dokładną nazwę regionu, aby przypisać go do wybranego tytułu grupy.
+Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
+	</notification>
+
 </notifications>

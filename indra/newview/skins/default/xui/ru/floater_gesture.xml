@@ -18,7 +18,8 @@
 		<menu_button name="gear_btn" tool_tip="Дополнительные параметры"/>
 		<button name="new_gesture_btn" tool_tip="Создать новый жест"/>
 		<button name="activate_btn" tool_tip="Активировать/деактивировать выбранный жест"/>
-		<check_box label="Только активные" name="FSShowOnlyActiveGestures" width="150"/>
+		<check_box label="Показывать только активные" name="FSShowOnlyActiveGestures" width="170"/>
+		<check_box label="Мои жесты включены" name="FSGesturesEnabled" width="170"/>
 		<button name="del_btn" tool_tip="Удалить этот жест"/>
 	</panel>
 	<button label="Изменить" name="edit_btn" tool_tip="Откройте окно для редактирования выбранного жеста."/>

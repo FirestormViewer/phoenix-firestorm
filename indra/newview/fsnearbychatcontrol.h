@@ -67,7 +67,7 @@ private:
     void applyTextPadding();
 
     // Unfocus and autohide chat bar accordingly if we are the default chat bar
-    void autohide();
+    void autohide(bool after_send);
 
     void updateRlvRestrictions(ERlvBehaviour behavior);
     void updateEmojiHelperSetting(const LLSD& data);
