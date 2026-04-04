@@ -193,6 +193,8 @@ LLMuteList::LLMuteList() :
             // but this way is just more convinient
             onAccountNameChanged(id, av_name.getUserName());
         });
+    // Register our region change callback handler early, we'll clean it up if/when we don't need it anymore.
+    mRegionChangedCallback = gAgent.addRegionChangedCallback(boost::bind(&LLMuteList::onRegionChanged, this));
 }
 
 //-----------------------------------------------------------------------------
@@ -206,6 +208,10 @@ LLMuteList::~LLMuteList()
 void LLMuteList::cleanupSingleton()
 {
     LLAvatarNameCache::getInstance()->setAccountNameChangedCallback(nullptr);
+    if (mRegionChangedCallback.connected())
+    {
+        mRegionChangedCallback.disconnect();
+    }
 }
 
 bool LLMuteList::isLinden(const std::string& name)
@@ -885,6 +891,11 @@ bool LLMuteList::isMuted(const std::string& username, U32 flags) const
 //-----------------------------------------------------------------------------
 void LLMuteList::requestFromServer(const LLUUID& agent_id)
 {
+    if(isLoadedFromServer())
+    {
+        LL_WARNS() << "Blocked attempt to request mute list from server when already loaded from server!" << LL_ENDL;
+        return;
+    }
     const std::string filename = getCacheFilename(agent_id);
     LLCRC crc;
     crc.update(filename);
@@ -945,6 +956,11 @@ void LLMuteList::cache(const LLUUID& agent_id)
 void LLMuteList::processMuteListUpdate(LLMessageSystem* msg, void**)
 {
     LL_INFOS() << "LLMuteList::processMuteListUpdate()" << LL_ENDL;
+    LLMuteList* mute_list = getInstance();
+    if(mute_list->mTriedRegionChangeRetry)
+    {
+        LL_WARNS() << "Received mute list update after retrying region change; success!" << LL_ENDL;
+    }
     LLUUID agent_id;
     msg->getUUIDFast(_PREHASH_MuteData, _PREHASH_AgentID, agent_id);
     if(agent_id != gAgent.getID())
@@ -960,7 +976,6 @@ void LLMuteList::processMuteListUpdate(LLMessageSystem* msg, void**)
         LL_WARNS() << "Received empty mute list filename." << LL_ENDL;
     }
 
-    LLMuteList* mute_list = getInstance();
     mute_list->mLoadState = ML_REQUESTED;
     mute_list->mRequestStartTime = LLTimer::getTotalSeconds();
 
@@ -981,7 +996,12 @@ void LLMuteList::processMuteListUpdate(LLMessageSystem* msg, void**)
 void LLMuteList::processUseCachedMuteList(LLMessageSystem* msg, void**)
 {
     LL_INFOS() << "LLMuteList::processUseCachedMuteList()" << LL_ENDL;
-    LLMuteList::getInstance()->loadFromFile(LLMuteList::getInstance()->getCacheFilename(gAgent.getID()), MLS_SERVER_CACHE);
+    LLMuteList* mute_list = LLMuteList::getInstance();
+    if(mute_list->mTriedRegionChangeRetry)
+    {
+        LL_WARNS() << "Received use cached mute list message after retrying region change; success!" << LL_ENDL;
+    }
+    mute_list->loadFromFile(mute_list->getCacheFilename(gAgent.getID()), MLS_SERVER_CACHE);
 }
 
 void LLMuteList::onFileMuteList(void** user_data, S32 error_code, LLExtStat ext_status)
@@ -1063,6 +1083,11 @@ void LLMuteList::setLoaded(EMuteListSource source)
     mLoadSource = source;
     notifyObservers();
     LL_INFOS() << "Mute list loaded from " << sourceToString(source) << LL_ENDL;
+    if(isLoadedFromServer() && mRegionChangedCallback.connected())
+    {
+        LL_INFOS() << "Mute list loaded from server, disconnecting region change callback" << LL_ENDL;
+        mRegionChangedCallback.disconnect();
+    }
 }
 
 void LLMuteList::notifyObservers()
@@ -1088,6 +1113,23 @@ void LLMuteList::notifyObserversDetailed(const LLMute& mute)
         observer->onChangeDetailed(mute);
         // In case onChange() deleted an entry.
         it = mObservers.upper_bound(observer);
+    }
+}
+
+void LLMuteList::onRegionChanged()
+{
+    // If we are in a degraded state, either some protocol messages got lost between us and our login region, or our login region was having a bad day.
+    // Since the previous region might've been unable to provide our mute list, we can try to request it again from our new region.
+    // This is limited to one retry per session.
+    if(isLoadedDegraded() && !mTriedRegionChangeRetry)
+    {
+        if(mRegionChangedCallback.connected())
+        {
+            mRegionChangedCallback.disconnect();
+        }
+        LL_WARNS() << "Region changed while mute list is in degraded state, queueing a retry of the mute list request" << LL_ENDL;
+        mTriedRegionChangeRetry = true;
+        requestFromServer(gAgent.getID());
     }
 }
 
