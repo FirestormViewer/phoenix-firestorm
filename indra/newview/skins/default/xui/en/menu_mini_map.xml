@@ -32,6 +32,14 @@
    <menu_item_call.on_click
     function="Minimap.Cam" />
    </menu_item_call>
+  <menu_item_call
+   label="Face towards avatar"
+   name="Face towards avatar">
+   <menu_item_call.on_click
+    function="Minimap.FaceTowards" />
+   <menu_item_call.on_enable
+    function="Minimap.CanFaceTowards" />
+  </menu_item_call>
 	<menu name="MarkAvatar" label="Mark...">
 		<menu_item_call
 			label="Red"

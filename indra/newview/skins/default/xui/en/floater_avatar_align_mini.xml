@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+    legacy_header_height="0"
+    header_height="0"
+    bg_opaque_image="Window_NoTitle_Foreground"
+    bg_alpha_image="Window_NoTitle_Foreground"
+    can_close="false"
+    can_dock="false"
+    can_minimize="false"
+    can_resize="true"
+    chrome="true"
+    height="98"
+    layout="topleft"
+    min_height="98"
+    min_width="74"
+    name="avatar_align_mini"
+    save_rect="true"
+    save_visibility="true"
+    show_title="false"
+    single_instance="true"
+    title="Compass"
+    width="74"
+>
+  <panel
+      name="pnl_toolbar"
+      follows="left|right|top"
+      layout="topleft"
+      top="0"
+      left="0"
+      height="22"
+      width="155"
+      background_visible="false"
+      mouse_opaque="false"
+  >
+    <button
+        name="btn_rotate_left_1"
+        image_overlay="Single_Folder_Back"
+        top="2" left="4" width="18" height="18"
+        label=""
+        tool_tip="Rotate your avatar 1° to the left" />
+    <button
+        name="btn_rotate_right_1"
+        image_overlay="Single_Folder_Forward"
+        top="2" left_pad="2" width="18" height="18"
+        label=""
+        tool_tip="Rotate your avatar 1° to the right" />
+    <button
+        name="btn_avatar"
+        image_overlay="Command_FaceNearest_Icon"
+        top="2" left_pad="2" width="18" height="18"
+        label=""
+        tool_tip="Face towards the nearest avatar" />
+  </panel>
+</floater>

@@ -6127,6 +6127,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Omnifilter_Label">
 		Omni-Filter
 	</string>
+	<string name="Command_AvatarAlign_Label">
+		Avatar-Ausrichtung
+	</string>
+	<string name="Command_FaceNearest_Label">
+		Zu nächstem Avatar drehen
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6333,6 +6339,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Omnifilter_Tooltip">
 		Regel für Omni-Filter bearbeiten
+	</string>
+	<string name="Command_AvatarAlign_Tooltip">
+		Avatar zur nächsten Himmelsrichtung oder zum Avatar in der geringsten Entfernung ausrichten
+	</string>
+	<string name="Command_FaceNearest_Tooltip">
+		Zum Avatar in der geringsten Entfernung innerhalb von 20m drehen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

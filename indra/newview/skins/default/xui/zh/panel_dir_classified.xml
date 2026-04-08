@@ -22,7 +22,7 @@
 		<combo_item name="Wanted" label="求購"/>
 		<combo_item name="Service" label="服務"/>
 		<combo_item name="Personal" label="其他"/>
-	 </combo_box>
+	</combo_box>
 	<icon tool_tip="普級" name="rating_icon_general"/>
 	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
 	<icon tool_tip="完全成人" name="rating_icon_adult"/>

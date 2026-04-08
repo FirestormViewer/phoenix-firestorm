@@ -43,6 +43,7 @@ class LLComboBox;
 class LLViewerGesture;
 class LLGestureOptions;
 class LLScrollListCtrl;
+class LLFilterEditor; // <FS:PP> Filter field
 class LLFloaterGestureObserver;
 class LLFloaterGestureInventoryObserver;
 class LLMultiGesture;
@@ -108,6 +109,12 @@ private:
     LLUUID mSelectedID;
     LLUUID mGestureFolderID;
     LLScrollListCtrl* mGestureList;
+
+    // <FS:PP> Filter field
+    void onFilterEdit(const std::string& search_string);
+    LLFilterEditor* mFilterEditor;
+    std::string mFilterSubString;
+    // </FS:PP>
 
     LLFloaterGestureObserver* mObserver;
 

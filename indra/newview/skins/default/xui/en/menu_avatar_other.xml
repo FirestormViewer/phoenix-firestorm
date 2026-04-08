@@ -62,8 +62,17 @@
         <menu_item_call.on_enable
          function="RLV.CanShowName" />
       </menu_item_call>
-    
+   
+<!-- [FS:Chanayane] Compass floater - face towards avatar -->
    <menu_item_separator />
+      <menu_item_call label="Face towards avatar"
+        layout="topleft"
+        name="Face towards avatar">
+        <menu_item_call.on_click function="Avatar.FaceTowards" />
+        <menu_item_call.on_enable function="Avatar.CanFaceTowards" />
+      </menu_item_call>
+   <menu_item_separator />
+<!-- [/FS:Chanayane] -->
 
      <menu_item_call label="Reset Skeleton"
        layout="topleft"

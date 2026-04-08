@@ -98,6 +98,11 @@
 #include "llurlmatch.h"
 #include "lltextutil.h"
 #include "lllogininstance.h"
+#include "llvvmquery.h"
+
+#if LL_VELOPACK
+#include "llvelopack.h"
+#endif
 #include "llprogressview.h"
 #include "llvocache.h"
 #include "lldiskcache.h"
@@ -435,10 +440,6 @@ const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"
 const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
 static std::string gLaunchFileOnQuit;
 
-// Used on Win32 for other apps to identify our window (eg, win_setup)
-// Note: Changing this breaks compatibility with SLURL handling, try to avoid it.
-const char* const VIEWER_WINDOW_CLASSNAME = "Second Life";
-
 //----------------------------------------------------------------------------
 
 // List of entries from strings.xml to always replace
@@ -763,7 +764,6 @@ LLAppViewer::LLAppViewer()
     mPurgeCacheOnExit(false),
     mPurgeUserDataOnExit(false),
     mSecondInstance(false),
-    mUpdaterNotFound(false),
     mSavedFinalSnapshot(false),
     mSavePerAccountSettings(false),     // don't save settings on logout unless login succeeded.
     mQuitRequested(false),
@@ -1355,102 +1355,51 @@ bool LLAppViewer::init()
     gGLActive = false;
 
     // <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD
-//    // Skip updater if this is a non-interactive instance
+////#if LL_RELEASE_FOR_DOWNLOAD
+//    // Launch VVM update check
 //    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
-//        LLProcess::Params updater;
-//        updater.desc = "updater process";
-//        // Because it's the updater, it MUST persist beyond the lifespan of the
-//        // viewer itself.
-//        updater.autokill = false;
-//        std::string updater_file;
-//#if LL_WINDOWS
-//        updater_file = "SLVersionChecker.exe";
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
-//#elif LL_DARWIN
-//        updater_file = "SLVersionChecker";
-//        updater.executable = gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file);
-//#else
-//        updater_file = "SLVersionChecker";
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
-//#endif
-//        // add LEAP mode command-line argument to whichever of these we selected
-//        updater.args.add("leap");
-//        // UpdaterServiceSettings
-//        if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
-//        {
-//            // Befor first login, treat this as 'manual' updates,
-//            // updater won't install anything, but required updates
-//            updater.args.add("0");
-//        }
-//        else
-//        {
-//            updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//        }
-//        // channel
-//        updater.args.add(LLVersionInfo::instance().getChannel());
-//        // testok
-//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
-//        // ForceAddressSize
-//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//
-//        try
-//        {
-//            // Run the updater. An exception from launching the updater should bother us.
-//            LLLeap::create(updater, true);
-//            mUpdaterNotFound = false;
-//        }
-//        catch (...)
-//        {
-//            LLUIString details = LLNotifications::instance().getGlobalString("LLLeapUpdaterFailure");
-//            details.setArg("[UPDATER_APP]", updater_file);
-//            OSMessageBox(
-//                details.getString(),
-//                LLStringUtil::null,
-//                OSMB_OK);
-//            mUpdaterNotFound = true;
-//        }
+//        initVVMUpdateCheck();
 //    }
 //    else
 //    {
 //        LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
 //    }
-//#endif //LL_RELEASE_FOR_DOWNLOAD
-//
-//    {
-//        // Iterate over --leap command-line options. But this is a bit tricky: if
-//        // there's only one, it won't be an array at all.
-//        LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
-//        LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
-//        if (LeapCommand.isDefined() && !LeapCommand.isArray())
-//        {
-//            // If LeapCommand is actually a scalar value, make an array of it.
-//            // Have to do it in two steps because LeapCommand.append(LeapCommand)
-//            // trashes content! :-P
-//            LLSD item(LeapCommand);
-//            LeapCommand.append(item);
-//        }
-//        for (const auto& leap : llsd::inArray(LeapCommand))
-//        {
-//            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
-//            // We don't have any better description of this plugin than the
-//            // user-specified command line. Passing "" causes LLLeap to derive a
-//            // description from the command line itself.
-//            // Suppress LLLeap::Error exception: trust LLLeap's own logging. We
-//            // don't consider any one --leap command mission-critical, so if one
-//            // fails, log it, shrug and carry on.
-//            LLLeap::create("", leap, false); // exception=false
-//        }
-//    }
-//
-//    if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
-//    {
-//        LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
-//                             << "lleventhost no longer supported as a dynamic library"
-//                             << LL_ENDL;
-//    }
+////#endif //LL_RELEASE_FOR_DOWNLOAD
     // </FS:Ansariel>
+
+    {
+        // Iterate over --leap command-line options. But this is a bit tricky: if
+        // there's only one, it won't be an array at all.
+        LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
+        LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
+        if (LeapCommand.isDefined() && !LeapCommand.isArray())
+        {
+            // If LeapCommand is actually a scalar value, make an array of it.
+            // Have to do it in two steps because LeapCommand.append(LeapCommand)
+            // trashes content! :-P
+            LLSD item(LeapCommand);
+            LeapCommand.append(item);
+        }
+        for (const auto& leap : llsd::inArray(LeapCommand))
+        {
+            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
+            // We don't have any better description of this plugin than the
+            // user-specified command line. Passing "" causes LLLeap to derive a
+            // description from the command line itself.
+            // Suppress LLLeap::Error exception: trust LLLeap's own logging. We
+            // don't consider any one --leap command mission-critical, so if one
+            // fails, log it, shrug and carry on.
+            LLLeap::create("", leap, false); // exception=false
+        }
+    }
+
+    if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
+    {
+        LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
+                             << "lleventhost no longer supported as a dynamic library"
+                             << LL_ENDL;
+    }
 
     LLTextUtil::TextHelpers::iconCallbackCreationFunction = create_text_segment_icon_from_url_match;
 
@@ -2049,6 +1998,16 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
+#if LL_VELOPACK
+    // Apply any pending Velopack update before shutdown
+    if (velopack_is_update_pending())
+    {
+        LL_INFOS("AppInit") << "Applying pending Velopack update on shutdown..." << LL_ENDL;
+        velopack_apply_pending_update(velopack_should_restart_after_update());
+    }
+    velopack_cleanup();
+#endif
+
     //ditch LLVOAvatarSelf instance
     gAgentAvatarp = NULL;
 
@@ -3780,7 +3739,7 @@ bool LLAppViewer::initWindow()
     LLViewerWindow::Params window_params;
     window_params
         .title(gWindowTitle)
-        .name(VIEWER_WINDOW_CLASSNAME)
+        .name(sWindowClass)
         .x(gSavedSettings.getS32("WindowX"))
         .y(gSavedSettings.getS32("WindowY"))
         .width(gSavedSettings.getU32("WindowWidth"))
@@ -3907,16 +3866,6 @@ bool LLAppViewer::initWindow()
     LL_INFOS("AppInit") << "Window initialization done." << LL_ENDL;
 
     return true;
-}
-
-bool LLAppViewer::isUpdaterMissing()
-{
-    return mUpdaterNotFound;
-}
-
-bool LLAppViewer::waitForUpdater()
-{
-    return !gSavedSettings.getBOOL("CmdLineSkipUpdater") && !mUpdaterNotFound && !gNonInteractive;
 }
 
 void LLAppViewer::writeDebugInfo(bool isStatic)

@@ -380,7 +380,7 @@ void FSFloaterSearch::onTabChange()
 
 //static
 template <class T>
-T* FSFloaterSearch::getSearchPanel(const std::string& panel_name)
+T* FSFloaterSearch::getSearchPanel(std::string_view panel_name)
 {
     FSFloaterSearch* search_instance = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search");
     if (search_instance && search_instance->mTabContainer)

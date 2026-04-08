@@ -689,4 +689,22 @@
          is_running_parameters="omnifilter"
          checkbox_control="OmnifilterEnabled"
          />
+
+  <command name="avatar_align"
+        available_in_toybox="true"
+        icon="Command_AvatarAlign_Icon"
+        label_ref="Command_AvatarAlign_Label"
+        tooltip_ref="Command_AvatarAlign_Tooltip"
+        execute_function="Avatar.AlignToggle"
+        is_running_function="Avatar.AlignIsOpen"
+         />
+
+  <command name="face_nearest_avatar"
+        available_in_toybox="true"
+        icon="Command_FaceNearest_Icon"
+        label_ref="Command_FaceNearest_Label"
+        tooltip_ref="Command_FaceNearest_Tooltip"
+        execute_function="Avatar.FaceNearest"
+         />
+
 </commands>

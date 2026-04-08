@@ -588,15 +588,17 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
+    configure_status=${PIPESTATUS[0]}
 
     # Check the return code of the build command
-    if [ $? -ne 0 ]; then
+    if [ $configure_status -ne 0 ]; then
         echo "Configure failed!"
         exit 1
     fi    
 fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
+    build_status=0
     if [ $TARGET_PLATFORM == "darwin" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=""
@@ -604,6 +606,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             JOBS="-jobs $JOBS"
         fi
         xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
+        build_status=${PIPESTATUS[0]}
     elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
@@ -611,8 +614,10 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         fi
         if [ $WANTS_NINJA -eq $TRUE ] ; then
             ninja -j $JOBS | tee -a "$LOG"
+            build_status=${PIPESTATUS[0]}
         else
             make -j $JOBS | tee -a "$LOG"
+            build_status=${PIPESTATUS[0]}
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
         # VS2026+ now uses .slnx so determine which one exists
@@ -627,13 +632,13 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
             -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
             -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
+        build_status=$?
     fi
     # Check the return code of the build command
-    if [ $? -ne 0 ]; then
+    if [ $build_status -ne 0 ]; then
         echo "Build failed!"
         exit 1
     fi    
 fi
 echo "finished"
 exit 0
-

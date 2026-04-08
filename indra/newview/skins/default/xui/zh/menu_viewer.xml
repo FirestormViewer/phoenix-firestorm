@@ -45,7 +45,9 @@
 			<menu_item_check label="以跑代步" name="Always Run" />
 			<menu_item_check label="強行坐下" name="Force Toggle Sitting" />
 			<menu_item_check label="移動鎖定" name="Move Lock" />
-			<menu_item_check label="快速跳躍" name="Avatar Ignore Prejump" />
+			<menu_item_check label="忽略起跳前動畫" name="Avatar Ignore Prejump" />
+			<menu_item_call label="朝最近的化身旋轉" name="AvatarFaceNearest" />
+			<menu_item_check label="化身對齊" name="AvatarAlign" />
 		</menu>
 		<menu_item_check label="移動控制" name="Movement Controls" />
 		<menu_item_check label="相機控制" name="Camera Controls" />

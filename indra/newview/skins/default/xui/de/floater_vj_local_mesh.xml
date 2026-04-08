@@ -12,6 +12,11 @@
 		<panel name="local_mesh_settings_panel" label="Einstellungen">
 			<check_box name="local_mesh_scale_use_meters" label="Skala in Meter annehmen" tool_tip="Skalierung in cm ignorieren, die in Tools wie Maya verwendet werden." />
 			<check_box name="checkbox_apply_joint_offsets" label="Gelenk-Versatz anwenden" tool_tip="Jeglichen Gelenk-Versatz im Mesh anwenden; standardmäßig werden diese ignoriert." />
+			<check_box name="checkbox_auto_reload" label="Geänderte Dateien autom. neu laden" tool_tip="Lokale Mesh-Dateien auf dem Dateisystem überwachen und bei Änderungen automatisch neu laden." />
+			<text name="auto_reload_period_label">
+				Scan-Intervall (Sek.):
+			</text>
+			<spinner name="auto_reload_period" tool_tip="In welchem Intervall überwachte Dateien auf Änderungen geprüft werden." />
 			<text name="lod_suffix_label">
 				LOD-Suffixe:
 			</text>

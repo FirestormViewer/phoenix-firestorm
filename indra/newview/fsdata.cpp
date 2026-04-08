@@ -35,14 +35,11 @@
 #include "fscorehttputil.h"
 #include "fsassetblacklist.h"
 
-/* boost: will not compile unless equivalent is undef'd, beware. */
-#include "fix_macros.h"
 #include <boost/filesystem.hpp>
 
 #include "llappviewer.h"
 #include "llagent.h"
 #include "llagentui.h"
-#include "llfloaterabout.h"
 #include "llimview.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
@@ -53,7 +50,6 @@
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
-#include "llfilesystem.h"
 #include "message.h"
 
 // [RLVa:KB]

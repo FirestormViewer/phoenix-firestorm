@@ -30,7 +30,6 @@
 #define FS_CHATHISTORY_H
 
 #include "lltexteditor.h"
-#include "lltextbox.h"
 #include "llviewerchat.h"
 
 class LLChatEntry;  // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line

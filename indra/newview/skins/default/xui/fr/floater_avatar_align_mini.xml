@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align_mini" title="Boussole">
+	<panel name="pnl_toolbar">
+		<button name="btn_rotate_left_1" tool_tip="Faites pivoter votre avatar de 1° vers la gauche"/>
+		<button name="btn_rotate_right_1" tool_tip="Faites pivoter votre avatar de 1° vers la droite"/>
+		<button name="btn_avatar" tool_tip="Tournez-vous vers l'avatar le plus proche"/>
+	</panel>
+</floater>

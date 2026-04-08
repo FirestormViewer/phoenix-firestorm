@@ -44,6 +44,8 @@
 			<menu_item_check label="Usiądź na ziemi" name="Force Toggle Sitting" shortcut="control|alt|K"/>
 			<menu_item_check label="Unieruchom" name="Move Lock"/>
 			<menu_item_check label="Szybki skok" name="Avatar Ignore Prejump"/>
+			<menu_item_call label="Zwróć się w stronę najbliższego awatara" name="AvatarFaceNearest" />
+			<menu_item_check label="Wyrównanie awatara" name="AvatarAlign" />
 		</menu>
 		<menu_item_check label="Ustawienia ruchu" name="Movement Controls"/>
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>

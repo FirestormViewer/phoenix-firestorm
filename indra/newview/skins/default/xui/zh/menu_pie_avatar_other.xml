@@ -16,6 +16,7 @@
 		<pie_slice label="凍結" name="Freeze..." />
 		<pie_slice label="傳送名片" name="Give Calling Card" />
 		<pie_slice label="邀請加入群組" name="Group Invite..." />
+		<pie_slice label="朝向該化身" name="Face towards" />
 		<pie_slice label="踢出" name="Eject..." />
 		<pie_menu name="Avatar Pie More 2" label="更多 &gt;">
 			<pie_slice label="除錯紋理" name="Debug..." />

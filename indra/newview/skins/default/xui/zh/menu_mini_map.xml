@@ -4,6 +4,7 @@
 	<menu label="檢視檔案" name="View Profiles"></menu>
 	<menu_item_call label="新增到聯絡人分組" name="Add to Set Multiple" />
 	<menu_item_call label="聚焦" name="Cam" />
+	<menu_item_call label="朝向該化身" name="Face towards avatar"/>
 	<menu name="MarkAvatar" label="標記...">
 		<menu_item_call label="紅色" name="MarkRed" />
 		<menu_item_call label="綠色" name="MarkGreen" />

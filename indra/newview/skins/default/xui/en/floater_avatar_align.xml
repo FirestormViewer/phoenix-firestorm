@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+    bg_alpha_image="Window_NoTitle_Foreground"
+    bg_opaque_image="Window_NoTitle_Foreground"
+    can_close="true"
+    can_dock="false"
+    can_minimize="true"
+    can_resize="true"
+    chrome="true"
+    height="379"
+    help_topic=""
+    layout="topleft"
+    legacy_header_height="15"
+    min_height="379"
+    min_width="230"
+    name="avatar_align"
+    save_rect="true"
+    save_visibility="true"
+    show_title="true"
+    single_instance="true"
+    title="Compass"
+    width="230"
+>
+    <button name="btn_rotate_left_10"  label="-10°" top="265" left="10"  width="50" tool_tip="Rotate your avatar 10° to the left" />
+    <button name="btn_rotate_left_1"   label="-1°"  top="265" left="62"  width="50" tool_tip="Rotate your avatar 1° to the left" />
+    <button name="btn_rotate_right_1"  label="+1°"  top="265" left="114" width="50" tool_tip="Rotate your avatar 1° to the right" />
+    <button name="btn_rotate_right_10" label="+10°" top="265" left="166" width="50" tool_tip="Rotate your avatar 10° to the right" />
+    <button name="btn_rotate_left_90"  label="-90°" top="292" left="10"  width="50" tool_tip="Rotate your avatar 90° to the left" />
+    <button name="btn_rotate_left_45"  label="-45°" top="292" left="62"  width="50" tool_tip="Rotate your avatar 45° to the left" />
+    <button name="btn_rotate_right_45" label="+45°" top="292" left="114" width="50" tool_tip="Rotate your avatar 45° to the right" />
+    <button name="btn_rotate_right_90" label="+90°" top="292" left="166" width="50" tool_tip="Rotate your avatar 90° to the right" />
+    <button name="btn_nearest"         label="To nearest cardinal" top_pad="4" left="10" width="207" tool_tip="Rotate your avatar towards nearest cardinal" />
+    <button name="btn_avatar"          label="Face nearest avatar" top_pad="4" left="10" width="207" tool_tip="Face towards the nearest avatar" />
+</floater>

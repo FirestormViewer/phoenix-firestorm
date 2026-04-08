@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align_mini" title="指南針">
+	<panel name="pnl_toolbar">
+		<button name="btn_rotate_left_1" tool_tip="將化身向左旋轉1°"/>
+		<button name="btn_rotate_right_1" tool_tip="將化身向右旋轉1°"/>
+		<button name="btn_avatar" tool_tip="朝距離最近的化身方向旋轉"/>
+	</panel>
+</floater>

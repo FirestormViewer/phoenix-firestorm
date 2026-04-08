@@ -2788,6 +2788,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Primfeed_Label">Primfeed</string>
   <string name="Command_Primfeed_Tooltip">Post directly to your Primfeed account.</string>
   <string name="Command_Omnifilter_Label">Omnifilter</string>
+  <string name="Command_AvatarAlign_Label">Avatar alignment</string>
+  <string name="Command_FaceNearest_Label">Face nearest avatar</string>
 
   <string name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -2847,6 +2849,10 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Blocklist_Tooltip">Opens the block/mute list</string>
   <string name="Command_ResyncAnimations_Tooltip">Synchronizes avatar animations</string>
   <string name="Command_RegionTracker_Tooltip">Track various regions status</string>
+  <!-- [FS:Chanayane] Compass floater -->
+  <string name="Command_AvatarAlign_Tooltip">Align your avatar to a cardinal direction or face the nearest avatar</string>
+  <string name="Command_FaceNearest_Tooltip">Turn to face the nearest avatar within 20m</string>
+  <!-- [/FS:Chanayane] -->
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
   <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
   <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>

@@ -110,7 +110,18 @@
             <pie_slice.on_enable
                 function="RLV.CanShowName" />
         </pie_slice>
-        <pie_separator/>
+
+<!-- [FS:Chanayane] Compass floater - face towards avatar from pie menu -->
+        <pie_slice
+            label="Face towards"
+            name="Face towards">
+            <pie_slice.on_click
+                function="Avatar.FaceTowards" />
+            <pie_slice.on_enable
+                function="Avatar.CanFaceTowards" />
+        </pie_slice>
+<!-- [/FS:Chanayane] -->
+
         <pie_slice
             label="Eject..."
             name="Eject..."

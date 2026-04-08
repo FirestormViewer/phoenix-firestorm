@@ -175,6 +175,8 @@ with the same filename but different name
   <texture name="Command_Primfeed_Icon"     file_name="icons/primfeed_white.png"       preload="true" />     <!-- FS:Beq Primfeed support -->
   <texture name="Command_Profile_Icon"      file_name="toolbar_icons/profile.png"      preload="true" />
   <texture name="Command_Report_Abuse_Icon" file_name="toolbar_icons/report_abuse.png" preload="true" />
+  <texture name="Command_AvatarAlign_Icon"  file_name="toolbar_icons/compass.png"      preload="true" />     <!-- FS:Chanayane Compass floater -->
+  <texture name="Command_FaceNearest_Icon"  file_name="toolbar_icons/facenearest.png"  preload="true" />     <!-- FS:Chanayane Compass floater -->
   <texture name="Command_Search_Icon"       file_name="toolbar_icons/search.png"       preload="true" />
   <texture name="Command_Snapshot_Icon"     file_name="toolbar_icons/snapshot.png"     preload="true" />
   <texture name="Command_Speak_Icon"        file_name="toolbar_icons/speak.png"        preload="true" />
