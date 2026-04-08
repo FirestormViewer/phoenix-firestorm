@@ -129,6 +129,7 @@ namespace
     // MiniDmpSender pointer. As things stand, though, we must define an
     // actual function and store the pointer statically.
     static MiniDmpSender *sBugSplatSender = nullptr;
+    static std::string sBugsplatDesriptionField;
 
     bool bugsplatSendLog(UINT nCode, LPVOID lpVal1, LPVOID lpVal2)
     {
@@ -202,7 +203,21 @@ namespace
 
             // LL_ERRS message, when there is one
             // <FS:Beq> Improve bugsplpat reporting with attributes
-           // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //if (!sBugsplatDesriptionField.empty())
+            //{
+            //    // Can be set by watchdog or other code that detects a problem
+            //    // and wants to add some context to the crash report.
+            //    // Will be visible in the BugSplat web UI.
+            //    sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //    // This type of crash is not nessesarily a crash, or final.
+            //    // Prepare for the next one.
+            //    sBugsplatDesriptionField.clear();
+            //}
+            //else
+            //{
+            //    // LL_ERRS message, when there is one
+            //    sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //}
             // sBugSplatSender->setAttribute(WCSTR(L"OS"), WCSTR(LLOSInfo::instance().getOSStringSimple())); // In case we ever stop using email for this
             // sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
             // sBugSplatSender->setAttribute(WCSTR(L"GLVendor"), WCSTR(gGLManager.mGLVendor));
@@ -1088,6 +1103,38 @@ bool LLAppViewerWin32::reportCrashToBugsplat(void* pExcepInfo)
     if (sBugSplatSender)
     {
         sBugSplatSender->createReport((EXCEPTION_POINTERS*)pExcepInfo);
+        return true;
+    }
+#endif // LL_BUGSPLAT
+    return false;
+}
+
+#if defined(LL_BUGSPLAT)
+static int reportCustomToBugsplatFilter(EXCEPTION_POINTERS* pExcepInfo)
+{
+    if (sBugSplatSender)
+    {
+        sBugSplatSender->createReport(pExcepInfo);
+    }
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+#endif
+
+bool LLAppViewerWin32::reportCustomToBugsplat(const std::string &description)
+{
+#if defined(LL_BUGSPLAT)
+    if (sBugSplatSender)
+    {
+        sBugsplatDesriptionField = description;
+
+        __try
+        {
+            // Generate a custom exception code
+            RaiseException(0xE0000001, 0, 0, NULL);
+        }
+        __except (reportCustomToBugsplatFilter(GetExceptionInformation()))
+        {
+        }
         return true;
     }
 #endif // LL_BUGSPLAT

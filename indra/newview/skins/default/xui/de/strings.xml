@@ -3230,6 +3230,9 @@ Falls diese Nachricht erneut angezeigt wird, starten Sie Ihren Computer bitte ne
 		[APP_NAME] scheint eingefroren zu sein oder ist abgestürzt.
 Möchten Sie einen Absturz-Bericht einschicken?
 	</string>
+	<string name="MBFreezeDetected">
+		[APP_NAME] scheint eingefroren zu sein. Falls dieses Problem regelmäßig auftritt, kontaktieren Sie den Support unter https://www.firestormviewer.org/support.
+	</string>
 	<string name="MBAlert">
 		Benachrichtigung
 	</string>
