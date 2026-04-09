@@ -352,6 +352,7 @@ public:
     void            setFilterString(const std::string& str);
     void            setFilterColumn(S32 col) { mFilterColumn = col; }
     bool            isFiltered(const LLScrollListItem* item) const;
+    bool            isFiltered() const { return mIsFiltered; }
     // </FS:Ansariel> Fix for FS-specific people list (radar)
 
     // support right-click context menus for avatar/group lists
