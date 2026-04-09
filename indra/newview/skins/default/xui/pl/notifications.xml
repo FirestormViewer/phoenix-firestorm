@@ -33,6 +33,9 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 	<notification name="BadInstallation">
 		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		Program [APP_NAME] wykrył zainstalowaną starszą wersję [VERSION]. Aby odinstalować starszą wersję, postępuj zgodnie z [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524/ tymi instrukcjami].
+	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Nie można połączyć z [CURRENT_GRID].
 &apos;[DIAGNOSTIC]&apos;
@@ -1738,6 +1741,10 @@ Pobierz ją z https://secondlife.com/support/downloads/
 Informacje o wydaniu: [URL]
 
 Kliknij OK, aby pobrać i zainstalować.
+	</notification>
+	<notification name="DownloadingUpdate">
+		Pobieranie aktualizacji [VERSION]...
+Przeglądarka zostanie uruchomiona ponownie po zakończeniu pobierania.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.

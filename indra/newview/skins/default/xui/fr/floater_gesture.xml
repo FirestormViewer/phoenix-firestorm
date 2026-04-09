@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="gestures" title="Gestes" label="Lieux">
+<floater width="350" min_width="350" name="gestures" title="Gestes" label="Lieux">
 	<floater.string name="loading">Chargement...</floater.string>
 	<floater.string name="playing">(Lecture)</floater.string>
 	<floater.string name="copy_name">Copie de [COPY_NAME]</floater.string>
@@ -8,11 +8,12 @@
 		<scroll_list.columns label="Déclencheur" name="trigger"/>
 		<scroll_list.columns label="Touche" name="shortcut"/>
 	</scroll_list>
-	<panel label="bottom_panel" name="bottom_panel">
+	<panel width="350" label="bottom_panel" name="bottom_panel">
 		<menu_button name="gear_btn" tool_tip="Plus d'options"/>
 		<button name="new_gesture_btn" tool_tip="Créer un nouveau geste"/>
 		<button name="activate_btn" tool_tip="Activer/désactiver le geste sélectionné"/>
-		<check_box label="N'afficher que les gestes actifs" name="FSShowOnlyActiveGestures"/>
+		<filter_editor width="245" label="Filtrer les gestes" name="filter_input"/>
+		<check_box width="180" label="N'afficher que les gestes actifs" name="FSShowOnlyActiveGestures"/>
 		<check_box label="Mes gestes sont activés" name="FSGesturesEnabled"/>
 		<button name="del_btn" tool_tip="Supprimer ce geste"/>
 	</panel>

@@ -29,8 +29,6 @@
 #define FS_FSDISCORDCONNECT_H
 
 #include "llsingleton.h"
-#include "llcoros.h"
-#include "lleventcoro.h"
 
 class LLEventPump;
 

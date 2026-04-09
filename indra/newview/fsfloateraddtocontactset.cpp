@@ -30,8 +30,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloateraddtocontactset.h"
 
-#include "fsfloatercontacts.h"
-#include "fspanelcontactsets.h"
 #include "llnotificationsutil.h"
 #include "llslurl.h"
 

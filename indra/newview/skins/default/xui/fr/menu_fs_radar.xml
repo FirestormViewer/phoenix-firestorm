@@ -8,6 +8,7 @@
 	<menu_item_call label="Appel vocal" name="Call"/>
 	<menu_item_call label="Voir sur la carte" name="Map"/>
 	<menu_item_call label="Suivre" name="Track"/>
+	<menu_item_call label="Regard vers l'avatar" name="FaceTowards"/>
 	<menu name="MarkAvatar" label="Marquer...">
 		<menu_item_call label="Rouge" name="MarkRed"/>
 		<menu_item_call label="Vert" name="MarkGreen"/>
@@ -35,4 +36,9 @@
 	<menu_item_call label="Bannir du domaine" name="estate_ban"/>
 	<menu_item_call label="Faire disparaitre temporairement" name="derender"/>
 	<menu_item_call label="Faire disparaitre &amp; Blacklister" name="derender_permanent"/>
+	<menu label="Paramètres d'affichage" name="render_settings">
+		<menu_item_check label="Afficher normalement" name="av_render_normal"/>
+		<menu_item_check label="Ne pas afficher" name="av_render_never"/>
+		<menu_item_check label="Afficher entièrement" name="av_render_always"/>
+	</menu>
 </context_menu>

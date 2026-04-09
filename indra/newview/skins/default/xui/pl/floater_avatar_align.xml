@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="Kompas">
+	<button name="btn_rotate_left_10" tool_tip="Obróć awatara o 10° w lewo" />
+	<button name="btn_rotate_left_1" tool_tip="Obróć awatara o 1° w lewo" />
+	<button name="btn_rotate_right_1" tool_tip="Obróć awatara o 1° w prawo" />
+	<button name="btn_rotate_right_10" tool_tip="Obróć awatara o 10° w prawo" />
+	<button name="btn_rotate_left_90" tool_tip="Obróć awatara o 90° w lewo" />
+	<button name="btn_rotate_left_45" tool_tip="Obróć awatara o 45° w lewo" />
+	<button name="btn_rotate_right_45" tool_tip="Obróć awatara o 45° w prawo" />
+	<button name="btn_rotate_right_90" tool_tip="Obróć awatara o 90° w prawo" />
+	<button name="btn_nearest" label="Do najbl. kierunku" tool_tip="Obróć awatara w stronę najbliższego głównego kierunku świata" />
+	<button name="btn_avatar" label="Do najbl. awatara" tool_tip="Zwróć się w stronę najbliższego awatara" />
+</floater>

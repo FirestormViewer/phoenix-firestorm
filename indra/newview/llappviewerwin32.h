@@ -59,8 +59,6 @@ protected:
 
     std::string generateSerialNumber();
 
-    static const std::string sWindowClass;
-
 private:
     void disableWinErrorReporting();
     void bugsplatAddStaticAttributes(const LLSD& info) override; // <FS:Beq> override for windows attributes

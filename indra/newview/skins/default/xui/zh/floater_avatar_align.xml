@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="指南針">
+	<button name="btn_rotate_left_10" tool_tip="將化身向左旋轉10°"/>
+	<button name="btn_rotate_left_1" tool_tip="將化身向左旋轉1°"/>
+	<button name="btn_rotate_right_1" tool_tip="將化身向右旋轉1°"/>
+	<button name="btn_rotate_right_10" tool_tip="將化身向右旋轉10°"/>
+	<button name="btn_rotate_left_90" tool_tip="將化身向左旋轉90°"/>
+	<button name="btn_rotate_left_45" tool_tip="將化身向左旋轉45°"/>
+	<button name="btn_rotate_right_45" tool_tip="將化身向右旋轉45°"/>
+	<button name="btn_rotate_right_90" tool_tip="將化身向右旋轉90°"/>
+	<button name="btn_nearest" label="旋轉到最近的方位" tool_tip="將化身旋轉到最近的方位"/>
+	<button name="btn_avatar" label="朝最近的化身旋轉" tool_tip="朝距離最近的化身方向旋轉"/>
+</floater>

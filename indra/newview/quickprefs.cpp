@@ -172,9 +172,23 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
             continue;
         }
 
-        if (LLControlVariable* var = current_widget->getControlVariable())
+        LLControlVariable* var = current_widget->getControlVariable();
+        if (!var)
         {
-            current_widget->setValue(var->getValue());
+            var = gSavedSettings.getControl(name);
+            if (!var)
+            {
+                var = gSavedPerAccountSettings.getControl(name);
+            }
+        }
+        if (var)
+        {
+            LLSD val = var->getValue();
+            if (entry.type == ControlTypeRadio && val.isBoolean())
+            {
+                val = LLSD(val.asInteger());
+            }
+            current_widget->setValue(val);
         }
     }
 
@@ -1280,7 +1294,24 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
     // if we found the control, set up the chosen widget to use it
     if (var)
     {
-        widget->setValue(var->getValue());
+        LLSD val = var->getValue();
+        if (entry.type == ControlTypeRadio && val.isBoolean())
+        {
+            val = LLSD(val.asInteger());
+        }
+        widget->setValue(val);
+        entry.signal_connection.disconnect();
+        if (entry.type == ControlTypeRadio && var->type() == TYPE_BOOLEAN)
+        {
+            entry.signal_connection = var->getSignal()->connect(
+                [handle = widget->getHandle()](LLControlVariable*, const LLSD& newvalue, const LLSD&)
+                {
+                    if (LLUICtrl* w = handle.get())
+                    {
+                        w->setValue(LLSD(newvalue.asInteger()));
+                    }
+                });
+        }
     }
     else
     {
@@ -1373,6 +1404,9 @@ void FloaterQuickPrefs::removeControl(const std::string& controlName, bool remov
     LLPanel* panel = it->second.panel;
     // remember the panel's height because it will be deleted by removeChild() later
     S32 height = panel->getRect().getHeight();
+
+    // disconnect any custom signal handler before removing
+    it->second.signal_connection.disconnect();
 
     // remove the panel from the internal list
     mControlsList.erase(it);

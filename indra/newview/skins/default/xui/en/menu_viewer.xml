@@ -442,6 +442,24 @@
                 <menu_item_check.on_click
                    function="Self.toggleIgnorePreJump" />
 			</menu_item_check>
+			<menu_item_separator
+			 layout="topleft" />
+			<menu_item_call
+			 label="Face nearest avatar"
+			 layout="topleft"
+			 name="AvatarFaceNearest">
+				<menu_item_call.on_click
+				 function="Avatar.FaceNearest" />
+			</menu_item_call>
+			<menu_item_check
+			 label="Avatar alignment"
+			 layout="topleft"
+			 name="AvatarAlign">
+				<menu_item_check.on_check
+				 function="Avatar.AlignIsOpen" />
+				<menu_item_check.on_click
+				 function="Avatar.AlignToggle" />
+			</menu_item_check>
 		</menu>
 
 		<menu_item_check

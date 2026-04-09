@@ -44,6 +44,7 @@
 #include "llnotificationsutil.h"
 #include "llpreviewgesture.h"
 #include "llscrolllistctrl.h"
+#include "llfiltereditor.h" // <FS:PP> Filter field
 #include "lltrans.h"
 #include "llviewergesture.h"
 #include "llviewermenu.h"
@@ -207,6 +208,12 @@ bool LLFloaterGesture::postBuild()
     mGestureList = getChild<LLScrollListCtrl>("gesture_list");
     mGestureList->setCommitCallback(boost::bind(&LLFloaterGesture::onCommitList, this));
     mGestureList->setDoubleClickCallback(boost::bind(&LLFloaterGesture::onClickPlay, this));
+
+    // <FS:PP> Filter field
+    mGestureList->setFilterColumn(1);
+    mFilterEditor = getChild<LLFilterEditor>("filter_input");
+    mFilterEditor->setCommitCallback(boost::bind(&LLFloaterGesture::onFilterEdit, this, _2));
+    // </FS:PP>
 
     getChild<LLUICtrl>("edit_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickEdit, this));
 
@@ -751,8 +758,24 @@ void LLFloaterGesture::updateGesturesEnabledState()
     getChildView("new_gesture_btn")->setEnabled(gestures_enabled);
     getChildView("del_btn")->setEnabled(gestures_enabled);
     getChildView("activate_btn")->setEnabled(gestures_enabled);
+    getChildView("filter_input")->setEnabled(gestures_enabled);
     getChildView("gear_btn")->setEnabled(gestures_enabled);
     getChildView("FSShowOnlyActiveGestures")->setEnabled(gestures_enabled);
+}
+// </FS:PP>
+
+// <FS:PP> Filter field
+void LLFloaterGesture::onFilterEdit(const std::string& search_string)
+{
+    std::string filter_upper = search_string;
+    LLStringUtil::trimHead(filter_upper);
+    LLStringUtil::toUpper(filter_upper);
+    if (mFilterSubString == filter_upper)
+    {
+        return;
+    }
+    mFilterSubString = filter_upper;
+    mGestureList->setFilterString(search_string);
 }
 // </FS:PP>
 

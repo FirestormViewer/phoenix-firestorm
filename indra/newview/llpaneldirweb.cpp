@@ -163,3 +163,11 @@ void LLPanelDirWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event
         mStatusBarText->setText(link);
     }
 }
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirWeb::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    mWebBrowser->setFocus(true);
+    return true;
+}
+// </FS:Ansariel>

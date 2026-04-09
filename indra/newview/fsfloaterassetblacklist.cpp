@@ -36,7 +36,6 @@
 #include "llaudioengine.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
-#include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 
 

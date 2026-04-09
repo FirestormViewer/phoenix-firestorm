@@ -1205,3 +1205,15 @@ void LLPanelDirBrowser::fillSearchComboBox()
     }
 }
 // </FS:Ansariel>
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirBrowser::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setFocus(true);
+        mSearchComboBox->focusTextEntry();
+    }
+    return true;
+}
+// </FS:Ansariel>

@@ -106,7 +106,7 @@ void FSGroupTitleRegionMgr::loadFromDisk()
     llifstream file(filename.c_str());
     if (!file.is_open())
     {
-        LL_INFOS() << "No region group titles file found at " << filename << LL_ENDL;
+        LL_INFOS() << "No region group titles file found at: " << filename << LL_ENDL;
         mDataLoaded = true;
         return;
     }
@@ -540,22 +540,17 @@ void FSGroupTitleRegionMgr::onRegionChanged()
             }
         }
 
-        if (gAgent.getGroupID() == group_id)
-        {
-            if (group_id.notNull() && !title_already_active)
-            {
-                LLGroupMgr::getInstance()->sendGroupTitleUpdate(group_id, role_id);
-            }
-            return;
-        }
-
-        LL_INFOS() << "Region '" << region->getName() << "' — switching to assigned group title" << LL_ENDL;
+        LL_INFOS() << "Region '" << region->getName() << "', switching to assigned group title" << LL_ENDL;
 
         if (group_id.notNull() && !title_already_active)
         {
             LLGroupMgr::getInstance()->sendGroupTitleUpdate(group_id, role_id);
         }
-        LLGroupActions::activate(group_id);
+
+        if (gAgent.getGroupID() != group_id)
+        {
+            LLGroupActions::activate(group_id);
+        }
     }
     else if (mNoneOnUnassigned && gAgent.getGroupID().notNull())
     {

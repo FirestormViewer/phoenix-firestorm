@@ -26,7 +26,6 @@
  */
 
 /*
-
  * App-wide preferences.  Note that these are not per-user,
  * because we need to load many preferences before we have
  * a login name.
@@ -35,11 +34,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterpreference.h"
-#include "fspanelpreferenceuisounds.h"  // <FS:PP> UI Sounds
 
 #include "message.h"
 #include "llfloaterautoreplacesettings.h"
-#include "llviewertexturelist.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llcheckboxctrl.h"
@@ -59,8 +56,6 @@
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
-#include "fsfloaterim.h"
-#include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llkeyboard.h"
 #include "llmodaldialog.h"
@@ -79,7 +74,6 @@
 #include "llsky.h"
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
-#include "llscrolllistcell.h"  // <FS:PP> UI Sounds
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
 #include "lltrans.h"
@@ -138,17 +132,16 @@
 #include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
+#include "fspanelpreferenceuisounds.h"  // <FS:PP> UI Sounds
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
-#include "llavatarname.h"   // <FS:CR> Deeper name cache stuffs
 #include "llclipboard.h"    // <FS:Zi> Support preferences search SLURLs
 #include "lldiriterator.h"  // <Kadah> for populating the fonts combo
-#include "llline.h"
+#include "llfiltereditor.h" // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
-#include "llspellcheck.h"
 #include "lltoolbarview.h"
 #include "lltoolpie.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
@@ -168,9 +161,6 @@
 #endif
 // </FS:LO>
 
-// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
-#include "llfiltereditor.h"
-#include "llviewershadermgr.h"
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
@@ -972,7 +962,7 @@ LLFloaterPreference::~LLFloaterPreference()
 //  bool has_first_selected = (mDisabledPopups->getFirstSelected()!=NULL);
 //  mEnablePopupBtn->setEnabled(has_first_selected);
 //
-//  has_first_selected = (mEnabledPopups.getFirstSelected()!=NULL);
+//  has_first_selected = (mEnabledPopups->getFirstSelected()!=NULL);
 //  mDisablePopupBtn->setEnabled(has_first_selected);
 //
 //  LLFloater::draw();
@@ -4035,11 +4025,6 @@ void LLPanelPreferenceGraphics::onPresetsListChange()
     //{
     //  instance->saveSettings(); //make cancel work correctly after changing the preset
     //}
-    //else
-    //{
-    //  std::string dummy;
-    //  instance->saveGraphicsPreset(dummy);
-    //}
 }
 
 void LLPanelPreferenceGraphics::setPresetText()
@@ -4127,6 +4112,7 @@ bool LLPanelPreferenceGraphics::hasDirtyChilds()
             view_stack.push_back(*iter);
         }
     }
+
     return false;
 }
 

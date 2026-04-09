@@ -274,7 +274,7 @@ void FSFloaterContacts::onOpen(const LLSD& key)
         // first set the tear-off host to the conversations container
         setHost(floater_container);
         // clear the tear-off host right after, the "last host used" will still stick
-        setHost(NULL);
+        setHost(nullptr);
         // reparent to floater view
         gFloaterView->addChild(this);
     }
@@ -389,7 +389,7 @@ void FSFloaterContacts::onDeleteFriendButtonClicked()
     }
 }
 
-bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
+bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids) const
 {
     const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
     for (const auto& id : uuids)
@@ -723,11 +723,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
     update_gen_column["column"]             = "friend_last_update_generation";
     update_gen_column["value"]              = relationInfo->getChangeSerialNum();
 
-    mFriendsList->addElement(element, ADD_BOTTOM);
-    if (LLScrollListItem* added_item = mFriendsList->getItem(agent_id); added_item)
-    {
-        updateFriendItemColor(added_item, agent_id);
-    }
+    updateFriendItemColor(mFriendsList->addElement(element, ADD_BOTTOM), agent_id);
 }
 
 void FSFloaterContacts::onMapButtonClicked()
@@ -936,7 +932,7 @@ void FSFloaterContacts::onSelectName()
     applyRightsToFriends();
 }
 
-void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke command)
+void FSFloaterContacts::confirmModifyRights(const rights_map_t& ids, EGrantRevoke command)
 {
     if (ids.empty())
     {
@@ -944,48 +940,44 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
     }
 
     LLSD args;
-    if (ids.size() > 0)
-    {
-        rights_map_t* rights = new rights_map_t(ids);
+    rights_map_t* rights = new rights_map_t(ids);
 
-        // for single friend, show their name
-        if (ids.size() == 1)
+    // for single friend, show their name
+    if (ids.size() == 1)
+    {
+        args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
+        if (command == GRANT)
         {
-            args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
-            if (command == GRANT)
-            {
-                LLNotificationsUtil::add("GrantModifyRights",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
-            else
-            {
-                LLNotificationsUtil::add("RevokeModifyRights",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
+            LLNotificationsUtil::add("GrantModifyRights",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
         }
         else
         {
-            if (command == GRANT)
-            {
-                LLNotificationsUtil::add("GrantModifyRightsMultiple",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
-            else
-            {
-                LLNotificationsUtil::add("RevokeModifyRightsMultiple",
-                    args,
-                    LLSD(),
-                    boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
-            }
+            LLNotificationsUtil::add("RevokeModifyRights",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
         }
     }
-
+    else
+    {
+        if (command == GRANT)
+        {
+            LLNotificationsUtil::add("GrantModifyRightsMultiple",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
+        }
+        else
+        {
+            LLNotificationsUtil::add("RevokeModifyRightsMultiple",
+                args,
+                LLSD(),
+                boost::bind(&FSFloaterContacts::modifyRightsConfirmation, this, _1, _2, rights));
+        }
+    }
 }
 
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
@@ -1113,7 +1105,7 @@ void FSFloaterContacts::applyRightsToFriends()
     }
 }
 
-void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
+void FSFloaterContacts::sendRightsGrant(const rights_map_t& ids)
 {
     if (ids.empty())
     {
@@ -1312,7 +1304,7 @@ void FSFloaterContacts::onDisplayNameChanged()
     mFriendsList->setNeedsSort();
 }
 
-std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
+std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name) const
 {
     if (av_name.isDisplayNameDefault() || !gSavedSettings.getBOOL("UseDisplayNames"))
     {

@@ -2758,7 +2758,7 @@ URL:[UNTRUSTED_URL]
 	</notification>
 	<notification name="ConfirmEmptyTrash">
 		[COUNT]個物件與資料夾將會永久刪除。 你確定你要永久刪除垃圾桶中的內容？
-		<usetemplate name="okcancelignore" notext="取消" yestext="確定"/>
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="TrashIsFull">
 		你的垃圾桶快滿了。 這可能會造成登錄的問題。
@@ -5904,15 +5904,15 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 
 	<notification name="FSSetTitleRegion">
-		請輸入要指定給選擇群組頭銜的區域的確切名稱。
-在儲存指定之前，會先驗證名稱。
+		請輸入區域的正確名稱，以將其指派給所選的群組頭銜。
+在儲存指派之前將驗證該名稱。
 		<form name="form">
 			<button name="OK" text="確定"/>
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
 	<notification name="FSSetTitleRegionNotFound">
-		找不到區域「[REGION]」。請檢查名稱後重試。
+		找不到區域「[REGION]」。請檢查名稱並再試一次。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 

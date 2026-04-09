@@ -34,7 +34,7 @@ class LLFloaterLocalMeshFilePicker;
 class LLScrollListCtrl;
 class LLTextEditor;
 
-class LLFloaterLocalMesh : public LLFloater
+class LLFloaterLocalMesh final : public LLFloater
 {
 public:
     explicit LLFloaterLocalMesh(const LLSD& key);

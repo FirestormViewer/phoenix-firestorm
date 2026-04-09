@@ -68,7 +68,7 @@ class FSSearchPanelBase : public LLPanel
 {
 public:
     FSSearchPanelBase() : LLPanel() { }
-    virtual ~FSSearchPanelBase() { }
+    virtual ~FSSearchPanelBase() = default;
     virtual void focusDefaultElement() { }
 };
 
@@ -79,14 +79,14 @@ public:
     FSPanelSearchPeople();
     static void processSearchReply(LLMessageSystem* msg, void**);
 
-    /*virtual*/ void focusDefaultElement();
+    void focusDefaultElement() override;
 
 protected:
     const S32& getNumResultsReturned() const { return mNumResultsReturned; };
     const S32& getNumResultsReceived() const { return mResultsReceived; };
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchPeople();
 
     void onBtnFind();
@@ -122,10 +122,10 @@ public:
     FSPanelSearchGroups();
     static void processSearchReply(LLMessageSystem* msg, void**);
 
-    /*virtual*/ void focusDefaultElement();
+    void focusDefaultElement() override;
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchGroups();
 
     void onBtnFind();
@@ -156,10 +156,10 @@ public:
     FSPanelSearchPlaces();
     static void processSearchReply(LLMessageSystem* msg, void**);
 
-    /*virtual*/ void focusDefaultElement();
+    void focusDefaultElement() override;
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchPlaces();
 
     void onBtnFind();
@@ -192,7 +192,7 @@ public:
     static void processSearchReply(LLMessageSystem* msg, void**);
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchLand();
 
     void onBtnFind();
@@ -224,10 +224,10 @@ public:
     FSPanelSearchClassifieds();
     static void processSearchReply(LLMessageSystem* msg, void**);
 
-    /*virtual*/ void focusDefaultElement();
+    void focusDefaultElement() override;
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchClassifieds();
 
     void onBtnFind();
@@ -259,10 +259,10 @@ public:
     FSPanelSearchEvents();
     static void processSearchReply(LLMessageSystem* msg, void**);
 
-    /*virtual*/ void focusDefaultElement();
+    void focusDefaultElement() override;
 
 private:
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     virtual ~FSPanelSearchEvents();
 
     void onBtnFind();
@@ -298,19 +298,18 @@ class FSPanelSearchWeb : public FSSearchPanelBase
     LOG_CLASS(FSFloaterSearch);
 public:
     FSPanelSearchWeb();
-    /*virtual*/ bool postBuild();
+    bool postBuild() override;
     void loadURL(const SearchQuery &query);
-    /*virtual*/ void focusDefaultElement();
-    /*virtual*/ void draw();
+    void focusDefaultElement() override;
+    void draw() override;
     void resetFocusOnLoad() { mResetFocusOnLoad = true; }
 
 private:
     virtual ~FSPanelSearchWeb() {};
 
-    LLMediaCtrl*    mWebBrowser;
-    LLSD            mCategoryPaths;
-
-    bool            mResetFocusOnLoad;
+    LLMediaCtrl* mWebBrowser;
+    LLSD         mCategoryPaths;
+    bool         mResetFocusOnLoad;
 };
 
 class FSFloaterSearch : public LLFloater
@@ -334,8 +333,8 @@ public:
 
     FSFloaterSearch(const Params& key);
     ~FSFloaterSearch();
-    void onOpen(const LLSD& key);
-    bool postBuild();
+    void onOpen(const LLSD& key) override;
+    bool postBuild() override;
 
     void avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name);
     void groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group);
@@ -350,11 +349,11 @@ public:
     void setLoadingProgress(bool started);
 
     template <class T>
-    static T* getSearchPanel(const std::string& panel_name);
+    static T* getSearchPanel(std::string_view panel_name);
 
 private:
-    virtual void onClose(bool app_quitting);
-    const LLUUID& getSelectedID() { return mSelectedID; }
+    void onClose(bool app_quitting) override;
+    const LLUUID& getSelectedID() const { return mSelectedID; }
     LLVector3d  mParcelGlobal;
     LLUUID      mSelectedID;
     U32         mEventID;

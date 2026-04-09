@@ -107,7 +107,8 @@
 			<text name="floater_opacity">Opacité des fenêtres :</text>
 			<slider label="Actives :" name="active"/>
 			<slider label="Inactives :" name="inactive"/>
-			<slider label="Caméra / Mouvement :" name="camera_movement"/>
+			<slider label="Caméra/Mouvement :" name="camera_movement"/>
+			<check_box name="override_im_active_opacity_checkbox" label="Utiliser la valeur d'opacité active lorsque la fenêtre « Conversations » est active"/>
 			<text name="console_opacity">Opacité de la console :</text>
 			<color_swatch name="console_background" tool_tip="Sélectionnez la couleur de la console"/>
 			<slider label="Opacité :" name="console_background_opacity" tool_tip="Ajustez l'opacité du fond de la console"/>

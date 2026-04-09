@@ -39,6 +39,8 @@
 #include "llcallingcard.h"          // for LLAvatarTracker
 #include "lllogchat.h"
 #include "llnetmap.h"
+#include "fsfloateravataralign.h"
+#include "llfloaterreg.h"
 #include "llviewermenu.h"           // for gMenuHolder
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -87,6 +89,7 @@ LLContextMenu* FSRadarMenu::createMenu()
         registrar.add("Avatar.Calllog",                         boost::bind(&LLAvatarActions::viewChatHistory,              id));
         registrar.add("Nearby.People.TeleportToAvatar",         boost::bind(&FSRadarMenu::teleportToAvatar,                 this));
         registrar.add("Nearby.People.TrackAvatar",              boost::bind(&FSRadarMenu::onTrackAvatarMenuItemClick,       this));
+        registrar.add("Nearby.People.FaceTowardsAvatar",        boost::bind(&FSRadarMenu::onFaceTowardsAvatarMenuItemClick, this));
         registrar.add("Nearby.People.SetRenderMode",            boost::bind(&FSRadarMenu::onSetRenderMode,                  this, _2));
         registrar.add("Nearby.People.SetAvatarMarkColor",       boost::bind(&LLNetMap::setAvatarMarkColor,                  id, _2));
         registrar.add("Nearby.People.ClearAvatarMarkColor",     boost::bind(&LLNetMap::clearAvatarMarkColor,                id));
@@ -98,6 +101,7 @@ LLContextMenu* FSRadarMenu::createMenu()
         enable_registrar.add("Avatar.VisibleFreezeEject",       boost::bind(&LLAvatarActions::canLandFreezeOrEject,         id));
         enable_registrar.add("Avatar.VisibleKickTeleportHome",  boost::bind(&LLAvatarActions::canEstateKickOrTeleportHome,  id));
         enable_registrar.add("Nearby.People.CheckRenderMode",   boost::bind(&FSRadarMenu::checkSetRenderMode,               this, _2));
+        enable_registrar.add("Nearby.People.CanFaceTowardsAvatar", boost::bind(&FSRadarMenu::canFaceTowardsAvatar,          this));
 
         // create the context menu from the XUI
         return createFromFile("menu_fs_radar.xml");
@@ -274,6 +278,23 @@ void FSRadarMenu::teleportToAvatar()
 void FSRadarMenu::onTrackAvatarMenuItemClick()
 {
     LLAvatarActions::track(mUUIDs.front());
+}
+
+void FSRadarMenu::onFaceTowardsAvatarMenuItemClick()
+{
+    LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(mUUIDs.front()));
+    FSAvatarAlignBase* floater = FSAvatarAlignBase::getActive();
+    if (floater && avatar)
+    {
+        floater->faceAvatar(avatar);
+    }
+}
+
+bool FSRadarMenu::canFaceTowardsAvatar()
+{
+    LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(mUUIDs.front()));
+    return avatar && !avatar->isDead() &&
+           dist_vec(avatar->getPositionAgent(), gAgent.getPositionAgent()) <= FSAvatarAlignBase::MAX_FACE_DISTANCE;
 }
 
 void FSRadarMenu::addToContactSet()

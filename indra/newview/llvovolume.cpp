@@ -6180,7 +6180,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     }
 
                     facep->setState(LLFace::RIGGED);
-                    facep->mSkinInfo = (LLMeshSkinInfo*) skinInfo; // TODO -- fix ugly de-consting here
+                    facep->mSkinInfo = skinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
                     facep->mAvatar = avatar;
                     any_rigged_face = true;
                 }

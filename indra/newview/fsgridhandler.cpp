@@ -197,7 +197,7 @@ void LLGridManager::initGrids()
     }
 
     // <FS:ND> FIRE-20112 in case grid was set bt settings/cmd line, set it now
-    if (mStartupGrid.size())
+    if (!mStartupGrid.empty())
         setGridChoice(mStartupGrid);
     mStartupGrid = "";
     // </FS:ND>
@@ -1340,7 +1340,7 @@ std::string LLGridManager::getSLURLBase(const std::string& grid)
         // deal with hand edited entries
         std::string grid_norm = grid;
 
-        if (grid_norm.size())
+        if (!grid_norm.empty())
         {
             size_t pos = grid_norm.find_last_of("/");
 
@@ -1354,6 +1354,38 @@ std::string LLGridManager::getSLURLBase(const std::string& grid)
     }
 
     return ret;
+}
+
+std::string LLGridManager::getUpdateServiceURL()
+{
+    auto env_update_service = LLStringUtil::getoptenv("SL_UPDATE_SERVICE");
+    std::string update_url_base = gSavedSettings.getString("CmdLineUpdateService");;
+    if (!update_url_base.empty())
+    {
+        LL_INFOS("UpdaterService", "GridManager")
+            << "Update URL base overridden from command line: " << update_url_base
+            << LL_ENDL;
+    }
+    else if (env_update_service && env_update_service->find("http") != std::string::npos)
+    {
+        update_url_base = *env_update_service;
+        LL_INFOS("UpdaterService", "GridManager")
+            << "Update URL base overridden from SL_UPDATE_SERVICE environment variable: " << update_url_base
+            << LL_ENDL;
+    }
+    else if (mGridList[mGrid].has(GRID_UPDATE_SERVICE_URL))
+    {
+        update_url_base = mGridList[mGrid][GRID_UPDATE_SERVICE_URL].asString();
+    }
+    else
+    {
+        LL_WARNS("UpdaterService", "GridManager")
+            << "The grid property '" << GRID_UPDATE_SERVICE_URL
+            << "' is not defined for the grid '" << mGrid << "'"
+            << LL_ENDL;
+    }
+
+    return update_url_base;
 }
 
 // get app slurl base for the given region

@@ -5544,6 +5544,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Omnifilter_Label">
 		Wszystkofiltr
 	</string>
+	<string name="Command_AvatarAlign_Label">
+		Wyrównanie awatara
+	</string>
+	<string name="Command_FaceNearest_Label">
+		Zwróć się w stronę najbliższego awatara
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°
 	</string>

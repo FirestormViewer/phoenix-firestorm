@@ -18,6 +18,7 @@
 		<menu_button name="gear_btn" tool_tip="Altre opzioni"/>
 		<button name="new_gesture_btn" tool_tip="Crea nuovo gesto"/>
 		<button name="activate_btn" tool_tip="Attiva/Disattiva gesto selezionato"/>
+		<filter_editor label="Filtra gesti" name="filter_input"/>
 		<button name="del_btn" tool_tip="Elimina questo gesto"/>
 		<check_box label="Mostra solo attivi" name="FSShowOnlyActiveGestures"/>
 		<check_box label="I miei gesti sono abilitati" name="FSGesturesEnabled"/>

@@ -1559,7 +1559,10 @@ void LLGroupMgr::notifyObservers(LLGroupChange gc)
             // notify LLParticularGroupObserver
             observer_map_t::iterator obs_it = mParticularObservers.find(group_id);
             if(obs_it == mParticularObservers.end())
-                return;
+                // <FS:PP> FIRE-36532 Don't skip groups without LLParticularGroupObserver - avoid  creating stale mChanged flags
+                // return;
+                continue;
+                // </FS:PP>
 
 //          observer_set_t& obs = obs_it->second;
 // [RLVa:KB] - Checked: RLVa-2.2 (General bugfix)

@@ -6006,6 +6006,12 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Omnifilter_Label">
 		Omnifiltre
 	</string>
+	<string name="Command_AvatarAlign_Label">
+		Alignement de l'avatar
+	</string>
+	<string name="Command_FaceNearest_Label">
+		Face à l'avatar le plus proche
+	</string>
 	 <string name="Command_360_Capture_Tooltip">
 		Capturez une image équirectangulaire de 360°.
 	</string>

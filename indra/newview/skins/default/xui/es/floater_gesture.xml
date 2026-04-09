@@ -18,7 +18,8 @@
 		<menu_button name="gear_btn" tool_tip="Más opciones"/>
 		<button name="new_gesture_btn" tool_tip="Hacer un gesto nuevo"/>
 		<button name="activate_btn" tool_tip="Activar/Desactivar el gesto elegido"/>
-		<check_box label="Mostrar solo activos" name="FSShowOnlyActiveGestures"/>
+		<filter_editor label="Filtrar gestos" name="filter_input"/>
+		<check_box width="130" label="Mostrar solo activos" name="FSShowOnlyActiveGestures"/>
 		<check_box label="Mis gestos están activados" name="FSGesturesEnabled"/>
 		<button name="del_btn" tool_tip="Borrar este gesto"/>
 	</panel>

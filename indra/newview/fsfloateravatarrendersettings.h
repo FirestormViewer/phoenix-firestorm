@@ -28,7 +28,6 @@
 #ifndef FS_FLOATERAVATARRENDERSETTINGS_H
 #define FS_FLOATERAVATARRENDERSETTINGS_H
 
-#include "fsavatarrenderpersistence.h"
 #include "llfloater.h"
 #include "lllistcontextmenu.h"
 #include "llvoavatar.h"

@@ -8,6 +8,7 @@
 	<menu_item_call label="語音通話" name="Call" />
 	<menu_item_call label="地圖" name="Map" />
 	<menu_item_call label="追蹤" name="Track" />
+	<menu_item_call label="朝向該化身" name="FaceTowards"/>
 	<menu name="MarkAvatar" label="標記">
 		<menu_item_call label="紅色" name="MarkRed" />
 		<menu_item_call label="綠色" name="MarkGreen" />

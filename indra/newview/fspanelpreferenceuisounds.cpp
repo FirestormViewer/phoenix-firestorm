@@ -1,6 +1,6 @@
 /**
  * @file fspanelpreferenceuisounds.cpp
- * @brief FSPanelPreferenceUISounds class — UI Sounds preferences tab
+ * @brief FSPanelPreferenceUISounds class: UI Sounds preferences tab
  *
  * $LicenseInfo:firstyear=2026&license=viewerlgpl$
  * Copyright (C) 2026, Firestorm Viewer Project

@@ -6297,8 +6297,11 @@ support@secondlife.com.
 	<string name="Command_Omnifilter_Label">
 		全方位過濾器
 	</string>
-	<string name="Command_Omnifilter_Tooltip">
-		編輯全方位過濾器規則
+	<string name="Command_AvatarAlign_Label">
+		化身對齊
+	</string>
+	<string name="Command_FaceNearest_Label">
+		朝最近的化身旋轉
 	</string>
 	<string name="Command_360_Capture_Tooltip">
 		拍攝360°旋轉圖像
@@ -6472,8 +6475,14 @@ support@secondlife.com.
 	<string name="Command_RegionTracker_Tooltip">
 		跟蹤各個區域的狀態
 	</string>
+	<string name="Command_AvatarAlign_Tooltip">
+		將你的化身對齊到一個基本方向，或朝向最近的化身
+	</string>
+	<string name="Command_FaceNearest_Tooltip">
+		在20公尺範圍內轉向面向最近的化身
+	</string>
 	<string name="Command_Group_Titles_Tooltip">
-		更改活躍的群組名稱
+		更改活躍的群組頭銜
 	</string>
 	<string name="Command_Wearable_Favorites_Tooltip">
 		打開我的裝扮列表
@@ -6486,6 +6495,9 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		顯示信標
+	</string>
+	<string name="Command_Omnifilter_Tooltip">
+		編輯全方位過濾器規則
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		位於你的底部工具列

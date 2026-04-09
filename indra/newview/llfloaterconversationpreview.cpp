@@ -39,9 +39,8 @@
 #include "llnotificationsutil.h"
 
 // <FS:CR>
-#include "llavataractions.h"
-#include "llconversationlog.h"
 #include "llfloatersearchreplace.h"
+#include "lltextbox.h"
 #include "llviewerwindow.h"
 #include "llviewercontrol.h"
 #include "llwindow.h"

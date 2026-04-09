@@ -36,7 +36,6 @@
 #include "llemojidictionary.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterperms.h"
-#include "llgroupactions.h"
 #include "llgroupmgr.h"
 #include "llinventorymodel.h"
 #include "lllogchat.h"

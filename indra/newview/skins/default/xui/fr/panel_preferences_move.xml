@@ -24,6 +24,14 @@
 			<text name="ignorecameraconstraints_requires_restart">(Redémarrage requis)</text>
 			<check_box label="Toujours afficher la fenêtre de contrôles de la caméra de façon opaque" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Réaffiche après une téléportation les objets temporairement désaffichés." name="FSTempDerenderUntilTeleport" tool_tip="Activée, les objets temporairement désaffichés le resteront jusqu'à la prochaine téléportation. Désactivée, ils resteront désaffichés jusqu'à la fin de la session ou jusqu'à ce qu'il soient réaffichés manuellement dans la fenêtre de blacklistage des éléments."/>
+			<text name="mouse_warp_lbl">
+				Dépl. souris :
+			</text>
+			<combo_box name="mouse_warp_combo" tool_tip="Permet de contrôler le déplacement de la souris vers le centre de l'écran lors du zoom avec la touche Alt et en vue subjective.">
+				<combo_box.item label="Automatique" name="0"/>
+				<combo_box.item label="On" name="1"/>
+				<combo_box.item label="Off" name="2"/>
+			</combo_box>
 		</panel>
 		<panel label="Vue subjective" name="tab-mouselook">
 			<check_box label="Activer la vue subjective" name="EnableMouselook" tool_tip="Permettre une vue à la première personne et un contrôle de la caméra à la souris"/>
@@ -50,6 +58,7 @@
 			<check_box label="Ne pas me retourner lorsque je marche à reculons" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Empêche votre avatar de se retourner pour faire face à la caméra lorsque vous marchez à reculons. Cette option n'affecte que votre vision et n'est pas compatible avec les AOs."/>
 			<check_box label="Tourner l'avatar vers l'objet qu'il sélectionne" name="FSTurnAvatarToSelectedObject" tool_tip="Tourne votre avatar face à l'objet que vous sélectionnez actuellement."/>
 			<slider label="Vitesse rotation avatar" name="av_turn_spd" tool_tip="Modifie la vitesse à laquelle votre avatar répond à la rotation. 0-100 en pourcentage estimé de la vitesse de rotation maximale. Les valeurs élevées donneront des résultats brusques et saccadées."/>
+			<check_box label="Désactiver la connexion aux régions voisines (important : lire l'info-bulle)" name="FSDisableNeighbourRegionConnections" tool_tip="N'affiche/ne charge que la région dans laquelle vous vous trouvez, ce qui peut améliorer les performances et la stabilité du réseau ; toutefois, les passages d'une région à l'autre à pied ou en véhicule seront moins fiables et il pourra être nécessaire de se téléporter manuellement."/>
 			<text name="Region_Crossing_Movement_Label" width="290">Prévision de mouvement si changement de région :</text>
 			<radio_group name="Region_Crossing_Movement" left_pad="1">
 				<radio_item label="Illimité" name="move_predict" width="65" />

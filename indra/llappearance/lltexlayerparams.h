@@ -31,6 +31,8 @@
 #include "v4color.h"
 #include "llviewervisualparam.h"
 
+#include <atomic>	// <FS:Zi> fix compile for gcc
+
 class LLAvatarAppearance;
 class LLImageRaw;
 class LLImageTGA;

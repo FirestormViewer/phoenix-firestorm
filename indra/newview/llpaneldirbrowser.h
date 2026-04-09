@@ -102,7 +102,8 @@ public:
 
     std::string filterShortWords( const std::string source_string, int shortest_word_length, bool& was_filtered );
 
-    virtual void openProfile() {}; // <FS:Ansariel> Add "open profile" button
+    virtual void openProfile() {} // <FS:Ansariel> Add "open profile" button
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override; // <FS:Ansariel> Select default search element on tab change
 
 protected:
     void updateResultCount();

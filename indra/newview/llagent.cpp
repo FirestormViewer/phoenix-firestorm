@@ -4402,6 +4402,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
                 update_group_floaters(group.mID);
             }
         }
+        gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), ""); // <FS:PP> FIRE-36532 Fire event for group title overview
     }
 };
 

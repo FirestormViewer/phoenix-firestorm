@@ -34,7 +34,6 @@
 #include "llcombobox.h"
 
 #include "lggcontactsets.h"
-#include <boost/signals2.hpp>
 
 class FSFloaterAddToContactSet : public LLFloater
 {

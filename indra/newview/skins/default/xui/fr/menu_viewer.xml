@@ -44,6 +44,8 @@
 			<menu_item_check label="Forcer à s'asseoir" name="Force Toggle Sitting"/>
 			<menu_item_check label="Figer" name="Move Lock"/>
 			<menu_item_check label="Saut rapide" name="Avatar Ignore Prejump"/>
+			<menu_item_call label="Face à l'avatar le plus proche" name="AvatarFaceNearest"/>
+			<menu_item_check label="Alignement de l'avatar" name="AvatarAlign"/>
 		</menu>
 		<menu_item_check label="Contrôles des mouvements" name="Movement Controls"/>
 		<menu_item_check label="Contrôles de la caméra..." name="Camera Controls"/>

@@ -30,7 +30,7 @@
 
 #include "llfloater.h"
 
-class FSFloaterWhiteListHelper : public LLFloater
+class FSFloaterWhiteListHelper final : public LLFloater
 {
 public:
     explicit FSFloaterWhiteListHelper(const LLSD& key);

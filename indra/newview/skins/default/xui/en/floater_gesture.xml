@@ -12,8 +12,8 @@
  label="Places"
  layout="topleft"
  min_height="200"
- min_width="300"
- width="313">
+ min_width="330"
+ width="330">
     <floater.string
      name="loading">
         Loading...
@@ -65,7 +65,7 @@
              layout="topleft"
              left="0"
              name="bottom_panel"
-             width="313">
+             width="330">
               <menu_button
                follows="bottom|left"
                height="18"
@@ -105,28 +105,16 @@
                  tool_tip="Activate/Deactivate selected gesture"
                  top="10"
                  width="10" />
-              <check_box
-                 control_name="FSShowOnlyActiveGestures"
-                 height="18"
-                 label="Show active only"
+              <filter_editor
+                 follows="bottom|left|right"
+                 height="23"
+                 width="225"
                  layout="topleft"
-                 follows="bottom|left"
-                 left_pad="25"
+                 left_pad="10"
                  top="5"
-                 name="FSShowOnlyActiveGestures"
-                 width="140">
-                   <check_box.commit_callback
-                    function="Gesture.Action.RefreshList" />
-              </check_box>
-              <check_box
-                 control_name="FSGesturesEnabled"
-                 height="18"
-                 label="My gestures are enabled"
-                 layout="topleft"
-                 follows="bottom|left"
-                 left="10"
-                 name="FSGesturesEnabled"
-                 width="180" />
+                 label="Filter gestures"
+                 max_length_bytes="100"
+                 name="filter_input" />
               <button
                  follows="bottom|right"
                  font="SansSerifBigBold"
@@ -138,8 +126,31 @@
                  name="del_btn"
                  right="-5"
                  tool_tip="Delete this gesture"
-                 top="5"
+                 top="7"
                  width="18" />
+              <check_box
+                 control_name="FSShowOnlyActiveGestures"
+                 height="18"
+                 label="Show active only"
+                 layout="topleft"
+                 follows="bottom|left"
+                 left="10"
+                 top="28"
+                 name="FSShowOnlyActiveGestures"
+                 width="110">
+                   <check_box.commit_callback
+                    function="Gesture.Action.RefreshList" />
+              </check_box>
+              <check_box
+                 control_name="FSGesturesEnabled"
+                 height="18"
+                 label="My gestures are enabled"
+                 layout="topleft"
+                 follows="bottom|left"
+                 left_pad="5"
+                 top_delta="0"
+                 name="FSGesturesEnabled"
+                 width="160" />
             </panel>
     <button
      follows="left|bottom"

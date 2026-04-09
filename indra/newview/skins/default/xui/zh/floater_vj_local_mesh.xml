@@ -13,6 +13,11 @@
 		<panel name="local_mesh_settings_panel" label="設定">
 			<check_box name="local_mesh_scale_use_meters" label="假定比例為米" tool_tip="忽略在Maya等工具中使用的以公分為單位的縮放。" />
 			<check_box name="checkbox_apply_joint_offsets" label="套用關節偏移。" tool_tip="套用網格模型中的任何關節偏移，預設情況下這些偏移會被忽略。" />
+			<check_box name="checkbox_auto_reload" label="自動重新載入已變更的檔案" tool_tip="監視檔案系統中的本地網格檔案，並在發生變更時自動重新載入。"/>
+			<text name="auto_reload_period_label">
+				掃描間隔（秒）：
+			</text>
+			<spinner name="auto_reload_period" tool_tip="檢查被監視檔案是否發生變更的時間間隔。"/>
 			<text name="lod_suffix_label">
 				細節層次後綴:
 			</text>

@@ -30,9 +30,7 @@
 
 #include "fsassetblacklist.h"
 
-#include "fsfloaterassetblacklist.h"
 #include "llaudioengine.h"
-#include "llfloaterreg.h"
 #include "llsdserialize.h"
 #include "llfilesystem.h"
 #include "llxorcipher.h"

@@ -32,6 +32,8 @@
 #include "fschatparticipants.h"
 #include "rlvhandler.h"
 
+class LLUIImage;
+
 class FSNearbyChatControl : public LLChatEntry, public FSChatParticipants
 {
 public:
@@ -40,8 +42,20 @@ public:
         Optional<bool> is_default;
         Optional<S32>  text_pad_left;
         Optional<S32>  text_pad_right;
+        Optional<S32>  background_pad;
+        Optional<LLUIImage*> background_image;
+        Optional<LLUIImage*> background_image_disabled;
+        Optional<LLUIImage*> background_image_focused;
 
-        Params() : is_default("default", false), text_pad_left("text_pad_left", 0), text_pad_right("text_pad_right", 0) {}
+        Params()
+            : is_default("default", false),
+              text_pad_left("text_pad_left", 0),
+              text_pad_right("text_pad_right", 0),
+              background_pad("background_pad", 1),
+              background_image("background_image"),
+              background_image_disabled("background_image_disabled"),
+              background_image_focused("background_image_focused")
+        {}
     };
 
     FSNearbyChatControl(const Params& p);
@@ -51,6 +65,7 @@ public:
     void onFocusLost() override;
     void setFocus(bool focus) override;
     void draw() override;
+    void paste() override;
 
     bool handleKeyHere(KEY key, MASK mask) override;
 
@@ -64,6 +79,7 @@ private:
     // Typing in progress, expand gestures etc.
     void onKeystroke(LLTextEditor* caller);
 
+    void drawBackground();
     void applyTextPadding();
 
     // Unfocus and autohide chat bar accordingly if we are the default chat bar
@@ -75,6 +91,10 @@ private:
     bool                        mDefault;
     S32                         mTextPadLeft;
     S32                         mTextPadRight;
+    S32                         mBackgroundPad;
+    LLUIImage*                  mBgImage;
+    LLUIImage*                  mBgImageDisabled;
+    LLUIImage*                  mBgImageFocused;
     boost::signals2::connection mRlvBehaviorCallbackConnection;
     boost::signals2::connection mEmojiHelperSettingConnection;
 };
