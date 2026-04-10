@@ -82,11 +82,15 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] 更新時出錯。  請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		[APP_NAME] 更新時出錯。請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME]偵測到已安裝舊版本[VERSION]。若要解除安裝舊版本，請依照此說明操作：[https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 資訊手冊]。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		無法連線到 [CURRENT_GRID]。
+		無法連線到[CURRENT_GRID]。
 '[DIAGNOSTIC]'
 請確定你的網路連線沒有問題。
 		<usetemplate name="okbutton" yestext="確定"/>
@@ -1837,13 +1841,17 @@ SHA1指紋：[MD5_DIGEST]
 點選「確定」開始下載並安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="DownloadingUpdate">
+		正在下載更新[VERSION]版本...
+下載完成後檢視器將重新啟動。
+	</notification>
 	<notification name="OptionalUpdateReady">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 點選「確定」開始安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="PromptOptionalUpdate">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 繼續？
 		<usetemplate canceltext="暫時不要" name="yesnocancelbuttons" notext="略過" yestext="安裝"/>
 	</notification>

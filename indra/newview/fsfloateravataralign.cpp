@@ -40,6 +40,7 @@
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
 #include "llviewermessage.h"
+#include "lltrans.h"
 
 // ============================================================
 // FSAvatarAlignBase
@@ -47,6 +48,8 @@
 
 FSAvatarAlignBase::FSAvatarAlignBase(const LLSD& key)
     : LLFloater(key)
+    , mLabelMini(LLTrans::getString("FSAvatarAlignToggleMini"))
+    , mLabelFull(LLTrans::getString("FSAvatarAlignToggleFull"))
 {
 }
 
@@ -92,7 +95,7 @@ FSAvatarAlignBase::CompassLayout FSAvatarAlignBase::buildCompassLayout() const
     lo.show_labels  = !mini && R >= 50;
     lo.bearing_y    = mini ? ((S32)lo.cy - R - 10) : ((S32)lo.cy - R - 25);
     lo.sq_half      = mini ? R : (R + 20);
-    lo.toggle_label = mini ? "Mini" : "Full";
+    lo.toggle_label = mini ? mLabelMini : mLabelFull;
     return lo;
 }
 

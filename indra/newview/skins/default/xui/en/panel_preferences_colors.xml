@@ -1745,6 +1745,7 @@
        label_height="0"
        layout="topleft"
        left="40"
+       top_pad="1"
        name="effect_color_swatch"
        width="44">
        <color_swatch.init_callback
@@ -1837,7 +1838,7 @@
      min_val="0.00"
      name="inactive"
      show_text="true"
-     top_pad="2"
+     top_pad="1"
      width="415" />
      <slider
      can_edit_text="false"
@@ -1855,7 +1856,7 @@
      min_val="0.00"
      name="camera_movement"
      show_text="true"
-     top_pad="2"
+     top_pad="1"
      width="415" />
      <slider
      can_edit_text="false"
@@ -1873,7 +1874,7 @@
      min_val="0.00"
      name="conversations"
      show_text="true"
-     top_pad="2"
+     top_pad="1"
      width="415" />
      <check_box
      control_name="FSImActiveOpacityOverride"
@@ -1903,7 +1904,7 @@
      label_height="0"
      layout="topleft"
      left="40"
-     top_pad="5"
+     top_pad="1"
      name="console_background"
      tool_tip="Choose console color"
      width="44">
@@ -1949,6 +1950,24 @@
       top_pad="10"
       width="443" />
 
+     <slider
+      control_name="FSMenuBackgroundAlpha"
+      follows="left|top"
+      height="16"
+      increment="0.05"
+      initial_value="0.9"
+      label="Menus background opacity:"
+      layout="topleft"
+      left_pad="10"
+      left="30"
+      max_val="1.00"
+      min_val="0.00"
+      label_width="182"
+      name="menu_background_alpha"
+      tool_tip="Opacity of context menus and top menu bar background (0.0 = fully transparent, 1.0 = fully opaque)"
+      top_pad="1"
+      width="443" />
+
      <text
        follows="left|top"
        layout="topleft"
@@ -1966,7 +1985,7 @@
        left="40"
        height="12"
        name="preferences_search_bg_label"
-       top_pad="15"
+       top_pad="7"
        width="80">
        Background:
      </text>
@@ -2024,7 +2043,7 @@
        left="340"
        height="12"
        name="area_search_beacon_color_label"
-       top_delta="-21"
+       top_delta="-13"
        width="310">
        Area search beacon Color:
      </text>
@@ -2035,7 +2054,7 @@
      label_height="0"
      layout="topleft"
      left="350"
-     top_pad="9"
+     top_pad="1"
      name="area_search_beacon_color"
      tool_tip="Choose area search beacon color"
      width="44">
@@ -2064,7 +2083,7 @@
        left="40"
        height="12"
        name="notecard_editor_writable_text_color_label"
-       top_pad="15"
+       top_pad="7"
        width="30">
        Text:
      </text>
@@ -2194,7 +2213,7 @@
      top_pad="5"
      width="450"
      label="Always show group notices on an opaque background" />
-     
+
      <!-- ## Zi: Pie menu -->
      <check_box
      control_name="OverridePieColors"

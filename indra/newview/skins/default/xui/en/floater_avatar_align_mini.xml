@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
-    legacy_header_height="0"
-    header_height="0"
-    bg_opaque_image="Window_NoTitle_Foreground"
-    bg_alpha_image="Window_NoTitle_Foreground"
     can_close="false"
     can_dock="false"
     can_minimize="false"
     can_resize="true"
-    chrome="true"
+    header_height="0"
     height="98"
     layout="topleft"
+    legacy_header_height="0"
     min_height="98"
     min_width="74"
     name="avatar_align_mini"

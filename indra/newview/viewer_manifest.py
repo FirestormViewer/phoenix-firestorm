@@ -985,15 +985,22 @@ class Windows_x86_64_Manifest(ViewerManifest):
         pack_title = self.app_name()  # Display name with spaces
         pack_dir = self.get_dst_prefix()
         main_exe = self.final_exe()
-        installer_base = self.installer_base_name()
-        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|secondlife-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
+        # <FS:TJ> Make sure to use Firestorm naming
+        #installer_base = self.installer_base_name()
+        #exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|secondlife-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
+        installer_base = self.fs_installer_basename()
+        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|firestorm-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
+        # </FS:TJ>
 
         # Channel-specific icon for the Velopack installer.
         # CMake copies icons/{channel}/secondlife.ico to res/ll_icon.ico at configure time.
         # Try the CMake-generated copy first, fall back to the source icon.
-        icon_path = os.path.join(self.get_src_prefix(), 'res', 'll_icon.ico')
-        if not os.path.exists(icon_path):
-            icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.ico')
+        # <FS:TJ> Use Firestorms icon path
+        #icon_path = os.path.join(self.get_src_prefix(), 'res', 'll_icon.ico')
+        #if not os.path.exists(icon_path):
+        #    icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.ico')
+        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'firestorm_icon.ico')
+        # </FS:TJ>
 
         # In CI, defer Velopack packaging to the sign step where Azure credentials
         # are available. Emit metadata as GitHub outputs so the sign step can run
@@ -1079,7 +1086,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
             print("Moved %s to %s" % (velopack_portable, our_portable))
 
         # Output the Releases directory path for artifact upload (contains nupkg, RELEASES for updates)
-        self.set_github_output('velopack_releases', releases_dir)
+        # <FS:TJ> Undo Github-Build stuff - I don't think we need this
+        #self.set_github_output('velopack_releases', releases_dir)
+        # </FS:TJ>
 
     def nsis_package_finish(self):
         """Package the viewer using NSIS installer (legacy)"""
@@ -2014,7 +2023,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         bundle_id = self.args.get('bundleid', 'com.secondlife.indra.viewer')
 
         # Icon path for macOS
-        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.icns')
+        # <FS:TJ> Use Firestorms icon path
+        #icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.icns')
+        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'firestorm_icon.icns')
+        # </FS:TJ>
 
         # The main executable inside Contents/MacOS/ is named after the channel
         main_exe = self.channel()
@@ -2101,7 +2113,9 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         print("Generated %d JSON file(s): %s" % (len(json_files), json_files))
 
         # Output the Releases directory path for artifact upload
-        self.set_github_output('velopack_releases', releases_dir)
+        # <FS:TJ> Undo Github-Build stuff - I don't think we need this
+        #self.set_github_output('velopack_releases', releases_dir)
+        # </FS:TJ>
         print("Velopack releases directory: %s" % releases_dir)
 
 
@@ -2282,8 +2296,10 @@ class LinuxManifest(ViewerManifest):
     def package_finish(self):
         # a standard map of strings for replacing in the templates
 
+        # <FS:TJ> Make sure all our package names look similar
         #installer_name = self.installer_base_name()
         installer_name = self.fs_installer_basename()
+        # </FS:TJ>
 
         self.fs_save_breakpad_symbols("linux")
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms

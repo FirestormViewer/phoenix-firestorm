@@ -106,6 +106,7 @@
 			<color_swatch name="console_background" tool_tip="選擇控制台的顏色" />
 			<slider label="透明度：" name="console_background_opacity" tool_tip="選擇控制台背景的透明度" />
 			<slider label="懸停文字背景透明度：" name="FSHudTextBackgroundOpacity" tool_tip="設定懸停文字背景的透明度"/>
+			<slider label="選單背景透明度：" name="menu_background_alpha" tool_tip="右鍵選單和頂部選單列背景的透明度（0.0＝完全透明，1.0＝完全不透明）"/>
 			<text name="preferences_search_label">突出顯示搜尋偏好設定：</text>
 			<text name="preferences_search_bg_label" width="35">背景：</text>
 			<color_swatch name="preferences_search_bg_color" tool_tip="選擇搜尋結果突出顯示的偏好設定的背景顏色" />

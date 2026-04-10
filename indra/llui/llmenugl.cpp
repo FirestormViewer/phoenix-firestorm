@@ -3272,7 +3272,13 @@ void LLMenuGL::draw( void )
 
     if( mBgVisible )
     {
-        gl_rect_2d( 0, getRect().getHeight(), getRect().getWidth(), 0, mBackgroundColor.get() );
+        // <FS:PP> Semi-transparent menu backgrounds
+        // gl_rect_2d( 0, getRect().getHeight(), getRect().getWidth(), 0, mBackgroundColor.get() );
+        static LLUICachedControl<F32> menu_bg_alpha("FSMenuBackgroundAlpha");
+        LLColor4 bg_color = mBackgroundColor.get();
+        bg_color.mV[VALPHA] *= menu_bg_alpha;
+        gl_rect_2d(0, getRect().getHeight(), getRect().getWidth(), 0, bg_color);
+        // </FS:PP>
     }
     LLView::draw();
 }

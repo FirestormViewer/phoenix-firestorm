@@ -7358,4 +7358,10 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="OmnifilterReplacement">
 		Omni-Filter-Ersetzung: [REPLACEMENT]
 	</string>
+	<string name="FSAvatarAlignToggleMini"
+		>Mini
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		Voll
+	</string>
 </strings>

@@ -201,6 +201,7 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Konsol rəngini seçin"/>
 			<slider label="Şəffaflıq:" name="console_background_opacity" tool_tip="Konsol fonunun şəffaflığını seçin"/>
+			<slider label="Menyu fonunun şəffaflığı:" name="menu_background_alpha" tool_tip="Kontekst menyunun və yuxarı menyu panelinin fonunun şəffaflığı (0.0 = tam şəffaf, 1.0 = tam qeyri-şəffaf)"/>
 			<text name="preferences_search_label">
                 Seçim axtarışının rəngləri:
             </text>

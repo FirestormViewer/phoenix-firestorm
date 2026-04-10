@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
-    bg_alpha_image="Window_NoTitle_Foreground"
-    bg_opaque_image="Window_NoTitle_Foreground"
     can_close="true"
     can_dock="false"
     can_minimize="true"
     can_resize="true"
-    chrome="true"
     height="379"
     help_topic=""
     layout="topleft"

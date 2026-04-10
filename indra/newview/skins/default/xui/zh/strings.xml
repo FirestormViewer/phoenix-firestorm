@@ -6481,6 +6481,12 @@ support@secondlife.com.
 	<string name="Command_FaceNearest_Tooltip">
 		在20公尺範圍內轉向面向最近的化身
 	</string>
+	<string name="FSAvatarAlignToggleMini">
+		迷你
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		完整
+	</string>
 	<string name="Command_Group_Titles_Tooltip">
 		更改活躍的群組頭銜
 	</string>

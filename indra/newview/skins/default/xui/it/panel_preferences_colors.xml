@@ -199,6 +199,7 @@
 		<color_swatch name="console_background" tool_tip="Scegliere colore sfondo"/>
 		<slider label="Opacità:" name="console_background_opacity" tool_tip="Scegli l'opacità dello sfondo della console"/>
 		<slider label="Opacità sfondo testo fluttuante:" name="FSHudTextBackgroundOpacity" tool_tip="Scegli l'opacità dello sfondo del testo fluttuante" />
+		<slider label="Opacità sfondo menu:" name="menu_background_alpha" tool_tip="Opacità dello sfondo dei menu contestuali e della barra dei menu (0.0 = completamente trasparente, 1.0 = completamente opaco)"/>
 		<text name="preferences_search_label">
             Risultati di ricerca nelle preferenze:
         </text>

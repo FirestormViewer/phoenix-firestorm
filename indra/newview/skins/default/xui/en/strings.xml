@@ -3357,4 +3357,6 @@ Your current position: [AVATAR_POS]
   <string name="Maximum">Maximum</string>
 
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
+  <string name="FSAvatarAlignToggleMini">Mini</string>
+  <string name="FSAvatarAlignToggleFull">Full</string>
 </strings>

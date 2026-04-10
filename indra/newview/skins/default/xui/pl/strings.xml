@@ -6717,4 +6717,10 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="OmnifilterReplacement">
 		Wszystkofiltr: [REPLACEMENT]
 	</string>
+	<string name="FSAvatarAlignToggleMini">
+		Małe
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		Pełne
+	</string>
 </strings>

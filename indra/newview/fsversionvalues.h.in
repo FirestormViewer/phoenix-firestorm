@@ -37,7 +37,7 @@
 //         a different format than is already provided there, then add a
 //         function to that file and reference it, rather than building your
 //         own function elsewhere.
-#define LL_VIEWER_CHANNEL "@VIEWER_CHANNEL@"
+#define LL_VIEWER_CHANNEL @VIEWER_CHANNEL@
 #define LL_VIEWER_VERSION_MAJOR @VIEWER_VERSION_MAJOR@
 #define LL_VIEWER_VERSION_MINOR @VIEWER_VERSION_MINOR@
 #define LL_VIEWER_VERSION_PATCH @VIEWER_VERSION_PATCH@

@@ -113,6 +113,7 @@
 			<color_swatch name="console_background" tool_tip="Sélectionnez la couleur de la console"/>
 			<slider label="Opacité :" name="console_background_opacity" tool_tip="Ajustez l'opacité du fond de la console"/>
 			<slider label="Opacité du fond du texte flottant :" name="FSHudTextBackgroundOpacity" tool_tip="Ajustez l'opacité de l'arrière-plan du texte flottant"/>
+			<slider label="Opacité du fond des menus :" name="menu_background_alpha" tool_tip="Opacité de l'arrière-plan des menus contextuels et de la barre de menus (0.0 = totalement transparent, 1.0 = totalement opaque)"/>
 			<text name="preferences_search_label">Surlignage des préférences recherchées :</text>
 			<text name="preferences_search_bg_label" width="75">Arrière-plan :</text>
 			<color_swatch name="preferences_search_bg_color" tool_tip="Sélectionnez la couleur d'arrière-plan des préférences surlignées par les résultats de recherche"/>

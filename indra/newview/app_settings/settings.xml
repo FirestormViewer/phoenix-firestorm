@@ -6976,17 +6976,6 @@
         <key>Value</key>
         <integer>0</integer>
     </map>
-    <key>LastInstallVersion</key>
-    <map>
-        <key>Comment</key>
-        <string>Version number of last instance of the viewer that you installed</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>String</string>
-        <key>Value</key>
-        <string></string>
-    </map>
     <key>LastSnapshotToProfileHeight</key>
     <map>
       <key>Comment</key>
@@ -16920,6 +16909,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<string>Boolean</string>
 			<key>Value</key>
 			<integer>0</integer>
+		</map>
+		<key>FSMenuBackgroundAlpha</key>
+		<map>
+			<key>Comment</key>
+			<string>Alpha (opacity) of menu backgrounds including context menus and the top menu bar (0.0 = fully transparent, 1.0 = fully opaque)</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>F32</string>
+			<key>Value</key>
+			<real>1.0</real>
 		</map>
 		<key>PieMenuOpacity</key>
 		<map>
