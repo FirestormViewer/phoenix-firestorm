@@ -47,6 +47,8 @@ private:
     void offerTeleport();
     void teleportToAvatar();
     void onTrackAvatarMenuItemClick();
+    void onFaceTowardsAvatarMenuItemClick();
+    bool canFaceTowardsAvatar();
     void addToContactSet();
     void onSetRenderMode(const LLSD& userdata);
     bool checkSetRenderMode(const LLSD& userdata);

@@ -55,7 +55,7 @@ FSGroupTitlesObserver::~FSGroupTitlesObserver()
 
 void FSGroupTitlesObserver::changed(LLGroupChange gc)
 {
-    if (!mParent.isDead())
+    if (gc == GC_TITLES && !mParent.isDead())
     {
         mParent.get()->processGroupTitleResults(mGroupData);
     }
@@ -232,10 +232,13 @@ void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& rol
 
 void FSFloaterGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 {
-    // Save the group name
-    std::string group_name(group_data.mName);
-
     LLGroupMgrGroupData* gmgr_data = LLGroupMgr::getInstance()->getGroupData(group_data.mID);
+    if (!gmgr_data || gmgr_data->mTitles.empty())
+    {
+        return;
+    }
+
+    std::string group_name(group_data.mName);
     const std::vector<LLGroupTitle> group_titles = gmgr_data->mTitles;
 
     // Add group titles

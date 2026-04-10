@@ -85,6 +85,10 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://www.firestormviewer.org/downloads télécharger la dernière version] du client.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME] a détecté une installation d'une version antérieure [VERSION]. Pour désinstaller cette version antérieure, veuillez suivre les instructions de  [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 ce manuel].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Connexion à [CURRENT_GRID] impossible.
 &apos;[DIAGNOSTIC]&apos;

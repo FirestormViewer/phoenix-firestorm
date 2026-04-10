@@ -29,12 +29,12 @@
 
 #include "fsfloateravatarrendersettings.h"
 
+#include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
 #include "llfiltereditor.h"
 #include "llfloateravatarpicker.h"
 #include "llnamelistctrl.h"
 #include "lltrans.h"
-#include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatar.h"
 

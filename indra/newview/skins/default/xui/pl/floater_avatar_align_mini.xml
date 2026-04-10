@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align_mini" title="Kompas">
+	<panel name="pnl_toolbar">
+		<button name="btn_rotate_left_1" tool_tip="Obróć awatara o 1° w lewo" />
+		<button name="btn_rotate_right_1" tool_tip="Obróć awatara o 1° w prawo" />
+		<button name="btn_avatar" tool_tip="Zwróć się w stronę najbliższego awatara" />
+	</panel>
+</floater>

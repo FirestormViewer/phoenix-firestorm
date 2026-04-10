@@ -30,8 +30,6 @@
 
 #include "fschathistory.h"
 
-#include <boost/signals2.hpp>
-
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 
@@ -45,29 +43,22 @@
 #include "llavataractions.h"
 #include "llavatariconctrl.h"
 #include "llcallingcard.h" //for LLAvatarTracker
-#include "llgroupactions.h"
 #include "llgroupmgr.h"
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltrans.h"
 #include "llfloaterreg.h"
 #include "llfloaterreporter.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llstylemap.h"
 #include "llslurl.h"
 #include "lllayoutstack.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lltoastnotifypanel.h"
-#include "lltooltip.h"
 #include "llviewerregion.h"
-#include "llviewertexteditor.h"
 #include "llworld.h"
-#include "lluiconstants.h"
 #include "llstring.h"
 #include "llurlaction.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h"
-#include "llviewernetwork.h"
 
 #if LL_SDL2
 #include "llwindow.h"
@@ -79,7 +70,6 @@
 #include "llkeyboard.h"
 #include "llpanelblockedlist.h"
 #include "rlvactions.h"
-#include "rlvcommon.h"
 #include "rlvhandler.h"
 
 static LLDefaultChildRegistry::Register<FSChatHistory> r("fs_chat_history");

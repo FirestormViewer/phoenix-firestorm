@@ -30,7 +30,6 @@
 #include "fsdroptarget.h"
 
 #include "llinventoryfunctions.h"
-#include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
 
 static LLDefaultChildRegistry::Register<FSCopyTransInventoryDropTarget> r1("fs_copytrans_inventory_drop_target");

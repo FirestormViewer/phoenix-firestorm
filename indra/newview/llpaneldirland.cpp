@@ -231,3 +231,11 @@ void LLPanelDirLand::performQuery()
     msg->addS32Fast(_PREHASH_QueryStart,mSearchStart);
     gAgent.sendReliableMessage();
 }
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirLand::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    getChild<LLLineEditor>("priceedit")->setFocus(true);
+    return true;
+}
+// </FS:Ansariel>

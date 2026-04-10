@@ -3230,6 +3230,9 @@ Falls diese Nachricht erneut angezeigt wird, starten Sie Ihren Computer bitte ne
 		[APP_NAME] scheint eingefroren zu sein oder ist abgestürzt.
 Möchten Sie einen Absturz-Bericht einschicken?
 	</string>
+	<string name="MBFreezeDetected">
+		[APP_NAME] scheint eingefroren zu sein. Falls dieses Problem regelmäßig auftritt, kontaktieren Sie den Support unter https://www.firestormviewer.org/support.
+	</string>
 	<string name="MBAlert">
 		Benachrichtigung
 	</string>
@@ -6127,6 +6130,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Omnifilter_Label">
 		Omni-Filter
 	</string>
+	<string name="Command_AvatarAlign_Label">
+		Avatar-Ausrichtung
+	</string>
+	<string name="Command_FaceNearest_Label">
+		Zu nächstem Avatar drehen
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6333,6 +6342,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Omnifilter_Tooltip">
 		Regel für Omni-Filter bearbeiten
+	</string>
+	<string name="Command_AvatarAlign_Tooltip">
+		Avatar zur nächsten Himmelsrichtung oder zum Avatar in der geringsten Entfernung ausrichten
+	</string>
+	<string name="Command_FaceNearest_Tooltip">
+		Zum Avatar in der geringsten Entfernung innerhalb von 20m drehen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -7342,5 +7357,11 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="OmnifilterReplacement">
 		Omni-Filter-Ersetzung: [REPLACEMENT]
+	</string>
+	<string name="FSAvatarAlignToggleMini"
+		>Mini
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		Voll
 	</string>
 </strings>

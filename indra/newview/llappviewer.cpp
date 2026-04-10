@@ -98,6 +98,11 @@
 #include "llurlmatch.h"
 #include "lltextutil.h"
 #include "lllogininstance.h"
+#include "llvvmquery.h"
+
+#if LL_VELOPACK
+#include "llvelopack.h"
+#endif
 #include "llprogressview.h"
 #include "llvocache.h"
 #include "lldiskcache.h"
@@ -433,11 +438,8 @@ const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker"); //FS
 const std::string START_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".start_marker"); //FS new modified LL new
 const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"); //FS orig modified LL
 const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
+const std::string WATCHDOG_MARKER_FILE_NAME("SecondLife.watchdog_marker");
 static std::string gLaunchFileOnQuit;
-
-// Used on Win32 for other apps to identify our window (eg, win_setup)
-// Note: Changing this breaks compatibility with SLURL handling, try to avoid it.
-const char* const VIEWER_WINDOW_CLASSNAME = "Second Life";
 
 //----------------------------------------------------------------------------
 
@@ -763,7 +765,6 @@ LLAppViewer::LLAppViewer()
     mPurgeCacheOnExit(false),
     mPurgeUserDataOnExit(false),
     mSecondInstance(false),
-    mUpdaterNotFound(false),
     mSavedFinalSnapshot(false),
     mSavePerAccountSettings(false),     // don't save settings on logout unless login succeeded.
     mQuitRequested(false),
@@ -1192,6 +1193,7 @@ bool LLAppViewer::init()
 
     // Initialize event recorder
     LLViewerEventRecorder::createInstance();
+    LLWatchdog::createInstance();
 
     //
     // Initialize the window
@@ -1355,102 +1357,51 @@ bool LLAppViewer::init()
     gGLActive = false;
 
     // <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD
-//    // Skip updater if this is a non-interactive instance
+////#if LL_RELEASE_FOR_DOWNLOAD
+//    // Launch VVM update check
 //    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
-//        LLProcess::Params updater;
-//        updater.desc = "updater process";
-//        // Because it's the updater, it MUST persist beyond the lifespan of the
-//        // viewer itself.
-//        updater.autokill = false;
-//        std::string updater_file;
-//#if LL_WINDOWS
-//        updater_file = "SLVersionChecker.exe";
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
-//#elif LL_DARWIN
-//        updater_file = "SLVersionChecker";
-//        updater.executable = gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file);
-//#else
-//        updater_file = "SLVersionChecker";
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
-//#endif
-//        // add LEAP mode command-line argument to whichever of these we selected
-//        updater.args.add("leap");
-//        // UpdaterServiceSettings
-//        if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
-//        {
-//            // Befor first login, treat this as 'manual' updates,
-//            // updater won't install anything, but required updates
-//            updater.args.add("0");
-//        }
-//        else
-//        {
-//            updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//        }
-//        // channel
-//        updater.args.add(LLVersionInfo::instance().getChannel());
-//        // testok
-//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
-//        // ForceAddressSize
-//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//
-//        try
-//        {
-//            // Run the updater. An exception from launching the updater should bother us.
-//            LLLeap::create(updater, true);
-//            mUpdaterNotFound = false;
-//        }
-//        catch (...)
-//        {
-//            LLUIString details = LLNotifications::instance().getGlobalString("LLLeapUpdaterFailure");
-//            details.setArg("[UPDATER_APP]", updater_file);
-//            OSMessageBox(
-//                details.getString(),
-//                LLStringUtil::null,
-//                OSMB_OK);
-//            mUpdaterNotFound = true;
-//        }
+//        initVVMUpdateCheck();
 //    }
 //    else
 //    {
 //        LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
 //    }
-//#endif //LL_RELEASE_FOR_DOWNLOAD
-//
-//    {
-//        // Iterate over --leap command-line options. But this is a bit tricky: if
-//        // there's only one, it won't be an array at all.
-//        LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
-//        LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
-//        if (LeapCommand.isDefined() && !LeapCommand.isArray())
-//        {
-//            // If LeapCommand is actually a scalar value, make an array of it.
-//            // Have to do it in two steps because LeapCommand.append(LeapCommand)
-//            // trashes content! :-P
-//            LLSD item(LeapCommand);
-//            LeapCommand.append(item);
-//        }
-//        for (const auto& leap : llsd::inArray(LeapCommand))
-//        {
-//            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
-//            // We don't have any better description of this plugin than the
-//            // user-specified command line. Passing "" causes LLLeap to derive a
-//            // description from the command line itself.
-//            // Suppress LLLeap::Error exception: trust LLLeap's own logging. We
-//            // don't consider any one --leap command mission-critical, so if one
-//            // fails, log it, shrug and carry on.
-//            LLLeap::create("", leap, false); // exception=false
-//        }
-//    }
-//
-//    if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
-//    {
-//        LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
-//                             << "lleventhost no longer supported as a dynamic library"
-//                             << LL_ENDL;
-//    }
+////#endif //LL_RELEASE_FOR_DOWNLOAD
     // </FS:Ansariel>
+
+    {
+        // Iterate over --leap command-line options. But this is a bit tricky: if
+        // there's only one, it won't be an array at all.
+        LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
+        LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
+        if (LeapCommand.isDefined() && !LeapCommand.isArray())
+        {
+            // If LeapCommand is actually a scalar value, make an array of it.
+            // Have to do it in two steps because LeapCommand.append(LeapCommand)
+            // trashes content! :-P
+            LLSD item(LeapCommand);
+            LeapCommand.append(item);
+        }
+        for (const auto& leap : llsd::inArray(LeapCommand))
+        {
+            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
+            // We don't have any better description of this plugin than the
+            // user-specified command line. Passing "" causes LLLeap to derive a
+            // description from the command line itself.
+            // Suppress LLLeap::Error exception: trust LLLeap's own logging. We
+            // don't consider any one --leap command mission-critical, so if one
+            // fails, log it, shrug and carry on.
+            LLLeap::create("", leap, false); // exception=false
+        }
+    }
+
+    if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
+    {
+        LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
+                             << "lleventhost no longer supported as a dynamic library"
+                             << LL_ENDL;
+    }
 
     LLTextUtil::TextHelpers::iconCallbackCreationFunction = create_text_segment_icon_from_url_match;
 
@@ -2049,6 +2000,16 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
+#if LL_VELOPACK
+    // Apply any pending Velopack update before shutdown
+    if (velopack_is_update_pending())
+    {
+        LL_INFOS("AppInit") << "Applying pending Velopack update on shutdown..." << LL_ENDL;
+        velopack_apply_pending_update(velopack_should_restart_after_update());
+    }
+    velopack_cleanup();
+#endif
+
     //ditch LLVOAvatarSelf instance
     gAgentAvatarp = NULL;
 
@@ -3780,7 +3741,7 @@ bool LLAppViewer::initWindow()
     LLViewerWindow::Params window_params;
     window_params
         .title(gWindowTitle)
-        .name(VIEWER_WINDOW_CLASSNAME)
+        .name(sWindowClass)
         .x(gSavedSettings.getS32("WindowX"))
         .y(gSavedSettings.getS32("WindowY"))
         .width(gSavedSettings.getU32("WindowWidth"))
@@ -3822,20 +3783,60 @@ bool LLAppViewer::initWindow()
                         << " (setting = " << watchdog_enabled_setting << ")"
                         << LL_ENDL;
 
-    if (use_watchdog)
+    // Watchdog reports to statistics via marker files, that is
+    // pointless without ability to write (!mSecondInstance) those files.
+    // If use_watchdog is set, watchdog also reports to bugspat.
+    if (use_watchdog || !mSecondInstance)
     {
-        LLWatchdog::getInstance()->init([]()
-        {
-            LLAppViewer* app = LLAppViewer::instance();
-            if (app->logoutRequestSent())
+        LLWatchdog::getInstance()->init(
+            [](bool final_marker)
             {
-                app->createErrorMarker(LAST_EXEC_LOGOUT_FROZE);
-            }
-            else
+                LLAppViewer* app = LLAppViewer::instance();
+                // Without watchdog everything will be counted as
+                // either 'unknown' (no crash marker) or based of present crash marker
+                if (final_marker)
+                {
+                    // watchdog is going to crash viewer, so crate a 'crash' marker
+                    if (app->logoutRequestSent())
+                    {
+                        app->createErrorMarker(LAST_EXEC_LOGOUT_FROZE);
+                    }
+                    else
+                    {
+                        app->createErrorMarker(LAST_EXEC_FROZE);
+                    }
+                }
+                else
+                {
+                    // not going to crash, just create a 'watchdog' marker
+                    app->createWatchdogMarker();
+                }
+            },
+            []()
             {
-                app->createErrorMarker(LAST_EXEC_FROZE);
-            }
-        });
+                LLAppViewer* app = LLAppViewer::instance();
+                // in case process recovered from freeze, remove watchdog marker.
+                app->removeWatchdogMarker();
+            },
+            [](std::string &desc)
+            {
+#if LL_WINDOWS && LL_BUGSPLAT
+                LLAppViewer* app = LLAppViewer::instance();
+                app->writeDebugInfo();
+                return app->reportCustomToBugsplat(desc);
+#else
+                return false;
+#endif
+            },
+            []()
+            {
+                LLAppViewer* app = LLAppViewer::instance();
+                app->sendLogoutRequest();
+                // Might be better to ask user if user wants to terminate the app or wait.
+                OSMessageBox(LLTrans::getString("MBFreezeDetected"), LLTrans::getString("MBFatalError"), OSMB_OK);
+            },
+            use_watchdog);
+
     }
 
     // <FS:Ansariel> Init group notices, IMs and chiclets position before the
@@ -3907,16 +3908,6 @@ bool LLAppViewer::initWindow()
     LL_INFOS("AppInit") << "Window initialization done." << LL_ENDL;
 
     return true;
-}
-
-bool LLAppViewer::isUpdaterMissing()
-{
-    return mUpdaterNotFound;
-}
-
-bool LLAppViewer::waitForUpdater()
-{
-    return !gSavedSettings.getBOOL("CmdLineSkipUpdater") && !mUpdaterNotFound && !gNonInteractive;
 }
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
@@ -4824,13 +4815,8 @@ void LLAppViewer::processMarkerFiles()
         {
             // the file existed, is ours, and matched our version, so we can report on what it says
             LL_INFOS("MarkerFile") << "Exec marker '"<< mMarkerFileName << "' found; last exec crashed or froze" << LL_ENDL;
-#if LL_WINDOWS && LL_BUGSPLAT
-            // bugsplat will set correct state in bugsplatSendLog
-            // Might be more accurate to rename this one into 'unknown'
+            // App terminated unexpectedly or froze, we don't know the cause yet.
             gLastExecEvent = LAST_EXEC_UNKNOWN;
-#else
-            gLastExecEvent = LAST_EXEC_OTHER_CRASH;
-#endif // LL_WINDOWS
 
         }
         else
@@ -4883,22 +4869,28 @@ void LLAppViewer::processMarkerFiles()
         }
         LLAPRFile::remove(logout_marker_file);
     }
-    // and last refine based on whether or not a marker created during a non-llerr crash is found
+    // Refine based on whether or not a marker created during
+    // a crash is found or if wathdog caught a freeze.
+    // Bugsplat will set correct state in bugsplatSendLog.
     std::string error_marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, ERROR_MARKER_FILE_NAME);
+    std::string watchdog_marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, WATCHDOG_MARKER_FILE_NAME);
     if(LLAPRFile::isExist(error_marker_file, NULL, LL_APR_RB))
     {
         S32 marker_code = getMarkerErrorCode(error_marker_file);
         if (marker_code >= 0)
         {
-            if (gLastExecEvent == LAST_EXEC_LOGOUT_FROZE)
+            if (marker_code > 0 && marker_code < (S32)LAST_EXEC_COUNT)
             {
-                gLastExecEvent = LAST_EXEC_LOGOUT_CRASH;
-                LL_INFOS("MarkerFile") << "Error marker '"<< error_marker_file << "' crashed, setting LastExecEvent to LOGOUT_CRASH" << LL_ENDL;
-            }
-            else if (marker_code > 0 && marker_code < (S32)LAST_EXEC_COUNT)
-            {
+                // If we have a code, it takes precendence
                 gLastExecEvent = (eLastExecEvent)marker_code;
                 LL_INFOS("MarkerFile") << "Error marker '"<< error_marker_file << "' crashed, setting LastExecEvent to " << gLastExecEvent << LL_ENDL;
+            }
+            // if we have the marker, even without a code, it's a crash.
+            else if (gLastExecEvent == LAST_EXEC_LOGOUT_UNKNOWN
+                    || gLastExecEvent == LAST_EXEC_LOGOUT_FROZE)
+            {
+                gLastExecEvent = LAST_EXEC_LOGOUT_CRASH;
+                LL_INFOS("MarkerFile") << "Error marker '" << error_marker_file << "' crashed, setting LastExecEvent to LOGOUT_CRASH" << LL_ENDL;
             }
             else
             {
@@ -4911,6 +4903,33 @@ void LLAppViewer::processMarkerFiles()
             LL_INFOS("MarkerFile") << "Error marker '"<< error_marker_file << "' marker found, but versions did not match" << LL_ENDL;
         }
         LLAPRFile::remove(error_marker_file);
+        if (LLAPRFile::isExist(watchdog_marker_file, NULL, LL_APR_RB))
+        {
+            // If viewer crashed after a freeze was detected,
+            // crash still takes precendence. Just clear watchdog.
+            removeWatchdogMarker();
+        }
+    }
+    else
+    {
+        // so only check watchdog marker if there is no error marker.
+        if (LLAPRFile::isExist(watchdog_marker_file, NULL, LL_APR_RB))
+        {
+            if (LAST_EXEC_UNKNOWN == gLastExecEvent
+                || LAST_EXEC_LOGOUT_UNKNOWN == gLastExecEvent)
+            {
+                // watchdog marker gets created if we detect a freeze,
+                // so if viwer did not stop gracefully, and we know it wasn't a crash,
+                // we have no other info, check watchdog.
+                if (markerIsSameVersion(watchdog_marker_file))
+                {
+                    gLastExecEvent = LAST_EXEC_UNKNOWN == gLastExecEvent ? LAST_EXEC_FROZE : LAST_EXEC_LOGOUT_FROZE;
+                    LL_INFOS("MarkerFile") << "Watchdog marker '" << watchdog_marker_file << "' found, setting LastExecEvent to FROZE"
+                        << LL_ENDL;
+                }
+            }
+            removeWatchdogMarker();
+        }
     }
 
     // <FS:Ansariel> Looks like we are not using this at all!?
@@ -4957,6 +4976,7 @@ void LLAppViewer::removeMarkerFiles()
         {
             LL_DEBUGS("MarkerFile") << "logout marker '"<<mLogoutMarkerFileName<<"' not open"<< LL_ENDL;
         }
+        removeWatchdogMarker();
     }
     else
     {
@@ -6495,6 +6515,30 @@ bool LLAppViewer::errorMarkerExists() const
 {
     std::string error_marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, ERROR_MARKER_FILE_NAME);
     return LLAPRFile::isExist(error_marker_file, NULL, LL_APR_RB);
+}
+
+void LLAppViewer::createWatchdogMarker() const
+{
+    if (!mSecondInstance)
+    {
+        std::string error_marker = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, WATCHDOG_MARKER_FILE_NAME);
+
+        LLAPRFile file;
+        file.open(error_marker, LL_APR_WB);
+        if (file.getFileHandle())
+        {
+            recordMarkerVersion(file);
+            file.close();
+        }
+    }
+}
+void LLAppViewer::removeWatchdogMarker() const
+{
+    if (!mSecondInstance)
+    {
+        std::string error_marker_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, WATCHDOG_MARKER_FILE_NAME);
+        LLFile::remove(error_marker_file);
+    }
 }
 
 void LLAppViewer::outOfMemorySoftQuit()

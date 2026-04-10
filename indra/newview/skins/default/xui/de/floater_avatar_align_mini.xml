@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align_mini" title="Kompass">
+	<panel name="pnl_toolbar">
+		<button name="btn_rotate_left_1" tool_tip="Avatar 1° nach links drehen"/>
+		<button name="btn_rotate_right_1" tool_tip="Avatar 1° nach rechts drehen"/>
+		<button name="btn_avatar" tool_tip="Zum Avatar in der geringsten Entfernung drehen"/>
+	</panel>
+</floater>

@@ -1965,8 +1965,15 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 
             LLSD value;
             value["id"] = info->getName();
-            value["columns"][0]["column"] = "sim_name";
-            value["columns"][0]["value"] = info->getName();
+            // <FS:Ansariel> Show region rating if there already is an icon column
+            //value["columns"][0]["column"] = "sim_name";
+            //value["columns"][0]["value"] = info->getName();
+            value["columns"][0]["column"] = "scroll_list_icon";
+            value["columns"][0]["value"] = info->getAccessIcon();
+            value["columns"][0]["type"] = "icon";
+            value["columns"][1]["column"] = "sim_name";
+            value["columns"][1]["value"] = info->getName();
+            // </FS:Ansariel>
             mSearchResults->addElement(value);
             num_results++;
         }

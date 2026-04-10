@@ -4,6 +4,7 @@
 	<menu label="Voir le Profil" name="View Profiles"/>
 	<menu_item_call label="Ajouter au cercle" name="Add to Set Multiple"/>
 	<menu_item_call label="Zoomer" name="Cam"/>
+	<menu_item_call label="Regard vers l'avatar" name="Face towards avatar"/>
 	<menu name="MarkAvatar" label="Marques...">
 		<menu_item_call label="Rouge" name="MarkRed"/>
 		<menu_item_call label="Vert" name="MarkGreen"/>

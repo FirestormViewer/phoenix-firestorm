@@ -82,11 +82,15 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] 更新時出錯。  請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		[APP_NAME] 更新時出錯。請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME]偵測到已安裝舊版本[VERSION]。若要解除安裝舊版本，請依照此說明操作：[https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 資訊手冊]。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		無法連線到 [CURRENT_GRID]。
+		無法連線到[CURRENT_GRID]。
 '[DIAGNOSTIC]'
 請確定你的網路連線沒有問題。
 		<usetemplate name="okbutton" yestext="確定"/>
@@ -1837,13 +1841,17 @@ SHA1指紋：[MD5_DIGEST]
 點選「確定」開始下載並安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="DownloadingUpdate">
+		正在下載更新[VERSION]版本...
+下載完成後檢視器將重新啟動。
+	</notification>
 	<notification name="OptionalUpdateReady">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 點選「確定」開始安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="PromptOptionalUpdate">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 繼續？
 		<usetemplate canceltext="暫時不要" name="yesnocancelbuttons" notext="略過" yestext="安裝"/>
 	</notification>
@@ -2758,7 +2766,7 @@ URL:[UNTRUSTED_URL]
 	</notification>
 	<notification name="ConfirmEmptyTrash">
 		[COUNT]個物件與資料夾將會永久刪除。 你確定你要永久刪除垃圾桶中的內容？
-		<usetemplate name="okcancelignore" notext="取消" yestext="確定"/>
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="TrashIsFull">
 		你的垃圾桶快滿了。 這可能會造成登錄的問題。
@@ -5904,15 +5912,15 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 
 	<notification name="FSSetTitleRegion">
-		請輸入要指定給選擇群組頭銜的區域的確切名稱。
-在儲存指定之前，會先驗證名稱。
+		請輸入區域的正確名稱，以將其指派給所選的群組頭銜。
+在儲存指派之前將驗證該名稱。
 		<form name="form">
 			<button name="OK" text="確定"/>
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
 	<notification name="FSSetTitleRegionNotFound">
-		找不到區域「[REGION]」。請檢查名稱後重試。
+		找不到區域「[REGION]」。請檢查名稱並再試一次。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 

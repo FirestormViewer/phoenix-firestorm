@@ -44,6 +44,7 @@ public:
     bool cleanup() override;
 
     bool reportCrashToBugsplat(void* pExcepInfo) override;
+    bool reportCustomToBugsplat(const std::string& desription) override;
 
 protected:
     bool initWindow() override; // Override to initialize the viewer's window.
@@ -58,8 +59,6 @@ protected:
     bool sendURLToOtherInstance(const std::string& url) override;
 
     std::string generateSerialNumber();
-
-    static const std::string sWindowClass;
 
 private:
     void disableWinErrorReporting();
