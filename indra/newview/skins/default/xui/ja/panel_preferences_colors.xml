@@ -216,6 +216,7 @@
 			<color_swatch name="console_background" tool_tip="コンソールの色を選択します。"/>
 			<slider label="透過度：" name="console_background_opacity" tool_tip="チャットコンソールの背景の透過度を選択します。"/>
 			<slider label="フローティングテキストの背景の透過度：" name="FSHudTextBackgroundOpacity" tool_tip="フローティングテキストの背景の不透明度を選んでください。"/>
+			<slider label="メニュー背景の透過度：" name="menu_background_alpha" tool_tip="コンテキストメニューおよびトップメニューバーの背景の透過度（0.0＝完全に透明、1.0＝完全に不透明）"/>
 			<text name="preferences_search_label">
 				検索結果のハイライト色：
 			</text>

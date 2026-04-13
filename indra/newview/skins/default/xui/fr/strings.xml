@@ -7212,4 +7212,10 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="OmnifilterReplacement">
 		Remplacement omnifiltre : [REPLACEMENT]
 	</string>
+	<string name="FSAvatarAlignToggleMini">
+		Mini
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		Complet
+	</string>
 </strings>

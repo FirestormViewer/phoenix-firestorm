@@ -276,6 +276,10 @@ static bool custom_download_asset(void* user_data,
 
 static const wchar_t* PROTOCOL_SECONDLIFE = L"secondlife";
 static const wchar_t* PROTOCOL_GRID_INFO = L"x-grid-location-info";
+// <FS:TJ> Support for Opensim protocols
+static const wchar_t* PROTOCOL_HOP_OPENSIM = L"hop";
+static const wchar_t* PROTOCOL_GRID_INFO_OPENSIM = L"x-grid-info";
+// </FS:TJ>
 static std::wstring get_viewer_exe_name()
 {
     return ll_convert<std::wstring>(gDirUtilp->getExecutableFilename());
@@ -294,13 +298,22 @@ static std::wstring get_app_name()
     // Match viewer_manifest.py app_name() logic: release channel uses "Viewer"
     // suffix instead of "Release" for display purposes (shortcuts, uninstall, etc.)
     std::wstring channel = LL_TO_WSTRING(LL_VIEWER_CHANNEL);
-    std::wstring release_suffix = L" Release";
-    if (channel.size() >= release_suffix.size() &&
-        channel.compare(channel.size() - release_suffix.size(), release_suffix.size(), release_suffix) == 0)
-    {
-        channel.replace(channel.size() - release_suffix.size(), release_suffix.size(), L" Viewer");
-    }
-    return channel;
+    // <FS:TJ> Get correct Firestorm app name
+    //std::wstring release_suffix = L" Release";
+    //if (channel.size() >= release_suffix.size() &&
+    //    channel.compare(channel.size() - release_suffix.size(), release_suffix.size(), release_suffix) == 0)
+    //{
+    //    channel.replace(channel.size() - release_suffix.size(), release_suffix.size(), L" Viewer");
+    //}
+    //return channel;
+    std::wstring prefix = L"Firestorm";
+    if (channel.starts_with(prefix))
+        channel.erase(0, prefix.size());
+#ifdef OPENSIM
+    prefix.append(L"OS");
+#endif
+    return prefix + channel;
+    // </FS:TJ>
 }
 
 static std::wstring get_app_name_oneword()
@@ -403,6 +416,22 @@ static void register_protocol_handler(const std::wstring& protocol,
                       (BYTE*)cmd_value.c_str(), (DWORD)((cmd_value.size() + 1) * sizeof(wchar_t)));
         RegCloseKey(hkey);
     }
+
+    // <FS:TJ> [FIRE-30446] Set FriendlyAppName for protocols
+    std::wstring friendlyappname_key_path = key_path + L"\\shell\\open";
+    if (RegCreateKeyExW(HKEY_CURRENT_USER, friendlyappname_key_path.c_str(), 0, NULL,
+                        REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkey, NULL) == ERROR_SUCCESS)
+    {
+    #ifdef OPENSIM
+        std::wstring friendlyappname_value = get_app_name_oneword() + L" for OpenSimulator";
+    #else
+        std::wstring friendlyappname_value = get_app_name_oneword();
+    #endif
+        RegSetValueExW(hkey, L"FriendlyAppName", 0, REG_SZ,
+                      (BYTE*)friendlyappname_value.c_str(), (DWORD)((friendlyappname_value.size() + 1) * sizeof(wchar_t)));
+        RegCloseKey(hkey);
+    }
+    // </FS:TJ>
 }
 
 void clear_nsis_links()
@@ -560,21 +589,33 @@ static void register_uninstall_info(const std::wstring& install_dir,
         RegSetValueExW(hkey, L"DisplayVersion", 0, REG_SZ,
                       (BYTE*)version.c_str(), (DWORD)((version.size() + 1) * sizeof(wchar_t)));
         RegSetValueExW(hkey, L"Publisher", 0, REG_SZ,
-                      (BYTE*)L"Linden Research, Inc.", 44);
+                      // <FS:TJ> Use Firestorm installation information
+                      //(BYTE*)L"Linden Research, Inc.", 44);
+                      (BYTE*)L"The Phoenix Firestorm Project, Inc.", 72);
+                      // </FS:TJ>
         RegSetValueExW(hkey, L"UninstallString", 0, REG_SZ,
                       (BYTE*)uninstall_cmd.c_str(), (DWORD)((uninstall_cmd.size() + 1) * sizeof(wchar_t)));
         RegSetValueExW(hkey, L"DisplayIcon", 0, REG_SZ,
                       (BYTE*)exe_path.c_str(), (DWORD)((exe_path.size() + 1) * sizeof(wchar_t)));
 
-        std::wstring link_url = L"https://support.secondlife.com/contact-support/";
+        // <FS:TJ> Use Firestorm installation information
+        //std::wstring link_url = L"https://support.secondlife.com/contact-support/";
+        std::wstring link_url = L"https://www.firestormviewer.org/support";
+        // </FS:TJ>
         RegSetValueExW(hkey, L"HelpLink", 0, REG_SZ,
             (BYTE*)link_url.c_str(), (DWORD)((link_url.size() + 1) * sizeof(wchar_t)));
 
-        link_url = L"https://secondlife.com/whatis/";
+        // <FS:TJ> Use Firestorm installation information
+        //link_url = L"https://secondlife.com/whatis/";
+        link_url = L"https://www.firestormviewer.org";
+        // </FS:TJ>
         RegSetValueExW(hkey, L"URLInfoAbout", 0, REG_SZ,
             (BYTE*)link_url.c_str(), (DWORD)((link_url.size() + 1) * sizeof(wchar_t)));
 
-        link_url = L"https://secondlife.com/support/downloads/";
+        // <FS:TJ> Use Firestorm installation information
+        //link_url = L"https://secondlife.com/support/downloads/";
+        link_url = L"https://www.firestormviewer.org/downloads";
+        // </FS:TJ>
         RegSetValueExW(hkey, L"URLUpdateInfo", 0, REG_SZ,
             (BYTE*)link_url.c_str(), (DWORD)((link_url.size() + 1) * sizeof(wchar_t)));
 
@@ -656,7 +697,15 @@ static void on_after_install(void* user_data, const char* app_version)
     std::wstring exe_path = install_dir + L"\\" + get_viewer_exe_name();
 
     register_protocol_handler(PROTOCOL_SECONDLIFE, L"URL:Second Life", exe_path);
+    // <FS:TJ> Support for OpenSim protocols
+#ifndef OPENSIM
     register_protocol_handler(PROTOCOL_GRID_INFO, L"URL:Second Life", exe_path);
+#else
+    register_protocol_handler(PROTOCOL_GRID_INFO, L"URL:Hypergrid", exe_path);
+#endif
+    register_protocol_handler(PROTOCOL_HOP_OPENSIM, L"URL:Hypergrid", exe_path);
+    register_protocol_handler(PROTOCOL_GRID_INFO_OPENSIM, L"URL:Hypergrid", exe_path);
+    // </FS:TJ>
     create_shortcuts(install_dir, app_name);
 }
 
@@ -666,6 +715,10 @@ static void on_before_uninstall(void* user_data, const char* app_version)
 
     unregister_protocol_handler(PROTOCOL_SECONDLIFE);
     unregister_protocol_handler(PROTOCOL_GRID_INFO);
+    // <FS:TJ> Support for OpenSim protocols
+    unregister_protocol_handler(PROTOCOL_HOP_OPENSIM);
+    unregister_protocol_handler(PROTOCOL_GRID_INFO_OPENSIM);
+    // </FS:TJ>
     unregister_uninstall_info();
     remove_shortcuts(app_name);
 }
