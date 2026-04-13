@@ -678,7 +678,9 @@ void LLPipeline::init()
     {
         cntrl_ptr->getCommitSignal()->connect([](LLControlVariable* control, const LLSD& value, const LLSD& previous)
         {
-            LLFontVertexBuffer::enableBufferCollection(control->getValue().asBoolean());
+            bool enable_buffers = control->getValue().asBoolean();
+            LLFontVertexBuffer::enableBufferCollection(enable_buffers);
+            LLFontWidthBuffer::enableBufferCollection(enable_buffers);
         });
     }
 }
@@ -1290,7 +1292,9 @@ void LLPipeline::refreshCachedSettings()
         LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
     }
 
-    LLFontVertexBuffer::enableBufferCollection(gSavedSettings.getBOOL("CollectFontVertexBuffers"));
+    bool enable_buffers = gSavedSettings.getBOOL("CollectFontVertexBuffers");
+    LLFontVertexBuffer::enableBufferCollection(enable_buffers);
+    LLFontWidthBuffer::enableBufferCollection(enable_buffers);
 }
 
 void LLPipeline::releaseGLBuffers()
