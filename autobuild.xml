@@ -2756,11 +2756,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9bd007dd70635d85d716ca00484cefa700cdb6f0</string>
+              <string>8de96fd083783b9f4df1d8d7028c8a713a7d7217</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-google-fonts/releases/download/v1.0.0-r2/google_fonts-1.0.0.22606339007-common-22606339007.tar.zst</string>
+              <string>https://github.com/secondlife/3p-google-fonts/releases/download/v1.0.0-r6/google_fonts-1.0.0.24469773244-common-24469773244.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
