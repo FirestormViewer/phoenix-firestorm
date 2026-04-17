@@ -238,7 +238,7 @@ protected:
     token_by_first_char_map_t mLineTokenByFirstChar;
     token_by_first_char_map_t mDelimiterTokenByFirstChar;
 
-    typedef  std::map<std::string, std::string, std::less<>> element_attributes_t;
+    typedef std::unordered_map<std::string, std::string, ll::string_hash, std::equal_to<>> element_attributes_t;
     typedef element_attributes_t::const_iterator attribute_iterator_t;
     element_attributes_t mAttributes;
     std::string getAttribute(std::string_view key);

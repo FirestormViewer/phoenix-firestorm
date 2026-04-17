@@ -341,21 +341,12 @@ bool LLTextureCacheRemoteWorker::doRead()
     if (!done && (mState == LOCAL))
     {
         llassert(local_size != 0);  // we're assuming there is a non empty local file here...
-        if (!mDataSize || mDataSize > local_size)
+        if (mDataSize <= 0 || mDataSize > local_size)
         {
             mDataSize = local_size;
         }
         // Allocate read buffer
-// <FS:Zi> Linux gcc 14.2 (at least) complains here
-#if defined(LL_GNUC) && GCC_VERSION >= 140000
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
-#endif
         mReadData = (U8*)ll_aligned_malloc_16(mDataSize);
-#if defined(LL_GNUC) && GCC_VERSION >= 140000
-#pragma GCC diagnostic pop
-#endif
-// </FS:Zi>
 
         if (mReadData)
         {
@@ -996,6 +987,8 @@ void LLTextureCache::setReadOnly(bool read_only)
 // Returns the unused amount of max_size if any
 S64 LLTextureCache::initCache(ELLPath location, S64 max_size, bool texture_cache_mismatch)
 {
+    LL_PROFILE_ZONE_SCOPED;
+
     llassert_always(getPending() == 0) ; //should not start accessing the texture cache before initialized.
 
     S64 entries_size = (max_size * 36) / 100; //0.36 * max_size

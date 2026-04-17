@@ -5957,6 +5957,8 @@ const std::string& LLAgent::getTeleportStateName() const
 
 void LLAgent::parseTeleportMessages(const std::string& xml_filename)
 {
+    LL_PROFILE_ZONE_SCOPED;
+
     LLXMLNodePtr root;
     bool success = LLUICtrlFactory::getLayeredXMLNode(xml_filename, root);
 

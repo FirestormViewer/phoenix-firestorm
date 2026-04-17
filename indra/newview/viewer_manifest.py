@@ -2296,8 +2296,8 @@ class LinuxManifest(ViewerManifest):
             ):
                 self.path(libfile)
 
-            # Vivox runtimes
-            # Currentelly, the 32-bit ones will work with a 64-bit client.
+        # Vivox runtimes
+        # currently, the 32-bit ones will work with a 64-bit client.
         with self.prefix(src=os.path.join(pkgdir, 'bin32' ), dst="bin"):
             self.path("SLVoice")
         with self.prefix(src=os.path.join(pkgdir ), dst="bin"):
@@ -2358,7 +2358,7 @@ class LinuxManifest(ViewerManifest):
                 self.run_command(['tar', '-C', self.get_build_prefix(),
                                   '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
                                  tarName, installer_name])
-                self.set_github_output_path('viewer_app', tarName)
+                #self.set_github_output_path('viewer_app', tarName)
             else:
                 print("Skipping %s.tar.xz for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype']))
@@ -2422,13 +2422,13 @@ class Linux_x86_64_Manifest(LinuxManifest):
                     pass
 
         # Vivox runtimes
-        with self.prefix(src=relpkgdir, dst="bin"):
-            self.path("SLVoice")
-        with self.prefix(src=relpkgdir, dst="lib"):
-            self.path("libortp.so")
-            self.path("libsndfile.so.1")
-            #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
-            self.path("libvivoxsdk.so")
+        # with self.prefix(src=relpkgdir, dst="bin"):
+            # self.path("SLVoice")
+        # with self.prefix(src=relpkgdir, dst="lib"):
+            # self.path("libortp.so")
+            # self.path("libsndfile.so.1")
+            # #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
+            # self.path("libvivoxsdk.so")
 
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()

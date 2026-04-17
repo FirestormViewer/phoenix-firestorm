@@ -657,10 +657,7 @@ LLProcess::LLProcess(const LLSDOrParams& params):
     // case), e.g. by calling operator(), returns a reference to *the same
     // instance* of the wrapped type that's stored in our Block subclass.
     // That's important! We know 'params' persists throughout this method
-    // call; but without that guarantee, we'd have to assume that converting
-    // one of its members to std::string might return a different (temp)
-    // instance. Capturing the c_str() from a temporary std::string is Bad Bad
-    // Bad. But armed with this knowledge, when you see params.cwd().c_str(),
+    // call; but without that guarantee, when you see params.cwd().c_str(),
     // grit your teeth and smile and carry on.
 
     if (params.cwd.isProvided())

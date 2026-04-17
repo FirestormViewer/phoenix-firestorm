@@ -307,7 +307,6 @@
 				<check_box label="Activar distancia de dibujo" name="UseFarClip" tool_tip="Activa la distancia de dibujo. Si la desactivas, el visor dibujará más allá de la distancia de dibujo configurada."/>
 				<check_box label="Ajustar dinámicamente el nivel de detalle" name="RednerLod1" tool_tip="Activa la característica que permite al visor ajustar dinámicamente el nivel de detalle en escena según te alejas de los objetos. Ayuda a mejorar el rendimiento, pero también puede reducir la calidad de los objetos en la escena."/>
 				<check_box label="Dibujar sólo los objetos visibles" tool_tip="Permite al visor procesar/dibujar sólo aquellos objetos que se encuentran dentro del campo de visión y no escondidos detrás de otro objeto. Por lo geneneral, supone una mejora del rendimiento, pero en algunas ocasiones puede reducirlo, especialmente cuando la escena/sim tiene pocos objetos. ¡Actívalo para ver si ayuda!" name="UssOcclusion1"/>
-				<check_box label="Filtrado anisotrópico" tool_tip="Aumenta la frescura de las texturas" name="Anisotropic"/>
 				<check_box label="Dibujar las partículas anexadas a otros" tool_tip="Permite al visor dibujar las texturas anexadas a/procedentes de otros avatares" name="Render Attached Particle"/>
 			</panel>
 			<panel name="P_Anti-aliasing">
@@ -321,6 +320,9 @@
 					<combo_box.item label="8x (Aún más suaves)" name="8x"/>
 					<combo_box.item label="16x (Los más suaves)" name="16x"/>
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Aumenta la frescura de las texturas">
+					Filtrado anisotrópico
+				</text>
 				<text name="T_Texture_Bumpiness" tool_tip="Controla la intensidad y la resolución de los mapas normales y los bump maps. Debes conmutar la casilla de abajo para que los cambios tengan efecto.">
 					Bacheado texturas
 				</text>

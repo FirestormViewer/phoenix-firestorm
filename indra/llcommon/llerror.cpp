@@ -525,7 +525,7 @@ namespace
     }
 
 
-    typedef std::map<std::string, LLError::ELevel> LevelMap;
+    typedef std::unordered_map<std::string, LLError::ELevel> LevelMap;
     typedef std::vector<LLError::RecorderPtr> Recorders;
     typedef std::vector<LLError::CallSite*> CallSiteVector;
 
@@ -546,7 +546,7 @@ namespace
         LevelMap                            mClassLevelMap;
         LevelMap                            mFileLevelMap;
         LevelMap                            mTagLevelMap;
-        std::map<std::string, unsigned int> mUniqueLogMessages;
+        std::unordered_map<std::string, unsigned int> mUniqueLogMessages;
 
         LLError::FatalFunction              mCrashFunction;
         LLError::TimeFunction               mTimeFunction;
@@ -1467,7 +1467,7 @@ namespace LLError
         {
             std::ostringstream message_stream;
 
-            std::map<std::string, unsigned int>::iterator messageIter = s->mUniqueLogMessages.find(message);
+            auto messageIter = s->mUniqueLogMessages.find(message);
             if (messageIter != s->mUniqueLogMessages.end())
             {
                 messageIter->second++;

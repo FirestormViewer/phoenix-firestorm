@@ -12,6 +12,7 @@
 		<string>FSRenderVignette</string>
 		<string>FullScreen</string>
 		<string>RenderAnisotropic</string>
+        <string>RenderAnisotropicLevel</string>
 		<string>RenderAttachedLights</string>
 		<string>RenderAttachedParticles</string>
 		<string>RenderAutoMaskAlphaDeferred</string>

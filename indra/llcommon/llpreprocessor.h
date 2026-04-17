@@ -83,6 +83,7 @@
     #define CLANG_VERSION (__clang_major__ * 10000 \
                         + __clang_minor__ * 100 \
                         + __clang_patchlevel__)
+    #define CLANG_VERSION_STRING (__VERSION__) // <FS:TJ/> For about viewer info
     #ifndef LL_CLANG
         #define LL_CLANG 1
     #endif

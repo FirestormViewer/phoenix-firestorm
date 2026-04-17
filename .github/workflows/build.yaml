@@ -366,7 +366,7 @@ jobs:
             ${{ steps.build.outputs.physicstpv }}
 
       - name: Upload appearance utility package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: matrix.build_variant == 'Viewer' && steps.build.outputs.appearanceutility
         with:
           name: "${{ steps.build.outputs.artifact }}-appearanceutility"

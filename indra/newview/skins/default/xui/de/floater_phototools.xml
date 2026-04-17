@@ -431,7 +431,6 @@
 				<check_box label="Draw Distance aktivieren" name="UseFarClip" tool_tip="Aktiviert die Draw Distance. Wenn diese Einstellung deaktiviert wird, stellt der Viewer Objekte auch außerhalb der Draw Distance dar."/>
 				<check_box label="Detaillevel dynamisch anpassen" name="RednerLod1" tool_tip="Diese Einstellung bewirkt, dass der Viewer dynamisch das Detaillevel von Objekten anpasst, wenn der Abstand zu einem Objekt verändert wird. Hierdurch wird die Performance verbessert, allerdings kann auch die Darstellungsqualität von Objekten schlechter werden."/>
 				<check_box label="Nur Objekte im Sichtber. der Kamera rendern" name="UssOcclusion1" tool_tip="Falls diese Einstellung aktiviert wird, werden nur Objekte durch den Viewer verarbeitet/gerendered, die im aktuellen Sichtbereich der Kamera und die nicht durch andere Objekte verdeckt sind. Hierdurch wird normalerweise eine bessere Performance erreicht. Manchmal kann die Performance allerdings auch schlechter werden, wenn in der aktuellen Szenerie/Region wenig Objekte vorhanden sind. Ausprobieren, um diese Einstellung einen Vorteil bringt!"/>
-				<check_box label="Anisotropische Filterung" name="Anisotropic" tool_tip="Diese Einstellung erzeugt knusprigere Texturen."/>
 				<check_box label="Partikel von anderen Avataren anzeigen" name="Render Attached Particle" tool_tip="Falls diese Einstellung aktiviert ist, werden alle Arten von Partikeln angezeigt, die von Avataren ausgehen."/>
 			</panel>
 
@@ -453,6 +452,9 @@
 					<combo_box.item label="Hoch" name="High"/>
 					<combo_box.item label="Ultra" name="Ultra"/>
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Diese Einstellung erzeugt knusprigere Texturen.">
+					Anisotropische Filterung
+				</text>
 				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest.">
 					Textur-Holprigkeit
 				</text>

@@ -177,7 +177,7 @@ public:
         std::vector<std::string> mLog;
         std::array<bool, 4>      mStatus;
         std::array<std::string, LOCAL_NUM_LODS> mFilenames;
-        std::array<LLSD, LOCAL_NUM_LODS>        mLastModified;
+        std::array<std::time_t, LOCAL_NUM_LODS> mLastModified;
         std::vector<std::unique_ptr<LLLocalMeshObject>> mLoadedObjectList;
     };
 
@@ -219,11 +219,11 @@ public:
     void pushLog(const std::string& who, const std::string& what, bool is_error = false);
 
 private:
-    bool readLastModified(const std::string& filename, LLSD& last_modified) const;
+    bool readLastModified(const std::string& filename, std::time_t& last_modified) const;
     void discoverLodFilenames(const std::array<std::string, LOCAL_NUM_LODS>& seed_filenames,
                               std::array<std::string, LOCAL_NUM_LODS>& discovered_filenames) const;
     bool detectReloadChanges(const std::array<std::string, LOCAL_NUM_LODS>& candidate_filenames,
-                             const std::array<LLSD, LOCAL_NUM_LODS>& candidate_last_modified,
+                             const std::array<std::time_t, LOCAL_NUM_LODS>& candidate_last_modified,
                              std::array<bool, LOCAL_NUM_LODS>& changed_lods) const;
     std::vector<std::unique_ptr<LLLocalMeshObject>> cloneLoadedObjects() const;
     std::vector<LLLocalMeshReloadBinding>           collectReloadBindings() const;
@@ -234,7 +234,7 @@ private:
                                 std::string& failure_reason) const;
 
     std::array<std::string, LOCAL_NUM_LODS> mFilenames;
-    std::array<LLSD, LOCAL_NUM_LODS>        mLastModified;
+    std::array<std::time_t, LOCAL_NUM_LODS> mLastModified;
     std::array<bool, LOCAL_NUM_LODS>        mLoadedSuccessfully;
     bool                                    mTryLODFiles;
     std::string                             mShortName;
