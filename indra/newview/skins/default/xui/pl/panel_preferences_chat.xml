@@ -161,6 +161,8 @@
 			<check_box name="FSShowChatType" label="Pokaż typ czatu i przycisk wysyłania"/>
 			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>
 			<check_box label="Odznaczaj pasek czatu po wysłaniu wiadomości" name="CloseChatOnReturn"/>
+			<check_box label="Tylko w trybie pierwszoosobowym" name="FSCloseChatOnReturnInMouselook" tool_tip="Kiedy 'odznaczaj pasek czatu po wysłaniu wiadomości' jest aktywne, to odznaczaj czat tylko w trybie pierwszoosobowym." />
+			<check_box label="Tylko dla paska czatu w pobliżu" name="FSCloseChatOnReturnOnlyForNearbyChatControl" tool_tip="When 'odznaczaj pasek czatu po wysłaniu wiadomości' jest aktywne, to odznaczaj czat tylko dla paska czatu w pobliżu." />
 			<check_box label="Odznaczaj także historię czatu" name="FSUnfocusChatHistoryOnReturn" />
 			<text name="textUseKeyboardShortcuts">
 				Używaj skrótów klawiszowych:

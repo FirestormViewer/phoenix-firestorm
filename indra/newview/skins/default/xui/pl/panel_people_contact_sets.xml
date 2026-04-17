@@ -4,5 +4,6 @@
 		<menu_button name="contact_sets_gear_btn" tool_tip="Akcje dotyczące wybranej osoby lub grupy" />
 		<menu_button name="contact_sets_plus_btn" tool_tip="Dodaj grupę lub rezydenta" />
 		<menu_button name="contact_sets_remove_btn" tool_tip="Usuń grupę lub rezydenta" />
+		<filter_editor label="Filtruj ludzi" name="contact_sets_filter_input" />
 	</panel>
 </panel>

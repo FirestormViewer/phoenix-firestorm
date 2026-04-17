@@ -1218,7 +1218,8 @@ Sizin aktiv qrupunuz üçün torpaq almaq hüququnuz yoxdur.
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz.
+		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz. Açar sözdə icazə verilən durğu işarələri: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Yanlış əvəzetmə siyahısı.
@@ -5086,6 +5087,13 @@ Bu əməliyyatı geri qaytara bilməzsiniz.
 			<button name="Cancel" text="Ləğv et"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		[COUNT] avatar üçün ləqəb daxil edin:
+		<form name="form">
+			<button name="Create" text="Yarat"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		&apos;[SET]&apos; dəstinin adını &apos;[NEW_NAME]&apos; olaraq dəyişmək mümkün olmadı, çünki eyni adlı dəst artıq mövcuddur və ya yeni ad etibarsızdır.
 	</notification>
@@ -5291,8 +5299,20 @@ URL defolt olaraq sıfırlansın?
 		<usetemplate name="okcancelbuttons" notext="Növbəti dəfə mənə xatırlat" yestext="Sıfırla"/>
 	</notification>
 	<notification name="WarnScriptedCamera">
-Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
+		Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
 
 [SOURCES]
+	</notification>
+	<notification name="FSSetTitleRegion">
+		Seçilmiş qrup başlığına təyin etmək üçün bölgənin dəqiq adını daxil edin.
+Ad təyinat saxlanmadan əvvəl yoxlanılacaq.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		'[REGION]' bölgəsi tapılmadı. Zəhmət olmasa adı yoxlayın və yenidən cəhd edin.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>

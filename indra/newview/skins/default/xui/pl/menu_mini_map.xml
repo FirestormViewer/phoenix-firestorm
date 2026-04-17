@@ -4,6 +4,7 @@
 	<menu label="Pokaż profil" name="View Profiles"></menu>
 	<menu_item_call label="Dodaj do Zestawu" name="Add to Set Multiple"/>
 	<menu_item_call label="Przybliż kamerę" name="Cam"/>
+	<menu_item_call label="Zwróć się w stronę" name="Face towards avatar" />
 	<menu name="MarkAvatar" label="Oznacz...">
 		<menu_item_call label="Czerwony" name="MarkRed"/>
 		<menu_item_call label="Zielony" name="MarkGreen"/>

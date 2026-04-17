@@ -54,6 +54,7 @@
 #include "llviewertexturelist.h"
 // PoundLife END
 #include "llvovolume.h"
+#include "llgltfmaterial.h"
 
 // <FS:Ansariel> FIRE-22292: Configurable columns
 #include "llmenugl.h"
@@ -648,32 +649,54 @@ void LLFloaterInspect::getObjectTextureMemory(LLViewerObject* object, U32& objec
 
     for (U8 j = 0; j < te_count; j++)
     {
-        LLViewerTexture* img = object->getTEImage(j);
-        if (img)
+        LLTextureEntry* te = object->getTE(j);
+        if (!te)
         {
-            calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+            continue;
         }
 
-        // materials per face
-        if (object->getTE(j)->getMaterialParams().notNull())
+        // If a PBR (GLTF) render material is present, count this instead of legacy textures.
+        if (LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial())
         {
-            uuid = object->getTE(j)->getMaterialParams()->getNormalID();
-            if (uuid.notNull())
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
             {
-                LLViewerTexture* img = gTextureList.getImage(uuid);
-                if (img)
+                const LLUUID& tex_id = gltf_mat->mTextureId[i];
+                if (tex_id.notNull())
                 {
-                    calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    if (LLViewerTexture* img = gTextureList.getImage(tex_id))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
                 }
             }
-
-            uuid = object->getTE(j)->getMaterialParams()->getSpecularID();
-            if (uuid.notNull())
+        }
+        else
+        {
+            // Legacy diffuse per face
+            if (LLViewerTexture* img = object->getTEImage(j))
             {
-                LLViewerTexture* img = gTextureList.getImage(uuid);
-                if (img)
+                calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+            }
+
+            // Legacy materials per face (normal/specular)
+            if (te->getMaterialParams().notNull())
+            {
+                uuid = te->getMaterialParams()->getNormalID();
+                if (uuid.notNull())
                 {
-                    calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    if (LLViewerTexture* img = gTextureList.getImage(uuid))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
+                }
+
+                uuid = te->getMaterialParams()->getSpecularID();
+                if (uuid.notNull())
+                {
+                    if (LLViewerTexture* img = gTextureList.getImage(uuid))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
                 }
             }
         }

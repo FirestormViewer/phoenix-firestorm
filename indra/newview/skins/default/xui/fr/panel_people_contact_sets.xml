@@ -4,5 +4,6 @@
 		<menu_button name="contact_sets_gear_btn" tool_tip="Actions sur la personne ou le groupe sélectionné"/>
 		<menu_button name="contact_sets_plus_btn" tool_tip="Ajouter un groupe ou une personne"/>
 		<menu_button name="contact_sets_remove_btn" tool_tip="Supprimer un groupe ou une personne"/>
+		<filter_editor label="Filtrer les personnes" name="contact_sets_filter_input"/>
 	</panel>
 </panel>

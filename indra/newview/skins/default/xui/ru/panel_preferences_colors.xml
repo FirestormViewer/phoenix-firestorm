@@ -216,6 +216,7 @@
 			<color_swatch name="console_background" tool_tip="Выберите цвет консоли"/>
 			<slider label="Прозрачность:" name="console_background_opacity" tool_tip="Выберите прозрачность фона консоли"/>
 			<slider label="Прозрачн. фона плав. текста:" name="FSHudTextBackgroundOpacity" tool_tip="Выберите прозрачность фона плавающего текста" />
+			<slider label="Прозрачность фона меню:" name="menu_background_alpha" tool_tip="Прозрачность фона контекстных меню и верхней панели меню (0.0 = полностью прозрачный, 1.0 = полностью непрозрачный)"/>
 			<text name="preferences_search_label">
                 Цвета подсветки поиска в настройках:
             </text>

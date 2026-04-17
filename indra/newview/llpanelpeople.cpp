@@ -140,18 +140,46 @@ protected:
 
         if (online1 == online2)
         {
-            std::string name1 = item1->getAvatarName();
-            std::string name2 = item2->getAvatarName();
+            // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
+            // std::string name1 = item1->getAvatarName();
+            // std::string name2 = item2->getAvatarName();
 
-            LLStringUtil::toUpper(name1);
-            LLStringUtil::toUpper(name2);
+            // LLStringUtil::toUpper(name1);
+            // LLStringUtil::toUpper(name2);
 
+            std::string name1 = getComparableName(item1);
+            std::string name2 = getComparableName(item2);
+            // </FS:PP>
             return name1 < name2;
         }
 
         return online1 > online2;
     }
 };
+
+// <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+class LLAvatarItemOnlineSipStatusComparator : public LLAvatarItemComparator
+{
+public:
+    LLAvatarItemOnlineSipStatusComparator() {};
+
+protected:
+    virtual bool doCompare(const LLAvatarListItem* item1, const LLAvatarListItem* item2) const
+    {
+        const bool online1 = LLAvatarTracker::instance().isBuddyOnline(item1->getAvatarId());
+        const bool online2 = LLAvatarTracker::instance().isBuddyOnline(item2->getAvatarId());
+
+        if (online1 == online2)
+        {
+            std::string name1 = getComparableName(item1);
+            std::string name2 = getComparableName(item2);
+            return name1 < name2;
+        }
+
+        return online1 > online2;
+    }
+};
+// </FS:PP>
 
 /** Compares avatar items by distance between you and them */
 class LLAvatarItemDistanceComparator : public LLAvatarItemComparator
@@ -242,12 +270,16 @@ protected:
 
         if (arr_time1 == arr_time2)
         {
-            std::string name1 = item1->getAvatarName();
-            std::string name2 = item2->getAvatarName();
+            // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
+            // std::string name1 = item1->getAvatarName();
+            // std::string name2 = item2->getAvatarName();
 
-            LLStringUtil::toUpper(name1);
-            LLStringUtil::toUpper(name2);
+            // LLStringUtil::toUpper(name1);
+            // LLStringUtil::toUpper(name2);
 
+            std::string name1 = getComparableName(item1);
+            std::string name2 = getComparableName(item2);
+            // </FS:PP>
             return name1 < name2;
         }
 
@@ -257,6 +289,7 @@ protected:
 
 static const LLAvatarItemRecentComparator RECENT_COMPARATOR;
 static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
+static const LLAvatarItemOnlineSipStatusComparator ONLINE_SIP_STATUS_COMPARATOR; // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
 static LLAvatarItemDistanceComparator DISTANCE_COMPARATOR;
 static const LLAvatarItemRecentSpeakerComparator RECENT_SPEAKER_COMPARATOR;
 static LLAvatarItemRecentArrivalComparator RECENT_ARRIVAL_COMPARATOR;
@@ -604,6 +637,7 @@ LLPanelPeople::LLPanelPeople()
     mCommitCallbackRegistrar.add("ContactSet.Action", boost::bind(&LLPanelPeople::onContactSetsMenuItemClicked, this, _2));
     mEnableCallbackRegistrar.add("ContactSet.Enable", boost::bind(&LLPanelPeople::onContactSetsEnable, this, _2));
     mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&LLPanelPeople::updateContactSets, this, _1));
+    LLAvatarTracker::instance().addObserver(this);
     // [/FS:CR]
 
     // <FS:Ansariel> FIRE-10839: Customizable radar columns (needed for Vintage skin)
@@ -620,7 +654,10 @@ LLPanelPeople::~LLPanelPeople()
     delete mFriendListUpdater;
     delete mRecentListUpdater;
 
-    LLVoiceClient::removeObserver(this);
+    // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+    // LLVoiceClient::removeObserver(this);
+    LLVoiceClient::removeObserver(static_cast<LLVoiceClientStatusObserver*>(this));
+    // </FS:PP>
 
     mNearbyFilterCommitConnection.disconnect();
     mFriedsFilterCommitConnection.disconnect();
@@ -628,8 +665,10 @@ LLPanelPeople::~LLPanelPeople()
     mRecentFilterCommitConnection.disconnect();
 
     // [FS:CR] Contact sets
+    mContactSetsFilterCommitConnection.disconnect();
     if (mContactSetChangedConnection.connected())
         mContactSetChangedConnection.disconnect();
+    LLAvatarTracker::instance().removeObserver(this);
     // [/FS:CR]
 }
 
@@ -754,6 +793,18 @@ bool LLPanelPeople::postBuild()
     mRecentFilterCommitConnection = recent_tab->getChild<LLFilterEditor>("recent_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
     mGroupsFilterCommitConnection = group_tab->getChild<LLFilterEditor>("groups_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 
+    // <FS:PP> FIRE-17568: Search in Contact Sets
+    if (LLFilterEditor* contact_sets_filter = getChild<LLFilterEditor>("contact_sets_filter_input", true))
+    {
+        mContactSetsFilterCommitConnection = contact_sets_filter->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
+    }
+    // </FS:PP>
+
+    // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    mOnlineFriendList->setUseContactSetColors(true);
+    mAllFriendList->setUseContactSetColors(true);
+    // </FS:PP>
+
     // <FS:Ansariel> Use Firestorm radar menu handler
     //mNearbyList->setContextMenu(&LLPanelPeopleMenus::gNearbyPeopleContextMenu);
     // </FS:Ansariel>
@@ -814,6 +865,9 @@ bool LLPanelPeople::postBuild()
     mContactSetList = getChild<LLAvatarList>("contact_list");
     if (mContactSetList)
     {
+        mContactSetList->setUseContactSetColors(true);
+        mContactSetList->setUseContactSetListStyle(true);
+        mContactSetList->setAvatarDropCallback(boost::bind(&LLPanelPeople::handleAvatarDropToCurrentContactSet, this, _1, _2));
         mContactSetList->setCommitCallback(boost::bind(&LLPanelPeople::updateButtons, this));
         mContactSetList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
         mContactSetList->setNoItemsCommentText(getString("empty_list"));
@@ -837,7 +891,10 @@ bool LLPanelPeople::postBuild()
     // Must go after setting commit callback and initializing all pointers to children.
     mTabContainer->selectTabByName(NEARBY_TAB_NAME);
 
-    LLVoiceClient::addObserver(this);
+    // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+    // LLVoiceClient::addObserver(this);
+    LLVoiceClient::addObserver(static_cast<LLVoiceClientStatusObserver*>(this));
+    // </FS:PP> FIRE-21531: Sort Contact Sets by Online Status
 
     // call this method in case some list is empty and buttons can be in inconsistent state
     updateButtons();
@@ -858,8 +915,25 @@ void LLPanelPeople::onChange(EStatusType status, const LLSD& channelInfo, bool p
         return;
     }
 
+    // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+    if (mContactSetList && shouldSortByOnlineStatusForCurrentSet())
+    {
+        mContactSetList->sort();
+    }
+    // </FS:PP>
+
     updateButtons();
 }
+
+// <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+void LLPanelPeople::changed(U32 mask)
+{
+    if ((mask & LLFriendObserver::ONLINE) && mContactSetList && shouldSortByOnlineStatusForCurrentSet())
+    {
+        mContactSetList->sort();
+    }
+}
+// </FS:PP>
 
 void LLPanelPeople::updateFriendListHelpText()
 {
@@ -934,6 +1008,14 @@ void LLPanelPeople::updateFriendList()
     mOnlineFriendList->setDirty(true, !mOnlineFriendList->filterHasMatches());// do force update if list do NOT have items
     mAllFriendList->setDirty(true, !mAllFriendList->filterHasMatches());
     //update trash and other buttons according to a selected item
+
+    // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+    if (mContactSetList && shouldSortByOnlineStatusForCurrentSet())
+    {
+        mContactSetList->sort();
+    }
+    // </FS:PP>
+
     updateButtons();
     showFriendsAccordionsIfNeeded();
 
@@ -1236,6 +1318,15 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
     {
         mRecentList->setNameFilter(filter);
     }
+    // <FS:PP> FIRE-17568: Search in Contact Sets
+    else if (cur_tab == CONTACT_SETS_TAB_NAME)
+    {
+        if (mContactSetList)
+        {
+            mContactSetList->setNameFilter(filter);
+        }
+    }
+    // </FS:PP>
 }
 
 void LLPanelPeople::onGroupLimitInfo()
@@ -1265,6 +1356,13 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
     updateButtons();
 
     showFriendsAccordionsIfNeeded();
+
+    // <FS:PP> FIRE-21531: Sort Contact Sets by Online Status
+    if (getActiveTabName() == CONTACT_SETS_TAB_NAME && mContactSetList && shouldSortByOnlineStatusForCurrentSet())
+    {
+        mContactSetList->sort();
+    }
+    // </FS:PP>
 
     // <FS:AO> Layout panels will not initialize at a constant size, force it here.
     if (mTabContainer->getCurrentPanel()->getName() == NEARBY_TAB_NAME)
@@ -1772,6 +1870,17 @@ bool LLPanelPeople::updateNearbyArrivalTime()
 // [FS:CR] Contact sets
 void LLPanelPeople::updateContactSets(LGGContactSets::EContactSetUpdate type)
 {
+    // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    if (mOnlineFriendList)
+    {
+        mOnlineFriendList->refreshNames();
+    }
+    if (mAllFriendList)
+    {
+        mAllFriendList->refreshNames();
+    }
+    // </FS:PP>
+
     switch (type)
     {
         case LGGContactSets::UPDATED_LISTS:
@@ -1812,17 +1921,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 
     if (contact_set == CS_SET_ALL_SETS)
     {
-        avatars = LGGContactSets::getInstance()->getListOfNonFriends();
-
-        // "All sets" includes buddies
-        LLAvatarTracker::buddy_map_t all_buddies;
-        LLAvatarTracker::instance().copyBuddyList(all_buddies);
-        for (LLAvatarTracker::buddy_map_t::const_iterator buddy = all_buddies.begin();
-             buddy != all_buddies.end();
-             ++buddy)
-        {
-            avatars.push_back(buddy->first);
-        }
+        avatars = LGGContactSets::getInstance()->getFriendsInAnySet();
     }
     else if (contact_set == CS_SET_NO_SETS)
     {
@@ -1851,6 +1950,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
             }
         }
     }
+    updateContactSetListSorting();
     mContactSetList->setDirty();
 }
 
@@ -1858,6 +1958,62 @@ void LLPanelPeople::generateCurrentContactList()
 {
     mContactSetList->refreshNames();
     generateContactList(mContactSetCombo->getValue().asString());
+}
+
+void LLPanelPeople::updateContactSetListSorting()
+{
+    if (!mContactSetList)
+    {
+        return;
+    }
+
+    if (shouldSortByOnlineStatusForCurrentSet())
+    {
+        mContactSetList->setComparator(&ONLINE_SIP_STATUS_COMPARATOR);
+        mContactSetList->sort();
+    }
+    else
+    {
+        mContactSetList->sortByName();
+    }
+}
+
+bool LLPanelPeople::shouldSortByOnlineStatusForCurrentSet() const
+{
+    if (!mContactSetCombo)
+    {
+        return false;
+    }
+
+    const std::string set_name = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set_name))
+    {
+        return false;
+    }
+
+    return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(set_name);
+}
+
+bool LLPanelPeople::handleAvatarDropToCurrentContactSet(const LLUUID& avatar_id, bool drop)
+{
+    if (!mContactSetCombo || avatar_id.isNull())
+    {
+        return false;
+    }
+
+    const std::string set_name = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set_name))
+    {
+        return false;
+    }
+
+    if (drop)
+    {
+        uuid_vec_t ids{ avatar_id };
+        LGGContactSets::instance().addToSet(ids, set_name);
+    }
+
+    return true;
 }
 
 bool LLPanelPeople::onContactSetsEnable(const LLSD& userdata)
@@ -1945,6 +2101,10 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
         }
         LLNotificationsUtil::add((selected_size > 1 ? "RemoveContactsFromSet" : "RemoveContactFromSet"), args, payload, &LGGContactSets::handleRemoveAvatarFromSetCallback);
     }
+    else if (chosen_item == "move_contact")
+    {
+        moveSelectedContactsToSet();
+    }
     else if (chosen_item == "set_config")
     {
         LLFloater* root_floater = gFloaterView->getParentFloater(this);
@@ -1993,9 +2153,20 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
         if (selected_uuids.empty()) return;
 
         LLSD payload, args;
-        args["AVATAR"] = LLSLURL("agent", selected_uuids.front(), "about").getSLURLString();
-        payload["id"] = selected_uuids.front();
-        LLNotificationsUtil::add("SetAvatarPseudonym", args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
+        if (selected_uuids.size() == 1)
+        {
+            args["AVATAR"] = LLSLURL("agent", selected_uuids.front(), "about").getSLURLString();
+            payload["id"] = selected_uuids.front();
+        }
+        else
+        {
+            args["COUNT"] = llformat("%d", static_cast<S32>(selected_uuids.size()));
+            for (const LLUUID& id : selected_uuids)
+            {
+                payload["ids"].append(id);
+            }
+        }
+        LLNotificationsUtil::add((selected_uuids.size() > 1 ? "SetAvatarPseudonymMultiple" : "SetAvatarPseudonym"), args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
     }
     else if (chosen_item == "remove_pseudonym")
     {
@@ -2035,6 +2206,29 @@ void LLPanelPeople::handlePickerCallback(const uuid_vec_t& ids, const std::strin
     }
 
     LGGContactSets::instance().addToSet(ids, set);
+}
+
+void LLPanelPeople::moveSelectedContactsToSet()
+{
+    if (!mContactSetCombo)
+    {
+        return;
+    }
+
+    const std::string source_set = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(source_set))
+    {
+        return;
+    }
+
+    uuid_vec_t selected_uuids;
+    getCurrentItemIDs(selected_uuids);
+    if (selected_uuids.empty())
+    {
+        return;
+    }
+
+    LLAvatarActions::moveToContactSet(selected_uuids, source_set);
 }
 // [/FS:CR]
 
@@ -2079,6 +2273,16 @@ bool LLPanelPeople::handleKeyHere(KEY key, MASK mask)
             getChild<LLFilterEditor>("recent_filter_input")->setFocus(true);
             return true;
         }
+        // <FS:PP> FIRE-17568: Search in Contact Sets
+        else if (cur_tab == CONTACT_SETS_TAB_NAME)
+        {
+            if (LLFilterEditor* filter_editor = getChild<LLFilterEditor>("contact_sets_filter_input", true))
+            {
+                filter_editor->setFocus(true);
+                return true;
+            }
+        }
+        // </FS:PP>
     }
 
     return LLPanel::handleKeyHere(key, mask);

@@ -67,6 +67,7 @@ public:
     void hideAllDetailPanels();
 
     bool postBuild() override;
+    void onOpen(const LLSD& key) override; // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
 
     void updateProfileButtonVisibility(); // <FS:Ansariel> Add "open profile" button
 
@@ -83,6 +84,8 @@ public:
 
 private:
     static LLFloaterDirectory *sInstance;
+
+    std::string mLastSearchURL; // <FS:TJ/> Always navigate if the SearchURL has changed
 };
 
 //extern bool gDisplayEventHack;

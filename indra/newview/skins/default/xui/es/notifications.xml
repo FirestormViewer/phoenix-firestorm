@@ -1203,7 +1203,8 @@ no tienes permiso para comprar terreno para el grupo que tienes activado actualm
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La palabra clave debe ser una única palabra y el reemplazo no puede estar vacío.
+		La palabra clave debe ser una sola palabra y el reemplazo no puede estar vacío. Signos de puntuación permitidos en la palabra clave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista de reemplazo no es válida.
@@ -5006,4 +5007,18 @@ No se podrá deshacer.
 	<notification name="ExodusFlickrUploadComplete">
 		Tu instantánea puede ser vista ahora [https://www.flickr.com/photos/me/[ID] aquí].
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Ingrese el nombre exacto de una región para asignar al título de grupo seleccionado.
+El nombre será verificado antes de guardar la asignación.
+		<form name="form">
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		No se encontró la región '[REGION]'. Por favor, verifique el nombre e intente de nuevo.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+
 </notifications>

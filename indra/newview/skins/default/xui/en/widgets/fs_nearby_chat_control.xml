@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<chat_editor max_length="3070">
+<chat_editor
+  background_pad="0"
+  background_image="TextField_Off"
+  background_image_disabled="TextField_Disabled"
+  background_image_focused="TextField_Active"
+  h_pad="0"
+  max_length="3070"
+  v_pad="0"
+  valign="center"
+  text_valign="center">
 </chat_editor>

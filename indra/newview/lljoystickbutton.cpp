@@ -134,16 +134,32 @@ void LLJoystick::updateSlop()
 
 bool LLJoystick::pointInCircle(S32 x, S32 y) const
 {
-    if(this->getLocalRect().getHeight() != this->getLocalRect().getWidth())
-    {
-        LL_DEBUGS() << "Joystick shape is not square"<<LL_ENDL;
-        return true;
-    }
-    //center is x and y coordinates of center of joystick circle, and also its radius
-    int center = this->getLocalRect().getHeight()/2;
-    bool in_circle = (x - center) * (x - center) + (y - center) * (y - center) <= center * center;
+    // <FS:Chanayane> Fix joystick accepting clicks outside its circular shape when non-square
+    // Original code assumed a square widget; if not square it accepted all clicks as a fallback,
+    // causing camera rotation to trigger anywhere in the bounding rect.
+    // Replaced with an ellipse test so non-square widgets are handled correctly.
+    //if(this->getLocalRect().getHeight() != this->getLocalRect().getWidth())
+    //{
+    //    LL_DEBUGS() << "Joystick shape is not square"<<LL_ENDL;
+    //    return true;
+    //}
+    ////center is x and y coordinates of center of joystick circle, and also its radius
+    //int center = this->getLocalRect().getHeight()/2;
+    //bool in_circle = (x - center) * (x - center) + (y - center) * (y - center) <= center * center;
+    //return in_circle;
 
-    return in_circle;
+    // Point-in-ellipse test: (dx/a)^2 + (dy/b)^2 <= 1
+    // where a and b are the horizontal and vertical semi-axes (half width/height).
+    F32 a = this->getLocalRect().getWidth() / 2.f;
+    F32 b = this->getLocalRect().getHeight() / 2.f;
+    if (a == 0.f || b == 0.f)
+    {
+        return false;
+    }
+    F32 dx = x - a;
+    F32 dy = y - b;
+    return (dx * dx) / (a * a) + (dy * dy) / (b * b) <= 1.f;
+    // </FS:Chanayane>
 }
 
 // <FS:Beq> FIRE-30414 Camera control arrows not clickable

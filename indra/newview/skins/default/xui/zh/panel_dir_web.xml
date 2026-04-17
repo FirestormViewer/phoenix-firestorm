@@ -1,0 +1,5 @@
+<panel label="網頁搜尋" name="panel_dir_web">
+	<button tool_tip="後退" name="back_btn"/>
+	<button tool_tip="前進" name="forward_btn"/>
+	<button name="home_btn" tool_tip="首頁"/>
+</panel>

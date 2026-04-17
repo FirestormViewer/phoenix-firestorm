@@ -222,6 +222,7 @@ protected:
         F32 max_value;
         F32 increment;
         LLSD value;     // used temporary during updateControls()
+        boost::signals2::connection signal_connection;
     };
 
     // XUI definition of a control entry in quick_preferences.xml

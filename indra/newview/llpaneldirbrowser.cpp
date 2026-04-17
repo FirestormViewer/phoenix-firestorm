@@ -95,6 +95,15 @@ bool LLPanelDirBrowser::postBuild()
     mNextPageBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { nextPage(); });
     mNextPageBtn->setVisible(false);
 
+    // <FS:Ansariel> Port over search term history
+    mSearchComboBox = findChild<LLSearchComboBox>("name");
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setCommitCallback(boost::bind(&LLPanelDirBrowser::onClickSearchCore, this));
+        fillSearchComboBox();
+    }
+    // </FS:Ansariel>
+
     return true;
 }
 
@@ -465,7 +474,10 @@ void LLPanelDirBrowser::processDirPeopleReply(LLMessageSystem *msg, void**)
 
         content["type"] = AVATAR_CODE;
 
-        std::string fullname = first_name + " " + last_name;
+        // <FS:PP> Respect FSTrimLegacyNames setting
+        // std::string fullname = first_name + " " + last_name;
+        std::string fullname = LLCacheName::buildFullName(first_name, last_name);
+        // </FS:PP>
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"] = fullname;
         row["columns"][1]["font"] = "SANSSERIF";
@@ -1100,6 +1112,13 @@ void LLPanelDirBrowser::onClickSearchCore(void* userdata)
     LLPanelDirBrowser* self = (LLPanelDirBrowser*)userdata;
     if (!self) return;
 
+    // <FS:Ansariel> Port over search term history
+    if (self->mSearchComboBox && !self->mSearchComboBox->getValue().asString().empty())
+    {
+        LLSearchHistory::getInstance()->addEntry(self->mSearchComboBox->getValue().asString());
+    }
+    // </FS:Ansariel>
+
     self->resetSearchStart();
     self->performQuery();
 }
@@ -1173,3 +1192,31 @@ S32 LLPanelDirBrowser::showNextButton(S32 rows)
     }
     return rows;
 }
+
+// <FS:Ansariel> Port over search term history
+void LLPanelDirBrowser::fillSearchComboBox()
+{
+    if (!mSearchComboBox)
+    {
+        return;
+    }
+
+    LLSearchHistory::getInstance()->load();
+    for (const auto& item : LLSearchHistory::getInstance()->getSearchHistoryList())
+    {
+        mSearchComboBox->add(item.search_query);
+    }
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirBrowser::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setFocus(true);
+        mSearchComboBox->focusTextEntry();
+    }
+    return true;
+}
+// </FS:Ansariel>

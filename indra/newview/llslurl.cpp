@@ -73,7 +73,10 @@ LLSLURL::LLSLURL(const std::string& slurl)
     {
         LLURI slurl_uri;
         // parse the slurl as a uri
-        if (slurl.find("://") == std::string::npos)
+        // <FS:TJ> [FIRE-36464] Ignore data URI's such as the TOS floater
+        //if (slurl.find("://") == std::string::npos)
+        if (slurl.find("://") == std::string::npos && slurl.substr(0, 4) != "data")
+        // </FS:TJ>
         {
             // There may be no scheme ('secondlife://', 'https://' etc.) passed in. In that
             // case we want to normalize the slurl by putting the appropriate scheme

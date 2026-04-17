@@ -6,6 +6,7 @@
 		<button name="rename_btn" label="Renommer"/>
 		<color_swatch label="Couleur" name="set_swatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
 		<check_box label="Afficher les notifications" name="show_set_notifications"/>
+		<check_box label="Trier par statut en ligne" name="sort_by_online_status"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">Paramètres généraux :</text>
@@ -18,7 +19,13 @@
 		<text name="label_colors">Couleurs personnalisées :</text>
 		<check_box label="Coloriser les icônes de la minicarte en se basant sur le cercle" name="FSContactSetsColorizeMiniMap"/>
 		<check_box label="Couleur du nom flottant basée sur le cercle" name="FSContactSetsColorizeNameTag"/>
-		<check_box label="Couleur des noms dans le radar &amp; contacts basée sur le cercle" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Couleur des noms dans le radar et la liste « Près de vous » basée sur le cercle" name="FSContactSetsColorizeRadar"/>
 		<check_box label="Couleur des messages basée sur le cercle" name="FSContactSetsColorizeChat"/>
+		<check_box label="Couleur de la liste d'amis basée sur le cercle" name="FSContactSetsColorizeFriends"/>
+	</panel>
+	<panel name="side_panel">
+		<check_box label="Personnaliser la réponse automatique de statut Occupé(e) pour ce cercle" name="set_autoresponse_busy_enabled"/>
+		<check_box label="Personnaliser la réponse automatique pour ce cercle" name="set_autoresponse_mode_enabled"/>
+		<check_box label="Personnaliser la réponse automatique aux non-amis pour ce cercle" name="set_autoresponse_nonfriends_enabled"/>
 	</panel>
 </floater>

@@ -59,11 +59,11 @@
                   <icon top="1" left="242" width="21" height="21" image_name="Icon_Attachment_Small" follows="right" mouse_opaque="true" name="attachment_icon" tool_tip="Attachment" visible="false"/>
                 </panel>
                 <panel border="false" top="23" left="0" width="260" height="15" bevel_style="none" follows="left|top|right|bottom" layout="topleft" name="sender_time_panel">
-                  <text allow_scroll="false" font="SansSerifSmall" top="0" left="0" width="170" height="13" layout="topleft" follows="right|left"
+                  <text allow_scroll="false" font="SansSerifSmall" top="0" left="0" width="130" height="13" layout="topleft" follows="right|left"
                     use_ellipses="true" word_wrap="false" mouse_opaque="false" name="sender_or_fee_box" visible="false">
                     Sender: "Resident R e s i d e n t R e s i d e n t"
                   </text>
-                  <text allow_scroll="false" font="SansSerifSmall" top="0" right="-5" width="95" height="13" follows="right" halign="right" layout="topleft" left_pad="5"
+                  <text allow_scroll="false" font="SansSerifSmall" top="0" right="-5" width="135" height="13" follows="right" halign="right" layout="topleft" left_pad="5"
                     name="notification_time" value="2014/12/24 23:30" />
                 </panel>
               </panel>
@@ -101,11 +101,11 @@
                       </text>
                     </panel>
                     <panel border="false" left="0" width="230" height="15" bevel_style="none" follows="left|top|right" layout="topleft" name="sender_time_panel_exp">
-                      <text allow_scroll="false" font="SansSerifSmall" top="0" left="0" width="145" height="13" layout="topleft" follows="right|left"
+                      <text allow_scroll="false" font="SansSerifSmall" top="0" left="0" width="105" height="13" layout="topleft" follows="right|left"
                         use_ellipses="true" word_wrap="false" mouse_opaque="false" name="sender_or_fee_box_exp" visible="false">
                         Sender: "Resident R e s i d e n t R e s i d e n t"
                       </text>
-                      <text allow_scroll="false" font="SansSerifSmall" top="0" right="-1" width="95" height="13" follows="right" halign="right" layout="topleft" left_pad="5"
+                      <text allow_scroll="false" font="SansSerifSmall" top="0" right="-1" width="135" height="13" follows="right" halign="right" layout="topleft" left_pad="5"
                         name="notification_time_exp" value="2014/12/24 23:30" />
                     </panel>
                     <panel border="false" left="0" height="115" width="230" bevel_style="none" follows="all" layout="topleft" name="notification_text_panel_exp" visible="true">

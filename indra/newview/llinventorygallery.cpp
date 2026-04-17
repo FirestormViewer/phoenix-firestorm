@@ -3444,6 +3444,7 @@ bool dragItemIntoFolder(LLUUID folder_id, LLInventoryItem* inv_item, bool drop, 
         if (accept && drop)
         {
             if (inv_item->getType() == LLAssetType::AT_GESTURE
+                && !inv_item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                 && LLGestureMgr::instance().isGestureActive(inv_item->getUUID()) && move_is_into_trash)
             {
                 LLGestureMgr::instance().deactivateGesture(inv_item->getUUID());
@@ -3980,6 +3981,7 @@ bool dragCategoryIntoFolder(LLUUID dest_id, LLInventoryCategory* inv_cat,
                 {
                     LLInventoryItem* item = descendent_items[i];
                     if (item->getType() == LLAssetType::AT_GESTURE
+                        && !item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                         && LLGestureMgr::instance().isGestureActive(item->getUUID()))
                     {
                         LLGestureMgr::instance().deactivateGesture(item->getUUID());

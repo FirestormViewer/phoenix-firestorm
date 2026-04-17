@@ -841,7 +841,7 @@
 		 left="13"
 		 top_pad="8"
 		 width="75">
-		 Time format:
+		 Clock format:
 		</text>
 		<combo_box
 		 control_name="FSStatusBarTimeFormat"

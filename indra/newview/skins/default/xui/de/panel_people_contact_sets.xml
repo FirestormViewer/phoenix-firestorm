@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="contact_sets_panel">
 	<panel name="contact_sets_buttons_panel">
+		<filter_editor label="Nach Personen filtern" name="contact_sets_filter_input"/>
 		<menu_button name="contact_sets_gear_btn" tool_tip="Aktionen auf ausgewähltem Avatar oder ausgewählter Gruppe"/>
 		<menu_button name="contact_sets_plus_btn" tool_tip="Gruppe oder Einwohner hinzufügen"/>
 		<menu_button name="contact_sets_remove_btn" tool_tip="Gruppe oder Einwohner entfernen"/>

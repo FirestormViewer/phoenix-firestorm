@@ -1,0 +1,21 @@
+<panel label="群組" name="panel_dir_groups">
+	<string name="searching_text">
+		搜尋中...
+	</string>
+	<string name="not_found_text">
+		未找到結果。
+	</string>
+	<string name="found_text">
+		找到[COUNT]條結果。
+	</string>
+	<button tool_tip="上一頁" name="prev_btn"/>
+	<button tool_tip="下一頁" name="next_btn"/>
+	<text name="find">
+		輸入搜尋關鍵字：
+	</text>
+	<check_box label="包含適度成人內容的群組" name="incmature"/>
+	<scroll_list name="results">
+		<column label="名稱" name="name"/>
+		<column label="成員" name="members"/>
+	</scroll_list>
+</panel>

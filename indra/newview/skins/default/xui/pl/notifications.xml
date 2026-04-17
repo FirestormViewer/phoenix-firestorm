@@ -33,6 +33,9 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 	<notification name="BadInstallation">
 		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		Program [APP_NAME] wykrył zainstalowaną starszą wersję [VERSION]. Aby odinstalować starszą wersję, postępuj zgodnie z [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524/ tymi instrukcjami].
+	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Nie można połączyć z [CURRENT_GRID].
 &apos;[DIAGNOSTIC]&apos;
@@ -1249,7 +1252,8 @@ Czy na pewno chcesz usunąć tę listę?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty.
+		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty. Dozwolona interpunkcja w słowie kluczowym: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Lista zamienników nie jest prawidłowa.
@@ -1737,6 +1741,10 @@ Pobierz ją z https://secondlife.com/support/downloads/
 Informacje o wydaniu: [URL]
 
 Kliknij OK, aby pobrać i zainstalować.
+	</notification>
+	<notification name="DownloadingUpdate">
+		Pobieranie aktualizacji [VERSION]...
+Przeglądarka zostanie uruchomiona ponownie po zakończeniu pobierania.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
@@ -5227,6 +5235,13 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Wprowadź alias dla [COUNT] awatarów:
+		<form name="form">
+			<button name="Create" text="Ustaw"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 	<notification name="RenameContactSetFailure">
 		Nie można zmienić nazwy zestawu &apos;[SET]&apos; na &apos;[NEW_NAME]&apos;, ponieważ zestaw z taką nazwą już istnieje lub nowa nazwa nie jest poprawna.
 	</notification>
@@ -5621,4 +5636,16 @@ Komunikat błędu:
 		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
 Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Wpisz dokładną nazwę regionu, aby przypisać go do wybranego tytułu grupy.
+Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
+	</notification>
+
 </notifications>

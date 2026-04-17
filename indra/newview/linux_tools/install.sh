@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# Enhanced Firestorm Viewer Installation Script
-# Features:
-#   - Creates a timestamped backup of existing installation
-#   - Allows installation with custom suffixes for parallel versions (e.g., beta, release, debug)
-#   - Supports both system-wide and user-specific installations
-#   - Provides command-line options for flexibility
+# Firestorm Viewer Installation Script
 
 # ANSI color codes for styling
 VT102_STYLE_NORMAL='\E[0m'
@@ -20,8 +15,8 @@ tarball_path="${RUN_PATH}"
 DEFAULT_SYSTEM_INSTALL_DIR="/opt/firestorm"
 DEFAULT_USER_INSTALL_DIR="$HOME/firestorm"
 
-# Backup directory base
-BACKUP_BASE_DIR="${DEFAULT_SYSTEM_INSTALL_DIR}_backups"
+# Default number of retained backups
+DEFAULT_RETAIN_BACKUPS=5
 
 # Function to display usage information
 usage() {
@@ -30,31 +25,10 @@ usage() {
     echo "Options:"
     echo "  --suffix <suffix>         Append a suffix to the installation directory (e.g., beta, release, debug)"
     echo "  --install-dir <directory> Specify a custom installation directory"
+    echo "  --retain <count>          Number of backup versions to keep (default: ${DEFAULT_RETAIN_BACKUPS})"
+    echo "  --yes, -y                 Non-interactive mode (accept defaults)"
     echo "  --help, -h                Display this help message"
     exit 1
-}
-
-# Function to prompt the user with a yes/no question
-prompt() {
-    local prompt_message="$1"
-    local input
-
-    echo -n "$prompt_message"
-
-    while read -r input; do
-        case "$input" in
-            [Yy]* )
-                return 1
-                ;;
-            [Nn]* )
-                return 0
-                ;;
-            * )
-                echo "Please enter yes or no."
-                echo -n "$prompt_message"
-                ;;
-        esac
-    done
 }
 
 # Function to display warning messages in red
@@ -79,6 +53,38 @@ backup_previous_installation() {
     echo " - Backup created successfully."
 }
 
+# Function to remove old backups beyond configured retention
+prune_old_backups() {
+    local install_dir="$1"
+    local retain="$2"
+    local backups=()
+    local i
+    local path
+
+    shopt -s nullglob
+    for path in "${install_dir}"-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]; do
+        [[ -e "$path" ]] || continue
+        backups+=("$path")
+    done
+    shopt -u nullglob
+
+    if (( ${#backups[@]} > 0 )); then
+        mapfile -t backups < <(printf '%s\n' "${backups[@]}" | sort -r)
+    fi
+
+    echo " - Backup retention: found ${#backups[@]} backups, retaining ${retain}"
+
+    # Nothing to prune.
+    if (( ${#backups[@]} <= retain )); then
+        return
+    fi
+
+    for (( i=retain; i<${#backups[@]}; i++ )); do
+        echo " - Removing old backup: ${backups[i]}"
+        rm -rf -- "${backups[i]}" || die "Failed to remove old backup: ${backups[i]}"
+    done
+}
+
 # Function to install Firestorm Viewer to the specified directory
 install_to_prefix() {
     local install_prefix="$1"
@@ -88,8 +94,17 @@ install_to_prefix() {
         backup_previous_installation "$install_prefix"
     fi
 
+    # Run retention exactly once per invocation.
+    # This still cleans pre-existing backup clutter when no current install exists.
+    prune_old_backups "$install_prefix" "$RETAIN_BACKUPS"
+
     # Create the installation directory
     mkdir -p "$install_prefix" || die "Failed to create installation directory: $install_prefix"
+
+    # Prevent recursive copy if install_prefix is inside tarball_path
+    if [[ "$(readlink -f "$install_prefix")" == "$(readlink -f "$tarball_path")"* ]]; then
+        die "Cannot install into a subdirectory of the source package."
+    fi
 
     echo " - Installing Firestorm Viewer to $install_prefix"
 
@@ -106,15 +121,21 @@ homedir_install() {
     warn "this script as the root user, or with the 'sudo' command."
     echo
 
-    local install_prefix="$DEFAULT_USER_INSTALL_DIR"
-    if [[ -n "$SUFFIX" ]]; then
-        install_prefix="${install_prefix}_${SUFFIX}"
+    local install_prefix
+    if [[ -n "$CUSTOM_INSTALL_DIR" ]]; then
+        install_prefix="$CUSTOM_INSTALL_DIR"
+    elif [[ -n "$SUFFIX" ]]; then
+        install_prefix="${DEFAULT_USER_INSTALL_DIR}_${SUFFIX}"
+    else
+        install_prefix="$DEFAULT_USER_INSTALL_DIR"
     fi
 
-    echo -n "Enter the desired installation directory [${install_prefix}]: "
-    read -r user_input
-    if [[ -n "$user_input" ]]; then
-        install_prefix="$user_input"
+    if [[ "$NON_INTERACTIVE" != "true" ]]; then
+        echo -n "Enter the desired installation directory [${install_prefix}]: "
+        read -r user_input
+        if [[ -n "$user_input" ]]; then
+            install_prefix="$user_input"
+        fi
     fi
 
     install_to_prefix "${install_prefix}"
@@ -134,10 +155,12 @@ root_install() {
         local install_prefix="$default_prefix"
     fi
 
-    echo -n "Enter the desired installation directory [${install_prefix}]: "
-    read -r user_input
-    if [[ -n "$user_input" ]]; then
-        install_prefix="$user_input"
+    if [[ "$NON_INTERACTIVE" != "true" ]]; then
+        echo -n "Enter the desired installation directory [${install_prefix}]: "
+        read -r user_input
+        if [[ -n "$user_input" ]]; then
+            install_prefix="$user_input"
+        fi
     fi
 
     install_to_prefix "$install_prefix"
@@ -168,6 +191,18 @@ parse_arguments() {
                     die "Error: --install-dir requires a non-empty option argument."
                 fi
                 ;;
+            --retain)
+                if [[ -n "$2" && "$2" =~ ^[0-9]+$ ]]; then
+                    RETAIN_BACKUPS="$2"
+                    shift 2
+                else
+                    die "Error: --retain requires a non-negative integer argument."
+                fi
+                ;;
+            --yes|-y)
+                NON_INTERACTIVE="true"
+                shift
+                ;;
             --help|-h)
                 usage
                 ;;
@@ -178,30 +213,12 @@ parse_arguments() {
     done
 }
 
-# Function to download Firestorm Viewer (optional enhancement)
-download_firestorm() {
-    # Define Firestorm Viewer download URL
-    # NOTE: Replace this URL with the actual download link as needed
-    FIRESTORM_URL="https://firestormviewer.org/download/linux/firestorm.tar.gz"
-
-    # Temporary download location
-    TEMP_DOWNLOAD="/tmp/firestorm.tar.gz"
-
-    echo "Downloading Firestorm Viewer from $FIRESTORM_URL..."
-    wget -O "$TEMP_DOWNLOAD" "$FIRESTORM_URL" || die "Failed to download Firestorm Viewer!"
-    echo "Download completed."
-
-    # Extract the tarball to the run path
-    tar -xzf "$TEMP_DOWNLOAD" -C "$tarball_path" --strip-components=1 || die "Failed to extract Firestorm Viewer tarball!"
-    echo "Extraction completed."
-
-    # Clean up the downloaded tarball
-    rm "$TEMP_DOWNLOAD"
-}
-
 # Main installation workflow
 main() {
     echo "Starting Firestorm Viewer installation script..."
+
+    RETAIN_BACKUPS="${DEFAULT_RETAIN_BACKUPS}"
+    NON_INTERACTIVE="false"
 
     # Parse command-line arguments
     parse_arguments "$@"
@@ -209,11 +226,9 @@ main() {
     echo "Installation Options:"
     echo "  Suffix: ${SUFFIX:-None}"
     echo "  Custom Install Directory: ${CUSTOM_INSTALL_DIR:-None}"
+    echo "  Retained Backups: ${RETAIN_BACKUPS}"
+    echo "  Non-interactive: ${NON_INTERACTIVE}"
     echo
-
-    # Optionally, download Firestorm Viewer if not already present
-    # Uncomment the following line if you want the script to handle downloading
-    # download_firestorm
 
     # Determine if the script is run as root
     if [[ "$EUID" -eq 0 ]]; then

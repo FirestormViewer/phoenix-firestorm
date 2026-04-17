@@ -48,6 +48,15 @@
 	<check_box label="Affiche la complexité de l'avatar" name="FSTagShowARW" tool_tip="Activée, l'étiquette du nom affichera la complexité de l'avatar."/>
 	<check_box label="Seulement si trop complexe" name="FSTagShowTooComplexOnlyARW" tool_tip="Activée, l'étiquette du nom n'affichera la complexité de l'avatar que si il est trop complexe et montré sous forme de JellyDoll."/>
 	<check_box label="Afficher sa complexité" name="FSTagShowOwnARW" tool_tip="Activée, l'étiquette de votre nom affichera la complexité de votre avatar."/>
+	<text name="time_format_textbox">
+		Format de l'heure :
+	</text>
+	<text name="time_format_textbox2">
+		(Redémarrage requis)
+	</text>
+	<text name="time_format_clock_note">
+		Le format de l'heure pour la barre supérieure se trouve dans Interface - Barres supérieures.
+	</text>
 	<text name="title_afk_text">Absent après :</text>
 	<text name="title_afk_quit_text">Déconnecter après avoir été absent :</text>
 	<combo_box label="Délai d'inactivité :" name="afk">

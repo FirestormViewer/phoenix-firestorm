@@ -54,6 +54,11 @@
 				<columns label="Nombre de usuario" name="username"/>
 			</fs_scroll_list>
 		</panel>
+		<panel label="Conjuntos de contactos" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				Selecciona un conjunto de contactos:
+			</text>
+		</panel>
 	</tab_container>
 	<button label="Aceptar" label_selected="Aceptar" name="ok_btn"/>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>

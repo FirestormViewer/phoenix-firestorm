@@ -1,0 +1,41 @@
+<panel label="土地出售" name="panel_dir_land">
+	<string name="searching_text">
+		搜尋中...
+	</string>
+	<string name="not_found_text">
+		未找到結果。
+	</string>
+	<string name="found_text">
+		找到[COUNT]條結果。
+	</string>
+	<text name="find">
+		輸入搜尋關鍵字：
+	</text>
+	<combo_box name="type">
+		<combo_item name="AllTypes" label="所有類型"/>
+		<combo_item name="Auction" label="拍賣"/>
+		<combo_item name="MainlandSales" label="主大陸出售"/>
+		<combo_item name="EstateSales" label="領地出售"/>
+	</combo_box>
+	<icon tool_tip="普級" name="rating_icon_general"/>
+	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
+	<icon tool_tip="完全成人" name="rating_icon_adult"/>
+	<check_box label="價格 &#8804; " name="pricecheck"/>
+	<text name="pricecheck_symbol">
+		L$
+	</text>
+	<check_box label="面積 &#8805; " name="areacheck"/>
+	<text name="areacheck_symbol">
+		平方米
+	</text>
+	<button label="搜尋" name="Search"/>
+	<scroll_list name="results">
+		<column label="名稱" name="name" />
+		<column label="類型" name="landtype" />
+		<column label="L$價格" name="price"/>
+		<column label="面積" name="area"/>
+		<column label="L$/平方米" name="per_meter"/>
+	</scroll_list>
+	<button tool_tip="上一頁" name="prev_btn"/>
+	<button tool_tip="下一頁" name="next_btn"/>
+</panel>

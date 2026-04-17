@@ -38,9 +38,12 @@ public:
     LLPanelDirLand();
     /*virtual*/ ~LLPanelDirLand();
 
-    bool postBuild();
+    bool postBuild() override; // <FS:Beq/> mark as override to fix build warning
 
-    void performQuery();
+    void performQuery() override; // <FS:Beq/> mark as override to fix build warning
+
+    // <FS:Ansariel> Select default search element on tab change
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override;
 
 protected:
     void onClickSort();

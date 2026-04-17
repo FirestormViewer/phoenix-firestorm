@@ -28,6 +28,7 @@
      height="23"
      layout="topleft"
      left="30"
+     top_pad="-2"
      max_chars="135"
      name="language_combobox"
      width="150">
@@ -117,51 +118,6 @@
      width="130">
         (Requires restart)
     </text>
-   <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="300"
-     name="time_format_textbox"
-     top="10"
-     width="200">
-        Time Format:
-    </text>
-    <combo_box
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left="300"
-     max_chars="135"
-     name="time_format_combobox"
-     width="90">
-        <combo_box.item
-         enabled="true"
-         label="1:00 PM"
-         name="12H"
-         value="0" />
-        <combo_box.item
-         enabled="true"
-         label="13:00"
-         name="24H"
-         value="1" />
-    </combo_box>
-    <text
-     top_delta="4"
-     font="SansSerifSmall"
-     type="string"
-     text_color="White_50"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="5"
-     name="time_format_textbox2"
-     width="130">
-        (Requires restart)
-    </text>
 <!--maturity-->
      <text
      type="string"
@@ -181,6 +137,7 @@
      height="23"
      layout="topleft"
      left="30"
+     top_pad="-2"
      name="maturity_desired_combobox"
      width="200">
         <combo_box.item
@@ -264,6 +221,7 @@
      layout="topleft"
      name="start_location_combo"
      left="30"
+     top_pad="-2"
      width="150">
         <combo_box.item
          label="My Last Location"
@@ -518,6 +476,67 @@
      name="FSTagShowOwnARW"
      tool_tip="If enabled, your own nametag will your current avatar complexity."/>
 
+   <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="15"
+    layout="topleft"
+    left="30"
+    name="time_format_textbox"
+    top_pad="10"
+    width="200">
+       Time Format:
+   </text>
+   <combo_box
+    follows="left|top"
+    height="23"
+    layout="topleft"
+    left="30"
+    top_pad="-2"
+    max_chars="135"
+    name="time_format_combobox"
+    width="90">
+       <combo_box.item
+        enabled="true"
+        label="1:00 PM"
+        name="12H"
+        value="0" />
+       <combo_box.item
+        enabled="true"
+        label="13:00"
+        name="24H"
+        value="1" />
+   </combo_box>
+   <text
+    top_delta="4"
+    font="SansSerifSmall"
+    type="string"
+    text_color="White_50"
+    length="1"
+    follows="left|top"
+    height="15"
+    layout="topleft"
+    left_pad="3"
+    name="time_format_textbox2"
+    width="130">
+       (Requires restart)
+   </text>
+   <text
+    top_pad="7"
+    font="SansSerifSmall"
+    type="string"
+    length="1"
+    follows="left|top"
+    height="13"
+    layout="topleft"
+    left="30"
+    mouse_opaque="false"
+    name="time_format_clock_note"
+    width="500">
+      Clock format for the top bar is in Interface - Top Bars.
+   </text>
+
 <!--away/logout-->
 	 <text
      type="string"
@@ -526,7 +545,7 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="10"
+     top_pad="12"
      name="title_afk_text"
      width="260">
         Away timeout:
@@ -550,7 +569,7 @@
      layout="topleft"
      control_name="AFKTimeout"
      left="30"
-     top_pad="5"
+     top_pad="1"
 	 label="Away timeout:"
      top_delta="0"
      name="afk"
@@ -627,6 +646,7 @@
 
     <text
      type="string"
+     font="SansSerifSmall"
      length="1"
      follows="left|top"
      height="13"
@@ -634,7 +654,7 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="10"
+     top_pad="3"
      width="500">
        Unavailable and Autoresponse messages can be found under Privacy / Autoresponse
     </text>

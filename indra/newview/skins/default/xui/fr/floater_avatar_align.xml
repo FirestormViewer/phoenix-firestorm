@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="Boussole">
+	<button name="btn_rotate_left_10" tool_tip="Faites pivoter votre avatar de 10° vers la gauche"/>
+	<button name="btn_rotate_left_1" tool_tip="Faites pivoter votre avatar de 1° vers la gauche"/>
+	<button name="btn_rotate_right_1" tool_tip="Faites pivoter votre avatar de 1° vers la droite"/>
+	<button name="btn_rotate_right_10" tool_tip="Faites pivoter votre avatar de 10° vers la droite"/>
+	<button name="btn_rotate_left_90" tool_tip="Faites pivoter votre avatar de 90° vers la gauche"/>
+	<button name="btn_rotate_left_45" tool_tip="Faites pivoter votre avatar de 45° vers la gauche"/>
+	<button name="btn_rotate_right_45" tool_tip="Faites pivoter votre avatar de 45° vers la droite"/>
+	<button name="btn_rotate_right_90" tool_tip="Faites pivoter votre avatar de 90° vers la droite"/>
+	<button name="btn_nearest" label="Vers le point cardinal le plus proche" tool_tip="Faites pivoter votre avatar vers le point cardinal le plus proche"/>
+	<button name="btn_avatar" label="Face à l'avatar le plus proche" tool_tip="Tournez-vous vers l'avatar le plus proche"/>
+</floater>

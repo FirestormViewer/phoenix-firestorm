@@ -54,6 +54,11 @@
 				<columns label="Kullanıcı Adı" name="username"/>
 			</fs_scroll_list>
 		</panel>
+		<panel label="İletişim Setleri" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				Bir iletişim seti seçin:
+			</text>
+		</panel>
 	</tab_container>
 	<button label="Tamam" label_selected="Tamam" name="ok_btn"/>
 	<button label="İptal" label_selected="İptal" name="cancel_btn"/>

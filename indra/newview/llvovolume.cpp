@@ -6152,7 +6152,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     }
 
                     facep->setState(LLFace::RIGGED);
-                    facep->mSkinInfo = (LLMeshSkinInfo*) skinInfo; // TODO -- fix ugly de-consting here
+                    facep->mSkinInfo = skinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
                     facep->mAvatar = avatar;
                     any_rigged_face = true;
                 }
@@ -6300,7 +6300,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                     bool should_render = true;
                                     if (gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_BLEND)
                                     {
-                                        if (gltf_mat->mBaseColor.mV[3] == 0.0f)
+                                        if (gltf_mat->mBaseColor.mV[3] == 0.0f && !LLDrawPoolAlpha::sShowDebugAlpha)
                                         {
                                             should_render = false;
                                         }

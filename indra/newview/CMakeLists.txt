@@ -45,6 +45,7 @@ include(TinyEXR)
 include(ThreeJS)
 include(Tracy)
 include(UI)
+include(Velopack)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
@@ -117,6 +118,7 @@ set(viewer_SOURCE_FILES
     fsfloateraddtocontactset.cpp
     fsfavoritegroups.cpp
     fsfloaterassetblacklist.cpp
+    fsfloateravataralign.cpp
     fsfloateravatarrendersettings.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
@@ -124,6 +126,7 @@ set(viewer_SOURCE_FILES
     fsfloaterexport.cpp
     fsfloatergroup.cpp
     fsfloatergrouptitles.cpp
+    fsgrouptitleregionmgr.cpp
     fsfloaterimport.cpp
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
@@ -163,6 +166,7 @@ set(viewer_SOURCE_FILES
     fspanelface.cpp
     fspanelimcontrolpanel.cpp
     fspanellogin.cpp
+    fspanelpreferenceuisounds.cpp
     fspanelprefs.cpp
     fspanelradar.cpp
     fsparticipantlist.cpp
@@ -198,7 +202,9 @@ set(viewer_SOURCE_FILES
     llagentwearablesfetch.cpp
     vjlocalmesh.cpp
     vjfloaterlocalmesh.cpp
+    fslocalmeshimportbase.cpp
     vjlocalmeshimportdae.cpp
+    fslocalmeshimportgltf.cpp
 
     gltfscenemanager.cpp
     # <FS:Ansariel> Group GLTF files into their subfolders
@@ -789,6 +795,7 @@ set(viewer_SOURCE_FILES
     llurllineeditorctrl.cpp
     llurlwhitelist.cpp
     llversioninfo.cpp
+    llvvmquery.cpp
     llviewchildren.cpp
     llviewerassetstats.cpp
     llviewerassetstorage.cpp
@@ -980,10 +987,12 @@ set(viewer_HEADER_FILES
     fsfloaterexport.h
     fsfloatergroup.h
     fsfloatergrouptitles.h
+    fsgrouptitleregionmgr.h
     fsfloaterimport.h
     fsfloaterim.h
     fsfloaterimcontainer.h
     fsfloaternearbychat.h
+    fsfloateravataralign.h
     fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
     fsfloaterposer.h
@@ -1020,6 +1029,7 @@ set(viewer_HEADER_FILES
     fspanelface.h
     fspanelimcontrolpanel.h
     fspanellogin.h
+    fspanelpreferenceuisounds.h
     fspanelprefs.h
     fspanelradar.h
     fsparticipantlist.h
@@ -1055,7 +1065,9 @@ set(viewer_HEADER_FILES
     omnifilterengine.h
     vjlocalmesh.h
     vjfloaterlocalmesh.h
+    fslocalmeshimportbase.h
     vjlocalmeshimportdae.h
+    fslocalmeshimportgltf.h
 
     gltfscenemanager.h
     groupchatlistener.h
@@ -1642,6 +1654,7 @@ set(viewer_HEADER_FILES
     llurllineeditorctrl.h
     llurlwhitelist.h
     llversioninfo.h
+    llvvmquery.h
     llviewchildren.h
     llviewerassetstats.h
     llviewerassetstorage.h
@@ -1828,6 +1841,8 @@ if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx-objc.h)
   LIST(APPEND viewer_SOURCE_FILES llfilepicker_mac.mm)
   LIST(APPEND viewer_HEADER_FILES llfilepicker_mac.h)
+  LIST(APPEND viewer_SOURCE_FILES llvelopack.cpp)
+  LIST(APPEND viewer_HEADER_FILES llvelopack.h)
 
   set_source_files_properties(
     llappviewermacosx-objc.mm
@@ -1939,13 +1954,21 @@ if (WINDOWS)
          growlmanager.cpp
          growlnotifierwin.cpp
          llappviewerwin32.cpp
+         llvelopack.cpp
          llwindebug.cpp
          )
+    set_source_files_properties(
+      llappviewerwin32.cpp
+      llvelopack.cpp
+      PROPERTIES
+      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+      )
 
     set_source_files_properties( llappviewer.cpp llviewermenu.cpp PROPERTIES COMPILE_FLAGS /bigobj )
 
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
+         llvelopack.h
          llwindebug.h
 # [FS] Growl libs
          growlmanager.h
@@ -2464,6 +2487,7 @@ if (WINDOWS)
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
+              "--velopack=${USE_VELOPACK}"
               "--avx2=${USE_AVX2_OPTIMIZATION}"
               --build=${CMAKE_CURRENT_BINARY_DIR}
               --buildtype=$<CONFIG>
@@ -2594,6 +2618,10 @@ endif()
 
 if (USE_DISCORD)
     target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+endif ()
+
+if (TARGET ll::velopack)
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::velopack )
 endif ()
 
 if( TARGET ll::intel_memops )
@@ -2843,6 +2871,7 @@ if (DARWIN)
           --arch=${ARCH}
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
+          --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
           "--discord=${USE_DISCORD}"
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
@@ -3094,4 +3123,3 @@ if (LL_TESTS)
 endif (LL_TESTS)
 
 check_message_template(${VIEWER_BINARY_NAME})
-

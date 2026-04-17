@@ -43,6 +43,7 @@ class LLComboBox;
 class LLViewerGesture;
 class LLGestureOptions;
 class LLScrollListCtrl;
+class LLFilterEditor; // <FS:PP> Filter field
 class LLFloaterGestureObserver;
 class LLFloaterGestureInventoryObserver;
 class LLMultiGesture;
@@ -98,11 +99,22 @@ private:
     void onDeleteSelected();
     void onRenameSelected();
 
+    // <FS:PP> FIRE-36169 Gestures enable/disable switch
+    void onGesturesEnabledChanged();
+    void updateGesturesEnabledState();
+    // </FS:PP>
+
     static void onGestureRename(const LLSD& notification, const LLSD& response);
 
     LLUUID mSelectedID;
     LLUUID mGestureFolderID;
     LLScrollListCtrl* mGestureList;
+
+    // <FS:PP> Filter field
+    void onFilterEdit(const std::string& search_string);
+    LLFilterEditor* mFilterEditor;
+    std::string mFilterSubString;
+    // </FS:PP>
 
     LLFloaterGestureObserver* mObserver;
 

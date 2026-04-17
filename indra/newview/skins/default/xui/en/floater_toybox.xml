@@ -4,7 +4,7 @@
   can_dock="false"
   can_minimize="false"
   can_resize="false"
-  height="525"
+  height="575"
   help_topic="toybox"
   layout="topleft"
   legacy_header_height="18"
@@ -81,11 +81,11 @@
   <panel
     bevel_style="none"
     border="true"
-    bottom="485"
+    bottom="535"
     follows="left|bottom|right"
     left="20"
     right="-20"
-    top="485" />
+    top="535" />
   <button
     follows="left|bottom|right"
     height="23"
@@ -95,7 +95,7 @@
     layout="topleft"
     left="185"
     name="btn_clear_all"
-    top="495"
+    top="545"
     width="130">
     <button.commit_callback function="Toybox.ClearAll" />
   </button>
@@ -108,7 +108,7 @@
     layout="topleft"
     left="335"
     name="btn_restore_defaults"
-    top="495"
+    top="545"
     width="130">
     <button.commit_callback function="Toybox.RestoreDefaults" />
   </button>

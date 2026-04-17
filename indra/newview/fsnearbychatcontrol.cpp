@@ -36,6 +36,7 @@
 #include "llchatmentionhelper.h"
 #include "llemojihelper.h"
 #include "llfloaterchatmentionpicker.h"
+#include "llfocusmgr.h"
 #include "llscrollcontainer.h"
 #include "llworld.h"
 #include "rlvactions.h"
@@ -46,7 +47,11 @@ FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
     LLChatEntry(p),
     mDefault(p.is_default),
     mTextPadLeft(p.text_pad_left),
-    mTextPadRight(p.text_pad_right)
+    mTextPadRight(p.text_pad_right),
+    mBackgroundPad(p.background_pad),
+    mBgImage(p.background_image),
+    mBgImageDisabled(p.background_image_disabled),
+    mBgImageFocused(p.background_image_focused)
 {
     //<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
     setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -55,6 +60,7 @@ FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 
     setCommitOnFocusLost(false);
     setPassDelete(true);
+    mBGVisible = false;
     setFont(LLViewerChat::getChatFont());
     enableSingleLineMode(true);
 
@@ -89,6 +95,18 @@ void FSNearbyChatControl::onKeystroke(LLTextEditor* caller)
     FSNearbyChat::handleChatBarKeystroke(caller);
 }
 
+void FSNearbyChatControl::paste()
+{
+    LLChatEntry::paste();
+
+    // Keep nearby chat on one visual line by flattening paragraph markers from paste.
+    S32 cursor_pos = getCursorPos();
+    LLWString content = getWText();
+    LLWStringUtil::replaceChar(content, llwchar(182), llwchar('\n'));
+    setWText(content);
+    setCursorPos(cursor_pos);
+}
+
 // send our focus status to the LLNearbyChat hub
 void FSNearbyChatControl::onFocusReceived()
 {
@@ -121,6 +139,7 @@ void FSNearbyChatControl::setFocus(bool focus)
 void FSNearbyChatControl::draw()
 {
     applyTextPadding();
+    drawBackground();
     LLChatEntry::draw();
 }
 
@@ -131,9 +150,84 @@ void FSNearbyChatControl::setTextPadding(S32 left, S32 right)
     applyTextPadding();
 }
 
+void FSNearbyChatControl::drawBackground()
+{
+    LLUIImage* image = nullptr;
+
+    if (getReadOnly())
+    {
+        image = mBgImageDisabled;
+    }
+    else if (hasFocus())
+    {
+        image = mBgImageFocused;
+    }
+    else
+    {
+        image = mBgImage;
+    }
+
+    if (!image)
+    {
+        return;
+    }
+
+    LLRect background_rect = getLocalRect();
+    background_rect.stretch(-mBackgroundPad);
+    if (background_rect.getWidth() <= 0 || background_rect.getHeight() <= 0)
+    {
+        return;
+    }
+
+    const F32 alpha = getCurrentTransparency();
+    if (hasFocus())
+    {
+        LLColor4 focus_color = gFocusMgr.getFocusColor();
+        focus_color.setAlpha(alpha);
+        image->drawBorder(
+            background_rect.mLeft,
+            background_rect.mBottom,
+            background_rect.getWidth(),
+            background_rect.getHeight(),
+            focus_color,
+            gFocusMgr.getFocusFlashWidth());
+    }
+
+    LLColor4 image_color = LLColor4::white;
+    image_color.setAlpha(alpha);
+    image->draw(background_rect, image_color);
+
+    // LLLineEditor-style subtle inner shade ring.
+    if (background_rect.getWidth() > 2 && background_rect.getHeight() > 2)
+    {
+        LLRect inner_border_rect = background_rect;
+        inner_border_rect.stretch(-1);
+
+        LLColor4 inner_shade = LLColor4::black;
+        const F32 inner_alpha = getReadOnly() ? 0.12f : (hasFocus() ? 0.10f : 0.16f);
+        inner_shade.setAlpha(alpha * inner_alpha);
+
+        image->drawBorder(
+            inner_border_rect.mLeft,
+            inner_border_rect.mBottom,
+            inner_border_rect.getWidth(),
+            inner_border_rect.getHeight(),
+            inner_shade,
+            1);
+    }
+}
+
 void FSNearbyChatControl::applyTextPadding()
 {
     LLRect base_rect = mScroller ? mScroller->getContentWindowRect() : getLocalRect();
+
+    const LLRect local_rect = getLocalRect();
+    if (base_rect.getHeight() < local_rect.getHeight())
+    {
+        base_rect.mTop = local_rect.mTop;
+        base_rect.mBottom = local_rect.mBottom;
+    }
+
     base_rect.mLeft = llmin(base_rect.mRight, base_rect.mLeft + mTextPadLeft);
     base_rect.mRight = llmax(base_rect.mLeft, base_rect.mRight - mTextPadRight);
 
@@ -144,16 +238,23 @@ void FSNearbyChatControl::applyTextPadding()
     }
 }
 
-void FSNearbyChatControl::autohide()
+void FSNearbyChatControl::autohide(bool after_send)
 {
     if (isDefault())
     {
-        if (gSavedSettings.getBOOL("CloseChatOnReturn"))
+        const bool in_mouselook = gAgentCamera.cameraMouselook();
+        const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn") 
+                         && !(!in_mouselook && gSavedSettings.getBOOL("FSCloseChatOnReturnInMouselook"));
+        const bool autohideChatBar = gSavedSettings.getBOOL("AutohideChatBar");
+        bool hide_chatbar = false;
+
+        if (closeChatOnReturn)
         {
             setFocus(false);
+            hide_chatbar = autohideChatBar;
         }
 
-        if (gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
+        if (hide_chatbar || (!after_send && autohideChatBar))
         {
             FSNearbyChat::instance().showDefaultChatBar(false);
         }
@@ -176,7 +277,7 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
     if (key == KEY_ESCAPE && mask == MASK_NONE)
     {
         // we let ESC key go through to the rest of the UI code, so don't set handled = true
-        autohide();
+        autohide(false);
         gAgent.stopTyping();
     }
     else if (KEY_RETURN == key)
@@ -222,7 +323,7 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
         FSNearbyChat::instance().sendChat(getConvertedText(), type);
 
         setText(LLStringExplicit(""));
-        autohide();
+        autohide(true);
         return true;
     }
 

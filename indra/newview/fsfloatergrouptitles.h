@@ -31,8 +31,11 @@
 
 #include "llagent.h"
 #include "llgroupmgr.h"
+#include <boost/signals2.hpp>
 
 class FSFloaterGroupTitles;
+class LLCheckBoxCtrl;
+class LLContextMenu;
 class LLFilterEditor;
 class LLScrollListCtrl;
 
@@ -79,14 +82,27 @@ private:
     void openGroupInfo();
     void onFilterEdit(const std::string& search_string);
 
+    void onSetRegion();
+    void onSetRegionManual();
+    void onClearRegion();
+    void onNoneOnUnassignedToggle();
+    void updateRegionColumn();
+
     LLButton*           mActivateButton;
     LLButton*           mRefreshButton;
     LLButton*           mInfoButton;
+    LLButton*           mSetRegionButton;
+    LLButton*           mSetRegionManualButton;
+    LLButton*           mClearRegionButton;
+    LLCheckBoxCtrl*     mNoneOnUnassigned;
     LLScrollListCtrl*   mTitleList;
     LLFilterEditor*     mFilterEditor;
 
     std::string         mFilterSubString;
     std::string         mFilterSubStringOrig;
+
+    boost::signals2::connection mAssignmentsChangedConnection;
+    LLHandle<LLContextMenu>     mClearRegionMenuHandle;
 
     typedef std::map<LLUUID, FSGroupTitlesObserver*> observer_map_t;
     observer_map_t      mGroupTitleObserverMap;

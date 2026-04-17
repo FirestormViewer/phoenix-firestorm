@@ -16,6 +16,7 @@
 		<pie_slice label="Geler" name="Freeze..."/>
 		<pie_slice label="Donner ma carte de visite" name="Give Calling Card"/>
 		<pie_slice label="Inviter dans un groupe" name="Group Invite..."/>
+		<pie_slice label="Faire face" name="Face towards"/>
 		<pie_slice label="Éjecter" name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="Plus &gt;">
 			<pie_slice label="Textures" name="Debug..."/>

@@ -30,6 +30,7 @@
 #include "llpanel.h"
 
 #include "llframetimer.h"
+#include "llsearchcombobox.h"
 
 class LLMessageSystem;
 class LLFloaterDirectory;
@@ -101,7 +102,8 @@ public:
 
     std::string filterShortWords( const std::string source_string, int shortest_word_length, bool& was_filtered );
 
-    virtual void openProfile() {}; // <FS:Ansariel> Add "open profile" button
+    virtual void openProfile() {} // <FS:Ansariel> Add "open profile" button
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override; // <FS:Ansariel> Select default search element on tab change
 
 protected:
     void updateResultCount();
@@ -115,6 +117,9 @@ protected:
     // optionally show the "Next" button.  Return the actual number of
     // rows to display.
     S32 showNextButton(S32 rows);
+
+    // <FS:Ansariel> Port over search term history
+    void fillSearchComboBox();
 
 protected:
     LLUUID mSearchID; // Unique ID for a pending search
@@ -141,6 +146,7 @@ protected:
     LLButton* mNextPageBtn;
 
     LLUUID mSelectedID; // <FS:Ansariel> Add "open profile" button
+    LLSearchComboBox* mSearchComboBox{ nullptr }; // <FS:Ansariel> Port over search term history
 };
 
 constexpr S32 RESULTS_PER_PAGE_DEFAULT = 100;

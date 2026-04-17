@@ -242,6 +242,8 @@ public:
     void setDirectoryFee(const S32 directory_fee) { mDirectoryFee = directory_fee; }
     S32  getDirectoryFee() const { return mDirectoryFee; }
 
+    std::string getUpdateServiceURL();
+
 private:
     friend class GridInfoRequestResponder;
 

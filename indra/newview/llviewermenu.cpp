@@ -161,6 +161,7 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "fsfloateravataralign.h" // <FS:Chanayane> Compass floater
 #include "fsassetblacklist.h"
 #include "fsdata.h"
 #include "fslslbridge.h"
@@ -8167,6 +8168,30 @@ class LLAvatarInviteToGroup : public view_listener_t
     }
 };
 
+// <FS:Chanayane> Compass floater - face towards avatar from context menu
+class LLAvatarFaceTowards : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        if (!avatar) return true;
+        FSAvatarAlignBase* f = FSAvatarAlignBase::getActive();
+        if (f) f->faceAvatar(avatar);
+        return true;
+    }
+};
+
+class LLAvatarCanFaceTowards : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        return avatar && !avatar->isSelf() && !avatar->isDead() &&
+               dist_vec(avatar->getPositionAgent(), gAgent.getPositionAgent()) <= FSAvatarAlignBase::MAX_FACE_DISTANCE;
+    }
+};
+// </FS:Chanayane>
+
 class LLAvatarAddFriend : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -13120,6 +13145,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarDebug(), "Avatar.Debug");
     view_listener_t::addMenu(new LLAvatarVisibleDebug(), "Avatar.VisibleDebug");
     view_listener_t::addMenu(new LLAvatarInviteToGroup(), "Avatar.InviteToGroup");
+// <FS:Chanayane> Compass floater - face towards avatar from context menu
+    view_listener_t::addMenu(new LLAvatarFaceTowards(),    "Avatar.FaceTowards");
+    view_listener_t::addMenu(new LLAvatarCanFaceTowards(), "Avatar.CanFaceTowards");
+// </FS:Chanayane>
     // <FS:Ansariel> FIRE-13515: Re-add give calling card
     view_listener_t::addMenu(new LLAvatarGiveCard(), "Avatar.GiveCard");
     // </FS:Ansariel> FIRE-13515: Re-add give calling card
@@ -13147,6 +13176,24 @@ void initialize_menus()
     enable.add("Avatar.IsPicksTabOpen", boost::bind(&picks_tab_visible));
 
     commit.add("Avatar.OpenMarketplace", boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
+
+// <AS:Chanayane> Compass floater
+    commit.add("Avatar.AlignToggle", [](LLUICtrl*, const LLSD&) {
+        if (gSavedSettings.getBOOL("AvatarAlignMini"))
+            LLFloaterReg::toggleInstance("avatar_align_mini");
+        else
+            LLFloaterReg::toggleInstance("avatar_align");
+    });
+    enable.add("Avatar.AlignIsOpen", [](LLUICtrl*, const LLSD&) -> bool {
+        return gSavedSettings.getBOOL("AvatarAlignMini")
+            ? LLFloaterReg::instanceVisible("avatar_align_mini", LLSD())
+            : LLFloaterReg::instanceVisible("avatar_align",      LLSD());
+    });
+    commit.add("Avatar.FaceNearest", [](LLUICtrl*, const LLSD&) {
+        FSAvatarAlignBase* f = FSAvatarAlignBase::getActive();
+        if (f) f->onClickFaceNearestAvatar();
+    });
+// </AS:Chanayane>
 
     view_listener_t::addMenu(new LLAvatarEnableAddFriend(), "Avatar.EnableAddFriend");
     enable.add("Avatar.EnableFreezeEject", boost::bind(&enable_freeze_eject, _2));

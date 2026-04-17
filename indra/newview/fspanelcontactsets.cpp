@@ -38,6 +38,7 @@
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
+#include "llfiltereditor.h"
 #include "llnotificationsutil.h"
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
@@ -45,13 +46,38 @@
 constexpr U32 MAX_SELECTIONS = 20;
 static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
+class FSAvatarItemOnlineStatusComparator : public LLAvatarItemComparator
+{
+public:
+    virtual ~FSAvatarItemOnlineStatusComparator() = default;
+
+protected:
+    bool doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const override
+    {
+        const bool online_1 = LLAvatarTracker::instance().isBuddyOnline(avatar_item1->getAvatarId());
+        const bool online_2 = LLAvatarTracker::instance().isBuddyOnline(avatar_item2->getAvatarId());
+        if (online_1 != online_2)
+        {
+            return online_1;
+        }
+
+        std::string name1 = getComparableName(avatar_item1);
+        std::string name2 = getComparableName(avatar_item2);
+        return name1 < name2;
+    }
+};
+
+static const FSAvatarItemOnlineStatusComparator FS_ONLINE_STATUS_COMPARATOR;
+
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
 {
+    LLAvatarTracker::instance().addObserver(this);
     mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSPanelContactSets::updateSets, this, _1));
 }
 
 FSPanelContactSets::~FSPanelContactSets()
 {
+    LLAvatarTracker::instance().removeObserver(this);
     if (mContactSetChangedConnection.connected())
     {
         mContactSetChangedConnection.disconnect();
@@ -64,6 +90,7 @@ bool FSPanelContactSets::postBuild()
     childSetAction("remove_set_btn",        boost::bind(&FSPanelContactSets::onClickRemoveSet,          this));
     childSetAction("config_btn",            boost::bind(&FSPanelContactSets::onClickConfigureSet,       this, _1));
     childSetAction("add_btn",               boost::bind(&FSPanelContactSets::onClickAddAvatar,          this, _1));
+    childSetAction("move_btn",              boost::bind(&FSPanelContactSets::onClickMoveAvatar,         this));
     childSetAction("remove_btn",            boost::bind(&FSPanelContactSets::onClickRemoveAvatar,       this));
     childSetAction("profile_btn",           boost::bind(&FSPanelContactSets::onClickOpenProfile,        this));
     childSetAction("start_im_btn",          boost::bind(&FSPanelContactSets::onClickStartIM,            this));
@@ -76,7 +103,15 @@ bool FSPanelContactSets::postBuild()
     mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
     refreshContactSets();
 
+    if (LLFilterEditor* filter = getChild<LLFilterEditor>("contact_sets_filter_input", false))
+    {
+        filter->setCommitCallback(boost::bind(&FSPanelContactSets::onFilterEdit, this, _2));
+    }
+
     mAvatarList = getChild<LLAvatarList>("contact_list");
+    mAvatarList->setUseContactSetColors(true);
+    mAvatarList->setUseContactSetListStyle(true);
+    mAvatarList->setAvatarDropCallback(boost::bind(&FSPanelContactSets::handleAvatarDrop, this, _1, _2));
     mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
     mAvatarList->setItemDoubleClickCallback(boost::bind(&FSPanelContactSets::onClickStartIM, this));
     mAvatarList->setNoItemsCommentText(getString("empty_list"));
@@ -107,17 +142,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 
     if (contact_set == CS_SET_ALL_SETS)
     {
-        avatars = LGGContactSets::getInstance()->getListOfNonFriends();
-
-        // "All sets" includes buddies
-        LLAvatarTracker::buddy_map_t all_buddies;
-        LLAvatarTracker::instance().copyBuddyList(all_buddies);
-        for (LLAvatarTracker::buddy_map_t::const_iterator buddy = all_buddies.begin();
-             buddy != all_buddies.end();
-             ++buddy)
-        {
-            avatars.push_back(buddy->first);
-        }
+        avatars = LGGContactSets::getInstance()->getFriendsInAnySet();
     }
     else if (contact_set == CS_SET_NO_SETS)
     {
@@ -151,8 +176,17 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
         }
     }
     getChild<LLTextBox>("member_count")->setTextArg("[COUNT]", llformat("%d", avatars.size()));
+    updateAvatarListSorting();
     mAvatarList->setDirty();
     resetControls();
+}
+
+void FSPanelContactSets::changed(U32 changed_mask)
+{
+    if ((changed_mask & LLFriendObserver::ONLINE) && mAvatarList && shouldSortByOnlineStatus())
+    {
+        mAvatarList->sort();
+    }
 }
 
 void FSPanelContactSets::resetControls()
@@ -164,11 +198,12 @@ void FSPanelContactSets::resetControls()
     childSetEnabled("remove_set_btn", mutable_set);
     childSetEnabled("config_btn", mutable_set);
     childSetEnabled("add_btn", mutable_set);
+    childSetEnabled("move_btn", (mutable_set && has_selection));
     childSetEnabled("remove_btn", (mutable_set && has_selection));
     childSetEnabled("profile_btn", has_selection);
     childSetEnabled("start_im_btn", has_selection);
     childSetEnabled("offer_teleport_btn", has_selection);   // Should probably check if they're online...
-    childSetEnabled("set_pseudonym_btn", (mAvatarSelections.size() == 1));
+    childSetEnabled("set_pseudonym_btn", has_selection);
     childSetEnabled("remove_pseudonym_btn", (has_selection
                                              && LGGContactSets::getInstance()->hasPseudonym(mAvatarSelections)));
     childSetEnabled("remove_displayname_btn", (has_selection
@@ -218,6 +253,62 @@ void FSPanelContactSets::refreshSetList()
     resetControls();
 }
 
+void FSPanelContactSets::updateAvatarListSorting()
+{
+    if (!mAvatarList)
+    {
+        return;
+    }
+
+    if (shouldSortByOnlineStatus())
+    {
+        mAvatarList->setComparator(&FS_ONLINE_STATUS_COMPARATOR);
+        mAvatarList->sort();
+    }
+    else
+    {
+        mAvatarList->sortByName();
+    }
+}
+
+bool FSPanelContactSets::shouldSortByOnlineStatus() const
+{
+    if (!mContactSetCombo)
+    {
+        return false;
+    }
+
+    const std::string selected_set = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(selected_set))
+    {
+        return false;
+    }
+
+    return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(selected_set);
+}
+
+bool FSPanelContactSets::handleAvatarDrop(const LLUUID& avatar_id, bool drop)
+{
+    if (!mContactSetCombo || avatar_id.isNull())
+    {
+        return false;
+    }
+
+    const std::string set_name = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set_name))
+    {
+        return false;
+    }
+
+    if (drop)
+    {
+        uuid_vec_t ids{ avatar_id };
+        LGGContactSets::instance().addToSet(ids, set_name);
+    }
+
+    return true;
+}
+
 void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
 {
     LLFloater* root_floater = gFloaterView->getParentFloater(this);
@@ -257,6 +348,22 @@ void FSPanelContactSets::onClickRemoveAvatar()
         payload["ids"].append(id);
     }
     LLNotificationsUtil::add((selected_size > 1 ? "RemoveContactsFromSet" : "RemoveContactFromSet"), args, payload, &LGGContactSets::handleRemoveAvatarFromSetCallback);
+}
+
+void FSPanelContactSets::onClickMoveAvatar()
+{
+    if (!(mContactSetCombo && !mAvatarSelections.empty()))
+    {
+        return;
+    }
+
+    const std::string set = mContactSetCombo->getValue().asString();
+    if (LGGContactSets::getInstance()->isInternalSetName(set))
+    {
+        return;
+    }
+
+    LLAvatarActions::moveToContactSet(mAvatarSelections, set);
 }
 
 void FSPanelContactSets::onClickAddSet()
@@ -311,10 +418,26 @@ void FSPanelContactSets::onClickOfferTeleport()
 
 void FSPanelContactSets::onClickSetPseudonym()
 {
+    if (mAvatarSelections.empty())
+    {
+        return;
+    }
+
     LLSD payload, args;
-    args["AVATAR"] = LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString();
-    payload["id"] = mAvatarSelections.front();
-    LLNotificationsUtil::add("SetAvatarPseudonym", args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
+    if (mAvatarSelections.size() == 1)
+    {
+        args["AVATAR"] = LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString();
+        payload["id"] = mAvatarSelections.front();
+    }
+    else
+    {
+        args["COUNT"] = llformat("%d", static_cast<S32>(mAvatarSelections.size()));
+        for (const LLUUID& id : mAvatarSelections)
+        {
+            payload["ids"].append(id);
+        }
+    }
+    LLNotificationsUtil::add((mAvatarSelections.size() > 1 ? "SetAvatarPseudonymMultiple" : "SetAvatarPseudonym"), args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
 }
 
 void FSPanelContactSets::onClickRemovePseudonym()
@@ -338,5 +461,24 @@ void FSPanelContactSets::onClickRemoveDisplayName()
         {
             contact_sets.removeDisplayName(id);
         }
+    }
+}
+
+void FSPanelContactSets::onFilterEdit(const std::string& search_string)
+{
+    std::string trimmed_search = search_string;
+    LLStringUtil::trimHead(trimmed_search);
+
+    std::string search_upper = trimmed_search;
+    LLStringUtil::toUpper(search_upper);
+    if (mFilterSubString == search_upper)
+    {
+        return;
+    }
+
+    mFilterSubString = search_upper;
+    if (mAvatarList)
+    {
+        mAvatarList->setNameFilter(trimmed_search);
     }
 }

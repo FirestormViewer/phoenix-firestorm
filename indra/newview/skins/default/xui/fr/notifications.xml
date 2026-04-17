@@ -85,6 +85,10 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 		Une erreur est survenue lors de la mise à jour de [APP_NAME].  Veuillez [https://www.firestormviewer.org/downloads télécharger la dernière version] du client.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME] a détecté une installation d'une version antérieure [VERSION]. Pour désinstaller cette version antérieure, veuillez suivre les instructions de  [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 ce manuel].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Connexion à [CURRENT_GRID] impossible.
 &apos;[DIAGNOSTIC]&apos;
@@ -1312,7 +1316,8 @@ Saisissez un nouveau nom unique :
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée.
+		Le mot-clé doit être constitué d&apos;un seul mot et sa valeur de remplacement doit être renseignée. Ponctuation autorisée dans le mot-clé : 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Liste de remplacement non valide.
@@ -5343,7 +5348,7 @@ Vous ne pouvez pas annuler cette action.
 		Créer un nouveau groupe de contacts avec le nom :
 		<form name="form">
 			<input name="message">
-				Nouveau groupe de contacts
+				Nouveau cercle de contacts
 			</input>
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
@@ -5369,6 +5374,13 @@ Vous ne pouvez pas annuler cette action.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Entrez un alias pour [AVATAR] :
+		<form name="form">
+			<button name="Create" text="Créer"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Entrez un alias pour [COUNT] avatars :
 		<form name="form">
 			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
@@ -5752,4 +5764,18 @@ Message d'erreur :
 		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
+Le nom sera vérifié avant l'enregistrement de l'assignation.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La région '[REGION]' n'a pas été trouvée. Veuillez vérifier le nom et réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

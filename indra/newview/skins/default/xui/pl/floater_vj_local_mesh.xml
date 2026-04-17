@@ -11,6 +11,11 @@
 		<panel name="local_mesh_settings_panel" label="Opcje">
 			<check_box name="local_mesh_scale_use_meters" label="Załóż, że rozmiar jest w metrach" tool_tip="Zignoruj jednostki skali w cm używane przez narzędzia takie jak Maya." />
 			<check_box name="checkbox_apply_joint_offsets" label="Przesunięcia stawów" tool_tip="Zastosuj wszelkie przesunięcia (offsety) stawów w meszu, domyślnie są one ignorowane." />
+			<check_box name="checkbox_auto_reload" label="Autoodśwież. zmienione pliki" tool_tip="Obserwuj lokalne pliki meszy na dysku i automatycznie je przeładowuj, gdy ulegną zmianie." />
+			<text name="auto_reload_period_label">
+				Skanuj co (sek):
+			</text>
+			<spinner name="auto_reload_period" tool_tip="Jak często skanować obserwowane lokalne pliki meszy w celu wykrycia zmian." />
 			<text name="lod_suffix_label">
 				Sufiksy LOD:
 			</text>

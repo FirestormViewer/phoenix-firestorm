@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="400"
- width="380"
+ height="412"
+ width="900"
  layout="topleft"
  can_resize="false"
  legacy_header_height="18"
@@ -16,7 +16,7 @@
      top="18"
      left="0"
      height="120"
-     width="380"
+     width="450"
      border_visible="true"
      bevel_style="none">
     <text
@@ -64,12 +64,21 @@ Contact Set Settings:
      name="show_set_notifications"
      top_delta="0"
      width="400" />
+    <check_box
+     height="16"
+     label="Sort by online status"
+     layout="topleft"
+     left_delta="0"
+     initial_value="false"
+     name="sort_by_online_status"
+     top_pad="4"
+     width="400" />
     </panel>
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="260"
-     width="380"
+     height="272"
+     width="450"
      border_visible="true"
      bevel_style="none">
     <text
@@ -160,7 +169,7 @@ Custom Colors:
     <check_box
      follows="left|top"
      height="12"
-     label="Color radar list entry based on their Contact Set"
+     label="Color radar and nearby people lists based on their Contact Set"
      name="FSContactSetsColorizeRadar"
      width="270"
      control_name="FSContactSetsColorizeRadar"/>
@@ -172,5 +181,86 @@ Custom Colors:
      name="FSContactSetsColorizeChat"
      width="270"
      control_name="FSContactSetsColorizeChat"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     initial_value="false"
+     label="Color friends list entry based on their Contact Set"
+     name="FSContactSetsColorizeFriends"
+     width="270"
+     control_name="FSContactSetsColorizeFriends"/>
+    </panel>
+    <panel
+     name="side_panel"
+     top="18"
+     left="450"
+     height="392"
+     width="448"
+     border_visible="true"
+     bevel_style="none">
+
+    <check_box
+     height="16"
+     label="Use custom Busy-mode autoresponse for this set"
+     layout="topleft"
+     left="10"
+     top="10"
+     initial_value="false"
+     name="set_autoresponse_busy_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="100"
+     layout="topleft"
+     left="25"
+     top_pad="5"
+     name="set_autoresponse_busy"
+     right="-12"
+     word_wrap="true" />
+
+    <check_box
+     height="16"
+     label="Use custom Autoresponse-mode message for this set"
+     layout="topleft"
+     left_delta="-15"
+     top_pad="6"
+     initial_value="false"
+     name="set_autoresponse_mode_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="100"
+     layout="topleft"
+     left_delta="15"
+     top_pad="5"
+     name="set_autoresponse_mode"
+     right="-12"
+     word_wrap="true" />
+
+    <check_box
+     height="16"
+     label="Use custom Non-friends autoresponse for this set"
+     layout="topleft"
+     left_delta="-15"
+     top_pad="6"
+     initial_value="false"
+     name="set_autoresponse_nonfriends_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="100"
+     layout="topleft"
+     left_delta="15"
+     top_pad="5"
+     name="set_autoresponse_nonfriends"
+     right="-12"
+     word_wrap="true" />
+
     </panel>
 </floater>

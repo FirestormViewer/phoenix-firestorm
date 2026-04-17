@@ -37,7 +37,7 @@
     </text>
     <combo_box
      allow_text_entry="false"
-     top_delta="0"
+     top_delta="-2"
      left="525"
      layout="topleft"
      follows="right|top"
@@ -125,32 +125,14 @@
      left_pad="2"
      name="rating_icon_adult"
      width="16"/>
-    <line_editor
-     bevel_style="in"
-     border_style="line"
-     border_thickness="1"
-     top_pad="3"
-     follows="left|right|top"
+    <search_combo_box
      layout="topleft"
-     font="SansSerif"
-     height="18"
+     follows="left|top|right"
+     height="23"
      left="5"
-     max_length="63"
-     mouse_opaque="true"
      name="name"
-     width="650" />
-    <button
-     follows="right|top"
-     layout="topleft"
-     font="SansSerif"
-     halign="center"
-     height="20"
-     label="Search"
-     top_delta="0"
-     left_pad="5"
-     mouse_opaque="true"
-     name="Search"
-     width="105" />
+     top="26"
+     width="770"/>
     <scroll_list
      background_visible="true"
      layout="topleft"

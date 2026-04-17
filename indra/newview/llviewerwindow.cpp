@@ -2538,7 +2538,17 @@ void LLViewerWindow::initWorldUI()
 
         LLFloaterReg::getInstance("destinations");
         LLFloaterReg::getInstance("avatar_welcome_pack");
-        LLFloaterReg::getInstance("search");
+        // <FS:TJ> Preload the CEF instance of the currently used legacy search floater
+        //LLFloaterReg::getInstance("search");
+        if (gSavedSettings.getBOOL("FSUseFSLegacySearch"))
+        {
+            LLFloaterReg::getInstance("search");
+        }
+        else
+        {
+            LLFloaterReg::getInstance("legacy_search");
+        }
+        // </FS:TJ>
         LLFloaterReg::getInstance("marketplace");
     }
 

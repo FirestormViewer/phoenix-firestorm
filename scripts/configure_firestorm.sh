@@ -21,6 +21,7 @@ FALSE=1
 #                  <string>-DUSE_AVX2_OPTIMIZATION:BOOL=OFF</string>
 #                  <string>-DLL_TESTS:BOOL=OFF</string>
 #                  <string>-DPACKAGE:BOOL=OFF></string>
+#                  <string>-DUSE_VELOPACK:BOOL=OFF></string>
 
 
 ###
@@ -30,6 +31,7 @@ FALSE=1
 WANTS_CLEAN=$FALSE
 WANTS_CONFIG=$FALSE
 WANTS_PACKAGE=$FALSE
+WANTS_VELOPACK=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODSTUDIO=$FALSE
@@ -72,6 +74,7 @@ showUsage()
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu                    : Build with KDU"
     echo "  --package                : Build installer"
+    echo "  --velopack               : Build with velopack (Overrides --package)"
     echo "  --no-package             : Build without installer (Overrides --package)"
     echo "  --fmodstudio             : Build with FMOD Studio"
     echo "  --openal                 : Build with OpenAL"
@@ -98,7 +101,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package velopack no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -134,6 +137,8 @@ getArgs()
                           TESTBUILD_PERIOD="$OPTARG"
                           ;;
           package)        WANTS_PACKAGE=$TRUE;;
+          velopack)       WANTS_PACKAGE=$TRUE
+                          WANTS_VELOPACK=$TRUE;;
           no-package)     WANTS_PACKAGE=$FALSE;;
           build)          WANTS_BUILD=$TRUE;;
           platform)       TARGET_PLATFORM="$OPTARG";;
@@ -328,6 +333,7 @@ else
     echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD`"                          | tee -a "$LOG"
 fi
 echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"                                | tee -a "$LOG"
+echo -e "       VELOPACK: `b2a $WANTS_VELOPACK`"                               | tee -a "$LOG"
 echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  | tee -a "$LOG"
 echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a "$LOG"
 echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a "$LOG"
@@ -508,8 +514,14 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
                 done
             done
         fi
+        if [ $WANTS_VELOPACK -eq $TRUE ] ; then
+            VELOPACK="-DUSE_VELOPACK:BOOL=ON"
+        else
+            VELOPACK="-DUSE_VELOPACK:BOOL=OFF"
+        fi
     else
         PACKAGE="-DPACKAGE:BOOL=OFF"
+        VELOPACK="-DUSE_VELOPACK:BOOL=OFF"
     fi
     if [ $WANTS_CRASHREPORTING -eq $TRUE ] ; then
         if [ $TARGET_PLATFORM == "windows" ] ; then
@@ -585,18 +597,20 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
+    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE $VELOPACK \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
+    configure_status=${PIPESTATUS[0]}
 
     # Check the return code of the build command
-    if [ $? -ne 0 ]; then
+    if [ $configure_status -ne 0 ]; then
         echo "Configure failed!"
         exit 1
     fi    
 fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
+    build_status=0
     if [ $TARGET_PLATFORM == "darwin" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=""
@@ -604,6 +618,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             JOBS="-jobs $JOBS"
         fi
         xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
+        build_status=${PIPESTATUS[0]}
     elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
@@ -611,8 +626,10 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         fi
         if [ $WANTS_NINJA -eq $TRUE ] ; then
             ninja -j $JOBS | tee -a "$LOG"
+            build_status=${PIPESTATUS[0]}
         else
             make -j $JOBS | tee -a "$LOG"
+            build_status=${PIPESTATUS[0]}
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
         # VS2026+ now uses .slnx so determine which one exists
@@ -627,13 +644,13 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
             -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
             -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
+        build_status=$?
     fi
     # Check the return code of the build command
-    if [ $? -ne 0 ]; then
+    if [ $build_status -ne 0 ]; then
         echo "Build failed!"
         exit 1
     fi    
 fi
 echo "finished"
 exit 0
-

@@ -64,6 +64,11 @@
 				<columns label="Nazwa użytkownika" name="usernameUUID" />
 			</fs_scroll_list>
 		</panel>
+		<panel label="Zestawy kontaktów" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				Wybierz zestaw kontaktów:
+			</text>
+		</panel>
 	</tab_container>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 </floater>

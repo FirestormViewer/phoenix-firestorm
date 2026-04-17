@@ -295,6 +295,37 @@
               width="150" />
           </fs_scroll_list>
         </panel>
+
+        <panel
+         height="150"
+         label="Contact Sets"
+         layout="topleft"
+         left="6"
+         help_topic="avatarpicker"
+         name="ContactSetsPanel"
+         top="150"
+         width="132">
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left="10"
+             name="SelectContactSetLabel"
+             top="8"
+             width="350">
+                Select a contact set:
+            </text>
+            <combo_box
+             follows="left|top|right"
+             height="20"
+             layout="topleft"
+             left_delta="0"
+             name="ContactSetSelector"
+             top_pad="2"
+             width="100"/>
+        </panel>
     </tab_container>
     <button
      follows="left|bottom"

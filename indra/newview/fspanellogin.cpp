@@ -39,6 +39,9 @@
 
 #include "llappviewer.h"
 #include "llbutton.h"
+#if LL_VELOPACK
+#include "llvelopack.h"
+#endif
 #include "llcheckboxctrl.h"
 #include "llcommandhandler.h"       // for secondlife:///app/login/
 #include "llcombobox.h"
@@ -923,6 +926,9 @@ void FSPanelLogin::loadLoginPage()
     // login page (web) content version
     params["login_content_version"] = gSavedSettings.getString("LoginContentVersion");
 
+    // skin
+    params["skin"] = gSavedSettings.getString("FSInternalSkinCurrent") + " " + gSavedSettings.getString("FSInternalSkinCurrentTheme");
+
     // No version popup
     if (gSavedSettings.getBOOL("FSNoVersionPopup"))
     {
@@ -971,6 +977,19 @@ void FSPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent ev
 // static
 void FSPanelLogin::onClickConnect(void *)
 {
+#if LL_VELOPACK
+    // In theory, you should never be able to get here.
+    // If there's a required update, try as you might you're not supposed to actually close the downloading update dialog.
+    // But just in case...
+    if (velopack_is_required_update_in_progress())
+    {
+        LLSD args;
+        args["VERSION"] = velopack_get_required_update_version();
+        LLNotificationsUtil::add("DownloadingUpdate", args);
+        return;
+    }
+#endif
+
     if (sInstance && sInstance->mCallback)
     {
         // JC - Make sure the fields all get committed.

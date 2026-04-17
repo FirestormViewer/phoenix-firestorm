@@ -1,0 +1,38 @@
+<panel label="地點" name="panel_dir_places">
+	<string name="searching_text">
+		搜尋中...
+	</string>
+	<string name="not_found_text">
+		未找到結果。
+	</string>
+	<string name="found_text">
+		找到[COUNT]條結果。
+	</string>
+	<text name="find">
+		輸入搜尋關鍵字：
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="所有分類"/>
+		<combo_item name="LindenLocation" vlabel="Linden地點"/>
+		<combo_item name="Arts&amp;Culture" label="藝術與文化"/>
+		<combo_item name="Business" label="公司"/>
+		<combo_item name="Educational" label="教育"/>
+		<combo_item name="Gaming" label="遊戲"/>
+		<combo_item name="Hangout" label="聚會點"/>
+		<combo_item name="NewcomerFriendly" label="適合新手"/>
+		<combo_item name="Parks&amp;Nature" label="公園與自然"/>
+		<combo_item name="Residential" label="住宅區"/>
+		<combo_item name="Shopping" label="購物"/>
+		<combo_item name="Adult" label="成人"/>
+		<combo_item name="Other" label="其他"/>
+	</combo_box>
+	<icon tool_tip="普級" name="rating_icon_general"/>
+	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
+	<icon tool_tip="完全成人" name="rating_icon_adult"/>
+	<scroll_list name="results">
+		<column label="名稱" name="name"/>
+		<column label="流量" name="dwell"/>
+	</scroll_list>
+	<button tool_tip="上一頁" name="prev_btn"/>
+	<button tool_tip="下一頁" name="next_btn"/>
+</panel>

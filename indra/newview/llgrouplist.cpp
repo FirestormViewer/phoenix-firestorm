@@ -325,7 +325,7 @@ void LLGroupList::refresh()
         sort();
 
         // <FS:PP> Group favorites / pinning
-        if (has_favorites && has_non_favorites && !have_filter)
+        if (mShowFavoritesSeparator && has_favorites && has_non_favorites && !have_filter)
         {
             addFavoritesSeparator();
         }
@@ -347,14 +347,50 @@ void LLGroupList::refresh()
     else
     {
         clear();
+        S32 regular_group_count = 0; // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
         for (group_map_t::iterator it = mGroups.begin(); it != mGroups.end(); ++it)
         {
             addNewItem(it->second, it->first, LLUUID::null, ADD_BOTTOM);
+            // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+            if (it->second.notNull())
+            {
+                ++regular_group_count;
+            }
+            // </FS:PP>
         }
 
         // Sort the list.
         sort();
+
+        // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+        if (!mSecondaryGroups.empty())
+        {
+            bool contact_set_separator_added = false;
+            for (const std::string& name : mSecondaryGroups)
+            {
+                if (name.empty())
+                {
+                    continue;
+                }
+                if (!contact_set_separator_added && regular_group_count > 0)
+                {
+                    LLGroupListSeparator* separator = new LLGroupListSeparator();
+                    static const LLUUID SECONDARY_SEPARATOR_UUID("00000000-0000-0000-0000-000000000002");
+                    addItem(separator, SECONDARY_SEPARATOR_UUID, ADD_BOTTOM, false);
+                    contact_set_separator_added = true;
+                }
+                LLGroupListItem* item = addNewItem(LLUUID::null, name, LLUUID::null, ADD_BOTTOM);
+                if (item)
+                {
+                    if (auto color_it = mSecondaryGroupColors.find(name); color_it != mSecondaryGroupColors.end())
+                    {
+                        item->setCustomTextColor(color_it->second);
+                    }
+                }
+            }
+        }
+        // </FS:PP>
     }
 
     setDirty(false);
@@ -382,13 +418,31 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
     setDirty(true);
 }
 
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+void LLGroupList::setSecondaryGroups(const std::vector<std::string>& group_names, const std::map<std::string, LLColor4>& group_colors)
+{
+    mSecondaryGroups = group_names;
+    mSecondaryGroupColors = group_colors;
+    setDirty(true);
+}
+
+std::string LLGroupList::getSelectedGroupName()
+{
+    if (const LLGroupListItem* selected_item = dynamic_cast<const LLGroupListItem*>(getSelectedItem()))
+    {
+        return selected_item->getGroupName();
+    }
+    return LLStringUtil::null;
+}
+// </FS:PP>
+
 //////////////////////////////////////////////////////////////////////////
 // PRIVATE Section
 //////////////////////////////////////////////////////////////////////////
 
-// <FS:PP> Group favorites / pinning
+// <FS:PP> Group favorites / pinning; FIRE-32401: Contact Sets on groups list in profile
 // void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile)
-void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile, bool is_favorite)
+LLGroupListItem* LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile, bool is_favorite)
 // </FS:PP>
 {
     LLGroupListItem* item = new LLGroupListItem(mForAgent, mShowIcons);
@@ -413,6 +467,7 @@ void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LL
     addItem(item, id, pos);
 
 //  setCommentVisible(false);
+    return item; // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 }
 
 // virtual
@@ -758,6 +813,13 @@ void LLGroupListItem::setVisibleInProfile(bool visible)
 {
     mGroupNameBox->setColor(LLUIColorTable::instance().getColor((visible ? "GroupVisibleInProfile" : "GroupHiddenInProfile"), LLColor4::red).get());
 }
+
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+void LLGroupListItem::setCustomTextColor(const LLColor4& color)
+{
+    mGroupNameBox->setColor(color);
+}
+// </FS:PP>
 
 //////////////////////////////////////////////////////////////////////////
 // Private Section

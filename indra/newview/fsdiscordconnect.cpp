@@ -30,10 +30,6 @@
 #include "fsdiscordconnect.h"
 
 #include "llagent.h"
-#include "llcallingcard.h"          // for LLAvatarTracker
-#include "llcommandhandler.h"
-#include "llnotificationsutil.h"
-#include "lltrans.h"
 #include "llevents.h"
 #include "llviewerregion.h"
 #include "llavatarnamecache.h"
@@ -41,8 +37,6 @@
 
 #include "rlvactions.h"
 #include "rlvhandler.h"
-
-#include "llfloaterreg.h"
 
 #include <discord-rpc/discord_rpc.h>
 #include <boost/algorithm/string/case_conv.hpp>

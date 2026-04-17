@@ -48,7 +48,14 @@ public:
 
     void navigateToDefaultPage();
 
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    void navigateToSearchPage(const std::string& category, const std::string& query, const std::string& collection = "");
+    // </FS:PP>
+
     void setFloaterDirectory(LLFloaterDirectory* floater) { mFloaterDirectory = floater; }
+
+    // <FS:Ansariel> Select default search element on tab change
+    bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override;
 
 protected:
     static void onClickHome( void* data );

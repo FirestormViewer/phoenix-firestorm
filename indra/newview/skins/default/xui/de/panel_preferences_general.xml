@@ -20,16 +20,6 @@
 	<text name="language_textbox2">
 		(Erfordert Neustart)
 	</text>
-	<text name="time_format_textbox">
-		Uhrzeitformat:
-	</text>
-	<combo_box name="time_format_combobox">
-		<combo_box.item label="1:00 PM" name="12H"/>
-		<combo_box.item label="13:00" name="24H"/>
-	</combo_box>
-	<text name="time_format_textbox2">
-		(Erfordert Neustart)
-	</text>
 	<text name="maturity_desired_prompt" width="320">
 		Auf Inhalte mit folgender Einstufung zugreifen:
 	</text>
@@ -77,7 +67,20 @@
 	<check_box label="Nur falls zu komplex" name="FSTagShowTooComplexOnlyARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität nur angezeigt, wenn der Avatar zu komplex ist und als JellyDoll dargestellt wird."/>
 	<check_box label="Eigene Komplexität anzeigen" name="FSTagShowOwnARW" tool_tip="Falls aktiviert, wird die eigene aktuelle Avatar-Komplexität angezeigt."/>
 
-	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
+	<text name="time_format_textbox">
+		Zeitformat:
+	</text>
+	<combo_box name="time_format_combobox">
+		<combo_box.item label="1:00 PM" name="12H"/>
+		<combo_box.item label="13:00" name="24H"/>
+	</combo_box>
+	<text name="time_format_textbox2">
+		(Erfordert Neustart)
+	</text>
+	<text name="time_format_clock_note">
+		Uhrenformat für die obere Leiste unter Benutzerinterface - Top-Leisten.
+	</text>
+
 	<text name="title_afk_text" width="275">
 		Zeit bis zur Abwesenheit:
 	</text>

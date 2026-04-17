@@ -999,6 +999,17 @@
 		<key>Value</key>
 			<string>0</string>
 	</map>
+	<key>FSGesturesEnabled</key>
+	<map>
+		<key>Comment</key>
+			<string>Enable gesture playback and trigger handling viewer-wide - for your own gestures</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>1</integer>
+	</map>
     <key>UseLSLFlightAssist</key>
         <map>
         <key>Comment</key>

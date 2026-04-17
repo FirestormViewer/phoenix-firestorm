@@ -21,12 +21,6 @@
 	<text name="language_textbox2">
 		(wymagany restart)
 	</text>
-	<text name="time_format_textbox">
-		Format czasu:
-	</text>
-	<text name="time_format_textbox2">
-		(wymagany restart)
-	</text>
 	<text name="maturity_desired_prompt">
 		Chcę mieć dostęp do miejsc:
 	</text>
@@ -71,6 +65,15 @@
 	<check_box label="Pokazuj złożoność" name="FSTagShowARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać obecną złożoność graficzną awatara."/>
 	<check_box label="Tylko gdy jest zbyt duża" name="FSTagShowTooComplexOnlyARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać złożoność graficzną awatara tylko wtedy, gdy będzie on zbyt złożony i zastępowany przez mniej obciążającą komputer formę (tzw. JellyDoll)."/>
 	<check_box label="Pokazuj własną złożoność" name="FSTagShowOwnARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać Twoją własną, obecną złożoność graficzną."/>
+	<text name="time_format_textbox">
+		Format czasu:
+	</text>
+	<text name="time_format_textbox2">
+		(wymagany restart)
+	</text>
+	<text name="time_format_clock_note">
+		Format zegara na górnym pasku: Interfejs - Górne paski.
+	</text>
 	<text name="title_afk_text">
 		Zasypiaj po czasie:
 	</text>

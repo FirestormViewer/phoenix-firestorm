@@ -976,8 +976,21 @@ Function un.UserSettingsFiles
 
 StrCmp $DO_UNINSTALL_V2 "true" Keep			# Don't remove user's settings files on auto upgrade
 
-# Ask if user wants to keep data files or not
-MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
+ClearErrors
+Push $0
+${GetParameters} $COMMANDLINE
+${GetOptionsS} $COMMANDLINE "/clrusrfiles" $0
+# GetOptionsS returns an error if option does not exist, jump past Goto.
+IfErrors +3 0
+  Pop $0
+  Goto Remove
+
+Pop $0
+ClearErrors
+
+ifSilent Keep 0
+  # Ask if user wants to keep data files or not
+  MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
 
 Remove:
 Push $0
@@ -1086,12 +1099,26 @@ IfFileExists "$INSTDIR" FOLDERFOUND NOFOLDER
 
 FOLDERFOUND:
 # Silent uninstall always removes all files (/SD IDYES)
+ifSilent +2 0
   MessageBox MB_YESNO $(DeleteProgramFilesMB) /SD IDYES IDNO NOFOLDER
   RMDir /r "$INSTDIR"
 
 NOFOLDER:
 
-MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
+ClearErrors
+Push $0
+${GetParameters} $COMMANDLINE
+${GetOptionsS} $COMMANDLINE "/clearreg" $0
+# GetOptionsS returns an error if option does not exist, jump past Goto.
+IfErrors +3 0
+  Pop $0
+  Goto DeleteKeys
+
+Pop $0
+ClearErrors
+
+ifSilent NoDelete 0
+	MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
@@ -1160,23 +1187,8 @@ label_ask_launch:
         MessageBox MB_YESNO $(InstSuccesssQuestion) IDYES label_launch IDNO label_no_launch
 
 label_launch:
-        # Assumes SetOutPath $INSTDIR
-        # Run INSTEXE (our updater), passing VIEWER_EXE plus the command-line
-        # arguments built into our shortcuts. This gives the updater a chance
-        # to verify that the viewer we just installed is appropriate for the
-        # running system -- or, if not, to download and install a different
-        # viewer. For instance, if a user running 32-bit Windows installs a
-        # 64-bit viewer, it cannot run on this system. But since the updater
-        # is a 32-bit executable even in the 64-bit viewer package, the
-        # updater can detect the problem and adapt accordingly.
-        # Once everything is in order, the updater will run the specified
-        # viewer with the specified params.
-        # Quote the updater executable and the viewer executable because each
-        # must be a distinct command-line token, but DO NOT quote the language
-        # string because it must decompose into separate command-line tokens.
-        # <FS:Ansariel> No updater, thanks!
-        # Exec '"$INSTDIR\$INSTEXE" precheck "$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
-        Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
+        Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+
 label_no_launch:
         # </FS:PP>
 FunctionEnd

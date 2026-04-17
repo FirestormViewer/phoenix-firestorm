@@ -4475,6 +4475,7 @@ void LLInventoryModel::removeCategory(const LLUUID& category_id)
         const LLViewerInventoryItem* item = (*iter);
         const LLUUID& item_id = item->getUUID();
         if (item->getType() == LLAssetType::AT_GESTURE
+            && !item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
             && LLGestureMgr::instance().isGestureActive(item_id))
         {
             LLGestureMgr::instance().deactivateGesture(item_id);

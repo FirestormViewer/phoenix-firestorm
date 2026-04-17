@@ -40,6 +40,7 @@
 #include "llviewertexture.h"
 #include "lldrawable.h"
 #include "lljoint.h"
+#include "llmodel.h"// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
 class LLFacePool;
 class LLVolume;
@@ -49,7 +50,7 @@ class LLVertexProgram;
 class LLViewerTexture;
 class LLGeometryManager;
 class LLDrawInfo;
-class LLMeshSkinInfo;
+// class LLMeshSkinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
 const F32 MIN_ALPHA_SIZE = 1024.f;
 // <FS:minerjr>
@@ -270,7 +271,7 @@ public:
     LLMatrix4*  mNormalMapMatrix;
     LLDrawInfo* mDrawInfo;
     LLVOAvatar* mAvatar = nullptr;
-    LLMeshSkinInfo* mSkinInfo = nullptr;
+    LLConstPointer<LLMeshSkinInfo> mSkinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
     // return mSkinInfo->mHash or 0 if mSkinInfo is null
     U64 getSkinHash();

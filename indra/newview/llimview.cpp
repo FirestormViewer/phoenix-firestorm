@@ -60,6 +60,7 @@
 #include "llmd5.h"
 #include "llmutelist.h"
 #include "llrecentpeople.h"
+#include "llimprocessing.h" // <FS> FS autoresponse feature
 #include "llviewermessage.h"
 #include "llviewerwindow.h"
 #include "llnotifications.h"
@@ -240,7 +241,10 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
     bool contains_mention = LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString());
-    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    // <FS:PP> UI Sounds
+    // static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
+    // </FS:PP>
     bool play_snd_mention = contains_mention && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT);
     if (!LLFloater::isVisible(im_box) || im_box->isMinimized())
     {
@@ -481,7 +485,10 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             im_container->addFlashingSession(session_id);
         }
 
-        static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+        // <FS:PP> UI Sounds
+        // static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+        static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
+        // </FS:PP>
         if (!gAgent.isDoNotDisturb() && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT) && LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString()))
         {
             make_ui_sound("UISndChatMention");
@@ -3552,7 +3559,7 @@ void LLIMMgr::addMessage(
     static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingConfIMSession(gSavedSettings, "PlayModeUISndNewIncomingConfIMSession");
-    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
     bool play_snd_mention = play_snd_mention_pref && LLUrlRegistry::getInstance()->containsAgentMention(msg);
     bool do_not_disturb = gAgent.isDoNotDisturb();
     bool is_group_chat = false;
@@ -4754,26 +4761,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
         std::string my_name;
         std::string response;
         LLAgentUI::buildFullname(my_name);
-        if (is_busy)
-        {
-            response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
-        }
-        else if (is_autorespond_nonfriends && !is_friend)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
-        }
-        else if (is_autorespond)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-        }
-        else if (is_afk && FSSendAwayAvatarResponse)
-        {
-            response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
-        }
-        else
-        {
-            LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
-        }
+        response = LLIMProcessing::getAutoresponseTextForAvatar(av_id, is_busy, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),

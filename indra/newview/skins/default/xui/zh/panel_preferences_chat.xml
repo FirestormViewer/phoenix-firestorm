@@ -132,8 +132,10 @@
 			<check_box name="FSShowChatChannel" label="在本地聊天視窗中顯示頻道號選擇" />
 			<check_box name="FSShowChatType" label="在本地聊天視窗中顯示說話/竊竊私語/大聲呼喊按鈕" />
 			<check_box label="隱藏主聊天欄" name="AutohideChatBar" tool_tip="當滑鼠懸停在該區域上方時，隱藏螢幕左下角的聊天欄，並在滑鼠離開該區域時顯示。" />
-			<check_box label="傳送訊息後取消輸入框選擇" name="CloseChatOnReturn" />
-			<check_box label="傳送訊息後也取消聊天歷史記錄的選擇" name="FSUnfocusChatHistoryOnReturn" />
+			<check_box label="傳送訊息後取消選取聊天框" name="CloseChatOnReturn"/>
+			<check_box label="僅在滑鼠視角模式下" name="FSCloseChatOnReturnInMouselook" tool_tip="當啟用「傳送訊息後取消選取聊天框」時，僅在滑鼠視角模式下取消選取聊天。"/>
+			<check_box label="僅適用於附近聊天欄" name="FSCloseChatOnReturnOnlyForNearbyChatControl" tool_tip="當啟用「傳送訊息後取消選取聊天框」時，僅對附近聊天欄生效。"/>
+			<check_box label="同時取消聊天記錄選取" name="FSUnfocusChatHistoryOnReturn"/>
 			<text name="textUseKeyboardShortcuts">使用鍵盤快速鍵：</text>
 			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (大聲呼喊)" tool_tip="使用 Ctrl+Enter 快速鍵在本地聊天中喊話。" />
 			<check_box name="FSUseShiftWhisper" label="Shift+Enter (竊竊私語)" tool_tip="使用 Shift+Enter 快速鍵在本地聊天中竊竊私語。" />

@@ -1,0 +1,34 @@
+<panel label="Sprzedaż ziemi" name="panel_dir_land">
+	<string name="searching_text">
+		Szukanie...
+	</string>
+	<string name="not_found_text">
+		Brak wyników.
+	</string>
+	<string name="found_text">
+		[COUNT] wyników.
+	</string>
+	<text name="find">
+		Szukana fraza:
+	</text>
+	<combo_box name="type">
+		<combo_item name="AllTypes" label="Wszystkie typy"/>
+		<combo_item name="Auction" label="Aukcje"/>
+		<combo_item name="MainlandSales" label="Sprzedaże na Mainland"/>
+		<combo_item name="EstateSales" label="Sprzedaże Majątków"/>
+	</combo_box>
+	<icon tool_tip="General (dla wszystkich)" name="rating_icon_general" />
+	<icon tool_tip="Moderate (umiarkowane)" name="rating_icon_moderate" />
+	<icon tool_tip="Adult (dla dorosłych)" name="rating_icon_adult" />
+	<check_box label="Cena &#8804; " name="pricecheck" />
+	<check_box label="Obszar &#8805; " name="areacheck" />
+	<button label="Szukaj" name="Search" />
+	<scroll_list name="results">
+		<column label="Nazwa" name="name" />
+		<column label="Typ" name="landtype" />
+		<column label="Cena L$" name="price" />
+		<column label="Obszar" name="area" />
+	</scroll_list>
+	<button tool_tip="Poprzednia strona" name="prev_btn" />
+	<button tool_tip="Następna strona" name="next_btn" />
+</panel>

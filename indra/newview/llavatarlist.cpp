@@ -41,12 +41,14 @@
 #include "llavatarnamecache.h"
 #include "llcallingcard.h" // for LLAvatarTracker
 #include "llcachename.h"
+#include "llinventory.h" // <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
 #include "lllistcontextmenu.h"
 #include "llrecentpeople.h"
 #include "lluuid.h"
 #include "llvoiceclient.h"
 #include "llviewercontrol.h"    // for gSavedSettings
 #include "lltooldraganddrop.h"
+#include "lggcontactsets.h" // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 #include "rlvactions.h"
@@ -193,6 +195,8 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowVoiceVolume(p.show_voice_volume)
 , mShowUsername(gSavedSettings.getBOOL("NameTagShowUsernames"))
 , mShowDisplayName(gSavedSettings.getBOOL("UseDisplayNames"))
+, mUseContactSetColors(false) // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+, mUseContactSetListStyle(false) // <FS:PP> FIRE-31733: Make contact sets lists more readable
 {
     setCommitOnSelectionChange(true);
 
@@ -211,10 +215,26 @@ LLAvatarList::LLAvatarList(const Params& p)
     // <FS:Ansariel> FIRE-1089: List needs to update also if we change the username setting
     gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 
+    // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    gSavedSettings.getControl("FSContactSetsColorizeFriends")->getSignal()->connect(boost::bind(&LLAvatarList::refreshNames, this));
+
     // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLAvatarList::updateRlvRestrictions, this, _1, _2));
 }
 
+// <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+void LLAvatarList::setUseContactSetColors(bool use_colors)
+{
+    mUseContactSetColors = use_colors;
+    mNeedUpdateNames = true;
+}
+
+void LLAvatarList::setUseContactSetListStyle(bool use_style)
+{
+    mUseContactSetListStyle = use_style;
+    mNeedUpdateNames = true;
+}
+// </FS:PP>
 
 void LLAvatarList::handleDisplayNamesOptionChanged()
 {
@@ -494,6 +514,8 @@ void LLAvatarList::updateAvatarNames()
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
         LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+        item->setUseContactSetColors(mUseContactSetColors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+        item->setUseContactSetListStyle(mUseContactSetListStyle); // <FS:PP> FIRE-31733: Make contact sets lists more readable
         item->setShowCompleteName(mShowCompleteName, mForceCompleteName);
         item->updateAvatarName();
     }
@@ -594,6 +616,8 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, bool is
     item->setShowPermissions(mShowPermissions);
     item->showUsername(mShowUsername);
     item->showDisplayName(mShowDisplayName);
+    item->setUseContactSetColors(mUseContactSetColors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+    item->setUseContactSetListStyle(mUseContactSetListStyle); // <FS:PP> FIRE-31733: Make contact sets lists more readable
 
     item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
     item->setMouseDownCallback(boost::bind(&LLAvatarList::onItemClicked, this, _1, _2, _3, _4));
@@ -667,6 +691,46 @@ bool LLAvatarList::handleHover(S32 x, S32 y, MASK mask)
 
     return handled;
 }
+
+// <FS:PP> FIRE-31146 Contact Sets - drag-and-drop support
+bool LLAvatarList::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept, std::string& tooltip_msg)
+{
+    if (!mAvatarDropCallback)
+    {
+        return LLFlatListViewEx::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
+    }
+
+    LLUUID avatar_id;
+    if (cargo_type == DAD_PERSON)
+    {
+        if (cargo_data)
+        {
+            avatar_id = *static_cast<LLUUID*>(cargo_data);
+        }
+    }
+    else if (cargo_type == DAD_CALLINGCARD)
+    {
+        if (LLInventoryItem* item = static_cast<LLInventoryItem*>(cargo_data); item)
+        {
+            avatar_id = item->getCreatorUUID();
+        }
+    }
+    else
+    {
+        *accept = ACCEPT_NO;
+        return true;
+    }
+
+    if (avatar_id.isNull())
+    {
+        *accept = ACCEPT_NO;
+        return true;
+    }
+
+    *accept = mAvatarDropCallback(avatar_id, drop) ? ACCEPT_YES_MULTI : ACCEPT_NO;
+    return true;
+}
+// </FS:PP>
 
 void LLAvatarList::setVisible(bool visible)
 {
@@ -763,14 +827,32 @@ bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2)
 
 bool LLAvatarItemNameComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
 {
-    std::string name1 = avatar_item1->getAvatarName();
-    std::string name2 = avatar_item2->getAvatarName();
+    // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
+    // std::string name1 = avatar_item1->getAvatarName();
+    // std::string name2 = avatar_item2->getAvatarName();
 
-    LLStringUtil::toUpper(name1);
-    LLStringUtil::toUpper(name2);
+    // LLStringUtil::toUpper(name1);
+    // LLStringUtil::toUpper(name2);
 
+    std::string name1 = getComparableName(avatar_item1);
+    std::string name2 = getComparableName(avatar_item2);
+    // </FS:PP>
     return name1 < name2;
 }
+
+// <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
+std::string LLAvatarItemComparator::getComparableName(const LLAvatarListItem* avatar_item)
+{
+    std::string name = avatar_item->getAvatarName();
+    if (LGGContactSets::getInstance()->hasPseudonym(avatar_item->getAvatarId()) && !name.empty() && (name.front() == '\'' || name.front() == '"'))
+    {
+        name.erase(0, 1);
+    }
+    LLStringUtil::toUpper(name);
+    return name;
+}
+// </FS:PP>
+
 bool LLAvatarItemAgentOnTopComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
 {
     //keep agent on top, if first is agent,

@@ -30,7 +30,6 @@
 
 // libs
 #include "llfiltereditor.h"
-#include "llmenugl.h"
 #include "lluictrlfactory.h"
 #include "llmenubutton.h"
 #include "lltoggleablemenu.h"
@@ -39,6 +38,7 @@
 #include "fscommon.h"
 #include "fsradarmenu.h"
 #include "llavataractions.h"
+#include "llcallingcard.h"
 #include "llnetmap.h"
 #include "llpanelblockedlist.h"
 #include "llviewercontrol.h"        // for gSavedSettings
@@ -59,14 +59,13 @@ public:
         LLAvatarTracker::instance().addObserver(this);
     }
 
-    ~FSButtonsUpdater()
+    ~FSButtonsUpdater() override
     {
         LLAvatarTracker::instance().removeObserver(this);
     }
 
-    /*virtual*/ void changed(U32 mask)
+    void changed(U32) override
     {
-        (void) mask;
         update();
     }
 };
