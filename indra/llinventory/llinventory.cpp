@@ -61,6 +61,8 @@ static const std::string INV_SALE_INFO_LABEL("sale_info");
 static const std::string INV_FLAGS_LABEL("flags");
 static const std::string INV_CREATION_DATE_LABEL("created_at");
 static const std::string INV_TOGGLED_LABEL("toggled");
+static const std::string INV_SCRIPT_LABEL("script");
+static const std::string INV_RUNTIME_LABEL("runtime");
 
 // key used by agent-inventory-service
 static const std::string INV_ASSET_TYPE_LABEL_WS("type_default");
@@ -109,6 +111,7 @@ void LLInventoryObject::copyObject(const LLInventoryObject* other)
     mName = other->mName;
     mThumbnailUUID = other->mThumbnailUUID;
     mFavorite = other->mFavorite;
+    mRuntime = other->mRuntime;
 }
 
 const LLUUID& LLInventoryObject::getUUID() const
@@ -129,6 +132,11 @@ const LLUUID& LLInventoryObject::getThumbnailUUID() const
 bool LLInventoryObject::getIsFavorite() const
 {
     return mFavorite;
+}
+
+const std::string& LLInventoryObject::getRuntime() const
+{
+    return mRuntime;
 }
 
 const std::string& LLInventoryObject::getName() const
@@ -190,9 +198,23 @@ void LLInventoryObject::setFavorite(bool favorite)
     mFavorite = favorite;
 }
 
+void LLInventoryObject::setRuntime(std::string_view runtime)
+{
+    // Store the runtime unconditionally; it will be validated/cleared
+    // when the final asset type is known (see setType()).
+    mRuntime = runtime;
+}
+
 void LLInventoryObject::setType(LLAssetType::EType type)
 {
     mType = type;
+
+    // Only LSL text assets are expected to have a runtime; clear any
+    // previously stored runtime for other asset types.
+    if (mType != LLAssetType::AT_LSL_TEXT)
+    {
+        mRuntime.clear();
+    }
 }
 
 
@@ -278,6 +300,15 @@ bool LLInventoryObject::importLegacyStream(std::istream& input_stream)
             else
             {
                 setFavorite(false);
+            }
+
+            if (metadata.has("script") && metadata["script"].has("runtime"))
+            {
+                setRuntime(metadata["script"]["runtime"].asString());
+            }
+            else
+            {
+                setRuntime(std::string());
             }
         }
         else if(0 == strcmp("name", keyword))
@@ -421,6 +452,7 @@ void LLInventoryItem::copyItem(const LLInventoryItem* other)
     mInventoryType = other->mInventoryType;
     mFlags = other->mFlags;
     mCreationDate = other->mCreationDate;
+    mRuntime = other->mRuntime;
 }
 
 // If this is a linked item, then the UUID of the base object is
@@ -862,6 +894,16 @@ bool LLInventoryItem::importLegacyStream(std::istream& input_stream)
             {
                 setFavorite(false);
             }
+
+            if (metadata.has("script") && metadata["script"].has("runtime"))
+            {
+                setRuntime(metadata["script"]["runtime"].asString());
+            }
+            else
+            {
+                setRuntime(std::string());
+            }
+
         }
         else if(0 == strcmp("inv_type", keyword))
         {
@@ -1027,6 +1069,11 @@ void LLInventoryItem::asLLSD( LLSD& sd ) const
         sd[INV_FAVORITE_LABEL] = LLSD().with(INV_TOGGLED_LABEL, mFavorite);
     }
 
+    if (!mRuntime.empty())
+    {
+        sd[INV_SCRIPT_LABEL] = LLSD().with(INV_RUNTIME_LABEL, mRuntime);
+    }
+
     U32 mask = mPermissions.getMaskBase();
     if(((mask & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED)
         || (mAssetUUID.isNull()))
@@ -1130,6 +1177,23 @@ bool LLInventoryItem::fromLLSD(const LLSD& sd, bool is_new)
             if (favorite_map.has(INV_TOGGLED_LABEL))
             {
                 mFavorite = favorite_map[INV_TOGGLED_LABEL].asBoolean();
+            }
+            continue;
+        }
+
+        if (i->first == INV_SCRIPT_LABEL)
+        {
+            const LLSD& script_map = i->second;
+            const std::string w = INV_RUNTIME_LABEL;
+            if (script_map.has(w))
+            {
+                mRuntime = script_map[w].asString();
+            }
+            else
+            {
+                // Clear any stale runtime when a script block is present
+                // but no explicit runtime value is provided.
+                mRuntime.clear();
             }
             continue;
         }
@@ -1553,6 +1617,8 @@ bool LLInventoryCategory::importLegacyStream(std::istream& input_stream)
             {
                 setFavorite(false);
             }
+            setRuntime(std::string());
+
         }
         else
         {

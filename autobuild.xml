@@ -3155,6 +3155,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       </map>
       <key>websocketpp</key>
       <map>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-websocketpp</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2014, Peter Thorson</string>
+        <key>description</key>
+        <string>WebSocket++ is a C++ header only library for interacting with WebSocket servers and clients.</string>
+        <key>license</key>
+        <string>websocketpp</string>
+        <key>license_file</key>
+        <string>LICENSES/websocketpp.txt</string>
+        <key>name</key>
+        <string>websocketpp</string>
         <key>platforms</key>
         <map>
           <key>common</key>
@@ -3162,36 +3174,24 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a69aa37bfbcb934974f7af906f6dc6b044692f07</string>
+              <string>abaea02a43487c07dbeaa2b22a1efcc8b26090d6</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-websocketpp/releases/download/v0.8.2-r2/websocketpp-0.8.2.19586590594-common-19586590594.tar.zst</string>
+              <string>https://github.com/secondlife/3p-websocketpp/releases/download/v0.8.2-r3/websocketpp-0.8.2.24525603568-common-24525603568.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
-        <key>license</key>
-        <string>websocketpp</string>
-        <key>license_file</key>
-        <string>LICENSES/websocketpp.txt</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2014, Peter Thorson</string>
-        <key>version</key>
-        <string>0.8.2.19586590594</string>
-        <key>name</key>
-        <string>websocketpp</string>
         <key>vcs_branch</key>
         <string>refs/tags/v0.8.2</string>
         <key>vcs_revision</key>
         <string>bdcf1453101976fc4dc26a62c87bc98c12e9c6dc</string>
         <key>vcs_url</key>
         <string>git://github.com/secondlife/3p-websocketpp.git</string>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/3p-websocketpp</string>
-        <key>description</key>
-        <string>WebSocket++ is a C++ header only library for interacting with WebSocket servers and clients.</string>
+        <key>version</key>
+        <string>0.8.2.24525603568</string>
       </map>
     </map>
     <key>package_description</key>

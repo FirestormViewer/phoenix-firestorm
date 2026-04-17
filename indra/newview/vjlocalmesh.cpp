@@ -472,7 +472,7 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
     for (size_t lod_iter = 0; lod_iter < LOCAL_NUM_LODS; ++lod_iter)
     {
         mFilenames[lod_iter].clear();
-        mLastModified[lod_iter] = 0ul;
+        mLastModified[lod_iter] = 0LL;
         mLoadedSuccessfully[lod_iter] = false;
     }
 
@@ -563,7 +563,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load, bool force_reloa
     {
         if (!readLastModified(reload_filenames[lod_idx], reload_last_modified[lod_idx]))
         {
-            reload_last_modified[lod_idx] = 0;
+            reload_last_modified[lod_idx] = 0LL;
         }
     }
 
@@ -836,7 +836,7 @@ void LLLocalMeshFile::reloadLocalMeshObjectsCallback()
 
 bool LLLocalMeshFile::readLastModified(const std::string& filename, std::time_t& last_modified) const
 {
-    last_modified = 0;
+    last_modified = 0LL;
     if (filename.empty())
     {
         return false;
@@ -1036,7 +1036,7 @@ bool LLLocalMeshFile::needsReload() const
     {
         if (!readLastModified(candidate_filenames[lod_idx], candidate_last_modified[lod_idx]))
         {
-            candidate_last_modified[lod_idx] = 0;
+            candidate_last_modified[lod_idx] = 0LL;
         }
     }
 
