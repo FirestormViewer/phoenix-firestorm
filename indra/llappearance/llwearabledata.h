@@ -67,7 +67,6 @@ public:
     bool            isOnTop(LLWearable* wearable) const;
 
     static const U32 MAX_CLOTHING_LAYERS = 60;
-    static constexpr U32 MAX_BODY_PARTS  = 4; // <FS:TJ/> Body part count is always 4
 
     //--------------------------------------------------------------------
     // Setters
