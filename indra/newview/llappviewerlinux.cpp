@@ -226,7 +226,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
         // <FS:PP> FIRE-36191: A secondary helper process can intentionally quit after handing an external SLURL to the already-running viewer instance
         if (LLApp::isQuitting())
         {
-            return 0;
+            return SDL_APP_SUCCESS;
         }
         // </FS:PP>
         LL_WARNS() << "Application init failed." << LL_ENDL;
