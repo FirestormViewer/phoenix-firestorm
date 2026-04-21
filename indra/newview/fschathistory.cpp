@@ -1730,6 +1730,30 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
                 prependNewLineState = false;
 
+                if (gSavedSettings.getBOOL("ShowChatMiniIcons")
+                    && chat.mFromID.notNull()
+                    && !chat.mRlvNamesFiltered)
+                {
+                    S32 line_h = fontp->getLineHeight();
+                    S32 icon_size = (line_h <= 24) ? 16 : 32;
+                    LLAvatarIconCtrl::Params icon_params;
+                    icon_params.name("avatar_icon_inline");
+                    icon_params.rect(LLRect(0, icon_size, icon_size, 0));
+                    icon_params.min_width(icon_size);
+                    icon_params.min_height(icon_size);
+                    icon_params.draw_tooltip(false);
+
+                    LLAvatarIconCtrl* icon = LLUICtrlFactory::create<LLAvatarIconCtrl>(icon_params);
+                    icon->setValue(chat.mFromID);
+
+                    LLInlineViewSegment::Params p;
+                    p.view = icon;
+                    p.force_newline = false;
+                    p.left_pad = 2;
+                    p.right_pad = 2;
+                    appendWidget(p, " ", false);
+                }
+
                 if (delimiter.length() > 0 && delimiter[0] == ':')
                 {
                     LLStyle::Params delimiter_params(body_message_params);

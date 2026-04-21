@@ -31,6 +31,7 @@
 
 #include "lliconctrl.h"
 #include "llavatarpropertiesprocessor.h"
+#include "llframetimer.h"
 #include "llviewernetwork.h"
 
 class LLAvatarName;
@@ -124,6 +125,7 @@ public:
     /*virtual*/ bool handleToolTip(S32 x, S32 y, MASK mask);
 // [/SL:KB]
 
+    void draw() override;
     virtual void setValue(const LLSD& value);
 
     // LLAvatarPropertiesProcessor observer trigger
@@ -143,6 +145,8 @@ protected:
                                 mSymbolVpad,
                                 mSymbolSize;
     LLAvatarIconCtrlEnums::ESymbolPos   mSymbolPos;
+
+    LLFrameTimer                mRetryTimer;
 
     bool updateFromCache();
 
