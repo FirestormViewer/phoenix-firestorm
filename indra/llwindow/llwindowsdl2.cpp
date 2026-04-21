@@ -2791,7 +2791,7 @@ void LLWindowSDL::setLanguageTextInput(const LLCoordGL& position)
     SDL_Rect r;
     r.x = win_pos.mX;
     r.y = win_pos.mY;
-    r.w = 500;
+    r.w = 1;
     r.h = 16;
 
     SDL_SetTextInputRect(&r);
