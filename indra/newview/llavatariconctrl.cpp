@@ -246,6 +246,7 @@ void LLAvatarIconCtrl::setValue(const LLSD& value)
                 LLIconCtrl::setValue(mDefaultIconName, LLViewerFetchedTexture::BOOST_UI);
                 app->addObserver(mAvatarId, this);
                 app->sendAvatarLegacyPropertiesRequest(mAvatarId);
+                mRetryTimer.reset();
             }
             else if (gAgentID == mAvatarId)
             {
@@ -260,6 +261,21 @@ void LLAvatarIconCtrl::setValue(const LLSD& value)
     }
 
     fetchAvatarName();
+}
+
+void LLAvatarIconCtrl::draw()
+{
+    LLIconCtrl::draw();
+
+    if (mAvatarId.notNull()
+        && LLAvatarIconIDCache::getInstance()->get(mAvatarId) == nullptr
+        && mRetryTimer.getElapsedTimeF32() > 30.f)
+    {
+        mRetryTimer.reset();
+        LLAvatarPropertiesProcessor* app = LLAvatarPropertiesProcessor::getInstance();
+        app->addObserver(mAvatarId, this);
+        app->sendAvatarLegacyPropertiesRequest(mAvatarId);
+    }
 }
 
 void LLAvatarIconCtrl::fetchAvatarName()
