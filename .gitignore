@@ -131,3 +131,12 @@ firestorm.code-workspace
 
 checks.json
 .venv/
+fixall2.py 
+find2.py 
+find_bad.py 
+fix.py 
+fix2.py 
+fix_dash.py 
+fixall.py 
+git 
+my_autobuild.xml 
