@@ -213,7 +213,7 @@ private:
     {
      eSaveFile, eOpenFile, eOpenMultiple
     };
-    bool openFileDialog( int32_t filter, bool blocking, EType aType );
+    bool openFileDialog( int32_t filter, bool blocking, EType aType, const std::string& filename = std::string() );
 #endif
 
     std::vector<std::string> mFiles;
