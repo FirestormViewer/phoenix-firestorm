@@ -190,6 +190,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             with self.prefix(src_dst="fonts"):
             # </FS:Ansariel>
                 self.path("*.ttf")
+                self.path("*.otf")
                 self.path("*.txt")
                 self.path("*.xml")
                 
