@@ -187,6 +187,8 @@ public:
     void            enableSave(bool b) { mEnableSave = b; }
     bool            hasChanged() const;
 
+    void            updateTabs(bool is_lua);      // <FS:Zi> Disable LSL preprocessor when compile target is luau
+
   private:
     // NaCl - LSL Preprocessor
     void        onToggleProc();
