@@ -271,7 +271,7 @@
                  <combo_box.drop_down_button
                   pad_bottom="1"
                   pad_left="10"
-                  font="SansSerif"
+                  font="SansSerifLarge"
                   label_color="Black"
                   label_color_selected="Black"
                   draw_focus_border="false"

@@ -252,7 +252,7 @@
       layout="topleft"
       left_delta="0"
       top_pad="5"
-      width="102"
+      width="105"
       name="roughness_factor_lbl">
       Roughness Factor
     </text>

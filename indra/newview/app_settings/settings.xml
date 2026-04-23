@@ -9264,7 +9264,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>90</integer>
+      <integer>110</integer>
     </map>
     <key>ChannelBottomPanelMargin</key>
     <map>

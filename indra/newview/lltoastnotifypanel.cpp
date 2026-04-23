@@ -50,7 +50,7 @@
 
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
-S32 BUTTON_WIDTH = 90;
+S32 BUTTON_WIDTH = 110;
 
 
 //static
@@ -387,8 +387,20 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
         }
         else
         {
-            const S32 button_panel_width = mControlPanel->getRect().getWidth();// do not change width of the panel
+            S32 button_panel_width = mControlPanel->getRect().getWidth();// get initial width from XML
             S32 button_panel_height = mControlPanel->getRect().getHeight();
+
+            // width for 3 columns: 3 buttons + 2 gaps
+            S32 min_width_required = 3 * BUTTON_WIDTH + 2 * (2 * HPAD);
+            if (min_width_required > button_panel_width)
+            {
+                button_panel_width = min_width_required;
+                S32 width_increase = button_panel_width - mControlPanel->getRect().getWidth();
+                reshape(getRect().getWidth() + width_increase, getRect().getHeight());
+                mInfoPanel->reshape(mInfoPanel->getRect().getWidth() + width_increase, mInfoPanel->getRect().getHeight());
+                mTextBox->reshape(mTextBox->getRect().getWidth() + width_increase, mTextBox->getRect().getHeight());
+            }
+
             //try get an average h_pad to spread out buttons
             S32 h_pad = (button_panel_width - buttons_width) / (S32(buttons.size()));
             if(h_pad < 2*HPAD)

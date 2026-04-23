@@ -1178,7 +1178,14 @@ LLFontGL* LLFontGL::getFontSansSerifSmallItalic()
 //static
 LLFontGL* LLFontGL::getFontSansSerif()
 {
-    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Medium",0));
+    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Small",0));
+    return fontp;
+}
+
+// static
+LLFontGL* LLFontGL::getFontSansSerifMedium()
+{
+    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Medium", 0));
     return fontp;
 }
 

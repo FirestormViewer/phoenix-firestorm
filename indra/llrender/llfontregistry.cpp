@@ -203,7 +203,7 @@ LLFontDescriptor LLFontDescriptor::normalize() const
         new_size = "Cascadia";
     // </FS:Ansariel>
     if (new_size.empty())
-        new_size = "Medium";
+        new_size = "Small";
 
     if (removeSubString(new_name,"Bold"))
         new_style |= LLFontGL::BOLD;

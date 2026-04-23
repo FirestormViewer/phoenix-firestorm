@@ -301,7 +301,6 @@ Maximum 200 per group daily
      width="400">
         <text
          type="string"
-         font="SansSerifMedium"
          height="16"
          layout="topleft"
          left="10"
