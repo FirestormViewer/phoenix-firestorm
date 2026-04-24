@@ -158,6 +158,7 @@
 	<combo_box name="TonemapType">
 		<combo_box.item label="Khronosナチュラル" name="0"/>
 		<combo_box.item label="ＡＣＥＳ" name="1"/>
+		<combo_box.item label="Filmic (Uncharted 2)" name="2"/>
 	</combo_box>
 	<slider label="トーンマップ混合：" tool_tip="リニアカラーとトーンマップカラーの混合値を指定します。" name="TonemapMix"/>
 	<!-- End of Tone Mapping Settings-->

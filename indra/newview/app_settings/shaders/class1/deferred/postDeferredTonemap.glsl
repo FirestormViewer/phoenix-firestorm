@@ -35,6 +35,22 @@ in vec2 vary_fragcoord;
 uniform float gamma;
 #endif
 
+uniform float color_saturation;
+uniform float color_contrast;
+uniform float color_temperature;
+uniform float color_brightness;
+
+vec3 applyColorGrading(vec3 color)
+{
+    float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
+    color = mix(vec3(luma), color, color_saturation);
+    color = clamp((color - 0.5) * color_contrast + 0.5, 0.0, 1.0);
+    color.r *= 1.0 + color_temperature * 0.3;
+    color.b *= 1.0 - color_temperature * 0.3;
+    color = clamp(color + color_brightness, 0.0, 1.0);
+    return color;
+}
+
 vec3 linear_to_srgb(vec3 cl);
 vec3 toneMap(vec3 color);
 
@@ -60,6 +76,8 @@ void main()
 #else
     diff.rgb = clamp(diff.rgb, vec3(0.0), vec3(1.0));
 #endif
+
+    diff.rgb = applyColorGrading(diff.rgb);
 
 #ifdef GAMMA_CORRECT
     diff.rgb = linear_to_srgb(diff.rgb);

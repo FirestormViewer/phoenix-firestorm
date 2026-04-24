@@ -199,6 +199,7 @@ F32 LLPipeline::CameraFNumber;
 F32 LLPipeline::CameraFocalLength;
 F32 LLPipeline::CameraFieldOfView;
 F32 LLPipeline::RenderShadowNoise;
+F32 LLPipeline::RenderShadowSoftness;
 F32 LLPipeline::RenderShadowBlurSize;
 F32 LLPipeline::RenderSSAOScale;
 U32 LLPipeline::RenderSSAOMaxScale;
@@ -623,6 +624,7 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("CameraFocalLength");
     connectRefreshCachedSettingsSafe("CameraFieldOfView");
     connectRefreshCachedSettingsSafe("RenderShadowNoise");
+    connectRefreshCachedSettingsSafe("RenderShadowSoftness");
     connectRefreshCachedSettingsSafe("RenderShadowBlurSize");
     connectRefreshCachedSettingsSafe("RenderSSAOScale");
     connectRefreshCachedSettingsSafe("RenderSSAOMaxScale");
@@ -1238,6 +1240,7 @@ void LLPipeline::refreshCachedSettings()
     CameraFocalLength = gSavedSettings.getF32("CameraFocalLength");
     CameraFieldOfView = gSavedSettings.getF32("CameraFieldOfView");
     RenderShadowNoise = gSavedSettings.getF32("RenderShadowNoise");
+    RenderShadowSoftness = gSavedSettings.getF32("RenderShadowSoftness");
     RenderShadowBlurSize = gSavedSettings.getF32("RenderShadowBlurSize");
     RenderSSAOScale = gSavedSettings.getF32("RenderSSAOScale");
     RenderSSAOMaxScale = gSavedSettings.getU32("RenderSSAOMaxScale");
@@ -7845,7 +7848,12 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_co
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        bool no_post = gSnapshotNoPost || psky->getReflectionProbeAmbiance(should_auto_adjust) == 0.f || (buildNoPost && gFloaterTools && gFloaterTools->isAvailable());
+        static LLCachedControl<U32> tonemap_type_setting(gSavedSettings, "RenderTonemapType", 0U);
+        const bool force_tonemap = (tonemap_type_setting > 0);
+
+        bool no_post = gSnapshotNoPost
+            || (!force_tonemap && psky->getReflectionProbeAmbiance(should_auto_adjust) == 0.f)
+            || (buildNoPost && gFloaterTools && gFloaterTools->isAvailable());
         LLGLSLShader* shader = nullptr;
         if(gamma_correct)
         {
@@ -7884,9 +7892,20 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_co
 
         shader->uniform1f(s_exposure, e);
 
-        static LLCachedControl<U32> tonemap_type_setting(gSavedSettings, "RenderTonemapType", 0U);
         shader->uniform1i(tonemap_type, tonemap_type_setting);
-        shader->uniform1f(tonemap_mix, psky->getTonemapMix(should_auto_adjust()));
+        F32 mix_val = force_tonemap
+            ? gSavedSettings.getF32("RenderTonemapMix")
+            : psky->getTonemapMix(should_auto_adjust());
+        shader->uniform1f(tonemap_mix, mix_val);
+
+        shader->uniform1f(LLShaderMgr::COLOR_SATURATION,
+            gSavedSettings.getF32("RenderColorSaturation"));
+        shader->uniform1f(LLShaderMgr::COLOR_CONTRAST,
+            gSavedSettings.getF32("RenderColorContrast"));
+        shader->uniform1f(LLShaderMgr::COLOR_TEMPERATURE,
+            gSavedSettings.getF32("RenderColorTemperature"));
+        shader->uniform1f(LLShaderMgr::COLOR_BRIGHTNESS,
+            gSavedSettings.getF32("RenderColorBrightness"));
 
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
@@ -9287,6 +9306,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     }
     shader.uniform1f(LLShaderMgr::DEFERRED_SUN_WASH, RenderDeferredSunWash);
     shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_NOISE, RenderShadowNoise);
+    shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_SOFTNESS, RenderShadowSoftness);
     shader.uniform1f(LLShaderMgr::DEFERRED_BLUR_SIZE, RenderShadowBlurSize);
 
 // <FS:WW> Compute scale factor to match AO appearance between view and snapshot.

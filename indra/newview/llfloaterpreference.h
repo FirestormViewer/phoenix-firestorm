@@ -205,6 +205,7 @@ public:
     void onClickBrowseChatLogDir();
     void onClickResetCache();
     void onClickClearCache(); // AO: was protected, moved to public
+    void onResetColorGrading();
     void onClickJavascript();
     void onClickBrowseSettingsDir();
     void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
