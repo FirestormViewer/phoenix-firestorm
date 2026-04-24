@@ -1791,7 +1791,7 @@ bool LLFilePicker::getSaveFileModeless(ESaveFilter filter,
 
 bool LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
 {
-    return openFileDialog( filter, blocking, eSaveFile );
+    return openFileDialog( filter, blocking, eSaveFile, filename );
 }
 
 bool LLFilePicker::getOpenFile( ELoadFilter filter, bool blocking )
@@ -1804,7 +1804,7 @@ bool LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
     return openFileDialog( filter, blocking, eOpenMultiple );
 }
 
-bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
+bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType, const std::string& filename )
 {
     if ( check_local_file_access_enabled() == false )
         return false;
@@ -2023,6 +2023,11 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
     if (!file_dialog_filter.empty())
     {
         flDlg.filter(file_dialog_filter.c_str());
+    }
+
+    if (aType == eSaveFile && !filename.empty())
+    {
+        flDlg.preset_file(filename.c_str());
     }
 
     int res = flDlg.show();

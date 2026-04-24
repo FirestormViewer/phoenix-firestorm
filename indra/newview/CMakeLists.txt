@@ -94,6 +94,8 @@ set(viewer_SOURCE_FILES
     aoset.cpp
     chatbar_as_cmdline.cpp
     daeexport.cpp
+    fschecktexture.cpp
+    fschecktexturegltf.cpp
     dialogstack.cpp
     exoflickr.cpp
     exoflickrauth.cpp
@@ -953,6 +955,8 @@ set(viewer_HEADER_FILES
     aoset.h
     chatbar_as_cmdline.h
     daeexport.h
+    fschecktexture.h
+    fschecktexturegltf.h
     dialogstack.h
     exoflickr.h
     exoflickrauth.h
