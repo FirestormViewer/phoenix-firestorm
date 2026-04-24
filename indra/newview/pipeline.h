@@ -1129,6 +1129,7 @@ public:
     static F32 CameraFocalLength;
     static F32 CameraFieldOfView;
     static F32 RenderShadowNoise;
+    static F32 RenderShadowSoftness;
     static F32 RenderShadowBlurSize;
     static F32 RenderSSAOScale;
     static U32 RenderSSAOMaxScale;

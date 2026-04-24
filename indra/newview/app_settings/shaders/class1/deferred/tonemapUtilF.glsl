@@ -113,10 +113,59 @@ vec3 PBRNeutralToneMapping( vec3 color )
   return mix(color, newPeak * vec3(1, 1, 1), g);
 }
 
+vec3 uncharted2Tonemap(vec3 x)
+{
+    float A = 0.15, B = 0.50, C = 0.10, D = 0.20, E = 0.02, F = 0.30;
+    return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
+}
+
+vec3 toneMapFilmic(vec3 color)
+{
+    vec3 curr = uncharted2Tonemap(color * 2.0);
+    vec3 whiteScale = 1.0 / uncharted2Tonemap(vec3(11.2));
+    return curr * whiteScale;
+}
+
+vec3 toneMapUchimura(vec3 color)
+{
+    // Uchimura 2017, "HDR theory and practice"
+    // Math: https://www.desmos.com/calculator/gslcdxvipg
+    const float P = 1.0;  // max brightness
+    const float a = 1.0;  // contrast
+    const float m = 0.22; // linear section start
+    const float l = 0.4;  // linear section length
+    const float c = 1.33; // black tightness
+    const float b = 0.0;  // pedestal
+
+    float l0 = ((P - m) * l) / a;
+    float L0 = m - m / a;
+    float L1 = m + (1.0 - m) / a;
+    float S0 = m + l0;
+    float S1 = m + a * l0;
+    float C2 = (a * P) / (P - S1);
+    float CP = -C2 / P;
+
+    vec3 w0 = vec3(1.0 - smoothstep(0.0, m, color));
+    vec3 w2 = vec3(step(m + l0, color));
+    vec3 w1 = vec3(1.0) - w0 - w2;
+
+    vec3 T = vec3(m * pow(color / m, vec3(c)) + b);
+    vec3 S = vec3(P - (P - S1) * exp(CP * (color - S0)));
+    vec3 L = vec3(m + a * (color - m));
+
+    return T * w0 + L * w1 + S * w2;
+}
+
+vec3 toneMapFilmicBD(vec3 color)
+{
+    vec3 X = max(vec3(0.0), color - 0.004);
+    vec3 result = (X * (6.2 * X + 0.5)) / (X * (6.2 * X + 1.7) + 0.06);
+    return pow(result, vec3(2.2));
+}
+
 uniform float exposure;
 uniform float tonemap_mix;
 uniform int tonemap_type;
-
 
 vec3 toneMap(vec3 color)
 {
@@ -136,11 +185,19 @@ vec3 toneMap(vec3 color)
     case 1:
         tonemapped_color = toneMapACES_Hill(exposed_color);
         break;
+    case 2:
+        tonemapped_color = toneMapFilmic(exposed_color);
+        break;
+    case 3:
+        tonemapped_color = toneMapUchimura(exposed_color);
+        break;
+    case 4:
+        tonemapped_color = toneMapFilmicBD(exposed_color);
+        break;
     }
 
     vec3 exposed_linear_input = linear_input_color * final_exposure;
     color = mix(exposed_linear_input, tonemapped_color, tonemap_mix);
-
     color = clamp(color, 0.0, 1.0);
 #else
     color *= exposure * texture(exposureMap, vec2(0.5,0.5)).r;
