@@ -11867,6 +11867,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>RenderShadowSoftness</key>
+  <map>
+    <key>Comment</key>
+    <string>PCF shadow softness multiplier (1.0 = sharp, 3.0 = soft). Scales the shadow sample tap radius.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0</real>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
   <key>RenderDeferredTreeShadowBias</key>
   <map>
     <key>Comment</key>
@@ -13837,13 +13850,57 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderTonemapType</key>
     <map>
         <key>Comment</key>
-        <string>What tonemapper to use: 0 = Khronos Neutral, 1 = ACES</string>
+        <string>What tonemapper to use: 0 = Khronos Neutral, 1 = ACES, 2 = Filmic</string>
         <key>Persist</key>
         <integer>1</integer>
         <key>Type</key>
         <string>U32</string>
         <key>Value</key>
         <integer>1</integer>
+    </map>
+    <key>RenderColorBrightness</key>
+    <map>
+        <key>Comment</key>
+        <string>Color grading brightness offset (-1.0=dark, 0.0=neutral, 1.0=bright)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.0</real>
+    </map>
+    <key>RenderColorSaturation</key>
+    <map>
+        <key>Comment</key>
+        <string>Color grading saturation (0.0=grayscale, 1.0=neutral, 2.0=vivid)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>1.0</real>
+    </map>
+    <key>RenderColorContrast</key>
+    <map>
+        <key>Comment</key>
+        <string>Color grading contrast (1.0=neutral, 0.5=flat, 2.0=high contrast)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>1.0</real>
+    </map>
+    <key>RenderColorTemperature</key>
+    <map>
+        <key>Comment</key>
+        <string>Color grading temperature offset (-1.0=cool/blue, 0.0=neutral, 1.0=warm/orange)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.0</real>
     </map>
     <key>ReplaySession</key>
     <map>

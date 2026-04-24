@@ -499,6 +499,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     mCommitCallbackRegistrar.add("Pref.RenderExceptions",       boost::bind(&LLFloaterPreference::onClickRenderExceptions, this));
     // mCommitCallbackRegistrar.add("Pref.AutoAdjustments",         boost::bind(&LLFloaterPreference::onClickAutoAdjustments, this)); // <FS:Beq/> Not required in FS at present
     mCommitCallbackRegistrar.add("Pref.HardwareDefaults",       boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
+    mCommitCallbackRegistrar.add("Pref.ResetColorGrading",      boost::bind(&LLFloaterPreference::onResetColorGrading, this));
     mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",  boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",    boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
@@ -1467,6 +1468,14 @@ void LLFloaterPreference::setRecommendedSettings()
             panel->setHardwareDefaults();
         }
     }
+}
+
+void LLFloaterPreference::onResetColorGrading()
+{
+    gSavedSettings.setF32("RenderColorSaturation", 1.0f);
+    gSavedSettings.setF32("RenderColorContrast", 1.0f);
+    gSavedSettings.setF32("RenderColorTemperature", 0.0f);
+    gSavedSettings.setF32("RenderColorBrightness", 0.0f);
 }
 
 void LLFloaterPreference::resetAutotuneSettings()

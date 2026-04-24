@@ -1382,8 +1382,9 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("depth_cutoff");
     mReservedUniforms.push_back("norm_cutoff");
     mReservedUniforms.push_back("shadow_target_width");
+    mReservedUniforms.push_back("shadow_softness");
 
-    llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH + 1);
+    llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_SOFTNESS + 1);
 
     mReservedUniforms.push_back("iterationCount");
     mReservedUniforms.push_back("rayStep");
@@ -1560,6 +1561,11 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("border_thickness");
     mReservedUniforms.push_back("frame_rect");
     // </FS:Beq>
+
+    mReservedUniforms.push_back("color_saturation");
+    mReservedUniforms.push_back("color_contrast");
+    mReservedUniforms.push_back("color_temperature");
+    mReservedUniforms.push_back("color_brightness");
 
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

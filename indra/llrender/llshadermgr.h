@@ -181,6 +181,7 @@ public:
         DEFERRED_DEPTH_CUTOFF,              //  "depth_cutoff"
         DEFERRED_NORM_CUTOFF,               //  "norm_cutoff"
         DEFERRED_SHADOW_TARGET_WIDTH,       //  "shadow_target_width"
+        DEFERRED_SHADOW_SOFTNESS,           //  "shadow_softness"
 
         DEFERRED_SSR_ITR_COUNT,             //  "iterationCount"
         DEFERRED_SSR_RAY_STEP,              //  "rayStep"
@@ -359,6 +360,12 @@ public:
         SNAPSHOT_BORDER_THICKNESS,          // "border_thickness"
         SNAPSHOT_FRAME_RECT,                // "frame_rect"
         // </FS:Beq>
+
+        COLOR_SATURATION,                   //  "color_saturation"
+        COLOR_CONTRAST,                     //  "color_contrast"
+        COLOR_TEMPERATURE,                  //  "color_temperature"
+        COLOR_BRIGHTNESS,                   //  "color_brightness"
+
         END_RESERVED_UNIFORMS
     } eGLSLReservedUniforms;
     // clang-format on

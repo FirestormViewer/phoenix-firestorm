@@ -1241,6 +1241,20 @@ If you do not understand the distinction then leave this control alone."
      follows="all"
      label="Rendering"
      name="Rendering" >
+      <scroll_container
+         follows="all"
+         layout="topleft"
+         left="0"
+         top="0"
+         name="rendering_tab_scroll"
+         bottom="-1"
+         right="-1">
+        <panel
+         height="1400"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="524">
       <!-- world pauser -->
       <text
          type="string"
@@ -1616,6 +1630,23 @@ If you do not understand the distinction then leave this control alone."
          top_pad="1"
          width="408" />
         <slider
+         control_name="RenderShadowSoftness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1.0"
+         label="Shadow Softness"
+         tool_tip="Softness of shadow edges (1.0 = sharp, 3.0 = soft)"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="1.0"
+         max_val="3.0"
+         name="ShadowSoftness"
+         top_pad="1"
+         width="408" />
+        <slider
          control_name="RenderTerrainScale"
          decimal_digits="0"
          follows="left|top"
@@ -1721,6 +1752,18 @@ If you do not understand the distinction then leave this control alone."
           label="ACES"
           name="1"
           value="1"/>
+         <combo_box.item
+          label="Filmic (Uncharted 2)"
+          name="2"
+          value="2"/>
+         <combo_box.item
+          label="Uchimura (GT)"
+          name="3"
+          value="3"/>
+         <combo_box.item
+          label="Filmic (BD Style)"
+          name="4"
+          value="4"/>
         </combo_box>
         <slider
          control_name="RenderTonemapMix"
@@ -1740,7 +1783,126 @@ If you do not understand the distinction then leave this control alone."
          show_text="true"
          top_pad="5"
          width="310"/>
+        <slider
+         control_name="RenderExposure"
+         enabled_control="RenderTonemapType"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1.0"
+         label="Exposure"
+         tool_tip="Scene exposure (disabled when Khronos Neutral is selected)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.5"
+         max_val="4.0"
+         name="RenderExposureRendering"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
         <!-- End of Tone Mapping Settings-->
+        <!-- Color Grading Settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ColorGradingLabel"
+         top_pad="10"
+         width="150">
+            Color Grading:
+        </text>
+        <slider
+         control_name="RenderColorSaturation"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="1.0"
+         label="Saturation:"
+         tool_tip="Color saturation (0.5=desaturated, 1.0=neutral, 1.5=vivid)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.5"
+         max_val="1.5"
+         name="ColorSaturation"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
+        <slider
+         control_name="RenderColorContrast"
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.001"
+         initial_value="1.0"
+         label="Contrast:"
+         tool_tip="Color contrast (0.8=flat, 1.0=neutral, 1.2=high contrast)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.95"
+         max_val="1.05"
+         name="ColorContrast"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
+        <slider
+         control_name="RenderColorTemperature"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="0.0"
+         label="Color Temperature:"
+         tool_tip="Color temperature (-0.5=cool/blue, 0.0=neutral, 0.5=warm/orange)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="-0.5"
+         max_val="0.5"
+         name="ColorTemperature"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
+        <slider
+         control_name="RenderColorBrightness"
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.001"
+         initial_value="0.0"
+         label="Brightness:"
+         tool_tip="Brightness offset (-0.3=darker, 0.0=neutral, 0.3=brighter)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="-0.05"
+         max_val="0.05"
+         name="ColorBrightness"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
+        <button
+         follows="left|top"
+         height="20"
+         label="Reset Color Grading"
+         layout="topleft"
+         left="10"
+         name="ResetColorGradingBtn"
+         top_pad="10"
+         width="180">
+            <button.commit_callback
+             function="Pref.ResetColorGrading"/>
+        </button>
+        <!-- End of Color Grading Settings -->
+        </panel>
+      </scroll_container>
     </panel>
 
 <!--Depth of Field-->

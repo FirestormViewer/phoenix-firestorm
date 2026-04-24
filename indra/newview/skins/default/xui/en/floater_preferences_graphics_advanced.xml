@@ -1067,6 +1067,14 @@
        label="ACES"
        name="1"
        value="1"/>
+     <combo_box.item
+       label="Filmic (Uncharted 2)"
+       name="2"
+       value="2"/>
+     <combo_box.item
+       label="Uchimura (GT)"
+       name="3"
+       value="3"/>
   </combo_box>
   <slider
    control_name="RenderTonemapMix"
@@ -1083,6 +1091,77 @@
    min_val="0.0"
    max_val="1.0"
    name="TonemapMix"
+   show_text="true"
+   top_delta="20"
+   width="260">
+  </slider>
+  <!-- Color Grading Settings -->
+  <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="16"
+    layout="topleft"
+    left="420"
+    name="ColorGradingLabel"
+    text_readonly_color="LabelDisabledColor"
+    top_delta="25"
+    width="200">
+    Color Grading:
+  </text>
+  <slider
+   control_name="RenderColorSaturation"
+   decimal_digits="2"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="1.0"
+   label="Saturation:"
+   tool_tip="Color saturation (0.0=grayscale, 1.0=neutral, 2.0=vivid)"
+   label_width="145"
+   layout="topleft"
+   left="420"
+   min_val="0.0"
+   max_val="2.0"
+   name="ColorSaturation"
+   show_text="true"
+   top_delta="20"
+   width="260">
+  </slider>
+  <slider
+   control_name="RenderColorContrast"
+   decimal_digits="2"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="1.0"
+   label="Contrast:"
+   tool_tip="Color contrast (0.5=flat, 1.0=neutral, 2.0=high contrast)"
+   label_width="145"
+   layout="topleft"
+   left="420"
+   min_val="0.5"
+   max_val="2.0"
+   name="ColorContrast"
+   show_text="true"
+   top_delta="20"
+   width="260">
+  </slider>
+  <slider
+   control_name="RenderColorTemperature"
+   decimal_digits="2"
+   follows="left|top"
+   height="16"
+   increment="0.05"
+   initial_value="0.0"
+   label="Color Temperature:"
+   tool_tip="Color temperature (-1.0=cool/blue, 0.0=neutral, 1.0=warm/orange)"
+   label_width="145"
+   layout="topleft"
+   left="420"
+   min_val="-1.0"
+   max_val="1.0"
+   name="ColorTemperature"
    show_text="true"
    top_delta="20"
    width="260">

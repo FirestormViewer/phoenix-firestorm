@@ -236,6 +236,7 @@
 				秒
 			</text>
 			<slider label="影の品質" tool_tip="文字通り影の品質です。（1がデフォルト） " name="ShadowResolution"/>
+			<slider label="影のソフトさ" tool_tip="影の縁のソフトさ（1.0=くっきり、3.0=ソフト）" name="ShadowSoftness"/>
 			<slider label="地形テクスチャの精度（要再起動）" name="RenderTerrainScale" tool_tip="地面のテクスチャの精度を決定します。値が低いほどテクスチャの圧縮度が高まります。（要再起動）"/>
 			<!-- Sharpening Settings -->
 			<slider label="鮮明化：" name="RenderSharpness"/>
@@ -257,8 +258,12 @@
 			<combo_box name="TonemapType">
 				<combo_box.item label="Khronosナチュラル" name="0"/>
 				<combo_box.item label="ＡＣＥＳ" name="1"/>
+				<combo_box.item label="Filmic (Uncharted 2)" name="2"/>
+				<combo_box.item label="Uchimura (GT)" name="3"/>
+				<combo_box.item label="Filmic (BD Style)" name="4"/>
 			</combo_box>
 			<slider label="トーンマップ混合：" tool_tip="リニアカラーとトーンマップカラーの混合値を指定します。" name="TonemapMix"/>
+			<slider label="露出" tool_tip="シーンの露出（Khronosナチュラル選択時は無効）" name="RenderExposureRendering"/>
 			<!-- End of Tone Mapping Settings-->
 		</panel>
 		<!-- 被写界深度 -->
