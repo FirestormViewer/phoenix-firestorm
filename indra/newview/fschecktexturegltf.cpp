@@ -31,6 +31,7 @@
 #include "llversioninfo.h"
 #include "llviewerobject.h"
 #include "llvolume.h"
+#include "llvovolume.h"
 
 #include "llavatarappearance.h"
 #include "llavatarappearancedefines.h"
@@ -63,6 +64,12 @@
 #endif
 #ifndef TINYGLTF_TARGET_ELEMENT_ARRAY_BUFFER
 #define TINYGLTF_TARGET_ELEMENT_ARRAY_BUFFER (34963)
+#endif
+#ifndef TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE
+#define TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE (5121)
+#endif
+#ifndef TINYGLTF_TYPE_VEC4
+#define TINYGLTF_TYPE_VEC4 (4)
 #endif
 
 static constexpr F32 CT_GLTF_TEXTURE_TIMEOUT = 120.f;
@@ -209,6 +216,58 @@ static int addU16Accessor(tinygltf::Model& model,
     model.accessors.push_back(acc);
     return accIdx;
 }
+
+static int addU8Vec4Accessor(tinygltf::Model& model, const std::vector<uint8_t>& data)
+{
+    auto& buf = model.buffers[0].data;
+    size_t offset = appendToBuffer(buf, data.data(), data.size());
+
+    tinygltf::BufferView bv;
+    bv.buffer     = 0;
+    bv.byteOffset = offset;
+    bv.byteLength = data.size();
+    bv.target     = TINYGLTF_TARGET_ARRAY_BUFFER;
+    int bvIdx = (int)model.bufferViews.size();
+    model.bufferViews.push_back(bv);
+
+    tinygltf::Accessor acc;
+    acc.bufferView    = bvIdx;
+    acc.byteOffset    = 0;
+    acc.componentType = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+    acc.type          = TINYGLTF_TYPE_VEC4;
+    acc.count         = (int)data.size() / 4;
+    acc.normalized    = false;
+
+    int accIdx = (int)model.accessors.size();
+    model.accessors.push_back(acc);
+    return accIdx;
+}
+
+static int addVec4Accessor(tinygltf::Model& model, const std::vector<float>& data)
+{
+    auto& buf = model.buffers[0].data;
+    size_t offset = appendToBuffer(buf, data.data(), data.size() * sizeof(float));
+
+    tinygltf::BufferView bv;
+    bv.buffer     = 0;
+    bv.byteOffset = offset;
+    bv.byteLength = data.size() * sizeof(float);
+    bv.target     = TINYGLTF_TARGET_ARRAY_BUFFER;
+    int bvIdx = (int)model.bufferViews.size();
+    model.bufferViews.push_back(bv);
+
+    tinygltf::Accessor acc;
+    acc.bufferView    = bvIdx;
+    acc.byteOffset    = 0;
+    acc.componentType = TINYGLTF_COMPONENT_TYPE_FLOAT;
+    acc.type          = TINYGLTF_TYPE_VEC4;
+    acc.count         = (int)data.size() / 4;
+
+    int accIdx = (int)model.accessors.size();
+    model.accessors.push_back(acc);
+    return accIdx;
+}
+
 
 // ---------------------------------------------------------------------------
 // FSCheckTextureGLTF
@@ -541,10 +600,61 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
     tinygltf::Scene scene;
     scene.name = sanitizeAscii(mObjectName);
 
+    // Skinning state: deduplicate skins and joint nodes across all objects
+    std::map<const LLMeshSkinInfo*, int> skinCache;
+    std::map<std::string, int> jointNodeMap;
+
+    auto getOrCreateSkin = [&](const LLMeshSkinInfo* si) -> int
+    {
+        auto it = skinCache.find(si);
+        if (it != skinCache.end()) return it->second;
+
+        int numJoints = (int)si->mJointNames.size();
+        if (numJoints == 0) return -1;
+
+        tinygltf::Skin skin;
+        skin.name = "Armature";
+        // inverseBindMatrices omitted (defaults to -1 = all IBMs treated as identity)
+
+        for (int j = 0; j < numJoints; ++j)
+        {
+            const std::string& jname = si->mJointNames[j];
+
+            // Joint node — create once per unique joint name, at identity transform.
+            // With IBM omitted and joint nodes at identity, jointMatrix(j) = I for
+            // all joints, so the mesh is exported in its bind pose without distortion.
+            int jNodeIdx;
+            auto jit = jointNodeMap.find(jname);
+            if (jit != jointNodeMap.end())
+            {
+                jNodeIdx = jit->second;
+            }
+            else
+            {
+                tinygltf::Node jNode;
+                jNode.name = jname;
+                jNodeIdx = (int)model.nodes.size();
+                model.nodes.push_back(jNode);
+                jointNodeMap[jname] = jNodeIdx;
+            }
+            skin.joints.push_back(jNodeIdx);
+        }
+
+        int skinIdx = (int)model.skins.size();
+        model.skins.push_back(skin);
+        skinCache[si] = skinIdx;
+        return skinIdx;
+    };
+
     for (auto& entry : mObjects)
     {
         LLViewerObject* obj = entry.obj;
         if (!obj || !obj->getVolume()) continue;
+
+        LLVOVolume* vol = dynamic_cast<LLVOVolume*>(obj);
+        const LLMeshSkinInfo* skinInfo = vol ? vol->getSkinInfo() : nullptr;
+        int skinIdx = (skinInfo && !skinInfo->mJointNames.empty())
+                      ? getOrCreateSkin(skinInfo) : -1;
 
         tinygltf::Mesh mesh;
         mesh.name = sanitizeAscii(entry.name);
@@ -564,13 +674,30 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
 
             LLTextureEntry* te = obj->getTE(f);
 
+            // For rigged meshes, bake getScale() into vertex positions.
+            // face.mPositions is normalized to [-0.5, 0.5] per axis; node.scale is
+            // cancelled by glTF's inverse(nodeWorld) in the joint matrix formula,
+            // so scale must be applied directly to the vertex data.
+            // Non-rigged meshes rely on node.scale instead (set later).
+            const LLVector3 objScale = obj->getScale();
+            const bool bakeScale = (skinIdx >= 0);
+
             for (S32 i = 0; i < face.mNumVertices; ++i)
             {
                 // LLVector4a → LLVector3 (same pattern as daeexport.cpp's v4adapt)
                 LLVector3 p((F32*)&face.mPositions[i]);
-                positions.push_back(p.mV[VX]);
-                positions.push_back(p.mV[VZ]);    //  SL.z → glTF.y
-                positions.push_back(-p.mV[VY]);   // -SL.y → glTF.z
+                if (bakeScale)
+                {
+                    positions.push_back(p.mV[VX] * objScale.mV[VX]);
+                    positions.push_back(p.mV[VZ] * objScale.mV[VZ]);   //  SL.z → glTF.y
+                    positions.push_back(-p.mV[VY] * objScale.mV[VY]);  // -SL.y → glTF.z
+                }
+                else
+                {
+                    positions.push_back(p.mV[VX]);
+                    positions.push_back(p.mV[VZ]);    //  SL.z → glTF.y
+                    positions.push_back(-p.mV[VY]);   // -SL.y → glTF.z
+                }
 
                 LLVector3 n((F32*)&face.mNormals[i]);
                 normals.push_back(n.mV[VX]);
@@ -591,7 +718,6 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
                 te->getScale(&repeatU, &repeatV);
                 te->getOffset(&offsetU, &offsetV);
                 bool planar = (LLTextureEntry::TEX_GEN_PLANAR == te->getTexGen());
-                LLVector3 objScale = obj->getScale();
 
                 for (S32 i = 0; i < face.mNumVertices; ++i)
                 {
@@ -663,6 +789,43 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
             prim.mode     = TINYGLTF_MODE_TRIANGLES;
             prim.material = getOrCreateMaterial(baseColor, normal_id, orm_id, emissive_id);
 
+            if (skinIdx >= 0 && face.mWeights)
+            {
+                int numJ = (int)skinInfo->mJointNames.size();
+                std::vector<uint8_t> joints4;
+                std::vector<float>   weights4;
+                joints4.reserve(face.mNumVertices * 4);
+                weights4.reserve(face.mNumVertices * 4);
+
+                for (S32 i = 0; i < face.mNumVertices; ++i)
+                {
+                    const LLVector4a& wv = face.mWeights[i];
+                    float wSum = 0.f;
+                    uint8_t ji[4] = {0, 0, 0, 0};
+                    float   wf[4] = {0.f, 0.f, 0.f, 0.f};
+                    for (int k = 0; k < 4; ++k)
+                    {
+                        float raw = wv.getF32ptr()[k];
+                        int idx = llclamp((int)floorf(raw), 0, numJ - 1);
+                        float w  = raw - (float)idx;
+                        ji[k] = (uint8_t)idx;
+                        wf[k] = w;
+                        wSum += w;
+                    }
+                    if (wSum > 1e-6f)
+                        for (int k = 0; k < 4; ++k)
+                            wf[k] /= wSum;
+                    for (int k = 0; k < 4; ++k)
+                    {
+                        joints4.push_back(ji[k]);
+                        weights4.push_back(wf[k]);
+                    }
+                }
+
+                prim.attributes["JOINTS_0"]  = addU8Vec4Accessor(model, joints4);
+                prim.attributes["WEIGHTS_0"] = addVec4Accessor(model, weights4);
+            }
+
             mesh.primitives.push_back(prim);
         }
 
@@ -676,29 +839,45 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
         node.name = sanitizeAscii(entry.name);
         node.mesh = meshIdx;
 
-        LLVector3 pos = obj->getRenderPosition() + mOffset;
-        node.translation = {(double)pos.mV[VX],
-                             (double)pos.mV[VZ],
-                            -(double)pos.mV[VY]};
+        if (skinIdx < 0)
+        {
+            // Non-rigged: place node at object's world position.
+            LLVector3 pos = obj->getRenderPosition() + mOffset;
+            node.translation = {(double)pos.mV[VX],
+                                 (double)pos.mV[VZ],
+                                -(double)pos.mV[VY]};
 
-        // Quaternion: (qx, qy, qz, qw) → (qx, qz, -qy, qw)
-        // tinygltf Node::rotation is [x, y, z, w]
-        LLQuaternion rot = obj->getRenderRotation();
-        node.rotation = {(double)rot.mQ[VX],
-                          (double)rot.mQ[VZ],
-                         -(double)rot.mQ[VY],
-                          (double)rot.mQ[3]};   // mQ[3] = w (VS)
+            // Quaternion: (qx, qy, qz, qw) → (qx, qz, -qy, qw)
+            // tinygltf Node::rotation is [x, y, z, w]
+            LLQuaternion rot = obj->getRenderRotation();
+            node.rotation = {(double)rot.mQ[VX],
+                              (double)rot.mQ[VZ],
+                             -(double)rot.mQ[VY],
+                              (double)rot.mQ[3]};   // mQ[3] = w
 
-        // Scale: axes remapped same as coordinates (no negation for scale)
-        LLVector3 scale = obj->getScale();
-        node.scale = {(double)scale.mV[VX],
-                      (double)scale.mV[VZ],
-                      (double)scale.mV[VY]};
+            // Scale: axes remapped same as coordinates (no negation for scale)
+            LLVector3 scale = obj->getScale();
+            node.scale = {(double)scale.mV[VX],
+                          (double)scale.mV[VZ],
+                          (double)scale.mV[VY]};
+        }
+        else
+        {
+            // Rigged: leave node transform as identity.
+            // glTF skinning applies inverse(nodeWorld) to joint matrices, so a
+            // non-identity mesh node would corrupt the skin deformation.
+            // The bind-pose positions are encoded in the joint nodes and IBMs.
+            node.skin = skinIdx;
+        }
 
         int nodeIdx = (int)model.nodes.size();
         model.nodes.push_back(node);
         scene.nodes.push_back(nodeIdx);
     }
+
+    // Add joint nodes as scene root nodes (required by glTF spec)
+    for (auto& kv : jointNodeMap)
+        scene.nodes.push_back(kv.second);
 
     if (scene.nodes.empty())
     {
