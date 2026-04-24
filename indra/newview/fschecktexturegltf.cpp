@@ -439,6 +439,16 @@ void FSCheckTextureGLTF::addSelectedObjects()
                     texId = te->getID();
                 }
                 enqueue(texId);
+
+                // Collect Normal/Specular from legacy (non-PBR) material
+                LLMaterialPtr legacyMat = te->getMaterialParams();
+                if (legacyMat.notNull())
+                {
+                    const LLUUID normalID   = legacyMat->getNormalID();
+                    const LLUUID specularID = legacyMat->getSpecularID();
+                    if (normalID.notNull())   enqueue(normalID);
+                    if (specularID.notNull()) enqueue(specularID);
+                }
             }
         }
     }
@@ -553,10 +563,12 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
     auto getOrCreateMaterial = [&](const LLUUID& baseColor,
                                     const LLUUID& normal,
                                     const LLUUID& orm,
-                                    const LLUUID& emissive) -> int
+                                    const LLUUID& emissive,
+                                    const LLUUID& specular = LLUUID::null) -> int
     {
         std::string key = baseColor.asString() + "|" + normal.asString()
-                        + "|" + orm.asString()  + "|" + emissive.asString();
+                        + "|" + orm.asString()  + "|" + emissive.asString()
+                        + "|" + specular.asString();
         auto it = matIndexMap.find(key);
         if (it != matIndexMap.end()) return it->second;
 
@@ -583,6 +595,10 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
         int emIdx = setTex(emissive);
         if (emIdx >= 0)
             mat.emissiveTexture.index = emIdx;
+
+        int sIdx = setTex(specular);
+        if (sIdx >= 0)
+            mat.additionalValues["specularTexture"].json_double_value["index"] = sIdx;
 
         // Non-PBR faces: set sensible metallic/roughness defaults
         if (normal.isNull() && orm.isNull() && emissive.isNull())
@@ -764,7 +780,7 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
             int idxAcc  = addU16Accessor(model, indices);
 
             // Determine textures for this face
-            LLUUID baseColor, normal_id, orm_id, emissive_id;
+            LLUUID baseColor, normal_id, orm_id, emissive_id, specular_id;
             if (te)
             {
                 LLGLTFMaterial* pbr = te->getGLTFRenderMaterial();
@@ -778,6 +794,12 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
                 else
                 {
                     baseColor = te->getID();
+                    LLMaterialPtr legacyMat = te->getMaterialParams();
+                    if (legacyMat.notNull())
+                    {
+                        normal_id   = legacyMat->getNormalID();
+                        specular_id = legacyMat->getSpecularID();
+                    }
                 }
             }
 
@@ -787,7 +809,7 @@ bool FSCheckTextureGLTF::buildAndSaveGLTF()
             prim.attributes["TEXCOORD_0"] = uvAcc;
             prim.indices  = idxAcc;
             prim.mode     = TINYGLTF_MODE_TRIANGLES;
-            prim.material = getOrCreateMaterial(baseColor, normal_id, orm_id, emissive_id);
+            prim.material = getOrCreateMaterial(baseColor, normal_id, orm_id, emissive_id, specular_id);
 
             if (skinIdx >= 0 && face.mWeights)
             {
