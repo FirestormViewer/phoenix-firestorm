@@ -45,6 +45,7 @@ uniform mat4 shadow_matrix[6];
 uniform vec4 shadow_clip;
 uniform float shadow_bias;
 uniform float shadow_offset;
+uniform float shadow_softness;
 uniform float spot_shadow_bias;
 uniform float spot_shadow_offset;
 uniform mat4 inv_proj;
@@ -60,10 +61,10 @@ float pcfShadow(sampler2DShadow shadowMap, vec3 norm, vec4 stc, float bias_mul, 
     stc.x = floor(stc.x*shadow_res.x + fract(pos_screen.y*shadow_res.y))/shadow_res.x; // add some chaotic jitter to X sample pos according to Y to disguise the snapping going on here
     float cs = texture(shadowMap, stc.xyz);
     float shadow = cs * 4.0;
-    shadow += texture(shadowMap, stc.xyz+vec3( 1.5/shadow_res.x,  0.5/shadow_res.y, 0.0));
-    shadow += texture(shadowMap, stc.xyz+vec3( 0.5/shadow_res.x, -1.5/shadow_res.y, 0.0));
-    shadow += texture(shadowMap, stc.xyz+vec3(-1.5/shadow_res.x, -0.5/shadow_res.y, 0.0));
-    shadow += texture(shadowMap, stc.xyz+vec3(-0.5/shadow_res.x,  1.5/shadow_res.y, 0.0));
+    shadow += texture(shadowMap, stc.xyz+vec3( 1.5*shadow_softness/shadow_res.x,  0.5*shadow_softness/shadow_res.y, 0.0));
+    shadow += texture(shadowMap, stc.xyz+vec3( 0.5*shadow_softness/shadow_res.x, -1.5*shadow_softness/shadow_res.y, 0.0));
+    shadow += texture(shadowMap, stc.xyz+vec3(-1.5*shadow_softness/shadow_res.x, -0.5*shadow_softness/shadow_res.y, 0.0));
+    shadow += texture(shadowMap, stc.xyz+vec3(-0.5*shadow_softness/shadow_res.x,  1.5*shadow_softness/shadow_res.y, 0.0));
     return clamp(shadow * 0.125, 0.0, 1.0);
 #else
     return 1.0;
