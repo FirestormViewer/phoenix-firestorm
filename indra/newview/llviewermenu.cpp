@@ -167,6 +167,8 @@
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
+#include "fschecktexture.h"
+#include "fschecktexturegltf.h"
 #include "fsfloatercontacts.h"
 #include "fsfloaterplacedetails.h"
 #include "fspose.h"
@@ -12478,6 +12480,38 @@ class FSObjectExportCollada : public view_listener_t
 };
 // </FS:CR>
 
+// <FS:Mode34> CheckTexture (DAE): save selected object mesh+textures without permission checks
+class FSDeveloperCheckTexture : public view_listener_t
+{
+    bool handleEvent(const LLSD& /*userdata*/)
+    {
+        FSCheckTexture* exporter = new FSCheckTexture();
+        exporter->exportSelection();
+        // FSCheckTexture self-manages its lifetime via gIdleCallbacks.
+        // We allocate on the heap and rely on the idle worker to clean up
+        // once all textures have been saved and the DAE has been written.
+        return true;
+    }
+};
+
+bool enable_check_texture()
+{
+    if (!gSavedSettings.getBOOL("Mode_34"))
+        return false;
+    return LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() != nullptr;
+}
+
+class FSDeveloperCheckTextureGLTF : public view_listener_t
+{
+    bool handleEvent(const LLSD& /*userdata*/)
+    {
+        FSCheckTextureGLTF* exporter = new FSCheckTextureGLTF();
+        exporter->exportSelection();
+        return true;
+    }
+};
+// </FS:Mode34>
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -13363,6 +13397,12 @@ void initialize_menus()
     view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
     enable.add("Object.EnableExport", boost::bind(&enable_export_object));
     // </FS:Techwolf Lupindo>
+
+    // <FS:Mode34> CheckTexture
+    view_listener_t::addMenu(new FSDeveloperCheckTexture(), "Developer.CheckTexture");
+    view_listener_t::addMenu(new FSDeveloperCheckTextureGLTF(), "Developer.CheckTextureGLTF");
+    enable.add("Developer.EnableCheckTexture", boost::bind(&enable_check_texture));
+    // </FS:Mode34>
 
     // <FS:Ansariel> Add avater complexity sttings to menu
     view_listener_t::addMenu(new FSRenderAvatarComplexityMode(), "World.RenderAvatarComplexityMode");
