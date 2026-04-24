@@ -33,3 +33,5 @@ FILES_ARE_UNICODE_UTF-16LE.txt text eol=crlf
 
 # Windows Installer Script files (normalization disabled)
 *.nsi -text
+indra/newview/fonts/*.otf binary
+indra/newview/fonts/*.ttf binary
