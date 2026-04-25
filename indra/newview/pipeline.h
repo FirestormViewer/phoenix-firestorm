@@ -111,6 +111,7 @@ public:
 
     void createGLBuffers();
     void createLUTBuffers();
+    bool loadColorGradingLUT(const std::string& filename);
 
     //allocate the largest screen buffer possible up to resX, resY
     //returns true if full size buffer allocated, false if some other size is allocated
@@ -829,6 +830,8 @@ public:
     U32                 mNoiseMap;
     U32                 mTrueNoiseMap;
     U32                 mLightFunc;
+    U32                 mColorGradingLUT = 0;
+    std::string         mColorGradingLUTName;
 
     //smaa
     U32                 mSMAAAreaMap = 0;

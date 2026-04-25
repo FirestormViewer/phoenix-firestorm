@@ -366,6 +366,10 @@ public:
         COLOR_TEMPERATURE,                  //  "color_temperature"
         COLOR_BRIGHTNESS,                   //  "color_brightness"
 
+        COLOR_GRADING_LUT,                  //  "color_grading_lut"
+        COLOR_GRADING_LUT_INTENSITY,        //  "color_grading_lut_intensity"
+        COLOR_GRADING_LUT_ENABLED,          //  "color_grading_lut_enabled"
+
         END_RESERVED_UNIFORMS
     } eGLSLReservedUniforms;
     // clang-format on

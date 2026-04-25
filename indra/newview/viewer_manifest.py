@@ -128,6 +128,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+                # include the 3D color grading LUT files
+                self.path("luts")
+
                 # <FS:AR> Poser Presets
                 self.path("poses")
                 
