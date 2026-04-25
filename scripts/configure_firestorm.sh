@@ -386,15 +386,27 @@ fi
 
 CHANNEL_SIMPLE="$CHANNEL"
 if [ -z $CHANNEL ] ; then
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        CHANNEL="private-`hostname -s` "
-    else
-        CHANNEL="private-`hostname`"
+    # CMakeCacheにVIEWER_CHANNELが既にあればそれを使う
+    CACHE_FILE="../build-linux-x86_64/CMakeCache.txt"
+    if [ -f "$CACHE_FILE" ] ; then
+        CACHED_CHANNEL=$(grep "^VIEWER_CHANNEL:STRING=" "$CACHE_FILE" | cut -d= -f2)
+        if [ -n "$CACHED_CHANNEL" ] ; then
+            CHANNEL="$CACHED_CHANNEL"
+            echo "Using cached channel: $CHANNEL"
+        fi
+    fi
+    if [ -z $CHANNEL ] ; then
+        if [ $TARGET_PLATFORM == "darwin" ] ; then
+            CHANNEL="private-`hostname -s` "
+        else
+            CHANNEL="private-`hostname`"
+        fi
+        CHANNEL="Firestorm-$CHANNEL"
     fi
 else
     CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
+    CHANNEL="Firestorm-$CHANNEL"
 fi
-CHANNEL="Firestorm-$CHANNEL"
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     echo "Cleaning $TARGET_PLATFORM...."

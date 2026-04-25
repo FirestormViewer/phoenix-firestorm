@@ -280,7 +280,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # depends on the channel type. If it's there, we chop it off.
         if channel_qualifier[0] == '-':
             channel_qualifier = channel_qualifier[1:]
-        if channel_qualifier.startswith('release'):
+        if   channel_qualifier.startswith('ayastorm'):  channel_type = 'ayastorm'
+        elif channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
             channel_type='beta'
@@ -388,6 +389,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             return "icons/" + chan + "-os"
         # </FS:ND>
         return "icons/" + chan
+
+    def icon_prefix(self):
+        if self.channel_type() == 'ayastorm':
+            return 'ayastorm'
+        return 'firestorm'
 
     def extract_names(self,src):
         """Extract contributor names from source file, returns string"""
@@ -627,7 +633,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         if self.is_packaging_viewer():
             # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            self.path(src='%s/ayastorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
             # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
             # GITHUB_OUTPUT = os.getenv('GITHUB_OUTPUT')
@@ -1000,7 +1006,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         #icon_path = os.path.join(self.get_src_prefix(), 'res', 'll_icon.ico')
         #if not os.path.exists(icon_path):
         #    icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.ico')
-        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'firestorm_icon.ico')
+        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), '%s_icon.ico' % self.icon_prefix())
         # </FS:TJ>
 
         # In CI, defer Velopack packaging to the sign step where Azure credentials
@@ -1591,7 +1597,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
-                    self.path("firestorm_icon.icns")
+                    self.path("%s_icon.icns" % self.icon_prefix())
 
                 # Translations
                 self.path("English.lproj/language.txt")
@@ -2026,7 +2032,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         # Icon path for macOS
         # <FS:TJ> Use Firestorms icon path
         #icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'secondlife.icns')
-        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), 'firestorm_icon.icns')
+        icon_path = os.path.join(self.get_src_prefix(), self.icon_path(), '%s_icon.icns' % self.icon_prefix())
         # </FS:TJ>
 
         # The main executable inside Contents/MacOS/ is named after the channel
@@ -2140,13 +2146,13 @@ class LinuxManifest(ViewerManifest):
         self.path("licenses-linux.txt","licenses.txt")
         self.path("VivoxAUP.txt")
         self.path("LGPL-license.txt")
-        self.path("res/firestorm_icon.png","firestorm_icon.png")
+        self.path("res/%s_icon.png" % self.icon_prefix(),"firestorm_icon.png")
         with self.prefix("linux_tools"):
             self.path("client-readme.txt","README-linux.txt")
             self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
-            self.path("wrapper.sh","firestorm")
+            self.path("wrapper.sh","ayastorm")
             with self.prefix(dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
@@ -2156,7 +2162,7 @@ class LinuxManifest(ViewerManifest):
 
         with self.prefix(dst="bin"):
             self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
-            self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
+            self.path("ayastorm-bin","do-not-directly-run-ayastorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
@@ -2172,7 +2178,7 @@ class LinuxManifest(ViewerManifest):
         icon_path = self.icon_path()
         print("DEBUG: icon_path '%s'" % icon_path)
         with self.prefix(src=icon_path) :
-            self.path("firestorm_256.png","firestorm_48.png")
+            self.path("%s_256.png" % self.icon_prefix(),"firestorm_48.png")
             #with self.prefix(dst="res-sdl") :
             #    self.path("firestorm_256.bmp","ll_icon.BMP")
 
