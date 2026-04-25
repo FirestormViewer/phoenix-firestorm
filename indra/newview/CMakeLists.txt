@@ -2054,6 +2054,14 @@ if (WINDOWS)
         "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/${ICON_PREFIX}_256.BMP"
         "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
       )
+    execute_process(COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/${ICON_PREFIX}_icon.ico
+        ${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/firestorm_icon.ico)
+    if (OPENSIM)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/${ICON_PREFIX}_icon.ico
+            ${CMAKE_CURRENT_SOURCE_DIR}/installers/windows/firestorm_icon_os.ico)
+    endif()
 
     # Add resource files to the project.
     # viewerRes.rc is the only buildable file, but
