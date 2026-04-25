@@ -16,10 +16,10 @@ RUN_PATH=`dirname "$0" || echo .`
 ch "${RUN_PATH}"
 
 #exec ./firestorm -url \'"${URL}"\'
-if [ `pidof do-not-directly-run-firestorm-bin` ]; then
+if [ `pidof do-not-directly-run-ayastorm-bin` ]; then
 	exec dbus-send --type=method_call --dest=com.secondlife.ViewerAppAPIService /com/secondlife/ViewerAppAPI com.secondlife.ViewerAppAPI.GoSLURL string:"$1"
 else
-	exec ../firestorm -url \'"${URL}"\'
+	exec ../ayastorm -url \'"${URL}"\'
 fi
 `
 
