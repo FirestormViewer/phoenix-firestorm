@@ -1567,6 +1567,10 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("color_temperature");
     mReservedUniforms.push_back("color_brightness");
 
+    mReservedUniforms.push_back("color_grading_lut");
+    mReservedUniforms.push_back("color_grading_lut_intensity");
+    mReservedUniforms.push_back("color_grading_lut_enabled");
+
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 
     std::set<std::string> dupe_check;

@@ -206,6 +206,10 @@ public:
     void onClickResetCache();
     void onClickClearCache(); // AO: was protected, moved to public
     void onResetColorGrading();
+    void onBrowseLUT();
+    void onLUTFileSelected(const std::vector<std::string>& filenames);
+    void onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value);
+    void onRemoveLUT();
     void onClickJavascript();
     void onClickBrowseSettingsDir();
     void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
