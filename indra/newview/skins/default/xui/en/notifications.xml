@@ -13850,7 +13850,23 @@ Export finished and saved to [FILENAME].
       <tag>Export</tag>
 Export failed unexpectedly. Please see the log for details.
     </notification>
-    
+
+    <notification
+     icon="alertmodal.tga"
+     name="AnimExportNotInInventory"
+     type="notify">
+      <tag>Export</tag>
+Cannot export: this animation is not in your inventory.
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="AnimExportNoCopyPerm"
+     type="notify">
+      <tag>Export</tag>
+Cannot export: you do not have copy permission for this animation.
+    </notification>
+
     <notification
      icon="alertmodal.tga"
      name="ExportColladaSuccess"
