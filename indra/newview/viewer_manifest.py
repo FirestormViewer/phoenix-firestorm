@@ -1191,13 +1191,15 @@ class Windows_x86_64_Manifest(ViewerManifest):
         # Yay 64bit windows.
         nsis_path = "makensis.exe"
         for program_files in '${programfiles}', '${programfiles(x86)}':
-            for nesis_path in 'NSIS', 'NSIS\\Unicode':
-                possible_path = os.path.expandvars(f"{program_files}\\{nesis_path}\\makensis.exe")
+            for nsis_dir in 'NSIS', 'NSIS\\Unicode':
+                possible_path = os.path.expandvars(f"{program_files}\\{nsis_dir}\\makensis.exe")
                 if os.path.exists(possible_path):
                     nsis_path = possible_path
                     break
+            if nsis_path != "makensis.exe":
+                break
 
-        self.run_command([possible_path, '/V2', self.dst_path_of(tempfile)])
+        self.run_command([nsis_path, '/V2', self.dst_path_of(tempfile)])
 
         self.fs_sign_win_installer(substitution_strings) # <FS:ND/> Sign files, step two. Sign installer.
         self.fs_save_windows_symbols()

@@ -95,6 +95,7 @@ if (WINDOWS)
       _WINSOCK_DEPRECATED_NO_WARNINGS # Disable deprecated WinSock API warnings
       )
   add_compile_options(
+          /utf-8
           /Zo
           /GS
           /TP

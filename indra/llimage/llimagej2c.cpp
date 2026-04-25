@@ -344,7 +344,7 @@ S32 LLImageJ2C::calcDataSizeJ2C(S32 w, S32 h, S32 comp, S32 discard_level, F32 r
             layer_area *= 4;
         }
 
-        // Allow extra layers for large (2k+) assets uploaded with 7–8 layers (from LL change justification)
+        // Allow extra layers for large (2k+) assets uploaded with 7-8 layers (from LL change justification)
         // If the max dimension implies more pyramid steps than the surface loop used, extend the walk up to that.
         // Note: this mostly affect long thin textures like 2048x256 as best I can tell.
         {
