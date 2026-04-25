@@ -52,8 +52,87 @@
 #include "llavatarnamecache.h"
 
 #include "fsassetblacklist.h"
+#include "llviewercontrol.h"
+#include "llassetstorage.h"
+#include "llfilesystem.h"
+#include "llinventorymodel.h"
+#include "llnotificationsutil.h"
+#include "llpermissionsflags.h"
+#include "llviewermenufile.h"
+#include "llviewerinventory.h"
 
 constexpr S32 MAX_ANIMATIONS = 100;
+
+// --------------------------------------------------------------------------
+
+namespace
+{
+
+std::string getAnimationName(const LLUUID& anim_id)
+{
+    LLViewerInventoryItem* item = gInventory.getItem(anim_id);
+    if (item)
+    {
+        return item->getName();
+    }
+
+    std::string name = gAnimLibrary.animationName(anim_id);
+    // gAnimLibrary returns "[uuid]" for unknown animations
+    if (!name.empty() && name.front() != '[')
+    {
+        return name;
+    }
+
+    return anim_id.asString();
+}
+
+struct AnimExportData
+{
+    std::string filename;
+};
+
+void onAssetReceivedForExport(const LLUUID& asset_id, LLAssetType::EType type,
+                               void* user_data, S32 status, LLExtStat /*ext_status*/)
+{
+    std::unique_ptr<AnimExportData> data(static_cast<AnimExportData*>(user_data));
+
+    if (status != LL_ERR_NOERR)
+    {
+        LL_WARNS("AnimationExplorer") << "Asset download failed for " << asset_id
+                                      << " status=" << status << LL_ENDL;
+        LLNotificationsUtil::add("ExportFailed");
+        return;
+    }
+
+    LLFileSystem file(asset_id, LLAssetType::AT_ANIMATION);
+    S32 size = file.getSize();
+    if (size <= 0)
+    {
+        LL_WARNS("AnimationExplorer") << "Asset " << asset_id << " has zero size" << LL_ENDL;
+        LLNotificationsUtil::add("ExportFailed");
+        return;
+    }
+
+    std::vector<U8> buffer(size);
+    file.read(buffer.data(), size);
+
+    llofstream out(data->filename, std::ios::out | std::ios::binary);
+    if (!out.is_open())
+    {
+        LL_WARNS("AnimationExplorer") << "Could not open file for writing: " << data->filename << LL_ENDL;
+        LLNotificationsUtil::add("ExportFailed");
+        return;
+    }
+
+    out.write(reinterpret_cast<const char*>(buffer.data()), size);
+    out.close();
+
+    LLSD args;
+    args["FILENAME"] = data->filename;
+    LLNotificationsUtil::add("ExportFinished", args);
+}
+
+} // anonymous namespace
 
 // --------------------------------------------------------------------------
 
@@ -122,6 +201,8 @@ AnimationExplorer::~AnimationExplorer()
 {
     mAnimationPreview = nullptr;
 
+    mExportSettingConnection.disconnect();
+
     for (const auto& cb : mAvatarNameCacheConnections)
     {
         if (cb.second.connected())
@@ -156,13 +237,25 @@ bool AnimationExplorer::postBuild()
     mStopButton = getChild<LLButton>("stop_btn");
     mBlacklistButton = getChild<LLButton>("blacklist_btn");
     mStopAndRevokeButton = getChild<LLButton>("stop_and_revoke_btn");
+    mExportButton = getChild<LLButton>("export_btn");
     mNoOwnedAnimationsCheckBox = getChild<LLCheckBoxCtrl>("no_owned_animations_check");
 
     mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation, this));
     mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed, this));
     mBlacklistButton->setCommitCallback(boost::bind(&AnimationExplorer::onBlacklistPressed, this));
     mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed, this));
+    mExportButton->setCommitCallback(boost::bind(&AnimationExplorer::onExportPressed, this));
     mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
+
+    mExportButton->setEnabled(false);
+    mExportButton->setVisible(gSavedSettings.getBOOL("Mode_34"));
+
+    mExportSettingConnection = gSavedSettings.getControl("Mode_34")->getSignal()->connect(
+        [this](LLControlVariable*, const LLSD& new_val, const LLSD&)
+        {
+            mExportButton->setVisible(new_val.asBoolean());
+        }
+    );
 
     mPreviewCtrl = findChild<LLView>("animation_preview");
     if (mPreviewCtrl)
@@ -200,6 +293,7 @@ void AnimationExplorer::onSelectAnimation()
     column = mAnimationScrollList->getColumn("object_id")->mIndex;
     mCurrentObject = item->getColumn(column)->getValue().asUUID();
 
+    mExportButton->setEnabled(true);
     startMotion(mCurrentAnimationID);
 }
 
@@ -241,6 +335,50 @@ void AnimationExplorer::onStopAndRevokePressed()
             gAgentAvatarp->revokePermissionsOnObject(vo);
         }
     }
+}
+
+void AnimationExplorer::onExportPressed()
+{
+    if (mCurrentAnimationID.isNull())
+    {
+        return;
+    }
+
+    // Animation Name列がUUIDの場合はPlayed by名+UUID短縮をファイル名にする
+    std::string anim_name = getAnimationName(mCurrentAnimationID);
+    bool is_uuid_name = (anim_name == mCurrentAnimationID.asString());
+    if (is_uuid_name)
+    {
+        // Played by列から名前を取得
+        LLScrollListItem* selected = mAnimationScrollList->getFirstSelected();
+        S32 played_by_col = mAnimationScrollList->getColumn("played_by")->mIndex;
+        std::string played_by = selected->getColumn(played_by_col)->getValue().asString();
+        // UUID先頭8文字を付加
+        std::string short_uuid = mCurrentAnimationID.asString().substr(0, 8);
+        anim_name = played_by + "_" + short_uuid;
+    }
+    LLStringUtil::replaceChar(anim_name, '/', '_');
+    LLStringUtil::replaceChar(anim_name, '\\', '_');
+    LLStringUtil::replaceChar(anim_name, ' ', '_');
+    std::string proposed_name = anim_name + ".anim";
+    LLUUID anim_id = mCurrentAnimationID;
+
+    LLFilePickerReplyThread::startPicker(
+        [anim_id](const std::vector<std::string>& filenames,
+                  LLFilePicker::ELoadFilter,
+                  LLFilePicker::ESaveFilter)
+        {
+            if (filenames.empty())
+            {
+                return;
+            }
+            AnimExportData* data = new AnimExportData{ filenames[0] };
+            gAssetStorage->getAssetData(anim_id, LLAssetType::AT_ANIMATION,
+                                        onAssetReceivedForExport, data);
+        },
+        LLFilePicker::FFSAVE_ANIM,
+        proposed_name
+    );
 }
 
 void AnimationExplorer::onOwnedCheckToggled()
@@ -293,6 +431,10 @@ void AnimationExplorer::update()
 {
     // stop playing preview animations when reloading the list
     startMotion(LLUUID::null);
+
+    mCurrentAnimationID = LLUUID::null;
+    mCurrentObject = LLUUID::null;
+    mExportButton->setEnabled(false);
 
     mAnimationScrollList->deleteAllItems();
     RecentAnimationList::instance().requestList(this);
@@ -434,16 +576,18 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
     LLSD item;
     item["columns"][0]["column"] = "played_by";
     item["columns"][0]["value"] = playedByName;
-    item["columns"][1]["column"] = "played";
-    item["columns"][1]["value"] = LLTrans::getString("animation_explorer_still_playing");
-    item["columns"][2]["column"] = "priority";
-    item["columns"][2]["value"] = LLTrans::getString("animation_explorer_unknown_priority");
-    item["columns"][3]["column"] = "timestamp";
-    item["columns"][3]["value"] = time;
-    item["columns"][4]["column"] = "animation_id";
-    item["columns"][4]["value"] = id;
-    item["columns"][5]["column"] = "object_id";
-    item["columns"][5]["value"] = played_by;
+    item["columns"][1]["column"] = "animation_name";
+    item["columns"][1]["value"] = getAnimationName(id);
+    item["columns"][2]["column"] = "played";
+    item["columns"][2]["value"] = LLTrans::getString("animation_explorer_still_playing");
+    item["columns"][3]["column"] = "priority";
+    item["columns"][3]["value"] = LLTrans::getString("animation_explorer_unknown_priority");
+    item["columns"][4]["column"] = "timestamp";
+    item["columns"][4]["value"] = time;
+    item["columns"][5]["column"] = "animation_id";
+    item["columns"][5]["value"] = id;
+    item["columns"][6]["column"] = "object_id";
+    item["columns"][6]["value"] = played_by;
 
     mAnimationScrollList->addElement(item, ADD_TOP);
 }
