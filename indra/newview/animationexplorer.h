@@ -100,6 +100,7 @@ protected:
     LLButton*         mStopButton;
     LLButton*         mBlacklistButton;
     LLButton*         mStopAndRevokeButton;
+    LLButton*         mExportButton;
     LLCheckBoxCtrl*   mNoOwnedAnimationsCheckBox;
 
     LLView*                       mPreviewCtrl;      // dummy control on the floater where the avatar preview should go
@@ -117,6 +118,8 @@ protected:
     typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
     avatar_name_cache_connection_map_t                    mAvatarNameCacheConnections;
 
+    boost::signals2::connection mExportSettingConnection;
+
     void draw() override;
     void update();                          // request list update from RecentAnimationList
     void updateList(F64 current_timestamp); // update times and playing status in animation list
@@ -126,6 +129,7 @@ protected:
     void onStopPressed();
     void onBlacklistPressed();
     void onStopAndRevokePressed();
+    void onExportPressed();
     void onOwnedCheckToggled();
 };
 
