@@ -13869,6 +13869,28 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
         <real>0.0</real>
     </map>
+    <key>RenderColorGradingLUTName</key>
+    <map>
+        <key>Comment</key>
+        <string>Name of the 3D LUT .cube file to apply for color grading</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string/>
+    </map>
+    <key>RenderColorGradingLUTIntensity</key>
+    <map>
+        <key>Comment</key>
+        <string>Blend intensity of the 3D color grading LUT (0.0=off, 1.0=full)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>1.0</real>
+    </map>
     <key>RenderColorSaturation</key>
     <map>
         <key>Comment</key>

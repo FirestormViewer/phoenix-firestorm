@@ -1364,6 +1364,13 @@ void LLPipeline::releaseLUTBuffers()
         mLightFunc = 0;
     }
 
+    if (mColorGradingLUT)
+    {
+        LLImageGL::deleteTextures(1, &mColorGradingLUT);
+        mColorGradingLUT = 0;
+    }
+    mColorGradingLUTName.clear();
+
     mPbrBrdfLut.release();
 
     mExposureMap.release();
@@ -1562,6 +1569,77 @@ void LLPipeline::createGLBuffers()
 F32 lerpf(F32 a, F32 b, F32 w)
 {
     return a + w * (b - a);
+}
+
+bool LLPipeline::loadColorGradingLUT(const std::string& filename)
+{
+    if (mColorGradingLUT)
+    {
+        LLImageGL::deleteTextures(1, &mColorGradingLUT);
+        mColorGradingLUT = 0;
+    }
+    mColorGradingLUTName.clear();
+
+    if (filename.empty())
+        return true;
+
+    std::string path = filename;
+    if (!gDirUtilp->fileExists(path))
+        path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "luts", filename);
+
+    llifstream file(path.c_str());
+    if (!file.is_open())
+    {
+        LL_WARNS("LUT") << "Failed to open LUT file: " << path << LL_ENDL;
+        return false;
+    }
+
+    int lut_size = 0;
+    std::vector<float> lut_data;
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty() || line[0] == '#') continue;
+        if (line.substr(0, 12) == "LUT_3D_SIZE ")
+        {
+            lut_size = std::stoi(line.substr(12));
+            lut_data.reserve((size_t)lut_size * lut_size * lut_size * 3);
+            continue;
+        }
+        if (lut_size > 0)
+        {
+            float r, g, b;
+            if (sscanf(line.c_str(), "%f %f %f", &r, &g, &b) == 3)
+            {
+                lut_data.push_back(r);
+                lut_data.push_back(g);
+                lut_data.push_back(b);
+            }
+        }
+    }
+
+    if (lut_size <= 0 || (int)lut_data.size() != lut_size * lut_size * lut_size * 3)
+    {
+        LL_WARNS("LUT") << "Invalid LUT file (size=" << lut_size
+            << " entries=" << lut_data.size() << "): " << path << LL_ENDL;
+        return false;
+    }
+
+    LLImageGL::generateTextures(1, &mColorGradingLUT);
+    gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE_3D, mColorGradingLUT);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F,
+        lut_size, lut_size, lut_size, 0, GL_RGB, GL_FLOAT, lut_data.data());
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE_3D);
+
+    mColorGradingLUTName = filename;
+    LL_INFOS("LUT") << "Loaded color grading LUT: " << path << LL_ENDL;
+    return true;
 }
 
 void LLPipeline::createLUTBuffers()
@@ -7907,9 +7985,25 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_co
         shader->uniform1f(LLShaderMgr::COLOR_BRIGHTNESS,
             gSavedSettings.getF32("RenderColorBrightness"));
 
+        // Reload 3D LUT if setting changed
+        {
+            static LLCachedControl<std::string> lut_name(gSavedSettings, "RenderColorGradingLUTName", "");
+            if (std::string(lut_name) != mColorGradingLUTName)
+                loadColorGradingLUT(lut_name);
+        }
+
+        S32 lut_channel = shader->enableTexture(LLShaderMgr::COLOR_GRADING_LUT, LLTexUnit::TT_TEXTURE_3D);
+        if (lut_channel > -1 && mColorGradingLUT)
+            gGL.getTexUnit(lut_channel)->bindManual(LLTexUnit::TT_TEXTURE_3D, mColorGradingLUT);
+        shader->uniform1i(LLShaderMgr::COLOR_GRADING_LUT_ENABLED, (mColorGradingLUT != 0) ? 1 : 0);
+        shader->uniform1f(LLShaderMgr::COLOR_GRADING_LUT_INTENSITY,
+            gSavedSettings.getF32("RenderColorGradingLUTIntensity"));
+
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 
+        if (lut_channel > -1)
+            gGL.getTexUnit(lut_channel)->unbind(LLTexUnit::TT_TEXTURE_3D);
         gGL.getTexUnit(channel)->unbind(src->getUsage());
         shader->unbind();
     }

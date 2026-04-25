@@ -1900,6 +1900,68 @@ If you do not understand the distinction then leave this control alone."
             <button.commit_callback
              function="Pref.ResetColorGrading"/>
         </button>
+        <!-- Color LUT Settings -->
+        <text
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ColorLUTLabel"
+         top_pad="10"
+         width="150">
+            Color LUT:
+        </text>
+        <combo_box
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="10"
+         name="ColorGradingLUTCombo"
+         top_pad="5"
+         width="340">
+        </combo_box>
+        <button
+         follows="left|top"
+         height="23"
+         label="Browse..."
+         layout="topleft"
+         left_pad="5"
+         name="BrowseLUTBtn"
+         top_delta="0"
+         width="100">
+            <button.commit_callback
+             function="Pref.BrowseLUT"/>
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Remove"
+         layout="topleft"
+         left_pad="5"
+         name="RemoveLUTBtn"
+         top_delta="0"
+         width="80">
+            <button.commit_callback
+             function="Pref.RemoveLUT"/>
+        </button>
+        <slider
+         control_name="RenderColorGradingLUTIntensity"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="1.0"
+         label="LUT Intensity:"
+         tool_tip="Blend intensity of the color LUT (0.0=off, 1.0=full)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="ColorGradingLUTIntensity"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
         <!-- End of Color Grading Settings -->
         </panel>
       </scroll_container>

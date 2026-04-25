@@ -40,6 +40,18 @@ uniform float color_contrast;
 uniform float color_temperature;
 uniform float color_brightness;
 
+uniform sampler3D color_grading_lut;
+uniform float color_grading_lut_intensity;
+uniform int color_grading_lut_enabled;
+
+vec3 applyLUT(sampler3D lut, vec3 color, int size)
+{
+    float scale  = float(size - 1) / float(size);
+    float offset = 0.5 / float(size);
+    vec3 coord   = clamp(color, 0.0, 1.0) * scale + offset;
+    return texture(lut, coord).rgb;
+}
+
 vec3 applyColorGrading(vec3 color)
 {
     float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
@@ -48,6 +60,11 @@ vec3 applyColorGrading(vec3 color)
     color.r *= 1.0 + color_temperature * 0.3;
     color.b *= 1.0 - color_temperature * 0.3;
     color = clamp(color + color_brightness, 0.0, 1.0);
+    if (color_grading_lut_enabled != 0)
+    {
+        vec3 lut_color = applyLUT(color_grading_lut, color, 33);
+        color = mix(color, lut_color, color_grading_lut_intensity);
+    }
     return color;
 }
 

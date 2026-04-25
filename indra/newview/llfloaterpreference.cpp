@@ -500,6 +500,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     // mCommitCallbackRegistrar.add("Pref.AutoAdjustments",         boost::bind(&LLFloaterPreference::onClickAutoAdjustments, this)); // <FS:Beq/> Not required in FS at present
     mCommitCallbackRegistrar.add("Pref.HardwareDefaults",       boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
     mCommitCallbackRegistrar.add("Pref.ResetColorGrading",      boost::bind(&LLFloaterPreference::onResetColorGrading, this));
+    mCommitCallbackRegistrar.add("Pref.BrowseLUT",               boost::bind(&LLFloaterPreference::onBrowseLUT, this));
+    mCommitCallbackRegistrar.add("Pref.RemoveLUT",               boost::bind(&LLFloaterPreference::onRemoveLUT, this));
     mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",  boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",    boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
@@ -1476,6 +1478,60 @@ void LLFloaterPreference::onResetColorGrading()
     gSavedSettings.setF32("RenderColorContrast", 1.0f);
     gSavedSettings.setF32("RenderColorTemperature", 0.0f);
     gSavedSettings.setF32("RenderColorBrightness", 0.0f);
+}
+
+void LLFloaterPreference::onBrowseLUT()
+{
+    LLFilePickerReplyThread::startPicker(
+        boost::bind(&LLFloaterPreference::onLUTFileSelected, this, _1),
+        LLFilePicker::FFLOAD_ALL,
+        false);
+}
+
+void LLFloaterPreference::onLUTFileSelected(const std::vector<std::string>& filenames)
+{
+    if (filenames.empty()) return;
+    const std::string& path = filenames[0];
+    gSavedSettings.setString("RenderColorGradingLUTName", path);
+
+    LLComboBox* combo = getChild<LLComboBox>("ColorGradingLUTCombo", true);
+    if (combo)
+    {
+        std::string basename = gDirUtilp->getBaseFileName(path, false);
+        if (combo->getItemByValue(LLSD(path)) == nullptr)
+            combo->addSimpleElement(basename, ADD_BOTTOM, path);
+        combo->setSimple(path);
+    }
+}
+
+void LLFloaterPreference::onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value)
+{
+    LLComboBox* combo = dynamic_cast<LLComboBox*>(ctrl);
+    if (!combo) return;
+    LLSD selected_val = combo->getSelectedValue();
+    gSavedSettings.setString("RenderColorGradingLUTName",
+        selected_val.asString());
+}
+
+void LLFloaterPreference::onRemoveLUT()
+{
+    LLComboBox* combo = getChild<LLComboBox>("ColorGradingLUTCombo", true);
+    if (!combo) return;
+
+    std::string current = combo->getSimple();
+
+    // デフォルトLUT（luts/フォルダ内）は削除不可
+    std::string current_path = gDirUtilp->getExpandedFilename(
+        LL_PATH_APP_SETTINGS, "luts", current);
+    if (gDirUtilp->fileExists(current_path))
+        return;
+
+    // カスタムLUTをリストから削除
+    combo->remove(current);
+
+    // Noneに戻す
+    combo->setSimple(std::string("None"));
+    gSavedSettings.setString("RenderColorGradingLUTName", "");
 }
 
 void LLFloaterPreference::resetAutotuneSettings()
@@ -4004,6 +4060,38 @@ bool LLPanelPreferenceGraphics::postBuild()
     use_HiDPI->setEnabled(false);
 #endif
     // </FS:Ansariel>
+
+    // Populate Color LUT combo box with bundled .cube files
+    {
+        LLComboBox* combo = getChild<LLComboBox>("ColorGradingLUTCombo");
+        if (combo)
+        {
+            combo->clearRows();
+            combo->addSimpleElement(std::string("None"), ADD_TOP, std::string(""));
+
+            std::string luts_dir = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "luts");
+            LLDirIterator dir_iter(luts_dir, "*.cube");
+            std::string file;
+            std::vector<std::string> lut_files;
+            while (dir_iter.next(file))
+                lut_files.push_back(file);
+            std::sort(lut_files.begin(), lut_files.end());
+            for (const auto& f : lut_files)
+                combo->addSimpleElement(f, ADD_BOTTOM, f);
+
+            std::string current = gSavedSettings.getString("RenderColorGradingLUTName");
+            if (!current.empty() && combo->getItemByValue(LLSD(current)) == nullptr)
+            {
+                std::string basename = gDirUtilp->getBaseFileName(current, false);
+                combo->addSimpleElement(basename, ADD_BOTTOM, current);
+            }
+            combo->setSimple(current.empty() ? std::string("None") : current);
+
+            LLFloaterPreference* parent_floater = dynamic_cast<LLFloaterPreference*>(getParentByType<LLFloater>());
+            if (parent_floater)
+                combo->setCommitCallback(boost::bind(&LLFloaterPreference::onLUTComboChanged, parent_floater, _1, _2));
+        }
+    }
 
     resetDirtyChilds();
     setPresetText();
