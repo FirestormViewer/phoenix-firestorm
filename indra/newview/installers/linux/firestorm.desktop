@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Firestorm
-Exec=firestorm
+Name=AYAstorm
+Exec=ayastorm
 Comment=Client for virtual worlds
 Icon=firestorm_icon
 Categories=Development;

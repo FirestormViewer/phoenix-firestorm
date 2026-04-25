@@ -12,8 +12,8 @@ RUN_PATH=$(dirname "${SCRIPTSRC}" || echo .)
 tarball_path="${RUN_PATH}"
 
 # Default installation directories
-DEFAULT_SYSTEM_INSTALL_DIR="/opt/firestorm"
-DEFAULT_USER_INSTALL_DIR="$HOME/firestorm"
+DEFAULT_SYSTEM_INSTALL_DIR="/opt/ayastorm"
+DEFAULT_USER_INSTALL_DIR="$HOME/ayastorm"
 
 # Default number of retained backups
 DEFAULT_RETAIN_BACKUPS=5
