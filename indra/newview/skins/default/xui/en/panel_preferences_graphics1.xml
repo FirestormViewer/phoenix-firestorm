@@ -1918,7 +1918,7 @@ If you do not understand the distinction then leave this control alone."
          left="10"
          name="ColorGradingLUTCombo"
          top_pad="5"
-         width="340">
+         width="230">
         </combo_box>
         <button
          follows="left|top"
