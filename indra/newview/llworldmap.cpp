@@ -725,7 +725,7 @@ void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
                 {
                     // request_height is 1, can add blocks one by one.
                     S32 check_offset = (block_x + request_width) | (block_y * MAP_BLOCK_RES);
-                    if (mMapBlockLoaded[check_offset])
+                    if (mMapBlockLoaded[check_offset] && mMapBlockLastUpdateOffsets.find(check_offset) != mMapBlockLastUpdateOffsets.end())
                     {
                         break;
                     }
@@ -742,7 +742,7 @@ void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
                     for (S32 x = 0; x < request_width; ++x)
                     {
                         S32 check_offset = (block_x + x) | ((block_y + request_height) * MAP_BLOCK_RES);
-                        if (mMapBlockLoaded[check_offset])
+                        if (mMapBlockLoaded[check_offset] && mMapBlockLastUpdateOffsets.find(check_offset) != mMapBlockLastUpdateOffsets.end())
                         {
                             can_expand = false;
                             break;
@@ -771,13 +771,13 @@ void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
                     {
                         S32 mark_offset = (block_x + x) | ((block_y + y) * MAP_BLOCK_RES);
                         mMapBlockLoaded[mark_offset] = true;
+                        // <FS:Ansariel> Periodically update sim info
+                        mMapBlockLastUpdateOffsets[mark_offset] = time_now;
                     }
                 }
 
                 // Skip over the width of blocks we just requested
                 block_x += request_width;
-                // <FS:Ansariel> Periodically update sim info
-                mMapBlockLastUpdateOffsets[offset] = time_now;
             }
             else
             {
