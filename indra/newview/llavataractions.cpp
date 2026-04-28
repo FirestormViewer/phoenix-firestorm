@@ -279,7 +279,17 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
     {
         // <FS:Ansariel> [FS communication UI]
         //LLFloaterIMContainer::getInstance()->showConversation(session_id);
-        FSFloaterIM::show(session_id);
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        if (ayastorm_is_ll_style())
+        {
+            LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+            if (ll_container) ll_container->showConversation(session_id);
+        }
+        else
+        {
+            FSFloaterIM::show(session_id);
+        }
+        // </FS:AYA>
         // </FS:Ansariel> [FS communication UI]
     }
     make_ui_sound("UISndStartIM");
@@ -454,7 +464,17 @@ const LLUUID LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUI
 
     // <FS:Ansariel> [FS communication UI]
     //FSFloaterIMContainer::getInstance()->showConversation(session_id);
-    FSFloaterIM::show(session_id);
+    // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+    if (ayastorm_is_ll_style())
+    {
+        LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+        if (ll_container) ll_container->showConversation(session_id);
+    }
+    else
+    {
+        FSFloaterIM::show(session_id);
+    }
+    // </FS:AYA>
     // </FS:Ansariel> [FS communication UI]
 
     make_ui_sound("UISndStartIM");

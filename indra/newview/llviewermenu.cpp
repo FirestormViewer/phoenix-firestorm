@@ -70,6 +70,7 @@
 #include "llfloatergodtools.h"
 #include "llfloaterimcontainer.h"
 #include "llfloaterland.h"
+#include "llviewercontrol.h"
 #include "llfloaterimnearbychat.h"
 #include "llfloaterlandholdings.h"
 #include "llfloaterpathfindingcharacters.h"
@@ -13407,4 +13408,26 @@ void initialize_menus()
     // <FS:Ansariel> Add avater complexity sttings to menu
     view_listener_t::addMenu(new FSRenderAvatarComplexityMode(), "World.RenderAvatarComplexityMode");
     view_listener_t::addMenu(new FSCheckRenderAvatarComplexityMode(), "World.CheckRenderAvatarComplexityMode");
+
+    // <FS:AYA> Phase 3: Dynamic Conversations menu routing
+    struct AYAConversationsToggle : public view_listener_t
+    {
+        bool handleEvent(const LLSD& userdata)
+        {
+            LLFloaterReg::toggleInstanceOrBringToFront(ayastorm_im_container_name());
+            return true;
+        }
+    };
+    struct AYAConversationsCheck : public view_listener_t
+    {
+        bool handleEvent(const LLSD& userdata)
+        {
+            return LLFloaterReg::instanceVisible(ayastorm_im_container_name());
+        }
+    };
+    view_listener_t::addMenu(new AYAConversationsToggle(), "AYA.Conversations.Toggle");
+    view_listener_t::addMenu(new AYAConversationsCheck(), "AYA.Conversations.Check");
+
+    // Note: AYA.NearbyChat.Toggle is registered in llviewerwindow.cpp before panel_toolbar_view.xml loads
+    // </FS:AYA>
 }

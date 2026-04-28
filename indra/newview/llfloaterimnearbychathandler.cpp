@@ -556,6 +556,13 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     {
         FSFloaterNearbyChat* nearby_chat = ::LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
         nearby_chat->addMessage(chat_msg, true, args);
+        // <FS:AYA> Phase 3: Forward to LL Chat Window only when LL style is selected
+        if (ayastorm_is_ll_style())
+        {
+            LLFloaterIMNearbyChat* ll_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+            if (ll_chat) ll_chat->addMessage(chat_msg, true, args);
+        }
+        // </FS:AYA>
         return;
     }
     // </FS:Ansariel> Optional muted chat history
@@ -680,6 +687,13 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     }
     // </FS:Beq>
     nearby_chat->addMessage(chat_msg, true, args);
+    // <FS:AYA> Phase 3: Forward to LL Chat Window only when LL style is selected
+    if (ayastorm_is_ll_style())
+    {
+        LLFloaterIMNearbyChat* ll_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+        if (ll_chat) ll_chat->addMessage(chat_msg, true, args);
+    }
+    // </FS:AYA>
 
     if (chat_msg.mSourceType == CHAT_SOURCE_AGENT
         && chat_msg.mFromID.notNull()

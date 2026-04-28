@@ -27,8 +27,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llconversationview.h"
 
 #include <boost/bind.hpp>
@@ -190,7 +188,7 @@ void LLConversationViewSession::startFlashing()
     if (isInVisibleChain()
         && mFlashStateOn
         && !mFlashStarted
-        && ! LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->isMinimized() )
+        && ! LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container")->isMinimized() )
     {
         mFlashStarted = true;
         mFlashTimer->startFlashing();
@@ -336,7 +334,7 @@ bool LLConversationViewSession::handleMouseDown( S32 x, S32 y, MASK mask )
             LLConversationItem* item = dynamic_cast<LLConversationItem *>(getViewModelItem());
             LLUUID session_id = item? item->getUUID() : LLUUID();
 
-            LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+            LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
             if (im_container->isConversationsPaneCollapsed() && im_container->getSelectedSession() == session_id)
             {
                 im_container->collapseMessagesPane(!im_container->isMessagesPaneCollapsed());
@@ -394,7 +392,7 @@ void LLConversationViewSession::selectConversationItem()
         LLConversationItem* item = dynamic_cast<LLConversationItem *>(getViewModelItem());
         LLUUID session_id = item? item->getUUID() : LLUUID();
 
-        LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+        LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
         im_container->flashConversationItemWidget(session_id,false);
         im_container->selectConversationPair(session_id, false);
     }
@@ -778,7 +776,7 @@ bool LLConversationViewParticipant::handleMouseDown( S32 x, S32 y, MASK mask )
             LLConversationItem* vmi = getParentFolder() ? dynamic_cast<LLConversationItem*>(getParentFolder()->getViewModelItem()) : NULL;
             LLUUID session_id = vmi? vmi->getUUID() : LLUUID();
 
-            LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+            LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
             LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::findConversation(session_id);
             im_container->setSelectedSession(session_id);
             im_container->flashConversationItemWidget(session_id,false);
@@ -885,5 +883,3 @@ void LLConversationViewParticipant::allowSpeakingIndicator(bool val)
 }
 
 // EOF
-
-#endif

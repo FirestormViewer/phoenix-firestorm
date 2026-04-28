@@ -24,8 +24,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LL_LLCONVERSATIONVIEW_H
 #define LL_LLCONVERSATIONVIEW_H
 
@@ -190,5 +188,3 @@ private:
 };
 
 #endif // LL_LLCONVERSATIONVIEW_H
-
-#endif

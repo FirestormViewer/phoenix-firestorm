@@ -1725,11 +1725,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
                 name_params.use_default_link_style = false;
                 name_params.link_href = LLSLURL(from_me ? "agentself" : "agent", chat.mFromID, "inspect").getSLURLString();
 
-                // Add link to avatar's inspector and delimiter to message.
-                appendText(std::string(name_params.link_href), prependNewLineState, name_params);
-
-                prependNewLineState = false;
-
+                // <FS:AYA> Move avatar icon to before name
                 if (gSavedSettings.getBOOL("ShowChatMiniIcons")
                     && chat.mFromID.notNull()
                     && !chat.mRlvNamesFiltered)
@@ -1751,8 +1747,15 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
                     p.force_newline = false;
                     p.left_pad = 2;
                     p.right_pad = 2;
-                    appendWidget(p, " ", false);
+                    appendWidget(p, " ", prependNewLineState);
+                    prependNewLineState = false;
                 }
+                // </FS:AYA>
+
+                // Add link to avatar's inspector and delimiter to message.
+                appendText(std::string(name_params.link_href), prependNewLineState, name_params);
+
+                prependNewLineState = false;
 
                 if (delimiter.length() > 0 && delimiter[0] == ':')
                 {

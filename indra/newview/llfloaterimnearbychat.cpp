@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "message.h"
 
 #include "lliconctrl.h"
@@ -79,7 +77,9 @@
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
 
-static LLFloaterIMNearbyChatListener sChatListener;
+// <FS:AYA> Phase 1: LLChatBar LLEventAPI already registered by fsnearbychatbarlistener.cpp
+// static LLFloaterIMNearbyChatListener sChatListener;
+// </FS:AYA>
 
 constexpr S32 EXPANDED_HEIGHT = 266;
 constexpr S32 COLLAPSED_HEIGHT = 60;
@@ -128,7 +128,7 @@ LLFloaterIMNearbyChat::LLFloaterIMNearbyChat(const LLSD& llsd)
 //static
 LLFloaterIMNearbyChat* LLFloaterIMNearbyChat::buildFloater(const LLSD& key)
 {
-    LLFloaterReg::getInstance("im_container");
+    LLFloaterReg::getInstance("ll_im_container");
     return new LLFloaterIMNearbyChat(key);
 }
 
@@ -882,6 +882,8 @@ LLWString LLFloaterIMNearbyChat::stripChannelNumber(const LLWString &mesg, S32* 
     }
 }
 
+// <FS:AYA> Phase 1: send_chat_from_viewer already defined in fsnearbychathub.cpp
+#if 0
 //void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
@@ -965,6 +967,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
     gAgent.sendReliableMessage();
     add(LLStatViewer::CHAT_COUNT, 1);
 }
+#endif // </FS:AYA>
 
 class LLChatCommandHandler : public LLCommandHandler
 {
@@ -1006,6 +1009,6 @@ public:
 };
 
 // Creating the object registers with the dispatcher.
-LLChatCommandHandler gChatHandler;
-
-#endif
+// <FS:AYA> Phase 1: gChatHandler already defined in fsnearbychathub.cpp
+// LLChatCommandHandler gChatHandler;
+// </FS:AYA>

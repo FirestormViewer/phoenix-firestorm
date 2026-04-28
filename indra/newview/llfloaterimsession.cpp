@@ -26,7 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
 #include "llfloaterimsession.h"
 
 #include "lldraghandle.h"
@@ -250,6 +249,14 @@ bool LLFloaterIMSession::checkGearMenuItem(const LLSD& userdata)
 
 void LLFloaterIMSession::sendMsgFromInputEditor()
 {
+    // <FS:AYA> Phase 2: debug log for LL Chat Window IM send investigation
+    LL_WARNS("AYA") << "sendMsgFromInputEditor: mDialog=" << mDialog
+                    << " mOtherParticipantUUID=" << mOtherParticipantUUID
+                    << " mSessionID=" << mSessionID
+                    << " mSessionInitialized=" << mSessionInitialized
+                    << " isGodlike=" << gAgent.isGodlike()
+                    << LL_ENDL;
+    // </FS:AYA>
     if (gAgent.isGodlike()
         || (mDialog != IM_NOTHING_SPECIAL)
         || !mOtherParticipantUUID.isNull())
@@ -335,6 +342,14 @@ void LLFloaterIMSession::sendMsg(const std::string& msg)
     }
 // [/RLVa:KB]
 
+    // <FS:AYA> Phase 2: debug log for LL Chat Window IM send investigation
+    LL_WARNS("AYA") << "sendMsg: mSessionInitialized=" << mSessionInitialized
+                    << " mSessionID=" << mSessionID
+                    << " mOtherParticipantUUID=" << mOtherParticipantUUID
+                    << " mDialog=" << mDialog
+                    << " text=" << utf8_text
+                    << LL_ENDL;
+    // </FS:AYA>
     if (mSessionInitialized)
     {
         LLIMModel::sendMessage(utf8_text, mSessionID, mOtherParticipantUUID, mDialog);
@@ -1410,5 +1425,3 @@ boost::signals2::connection LLFloaterIMSession::setIMFloaterShowedCallback(const
 {
     return LLFloaterIMSession::sIMFloaterShowedSignal.connect(cb);
 }
-
-#endif

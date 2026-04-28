@@ -24,8 +24,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LL_LLFLOATERIMCONTAINER_H
 #define LL_LLFLOATERIMCONTAINER_H
 
@@ -89,6 +87,9 @@ public:
     static LLFloaterIMContainer* getInstance();
 
     static void onCurrentChannelChanged(const LLUUID& session_id);
+    // <FS:AYA> Phase 2: mNewMsgSignal callback for LL Chat Window conversation list flash
+    static void onNewIMReceived(const LLSD& msg);
+    // </FS:AYA>
 
     void collapseMessagesPane(bool collapse);
     bool isMessagesPaneCollapsed();
@@ -240,5 +241,3 @@ private:
 };
 
 #endif // LL_LLFLOATERIMCONTAINER_H
-
-#endif

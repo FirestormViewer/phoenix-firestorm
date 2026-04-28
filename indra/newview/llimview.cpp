@@ -51,7 +51,12 @@
 #include "llcallingcard.h"
 #include "llchat.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h"
+// <FS:AYA> Phase 2: needed for LLFloaterIMSession::newIMCallback
+#include "llfloaterimsession.h"
+// Free functions defined in llfloaterimcontainer.cpp; avoids circular include
+extern void ayastorm_flash_ll_im_container(const LLSD& msg);
+extern void ayastorm_show_ll_im_conversation(const LLUUID& session_id);
+// </FS:AYA>
 //#include "llfloaterimcontainer.h"
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
@@ -212,7 +217,19 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
     //LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
     if (gSavedSettings.getS32("NotificationToastLifeTime") > 0 || gSavedSettings.getS32("ToastFadingTime") > 0) // Ansa: only create toast if it should be visible at all
     {
-        LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        if (ayastorm_is_ll_style())
+        {
+            LLUUID session_id = msg["session_id"].asUUID();
+            LLNotificationsUtil::add("IMToast", args, LLSD(), [session_id](const LLSD&, const LLSD&) {
+                ayastorm_show_ll_im_conversation(session_id);
+            });
+        }
+        else
+        {
+            LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+        }
+        // </FS:AYA>
     }
     // </FS:Ansariel> [FS communication UI]
 }
@@ -236,7 +253,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     enum {CLOSED, NOT_ON_TOP, ON_TOP, ON_TOP_AND_ITEM_IS_SELECTED} conversations_floater_status;
 
 
-    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
     LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::getConversation(session_id);
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
@@ -348,7 +365,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             if(!LLAppViewer::instance()->quitRequested() && !LLFloater::isVisible(im_box))
             {
                 // Open conversations floater
-                LLFloaterReg::showInstance("im_container");
+                LLFloaterReg::showInstance("ll_im_container");
             }
             im_box->collapseMessagesPane(false);
             if (session_floater)
@@ -877,6 +894,10 @@ LLIMModel::LLIMModel()
     //addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
     addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
     // </FS:Ansariel> [FS communication UI]
+    // <FS:AYA> Phase 2: Also notify LL IM session floater for LL Chat Window
+    addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
+    addNewMsgCallback(boost::bind(&ayastorm_flash_ll_im_container, _1));
+    // </FS:AYA>
     addNewMsgCallback(boost::bind(&on_new_message, _1));
     LLCallDialogManager::instance();
 }
@@ -1723,6 +1744,14 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
         {
             im_floater->sessionInitReplyReceived(new_session_id);
         }
+
+        // <FS:AYA> Phase 2: Also notify LLFloaterIMSession for LL Chat Window
+        LLFloaterIMSession* ll_im_floater = LLFloaterIMSession::findInstance(old_session_id);
+        if (ll_im_floater)
+        {
+            ll_im_floater->sessionInitReplyReceived(new_session_id);
+        }
+        // </FS:AYA>
 
         if (old_session_id != new_session_id)
         {
@@ -3809,10 +3838,9 @@ void LLIMMgr::addMessage(
     //if (is_offline_msg && !skip_message)
     if (is_offline_msg && gSavedSettings.getBOOL("FSOpenIMContainerOnOfflineMessage"))
     {
-    //    LLFloaterReg::showInstance("im_container");
-    //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
-    //          flashConversationItemWidget(new_session_id, true, LLUrlRegistry::getInstance()->containsAgentMention(msg));
-        LLFloaterReg::showInstance("fs_im_container");
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        LLFloaterReg::showInstance(ayastorm_im_container_name());
+        // </FS:AYA>
     // </FS:CR>
     }
 }

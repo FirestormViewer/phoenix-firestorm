@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llfloaterimsession.h"
 #include "llfloaterimcontainer.h"
 
@@ -60,6 +58,12 @@
 #include "llviewerobjectlist.h"
 // [RLVa:KB] - @pay
 #include "rlvactions.h"
+// <FS:AYA> Phase 3: Range-filter nearby chat participants in LL-style
+#include "lfsimfeaturehandler.h"
+#include "llparticipantlist.h"
+#include "llspeakers.h"
+#include "llvoavatar.h"
+// </FS:AYA>
 // [/RLVa:KB]
 
 
@@ -197,6 +201,37 @@ void LLFloaterIMContainer::onCurrentChannelChanged(const LLUUID& session_id)
         LLFloaterIMContainer::getInstance()->showConversation(session_id);
     }
 }
+
+// <FS:AYA> Phase 2: Flash conversation list item when IM received in LL Chat Window
+// static
+void LLFloaterIMContainer::onNewIMReceived(const LLSD& msg)
+{
+    LLUUID session_id = msg["session_id"].asUUID();
+    LLUUID from_id = msg["from_id"].asUUID();
+    if (from_id == gAgentID || session_id.isNull())
+        return;
+    LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    if (!ll_container || !LLFloater::isVisible(ll_container))
+        return;
+    if (ll_container->getSelectedSession() == session_id)
+        return;
+    if (LLMuteList::getInstance()->isMuted(from_id, LLMute::flagTextChat))
+        return;
+    ll_container->flashConversationItemWidget(session_id, true, false);
+}
+
+// Free function wrapper registered in LLIMModel constructor (avoids circular include)
+void ayastorm_flash_ll_im_container(const LLSD& msg)
+{
+    LLFloaterIMContainer::onNewIMReceived(msg);
+}
+
+void ayastorm_show_ll_im_conversation(const LLUUID& session_id)
+{
+    LLFloaterIMContainer* container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    if (container) container->showConversation(session_id);
+}
+// </FS:AYA>
 
 bool LLFloaterIMContainer::postBuild()
 {
@@ -443,12 +478,16 @@ void LLFloaterIMContainer::onExpandCollapseButtonClicked()
 
 LLFloaterIMContainer* LLFloaterIMContainer::findInstance()
 {
-    return LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("im_container");
+    // <FS:AYA> Phase 1: registered as "ll_im_container" not "im_container"
+    return LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    // </FS:AYA>
 }
 
 LLFloaterIMContainer* LLFloaterIMContainer::getInstance()
 {
-    return LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+    // <FS:AYA> Phase 1: registered as "ll_im_container" not "im_container"
+    return LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    // </FS:AYA>
 }
 
 // Update all participants in the conversation lists
@@ -535,6 +574,45 @@ void LLFloaterIMContainer::idleUpdate()
                 setTitle(needs_override ? conversation_floaterp->getTitle() : mGeneralTitle);
             }
         }
+
+        // <FS:AYA> Phase 3: Reconcile nearby chat participant list with sayRange in LL-style
+        if (ayastorm_is_ll_style())
+        {
+            LLParticipantList* nearby_list = dynamic_cast<LLParticipantList*>(getSessionModel(LLUUID::null));
+            if (nearby_list)
+            {
+                F32 r = (F32)LFSimFeatureHandler::getInstance()->sayRange();
+                F32 rsq = r * r;
+
+                // Step 1: Remove model participants that are confirmed beyond sayRange
+                std::vector<LLUUID> to_remove;
+                for (auto pit = nearby_list->getChildrenBegin(); pit != nearby_list->getChildrenEnd(); ++pit)
+                {
+                    LLConversationItemParticipant* p = dynamic_cast<LLConversationItemParticipant*>((*pit).get());
+                    if (!p || p->getUUID() == gAgentID) continue;
+                    LLVOAvatar* av = (LLVOAvatar*)gObjectList.findObject(p->getUUID());
+                    if (av && dist_vec_squared(av->getPositionAgent(), gAgent.getPositionAgent()) > rsq)
+                        to_remove.push_back(p->getUUID());
+                }
+                for (const LLUUID& id : to_remove)
+                    nearby_list->removeParticipant(id);
+
+                // Step 2: Re-add speakers that returned within sayRange but are missing from model
+                LLSpeakerMgr::speaker_list_t speaker_list;
+                LLLocalSpeakerMgr::getInstance()->getSpeakerList(&speaker_list, true);
+                for (const LLPointer<LLSpeaker>& sp : speaker_list)
+                {
+                    if (sp->mID == gAgentID) continue;
+                    LLVOAvatar* av = (LLVOAvatar*)gObjectList.findObject(sp->mID);
+                    if (av && dist_vec_squared(av->getPositionAgent(), gAgent.getPositionAgent()) <= rsq
+                        && !nearby_list->findParticipant(sp->mID))
+                    {
+                        nearby_list->addAvatarIDExceptAgent(sp->mID);
+                    }
+                }
+            }
+        }
+        // </FS:AYA>
 
         mParticipantRefreshTimer.setTimerExpirySec(1.0f);
     }
@@ -2281,11 +2359,15 @@ LLSpeaker * LLFloaterIMContainer::getSpeakerOfSelectedParticipant(LLSpeakerMgr *
 
 void LLFloaterIMContainer::toggleAllowTextChat(const LLUUID& participant_uuid)
 {
-    LLIMSpeakerMgr * speaker_managerp = dynamic_cast<LLIMSpeakerMgr*>(getSpeakerMgrForSelectedParticipant());
-    if (NULL != speaker_managerp)
+    // <FS:AYA> Phase 1: toggleAllowTextChat removed in FS; implement toggle via mModeratorMutedText
+    LLIMSpeakerMgr* speaker_managerp = dynamic_cast<LLIMSpeakerMgr*>(getSpeakerMgrForSelectedParticipant());
+    if (speaker_managerp)
     {
-        speaker_managerp->toggleAllowTextChat(participant_uuid);
+        LLPointer<LLSpeaker> speakerp = speaker_managerp->findSpeaker(participant_uuid);
+        bool currently_muted = speakerp && speakerp->mModeratorMutedText;
+        speaker_managerp->allowTextChat(participant_uuid, currently_muted);
     }
+    // </FS:AYA>
 }
 
 void LLFloaterIMContainer::openNearbyChat()
@@ -2546,5 +2628,3 @@ void LLFloaterIMContainer::handleReshape(const LLRect& rect, bool by_user)
 }
 
 // EOF
-
-#endif

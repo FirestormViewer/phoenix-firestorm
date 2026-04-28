@@ -38,6 +38,7 @@
 #include "llgroupmgr.h"
 #include "llfloaterimcontainer.h"
 #include "llimview.h" // for gIMMgr
+#include "llviewercontrol.h"
 #include "llnotificationsutil.h"
 #include "llstartup.h"
 #include "llstatusbar.h"    // can_afford_transaction()
@@ -664,7 +665,17 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
         {
             // <FS:Ansariel> [FS communication UI]
             //LLFloaterIMContainer::getInstance()->showConversation(session_id);
-            FSFloaterIM::show(session_id);
+            // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+            if (ayastorm_is_ll_style())
+            {
+                LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+                if (ll_container) ll_container->showConversation(session_id);
+            }
+            else
+            {
+                FSFloaterIM::show(session_id);
+            }
+            // </FS:AYA>
             // </FS:Ansariel> [FS communication UI]
         }
         make_ui_sound("UISndStartIM");
