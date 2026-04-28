@@ -87,6 +87,9 @@ public:
     static LLFloaterIMContainer* getInstance();
 
     static void onCurrentChannelChanged(const LLUUID& session_id);
+    // <FS:AYA> Phase 2: mNewMsgSignal callback for LL Chat Window conversation list flash
+    static void onNewIMReceived(const LLSD& msg);
+    // </FS:AYA>
 
     void collapseMessagesPane(bool collapse);
     bool isMessagesPaneCollapsed();

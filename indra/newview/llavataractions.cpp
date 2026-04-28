@@ -281,6 +281,12 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
         //LLFloaterIMContainer::getInstance()->showConversation(session_id);
         FSFloaterIM::show(session_id);
         // </FS:Ansariel> [FS communication UI]
+        // <FS:AYA> Phase 2: Also navigate LL Chat Window to new IM session
+        {
+            LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+            if (ll_container) ll_container->showConversation(session_id);
+        }
+        // </FS:AYA>
     }
     make_ui_sound("UISndStartIM");
 }
