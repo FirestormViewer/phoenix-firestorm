@@ -321,6 +321,26 @@
          label="Chat Windows"
          name="ChatWindows">
 
+            <!-- <FS:AYA> Wrap content in a scroll container so the panel
+                 stays usable as new options are added. -->
+            <scroll_container
+             follows="all"
+             layout="topleft"
+             left="0"
+             top="0"
+             bottom="-1"
+             right="-1"
+             name="chat_windows_scroll">
+                <panel
+                 background_visible="false"
+                 border="false"
+                 height="540"
+                 layout="topleft"
+                 left="0"
+                 top="0"
+                 width="520"
+                 name="chat_windows_scroll_content">
+
             <text
              top="10"
              follows="left|top"
@@ -876,6 +896,9 @@
              name="FSEnablePerGroupSnoozeDuration"
              control_name="FSEnablePerGroupSnoozeDuration"
              label="Set group chat snooze duration individually per group"/>
+                </panel>
+            </scroll_container>
+            <!-- </FS:AYA> -->
         </panel>
 
         <!-- Chat: Typing -->
