@@ -837,18 +837,18 @@
              function="Floater.Toggle"
              parameter="people" />
             </menu_item_check>
+        <!-- <FS:AYA> Phase 3: Conversations menu routes to FS or LL based on AYAChatWindowStyle -->
         <menu_item_check
          label="Conversations"
          name="Conversations"
          shortcut="control|T"
          use_mac_ctrl="true">
             <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="fs_im_container" />
+             function="AYA.Conversations.Check" />
             <menu_item_check.on_click
-             function="Floater.ToggleOrBringToFront"
-             parameter="fs_im_container" />
+             function="AYA.Conversations.Toggle" />
         </menu_item_check>
+        <!-- </FS:AYA> -->
 
         <menu_item_check
           label="Omnifilter"

@@ -76,6 +76,7 @@
 #include "lltransientfloatermgr.h"
 #include "llversioninfo.h"
 #include "llviewerchat.h"
+#include "llviewercontrol.h"    // <FS:AYA> Phase 3
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llvoicechannel.h"
@@ -1565,7 +1566,9 @@ void FSFloaterIM::updateMessages()
     if (messages.size())
     {
         LLSD chat_args;
-        chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
+        // <FS:AYA> Phase 3: V1 style = plain text mode
+        chat_args["use_plain_text_chat_history"] = gSavedSettings.getS32("AYAChatWindowStyle") == 0;
+        // </FS:AYA>
         chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
         chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsIM");
 

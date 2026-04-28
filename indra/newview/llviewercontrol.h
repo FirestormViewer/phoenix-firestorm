@@ -65,4 +65,9 @@ extern std::string gLastRunVersion;
 void applyGlobalOnlineStatusChange(const LLSD& notification, const LLSD& response);
 // </FS>
 
+// <FS:AYA> Phase 3: Chat window style helpers
+bool ayastorm_is_ll_style();
+std::string ayastorm_im_container_name();
+// </FS:AYA>
+
 #endif // LL_LLVIEWERCONTROL_H

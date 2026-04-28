@@ -217,9 +217,10 @@
           left="5"
           top="3"
           width="80">
+  <!-- <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle -->
   <commit_callback
-          function="Floater.Toggle"
-          parameter="fs_nearby_chat" />
+          function="AYA.NearbyChat.Toggle" />
+  <!-- </FS:AYA> -->
   </button>
 
   <fs_nearby_chat_voice_monitor layout="topleft"

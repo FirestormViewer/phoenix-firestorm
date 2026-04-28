@@ -27,13 +27,12 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llavataractions.h"
 #include "llevents.h"
 #include "llfloaterimsession.h"
+#include "llmutelist.h"
 #include "llsdutil.h"
 #include "llconversationmodel.h"
 #include "llimview.h" //For LLIMModel
@@ -762,5 +761,3 @@ void LLConversationViewModel::sort(LLFolderViewFolder* folder)
 }
 
 // EOF
-
-#endif

@@ -25,8 +25,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LL_FLOATERIMSESSIONTAB_H
 #define LL_FLOATERIMSESSIONTAB_H
 
@@ -40,9 +38,11 @@
 #include "llconversationview.h"
 #include "lltexteditor.h"
 
+// <FS:AYA> Phase 1 Step2: LLChatHistory needs complete type for getChild<> template
+#include "llchathistory.h"
+// </FS:AYA>
 class LLPanelChatControlPanel;
 class LLChatEntry;
-class LLChatHistory;
 class LLPanelEmojiComplete;
 
 class LLFloaterIMSessionTab
@@ -260,5 +260,3 @@ private:
 
 
 #endif /* LL_FLOATERIMSESSIONTAB_H */
-
-#endif

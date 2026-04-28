@@ -1254,8 +1254,10 @@ void LLFloaterPreference::onOpen(const LLSD& key)
     refresh();
 
 
-    getChildView("plain_text_chat_history")->setEnabled(true);
-    getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
+    // <FS:AYA> Phase 3: plain_text_chat_history replaced by AYAChatWindowStyle radio_group
+    // getChildView("plain_text_chat_history")->setEnabled(true);
+    // getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
+    // </FS:AYA>
 
 // <FS:CR> Show/hide Client Tag panel
     bool in_opensim = false;

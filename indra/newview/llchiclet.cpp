@@ -49,6 +49,8 @@
 // Firestorm includes
 #include "fsfloaterim.h"
 #include "llagent.h"
+#include "llfloaterimcontainer.h"
+#include "llviewercontrol.h"
 #include "llavataractions.h"
 #include "llgroupactions.h"
 #include "llgroupmgr.h"
@@ -590,7 +592,17 @@ void LLIMChiclet::onMouseDown()
 {
     // <FS:Ansariel> [FS communication UI]
     //LLFloaterIMSession::toggle(getSessionId());
-    FSFloaterIM::toggle(getSessionId());
+    // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+    if (ayastorm_is_ll_style())
+    {
+        LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+        if (ll_container) ll_container->showConversation(getSessionId());
+    }
+    else
+    {
+        FSFloaterIM::toggle(getSessionId());
+    }
+    // </FS:AYA>
     setCounter(0);
     // </FS:Ansariel> [FS communication UI]
 }
@@ -1320,7 +1332,17 @@ void LLChicletPanel::onCurrentVoiceChannelChanged(const LLUUID& session_id)
             {
                 // <FS:Ansariel> [FS communication UI]
                 //LLFloaterIMContainer::getInstance()->showConversation(session_id);
-                FSFloaterIM::show(chiclet->getSessionId());
+                // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+                if (ayastorm_is_ll_style())
+                {
+                    LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+                    if (ll_container) ll_container->showConversation(chiclet->getSessionId());
+                }
+                else
+                {
+                    FSFloaterIM::show(chiclet->getSessionId());
+                }
+                // </FS:AYA>
                 // </FS:Ansariel> [FS communication UI]
             }
         }

@@ -102,6 +102,7 @@
 #include "fsfloatercontacts.h"
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
+#include "llfloaterimsessiontab.h"  // <FS:AYA> Phase 3
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
@@ -1530,6 +1531,18 @@ void settings_setup_listeners()
     // <FS:Ansariel> [FS communication UI]
     setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    // <FS:AYA> Phase 3: Also update chat history style when AYAChatWindowStyle or AYALLChatCompactView changes
+    setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", FSFloaterIM::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "AYALLChatCompactView", []() { LLFloaterIMSessionTab::processChatHistoryStyleUpdate(); });
+    // Auto-open ll_im_container when switching to LL style, auto-close when switching away
+    setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", [](const LLSD& newvalue) {
+        if (newvalue.asInteger() == 2)
+        {
+            LLFloaterReg::getInstance("ll_im_container");
+        }
+    });
+    // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
@@ -1629,3 +1642,14 @@ void test_cached_control()
 }
 #endif // TEST_CACHED_CONTROL
 
+// <FS:AYA> Phase 3: Chat window style helpers
+bool ayastorm_is_ll_style()
+{
+    return gSavedSettings.getS32("AYAChatWindowStyle") == 2;
+}
+
+std::string ayastorm_im_container_name()
+{
+    return ayastorm_is_ll_style() ? "ll_im_container" : "fs_im_container";
+}
+// </FS:AYA>

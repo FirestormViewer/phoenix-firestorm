@@ -278,8 +278,10 @@ void LLFloaterConversationPreview::showHistory()
         }
 
         LLSD chat_args;
+        // <FS:AYA> Phase 3: V1 style = plain text mode
         chat_args["use_plain_text_chat_history"] =
-                        gSavedSettings.getBOOL("PlainTextChatHistory");
+                        gSavedSettings.getS32("AYAChatWindowStyle") == 0;
+        // </FS:AYA>
         // <FS:CR>
         //chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
         chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsTranscripts");
