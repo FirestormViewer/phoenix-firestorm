@@ -1464,10 +1464,37 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
                 LLStyle::Params link_params(body_message_params);
                 link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));
 
-                // Add link to avatar's inspector and delimiter to message.
-                mEditor->appendText(std::string(link_params.link_href) + delimiter,
-                    prependNewLineState, link_params);
-                prependNewLineState = false;
+                // <FS:AYA> Phase 2: Show avatar mini-icons inline before name in LL Chat Window (compact mode)
+                if (gSavedSettings.getBOOL("ShowChatMiniIcons"))
+                {
+                    S32 line_h = fontp->getLineHeight();
+                    S32 icon_size = (line_h <= 24) ? 16 : 32;
+                    LLAvatarIconCtrl::Params icon_params;
+                    icon_params.name("avatar_icon_inline");
+                    icon_params.rect(LLRect(0, icon_size, icon_size, 0));
+                    icon_params.min_width(icon_size);
+                    icon_params.min_height(icon_size);
+                    icon_params.draw_tooltip(false);
+                    LLAvatarIconCtrl* icon = LLUICtrlFactory::create<LLAvatarIconCtrl>(icon_params);
+                    icon->setValue(chat.mFromID);
+                    LLInlineViewSegment::Params ip;
+                    ip.view = icon;
+                    ip.force_newline = false;
+                    ip.left_pad = 2;
+                    ip.right_pad = 2;
+                    mEditor->appendWidget(ip, " ", prependNewLineState);
+                    prependNewLineState = false;
+
+                    mEditor->appendText(std::string(link_params.link_href) + delimiter, false, link_params);
+                }
+                else
+                {
+                    // Add link to avatar's inspector and delimiter to message.
+                    mEditor->appendText(std::string(link_params.link_href) + delimiter,
+                        prependNewLineState, link_params);
+                    prependNewLineState = false;
+                }
+                // </FS:AYA>
             }
             else if (teleport_separator)
             {
