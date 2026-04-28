@@ -386,21 +386,34 @@
              top_pad="5"
              height="16"
              width="400" />
-            <check_box
-             control_name="PlainTextChatHistory"
-             enabled="true"
-             height="16"
-             label="Use V1 style chat headers"
+            <!-- <FS:AYA> Phase 3: Chat window style radio group -->
+            <radio_group
+             control_name="AYAChatWindowStyle"
+             height="54"
              layout="topleft"
-             name="plain_text_chat_history"
-             top_pad="1"
-             width="400" />
+             left="20"
+             name="chat_window_style"
+             top_pad="5"
+             width="400">
+                <radio_item
+                 label="FS V1 style (plain text)"
+                 name="style_v1"
+                 value="0" />
+                <radio_item
+                 label="FS V7 style (modern headers)"
+                 name="style_v7"
+                 value="1" />
+                <radio_item
+                 label="LL style"
+                 name="style_ll"
+                 value="2" />
+            </radio_group>
+            <!-- </FS:AYA> -->
             <check_box
-             disabled_control="PlainTextChatHistory"
              control_name="ShowChatMiniIcons"
              height="16"
              initial_value="false"
-             label="When using [SHORT_VIEWER_GENERATION] style chat headers, show mini icons"
+             label="Show mini icons in chat"
              layout="topleft"
              name="ShowChatMiniIcons"
              top_pad="1"
