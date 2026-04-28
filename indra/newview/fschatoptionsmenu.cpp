@@ -139,7 +139,9 @@ bool FSChatOptionsMenu::onMenuItemVisible(const LLSD& userdata, LLUICtrl* source
     }
     else if (option == "show_mini_icons")
     {
-        return !gSavedSettings.getBOOL("PlainTextChatHistory");
+        // <FS:AYA> Phase 3: mini icons only in V7/LL style, not V1 plain text
+        return gSavedSettings.getS32("AYAChatWindowStyle") != 0;
+        // </FS:AYA>
     }
 
     return false;
