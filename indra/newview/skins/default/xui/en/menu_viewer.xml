@@ -850,6 +850,19 @@
              parameter="fs_im_container" />
         </menu_item_check>
 
+        <!-- <FS:AYA> Phase 0: LL-style Chat Window coexistence -->
+        <menu_item_check
+         label="Conversations (LL Style)"
+         name="LL Conversations">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="ll_im_container" />
+            <menu_item_check.on_click
+             function="Floater.ToggleOrBringToFront"
+             parameter="ll_im_container" />
+        </menu_item_check>
+        <!-- </FS:AYA> -->
+
         <menu_item_check
           label="Omnifilter"
           name="Omnifilter">

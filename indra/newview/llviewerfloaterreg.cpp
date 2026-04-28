@@ -163,6 +163,9 @@
 #include "llfloaterwindowsize.h"
 #include "llfloaterworldmap.h"
 #include "llfloaterimcontainer.h"
+// <FS:AYA> Phase 0: LL-style Chat Window coexistence
+#include "llfloaterimcontainer_ll.h"
+// </FS:AYA>
 #include "llinspectavatar.h"
 #include "llinspectgroup.h"
 #include "llinspectobject.h"
@@ -481,6 +484,10 @@ void LLViewerFloaterReg::registerFloaters()
     // <FS:Ansariel> [FS communication UI]
     //LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMSession>);
     //LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMContainer>);
+    // <FS:AYA> Phase 0: LL-style Chat Window coexistence
+    LLFloaterReg::add("ll_im_container", "floater_im_container_ll.xml",
+        (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMContainerLL>);
+    // </FS:AYA>
     LLFloaterReg::add("fs_impanel", "floater_fs_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIM>);
     LLFloaterReg::add("fs_im_container", "floater_fs_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIMContainer>);
     // <FS:Ansariel> [FS communication UI]
