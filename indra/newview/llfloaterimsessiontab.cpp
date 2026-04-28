@@ -27,8 +27,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llfloaterimsessiontab.h"
 
 #include "llagent.h"
@@ -1419,5 +1417,3 @@ bool LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
     }
     return handled;
 }
-
-#endif

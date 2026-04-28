@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llchathistory.h"
 
 #include <boost/signals2.hpp>
@@ -115,7 +113,9 @@ public:
         return true;
     }
 };
-LLObjectIMHandler gObjectIMHandler;
+// <FS:AYA> Phase 1: gObjectIMHandler already defined in fschathistory.cpp
+// LLObjectIMHandler gObjectIMHandler;
+// </FS:AYA>
 
 class LLChatHistoryHeader: public LLPanel
 {
@@ -501,8 +501,15 @@ public:
         }
         else if(level == "toggle_allow_text_chat")
         {
+            // <FS:AYA> Phase 1: toggleAllowTextChat removed in FS; implement toggle via mModeratorMutedText
             LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-            speaker_mgr->toggleAllowTextChat(getAvatarId());
+            if (speaker_mgr)
+            {
+                LLPointer<LLSpeaker> speakerp = speaker_mgr->findSpeaker(getAvatarId());
+                bool currently_muted = speakerp && speakerp->mModeratorMutedText;
+                speaker_mgr->allowTextChat(getAvatarId(), currently_muted);
+            }
+            // </FS:AYA>
         }
         else if(level == "group_mute")
         {
@@ -1643,5 +1650,3 @@ void LLChatHistory::draw()
 
     LLUICtrl::draw();
 }
-
-#endif

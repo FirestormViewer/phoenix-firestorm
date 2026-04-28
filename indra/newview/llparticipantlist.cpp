@@ -148,13 +148,11 @@ bool LLParticipantList::onSpeakerUpdateEvent(LLPointer<LLOldEvents::LLEvent> eve
     if ( evt_data.has("id") )
     {
         LLUUID participant_id = evt_data["id"];
-        // <FS:AYA> Phase 1 Step1: llfloaterimcontainer.h is still #if 0; restore in Step 4
-        //LLFloaterIMContainer* im_box = LLFloaterIMContainer::findInstance();
-        //if (im_box)
-        //{
-        //    im_box->setTimeNow(mUUID,participant_id);
-        //}
-        // </FS:AYA>
+        LLFloaterIMContainer* im_box = LLFloaterIMContainer::findInstance();
+        if (im_box)
+        {
+            im_box->setTimeNow(mUUID,participant_id);
+        }
     }
     return true;
 }
