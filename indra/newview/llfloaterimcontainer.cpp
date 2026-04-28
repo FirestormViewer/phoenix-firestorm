@@ -196,6 +196,31 @@ void LLFloaterIMContainer::onCurrentChannelChanged(const LLUUID& session_id)
     }
 }
 
+// <FS:AYA> Phase 2: Flash conversation list item when IM received in LL Chat Window
+// static
+void LLFloaterIMContainer::onNewIMReceived(const LLSD& msg)
+{
+    LLUUID session_id = msg["session_id"].asUUID();
+    LLUUID from_id = msg["from_id"].asUUID();
+    if (from_id == gAgentID || session_id.isNull())
+        return;
+    LLFloaterIMContainer* ll_container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    if (!ll_container || !LLFloater::isVisible(ll_container))
+        return;
+    if (ll_container->getSelectedSession() == session_id)
+        return;
+    if (LLMuteList::getInstance()->isMuted(from_id, LLMute::flagTextChat))
+        return;
+    ll_container->flashConversationItemWidget(session_id, true, false);
+}
+
+// Free function wrapper registered in LLIMModel constructor (avoids circular include)
+void ayastorm_flash_ll_im_container(const LLSD& msg)
+{
+    LLFloaterIMContainer::onNewIMReceived(msg);
+}
+// </FS:AYA>
+
 bool LLFloaterIMContainer::postBuild()
 {
     mOrigMinWidth = getMinWidth();

@@ -51,7 +51,11 @@
 #include "llcallingcard.h"
 #include "llchat.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h"
+// <FS:AYA> Phase 2: needed for LLFloaterIMSession::newIMCallback
+#include "llfloaterimsession.h"
+// Free function defined in llfloaterimcontainer.cpp; avoids circular include
+extern void ayastorm_flash_ll_im_container(const LLSD& msg);
+// </FS:AYA>
 //#include "llfloaterimcontainer.h"
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
@@ -877,6 +881,10 @@ LLIMModel::LLIMModel()
     //addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
     addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
     // </FS:Ansariel> [FS communication UI]
+    // <FS:AYA> Phase 2: Also notify LL IM session floater for LL Chat Window
+    addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
+    addNewMsgCallback(boost::bind(&ayastorm_flash_ll_im_container, _1));
+    // </FS:AYA>
     addNewMsgCallback(boost::bind(&on_new_message, _1));
     LLCallDialogManager::instance();
 }
@@ -1723,6 +1731,14 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
         {
             im_floater->sessionInitReplyReceived(new_session_id);
         }
+
+        // <FS:AYA> Phase 2: Also notify LLFloaterIMSession for LL Chat Window
+        LLFloaterIMSession* ll_im_floater = LLFloaterIMSession::findInstance(old_session_id);
+        if (ll_im_floater)
+        {
+            ll_im_floater->sessionInitReplyReceived(new_session_id);
+        }
+        // </FS:AYA>
 
         if (old_session_id != new_session_id)
         {
