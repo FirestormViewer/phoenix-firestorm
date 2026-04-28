@@ -1294,7 +1294,9 @@ void LLChatHistory::clear()
     mLastFromID = LLUUID::null;
 }
 
-static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("Append Chat Message");
+// <FS:AYA> Phase 1: rename to avoid collision with fschathistory.cpp's "Append Chat Message"
+static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("LL Append Chat Message");
+// </FS:AYA>
 
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {

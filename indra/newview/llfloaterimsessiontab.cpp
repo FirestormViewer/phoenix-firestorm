@@ -153,7 +153,7 @@ void LLFloaterIMSessionTab::setVisible(bool visible)
         mHasVisibleBeenInitialized = true;
         if (!gAgentCamera.cameraMouselook())
         {
-            LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->setVisible(true);
+            LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container")->setVisible(true);
         }
         LLFloaterIMSessionTab::addToHost(mSessionID);
         LLFloaterIMSessionTab* conversp = LLFloaterIMSessionTab::getConversation(mSessionID);
@@ -1218,7 +1218,7 @@ void LLFloaterIMSessionTab::onTearOffClicked()
     mSaveRect = isTornOff();
     initRectControl();
     LLFloater::onClickTearOff(this);
-    LLFloaterIMContainer* container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("im_container");
+    LLFloaterIMContainer* container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
 
     if (isTornOff())
     {
