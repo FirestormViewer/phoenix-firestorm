@@ -53,8 +53,9 @@
 // <FS:Ansariel> [FS communication UI]
 // <FS:AYA> Phase 2: needed for LLFloaterIMSession::newIMCallback
 #include "llfloaterimsession.h"
-// Free function defined in llfloaterimcontainer.cpp; avoids circular include
+// Free functions defined in llfloaterimcontainer.cpp; avoids circular include
 extern void ayastorm_flash_ll_im_container(const LLSD& msg);
+extern void ayastorm_show_ll_im_conversation(const LLUUID& session_id);
 // </FS:AYA>
 //#include "llfloaterimcontainer.h"
 #include "fsfloaterim.h"
@@ -216,7 +217,19 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
     //LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
     if (gSavedSettings.getS32("NotificationToastLifeTime") > 0 || gSavedSettings.getS32("ToastFadingTime") > 0) // Ansa: only create toast if it should be visible at all
     {
-        LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        if (ayastorm_is_ll_style())
+        {
+            LLUUID session_id = msg["session_id"].asUUID();
+            LLNotificationsUtil::add("IMToast", args, LLSD(), [session_id](const LLSD&, const LLSD&) {
+                ayastorm_show_ll_im_conversation(session_id);
+            });
+        }
+        else
+        {
+            LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+        }
+        // </FS:AYA>
     }
     // </FS:Ansariel> [FS communication UI]
 }
@@ -3825,10 +3838,9 @@ void LLIMMgr::addMessage(
     //if (is_offline_msg && !skip_message)
     if (is_offline_msg && gSavedSettings.getBOOL("FSOpenIMContainerOnOfflineMessage"))
     {
-    //    LLFloaterReg::showInstance("ll_im_container");
-    //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container")->
-    //          flashConversationItemWidget(new_session_id, true, LLUrlRegistry::getInstance()->containsAgentMention(msg));
-        LLFloaterReg::showInstance("fs_im_container");
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        LLFloaterReg::showInstance(ayastorm_im_container_name());
+        // </FS:AYA>
     // </FS:CR>
     }
 }
