@@ -28,8 +28,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llfloaterimnearbychatlistener.h"
 #include "llfloaterimnearbychat.h"
 
@@ -99,5 +97,3 @@ void LLFloaterIMNearbyChatListener::sendChat(LLSD const& chat_data)
     // Send it as if it was typed in
     LLFloaterIMNearbyChat::sendChatFromViewer(chat_text, type_o_chat, (channel == 0) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
-
-#endif

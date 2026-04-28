@@ -26,7 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
 #include "llfloaterimsession.h"
 
 #include "lldraghandle.h"
@@ -1410,5 +1409,3 @@ boost::signals2::connection LLFloaterIMSession::setIMFloaterShowedCallback(const
 {
     return LLFloaterIMSession::sIMFloaterShowedSignal.connect(cb);
 }
-
-#endif

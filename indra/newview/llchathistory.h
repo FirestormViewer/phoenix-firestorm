@@ -24,8 +24,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LLCHATHISTORY_H_
 #define LLCHATHISTORY_H_
 
@@ -152,5 +150,3 @@ class LLChatHistory : public LLUICtrl
         unread_chat_source_t mUnreadChatSources;
 };
 #endif /* LLCHATHISTORY_H_ */
-
-#endif

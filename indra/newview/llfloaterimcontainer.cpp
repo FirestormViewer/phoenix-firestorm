@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llfloaterimsession.h"
 #include "llfloaterimcontainer.h"
 
@@ -2281,11 +2279,15 @@ LLSpeaker * LLFloaterIMContainer::getSpeakerOfSelectedParticipant(LLSpeakerMgr *
 
 void LLFloaterIMContainer::toggleAllowTextChat(const LLUUID& participant_uuid)
 {
-    LLIMSpeakerMgr * speaker_managerp = dynamic_cast<LLIMSpeakerMgr*>(getSpeakerMgrForSelectedParticipant());
-    if (NULL != speaker_managerp)
+    // <FS:AYA> Phase 1: toggleAllowTextChat removed in FS; implement toggle via mModeratorMutedText
+    LLIMSpeakerMgr* speaker_managerp = dynamic_cast<LLIMSpeakerMgr*>(getSpeakerMgrForSelectedParticipant());
+    if (speaker_managerp)
     {
-        speaker_managerp->toggleAllowTextChat(participant_uuid);
+        LLPointer<LLSpeaker> speakerp = speaker_managerp->findSpeaker(participant_uuid);
+        bool currently_muted = speakerp && speakerp->mModeratorMutedText;
+        speaker_managerp->allowTextChat(participant_uuid, currently_muted);
     }
+    // </FS:AYA>
 }
 
 void LLFloaterIMContainer::openNearbyChat()
@@ -2546,5 +2548,3 @@ void LLFloaterIMContainer::handleReshape(const LLRect& rect, bool by_user)
 }
 
 // EOF
-
-#endif

@@ -27,8 +27,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llconversationview.h"
 
 #include <boost/bind.hpp>
@@ -885,5 +883,3 @@ void LLConversationViewParticipant::allowSpeakingIndicator(bool val)
 }
 
 // EOF
-
-#endif

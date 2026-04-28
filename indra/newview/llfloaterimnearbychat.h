@@ -24,8 +24,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LL_LLFLOATERIMNEARBYCHAT_H
 #define LL_LLFLOATERIMNEARBYCHAT_H
 
@@ -119,5 +117,3 @@ private:
 };
 
 #endif // LL_LLFLOATERIMNEARBYCHAT_H
-
-#endif
