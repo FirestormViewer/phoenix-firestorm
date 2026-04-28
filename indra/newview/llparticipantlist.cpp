@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llavatarnamecache.h"
 #include "llerror.h"
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
@@ -37,6 +35,7 @@
 #include "llfloaterimcontainer.h"
 #include "llparticipantlist.h"
 #include "llspeakers.h"
+#include "lltrans.h"
 
 //LLParticipantList retrieves add, clear and remove events and updates view accordingly
 #if LL_MSVC
@@ -94,14 +93,12 @@ LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source, LLFolderViewMode
         else if (im_session->isGroupSessionType())
         {
             mConvType = CONV_SESSION_GROUP;
-                item->setState(LLAvatarListItem::IS_ONLINE);
         }
     }
     else
     {
         // That's the only session that doesn't get listed in the LLIMModel as a session...
         mConvType = CONV_SESSION_NEARBY;
-                item->setState(LLAvatarListItem::IS_GROUPMOD);
     }
 }
 
@@ -151,11 +148,13 @@ bool LLParticipantList::onSpeakerUpdateEvent(LLPointer<LLOldEvents::LLEvent> eve
     if ( evt_data.has("id") )
     {
         LLUUID participant_id = evt_data["id"];
-        LLFloaterIMContainer* im_box = LLFloaterIMContainer::findInstance();
-        if (im_box)
-        {
-            im_box->setTimeNow(mUUID,participant_id);
-        }
+        // <FS:AYA> Phase 1 Step1: llfloaterimcontainer.h is still #if 0; restore in Step 4
+        //LLFloaterIMContainer* im_box = LLFloaterIMContainer::findInstance();
+        //if (im_box)
+        //{
+        //    im_box->setTimeNow(mUUID,participant_id);
+        //}
+        // </FS:AYA>
     }
     return true;
 }
@@ -238,8 +237,6 @@ void LLParticipantList::addAvatarIDExceptAgent(const LLUUID& avatar_id)
 
 static LLFastTimer::DeclareTimer FTM_FOLDERVIEW_TEST("add test avatar agents");
 
-static LLFastTimer::DeclareTimer FTM_FOLDERVIEW_TEST("add test avatar agents");
-
 void LLParticipantList::adjustParticipant(const LLUUID& speaker_id)
 {
     LLPointer<LLSpeaker> speakerp = mSpeakerMgr->findSpeaker(speaker_id);
@@ -303,7 +300,5 @@ bool LLParticipantList::SpeakerMuteListener::handleEvent(LLPointer<LLOldEvents::
 {
     return mParent.onSpeakerMuteEvent(event, userdata);
 }
-
-#endif // 0
 
 //EOF
