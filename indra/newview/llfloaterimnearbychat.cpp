@@ -77,7 +77,9 @@
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
 
-static LLFloaterIMNearbyChatListener sChatListener;
+// <FS:AYA> Phase 1: LLChatBar LLEventAPI already registered by fsnearbychatbarlistener.cpp
+// static LLFloaterIMNearbyChatListener sChatListener;
+// </FS:AYA>
 
 constexpr S32 EXPANDED_HEIGHT = 266;
 constexpr S32 COLLAPSED_HEIGHT = 60;
@@ -126,7 +128,7 @@ LLFloaterIMNearbyChat::LLFloaterIMNearbyChat(const LLSD& llsd)
 //static
 LLFloaterIMNearbyChat* LLFloaterIMNearbyChat::buildFloater(const LLSD& key)
 {
-    LLFloaterReg::getInstance("im_container");
+    LLFloaterReg::getInstance("ll_im_container");
     return new LLFloaterIMNearbyChat(key);
 }
 

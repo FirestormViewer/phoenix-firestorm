@@ -171,9 +171,11 @@
 #include "llmaterialeditor.h"
 #include "llmoveview.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimnearbychat.h
+// <FS:AYA> Phase 1 Step5: needed for "nearby_chat" registration
+#include "llfloaterimnearbychat.h"
+// </FS:AYA>
 #include "fsfloaternearbychat.h"
-// <FS:Ansariel> [FS communication UI]
+// </FS:Ansariel> [FS communication UI]
 #include "fsfloaterposer.h" // <FS:AR> [FIRE-30873]: Poser
 #include "llpanelblockedlist.h"
 #include "llpanelprofileclassifieds.h"
@@ -432,7 +434,9 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("chat_voice", "floater_voice_chat_volume.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterChatVoiceVolume>);
     LLFloaterReg::add("change_item_thumbnail", "floater_change_item_thumbnail.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterChangeItemThumbnail>);
     // <FS:Ansariel> [FS communication UI]
-    //LLFloaterReg::add("nearby_chat", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterIMNearbyChat::buildFloater);
+    // <FS:AYA> Phase 1 Step5: LLFloaterIMContainer::onOpen requires "nearby_chat"
+    LLFloaterReg::add("nearby_chat", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterIMNearbyChat::buildFloater);
+    // </FS:AYA>
     LLFloaterReg::add("fs_nearby_chat", "floater_fs_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterNearbyChat>);
     // </FS:Ansariel> [FS communication UI]
     LLFloaterReg::add("chat_mention_picker", "floater_chat_mention_picker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterChatMentionPicker>);

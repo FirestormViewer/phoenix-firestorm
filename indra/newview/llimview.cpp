@@ -236,7 +236,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     enum {CLOSED, NOT_ON_TOP, ON_TOP, ON_TOP_AND_ITEM_IS_SELECTED} conversations_floater_status;
 
 
-    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
     LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::getConversation(session_id);
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
@@ -348,7 +348,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             if(!LLAppViewer::instance()->quitRequested() && !LLFloater::isVisible(im_box))
             {
                 // Open conversations floater
-                LLFloaterReg::showInstance("im_container");
+                LLFloaterReg::showInstance("ll_im_container");
             }
             im_box->collapseMessagesPane(false);
             if (session_floater)
@@ -3809,8 +3809,8 @@ void LLIMMgr::addMessage(
     //if (is_offline_msg && !skip_message)
     if (is_offline_msg && gSavedSettings.getBOOL("FSOpenIMContainerOnOfflineMessage"))
     {
-    //    LLFloaterReg::showInstance("im_container");
-    //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
+    //    LLFloaterReg::showInstance("ll_im_container");
+    //    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container")->
     //          flashConversationItemWidget(new_session_id, true, LLUrlRegistry::getInstance()->containsAgentMention(msg));
         LLFloaterReg::showInstance("fs_im_container");
     // </FS:CR>

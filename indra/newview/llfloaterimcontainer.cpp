@@ -441,12 +441,16 @@ void LLFloaterIMContainer::onExpandCollapseButtonClicked()
 
 LLFloaterIMContainer* LLFloaterIMContainer::findInstance()
 {
-    return LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("im_container");
+    // <FS:AYA> Phase 1: registered as "ll_im_container" not "im_container"
+    return LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    // </FS:AYA>
 }
 
 LLFloaterIMContainer* LLFloaterIMContainer::getInstance()
 {
-    return LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+    // <FS:AYA> Phase 1: registered as "ll_im_container" not "im_container"
+    return LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
+    // </FS:AYA>
 }
 
 // Update all participants in the conversation lists
