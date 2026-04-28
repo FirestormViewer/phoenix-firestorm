@@ -2276,6 +2276,29 @@ void LLViewerWindow::initBase()
     //mNavBarContainer = mStatusBarContainer->getChild<LLView>("nav_bar_container");
     //mTopInfoContainer = main_view->getChild<LLPanel>("topinfo_bar_container");
 
+    // <FS:AYA> Phase 3: Register AYA callbacks before toolbar XMLs are loaded
+    {
+        auto& commit_reg = LLUICtrl::CommitCallbackRegistry::defaultRegistrar();
+        auto& enable_reg = LLUICtrl::EnableCallbackRegistry::defaultRegistrar();
+
+        // Used by panel_toolbar_view.xml local chat button
+        commit_reg.add("AYA.NearbyChat.Toggle", [](LLUICtrl*, const LLSD&) {
+            if (ayastorm_is_ll_style())
+                LLFloaterReg::toggleInstanceOrBringToFront("ll_im_container");
+            else
+                LLFloaterReg::toggleInstanceOrBringToFront("fs_nearby_chat");
+        });
+
+        // Used by commands.xml "chat" toolbar command
+        commit_reg.add("AYA.Conversations.Toggle", [](LLUICtrl*, const LLSD&) {
+            LLFloaterReg::toggleInstanceOrBringToFront(ayastorm_im_container_name());
+        });
+        enable_reg.add("AYA.Conversations.IsOpen", [](LLUICtrl*, const LLSD&) -> bool {
+            return LLFloaterReg::instanceVisible(ayastorm_im_container_name());
+        });
+    }
+    // </FS:AYA>
+
     // Create the toolbar view
     // Get a pointer to the toolbar view holder
     LLPanel* panel_holder = main_view->getChild<LLPanel>("toolbar_view_holder");
