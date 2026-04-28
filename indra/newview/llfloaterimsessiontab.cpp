@@ -50,6 +50,8 @@
 #include "lllayoutstack.h"
 #include "llpanelemojicomplete.h"
 #include "lltoolbarview.h"
+#include "llspeakers.h"         // <FS:AYA> Phase 3
+#include "llviewercontrol.h"    // <FS:AYA> Phase 3
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const std::string ICN_GROUP("group_chat_icon");
@@ -659,8 +661,14 @@ void LLFloaterIMSessionTab::appendMessage(const LLChat& chat, const LLSD& args)
     tmp_chat.mFromName = chat.mFromName;
 
     LLSD chat_args = args;
-    chat_args["use_plain_text_chat_history"] =
-            gSavedSettings.getBOOL("PlainTextChatHistory");
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting; FS uses AYAChatWindowStyle
+    {
+        S32 style = gSavedSettings.getS32("AYAChatWindowStyle");
+        chat_args["use_plain_text_chat_history"] =
+            (style == 2) ? gSavedSettings.getBOOL("AYALLChatCompactView")
+                         : (style == 0);
+    }
+    // </FS:AYA>
     chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
     chat_args["show_names_for_p2p_conv"] = !mIsP2PChat ||
             gSavedSettings.getBOOL("IMShowNamesForP2PConv");
@@ -801,7 +809,16 @@ void LLFloaterIMSessionTab::refreshConversation()
         if (widget_it->second->getViewModelItem())
         {
             widget_it->second->refresh();
-            widget_it->second->setVisible(true);
+            // <FS:AYA> Phase 3: Hide out-of-range participants in nearby chat
+            bool should_show = true;
+            if (mIsNearbyChat)
+            {
+                LLPointer<LLSpeaker> speakerp = LLLocalSpeakerMgr::getInstance()->findSpeaker(widget_it->first);
+                if (speakerp.notNull() && speakerp->mStatus == LLSpeaker::STATUS_NOT_IN_CHANNEL)
+                    should_show = false;
+            }
+            widget_it->second->setVisible(should_show);
+            // </FS:AYA>
         }
         ++widget_it;
     }
@@ -884,7 +901,13 @@ void LLFloaterIMSessionTab::onIMSessionMenuItemClicked(const LLSD& userdata)
 
     if (item == "compact_view" || item == "expanded_view")
     {
-        gSavedSettings.setBOOL("PlainTextChatHistory", item == "compact_view");
+        bool compact = (item == "compact_view");
+        // <FS:AYA> Phase 3: LL style has its own compact/expanded setting
+        if (ayastorm_is_ll_style())
+            gSavedSettings.setBOOL("AYALLChatCompactView", compact);
+        else
+            gSavedSettings.setBOOL("PlainTextChatHistory", compact);
+        // </FS:AYA>
     }
     else
     {
@@ -898,8 +921,11 @@ void LLFloaterIMSessionTab::onIMSessionMenuItemClicked(const LLSD& userdata)
 bool LLFloaterIMSessionTab::onIMCompactExpandedMenuItemCheck(const LLSD& userdata)
 {
     std::string item = userdata.asString();
-    bool is_plain_text_mode = gSavedSettings.getBOOL("PlainTextChatHistory");
-
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting
+    bool is_plain_text_mode = ayastorm_is_ll_style()
+        ? gSavedSettings.getBOOL("AYALLChatCompactView")
+        : gSavedSettings.getBOOL("PlainTextChatHistory");
+    // </FS:AYA>
     return is_plain_text_mode? item == "compact_view" : item == "expanded_view";
 }
 
@@ -913,7 +939,11 @@ bool LLFloaterIMSessionTab::onIMShowModesMenuItemCheck(const LLSD& userdata)
 bool LLFloaterIMSessionTab::onIMShowModesMenuItemEnable(const LLSD& userdata)
 {
     std::string item = userdata.asString();
-    bool plain_text = gSavedSettings.getBOOL("PlainTextChatHistory");
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting
+    bool plain_text = ayastorm_is_ll_style()
+        ? gSavedSettings.getBOOL("AYALLChatCompactView")
+        : gSavedSettings.getBOOL("PlainTextChatHistory");
+    // </FS:AYA>
     bool is_not_names = (item != "IMShowNamesForP2PConv");
     return (plain_text && (is_not_names || mIsP2PChat));
 }
