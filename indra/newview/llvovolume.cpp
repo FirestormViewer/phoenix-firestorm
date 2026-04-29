@@ -5991,6 +5991,13 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 continue;
             }
 
+            // <FS:AYA> [RenderHideOutsideParcel]
+            if (LLPipeline::sRenderHideOutsideParcel && LLPipeline::shouldHideForOutsideParcel(drawablep))
+            {
+                continue;
+            }
+            // </FS:AYA>
+
             LLVOVolume* vobj = drawablep->getVOVolume();
 
             if (!vobj || vobj->isDead() || vobj->mGLTFAsset)
