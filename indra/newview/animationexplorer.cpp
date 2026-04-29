@@ -248,14 +248,21 @@ bool AnimationExplorer::postBuild()
     mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
 
     mExportButton->setEnabled(false);
-    mExportButton->setVisible(gSavedSettings.getBOOL("Mode_34"));
 
-    mExportSettingConnection = gSavedSettings.getControl("Mode_34")->getSignal()->connect(
-        [this](LLControlVariable*, const LLSD& new_val, const LLSD&)
-        {
-            mExportButton->setVisible(new_val.asBoolean());
-        }
-    );
+    // <FS:AYA> Mode_34 is intentionally not declared in shipped settings XML.
+    // Treat missing control as false (button hidden, no signal hookup).
+    LLControlVariable* mode34 = gSavedSettings.getControl("Mode_34");
+    mExportButton->setVisible(mode34 && mode34->getValue().asBoolean());
+
+    if (mode34)
+    {
+        mExportSettingConnection = mode34->getSignal()->connect(
+            [this](LLControlVariable*, const LLSD& new_val, const LLSD&)
+            {
+                mExportButton->setVisible(new_val.asBoolean());
+            }
+        );
+    }
 
     mPreviewCtrl = findChild<LLView>("animation_preview");
     if (mPreviewCtrl)

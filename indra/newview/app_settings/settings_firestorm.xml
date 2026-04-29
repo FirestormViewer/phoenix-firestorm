@@ -313,17 +313,6 @@
 	<integer>0</integer>
   </map>
 
-  <key>Mode_34</key>
-  <map>
-    <key>Comment</key>
-    <string>Enable CheckTexture in Developer menu (saves selected object mesh+textures without permission checks)</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
 
 </map>
 </llsd>
