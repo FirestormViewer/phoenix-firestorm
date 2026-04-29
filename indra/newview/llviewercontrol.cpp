@@ -103,6 +103,8 @@
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
 #include "llfloaterimsessiontab.h"  // <FS:AYA> Phase 3
+#include "llfloaterimcontainer.h"   // <FS:AYA> Phase 3 - backfill on LL switch
+#include "llimview.h"               // <FS:AYA> Phase 3 - backfill on LL switch
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
@@ -1567,11 +1569,25 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "AYALLChatCompactView", []() { LLFloaterIMSessionTab::processChatHistoryStyleUpdate(); });
-    // Auto-open ll_im_container when switching to LL style, auto-close when switching away
+    // Auto-open ll_im_container when switching to LL style, and backfill any
+    // IM sessions that were created while a non-LL style was active so they
+    // become addressable from the LL container.
     setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", [](const LLSD& newvalue) {
         if (newvalue.asInteger() == 2)
         {
-            LLFloaterReg::getInstance("ll_im_container");
+            LLFloaterIMContainer* ll_container =
+                LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container");
+            if (ll_container)
+            {
+                for (auto& kv : LLIMModel::getInstance()->mId2SessionMap)
+                {
+                    LLIMModel::LLIMSession* s = kv.second;
+                    if (s)
+                    {
+                        ll_container->sessionAdded(kv.first, s->mName, s->mOtherParticipantID, false);
+                    }
+                }
+            }
         }
     });
     // </FS:AYA>
