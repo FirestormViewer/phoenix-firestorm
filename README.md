@@ -42,6 +42,66 @@
   **Color LUT (.cube) Loading** — Apply 3D LUT files (`.cube`) for post-process color grading. Seven presets are bundled (`teal_orange`, `warm`, `cold_war`, `sepia`, `cool`, `cinematic`, `film_noir`), but the primary goal is to let **users load their own `.cube` files to fully customize the look of the viewer**. Pick a LUT via `Browse...` and adjust `LUT Intensity` to taste
   **Color LUT (.cube) 加载** — 通过后处理应用 `.cube` 格式的 3D LUT 进行色彩分级。内置七种预设 (`teal_orange` / `warm` / `cold_war` / `sepia` / `cool` / `cinematic` / `film_noir`)，但核心目的是 **让用户加载自己的 `.cube` 文件，自由定制画面风格**。通过 `Browse...` 选择 LUT，并使用 `LUT Intensity` 调整应用强度
 
+### 区画 / Parcel / 区域
+
+環境設定 → Firestorm → Build 2 タブから設定できます。
+**Configurable from Preferences → Firestorm → Build 2 tab.**
+**可在 设置 → Firestorm → Build 2 标签页中配置。**
+
+![環境設定 - Firestorm Build 2 / Preferences - Firestorm Build 2](doc/images/preferences_firestorm_build2.png)
+
+#### 利用者側 — 区画外オブジェクトを非表示 / Hide objects outside parcel / 隐藏区域外物体
+
+- **`Hide objects outside your parcel`** — 自分が今立っている区画の外にあるオブジェクトを描画しない設定。**任意の区画で有効**で、撮影時に背景の邪魔なプリムや看板を一時的に消したいとき等に使えます。アバター・添付物・HUD・自分の所有物は除外オプションで残せます (`Keep avatars visible` / `Keep my own objects visible`)
+  **`Hide objects outside your parcel`** — Don't render objects outside the parcel you're currently standing on. Works on **any parcel** — handy when taking screenshots and you want to clear away neighbouring prims or signs from the background. Avatars / attachments / HUDs / your own objects can be kept visible via `Keep avatars visible` / `Keep my own objects visible`
+  **`Hide objects outside your parcel`** — 不渲染当前所站区域之外的物体。**在任意区域均可启用** —— 拍摄截图时想清理掉相邻地块上碍眼的物件或招牌时非常有用。可通过 `Keep avatars visible` / `Keep my own objects visible` 保留头像 / 附件 / HUD / 自有物体
+
+#### 区画オーナー側 — description タグによる強制 / Parcel-owner forced hiding via description tag / 区域所有者通过描述标签强制启用
+
+区画 (Parcel) の **description (説明文) に下記タグを書き込む**だけで、その区画を訪れた **AYAstorm 利用者** に対して上記の隠し動作を強制発動できます。**他の Viewer (本家 Firestorm / 公式 LL Viewer 等) はこのタグを解釈しないため影響を受けません** — つまり「AYAstorm ユーザーにだけ効くプライバシー保護タグ」として機能します。区画オーナー権限で書ける箇所なので、訪問者側の合意も設定変更も不要です。
+
+Just write the tag below into the **parcel description** and any **AYAstorm visitor** to that parcel will have the hide-outside behaviour forced on. **Other viewers (upstream Firestorm, official LL viewer, etc.) ignore the tag entirely**, so it functions as a "privacy tag that only affects AYAstorm users". As parcel owner you can set it without any cooperation from visitors.
+
+只需在 **区域 (Parcel) 的描述文本中** 写入下方标签，所有访问该区域的 **AYAstorm 用户** 都会被强制启用上述隐藏行为。**其他 Viewer (上游 Firestorm / 官方 LL Viewer 等) 不会解析此标签，因此完全不受影响** —— 也就是说，它是一个 "仅对 AYAstorm 用户生效的隐私保护标签"。区域所有者无需访问者配合即可设置。
+
+**タグ書式 / Tag format / 标签格式:**
+
+```
+[AYAstorm:{key:value}{key:value}...]
+```
+
+- description のどこに書いても OK (前後に他の文章があっても可)
+- Can appear anywhere in the description (other text before/after is fine)
+- 可写在描述的任何位置（前后可有其他文本）
+
+| キー / Key | デフォルト / Default | 動作 / Behaviour / 行为 |
+|---|---|---|
+| `hideoutside` | `true` | `false` でタグを一時無効化 / `false` temporarily disables the tag / `false` 临时禁用此标签 |
+| `keepavatars` | `false` | `true` でアバター・HUD は表示 / `true` keeps avatars & HUDs visible / `true` 保留头像与 HUD |
+| `keepownobject` | `false` | `true` で訪問者自身の所有物は表示 / `true` keeps the visitor's own objects visible / `true` 保留访问者自有物体 |
+
+**例 / Examples / 示例:**
+
+| description に書く文字列 | 効果 / Effect / 效果 |
+|---|---|
+| `[AYAstorm:]` | 区画外を全部隠す (アバターも自分の物も隠す) / Hide everything outside the parcel / 隐藏区域外的所有内容 |
+| `[AYAstorm:{keepavatars:true}]` | アバターは見えるが他の物は隠す / Avatars stay visible, other objects hidden / 保留头像，其他物体隐藏 |
+| `[AYAstorm:{keepavatars:true}{keepownobject:true}]` | 一般的に使いやすい設定 / Common-sense default / 通用推荐设置 |
+| `[AYAstorm:{hideoutside:false}]` | タグ一時無効 (イベント時など) / Temporarily disable tag (during events etc.) / 临时禁用 (例如举办活动时) |
+
+**効果イメージ / Effect comparison / 效果对比:**
+
+<table>
+<tr>
+<td width="50%" align="center"><b>タグなし / Without tag / 无标签</b><br/>(通常表示 / normal rendering / 普通渲染)</td>
+<td width="50%" align="center"><b>タグあり / With tag / 有标签</b><br/>(<code>[AYAstorm:...]</code> in description)</td>
+</tr>
+<tr>
+<td><img src="doc/images/parcel_magic_off.png" alt="タグなし / Without tag"/></td>
+<td><img src="doc/images/parcel_magic_on.png" alt="タグあり / With tag"/></td>
+</tr>
+</table>
+
 ### チャット UI / Chat UI / 聊天界面
 
 環境設定 → チャット → Chat Windows タブから設定できます。
