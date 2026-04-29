@@ -94,11 +94,24 @@
 
 ## ダウンロード / Download / 下载
 
-> ビルド済みバイナリは GitHub Releases からダウンロードできます。（準備中）
->
-> Pre-built binaries are available from GitHub Releases. (Coming soon)
->
-> 编译好的安装包将在 GitHub Releases 提供。（即将推出）
+最新版のビルド済みバイナリは **[GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest)** からダウンロードできます。
+**Pre-built binaries are available from [GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest).**
+**最新编译版可在 [GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest) 下载。**
+
+| OS | ファイル / File | 使い方 / How to use |
+|----|------|------|
+| Windows (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe` | NSIS インストーラー。ダウンロードして実行 / Run the installer |
+| Linux (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*.tar.xz` | 任意の場所に展開し、中の `install.sh` を実行 / Extract and run `install.sh` |
+| macOS | （準備中 / Coming soon / 即将推出） | — |
+
+**Linux インストール例 / Linux install example:**
+
+```bash
+tar xf Phoenix-FirestormOS-AYAstorm-release_LEGACY-*.tar.xz
+cd Phoenix-FirestormOS-AYAstorm-release_LEGACY-*/
+./install.sh
+~/ayastorm/ayastorm
+```
 
 ---
 
