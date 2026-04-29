@@ -325,6 +325,29 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
     return true;
 }
 
+// <FS:AYA> [RenderHideOutsideParcel]
+bool handleRenderHideOutsideParcelChanged(const LLSD& newvalue)
+{
+    LLPipeline::sRenderHideOutsideParcel = newvalue.asBoolean();
+    LLPipeline::refreshOutsideParcelHiding();
+    return true;
+}
+
+bool handleRenderHideOutsideParcelKeepAvatarsChanged(const LLSD& newvalue)
+{
+    LLPipeline::sRenderHideOutsideParcelKeepAvatars = newvalue.asBoolean();
+    LLPipeline::refreshOutsideParcelHiding();
+    return true;
+}
+
+bool handleRenderHideOutsideParcelKeepOwnChanged(const LLSD& newvalue)
+{
+    LLPipeline::sRenderHideOutsideParcelKeepOwn = newvalue.asBoolean();
+    LLPipeline::refreshOutsideParcelHiding();
+    return true;
+}
+// </FS:AYA>
+
 
 static bool handleShadowsResized(const LLSD& newvalue)
 {
@@ -1460,6 +1483,15 @@ void settings_setup_listeners()
     // <FS:Ansariel> Show start location setting has no effect on login
     setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
+    // <FS:AYA> [RenderHideOutsideParcel]
+    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcel", handleRenderHideOutsideParcelChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepAvatars", handleRenderHideOutsideParcelKeepAvatarsChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepOwn", handleRenderHideOutsideParcelKeepOwnChanged);
+    gAgent.addParcelChangedCallback([](){ LLPipeline::refreshOutsideParcelHiding(); });
+    LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
+    LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
+    LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
+    // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);

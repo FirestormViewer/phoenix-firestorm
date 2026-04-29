@@ -680,6 +680,16 @@ public:
     static bool             sAutoMaskAlphaDeferred;
     static bool             sAutoMaskAlphaNonDeferred;
     static bool             sRenderTransparentWater;
+    // <FS:AYA> [RenderHideOutsideParcel] hide objects outside agent parcel
+    static bool             sRenderHideOutsideParcel;
+    static bool             sRenderHideOutsideParcelKeepAvatars;
+    static bool             sRenderHideOutsideParcelKeepOwn;
+    static S32              sParcelCheckSeq; // bumped on parcel change or related setting change to invalidate per-drawable caches
+    static bool             shouldHideForOutsideParcel(LLDrawable* drawablep);
+    // Mark all volume drawables for rebuild so the outside-parcel filter is
+    // re-applied. Call when sParcelCheckSeq changes.
+    static void             refreshOutsideParcelHiding();
+    // </FS:AYA>
     static bool             sBakeSunlight;
     static bool             sNoAlpha;
     static bool             sUseFarClip;

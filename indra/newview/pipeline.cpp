@@ -339,6 +339,12 @@ S32     LLPipeline::sUseOcclusion = 0;
 bool    LLPipeline::sAutoMaskAlphaDeferred = true;
 bool    LLPipeline::sAutoMaskAlphaNonDeferred = false;
 bool    LLPipeline::sRenderTransparentWater = true;
+// <FS:AYA> [RenderHideOutsideParcel]
+bool    LLPipeline::sRenderHideOutsideParcel = false;
+bool    LLPipeline::sRenderHideOutsideParcelKeepAvatars = true;
+bool    LLPipeline::sRenderHideOutsideParcelKeepOwn = true;
+S32     LLPipeline::sParcelCheckSeq = 0;
+// </FS:AYA>
 bool    LLPipeline::sBakeSunlight = false;
 bool    LLPipeline::sNoAlpha = false;
 bool    LLPipeline::sUseFarClip = true;
@@ -3096,6 +3102,88 @@ void LLPipeline::updateGeom(F32 max_dtime)
 
     updateMovedList(mMovedBridge);
 }
+
+// <FS:AYA> [RenderHideOutsideParcel]
+// Returns true if the given drawable should be hidden because it is outside
+// the agent's current parcel and the FSRenderHideOutsideParcel setting is on.
+// Spatial bridges (e.g. avatar attachment hierarchies) are never hidden here;
+// they are handled at the wrapped object level.
+bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
+{
+    if (!drawablep || drawablep->isSpatialBridge())
+    {
+        return false;
+    }
+
+    LLViewerObject* vobj = drawablep->getVObj();
+    if (!vobj)
+    {
+        return false;
+    }
+
+    if (sRenderHideOutsideParcelKeepAvatars
+        && (vobj->isAvatar() || vobj->isAttachment() || vobj->isHUDAttachment()))
+    {
+        return false;
+    }
+
+    if (sRenderHideOutsideParcelKeepOwn && vobj->permYouOwner())
+    {
+        return false;
+    }
+
+    if (drawablep->mLastParcelCheckSeq == sParcelCheckSeq)
+    {
+        return drawablep->mLastParcelCheckHidden;
+    }
+
+    bool hidden = !LLViewerParcelMgr::getInstance()->inAgentParcel(vobj->getPositionGlobal());
+    drawablep->mLastParcelCheckSeq = sParcelCheckSeq;
+    drawablep->mLastParcelCheckHidden = hidden;
+    return hidden;
+}
+
+void LLPipeline::refreshOutsideParcelHiding()
+{
+    sParcelCheckSeq++;
+
+    if (!gPipeline.assertInitialized())
+    {
+        return;
+    }
+
+    // Mark every volume spatial group GEOM_DIRTY (same mechanism as the
+    // "Highlight Transparent" toggle) so that rebuildGeom re-runs and the
+    // parcel filter is applied.
+    gPipeline.rebuildDrawInfo();
+
+    // The bulk path above sometimes fails to immediately re-batch every
+    // visible group (depends on cull state / IN_BUILD_Q1 timing). Also walk
+    // the live object list and mark each volume drawable's spatial group
+    // dirty — this mirrors the per-object rebuild path that we know works
+    // (the same one triggered by edit-selecting an object).
+    const S32 num_objects = gObjectList.getNumObjects();
+    for (S32 i = 0; i < num_objects; ++i)
+    {
+        LLViewerObject* objp = gObjectList.getObject(i);
+        if (!objp || objp->isDead())
+        {
+            continue;
+        }
+        LLDrawable* drawablep = objp->mDrawable;
+        if (!drawablep || drawablep->isDead())
+        {
+            continue;
+        }
+        LLSpatialGroup* groupp = drawablep->getSpatialGroup();
+        if (groupp)
+        {
+            groupp->dirtyGeom();
+            gPipeline.markRebuild(groupp);
+        }
+    }
+}
+// </FS:AYA>
 
 void LLPipeline::markVisible(LLDrawable *drawablep, LLCamera& camera)
 {
