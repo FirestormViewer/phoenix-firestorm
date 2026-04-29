@@ -9,6 +9,7 @@
 
 - **v1 (2026-04-29)**: 初版
 - **v2 (2026-04-29)**: Phase A 完了 (PR #12 マージ) を踏まえ、Phase B-1 (区画 description タグによるオーナー強制) を追記
+- **v3 (2026-04-29)**: Phase B-1 として「区画 description タグ `[AYAstorm:...]` によるオーナー強制描画」を追加。タグ override 用の内部変数 `sParcelOwnerTag*` を新設。利用者側の `FSRenderHideOutsideParcel` は**任意の区画で有効** (撮影時の背景隠し等のユースケースを想定)
 
 ---
 
@@ -292,7 +293,7 @@ Phase B で追加予定 (このブランチでは触らない):
 Phase A の判定式 (`sRenderHideOutsideParcel && shouldHideForOutsideParcel(...)`) を以下に拡張:
 
 ```
-hide = (sRenderHideOutsideParcel || sParcelTagHide)
+hide = (sRenderHideOutsideParcel || sParcelOwnerTagActive)
     && shouldHideForOutsideParcel(...)
 ```
 
