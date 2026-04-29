@@ -8,6 +8,8 @@
 ## 改訂履歴
 
 - **v1 (2026-04-29)**: 初版
+- **v2 (2026-04-29)**: Phase A 完了 (PR #12 マージ) を踏まえ、Phase B-1 (区画 description タグによるオーナー強制) を追記
+- **v3 (2026-04-29)**: Phase B-1 として「区画 description タグ `[AYAstorm:...]` によるオーナー強制描画」を追加。タグ override 用の内部変数 `sParcelOwnerTag*` を新設。利用者側の `FSRenderHideOutsideParcel` は**任意の区画で有効** (撮影時の背景隠し等のユースケースを想定)
 
 ---
 
@@ -219,6 +221,83 @@ Phase B で追加予定 (このブランチでは触らない):
 - 結果を `FSParcelDescCache` (region UUID → {LocalID → desc, bitmap}) にキャッシュ
 - `LLVOVolume::isVisible()` 内で「対象オブジェクトのセル → LocalID → cache 参照 → desc にタグ?」を確認
 - 隣接リージョンも同様にスキャン
+
+---
+
+## 7.1 Phase B-1: 区画 description タグによるオーナー強制 (本ブランチで実装)
+
+**作業ブランチ**: `feature/render-hide-outside-parcel-tag`
+
+### 7.1.1 目的
+
+区画オーナーが「自分の区画に来た AYAstorm 利用者には、区画外を見せたくない」と意図したとき、区画の description にタグを書くだけでそれを強制できるようにする。
+
+利用者側の `FSRenderHideOutsideParcel` 設定 (Phase A) の値に関わらず、タグの内容に従って描画判定が上書きされる。
+
+### 7.1.2 設計方針
+
+- **対象は agent parcel のみ**: 利用者が今立っている区画の description を見るだけ。隣接区画のスキャン (Phase B 元案) は行わない。同期取得で済むため低コスト
+- **オプトアウトなし**: SL の慣習に従い、土地オーナーが絶対権限を持つ。利用者側で「タグを無視する」スイッチは設けない
+- **タグなし区画**: 利用者の Phase A 設定通りの挙動
+
+### 7.1.3 タグ書式
+
+```
+[AYAstorm:{key1:value1}{key2:value2}...]
+```
+
+- description 全文を走査し、最初に見つかった `[AYAstorm:...]` ブロックをパースする
+- description 内のどこに置かれていてもよい (前後にユーザー文章があっても無視)
+- プレフィックス `AYAstorm` は完全一致 (大小文字含む)
+- キー名は **小文字統一** (`hideoutside`, `keepavatars`, `keepownobject`)
+- 値は `true` / `false` (大小文字無視)
+- 各 `{key:value}` ペアは順不同・繰り返し可。最後に出現した値を採用
+- ペアを 1 個も持たないタグ (`[AYAstorm:]`) も有効 (= デフォルト挙動)
+
+### 7.1.4 各キーのデフォルト値と意味
+
+「タグそのものが書かれている = 区画外を隠したい」というオーナー意図が前提。よって省略時のデフォルトは「全部隠す」側に倒す:
+
+| キー | デフォルト (省略時) | `true` の意味 | `false` の意味 |
+|---|---|---|---|
+| `hideoutside` | `true` | 区画外を隠す動作を強制発動 | **タグを一時無効化**。他のキーも自動的に `true` 扱い (= 全部表示) |
+| `keepavatars` | `false` | アバター/添付物/HUD は表示 | アバターも隠す |
+| `keepownobject` | `false` | 利用者自身の所有オブジェクトは表示 | 自オブジェクトも隠す |
+
+**「`hideoutside:false` で他キー自動 true」設計の意図**:
+
+オーナーが「ふだんは隠す設定にしているが、今日のイベント中だけ普通に見せたい」というユースケースで、タグ全体を書き換える/消す手間を省くため。`hideoutside:false` ひとつで「タグなしと同等の通常状態」に戻せる。
+
+### 7.1.5 利用者から見た挙動マトリクス
+
+利用者が立っている区画にタグがある場合の挙動:
+
+| description 内のタグ | 区画外の隠し動作 | アバター | 自オブジェクト |
+|---|---|---|---|
+| (タグなし) | 利用者の `FSRenderHideOutsideParcel` に従う | 利用者の `KeepAvatars` に従う | 利用者の `KeepOwn` に従う |
+| `[AYAstorm:]` | 強制 ON | 隠す | 隠す |
+| `[AYAstorm:{keepavatars:true}]` | 強制 ON | 表示 | 隠す |
+| `[AYAstorm:{keepavatars:true}{keepownobject:true}]` | 強制 ON | 表示 | 表示 |
+| `[AYAstorm:{hideoutside:false}]` | 一時無効 (= 利用者設定通り) | (タグなしと同等) | (タグなしと同等) |
+
+### 7.1.6 実装ステップ
+
+1. **docs (本章)**: 仕様確定 ← 今ここ
+2. **パーサ + キャッシュ**: `LLPipeline` に `parseAYAstormParcelTag(const std::string& desc)` と override 用静的メンバを追加
+3. **`shouldHideForOutsideParcel` 更新**: タグ override が有効ならそちらの値を使う
+4. **`refreshOutsideParcelHiding` 更新**: 区画変更時に agent parcel description を再パースしてキャッシュ更新
+5. **UI**: Build 2 タブの既存 3 チェックボックスの下にタグ書式説明を text ウィジェットで追加 (区画オーナー向けの利用案内)
+
+### 7.1.7 Phase A との関係
+
+Phase A の判定式 (`sRenderHideOutsideParcel && shouldHideForOutsideParcel(...)`) を以下に拡張:
+
+```
+hide = (sRenderHideOutsideParcel || sParcelOwnerTagActive)
+    && shouldHideForOutsideParcel(...)
+```
+
+`shouldHideForOutsideParcel` 内で keep 系のフラグ参照も、タグ override が有効なときはタグ値を優先する。
 
 ---
 

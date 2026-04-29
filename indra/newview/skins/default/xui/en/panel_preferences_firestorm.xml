@@ -1558,6 +1558,51 @@
          name="FSRenderHideOutsideParcelKeepOwn"
          control_name="FSRenderHideOutsideParcelKeepOwn"
          width="500"/>
+
+        <!-- Parcel-owner enforcement tag -->
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_pad="10"
+         follows="left|top"
+         height="2"
+         left="3"
+         width="520"/>
+        <text
+         top_pad="6"
+         follows="left|top"
+         height="16"
+         left="3"
+         width="520"
+         font="SansSerifSmall"
+         text_color="EmphasisColor"
+         name="FSAYAParcelTagHeader">
+            Parcel owner: enforce these settings on visiting AYAstorm users
+        </text>
+        <text
+         top_pad="2"
+         follows="left|top"
+         height="60"
+         left="3"
+         width="520"
+         wrap="true"
+         font="SansSerifSmall"
+         name="FSAYAParcelTagDesc">
+            Add a tag to your parcel description (About Land &gt; General). When an AYAstorm user is standing in your parcel, the tag overrides their personal settings. Keys are lowercase. Default values when the tag is present: hideoutside=true, keepavatars=false, keepownobject=false.
+        </text>
+        <text
+         top_pad="2"
+         follows="left|top"
+         height="80"
+         left="3"
+         width="520"
+         font="Monospace"
+         name="FSAYAParcelTagExamples">
+            [AYAstorm:]                                       hide everything outside (incl. avatars and own)
+            [AYAstorm:{keepavatars:true}]                     hide outside, keep avatars visible
+            [AYAstorm:{keepavatars:true}{keepownobject:true}] also keep own objects visible
+            [AYAstorm:{hideoutside:false}]                    temporarily disable this tag
+        </text>
         <!-- </FS:AYA> -->
         <check_box
          left="3"

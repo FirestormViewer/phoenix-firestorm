@@ -83,6 +83,7 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
+#include "llparcel.h" // <FS:AYA> [RenderHideOutsideParcel-Tag] for LLParcel::getDesc()
 #include "llviewerregion.h" // for audio debugging.
 #include "llviewerwindow.h" // For getSpinAxis
 #include "llvoavatarself.h"
@@ -344,6 +345,10 @@ bool    LLPipeline::sRenderHideOutsideParcel = false;
 bool    LLPipeline::sRenderHideOutsideParcelKeepAvatars = true;
 bool    LLPipeline::sRenderHideOutsideParcelKeepOwn = true;
 S32     LLPipeline::sParcelCheckSeq = 0;
+// [RenderHideOutsideParcel-Tag] parsed override values for the agent parcel
+bool    LLPipeline::sParcelOwnerTagActive = false;
+bool    LLPipeline::sParcelOwnerTagKeepAvatars = false;
+bool    LLPipeline::sParcelOwnerTagKeepOwn = false;
 // </FS:AYA>
 bool    LLPipeline::sBakeSunlight = false;
 bool    LLPipeline::sNoAlpha = false;
@@ -3104,10 +3109,104 @@ void LLPipeline::updateGeom(F32 max_dtime)
 }
 
 // <FS:AYA> [RenderHideOutsideParcel]
+// Parse a parcel description for the [AYAstorm:{key:value}{key:value}...] tag.
+// See docs/ayastorm-render-hide-outside-parcel.md section 7.1 for the spec.
+//
+// Behavior summary:
+//   - Tag absent: ParcelTagOverride{active=false}.
+//   - Tag present, hideoutside missing or true (default): active=true with
+//     keepavatars / keepownobject parsed (each defaulting to false).
+//   - Tag present with hideoutside:false: tag is treated as a temporary
+//     no-op, returning active=false (Phase A behavior applies).
+//   - Prefix "AYAstorm" is matched case-sensitively. Keys are lowercase.
+//     Values "true"/"false" are case-insensitive.
+LLPipeline::ParcelTagOverride LLPipeline::parseAYAstormParcelTag(const std::string& desc)
+{
+    ParcelTagOverride out;
+
+    static const std::string PREFIX = "[AYAstorm:";
+    const std::string::size_type start = desc.find(PREFIX);
+    if (start == std::string::npos)
+    {
+        return out;
+    }
+    const std::string::size_type body_begin = start + PREFIX.size();
+    const std::string::size_type end = desc.find(']', body_begin);
+    if (end == std::string::npos)
+    {
+        return out;
+    }
+    const std::string body = desc.substr(body_begin, end - body_begin);
+
+    bool hideoutside = true; // default when tag is present
+    bool keepavatars = false;
+    bool keepown = false;
+
+    // Walk the body looking for {key:value} pairs. Anything outside braces
+    // (whitespace, stray separators) is ignored.
+    std::string::size_type i = 0;
+    while (i < body.size())
+    {
+        const std::string::size_type ob = body.find('{', i);
+        if (ob == std::string::npos) break;
+        const std::string::size_type cb = body.find('}', ob + 1);
+        if (cb == std::string::npos) break;
+        const std::string pair = body.substr(ob + 1, cb - ob - 1);
+        i = cb + 1;
+
+        const std::string::size_type colon = pair.find(':');
+        if (colon == std::string::npos) continue;
+
+        std::string key = pair.substr(0, colon);
+        std::string val = pair.substr(colon + 1);
+
+        // Trim ASCII whitespace from key and val
+        auto trim = [](std::string& s) {
+            const std::string ws = " \t\r\n";
+            std::string::size_type a = s.find_first_not_of(ws);
+            std::string::size_type b = s.find_last_not_of(ws);
+            if (a == std::string::npos) { s.clear(); return; }
+            s = s.substr(a, b - a + 1);
+        };
+        trim(key);
+        trim(val);
+
+        // Lowercase the value so "True" / "FALSE" both work.
+        for (char& c : val) { c = static_cast<char>(std::tolower(static_cast<unsigned char>(c))); }
+
+        bool bval;
+        if (val == "true") bval = true;
+        else if (val == "false") bval = false;
+        else continue;
+
+        if (key == "hideoutside") hideoutside = bval;
+        else if (key == "keepavatars") keepavatars = bval;
+        else if (key == "keepownobject") keepown = bval;
+        // unknown keys are silently ignored
+    }
+
+    if (!hideoutside)
+    {
+        // Owner has temporarily disabled the tag — Phase A behavior applies.
+        return out; // active=false
+    }
+
+    out.active = true;
+    out.keepAvatars = keepavatars;
+    out.keepOwn = keepown;
+    return out;
+}
+
 // Returns true if the given drawable should be hidden because it is outside
-// the agent's current parcel and the FSRenderHideOutsideParcel setting is on.
+// the agent's current parcel. Callers should additionally gate on
+// (sRenderHideOutsideParcel || sParcelOwnerTagActive) before invoking.
 // Spatial bridges (e.g. avatar attachment hierarchies) are never hidden here;
 // they are handled at the wrapped object level.
+//
+// When the agent parcel description carries an [AYAstorm:...] tag
+// (sParcelOwnerTagActive==true), the keepavatars / keepownobject decisions use
+// the tag-supplied values instead of the visitor's settings. This lets the
+// parcel owner enforce their immersion intent.
 bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
 {
     if (!drawablep || drawablep->isSpatialBridge())
@@ -3121,13 +3220,20 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
         return false;
     }
 
-    if (sRenderHideOutsideParcelKeepAvatars
+    const bool keep_avatars = sParcelOwnerTagActive
+        ? sParcelOwnerTagKeepAvatars
+        : sRenderHideOutsideParcelKeepAvatars;
+    const bool keep_own = sParcelOwnerTagActive
+        ? sParcelOwnerTagKeepOwn
+        : sRenderHideOutsideParcelKeepOwn;
+
+    if (keep_avatars
         && (vobj->isAvatar() || vobj->isAttachment() || vobj->isHUDAttachment()))
     {
         return false;
     }
 
-    if (sRenderHideOutsideParcelKeepOwn && vobj->permYouOwner())
+    if (keep_own && vobj->permYouOwner())
     {
         return false;
     }
@@ -3146,6 +3252,25 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
 void LLPipeline::refreshOutsideParcelHiding()
 {
     sParcelCheckSeq++;
+
+    // Re-evaluate the parcel-owner [AYAstorm:...] tag for the parcel the
+    // agent is currently standing in. This drives sParcelOwnerTagActive and the
+    // tag-supplied keepavatars / keepownobject overrides used inside
+    // shouldHideForOutsideParcel().
+    LLParcel* agent_parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+    if (agent_parcel)
+    {
+        ParcelTagOverride tag = parseAYAstormParcelTag(agent_parcel->getDesc());
+        sParcelOwnerTagActive = tag.active;
+        sParcelOwnerTagKeepAvatars = tag.keepAvatars;
+        sParcelOwnerTagKeepOwn = tag.keepOwn;
+    }
+    else
+    {
+        sParcelOwnerTagActive = false;
+        sParcelOwnerTagKeepAvatars = false;
+        sParcelOwnerTagKeepOwn = false;
+    }
 
     if (!gPipeline.assertInitialized())
     {
