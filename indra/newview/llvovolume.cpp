@@ -5991,6 +5991,16 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 continue;
             }
 
+            // <FS:AYA> [RenderHideOutsideParcel]
+            // Visitor's own setting OR parcel-owner tag triggers hiding.
+            if ((LLPipeline::sRenderHideOutsideParcel
+                 || LLPipeline::sParcelOwnerTagActive)
+                && LLPipeline::shouldHideForOutsideParcel(drawablep))
+            {
+                continue;
+            }
+            // </FS:AYA>
+
             LLVOVolume* vobj = drawablep->getVOVolume();
 
             if (!vobj || vobj->isDead() || vobj->mGLTFAsset)

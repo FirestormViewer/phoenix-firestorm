@@ -1,3 +1,5 @@
+[![Download](https://img.shields.io/github/v/release/mayatonton/phoenix-firestorm?label=⬇%20Download&style=for-the-badge&color=blue)](https://github.com/mayatonton/phoenix-firestorm/releases/latest)
+
 <img align="left" width="100" height="100" src="indra/newview/icons/ayastorm/ayastorm_512.png" alt="AYAstorm logo"/>
 
 **AYAstorm は [Firestorm](https://www.firestormviewer.org) をベースにした、Second Life 向けカスタム Viewer です。**
@@ -13,55 +15,119 @@
 
 ### レンダリング / Rendering / 渲染
 
-- **LUT カラーグレーディング** — ポストプロセスで LUT を適用してカラーグレーディングが可能
-  **LUT Color Grading** — Apply LUT textures for post-process color grading
-  **LUT色彩分级** — 支持通过LUT贴图进行后处理色彩分级
+環境設定 → グラフィック → レンダリング タブから設定できます。
+**Configurable from Preferences → Graphics → Rendering tab.**
+**可在 设置 → 图形 → 渲染 标签页中配置。**
 
-- **トーンマッパー** — カスタムトーンマッピング対応
-  **Tone Mapper** — Custom tone mapping support
-  **色调映射器** — 支持自定义色调映射
+![環境設定 - レンダリング / Preferences - Rendering](doc/images/preferences_graphics_rendering.png)
+
+- **Shadow Softness（影の柔らかさ）** — 影のエッジを柔らかくする調整スライダーを追加
+  **Shadow Softness** — New slider to soften shadow edges
+  **阴影柔和度** — 新增滑块用于柔化阴影边缘
+
+- **トーンマッパー選択肢を拡張** — 既存の Firestorm では内部的に Khronos Neutral 固定だったトーンマッパーを、UI から以下5種類から選択可能に:
+  - Khronos Neutral / ACES / Filmic (Uncharted 2) / Uchimura (GT) / Filmic (BD Style)
+
+  **Selectable Tone Mappers** — Upstream Firestorm hard-codes Khronos Neutral internally; AYAstorm exposes a UI selector with five options:
+  - Khronos Neutral / ACES / Filmic (Uncharted 2) / Uchimura (GT) / Filmic (BD Style)
+
+  **可选色调映射器** — 上游 Firestorm 在内部固定为 Khronos Neutral，AYAstorm 在界面上提供五种选择：
+  - Khronos Neutral / ACES / Filmic (Uncharted 2) / Uchimura (GT) / Filmic (BD Style)
+
+- **Color Grading コントロール** — Saturation（彩度）／ Contrast（コントラスト）／ Color Temperature（色温度）／ Brightness（明度）の4つを UI から調整可能に。`Reset Color Grading` ボタンで一括リセットできます
+  **Color Grading Controls** — Adjustable Saturation, Contrast, Color Temperature, and Brightness sliders (with a `Reset Color Grading` button) added to the UI
+  **色彩分级控制** — 在界面上添加了饱和度 / 对比度 / 色温 / 亮度四项滑块，并提供 `Reset Color Grading` 一键重置按钮
+
+- **Color LUT (.cube) 読み込み** — ポストプロセスで `.cube` 形式の 3D LUT を適用してカラーグレーディングが可能。標準で7種のプリセット (`teal_orange` / `warm` / `cold_war` / `sepia` / `cool` / `cinematic` / `film_noir`) を同梱していますが、本来の狙いは **ユーザー自身が任意の `.cube` ファイルを読み込んで描画の風合いを自由に変更できること** です。`Browse...` から好みの LUT を指定し、`LUT Intensity` で適用強度を調整できます
+  **Color LUT (.cube) Loading** — Apply 3D LUT files (`.cube`) for post-process color grading. Seven presets are bundled (`teal_orange`, `warm`, `cold_war`, `sepia`, `cool`, `cinematic`, `film_noir`), but the primary goal is to let **users load their own `.cube` files to fully customize the look of the viewer**. Pick a LUT via `Browse...` and adjust `LUT Intensity` to taste
+  **Color LUT (.cube) 加载** — 通过后处理应用 `.cube` 格式的 3D LUT 进行色彩分级。内置七种预设 (`teal_orange` / `warm` / `cold_war` / `sepia` / `cool` / `cinematic` / `film_noir`)，但核心目的是 **让用户加载自己的 `.cube` 文件，自由定制画面风格**。通过 `Browse...` 选择 LUT，并使用 `LUT Intensity` 调整应用强度
 
 ### チャット UI / Chat UI / 聊天界面
 
-- **LL / FS V7 / FS V1 スタイル切替** — 設定から好みのチャットウィンドウスタイルを選択可能
-  **Switchable Chat Style** — Choose between LL, FS V7, and FS V1 chat window styles in preferences
-  **可切换聊天风格** — 在设置中选择LL、FS V7或FS V1聊天窗口风格
+環境設定 → チャット → Chat Windows タブから設定できます。
+**Configurable from Preferences → Chat → Chat Windows tab.**
+**可在 设置 → 聊天 → Chat Windows 标签页中配置。**
+
+![環境設定 - チャットウィンドウ / Preferences - Chat Windows](doc/images/preferences_chat_chatwindows.png)
+
+- **LL スタイルのチャットウィンドウを移植** — Firestorm の Nearby Chat は元々 `FS V1 (plain text)` と `FS V7 (modern headers)` から選択でき機能的にも優秀ですが、**チャットレンジ内のユーザーを把握するには別ウィンドウを開く必要がありました**。AYAstorm では **Linden Lab 公式 Viewer の CONVERSATIONS ウィンドウの見た目をそのまま移植した `LL style` を新規追加**し、チャットウィンドウを開いているだけで **チャットレンジ内のユーザーをそのまま一覧確認できる** ようにしました
+  **Ported LL-style Chat Window** — Upstream Firestorm's Nearby Chat already offers the capable `FS V1 (plain text)` and `FS V7 (modern headers)` styles, but **seeing who is within chat range requires opening a separate window**. AYAstorm adds a new **`LL style`** that ports the look of Linden Lab's official viewer's CONVERSATIONS window, **letting you see avatars within chat range directly inside the chat window** — no extra panel needed
+  **移植 LL 风格聊天窗口** — Firestorm 原有的 Nearby Chat 提供 `FS V1 (纯文本)` 和 `FS V7 (现代头部)` 两种风格，功能强大，但 **要查看聊天范围内的用户必须打开另一个窗口**。AYAstorm 新增 **`LL style`**，将 Linden Lab 官方客户端 CONVERSATIONS 窗口的外观直接移植过来，**只需打开聊天窗口即可一览聊天范围内的用户**
+
+- **発言者プロフィールアイコン表示 (`Show mini icons in chat`)** — チャット発言行のユーザー名の隣にプロフィールアイコンを表示。名前文字列だけでは発言者の判別がしづらかったため、アイコンを併置することで **誰の発言か直感的にわかる** ようにしています
+  **Profile Icons Next to Speakers (`Show mini icons in chat`)** — Show each speaker's profile icon next to their name on every chat line, so you can **intuitively tell who said what** instead of squinting at name strings alone
+  **发言者头像图标 (`Show mini icons in chat`)** — 在聊天行的用户名旁显示头像图标——仅靠名字文本难以快速识别发言者，附上头像后 **一眼就能看出是谁在说话**
+
+  ![Nearby Chat におけるミニアイコン表示例 / Mini icons in nearby chat](doc/images/neaby_chat_miniicon_exapmpleshot.png)
 
 - **チャットレンジ参加者フィルタ** — ローカルチャット参加者リストをチャットレンジ (20m) 以内のみ表示
   **Chat Range Participant Filter** — Show only avatars within chat range (20m) in the nearby chat list
   **聊天范围参与者过滤** — 仅在附近聊天列表中显示聊天范围（20米）内的用户
 
-- **近隣チャットにアバターアイコン表示** — コンパクトモードでもアバターアイコンをインライン表示
-  **Avatar Icons in Nearby Chat** — Show avatar icons inline even in compact chat mode
-  **附近聊天显示头像图标** — 即使在紧凑模式下也能显示头像图标
-
 ### 日本語対応 / Japanese Support / 日语支持
 
-- **日本語フォント内蔵** — 追加インストール不要で日本語が正しく表示される
-  **Built-in Japanese Fonts** — Japanese text displays correctly without additional installation
-  **内置日语字体** — 无需额外安装即可正确显示日语文字
+- **Linux + Mozc + Fcitx5 の IME 候補ウィンドウ位置バグを修正** — 既存の Firestorm では Linux 上で Mozc + Fcitx5 を使うと **変換候補ウィンドウが画面左下に飛んでしまい実質使い物にならない** 致命的な問題がありました。AYAstorm ではこのバグを修正し、入力中のキャレット位置のすぐ下に変換候補が正しく表示されるようにしています。Linux で日本語入力する人にとって特に重要な修正です
+  **Fixed IME Candidate Window Position on Linux + Mozc + Fcitx5** — Upstream Firestorm has a critical bug on Linux where the **conversion candidate window jumps to the bottom-left of the screen, making Mozc + Fcitx5 essentially unusable**. AYAstorm fixes this so candidates appear directly under the caret as expected. Especially impactful for Japanese-speaking Linux users
+  **修复 Linux + Mozc + Fcitx5 输入法候选窗口位置错误** — 上游 Firestorm 在 Linux 上使用 Mozc + Fcitx5 时存在严重 bug——**候选窗口会跳到屏幕左下角，导致输入实际上无法使用**。AYAstorm 修复了此问题，候选窗口现可正确显示在光标正下方。对在 Linux 上使用日语输入的用户尤为重要
 
-- **IME ポジション修正** — 日本語入力時のカーソル位置を正確に表示
-  **IME Position Fix** — Input method cursor is displayed at the correct position
-  **输入法光标位置修正** — 输入日语时光标位置显示正确
+- **日本語フォントを4ファミリー同梱** — 追加インストール不要で日本語が正しく表示されます。好みに応じて環境設定の Chat フォント等から切り替え可能:
+  - **Noto Sans JP** — Google Noto プロジェクトの日本語サンセリフ。クセのない万能型で標準のおすすめ
+  - **IBM Plex Sans JP** — IBM の OSS 企業フォント。やや幾何学的でモダンな見た目
+  - **Alibaba Sans JP** — Alibaba がオープンソース公開したサンセリフ。柔らかく親しみのある書体
+  - **LINE Seed JP** — LINE 社の OSS フォント。ややキャラクターのある今風のデザイン
 
-- **OTF フォントサポート修正** — OTF 形式のフォントが正しく読み込まれるよう修正
-  **OTF Font Support Fix** — OTF format fonts are now loaded correctly
-  **OTF字体支持修正** — 修复了OTF格式字体的加载问题
+  **Four Bundled Japanese Font Families** — Japanese text renders correctly out of the box, no extra install required. Switch between them in Preferences:
+  - **Noto Sans JP** — Google Noto's Japanese sans-serif. Neutral and versatile, the default recommendation
+  - **IBM Plex Sans JP** — IBM's open-source corporate font. Slightly geometric, modern feel
+  - **Alibaba Sans JP** — Alibaba's open-sourced sans-serif. Soft and friendly
+  - **LINE Seed JP** — LINE Corp's open-source font. Contemporary with a touch of character
+
+  **内置四款日语字体家族** — 开箱即用，无需额外安装。可在偏好设置中切换：
+  - **Noto Sans JP** — Google Noto 项目的日语无衬线字体，中性百搭，推荐默认使用
+  - **IBM Plex Sans JP** — IBM 开源的企业字体，略带几何感，现代风格
+  - **Alibaba Sans JP** — 阿里巴巴开源的无衬线字体，柔和友好
+  - **LINE Seed JP** — LINE 公司开源的字体，带有现代设计个性
+
+- **OTF フォントサポート修正** — OTF 形式のフォント (上記の Alibaba / IBM Plex / LINE Seed JP は OTF) が正しく読み込まれるよう修正
+  **OTF Font Support Fix** — OTF format fonts (Alibaba / IBM Plex / LINE Seed JP above are OTF) now load correctly
+  **OTF字体支持修正** — 修复了 OTF 格式字体的加载问题（上述 Alibaba / IBM Plex / LINE Seed JP 均为 OTF）
 
 ---
 
 ## ダウンロード / Download / 下载
 
-> ビルド済みバイナリは GitHub Releases からダウンロードできます。（準備中）
->
-> Pre-built binaries are available from GitHub Releases. (Coming soon)
->
-> 编译好的安装包将在 GitHub Releases 提供。（即将推出）
+最新版のビルド済みバイナリは **[GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest)** からダウンロードできます。
+**Pre-built binaries are available from [GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest).**
+**最新编译版可在 [GitHub Releases](https://github.com/mayatonton/phoenix-firestorm/releases/latest) 下载。**
+
+| OS | ファイル / File | 使い方 / How to use |
+|----|------|------|
+| Windows (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe` | NSIS インストーラー。ダウンロードして実行 / Run the installer |
+| Linux (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*.tar.xz` | 任意の場所に展開し、中の `install.sh` を実行 / Extract and run `install.sh` |
+| macOS | （準備中 / Coming soon / 即将推出） | — |
+
+**Linux インストール例 / Linux install example:**
+
+```bash
+tar xf Phoenix-FirestormOS-AYAstorm-release_LEGACY-*.tar.xz
+cd Phoenix-FirestormOS-AYAstorm-release_LEGACY-*/
+./install.sh
+~/ayastorm/ayastorm
+```
 
 ---
 
 ## ビルド方法 / Build Instructions / 编译说明
+
+AYAstorm 独自のビルド手順 (Linux / Windows):
+**AYAstorm-specific build guide (Linux / Windows):**
+**AYAstorm 专用编译步骤 (Linux / Windows):**
+
+- [AYAstorm ビルド手順書 / AYAstorm Build Guide](doc/building_ayastorm.md)
+
+本家 Firestorm のビルド手順 (Mac はこちらを参照):
+**Upstream Firestorm build guides (refer to these for Mac):**
+**上游 Firestorm 编译指南 (Mac 请参考此处):**
 
 - [Windows](doc/building_windows.md)
 - [Mac](doc/building_macos.md)

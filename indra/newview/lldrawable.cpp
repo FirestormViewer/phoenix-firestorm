@@ -120,6 +120,11 @@ void LLDrawable::init(bool new_entry)
     mGeneration = -1;
     mSpatialBridge = NULL;
 
+    // <FS:AYA> [RenderHideOutsideParcel]
+    mLastParcelCheckSeq = -1;
+    mLastParcelCheckHidden = false;
+    // </FS:AYA>
+
     LLViewerOctreeEntry* entry = NULL;
     LLVOCacheEntry* vo_entry = NULL;
     if(!new_entry && mVObjp && getRegion() != NULL)
