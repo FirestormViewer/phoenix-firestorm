@@ -630,6 +630,21 @@ void LLGrassPartition::addGeometryCount(LLSpatialGroup* group, U32& vertex_count
             continue;
         }
 
+        // <FS:AYA> [RenderHideOutsideParcel] Skip grass blades whose drawable
+        // is in a parcel that should be hidden by the visitor's
+        // RenderHideOutsideParcel setting or the parcel-owner [AYAstorm:...]
+        // tag. Grass uses LLGrassPartition (separate from LLVOVolume's
+        // rebuildGeom path), so the volume face-collection hook does not
+        // catch it. Filtering here means the buffer is not sized for these
+        // faces and they never reach the alpha pool draw_vec.
+        if ((LLPipeline::sRenderHideOutsideParcel
+             || LLPipeline::sParcelOwnerTagActive)
+            && LLPipeline::shouldHideForOutsideParcel(drawablep))
+        {
+            continue;
+        }
+        // </FS:AYA>
+
         // <FS:ND> Crashfix
 
         // LLAlphaObject* obj = (LLAlphaObject*) drawablep->getVObj().get();

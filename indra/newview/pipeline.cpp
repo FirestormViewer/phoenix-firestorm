@@ -3220,6 +3220,14 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
         return false;
     }
 
+    // HUDs are user-interface elements that live in the agent's HUD slot,
+    // not world geometry. They must remain visible regardless of any
+    // keepavatars setting (visitor preference or parcel-owner tag).
+    if (vobj->isHUDAttachment())
+    {
+        return false;
+    }
+
     const bool keep_avatars = sParcelOwnerTagActive
         ? sParcelOwnerTagKeepAvatars
         : sRenderHideOutsideParcelKeepAvatars;
@@ -3227,8 +3235,7 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
         ? sParcelOwnerTagKeepOwn
         : sRenderHideOutsideParcelKeepOwn;
 
-    if (keep_avatars
-        && (vobj->isAvatar() || vobj->isAttachment() || vobj->isHUDAttachment()))
+    if (keep_avatars && (vobj->isAvatar() || vobj->isAttachment()))
     {
         return false;
     }
