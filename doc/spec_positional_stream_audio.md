@@ -167,6 +167,8 @@
 
 「同一 URL を 2 回開く」アンチパターンを避けるため、`LLPositionalStream` は内部で **1 本の `FMOD::Sound* (FMOD_2D, FMOD_CREATESTREAM)`** を保持し、これを発音には使わず、DSP read callback で PCM のみ吸い出す。発音は別途生成した `FMOD_OPENUSER` の Sound から行う。
 
+**実装上の選択 (M5-a 以降):** カスタム DSP を挟まず、`FMOD::Sound::readData()` をメインスレッドから毎フレーム呼んでソース Sound から PCM を吸い出し、SPSC リングバッファ経由で `FMOD_OPENUSER` の `pcmreadcallback` (FMOD ミキサスレッド) に供給する。意味的にはカスタム DSP と等価で、実装が簡潔・FMOD バージョン差にも強い。詳細は `LLPositionalStreamStereo` (`indra/llaudio/llpositionalstreamstereo.{h,cpp}`)。
+
 ## 8. UI 仕様
 
 ### 8.1 フローター `floater_ayastream`

@@ -27,6 +27,7 @@
 #include "llpositionalstreammgr.h"
 
 #include "llpositionalstream.h"
+#include "llpositionalstreamstereo.h"
 
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
@@ -308,6 +309,11 @@ void LLPositionalStreamMgr::update()
         mDebugStream->update();
     }
 
+    if (mDebugStereoStream)
+    {
+        mDebugStereoStream->update();
+    }
+
     for (auto it = mBindings.begin(); it != mBindings.end(); )
     {
         const LLUUID& id = it->first;
@@ -333,6 +339,11 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
     if (mDebugStream)
     {
         mDebugStream->setRolloffDistances(default_min, default_max);
+    }
+
+    if (mDebugStereoStream)
+    {
+        mDebugStereoStream->setRolloffDistances(default_min, default_max);
     }
 
     for (auto& [id, b] : mBindings)
@@ -366,5 +377,28 @@ void LLPositionalStreamMgr::stopDebug()
     {
         mDebugStream->stop();
         mDebugStream.reset();
+    }
+}
+
+void LLPositionalStreamMgr::startDebugStereo(const std::string& url,
+                                             const LLVector3& l_pos,
+                                             const LLVector3& r_pos)
+{
+    if (!mDebugStereoStream)
+    {
+        mDebugStereoStream = std::make_unique<LLPositionalStreamStereo>();
+    }
+    mDebugStereoStream->setRolloffDistances(
+        gSavedSettings.getF32("AYAStreamRolloffMin"),
+        gSavedSettings.getF32("AYAStreamRolloffMax"));
+    mDebugStereoStream->start(url, l_pos, r_pos);
+}
+
+void LLPositionalStreamMgr::stopDebugStereo()
+{
+    if (mDebugStereoStream)
+    {
+        mDebugStereoStream->stop();
+        mDebugStereoStream.reset();
     }
 }

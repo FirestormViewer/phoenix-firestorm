@@ -588,6 +588,33 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
         LLPositionalStreamMgr::instance().stopDebug();
     }
 }
+
+static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting stereo." << LL_ENDL;
+            return;
+        }
+
+        // M5-a: both sides anchored 5m in front of the agent.
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d source_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3 source_f;
+        source_f.setVec(source_global);
+
+        LLPositionalStreamMgr::instance().startDebugStereo(url, source_f, source_f);
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().stopDebugStereo();
+    }
+}
 // </FS:AYA>
 
 static bool handleJoystickChanged(const LLSD& newvalue)
@@ -1530,6 +1557,7 @@ void settings_setup_listeners()
     LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
     LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
     setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugStereoPlay", handleAYAStreamDebugStereoPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
     // </FS:AYA>

@@ -35,6 +35,7 @@
 #include <string>
 
 class LLPositionalStream;
+class LLPositionalStreamStereo;
 
 class LLPositionalStreamMgr
 {
@@ -58,6 +59,14 @@ public:
     // the prim binding map.
     void startDebug(const std::string& url, const LLVector3& world_pos);
     void stopDebug();
+
+    // Stereo debug stream (driven by AYAStreamDebugStereoPlay, M5-a spike).
+    // Pulls PCM from a source HTTP stream and feeds two OPENUSER 3D mono
+    // sounds. In M5-a both sides receive the same downmixed signal.
+    void startDebugStereo(const std::string& url,
+                          const LLVector3& l_pos,
+                          const LLVector3& r_pos);
+    void stopDebugStereo();
 
     // Tag parsed from a prim Description.
     struct TagData
@@ -95,6 +104,7 @@ private:
     std::map<LLUUID, std::string> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
     std::unique_ptr<LLPositionalStream> mDebugStream;
+    std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H
