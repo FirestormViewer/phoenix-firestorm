@@ -556,6 +556,13 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 }
 
 // <FS:AYA> [PositionalStream]
+static void handleAYAStreamRolloffChanged(const LLSD&)
+{
+    LLPositionalStream::instance().setRolloffDistances(
+        gSavedSettings.getF32("AYAStreamRolloffMin"),
+        gSavedSettings.getF32("AYAStreamRolloffMax"));
+}
+
 static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
@@ -566,6 +573,9 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
             LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting." << LL_ENDL;
             return;
         }
+
+        // Sync rolloff settings before starting so the channel picks them up.
+        handleAYAStreamRolloffChanged(LLSD());
 
         LLVector3 forward = gAgent.getAtAxis();
         forward.normalize();
@@ -1523,6 +1533,8 @@ void settings_setup_listeners()
     LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
     LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
     setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);

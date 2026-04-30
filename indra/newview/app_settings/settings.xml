@@ -27579,5 +27579,27 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>AYAStreamRolloffMin</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm: Distance in meters within which a positional stream plays at full volume (FMOD 3D rolloff near distance). Applied live.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>AYAStreamRolloffMax</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm: Distance in meters at which a positional stream is fully attenuated (FMOD 3D rolloff far distance). Applied live.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>20.0</real>
+    </map>
   </map>
 </llsd>

@@ -203,7 +203,7 @@
 | `AYAStreamEnabled` | Boolean | true | 機能全体の有効化 |
 | `AYAStreamMaxConcurrent` | S32 | 4 | 同時再生可能ストリーム数 |
 | `AYAStreamRolloffMin` | F32 | 1.0 | 距離減衰開始距離(m) |
-| `AYAStreamRolloffMax` | F32 | 64.0 | 距離減衰終了距離(m) |
+| `AYAStreamRolloffMax` | F32 | 20.0 | 距離減衰終了距離(m) |
 | `AYAStreamVolumeMaster` | F32 | 0.5 | ストリーム種マスター音量 |
 | `AYAStreamReconnectAttempts` | S32 | 3 | 切断時の再接続試行回数 |
 | `AYAStreamDescriptionScan` | Boolean | true | Description タグからの自動検出を有効化 |

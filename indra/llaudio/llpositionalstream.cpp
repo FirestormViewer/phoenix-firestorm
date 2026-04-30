@@ -162,6 +162,21 @@ void LLPositionalStream::setVolume(F32 volume)
     }
 }
 
+void LLPositionalStream::setRolloffDistances(F32 min_distance, F32 max_distance)
+{
+    // Guard against zero/inverted values that would make FMOD reject the call.
+    min_distance = llmax(min_distance, 0.1f);
+    max_distance = llmax(max_distance, min_distance + 0.1f);
+
+    mRolloffMin = min_distance;
+    mRolloffMax = max_distance;
+    if (mChannel)
+    {
+        checkFmod(mChannel->set3DMinMaxDistance(mRolloffMin, mRolloffMax),
+                  "Channel::set3DMinMaxDistance");
+    }
+}
+
 void LLPositionalStream::update()
 {
     if (!mSound || mChannel)

@@ -54,6 +54,7 @@ public:
 
     void setPosition(const LLVector3& world_pos);
     void setVolume(F32 volume);
+    void setRolloffDistances(F32 min_distance, F32 max_distance);
 
     // Drives async open polling and any deferred state. Call once per frame.
     void update();
