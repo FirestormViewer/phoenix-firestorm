@@ -31,12 +31,14 @@ if (TARGET ll::fmodstudio)
          llaudioengine_fmodstudio.cpp
          lllistener_fmodstudio.cpp
          llstreamingaudio_fmodstudio.cpp
+         llpositionalstream.cpp
          )
 
     list(APPEND llaudio_HEADER_FILES
          llaudioengine_fmodstudio.h
          lllistener_fmodstudio.h
          llstreamingaudio_fmodstudio.h
+         llpositionalstream.h
          )
 endif ()
 

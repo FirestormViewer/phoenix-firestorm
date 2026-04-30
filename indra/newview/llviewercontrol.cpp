@@ -40,6 +40,7 @@
 
 // For Listeners
 #include "llaudioengine.h"
+#include "llpositionalstream.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llconsole.h"
@@ -553,6 +554,34 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 {
     audio_update_volume(true);
 }
+
+// <FS:AYA> [PositionalStream]
+static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting." << LL_ENDL;
+            return;
+        }
+
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d source_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3 source_f;
+        source_f.setVec(source_global);
+
+        LLPositionalStream::instance().start(url, source_f);
+    }
+    else
+    {
+        LLPositionalStream::instance().stop();
+    }
+}
+// </FS:AYA>
 
 static bool handleJoystickChanged(const LLSD& newvalue)
 {
@@ -1493,6 +1522,7 @@ void settings_setup_listeners()
     LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
     LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
     LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
