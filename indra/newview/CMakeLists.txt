@@ -677,6 +677,7 @@ set(viewer_SOURCE_FILES
     llplacesinventorypanel.cpp
     llplacesfolderview.cpp
     llpopupview.cpp
+    llpositionalstreammgr.cpp
     llpostcard.cpp
     llpresetsmanager.cpp
     llpreview.cpp
@@ -1532,6 +1533,7 @@ set(viewer_HEADER_FILES
     llplacesinventorypanel.h
     llplacesfolderview.h
     llpopupview.h
+    llpositionalstreammgr.h
     llpostcard.h
     llpresetsmanager.h
     llpreview.h

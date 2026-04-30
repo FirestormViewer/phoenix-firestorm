@@ -73,6 +73,7 @@
 #include "llmeshrepository.h"
 #include "llmutelist.h"
 #include "llparcel.h"
+#include "llpositionalstreammgr.h" // <FS:AYA> [PositionalStream] capture prim Description
 #include "llnotificationsutil.h"
 #include "llsidepaneltaskinfo.h"
 #include "llslurl.h"
@@ -6222,6 +6223,10 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
         std::string desc;
         msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Description, desc, i);
 
+        // <FS:AYA> [PositionalStream] feed Description into positional stream mgr
+        LLPositionalStreamMgr::instance().onObjectPropertiesReceived(id, desc);
+        // </FS:AYA>
+
         std::string touch_name;
         msg->getStringFast(_PREHASH_ObjectData, _PREHASH_TouchName, touch_name, i);
         std::string sit_name;
@@ -6433,6 +6438,10 @@ void LLSelectMgr::processObjectPropertiesFamily(LLMessageSystem* msg, void** use
 
     std::string desc;
     msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Description, desc);
+
+    // <FS:AYA> [PositionalStream] feed Description into positional stream mgr
+    LLPositionalStreamMgr::instance().onObjectPropertiesReceived(id, desc);
+    // </FS:AYA>
 
     // the reporter widget askes the server for info about picked objects
     if (request_flags & COMPLAINT_REPORT_REQUEST )

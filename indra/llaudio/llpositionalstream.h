@@ -36,10 +36,16 @@ namespace FMOD
     class System;
 }
 
+// One playable positional stream. Multiple instances may coexist; the
+// owning manager (LLPositionalStreamMgr in newview) is responsible for
+// lifecycle and per-frame update() calls.
 class LLPositionalStream
 {
 public:
-    static LLPositionalStream& instance();
+    LLPositionalStream();
+    ~LLPositionalStream();
+    LLPositionalStream(const LLPositionalStream&) = delete;
+    LLPositionalStream& operator=(const LLPositionalStream&) = delete;
 
     // Open a streaming URL and schedule it for playback at world_pos.
     // Playback actually begins once update() observes the async open
@@ -52,6 +58,8 @@ public:
     bool isOpen() const { return mSound != nullptr; }
     bool isPlaying() const { return mChannel != nullptr; }
 
+    const std::string& getUrl() const { return mUrl; }
+
     void setPosition(const LLVector3& world_pos);
     void setVolume(F32 volume);
     void setRolloffDistances(F32 min_distance, F32 max_distance);
@@ -60,11 +68,6 @@ public:
     void update();
 
 private:
-    LLPositionalStream();
-    ~LLPositionalStream();
-    LLPositionalStream(const LLPositionalStream&) = delete;
-    LLPositionalStream& operator=(const LLPositionalStream&) = delete;
-
     FMOD::System* getFmodSystem() const;
     void releaseSound();
 

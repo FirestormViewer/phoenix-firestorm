@@ -46,12 +46,6 @@ namespace
     }
 }
 
-LLPositionalStream& LLPositionalStream::instance()
-{
-    static LLPositionalStream sInstance;
-    return sInstance;
-}
-
 LLPositionalStream::LLPositionalStream()
 :   mSound(nullptr),
     mChannel(nullptr),

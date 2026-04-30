@@ -40,7 +40,7 @@
 
 // For Listeners
 #include "llaudioengine.h"
-#include "llpositionalstream.h"
+#include "llpositionalstreammgr.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llconsole.h"
@@ -558,7 +558,7 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 // <FS:AYA> [PositionalStream]
 static void handleAYAStreamRolloffChanged(const LLSD&)
 {
-    LLPositionalStream::instance().setRolloffDistances(
+    LLPositionalStreamMgr::instance().applyDefaultRolloff(
         gSavedSettings.getF32("AYAStreamRolloffMin"),
         gSavedSettings.getF32("AYAStreamRolloffMax"));
 }
@@ -574,9 +574,6 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
             return;
         }
 
-        // Sync rolloff settings before starting so the channel picks them up.
-        handleAYAStreamRolloffChanged(LLSD());
-
         LLVector3 forward = gAgent.getAtAxis();
         forward.normalize();
         LLVector3d agent_global = gAgent.getPositionGlobal();
@@ -584,11 +581,11 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
         LLVector3 source_f;
         source_f.setVec(source_global);
 
-        LLPositionalStream::instance().start(url, source_f);
+        LLPositionalStreamMgr::instance().startDebug(url, source_f);
     }
     else
     {
-        LLPositionalStream::instance().stop();
+        LLPositionalStreamMgr::instance().stopDebug();
     }
 }
 // </FS:AYA>
