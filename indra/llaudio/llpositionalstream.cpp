@@ -58,7 +58,7 @@ LLPositionalStream::LLPositionalStream()
     mPosition(0.f, 0.f, 0.f),
     mVolume(1.f),
     mRolloffMin(1.f),
-    mRolloffMax(64.f)
+    mRolloffMax(20.f)
 {
 }
 
@@ -105,9 +105,8 @@ bool LLPositionalStream::start(const std::string& url, const LLVector3& world_po
     mUrl = clean_url;
     mPosition = world_pos;
 
-    // Open as 2D to keep FMOD's stream parser happy for stereo SHOUTcast/Icecast;
-    // 3D positioning is then applied per-channel after playSound.
-    const FMOD_MODE mode = FMOD_2D
+    const FMOD_MODE mode = FMOD_3D
+                         | FMOD_3D_LINEARSQUAREROLLOFF
                          | FMOD_NONBLOCKING
                          | FMOD_IGNORETAGS;
 
@@ -199,10 +198,6 @@ void LLPositionalStream::update()
         return;
     }
     mChannel = channel;
-
-    // Promote the channel to 3D positional after the (2D) stream has been opened.
-    checkFmod(mChannel->setMode(FMOD_3D | FMOD_3D_LINEARSQUAREROLLOFF),
-              "Channel::setMode(3D)");
 
     FMOD_VECTOR pos = { mPosition.mV[0], mPosition.mV[1], mPosition.mV[2] };
     FMOD_VECTOR vel = { 0.f, 0.f, 0.f };
