@@ -105,6 +105,92 @@ namespace
         }
         return std::string::npos;
     }
+
+    bool tryParseInt(const std::string& s, S32& out)
+    {
+        if (s.empty()) return false;
+        try
+        {
+            size_t consumed = 0;
+            S32 val = std::stoi(s, &consumed);
+            if (consumed == 0) return false;
+            out = val;
+            return true;
+        }
+        catch (const std::exception&)
+        {
+            return false;
+        }
+    }
+
+    // Walks a "{key:value},{key:value},..." body between [content_start, end)
+    // and invokes onPair(lowered_key, trimmed_val) for every well-formed unit.
+    template <typename F>
+    void forEachKeyValue(const std::string& description,
+                         size_t content_start, size_t end, F&& onPair)
+    {
+        size_t cursor = content_start;
+        while (cursor < end)
+        {
+            size_t next = description.find(',', cursor);
+            if (next == std::string::npos || next > end) next = end;
+
+            std::string item = description.substr(cursor, next - cursor);
+            cursor = next + 1;
+
+            LLStringUtil::trim(item);
+            if (item.size() < 2 || item.front() != '{' || item.back() != '}') continue;
+
+            std::string inner = item.substr(1, item.size() - 2);
+            size_t colon = inner.find(':');
+            if (colon == std::string::npos) continue;
+
+            std::string key = inner.substr(0, colon);
+            std::string val = inner.substr(colon + 1);
+            LLStringUtil::trim(key);
+            LLStringUtil::trim(val);
+            key = toLowerAscii(key);
+
+            onPair(key, val);
+        }
+    }
+
+    // Locate the body of "[<prefix>...]" and return [content_start, end).
+    // Returns false if prefix not found or no closing bracket.
+    bool findTagBody(const std::string& description, const std::string& prefix,
+                     size_t& out_content_start, size_t& out_end)
+    {
+        size_t begin = findCaseInsensitive(description, prefix);
+        if (begin == std::string::npos) return false;
+        size_t content_start = begin + prefix.size();
+        size_t end = description.find(']', content_start);
+        if (end == std::string::npos) return false;
+        out_content_start = content_start;
+        out_end = end;
+        return true;
+    }
+
+    template <typename TagT>
+    void resolveRolloffFromTag(const TagT& tag, F32& out_min, F32& out_max)
+    {
+        out_min = tag.min.value_or(gSavedSettings.getF32("AYAStreamRolloffMin"));
+        out_max = tag.max.value_or(gSavedSettings.getF32("AYAStreamRolloffMax"));
+    }
+
+    // Resolve link number to a child object. Link 1 is the root itself, link 2
+    // is the first child, etc. Returns nullptr if no such link in this set.
+    LLViewerObject* resolveLink(LLViewerObject* root, S32 link_num)
+    {
+        if (!root || link_num < 1) return nullptr;
+        if (link_num == 1) return root;
+
+        const auto& children = root->getChildren();
+        S32 want_idx = link_num - 2; // link 2 == children[0]
+        if (want_idx < 0 || want_idx >= static_cast<S32>(children.size())) return nullptr;
+        auto it = children.begin();
+        std::advance(it, want_idx);
+        return it->get();
+    }
 }
 
 LLPositionalStreamMgr& LLPositionalStreamMgr::instance()
@@ -122,87 +208,48 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 {
     static const std::string kPrefix = "[ayastream:";
 
-    size_t begin = findCaseInsensitive(description, kPrefix);
-    if (begin == std::string::npos)
-    {
-        return std::nullopt;
-    }
-    size_t content_start = begin + kPrefix.size();
-    size_t end = description.find(']', content_start);
-    if (end == std::string::npos)
-    {
-        return std::nullopt;
-    }
+    size_t content_start = 0, end = 0;
+    if (!findTagBody(description, kPrefix, content_start, end)) return std::nullopt;
 
-    // Split content on ',' and require each element to be a {key:value} unit.
     TagData data;
     bool got_url = false;
-
-    size_t cursor = content_start;
-    while (cursor < end)
-    {
-        size_t next = description.find(',', cursor);
-        if (next == std::string::npos || next > end)
+    forEachKeyValue(description, content_start, end,
+        [&](const std::string& key, const std::string& val)
         {
-            next = end;
-        }
+            if (key == "url")      { data.url = val; got_url = !val.empty(); }
+            else if (key == "min") { F32 f; if (tryParseFloat(val, f)) data.min = f; }
+            else if (key == "max") { F32 f; if (tryParseFloat(val, f)) data.max = f; }
+        });
 
-        std::string item = description.substr(cursor, next - cursor);
-        cursor = next + 1;
-
-        LLStringUtil::trim(item);
-        if (item.size() < 2 || item.front() != '{' || item.back() != '}')
-        {
-            continue;
-        }
-
-        std::string inner = item.substr(1, item.size() - 2);
-        size_t colon = inner.find(':');
-        if (colon == std::string::npos)
-        {
-            continue;
-        }
-
-        std::string key = inner.substr(0, colon);
-        std::string val = inner.substr(colon + 1);
-        LLStringUtil::trim(key);
-        LLStringUtil::trim(val);
-        key = toLowerAscii(key);
-
-        if (key == "url")
-        {
-            data.url = val;
-            got_url = !val.empty();
-        }
-        else if (key == "min")
-        {
-            F32 f;
-            if (tryParseFloat(val, f))
-            {
-                data.min = f;
-            }
-        }
-        else if (key == "max")
-        {
-            F32 f;
-            if (tryParseFloat(val, f))
-            {
-                data.max = f;
-            }
-        }
-    }
-
-    if (!got_url)
-    {
-        return std::nullopt;
-    }
+    if (!got_url) return std::nullopt;
     return data;
 }
 
-void LLPositionalStreamMgr::resolveRolloff(const TagData& tag, F32& out_min, F32& out_max) const
+// static
+std::optional<LLPositionalStreamMgr::StereoTagData>
+LLPositionalStreamMgr::parseStereoTag(const std::string& description)
 {
-    out_min = tag.min.value_or(gSavedSettings.getF32("AYAStreamRolloffMin"));
-    out_max = tag.max.value_or(gSavedSettings.getF32("AYAStreamRolloffMax"));
+    static const std::string kPrefix = "[ayastream-stereo:";
+
+    size_t content_start = 0, end = 0;
+    if (!findTagBody(description, kPrefix, content_start, end)) return std::nullopt;
+
+    StereoTagData data;
+    bool got_url = false;
+    forEachKeyValue(description, content_start, end,
+        [&](const std::string& key, const std::string& val)
+        {
+            if (key == "url")      { data.url = val; got_url = !val.empty(); }
+            else if (key == "min") { F32 f; if (tryParseFloat(val, f)) data.min = f; }
+            else if (key == "max") { F32 f; if (tryParseFloat(val, f)) data.max = f; }
+            else if (key == "l")   { S32 i; if (tryParseInt(val, i)) data.l_link = i; }
+            else if (key == "r")   { S32 i; if (tryParseInt(val, i)) data.r_link = i; }
+        });
+
+    if (!got_url) return std::nullopt;
+    if (data.l_link < 1 || data.r_link < 1) return std::nullopt;
+    if (data.l_link == data.r_link) return std::nullopt;
+    return data;
 }
 
 void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
@@ -228,46 +275,81 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         return;
     }
 
-    auto tag = parseTag(desc_it->second);
-    auto bind_it = mBindings.find(id);
+    // Stereo tag wins if both happen to be present (the prefixes don't
+    // overlap textually, but a description could in theory contain both).
+    auto stereo_tag = parseStereoTag(desc_it->second);
+    auto mono_tag = stereo_tag ? std::nullopt : parseTag(desc_it->second);
 
-    if (!tag.has_value())
+    auto bind_it = mBindings.find(id);
+    auto sbind_it = mStereoBindings.find(id);
+
+    // If a different mode now applies, drop the stale binding first so the
+    // new path can recreate it cleanly.
+    if (stereo_tag && bind_it != mBindings.end())
     {
-        if (bind_it != mBindings.end())
-        {
-            LL_INFOS("AYAStream") << "Removing positional binding for " << id
-                                  << " (tag gone)" << LL_ENDL;
-            mBindings.erase(bind_it);
-        }
+        LL_INFOS("AYAStream") << "Replacing mono binding with stereo for " << id << LL_ENDL;
+        mBindings.erase(bind_it);
+        bind_it = mBindings.end();
+    }
+    if (mono_tag && sbind_it != mStereoBindings.end())
+    {
+        LL_INFOS("AYAStream") << "Replacing stereo binding with mono for " << id << LL_ENDL;
+        mStereoBindings.erase(sbind_it);
+        sbind_it = mStereoBindings.end();
+    }
+
+    if (stereo_tag)
+    {
+        evaluateStereoBinding(id, *stereo_tag);
+        return;
+    }
+    if (mono_tag)
+    {
+        evaluateMonoBinding(id, *mono_tag);
         return;
     }
 
+    // No tag of either kind: drop any bindings this prim still has.
+    if (bind_it != mBindings.end())
+    {
+        LL_INFOS("AYAStream") << "Removing positional binding for " << id
+                              << " (tag gone)" << LL_ENDL;
+        mBindings.erase(bind_it);
+    }
+    if (sbind_it != mStereoBindings.end())
+    {
+        LL_INFOS("AYAStream") << "Removing stereo binding for " << id
+                              << " (tag gone)" << LL_ENDL;
+        mStereoBindings.erase(sbind_it);
+    }
+}
+
+void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData& tag)
+{
     LLViewerObject* obj = gObjectList.findObject(id);
     if (!obj || obj->isDead())
     {
-        // Object isn't resolvable in the world right now; defer until
-        // update() picks it up (or it gets re-evaluated on a later props msg).
         return;
     }
 
     F32 want_min, want_max;
-    resolveRolloff(*tag, want_min, want_max);
+    resolveRolloffFromTag(tag, want_min, want_max);
     LLVector3 pos = toFloatVec(obj->getPositionGlobal());
 
+    auto bind_it = mBindings.find(id);
     if (bind_it != mBindings.end())
     {
         Binding& b = bind_it->second;
-        if (b.url == tag->url)
+        if (b.url == tag.url)
         {
-            b.tag_min = tag->min;
-            b.tag_max = tag->max;
+            b.tag_min = tag.min;
+            b.tag_max = tag.max;
             if (b.applied_min != want_min || b.applied_max != want_max)
             {
                 b.stream->setRolloffDistances(want_min, want_max);
                 b.applied_min = want_min;
                 b.applied_max = want_max;
             }
-            // Position is refreshed each frame by update().
             return;
         }
         LL_INFOS("AYAStream") << "Rebinding " << id << ": URL changed" << LL_ENDL;
@@ -275,7 +357,7 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
     }
 
     const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
-    if (cap > 0 && static_cast<S32>(mBindings.size()) >= cap)
+    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
     {
         LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
                               << ") reached; not binding " << id << LL_ENDL;
@@ -284,22 +366,105 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
 
     auto stream = std::make_unique<LLPositionalStream>();
     stream->setRolloffDistances(want_min, want_max);
-    if (!stream->start(tag->url, pos))
+    if (!stream->start(tag.url, pos))
     {
         return;
     }
 
     Binding b;
-    b.url = tag->url;
-    b.tag_min = tag->min;
-    b.tag_max = tag->max;
+    b.url = tag.url;
+    b.tag_min = tag.min;
+    b.tag_max = tag.max;
     b.applied_min = want_min;
     b.applied_max = want_max;
     b.stream = std::move(stream);
     mBindings.emplace(id, std::move(b));
 
     LL_INFOS("AYAStream") << "Bound positional stream to " << id
-                          << " url=" << tag->url << LL_ENDL;
+                          << " url=" << tag.url << LL_ENDL;
+}
+
+void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag)
+{
+    LLViewerObject* root = gObjectList.findObject(id);
+    if (!root || root->isDead())
+    {
+        return;
+    }
+
+    LLViewerObject* l_obj = resolveLink(root, tag.l_link);
+    LLViewerObject* r_obj = resolveLink(root, tag.r_link);
+    if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
+    {
+        // Linkset not fully resolvable yet; defer (will retry on next props
+        // msg or when update() re-runs after children arrive).
+        return;
+    }
+
+    F32 want_min, want_max;
+    resolveRolloffFromTag(tag, want_min, want_max);
+    LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
+    LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
+
+    auto sbind_it = mStereoBindings.find(id);
+    if (sbind_it != mStereoBindings.end())
+    {
+        StereoBinding& b = sbind_it->second;
+        const bool topology_same = (b.url == tag.url
+                                    && b.l_link == tag.l_link
+                                    && b.r_link == tag.r_link
+                                    && b.l_prim == l_obj->getID()
+                                    && b.r_prim == r_obj->getID());
+        if (topology_same)
+        {
+            b.tag_min = tag.min;
+            b.tag_max = tag.max;
+            if (b.applied_min != want_min || b.applied_max != want_max)
+            {
+                b.stream->setRolloffDistances(want_min, want_max);
+                b.applied_min = want_min;
+                b.applied_max = want_max;
+            }
+            return;
+        }
+        LL_INFOS("AYAStream") << "Rebinding stereo " << id
+                              << ": URL or linkset topology changed" << LL_ENDL;
+        mStereoBindings.erase(sbind_it);
+    }
+
+    const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
+    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
+    {
+        LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
+                              << ") reached; not binding stereo " << id << LL_ENDL;
+        return;
+    }
+
+    auto stream = std::make_unique<LLPositionalStreamStereo>();
+    stream->setRolloffDistances(want_min, want_max);
+    if (!stream->start(tag.url, l_pos, r_pos))
+    {
+        return;
+    }
+
+    StereoBinding b;
+    b.url = tag.url;
+    b.tag_min = tag.min;
+    b.tag_max = tag.max;
+    b.applied_min = want_min;
+    b.applied_max = want_max;
+    b.l_link = tag.l_link;
+    b.r_link = tag.r_link;
+    b.l_prim = l_obj->getID();
+    b.r_prim = r_obj->getID();
+    b.stream = std::move(stream);
+    mStereoBindings.emplace(id, std::move(b));
+
+    LL_INFOS("AYAStream") << "Bound stereo stream to " << id
+                          << " url=" << tag.url
+                          << " L=link" << tag.l_link << "(" << l_obj->getID() << ")"
+                          << " R=link" << tag.r_link << "(" << r_obj->getID() << ")"
+                          << LL_ENDL;
 }
 
 void LLPositionalStreamMgr::update()
@@ -332,6 +497,27 @@ void LLPositionalStreamMgr::update()
         b.stream->update();
         ++it;
     }
+
+    for (auto it = mStereoBindings.begin(); it != mStereoBindings.end(); )
+    {
+        const LLUUID& id = it->first;
+        StereoBinding& b = it->second;
+
+        LLViewerObject* l_obj = gObjectList.findObject(b.l_prim);
+        LLViewerObject* r_obj = gObjectList.findObject(b.r_prim);
+        if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
+        {
+            LL_INFOS("AYAStream") << "Stereo pair (" << id
+                                  << ") gone; releasing stereo stream" << LL_ENDL;
+            it = mStereoBindings.erase(it);
+            continue;
+        }
+
+        b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
+                               toFloatVec(r_obj->getPositionGlobal()));
+        b.stream->update();
+        ++it;
+    }
 }
 
 void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max)
@@ -347,6 +533,18 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
     }
 
     for (auto& [id, b] : mBindings)
+    {
+        F32 want_min = b.tag_min.value_or(default_min);
+        F32 want_max = b.tag_max.value_or(default_max);
+        if (b.applied_min != want_min || b.applied_max != want_max)
+        {
+            b.stream->setRolloffDistances(want_min, want_max);
+            b.applied_min = want_min;
+            b.applied_max = want_max;
+        }
+    }
+
+    for (auto& [id, b] : mStereoBindings)
     {
         F32 want_min = b.tag_min.value_or(default_min);
         F32 want_max = b.tag_max.value_or(default_max);

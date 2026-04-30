@@ -68,7 +68,7 @@ public:
                           const LLVector3& r_pos);
     void stopDebugStereo();
 
-    // Tag parsed from a prim Description.
+    // Mono tag parsed from a prim Description ([ayastream:{...}]).
     struct TagData
     {
         std::string url;
@@ -76,9 +76,24 @@ public:
         std::optional<F32> max;
     };
 
+    // Stereo tag parsed from a prim Description ([ayastream-stereo:{...}]).
+    // L / R are linkset link numbers (1 = root, 2 = first child, ...).
+    struct StereoTagData
+    {
+        std::string url;
+        std::optional<F32> min;
+        std::optional<F32> max;
+        S32 l_link = 1;
+        S32 r_link = 2;
+    };
+
     // Returns parsed [ayastream:{...},{...}] tag, or nullopt if none /
     // malformed / missing URL.
     static std::optional<TagData> parseTag(const std::string& description);
+
+    // Returns parsed [ayastream-stereo:{...}] tag, or nullopt if none /
+    // malformed / missing URL / L == R.
+    static std::optional<StereoTagData> parseStereoTag(const std::string& description);
 
 private:
     LLPositionalStreamMgr();
@@ -98,11 +113,29 @@ private:
         std::unique_ptr<LLPositionalStream> stream;
     };
 
+    struct StereoBinding
+    {
+        std::string url;
+        std::optional<F32> tag_min;
+        std::optional<F32> tag_max;
+        F32 applied_min = 1.f;
+        F32 applied_max = 20.f;
+        S32 l_link = 1;
+        S32 r_link = 2;
+        // Resolved at bind time by walking the linkset; refreshed on each
+        // re-evaluation in case the linkset changes.
+        LLUUID l_prim;
+        LLUUID r_prim;
+        std::unique_ptr<LLPositionalStreamStereo> stream;
+    };
+
     void evaluateBinding(const LLUUID& id);
-    void resolveRolloff(const TagData& tag, F32& out_min, F32& out_max) const;
+    void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
+    void evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag);
 
     std::map<LLUUID, std::string> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
+    std::map<LLUUID, StereoBinding> mStereoBindings;
     std::unique_ptr<LLPositionalStream> mDebugStream;
     std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
 };
