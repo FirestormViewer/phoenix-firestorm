@@ -391,6 +391,19 @@ bool LLPositionalStreamStereo::startUserChannels()
               "Channel::set3DMinMaxDistance(R)");
     checkFmod(mChannelL->setVolume(mVolume), "Channel::setVolume(L)");
     checkFmod(mChannelR->setVolume(mVolume), "Channel::setVolume(R)");
+
+    // Sample-accurate sync between L and R. Without this, the two channels
+    // start on different mixer ticks (~5–20 ms skew), which on shared L/R
+    // content causes a fixed image offset (Haas) and comb filtering.
+    // Read the parent (mixer) DSP clock and schedule both channels to begin
+    // at the same future sample index.
+    unsigned long long parent_now = 0;
+    checkFmod(mChannelL->getDSPClock(nullptr, &parent_now), "Channel::getDSPClock(L)");
+    const unsigned long long lead = static_cast<unsigned long long>(mSampleRate) / 50; // ~20ms
+    const unsigned long long start_at = parent_now + lead;
+    checkFmod(mChannelL->setDelay(start_at, 0, false), "Channel::setDelay(L)");
+    checkFmod(mChannelR->setDelay(start_at, 0, false), "Channel::setDelay(R)");
+
     checkFmod(mChannelL->setPaused(false), "Channel::setPaused(L)");
     checkFmod(mChannelR->setPaused(false), "Channel::setPaused(R)");
     return true;
@@ -437,10 +450,12 @@ void LLPositionalStreamStereo::pumpSource()
 
     size_t frames_read = read_bytes / bytes_per_frame;
 
-    // Convert (or pass-through) into a F32 stack buffer in chunks, then mix
-    // mono / downmix stereo into both rings. M5-a feeds both sides identically.
+    // Convert (or pass-through) into F32 stack buffers in chunks. For mono
+    // source we feed the same samples to both rings; for stereo we split the
+    // interleaved L/R channels into separate rings (true M5-b deinterleave).
     constexpr size_t kChunk = 1024;
-    F32 mix[kChunk];
+    F32 left[kChunk];
+    F32 right[kChunk];
 
     const U8* sp = mReadScratch.data();
     size_t remaining = frames_read;
@@ -451,32 +466,35 @@ void LLPositionalStreamStereo::pumpSource()
 
         if (mSourceChannels == 1)
         {
-            // Mono source.
+            // Mono source: same samples on both sides — there is no L/R to
+            // separate. The 3D positions of the L and R channels still
+            // produce different spatial cues from the listener's perspective.
             if (mSourceIsFloat)
             {
-                std::memcpy(mix, sp, this_chunk * sizeof(F32));
+                std::memcpy(left, sp, this_chunk * sizeof(F32));
             }
             else
             {
                 const S16* s16 = reinterpret_cast<const S16*>(sp);
                 for (size_t i = 0; i < this_chunk; ++i)
                 {
-                    mix[i] = static_cast<F32>(s16[i]) * (1.f / 32768.f);
+                    left[i] = static_cast<F32>(s16[i]) * (1.f / 32768.f);
                 }
             }
+            mRingL.write(left, this_chunk);
+            mRingR.write(left, this_chunk);
         }
         else
         {
-            // Stereo (or more): downmix to mono ((L + R) / 2) for M5-a.
-            // M5-b will swap this for a true L/R deinterleave.
+            // Stereo (or more): take channel 0 as L, channel 1 as R, ignore
+            // any further channels. Source is FMOD-interleaved.
             if (mSourceIsFloat)
             {
                 const F32* f32 = reinterpret_cast<const F32*>(sp);
                 for (size_t i = 0; i < this_chunk; ++i)
                 {
-                    F32 l = f32[i * mSourceChannels + 0];
-                    F32 r = f32[i * mSourceChannels + 1];
-                    mix[i] = 0.5f * (l + r);
+                    left[i]  = f32[i * mSourceChannels + 0];
+                    right[i] = f32[i * mSourceChannels + 1];
                 }
             }
             else
@@ -484,15 +502,14 @@ void LLPositionalStreamStereo::pumpSource()
                 const S16* s16 = reinterpret_cast<const S16*>(sp);
                 for (size_t i = 0; i < this_chunk; ++i)
                 {
-                    F32 l = static_cast<F32>(s16[i * mSourceChannels + 0]) * (1.f / 32768.f);
-                    F32 r = static_cast<F32>(s16[i * mSourceChannels + 1]) * (1.f / 32768.f);
-                    mix[i] = 0.5f * (l + r);
+                    left[i]  = static_cast<F32>(s16[i * mSourceChannels + 0]) * (1.f / 32768.f);
+                    right[i] = static_cast<F32>(s16[i * mSourceChannels + 1]) * (1.f / 32768.f);
                 }
             }
+            mRingL.write(left,  this_chunk);
+            mRingR.write(right, this_chunk);
         }
 
-        mRingL.write(mix, this_chunk);
-        mRingR.write(mix, this_chunk);
         sp += this_chunk * bytes_per_frame;
         remaining -= this_chunk;
     }

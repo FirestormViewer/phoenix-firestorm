@@ -600,15 +600,22 @@ static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
             return;
         }
 
-        // M5-a: both sides anchored 5m in front of the agent.
+        // M5-b: L and R anchored 5m in front of the agent and offset 5m
+        // along the agent's left/right axes respectively. Lets the listener
+        // verify true L/R deinterleave + 3D positioning in one shot.
         LLVector3 forward = gAgent.getAtAxis();
         forward.normalize();
+        LLVector3 left = gAgent.getLeftAxis();
+        left.normalize();
         LLVector3d agent_global = gAgent.getPositionGlobal();
-        LLVector3d source_global = agent_global + LLVector3d(forward) * 5.0;
-        LLVector3 source_f;
-        source_f.setVec(source_global);
+        LLVector3d anchor_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3d l_global = anchor_global + LLVector3d(left) * 5.0;
+        LLVector3d r_global = anchor_global - LLVector3d(left) * 5.0;
+        LLVector3 l_f, r_f;
+        l_f.setVec(l_global);
+        r_f.setVec(r_global);
 
-        LLPositionalStreamMgr::instance().startDebugStereo(url, source_f, source_f);
+        LLPositionalStreamMgr::instance().startDebugStereo(url, l_f, r_f);
     }
     else
     {
