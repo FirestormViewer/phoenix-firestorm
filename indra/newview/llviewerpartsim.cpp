@@ -786,6 +786,20 @@ void LLViewerPartSim::updateSimulation()
                 }
             }
 
+            // <FS:AYA> [RenderHideOutsideParcel] Suppress particle emission when
+            // the source object is in a parcel that should be hidden by the
+            // visitor's RenderHideOutsideParcel setting or the parcel-owner
+            // [AYAstorm:...] tag. shouldHideForOutsideParcel() applies the
+            // keep_avatars / keep_own / HUD rules consistently with volume hiding.
+            if (upd && vobj && vobj->mDrawable
+                && (LLPipeline::sRenderHideOutsideParcel
+                    || LLPipeline::sParcelOwnerTagActive)
+                && LLPipeline::shouldHideForOutsideParcel(vobj->mDrawable))
+            {
+                upd = false;
+            }
+            // </FS:AYA>
+
             if (upd)
             {
                 mViewerPartSources[i]->update(dt);

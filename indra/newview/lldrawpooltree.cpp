@@ -85,6 +85,25 @@ void LLDrawPoolTree::renderDeferred(S32 pass)
         iter != mDrawFace.end(); iter++)
     {
         LLFace* face = *iter;
+
+        // <FS:AYA> [RenderHideOutsideParcel] Skip tree faces whose drawable
+        // is in a parcel that should be hidden by the visitor's
+        // RenderHideOutsideParcel setting or the parcel-owner [AYAstorm:...]
+        // tag. Trees live in their own face pool (LLDrawPoolTree, not
+        // LLVOVolume's draw map), so the rebuildGeom filter does not catch
+        // them. shouldHideForOutsideParcel() applies the keep_avatars /
+        // keep_own / HUD rules consistently with volume hiding. renderShadow
+        // delegates to renderDeferred so the shadow pass is also covered.
+        LLDrawable* drawable = face ? face->getDrawable() : nullptr;
+        if (drawable
+            && (LLPipeline::sRenderHideOutsideParcel
+                || LLPipeline::sParcelOwnerTagActive)
+            && LLPipeline::shouldHideForOutsideParcel(drawable))
+        {
+            continue;
+        }
+        // </FS:AYA>
+
         LLVertexBuffer* buff = face->getVertexBuffer();
 
         if (buff)

@@ -124,6 +124,23 @@ void LLHUDText::render()
 {
     if (!mOnHUDAttachment && sDisplayText)
     {
+        // <FS:AYA> [RenderHideOutsideParcel] Hide floating text (llSetText)
+        // whose source object is in a parcel that should be hidden by the
+        // visitor's RenderHideOutsideParcel setting or the parcel-owner
+        // [AYAstorm:...] tag. HUD-attachment text is rendered via the
+        // separate renderAllHUD() path, so the !mOnHUDAttachment guard above
+        // keeps the user's own HUD text visible. shouldHideForOutsideParcel
+        // applies the keep_avatars / keep_own / HUD rules consistently with
+        // volume / tree / grass / particle hiding.
+        if (mSourceObject.notNull() && mSourceObject->mDrawable.notNull()
+            && (LLPipeline::sRenderHideOutsideParcel
+                || LLPipeline::sParcelOwnerTagActive)
+            && LLPipeline::shouldHideForOutsideParcel(mSourceObject->mDrawable))
+        {
+            return;
+        }
+        // </FS:AYA>
+
         // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights
         //LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
         // If the current text object is highighed and the use hover highlight feature is enabled, then 
