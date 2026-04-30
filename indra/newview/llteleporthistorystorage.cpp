@@ -71,7 +71,7 @@ LLSD LLTeleportHistoryPersistentItem::toLLSD() const
     val["title"]        = mTitle;
     val["global_pos"]   = mGlobalPos.getValue();
     val["date"]     = mDate;
-    val["slurl"]    = mSLURL.getSLURLString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
+    val["slurl"]    = mSLURL.isValid() ? mSLURL.getSLURLString() : std::string(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
 
     return val;
 }

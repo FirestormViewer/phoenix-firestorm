@@ -103,7 +103,7 @@ public:
         val["global_pos"]   = mGlobalPos.getValue();
         val["tooltip"]  = mToolTip;
         val["item_type"] = mType;
-        val["slurl"] = mSLURL.getSLURLString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
+        val["slurl"] = mSLURL.isValid() ? mSLURL.getSLURLString() : std::string(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
         return val;
     }
     const std::string& getLocation() const { return mLocation;  };
