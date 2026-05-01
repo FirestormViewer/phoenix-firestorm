@@ -85,6 +85,9 @@ public:
 
     bool isOpen() const { return mSourceSound != nullptr; }
     bool isPlaying() const { return mChannelL != nullptr || mChannelR != nullptr; }
+    // True after FMOD reports an unrecoverable error during open or playback.
+    // The manager uses this to drive auto-reconnect (M7).
+    bool isFailed() const { return mState == State::Failed; }
 
     void setPositions(const LLVector3& l_pos, const LLVector3& r_pos);
     void setVolume(F32 volume);

@@ -29,6 +29,7 @@
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
 #include "llstring.h"
+#include "lltimer.h"
 
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
@@ -52,7 +53,9 @@ LLPositionalStream::LLPositionalStream()
     mPosition(0.f, 0.f, 0.f),
     mVolume(1.f),
     mRolloffMin(1.f),
-    mRolloffMax(20.f)
+    mRolloffMax(20.f),
+    mState(State::Idle),
+    mStarvingSince(0.0)
 {
 }
 
@@ -107,10 +110,12 @@ bool LLPositionalStream::start(const std::string& url, const LLVector3& world_po
     if (checkFmod(system->createStream(clean_url.c_str(), mode, nullptr, &mSound), "createStream"))
     {
         mSound = nullptr;
-        mUrl.clear();
+        // Keep mUrl so the manager can drive a retry from the same address.
+        mState = State::Failed;
         return false;
     }
 
+    mState = State::Opening;
     LL_INFOS("AYAStream") << "Opening positional stream '" << clean_url
                           << "' at " << world_pos << LL_ENDL;
     return true;
@@ -125,6 +130,8 @@ void LLPositionalStream::stop()
     }
     releaseSound();
     mUrl.clear();
+    mState = State::Idle;
+    mStarvingSince = 0.0;
 }
 
 void LLPositionalStream::releaseSound()
@@ -173,7 +180,72 @@ void LLPositionalStream::setRolloffDistances(F32 min_distance, F32 max_distance)
 
 void LLPositionalStream::update()
 {
-    if (!mSound || mChannel)
+    // Already-playing path: detect mid-stream drops so the manager can retry.
+    // FMOD doesn't stop the channel just because the network died — it will
+    // happily play silence. Three signals tell us the stream is actually dead:
+    //   1. isPlaying() RPC fails / returns false (channel stolen, stopped)
+    //   2. getOpenState() returns ERROR (FMOD itself gave up)
+    //   3. starving flag stays true continuously for kStarvedTimeout seconds
+    // Signal 3 is debounced because a brief packet hiccup is normal.
+    if (mChannel)
+    {
+        static constexpr F64 kStarvedTimeout = 3.0;
+        const F64 now = LLTimer::getElapsedSeconds();
+
+        bool failed = false;
+        const char* reason = "";
+
+        bool still_playing = false;
+        FMOD_RESULT pr = mChannel->isPlaying(&still_playing);
+        if (pr != FMOD_OK || !still_playing)
+        {
+            failed = true;
+            reason = "channel stopped";
+        }
+        else if (mSound)
+        {
+            FMOD_OPENSTATE st = FMOD_OPENSTATE_PLAYING;
+            bool starving = false;
+            FMOD_RESULT or_ = mSound->getOpenState(&st, nullptr, &starving, nullptr);
+            if (or_ != FMOD_OK || st == FMOD_OPENSTATE_ERROR)
+            {
+                failed = true;
+                reason = "openstate error";
+            }
+            else if (starving)
+            {
+                if (mStarvingSince == 0.0)
+                {
+                    mStarvingSince = now;
+                    LL_INFOS("AYAStream") << "Stream starving (will fail in "
+                                          << kStarvedTimeout << "s if it continues): "
+                                          << mUrl << LL_ENDL;
+                }
+                else if ((now - mStarvingSince) > kStarvedTimeout)
+                {
+                    failed = true;
+                    reason = "starved";
+                }
+            }
+            else
+            {
+                mStarvingSince = 0.0;
+            }
+        }
+
+        if (failed)
+        {
+            LL_WARNS("AYAStream") << "Stream dropped mid-playback (" << reason
+                                  << "): " << mUrl << LL_ENDL;
+            mChannel = nullptr;
+            releaseSound();
+            mState = State::Failed;
+            mStarvingSince = 0.0;
+        }
+        return;
+    }
+
+    if (!mSound)
     {
         return;
     }
@@ -191,7 +263,8 @@ void LLPositionalStream::update()
         LL_WARNS("AYAStream") << "Stream open errored: " << mUrl
                               << " (" << FMOD_ErrorString(open_result) << ")" << LL_ENDL;
         releaseSound();
-        mUrl.clear();
+        // Keep mUrl so the manager's reconnect loop can re-open the same source.
+        mState = State::Failed;
         return;
     }
     if (state != FMOD_OPENSTATE_READY && state != FMOD_OPENSTATE_PLAYING)
@@ -216,5 +289,6 @@ void LLPositionalStream::update()
     checkFmod(mChannel->setVolume(mVolume), "Channel::setVolume");
     checkFmod(mChannel->setPaused(false), "Channel::setPaused");
 
+    mState = State::Playing;
     LL_INFOS("AYAStream") << "Positional stream playing: " << mUrl << LL_ENDL;
 }

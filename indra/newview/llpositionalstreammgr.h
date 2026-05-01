@@ -55,6 +55,11 @@ public:
     // Per-prim tags that explicitly set min/max are NOT overridden.
     void applyDefaultRolloff(F32 default_min, F32 default_max);
 
+    // M7: Apply the global master volume (0..1) to every active stream.
+    // Driven by AYAStreamVolumeMaster signal; new bindings also pick up the
+    // current setting at bind time.
+    void applyMasterVolume(F32 volume);
+
     // Debug toggle stream (driven by AYAStreamDebugPlay). Independent of
     // the prim binding map.
     void startDebug(const std::string& url, const LLVector3& world_pos);
@@ -110,6 +115,12 @@ private:
         std::optional<F32> tag_max;
         F32 applied_min = 1.f;
         F32 applied_max = 20.f;
+        // M7: reconnect bookkeeping. reconnect_attempts counts consecutive
+        // failed retries; reset to 0 on successful playback. next_retry_time
+        // is the monotonic-seconds timestamp at which the next retry should
+        // fire (0 = no retry pending).
+        S32 reconnect_attempts = 0;
+        F64 next_retry_time = 0.0;
         std::unique_ptr<LLPositionalStream> stream;
     };
 
@@ -126,6 +137,8 @@ private:
         // re-evaluation in case the linkset changes.
         LLUUID l_prim;
         LLUUID r_prim;
+        S32 reconnect_attempts = 0;
+        F64 next_retry_time = 0.0;
         std::unique_ptr<LLPositionalStreamStereo> stream;
     };
 

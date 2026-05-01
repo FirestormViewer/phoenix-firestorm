@@ -57,6 +57,10 @@ public:
 
     bool isOpen() const { return mSound != nullptr; }
     bool isPlaying() const { return mChannel != nullptr; }
+    // True after FMOD reports an unrecoverable error during open OR mid-stream
+    // drop. The stream releases its FMOD handles but keeps mUrl so the manager
+    // can drive reconnect.
+    bool isFailed() const { return mState == State::Failed; }
 
     const std::string& getUrl() const { return mUrl; }
 
@@ -68,6 +72,8 @@ public:
     void update();
 
 private:
+    enum class State { Idle, Opening, Playing, Failed };
+
     FMOD::System* getFmodSystem() const;
     void releaseSound();
 
@@ -78,6 +84,11 @@ private:
     F32 mRolloffMin;
     F32 mRolloffMax;
     std::string mUrl;
+    State mState;
+    // Monotonic seconds since FMOD first reported the source as starving
+    // during playback. 0 = not currently starving. Used to debounce transient
+    // network blips before declaring the stream Failed.
+    F64 mStarvingSince;
 };
 
 #endif // LL_POSITIONAL_STREAM_H

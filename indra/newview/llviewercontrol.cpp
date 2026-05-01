@@ -563,6 +563,12 @@ static void handleAYAStreamRolloffChanged(const LLSD&)
         gSavedSettings.getF32("AYAStreamRolloffMax"));
 }
 
+static void handleAYAStreamVolumeMasterChanged(const LLSD& newvalue)
+{
+    LLPositionalStreamMgr::instance().applyMasterVolume(
+        static_cast<F32>(newvalue.asReal()));
+}
+
 static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
@@ -1567,6 +1573,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugStereoPlay", handleAYAStreamDebugStereoPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamVolumeMaster", handleAYAStreamVolumeMasterChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);

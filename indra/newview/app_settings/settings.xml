@@ -27634,5 +27634,27 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>30.0</real>
     </map>
+    <key>AYAStreamVolumeMaster</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm M7: Master volume multiplier (0.0 - 1.0) applied to every prim-bound positional stream. Live: changes take effect on the next frame.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>AYAStreamReconnectAttempts</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm M7: Number of times the manager will try to reopen a positional stream after FMOD reports an error or a mid-stream drop. Each retry waits 5 seconds; after exhausting all attempts the binding is released. 0 disables auto-reconnect.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>3</integer>
+    </map>
   </map>
 </llsd>

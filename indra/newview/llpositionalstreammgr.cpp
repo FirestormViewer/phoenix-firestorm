@@ -382,6 +382,7 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
 
     auto stream = std::make_unique<LLPositionalStream>();
     stream->setRolloffDistances(want_min, want_max);
+    stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
     if (!stream->start(tag.url, pos))
     {
         return;
@@ -458,6 +459,7 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
 
     auto stream = std::make_unique<LLPositionalStreamStereo>();
     stream->setRolloffDistances(want_min, want_max);
+    stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
     if (!stream->start(tag.url, l_pos, r_pos))
     {
         return;
@@ -485,7 +487,8 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
 
 void LLPositionalStreamMgr::update()
 {
-    pollObjectPropertiesFamily(LLTimer::getElapsedSeconds());
+    const F64 now = LLTimer::getElapsedSeconds();
+    pollObjectPropertiesFamily(now);
 
     if (mDebugStream)
     {
@@ -496,6 +499,11 @@ void LLPositionalStreamMgr::update()
     {
         mDebugStereoStream->update();
     }
+
+    // M7: fixed 5s wait between reconnect attempts. Total worst-case downtime
+    // before a binding is dropped == AYAStreamReconnectAttempts * kRetryDelay.
+    static constexpr F64 kRetryDelay = 5.0;
+    const S32 max_attempts = gSavedSettings.getS32("AYAStreamReconnectAttempts");
 
     for (auto it = mBindings.begin(); it != mBindings.end(); )
     {
@@ -509,6 +517,59 @@ void LLPositionalStreamMgr::update()
                                   << " gone; releasing positional stream" << LL_ENDL;
             it = mBindings.erase(it);
             continue;
+        }
+
+        if (b.stream->isFailed())
+        {
+            if (max_attempts <= 0)
+            {
+                LL_WARNS("AYAStream") << "Stream for " << id
+                                      << " failed; auto-reconnect disabled, dropping binding"
+                                      << LL_ENDL;
+                it = mBindings.erase(it);
+                continue;
+            }
+            if (b.reconnect_attempts >= max_attempts)
+            {
+                LL_WARNS("AYAStream") << "Stream for " << id << " exhausted "
+                                      << max_attempts << " reconnect attempts; dropping binding"
+                                      << LL_ENDL;
+                it = mBindings.erase(it);
+                continue;
+            }
+            if (b.next_retry_time == 0.0)
+            {
+                b.next_retry_time = now + kRetryDelay;
+                LL_INFOS("AYAStream") << "Stream for " << id
+                                      << " failed; scheduling reconnect "
+                                      << (b.reconnect_attempts + 1) << "/" << max_attempts
+                                      << " in " << kRetryDelay << "s" << LL_ENDL;
+            }
+            else if (now >= b.next_retry_time)
+            {
+                ++b.reconnect_attempts;
+                b.next_retry_time = 0.0;
+                const LLVector3 pos = toFloatVec(obj->getPositionGlobal());
+                b.stream->setRolloffDistances(b.applied_min, b.applied_max);
+                b.stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
+                LL_INFOS("AYAStream") << "Reconnect attempt " << b.reconnect_attempts
+                                      << "/" << max_attempts << " for " << id
+                                      << " url=" << b.url << LL_ENDL;
+                b.stream->start(b.url, pos);
+            }
+            ++it;
+            continue;
+        }
+
+        // Successful playback resets the retry counter so a later, independent
+        // failure gets its own full budget rather than inheriting old strikes.
+        if (b.reconnect_attempts > 0 && b.stream->isPlaying())
+        {
+            LL_INFOS("AYAStream") << "Reconnect succeeded for " << id
+                                  << " after " << b.reconnect_attempts << " attempt(s)"
+                                  << LL_ENDL;
+            b.reconnect_attempts = 0;
+            b.next_retry_time = 0.0;
         }
 
         b.stream->setPosition(toFloatVec(obj->getPositionGlobal()));
@@ -529,6 +590,58 @@ void LLPositionalStreamMgr::update()
                                   << ") gone; releasing stereo stream" << LL_ENDL;
             it = mStereoBindings.erase(it);
             continue;
+        }
+
+        if (b.stream->isFailed())
+        {
+            if (max_attempts <= 0)
+            {
+                LL_WARNS("AYAStream") << "Stereo stream for " << id
+                                      << " failed; auto-reconnect disabled, dropping binding"
+                                      << LL_ENDL;
+                it = mStereoBindings.erase(it);
+                continue;
+            }
+            if (b.reconnect_attempts >= max_attempts)
+            {
+                LL_WARNS("AYAStream") << "Stereo stream for " << id << " exhausted "
+                                      << max_attempts << " reconnect attempts; dropping binding"
+                                      << LL_ENDL;
+                it = mStereoBindings.erase(it);
+                continue;
+            }
+            if (b.next_retry_time == 0.0)
+            {
+                b.next_retry_time = now + kRetryDelay;
+                LL_INFOS("AYAStream") << "Stereo stream for " << id
+                                      << " failed; scheduling reconnect "
+                                      << (b.reconnect_attempts + 1) << "/" << max_attempts
+                                      << " in " << kRetryDelay << "s" << LL_ENDL;
+            }
+            else if (now >= b.next_retry_time)
+            {
+                ++b.reconnect_attempts;
+                b.next_retry_time = 0.0;
+                const LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
+                const LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
+                b.stream->setRolloffDistances(b.applied_min, b.applied_max);
+                b.stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
+                LL_INFOS("AYAStream") << "Stereo reconnect attempt " << b.reconnect_attempts
+                                      << "/" << max_attempts << " for " << id
+                                      << " url=" << b.url << LL_ENDL;
+                b.stream->start(b.url, l_pos, r_pos);
+            }
+            ++it;
+            continue;
+        }
+
+        if (b.reconnect_attempts > 0 && b.stream->isPlaying())
+        {
+            LL_INFOS("AYAStream") << "Stereo reconnect succeeded for " << id
+                                  << " after " << b.reconnect_attempts << " attempt(s)"
+                                  << LL_ENDL;
+            b.reconnect_attempts = 0;
+            b.next_retry_time = 0.0;
         }
 
         b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
@@ -572,6 +685,26 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
             b.applied_min = want_min;
             b.applied_max = want_max;
         }
+    }
+}
+
+void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
+{
+    if (mDebugStream)
+    {
+        mDebugStream->setVolume(volume);
+    }
+    if (mDebugStereoStream)
+    {
+        mDebugStereoStream->setVolume(volume);
+    }
+    for (auto& [id, b] : mBindings)
+    {
+        b.stream->setVolume(volume);
+    }
+    for (auto& [id, b] : mStereoBindings)
+    {
+        b.stream->setVolume(volume);
     }
 }
 
