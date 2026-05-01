@@ -564,17 +564,27 @@ void audio_update_listener()
         // update listener position because agent has moved
         static LLUICachedControl<S32> mEarLocation("MediaSoundsEarLocation", 0);
         LLVector3d ear_position;
+        // <FS:AYA> Avatar-ear mode should also orient by the avatar so 3D
+        // panning is consistent with where the avatar is facing rather than
+        // wherever the camera happens to be looking.
+        LLVector3 listener_at;
+        LLVector3 listener_up;
         switch(mEarLocation)
         {
         case 0:
         default:
             ear_position = gAgentCamera.getCameraPositionGlobal();
+            listener_at = LLViewerCamera::getInstance()->getAtAxis();
+            listener_up = LLViewerCamera::getInstance()->getUpAxis();
             break;
 
         case 1:
             ear_position = gAgent.getPositionGlobal();
+            listener_at = gAgent.getAtAxis();
+            listener_up = gAgent.getUpAxis();
             break;
         }
+        // </FS:AYA>
         LLVector3d lpos_global = ear_position;
         LLVector3 lpos_global_f;
         lpos_global_f.setVec(lpos_global);
@@ -583,8 +593,8 @@ void audio_update_listener()
                              // LLViewerCamera::getInstance()VelocitySmoothed,
                              // LLVector3::zero,
                              gAgent.getVelocity(),    // !!! *TODO: need to replace this with smoothed velocity!
-                             LLViewerCamera::getInstance()->getUpAxis(),
-                             LLViewerCamera::getInstance()->getAtAxis());
+                             listener_up,
+                             listener_at);
     }
 }
 
