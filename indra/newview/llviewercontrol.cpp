@@ -328,24 +328,24 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
     return true;
 }
 
-// <FS:AYA> [RenderHideOutsideParcel]
-bool handleRenderHideOutsideParcelChanged(const LLSD& newvalue)
+// <FS:AYA> [ParcelHide]
+bool handleParcelHideEnabledChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcel = newvalue.asBoolean();
+    LLPipeline::sParcelHideEnabled = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
 
-bool handleRenderHideOutsideParcelKeepAvatarsChanged(const LLSD& newvalue)
+bool handleParcelHideKeepAvatarsChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcelKeepAvatars = newvalue.asBoolean();
+    LLPipeline::sParcelHideKeepAvatars = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
 
-bool handleRenderHideOutsideParcelKeepOwnChanged(const LLSD& newvalue)
+bool handleParcelHideKeepOwnChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcelKeepOwn = newvalue.asBoolean();
+    LLPipeline::sParcelHideKeepOwn = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
@@ -556,30 +556,30 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 }
 
 // <FS:AYA> [PositionalStream]
-static void handleAYAStreamRolloffChanged(const LLSD&)
+static void handleStream3DRolloffChanged(const LLSD&)
 {
     LLPositionalStreamMgr::instance().applyDefaultRolloff(
-        gSavedSettings.getF32("AYAStreamRolloffMin"),
-        gSavedSettings.getF32("AYAStreamRolloffMax"));
+        gSavedSettings.getF32("Stream3DRolloffMin"),
+        gSavedSettings.getF32("Stream3DRolloffMax"));
 }
 
-static void handleAYAStreamVolumeMasterChanged(const LLSD& newvalue)
+static void handleStream3DVolumeMasterChanged(const LLSD& newvalue)
 {
     LLPositionalStreamMgr::instance().applyMasterVolume(
         static_cast<F32>(newvalue.asReal()));
 }
 
-static void handleAYAStreamEnabledChanged(const LLSD& newvalue)
+static void handleStream3DEnabledChanged(const LLSD& newvalue)
 {
     if (!newvalue.asBoolean())
     {
         LLPositionalStreamMgr::instance().shutdownAll();
     }
     // Re-enabling does nothing here on purpose: M3b polling will rediscover
-    // tagged prims on its next pass (within AYAStreamPollInterval seconds).
+    // tagged prims on its next pass (within Stream3DPollInterval seconds).
 }
 
-static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
+static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)
 {
     if (!newvalue.asBoolean())
     {
@@ -587,19 +587,19 @@ static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
     }
 }
 
-static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
+static void handleStream3DDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
         {
-            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stream." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stream." << LL_ENDL;
             return;
         }
-        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
         if (url.empty())
         {
-            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting." << LL_ENDL;
             return;
         }
 
@@ -618,19 +618,19 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
     }
 }
 
-static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
+static void handleStream3DDebugStereoPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
         {
-            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
             return;
         }
-        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
         if (url.empty())
         {
-            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting stereo." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting stereo." << LL_ENDL;
             return;
         }
 
@@ -1428,6 +1428,59 @@ void setting_setup_signal_listener(LLControlGroup& group, const std::string& set
     });
 }
 
+// <FS:AYA> [AYAstorm-r5] Settings-key migration for the r5 naming refactor.
+// r4 used AYAStream* / FSRenderHideOutsideParcel* keys. r5 declares only the
+// renamed keys (Stream3D* / ParcelHide*). When a user upgrades from r4, the
+// old keys arrive via user settings as undeclared persisted controls; we copy
+// their value onto the new declared key (only when the new key is still at
+// its compile-time default) and then suppress old-key persistence so the
+// stale name disappears from saved settings on the next write. After one
+// successful run there is no old key, so this becomes a no-op.
+void migrate_legacy_settings()
+{
+    static const std::pair<const char*, const char*> kMigrations[] = {
+        // 3D Stream (r4 AYAStream* -> r5 Stream3D*)
+        { "AYAStreamDebugUrl",            "Stream3DDebugUrl"            },
+        { "AYAStreamDebugPlay",           "Stream3DDebugPlay"           },
+        { "AYAStreamDebugStereoPlay",     "Stream3DDebugStereoPlay"     },
+        { "AYAStreamRolloffMin",          "Stream3DRolloffMin"          },
+        { "AYAStreamRolloffMax",          "Stream3DRolloffMax"          },
+        { "AYAStreamMaxDistance",         "Stream3DMaxDistance"         },
+        { "AYAStreamPollInterval",        "Stream3DPollInterval"        },
+        { "AYAStreamVolumeMaster",        "Stream3DVolumeMaster"        },
+        { "AYAStreamReconnectAttempts",   "Stream3DReconnectAttempts"   },
+        { "AYAStreamEnabled",             "Stream3DEnabled"             },
+        { "AYAStreamDescriptionScan",     "Stream3DDescriptionScan"     },
+        { "AYAStreamMaxConcurrent",       "Stream3DMaxConcurrent"       },
+        // Parcel Hide (r4 FSRenderHideOutsideParcel* -> r5 ParcelHide*)
+        { "FSRenderHideOutsideParcel",            "ParcelHideEnabled"      },
+        { "FSRenderHideOutsideParcelKeepAvatars", "ParcelHideKeepAvatars" },
+        { "FSRenderHideOutsideParcelKeepOwn",     "ParcelHideKeepOwn"     },
+    };
+
+    for (const auto& [old_key, new_key] : kMigrations)
+    {
+        if (!gSavedSettings.controlExists(old_key))
+        {
+            continue;
+        }
+        LLControlVariablePtr old_ctrl = gSavedSettings.getControl(old_key);
+        LLControlVariablePtr new_ctrl = gSavedSettings.getControl(new_key);
+        if (!old_ctrl || !new_ctrl)
+        {
+            continue;
+        }
+        if (new_ctrl->isDefault())
+        {
+            new_ctrl->setValue(old_ctrl->getValue());
+            LL_INFOS("Settings") << "AYAstorm r5: migrated '" << old_key
+                                 << "' -> '" << new_key << "'" << LL_ENDL;
+        }
+        old_ctrl->setPersist(LLControlVariable::PERSIST_NO);
+    }
+}
+// </FS:AYA>
+
 void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
@@ -1589,21 +1642,21 @@ void settings_setup_listeners()
     // <FS:Ansariel> Show start location setting has no effect on login
     setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
-    // <FS:AYA> [RenderHideOutsideParcel]
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcel", handleRenderHideOutsideParcelChanged);
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepAvatars", handleRenderHideOutsideParcelKeepAvatarsChanged);
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepOwn", handleRenderHideOutsideParcelKeepOwnChanged);
+    // <FS:AYA> [ParcelHide]
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideEnabled", handleParcelHideEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideKeepAvatars", handleParcelHideKeepAvatarsChanged);
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideKeepOwn", handleParcelHideKeepOwnChanged);
     gAgent.addParcelChangedCallback([](){ LLPipeline::refreshOutsideParcelHiding(); });
-    LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
-    LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
-    LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugStereoPlay", handleAYAStreamDebugStereoPlayChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamVolumeMaster", handleAYAStreamVolumeMasterChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamEnabled", handleAYAStreamEnabledChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDescriptionScan", handleAYAStreamDescriptionScanChanged);
+    LLPipeline::sParcelHideEnabled = gSavedSettings.getBOOL("ParcelHideEnabled");
+    LLPipeline::sParcelHideKeepAvatars = gSavedSettings.getBOOL("ParcelHideKeepAvatars");
+    LLPipeline::sParcelHideKeepOwn = gSavedSettings.getBOOL("ParcelHideKeepOwn");
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugPlay", handleStream3DDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugStereoPlay", handleStream3DDebugStereoPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMax", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DVolumeMaster", handleStream3DVolumeMasterChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);

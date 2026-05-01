@@ -1,5 +1,11 @@
 # プリム発音ストリーミングの空間音響化 仕様書
 
+> **r5 改訂 (2026-05-02)**: AYAstorm r5 で本機能のユーザー開示識別子を **3D Stream** 系へ統一した。タグ prefix は `[ayastream:...]` / `[ayastream-stereo:...]` から `[3dstream:...]` / `[3dstream-stereo:...]` に、設定キーは `AYAStream*` から `Stream3D*` に、ログ channel は `AYAStream` から `Stream3D` に rename。以下本文の表記は r5 以降の名前で記述する。
+>
+> **後方互換**: 旧タグ prefix (`[ayastream:...]` / `[ayastream-stereo:...]`) は parser に恒久 alias として残しており、配置済みプリム/notecard/インワールド作品の再編集は不要。旧設定キー (`AYAStream*`) は r5 起動時に新キー (`Stream3D*`) へ自動マイグレーション。詳細は `docs/ayastorm-r5-naming-refactor.md` を参照。
+>
+> 内部クラス/ファイル名 (`LLPositionalStream*` / `llpositionalstream*.{cpp,h}`) は技術的に正確なため温存。
+
 ## 1. 概要
 
 プリム(オブジェクト)から SHOUTcast / Icecast 等の HTTP オーディオストリームを再生し、3D ワールド内でリスナー(カメラ)との位置関係に応じた**方向定位・距離減衰**を伴うように再生する機能を追加する。
@@ -72,16 +78,16 @@
 
 - ホストプリム判定:
   - プリムの **Description フィールド** に特定タグを記載する。
-    - 単一プリム: `[ayastream:URL]`
-    - ステレオペア: ルートプリムに `[ayastream-stereo:URL]` を記載し、リンクセット内のリンク番号で L/R を決定。
+    - 単一プリム: `[3dstream:URL]`
+    - ステレオペア: ルートプリムに `[3dstream-stereo:URL]` を記載し、リンクセット内のリンク番号で L/R を決定。
       - リンク番号 1 (ルート) = L、リンク番号 2 (最初の子) = R を既定とする。
-      - 明示指定する場合は `[ayastream-stereo:URL|L=2|R=3]` のように書ける。
+      - 明示指定する場合は `[3dstream-stereo:URL|L=2|R=3]` のように書ける。
 - 利点:
   - LSL 不要で完結する。
   - 既存の建築ワークフローに沿う(Description は誰でも編集可)。
   - リンクセット移動でペアが自動で一緒に動く。
 - 制限:
-  - Description は他用途と衝突しうる → タグプレフィックスを `[ayastream` で固定し誤検出を防ぐ。
+  - Description は他用途と衝突しうる → タグプレフィックスを `[3dstream` で固定し誤検出を防ぐ (r5 以前の `[ayastream` も恒久 alias として受理)。
   - Description は 127 byte 上限 → URL 長が長い場合 UI 入力経由(後述)に切り替え。
 
 ### 補助案: 右クリックメニュー / フローター UI
@@ -152,7 +158,7 @@
 | フレーム更新 | `indra/newview/llappviewer.cpp` (idle ループ) | `LLPositionalStreamMgr::instance().update()` を毎フレーム呼ぶ |
 | プリム生成/破棄/移動の検知 | `indra/newview/llviewerobject.cpp` および `LLViewerObjectList` | プリムが範囲外/削除された際にストリーム停止 |
 | Description スキャン | `LLViewerObject` の Description 変更通知 | タグ検出して `LLPositionalStreamMgr` に登録/更新/解除 |
-| UI フローター | `indra/newview/skins/default/xui/en/floater_ayastream.xml` 新規 | URL 入力、ペア指定、再生/停止、音量 |
+| UI フローター | `indra/newview/skins/default/xui/en/floater_stream3d.xml` 新規 | URL 入力、ペア指定、再生/停止、音量 |
 | 設定キー | `indra/newview/app_settings/settings.xml` | 後述 §9 を追加 |
 
 ### 7.4 リスナー連携
@@ -171,7 +177,7 @@
 
 ## 8. UI 仕様
 
-### 8.1 フローター `floater_ayastream`
+### 8.1 フローター `floater_stream3d`
 
 - 起動: メニュー「Avatar → AYAstorm → Positional Stream...」または右クリック「このプリムをストリームソースに...」。
 - 内容:
@@ -209,13 +215,13 @@
 
 | キー | 型 | 既定値 | 説明 |
 |---|---|---|---|
-| `AYAStreamEnabled` | Boolean | true | 機能全体の有効化 |
-| `AYAStreamMaxConcurrent` | S32 | 4 | 同時再生可能ストリーム数 |
-| `AYAStreamRolloffMin` | F32 | 1.0 | 距離減衰開始距離(m) |
-| `AYAStreamRolloffMax` | F32 | 20.0 | 距離減衰終了距離(m) |
-| `AYAStreamVolumeMaster` | F32 | 0.5 | ストリーム種マスター音量 |
-| `AYAStreamReconnectAttempts` | S32 | 3 | 切断時の再接続試行回数 |
-| `AYAStreamDescriptionScan` | Boolean | true | Description タグからの自動検出を有効化 |
+| `Stream3DEnabled` | Boolean | true | 機能全体の有効化 |
+| `Stream3DMaxConcurrent` | S32 | 4 | 同時再生可能ストリーム数 |
+| `Stream3DRolloffMin` | F32 | 1.0 | 距離減衰開始距離(m) |
+| `Stream3DRolloffMax` | F32 | 20.0 | 距離減衰終了距離(m) |
+| `Stream3DVolumeMaster` | F32 | 0.5 | ストリーム種マスター音量 |
+| `Stream3DReconnectAttempts` | S32 | 3 | 切断時の再接続試行回数 |
+| `Stream3DDescriptionScan` | Boolean | true | Description タグからの自動検出を有効化 |
 
 ## 10. 工程
 
@@ -224,7 +230,7 @@
 | M | 内容 | 期間目安 |
 |---|---|---|
 | M0 | 設計レビュー(本書)・アーキ確定 | 0.5 日 |
-| M1 | `LLPositionalStream` モノラル経路の最小実装 + Debug Setting `AYAStreamDebugUrl` / `AYAStreamDebugPlay` でのトグル動作確認 | 1.5 日 |
+| M1 | `LLPositionalStream` モノラル経路の最小実装 + Debug Setting `Stream3DDebugUrl` / `Stream3DDebugPlay` でのトグル動作確認 | 1.5 日 |
 | M2 | フレーム更新 / プリム位置追従 / プリム破棄ハンドリング | 0.5 日 |
 | M3 | フローター UI + 単一プリムモノラル再生の手動操作対応 | 1 日 |
 | M4 | Description タグスキャン + ローカル設定保存 | 0.5 日 |
@@ -251,10 +257,10 @@ M5(ステレオ分離)は M2 完了後ただちに着手可能で、M3/M4(UI)と
 - **R2. ステレオ位相による違和感**: L/R プリムの間隔が広すぎる/近すぎると音場が崩れる。M8 で許容レンジを実測しガイドラインに追記。
   - M8 判定: 実装時点の既定ロールオフ (1m / 20m) で破綻する利用ケースが確認されなかったため、追加実測・ガイドライン追記は見送り。利用側で違和感が報告された段階で再着手する。
 - **R3. SHOUTcast サーバ互換性**: ICY ヘッダ非対応サーバや HTTPS Icecast の挙動差。FMOD `createStream` の URL 対応範囲に準ずる。
-- **R4. パーセル BGM との干渉**: 同時再生時の音量バランス。`AYAStreamVolumeMaster` で個別調整可能だが、ユーザー体験上のデフォルト値は M8 で決定。
-  - M8 判定: 既定 `AYAStreamVolumeMaster = 0.5` を維持。パーセル BGM と並走する想定でやや控えめな初期値とし、上げ下げはユーザー側スライダーで対応する。
+- **R4. パーセル BGM との干渉**: 同時再生時の音量バランス。`Stream3DVolumeMaster` で個別調整可能だが、ユーザー体験上のデフォルト値は M8 で決定。
+  - M8 判定: 既定 `Stream3DVolumeMaster = 0.5` を維持。パーセル BGM と並走する想定でやや控えめな初期値とし、上げ下げはユーザー側スライダーで対応する。
 - **R5. プリム高頻度移動時の負荷**: 物理プリムや乗り物に紐づけた場合、毎フレームの `set3DAttributes()` 呼び出しが多数になる。最大同時数 4 で実用上は問題ない見込みだが M8 で確認。
-  - M8 判定: 既定 `AYAStreamMaxConcurrent = 4` で実用上の負荷問題は観測されず。追加スロットリングは入れない。
+  - M8 判定: 既定 `Stream3DMaxConcurrent = 4` で実用上の負荷問題は観測されず。追加スロットリングは入れない。
 - **R6. CEF (MoaP) の音声と二重再生**: 同じプリムで MoaP URL とストリームタグが両方有効な場合の優先順位。タグ優先 + MoaP 音声ミュートを既定とする(M3 で実装)。
 
 ## 12. 将来拡張(本仕様外)

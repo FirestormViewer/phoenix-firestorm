@@ -1150,6 +1150,12 @@ bool LLAppViewer::init()
 #endif
     LLMIMETypes::parseMIMETypes( mime_types_name );
 
+    // <FS:AYA> [AYAstorm-r5] Migrate r4-and-earlier setting keys (AYAStream*,
+    // FSRenderHideOutsideParcel*) onto their r5-renamed counterparts before
+    // settings_to_globals() reads the values into C++ statics.
+    migrate_legacy_settings();
+    // </FS:AYA>
+
     // Copy settings to globals. *TODO: Remove or move to appropriage class initializers
     settings_to_globals();
     // Setup settings listeners

@@ -26063,7 +26063,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSRenderHideOutsideParcel</key>
+    <key>ParcelHideEnabled</key>
     <map>
       <key>Comment</key>
       <string>Hide objects that are outside the agent's current parcel</string>
@@ -26074,10 +26074,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSRenderHideOutsideParcelKeepAvatars</key>
+    <key>ParcelHideKeepAvatars</key>
     <map>
       <key>Comment</key>
-      <string>When FSRenderHideOutsideParcel is enabled, still render avatars, attachments and HUDs that are outside the agent's parcel</string>
+      <string>When ParcelHideEnabled is on, still render avatars, attachments and HUDs that are outside the agent's parcel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -26085,10 +26085,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSRenderHideOutsideParcelKeepOwn</key>
+    <key>ParcelHideKeepOwn</key>
     <map>
       <key>Comment</key>
-      <string>When FSRenderHideOutsideParcel is enabled, still render objects owned by the agent even when they are outside the parcel</string>
+      <string>When ParcelHideEnabled is on, still render objects owned by the agent even when they are outside the parcel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -27557,10 +27557,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>AYAStreamDebugUrl</key>
+    <key>Stream3DDebugUrl</key>
     <map>
       <key>Comment</key>
-      <string>AYAstorm: HTTP audio stream URL used for the positional stream debug toggle (set AYAStreamDebugPlay to start playback at 5m in front of the agent).</string>
+      <string>AYAstorm: HTTP audio stream URL used for the 3D Stream debug toggle (set Stream3DDebugPlay to start playback at 5m in front of the agent).</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -27568,10 +27568,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string></string>
     </map>
-    <key>AYAStreamDebugPlay</key>
+    <key>Stream3DDebugPlay</key>
     <map>
       <key>Comment</key>
-      <string>AYAstorm: Toggle to start/stop the positional stream debug source. URL is read from AYAStreamDebugUrl at the moment of toggle-on; the source is anchored 5m in front of the agent at that instant.</string>
+      <string>AYAstorm: Toggle to start/stop the 3D Stream debug source. URL is read from Stream3DDebugUrl at the moment of toggle-on; the source is anchored 5m in front of the agent at that instant.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -27579,10 +27579,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>AYAStreamDebugStereoPlay</key>
+    <key>Stream3DDebugStereoPlay</key>
     <map>
       <key>Comment</key>
-      <string>AYAstorm M5-a: Toggle to start/stop a stereo positional stream debug source. URL is read from AYAStreamDebugUrl. Pulls PCM from a source stream and feeds two OPENUSER 3D mono sounds; in M5-a both sides share the same downmixed signal at 5m in front of the agent (later milestones split L/R).</string>
+      <string>AYAstorm M5-a: Toggle to start/stop a stereo 3D Stream debug source. URL is read from Stream3DDebugUrl. Pulls PCM from a source stream and feeds two OPENUSER 3D mono sounds; in M5-a both sides share the same downmixed signal at 5m in front of the agent (later milestones split L/R).</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -27590,7 +27590,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>AYAStreamRolloffMin</key>
+    <key>Stream3DRolloffMin</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm: Distance in meters within which a positional stream plays at full volume (FMOD 3D rolloff near distance). Applied live.</string>
@@ -27601,7 +27601,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
-    <key>AYAStreamRolloffMax</key>
+    <key>Stream3DRolloffMax</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm: Distance in meters at which a positional stream is fully attenuated (FMOD 3D rolloff far distance). Applied live.</string>
@@ -27612,10 +27612,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
-    <key>AYAStreamMaxDistance</key>
+    <key>Stream3DMaxDistance</key>
     <map>
       <key>Comment</key>
-      <string>AYAstorm M3b: Maximum distance in meters within which prims are polled with RequestObjectPropertiesFamily to discover [ayastream:...] tags. Should be at least as large as AYAStreamRolloffMax.</string>
+      <string>AYAstorm M3b: Maximum distance in meters within which prims are polled with RequestObjectPropertiesFamily to discover [3dstream:...] tags. Should be at least as large as Stream3DRolloffMax.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -27623,7 +27623,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>64.0</real>
     </map>
-    <key>AYAStreamPollInterval</key>
+    <key>Stream3DPollInterval</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M3b: Seconds between RequestObjectPropertiesFamily re-polls of in-range prims. Catches LSL llSetObjectDesc tag changes and prims that existed before the viewer arrived. 0 disables active polling (right-click / inspect still updates on demand).</string>
@@ -27634,7 +27634,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>30.0</real>
     </map>
-    <key>AYAStreamVolumeMaster</key>
+    <key>Stream3DVolumeMaster</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M7: Master volume multiplier (0.0 - 1.0) applied to every prim-bound positional stream. Live: changes take effect on the next frame.</string>
@@ -27645,7 +27645,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.5</real>
     </map>
-    <key>AYAStreamReconnectAttempts</key>
+    <key>Stream3DReconnectAttempts</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M7: Number of times the manager will try to reopen a positional stream after FMOD reports an error or a mid-stream drop. Each retry waits 5 seconds; after exhausting all attempts the binding is released. 0 disables auto-reconnect.</string>
@@ -27656,7 +27656,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>3</integer>
     </map>
-    <key>AYAStreamEnabled</key>
+    <key>Stream3DEnabled</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M8: Master kill switch for the positional stream feature. When false, every active prim and debug stream is torn down immediately, polling stops, and new debug toggles are refused. Re-enabling does NOT re-bind by itself; M3b polling will re-discover tagged prims on its next pass.</string>
@@ -27667,7 +27667,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>AYAStreamDescriptionScan</key>
+    <key>Stream3DDescriptionScan</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M8: When false, prim Description tags are no longer scanned (active polling stops, ObjectProperties replies are ignored) and ALL prim-bound streams are torn down. Debug streams are unaffected. Re-enabling will re-discover tagged prims on the next polling pass.</string>
@@ -27678,7 +27678,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>AYAStreamMaxConcurrent</key>
+    <key>Stream3DMaxConcurrent</key>
     <map>
       <key>Comment</key>
       <string>AYAstorm M8: Maximum number of simultaneously bound positional streams (mono + stereo combined). When the cap is reached, new tagged prims are refused (a WARN is logged) until an existing binding is released. 0 means unlimited.</string>

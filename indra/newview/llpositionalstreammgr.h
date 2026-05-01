@@ -56,24 +56,24 @@ public:
     void applyDefaultRolloff(F32 default_min, F32 default_max);
 
     // M7: Apply the global master volume (0..1) to every active stream.
-    // Driven by AYAStreamVolumeMaster signal; new bindings also pick up the
+    // Driven by Stream3DVolumeMaster signal; new bindings also pick up the
     // current setting at bind time.
     void applyMasterVolume(F32 volume);
 
     // M8: Tear down every prim binding (mono + stereo) but leave debug streams
-    // alone. Used when AYAStreamDescriptionScan is toggled off.
+    // alone. Used when Stream3DDescriptionScan is toggled off.
     void shutdownPrimBindings();
 
     // M8: Tear down everything — prim bindings AND debug streams. Used when
-    // the master AYAStreamEnabled kill switch is toggled off.
+    // the master Stream3DEnabled kill switch is toggled off.
     void shutdownAll();
 
-    // Debug toggle stream (driven by AYAStreamDebugPlay). Independent of
+    // Debug toggle stream (driven by Stream3DDebugPlay). Independent of
     // the prim binding map.
     void startDebug(const std::string& url, const LLVector3& world_pos);
     void stopDebug();
 
-    // Stereo debug stream (driven by AYAStreamDebugStereoPlay, M5-a spike).
+    // Stereo debug stream (driven by Stream3DDebugStereoPlay, M5-a spike).
     // Pulls PCM from a source HTTP stream and feeds two OPENUSER 3D mono
     // sounds. In M5-a both sides receive the same downmixed signal.
     void startDebugStereo(const std::string& url,
@@ -81,7 +81,8 @@ public:
                           const LLVector3& r_pos);
     void stopDebugStereo();
 
-    // Mono tag parsed from a prim Description ([ayastream:{...}]).
+    // Mono tag parsed from a prim Description ([3dstream:{...}]; legacy
+    // [ayastream:{...}] also accepted).
     struct TagData
     {
         std::string url;
@@ -89,7 +90,8 @@ public:
         std::optional<F32> max;
     };
 
-    // Stereo tag parsed from a prim Description ([ayastream-stereo:{...}]).
+    // Stereo tag parsed from a prim Description ([3dstream-stereo:{...}];
+    // legacy [ayastream-stereo:{...}] also accepted).
     // L / R are linkset link numbers (1 = root, 2 = first child, ...).
     struct StereoTagData
     {
@@ -100,12 +102,13 @@ public:
         S32 r_link = 2;
     };
 
-    // Returns parsed [ayastream:{...},{...}] tag, or nullopt if none /
-    // malformed / missing URL.
+    // Returns parsed [3dstream:{...}{...}] tag, or nullopt if none /
+    // malformed / missing URL. (Legacy [ayastream:...] is also accepted.)
     static std::optional<TagData> parseTag(const std::string& description);
 
-    // Returns parsed [ayastream-stereo:{...}] tag, or nullopt if none /
-    // malformed / missing URL / L == R.
+    // Returns parsed [3dstream-stereo:{...}] tag, or nullopt if none /
+    // malformed / missing URL / L == R. (Legacy [ayastream-stereo:...]
+    // is also accepted.)
     static std::optional<StereoTagData> parseStereoTag(const std::string& description);
 
 private:
@@ -170,7 +173,7 @@ private:
         std::string description;
         // Monotonic seconds (LLTimer::getElapsedSeconds) of the most recent
         // request OR reply for this prim. 0 means "never seen". Used by the
-        // poll loop to throttle re-requests to AYAStreamPollInterval.
+        // poll loop to throttle re-requests to Stream3DPollInterval.
         F64 last_polled = 0.0;
     };
 

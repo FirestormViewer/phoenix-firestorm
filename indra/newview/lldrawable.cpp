@@ -120,7 +120,7 @@ void LLDrawable::init(bool new_entry)
     mGeneration = -1;
     mSpatialBridge = NULL;
 
-    // <FS:AYA> [RenderHideOutsideParcel]
+    // <FS:AYA> [ParcelHide]
     mLastParcelCheckSeq = -1;
     mLastParcelCheckHidden = false;
     // </FS:AYA>
