@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel bottom="-371" height="300" left="280" mouse_opaque="true" name="groups" width="355">
+  <filter_editor follows="left|top|right" height="23" layout="topleft" left="6" label="Filtrar grupos" max_length_bytes="35" name="group_filter_input" top="3" right="-86" />
+  <view_border top_pad="3" bottom="25" left="6" width="262" height="245" layout="topleft" follows="all" bevel_style="in" name="info_border" />
+  <group_list allow_select="true" follows="all" left="7" height="245" layout="topleft" name="group_list" color="ScrollBgWriteableColor" top_delta="0" width="260" />
+  <text type="string" length="1" bottom="296" follows="left|bottom" height="14" layout="topleft" right="-10" name="groupcount">
+	</text>
+  <button top="2" follows="top|right" height="20" label="IM/Chamada" layout="topleft" right="-1" name="chat_btn" tool_tip="Abrir sessão de mensagem instantânea" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Perfil" layout="topleft" name="info_btn" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Títulos de grupos" layout="topleft" name="titles_btn" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Ativar" layout="topleft" name="activate_btn" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Alfinete" layout="topleft" name="favorite_btn" tool_tip="Adicionar ou remover grupo dos favoritos" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Deixar" layout="topleft" name="leave_btn" width="80" />
+  <button top_delta="31" follows="top|right" height="20" label="Criar..." layout="topleft" name="create_btn" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Procurar..." layout="topleft" name="search_btn" width="80" />
+  <button top_delta="25" follows="top|right" height="20" label="Convidar..." layout="topleft" name="invite_btn" width="80" />
+</panel>

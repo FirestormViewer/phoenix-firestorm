@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel bevel_style="none" follows="left|top" height="530" width="580" name="panel_performance_complexity" layout="topleft" left="0" top="0">
+  <button height="16" width="16" layout="topleft" mouse_opaque="true" follows="left|top" name="back_btn" top="7" image_selected="Arrow_Left_Off" image_pressed="Arrow_Left_Off" image_unselected="Arrow_Left_Off" left="15" is_toggle="true">
+  </button>
+  <text follows="left|top" height="20" layout="topleft" left_pad="3" top="10" name="back_lbl" width="40">
+    Voltar
+  </text>
+  <text follows="left|top" font="SansSerifLarge" text_color="white" height="20" layout="topleft" left="20" top_pad="10" name="attachments_title" width="250">
+    Complexidade dos anexos do avatar
+  </text>
+  <text follows="right|top" font="SansSerifLarge" text_color="White" height="20" layout="topleft" right="-40" top_delta="0" name="tot_att_count" halign="right" width="200">
+   Total: 50 (120000.10μs)
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="5" left="20" name="attachments_desc1" width="580">
+  Os anexos tornam seu avatar mais complexo e mais lento para renderizar.
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="3" left="20" name="attachments_desc2" width="580">
+Esta tela permite ver os anexos do seu próprio avatar.
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="3" left="20" name="attachments_desc3" width="580">
+Você pode remover seus próprios anexos rapidamente clicando no ‘X’.
+  </text>
+  <name_list left="20" column_padding="1" draw_stripes="true" draw_heading="true" height="379" follows="left|top" sort_column="1" sort_ascending="false" multi_select="false" layout="topleft" name="obj_list" top_pad="10" width="540">
+    <name_list.columns label="" name="art_visual" width="90" />
+    <name_list.columns label="Tempo (μs)" name="art_value" tool_tip="Tempo necessário para renderizar este anexo (microssegundos)" width="80" />
+    <name_list.columns label="ARC" name="complex_value" tool_tip="Complexidade do item (ARC)" width="40" />
+    <name_list.columns label="Nome do anexo" tool_tip="Clique no ‘X’ para separar" name="name" />
+  </name_list>
+</panel>

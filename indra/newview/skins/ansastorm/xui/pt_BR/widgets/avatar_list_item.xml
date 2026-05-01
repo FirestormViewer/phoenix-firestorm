@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<avatar_list_item height="0" layout="topleft" left="0" name="avatar_list_item" top="0" width="0">
+  
+  <default_style font="SansSerifSmall" font.style="NORMAL" color="DkGray" />
+
+  
+  <voice_call_invited_style font="SansSerifSmall" font.style="NORMAL" color="SL-MidDkGray_50" />
+
+  
+  <voice_call_joined_style font="SansSerifSmall" font.style="NORMAL" color="White" />
+
+  
+  <voice_call_left_style font="SansSerifSmall" font.style="ITALIC" color="LtGray_50" />
+
+  
+  <online_style font="SansSerifSmall" font.style="NORMAL" color="White" />
+
+  
+  <offline_style font="SansSerifSmall" font.style="NORMAL" color="LtGray_50" />
+
+  
+  <group_moderator_style font="SansSerifSmall" font.style="BOLD" color="White" />
+</avatar_list_item>

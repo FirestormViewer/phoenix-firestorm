@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="centered"
+ legacy_header_height="18"
+ can_resize="true"
+ default_tab_group="1"
+ height="350"
+ layout="topleft"
+ min_height="160"
+ min_width="270"
+ name="object_vram_usage"
+ help_topic=""
+ save_rect="true"
+ title="Impacto do Objeto na VRAM"
+ width="400">
+</floater>

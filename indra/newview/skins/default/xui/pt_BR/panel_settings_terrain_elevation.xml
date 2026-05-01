@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" follows="all" label="Elevação" layout="topleft" left="0" name="panel_settings_terrain_elevation" top="0">
+  <spinner follows="left|top" height="20" label="Altura da Água" label_width="120" layout="topleft" left="15" max_val="100" name="water_height_spin" top_delta="18" width="180" />
+  <spinner follows="left|top" height="20" increment="0.2" label="Limite de Elevação do Terreno" label_width="120" layout="topleft" left="240" max_val="100" name="terrain_raise_spin" top_delta="0" width="180" />
+  <spinner follows="left|top" height="20" increment="0.2" label="Limite Inferior do Terreno" label_width="120" layout="topleft" left="240" max_val="0" min_val="-100" name="terrain_lower_spin" top_delta="20" width="180" />
+  <view_border bevel_style="none" follows="top|left" height="60" layout="topleft" left="8" top_delta="-30" width="460" />
+  <text type="string" length="1" follows="left|top" height="20" layout="topleft" left="10" name="height_text_lbl5" top_delta="74" width="300">
+      Faixas de elevação (texturas)
+  </text>
+  <text visible="false" type="string" length="1" follows="left|top" height="20" layout="topleft" left="10" name="height_text_lbl5_material" top_delta="0" width="300">
+      Faixas de elevação (materiais)
+  </text>
+  <text follows="left|top" height="20" layout="topleft" left="10" name="height_text_lbl10" top_delta="30" width="200" word_wrap="true">
+    Esses valores definem a faixa de mesclagem das texturas acima.
+  </text>
+  <text visible="false" follows="left|top" height="20" layout="topleft" left="10" name="height_text_lbl10_material" top_delta="0" width="200" word_wrap="true">
+    Esses valores definem a faixa de mesclagem dos materiais acima.
+  </text>
+  <text follows="left|top" height="60" layout="topleft" left_delta="0" name="height_text_lbl11" top_delta="32" width="200" word_wrap="true">
+      Em metros, o valor BAIXO é a altura MÁXIMA da textura nº 1 e o valor ALTO é a altura MÍNIMA da textura nº 4.
+  </text>
+  <text visible="false" follows="left|top" height="60" layout="topleft" left_delta="0" name="height_text_lbl11_material" top_delta="0" width="200" word_wrap="true">
+      Em metros, o valor BAIXO é a altura MÁXIMA do material nº 1 e o valor ALTO é a altura MÍNIMA do material nº 4.
+  </text>
+  <text follows="left|top" height="20" layout="topleft" left="270" name="height_text_lbl6" top_delta="-62" width="100">
+      Noroeste
+  </text>
+  <text follows="left|top" height="20" layout="topleft" left_pad="10" name="height_text_lbl7" top_delta="0" width="100">
+      Nordeste
+  </text>
+  <spinner follows="left|top" height="20" increment="0.5" label="Baixo" label_width="37" layout="topleft" left="230" max_val="500" min_val="-500" name="height_start_spin_1" top_delta="15" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Baixo" label_width="37" layout="topleft" left_pad="10" max_val="500" min_val="-500" name="height_start_spin_3" top_delta="0" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Alto" label_width="37" layout="topleft" left="230" max_val="500" min_val="-500" name="height_range_spin_1" top_delta="20" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Alto" label_width="37" layout="topleft" left_pad="10" max_val="500" min_val="-500" name="height_range_spin_3" top_delta="0" width="100" />
+  <text follows="left|top" height="20" layout="topleft" left="270" name="height_text_lbl8" top_pad="10" width="100">
+      Sudoeste
+  </text>
+  <text follows="left|top" height="20" layout="topleft" left_pad="10" name="height_text_lbl9" top_delta="0" width="100">
+      Sudeste
+  </text>
+  <spinner follows="left|top" height="20" increment="0.5" label="Baixo" label_width="37" layout="topleft" left="230" max_val="500" min_val="-500" name="height_start_spin_0" top_delta="15" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Baixo" label_width="37" layout="topleft" left_pad="10" max_val="500" min_val="-500" name="height_start_spin_2" top_delta="0" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Alto" label_width="37" layout="topleft" left="230" max_val="500" min_val="-500" name="height_range_spin_0" top_delta="20" width="100" />
+  <spinner follows="left|top" height="20" increment="0.5" label="Alto" label_width="37" layout="topleft" left_pad="10" max_val="500" min_val="-500" name="height_range_spin_2" top_delta="0" width="100" />
+  <button follows="left|top" height="20" label="Baixar terreno RAW..." layout="topleft" left="10" name="download_raw_btn" tool_tip="Disponível apenas para proprietários de imóveis, não para administradores" top_delta="40" width="160" />
+  <button follows="left|top" height="20" label="Carregar terreno RAW..." layout="topleft" left_pad="10" top_delta="0" name="upload_raw_btn" tool_tip="Disponível apenas para proprietários de imóveis, não para administradores" width="160" />
+  <button follows="left|top" height="20" label="Assar terreno" layout="topleft" left_pad="10" name="bake_terrain_btn" tool_tip="Defina o terreno atual como ponto médio para aumentar/diminuir limites" width="100" />
+</panel>

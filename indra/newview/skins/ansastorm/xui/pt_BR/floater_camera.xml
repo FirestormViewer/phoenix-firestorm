@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ header_height="0"
+ bg_opaque_image="Window_NoTitle_Foreground"
+ bg_alpha_image="Window_NoTitle_Foreground"
+ positioning="specified"
+ right="-460"
+ bottom="-50"
+ follows="left|bottom"
+ legacy_header_height="0"
+ can_minimize="false"
+ can_close="false"
+ height="85"
+ layout="topleft"
+ name="camera_floater"
+ help_topic="camera_floater"
+ save_visibility="true"
+ show_title="false"
+ single_instance="true"
+ title="Controles da Câmera"
+ chrome="true"
+ save_rect="true"
+ width="360">
+    <floater.string
+     name="rotate_tooltip">
+        Girar a câmera em torno do foco
+    </floater.string>
+    <floater.string
+     name="zoom_tooltip">
+        Zoom da câmera em direção ao foco
+    </floater.string>
+    <floater.string
+     name="move_tooltip">
+        Mover a câmera para cima e para baixo, esquerda e direita
+    </floater.string>
+    <floater.string
+     name="free_mode_title">
+        Visualizar Objeto
+    </floater.string>
+    <string name="inactive_combo_text">Usar predefinição</string>
+    <panel
+     border="false"
+     follows="top|left"
+     height="123"
+     layout="topleft"
+     left="2"
+     top_pad="-23"
+     mouse_opaque="false"
+     name="controls"
+     width="190">
+         <!--TODO: substituir imagens + - -->
+         <panel
+            border="false"
+            class="camera_zoom_panel"
+            bottom="-1"
+            layout="topleft"
+            left="0"
+            mouse_opaque="false"
+            name="zoom"
+            top="0"
+            width="220">
+           <joystick_rotate
+              follows="top|left"
+              height="78"
+              layout="topleft"
+              left="2"
+              name="cam_rotate_stick"
+              quadrant="left"
+              sound_flags="3"
+              visible="true"
+              tool_tip="Orbitar câmera em torno do foco"
+              top="25"
+              width="78" />
+<!-- <FS:Chanayane> Rolagem da câmera (de Alchemy) -->
+           <button
+              follows="bottom|left"
+              width="16"
+              height="16"
+              image_selected="VirtualTrackball_Rotate_Left_Active"
+              image_unselected="VirtualTrackball_Rotate_Left"
+              layout="topleft"
+              top="89"
+              left="2"
+              name="roll_left"
+              tool_tip="Girar câmera para esquerda">
+              <commit_callback function="Camera.roll_left" />
+              <mouse_held_callback function="Camera.roll_left" />
+           </button>
+           <button
+              follows="top|left"
+              width="16"
+              height="16"
+              image_selected="VirtualTrackball_Rotate_Right_Active"
+              image_unselected="VirtualTrackball_Rotate_Right"
+              layout="topleft"
+              top="89"
+              left="64"
+              name="roll_right"
+              tool_tip="Girar câmera para direita">
+              <commit_callback function="Camera.roll_right" />
+              <mouse_held_callback function="Camera.roll_right" />
+           </button>
+<!-- </FS:Chanayane> -->
+           <button
+              follows="top|left"
+              height="18"
+              image_disabled="AddItem_Disabled"
+              image_selected="AddItem_Press"
+              image_unselected="AddItem_Off"
+              layout="topleft"
+              left_pad="4"
+              name="zoom_plus_btn"
+              width="18"
+              top="23">
+             <commit_callback
+                function="Zoom.plus" />
+             <mouse_held_callback
+                function="Zoom.plus" />
+           </button>
+           <slider_bar
+              height="50"
+              layout="topleft"
+              name="zoom_slider"
+              orientation="vertical"
+              tool_tip="Zoom da câmera em direção ao foco"
+              top_pad="0"
+              min_val="0"
+              max_val="1"
+              width="18">
+             <commit_callback function="Slider.value_changed"/>
+           </slider_bar>
+           <button
+              follows="top|left"
+              height="18"
+              image_disabled="MinusItem_Disabled"
+              image_selected="MinusItem_Press"
+              image_unselected="MinusItem_Off"
+              layout="topleft"
+              name="zoom_minus_btn"
+              top_pad="0"
+              width="18">
+             <commit_callback
+                function="Zoom.minus" />
+             <mouse_held_callback
+                function="Zoom.minus" />
+           </button>
+         <joystick_track
+         follows="top|left"
+         height="78"
+         image_selected="Cam_Tracking_In"
+         image_unselected="Cam_Tracking_Out"
+         layout="topleft"
+         left_pad="4"
+         name="cam_track_stick"
+         quadrant="left"
+         scale_image="false"
+         sound_flags="3"
+         tool_tip="Mover câmera para cima e para baixo, esquerda e direita"
+         top="25"
+         width="78"/>
+        </panel>
+    </panel>
+    <panel
+     follows="all"
+     height="27"
+     layout="topleft"
+     left_pad="2"
+     name="buttons_panel"
+     top_delta="18"
+     width="140">
+    <panel_camera_item
+      name="front_view"
+      tool_tip="Vista frontal"
+      width="18">
+      <panel_camera_item.mousedown_callback
+        function="CameraPresets.ChangeView"
+        parameter="Vista Frontal" />
+      <panel_camera_item.picture
+        image_name="Cam_Preset_Front_Off" />
+      <panel_camera_item.selected_picture
+        image_name="Cam_Preset_Front_On" />
+    </panel_camera_item>
+    <panel_camera_item
+      name="group_view"
+      tool_tip="Vista lateral"
+      width="18"
+      left_pad="2">
+      <panel_camera_item.mousedown_callback
+        function="CameraPresets.ChangeView"
+        parameter="Vista Lateral" />
+      <panel_camera_item.picture
+        image_name="Cam_Preset_Side_Off" />
+      <panel_camera_item.selected_picture
+        image_name="Cam_Preset_Side_On" />
+    </panel_camera_item>
+    <panel_camera_item
+      name="rear_view"
+      tool_tip="Vista traseira"
+      width="18"
+      left_pad="2">
+      <panel_camera_item.mousedown_callback
+        function="CameraPresets.ChangeView"
+        parameter="Vista Traseira" />
+      <panel_camera_item.picture
+        image_name="Cam_Preset_Back_Off" />
+      <panel_camera_item.selected_picture
+        image_name="Cam_Preset_Back_On" />
+    </panel_camera_item>
+    <panel_camera_item
+      name="tpp_view"
+      tool_tip="Vista TPP"
+      width="18"
+      left_pad="2">
+      <panel_camera_item.mousedown_callback
+        function="CameraPresets.ChangeView"
+        parameter="Vista TPP" />
+      <panel_camera_item.picture
+        image_name="Cam_Preset_TPP_Off" />
+      <panel_camera_item.selected_picture
+        image_name="Cam_Preset_TPP_On" />
+    </panel_camera_item>
+    <panel_camera_item
+        name="object_view"
+        tool_tip="Vista do objeto"
+        width="18"
+        left_pad="2">
+        <panel_camera_item.mousedown_callback
+          function="CameraPresets.ChangeView"
+          parameter="visualizar_objeto" />
+        <panel_camera_item.picture
+          image_name="Object_View_Off" />
+        <panel_camera_item.selected_picture
+          image_name="Object_View_On" />
+      </panel_camera_item>
+      <panel_camera_item
+        name="mouselook_view"
+        tool_tip="Vista em primeira pessoa"
+        width="18"
+        left_pad="2">
+        <panel_camera_item.mousedown_callback
+          function="CameraPresets.ChangeView"
+          parameter="visualizar_primeira_pessoa" />
+        <panel_camera_item.picture
+          image_name="MouseLook_View_Off" />
+        <panel_camera_item.selected_picture
+          image_name="MouseLook_View_On" />
+      </panel_camera_item>
+      <panel_camera_item
+        name="reset_view"
+        tool_tip="Redefinir vista"
+        width="18"
+        left_pad="2">
+          <panel_camera_item.mousedown_callback
+          function="CameraPresets.ChangeView"
+          parameter="redefinir_vista" />
+          <panel_camera_item.picture
+          image_name="Refresh_Off" />
+          <panel_camera_item.selected_picture
+          image_name="Refresh_Over" />
+      </panel_camera_item>
+    </panel>
+      <combo_box
+        height="23"
+        left_delta="-1"
+        mouse_opaque="true"
+        name="preset_combo"
+        top_pad="7"
+        width="136">
+        <combo_list
+        mouse_wheel_opaque="true"/>
+        <combo_box.item
+         label="Usar predefinição"
+         name="Use preset"
+         value="default" />
+      </combo_box>
+      <button
+        height="23"
+        width="24"
+        layout="topleft"
+        mouse_opaque="true"
+        name="gear_btn"
+        tool_tip="Predefinições da câmera"
+        top_delta="0"
+        left_pad="3"
+        image_overlay="Icon_Gear"
+        is_toggle="true">
+        <button.commit_callback
+          function="CameraPresets.ShowPresetsList"/>
+      </button>
+      <button
+        follows="top|left"
+        height="23"
+        label="Posição..."
+        layout="topleft"
+        left_delta="-139"
+        name="camera_position_btn"
+        top_pad="5"
+        width="80">
+        <button.commit_callback
+          function="Floater.Show"
+          parameter="prefs_vista_avancada"/>
+      </button>
+      <button
+        follows="top|left"
+        height="23"
+        label="Salvar"
+        layout="topleft"
+        left_pad="3"
+        name="save_btn"
+        top_delta="0"
+        width="80">
+        <button.commit_callback
+          function="CameraPresets.Save"/>
+      </button>
+  <panel
+    name="viewer_camera_info"
+    left="0"
+    top="85"
+    width="400"
+    height="150"
+    border="true"
+    visible="false"
+    background_visible="true"/>
+  <panel
+    name="agent_camera_info"
+    left="0"
+    top="215"
+    width="400"
+    height="150"
+    border="true"
+    visible="false"
+    background_visible="true"/>
+</floater>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater height="412" width="900" layout="topleft" can_resize="false" legacy_header_height="18" name="floater_fs_contact_set_configure" title="Configurações do Conjunto de Contatos">
+  <floater.string name="title">
+    [NAME] configurações
+    </floater.string>
+  <panel name="top_panel" top="18" left="0" height="120" width="450" border_visible="true" bevel_style="none">
+    <text top="10" follows="left|top" layout="topleft" left="10" height="12" name="set_label">
+Configurações do conjunto de contatos:
+    </text>
+    <line_editor name="set_name_editor" height="23" top_pad="10" follows="left|top" layout="topleft" left="14" right="-90" />
+    <button name="rename_btn" height="23" top_delta="0" follows="left|top|right" layout="topleft" right="-10" width="75" label="Renomear" />
+    <color_swatch can_apply_immediately="true" follows="left|top" height="55" label="Definir cor" top_pad="8" left="14" name="set_swatch" tool_tip="Clique para abrir o Seletor de Cores" width="65" />
+    <check_box height="16" label="Mostrar notificações" layout="topleft" left_pad="4" initial_value="false" name="show_set_notifications" top_delta="0" width="400" />
+    <check_box height="16" label="Classificar por status on-line" layout="topleft" left_delta="0" initial_value="false" name="sort_by_online_status" top_pad="4" width="400" />
+  </panel>
+    <panel name="bottom_panel" top_pad="0" height="272" width="450" border_visible="true" bevel_style="none">
+    <text top="10" follows="left|top" layout="topleft" left="10" height="12" name="global_label">
+Configurações globais:
+    </text>
+    <color_swatch can_apply_immediately="true" follows="left|top" height="55" label="Cor padrão definida" top_pad="8" left_delta="4" name="global_swatch" tool_tip="Clique para abrir o Seletor de Cores" width="100" />
+    <text top_pad="-2" follows="left|top" height="16" left="15" name="label_online" width="200">
+Notificações on-line:
+    </text>
+    <check_box top_pad="4" follows="left|top" height="12" label="Mostrar avisos on-line para TODOS os amigos como brindes" left_delta="5" name="ChatOnlineNotification" width="270" control_name="ChatOnlineNotification" />
+    <check_box follows="left|top" height="12" label="Mostrar avisos on-line para TODOS os amigos no bate-papo próximo" name="OnlineOfflinetoNearbyChat" width="270" control_name="OnlineOfflinetoNearbyChat" />
+    <check_box disabled_control="ChatOnlineNotification" follows="left|top" height="12" label="Mostrar avisos on-line para determinados conjuntos como brinde" name="FSContactSetsNotificationToast" width="270" control_name="FSContactSetsNotificationToast" />
+    <check_box disabled_control="OnlineOffLinetoNearbyChat" follows="left|top" height="12" label="Mostrar avisos on-line para determinados conjuntos no bate-papo próximo" name="FSContactSetsNotificationNearbyChat" width="270" control_name="FSContactSetsNotificationNearbyChat" />
+    <text top_pad="8" follows="left|top" height="16" left="15" name="label_colors" width="200">
+Cores personalizadas:
+    </text>
+    <check_box top_pad="4" follows="left|top" height="12" label="Ícone colorido do minimapa com base no conjunto de contatos" left_delta="5" name="FSContactSetsColorizeMiniMap" width="270" control_name="FSContactSetsColorizeMiniMap" />
+    <check_box follows="left|top" height="12" label="Etiqueta de nome colorida com base em seu conjunto de contatos" name="FSContactSetsColorizeNameTag" width="270" control_name="FSContactSetsColorizeNameTag" />
+    <check_box follows="left|top" height="12" label="Radar colorido e listas de pessoas próximas com base em seu conjunto de contatos" name="FSContactSetsColorizeRadar" width="270" control_name="FSContactSetsColorizeRadar" />
+    <check_box follows="left|top" height="12" initial_value="false" label="Bate-papo colorido com base em seu conjunto de contatos" name="FSContactSetsColorizeChat" width="270" control_name="FSContactSetsColorizeChat" />
+    <check_box follows="left|top" height="12" initial_value="false" label="Colorir a entrada da lista de amigos com base em seu conjunto de contatos" name="FSContactSetsColorizeFriends" width="270" control_name="FSContactSetsColorizeFriends" />
+  </panel>
+    <panel name="side_panel" top="18" left="450" height="392" width="448" border_visible="true" bevel_style="none">
+    <check_box height="16" label="Use resposta automática personalizada no modo ocupado para este conjunto" layout="topleft" left="10" top="10" initial_value="false" name="set_autoresponse_busy_enabled" width="520" />
+    <text_editor use_ellipses="false" commit_on_focus_lost="true" follows="left|top|right" height="100" layout="topleft" left="25" top_pad="5" name="set_autoresponse_busy" right="-12" word_wrap="true" />
+    <check_box height="16" label="Use mensagem personalizada no modo de resposta automática para este conjunto" layout="topleft" left_delta="-15" top_pad="6" initial_value="false" name="set_autoresponse_mode_enabled" width="520" />
+    <text_editor use_ellipses="false" commit_on_focus_lost="true" follows="left|top|right" height="100" layout="topleft" left_delta="15" top_pad="5" name="set_autoresponse_mode" right="-12" word_wrap="true" />
+    <check_box height="16" label="Use resposta automática personalizada para não amigos para este conjunto" layout="topleft" left_delta="-15" top_pad="6" initial_value="false" name="set_autoresponse_nonfriends_enabled" width="520" />
+    <text_editor use_ellipses="false" commit_on_focus_lost="true" follows="left|top|right" height="100" layout="topleft" left_delta="15" top_pad="5" name="set_autoresponse_nonfriends" right="-12" word_wrap="true" />
+  </panel>
+</floater>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ height="162"
+ width="500"
+ help_topic="fs_export"
+ layout="topleft"
+ legacy_header_height="18"
+ name="floater_fs_export"
+ min_width="252"
+ min_height="168"
+ save_rect="true"
+ can_resize="true"
+ title="Backup de objetos...">
+ 	<floater.string name="title_floater">
+ 		Fazer backup de [OBJECT] no disco rígido...
+ 	</floater.string>
+ 	<floater.string name="title_working">
+ 		Fazendo backup de [OBJECT] - Coletando informações...
+ 	</floater.string>
+</floater>

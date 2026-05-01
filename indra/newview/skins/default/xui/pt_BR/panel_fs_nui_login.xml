@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel follows="all" height="768" layout="topleft" name="panel_login" focus_root="true" background_visible="true" bg_opaque_color="0.16 0.16 0.16 1" background_opaque="true" width="1024">
+  <panel.string name="forgot_password_url">
+    http://secondlife.com/account/request.php
+  </panel.string>
+  <string name="ServerComboTooltip">
+    Uma grade existente ou um URI de grade
+  </string>
+  <web_browser tab_stop="false" trusted_content="true" bg_opaque_color="Black" border_visible="false" follows="all" left="0" name="login_html" start_url="" top="18" height="598" width="1024" />
+  <layout_stack follows="left|right|bottom" height="152" left="0" name="ui_stack" orientation="horizontal" bottom="-1" width="1024">
+    <layout_panel height="152" auto_resize="true" name="ui_elastic_pad_left" width="27" />
+    <layout_panel auto_resize="false" follows="left|right|top" name="ui_container" layout="topleft" width="970" min_width="970" height="152">
+      <icon height="125" width="125" image_name="login_fs_logo" left="0" top="10" name="sl_logo_small" />
+      <layout_stack animate="false" clip="false" follows="all" name="vert_stack_left" layout="topleft" orientation="vertical" top="0" left_pad="10" width="685" height="152">
+        <layout_panel auto_resize="false" follows="all" name="1st_row" layout="topleft" height="86" width="685">
+          <layout_stack animate="false" clip="false" follows="left|top|right" name="1st_row_stack" layout="topleft" orientation="horizontal" top="0" left="0" width="685" height="86">
+            <layout_panel auto_resize="true" follows="left|top|right" name="login" layout="topleft" width="206" height="86">
+              <combo_box left="5" top_pad="25" allow_text_entry="true" follows="left|top|right" height="32" label="Nome de usuário" combo_editor.font="SansSerifLarge" max_chars="128" force_disable_fulltext_search="true" combo_editor.commit_on_focus_lost="false" combo_editor.prevalidator="ascii" tool_tip="O nome de usuário que você escolheu ao se registrar, como bobsmith12 ou Steller Sunshine" name="username_combo" width="201">
+                <combo_box.combo_editor text_pad_left="8" text_pad_right="8" bg_image_always_focused="true" />
+              </combo_box>
+    <check_box tab_stop="false" control_name="FSRememberUsername" follows="left|top|right" font="SansSerifLarge" left="2" top_pad="10" height="18" label="Lembrar nome de usuário" name="remember_username_check" width="204" />
+            </layout_panel> 
+    <layout_panel tab_stop="false" auto_resize="false" follows="left|top|right" name="delete_container" layout="topleft" width="32" height="86">
+              <button follows="right|top" height="32" image_unselected="TrashItem_Off" image_selected="TrashItem_Press" image_pressed="TrashItem_Press" tool_tip="Remover este nome de usuário" label="" layout="topleft" name="remove_user_btn" left="0" top_pad="25" width="32" />
+            </layout_panel> 
+    <layout_panel auto_resize="true" follows="left|top|right" name="password_container" layout="topleft" width="206" height="86">
+              <line_editor follows="left|top|right" height="32" left="5" max_length_chars="16" text_pad_left="8" text_pad_right="8" name="password_edit" label="Senha" bg_image_always_focused="true" font="SansSerifLarge" is_password="true" select_on_focus="true" commit_on_focus_lost="false" top_pad="25" width="201" />
+              <check_box tab_stop="false" control_name="RememberPassword" enabled_control="FSRememberUsername" follows="left|top|right" font="SansSerifLarge" left="2" height="18" label="Lembrar senha" top_pad="10" name="remember_check" width="204" />
+              <button name="password_show_btn" tool_tip="Mostrar texto da senha" follows="left|bottom" left="194" bottom_delta="0" height="20" width="20" image_pressed="Profile_Group_Visibility_Off_Pressed" image_unselected="Profile_Group_Visibility_Off" tab_stop="false" visible="true" />
+              <button name="password_hide_btn" tool_tip="Ocultar texto da senha" follows="left|bottom" left="194" bottom_delta="0" height="20" width="20" image_pressed="Profile_Group_Visibility_On_Pressed" image_unselected="Profile_Group_Visibility_On" tab_stop="false" visible="false" />
+            </layout_panel> 
+    <layout_panel auto_resize="false" follows="left|top|right" name="start_location_panel" layout="topleft" width="211" height="86">
+              <combo_box allow_text_entry="true" control_name="NextLoginLocation" follows="left|top|right" label="Localização inicial" height="32" max_chars="128" combo_editor.font="SansSerifLarge" left="5" top_pad="25" name="start_location_combo" width="201" combo_button.scale_image="true">
+                <combo_box.combo_editor bg_image_always_focused="true" text_pad_left="8" text_pad_right="8" />
+                <combo_box.item label="Última localização" name="MyLastLocation" value="last" />
+                <combo_box.item label="Lar" name="MyHome" value="home" />
+                <combo_box.item label="&lt;Digite o nome da região&gt;" name="Typeregionname" value="" />
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel> 
+
+    <layout_panel auto_resize="false" follows="left|top|right" name="2nd_row" layout="topleft" top_pad="0" height="66" width="685">
+          <layout_stack animate="false" clip="false" follows="left|top|right" name="2nd_row_stack" layout="topleft" orientation="horizontal" top_pad="0" left="0" width="685" height="66">
+            <layout_panel auto_resize="false" follows="left|top|right" name="grid_panel" layout="topleft" width="342" height="66" visible="true">
+              <text follows="left|bottom" font="SansSerifLarge" height="32" name="grid_login_text" valign="center" top_pad="5" left="5" width="35">
+        Grade:
+    </text>
+              <combo_box allow_text_entry="true" font="SansSerifLarge" follows="left|bottom" height="32" max_chars="256" combo_editor.font="SansSerifLarge" left_pad="5" force_disable_fulltext_search="true" combo_editor.commit_on_focus_lost="false" combo_editor.prevalidator="ascii" layout="topleft" top_pad="-32" name="server_combo" width="250" combo_button.scale_image="true">
+                <combo_box.drop_down_button font="SansSerifLarge" />
+              </combo_box>
+    <text follows="left|top|right" font="SansSerifMedium" text_color="EmphasisColor" top_pad="5" height="16" name="grid_builder_text" valign="center" left="45" width="250" visible="false">
+    + Clique para adicionar mais grades
+    </text>
+            </layout_panel>
+    <layout_panel follows="left|top|right" name="mode_selection" width="342" height="66">
+              <text follows="right|top" font="SansSerifLarge" halign="right" valign="center" height="32" name="mode_selection_text" top_pad="5" right="-130" width="75">
+        Modo:
+    </text>
+              <combo_box follows="right|bottom" top_delta="0" left_pad="10" right="-5" height="32" max_chars="128" tool_tip="Selecione o estilo de visualizador com o qual você está mais familiarizado para definir seus padrões adequadamente." name="mode_combo" width="120" combo_button.scale_image="true">
+                <combo_box.drop_down_button font="SansSerifLarge" />
+                <combo_box.item label="Tempestade de fogo" name="Firestorm" value="settings_firestorm.xml" />
+                <combo_box.item label="Fênix" name="Phoenix" value="settings_phoenix.xml" />
+                <combo_box.item label="[VIEWER_GENERATION]" name="V3" value="settings_v3.xml" />
+                <combo_box.item label="Híbrido" name="Hybrid" value="settings_hybrid.xml" />
+                <combo_box.item label="Texto" name="Text" value="settings_text.xml" />
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack> 
+  <button follows="left|top|right" image_unselected="PushButton_Login" image_pressed="PushButton_Login_Pressed" image_hover_unselected="PushButton_Login_Over" label="Conecte-se" label_color="White" font="SansSerifLarge" name="connect_btn" width="140" height="54" left_pad="10" top="25" />
+      <text follows="left|top|right" font="SansSerifMedium" text_color="EmphasisColor" left_delta="0" height="16" name="create_new_account_text" top_pad="14" width="140">
+        Criar uma conta
+    </text>
+      <text follows="left|top|right" font="SansSerifMedium" text_color="EmphasisColor" left_delta="0" height="16" name="forgot_password_text" top_pad="5" width="140">
+        Esqueceu a senha?
+    </text>
+    </layout_panel>
+  <layout_panel height="152" auto_resize="true" name="ui_elastic_pad_right" width="27" />
+  </layout_stack>
+</panel>

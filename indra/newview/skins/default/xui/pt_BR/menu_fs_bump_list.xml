@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	name="Bump List Context Menu">
+	<menu_item_call
+		label="Ver Perfil"
+		name="show_agent">
+		<on_click
+			function="BumpList.Action"
+			parameter="show_profile"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_show_profile"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Enviar Mensagem..."
+		name="send_im">
+		<on_click
+			function="BumpList.Action"
+			parameter="sendim"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_sendim"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Zoom no Resident"
+		name="zoom_agent">
+		<on_click
+			function="BumpList.Action"
+			parameter="zoom"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_zoom"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Teleportar para Resident"
+		name="teleportto_agent">
+		<on_click
+			function="BumpList.Action"
+			parameter="teleportto"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_teleportto"/>
+	</menu_item_call>
+	<menu_item_check
+		label="Bloquear"
+		name="Block">
+		<menu_item_check.on_click
+			function="BumpList.Action"
+			parameter="block"/>
+		<menu_item_check.on_check
+			function="BumpList.Enable"
+			parameter="is_blocked"/>
+		<menu_item_check.on_enable
+			function="BumpList.Enable"
+			parameter="can_block"/>
+	</menu_item_check>
+	<menu_item_call
+		label="Denunciar"
+		name="report">
+		<on_click
+			function="BumpList.Action"
+			parameter="report"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_report"/>
+	</menu_item_call>
+	<menu_item_separator/>
+	<menu_item_call
+		enabled="false"
+		label="Copiar"
+		name="Copy">
+		<on_click
+			function="BumpList.Action"
+			parameter="copy"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_copy"/>
+	</menu_item_call>
+</context_menu>

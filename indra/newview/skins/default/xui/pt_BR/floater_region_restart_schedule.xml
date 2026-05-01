@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  height="180"
+  layout="topleft"
+  name="floater_region_restart_schedule"
+  help_topic="region_restart_schedule"
+  single_instance="true"
+  save_rect="true"
+  title="Agendamento de Reinício da Região"
+  width="300">
+
+<!-- This block shows Advanced Settings -->
+  <floater.string name="am_string">am</floater.string>
+  <floater.string name="pm_string">pm</floater.string>
+</floater>

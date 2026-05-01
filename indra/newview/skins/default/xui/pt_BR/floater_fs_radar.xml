@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ name="radar"
+ help_topic="fs_radar"
+ title="Radar"
+ width="400"
+ height="440"
+ min_width="365"
+ min_height="150"
+ reuse_instance="true"
+ single_instance="true"
+ save_rect="true"
+ save_visibility="true"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true">
+	<panel
+	 class="fs_panel_radar"
+	 name="panel_radar"
+	 filename="panel_fs_radar.xml"
+	 follows="all"
+	 height="437"
+	 layout="topleft"
+	 left="3"
+	 top_pad="3"
+	 width="391"/>
+</floater>

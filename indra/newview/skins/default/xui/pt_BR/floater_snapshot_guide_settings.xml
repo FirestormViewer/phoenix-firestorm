@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater
+    name="snapshot_guide_settings"
+    title="Configurações da Moldura"
+    can_dock="false"
+    can_resize="false"
+    width="250"
+    height="120"
+    min_height="140"
+    min_width="280"
+    layout="topleft">
+</floater>

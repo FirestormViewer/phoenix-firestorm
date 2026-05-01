@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" follows="all" height="480" layout="topleft" left="1" top="1" width="540" label="Preferências da IU" name="Display panel">
+  <tab_container label="Preferências Firestorm" layout="topleft" follows="all" top="5" bottom="-1" left="1" right="-1" name="tabs" tab_min_width="50" tab_position="top">
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Mundo 3D" name="UI Prefs Panel">
+      <text type="string" left="10" top_pad="8" length="1" follows="left|top" height="12" layout="topleft" name="HoverTipText" width="100">
+            Dicas ao passar o mouse:
+        </text>
+      <check_box control_name="ShowHoverTips" height="16" initial_value="true" label="Mostrar dicas de foco" layout="topleft" left_delta="10" name="ShowHoverTips" tool_tip="Defina isto para mostrar dicas de foco em avatares e algumas outras coisas - defina este primeiro (CTRL+SHIFT+T)" top_pad="7" width="256" />
+      <check_box enabled_control="ShowHoverTips" control_name="ShowAllObjectHoverTip" height="16" initial_value="true" label="em todos os objetos" tool_tip="Defina isto para mostrar dicas de foco em objetos no mundo" layout="topleft" left_delta="10" name="ShowAllHoverTips" top_pad="2" width="256" />
+      <check_box enabled_control="ShowHoverTips" control_name="ShowLandHoverTip" height="16" initial_value="true" label="em terra" tool_tip="Defina isto para mostrar dicas de foco em terra" layout="topleft" name="ShowLandHoverTips" top_pad="2" width="256" />
+      <check_box enabled_control="ShowHoverTips" control_name="FSAdvancedTooltips" name="FSAdvancedTooltips" label="Mostrar informações estendidas em hovertips" layout="topleft" top_pad="5" left_delta="-10" height="16" width="350" />
+      <check_box enabled_control="ShowHoverTips" control_name="FSShowGroupTitleInTooltip" name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupos de avatares em hovertips" layout="topleft" top_pad="2" height="16" width="350" />
+      <text type="string" length="1" follows="left|top" height="12" layout="topleft" left="265" name="tooltip_textbox" top="8" width="200">
+           Atrasos para exibir dicas:
+        </text>
+      <slider control_name="ToolTipDelay" decimal_digits="3" follows="left|top" height="16" increment="0.025" initial_value="0.7" label="Dicas de ferramentas:" label_width="50" layout="topleft" max_val="6.0" min_val="0" name="ToolTipDelay_slider" tool_tip="Atraso depois que as dicas de ferramentas para elementos da interface do usuário, como botões, são mostradas. (Padrão: 0,7)" top_pad="7" left="275" width="200" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_pad="1" name="ToolTipDelay_text" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider enabled_control="ShowHoverTips" control_name="AvatarInspectorTooltipDelay" decimal_digits="3" follows="left|top" height="17" increment="0.025" initial_value="0.35" label="Avatares:" label_width="50" layout="topleft" left="275" max_val="6.0" min_val="0" name="AvatarInspectorTooltipDelay_slider" tool_tip="Atraso depois que as dicas flutuantes para avatares são mostradas. (Padrão: 0,35)" top_pad="2" width="200" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_pad="1" name="AvatarInspectorTooltipDelay_text" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider enabled_control="ShowHoverTips" control_name="ObjectInspectorTooltipDelay" decimal_digits="3" follows="left|top" height="17" increment="0.025" initial_value="0.35" label="Objetos:" label_width="50" layout="topleft" left="275" max_val="6.0" min_val="0" name="ObjectInspectorTooltipDelay_slider" tool_tip="Atraso depois que as dicas flutuantes para objetos são mostradas. (Padrão: 0,35)" top_pad="2" width="200" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_pad="1" name="ObjectInspectorTooltipDelay_text" top_delta="0" width="80">
+            segundos
+        </text>
+      <text type="string" left="10" top="130" top_pad="15" width="180" follows="left|top" height="16" layout="topleft" name="FSHudTextLabel">
+            Opções de texto flutuante:
+        </text>
+      <slider control_name="FSHudTextFadeDistance" decimal_digits="2" follows="left|top" height="16" increment="0.25" label="Distância de esmaecimento do texto flutuante (em m):" tool_tip="Define a distância onde o texto flutuante (hovertext) começa a desaparecer" label_width="200" layout="topleft" left="10" min_val="0" max_val="64" name="FSHudTextFadeDistance" width="481" />
+      <slider control_name="FSHudTextFadeRange" decimal_digits="2" follows="left|top" height="16" increment="0.25" label="Intervalo de esmaecimento do texto flutuante (em m):" tool_tip="Define o intervalo necessário para que um texto flutuante (hovertext) desapareça de totalmente visível para completamente invisível" label_width="200" layout="topleft" left="10" min_val="0.25" max_val="32" name="FSHudTextFadeRange" top_pad="2" width="474" />
+      <check_box control_name="FSHudTextUseHoverHighlight" name="FSHudTextUseHoverHighlight" label="Passe o mouse sobre o objeto para destacar o texto flutuante:" tool_tip="Quando um objeto estiver passando o mouse, destaque o texto flutuante (hovertext) movendo o texto para o primeiro plano e desative seu alfa" layout="topleft" top_pad="5" left_delta="0" height="16" width="350" />
+      <text type="string" left="10" top_pad="5" width="180" follows="left|top" height="16" layout="topleft" name="FSHudTextShowBackgroundLabel">
+            Mostrar fundo do texto flutuante:
+        </text>
+      <combo_box control_name="FSHudTextShowBackground" height="23" layout="topleft" left_pad="10" top_delta="-5" name="FSHudTextShowBackgroundDropdown" tool_tip="Exibe um fundo preto/branco atrás do texto flutuante (hovertext) para torná-lo mais legível. A opacidade pode ser alterada em Cores &gt; Diversos" width="180">
+        <combo_box.item label="Desligado" name="ScriptDialogOption_0" value="0" />
+        <combo_box.item label="Apenas objeto destacado" name="ScriptDialogOption_1" value="1" />
+        <combo_box.item label="Todos os objetos" name="ScriptDialogOption_2" value="2" />
+      </combo_box>
+    </panel>
+
+    
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Sobreposição 2D" name="ui-2d-overlay">
+      <text type="string" length="1" follows="left|top" height="12" layout="topleft" left="10" name="UI Size:" top_pad="8" width="80">
+            Escala da IU:
+        </text>
+      <slider control_name="UIScaleFactor" decimal_digits="2" follows="left|top" height="17" increment="0.025" initial_value="1" layout="topleft" left_pad="0" max_val="2.0" min_val="0.75" name="ui_scale_slider" top_pad="-14" width="390" />
+      <text type="string" length="1" follows="left|top" height="12" layout="topleft" left="10" name="HUD Size:" top_pad="5" width="80">
+            Escala dos HUDs:
+        </text>
+      <slider control_name="HUDScaleFactor" decimal_digits="2" follows="left|top" height="17" increment="0.1" initial_value="1" layout="topleft" left_pad="0" max_val="2.0" min_val="1.0" name="ui_scale_slider" top_pad="-14" width="390" />
+      <text type="string" left="10" top_pad="15" width="140" follows="left|top" height="16" layout="topleft" name="ScriptDialogsPerObjectLabel">
+        Diálogos de script por objeto:
+      </text>
+      <combo_box control_name="ScriptDialogLimitations" height="23" layout="topleft" left_pad="10" top_delta="-5" name="ScriptDialogPerObjectDropdown" width="180">
+        <combo_box.item label="Um por objeto" name="ScriptDialogOption_0" value="0" />
+        <combo_box.item label="Um por canal" name="ScriptDialogOption_1" value="1" />
+        <combo_box.item label="Um por canal para anexos" name="ScriptDialogOption_2" value="2" />
+        <combo_box.item label="Um por canal para HUDs" name="ScriptDialogOption_3" value="3" />
+        <combo_box.item label="Irrestrito para HUDs" name="ScriptDialogOption_4" value="4" />
+        <combo_box.item label="Irrestrito" name="ScriptDialogOption_5" value="5" />
+      </combo_box>
+        <check_box control_name="FSRemoveScriptBlockButton" height="16" label="Remover botão &quot;Bloquear&quot;" layout="topleft" left_pad="5" name="FSRemoveScriptBlockButton" top_delta="4" width="256" />
+      <text type="string" left="10" top_pad="9" width="140" follows="left|top" height="16" layout="topleft" name="ScriptDialogsPositionLabel">
+        Posição dos diálogos de script:
+      </text>
+      <combo_box control_name="ScriptDialogsPosition" height="23" layout="topleft" left_pad="10" top_delta="-5" name="ScriptDialogsPositionDropdown" tool_tip="Escolha onde as caixas de diálogo de script (menus) aparecem na tela." width="180">
+        <combo_box.item label="Ancorado em Chiclet" name="ScriptDialogPositionOption_1" value="1" />
+        <combo_box.item label="Canto superior esquerdo" name="ScriptDialogPositionOption_2" value="2" />
+        <combo_box.item label="Canto superior direito" name="ScriptDialogPositionOption_3" value="3" />
+        <combo_box.item label="Inferior Esquerdo" name="ScriptDialogPositionOption_4" value="4" />
+        <combo_box.item label="Canto inferior direito" name="ScriptDialogPositionOption_5" value="5" />
+      </combo_box>
+        <check_box control_name="FSAnimatedScriptDialogs" height="16" initial_value="true" label="Animar caixas de diálogo de script" layout="topleft" left_pad="5" name="FSAnimatedScriptDialogs" tool_tip="Defina isto para animar as caixas de diálogo do script ao abrir (comportamento clássico V1.x). Funciona apenas quando as caixas de diálogo são abertas de cima para baixo." top_delta="4" width="256" />
+      <slider control_name="FSRowsPerScriptDialog" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="20" label="Linhas visíveis por caixa de diálogo de script:" label_width="160" layout="topleft" max_val="50" min_val="2" name="FSRowsPerScriptDialog" tool_tip="O número máximo de linhas em uma caixa de diálogo de script que ficarão visíveis ao mesmo tempo." top_pad="9" left="10" width="400" />
+      <check_box control_name="UsePieMenu" height="16" label="Usar menu de torta" layout="topleft" left="5" name="UsePieMenu" tool_tip="Use o menu de anel V1 clássico em vez de menus de contexto retangulares ao clicar com o botão direito em terrenos, avatares, objetos ou anexos." top_pad="12" width="256" />
+      <check_box control_name="PieMenuPopupFontEffect" enabled_control="UsePieMenu" height="16" label="Ativar animação de texto" layout="topleft" left="15" name="PieMenuPopupFontEffect" tool_tip="Permite que o texto do menu circular faça parte da animação quando o menu circular for aberto." top_pad="3" width="256" />
+      <check_box control_name="PieMenuOuterRingShade" enabled_control="UsePieMenu" height="16" label="Ativar sombra do anel externo" layout="topleft" left="15" name="PieMenuOuterRingShade" tool_tip="Ativa uma sombra de anel externo adicional que ajuda a visualizar submenus." top_pad="3" width="256" />
+      <text follows="left|top" height="16" layout="topleft" left="10" name="ShowGroupNoticesTopRightLabel" top_pad="8" type="string" width="210">
+           Posição dos avisos de grupo e dos chiclets:
+        </text>
+      <radio_group control_name="ShowGroupNoticesTopRight" height="16" initial_value="1" layout="topleft" left_pad="5" top_delta="-1" name="ShowGroupNoticesTopRight" tool_tip="Escolha onde as notificações de grupo e os ícones chiclet aparecerão na tela." width="200">
+        <radio_item height="16" label="Canto inferior direito" layout="topleft" left="0" name="radio" top_pad="2" value="0" width="100" />
+        <radio_item height="16" label="Canto superior direito" layout="topleft" left_pad="0" name="radio1" value="1" width="100" />
+      </radio_group>
+        <text follows="left|top" height="16" layout="topleft" left_pad="2" name="GroupTopRightRequiresRestart" text_color="White_50" top_pad="-14" type="string" width="128">
+           (requer reinício)
+        </text>
+      <check_box control_name="FSDisableIMChiclets" height="16" label="Ocultar chiclets de bate-papo em grupo e mensagens instantâneas" layout="topleft" left="5" name="FSDisableIMChiclets" tool_tip="Se marcado, o Firestorm não mostrará nenhum chiclete de bate-papo em grupo/IM (o envelope de notificações e a soma das mensagens instantâneas permanecerão na tela)." top_pad="6" width="256" />
+      <check_box control_name="FSLegacyNotificationWell" height="16" initial_value="true" label="Usar o layout de lista herdado para a janela Notificações" layout="topleft" left="5" name="FSLegacyNotificationWell" tool_tip="Se marcado, o Firestorm usará a visualização de lista herdada para exibir notificações armazenadas." top_pad="3" width="265" />
+      <text type="string" left_pad="10" top_pad="-15" width="128" follows="left|top" height="12" layout="topleft" text_color="White_50" name="FSLegacyNotificationWellRequiresRestart">
+            (requer reinício)
+        </text>
+      <check_box control_name="FSLegacyNotificationWellAutoResize" height="16" initial_value="true" label="Redimensionar automaticamente conversas e listas de notificações herdadas" layout="topleft" left="5" name="FSLegacyNotificationWellAutoResize" tool_tip="Se marcado, o Firestorm sempre redimensionará as listas de conversas e notificações herdadas automaticamente quando itens forem adicionados ou removidos." top_pad="3" width="450" />
+      <check_box control_name="FSRemapLinuxShortcuts" height="16" label="Remapear atalhos já usados ​​pelo Linux (somente Linux; requer reinicialização)" layout="topleft" left="5" name="FSRemapLinuxShortcuts" tool_tip="Se ativado, os atalhos que já são usados ​​pelo sistema operacional Linux (como CTRL-ALT-Fx) serão remapeados." top_pad="5" width="256" />
+      <check_box control_name="FSStatisticsNoFocus" height="16" label="Impedir que a janela de estatísticas ganhe foco" layout="topleft" left="5" name="FSStatisticsNoFocus" tool_tip="Se habilitada, a janela de estatísticas nunca receberá foco quando outra janela for fechada (ações como alterar o layout do gráfico para itens ainda são possíveis quando habilitada)." top_pad="3" width="256" />
+      <check_box control_name="FSShowInventoryThumbnailTooltips" height="16" label="Mostrar miniaturas de itens de inventário em dicas de ferramentas" layout="topleft" left="5" name="FSShowInventoryThumbnailTooltips" tool_tip="Se ativado, passar o mouse sobre os itens de inventário que contêm uma miniatura exibirá a miniatura em uma dica de ferramenta." top_pad="3" width="256" />
+      <slider control_name="FSInventoryThumbnailTooltipsDelay" enabled_control="FSShowInventoryThumbnailTooltips" decimal_digits="2" follows="left|top" height="16" increment="0.1" label="Atraso na dica de ferramenta da miniatura:" tool_tip="O atraso nas dicas de ferramentas mostrando miniaturas do item de inventário" label_width="200" layout="topleft" left="20" min_val="0.1" max_val="5" name="FSInventoryThumbnailTooltipsDelay" top_pad="2" width="457" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="490" name="FSInventoryThumbnailTooltipsDelayText" top_delta="0" width="50">
+            seg.
+        </text>
+      <slider control_name="FlashCount" decimal_digits="0" follows="left|top" height="16" increment="1" label="Número de vezes que as guias de mensagens instantâneas piscam:" label_width="200" layout="topleft" left="10" min_val="0" max_val="16" name="ButtonsFlashCount" top_pad="14" width="471" />
+      <slider control_name="FlashPeriod" decimal_digits="2" follows="left|top" height="16" increment="0.25" label="Período de flash da guia IM:" tool_tip="Tempo em segundos que leva um único flash das guias de IM - usado para notificações de IM" label_width="200" layout="topleft" left="10" min_val="0.25" max_val="4" name="ButtonFlashRate" top_pad="2" width="467" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="490" name="ButtonFlashRateText" top_delta="0" width="50">
+            seg.
+        </text>
+    </panel>	
+
+    
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Barras principais" name="UI-interface-top-bars">
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" name="statusbar_textbox" left="10" top_pad="8" width="200">
+		Barra de status:
+		</text>
+      <check_box control_name="ShowNetStats" height="16" tool_tip="Mostrar indicador de tráfego no menu superior" label="Mostrar indicador de trânsito no canto superior direito da tela" layout="topleft" name="ShowNetStats" top_pad="8" left="10" width="250" />
+      <check_box enabled_control="ShowNetStats" top_pad="4" follows="left|top" height="16" label="Usar a exibição da média por segundo do período herdado para o indicador de tráfego" name="FSStatbarLegacyMeanPerSec" width="270" left="20" control_name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o Firestorm usará o método legado de mostrar o valor médio do período por segundo no indicador de tráfego em vez do valor observado atual" />
+      <check_box enabled_control="ShowNetStats" top_pad="4" follows="left|top" height="16" label="Clicar no indicador de tráfego abre Estatísticas em vez do Medidor de Lag" name="FSUseStatsInsteadOfLagMeter" width="270" left="20" control_name="FSUseStatsInsteadOfLagMeter" />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar controles de mídia no menu superior" name="FSEnableVolumeControls" left="10" width="270" control_name="FSEnableVolumeControls" tool_tip="Se marcado, o Firestorm mostrará os controles de mídia (volume, mídia, stream) no canto superior direito da tela. Útil se o skin já tiver seus próprios controles." />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar localização no menu superior" name="ShowMenuBarLocation" width="270" left="10" control_name="ShowMenuBarLocation" />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar versão do simulador no menu superior" left="20" name="FSStatusbarShowSimulatorVersion" enabled_control="ShowMenuBarLocation" width="270" control_name="FSStatusbarShowSimulatorVersion" tool_tip="Mostra a versão atual do simulador na barra de status semelhante à V1." />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar pesquisa de menu" left="10" name="show_search_menu_check" width="270" control_name="MenuSearch" />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar saldo de moeda" name="FSShowCurrencyBalanceInStatusbar" width="270" control_name="FSShowCurrencyBalanceInStatusbar" />
+      <check_box top_pad="4" follows="left|top" height="16" label="Ativar pop-up de rolagem do mouse nos ícones do menu da barra de status" name="FSStatusBarMenuButtonPopupOnRollover" width="270" control_name="FSStatusBarMenuButtonPopupOnRollover" />
+      <text type="string" follows="left|top" height="16" layout="topleft" name="statusbar_timeformat_textbox" left="13" top_pad="8" width="75">
+		 Formato do relógio:
+		</text>
+      <combo_box control_name="FSStatusBarTimeFormat" height="23" layout="topleft" left_pad="10" top_delta="-4" name="FSStatusBarTimeFormat" tool_tip="Seleciona o formato de hora usado na barra do menu principal." width="250">
+        <combo_box.item label="Padrão de idioma" name="Language" value="Language" />
+        <combo_box.item label="12 horas" name="12_Hour" value="12 Hour" />
+        <combo_box.item label="12 horas incl. Segundos" name="12_Hour_Seconds" value="12 Hour Seconds" />
+        <combo_box.item label="12 horas incl. Fuso horário" name="12_Hour_TZ" value="12 Hour TZ" />
+        <combo_box.item label="12 horas incl. Segundos e fuso horário" name="12_Hour_TZ_Seconds" value="12 Hour TZ Seconds" />
+        <combo_box.item label="24 horas" name="24_Hour" value="24 Hour" />
+        <combo_box.item label="24 horas incluindo Segundos" name="24_Hour_Seconds" value="24 Hour Seconds" />
+        <combo_box.item label="24 horas incluindo Fuso horário" name="24_Hour_TZ" value="24 Hour TZ" />
+        <combo_box.item label="24 horas incluindo Segundos e fuso horário" name="24_Hour_TZ_Seconds" value="24 Hour TZ Seconds" />
+      </combo_box>
+
+		<text type="string" length="1" follows="left|top" height="16" layout="topleft" name="navfav_textbox" left="10" top_pad="10" width="200">
+		Barras de navegação e favoritos:
+		</text>
+      <check_box top_pad="8" follows="left|top" height="16" label="Mostrar barra de favoritos" name="ShowNavbarFavoritesPanel" width="270" left="10" control_name="ShowNavbarFavoritesPanel" />
+      <check_box top_pad="4" follows="left|top" height="16" label="Mostrar barra de navegação e pesquisa" name="ShowNavbarNavigationPanel" width="270" control_name="ShowNavbarNavigationPanel" />
+      <check_box enabled_control="ShowNavbarNavigationPanel" top_pad="4" follows="left|top" height="16" label="Mostrar barra de pesquisa" name="ShowSearchTopBar" width="270" left="20" control_name="ShowSearchTopBar" />
+    </panel>
+
+    
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Janelas de interface" name="UI-interface-windows-tab">
+      <check_box control_name="FSInspectAvatarSlurlOpensProfile" height="16" label="Abra o perfil do avatar diretamente ao clicar em seu nome" layout="topleft" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Se ativado, o Firestorm abrirá o perfil de um avatar diretamente ao clicar em um link com seu nome" initial_value="true" top_pad="6" left="10" width="250" />
+      <check_box top_pad="0" follows="left|top" height="16" label="Desative a abertura automática da lista de bloqueios" name="FSDisableBlockListAutoOpen" width="270" control_name="FSDisableBlockListAutoOpen" tool_tip="Desativa a abertura automática da lista de bloqueio ao bloquear avatares ou objetos." />
+      <check_box top_pad="0" follows="left|top" height="16" label="'Amigos' e 'Grupos' no menu 'Comm' abrem as janelas baseadas em [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" width="270" control_name="FSUseV2Friends" tool_tip="Se ativado, Amigos/Grupos serão abertos no painel Pessoas - caso contrário, serão abertos no painel Contatos." />
+      <check_box top_pad="0" follows="left|top" height="16" label="Use propriedades de objetos herdados" name="FSUseLegacyObjectProperties" width="270" control_name="FSUseLegacyObjectProperties" tool_tip="Se habilitado, a janela de perfil do objeto legado será usada ao abrir as propriedades do objeto." />
+      <check_box top_pad="0" follows="left|top" height="16" label="Use uma pequena janela de câmera" name="FSUseSmallCameraFloater" width="270" control_name="FSUseSmallCameraFloater" tool_tip="Se ativado, a janela menor da câmera legada sem controles de predefinição de câmera será usada." />
+      <check_box top_pad="0" follows="left|top" height="16" label="Desative os botões de redefinição dos controles da câmera" name="DisableCameraJoystickCenterReset" width="270" control_name="DisableCameraJoystickCenterReset" tool_tip="Impede que o alvo central da órbita e mova os controles da câmera reinicie a câmera." />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" name="standalone_textbox" left="10" top_pad="7" width="200">
+		Usar janelas independentes para:
+		</text>
+      <check_box top_pad="2" control_name="FSUseStandaloneGroupFloater" follows="left|top" height="16" name="FSUseStandaloneGroupFloater" label="Perfis de grupo" left="20" width="170" tool_tip="Se ativado, os perfis de grupo serão abertos em janelas separadas." />
+      <check_box control_name="FSUseStandaloneTeleportHistoryFloater" follows="left|top" height="16" name="FSUseStandaloneTeleportHistoryFloater" label="História de teletransporte" left_pad="5" width="170" tool_tip="Se ativado, usar o atalho para o histórico de teletransporte abrirá o histórico em uma janela separada." />
+      <check_box top_pad="2" control_name="FSUseStandaloneBlocklistFloater" follows="left|top" height="16" name="FSUseStandaloneBlocklistFloater" label="Lista de bloqueio/silenciamento" left="20" width="170" tool_tip="Se ativado, a lista de residentes e objetos bloqueados/silenciados será aberta em uma janela separada." />
+      <check_box control_name="FSUseStandalonePlaceDetailsFloater" follows="left|top" height="16" name="FSUseStandalonePlaceDetailsFloater" label="Marcos, detalhes de lugares e detalhes do histórico de teletransporte" left_pad="5" width="170" tool_tip="Se ativado, pontos de referência, detalhes de locais e detalhes do histórico de teletransporte serão abertos em janelas separadas." />
+      <text top_pad="7" left="10" layout="topleft" follows="left|top" height="16" width="300" name="ExtendedTeleportHistoryLabel">
+			Estender o histórico de teletransporte com:
+		</text>
+      <check_box control_name="FSTeleportHistoryShowPosition" top_pad="2" left="20" layout="topleft" follows="left|top" height="16" name="FSTeleportHistoryShowPosition" label="Posição" width="75" tool_tip="Se ativado, as coordenadas locais da região serão mostradas no histórico de teletransporte." />
+      <check_box top_delta="0" control_name="FSTeleportHistoryShowDate" follows="left|top" height="16" name="FSTeleportHistoryShowDate" label="Data" left_pad="5" width="75" tool_tip="Se ativado, a data e hora do teletransporte serão mostradas no histórico de teletransporte." />
+      <text top_pad="7" left="10" layout="topleft" follows="left|top" height="16" width="300" name="textFriendlistOptions">
+			Opções da lista de contatos:
+		</text>
+      <text top_pad="2" left="20" layout="topleft" follows="left|top" height="16" width="125" name="textFriendlistColumns">
+			Colunas de nome visíveis:
+		</text>
+      <check_box top_delta="0" left_pad="15" follows="left|top" height="16" label="Nome de usuário" name="FSFriendListColumnShowUserName" width="70" control_name="FSFriendListColumnShowUserName" tool_tip="A lista de contatos mostrará uma coluna com o nome de usuário do amigo.">
+        <check_box.commit_callback function="FS.CheckContactListColumnMode" />
+      </check_box>
+		<check_box top_delta="0" left_pad="15" follows="left|top" height="16" label="Nome de exibição" name="FSFriendListColumnShowDisplayName" width="90" control_name="FSFriendListColumnShowDisplayName" tool_tip="A lista de contatos mostrará uma coluna com o nome de exibição do amigo.">
+        <check_box.commit_callback function="FS.CheckContactListColumnMode" />
+      </check_box>
+		<check_box top_delta="0" left_pad="15" follows="left|top" height="16" label="Nome completo" name="FSFriendListColumnShowFullName" width="70" control_name="FSFriendListColumnShowFullName" tool_tip="A lista de contatos mostrará uma coluna com o nome completo do amigo.">
+        <check_box.commit_callback function="FS.CheckContactListColumnMode" />
+      </check_box>
+		<text top_pad="2" left="20" follows="left|top" name="textFriendListSortOrder" width="60">
+		 Ordenar lista por:
+		</text>
+      <radio_group top_delta="0" left_pad="15" height="16" layout="topleft" control_name="FSFriendListSortOrder" name="FSFriendListSortOrder" tool_tip="" width="331">
+        <radio_item label="Nome de usuário" layout="topleft" name="username" value="0" top_pad="7" width="75" />
+        <radio_item left_pad="15" label="Nome de exibição" layout="topleft" top_delta="0" name="displayname" value="1" width="75" />
+      </radio_group>
+		<text top_pad="2" left="20" follows="left|top" name="textFriendListFullNameFormat" width="105">
+		 Mostrar nome completo como:
+		</text>
+      <radio_group top_delta="0" left_pad="15" height="16" layout="topleft" enabled_control="FSFriendListColumnShowFullName" control_name="FSFriendListFullNameFormat" name="FSFriendListFullNameFormat" tool_tip="" width="331">
+        <radio_item label="Nome de usuário (nome de exibição)" layout="topleft" name="username_displayname" value="0" top_pad="7" width="160" />
+        <radio_item left_pad="15" label="Nome de exibição (nome de usuário)" layout="topleft" top_delta="0" name="displayname_username" value="1" width="75" />
+      </radio_group>
+		<check_box top_pad="2" left="20" follows="left|top" height="16" label="Mostrar coluna de permissões" name="FSFriendListColumnShowPermissions" width="270" control_name="FSFriendListColumnShowPermissions" tool_tip="A lista de contatos mostrará as colunas com as permissões que você concedeu a este avatar e vice-versa.">
+		</check_box>
+      <check_box top_pad="2" left="20" follows="left|top" height="16" label="Mostrar filtro de pesquisa" name="FSContactListShowSearch" width="270" control_name="FSContactListShowSearch" tool_tip="A lista de contatos mostrará uma caixa de texto de pesquisa para filtrar a lista.">
+		</check_box>
+      <text top_pad="7" left="10" layout="topleft" follows="left|top" height="16" width="300" name="textInventoryOptions">
+			Opções do inventário:
+		</text>
+      <check_box top_pad="2" left="20" follows="left|top" height="16" label="Ocultar pastas vazias do sistema do inventário" name="DebugHideEmptySystemFolders" width="270" control_name="DebugHideEmptySystemFolders" tool_tip="Se ativado, as janelas de inventário ocultarão todas as pastas vazias do sistema, como Favoritos, Marcos, etc." />
+      <check_box top_pad="2" follows="left|top" height="16" label="Mostrar a pasta Itens Recebidos no inventário normal" name="FSShowInboxFolder" width="270" control_name="FSShowInboxFolder" tool_tip="Se ativado, as janelas de inventário também mostrarão a pasta Itens Recebidos" />
+      <check_box top_pad="2" left="30" follows="left|top" height="16" label="Sempre mostrar o botão Itens Recebidos na parte inferior do inventário" name="FSAlwaysShowInboxButton" width="270" control_name="FSAlwaysShowInboxButton" enabled_control="FSShowInboxFolder" tool_tip="Se ativado, o botão Itens Recebidos é sempre mostrado na parte inferior das janelas do inventário, mesmo que a pasta seja mostrada no inventário." />
+      <check_box top_pad="2" left="20" follows="left|top" height="16" label="Permitir termos de pesquisa separados em cada guia do inventário" name="FSSplitInventorySearchOverTabs" width="270" control_name="FSSplitInventorySearchOverTabs" tool_tip="Se ativado, é possível inserir um termo de pesquisa diferente para cada aba do inventário." />
+    </panel>
+
+    
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Avisos flutuantes" name="UI-toasts-tab">
+      <text type="string" left="10" top="10" length="1" follows="left|top" height="12" layout="topleft" name="ToastSettings" width="330">
+            Exibição de notificações (pop-ups, console, avisos flutuantes):
+        </text>
+      <slider control_name="ChannelBottomPanelMargin" decimal_digits="0" follows="left|top" height="16" increment="1" label="Espaço até o aviso inferior e a borda da tela:" tool_tip="Espaço em pixels entre a parte inferior da IU e o aviso mais baixo" label_width="250" layout="topleft" left="10" min_val="0" max_val="250" name="ToastSpace" top_pad="10" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="ToastSpaceText" top_delta="0" width="80">
+            pixels
+        </text>
+      <slider control_name="NotificationToastLifeTime" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Tempo visível do aviso de notificação:" tool_tip="Quantos segundos o aviso fica na tela antes de sumir" label_width="250" layout="topleft" left="10" max_val="300" name="ToastLifetime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="ToastLifetimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="NotificationTipToastLifeTime" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Tempo visível das dicas em aviso:" tool_tip="Quantos segundos uma dica em aviso flutuante permanece visível" label_width="250" layout="topleft" left="10" max_val="30" name="TipToastLifetime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="TipToastLifetimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="NearbyToastLifeTime" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Tempo visível do aviso de bate-papo próximo:" tool_tip="Quantos segundos o pop-up de conversa próxima fica visível" label_width="250" layout="topleft" left="10" max_val="60" name="NearbyToastLifetime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="NearbyToastLifetimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="FSNearbyChatToastsOffset" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Deslocamento z do Chat Toast próximo:" tool_tip="Controla o deslocamento z de brindes de bate-papo próximos" label_width="250" layout="topleft" left="10" max_val="60" name="FSNearbyChatToastsOffset" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="FSNearbyChatToastsOffsetText" top_delta="0" width="80">
+            pixels
+        </text>
+      <slider control_name="NearbyToastFadingTime" decimal_digits="0" follows="left|top" height="16" increment="1" label="Tempo de esmaecimento do aviso de bate-papo próximo:" tool_tip="Quantos segundos o pop-up de conversa próxima leva para sumir por completo" label_width="250" layout="topleft" left="10" max_val="10" name="NearbyToastFadingTime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="NearbyToastFadingTimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="StartUpToastLifeTime" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Tempo visível dos avisos na inicialização:" tool_tip="Quantos segundos os avisos na inicialização ficam visíveis" label_width="250" layout="topleft" left="10" max_val="30" name="StartupToastLifetime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="StartupToastLifetimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="ToastFadingTime" decimal_digits="0" follows="left|top" height="16" increment="1" label="Tempo de esmaecimento dos avisos:" tool_tip="Duração do esmaecimento dos avisos flutuantes normais (segundos)" label_width="250" layout="topleft" left="10" max_val="10" name="ToastFadingTime" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="ToastFadingTimeText" top_delta="0" width="80">
+            segundos
+        </text>
+      <slider control_name="ToastGap" decimal_digits="0" follows="left|top" height="16" increment="1" initial_value="5" label="Espaço entre avisos:" tool_tip="Espaço entre avisos adjacentes, em pixels" label_width="250" layout="topleft" left="10" max_val="30" name="ToastGap" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="ToastGapText" top_delta="0" width="80">
+            pixels
+        </text>
+      <slider control_name="OverflowToastHeight" decimal_digits="0" follows="left|top" height="16" increment="1" label="Altura do aviso em modo transbordante:" tool_tip="Altura do aviso em modo transbordante, em pixels" label_width="250" layout="topleft" left="10" max_val="250" name="OverflowToastHeight" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="OverflowToastHeightText" top_delta="0" width="80">
+            pixels
+        </text>
+      <slider control_name="NearbyToastWidth" decimal_digits="0" follows="left|top" height="16" increment="1" label="Largura do aviso de bate-papo próximo:" tool_tip="Largura dos pop-ups de conversa próxima em porcentagem da largura da tela" label_width="250" layout="topleft" left="10" min_val="20" max_val="90" name="NearbyToastWidth" top_pad="7" width="400" />
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left_delta="400" name="NearbyToastWidthText" top_delta="0" width="80">
+            %
+        </text>
+      <check_box control_name="FSShowToastsInFront" height="16" initial_value="true" label="Mostrar avisos flutuantes à frente de outras janelas" layout="topleft" left="10" name="FSShowToastsInFront" top_pad="10" width="256" />
+      <check_box control_name="FSUseNewRegionRestartNotification" height="16" label="Usar notificação de reinicialização de nova região" layout="topleft" left="10" name="FSUseNewRegionRestartNotification" top_pad="5" width="256" />
+      <check_box enabled_control="FSUseNewRegionRestartNotification" control_name="FSNoScreenShakeOnRegionRestart" height="16" label="Não agite minha tela quando a mensagem de alerta de reinicialização da região for exibida" layout="topleft" left="15" name="FSNoScreenShakeOnRegionRestart" top_pad="3" width="256" />
+      <check_box enabled_control="FSUseNewRegionRestartNotification" control_name="FSReportRegionRestartToChat" height="16" label="Enviar informações de reinício da região para o canal:" layout="topleft" left="15" name="FSReportRegionRestartToChat" top_pad="3" width="215" />
+      <spinner top_delta="-4" control_name="FSRegionRestartAnnounceChannel" enabled_control="FSUseNewRegionRestartNotification" decimal_digits="0" layout="topleft" follows="left|top" height="18" left_pad="5" increment="1" initial_value="473405" max_val="16777216" min_val="1" name="FSRegionRestartAnnounceChannel" width="90" />
+    </panel>
+
+    
+    <panel top_pad="5" bottom="-1" left="1" right="-1" follows="all" label="Fonte" name="UI-font-tab">
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="tooltip_textbox1" top_pad="10" width="120">
+           Esquema de fontes:
+        </text>
+      <combo_box height="23" layout="topleft" follows="left|top" control_name="FSFontSettingsFile" left_pad="5" name="Fontsettingsfile" width="160">
+            
+        </combo_box>
+      <text name="tooltip_textbox2" top_delta="5" left_pad="5" height="16" width="120" layout="topleft" follows="left|top" type="string" length="1">
+           (requer reinício)
+        </text>
+      <text name="tooltip_textbox5" top_pad="15" left="10" height="16" width="120" layout="topleft" follows="left|top" type="string" length="1">
+           Ajuste do tamanho da fonte:
+        </text>
+      <spinner name="font_size_adj_slider" top_delta="-5" left_pad="5" height="18" width="50" layout="topleft" follows="left|top" control_name="FSFontSizeAdjustment" increment=".1" decimal_digits="1" initial_value="0" min_val="-1" max_val="2" />
+      <text name="tooltip_textbox6" top_delta="5" left_pad="3" height="36" width="345" layout="topleft" follows="left|top" type="string" length="1" line_spacing.pixels="5">
+           pt (requer reinício)
+Padrão: 0. Valores maiores podem não funcionar bem.
+        </text>
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="tooltip_textbox3" top_pad="15" width="120">
+           Espaçamento entre linhas do chat:
+        </text>
+      <spinner top_delta="-5" left_pad="5" height="18" width="50" control_name="FSFontChatLineSpacingPixels" layout="topleft" follows="left|top" increment="1" decimal_digits="0" initial_value="7" min_val="0" max_val="36" name="chat_line_spacing_slider" />
+      <text name="tooltip_textbox4" top_delta="5" left_pad="3" height="36" width="335" layout="topleft" follows="left|top" type="string" length="1" line_spacing.pixels="5">
+          pixels (requer reinício)
+[VIEWER_GENERATION] padrão 0. Viewer 1 padrão 2.
+        </text>
+      <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="10" name="Label_FolderItemViewHeight" top_pad="15" width="120">
+           Altura do item em pastas:
+        </text>
+      <spinner top_delta="-5" left_pad="5" height="18" width="50" control_name="FSFolderViewItemHeight" layout="topleft" follows="left|top" increment="1" decimal_digits="0" initial_value="20" min_val="10" max_val="30" name="FSFolderViewItemHeight" />
+      <text name="Label_FolderItemViewHeight_Scale" top_delta="5" left_pad="3" height="36" width="335" layout="topleft" follows="left|top" type="string" length="1" line_spacing.pixels="5">
+          pixels (requer reinício)
+[VIEWER_GENERATION] padrão 20. Viewer 1 padrão 18.
+        </text>
+      <text top_pad="10" left="10" follows="left|top" name="text_box_notecard_font" width="120">
+          Fonte do editor de cartões:
+        </text>
+      <combo_box allow_text_entry="false" top_delta="-5" left_pad="5" follows="left|top" max_chars="20" mouse_opaque="true" name="FSNotecardFontName" width="150" control_name="FSNotecardFontName" tool_tip="Nome da fonte usada no editor notecard">
+        <combo_item name="Sans Serif" value="SansSerif" label="Sem serifa" />
+        <combo_item name="Monospace" value="Monospace" label="Monoespaçado" />
+        <combo_item name="Scripting" value="Scripting" label="Scripts" />
+        <combo_item name="Cascadia" value="Cascadia" label="Código Cascadia" />
+      </combo_box>
+        <combo_box allow_text_entry="false" top_delta="0" left_pad="5" follows="left|top" max_chars="20" mouse_opaque="true" name="FSNotecardFontSize" width="150" control_name="FSNotecardFontSize" tool_tip="Tamanho da fonte usada no editor notecard">
+        <combo_item name="Monospace" value="Monospace" label="Monoespaçado" />
+        <combo_item name="Scripting" value="Scripting" label="Scripts" />
+        <combo_item name="Cascadia" value="Cascadia" label="Código Cascadia" />
+        <combo_item name="Small" value="Small" label="Pequeno" />
+        <combo_item name="Medium" value="Medium" label="Médio" />
+        <combo_item name="Large" value="Large" label="Grande" />
+      </combo_box>
+        <text top_pad="20" left="10" follows="left|top" name="emoji_font_settings_label" width="300">
+          Fonte de emoji: (reinicie para aplicar por completo)
+        </text>
+      <check_box control_name="FSUseBWEmojis" height="16" label="Exibir emojis em monocromático" layout="topleft" left="15" name="FSUseBWEmojis" top_pad="13" width="215" />
+      <check_box disabled_control="FSUseBWEmojis" control_name="FSUsePrettyEmojiButton" height="16" label="Usar o botão de emoji estilizado" layout="topleft" left="15" name="FSUsePrettyEmojiButton" top_pad="3" width="215" />
+    </panel>
+  </tab_container>
+</panel>

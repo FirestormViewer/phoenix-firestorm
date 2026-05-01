@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	layout="topleft"
+	name="Multi-Selected People Context Menu">
+	<menu_item_call
+		enabled="false"
+		label="Adicionar Amigos"
+		layout="topleft"
+		name="Add Friends">
+		<on_click
+			function="Avatar.AddFriends" />
+		<on_enable
+			function="Avatar.EnableItem"
+			parameter="can_add" />
+	</menu_item_call>
+	<menu_item_call
+		label="Adicionar ao Conjunto"
+		layout="topleft"
+		name="Add to Set">
+		<menu_item_call.on_click
+			function="Avatar.AddToContactSet" />
+	</menu_item_call>
+	<menu_item_call
+		label="Remover Amigos"
+		layout="topleft"
+		name="Remove Friend">
+		<menu_item_call.on_click
+			function="Avatar.RemoveFriend" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_delete" />
+	</menu_item_call>
+	<menu_item_call
+		label="Mensagem"
+		layout="topleft"
+		name="IM">
+		<on_click
+			function="Avatar.IM" />
+	</menu_item_call>
+	<menu_item_call
+		enabled="false"
+		label="Ligar"
+		layout="topleft"
+		name="Call">
+		<on_click
+			function="Avatar.Call" />
+		<on_enable
+			function="Avatar.EnableItem"
+			parameter="can_call" />
+	</menu_item_call>
+	<menu name="MarkAvatar" label="Marcar...">
+		<menu_item_call
+			label="Red"
+			name="MarkRed">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Red"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Green"
+		name="MarkGreen">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Green"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Blue"
+		name="MarkBlue">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Blue"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Purple"
+			name="MarkPurple">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Purple"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Yellow"
+			name="MarkYellow">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="LtYellow"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Limpar Marca(s)"
+			name="Clear Mark">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAvatarMarkColor"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Limpar Todas as Marcas"
+			name="Clear Marks">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAllAvatarMarkColors"/>
+		</menu_item_call>
+	</menu>
+	<menu_item_call
+		enabled="false"
+		label="Compartilhar"
+		layout="topleft"
+		name="Share">
+		<on_click
+			function="Avatar.Share" />
+	</menu_item_call>
+	<menu_item_call
+		enabled="false"
+		label="Pagar"
+		layout="topleft"
+		name="Pay">
+		<menu_item_call.on_click
+			function="Avatar.Pay" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_pay"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Oferecer Teleporte"
+		name="teleport">
+		<menu_item_call.on_click
+			function="Avatar.OfferTeleport"/>
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_offer_teleport"/>
+	</menu_item_call>
+
+	<menu_item_separator />
+
+	<menu_item_call
+		label="Congelar"
+		name="freeze">
+		<menu_item_call.on_click
+			function="Avatar.Freeze"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleFreezeEject"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ejetar do Parcel"
+		name="eject">
+		<menu_item_call.on_click
+			function="Avatar.Eject"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleFreezeEject"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Expulsar da Estate"
+		name="kick">
+		<menu_item_call.on_click
+			function="Avatar.Kick"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Teleportar para Casa da Estate"
+		name="teleport_home">
+		<menu_item_call.on_click
+			function="Avatar.TeleportHome"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Banir da Estate"
+		name="estate_ban">
+		<menu_item_call.on_click
+			function="Avatar.EstateBan"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ocultar"
+		name="derender">
+		<menu_item_call.on_click
+			function="Avatar.Derender"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ocultar e Lista Negra"
+		name="derender_permanent">
+		<menu_item_call.on_click
+			function="Avatar.DerenderPermanent"/>
+	</menu_item_call>
+	<menu label="Configurações de Renderização" name="render_settings">
+		<menu_item_call
+			label="Renderizar Normalmente"
+			name="av_render_normal">
+			<menu_item_call.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="0" />
+		</menu_item_call>
+		<menu_item_call
+			label="Não Renderizar"
+			name="av_render_never">
+			<menu_item_call.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="1" />
+		</menu_item_call>
+		<menu_item_call
+			label="Renderizar Totalmente"
+			name="av_render_always">
+			<menu_item_call.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="2" />
+		</menu_item_call>
+	</menu>
+</context_menu>

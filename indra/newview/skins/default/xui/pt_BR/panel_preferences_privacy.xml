@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+    border="true"
+ follows="all"
+ height="480"
+    layout="topleft"
+ left="1"
+    top="1"
+ width="540"
+ label="Comunicação"
+ name="im">
+ 
+	<string name="AutoresponseItemNotSet">
+		Nenhum item definido
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Item não disponível
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Não autenticado
+	</string>
+ 
+<tab_container
+ label="Privacidade"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+  <!--General-->
+  <panel
+   top_pad="5"
+   bottom="-1"
+   left="1"
+   right="-1"
+   follows="all"
+   label="Geral"
+   name="tab-general" >
+
+  <panel.string
+   name="log_in_to_change">
+   autentique-se para alterar
+  </panel.string>
+
+   <button
+    enabled="false"
+    follows="left|top"
+    height="23"
+    label="Limpar histórico"
+    tool_tip="Limpar histórico de pesquisa e teletransporte, cache Web e de texturas"
+    layout="topleft"
+    left="15"
+    name="clear_webcache"
+    top_pad="10"
+    width="145">
+    <button.commit_callback
+     function="Pref.WebClearCache" />
+   </button>
+
+   <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="10"
+    layout="topleft"
+    top_delta="5"
+    left_pad="10"
+    mouse_opaque="false"
+    name="cache_size_label"
+    text_color="LtGray_50"
+    width="300">
+    (Locais, imagens, Web, histórico de pesquisa)
+   </text>
+
+   <check_box
+    height="16"
+    enabled="true"
+    label="Mostrar informações do meu perfil nos resultados da Pesquisa"
+    layout="topleft"
+    left="15"
+    name="online_searchresults"
+    top_pad="20"
+    width="350" />
+   <check_box
+    height="16"
+    enabled="false"
+    label="Apenas amigos e grupos sabem que estou em linha"
+    layout="topleft"
+    name="online_visibility"
+    top_pad="3"
+    width="350" />
+   <check_box
+    enabled="false"
+    height="16"
+    label="Apenas amigos e grupos podem ligar-me ou enviar MI"
+    layout="topleft"
+    name="voice_call_friends_only_check"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="FSShowJoinedGroupInvitations"
+    height="16"
+    label="Mostrar convites para grupos dos quais já faço parte"
+    layout="topleft"
+    name="FSShowJoinedGroupInvitations"
+    top_pad="3"
+    width="350" />
+   <check_box
+    enabled_control="EnableVoiceChat"
+    control_name="AutoDisengageMic"
+    height="16"
+    label="Desligar o microfone ao terminar chamadas"
+    layout="topleft"
+    name="auto_disengage_mic_check"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="LanguageIsPublic"
+    height="16"
+    label="Permitir que objetos com script vejam o meu idioma atual"
+    layout="topleft"
+    name="LanguageIsPublic"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="ShowFavoritesOnLogin"
+    enabled="false"
+    label="Mostrar os meus marcos favoritos ao iniciar sessão (menu pendente «Começar em» / Start At)"
+    layout="topleft"
+    name="favorites_on_login_check"
+    top_pad="3"
+    height="16"
+    width="350" />
+
+   <check_box
+    control_name="AutoAcceptNewInventory"
+    height="16"
+    label="Aceitar automaticamente novos itens de inventário"
+    layout="topleft"
+    name="Auto_Accept_New_Inventory"
+    top_pad="10"
+    width="350" />
+   <check_box
+    control_name="FSLogAutoAcceptInventoryToChat"
+    enabled_control="AutoAcceptNewInventory"
+    height="16"
+    label="Registar no chat próximo os itens de inventário aceites automaticamente"
+    layout="topleft"
+    left_delta="10"
+    name="FSLogAutoAcceptInventoryToChat"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="FSShowAutoAcceptInventoryInNotifications"
+    enabled_control="AutoAcceptNewInventory"
+    height="16"
+    label="Mostrar notificação de novo inventário mesmo com aceitação automática"
+    layout="topleft"
+    name="FSShowAutoAcceptInventoryInNotifications"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="FSUseLegacyInventoryAcceptMessages"
+    height="16"
+    label="Usar mensagens antigas de aceitar/recusar ofertas de inventário"
+    layout="topleft"
+    left_delta="-10"
+    name="FSUseLegacyInventoryAcceptMessages"
+    tool_tip="Se ativado, o visualizador só envia mensagens de aceitar e recusar após premir o botão correspondente. Se desativado, a aceitação é enviada automaticamente assim que a oferta é recebida. Sem efeito se as ofertas forem aceites automaticamente."
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="ShowInInventory"
+    height="16"
+    label="Mostrar automaticamente no inventário os itens recém-aceites"
+    layout="topleft"
+    name="Show_In_Inventory"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="ShowNewInventory"
+    height="16"
+    label="Abrir automaticamente blocos de notas, texturas e marcos após aceitar"
+    layout="topleft"
+    name="Show_New_Inventory"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="FSOpenInventoryAfterSnapshot"
+    height="16"
+    label="Mostrar automaticamente as capturas no inventário após o envio"
+    layout="topleft"
+    name="FSOpenInventoryAfterSnapshot"
+    top_pad="3"
+    width="350" />
+   <check_box
+    control_name="FSCreateGiveInventoryParticleEffect"
+    height="16"
+    label="Criar efeitos de partículas ao dar objetos de inventário a outros avatares"
+    layout="topleft"
+    name="FSCreateGiveInventoryParticleEffect"
+    top_pad="3"
+    width="350" />
+
+    <button
+     follows="left|top"
+     height="23"
+     label="Gerir lista de bloqueio / silenciados"
+     layout="topleft"
+     name="block_list"
+     top_pad="15"
+     width="255">
+     <button.commit_callback
+      function="Pref.BlockList"/>
+    </button>
+    </panel>
+
+    <!--Logging-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Registos e transcrições"
+     name="tab-logging" >
+
+	   <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left="15"
+		top="10"
+		mouse_opaque="false"
+		name="logging_label"
+		width="300">
+		Guardar:
+	   </text>
+	   <combo_box
+		enabled="false"
+		control_name="KeepConversationLogTranscripts"
+		height="23"
+		layout="topleft"
+		left="15"
+		tool_tip="Registo: lista de conversas de chat iniciadas por si ou por outra pessoa. Transcrição: o texto tal como apareceu no ecrã."
+		top_pad="5"
+		name="conversation_log_combo"
+		width="200">
+		 <item
+		  name="log_and_transcripts"
+		  label="Registos e transcrições"
+		  value="2"/>
+		 <item
+		  name="log_only"
+		  label="Só registos"
+		  value="1"/>
+		 <item
+		  name="no_log_or_transcript"
+		  label="Sem registos nem transcrições"
+		  value="0"/>
+	   </combo_box>
+	   <button
+		enabled="false"
+		follows="left|top"
+		height="23"
+		label="Limpar registo..."
+		layout="topleft"
+		left_pad="4"
+		name="clear_log"
+		top_delta="0"
+		width="110">
+		<button.commit_callback
+		 function="Pref.ClearLog" />
+		</button>
+		<button
+		 enabled="false"
+		 follows="left|top"
+		 height="23"
+		 label="Eliminar transcrições..."
+		 layout="topleft"
+		 left_pad="5"
+		 top_delta="0"
+		 name="delete_transcripts"
+		 width="140">
+		 <commit_callback
+		  function="Pref.DeleteTranscripts" />
+		</button>
+	   <check_box
+		enabled="false"
+		control_name="LogNearbyChat"
+		name="LogNearbyChat"
+		top_pad="2"
+		left="15"
+		label="Guardar transcrição do chat próximo"
+		layout="topleft"
+		height="18"
+		tool_tip="Gravar no disco a transcrição das mensagens do chat próximo"
+		width="350" />
+
+	   <check_box
+		 control_name="UseLegacyIMLogNames"
+		 label="Usar formato antigo de nome de ficheiro nas transcrições"
+		 layout="topleft"
+		 name="UseLegacyIMLogNames"
+		 tool_tip="Se ativado, usa o formato antigo de nome de ficheiro (Nome visível) em vez do novo formato (nome_utilizador)."
+		 top_pad="15"
+		 height="16"
+		 width="350" />
+	   <check_box
+		 control_name="LogFileNamewithDate"
+		 label="Adicionar data ao nome dos ficheiros de transcrição"
+		 layout="topleft"
+		 name="LogFileNamewithDate"
+		 tool_tip="Adiciona data aos ficheiros de registo de chat e MI no formato chat-AAAA-MM-DD e nome_do_MI-AAAA-MM."
+		 top_pad="3"
+		 height="16"
+		 width="350" />
+	   <check_box
+		 control_name="FSUseBuiltInHistory"
+		 label="Usar leitor de transcrições integrado"
+		 layout="topleft"
+		 name="FSUseBuiltInHistory"
+		 tool_tip="Usa o leitor de transcrições integrado. Se desativado, as transcrições abrem no editor de texto predefinido do sistema."
+		 top_pad="3"
+		 height="16"
+		 width="350" />
+
+    </panel>
+
+    <!--LookAt-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Ponto de mira"
+     name="tab-lookat" >
+     
+        <check_box
+         top="10"
+         follows="left|top"
+         height="16"
+         label="Mostrar alvos de look at:"
+         left="15"
+         name="showlookat"
+         width="270"
+         control_name="DebugLookAt"
+         tool_tip="O ponto LookAt é uma dica de animação: o visualizador usa-o para orientar olhos, cabeça e torso. Também pode servir de âncora para a câmara do avatar."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="35"
+         name="lookatshownames"
+         tool_tip="Formato de nome a mostrar nos alvos de look at"
+         top_pad="5"
+         width="200">
+            Mostrar nomes nos alvos de look at:
+        </text>
+        <combo_box
+         enabled_control="DebugLookAt"
+         control_name="DebugLookAtShowNames"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="7"
+         max_chars="135"
+         name="lookatshownames_combobox"
+         width="150">
+            <combo_box.item
+             enabled="true"
+             label="Nenhum"
+             name="None"
+             value="0" />
+            <combo_box.item
+             enabled="true"
+             label="Nome completo"
+             name="Complete_Name"
+             value="1" />
+            <combo_box.item
+             enabled="true"
+             label="Nome de exibição"
+             name="Display_Name"
+             value="2" />
+            <combo_box.item
+             enabled="true"
+             label="Nome legado"
+             name="Legacy_Name"
+             value="3" />
+            <combo_box.item
+             enabled="true"
+             label="Nome de utilizador"
+             name="User_Name"
+             value="4" />
+        </combo_box>
+        <check_box
+         enabled_control="DebugLookAt"
+         control_name="DebugLookAtHideOwn"
+         height="16"
+         initial_value="true"
+         label="Não mostrar o meu próprio alvo de look at"
+         layout="topleft"
+         left="30"
+         name="LookAtHideOwn"
+         tool_tip="Não mostrar a minha própria mira de câmara"
+         top_pad="4"
+         width="350" />
+        <check_box
+         enabled_control="DebugLookAt"
+         control_name="ExodusLookAtLines"
+         height="16"
+         initial_value="true"
+         label="Desenhar linhas até ao alvo de look at"
+         layout="topleft"
+         left="30"
+         name="ExodusLookAtLines"
+         tool_tip="Desenhar uma linha do avatar até à mira do alvo de look at"
+         top_pad="4"
+         width="350" />
+
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="15"
+      layout="topleft"
+      left="15"
+      name="mylookat"
+      top_pad="25"
+      width="200">
+        Os meus alvos de look at:
+      </text>
+        <check_box
+         control_name="PrivateLookAtTarget"
+         height="16"
+         label="Não enviar os meus alvos de look at para os outros"
+         layout="topleft"
+         left_delta="15"
+         name="privatelookat"
+         tool_tip="Impede que as suas dicas de look at sejam difundidas a outros"
+         top_pad="4"
+         width="350" />
+        <check_box
+         control_name="PrivateLocalLookAtTarget"
+         height="16"
+         label="Não enviar alvos de look at, nem para mim mesma/mesmo"
+         layout="topleft"
+         name="privateLocalLookat"
+         tool_tip="Impede a cabeça do avatar de virar para o ponto em que a câmara está focada na sua vista. Este movimento pode não ser visível para outros."
+         top_pad="4"
+         width="400" />
+        <check_box
+         control_name="PrivatePointAtTarget"
+         height="16"
+         label="Não enviar dicas do alvo de seleção"
+         layout="topleft"
+         name="privatepointat"
+         tool_tip="Impede que o ponto de seleção seja visível para outros"
+         top_pad="4"
+         width="350" />
+        <check_box
+         control_name="FSLookAtTargetLimitDistance"
+         height="16"
+         label="Limitar distância da cabeça:"
+         follows="left|top"
+         layout="topleft"
+         name="LimitLookAt"
+         tool_tip="Limita o alvo de look at à zona da cabeça."
+         top_pad="4"
+         width="160" />
+        <slider
+         control_name="FSLookAtTargetMaxDistance"
+         decimal_digits="0"
+         top_delta="0"
+         left_pad="10"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="160"
+         layout="topleft"
+         max_val="32"
+         min_val="1"
+         name="LimitLookAtDistance"
+         width="150" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="0"
+         name="LimitLookAtDistanceMeterText"
+         top_delta="0"
+         width="128">
+          m
+        </text>
+    </panel>
+
+    <!--Autoresponse-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Resposta automática 1"
+     name="tab-autoresponse-1" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_toggle_location_tip"
+         top_pad="5"
+         width="475"
+         wrap="true">
+           Nota: Para ativar as respostas automáticas, defina o estado em linha em Menu Comunicação &gt; Estado em linha
+        </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="text_box3"
+         top_pad="10"
+         width="475">
+          Resposta automática no modo INDISPONÍVEL (ou seja, OCUPADO):
+        </text>
+        <text_editor
+         control_name="DoNotDisturbModeResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="50"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="do_not_disturb_response"
+         width="475"
+         word_wrap="true">
+         log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_response_label"
+         top_pad="5"
+         width="475">
+           Resposta automática a todos os avatares no modo RESPOSTA AUTOMÁTICA para todos:
+        </text>
+        <text_editor
+         control_name="FSAutorespondModeResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="50"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_nf_response_label"
+         top_pad="5"
+         width="475">
+           Resposta automática a não amigos no modo RESPOSTA AUTOMÁTICA APENAS PARA NÃO AMIGOS:
+        </text>
+        <text_editor
+         control_name="FSAutorespondNonFriendsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="50"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_nf_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+       <check_box
+        top_pad="5"
+        follows="left|top"
+        height="16"
+        label="Enviar resposta automática no modo AUSENTE:"
+        left="15"
+        name="send_away_av_response"
+        width="270"
+        control_name="FSSendAwayAvatarResponse"
+        tool_tip="Envia o texto abaixo quando alguém lhe envia MI enquanto está no modo ausente."/>
+      <text_editor
+        enabled_control="FSSendAwayAvatarResponse"
+        control_name="FSAwayAvatarResponse"
+        use_ellipses="false"
+        commit_on_focus_lost = "true"
+        follows="left|top"
+        height="50"
+        layout="topleft"
+        left="35"
+        top_pad="5"
+        name="away_avatar_response"
+        width="475"
+        word_wrap="true">
+        log_in_to_change
+      </text_editor>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Enviar resposta automática a avatares SILENCIOSOS:"
+         left="15"
+         name="send_muted_av_response"
+         width="270"
+         control_name="FSSendMutedAvatarResponse"
+         tool_tip="Envia o texto abaixo quando alguém que silenciou lhe envia MI."/>
+        <text_editor
+         enabled_control="FSSendMutedAvatarResponse"
+         control_name="FSMutedAvatarResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="muted_avatar_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+    </panel>
+
+    <!--Autoresponse-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Resposta automática 2"
+     name="tab-autoresponse-2" >
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rto_response_label"
+         top="10"
+         width="500">
+           Resposta automática a todos no modo RECUSAR OFERTAS DE TELETRANSPORTE:
+        </text>
+        <text_editor
+         control_name="FSRejectTeleportOffersResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rto_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+       <check_box
+        top_pad="5"
+        left="35"
+        follows="left|top"
+        height="16"
+        label="Não recusar ofertas de teletransporte (nem enviar resposta) de pessoas na lista de amigos"
+        name="FSDontRejectTeleportOffersFromFriends"
+        width="500"
+        control_name="FSDontRejectTeleportOffersFromFriends"/>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rfr_response_label"
+         top_pad="5"
+         width="500">
+           Resposta automática a todos no modo RECUSAR PEDIDOS DE AMIZADE:
+        </text>
+        <text_editor
+         control_name="FSRejectFriendshipRequestsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rfr_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autoresponse_item_label"
+         top_pad="25"
+         width="180">
+          Item enviado com todas as respostas automáticas:
+        </text>
+        <fs_copytrans_inventory_drop_target
+         name="autoresponse_item"
+         follows="left|top|right"
+         height="23"
+         layout="topleft"
+         left_pad="5"
+         max_length_bytes="255"
+         top_delta="-5"
+         right="-50"
+         tool_tip="Arraste para aqui um item do inventário de origem."/>
+        <button
+         follows="left|top"
+         height="23"
+         label="Limpar"
+         layout="topleft"
+         left_pad="4"
+         name="clear_autoresponse_item"
+         top_delta="0"
+         width="40"/>
+
+    </panel>
+</tab_container>
+</panel>

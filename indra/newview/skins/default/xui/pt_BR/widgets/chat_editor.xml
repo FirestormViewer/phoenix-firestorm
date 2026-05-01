@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<chat_editor
+  name="chat_editor"
+  enable_tab_remove="false"
+  show_context_menu="true"
+  show_emoji_helper="true"
+  use_color="true"
+  />

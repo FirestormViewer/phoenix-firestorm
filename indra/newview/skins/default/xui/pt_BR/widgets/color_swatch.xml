@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- <FS:Zi> Add label/caption colors (text_enabled_color/text_disabled_color) -->
+<color_swatch alpha_background_image="color_swatch_alpha.tga"
+              border_color="ColorSwatchBorderColor"
+              text_enabled_color="LabelTextColor"
+              text_disabled_color="LabelDisabledColor"
+              name="colorswatch">
+  <color_swatch.caption_text name="caption"
+                             halign="center"
+                             follows="left|right|bottom"
+                             v_pad="2"/>
+</color_swatch>

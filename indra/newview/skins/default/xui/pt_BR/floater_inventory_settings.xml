@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ can_close="true"
+ can_minimize="true"
+ can_resize="false"
+ save_rect="true"
+ height="483"
+ width="483"
+ name="inventory_settings"
+ title="Configurações do Inventário">
+ <icon
+  follows="top|left"
+  height="18"
+  image_name="Multi_Folder_Mode"
+  layout="topleft"
+  left="18"
+  mouse_opaque="true"
+  name="multi_folder_icon"
+  top="20"
+  width="18" />
+ <text
+   type="string"
+   length="1"
+   follows="left|top|right"
+   height="13"
+   layout="topleft"
+   left_pad="12"
+   top_delta="2"
+   name="multi_folder_txt"
+   font="SansSerifMedium"
+   text_color="White"
+   width="300">
+   Clique duplo em uma pasta na visualização multipasta:
+ </text>
+ <radio_group
+  control_name="MultiModeDoubleClickFolder"
+  follows="left|top"
+  top_pad="8"
+  layout="topleft"
+  font="SansSerifMedium"
+  left="60"
+  width="300"
+  height="66"
+  name="multi_double_click_setting">
+     <radio_item
+      height="18"
+      label="Expande e recolhe a pasta"
+      label_text.text_color="White"
+      follows="left|top"
+      layout="topleft"
+      name="0"
+      width="200"/>
+     <radio_item
+      height="18"
+      follows="left|top"
+      label="Abre uma nova janela"
+      label_text.text_color="White"
+      layout="topleft"
+      left_delta="0"
+      name="1"
+      top_pad ="3"
+      width="200" />
+     <radio_item
+      height="18"
+      follows="left|top"
+      label="Troca a visualização"
+      label_text.text_color="White"
+      layout="topleft"
+      left_delta="0"
+      name="2"
+      top_pad ="3"
+      width="200" />
+ </radio_group>
+ <icon
+  follows="top|left"
+  height="18"
+  image_name="Single_Folder_Mode"
+  layout="topleft"
+  left="18"
+  mouse_opaque="true"
+  name="single_folder_icon"
+  top_pad="19"
+  width="18" />
+ <text
+   type="string"
+   length="1"
+   follows="left|top|right"
+   height="13"
+   layout="topleft"
+   left_pad="12"
+   top_delta="2"
+   name="single_folder_txt"
+   font="SansSerifMedium"
+   text_color="White"
+   width="300">
+   Clique duplo em uma pasta na visualização de pasta única:
+ </text>
+ <radio_group
+  control_name="SingleModeDoubleClickOpenWindow"
+  follows="left|top"
+  top_pad="8"
+  layout="topleft"
+  font="SansSerifMedium"
+  left="60"
+  width="300"
+  height="44"
+  name="single_double_click_setting">
+     <radio_item
+      height="18"
+      label="Permanece na janela atual"
+      label_text.text_color="White"
+      follows="left|top"
+      layout="topleft"
+      name="false"
+      width="200"/>
+     <radio_item
+      height="18"
+      follows="left|top"
+      label="Abre uma nova janela"
+      label_text.text_color="White"
+      layout="topleft"
+      left_delta="0"
+      name="true"
+      top_pad ="3"
+      width="200" />
+ </radio_group>
+  <icon
+   follows="top|left"
+   height="15"
+   image_name="Icon_Pointer"
+   layout="topleft"
+   left="20"
+   mouse_opaque="true"
+   name="single_folder_icon"
+   top_pad="20"
+   width="15" />
+ <text
+   type="string"
+   length="1"
+   follows="left|top|right"
+   height="13"
+   layout="topleft"
+   left_pad="13"
+   name="find_original_txt"
+   font="SansSerifMedium"
+   text_color="White"
+   top_delta="1"
+   width="300">
+   Ao clicar em &quot;Mostrar no inventário&quot; ou &quot;Encontrar original&quot;
+ </text>
+ <radio_group
+  control_name="FindOriginalOpenWindow"
+  follows="left|top"
+  top_pad="8"
+  layout="topleft"
+  font="SansSerifMedium"
+  left="60"
+  width="300"
+  height="44"
+  name="find_original_settings">
+     <radio_item
+      height="18"
+      label="Mostra o item na janela principal do inventário"
+      label_text.text_color="White"
+      follows="left|top"
+      layout="topleft"
+      name="false"
+      width="200"/>
+     <radio_item
+      height="18"
+      follows="left|top"
+      label="Abre uma nova janela de pasta única"
+      label_text.text_color="White"
+      layout="topleft"
+      left_delta="0"
+      name="true"
+      top_pad ="3"
+      width="200" />
+ </radio_group>
+  <icon
+   follows="top|left"
+   height="18"
+   image_name="Inv_Favorite_Star_Full"
+  layout="topleft"
+   left="18"
+   mouse_opaque="true"
+   name="favorites_icon"
+   top_pad="19"
+   width="18" />
+  <text
+   type="string"
+   length="1"
+   layout="topleft"
+   follows="left|top|right"
+   height="13"
+   left_pad="12"
+   top_delta="2"
+   name="favorites_txt"
+   font="SansSerifMedium"
+   text_color="White"
+   width="300">
+   Favoritos
+  </text>
+  <check_box
+   control_name="InventoryFavoritesUseStar"
+   layout="topleft"
+   follows="left|top"
+   top_pad="8"
+   font="SansSerifMedium"
+   left="60"
+   width="300"
+   height="18"
+   label="Estrela nos itens favoritos"
+   name="favorite_star"
+   label_text.text_color="White"
+   initial_value="false"/>
+  <check_box
+   control_name="InventoryFavoritesUseHollowStar"
+   follows="left|top"
+   top_pad="5"
+   layout="topleft"
+   font="SansSerifMedium"
+   left="60"
+   width="150"
+   height="18"
+   label="Estrela nas pastas que contêm um favorito"
+   name="favorite_hollow_star"
+   label_text.text_color="White"
+   initial_value="false"/>
+  <check_box
+   control_name="InventoryFavoritesColorText"
+   follows="left|top"
+   top_pad="5"
+   layout="topleft"
+   font="SansSerifMedium"
+   left="60"
+   width="150"
+   height="18"
+   label="Texto colorido"
+   name="favorites_color"
+   label_text.text_color="White"
+   initial_value="false"/>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   layout="topleft"
+   height="24"
+   label_height="0"
+   left_pad="40"
+   name="favorites_swatch"
+   top_delta="-6"
+   width="44" >
+    <color_swatch.init_callback
+     function="ScriptPref.getUIColor"
+     parameter="InventoryFavoriteColor" />
+    <color_swatch.commit_callback
+     function="ScriptPref.applyUIColor"
+     parameter="InventoryFavoriteColor" />
+  </color_swatch>
+  <icon
+   follows="top|left"
+   height="18"
+   image_name="Inv_Object"
+   layout="topleft"
+   left="18"
+   mouse_opaque="true"
+   name="obj_icon"
+   top_pad="19"
+   width="18" />
+  <text
+   type="string"
+   length="1"
+   follows="left|top|right"
+   height="13"
+   layout="topleft"
+   left_pad="12"
+   top_delta="2"
+   name="attachment_return_txt"
+   font="SansSerifMedium"
+   text_color="White"
+   width="420">
+   Pressionar Enter ou clicar duas vezes em um anexo do avatar
+  </text>
+  <combo_box
+   control_name="FSDoubleClickAddInventoryObjects"
+   layout="topleft"
+   follows="left|top"
+   top_pad="8"
+   height="24"
+   left="60"
+   name="attach_combo"
+   width="350">
+    <combo_box.item
+      label="Adiciona anexo (recomendado)"
+      name="1"
+      value="1"/>
+    <combo_box.item
+      label="Vestir (remove o anexo naquele ponto)"
+      name="0"
+      value="0"/>
+  </combo_box>
+</floater>

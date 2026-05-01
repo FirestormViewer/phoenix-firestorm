@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  positioning="cascading"
+  can_close="true"
+  can_minimize="true"
+  can_resize="true"
+  height="300"
+  min_height="300"
+  min_width="450"
+  name="rlv_behaviours"
+  save_rect="true"
+  save_visibility="false"
+  single_instance="true"
+  title="Restrições RLV Ativas"
+  width="450">
+</floater>

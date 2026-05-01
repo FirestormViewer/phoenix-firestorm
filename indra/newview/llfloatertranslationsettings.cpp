@@ -116,7 +116,13 @@ bool LLFloaterTranslationSettings::postBuild()
 void LLFloaterTranslationSettings::onOpen(const LLSD& key)
 {
     mMachineTranslationCB->setValue(gSavedSettings.getBOOL("TranslateChat"));
-    mLanguageCombo->setSelectedByValue(gSavedSettings.getString("TranslateLanguage"), true);
+    std::string translate_language = gSavedSettings.getString("TranslateLanguage");
+    if (translate_language == "pt")
+    {
+        translate_language = "pt_BR";
+        gSavedSettings.setString("TranslateLanguage", translate_language);
+    }
+    mLanguageCombo->setSelectedByValue(translate_language, true);
     mTranslationServiceRadioGroup->setSelectedByValue(gSavedSettings.getString("TranslationService"), true);
 
     LLSD azure_key = gSavedSettings.getLLSD("AzureTranslateAPIKey");

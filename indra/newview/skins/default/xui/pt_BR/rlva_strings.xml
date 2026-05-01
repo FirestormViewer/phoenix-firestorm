@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Oculto)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Parcela oculta)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Região oculta)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** MI bloqueada pelo seu visualizador</string>
+			<key>description</key>
+			<string>Exibida no lugar da mensagem original quando uma MI recebida é bloqueada</string>
+			<key>label</key>
+			<string>MI recebida bloqueada (local)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** MI bloqueada pelo visualizador do remetente</string>
+			<key>description</key>
+			<string>Exibida (e enviada ao destinatário) quando uma MI enviada é bloqueada</string>
+			<key>label</key>
+			<string>MI enviada bloqueada (local + remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** A outra parte pede respeitosamente que você cuide da sua vida (foi culpa dos coelhos!)</string>
+			<key>description</key>
+			<string>Enviada ao destinatário quando você recusa o pedido de listar suas restrições RLV ativas.</string>
+			<key>label</key>
+			<string>Comando @list e @except (remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Use @except para ver a lista de exceções ativas)</string>
+			<key>description</key>
+			<string>Enviada ao destinatário como sufixo a @list para indicar como pedir suas exceções</string>
+			<key>label</key>
+			<string>Sufixo do comando @list (remoto)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** A outra parte não está sob restrição @startim</string>
+			<key>description</key>
+			<string>Enviada ao destinatário quando tentam fechar à força sua conversa de MI (e não existe sessão)</string>
+			<key>label</key>
+			<string>Comando @stopim sem sessão (remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** A sessão foi encerrada para a outra parte</string>
+			<key>description</key>
+			<string>Enviada ao destinatário quando tentam fechar à força a conversa de MI (e ela existe)</string>
+			<key>label</key>
+			<string>Comando @stopim com sessão ativa (remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] encerrou remotamente a conversa de MI com @stopim</string>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível usar o piloto automático devido a restrições RLV</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível executar a ação devido a restrições RLV</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível alterar o grupo ativo por restrição RLV; voltando a &quot;[GROUP_SLURL]&quot;</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível executar a ação pedida no inventário: pasta bloqueada por RLV.</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível ver avatares próximos devido a restrições RLV</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>Tentativa de anexar '[OBJECT]' negada por restrições RLV</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>'[OBJECT]' não tem permissão para teleportá-lo devido a restrições RLV</string>
+		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível mostrar diálogo de script ou caixa de texto devido a restrições RLV</string>
+		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível compartilhar inventário com [RECIPIENT] devido a restrições RLV.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível compartilhar inventário devido a restrições RLV.</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível iniciar MI com [RECIPIENT] devido a restrições RLV</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível iniciar conferência com [RECIPIENT] devido a restrições RLV</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível iniciar teleporte devido a restrições RLV</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível oferecer teleporte devido a restrições RLV</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível abrir [TYPE] devido a restrições RLV</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Não é possível ativar o modo arame devido a restrições RLV</string>
+		</map>
+
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>O residente a quem você enviou mensagem não pode ler MIs no momento; tente mais tarde.</string>
+			<key>description</key>
+			<string>Enviada ao remetente quando a MI dele foi bloqueada</string>
+			<key>label</key>
+			<string>MI recebida bloqueada (remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>O residente não pode aceitar no momento. Tente mais tarde.</string>
+			<key>description</key>
+			<string>Enviada ao remetente quando o pedido ou oferta de teleporte foi bloqueado</string>
+			<key>label</key>
+			<string>Oferta/pedido de teleporte bloqueado (remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>Um residente</string>
+		<string>Este residente</string>
+		<string>Aquele residente</string>
+		<string>Um indivíduo</string>
+		<string>Este indivíduo</string>
+		<string>Aquele indivíduo</string>
+		<string>Uma pessoa</string>
+		<string>Esta pessoa</string>
+		<string>Aquela pessoa</string>
+		<string>Um estranho</string>
+		<string>Este estranho</string>
+		<string>Aquele estranho</string>
+		<string>Um ser</string>
+		<string>Este ser</string>
+		<string>Aquele ser</string>
+		<string>Um agente</string>
+		<string>Este agente</string>
+		<string>Aquele agente</string>
+		<string>Uma alma</string>
+		<string>Esta alma</string>
+		<string>Aquela alma</string>
+		<string>Alguém</string>
+		<string>Algumas pessoas</string>
+		<string>Alguma pessoa</string>
+		<string>Um ser desconhecido</string>
+		<string>Um não identificado</string>
+		<string>Uma pessoa desconhecida</string>
+	</array>
+
+</map>
+</llsd>

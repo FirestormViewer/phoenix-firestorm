@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ legacy_header_height="18"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true"
+ height="400"
+ min_height="348"
+ min_width="668"
+ layout="topleft"
+ name="omnifilter"
+ help_topic="omnifilter"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Editor de Regras do Omnifilter"
+ width="700">
+</floater>

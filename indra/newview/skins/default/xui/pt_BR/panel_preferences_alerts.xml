@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Diálogos" name="popups" title="Diálogos">
+<tab_container name="tabs">
+ 
+    <!-- World -->
+    <panel label="Mundo" name="tab-world">
+	<check_box label="Avisar ao gastar ou receber L$" name="notify_money_change_checkbox"/>
+    </panel>
+
+    <!-- Alerts -->
+    <panel label="Alertas" name="tab-alerts">
+	<text name="show_label">
+		Mostrar sempre:
+	</text>
+	<text name="dont_show_label">
+		Nunca mostrar:
+	</text>
+	</panel>
+
+</tab_container>
+</panel>

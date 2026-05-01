@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_debug" title="Configurações de depuração">
+	<radio_group name="boolean_combo">
+		<radio_item label="Verdadeiro" name="TRUE" />
+		<radio_item label="Falso" name="FALSE" />
+	</radio_group>
+	<color_swatch label="Cor" name="val_color_swatch"/>
+	<spinner label="x" name="val_spinner_1"/>
+	<spinner label="x" name="val_spinner_2"/>
+	<spinner label="x" name="val_spinner_3"/>
+	<spinner label="x" name="val_spinner_4"/>
+	<button label="Restaurar padrão" name="default_btn"/>
+</floater>

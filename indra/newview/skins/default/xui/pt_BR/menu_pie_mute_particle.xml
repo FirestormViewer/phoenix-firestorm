@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+ name="Mute Particle Pie">
+  <pie_slice
+     enabled="false"
+     label="Silenc. Dono Part."
+     name="Mute Particle">
+    <pie_slice.on_click
+     function="Particle.Mute" />
+    <pie_slice.on_enable
+     function="EnableMuteParticle" />
+  </pie_slice>
+</pie_menu>

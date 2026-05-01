@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater positioning="cascading" can_close="true" can_resize="true" height="332" help_topic="fs_blocklist" min_height="250" min_width="210" layout="topleft" name="floater_blocklist" save_rect="true" save_visibility="false" single_instance="true" reuse_instance="true" title="Residentes e Objetos Bloqueados" width="310">
+  <panel class="fs_panel_block_list_sidetray" name="panel_block_list_sidetray" filename="panel_block_list_sidetray.xml" follows="all" left="0" top="0" right="-1" bottom="-1" />
+</floater>

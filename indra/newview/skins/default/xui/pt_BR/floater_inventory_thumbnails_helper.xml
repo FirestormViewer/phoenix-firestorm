@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+   legacy_header_height="18"
+   can_resize="false"
+   height="600"
+   layout="topleft"
+   min_height="175"
+   min_width="500"
+   name="contents"
+   help_topic="contents"
+   title="Auxiliar de Miniaturas do Inventário"
+   width="800">
+</floater>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+ layout="topleft"
+ name="Settings">
+    <menu_item_call
+     label="Carregar Seletivo"
+	 tool_tip="Carrega apenas as articulações que estão desligadas e as ativa."
+     layout="topleft"
+     name="load_selective">
+        <on_click function="Pose.Menu" parameter="selective"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Carregar Seletivo - Apenas Rotações"
+	 tool_tip="Carrega apenas rotações nas articulações que estão desligadas e as ativa."
+     layout="topleft"
+     name="rotations_positions">
+        <on_click function="Pose.Menu" parameter="selective_rot"/>
+    </menu_item_call>
+    <menu_item_separator
+     layout="topleft" />
+    <menu_item_call
+     label="Carregar - Apenas Rotações"
+     layout="topleft"
+	 tool_tip="Carrega apenas as rotações. Adequado para poses feitas em outros avatares ou formas."
+     name="rotations">
+        <on_click function="Pose.Menu" parameter="rotation"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Carregar"
+     layout="topleft"
+	 tool_tip="Carrega rotações, posições e escalas."
+     name="load_all">
+        <on_click function="Pose.Menu" parameter="all"/>
+    </menu_item_call>
+</toggleable_menu>

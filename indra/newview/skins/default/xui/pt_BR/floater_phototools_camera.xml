@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="right"
+ can_resize="false"
+ can_dock="false"
+ can_close="true"
+ can_minimize="true"
+ height="315"
+ width="285"
+ layout="topleft"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ save_dock_state="true"
+ title="Ferramentas de Câmera"
+ border_thickness="0"
+ name="phototools_camera_floater"
+ help_topic="phototools_camera_floater">
+	<floater.string name="rotate_tooltip">
+		Girar a câmera em torno do foco
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Aproximar ou afastar a câmera em direção ao foco
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Mover a câmera para cima/baixo e esquerda/direita
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Ver objeto
+	</floater.string>
+	<string name="inactive_combo_text">Usar predefinição</string>
+	<tab_container
+	 follows="all"
+	 halign="center"
+	 name="tabs"
+	 layout="topleft"
+	 height="320"
+	 width="285"
+	 top="0"
+	 left="0"
+	 tab_group="1"
+	 tab_width="68"
+	 tab_position="top"
+	 tab_min_width="25">
+		<panel
+		 name="P_Cam_Controls_1"
+		 follows="all"
+		 layout="topleft"
+		 top="0"
+		 label="Controles da câmera 1"
+		 height="350"
+		 left="0">
+			<panel
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 name="cameracontrolspanel"
+			 width="270"
+			 height="145"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<panel
+				 border="false"
+				 height="110"
+				 layout="topleft"
+				 left="0"
+				 top_pad="0"
+				 mouse_opaque="false"
+				 name="controls1"
+				 width="270">
+					<panel
+					 follows="all"
+					 height="102"
+					 layout="topleft"
+					 left="6"
+					 name="preset_views_list"
+					 top_pad="0"
+					 right="-1"
+					 visible="false">
+						<panel_camera_item
+						 name="front_view"
+						 height="20"
+						 top="10">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="Front View"/>
+							<panel_camera_item.picture
+							 image_name="Cam_Preset_Front_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Cam_Preset_Front_On"/>
+							<panel_camera_item.text
+							 name="front_view_text"
+							 top="22">
+								Vista frontal
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item
+						 name="group_view"
+						 height="20"
+						 top_pad="1">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="Side View"/>
+							<panel_camera_item.picture
+							 image_name="Cam_Preset_Side_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Cam_Preset_Side_On"/>
+							<panel_camera_item.text
+							 name="side_view_text"
+							 top="22">
+								Vista lateral
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item
+						 name="rear_view"
+						 height="20"
+						 top_pad="1">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="Rear View"/>
+							<panel_camera_item.picture
+							 image_name="Cam_Preset_Back_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Cam_Preset_Back_On"/>
+							<panel_camera_item.text
+							 name="rear_view_text"
+							 top="22">
+								Vista traseira
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item
+						 name="tpp_view"
+						 layout="topleft"
+						 height="20"
+						 top_pad="1">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="TPP View"/>
+							<panel_camera_item.picture
+							 image_name="Cam_Preset_TPP_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Cam_Preset_TPP_On"/>
+							<panel_camera_item.text
+							 name="tpp_view_text"
+							 top="22">
+								Vista 3ª pessoa
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<combo_box
+						 height="20"
+						 left="0"
+						 mouse_opaque="true"
+						 name="preset_combo"
+						 top_pad="-4"
+						 width="122">
+						 <combo_list
+							mouse_wheel_opaque="true"/>
+						 <combo_box.item
+						 label="Usar predefinição"
+							name="Use preset"
+							value="default" />
+						</combo_box>
+						<button
+						 height="13"
+						 width="13"
+						 layout="topleft"
+						 mouse_opaque="true"
+						 name="gear_btn"
+						 tool_tip="Predefinições de câmera"
+						 top_delta="3"
+						 left_pad="3" 
+						 image_selected="Icon_Gear"
+						 image_pressed="Icon_Gear"
+						 image_unselected="Icon_Gear"
+						 is_toggle="true">
+						 <button.commit_callback
+							function="CameraPresets.ShowPresetsList"/>
+						</button>
+						<button
+						 follows="top|left"
+						 height="20"
+						 label="Posição..."
+						 layout="topleft"
+						 left_pad="5"
+						 name="camera_position_btn"
+						 top_delta="-3"
+						 width="103">
+						 <button.commit_callback
+							function="Floater.Show"
+							parameter="prefs_view_advanced"/>
+						</button>
+					</panel>
+					<panel
+					 follows="all"
+					 height="68"
+					 layout="topleft"
+					 left="50"
+					 name="camera_modes_list"
+					 top="25"
+					 width="220"
+					 visible="false">
+						<panel_camera_item
+						 name="object_view">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="object_view"/>
+							<panel_camera_item.text
+							 name="object_view_text">
+								Vista do objeto
+							</panel_camera_item.text>
+							<panel_camera_item.picture
+							 image_name="Object_View_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="Object_View_On"/>
+						</panel_camera_item>
+						<panel_camera_item
+						 name="mouselook_view"
+						 layout="topleft">
+							<panel_camera_item.mousedown_callback
+							 function="CameraPresets.ChangeView"
+							 parameter="mouselook_view"/>
+							<panel_camera_item.text
+							 name="mouselook_view_text">
+								Vista mouselook
+							</panel_camera_item.text>
+							<panel_camera_item.picture
+							 image_name="MouseLook_View_Off"/>
+							<panel_camera_item.selected_picture
+							 image_name="MouseLook_View_On"/>
+						</panel_camera_item>
+					</panel>
+					<!--TODO: replace + - images -->
+					<panel
+					 border="false"
+					 follows="top|left"
+					 class="camera_zoom_panel"
+					 height="115"
+					 layout="topleft"
+					 left="0"
+					 mouse_opaque="false"
+					 name="zoom"
+					 top="0"
+					 width="270">
+						<joystick_rotate
+						 follows="top|left"
+						 height="100"
+						 layout="topleft"
+						 left="10"
+						 name="cam_rotate_stick"
+						 quadrant="left"
+						 sound_flags="3"
+						 visible="true"
+						 tool_tip="Órbita da câmera em torno do foco"
+						 top="5"
+						 width="100"/>
+					<!-- <FS:Beq> FIRE-34509 Add Camera roll -->
+						<button
+						follows="bottom|left"
+						width="12"
+						height="12"
+						image_selected="VirtualTrackball_Rotate_Left_Active"
+						image_unselected="VirtualTrackball_Rotate_Left"
+						layout="topleft"
+						top_delta="85"
+						left_delta="5"
+						name="roll_left"
+						tool_tip="Rolar câmera para a esquerda">
+						<commit_callback function="Camera.roll_left" />
+						<mouse_held_callback function="Camera.roll_left" />
+					</button>
+					<button
+						follows="bottom|right"
+						width="12"
+						height="12"
+						image_selected="VirtualTrackball_Rotate_Right_Active"
+						image_unselected="VirtualTrackball_Rotate_Right"
+						layout="topleft"
+						top_delta="0"
+						left_delta="78"
+						name="roll_right"
+						tool_tip="Rolar câmera para a direita">
+						<commit_callback function="Camera.roll_right" />
+						<mouse_held_callback function="Camera.roll_right" />
+					</button>
+					<!-- </FS:Beq> -->						 
+						<button
+						 follows="top|left"
+						 height="18"
+						 image_disabled="AddItem_Disabled"
+						 image_selected="AddItem_Press"
+						 image_unselected="AddItem_Off"
+						 layout="topleft"
+						 left_pad="15" 
+						 name="zoom_plus_btn"
+						 width="18"
+						 top="5">
+							<commit_callback
+							 function="Zoom.plus"/>
+							<mouse_held_callback
+							 function="Zoom.plus"/>
+						</button>
+						<slider_bar
+						 height="63"
+						 layout="topleft"
+						 name="zoom_slider"
+						 orientation="vertical"
+						 tool_tip="Aproxima ou afasta a câmera. Não altera o campo de visão (FOV): use o controle ‘Ângulo de visão’ para zoom real. Flycam 3D pode ignorar este controle."
+						 top_pad="0"
+						 min_val="0"
+						 max_val="1">
+							<commit_callback function="Slider.value_changed"/>
+						</slider_bar>
+						<button
+						 follows="top|left"
+						 height="18"
+						 image_disabled="MinusItem_Disabled"
+						 image_selected="MinusItem_Press"
+						 image_unselected="MinusItem_Off"
+						 layout="topleft"
+						 name="zoom_minus_btn"
+						 top_pad="0"
+						 width="18">
+							<commit_callback function="Zoom.minus" />
+							<mouse_held_callback function="Zoom.minus" />
+						</button>
+						<joystick_track
+						 follows="top|left"
+						 height="100"
+						 image_selected="Cam_Tracking_In"
+						 image_unselected="Cam_Tracking_Out"
+						 layout="topleft"
+						 left_pad="15"
+						 name="cam_track_stick"
+						 quadrant="left"
+						 scale_image="false"
+						 sound_flags="3"
+						 tool_tip="Move a câmera para cima/baixo e esquerda/direita."
+						 top="5"
+						 width="100"/>
+					</panel>
+				</panel>
+
+				<panel
+				 border="false"
+				 height="32"
+				 layout="topleft"
+				 left="0"
+				 top_pad="0"
+				 name="buttons"
+				 width="270">
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left="21"
+					 is_toggle="true"
+					 image_overlay="Cam_Avatar_Off"
+					 image_selected="PushButton_Selected_Press"
+					 name="presets_btn"
+					 tab_stop="false"
+					 tool_tip="Vistas predefinidas"
+					 top="5" 
+					 width="25"/>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 is_toggle="true"
+					 image_overlay="PanOrbit_Off"
+					 image_selected="PushButton_Selected_Press"
+					 name="pan_btn"
+					 tab_stop="false"
+					 tool_tip="Órbita, zoom e panorâmica"
+					 width="25"/>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_FreeCam_Off"
+					 image_selected="PushButton_Selected_Press"
+					 name="avatarview_btn"
+					 tab_stop="false"
+					 tool_tip="Modos da câmera"
+					 width="25"/>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Store_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="store_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Guardar vista atual da câmera"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.StoreView"/>
+					</button>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Load_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="load_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Carregar vista guardada da câmera"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.LoadView"/>
+					</button>
+				</panel>
+			</panel>
+
+			<panel
+			 name="P_Cam_Mov_Settings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Cam_Mov_Settings"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="230">
+					Configurações do movimento da câmera
+				</text>
+			</panel>
+
+			<panel
+			 name="P_Zoom"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="105"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 name="T_Zoom"
+				 layout="topleft"
+				 left="10"
+				 top_pad="12"
+				 tool_tip="Equivale ao zoom por campo de visão na janela (Ctrl+0 / Ctrl+8). Não funciona com flycam 3D (SpaceNavigator) ativo."
+				 width="100">
+					Ângulo de visão
+				</text>
+				<slider
+				 name="SL_Zoom"
+				 can_edit_text="true"
+				 control_name="CameraAngle"
+				 follows="left|right"
+				 height="16"
+				 increment="0.002"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val="0.08"
+				 max_val="3.06"
+				 top_delta="-2"
+				 width="135" />
+				<!--spinner
+				 name="S_Zoom"
+				 can_edit_text="true"
+				 control_name="CameraAngle"
+				 top_delta="-3"
+				 label_width="0"
+				 left_delta="120"
+				 decimal_digits="3"
+				 follows="top|right"
+				 max_val="3.06"
+				 min_val="0.08"
+				 width="53"
+				 increment="0.001"
+				 border_visible="false"/-->
+				<button
+				 follows="right"
+				 name="Reset_Camera_Angle"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraAngle"/>
+				</button>
+
+				<text
+				 name="T_Zoom_Speed"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Controla a velocidade do zoom da câmera. Valores maiores deixam o zoom mais lento e suave."
+				 width="100">
+					Velocidade do zoom
+				</text>
+				<slider
+				 name="SL_Zoom_Speed"
+				 can_edit_text="true"
+				 control_name="ZoomTime"
+				 follows="left|right"
+				 height="16"
+				 increment=".1"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val="0"
+				 max_val="30"
+				 top_delta="-2"
+				 width="135"/>
+				<button
+				 follows="right"
+				 name="Reset_Zoom_Time"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="ZoomTime"/>
+				</button>
+
+				<text
+				 name="T_Camera_Lag"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Quanto a câmera atrasa em relação ao movimento do avatar (0 = nenhum, 30 ≈ velocidade do avatar)."
+				 width="100">
+					Atraso da câmera
+				</text>
+				<slider
+				 name="SL_Camera_Lag"
+				 can_edit_text="true"
+				 control_name="DynamicCameraStrength"
+				 follows="left|right"
+				 height="16"
+				 increment=".1"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val="0"
+				 max_val="30"
+				 top_delta="-2"
+				 width="135"/>
+				<button
+				 follows="right"
+				 name="Reset_Camera_Lag"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="DynamicCameraStrength"/>
+				</button>
+
+				<text
+				 name="T_Camera_Offset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Controla o deslocamento ou distância da câmera em relação ao ponto de vista padrão."
+				 width="100">
+					Deslocamento da câmera
+				</text>
+				<slider
+				 name="SL_Camera_Offset"
+				 can_edit_text="true"
+				 control_name="CameraOffsetScale"
+				 follows="left|right"
+				 height="16"
+				 increment=".001"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val=".001"
+				 max_val="25"
+				 top_delta="-2"
+				 width="135"/>
+				<button
+				 follows="right"
+				 name="Reset_Camera_Offset"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraOffsetScale"/>
+				</button>
+
+				<text
+				 name="T_Camera_Smoothing"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Controla o quão suavemente a câmera inicia e para. Valores maiores = movimento mais suave (e um pouco mais lento)."
+				 width="100">
+					Suavização da câmera
+				</text>
+				<slider
+				 name="SL_Camera_Smoothing"
+				 can_edit_text="true"
+				 control_name="CameraPositionSmoothing"
+				 follows="left|right"
+				 height="16"
+				 increment=".01"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val="0"
+				 max_val="300"
+				 top_delta="-2"
+				 width="135"/>
+				<button
+				 follows="right"
+				 name="Reset_Camera_Smoothing"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraPositionSmoothing"/>
+				</button>
+			</panel>
+		</panel>
+
+		<panel
+		 name="P_Cam_Controls_2"
+		 follows="all"
+		 layout="topleft"
+		 top_pad="0"
+		 label="Controles da câmera 2"
+		 height="350"
+		 left="0">
+			<panel
+			 name="P_Mouse_Movement"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Mouse_Movement"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="230">
+					Configurações do movimento do mouse
+				</text>
+			</panel>
+
+			<panel
+			 name="P_Mouse_Movement_Settings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="100"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 name="T_Mouse_Sensitivity"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="15"
+				 tool_tip="Controla a resposta do mouse no modo mouselook."
+				 width="100">
+					Sensibilidade do mouse
+				</text>
+				<slider
+				 name="SL_Mouse_Sensitivity"
+				 can_edit_text="true"
+				 control_name="MouseSensitivity"
+				 follows="left|top"
+				 height="16"
+				 increment=".1"
+				 layout="topleft"
+				 left_delta="100"
+				 min_val="0"
+				 max_val="15"
+				 top_delta="-2"
+				 width="135"/>
+				<button
+				 follows="right"
+				 name="Reset_Mouse_Sensitivity"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Restaurar o valor padrão.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="MouseSensitivity"/>
+				</button>
+				<check_box
+				 control_name="FirstPersonAvatarVisible"
+				 follows="left|top"
+				 height="16"
+				 label="Mostrar avatar no mouselook"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Mostra o avatar e anexos abaixo do pescoço no mouselook. Padrão: desligado."
+				 name="first_person_avatar_visible"
+				 top_pad="10"
+				 width="250"/>
+				<check_box
+				 control_name="MouseSmooth"
+				 follows="left|top"
+				 height="16"
+				 label="Suavizar movimento no mouselook"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Suaviza o movimento do mouse no modo mouselook."
+				 name="MouseSmooth"
+				 top_pad="2"
+				 width="250"/>
+			</panel>
+
+			<panel
+			 name="P_Additional_Camera_Options"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="10"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Additional_Camera_Options"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="200">
+					Opções adicionais da câmera
+				</text>
+			</panel>
+
+			<panel
+			 name="P_Add_Cam_Opt_Settings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="115"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<check_box
+				 top_pad="15"
+				 follows="left|top"
+				 height="16"
+				 label="Clicar no avatar mantém a posição da câmera"
+				 layout="topleft"
+				 left="5"
+				 name="clickonavatarkeepscamera"
+				 width="250"
+				 control_name="ClickOnAvatarKeepsCamera"
+				 tool_tip="Por padrão, clicar no avatar redefine a posição da câmera. Esta opção desativa esse comportamento."/>
+				<check_box
+				 top_pad="2"
+				 follows="left|top"
+				 height="16"
+				 label="Redefinir posição da câmera após teletransporte"
+				 layout="topleft"
+				 left="5"
+				 name="FSResetCameraOnTP"
+				 width="250"
+				 control_name="FSResetCameraOnTP"
+				 tool_tip="Por padrão, a posição da câmera é redefinida ao teletransportar (dentro da região). Esta opção impede isso."/>
+				<check_box
+				 top_pad="2"
+				 follows="left|top"
+				 height="16"
+				 label="Permitir câmera sem restrições do simulador"
+				 layout="topleft"
+				 left="5"
+				 name="ignorecameraconstraints"
+				 width="250"
+				 control_name="FSIgnoreSimulatorCameraConstraints"
+				 tool_tip="Ignora o “empurrão” que o simulador aplica à câmera para mantê-la fora dos objetos. Requer reiniciar."/>
+				<check_box
+				 top_pad="2"
+				 follows="left|top"
+				 height="16"
+				 label="Redefinir posição da câmera ao mover o avatar"
+				 layout="topleft"
+				 left="5"
+				 name="resetcameraonmovement"
+				 width="250"
+				 control_name="FSResetCameraOnMovement"
+				 tool_tip="Redefine a câmera para a posição padrão quando você move o avatar"/>
+			</panel>
+		</panel>
+
+		<panel
+		 name="P_3D_Mouse"
+		 follows="all"
+		 layout="topleft"
+		 top="0"
+		 label="Mouse 3D"
+		 height="300"
+		 left="0">
+			<panel
+			 name="P_3D_Mouse_Settings1"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="160"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale1"
+				 decimal_digits="3"
+				 increment="0.001"
+				 follows="left|top"
+				 height="16"
+				 label="Esquerda / direita"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val="5"
+				 min_val="0"
+				 name="FlycamAxisScale1b"
+				 top_pad="10"
+				 tool_tip="Ajusta a sensibilidade do movimento esquerda/direita. Reduza o valor para movimentos mais precisos."
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale2"
+				 decimal_digits="3"
+				 increment="0.001"
+				 follows="left|top"
+				 height="16"
+				 label="Cima / baixo"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val="5"
+				 min_val="0"
+				 name="FlycamAxisScale2b"
+				 tool_tip="Ajusta a sensibilidade do movimento cima/baixo. Reduza o valor para movimentos mais precisos."
+				 top_pad="2"
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale0"
+				 decimal_digits="3"
+				 increment="0.001"
+				 follows="left|top"
+				 height="16"
+				 label="Frente / fundo"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val="5"
+				 min_val="0"
+				 name="FlycamAxisScale0b"
+				 top_pad="2"
+				 tool_tip="Ajusta a sensibilidade do movimento aproximar/afastar. Reduza o valor para movimentos mais precisos."
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale4"
+				 decimal_digits="3"
+				 follows="left|top"
+				 increment="0.001"
+				 height="16"
+				 label="Arfagem"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val=".5"
+				 min_val="0"
+				 name="FlycamAxisScale4"
+				 tool_tip="Ajusta a sensibilidade da arfagem. Reduza o valor para mais precisão."
+				 top_pad="2"
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale5"
+				 decimal_digits="3"
+				 follows="left|top"
+				 height="16"
+				 increment="0.001"
+				 label="Guinada"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val=".5"
+				 min_val="0"
+				 name="FlycamAxisScale5"
+				 top_pad="2"
+				 tool_tip="Ajusta a sensibilidade da guinada. Reduza o valor para mais precisão."
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 height="16"
+				 increment="0.001"
+				 label="Rolagem"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val=".5"
+				 min_val="0"
+				 name="FlycamAxisScale3"
+				 tool_tip="Ajusta a sensibilidade da rolagem. Reduza o valor para mais precisão."
+				 top_pad="2"
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamAxisScale6"
+				 decimal_digits="4"
+				 follows="left|top"
+				 height="16"
+				 increment="0.0001"
+				 label="Velocidade do zoom"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val="0.1"
+				 min_val="0.0001"
+				 name="FlycamAxisScale6"
+				 tool_tip="Ajusta a sensibilidade da velocidade de zoom. Reduza o valor para mais precisão."
+				 top_pad="2"
+				 width="255"/>
+				<slider
+				 can_edit_text="true"
+				 control_name="FlycamFeathering"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment=".01"
+				 label="Suavização"
+				 label_width="75"
+				 layout="topleft"
+				 left="10"
+				 max_val="10"
+				 min_val="0"
+				 name="FlycamFeathering"
+				 top_pad="2"
+				 tool_tip="À direita a câmera fica rígida e responsiva ao joystick; à esquerda fica mais fluida e “pesada”, melhor para passagens aéreas e pior para enquadramento fino."
+				 width="255"/>
+			</panel>
+
+			<panel
+			 name="P_3D_Mouse_Settings2"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="115"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<spinner
+				 follows="left|top"
+				 control_name="JoystickAxis6"
+				 decimal_digits="0"
+				 increment="1"
+				 label="Mapeamento do eixo de zoom"
+				 label_width="200"
+				 layout="topleft"
+				 left="10"
+				 max_val="5"
+				 min_val="-1"
+				 name="JoystickAxis6"
+				 tool_tip="Define qual eixo do mouse 3D controla o zoom."
+				 top_pad="2"
+				 width="255"/>
+				<check_box
+				 top_pad="20"
+				 control_name="JoystickEnabled"
+				 halign="left"
+				 label="Ativar mouse 3D"
+				 layout="topleft"
+				 left="6"
+				 tool_tip="Ativa o mouse 3D."
+				 name="enable_joystick"
+				 width="60"/>
+				<check_box
+				 name="CB_Zoom_Control"
+				 control_name="ZoomDirect"
+				 label="Ativar controle de zoom (veja a dica)"
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 tool_tip="Para o controle de zoom funcionar, defina “Mapeamento do eixo de zoom” acima como 4."
+				 width="15"/>
+				<check_box
+				 name="CB_Auto_Leveling"
+				 control_name="AutoLeveling"
+				 label="Nivelamento automático (evita rolagem da câmera)"
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 width="15"/>
+				<check_box
+				 name="CB_3D_Mouse_Avatar"
+				 control_name="JoystickAvatarEnabled"
+				 label="Usar mouse 3D para mover o avatar"
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 width="15"/>
+				<check_box
+				 name="CB_3D_Mouse_Build"
+				 control_name="JoystickBuildEnabled"
+				 label="Usar mouse 3D para mover objetos (construção)"
+				 tool_tip="Usa o mouse 3D para mover objetos ao construir e editar."
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 width="15"/>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

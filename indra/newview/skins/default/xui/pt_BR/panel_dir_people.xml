@@ -1,0 +1,107 @@
+<panel
+ border="true"
+ top="30"
+ follows="left|top|right|bottom"
+ height="533"
+ label="Pessoas"
+ left="1"
+ mouse_opaque="false"
+ name="panel_dir_people"
+ width="778">
+    <string name="searching_text">
+        Pesquisando...
+    </string>
+    <string name="not_found_text">
+        Nenhum encontrado.
+    </string>
+    <string name="found_text">
+        [COUNT] encontrado(s).
+    </string>
+    <text
+     bg_visible="false"
+     border_visible="false"
+     top="8"
+     layout="topleft"
+     follows="left|top"
+     font="SansSerif"
+     h_pad="0"
+     halign="left"
+     height="16"
+     left="5"
+     mouse_opaque="true"
+     name="find"
+     width="150">
+        Digite termos de pesquisa:
+    </text>
+    <search_combo_box
+     layout="topleft"
+     follows="left|top|right"
+     height="23"
+     left="5"
+     name="name"
+     top="26"
+     width="770"/>
+    <scroll_list
+     background_visible="true"
+     layout="topleft"
+     top_pad="3"
+     column_padding="0"
+     draw_border="true"
+     draw_heading="true"
+     follows="left|top|right|bottom"
+     height="450"
+     left="5"
+     mouse_opaque="true"
+     multi_select="false"
+     name="results"
+     search_column="2"
+     width="336">
+        <column label="" name="icon" width="24" />
+        <column label="" name="type" width="-1" />
+        <column label="Nome" name="name" width="304" />
+    </scroll_list>
+    <text
+     bg_visible="false"
+     border_visible="false"
+     bottom_delta="-20"
+     follows="left|bottom"
+     font="SansSerifSmall"
+     h_pad="0"
+     halign="left"
+     height="16"
+     left="4"
+     mouse_opaque="true"
+     name="result_text"
+     v_pad="0"
+     width="328" />
+    <button
+     image_overlay="Arrow_Left_Off"
+     image_disabled="PushButton_Disabled"
+     image_disabled_selected="PushButton_Disabled"
+     image_selected="PushButton_Selected"
+     image_unselected="PushButton_Off"
+     chrome="true"
+     hover_glow_amount="0.15"
+     tool_tip="Pagina anterior"
+     follows="right|bottom"
+     height="22"
+     right="305"
+     bottom="-533"
+     name="prev_btn"
+     width="32" />
+    <button
+     image_overlay="Arrow_Right_Off"
+     image_disabled="PushButton_Disabled"
+     image_disabled_selected="PushButton_Disabled"
+     image_selected="PushButton_Selected"
+     image_unselected="PushButton_Off"
+     chrome="true"
+     tool_tip="Proxima pagina"
+     follows="right|bottom"
+     height="22"
+     layout="topleft"
+     left_pad="5"
+     name="next_btn"
+     top_delta="0"
+     width="32"/>
+</panel>

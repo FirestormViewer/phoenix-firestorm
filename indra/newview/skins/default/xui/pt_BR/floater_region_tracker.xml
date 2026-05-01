@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ name="region_tracker"
+ title="Rastreador de Região"
+ help_topic="floater_region_tracker"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ layout="topleft"
+ height="250"
+ width="408"
+ min_height="150"
+ min_width="300"
+ can_resize="true">
+</floater>

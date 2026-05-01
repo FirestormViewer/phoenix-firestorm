@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu
+ layout="topleft"
+ name="Avatar Profile Menu">
+  <menu_item_call
+   label="MI"
+   layout="topleft"
+   name="im">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="im"/>
+  </menu_item_call>
+  <menu_item_call
+  label="Oferecer Teleporte"
+  name="offer_teleport">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="offer_teleport"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="offer_teleport"/>
+  </menu_item_call>
+  <menu_item_call
+  label="Solicitar Teleporte"
+  name="request_teleport">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="request_teleport"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="request_teleport"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Chamada de voz"
+   layout="topleft"
+   name="voice_call">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="voice_call"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="voice_call"/>
+  </menu_item_call>
+  <menu_item_separator />
+  <menu_item_call
+   label="Ver histórico do chat..."
+   layout="topleft"
+   name="chat_history">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="chat_history"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="chat_history"/>
+  </menu_item_call>
+  <menu_item_separator name="separator_chat_history"/>
+  <menu_item_call
+   label="Adicionar Amigo"
+   layout="topleft"
+   name="add_friend">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="add_friend"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="add_friend"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Remover Amigo"
+   layout="topleft"
+   name="remove_friend">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="remove_friend"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="remove_friend"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Convidar para grupo..."
+   layout="topleft"
+   name="invite_to_group">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="invite_to_group"/>
+  </menu_item_call>
+  <menu_item_separator name="separator_invite_to_group"/>
+  <menu_item_call
+   label="Permissões"
+   layout="topleft"
+   name="agent_permissions">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="agent_permissions"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="agent_permissions"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Mapa"
+   layout="topleft"
+   name="map">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="can_show_on_map"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="can_show_on_map"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Compartilhar"
+   layout="topleft"
+   name="share">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="share"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Pagar"
+   layout="topleft"
+   name="pay">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="pay"/>
+  </menu_item_call>
+  <menu_item_check
+   label="Bloquear/Desbloquear"
+   layout="topleft"
+   name="block_unblock">
+    <menu_item_check.on_click
+     function="Profile.Commit"
+     parameter="toggle_block_agent"/>
+    <menu_item_check.on_check
+     function="Profile.CheckItem"
+     parameter="toggle_block_agent"/>
+    <menu_item_check.on_enable
+     function="Profile.EnableItem"
+     parameter="toggle_block_agent"/>
+  </menu_item_check>
+  <menu_item_separator name="separator_copy_options"/>
+  <menu_item_call
+   label="Copiar Nome de Exibição"
+   layout="topleft"
+   name="copy_display_name">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="copy_display_name"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="copy_display_name"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Copiar Nome do Agente"
+   layout="topleft"
+   name="copy_name">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="copy_username"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="copy_username"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Copiar ID do Agente"
+   layout="topleft"
+   name="copy_id">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="copy_user_id"/>
+  </menu_item_call>
+</toggleable_menu>

@@ -87,9 +87,9 @@
    name="Polish"
    value="pl" />
   <combo_box.item
-   label="Português (Portuguese)"
+   label="Português (Brazilian Portuguese)"
    name="Portugese"
-   value="pt" />
+   value="pt_BR" />
   <combo_box.item
    label="Русский (Russian)"
    name="Russian"

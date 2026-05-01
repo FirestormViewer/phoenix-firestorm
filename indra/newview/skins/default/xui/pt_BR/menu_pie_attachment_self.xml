@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    name="Attachment Pie">
+
+    <pie_slice
+        label="Perfil..."
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="agent" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Soltar"
+        name="Drop">
+        <pie_slice.on_click
+            function="Attachment.Drop" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDrop" />
+    </pie_slice>
+    <pie_menu
+        name="Attachment Pie More"
+        label="Mais &gt;">
+
+        <pie_slice
+            enabled="true"
+            label="Atualizar Texturas"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Object.TexRefresh" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Informações do script"
+            name="ScriptInfo">
+            <pie_slice.on_click
+                function="Tools.ScriptInfo" />
+            <pie_slice.on_enable
+                function="Object.EnableScriptInfo" />
+        </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="Tocar"
+            name="Attachment Object Touch">
+            <pie_slice.on_click
+                function="Object.Touch" />
+            <pie_slice.on_enable
+                function="Object.EnableTouch"
+                name="EnableTouch"/>
+        </pie_slice>
+        <pie_menu
+            name="DerenderMenu"
+            label="Não renderizar &gt;">
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_slice
+				enabled="true"
+				label="Temporário"
+				name="Derender">
+				<pie_slice.on_click
+					function="Object.Derender" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
+			</pie_slice>
+			<pie_slice
+				enabled="true"
+				label="Lista Negra"
+				name="DerenderPermanent">
+				<pie_slice.on_click
+					function="Object.DerenderPermanent" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
+			</pie_slice>
+        </pie_menu>
+        <pie_menu
+            name="ExportMenu"
+            label="Salvar como &gt;">
+            <pie_slice
+                enabled="false"
+                label="Backup"
+                name="Backup">
+                <pie_slice.on_click
+                    function="Object.Export" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Collada"
+                name="Collada">
+                <pie_slice.on_click
+                    function="Object.ExportCollada" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+        </pie_menu>
+        <pie_slice
+            label="Mostrar no Inv."
+            name="Show original">
+            <pie_slice.on_click
+                function="Object.ShowOriginal" />
+            <pie_slice.on_enable
+                function="Object.EnableShowOriginal" />
+        </pie_slice>
+        <pie_slice
+            label="Inspecionar"
+            name="Avatar Inspect">
+            <pie_slice.on_click
+                function="Floater.Show"
+                parameter="inspect" />
+            <pie_slice.on_enable
+                function="Object.EnableInspect" />
+        </pie_slice>
+            <pie_slice
+                label="Texturas"
+                name="Debug...">
+                <pie_slice.on_click
+                    function="Avatar.Debug" />
+            </pie_slice>
+
+    </pie_menu>
+    <pie_slice
+        label="Sentar Aqui"
+        start_autohide="true"
+        name="Sit Down Here">
+        <pie_slice.on_click
+            function="Self.SitDown"
+            parameter="" />
+        <pie_slice.on_enable
+            function="Self.EnableSitDown" />
+    </pie_slice>
+    <pie_slice
+        label="Levantar"
+        autohide="true"
+        name="Stand Up">
+        <pie_slice.on_click
+            function="Self.StandUp" />
+        <pie_slice.on_enable
+            function="Self.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Remover Anexo"
+        name="Detach">
+        <pie_slice.on_click
+            function="Attachment.Detach" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDetach" />
+    </pie_slice>
+    <pie_slice
+        label="Gestos..."
+        name="Gestures">
+        <pie_slice.on_click
+            function="Floater.Toggle"
+            parameter="gestures" />
+    </pie_slice>
+
+    <pie_menu
+        label="Aparência &gt;"
+        name="Appearance &gt;">
+
+        <pie_slice label="Editar Forma"
+           name="Edit My Shape">
+           <pie_slice.on_click
+               function="EditShape" />
+           <pie_slice.on_enable
+               function="Edit.EnableEditShape" />
+       </pie_slice>
+		<pie_menu
+			name="ResetMenu"
+			label="Resetar &gt;">
+			<pie_slice
+				label="Esqueleto &amp; Anim."
+				name="Reset Skeleton And Animations">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeletonAndAnimations" />
+			</pie_slice>
+			<pie_slice
+				label="Esqueleto"
+				name="Reset Skeleton">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeleton" />
+			</pie_slice>
+			<pie_slice
+				label="LOD da malha"
+				name="Reset Mesh LOD">
+				<pie_slice.on_click
+					function="Avatar.ResetMeshLOD" />
+			</pie_slice>
+		</pie_menu>
+        <pie_separator />
+        <pie_separator />
+
+        <pie_slice label="Editar Traje"
+           name="Edit My Outfit">
+           <pie_slice.on_click
+               function="EditOutfit" />
+           <pie_slice.on_enable
+               function="Edit.EnableCustomizeAvatar" />
+       </pie_slice>
+		<pie_separator />
+		<pie_slice
+			label="Exportar XML"
+			name="Dump XML">
+			<pie_slice.on_click
+				function="Advanced.AppearanceToXML" />
+			<pie_slice.on_visible
+				function="Advanced.EnableAppearanceToXML"/>
+		</pie_slice>
+		<pie_slice
+		 label="Altura do Hover"
+		 name="Hover Height">
+			<pie_slice.on_click
+			 function="HoverHeight" />
+			<pie_slice.on_enable
+			 function="Edit.EnableHoverHeight" />
+		</pie_slice>
+
+    </pie_menu>
+
+	<pie_slice
+		label="Editar"
+		name="Edit...">
+		<pie_slice.on_click
+			function="Object.Edit" />
+		<pie_slice.on_enable
+			function="EnableEdit"/>
+	</pie_slice>
+
+</pie_menu>

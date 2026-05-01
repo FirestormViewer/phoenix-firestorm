@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<panel background_visible="true" follows="all" height="400" layout="topleft" left="0" name="edit_shape_panel" top_pad="10" width="333">
+     <string name="meters">Metros</string>
+     <string name="feet">Pés</string>
+     <string name="height">Altura:</string>
+     <string name="height_label_color" translate="false">White_50</string>
+     <string name="height_value_label_color" translate="false">White</string>
+     <text follows="top|left|right" font="SansSerifSmallBold" halign="right" height="12" layout="topleft" left="0" name="avatar_height" top="0" width="333">
+     </text>
+
+    <tab_container name="wearable_accordion" layout="topleft" follows="all" tab_position="top" height="384" width="333">
+
+      
+      <panel name="shape_body_tab_holder" title="Corpo" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_body_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_body_tab" fit_panel="false" title="Corpo">
+      
+	  <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_body_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_head_tab_holder" title="Cabeça" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_head_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_head_tab" fit_panel="false" title="Cabeça">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_head_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_eyes_tab_holder" title="Olhos" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_eyes_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_eyes_tab" fit_panel="false" title="Olhos">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_eyes_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_ears_tab_holder" title="Orelhas" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_ears_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_ears_tab" fit_panel="false" title="Orelhas">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_ears_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_nose_tab_holder" title="Nariz" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_nose_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_nose_tab" fit_panel="false" title="Nariz">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_nose_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_mouth_tab_holder" title="Boca" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_mouth_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_mouth_tab" fit_panel="false" title="Boca">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_mouth_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_chin_tab_holder" title="Queixo" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_chin_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_chin_tab" fit_panel="false" title="Queixo">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_chin_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_torso_tab_holder" title="Tronco" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_torso_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_torso_tab" fit_panel="false" title="Tronco">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_torso_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="shape_legs_tab_holder" title="Pernas" top_pad="0" left="0" layout="topleft" follows="all" height="384" width="333">
+      
+      <accordion layout="topleft" follows="all" height="384" left="0" name="shape_legs_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="shape_legs_tab" fit_panel="false" title="Pernas">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="shape_legs_param_list" top="0" height="330" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      </tab_container>
+</panel>

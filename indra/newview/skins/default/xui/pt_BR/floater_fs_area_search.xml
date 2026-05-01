@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="area_search" help_topic="fs_area_search" title="Busca de Área para Objetos" min_width="430" min_height="440" width="610" height="440" save_rect="true" single_instance="true" reuse_instance="false" can_resize="true" can_minimize="true" can_close="true" can_drag_on_left="false">
+  <tab_container follows="all" layout="topleft" left="1" right="-1" name="area_searchtab" tab_position="top" tab_height="20" tab_min_width="67" bottom="430" top="2">
+    <panel border="true" follows="all" label="Lista" layout="topleft" left="0" name="area_search_list_panel" top="0" height="440" width="610">
+      <panel.string name="ListedPendingTotalBlank">
+				Listados | Pendentes | Total
+			</panel.string>
+      <panel.string name="ListedPendingTotalFilled">
+				[LISTED] Listado | [PENDING] Pendente | [TOTAL] Total
+			</panel.string>
+      <fs_scroll_list name="result_list" left="5" right="-5" height="395" top="5" follows="left|top|bottom|right" column_padding="0" draw_heading="true" multi_select="true" search_column="1">
+        <fs_scroll_list.columns name="distance" label="Dist" width="40" tool_tip="Distância do seu avatar ao objeto." />
+        <fs_scroll_list.columns name="name" label="Nome" width="180" />
+        <fs_scroll_list.columns name="description" label="Descrição" width="180" />
+        <fs_scroll_list.columns name="price" label="Preço" width="40" tool_tip="Se o objeto estiver à venda, quanto você pagaria para comprá-lo." />
+        <fs_scroll_list.columns name="land_impact" label="LI" width="40" tool_tip="O número que é contabilizado no máximo do seu pacote." />
+        <fs_scroll_list.columns name="prim_count" label="afinar" width="40" tool_tip="Contagem de prims que compõem cada objeto." />
+        <fs_scroll_list.columns name="owner" label="Proprietário" width="140" />
+        <fs_scroll_list.columns name="group" label="Grupo" width="140" tool_tip="Em qual grupo o objeto está definido." />
+        <fs_scroll_list.columns name="creator" label="Criador" width="170" />
+        <fs_scroll_list.columns name="last_owner" label="Último proprietário" width="150" tool_tip="Quem o possuiu por último." />
+      </fs_scroll_list>
+			<button name="Refresh" label="Atualizar" font="SansSerif" mouse_opaque="true" height="20" width="80" left="10" bottom="-6" follows="left|bottom" />
+      <text name="counter" height="15" width="220" left_delta="85" bottom="-9" follows="left|bottom">
+				Listado | Pendente | Total
+			</text>
+      <check_box follows="right|bottom" height="16" left_pad="180" width="80" name="beacons" label="Mostrar faróis" bottom="-9" />
+    </panel>
+		<panel border="true" follows="all" label="Procurar" layout="topleft" left="0" top="0" help_topic="area_search_find_tab" name="area_search_find_panel">
+      <text name="name_label" top_pad="10" follows="top|left" height="15" left="12" width="200">
+				Nome:
+			</text>
+      <text name="desc_label" bottom_delta="0" follows="top|left" height="15" left="218" width="200">
+				Descrição:
+			</text>
+      <line_editor name="name_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left="10" bottom_delta="20" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <line_editor name="description_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left_delta="206" bottom_delta="0" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <text name="owner_label" bottom_delta="20" follows="top|left" height="15" left="12" width="200">
+				Proprietário:
+			</text>
+      <text name="group_label" bottom_delta="0" follows="top|left" height="15" left="218" width="200">
+				Grupo:
+			</text>
+      <line_editor name="owner_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left="10" bottom_delta="20" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <line_editor name="group_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left_delta="206" bottom_delta="0" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <text name="creator_label" bottom_delta="20" follows="top|left" height="15" left="12" width="200">
+				Criador:
+			</text>
+      <text name="last_owner_label" bottom_delta="0" follows="top|left" height="15" left="218" width="200">
+				Último proprietário:
+			</text>
+      <line_editor name="creator_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left="10" bottom_delta="20" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <line_editor name="last_owner_search" bevel_style="in" border_style="line" border_thickness="1" height="20" width="200" left_delta="206" bottom_delta="0" follows="left|top" font="SansSerifSmall" max_length_chars="256" mouse_opaque="true" />
+      <check_box follows="top|left" height="16" layout="topleft" left="8" name="regular_expression" label="Usar expressão regular" top_pad="10" />
+      <button name="search" label="Pesquisar" mouse_opaque="true" height="20" width="80" left="10" bottom="-6" follows="left|bottom" />
+      <button name="clear" label="Limpar" mouse_opaque="true" height="20" width="80" left_pad="10" bottom="-6" follows="left|bottom" />
+    </panel>
+		<panel border="true" follows="all" label="Filtro" layout="topleft" left="0" top="0" help_topic="area_search_filter_tab" name="area_search_filter_panel">
+      <text name="only_list" height="15" follows="top|left" right="-5" left="5">
+				Liste apenas objetos que são:
+			</text>
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="filter_locked" label="Bloqueado" width="100" />
+      <check_box follows="top|left" layout="topleft" left_pad="0" name="filter_physical" label="Físico" width="100" />
+      <check_box follows="top|left" layout="topleft" name="filter_phantom" label="Fantasma" left_pad="0" width="100" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" name="filter_temporary" label="Temporário" left="10" width="100" />
+      <check_box follows="top|left" layout="topleft" name="filter_attachment" label="Anexo" left_pad="0" width="100" />
+      <check_box follows="top|left" layout="topleft" name="filter_moap" label="Mídia compartilhada" left_pad="0" width="100" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="filter_perm_copy" label="Copiar" width="100" />
+      <check_box follows="top|left" layout="topleft" left_pad="0" name="filter_perm_modify" label="Modificar" width="100" />
+      <check_box follows="top|left" layout="topleft" left_pad="0" name="filter_perm_transfer" label="Transferir" width="100" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="filter_reflection_probe" label="Sondas de Reflexão" tool_tip="Inclui apenas sondas manuais, não sondas automáticas. Inclui testes de espelhamento apenas se os espelhos estiverem habilitados nas preferências gráficas. Se a cobertura de reflexão estiver definida como 'nenhuma' ou a sonda não estiver preparada, os objetos poderão não ser identificados." width="100" />
+      <check_box follows="top|left" height="20" layout="topleft" left="10" name="filter_for_sale" label="À venda entre" top_pad="10" width="130" />
+      <spinner decimal_digits="0" follows="left|top" increment="1" initial_value="0" layout="topleft" left_pad="0" max_val="999999999" min_val="0" name="min_price" top_delta="0" width="80" />
+      <text name="and" height="10" follows="top|left" left_pad="5" top_delta="4" width="22">
+				e
+			</text>
+      <spinner decimal_digits="0" follows="left|top" increment="1" initial_value="999999" layout="topleft" left_pad="5" max_val="999999999" min_val="0" name="max_price" top_delta="-4" width="80" />
+      <text name="mouse_text" height="18" follows="top|left" left="15" top_pad="25" width="115">
+				Ação de clique do mouse
+			</text>
+      <combo_box height="23" follows="top|left" name="click_action" left_pad="5" tool_tip="Ação que é executada ao clicar em um objeto." width="120">
+        <combo_box.item enabled="true" label=" " name="click_blank" value="blank" />
+        <combo_box.item enabled="true" label="Qualquer" name="click_any" value="any" />
+        <combo_box.item enabled="true" label="Tocar" name="click_touch" value="touch" />
+        <combo_box.item enabled="true" label="Enviar" name="click_sit" value="sit" />
+        <combo_box.item enabled="true" label="Comprar" name="click_buy" value="buy" />
+        <combo_box.item enabled="true" label="Pagar" name="click_pay" value="pay" />
+        <combo_box.item enabled="true" label="Abrir" name="click_open" value="open" />
+        <combo_box.item enabled="true" label="Jogar" name="click_play" value="play" />
+        <combo_box.item enabled="true" label="Mídia aberta" name="click_open_media" value="open_media" />
+        <combo_box.item enabled="true" label="Zoom" name="click_zoom" value="zoom" />
+      </combo_box>
+			<check_box follows="top|left" height="20" layout="topleft" left="10" name="filter_distance" label="Distância entre" top_pad="10" width="130" />
+      <spinner decimal_digits="0" follows="left|top" increment="1" initial_value="0" layout="topleft" left_pad="0" max_val="999999999" min_val="0" name="min_distance" top_delta="0" width="80" />
+      <text name="and2" height="10" follows="top|left" left_pad="5" top_delta="4" width="22">
+				e
+			</text>
+      <spinner decimal_digits="0" follows="left|top" increment="1" initial_value="999999" layout="topleft" left_pad="5" max_val="999999999" min_val="0" name="max_distance" top_delta="-4" width="80" />
+      <check_box follows="top|left" top_pad="22" layout="topleft" left="10" name="filter_agent_parcel_only" label="Somente pacote atual" width="80" />
+      <text name="only_list" height="15" top_pad="5" follows="top|left" right="-5" left="5">
+				Exclui objetos que devem ser:
+			</text>
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_attachment" label="Anexo" width="80" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_physical" label="Físico" width="80" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_temporary" label="Temporário" width="80" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_reflection_probes" label="Sondas de Reflexão" width="80" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_childprim" label="Criança Prim" width="80" />
+      <check_box follows="top|left" top_pad="10" layout="topleft" left="10" name="exclude_neighbor_region" label="Regiões vizinhas" width="80" />
+      <button name="apply" label="Aplicar" mouse_opaque="true" height="20" width="80" left="10" bottom="-6" follows="left|bottom" />
+      <button name="save_as_default" label="Salvar como padrão" mouse_opaque="true" height="20" width="160" left_pad="10" follows="left|bottom" />
+    </panel>
+		<panel border="true" follows="all" label="Opções" layout="topleft" left="0" top="0" help_topic="area_search_options_tab" name="area_search_options_panel">
+      <text name="display_column" height="15" follows="top|left" left="5">
+				Coluna de exibição:
+			</text>
+      <check_box follows="top|left" height="16" layout="topleft" left="8" name="show_distance" label="Distância" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="distance" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="distance" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_name" label="Nome" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="name" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="name" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_description" label="Descrição" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="description" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="description" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_price" label="Preço" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="price" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="price" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_land_impact" label="Impacto Terrestre" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="land_impact" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="land_impact" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_prim_count" label="Contagem de Prim" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="prim_count" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="prim_count" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_owner" label="Proprietário" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="owner" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="owner" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_group" label="Grupo" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="group" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="group" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_creator" label="Criador" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="creator" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="creator" />
+      </check_box>
+			<check_box follows="top|left" height="16" layout="topleft" left="8" name="show_last_owner" label="Último proprietário" top_pad="10" initial_value="true">
+        <check_box.commit_callback function="AreaSearch.DisplayColumn" parameter="last_owner" />
+        <check_box.on_check function="AreaSearch.EnableColumn" parameter="last_owner" />
+      </check_box>
+    </panel>
+		<panel border="true" follows="all" label="Avançado" layout="topleft" left="0" top="0" help_topic="area_search_advanced_tab" name="area_search_advanced_panel">
+      <check_box follows="top|left" height="16" layout="topleft" left="8" name="double_click_touch" label="Clique duas vezes no objeto de toque" top_pad="10" />
+      <check_box follows="top|left" height="16" layout="topleft" left="8" name="double_click_buy" label="Clique duas vezes no objeto comprar" top_pad="10" />
+      <check_box follows="top|left" height="16" layout="topleft" left="8" name="double_click_sit" label="Clique duas vezes para sentar no objeto" top_pad="10" />
+    </panel>
+  </tab_container>
+</floater>

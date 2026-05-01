@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<panel background_visible="true" follows="all" height="400" layout="topleft" left="0" name="edit_skin_panel" top_pad="10" width="333">
+
+     <panel border="false" follows="top|left|right" height="80" left="0" layout="topleft" name="avatar_skin_color_panel" top="0" width="333">
+       <texture_picker allow_no_texture="true" can_apply_immediately="true" default_image_name="Default" follows="left|top" height="80" label="Tatuagens da cabeça" layout="topleft" left="5" name="Head" tool_tip="Clique para escolher uma imagem" top="5" width="64">
+         <texture_picker.commit_callback function="TexturePicker.Commit" />
+       </texture_picker>
+       <texture_picker allow_no_texture="true" can_apply_immediately="true" default_image_name="Default" follows="left|top" height="80" label="Tatuagens do tronco superior" layout="topleft" left_pad="10" name="Upper Body" tool_tip="Clique para escolher uma imagem" top_delta="0" width="64">
+         <texture_picker.commit_callback function="TexturePicker.Commit" />
+       </texture_picker>
+       <texture_picker allow_no_texture="true" can_apply_immediately="true" default_image_name="Default" follows="left|top" height="80" label="Tatuagens do tronco inferior" layout="topleft" left_pad="10" name="Lower Body" tool_tip="Clique para escolher uma imagem" top_delta="0" width="64">
+         <texture_picker.commit_callback function="TexturePicker.Commit" />
+       </texture_picker>
+     </panel>
+
+     <tab_container name="wearable_accordion" layout="topleft" follows="all" tab_position="top" top_pad="0" left="0" height="320" width="333">
+
+      
+      <panel name="skin_color_tab_holder" title="Cor da pele" layout="topleft" follows="all" height="320" width="333">
+      
+      <accordion layout="topleft" follows="all" height="320" left="0" name="skin_color_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="skin_color_tab" fit_panel="false" title="Cor da pele">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="skin_color_param_list" top="0" height="266" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="skin_face_tab_holder" title="Detalhe do rosto" layout="topleft" follows="all" height="320" width="333">
+      
+      <accordion layout="topleft" follows="all" height="320" left="0" name="skin_face_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="skin_face_tab" fit_panel="false" title="Detalhe do rosto">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="skin_face_param_list" top="0" height="266" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="skin_makeup_holder" title="Maquilagem" layout="topleft" follows="all" height="320" width="333">
+      
+      <accordion layout="topleft" follows="all" height="320" left="0" name="skin_makeup_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="skin_makeup_tab" fit_panel="false" title="Maquilagem">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="skin_makeup_param_list" top="0" height="266" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+      
+      <panel name="skin_body_holder" title="Detalhe do corpo" layout="topleft" follows="all" height="320" width="333">
+      
+      <accordion layout="topleft" follows="all" height="320" left="0" name="skin_body_accordion" top="0" single_expansion="true" fit_parent="true" width="333">
+      <accordion_tab layout="topleft" min_height="150" name="skin_body_tab" fit_panel="false" title="Detalhe do corpo">
+      
+      <scrolling_panel_list layout="topleft" follows="all" left="0" name="skin_body_param_list" top="0" height="266" width="333" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      
+
+    </tab_container>
+</panel>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" follows="all" height="480" layout="topleft" left="1" top="1" width="540" label="Peles" name="skin_panel">
+  <button image_color="SL-White" image_color_disabled="SL-White" scale_image="true" display_pressed_state="false" hover_glow_amount="0.0" left="30" top="20" follows="left|top" layout="topleft" width="414" height="225" name="skin_preview" image_selected="Blank" image_unselected="Blank" />
+  <text type="string" length="1" follows="left|top" height="15" layout="topleft" left="30" name="skin_textbox" top_pad="15" width="400">
+        Capa (skin):
+    </text>
+  <combo_box follows="left|top" height="23" layout="topleft" left="50" max_chars="135" name="skin_combobox" width="200">
+    </combo_box>
+  <text font="SansSerifSmall" type="string" text_color="White_50" length="1" follows="left|top" height="18" layout="topleft" left_pad="10" name="skin_textbox1" width="200">
+        (Requer reiniciar)
+    </text>
+  <text type="string" length="1" follows="left|top" height="15" layout="topleft" left="30" top_pad="15" name="theme_textbox" width="200">
+        Esquema de cores:
+    </text>
+  <combo_box follows="left|top" height="23" layout="topleft" left="50" name="theme_combobox" width="200">
+    </combo_box>
+  <text font="SansSerifSmall" type="string" text_color="White_50" length="1" follows="left|top" height="18" layout="topleft" left_pad="10" name="theme_textbox2" width="200">
+        (Requer reiniciar)
+    </text>
+  <check_box control_name="FSSkinClobbersToolbarPrefs" enabled="true" follows="left|top" height="16" initial_value="true" label="Redefinir as barras de ferramentas para o layout preferido do tema ao trocar de tema." tool_tip="Quando ativada, esta opção preserva o layout projetado dos botões da barra de ferramentas e substituirá as personalizações de botão escolhidas quando você alterar as capas." layout="topleft" left="30" top_pad="15" name="reset_toolbar_settings" width="200" />
+  <check_box control_name="FSToolbarsResetOnModeChange" enabled="true" follows="left|top" height="16" initial_value="true" label="Redefinir as barras de ferramentas para o layout preferido do modo de login ao trocar de modo de login." tool_tip="Quando ativada, esta opção preserva o layout dos botões da barra de ferramentas do modo de login e substituirá as personalizações de botão escolhidas quando você alterar o modo de login." layout="topleft" left="30" top_pad="5" name="FSToolbarsResetOnModeChange" width="200" />
+  <check_box control_name="FSUseLegacyCursors" follows="left|top" height="16" initial_value="true" label="Usar cursores no estilo do Visualizador 1" layout="topleft" left="30" top_pad="5" name="use_legacy_cursors" width="200" />
+  <text font="SansSerifSmall" type="string" text_color="White_50" length="1" follows="left|top" height="18" layout="topleft" left_pad="30" name="theme_textbox3" width="200">
+        (Requer reiniciar)
+    </text>
+</panel>

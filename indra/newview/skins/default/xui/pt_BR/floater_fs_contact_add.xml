@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ height="112"
+ width="280"
+ layout="topleft"
+ positioning="centered"
+ legacy_header_height="18"
+ can_resize="false"
+ name="floater_fs_add_contact"
+ title="Adicionar ao Conjunto de Contatos...">
+ 	<floater.string name="no_sets">
+ 		Nenhum conjunto de contatos disponível.
+ 	</floater.string>
+ 	<floater.string name="text_add_single">
+ 		Por favor, selecione qual conjunto de contatos para adicionar [NAME]:
+ 	</floater.string>
+ 	<floater.string name="text_add_multiple">
+ 		Por favor, selecione qual conjunto de contatos para adicionar [COUNT] avatares:
+ 	</floater.string>
+</floater>

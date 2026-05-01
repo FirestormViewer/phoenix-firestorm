@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel height="540" width="272" layout="topleft" name="panel_primfeed_account">
+  <string name="primfeed_connected" value="Você está conectado ao Primfeed como:" />
+  <string name="primfeed_disconnected" value="Não conectado ao Primfeed" />
+  <string name="primfeed_plan_unknown" value="Desconhecido" />
+  <text layout="topleft" length="1" follows="top|left" font="SansSerif" height="16" left="10" name="connected_as_label" top="5" type="string">
+    Não conectado ao Primfeed.
+  </text>
+  <text layout="topleft" top_pad="2" length="1" follows="top|left" font="SansSerif" height="16" left="10" name="primfeed_account_name" parse_urls="true" type="string" />
+  <text layout="topleft" length="1" follows="top|left" font="SansSerif" height="16" left="10" name="primfeed_account_plan_label" top_pad="2" type="string">
+    Tipo de conta:
+  </text>
+  <text layout="topleft" top_pad="2" length="1" follows="top|left" font="SansSerif" height="16" left="10" name="primfeed_account_plan" parse_urls="true" type="string" />
+  <panel layout="topleft" name="panel_buttons" height="345" left="0">
+    <button layout="topleft" follows="left|top|right" top_pad="9" visible="true" left="10" right="-10" height="23" label="Conectar..." name="connect_btn" width="210">
+      <commit_callback function="SocialSharing.Connect" />
+    </button>
+
+    <button layout="topleft" follows="left|top|right" top_delta="0" left="10" right="-10" height="23" label="Desconectar" name="disconnect_btn" width="210" visible="false">
+      <commit_callback function="SocialSharing.Disconnect" />
+    </button>
+    <text layout="topleft" length="1" follows="top|left" height="16" left="10" name="account_learn_more_label" top_pad="5" type="string">
+      [https://docs.primfeed.com Saiba mais sobre o Primfeed]
+    </text>
+  </panel>
+</panel>

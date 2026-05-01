@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+        can_tear_off="false"
+        can_resize="false"
+        can_drag_on_left="false"
+        can_close="true"
+        can_dock="false"
+        bevel_style="in"
+        height="463"
+        layout="topleft"
+        name="Fixed Environment"
+        save_rect="true"
+        title="Ambiente Fixo"
+        save_visibility="false"
+        help_topic="fs_fixed_environment"
+        single_instance="true" 
+        width="300">
+    <string name="edit_sky">Editar Céu:</string>
+    <string name="edit_water">Editar Água:</string>
+</floater>

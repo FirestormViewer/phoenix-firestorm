@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater legacy_header_height="18" can_resize="true" height="400" layout="topleft" name="floater_test_radiogroup" help_topic="floater_test_radiogroup" translate="false" width="400">
+  <radio_group height="54" layout="topleft" left="10" name="parcel_voice_channel" top="46" width="219">
+    <radio_item height="16" label="Use o canal espacial Estate" layout="topleft" left="3" name="Estate" top="3" width="463" />
+    <radio_item height="16" label="Use um canal espacial privado" layout="topleft" left_delta="0" name="Private" top_delta="16" width="463" />
+    <radio_item height="16" label="Desative o áudio espacial neste pacote" layout="topleft" left_delta="0" name="Disabled" top_delta="16" width="463" />
+  </radio_group>
+    <radio_group height="50" layout="topleft" left_delta="0" name="simple_radio_group" top_pad="50" width="150">
+    <radio_item bottom="20" height="16" label="Rótulo no atributo rótulo" layout="topleft" name="label_radio_item" />
+    <radio_item bottom_delta="20" height="16" label="Etiqueta no conteúdo do texto" layout="topleft" name="contents_radio_item" />
+  </radio_group>
+    <radio_group draw_border="false" height="50" layout="topleft" left_delta="0" name="no_border_radio_group" top_pad="50" width="150">
+    <radio_item bottom="20" height="16" label="Sem Fronteira" layout="topleft" name="foo_radio_item" />
+    <radio_item bottom_delta="20" height="16" label="Sem barra de borda" layout="topleft" name="bar_item" />
+  </radio_group>
+</floater>

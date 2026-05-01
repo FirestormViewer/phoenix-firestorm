@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="fs_asset_blacklist"
+ help_topic="fs_asset_blacklist"
+ title="Lista negra de ativos"
+ min_width="650"
+ min_height="320"
+ width="750"
+ height="320"
+ save_rect="true"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true"
+ can_drag_on_left="false">
+ 	<floater.string name="asset_object">
+ 		Objeto
+ 	</floater.string>
+ 	<floater.string name="asset_texture">
+ 		Textura
+ 	</floater.string>
+</floater>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" follows="all" height="480" layout="topleft" left="1" top="1" width="540" label="Backup" name="backup">
+  <text name="backup_path_label" layout="topleft" follows="left|top" top="10" left="30" width="80" height="20">
+Caminho do backup:
+    </text>
+  <line_editor name="settings_backup_path" control_name="SettingsBackupPath" layout="topleft" follows="left|right|top" left_pad="8" right="-120" height="20" />
+  <button layout="topleft" left_pad="10" follows="right|top" height="20" label="Definir" name="set_backup_settings_path" width="80">
+    <button.commit_callback function="Pref.SetBackupSettingsPath" />
+  </button>
+
+    <layout_stack name="ls_account_specific_label" follows="all" height="400" orientation="vertical" top_pad="5" left="30" right="-30" layout="topleft">
+    <layout_panel name="lp_account_specific_label" follows="all" left="1" right="-1" height="50" user_resize="false" auto_resize="false" layout="topleft" invisibility_control="PerAccountSettingsFile">
+      <text name="account_specific_label" follows="all" layout="topleft" left="0" right="-1" top="0" word_wrap="true" height="50">
+Você não está conectado. As configurações específicas da conta só podem ser copiadas e restauradas com login. Já as configurações que valem para todas as contas podem ser copiadas sem estar conectado.
+    </text>
+    </layout_panel>
+
+    <layout_panel name="lp_buttons" follows="all" left="1" right="-1" height="250" user_resize="false" auto_resize="true" layout="topleft">
+      <text name="settings_restored_label" follows="top|left|right" layout="topleft" left="0" right="-1" top="0" word_wrap="false" height="18">
+Grupos de configurações a restaurar (o backup sempre salva tudo):
+    </text>
+      <layout_stack name="ls_list_view_stack" follows="top|left|right" height="220" orientation="horizontal" top_pad="4" left="1" right="-1" layout="topleft">
+        <layout_panel name="lp_restore_global_files" top="0" bottom="-1" follows="all" user_resize="false" auto_resize="true" layout="topleft">
+          <scroll_list name="restore_global_files_list" layout="topleft" follows="all" left="1" top="0" right="-1" bottom="-1" draw_heading="true" multi_select="false">
+            <column label="" name="restore_global_files_check" width="16" />
+            <column label="Arquivos globais:" name="restore_global_files_label" />
+            <column label="Valor" name="value" width="-1" />
+            <row name="restore_global_row_login">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Credenciais de login</column>
+              <column name="value">bin_conf.dat</column>
+            </row>
+        <row name="restore_global_row_colors">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Cores</column>
+              <column name="value">colors.xml</column>
+            </row>
+        <row name="restore_global_row_dialogs">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Diálogos ignoráveis</column>
+              <column name="value">ignorable_dialogs.xml</column>
+            </row>
+        <row name="restore_global_row_grids">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Grades definidas pelo usuário</column>
+              <column name="value">grids.user.xml</column>
+            </row>
+        <row name="restore_global_row_autoreplace">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Substituição automática</column>
+              <column name="value">autoreplace.xml</column>
+            </row>
+        <row name="restore_global_row_quickprefs">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Preferências rápidas</column>
+              <column name="value">quick_preferences.xml</column>
+            </row>
+        <row name="restore_global_row_favorites">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Favoritos</column>
+              <column name="value">stored_favorites.xml</column>
+            </row>
+        <row name="restore_global_row_controls">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Controles</column>
+              <column name="value">key_bindings.xml</column>
+            </row>
+        <row name="restore_global_row_omnifilter">
+              <column type="checkbox" name="restore_global_files_check" value="true" />
+              <column name="restore_global_files_label">Omnifiltro</column>
+              <column name="value">omnifilter.xml</column>
+            </row>
+          </scroll_list>
+        </layout_panel>
+
+    <layout_panel name="lp_restore_per_account_files" top="0" bottom="-1" follows="all" user_resize="false" auto_resize="true" enabled_control="PerAccountSettingsFile" layout="topleft">
+          <scroll_list name="restore_per_account_files_list" layout="topleft" follows="all" left="1" top="0" right="-1" bottom="-1" draw_heading="true" multi_select="false">
+            <column label="" name="restore_per_account_files_check" width="16" />
+            <column label="Arquivos por conta:" name="restore_per_account_files_label" />
+            <column label="Valor" name="value" width="-1" />
+            <row name="restore_per_account_row_blacklist">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Lista negra de assets</column>
+              <column name="value">asset_blacklist.xml</column>
+            </row>
+        <row name="restore_per_account_row_contactsets">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Conjuntos de contatos</column>
+              <column name="value">settings_friends_groups.xml</column>
+            </row>
+        <row name="restore_per_account_row_invfilters">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Filtros de inventário</column>
+              <column name="value">filters.xml</column>
+            </row>
+        <row name="restore_per_account_row_medialists">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Lista branca/negra de mídia</column>
+              <column name="value">medialist.xml</column>
+            </row>
+        <row name="restore_per_account_row_toolbars">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Barras de ferramentas</column>
+              <column name="value">toolbars.xml</column>
+            </row>
+        <row name="restore_per_account_row_volumes">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Volumes do chat de voz</column>
+              <column name="value">volume_settings.xml</column>
+            </row>
+        <row name="restore_per_account_row_tphistory">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Histórico de teletransporte</column>
+              <column name="value">teleport_history.txt</column>
+            </row>
+        <row name="restore_per_account_row_regiontracker">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Rastreador de regiões</column>
+              <column name="value">tracked_regions.json</column>
+            </row>
+        <row name="restore_per_account_row_groupmutes" value="groupmutes">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Chats de grupo desativados</column>
+              <column name="value">muted_groups.xml</column>
+            </row>
+        <row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Configurações de renderização do avatar</column>
+              <column name="value">avatar_render_settings.xml</column>
+            </row>
+        <row name="restore_per_account_row_regiongrouptitles">
+              <column type="checkbox" name="restore_per_account_files_check" value="true" />
+              <column name="restore_per_account_files_label">Títulos de grupo por região</column>
+              <column name="value">region_group_titles.xml</column>
+            </row>
+          </scroll_list>
+    
+    <panel name="restore_per_account_disable_cover" background_visible="true" background_opaque="true" bg_opaque_color="Black_50" layout="topleft" follows="all" left="0" top="0" right="-1" bottom="-1" />
+        </layout_panel>
+
+    <layout_panel name="lp_restore_folders" top="0" bottom="-1" follows="all" user_resize="false" auto_resize="true" layout="topleft">
+          <scroll_list name="restore_global_folders_list" layout="topleft" follows="all" left="1" top="0" right="-1" bottom="-1" draw_heading="true" multi_select="false">
+            <column label="" name="restore_global_folders_check" width="16" />
+            <column label="Pastas:" name="restore_global_folders_label" />
+            <column label="Valor" name="value" width="-1" />
+            <row name="restore_folders_row_beams">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Feixes de seleção</column>
+              <column name="value">beams</column>
+            </row>
+        <row name="restore_folders_row_beamcolors">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Cores dos feixes de seleção</column>
+              <column name="value">beamsColors</column>
+            </row>
+        <row name="restore_folders_row_spellcheck">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Ortografia personalizada</column>
+              <column name="value">dictionaries</column>
+            </row>
+        
+        <row enabled="false" name="restore_folders_row_windlight" value="windlight">
+              <column type="checkbox" name="restore_global_folders_check" value="true" enabled="false" />
+              <column name="restore_global_folders_label">Windlight (obrigatório)</column>
+              <column name="value">windlight</column>
+            </row>
+        <row name="restore_folders_row_daycycles" value="windlight_daycycles">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Ciclos de dia Windlight</column>
+              <column name="value">windlight/days</column>
+            </row>
+        <row name="restore_folders_row_skies" value="windlight_skies">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Céus Windlight</column>
+              <column name="value">windlight/skies</column>
+            </row>
+        <row name="restore_folders_row_waters" value="windlight_water">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Águas Windlight</column>
+              <column name="value">windlight/water</column>
+            </row>
+        <row name="restore_folders_row_presets" value="presets">
+              <column type="checkbox" name="restore_global_folders_check" value="true" />
+              <column name="restore_global_folders_label">Predefinições</column>
+              <column name="value">presets</column>
+            </row>
+          </scroll_list>
+        </layout_panel>
+      </layout_stack>
+
+    <button layout="topleft" top_pad="5" follows="left|top" height="20" label="Selecionar tudo" left="30" name="select_all_button" width="120">
+        <button.commit_callback function="Pref.BackupSelectAll" />
+      </button>
+
+    <button layout="topleft" right="-30" top_delta="0" follows="right|top" height="20" label="Desmarcar tudo" name="deselect_all_button" width="120">
+        <button.commit_callback function="Pref.BackupDeselectAll" />
+      </button>
+
+    <check_box label="Restaurar configurações globais" layout="topleft" follows="top|left" top_pad="5" left="30" width="200" height="16" name="restore_global_settings_checkbox" control_name="RestoreGlobalSettings" />
+      <check_box label="Restaurar configurações por conta" layout="topleft" follows="top|left" left="30" width="200" height="16" name="restore_per_account_settings_checkbox" enabled_control="PerAccountSettingsFile" control_name="RestorePerAccountSettings" />
+      <button enabled_control="SettingsBackupPath" layout="topleft" top_pad="5" follows="left|top" height="20" label="Configurações de backup" left="50" name="backup_settings" width="120">
+        <button.commit_callback function="Pref.BackupSettings" />
+      </button>
+
+    <button enabled_control="SettingsBackupPath" layout="topleft" right="-50" top_delta="0" follows="right|top" height="20" label="Restaurar configurações" name="restore_settings" width="120">
+        <button.commit_callback function="Pref.RestoreSettings" />
+      </button>
+    </layout_panel>
+  </layout_stack>
+</panel>

@@ -1,0 +1,1907 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+ border="true"
+ follows="all"
+ height="480"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Gráficos"
+ name="Display panel">
+  <tab_container
+   label="Preferências de gráficos"
+   layout="topleft"
+   follows="all"
+   top="5"
+   bottom="-1"
+   left="1"
+   right="-1"
+   name="tabs"
+   tab_min_width="50"
+   tab_position="top" >
+
+<!--General-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Geral"
+     name="General" >
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left="5"
+    name="preset_label"
+    top="5"
+    width="130">
+      Predefinição em uso:
+  </text>
+
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left_pad="10"
+    name="preset_text"
+    top="5"
+    width="120">
+      (Nenhuma)
+  </text>
+
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="25"
+       layout="topleft"
+       left="5"
+       name="QualitySpeed"
+       top="25"
+       width="105"
+       wrap="true">
+        Qualidade e velocidade:
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="right"
+       height="12"
+       layout="topleft"
+       left_pad="5"
+       name="FasterText"
+       top_delta="0"
+       width="80">
+        Desempenho
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="465"
+       name="BetterText"
+       top_delta="0"
+       width="100">
+        Qualidade
+      </text>
+
+      <!--Reset Button-->
+      <button
+       follows="left|top"
+       height="23"
+       image_overlay="Refresh_Off"
+       tool_tip="Restaurar gráficos padrão."
+       layout="topleft"
+       left="510"
+       name="Defaults"
+       top_delta="-5"
+       width="23">
+        <button.commit_callback
+         function="Pref.HardwareDefaults" />
+      </button>
+
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left="200"
+       name="LowGraphicsDivet"
+       top_delta="3"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="LowMidGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="MidGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="MidHighGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="HighGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="HighUltraGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="Slidermark"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="UltraGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <slider
+       control_name="RenderQualityPerformance"
+       decimal_digits="0"
+       follows="left|top"
+       height="16"
+       increment="1"
+       initial_value="0"
+       layout="topleft"
+       left="193"
+       max_val="6"
+       name="QualityPerformanceSelection"
+       show_text="false"
+       top_delta="-1"
+       width="275">
+        <slider.commit_callback
+           function="Pref.QualityPerformance"/>
+      </slider>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left="161"
+       name="ShadersPrefText"
+       top_delta="20"
+       width="80">
+        Baixo
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="87"
+       name="ShadersPrefText2"
+       top_delta="0"
+       width="80">
+        Médio
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="87"
+       name="ShadersPrefText3"
+       top_delta="0"
+       width="80">
+        Alto
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="85"
+       name="ShadersPrefText4"
+       top_delta="0"
+       width="80">
+        Ultra
+      </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="4"
+         name="ShadersText"
+         top="60"
+         width="128">
+          Sombreadores:
+        </text>
+        <check_box
+         control_name="RenderTransparentWater"
+         height="16"
+         initial_value="true"
+         label="Água transparente"
+         layout="topleft"
+         left_delta="5"
+         name="TransparentWater"
+         top_pad="5"
+         width="256" >
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderDeferredSSAO"
+         height="16"
+         initial_value="true"
+         label="Oclusão ambiente"
+         layout="topleft"
+         left_delta="0"
+         name="UseSSAO"
+         top_pad="1"
+         width="256">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderScreenSpaceReflections"
+         height="16"
+         initial_value="true"
+         label="Reflexos em espaço de tela"
+         layout="topleft"
+         left_delta="0"
+         name="ScreenSpaceReflections"
+         top_pad="1"
+         width="256">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderMirrors"
+         height="16"
+         initial_value="false"
+         label="Espelhos"
+         layout="topleft"
+         left_delta="0"
+         name="Mirrors"
+         top_pad="1"
+         width="280">
+          <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <text
+         type="string"
+         length="1"
+         top_pad="4"
+         follows="top|left"
+         height="12"
+         width="110"
+         word_wrap="true"
+         layout="topleft"
+         left_delta="-5"
+         name="shadows_label">
+          Sombras:
+        </text>
+        <combo_box
+         control_name="RenderShadowDetail"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ShadowDetail"
+         width="150">
+          <combo_box.commit_callback
+         function="Pref.RenderOptionUpdate" />
+          <combo_box.item
+           label="Nenhum"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Sol/Lua"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Sol/Lua + projetores"
+           name="2"
+           value="2"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="ReflectionDetailText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Detalhe do reflexo:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeDetail"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionDetail"
+         width="150">
+          <combo_box.item
+           label="Só estático"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Estático e dinâmico"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Tempo real"
+           name="2"
+           value="2"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="ReflectionProbeText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Cobertura do reflexo:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeLevel"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionLevel"
+         width="150">
+          <combo_box.item
+           label="Nenhum"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Só manual"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Manual e terreno"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Cena inteira"
+           name="3"
+           value="3"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         top_pad="4"
+         follows="top|left"
+         height="12"
+         width="170"
+         word_wrap="false"
+         layout="topleft"
+         left_delta="-5"
+         name="local lights_label"
+         tool_tip="Afeta o número de fontes de luz. Requer reinício.">
+          Iluminação pontual (requer reinício)
+        </text>
+        <combo_box
+         control_name="RenderShaderLightingMaxLevel"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="LocalLightsDetail"
+         width="150">
+          <combo_box.item
+           label="Completo (padrão)"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="Reduzido"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Só sol/lua"
+           name="1"
+           value="1"/>
+        </combo_box>
+
+        <!-- Mirror settings. -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="MirrorResolutionText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Resolução do espelho:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeResolution"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="MirrorResolution"
+         width="150">
+          <combo_box.item
+           label="256"
+           name="0"
+           value="256"/>
+          <combo_box.item
+           label="512"
+           name="1"
+           value="512"/>
+          <combo_box.item
+           label="1024"
+           name="2"
+           value="1024"/>
+          <combo_box.item
+           label="2048"
+           name="3"
+           value="2048"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="HeroProbeUpdateText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Taxa de atualização do espelho:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeUpdateRate"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="HeroProbeUpdateRate"
+         width="150">
+          <combo_box.item
+           label="Baixo"
+           name="6"
+           value="6"/>
+          <combo_box.item
+           label="Médio"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="Alto"
+           name="1"
+           value="2"/>
+          <combo_box.item
+           label="Ultra"
+           name="0"
+           value="1"/>
+        </combo_box>
+        <!-- End of mirror settings -->
+
+      <!--Top of second column in General tab-->
+        <check_box
+         control_name="FullScreen"
+         height="16"
+         initial_value="false"
+         label="Modo tela cheia"
+         layout="topleft"
+         left="196"
+         name="Fullscreen Mode"
+         tool_tip="Tela cheia. Requer reinício para aplicar."
+         top="60"
+         width="280" />
+
+        <slider
+         control_name="RenderFarClip"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="Distância de desenho"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="1024"
+         min_val="32"
+         name="DrawDistance"
+         top_pad="5"
+         width="321" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="316"
+         name="DrawDistanceMeterText2"
+         top_delta="0"
+         width="128">
+          m
+        </text>
+        <slider
+         control_name="RenderMaxPartCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="256"
+         initial_value="4096"
+         label="Máx. partículas"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="8192"
+         name="MaxParticleCount"
+         top_pad="6"
+         width="321" />
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="200"
+          top_pad="8"
+          width="150"
+          name="AvatarComplexityModeLabel">
+            Exibição de avatars
+        </text>
+        <combo_box
+         control_name="RenderAvatarComplexityMode"
+         height="23"
+         layout="topleft"
+         left_pad="22"
+         top_delta="-4"
+         name="AvatarComplexityMode"
+         width="150">
+            <combo_box.item
+             label="Limitar por complexidade"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Sempre mostrar amigos"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Mostrar só amigos"
+             name="2"
+             value="2"/>
+        </combo_box>
+        <slider
+         control_name="IndirectMaxComplexity"
+         tool_tip="Quando um avatar complexo vira JellyDoll."
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="101"
+         label="Complexidade máxima do avatar"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="101"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxComplexity"
+         top_pad="3"
+         width="281">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxComplexity"
+          parameter="IndirectMaxComlexityText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="485"
+         name="IndirectMaxComplexityText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
+        <slider
+         control_name="IndirectMaxNonImpostors"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="12"
+         label="Máx. avatars sem impostor"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="66"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxNonImpostors"
+         top_pad="5"
+         width="281">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxNonImpostors"
+          parameter="IndirectNonImpostorsText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="485"
+         name="IndirectMaxNonImpostorsText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
+        <slider
+         control_name="RenderGlowResolutionPow"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="8"
+         label="Qualidade pós-processamento"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="9"
+         min_val="8"
+         name="RenderPostProcess"
+         show_text="false"
+         top_pad="5"
+         width="281">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="PostProcessText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="485"
+         name="PostProcessText"
+         top_delta="0"
+         width="128">
+          Baixo
+        </text>
+
+        <slider
+         control_name="RenderLocalLightCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="256"
+         label="Máx. luzes próximas"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         min_val="0"
+         max_val="8192"
+         name="MaxLights"
+         top_pad="5"
+         width="317" />
+
+        <slider
+         control_name="RenderAvatarPhysicsLODFactor"
+         follows="left|top"
+         height="15"
+         decimal_digits="2"
+         initial_value="1"
+         increment=".05"
+         label="Física do avatar"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         name="AvatarPhysicsDetail"
+         show_text="true"
+         top_pad="2"
+         width="317"/>
+
+        <slider
+         control_name="RenderExposure"
+         disabled_control="RenderDisableVintageMode"
+         decimal_digits="1"
+         follows="left|top"
+         height="15"
+         increment="0.1"
+         initial_value="1"
+         label="Exposição"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         min_val="0.5"
+         max_val="4.0"
+         name="RenderExposure"
+         show_text="true"
+         top_pad="2"
+         width="317"/>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="200"
+         name="MeshDetailText"
+         top_pad="8"
+         width="400">
+          Distâncias LOD:
+        </text>
+
+        <slider
+         control_name="RenderVolumeLODFactor"
+         tool_tip="Uso de modelos mais simples. Valores altos aumentam lag."
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="2"
+         label="  Objetos e sculpts (LOD)"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         min_val="1"
+         max_val="4"
+         name="ObjectMeshDetail"
+         show_text="true"
+         top_pad="6"
+         width="324"/>
+        <slider
+        control_name="RenderFlexTimeFactor"
+        follows="left|top"
+        height="15"
+        initial_value="160"
+        label="  Flexiprims"
+        label_width="140"
+        layout="topleft"
+        left_delta="0"
+        name="FlexibleMeshDetail"
+        show_text="true"
+        top_pad="3"
+        width="324"/>
+        <slider
+         control_name="RenderTreeLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         min_val="0.125"
+         label="  Árvores"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         name="TreeMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="324"/>
+        <slider
+         control_name="RenderAvatarLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Avatars"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="324"/>
+        <slider
+         control_name="RenderTerrainLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Terreno"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         max_val="4"
+         min_val="1"
+         name="TerrainMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="324"/>
+        <slider
+         control_name="WLSkyDetail"
+         enabled_control="WindLightUseAtmosShaders"
+         decimal_digits="3"
+         follows="left|top"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="  Céu"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         max_val="128"
+         min_val="16"
+         name="SkyMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="335"/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarPhysicsDetailText"
+         visible="false"
+         top_delta="0"
+         width="0">
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="200"
+         name="Presets_Label"
+         top_pad="18"
+         width="155">
+          Predefinições:
+        </text>
+        <button
+         follows="left|top"
+         height="23"
+         label="Salvar"
+         layout="topleft"
+         left="260"
+         name="PrefSaveButton"
+         top_delta="-5"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefSave"
+          parameter="graphic" />
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Carregar"
+         layout="topleft"
+         left_pad="10"
+         name="PrefLoadButton"
+         top_delta="0"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefLoad"
+          parameter="graphic" />
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Excluir"
+         layout="topleft"
+         left_pad="10"
+         name="PrefDeleteButton"
+         top_delta="0"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefDelete"
+          parameter="graphic" />
+        </button>
+    </panel>
+
+<!--Hardware Settings-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Hardware"
+     name="Hardware Settings" >
+        <check_box
+         control_name="RenderAnisotropic"
+         height="16"
+         label="Filtragem anisotrópica (mais lenta)"
+         layout="topleft"
+         left="10"
+         name="ani"
+         tool_tip="Filtragem anisotrópica: melhora texturas vistas em ângulo; costuma reduzir desfoque à distância."
+         top="20"
+         width="256" />
+        <check_box
+         control_name="RenderCompressTextures"
+         height="16"
+         initial_value="false"
+         label="Compressão com perdas (requer reinício)"
+         layout="topleft"
+         left="10"
+         top_pad="5"
+         name="texture compression"
+         tool_tip="Comprime texturas na VRAM; permite mais texturas ou maior resolução com alguma perda de cor."
+         width="315" />
+        <check_box
+         control_name="RenderHiDPI"
+         height="16"
+         initial_value="true"
+         label="HiDPI (só macOS; requer reinício)"
+         layout="topleft"
+         left="10"
+         top_pad="5"
+         name="use HiDPI"
+         tool_tip="OpenGL para alta resolução."
+         width="315" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="antialiasing label"
+         top_pad="10"
+         width="220"
+         tool_tip="Pode exigir reinício em alguns hardwares.">
+          Antisserrilhamento (reinicie se possível):
+        </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="300"
+         name="antialiasing quality label"
+         top_delta="0"
+         width="220"
+         tool_tip="Pode exigir reinício em alguns hardwares.">
+          Qualidade do antisserrilhamento:
+        </text>
+        <combo_box
+         control_name="RenderFSAAType"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         name="fsaa"
+         top_pad="5"
+         width="130">
+            <combo_box.item
+             label="Desativado"
+             name="FSAADisabled"
+             value="0" />
+            <combo_box.item
+             label="FXAA"
+             name="FXAA"
+             value="1" />
+            <combo_box.item
+             label="SMAA"
+             name="SMAA"
+             value="2" />
+        </combo_box>
+        <combo_box
+         control_name="RenderFSAASamples"
+         height="22"
+         initial_value="false"
+         follows="left|top"
+         layout="topleft"
+         left="300"
+         name="fsaa quality"
+         top_delta="5"
+         width="130">
+            <combo_box.item
+             label="Baixo"
+             name="Low"
+             value="0" />
+            <combo_box.item
+             label="Médio"
+             name="Medium"
+             value="1" />
+            <combo_box.item
+             label="Alto"
+             name="High"
+             value="2" />
+            <combo_box.item
+             label="Ultra"
+             name="Ultra"
+             value="3" />
+        </combo_box>
+
+        <check_box
+          control_name="FSLimitTextureVRAMUsage"
+          height="16"
+          label="Limitar VRAM em texturas (MB)"
+          layout="topleft"
+          left="10"
+          top_pad="15"
+          name="FSLimitTextureVRAMUsage"
+          tool_tip="Limita VRAM para texturas; outros usos continuam a contar."
+          width="275" 
+        />
+        <slider
+          control_name="RenderMaxVRAMBudget"
+          enabled_control="FSLimitTextureVRAMUsage"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="16"
+          layout="topleft"
+          left_pad="5"
+          min_val="0"
+          max_val="4096"
+          name="RenderMaxVRAMBudget"
+          tool_tip="VRAM máxima (MB) para texturas."
+          top_delta="0"
+          width="200"
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="advanced_settings"
+         top_pad="10"
+         width="308">
+            Configurações avançadas (requer reinício):
+        </text>
+
+        <check_box
+          control_name="FSOverrideVRAMDetection"
+          height="16"
+          label="Substituir detecção de VRAM"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSOverrideVRAMDetection"
+          tool_tip="Ignorar detecção de VRAM (muito cuidado)."
+          width="315" 
+        />
+        <slider
+          control_name="FSForcedVideoMemory"
+          enabled_control="FSOverrideVRAMDetection"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          initial_value="2"
+          label="VRAM dedicada da GPU (GB):"
+          label_width="275"
+          layout="topleft"
+          left="10"
+          min_val="0"
+          max_val="32"
+          name="FSForcedVideoMemory"
+          tool_tip="Atenção: use com extremo cuidado.
+Substitui a VRAM detectada na sua GPU.
+Não inclua VRAM compartilhada que faz parte da RAM do sistema.
+Se não entender a diferença, não altere este controle."
+          top_pad="5"
+          width="475" 
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="automatic_texture_downscale_settings"
+         top_pad="10"
+         width="308">
+            Redução automática de texturas:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardBackgroundedTime_label"
+         tool_tip="Reduz texturas após estes segundos em segundo plano."
+         top_pad="10"
+         width="275">
+            Em segundo plano (0 desliga)
+        </text>
+        <spinner
+          control_name="TextureDiscardBackgroundedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardBackgroundedTime"
+          tool_tip="Reduz texturas após estes segundos em segundo plano."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardBackgroundedTime_seconds"
+         top_delta="5"
+         width="100">
+            Segundo(s)
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardMinimizedTime_label"
+         tool_tip="Reduz texturas após estes segundos minimizado."
+         top_pad="10"
+         width="275">
+            Minimizado (0 desliga)
+        </text>
+        <spinner
+          control_name="TextureDiscardMinimizedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardMinimizedTime"
+          tool_tip="Reduz texturas após estes segundos minimizado."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardMinimizedTime_seconds"
+         top_delta="5"
+         width="100">
+            Segundo(s)
+        </text>
+    </panel>
+
+<!--Rendering-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Renderização"
+     name="Rendering" >
+      <!-- world pauser -->
+      <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="World Updating"
+         top_pad="2"
+         width="308">
+            Atualização do mundo:
+        </text>
+        <check_box
+         control_name="AgentPause"
+         height="16"
+         initial_value="false"
+         label="Congelar atualizações do mundo (pausar tudo)"
+         tool_tip="Congela atualizações do servidor; não afeta chat, MIs nem voz."
+         layout="topleft"
+         left_delta="5"
+         name="WorldPause"
+         top_pad="4"
+         width="256"/>
+
+         <check_box
+         control_name="FSLimitFramerate"
+         height="16"
+         initial_value="true"
+         label="Limitar taxa de quadros"
+         layout="topleft"
+         left_delta="0"
+         name="FSLimitFramerate"
+         tool_tip="Limita quadros por segundo; pode reduzir consumo e aquecimento."
+         top_pad="2"
+         width="256"/>
+        <slider
+         enabled_control="FSLimitFramerate"
+         control_name="FramePerSecondLimit"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="FPS:"
+         label_width="30"
+         layout="topleft"
+         max_val="360"
+         min_val="15"
+         name="MaxFPS"
+         left_delta="240"
+         mouse_opaque="true"
+         show_text="true"
+         width="200" />
+
+         <check_box
+         control_name="RenderVSyncEnable"
+         height="16"
+         initial_value="false"
+         label="Limitar FPS à frequência do monitor (VSync)"
+         layout="topleft"
+         left="15"
+         top_pad="2"
+         name="vsync"
+         tool_tip="Sincroniza com o monitor (VSync); pode aumentar engasgos e atraso."
+         width="315" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="Texture Rendering"
+         top_pad="4"
+         width="308">
+            Texturas:
+        </text>
+
+        <text
+         type="string"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="10"
+         name="FSRestrictMaxTextureSize"
+         top_pad="2"
+         width="250">
+            Limitar resolução máx. de textura a:
+        </text>
+
+        <combo_box
+         control_name="RenderMaxTextureResolution"
+         height="20"
+         layout="topleft"
+         left_pad="2"
+         tool_tip="Resolução máxima das texturas no mundo; evita turvação por falta de memória."
+         top_delta="-2"
+         name="FSRestrictMaxTexturePixels"
+         width="100">
+          <combo_box.item
+           label="512 pixels"
+           name="512"
+           value="512"/>
+          <combo_box.item
+           label="1024 pixels"
+           name="1024"
+           value="1024"/>
+          <combo_box.item
+           label="2048 pixels"
+           name="2048"
+           value="2048"/>
+        </combo_box>
+
+      <!-- New Texture detail 5 is lowest, 0 is highest -->
+        <text
+         type="string"
+         length="1"
+         top_pad="3"
+         follows="top|left"
+         height="18"
+         width="150"
+         word_wrap="true"
+         layout="topleft"
+         left="22"
+         name="TextureDetailLabel">
+            Nível máximo de qualidade:
+        </text>
+        <combo_box
+         control_name="TextureDiscardLevel"
+         height="20"
+         layout="topleft"
+         follows="left|top"
+         left_pad="5"
+         top_pad="-20"
+         name="TextureDetail"
+         width="150"
+         tool_tip="Qualidade de carregamento; afeta TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
+            <combo_box.item
+             label="Normal (0)"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Média (3)"
+             name="3"
+             value="3"/>
+            <combo_box.item
+             label="Baixa (4)"
+             name="4"
+             value="4"/>
+            <combo_box.item
+             label="Sem (5) texturas"
+             name="5"
+             value="5"/>
+        </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="Miscellaneous Rendering"
+         top_pad="4"
+         width="308">
+            Outras opções:
+        </text>
+        <check_box
+         control_name="RenderDisableVintageMode"
+         height="16"
+         initial_value="false"
+         label="HDR e emissivo"
+         tool_tip="HDR e emissivos em conteúdo PBR em máquinas recentes."
+         layout="topleft"
+         left="20"
+         name="VintageMode"
+         top_pad="6"
+         width="256">
+         <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderAutoMaskAlphaDeferred"
+         height="16"
+         initial_value="false"
+         label="Renderizar máscaras alfa"
+         tool_tip="Máscaras alfa renderizam corretamente."
+         layout="topleft"
+         left="20"
+         name="RenderAutoMaskAlphaDeferred"
+         top_pad="-1"
+         width="256"/>
+        <check_box
+         control_name="RenderGlow"
+         height="16"
+         initial_value="true"
+         label="Renderizar glow"
+         tool_tip="Glow; com sombras, use intensidade 0 para desligar."
+         layout="topleft"
+         left_delta="0"
+         name="RenderGlow"
+         top_pad="1"
+         width="256"/>
+		<slider
+		enabled_control="RenderGlow"
+		control_name="RenderGlowIterations"
+		decimal_digits="0"
+		follows="left|top"
+		can_edit_text="false"
+		height="16"
+		increment="1"
+		initial_value="160"
+		label="Intensidade:"
+		tool_tip="Intensidade do glow: maior = mais largo e suave (padrão 2)."
+		label_width="50"
+		layout="topleft"
+		max_val="3"
+		min_val="0"
+		name="glow_strength"
+		enabled="true"
+		left_delta="240"
+		mouse_opaque="true"
+		show_text="true"
+		width="150" />
+		<check_box
+         control_name="RenderUnloadedAvatar"
+         height="16"
+         initial_value="false"
+         label="Mostrar avatars ainda carregando"
+         layout="topleft"
+         left="20"
+         name="RenderUnloadedAvatars"
+         top_pad="1"
+         width="256"/>
+        <check_box
+         follows="top|left"
+         height="16"
+         layout="topleft"
+         left="20"
+         top_pad="1"
+         label="Cena em arame"
+         name="Wireframe">
+        <check_box.on_check
+         function="Advanced.CheckWireframe"
+         parameter="Wireframe"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.ToggleWireframe"/>
+        </check_box>
+        <check_box
+         follows="top|left"
+         height="16"
+         layout="topleft"
+         left="20"
+         top_pad="1"
+         width="220"
+         label="Ativar luzes anexadas (face lights)"
+         tool_tip="Ativa luzes anexadas (face lights). Útil para desligá-las quando necessário."
+         name="Render Attached Lights">
+        <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedLights"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedLights"/>
+        </check_box>
+        <check_box
+         layout="topleft"
+         left="20"
+         height="16"
+         top_pad="1"
+         width="200"
+         label="Partículas anexadas"
+         name="Render Attached Particles">
+         <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedParticles"/>
+         <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedParticles"/>
+        </check_box>
+        <check_box
+         control_name="FSDrawDistanceVRAMOptimization"
+         follows="top|left"
+         height="16"
+         layout="topleft"
+         left="20"
+         top_pad="1"
+         label="Reduzir distância quando a VRAM enche"
+         name="Reduce Draw Distance when VRAM is full"
+         tool_tip="Reduz distância de desenho quando a VRAM enche."/>
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          width="200"
+          name="ExcludeAnimeshImposterLabel">
+            Excluir impostor Animesh:
+        </text>
+        <combo_box
+         control_name="FSImpostorAvatarExclude"
+         height="20"
+         layout="topleft"
+         tool_tip="Exclui Animesh de usuário ou de controle dos impostores."
+         left_pad="8"
+         top_delta="-4"
+         name="FSImpostorAvatarExclude"
+         width="80">
+            <combo_box.item
+             label="Nenhum"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Usuário"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Controle"
+             name="2"
+             value="2"/>
+            <combo_box.item
+             label="Ambos"
+             name="3"
+             value="3"/>
+        </combo_box>
+        <slider
+         control_name="PrecachingDelay"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="200"
+         label="Atraso de pré-cache antes de mostrar o mundo"
+         tool_tip="Atraso antes de mostrar o mundo após ficar online para outros (padrão ~6 s)."
+         label_width="300"
+         layout="topleft"
+         max_val="15"
+         min_val="1"
+         name="PrecachingDelay"
+         left="10"
+         top_pad="5"
+         width="405" />
+        <text
+         type="string"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="406"
+         name="PrecachingDelayText"
+         top_delta="0"
+         width="50">
+            segundos
+        </text>
+        <slider
+         control_name="RenderShadowResolutionScale"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1.0"
+         label="Qualidade das sombras"
+         tool_tip="Qualidade das sombras (padrão 1)."
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="1.0"
+         max_val="4.0"
+         name="ShadowResolution"
+         top_pad="1"
+         width="408" />
+        <slider
+         control_name="RenderTerrainScale"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="12"
+         label="Escala da textura do terreno (requer reinício)"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         max_val="24"
+         min_val="1"
+         name="RenderTerrainScale"
+         tool_tip="Escala das texturas do terreno; menor = mais comprimido (reinício)."
+         top_pad="1"
+         width="405" />
+        <!-- Sharpening Settings -->
+        <slider
+         control_name="RenderCASSharpness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Nitidez:"
+         label_width="300"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="RenderSharpness"
+         show_text="true"
+         top_pad="0"
+         width="405">
+        </slider>
+        <!-- End of Sharpening Settings-->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ReflectionProbeCount"
+         top_pad="2"
+         width="150">
+            Máx. reflection probes:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeCount"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="ProbeCount"
+         width="150">
+         <combo_box.item
+          label="Nenhum"
+          name="1"
+          value="1"/>
+         <combo_box.item
+          label="Baixo"
+          name="32"
+          value="32"/>
+         <combo_box.item
+          label="Médio"
+          name="64"
+          value="64"/>
+         <combo_box.item
+          label="Alto"
+          name="128"
+          value="128"/>
+         <combo_box.item
+          label="Ultra"
+          name="256"
+          value="256"/>
+        </combo_box>
+        <!-- Tone Mapping Settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="TonemapTypeText"
+         top_pad="6"
+         width="150">
+            Mapeamento de tons:
+        </text>
+        <combo_box
+         control_name="RenderTonemapType"
+         height="20"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-2"
+         name="TonemapType"
+         width="150">
+         <combo_box.item
+          label="Khronos Neutral"
+          name="0"
+          value="0"/>
+         <combo_box.item
+          label="ACES"
+          name="1"
+          value="1"/>
+        </combo_box>
+        <slider
+         control_name="RenderTonemapMix"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         label="Mistura tone mapping:"
+         tool_tip="Mistura entre linear e tone mapping."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="TonemapMix"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <!-- End of Tone Mapping Settings-->
+    </panel>
+
+<!--Depth of Field-->
+	   <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Profundidade de campo"
+     name="DOF panel" >
+       <check_box
+        control_name="RenderDepthOfField"
+        height="16"
+        initial_value="true"
+        label="Ativar profundidade de campo (desfoca fora do foco)"
+        layout="topleft"
+        left="10"
+        name="UseDoF"
+        top_pad="25"
+        width="256">
+         <check_box.commit_callback
+        function="Pref.RenderOptionUpdate" />
+       </check_box>
+        <check_box
+         control_name="RenderDepthOfFieldInEditMode"
+         enabled_control="RenderDepthOfField"
+         height="16"
+         initial_value="false"
+         label="Ativar no modo edição"
+         layout="topleft"
+         left_delta="18"
+         name="RenderDepthOfFieldInEditMode"
+         top_pad="4"
+         width="256"/>
+        <check_box
+         control_name="FSFocusPointFollowsPointer"
+         enabled_control="RenderDepthOfField"
+         height="16"
+         label="Foco DoF segue o ponteiro"
+         layout="topleft"
+         name="FSFocusPointFollowsPointer"
+         tool_tip="O foco DoF segue o mouse (como no flycam). Use com bloqueio de foco DoF."
+         top_pad="4"
+         width="256"/>
+        <slider
+         enabled_control="RenderDepthOfField"
+         control_name="CameraFNumber"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment=".5"
+         initial_value="9.5"
+         label="Número f:"
+         label_width="160"
+         layout="topleft"
+         left_delta="-18"
+         max_val="64"
+         min_val="1"
+         name="CameraFNum"
+         tool_tip="Valor f da câmera para DoF."
+         top_pad="10"
+         width="471"/>
+        <slider
+         enabled_control="RenderDepthOfField"
+         control_name="CameraFocalLength"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="50"
+         label="Distância focal (mm):"
+         label_width="160"
+         layout="topleft"
+         left_delta="0"
+         max_val="1000"
+         min_val="1"
+         name="CameraFocal"
+         tool_tip="Distância focal para DoF (mm)."
+         top_pad="5"
+         width="475"/>
+        <slider
+         enabled_control="RenderDepthOfField"
+         control_name="CameraFieldOfView"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="60"
+         label="FOV da câmera (°):"
+         label_width="160"
+         layout="topleft"
+         left_delta="0"
+         max_val="200"
+         min_val="10"
+         name="Camera FOV"
+         tool_tip="Campo de visão vertical para DoF (graus)."
+         top_pad="5"
+         width="468"/>
+        <slider
+         enabled_control="RenderDepthOfField"
+         control_name="CameraFocusTransitionTime"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="0.5"
+         label="Transição de foco DoF:"
+         label_width="160"
+         layout="topleft"
+         left_delta="0"
+         max_val="10"
+         min_val="0.1"
+         name="CameraFocusTrans"
+         tool_tip="Tempo para mudar o foco entre pontos."
+         top_pad="5"
+         width="478"/>
+       <slider
+         enabled_control="RenderDepthOfField"
+         control_name="CameraDoFResScale"
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="0.70"
+         label="Qualidade DoF:"
+         label_width="160"
+         layout="topleft"
+         left_delta="0"
+         max_val="1"
+         min_val="0.25"
+         name="CameraDoFResScale"
+         tool_tip="Qualidade do desfoque versus desempenho (maior = melhor imagem, menor = mais FPS)."
+         top_pad="5"
+         width="477"/>
+    </panel>
+</tab_container>
+
+<!-- These two check boxes are dummies and will never be displayed.  They are here so the control variables
+are saved in a preset file. -->
+  <check_box
+    control_name="RenderAvatarMaxComplexity"
+    visible="false"
+    height="0"
+    label="RenderAvatarMaxComplexity"
+    layout="topleft"
+    left="0"
+    name="RenderAvatarMaxNonImpostors"
+    top_delta="0"
+    width="0">
+  </check_box>
+
+  <check_box
+    control_name="RenderAvatarMaxNonImpostors"
+    visible="false"
+    height="0"
+    label="RenderAvatarMaxNonImpostors"
+    layout="topleft"
+    left="0"
+    name="RenderAvatarMaxNonImpostors"
+    top_delta="0"
+    width="0">
+  </check_box>
+</panel>

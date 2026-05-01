@@ -1,0 +1,1951 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="480"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Firestorm"
+ name="firestorm">
+ 
+<panel.string name="BeamsOffLabel">
+	=== DESLIGADO ===
+</panel.string>
+	<string name="EmbeddedItemNotSet">
+		Não definido
+	</string>
+	<string name="EmbeddedItemNotAvailable">
+		Indisponível
+	</string>
+	<string name="EmbeddedItemNotLoggedIn">
+		Não conectado
+	</string>
+
+<tab_container
+ label="Preferências Firestorm"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+    <!--Extras-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Extras"
+     name="tab-extras" >
+        <check_box
+         control_name="RestrainedLove"
+         layout="topleft"
+         follows="left|top"
+         top_pad="6"
+         left="10"
+         width="270"
+         height="20"
+         name="checkMiscRLVa"
+         label="Permitir controles remotos por script do visualizador (RLVa)"/>
+        <text
+         layout="topleft"
+         follows="left|top"
+         left_pad="5"
+         height="16"
+         width="150"
+         name="textMiscRLVaRestart"
+         text_color="White_25">
+            (requer reinício)
+        </text>
+        <check_box
+         top_pad="3"
+         left="10"
+         follows="left|top"
+         height="16"
+         label="Sempre rezzar objetos no grupo do terreno quando possível"
+         name="grouplandrez"
+         width="270"
+         control_name="RezUnderLandGroup"
+         tool_tip="Tenta rezzar objetos no grupo do terreno se você estiver naquele grupo, independentemente da etiqueta de grupo ativa."/>
+		<check_box
+		 control_name="EffectScriptChatParticles"
+		 height="16"
+		 label="Criar efeitos de partículas quando scripts se comunicam"
+		 layout="topleft"
+		 name="EffectScriptChatParticles"
+		 tool_tip="Se ativado, objetos com script exibem luzes em espiral quando os scripts se comunicam"
+		 initial_value="true"
+		 top_pad="3"
+		 width="350" />
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Desativar baliza de rastreamento ao chegar perto do avatar alvo (≤ 3 m)"
+         name="FSDisableAvatarTrackerAtCloseIn"
+         width="270"
+         control_name="FSDisableAvatarTrackerAtCloseIn"
+         tool_tip="Se ativado, a baliza de rastreamento desliga automaticamente quando a distância ao avatar alvo for menor que 3 m. (Padrão)"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Corrigir animação idle Bento"
+         name="play_default_bento_idle_animation_toggle"
+         tool_tip="Se ativado, o visualizador executa uma animação Bento padrão de prioridade 0 que posiciona mãos, asas, boca e cauda de forma natural quando nenhuma outra animação Bento está em execução."
+         width="270"
+         control_name="FSPlayDefaultBentoAnimation"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Redefinir esqueleto do avatar ao levantar"
+         name="FSResetSkeletonOnStandUp"
+         tool_tip="Se ativado, o visualizador redefine automaticamente o esqueleto ao levantar. O reset também é enviado aos avatares próximos para atualizar sua aparência nos visualizadores deles."
+         width="270"
+         control_name="FSResetSkeletonOnStandUp"/>
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         label="Desativar tela de progresso do login"
+         name="login_screen_toggle"
+         width="270"
+         control_name="FSDisableLoginScreens"
+         tool_tip="Desativa a tela preta de progresso do login"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Desativar tela de progresso do logout"
+         name="logout_screen_toggle"
+         width="270"
+         control_name="FSDisableLogoutScreens"
+         tool_tip="Desativa a tela preta de progresso do logout."/>
+
+		<check_box
+		 control_name="FSRenderFarClipStepping"
+		 height="16"
+		 label="Ativar aumento progressivo da distância de desenho"
+		 layout="topleft"
+		 name="FSRenderFarClipStepping"
+		 tool_tip="Se ativado, o Firestorm aumenta a distância de desenho progressivamente após teletransporte."
+		 initial_value="true"
+		 top_pad="10"
+		 width="250" />
+		<slider
+		 name="progressive_draw_distance_interval"
+		 control_name="FSRenderFarClipSteppingInterval"
+		 enabled_control="FSRenderFarClipStepping"
+		 decimal_digits="0"
+		 left="10"
+		 top_pad="2"
+		 follows="left|top"
+		 layout="topleft"
+		 height="18"
+		 increment="1"
+		 initial_value="20"
+		 max_val="30"
+		 min_val="5"
+		 width="225"
+		 tool_tip="Intervalo em segundos entre cada aumento da distância de desenho"/>
+
+        <check_box
+         top_pad="10"
+         control_name="UseLSLBridge"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="UseLSLBridge"
+         label="Ativar ponte LSL–Cliente"
+         left="10"
+         width="270"
+         tool_tip="Permite ao visualizador usar um anexo com script (Bridge) para estender recursos"/>
+        <combo_box
+         control_name="UseLSLFlightAssist"
+         enabled_control="UseLSLBridge"
+         layout="topleft"
+		 left="10"
+		 top_pad="2"
+         follows="left|top"
+         height="25"
+         name="UseLSLFlightAssist"
+         tool_tip="Ativa o script que auxilia voo e pairar em grandes altitudes"
+         width="225">
+            <combo_box.item
+             label="Auxílio de voo: desligado"
+             name="flight_disabled"
+             value="0.0" />
+            <combo_box.item
+             label="Auxílio de voo: leve"
+             name="flight_mild"
+             value="0.5" />
+            <combo_box.item
+             label="Auxílio de voo: moderado"
+             name="flight_moderate"
+             value="1.0" />
+            <combo_box.item
+             label="Auxílio de voo: forte"
+             name="flight_strong"
+             value="2.0" />
+            <combo_box.item
+             label="Auxílio de voo: extremo"
+             name="flight_extreme"
+             value="15.0" />
+        </combo_box>
+        <slider
+         name="manual_environment_change_transition_period"
+         control_name="FSEnvironmentManualTransitionTime"
+         label="Tempo de transição do ambiente:"
+         decimal_digits="1"
+         left="12"
+         top_pad="15"
+         follows="left|top"
+         layout="topleft"
+         height="18"
+         increment="0.5"
+         initial_value="0"
+         max_val="60"
+         min_val="0"
+         width="520"
+         tool_tip="Intervalo em segundos para mesclar alterações manuais de ambiente. Zero é instantâneo."/>
+        <check_box
+         top_pad="5"
+         control_name="EnvironmentPersistAcrossLogin"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="EnvironmentPersistAcrossLogin"
+         label="Manter configurações de ambiente entre sessões"
+         left="10"
+         width="500"
+         tool_tip="Restaura as configurações atuais de ambiente no próximo login."/>
+        <check_box
+         top_pad="5"
+         control_name="FSRepeatedEnvTogglesShared"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="FSRepeatedEnvTogglesShared"
+         label="Atalhos repetidos de ambiente voltam ao ambiente compartilhado"
+         left="10"
+         width="500"
+         tool_tip="Faz com que atalhos repetidos (ex.: Ctrl+Shift+Y) alternem entre a predefinição pedida e o ambiente compartilhado"/>
+    </panel>
+
+
+    <!--Protection-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Proteção"
+     name="ProtectionTab">
+        <check_box
+         top_pad="10"
+         left="10"
+         label="Bloquear sentar com clique esquerdo em objetos"
+         control_name="FSBlockClickSit"
+         follows="left|top"
+         height="16"
+         name="FSBlockClickSit"
+         width="256" />
+        <check_box
+         top_pad="4"
+         label="Permitir que scripts mostrem o mapa (llMapDestination)"
+         control_name="ScriptsCanShowUI"
+         follows="left|top"
+         height="16"
+         name="ScriptsCanShowUI"
+         width="256" />
+
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="12"
+         name="revokepermissions_txt"
+         width="200">
+         Revogar permissões:
+         </text>
+        <radio_group
+         top_pad="5"
+         left="20"
+         height="62"
+         layout="topleft"
+         control_name="FSRevokePerms"
+         name="FSRevokePerms"
+         tool_tip=""
+         width="331">
+            <radio_item
+             height="16"
+             label="Nunca (comportamento original)"
+             layout="topleft"
+             name="never_radio"
+             value="0"
+             top_pad="0"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revogar ao SENTAR"
+             layout="topleft"
+             top_pad="0"
+             name="sit_radio"
+             value="1"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revogar ao LEVANTAR"
+             layout="topleft"
+             top_pad="0"
+             name="stand_radio"
+             value="2"
+             width="150" />
+            <radio_item
+             height="16"
+             label="Revogar ao SENTAR e ao LEVANTAR"
+             layout="topleft"
+             top_pad="0"
+             name="sitnstand_radio"
+             value="3"
+             width="150" />
+        </radio_group>
+
+        <text
+         left="10"
+         top_pad="5"
+         follows="left|top"
+         height="12"
+         name="SurfaceAreaThreshholdLabel"
+         width="360">
+         Proteção contra lag de textura (pode afetar alguns objetos):
+         </text>
+        <check_box
+         top_pad="8"
+         left="20"
+         label="Ocultar automaticamente objetos grandes com área de textura alta. Limite: "
+         control_name="RenderVolumeSAProtection"
+         follows="left|top"
+         height="16"
+         name="RenderVolumeSAProtection"
+         width="380"
+         tool_tip="Protege contra objetos com texturas muito grandes em áreas amplas, frequentemente usados para travar o visualizador. O padrão é 5000 m²; se alguns objetos não renderizarem com esta opção ativa, talvez seja preciso aumentar o valor."/>
+        <spinner
+         enabled_control="RenderVolumeSAProtection"
+         top_delta="-5"
+         control_name="RenderVolumeSAFrameMax"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="5"
+         increment="1"
+         initial_value="5000"
+         max_val="10000"
+         min_val="500"
+         name="RenderVolumeSAFrameMax"
+         width="90" />
+
+        <check_box
+         top_pad="10"
+         left="10"
+         label="Ativar proteção contra spam"
+         control_name="UseAntiSpam"
+         follows="left|top"
+         height="16"
+         name="UseAntiSpam"
+         width="200" />
+        <!-- FS:TS FIRE-23138: Enable spam protection for user's objects -->
+        <check_box
+         left="20"
+         label="Ativar proteção contra spam também para seus objetos"
+         control_name="FSUseAntiSpamMine"
+         enabled_control="UseAntiSpam"
+         follows="left|top"
+         height="16"
+         name="FSUseAntiSpamMine"
+         width="380"
+         tool_tip="Aplica a proteção antispam também aos objetos que você possui."/>
+        <!-- /FS:TS FIRE-23138 -->
+        <text
+         top_pad="5"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="AntiSpamText1"
+         width="200">
+           Máx. de linhas em uma única mensagem:
+        </text>
+        <spinner
+         enabled_control="UseAntiSpam"
+         top_delta="-5"
+         control_name="_NACL_AntiSpamNewlines"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_value="70"
+         max_val="1000"
+         min_val="5"
+         name="_NACL_AntiSpamNewlines"
+         width="50"
+         tool_tip="Número máximo de linhas aceitas em uma única mensagem de texto [padrão: 70]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="AntiSpamText2"
+         width="200">
+           Máx. de eventos da mesma origem:
+        </text>
+        <spinner
+         enabled_control="UseAntiSpam"
+         top_delta="-5"
+         control_name="_NACL_AntiSpamAmount"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_value="10"
+         max_val="40"
+         min_val="2"
+         name="_NACL_AntiSpamAmount"
+         width="50"
+         tool_tip="Número máximo de eventos semelhantes aceitos em 2 segundos da mesma origem [padrão: 10]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="AntiSpamText3"
+         width="200">
+           Multiplicador de pedidos de reprodução de som:
+        </text>
+        <spinner
+         enabled_control="UseAntiSpam"
+         top_delta="-5"
+         control_name="_NACL_AntiSpamSoundMulti"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_value="10"
+         max_val="25"
+         min_val="1"
+         name="_NACL_AntiSpamSoundMulti"
+         width="50"
+         tool_tip="Multiplicador de eventos para pedidos de reprodução de som [padrão: 10]"/>
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="30"
+         name="AntiSpamText4"
+         width="200">
+           Multiplicador de pedidos de pré-carregamento de som:
+        </text>
+        <spinner
+         enabled_control="UseAntiSpam"
+         top_delta="-5"
+         control_name="_NACL_AntiSpamSoundPreloadMulti"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="1"
+         initial_value="4"
+         max_val="25"
+         min_val="1"
+         name="_NACL_AntiSpamSoundPreloadMulti"
+         width="50"
+         tool_tip="Multiplicador de eventos para pedidos de pré-carregamento de som [padrão: 4]"/>
+        <button
+         enabled_control="UseAntiSpam"
+         layout="topleft"
+         follows="left|top"
+         top_pad="10"
+         width="200"
+         height="20"
+         left="40"
+         name="AntiSpamUnblock"
+         label="Desbloquear todas as origens de spam"
+         commit_callback.function="NACL.AntiSpamUnblock"/>
+
+        <check_box
+         top_pad="8"
+         left="10"
+         label="Confirmar antes de pagar. Limiar:"
+         control_name="FSConfirmPayments"
+         follows="left|top"
+         height="16"
+         name="FSConfirmPayments"
+         width="205"
+         tool_tip="Exibe confirmação antes de pagar valores acima do limiar. Para sempre pedir confirmação, defina o limiar como 0."/>
+        <spinner
+         enabled_control="FSConfirmPayments"
+         top_delta="-5"
+         control_name="FSPaymentConfirmationThreshold"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="5"
+         increment="1"
+         initial_value="200"
+         max_val="2147483647"
+         min_val="0"
+         name="FSPaymentConfirmationThreshold"
+         tool_tip="Exibe confirmação antes de pagar valores acima do limiar. Para sempre pedir confirmação, defina o limiar como 0."
+         width="100"/>
+    </panel>
+
+
+    <!--Avatar-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Avatar"
+     name="firestorm_avatar" >
+
+        <text
+         type="string"
+         left="5"
+         top_pad="12"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="HeadMovement"
+         width="500">
+            Quanto a cabeça do avatar segue o mouse (use ‘0’ para não mover):
+        </text>
+        <slider
+         control_name="PitchFromMousePosition"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="15"
+         label="Amplitude vertical da cabeça seguindo o mouse:"
+         tool_tip="Amplitude vertical (arfagem) em graus"
+         label_width="300"
+         layout="topleft"
+         left="15"
+         min_val="0"
+         max_val="120"
+         name="PitchFromMousePositionSlider"
+         top_pad="10"
+         width="471" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="485"
+         name="PitchFromMousePositionText"
+         top_delta="0"
+         width="50">
+            graus
+        </text>
+        <slider
+         control_name="YawFromMousePosition"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="5"
+         label="Amplitude horizontal da cabeça seguindo o mouse:"
+         tool_tip="Amplitude horizontal (guinada) em graus"
+         label_width="300"
+         layout="topleft"
+         left="15"
+         min_val="0"
+         max_val="120"
+         name="YawFromMousePositionSlider"
+         top_pad="5"
+         width="471" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="485"
+         name="YawFromMousePositionText"
+         top_delta="0"
+         width="50">
+            graus
+        </text>
+        <text
+         top_pad="5"
+         left="15"
+         name="note_lookat"
+         follows="left|top"
+         layout="topleft"
+         text_color="White_50"
+         height="12"
+         width="500">
+             (As opções de olhar para estão na aba Privacidade.)
+        </text>
+
+        <check_box
+         top_pad="10"
+         enabled="false"
+         follows="left|top"
+         height="16"
+         label="Desativar movimentos aleatórios dos olhos do avatar"
+         left="15"
+         name="FSStaticEyes"
+         width="250"
+         control_name="FSStaticEyes"/>
+
+        <!-- LGG Color Beams -->
+        <text
+         name="BeamPrefs"
+         follows="left|top"
+         left="15"
+         bottom_delta="25" >
+            Feixe de seleção (efeitos de partículas)
+        </text>
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_delta="15"
+         follows="top|left"
+         height="0"
+         left="15"
+         name="BeamDivisor"
+         width="490" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="BeamColor_delete"
+         label="Excluir"
+         tool_tip="Remove esta predefinição de cor"
+         left="15"
+         top_delta="10"
+         width="55"
+         height="20"
+         follows="left|top" />
+
+        <combo_box
+         enabled_control="ShowSelectionBeam"
+         allow_text_entry="false"
+         top_delta="0"
+         left_delta="60"
+         follows="left|top"
+         height="20"
+         max_chars="20"
+         name="BeamColor_combo"
+         width="170"
+         control_name="FSBeamColorFile"
+         tool_tip="Escolha a predefinição de cor do feixe de seleção"/>
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="BeamColor_new"
+         label="Criar novo"
+         tool_tip="Criar nova predefinição de cor"
+         left="15"
+         bottom_delta="25"
+         width="80"
+         height="20"
+         follows="left|top" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="BeamColor_refresh"
+         label="Atualizar lista"
+         tool_tip="Atualizar lista de predefinições"
+         left="15"
+         bottom_delta="25"
+         width="80"
+         height="20"
+         follows="left|top" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         left="100"
+         top_delta="-25"
+         follows="left|top"
+         width="130"
+         height="80"
+         name="PhoenixBeamPrev_rainbow"
+         label=""
+         scale_image="true"
+         image_color="SL-White"
+         image_color_disabled="SL-White"
+         image_selected="beam_rainbow.png"
+         image_unselected="beam_rainbow.png"
+         image_hover_selected="beam_rainbow.png"
+         image_hover_unselected="beam_rainbow.png" />
+
+        <slider
+         enabled_control="ShowSelectionBeam"
+         bottom_delta="25"
+         left="15"
+         name="FSMaxBeamsPerSecond"
+         control_name="FSMaxBeamsPerSecond"
+         decimal_digits="0"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="1"
+         initial_value="4"
+         label="Atualizações do feixe por segundo:"
+         label_width="100"
+         max_val="200"
+         min_val="4"
+         show_text="true"
+         width="250"
+         tool_tip="Quantas atualizações do feixe enviar por segundo. Padrão: 40" />
+
+        <check_box
+         bottom_delta="18"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="Ativar feixe de seleção"
+         left="15"
+         name="SLPartBeam"
+         width="250"
+         tool_tip="Desativar impede que feixes de seleção sejam renderizados localmente; outros avatares ainda podem recebê-los. Para não mostrar sua seleção a outros, use Preferências → Privacidade → Olhar para → não enviar dicas de alvo de seleção."
+         control_name="ShowSelectionBeam" />
+
+        <check_box
+         bottom_delta="18"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="Enviar dados de seleção ao chat"
+         left="15"
+         name="FSParticleChat"
+         tool_tip="Envia dados de seleção (início/fim e posição global) ao canal de chat 9000."
+         width="250"
+         control_name="FSParticleChat" />
+
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_delta="-160"
+         follows="top|left"
+         height="180"
+         left="260"
+         name="BeamDivisor2"
+         width="0" />
+
+        <combo_box
+         enabled_control="ShowSelectionBeam"
+         allow_text_entry="false"
+         bottom_delta="-150"
+         left="275"
+         follows="left|top"
+         height="20"
+         max_chars="20"
+         name="FSBeamShape_combo"
+         width="170"
+         control_name="FSBeamShape"
+         tool_tip="Escolha o formato da partícula do feixe" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="delete_beam"
+         label="Excluir"
+         tool_tip="Remover este feixe"
+         left_delta="175"
+         bottom_delta="0"
+         width="55"
+         height="20"
+         follows="left|top" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="custom_beam_btn"
+         label="Criar novo"
+         tool_tip="Personalizar formato do feixe"
+         left_delta="-20"
+         bottom_delta="25"
+         width="80"
+         height="20"
+         follows="left|top"/>
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         name="refresh_beams"
+         label="Atualizar lista"
+         tool_tip="Atualizar lista de feixes"
+         left_delta="0"
+         bottom_delta="25"
+         width="80"
+         height="20"
+         follows="left|top" />
+
+        <button
+         enabled_control="ShowSelectionBeam"
+         left="290"
+         top_delta="-25"
+         follows="left|top"
+         width="130"
+         height="80"
+         name="PhoenixBeamPrev_Phoenix"
+         label=""
+         image_color="SL-White"
+         image_color_disabled="SL-White"
+         scale_image="true"
+         image_selected="beam_phoenix.png"
+         image_unselected="beam_phoenix.png"
+         image_hover_selected="beam_phoenix.png"
+         image_hover_unselected="beam_phoenix.png" />
+
+        <slider
+         enabled_control="ShowSelectionBeam"
+         bottom_delta="25"
+         left_delta="-15"
+         name="FSBeamShapeScale"
+         control_name="FSBeamShapeScale"
+         decimal_digits="1"
+         enabled="true"
+         follows="left|top"
+         height="18"
+         increment="0.1"
+         initial_value="1"
+         label="Escala:"
+         label_width="35"
+         max_val="4"
+         min_val="0.1"
+         show_text="true"
+         width="150"
+         tool_tip="Altera a escala do formato usado no feixe em formato Phoenix" />
+
+        <text
+         type="string"
+         left="5"
+         top_pad="65"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="BridgeProtocols"
+         width="500">
+            Integração externa da ponte LSL–Cliente:
+        </text>
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Permitir protocolo OpenCollar para ativar ou desativar o AO integrado"
+         left="15"
+         top_pad="10"
+         name="BridgeIntegrationOC"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationOC" />
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Permitir protocolo LockMeister para ativar ou desativar o AO integrado"
+         left="15"
+         top_pad="2"
+         name="BridgeIntegrationLM"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationLM" />
+
+    </panel>
+
+    <!--Build 1-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Construir 1"
+     name="BuildTab">
+     
+        <text
+         top="5"
+         follows="left|top|right"
+         height="10"
+         left="20"
+         name="text_box_objprams"
+         width="175">
+         Tamanho padrão do objeto
+        </text>
+        <text
+         top="5"
+         follows="left|top|right"
+         height="10"
+         left="180"
+         name="text_box_objprams2"
+         width="175">
+         Configurações
+        </text>
+        <text
+         top="5"
+         follows="left|top|right"
+         height="10"
+         left="350"
+         name="text_box_objprams3"
+         width="175">
+         Textura
+        </text>
+        <view_border
+         top_pad="5"
+         left="5"
+         height="90"
+         follows="top|left"
+         bevel_style="none"
+         border_thickness="1"
+         name="SizeBorder"
+         width="140"/>
+        <view_border
+         top_delta="0"
+         left_delta="140"
+         height="90"
+         follows="top|left"
+         bevel_style="none"
+         border_thickness="1"
+         name="SettingBorder"
+         width="120"/>
+        <view_border
+         top_delta="0"
+         left_delta="120"
+         height="90"
+         follows="top|left"
+         bevel_style="none"
+         border_thickness="1"
+         name="TextureBorder"
+         width="255"/>
+         
+        <spinner
+         top_pad="-77"
+         left="15"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Tam. X"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="X size"
+         width="120"
+         control_name="FSBuildPrefs_Xsize"/>
+        <spinner
+         top_pad="7"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Tam. Y"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="Y size"
+         width="120"
+         control_name="FSBuildPrefs_Ysize"/>
+        <spinner
+         top_pad="7"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Tam. Z"
+         label_width="40"
+         max_val="10"
+         min_val="0.01"
+         name="Z size"
+         width="120"
+         control_name="FSBuildPrefs_Zsize"/>
+
+        <check_box
+         top_delta="-50"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Fantasma"
+         left="155"
+         mouse_opaque="true"
+         name="FSBuildPrefs_PhantomToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Phantom"/>
+        <check_box
+         top_delta="20"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Físico"
+         left_delta="0"
+         mouse_opaque="true"
+         name="FSBuildPrefs_PhysicalToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Physical"/>
+        <check_box
+         top_delta="20"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Temporário"
+         left_delta="0"
+         mouse_opaque="true"
+         name="FSBuildPrefs_TemporaryToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Temporary"/>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="20"
+         left_delta="1"
+         follows="left|top"
+         height="18"
+         max_chars="20"
+         mouse_opaque="true"
+         name="material"
+         width="87"
+         control_name="FSBuildPrefs_Material">
+             <combo_item name="Stone" value="Stone" label="Pedra"/>
+             <combo_item name="Metal" value="Metal" label="Metal"/>
+             <combo_item name="Glass" value="Glass" label="Vidro"/>
+             <combo_item name="Wood" value="Wood" label="Madeira"/>
+             <combo_item name="Flesh" value="Flesh" label="Orgânico"/>
+             <combo_item name="Plastic" value="Plastic" label="Plástico"/>
+             <combo_item name="Rubber" value="Rubber" label="Borracha"/>
+        </combo_box>
+
+        <texture_picker
+         allow_no_texture="false"
+         top_delta="-60"
+         can_apply_immediately="true"
+         default_image_name="Default"
+         follows="left|top"
+         height="80"
+         label="Textura"
+         left="275"
+         mouse_opaque="true"
+         name="texture control"
+         control_name="FSDefaultObjectTexture"
+         tool_tip="Clique para escolher uma imagem"
+         width="64"/>
+        <color_swatch
+         border_color="0.45098, 0.517647, 0.607843, 1"
+         top_delta="0"
+         can_apply_immediately="true"
+         color="1, 1, 1, 1"
+         follows="left|top"
+         height="80"
+         label="Cor"
+         left_delta="75"
+         mouse_opaque="true"
+         name="colorswatch"
+         tool_tip="Clique para abrir o seletor de cores"
+         width="64"
+         control_name="FSBuildPrefs_Color"/>
+        <spinner
+         top_delta="0"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Transparência"
+         label_width="40"
+         left_delta="70"
+         max_val="100"
+         min_val="0"
+         mouse_opaque="true"
+         name="alpha"
+         width="90"
+         control_name="FSBuildPrefs_Alpha"/>
+        <spinner
+         top_delta="20"
+         enabled="true"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Brilho volumétrico"
+         label_width="40"
+         left_delta="0"
+         max_val="1"
+         min_val="0"
+         mouse_opaque="true"
+         name="glow"
+         width="90"
+         control_name="FSBuildPrefs_Glow"/>
+        <check_box
+         top_delta="22"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Brilho total"
+         left_delta="0"
+         mouse_opaque="true"
+         name="EmFBToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_FullBright"/>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="18"
+         follows="left|top"
+         height="18"
+         left_delta="0"
+         max_chars="20"
+         mouse_opaque="true"
+         name="combobox shininess"
+         tool_tip="Define o nível de reflexo do objeto"
+         width="90"
+         control_name="FSBuildPrefs_Shiny">
+          <combo_item name="None" value="None" label="Nenhum"/>
+          <combo_item name="Low" value="Low" label="Baixo"/>
+          <combo_item name="Medium" value="Medium" label="Médio"/>
+          <combo_item name="High" value="High" label="Alto"/>
+        </combo_box>
+        <check_box
+         name="FSBuildPrefs_EmbedItem"
+         top="120"
+         enabled="false"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         initial_value="false"
+         label="Incorporar um item nos novos prims"
+         left="10"
+         mouse_opaque="true"
+         control_name="FSBuildPrefs_EmbedItem"
+         radio_style="false"
+         width="255"/>
+        <view_border
+         bevel_style="in"
+         top_delta="20"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="embed_item_drop_target_rect"
+         width="255"/>
+        <fs_embedded_item_drop_target
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="embed_item"
+         tool_tip="Solte aqui um item do inventário."
+         v_pad="2"
+         width="255">
+         Solte aqui um item do inventário.
+        </fs_embedded_item_drop_target>
+        <view_border
+         bevel_style="in"
+         top_delta="18"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="build_item_add_disp_rect"
+         width="255"/>
+        <text
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="build_item_add_disp_rect_txt"
+         tool_tip=""
+         v_pad="2"
+         width="255">
+         Definido atualmente como: [ITEM]
+        </text>
+        <check_box
+         name="FSBuildPrefs_UseCustomScript"
+         top="120"
+         left_pad="5"
+         enabled="false"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         initial_value="false"
+         label="Usar script personalizado no botão Novo script"
+         mouse_opaque="true"
+         control_name="FSBuildPrefs_UseCustomScript"
+         radio_style="false"
+         width="250"/>
+        <view_border
+         bevel_style="in"
+         top_delta="20"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="custom_script_drop_target_rect"
+         width="250"/>
+        <fs_embedded_item_drop_target
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="custom_script"
+         tool_tip="Solte aqui um script do seu inventário."
+         v_pad="2"
+         width="250">
+         Solte aqui um script.
+        </fs_embedded_item_drop_target>
+        <view_border
+         bevel_style="in"
+         top_delta="18"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="custom_script_disp_rect"
+         width="250"/>
+        <text
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="custom_script_disp_rect_txt"
+         tool_tip=""
+         v_pad="2"
+         width="250">
+         Definido atualmente como: [SCRIPT]
+        </text>
+
+        <button
+         follows="left|top"
+         height="25"
+         label="Permissões padrão de criação"
+         layout="topleft"
+         name="fs_default_creation_permissions"
+         left="8"
+         top="185"
+         width="250">
+         <button.commit_callback
+             function="Pref.PermsDefault" />
+        </button>
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         left="8"
+         label="Ativar realce dos prims selecionados"
+         tool_tip="Se desmarcado, os contornos amarelos/azuis não são desenhados, melhorando o desempenho com muitos prims selecionados."
+         name="FSBuildPrefsRenderHighlight_toggle"
+         control_name="RenderHighlightSelections"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Realçar o limite do lote atualmente selecionado"
+         name="RenderParcelSelection"
+         control_name="RenderParcelSelection"
+         width="190"/>
+        <check_box
+         enabled_control="RenderParcelSelection"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         left="13"
+         label="Mostrar limite até a altura máxima de construção"
+         name="FSRenderParcelSelectionToMaxBuildHeight"
+         control_name="FSRenderParcelSelectionToMaxBuildHeight"
+         width="190"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         left="8"
+         label="Limitar distância de seleção (metros):"
+         name="LimitSelectDistance"
+         control_name="LimitSelectDistance"
+         width="190"/>
+        <spinner
+         enabled_control="LimitSelectDistance"
+         control_name="MaxSelectDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxSelectDistance"
+         width="75"
+         tool_tip="Distância máxima permitida para seleção (metros a partir do avatar) [Padrão: 128,000]"/>
+        <check_box
+         left="8"
+         top_pad="13"
+         follows="left|top"
+         height="16"
+         label="Limitar distância de arrastar (metros):"
+         name="LimitDragDistance"
+         control_name="LimitDragDistance"
+         width="190"/>
+        <spinner
+         enabled_control="LimitDragDistance"
+         control_name="MaxDragDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxDragDistance"
+         width="75"
+         tool_tip="Distância máxima permitida numa única operação da ferramenta mover (metros a partir do ponto inicial) [Padrão: 48,000]"/>
+        <text
+         top_pad="14"
+         follows="left|top"
+         height="16"
+         left="10"
+         name="RotationStepText1"
+         width="190">
+          Restringir rotações a múltiplos de
+        </text>
+        <spinner
+         control_name="RotationStep"
+         decimal_digits="2"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="359.99"
+         min_val="0.01"
+         name="RotationStep"
+         width="65"
+         tool_tip="Todas as rotações pela ferramenta de rotação ficam restritas a múltiplos desta unidade [Padrão: 1,0]"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="RotationStepText2"
+         width="270">
+          graus, quando não estiver usando “alinhar à grade”
+        </text>
+        <check_box
+         left="8"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Mostrar diálogo de confirmação ao desvincular se o conjunto tiver no mínimo"
+         name="FSUnlinkConfirmEnabled"
+         control_name="FSUnlinkConfirmEnabled"
+         width="325"/>
+        <spinner
+         enabled_control="FSUnlinkConfirmEnabled"
+         control_name="MinObjectsForUnlinkConfirm"
+         decimal_digits="0"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         max_val="256"
+         min_val="0"
+         name="MinObjectsForUnlinkConfirm"
+         width="65"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="MinObjectsForUnlinkConfirmText2"
+         width="270">
+          objetos
+        </text>
+        <check_box
+         left="8"
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Usar comportamento antigo de “Definir objeto à venda”"
+         tool_tip="Se marcado, as informações de venda são salvas ao alterar em vez de exigir confirmação."
+         name="FSCommitForSaleOnChange_toggle"
+         control_name="FSCommitForSaleOnChange"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Salvar texturas do inventário em disco como PNG em vez de TGA por padrão"
+         tool_tip="Usado na janela de pré-visualização de texturas e no menu de contexto do inventário."
+         name="FSTextureDefaultSaveAsFormat"
+         control_name="FSTextureDefaultSaveAsFormat"/>
+
+        <text
+         top="185"
+         left_delta="377"
+         follows="left|top"
+         height="10"
+         name="text_box_pivotpoint"
+         width="135">
+          Ponto de pivô
+        </text>
+        <view_border
+         top_pad="5"
+         bevel_style="none"
+         border_thickness="1"
+         follows="top|left"
+         height="120"
+         name="PivotBorder"
+         width="135"/>
+        <check_box
+         top_delta="13"
+         left_delta="3"
+         follows="left|top"
+         label="Eixo no prim raiz"
+         tool_tip="Por padrão o eixo aparece no centro de massa do conjunto. Se ativado, o eixo aparece no prim raiz."
+         name="FSBuildPrefsActualRoot_toggle"
+         control_name="FSBuildPrefs_ActualRoot"/>
+        <spinner
+         top_pad="5"
+         left_delta="5"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Pos. X"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="X pos"
+         width="120"
+         control_name="FSBuildPrefs_PivotX"/>
+        <spinner
+         top_pad="7"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Pos. Y"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="Y pos"
+         width="120"
+         control_name="FSBuildPrefs_PivotY"/>
+        <spinner
+         top_pad="7"
+         decimal_digits="5"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Pos. Z"
+         label_width="40"
+         max_val="256"
+         min_val="-256"
+         name="Z pos"
+         width="120"
+         control_name="FSBuildPrefs_PivotZ"/>
+        <check_box
+         top_pad="10"
+         left_delta="-3"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         label="Valores são percentuais"
+         tool_tip="As configurações padrão são percentuais e cada eixo em 50."
+         name="FSPivotPercToggle"
+         width="100"
+         control_name="FSBuildPrefs_PivotIsPercent"/>
+
+  </panel>
+
+    <!--Build 2-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Construir 2"
+     name="BuildTab2">
+        <check_box
+         left="3"
+         top="10"
+         follows="left|top"
+         height="16"
+         label="Usar Ctrl+mouse para pegar e manipular objetos"
+         tool_tip="Se marcado, você poderá pegar e mover objetos com o mouse e a tecla Ctrl."
+         name="FSEnableGrab"
+         control_name="EnableGrab"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+		 initial_value="false"
+         label="Permitir arrastar ou dimensionar por clique (com Caps Lock) numa face de textura no modo construir"
+         tool_tip="Se ativado, permite arrastar ou dimensionar por clique (junto com Caps Lock) uma face de textura no modo construir. Recurso experimental — use com cautela."
+         name="FSExperimentalDragTexture"
+         control_name="FSExperimentalDragTexture"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Pré-visualizar animações no próprio avatar durante o envio"
+         tool_tip="Se ativado, você pode pré-visualizar animações durante o envio no próprio avatar."
+         name="FSUploadAnimationOnOwnAvatar"
+         control_name="FSUploadAnimationOnOwnAvatar"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Sempre expandir informações avançadas na pré-visualização de animações"
+         tool_tip="Expande por padrão as informações avançadas na janela de pré-visualização de animações."
+         name="FSAnimationPreviewExpanded"
+         control_name="FSAnimationPreviewExpanded"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Ativar detalhes estendidos das informações de script"
+         tool_tip="Se ativado, amplia o recurso básico de informações de script com vários detalhes úteis para construtores."
+         name="FSScriptInfoExtended"
+         enabled_control="UseLSLBridge"
+         control_name="FSScriptInfoExtended"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Ordenar pontos de anexo nos menus “Anexar em” alfabeticamente (requer reiniciar)"
+         tool_tip="Se ativado, a lista de pontos de anexo nos menus Anexar em será ordenada alfabeticamente."
+         name="FSSortAttachmentSpotsAlphabetically"
+         control_name="FSSortAttachmentSpotsAlphabetically"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Usar o novo painel de texturas [APP_NAME] nas ferramentas (requer reiniciar)"
+         tool_tip="Se ativado, as ferramentas de edição de texturas usam o fluxo refinado [APP_NAME] e permitem editar texturas Blinn-Phong e PBR."
+         name="FSUseNewTexturePanel"
+         control_name="FSUseNewTexturePanel"/>
+    </panel>
+
+    <!--Script Editor-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Editor de scripts"
+     name="BuildTabScriptEditor">
+        <text
+         top="15"
+         left="10"
+         height="16"
+         follows="left|top"
+         name="text_box_scripting_font"
+         width="100">
+          Fonte do editor de scripts:
+        </text>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="-5"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontName"
+         width="100"
+         control_name="FSScriptingFontName"
+         tool_tip="Nome da fonte usada no editor de scripts LSL">
+             <combo_item name="Monospace" value="Monospace" label="Monoespaçado"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripts"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Código Cascadia"/>
+        </combo_box>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="0"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontSize"
+         width="100"
+         control_name="FSScriptingFontSize"
+         tool_tip="Tamanho da fonte usada no editor de scripts LSL">
+             <combo_item name="Monospace" value="Monospace" label="Monoespaçado"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripts"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Código Cascadia"/>
+             <combo_item name="Small" value="Small" label="Pequeno"/>
+             <combo_item name="Medium" value="Medium" label="Médio"/>
+             <combo_item name="Large" value="Large" label="Grande"/>
+        </combo_box>
+
+        <check_box
+         left="10"
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         label="Salvar scripts editados do inventário como Mono"
+         tool_tip="Se marcado, ao editar um script direto do inventário e salvar, será salvo como Mono em vez de LSL."
+         name="FSSaveInventoryScriptsAsMono_toggle"
+         control_name="FSSaveInventoryScriptsAsMono"/>
+
+        <view_border
+         bevel_style="none"
+         border_thickness="1"
+         top_pad="15"
+         follows="top|left"
+         height="155"
+         left="10"
+         name="PreprocBox"
+         width="515" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="7"
+         left="15"
+         label="Ativar pré-processador LSL"
+         tool_tip="Se marcado, o pré-processador LSL fica ativado."
+         name="preproc_checkbox"
+         control_name="_NACL_LSLPreprocessor" />
+        <check_box
+         follows="left|top"
+         height="16"
+         left="20"
+         top_pad="5"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Otimizador de scripts"
+         tool_tip="Se marcado, o pré-processador LSL otimiza o espaço usado pelos scripts."
+         name="preprocoptimizer_checkbox"
+         control_name="_NACL_PreProcLSLOptimizer" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="120"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Instrução switch()"
+         tool_tip="Se marcado, o pré-processador LSL permite usar a instrução switch() no fluxo do script."
+         name="preprocswitch_checkbox"
+         control_name="_NACL_PreProcLSLSwitch" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="130"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Listas “lazy”"
+         tool_tip="Se marcado, o pré-processador LSL permite extensões de sintaxe para manipulação de listas."
+         name="preproclazy_checkbox"
+         control_name="_NACL_PreProcLSLLazyLists" />
+        <check_box
+         follows="left|top"
+         top_delta="0"
+         left_delta="80"
+         height="16"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="#includes do disco local"
+         tool_tip="Se marcado, o pré-processador LSL permite que #include referencie arquivos no disco local."
+         name="preprocinclude_checkbox"
+         control_name="_NACL_PreProcEnableHDDInclude" />
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         name="lslpreprocinclude_textbox"
+         left="17"
+         top_pad="10"
+         width="256">
+          Caminho de inclusão do pré-processador:
+        </text>
+        <line_editor
+         control_name="_NACL_PreProcHDDIncludeLocation"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         max_length_chars="4096"
+         name="preprocinclude_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         label="Procurar"
+         label_selected="Procurar"
+         left_pad="5"
+         name="SetPreprocInclude"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="NACL.SetPreprocInclude" />
+        </button>
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         name="externaleditor_textbox"
+         left="17"
+         width="256">
+          Editor externo:
+        </text>
+        <line_editor
+         control_name="ExternalEditor"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         max_length_chars="4096"
+         name="externaleditor_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         label="Procurar"
+         label_selected="Procurar"
+         left_pad="5"
+         name="SetExternalEditor"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="Pref.SetExternalEditor" />
+        </button>
+    </panel>
+
+    <!--Uploads-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Envios"
+     name="UploadsTab">
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title"
+       top_pad="10"
+       width="250">
+        Pastas de destino atuais para envios:
+      </text>
+
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title_images"
+       top_pad="17"
+       width="100">
+        Imagens
+      </text>
+      <text
+       type="string"
+       use_ellipses="true"
+       follows="left|top"
+       height="27"
+       layout="topleft"
+       font.style="BOLD"
+       left="10"
+       name="upload_textures"
+       top_pad="5"
+       width="370"
+       word_wrap="true" />
+      
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title_sounds"
+       top_pad="7"
+       width="100">
+        Sons
+      </text>
+      <text
+       type="string"
+       use_ellipses="true"
+       follows="left|top"
+       height="27"
+       layout="topleft"
+       font.style="BOLD"
+       left="10"
+       name="upload_sounds"
+       top_pad="5"
+       width="370"
+       word_wrap="true" />
+      
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title_animations"
+       top_pad="7"
+       width="100">
+        Animações
+      </text>
+      <text
+       type="string"
+       use_ellipses="true"
+       follows="left|top"
+       height="27"
+       layout="topleft"
+       font.style="BOLD"
+       left="10"
+       name="upload_animation"
+       top_pad="5"
+       width="370"
+       word_wrap="true" />
+
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title_models"
+       top_pad="7"
+       width="100">
+        Modelos
+      </text>
+      <text
+       type="string"
+       use_ellipses="true"
+       follows="left|top"
+       height="27"
+       layout="topleft"
+       font.style="BOLD"
+       left="10"
+       name="upload_models"
+       top_pad="5"
+       width="370"
+       word_wrap="true" />
+
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="10"
+       name="title_pbr"
+       top_pad="7"
+       width="100">
+        Materiais PBR
+      </text>
+      <text
+       type="string"
+       use_ellipses="true"
+       follows="left|top"
+       height="27"
+       layout="topleft"
+       font.style="BOLD"
+       left="10"
+       name="upload_pbr"
+       top_pad="5"
+       width="370"
+       word_wrap="true" />
+
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="30"
+       layout="topleft"
+       font.style="ITALIC"
+       left="10"
+       name="upload_help"
+       top_pad="6"
+       width="475">
+        Para alterar uma pasta de destino, clique com o botão direito nela no inventário e escolha
+     “Usar como padrão para”
+      </text>
+      <button
+       name="reset_default_folders"
+       label="Redefinir pastas padrão"
+       left="10"
+       top_pad="10"
+       width="200"
+       follows="left|top" />
+    </panel>
+</tab_container>
+</panel>

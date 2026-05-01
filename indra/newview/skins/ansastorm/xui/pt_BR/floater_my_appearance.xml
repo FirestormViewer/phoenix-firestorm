@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<floater positioning="cascading" legacy_header_height="18" can_resize="true" height="588" layout="topleft" name="floater_my_appearance" help_topic="appearance" save_rect="true" single_instance="true" reuse_instance="true" title="APARÊNCIA" min_height="400" min_width="415" width="415">
+    <panel top="18" class="sidepanel_appearance" name="main_panel" filename="sidepanel_appearance.xml" label="Editar aparência" font="SansSerifBold" />
+</floater>

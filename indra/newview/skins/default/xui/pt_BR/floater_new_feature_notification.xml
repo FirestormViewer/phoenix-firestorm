@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ height="130"
+ width="300"
+ layout="topleft"
+ name="floater_new_feature_notification"
+ title="NOVO RECURSO"
+ show_title="false"
+ header_height="0"
+ bg_opaque_image="Window_NoTitle_Foreground"
+ bg_alpha_image="Window_NoTitle_Background"
+ can_resize="false"
+ can_drag_on_left="false"
+ can_minimize="false"
+ can_close="false">
+    <floater.string name="title_txt_inventory">
+ Novos recursos de inventário
+    </floater.string>
+    <floater.string name="description_txt_inventory">
+Agora você pode marcar itens e pastas como favoritos. Os itens favoritos aparecerão na guia Favoritos do inventário e, por padrão, serão destacados com uma estrela na visualização principal do inventário.
+    </floater.string>
+  <text
+   type="string"
+   length="1"
+   follows="top|left|right"
+   font="SansSerifLargeBold"
+   text_color="White"
+   layout="topleft"
+   left="10"
+   height="14"
+   top="10"
+   right="-10"
+   name="title_txt">
+Novo recurso
+  </text>
+  <text
+   type="string"
+   length="1"
+   follows="top|left|right|bottom"
+   text_color="White"
+   layout="topleft"
+   left="10"
+   height="40"
+   top_pad="14"
+   right="-10"
+   word_wrap="true"
+   name="description_txt">
+Descrição do recurso
+  </text>
+  <button
+   follows="bottom|left|right"
+   layout="topleft"
+   height="24"
+   label="Entendi!"
+   left="104"
+   bottom="-10"
+   name="close_btn"
+   width="90"/>
+</floater>

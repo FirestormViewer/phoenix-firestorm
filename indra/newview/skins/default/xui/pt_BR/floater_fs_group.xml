@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater positioning="centered" name="group_info" height="565" help_topic="group_info" layout="topleft" min_height="565" width="470" can_close="true" can_resize="true" save_rect="true" min_width="470">
+  <floater.string name="title_create_group">
+ 		Criar novo grupo...
+ 	</floater.string>
+  <floater.string name="title_loading">
+ 		Perfil do Grupo - Carregando...
+ 	</floater.string>
+  <floater.string name="title">
+		Perfil do Grupo - [NAME]
+	</floater.string>
+  <panel background_visible="false" top="5" height="560" right="-3" left="0" class="panel_group_info_sidetray" name="panel_group_info_sidetray" filename="panel_group_info_sidetray.xml" />
+  <panel background_visible="false" top="5" height="560" right="-3" left="0" class="panel_group_creation_sidetray" name="panel_group_creation_sidetray" filename="panel_group_creation_sidetray.xml" />
+</floater>

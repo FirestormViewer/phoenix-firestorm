@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ positioning="cascading"
+ legacy_header_height="18"
+ can_minimize="false"
+ can_resize="false"
+ can_close="true"
+ height="305"
+ layout="topleft"
+ name="simple_snapshot"
+ single_instance="false"
+ help_topic="snapshot"
+ save_rect="true"
+ save_visibility="false"
+ title="Instantâneo do Item"
+ width="351">
+</floater>

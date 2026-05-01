@@ -1,0 +1,7 @@
+<floater name="whitelist_floater"
+     title="Pastas e Binários da Lista Branca"
+     width="700"
+     height="492"
+     can_minimize="true"
+     can_resize="false">
+</floater>

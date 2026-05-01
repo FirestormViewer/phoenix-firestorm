@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ legacy_header_height="18"
+ height="590"
+ layout="topleft"
+ name="Task Properties"
+ help_topic="item+properties"
+ title="Propriedades do Item"
+ single_instance="true"
+ width="330">
+</floater>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_close="true"
+ can_resize="true"
+ height="350"
+ help_topic="fs_wearable_favorites"
+ min_height="150"
+ min_width="175"
+ layout="topleft"
+ name="floater_fs_wearable_favorites"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Itens vestíveis favoritos"
+ width="310">
+ 
+ 	<floater.string name="empty_list">
+ 		Arraste itens vestíveis aqui para adicionar à lista.
+ 	</floater.string>
+</floater>

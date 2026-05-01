@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- <FS:Zi> Add label/caption colors (text_enabled_color/text_disabled_color) -->
+<texture_picker border_color="DefaultHighlightLight"
+                name="texture picker"
+                mouse_opaque="true"
+                follows="left|top"
+                text_enabled_color="LabelTextColor"
+                text_disabled_color="LabelDisabledColor"
+                >
+  <multiselect_text font="SansSerifSmall"/>
+  <caption_text halign="center" 
+                font="SansSerifSmall"
+                v_pad="2"/>
+  <border bevel_style="in"/>
+</texture_picker>
+

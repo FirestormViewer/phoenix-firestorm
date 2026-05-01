@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater can_close="true" can_drag_on_left="false" can_minimize="false" can_resize="true" height="314" help_topic="fs_animation_explorer" layout="topleft" min_height="314" min_width="400" name="animation_explorer" save_rect="true" title="Explorador de Animação" width="574">
+  <scroll_list bottom="-4" draw_heading="true" follows="all" layout="topleft" left="4" name="animation_list" top="4" width="306">
+    <scroll_list.column label="Reproduzido por" name="played_by" />
+    <scroll_list.column label="Reproduzido" name="played" />
+    <scroll_list.column label="Prioridade" name="priority" width="60" />
+    <scroll_list.column label="Tempo" name="timestamp" width="-1" />
+    <scroll_list.column label="ID da Animação" name="animation_id" width="-1" />
+    <scroll_list.column label="ID do objeto" name="object_id" width="-1" />
+  </scroll_list>
+
+ 	<view_border bevel_style="in" follows="top|bottom|right" height="256" name="animation_preview" layout="topleft" left_pad="4" top_delta="0" width="256" />
+  <panel follows="bottom|right" height="48" name="buttons_panel" top_pad="4" width="256">
+    <button follows="top|right" height="22" label="Pará" layout="topleft" left="0" name="stop_btn" top="0" width="98" />
+    <button follows="top|right" height="22" label="Parar e Revogar" layout="topleft" left_pad="4" name="stop_and_revoke_btn" width="154" />
+    <button follows="top|right" height="22" label="Lista negra" layout="topleft" left="0" name="blacklist_btn" top_pad="4" width="98" />
+    <check_box follows="top|right" height="22" label="Sem Animações Próprias" left_pad="4" name="no_owned_animations_check" tool_tip="Quando marcados, isso filtrará todas as animações que pertencem ao seu avatar, como animações de AO ou animações padrão do sistema." top_delta="-4" width="154" />
+  </panel>
+</floater>

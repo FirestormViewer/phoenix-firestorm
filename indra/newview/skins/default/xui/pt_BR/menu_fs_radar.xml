@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	layout="topleft"
+	name="Avatar Context Menu">
+	<menu_item_call
+		label="Ver Perfil"
+		layout="topleft"
+		name="View Profile">
+		<menu_item_call.on_click
+			function="Avatar.Profile" />
+	</menu_item_call>
+	<menu_item_call
+		label="Adicionar Amigo"
+		layout="topleft"
+		name="Add Friend">
+		<menu_item_call.on_click
+			function="Avatar.AddFriend" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_add" />
+	</menu_item_call>
+	<menu_item_call
+		label="Adicionar ao Conjunto"
+		layout="topleft"
+		name="Add to Set">
+		<menu_item_call.on_click
+			function="Avatar.AddToContactSet" />
+	</menu_item_call>
+	<menu_item_call
+		label="Remover Amigo"
+		layout="topleft"
+		name="Remove Friend">
+		<menu_item_call.on_click
+			function="Avatar.RemoveFriend" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_delete" />
+	</menu_item_call>
+	<menu_item_call
+		label="Mensagem"
+		layout="topleft"
+		name="IM">
+		<menu_item_call.on_click
+			function="Avatar.IM" />
+	</menu_item_call>
+	<menu_item_call
+		label="Ligar"
+		layout="topleft"
+		name="Call">
+		<menu_item_call.on_click
+			function="Avatar.Call" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_call" />
+	</menu_item_call>
+	<menu_item_call
+		label="Mapa"
+		layout="topleft"
+		name="Map">
+		<menu_item_call.on_click
+			function="Avatar.ShowOnMap" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_show_on_map" />
+	</menu_item_call>
+	<menu_item_call
+		label="Rastrear"
+		layout="topleft"
+		name="Track">
+		<menu_item_call.on_click
+			function="Nearby.People.TrackAvatar" />
+	</menu_item_call>
+	<menu_item_call
+		label="Mirar para avatar"
+		layout="topleft"
+		name="FaceTowards">
+		<menu_item_call.on_click
+			function="Nearby.People.FaceTowardsAvatar" />
+		<menu_item_call.on_enable
+			function="Nearby.People.CanFaceTowardsAvatar" />
+	</menu_item_call>
+	<menu name="MarkAvatar" label="Marcar...">
+		<menu_item_call
+			label="Vermelho"
+			name="MarkVermelho">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Vermelho"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Verde"
+		name="MarkVerde">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Verde"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Azul"
+		name="MarkAzul">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Azul"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Roxo"
+			name="MarkRoxo">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Roxo"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Amarelo"
+			name="MarkAmarelo">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="LtAmarelo"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Limpar Marca(s)"
+			name="Clear Mark">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAvatarMarkColor"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Limpar Todas as Marcas"
+			name="Clear Marks">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAllAvatarMarkColors"/>
+		</menu_item_call>
+	</menu>
+	<menu_item_call
+		label="Compartilhar"
+		layout="topleft"
+		name="Share">
+		<menu_item_call.on_click
+			function="Avatar.Share" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_open_inventory" />
+	</menu_item_call>
+	<menu_item_call
+		label="Pagar"
+		layout="topleft"
+		name="Pay">
+		<menu_item_call.on_click
+			function="Avatar.Pay" />
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_pay"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Oferecer Teleporte"
+		name="teleport">
+		<menu_item_call.on_click
+			function="Avatar.OfferTeleport"/>
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_offer_teleport"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Solicitar Teleporte"
+		name="request_teleport">
+		<menu_item_call.on_click
+			function="Avatar.TeleportRequest"/>
+		<menu_item_call.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_request_teleport"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Teleportar Para"
+		name="teleport_to">
+		<menu_item_call.on_click
+			function="Nearby.People.TeleportToAvatar"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Aproximar"
+		name="zoom_in">
+		<menu_item_call.on_click
+			function="Avatar.ZoomIn"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleZoomIn"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Convidar para Grupo"
+		name="GroupInvite">
+		<menu_item_call.on_click
+			function="Avatar.GroupInvite" />
+	</menu_item_call>
+	<menu_item_call
+		label="Obter Informações do Script"
+		name="ScriptInfo">
+		<menu_item_call.on_click
+			function="Avatar.getScriptInfo" />
+		<menu_item_call.on_enable
+			function="EnableBridgeFunction" />
+	</menu_item_call>
+    <menu_item_call
+     label="Ver transcrições de chat..."
+     layout="topleft"
+     name="chat_history">
+        <menu_item_call.on_click
+         function="Avatar.Calllog" />
+        <menu_item_call.on_enable
+         function="Avatar.EnableItem"
+         parameter="can_callog"/>
+    </menu_item_call>
+
+	<menu_item_separator />
+
+	<menu_item_check
+		label="Bloquear/Desbloquear"
+		layout="topleft"
+		name="Block/Unblock">
+		<menu_item_check.on_click
+			function="Avatar.BlockUnblock" />
+		<menu_item_check.on_check
+			function="Avatar.CheckItem"
+			parameter="is_blocked" />
+		<menu_item_check.on_enable
+			function="Avatar.EnableItem"
+			parameter="can_block" />
+	</menu_item_check>
+	<menu_item_call
+		label="Denunciar"
+		name="report">
+		<menu_item_call.on_click
+			function="Avatar.Report"/>
+	</menu_item_call>  
+	<menu_item_call
+		label="Congelar"
+		name="freeze">
+		<menu_item_call.on_click
+			function="Avatar.Freeze"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleFreezeEject"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ejetar do Parcel"
+		name="eject">
+		<menu_item_call.on_click
+			function="Avatar.Eject"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleFreezeEject"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Expulsar da Estate"
+		name="kick">
+		<menu_item_call.on_click
+			function="Avatar.Kick"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Teleportar para Casa da Estate"
+		name="teleport_home">
+		<menu_item_call.on_click
+			function="Avatar.TeleportHome"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Banir da Estate"
+		name="estate_ban">
+		<menu_item_call.on_click
+			function="Avatar.EstateBan"/>
+		<menu_item_call.on_visible
+			function="Avatar.VisibleKickTeleportHome"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ocultar"
+		name="derender">
+		<menu_item_call.on_click
+			function="Avatar.Derender"/>
+	</menu_item_call>
+	<menu_item_call
+		label="Ocultar e Lista Negra"
+		name="derender_permanent">
+		<menu_item_call.on_click
+			function="Avatar.DerenderPermanent"/>
+	</menu_item_call>
+	<menu label="Configurações de Renderização" name="render_settings">
+		<menu_item_check
+			label="Renderizar Normally"
+			name="av_render_normal">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="0" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="0" />
+		</menu_item_check>
+		<menu_item_check
+			label="Não Renderizar"
+			name="av_render_never">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="1" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="1" />
+		</menu_item_check>
+		<menu_item_check
+			label="Renderizar Totalmente"
+			name="av_render_always">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="2" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="2" />
+		</menu_item_check>
+	</menu>
+</context_menu>

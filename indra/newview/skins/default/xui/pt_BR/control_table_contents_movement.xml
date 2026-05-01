@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+  <rows enabled="false" name="move_actions" value="">
+    <columns type="icontext" column="lst_action" font="SansSerif" halign="left" label="Mover ações" name="lst_action" value="Move_Walk_Off" />
+  </rows>
+    <rows name="walk_to" value="walk_to">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Caminhe até o local onde o cursor do mouse aponta" value="Caminhar até" />
+  </rows>
+    <rows name="teleport_to" value="teleport_to">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Teletransporte-se para o local para o qual o cursor do mouse aponta, mas nem todos os locais permitem o teletransporte direto, então você pode ser teletransportado para mais perto do destino." value="Teletransportar para" />
+  </rows>
+    <rows name="push_forward" value="push_forward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover para Frente" />
+  </rows>
+    <rows name="push_backward" value="push_backward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover para Trás" />
+  </rows>
+    <rows name="turn_left" value="turn_left">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Esquerda" />
+  </rows>
+    <rows name="turn_right" value="turn_right">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Direita" />
+  </rows>
+    <rows name="slide_left" value="slide_left">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Deslocar para Esquerda" />
+  </rows>
+    <rows name="slide_right" value="slide_right">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Deslocar para Direita" />
+  </rows>
+    <rows name="jump" value="jump">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Pular/Subir" />
+  </rows>
+    <rows name="push_down" value="push_down">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Baixo" />
+  </rows>
+    <rows name="run_forward" value="run_forward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Correr para Frente" />
+  </rows>
+    <rows name="run_backward" value="run_backward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Correr para Trás" />
+  </rows>
+    <rows name="run_left" value="run_left">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Correr para Esquerda" />
+  </rows>
+    <rows name="run_right" value="run_right">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Correr para Direita" />
+  </rows>
+    <rows name="toggle_run" value="toggle_run">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Alternar Corrida" />
+  </rows>
+    <rows name="toggle_fly" value="toggle_fly">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Voar/Parar de Voar" />
+  </rows>
+    <rows name="toggle_sit" value="toggle_sit">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Sentar/Levantar" />
+  </rows>
+    <rows name="stop_moving" value="stop_moving">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Parar de Mover" />
+  </rows>
+</contents>

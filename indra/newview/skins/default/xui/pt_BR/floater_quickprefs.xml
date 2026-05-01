@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+    positioning="centered"
+    legacy_header_height="18"
+    can_resize="false"
+    can_dock="true"
+    can_close="true"
+    height="178"
+    width="260"
+    layout="topleft"
+    name="quickprefs"
+    help_topic="fs_quick_preferences"
+    save_rect="true"
+    save_visibility="true"
+    single_instance="true"
+    save_dock_state="true"
+    title="Preferências rápidas">
+<panel
+    name="quickprefs"
+    left="0"
+    top="16"
+    width="260"
+    height="155"
+    follows="all"
+    layout="topleft">
+    <layout_stack
+     layout="topleft"
+     follows="all"
+     name="options_stack"
+     left="0"
+     top="4"
+     width="260"
+     height="0"
+     orientation="vertical"
+     border_size="0">
+        <!-- <FS:Zi> dummy panel to make XUI validation happy -->
+        <layout_panel
+         layout="topleft"
+         follows="all"
+         name="dummy_options_panel"
+         visible="false"
+         height="20">
+        </layout_panel>
+     </layout_stack>
+
+     <view_border
+      layout="topleft"
+      follows="left|right|bottom"
+      name="divider_line_dynamic_to_static"
+      top_pad="2"
+      left="2"
+      height="2"
+      right="-2" />
+
+     <layout_stack
+      layout="topleft"
+      follows="left|right|bottom"
+      name="wl_options_stack"
+      left="0"
+      top_pad="0"
+      width="260"
+      height="150"
+      orientation="vertical">
+
+     <layout_panel
+      layout="topleft"
+      follows="all"
+      name="wl_options_panel"
+      invisibility_control="QuickPrefsEditMode"
+      height="150">
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="HoverHeightLabel"
+            tool_tip="Defina a altura de levitação do seu avatar"
+            mouse_opaque="false"
+            top_pad="5"
+            width="90">
+            Altura de Levitação:
+        </text>
+        <slider
+            text_width="40"
+            enabled="false"
+            can_edit_text="true"
+            decimal_digits="3"
+            follows="left|right|top"
+            height="16"
+            increment="0.001"
+            initial_value="0.0"
+            layout="topleft"
+            left_pad="5"
+            name="HoverHeightSlider"
+            top_delta="-2"
+            right="-7" />
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Maximum bandwidth"
+            tool_tip="Defina sua largura de banda de rede em Kbps (quilobits por segundo)"
+            mouse_opaque="false"
+            top_pad="5"
+            width="90">
+            Largura Máxima de Banda:
+        </text>
+        <slider
+            text_width="40"
+            can_edit_text="true"
+            control_name="ThrottleBandwidthKBPS"
+            decimal_digits="0"
+            follows="left|right|top"
+            height="16"
+            increment="50"
+            initial_value="500"
+            layout="topleft"
+            left_pad="5"
+            max_val="3000"
+            min_val="50"
+            name="max_bandwidth"
+            top_delta="-2"
+            right="-7" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="18"
+            layout="topleft"
+            left="5"
+            name="Maximum complexity"
+            tool_tip="Controla em que ponto um avatar visualmente complexo é desenhado como JellyDoll"
+            mouse_opaque="false"
+            top_pad="5"
+            width="90">
+            Complexidade Máxima:
+        </text>
+        <slider
+            text_width="40"
+            control_name="IndirectMaxComplexity"
+            decimal_digits="0"
+            follows="left|right|top"
+            height="16"
+            increment="1"
+            initial_value="101"
+            layout="topleft"
+            left_pad="5"
+            max_val="101"
+            min_val="1"
+            name="IndirectMaxComplexity"
+            show_text="false"
+            top_delta="-2"
+            right="-58" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="16"
+            layout="topleft"
+            left_pad="5"
+            name="IndirectMaxComplexityText"
+            text_readonly_color="LabelDisabledColor"
+            top_delta="2"
+            width="50">
+            Sem Limite
+        </text>
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="WL Sky"
+            tool_tip="Predefinições do céu"
+            mouse_opaque="false"
+            top_delta="24"
+            width="90">
+            Céu:
+        </text>
+        <combo_box
+            follows="left|top"
+            height="20"
+            layout="topleft"
+            left_delta="58"
+            name="WLPresetsCombo"
+            top_delta="-4"
+            width="150" />
+        <button
+            enabled="true"
+            name="WLPrevPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="WLNextPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="WL Water"
+            tool_tip="Predefinições da água"
+            mouse_opaque="false"
+            top_delta="25"
+            width="90">
+            Água:
+        </text>
+        <combo_box
+            follows="left|top"
+            height="20"
+            layout="topleft"
+            left_delta="58"
+            name="WaterPresetsCombo"
+            top_delta="-4"
+            width="150" />
+        <button
+            enabled="true"
+            name="WWPrevPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="WWNextPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Day Cycle"
+            tool_tip="Predefinições do ciclo dia/noite"
+            mouse_opaque="false"
+            top_delta="24"
+            width="90">
+            Ciclo dia/noite:
+        </text>
+        <combo_box
+            follows="left|top"
+            height="20"
+            layout="topleft"
+            left_delta="58"
+            name="DCPresetsCombo"
+            top_delta="-4"
+            width="150" />
+        <button
+            enabled="true"
+            name="DCPrevPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="DCNextPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="btn_personal_lighting"
+            follows="left|top"
+            height="20"
+            width="208"
+            top_delta="25"
+            left="5"
+            label="Iluminação Pessoal...">
+            <button.commit_callback
+             function="Floater.ToggleOrBringToFront"
+             parameter="env_adjust_snapshot" />
+            <button.on_enable
+             function="RLV.EnableIfNot"
+             parameter="setenv" />
+        </button>
+                <button
+                 name="ResetToRegionDefault"
+                 label=""
+                 tool_tip="Restaurar o ambiente compartilhado da região."
+                 enabled="true"
+                 top_delta="0"
+                 left="215"
+                 height="20"
+                 width="20"
+                 follows="left|top"
+                 image_overlay="StopReload_Off"
+                 label_selected=""
+                 scale_image="true"
+                />
+                <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+                <button
+                 name="button_edit"
+                 label=""
+                 tool_tip="Clique para configurar os controles das Preferências rápidas"
+                 top_delta="0"
+                 left="236"
+                 height="20"
+                 width="20"
+                 follows="right|top"
+                 layout="topleft"
+                 control_name="QuickPrefsEditMode"
+                 image_overlay="Edit_Wrench"
+                 toggle="true"
+                />
+        <!-- </FS:Zi> -->
+
+    </layout_panel>
+    </layout_stack>
+</panel>
+
+<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
+<panel
+ layout="topleft"
+ follows="left|right|bottom"
+ name="edit_overlay_panel"
+ visibility_control="QuickPrefsEditMode"
+ left="1"
+ top="-138"
+ right="-1"
+ height="143">
+
+<view_border
+ layout="topleft"
+ follows="all"
+ name="divider_line_edit_options"
+ left="0"
+ top="0"
+ right="-1"
+ height="2" />
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="move_up_button"
+ tool_tip="Mover o controle selecionado uma posição para cima"
+ enabled_control="QuickPrefsSelectedControl"
+ image_overlay="Arrow_Up"
+ top="8"
+ left="4"
+ width="20"
+ height="23"/>
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="add_new_button"
+ tool_tip="Adicionar um novo controle de preferências rápidas"
+ image_overlay="AddItem_Off"
+ left_pad="4"
+ top_delta="0"
+ width="20"
+ height="23" />
+
+<line_editor
+ layout="topleft"
+ follows="left|top"
+ name="label_edit"
+ enabled_control="QuickPrefsSelectedControl"
+ tool_tip="Digite aqui o rótulo do controle"
+ label="Rótulo do controle:"
+ left_pad="4"
+ width="185"
+ height="23" />
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="move_down_button"
+ tool_tip="Mover o controle selecionado uma posição para baixo"
+ enabled_control="QuickPrefsSelectedControl"
+ image_overlay="Arrow_Down"
+ left="4"
+ width="20"
+ height="23" />
+
+<combo_box
+ layout="topleft"
+ follows="left|top"
+ name="control_name_combo"
+ enabled_control="QuickPrefsSelectedControl"
+ tool_tip="Escolha o controle na lista de configurações de depuração"
+ left_pad="4"
+ width="225"
+ height="23">
+<combo_box.item
+ type="string"
+ label="=== Escolher ==="
+ name="control_name_list_header"
+ value="" />
+</combo_box>
+
+<text
+ layout="topleft"
+ follows="left|top"
+ name="control_type_label"
+ enabled_control="QuickPrefsSelectedControl"
+ left="4"
+ top_pad="8"
+ width="42"
+ height="23">
+Tipo:
+</text>
+
+<combo_box
+ layout="topleft"
+ follows="left|top"
+ name="control_type_combo_box"
+ tool_tip="Escolha o tipo de controle de interface para esta configuração"
+ enabled_control="QuickPrefsSelectedControl"
+ left_pad="4"
+ top_delta="-5"
+ width="135"
+ height="23">
+<!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
+<combo_box.item
+ type="string"
+ label="Caixa de seleção"
+ name="Checkbox"
+ value="0" />
+<combo_box.item
+ type="string"
+ label="Texto"
+ name="Text"
+ value="1" />
+<combo_box.item
+ type="string"
+ label="Campo numérico"
+ name="Spinner"
+ value="2" />
+<combo_box.item
+ type="string"
+ label="Controle deslizante"
+ name="Slider"
+ value="3" />
+<combo_box.item
+ type="string"
+ label="Botões de opção"
+ name="Radio"
+ value="4" />
+<combo_box.item
+ type="string"
+ label="Cor RGB"
+ name="Color 3"
+ value="5" />
+<combo_box.item
+ type="string"
+ label="Cor RGBA"
+ name="Color 4"
+ value="6" />
+</combo_box>
+
+<!-- enable/disable done in code depending on the type of control chosen -->
+<check_box
+ layout="topleft"
+ enabled="false"
+ follows="left|top"
+ name="control_integer_checkbox"
+ tool_tip="Marque se o valor da configuração for inteiro (somente números inteiros)"
+ enabled_control="QuickPrefsSelectedControl"
+ left_pad="4"
+ height="20"
+ top_delta="0"
+ width="16"
+ label="Inteiro" />
+
+<!-- enable/disable additionally done in code depending on the type of control chosen -->
+<spinner
+ layout="topleft"
+ enabled="false"
+ follows="left|top"
+ name="control_min_edit"
+ tool_tip="Valor mínimo permitido"
+ enabled_control="QuickPrefsSelectedControl"
+ decimal_digits="2"
+ label="Min:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left="4"
+ top_pad="7"
+ width="81"
+ height="22" />
+<spinner
+ layout="topleft"
+ enabled="false"
+ follows="left|top"
+ name="control_max_edit"
+ tool_tip="Valor máximo permitido"
+ enabled_control="QuickPrefsSelectedControl"
+ decimal_digits="2"
+ label="Max:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left_pad="4"
+ width="81"
+ height="22" />
+<spinner
+ layout="topleft"
+ enabled="false"
+ follows="left|top"
+ name="control_increment_edit"
+ tool_tip="Incremento ao usar as setas do campo numérico ou teclas de cursor em um controle deslizante"
+ enabled_control="QuickPrefsSelectedControl"
+ decimal_digits="2"
+ label="Incr:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left_pad="4"
+ width="81"
+ height="22" />
+<button
+ layout="topleft"
+ follows="right_top"
+ name="Restore_Btn"
+ tool_tip="Restaurar configurações padrão"
+ label="Redefinir"
+ left="4"
+ width="120"
+ top_pad="4"
+ height="16" />
+<!-- reverse the image names here beause we have a toggle ON button -->
+<button
+ layout="topleft"
+ follows="right|top"
+ name="button_close"
+ tool_tip="Fechar o painel de edição"
+ toggle="true"
+ control_name="QuickPrefsEditMode"
+ image_unselected="Icon_Close_Press"
+ image_selected="Icon_Close_Foreground"
+ left="-18"
+ width="16"
+ top="10"
+ height="16" />
+</panel>
+
+</floater>

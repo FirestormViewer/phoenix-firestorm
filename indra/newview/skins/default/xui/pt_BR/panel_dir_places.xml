@@ -1,0 +1,200 @@
+<panel
+ border="true"
+ top="30"
+ follows="left|top|right|bottom"
+ height="533"
+ label="Lugares"
+ left="1"
+ mouse_opaque="false"
+ name="panel_dir_places"
+ width="778">
+    <string name="searching_text">
+        Pesquisando...
+    </string>
+    <string name="not_found_text">
+        Nenhum encontrado.
+    </string>
+    <string name="found_text">
+        [COUNT] encontrado(s).
+    </string>
+    <text
+     bg_visible="false"
+     border_visible="false"
+     top="8"
+     layout="topleft"
+     follows="left|top"
+     font="SansSerif"
+     h_pad="0"
+     halign="left"
+     height="16"
+     left="5"
+     mouse_opaque="true"
+     name="find"
+     width="150">
+        Digite termos de pesquisa:
+    </text>
+    <combo_box
+     allow_text_entry="false"
+     follows="right|top"
+     layout="topleft"
+     height="18"
+     top_delta="-2"
+     left="525"
+     max_chars="20"
+     mouse_opaque="true"
+     name="Category"
+     width="128">
+         <combo_item name="AnyCategory" value="any" label="Qualquer Categoria"/>
+         <combo_item name="LindenLocation" value="linden" label="Local Linden"/>
+         <combo_item name="Arts&amp;Culture" value="arts" label="Artes &amp; Cultura"/>
+         <combo_item name="Business" value="store" label="Comercial"/>
+         <combo_item name="Educational" value="educational" label="Educacional"/>
+         <combo_item name="Gaming" value="game" label="Jogos"/>
+         <combo_item name="Hangout" value="gather" label="Encontro"/>
+         <combo_item name="NewcomerFriendly" value="newcomer" label="Amigo do Recem-Chegado"/>
+         <combo_item name="Parks&amp;Nature" value="park" label="Parques &amp; Natureza"/>
+         <combo_item name="Residential" value="home" label="Residencial"/>
+         <combo_item name="Shopping" value="shopping" label="Compras"/>
+         <combo_item name="Adult" value="adult" label="Adulto"/>
+         <combo_item name="Other" value="other" label="Outro"/>
+    </combo_box>
+    <check_box
+     left_pad="5"
+     control_name="ShowPGSims"
+     follows="right|top"
+     layout="topleft"
+     font="SansSerifSmall"
+     height="16"
+     initial_value="true"
+     label=""
+     mouse_opaque="true"
+     name="incpg"
+     width="15" />
+    <icon
+     follows="right|top"
+     height="16"
+     top_delta="-1"
+     image_name="Parcel_PG_Dark"
+     tool_tip="Geral"
+     layout="topleft"
+     left_pad="2"
+     name="rating_icon_general"
+     width="16"/>
+    <check_box
+     left_pad="4"
+     top_delta="1"
+     layout="topleft"
+     control_name="ShowMatureSims"
+     follows="right|top"
+     font="SansSerifSmall"
+     height="16"
+     initial_value="true"
+     label=""
+     mouse_opaque="true"
+     name="incmature"
+     width="15" />
+     <icon
+     follows="right|top"
+     height="16"
+     top_delta="-1"
+     image_name="Parcel_M_Dark"
+     tool_tip="Moderado"
+     layout="topleft"
+     left_pad="2"
+     name="rating_icon_moderate"
+     width="16"/>
+    <check_box
+     left_pad="4"
+     top_delta="1"
+     layout="topleft"
+     control_name="ShowAdultSims"
+     follows="right|top"
+     font="SansSerifSmall"
+     height="16"
+     initial_value="false"
+     label=""
+     mouse_opaque="true"
+     name="incadult"
+     width="15" />
+    <icon
+     follows="right|top"
+     height="16"
+     top_delta="-1"
+     image_name="Parcel_R_Dark"
+     tool_tip="Adulto"
+     layout="topleft"
+     left_pad="2"
+     name="rating_icon_adult"
+     width="16"/>
+    <search_combo_box
+     layout="topleft"
+     follows="left|top|right"
+     height="23"
+     left="5"
+     name="name"
+     top="26"
+     width="770"/>
+    <scroll_list
+     background_visible="true"
+     layout="topleft"
+     top_pad="3"
+     column_padding="0"
+     draw_border="true"
+     draw_heading="true"
+     follows="left|top|right|bottom"
+     height="450"
+     left="5"
+     mouse_opaque="true"
+     multi_select="false"
+     name="results"
+     search_column="2"
+     width="336">
+        <column label="" name="icon" width="24" />
+        <column dynamicwidth="true" label="Nome" name="name" />
+        <column label="Trafego" name="dwell" width="75" />
+    </scroll_list>
+    <text
+     bg_visible="false"
+     border_visible="false"
+     bottom_delta="-20"
+     follows="left|bottom"
+     font="SansSerifSmall"
+     h_pad="0"
+     halign="left"
+     height="16"
+     left="4"
+     mouse_opaque="true"
+     name="result_text"
+     v_pad="0"
+     width="328" />
+    <button
+     image_overlay="Arrow_Left_Off"
+     image_disabled="PushButton_Disabled"
+     image_disabled_selected="PushButton_Disabled"
+     image_selected="PushButton_Selected"
+     image_unselected="PushButton_Off"
+     chrome="true"
+     hover_glow_amount="0.15"
+     tool_tip="Pagina anterior"
+     follows="right|bottom"
+     height="22"
+     right="305"
+     bottom="-533"
+     name="prev_btn"
+     width="32" />
+    <button
+     image_overlay="Arrow_Right_Off"
+     image_disabled="PushButton_Disabled"
+     image_disabled_selected="PushButton_Disabled"
+     image_selected="PushButton_Selected"
+     image_unselected="PushButton_Off"
+     chrome="true"
+     tool_tip="Proxima pagina"
+     follows="right|bottom"
+     height="22"
+     layout="topleft"
+     left_pad="5"
+     name="next_btn"
+     top_delta="0"
+     width="32"/>
+</panel>

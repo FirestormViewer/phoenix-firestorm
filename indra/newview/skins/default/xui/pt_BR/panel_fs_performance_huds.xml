@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel bevel_style="none" follows="left|top" height="530" width="580" name="panel_performance_huds" layout="topleft" left="0" top="0">
+  <button height="16" width="16" layout="topleft" mouse_opaque="true" follows="left|top" name="back_btn" top="7" image_selected="Arrow_Left_Off" image_pressed="Arrow_Left_Off" image_unselected="Arrow_Left_Off" left="15" is_toggle="true">
+  </button>
+  <text follows="left|top" height="20" layout="topleft" left_pad="3" top="10" name="back_lbl" width="40">
+    Voltar
+  </text>
+  <text follows="left|top" font="SansSerifLarge" text_color="White" height="20" layout="topleft" left="20" top_pad="10" name="huds_title" width="135">
+    Seus HUDs ativos
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="5" left="20" name="huds_desc1" width="540">
+    Separar HUDs que você não está usando libera memória e pode deixar o visualizador mais rápido.
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="3" left="20" name="huds_desc2" width="540">
+    HUDs costumam usar muitos scripts e também contribuem para o lag do lado do servidor.
+  </text>
+  <text follows="left|top" font="SansSerifSmall" text_color="White" height="18" layout="topleft" top_pad="3" left="20" name="huds_desc3" width="540">
+    Observação: o botão minimizar do HUD não o separa. Use o X para removê-lo.
+  </text>
+  <name_list column_padding="1" draw_stripes="true" draw_heading="true" height="380" follows="left|top" layout="topleft" name="hud_list" top_pad="10" width="540">
+    <name_list.columns label="" name="art_visual" width="90" />
+    <name_list.columns label="Tempo (μs)" name="art_value" tool_tip="Tempo necessário para renderizar este HUD (microssegundos)" width="80" />
+    <name_list.columns label="Nome" tool_tip="Clique no ‘X’ para separar" name="name" />
+  </name_list>
+</panel>

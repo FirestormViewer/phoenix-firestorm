@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ legacy_header_height="18"
+ can_resize="true"
+ height="640"
+ layout="topleft"
+ min_height="230"
+ min_width="750"
+ name="gui_preview_tool"
+ help_topic="gui_preview_tool"
+ single_instance="true"
+ title="Ferramenta de Pré-visualização XUI"
+ translate="false"
+ width="750">
+</floater>

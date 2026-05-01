@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater legacy_header_height="18" can_resize="true" height="400" layout="topleft" name="floater_test_combobox" help_topic="floater_test_combobox" translate="false" width="400">
+  <text type="string" length="1" height="16" layout="topleft" left="10" top="24" width="200">
+        Real world usage (login location):
+    </text>
+  <combo_box allow_text_entry="true" control_name="LoginLocation" follows="left|bottom" height="18" layout="topleft" left_delta="0" max_chars="128" name="start_location_combo" top_pad="2" width="155">
+    <combo_box.item label="Minha última localização" name="MyLastLocation" value="last" />
+    <combo_box.item label="Minha casa" name="MyHome" value="home" />
+    <combo_box.item label="&lt;Digite o nome da região&gt;" name="Typeregionname" value="" />
+  </combo_box>
+    <text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
+        Minimal combobox:
+    </text>
+  <combo_box height="18" layout="topleft" left_delta="0" name="minimal_combo" top_pad="2" width="150">
+    <combo_box.item label="Primeiro item" name="item1" value="first" />
+    <combo_box.item label="Segundo item" name="item2" value="second" />
+  </combo_box>
+    <text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
+        Allow text input:
+    </text>
+  <combo_box allow_text_entry="true" height="18" layout="topleft" left_delta="0" name="text_entry_combo" top_pad="2" width="150">
+    <combo_box.item label="Primeiro item" name="item1" value="first" />
+    <combo_box.item label="Segundo item" name="item2" value="second" />
+  </combo_box>
+    <text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
+        Allow text input, default to second item:
+    </text>
+  <combo_box allow_text_entry="true" height="18" initial_value="second" layout="topleft" left_delta="0" name="text_entry_combo2" top_pad="2" width="150">
+    <combo_box.item label="Primeiro item" name="item1" value="first" />
+    <combo_box.item label="Segundo item" name="item2" value="second" />
+  </combo_box>
+    <text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
+        Two character max input:
+    </text>
+  <combo_box allow_text_entry="true" height="16" layout="topleft" left_delta="0" max_chars="2" name="state_combo" top_pad="4" width="150">
+    <combo_box.item label="CA" name="item1" value="ca" />
+    <combo_box.item label="Nova Iorque" name="item2" value="ny" />
+    <combo_box.item label="Texas" name="item3" value="tx" />
+  </combo_box>
+    <text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
+        Multiple columns:
+    </text>
+  <combo_box name="multi_column_combo" layout="topleft" height="20" width="150" left_delta="0" top_pad="4">
+    <combo_item name="combo_item1" value="0">
+      <column width="40" name="label" label="|Abc|" />
+      <column name="longtext" label="Corresponder ao texto completo" />
+    </combo_item>
+
+        <combo_item name="combo_item2" value="1">
+      <column name="label" label="*Abc*" />
+      <column name="longtext" label="Corresponder substring" />
+    </combo_item>
+
+        <combo_item name="combo_item3" value="2">
+      <column name="label" label="/*. /" />
+      <column name="longtext" label="Corresponder expressão regular" />
+    </combo_item>
+  </combo_box>
+</floater>

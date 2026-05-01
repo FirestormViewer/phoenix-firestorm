@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+  <rows enabled="false" name="camera_actions" value="">
+    <columns type="icontext" column="lst_action" font="SansSerif" halign="left" label="Câmera" name="lst_action" value="Cam_FreeCam_Off" />
+  </rows>
+    <rows name="look_up" value="look_up">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Olhar para Cima" />
+  </rows>
+    <rows name="look_down" value="look_down">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Olhar para Baixo" />
+  </rows>
+    <rows name="move_forward" value="move_forward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Frente" />
+  </rows>
+    <rows name="move_backward" value="move_backward">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Trás" />
+  </rows>
+    <rows name="move_forward_fast" value="move_forward_fast">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Frente Rápido" />
+  </rows>
+    <rows name="move_backward_fast" value="move_backward_fast">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Trás Rápido" />
+  </rows>
+    <rows name="spin_over" value="spin_over">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Girar Câmera Acima" />
+  </rows>
+    <rows name="spin_under" value="spin_under">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Girar Câmera Abaixo" />
+  </rows>
+    <rows name="pan_up" value="pan_up">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Cima" />
+  </rows>
+    <rows name="pan_down" value="pan_down">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Baixo" />
+  </rows>
+    <rows name="pan_left" value="pan_left">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Esquerda" />
+  </rows>
+    <rows name="pan_right" value="pan_right">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Direita" />
+  </rows>
+    <rows name="pan_in" value="pan_in">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Dentro" />
+  </rows>
+    <rows name="pan_out" value="pan_out">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Mover Câmera para Fora" />
+  </rows>
+    <rows name="spin_around_ccw" value="spin_around_ccw">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Câmera girando no sentido anti-horário" value="Anti-horário" />
+  </rows>
+    <rows name="spin_around_cw" value="spin_around_cw">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Câmera girando no sentido horário" value="Horário" />
+  </rows>
+
+    <rows name="roll_left" value="roll_left">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Rolo da câmera para a esquerda" value="Girar para Esquerda" />
+  </rows>
+    <rows name="roll_right" value="roll_right">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Rolo da câmera para a direita" value="Girar para Direita" />
+  </rows>
+
+    <rows name="move_forward_sitting" value="move_forward_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Frente Sentado" />
+  </rows>
+    <rows name="move_backward_sitting" value="move_backward_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Câmera para Trás Sentado" />
+  </rows>
+    <rows name="spin_over_sitting" value="spin_over_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Girar Câmera Acima Sentado" />
+  </rows>
+    <rows name="spin_under_sitting" value="spin_under_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" value="Girar Câmera Abaixo Sentado" />
+  </rows>
+    <rows name="spin_around_ccw_sitting" value="spin_around_ccw_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Câmera girando no sentido anti-horário sentado" value="Anti-horário Sentado" />
+  </rows>
+    <rows name="spin_around_cw_sitting" value="spin_around_cw_sitting">
+    <columns column="lst_action" font="SansSerif" halign="left" name="lst_action" tool_tip="Câmera girando no sentido horário sentado" value="Horário Sentado" />
+  </rows>
+</contents>

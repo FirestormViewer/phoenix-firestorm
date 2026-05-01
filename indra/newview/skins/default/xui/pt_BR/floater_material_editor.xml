@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ legacy_header_height="18"
+ can_resize="true"
+ default_tab_group="1"
+ height="891"
+ width="256"
+ min_height="500"
+ min_width="256"
+ layout="topleft"
+ name="material editor"
+ help_topic="material_editor"
+ title="[MATERIAL_NAME]">
+  <string name="no_upload_fee_string">sem taxa de envio</string>
+  <string name="upload_fee_string">L$[FEE] taxa de envio</string>
+  <string name="material_override_title">Editando Material</string>
+</floater>

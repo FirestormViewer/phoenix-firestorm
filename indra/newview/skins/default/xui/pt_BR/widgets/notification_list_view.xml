@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<notification_list_view
+ allow_select="false"
+ color="PanelFocusBackgroundColor"
+ item_pad="0"
+ keep_one_selected="false"
+ multi_select="false"
+ opaque="true">
+</notification_list_view>

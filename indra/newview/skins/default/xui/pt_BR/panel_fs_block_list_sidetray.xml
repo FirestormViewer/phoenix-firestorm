@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel background_visible="true" follows="left|top|right|bottom" height="305" layout="topleft" left="0" name="block_list_panel" help_topic="blocked_list" min_height="350" min_width="240" width="300">
+  <panel follows="left|top|right" height="27" label="painel_inferior" layout="topleft" left="0" name="blocked_buttons_panel" right="-1" top="0">
+    <filter_editor follows="left|top|right" height="23" layout="topleft" left="6" label="Filtro" max_length_chars="300" name="blocked_filter_input" top="4" width="154" />
+    <menu_button follows="right" height="25" image_hover_unselected="Toolbar_Middle_Over" image_overlay="OptionsMenu_Off" image_selected="Toolbar_Middle_Selected" image_unselected="Toolbar_Middle_Off" layout="topleft" left_pad="8" menu_filename="menu_people_blocked_gear.xml" menu_position="bottomleft" name="blocked_gear_btn" tool_tip="Ações na pessoa ou objeto selecionado" top="3" width="31" />
+    <menu_button follows="right" height="25" image_hover_unselected="Toolbar_Middle_Over" image_overlay="Conv_toolbar_sort" image_selected="Toolbar_Middle_Selected" image_unselected="Toolbar_Middle_Off" layout="topleft" left_pad="2" menu_filename="menu_people_blocked_view.xml" menu_position="bottomleft" name="view_btn" tool_tip="Opções de classificação" top_delta="0" width="31" />
+    <menu_button follows="right" height="25" image_hover_unselected="Toolbar_Middle_Over" image_overlay="AddItem_Off" image_selected="Toolbar_Middle_Selected" image_unselected="Toolbar_Middle_Off" layout="topleft" left_pad="2" menu_filename="menu_people_blocked_plus.xml" menu_position="bottomleft" name="plus_btn" tool_tip="Escolha um residente ou objeto para bloquear" top_delta="0" width="31" />
+    <button follows="right" height="25" image_hover_unselected="Toolbar_Middle_Over" image_overlay="TrashItem_Off" image_selected="Toolbar_Middle_Selected" image_unselected="Toolbar_Middle_Off" left_pad="2" layout="topleft" name="unblock_btn" tool_tip="Remover residente ou objeto da lista de bloqueados" top_delta="0" width="31" />
+  </panel>
+     <text type="string" length="1" follows="left|top|right" height="14" layout="topleft" right="-10" top_pad="4" left="4" use_ellipses="true" name="block_limit">
+          Bloqueados: [COUNT] (máx. [LIMIT].)
+      </text>
+  <fs_scroll_list draw_heading="true" follows="all" bottom="-4" layout="topleft" left="4" top="47" sort_column="0" sort_ascending="true" name="block_list" draw_stripes="true" multi_select="true" right="-1">
+    <fs_scroll_list.columns name="item_name" label="Nome" />
+    <fs_scroll_list.columns name="item_type" label="Tipo" width="96" />
+    <fs_scroll_list.columns name="item_mute_type" width="-1" />
+    <fs_scroll_list.columns name="item_mute_uuid" width="-1" />
+  </fs_scroll_list>
+</panel>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ follows="left|top|right"
+ height="10"
+ layout="topleft"
+ left="0"
+ name="group_list_separator"
+ top="0"
+ width="300">
+    <view_border
+     bevel_style="none"
+     follows="left|right|top"
+     height="1"
+     layout="topleft"
+     left="5"
+     name="separator_line"
+     right="-5"
+     top="5" />
+</panel>
+

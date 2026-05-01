@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" top="30" default_tab_group="1" follows="left|top|right|bottom" height="533" label="Eventos" left="1" mouse_opaque="false" name="panel_dir_events" width="778">
+  <string name="searching_text">
+        Procurando...
+    </string>
+  <string name="not_found_text">
+        Nenhum encontrado.
+    </string>
+  <string name="found_text">
+        [COUNT] encontrado.
+    </string>
+  <text bg_visible="false" border_visible="false" top="8" layout="topleft" follows="left|top" font="SansSerif" h_pad="0" halign="left" height="16" left="5" mouse_opaque="true" name="find" width="150">
+        Digite os termos de pesquisa:
+    </text>
+  <combo_box allow_text_entry="false" top_delta="-2" left="525" layout="topleft" follows="right|top" height="18" max_chars="20" mouse_opaque="true" name="category_combo" width="128">
+    <combo_item name="All" value="0" label="Qualquer categoria" />
+    <combo_item name="Discussion" value="18" label="Discussão" />
+    <combo_item name="Sports" value="19" label="Esportes" />
+    <combo_item name="LiveMusic" value="20" label="Música ao vivo" />
+    <combo_item name="LiveDJ" value="30" label="DJ ao vivo" />
+    <combo_item name="Commercial" value="22" label="Comercial" />
+    <combo_item name="Nightlife/Entertainment" value="23" label="Vida noturna/entretenimento" />
+    <combo_item name="Games/Contests" value="24" label="Jogos/Concursos" />
+    <combo_item name="Pageants" value="25" label="Concursos" />
+    <combo_item name="Education" value="26" label="Educação" />
+    <combo_item name="ArtsandCulture" value="27" label="Artes e Cultura" />
+    <combo_item name="Charity/SupportGroups" value="28" label="Grupos de caridade/apoio" />
+    <combo_item name="Miscellaneous" value="29" label="Variado" />
+  </combo_box>
+    <check_box left_pad="5" control_name="ShowPGEvents" follows="right|top" layout="topleft" font="SansSerifSmall" height="16" initial_value="true" label="" mouse_opaque="true" name="incpg" width="15" />
+  <icon follows="right|top" height="16" top_delta="-1" image_name="Parcel_PG_Dark" tool_tip="Em geral" layout="topleft" left_pad="2" name="rating_icon_general" width="16" />
+  <check_box left_pad="4" top_delta="1" layout="topleft" control_name="ShowMatureEvents" follows="right|top" font="SansSerifSmall" height="16" initial_value="true" label="" mouse_opaque="true" name="incmature" width="15" />
+  <icon follows="right|top" height="16" top_delta="-1" image_name="Parcel_M_Dark" tool_tip="Moderado" layout="topleft" left_pad="2" name="rating_icon_moderate" width="16" />
+  <check_box left_pad="4" top_delta="1" layout="topleft" control_name="ShowAdultEvents" follows="right|top" font="SansSerifSmall" height="16" initial_value="false" label="" mouse_opaque="true" name="incadult" width="15" />
+  <icon follows="right|top" height="16" top_delta="-1" image_name="Parcel_R_Dark" tool_tip="Adulto" layout="topleft" left_pad="2" name="rating_icon_adult" width="16" />
+  <search_combo_box layout="topleft" follows="left|top|right" height="23" left="5" name="name" top="26" width="770" />
+  <scroll_list background_visible="true" layout="topleft" top_pad="3" column_padding="0" draw_border="true" draw_heading="true" follows="left|top|right|bottom" height="450" left="5" mouse_opaque="true" multi_select="false" name="results" search_column="2" width="336">
+    <column label="" name="icon" width="24" />
+    <column label="" name="type" width="-1" />
+    <column dynamicwidth="true" label="Nome" name="name" />
+    <column label="Hora (PT)" name="date" sort="time" width="106" />
+    <column label="" name="event_id" width="-1" />
+    <column label="Tempo" name="time" width="-1" />
+  </scroll_list>
+    <text bg_visible="false" border_visible="false" bottom_delta="-20" drop_shadow_visible="true" follows="left|bottom" font="SansSerifSmall" h_pad="0" halign="left" height="16" left="4" mouse_opaque="true" name="result_text" v_pad="0" width="80" />
+  <button image_overlay="Arrow_Left_Off" image_disabled="PushButton_Disabled" image_disabled_selected="PushButton_Disabled" image_selected="PushButton_Selected" image_unselected="PushButton_Off" chrome="true" hover_glow_amount="0.15" tool_tip="Página anterior" follows="right|bottom" height="22" right="305" bottom="-533" name="prev_btn" width="32" />
+  <button image_overlay="Arrow_Right_Off" image_disabled="PushButton_Disabled" image_disabled_selected="PushButton_Disabled" image_selected="PushButton_Selected" image_unselected="PushButton_Off" chrome="true" tool_tip="Próxima página" follows="right|bottom" height="22" layout="topleft" left_pad="5" name="next_btn" top_delta="0" width="32" />
+  <radio_group top="5" draw_border="false" follows="top|left" layout="topleft" height="16" left="160" mouse_opaque="true" name="date_mode" initial_value="current" width="200">
+    <radio_item layout="topleft" left="3" top="0" follows="left|top" height="20" mouse_opaque="true" name="current" width="170" label="Em andamento e em breve" />
+    <radio_item layout="topleft" follows="left|top" height="20" top_delta="0" left_delta="151" mouse_opaque="true" name="date" width="56" label="Data" />
+  </radio_group>
+    <button top="6" left_pad="15" layout="topleft" follows="left|top" font="SansSerif" halign="center" height="20" label="&lt;&lt;" label_selected="&lt;&lt;" left_delta="54" mouse_opaque="true" name="back_btn" tool_tip="Volte um dia" width="20" />
+  <text top="8" bg_visible="false" border_visible="false" left_pad="1" layout="topleft" drop_shadow_visible="true" follows="left|top" font="SansSerif" h_pad="0" halign="center" height="14" mouse_opaque="true" name="date_text" v_pad="0" width="48">
+        6/6
+    </text>
+  <button top="6" left_pad="1" layout="topleft" follows="left|top" font="SansSerif" halign="center" height="20" label="&gt;&gt;" label_selected="&gt;&gt;" left_delta="50" mouse_opaque="true" name="forward_btn" tool_tip="Avance um dia" width="20" />
+</panel>

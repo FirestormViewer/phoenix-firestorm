@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  can_close="true"
+  can_minimize="true"
+  can_resize="true"
+  height="200"
+  min_height="200"
+  min_width="500"
+  name="rlvLocks"
+  save_rect="true"
+  save_visibility="false"
+  single_instance="true"
+  positioning="cascading"
+  reuse_instance="true"
+  title="Bloqueios RLV Ativos"
+  width="500">
+</floater>

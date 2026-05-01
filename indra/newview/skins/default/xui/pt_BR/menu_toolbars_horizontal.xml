@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+      label="Toolbar"
+      layout="topleft"
+      name="Toolbars Popup"
+      visible="false">
+  <menu_item_call label="Remover este botão"
+                  layout="topleft"
+                  invisibility_control="LockToolbars"
+                  name="Remove button">
+    <menu_item_call.on_click function="Toolbars.RemoveSelectedCommand" />
+  </menu_item_call>
+  <menu_item_separator layout="topleft" invisibility_control="LockToolbars" />
+  <menu_item_call label="Botões da barra de ferramentas..."
+                  layout="topleft"
+                  name="Choose Buttons">
+    <menu_item_call.on_click function="Floater.Show"
+                             parameter="toybox" />
+  </menu_item_call>
+  <menu_item_separator layout="topleft" />
+  <menu_item_check label="Alinhado à Esquerda"
+                   layout="topleft"
+                   name="left_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="left" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="left" />
+  </menu_item_check>
+  <menu_item_check label="Centralizado"
+                   layout="topleft"
+                   name="center_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="center" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="center" />
+  </menu_item_check>
+  <menu_item_check label="Alinhado à Direita"
+                   layout="topleft"
+                   name="right_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="right" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="right" />
+  </menu_item_check>
+  <menu_item_separator layout="topleft" />
+  <menu_item_check label="Ícones e rótulos"
+                   layout="topleft"
+                   name="icons_with_text">
+    <on_click function="Toolbars.EnableSetting"
+              parameter="icons_with_text" />
+    <on_check function="Toolbars.CheckSetting"
+              parameter="icons_with_text" />
+  </menu_item_check>
+  <menu_item_check label="Apenas ícones"
+                   layout="topleft"
+                   name="icons_only">
+    <on_click function="Toolbars.EnableSetting"
+              parameter="icons_only" />
+    <on_check function="Toolbars.CheckSetting"
+              parameter="icons_only" />
+  </menu_item_check>
+  <menu_item_check label="Apenas rótulos"
+                   layout="topleft"
+                   name="text_only">
+    <on_click function="Toolbars.EnableSetting"
+              parameter="text_only" />
+    <on_check function="Toolbars.CheckSetting"
+              parameter="text_only" />
+  </menu_item_check>
+  <menu_item_separator layout="topleft" />
+  <menu_item_check label="Botões de Tamanho Automático"
+                   layout="topleft"
+                   name="layout_style_none">
+    <on_click function="Toolbars.SetLayoutStyle"
+              parameter="none" />
+    <on_check function="Toolbars.CheckLayoutStyle"
+              parameter="none" />
+  </menu_item_check>
+  <menu_item_check label="Botões de Tamanho Fixo"
+                   layout="topleft"
+                   name="layout_style_equalize">
+    <on_click function="Toolbars.SetLayoutStyle"
+              parameter="equalize" />
+    <on_check function="Toolbars.CheckLayoutStyle"
+              parameter="equalize" />
+  </menu_item_check>
+  <menu_item_check label="Botões Preenchem a Barra"
+                   layout="topleft"
+                   name="layout_style_fill">
+    <on_click function="Toolbars.SetLayoutStyle"
+              parameter="fill" />
+    <on_check function="Toolbars.CheckLayoutStyle"
+              parameter="fill" />
+  </menu_item_check>
+  <menu_item_separator layout="topleft" />
+  <menu_item_check label="Bloqueado"
+                   layout="topleft"
+                   name="toolbars_locked">
+    <on_check control="LockToolbars" />
+    <on_click function="ToggleControl"
+              parameter="LockToolbars" />
+  </menu_item_check>
+</context_menu>

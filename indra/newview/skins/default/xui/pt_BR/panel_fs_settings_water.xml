@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel border="true" follows="all" height="390" label="Água" layout="topleft" left="0" name="panel_fs_settings_water" top="0">
+  <panel name="P_Wave_Fog" label="Névoa" follows="left|top" layout="topleft" top_pad="1" left="3" width="292" height="65" border_visible="true" background_visible="true">
+    <color_swatch can_apply_immediately="true" follows="left|top" height="40" label_height="0" layout="topleft" left="20" name="water_fog_color" top_pad="5" width="90" />
+    <texture_picker height="60" layout="topleft" left_pad="60" name="water_normal_map" top_delta="0" width="40" />
+    <text follows="top|left" font="SansSerifSmall" layout="topleft" left="20" name="water_fog_label" top_pad="-16" width="110" tool_tip="Cor da névoa da água - altera a cor do volume da água, definindo essencialmente a cor da própria água. Se a sua água não tiver neblina, ela parecerá cristalina e incolor." word_wrap="true">
+		Cor da névoa da água
+		</text>
+    <text follows="left|top|right" font="SansSerifSmall" layout="topleft" left_pad="30" name="normal_map_label" top_delta="0" tool_tip="Mapa Normal - Imagem usada para determinar reflexões e refrações. Qualquer textura pode ser usada para esta configuração – mas mapas normais verdadeiros funcionam melhor." width="100">
+		Mapa normal
+		</text>
+  </panel>
+
+	<panel name="P_Wave_Fog_2" label="Névoa" follows="left|top" layout="topleft" top_pad="1" left="3" width="292" height="80" border_visible="true" background_visible="true">
+    <text name="density_exponent_label" follows="left|top" height="15" layout="topleft" left="5" width="115">
+		Expoente de densidade:
+		</text>
+    <slider decimal_digits="2" follows="left|top" height="16" increment="0.01" initial_value="0" layout="topleft" min_val="0" max_val="100" name="water_fog_density" left_pad="0" width="167" can_edit_text="true" />
+    <text name="underwater_modifier_label" follows="left|top" height="15" layout="topleft" left="5" width="115">
+		Modificador subaquático:
+		</text>
+    <slider decimal_digits="2" follows="left|top" height="16" increment="0.01" initial_value="0" layout="topleft" left_pad="0" min_val="0.0" max_val="20.0" name="water_underwater_mod" width="167" can_edit_text="true" />
+    <text name="FresnelScaleText" follows="left|top" height="15" layout="topleft" left="5" width="115">
+		Escala de Fresnel:
+		</text>
+    <slider decimal_digits="2" follows="left|top" height="16" increment="0.01" initial_value="0.7" layout="topleft" name="water_fresnel_scale" left_pad="0" width="167" can_edit_text="true" />
+    <text name="FresnelOffsetText" follows="left|top" height="15" layout="topleft" left="5" width="115">
+		Deslocamento de Fresnel:
+		</text>
+    <slider decimal_digits="2" follows="left|top" increment="0.01" initial_value="0.7" height="16" layout="topleft" left_pad="0" name="water_fresnel_offset" width="167" can_edit_text="true" />
+  </panel>
+ 
+	<panel name="P_Water_Wave" follows="left|top" label="Ondas" layout="topleft" top_pad="1" left="3" width="292" height="180" border_visible="true" background_visible="true">
+    <text name="large_wave_speed_label" follows="left|top" height="16" width="130" layout="topleft" top_pad="5" left="5">
+		Velocidade da onda grande
+		</text>
+    <text name="small_wave_speed_label" follows="left|top" height="16" layout="topleft" top_delta="0" left_pad="10">
+		Velocidade da onda pequena
+		</text>
+    <xy_vector follows="top|left" name="water_wave1_xy" width="130" height="75" visible="true" left="5" top_pad="0" min_val_x="-20" max_val_x="20" increment_x="0.01f" min_val_y="-20" max_val_y="20" increment_y="0.01f" arrow_color="white" />
+    <xy_vector follows="top|left" name="water_wave2_xy" width="130" height="75" visible="true" left_pad="10" top_delta="0" min_val_x="-20" max_val_x="20" min_val_y="-20" max_val_y="20" increment_x="0.01f" increment_y="0.01f" arrow_color="white" />
+    <text name="reflection_wavelet_scale_label" follows="left|top|right" height="16" layout="topleft" left="5" top_pad="5" width="215">
+		Escala de wavelet de reflexão
+		</text>
+    <slider decimal_digits="2" follows="left|top" increment="0.01" height="16" initial_value="0.7" layout="topleft" label="X:" left="5" max_val="10" name="water_normal_scale_x" top_pad="0" width="282" can_edit_text="true" />
+    <slider decimal_digits="2" follows="left|top" increment="0.01" initial_value="0.7" height="16" layout="topleft" left="5" max_val="10" name="water_normal_scale_y" top_pad="5" label="Y:" width="282" can_edit_text="true" />
+    <slider decimal_digits="2" follows="left|top" increment="0.01" initial_value="0.7" height="16" layout="topleft" left="5" max_val="10" name="water_normal_scale_z" top_pad="5" label="Z:" width="282" can_edit_text="true" />
+  </panel>
+
+	<panel name="P_Water_Reflection" label="Refração" follows="left|top" layout="topleft" top_pad="1" left="3" width="292" height="60" border_visible="true" background_visible="true">
+    <text name="refraction_scale_above_label" follows="left|top" height="15" layout="topleft" left="5" width="160">
+		Escala de refração (acima):
+		</text>
+    <slider control_name="water_scale_above" decimal_digits="2" follows="left|top" increment="0.01" initial_value="0.1" height="16" layout="topleft" min_val="0" max_val="3" name="water_scale_above" left_pad="0" width="122" can_edit_text="true" />
+    <text name="refraction_scale_below_label" follows="left|top" height="15" layout="topleft" left="5" width="160">
+		Escala de refração (abaixo):
+		</text>
+    <slider control_name="water_scale_below" decimal_digits="2" follows="left|top" height="16" increment="0.01" initial_value="0" layout="topleft" left_pad="0" min_val="0" max_val="3" name="water_scale_below" width="122" can_edit_text="true" />
+    <text name="blur_multiplier_label" follows="left|top" height="15" layout="topleft" left="5" width="160">
+		Multiplicador de desfoque:
+		</text>
+    <slider control_name="water_blur_multip" follows="left|top" height="16" increment="0.001" initial_value="0" layout="topleft" min_val="0" max_val="0.5" name="water_blur_multip" left_pad="0" width="122" can_edit_text="true" />
+  </panel>
+</panel>
