@@ -60,6 +60,14 @@ public:
     // current setting at bind time.
     void applyMasterVolume(F32 volume);
 
+    // M8: Tear down every prim binding (mono + stereo) but leave debug streams
+    // alone. Used when AYAStreamDescriptionScan is toggled off.
+    void shutdownPrimBindings();
+
+    // M8: Tear down everything — prim bindings AND debug streams. Used when
+    // the master AYAStreamEnabled kill switch is toggled off.
+    void shutdownAll();
+
     // Debug toggle stream (driven by AYAStreamDebugPlay). Independent of
     // the prim binding map.
     void startDebug(const std::string& url, const LLVector3& world_pos);

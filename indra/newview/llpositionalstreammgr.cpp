@@ -264,6 +264,18 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
         return;
     }
 
+    // M8: kill switch + scan toggle gating. Cache the description anyway when
+    // only DescriptionScan is off — re-enabling shouldn't have to wait for a
+    // fresh polling cycle to know what every prim said.
+    if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+    {
+        return;
+    }
+    if (!gSavedSettings.getBOOL("AYAStreamDescriptionScan"))
+    {
+        return;
+    }
+
     // Always re-evaluate: if the description is unchanged the diff inside
     // evaluateBinding is cheap, and re-arrivals after object recreate
     // (e.g., teleport out and back) need to re-bind even when the text matches.
@@ -487,6 +499,13 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
 
 void LLPositionalStreamMgr::update()
 {
+    // M8: master kill switch. Listener already tore down state when the
+    // setting flipped to false, so just bail.
+    if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+    {
+        return;
+    }
+
     const F64 now = LLTimer::getElapsedSeconds();
     pollObjectPropertiesFamily(now);
 
@@ -688,6 +707,40 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
     }
 }
 
+void LLPositionalStreamMgr::shutdownPrimBindings()
+{
+    if (mBindings.empty() && mStereoBindings.empty())
+    {
+        return;
+    }
+    LL_INFOS("AYAStream") << "Tearing down "
+                          << mBindings.size() << " mono and "
+                          << mStereoBindings.size() << " stereo prim bindings"
+                          << LL_ENDL;
+    // ~Binding / ~StereoBinding's unique_ptr<> destructors invoke each
+    // stream's stop(), which calls FMOD Channel::stop() synchronously.
+    // Output device buffer drain (<50ms typical) is the only residual delay.
+    mBindings.clear();
+    mStereoBindings.clear();
+}
+
+void LLPositionalStreamMgr::shutdownAll()
+{
+    shutdownPrimBindings();
+    if (mDebugStream)
+    {
+        LL_INFOS("AYAStream") << "Tearing down debug mono stream" << LL_ENDL;
+        mDebugStream->stop();
+        mDebugStream.reset();
+    }
+    if (mDebugStereoStream)
+    {
+        LL_INFOS("AYAStream") << "Tearing down debug stereo stream" << LL_ENDL;
+        mDebugStereoStream->stop();
+        mDebugStereoStream.reset();
+    }
+}
+
 void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
 {
     if (mDebugStream)
@@ -754,6 +807,13 @@ void LLPositionalStreamMgr::stopDebugStereo()
 
 void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
 {
+    // M8: AYAStreamDescriptionScan also gates the active poll. (Enabled is
+    // checked one level up in update(); reaching here implies Enabled=true.)
+    if (!gSavedSettings.getBOOL("AYAStreamDescriptionScan"))
+    {
+        return;
+    }
+
     // Run the scan at ~2 Hz; with kBudgetPerScan = 5 that caps outgoing
     // requests at ~10 req/s sustained, regardless of frame rate.
     // 10 req/s × 30s poll_interval = ~300 prims per cycle. In denser regions

@@ -569,10 +569,33 @@ static void handleAYAStreamVolumeMasterChanged(const LLSD& newvalue)
         static_cast<F32>(newvalue.asReal()));
 }
 
+static void handleAYAStreamEnabledChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownAll();
+    }
+    // Re-enabling does nothing here on purpose: M3b polling will rediscover
+    // tagged prims on its next pass (within AYAStreamPollInterval seconds).
+}
+
+static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownPrimBindings();
+    }
+}
+
 static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
+        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        {
+            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stream." << LL_ENDL;
+            return;
+        }
         const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
         if (url.empty())
         {
@@ -599,6 +622,11 @@ static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
+        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        {
+            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
+            return;
+        }
         const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
         if (url.empty())
         {
@@ -1574,6 +1602,8 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
     setting_setup_signal_listener(gSavedSettings, "AYAStreamVolumeMaster", handleAYAStreamVolumeMasterChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamEnabled", handleAYAStreamEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDescriptionScan", handleAYAStreamDescriptionScanChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
