@@ -115,6 +115,19 @@ Description タグ `[ayastream-stereo:{url=...},{l=1},{r=2}]` をパース (`par
 
 仕様 §11 R2/R4/R5 を「現状値で確定」として spec に追記。実装での既定値 (rolloff 1m/20m, master 0.5, max concurrent 4) で利用上の破綻が出なかったため、追加チューニング・新規 knob は見送り。
 
+### 2.12 Post-M9: Preferences / Volume Pulldown UI 統合
+
+**ファイル**: `panel_preferences_sound.xml`, `panel_volume_pulldown.xml`, `floater_fs_volume_controls.xml`, metaharper skin override
+**commit**: `46e11fc970`, `3d80cd6be1`
+
+仕様 §8.1 のフローター UI は実装せず、既存 Sound 系 UI に最小限の露出を追加した:
+
+- **Preferences > Sound & Media**: Voice 行の下に「3D Stream」slider + Enabled checkbox を追加。Music/Media/Voice と同じレイアウト (mute ボタンは省略 — Enabled が hard mute 相当)
+- **スピーカーアイコン pulldown** (`panel_volume_pulldown.xml`): 末尾に同じ「3D Stream」slider + enable checkbox を追加。`floater_fs_volume_controls.xml` 側も含めパネル高さを調整 (155 → 176, 外側 floater 170 → 191)。metaharper skin override にも同じ行を反映
+- **Ear-location ラベル**: 既存「Hear media and sounds from:」を「Hear media and sounds from (3D Stream):」に変更し、`MediaSoundsEarLocation` ラジオが AYAstream のリスナー位置にも効くことを明示
+
+C++ 側の追加コードは不要 — `AYAStreamVolumeMaster` / `AYAStreamEnabled` は M7/M8 段階で既に signal listener に繋がっており、新規 control_name バインドだけで動作する。
+
 ---
 
 ## 3. 設定キー一覧
@@ -168,6 +181,8 @@ Description タグ `[ayastream-stereo:{url=...},{l=1},{r=2}]` をパース (`par
 | `a415d94f00` | PositionalStream: kill switch + scan toggle + concurrent cap (M8 step 1) |
 | `c8f9583c0f` | PositionalStream: toast + nearby chat notifications (M8 step 2) |
 | `e6713cb2af` | spec: close R2/R4/R5 with M8 in-world judgments (M8 step 3) |
+| `46e11fc970` | Sound prefs: expose AYAstream as "3D Stream" volume row |
+| `3d80cd6be1` | Sound prefs: hint that ear-location radio also covers 3D Stream |
 
 ---
 
@@ -182,12 +197,14 @@ Description タグ `[ayastream-stereo:{url=...},{l=1},{r=2}]` をパース (`par
 - `AYAStreamDescriptionScan = false` で prim binding のみ落ち、debug は維持
 - `AYAStreamMaxConcurrent = 1` で 2 個目のタグ付プリムを拒否 + 通知、解放後に再 bind
 - 通知が FS Nearby Chat / LL Nearby Chat の両方に出る
+- Preferences > Sound & Media と speaker icon pulldown の「3D Stream」スライダ・Enabled チェックが live に反映される
+- 「Hear media and sounds from (3D Stream):」ラジオを Camera / Avatar に切り替えると AYAstream の定位中心も即時切替
 
 ---
 
 ## 7. 残課題・スコープ外
 
-- フローター UI (`floater_ayastream`) は仕様 §8.1 に記述があるが、LSL 主導の運用形態を踏まえて未実装。右クリックメニュー追加 (§8.2) も同様
+- 専用フローター UI (`floater_ayastream`) は仕様 §8.1 に記述があるが未実装。代わりに既存 Sound Preferences と speaker icon pulldown に「3D Stream」行を追加して必要最小限の露出を確保した (§2.12)。右クリックメニュー追加 (§8.2) は引き続き未着手
 - ICY メタデータ (曲タイトル等) のフローター表示 (spec §12)
 - HTTPS Icecast の挙動差は FMOD 側に依存。新規サーバとぶつかった場合は個別検証
 - `LLPositionalStreamMgr::pollObjectPropertiesFamily()` は `AYAStreamMaxDistance` 内の全プリムを round-robin する単純実装。タグなしプリム比率が高い大型 SIM では最初の発見までタイムラグが出る可能性あり
