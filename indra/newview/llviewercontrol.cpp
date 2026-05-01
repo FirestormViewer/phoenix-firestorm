@@ -1428,6 +1428,59 @@ void setting_setup_signal_listener(LLControlGroup& group, const std::string& set
     });
 }
 
+// <FS:AYA> [AYAstorm-r5] Settings-key migration for the r5 naming refactor.
+// r4 used AYAStream* / FSRenderHideOutsideParcel* keys. r5 declares only the
+// renamed keys (Stream3D* / ParcelHide*). When a user upgrades from r4, the
+// old keys arrive via user settings as undeclared persisted controls; we copy
+// their value onto the new declared key (only when the new key is still at
+// its compile-time default) and then suppress old-key persistence so the
+// stale name disappears from saved settings on the next write. After one
+// successful run there is no old key, so this becomes a no-op.
+void migrate_legacy_settings()
+{
+    static const std::pair<const char*, const char*> kMigrations[] = {
+        // 3D Stream (r4 AYAStream* -> r5 Stream3D*)
+        { "AYAStreamDebugUrl",            "Stream3DDebugUrl"            },
+        { "AYAStreamDebugPlay",           "Stream3DDebugPlay"           },
+        { "AYAStreamDebugStereoPlay",     "Stream3DDebugStereoPlay"     },
+        { "AYAStreamRolloffMin",          "Stream3DRolloffMin"          },
+        { "AYAStreamRolloffMax",          "Stream3DRolloffMax"          },
+        { "AYAStreamMaxDistance",         "Stream3DMaxDistance"         },
+        { "AYAStreamPollInterval",        "Stream3DPollInterval"        },
+        { "AYAStreamVolumeMaster",        "Stream3DVolumeMaster"        },
+        { "AYAStreamReconnectAttempts",   "Stream3DReconnectAttempts"   },
+        { "AYAStreamEnabled",             "Stream3DEnabled"             },
+        { "AYAStreamDescriptionScan",     "Stream3DDescriptionScan"     },
+        { "AYAStreamMaxConcurrent",       "Stream3DMaxConcurrent"       },
+        // Parcel Hide (r4 FSRenderHideOutsideParcel* -> r5 ParcelHide*)
+        { "FSRenderHideOutsideParcel",            "ParcelHideEnabled"      },
+        { "FSRenderHideOutsideParcelKeepAvatars", "ParcelHideKeepAvatars" },
+        { "FSRenderHideOutsideParcelKeepOwn",     "ParcelHideKeepOwn"     },
+    };
+
+    for (const auto& [old_key, new_key] : kMigrations)
+    {
+        if (!gSavedSettings.controlExists(old_key))
+        {
+            continue;
+        }
+        LLControlVariablePtr old_ctrl = gSavedSettings.getControl(old_key);
+        LLControlVariablePtr new_ctrl = gSavedSettings.getControl(new_key);
+        if (!old_ctrl || !new_ctrl)
+        {
+            continue;
+        }
+        if (new_ctrl->isDefault())
+        {
+            new_ctrl->setValue(old_ctrl->getValue());
+            LL_INFOS("Settings") << "AYAstorm r5: migrated '" << old_key
+                                 << "' -> '" << new_key << "'" << LL_ENDL;
+        }
+        old_ctrl->setPersist(LLControlVariable::PERSIST_NO);
+    }
+}
+// </FS:AYA>
+
 void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
