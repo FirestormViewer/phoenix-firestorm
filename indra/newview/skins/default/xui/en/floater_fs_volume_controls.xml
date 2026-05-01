@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  name="volume_controls"
- height="170"
+ height="191"
  width="225"
  layout="topleft"
  background_opaque="false"
@@ -20,7 +20,7 @@
 	 name="global_volume_controls_panel"
 	 top="20"
 	 left="0"
-	 height="155"
+	 height="176"
 	 width="225"
 	 follows="all"
 	 layout="topleft"
