@@ -1577,18 +1577,7 @@
          font="SansSerifSmall"
          text_color="EmphasisColor"
          name="FSAYAParcelTagHeader">
-            Parcel owner: enforce these settings on visiting AYAstorm users
-        </text>
-        <text
-         top_pad="2"
-         follows="left|top"
-         height="60"
-         left="3"
-         width="520"
-         wrap="true"
-         font="SansSerifSmall"
-         name="FSAYAParcelTagDesc">
-            Add a tag to your parcel description (About Land &gt; General). When an AYAstorm user is standing in your parcel, the tag overrides their personal settings. Keys are lowercase. Default values when the tag is present: hideoutside=true, keepavatars=false, keepownobject=false. Legacy [AYAstorm:...] form is still accepted.
+Parcel owner: enforce Parcel Hide on visiting AYAstorm viewer users
         </text>
         <text
          top_pad="2"
@@ -1596,12 +1585,23 @@
          height="80"
          left="3"
          width="520"
+         wrap="true"
+         font="SansSerifSmall"
+         name="FSAYAParcelTagDesc">
+Add a [parcelhide:...] tag to About Land &gt; Description to enforce Parcel Hide on visiting AYAstorm viewer users. Keys are lowercase. Defaults when present: hideoutside=true, keepavatars=false, keepownobject=false. Legacy [AYAstorm:...] form is also accepted.
+        </text>
+        <text
+         top_pad="2"
+         follows="left|top"
+         height="64"
+         left="3"
+         width="520"
          font="Monospace"
          name="FSAYAParcelTagExamples">
-            [parcelhide:]                                       hide everything outside (incl. avatars and own)
-            [parcelhide:{keepavatars:true}]                     hide outside, keep avatars visible
-            [parcelhide:{keepavatars:true}{keepownobject:true}] also keep own objects visible
-            [parcelhide:{hideoutside:false}]                    temporarily disable this tag
+[parcelhide:]
+[parcelhide:{keepavatars:true}]
+[parcelhide:{keepavatars:true}{keepownobject:true}]
+[parcelhide:{hideoutside:false}]
         </text>
         <!-- </FS:AYA> -->
         <check_box
