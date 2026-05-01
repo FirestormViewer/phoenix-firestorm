@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel
  name="volumepulldown_floater"
- height="155"
+ height="176"
  width="225"
  follows="bottom"
  layout="topleft"
@@ -342,6 +342,35 @@
 	 layout="topleft"
 	 control_name="EnableVoiceChat"
 	 disabled_control="CmdLineDisableVoice"
+	 label_text.halign="left"
+	/>
+	<slider
+	 name="AYAStream Volume"
+	 label="3D Stream"
+	 top_pad="4"
+	 left="10"
+	 height="15"
+	 width="160"
+	 follows="left|top"
+	 layout="topleft"
+	 control_name="AYAStreamVolumeMaster"
+	 disabled_control="MuteAudio"
+	 increment="0.025"
+	 initial_value="0.5"
+	 label_width="60"
+	 show_text="false"
+	 volume="true"
+	/>
+	<check_box
+	 name="enable_ayastream_check"
+	 tool_tip="Positional 3D audio streams from prims (AYAstream)"
+	 top_delta="2"
+	 left_pad="26"
+	 height="16"
+	 width="16"
+	 follows="left|top"
+	 layout="topleft"
+	 control_name="AYAStreamEnabled"
 	 label_text.halign="left"
 	/>
 </panel>

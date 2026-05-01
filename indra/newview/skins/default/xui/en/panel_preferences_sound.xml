@@ -593,6 +593,35 @@
          left_pad="5"
          name="enable_voice_check_volume"
          width="110"/>
+        <slider
+         control_name="AYAStreamVolumeMaster"
+         disabled_control="MuteAudio"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="0.5"
+         label="3D Stream"
+         label_width="120"
+         layout="topleft"
+         left="0"
+         top_pad="2"
+         name="AYAStream Volume"
+         show_text="false"
+         slider_label.halign="right"
+         volume="true"
+         width="300"/>
+        <check_box
+         label_text.halign="left"
+         follows="left|top"
+         height="16"
+         control_name="AYAStreamEnabled"
+         label="Enabled"
+         layout="topleft"
+         top_delta="2"
+         left_pad="26"
+         name="enable_ayastream_check_volume"
+         tool_tip="Positional 3D audio streams that prims publish via Description tags. Unlike parcel music, these streams start automatically based on what is in-world."
+         width="110"/>
 
         <text
          type="string"
@@ -604,8 +633,8 @@
          name="Listen media from"
          height="15"
          word_wrap="true"
-         width="170">
-          Hear media and sounds from:
+         width="240">
+          Hear media and sounds from (3D Stream):
         </text>
         <radio_group
          control_name="MediaSoundsEarLocation"

@@ -196,6 +196,7 @@
 #include "llproxy.h"
 #include "llcachename.h"
 #include "llaudioengine.h"
+#include "llpositionalstreammgr.h"
 #include "llstreamingaudio.h"
 #include "llviewermenu.h"
 #include "llselectmgr.h"
@@ -6170,6 +6171,10 @@ void LLAppViewer::idle()
 
             // this line actually commits the changes we've made to source positions, etc.
             gAudiop->idle();
+
+            // <FS:AYA> [PositionalStream] drive async opens, position refresh, dead-object cleanup
+            LLPositionalStreamMgr::instance().update();
+            // </FS:AYA>
         }
     }
 

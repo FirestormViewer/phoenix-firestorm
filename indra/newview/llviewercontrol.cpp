@@ -40,6 +40,7 @@
 
 // For Listeners
 #include "llaudioengine.h"
+#include "llpositionalstreammgr.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llconsole.h"
@@ -553,6 +554,109 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 {
     audio_update_volume(true);
 }
+
+// <FS:AYA> [PositionalStream]
+static void handleAYAStreamRolloffChanged(const LLSD&)
+{
+    LLPositionalStreamMgr::instance().applyDefaultRolloff(
+        gSavedSettings.getF32("AYAStreamRolloffMin"),
+        gSavedSettings.getF32("AYAStreamRolloffMax"));
+}
+
+static void handleAYAStreamVolumeMasterChanged(const LLSD& newvalue)
+{
+    LLPositionalStreamMgr::instance().applyMasterVolume(
+        static_cast<F32>(newvalue.asReal()));
+}
+
+static void handleAYAStreamEnabledChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownAll();
+    }
+    // Re-enabling does nothing here on purpose: M3b polling will rediscover
+    // tagged prims on its next pass (within AYAStreamPollInterval seconds).
+}
+
+static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownPrimBindings();
+    }
+}
+
+static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        {
+            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stream." << LL_ENDL;
+            return;
+        }
+        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting." << LL_ENDL;
+            return;
+        }
+
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d source_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3 source_f;
+        source_f.setVec(source_global);
+
+        LLPositionalStreamMgr::instance().startDebug(url, source_f);
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().stopDebug();
+    }
+}
+
+static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        {
+            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
+            return;
+        }
+        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting stereo." << LL_ENDL;
+            return;
+        }
+
+        // M5-b: L and R anchored 5m in front of the agent and offset 5m
+        // along the agent's left/right axes respectively. Lets the listener
+        // verify true L/R deinterleave + 3D positioning in one shot.
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3 left = gAgent.getLeftAxis();
+        left.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d anchor_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3d l_global = anchor_global + LLVector3d(left) * 5.0;
+        LLVector3d r_global = anchor_global - LLVector3d(left) * 5.0;
+        LLVector3 l_f, r_f;
+        l_f.setVec(l_global);
+        r_f.setVec(r_global);
+
+        LLPositionalStreamMgr::instance().startDebugStereo(url, l_f, r_f);
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().stopDebugStereo();
+    }
+}
+// </FS:AYA>
 
 static bool handleJoystickChanged(const LLSD& newvalue)
 {
@@ -1493,6 +1597,13 @@ void settings_setup_listeners()
     LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
     LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
     LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugStereoPlay", handleAYAStreamDebugStereoPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamVolumeMaster", handleAYAStreamVolumeMasterChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamEnabled", handleAYAStreamEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "AYAStreamDescriptionScan", handleAYAStreamDescriptionScanChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
