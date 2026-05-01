@@ -302,7 +302,7 @@ private:
 
     LLVector3       mCurrentScale;
 
-    // <FS:AYA> [RenderHideOutsideParcel] per-drawable cache for parcel filter (LLPipeline is a friend)
+    // <FS:AYA> [ParcelHide] per-drawable cache for parcel filter (LLPipeline is a friend)
     S32             mLastParcelCheckSeq;
     bool            mLastParcelCheckHidden;
     // </FS:AYA>

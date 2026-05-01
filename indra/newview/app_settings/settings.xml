@@ -26063,7 +26063,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSRenderHideOutsideParcel</key>
+    <key>ParcelHideEnabled</key>
     <map>
       <key>Comment</key>
       <string>Hide objects that are outside the agent's current parcel</string>
@@ -26074,10 +26074,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSRenderHideOutsideParcelKeepAvatars</key>
+    <key>ParcelHideKeepAvatars</key>
     <map>
       <key>Comment</key>
-      <string>When FSRenderHideOutsideParcel is enabled, still render avatars, attachments and HUDs that are outside the agent's parcel</string>
+      <string>When ParcelHideEnabled is on, still render avatars, attachments and HUDs that are outside the agent's parcel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -26085,10 +26085,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSRenderHideOutsideParcelKeepOwn</key>
+    <key>ParcelHideKeepOwn</key>
     <map>
       <key>Comment</key>
-      <string>When FSRenderHideOutsideParcel is enabled, still render objects owned by the agent even when they are outside the parcel</string>
+      <string>When ParcelHideEnabled is on, still render objects owned by the agent even when they are outside the parcel</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

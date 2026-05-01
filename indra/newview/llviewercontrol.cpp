@@ -328,24 +328,24 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
     return true;
 }
 
-// <FS:AYA> [RenderHideOutsideParcel]
-bool handleRenderHideOutsideParcelChanged(const LLSD& newvalue)
+// <FS:AYA> [ParcelHide]
+bool handleParcelHideEnabledChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcel = newvalue.asBoolean();
+    LLPipeline::sParcelHideEnabled = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
 
-bool handleRenderHideOutsideParcelKeepAvatarsChanged(const LLSD& newvalue)
+bool handleParcelHideKeepAvatarsChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcelKeepAvatars = newvalue.asBoolean();
+    LLPipeline::sParcelHideKeepAvatars = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
 
-bool handleRenderHideOutsideParcelKeepOwnChanged(const LLSD& newvalue)
+bool handleParcelHideKeepOwnChanged(const LLSD& newvalue)
 {
-    LLPipeline::sRenderHideOutsideParcelKeepOwn = newvalue.asBoolean();
+    LLPipeline::sParcelHideKeepOwn = newvalue.asBoolean();
     LLPipeline::refreshOutsideParcelHiding();
     return true;
 }
@@ -1589,14 +1589,14 @@ void settings_setup_listeners()
     // <FS:Ansariel> Show start location setting has no effect on login
     setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
-    // <FS:AYA> [RenderHideOutsideParcel]
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcel", handleRenderHideOutsideParcelChanged);
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepAvatars", handleRenderHideOutsideParcelKeepAvatarsChanged);
-    setting_setup_signal_listener(gSavedSettings, "FSRenderHideOutsideParcelKeepOwn", handleRenderHideOutsideParcelKeepOwnChanged);
+    // <FS:AYA> [ParcelHide]
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideEnabled", handleParcelHideEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideKeepAvatars", handleParcelHideKeepAvatarsChanged);
+    setting_setup_signal_listener(gSavedSettings, "ParcelHideKeepOwn", handleParcelHideKeepOwnChanged);
     gAgent.addParcelChangedCallback([](){ LLPipeline::refreshOutsideParcelHiding(); });
-    LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
-    LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
-    LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
+    LLPipeline::sParcelHideEnabled = gSavedSettings.getBOOL("ParcelHideEnabled");
+    LLPipeline::sParcelHideKeepAvatars = gSavedSettings.getBOOL("ParcelHideKeepAvatars");
+    LLPipeline::sParcelHideKeepOwn = gSavedSettings.getBOOL("ParcelHideKeepOwn");
     setting_setup_signal_listener(gSavedSettings, "Stream3DDebugPlay", handleStream3DDebugPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DDebugStereoPlay", handleStream3DDebugStereoPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);

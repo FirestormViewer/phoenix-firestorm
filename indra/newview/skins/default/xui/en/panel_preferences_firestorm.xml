@@ -1525,7 +1525,7 @@
      follows="all"
      label="Build 2"
      name="BuildTab2">
-        <!-- <FS:AYA> [RenderHideOutsideParcel] -->
+        <!-- <FS:AYA> [ParcelHide] -->
         <check_box
          left="3"
          top="10"
@@ -1533,30 +1533,30 @@
          height="16"
          label="Hide objects outside your parcel"
          tool_tip="Stop rendering objects that lie outside the parcel you are currently in. Useful for blocking visual clutter from neighboring parcels."
-         name="FSRenderHideOutsideParcel"
-         control_name="FSRenderHideOutsideParcel"
+         name="ParcelHideEnabled"
+         control_name="ParcelHideEnabled"
          width="500"/>
         <check_box
-         enabled_control="FSRenderHideOutsideParcel"
+         enabled_control="ParcelHideEnabled"
          top_pad="4"
          follows="left|top"
          height="16"
          left="18"
          label="Keep avatars and attachments visible"
          tool_tip="When hiding objects outside your parcel, still render avatars, their attachments and HUDs. Recommended on, otherwise neighbors appear as floating avatars."
-         name="FSRenderHideOutsideParcelKeepAvatars"
-         control_name="FSRenderHideOutsideParcelKeepAvatars"
+         name="ParcelHideKeepAvatars"
+         control_name="ParcelHideKeepAvatars"
          width="500"/>
         <check_box
-         enabled_control="FSRenderHideOutsideParcel"
+         enabled_control="ParcelHideEnabled"
          top_pad="4"
          follows="left|top"
          height="16"
          left="18"
          label="Keep your own objects visible"
          tool_tip="When hiding objects outside your parcel, still render objects that you own (regardless of which parcel they are in)."
-         name="FSRenderHideOutsideParcelKeepOwn"
-         control_name="FSRenderHideOutsideParcelKeepOwn"
+         name="ParcelHideKeepOwn"
+         control_name="ParcelHideKeepOwn"
          width="500"/>
 
         <!-- Parcel-owner enforcement tag -->
@@ -1588,7 +1588,7 @@
          wrap="true"
          font="SansSerifSmall"
          name="FSAYAParcelTagDesc">
-            Add a tag to your parcel description (About Land &gt; General). When an AYAstorm user is standing in your parcel, the tag overrides their personal settings. Keys are lowercase. Default values when the tag is present: hideoutside=true, keepavatars=false, keepownobject=false.
+            Add a tag to your parcel description (About Land &gt; General). When an AYAstorm user is standing in your parcel, the tag overrides their personal settings. Keys are lowercase. Default values when the tag is present: hideoutside=true, keepavatars=false, keepownobject=false. Legacy [AYAstorm:...] form is still accepted.
         </text>
         <text
          top_pad="2"
@@ -1598,10 +1598,10 @@
          width="520"
          font="Monospace"
          name="FSAYAParcelTagExamples">
-            [AYAstorm:]                                       hide everything outside (incl. avatars and own)
-            [AYAstorm:{keepavatars:true}]                     hide outside, keep avatars visible
-            [AYAstorm:{keepavatars:true}{keepownobject:true}] also keep own objects visible
-            [AYAstorm:{hideoutside:false}]                    temporarily disable this tag
+            [parcelhide:]                                       hide everything outside (incl. avatars and own)
+            [parcelhide:{keepavatars:true}]                     hide outside, keep avatars visible
+            [parcelhide:{keepavatars:true}{keepownobject:true}] also keep own objects visible
+            [parcelhide:{hideoutside:false}]                    temporarily disable this tag
         </text>
         <!-- </FS:AYA> -->
         <check_box
