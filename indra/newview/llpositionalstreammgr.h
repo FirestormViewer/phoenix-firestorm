@@ -129,6 +129,11 @@ private:
         // fire (0 = no retry pending).
         S32 reconnect_attempts = 0;
         F64 next_retry_time = 0.0;
+        // M8: set true once the stream has reached Playing for the first time
+        // since this Binding was created. Suppresses duplicate "now playing"
+        // toasts on every reconnect-success transition (only the *initial*
+        // bind notifies; rebinds inherit a fresh false because new Binding).
+        bool notified_played = false;
         std::unique_ptr<LLPositionalStream> stream;
     };
 
@@ -147,6 +152,7 @@ private:
         LLUUID r_prim;
         S32 reconnect_attempts = 0;
         F64 next_retry_time = 0.0;
+        bool notified_played = false;
         std::unique_ptr<LLPositionalStreamStereo> stream;
     };
 
@@ -179,6 +185,11 @@ private:
     // M3b: round-robin cursor into gObjectList so per-pass budget doesn't
     // starve prims past the first slice when num_objects > one pass can cover.
     S32 mPollCursor = 0;
+    // M8: edge-trigger for the "max concurrent reached" toast. Set true the
+    // first time we refuse a binding due to the cap; reset to false whenever
+    // total binding count drops back below the cap, so the user sees the
+    // notification once per "newly full" event rather than every poll cycle.
+    bool mCapNotified = false;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H

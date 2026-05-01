@@ -34,6 +34,11 @@
 #include "llviewerobjectlist.h"
 
 #include "llagent.h"
+#include "llchat.h"
+#include "llfloaterimnearbychat.h"
+#include "llfloaterreg.h"
+#include "llinstantmessage.h"
+#include "llnotificationsutil.h"
 #include "llselectmgr.h"
 
 #include "llstring.h"
@@ -179,6 +184,35 @@ namespace
     {
         out_min = tag.min.value_or(gSavedSettings.getF32("AYAStreamRolloffMin"));
         out_max = tag.max.value_or(gSavedSettings.getF32("AYAStreamRolloffMax"));
+    }
+
+    // M8: emit a Firestorm toast that also auto-logs into Nearby Chat.
+    // ChatSystemMessageTip is a built-in template (notifications.xml) that
+    // marries `notifytip` (transient toast) with `log_to_chat="true"`.
+    // Firestorm rewrote LLHandlerUtil::logToNearbyChat to deliver only into
+    // FSFloaterNearbyChat, so AYAChatWindowStyle=2 (LL) users would otherwise
+    // see only the toast. Forward the same line to LLFloaterIMNearbyChat in
+    // that case so chat history matches the toast across both styles.
+    void notifyAYAStream(const std::string& message)
+    {
+        const std::string text = "AYAstream: " + message;
+
+        LLSD args;
+        args["MESSAGE"] = text;
+        LLNotificationsUtil::add("ChatSystemMessageTip", args);
+
+        if (ayastorm_is_ll_style())
+        {
+            if (LLFloaterIMNearbyChat* ll_chat =
+                    LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))
+            {
+                LLChat chat_msg(text);
+                chat_msg.mSourceType = CHAT_SOURCE_SYSTEM;
+                chat_msg.mFromName = SYSTEM_FROM;
+                chat_msg.mFromID = LLUUID::null;
+                ll_chat->addMessage(chat_msg);
+            }
+        }
     }
 
     // Resolve link number to a child object. Link 1 is the root itself, link 2
@@ -389,6 +423,13 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
     {
         LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
                               << ") reached; not binding " << id << LL_ENDL;
+        if (!mCapNotified)
+        {
+            mCapNotified = true;
+            notifyAYAStream(llformat(
+                "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
+                cap));
+        }
         return;
     }
 
@@ -466,6 +507,13 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
     {
         LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
                               << ") reached; not binding stereo " << id << LL_ENDL;
+        if (!mCapNotified)
+        {
+            mCapNotified = true;
+            notifyAYAStream(llformat(
+                "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
+                cap));
+        }
         return;
     }
 
@@ -504,6 +552,18 @@ void LLPositionalStreamMgr::update()
     if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
     {
         return;
+    }
+
+    // M8: re-arm the cap notification once we drop back under the cap, so a
+    // future cap-hit triggers a fresh toast rather than being suppressed by
+    // the stale flag.
+    {
+        const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
+        const S32 total = static_cast<S32>(mBindings.size() + mStereoBindings.size());
+        if (mCapNotified && (cap <= 0 || total < cap))
+        {
+            mCapNotified = false;
+        }
     }
 
     const F64 now = LLTimer::getElapsedSeconds();
@@ -553,6 +613,9 @@ void LLPositionalStreamMgr::update()
                 LL_WARNS("AYAStream") << "Stream for " << id << " exhausted "
                                       << max_attempts << " reconnect attempts; dropping binding"
                                       << LL_ENDL;
+                notifyAYAStream("stream gave up after "
+                                + llformat("%d", max_attempts)
+                                + " reconnect attempts: " + b.url);
                 it = mBindings.erase(it);
                 continue;
             }
@@ -591,6 +654,15 @@ void LLPositionalStreamMgr::update()
             b.next_retry_time = 0.0;
         }
 
+        // M8: notify exactly once per Binding, when it first reaches Playing.
+        // Reconnect successes don't re-fire because Binding (and the flag)
+        // survives across stream->start() retries.
+        if (!b.notified_played && b.stream->isPlaying())
+        {
+            b.notified_played = true;
+            notifyAYAStream("now playing: " + b.url);
+        }
+
         b.stream->setPosition(toFloatVec(obj->getPositionGlobal()));
         b.stream->update();
         ++it;
@@ -626,6 +698,9 @@ void LLPositionalStreamMgr::update()
                 LL_WARNS("AYAStream") << "Stereo stream for " << id << " exhausted "
                                       << max_attempts << " reconnect attempts; dropping binding"
                                       << LL_ENDL;
+                notifyAYAStream("stereo stream gave up after "
+                                + llformat("%d", max_attempts)
+                                + " reconnect attempts: " + b.url);
                 it = mStereoBindings.erase(it);
                 continue;
             }
@@ -661,6 +736,12 @@ void LLPositionalStreamMgr::update()
                                   << LL_ENDL;
             b.reconnect_attempts = 0;
             b.next_retry_time = 0.0;
+        }
+
+        if (!b.notified_played && b.stream->isPlaying())
+        {
+            b.notified_played = true;
+            notifyAYAStream("now playing (stereo): " + b.url);
         }
 
         b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
