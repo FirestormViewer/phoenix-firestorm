@@ -299,14 +299,16 @@ Call openLinkNewWindow
 !define OpenURL '!insertmacro "_OpenURL"'
 
 ; Add the AVX2 check functions
-; <FS:AYA> AVX2 incompatibility check: simplified to a single bilingual notice
+; <FS:AYA> AVX2 incompatibility check: simplified to a single English notice
 ; without URL redirect, since AYAstorm distributes both AVX2 and LEGACY builds
-; from the same GitHub Releases page.
+; from the same GitHub Releases page. The text is kept ASCII because this
+; template is read as UTF-8-without-BOM and makensis (Unicode true) rejects
+; non-ASCII bytes in that path; localized variants would require a LangString.
 Function CheckCPUFlagsAVX2
     Push $1
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2
-    MessageBox MB_OK "This build requires an AVX2-capable CPU. Please install the LEGACY build instead.$\r$\n$\r$\nこのビルドは AVX2 対応 CPU が必要です。LEGACY 版をご使用ください。"
+    MessageBox MB_OK "This build requires an AVX2-capable CPU. Please install the LEGACY build instead."
     Quit
 
   OK_AVX2:
