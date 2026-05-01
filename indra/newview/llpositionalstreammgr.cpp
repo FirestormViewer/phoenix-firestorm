@@ -33,7 +33,11 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 
+#include "llagent.h"
+#include "llselectmgr.h"
+
 #include "llstring.h"
+#include "lltimer.h"
 
 #include <algorithm>
 #include <cctype>
@@ -263,7 +267,18 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     // Always re-evaluate: if the description is unchanged the diff inside
     // evaluateBinding is cheap, and re-arrivals after object recreate
     // (e.g., teleport out and back) need to re-bind even when the text matches.
-    mDescriptionCache[id] = description;
+    auto& entry = mDescriptionCache[id];
+    entry.description = description;
+    entry.last_polled = LLTimer::getElapsedSeconds();
+
+    // M3b debug: only log replies that look like our tag, to keep the noise
+    // floor sane in busy regions.
+    if (description.find("ayastream") != std::string::npos)
+    {
+        LL_INFOS("AYAStream") << "reply: " << id
+                              << " desc=\"" << description << "\"" << LL_ENDL;
+    }
+
     evaluateBinding(id);
 }
 
@@ -277,8 +292,9 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
 
     // Stereo tag wins if both happen to be present (the prefixes don't
     // overlap textually, but a description could in theory contain both).
-    auto stereo_tag = parseStereoTag(desc_it->second);
-    auto mono_tag = stereo_tag ? std::nullopt : parseTag(desc_it->second);
+    const std::string& desc = desc_it->second.description;
+    auto stereo_tag = parseStereoTag(desc);
+    auto mono_tag = stereo_tag ? std::nullopt : parseTag(desc);
 
     auto bind_it = mBindings.find(id);
     auto sbind_it = mStereoBindings.find(id);
@@ -469,6 +485,8 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
 
 void LLPositionalStreamMgr::update()
 {
+    pollObjectPropertiesFamily(LLTimer::getElapsedSeconds());
+
     if (mDebugStream)
     {
         mDebugStream->update();
@@ -599,4 +617,111 @@ void LLPositionalStreamMgr::stopDebugStereo()
         mDebugStereoStream->stop();
         mDebugStereoStream.reset();
     }
+}
+
+void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
+{
+    // Run the scan at ~2 Hz; with kBudgetPerScan = 5 that caps outgoing
+    // requests at ~10 req/s sustained, regardless of frame rate.
+    // 10 req/s × 30s poll_interval = ~300 prims per cycle. In denser regions
+    // a given prim's effective re-poll interval will exceed AYAStreamPollInterval.
+    static constexpr F64 kScanInterval  = 0.5;
+    static constexpr int kBudgetPerScan = 5;
+
+    if (now - mLastPollScanTime < kScanInterval)
+    {
+        return;
+    }
+    mLastPollScanTime = now;
+
+    const F32 poll_interval = gSavedSettings.getF32("AYAStreamPollInterval");
+    const F32 max_dist      = gSavedSettings.getF32("AYAStreamMaxDistance");
+
+    // Per-scan breakdown for support / tuning. Off by default; enable with
+    //   --logdebug AYAStream
+    LL_DEBUGS("AYAStream") << "poll diag: interval=" << poll_interval
+                           << " max_dist=" << max_dist
+                           << " num_objects=" << gObjectList.getNumObjects()
+                           << LL_ENDL;
+
+    if (poll_interval <= 0.f)
+    {
+        return;
+    }
+
+    if (max_dist <= 0.f)
+    {
+        return;
+    }
+    const F32 max_dist_sq = max_dist * max_dist;
+    const LLVector3d agent_pos = gAgent.getPositionGlobal();
+
+    int budget = kBudgetPerScan;
+    const S32 num = gObjectList.getNumObjects();
+    if (num == 0)
+    {
+        return;
+    }
+
+    int n_total = 0, n_filtered = 0, n_far = 0, n_recent = 0, n_sent = 0;
+    int examined = 0;
+
+    // Walk in round-robin order so dense regions don't starve prims past
+    // the first slice each pass can reach before exhausting the budget.
+    while (budget > 0 && examined < num)
+    {
+        if (mPollCursor >= num)
+        {
+            mPollCursor = 0;
+        }
+        const S32 i = mPollCursor++;
+        ++examined;
+
+        LLViewerObject* obj = gObjectList.getObject(i);
+        if (!obj || obj->isDead())
+        {
+            continue;
+        }
+        ++n_total;
+
+        // Avatars / attachments / HUDs don't carry [ayastream:...] tags.
+        if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment())
+        {
+            ++n_filtered;
+            continue;
+        }
+
+        LLVector3d delta = obj->getPositionGlobal();
+        delta -= agent_pos;
+        if (static_cast<F32>(delta.magVecSquared()) > max_dist_sq)
+        {
+            ++n_far;
+            continue;
+        }
+
+        const LLUUID& id = obj->getID();
+        // operator[] auto-creates an empty entry; harmless — last_polled stamps
+        // it so we don't re-request before the interval elapses.
+        auto& entry = mDescriptionCache[id];
+        if (entry.last_polled > 0.0 && (now - entry.last_polled) < poll_interval)
+        {
+            ++n_recent;
+            continue;
+        }
+
+        LLSelectMgr::getInstance()->requestObjectPropertiesFamily(obj);
+        entry.last_polled = now;
+        --budget;
+        ++n_sent;
+    }
+
+    LL_DEBUGS("AYAStream") << "poll: scanned this pass total=" << n_total
+                           << " filtered=" << n_filtered
+                           << " far=" << n_far
+                           << " recent=" << n_recent
+                           << " sent=" << n_sent
+                           << " examined=" << examined
+                           << " cursor=" << mPollCursor
+                           << "/" << num
+                           << LL_ENDL;
 }

@@ -133,11 +133,31 @@ private:
     void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
     void evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag);
 
-    std::map<LLUUID, std::string> mDescriptionCache;
+    // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
+    // any whose Description we haven't seen recently. Throttled so we never
+    // burst more than a handful of requests per second at the sim.
+    void pollObjectPropertiesFamily(F64 now_seconds);
+
+    struct CacheEntry
+    {
+        std::string description;
+        // Monotonic seconds (LLTimer::getElapsedSeconds) of the most recent
+        // request OR reply for this prim. 0 means "never seen". Used by the
+        // poll loop to throttle re-requests to AYAStreamPollInterval.
+        F64 last_polled = 0.0;
+    };
+
+    std::map<LLUUID, CacheEntry> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
     std::map<LLUUID, StereoBinding> mStereoBindings;
     std::unique_ptr<LLPositionalStream> mDebugStream;
     std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
+
+    // M3b: throttle for the per-frame poll scan.
+    F64 mLastPollScanTime = 0.0;
+    // M3b: round-robin cursor into gObjectList so per-pass budget doesn't
+    // starve prims past the first slice when num_objects > one pass can cover.
+    S32 mPollCursor = 0;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H

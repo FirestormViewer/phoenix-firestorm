@@ -27612,5 +27612,27 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
+    <key>AYAStreamMaxDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm M3b: Maximum distance in meters within which prims are polled with RequestObjectPropertiesFamily to discover [ayastream:...] tags. Should be at least as large as AYAStreamRolloffMax.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>64.0</real>
+    </map>
+    <key>AYAStreamPollInterval</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm M3b: Seconds between RequestObjectPropertiesFamily re-polls of in-range prims. Catches LSL llSetObjectDesc tag changes and prims that existed before the viewer arrived. 0 disables active polling (right-click / inspect still updates on demand).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>30.0</real>
+    </map>
   </map>
 </llsd>
