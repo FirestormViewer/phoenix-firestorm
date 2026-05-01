@@ -556,30 +556,30 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 }
 
 // <FS:AYA> [PositionalStream]
-static void handleAYAStreamRolloffChanged(const LLSD&)
+static void handleStream3DRolloffChanged(const LLSD&)
 {
     LLPositionalStreamMgr::instance().applyDefaultRolloff(
-        gSavedSettings.getF32("AYAStreamRolloffMin"),
-        gSavedSettings.getF32("AYAStreamRolloffMax"));
+        gSavedSettings.getF32("Stream3DRolloffMin"),
+        gSavedSettings.getF32("Stream3DRolloffMax"));
 }
 
-static void handleAYAStreamVolumeMasterChanged(const LLSD& newvalue)
+static void handleStream3DVolumeMasterChanged(const LLSD& newvalue)
 {
     LLPositionalStreamMgr::instance().applyMasterVolume(
         static_cast<F32>(newvalue.asReal()));
 }
 
-static void handleAYAStreamEnabledChanged(const LLSD& newvalue)
+static void handleStream3DEnabledChanged(const LLSD& newvalue)
 {
     if (!newvalue.asBoolean())
     {
         LLPositionalStreamMgr::instance().shutdownAll();
     }
     // Re-enabling does nothing here on purpose: M3b polling will rediscover
-    // tagged prims on its next pass (within AYAStreamPollInterval seconds).
+    // tagged prims on its next pass (within Stream3DPollInterval seconds).
 }
 
-static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
+static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)
 {
     if (!newvalue.asBoolean())
     {
@@ -587,19 +587,19 @@ static void handleAYAStreamDescriptionScanChanged(const LLSD& newvalue)
     }
 }
 
-static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
+static void handleStream3DDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
         {
-            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stream." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stream." << LL_ENDL;
             return;
         }
-        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
         if (url.empty())
         {
-            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting." << LL_ENDL;
             return;
         }
 
@@ -618,19 +618,19 @@ static void handleAYAStreamDebugPlayChanged(const LLSD& newvalue)
     }
 }
 
-static void handleAYAStreamDebugStereoPlayChanged(const LLSD& newvalue)
+static void handleStream3DDebugStereoPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
     {
-        if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
         {
-            LL_WARNS("AYAStream") << "AYAStreamEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
             return;
         }
-        const std::string url = gSavedSettings.getString("AYAStreamDebugUrl");
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
         if (url.empty())
         {
-            LL_WARNS("AYAStream") << "AYAStreamDebugUrl is empty; not starting stereo." << LL_ENDL;
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting stereo." << LL_ENDL;
             return;
         }
 
@@ -1597,13 +1597,13 @@ void settings_setup_listeners()
     LLPipeline::sRenderHideOutsideParcel = gSavedSettings.getBOOL("FSRenderHideOutsideParcel");
     LLPipeline::sRenderHideOutsideParcelKeepAvatars = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepAvatars");
     LLPipeline::sRenderHideOutsideParcelKeepOwn = gSavedSettings.getBOOL("FSRenderHideOutsideParcelKeepOwn");
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugPlay", handleAYAStreamDebugPlayChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDebugStereoPlay", handleAYAStreamDebugStereoPlayChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMin", handleAYAStreamRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamRolloffMax", handleAYAStreamRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamVolumeMaster", handleAYAStreamVolumeMasterChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamEnabled", handleAYAStreamEnabledChanged);
-    setting_setup_signal_listener(gSavedSettings, "AYAStreamDescriptionScan", handleAYAStreamDescriptionScanChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugPlay", handleStream3DDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugStereoPlay", handleStream3DDebugStereoPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMax", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DVolumeMaster", handleStream3DVolumeMasterChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);

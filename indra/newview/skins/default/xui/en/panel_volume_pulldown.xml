@@ -345,7 +345,7 @@
 	 label_text.halign="left"
 	/>
 	<slider
-	 name="AYAStream Volume"
+	 name="Stream3D Volume"
 	 label="3D Stream"
 	 top_pad="4"
 	 left="10"
@@ -353,7 +353,7 @@
 	 width="160"
 	 follows="left|top"
 	 layout="topleft"
-	 control_name="AYAStreamVolumeMaster"
+	 control_name="Stream3DVolumeMaster"
 	 disabled_control="MuteAudio"
 	 increment="0.025"
 	 initial_value="0.5"
@@ -362,15 +362,15 @@
 	 volume="true"
 	/>
 	<check_box
-	 name="enable_ayastream_check"
-	 tool_tip="Positional 3D audio streams from prims (AYAstream)"
+	 name="enable_stream3d_check"
+	 tool_tip="Positional 3D audio streams from prims"
 	 top_delta="2"
 	 left_pad="26"
 	 height="16"
 	 width="16"
 	 follows="left|top"
 	 layout="topleft"
-	 control_name="AYAStreamEnabled"
+	 control_name="Stream3DEnabled"
 	 label_text.halign="left"
 	/>
 </panel>

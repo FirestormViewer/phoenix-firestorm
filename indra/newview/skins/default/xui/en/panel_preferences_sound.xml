@@ -594,7 +594,7 @@
          name="enable_voice_check_volume"
          width="110"/>
         <slider
-         control_name="AYAStreamVolumeMaster"
+         control_name="Stream3DVolumeMaster"
          disabled_control="MuteAudio"
          follows="left|top"
          height="16"
@@ -605,7 +605,7 @@
          layout="topleft"
          left="0"
          top_pad="2"
-         name="AYAStream Volume"
+         name="Stream3D Volume"
          show_text="false"
          slider_label.halign="right"
          volume="true"
@@ -614,12 +614,12 @@
          label_text.halign="left"
          follows="left|top"
          height="16"
-         control_name="AYAStreamEnabled"
+         control_name="Stream3DEnabled"
          label="Enabled"
          layout="topleft"
          top_delta="2"
          left_pad="26"
-         name="enable_ayastream_check_volume"
+         name="enable_stream3d_check_volume"
          tool_tip="Positional 3D audio streams that prims publish via Description tags. Unlike parcel music, these streams start automatically based on what is in-world."
          width="110"/>
 

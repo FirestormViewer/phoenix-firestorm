@@ -43,7 +43,7 @@ namespace
         {
             return false;
         }
-        LL_WARNS("AYAStream") << what << " error: " << FMOD_ErrorString(result) << LL_ENDL;
+        LL_WARNS("Stream3D") << what << " error: " << FMOD_ErrorString(result) << LL_ENDL;
         return true;
     }
 
@@ -180,14 +180,14 @@ bool LLPositionalStreamStereo::start(const std::string& url,
     LLStringUtil::trim(clean_url);
     if (clean_url.empty())
     {
-        LL_WARNS("AYAStream") << "Refusing to start stereo stream with empty URL" << LL_ENDL;
+        LL_WARNS("Stream3D") << "Refusing to start stereo stream with empty URL" << LL_ENDL;
         return false;
     }
 
     FMOD::System* system = getFmodSystem();
     if (!system)
     {
-        LL_WARNS("AYAStream") << "FMOD Studio system unavailable" << LL_ENDL;
+        LL_WARNS("Stream3D") << "FMOD Studio system unavailable" << LL_ENDL;
         return false;
     }
 
@@ -210,7 +210,7 @@ bool LLPositionalStreamStereo::start(const std::string& url,
     }
 
     mState = State::Opening;
-    LL_INFOS("AYAStream") << "Opening stereo source '" << clean_url
+    LL_INFOS("Stream3D") << "Opening stereo source '" << clean_url
                           << "' L=" << l_pos << " R=" << r_pos << LL_ENDL;
     return true;
 }
@@ -441,7 +441,7 @@ void LLPositionalStreamStereo::pumpSource()
         // available; that's expected, just try again next frame.
         if (rr != FMOD_ERR_NOTREADY)
         {
-            LL_WARNS("AYAStream") << "Sound::readData error: "
+            LL_WARNS("Stream3D") << "Sound::readData error: "
                                   << FMOD_ErrorString(rr) << LL_ENDL;
         }
         return;
@@ -526,7 +526,7 @@ void LLPositionalStreamStereo::update()
         FMOD_RESULT rr = mSourceSound->getOpenState(&state, nullptr, nullptr, nullptr);
         if (rr != FMOD_OK || state == FMOD_OPENSTATE_ERROR)
         {
-            LL_WARNS("AYAStream") << "Stereo source open failed: " << mUrl
+            LL_WARNS("Stream3D") << "Stereo source open failed: " << mUrl
                                   << " (" << FMOD_ErrorString(rr) << ")" << LL_ENDL;
             releaseAll();
             mUrl.clear();
@@ -568,7 +568,7 @@ void LLPositionalStreamStereo::update()
         }
         else
         {
-            LL_WARNS("AYAStream") << "Source format unsupported (got " << (int)fmt
+            LL_WARNS("Stream3D") << "Source format unsupported (got " << (int)fmt
                                   << "); aborting stereo path" << LL_ENDL;
             releaseAll();
             mState = State::Failed;
@@ -582,7 +582,7 @@ void LLPositionalStreamStereo::update()
         mRingR.reset(cap);
         mState = State::Buffering;
 
-        LL_INFOS("AYAStream") << "Stereo source ready: " << mUrl
+        LL_INFOS("Stream3D") << "Stereo source ready: " << mUrl
                               << " " << mSampleRate << " Hz x " << mSourceChannels
                               << " ch, fmt=" << (mSourceIsFloat ? "PCMFLOAT" : "PCM16")
                               << ", ring cap " << cap << " frames" << LL_ENDL;
@@ -597,13 +597,13 @@ void LLPositionalStreamStereo::update()
         {
             if (!createUserSounds() || !startUserChannels())
             {
-                LL_WARNS("AYAStream") << "Failed to start OPENUSER channels" << LL_ENDL;
+                LL_WARNS("Stream3D") << "Failed to start OPENUSER channels" << LL_ENDL;
                 releaseAll();
                 mState = State::Failed;
                 return;
             }
             mState = State::Playing;
-            LL_INFOS("AYAStream") << "Stereo path playing: " << mUrl << LL_ENDL;
+            LL_INFOS("Stream3D") << "Stereo path playing: " << mUrl << LL_ENDL;
         }
     }
 }
