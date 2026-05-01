@@ -183,6 +183,13 @@
   - 状態表示(接続中 / 再生中 / 切断 / エラー)
   - アクティブストリーム一覧(URL / ホストプリム名 / 音量)
 
+> **実装方針 (Post-M9):** 当初想定したフローター UI は実装せず、運用が LSL タグ主導であることを踏まえて既存 Sound 系 UI に最小限の露出のみを追加する。
+> - Preferences > Sound & Media に「3D Stream」slider + Enabled checkbox (Music/Media/Voice 同等レイアウト)
+> - speaker icon の Volume pulldown / `floater_fs_volume_controls` 末尾に同じ行
+> - 既存「Hear media and sounds from:」ラベルを「... (3D Stream):」に変更し `MediaSoundsEarLocation` が AYAstream にも効くことを明示
+>
+> URL/プリム選択/状態表示などは LSL 側で完結するため UI には出さない。再導入が必要になったらこの節を改訂する。
+
 ### 8.2 右クリックメニュー追加項目(将来)
 
 将来的にプリムの右クリックメニューから個別 start/stop と種別指定ができるようにする(初期フェーズでは Description タグ編集が唯一の制御経路)。
