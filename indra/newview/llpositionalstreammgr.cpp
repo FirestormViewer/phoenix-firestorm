@@ -26,6 +26,7 @@
 
 #include "llpositionalstreammgr.h"
 
+#include "llfasttimer.h"
 #include "llpositionalstream.h"
 #include "llpositionalstreamstereo.h"
 
@@ -554,8 +555,12 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
                           << LL_ENDL;
 }
 
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MGR_UPDATE("Stream3D Mgr Update");
+
 void LLPositionalStreamMgr::update()
 {
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_MGR_UPDATE);
+
     // M8: master kill switch. Listener already tore down state when the
     // setting flipped to false, so just bail.
     if (!gSavedSettings.getBOOL("Stream3DEnabled"))

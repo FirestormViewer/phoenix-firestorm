@@ -28,6 +28,7 @@
 
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
+#include "llfasttimer.h"
 #include "llstring.h"
 #include "lltimer.h"
 
@@ -178,8 +179,12 @@ void LLPositionalStream::setRolloffDistances(F32 min_distance, F32 max_distance)
     }
 }
 
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MONO_UPDATE("Stream3D Mono Update");
+
 void LLPositionalStream::update()
 {
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_MONO_UPDATE);
+
     // Already-playing path: detect mid-stream drops so the manager can retry.
     // FMOD doesn't stop the channel just because the network died — it will
     // happily play silence. Three signals tell us the stream is actually dead:

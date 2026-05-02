@@ -28,7 +28,9 @@
 
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
+#include "llfasttimer.h"
 #include "llstring.h"
+#include "lltimer.h"
 
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
@@ -544,8 +546,12 @@ size_t LLPositionalStreamStereo::pumpSource()
     return read_bytes;
 }
 
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_STEREO_UPDATE("Stream3D Stereo Update");
+
 void LLPositionalStreamStereo::update()
 {
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_STEREO_UPDATE);
+
     // r7 M2: state is atomic now; load once and use the local for the rest of
     // this update tick to avoid torn reads if the decode thread happens to
     // change state mid-function (Failed transition is added in M3).
@@ -699,9 +705,43 @@ void LLPositionalStreamStereo::decodeThreadMain()
     // wakes early on stop().
     static constexpr auto kPumpInterval = std::chrono::milliseconds(5);
 
+    // r7 M4: lightweight pump-time sampling. fast_timer is main-thread only,
+    // so we accumulate per-iteration elapsed time here and dump min/max/avg
+    // every kReportInterval. Visible only with --logdebug Stream3D so the
+    // log file isn't spammed in normal runs.
+    static constexpr F64 kReportInterval = 5.0;
+    F64 window_start = LLTimer::getElapsedSeconds();
+    F64 sum_ms = 0.0;
+    F64 max_ms = 0.0;
+    U32 count = 0;
+    U32 nonempty = 0;
+
     while (!mDecodeStop.load(std::memory_order_acquire))
     {
-        pumpSource();
+        const F64 t0 = LLTimer::getElapsedSeconds();
+        const size_t got = pumpSource();
+        const F64 dt_ms = (LLTimer::getElapsedSeconds() - t0) * 1000.0;
+
+        sum_ms += dt_ms;
+        if (dt_ms > max_ms) max_ms = dt_ms;
+        ++count;
+        if (got > 0) ++nonempty;
+
+        const F64 now = LLTimer::getElapsedSeconds();
+        if (now - window_start >= kReportInterval)
+        {
+            LL_DEBUGS("Stream3D") << "decode pump: count=" << count
+                                   << " nonempty=" << nonempty
+                                   << " avg_ms=" << (count ? sum_ms / count : 0.0)
+                                   << " max_ms=" << max_ms
+                                   << " window_s=" << (now - window_start)
+                                   << LL_ENDL;
+            window_start = now;
+            sum_ms = 0.0;
+            max_ms = 0.0;
+            count = 0;
+            nonempty = 0;
+        }
 
         std::unique_lock<std::mutex> lk(mDecodeMutex);
         mDecodeCv.wait_for(lk, kPumpInterval,
