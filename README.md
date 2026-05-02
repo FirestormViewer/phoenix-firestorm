@@ -67,12 +67,15 @@ Just write the tag below into the **parcel description** and any **AYAstorm visi
 **タグ書式 / Tag format / 标签格式:**
 
 ```
-[AYAstorm:{key:value}{key:value}...]
+[parcelhide:{key:value}{key:value}...]
 ```
 
 - description のどこに書いても OK (前後に他の文章があっても可)
 - Can appear anywhere in the description (other text before/after is fine)
 - 可写在描述的任何位置（前后可有其他文本）
+- 旧形式 `[AYAstorm:...]` も互換受付 (r5 で `[parcelhide:...]` にリネーム)
+- The legacy `[AYAstorm:...]` form is still accepted (renamed to `[parcelhide:...]` in r5)
+- 旧式 `[AYAstorm:...]` 格式仍可向后兼容 (r5 中重命名为 `[parcelhide:...]`)
 
 | キー / Key | デフォルト / Default | 動作 / Behaviour / 行为 |
 |---|---|---|
@@ -84,17 +87,17 @@ Just write the tag below into the **parcel description** and any **AYAstorm visi
 
 | description に書く文字列 | 効果 / Effect / 效果 |
 |---|---|
-| `[AYAstorm:]` | 区画外を全部隠す (アバターも自分の物も隠す) / Hide everything outside the parcel / 隐藏区域外的所有内容 |
-| `[AYAstorm:{keepavatars:true}]` | アバターは見えるが他の物は隠す / Avatars stay visible, other objects hidden / 保留头像，其他物体隐藏 |
-| `[AYAstorm:{keepavatars:true}{keepownobject:true}]` | 一般的に使いやすい設定 / Common-sense default / 通用推荐设置 |
-| `[AYAstorm:{hideoutside:false}]` | タグ一時無効 (イベント時など) / Temporarily disable tag (during events etc.) / 临时禁用 (例如举办活动时) |
+| `[parcelhide:]` | 区画外を全部隠す (アバターも自分の物も隠す) / Hide everything outside the parcel / 隐藏区域外的所有内容 |
+| `[parcelhide:{keepavatars:true}]` | アバターは見えるが他の物は隠す / Avatars stay visible, other objects hidden / 保留头像，其他物体隐藏 |
+| `[parcelhide:{keepavatars:true}{keepownobject:true}]` | 一般的に使いやすい設定 / Common-sense default / 通用推荐设置 |
+| `[parcelhide:{hideoutside:false}]` | タグ一時無効 (イベント時など) / Temporarily disable tag (during events etc.) / 临时禁用 (例如举办活动时) |
 
 **効果イメージ / Effect comparison / 效果对比:**
 
 <table>
 <tr>
 <td width="50%" align="center"><b>タグなし / Without tag / 无标签</b><br/>(通常表示 / normal rendering / 普通渲染)</td>
-<td width="50%" align="center"><b>タグあり / With tag / 有标签</b><br/>(<code>[AYAstorm:...]</code> in description)</td>
+<td width="50%" align="center"><b>タグあり / With tag / 有标签</b><br/>(<code>[parcelhide:...]</code> in description)</td>
 </tr>
 <tr>
 <td><img src="doc/images/parcel_magic_off.png" alt="タグなし / Without tag"/></td>
@@ -162,9 +165,15 @@ Just write the tag below into the **parcel description** and any **AYAstorm visi
 
 | OS | ファイル / File | 使い方 / How to use |
 |----|------|------|
-| Windows (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe` | NSIS インストーラー。ダウンロードして実行 / Run the installer |
+| Windows (x64) | `Phoenix-FirestormOS-AYAstorm-release_AVX2-*_Setup.exe` | NSIS インストーラー。ダウンロードして実行 / Run the installer |
 | Linux (x64) | `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*.tar.xz` | 任意の場所に展開し、中の `install.sh` を実行 / Extract and run `install.sh` |
 | macOS | （準備中 / Coming soon / 即将推出） | — |
+
+> **※ AVX2 非対応の古い CPU の場合 (Windows のみ)**: 上記 AVX2 版を実行するとインストール開始前にその旨のメッセージが出ます。代わりに `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe` をダウンロードしてご利用ください。AVX2 は概ね 2013年以降の Intel / AMD CPU で対応しているため、ほとんどの方は AVX2 版で問題ありません。
+>
+> **For older CPUs without AVX2 (Windows only)**: If you run the AVX2 build above, the installer will show a message before installation begins. Download `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe` instead. AVX2 is supported on most Intel / AMD CPUs from 2013 onward, so the AVX2 build works for most users.
+>
+> **若 CPU 不支持 AVX2 (仅 Windows)**: 运行上述 AVX2 版本时，安装程序会在安装开始前提示该问题。请改为下载 `Phoenix-FirestormOS-AYAstorm-release_LEGACY-*_Setup.exe`。AVX2 在 2013 年之后的 Intel / AMD CPU 上基本均支持，因此大多数用户使用 AVX2 版本即可。
 
 **Linux インストール例 / Linux install example:**
 
