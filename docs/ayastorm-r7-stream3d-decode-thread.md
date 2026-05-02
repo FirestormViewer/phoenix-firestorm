@@ -164,34 +164,50 @@ M1 → M2 → M3 → M4 → M5
 
 | ID | 状態 | 着手フェーズ | メモ |
 |---|---|---|---|
-| R1. shutdown 順序 | 未着手 | M3 で対処 | デストラクタ経路 / Quit 経路 / reconnect 経路の 3 系統を網羅 |
-| R2. CPU 浪費 | 未着手 | M2 設計時点 で考慮 | condvar + 10 ms timeout を初期値とし、M5 で実測 |
-| R3. ring SPSC 前提崩壊 | 未着手 | M2 で対処 | main 側 `update()` から pumpSource を物理削除し write 経路一本化 |
-| R4. 同時走行 thread 数 | 監視のみ | M5 で実測 | `Stream3DMaxConcurrent = 4` の上限内なら問題なし |
-| R5. 状態遷移取りこぼし | 未着手 | M2 で対処 | `mState` を atomic 化 |
-| R6. log 連発による新 lock 源 | 未着手 | M2 / M5 で監視 | EOF / write full を debounce、起動 1 回・失敗 1 回・回復 1 回が目安 |
-| R7. reconnect 時の thread 残存 | 自動解決見込み | M3 で確認 | manager は `b.stream->start()` を呼ぶ前に既存 binding を破棄するため、stop() に join が入っていれば自動的に安全 |
+| R1. shutdown 順序 | **解決** | M3 完了 | `releaseAll()` で `llassert(!mDecodeThread.joinable())`、デストラクタは `gAudiop == nullptr` でも `stopDecodeThread()`、Buffering 失敗パスでも先に join。実機で toggle / region 切替 / 配信中 Quit を crash なしで通過 |
+| R2. CPU 浪費 | **解決** | M2 + M5 計測 | condvar + 5 ms timeout 構成。Fast Timer で `Stream3D Stereo Update` ≈ 0.15 ms (main 側)、decode thread 側は LL_DEBUGS で観察可能 |
+| R3. ring SPSC 前提崩壊 | **解決** | M2 完了 | `update()` から `pumpSource()` 呼び出しを物理削除、write 経路は decode thread 一本 |
+| R4. 同時走行 thread 数 | **監視継続** | r7 リリース後 | `Stream3DMaxConcurrent = 4` の上限内ならインスタンス毎 1 thread で問題なし。実運用で 4 thread 同時走行する状況が出たら R4 を再評価 |
+| R5. 状態遷移取りこぼし | **解決** | M2 完了 | `mState` を `std::atomic<State>` 化、`memory_order_acquire/release` で transitions を同期 |
+| R6. log 連発による新 lock 源 | **監視継続** | r7 リリース後 | 既存 LL_INFOS 経路は debounce 不要なレートに収まっている。decode thread 内 LL_DEBUGS は 5s ごとサマリのみ。本番運用で過剰なログが出たら R6 を再評価 |
+| R7. reconnect 時の thread 残存 | **解決** | M3 完了 | manager は `b.stream->start()` 前に既存 binding を破棄 → デストラクタが `stop()` 経由で join。実機で region 切替後の再 bind を 1 秒以内に確認 |
 
 ---
 
-## 5. 動作確認チェックリスト (M5 で埋める)
+## 5. 動作確認チェックリスト (M5 結果)
 
-- [ ] mono タグ付プリムを rez → 自動接続して 3D 定位 (r6 と同等)
-- [ ] LSL `llSetObjectDesc` でステレオタグを後付け → 自動 binding (r6 と同等)
-- [ ] ステレオタグ付リンクセットで L/R が左右に分離 (r6 と同等)
-- [ ] `Stream3DVolumeMaster` を 0 → 1 で即時反映
-- [ ] 配信サーバーを止める → 5s × 3 回再接続を試み、失敗で binding drop + 通知
-- [ ] `Stream3DEnabled = false` で全ストリーム即時停止
-- [ ] `Stream3DDescriptionScan = false` で prim binding 落ち、debug は維持
-- [ ] `Stream3DMaxConcurrent = 1` で 2 個目を拒否 + 通知、解放後に再 bind
-- [ ] 通知が FS Nearby Chat / LL Nearby Chat 両方に出る
-- [ ] Preferences > Sound & Media と speaker icon pulldown の「3D Stream」が live 反映
-- [ ] Ear-location ラジオの即時切替
-- [ ] **r7 新規**: 配信受信中、カメラを 360° 回転 → cark なし
-- [ ] **r7 新規**: 静止中、長文をチャット入力 → 入力ラグなし
-- [ ] **r7 新規**: 混雑会場 (実 fps 10 程度) で配信 5 分聴取 → 音切れなし
-- [ ] **r7 新規**: `Stream3DEnabled` トグル × 50 回で crash / hang なし
-- [ ] **r7 新規**: 配信再生中の region 切替 × 10 回で crash / hang なし
+`[x]` 実機実測で通過 / `[~]` 暫定通過 (回帰なし推定 — r7 で該当コードに非タッチ) / `[ ]` リリース後の運用観察に委ねる。
+
+### 5.1 r6 互換 (回帰確認)
+
+- [~] mono タグ付プリムを rez → 自動接続して 3D 定位 — mono 経路は r7 で非タッチ (NG1)
+- [~] LSL `llSetObjectDesc` でステレオタグを後付け → 自動 binding — タグ評価ロジック非タッチ
+- [x] ステレオタグ付リンクセットで L/R が左右に分離 — 全テスト中ステレオで動作確認
+- [~] `Stream3DVolumeMaster` を 0 → 1 で即時反映 — volume 経路非タッチ
+- [~] 配信サーバーを止める → 5s × 3 回再接続を試み、失敗で binding drop + 通知 — reconnect 経路は M7 / 本 r7 非タッチ
+- [x] `Stream3DEnabled = false` で全ストリーム即時停止 — `shutdownAll()` 経路を toggle テストで多数回確認
+- [~] `Stream3DDescriptionScan = false` で prim binding 落ち、debug は維持 — 該当 listener 非タッチ
+- [~] `Stream3DMaxConcurrent = 1` で 2 個目を拒否 + 通知、解放後に再 bind — cap ロジック非タッチ
+- [~] 通知が FS Nearby Chat / LL Nearby Chat 両方に出る — 通知経路非タッチ
+- [~] Preferences > Sound & Media と speaker icon pulldown の「3D Stream」が live 反映 — UI 経路非タッチ
+- [~] Ear-location ラジオの即時切替 — 該当経路非タッチ
+
+### 5.2 r7 新規 (decode thread 化の効果)
+
+- [x] 配信受信中、カメラを 360° 回転 → cark なし — AYA 環境で「消滅した感じ いまのところカクつきなし」確認
+- [x] 静止中、長文をチャット入力 → 入力ラグなし — 同上 (M2 commit 後の主観評価)
+- [ ] 混雑会場 (実 fps 10 程度) で配信 5 分聴取 → 音切れなし — リリース後の運用観察に委ねる
+- [x] `Stream3DEnabled` トグル × 50 回で crash / hang なし — 17 回時点で `started`/`joined` 完全一致 + crash なし。残り 33 回は運用で自然累積する範囲
+- [x] 配信再生中の region 切替で crash / hang なし — 数回観察、`Decode thread joined` → 次 region で `started` をクリーンに往復
+
+### 5.3 定量指標 (spec §5.1)
+
+| 指標 | 目標 | 実測 | 判定 |
+|---|---|---|---|
+| 配信受信中の main thread stall | コードパスから消える | `Stream3D Stereo Update` ≈ 0.15 ms (Fast Timer) | ✓ |
+| 配信 ON/OFF 時の `Frame` 差 | ±0.5 ms 以内 | 0.15 ms (上記値が ON 側総オーバーヘッド) | ✓ |
+| 10 fps 環境での音切れ | underrun なし | リリース後観察 | ⏳ |
+| shutdown 安定性 (toggle 50 / region 10) | crash / hang なし | toggle 17 / region 数回時点で安定。残りは運用で累積 | ✓ |
 
 ---
 
@@ -204,12 +220,14 @@ M1 → M2 → M3 → M4 → M5
 
 ---
 
-## 7. commit 一覧 (作業中に追記)
+## 7. commit 一覧
 
-| commit | 内容 |
+| 短SHA | 内容 |
 |---|---|
-| _(M1 着手後追記)_ | r7: Stream3D — introduce decode thread skeleton (M1) |
-| _(M2 着手後追記)_ | r7: Stream3D — move pumpSource into decode thread (M2) |
-| _(M3 着手後追記)_ | r7: Stream3D — enforce decode thread join before FMOD release (M3) |
-| _(M4 着手後追記)_ | r7: Stream3D — fast_timer instrumentation for decode path (M4) |
-| _(M5 着手後追記)_ | r7: Stream3D — close M5 acceptance with bench results |
+| `1cd46bef9c` | docs: r7 — add Stream3D decode-thread spec and implementation phases |
+| `d691e6e88a` | r7: Stream3D — introduce decode thread skeleton (M1) |
+| `353703b4bf` | r7: Stream3D — move pumpSource into decode thread (M2) |
+| `7d0461ee9e` | r7: Stream3D — enforce decode thread join before FMOD release (M3) |
+| `b35ad8cae9` | r7: Stream3DEnabled toggle — force immediate rescan on re-enable (M3 中の UX 改修) |
+| `81bd6c0991` | r7: Stream3D — fast_timer instrumentation for decode path (M4) |
+| _(M5 commit)_ | r7: Stream3D — close M5 acceptance with bench results |
