@@ -68,6 +68,12 @@ public:
     // the master Stream3DEnabled kill switch is toggled off.
     void shutdownAll();
 
+    // r7: Reset every prim's last-polled stamp so the next scan tick treats
+    // them all as un-polled and (re)issues ObjectPropertiesFamily requests.
+    // Used when Stream3DEnabled is flipped back on, so we don't make the user
+    // wait up to Stream3DPollInterval seconds before tagged prims rebind.
+    void forceRescan();
+
     // Debug toggle stream (driven by Stream3DDebugPlay). Independent of
     // the prim binding map.
     void startDebug(const std::string& url, const LLVector3& world_pos);

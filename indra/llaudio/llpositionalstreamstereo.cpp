@@ -28,12 +28,19 @@
 
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
+#include "llfasttimer.h"
 #include "llstring.h"
+#include "lltimer.h"
 
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
 
+#include <chrono>
 #include <cstring>
+
+#if LL_LINUX
+#  include <pthread.h>
+#endif
 
 namespace
 {
@@ -151,7 +158,8 @@ LLPositionalStreamStereo::LLPositionalStreamStereo()
     mVolume(1.f),
     mRolloffMin(1.f),
     mRolloffMax(20.f),
-    mState(State::Idle)
+    mState(State::Idle),
+    mDecodeStop(false)
 {
 }
 
@@ -160,6 +168,14 @@ LLPositionalStreamStereo::~LLPositionalStreamStereo()
     if (gAudiop)
     {
         stop();
+    }
+    else
+    {
+        // r7 M3: FMOD engine has already been torn down (Quit ordering or
+        // engine restart). releaseAll() would call into freed FMOD pointers,
+        // but the decode thread *must* still be joined or std::thread's
+        // destructor calls std::terminate(). Skip FMOD release; just join.
+        stopDecodeThread();
     }
 }
 
@@ -217,6 +233,11 @@ bool LLPositionalStreamStereo::start(const std::string& url,
 
 void LLPositionalStreamStereo::stop()
 {
+    // r7 M3: invariant — decode thread must be joined *before* releaseAll()
+    // touches FMOD. The decode thread reads mSourceSound via pumpSource(),
+    // so releasing it underneath an in-flight readData() crashes inside
+    // FMOD. releaseAll() asserts the invariant in debug builds.
+    stopDecodeThread();
     releaseAll();
     mUrl.clear();
     mState = State::Idle;
@@ -224,6 +245,11 @@ void LLPositionalStreamStereo::stop()
 
 void LLPositionalStreamStereo::releaseAll()
 {
+    // r7 M3: enforce the shutdown invariant. Any caller that touches FMOD
+    // resources here must have already joined the decode thread, otherwise
+    // pumpSource() may dereference mSourceSound after release().
+    llassert(!mDecodeThread.joinable());
+
     if (mChannelL)
     {
         checkFmod(mChannelL->stop(), "Channel::stop(L)");
@@ -409,9 +435,12 @@ bool LLPositionalStreamStereo::startUserChannels()
     return true;
 }
 
-void LLPositionalStreamStereo::pumpSource()
+size_t LLPositionalStreamStereo::pumpSource()
 {
-    if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return;
+    // r7 M2: invoked from the decode thread. Returns bytes read this iteration
+    // so the caller can decide whether to sleep (0 → idle wait) or continue
+    // pumping (positive → ring may have more room).
+    if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return 0;
 
     // Try to top up both rings. We read enough source frames to fill whichever
     // ring has the least free space, capped at a reasonable per-frame amount
@@ -421,7 +450,7 @@ void LLPositionalStreamStereo::pumpSource()
     size_t free_l = mRingL.writeAvailable();
     size_t free_r = mRingR.writeAvailable();
     size_t want_frames = std::min({ free_l, free_r, kMaxFramesPerPump });
-    if (want_frames == 0) return;
+    if (want_frames == 0) return 0;
 
     const size_t bytes_per_frame = static_cast<size_t>(mSourceBytesPerSample)
                                  * static_cast<size_t>(mSourceChannels);
@@ -438,15 +467,15 @@ void LLPositionalStreamStereo::pumpSource()
     if (rr != FMOD_OK && rr != FMOD_ERR_FILE_EOF)
     {
         // FMOD returns FMOD_ERR_NOTREADY when no buffered data is currently
-        // available; that's expected, just try again next frame.
+        // available; that's expected, just sleep briefly in the decode loop.
         if (rr != FMOD_ERR_NOTREADY)
         {
             LL_WARNS("Stream3D") << "Sound::readData error: "
                                   << FMOD_ErrorString(rr) << LL_ENDL;
         }
-        return;
+        return 0;
     }
-    if (read_bytes == 0) return;
+    if (read_bytes == 0) return 0;
 
     size_t frames_read = read_bytes / bytes_per_frame;
 
@@ -513,14 +542,24 @@ void LLPositionalStreamStereo::pumpSource()
         sp += this_chunk * bytes_per_frame;
         remaining -= this_chunk;
     }
+
+    return read_bytes;
 }
+
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_STEREO_UPDATE("Stream3D Stereo Update");
 
 void LLPositionalStreamStereo::update()
 {
-    if (mState == State::Idle || mState == State::Failed) return;
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_STEREO_UPDATE);
+
+    // r7 M2: state is atomic now; load once and use the local for the rest of
+    // this update tick to avoid torn reads if the decode thread happens to
+    // change state mid-function (Failed transition is added in M3).
+    const State st = mState.load(std::memory_order_acquire);
+    if (st == State::Idle || st == State::Failed) return;
     if (!mSourceSound) return;
 
-    if (mState == State::Opening)
+    if (st == State::Opening)
     {
         FMOD_OPENSTATE state = FMOD_OPENSTATE_LOADING;
         FMOD_RESULT rr = mSourceSound->getOpenState(&state, nullptr, nullptr, nullptr);
@@ -586,11 +625,16 @@ void LLPositionalStreamStereo::update()
                               << " " << mSampleRate << " Hz x " << mSourceChannels
                               << " ch, fmt=" << (mSourceIsFloat ? "PCMFLOAT" : "PCM16")
                               << ", ring cap " << cap << " frames" << LL_ENDL;
+
+        // r7 M2: format/channels are now committed (mSampleRate / mSourceChannels /
+        // mSourceBytesPerSample / mSourceIsFloat) and the rings are sized. Hand
+        // pumping over to the decode thread *before* leaving Opening; otherwise
+        // the rings would never fill (main thread no longer pumps) and we would
+        // be stuck in Buffering forever waiting for kPrebufferFrames.
+        startDecodeThread();
     }
 
-    pumpSource();
-
-    if (mState == State::Buffering)
+    if (st == State::Buffering)
     {
         if (mRingL.readAvailable() >= kPrebufferFrames
             && mRingR.readAvailable() >= kPrebufferFrames)
@@ -598,12 +642,109 @@ void LLPositionalStreamStereo::update()
             if (!createUserSounds() || !startUserChannels())
             {
                 LL_WARNS("Stream3D") << "Failed to start OPENUSER channels" << LL_ENDL;
+                // r7 M3: decode thread was started during the Opening→Buffering
+                // transition; it must be joined before releaseAll() touches
+                // mSourceSound (which the thread is still reading via
+                // pumpSource()). releaseAll()'s invariant assert would fire
+                // otherwise.
+                stopDecodeThread();
                 releaseAll();
                 mState = State::Failed;
                 return;
             }
             mState = State::Playing;
             LL_INFOS("Stream3D") << "Stereo path playing: " << mUrl << LL_ENDL;
+            // (decode thread was already started during the Opening→Buffering
+            // transition above; nothing to do here in M2.)
         }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// r7 M1: decode thread skeleton
+// ---------------------------------------------------------------------------
+
+void LLPositionalStreamStereo::startDecodeThread()
+{
+    if (mDecodeThread.joinable())
+    {
+        // Already running (e.g. State::Playing re-entered without stop()).
+        return;
+    }
+    mDecodeStop.store(false, std::memory_order_release);
+    mDecodeThread = std::thread(&LLPositionalStreamStereo::decodeThreadMain, this);
+    LL_INFOS("Stream3D") << "Decode thread started for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::stopDecodeThread()
+{
+    if (!mDecodeThread.joinable())
+    {
+        return;
+    }
+    {
+        std::lock_guard<std::mutex> lk(mDecodeMutex);
+        mDecodeStop.store(true, std::memory_order_release);
+    }
+    mDecodeCv.notify_all();
+    mDecodeThread.join();
+    LL_INFOS("Stream3D") << "Decode thread joined for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::decodeThreadMain()
+{
+#if LL_LINUX
+    // Visible in `top -H` / perf — helps when isolating audio thread cost.
+    pthread_setname_np(pthread_self(), "Stream3D-decode");
+#endif
+
+    // r7 M2: drive pumpSource() from this thread. The 5 ms cadence gives
+    // ~200 Hz pumping which is far more than the ~44 kHz ring needs to stay
+    // ahead of the FMOD mixer (ring caps at 32768 frames ≈ 0.74 s at 44 kHz),
+    // while keeping per-iteration readData()/decode work small. condvar wait
+    // wakes early on stop().
+    static constexpr auto kPumpInterval = std::chrono::milliseconds(5);
+
+    // r7 M4: lightweight pump-time sampling. fast_timer is main-thread only,
+    // so we accumulate per-iteration elapsed time here and dump min/max/avg
+    // every kReportInterval. Visible only with --logdebug Stream3D so the
+    // log file isn't spammed in normal runs.
+    static constexpr F64 kReportInterval = 5.0;
+    F64 window_start = LLTimer::getElapsedSeconds();
+    F64 sum_ms = 0.0;
+    F64 max_ms = 0.0;
+    U32 count = 0;
+    U32 nonempty = 0;
+
+    while (!mDecodeStop.load(std::memory_order_acquire))
+    {
+        const F64 t0 = LLTimer::getElapsedSeconds();
+        const size_t got = pumpSource();
+        const F64 dt_ms = (LLTimer::getElapsedSeconds() - t0) * 1000.0;
+
+        sum_ms += dt_ms;
+        if (dt_ms > max_ms) max_ms = dt_ms;
+        ++count;
+        if (got > 0) ++nonempty;
+
+        const F64 now = LLTimer::getElapsedSeconds();
+        if (now - window_start >= kReportInterval)
+        {
+            LL_DEBUGS("Stream3D") << "decode pump: count=" << count
+                                   << " nonempty=" << nonempty
+                                   << " avg_ms=" << (count ? sum_ms / count : 0.0)
+                                   << " max_ms=" << max_ms
+                                   << " window_s=" << (now - window_start)
+                                   << LL_ENDL;
+            window_start = now;
+            sum_ms = 0.0;
+            max_ms = 0.0;
+            count = 0;
+            nonempty = 0;
+        }
+
+        std::unique_lock<std::mutex> lk(mDecodeMutex);
+        mDecodeCv.wait_for(lk, kPumpInterval,
+                           [this] { return mDecodeStop.load(std::memory_order_acquire); });
     }
 }
