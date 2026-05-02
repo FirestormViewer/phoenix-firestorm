@@ -8,10 +8,10 @@
 		Second Life
 	</string>
 	<string name="APP_NAME">
-		Second Life
+		AYAstorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
+		AYASTORM
 	</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life Ağı
@@ -35,7 +35,7 @@
 		Grafik başlatma başarılamadı. Lütfen grafik sürücünüzü güncelleştirin!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
+		[APP_NAME] r7 (based on FS [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] build [VIEWER_VERSION_3]) ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 Second Life Viewer ile uyumluluk: [VIEWER_VERSION_LL]
 	</string>

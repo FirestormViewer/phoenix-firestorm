@@ -680,14 +680,15 @@ public:
     static bool             sAutoMaskAlphaDeferred;
     static bool             sAutoMaskAlphaNonDeferred;
     static bool             sRenderTransparentWater;
-    // <FS:AYA> [RenderHideOutsideParcel] hide objects outside agent parcel
-    static bool             sRenderHideOutsideParcel;
-    static bool             sRenderHideOutsideParcelKeepAvatars;
-    static bool             sRenderHideOutsideParcelKeepOwn;
+    // <FS:AYA> [ParcelHide] hide objects outside agent parcel
+    static bool             sParcelHideEnabled;
+    static bool             sParcelHideKeepAvatars;
+    static bool             sParcelHideKeepOwn;
     static S32              sParcelCheckSeq; // bumped on parcel change or related setting change to invalidate per-drawable caches
-    // [RenderHideOutsideParcel-Tag] parsed result of the [AYAstorm:...] tag
-    // in the current agent parcel description. sParcelOwnerTagActive==false means
-    // the tag is absent (or hideoutside:false) and Phase A behavior applies.
+    // [ParcelHide-Tag] parsed result of the [parcelhide:...] tag (legacy
+    // [AYAstorm:...] also accepted) in the current agent parcel description.
+    // sParcelOwnerTagActive==false means the tag is absent (or
+    // hideoutside:false) and Phase A behavior applies.
     static bool             sParcelOwnerTagActive;
     static bool             sParcelOwnerTagKeepAvatars;
     static bool             sParcelOwnerTagKeepOwn;
@@ -697,7 +698,7 @@ public:
         bool keepAvatars = false;   // tag-specified keepavatars (default false)
         bool keepOwn = false;       // tag-specified keepownobject (default false)
     };
-    static ParcelTagOverride parseAYAstormParcelTag(const std::string& desc);
+    static ParcelTagOverride parseParcelHideTag(const std::string& desc);
     static bool             shouldHideForOutsideParcel(LLDrawable* drawablep);
     // Mark all volume drawables for rebuild so the outside-parcel filter is
     // re-applied. Call when sParcelCheckSeq changes.

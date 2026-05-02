@@ -28,6 +28,7 @@
 
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
+#include "llfasttimer.h"
 #include "llstring.h"
 #include "lltimer.h"
 
@@ -42,7 +43,7 @@ namespace
         {
             return false;
         }
-        LL_WARNS("AYAStream") << what << " error: " << FMOD_ErrorString(result) << LL_ENDL;
+        LL_WARNS("Stream3D") << what << " error: " << FMOD_ErrorString(result) << LL_ENDL;
         return true;
     }
 }
@@ -88,14 +89,14 @@ bool LLPositionalStream::start(const std::string& url, const LLVector3& world_po
 
     if (clean_url.empty())
     {
-        LL_WARNS("AYAStream") << "Refusing to start positional stream with empty URL" << LL_ENDL;
+        LL_WARNS("Stream3D") << "Refusing to start positional stream with empty URL" << LL_ENDL;
         return false;
     }
 
     FMOD::System* system = getFmodSystem();
     if (!system)
     {
-        LL_WARNS("AYAStream") << "FMOD Studio system unavailable" << LL_ENDL;
+        LL_WARNS("Stream3D") << "FMOD Studio system unavailable" << LL_ENDL;
         return false;
     }
 
@@ -116,7 +117,7 @@ bool LLPositionalStream::start(const std::string& url, const LLVector3& world_po
     }
 
     mState = State::Opening;
-    LL_INFOS("AYAStream") << "Opening positional stream '" << clean_url
+    LL_INFOS("Stream3D") << "Opening positional stream '" << clean_url
                           << "' at " << world_pos << LL_ENDL;
     return true;
 }
@@ -178,8 +179,12 @@ void LLPositionalStream::setRolloffDistances(F32 min_distance, F32 max_distance)
     }
 }
 
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MONO_UPDATE("Stream3D Mono Update");
+
 void LLPositionalStream::update()
 {
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_MONO_UPDATE);
+
     // Already-playing path: detect mid-stream drops so the manager can retry.
     // FMOD doesn't stop the channel just because the network died — it will
     // happily play silence. Three signals tell us the stream is actually dead:
@@ -217,7 +222,7 @@ void LLPositionalStream::update()
                 if (mStarvingSince == 0.0)
                 {
                     mStarvingSince = now;
-                    LL_INFOS("AYAStream") << "Stream starving (will fail in "
+                    LL_INFOS("Stream3D") << "Stream starving (will fail in "
                                           << kStarvedTimeout << "s if it continues): "
                                           << mUrl << LL_ENDL;
                 }
@@ -235,7 +240,7 @@ void LLPositionalStream::update()
 
         if (failed)
         {
-            LL_WARNS("AYAStream") << "Stream dropped mid-playback (" << reason
+            LL_WARNS("Stream3D") << "Stream dropped mid-playback (" << reason
                                   << "): " << mUrl << LL_ENDL;
             mChannel = nullptr;
             releaseSound();
@@ -260,7 +265,7 @@ void LLPositionalStream::update()
     FMOD_RESULT open_result = mSound->getOpenState(&state, nullptr, nullptr, nullptr);
     if (open_result != FMOD_OK || state == FMOD_OPENSTATE_ERROR)
     {
-        LL_WARNS("AYAStream") << "Stream open errored: " << mUrl
+        LL_WARNS("Stream3D") << "Stream open errored: " << mUrl
                               << " (" << FMOD_ErrorString(open_result) << ")" << LL_ENDL;
         releaseSound();
         // Keep mUrl so the manager's reconnect loop can re-open the same source.
@@ -290,5 +295,5 @@ void LLPositionalStream::update()
     checkFmod(mChannel->setPaused(false), "Channel::setPaused");
 
     mState = State::Playing;
-    LL_INFOS("AYAStream") << "Positional stream playing: " << mUrl << LL_ENDL;
+    LL_INFOS("Stream3D") << "Positional stream playing: " << mUrl << LL_ENDL;
 }

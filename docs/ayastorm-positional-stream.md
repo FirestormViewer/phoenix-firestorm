@@ -208,3 +208,13 @@ C++ 側の追加コードは不要 — `AYAStreamVolumeMaster` / `AYAStreamEnabl
 - ICY メタデータ (曲タイトル等) のフローター表示 (spec §12)
 - HTTPS Icecast の挙動差は FMOD 側に依存。新規サーバとぶつかった場合は個別検証
 - `LLPositionalStreamMgr::pollObjectPropertiesFamily()` は `AYAStreamMaxDistance` 内の全プリムを round-robin する単純実装。タグなしプリム比率が高い大型 SIM では最初の発見までタイムラグが出る可能性あり
+
+---
+
+## 8. r5 命名整理 (2026-05-02)
+
+本ドキュメントは Post-M9 までの実装記録として当時の命名 (`AYAStream*` 設定キー、`[ayastream:...]` タグ、`AYAStream` ログ channel) のまま温存する。
+
+r5 (`v7.2.5-ayastorm-r5`) でユーザー開示識別子は **3D Stream** 系へ統一された。新名 (タグ `[3dstream:...]` / 設定キー `Stream3D*` / ログ channel `Stream3D`) と旧名の対応、後方互換 (旧タグ恒久 alias、起動時の設定キー auto-migration) の詳細は `docs/ayastorm-r5-naming-refactor.md` を参照。
+
+内部クラス/ファイル名 (`LLPositionalStream*` / `llpositionalstream*.{cpp,h}`) は r5 でも温存。

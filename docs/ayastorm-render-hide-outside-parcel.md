@@ -10,6 +10,7 @@
 - **v1 (2026-04-29)**: 初版
 - **v2 (2026-04-29)**: Phase A 完了 (PR #12 マージ) を踏まえ、Phase B-1 (区画 description タグによるオーナー強制) を追記
 - **v3 (2026-04-29)**: Phase B-1 として「区画 description タグ `[AYAstorm:...]` によるオーナー強制描画」を追加。タグ override 用の内部変数 `sParcelOwnerTag*` を新設。利用者側の `FSRenderHideOutsideParcel` は**任意の区画で有効** (撮影時の背景隠し等のユースケースを想定)
+- **v4 (2026-05-02, r5)**: 命名整理。タグ prefix を `[AYAstorm:...]` から `[parcelhide:...]` に、設定キーを `FSRenderHideOutsideParcel*` から `ParcelHide*` (Enabled/KeepAvatars/KeepOwn) に、内部 static 変数を `sRenderHideOutsideParcel*` から `sParcelHide*` に rename。後方互換: 旧タグ `[AYAstorm:...]` は parser に恒久 alias として残存、旧設定キーは r5 起動時に新キーへ自動マイグレーション。詳細は `docs/ayastorm-r5-naming-refactor.md`。本文 §7.1 のタグ仕様は r5 表記で記述、§4 等の Phase A 設定キー名は実装当時の表記 (`FSRenderHideOutsideParcel*`) のまま温存し履歴として残す。
 
 ---
 
@@ -243,16 +244,17 @@ Phase B で追加予定 (このブランチでは触らない):
 ### 7.1.3 タグ書式
 
 ```
-[AYAstorm:{key1:value1}{key2:value2}...]
+[parcelhide:{key1:value1}{key2:value2}...]
 ```
 
-- description 全文を走査し、最初に見つかった `[AYAstorm:...]` ブロックをパースする
+- description 全文を走査し、最初に見つかった `[parcelhide:...]` ブロックをパースする (見つからなければ legacy `[AYAstorm:...]` を試す)
 - description 内のどこに置かれていてもよい (前後にユーザー文章があっても無視)
-- プレフィックス `AYAstorm` は完全一致 (大小文字含む)
+- プレフィックス `parcelhide` は小文字完全一致。legacy `[AYAstorm:...]` は r4 までの形式で、r5 以降も恒久 alias として受理 (大小文字含む完全一致)
 - キー名は **小文字統一** (`hideoutside`, `keepavatars`, `keepownobject`)
 - 値は `true` / `false` (大小文字無視)
 - 各 `{key:value}` ペアは順不同・繰り返し可。最後に出現した値を採用
-- ペアを 1 個も持たないタグ (`[AYAstorm:]`) も有効 (= デフォルト挙動)
+- `{...}` ブロック間の文字 (空白、comma、改行など) はすべて区切りとして無視 — `{a:1}{b:2}` も `{a:1},{b:2}` も同じ意味
+- ペアを 1 個も持たないタグ (`[parcelhide:]`) も有効 (= デフォルト挙動)
 
 ### 7.1.4 各キーのデフォルト値と意味
 
@@ -270,30 +272,30 @@ Phase B で追加予定 (このブランチでは触らない):
 
 ### 7.1.5 利用者から見た挙動マトリクス
 
-利用者が立っている区画にタグがある場合の挙動:
+利用者が立っている区画にタグがある場合の挙動 (新タグ表記で記載。legacy `[AYAstorm:...]` も同じ挙動):
 
 | description 内のタグ | 区画外の隠し動作 | アバター | 自オブジェクト |
 |---|---|---|---|
-| (タグなし) | 利用者の `FSRenderHideOutsideParcel` に従う | 利用者の `KeepAvatars` に従う | 利用者の `KeepOwn` に従う |
-| `[AYAstorm:]` | 強制 ON | 隠す | 隠す |
-| `[AYAstorm:{keepavatars:true}]` | 強制 ON | 表示 | 隠す |
-| `[AYAstorm:{keepavatars:true}{keepownobject:true}]` | 強制 ON | 表示 | 表示 |
-| `[AYAstorm:{hideoutside:false}]` | 一時無効 (= 利用者設定通り) | (タグなしと同等) | (タグなしと同等) |
+| (タグなし) | 利用者の `ParcelHideEnabled` に従う | 利用者の `ParcelHideKeepAvatars` に従う | 利用者の `ParcelHideKeepOwn` に従う |
+| `[parcelhide:]` | 強制 ON | 隠す | 隠す |
+| `[parcelhide:{keepavatars:true}]` | 強制 ON | 表示 | 隠す |
+| `[parcelhide:{keepavatars:true}{keepownobject:true}]` | 強制 ON | 表示 | 表示 |
+| `[parcelhide:{hideoutside:false}]` | 一時無効 (= 利用者設定通り) | (タグなしと同等) | (タグなしと同等) |
 
 ### 7.1.6 実装ステップ
 
 1. **docs (本章)**: 仕様確定 ← 今ここ
-2. **パーサ + キャッシュ**: `LLPipeline` に `parseAYAstormParcelTag(const std::string& desc)` と override 用静的メンバを追加
+2. **パーサ + キャッシュ**: `LLPipeline` に `parseParcelHideTag(const std::string& desc)` と override 用静的メンバを追加 (r5 で `parseAYAstormParcelTag` から rename)
 3. **`shouldHideForOutsideParcel` 更新**: タグ override が有効ならそちらの値を使う
 4. **`refreshOutsideParcelHiding` 更新**: 区画変更時に agent parcel description を再パースしてキャッシュ更新
 5. **UI**: Build 2 タブの既存 3 チェックボックスの下にタグ書式説明を text ウィジェットで追加 (区画オーナー向けの利用案内)
 
 ### 7.1.7 Phase A との関係
 
-Phase A の判定式 (`sRenderHideOutsideParcel && shouldHideForOutsideParcel(...)`) を以下に拡張:
+Phase A の判定式 (`sParcelHideEnabled && shouldHideForOutsideParcel(...)`) を以下に拡張 (r5 表記。r4 までは `sRenderHideOutsideParcel`):
 
 ```
-hide = (sRenderHideOutsideParcel || sParcelOwnerTagActive)
+hide = (sParcelHideEnabled || sParcelOwnerTagActive)
     && shouldHideForOutsideParcel(...)
 ```
 

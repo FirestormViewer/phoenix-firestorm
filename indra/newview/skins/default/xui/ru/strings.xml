@@ -8,10 +8,10 @@
 		[CURRENT_GRID]
 	</string>
 	<string name="APP_NAME">
-		Firestorm
+		AYAstorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		FIRESTORM
+		AYASTORM
 	</string>
 	<string name="SECOND_LIFE_GRID">
 		Сеть Second Life
@@ -38,7 +38,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]бит / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[APP_NAME] r7 (based on FS [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] build [VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]бит / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 Соответствие Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>

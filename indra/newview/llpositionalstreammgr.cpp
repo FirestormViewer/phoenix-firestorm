@@ -26,6 +26,7 @@
 
 #include "llpositionalstreammgr.h"
 
+#include "llfasttimer.h"
 #include "llpositionalstream.h"
 #include "llpositionalstreamstereo.h"
 
@@ -132,8 +133,11 @@ namespace
         }
     }
 
-    // Walks a "{key:value},{key:value},..." body between [content_start, end)
-    // and invokes onPair(lowered_key, trimmed_val) for every well-formed unit.
+    // Walks a body between [content_start, end) by directly scanning for
+    // "{key:value}" blocks and invoking onPair(lowered_key, trimmed_val) for
+    // each well-formed unit. Anything between blocks (comma, whitespace, or
+    // nothing at all) is treated as a separator, so r5 unifies the previous
+    // 3D Stream "comma required" and Parcel Hide "no separator" formats.
     template <typename F>
     void forEachKeyValue(const std::string& description,
                          size_t content_start, size_t end, F&& onPair)
@@ -141,16 +145,14 @@ namespace
         size_t cursor = content_start;
         while (cursor < end)
         {
-            size_t next = description.find(',', cursor);
-            if (next == std::string::npos || next > end) next = end;
+            size_t ob = description.find('{', cursor);
+            if (ob == std::string::npos || ob >= end) break;
+            size_t cb = description.find('}', ob + 1);
+            if (cb == std::string::npos || cb > end) break;
 
-            std::string item = description.substr(cursor, next - cursor);
-            cursor = next + 1;
+            std::string inner = description.substr(ob + 1, cb - ob - 1);
+            cursor = cb + 1;
 
-            LLStringUtil::trim(item);
-            if (item.size() < 2 || item.front() != '{' || item.back() != '}') continue;
-
-            std::string inner = item.substr(1, item.size() - 2);
             size_t colon = inner.find(':');
             if (colon == std::string::npos) continue;
 
@@ -182,8 +184,8 @@ namespace
     template <typename TagT>
     void resolveRolloffFromTag(const TagT& tag, F32& out_min, F32& out_max)
     {
-        out_min = tag.min.value_or(gSavedSettings.getF32("AYAStreamRolloffMin"));
-        out_max = tag.max.value_or(gSavedSettings.getF32("AYAStreamRolloffMax"));
+        out_min = tag.min.value_or(gSavedSettings.getF32("Stream3DRolloffMin"));
+        out_max = tag.max.value_or(gSavedSettings.getF32("Stream3DRolloffMax"));
     }
 
     // M8: emit a Firestorm toast that also auto-logs into Nearby Chat.
@@ -193,9 +195,9 @@ namespace
     // FSFloaterNearbyChat, so AYAChatWindowStyle=2 (LL) users would otherwise
     // see only the toast. Forward the same line to LLFloaterIMNearbyChat in
     // that case so chat history matches the toast across both styles.
-    void notifyAYAStream(const std::string& message)
+    void notifyStream3D(const std::string& message)
     {
-        const std::string text = "AYAstream: " + message;
+        const std::string text = "3D Stream: " + message;
 
         LLSD args;
         args["MESSAGE"] = text;
@@ -244,10 +246,14 @@ LLPositionalStreamMgr::~LLPositionalStreamMgr() = default;
 std::optional<LLPositionalStreamMgr::TagData>
 LLPositionalStreamMgr::parseTag(const std::string& description)
 {
-    static const std::string kPrefix = "[ayastream:";
+    // r5: new prefix is `[3dstream:`; the legacy `[ayastream:` is kept as a
+    // permanent alias so already-placed prims keep working without re-edit.
+    static const std::string kPrefix    = "[3dstream:";
+    static const std::string kPrefixOld = "[ayastream:";
 
     size_t content_start = 0, end = 0;
-    if (!findTagBody(description, kPrefix, content_start, end)) return std::nullopt;
+    if (!findTagBody(description, kPrefix, content_start, end) &&
+        !findTagBody(description, kPrefixOld, content_start, end)) return std::nullopt;
 
     TagData data;
     bool got_url = false;
@@ -267,10 +273,13 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 std::optional<LLPositionalStreamMgr::StereoTagData>
 LLPositionalStreamMgr::parseStereoTag(const std::string& description)
 {
-    static const std::string kPrefix = "[ayastream-stereo:";
+    // r5: see parseTag — same prefix-alias scheme for stereo.
+    static const std::string kPrefix    = "[3dstream-stereo:";
+    static const std::string kPrefixOld = "[ayastream-stereo:";
 
     size_t content_start = 0, end = 0;
-    if (!findTagBody(description, kPrefix, content_start, end)) return std::nullopt;
+    if (!findTagBody(description, kPrefix, content_start, end) &&
+        !findTagBody(description, kPrefixOld, content_start, end)) return std::nullopt;
 
     StereoTagData data;
     bool got_url = false;
@@ -301,11 +310,11 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     // M8: kill switch + scan toggle gating. Cache the description anyway when
     // only DescriptionScan is off — re-enabling shouldn't have to wait for a
     // fresh polling cycle to know what every prim said.
-    if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+    if (!gSavedSettings.getBOOL("Stream3DEnabled"))
     {
         return;
     }
-    if (!gSavedSettings.getBOOL("AYAStreamDescriptionScan"))
+    if (!gSavedSettings.getBOOL("Stream3DDescriptionScan"))
     {
         return;
     }
@@ -319,9 +328,10 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
 
     // M3b debug: only log replies that look like our tag, to keep the noise
     // floor sane in busy regions.
-    if (description.find("ayastream") != std::string::npos)
+    if (description.find("3dstream") != std::string::npos ||
+        description.find("ayastream") != std::string::npos)
     {
-        LL_INFOS("AYAStream") << "reply: " << id
+        LL_INFOS("Stream3D") << "reply: " << id
                               << " desc=\"" << description << "\"" << LL_ENDL;
     }
 
@@ -349,13 +359,13 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
     // new path can recreate it cleanly.
     if (stereo_tag && bind_it != mBindings.end())
     {
-        LL_INFOS("AYAStream") << "Replacing mono binding with stereo for " << id << LL_ENDL;
+        LL_INFOS("Stream3D") << "Replacing mono binding with stereo for " << id << LL_ENDL;
         mBindings.erase(bind_it);
         bind_it = mBindings.end();
     }
     if (mono_tag && sbind_it != mStereoBindings.end())
     {
-        LL_INFOS("AYAStream") << "Replacing stereo binding with mono for " << id << LL_ENDL;
+        LL_INFOS("Stream3D") << "Replacing stereo binding with mono for " << id << LL_ENDL;
         mStereoBindings.erase(sbind_it);
         sbind_it = mStereoBindings.end();
     }
@@ -374,13 +384,13 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
     // No tag of either kind: drop any bindings this prim still has.
     if (bind_it != mBindings.end())
     {
-        LL_INFOS("AYAStream") << "Removing positional binding for " << id
+        LL_INFOS("Stream3D") << "Removing positional binding for " << id
                               << " (tag gone)" << LL_ENDL;
         mBindings.erase(bind_it);
     }
     if (sbind_it != mStereoBindings.end())
     {
-        LL_INFOS("AYAStream") << "Removing stereo binding for " << id
+        LL_INFOS("Stream3D") << "Removing stereo binding for " << id
                               << " (tag gone)" << LL_ENDL;
         mStereoBindings.erase(sbind_it);
     }
@@ -414,19 +424,19 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
             }
             return;
         }
-        LL_INFOS("AYAStream") << "Rebinding " << id << ": URL changed" << LL_ENDL;
+        LL_INFOS("Stream3D") << "Rebinding " << id << ": URL changed" << LL_ENDL;
         mBindings.erase(bind_it);
     }
 
-    const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
+    const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
     if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
     {
-        LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
+        LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
                               << ") reached; not binding " << id << LL_ENDL;
         if (!mCapNotified)
         {
             mCapNotified = true;
-            notifyAYAStream(llformat(
+            notifyStream3D(llformat(
                 "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
                 cap));
         }
@@ -435,7 +445,7 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
 
     auto stream = std::make_unique<LLPositionalStream>();
     stream->setRolloffDistances(want_min, want_max);
-    stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
+    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
     if (!stream->start(tag.url, pos))
     {
         return;
@@ -450,7 +460,7 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
     b.stream = std::move(stream);
     mBindings.emplace(id, std::move(b));
 
-    LL_INFOS("AYAStream") << "Bound positional stream to " << id
+    LL_INFOS("Stream3D") << "Bound positional stream to " << id
                           << " url=" << tag.url << LL_ENDL;
 }
 
@@ -497,20 +507,20 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
             }
             return;
         }
-        LL_INFOS("AYAStream") << "Rebinding stereo " << id
+        LL_INFOS("Stream3D") << "Rebinding stereo " << id
                               << ": URL or linkset topology changed" << LL_ENDL;
         mStereoBindings.erase(sbind_it);
     }
 
-    const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
+    const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
     if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
     {
-        LL_WARNS("AYAStream") << "Max concurrent streams (" << cap
+        LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
                               << ") reached; not binding stereo " << id << LL_ENDL;
         if (!mCapNotified)
         {
             mCapNotified = true;
-            notifyAYAStream(llformat(
+            notifyStream3D(llformat(
                 "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
                 cap));
         }
@@ -519,7 +529,7 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
 
     auto stream = std::make_unique<LLPositionalStreamStereo>();
     stream->setRolloffDistances(want_min, want_max);
-    stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
+    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
     if (!stream->start(tag.url, l_pos, r_pos))
     {
         return;
@@ -538,18 +548,22 @@ void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const Stereo
     b.stream = std::move(stream);
     mStereoBindings.emplace(id, std::move(b));
 
-    LL_INFOS("AYAStream") << "Bound stereo stream to " << id
+    LL_INFOS("Stream3D") << "Bound stereo stream to " << id
                           << " url=" << tag.url
                           << " L=link" << tag.l_link << "(" << l_obj->getID() << ")"
                           << " R=link" << tag.r_link << "(" << r_obj->getID() << ")"
                           << LL_ENDL;
 }
 
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MGR_UPDATE("Stream3D Mgr Update");
+
 void LLPositionalStreamMgr::update()
 {
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_MGR_UPDATE);
+
     // M8: master kill switch. Listener already tore down state when the
     // setting flipped to false, so just bail.
-    if (!gSavedSettings.getBOOL("AYAStreamEnabled"))
+    if (!gSavedSettings.getBOOL("Stream3DEnabled"))
     {
         return;
     }
@@ -558,7 +572,7 @@ void LLPositionalStreamMgr::update()
     // future cap-hit triggers a fresh toast rather than being suppressed by
     // the stale flag.
     {
-        const S32 cap = gSavedSettings.getS32("AYAStreamMaxConcurrent");
+        const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
         const S32 total = static_cast<S32>(mBindings.size() + mStereoBindings.size());
         if (mCapNotified && (cap <= 0 || total < cap))
         {
@@ -580,9 +594,9 @@ void LLPositionalStreamMgr::update()
     }
 
     // M7: fixed 5s wait between reconnect attempts. Total worst-case downtime
-    // before a binding is dropped == AYAStreamReconnectAttempts * kRetryDelay.
+    // before a binding is dropped == Stream3DReconnectAttempts * kRetryDelay.
     static constexpr F64 kRetryDelay = 5.0;
-    const S32 max_attempts = gSavedSettings.getS32("AYAStreamReconnectAttempts");
+    const S32 max_attempts = gSavedSettings.getS32("Stream3DReconnectAttempts");
 
     for (auto it = mBindings.begin(); it != mBindings.end(); )
     {
@@ -592,7 +606,7 @@ void LLPositionalStreamMgr::update()
         LLViewerObject* obj = gObjectList.findObject(id);
         if (!obj || obj->isDead())
         {
-            LL_INFOS("AYAStream") << "Object " << id
+            LL_INFOS("Stream3D") << "Object " << id
                                   << " gone; releasing positional stream" << LL_ENDL;
             it = mBindings.erase(it);
             continue;
@@ -602,7 +616,7 @@ void LLPositionalStreamMgr::update()
         {
             if (max_attempts <= 0)
             {
-                LL_WARNS("AYAStream") << "Stream for " << id
+                LL_WARNS("Stream3D") << "Stream for " << id
                                       << " failed; auto-reconnect disabled, dropping binding"
                                       << LL_ENDL;
                 it = mBindings.erase(it);
@@ -610,10 +624,10 @@ void LLPositionalStreamMgr::update()
             }
             if (b.reconnect_attempts >= max_attempts)
             {
-                LL_WARNS("AYAStream") << "Stream for " << id << " exhausted "
+                LL_WARNS("Stream3D") << "Stream for " << id << " exhausted "
                                       << max_attempts << " reconnect attempts; dropping binding"
                                       << LL_ENDL;
-                notifyAYAStream("stream gave up after "
+                notifyStream3D("stream gave up after "
                                 + llformat("%d", max_attempts)
                                 + " reconnect attempts: " + b.url);
                 it = mBindings.erase(it);
@@ -622,7 +636,7 @@ void LLPositionalStreamMgr::update()
             if (b.next_retry_time == 0.0)
             {
                 b.next_retry_time = now + kRetryDelay;
-                LL_INFOS("AYAStream") << "Stream for " << id
+                LL_INFOS("Stream3D") << "Stream for " << id
                                       << " failed; scheduling reconnect "
                                       << (b.reconnect_attempts + 1) << "/" << max_attempts
                                       << " in " << kRetryDelay << "s" << LL_ENDL;
@@ -633,8 +647,8 @@ void LLPositionalStreamMgr::update()
                 b.next_retry_time = 0.0;
                 const LLVector3 pos = toFloatVec(obj->getPositionGlobal());
                 b.stream->setRolloffDistances(b.applied_min, b.applied_max);
-                b.stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
-                LL_INFOS("AYAStream") << "Reconnect attempt " << b.reconnect_attempts
+                b.stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
+                LL_INFOS("Stream3D") << "Reconnect attempt " << b.reconnect_attempts
                                       << "/" << max_attempts << " for " << id
                                       << " url=" << b.url << LL_ENDL;
                 b.stream->start(b.url, pos);
@@ -647,7 +661,7 @@ void LLPositionalStreamMgr::update()
         // failure gets its own full budget rather than inheriting old strikes.
         if (b.reconnect_attempts > 0 && b.stream->isPlaying())
         {
-            LL_INFOS("AYAStream") << "Reconnect succeeded for " << id
+            LL_INFOS("Stream3D") << "Reconnect succeeded for " << id
                                   << " after " << b.reconnect_attempts << " attempt(s)"
                                   << LL_ENDL;
             b.reconnect_attempts = 0;
@@ -660,7 +674,7 @@ void LLPositionalStreamMgr::update()
         if (!b.notified_played && b.stream->isPlaying())
         {
             b.notified_played = true;
-            notifyAYAStream("now playing: " + b.url);
+            notifyStream3D("now playing: " + b.url);
         }
 
         b.stream->setPosition(toFloatVec(obj->getPositionGlobal()));
@@ -677,7 +691,7 @@ void LLPositionalStreamMgr::update()
         LLViewerObject* r_obj = gObjectList.findObject(b.r_prim);
         if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
         {
-            LL_INFOS("AYAStream") << "Stereo pair (" << id
+            LL_INFOS("Stream3D") << "Stereo pair (" << id
                                   << ") gone; releasing stereo stream" << LL_ENDL;
             it = mStereoBindings.erase(it);
             continue;
@@ -687,7 +701,7 @@ void LLPositionalStreamMgr::update()
         {
             if (max_attempts <= 0)
             {
-                LL_WARNS("AYAStream") << "Stereo stream for " << id
+                LL_WARNS("Stream3D") << "Stereo stream for " << id
                                       << " failed; auto-reconnect disabled, dropping binding"
                                       << LL_ENDL;
                 it = mStereoBindings.erase(it);
@@ -695,10 +709,10 @@ void LLPositionalStreamMgr::update()
             }
             if (b.reconnect_attempts >= max_attempts)
             {
-                LL_WARNS("AYAStream") << "Stereo stream for " << id << " exhausted "
+                LL_WARNS("Stream3D") << "Stereo stream for " << id << " exhausted "
                                       << max_attempts << " reconnect attempts; dropping binding"
                                       << LL_ENDL;
-                notifyAYAStream("stereo stream gave up after "
+                notifyStream3D("stereo stream gave up after "
                                 + llformat("%d", max_attempts)
                                 + " reconnect attempts: " + b.url);
                 it = mStereoBindings.erase(it);
@@ -707,7 +721,7 @@ void LLPositionalStreamMgr::update()
             if (b.next_retry_time == 0.0)
             {
                 b.next_retry_time = now + kRetryDelay;
-                LL_INFOS("AYAStream") << "Stereo stream for " << id
+                LL_INFOS("Stream3D") << "Stereo stream for " << id
                                       << " failed; scheduling reconnect "
                                       << (b.reconnect_attempts + 1) << "/" << max_attempts
                                       << " in " << kRetryDelay << "s" << LL_ENDL;
@@ -719,8 +733,8 @@ void LLPositionalStreamMgr::update()
                 const LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
                 const LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
                 b.stream->setRolloffDistances(b.applied_min, b.applied_max);
-                b.stream->setVolume(gSavedSettings.getF32("AYAStreamVolumeMaster"));
-                LL_INFOS("AYAStream") << "Stereo reconnect attempt " << b.reconnect_attempts
+                b.stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
+                LL_INFOS("Stream3D") << "Stereo reconnect attempt " << b.reconnect_attempts
                                       << "/" << max_attempts << " for " << id
                                       << " url=" << b.url << LL_ENDL;
                 b.stream->start(b.url, l_pos, r_pos);
@@ -731,7 +745,7 @@ void LLPositionalStreamMgr::update()
 
         if (b.reconnect_attempts > 0 && b.stream->isPlaying())
         {
-            LL_INFOS("AYAStream") << "Stereo reconnect succeeded for " << id
+            LL_INFOS("Stream3D") << "Stereo reconnect succeeded for " << id
                                   << " after " << b.reconnect_attempts << " attempt(s)"
                                   << LL_ENDL;
             b.reconnect_attempts = 0;
@@ -741,7 +755,7 @@ void LLPositionalStreamMgr::update()
         if (!b.notified_played && b.stream->isPlaying())
         {
             b.notified_played = true;
-            notifyAYAStream("now playing (stereo): " + b.url);
+            notifyStream3D("now playing (stereo): " + b.url);
         }
 
         b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
@@ -794,7 +808,7 @@ void LLPositionalStreamMgr::shutdownPrimBindings()
     {
         return;
     }
-    LL_INFOS("AYAStream") << "Tearing down "
+    LL_INFOS("Stream3D") << "Tearing down "
                           << mBindings.size() << " mono and "
                           << mStereoBindings.size() << " stereo prim bindings"
                           << LL_ENDL;
@@ -810,16 +824,48 @@ void LLPositionalStreamMgr::shutdownAll()
     shutdownPrimBindings();
     if (mDebugStream)
     {
-        LL_INFOS("AYAStream") << "Tearing down debug mono stream" << LL_ENDL;
+        LL_INFOS("Stream3D") << "Tearing down debug mono stream" << LL_ENDL;
         mDebugStream->stop();
         mDebugStream.reset();
     }
     if (mDebugStereoStream)
     {
-        LL_INFOS("AYAStream") << "Tearing down debug stereo stream" << LL_ENDL;
+        LL_INFOS("Stream3D") << "Tearing down debug stereo stream" << LL_ENDL;
         mDebugStereoStream->stop();
         mDebugStereoStream.reset();
     }
+}
+
+void LLPositionalStreamMgr::forceRescan()
+{
+    // Two-step rescan:
+    //
+    // (1) Re-evaluate every cached prim *immediately* using the description
+    //     we already hold. evaluateBinding() does a string parse + (re)bind
+    //     against mDescriptionCache without any network roundtrip, so tagged
+    //     prims rebind within this tick — no need to wait for the round-robin
+    //     scan walk to circle back (which can take >1 minute in dense regions
+    //     where ObjectPropertiesFamily is rate-limited to 10 req/s).
+    //
+    // (2) Zero last_polled so the periodic poll loop will eventually re-issue
+    //     ObjectPropertiesFamily for everything (in case any descriptions
+    //     changed while Stream3DEnabled was off). This is the slow safety
+    //     net; (1) is what users feel.
+    //
+    // mPollCursor is left alone — the round-robin walk picks up where it was.
+    int rebind_candidates = 0;
+    for (auto& kv : mDescriptionCache)
+    {
+        if (!kv.second.description.empty())
+        {
+            ++rebind_candidates;
+            evaluateBinding(kv.first);
+        }
+        kv.second.last_polled = 0.0;
+    }
+    LL_INFOS("Stream3D") << "Forced rescan: " << rebind_candidates
+                          << " cached descriptions re-evaluated, last_polled cleared on "
+                          << mDescriptionCache.size() << " entries" << LL_ENDL;
 }
 
 void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
@@ -849,8 +895,8 @@ void LLPositionalStreamMgr::startDebug(const std::string& url, const LLVector3& 
         mDebugStream = std::make_unique<LLPositionalStream>();
     }
     mDebugStream->setRolloffDistances(
-        gSavedSettings.getF32("AYAStreamRolloffMin"),
-        gSavedSettings.getF32("AYAStreamRolloffMax"));
+        gSavedSettings.getF32("Stream3DRolloffMin"),
+        gSavedSettings.getF32("Stream3DRolloffMax"));
     mDebugStream->start(url, world_pos);
 }
 
@@ -872,8 +918,8 @@ void LLPositionalStreamMgr::startDebugStereo(const std::string& url,
         mDebugStereoStream = std::make_unique<LLPositionalStreamStereo>();
     }
     mDebugStereoStream->setRolloffDistances(
-        gSavedSettings.getF32("AYAStreamRolloffMin"),
-        gSavedSettings.getF32("AYAStreamRolloffMax"));
+        gSavedSettings.getF32("Stream3DRolloffMin"),
+        gSavedSettings.getF32("Stream3DRolloffMax"));
     mDebugStereoStream->start(url, l_pos, r_pos);
 }
 
@@ -888,9 +934,9 @@ void LLPositionalStreamMgr::stopDebugStereo()
 
 void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
 {
-    // M8: AYAStreamDescriptionScan also gates the active poll. (Enabled is
+    // M8: Stream3DDescriptionScan also gates the active poll. (Enabled is
     // checked one level up in update(); reaching here implies Enabled=true.)
-    if (!gSavedSettings.getBOOL("AYAStreamDescriptionScan"))
+    if (!gSavedSettings.getBOOL("Stream3DDescriptionScan"))
     {
         return;
     }
@@ -898,7 +944,7 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     // Run the scan at ~2 Hz; with kBudgetPerScan = 5 that caps outgoing
     // requests at ~10 req/s sustained, regardless of frame rate.
     // 10 req/s × 30s poll_interval = ~300 prims per cycle. In denser regions
-    // a given prim's effective re-poll interval will exceed AYAStreamPollInterval.
+    // a given prim's effective re-poll interval will exceed Stream3DPollInterval.
     static constexpr F64 kScanInterval  = 0.5;
     static constexpr int kBudgetPerScan = 5;
 
@@ -908,12 +954,12 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     }
     mLastPollScanTime = now;
 
-    const F32 poll_interval = gSavedSettings.getF32("AYAStreamPollInterval");
-    const F32 max_dist      = gSavedSettings.getF32("AYAStreamMaxDistance");
+    const F32 poll_interval = gSavedSettings.getF32("Stream3DPollInterval");
+    const F32 max_dist      = gSavedSettings.getF32("Stream3DMaxDistance");
 
     // Per-scan breakdown for support / tuning. Off by default; enable with
-    //   --logdebug AYAStream
-    LL_DEBUGS("AYAStream") << "poll diag: interval=" << poll_interval
+    //   --logdebug Stream3D
+    LL_DEBUGS("Stream3D") << "poll diag: interval=" << poll_interval
                            << " max_dist=" << max_dist
                            << " num_objects=" << gObjectList.getNumObjects()
                            << LL_ENDL;
@@ -958,7 +1004,7 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
         }
         ++n_total;
 
-        // Avatars / attachments / HUDs don't carry [ayastream:...] tags.
+        // Avatars / attachments / HUDs don't carry [3dstream:...] tags.
         if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment())
         {
             ++n_filtered;
@@ -989,7 +1035,7 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
         ++n_sent;
     }
 
-    LL_DEBUGS("AYAStream") << "poll: scanned this pass total=" << n_total
+    LL_DEBUGS("Stream3D") << "poll: scanned this pass total=" << n_total
                            << " filtered=" << n_filtered
                            << " far=" << n_far
                            << " recent=" << n_recent

@@ -5991,9 +5991,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 continue;
             }
 
-            // <FS:AYA> [RenderHideOutsideParcel]
+            // <FS:AYA> [ParcelHide]
             // Visitor's own setting OR parcel-owner tag triggers hiding.
-            if ((LLPipeline::sRenderHideOutsideParcel
+            if ((LLPipeline::sParcelHideEnabled
                  || LLPipeline::sParcelOwnerTagActive)
                 && LLPipeline::shouldHideForOutsideParcel(drawablep))
             {

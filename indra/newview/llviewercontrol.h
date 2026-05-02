@@ -44,6 +44,12 @@ bool toggle_show_favorites_panel(const LLSD& newvalue);
 //setting variables are declared in this function
 void settings_setup_listeners();
 
+// <FS:AYA> [AYAstorm-r5] Copy r4-and-earlier setting values onto their
+// r5-renamed keys (3D Stream and Parcel Hide). Call once at startup,
+// after user settings are loaded and before settings_to_globals().
+void migrate_legacy_settings();
+// </FS:AYA>
+
 // for the graphics settings
 void create_graphics_group(LLControlGroup& group);
 

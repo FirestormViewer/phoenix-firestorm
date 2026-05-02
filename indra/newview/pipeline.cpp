@@ -83,7 +83,7 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
-#include "llparcel.h" // <FS:AYA> [RenderHideOutsideParcel-Tag] for LLParcel::getDesc()
+#include "llparcel.h" // <FS:AYA> [ParcelHide-Tag] for LLParcel::getDesc()
 #include "llviewerregion.h" // for audio debugging.
 #include "llviewerwindow.h" // For getSpinAxis
 #include "llvoavatarself.h"
@@ -340,12 +340,12 @@ S32     LLPipeline::sUseOcclusion = 0;
 bool    LLPipeline::sAutoMaskAlphaDeferred = true;
 bool    LLPipeline::sAutoMaskAlphaNonDeferred = false;
 bool    LLPipeline::sRenderTransparentWater = true;
-// <FS:AYA> [RenderHideOutsideParcel]
-bool    LLPipeline::sRenderHideOutsideParcel = false;
-bool    LLPipeline::sRenderHideOutsideParcelKeepAvatars = true;
-bool    LLPipeline::sRenderHideOutsideParcelKeepOwn = true;
+// <FS:AYA> [ParcelHide]
+bool    LLPipeline::sParcelHideEnabled = false;
+bool    LLPipeline::sParcelHideKeepAvatars = true;
+bool    LLPipeline::sParcelHideKeepOwn = true;
 S32     LLPipeline::sParcelCheckSeq = 0;
-// [RenderHideOutsideParcel-Tag] parsed override values for the agent parcel
+// [ParcelHide-Tag] parsed override values for the agent parcel
 bool    LLPipeline::sParcelOwnerTagActive = false;
 bool    LLPipeline::sParcelOwnerTagKeepAvatars = false;
 bool    LLPipeline::sParcelOwnerTagKeepOwn = false;
@@ -3108,8 +3108,10 @@ void LLPipeline::updateGeom(F32 max_dtime)
     updateMovedList(mMovedBridge);
 }
 
-// <FS:AYA> [RenderHideOutsideParcel]
-// Parse a parcel description for the [AYAstorm:{key:value}{key:value}...] tag.
+// <FS:AYA> [ParcelHide]
+// Parse a parcel description for the [parcelhide:{key:value}{key:value}...]
+// tag. The legacy [AYAstorm:...] prefix is accepted as a permanent alias so
+// already-published parcel descriptions keep working without re-edit.
 // See docs/ayastorm-render-hide-outside-parcel.md section 7.1 for the spec.
 //
 // Behavior summary:
@@ -3118,19 +3120,26 @@ void LLPipeline::updateGeom(F32 max_dtime)
 //     keepavatars / keepownobject parsed (each defaulting to false).
 //   - Tag present with hideoutside:false: tag is treated as a temporary
 //     no-op, returning active=false (Phase A behavior applies).
-//   - Prefix "AYAstorm" is matched case-sensitively. Keys are lowercase.
-//     Values "true"/"false" are case-insensitive.
-LLPipeline::ParcelTagOverride LLPipeline::parseAYAstormParcelTag(const std::string& desc)
+//   - Prefix is matched case-sensitively. Keys are lowercase. Values
+//     "true"/"false" are case-insensitive.
+LLPipeline::ParcelTagOverride LLPipeline::parseParcelHideTag(const std::string& desc)
 {
     ParcelTagOverride out;
 
-    static const std::string PREFIX = "[AYAstorm:";
-    const std::string::size_type start = desc.find(PREFIX);
+    static const std::string PREFIX     = "[parcelhide:";
+    static const std::string PREFIX_OLD = "[AYAstorm:"; // r4 and earlier
+    std::string::size_type start = desc.find(PREFIX);
+    std::string::size_type prefix_len = PREFIX.size();
+    if (start == std::string::npos)
+    {
+        start = desc.find(PREFIX_OLD);
+        prefix_len = PREFIX_OLD.size();
+    }
     if (start == std::string::npos)
     {
         return out;
     }
-    const std::string::size_type body_begin = start + PREFIX.size();
+    const std::string::size_type body_begin = start + prefix_len;
     const std::string::size_type end = desc.find(']', body_begin);
     if (end == std::string::npos)
     {
@@ -3199,11 +3208,11 @@ LLPipeline::ParcelTagOverride LLPipeline::parseAYAstormParcelTag(const std::stri
 
 // Returns true if the given drawable should be hidden because it is outside
 // the agent's current parcel. Callers should additionally gate on
-// (sRenderHideOutsideParcel || sParcelOwnerTagActive) before invoking.
+// (sParcelHideEnabled || sParcelOwnerTagActive) before invoking.
 // Spatial bridges (e.g. avatar attachment hierarchies) are never hidden here;
 // they are handled at the wrapped object level.
 //
-// When the agent parcel description carries an [AYAstorm:...] tag
+// When the agent parcel description carries a [parcelhide:...] tag
 // (sParcelOwnerTagActive==true), the keepavatars / keepownobject decisions use
 // the tag-supplied values instead of the visitor's settings. This lets the
 // parcel owner enforce their immersion intent.
@@ -3230,10 +3239,10 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
 
     const bool keep_avatars = sParcelOwnerTagActive
         ? sParcelOwnerTagKeepAvatars
-        : sRenderHideOutsideParcelKeepAvatars;
+        : sParcelHideKeepAvatars;
     const bool keep_own = sParcelOwnerTagActive
         ? sParcelOwnerTagKeepOwn
-        : sRenderHideOutsideParcelKeepOwn;
+        : sParcelHideKeepOwn;
 
     if (keep_avatars && (vobj->isAvatar() || vobj->isAttachment()))
     {
@@ -3260,14 +3269,15 @@ void LLPipeline::refreshOutsideParcelHiding()
 {
     sParcelCheckSeq++;
 
-    // Re-evaluate the parcel-owner [AYAstorm:...] tag for the parcel the
-    // agent is currently standing in. This drives sParcelOwnerTagActive and the
-    // tag-supplied keepavatars / keepownobject overrides used inside
+    // Re-evaluate the parcel-owner [parcelhide:...] tag (legacy
+    // [AYAstorm:...] also accepted) for the parcel the agent is currently
+    // standing in. This drives sParcelOwnerTagActive and the tag-supplied
+    // keepavatars / keepownobject overrides used inside
     // shouldHideForOutsideParcel().
     LLParcel* agent_parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
     if (agent_parcel)
     {
-        ParcelTagOverride tag = parseAYAstormParcelTag(agent_parcel->getDesc());
+        ParcelTagOverride tag = parseParcelHideTag(agent_parcel->getDesc());
         sParcelOwnerTagActive = tag.active;
         sParcelOwnerTagKeepAvatars = tag.keepAvatars;
         sParcelOwnerTagKeepOwn = tag.keepOwn;

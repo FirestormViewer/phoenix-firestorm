@@ -7,15 +7,15 @@
 
 	<!-- Default Args - these arguments will be replaced in all strings -->
 	<string name="SECOND_LIFE">[CURRENT_GRID]</string>
-	<string name="APP_NAME">Firestorm</string>
-	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
+	<string name="APP_NAME">AYAstorm</string>
+	<string name="CAPITALIZED_APP_NAME">AYASTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Firestorm Support Portal</string>
 	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
 	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
-	<string name="APP_NAME_ABBR">FS</string>
+	<string name="APP_NAME_ABBR">AYA</string>
 
 	<!-- starting up -->
 	<string name="StartupLoading">Loading [APP_NAME]...</string>
@@ -26,7 +26,7 @@
 
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[APP_NAME] r7 (based on FS [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] build [VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 Parity with Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>

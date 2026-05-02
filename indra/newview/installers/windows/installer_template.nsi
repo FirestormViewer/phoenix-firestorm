@@ -299,36 +299,23 @@ Call openLinkNewWindow
 !define OpenURL '!insertmacro "_OpenURL"'
 
 ; Add the AVX2 check functions
+; <FS:AYA> AVX2 incompatibility check: simplified to a single English notice
+; without URL redirect, since AYAstorm distributes both AVX2 and LEGACY builds
+; from the same GitHub Releases page. The text is kept ASCII because this
+; template is read as UTF-8-without-BOM and makensis (Unicode true) rejects
+; non-ASCII bytes in that path; localized variants would require a LangString.
 Function CheckCPUFlagsAVX2
     Push $1
-    Push $2
-    Push $3
     System::Call 'kernel32::IsProcessorFeaturePresent(i 40) i .r1'  ; 40 is PF_AVX2_INSTRUCTIONS_AVAILABLE
     IntCmp $1 1 OK_AVX2
-    ; AVX2 not supported
-    ; Replace %DLURL% in the language string with the URL
-    ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
-    MessageBox MB_OK "$3"
-    
-    MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
-    MessageBox MB_OKCANCEL $(AVX2OverrideNote) IDCANCEL NoInstall
-
-    ; User chose to proceed
-    Pop $3
-    Pop $2
-    Pop $1
-    Return
-
-  NoInstall:
-    ${OpenURL} "${DL_URL}-legacy-cpus"
+    MessageBox MB_OK "This build requires an AVX2-capable CPU. Please install the LEGACY build instead."
     Quit
 
   OK_AVX2:
-    Pop $3
-    Pop $2
     Pop $1
     Return
 FunctionEnd
+; </FS:AYA>
 
 Function CheckCPUFlagsAVX2_Prompt
     Push $1
@@ -411,14 +398,15 @@ after_instdir:
 
 Call CheckCPUFlags							# Make sure we have SSE2 support
 
-# Two checks here, if we are an AVX2 build we want to abort if no AVX2 support on this CPU.
-# If we are not an AVX2 build but the CPU can support it then we want to prompt them to download the AVX2 version
-# but also allow them to override.
+# <FS:AYA> AVX2 build aborts on non-AVX2 CPUs (compatibility safeguard).
+# The LEGACY-side prompt that would suggest switching to AVX2 is suppressed:
+# AYAstorm publishes AVX2 / LEGACY side-by-side on GitHub Releases, so users
+# pick the right build at download time, and the in-installer redirect is
+# unnecessary (and was previously broken with a <NO-URL> placeholder).
 ${If} ${ISAVX2} == 1
   Call CheckCPUFlagsAVX2
-${Else}
-  Call CheckCPUFlagsAVX2_Prompt
 ${EndIf}
+# </FS:AYA>
 
 Call CheckWindowsVersion					# Don't install On unsupported systems
     Push $0
