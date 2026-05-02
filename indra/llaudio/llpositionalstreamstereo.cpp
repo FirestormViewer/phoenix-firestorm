@@ -167,6 +167,14 @@ LLPositionalStreamStereo::~LLPositionalStreamStereo()
     {
         stop();
     }
+    else
+    {
+        // r7 M3: FMOD engine has already been torn down (Quit ordering or
+        // engine restart). releaseAll() would call into freed FMOD pointers,
+        // but the decode thread *must* still be joined or std::thread's
+        // destructor calls std::terminate(). Skip FMOD release; just join.
+        stopDecodeThread();
+    }
 }
 
 FMOD::System* LLPositionalStreamStereo::getFmodSystem() const
@@ -223,8 +231,10 @@ bool LLPositionalStreamStereo::start(const std::string& url,
 
 void LLPositionalStreamStereo::stop()
 {
-    // r7 M1: thread join must precede FMOD release. M3 will harden this with
-    // an explicit invariant check; for now just keep the order correct.
+    // r7 M3: invariant — decode thread must be joined *before* releaseAll()
+    // touches FMOD. The decode thread reads mSourceSound via pumpSource(),
+    // so releasing it underneath an in-flight readData() crashes inside
+    // FMOD. releaseAll() asserts the invariant in debug builds.
     stopDecodeThread();
     releaseAll();
     mUrl.clear();
@@ -233,6 +243,11 @@ void LLPositionalStreamStereo::stop()
 
 void LLPositionalStreamStereo::releaseAll()
 {
+    // r7 M3: enforce the shutdown invariant. Any caller that touches FMOD
+    // resources here must have already joined the decode thread, otherwise
+    // pumpSource() may dereference mSourceSound after release().
+    llassert(!mDecodeThread.joinable());
+
     if (mChannelL)
     {
         checkFmod(mChannelL->stop(), "Channel::stop(L)");
@@ -621,6 +636,12 @@ void LLPositionalStreamStereo::update()
             if (!createUserSounds() || !startUserChannels())
             {
                 LL_WARNS("Stream3D") << "Failed to start OPENUSER channels" << LL_ENDL;
+                // r7 M3: decode thread was started during the Opening→Buffering
+                // transition; it must be joined before releaseAll() touches
+                // mSourceSound (which the thread is still reading via
+                // pumpSource()). releaseAll()'s invariant assert would fire
+                // otherwise.
+                stopDecodeThread();
                 releaseAll();
                 mState = State::Failed;
                 return;
