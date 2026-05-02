@@ -8,10 +8,10 @@
 		[當前伺服器]
 	</string>
 	<string name="APP_NAME">
-		Firestorm
+		AYAstorm
 	</string>
 	<string name="CAPITALIZED_APP_NAME">
-		FIRESTORM
+		AYASTORM
 	</string>
 	<string name="SECOND_LIFE_GRID">
 		第二人生
@@ -27,7 +27,7 @@
 		V[VERSION]
 	</string>
 	<string name="APP_NAME_ABBR">
-		FS
+		AYA
 	</string>
 	<string name="StartupLoading">
 		[APP_NAME]載入中...
