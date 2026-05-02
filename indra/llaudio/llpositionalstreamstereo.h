@@ -31,7 +31,10 @@
 #include "fmodstudio/fmod_common.h"
 
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <string>
+#include <thread>
 #include <vector>
 
 namespace FMOD
@@ -112,6 +115,13 @@ private:
     void pumpSource();
     void applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos);
 
+    // r7 M1: decode thread skeleton. M1 spins up a thread on State::Playing
+    // and tears it down in stop(); the loop itself is empty here. M2 will
+    // move pumpSource() into it. Spec: doc/spec_stream3d_decode_thread.md §4.
+    void startDecodeThread();
+    void stopDecodeThread();
+    void decodeThreadMain();
+
     FMOD::Sound* mSourceSound;
     FMOD::Sound* mUserSoundL;
     FMOD::Sound* mUserSoundR;
@@ -137,6 +147,15 @@ private:
 
     // Scratch buffer reused by pumpSource() to avoid per-frame allocs.
     std::vector<U8> mReadScratch;
+
+    // r7 M1: decode thread plumbing. mDecodeStop is set by stop()/dtor; the
+    // condvar wakes the loop from its idle wait. mDecodeThread is non-joinable
+    // until startDecodeThread() runs. Invariant: stop() must request-stop and
+    // join *before* releaseAll() touches FMOD resources (M3 hardens this).
+    std::thread mDecodeThread;
+    std::atomic<bool> mDecodeStop;
+    std::mutex mDecodeMutex;
+    std::condition_variable mDecodeCv;
 
     // Frames of PCM to accumulate in each ring before unpausing playback.
     static constexpr size_t kPrebufferFrames = 4096;

@@ -33,7 +33,12 @@
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
 
+#include <chrono>
 #include <cstring>
+
+#if LL_LINUX
+#  include <pthread.h>
+#endif
 
 namespace
 {
@@ -151,7 +156,8 @@ LLPositionalStreamStereo::LLPositionalStreamStereo()
     mVolume(1.f),
     mRolloffMin(1.f),
     mRolloffMax(20.f),
-    mState(State::Idle)
+    mState(State::Idle),
+    mDecodeStop(false)
 {
 }
 
@@ -217,6 +223,9 @@ bool LLPositionalStreamStereo::start(const std::string& url,
 
 void LLPositionalStreamStereo::stop()
 {
+    // r7 M1: thread join must precede FMOD release. M3 will harden this with
+    // an explicit invariant check; for now just keep the order correct.
+    stopDecodeThread();
     releaseAll();
     mUrl.clear();
     mState = State::Idle;
@@ -604,6 +613,58 @@ void LLPositionalStreamStereo::update()
             }
             mState = State::Playing;
             LL_INFOS("Stream3D") << "Stereo path playing: " << mUrl << LL_ENDL;
+            // r7 M1: spin up the decode thread now that format/channels are
+            // confirmed and the user channels are live. The loop is empty in
+            // M1; M2 moves pumpSource() into it.
+            startDecodeThread();
         }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// r7 M1: decode thread skeleton
+// ---------------------------------------------------------------------------
+
+void LLPositionalStreamStereo::startDecodeThread()
+{
+    if (mDecodeThread.joinable())
+    {
+        // Already running (e.g. State::Playing re-entered without stop()).
+        return;
+    }
+    mDecodeStop.store(false, std::memory_order_release);
+    mDecodeThread = std::thread(&LLPositionalStreamStereo::decodeThreadMain, this);
+    LL_INFOS("Stream3D") << "Decode thread started for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::stopDecodeThread()
+{
+    if (!mDecodeThread.joinable())
+    {
+        return;
+    }
+    {
+        std::lock_guard<std::mutex> lk(mDecodeMutex);
+        mDecodeStop.store(true, std::memory_order_release);
+    }
+    mDecodeCv.notify_all();
+    mDecodeThread.join();
+    LL_INFOS("Stream3D") << "Decode thread joined for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::decodeThreadMain()
+{
+#if LL_LINUX
+    // Visible in `top -H` / perf — helps when isolating audio thread cost.
+    pthread_setname_np(pthread_self(), "Stream3D-decode");
+#endif
+
+    // M1 body: just wait for stop. M2 will replace this with the pump loop
+    // (readData → deinterleave → ring write) currently in pumpSource().
+    while (!mDecodeStop.load(std::memory_order_acquire))
+    {
+        std::unique_lock<std::mutex> lk(mDecodeMutex);
+        mDecodeCv.wait_for(lk, std::chrono::milliseconds(100),
+                           [this] { return mDecodeStop.load(std::memory_order_acquire); });
     }
 }
