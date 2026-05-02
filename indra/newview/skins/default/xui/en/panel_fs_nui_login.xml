@@ -49,13 +49,37 @@
       width="970"
       min_width="970"
       height="152">
+  <!-- <FS:AYA> [r6 login branding] AYAstorm logo (4/5 of original 125px) + identifier text -->
   <icon
-    height="125"
-    width="125"
-    image_name="login_fs_logo"
+    height="100"
+    width="100"
+    image_name="login_aya_logo"
     left="0"
     top="10"
     name="sl_logo_small" />
+  <text
+    left="0"
+    top="113"
+    width="100"
+    height="13"
+    font="SansSerifSmall"
+    halign="center"
+    text_color="EmphasisColor"
+    name="aya_brand_line1">
+AYAstorm r6
+  </text>
+  <text
+    left="0"
+    top_pad="0"
+    width="100"
+    height="12"
+    font="SansSerifSmall"
+    halign="center"
+    text_color="LtGray_50"
+    name="aya_brand_line2">
+based on FS 7.2.4
+  </text>
+  <!-- </FS:AYA> -->
 
     <layout_stack
       animate="false"
