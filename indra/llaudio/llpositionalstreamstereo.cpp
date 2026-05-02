@@ -418,9 +418,12 @@ bool LLPositionalStreamStereo::startUserChannels()
     return true;
 }
 
-void LLPositionalStreamStereo::pumpSource()
+size_t LLPositionalStreamStereo::pumpSource()
 {
-    if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return;
+    // r7 M2: invoked from the decode thread. Returns bytes read this iteration
+    // so the caller can decide whether to sleep (0 → idle wait) or continue
+    // pumping (positive → ring may have more room).
+    if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return 0;
 
     // Try to top up both rings. We read enough source frames to fill whichever
     // ring has the least free space, capped at a reasonable per-frame amount
@@ -430,7 +433,7 @@ void LLPositionalStreamStereo::pumpSource()
     size_t free_l = mRingL.writeAvailable();
     size_t free_r = mRingR.writeAvailable();
     size_t want_frames = std::min({ free_l, free_r, kMaxFramesPerPump });
-    if (want_frames == 0) return;
+    if (want_frames == 0) return 0;
 
     const size_t bytes_per_frame = static_cast<size_t>(mSourceBytesPerSample)
                                  * static_cast<size_t>(mSourceChannels);
@@ -447,15 +450,15 @@ void LLPositionalStreamStereo::pumpSource()
     if (rr != FMOD_OK && rr != FMOD_ERR_FILE_EOF)
     {
         // FMOD returns FMOD_ERR_NOTREADY when no buffered data is currently
-        // available; that's expected, just try again next frame.
+        // available; that's expected, just sleep briefly in the decode loop.
         if (rr != FMOD_ERR_NOTREADY)
         {
             LL_WARNS("Stream3D") << "Sound::readData error: "
                                   << FMOD_ErrorString(rr) << LL_ENDL;
         }
-        return;
+        return 0;
     }
-    if (read_bytes == 0) return;
+    if (read_bytes == 0) return 0;
 
     size_t frames_read = read_bytes / bytes_per_frame;
 
@@ -522,14 +525,20 @@ void LLPositionalStreamStereo::pumpSource()
         sp += this_chunk * bytes_per_frame;
         remaining -= this_chunk;
     }
+
+    return read_bytes;
 }
 
 void LLPositionalStreamStereo::update()
 {
-    if (mState == State::Idle || mState == State::Failed) return;
+    // r7 M2: state is atomic now; load once and use the local for the rest of
+    // this update tick to avoid torn reads if the decode thread happens to
+    // change state mid-function (Failed transition is added in M3).
+    const State st = mState.load(std::memory_order_acquire);
+    if (st == State::Idle || st == State::Failed) return;
     if (!mSourceSound) return;
 
-    if (mState == State::Opening)
+    if (st == State::Opening)
     {
         FMOD_OPENSTATE state = FMOD_OPENSTATE_LOADING;
         FMOD_RESULT rr = mSourceSound->getOpenState(&state, nullptr, nullptr, nullptr);
@@ -595,11 +604,16 @@ void LLPositionalStreamStereo::update()
                               << " " << mSampleRate << " Hz x " << mSourceChannels
                               << " ch, fmt=" << (mSourceIsFloat ? "PCMFLOAT" : "PCM16")
                               << ", ring cap " << cap << " frames" << LL_ENDL;
+
+        // r7 M2: format/channels are now committed (mSampleRate / mSourceChannels /
+        // mSourceBytesPerSample / mSourceIsFloat) and the rings are sized. Hand
+        // pumping over to the decode thread *before* leaving Opening; otherwise
+        // the rings would never fill (main thread no longer pumps) and we would
+        // be stuck in Buffering forever waiting for kPrebufferFrames.
+        startDecodeThread();
     }
 
-    pumpSource();
-
-    if (mState == State::Buffering)
+    if (st == State::Buffering)
     {
         if (mRingL.readAvailable() >= kPrebufferFrames
             && mRingR.readAvailable() >= kPrebufferFrames)
@@ -613,10 +627,8 @@ void LLPositionalStreamStereo::update()
             }
             mState = State::Playing;
             LL_INFOS("Stream3D") << "Stereo path playing: " << mUrl << LL_ENDL;
-            // r7 M1: spin up the decode thread now that format/channels are
-            // confirmed and the user channels are live. The loop is empty in
-            // M1; M2 moves pumpSource() into it.
-            startDecodeThread();
+            // (decode thread was already started during the Opening→Buffering
+            // transition above; nothing to do here in M2.)
         }
     }
 }
@@ -659,12 +671,19 @@ void LLPositionalStreamStereo::decodeThreadMain()
     pthread_setname_np(pthread_self(), "Stream3D-decode");
 #endif
 
-    // M1 body: just wait for stop. M2 will replace this with the pump loop
-    // (readData → deinterleave → ring write) currently in pumpSource().
+    // r7 M2: drive pumpSource() from this thread. The 5 ms cadence gives
+    // ~200 Hz pumping which is far more than the ~44 kHz ring needs to stay
+    // ahead of the FMOD mixer (ring caps at 32768 frames ≈ 0.74 s at 44 kHz),
+    // while keeping per-iteration readData()/decode work small. condvar wait
+    // wakes early on stop().
+    static constexpr auto kPumpInterval = std::chrono::milliseconds(5);
+
     while (!mDecodeStop.load(std::memory_order_acquire))
     {
+        pumpSource();
+
         std::unique_lock<std::mutex> lk(mDecodeMutex);
-        mDecodeCv.wait_for(lk, std::chrono::milliseconds(100),
+        mDecodeCv.wait_for(lk, kPumpInterval,
                            [this] { return mDecodeStop.load(std::memory_order_acquire); });
     }
 }
