@@ -575,8 +575,16 @@ static void handleStream3DEnabledChanged(const LLSD& newvalue)
     {
         LLPositionalStreamMgr::instance().shutdownAll();
     }
-    // Re-enabling does nothing here on purpose: M3b polling will rediscover
-    // tagged prims on its next pass (within Stream3DPollInterval seconds).
+    else
+    {
+        // r7: without this, the manager would wait up to Stream3DPollInterval
+        // (default 30 s) before re-issuing ObjectPropertiesFamily requests for
+        // any prim it had recently polled before the toggle, so users see a
+        // long silence after re-enabling. forceRescan() zeroes last_polled so
+        // the next 0.5 s scan tick re-requests in-range prims at the existing
+        // budget (no extra server load — same 10 req/s cap).
+        LLPositionalStreamMgr::instance().forceRescan();
+    }
 }
 
 static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)

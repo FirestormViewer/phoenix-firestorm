@@ -831,6 +831,38 @@ void LLPositionalStreamMgr::shutdownAll()
     }
 }
 
+void LLPositionalStreamMgr::forceRescan()
+{
+    // Two-step rescan:
+    //
+    // (1) Re-evaluate every cached prim *immediately* using the description
+    //     we already hold. evaluateBinding() does a string parse + (re)bind
+    //     against mDescriptionCache without any network roundtrip, so tagged
+    //     prims rebind within this tick — no need to wait for the round-robin
+    //     scan walk to circle back (which can take >1 minute in dense regions
+    //     where ObjectPropertiesFamily is rate-limited to 10 req/s).
+    //
+    // (2) Zero last_polled so the periodic poll loop will eventually re-issue
+    //     ObjectPropertiesFamily for everything (in case any descriptions
+    //     changed while Stream3DEnabled was off). This is the slow safety
+    //     net; (1) is what users feel.
+    //
+    // mPollCursor is left alone — the round-robin walk picks up where it was.
+    int rebind_candidates = 0;
+    for (auto& kv : mDescriptionCache)
+    {
+        if (!kv.second.description.empty())
+        {
+            ++rebind_candidates;
+            evaluateBinding(kv.first);
+        }
+        kv.second.last_polled = 0.0;
+    }
+    LL_INFOS("Stream3D") << "Forced rescan: " << rebind_candidates
+                          << " cached descriptions re-evaluated, last_polled cleared on "
+                          << mDescriptionCache.size() << " entries" << LL_ENDL;
+}
+
 void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
 {
     if (mDebugStream)
