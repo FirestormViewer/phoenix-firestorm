@@ -1187,7 +1187,10 @@ label_ask_launch:
         MessageBox MB_YESNO $(InstSuccesssQuestion) IDYES label_launch IDNO label_no_launch
 
 label_launch:
-        Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+        # <FS:TJ> Exec it through explorer to it isn't ran as Admin causing issues
+        #Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+        Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
+        # </FS:TJ>
 
 label_no_launch:
         # </FS:PP>
