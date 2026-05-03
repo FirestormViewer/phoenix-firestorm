@@ -53,6 +53,7 @@ public:
 
 private:
 	std::string getBaseDomain(const std::string& url) const;
+	std::string getHostname(const std::string& url) const;
 };
 
 #endif // LL_PHISHINGFILTER_H

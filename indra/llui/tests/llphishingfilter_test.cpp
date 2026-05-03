@@ -46,12 +46,20 @@ namespace tut
 		ensure_equals("Official marketplace", LLPhishingFilter::instance().evaluateURLRisk("https://marketplace.secondlife.com/p/item/123"), 0);
 		ensure_equals("Official domain", LLPhishingFilter::instance().evaluateURLRisk("https://secondlife.com/destinations"), 0);
 
-		// Malicious domains with SL keywords should have high risk
+		// Malicious domains with SL keywords in hostname should have high risk
 		ensure_equals("Malicious marketplace on herokuapp", LLPhishingFilter::instance().evaluateURLRisk("http://marketplace.seconde-life-com.herokuapp.com/login"), 150); // 100 (keyword) + 50 (hosting)
 		ensure_equals("Typosquatting", LLPhishingFilter::instance().evaluateURLRisk("https://marketplace.seconde-life.com/"), 100);
+		ensure_equals("Phishing on herokuapp", LLPhishingFilter::instance().evaluateURLRisk("https://second-lif-9bc8e3689e62.herokuapp.com/"), 150);
 
-		// Benign non-SL domains should have 0 or low risk
-		ensure_equals("Google", LLPhishingFilter::instance().evaluateURLRisk("https://www.google.com/search?q=secondlife"), 0); // keyword is in query, but not in domain
+		// Benign domains with SL keywords in PATH or QUERY should have 0 or low risk
+		ensure_equals("Google search", LLPhishingFilter::instance().evaluateURLRisk("https://www.google.com/search?q=secondlife"), 0); 
+		ensure_equals("Relay for life", LLPhishingFilter::instance().evaluateURLRisk("https://relayforlife.com/secondlife-campaign"), 0);
+
+		// Internal protocol
+		ensure_equals("Internal protocol", LLPhishingFilter::instance().evaluateURLRisk("secondlife:///app/agent/6b5042e8-112f-4f8f-990d-2a4a737bd391/about"), 0);
+
+		// Explicit test domain
+		ensure_equals("Suspicious test domain", LLPhishingFilter::instance().evaluateURLRisk("http://www.suspicious-url.com/path"), 100);
 	}
 
 	template<> template<>
@@ -61,6 +69,9 @@ namespace tut
 
 		ensure("Official is not suspicious", !LLPhishingFilter::instance().isSuspicious("https://secondlife.com/"));
 		ensure("Official marketplace is not suspicious", !LLPhishingFilter::instance().isSuspicious("https://marketplace.secondlife.com/p/item/123"));
+		ensure("Relay for life is not suspicious", !LLPhishingFilter::instance().isSuspicious("https://relayforlife.com/secondlife-campaign"));
+		ensure("Internal protocol is not suspicious", !LLPhishingFilter::instance().isSuspicious("secondlife:///app/agent/6b5042e8-112f-4f8f-990d-2a4a737bd391/about"));
+		ensure("Suspicious test domain is suspicious", LLPhishingFilter::instance().isSuspicious("http://suspicious-url.com/"));
 
 		// Real world scam URLs
 		ensure("second-lif herokuapp", LLPhishingFilter::instance().isSuspicious("https://second-lif-9bc8e3689e62.herokuapp.com/"));
