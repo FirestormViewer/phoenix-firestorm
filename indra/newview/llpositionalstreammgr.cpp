@@ -409,25 +409,213 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         return;
     }
 
-    // r8: stereo binding (new distributed format) is wired in F2.
-    // For now only the mono [3dstream:...] tag drives bindings here.
     const std::string& desc = desc_it->second.description;
     auto mono_tag = parseTag(desc);
-
-    auto bind_it = mBindings.find(id);
 
     if (mono_tag)
     {
         evaluateMonoBinding(id, *mono_tag);
+        // r8 F2-a: a prim that just became a mono source must drop out of any
+        // distributed-stereo linkset it had been participating in. Re-evaluate
+        // the previously-known root so the speaker slot is recomputed without
+        // this prim. (mPrimToRoot lookup is the only side effect here; the
+        // mono path itself is unchanged.)
+        auto pr_it = mPrimToRoot.find(id);
+        if (pr_it != mPrimToRoot.end())
+        {
+            evaluateLinkset(pr_it->second);
+        }
         return;
     }
 
+    // No mono tag — drop any leftover mono binding before considering the
+    // distributed-stereo path.
+    auto bind_it = mBindings.find(id);
     if (bind_it != mBindings.end())
     {
         LL_INFOS("Stream3D") << "Removing positional binding for " << id
                               << " (tag gone)" << LL_ENDL;
         mBindings.erase(bind_it);
     }
+
+    // r8 F2-a: distributed-stereo dispatch. Either {url} or {ch} triggers a
+    // linkset-level (re)evaluation rooted at this prim's getRootEdit().
+    auto dist = parseDistributedStereoTag(desc);
+
+    if (dist.error != DistParseError::Ok)
+    {
+        // F4 will turn this into a throttled user-visible notification.
+        LL_INFOS("Stream3D") << "[3dstream-stereo] parse error on " << id
+                              << " (kind=" << static_cast<int>(dist.error)
+                              << ", value='" << dist.bad_value << "')" << LL_ENDL;
+        // Field is malformed → treat the slot as missing and re-evaluate the
+        // owning linkset, if we knew about one.
+        auto pr_it = mPrimToRoot.find(id);
+        if (pr_it != mPrimToRoot.end())
+        {
+            evaluateLinkset(pr_it->second);
+        }
+        return;
+    }
+
+    if (dist.data)
+    {
+        LLViewerObject* obj = gObjectList.findObject(id);
+        if (!obj || obj->isDead())
+        {
+            return;
+        }
+        LLViewerObject* root = obj->getRootEdit();
+        LLUUID root_id = root ? root->getID() : id;
+        evaluateLinkset(root_id);
+        return;
+    }
+
+    // No tag of any kind. If this prim used to participate in a linkset
+    // binding, that binding needs to be recomputed without it.
+    auto pr_it = mPrimToRoot.find(id);
+    if (pr_it != mPrimToRoot.end())
+    {
+        evaluateLinkset(pr_it->second);
+    }
+}
+
+void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
+{
+    LLViewerObject* root = gObjectList.findObject(root_id);
+    if (!root || root->isDead() || root->isAvatar())
+    {
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    auto root_desc_it = mDescriptionCache.find(root_id);
+    if (root_desc_it == mDescriptionCache.end()
+        || root_desc_it->second.description.empty())
+    {
+        // Root description not yet known — keep any existing binding pending
+        // until pollObjectPropertiesFamily fills the cache (F2-b).
+        return;
+    }
+
+    auto root_parse = parseDistributedStereoTag(root_desc_it->second.description);
+    if (!root_parse.data || !root_parse.data->url.has_value())
+    {
+        // r8 F2-a constraint: source declaration must live on the root prim.
+        // A linkset without a root-level {url} cannot form a binding.
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    const auto& root_data = *root_parse.data;
+    const std::string url = *root_data.url;
+    const F32 fallback_range = gSavedSettings.getF32("Stream3DRolloffMax");
+    const F32 range_default = root_data.range_default.value_or(fallback_range);
+
+    std::vector<SpeakerSlot> speakers;
+    auto collectSpeaker = [&](const LLUUID& prim_id, const DistStereoTagData& d)
+    {
+        if (!d.ch.has_value()) return;
+        SpeakerSlot s;
+        s.prim_id = prim_id;
+        s.ch = *d.ch;
+        s.range = d.range_speaker.value_or(range_default);
+        s.volume = d.volume.value_or(1.f);
+        speakers.push_back(s);
+    };
+
+    // Root may be both source and speaker.
+    collectSpeaker(root_id, root_data);
+
+    for (const auto& child : root->getChildren())
+    {
+        if (!child || child->isDead()) continue;
+        const LLUUID& child_id = child->getID();
+        auto cdesc_it = mDescriptionCache.find(child_id);
+        if (cdesc_it == mDescriptionCache.end()
+            || cdesc_it->second.description.empty()) continue;
+        auto cparse = parseDistributedStereoTag(cdesc_it->second.description);
+        if (!cparse.data) continue;
+        collectSpeaker(child_id, *cparse.data);
+    }
+
+    if (speakers.empty())
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] structural error: root "
+                              << root_id << " has no speakers" << LL_ENDL;
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    // F2-a: per-binding speaker cap is hard-coded; F5 will surface this as
+    // Stream3DStereoMaxSpeakers in settings.xml.
+    constexpr S32 kMaxSpeakers = 16;
+    S32 dropped = 0;
+    if (static_cast<S32>(speakers.size()) > kMaxSpeakers)
+    {
+        dropped = static_cast<S32>(speakers.size()) - kMaxSpeakers;
+        speakers.resize(kMaxSpeakers);
+        LL_INFOS("Stream3D") << "[3dstream-stereo] too many speakers on root "
+                              << root_id << " — truncated to " << kMaxSpeakers
+                              << " (dropped " << dropped << ")" << LL_ENDL;
+    }
+
+    // Unmap whatever speakers the previous binding (if any) had registered,
+    // so mPrimToRoot reflects only the current speaker set.
+    auto old_it = mDistributedBindings.find(root_id);
+    const bool was_present = (old_it != mDistributedBindings.end());
+    if (was_present)
+    {
+        for (const auto& s : old_it->second.speakers)
+        {
+            auto pr_it = mPrimToRoot.find(s.prim_id);
+            if (pr_it != mPrimToRoot.end() && pr_it->second == root_id)
+            {
+                mPrimToRoot.erase(pr_it);
+            }
+        }
+    }
+
+    auto& binding = mDistributedBindings[root_id];
+    binding.root_id = root_id;
+    binding.url = url;
+    binding.range_default = range_default;
+    binding.speakers = std::move(speakers);
+    binding.dropped_speakers = dropped;
+
+    for (const auto& s : binding.speakers)
+    {
+        mPrimToRoot[s.prim_id] = root_id;
+    }
+
+    LL_INFOS("Stream3D") << "[3dstream-stereo] binding "
+                          << (was_present ? "updated" : "constructed")
+                          << " root=" << root_id
+                          << " url=" << url
+                          << " speakers=" << binding.speakers.size()
+                          << " (dropped=" << dropped << ")"
+                          << LL_ENDL;
+}
+
+void LLPositionalStreamMgr::teardownDistributedBinding(const LLUUID& root_id)
+{
+    auto it = mDistributedBindings.find(root_id);
+    if (it == mDistributedBindings.end()) return;
+
+    LL_INFOS("Stream3D") << "[3dstream-stereo] tearing down binding root="
+                          << root_id
+                          << " speakers=" << it->second.speakers.size()
+                          << LL_ENDL;
+
+    for (const auto& s : it->second.speakers)
+    {
+        auto pr_it = mPrimToRoot.find(s.prim_id);
+        if (pr_it != mPrimToRoot.end() && pr_it->second == root_id)
+        {
+            mPrimToRoot.erase(pr_it);
+        }
+    }
+    mDistributedBindings.erase(it);
 }
 
 void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData& tag)
@@ -655,16 +843,22 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
 
 void LLPositionalStreamMgr::shutdownPrimBindings()
 {
-    if (mBindings.empty())
+    if (!mBindings.empty())
     {
-        return;
+        LL_INFOS("Stream3D") << "Tearing down " << mBindings.size()
+                              << " mono prim bindings" << LL_ENDL;
+        // ~Binding's unique_ptr<> destructor invokes the stream's stop(),
+        // which calls FMOD Channel::stop() synchronously. Output device
+        // buffer drain (<50ms typical) is the only residual delay.
+        mBindings.clear();
     }
-    LL_INFOS("Stream3D") << "Tearing down " << mBindings.size()
-                          << " mono prim bindings" << LL_ENDL;
-    // ~Binding's unique_ptr<> destructor invokes the stream's stop(), which
-    // calls FMOD Channel::stop() synchronously. Output device buffer drain
-    // (<50ms typical) is the only residual delay.
-    mBindings.clear();
+    if (!mDistributedBindings.empty())
+    {
+        LL_INFOS("Stream3D") << "Tearing down " << mDistributedBindings.size()
+                              << " distributed-stereo bindings" << LL_ENDL;
+        mDistributedBindings.clear();
+        mPrimToRoot.clear();
+    }
 }
 
 void LLPositionalStreamMgr::shutdownAll()

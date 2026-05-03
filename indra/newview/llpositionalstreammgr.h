@@ -33,6 +33,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 class LLPositionalStream;
 class LLPositionalStreamStereo;
@@ -192,8 +193,42 @@ private:
         std::unique_ptr<LLPositionalStream> stream;
     };
 
+    // r8 F2-a: one entry per speaker prim that participates in a distributed
+    // binding. `range` is the per-speaker resolved value (slot {range} → root
+    // {range} → settings.xml fallback) — F3 reads it directly when calling
+    // FMOD set3DMinMaxDistance, so the precedence resolution lives only in
+    // evaluateLinkset, not in the streaming layer.
+    struct SpeakerSlot
+    {
+        LLUUID prim_id;
+        DistChannel ch = DistChannel::M;
+        F32 range = 20.f;
+        F32 volume = 1.f;
+    };
+
+    // r8 F2-a: aggregated linkset state for one distributed-stereo source.
+    // Keyed by root_id in mDistributedBindings. F2-a populates the structural
+    // fields only; F3 will own a unique_ptr<LLPositionalStreamMulti> here.
+    struct DistributedStereoBinding
+    {
+        LLUUID root_id;
+        std::string url;
+        F32 range_default = 20.f;
+        std::vector<SpeakerSlot> speakers;
+        // Count of speakers truncated by the per-binding cap. Surfaced in
+        // F4 throttled notification; F2-a only logs.
+        S32 dropped_speakers = 0;
+    };
+
     void evaluateBinding(const LLUUID& id);
     void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
+
+    // r8 F2-a: (re)build the distributed-stereo binding rooted at root_id by
+    // walking the linkset and harvesting whatever speaker descriptions are
+    // already in mDescriptionCache. Missing child descriptions are not
+    // requested here — F2-b extends pollObjectPropertiesFamily to do that.
+    void evaluateLinkset(const LLUUID& root_id);
+    void teardownDistributedBinding(const LLUUID& root_id);
 
     // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
     // any whose Description we haven't seen recently. Throttled so we never
@@ -211,6 +246,12 @@ private:
 
     std::map<LLUUID, CacheEntry> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
+    // r8 F2-a: distributed-stereo bindings, keyed by root prim id.
+    std::map<LLUUID, DistributedStereoBinding> mDistributedBindings;
+    // r8 F2-a: reverse index for O(log N) child→root resolution from
+    // onObjectPropertiesReceived. Populated/cleared by evaluateLinkset and
+    // teardownDistributedBinding so it stays in sync with mDistributedBindings.
+    std::map<LLUUID, LLUUID> mPrimToRoot;
     std::unique_ptr<LLPositionalStream> mDebugStream;
     std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
 
