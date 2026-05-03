@@ -454,7 +454,7 @@ void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
     case DistErrorKind::SpeakerOverLimit:
         msg = "構造エラー (root " + id_short + "): スピーカー数が上限を超えています";
         if (!detail.empty()) msg += " (" + detail + ")";
-        msg += "。先頭から 16 個のみ採用しました";
+        msg += "。Stream3DStereoMaxSpeakers の上限まで採用しました";
         break;
     case DistErrorKind::StreamStartFailed:
         msg = "再生エラー (root " + id_short + "): ストリームを開始できませんでした";
@@ -630,9 +630,11 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
         return;
     }
 
-    // F2-a: per-binding speaker cap is hard-coded; F5 will surface this as
-    // Stream3DStereoMaxSpeakers in settings.xml.
-    constexpr S32 kMaxSpeakers = 16;
+    // r8 F5: per-binding speaker cap from settings.xml. Reads on every
+    // evaluation so a runtime change (debug menu / login.xml override)
+    // takes effect on the next poll cycle. Clamped to ≥ 1 so a hostile /
+    // mistyped 0 setting doesn't silently disable distributed-stereo.
+    const S32 kMaxSpeakers = std::max(1, gSavedSettings.getS32("Stream3DStereoMaxSpeakers"));
     S32 dropped = 0;
     if (static_cast<S32>(speakers.size()) > kMaxSpeakers)
     {
