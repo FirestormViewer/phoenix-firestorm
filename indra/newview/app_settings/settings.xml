@@ -27689,5 +27689,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>4</integer>
     </map>
+    <key>Stream3DStereoMaxSpeakers</key>
+    <map>
+      <key>Comment</key>
+      <string>AYAstorm r8: Maximum number of speaker prims allowed in a single distributed-stereo binding ([3dstream-stereo:...]). Speakers beyond this count are dropped from the linkset traversal tail and a throttled toast is emitted. Re-evaluation picks up changes on the next poll cycle.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>16</integer>
+    </map>
   </map>
 </llsd>

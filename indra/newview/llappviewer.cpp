@@ -2175,6 +2175,15 @@ bool LLAppViewer::cleanup()
     {
         LL_INFOS() << "Shutting down audio" << LL_ENDL;
 
+        // <FS:AYA> r7 M3 / r8 F6: positional stream decode threads hold FMOD
+        // sound pointers and call Sound::readData() at 200 Hz. Tearing them
+        // down here (while gAudiop is still alive) lets each stream's stop()
+        // join its decode thread before any FMOD release. Without this the
+        // singleton's destructor runs at static-finalisation, by which time
+        // FMOD::System has already been released and the still-running
+        // decode thread is reading freed memory.
+        LLPositionalStreamMgr::instance().shutdownAll();
+
         // be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
         gAudiop->stopInternetStream();
         // shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.

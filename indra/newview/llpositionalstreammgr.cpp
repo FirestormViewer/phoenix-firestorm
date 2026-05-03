@@ -28,6 +28,7 @@
 
 #include "llfasttimer.h"
 #include "llpositionalstream.h"
+#include "llpositionalstreammulti.h"
 #include "llpositionalstreamstereo.h"
 
 #include "llviewercontrol.h"
@@ -41,12 +42,16 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llselectmgr.h"
+#include "llviewerregion.h"
+#include "message.h"
 
 #include "llstring.h"
 #include "lltimer.h"
 
 #include <algorithm>
 #include <cctype>
+#include <limits>
+#include <set>
 
 namespace
 {
@@ -114,23 +119,6 @@ namespace
             }
         }
         return std::string::npos;
-    }
-
-    bool tryParseInt(const std::string& s, S32& out)
-    {
-        if (s.empty()) return false;
-        try
-        {
-            size_t consumed = 0;
-            S32 val = std::stoi(s, &consumed);
-            if (consumed == 0) return false;
-            out = val;
-            return true;
-        }
-        catch (const std::exception&)
-        {
-            return false;
-        }
     }
 
     // Walks a body between [content_start, end) by directly scanning for
@@ -216,21 +204,6 @@ namespace
             }
         }
     }
-
-    // Resolve link number to a child object. Link 1 is the root itself, link 2
-    // is the first child, etc. Returns nullptr if no such link in this set.
-    LLViewerObject* resolveLink(LLViewerObject* root, S32 link_num)
-    {
-        if (!root || link_num < 1) return nullptr;
-        if (link_num == 1) return root;
-
-        const auto& children = root->getChildren();
-        S32 want_idx = link_num - 2; // link 2 == children[0]
-        if (want_idx < 0 || want_idx >= static_cast<S32>(children.size())) return nullptr;
-        auto it = children.begin();
-        std::advance(it, want_idx);
-        return it->get();
-    }
 }
 
 LLPositionalStreamMgr& LLPositionalStreamMgr::instance()
@@ -270,33 +243,128 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 }
 
 // static
-std::optional<LLPositionalStreamMgr::StereoTagData>
-LLPositionalStreamMgr::parseStereoTag(const std::string& description)
+LLPositionalStreamMgr::DistParseResult
+LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
 {
-    // r5: see parseTag — same prefix-alias scheme for stereo.
+    // r5 で導入した [3dstream-stereo:...] と alias [ayastream-stereo:...] を
+    // 同じ本体としてサポート (r8 で旧 {l:N}{r:N} 書式は廃止し、新書式のみ受ける)。
     static const std::string kPrefix    = "[3dstream-stereo:";
     static const std::string kPrefixOld = "[ayastream-stereo:";
 
+    DistParseResult result;
+
     size_t content_start = 0, end = 0;
     if (!findTagBody(description, kPrefix, content_start, end) &&
-        !findTagBody(description, kPrefixOld, content_start, end)) return std::nullopt;
+        !findTagBody(description, kPrefixOld, content_start, end))
+    {
+        return result; // no tag at all
+    }
 
-    StereoTagData data;
-    bool got_url = false;
+    // Track which keys appeared (regardless of value validity) so a
+    // {ch:X} with an invalid value still surfaces BadCh rather than
+    // silently being treated as "no tag here".
+    bool seen_ch_key  = false;
+    bool seen_url_key = false;
+
+    DistStereoTagData data;
+    F32 range_value = 0.f;
+    bool range_valid = false;
+    F32 volume_value = 0.f;
+    bool volume_valid = false;
+
+    auto setError = [&](DistParseError e, const std::string& v)
+    {
+        // First error wins — keeps the surfaced message stable when several
+        // fields are bad (LSL editing typically fixes one at a time anyway).
+        if (result.error == DistParseError::Ok)
+        {
+            result.error = e;
+            result.bad_value = v;
+        }
+    };
+
     forEachKeyValue(description, content_start, end,
         [&](const std::string& key, const std::string& val)
         {
-            if (key == "url")      { data.url = val; got_url = !val.empty(); }
-            else if (key == "min") { F32 f; if (tryParseFloat(val, f)) data.min = f; }
-            else if (key == "max") { F32 f; if (tryParseFloat(val, f)) data.max = f; }
-            else if (key == "l")   { S32 i; if (tryParseInt(val, i)) data.l_link = i; }
-            else if (key == "r")   { S32 i; if (tryParseInt(val, i)) data.r_link = i; }
+            if (key == "url")
+            {
+                seen_url_key = true;
+                if (val.empty())
+                {
+                    setError(DistParseError::EmptyUrl, val);
+                }
+                else
+                {
+                    data.url = val;
+                }
+            }
+            else if (key == "ch")
+            {
+                seen_ch_key = true;
+                std::string v = toLowerAscii(val);
+                if      (v == "l") data.ch = DistChannel::L;
+                else if (v == "r") data.ch = DistChannel::R;
+                else if (v == "m") data.ch = DistChannel::M;
+                else               setError(DistParseError::BadCh, val);
+            }
+            else if (key == "range")
+            {
+                F32 f;
+                if (tryParseFloat(val, f) && f > 0.f)
+                {
+                    range_value = f;
+                    range_valid = true;
+                }
+                else
+                {
+                    setError(DistParseError::BadRange, val);
+                }
+            }
+            else if (key == "volume")
+            {
+                F32 f;
+                if (tryParseFloat(val, f) && f >= 0.f && f <= 1.f)
+                {
+                    volume_value = f;
+                    volume_valid = true;
+                }
+                else
+                {
+                    setError(DistParseError::BadVolume, val);
+                }
+            }
+            // Unknown keys (incl. removed-in-r8 {l}/{r}/{min}/{max}) are
+            // silently ignored — the spec is permissive about extra fields.
         });
 
-    if (!got_url) return std::nullopt;
-    if (data.l_link < 1 || data.r_link < 1) return std::nullopt;
-    if (data.l_link == data.r_link) return std::nullopt;
-    return data;
+    // The tag is recognized when at least one of {url} or {ch} appeared.
+    // A bracket body with neither is treated as "no tag here".
+    const bool tag_recognized = seen_ch_key || seen_url_key;
+    if (!tag_recognized)
+    {
+        return result;
+    }
+
+    if (result.error != DistParseError::Ok)
+    {
+        return result; // data stays nullopt; caller can throttle/notify
+    }
+
+    // Fan {range} and {volume} into the role-specific slots. {range} on a
+    // prim that is both source and speaker fills both range_default and
+    // range_speaker from the same value (spec §4.3).
+    if (range_valid)
+    {
+        if (data.url.has_value()) data.range_default = range_value;
+        if (data.ch.has_value())  data.range_speaker = range_value;
+    }
+    if (volume_valid && data.ch.has_value())
+    {
+        data.volume = volume_value;
+    }
+
+    result.data = data;
+    return result;
 }
 
 void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
@@ -324,7 +392,10 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     // (e.g., teleport out and back) need to re-bind even when the text matches.
     auto& entry = mDescriptionCache[id];
     entry.description = description;
-    entry.last_polled = LLTimer::getElapsedSeconds();
+    const F64 reply_now = LLTimer::getElapsedSeconds();
+    entry.last_polled  = reply_now;
+    entry.last_replied = reply_now;
+    entry.priority_retries = 0;
 
     // M3b debug: only log replies that look like our tag, to keep the noise
     // floor sane in busy regions.
@@ -338,6 +409,68 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     evaluateBinding(id);
 }
 
+void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
+                                                   DistErrorKind kind,
+                                                   const std::string& detail)
+{
+    const F64 now = LLTimer::getElapsedSeconds();
+    auto key = std::make_pair(prim_id, kind);
+    auto it = mErrorThrottle.find(key);
+    if (it != mErrorThrottle.end() && (now - it->second) < 30.0)
+    {
+        // spec §4.9: suppression logged but not surfaced to chat.
+        LL_DEBUGS("Stream3D") << "[3dstream-stereo] notification suppressed: kind="
+                               << static_cast<int>(kind) << " prim=" << prim_id
+                               << " (next allowed in "
+                               << (30.0 - (now - it->second)) << "s)" << LL_ENDL;
+        return;
+    }
+    mErrorThrottle[key] = now;
+
+    // spec §4.9 message templates. detail is interpolated where it carries
+    // useful information (raw bad value, over-limit count, URL). Each kind
+    // ends in a worked example so the user can copy-paste a fix.
+    const std::string id_short = prim_id.asString().substr(0, 8);
+    std::string msg;
+    switch (kind)
+    {
+    case DistErrorKind::BadCh:
+        msg = "タグ書式エラー (prim " + id_short + "): ch の値は L/R/M のいずれかである必要があります";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{range:30}]";
+        break;
+    case DistErrorKind::BadRange:
+        msg = "タグ書式エラー (prim " + id_short + "): range は正の数で指定してください";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{range:30}]";
+        break;
+    case DistErrorKind::BadVolume:
+        msg = "タグ書式エラー (prim " + id_short + "): volume は 0.0〜1.0 の範囲で指定してください";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{volume:0.8}]";
+        break;
+    case DistErrorKind::EmptyUrl:
+        msg = "タグ書式エラー (prim " + id_short + "): url が空です";
+        msg += "。例: [3dstream-stereo:{url:http://example/stream.mp3}{range:30}]";
+        break;
+    case DistErrorKind::NoSpeakers:
+        msg = "構造エラー (root " + id_short + "): 音源宣言 (url) が root にあるがスピーカー (ch) が見つかりません";
+        msg += "。各スピーカープリムに [3dstream-stereo:{ch:L|R|M}] を記載してください";
+        break;
+    case DistErrorKind::SpeakerOverLimit:
+        msg = "構造エラー (root " + id_short + "): スピーカー数が上限を超えています";
+        if (!detail.empty()) msg += " (" + detail + ")";
+        msg += "。Stream3DStereoMaxSpeakers の上限まで採用しました";
+        break;
+    case DistErrorKind::StreamStartFailed:
+        msg = "再生エラー (root " + id_short + "): ストリームを開始できませんでした";
+        if (!detail.empty()) msg += " (url='" + detail + "')";
+        msg += "。URL とネットワーク接続を確認してください";
+        break;
+    }
+    notifyStream3D(msg);
+}
+
 void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
 {
     auto desc_it = mDescriptionCache.find(id);
@@ -346,54 +479,474 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         return;
     }
 
-    // Stereo tag wins if both happen to be present (the prefixes don't
-    // overlap textually, but a description could in theory contain both).
     const std::string& desc = desc_it->second.description;
-    auto stereo_tag = parseStereoTag(desc);
-    auto mono_tag = stereo_tag ? std::nullopt : parseTag(desc);
+    auto mono_tag = parseTag(desc);
 
-    auto bind_it = mBindings.find(id);
-    auto sbind_it = mStereoBindings.find(id);
-
-    // If a different mode now applies, drop the stale binding first so the
-    // new path can recreate it cleanly.
-    if (stereo_tag && bind_it != mBindings.end())
-    {
-        LL_INFOS("Stream3D") << "Replacing mono binding with stereo for " << id << LL_ENDL;
-        mBindings.erase(bind_it);
-        bind_it = mBindings.end();
-    }
-    if (mono_tag && sbind_it != mStereoBindings.end())
-    {
-        LL_INFOS("Stream3D") << "Replacing stereo binding with mono for " << id << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
-        sbind_it = mStereoBindings.end();
-    }
-
-    if (stereo_tag)
-    {
-        evaluateStereoBinding(id, *stereo_tag);
-        return;
-    }
     if (mono_tag)
     {
         evaluateMonoBinding(id, *mono_tag);
+        // r8 F2-a: a prim that just became a mono source must drop out of any
+        // distributed-stereo linkset it had been participating in. Re-evaluate
+        // the previously-known root so the speaker slot is recomputed without
+        // this prim. (mPrimToRoot lookup is the only side effect here; the
+        // mono path itself is unchanged.)
+        // r8 F8: defer to the per-frame drain in update() — see
+        // mPendingLinksetEval comment for why.
+        auto pr_it = mPrimToRoot.find(id);
+        if (pr_it != mPrimToRoot.end())
+        {
+            mPendingLinksetEval.insert(pr_it->second);
+        }
         return;
     }
 
-    // No tag of either kind: drop any bindings this prim still has.
+    // No mono tag — drop any leftover mono binding before considering the
+    // distributed-stereo path.
+    auto bind_it = mBindings.find(id);
     if (bind_it != mBindings.end())
     {
         LL_INFOS("Stream3D") << "Removing positional binding for " << id
                               << " (tag gone)" << LL_ENDL;
         mBindings.erase(bind_it);
     }
-    if (sbind_it != mStereoBindings.end())
+
+    // r8 F2-a: distributed-stereo dispatch. Either {url} or {ch} triggers a
+    // linkset-level (re)evaluation rooted at this prim's getRootEdit().
+    auto dist = parseDistributedStereoTag(desc);
+
+    if (dist.error != DistParseError::Ok)
     {
-        LL_INFOS("Stream3D") << "Removing stereo binding for " << id
-                              << " (tag gone)" << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
+        LL_INFOS("Stream3D") << "[3dstream-stereo] parse error on " << id
+                              << " (kind=" << static_cast<int>(dist.error)
+                              << ", value='" << dist.bad_value << "')" << LL_ENDL;
+
+        DistErrorKind k = DistErrorKind::BadCh;
+        switch (dist.error)
+        {
+        case DistParseError::BadCh:     k = DistErrorKind::BadCh;     break;
+        case DistParseError::BadRange:  k = DistErrorKind::BadRange;  break;
+        case DistParseError::BadVolume: k = DistErrorKind::BadVolume; break;
+        case DistParseError::EmptyUrl:  k = DistErrorKind::EmptyUrl;  break;
+        case DistParseError::Ok:        break; // unreachable
+        }
+        notifyDistributedError(id, k, dist.bad_value);
+
+        // Field is malformed → treat the slot as missing and re-evaluate the
+        // owning linkset, if we knew about one. (Deferred — F8.)
+        auto pr_it = mPrimToRoot.find(id);
+        if (pr_it != mPrimToRoot.end())
+        {
+            mPendingLinksetEval.insert(pr_it->second);
+        }
+        return;
     }
+
+    if (dist.data)
+    {
+        LLViewerObject* obj = gObjectList.findObject(id);
+        if (!obj || obj->isDead())
+        {
+            return;
+        }
+        LLViewerObject* root = obj->getRootEdit();
+        LLUUID root_id = root ? root->getID() : id;
+        // r8 F8: defer to per-frame drain so a burst of replies for the same
+        // linkset coalesces into a single rebuild.
+        mPendingLinksetEval.insert(root_id);
+        return;
+    }
+
+    // No tag of any kind. If this prim used to participate in a linkset
+    // binding, that binding needs to be recomputed without it. (Deferred — F8.)
+    auto pr_it = mPrimToRoot.find(id);
+    if (pr_it != mPrimToRoot.end())
+    {
+        mPendingLinksetEval.insert(pr_it->second);
+    }
+}
+
+void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
+{
+    LLViewerObject* root = gObjectList.findObject(root_id);
+    if (!root || root->isDead() || root->isAvatar())
+    {
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    auto root_desc_it = mDescriptionCache.find(root_id);
+    if (root_desc_it == mDescriptionCache.end()
+        || root_desc_it->second.description.empty())
+    {
+        // Root description not yet known — keep any existing binding pending
+        // and ask the poll loop to fetch the root proactively.
+        enqueuePriorityPoll(root_id);
+        return;
+    }
+
+    auto root_parse = parseDistributedStereoTag(root_desc_it->second.description);
+    if (!root_parse.data || !root_parse.data->url.has_value())
+    {
+        // r8 F2-a constraint: source declaration must live on the root prim.
+        // A linkset without a root-level {url} cannot form a binding.
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    const auto& root_data = *root_parse.data;
+    const std::string url = *root_data.url;
+    const F32 fallback_range = gSavedSettings.getF32("Stream3DRolloffMax");
+    const F32 range_default = root_data.range_default.value_or(fallback_range);
+
+    std::vector<SpeakerSlot> speakers;
+    auto collectSpeaker = [&](const LLUUID& prim_id, const DistStereoTagData& d)
+    {
+        if (!d.ch.has_value()) return;
+        SpeakerSlot s;
+        s.prim_id = prim_id;
+        s.ch = *d.ch;
+        s.range = d.range_speaker.value_or(range_default);
+        s.volume = d.volume.value_or(1.f);
+        speakers.push_back(s);
+    };
+
+    // Root may be both source and speaker.
+    collectSpeaker(root_id, root_data);
+
+    for (const auto& child : root->getChildren())
+    {
+        if (!child || child->isDead()) continue;
+        const LLUUID& child_id = child->getID();
+        auto cdesc_it = mDescriptionCache.find(child_id);
+        if (cdesc_it == mDescriptionCache.end()
+            || cdesc_it->second.description.empty())
+        {
+            // r8 F2-b: ask the poll loop to fetch this child ahead of the
+            // round-robin scan so the binding completes promptly.
+            enqueuePriorityPoll(child_id);
+            // r8 F11: ObjectPropertiesFamily replies are filtered by the sim
+            // for unselected child prims, so the priority poll alone never
+            // resolves a child desc on a fresh login (root replies, children
+            // stay silent). Trigger a one-shot ObjectSelect on the child to
+            // force a full ObjectProperties reply (which carries Description
+            // and feeds onObjectPropertiesReceived). The deselect drain in
+            // update() releases the slot a moment later. We bypass LLSelectMgr
+            // so the user's actual selection / edit-menu / selection beam
+            // are untouched.
+            requestChildDescViaSelect(child.get());
+            continue;
+        }
+        auto cparse = parseDistributedStereoTag(cdesc_it->second.description);
+        if (!cparse.data) continue;
+        collectSpeaker(child_id, *cparse.data);
+    }
+
+    if (speakers.empty())
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] structural error: root "
+                              << root_id << " has no speakers" << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::NoSpeakers, "");
+        teardownDistributedBinding(root_id);
+        return;
+    }
+
+    // r8 F5: per-binding speaker cap from settings.xml. Reads on every
+    // evaluation so a runtime change (debug menu / login.xml override)
+    // takes effect on the next poll cycle. Clamped to ≥ 1 so a hostile /
+    // mistyped 0 setting doesn't silently disable distributed-stereo.
+    const S32 kMaxSpeakers = std::max(1, gSavedSettings.getS32("Stream3DStereoMaxSpeakers"));
+    S32 dropped = 0;
+    if (static_cast<S32>(speakers.size()) > kMaxSpeakers)
+    {
+        dropped = static_cast<S32>(speakers.size()) - kMaxSpeakers;
+        const S32 total = static_cast<S32>(speakers.size());
+        speakers.resize(kMaxSpeakers);
+        LL_INFOS("Stream3D") << "[3dstream-stereo] too many speakers on root "
+                              << root_id << " — truncated to " << kMaxSpeakers
+                              << " (dropped " << dropped << ")" << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::SpeakerOverLimit,
+                               llformat("declared=%d, used=%d", total, kMaxSpeakers));
+    }
+
+    // r8 F3-3: detect "no audible change" so we can keep the running stream
+    // when an unrelated tag in the linkset is re-polled. Comparison covers
+    // url + element-wise speaker tuple (prim, ch, range, volume); position
+    // changes are propagated every tick by the update loop and never trigger
+    // a restart.
+    auto old_it = mDistributedBindings.find(root_id);
+    const bool was_present = (old_it != mDistributedBindings.end());
+    bool fingerprint_match = false;
+    if (was_present)
+    {
+        const auto& old_b = old_it->second;
+        if (old_b.url == url
+            && old_b.speakers.size() == speakers.size()
+            && old_b.stream)
+        {
+            fingerprint_match = true;
+            for (size_t i = 0; i < speakers.size(); ++i)
+            {
+                const auto& a = old_b.speakers[i];
+                const auto& c = speakers[i];
+                if (a.prim_id != c.prim_id || a.ch != c.ch
+                    || a.range != c.range || a.volume != c.volume)
+                {
+                    fingerprint_match = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (fingerprint_match)
+    {
+        // Refresh metadata cheaply (range_default may have moved if the root
+        // {range:} was re-typed to the same numeric value, etc.) but leave
+        // the live stream untouched.
+        old_it->second.range_default = range_default;
+        old_it->second.dropped_speakers = dropped;
+        return;
+    }
+
+    // Structural change (or first build). Drop the previous mPrimToRoot
+    // entries so the new speaker set is the only one indexed.
+    if (was_present)
+    {
+        for (const auto& s : old_it->second.speakers)
+        {
+            auto pr_it = mPrimToRoot.find(s.prim_id);
+            if (pr_it != mPrimToRoot.end() && pr_it->second == root_id)
+            {
+                mPrimToRoot.erase(pr_it);
+            }
+        }
+    }
+
+    auto& binding = mDistributedBindings[root_id];
+    binding.root_id = root_id;
+    binding.url = url;
+    binding.range_default = range_default;
+    binding.speakers = std::move(speakers);
+    binding.dropped_speakers = dropped;
+
+    for (const auto& s : binding.speakers)
+    {
+        mPrimToRoot[s.prim_id] = root_id;
+    }
+
+    // (Re)build the FMOD stream. unique_ptr::reset() invokes the existing
+    // stream's destructor, which joins the decode thread before releasing
+    // FMOD resources (r7 M3 invariant carried from Stereo into Multi).
+    binding.stream.reset();
+    // Fresh stream object: any in-flight retry budget belongs to the old
+    // stream. Keep notified_played sticky so unrelated tag edits don't spam
+    // "now playing" again. (F7)
+    binding.reconnect_attempts = 0;
+    binding.next_retry_time = 0.0;
+    auto stream = std::make_unique<LLPositionalStreamMulti>();
+    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
+
+    std::vector<LLPositionalStreamMulti::SpeakerConfig> configs;
+    configs.reserve(binding.speakers.size());
+    for (const auto& s : binding.speakers)
+    {
+        LLPositionalStreamMulti::SpeakerConfig c;
+        switch (s.ch)
+        {
+        case DistChannel::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
+        case DistChannel::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
+        case DistChannel::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
+        }
+        c.range = s.range;
+        c.volume = s.volume;
+        // Initial position: best effort. Speaker prims that arrived in the
+        // poll cache before their viewer object did get a zero vector here;
+        // the next update tick replaces it with the real getPositionGlobal().
+        if (LLViewerObject* obj = gObjectList.findObject(s.prim_id))
+        {
+            if (!obj->isDead())
+            {
+                c.position = toFloatVec(obj->getPositionGlobal());
+            }
+        }
+        configs.push_back(c);
+    }
+
+    if (!stream->start(url, configs))
+    {
+        LL_WARNS("Stream3D") << "[3dstream-stereo] stream start failed root="
+                              << root_id << " url=" << url << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::StreamStartFailed, url);
+        // Keep the binding metadata so a subsequent re-evaluation (e.g.
+        // network recovers) can retry without re-walking the linkset; the
+        // missing stream is the signal that we owe a retry.
+    }
+    else
+    {
+        binding.stream = std::move(stream);
+    }
+
+    LL_INFOS("Stream3D") << "[3dstream-stereo] binding "
+                          << (was_present ? "rebuilt" : "constructed")
+                          << " root=" << root_id
+                          << " url=" << url
+                          << " speakers=" << binding.speakers.size()
+                          << " (dropped=" << dropped << ")"
+                          << " stream=" << (binding.stream ? "started" : "deferred")
+                          << LL_ENDL;
+}
+
+void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
+{
+    // O(N) dedup; queue is small in practice (≤ ~16 per pending linkset).
+    for (const auto& q : mPriorityPollQueue)
+    {
+        if (q == id) return;
+    }
+    mPriorityPollQueue.push_back(id);
+}
+
+void LLPositionalStreamMgr::requestChildDescViaSelect(LLViewerObject* child)
+{
+    // r8 F11: see header. We bypass LLSelectMgr deliberately — going through
+    // selectObjectAndFamily would mutate gEditMenuHandler, raise selection
+    // beams, and clobber the user's actual selection. The bare wire-level
+    // ObjectSelect is enough to coax the sim into emitting full
+    // ObjectProperties (which carries Description) for this child.
+    if (!child || child->isDead()) return;
+
+    LLViewerRegion* region = child->getRegion();
+    if (!region) return;
+
+    // If we already have a deselect pending for this prim, the previous select
+    // is still in flight (or its reply hasn't been processed yet). Bumping the
+    // due-time keeps the slot alive a bit longer instead of double-selecting.
+    const F64 now = LLTimer::getElapsedSeconds();
+    static constexpr F64 kSelectHoldSeconds = 1.0;
+    auto [it, inserted] = mPendingChildDeselect.try_emplace(
+        child->getID(), now + kSelectHoldSeconds);
+    if (!inserted)
+    {
+        it->second = now + kSelectHoldSeconds;
+        return;
+    }
+
+    LLMessageSystem* msg = gMessageSystem;
+    msg->newMessageFast(_PREHASH_ObjectSelect);
+    msg->nextBlockFast(_PREHASH_AgentData);
+    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->nextBlockFast(_PREHASH_ObjectData);
+    msg->addU32Fast(_PREHASH_ObjectLocalID, child->getLocalID());
+    msg->sendReliable(region->getHost());
+}
+
+void LLPositionalStreamMgr::drainChildDeselects(F64 now)
+{
+    if (mPendingChildDeselect.empty()) return;
+
+    for (auto it = mPendingChildDeselect.begin(); it != mPendingChildDeselect.end(); )
+    {
+        if (it->second > now)
+        {
+            ++it;
+            continue;
+        }
+
+        LLViewerObject* obj = gObjectList.findObject(it->first);
+        if (!obj || obj->isDead())
+        {
+            // Object gone — sim already cleared its half of the selection
+            // when it emitted KillObject, so we just drop the entry.
+            it = mPendingChildDeselect.erase(it);
+            continue;
+        }
+
+        // r8 F11: user-collision guard. If LLSelectMgr has the prim in its
+        // local selection (build tools open, edit-link picker, etc.), then
+        // there's an authoritative ObjectSelect from the user side that
+        // outlives our phantom one. Sending our deselect would clobber the
+        // user's selection on the sim while their viewer still thinks it
+        // owns the slot — so we drop the entry and let the user's lifecycle
+        // manage deselect.
+        if (obj->isSelected())
+        {
+            it = mPendingChildDeselect.erase(it);
+            continue;
+        }
+
+        LLViewerRegion* region = obj->getRegion();
+        if (region)
+        {
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessageFast(_PREHASH_ObjectDeselect);
+            msg->nextBlockFast(_PREHASH_AgentData);
+            msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+            msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+            msg->nextBlockFast(_PREHASH_ObjectData);
+            msg->addU32Fast(_PREHASH_ObjectLocalID, obj->getLocalID());
+            msg->sendReliable(region->getHost());
+        }
+
+        it = mPendingChildDeselect.erase(it);
+    }
+}
+
+void LLPositionalStreamMgr::detectLinksetStructureChanges()
+{
+    if (mPrimToRoot.empty()) return;
+
+    // Collect deltas first, then re-evaluate — calling evaluateLinkset while
+    // iterating mPrimToRoot would mutate it under us.
+    std::set<LLUUID> roots_to_reeval;
+    for (const auto& [prim_id, registered_root] : mPrimToRoot)
+    {
+        LLViewerObject* obj = gObjectList.findObject(prim_id);
+        if (!obj || obj->isDead())
+        {
+            // Prim gone (e.g. derez). Re-evaluating the registered root will
+            // drop this slot and either rebuild or tear down the binding.
+            roots_to_reeval.insert(registered_root);
+            continue;
+        }
+        LLViewerObject* current_root_obj = obj->getRootEdit();
+        const LLUUID current_root = current_root_obj
+            ? current_root_obj->getID() : prim_id;
+        if (current_root != registered_root)
+        {
+            // link / unlink moved this prim across linksets.
+            roots_to_reeval.insert(registered_root);
+            roots_to_reeval.insert(current_root);
+        }
+    }
+
+    for (const auto& r : roots_to_reeval)
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] linkset structure change "
+                              << "— re-evaluating root " << r << LL_ENDL;
+        evaluateLinkset(r);
+    }
+}
+
+void LLPositionalStreamMgr::teardownDistributedBinding(const LLUUID& root_id)
+{
+    auto it = mDistributedBindings.find(root_id);
+    if (it == mDistributedBindings.end()) return;
+
+    LL_INFOS("Stream3D") << "[3dstream-stereo] tearing down binding root="
+                          << root_id
+                          << " speakers=" << it->second.speakers.size()
+                          << LL_ENDL;
+
+    for (const auto& s : it->second.speakers)
+    {
+        auto pr_it = mPrimToRoot.find(s.prim_id);
+        if (pr_it != mPrimToRoot.end() && pr_it->second == root_id)
+        {
+            mPrimToRoot.erase(pr_it);
+        }
+    }
+    mDistributedBindings.erase(it);
 }
 
 void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData& tag)
@@ -429,7 +982,7 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
     }
 
     const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
+    if (cap > 0 && static_cast<S32>(mBindings.size()) >= cap)
     {
         LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
                               << ") reached; not binding " << id << LL_ENDL;
@@ -464,97 +1017,6 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
                           << " url=" << tag.url << LL_ENDL;
 }
 
-void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag)
-{
-    LLViewerObject* root = gObjectList.findObject(id);
-    if (!root || root->isDead())
-    {
-        return;
-    }
-
-    LLViewerObject* l_obj = resolveLink(root, tag.l_link);
-    LLViewerObject* r_obj = resolveLink(root, tag.r_link);
-    if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
-    {
-        // Linkset not fully resolvable yet; defer (will retry on next props
-        // msg or when update() re-runs after children arrive).
-        return;
-    }
-
-    F32 want_min, want_max;
-    resolveRolloffFromTag(tag, want_min, want_max);
-    LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
-    LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
-
-    auto sbind_it = mStereoBindings.find(id);
-    if (sbind_it != mStereoBindings.end())
-    {
-        StereoBinding& b = sbind_it->second;
-        const bool topology_same = (b.url == tag.url
-                                    && b.l_link == tag.l_link
-                                    && b.r_link == tag.r_link
-                                    && b.l_prim == l_obj->getID()
-                                    && b.r_prim == r_obj->getID());
-        if (topology_same)
-        {
-            b.tag_min = tag.min;
-            b.tag_max = tag.max;
-            if (b.applied_min != want_min || b.applied_max != want_max)
-            {
-                b.stream->setRolloffDistances(want_min, want_max);
-                b.applied_min = want_min;
-                b.applied_max = want_max;
-            }
-            return;
-        }
-        LL_INFOS("Stream3D") << "Rebinding stereo " << id
-                              << ": URL or linkset topology changed" << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
-    }
-
-    const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
-    {
-        LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
-                              << ") reached; not binding stereo " << id << LL_ENDL;
-        if (!mCapNotified)
-        {
-            mCapNotified = true;
-            notifyStream3D(llformat(
-                "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
-                cap));
-        }
-        return;
-    }
-
-    auto stream = std::make_unique<LLPositionalStreamStereo>();
-    stream->setRolloffDistances(want_min, want_max);
-    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
-    if (!stream->start(tag.url, l_pos, r_pos))
-    {
-        return;
-    }
-
-    StereoBinding b;
-    b.url = tag.url;
-    b.tag_min = tag.min;
-    b.tag_max = tag.max;
-    b.applied_min = want_min;
-    b.applied_max = want_max;
-    b.l_link = tag.l_link;
-    b.r_link = tag.r_link;
-    b.l_prim = l_obj->getID();
-    b.r_prim = r_obj->getID();
-    b.stream = std::move(stream);
-    mStereoBindings.emplace(id, std::move(b));
-
-    LL_INFOS("Stream3D") << "Bound stereo stream to " << id
-                          << " url=" << tag.url
-                          << " L=link" << tag.l_link << "(" << l_obj->getID() << ")"
-                          << " R=link" << tag.r_link << "(" << r_obj->getID() << ")"
-                          << LL_ENDL;
-}
-
 static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MGR_UPDATE("Stream3D Mgr Update");
 
 void LLPositionalStreamMgr::update()
@@ -573,7 +1035,7 @@ void LLPositionalStreamMgr::update()
     // the stale flag.
     {
         const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-        const S32 total = static_cast<S32>(mBindings.size() + mStereoBindings.size());
+        const S32 total = static_cast<S32>(mBindings.size());
         if (mCapNotified && (cap <= 0 || total < cap))
         {
             mCapNotified = false;
@@ -582,6 +1044,28 @@ void LLPositionalStreamMgr::update()
 
     const F64 now = LLTimer::getElapsedSeconds();
     pollObjectPropertiesFamily(now);
+
+    // r8 F11: release child prims we briefly selected to force a full
+    // ObjectProperties reply. Runs before the linkset-eval drain so the
+    // ObjectDeselect goes out in the same frame the now-cached desc is
+    // consumed — the sim never sees a long-held selection on our behalf.
+    drainChildDeselects(now);
+
+    // r8 F8: drain pending linkset re-evaluations once per frame. A
+    // selection-induced ObjectProperties message can deliver 16 child
+    // descriptions back-to-back; the previous "evaluate per reply" path
+    // rebuilt the FMOD multi-stream once for every reply, blocking the main
+    // thread for several seconds. Set semantics dedup the root ids so each
+    // affected linkset rebuilds at most once per frame.
+    if (!mPendingLinksetEval.empty())
+    {
+        std::set<LLUUID> drained;
+        drained.swap(mPendingLinksetEval);
+        for (const auto& root_id : drained)
+        {
+            evaluateLinkset(root_id);
+        }
+    }
 
     if (mDebugStream)
     {
@@ -682,86 +1166,143 @@ void LLPositionalStreamMgr::update()
         ++it;
     }
 
-    for (auto it = mStereoBindings.begin(); it != mStereoBindings.end(); )
-    {
-        const LLUUID& id = it->first;
-        StereoBinding& b = it->second;
+    // r8 F3-3: distributed-stereo bindings. F7 mirrors the mono Bindings loop:
+    // socket-level outages flip stream → State::Failed, this loop runs the
+    // retry budget (Stream3DReconnectAttempts × 5s) and either reconnects or
+    // drops the binding. F4 still owns parse-time error notifications inside
+    // evaluateLinkset.
+    constexpr F64 kRetryDelayDist = 5.0;
+    const S32 max_attempts_dist = gSavedSettings.getS32("Stream3DReconnectAttempts");
+    const F64 now_dist = LLTimer::getElapsedSeconds();
 
-        LLViewerObject* l_obj = gObjectList.findObject(b.l_prim);
-        LLViewerObject* r_obj = gObjectList.findObject(b.r_prim);
-        if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
+    std::vector<LLUUID> dead_roots;
+    for (auto& [root_id, b] : mDistributedBindings)
+    {
+        LLViewerObject* root = gObjectList.findObject(root_id);
+        if (!root || root->isDead())
         {
-            LL_INFOS("Stream3D") << "Stereo pair (" << id
-                                  << ") gone; releasing stereo stream" << LL_ENDL;
-            it = mStereoBindings.erase(it);
+            dead_roots.push_back(root_id);
+            continue;
+        }
+        if (!b.stream)
+        {
+            // Stream couldn't be built yet (deferred above). Re-evaluating
+            // here is not appropriate — that's the poll loop's job once the
+            // descriptions / network resolve. Leave it for now.
             continue;
         }
 
         if (b.stream->isFailed())
         {
-            if (max_attempts <= 0)
+            if (max_attempts_dist <= 0)
             {
-                LL_WARNS("Stream3D") << "Stereo stream for " << id
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id
                                       << " failed; auto-reconnect disabled, dropping binding"
                                       << LL_ENDL;
-                it = mStereoBindings.erase(it);
+                dead_roots.push_back(root_id);
                 continue;
             }
-            if (b.reconnect_attempts >= max_attempts)
+            if (b.reconnect_attempts >= max_attempts_dist)
             {
-                LL_WARNS("Stream3D") << "Stereo stream for " << id << " exhausted "
-                                      << max_attempts << " reconnect attempts; dropping binding"
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id << " exhausted "
+                                      << max_attempts_dist
+                                      << " reconnect attempts; dropping binding"
                                       << LL_ENDL;
-                notifyStream3D("stereo stream gave up after "
-                                + llformat("%d", max_attempts)
+                notifyStream3D("stream gave up after "
+                                + llformat("%d", max_attempts_dist)
                                 + " reconnect attempts: " + b.url);
-                it = mStereoBindings.erase(it);
+                dead_roots.push_back(root_id);
                 continue;
             }
             if (b.next_retry_time == 0.0)
             {
-                b.next_retry_time = now + kRetryDelay;
-                LL_INFOS("Stream3D") << "Stereo stream for " << id
-                                      << " failed; scheduling reconnect "
-                                      << (b.reconnect_attempts + 1) << "/" << max_attempts
-                                      << " in " << kRetryDelay << "s" << LL_ENDL;
+                b.next_retry_time = now_dist + kRetryDelayDist;
+                LL_INFOS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id << " failed; scheduling reconnect "
+                                      << (b.reconnect_attempts + 1) << "/"
+                                      << max_attempts_dist
+                                      << " in " << kRetryDelayDist << "s" << LL_ENDL;
             }
-            else if (now >= b.next_retry_time)
+            else if (now_dist >= b.next_retry_time)
             {
                 ++b.reconnect_attempts;
                 b.next_retry_time = 0.0;
-                const LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
-                const LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
-                b.stream->setRolloffDistances(b.applied_min, b.applied_max);
+                std::vector<LLPositionalStreamMulti::SpeakerConfig> configs;
+                configs.reserve(b.speakers.size());
+                for (const auto& s : b.speakers)
+                {
+                    LLPositionalStreamMulti::SpeakerConfig c;
+                    switch (s.ch)
+                    {
+                    case DistChannel::L:
+                        c.ch = LLPositionalStreamMulti::Channel::L;
+                        break;
+                    case DistChannel::R:
+                        c.ch = LLPositionalStreamMulti::Channel::R;
+                        break;
+                    case DistChannel::M:
+                        c.ch = LLPositionalStreamMulti::Channel::M;
+                        break;
+                    }
+                    c.range = s.range;
+                    c.volume = s.volume;
+                    if (LLViewerObject* sp = gObjectList.findObject(s.prim_id))
+                    {
+                        if (!sp->isDead())
+                        {
+                            c.position = toFloatVec(sp->getPositionGlobal());
+                        }
+                    }
+                    configs.push_back(c);
+                }
                 b.stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
-                LL_INFOS("Stream3D") << "Stereo reconnect attempt " << b.reconnect_attempts
-                                      << "/" << max_attempts << " for " << id
+                LL_INFOS("Stream3D") << "[3dstream-stereo] reconnect attempt "
+                                      << b.reconnect_attempts << "/" << max_attempts_dist
+                                      << " for root " << root_id
                                       << " url=" << b.url << LL_ENDL;
-                b.stream->start(b.url, l_pos, r_pos);
+                b.stream->start(b.url, configs);
             }
-            ++it;
+            // Skip position pushes & update() while Failed.
             continue;
         }
 
+        // Successful playback resets the retry counter so a later, independent
+        // outage gets its own full budget rather than inheriting old strikes.
         if (b.reconnect_attempts > 0 && b.stream->isPlaying())
         {
-            LL_INFOS("Stream3D") << "Stereo reconnect succeeded for " << id
-                                  << " after " << b.reconnect_attempts << " attempt(s)"
-                                  << LL_ENDL;
+            LL_INFOS("Stream3D") << "[3dstream-stereo] reconnect succeeded for root "
+                                  << root_id << " after "
+                                  << b.reconnect_attempts << " attempt(s)" << LL_ENDL;
             b.reconnect_attempts = 0;
             b.next_retry_time = 0.0;
         }
 
+        // Notify exactly once per binding when it first reaches Playing.
+        // Reconnect successes don't re-fire because the binding (and the
+        // flag) survives across stream->start() retries.
         if (!b.notified_played && b.stream->isPlaying())
         {
             b.notified_played = true;
-            notifyStream3D("now playing (stereo): " + b.url);
+            notifyStream3D("now playing: " + b.url);
         }
 
-        b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
-                               toFloatVec(r_obj->getPositionGlobal()));
+        for (size_t i = 0; i < b.speakers.size(); ++i)
+        {
+            LLViewerObject* sp = gObjectList.findObject(b.speakers[i].prim_id);
+            if (sp && !sp->isDead())
+            {
+                b.stream->setSpeakerPosition(i, toFloatVec(sp->getPositionGlobal()));
+            }
+        }
         b.stream->update();
-        ++it;
+    }
+    for (const auto& r : dead_roots)
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] root " << r
+                              << " gone; tearing down binding" << LL_ENDL;
+        teardownDistributedBinding(r);
     }
 }
 
@@ -788,40 +1329,45 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
             b.applied_max = want_max;
         }
     }
-
-    for (auto& [id, b] : mStereoBindings)
-    {
-        F32 want_min = b.tag_min.value_or(default_min);
-        F32 want_max = b.tag_max.value_or(default_max);
-        if (b.applied_min != want_min || b.applied_max != want_max)
-        {
-            b.stream->setRolloffDistances(want_min, want_max);
-            b.applied_min = want_min;
-            b.applied_max = want_max;
-        }
-    }
 }
 
 void LLPositionalStreamMgr::shutdownPrimBindings()
 {
-    if (mBindings.empty() && mStereoBindings.empty())
+    if (!mBindings.empty())
     {
-        return;
+        LL_INFOS("Stream3D") << "Tearing down " << mBindings.size()
+                              << " mono prim bindings" << LL_ENDL;
+        // ~Binding's unique_ptr<> destructor invokes the stream's stop(),
+        // which calls FMOD Channel::stop() synchronously. Output device
+        // buffer drain (<50ms typical) is the only residual delay.
+        mBindings.clear();
     }
-    LL_INFOS("Stream3D") << "Tearing down "
-                          << mBindings.size() << " mono and "
-                          << mStereoBindings.size() << " stereo prim bindings"
-                          << LL_ENDL;
-    // ~Binding / ~StereoBinding's unique_ptr<> destructors invoke each
-    // stream's stop(), which calls FMOD Channel::stop() synchronously.
-    // Output device buffer drain (<50ms typical) is the only residual delay.
-    mBindings.clear();
-    mStereoBindings.clear();
+    if (!mDistributedBindings.empty())
+    {
+        LL_INFOS("Stream3D") << "Tearing down " << mDistributedBindings.size()
+                              << " distributed-stereo bindings" << LL_ENDL;
+        mDistributedBindings.clear();
+        mPrimToRoot.clear();
+    }
+    // r8 F2-b: any pending priority polls were tied to bindings that no
+    // longer exist; drop them so we don't burn poll budget after teardown.
+    mPriorityPollQueue.clear();
+    // r8 F8: deferred re-evaluations referenced roots we just tore down.
+    mPendingLinksetEval.clear();
+    // r8 F11: drain pending deselects synchronously instead of just clearing
+    // — otherwise a kill-switch toggle within the 1 s hold window would leave
+    // phantom selections on the sim. Forcing now=+infinity makes drainChild
+    // Deselects fire every entry; the user-collision guard inside still
+    // protects build-tool selections.
+    drainChildDeselects(std::numeric_limits<F64>::max());
 }
 
 void LLPositionalStreamMgr::shutdownAll()
 {
     shutdownPrimBindings();
+    // r8 F4: drop throttle history so a fresh session starts with no stale
+    // suppression. mErrorThrottle is not load-bearing across sessions.
+    mErrorThrottle.clear();
     if (mDebugStream)
     {
         LL_INFOS("Stream3D") << "Tearing down debug mono stream" << LL_ENDL;
@@ -862,6 +1408,10 @@ void LLPositionalStreamMgr::forceRescan()
             evaluateBinding(kv.first);
         }
         kv.second.last_polled = 0.0;
+        // r8 F8: also reset the priority retry counter so prims that the sim
+        // previously refused to reply for get a fresh shot at the fast retry
+        // path on the next poll tick.
+        kv.second.priority_retries = 0;
     }
     LL_INFOS("Stream3D") << "Forced rescan: " << rebind_candidates
                           << " cached descriptions re-evaluated, last_polled cleared on "
@@ -882,9 +1432,12 @@ void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
     {
         b.stream->setVolume(volume);
     }
-    for (auto& [id, b] : mStereoBindings)
+    for (auto& [root_id, b] : mDistributedBindings)
     {
-        b.stream->setVolume(volume);
+        if (b.stream)
+        {
+            b.stream->setVolume(volume);
+        }
     }
 }
 
@@ -947,6 +1500,14 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     // a given prim's effective re-poll interval will exceed Stream3DPollInterval.
     static constexpr F64 kScanInterval  = 0.5;
     static constexpr int kBudgetPerScan = 5;
+    // r8 F8: priority queue retry cadence. Far below Stream3DPollInterval so
+    // a freshly discovered linkset finishes binding within seconds even when
+    // the first Family request was dropped, but capped to kPriorityRetryCap
+    // attempts so prims the sim refuses to answer for don't burn the whole
+    // priority budget every tick. After the cap, round-robin (poll_interval
+    // cadence) takes over silently.
+    static constexpr F64 kPriorityRetryWait = 3.0;
+    static constexpr S32 kPriorityRetryCap  = 5;
 
     if (now - mLastPollScanTime < kScanInterval)
     {
@@ -976,7 +1537,70 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     const F32 max_dist_sq = max_dist * max_dist;
     const LLVector3d agent_pos = gAgent.getPositionGlobal();
 
+    // r8 F2-c: spot link/unlink/death once per scan tick. This is cheap and
+    // independent of the request budget — it only reads gObjectList and may
+    // call evaluateLinkset (which itself may enqueue priority polls picked
+    // up by the drain below).
+    detectLinksetStructureChanges();
+
     int budget = kBudgetPerScan;
+
+    // r8 F2-b / F8: drain the priority queue first. These are prims that
+    // evaluateLinkset wants polled now (root or speaker that we don't yet
+    // have description for). Distance / avatar filtering still applies.
+    //
+    // Retry policy (F8): a prim stays in the queue across drains until either
+    // its reply arrives (last_replied stamped) or kPriorityRetryCap attempts
+    // were spent. The previous policy used the same 30 s round-robin throttle
+    // here, so a child whose first Family request was dropped by the sim sat
+    // mute for 30 s before round-robin retried — observable as the "16 spk
+    // linkset only plays 1 speaker until the user touches it" symptom.
+    //
+    // Snapshot the queue size before draining so re-queued items don't get
+    // re-processed in the same tick (same prim could otherwise be sent twice
+    // back-to-back when budget is large).
+    int n_priority = 0;
+    size_t to_process = mPriorityPollQueue.size();
+    while (budget > 0 && to_process > 0 && !mPriorityPollQueue.empty())
+    {
+        --to_process;
+        const LLUUID id = mPriorityPollQueue.front();
+        mPriorityPollQueue.pop_front();
+
+        LLViewerObject* obj = gObjectList.findObject(id);
+        if (!obj || obj->isDead()) continue;
+        if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment()) continue;
+
+        LLVector3d delta = obj->getPositionGlobal();
+        delta -= agent_pos;
+        if (static_cast<F32>(delta.magVecSquared()) > max_dist_sq) continue;
+
+        auto& entry = mDescriptionCache[id];
+
+        // Reply already arrived: round-robin owns this prim now.
+        if (entry.last_replied > 0.0) continue;
+        // Spent the priority budget without a reply: let round-robin retry
+        // at its slower cadence. Don't re-queue.
+        if (entry.priority_retries >= kPriorityRetryCap) continue;
+        // Within retry-wait window since the last send: keep the slot but
+        // wait for the next drain.
+        if (entry.last_polled > 0.0 && (now - entry.last_polled) < kPriorityRetryWait)
+        {
+            mPriorityPollQueue.push_back(id);
+            continue;
+        }
+
+        LLSelectMgr::getInstance()->requestObjectPropertiesFamily(obj);
+        entry.last_polled = now;
+        entry.priority_retries++;
+        --budget;
+        ++n_priority;
+
+        // Re-queue so the next drain checks whether the reply arrived and,
+        // if not, retries (subject to the cap above).
+        mPriorityPollQueue.push_back(id);
+    }
+
     const S32 num = gObjectList.getNumObjects();
     if (num == 0)
     {
@@ -1040,6 +1664,8 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
                            << " far=" << n_far
                            << " recent=" << n_recent
                            << " sent=" << n_sent
+                           << " priority_sent=" << n_priority
+                           << " priority_queue=" << mPriorityPollQueue.size()
                            << " examined=" << examined
                            << " cursor=" << mPollCursor
                            << "/" << num
