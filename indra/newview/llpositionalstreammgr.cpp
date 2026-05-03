@@ -555,7 +555,7 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
     }
 }
 
-void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
+void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
 {
     LLViewerObject* root = gObjectList.findObject(root_id);
     if (!root || root->isDead() || root->isAvatar())

@@ -253,17 +253,20 @@ F1 → F2 → F3 → F4 → F5 → F6
 
 ### 5.2 r8 新規 (分散記述拡張の効果)
 
-- [ ] N=2 新書式 `{ch:L}` `{ch:R}` で再生
+- [x] N=2 新書式 `{ch:L}` `{ch:R}` で再生
 - [ ] N=4 新書式 (L/R/L/R) で再生、左右移動で減衰確認
 - [ ] N=8 / N=16 で再生
 - [ ] `ch=M` sum-to-mono 動作確認 (L=440Hz / R=880Hz 素材で周波数解析)
-- [ ] per-speaker `range` 上書き動作
-- [ ] per-speaker `volume` 動作 (1.0 / 0.8 / 0.5 / 0.2 で聴感確認)
-- [ ] 17 個書いて 16 採用 + 警告通知
-- [ ] 子プリム description 後付けで反映 (数秒以内)
-- [ ] link / unlink で binding 再評価
-- [ ] 書式エラー時の通知に例が含まれる
-- [ ] 同種エラー 30 秒抑制動作
+- [x] per-speaker `range` 上書き動作
+- [x] per-speaker `volume` 動作 (1.0 / 0.8 / 0.5 / 0.2 で聴感確認)
+- [x] 17 個書いて 16 採用 + 警告通知 (検証は MaxSpeakers=1 で N=2→1 truncate にて代替実施)
+- [x] 子プリム description 後付けで反映 (数秒以内)
+  - 検証中に `evaluateLinkset(const LLUUID&)` の use-after-free を発見・修正:
+    呼び出し側 `pr_it->second` (= mPrimToRoot 内の値) を参照渡しすると、関数内の
+    `mPrimToRoot.erase` で参照が解放される。引数を値渡しに変更して復旧。
+- [x] link / unlink で binding 再評価
+- [x] 書式エラー時の通知に例が含まれる
+- [x] 同種エラー 30 秒抑制動作
 
 ### 5.3 同期性 (spec §5.2)
 

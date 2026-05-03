@@ -263,7 +263,11 @@ private:
     // description is not yet cached is enqueued onto mPriorityPollQueue so
     // the binding completes within a few poll ticks rather than waiting for
     // round-robin discovery.
-    void evaluateLinkset(const LLUUID& root_id);
+    // root_id is taken by value: evaluateLinkset() may erase entries from
+    // mPrimToRoot whose `.second` is the very reference a caller would pass
+    // (e.g. evaluateAndDispatch hands us `pr_it->second`). Copying defuses
+    // that use-after-free without auditing every call site.
+    void evaluateLinkset(LLUUID root_id);
     void teardownDistributedBinding(const LLUUID& root_id);
 
     // r8 F2-b: push id onto mPriorityPollQueue if not already queued.
