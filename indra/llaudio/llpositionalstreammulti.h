@@ -150,6 +150,26 @@ public:
     bool isPlaying() const;
     bool isFailed() const { return mState.load(std::memory_order_acquire) == State::Failed; }
 
+    // r9 P6: distinguish "retryable failure" (network) from "fatal format
+    // mismatch" so the manager can stop the reconnect cascade for sources
+    // that will never succeed (3/4/5/7/8ch, or 6ch from a codec we don't
+    // know the channel layout of). The detail string carries the offending
+    // numbers (e.g. "channels=4") for the user-facing notification.
+    //
+    // `Ok` (not `None`) for the no-failure sentinel — this header reaches
+    // PCH paths that include X11/Xlib.h, which defines `None` as a macro.
+    enum class FailReason
+    {
+        Ok,
+        Network,
+        FormatUnsupported,
+    };
+    FailReason failReason() const { return mFailReason.load(std::memory_order_acquire); }
+    // Snapshot of the detail string captured at the moment of the Failed
+    // transition. Caller is expected to read this only after isFailed()
+    // returned true; the value is stable from that point on.
+    std::string failDetail() const { return mFailDetail; }
+
     // Update one speaker's 3D position (caller is responsible for indexing
     // the same way it set up the speaker vector in start()).
     void setSpeakerPosition(size_t idx, const LLVector3& pos);
@@ -182,6 +202,11 @@ private:
     static FMOD_RESULT F_CALL pcmReadCallback(FMOD_SOUND* sound, void* data, U32 datalen);
 
     FMOD::System* getFmodSystem() const;
+
+    // r9 P6: capture fail reason + detail before publishing State::Failed so
+    // a reader synchronised by isFailed() (acquire) sees both. Always called
+    // in place of plain `mState = State::Failed` from this point.
+    void setFailed(FailReason reason, std::string detail = {});
 
     void releaseAll();
     bool createUserSounds();
@@ -218,6 +243,12 @@ private:
     std::string mUrl;
 
     std::atomic<State> mState;
+
+    // r9 P6: written before mState is published as Failed (acquire/release on
+    // mState orders the visibility). mFailDetail is read-only from the moment
+    // mState becomes Failed onwards.
+    std::atomic<FailReason> mFailReason{FailReason::Ok};
+    std::string mFailDetail;
 
     std::vector<U8> mReadScratch;
     // r9: F32 scratch used by the 6ch path when the source decodes as PCM16.

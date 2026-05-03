@@ -266,6 +266,11 @@ private:
         NoSpeakers,
         SpeakerOverLimit,
         StreamStartFailed,
+        // r9 P6: source decoded but its channel count or codec layout is not
+        // accepted (1/2/6 only, 6ch only Vorbis/Opus/FLAC). detail = the raw
+        // mismatch summary captured by LLPositionalStreamMulti::failDetail()
+        // (e.g. "channels=4" or "channels=6 codec_type=11").
+        UnsupportedSourceFormat,
     };
 
     // detail carries the raw bad value (e.g. "X" for {ch:X}, "1.5" for

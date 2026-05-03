@@ -280,6 +280,8 @@ bool LLPositionalStreamMulti::start(const std::string& url,
     mSpeakers = speakers;
     mReadFailStreak = 0;
     mLastReadFailLogTime = 0.0;
+    mFailReason.store(FailReason::Ok, std::memory_order_relaxed);
+    mFailDetail.clear();
 
     const FMOD_MODE source_mode = FMOD_2D
                                 | FMOD_NONBLOCKING
@@ -309,6 +311,15 @@ void LLPositionalStreamMulti::stop()
     mUrl.clear();
     mSpeakers.clear();
     mState = State::Idle;
+}
+
+void LLPositionalStreamMulti::setFailed(FailReason reason, std::string detail)
+{
+    mFailDetail = std::move(detail);
+    // Order matters: detail + reason must be observable before the Failed
+    // state publishes. mState's release pairs with isFailed()'s acquire.
+    mFailReason.store(reason, std::memory_order_release);
+    mState.store(State::Failed, std::memory_order_release);
 }
 
 void LLPositionalStreamMulti::releaseAll()
@@ -348,6 +359,9 @@ void LLPositionalStreamMulti::releaseAll()
     mSourceBytesPerSample = 0;
     mSourceIsFloat = false;
     mDownmix = LLMultichannelDownmix();
+    // Don't reset mFailReason / mFailDetail here: releaseAll() runs as part
+    // of the transition into Failed and the manager reads these immediately
+    // afterwards. They're cleared on the next start() instead.
 }
 
 void LLPositionalStreamMulti::setSpeakerPosition(size_t idx, const LLVector3& pos)
@@ -576,7 +590,7 @@ size_t LLPositionalStreamMulti::pumpSource()
                 LL_WARNS("Stream3D") << "Multi source readData failed " << mReadFailStreak
                                       << " times consecutively for " << mUrl
                                       << "; transitioning to Failed for reconnect" << LL_ENDL;
-                mState.store(State::Failed, std::memory_order_release);
+                setFailed(FailReason::Network, "readData streak");
             }
         }
         return 0;
@@ -708,7 +722,7 @@ void LLPositionalStreamMulti::update()
                                   << " (" << FMOD_ErrorString(rr) << ")" << LL_ENDL;
             releaseAll();
             mUrl.clear();
-            mState = State::Failed;
+            setFailed(FailReason::Network, FMOD_ErrorString(rr));
             return;
         }
         if (state != FMOD_OPENSTATE_READY && state != FMOD_OPENSTATE_PLAYING)
@@ -723,7 +737,7 @@ void LLPositionalStreamMulti::update()
         if (checkFmod(mSourceSound->getFormat(&type, &fmt, &channels, &bits), "Sound::getFormat"))
         {
             releaseAll();
-            mState = State::Failed;
+            setFailed(FailReason::Network, "getFormat failed");
             return;
         }
         float freq = 44100.f;
@@ -731,7 +745,7 @@ void LLPositionalStreamMulti::update()
         if (checkFmod(mSourceSound->getDefaults(&freq, &prio), "Sound::getDefaults"))
         {
             releaseAll();
-            mState = State::Failed;
+            setFailed(FailReason::Network, "getDefaults failed");
             return;
         }
         if (fmt == FMOD_SOUND_FORMAT_PCMFLOAT)
@@ -749,7 +763,8 @@ void LLPositionalStreamMulti::update()
             LL_WARNS("Stream3D") << "Source format unsupported (got " << (int)fmt
                                   << "); aborting multi path" << LL_ENDL;
             releaseAll();
-            mState = State::Failed;
+            setFailed(FailReason::FormatUnsupported,
+                      llformat("sample-format=%d", (int)fmt));
             return;
         }
 
@@ -758,9 +773,9 @@ void LLPositionalStreamMulti::update()
 
         // r9 (§4.5): 6ch sources go through the BS.775 downmix to a 2-track
         // ring; 1ch / 2ch use the r8 path unchanged. Other channel counts
-        // (3/4/5/7/8) are rejected here — P6 will route this through the
-        // user-facing notifyStream3D channel; for now we Fail the stream so
-        // the manager's reconnect path doesn't keep banging on it.
+        // (3/4/5/7/8) and 6ch from unknown codecs are FormatUnsupported —
+        // the manager's reconnect cascade reads failReason() and stops the
+        // retry budget for these so the user sees one clear notification.
         if (mSourceChannels == 6)
         {
             mDownmix = LLMultichannelDownmix::forSourceFormat(type, mSourceChannels);
@@ -770,7 +785,8 @@ void LLPositionalStreamMulti::update()
                                       << (int)type << ") — only Vorbis/Opus/FLAC accepted in r9: "
                                       << mUrl << LL_ENDL;
                 releaseAll();
-                mState = State::Failed;
+                setFailed(FailReason::FormatUnsupported,
+                          llformat("channels=6 codec_type=%d", (int)type));
                 return;
             }
             // Pre-size the F32 scratch used by the PCM16 widen step in
@@ -784,7 +800,8 @@ void LLPositionalStreamMulti::update()
                                   << mSourceChannels << " for " << mUrl
                                   << " (r9 accepts 1/2/6 only)" << LL_ENDL;
             releaseAll();
-            mState = State::Failed;
+            setFailed(FailReason::FormatUnsupported,
+                      llformat("channels=%d", mSourceChannels));
             return;
         }
 
@@ -824,7 +841,7 @@ void LLPositionalStreamMulti::update()
                 // join before releaseAll() reaches mSourceSound->release().
                 stopDecodeThread();
                 releaseAll();
-                mState = State::Failed;
+                setFailed(FailReason::Network, "createUserSounds/startUserChannels");
                 return;
             }
             mState = State::Playing;

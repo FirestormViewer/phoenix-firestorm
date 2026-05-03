@@ -491,6 +491,11 @@ void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
         if (!detail.empty()) msg += " (url='" + detail + "')";
         msg += "。URL とネットワーク接続を確認してください";
         break;
+    case DistErrorKind::UnsupportedSourceFormat:
+        msg = "構造エラー (root " + id_short + "): 非対応のソース形式です";
+        if (!detail.empty()) msg += " (" + detail + ")";
+        msg += "。受入対象は 1/2ch ソース、または 6ch Vorbis/Opus/FLAC のみです";
+        break;
     }
     notifyStream3D(msg);
 }
@@ -1218,6 +1223,23 @@ void LLPositionalStreamMgr::update()
 
         if (b.stream->isFailed())
         {
+            // r9 P6: format mismatches (3/4/5/7/8ch source, or 6ch in a
+            // codec we don't have a layout for) won't get better on retry.
+            // Skip the reconnect budget, surface a clear notification once,
+            // and drop the binding.
+            if (b.stream->failReason() == LLPositionalStreamMulti::FailReason::FormatUnsupported)
+            {
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id
+                                      << " has unsupported source format ("
+                                      << b.stream->failDetail()
+                                      << "); not retrying" << LL_ENDL;
+                notifyDistributedError(root_id,
+                                       DistErrorKind::UnsupportedSourceFormat,
+                                       b.stream->failDetail());
+                dead_roots.push_back(root_id);
+                continue;
+            }
             if (max_attempts_dist <= 0)
             {
                 LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
