@@ -62,6 +62,7 @@ set(llui_SOURCE_FILES
     llnotificationslistener.cpp
     llnotificationsutil.cpp
     llpanel.cpp
+    llphishingfilter.cpp
     llprogressbar.cpp
     llradiogroup.cpp
     llresizebar.cpp
@@ -183,6 +184,7 @@ set(llui_HEADER_FILES
     llnotificationtemplate.h
     llnotificationvisibilityrule.h
     llpanel.h
+    llphishingfilter.h
     llprogressbar.h
     llradiogroup.h
     llresizebar.h
@@ -283,6 +285,7 @@ if(LL_TESTS)
 
   SET(llui_TEST_SOURCE_FILES
       llurlmatch.cpp
+      tests/llphishingfilter_test.cpp
       )
   set_property( SOURCE ${llui_TEST_SOURCE_FILES} PROPERTY LL_TEST_ADDITIONAL_LIBRARIES ${test_libs})
   LL_ADD_PROJECT_UNIT_TESTS(llui "${llui_TEST_SOURCE_FILES}")

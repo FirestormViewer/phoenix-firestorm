@@ -65,6 +65,7 @@
 #include "llviewerwindow.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
+#include "llphishingfilter.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 #include "fsfloaternearbychat.h"
@@ -3517,6 +3518,14 @@ void LLIMMgr::addMessage(
         }
     }
     // </FS:Zi>
+
+    // <FS:Emme> Phishing filter support
+    std::string filtered_msg;
+    if (LLPhishingFilter::instance().processMessage(msg, filtered_msg))
+    {
+        msg = filtered_msg;
+    }
+    // </FS:Emme>
 
     LLUUID other_participant_id = target_id;
     std::string message_display_name = (display_name.empty()) ? from : std::string(display_name);
