@@ -25,6 +25,7 @@
 #ifndef LL_POSITIONAL_STREAM_MULTI_H
 #define LL_POSITIONAL_STREAM_MULTI_H
 
+#include "llmultichanneldownmix.h"
 #include "stdtypes.h"
 #include "v3math.h"
 
@@ -124,7 +125,7 @@ private:
 class LLPositionalStreamMulti
 {
 public:
-    // Mirrors LLPositionalStreamMgr::DistChannel; duplicated here so llaudio
+    // Mirrors LLPositionalStreamMgr::ChannelKind; duplicated here so llaudio
     // does not depend on indra/newview.
     enum class Channel { L, R, M };
 
@@ -148,6 +149,26 @@ public:
     bool isOpen() const { return mSourceSound != nullptr; }
     bool isPlaying() const;
     bool isFailed() const { return mState.load(std::memory_order_acquire) == State::Failed; }
+
+    // r9 P6: distinguish "retryable failure" (network) from "fatal format
+    // mismatch" so the manager can stop the reconnect cascade for sources
+    // that will never succeed (3/4/5/7/8ch, or 6ch from a codec we don't
+    // know the channel layout of). The detail string carries the offending
+    // numbers (e.g. "channels=4") for the user-facing notification.
+    //
+    // `Ok` (not `None`) for the no-failure sentinel — this header reaches
+    // PCH paths that include X11/Xlib.h, which defines `None` as a macro.
+    enum class FailReason
+    {
+        Ok,
+        Network,
+        FormatUnsupported,
+    };
+    FailReason failReason() const { return mFailReason.load(std::memory_order_acquire); }
+    // Snapshot of the detail string captured at the moment of the Failed
+    // transition. Caller is expected to read this only after isFailed()
+    // returned true; the value is stable from that point on.
+    std::string failDetail() const { return mFailDetail; }
 
     // Update one speaker's 3D position (caller is responsible for indexing
     // the same way it set up the speaker vector in start()).
@@ -182,6 +203,11 @@ private:
 
     FMOD::System* getFmodSystem() const;
 
+    // r9 P6: capture fail reason + detail before publishing State::Failed so
+    // a reader synchronised by isFailed() (acquire) sees both. Always called
+    // in place of plain `mState = State::Failed` from this point.
+    void setFailed(FailReason reason, std::string detail = {});
+
     void releaseAll();
     bool createUserSounds();
     bool startUserChannels();
@@ -194,15 +220,20 @@ private:
 
     FMOD::Sound* mSourceSound;
     int mSampleRate;
-    int mSourceChannels;       // 1 or 2
+    int mSourceChannels;       // 1, 2, or (r9) 6
     int mSourceBytesPerSample; // 2 for PCM16, 4 for PCMFLOAT
     bool mSourceIsFloat;
 
-    // Ring is sized at Opening→Buffering with n_tracks = max(mSourceChannels, 2)
-    // so even mono sources can drive ch=L/R speakers (decoder duplicates the
-    // mono sample into both tracks at write time so Mono ReadMode returns the
-    // original amplitude). N_track is parameterised so r10 can lift the same
-    // scaffolding to 5.1 without touching the ring.
+    // r9: populated at format detection when mSourceChannels == 6. The ring
+    // is still allocated with n_tracks = 2 — pumpSource() converts each 6ch
+    // frame to interleaved L/R via mDownmix before writing.
+    LLMultichannelDownmix mDownmix;
+
+    // Ring is sized at Opening→Buffering with n_tracks = 2 across all source
+    // channel counts. Mono sources duplicate the sample into both tracks at
+    // write time so ch=L/R speakers each see the full mono signal; 6ch sources
+    // are downmixed to L/R via mDownmix before writeFrames(). r10 may lift
+    // n_tracks for true per-channel routing without touching the reader side.
     LLMultiTailRing mRing;
 
     std::vector<SpeakerConfig> mSpeakers;
@@ -213,7 +244,17 @@ private:
 
     std::atomic<State> mState;
 
+    // r9 P6: written before mState is published as Failed (acquire/release on
+    // mState orders the visibility). mFailDetail is read-only from the moment
+    // mState becomes Failed onwards.
+    std::atomic<FailReason> mFailReason{FailReason::Ok};
+    std::string mFailDetail;
+
     std::vector<U8> mReadScratch;
+    // r9: F32 scratch used by the 6ch path when the source decodes as PCM16.
+    // Holds up to kChunkFrames × 6 floats; pre-sized at format detection so
+    // the decode thread never allocates on the audio path.
+    std::vector<F32> mDownmixInputScratch;
 
     std::thread mDecodeThread;
     std::atomic<bool> mDecodeStop;
@@ -239,6 +280,9 @@ private:
 
     static constexpr size_t kPrebufferFrames = 4096;
     static constexpr size_t kRingFrames      = 1 << 15; // ~0.74 s at 44.1 kHz
+    // r9: chunk granularity for the source → ring conversion loop. Sized so a
+    // single chunk fits comfortably in L1 (1024 frames × 6 ch × 4 B = 24 KB).
+    static constexpr size_t kPumpChunkFrames = 1024;
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;

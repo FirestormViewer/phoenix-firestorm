@@ -243,6 +243,27 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 }
 
 // static
+std::optional<LLPositionalStreamMgr::ChannelKind>
+LLPositionalStreamMgr::parseChannelKind(std::string_view s)
+{
+    // The {ch:...} alphabet — kept tiny on purpose. r10 (5.1 venue placement)
+    // adds FL/FR/C/LFE/SL/SR by extending this table and ChannelKind together;
+    // every other consumer (parser, evaluator, downmix table) reads through
+    // the enum and never re-parses the source string.
+    if (s.size() == 1)
+    {
+        switch (s[0])
+        {
+        case 'L': case 'l': return ChannelKind::L;
+        case 'R': case 'r': return ChannelKind::R;
+        case 'M': case 'm': return ChannelKind::M;
+        default: break;
+        }
+    }
+    return std::nullopt;
+}
+
+// static
 LLPositionalStreamMgr::DistParseResult
 LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
 {
@@ -301,11 +322,14 @@ LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
             else if (key == "ch")
             {
                 seen_ch_key = true;
-                std::string v = toLowerAscii(val);
-                if      (v == "l") data.ch = DistChannel::L;
-                else if (v == "r") data.ch = DistChannel::R;
-                else if (v == "m") data.ch = DistChannel::M;
-                else               setError(DistParseError::BadCh, val);
+                if (auto ck = parseChannelKind(val))
+                {
+                    data.ch = *ck;
+                }
+                else
+                {
+                    setError(DistParseError::BadCh, val);
+                }
             }
             else if (key == "range")
             {
@@ -467,6 +491,11 @@ void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
         if (!detail.empty()) msg += " (url='" + detail + "')";
         msg += "。URL とネットワーク接続を確認してください";
         break;
+    case DistErrorKind::UnsupportedSourceFormat:
+        msg = "構造エラー (root " + id_short + "): 非対応のソース形式です";
+        if (!detail.empty()) msg += " (" + detail + ")";
+        msg += "。受入対象は 1/2ch ソース、または 6ch Vorbis/Opus/FLAC のみです";
+        break;
     }
     notifyStream3D(msg);
 }
@@ -595,6 +624,23 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
 
     const auto& root_data = *root_parse.data;
     const std::string url = *root_data.url;
+
+    // r9 P6.5: skip re-opening if this root's URL was already classified
+    // FormatUnsupported. Without this gate, dead_roots teardown removes
+    // the binding but the next desc poll re-enters here and rebuilds it,
+    // looping FMOD open/close every Stream3DPollInterval. The user clears
+    // the failure by editing the URL — a different URL falls through
+    // (and we erase the cached entry).
+    auto failed_it = mFormatFailedUrl.find(root_id);
+    if (failed_it != mFormatFailedUrl.end())
+    {
+        if (failed_it->second == url)
+        {
+            return;
+        }
+        mFormatFailedUrl.erase(failed_it);
+    }
+
     const F32 fallback_range = gSavedSettings.getF32("Stream3DRolloffMax");
     const F32 range_default = root_data.range_default.value_or(fallback_range);
 
@@ -753,9 +799,9 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
         LLPositionalStreamMulti::SpeakerConfig c;
         switch (s.ch)
         {
-        case DistChannel::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
-        case DistChannel::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
-        case DistChannel::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
+        case ChannelKind::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
+        case ChannelKind::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
+        case ChannelKind::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
         }
         c.range = s.range;
         c.volume = s.volume;
@@ -1194,6 +1240,27 @@ void LLPositionalStreamMgr::update()
 
         if (b.stream->isFailed())
         {
+            // r9 P6: format mismatches (3/4/5/7/8ch source, or 6ch in a
+            // codec we don't have a layout for) won't get better on retry.
+            // Skip the reconnect budget, surface a clear notification once,
+            // and drop the binding.
+            if (b.stream->failReason() == LLPositionalStreamMulti::FailReason::FormatUnsupported)
+            {
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id
+                                      << " has unsupported source format ("
+                                      << b.stream->failDetail()
+                                      << "); not retrying" << LL_ENDL;
+                notifyDistributedError(root_id,
+                                       DistErrorKind::UnsupportedSourceFormat,
+                                       b.stream->failDetail());
+                // r9 P6.5: remember (root, url) so the next desc poll's
+                // evaluateLinkset doesn't rebuild this binding and re-open
+                // the stream just to fail again. Cleared on URL change.
+                mFormatFailedUrl[root_id] = b.url;
+                dead_roots.push_back(root_id);
+                continue;
+            }
             if (max_attempts_dist <= 0)
             {
                 LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
@@ -1236,13 +1303,13 @@ void LLPositionalStreamMgr::update()
                     LLPositionalStreamMulti::SpeakerConfig c;
                     switch (s.ch)
                     {
-                    case DistChannel::L:
+                    case ChannelKind::L:
                         c.ch = LLPositionalStreamMulti::Channel::L;
                         break;
-                    case DistChannel::R:
+                    case ChannelKind::R:
                         c.ch = LLPositionalStreamMulti::Channel::R;
                         break;
-                    case DistChannel::M:
+                    case ChannelKind::M:
                         c.ch = LLPositionalStreamMulti::Channel::M;
                         break;
                     }
@@ -1368,6 +1435,9 @@ void LLPositionalStreamMgr::shutdownAll()
     // r8 F4: drop throttle history so a fresh session starts with no stale
     // suppression. mErrorThrottle is not load-bearing across sessions.
     mErrorThrottle.clear();
+    // r9 P6.5: same reasoning — the format-failed URL cache should not
+    // survive a Stream3D-disable toggle (or app exit).
+    mFormatFailedUrl.clear();
     if (mDebugStream)
     {
         LL_INFOS("Stream3D") << "Tearing down debug mono stream" << LL_ENDL;
