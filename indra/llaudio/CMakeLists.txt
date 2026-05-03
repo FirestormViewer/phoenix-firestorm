@@ -33,6 +33,7 @@ if (TARGET ll::fmodstudio)
          llstreamingaudio_fmodstudio.cpp
          llpositionalstream.cpp
          llpositionalstreamstereo.cpp
+         llpositionalstreammulti.cpp
          )
 
     list(APPEND llaudio_HEADER_FILES
@@ -41,6 +42,7 @@ if (TARGET ll::fmodstudio)
          llstreamingaudio_fmodstudio.h
          llpositionalstream.h
          llpositionalstreamstereo.h
+         llpositionalstreammulti.h
          )
 endif ()
 
