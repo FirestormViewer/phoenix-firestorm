@@ -494,7 +494,8 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
         || root_desc_it->second.description.empty())
     {
         // Root description not yet known — keep any existing binding pending
-        // until pollObjectPropertiesFamily fills the cache (F2-b).
+        // and ask the poll loop to fetch the root proactively.
+        enqueuePriorityPoll(root_id);
         return;
     }
 
@@ -533,7 +534,13 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
         const LLUUID& child_id = child->getID();
         auto cdesc_it = mDescriptionCache.find(child_id);
         if (cdesc_it == mDescriptionCache.end()
-            || cdesc_it->second.description.empty()) continue;
+            || cdesc_it->second.description.empty())
+        {
+            // r8 F2-b: ask the poll loop to fetch this child ahead of the
+            // round-robin scan so the binding completes promptly.
+            enqueuePriorityPoll(child_id);
+            continue;
+        }
         auto cparse = parseDistributedStereoTag(cdesc_it->second.description);
         if (!cparse.data) continue;
         collectSpeaker(child_id, *cparse.data);
@@ -595,6 +602,16 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
                           << " speakers=" << binding.speakers.size()
                           << " (dropped=" << dropped << ")"
                           << LL_ENDL;
+}
+
+void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
+{
+    // O(N) dedup; queue is small in practice (≤ ~16 per pending linkset).
+    for (const auto& q : mPriorityPollQueue)
+    {
+        if (q == id) return;
+    }
+    mPriorityPollQueue.push_back(id);
 }
 
 void LLPositionalStreamMgr::teardownDistributedBinding(const LLUUID& root_id)
@@ -859,6 +876,9 @@ void LLPositionalStreamMgr::shutdownPrimBindings()
         mDistributedBindings.clear();
         mPrimToRoot.clear();
     }
+    // r8 F2-b: any pending priority polls were tied to bindings that no
+    // longer exist; drop them so we don't burn poll budget after teardown.
+    mPriorityPollQueue.clear();
 }
 
 void LLPositionalStreamMgr::shutdownAll()
@@ -1015,6 +1035,35 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     const LLVector3d agent_pos = gAgent.getPositionGlobal();
 
     int budget = kBudgetPerScan;
+
+    // r8 F2-b: drain the priority queue first. These are prims that
+    // evaluateLinkset wants polled now (root or speaker that we don't yet
+    // have description for). Distance / avatar filtering still applies; the
+    // last_polled throttle still applies, since the priority hint and the
+    // sim-friendly rate limit are independent concerns.
+    int n_priority = 0;
+    while (budget > 0 && !mPriorityPollQueue.empty())
+    {
+        const LLUUID id = mPriorityPollQueue.front();
+        mPriorityPollQueue.pop_front();
+
+        LLViewerObject* obj = gObjectList.findObject(id);
+        if (!obj || obj->isDead()) continue;
+        if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment()) continue;
+
+        LLVector3d delta = obj->getPositionGlobal();
+        delta -= agent_pos;
+        if (static_cast<F32>(delta.magVecSquared()) > max_dist_sq) continue;
+
+        auto& entry = mDescriptionCache[id];
+        if (entry.last_polled > 0.0 && (now - entry.last_polled) < poll_interval) continue;
+
+        LLSelectMgr::getInstance()->requestObjectPropertiesFamily(obj);
+        entry.last_polled = now;
+        --budget;
+        ++n_priority;
+    }
+
     const S32 num = gObjectList.getNumObjects();
     if (num == 0)
     {
@@ -1078,6 +1127,8 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
                            << " far=" << n_far
                            << " recent=" << n_recent
                            << " sent=" << n_sent
+                           << " priority_sent=" << n_priority
+                           << " priority_queue=" << mPriorityPollQueue.size()
                            << " examined=" << examined
                            << " cursor=" << mPollCursor
                            << "/" << num

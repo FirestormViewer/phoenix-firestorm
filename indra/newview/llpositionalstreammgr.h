@@ -29,6 +29,7 @@
 #include "stdtypes.h"
 #include "v3math.h"
 
+#include <deque>
 #include <map>
 #include <memory>
 #include <optional>
@@ -225,14 +226,23 @@ private:
 
     // r8 F2-a: (re)build the distributed-stereo binding rooted at root_id by
     // walking the linkset and harvesting whatever speaker descriptions are
-    // already in mDescriptionCache. Missing child descriptions are not
-    // requested here — F2-b extends pollObjectPropertiesFamily to do that.
+    // already in mDescriptionCache. r8 F2-b: any participating prim whose
+    // description is not yet cached is enqueued onto mPriorityPollQueue so
+    // the binding completes within a few poll ticks rather than waiting for
+    // round-robin discovery.
     void evaluateLinkset(const LLUUID& root_id);
     void teardownDistributedBinding(const LLUUID& root_id);
 
+    // r8 F2-b: push id onto mPriorityPollQueue if not already queued.
+    // Linear scan dedup is fine — the queue is bounded by ~16 speakers per
+    // pending linkset and drains every poll tick.
+    void enqueuePriorityPoll(const LLUUID& id);
+
     // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
     // any whose Description we haven't seen recently. Throttled so we never
-    // burst more than a handful of requests per second at the sim.
+    // burst more than a handful of requests per second at the sim. r8 F2-b:
+    // mPriorityPollQueue is drained first (within the same per-tick budget)
+    // so distributed-stereo linksets complete promptly.
     void pollObjectPropertiesFamily(F64 now_seconds);
 
     struct CacheEntry
@@ -260,6 +270,11 @@ private:
     // M3b: round-robin cursor into gObjectList so per-pass budget doesn't
     // starve prims past the first slice when num_objects > one pass can cover.
     S32 mPollCursor = 0;
+    // r8 F2-b: prims that evaluateLinkset wants polled ahead of the
+    // round-robin scan because they belong to a linkset where a source
+    // declaration was just observed. Drained at the head of every
+    // pollObjectPropertiesFamily tick, sharing the same per-tick budget.
+    std::deque<LLUUID> mPriorityPollQueue;
     // M8: edge-trigger for the "max concurrent reached" toast. Set true the
     // first time we refuse a binding due to the cap; reset to false whenever
     // total binding count drops back below the cap, so the user sees the
