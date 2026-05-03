@@ -397,6 +397,16 @@ private:
     // population in practice tracks the user's tagged prim count, so a prune
     // pass is not yet required. Cleared by shutdownAll().
     std::map<std::pair<LLUUID, DistErrorKind>, F64> mErrorThrottle;
+
+    // r9 P6.5: roots whose source URL was permanently rejected by
+    // LLPositionalStreamMulti (FailReason::FormatUnsupported, e.g. 5ch
+    // source or 6ch in an unsupported codec). evaluateLinkset checks this
+    // at entry and skips re-opening the stream when the root still
+    // declares the same bad URL — without this, every desc poll would
+    // rebuild the binding, re-open FMOD, fail again, and tear down,
+    // looping at the poll cadence. Invalidated when the root's URL
+    // changes (description edit) and cleared by shutdownAll().
+    std::map<LLUUID, std::string> mFormatFailedUrl;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H

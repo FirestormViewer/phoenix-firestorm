@@ -796,12 +796,16 @@ void LLPositionalStreamMulti::update()
         }
         else if (mSourceChannels != 1 && mSourceChannels != 2)
         {
+            // Capture before releaseAll() resets mSourceChannels to 0 — the
+            // failDetail string is read by the manager (and shown to the
+            // user) after this returns.
+            const int ch_for_log = mSourceChannels;
             LL_WARNS("Stream3D") << "Multi source: unsupported channel count "
-                                  << mSourceChannels << " for " << mUrl
+                                  << ch_for_log << " for " << mUrl
                                   << " (r9 accepts 1/2/6 only)" << LL_ENDL;
             releaseAll();
             setFailed(FailReason::FormatUnsupported,
-                      llformat("channels=%d", mSourceChannels));
+                      llformat("channels=%d", ch_for_log));
             return;
         }
 

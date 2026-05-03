@@ -624,6 +624,23 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
 
     const auto& root_data = *root_parse.data;
     const std::string url = *root_data.url;
+
+    // r9 P6.5: skip re-opening if this root's URL was already classified
+    // FormatUnsupported. Without this gate, dead_roots teardown removes
+    // the binding but the next desc poll re-enters here and rebuilds it,
+    // looping FMOD open/close every Stream3DPollInterval. The user clears
+    // the failure by editing the URL — a different URL falls through
+    // (and we erase the cached entry).
+    auto failed_it = mFormatFailedUrl.find(root_id);
+    if (failed_it != mFormatFailedUrl.end())
+    {
+        if (failed_it->second == url)
+        {
+            return;
+        }
+        mFormatFailedUrl.erase(failed_it);
+    }
+
     const F32 fallback_range = gSavedSettings.getF32("Stream3DRolloffMax");
     const F32 range_default = root_data.range_default.value_or(fallback_range);
 
@@ -1237,6 +1254,10 @@ void LLPositionalStreamMgr::update()
                 notifyDistributedError(root_id,
                                        DistErrorKind::UnsupportedSourceFormat,
                                        b.stream->failDetail());
+                // r9 P6.5: remember (root, url) so the next desc poll's
+                // evaluateLinkset doesn't rebuild this binding and re-open
+                // the stream just to fail again. Cleared on URL change.
+                mFormatFailedUrl[root_id] = b.url;
                 dead_roots.push_back(root_id);
                 continue;
             }
@@ -1414,6 +1435,9 @@ void LLPositionalStreamMgr::shutdownAll()
     // r8 F4: drop throttle history so a fresh session starts with no stale
     // suppression. mErrorThrottle is not load-bearing across sessions.
     mErrorThrottle.clear();
+    // r9 P6.5: same reasoning — the format-failed URL cache should not
+    // survive a Stream3D-disable toggle (or app exit).
+    mFormatFailedUrl.clear();
     if (mDebugStream)
     {
         LL_INFOS("Stream3D") << "Tearing down debug mono stream" << LL_ENDL;
