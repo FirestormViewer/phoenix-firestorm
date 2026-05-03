@@ -31,6 +31,7 @@
 		</panel>
 		<panel label="保護" name="ProtectionTab">
 			<check_box label="阻止通過簡單點擊坐在物件上" name="FSBlockClickSit" />
+			<check_box label="停用聊天中的方括號連結（網址仍然可見）" name="FSDisableLabeledChatLinks" tool_tip="啟用時，從其他居民收到的聊天、即時訊息、群組通知和物件文字中的方括號連結不會折疊為單一標籤，而是顯示並連結實際的網址。有助於減輕顯示文字隱藏不同目的地的網路釣魚攻擊。檢視器內建的文字（通知、偏好設定等）不受影響。"/>
 			<check_box label="允許指令碼顯示地圖 (llMapDestination)" name="ScriptsCanShowUI" />
 			<text name="revokepermissions_txt">復原權限：</text>
 			<radio_group name="FSRevokePerms">
