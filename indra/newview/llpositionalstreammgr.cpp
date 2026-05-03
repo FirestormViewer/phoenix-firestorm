@@ -403,6 +403,68 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     evaluateBinding(id);
 }
 
+void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
+                                                   DistErrorKind kind,
+                                                   const std::string& detail)
+{
+    const F64 now = LLTimer::getElapsedSeconds();
+    auto key = std::make_pair(prim_id, kind);
+    auto it = mErrorThrottle.find(key);
+    if (it != mErrorThrottle.end() && (now - it->second) < 30.0)
+    {
+        // spec §4.9: suppression logged but not surfaced to chat.
+        LL_DEBUGS("Stream3D") << "[3dstream-stereo] notification suppressed: kind="
+                               << static_cast<int>(kind) << " prim=" << prim_id
+                               << " (next allowed in "
+                               << (30.0 - (now - it->second)) << "s)" << LL_ENDL;
+        return;
+    }
+    mErrorThrottle[key] = now;
+
+    // spec §4.9 message templates. detail is interpolated where it carries
+    // useful information (raw bad value, over-limit count, URL). Each kind
+    // ends in a worked example so the user can copy-paste a fix.
+    const std::string id_short = prim_id.asString().substr(0, 8);
+    std::string msg;
+    switch (kind)
+    {
+    case DistErrorKind::BadCh:
+        msg = "タグ書式エラー (prim " + id_short + "): ch の値は L/R/M のいずれかである必要があります";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{range:30}]";
+        break;
+    case DistErrorKind::BadRange:
+        msg = "タグ書式エラー (prim " + id_short + "): range は正の数で指定してください";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{range:30}]";
+        break;
+    case DistErrorKind::BadVolume:
+        msg = "タグ書式エラー (prim " + id_short + "): volume は 0.0〜1.0 の範囲で指定してください";
+        if (!detail.empty()) msg += " (got '" + detail + "')";
+        msg += "。例: [3dstream-stereo:{ch:L}{volume:0.8}]";
+        break;
+    case DistErrorKind::EmptyUrl:
+        msg = "タグ書式エラー (prim " + id_short + "): url が空です";
+        msg += "。例: [3dstream-stereo:{url:http://example/stream.mp3}{range:30}]";
+        break;
+    case DistErrorKind::NoSpeakers:
+        msg = "構造エラー (root " + id_short + "): 音源宣言 (url) が root にあるがスピーカー (ch) が見つかりません";
+        msg += "。各スピーカープリムに [3dstream-stereo:{ch:L|R|M}] を記載してください";
+        break;
+    case DistErrorKind::SpeakerOverLimit:
+        msg = "構造エラー (root " + id_short + "): スピーカー数が上限を超えています";
+        if (!detail.empty()) msg += " (" + detail + ")";
+        msg += "。先頭から 16 個のみ採用しました";
+        break;
+    case DistErrorKind::StreamStartFailed:
+        msg = "再生エラー (root " + id_short + "): ストリームを開始できませんでした";
+        if (!detail.empty()) msg += " (url='" + detail + "')";
+        msg += "。URL とネットワーク接続を確認してください";
+        break;
+    }
+    notifyStream3D(msg);
+}
+
 void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
 {
     auto desc_it = mDescriptionCache.find(id);
@@ -446,10 +508,21 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
 
     if (dist.error != DistParseError::Ok)
     {
-        // F4 will turn this into a throttled user-visible notification.
         LL_INFOS("Stream3D") << "[3dstream-stereo] parse error on " << id
                               << " (kind=" << static_cast<int>(dist.error)
                               << ", value='" << dist.bad_value << "')" << LL_ENDL;
+
+        DistErrorKind k = DistErrorKind::BadCh;
+        switch (dist.error)
+        {
+        case DistParseError::BadCh:     k = DistErrorKind::BadCh;     break;
+        case DistParseError::BadRange:  k = DistErrorKind::BadRange;  break;
+        case DistParseError::BadVolume: k = DistErrorKind::BadVolume; break;
+        case DistParseError::EmptyUrl:  k = DistErrorKind::EmptyUrl;  break;
+        case DistParseError::Ok:        break; // unreachable
+        }
+        notifyDistributedError(id, k, dist.bad_value);
+
         // Field is malformed → treat the slot as missing and re-evaluate the
         // owning linkset, if we knew about one.
         auto pr_it = mPrimToRoot.find(id);
@@ -552,6 +625,7 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
     {
         LL_INFOS("Stream3D") << "[3dstream-stereo] structural error: root "
                               << root_id << " has no speakers" << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::NoSpeakers, "");
         teardownDistributedBinding(root_id);
         return;
     }
@@ -563,10 +637,13 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
     if (static_cast<S32>(speakers.size()) > kMaxSpeakers)
     {
         dropped = static_cast<S32>(speakers.size()) - kMaxSpeakers;
+        const S32 total = static_cast<S32>(speakers.size());
         speakers.resize(kMaxSpeakers);
         LL_INFOS("Stream3D") << "[3dstream-stereo] too many speakers on root "
                               << root_id << " — truncated to " << kMaxSpeakers
                               << " (dropped " << dropped << ")" << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::SpeakerOverLimit,
+                               llformat("declared=%d, used=%d", total, kMaxSpeakers));
     }
 
     // r8 F3-3: detect "no audible change" so we can keep the running stream
@@ -672,10 +749,10 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
     {
         LL_WARNS("Stream3D") << "[3dstream-stereo] stream start failed root="
                               << root_id << " url=" << url << LL_ENDL;
+        notifyDistributedError(root_id, DistErrorKind::StreamStartFailed, url);
         // Keep the binding metadata so a subsequent re-evaluation (e.g.
         // network recovers) can retry without re-walking the linkset; the
-        // missing stream is the signal that we owe a retry. F4 will hook
-        // user-visible notification here.
+        // missing stream is the signal that we owe a retry.
     }
     else
     {
@@ -954,9 +1031,10 @@ void LLPositionalStreamMgr::update()
         ++it;
     }
 
-    // r8 F3-3: distributed-stereo bindings. No reconnect bookkeeping yet
-    // (F4 will fold it in alongside throttled error notifications); for now
-    // we just push positions and tear down bindings whose root prim is gone.
+    // r8 F3-3: distributed-stereo bindings. Reconnect bookkeeping not yet
+    // wired (mono retry loop above is the model when we add it); for now we
+    // just push positions and tear down bindings whose root prim is gone.
+    // F4 added throttled notifications inside evaluateLinkset / start.
     std::vector<LLUUID> dead_roots;
     for (auto& [root_id, b] : mDistributedBindings)
     {
@@ -1042,6 +1120,9 @@ void LLPositionalStreamMgr::shutdownPrimBindings()
 void LLPositionalStreamMgr::shutdownAll()
 {
     shutdownPrimBindings();
+    // r8 F4: drop throttle history so a fresh session starts with no stale
+    // suppression. mErrorThrottle is not load-bearing across sessions.
+    mErrorThrottle.clear();
     if (mDebugStream)
     {
         LL_INFOS("Stream3D") << "Tearing down debug mono stream" << LL_ENDL;

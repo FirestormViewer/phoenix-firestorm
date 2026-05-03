@@ -228,6 +228,26 @@ private:
         std::unique_ptr<LLPositionalStreamMulti> stream;
     };
 
+    // r8 F4: throttled error notification. Keyed by (prim_id, kind) so the
+    // user gets one toast per failure mode per 30 seconds even if the parse /
+    // start path is hit on every poll tick. spec §4.9.
+    enum class DistErrorKind
+    {
+        BadCh,
+        BadRange,
+        BadVolume,
+        EmptyUrl,
+        NoSpeakers,
+        SpeakerOverLimit,
+        StreamStartFailed,
+    };
+
+    // detail carries the raw bad value (e.g. "X" for {ch:X}, "1.5" for
+    // {volume:1.5}) or an over-limit count, depending on kind. Empty for
+    // kinds that don't have a useful payload (NoSpeakers).
+    void notifyDistributedError(const LLUUID& prim_id, DistErrorKind kind,
+                                const std::string& detail);
+
     void evaluateBinding(const LLUUID& id);
     void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
 
@@ -295,6 +315,13 @@ private:
     // total binding count drops back below the cap, so the user sees the
     // notification once per "newly full" event rather than every poll cycle.
     bool mCapNotified = false;
+
+    // r8 F4: last-notified timestamp per (prim, kind). 30s suppression.
+    // The map can in principle accumulate entries indefinitely (one per prim
+    // that ever produced an error) but each entry is small (~32 B) and the
+    // population in practice tracks the user's tagged prim count, so a prune
+    // pass is not yet required. Cleared by shutdownAll().
+    std::map<std::pair<LLUUID, DistErrorKind>, F64> mErrorThrottle;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H
