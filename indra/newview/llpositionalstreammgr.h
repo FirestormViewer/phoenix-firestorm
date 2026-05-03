@@ -29,13 +29,18 @@
 #include "stdtypes.h"
 #include "v3math.h"
 
+#include <deque>
 #include <map>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string>
+#include <vector>
 
 class LLPositionalStream;
 class LLPositionalStreamStereo;
+class LLPositionalStreamMulti;
+class LLViewerObject;
 
 class LLPositionalStreamMgr
 {
@@ -96,26 +101,72 @@ public:
         std::optional<F32> max;
     };
 
-    // Stereo tag parsed from a prim Description ([3dstream-stereo:{...}];
-    // legacy [ayastream-stereo:{...}] also accepted).
-    // L / R are linkset link numbers (1 = root, 2 = first child, ...).
-    struct StereoTagData
-    {
-        std::string url;
-        std::optional<F32> min;
-        std::optional<F32> max;
-        S32 l_link = 1;
-        S32 r_link = 2;
-    };
-
     // Returns parsed [3dstream:{...}{...}] tag, or nullopt if none /
     // malformed / missing URL. (Legacy [ayastream:...] is also accepted.)
     static std::optional<TagData> parseTag(const std::string& description);
 
-    // Returns parsed [3dstream-stereo:{...}] tag, or nullopt if none /
-    // malformed / missing URL / L == R. (Legacy [ayastream-stereo:...]
-    // is also accepted.)
-    static std::optional<StereoTagData> parseStereoTag(const std::string& description);
+    // r8: distributed-description stereo (1 source → N speakers).
+    // Channel assignment of one speaker prim. r10 will extend this enum to
+    // include FL/FR/C/LFE/SL/SR for 5.1 venue placement (see spec §9.1).
+    enum class DistChannel { L, R, M };
+
+    // r8: parsed [3dstream-stereo:{url:...}{range:...}{ch:...}{volume:...}] tag.
+    // A single prim's description may declare:
+    //   - source only (root):         {url}      [+ {range}]
+    //   - speaker only (root/child):  {ch}       [+ {range} + {volume}]
+    //   - source + self-speaker:      {url}{ch}  [+ {range} + {volume}]
+    // The same {range} field, when present, fills both range_default (source
+    // role) and range_speaker (speaker role) of the same prim — the spec
+    // §4.3 treats it as a single shared field rather than two separate keys.
+    struct DistStereoTagData
+    {
+        // Source declaration fields (set only when {url:...} is present).
+        std::optional<std::string> url;
+        std::optional<F32> range_default;
+
+        // Speaker declaration fields (set only when {ch:...} is present).
+        std::optional<DistChannel> ch;
+        std::optional<F32> range_speaker;
+        std::optional<F32> volume; // 0.0 .. 1.0
+    };
+
+    // r8: parse-time error categories. The error string carries the offending
+    // input value (e.g. "X" for {ch:X}, "1.5" for {volume:1.5}) so the F4
+    // throttled notifier can echo it back to the user.
+    //
+    // Note: `Ok` (not `None`) for the no-error sentinel — X11 headers define
+    // `None` as a macro (0L), and llpositionalstreammgr.h is reached through
+    // PCH paths that include X11/Xlib.h.
+    enum class DistParseError
+    {
+        Ok,
+        BadCh,        // {ch:...} value not L/R/M (case-insensitive)
+        BadRange,     // {range:N} not > 0 or unparseable
+        BadVolume,    // {volume:N} not in [0.0, 1.0] or unparseable
+        EmptyUrl,     // {url:} empty
+    };
+
+    struct DistParseResult
+    {
+        // data has value only when the tag has at least one of {url} / {ch}
+        // and all present fields parse cleanly. nullopt with error==Ok
+        // means "no recognizable [3dstream-stereo:...] tag at all"; nullopt
+        // with error!=Ok means "tag present but a field is malformed".
+        std::optional<DistStereoTagData> data;
+        DistParseError error = DistParseError::Ok;
+        std::string bad_value;
+    };
+
+    // r8: parse the [3dstream-stereo:...] body for the distributed format.
+    //
+    // Returns:
+    //   - tag absent              → {nullopt, Ok, ""}
+    //   - tag present, all valid  → {data,    Ok, ""}
+    //   - tag present, field bad  → {nullopt, <error>, bad_value}
+    //
+    // The tag is recognized when {url} or {ch} is present. The legacy
+    // {l:N}{r:N} format (r5–r7) is no longer supported in r8.
+    static DistParseResult parseDistributedStereoTag(const std::string& description);
 
 private:
     LLPositionalStreamMgr();
@@ -146,46 +197,143 @@ private:
         std::unique_ptr<LLPositionalStream> stream;
     };
 
-    struct StereoBinding
+    // r8 F2-a: one entry per speaker prim that participates in a distributed
+    // binding. `range` is the per-speaker resolved value (slot {range} → root
+    // {range} → settings.xml fallback) — F3 reads it directly when calling
+    // FMOD set3DMinMaxDistance, so the precedence resolution lives only in
+    // evaluateLinkset, not in the streaming layer.
+    struct SpeakerSlot
     {
+        LLUUID prim_id;
+        DistChannel ch = DistChannel::M;
+        F32 range = 20.f;
+        F32 volume = 1.f;
+    };
+
+    // r8 F2-a: aggregated linkset state for one distributed-stereo source.
+    // Keyed by root_id in mDistributedBindings.
+    struct DistributedStereoBinding
+    {
+        LLUUID root_id;
         std::string url;
-        std::optional<F32> tag_min;
-        std::optional<F32> tag_max;
-        F32 applied_min = 1.f;
-        F32 applied_max = 20.f;
-        S32 l_link = 1;
-        S32 r_link = 2;
-        // Resolved at bind time by walking the linkset; refreshed on each
-        // re-evaluation in case the linkset changes.
-        LLUUID l_prim;
-        LLUUID r_prim;
+        F32 range_default = 20.f;
+        std::vector<SpeakerSlot> speakers;
+        // Count of speakers truncated by the per-binding cap. Surfaced in
+        // F4 throttled notification; F2-a only logs.
+        S32 dropped_speakers = 0;
+        // r8 F3-3: live FMOD-backed multi-speaker stream. nullptr while the
+        // linkset is still incomplete (priority-poll pending) or when the
+        // last (re)evaluation deferred a restart. evaluateLinkset compares
+        // the new (url, speakers) tuple against the old; identical tuples
+        // keep the existing stream so unrelated tag edits in the linkset
+        // don't audibly bounce the audio.
+        std::unique_ptr<LLPositionalStreamMulti> stream;
+        // r8 F7: reconnect bookkeeping mirrors the mono Binding loop so a
+        // socket-level outage rebuilds the stream instead of leaving the
+        // linkset silent.
         S32 reconnect_attempts = 0;
         F64 next_retry_time = 0.0;
         bool notified_played = false;
-        std::unique_ptr<LLPositionalStreamStereo> stream;
     };
+
+    // r8 F4: throttled error notification. Keyed by (prim_id, kind) so the
+    // user gets one toast per failure mode per 30 seconds even if the parse /
+    // start path is hit on every poll tick. spec §4.9.
+    enum class DistErrorKind
+    {
+        BadCh,
+        BadRange,
+        BadVolume,
+        EmptyUrl,
+        NoSpeakers,
+        SpeakerOverLimit,
+        StreamStartFailed,
+    };
+
+    // detail carries the raw bad value (e.g. "X" for {ch:X}, "1.5" for
+    // {volume:1.5}) or an over-limit count, depending on kind. Empty for
+    // kinds that don't have a useful payload (NoSpeakers).
+    void notifyDistributedError(const LLUUID& prim_id, DistErrorKind kind,
+                                const std::string& detail);
 
     void evaluateBinding(const LLUUID& id);
     void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
-    void evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag);
+
+    // r8 F2-a: (re)build the distributed-stereo binding rooted at root_id by
+    // walking the linkset and harvesting whatever speaker descriptions are
+    // already in mDescriptionCache. r8 F2-b: any participating prim whose
+    // description is not yet cached is enqueued onto mPriorityPollQueue so
+    // the binding completes within a few poll ticks rather than waiting for
+    // round-robin discovery.
+    // root_id is taken by value: evaluateLinkset() may erase entries from
+    // mPrimToRoot whose `.second` is the very reference a caller would pass
+    // (e.g. evaluateAndDispatch hands us `pr_it->second`). Copying defuses
+    // that use-after-free without auditing every call site.
+    void evaluateLinkset(LLUUID root_id);
+    void teardownDistributedBinding(const LLUUID& root_id);
+
+    // r8 F2-b: push id onto mPriorityPollQueue if not already queued.
+    // Linear scan dedup is fine — the queue is bounded by ~16 speakers per
+    // pending linkset and drains every poll tick.
+    void enqueuePriorityPoll(const LLUUID& id);
+
+    // r8 F11: send a bare ObjectSelect packet for `child` directly to its
+    // region — bypassing LLSelectMgr so the user's selection state, edit
+    // menu, and selection beam are untouched. The sim replies with a full
+    // ObjectProperties (carrying Description), which already feeds
+    // onObjectPropertiesReceived via llselectmgr.cpp:processObjectProperties.
+    // The matching ObjectDeselect is queued in mPendingChildDeselect and
+    // sent by drainChildDeselects() one tick later, so the sim doesn't keep
+    // the prim "selected" on our behalf indefinitely.
+    void requestChildDescViaSelect(LLViewerObject* child);
+    void drainChildDeselects(F64 now_seconds);
+
+    // r8 F2-c: scan mPrimToRoot looking for prims whose getRootEdit() no
+    // longer matches the registered root (link / unlink / death). Both the
+    // stale and the current root are re-evaluated, which transparently
+    // moves the speaker slot between linksets or tears down a binding when
+    // a participating prim is gone. Cheap: O(mPrimToRoot.size()) per tick,
+    // bounded by max_speakers × active bindings.
+    void detectLinksetStructureChanges();
 
     // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
     // any whose Description we haven't seen recently. Throttled so we never
-    // burst more than a handful of requests per second at the sim.
+    // burst more than a handful of requests per second at the sim. r8 F2-b:
+    // mPriorityPollQueue is drained first (within the same per-tick budget)
+    // so distributed-stereo linksets complete promptly.
     void pollObjectPropertiesFamily(F64 now_seconds);
 
     struct CacheEntry
     {
         std::string description;
         // Monotonic seconds (LLTimer::getElapsedSeconds) of the most recent
-        // request OR reply for this prim. 0 means "never seen". Used by the
-        // poll loop to throttle re-requests to Stream3DPollInterval.
+        // request send. 0 means "never sent". Round-robin re-poll uses this
+        // to space sends out at Stream3DPollInterval. Priority drain uses it
+        // to space retries at kPriorityRetryWait while waiting for the first
+        // reply.
         F64 last_polled = 0.0;
+        // r8 F8: time of the most recent reply. 0 means "never replied".
+        // Distinct from last_polled so the priority queue can keep retrying
+        // a prim whose request was sent but whose reply hasn't arrived
+        // (sim drop / interest-list miss) without bumping into the 30 s
+        // round-robin throttle.
+        F64 last_replied = 0.0;
+        // r8 F8: count of consecutive priority sends without a reply.
+        // Reset to 0 by onObjectPropertiesReceived. Capped at
+        // kPriorityRetryCap so a prim the sim refuses to answer for falls
+        // back to the slower round-robin cadence instead of burning the
+        // whole priority budget every tick.
+        S32 priority_retries = 0;
     };
 
     std::map<LLUUID, CacheEntry> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
-    std::map<LLUUID, StereoBinding> mStereoBindings;
+    // r8 F2-a: distributed-stereo bindings, keyed by root prim id.
+    std::map<LLUUID, DistributedStereoBinding> mDistributedBindings;
+    // r8 F2-a: reverse index for O(log N) child→root resolution from
+    // onObjectPropertiesReceived. Populated/cleared by evaluateLinkset and
+    // teardownDistributedBinding so it stays in sync with mDistributedBindings.
+    std::map<LLUUID, LLUUID> mPrimToRoot;
     std::unique_ptr<LLPositionalStream> mDebugStream;
     std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
 
@@ -194,11 +342,38 @@ private:
     // M3b: round-robin cursor into gObjectList so per-pass budget doesn't
     // starve prims past the first slice when num_objects > one pass can cover.
     S32 mPollCursor = 0;
+    // r8 F2-b: prims that evaluateLinkset wants polled ahead of the
+    // round-robin scan because they belong to a linkset where a source
+    // declaration was just observed. Drained at the head of every
+    // pollObjectPropertiesFamily tick, sharing the same per-tick budget.
+    std::deque<LLUUID> mPriorityPollQueue;
+    // r8 F8: linksets with at least one onObjectPropertiesReceived since the
+    // last update() drain. Drained once per frame so a burst of replies (e.g.
+    // a selection-induced ObjectProperties carrying 16 child descs at once)
+    // coalesces into a single evaluateLinkset / stream rebuild instead of
+    // N consecutive ones — N rebuilds blocked the main thread visibly.
+    std::set<LLUUID> mPendingLinksetEval;
+
+    // r8 F11: deferred ObjectDeselect for child prims we briefly selected
+    // (via requestChildDescViaSelect) to force a full ObjectProperties reply.
+    // Key = child prim id, value = monotonic-seconds at which to send the
+    // ObjectDeselect. The drain in update() releases the slot ~1s after the
+    // select so the sim has time to process the ObjectSelect and queue its
+    // ObjectProperties reply before we tell it to forget us.
+    std::map<LLUUID, F64> mPendingChildDeselect;
+
     // M8: edge-trigger for the "max concurrent reached" toast. Set true the
     // first time we refuse a binding due to the cap; reset to false whenever
     // total binding count drops back below the cap, so the user sees the
     // notification once per "newly full" event rather than every poll cycle.
     bool mCapNotified = false;
+
+    // r8 F4: last-notified timestamp per (prim, kind). 30s suppression.
+    // The map can in principle accumulate entries indefinitely (one per prim
+    // that ever produced an error) but each entry is small (~32 B) and the
+    // population in practice tracks the user's tagged prim count, so a prune
+    // pass is not yet required. Cleared by shutdownAll().
+    std::map<std::pair<LLUUID, DistErrorKind>, F64> mErrorThrottle;
 };
 
 #endif // LL_POSITIONAL_STREAM_MGR_H

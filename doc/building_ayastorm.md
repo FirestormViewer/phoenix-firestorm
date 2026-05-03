@@ -86,7 +86,7 @@ autobuild configure -A 64 -c ReleaseFS_open --   --fmodstudio -DLL_TESTS:BOOL=FA
 ### 8. ビルド
 
 ```bash
-autobuild build -A 64 -c ReleaseFS_open
+autobuild build -A 64 -c ReleaseFS_open --no-configure
 ```
 
 ### 9. キャッシュの削除 & インストール
@@ -113,7 +113,7 @@ rm -rf ~/.ayastorm_x64/cache/
 
 ### 1. 必要ツールのインストール（一度だけ）
 
-> **重要：** すべての作業はPowerShellではなく **cmd.exe（コマンドプロンプト）** で行う。
+> **重要：** すべての作業はPowerShellではなく **cmd.exe（コマンドプロンプト）管理者モード** で行う。
 
 #### Visual Studio 2022 Community（無料）
 
@@ -142,14 +142,6 @@ rm -rf ~/.ayastorm_x64/cache/
 #### NSIS（インストーラー作成用）
 
 - https://nsis.sourceforge.io からダウンロード
-
-#### Claude Code（コード修正・調査用）
-
-```cmd
-curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
-```
-
-インストール後、`C:\Users\owner\.local\bin` をPATHに追加（システムの環境変数を編集）。
 
 ### 2. リポジトリのclone
 
@@ -211,26 +203,49 @@ autobuild installables edit fmodstudio platform=windows64 ^
   url=file:///c:/work_ayastorm/3p-fmodstudio/fmodstudio-2.03.07-windows64-*.tar.bz2
 ```
 
-### 6. configure
+### 6. configure (Legacy)
 
 管理者cmdで環境変数を設定した後に実行：
 
 ```cmd
 cd c:\work_ayastorm\phoenix-firestorm
 rmdir /s /q build-vc170-64
-autobuild configure -A 64 -c ReleaseFS_open --  --fmodstudio -DLL_TESTS:BOOL=FALSE --package --chan Ayastorm-release
+autobuild configure -A 64 -c ReleaseFS_open -- --fmodstudio -DLL_TESTS:BOOL=FALSE --package --chan AYAstorm-release
 ```
 
-### 7. ビルド
+### 7. ビルド (Legacy)
 
 ```cmd
 autobuild build -A 64 -c ReleaseFS_open --no-configure
 ```
 
-### 8. インストーラーの場所
+### 8. インストーラーの場所 (Legacy)
 
 ```
 c:\work_ayastorm\phoenix-firestorm\build-vc170-64\newview\Release\
 Phoenix-FirestormOS-Ayastorm-release_LEGACY-7-2-4-80621_Setup.exe
+```
+
+### 9. configure (AVX2)
+
+管理者cmdで環境変数を設定した後に実行：
+
+```cmd
+cd c:\work_ayastorm\phoenix-firestorm
+rmdir /s /q build-vc170-64
+autobuild configure -A 64 -c ReleaseFS_open -- --fmodstudio --avx2 -DLL_TESTS:BOOL=FALSE --package --chan AYAstorm-release
+```
+
+### 10. ビルド (AVX2)
+
+```cmd
+autobuild build -A 64 -c ReleaseFS_AVX2 --no-configure
+```
+
+### 11. インストーラーの場所 (AVX2)
+
+```
+c:\work_ayastorm\phoenix-firestorm\build-vc170-64\newview\Release\
+Phoenix-FirestormOS-AYAstorm-release_AVX2-7-2-4-80621_Setup.exe
 ```
 

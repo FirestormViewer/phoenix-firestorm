@@ -26,7 +26,7 @@
 		Échec d&apos;initialisation des graphiques. Veuillez mettre votre pilote graphique à jour.
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] r7 (based on FS [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] build [VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
+		[APP_NAME] r8 (based on FS [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] build [VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 Parité avec le client Second Life: [VIEWER_VERSION_LL]
 	</string>
