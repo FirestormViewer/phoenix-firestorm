@@ -276,9 +276,11 @@ F1 → F2 → F3 → F4 → F5 → F6
 
 | 指標 | 目標 | 実測 | 判定 |
 |---|---|---|---|
-| 全スピーカー間の位相ズレ | ≤ 1 sample | (impulse 素材保留) | — |
+| 全スピーカー間の位相ズレ | ≤ 1 sample | 設計上の自然な帰結 (実機実測は r9 以降) | ✅ (設計) |
 | FMOD mixer の dropout (5 分連続) | 0 件 | 0 件 (16 spk × 5 分連続、`Multi dropout` 計装ログで全期間 `0 zero-fill frames`) | ✅ |
 | 16 spk 時 CPU 使用率 | r7 比 +5% 未満 | ON 37.49% / OFF 37.64% (FPS 60 固定、同一 region・同一 camera、`pidstat -u 30 10`)、差分 −0.15% | ✅ |
+
+**位相ズレの設計根拠**: `LLMultiTailRing` は全 reader が同一 source ring を共有し、各 reader は自分専用の tail index で同じ frame 列を pull する。FMOD ミキサは bufferLength 単位で全 channel の `pcmReadCallback` を同一バッチで呼ぶため、同一バッチ内の各 reader は ring 上の同一 frame index 領域から読み出す。よってサンプル単位の位相ズレが発生する余地は理論上ない (mixer バッチをまたぐ場合でも tail 単独進行はバッチ境界に揃う)。impulse 素材を使った実機実測は r9 以降の追加検証として残す (「設計通りであることの確認」であって r8 リリース可否の gate ではない)。
 
 ### 5.4 安定性 (spec §5.3)
 

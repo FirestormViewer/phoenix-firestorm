@@ -783,20 +783,24 @@ void LLPositionalStreamMulti::update()
             const U64 frames = mUnderrunFrames.exchange(0, std::memory_order_relaxed);
             const U64 calls  = mUnderrunCallbacks.exchange(0, std::memory_order_relaxed);
             const F64 win    = now - mLastUnderrunLogTime;
-            // Frames per speaker per second — easier to reason about than
-            // raw counts because callbacks fire N times per real second
-            // (once per speaker). 0 across the window means clean playback.
-            const F64 fps_per_spk = (mSpeakers.empty() || win <= 0.0)
-                                  ? 0.0
-                                  : static_cast<F64>(frames)
-                                    / static_cast<F64>(mSpeakers.size())
-                                    / win;
-            LL_INFOS("Stream3D") << "Multi dropout (" << mUrl << "): "
-                                  << frames << " zero-fill frames across "
-                                  << calls << " callbacks over "
-                                  << win << "s (" << fps_per_spk
-                                  << " frames/spk/s, speakers="
-                                  << mSpeakers.size() << ")" << LL_ENDL;
+            // Only log when there were actual underruns. Healthy streams
+            // would otherwise spam an INFO line every 10 s. The counter
+            // window itself still rolls forward so a single dropped frame
+            // shows up as the integer it is, not as a fraction.
+            if (frames > 0)
+            {
+                const F64 fps_per_spk = (mSpeakers.empty() || win <= 0.0)
+                                      ? 0.0
+                                      : static_cast<F64>(frames)
+                                        / static_cast<F64>(mSpeakers.size())
+                                        / win;
+                LL_WARNS("Stream3D") << "Multi dropout (" << mUrl << "): "
+                                      << frames << " zero-fill frames across "
+                                      << calls << " callbacks over "
+                                      << win << "s (" << fps_per_spk
+                                      << " frames/spk/s, speakers="
+                                      << mSpeakers.size() << ")" << LL_ENDL;
+            }
             mLastUnderrunLogTime = now;
         }
     }
