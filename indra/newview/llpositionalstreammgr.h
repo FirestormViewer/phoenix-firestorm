@@ -238,6 +238,14 @@ private:
     // pending linkset and drains every poll tick.
     void enqueuePriorityPoll(const LLUUID& id);
 
+    // r8 F2-c: scan mPrimToRoot looking for prims whose getRootEdit() no
+    // longer matches the registered root (link / unlink / death). Both the
+    // stale and the current root are re-evaluated, which transparently
+    // moves the speaker slot between linksets or tears down a binding when
+    // a participating prim is gone. Cheap: O(mPrimToRoot.size()) per tick,
+    // bounded by max_speakers × active bindings.
+    void detectLinksetStructureChanges();
+
     // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
     // any whose Description we haven't seen recently. Throttled so we never
     // burst more than a handful of requests per second at the sim. r8 F2-b:

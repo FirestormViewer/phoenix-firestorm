@@ -47,6 +47,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <set>
 
 namespace
 {
@@ -614,6 +615,42 @@ void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
     mPriorityPollQueue.push_back(id);
 }
 
+void LLPositionalStreamMgr::detectLinksetStructureChanges()
+{
+    if (mPrimToRoot.empty()) return;
+
+    // Collect deltas first, then re-evaluate — calling evaluateLinkset while
+    // iterating mPrimToRoot would mutate it under us.
+    std::set<LLUUID> roots_to_reeval;
+    for (const auto& [prim_id, registered_root] : mPrimToRoot)
+    {
+        LLViewerObject* obj = gObjectList.findObject(prim_id);
+        if (!obj || obj->isDead())
+        {
+            // Prim gone (e.g. derez). Re-evaluating the registered root will
+            // drop this slot and either rebuild or tear down the binding.
+            roots_to_reeval.insert(registered_root);
+            continue;
+        }
+        LLViewerObject* current_root_obj = obj->getRootEdit();
+        const LLUUID current_root = current_root_obj
+            ? current_root_obj->getID() : prim_id;
+        if (current_root != registered_root)
+        {
+            // link / unlink moved this prim across linksets.
+            roots_to_reeval.insert(registered_root);
+            roots_to_reeval.insert(current_root);
+        }
+    }
+
+    for (const auto& r : roots_to_reeval)
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] linkset structure change "
+                              << "— re-evaluating root " << r << LL_ENDL;
+        evaluateLinkset(r);
+    }
+}
+
 void LLPositionalStreamMgr::teardownDistributedBinding(const LLUUID& root_id)
 {
     auto it = mDistributedBindings.find(root_id);
@@ -1033,6 +1070,12 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     }
     const F32 max_dist_sq = max_dist * max_dist;
     const LLVector3d agent_pos = gAgent.getPositionGlobal();
+
+    // r8 F2-c: spot link/unlink/death once per scan tick. This is cheap and
+    // independent of the request budget — it only reads gObjectList and may
+    // call evaluateLinkset (which itself may enqueue priority polls picked
+    // up by the drain below).
+    detectLinksetStructureChanges();
 
     int budget = kBudgetPerScan;
 
