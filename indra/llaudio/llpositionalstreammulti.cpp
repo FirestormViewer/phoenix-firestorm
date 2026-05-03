@@ -488,6 +488,13 @@ bool LLPositionalStreamMulti::startUserChannels()
             sr.channel = nullptr;
             return false;
         }
+        // r8 F9: pin priority to 0 (highest) immediately so the next iteration's
+        // playSound() can't recycle this paused channel out from under us. With
+        // 16 speakers, FMOD's free-channel pool is too small to hold them all,
+        // and the default priority of a paused channel makes it the prime
+        // recycle target — symptom is silent speakers whose pcmReadCallback
+        // never fires, which then stalls the multi-tail ring writer.
+        checkFmod(sr.channel->setPriority(0), "Channel::setPriority(speaker)");
         applyChannelAttributes(sr.channel, mSpeakers[i].position, mSpeakers[i].range);
         checkFmod(sr.channel->setVolume(mVolume * mSpeakers[i].volume),
                   "Channel::setVolume(speaker)");

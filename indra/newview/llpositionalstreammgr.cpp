@@ -42,12 +42,15 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llselectmgr.h"
+#include "llviewerregion.h"
+#include "message.h"
 
 #include "llstring.h"
 #include "lltimer.h"
 
 #include <algorithm>
 #include <cctype>
+#include <limits>
 #include <set>
 
 namespace
@@ -389,7 +392,10 @@ void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
     // (e.g., teleport out and back) need to re-bind even when the text matches.
     auto& entry = mDescriptionCache[id];
     entry.description = description;
-    entry.last_polled = LLTimer::getElapsedSeconds();
+    const F64 reply_now = LLTimer::getElapsedSeconds();
+    entry.last_polled  = reply_now;
+    entry.last_replied = reply_now;
+    entry.priority_retries = 0;
 
     // M3b debug: only log replies that look like our tag, to keep the noise
     // floor sane in busy regions.
@@ -484,10 +490,12 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         // the previously-known root so the speaker slot is recomputed without
         // this prim. (mPrimToRoot lookup is the only side effect here; the
         // mono path itself is unchanged.)
+        // r8 F8: defer to the per-frame drain in update() — see
+        // mPendingLinksetEval comment for why.
         auto pr_it = mPrimToRoot.find(id);
         if (pr_it != mPrimToRoot.end())
         {
-            evaluateLinkset(pr_it->second);
+            mPendingLinksetEval.insert(pr_it->second);
         }
         return;
     }
@@ -524,11 +532,11 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         notifyDistributedError(id, k, dist.bad_value);
 
         // Field is malformed → treat the slot as missing and re-evaluate the
-        // owning linkset, if we knew about one.
+        // owning linkset, if we knew about one. (Deferred — F8.)
         auto pr_it = mPrimToRoot.find(id);
         if (pr_it != mPrimToRoot.end())
         {
-            evaluateLinkset(pr_it->second);
+            mPendingLinksetEval.insert(pr_it->second);
         }
         return;
     }
@@ -542,16 +550,18 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         }
         LLViewerObject* root = obj->getRootEdit();
         LLUUID root_id = root ? root->getID() : id;
-        evaluateLinkset(root_id);
+        // r8 F8: defer to per-frame drain so a burst of replies for the same
+        // linkset coalesces into a single rebuild.
+        mPendingLinksetEval.insert(root_id);
         return;
     }
 
     // No tag of any kind. If this prim used to participate in a linkset
-    // binding, that binding needs to be recomputed without it.
+    // binding, that binding needs to be recomputed without it. (Deferred — F8.)
     auto pr_it = mPrimToRoot.find(id);
     if (pr_it != mPrimToRoot.end())
     {
-        evaluateLinkset(pr_it->second);
+        mPendingLinksetEval.insert(pr_it->second);
     }
 }
 
@@ -614,6 +624,16 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
             // r8 F2-b: ask the poll loop to fetch this child ahead of the
             // round-robin scan so the binding completes promptly.
             enqueuePriorityPoll(child_id);
+            // r8 F11: ObjectPropertiesFamily replies are filtered by the sim
+            // for unselected child prims, so the priority poll alone never
+            // resolves a child desc on a fresh login (root replies, children
+            // stay silent). Trigger a one-shot ObjectSelect on the child to
+            // force a full ObjectProperties reply (which carries Description
+            // and feeds onObjectPropertiesReceived). The deselect drain in
+            // update() releases the slot a moment later. We bypass LLSelectMgr
+            // so the user's actual selection / edit-menu / selection beam
+            // are untouched.
+            requestChildDescViaSelect(child.get());
             continue;
         }
         auto cparse = parseDistributedStereoTag(cdesc_it->second.description);
@@ -786,6 +806,92 @@ void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
     mPriorityPollQueue.push_back(id);
 }
 
+void LLPositionalStreamMgr::requestChildDescViaSelect(LLViewerObject* child)
+{
+    // r8 F11: see header. We bypass LLSelectMgr deliberately — going through
+    // selectObjectAndFamily would mutate gEditMenuHandler, raise selection
+    // beams, and clobber the user's actual selection. The bare wire-level
+    // ObjectSelect is enough to coax the sim into emitting full
+    // ObjectProperties (which carries Description) for this child.
+    if (!child || child->isDead()) return;
+
+    LLViewerRegion* region = child->getRegion();
+    if (!region) return;
+
+    // If we already have a deselect pending for this prim, the previous select
+    // is still in flight (or its reply hasn't been processed yet). Bumping the
+    // due-time keeps the slot alive a bit longer instead of double-selecting.
+    const F64 now = LLTimer::getElapsedSeconds();
+    static constexpr F64 kSelectHoldSeconds = 1.0;
+    auto [it, inserted] = mPendingChildDeselect.try_emplace(
+        child->getID(), now + kSelectHoldSeconds);
+    if (!inserted)
+    {
+        it->second = now + kSelectHoldSeconds;
+        return;
+    }
+
+    LLMessageSystem* msg = gMessageSystem;
+    msg->newMessageFast(_PREHASH_ObjectSelect);
+    msg->nextBlockFast(_PREHASH_AgentData);
+    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->nextBlockFast(_PREHASH_ObjectData);
+    msg->addU32Fast(_PREHASH_ObjectLocalID, child->getLocalID());
+    msg->sendReliable(region->getHost());
+}
+
+void LLPositionalStreamMgr::drainChildDeselects(F64 now)
+{
+    if (mPendingChildDeselect.empty()) return;
+
+    for (auto it = mPendingChildDeselect.begin(); it != mPendingChildDeselect.end(); )
+    {
+        if (it->second > now)
+        {
+            ++it;
+            continue;
+        }
+
+        LLViewerObject* obj = gObjectList.findObject(it->first);
+        if (!obj || obj->isDead())
+        {
+            // Object gone — sim already cleared its half of the selection
+            // when it emitted KillObject, so we just drop the entry.
+            it = mPendingChildDeselect.erase(it);
+            continue;
+        }
+
+        // r8 F11: user-collision guard. If LLSelectMgr has the prim in its
+        // local selection (build tools open, edit-link picker, etc.), then
+        // there's an authoritative ObjectSelect from the user side that
+        // outlives our phantom one. Sending our deselect would clobber the
+        // user's selection on the sim while their viewer still thinks it
+        // owns the slot — so we drop the entry and let the user's lifecycle
+        // manage deselect.
+        if (obj->isSelected())
+        {
+            it = mPendingChildDeselect.erase(it);
+            continue;
+        }
+
+        LLViewerRegion* region = obj->getRegion();
+        if (region)
+        {
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessageFast(_PREHASH_ObjectDeselect);
+            msg->nextBlockFast(_PREHASH_AgentData);
+            msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+            msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+            msg->nextBlockFast(_PREHASH_ObjectData);
+            msg->addU32Fast(_PREHASH_ObjectLocalID, obj->getLocalID());
+            msg->sendReliable(region->getHost());
+        }
+
+        it = mPendingChildDeselect.erase(it);
+    }
+}
+
 void LLPositionalStreamMgr::detectLinksetStructureChanges()
 {
     if (mPrimToRoot.empty()) return;
@@ -938,6 +1044,28 @@ void LLPositionalStreamMgr::update()
 
     const F64 now = LLTimer::getElapsedSeconds();
     pollObjectPropertiesFamily(now);
+
+    // r8 F11: release child prims we briefly selected to force a full
+    // ObjectProperties reply. Runs before the linkset-eval drain so the
+    // ObjectDeselect goes out in the same frame the now-cached desc is
+    // consumed — the sim never sees a long-held selection on our behalf.
+    drainChildDeselects(now);
+
+    // r8 F8: drain pending linkset re-evaluations once per frame. A
+    // selection-induced ObjectProperties message can deliver 16 child
+    // descriptions back-to-back; the previous "evaluate per reply" path
+    // rebuilt the FMOD multi-stream once for every reply, blocking the main
+    // thread for several seconds. Set semantics dedup the root ids so each
+    // affected linkset rebuilds at most once per frame.
+    if (!mPendingLinksetEval.empty())
+    {
+        std::set<LLUUID> drained;
+        drained.swap(mPendingLinksetEval);
+        for (const auto& root_id : drained)
+        {
+            evaluateLinkset(root_id);
+        }
+    }
 
     if (mDebugStream)
     {
@@ -1224,6 +1352,14 @@ void LLPositionalStreamMgr::shutdownPrimBindings()
     // r8 F2-b: any pending priority polls were tied to bindings that no
     // longer exist; drop them so we don't burn poll budget after teardown.
     mPriorityPollQueue.clear();
+    // r8 F8: deferred re-evaluations referenced roots we just tore down.
+    mPendingLinksetEval.clear();
+    // r8 F11: drain pending deselects synchronously instead of just clearing
+    // — otherwise a kill-switch toggle within the 1 s hold window would leave
+    // phantom selections on the sim. Forcing now=+infinity makes drainChild
+    // Deselects fire every entry; the user-collision guard inside still
+    // protects build-tool selections.
+    drainChildDeselects(std::numeric_limits<F64>::max());
 }
 
 void LLPositionalStreamMgr::shutdownAll()
@@ -1272,6 +1408,10 @@ void LLPositionalStreamMgr::forceRescan()
             evaluateBinding(kv.first);
         }
         kv.second.last_polled = 0.0;
+        // r8 F8: also reset the priority retry counter so prims that the sim
+        // previously refused to reply for get a fresh shot at the fast retry
+        // path on the next poll tick.
+        kv.second.priority_retries = 0;
     }
     LL_INFOS("Stream3D") << "Forced rescan: " << rebind_candidates
                           << " cached descriptions re-evaluated, last_polled cleared on "
@@ -1360,6 +1500,14 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
     // a given prim's effective re-poll interval will exceed Stream3DPollInterval.
     static constexpr F64 kScanInterval  = 0.5;
     static constexpr int kBudgetPerScan = 5;
+    // r8 F8: priority queue retry cadence. Far below Stream3DPollInterval so
+    // a freshly discovered linkset finishes binding within seconds even when
+    // the first Family request was dropped, but capped to kPriorityRetryCap
+    // attempts so prims the sim refuses to answer for don't burn the whole
+    // priority budget every tick. After the cap, round-robin (poll_interval
+    // cadence) takes over silently.
+    static constexpr F64 kPriorityRetryWait = 3.0;
+    static constexpr S32 kPriorityRetryCap  = 5;
 
     if (now - mLastPollScanTime < kScanInterval)
     {
@@ -1397,14 +1545,25 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
 
     int budget = kBudgetPerScan;
 
-    // r8 F2-b: drain the priority queue first. These are prims that
+    // r8 F2-b / F8: drain the priority queue first. These are prims that
     // evaluateLinkset wants polled now (root or speaker that we don't yet
-    // have description for). Distance / avatar filtering still applies; the
-    // last_polled throttle still applies, since the priority hint and the
-    // sim-friendly rate limit are independent concerns.
+    // have description for). Distance / avatar filtering still applies.
+    //
+    // Retry policy (F8): a prim stays in the queue across drains until either
+    // its reply arrives (last_replied stamped) or kPriorityRetryCap attempts
+    // were spent. The previous policy used the same 30 s round-robin throttle
+    // here, so a child whose first Family request was dropped by the sim sat
+    // mute for 30 s before round-robin retried — observable as the "16 spk
+    // linkset only plays 1 speaker until the user touches it" symptom.
+    //
+    // Snapshot the queue size before draining so re-queued items don't get
+    // re-processed in the same tick (same prim could otherwise be sent twice
+    // back-to-back when budget is large).
     int n_priority = 0;
-    while (budget > 0 && !mPriorityPollQueue.empty())
+    size_t to_process = mPriorityPollQueue.size();
+    while (budget > 0 && to_process > 0 && !mPriorityPollQueue.empty())
     {
+        --to_process;
         const LLUUID id = mPriorityPollQueue.front();
         mPriorityPollQueue.pop_front();
 
@@ -1417,12 +1576,29 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
         if (static_cast<F32>(delta.magVecSquared()) > max_dist_sq) continue;
 
         auto& entry = mDescriptionCache[id];
-        if (entry.last_polled > 0.0 && (now - entry.last_polled) < poll_interval) continue;
+
+        // Reply already arrived: round-robin owns this prim now.
+        if (entry.last_replied > 0.0) continue;
+        // Spent the priority budget without a reply: let round-robin retry
+        // at its slower cadence. Don't re-queue.
+        if (entry.priority_retries >= kPriorityRetryCap) continue;
+        // Within retry-wait window since the last send: keep the slot but
+        // wait for the next drain.
+        if (entry.last_polled > 0.0 && (now - entry.last_polled) < kPriorityRetryWait)
+        {
+            mPriorityPollQueue.push_back(id);
+            continue;
+        }
 
         LLSelectMgr::getInstance()->requestObjectPropertiesFamily(obj);
         entry.last_polled = now;
+        entry.priority_retries++;
         --budget;
         ++n_priority;
+
+        // Re-queue so the next drain checks whether the reply arrived and,
+        // if not, retries (subject to the cap above).
+        mPriorityPollQueue.push_back(id);
     }
 
     const S32 num = gObjectList.getNumObjects();

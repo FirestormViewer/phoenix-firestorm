@@ -33,12 +33,14 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string>
 #include <vector>
 
 class LLPositionalStream;
 class LLPositionalStreamStereo;
 class LLPositionalStreamMulti;
+class LLViewerObject;
 
 class LLPositionalStreamMgr
 {
@@ -275,6 +277,17 @@ private:
     // pending linkset and drains every poll tick.
     void enqueuePriorityPoll(const LLUUID& id);
 
+    // r8 F11: send a bare ObjectSelect packet for `child` directly to its
+    // region — bypassing LLSelectMgr so the user's selection state, edit
+    // menu, and selection beam are untouched. The sim replies with a full
+    // ObjectProperties (carrying Description), which already feeds
+    // onObjectPropertiesReceived via llselectmgr.cpp:processObjectProperties.
+    // The matching ObjectDeselect is queued in mPendingChildDeselect and
+    // sent by drainChildDeselects() one tick later, so the sim doesn't keep
+    // the prim "selected" on our behalf indefinitely.
+    void requestChildDescViaSelect(LLViewerObject* child);
+    void drainChildDeselects(F64 now_seconds);
+
     // r8 F2-c: scan mPrimToRoot looking for prims whose getRootEdit() no
     // longer matches the registered root (link / unlink / death). Both the
     // stale and the current root are re-evaluated, which transparently
@@ -294,9 +307,23 @@ private:
     {
         std::string description;
         // Monotonic seconds (LLTimer::getElapsedSeconds) of the most recent
-        // request OR reply for this prim. 0 means "never seen". Used by the
-        // poll loop to throttle re-requests to Stream3DPollInterval.
+        // request send. 0 means "never sent". Round-robin re-poll uses this
+        // to space sends out at Stream3DPollInterval. Priority drain uses it
+        // to space retries at kPriorityRetryWait while waiting for the first
+        // reply.
         F64 last_polled = 0.0;
+        // r8 F8: time of the most recent reply. 0 means "never replied".
+        // Distinct from last_polled so the priority queue can keep retrying
+        // a prim whose request was sent but whose reply hasn't arrived
+        // (sim drop / interest-list miss) without bumping into the 30 s
+        // round-robin throttle.
+        F64 last_replied = 0.0;
+        // r8 F8: count of consecutive priority sends without a reply.
+        // Reset to 0 by onObjectPropertiesReceived. Capped at
+        // kPriorityRetryCap so a prim the sim refuses to answer for falls
+        // back to the slower round-robin cadence instead of burning the
+        // whole priority budget every tick.
+        S32 priority_retries = 0;
     };
 
     std::map<LLUUID, CacheEntry> mDescriptionCache;
@@ -320,6 +347,21 @@ private:
     // declaration was just observed. Drained at the head of every
     // pollObjectPropertiesFamily tick, sharing the same per-tick budget.
     std::deque<LLUUID> mPriorityPollQueue;
+    // r8 F8: linksets with at least one onObjectPropertiesReceived since the
+    // last update() drain. Drained once per frame so a burst of replies (e.g.
+    // a selection-induced ObjectProperties carrying 16 child descs at once)
+    // coalesces into a single evaluateLinkset / stream rebuild instead of
+    // N consecutive ones — N rebuilds blocked the main thread visibly.
+    std::set<LLUUID> mPendingLinksetEval;
+
+    // r8 F11: deferred ObjectDeselect for child prims we briefly selected
+    // (via requestChildDescViaSelect) to force a full ObjectProperties reply.
+    // Key = child prim id, value = monotonic-seconds at which to send the
+    // ObjectDeselect. The drain in update() releases the slot ~1s after the
+    // select so the sim has time to process the ObjectSelect and queue its
+    // ObjectProperties reply before we tell it to forget us.
+    std::map<LLUUID, F64> mPendingChildDeselect;
+
     // M8: edge-trigger for the "max concurrent reached" toast. Set true the
     // first time we refuse a binding due to the cap; reset to false whenever
     // total binding count drops back below the cap, so the user sees the
