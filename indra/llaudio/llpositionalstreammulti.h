@@ -25,6 +25,7 @@
 #ifndef LL_POSITIONAL_STREAM_MULTI_H
 #define LL_POSITIONAL_STREAM_MULTI_H
 
+#include "llmultichanneldownmix.h"
 #include "stdtypes.h"
 #include "v3math.h"
 
@@ -194,15 +195,20 @@ private:
 
     FMOD::Sound* mSourceSound;
     int mSampleRate;
-    int mSourceChannels;       // 1 or 2
+    int mSourceChannels;       // 1, 2, or (r9) 6
     int mSourceBytesPerSample; // 2 for PCM16, 4 for PCMFLOAT
     bool mSourceIsFloat;
 
-    // Ring is sized at Opening→Buffering with n_tracks = max(mSourceChannels, 2)
-    // so even mono sources can drive ch=L/R speakers (decoder duplicates the
-    // mono sample into both tracks at write time so Mono ReadMode returns the
-    // original amplitude). N_track is parameterised so r10 can lift the same
-    // scaffolding to 5.1 without touching the ring.
+    // r9: populated at format detection when mSourceChannels == 6. The ring
+    // is still allocated with n_tracks = 2 — pumpSource() converts each 6ch
+    // frame to interleaved L/R via mDownmix before writing.
+    LLMultichannelDownmix mDownmix;
+
+    // Ring is sized at Opening→Buffering with n_tracks = 2 across all source
+    // channel counts. Mono sources duplicate the sample into both tracks at
+    // write time so ch=L/R speakers each see the full mono signal; 6ch sources
+    // are downmixed to L/R via mDownmix before writeFrames(). r10 may lift
+    // n_tracks for true per-channel routing without touching the reader side.
     LLMultiTailRing mRing;
 
     std::vector<SpeakerConfig> mSpeakers;
@@ -214,6 +220,10 @@ private:
     std::atomic<State> mState;
 
     std::vector<U8> mReadScratch;
+    // r9: F32 scratch used by the 6ch path when the source decodes as PCM16.
+    // Holds up to kChunkFrames × 6 floats; pre-sized at format detection so
+    // the decode thread never allocates on the audio path.
+    std::vector<F32> mDownmixInputScratch;
 
     std::thread mDecodeThread;
     std::atomic<bool> mDecodeStop;
@@ -239,6 +249,9 @@ private:
 
     static constexpr size_t kPrebufferFrames = 4096;
     static constexpr size_t kRingFrames      = 1 << 15; // ~0.74 s at 44.1 kHz
+    // r9: chunk granularity for the source → ring conversion loop. Sized so a
+    // single chunk fits comfortably in L1 (1024 frames × 6 ch × 4 B = 24 KB).
+    static constexpr size_t kPumpChunkFrames = 1024;
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;

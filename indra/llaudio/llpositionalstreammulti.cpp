@@ -347,6 +347,7 @@ void LLPositionalStreamMulti::releaseAll()
     mSourceChannels = 0;
     mSourceBytesPerSample = 0;
     mSourceIsFloat = false;
+    mDownmix = LLMultichannelDownmix();
 }
 
 void LLPositionalStreamMulti::setSpeakerPosition(size_t idx, const LLVector3& pos)
@@ -595,7 +596,7 @@ size_t LLPositionalStreamMulti::pumpSource()
     //     speakers each see the full mono signal at their own 3D position.
     //   - stereo source (2 ch) into 2-track ring: 1:1 copy. ReadMode::Mono
     //     returns the spec-mandated -6 dB sum-to-mono.
-    constexpr size_t kChunkFrames = 1024;
+    constexpr size_t kChunkFrames = kPumpChunkFrames;
     std::vector<F32> chunk(kChunkFrames * n_tracks, 0.f);
 
     const U8* sp = mReadScratch.data();
@@ -634,6 +635,29 @@ size_t LLPositionalStreamMulti::pumpSource()
                     }
                 }
             }
+        }
+        else if (mSourceChannels == 6)
+        {
+            // r9: 6ch source → BS.775 downmix → 2-track ring. The downmix
+            // expects F32 6ch interleaved; PCM16 input is widened into the
+            // pre-sized mDownmixInputScratch first.
+            const F32* in6 = nullptr;
+            if (mSourceIsFloat)
+            {
+                in6 = reinterpret_cast<const F32*>(sp);
+            }
+            else
+            {
+                const S16* s16 = reinterpret_cast<const S16*>(sp);
+                const size_t samples = this_chunk * 6;
+                for (size_t i = 0; i < samples; ++i)
+                {
+                    mDownmixInputScratch[i] = static_cast<F32>(s16[i]) * (1.f / 32768.f);
+                }
+                in6 = mDownmixInputScratch.data();
+            }
+            // chunk is sized this_chunk * n_tracks (= 2), interleaved L,R.
+            mDownmix.mix6chTo2chLR(in6, chunk.data(), this_chunk);
         }
         else if (mSourceIsFloat)
         {
@@ -732,11 +756,43 @@ void LLPositionalStreamMulti::update()
         mSampleRate = static_cast<int>(freq);
         mSourceChannels = channels;
 
-        // r10 prep: parameterise N_track. Stereo path uses 2; a future 5.1
-        // path would set this to 6 and add Track2..Track5 ReadModes. Mono
-        // sources still allocate 2 tracks because ch=L/R speakers expect a
-        // stereo-shaped ring upstream.
-        const size_t n_tracks = std::max(2, mSourceChannels);
+        // r9 (§4.5): 6ch sources go through the BS.775 downmix to a 2-track
+        // ring; 1ch / 2ch use the r8 path unchanged. Other channel counts
+        // (3/4/5/7/8) are rejected here — P6 will route this through the
+        // user-facing notifyStream3D channel; for now we Fail the stream so
+        // the manager's reconnect path doesn't keep banging on it.
+        if (mSourceChannels == 6)
+        {
+            mDownmix = LLMultichannelDownmix::forSourceFormat(type, mSourceChannels);
+            if (!mDownmix.isSupported())
+            {
+                LL_WARNS("Stream3D") << "Multi source: 6ch from unsupported codec (FMOD type "
+                                      << (int)type << ") — only Vorbis/Opus/FLAC accepted in r9: "
+                                      << mUrl << LL_ENDL;
+                releaseAll();
+                mState = State::Failed;
+                return;
+            }
+            // Pre-size the F32 scratch used by the PCM16 widen step in
+            // pumpSource(). PCMFLOAT sources never touch it, but the cost
+            // is one allocation of 24 KB so we do it unconditionally.
+            mDownmixInputScratch.assign(kPumpChunkFrames * 6, 0.f);
+        }
+        else if (mSourceChannels != 1 && mSourceChannels != 2)
+        {
+            LL_WARNS("Stream3D") << "Multi source: unsupported channel count "
+                                  << mSourceChannels << " for " << mUrl
+                                  << " (r9 accepts 1/2/6 only)" << LL_ENDL;
+            releaseAll();
+            mState = State::Failed;
+            return;
+        }
+
+        // r9: ring stays 2-track even for 6ch source (downmix to L/R happens
+        // in pumpSource before writeFrames). Mono sources allocate 2 tracks
+        // so ch=L/R speakers each see the full mono signal — pumpSource
+        // duplicates the sample into both tracks at write time.
+        const size_t n_tracks = 2;
         const size_t cap = nextPow2(kRingFrames);
         mRing.reset(cap, n_tracks, mSpeakers.size());
         mState = State::Buffering;
@@ -744,6 +800,9 @@ void LLPositionalStreamMulti::update()
         LL_INFOS("Stream3D") << "Multi source ready: " << mUrl
                               << " " << mSampleRate << " Hz x " << mSourceChannels
                               << " ch, fmt=" << (mSourceIsFloat ? "PCMFLOAT" : "PCM16")
+                              << (mSourceChannels == 6
+                                  ? std::string(", downmix=") + mDownmix.layoutName()
+                                  : std::string())
                               << ", ring cap " << cap << " frames × " << n_tracks << " tracks"
                               << ", speakers=" << mSpeakers.size() << LL_ENDL;
 
