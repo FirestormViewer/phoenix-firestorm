@@ -226,11 +226,26 @@ private:
     int mReadFailStreak = 0;
     F64 mLastReadFailLogTime = 0.0;
 
+    // r8 F6 acceptance instrumentation: count frames the FMOD mixer callback
+    // had to zero-fill because the ring drained (decode thread fell behind
+    // or the source stalled). Bumped from the FMOD mixer thread (multiple
+    // threads, one per speaker), drained from update() on the main thread.
+    // Logged at kUnderrunLogPeriod cadence after a warmup window so
+    // prebuffer-drain transients don't show up as "dropouts".
+    std::atomic<U64> mUnderrunFrames{0};
+    std::atomic<U64> mUnderrunCallbacks{0};
+    F64 mPlayingStartTime = 0.0;
+    F64 mLastUnderrunLogTime = 0.0;
+
     static constexpr size_t kPrebufferFrames = 4096;
     static constexpr size_t kRingFrames      = 1 << 15; // ~0.74 s at 44.1 kHz
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;
+    // r8 F6: skip the first second after Playing transition to discount
+    // prebuffer warmup; emit the rolling counter every 10s thereafter.
+    static constexpr F64 kUnderrunWarmupSec  = 1.0;
+    static constexpr F64 kUnderrunLogPeriod  = 10.0;
 };
 
 #endif // LL_POSITIONAL_STREAM_MULTI_H

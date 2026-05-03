@@ -414,6 +414,15 @@ LLPositionalStreamMulti::pcmReadCallback(FMOD_SOUND* sound, void* data, U32 data
     if (got < n)
     {
         std::memset(out + got, 0, (n - got) * sizeof(F32));
+        // r8 F6 acceptance: count the underrun for the dropout metric. Done
+        // here, not in readFrames, so a speaker whose tail reads short still
+        // registers even if the ring isn't globally empty.
+        if (cb && cb->self)
+        {
+            cb->self->mUnderrunFrames.fetch_add(static_cast<U64>(n - got),
+                                                std::memory_order_relaxed);
+            cb->self->mUnderrunCallbacks.fetch_add(1, std::memory_order_relaxed);
+        }
     }
     return FMOD_OK;
 }
@@ -753,8 +762,42 @@ void LLPositionalStreamMulti::update()
                 return;
             }
             mState = State::Playing;
+            // r8 F6: anchor the warmup window for the dropout metric, and
+            // zero the counters so any callbacks during Buffering→Playing
+            // transition don't leak into the Playing measurement.
+            mPlayingStartTime = LLTimer::getElapsedSeconds();
+            mLastUnderrunLogTime = mPlayingStartTime;
+            mUnderrunFrames.store(0, std::memory_order_relaxed);
+            mUnderrunCallbacks.store(0, std::memory_order_relaxed);
             LL_INFOS("Stream3D") << "Multi path playing: " << mUrl
                                   << " (" << mSpeakers.size() << " speakers)" << LL_ENDL;
+        }
+    }
+
+    if (st == State::Playing)
+    {
+        const F64 now = LLTimer::getElapsedSeconds();
+        if (now - mPlayingStartTime >= kUnderrunWarmupSec &&
+            now - mLastUnderrunLogTime >= kUnderrunLogPeriod)
+        {
+            const U64 frames = mUnderrunFrames.exchange(0, std::memory_order_relaxed);
+            const U64 calls  = mUnderrunCallbacks.exchange(0, std::memory_order_relaxed);
+            const F64 win    = now - mLastUnderrunLogTime;
+            // Frames per speaker per second — easier to reason about than
+            // raw counts because callbacks fire N times per real second
+            // (once per speaker). 0 across the window means clean playback.
+            const F64 fps_per_spk = (mSpeakers.empty() || win <= 0.0)
+                                  ? 0.0
+                                  : static_cast<F64>(frames)
+                                    / static_cast<F64>(mSpeakers.size())
+                                    / win;
+            LL_INFOS("Stream3D") << "Multi dropout (" << mUrl << "): "
+                                  << frames << " zero-fill frames across "
+                                  << calls << " callbacks over "
+                                  << win << "s (" << fps_per_spk
+                                  << " frames/spk/s, speakers="
+                                  << mSpeakers.size() << ")" << LL_ENDL;
+            mLastUnderrunLogTime = now;
         }
     }
 }
