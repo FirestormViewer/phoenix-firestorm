@@ -253,6 +253,82 @@ F1 → F2 → F3 → F4 → F5 → F6
 - [ ] リージョン切替 × 10 回で再評価が正しく走る
 - [ ] 配信再生中の Quit で crash なし (r7 同等)
 
+### 5.5 実機テスト用サンプル構成
+
+`<URL>` は実 HTTP MP3 / Ogg ストリーム URL に置換。各 prim は `Description` 欄に貼り付け、root と children を link する。tag は r5 alias `[ayastream-stereo:...]` も同等に動作。
+
+#### F1 (N=2 最小): root が source + ch=M、子 1 個が ch=R
+
+| prim | description |
+|---|---|
+| root | `[3dstream-stereo:{url:<URL>}{range:30}{ch:M}{volume:1.0}]` |
+| child 1 | `[3dstream-stereo:{ch:R}{range:25}]` |
+
+#### F1 (N=4 ステージ): root が source 専用、子 4 個が L / R / L / R
+
+| prim | description |
+|---|---|
+| root | `[3dstream-stereo:{url:<URL>}{range:30}]` |
+| child 1 | `[3dstream-stereo:{ch:L}{range:20}]` |
+| child 2 | `[3dstream-stereo:{ch:R}{range:20}]` |
+| child 3 | `[3dstream-stereo:{ch:L}{range:20}{volume:0.6}]` |
+| child 4 | `[3dstream-stereo:{ch:R}{range:20}{volume:0.6}]` |
+
+#### F2 (sum-to-mono): L=440Hz / R=880Hz の test stream URL を root に、ch=M スピーカー 1 個を別 prim に
+
+| prim | description |
+|---|---|
+| root | `[3dstream-stereo:{url:<TEST_440_880_URL>}{range:30}]` |
+| child 1 | `[3dstream-stereo:{ch:M}{range:25}]` |
+
+→ M スピーカーの周波数解析で 440Hz と 880Hz の両方が含まれること、振幅が源音と一致 (-6 dB ではなく) することを確認。
+
+#### F3 (per-speaker range): 1 個だけ range:50、他は range:10
+
+| prim | description |
+|---|---|
+| root | `[3dstream-stereo:{url:<URL>}{range:10}]` |
+| child 1 | `[3dstream-stereo:{ch:L}{range:50}]` ← 遠くまで聞こえる |
+| child 2 | `[3dstream-stereo:{ch:R}{range:10}]` |
+
+#### F4 (per-speaker volume): 4 段階 1.0 / 0.8 / 0.5 / 0.2
+
+| prim | description |
+|---|---|
+| root | `[3dstream-stereo:{url:<URL>}{range:30}]` |
+| child 1 | `[3dstream-stereo:{ch:L}{volume:1.0}]` |
+| child 2 | `[3dstream-stereo:{ch:R}{volume:0.8}]` |
+| child 3 | `[3dstream-stereo:{ch:L}{volume:0.5}]` |
+| child 4 | `[3dstream-stereo:{ch:R}{volume:0.2}]` |
+
+#### F5 (上限超過): `Stream3DStereoMaxSpeakers` を 8 などに下げて、9 個以上 link
+
+→ 9 個目以降が落ちて `SpeakerOverLimit` 通知が出ることを確認。30 秒以内の連投は重複抑制される (F9)。
+
+#### F6 / F7 (LSL 後付け / link 操作): 起動後に description / link を変更
+
+```lsl
+default {
+    touch_start(integer n) {
+        llSetObjectDesc("[3dstream-stereo:{ch:L}{range:25}]");
+    }
+}
+```
+
+タッチで child の tag を後付け → 数秒以内に再評価され該当 channel が増える。`llCreateLink` / `llBreakLink` で linkset 構成を変えても F2-c (`detectLinksetStructureChanges`) が拾う。
+
+#### F8 / F9 (書式エラー通知): わざと壊した tag
+
+| 用途 | description |
+|---|---|
+| BadCh 通知 | `[3dstream-stereo:{ch:X}{range:20}]` |
+| BadRange 通知 | `[3dstream-stereo:{ch:L}{range:abc}]` |
+| BadVolume 通知 | `[3dstream-stereo:{ch:L}{volume:1.5}]` |
+| EmptyUrl 通知 | `[3dstream-stereo:{url:}{range:20}]` |
+| NoSpeakers 通知 | root に `{url}` だけ書いて子 prim を link しない (or 全員 ch なし) |
+
+→ 各通知の文言に「例: ...」が含まれることを確認 (F8)、同じ tag を 30 秒以内に複数回触っても通知が 1 回に絞られることを確認 (F9)。
+
 ---
 
 ## 6. 残課題・スコープ外
