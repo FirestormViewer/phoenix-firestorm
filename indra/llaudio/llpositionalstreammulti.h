@@ -220,8 +220,17 @@ private:
     std::mutex mDecodeMutex;
     std::condition_variable mDecodeCv;
 
+    // r8 F7: detect a dead source so the manager's reconnect loop can rebuild
+    // us. Counted on the decode thread; State::Failed is observed by the
+    // manager via isFailed() with acquire ordering.
+    int mReadFailStreak = 0;
+    F64 mLastReadFailLogTime = 0.0;
+
     static constexpr size_t kPrebufferFrames = 4096;
     static constexpr size_t kRingFrames      = 1 << 15; // ~0.74 s at 44.1 kHz
+    // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
+    // dead. Generous so brief network hiccups don't trip a teardown.
+    static constexpr int kMaxReadFailStreak  = 200;
 };
 
 #endif // LL_POSITIONAL_STREAM_MULTI_H

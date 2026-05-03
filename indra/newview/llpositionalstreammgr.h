@@ -226,6 +226,12 @@ private:
         // keep the existing stream so unrelated tag edits in the linkset
         // don't audibly bounce the audio.
         std::unique_ptr<LLPositionalStreamMulti> stream;
+        // r8 F7: reconnect bookkeeping mirrors the mono Binding loop so a
+        // socket-level outage rebuilds the stream instead of leaving the
+        // linkset silent.
+        S32 reconnect_attempts = 0;
+        F64 next_retry_time = 0.0;
+        bool notified_played = false;
     };
 
     // r8 F4: throttled error notification. Keyed by (prim_id, kind) so the

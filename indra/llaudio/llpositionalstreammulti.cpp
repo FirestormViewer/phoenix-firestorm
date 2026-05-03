@@ -278,6 +278,8 @@ bool LLPositionalStreamMulti::start(const std::string& url,
 
     mUrl = clean_url;
     mSpeakers = speakers;
+    mReadFailStreak = 0;
+    mLastReadFailLogTime = 0.0;
 
     const FMOD_MODE source_mode = FMOD_2D
                                 | FMOD_NONBLOCKING
@@ -515,6 +517,9 @@ bool LLPositionalStreamMulti::startUserChannels()
 size_t LLPositionalStreamMulti::pumpSource()
 {
     if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return 0;
+    // Once we've declared the stream dead, don't keep banging on a broken
+    // source — the manager's reconnect loop will rebuild us.
+    if (mState.load(std::memory_order_acquire) == State::Failed) return 0;
 
     constexpr size_t kMaxFramesPerPump = 8192;
 
@@ -536,14 +541,33 @@ size_t LLPositionalStreamMulti::pumpSource()
                                             &read_bytes);
     if (rr != FMOD_OK && rr != FMOD_ERR_FILE_EOF)
     {
+        // FMOD_ERR_NOTREADY just means "decoder hasn't fed us yet" — not a
+        // fault. Real socket / EOF cascades return other codes; those count
+        // toward kMaxReadFailStreak so the manager can rebuild this stream.
         if (rr != FMOD_ERR_NOTREADY)
         {
-            LL_WARNS("Stream3D") << "Sound::readData error: "
-                                  << FMOD_ErrorString(rr) << LL_ENDL;
+            ++mReadFailStreak;
+            const F64 now = LLTimer::getElapsedSeconds();
+            if (now - mLastReadFailLogTime >= 1.0)
+            {
+                LL_WARNS("Stream3D") << "Sound::readData error (" << mReadFailStreak
+                                      << " consecutive): " << FMOD_ErrorString(rr) << LL_ENDL;
+                mLastReadFailLogTime = now;
+            }
+            if (mReadFailStreak >= kMaxReadFailStreak)
+            {
+                LL_WARNS("Stream3D") << "Multi source readData failed " << mReadFailStreak
+                                      << " times consecutively for " << mUrl
+                                      << "; transitioning to Failed for reconnect" << LL_ENDL;
+                mState.store(State::Failed, std::memory_order_release);
+            }
         }
         return 0;
     }
     if (read_bytes == 0) return 0;
+    // Successful read: reset the failure streak so a later, independent
+    // outage gets its own full budget rather than inheriting old strikes.
+    mReadFailStreak = 0;
 
     const size_t frames_read = read_bytes / bytes_per_frame;
     const size_t n_tracks = mRing.numTracks();

@@ -718,6 +718,11 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
     // stream's destructor, which joins the decode thread before releasing
     // FMOD resources (r7 M3 invariant carried from Stereo into Multi).
     binding.stream.reset();
+    // Fresh stream object: any in-flight retry budget belongs to the old
+    // stream. Keep notified_played sticky so unrelated tag edits don't spam
+    // "now playing" again. (F7)
+    binding.reconnect_attempts = 0;
+    binding.next_retry_time = 0.0;
     auto stream = std::make_unique<LLPositionalStreamMulti>();
     stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
 
@@ -1033,10 +1038,15 @@ void LLPositionalStreamMgr::update()
         ++it;
     }
 
-    // r8 F3-3: distributed-stereo bindings. Reconnect bookkeeping not yet
-    // wired (mono retry loop above is the model when we add it); for now we
-    // just push positions and tear down bindings whose root prim is gone.
-    // F4 added throttled notifications inside evaluateLinkset / start.
+    // r8 F3-3: distributed-stereo bindings. F7 mirrors the mono Bindings loop:
+    // socket-level outages flip stream → State::Failed, this loop runs the
+    // retry budget (Stream3DReconnectAttempts × 5s) and either reconnects or
+    // drops the binding. F4 still owns parse-time error notifications inside
+    // evaluateLinkset.
+    constexpr F64 kRetryDelayDist = 5.0;
+    const S32 max_attempts_dist = gSavedSettings.getS32("Stream3DReconnectAttempts");
+    const F64 now_dist = LLTimer::getElapsedSeconds();
+
     std::vector<LLUUID> dead_roots;
     for (auto& [root_id, b] : mDistributedBindings)
     {
@@ -1053,6 +1063,103 @@ void LLPositionalStreamMgr::update()
             // descriptions / network resolve. Leave it for now.
             continue;
         }
+
+        if (b.stream->isFailed())
+        {
+            if (max_attempts_dist <= 0)
+            {
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id
+                                      << " failed; auto-reconnect disabled, dropping binding"
+                                      << LL_ENDL;
+                dead_roots.push_back(root_id);
+                continue;
+            }
+            if (b.reconnect_attempts >= max_attempts_dist)
+            {
+                LL_WARNS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id << " exhausted "
+                                      << max_attempts_dist
+                                      << " reconnect attempts; dropping binding"
+                                      << LL_ENDL;
+                notifyStream3D("stream gave up after "
+                                + llformat("%d", max_attempts_dist)
+                                + " reconnect attempts: " + b.url);
+                dead_roots.push_back(root_id);
+                continue;
+            }
+            if (b.next_retry_time == 0.0)
+            {
+                b.next_retry_time = now_dist + kRetryDelayDist;
+                LL_INFOS("Stream3D") << "[3dstream-stereo] stream for root "
+                                      << root_id << " failed; scheduling reconnect "
+                                      << (b.reconnect_attempts + 1) << "/"
+                                      << max_attempts_dist
+                                      << " in " << kRetryDelayDist << "s" << LL_ENDL;
+            }
+            else if (now_dist >= b.next_retry_time)
+            {
+                ++b.reconnect_attempts;
+                b.next_retry_time = 0.0;
+                std::vector<LLPositionalStreamMulti::SpeakerConfig> configs;
+                configs.reserve(b.speakers.size());
+                for (const auto& s : b.speakers)
+                {
+                    LLPositionalStreamMulti::SpeakerConfig c;
+                    switch (s.ch)
+                    {
+                    case DistChannel::L:
+                        c.ch = LLPositionalStreamMulti::Channel::L;
+                        break;
+                    case DistChannel::R:
+                        c.ch = LLPositionalStreamMulti::Channel::R;
+                        break;
+                    case DistChannel::M:
+                        c.ch = LLPositionalStreamMulti::Channel::M;
+                        break;
+                    }
+                    c.range = s.range;
+                    c.volume = s.volume;
+                    if (LLViewerObject* sp = gObjectList.findObject(s.prim_id))
+                    {
+                        if (!sp->isDead())
+                        {
+                            c.position = toFloatVec(sp->getPositionGlobal());
+                        }
+                    }
+                    configs.push_back(c);
+                }
+                b.stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
+                LL_INFOS("Stream3D") << "[3dstream-stereo] reconnect attempt "
+                                      << b.reconnect_attempts << "/" << max_attempts_dist
+                                      << " for root " << root_id
+                                      << " url=" << b.url << LL_ENDL;
+                b.stream->start(b.url, configs);
+            }
+            // Skip position pushes & update() while Failed.
+            continue;
+        }
+
+        // Successful playback resets the retry counter so a later, independent
+        // outage gets its own full budget rather than inheriting old strikes.
+        if (b.reconnect_attempts > 0 && b.stream->isPlaying())
+        {
+            LL_INFOS("Stream3D") << "[3dstream-stereo] reconnect succeeded for root "
+                                  << root_id << " after "
+                                  << b.reconnect_attempts << " attempt(s)" << LL_ENDL;
+            b.reconnect_attempts = 0;
+            b.next_retry_time = 0.0;
+        }
+
+        // Notify exactly once per binding when it first reaches Playing.
+        // Reconnect successes don't re-fire because the binding (and the
+        // flag) survives across stream->start() retries.
+        if (!b.notified_played && b.stream->isPlaying())
+        {
+            b.notified_played = true;
+            notifyStream3D("now playing: " + b.url);
+        }
+
         for (size_t i = 0; i < b.speakers.size(); ++i)
         {
             LLViewerObject* sp = gObjectList.findObject(b.speakers[i].prim_id);

@@ -184,6 +184,32 @@
 
 ---
 
+### F7: multi 経路 reconnect (回帰確認で発見した不足分)
+
+**目的**: §5.1 ⑥ の実機検証で「mono 経路は reconnect するが multi 経路は無音のまま」が判明したため、mono の retry ループを multi にも移植する。
+
+**ファイル**:
+- `indra/llaudio/llpositionalstreammulti.h` (fail streak フィールド + 閾値定数)
+- `indra/llaudio/llpositionalstreammulti.cpp` (`pumpSource` で連続 readData エラーを数えて `State::Failed` 遷移、ログ throttle 1/sec、Failed 中は readData をスキップ)
+- `indra/newview/llpositionalstreammgr.h` (`DistributedStereoBinding` に `reconnect_attempts` / `next_retry_time` / `notified_played` を追加)
+- `indra/newview/llpositionalstreammgr.cpp` (分散バインディング更新ループに retry 経路、`evaluateLinkset` 側で構造変更時のカウンタリセット)
+
+**動作**:
+- 連続 200 回 (≈ 1 秒分) の readData エラー → `State::Failed`
+- Manager が 5 秒間隔で `start()` を再呼び出し
+- `Stream3DReconnectAttempts` (mono と共有、デフォルト 3) 回数を超えると binding を drop し chat に `gave up` 通知
+- 再接続成功で reconnect counter をリセット、ログに `reconnect succeeded`
+- ログスパムは 1/sec まで throttle
+
+**完了条件**:
+- 配信元停止 → 1 秒以内に Failed 遷移、ログ 1/sec
+- 5 秒間隔で reconnect attempt が試行される
+- 配信再開が retry ウィンドウ内に間に合えば自動復帰、間に合わなくても evaluateLinkset 経由で再構築
+
+**想定 commit**: 1 本 (`r8: distributed-stereo — multi-path reconnect (F7)`)
+
+---
+
 ## 3. マイルストーン依存関係
 
 ```
@@ -218,12 +244,12 @@ F1 → F2 → F3 → F4 → F5 → F6
 
 ### 5.1 r7 互換 (回帰確認)
 
-- [ ] mono タグ `[3dstream:...]` プリム rez → 自動接続して 3D 定位 (mono 経路は r8 で非タッチ — NG5)
-- [ ] `[ayastream-stereo:...]` prefix alias 再生 (r5 命名整理からの継続互換)
-- [ ] `Stream3DEnabled = false` で全停止
-- [ ] `Stream3DDescriptionScan = false` で binding 落ち
-- [ ] `Stream3DVolumeMaster` の即時反映
-- [ ] reconnect 経路の動作
+- [x] mono タグ `[3dstream:...]` プリム rez → 自動接続して 3D 定位 (mono 経路は r8 で非タッチ — NG5)
+- [x] `[ayastream-stereo:...]` prefix alias 再生 (r5 命名整理からの継続互換)
+- [x] `Stream3DEnabled = false` で全停止
+- [x] `Stream3DDescriptionScan = false` で binding 落ち
+- [x] `Stream3DVolumeMaster` の即時反映
+- [x] reconnect 経路の動作 (F7: multi 側にも reconnect ループを移植)
 
 ### 5.2 r8 新規 (分散記述拡張の効果)
 
