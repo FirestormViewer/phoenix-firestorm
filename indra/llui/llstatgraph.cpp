@@ -74,7 +74,7 @@ void LLStatGraph::draw()
         {
             // <FS:Ansariel> Legacy periodic mean per second instead of per second
             //mValue = (F32)recording.getPerSec(*mNewStatFloatp);
-            static LLCachedControl<bool> fsStatbarLegacyMeanPerSec(*LLUI::getInstance()->mSettingGroups["config"], "FSStatbarLegacyMeanPerSec");
+            static LLUICachedControl<bool> fsStatbarLegacyMeanPerSec("FSStatbarLegacyMeanPerSec");
             if (fsStatbarLegacyMeanPerSec)
             {
                 mValue = (F32)LLTrace::get_frame_recording().getPeriodMeanPerSec(*mNewStatFloatp);

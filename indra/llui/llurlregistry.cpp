@@ -32,7 +32,6 @@
 
 // <FS:PP> Option to disable square-bracket links
 #include "llui.h"
-#include "llcontrol.h"
 // </FS:PP>
 
 #include <boost/algorithm/string/find.hpp> //for boost::ifind_first -KC
@@ -255,7 +254,7 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         // <FS:PP> Option to disable square-bracket links
         if (!is_content_trusted && ((mUrlEntryHTTPLabel == *it) || (mUrlEntrySLLabel == *it)))
         {
-            static LLCachedControl<bool> sDisableLabeledLinks(*LLUI::getInstance()->mSettingGroups["config"], "FSDisableLabeledChatLinks", false);
+            static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
             if (sDisableLabeledLinks)
             {
                 continue;
