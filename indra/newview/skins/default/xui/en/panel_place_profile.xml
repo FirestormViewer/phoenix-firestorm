@@ -54,6 +54,9 @@
      name="area_text"
      value="m²" />
     <string
+     name="information_text"
+     value="[AREA] m² | 🚶 [TRAFFIC]" />
+    <string
      name="all_residents_text"
      value="All Residents" />
     <string
@@ -286,13 +289,25 @@
             <text
              parse_urls="false"
              follows="left|top|right"
+             font="SansSerifSmall"
+             height="14"
+             halign="right"
+             layout="topleft"
+             left="10"
+             name="information"
+             top_pad="-7"
+             use_ellipses="true"
+             width="315" />
+            <text
+             parse_urls="false"
+             follows="left|top|right"
              font="SansSerifLarge"
              height="14"
              layout="topleft"
              left="10"
              name="parcel_title"
              text_color="white"
-             top_pad="5"
+             top_pad="-2"
              use_ellipses="true"
              value="unknown"
              width="320" />
