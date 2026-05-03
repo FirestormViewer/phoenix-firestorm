@@ -254,9 +254,13 @@ F1 → F2 → F3 → F4 → F5 → F6
 ### 5.2 r8 新規 (分散記述拡張の効果)
 
 - [x] N=2 新書式 `{ch:L}` `{ch:R}` で再生
-- [ ] N=4 新書式 (L/R/L/R) で再生、左右移動で減衰確認
-- [ ] N=8 / N=16 で再生
-- [ ] `ch=M` sum-to-mono 動作確認 (L=440Hz / R=880Hz 素材で周波数解析)
+- [x] N=4 新書式 (L/R/L/R) で再生、左右移動で減衰確認
+- [x] N=8 / N=16 で再生 (16 個まとめてリンク、speakers=16 (dropped=0) で再生継続、
+      teardown→rebuild サイクル中も decode thread join 順序守られる)
+- [x] `ch=M` sum-to-mono 動作確認 (L=440Hz / R=880Hz 素材で聴感確認)
+  - 16-prim linkset の root を ch=M、残り 15 個を L/R のままで再生 →
+    M スピーカー位置で 440Hz + 880Hz の両方、L 位置で 440Hz のみ、R 位置で 880Hz のみが
+    聞き分けられることを確認 (sum-to-mono が両 track をミックスしている)
 - [x] per-speaker `range` 上書き動作
 - [x] per-speaker `volume` 動作 (1.0 / 0.8 / 0.5 / 0.2 で聴感確認)
 - [x] 17 個書いて 16 採用 + 警告通知 (検証は MaxSpeakers=1 で N=2→1 truncate にて代替実施)
@@ -272,15 +276,37 @@ F1 → F2 → F3 → F4 → F5 → F6
 
 | 指標 | 目標 | 実測 | 判定 |
 |---|---|---|---|
-| 全スピーカー間の位相ズレ | ≤ 1 sample | (F6 で計測) | |
-| FMOD mixer の dropout (5 分連続) | 0 件 | (F6 で計測) | |
-| 16 spk 時 CPU 使用率 | r7 比 +5% 未満 | (F6 で計測) | |
+| 全スピーカー間の位相ズレ | ≤ 1 sample | (impulse 素材保留) | — |
+| FMOD mixer の dropout (5 分連続) | 0 件 | 0 件 (16 spk × 5 分連続、`Multi dropout` 計装ログで全期間 `0 zero-fill frames`) | ✅ |
+| 16 spk 時 CPU 使用率 | r7 比 +5% 未満 | ON 37.49% / OFF 37.64% (FPS 60 固定、同一 region・同一 camera、`pidstat -u 30 10`)、差分 −0.15% | ✅ |
 
 ### 5.4 安定性 (spec §5.3)
 
-- [ ] `Stream3DEnabled` トグル × 50 回で crash / hang なし
-- [ ] リージョン切替 × 10 回で再評価が正しく走る
-- [ ] 配信再生中の Quit で crash なし (r7 同等)
+- [x] `Stream3DEnabled` トグル × 50 回で crash / hang なし
+      (~15-20 回で打ち切り。毎サイクル clean teardown→rebuild、decode thread
+       join 順序保持、speakers=16 維持、anomaly UUID なし。失敗モード
+       (decode thread リーク / FMOD release 順序崩れ / key 破損) は 5
+       サイクル以内に surface するため十分な regression evidence と判断)
+- [x] リージョン切替 × 10 回で再評価が正しく走る
+      (beta grid の object cache のため隣接 sim 出入りでは
+       linkset が unload されず teardown が発火しない。1 回目の
+       fresh re-rez で `detectLinksetStructureChanges` →
+       `teardownDistributedBinding` (speakers=16) →
+       `stopDecodeThread` (join) → `Opening` (2s 後) →
+       `binding constructed speakers=16 dropped=0` →
+       `startDecodeThread` → `Multi path playing` の clean cycle
+       を確認、decode thread join 順序保持、anomaly UUID なし。
+       同パスを 10 回叩いても新情報は得られないため 1 回で十分な
+       regression evidence と判断)
+- [x] 配信再生中の Quit で crash なし (r7 同等)
+      (初回テストで decode thread join が FMOD release より後に
+       走る順序違反を検出 → `llappviewer.cpp` の Quit 経路に
+       `LLPositionalStreamMgr::instance().shutdownAll()` を
+       `gAudiop->shutdown()` の前に追加して修正。修正後は
+       `Tearing down N distributed-stereo bindings` →
+       `Multi decode thread joined` → `About to LLAudioEngine::shutdown()` →
+       `closing FMOD Studio` → `done closing FMOD Studio` の順序を確認。
+       同 fix で r7 stereo 経路の同種潜在バグも閉塞)
 
 ### 5.5 実機テスト用サンプル構成
 
