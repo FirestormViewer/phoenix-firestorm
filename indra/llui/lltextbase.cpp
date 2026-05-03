@@ -43,6 +43,7 @@
 #include "lluictrl.h"
 #include "llurlaction.h"
 #include "llurlregistry.h"
+#include "llphishingfilter.h"
 #include "llview.h"
 #include "llwindow.h"
 #include <boost/bind.hpp>
@@ -2640,13 +2641,19 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
         while (LLUrlRegistry::instance().findUrl(text, match,
                 boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3), isContentTrusted() || mAlwaysShowIcons, force_slurl))
         {
+            // <FS:Emme> Phishing filter check
+            bool is_phishing = LLPhishingFilter::instance().isSuspicious(match.getUrl());
+            // </FS:Emme>
+
             start = match.getStart();
             end = match.getEnd()+1;
 
             LLStyle::Params link_params(style_params);
             // <FS:Ansariel> Overwrite only if we explicitly allow it
             //link_params.overwriteFrom(match.getStyle());
-            if (input_params.use_default_link_style)
+            // <FS:Emme> Don't make suspicious links clickable
+            if (!is_phishing && input_params.use_default_link_style)
+            // </FS:Emme>
             {
                 link_params.overwriteFrom(match.getStyle());
             }
@@ -2675,7 +2682,9 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
             //{
             //  setLastSegmentToolTip(LLTrans::getString("TooltipSLIcon"));
             //}
-            if (mIconPositioning == LLTextBaseEnums::LEFT || match.isTrusted() || mAlwaysShowIcons)
+            // <FS:Emme> Don't show icons for phishing links
+            if (!is_phishing && (mIconPositioning == LLTextBaseEnums::LEFT || match.isTrusted() || mAlwaysShowIcons))
+            // </FS:Emme>
             {
                 LLTextUtil::processUrlMatch(&match, this, isContentTrusted() || match.isTrusted() || mAlwaysShowIcons);
                 if ((isContentTrusted() || match.isTrusted()) && !match.getIcon().empty() )
@@ -2688,8 +2697,16 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
             // output the styled Url
             // <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
             //appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.getUnderline());
-            appendAndHighlightTextImpl(match.getLabel(), part, link_params,
-                                       input_params.can_underline_on_hover ? match.getUnderline() : LLStyle::UNDERLINE_NEVER);
+            // <FS:Emme> Add warning for phishing links
+            std::string label = match.getLabel();
+            if (is_phishing)
+            {
+                label = "[PHISHING?] " + label;
+                link_params.color = LLColor4::red;
+            }
+            appendAndHighlightTextImpl(label, part, link_params,
+                                       (input_params.can_underline_on_hover && !is_phishing) ? match.getUnderline() : LLStyle::UNDERLINE_NEVER);
+            // </FS:Emme>
             // </FS:CR>
             bool tooltip_required =  !match.getTooltip().empty();
 
@@ -2699,18 +2716,30 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
                 setLastSegmentToolTip(match.getTooltip());
             }
 
+            // <FS:Emme> Phishing filter: skip query part coloring/mangling if it's phishing
+            if (is_phishing)
+            {
+                setLastSegmentToolTip("[WARNING: LIKELY PHISHING ATTEMPT]");
+            }
+            // </FS:Emme>
+
             // show query part of url with gray color only for LLUrlEntryHTTP url entries
-            std::string label = match.getQuery();
-            if (label.size())
+            std::string query_label = match.getQuery();
+            if (query_label.size())
             {
                 // <FS:Ansariel> Custom URI query part color
                 //link_params.color = LLColor4::grey;
                 //link_params.readonly_color = LLColor4::grey;
                 //appendAndHighlightTextImpl(label, part, link_params, match.getUnderline());
                 static LLUIColor query_part_color = LLUIColorTable::getInstance()->getColor("UriQueryPartColor", LLColor4::grey);
-                link_params.color = query_part_color;
-                link_params.readonly_color = query_part_color;
-                appendAndHighlightTextImpl(label, part, link_params, input_params.can_underline_on_hover ? match.getUnderline() : LLStyle::UNDERLINE_NEVER);
+                // <FS:Emme> Keep red color if phishing
+                if (!is_phishing)
+                {
+                    link_params.color = query_part_color;
+                    link_params.readonly_color = query_part_color;
+                }
+                appendAndHighlightTextImpl(query_label, part, link_params, (input_params.can_underline_on_hover && !is_phishing) ? match.getUnderline() : LLStyle::UNDERLINE_NEVER);
+                // </FS:Emme>
                 // </FS:Ansariel>
 
                 // set the tooltip for the query part of url
@@ -2721,7 +2750,7 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
             }
 
             // <FS:Ansariel> Optional icon position
-            if (mIconPositioning == LLTextBaseEnums::RIGHT && !match.isTrusted() && !mAlwaysShowIcons)
+            if (!is_phishing && mIconPositioning == LLTextBaseEnums::RIGHT && !match.isTrusted() && !mAlwaysShowIcons)
             {
                 LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
             }

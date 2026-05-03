@@ -60,6 +60,20 @@ namespace tut
 		set_test_name("isSuspicious check");
 
 		ensure("Official is not suspicious", !LLPhishingFilter::instance().isSuspicious("https://secondlife.com/"));
-		ensure("Phishing is suspicious", LLPhishingFilter::instance().isSuspicious("http://marketplace-secondlife.com.herokuapp.com/"));
+		ensure("Official marketplace is not suspicious", !LLPhishingFilter::instance().isSuspicious("https://marketplace.secondlife.com/p/item/123"));
+
+		// Real world scam URLs
+		ensure("second-lif herokuapp", LLPhishingFilter::instance().isSuspicious("https://second-lif-9bc8e3689e62.herokuapp.com/"));
+		ensure("marketplace-secondellife herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-secondellife-6c9143ddec6d.herokuapp.com/"));
+		ensure("marketplace-seconldlife herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-seconldlife-let-p-be1335f33c3f.herokuapp.com/id.html"));
+		ensure("marketplace-seconldlife-angel herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-seconldlife-angel-b45a44c35bab.herokuapp.com/"));
+		ensure("marketplace-secondlife-com herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-secondlife-com-p-m-655efa0e1350.herokuapp.com/"));
+		ensure("marketplacesecondlife herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplacesecondlife-necklace-7a51f474ed25.herokuapp.com/"));
+		ensure("marketplace-secondlife-p herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-secondlife-p-re-my-1c3fab5d4034.herokuapp.com/id.htm"));
+		ensure("kirastyle herokuapp (pattern match)", LLPhishingFilter::instance().isSuspicious("https://kirastyle-283-2787130-4aff445324e8.herokuapp.com/"));
+		ensure("marketplace-seconldlife-let-pe herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-seconldlife-let-pe-b8bb43cf66f1.herokuapp.com/id.html"));
+		ensure("seconde-live herokuapp", LLPhishingFilter::instance().isSuspicious("https://seconde-live-1d5912081d12.herokuapp.com/"));
+		ensure("marketplace-secondlife herokuapp", LLPhishingFilter::instance().isSuspicious("https://marketplace-secondlife-28fbbedee6b3.herokuapp.com/"));
+		ensure("secondlife-marketplaces-nonoma herokuapp", LLPhishingFilter::instance().isSuspicious("https://secondlife-marketplaces-nonoma-6e7834ae410b.herokuapp.com/"));
 	}
 }

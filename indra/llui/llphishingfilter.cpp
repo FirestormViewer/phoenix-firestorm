@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-#include "lluicontrolfactory.h"
+#include "llui.h"
 #include "llphishingfilter.h"
 #include "llstring.h"
 #include "llurlregistry.h"
@@ -49,9 +49,13 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 
 	S32 score = 0;
 
-	// Official keywords
-	bool has_sl_keyword = (lower_url.find("secondlife") != std::string::npos || 
-						   lower_url.find("marketplace") != std::string::npos);
+	// Regex for Second Life and Marketplace keywords with common typos/variations
+	// Catches: secondlife, second-life, second-lif, seconde-life, secondellife, seconldlife, etc.
+	static const boost::regex sl_pattern("secon[dl]?d[e]?[-_ \\.]?li[fv]e", boost::regex::icase);
+	static const boost::regex mp_pattern("mark[e]?tpl[a]?ce", boost::regex::icase);
+
+	bool has_sl_keyword = boost::regex_search(lower_url, sl_pattern) || 
+						   boost::regex_search(lower_url, mp_pattern);
 
 	std::string domain = getBaseDomain(lower_url);
 
@@ -68,6 +72,13 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 	if (domain == "herokuapp.com" || domain == "firebaseapp.com" || domain == "github.io" || domain == "netlify.app")
 	{
 		score += 50;
+
+		// If it's on a free host and looks like a marketplace item link (e.g., brand-ID-hex)
+		static const boost::regex item_pattern("-[0-9]{5,}-[0-9a-f]{10,}", boost::regex::icase);
+		if (boost::regex_search(lower_url, item_pattern))
+		{
+			score += 50;
+		}
 	}
 
 	return score;
@@ -75,63 +86,15 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 
 bool LLPhishingFilter::isSuspicious(const std::string& url) const
 {
+	if (LLUI::instanceExists())
+	{
+		static LLCachedControl<bool> enabled(*LLUI::getInstance()->mSettingGroups["config"], "FSPhishingFilterEnabled", true);
+		if (!enabled)
+		{
+			return false;
+		}
+	}
 	return evaluateURLRisk(url) >= 75;
-}
-
-bool LLPhishingFilter::processMessage(const std::string& message, std::string& filtered_message) const
-{
-	static LLCachedControl<bool> enabled(std::string("FSPhishingFilterEnabled"), true);
-	if (!enabled)
-	{
-		filtered_message = message;
-		return false;
-	}
-
-	// We need to find all URLs in the message.
-	// LLUrlRegistry can help with this.
-	std::vector<LLUrlMatch> matches;
-	LLUrlRegistry::instance().findUrl(LLWString(utf8str_to_wstring(message)), matches);
-
-	bool modified = false;
-	std::string result = message;
-
-	// Process matches in reverse to maintain offsets
-	for (std::vector<LLUrlMatch>::reverse_iterator it = matches.rbegin(); it != matches.rend(); ++it)
-	{
-		std::string url = wstring_to_utf8str(it->getUrl());
-		if (isSuspicious(url))
-		{
-			modified = true;
-			// Mangle the URL to make it non-clickable
-			std::string mangled_url = url;
-			boost::replace_all(mangled_url, "http://", "h-ttp://");
-			boost::replace_all(mangled_url, "https://", "h-ttps://");
-			boost::replace_all(mangled_url, ".", "[dot]");
-		}
-	}
-
-	if (modified)
-	{
-		LLWString w_message = utf8str_to_wstring(message);
-		for (std::vector<LLUrlMatch>::reverse_iterator it = matches.rbegin(); it != matches.rend(); ++it)
-		{
-			std::string url = wstring_to_utf8str(it->getUrl());
-			if (isSuspicious(url))
-			{
-				std::string mangled_url = url;
-				boost::replace_all(mangled_url, "http", "h-ttp");
-				boost::replace_all(mangled_url, ".", "[dot]");
-				
-				w_message.replace(it->getStart(), it->getEnd() - it->getStart() + 1, utf8str_to_wstring(mangled_url));
-			}
-		}
-
-		filtered_message = "[WARNING, LIKELY PHISHING ATTEMPT] " + wstring_to_utf8str(w_message) + " [WARNING, LIKELY PHISHING ATTEMPT]";
-		return true;
-	}
-
-	filtered_message = message;
-	return false;
 }
 
 std::string LLPhishingFilter::getBaseDomain(const std::string& url) const

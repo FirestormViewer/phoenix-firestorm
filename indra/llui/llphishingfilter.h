@@ -51,14 +51,6 @@ public:
 	 */
 	bool isSuspicious(const std::string& url) const;
 
-	/**
-	 * @brief Processes a message and wraps it in a warning if phishing is detected.
-	 * @param message The original message text.
-	 * @param filtered_message The resulting message (with warning if necessary).
-	 * @return True if phishing was detected and the message was altered.
-	 */
-	bool processMessage(const std::string& message, std::string& filtered_message) const;
-
 private:
 	std::string getBaseDomain(const std::string& url) const;
 };
