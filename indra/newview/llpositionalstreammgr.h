@@ -96,26 +96,72 @@ public:
         std::optional<F32> max;
     };
 
-    // Stereo tag parsed from a prim Description ([3dstream-stereo:{...}];
-    // legacy [ayastream-stereo:{...}] also accepted).
-    // L / R are linkset link numbers (1 = root, 2 = first child, ...).
-    struct StereoTagData
-    {
-        std::string url;
-        std::optional<F32> min;
-        std::optional<F32> max;
-        S32 l_link = 1;
-        S32 r_link = 2;
-    };
-
     // Returns parsed [3dstream:{...}{...}] tag, or nullopt if none /
     // malformed / missing URL. (Legacy [ayastream:...] is also accepted.)
     static std::optional<TagData> parseTag(const std::string& description);
 
-    // Returns parsed [3dstream-stereo:{...}] tag, or nullopt if none /
-    // malformed / missing URL / L == R. (Legacy [ayastream-stereo:...]
-    // is also accepted.)
-    static std::optional<StereoTagData> parseStereoTag(const std::string& description);
+    // r8: distributed-description stereo (1 source → N speakers).
+    // Channel assignment of one speaker prim. r10 will extend this enum to
+    // include FL/FR/C/LFE/SL/SR for 5.1 venue placement (see spec §9.1).
+    enum class DistChannel { L, R, M };
+
+    // r8: parsed [3dstream-stereo:{url:...}{range:...}{ch:...}{volume:...}] tag.
+    // A single prim's description may declare:
+    //   - source only (root):         {url}      [+ {range}]
+    //   - speaker only (root/child):  {ch}       [+ {range} + {volume}]
+    //   - source + self-speaker:      {url}{ch}  [+ {range} + {volume}]
+    // The same {range} field, when present, fills both range_default (source
+    // role) and range_speaker (speaker role) of the same prim — the spec
+    // §4.3 treats it as a single shared field rather than two separate keys.
+    struct DistStereoTagData
+    {
+        // Source declaration fields (set only when {url:...} is present).
+        std::optional<std::string> url;
+        std::optional<F32> range_default;
+
+        // Speaker declaration fields (set only when {ch:...} is present).
+        std::optional<DistChannel> ch;
+        std::optional<F32> range_speaker;
+        std::optional<F32> volume; // 0.0 .. 1.0
+    };
+
+    // r8: parse-time error categories. The error string carries the offending
+    // input value (e.g. "X" for {ch:X}, "1.5" for {volume:1.5}) so the F4
+    // throttled notifier can echo it back to the user.
+    //
+    // Note: `Ok` (not `None`) for the no-error sentinel — X11 headers define
+    // `None` as a macro (0L), and llpositionalstreammgr.h is reached through
+    // PCH paths that include X11/Xlib.h.
+    enum class DistParseError
+    {
+        Ok,
+        BadCh,        // {ch:...} value not L/R/M (case-insensitive)
+        BadRange,     // {range:N} not > 0 or unparseable
+        BadVolume,    // {volume:N} not in [0.0, 1.0] or unparseable
+        EmptyUrl,     // {url:} empty
+    };
+
+    struct DistParseResult
+    {
+        // data has value only when the tag has at least one of {url} / {ch}
+        // and all present fields parse cleanly. nullopt with error==Ok
+        // means "no recognizable [3dstream-stereo:...] tag at all"; nullopt
+        // with error!=Ok means "tag present but a field is malformed".
+        std::optional<DistStereoTagData> data;
+        DistParseError error = DistParseError::Ok;
+        std::string bad_value;
+    };
+
+    // r8: parse the [3dstream-stereo:...] body for the distributed format.
+    //
+    // Returns:
+    //   - tag absent              → {nullopt, Ok, ""}
+    //   - tag present, all valid  → {data,    Ok, ""}
+    //   - tag present, field bad  → {nullopt, <error>, bad_value}
+    //
+    // The tag is recognized when {url} or {ch} is present. The legacy
+    // {l:N}{r:N} format (r5–r7) is no longer supported in r8.
+    static DistParseResult parseDistributedStereoTag(const std::string& description);
 
 private:
     LLPositionalStreamMgr();
@@ -146,28 +192,8 @@ private:
         std::unique_ptr<LLPositionalStream> stream;
     };
 
-    struct StereoBinding
-    {
-        std::string url;
-        std::optional<F32> tag_min;
-        std::optional<F32> tag_max;
-        F32 applied_min = 1.f;
-        F32 applied_max = 20.f;
-        S32 l_link = 1;
-        S32 r_link = 2;
-        // Resolved at bind time by walking the linkset; refreshed on each
-        // re-evaluation in case the linkset changes.
-        LLUUID l_prim;
-        LLUUID r_prim;
-        S32 reconnect_attempts = 0;
-        F64 next_retry_time = 0.0;
-        bool notified_played = false;
-        std::unique_ptr<LLPositionalStreamStereo> stream;
-    };
-
     void evaluateBinding(const LLUUID& id);
     void evaluateMonoBinding(const LLUUID& id, const TagData& tag);
-    void evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag);
 
     // M3b: walk in-range prims and re-poll RequestObjectPropertiesFamily for
     // any whose Description we haven't seen recently. Throttled so we never
@@ -185,7 +211,6 @@ private:
 
     std::map<LLUUID, CacheEntry> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
-    std::map<LLUUID, StereoBinding> mStereoBindings;
     std::unique_ptr<LLPositionalStream> mDebugStream;
     std::unique_ptr<LLPositionalStreamStereo> mDebugStereoStream;
 

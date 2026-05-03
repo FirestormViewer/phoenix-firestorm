@@ -11,7 +11,7 @@
 
 `[3dstream-stereo:...]` タグを「分散記述方式」に拡張し、1 ストリーム → N スピーカー (上限 16) の同期再生を実現する。各スピーカーに L / R / M (sum-to-mono) のチャンネル割当と、個別の `range` / `volume` を設定できるようにする。
 
-旧書式 `{l:N}{r:N}{min:N}{max:N}` は完全互換で継続動作。
+旧書式 `{l:N}{r:N}{min:N}{max:N}` は r8 で削除済 (公開前の内部書式のため互換層は持たない)。`[ayastream-stereo:...]` の prefix alias は r5 命名整理から継続。
 
 ---
 
@@ -29,21 +29,20 @@
 
 **作業**:
 - `StereoSourceTag` / `StereoSpeakerTag` の構造体を追加
-- `parseSourceFields(description)` / `parseSpeakerFields(description)` を追加
-- 旧書式 `parseStereoTag` は据え置き、別経路として共存
-- `range` キーを認識 (旧 `max` と意味的に等価、settings の `Stream3DRolloffMax` 既定値にフォールバック)
+- `parseDistributedStereoTag(description)` を追加 (source / speaker フィールドを 1 パスで抽出)
+- `range` キーを認識 (`Stream3DRolloffMax` 既定値にフォールバック)
 - `ch` の値検証: `L` / `R` / `M` 以外は書式エラー
 - `volume` の値検証: 0.0〜1.0 範囲外は書式エラー
-- 書式エラー検出時のエラー種別 enum (`ErrorKind::BAD_CH` / `BAD_VOLUME` / `EMPTY_TAG`) を定義
-- ユニットテスト: 旧書式・新書式・書式エラー・両方混在の各パターン
+- 書式エラー検出時のエラー種別 enum (`DistParseError::BadCh` / `BadVolume` / `BadRange` / `EmptyUrl`) を定義
+- ユニットテスト: 新書式の各書式エラーケース、source/speaker/両方併記の各パターン
 
 **完了条件**:
-- 各種書式入力に対して `parseSourceFields` / `parseSpeakerFields` が期待通りの結果を返す
-- 既存 `parseStereoTag` / `parseTag` の挙動に regression なし
-- 書式エラー検出ロジックが ErrorKind を正しく分類できる
+- 各種書式入力に対して `parseDistributedStereoTag` が期待通りの結果を返す
+- 既存 `parseTag` (mono) の挙動に regression なし
+- 書式エラー検出ロジックが `DistParseError` を正しく分類できる
 - まだ binding 構造には繋がない (この段階で実機で再生確認はしない)
 
-**想定 commit**: 1〜2 本 (`r8: distributed-stereo — add parseSpeakerFields / parseSourceFields (F1)`)
+**想定 commit**: 1 本 (`r8: distributed-stereo — add parseDistributedStereoTag (F1)`)
 
 ---
 
@@ -162,7 +161,6 @@
 
 **作業**:
 - N=2 / 4 / 8 / 16 の各構成で再生試験
-  - 旧書式互換 (N=2 で `{l:2}{r:3}{min:5}{max:30}`)
   - 新書式 各 N
   - sum-to-mono 試験 (L=440Hz / R=880Hz 素材)
   - per-speaker volume / range 上書き試験
@@ -206,7 +204,7 @@ F1 → F2 → F3 → F4 → F5 → F6
 | R2. ring buffer N reader 対応 | (未着手) | F3 | F3 設計時点で multi-tail SPSC vs mixer 前段スナップショットを比較選定 |
 | R3. 子 desc 取得不整合 | (未着手) | F2 | NG4 でゆるい SLA を許容。F2 で再評価ループを実装 |
 | R4. spk 数超過時挙動 | (未着手) | F2 + F4 | 「先頭 N 個採用」を F2 で実装、通知を F4 で整備 |
-| R5. 旧/新書式判定ミス | (未着手) | F1 | F1 ユニットテストで境界ケース固める |
+| R5. 書式エラー誤判定 | (未着手) | F1 | F1 ユニットテストで `DistParseError` 各分類の境界ケース固める |
 | R6. 通知重複抑制破綻 | (未着手) | F4 | ErrorThrottleKey は (prim_id, kind) で固定、F4 でテスト |
 | R7. sum-to-mono clipping | (未着手) | F3 | 0.5f 倍で正規化、源音 0dB 未達なら問題なし。F3 で検出ログ |
 | R8. 16 spk channel 枯渇 | (未着手) | F6 | 実測。FMOD 既定 channel 数 (512) 内に収まる見込み |
@@ -221,8 +219,7 @@ F1 → F2 → F3 → F4 → F5 → F6
 ### 5.1 r7 互換 (回帰確認)
 
 - [ ] mono タグ `[3dstream:...]` プリム rez → 自動接続して 3D 定位 (mono 経路は r8 で非タッチ — NG5)
-- [ ] 旧書式 `[3dstream-stereo:{l:2}{r:3}{min:5}{max:30}]` で再生
-- [ ] `[ayastream-stereo:...]` 旧 alias 再生
+- [ ] `[ayastream-stereo:...]` prefix alias 再生 (r5 命名整理からの継続互換)
 - [ ] `Stream3DEnabled = false` で全停止
 - [ ] `Stream3DDescriptionScan = false` で binding 落ち
 - [ ] `Stream3DVolumeMaster` の即時反映
@@ -255,7 +252,6 @@ F1 → F2 → F3 → F4 → F5 → F6
 - [ ] `Stream3DEnabled` トグル × 50 回で crash / hang なし
 - [ ] リージョン切替 × 10 回で再評価が正しく走る
 - [ ] 配信再生中の Quit で crash なし (r7 同等)
-- [ ] 旧書式と新書式が混在する parcel で相互干渉なし
 
 ---
 
@@ -275,7 +271,8 @@ F1 → F2 → F3 → F4 → F5 → F6
 | 短SHA | 内容 |
 |---|---|
 | _(F0)_ | docs: r8 — add distributed-stereo spec and implementation phases |
-| _(F1)_ | r8: distributed-stereo — add parseSpeakerFields / parseSourceFields (F1) |
+| _(F1a)_ | r8: distributed-stereo — drop legacy {l:N}{r:N} stereo format |
+| _(F1b)_ | r8: distributed-stereo — add parseDistributedStereoTag (F1) |
 | _(F2)_ | r8: distributed-stereo — linkset aggregation and child property tracking (F2) |
 | _(F3)_ | r8: distributed-stereo — introduce LLPositionalStreamMulti (F3) |
 | _(F3)_ | r8: distributed-stereo — wire multi-stream into manager (F3) |

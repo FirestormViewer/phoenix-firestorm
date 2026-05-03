@@ -116,23 +116,6 @@ namespace
         return std::string::npos;
     }
 
-    bool tryParseInt(const std::string& s, S32& out)
-    {
-        if (s.empty()) return false;
-        try
-        {
-            size_t consumed = 0;
-            S32 val = std::stoi(s, &consumed);
-            if (consumed == 0) return false;
-            out = val;
-            return true;
-        }
-        catch (const std::exception&)
-        {
-            return false;
-        }
-    }
-
     // Walks a body between [content_start, end) by directly scanning for
     // "{key:value}" blocks and invoking onPair(lowered_key, trimmed_val) for
     // each well-formed unit. Anything between blocks (comma, whitespace, or
@@ -216,21 +199,6 @@ namespace
             }
         }
     }
-
-    // Resolve link number to a child object. Link 1 is the root itself, link 2
-    // is the first child, etc. Returns nullptr if no such link in this set.
-    LLViewerObject* resolveLink(LLViewerObject* root, S32 link_num)
-    {
-        if (!root || link_num < 1) return nullptr;
-        if (link_num == 1) return root;
-
-        const auto& children = root->getChildren();
-        S32 want_idx = link_num - 2; // link 2 == children[0]
-        if (want_idx < 0 || want_idx >= static_cast<S32>(children.size())) return nullptr;
-        auto it = children.begin();
-        std::advance(it, want_idx);
-        return it->get();
-    }
 }
 
 LLPositionalStreamMgr& LLPositionalStreamMgr::instance()
@@ -270,33 +238,128 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 }
 
 // static
-std::optional<LLPositionalStreamMgr::StereoTagData>
-LLPositionalStreamMgr::parseStereoTag(const std::string& description)
+LLPositionalStreamMgr::DistParseResult
+LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
 {
-    // r5: see parseTag — same prefix-alias scheme for stereo.
+    // r5 で導入した [3dstream-stereo:...] と alias [ayastream-stereo:...] を
+    // 同じ本体としてサポート (r8 で旧 {l:N}{r:N} 書式は廃止し、新書式のみ受ける)。
     static const std::string kPrefix    = "[3dstream-stereo:";
     static const std::string kPrefixOld = "[ayastream-stereo:";
 
+    DistParseResult result;
+
     size_t content_start = 0, end = 0;
     if (!findTagBody(description, kPrefix, content_start, end) &&
-        !findTagBody(description, kPrefixOld, content_start, end)) return std::nullopt;
+        !findTagBody(description, kPrefixOld, content_start, end))
+    {
+        return result; // no tag at all
+    }
 
-    StereoTagData data;
-    bool got_url = false;
+    // Track which keys appeared (regardless of value validity) so a
+    // {ch:X} with an invalid value still surfaces BadCh rather than
+    // silently being treated as "no tag here".
+    bool seen_ch_key  = false;
+    bool seen_url_key = false;
+
+    DistStereoTagData data;
+    F32 range_value = 0.f;
+    bool range_valid = false;
+    F32 volume_value = 0.f;
+    bool volume_valid = false;
+
+    auto setError = [&](DistParseError e, const std::string& v)
+    {
+        // First error wins — keeps the surfaced message stable when several
+        // fields are bad (LSL editing typically fixes one at a time anyway).
+        if (result.error == DistParseError::Ok)
+        {
+            result.error = e;
+            result.bad_value = v;
+        }
+    };
+
     forEachKeyValue(description, content_start, end,
         [&](const std::string& key, const std::string& val)
         {
-            if (key == "url")      { data.url = val; got_url = !val.empty(); }
-            else if (key == "min") { F32 f; if (tryParseFloat(val, f)) data.min = f; }
-            else if (key == "max") { F32 f; if (tryParseFloat(val, f)) data.max = f; }
-            else if (key == "l")   { S32 i; if (tryParseInt(val, i)) data.l_link = i; }
-            else if (key == "r")   { S32 i; if (tryParseInt(val, i)) data.r_link = i; }
+            if (key == "url")
+            {
+                seen_url_key = true;
+                if (val.empty())
+                {
+                    setError(DistParseError::EmptyUrl, val);
+                }
+                else
+                {
+                    data.url = val;
+                }
+            }
+            else if (key == "ch")
+            {
+                seen_ch_key = true;
+                std::string v = toLowerAscii(val);
+                if      (v == "l") data.ch = DistChannel::L;
+                else if (v == "r") data.ch = DistChannel::R;
+                else if (v == "m") data.ch = DistChannel::M;
+                else               setError(DistParseError::BadCh, val);
+            }
+            else if (key == "range")
+            {
+                F32 f;
+                if (tryParseFloat(val, f) && f > 0.f)
+                {
+                    range_value = f;
+                    range_valid = true;
+                }
+                else
+                {
+                    setError(DistParseError::BadRange, val);
+                }
+            }
+            else if (key == "volume")
+            {
+                F32 f;
+                if (tryParseFloat(val, f) && f >= 0.f && f <= 1.f)
+                {
+                    volume_value = f;
+                    volume_valid = true;
+                }
+                else
+                {
+                    setError(DistParseError::BadVolume, val);
+                }
+            }
+            // Unknown keys (incl. removed-in-r8 {l}/{r}/{min}/{max}) are
+            // silently ignored — the spec is permissive about extra fields.
         });
 
-    if (!got_url) return std::nullopt;
-    if (data.l_link < 1 || data.r_link < 1) return std::nullopt;
-    if (data.l_link == data.r_link) return std::nullopt;
-    return data;
+    // The tag is recognized when at least one of {url} or {ch} appeared.
+    // A bracket body with neither is treated as "no tag here".
+    const bool tag_recognized = seen_ch_key || seen_url_key;
+    if (!tag_recognized)
+    {
+        return result;
+    }
+
+    if (result.error != DistParseError::Ok)
+    {
+        return result; // data stays nullopt; caller can throttle/notify
+    }
+
+    // Fan {range} and {volume} into the role-specific slots. {range} on a
+    // prim that is both source and speaker fills both range_default and
+    // range_speaker from the same value (spec §4.3).
+    if (range_valid)
+    {
+        if (data.url.has_value()) data.range_default = range_value;
+        if (data.ch.has_value())  data.range_speaker = range_value;
+    }
+    if (volume_valid && data.ch.has_value())
+    {
+        data.volume = volume_value;
+    }
+
+    result.data = data;
+    return result;
 }
 
 void LLPositionalStreamMgr::onObjectPropertiesReceived(const LLUUID& id,
@@ -346,53 +409,24 @@ void LLPositionalStreamMgr::evaluateBinding(const LLUUID& id)
         return;
     }
 
-    // Stereo tag wins if both happen to be present (the prefixes don't
-    // overlap textually, but a description could in theory contain both).
+    // r8: stereo binding (new distributed format) is wired in F2.
+    // For now only the mono [3dstream:...] tag drives bindings here.
     const std::string& desc = desc_it->second.description;
-    auto stereo_tag = parseStereoTag(desc);
-    auto mono_tag = stereo_tag ? std::nullopt : parseTag(desc);
+    auto mono_tag = parseTag(desc);
 
     auto bind_it = mBindings.find(id);
-    auto sbind_it = mStereoBindings.find(id);
 
-    // If a different mode now applies, drop the stale binding first so the
-    // new path can recreate it cleanly.
-    if (stereo_tag && bind_it != mBindings.end())
-    {
-        LL_INFOS("Stream3D") << "Replacing mono binding with stereo for " << id << LL_ENDL;
-        mBindings.erase(bind_it);
-        bind_it = mBindings.end();
-    }
-    if (mono_tag && sbind_it != mStereoBindings.end())
-    {
-        LL_INFOS("Stream3D") << "Replacing stereo binding with mono for " << id << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
-        sbind_it = mStereoBindings.end();
-    }
-
-    if (stereo_tag)
-    {
-        evaluateStereoBinding(id, *stereo_tag);
-        return;
-    }
     if (mono_tag)
     {
         evaluateMonoBinding(id, *mono_tag);
         return;
     }
 
-    // No tag of either kind: drop any bindings this prim still has.
     if (bind_it != mBindings.end())
     {
         LL_INFOS("Stream3D") << "Removing positional binding for " << id
                               << " (tag gone)" << LL_ENDL;
         mBindings.erase(bind_it);
-    }
-    if (sbind_it != mStereoBindings.end())
-    {
-        LL_INFOS("Stream3D") << "Removing stereo binding for " << id
-                              << " (tag gone)" << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
     }
 }
 
@@ -429,7 +463,7 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
     }
 
     const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
+    if (cap > 0 && static_cast<S32>(mBindings.size()) >= cap)
     {
         LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
                               << ") reached; not binding " << id << LL_ENDL;
@@ -464,97 +498,6 @@ void LLPositionalStreamMgr::evaluateMonoBinding(const LLUUID& id, const TagData&
                           << " url=" << tag.url << LL_ENDL;
 }
 
-void LLPositionalStreamMgr::evaluateStereoBinding(const LLUUID& id, const StereoTagData& tag)
-{
-    LLViewerObject* root = gObjectList.findObject(id);
-    if (!root || root->isDead())
-    {
-        return;
-    }
-
-    LLViewerObject* l_obj = resolveLink(root, tag.l_link);
-    LLViewerObject* r_obj = resolveLink(root, tag.r_link);
-    if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
-    {
-        // Linkset not fully resolvable yet; defer (will retry on next props
-        // msg or when update() re-runs after children arrive).
-        return;
-    }
-
-    F32 want_min, want_max;
-    resolveRolloffFromTag(tag, want_min, want_max);
-    LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
-    LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
-
-    auto sbind_it = mStereoBindings.find(id);
-    if (sbind_it != mStereoBindings.end())
-    {
-        StereoBinding& b = sbind_it->second;
-        const bool topology_same = (b.url == tag.url
-                                    && b.l_link == tag.l_link
-                                    && b.r_link == tag.r_link
-                                    && b.l_prim == l_obj->getID()
-                                    && b.r_prim == r_obj->getID());
-        if (topology_same)
-        {
-            b.tag_min = tag.min;
-            b.tag_max = tag.max;
-            if (b.applied_min != want_min || b.applied_max != want_max)
-            {
-                b.stream->setRolloffDistances(want_min, want_max);
-                b.applied_min = want_min;
-                b.applied_max = want_max;
-            }
-            return;
-        }
-        LL_INFOS("Stream3D") << "Rebinding stereo " << id
-                              << ": URL or linkset topology changed" << LL_ENDL;
-        mStereoBindings.erase(sbind_it);
-    }
-
-    const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-    if (cap > 0 && static_cast<S32>(mBindings.size() + mStereoBindings.size()) >= cap)
-    {
-        LL_WARNS("Stream3D") << "Max concurrent streams (" << cap
-                              << ") reached; not binding stereo " << id << LL_ENDL;
-        if (!mCapNotified)
-        {
-            mCapNotified = true;
-            notifyStream3D(llformat(
-                "max concurrent streams (%d) reached; new tagged prims will be ignored until one is released.",
-                cap));
-        }
-        return;
-    }
-
-    auto stream = std::make_unique<LLPositionalStreamStereo>();
-    stream->setRolloffDistances(want_min, want_max);
-    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
-    if (!stream->start(tag.url, l_pos, r_pos))
-    {
-        return;
-    }
-
-    StereoBinding b;
-    b.url = tag.url;
-    b.tag_min = tag.min;
-    b.tag_max = tag.max;
-    b.applied_min = want_min;
-    b.applied_max = want_max;
-    b.l_link = tag.l_link;
-    b.r_link = tag.r_link;
-    b.l_prim = l_obj->getID();
-    b.r_prim = r_obj->getID();
-    b.stream = std::move(stream);
-    mStereoBindings.emplace(id, std::move(b));
-
-    LL_INFOS("Stream3D") << "Bound stereo stream to " << id
-                          << " url=" << tag.url
-                          << " L=link" << tag.l_link << "(" << l_obj->getID() << ")"
-                          << " R=link" << tag.r_link << "(" << r_obj->getID() << ")"
-                          << LL_ENDL;
-}
-
 static LLTrace::BlockTimerStatHandle FTM_STREAM3D_MGR_UPDATE("Stream3D Mgr Update");
 
 void LLPositionalStreamMgr::update()
@@ -573,7 +516,7 @@ void LLPositionalStreamMgr::update()
     // the stale flag.
     {
         const S32 cap = gSavedSettings.getS32("Stream3DMaxConcurrent");
-        const S32 total = static_cast<S32>(mBindings.size() + mStereoBindings.size());
+        const S32 total = static_cast<S32>(mBindings.size());
         if (mCapNotified && (cap <= 0 || total < cap))
         {
             mCapNotified = false;
@@ -682,87 +625,7 @@ void LLPositionalStreamMgr::update()
         ++it;
     }
 
-    for (auto it = mStereoBindings.begin(); it != mStereoBindings.end(); )
-    {
-        const LLUUID& id = it->first;
-        StereoBinding& b = it->second;
-
-        LLViewerObject* l_obj = gObjectList.findObject(b.l_prim);
-        LLViewerObject* r_obj = gObjectList.findObject(b.r_prim);
-        if (!l_obj || !r_obj || l_obj->isDead() || r_obj->isDead())
-        {
-            LL_INFOS("Stream3D") << "Stereo pair (" << id
-                                  << ") gone; releasing stereo stream" << LL_ENDL;
-            it = mStereoBindings.erase(it);
-            continue;
-        }
-
-        if (b.stream->isFailed())
-        {
-            if (max_attempts <= 0)
-            {
-                LL_WARNS("Stream3D") << "Stereo stream for " << id
-                                      << " failed; auto-reconnect disabled, dropping binding"
-                                      << LL_ENDL;
-                it = mStereoBindings.erase(it);
-                continue;
-            }
-            if (b.reconnect_attempts >= max_attempts)
-            {
-                LL_WARNS("Stream3D") << "Stereo stream for " << id << " exhausted "
-                                      << max_attempts << " reconnect attempts; dropping binding"
-                                      << LL_ENDL;
-                notifyStream3D("stereo stream gave up after "
-                                + llformat("%d", max_attempts)
-                                + " reconnect attempts: " + b.url);
-                it = mStereoBindings.erase(it);
-                continue;
-            }
-            if (b.next_retry_time == 0.0)
-            {
-                b.next_retry_time = now + kRetryDelay;
-                LL_INFOS("Stream3D") << "Stereo stream for " << id
-                                      << " failed; scheduling reconnect "
-                                      << (b.reconnect_attempts + 1) << "/" << max_attempts
-                                      << " in " << kRetryDelay << "s" << LL_ENDL;
-            }
-            else if (now >= b.next_retry_time)
-            {
-                ++b.reconnect_attempts;
-                b.next_retry_time = 0.0;
-                const LLVector3 l_pos = toFloatVec(l_obj->getPositionGlobal());
-                const LLVector3 r_pos = toFloatVec(r_obj->getPositionGlobal());
-                b.stream->setRolloffDistances(b.applied_min, b.applied_max);
-                b.stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
-                LL_INFOS("Stream3D") << "Stereo reconnect attempt " << b.reconnect_attempts
-                                      << "/" << max_attempts << " for " << id
-                                      << " url=" << b.url << LL_ENDL;
-                b.stream->start(b.url, l_pos, r_pos);
-            }
-            ++it;
-            continue;
-        }
-
-        if (b.reconnect_attempts > 0 && b.stream->isPlaying())
-        {
-            LL_INFOS("Stream3D") << "Stereo reconnect succeeded for " << id
-                                  << " after " << b.reconnect_attempts << " attempt(s)"
-                                  << LL_ENDL;
-            b.reconnect_attempts = 0;
-            b.next_retry_time = 0.0;
-        }
-
-        if (!b.notified_played && b.stream->isPlaying())
-        {
-            b.notified_played = true;
-            notifyStream3D("now playing (stereo): " + b.url);
-        }
-
-        b.stream->setPositions(toFloatVec(l_obj->getPositionGlobal()),
-                               toFloatVec(r_obj->getPositionGlobal()));
-        b.stream->update();
-        ++it;
-    }
+    // r8: distributed-stereo bindings will get their own update loop in F2.
 }
 
 void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max)
@@ -788,35 +651,20 @@ void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max
             b.applied_max = want_max;
         }
     }
-
-    for (auto& [id, b] : mStereoBindings)
-    {
-        F32 want_min = b.tag_min.value_or(default_min);
-        F32 want_max = b.tag_max.value_or(default_max);
-        if (b.applied_min != want_min || b.applied_max != want_max)
-        {
-            b.stream->setRolloffDistances(want_min, want_max);
-            b.applied_min = want_min;
-            b.applied_max = want_max;
-        }
-    }
 }
 
 void LLPositionalStreamMgr::shutdownPrimBindings()
 {
-    if (mBindings.empty() && mStereoBindings.empty())
+    if (mBindings.empty())
     {
         return;
     }
-    LL_INFOS("Stream3D") << "Tearing down "
-                          << mBindings.size() << " mono and "
-                          << mStereoBindings.size() << " stereo prim bindings"
-                          << LL_ENDL;
-    // ~Binding / ~StereoBinding's unique_ptr<> destructors invoke each
-    // stream's stop(), which calls FMOD Channel::stop() synchronously.
-    // Output device buffer drain (<50ms typical) is the only residual delay.
+    LL_INFOS("Stream3D") << "Tearing down " << mBindings.size()
+                          << " mono prim bindings" << LL_ENDL;
+    // ~Binding's unique_ptr<> destructor invokes the stream's stop(), which
+    // calls FMOD Channel::stop() synchronously. Output device buffer drain
+    // (<50ms typical) is the only residual delay.
     mBindings.clear();
-    mStereoBindings.clear();
 }
 
 void LLPositionalStreamMgr::shutdownAll()
@@ -879,10 +727,6 @@ void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
         mDebugStereoStream->setVolume(volume);
     }
     for (auto& [id, b] : mBindings)
-    {
-        b.stream->setVolume(volume);
-    }
-    for (auto& [id, b] : mStereoBindings)
     {
         b.stream->setVolume(volume);
     }
