@@ -243,6 +243,27 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 }
 
 // static
+std::optional<LLPositionalStreamMgr::ChannelKind>
+LLPositionalStreamMgr::parseChannelKind(std::string_view s)
+{
+    // The {ch:...} alphabet — kept tiny on purpose. r10 (5.1 venue placement)
+    // adds FL/FR/C/LFE/SL/SR by extending this table and ChannelKind together;
+    // every other consumer (parser, evaluator, downmix table) reads through
+    // the enum and never re-parses the source string.
+    if (s.size() == 1)
+    {
+        switch (s[0])
+        {
+        case 'L': case 'l': return ChannelKind::L;
+        case 'R': case 'r': return ChannelKind::R;
+        case 'M': case 'm': return ChannelKind::M;
+        default: break;
+        }
+    }
+    return std::nullopt;
+}
+
+// static
 LLPositionalStreamMgr::DistParseResult
 LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
 {
@@ -301,11 +322,14 @@ LLPositionalStreamMgr::parseDistributedStereoTag(const std::string& description)
             else if (key == "ch")
             {
                 seen_ch_key = true;
-                std::string v = toLowerAscii(val);
-                if      (v == "l") data.ch = DistChannel::L;
-                else if (v == "r") data.ch = DistChannel::R;
-                else if (v == "m") data.ch = DistChannel::M;
-                else               setError(DistParseError::BadCh, val);
+                if (auto ck = parseChannelKind(val))
+                {
+                    data.ch = *ck;
+                }
+                else
+                {
+                    setError(DistParseError::BadCh, val);
+                }
             }
             else if (key == "range")
             {
@@ -753,9 +777,9 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
         LLPositionalStreamMulti::SpeakerConfig c;
         switch (s.ch)
         {
-        case DistChannel::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
-        case DistChannel::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
-        case DistChannel::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
+        case ChannelKind::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
+        case ChannelKind::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
+        case ChannelKind::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
         }
         c.range = s.range;
         c.volume = s.volume;
@@ -1236,13 +1260,13 @@ void LLPositionalStreamMgr::update()
                     LLPositionalStreamMulti::SpeakerConfig c;
                     switch (s.ch)
                     {
-                    case DistChannel::L:
+                    case ChannelKind::L:
                         c.ch = LLPositionalStreamMulti::Channel::L;
                         break;
-                    case DistChannel::R:
+                    case ChannelKind::R:
                         c.ch = LLPositionalStreamMulti::Channel::R;
                         break;
-                    case DistChannel::M:
+                    case ChannelKind::M:
                         c.ch = LLPositionalStreamMulti::Channel::M;
                         break;
                     }

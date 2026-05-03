@@ -35,6 +35,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class LLPositionalStream;
@@ -106,9 +107,20 @@ public:
     static std::optional<TagData> parseTag(const std::string& description);
 
     // r8: distributed-description stereo (1 source → N speakers).
-    // Channel assignment of one speaker prim. r10 will extend this enum to
-    // include FL/FR/C/LFE/SL/SR for 5.1 venue placement (see spec §9.1).
-    enum class DistChannel { L, R, M };
+    // Channel assignment of one speaker prim.
+    //
+    // r9 (spec_5_1ch_source.md §4.6): renamed from DistChannel and split into
+    // a standalone enum class so r10 can append FL/FR/C/LFE/SL/SR for 5.1
+    // venue placement by editing this declaration + parseChannelKind() +
+    // downmix table only — the parser, evaluator and reconfig switches are
+    // generic over the value.
+    enum class ChannelKind : U8
+    {
+        L = 0,
+        R,
+        M,
+        // r10: FL, FR, C, LFE, SL, SR
+    };
 
     // r8: parsed [3dstream-stereo:{url:...}{range:...}{ch:...}{volume:...}] tag.
     // A single prim's description may declare:
@@ -125,7 +137,7 @@ public:
         std::optional<F32> range_default;
 
         // Speaker declaration fields (set only when {ch:...} is present).
-        std::optional<DistChannel> ch;
+        std::optional<ChannelKind> ch;
         std::optional<F32> range_speaker;
         std::optional<F32> volume; // 0.0 .. 1.0
     };
@@ -168,6 +180,12 @@ public:
     // {l:N}{r:N} format (r5–r7) is no longer supported in r8.
     static DistParseResult parseDistributedStereoTag(const std::string& description);
 
+    // r9 (§4.6): {ch:...} value → enum. Case-insensitive ASCII match against
+    // the L/R/M alphabet; returns nullopt for any unknown token. Surfaced as
+    // a member so parser unit tests and r10's 5.1 placement code share the
+    // exact same alphabet without the parser leaking its lowercase trick.
+    static std::optional<ChannelKind> parseChannelKind(std::string_view s);
+
 private:
     LLPositionalStreamMgr();
     ~LLPositionalStreamMgr();
@@ -205,7 +223,7 @@ private:
     struct SpeakerSlot
     {
         LLUUID prim_id;
-        DistChannel ch = DistChannel::M;
+        ChannelKind ch = ChannelKind::M;
         F32 range = 20.f;
         F32 volume = 1.f;
     };

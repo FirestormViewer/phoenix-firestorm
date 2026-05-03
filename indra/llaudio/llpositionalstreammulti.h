@@ -124,7 +124,7 @@ private:
 class LLPositionalStreamMulti
 {
 public:
-    // Mirrors LLPositionalStreamMgr::DistChannel; duplicated here so llaudio
+    // Mirrors LLPositionalStreamMgr::ChannelKind; duplicated here so llaudio
     // does not depend on indra/newview.
     enum class Channel { L, R, M };
 
