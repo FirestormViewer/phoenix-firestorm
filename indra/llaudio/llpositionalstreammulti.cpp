@@ -190,12 +190,9 @@ size_t LLMultiTailRing::readFrames(size_t reader_idx, F32* dst, size_t n_frames,
         for (size_t i = 0; i < to_read; ++i)
         {
             const size_t f = (r + i) % total;
-            // sum-to-mono with -6 dB for L+R correlated content (spec §4.6).
-            // For mono sources track_l == track_r so this becomes a noop *0.5
-            // which is acoustically wrong; the writer compensates by never
-            // duplicating mono → both tracks (it leaves the second track at
-            // zero) — so Mono on a mono ring gets the original sample / 2.
-            // F3-2 will revisit this once the writer side is wired.
+            // Sum-to-mono with -6 dB for stereo source (spec §4.6). Mono
+            // source is duplicated into both tracks at write time so this
+            // collapses to the original sample.
             dst[i] = (sample_at(f, track_l) + sample_at(f, track_r)) * 0.5f;
         }
         break;
@@ -246,9 +243,11 @@ FMOD::System* LLPositionalStreamMulti::getFmodSystem() const
 
 bool LLPositionalStreamMulti::isPlaying() const
 {
-    // F3-1 has no per-speaker channels yet, so "playing" tracks the state
-    // machine. F3-2 will switch this to "any speaker channel != nullptr".
-    return mState.load(std::memory_order_acquire) == State::Playing;
+    for (const auto& sr : mSpeakerRuntime)
+    {
+        if (sr.channel) return true;
+    }
+    return false;
 }
 
 bool LLPositionalStreamMulti::start(const std::string& url,
@@ -314,8 +313,28 @@ void LLPositionalStreamMulti::releaseAll()
 {
     llassert(!mDecodeThread.joinable());
 
-    // F3-1: only mSourceSound exists. F3-2 will release per-speaker channels
-    // and OPENUSER sounds here, in the right order (channels before sounds).
+    // Channels must be stopped before their backing OPENUSER sounds are
+    // released; FMOD will warn (and may briefly stutter) otherwise.
+    for (auto& sr : mSpeakerRuntime)
+    {
+        if (sr.channel)
+        {
+            checkFmod(sr.channel->stop(), "Channel::stop");
+            sr.channel = nullptr;
+        }
+    }
+    for (auto& sr : mSpeakerRuntime)
+    {
+        if (sr.user_sound)
+        {
+            checkFmod(sr.user_sound->release(), "Sound::release(user)");
+            sr.user_sound = nullptr;
+        }
+    }
+    // SpeakerCallback structs are referenced by the FMOD pcmreadcallback,
+    // which won't fire again after the sound is released — safe to drop.
+    mSpeakerRuntime.clear();
+
     if (mSourceSound)
     {
         checkFmod(mSourceSound->release(), "Sound::release(source)");
@@ -332,13 +351,165 @@ void LLPositionalStreamMulti::setSpeakerPosition(size_t idx, const LLVector3& po
 {
     if (idx >= mSpeakers.size()) return;
     mSpeakers[idx].position = pos;
-    // F3-2: push to mChannels[idx]->set3DAttributes().
+    if (idx < mSpeakerRuntime.size() && mSpeakerRuntime[idx].channel)
+    {
+        applyChannelAttributes(mSpeakerRuntime[idx].channel, pos, mSpeakers[idx].range);
+    }
 }
 
 void LLPositionalStreamMulti::setVolume(F32 volume)
 {
     mVolume = volume;
-    // F3-2: push (mVolume * speaker.volume) to each channel.
+    for (size_t i = 0; i < mSpeakerRuntime.size() && i < mSpeakers.size(); ++i)
+    {
+        if (mSpeakerRuntime[i].channel)
+        {
+            checkFmod(mSpeakerRuntime[i].channel->setVolume(mVolume * mSpeakers[i].volume),
+                      "Channel::setVolume");
+        }
+    }
+}
+
+void LLPositionalStreamMulti::applyChannelAttributes(FMOD::Channel* channel,
+                                                     const LLVector3& pos,
+                                                     F32 range)
+{
+    FMOD_VECTOR fpos = { pos.mV[0], pos.mV[1], pos.mV[2] };
+    FMOD_VECTOR fvel = { 0.f, 0.f, 0.f };
+    checkFmod(channel->set3DAttributes(&fpos, &fvel), "Channel::set3DAttributes");
+    // Spec §4.3 fixes the inner radius to 1.0 m (no per-speaker {min} field
+    // exists in r8; min was dropped from the tag format intentionally).
+    checkFmod(channel->set3DMinMaxDistance(1.f, std::max(range, 1.1f)),
+              "Channel::set3DMinMaxDistance");
+}
+
+// static
+FMOD_RESULT F_CALL
+LLPositionalStreamMulti::pcmReadCallback(FMOD_SOUND* sound, void* data, U32 datalen)
+{
+    void* ud = nullptr;
+    reinterpret_cast<FMOD::Sound*>(sound)->getUserData(&ud);
+    auto* cb = static_cast<SpeakerCallback*>(ud);
+    F32* out = static_cast<F32*>(data);
+    const size_t n = datalen / sizeof(F32);
+
+    size_t got = 0;
+    if (cb && cb->self && cb->speaker_idx < cb->self->mSpeakers.size())
+    {
+        // Channel role → ring read mode. Stable for the lifetime of the
+        // SpeakerCallback (tag changes go through stop()/start(), which
+        // tears down the FMOD sound first), so reading mSpeakers from the
+        // mixer thread is safe.
+        LLMultiTailRing::ReadMode mode = LLMultiTailRing::ReadMode::Mono;
+        switch (cb->self->mSpeakers[cb->speaker_idx].ch)
+        {
+        case Channel::L: mode = LLMultiTailRing::ReadMode::Track0; break;
+        case Channel::R: mode = LLMultiTailRing::ReadMode::Track1; break;
+        case Channel::M: mode = LLMultiTailRing::ReadMode::Mono;   break;
+        }
+        got = cb->self->mRing.readFrames(cb->speaker_idx, out, n, mode);
+    }
+    if (got < n)
+    {
+        std::memset(out + got, 0, (n - got) * sizeof(F32));
+    }
+    return FMOD_OK;
+}
+
+bool LLPositionalStreamMulti::createUserSounds()
+{
+    FMOD::System* system = getFmodSystem();
+    if (!system) return false;
+
+    mSpeakerRuntime.clear();
+    mSpeakerRuntime.resize(mSpeakers.size());
+
+    for (size_t i = 0; i < mSpeakers.size(); ++i)
+    {
+        FMOD_CREATESOUNDEXINFO ex = {};
+        ex.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
+        ex.numchannels = 1;
+        ex.defaultfrequency = mSampleRate;
+        ex.format = FMOD_SOUND_FORMAT_PCMFLOAT;
+        ex.length = static_cast<U32>(mSampleRate) * sizeof(F32) * 5;
+        ex.decodebuffersize = 4096;
+        ex.pcmreadcallback = &pcmReadCallback;
+
+        const FMOD_MODE mode = FMOD_OPENUSER
+                             | FMOD_CREATESTREAM
+                             | FMOD_LOOP_NORMAL
+                             | FMOD_3D
+                             | FMOD_3D_LINEARSQUAREROLLOFF;
+
+        FMOD::Sound* snd = nullptr;
+        if (checkFmod(system->createSound(nullptr, mode, &ex, &snd), "createSound(OPENUSER)"))
+        {
+            return false;
+        }
+
+        // Heap-allocated so the FMOD callback's stored pointer survives
+        // moves of the speaker runtime vector (which we don't do, but it's
+        // cheaper than promising never to).
+        auto cb = std::make_unique<SpeakerCallback>();
+        cb->self = this;
+        cb->speaker_idx = i;
+        checkFmod(snd->setUserData(cb.get()), "Sound::setUserData");
+
+        mSpeakerRuntime[i].user_sound = snd;
+        mSpeakerRuntime[i].cb = std::move(cb);
+    }
+    return true;
+}
+
+bool LLPositionalStreamMulti::startUserChannels()
+{
+    FMOD::System* system = getFmodSystem();
+    if (!system) return false;
+
+    for (size_t i = 0; i < mSpeakers.size(); ++i)
+    {
+        SpeakerRuntime& sr = mSpeakerRuntime[i];
+        if (!sr.user_sound) return false;
+
+        if (checkFmod(system->playSound(sr.user_sound, nullptr, true /*paused*/, &sr.channel),
+                      "playSound(speaker)"))
+        {
+            sr.channel = nullptr;
+            return false;
+        }
+        applyChannelAttributes(sr.channel, mSpeakers[i].position, mSpeakers[i].range);
+        checkFmod(sr.channel->setVolume(mVolume * mSpeakers[i].volume),
+                  "Channel::setVolume(speaker)");
+    }
+
+    // Sample-accurate sync across all N channels (spec §4.7). Same trick as
+    // Stereo: read the mixer DSP clock from the first channel, schedule every
+    // channel to begin at the same future sample index. ~20 ms lead is enough
+    // for FMOD to commit the schedule before the first mixer tick consumes it.
+    if (!mSpeakerRuntime.empty() && mSpeakerRuntime[0].channel)
+    {
+        unsigned long long parent_now = 0;
+        checkFmod(mSpeakerRuntime[0].channel->getDSPClock(nullptr, &parent_now),
+                  "Channel::getDSPClock");
+        const unsigned long long lead = static_cast<unsigned long long>(mSampleRate) / 50;
+        const unsigned long long start_at = parent_now + lead;
+        for (auto& sr : mSpeakerRuntime)
+        {
+            if (sr.channel)
+            {
+                checkFmod(sr.channel->setDelay(start_at, 0, false), "Channel::setDelay");
+            }
+        }
+    }
+
+    for (auto& sr : mSpeakerRuntime)
+    {
+        if (sr.channel)
+        {
+            checkFmod(sr.channel->setPaused(false), "Channel::setPaused");
+        }
+    }
+    return true;
 }
 
 size_t LLPositionalStreamMulti::pumpSource()
@@ -379,12 +550,11 @@ size_t LLPositionalStreamMulti::pumpSource()
 
     // Convert source PCM → ring's track layout. Ring is allocated with
     // n_tracks = max(source_channels, 2) so:
-    //   - mono source (1 ch) into 2-track ring: copy sample into track 0,
-    //     leave track 1 zero. Mono ReadMode reads (s+0)*0.5 which halves
-    //     amplitude vs. the source; this is acoustically wrong but never
-    //     hits the wire in F3-1 (no readers connected yet) and F3-2 picks
-    //     the cheaper fix of duplicating into both tracks at write time.
-    //   - stereo source (2 ch) into 2-track ring: 1:1 copy.
+    //   - mono source (1 ch) into 2-track ring: copy the same sample into
+    //     both tracks. ReadMode::Mono then returns (s+s)*0.5 = s, and ch=L/R
+    //     speakers each see the full mono signal at their own 3D position.
+    //   - stereo source (2 ch) into 2-track ring: 1:1 copy. ReadMode::Mono
+    //     returns the spec-mandated -6 dB sum-to-mono.
     constexpr size_t kChunkFrames = 1024;
     std::vector<F32> chunk(kChunkFrames * n_tracks, 0.f);
 
@@ -396,7 +566,36 @@ size_t LLPositionalStreamMulti::pumpSource()
         const size_t this_chunk = std::min(remaining, kChunkFrames);
         std::fill(chunk.begin(), chunk.begin() + this_chunk * n_tracks, 0.f);
 
-        if (mSourceIsFloat)
+        if (mSourceChannels == 1)
+        {
+            // Mono source: duplicate into all ring tracks so every ReadMode
+            // ends up with the original amplitude.
+            if (mSourceIsFloat)
+            {
+                const F32* f32 = reinterpret_cast<const F32*>(sp);
+                for (size_t i = 0; i < this_chunk; ++i)
+                {
+                    const F32 s = f32[i];
+                    for (size_t t = 0; t < n_tracks; ++t)
+                    {
+                        chunk[i * n_tracks + t] = s;
+                    }
+                }
+            }
+            else
+            {
+                const S16* s16 = reinterpret_cast<const S16*>(sp);
+                for (size_t i = 0; i < this_chunk; ++i)
+                {
+                    const F32 s = static_cast<F32>(s16[i]) * (1.f / 32768.f);
+                    for (size_t t = 0; t < n_tracks; ++t)
+                    {
+                        chunk[i * n_tracks + t] = s;
+                    }
+                }
+            }
+        }
+        else if (mSourceIsFloat)
         {
             const F32* f32 = reinterpret_cast<const F32*>(sp);
             for (size_t i = 0; i < this_chunk; ++i)
@@ -513,16 +712,25 @@ void LLPositionalStreamMulti::update()
 
     if (st == State::Buffering)
     {
-        // F3-1: there are no readers yet, so writeAvailable() never shrinks
-        // and the ring fills up to capacity. Promote to Playing as soon as
-        // we have the prebuffer's worth and let F3-2 actually wire OPENUSER
-        // channels here. Until F3-2, "Playing" simply means "the decode
-        // thread is keeping up"; nothing reaches the speakers.
+        // Each speaker has its own reader tail; checking idx 0 alone is
+        // enough because no reader has consumed yet (channels are still
+        // unpaused below) so all tails read identical readAvailable values.
         if (mRing.readAvailable(0) >= kPrebufferFrames)
         {
+            if (!createUserSounds() || !startUserChannels())
+            {
+                LL_WARNS("Stream3D") << "Failed to start OPENUSER channels for "
+                                      << mUrl << LL_ENDL;
+                // r7 M3 invariant: decode thread holds mSourceSound, must
+                // join before releaseAll() reaches mSourceSound->release().
+                stopDecodeThread();
+                releaseAll();
+                mState = State::Failed;
+                return;
+            }
             mState = State::Playing;
-            LL_INFOS("Stream3D") << "Multi path buffered (F3-1: no audio output yet): "
-                                  << mUrl << LL_ENDL;
+            LL_INFOS("Stream3D") << "Multi path playing: " << mUrl
+                                  << " (" << mSpeakers.size() << " speakers)" << LL_ENDL;
         }
     }
 }

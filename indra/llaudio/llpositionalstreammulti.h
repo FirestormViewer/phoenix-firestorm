@@ -162,9 +162,30 @@ public:
 private:
     enum class State { Idle, Opening, Buffering, Playing, Failed };
 
+    // Per-sound user-data passed to FMOD's pcmreadcallback. Heap-allocated
+    // because FMOD stores the pointer; the speaker_idx lets one static thunk
+    // service all N speakers without scanning a sound→speaker map.
+    struct SpeakerCallback
+    {
+        LLPositionalStreamMulti* self = nullptr;
+        size_t speaker_idx = 0;
+    };
+
+    struct SpeakerRuntime
+    {
+        FMOD::Sound* user_sound = nullptr;
+        FMOD::Channel* channel = nullptr;
+        std::unique_ptr<SpeakerCallback> cb;
+    };
+
+    static FMOD_RESULT F_CALL pcmReadCallback(FMOD_SOUND* sound, void* data, U32 datalen);
+
     FMOD::System* getFmodSystem() const;
 
     void releaseAll();
+    bool createUserSounds();
+    bool startUserChannels();
+    void applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos, F32 range);
     size_t pumpSource();
 
     void startDecodeThread();
@@ -179,11 +200,13 @@ private:
 
     // Ring is sized at Opening→Buffering with n_tracks = max(mSourceChannels, 2)
     // so even mono sources can drive ch=L/R speakers (decoder duplicates the
-    // mono sample into both tracks). N_track is parameterised so r10 can lift
-    // the same scaffolding to 5.1 without touching the ring.
+    // mono sample into both tracks at write time so Mono ReadMode returns the
+    // original amplitude). N_track is parameterised so r10 can lift the same
+    // scaffolding to 5.1 without touching the ring.
     LLMultiTailRing mRing;
 
     std::vector<SpeakerConfig> mSpeakers;
+    std::vector<SpeakerRuntime> mSpeakerRuntime;
 
     F32 mVolume;
     std::string mUrl;
