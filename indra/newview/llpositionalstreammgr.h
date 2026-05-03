@@ -38,6 +38,7 @@
 
 class LLPositionalStream;
 class LLPositionalStreamStereo;
+class LLPositionalStreamMulti;
 
 class LLPositionalStreamMgr
 {
@@ -208,8 +209,7 @@ private:
     };
 
     // r8 F2-a: aggregated linkset state for one distributed-stereo source.
-    // Keyed by root_id in mDistributedBindings. F2-a populates the structural
-    // fields only; F3 will own a unique_ptr<LLPositionalStreamMulti> here.
+    // Keyed by root_id in mDistributedBindings.
     struct DistributedStereoBinding
     {
         LLUUID root_id;
@@ -219,6 +219,13 @@ private:
         // Count of speakers truncated by the per-binding cap. Surfaced in
         // F4 throttled notification; F2-a only logs.
         S32 dropped_speakers = 0;
+        // r8 F3-3: live FMOD-backed multi-speaker stream. nullptr while the
+        // linkset is still incomplete (priority-poll pending) or when the
+        // last (re)evaluation deferred a restart. evaluateLinkset compares
+        // the new (url, speakers) tuple against the old; identical tuples
+        // keep the existing stream so unrelated tag edits in the linkset
+        // don't audibly bounce the audio.
+        std::unique_ptr<LLPositionalStreamMulti> stream;
     };
 
     void evaluateBinding(const LLUUID& id);

@@ -28,6 +28,7 @@
 
 #include "llfasttimer.h"
 #include "llpositionalstream.h"
+#include "llpositionalstreammulti.h"
 #include "llpositionalstreamstereo.h"
 
 #include "llviewercontrol.h"
@@ -568,10 +569,48 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
                               << " (dropped " << dropped << ")" << LL_ENDL;
     }
 
-    // Unmap whatever speakers the previous binding (if any) had registered,
-    // so mPrimToRoot reflects only the current speaker set.
+    // r8 F3-3: detect "no audible change" so we can keep the running stream
+    // when an unrelated tag in the linkset is re-polled. Comparison covers
+    // url + element-wise speaker tuple (prim, ch, range, volume); position
+    // changes are propagated every tick by the update loop and never trigger
+    // a restart.
     auto old_it = mDistributedBindings.find(root_id);
     const bool was_present = (old_it != mDistributedBindings.end());
+    bool fingerprint_match = false;
+    if (was_present)
+    {
+        const auto& old_b = old_it->second;
+        if (old_b.url == url
+            && old_b.speakers.size() == speakers.size()
+            && old_b.stream)
+        {
+            fingerprint_match = true;
+            for (size_t i = 0; i < speakers.size(); ++i)
+            {
+                const auto& a = old_b.speakers[i];
+                const auto& c = speakers[i];
+                if (a.prim_id != c.prim_id || a.ch != c.ch
+                    || a.range != c.range || a.volume != c.volume)
+                {
+                    fingerprint_match = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (fingerprint_match)
+    {
+        // Refresh metadata cheaply (range_default may have moved if the root
+        // {range:} was re-typed to the same numeric value, etc.) but leave
+        // the live stream untouched.
+        old_it->second.range_default = range_default;
+        old_it->second.dropped_speakers = dropped;
+        return;
+    }
+
+    // Structural change (or first build). Drop the previous mPrimToRoot
+    // entries so the new speaker set is the only one indexed.
     if (was_present)
     {
         for (const auto& s : old_it->second.speakers)
@@ -596,12 +635,60 @@ void LLPositionalStreamMgr::evaluateLinkset(const LLUUID& root_id)
         mPrimToRoot[s.prim_id] = root_id;
     }
 
+    // (Re)build the FMOD stream. unique_ptr::reset() invokes the existing
+    // stream's destructor, which joins the decode thread before releasing
+    // FMOD resources (r7 M3 invariant carried from Stereo into Multi).
+    binding.stream.reset();
+    auto stream = std::make_unique<LLPositionalStreamMulti>();
+    stream->setVolume(gSavedSettings.getF32("Stream3DVolumeMaster"));
+
+    std::vector<LLPositionalStreamMulti::SpeakerConfig> configs;
+    configs.reserve(binding.speakers.size());
+    for (const auto& s : binding.speakers)
+    {
+        LLPositionalStreamMulti::SpeakerConfig c;
+        switch (s.ch)
+        {
+        case DistChannel::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
+        case DistChannel::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
+        case DistChannel::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
+        }
+        c.range = s.range;
+        c.volume = s.volume;
+        // Initial position: best effort. Speaker prims that arrived in the
+        // poll cache before their viewer object did get a zero vector here;
+        // the next update tick replaces it with the real getPositionGlobal().
+        if (LLViewerObject* obj = gObjectList.findObject(s.prim_id))
+        {
+            if (!obj->isDead())
+            {
+                c.position = toFloatVec(obj->getPositionGlobal());
+            }
+        }
+        configs.push_back(c);
+    }
+
+    if (!stream->start(url, configs))
+    {
+        LL_WARNS("Stream3D") << "[3dstream-stereo] stream start failed root="
+                              << root_id << " url=" << url << LL_ENDL;
+        // Keep the binding metadata so a subsequent re-evaluation (e.g.
+        // network recovers) can retry without re-walking the linkset; the
+        // missing stream is the signal that we owe a retry. F4 will hook
+        // user-visible notification here.
+    }
+    else
+    {
+        binding.stream = std::move(stream);
+    }
+
     LL_INFOS("Stream3D") << "[3dstream-stereo] binding "
-                          << (was_present ? "updated" : "constructed")
+                          << (was_present ? "rebuilt" : "constructed")
                           << " root=" << root_id
                           << " url=" << url
                           << " speakers=" << binding.speakers.size()
                           << " (dropped=" << dropped << ")"
+                          << " stream=" << (binding.stream ? "started" : "deferred")
                           << LL_ENDL;
 }
 
@@ -867,7 +954,41 @@ void LLPositionalStreamMgr::update()
         ++it;
     }
 
-    // r8: distributed-stereo bindings will get their own update loop in F2.
+    // r8 F3-3: distributed-stereo bindings. No reconnect bookkeeping yet
+    // (F4 will fold it in alongside throttled error notifications); for now
+    // we just push positions and tear down bindings whose root prim is gone.
+    std::vector<LLUUID> dead_roots;
+    for (auto& [root_id, b] : mDistributedBindings)
+    {
+        LLViewerObject* root = gObjectList.findObject(root_id);
+        if (!root || root->isDead())
+        {
+            dead_roots.push_back(root_id);
+            continue;
+        }
+        if (!b.stream)
+        {
+            // Stream couldn't be built yet (deferred above). Re-evaluating
+            // here is not appropriate — that's the poll loop's job once the
+            // descriptions / network resolve. Leave it for now.
+            continue;
+        }
+        for (size_t i = 0; i < b.speakers.size(); ++i)
+        {
+            LLViewerObject* sp = gObjectList.findObject(b.speakers[i].prim_id);
+            if (sp && !sp->isDead())
+            {
+                b.stream->setSpeakerPosition(i, toFloatVec(sp->getPositionGlobal()));
+            }
+        }
+        b.stream->update();
+    }
+    for (const auto& r : dead_roots)
+    {
+        LL_INFOS("Stream3D") << "[3dstream-stereo] root " << r
+                              << " gone; tearing down binding" << LL_ENDL;
+        teardownDistributedBinding(r);
+    }
 }
 
 void LLPositionalStreamMgr::applyDefaultRolloff(F32 default_min, F32 default_max)
@@ -980,6 +1101,13 @@ void LLPositionalStreamMgr::applyMasterVolume(F32 volume)
     for (auto& [id, b] : mBindings)
     {
         b.stream->setVolume(volume);
+    }
+    for (auto& [root_id, b] : mDistributedBindings)
+    {
+        if (b.stream)
+        {
+            b.stream->setVolume(volume);
+        }
     }
 }
 
