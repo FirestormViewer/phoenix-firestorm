@@ -88,6 +88,11 @@
 			<menu_item_check label="テレポートのオファーとリクエストを拒否する" name="Automatically reject teleport offers"/>
 			<menu_item_check label="フレンドシップのリクエストを拒否する" name="Reject all friendship requests"/>
 			<menu_item_check label="すべてのグループの招待を拒否する" name="Reject all group invites"/>
+			<menu label="会議（アドホック）チャット" name="Ad-hoc conferences">
+				<menu_item_check label="すべてを自動的に無視して退出する" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="近くのチャットで無視を報告する" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="フレンドからは無視しない" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="フレンド" name="My Friends"/>
 		<menu_item_check label="コンタクト" name="Contacts"/>

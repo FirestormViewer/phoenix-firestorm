@@ -243,18 +243,18 @@ void FSNearbyChatControl::autohide(bool after_send)
     if (isDefault())
     {
         const bool in_mouselook = gAgentCamera.cameraMouselook();
-        const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn") 
+        const bool show_interface_in_mouselook = gSavedSettings.getBOOL("FSShowInterfaceInMouselook");
+        const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn")
                          && !(!in_mouselook && gSavedSettings.getBOOL("FSCloseChatOnReturnInMouselook"));
         const bool autohideChatBar = gSavedSettings.getBOOL("AutohideChatBar");
-        bool hide_chatbar = false;
 
         if (closeChatOnReturn)
         {
             setFocus(false);
-            hide_chatbar = autohideChatBar;
         }
 
-        if (hide_chatbar || (!after_send && autohideChatBar))
+        if ((!after_send || closeChatOnReturn) &&
+            ((in_mouselook && !show_interface_in_mouselook) || autohideChatBar))
         {
             FSNearbyChat::instance().showDefaultChatBar(false);
         }

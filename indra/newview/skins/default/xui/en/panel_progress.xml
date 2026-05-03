@@ -162,7 +162,7 @@
                          line_spacing.pixels="2"
                          name="logos_lbl"
                          text_color="LoginProgressBoxTextColor">
-                          Second Life uses
+                          [APP_NAME] uses
                         </text>
                       </layout_panel>
                     </layout_stack>
