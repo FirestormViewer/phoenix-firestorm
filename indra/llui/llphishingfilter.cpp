@@ -132,6 +132,11 @@ S32 LLPhishingFilter::getLevenshteinScore(const std::string& hostname) const
 	}
 
 	// 2. vs 'marketplace' (11 chars)
+	// Flagging any link domain beginning with "marketplace" (or anything within 4 characters of it)
+	// is admittedly aggressive. It will flag marketplace.visualstudio.com and the marketplace.org
+	// (sorry, Kai Ryssdal). At present that's probably worth it, but we can scale back the aggression
+	// by making it a "marketplace.secondlife" match prefix instead. Fewer false positives, more people
+	// tricked.
 	// Threshold 4: scaled proportionally (11 * 6 / 14 = 4.7).
 	std::string target2 = "marketplace";
 	if (hostname.length() >= target2.length())
