@@ -1,6 +1,6 @@
 /**
  * @file llmultichanneldownmix.h
- * @brief 5.1ch → L/R downmix for the distributed-stereo decode worker (r9).
+ * @brief 5.1ch → mono BS.775 downmix for the distributed-stereo reader (r9/r10).
  *
  * $LicenseInfo:firstyear=2026&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -32,17 +32,18 @@
 #include <cstddef>
 
 // r9 (spec_5_1ch_source.md §4.3 / §4.4 / §4.7): map a 6-channel interleaved
-// PCM frame to 2-channel (L/R) using ITU-R BS.775 coefficients with a single
-// normalisation factor that keeps full-scale input inside ±1.0 on output.
+// PCM frame to a single mono output channel using ITU-R BS.775 coefficients
+// with a single normalisation factor that keeps full-scale input inside ±1.0.
 //
 // Codec-specific channel order is captured at construction (Vorbis/Opus use
 // channel-mapping-family-1 order [FL,C,FR,SL,SR,LFE]; FLAC uses WAV/SMPTE
 // order [FL,FR,C,LFE,SL,SR]) so the per-frame inner loop reads through fixed
 // indices and never re-checks the codec.
 //
-// Scope is intentionally just 6ch → 2ch interleaved. r10 may rename this to
-// MultichannelRouter and add a 6ch → 6track passthrough variant when speaker
-// placement moves to per-channel routing.
+// r10 P3: shape is 6ch → 1ch with a role selector (L / R / MonoLR), called
+// per-speaker on the FMOD mixer thread. The reader pulls raw 6ch samples
+// from the multi-tail ring and runs them through here to produce the mono
+// signal that gets handed to FMOD as the speaker's source PCM.
 class LLMultichannelDownmix
 {
 public:
@@ -51,6 +52,16 @@ public:
         Unsupported,
         VorbisOpus6,
         Flac6,
+    };
+
+    // r10 P3: which BS.775-downmixed channel the caller wants out of a 6ch
+    // input frame. L / R map to the BS.775 stereo pair; MonoLR is (L+R)/2,
+    // a -6 dB sum-to-mono on top of BS.775 — used by ch:M speakers.
+    enum class MixRole
+    {
+        L,
+        R,
+        MonoLR,
     };
 
     LLMultichannelDownmix() = default;
@@ -64,13 +75,15 @@ public:
     Layout layout() const { return mLayout; }
     const char* layoutName() const;
 
-    // 6ch interleaved F32 input → 2ch interleaved F32 output (L,R,L,R,...).
-    // Output slot count is 2 * frames. Coefficients follow §4.4:
+    // 6ch interleaved F32 input → 1ch F32 output, one sample per frame.
+    // Output slot count is `frames`. Coefficients follow §4.4:
     //   L = c·(FL + 0.707·C + 0.707·SL + 0.5·LFE)
     //   R = c·(FR + 0.707·C + 0.707·SR + 0.5·LFE)
+    //   M = (L + R) / 2
     //   c = 1/2.914
     // Caller has already converted from PCM16 to F32 if needed.
-    void mix6chTo2chLR(const F32* in_6ch, F32* out_2ch, std::size_t frames) const;
+    void mix6chToMono(const F32* in_6ch, F32* out_mono,
+                      std::size_t frames, MixRole role) const;
 
 private:
     struct Indices

@@ -119,7 +119,16 @@ public:
         L = 0,
         R,
         M,
-        // r10: FL, FR, C, LFE, SL, SR
+        // r10 (spec_5_1ch_placement.md §4.1): 5.1 venue placement values.
+        // Compatibility matrix (§4.2) decides what each value plays per
+        // source channel count — handled in the audio-side reader, not
+        // here. r8/r9 viewers receive these as unknown and silent-ignore.
+        FL,
+        FR,
+        C,
+        LFE,
+        SL,
+        SR,
     };
 
     // r8: parsed [3dstream-stereo:{url:...}{range:...}{ch:...}{volume:...}] tag.

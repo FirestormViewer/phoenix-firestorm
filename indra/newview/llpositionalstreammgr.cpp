@@ -246,19 +246,35 @@ LLPositionalStreamMgr::parseTag(const std::string& description)
 std::optional<LLPositionalStreamMgr::ChannelKind>
 LLPositionalStreamMgr::parseChannelKind(std::string_view s)
 {
-    // The {ch:...} alphabet — kept tiny on purpose. r10 (5.1 venue placement)
-    // adds FL/FR/C/LFE/SL/SR by extending this table and ChannelKind together;
-    // every other consumer (parser, evaluator, downmix table) reads through
-    // the enum and never re-parses the source string.
-    if (s.size() == 1)
+    // The {ch:...} alphabet. r8/r9 used L/R/M only; r10 added the 5.1
+    // placement values. Every other consumer (evaluator, downmix table)
+    // reads through the enum and never re-parses the source string.
+    static constexpr std::pair<std::string_view, ChannelKind> kTokens[] = {
+        {"L",   ChannelKind::L},
+        {"R",   ChannelKind::R},
+        {"M",   ChannelKind::M},
+        {"FL",  ChannelKind::FL},
+        {"FR",  ChannelKind::FR},
+        {"C",   ChannelKind::C},
+        {"LFE", ChannelKind::LFE},
+        {"SL",  ChannelKind::SL},
+        {"SR",  ChannelKind::SR},
+    };
+
+    auto upcase = [](char c) -> char
     {
-        switch (s[0])
+        return (c >= 'a' && c <= 'z') ? char(c - 'a' + 'A') : c;
+    };
+
+    for (const auto& [token, kind] : kTokens)
+    {
+        if (s.size() != token.size()) continue;
+        bool match = true;
+        for (size_t i = 0; i < s.size(); ++i)
         {
-        case 'L': case 'l': return ChannelKind::L;
-        case 'R': case 'r': return ChannelKind::R;
-        case 'M': case 'm': return ChannelKind::M;
-        default: break;
+            if (upcase(s[i]) != token[i]) { match = false; break; }
         }
+        if (match) return kind;
     }
     return std::nullopt;
 }
@@ -459,7 +475,7 @@ void LLPositionalStreamMgr::notifyDistributedError(const LLUUID& prim_id,
     switch (kind)
     {
     case DistErrorKind::BadCh:
-        msg = "タグ書式エラー (prim " + id_short + "): ch の値は L/R/M のいずれかである必要があります";
+        msg = "タグ書式エラー (prim " + id_short + "): ch の値は L/R/M/FL/FR/C/LFE/SL/SR のいずれかである必要があります";
         if (!detail.empty()) msg += " (got '" + detail + "')";
         msg += "。例: [3dstream-stereo:{ch:L}{range:30}]";
         break;
@@ -799,9 +815,15 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
         LLPositionalStreamMulti::SpeakerConfig c;
         switch (s.ch)
         {
-        case ChannelKind::L: c.ch = LLPositionalStreamMulti::Channel::L; break;
-        case ChannelKind::R: c.ch = LLPositionalStreamMulti::Channel::R; break;
-        case ChannelKind::M: c.ch = LLPositionalStreamMulti::Channel::M; break;
+        case ChannelKind::L:   c.ch = LLPositionalStreamMulti::Channel::L;   break;
+        case ChannelKind::R:   c.ch = LLPositionalStreamMulti::Channel::R;   break;
+        case ChannelKind::M:   c.ch = LLPositionalStreamMulti::Channel::M;   break;
+        case ChannelKind::FL:  c.ch = LLPositionalStreamMulti::Channel::FL;  break;
+        case ChannelKind::FR:  c.ch = LLPositionalStreamMulti::Channel::FR;  break;
+        case ChannelKind::C:   c.ch = LLPositionalStreamMulti::Channel::C;   break;
+        case ChannelKind::LFE: c.ch = LLPositionalStreamMulti::Channel::LFE; break;
+        case ChannelKind::SL:  c.ch = LLPositionalStreamMulti::Channel::SL;  break;
+        case ChannelKind::SR:  c.ch = LLPositionalStreamMulti::Channel::SR;  break;
         }
         c.range = s.range;
         c.volume = s.volume;
@@ -1311,6 +1333,24 @@ void LLPositionalStreamMgr::update()
                         break;
                     case ChannelKind::M:
                         c.ch = LLPositionalStreamMulti::Channel::M;
+                        break;
+                    case ChannelKind::FL:
+                        c.ch = LLPositionalStreamMulti::Channel::FL;
+                        break;
+                    case ChannelKind::FR:
+                        c.ch = LLPositionalStreamMulti::Channel::FR;
+                        break;
+                    case ChannelKind::C:
+                        c.ch = LLPositionalStreamMulti::Channel::C;
+                        break;
+                    case ChannelKind::LFE:
+                        c.ch = LLPositionalStreamMulti::Channel::LFE;
+                        break;
+                    case ChannelKind::SL:
+                        c.ch = LLPositionalStreamMulti::Channel::SL;
+                        break;
+                    case ChannelKind::SR:
+                        c.ch = LLPositionalStreamMulti::Channel::SR;
                         break;
                     }
                     c.range = s.range;

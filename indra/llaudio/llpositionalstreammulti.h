@@ -99,6 +99,13 @@ public:
     // frames actually read.
     size_t readFrames(size_t reader_idx, F32* dst, size_t n_frames, ReadMode mode);
 
+    // r10 P3: pull n_frames worth of raw interleaved samples (n_frames ×
+    // n_tracks F32 written to dst) for a single reader. Used by the
+    // reader-side BS.775 downmix path on a 6-track ring; ReadMode-driven
+    // readers above use readFrames() instead. dst length must be ≥
+    // n_frames * numTracks(). Returns frames actually read.
+    size_t readFramesRaw(size_t reader_idx, F32* dst, size_t n_frames);
+
 private:
     // One slot reserved (capacity_frames + 1) so full vs. empty stays
     // distinguishable per reader the same way LLFloatRing does.
@@ -126,8 +133,10 @@ class LLPositionalStreamMulti
 {
 public:
     // Mirrors LLPositionalStreamMgr::ChannelKind; duplicated here so llaudio
-    // does not depend on indra/newview.
-    enum class Channel { L, R, M };
+    // does not depend on indra/newview. r10 added the 5.1 placement values
+    // (spec_5_1ch_placement.md §4.1); the per-source-channel-count behavior
+    // (§4.2 compatibility matrix) is decided in pcmReadCallback.
+    enum class Channel { L, R, M, FL, FR, C, LFE, SL, SR };
 
     struct SpeakerConfig
     {
@@ -190,6 +199,11 @@ private:
     {
         LLPositionalStreamMulti* self = nullptr;
         size_t speaker_idx = 0;
+        // r10 P3: scratch for the 6ch raw-read → BS.775 mono path. Sized at
+        // createUserSounds() to kReaderChunkFrames × 6 floats when source is
+        // 6ch; left empty otherwise. Only ever accessed by the FMOD mixer
+        // thread for this one speaker, so no synchronisation is needed.
+        std::vector<F32> raw_scratch;
     };
 
     struct SpeakerRuntime
@@ -229,11 +243,13 @@ private:
     // frame to interleaved L/R via mDownmix before writing.
     LLMultichannelDownmix mDownmix;
 
-    // Ring is sized at Opening→Buffering with n_tracks = 2 across all source
-    // channel counts. Mono sources duplicate the sample into both tracks at
-    // write time so ch=L/R speakers each see the full mono signal; 6ch sources
-    // are downmixed to L/R via mDownmix before writeFrames(). r10 may lift
-    // n_tracks for true per-channel routing without touching the reader side.
+    // Ring is sized at Opening→Buffering. r10: 1ch / 2ch sources use a
+    // 2-track ring (mono is duplicated into both tracks at write time so
+    // ch=L/R each see the full signal); 6ch sources use a 6-track ring with
+    // raw per-channel write so ch:FL/FR/C/LFE/SL/SR can read their own track
+    // directly. P3 wired the reader-side BS.775 downmix path for ch:L/R/M on
+    // a 6-track ring (pcmReadCallback → readFramesRaw → mix6chToMono); the
+    // §4.2 compat matrix dispatch for the placement values lands in P4.
     LLMultiTailRing mRing;
 
     std::vector<SpeakerConfig> mSpeakers;
@@ -251,10 +267,6 @@ private:
     std::string mFailDetail;
 
     std::vector<U8> mReadScratch;
-    // r9: F32 scratch used by the 6ch path when the source decodes as PCM16.
-    // Holds up to kChunkFrames × 6 floats; pre-sized at format detection so
-    // the decode thread never allocates on the audio path.
-    std::vector<F32> mDownmixInputScratch;
 
     std::thread mDecodeThread;
     std::atomic<bool> mDecodeStop;
@@ -283,6 +295,12 @@ private:
     // r9: chunk granularity for the source → ring conversion loop. Sized so a
     // single chunk fits comfortably in L1 (1024 frames × 6 ch × 4 B = 24 KB).
     static constexpr size_t kPumpChunkFrames = 1024;
+    // r10 P3: chunk size for the reader-side BS.775 downmix. Bounds the per-
+    // SpeakerCallback raw-scratch (1024 frames × 6 ch × 4 B = 24 KB). The
+    // FMOD mixer callback's datalen is bounded by the OPENUSER decodebuffer
+    // (4096 bytes ≈ 1024 mono floats), so a single iteration usually
+    // handles the whole callback; the loop is there for safety.
+    static constexpr size_t kReaderChunkFrames = 1024;
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;
