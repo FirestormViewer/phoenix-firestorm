@@ -285,7 +285,7 @@ if(LL_TESTS)
 
   SET(llui_TEST_SOURCE_FILES
       llurlmatch.cpp
-      tests/llphishingfilter_test.cpp
+      llphishingfilter.cpp
       )
   set_property( SOURCE ${llui_TEST_SOURCE_FILES} PROPERTY LL_TEST_ADDITIONAL_LIBRARIES ${test_libs})
   LL_ADD_PROJECT_UNIT_TESTS(llui "${llui_TEST_SOURCE_FILES}")

@@ -54,6 +54,7 @@ public:
 private:
 	std::string getBaseDomain(const std::string& url) const;
 	std::string getHostname(const std::string& url) const;
+	size_t calculateLevenshteinDistance(const std::string& s1, const std::string& s2) const;
 };
 
 #endif // LL_PHISHINGFILTER_H

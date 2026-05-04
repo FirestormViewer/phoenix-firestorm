@@ -33,6 +33,7 @@
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
+#include <set>
 
 LLPhishingFilter::LLPhishingFilter()
 {
@@ -55,13 +56,6 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 		return 0;
 	}
 
-	S32 score = 0;
-
-	// Improved regex for Second Life and Marketplace keywords with common typos/variations
-	// matches secondlife, seconld-lif, second-live, marketplacesecondlife, etc.
-	static const boost::regex sl_pattern("secon[dl]*d+[e]?[-_ \\.]*li[fv][e]?", boost::regex::icase);
-	static const boost::regex mp_pattern("mark[e]?tpl[a]?ce", boost::regex::icase);
-
 	std::string host = getHostname(lower_url);
 	std::string domain = getBaseDomain(lower_url);
 
@@ -72,27 +66,70 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 		return 0;
 	}
 
-	// Check for keywords in the hostname specifically
-	if (boost::regex_search(host, sl_pattern) || 
-		boost::regex_search(host, mp_pattern) ||
-		domain == "suspicious-url.com")
+	S32 score = 0;
+
+	// Explicit test domain
+	if (domain == "suspicious-url.com")
 	{
-		// High risk: contains SL keywords in hostname but is not on an official domain
-		// Or is the explicit test domain suspicious-url.com
 		score += 100;
 	}
 
-	// Medium risk: known free hosting/dynamic DNS often used for phishing
-	if (domain == "herokuapp.com" || domain == "firebaseapp.com" || domain == "github.io" || domain == "netlify.app")
+	// 1. Regex checks (Base score 100 if matched)
+	static const boost::regex sl_pattern("secon[dl]*d+[e]?[-_ \\.]*(li[fv][e]?|iife)", boost::regex::icase);
+	static const boost::regex mp_pattern("mark[e]?tpl[a]?ce", boost::regex::icase);
+
+	if (boost::regex_search(host, sl_pattern) || boost::regex_search(host, mp_pattern))
+	{
+		score += 100;
+	}
+
+	// 2. Levenshtein distance checks on hostname (+50 each)
+	// First 14 characters vs 'secondlife.com'
+	std::string host_14 = host.substr(0, 14);
+	if (calculateLevenshteinDistance(host_14, "secondlife.com") < 5)
 	{
 		score += 50;
+	}
 
-		// If it's on a free host and looks like a marketplace item link in the path
-		static const boost::regex item_pattern("-[0-9]{5,}-[0-9a-f]{10,}", boost::regex::icase);
-		if (boost::regex_search(lower_url, item_pattern))
-		{
-			score += 50;
-		}
+	// First 22 characters vs 'marketplace.secondlife'
+	std::string host_22 = host.substr(0, 22);
+	if (calculateLevenshteinDistance(host_22, "marketplace.secondlife") < 5)
+	{
+		score += 50;
+	}
+
+	// First 15 characters vs 'maps.secondlife'
+	std::string host_15 = host.substr(0, 15);
+	if (calculateLevenshteinDistance(host_15, "maps.secondlife") < 5)
+	{
+		score += 50;
+	}
+
+	// 3. Suspicious providers/TLDs (+50)
+	static const std::set<std::string> suspicious_domains = {
+		"herokuapp.com", "firebaseapp.com", "github.io", "netlify.app",
+		"vercel.app", "fly.dev", "pages.dev", "ondigitalocean.app",
+		"azurewebsites.net", "appspot.com", "openshiftapps.com",
+		"kamatera.com", "sliplane.app", "duckdns.org", "eu.org",
+		"subdomain.me", "your-freedom.net", "afraid.org"
+	};
+
+	static const std::set<std::string> suspicious_tlds = {
+		"shop", "store", "online", "top", "cfd", "sbs", "xyz", "cyou", "icu", "bond", "live", "wiki", "info"
+	};
+
+	bool is_suspicious_base = suspicious_domains.count(domain) > 0;
+	
+	bool is_suspicious_tld = false;
+	size_t dot_pos = host.find_last_of('.');
+	if (dot_pos != std::string::npos)
+	{
+		is_suspicious_tld = suspicious_tlds.count(host.substr(dot_pos + 1)) > 0;
+	}
+
+	if (is_suspicious_base || is_suspicious_tld)
+	{
+		score += 50;
 	}
 
 	return score;
@@ -159,4 +196,27 @@ std::string LLPhishingFilter::getHostname(const std::string& url) const
 	}
 
 	return host;
+}
+
+size_t LLPhishingFilter::calculateLevenshteinDistance(const std::string& s1, const std::string& s2) const
+{
+	const size_t m = s1.size();
+	const size_t n = s2.size();
+	if (m == 0) return n;
+	if (n == 0) return m;
+
+	std::vector<size_t> v0(n + 1);
+	std::vector<size_t> v1(n + 1);
+
+	for (size_t i = 0; i <= n; ++i) v0[i] = i;
+
+	for (size_t i = 0; i < m; ++i) {
+		v1[0] = i + 1;
+		for (size_t j = 0; j < n; ++j) {
+			size_t cost = (s1[i] == s2[j]) ? 0 : 1;
+			v1[j + 1] = std::min({v1[j] + 1, v0[j + 1] + 1, v0[j] + cost});
+		}
+		v0 = v1;
+	}
+	return v0[n];
 }
