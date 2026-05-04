@@ -1444,6 +1444,20 @@ void LLPositionalStreamMgr::update()
             dead_roots.push_back(root_id);
             continue;
         }
+        // r10.x: link/unlink demoted this prim — the binding's UUID is no
+        // longer a root. The new root (already evaluated separately) owns
+        // the speakers; the stale binding here would compete with it,
+        // double-playing the same source out of two streams. Tear down on
+        // demotion so mDistributedBindings only ever holds live root keys.
+        if (root->getRootEdit() && root->getRootEdit()->getID() != root_id)
+        {
+            LL_INFOS("Stream3D") << "[3dstream-stereo] root " << root_id
+                                  << " demoted to child of "
+                                  << root->getRootEdit()->getID()
+                                  << "; tearing down stale binding" << LL_ENDL;
+            dead_roots.push_back(root_id);
+            continue;
+        }
         if (!b.stream)
         {
             // Stream couldn't be built yet (deferred above). Re-evaluating

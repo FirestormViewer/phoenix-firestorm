@@ -317,6 +317,7 @@ bool LLPositionalStreamMulti::start(const std::string& url,
     mSpeakers = speakers;
     mReadFailStreak = 0;
     mLastReadFailLogTime = 0.0;
+    mZeroFillStreakStart = 0.0;
     mFailReason.store(FailReason::Ok, std::memory_order_relaxed);
     mFailDetail.clear();
 
@@ -777,10 +778,32 @@ size_t LLPositionalStreamMulti::pumpSource()
         }
         return 0;
     }
-    if (read_bytes == 0) return 0;
-    // Successful read: reset the failure streak so a later, independent
+    if (read_bytes == 0)
+    {
+        // r10.x: FMOD's HTTP source can return OK with 0 bytes when the
+        // upstream Icecast source has died — there's no error to count
+        // toward mReadFailStreak, so without this branch we'd zero-fill
+        // forever. Time-stamp the streak start; if it persists past the
+        // threshold, flip to Failed so the manager's reconnect cascade
+        // rebuilds us. Reset below on any non-zero read.
+        const F64 now0 = LLTimer::getElapsedSeconds();
+        if (mZeroFillStreakStart == 0.0)
+        {
+            mZeroFillStreakStart = now0;
+        }
+        else if (now0 - mZeroFillStreakStart >= kZeroFillStreakLimit)
+        {
+            LL_WARNS("Stream3D") << "Multi source returned 0 bytes for "
+                                  << (now0 - mZeroFillStreakStart) << "s for " << mUrl
+                                  << "; transitioning to Failed for reconnect" << LL_ENDL;
+            setFailed(FailReason::Network, "zero-fill streak");
+        }
+        return 0;
+    }
+    // Successful read: reset failure streaks so a later, independent
     // outage gets its own full budget rather than inheriting old strikes.
     mReadFailStreak = 0;
+    mZeroFillStreakStart = 0.0;
 
     const size_t frames_read = read_bytes / bytes_per_frame;
     const size_t n_tracks = mRing.numTracks();

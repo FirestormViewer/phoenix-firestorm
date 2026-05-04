@@ -330,6 +330,14 @@ private:
     int mReadFailStreak = 0;
     F64 mLastReadFailLogTime = 0.0;
 
+    // r10.x: when the upstream Icecast source dies, FMOD's HTTP source can
+    // return OK with 0 bytes — no error to count toward mReadFailStreak,
+    // and the stream stays zero-filling forever. Time-stamp the start of a
+    // sustained zero-byte run so we can flip to Failed after a threshold
+    // and let the manager's reconnect cascade rebuild us. Reset on any
+    // successful (non-zero) read.
+    F64 mZeroFillStreakStart = 0.0;
+
     // r8 F6 acceptance instrumentation: count frames the FMOD mixer callback
     // had to zero-fill because the ring drained (decode thread fell behind
     // or the source stalled). Bumped from the FMOD mixer thread (multiple
@@ -355,6 +363,10 @@ private:
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;
+    // r10.x: how long pumpSource may keep returning OK-with-0-bytes before
+    // we declare the transport dead. Generous to ride out decoder warmup
+    // and brief upstream stalls; mgr's reconnect cascade picks up after.
+    static constexpr F64 kZeroFillStreakLimit = 10.0;
     // r8 F6: skip the first second after Playing transition to discount
     // prebuffer warmup; emit the rolling counter every 10s thereafter.
     static constexpr F64 kUnderrunWarmupSec  = 1.0;
