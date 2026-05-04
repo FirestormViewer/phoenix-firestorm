@@ -50,8 +50,10 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstring>
 #include <limits>
 #include <set>
+#include <sstream>
 
 namespace
 {
@@ -60,6 +62,27 @@ namespace
         LLVector3 out;
         out.setVec(v);
         return out;
+    }
+
+    // r10 P5 (§4.4): label for one ChannelKind, used in the routing diagnostic
+    // log. Matches the spec sample output exactly so a config check can grep
+    // for "ch:FL × 2".
+    const char* channelKindLabel(LLPositionalStreamMgr::ChannelKind ch)
+    {
+        using CK = LLPositionalStreamMgr::ChannelKind;
+        switch (ch)
+        {
+        case CK::L:   return "L";
+        case CK::R:   return "R";
+        case CK::M:   return "M";
+        case CK::FL:  return "FL";
+        case CK::FR:  return "FR";
+        case CK::C:   return "C";
+        case CK::LFE: return "LFE";
+        case CK::SL:  return "SL";
+        case CK::SR:  return "SR";
+        }
+        return "?";
     }
 
     bool tryParseFloat(const std::string& s, F32& out)
@@ -862,6 +885,175 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
                           << " (dropped=" << dropped << ")"
                           << " stream=" << (binding.stream ? "started" : "deferred")
                           << LL_ENDL;
+
+    // r10 P5: structural change resets the diagnostic key so the next time
+    // the rebuilt stream reaches Playing the diagnostic re-emits with the
+    // new (url, speaker_set, observed_channel_count) tuple.
+    binding.last_diagnostic_key.clear();
+}
+
+void LLPositionalStreamMgr::emitRoutingDiagnostic(DistributedStereoBinding& b)
+{
+    // Caller is responsible for the "stream alive" gate, but be defensive:
+    // a Failed binding sneaking through here would print a 0ch line.
+    if (!b.stream || !b.stream->isPlaying()) return;
+    const int source_channels = b.stream->sourceChannels();
+    if (source_channels <= 0) return;
+
+    // §4.4.2 throttle key. The prim_set_signature is the sorted concatenation
+    // of (uuid|ch_int) so reordering speakers in the description (without
+    // changing membership) doesn't re-fire the diagnostic.
+    std::vector<std::string> sig_entries;
+    sig_entries.reserve(b.speakers.size());
+    for (const auto& s : b.speakers)
+    {
+        sig_entries.push_back(s.prim_id.asString() + "|"
+                              + std::to_string(static_cast<int>(s.ch)));
+    }
+    std::sort(sig_entries.begin(), sig_entries.end());
+    std::string prim_signature;
+    for (const auto& e : sig_entries) prim_signature += e + ";";
+
+    std::string key = b.root_id.asString() + "#" + b.url + "#"
+                      + std::to_string(source_channels) + "#" + prim_signature;
+    if (b.last_diagnostic_key == key) return;
+    b.last_diagnostic_key = key;
+
+    // §4.4.3: setting gate. The key is updated above regardless so that
+    // toggling the setting on doesn't dump a stale snapshot for a binding
+    // that hasn't actually changed structure since.
+    if (!gSavedSettings.getBOOL("Stream3DRoutingDiagnostic")) return;
+
+    // Per-ch speaker count. r10 receives any of L/R/M/FL/FR/C/LFE/SL/SR
+    // (older r5–r9 viewers only emit L/R/M, which is still a valid subset).
+    std::map<ChannelKind, int> ch_count;
+    for (const auto& s : b.speakers) ++ch_count[s.ch];
+
+    const bool has_lrm_bucket = (ch_count[ChannelKind::L]
+                                 + ch_count[ChannelKind::R]
+                                 + ch_count[ChannelKind::M]) > 0;
+
+    // Source-side row order (§4.4 sample). 1ch shows just M; 2ch shows L/R;
+    // 6ch shows the full FL/FR/C/LFE/SL/SR row.
+    std::vector<ChannelKind> source_chs;
+    if (source_channels == 1)
+    {
+        source_chs = { ChannelKind::M };
+    }
+    else if (source_channels == 2)
+    {
+        source_chs = { ChannelKind::L, ChannelKind::R };
+    }
+    else if (source_channels == 6)
+    {
+        source_chs = { ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
+                       ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR };
+    }
+
+    static constexpr ChannelKind kAllChannels[] = {
+        ChannelKind::L, ChannelKind::R, ChannelKind::M,
+        ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
+        ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR,
+    };
+
+    std::ostringstream oss;
+    oss << "[Stream3D] root " << b.root_id
+        << " channel routing for " << source_channels << "ch "
+        << b.stream->sourceFormatName()
+        << " from " << b.url << ":\n";
+
+    oss << "  source channel \xe2\x86\x92 prim\n";
+    for (auto sc : source_chs)
+    {
+        const char* name = channelKindLabel(sc);
+        const int direct = ch_count[sc];
+        oss << "    " << name;
+        for (int p = static_cast<int>(std::strlen(name)); p < 4; ++p) oss << ' ';
+        oss << "\xe2\x86\x92 " << direct << " prim";
+        if (direct != 1) oss << "(s)";
+        if (direct > 0)
+        {
+            oss << " \xe2\x9c\x93";
+        }
+        else if (source_channels == 6)
+        {
+            // §4.4.1: 6ch source channel with no dedicated prim — falls into
+            // the BS.775 downmix when there's an L/R/M bucket, otherwise the
+            // channel is silently dropped.
+            oss << "   \xe2\x86\x90 warn: \"" << name;
+            if (has_lrm_bucket)
+            {
+                oss << " content folded into BS.775 downmix";
+                if (sc == ChannelKind::FL || sc == ChannelKind::FR || sc == ChannelKind::C)
+                {
+                    oss << " on ch:L/R/M prims";
+                }
+                oss << "\"";
+            }
+            else
+            {
+                oss << " content has no destination \xe2\x80\x94 dropped\"";
+            }
+        }
+        oss << "\n";
+    }
+
+    oss << "  prim \xe2\x86\x92 source channel\n";
+    for (auto sc : kAllChannels)
+    {
+        const int n = ch_count[sc];
+        if (n == 0) continue;
+        oss << "    ch:" << channelKindLabel(sc) << " \xc3\x97 " << n;
+        // §4.2 outcome description. Keep these strings short and grep-able;
+        // they describe what the audio reader will actually do for this
+        // (source_channels, ch) pair as resolved in resolveReadOp().
+        std::string outcome;
+        const bool is_lrm = (sc == ChannelKind::L || sc == ChannelKind::R || sc == ChannelKind::M);
+        const bool is_5_1 = (sc == ChannelKind::FL || sc == ChannelKind::FR
+                             || sc == ChannelKind::C  || sc == ChannelKind::LFE
+                             || sc == ChannelKind::SL || sc == ChannelKind::SR);
+        if (source_channels == 6 && is_lrm)
+        {
+            outcome = " \xe2\x9c\x93 (BS.775 downmix)";
+        }
+        else if (source_channels == 6 && is_5_1)
+        {
+            outcome = " \xe2\x9c\x93";
+        }
+        else if (source_channels == 2 && sc == ChannelKind::M)
+        {
+            outcome = " \xe2\x9c\x93 (sum-to-mono)";
+        }
+        else if (source_channels == 2
+                 && (sc == ChannelKind::L || sc == ChannelKind::R))
+        {
+            outcome = " \xe2\x9c\x93";
+        }
+        else if (source_channels == 2 && sc == ChannelKind::C)
+        {
+            outcome = " \xe2\x9c\x93 (sum-to-mono fallback)";
+        }
+        else if (source_channels == 2
+                 && (sc == ChannelKind::FL || sc == ChannelKind::FR))
+        {
+            outcome = " \xe2\x9c\x93 (track-direct fallback: FL\xe2\x86\x92L, FR\xe2\x86\x92R)";
+        }
+        else if (source_channels == 1
+                 && (is_lrm || sc == ChannelKind::FL || sc == ChannelKind::FR
+                     || sc == ChannelKind::C))
+        {
+            outcome = " \xe2\x9c\x93 (mono source duplicated)";
+        }
+        else
+        {
+            // ch:LFE / SL / SR on 1ch or 2ch — silent per §4.2.
+            outcome = std::string(" silent (source is ")
+                      + std::to_string(source_channels) + "ch)";
+        }
+        oss << outcome << "\n";
+    }
+
+    LL_WARNS("Stream3D") << oss.str() << LL_ENDL;
 }
 
 void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
@@ -1394,6 +1586,11 @@ void LLPositionalStreamMgr::update()
             b.notified_played = true;
             notifyStream3D("now playing: " + b.url);
         }
+
+        // r10 P5: emit (or skip via throttle key) the routing diagnostic
+        // once per (root, url, observed_channel_count, speaker_set) tuple.
+        // Cheap on the no-op path — single key compare.
+        emitRoutingDiagnostic(b);
 
         for (size_t i = 0; i < b.speakers.size(); ++i)
         {

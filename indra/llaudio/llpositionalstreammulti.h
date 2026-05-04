@@ -62,13 +62,6 @@ namespace FMOD
 class LLMultiTailRing
 {
 public:
-    enum class ReadMode
-    {
-        Track0,  // pick channel 0 directly (used for ch=L on stereo source)
-        Track1,  // pick channel 1 directly (used for ch=R on stereo source)
-        Mono,    // (track0 + track1) * 0.5 (used for ch=M on stereo source)
-    };
-
     LLMultiTailRing();
     ~LLMultiTailRing();
     LLMultiTailRing(const LLMultiTailRing&) = delete;
@@ -94,17 +87,30 @@ public:
     // frames actually written (capped by writeAvailable()).
     size_t writeFrames(const F32* src, size_t n_frames);
 
-    // Pull n_frames worth of mono F32 samples for a single reader, applying
-    // ReadMode to select / mix tracks. dst length must be ≥ n_frames. Returns
-    // frames actually read.
-    size_t readFrames(size_t reader_idx, F32* dst, size_t n_frames, ReadMode mode);
+    // r10 P4: pull n_frames worth of one specific track from the ring into
+    // dst (mono F32 output). track_idx is clamped to numTracks()-1.
+    // Returns frames actually read.
+    size_t readFramesTrack(size_t reader_idx, F32* dst,
+                           size_t n_frames, size_t track_idx);
+
+    // r9: pull n_frames worth of (track0 + track1) * 0.5 mono samples — the
+    // sum-to-mono mix used by ch:M (and ch:C fallback) when source is 2ch.
+    // For a 1-track ring this collapses to track0; for ≥3-track rings only
+    // the first two tracks are summed (callers on 6ch source go through
+    // mix6chToMono / readFramesTrack instead). Returns frames actually read.
+    size_t readFramesMonoSum(size_t reader_idx, F32* dst, size_t n_frames);
 
     // r10 P3: pull n_frames worth of raw interleaved samples (n_frames ×
     // n_tracks F32 written to dst) for a single reader. Used by the
-    // reader-side BS.775 downmix path on a 6-track ring; ReadMode-driven
-    // readers above use readFrames() instead. dst length must be ≥
-    // n_frames * numTracks(). Returns frames actually read.
+    // reader-side BS.775 downmix path on a 6-track ring. dst length must
+    // be ≥ n_frames * numTracks(). Returns frames actually read.
     size_t readFramesRaw(size_t reader_idx, F32* dst, size_t n_frames);
+
+    // r10 P4: advance one reader's tail by up to n_frames without copying
+    // any samples. Used by the Silent op (ch:LFE/SL/SR with 1ch / 2ch
+    // source) so the writer's lagging-reader bound doesn't stall on a
+    // speaker that intentionally outputs silence. Returns frames skipped.
+    size_t skipFrames(size_t reader_idx, size_t n_frames);
 
 private:
     // One slot reserved (capacity_frames + 1) so full vs. empty stays
@@ -179,6 +185,14 @@ public:
     // returned true; the value is stable from that point on.
     std::string failDetail() const { return mFailDetail; }
 
+    // Source-format observation, available after the source has reached
+    // State::Playing (sourceChannels() returns 0 / sourceFormatName() returns
+    // "Unknown" before that). r10 P5 routing diagnostic reads these so the
+    // mgr-side log can echo "6ch Vorbis from <url>" without the audio module
+    // having to know about LL_WARNS / chat / settings gating itself.
+    int sourceChannels() const { return mSourceChannels; }
+    const char* sourceFormatName() const;
+
     // Update one speaker's 3D position (caller is responsible for indexing
     // the same way it set up the speaker vector in start()).
     void setSpeakerPosition(size_t idx, const LLVector3& pos);
@@ -199,10 +213,28 @@ private:
     {
         LLPositionalStreamMulti* self = nullptr;
         size_t speaker_idx = 0;
-        // r10 P3: scratch for the 6ch raw-read → BS.775 mono path. Sized at
-        // createUserSounds() to kReaderChunkFrames × 6 floats when source is
-        // 6ch; left empty otherwise. Only ever accessed by the FMOD mixer
-        // thread for this one speaker, so no synchronisation is needed.
+
+        // r10 P4: pre-computed routing decision per the §4.2 compatibility
+        // matrix. Determined once at createUserSounds() — when both
+        // mSourceChannels and mDownmix are settled — so the mixer thread
+        // never re-evaluates the matrix.
+        enum class OpKind
+        {
+            Silent,    // zero-fill (ch:LFE/SL/SR on 1ch / 2ch source)
+            Track,     // direct read of mRing track[op_track]
+            StereoSum, // (track0 + track1)/2 — ch:M/C on 2ch source
+            Bs775,     // mix6chToMono(op_role) — ch:L/R/M on 6ch source
+        };
+        OpKind op_kind = OpKind::Silent;
+        int op_track = 0;
+        LLMultichannelDownmix::MixRole op_role
+            = LLMultichannelDownmix::MixRole::L;
+
+        // r10 P3: scratch for the 6ch raw-read → BS.775 mono path. Sized
+        // at createUserSounds() to kReaderChunkFrames × 6 floats when
+        // op_kind is Bs775; left empty otherwise. Only ever accessed by
+        // the FMOD mixer thread for this one speaker, so no
+        // synchronisation is needed.
         std::vector<F32> raw_scratch;
     };
 
@@ -228,6 +260,11 @@ private:
     void applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos, F32 range);
     size_t pumpSource();
 
+    // r10 P4: resolve §4.2 compat matrix into a SpeakerCallback::OpKind +
+    // parameters for one speaker, given the current mSourceChannels and
+    // mDownmix. Called once per speaker at createUserSounds() time.
+    void resolveReadOp(SpeakerCallback& cb, Channel ch) const;
+
     void startDecodeThread();
     void stopDecodeThread();
     void decodeThreadMain();
@@ -237,6 +274,11 @@ private:
     int mSourceChannels;       // 1, 2, or (r9) 6
     int mSourceBytesPerSample; // 2 for PCM16, 4 for PCMFLOAT
     bool mSourceIsFloat;
+    // r10 P5: codec type captured at getFormat() time. Used by the mgr-side
+    // routing diagnostic log to print a human-readable codec name. Reset to
+    // FMOD_SOUND_TYPE_UNKNOWN by releaseAll() so a stale value never bleeds
+    // into a later open of a different URL.
+    FMOD_SOUND_TYPE mSourceType;
 
     // r9: populated at format detection when mSourceChannels == 6. The ring
     // is still allocated with n_tracks = 2 — pumpSource() converts each 6ch

@@ -85,12 +85,17 @@ public:
     void mix6chToMono(const F32* in_6ch, F32* out_mono,
                       std::size_t frames, MixRole role) const;
 
-private:
+    // r10 P4: codec channel indices, used by the §4.2 compatibility matrix
+    // when a ch:FL/FR/C/LFE/SL/SR speaker on a 6ch source needs to read its
+    // own track directly out of the multi-tail ring. Values are valid only
+    // when isSupported() is true.
     struct Indices
     {
         int FL, FR, C, LFE, SL, SR;
     };
+    const Indices& indices() const { return mIndices; }
 
+private:
     Layout mLayout = Layout::Unsupported;
     Indices mIndices = {};
 };

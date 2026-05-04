@@ -150,7 +150,28 @@ size_t LLMultiTailRing::writeFrames(const F32* src, size_t n_frames)
     return to_write;
 }
 
-size_t LLMultiTailRing::readFrames(size_t reader_idx, F32* dst, size_t n_frames, ReadMode mode)
+size_t LLMultiTailRing::readFramesTrack(size_t reader_idx, F32* dst,
+                                        size_t n_frames, size_t track_idx)
+{
+    if (reader_idx >= mNumReaders || mCapacityFrames == 0 || mNumTracks == 0) return 0;
+    if (track_idx >= mNumTracks) track_idx = mNumTracks - 1;
+    const size_t avail = readAvailable(reader_idx);
+    const size_t to_read = std::min(n_frames, avail);
+    if (to_read == 0) return 0;
+
+    const size_t total = mCapacityFrames + 1;
+    const size_t r = mReadFrames[reader_idx].load(std::memory_order_relaxed);
+    for (size_t i = 0; i < to_read; ++i)
+    {
+        const size_t f = (r + i) % total;
+        dst[i] = mBuf[f * mNumTracks + track_idx];
+    }
+
+    mReadFrames[reader_idx].store((r + to_read) % total, std::memory_order_release);
+    return to_read;
+}
+
+size_t LLMultiTailRing::readFramesMonoSum(size_t reader_idx, F32* dst, size_t n_frames)
 {
     if (reader_idx >= mNumReaders || mCapacityFrames == 0 || mNumTracks == 0) return 0;
     const size_t avail = readAvailable(reader_idx);
@@ -159,47 +180,37 @@ size_t LLMultiTailRing::readFrames(size_t reader_idx, F32* dst, size_t n_frames,
 
     const size_t total = mCapacityFrames + 1;
     const size_t r = mReadFrames[reader_idx].load(std::memory_order_relaxed);
-    // Source-track indices clamped to what the ring actually has — guards
-    // against e.g. ReadMode::Track1 on a 1-track ring (mono source). On a
-    // 1-track ring all three modes degrade to "track 0".
+    // 1-track ring (degenerate path): collapse to that single track. All
+    // ≥2-track rings sum tracks 0 and 1; ≥3-track rings ignore the rest
+    // because callers on 6ch source go through readFramesTrack /
+    // mix6chToMono instead.
     const size_t track_l = 0;
     const size_t track_r = (mNumTracks >= 2) ? 1 : 0;
 
-    auto sample_at = [&](size_t frame_idx, size_t track) -> F32
+    for (size_t i = 0; i < to_read; ++i)
     {
-        return mBuf[frame_idx * mNumTracks + track];
-    };
-
-    switch (mode)
-    {
-    case ReadMode::Track0:
-        for (size_t i = 0; i < to_read; ++i)
-        {
-            const size_t f = (r + i) % total;
-            dst[i] = sample_at(f, track_l);
-        }
-        break;
-    case ReadMode::Track1:
-        for (size_t i = 0; i < to_read; ++i)
-        {
-            const size_t f = (r + i) % total;
-            dst[i] = sample_at(f, track_r);
-        }
-        break;
-    case ReadMode::Mono:
-        for (size_t i = 0; i < to_read; ++i)
-        {
-            const size_t f = (r + i) % total;
-            // Sum-to-mono with -6 dB for stereo source (spec §4.6). Mono
-            // source is duplicated into both tracks at write time so this
-            // collapses to the original sample.
-            dst[i] = (sample_at(f, track_l) + sample_at(f, track_r)) * 0.5f;
-        }
-        break;
+        const size_t f = (r + i) % total;
+        const F32 sl = mBuf[f * mNumTracks + track_l];
+        const F32 sr = mBuf[f * mNumTracks + track_r];
+        // -6 dB sum-to-mono (spec §4.6). 1ch source is duplicated into
+        // both tracks at write time so this collapses to the source sample.
+        dst[i] = (sl + sr) * 0.5f;
     }
 
     mReadFrames[reader_idx].store((r + to_read) % total, std::memory_order_release);
     return to_read;
+}
+
+size_t LLMultiTailRing::skipFrames(size_t reader_idx, size_t n_frames)
+{
+    if (reader_idx >= mNumReaders || mCapacityFrames == 0) return 0;
+    const size_t avail = readAvailable(reader_idx);
+    const size_t to_skip = std::min(n_frames, avail);
+    if (to_skip == 0) return 0;
+    const size_t total = mCapacityFrames + 1;
+    const size_t r = mReadFrames[reader_idx].load(std::memory_order_relaxed);
+    mReadFrames[reader_idx].store((r + to_skip) % total, std::memory_order_release);
+    return to_skip;
 }
 
 size_t LLMultiTailRing::readFramesRaw(size_t reader_idx, F32* dst, size_t n_frames)
@@ -237,6 +248,7 @@ LLPositionalStreamMulti::LLPositionalStreamMulti()
     mSourceChannels(0),
     mSourceBytesPerSample(0),
     mSourceIsFloat(false),
+    mSourceType(FMOD_SOUND_TYPE_UNKNOWN),
     mVolume(1.f),
     mState(State::Idle),
     mDecodeStop(false)
@@ -383,10 +395,29 @@ void LLPositionalStreamMulti::releaseAll()
     mSourceChannels = 0;
     mSourceBytesPerSample = 0;
     mSourceIsFloat = false;
+    mSourceType = FMOD_SOUND_TYPE_UNKNOWN;
     mDownmix = LLMultichannelDownmix();
     // Don't reset mFailReason / mFailDetail here: releaseAll() runs as part
     // of the transition into Failed and the manager reads these immediately
     // afterwards. They're cleared on the next start() instead.
+}
+
+const char* LLPositionalStreamMulti::sourceFormatName() const
+{
+    // r10 P5: short codec label for the routing diagnostic log. Only the
+    // codecs we actually meet on the AYAstorm path are spelled out — anything
+    // else falls back to "Unknown" so the diagnostic line still parses.
+    switch (mSourceType)
+    {
+    case FMOD_SOUND_TYPE_OGGVORBIS:
+    case FMOD_SOUND_TYPE_VORBIS:    return "Vorbis";
+    case FMOD_SOUND_TYPE_OPUS:      return "Opus";
+    case FMOD_SOUND_TYPE_FLAC:      return "FLAC";
+    case FMOD_SOUND_TYPE_MPEG:      return "MPEG";
+    case FMOD_SOUND_TYPE_WAV:       return "WAV";
+    case FMOD_SOUND_TYPE_AIFF:      return "AIFF";
+    default:                        return "Unknown";
+    }
 }
 
 void LLPositionalStreamMulti::setSpeakerPosition(size_t idx, const LLVector3& pos)
@@ -435,91 +466,134 @@ LLPositionalStreamMulti::pcmReadCallback(FMOD_SOUND* sound, void* data, U32 data
     F32* out = static_cast<F32*>(data);
     const size_t n = datalen / sizeof(F32);
 
-    size_t got = 0;
-    if (cb && cb->self && cb->speaker_idx < cb->self->mSpeakers.size())
+    if (!(cb && cb->self && cb->speaker_idx < cb->self->mSpeakers.size()))
     {
-        // Channel role + source channel count are both stable for the
-        // lifetime of the SpeakerCallback — they're set during update()
-        // State::Opening on the main thread, before the FMOD sound (and
-        // hence this callback) exists. Tag changes go through stop()/
-        // start(), which tears down the FMOD sound first. Reading
-        // mSpeakers / mSourceChannels / mDownmix from the mixer thread is
-        // therefore race-free.
-        LLPositionalStreamMulti* self = cb->self;
-        const Channel ch = self->mSpeakers[cb->speaker_idx].ch;
-        const int src_ch = self->mSourceChannels;
-
-        // r10 P3: 6ch source + ch:L/R/M readers run BS.775 downmix on read.
-        // Pull n_frames worth of raw 6-track samples into the per-callback
-        // scratch and run them through mix6chToMono with the role for this
-        // speaker. ch:FL/FR/C/LFE/SL/SR on a 6ch source still fall through
-        // to the placeholder ReadMode::Mono — P4 wires the §4.2 compat
-        // matrix dispatch (per-track direct read using the codec indices).
-        if (src_ch == 6 &&
-            (ch == Channel::L || ch == Channel::R || ch == Channel::M))
-        {
-            const LLMultichannelDownmix::MixRole role =
-                  (ch == Channel::L) ? LLMultichannelDownmix::MixRole::L
-                : (ch == Channel::R) ? LLMultichannelDownmix::MixRole::R
-                :                      LLMultichannelDownmix::MixRole::MonoLR;
-
-            // raw_scratch is sized at createUserSounds() to
-            // kReaderChunkFrames × 6 floats; loop covers the rare case of
-            // a callback datalen that exceeds one chunk.
-            const size_t chunk_cap = kReaderChunkFrames;
-            F32* raw = cb->raw_scratch.data();
-            size_t produced = 0;
-            while (produced < n)
-            {
-                const size_t this_chunk = std::min(n - produced, chunk_cap);
-                const size_t pulled = self->mRing.readFramesRaw(
-                    cb->speaker_idx, raw, this_chunk);
-                if (pulled == 0) break;
-                self->mDownmix.mix6chToMono(raw, out + produced, pulled, role);
-                produced += pulled;
-                if (pulled < this_chunk) break;  // ring drained
-            }
-            got = produced;
-        }
-        else
-        {
-            LLMultiTailRing::ReadMode mode = LLMultiTailRing::ReadMode::Mono;
-            switch (ch)
-            {
-            case Channel::L: mode = LLMultiTailRing::ReadMode::Track0; break;
-            case Channel::R: mode = LLMultiTailRing::ReadMode::Track1; break;
-            case Channel::M: mode = LLMultiTailRing::ReadMode::Mono;   break;
-            // r10 P3 (still placeholder): ch:FL/FR/C/LFE/SL/SR on a 6-track
-            // ring fall back to (track0 + track1) / 2 = (FL + FR) / 2 — an
-            // un-differentiated placeholder so the tag is audible but not
-            // yet placement-correct. P4 replaces this with the §4.2 compat
-            // matrix dispatch (per-track direct read via codec indices).
-            case Channel::FL:
-            case Channel::FR:
-            case Channel::C:
-            case Channel::LFE:
-            case Channel::SL:
-            case Channel::SR:
-                mode = LLMultiTailRing::ReadMode::Mono;
-                break;
-            }
-            got = self->mRing.readFrames(cb->speaker_idx, out, n, mode);
-        }
+        std::memset(out, 0, n * sizeof(F32));
+        return FMOD_OK;
     }
+    LLPositionalStreamMulti* self = cb->self;
+
+    // r10 P4: dispatch the §4.2 compatibility-matrix routing pre-computed
+    // for this speaker at createUserSounds(). All three of mSpeakers,
+    // mSourceChannels, mDownmix are settled before the FMOD sound (and
+    // hence this callback) exists; tag changes go through stop()/start()
+    // which tears down the FMOD sound first. So no re-evaluation or
+    // synchronisation is needed on this hot path.
+    size_t got = 0;
+    switch (cb->op_kind)
+    {
+    case SpeakerCallback::OpKind::Silent:
+        // ch:LFE/SL/SR on 1ch / 2ch source. Output is unconditional silence,
+        // but we still consume from the ring at the same rate as the other
+        // readers — otherwise the writer's lagging-reader bound would stall
+        // the whole stream on this one speaker. No underrun is counted
+        // (intentional silence is not a dropout).
+        self->mRing.skipFrames(cb->speaker_idx, n);
+        std::memset(out, 0, n * sizeof(F32));
+        return FMOD_OK;
+
+    case SpeakerCallback::OpKind::Track:
+        got = self->mRing.readFramesTrack(cb->speaker_idx, out, n,
+                                          static_cast<size_t>(cb->op_track));
+        break;
+
+    case SpeakerCallback::OpKind::StereoSum:
+        got = self->mRing.readFramesMonoSum(cb->speaker_idx, out, n);
+        break;
+
+    case SpeakerCallback::OpKind::Bs775:
+    {
+        // raw_scratch is sized at createUserSounds() to kReaderChunkFrames
+        // × 6 floats; loop covers the rare case of a callback datalen
+        // that exceeds one chunk.
+        const size_t chunk_cap = kReaderChunkFrames;
+        F32* raw = cb->raw_scratch.data();
+        size_t produced = 0;
+        while (produced < n)
+        {
+            const size_t this_chunk = std::min(n - produced, chunk_cap);
+            const size_t pulled = self->mRing.readFramesRaw(
+                cb->speaker_idx, raw, this_chunk);
+            if (pulled == 0) break;
+            self->mDownmix.mix6chToMono(raw, out + produced, pulled, cb->op_role);
+            produced += pulled;
+            if (pulled < this_chunk) break;  // ring drained
+        }
+        got = produced;
+        break;
+    }
+    }
+
     if (got < n)
     {
         std::memset(out + got, 0, (n - got) * sizeof(F32));
         // r8 F6 acceptance: count the underrun for the dropout metric. Done
-        // here, not in readFrames, so a speaker whose tail reads short still
-        // registers even if the ring isn't globally empty.
-        if (cb && cb->self)
-        {
-            cb->self->mUnderrunFrames.fetch_add(static_cast<U64>(n - got),
-                                                std::memory_order_relaxed);
-            cb->self->mUnderrunCallbacks.fetch_add(1, std::memory_order_relaxed);
-        }
+        // here, not in the ring methods, so a speaker whose tail reads
+        // short still registers even if the ring isn't globally empty.
+        self->mUnderrunFrames.fetch_add(static_cast<U64>(n - got),
+                                        std::memory_order_relaxed);
+        self->mUnderrunCallbacks.fetch_add(1, std::memory_order_relaxed);
     }
     return FMOD_OK;
+}
+
+void LLPositionalStreamMulti::resolveReadOp(SpeakerCallback& cb, Channel ch) const
+{
+    // r10 P4: §4.2 compat matrix dispatch. mSourceChannels and mDownmix are
+    // already settled before this is called (createUserSounds runs after
+    // the State::Opening → State::Buffering transition).
+    using Op = SpeakerCallback::OpKind;
+    using Role = LLMultichannelDownmix::MixRole;
+
+    if (mSourceChannels == 6 && mDownmix.isSupported())
+    {
+        const auto& idx = mDownmix.indices();
+        switch (ch)
+        {
+        case Channel::L:   cb.op_kind = Op::Bs775; cb.op_role = Role::L;      return;
+        case Channel::R:   cb.op_kind = Op::Bs775; cb.op_role = Role::R;      return;
+        case Channel::M:   cb.op_kind = Op::Bs775; cb.op_role = Role::MonoLR; return;
+        case Channel::FL:  cb.op_kind = Op::Track; cb.op_track = idx.FL;      return;
+        case Channel::FR:  cb.op_kind = Op::Track; cb.op_track = idx.FR;      return;
+        case Channel::C:   cb.op_kind = Op::Track; cb.op_track = idx.C;       return;
+        case Channel::LFE: cb.op_kind = Op::Track; cb.op_track = idx.LFE;     return;
+        case Channel::SL:  cb.op_kind = Op::Track; cb.op_track = idx.SL;      return;
+        case Channel::SR:  cb.op_kind = Op::Track; cb.op_track = idx.SR;      return;
+        }
+    }
+    else if (mSourceChannels == 2)
+    {
+        switch (ch)
+        {
+        case Channel::L:
+        case Channel::FL:  cb.op_kind = Op::Track; cb.op_track = 0; return;
+        case Channel::R:
+        case Channel::FR:  cb.op_kind = Op::Track; cb.op_track = 1; return;
+        case Channel::M:
+        case Channel::C:   cb.op_kind = Op::StereoSum;              return;
+        case Channel::LFE:
+        case Channel::SL:
+        case Channel::SR:  cb.op_kind = Op::Silent;                 return;
+        }
+    }
+    else  // mSourceChannels == 1 (or unexpected — falls through to Silent)
+    {
+        switch (ch)
+        {
+        case Channel::L:
+        case Channel::R:
+        case Channel::M:
+        case Channel::FL:
+        case Channel::FR:
+        case Channel::C:   cb.op_kind = Op::Track; cb.op_track = 0; return;
+        case Channel::LFE:
+        case Channel::SL:
+        case Channel::SR:  cb.op_kind = Op::Silent;                 return;
+        }
+    }
+    // Defensive default — every (ch, src_ch) combination above hits a
+    // return; reaching here implies an unhandled channel value.
+    cb.op_kind = Op::Silent;
 }
 
 bool LLPositionalStreamMulti::createUserSounds()
@@ -559,9 +633,10 @@ bool LLPositionalStreamMulti::createUserSounds()
         auto cb = std::make_unique<SpeakerCallback>();
         cb->self = this;
         cb->speaker_idx = i;
-        // r10 P3: only 6ch sources need the raw-read scratch (used by the
-        // BS.775 reader path). 1ch / 2ch leave it empty.
-        if (mSourceChannels == 6)
+        resolveReadOp(*cb, mSpeakers[i].ch);
+        // r10 P3: raw-read scratch is only needed by the Bs775 op (6ch
+        // source + ch:L/R/M). Track / StereoSum / Silent ops leave it empty.
+        if (cb->op_kind == SpeakerCallback::OpKind::Bs775)
         {
             cb->raw_scratch.assign(kReaderChunkFrames * 6, 0.f);
         }
@@ -693,12 +768,12 @@ size_t LLPositionalStreamMulti::pumpSource()
     // update() State::Opening:
     //   - 1ch source: 2-track ring, mono sample duplicated into both tracks
     //     so ch=L/R speakers each see the full signal at their 3D position.
-    //   - 2ch source: 2-track ring, 1:1 copy. ReadMode::Mono returns the
-    //     spec-mandated -6 dB sum-to-mono.
-    //   - 6ch source (r10 P2): 6-track ring, raw per-channel write. The
-    //     reader side decides what to do per-prim per spec §4.2 (BS.775
-    //     downmix for ch:L/R/M, direct track read for ch:FL/FR/C/LFE/SL/SR);
-    //     P3 lands the reader-side downmix, P4 wires the compat matrix.
+    //   - 2ch source: 2-track ring, 1:1 copy. readFramesMonoSum() returns the
+    //     spec-mandated -6 dB sum-to-mono for ch:M speakers.
+    //   - 6ch source (r10): 6-track ring, raw per-channel write. The reader
+    //     side decides what to do per-prim per spec §4.2 (BS.775 downmix for
+    //     ch:L/R/M, direct track read for ch:FL/FR/C/LFE/SL/SR) — see
+    //     resolveReadOp() / pcmReadCallback().
     constexpr size_t kChunkFrames = kPumpChunkFrames;
     std::vector<F32> chunk(kChunkFrames * n_tracks, 0.f);
 
@@ -712,8 +787,8 @@ size_t LLPositionalStreamMulti::pumpSource()
 
         if (mSourceChannels == 1)
         {
-            // Mono source: duplicate into all ring tracks so every ReadMode
-            // ends up with the original amplitude.
+            // Mono source: duplicate into all ring tracks so every reader op
+            // (track read / mono-sum) ends up with the original amplitude.
             if (mSourceIsFloat)
             {
                 const F32* f32 = reinterpret_cast<const F32*>(sp);
@@ -836,6 +911,7 @@ void LLPositionalStreamMulti::update()
 
         mSampleRate = static_cast<int>(freq);
         mSourceChannels = channels;
+        mSourceType = type;
 
         // r10 (§4.2): 6ch sources fill a 6-track ring per-channel; the
         // BS.775 downmix moves to the reader side in P3 (forSourceFormat is
