@@ -41,10 +41,14 @@ declare -A TONE_HZ=(
     [SR]=3520
 )
 
-# WAV interleave 順 (WAV/SMPTE) — sox -M に渡す。oggenc は RIFF channel
-# mask を読んで Vorbis channel mapping family 1 (FL,C,FR,SL,SR,LFE) に
-# 並べ替えてくれる。FLAC 変換が必要なら本順序のまま flac CLI に渡せる。
-WAV_ORDER=(FL FR C LFE SL SR)
+# interleave 順 = Vorbis channel mapping family 1 (FL,C,FR,SL,SR,LFE)。
+# oggenc は WAV の interleave 順をそのまま Vorbis stream に流すだけで、
+# RIFF channel mask を見て family 1 に並べ替える機能は持たない。viewer 側
+# (LLMultichannelDownmix) は Vorbis = family 1 前提で ch index を解決する
+# ので、ここで WAV/SMPTE 順 [FL,FR,C,LFE,SL,SR] のまま渡すと ch1↔ch2 と
+# ch3↔ch5 がズレて routing がクロスする。FLAC を作る場合は WAV/SMPTE 順
+# が必要なので、別途 flac CLI に渡す前に order を組み替えること。
+WAV_ORDER=(FL C FR SL SR LFE)
 
 DURATION_SEC=30
 SAMPLE_RATE=48000
@@ -85,11 +89,11 @@ done
 echo "[gen_test_material] interleaving 6ch WAV (order: ${WAV_ORDER[*]})"
 sox -M \
     "$TMP_DIR/FL.wav" \
-    "$TMP_DIR/FR.wav" \
     "$TMP_DIR/C.wav" \
-    "$TMP_DIR/LFE.wav" \
+    "$TMP_DIR/FR.wav" \
     "$TMP_DIR/SL.wav" \
     "$TMP_DIR/SR.wav" \
+    "$TMP_DIR/LFE.wav" \
     -c 6 "$TMP_DIR/test_routing_5_1.wav"
 
 echo "[gen_test_material] encoding Vorbis (channel mapping family 1)"
