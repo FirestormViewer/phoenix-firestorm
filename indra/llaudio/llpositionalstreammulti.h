@@ -62,13 +62,6 @@ namespace FMOD
 class LLMultiTailRing
 {
 public:
-    enum class ReadMode
-    {
-        Track0,  // pick channel 0 directly (used for ch=L on stereo source)
-        Track1,  // pick channel 1 directly (used for ch=R on stereo source)
-        Mono,    // (track0 + track1) * 0.5 (used for ch=M on stereo source)
-    };
-
     LLMultiTailRing();
     ~LLMultiTailRing();
     LLMultiTailRing(const LLMultiTailRing&) = delete;
@@ -94,10 +87,30 @@ public:
     // frames actually written (capped by writeAvailable()).
     size_t writeFrames(const F32* src, size_t n_frames);
 
-    // Pull n_frames worth of mono F32 samples for a single reader, applying
-    // ReadMode to select / mix tracks. dst length must be ≥ n_frames. Returns
-    // frames actually read.
-    size_t readFrames(size_t reader_idx, F32* dst, size_t n_frames, ReadMode mode);
+    // r10 P4: pull n_frames worth of one specific track from the ring into
+    // dst (mono F32 output). track_idx is clamped to numTracks()-1.
+    // Returns frames actually read.
+    size_t readFramesTrack(size_t reader_idx, F32* dst,
+                           size_t n_frames, size_t track_idx);
+
+    // r9: pull n_frames worth of (track0 + track1) * 0.5 mono samples — the
+    // sum-to-mono mix used by ch:M (and ch:C fallback) when source is 2ch.
+    // For a 1-track ring this collapses to track0; for ≥3-track rings only
+    // the first two tracks are summed (callers on 6ch source go through
+    // mix6chToMono / readFramesTrack instead). Returns frames actually read.
+    size_t readFramesMonoSum(size_t reader_idx, F32* dst, size_t n_frames);
+
+    // r10 P3: pull n_frames worth of raw interleaved samples (n_frames ×
+    // n_tracks F32 written to dst) for a single reader. Used by the
+    // reader-side BS.775 downmix path on a 6-track ring. dst length must
+    // be ≥ n_frames * numTracks(). Returns frames actually read.
+    size_t readFramesRaw(size_t reader_idx, F32* dst, size_t n_frames);
+
+    // r10 P4: advance one reader's tail by up to n_frames without copying
+    // any samples. Used by the Silent op (ch:LFE/SL/SR with 1ch / 2ch
+    // source) so the writer's lagging-reader bound doesn't stall on a
+    // speaker that intentionally outputs silence. Returns frames skipped.
+    size_t skipFrames(size_t reader_idx, size_t n_frames);
 
 private:
     // One slot reserved (capacity_frames + 1) so full vs. empty stays
@@ -126,8 +139,10 @@ class LLPositionalStreamMulti
 {
 public:
     // Mirrors LLPositionalStreamMgr::ChannelKind; duplicated here so llaudio
-    // does not depend on indra/newview.
-    enum class Channel { L, R, M };
+    // does not depend on indra/newview. r10 added the 5.1 placement values
+    // (spec_5_1ch_placement.md §4.1); the per-source-channel-count behavior
+    // (§4.2 compatibility matrix) is decided in pcmReadCallback.
+    enum class Channel { L, R, M, FL, FR, C, LFE, SL, SR };
 
     struct SpeakerConfig
     {
@@ -170,6 +185,14 @@ public:
     // returned true; the value is stable from that point on.
     std::string failDetail() const { return mFailDetail; }
 
+    // Source-format observation, available after the source has reached
+    // State::Playing (sourceChannels() returns 0 / sourceFormatName() returns
+    // "Unknown" before that). r10 P5 routing diagnostic reads these so the
+    // mgr-side log can echo "6ch Vorbis from <url>" without the audio module
+    // having to know about LL_WARNS / chat / settings gating itself.
+    int sourceChannels() const { return mSourceChannels; }
+    const char* sourceFormatName() const;
+
     // Update one speaker's 3D position (caller is responsible for indexing
     // the same way it set up the speaker vector in start()).
     void setSpeakerPosition(size_t idx, const LLVector3& pos);
@@ -190,6 +213,29 @@ private:
     {
         LLPositionalStreamMulti* self = nullptr;
         size_t speaker_idx = 0;
+
+        // r10 P4: pre-computed routing decision per the §4.2 compatibility
+        // matrix. Determined once at createUserSounds() — when both
+        // mSourceChannels and mDownmix are settled — so the mixer thread
+        // never re-evaluates the matrix.
+        enum class OpKind
+        {
+            Silent,    // zero-fill (ch:LFE/SL/SR on 1ch / 2ch source)
+            Track,     // direct read of mRing track[op_track]
+            StereoSum, // (track0 + track1)/2 — ch:M/C on 2ch source
+            Bs775,     // mix6chToMono(op_role) — ch:L/R/M on 6ch source
+        };
+        OpKind op_kind = OpKind::Silent;
+        int op_track = 0;
+        LLMultichannelDownmix::MixRole op_role
+            = LLMultichannelDownmix::MixRole::L;
+
+        // r10 P3: scratch for the 6ch raw-read → BS.775 mono path. Sized
+        // at createUserSounds() to kReaderChunkFrames × 6 floats when
+        // op_kind is Bs775; left empty otherwise. Only ever accessed by
+        // the FMOD mixer thread for this one speaker, so no
+        // synchronisation is needed.
+        std::vector<F32> raw_scratch;
     };
 
     struct SpeakerRuntime
@@ -212,7 +258,21 @@ private:
     bool createUserSounds();
     bool startUserChannels();
     void applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos, F32 range);
+
+    // r10 P7 (§4.5.2 r11 hook point): bring up one speaker's FMOD::Channel —
+    // playSound (paused), priority pin, 3D attributes, volume, and the
+    // explicit Channel::set3DLevel(1.0f) that r11 will flip to 0.0f when
+    // Steam Audio takes over the binaural pan. Centralising the whole
+    // per-speaker bring-up here keeps the takeover edit a single-function
+    // change rather than a hunt across startUserChannels(). Returns false
+    // if any FMOD call fails; the caller is expected to abort the start.
+    bool makeChannelForBinding(size_t i);
     size_t pumpSource();
+
+    // r10 P4: resolve §4.2 compat matrix into a SpeakerCallback::OpKind +
+    // parameters for one speaker, given the current mSourceChannels and
+    // mDownmix. Called once per speaker at createUserSounds() time.
+    void resolveReadOp(SpeakerCallback& cb, Channel ch) const;
 
     void startDecodeThread();
     void stopDecodeThread();
@@ -223,17 +283,24 @@ private:
     int mSourceChannels;       // 1, 2, or (r9) 6
     int mSourceBytesPerSample; // 2 for PCM16, 4 for PCMFLOAT
     bool mSourceIsFloat;
+    // r10 P5: codec type captured at getFormat() time. Used by the mgr-side
+    // routing diagnostic log to print a human-readable codec name. Reset to
+    // FMOD_SOUND_TYPE_UNKNOWN by releaseAll() so a stale value never bleeds
+    // into a later open of a different URL.
+    FMOD_SOUND_TYPE mSourceType;
 
     // r9: populated at format detection when mSourceChannels == 6. The ring
     // is still allocated with n_tracks = 2 — pumpSource() converts each 6ch
     // frame to interleaved L/R via mDownmix before writing.
     LLMultichannelDownmix mDownmix;
 
-    // Ring is sized at Opening→Buffering with n_tracks = 2 across all source
-    // channel counts. Mono sources duplicate the sample into both tracks at
-    // write time so ch=L/R speakers each see the full mono signal; 6ch sources
-    // are downmixed to L/R via mDownmix before writeFrames(). r10 may lift
-    // n_tracks for true per-channel routing without touching the reader side.
+    // Ring is sized at Opening→Buffering. r10: 1ch / 2ch sources use a
+    // 2-track ring (mono is duplicated into both tracks at write time so
+    // ch=L/R each see the full signal); 6ch sources use a 6-track ring with
+    // raw per-channel write so ch:FL/FR/C/LFE/SL/SR can read their own track
+    // directly. P3 wired the reader-side BS.775 downmix path for ch:L/R/M on
+    // a 6-track ring (pcmReadCallback → readFramesRaw → mix6chToMono); the
+    // §4.2 compat matrix dispatch for the placement values lands in P4.
     LLMultiTailRing mRing;
 
     std::vector<SpeakerConfig> mSpeakers;
@@ -251,10 +318,6 @@ private:
     std::string mFailDetail;
 
     std::vector<U8> mReadScratch;
-    // r9: F32 scratch used by the 6ch path when the source decodes as PCM16.
-    // Holds up to kChunkFrames × 6 floats; pre-sized at format detection so
-    // the decode thread never allocates on the audio path.
-    std::vector<F32> mDownmixInputScratch;
 
     std::thread mDecodeThread;
     std::atomic<bool> mDecodeStop;
@@ -266,6 +329,14 @@ private:
     // manager via isFailed() with acquire ordering.
     int mReadFailStreak = 0;
     F64 mLastReadFailLogTime = 0.0;
+
+    // r10.x: when the upstream Icecast source dies, FMOD's HTTP source can
+    // return OK with 0 bytes — no error to count toward mReadFailStreak,
+    // and the stream stays zero-filling forever. Time-stamp the start of a
+    // sustained zero-byte run so we can flip to Failed after a threshold
+    // and let the manager's reconnect cascade rebuild us. Reset on any
+    // successful (non-zero) read.
+    F64 mZeroFillStreakStart = 0.0;
 
     // r8 F6 acceptance instrumentation: count frames the FMOD mixer callback
     // had to zero-fill because the ring drained (decode thread fell behind
@@ -283,9 +354,19 @@ private:
     // r9: chunk granularity for the source → ring conversion loop. Sized so a
     // single chunk fits comfortably in L1 (1024 frames × 6 ch × 4 B = 24 KB).
     static constexpr size_t kPumpChunkFrames = 1024;
+    // r10 P3: chunk size for the reader-side BS.775 downmix. Bounds the per-
+    // SpeakerCallback raw-scratch (1024 frames × 6 ch × 4 B = 24 KB). The
+    // FMOD mixer callback's datalen is bounded by the OPENUSER decodebuffer
+    // (4096 bytes ≈ 1024 mono floats), so a single iteration usually
+    // handles the whole callback; the loop is there for safety.
+    static constexpr size_t kReaderChunkFrames = 1024;
     // ~1s of pumpSource failures (200 Hz pump) before declaring the stream
     // dead. Generous so brief network hiccups don't trip a teardown.
     static constexpr int kMaxReadFailStreak  = 200;
+    // r10.x: how long pumpSource may keep returning OK-with-0-bytes before
+    // we declare the transport dead. Generous to ride out decoder warmup
+    // and brief upstream stalls; mgr's reconnect cascade picks up after.
+    static constexpr F64 kZeroFillStreakLimit = 10.0;
     // r8 F6: skip the first second after Playing transition to discount
     // prebuffer warmup; emit the rolling counter every 10s thereafter.
     static constexpr F64 kUnderrunWarmupSec  = 1.0;

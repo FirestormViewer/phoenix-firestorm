@@ -1,6 +1,6 @@
 /**
  * @file llmultichanneldownmix.cpp
- * @brief 5.1ch → L/R downmix for the distributed-stereo decode worker (r9).
+ * @brief 5.1ch → mono BS.775 downmix for the distributed-stereo reader (r9/r10).
  *
  * $LicenseInfo:firstyear=2026&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -85,13 +85,14 @@ const char* LLMultichannelDownmix::layoutName() const
     return "Unsupported";
 }
 
-void LLMultichannelDownmix::mix6chTo2chLR(const F32* in_6ch, F32* out_2ch, std::size_t frames) const
+void LLMultichannelDownmix::mix6chToMono(const F32* in_6ch, F32* out_mono,
+                                         std::size_t frames, MixRole role) const
 {
     if (mLayout == Layout::Unsupported)
     {
         // Defensive: caller is supposed to gate on isSupported() before
         // entering this path, so reaching here is a programmer error.
-        for (std::size_t i = 0; i < 2 * frames; ++i) out_2ch[i] = 0.f;
+        for (std::size_t i = 0; i < frames; ++i) out_mono[i] = 0.f;
         return;
     }
 
@@ -111,7 +112,11 @@ void LLMultichannelDownmix::mix6chTo2chLR(const F32* in_6ch, F32* out_2ch, std::
         const F32 L = kNormGain * (f[iFL] + kCoefCenter * c + kCoefSurround * f[iSL] + kCoefLfe * lfe);
         const F32 R = kNormGain * (f[iFR] + kCoefCenter * c + kCoefSurround * f[iSR] + kCoefLfe * lfe);
 
-        out_2ch[i * 2 + 0] = L;
-        out_2ch[i * 2 + 1] = R;
+        switch (role)
+        {
+        case MixRole::L:      out_mono[i] = L;             break;
+        case MixRole::R:      out_mono[i] = R;             break;
+        case MixRole::MonoLR: out_mono[i] = (L + R) * 0.5f; break;
+        }
     }
 }
