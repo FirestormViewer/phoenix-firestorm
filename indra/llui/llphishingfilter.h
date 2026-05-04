@@ -40,7 +40,7 @@ public:
 	/**
 	 * @brief Evaluates the risk score of a given URL.
 	 * @param url The URL to evaluate.
-	 * @return A score between 0 and 100, where higher is more suspicious.
+	 * @return A score between 0 and 100+, where higher is more suspicious.
 	 */
 	S32 evaluateURLRisk(const std::string& url) const;
 
@@ -51,10 +51,15 @@ public:
 	 */
 	bool isSuspicious(const std::string& url) const;
 
+	// Scoring components broken out for individual testing
+	S32 getRegexScore(const std::string& hostname) const;
+	S32 getLevenshteinScore(const std::string& hostname) const;
+	S32 getProviderTLDScore(const std::string& hostname, const std::string& domain) const;
+	size_t calculateLevenshteinDistance(const std::string& s1, const std::string& s2) const;
+
 private:
 	std::string getBaseDomain(const std::string& url) const;
 	std::string getHostname(const std::string& url) const;
-	size_t calculateLevenshteinDistance(const std::string& s1, const std::string& s2) const;
 };
 
 #endif // LL_PHISHINGFILTER_H

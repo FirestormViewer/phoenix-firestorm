@@ -59,7 +59,7 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 	std::string host = getHostname(lower_url);
 	std::string domain = getBaseDomain(lower_url);
 
-	// Whitelist check
+	// Whitelist official domains
 	bool is_official_domain = (domain == "secondlife.com" || domain == "lindenlab.com");
 	if (is_official_domain)
 	{
@@ -74,38 +74,93 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 		score += 100;
 	}
 
-	// 1. Regex checks (Base score 100 if matched)
-	static const boost::regex sl_pattern("secon[dl]*d+[e]?[-_ \\.]*(li[fv][e]?|iife)", boost::regex::icase);
-	static const boost::regex mp_pattern("mark[e]?tpl[a]?ce", boost::regex::icase);
+	// Sum scores from modular components
+	score += getRegexScore(host);
+	score += getLevenshteinScore(host);
+	score += getProviderTLDScore(host, domain);
 
-	if (boost::regex_search(host, sl_pattern) || boost::regex_search(host, mp_pattern))
+	return score;
+}
+
+S32 LLPhishingFilter::getRegexScore(const std::string& hostname) const
+{
+	// Regex checks (Base score 100 if matched). This matches the patterns used by the scammers in
+	// early 2026. But of course, regex matches are brittle, so we also do more fuzzy comparisons
+	// below.
+	static const boost::regex sl_pattern("secon[dl]*d+[e]?[-_ \\.]*(l?i+[fv][e]?|iife)", boost::regex::icase);
+	static const boost::regex mp_pattern("mark[e]?t[-_ \\.]*pl[a]?ce", boost::regex::icase);
+
+	if (boost::regex_search(hostname, sl_pattern) || boost::regex_search(hostname, mp_pattern))
 	{
-		score += 100;
+		return 100;
+	}
+	return 0;
+}
+
+S32 LLPhishingFilter::getLevenshteinScore(const std::string& hostname) const
+{
+	S32 score = 0;
+
+	/*
+	 * We calculate a "Similarity Score" based on the Levenshtein distance 
+	 * between the start of the hostname and our official domains.
+	 * 
+	 * The formula is: 100 - (100 * distance / target_length)
+	 * 
+	 * This means:
+	 * - An exact match (if not already whitelisted) gives 100 points.
+	 * - A 1-character typo (e.g., 'secondl1fe') gives ~93 points for a 14-char target.
+	 * - A 2-character typo gives ~86 points.
+	 * 
+	 * We only apply this if the distance is below a specific threshold 
+	 * (roughly 40% of the target string's length). 
+	 * 
+	 * We check three common targets: 'secondlife.com', 'marketplace', 
+	 * and 'maps.secondlife'.
+	 */
+
+	// 1. vs 'secondlife.com' (14 chars)
+	// Threshold 6: allows for significant fuzzy matching but stays safe from common words.
+	std::string target1 = "secondlife.com";
+	if (hostname.length() >= target1.length())
+	{
+		size_t dist = calculateLevenshteinDistance(hostname.substr(0, target1.length()), target1);
+		if (dist < 6)
+		{
+			score += 100 - (S32)((100 * dist) / target1.length());
+		}
 	}
 
-	// 2. Levenshtein distance checks on hostname (+50 each)
-	// First 14 characters vs 'secondlife.com'
-	std::string host_14 = host.substr(0, 14);
-	if (calculateLevenshteinDistance(host_14, "secondlife.com") < 5)
+	// 2. vs 'marketplace' (11 chars)
+	// Threshold 4: scaled proportionally (11 * 6 / 14 = 4.7).
+	std::string target2 = "marketplace";
+	if (hostname.length() >= target2.length())
 	{
-		score += 50;
+		size_t dist = calculateLevenshteinDistance(hostname.substr(0, target2.length()), target2);
+		if (dist < 4)
+		{
+			score += 100 - (S32)((100 * dist) / target2.length());
+		}
 	}
 
-	// First 22 characters vs 'marketplace.secondlife'
-	std::string host_22 = host.substr(0, 22);
-	if (calculateLevenshteinDistance(host_22, "marketplace.secondlife") < 5)
+	// 3. vs 'maps.secondlife' (15 chars)
+	// Threshold 6: scaled proportionally (15 * 6 / 14 = 6.4).
+	std::string target3 = "maps.secondlife";
+	if (hostname.length() >= target3.length())
 	{
-		score += 50;
+		size_t dist = calculateLevenshteinDistance(hostname.substr(0, target3.length()), target3);
+		if (dist < 6)
+		{
+			score += 100 - (S32)((100 * dist) / target3.length());
+		}
 	}
 
-	// First 15 characters vs 'maps.secondlife'
-	std::string host_15 = host.substr(0, 15);
-	if (calculateLevenshteinDistance(host_15, "maps.secondlife") < 5)
-	{
-		score += 50;
-	}
+	return score;
+}
 
-	// 3. Suspicious providers/TLDs (+50)
+S32 LLPhishingFilter::getProviderTLDScore(const std::string& hostname, const std::string& domain) const
+{
+	// Suspicious providers/TLDs (+50)
 	static const std::set<std::string> suspicious_domains = {
 		"herokuapp.com", "firebaseapp.com", "github.io", "netlify.app",
 		"vercel.app", "fly.dev", "pages.dev", "ondigitalocean.app",
@@ -121,18 +176,17 @@ S32 LLPhishingFilter::evaluateURLRisk(const std::string& url) const
 	bool is_suspicious_base = suspicious_domains.count(domain) > 0;
 	
 	bool is_suspicious_tld = false;
-	size_t dot_pos = host.find_last_of('.');
+	size_t dot_pos = hostname.find_last_of('.');
 	if (dot_pos != std::string::npos)
 	{
-		is_suspicious_tld = suspicious_tlds.count(host.substr(dot_pos + 1)) > 0;
+		is_suspicious_tld = suspicious_tlds.count(hostname.substr(dot_pos + 1)) > 0;
 	}
 
 	if (is_suspicious_base || is_suspicious_tld)
 	{
-		score += 50;
+		return 50;
 	}
-
-	return score;
+	return 0;
 }
 
 bool LLPhishingFilter::isSuspicious(const std::string& url) const
