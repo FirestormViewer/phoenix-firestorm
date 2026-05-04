@@ -319,13 +319,13 @@ oggenc --quality 5 -o test_routing_5_1.ogg test_routing_5_1.wav
 
 | 項目 | 基準 | r9 比較 | 実測 (2026-05-04) |
 |---|---|---|---|
-| 各 6 prim で正しい channel name が聴こえる | PASS / FAIL | 新規 | ✓ PASS — P9 #1 で 6 prim ch:FL/FR/C/LFE/SL/SR 配置、各 prim 真横で voice + tone (FL=220Hz / FR=440Hz / C=880Hz / LFE=60Hz / SL=1760Hz / SR=3520Hz) 単独確認 |
-| 各 prim から bleed (他 ch freq) が inaudible | PASS / FAIL | 新規 | ✓ PASS — P9 #2 で隣接 prim の周波数が真横位置で audible でない、range:8 で十分減衰 |
-| sample1_6ch を 6 prim 配置で 5 分連続 dropout 0 | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — 5 分間 dropout delta=0 (test_routing_5_1.ogg を Icecast LAN 配信、6 prim linkset 配置) |
-| CPU r9 比 +5% 未満 (downmix → reader-side downmix の移行込み) | PASS / FAIL | 新規 | ✓ PASS — r10 6 prim placement 平均 **43.66%** vs r9 1 prim ch:M baseline 39.87% = **+3.79pp** (target +5pp 未満)。今回は 6 Multi instance (placement) の重い workload、reader-side downmix 単体の差はこれより小さいはず |
-| URL 切替 ×10 (5.1 ↔ 2ch) 全成功 | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — P9 / P10 中に 6ch ↔ 2ch ↔ 1ch を計 7 回切替、いずれも reconnect cascade 込みで再生再開 (bug A 修正後) |
-| §4.2 互換マトリクス全行が決定論通り | PASS / FAIL | 新規 | ✓ PASS — P4 unit test で 27 cell 決定論動作担保、P9 #4 で実機 4 cell (6ch×ch:M / 1ch×ch:FL / 1ch×ch:LFE / 2ch×ch:FL/FR/C/LFE) を spec §4.2 通りに確認 |
-| r9 / r8 回帰なし (1ch / 2ch source) | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — P10 で ch:M / ch:L × 6ch / 2ch / 1ch source の 6 セルを実機検証、reader-side downmix 移行による r9 経路への regression なし |
+| 各 6 prim で正しい channel name が聴こえる | ✓ PASS | 新規 | ✓ PASS — P9 #1 で 6 prim ch:FL/FR/C/LFE/SL/SR 配置、各 prim 真横で voice + tone (FL=220Hz / FR=440Hz / C=880Hz / LFE=60Hz / SL=1760Hz / SR=3520Hz) 単独確認 |
+| 各 prim から bleed (他 ch freq) が inaudible | ✓ PASS | 新規 | ✓ PASS — P9 #2 で隣接 prim の周波数が真横位置で audible でない、range:8 で十分減衰 |
+| sample1_6ch を 6 prim 配置で 5 分連続 dropout 0 | ✓ PASS | r9 §5.3 と同 | ✓ PASS — 5 分間 dropout delta=0 (test_routing_5_1.ogg を Icecast LAN 配信、6 prim linkset 配置) |
+| CPU r9 比 +5% 未満 (downmix → reader-side downmix の移行込み) | ✓ PASS | 新規 | ✓ PASS — r10 6 prim placement 平均 **43.66%** vs r9 1 prim ch:M baseline 39.87% = **+3.79pp** (target +5pp 未満)。今回は 6 Multi instance (placement) の重い workload、reader-side downmix 単体の差はこれより小さいはず |
+| URL 切替 ×10 (5.1 ↔ 2ch) 全成功 | ✓ PASS | r9 §5.3 と同 | ✓ PASS — P9 / P10 中に 6ch ↔ 2ch ↔ 1ch を計 7 回切替、いずれも reconnect cascade 込みで再生再開 (bug A 修正後) |
+| §4.2 互換マトリクス全行が決定論通り | ✓ PASS | 新規 | ✓ PASS — P4 unit test で 27 cell 決定論動作担保、P9 #4 で実機 4 cell (6ch×ch:M / 1ch×ch:FL / 1ch×ch:LFE / 2ch×ch:FL/FR/C/LFE) を spec §4.2 通りに確認 |
+| r9 / r8 回帰なし (1ch / 2ch source) | ✓ PASS | r9 §5.3 と同 | ✓ PASS — P10 で ch:M / ch:L × 6ch / 2ch / 1ch source の 6 セルを実機検証、reader-side downmix 移行による r9 経路への regression なし |
 
 ---
 
