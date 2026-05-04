@@ -27703,7 +27703,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Stream3DRoutingDiagnostic</key>
     <map>
       <key>Comment</key>
-      <string>AYAstorm r10: When true, emit a per-binding routing diagnostic log line (LL_WARNS Stream3D channel) describing which source channel feeds which speaker prim per the §4.2 compatibility matrix. Throttled by (root, url, observed channel count, prim-set signature) so it fires once per structural change. False (default) keeps the log silent for ordinary listeners; turn on while placing 5.1ch venues.</string>
+      <string>AYAstorm r10.x: When true, emit one chat line per fallback case describing which source channel feeds which speaker prim per the §4.2 compatibility matrix (e.g. "ch:FL prim playing L (source is 2ch)"). Throttled by (root, url, observed channel count, prim-set signature) so it fires once per structural change. False (default) keeps chat silent for ordinary listeners; turn on while placing 5.1ch venues. Bound to the Preferences > Sound checkbox "Show channel routing diagnostics in chat".</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

@@ -268,17 +268,18 @@ private:
         std::string last_diagnostic_key;
     };
 
-    // r10 P5: routing-diagnostic emitter. Called from update() once a
-    // distributed-stereo binding's stream has reached Playing (so the
+    // r10 P5 / r10.x P2: routing-diagnostic emitter. Called from update()
+    // once a distributed-stereo binding's stream has reached Playing (so the
     // observed source channel count is settled). Computes the throttle key
     // (root_id + url + ch_count + prim_set_signature) per spec §4.4.2 and
     // bails out if it matches `b.last_diagnostic_key`. Otherwise it walks the
     // §4.2 compatibility matrix once for the current (source_channels,
-    // speakers) pair, prints the source→prim and prim→source breakdowns to
-    // LL_WARNS("Stream3D"), and stores the new key. Gated globally by the
-    // `Stream3DRoutingDiagnostic` setting (P6) — when false, the key is
-    // still updated so toggling the setting on doesn't reprint a stale
-    // snapshot for a binding that hasn't actually changed since.
+    // speakers) pair and emits one chat line per fallback case via
+    // notifyStream3D (spec §4.4.1). Gated globally by the
+    // `Stream3DRoutingDiagnostic` setting (Preferences > Sound checkbox) —
+    // when false, the key is still updated so toggling the setting on
+    // doesn't replay a stale snapshot for a binding that hasn't actually
+    // changed since.
     void emitRoutingDiagnostic(DistributedStereoBinding& b);
 
     // r8 F4: throttled error notification. Keyed by (prim_id, kind) so the

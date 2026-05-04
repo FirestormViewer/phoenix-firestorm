@@ -50,7 +50,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cstring>
 #include <limits>
 #include <set>
 #include <sstream>
@@ -895,7 +894,7 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
 void LLPositionalStreamMgr::emitRoutingDiagnostic(DistributedStereoBinding& b)
 {
     // Caller is responsible for the "stream alive" gate, but be defensive:
-    // a Failed binding sneaking through here would print a 0ch line.
+    // a Failed binding sneaking through here would emit a 0ch line.
     if (!b.stream || !b.stream->isPlaying()) return;
     const int source_channels = b.stream->sourceChannels();
     if (source_channels <= 0) return;
@@ -919,9 +918,9 @@ void LLPositionalStreamMgr::emitRoutingDiagnostic(DistributedStereoBinding& b)
     if (b.last_diagnostic_key == key) return;
     b.last_diagnostic_key = key;
 
-    // §4.4.3: setting gate. The key is updated above regardless so that
-    // toggling the setting on doesn't dump a stale snapshot for a binding
-    // that hasn't actually changed structure since.
+    // §4.4.3 (r10.x): setting gate. The key is updated above regardless so
+    // that toggling the setting on doesn't dump stale notifications for a
+    // binding that hasn't actually changed structure since last emit.
     if (!gSavedSettings.getBOOL("Stream3DRoutingDiagnostic")) return;
 
     // Per-ch speaker count. r10 receives any of L/R/M/FL/FR/C/LFE/SL/SR
@@ -933,127 +932,87 @@ void LLPositionalStreamMgr::emitRoutingDiagnostic(DistributedStereoBinding& b)
                                  + ch_count[ChannelKind::R]
                                  + ch_count[ChannelKind::M]) > 0;
 
-    // Source-side row order (§4.4 sample). 1ch shows just M; 2ch shows L/R;
-    // 6ch shows the full FL/FR/C/LFE/SL/SR row.
-    std::vector<ChannelKind> source_chs;
-    if (source_channels == 1)
-    {
-        source_chs = { ChannelKind::M };
-    }
-    else if (source_channels == 2)
-    {
-        source_chs = { ChannelKind::L, ChannelKind::R };
-    }
-    else if (source_channels == 6)
-    {
-        source_chs = { ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
-                       ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR };
-    }
+    // §4.4.1 fallback notifications — emit one chat line per case via
+    // notifyStream3D (which prefixes "3D Stream: " automatically). Source
+    // is normative, prim layout is dependent: walk source-side first to
+    // catch missing dedicated prims, then prim-side for compat fallbacks.
 
-    static constexpr ChannelKind kAllChannels[] = {
-        ChannelKind::L, ChannelKind::R, ChannelKind::M,
-        ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
-        ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR,
-    };
-
-    std::ostringstream oss;
-    oss << "[Stream3D] root " << b.root_id
-        << " channel routing for " << source_channels << "ch "
-        << b.stream->sourceFormatName()
-        << " from " << b.url << ":\n";
-
-    oss << "  source channel \xe2\x86\x92 prim\n";
-    for (auto sc : source_chs)
+    // (a) source-side: 6ch source with missing dedicated prim → folded into
+    // the BS.775 downmix, or dropped entirely if no L/R/M prim exists.
+    if (source_channels == 6)
     {
-        const char* name = channelKindLabel(sc);
-        const int direct = ch_count[sc];
-        oss << "    " << name;
-        for (int p = static_cast<int>(std::strlen(name)); p < 4; ++p) oss << ' ';
-        oss << "\xe2\x86\x92 " << direct << " prim";
-        if (direct != 1) oss << "(s)";
-        if (direct > 0)
+        static constexpr ChannelKind kSrc6[] = {
+            ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
+            ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR,
+        };
+        for (auto sc : kSrc6)
         {
-            oss << " \xe2\x9c\x93";
-        }
-        else if (source_channels == 6)
-        {
-            // §4.4.1: 6ch source channel with no dedicated prim — falls into
-            // the BS.775 downmix when there's an L/R/M bucket, otherwise the
-            // channel is silently dropped.
-            oss << "   \xe2\x86\x90 warn: \"" << name;
+            if (ch_count[sc] > 0) continue;
+            const char* name = channelKindLabel(sc);
+            std::ostringstream line;
             if (has_lrm_bucket)
             {
-                oss << " content folded into BS.775 downmix";
-                if (sc == ChannelKind::FL || sc == ChannelKind::FR || sc == ChannelKind::C)
-                {
-                    oss << " on ch:L/R/M prims";
-                }
-                oss << "\"";
+                line << name << " content folded into BS.775 downmix"
+                     << " (source is 6ch, no ch:" << name << " prim)";
             }
             else
             {
-                oss << " content has no destination \xe2\x80\x94 dropped\"";
+                line << name
+                     << " content has no destination \xe2\x80\x94 dropped"
+                     << " (source is 6ch, no ch:L/R/M prim)";
             }
+            notifyStream3D(line.str());
         }
-        oss << "\n";
     }
 
-    oss << "  prim \xe2\x86\x92 source channel\n";
-    for (auto sc : kAllChannels)
+    // (b) prim-side: dedicated 5.1 prim (FL/FR/C/LFE/SL/SR) on 1ch or 2ch
+    // source → compat fallback per §4.2 matrix. ch:L/R/M prims always have
+    // a sensible mapping and are not warned (§4.4.1 row 5 "通知不要").
+    static constexpr ChannelKind kPrim51[] = {
+        ChannelKind::FL, ChannelKind::FR, ChannelKind::C,
+        ChannelKind::LFE, ChannelKind::SL, ChannelKind::SR,
+    };
+    for (auto pc : kPrim51)
     {
-        const int n = ch_count[sc];
-        if (n == 0) continue;
-        oss << "    ch:" << channelKindLabel(sc) << " \xc3\x97 " << n;
-        // §4.2 outcome description. Keep these strings short and grep-able;
-        // they describe what the audio reader will actually do for this
-        // (source_channels, ch) pair as resolved in resolveReadOp().
-        std::string outcome;
-        const bool is_lrm = (sc == ChannelKind::L || sc == ChannelKind::R || sc == ChannelKind::M);
-        const bool is_5_1 = (sc == ChannelKind::FL || sc == ChannelKind::FR
-                             || sc == ChannelKind::C  || sc == ChannelKind::LFE
-                             || sc == ChannelKind::SL || sc == ChannelKind::SR);
-        if (source_channels == 6 && is_lrm)
+        if (ch_count[pc] == 0) continue;
+        if (source_channels == 6) continue; // direct, no warn
+
+        const char* name = channelKindLabel(pc);
+        const char* dest = nullptr;
+        bool silent = false;
+        switch (pc)
         {
-            outcome = " \xe2\x9c\x93 (BS.775 downmix)";
+            case ChannelKind::FL:
+                dest = (source_channels == 2) ? "L" : "M";
+                break;
+            case ChannelKind::FR:
+                dest = (source_channels == 2) ? "R" : "M";
+                break;
+            case ChannelKind::C:
+                dest = "M";
+                break;
+            case ChannelKind::LFE:
+            case ChannelKind::SL:
+            case ChannelKind::SR:
+                silent = true;
+                break;
+            default:
+                break;
         }
-        else if (source_channels == 6 && is_5_1)
+
+        std::ostringstream line;
+        if (silent)
         {
-            outcome = " \xe2\x9c\x93";
-        }
-        else if (source_channels == 2 && sc == ChannelKind::M)
-        {
-            outcome = " \xe2\x9c\x93 (sum-to-mono)";
-        }
-        else if (source_channels == 2
-                 && (sc == ChannelKind::L || sc == ChannelKind::R))
-        {
-            outcome = " \xe2\x9c\x93";
-        }
-        else if (source_channels == 2 && sc == ChannelKind::C)
-        {
-            outcome = " \xe2\x9c\x93 (sum-to-mono fallback)";
-        }
-        else if (source_channels == 2
-                 && (sc == ChannelKind::FL || sc == ChannelKind::FR))
-        {
-            outcome = " \xe2\x9c\x93 (track-direct fallback: FL\xe2\x86\x92L, FR\xe2\x86\x92R)";
-        }
-        else if (source_channels == 1
-                 && (is_lrm || sc == ChannelKind::FL || sc == ChannelKind::FR
-                     || sc == ChannelKind::C))
-        {
-            outcome = " \xe2\x9c\x93 (mono source duplicated)";
+            line << "ch:" << name << " prim silent"
+                 << " (source is " << source_channels << "ch)";
         }
         else
         {
-            // ch:LFE / SL / SR on 1ch or 2ch — silent per §4.2.
-            outcome = std::string(" silent (source is ")
-                      + std::to_string(source_channels) + "ch)";
+            line << "ch:" << name << " prim playing " << dest
+                 << " (source is " << source_channels << "ch)";
         }
-        oss << outcome << "\n";
+        notifyStream3D(line.str());
     }
-
-    LL_WARNS("Stream3D") << oss.str() << LL_ENDL;
 }
 
 void LLPositionalStreamMgr::enqueuePriorityPoll(const LLUUID& id)
