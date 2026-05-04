@@ -258,6 +258,15 @@ private:
     bool createUserSounds();
     bool startUserChannels();
     void applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos, F32 range);
+
+    // r10 P7 (§4.5.2 r11 hook point): bring up one speaker's FMOD::Channel —
+    // playSound (paused), priority pin, 3D attributes, volume, and the
+    // explicit Channel::set3DLevel(1.0f) that r11 will flip to 0.0f when
+    // Steam Audio takes over the binaural pan. Centralising the whole
+    // per-speaker bring-up here keeps the takeover edit a single-function
+    // change rather than a hunt across startUserChannels(). Returns false
+    // if any FMOD call fails; the caller is expected to abort the start.
+    bool makeChannelForBinding(size_t i);
     size_t pumpSource();
 
     // r10 P4: resolve §4.2 compat matrix into a SpeakerCallback::OpKind +
