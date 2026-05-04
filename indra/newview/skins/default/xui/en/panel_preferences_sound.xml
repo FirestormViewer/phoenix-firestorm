@@ -622,6 +622,18 @@
          name="enable_stream3d_check_volume"
          tool_tip="Positional 3D audio streams that prims publish via Description tags. Unlike parcel music, these streams start automatically based on what is in-world."
          width="110"/>
+        <check_box
+         label_text.halign="left"
+         follows="left|top"
+         height="16"
+         control_name="Stream3DRoutingDiagnostic"
+         label="Show channel routing diagnostics in chat"
+         layout="topleft"
+         left="146"
+         top_pad="2"
+         name="stream3d_routing_diagnostic_check"
+         tool_tip="When a 3D Stream's source channel count doesn't match the prim layout (e.g. a 6ch source playing on stereo prims, or a stereo source on a 5.1 placement), show one chat line per fallback case. Useful while placing speakers; turn off in production."
+         width="340"/>
 
         <text
          type="string"
