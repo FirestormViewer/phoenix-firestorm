@@ -3237,6 +3237,23 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
         return false;
     }
 
+    // Self-worn attachments are always at gAgent's position, which is by
+    // definition inside the agent parcel that drives this filter. Skip the
+    // position-check entirely: relying on the attachment drawable's cached
+    // agent-frame position is unsafe right after a TP — mPositionAgent can
+    // briefly hold the old SIM's value while gAgent has already rebound to
+    // the new region, producing a bogus global coordinate that gets locked
+    // into the per-seq cache as "hidden". See
+    // docs/ayastorm-fix-parcel-hide-stale-position.md §3.1 / §4.1.
+    if (vobj->isAttachment())
+    {
+        LLVOAvatar* wearer = vobj->getAvatar();
+        if (wearer && wearer->isSelf())
+        {
+            return false;
+        }
+    }
+
     const bool keep_avatars = sParcelOwnerTagActive
         ? sParcelOwnerTagKeepAvatars
         : sParcelHideKeepAvatars;
@@ -3250,6 +3267,19 @@ bool LLPipeline::shouldHideForOutsideParcel(LLDrawable* drawablep)
     }
 
     if (keep_own && vobj->permYouOwner())
+    {
+        return false;
+    }
+
+    // Defer the verdict (and skip caching) while the object's region is
+    // unresolved. During TP / region transitions LLViewerObject::getPositionGlobal()
+    // falls back to returning getPosition() — a local-frame value cast as
+    // a global coordinate — which lies outside any parcel. Caching that
+    // false-negative for the current sParcelCheckSeq would leave the object
+    // hidden until the next agent-parcel change. See
+    // docs/ayastorm-fix-parcel-hide-stale-position.md §3.2 / §4.2.
+    LLViewerRegion* objRegion = vobj->getRegion();
+    if (!objRegion || !LLWorld::instance().isRegionListed(objRegion))
     {
         return false;
     }
