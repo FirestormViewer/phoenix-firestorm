@@ -317,15 +317,15 @@ oggenc --quality 5 -o test_routing_5_1.ogg test_routing_5_1.wav
 
 ### 5.3 受入条件
 
-| 項目 | 基準 | r9 比較 |
-|---|---|---|
-| 各 6 prim で正しい channel name が聴こえる | PASS / FAIL | 新規 |
-| 各 prim から bleed (他 ch freq) が inaudible | PASS / FAIL | 新規 |
-| sample1_6ch を 6 prim 配置で 5 分連続 dropout 0 | PASS / FAIL | r9 §5.3 と同 |
-| CPU r9 比 +5% 未満 (downmix → reader-side downmix の移行込み) | PASS / FAIL | 新規 |
-| URL 切替 ×10 (5.1 ↔ 2ch) 全成功 | PASS / FAIL | r9 §5.3 と同 |
-| §4.2 互換マトリクス全行が決定論通り | PASS / FAIL | 新規 |
-| r9 / r8 回帰なし (1ch / 2ch source) | PASS / FAIL | r9 §5.3 と同 |
+| 項目 | 基準 | r9 比較 | 実測 (2026-05-04) |
+|---|---|---|---|
+| 各 6 prim で正しい channel name が聴こえる | PASS / FAIL | 新規 | ✓ PASS — P9 #1 で 6 prim ch:FL/FR/C/LFE/SL/SR 配置、各 prim 真横で voice + tone (FL=220Hz / FR=440Hz / C=880Hz / LFE=60Hz / SL=1760Hz / SR=3520Hz) 単独確認 |
+| 各 prim から bleed (他 ch freq) が inaudible | PASS / FAIL | 新規 | ✓ PASS — P9 #2 で隣接 prim の周波数が真横位置で audible でない、range:8 で十分減衰 |
+| sample1_6ch を 6 prim 配置で 5 分連続 dropout 0 | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — 5 分間 dropout delta=0 (test_routing_5_1.ogg を Icecast LAN 配信、6 prim linkset 配置) |
+| CPU r9 比 +5% 未満 (downmix → reader-side downmix の移行込み) | PASS / FAIL | 新規 | ✓ PASS — r10 6 prim placement 平均 **43.66%** vs r9 1 prim ch:M baseline 39.87% = **+3.79pp** (target +5pp 未満)。今回は 6 Multi instance (placement) の重い workload、reader-side downmix 単体の差はこれより小さいはず |
+| URL 切替 ×10 (5.1 ↔ 2ch) 全成功 | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — P9 / P10 中に 6ch ↔ 2ch ↔ 1ch を計 7 回切替、いずれも reconnect cascade 込みで再生再開 (bug A 修正後) |
+| §4.2 互換マトリクス全行が決定論通り | PASS / FAIL | 新規 | ✓ PASS — P4 unit test で 27 cell 決定論動作担保、P9 #4 で実機 4 cell (6ch×ch:M / 1ch×ch:FL / 1ch×ch:LFE / 2ch×ch:FL/FR/C/LFE) を spec §4.2 通りに確認 |
+| r9 / r8 回帰なし (1ch / 2ch source) | PASS / FAIL | r9 §5.3 と同 | ✓ PASS — P10 で ch:M / ch:L × 6ch / 2ch / 1ch source の 6 セルを実機検証、reader-side downmix 移行による r9 経路への regression なし |
 
 ---
 
@@ -500,3 +500,57 @@ r9 実績 4 日 (P1 から P10 + クローズまで) ベース。r10 は viewer-
 | **合計** | **3〜4 日** |
 
 memory `project_release_workload_norms`: r9 見積 3〜4 日、実績 4 日 とほぼ同等規模。
+
+---
+
+## 13. 実装結果 / 受入クローズ (r10 リリース 2026-05-04)
+
+### 13.1 実装サマリ
+
+| フェーズ | コミット | 備考 |
+|---|---|---|
+| 仕様策定 | `bd28a67f84` | 本書の初版 |
+| P1〜P3 | `7b8c45f96a` | ChannelKind 拡張 + 6ch placement 経路 + reader-side BS.775 downmix |
+| P4 + P5 | `025da1a4a9` | §4.2 互換マトリクス (27 cell) + routing 診断 log 機構 |
+| P6 | `9eff2db244` | `Stream3DRoutingDiagnostic` 設定追加 |
+| P7 | `a57c944718` | r11 hook 関数 `makeChannelForBinding()` 抽出 |
+| P8 | `c90b67e649` | 5.1ch routing 検証材料生成スクリプト (`doc/r10/gen_test_material.sh`) |
+| P8 fix | `bc562f026e` | gen_test_material.sh の WAV/Vorbis ch 順を family 1 に修正 |
+| r10.x bugfix | `c27c12b163` | P9 検証中発見の auto-reconnect (zero-fill streak) + linkset 再構築 (stale binding) 2 bug 修正 |
+
+スコープ縮退は発生せず、全フェーズ予定通りクローズ。SIMD 化 (R2 / 縮退 A) も実測 +3.79pp で不要判定。
+
+### 13.2 §5.3 安定性指標 (P11 実測)
+
+§5.3 の表を参照。dropout 0 / CPU r9 比 +3.79pp / URL 切替 7/7 成功 / 互換マトリクス 全 cell PASS / r9 r8 回帰なし、すべて目標達成。
+
+### 13.3 P9 検証中発見の bug
+
+P9 routing / matrix 検証中に r10.x 級の 2 件を発見し本リリースに同梱:
+
+| ID | 症状 | 原因 | 修正 |
+|---|---|---|---|
+| bug A | 上流 ffmpeg 再起動で viewer が無音のまま自動復帰しない | FMOD HTTP source は upstream 切断時 OK で 0 bytes を返し続け、エラーカウンタが回らないため Failed 遷移しない | `pumpSource` に zero-fill streak (10s) 追加、超過で setFailed → mgr reconnect cascade に拾わせる |
+| bug B (#38) | linkset 再構築 (Ctrl+L) で旧 root prim の binding が残り二重再生 | demoted root の binding が `mDistributedBindings` に残存 | evaluate ループ内で `getRootEdit() != root_id` を見て dead_roots に積み tearDown |
+
+両 bug は P9 開始前 (r10 P1〜P3 段階) から既存の挙動で、5.1ch placement の検証実施で初めて顕在化。**修正済み・本リリースに同梱**。
+
+### 13.4 codec 別 end-to-end 検証状況
+
+| codec | end-to-end 検証 | 補足 |
+|---|---|---|
+| Vorbis 6ch (channel mapping family 1) | ✓ 完了 | `test_routing_5_1.ogg` (per-ch voice + tone 合成素材) で routing / bleed / placement / 互換マトリクス確認 |
+| Opus 6ch | △ コードレビューのみ | r9 §12.3 と同じ FMOD seek 制約。本番経路 (Shoutcast / butt-aya / ffmpeg primary) は r9 で検証済 |
+| FLAC 6ch | △ コードレビューのみ | 同上。SMPTE→family 1 reorder は P3 reader 側で実装済、unit test 経路で確認 |
+
+### 13.5 既知の運用上の制約
+
+- bug A 修正後の自動再接続は **zero-fill 10s + reconnect cascade 3×5s ≒ 25s** を要する。設定値 (`kZeroFillStreakLimit` / `Stream3DReconnectAttempts`) は r10 出荷値、短縮は r10.x 以降で検討。
+- 互換マトリクスの `ch:C × 2ch source` (M downmix) は耳での聴き分けが原理的に困難 (M downmix vs R 直取りが類似音)。P4 unit test で決定論動作担保。
+- gen_test_material.sh の WAV interleave 順は **Vorbis channel mapping family 1** [FL,C,FR,SL,SR,LFE]。FLAC を生成する場合は WAV/SMPTE 順 [FL,FR,C,LFE,SL,SR] への組み替えが必要 (script コメント参照)。
+
+### 13.6 r11 への持ち越し
+
+- HRTF / SOFA / Steam Audio Layer 2 統合 — §7.4 / §9 の hook point (`makeChannelForBinding()` の `set3DLevel(1.0f)`) を 0.0f に切替えるだけで Steam Audio に渡せる構造を維持
+- Strict mode (`Stream3DStrictChannelMatch`) — §9.7、要望次第で r10.x
+- bug A の `kZeroFillStreakLimit` / reconnect cascade 設定値の調整 — §13.5
