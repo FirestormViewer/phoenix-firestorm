@@ -925,6 +925,19 @@ void LLPositionalStreamMulti::update()
             setFailed(FailReason::Network, "getFormat failed");
             return;
         }
+        // FMOD reports plugin codecs as UNKNOWN. The AYAstorm Opus codec
+        // populates waveformat.name = "Ogg Opus", which Sound::getName surfaces;
+        // promote that to FMOD_SOUND_TYPE_OPUS so downstream layout / logging
+        // treats it identically to a built-in Opus decoder.
+        if (type == FMOD_SOUND_TYPE_UNKNOWN)
+        {
+            char namebuf[64] = {0};
+            if (mSourceSound->getName(namebuf, sizeof(namebuf)) == FMOD_OK
+                && std::strcmp(namebuf, "Ogg Opus") == 0)
+            {
+                type = FMOD_SOUND_TYPE_OPUS;
+            }
+        }
         float freq = 44100.f;
         int prio = 0;
         if (checkFmod(mSourceSound->getDefaults(&freq, &prio), "Sound::getDefaults"))

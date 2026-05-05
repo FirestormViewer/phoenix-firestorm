@@ -1,17 +1,18 @@
 /**
  * @file fmod_codec_opus.cpp
- * @brief AYAstorm FMOD codec plugin for Ogg Opus (P3.2 mono / stereo).
+ * @brief AYAstorm FMOD codec plugin for Ogg Opus (P4 mono / stereo / multistream).
  *
  * Bundled libfmod ships without an Opus codec. We extend FMOD via the
  * registerCodec() API: libogg handles the Ogg framing, libopus (shipped
  * inside the FMOD SDK staging) handles the per-packet decode.
  *
- * Scope at this stage:
- *   - Channel mapping family 0 (native mono / stereo) only.
+ * Scope:
+ *   - Channel mapping family 0 (native mono / stereo) via opus_decoder.
+ *   - Channel mapping family 1 (Vorbis-compatible 3..8 ch surround) via
+ *     opus_multistream_decoder. Mapping table is parsed from OpusHead.
  *   - PCMFLOAT output at 48 kHz (FMOD resamples downstream as needed).
  *   - Streamed playback: only setposition(0) is accepted (FMOD prebuffer);
  *     real seeking and getlength are not advertised.
- * Multi-stream 5.1 (channel mapping family 1) is deferred to P4.
  */
 
 #include "fmod_codec_opus.h"
@@ -20,6 +21,7 @@
 
 #include <ogg/ogg.h>
 #include <opus/opus.h>
+#include <opus/opus_multistream.h>
 
 #include <algorithm>
 #include <cstdint>
@@ -30,6 +32,7 @@ namespace
 {
     constexpr int kOpusOutputRate      = 48000;
     constexpr int kOpusMaxFrameSamples = 5760;   // 120 ms @ 48 kHz, per channel
+    constexpr int kOpusMaxChannels     = 8;      // family 1 supports up to 8 ch
     constexpr unsigned int kFeedChunkSize = 4096;
     constexpr unsigned int kProbeMaxBytes = 65536;
 
@@ -37,7 +40,10 @@ namespace
     {
         ogg_sync_state   oy{};
         ogg_stream_state os{};
+        // Exactly one of these is non-null after a successful opusOpen:
+        // family 0 uses opus_decoder, family 1 uses opus_multistream_decoder.
         OpusDecoder*     decoder = nullptr;
+        OpusMSDecoder*   ms_decoder = nullptr;
         int              channels = 0;
         int              pre_skip_remaining = 0;
         bool             ogg_sync_init_done = false;
@@ -93,6 +99,11 @@ namespace
         {
             opus_decoder_destroy(state->decoder);
             state->decoder = nullptr;
+        }
+        if (state->ms_decoder)
+        {
+            opus_multistream_decoder_destroy(state->ms_decoder);
+            state->ms_decoder = nullptr;
         }
         if (state->stream_init_done)
         {
@@ -190,24 +201,80 @@ namespace
         std::int16_t output_gain_q8 = static_cast<std::int16_t>(read_u16le(p + 16));
         unsigned char channel_mapping_family = p[18];
 
-        if (channel_mapping_family != 0 || channel_count < 1 || channel_count > 2)
+        if (channel_count < 1 || channel_count > kOpusMaxChannels)
         {
-            // P3 scope: native mono / stereo only. 5.1 lands in P4 via multistream.
             destroy_state(state);
             return FMOD_ERR_FORMAT;
         }
 
         int err = 0;
-        state->decoder = opus_decoder_create(kOpusOutputRate, channel_count, &err);
-        if (!state->decoder || err != OPUS_OK)
+        if (channel_mapping_family == 0)
         {
-            LL_WARNS("FmodOpus") << "opusOpen: opus_decoder_create failed err=" << err << LL_ENDL;
+            // Family 0: native mono / stereo, no mapping table.
+            if (channel_count > 2)
+            {
+                destroy_state(state);
+                return FMOD_ERR_FORMAT;
+            }
+            state->decoder = opus_decoder_create(kOpusOutputRate, channel_count, &err);
+            if (!state->decoder || err != OPUS_OK)
+            {
+                LL_WARNS("FmodOpus") << "opus_decoder_create failed err=" << err << LL_ENDL;
+                destroy_state(state);
+                return FMOD_ERR_FORMAT;
+            }
+            if (output_gain_q8 != 0)
+            {
+                opus_decoder_ctl(state->decoder, OPUS_SET_GAIN(output_gain_q8));
+            }
+        }
+        else if (channel_mapping_family == 1)
+        {
+            // Family 1: Vorbis-compatible mapping. OpusHead extends past the
+            // 19-byte fixed header with stream_count, coupled_count, and a
+            // per-output-channel mapping table.
+            const int kMapHeaderSize = 2;   // stream_count + coupled_count
+            const int needed = 19 + kMapHeaderSize + channel_count;
+            if (first_packet.bytes < needed)
+            {
+                destroy_state(state);
+                return FMOD_ERR_FORMAT;
+            }
+            int stream_count  = p[19];
+            int coupled_count = p[20];
+            const unsigned char* mapping = p + 21;
+            // libopus validates stream_count / coupled_count / mapping itself;
+            // any inconsistency surfaces as a non-OK err below.
+            state->ms_decoder = opus_multistream_decoder_create(
+                kOpusOutputRate,
+                channel_count,
+                stream_count,
+                coupled_count,
+                mapping,
+                &err);
+            if (!state->ms_decoder || err != OPUS_OK)
+            {
+                LL_WARNS("FmodOpus") << "opus_multistream_decoder_create failed err=" << err
+                                      << " ch=" << channel_count
+                                      << " streams=" << stream_count
+                                      << " coupled=" << coupled_count << LL_ENDL;
+                destroy_state(state);
+                return FMOD_ERR_FORMAT;
+            }
+            if (output_gain_q8 != 0)
+            {
+                opus_multistream_decoder_ctl(state->ms_decoder, OPUS_SET_GAIN(output_gain_q8));
+            }
+            LL_INFOS("FmodOpus") << "Opus multistream: ch=" << channel_count
+                                  << " streams=" << stream_count
+                                  << " coupled=" << coupled_count << LL_ENDL;
+        }
+        else
+        {
+            // Family 2 / 3 (ambisonic) deferred — would land alongside HRTF/SOFA
+            // work, not r9 5.1 source receiving.
             destroy_state(state);
             return FMOD_ERR_FORMAT;
-        }
-        if (output_gain_q8 != 0)
-        {
-            opus_decoder_ctl(state->decoder, OPUS_SET_GAIN(output_gain_q8));
         }
 
         state->channels            = channel_count;
@@ -260,12 +327,25 @@ namespace
         }
 
         std::vector<float> tmp(static_cast<size_t>(kOpusMaxFrameSamples) * static_cast<size_t>(state->channels));
-        int frames = opus_decode_float(state->decoder,
+        int frames = 0;
+        if (state->ms_decoder)
+        {
+            frames = opus_multistream_decode_float(state->ms_decoder,
+                                                   packet.packet,
+                                                   static_cast<opus_int32>(packet.bytes),
+                                                   tmp.data(),
+                                                   kOpusMaxFrameSamples,
+                                                   0);
+        }
+        else
+        {
+            frames = opus_decode_float(state->decoder,
                                        packet.packet,
                                        static_cast<opus_int32>(packet.bytes),
                                        tmp.data(),
                                        kOpusMaxFrameSamples,
                                        0);
+        }
         if (frames <= 0)
         {
             LL_WARNS("FmodOpus") << "opus_decode_float -> " << frames
