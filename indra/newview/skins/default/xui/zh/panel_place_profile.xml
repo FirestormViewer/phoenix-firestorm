@@ -15,6 +15,7 @@
 	<string name="group_owned_text" value="（由群組所擁有）" />
 	<string name="price_text" value="L$" />
 	<string name="area_text" value="平方公尺" />
+	<string name="information_text" value="[AREA]平方公尺 | 🚶 [TRAFFIC]" />
 	<string name="all_residents_text" value="全部居民" />
 	<string name="group_text" value="群組" />
 	<string name="can_resell">
