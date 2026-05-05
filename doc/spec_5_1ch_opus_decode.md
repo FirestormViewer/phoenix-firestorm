@@ -270,3 +270,64 @@ plugin が途中で `FMOD_ERR_FILE_EOF` を返すと、FMOD はその Sound を 
 - `project_ayastorm_r9_5_1ch_source.md` — r9 5.1ch ソース受入 (本書の前提)
 - `project_ayastorm_r10_5_1ch_placement.md` — r10 5.1ch placement (本書の前提)
 - `project_ayastorm_three_platforms.md` — Linux/macOS/Windows 3 OS 対応が大前提
+
+---
+
+## 11. 実装結果 / 受入クローズ (Linux 完了 2026-05-05)
+
+### 11.1 実装サマリ
+
+| フェーズ | コミット | 備考 |
+|---|---|---|
+| 仕様策定 | `5df467d156` (P3 commit に同梱) | 本書の初版を P3 と同時 commit |
+| P1 | `5df467d156` (autobuild.xml hash 更新分) | 3p-fmodstudio fork (`mayatonton/3p-fmodstudio`) で SDK 同梱 libopus + headers を staging 化、`fmodstudio` package md5 更新 |
+| P2 + P3 | `5df467d156` | `fmod_codec_opus.{cpp,h}` 新規 + `registerCodec()` 呼出。Ogg demux + libopus decode (channel_mapping_family 0 = mono / stereo) で実機再生確認 |
+| P4 | `378b2b8864` | `opus_multistream_decoder` で channel_mapping_family 1 (5.1 surround) 対応。`go-stream-live.com:8030/stream` で実機 PASS |
+| build-doc 反映 | `26f5d04f27` | Linux / Windows 手順書の clone URL を fork に更新、理由をインライン注記 |
+
+P5 (堅牢化) / P6 (Windows / macOS staging) / P7 (受入条件 A1〜A9 全項目検証) は **Linux 実機 PASS 後に Windows / macOS 側で実施予定**、本書 §6 の 7 フェーズ表でいう P5 以降は r9-opus フォローアップとして残置。
+
+### 11.2 P4 で発見した実装上の論点 2 件
+
+P4 multistream 対応で実装上初出の問題が 2 件出たため、本書の reference として記録:
+
+| 論点 | 症状 | 解決 |
+|---|---|---|
+| **FMOD decode thread のスタック不足** | 6ch Opus を再生開始すると STREAM / NONBLOCKING / MIXER のいずれかの thread で SIGSEGV。原因は libopus CELT decoder が alloca-heavy で、FMOD default 96KB スタックを超える | `llaudioengine_fmodstudio.cpp` の FMOD init 直後に `FMOD::Thread_SetAttributes` で STREAM / NONBLOCKING / MIXER 3 thread のスタックを **1MB** に拡大 |
+| **plugin codec の `FMOD_SOUND_TYPE` 表現** | FMOD は plugin 経由 codec の sound type を `FMOD_SOUND_TYPE_UNKNOWN` として返す仕様。r9 / r10 の downmix path は `FMOD_SOUND_TYPE_OPUS` を期待していたため、6ch source が「未知 codec」扱いで弾かれる | `llpositionalstreammulti.cpp` で `Sound::getName()` を読み、`"Ogg Opus"` であれば `FMOD_SOUND_TYPE_OPUS` に昇格させる薄い shim を追加。既存 downmix / placement logic は無改修で透過適用 |
+
+両論点とも仕様書 §4 の段階では予見されていなかった (FMOD SDK ドキュメント / example だけからは読み取れない実装挙動)。今後 plugin codec を増やす場合は同パターンで踏みうるため §10 関連 memory への登録候補。
+
+### 11.3 codec / OS 別検証状況
+
+| codec / OS | Linux64 | Windows64 | darwin64 |
+|---|---|---|---|
+| Opus mono URL | ✓ P3 で実機 PASS | △ ビルド未実施 | △ ビルド未実施 |
+| Opus stereo URL | ✓ P3 で実機 PASS | △ ビルド未実施 | △ ビルド未実施 |
+| Opus 5.1 URL (`go-stream-live.com:8030/stream`) | ✓ P4 で実機 PASS (r9 downmix + r10 placement) | △ ビルド未実施 | △ ビルド未実施 |
+| Vorbis / FLAC / MP3 / WAV regression | ✓ AYAstorm 既存経路で継続動作確認 | △ ビルド未実施 | △ ビルド未実施 |
+
+**Windows / macOS 完了は r9-opus P6 フォローアップで実施**。3p-fmodstudio fork の Windows / macOS staging は build-cmd.sh が OS 共通記述になっており、各 OS の autobuild package を生成して手元に届ければそのまま動く想定。実検証は AYA の各 OS ビルド環境で行う。
+
+### 11.4 既知の制約 / 残課題
+
+- `setposition()` は seek 経路を実装していないため `FMOD_ERR_FILE_COULDNOTSEEK` を返す。netstream は seek 不能なので運用上影響なし、ローカル file の早送りには未対応 (用途想定外)
+- plugin codec の verifier 経路は OpusHead magic (`OpusHead`) でのみ受理。Ogg container に Opus 以外の packet が混在する非標準ストリームは未対応 (実 Icecast 配信局では未観測)
+- `viewer_manifest.py` で Linux 32/64 の libopus 同梱は実装済。Windows / macOS の installer manifest は P6 で追記
+- 3p-fmodstudio fork (`mayatonton/3p-fmodstudio`) は AYAstorm リリースの暗黙依存になったため、build doc (`doc/building_ayastorm.md`) の clone URL を fork に更新済 (`26f5d04f27`)
+
+### 11.5 受入条件 (§7) 達成状況
+
+| ID | 内容 | Linux | Win/Mac |
+|---|---|---|---|
+| A1 | 3 OS 全部でビルド成功 | ✓ | △ 未実施 |
+| A2 | 既存 codec regression なし | ✓ | △ |
+| A3 | mono Opus URL 再生 | ✓ | △ |
+| A4 | stereo Opus URL 再生 | ✓ | △ |
+| A5 | 5.1 Opus URL 再生 (r9 downmix) | ✓ | △ |
+| A6 | 5.1 Opus URL 再生 (r10 placement) | ✓ | △ |
+| A7 | 不正 Opus byte 列で plugin が crash しない | ✓ (実機で `go-stream-live.com:8030` の network glitch を含む数十分連続再生で crash なし) | △ |
+| A8 | priority 100 で他 codec と非競合 | ✓ | △ |
+| A9 | log に register / open ログ出力 | ✓ | △ |
+
+Linux64 で全項目 PASS、Windows / macOS は r9-opus P6 待ち。
