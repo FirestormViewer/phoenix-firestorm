@@ -377,11 +377,22 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
 
     {
+        // Register below every FMOD built-in codec so the built-ins win first
+        // for any non-Opus content. opusOpen() consumes bytes from the source
+        // during its Ogg sync probe; on a non-seekable HTTP stream those bytes
+        // can't be replayed, so a built-in codec that runs after Opus gets a
+        // truncated head and fails with FMOD_ERR_FILE_COULDNOTSEEK (this broke
+        // Parcel Music + 3D Stream HTTP MP3 the moment r9-opus shipped).
+        //
+        // Per FMOD staff (qa.fmod.com/t/18597), built-in priorities top out at
+        // USER=2600 in 2.02.06 (MPEG=2400). 10000 leaves comfortable headroom
+        // for future additions while staying numerically tame.
+        constexpr unsigned int kOpusCodecPriority = 10000;
         unsigned int opus_codec_handle = 0;
-        FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOpus(), &opus_codec_handle, 100);
+        FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOpus(), &opus_codec_handle, kOpusCodecPriority);
         if (codec_result == FMOD_OK)
         {
-            LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec registered (handle=" << opus_codec_handle << ")" << LL_ENDL;
+            LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec registered (handle=" << opus_codec_handle << ", priority=" << kOpusCodecPriority << ")" << LL_ENDL;
         }
         else
         {
