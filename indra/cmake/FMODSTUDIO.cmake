@@ -41,9 +41,20 @@ if (USE_FMODSTUDIO)
       libfmod.so
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
-    target_link_libraries(ll::fmodstudio INTERFACE ${FMOD_LIBRARY})
+    # libopus ships inside the fmodstudio package (via 3p-fmodstudio's
+    # build-cmd.sh staging the SDK's FSBank libopus). It backs the AYAstorm
+    # FMOD codec plugin that adds Opus decode support that libfmod itself
+    # lacks.
+    find_library(OPUS_LIBRARY
+      NAMES
+      opus.lib
+      libopus.dylib
+      libopus.so
+      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
-    target_include_directories( ll::fmodstudio SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/fmodstudio)
+    target_link_libraries(ll::fmodstudio INTERFACE ${FMOD_LIBRARY} ${OPUS_LIBRARY})
+
+    target_include_directories( ll::fmodstudio SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/fmodstudio ${LIBS_PREBUILT_DIR}/include)
   endif (FMODSTUDIO_LIBRARY AND FMODSTUDIO_INCLUDE_DIR)
 else()
   set( USE_FMODSTUDIO "OFF")
