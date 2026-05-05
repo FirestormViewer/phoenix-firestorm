@@ -1706,6 +1706,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                     ):
                             print("debug: adding {} to dylibs for fmodstudio".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                    # libopus.dylib backs the AYAstorm FMOD Opus codec plugin
+                    # (libfmod doesn't decode Opus). FMOD ships only one
+                    # variant; pull from relpkgdir for both debug and release.
+                    dylibs += path_optional(os.path.join(relpkgdir, "libopus.dylib"), "libopus.dylib")
 
                 print(f"debug: dylibs = {dylibs}")
 
