@@ -122,14 +122,14 @@ public:
     virtual ~LLAvatarIconCtrl();
 
 // [SL:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-    /*virtual*/ bool handleToolTip(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleToolTip(S32 x, S32 y, MASK mask) override;
 // [/SL:KB]
 
     void draw() override;
-    virtual void setValue(const LLSD& value);
+    virtual void setValue(const LLSD& value) override;
 
     // LLAvatarPropertiesProcessor observer trigger
-    virtual void processProperties(void* data, EAvatarProcessorType type);
+    virtual void processProperties(void* data, EAvatarProcessorType type) override;
 
     const LLUUID&       getAvatarId() const { return mAvatarId; }
     const std::string&  getFullName() const { return mFullName; }

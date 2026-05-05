@@ -4,7 +4,9 @@ import tarfile
 
 class FSViewerManifest:
     def fs_installer_basename(self):
-        if self.fs_is_avx2():
+        if self.args.get('platform') == 'darwin':
+            opt_string = "arm64"
+        elif self.fs_is_avx2():
             opt_string = "AVX2"
         else:
             opt_string = "LEGACY"

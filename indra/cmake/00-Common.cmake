@@ -214,6 +214,17 @@ if (DARWIN)
   # Ensure debug symbols are always generated
   add_compile_options(-g --debug) # --debug is a clang synonym for -g that bypasses cmake behaviors
 
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    add_compile_options(
+      -ffile-prefix-map=${CMAKE_SOURCE_DIR}=.
+      -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.
+      -fdebug-prefix-map=${CMAKE_SOURCE_DIR}=.
+      -ffile-prefix-map=${CMAKE_BINARY_DIR}=build
+      -fmacro-prefix-map=${CMAKE_BINARY_DIR}=build
+      -fdebug-prefix-map=${CMAKE_BINARY_DIR}=build
+      )
+  endif()
+
   # Silence GL deprecation warnings
   add_compile_definitions(GL_SILENCE_DEPRECATION=1)
 
@@ -241,4 +252,3 @@ if (LINUX OR DARWIN)
   add_compile_options(${GCC_WARNINGS})
   add_compile_options(-m${ADDRESS_SIZE})
 endif (LINUX OR DARWIN)
-

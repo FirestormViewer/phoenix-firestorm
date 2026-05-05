@@ -444,7 +444,10 @@ fi
 if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     echo "Versioning..."
     pushd ..
-    if [ -d .git ]
+    if [ -n "${AUTOBUILD_BUILD_ID}" ]
+    then
+        buildVer=${AUTOBUILD_BUILD_ID}
+    elif git rev-parse --is-inside-work-tree >/dev/null 2>&1
     then
         buildVer=`git rev-list --count HEAD`
     else
