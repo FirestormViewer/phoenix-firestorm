@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llpreviewnotecard.h"
+#include "llnotecard.h"
 
 #include "llinventory.h"
 
@@ -60,6 +61,7 @@
 #include "lllineeditor.h"
 #include "lluictrlfactory.h"
 #include "llviewerassetupload.h"
+#include "lluistring.h"
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 #include "llfloatersearchreplace.h"
@@ -125,6 +127,14 @@ bool LLPreviewNotecard::postBuild()
 
     mEditBtn = getChild<LLButton>("Edit");
     mEditBtn->setCommitCallback(boost::bind(&LLPreviewNotecard::openInExternalEditor, this));
+	
+	// Byte counter
+	mByteCounter = getChild<LLTextBox>("byte_counter");
+	if (mByteCounter)
+	{
+		mByteCounterTemplate = mByteCounter->getText();
+	}
+	mEditor->setKeystrokeCallback([this](LLTextEditor*) { mByteCounterDirty = true; });
 
     // <FS:Ansariel> FIRE-13969: Search button
     getChild<LLButton>("Search")->setClickedCallback(boost::bind(&LLPreviewNotecard::onSearchButtonClicked, this));
@@ -156,6 +166,36 @@ bool LLPreviewNotecard::saveItem()
     return saveIfNeeded(item);
 }
 
+// Byte counter
+// - Neremyn
+void LLPreviewNotecard::updateByteCounter()
+{
+    if (!mEditor || !mByteCounter) return;
+
+    std::string text = mEditor->getText();
+    size_t bytes = text.size(); // Assumes UTF-8 encoding where size() == bytes
+
+    const size_t MAX_BYTES = LLNotecard::MAX_SIZE;
+	
+	auto getColorForByteCount = [MAX_BYTES, bytes]() -> LLColor4
+	{
+		if (bytes >= MAX_BYTES)
+			return LLColor4::red;
+		
+		if (bytes > (MAX_BYTES * 8 / 10))
+			return LLColor4::yellow;
+		
+		return LLColor4::white;
+	};
+	mByteCounter->setColor(getColorForByteCount()); 
+
+    LLUIString ui_text(mByteCounterTemplate);
+    ui_text.setArg("[BYTES]", std::to_string(bytes));
+    ui_text.setArg("[MAX]", std::to_string(MAX_BYTES));
+
+    mByteCounter->setText(ui_text.getString());
+}
+
 void LLPreviewNotecard::setEnabled(bool enabled)
 {
     if (mEditor)
@@ -182,7 +222,11 @@ void LLPreviewNotecard::draw()
     bool changed = !mEditor->isPristine();
 
     mSaveBtn->setEnabled(changed && getEnabled());
-
+	if (mByteCounterDirty) // Byte counter
+	{
+		updateByteCounter();
+		mByteCounterDirty = false;
+	}
     LLPreview::draw();
 }
 

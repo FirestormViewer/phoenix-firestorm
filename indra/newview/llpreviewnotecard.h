@@ -99,6 +99,9 @@ protected:
     void updateTitleButtons() override;
     void loadAsset() override;
     bool saveIfNeeded(LLInventoryItem* copyitem = NULL, bool sync = true);
+	
+	// Byte counter
+	void updateByteCounter();
 
     void deleteNotecard();
 
@@ -137,6 +140,11 @@ protected:
     LLButton* mEditBtn = nullptr;
     LLButton* mDeleteBtn = nullptr;
     LLUICtrl* mLockBtn = nullptr;
+
+	// Byte counter
+	LLTextBox* mByteCounter = nullptr;
+	std::string mByteCounterTemplate;
+	bool mByteCounterDirty = true;
 
     LLUUID mAssetID;
 

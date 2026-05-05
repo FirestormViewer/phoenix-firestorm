@@ -106,6 +106,16 @@
      name="Edit"
      top="332"
      width="100" />
+	<text
+		name="byte_counter"
+		layout="topleft"
+		left="150"   
+		top="336"   
+		height="16"
+		width="200"
+		follows="left|bottom"
+		initial_value="Bytes: [BYTES] / [MAX]"
+	/>
     <button
      follows="right|bottom"
      height="22"
