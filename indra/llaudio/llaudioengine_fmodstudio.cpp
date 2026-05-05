@@ -39,6 +39,7 @@
 
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
+#include "fmod_codec_opus.h"
 #include "lldir.h"
 #include "llapr.h"
 
@@ -357,6 +358,19 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     }
 
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
+
+    {
+        unsigned int opus_codec_handle = 0;
+        FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOpus(), &opus_codec_handle, 100);
+        if (codec_result == FMOD_OK)
+        {
+            LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec registered (handle=" << opus_codec_handle << ")" << LL_ENDL;
+        }
+        else
+        {
+            LL_WARNS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec register failed: " << FMOD_ErrorString(codec_result) << LL_ENDL;
+        }
+    }
 
     FMOD_ADVANCEDSETTINGS settings_dump = { };
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer

@@ -35,6 +35,7 @@ if (TARGET ll::fmodstudio)
          llpositionalstreamstereo.cpp
          llpositionalstreammulti.cpp
          llmultichanneldownmix.cpp
+         fmod_codec_opus.cpp
          )
 
     list(APPEND llaudio_HEADER_FILES
@@ -45,6 +46,7 @@ if (TARGET ll::fmodstudio)
          llpositionalstreamstereo.h
          llpositionalstreammulti.h
          llmultichanneldownmix.h
+         fmod_codec_opus.h
          )
 endif ()
 
