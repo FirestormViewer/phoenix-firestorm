@@ -59,7 +59,8 @@ https://www.fmod.com で無料アカウントを作成してLinux版 **FMOD Stud
 
 ```bash
 cd ~/work_ayastorm
-git clone https://github.com/FirestormViewer/3p-fmodstudio.git
+# AYAstorm は SDK 同梱の libopus を staging する fork を使う (Opus 5.1 surround 対応のため)
+git clone https://github.com/mayatonton/3p-fmodstudio.git
 cp ~/ダウンロード/fmodstudioapi20307linux.tar.gz ~/work_ayastorm/3p-fmodstudio/
 cd ~/work_ayastorm/3p-fmodstudio
 autobuild build -A 64 --all
@@ -184,7 +185,8 @@ https://www.fmod.com で無料アカウントを作成してWindows版 **FMOD St
 
 ```cmd
 cd c:\work_ayastorm
-git clone https://github.com/FirestormViewer/3p-fmodstudio.git
+:: AYAstorm は SDK 同梱の libopus を staging する fork を使う (Opus 5.1 surround 対応のため)
+git clone https://github.com/mayatonton/3p-fmodstudio.git
 copy fmodstudioapi20307win-installer.exe c:\work_ayastorm\3p-fmodstudio\
 cd c:\work_ayastorm\3p-fmodstudio
 autobuild build -A 64 --all
