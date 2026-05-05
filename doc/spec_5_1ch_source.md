@@ -550,12 +550,13 @@ R1 / R4 が顕在化した場合の縮退案:
 | codec | end-to-end 検証 | 補足 |
 |---|---|---|
 | Vorbis 6ch | ✓ 完了 | 合成 sine 素材で channel 分離 + 音楽素材 (Danza debajo del sol!) で BS.775 音質確認 |
-| Opus 6ch | △ コードレビューのみ | FMOD parser が seek を要求し Icecast / 単純 HTTP では開けない (`FMOD_ERR_FILE_COULDNOTSEEK`)。本番経路 (Shoutcast / butt-aya / ffmpeg primary の TCP backpressure) では既知の動作実績あり (R1 リスクは現実顕在化せず) |
-| FLAC 6ch | △ コードレビューのみ | Opus と同じ seek 制約。FLAC indices は SMPTE identity (`{0,1,2,3,4,5}`) で実装上自明 |
+| Opus 6ch | ✓ 完了 (r9-opus 補完) | r9 時点では FMOD 同梱 codec に Opus が無く未検証だったが、r9-opus (`doc/spec_5_1ch_opus_decode.md`) で codec plugin を実装し実機 Icecast (`go-stream-live.com:8030/stream`) で 5.1 surround の再生 + 6ch downmix を確認 |
+| FLAC 6ch | △ コードレビューのみ | FMOD parser が seek を要求し Icecast / 単純 HTTP では開けない (`FMOD_ERR_FILE_COULDNOTSEEK`)。FLAC indices は SMPTE identity (`{0,1,2,3,4,5}`) で実装上自明 |
 
 ### 12.4 既知の運用上の制約
 
-- Opus 6ch / FLAC 6ch を **単純 HTTP** (例 `python3 -m http.server`) や **Icecast** で配信すると FMOD parser が `FMOD_ERR_FILE_COULDNOTSEEK` で開けない。本番配信は **Shoutcast 互換 streamer**、もしくは **ffmpeg / butt-aya のプッシュ先** を使うこと。
+- **FLAC 6ch** を **単純 HTTP** (例 `python3 -m http.server`) や **Icecast** で配信すると FMOD parser が `FMOD_ERR_FILE_COULDNOTSEEK` で開けない。本番配信は **Shoutcast 互換 streamer**、もしくは **ffmpeg / butt-aya のプッシュ先** を使うこと。
+- **Opus 6ch** は r9-opus の codec plugin 経由で seek 不要のまま decode できるため、上記 seek 制約は適用されない (単純 HTTP / Icecast でも開ける)。
 - 6ch source の HTTP 切替直後は prebuffer 充填中に 5〜10 秒間 dropout 警告が出ることがある (LAN 環境で 408〜2045 frames/spk/s ≒ 0.8〜4% / 10 秒)。定常運用では消える。
 - §9.4 の butt-aya fork (5.1 GUI 配信ツール) は別 repo で進行、AYAstorm 本体スコープ外。
 
