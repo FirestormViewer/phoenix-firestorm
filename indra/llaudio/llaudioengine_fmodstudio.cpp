@@ -39,6 +39,7 @@
 
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
+#include "fmod_codec_opus.h"
 #include "lldir.h"
 #include "llapr.h"
 
@@ -207,6 +208,23 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
 
     LL_DEBUGS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() initializing FMOD" << LL_ENDL;
 
+    // Multistream Opus decode (5.1 family-1) overflows the small default
+    // stacks (mixer 80 KB, stream 96 KB, nonblocking 112 KB) inside libopus'
+    // alloca-heavy CELT path. Codec callbacks can run on any of these — bump
+    // them to 1 MB before System_Create (must precede any FMOD::System).
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_STREAM,
+                               FMOD_THREAD_AFFINITY_STREAM,
+                               FMOD_THREAD_PRIORITY_STREAM,
+                               1024 * 1024);
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_NONBLOCKING,
+                               FMOD_THREAD_AFFINITY_NONBLOCKING,
+                               FMOD_THREAD_PRIORITY_NONBLOCKING,
+                               1024 * 1024);
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_MIXER,
+                               FMOD_THREAD_AFFINITY_MIXER,
+                               FMOD_THREAD_PRIORITY_MIXER,
+                               1024 * 1024);
+
     result = FMOD::System_Create(&mSystem);
     if (Check_FMOD_Error(result, "FMOD::System_Create"))
         return false;
@@ -357,6 +375,19 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     }
 
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
+
+    {
+        unsigned int opus_codec_handle = 0;
+        FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOpus(), &opus_codec_handle, 100);
+        if (codec_result == FMOD_OK)
+        {
+            LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec registered (handle=" << opus_codec_handle << ")" << LL_ENDL;
+        }
+        else
+        {
+            LL_WARNS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Opus codec register failed: " << FMOD_ErrorString(codec_result) << LL_ENDL;
+        }
+    }
 
     FMOD_ADVANCEDSETTINGS settings_dump = { };
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer

@@ -2422,9 +2422,11 @@ class Linux_i686_Manifest(LinuxManifest):
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")
+                    self.path("libopus.so")
+                    self.path("libopus.so*")
                     pass
                 except:
-                    print("Skipping libfmod.so - not found")
+                    print("Skipping libfmod.so / libopus.so - not found")
                     pass
 
         # Vivox runtimes
@@ -2464,9 +2466,11 @@ class Linux_x86_64_Manifest(LinuxManifest):
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")
+                    self.path("libopus.so")
+                    self.path("libopus.so*")
                     pass
                 except:
-                    print ("Skipping libfmod.so - not found")
+                    print ("Skipping libfmod.so / libopus.so - not found")
                     pass
 
         with self.prefix(dst="bin"):

@@ -105,6 +105,40 @@ Just write the tag below into the **parcel description** and any **AYAstorm visi
 </tr>
 </table>
 
+### オーディオ / Audio / 音频
+
+#### 3D Stream — プリムから音源を 3D 定位再生 / 3D-positional audio streaming from prims / 从图元 3D 定位播放音频流
+
+HTTP オーディオストリーム (SHOUTcast / Icecast / 静的 MP3 / Vorbis / Opus / FLAC) を **プリム位置から 3D 定位再生** する機能です。SL 標準の「パーセル単位 BGM の 2D 再生」と違い、リスナーが動くと音の方向と距離感が実時間で追従します。**ライブ会場の PA / 環境音 / マルチスピーカー会場 / 5.1ch 会場展開** などに使えます。プリムの **Description (説明文) フィールドにタグを書くだけ** で完結し、LSL スクリプトは不要です。
+
+Plays HTTP audio streams (SHOUTcast / Icecast / static MP3 / Vorbis / Opus / FLAC) as **3D-positional audio from prim locations**. Unlike SL's standard parcel-level 2D BGM, sound direction and distance update in real time as the listener moves. Use cases: **live venue PA / ambient audio / multi-speaker venues / 5.1ch venue deployment**. Configure entirely by **writing tags into a prim's Description field** — no LSL script required.
+
+将 HTTP 音频流 (SHOUTcast / Icecast / 静态 MP3 / Vorbis / Opus / FLAC) **以 3D 定位的方式从图元位置播放**。与 SL 标准的"地块级 2D BGM"不同，听者移动时声音的方向感和距离感会实时跟随。**适用于现场演出 PA / 环境音 / 多扬声器会场 / 5.1ch 会场展开** 等用途。仅在图元的 **Description (说明文字) 字段里写标签** 即可完成配置，无需 LSL 脚本。
+
+**最小例 / Minimum example / 最简示例:**
+
+```
+[3dstream:{url:http://example.com/stream.mp3}]
+```
+
+タグを書いたプリムから 3D 定位でストリームが鳴ります。
+The prim with this tag plays the stream as 3D-positional audio.
+写有此标签的图元会以 3D 定位播放该音频流。
+
+**ステレオ / 5.1ch / マルチスピーカー対応 / Stereo, 5.1ch, multi-speaker support / 立体声、5.1ch、多扬声器支持:**
+
+リンクセット内の各プリムに `[3dstream-stereo:{ch:L|R|M|FL|FR|C|LFE|SL|SR}]` を割り当てて、L/R を別プリムに分けたり 5.1ch ソースを 6 プリムに展開できます。詳細・全キー・互換マトリクス・配信側レシピ・トラブルシューティングは下記の言語別ガイドをご覧ください。
+
+Assign `[3dstream-stereo:{ch:L|R|M|FL|FR|C|LFE|SL|SR}]` to prims in a linkset to split L/R across separate prims or deploy a 5.1ch source onto 6 prims. The full reference (all keys, compatibility matrix, broadcaster recipes, troubleshooting) is in the per-language guides below.
+
+为链接组中的各图元分配 `[3dstream-stereo:{ch:L|R|M|FL|FR|C|LFE|SL|SR}]`，可以把 L/R 拆到不同图元，或将 5.1ch 源展开到 6 个图元。完整参考 (全部键、兼容矩阵、推流端配方、故障排查) 请见下方各语言版指南。
+
+**詳細ガイド / Full reference / 完整参考:**
+
+- 🇯🇵 [3D Stream タグ書式ガイド (日本語)](doc/3dstream-tag-guide.ja.md)
+- 🇬🇧 [3D Stream Tag Format Guide (English)](doc/3dstream-tag-guide.en.md)
+- 🇨🇳 [3D Stream 标签格式指南 (简体中文)](doc/3dstream-tag-guide.zh.md)
+
 ### チャット UI / Chat UI / 聊天界面
 
 環境設定 → チャット → Chat Windows タブから設定できます。
