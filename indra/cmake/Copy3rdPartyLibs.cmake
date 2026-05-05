@@ -90,6 +90,8 @@ if(WINDOWS)
         # fmodL is included for logging, only one should be picked by manifest
         #set(release_files ${release_files} fmodL.dll)
         set(release_files ${release_files} fmod.dll)
+        # opus.dll backs the AYAstorm FMOD codec plugin (Opus decode).
+        set(release_files ${release_files} opus.dll)
     endif ()
 
     if (TARGET ll::openal)

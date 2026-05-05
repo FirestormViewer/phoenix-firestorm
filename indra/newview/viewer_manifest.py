@@ -699,6 +699,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
+                # FMOD's libopus, used by AYAstorm's FMOD Opus codec plugin
+                # (libfmod itself doesn't decode Opus).
+                self.path("opus.dll")
 
             # if self.args['openal'] == 'ON':
             if self.args['openal'].lower() == 'on':
