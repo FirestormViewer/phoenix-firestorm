@@ -689,9 +689,6 @@ void LLVoiceClient::setUserPTTState(bool ptt)
 {
     if (ptt)
     {
-        // Nearby chat is muted by moderator, don't toggle PTT
-        if (!mUserPTTState && LLNearbyVoiceModeration::getInstance()->showNotificationIfNeeded())
-            return;
         LLUIUsage::instance().logCommand("Agent.EnableMicrophone");
     }
     mUserPTTState = ptt;
