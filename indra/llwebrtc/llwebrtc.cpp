@@ -863,12 +863,17 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
     {
         mPeerCustomProcessor->setGain(mMute ? 0.0f : mGain);
     }
+
+    // Sequence counter to prevent race conditions from rapid requests to mute/unmute
+    static std::atomic<uint32_t> mute_sequence(0);
+    uint32_t current_sequence = ++mute_sequence;
+
     if (mMute)
     {
         mWorkerThread->PostDelayedTask(
-            [this]
+            [this, current_sequence]
             {
-                if (mDeviceModule)
+                if (mDeviceModule && (current_sequence == mute_sequence.load()))
                 {
                     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
                     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is
@@ -927,9 +932,9 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
     else
     {
         mWorkerThread->PostTask(
-            [this]
+            [this, current_sequence]
             {
-                if (mDeviceModule)
+                if (mDeviceModule && (current_sequence == mute_sequence.load()))
                 {
                     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
                     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is
@@ -1034,6 +1039,8 @@ LLWebRTCPeerConnectionImpl::LLWebRTCPeerConnectionImpl() :
     mPeerConnection(nullptr),
     mMute(MUTE_INITIAL),
     mAnswerReceived(false),
+    mPeerConnectionState(webrtc::PeerConnectionInterface::PeerConnectionState::kNew),
+    mDisconnectCount(0),
     mPendingJobs(0)
 {
 }
@@ -1460,10 +1467,14 @@ void LLWebRTCPeerConnectionImpl::OnIceGatheringChange(webrtc::PeerConnectionInte
     }
 }
 
+static const webrtc::TimeDelta DISCONNECT_RENEGOTIATE_DELAY = webrtc::TimeDelta::Millis(10000);
+
 // Called any time the PeerConnectionState changes.
 void LLWebRTCPeerConnectionImpl::OnConnectionChange(webrtc::PeerConnectionInterface::PeerConnectionState new_state)
 {
     RTC_LOG(LS_ERROR) << __FUNCTION__ << " Peer Connection State Change " << new_state;
+
+    mPeerConnectionState = new_state;
 
     switch (new_state)
     {
@@ -1480,13 +1491,32 @@ void LLWebRTCPeerConnectionImpl::OnConnectionChange(webrtc::PeerConnectionInterf
             break;
         }
         case webrtc::PeerConnectionInterface::PeerConnectionState::kFailed:
-        case webrtc::PeerConnectionInterface::PeerConnectionState::kDisconnected:
         {
             for (auto &observer : mSignalingObserverList)
             {
                 observer->OnRenegotiationNeeded();
             }
-
+            break;
+        }
+        case webrtc::PeerConnectionInterface::PeerConnectionState::kDisconnected:
+        {
+            // Wait 10 seconds before renegotiating in case the connection recovers on its own.
+            // Use a sequence count so that only the most recent disconnect transition can trigger
+            // a renegotiation, avoiding stale delayed tasks from earlier disconnect/reconnect cycles.
+            uint32_t disconnect_count = ++mDisconnectCount;
+            mWebRTCImpl->PostDelayedSignalingTask(
+                [this, disconnect_count]()
+                {
+                    if (disconnect_count == mDisconnectCount
+                        && mPeerConnectionState == webrtc::PeerConnectionInterface::PeerConnectionState::kDisconnected)
+                    {
+                        for (auto &observer : mSignalingObserverList)
+                        {
+                            observer->OnRenegotiationNeeded();
+                        }
+                    }
+                },
+                DISCONNECT_RENEGOTIATE_DELAY);
             break;
         }
         default:
