@@ -27,7 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llpreviewnotecard.h"
-#include "llnotecard.h"
+#include "llnotecard.h" // <FS> Byte counter
 
 #include "llinventory.h"
 
@@ -61,7 +61,7 @@
 #include "lllineeditor.h"
 #include "lluictrlfactory.h"
 #include "llviewerassetupload.h"
-#include "lluistring.h"
+#include "lluistring.h" // <FS> Needed for the Byte Counter
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 #include "llfloatersearchreplace.h"
@@ -79,6 +79,7 @@ LLPreviewNotecard::LLPreviewNotecard(const LLSD& key) //const LLUUID& item_id,
     // <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
     ,mCursorPos(0)
     ,mScrollPos(0)
+    ,mByteCounterTemplate("")  // <FS> Initialize empty for Byte Counter
     // <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
     ,mFontNameChangedCallbackConnection()
     ,mFontSizeChangedCallbackConnection()
@@ -127,14 +128,21 @@ bool LLPreviewNotecard::postBuild()
 
     mEditBtn = getChild<LLButton>("Edit");
     mEditBtn->setCommitCallback(boost::bind(&LLPreviewNotecard::openInExternalEditor, this));
-	
-	// Byte counter
-	mByteCounter = getChild<LLTextBox>("byte_counter");
-	if (mByteCounter)
-	{
-		mByteCounterTemplate = mByteCounter->getText();
-	}
-	mEditor->setKeystrokeCallback([this](LLTextEditor*) { mByteCounterDirty = true; });
+
+    // <FS> Byte counter
+    mByteCounter = getChild<LLTextBox>("byte_counter");
+    if (mByteCounter)
+    {
+        mByteCounterTemplate = mByteCounter->getText();
+        if (mByteCounterTemplate.empty())
+            mByteCounterTemplate = "Bytes: [BYTES] / [MAX]";
+        LLUIString init_text(mByteCounterTemplate);
+        init_text.setArg("[BYTES]", "0");
+        init_text.setArg("[MAX]", std::to_string(LLNotecard::MAX_SIZE));
+        mByteCounter->setText(init_text.getString());
+    }
+    mEditor->setKeystrokeCallback([this](LLTextEditor*) { mByteCounterDirty = true; });
+    // </FS>
 
     // <FS:Ansariel> FIRE-13969: Search button
     getChild<LLButton>("Search")->setClickedCallback(boost::bind(&LLPreviewNotecard::onSearchButtonClicked, this));
@@ -166,28 +174,35 @@ bool LLPreviewNotecard::saveItem()
     return saveIfNeeded(item);
 }
 
-// Byte counter
-// - Neremyn
+// <FS:Neremyn> Byte counter
 void LLPreviewNotecard::updateByteCounter()
 {
     if (!mEditor || !mByteCounter) return;
 
+    mByteCounterDirty = false;
+
+    const size_t MAX_BYTES = LLNotecard::MAX_SIZE;
+
     std::string text = mEditor->getText();
     size_t bytes = text.size(); // Assumes UTF-8 encoding where size() == bytes
 
-    const size_t MAX_BYTES = LLNotecard::MAX_SIZE;
-	
-	auto getColorForByteCount = [MAX_BYTES, bytes]() -> LLColor4
-	{
-		if (bytes >= MAX_BYTES)
-			return LLColor4::red;
-		
-		if (bytes > (MAX_BYTES * 8 / 10))
-			return LLColor4::yellow;
-		
-		return LLColor4::white;
-	};
-	mByteCounter->setColor(getColorForByteCount()); 
+    auto getColorForByteCount = [MAX_BYTES, bytes]() -> LLColor4
+    {
+        if (bytes >= MAX_BYTES)
+            return LLColor4::red;
+
+        if (bytes > (MAX_BYTES * 8 / 10))
+            return LLColor4::yellow;
+
+        return LLColor4::white;
+    };
+    mByteCounter->setColor(getColorForByteCount());
+
+    // Ensure template is valid
+    if (mByteCounterTemplate.empty())
+    {
+        mByteCounterTemplate = "Bytes: [BYTES] / [MAX]";
+    }
 
     LLUIString ui_text(mByteCounterTemplate);
     ui_text.setArg("[BYTES]", std::to_string(bytes));
@@ -195,6 +210,7 @@ void LLPreviewNotecard::updateByteCounter()
 
     mByteCounter->setText(ui_text.getString());
 }
+// </FS>
 
 void LLPreviewNotecard::setEnabled(bool enabled)
 {
@@ -222,11 +238,12 @@ void LLPreviewNotecard::draw()
     bool changed = !mEditor->isPristine();
 
     mSaveBtn->setEnabled(changed && getEnabled());
-	if (mByteCounterDirty) // Byte counter
-	{
-		updateByteCounter();
-		mByteCounterDirty = false;
-	}
+    // <FS> Byte counter
+    if (mByteCounterDirty)
+    {
+        updateByteCounter();
+    }
+    // </FS>
     LLPreview::draw();
 }
 
@@ -497,6 +514,9 @@ void LLPreviewNotecard::onLoadComplete(const LLUUID& asset_uuid,
             preview->setEnabled(modifiable);
             preview->syncExternal();
             preview->mAssetStatus = PREVIEW_ASSET_LOADED;
+            // <FS> Byte counter
+            preview->updateByteCounter();
+            // </FS>
 
             // <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
             preview->mEditor->setCursorPos(preview->mCursorPos);
@@ -946,6 +966,7 @@ bool LLPreviewNotecard::loadNotecardText(const std::string& filename)
     LLStringUtil::replaceTabsWithSpaces(text, LLTextEditor::spacesPerTab());
 
     mEditor->setText(text);
+    mByteCounterDirty = true; // <FS> Byte counter
     delete[] buffer;
 
     return true;
