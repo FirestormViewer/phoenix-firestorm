@@ -13,6 +13,16 @@ on run (volumeName)
 			set theWidth to 340
 			set theHeight to 240
 			set iconSize to 55
+			set appPosition to {50, 90}
+			set applicationsPosition to {200, 90}
+
+			if volumeName starts with "AYAstorm Installer" then
+				set theWidth to 760
+				set theHeight to 460
+				set iconSize to 128
+				set appPosition to {190, 210}
+				set applicationsPosition to {570, 210}
+			end if
 
 			set theBottomRightX to (theXOrigin + theWidth)
 			set theBottomRightY to (theYOrigin + theHeight)
@@ -28,9 +38,9 @@ on run (volumeName)
 				set file_list to every file
 				repeat with i in file_list
 					if the name of i is "Applications" then
-						set the position of i to {200, 90}
+						set the position of i to applicationsPosition
 					else if the name of i ends with ".app" then
-						set the position of i to {50, 90}
+						set the position of i to appPosition
 					end if
 				end repeat
 			-- This close-open hack is nessesary to save positions on 10.6 Snow Leopard
@@ -44,7 +54,9 @@ on run (volumeName)
 				set arrangement to not arranged
 			end tell
 
-			set background picture of opts to file "background.png"
+			try
+				set background picture of opts to file "background.png"
+			end try
 
 			update without registering applications
 			-- Force saving of the size
