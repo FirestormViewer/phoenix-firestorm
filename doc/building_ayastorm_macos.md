@@ -23,7 +23,7 @@ Output example: `Phoenix-FirestormOS-AYAstorm-release_arm64-7-2-4-80834.dmg`
 export WORK="$HOME/work_ayastorm"
 export REPO="$WORK/phoenix-firestorm"
 export FS_BUILD_VARIABLES="$WORK/fs-build-variables/variables"
-export FMOD_REPO="/Users/takayukinoami/Desktop/WorkNOW/Firestorm_Develop/3p-fmodstudio"
+export FMOD_REPO="$WORK/3p-fmodstudio"
 export TARGET_REF="feature/macos-arm64-build-on-latest"
 export AYA_BUILD_ID="80834"
 ```
@@ -73,7 +73,7 @@ FMOD Studio API は FMOD 公式サイトから macOS 版を取得します。FMO
 この作業環境では FMOD package 作成に既存の local clone を使います。
 
 ```bash
-export FMOD_REPO="/Users/takayukinoami/Desktop/WorkNOW/Firestorm_Develop/3p-fmodstudio"
+export FMOD_REPO="$WORK/3p-fmodstudio"
 test -d "$FMOD_REPO/.git"
 git -C "$FMOD_REPO" remote -v
 ```
