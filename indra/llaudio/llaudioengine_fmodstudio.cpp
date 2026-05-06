@@ -374,6 +374,12 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
         Check_FMOD_Error(mSystem->createChannelGroup("Ambient", &mChannelGroups[AUDIO_TYPE_AMBIENT]), "FMOD::System::createChannelGroup");
     }
 
+    // r11 P1: Stream3D speaker bus. Auto-parented to FMOD master so global
+    // volume / mute keep working; r11 phases insert lite-HRTF and venue
+    // reverb DSPs onto this group.
+    Check_FMOD_Error(mSystem->createChannelGroup("Stream3D", &mStream3DGroup),
+                     "FMOD::System::createChannelGroup(Stream3D)");
+
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
 
     {
@@ -552,6 +558,12 @@ void LLAudioEngine_FMODSTUDIO::shutdown()
     LLAudioEngine::shutdown();
 
     LL_INFOS("FMOD") << "LLAudioEngine_FMODSTUDIO::shutdown() closing FMOD Studio" << LL_ENDL;
+    if (mStream3DGroup)
+    {
+        // r11 P1: release the Stream3D bus before tearing down the system.
+        Check_FMOD_Error(mStream3DGroup->release(), "FMOD::ChannelGroup::release(Stream3D)");
+        mStream3DGroup = nullptr;
+    }
     if (mSystem)
     {
         Check_FMOD_Error(mSystem->close(), "FMOD::System::close");

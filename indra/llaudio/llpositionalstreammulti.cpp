@@ -670,17 +670,28 @@ bool LLPositionalStreamMulti::makeChannelForBinding(size_t i)
     // recycle target — symptom is silent speakers whose pcmReadCallback
     // never fires, which then stalls the multi-tail ring writer.
     checkFmod(sr.channel->setPriority(0), "Channel::setPriority(speaker)");
+
+    // r11 P1: route every speaker channel through the dedicated Stream3D
+    // ChannelGroup. This is the single insertion point r11 phases use to
+    // attach lite-HRTF / venue-reverb DSPs without touching world SFX.
+    // Failure is non-fatal — fall back to master so audio is never silent.
+    if (LLAudioEngine_FMODSTUDIO* engine = dynamic_cast<LLAudioEngine_FMODSTUDIO*>(gAudiop))
+    {
+        if (FMOD::ChannelGroup* group = engine->getStream3DGroup())
+        {
+            checkFmod(sr.channel->setChannelGroup(group), "Channel::setChannelGroup(Stream3D)");
+        }
+    }
+
     applyChannelAttributes(sr.channel, mSpeakers[i].position, mSpeakers[i].range);
     checkFmod(sr.channel->setVolume(mVolume * mSpeakers[i].volume),
               "Channel::setVolume(speaker)");
 
-    // r11 hook: Steam Audio takeover. r10 keeps FMOD's built-in 3D panner
-    // fully on (1.0f), so AYAstorm placement uses the same panner the rest
-    // of the world uses. r11 will flip this single line to 0.0f, which
-    // disables FMOD's distance/pan attenuation per channel and hands the
-    // spatialisation off to a Steam Audio DSP inserted upstream of the
-    // mixer — the explicit call here is what makes that takeover a one-line
-    // edit instead of a search-for-FMOD-defaults exercise.
+    // r11 hook: lite-HRTF takeover. r10 keeps FMOD's built-in 3D panner fully
+    // on (1.0f), so AYAstorm placement uses the same panner the rest of the
+    // world uses. r11's LiteHrtfDsp (attached to the Stream3D ChannelGroup
+    // above) will flip this to 0.0f to disable FMOD's per-channel distance /
+    // pan attenuation and let the DSP own ITD + ILD shadow + air absorption.
     checkFmod(sr.channel->set3DLevel(1.0f), "Channel::set3DLevel(speaker)");
     return true;
 }

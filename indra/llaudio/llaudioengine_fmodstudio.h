@@ -78,6 +78,13 @@ public:
 
     LLUUID getSelectedDeviceUUID() const { return mSelectedDeviceUUID; }
 
+    // r11 P1: Dedicated ChannelGroup for AYAstorm 3D stream speaker channels.
+    // Created unconditionally in init() (independent of mEnableProfiler) so the
+    // r11 lite-HRTF / venue-reverb DSPs have a stable insertion point upstream
+    // of the master mixer. Master volume/mute still propagates because this
+    // group is parented to FMOD's master ChannelGroup by default.
+    FMOD::ChannelGroup* getStream3DGroup() const { return mStream3DGroup; }
+
 protected:
     /*virtual*/ LLAudioBuffer *createBuffer(); // Get a free buffer, or flush an existing one if you have to.
     /*virtual*/ LLAudioChannel *createChannel(); // Create a new audio channel.
@@ -91,6 +98,7 @@ protected:
     FMOD_DSP_DESCRIPTION *mWindDSPDesc;
     FMOD::DSP *mWindDSP;
     FMOD::System *mSystem;
+    FMOD::ChannelGroup *mStream3DGroup { nullptr }; // r11 P1
     bool mEnableProfiler;
     U32 mResampleMethod;
 
