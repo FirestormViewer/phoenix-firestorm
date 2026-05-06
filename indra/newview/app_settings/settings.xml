@@ -9896,6 +9896,34 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
     </map>
 
+    <!-- <FS:AYA> Phase 3: Declared here so all SessionSettingsFile modes
+         (settings_firestorm/phoenix/v3/text/hybrid.xml) have the key
+         registered before settings_setup_listeners() runs. Mode-specific
+         overrides may live in the mode XML. -->
+    <key>AYAChatWindowStyle</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat window style: 0=FS V1 (plain text), 1=FS V7 (modern headers), 2=LL Style</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
+    <key>AYALLChatCompactView</key>
+    <map>
+      <key>Comment</key>
+      <string>LL Style chat window: true=Compact View, false=Expanded View (independent from FS PlainTextChatHistory)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <!-- </FS:AYA> -->
+
     <key>PluginInstancesLow</key>
     <map>
       <key>Comment</key>
