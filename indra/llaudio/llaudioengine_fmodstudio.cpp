@@ -377,17 +377,15 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
 
     {
-        // Register below every FMOD built-in codec so the built-ins win first
-        // for any non-Opus content. opusOpen() consumes bytes from the source
-        // during its Ogg sync probe; on a non-seekable HTTP stream those bytes
-        // can't be replayed, so a built-in codec that runs after Opus gets a
-        // truncated head and fails with FMOD_ERR_FILE_COULDNOTSEEK (this broke
-        // Parcel Music + 3D Stream HTTP MP3 the moment r9-opus shipped).
+        // Register before FMOD's built-in Ogg/Vorbis codec. Icecast Ogg Opus
+        // streams can otherwise be claimed by the built-in Ogg path first and
+        // fail with FMOD_ERR_FILE_COULDNOTSEEK before this codec is attempted.
         //
-        // Per FMOD staff (qa.fmod.com/t/18597), built-in priorities top out at
-        // USER=2600 in 2.02.06 (MPEG=2400). 10000 leaves comfortable headroom
-        // for future additions while staying numerically tame.
-        constexpr unsigned int kOpusCodecPriority = 10000;
+        // Non-Opus streams stay safe because opusOpen() now rejects anything
+        // without the Ogg capture pattern after a 4-byte probe, which FMOD's
+        // built-in HTTP codecs tolerate. FMOD codec priority uses 0 as the
+        // highest priority.
+        constexpr unsigned int kOpusCodecPriority = 0;
         unsigned int opus_codec_handle = 0;
         FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOpus(), &opus_codec_handle, kOpusCodecPriority);
         if (codec_result == FMOD_OK)

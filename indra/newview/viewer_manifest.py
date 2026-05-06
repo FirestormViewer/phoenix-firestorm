@@ -1235,6 +1235,66 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         build_data_dict.update({'Bundle Id':self.args['bundleid']})
         return build_data_dict
 
+    def sign_macho_tree(self, app_path):
+        entitlements = self.src_path_of("slplugin.entitlements")
+        nested_apps = []
+        macho_files = []
+
+        for root, dirs, files in os.walk(app_path):
+            for dirname in dirs:
+                if dirname.endswith(".app"):
+                    nested_apps.append(os.path.join(root, dirname))
+
+            for filename in files:
+                path = os.path.join(root, filename)
+                try:
+                    file_info = subprocess.check_output(['file', path]).decode('utf-8', 'ignore')
+                except subprocess.CalledProcessError:
+                    continue
+
+                if 'Mach-O' in file_info:
+                    if ".app/Contents/MacOS/" in path:
+                        continue
+                    macho_files.append(path)
+
+        # Sign leaf Mach-O files first. Some third-party dylibs arrive with
+        # invalid arm64 signatures; dyld kills the app before startup unless
+        # these are replaced before sealing the outer bundle.
+        for path in sorted(macho_files, key=lambda item: item.count(os.sep), reverse=True):
+            self.run_command(['codesign', '--force',
+                              '--options', 'runtime',
+                              '--sign', '-', path])
+
+        for path in sorted(nested_apps, key=lambda item: item.count(os.sep), reverse=True):
+            self.run_command(['codesign', '--force', '--deep',
+                              '--options', 'runtime',
+                              '--entitlements', entitlements,
+                              '--sign', '-', path])
+
+        self.run_command(['codesign', '--force', '--deep',
+                          '--options', 'runtime',
+                          '--entitlements', entitlements,
+                          '--sign', '-', app_path])
+
+    def strip_macho_local_symbols(self, app_path):
+        macho_files = []
+
+        for root, _dirs, files in os.walk(app_path):
+            for filename in files:
+                path = os.path.join(root, filename)
+                try:
+                    file_info = subprocess.check_output(['file', path]).decode('utf-8', 'ignore')
+                except subprocess.CalledProcessError:
+                    continue
+
+                if 'Mach-O' in file_info:
+                    macho_files.append(path)
+
+        # Static archives linked into these Mach-O files can leave absolute
+        # build paths in local symbols. Strip them before signing the bundle.
+        for path in sorted(macho_files, key=lambda item: item.count(os.sep), reverse=True):
+            self.run_command(['strip', '-S', '-x', path])
+
     def is_packaging_viewer(self):
         # darwin requires full app bundle packaging even for debugging.
         return True
@@ -1472,8 +1532,13 @@ class Darwin_x86_64_Manifest(ViewerManifest):
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode
         # script)
-        #self.path(os.path.join(self.args['configuration'], self.channel() + ".app"), dst="")
-        self.path(os.path.join(self.args['configuration'], "Firestorm.app"), dst="")
+        app_basename = os.path.basename(self.args['dest'])
+        app_executable = os.path.splitext(app_basename)[0]
+        # Xcode has already created the bundle at the manifest destination.
+        # Use that concrete bundle name instead of deriving one from the channel,
+        # because AYAstorm's built app is AYAstorm.app while app_name() resolves
+        # to the Firestorm channel variant name.
+        self.path(os.path.join(self.args['configuration'], app_basename), dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -1485,7 +1550,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of("Firestorm") # locate the executable within the bundle.
+                executable = self.dst_path_of(app_executable) # locate the executable within the bundle.
 
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
@@ -1529,7 +1594,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         self.path(libfile)
 
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of(CHANNEL_VENDOR_BASE)
+                executable = self.dst_path_of(app_executable)
                 if self.args.get('bugsplat'):
                     # According to Apple Technical Note TN2206:
                     # https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG207
@@ -1757,7 +1822,13 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command_shell('strip -S %(viewer_binary)r' %
-                            { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
+                            { 'viewer_binary' : self.dst_path_of(os.path.join('Contents', 'MacOS', app_executable))})
+            self.strip_macho_local_symbols(self.args['dest'])
+
+        # Xcode leaves the copied app with only a linker ad-hoc signature on
+        # the main executable. Seal every Mach-O inside the bundle so direct
+        # launch and the DMG copy do not trip macOS page validation.
+        self.sign_macho_tree(self.args['dest'])
 # </FS:Ansariel> construct method VMP trampoline crazy VMP launcher juggling shamelessly replaced with old version
 
     def package_finish(self):
@@ -1766,6 +1837,10 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
         volname=CHANNEL_VENDOR_BASE+" Installer"  # DO NOT CHANGE without understanding comment above
+        volume_icon = None
+        if self.channel_type() == 'ayastorm':
+            volname = "AYAstorm Installer"
+            volume_icon = os.path.join("icons", "ayastorm", "ayastorm_icon.icns")
 
         # <FS:ND> Make sure all our package names look similar 
         #imagename = self.installer_base_name_mac()
@@ -1812,7 +1887,8 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             print ("Trying template directory", dmg_template)
 
             if not os.path.exists (self.src_path_of(dmg_template)):
-                dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
+                dmg_template = os.path.join(
+                    'installers', 'darwin', '%s-release-dmg' % dmg_template_prefix)
                 print ("Not found, trying template directory", dmg_template)
 
             for s,d in list({self.get_dst_prefix():app_name + ".app",
@@ -1833,16 +1909,19 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             # Set up the installer disk image: set icon positions, folder view
             #  options, and icon label colors. This must be done before the
             #  files are hidden.
-            self.run_command(
-                ['osascript',
-                 self.src_path_of("installers/darwin/installer-dmg.applescript"),
-                 volname])
+            try:
+                self.run_command(
+                    ['osascript',
+                     self.src_path_of("installers/darwin/installer-dmg.applescript"),
+                     volname])
+            except ManifestError as err:
+                print("Warning: skipping Finder DMG layout step: " + err.msg, file=sys.stderr)
 
             # <FS:TS> ARGH! osascript clobbers the volume icon file, for no
             #        reason I can find anywhere. So we need to copy it after
             #        running the script to set everything else up.
             print ("Copying volume icon to dmg")
-            self.copy_action(self.src_path_of(os.path.join(dmg_template, "_VolumeIcon.icns")),
+            self.copy_action(self.src_path_of(volume_icon or os.path.join(dmg_template, "_VolumeIcon.icns")),
                 os.path.join(volpath, ".VolumeIcon.icns"))
 
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)

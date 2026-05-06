@@ -34,6 +34,7 @@ namespace
     constexpr int kOpusMaxFrameSamples = 5760;   // 120 ms @ 48 kHz, per channel
     constexpr int kOpusMaxChannels     = 8;      // family 1 supports up to 8 ch
     constexpr unsigned int kFeedChunkSize = 4096;
+    constexpr unsigned int kOggCapturePatternSize = 4;
     constexpr unsigned int kProbeMaxBytes = 65536;
 
     struct OpusCodecState
@@ -131,7 +132,28 @@ namespace
         ogg_page page;
         ogg_packet first_packet;
         bool got_first_packet = false;
-        unsigned int total_probed = 0;
+        unsigned int total_probed = kOggCapturePatternSize;
+
+        // Keep this codec safe at priority 0. FMOD does not rewind
+        // non-seekable HTTP streams after a failed codec probe, so a broad
+        // libogg sync probe breaks MP3/Icecast streams before FMOD's built-in
+        // MPEG codec can see the header. A valid Ogg stream starts with the
+        // Ogg capture pattern; reject everything else after only four bytes.
+        char* capture = ogg_sync_buffer(&state->oy, kOggCapturePatternSize);
+        if (!capture)
+        {
+            destroy_state(state);
+            return FMOD_ERR_FORMAT;
+        }
+        unsigned int bytes_read = 0;
+        FMOD_RESULT read_result = FMOD_CODEC_FILE_READ(codec, capture, kOggCapturePatternSize, &bytes_read);
+        if (read_result != FMOD_OK || bytes_read != kOggCapturePatternSize ||
+            std::memcmp(capture, "OggS", kOggCapturePatternSize) != 0)
+        {
+            destroy_state(state);
+            return FMOD_ERR_FORMAT;
+        }
+        ogg_sync_wrote(&state->oy, static_cast<long>(bytes_read));
 
         while (!got_first_packet)
         {
