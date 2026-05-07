@@ -178,7 +178,7 @@
 		<panel label="General" name="Media Sounds Panel">
 			<slider label="Volumen general" name="System Volume"/>
 			<check_box label="Silenciar al minimizar" name="mute_when_minimized"/>
-			<slider label="Botones" name="UI Volume"/>
+			<slider label="Interfaz" name="UI Volume"/>
 			<slider label="Ambiente" name="Wind Volume"/>
 			<check_box name="collisions_audio_play_btn" tool_tip="Activa/desactiva los sonidos asociados a las colisiones" label="Reproducir sonidos de colisión"/>
 			<slider label="Efectos de sonido" name="SFX Volume"/>

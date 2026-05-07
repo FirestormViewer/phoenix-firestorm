@@ -74,7 +74,7 @@
 	<text name="time_format_textbox">
 		Zeitformat:
 	</text>
-	<combo_box name="time_format_combobox">
+	<combo_box name="time_format_combobox" tool_tip="Diese Einstellung steuert Chat in der Nähe, Poser, Protokoll von Gesprächen, IMs, das Fenster 'Objekte untersuchen', Land-Info, den Zeitplan Regionsneustart, Benachrichtigungen, Umgebung, Gruppenmitteilungen, Landmarken, die Teleport-Liste und Toasts zu Gruppenmitteilungen.">
 		<combo_box.item label="1:00 PM" name="12H"/>
 		<combo_box.item label="13:00" name="24H"/>
 	</combo_box>
@@ -82,7 +82,7 @@
 		(Erfordert Neustart)
 	</text>
 	<text name="time_format_clock_note">
-		Uhrenformat für die obere Leiste unter Benutzerinterface - Top-Leisten.
+		Uhrenformat für die obere Leiste unter [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Benutzerinterface - Top-Leisten].
 	</text>
 
 	<text name="title_afk_text" width="275">
@@ -107,9 +107,9 @@
 		<combo_box.item label="nie" name="item4"/>
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Sitzen wenn abwesend"/>
-	<text name="text_box3">
+	<text name="text_box3" height="30">
 		Nicht-Stören- und Abwesenheitsnachrichten können unter
-Privatsphäre, Automatische Antwort konfiguriert werden.
+[secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privatsphäre / Automatische Antwort] konfiguriert werden.
 	</text>
 	<text_editor name="do_not_disturb_response">
 		log_in_to_change

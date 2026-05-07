@@ -30,6 +30,7 @@
 		</panel>
 		<panel label="Protection" name="ProtectionTab">
 			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>
+			<check_box label="Désactiver les liens entre crochets dans le chat (l'URL reste visible)" name="FSDisableLabeledChatLinks" tool_tip="Lorsqu'activé, les liens entre crochets reçus dans le chat, IM, notices de groupe et textes d'objets venant d'autres résidents ne sont pas réduits en une seule étiquette. L'URL réelle est affichée et cliquable. Aide à limiter le phishing où le texte visible masque une destination différente. Les textes intégrés au viewer (notifications, préférences, etc.) ne sont pas affectés."/>
 			<check_box label="Permettre aux scripts d'afficher la carte (llMapDestination)" name="ScriptsCanShowUI"/>
 			<text name="revokepermissions_txt">Révoquer les permissions :</text>
 			<radio_group name="FSRevokePerms">

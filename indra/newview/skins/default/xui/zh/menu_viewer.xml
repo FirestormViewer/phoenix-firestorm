@@ -88,6 +88,11 @@
 			<menu_item_check label="拒絕傳送邀請和請求" name="Automatically reject teleport offers" />
 			<menu_item_check label="拒絕所有群組邀請" name="Reject all group invites" />
 			<menu_item_check label="拒絕所有好友請求" name="Reject all friendship requests" />
+			<menu label="臨時會議" name="Ad-hoc conferences">
+				<menu_item_check label="全部自動忽略並離開" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="在附近聊天中報告已忽略的會話" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="來自好友的不忽略" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="朋友" name="My Friends" />
 		<menu_item_check label="聯絡人" name="Contacts" />

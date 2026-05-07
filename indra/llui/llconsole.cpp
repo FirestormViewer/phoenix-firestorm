@@ -290,13 +290,13 @@ void LLConsole::draw()
     //}
 
     paragraph_t::reverse_iterator paragraph_it;
-    static LLCachedControl<F32> consoleBackgroundOpacity(*LLUI::getInstance()->mSettingGroups["config"], "ConsoleBackgroundOpacity");
+    static LLUICachedControl<F32> consoleBackgroundOpacity("ConsoleBackgroundOpacity");
     static LLUIColor cbcolor = LLUIColorTable::instance().getColor("ConsoleBackground");
     LLColor4 color = cbcolor.get();
     color.mV[VALPHA] *= llclamp(consoleBackgroundOpacity(), 0.f, 1.f);
 
     F32 line_height = (F32)mFont->getLineHeight();
-    static LLCachedControl<bool> classic_draw_mode(*LLUI::getInstance()->mSettingGroups["config"], "FSConsoleClassicDrawMode");
+    static LLUICachedControl<bool> classic_draw_mode("FSConsoleClassicDrawMode");
 
     if (classic_draw_mode)
     {

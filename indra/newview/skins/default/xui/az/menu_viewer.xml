@@ -94,6 +94,11 @@
 			<menu_item_check label="Teleport təkliflərini rədd etmək" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Bütün qrup dəvətini rədd etmək" name="Reject all group invites"/>
 			<menu_item_check label="Bütün dostluq təkliflərini rədd etmək" name="Reject all friendship requests"/>
+			<menu label="Ad-Hoc konfransları" name="Ad-hoc conferences">
+				<menu_item_check label="Hamısını avtomatik olaraq rədd et və çıx" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Rədd edilənləri Ümumi söhbətə bildir" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Dostlarımdan gələni rədd etmə" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Dostlarım" name="My Friends"/>
 		<menu_item_check label="Əlaqələr" name="Contacts"/>

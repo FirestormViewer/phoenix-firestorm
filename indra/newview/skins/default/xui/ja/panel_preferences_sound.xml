@@ -189,7 +189,7 @@
 		<panel label="サウンド" name="Media Sounds Panel">
 			<slider label="マスターボリューム" name="System Volume"/>
 			<check_box label="最小化時にミュート" name="mute_when_minimized"/>
-			<slider label="ボタン" name="UI Volume"/>
+			<slider label="インターフェース" name="UI Volume"/>
 			<slider label="環境音" name="Wind Volume"/>
 			<check_box name="collisions_audio_play_btn" tool_tip="衝突時のデフォルトのサウンドを聞くには、これをチェックしてください。" label="衝突時の音を再生する"/>
 			<slider label="効果音" name="SFX Volume"/>

@@ -332,7 +332,7 @@ void LGGContactSets::importFromLLSD(const LLSD& data)
             }
             new_set->mNotify = notify;
 
-            bool sort_by_online_status = false;
+            bool sort_by_online_status = true;
             if (set_data.has("sort_by_online_status"))
             {
                 sort_by_online_status = set_data["sort_by_online_status"].asBoolean();
@@ -1032,7 +1032,7 @@ void LGGContactSets::addSet(std::string_view set_name)
         set->mName = set_name;
         set->mColor = getDefaultColor();
         set->mNotify = false;
-        set->mSortByOnlineStatus = false;
+        set->mSortByOnlineStatus = true;
         set->mAutoresponseBusyEnabled = false;
         set->mAutoresponseBusy.clear();
         set->mAutoresponseModeEnabled = false;
