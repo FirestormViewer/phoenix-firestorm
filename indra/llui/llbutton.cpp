@@ -1209,6 +1209,67 @@ bool LLButton::labelIsTruncated() const
     return getCurrentLabel().getString().size() > mLastDrawCharsCount;
 }
 
+// <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+// Helper function to detemine if the text is truncated, based upon the calculations from the Draw method.
+// The above function only works after rendering, and does not work when first loading the button.
+bool LLButton::isLabelTruncated()
+{
+    // let overlay image and text play well together
+    S32 text_left  = mLeftHPad;
+    S32 text_right = getRect().getWidth() - mRightHPad;
+    S32 usable_text_width = getRect().getWidth() - mLeftHPad - mRightHPad;
+
+    // Handle an image overlay taking up the text space.
+    if (mImageOverlay.notNull())
+    {
+        // get max width and height (discard level 0)
+        S32 overlay_width;
+        S32 overlay_height;
+
+        getOverlayImageSize(overlay_width, overlay_height);
+        switch(mImageOverlayAlignment)
+        {
+            case LLFontGL::LEFT:
+                text_left += overlay_width + mImgOverlayLabelSpace;
+                usable_text_width -= overlay_width + mImgOverlayLabelSpace;
+                break;
+            case LLFontGL::RIGHT:
+                text_right -= overlay_width + mImgOverlayLabelSpace;
+                usable_text_width -= overlay_width + mImgOverlayLabelSpace;
+                break;
+        }
+    }
+
+    // Handle the text starting position on the button
+    if (!getCurrentLabel().empty()) // Unselected label assignments
+    {
+        S32 x_offset;
+        switch (mHAlign)
+        {
+            case LLFontGL::RIGHT:
+                x_offset = text_right;
+                break;
+            case LLFontGL::HCENTER:
+                x_offset = text_left + (usable_text_width / 2);
+                break;
+            case LLFontGL::LEFT:
+            default:
+                x_offset = text_left;
+                break;
+        }
+        usable_text_width -= x_offset;
+    }
+
+    // Finally check if the current label's width is great then the usable text width
+    if (mGLFont->getWidth(getCurrentLabel()) > usable_text_width)
+    {
+        return true;
+    }
+
+    return false;
+}
+// </FS:minerjr> [FIRE-36603]
+
 const LLUIString& LLButton::getCurrentLabel() const
 {
     return getToggleState() ? mSelectedLabel : mUnselectedLabel;
