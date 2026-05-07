@@ -1360,7 +1360,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         if (tuple->mButton->isLabelTruncated())
         {
             // Only change the tool tip if it is currently empty.
-            if (tuple->mButton->getToolTip().compare("") == 0)
+            if (tuple->mButton->getToolTip().empty())
             {
                 tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
             }
@@ -1369,7 +1369,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
         {
             // Only change the tool tip if it is currently empty.
-            if (tuple->mPlaceholderText->getToolTip().compare("") == 0)
+            if (tuple->mPlaceholderText->getToolTip().empty())
             {
                 tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
             }
@@ -1947,7 +1947,7 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         if (tuple->mButton->isLabelTruncated())
         {
             // Only change the tool tip if it is currently empty.
-            if (tuple->mButton->getToolTip().compare("") == 0)
+            if (tuple->mButton->getToolTip().empty())
             {
                 tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
             }
@@ -1956,7 +1956,7 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
         {
             // Only change the tool tip if it is currently empty.
-            if (tuple->mPlaceholderText->getToolTip().compare("") == 0)
+            if (tuple->mPlaceholderText->getToolTip().empty())
             {
                 tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
             }

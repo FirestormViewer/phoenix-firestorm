@@ -1212,7 +1212,7 @@ bool LLButton::labelIsTruncated() const
 // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
 // Helper function to detemine if the text is truncated, based upon the calculations from the Draw method.
 // The above function only works after rendering, and does not work when first loading the button.
-bool LLButton::isLabelTruncated()
+bool LLButton::isLabelTruncated() const
 {
     // let overlay image and text play well together
     S32 text_left  = mLeftHPad;
@@ -1223,10 +1223,11 @@ bool LLButton::isLabelTruncated()
     if (mImageOverlay.notNull())
     {
         // get max width and height (discard level 0)
-        S32 overlay_width;
-        S32 overlay_height;
+        S32 overlay_width = mImageOverlay->getWidth();
+        S32 overlay_height = mImageOverlay->getHeight();
 
-        getOverlayImageSize(overlay_width, overlay_height);
+        F32 scale_factor = llmin((F32)getRect().getWidth() / (F32)overlay_width, (F32)getRect().getHeight() / (F32)overlay_height, 1.f);
+        overlay_width    = ll_round((F32)overlay_width * scale_factor);
         switch(mImageOverlayAlignment)
         {
             case LLFontGL::LEFT:

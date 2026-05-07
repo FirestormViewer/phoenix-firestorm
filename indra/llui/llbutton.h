@@ -274,7 +274,7 @@ public:
     bool            labelIsTruncated() const;
     // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
     // The above function only works after rendering, and does not work when not first loading the button.
-    bool            isLabelTruncated();
+    bool            isLabelTruncated() const;
     // </FS:minerjr> [FIRE-36603]
     const LLUIString&   getCurrentLabel() const;
 
