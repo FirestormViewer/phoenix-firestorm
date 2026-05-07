@@ -720,6 +720,19 @@ things in this group. There&apos;s a broad variety of Abilities.
          follows="all"
          layout="topleft" />
 
+        <text
+         type="string"
+         height="125"
+         layout="topleft"
+         follows="left|top"
+         left="5"
+         name="members_not_loaded"
+         visible="false"
+         top_delta="3"
+         width="300">
+             Members are not loaded
+        </text>
+
     </panel>
 
 <!--

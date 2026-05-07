@@ -44,6 +44,10 @@ public:
     bool cleanup() override;
 
     bool reportCrashToBugsplat(void* pExcepInfo) override;
+    bool reportCustomToBugsplat(const std::string& description) override;
+
+    // returns true if other windows were found and are still running.
+    static bool sendShutdownToOtherInstances(const std::wstring& install_dir);
 
 protected:
     bool initWindow() override; // Override to initialize the viewer's window.

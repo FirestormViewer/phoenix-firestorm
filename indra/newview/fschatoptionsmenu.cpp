@@ -99,7 +99,7 @@ bool FSChatOptionsMenu::onMenuItemEnable(const LLSD& userdata, LLUICtrl* source)
     if (option == "typing_chevron")
     {
         FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(source);
-        return (floater && floater->isP2PChat());
+        return (floater && floater->isP2PSessionType());
     }
     else if (option == "show_channel_selection")
     {

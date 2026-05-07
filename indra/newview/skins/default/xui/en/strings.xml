@@ -1522,6 +1522,9 @@ If this message persists, restart your computer.
 		[APP_NAME] appears to have frozen or crashed on the previous run.
 Would you like to send a crash report?
 	</string>
+    <string name="MBFreezeDetected">
+        [APP_NAME] appears to have frozen. If this issue occurs regularly, please contact support at https://support.secondlife.com.
+    </string>
 	<string name="MBAlert">Notification</string>
 	<string name="MBNoDirectX">
 		[APP_NAME] is unable to detect DirectX 9.0b or greater.
@@ -2731,7 +2734,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Flickr_Label">Flickr</string>
   <string name="Command_Gestures_Label">Gestures</string>
   <string name="Command_Grid_Status_Label">Grid status</string>
-  <string name="Command_HowTo_Label">Guidebook</string>
   <string name="Command_Inventory_Label">Inventory</string>
   <string name="Command_Map_Label">Map</string>
   <string name="Command_Marketplace_Label">Marketplace</string>
@@ -2805,7 +2807,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Flickr_Tooltip">Upload to Flickr</string>
   <string name="Command_Gestures_Tooltip">Gestures for your avatar (CTRL+G)</string>
   <string name="Command_Grid_Status_Tooltip">Show current Grid status</string>
-  <string name="Command_HowTo_Tooltip">How to do common tasks</string>
   <string name="Command_Inventory_Tooltip">View and use your belongings (CTRL+I)</string>
   <string name="Command_Map_Tooltip">Map of the world (CTRL+M)</string>
   <string name="Command_Marketplace_Tooltip">Go shopping</string>

@@ -302,7 +302,6 @@
 		<menu_item_call label="Firestormサポートグループに参加" name="firestorm_support_group"/>
 		<menu_item_call label="Firestorm勉強会スケジュール" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestormイベントカレンダー" name="Firestorm Events Calendar"/>
-		<menu_item_call label="ガイドブック" name="How To"/>
 		<menu_item_call label="[CURRENT_GRID]ヘルプ" name="current_grid_help"/>
 		<menu_item_call label="[CURRENT_GRID]について" name="current_grid_about"/>
 		<menu_item_call name="whitelist_folders" label="ホワイトリストアドバイザー"/>

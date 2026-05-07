@@ -5844,9 +5844,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Grid_Status_Label">
 		État du réseau
 	</string>
-	<string name="Command_HowTo_Label">
-		Aide rapide
-	</string>
 	<string name="Command_Inventory_Label">
 		Inventaire
 	</string>
@@ -6050,9 +6047,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Afficher l’état actuel du réseau
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Comment effectuer les opérations courantes
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Afficher et utiliser vos possessions

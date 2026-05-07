@@ -5637,9 +5637,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Grid_Status_Label">
 		グリッド状況
 	</string>
-	<string name="Command_HowTo_Label">
-		ハウツー
-	</string>
 	<string name="Command_Inventory_Label">
 		インベントリ
 	</string>
@@ -5772,9 +5769,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		現在のグリッドステータスを表示します。
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		一般的タスクの実行方法を表示します。
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		インベントリの内容を表示したり使用したりします。

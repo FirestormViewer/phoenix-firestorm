@@ -1596,7 +1596,6 @@ Vous pouvez soit vérifier votre connexion Internet et réessayer dans quelques 
 		Votre personnage va apparaître dans un moment.
 
 Pour marcher, utilisez les flèches de direction.
-Appuyez sur F1 pour obtenir de l&apos;aide ou en savoir plus sur [CURRENT_GRID].
 Choisissez un avatar homme ou femme.
 Vous pourrez revenir sur votre décision plus tard.
 		<usetemplate name="okcancelbuttons" notext="Femme" yestext="Homme"/>

@@ -989,7 +989,9 @@ void recovered_item_link_cb(const LLUUID& item_id, LLWearableType::EType type, L
     if (!holder->isMostRecent())
     {
         LL_WARNS() << "HP " << holder->index() << " skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << LL_ENDL;
-        // runway skip here?
+
+        // If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
+        return;
 
 // [SL:KB] - Appearance-Fixes
         // If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
@@ -1034,7 +1036,6 @@ void recovered_item_cb(const LLUUID& item_id, LLWearableType::EType type, LLView
 {
     if (!holder->isMostRecent())
     {
-        // runway skip here?
         LL_WARNS() << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << LL_ENDL;
 
         // If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
