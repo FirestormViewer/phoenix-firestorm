@@ -104,7 +104,7 @@ bool LLFloaterDirectory::postBuild()
         if (currentDirBrowserPanel)
             currentDirBrowserPanel->openProfile();
         });
-    mDirectoryTabs  = getChild<LLTabContainer>("Directory Tabs");
+    mDirectoryTabs = getChild<LLTabContainer>("Directory Tabs");
     mDirectoryTabs->setCommitCallback([&](LLUICtrl*, const LLSD&) { updateProfileButtonVisibility(); });
 
     if (!mDirectoryTabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
@@ -124,6 +124,9 @@ bool LLFloaterDirectory::postBuild()
 void LLFloaterDirectory::onOpen(const LLSD& key)
 {
     LLFloater::onOpen(key);
+
+    if (auto currentPanel = mDirectoryTabs->getCurrentPanel())
+        currentPanel->focusFirstItem();
 
     if (key.has("tab") && key["tab"].asString() == "groups")
     {
@@ -145,7 +148,7 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
     mLastSearchURL = search_url;
 
     LLPanelDirWeb* panel_dir_web = findChild<LLPanelDirWeb>("panel_dir_web");
-    if (!panel_dir_web || !mDirectoryTabs)
+    if (!panel_dir_web)
     {
         return;
     }
