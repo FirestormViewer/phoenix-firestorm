@@ -154,7 +154,10 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
     const std::string query = key["query"].asString();
     const std::string collection = key.has("collection") ? key["collection"].asString() : "";
 
-    mDirectoryTabs->selectTabByName("panel_dir_web");
+    if (key.has("query"))
+    {
+        mDirectoryTabs->selectTabByName("panel_dir_web");
+    }
     panel_dir_web->navigateToSearchPage(category, query, collection);
 }
 // </FS:PP>
