@@ -129,7 +129,7 @@ namespace
     // MiniDmpSender pointer. As things stand, though, we must define an
     // actual function and store the pointer statically.
     static MiniDmpSender *sBugSplatSender = nullptr;
-    static std::string sBugsplatDesriptionField;
+    static std::string sBugsplatDescriptionField;
 
     bool bugsplatSendLog(UINT nCode, LPVOID lpVal1, LPVOID lpVal2)
     {
@@ -208,7 +208,7 @@ namespace
             //    // Can be set by watchdog or other code that detects a problem
             //    // and wants to add some context to the crash report.
             //    // Will be visible in the BugSplat web UI.
-            //    sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //    sBugSplatSender->setDefaultUserDescription(WCSTR(sBugsplatDescriptionField));
             //    // This type of crash is not nessesarily a crash, or final.
             //    // Prepare for the next one.
             //    sBugsplatDesriptionField.clear();
@@ -1111,7 +1111,7 @@ bool LLAppViewerWin32::reportCustomToBugsplat(const std::string &description)
 #if defined(LL_BUGSPLAT)
     if (sBugSplatSender)
     {
-        sBugsplatDesriptionField = description;
+        sBugsplatDescriptionField = description;
 
         __try
         {
