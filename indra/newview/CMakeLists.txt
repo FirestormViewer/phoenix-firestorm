@@ -2170,7 +2170,6 @@ set(viewer_APPSETTINGS_FILES
     app_settings/std_bump.ini
     #app_settings/toolbars.xml  FS:AO moved to skins
     app_settings/trees.xml
-    app_settings/types_lua_default.xml
     app_settings/viewerart.xml
     app_settings/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg

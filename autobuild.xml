@@ -1640,18 +1640,6 @@
       </map>
       <key>lsl_definitions</key>
       <map>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/lsl-definitions</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2026, Linden Lab</string>
-        <key>description</key>
-        <string>LSL definitions</string>
-        <key>license</key>
-        <string>MIT</string>
-        <key>license_file</key>
-        <string>LICENSES/lsl_definitions.txt</string>
-        <key>name</key>
-        <string>lsl_definitions</string>
         <key>platforms</key>
         <map>
           <key>common</key>
@@ -1659,28 +1647,40 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6e4e3b86f5daf6dc2e7d7b2b59deaaad293b7232</string>
+              <string>9e8a23b240897ca2e98f6700fae3bec46ad0d0f2</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/lsl-definitions/releases/download/v0.4.1/lsl_definitions-0.4.1-common-22871771849.tar.zst</string>
+              <string>https://github.com/secondlife/lsl-definitions/releases/download/v0.6.3/lsl_definitions-0.6.3-common-25336758775.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
-        <key>source_type</key>
-        <string>git</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/lsl_definitions.txt</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2026, Linden Lab</string>
+        <key>version</key>
+        <string>0.6.3</string>
         <key>use_scm_version</key>
         <boolean>true</boolean>
+        <key>name</key>
+        <string>lsl_definitions</string>
         <key>vcs_branch</key>
         <string>refs/tags/v0.4.1</string>
         <key>vcs_revision</key>
         <string>03006fb488cba2bae502e9baed051bfc8d00144d</string>
         <key>vcs_url</key>
         <string>git://github.com/secondlife/lsl-definitions.git</string>
-        <key>version</key>
-        <string>0.4.1</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/lsl-definitions</string>
+        <key>description</key>
+        <string>LSL definitions</string>
+        <key>source_type</key>
+        <string>git</string>
       </map>
       <key>meshoptimizer</key>
       <map>
@@ -2819,16 +2819,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       </map>
       <key>webrtc</key>
       <map>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/3p-webrtc-build</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
-        <key>license</key>
-        <string>MIT</string>
-        <key>license_file</key>
-        <string>LICENSES/webrtc-license.txt</string>
-        <key>name</key>
-        <string>webrtc</string>
         <key>platforms</key>
         <map>
           <key>darwin64</key>
@@ -2874,14 +2864,24 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <string>windows64</string>
           </map>
         </map>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/webrtc-license.txt</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
+        <key>version</key>
+        <string>m137.7151.04.23.22004231636</string>
+        <key>name</key>
+        <string>webrtc</string>
         <key>vcs_branch</key>
         <string>secondlife</string>
         <key>vcs_revision</key>
         <string>d3f62d32bac8694d3c7423c731ae30c113bf6a11</string>
         <key>vcs_url</key>
         <string>https://github.com/secondlife/3p-webrtc-build</string>
-        <key>version</key>
-        <string>m137.7151.04.23.22004231636</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-webrtc-build</string>
       </map>
       <key>xxhash</key>
       <map>
@@ -3155,18 +3155,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       </map>
       <key>websocketpp</key>
       <map>
-        <key>canonical_repo</key>
-        <string>https://github.com/secondlife/3p-websocketpp</string>
-        <key>copyright</key>
-        <string>Copyright (c) 2014, Peter Thorson</string>
-        <key>description</key>
-        <string>WebSocket++ is a C++ header only library for interacting with WebSocket servers and clients.</string>
-        <key>license</key>
-        <string>websocketpp</string>
-        <key>license_file</key>
-        <string>LICENSES/websocketpp.txt</string>
-        <key>name</key>
-        <string>websocketpp</string>
         <key>platforms</key>
         <map>
           <key>common</key>
@@ -3184,14 +3172,26 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <string>common</string>
           </map>
         </map>
+        <key>license</key>
+        <string>websocketpp</string>
+        <key>license_file</key>
+        <string>LICENSES/websocketpp.txt</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2014, Peter Thorson</string>
+        <key>version</key>
+        <string>0.8.2.24525603568</string>
+        <key>name</key>
+        <string>websocketpp</string>
         <key>vcs_branch</key>
         <string>refs/tags/v0.8.2</string>
         <key>vcs_revision</key>
         <string>bdcf1453101976fc4dc26a62c87bc98c12e9c6dc</string>
         <key>vcs_url</key>
         <string>git://github.com/secondlife/3p-websocketpp.git</string>
-        <key>version</key>
-        <string>0.8.2.24525603568</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-websocketpp</string>
+        <key>description</key>
+        <string>WebSocket++ is a C++ header only library for interacting with WebSocket servers and clients.</string>
       </map>
     </map>
     <key>package_description</key>

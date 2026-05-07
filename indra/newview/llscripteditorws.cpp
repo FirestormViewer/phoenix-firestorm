@@ -2,6 +2,9 @@
  * @file llscripteditorws.cpp
  * @brief JSON-RPC 2.0 WebSocket server implementation for external script editor integration
  *
+ * For a full description of the JSON-RPC protocol and all supported methods,
+ * see doc/external-editor-json-rpc.md in the repository root.
+ *
  * $LicenseInfo:firstyear=2025&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2025, Linden Research, Inc.
@@ -73,7 +76,7 @@ LLWebsocketMgr::WSConnection::ptr_t LLScriptEditorWSServer::connectionFactory(LL
 
 void LLScriptEditorWSServer::onStarted()
 {
-    LLSyntaxIdLSL& syntax_id_mgr = LLSyntaxIdLSL::instance();
+    LLSyntaxDefCache& syntax_id_mgr = LLSyntaxDefCache::instance();
     wptr_t that(std::static_pointer_cast<LLScriptEditorWSServer>(shared_from_this()));
 
     mLastSyntaxId = syntax_id_mgr.getSyntaxID();
@@ -272,6 +275,26 @@ void LLScriptEditorWSServer::setupConnectionMethods(LLJSONRPCConnection::ptr_t c
                 }
                 return LLSD();
             });
+        script_connection->registerMethod("language.syntax.cache",
+            [that](const std::string&, const LLSD&, const LLSD& params)
+            {
+                auto server = that.lock();
+                if (server)
+                {
+                    return server->handleSyntaxCacheRequest();
+                }
+                return LLSD();
+            });
+        script_connection->registerMethod("language.syntax.get",
+            [that](const std::string&, const LLSD&, const LLSD& params)
+            {
+                auto server = that.lock();
+                if (server)
+                {
+                    return server->handleSyntaxCacheFileRequest(params);
+                }
+                return LLSD();
+            });
         script_connection->registerMethod("script.subscribe",
             [that, connection_id](const std::string&, const LLSD&, const LLSD& params) -> LLSD
             {
@@ -302,7 +325,7 @@ void LLScriptEditorWSServer::setupConnectionMethods(LLJSONRPCConnection::ptr_t c
 
 void LLScriptEditorWSServer::broadcastLanguageChange()
 {
-    LLUUID syntax_id = LLSyntaxIdLSL::instance().getSyntaxID();
+    LLUUID syntax_id = LLSyntaxDefCache::instance().getSyntaxID();
 
     if (syntax_id != mLastSyntaxId)
     {
@@ -340,12 +363,12 @@ LLSD LLScriptEditorWSServer::handleSyntaxRequest(const LLSD& params) const
     response["id"] = mLastSyntaxId;
     if (category == "defs.lua")
     {
-        response["defs"] = LLSyntaxLua::instance().getTypesXML();
+        response["defs"] = LLSyntaxDefCache::instance().getLuaKeywords();
         response["success"] = response["defs"].isDefined();
     }
     else if (category == "defs.lsl")
     {
-        response["defs"] = LLSyntaxIdLSL::instance().getKeywordsXML();
+        response["defs"] = LLSyntaxDefCache::instance().getLSLKeywords();
         response["success"] = response["defs"].isDefined();
     }
     else
@@ -353,6 +376,71 @@ LLSD LLScriptEditorWSServer::handleSyntaxRequest(const LLSD& params) const
         response["error"] = "Unknown syntax category requested";
         response["success"] = false;
     }
+    return response;
+}
+
+LLSD LLScriptEditorWSServer::handleSyntaxCacheRequest() const
+{
+    LLSD response;
+    // Add array of cached syntax definition files
+    LLSD syntax_files = LLSD::emptyArray();
+    for (const auto& name : LLSyntaxDefCache::instance().getCacheFileNames())
+    {
+        syntax_files.append(name);
+    }
+    response["files"] = syntax_files;
+    response["success"] = true;
+    return response;
+}
+
+LLSD LLScriptEditorWSServer::handleSyntaxCacheFileRequest(const LLSD& params) const
+{
+    std::string filename = params["filename"].asString();
+    bool        as_json  = params["as_json"].asBoolean();
+
+    LLSyntaxDefCache& cache = LLSyntaxDefCache::instance();
+    LLSD              response;
+
+    if (filename.empty())
+    {
+        response["error"] = "No filename specified";
+        response["success"] = false;
+        return response;
+    }
+    if (!cache.hasCacheFile(filename))
+    {
+        response["error"] = "Requested syntax cache file not found";
+        response["success"] = false;
+        return response;
+    }
+    bool success = false;
+    if (as_json)
+    {
+        LLSD file_content   = cache.loadCacheFileAsLLSD(filename);
+        if (file_content.isDefined())
+        {
+            response["content"] = file_content;
+            success = true;
+        }
+        else
+        {
+            response["error"] = "Failed to load and format syntax cache file.";
+        }
+    }
+    else
+    {
+        std::string content = cache.loadCacheFile(filename);
+        if (!content.empty())
+        {
+            response["content"] = content;
+            success = true;
+        }
+        else
+        {
+            response["error"] = "Failed to load syntax cache file";
+        }
+    }
+    response["success"] = success;
     return response;
 }
 
@@ -710,12 +798,13 @@ void LLScriptEditorWSConnection::onOpen()
     languages.append("lsl");
     languages.append("luau");
     handshake["languages"] = languages;
-    handshake["syntax_id"] = LLSyntaxIdLSL::instance().getSyntaxID();
+    handshake["syntax_id"] = LLSyntaxDefCache::instance().getSyntaxID();
 
     // Features object
     LLSD features;
     features["live_sync"]        = true;
     features["compilation"]      = true;
+    features["syntax_cache"]     = true;
     handshake["features"]        = features;
 
     wptr_t that = shared_from_this();

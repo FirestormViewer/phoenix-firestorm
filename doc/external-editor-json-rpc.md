@@ -1,6 +1,6 @@
 # Viewer to External Editor JSON-RPC<br>Message Interfaces Documentation
 
-This document describes all the message interfaces defined in for WebSocket communication between the Second Life viewer and an external editor such as a VSCode extension.
+This document describes all the message interfaces defined for WebSocket communication between the Second Life viewer and an external editor such as a VSCode extension.
 
 ## Table of Contents
 
@@ -15,10 +15,13 @@ This document describes all the message interfaces defined in for WebSocket comm
   - [SyntaxChange](#syntaxchange)
   - [Language Syntax ID Request](#language-syntax-id-request)
   - [Language Syntax Request](#language-syntax-request)
+  - [Language Syntax Cache List](#language-syntax-cache-list)
+  - [Language Syntax Cache Get](#language-syntax-cache-get)
 - [Script Subscription Interfaces](#script-subscription-interfaces)
   - [ScriptSubscribe](#scriptsubscribe)
   - [ScriptSubscribeResponse](#scriptsubscriberesponse)
   - [ScriptUnsubscribe](#scriptunsubscribe)
+  - [ScriptList](#scriptlist)
 - [Compilation Interfaces](#compilation-interfaces)
   - [CompilationError](#compilationerror)
   - [CompilationResult](#compilationresult)
@@ -33,7 +36,7 @@ This document describes all the message interfaces defined in for WebSocket comm
 
 1. **Connection Establishment:**
 
-   - Viewer sends `session.handshake` notification with `SessionHandshake` data
+   - Viewer sends `session.handshake` call with `SessionHandshake` data
    - Extension responds with `SessionHandshakeResponse`
    - Viewer confirms with `session.ok` notification
 
@@ -41,7 +44,7 @@ This document describes all the message interfaces defined in for WebSocket comm
 
    - Extension makes `language.syntax.id` call to get current syntax version
    - Extension makes `language.syntax` calls with different `kind` parameters to get specific language data
-   - Viewer responds with `LanguageInfo` data containing the requested information
+   - Viewer responds with a `LanguageInfo` object containing the requested definitions
 
 3. **Script Subscription Management:**
 
@@ -65,17 +68,23 @@ This document describes all the message interfaces defined in for WebSocket comm
 
 | Method                          | Direction          | Type         | Interface/Parameters       |
 | ------------------------------- | ------------------ | ------------ | -------------------------- |
-| `session.handshake`             | Viewer → Extension | Notification | `SessionHandshake`         |
+| `session.handshake`             | Viewer → Extension | Call         | `SessionHandshake`         |
 | `session.handshake` (response)  | Extension → Viewer | Response     | `SessionHandshakeResponse` |
 | `session.ok`                    | Viewer → Extension | Notification | _(no interface)_           |
 | `session.disconnect`            | Bidirectional      | Notification | `SessionDisconnect`        |
 | `script.subscribe`              | Extension → Viewer | Call         | `ScriptSubscribe`          |
 | `script.subscribe` (response)   | Viewer → Extension | Response     | `ScriptSubscribeResponse`  |
 | `script.unsubscribe`            | Viewer → Extension | Notification | `ScriptUnsubscribe`        |
+| `script.list`                   | Extension → Viewer | Call         | _(no parameters)_          |
+| `script.list` (response)        | Viewer → Extension | Response     | `ScriptList`               |
 | `language.syntax.id`            | Extension → Viewer | Call         | _(no parameters)_          |
 | `language.syntax.id` (response) | Viewer → Extension | Response     | `{ id: string }`           |
 | `language.syntax`               | Extension → Viewer | Call         | `{ kind: string }`         |
 | `language.syntax` (response)    | Viewer → Extension | Response     | `LanguageInfo`             |
+| `language.syntax.cache`            | Extension → Viewer | Call         | _(no parameters)_                    |
+| `language.syntax.cache` (response) | Viewer → Extension | Response     | `SyntaxCacheList`                    |
+| `language.syntax.get`              | Extension → Viewer | Call         | `{ filename: string, as_json?: boolean }` |
+| `language.syntax.get` (response)   | Viewer → Extension | Response     | `SyntaxCacheFile`                    |
 | `language.syntax.change`        | Viewer → Extension | Notification | `SyntaxChange`             |
 | `script.compiled`               | Viewer → Extension | Notification | `CompilationResult`        |
 | `runtime.debug`                 | Viewer → Extension | Notification | `RuntimeDebug`             |
@@ -85,9 +94,9 @@ This document describes all the message interfaces defined in for WebSocket comm
 
 ### SessionHandshake
 
-**JSON-RPC Method:** `session.handshake` (notification from viewer)
+**JSON-RPC Method:** `session.handshake` (call from viewer)
 
-The initial handshake message sent by the viewer to establish a connection.
+The initial handshake call sent by the viewer to establish a session.
 
 ```typescript
 interface SessionHandshake {
@@ -112,10 +121,13 @@ interface SessionHandshake {
 - `viewer_version`: Version string of the viewer
 - `agent_id`: Unique identifier for the user/agent
 - `agent_name`: Human-readable name of the agent
-- `challenge` (optional): Security challenge string for authentication
-- `languages`: Array of supported scripting languages (e.g., ["lsl", "luau"])
-- `syntax_id`: Current active syntax/language identifier
-- `features`: Dictionary of feature flags indicating viewer capabilities
+- `challenge` (optional): Path to a temporary file on the local filesystem containing a UUID. The client must read this file and return the UUID as `challenge_response` to authenticate the connection.
+- `languages`: Array of supported scripting languages (e.g., `["lsl", "luau"]`)
+- `syntax_id`: Current active syntax identifier as a UUID string
+- `features`: Dictionary of feature flags indicating viewer capabilities. Known flags:
+  - `live_sync`: Viewer supports live script synchronisation with the external editor
+  - `compilation`: Viewer will forward compilation results via `script.compiled`
+  - `syntax_cache`: Viewer supports `language.syntax.cache` and `language.syntax.get` for retrieving syntax definition files
 
 ### SessionHandshakeResponse
 
@@ -131,6 +143,8 @@ interface SessionHandshakeResponse {
   challenge_response?: string;
   languages: string[];
   features: { [feature: string]: boolean };
+  script_name?: string;
+  script_language?: string;
 }
 ```
 
@@ -139,15 +153,17 @@ interface SessionHandshakeResponse {
 - `client_name`: Name of the client (VS Code extension)
 - `client_version`: Fixed version "1.0" of the client
 - `protocol_version`: Protocol version the client supports
-- `challenge_response` (optional): Response to the security challenge if provided
+- `challenge_response` (optional): The UUID read from the temporary file identified by the `challenge` field in the handshake. Must be provided if `challenge` was present, otherwise the connection will be closed.
 - `languages`: Array of languages supported by the client
 - `features`: Dictionary of features supported by the client
+- `script_name` (optional): Name of the script currently open in the editor
+- `script_language` (optional): Language of the script currently open in the editor (e.g. `"lsl"`, `"luau"`)
 
 ### Session OK
 
 **JSON-RPC Method:** `session.ok` (notification from viewer)
 
-Confirmation notification sent by the viewer after successful handshake completion. This interface has no defined structure as it appears to be a simple confirmation message.
+Confirmation notification sent by the viewer after successful handshake completion. No parameters are sent with this notification.
 
 ### SessionDisconnect
 
@@ -164,7 +180,12 @@ interface SessionDisconnect {
 
 **Fields:**
 
-- `reason`: Numeric code indicating the reason for disconnection
+- `reason`: Numeric code indicating the reason for disconnection:
+  - `0`: Normal closure
+  - `1`: Editor closed
+  - `2`: Protocol error
+  - `3`: Connection timeout
+  - `4`: Internal server error
 - `message`: Human-readable description of the disconnect reason
 
 ## Language and Syntax Interfaces
@@ -183,7 +204,7 @@ interface SyntaxChange {
 
 **Fields:**
 
-- `id`: Identifier for the new syntax/language
+- `id`: UUID string identifying the new syntax version
 
 ### Language Syntax ID Request
 
@@ -191,63 +212,130 @@ interface SyntaxChange {
 
 Requests the current active language syntax identifier from the viewer. This method takes no parameters.
 
-**Response:** Returns an object with an `id` field containing the current syntax identifier.
+**Response:** Returns `{ id: string }` where `id` is the current syntax version as a UUID string.
 
 ### Language Syntax Request
 
 **JSON-RPC Method:** `language.syntax` (call from extension to viewer)
 
-Requests detailed syntax information for a specific language kind.
+Requests the in-memory keyword definitions for a specific language. These definitions are the deserialized, viewer-processed form of the syntax data for the current region.
 
 **Parameters:**
 
 ```typescript
 {
-  kind: string; // The type of syntax information requested
+  kind: string; // The language whose definitions to retrieve
 }
 ```
 
-**Fields:**
+**Valid `kind` values:**
 
-- `kind`: The type of syntax information to retrieve (e.g., "functions", "constants", "events", "types.luau")
+| Value | Description |
+| ----------- | ----------------------------------------- |
+| `"defs.lsl"` | Returns the LSL keyword definitions |
+| `"defs.lua"` | Returns the Luau keyword definitions |
 
-**Response:** Returns `LanguageInfo` data containing the requested syntax information:
+**Response:**
 
 ```typescript
 interface LanguageInfo {
   id: string;
-  lslDefs?: {
-    controls?: any;
-    types?: any;
-    constants?: { [name: string]: ConstantDef };
-    events?: { [name: string]: FunctionDef };
-    functions?: { [name: string]: FunctionDef };
-  };
-  luaDefs?: {
-    modules?: { [name: string]: TypeDef };
-    classes?: { [name: string]: TypeDef };
-    aliases?: { [name: string]: TypeDef };
-    functions?: { [name: string]: FunctionDef };
-  };
+  defs?: object;    // Present only on success
+  success: boolean;
+  error?: string;   // Present only on failure
 }
 ```
 
 **Response Fields:**
 
-- `id`: Version identifier for the language syntax
-- `lslDefs` (optional): LSL-specific language definitions containing:
-  - `controls` (optional): Control flow and language constructs
-  - `types` (optional): LSL type definitions
-  - `constants` (optional): Object containing constant definitions keyed by constant name
-  - `events` (optional): Object containing event definitions keyed by event name
-  - `functions` (optional): Object containing function definitions keyed by function name
-- `luaDefs` (optional): Lua-specific language definitions containing:
-  - `modules` (optional): Module type definitions keyed by module name
-  - `classes` (optional): Class type definitions keyed by class name
-  - `aliases` (optional): Type alias definitions keyed by alias name
-  - `functions` (optional): Function definitions keyed by function name
+- `id`: The current syntax version identifier
+- `defs` (optional): The keyword definitions object. Only present when `success` is `true`. Structure varies by language.
+- `success`: Whether the definitions were found and returned successfully
+- `error` (optional): Human-readable error description. Only present when `success` is `false`
 
-The specific sections returned depend on the `kind` parameter and the active language context.
+**Error cases:**
+
+- No `kind` parameter supplied: `success: false`, `error: "No syntax category specified"`
+- Unknown `kind` value: `success: false`, `error: "Unknown syntax category requested"`
+
+### Language Syntax Cache List
+
+**JSON-RPC Method:** `language.syntax.cache` (call from extension to viewer)
+
+Requests the list of file names currently held in the `LLSyntaxDefCache`. This provides the extension with the available syntax definition file names that can subsequently be retrieved with `language.syntax.get`. This method takes no parameters.
+
+**Response:**
+
+```typescript
+interface SyntaxCacheList {
+  files: string[];  // Array of file names (e.g. ["lsl_keywords.xml", "slua_definitions.yaml"])
+  success: boolean;
+}
+```
+
+**Response Fields:**
+
+- `files`: Array of file name strings, each of which can be passed as the `filename` parameter to `language.syntax.get`
+- `success`: Whether the request was handled successfully
+
+**Known cache files:**
+
+| File name | Description |
+| -------------------------------- | ---------------------------------------------------- |
+| `builtins.txt`                   | LSL built-in keyword list in plain text format |
+| `lsl_definitions.yaml`           | LSL language definitions in YAML format |
+| `lsl_keywords.xml`               | LSL keyword definitions in LLSD XML format. Used by the viewer's script editor |
+| `lsl_keywords_pretty.xml`        | LSL keyword definitions in formatted LLSD XML format |
+| `secondlife.d.luau`              | Luau type definition file. Used by luau-lsp |
+| `secondlife.docs.json`           | Luau documentation data in JSON format. Used by luau-lsp |
+| `slua_definitions.yaml`          | Luau language definitions in YAML format |
+| `lua_keywords.xml`               | Luau keyword definitions in LLSD XML format. Used by the viewer's script editor |
+| `lua_keywords_pretty.xml`        | Luau keyword definitions in formatted LLSD XML format |
+| `secondlife_selene.yml`          | Luau Selene linter configuration in YAML format |
+
+Not all files may be present in every cache — the actual list returned by `language.syntax.cache` reflects only what is available on the viewer's local filesystem at the time of the request.
+
+### Language Syntax Cache Get
+
+**JSON-RPC Method:** `language.syntax.get` (call from extension to viewer)
+
+Requests the content of a specific file from the syntax definition cache. The file name must be one of the names returned by a prior `language.syntax.cache` call. Content is returned either as a raw text string or as a parsed JSON/LLSD object depending on the `as_json` parameter.
+
+**Parameters:**
+
+```typescript
+{
+  filename: string;   // The file name to retrieve, as returned by language.syntax.cache
+  as_json?: boolean;  // Optional. If true, content is returned as a parsed object rather than raw text
+}
+```
+
+**Fields:**
+
+- `filename`: The file name to retrieve (e.g. `"lsl_keywords.xml"`, `"slua_definitions.yaml"`)
+- `as_json` (optional): When `true`, the file is deserialized and returned as a structured object in `content`. When omitted or `false`, `content` is the raw text of the file.
+
+**Response:**
+
+```typescript
+interface SyntaxCacheFile {
+  content?: string | object;  // Present only on success. String if as_json is false/omitted, object if as_json is true
+  success: boolean;
+  error?: string;             // Present only on failure
+}
+```
+
+**Response Fields:**
+
+- `content`: The file content. Only present when `success` is `true`. Is a raw text string when `as_json` is omitted or `false`; is a parsed object when `as_json` is `true`.
+- `success`: Whether the file was found and read successfully
+- `error` (optional): Human-readable error description. Only present when `success` is `false`
+
+**Error cases:**
+
+- No `filename` parameter supplied: `success: false`, `error: "No filename specified"`
+- Name not found in cache: `success: false`, `error: "Requested syntax cache file not found"`
+- File could not be loaded: `success: false`, `error: "Failed to load syntax cache file"` (or `"Failed to load and format syntax cache file."` when `as_json` is `true`)
 
 ## Script Subscription Interfaces
 
@@ -283,7 +371,6 @@ interface ScriptSubscribeResponse {
   success: boolean;
   status: number;
   object_id?: string;
-  object_name?: string;
   item_id?: string;
   message?: string;
 }
@@ -293,9 +380,14 @@ interface ScriptSubscribeResponse {
 
 - `script_id`: The script identifier that was subscribed to
 - `success`: Whether the subscription was successful
-- `status`: Numeric status code indicating the result
-- `object_id` (optional): The in-world ID of the object containing the script
-- `object_name` (optional): The name of the object containing the script.
+- `status`: Numeric status code indicating the result:
+  - `0`: Success
+  - `1`: Invalid editor — the script editor panel is no longer open
+  - `2`: Invalid subscription — no subscription found for the given `script_id`
+  - `3`: Already subscribed — another connection is already subscribed to this script
+  - `4`: Internal server error
+- `object_id` (optional): The in-world UUID of the object containing the script
+- `item_id` (optional): The inventory item UUID of the script within the object
 - `message` (optional): Additional information about the subscription result
 
 ### ScriptUnsubscribe
@@ -314,6 +406,28 @@ interface ScriptUnsubscribe {
 
 - `script_id`: Unique identifier for the script to unsubscribe from
 
+### ScriptList
+
+**JSON-RPC Method:** `script.list` (call from extension to viewer)
+
+Requests the list of all scripts currently open and tracked by the viewer, along with the viewer's temp directory. This is intended for use by a file watcher tool that needs to discover which script temp files are active without going through the full `script.subscribe` flow. This method takes no parameters.
+
+**Response:**
+
+```typescript
+interface ScriptList {
+  temp_dir: string;
+  script_ids: string[];
+  success: boolean;
+}
+```
+
+**Response Fields:**
+
+- `temp_dir`: The absolute path to the viewer's temp directory where live-sync script files are written. Combined with a `script_id`, the caller can locate the corresponding temp file on disk.
+- `script_ids`: Array of script ID strings for all currently subscribed scripts, across all active connections.
+- `success`: Always `true`.
+
 ## Compilation Interfaces
 
 ### CompilationError
@@ -324,17 +438,19 @@ Individual compilation error record.
 interface CompilationError {
   row: number;
   column: number;
-  level: "ERROR";
+  level: string;
   message: string;
+  format?: "lsl";  // Present only for LSL compilation errors
 }
 ```
 
 **Fields:**
 
-- `row`: Line number where the error occurred (0-based or 1-based depending on context)
-- `column`: Column position of the error
-- `level`: Severity level (currently only "ERROR" is defined)
+- `row`: Line number where the error occurred (1-based for both LSL and Luau)
+- `column`: Column position of the error (1-based for LSL; always `0` for Luau as the compiler does not provide column information)
+- `level`: Compiler severity string (e.g. `"ERROR"`, `"WARNING"`)
 - `message`: Error description
+- `format` (optional): Present and set to `"lsl"` for LSL compilation errors; absent for Luau errors
 
 ### CompilationResult
 
@@ -405,10 +521,10 @@ interface RuntimeError {
 - `script_id`: Unique identifier for the script that encountered the error
 - `object_id`: Unique identifier for the object containing the script
 - `object_name`: Human-readable name of the object
-- `message`: Error message description
-- `error`: Specific error type or code
-- `line`: Line number where the error occurred
-- `stack` (optional): Stack trace information if available
+- `message`: The full raw chat text of the runtime error message as received from the simulator
+- `error`: Extracted error description. Currently always an empty string — runtime error extraction from the simulator's multi-message format is not yet fully implemented.
+- `line`: Line number where the error occurred. Currently always `0` for the same reason.
+- `stack` (optional): Stack trace lines if they could be extracted from the error message
 
 ## Handler and Configuration Interfaces
 
@@ -436,7 +552,7 @@ interface WebSocketHandlers {
 - `onHandshake`: Handler for initial handshake message, returns handshake response
 - `onHandshakeOk`: Handler called when handshake is successfully completed
 - `onDisconnect`: Handler for disconnect notifications
-- `onSubscribe`: Handler for script subscription requests from viewer, returns subscription response
+- `onSubscribe`: Handler called when the extension sends a `script.subscribe` request, returns subscription response
 - `onUnsubscribe`: Handler for script unsubscription notifications from viewer
 - `onSyntaxChange`: Handler for syntax change notifications
 - `onConnectionClosed`: Handler called when connection is closed

@@ -352,8 +352,8 @@ void LLScriptEditor::drawLineNumbers()
 
 void LLScriptEditor::initKeywords(bool luau_language)
 {
-    mKeywordsLua.initialize(LLSyntaxLua::getInstance()->getKeywordsXML(), true);
-    mKeywordsLSL.initialize(LLSyntaxIdLSL::getInstance()->getKeywordsXML(), false);
+    mKeywordsLua.initialize(LLSyntaxDefCache::getInstance()->getLuaKeywords(), true);
+    mKeywordsLSL.initialize(LLSyntaxDefCache::getInstance()->getLSLKeywords(), false);
 
     mLuauLanguage = luau_language;
 

@@ -643,11 +643,10 @@ bool LLScriptEdCore::postBuild()
     initMenu();
     initButtonBar();    // <FS:CR> Advanced Script Editor
 
-    mSyntaxIDConnection = LLSyntaxIdLSL::getInstance()->addSyntaxIDCallback(boost::bind(&LLScriptEdCore::processKeywords, this));
+    mSyntaxIDConnection = LLSyntaxDefCache::getInstance()->addSyntaxIDCallback(boost::bind(&LLScriptEdCore::processKeywords, this));
 
     // Intialise keyword highlighting for the current simulator's version of LSL
-    LLSyntaxIdLSL::getInstance()->initialize();
-    LLSyntaxLua::getInstance()->initialize();
+    LLSyntaxDefCache::getInstance();
     processKeywords();
 
     // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
