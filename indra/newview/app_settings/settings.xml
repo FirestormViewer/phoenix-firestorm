@@ -3326,7 +3326,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FSCloseChatOnReturnOnlyForNearbyChatControl</key>
     <map>
@@ -19575,6 +19575,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<map>
 			<key>Comment</key>
 			<string>Prevents sitting on left-click.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>FSDisableLabeledChatLinks</key>
+		<map>
+			<key>Comment</key>
+			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs; mitigates misleading link text.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>

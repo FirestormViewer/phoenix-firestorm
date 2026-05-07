@@ -33,6 +33,8 @@
 #include "lldate.h"
 #include "v3dmath.h"
 
+#include "llslurl.h" // <FS/> Access to LLSLURL
+
 class LLSD;
 
 /**
@@ -46,12 +48,20 @@ public:
     LLTeleportHistoryPersistentItem()
     {}
 
-    LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos)
-        : mTitle(title), mGlobalPos(global_pos), mDate(LLDate::now())
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos)
+    //    : mTitle(title), mGlobalPos(global_pos), mDate(LLDate::now())
+    LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos, const LLSLURL& slurl = LLSLURL())
+        : mTitle(title), mGlobalPos(global_pos), mDate(LLDate::now()), mSLURL(slurl)
+    // </FS:TJ>
     {}
 
-    LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
-        : mTitle(title), mGlobalPos(global_pos), mDate(date)
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
+    //    : mTitle(title), mGlobalPos(global_pos), mDate(date)
+    LLTeleportHistoryPersistentItem(const std::string title, const LLVector3d& global_pos, const LLDate& date, const LLSLURL& slurl = LLSLURL())
+        : mTitle(title), mGlobalPos(global_pos), mDate(date), mSLURL(slurl)
+    // </FS:TJ>
     {}
 
     LLTeleportHistoryPersistentItem(const LLSD& val);
@@ -60,6 +70,7 @@ public:
     std::string mTitle;
     LLVector3d  mGlobalPos;
     LLDate      mDate;
+    LLSLURL     mSLURL; // <FS:TJ/> Fix Teleport and Location History for OpenSim
 };
 
 /**
@@ -86,8 +97,12 @@ public:
     const slurl_list_t& getItems() const { return mItems; }
     void            purgeItems();
 
-    void addItem(const std::string title, const LLVector3d& global_pos);
-    void addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date);
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //void addItem(const std::string title, const LLVector3d& global_pos);
+    //void addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date);
+    void addItem(const std::string title, const LLVector3d& global_pos, const LLSLURL& slurl = LLSLURL());
+    void addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date, const LLSLURL& slurl = LLSLURL());
+    // </FS:TJ>
 
     void removeItem(S32 idx);
 
@@ -113,6 +128,10 @@ public:
      * The item is specified by its index (starting from 0).
      */
     void                    showItemOnMap(S32 idx);
+
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    void                    regionNameCallback(int idx, U64 handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport);
+    // </FS:TJ>
 
 //private:
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b

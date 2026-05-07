@@ -96,6 +96,11 @@
 			<menu_item_check label="Отклонять предложения и запросы телепортации" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Отклонять все приглашения в группы" name="Reject all group invites"/>
 			<menu_item_check label="Отклонять все запросы дружбы" name="Reject all friendship requests"/>
+			<menu label="Конференции (Ad-Hoc)" name="Ad-hoc conferences">
+				<menu_item_check label="Автоматически игнорировать и отказываться от всех" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Уведомлять в общий чат об отклоненных" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Не игнорировать от моих друзей" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Друзья" name="My Friends"/>
 		<menu_item_check label="Контакты" name="Contacts"/>

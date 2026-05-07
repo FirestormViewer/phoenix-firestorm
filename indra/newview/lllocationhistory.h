@@ -34,6 +34,8 @@
 #include <string>
 #include <boost/signals2.hpp>
 
+#include "llslurl.h" // <FS/> Access to LLSLURL
+
 class LLSD;
 /**
  * This enum is responsible for identifying of history item.
@@ -48,24 +50,41 @@ class LLLocationHistoryItem {
 public:
     LLLocationHistoryItem(){}
     LLLocationHistoryItem(std::string typed_location,
-            LLVector3d global_position, std::string tooltip,ELocationType type ):
+            // <FS:TJ> Fix Teleport and Location History for OpenSim
+            //LLVector3d global_position, std::string tooltip,ELocationType type ):
+            LLVector3d global_position, std::string tooltip, ELocationType type, const LLSLURL& slurl = LLSLURL()):
+            // </FS:TJ>
         mLocation(typed_location),
         mGlobalPos(global_position),
         mToolTip(tooltip),
-        mType(type)
+        mType(type),
+        mSLURL(slurl) // <FS:TJ/> Fix Teleport and Location History for OpenSim
     {}
     LLLocationHistoryItem(const LLLocationHistoryItem& item):
         mGlobalPos(item.mGlobalPos),
         mToolTip(item.mToolTip),
         mLocation(item.mLocation),
-        mType(item.mType)
+        mType(item.mType),
+        mSLURL(item.mSLURL) // <FS:TJ/> Fix Teleport and Location History for OpenSim
     {}
     LLLocationHistoryItem(const LLSD& data):
     mLocation(data["location"]),
     mGlobalPos(data["global_pos"]),
     mToolTip(data["tooltip"]),
     mType(ELocationType(data["item_type"].asInteger()))
-    {}
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //{}
+    {
+        if (data.has("slurl") && !data["slurl"].asString().empty())
+        {
+            mSLURL = LLSLURL(data["slurl"].asString());
+        }
+        else
+        {
+            mSLURL = LLSLURL();
+        }
+    }
+    // </FS:TJ>
 
     bool operator==(const LLLocationHistoryItem& item)
     {
@@ -84,6 +103,7 @@ public:
         val["global_pos"]   = mGlobalPos.getValue();
         val["tooltip"]  = mToolTip;
         val["item_type"] = mType;
+        val["slurl"] = mSLURL.isValid() ? mSLURL.getSLURLString() : std::string(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
         return val;
     }
     const std::string& getLocation() const { return mLocation;  };
@@ -98,6 +118,7 @@ public:
     std::string mToolTip;// SURL
     std::string mLocation;// typed_location
     ELocationType mType;
+    LLSLURL mSLURL; // <FS:TJ/> Fix Teleport and Location History for OpenSim
 };
 
 class LLLocationHistory: public LLSingleton<LLLocationHistory>

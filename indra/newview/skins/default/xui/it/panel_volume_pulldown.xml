@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="volumepulldown_floater">
 	<slider label="Generale" name="System Volume"/>
-	<slider label="Pulsanti" name="UI Volume"/>
+	<slider label="Interfaccia" name="UI Volume"/>
 	<slider label="Ambiente" name="Wind Volume"/>
 	<check_box name="collisions_audio_play_btn" tool_tip="Abilita suoni delle collisioni"/>
 	<slider label="Suoni" name="SFX Volume"/>

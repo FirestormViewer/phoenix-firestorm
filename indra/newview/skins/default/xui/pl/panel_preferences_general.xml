@@ -68,11 +68,15 @@
 	<text name="time_format_textbox">
 		Format czasu:
 	</text>
+	<combo_box name="time_format_combobox" tool_tip="To ustawienie kontroluje czat w pobliżu, Pozer, logi rozmów, IM, inspekcję obiektów, okno O działce, planowanie restartów regionu, powiadomienia, otoczenie, ogłoszenia grup, landmarki, historię teleportacji oraz tosty grupowe.">
+		<combo_box.item label="1:00 PM" name="12H" />
+		<combo_box.item label="13:00" name="24H" />
+	</combo_box>
 	<text name="time_format_textbox2">
 		(wymagany restart)
 	</text>
 	<text name="time_format_clock_note">
-		Format zegara na górnym pasku: Interfejs - Górne paski.
+		Format zegara na górnym pasku: [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interfejs - Górne paski].
 	</text>
 	<text name="title_afk_text">
 		Zasypiaj po czasie:
@@ -97,6 +101,6 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Usiądź, gdy Zasypiam"/>
 	<text name="text_box3">
-		Wiadomości automatyczne możesz znaleźć w Prywatność / Autoodpowiedzi
+		Wiadomości automatyczne możesz znaleźć w [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Prywatność / Autoodpowiedzi].
 	</text>
 </panel>

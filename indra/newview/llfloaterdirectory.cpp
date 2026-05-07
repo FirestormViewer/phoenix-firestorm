@@ -46,6 +46,11 @@
 
 #include "lltabcontainer.h"
 
+// <FS:TJ> Always navigate if the SearchURL has changed
+#include "lfsimfeaturehandler.h"
+#include "llviewernetwork.h"
+// </FS:TJ>
+
 LLFloaterDirectory::LLFloaterDirectory(const std::string& name)
 :   LLFloater(name),
     mPanelAvatarp(nullptr),
@@ -103,6 +108,10 @@ bool LLFloaterDirectory::postBuild()
     mDirectoryTabs->setCommitCallback([&](LLUICtrl*, const LLSD&) { updateProfileButtonVisibility(); });
     // </FS:Ansariel>
 
+    // <FS:TJ> Always navigate if the SearchURL has changed
+    mLastSearchURL = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+    // </FS:TJ>
+
     return true;
 }
 
@@ -111,10 +120,18 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
 {
     LLFloater::onOpen(key);
 
-    if (!key.has("query"))
+    // <FS:TJ> Always navigate if the SearchURL has changed
+    std::string search_url = LFSimFeatureHandler::instance().searchURL();
+    if (search_url.empty())
+    {
+        search_url = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+    }
+
+    if (!key.has("query") && mLastSearchURL == search_url)
     {
         return;
     }
+    mLastSearchURL = search_url;
 
     LLPanelDirWeb* panel_dir_web = findChild<LLPanelDirWeb>("panel_dir_web");
     if (!panel_dir_web || !mDirectoryTabs)

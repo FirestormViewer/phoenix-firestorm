@@ -100,6 +100,11 @@
             <menu_item_check label="Teleport-Angebote und -Anforderungen abweisen" name="Automatically reject teleport offers"/>
             <menu_item_check label="Alle Gruppeneinladungen abweisen" name="Reject all group invites"/>
             <menu_item_check label="Alle Freundschaftsanfragen abweisen" name="Reject all friendship requests"/>
+            <menu label="Ad-hoc-Konferenzen" name="Ad-hoc conferences">
+                <menu_item_check label="Alle automatisch ignorieren und verlassen" name="FSIgnoreAdHocSessions"/>
+                <menu_item_check label="Ignorierte im Chat in der Nähe melden" name="FSReportIgnoredAdHocSession"/>
+                <menu_item_check label="Von Freunden nicht ignorieren" name="FSDontIgnoreAdHocFromFriends"/>
+            </menu>
         </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
 		<menu_item_call label="Twitter..." name="Twitter"/>

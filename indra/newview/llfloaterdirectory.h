@@ -84,6 +84,8 @@ public:
 
 private:
     static LLFloaterDirectory *sInstance;
+
+    std::string mLastSearchURL; // <FS:TJ/> Always navigate if the SearchURL has changed
 };
 
 //extern BOOL gDisplayEventHack;

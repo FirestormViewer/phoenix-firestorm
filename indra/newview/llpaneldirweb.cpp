@@ -36,6 +36,11 @@
 #include "llviewercontrol.h"
 #include "llweb.h"
 
+// <FS:TJ> Get the correct SearchURL from the login response if available
+#include "lfsimfeaturehandler.h"
+#include "llviewernetwork.h"
+// </FS:TJ>
+
 static LLPanelInjector<LLPanelDirWeb> t_panel_dir_web("panel_dir_web");
 
 LLPanelDirWeb::LLPanelDirWeb()
@@ -56,7 +61,13 @@ bool LLPanelDirWeb::postBuild()
     mBtnBack->setClickedCallback([this](LLUICtrl*, const LLSD&) { mWebBrowser->navigateBack(); });
     mBtnForward->setClickedCallback([this](LLUICtrl*, const LLSD&) { mWebBrowser->navigateForward(); });
 
-    mWebBrowser = findChild<LLMediaCtrl>("web_search");
+    // <FS:PP> Load openID cookie and log in the user
+    // mWebBrowser = findChild<LLMediaCtrl>("web_search");
+    mWebBrowser = getChild<LLMediaCtrl>("web_search");
+    mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
+    // </FS:PP>
+
     navigateToDefaultPage();
     mWebBrowser->addObserver(this);
 
@@ -97,7 +108,14 @@ void LLPanelDirWeb::navigateToDefaultPage()
 void LLPanelDirWeb::navigateToSearchPage(const std::string& category, const std::string& query, const std::string& collection)
 {
 // </FS:PP>
-    std::string url = gSavedSettings.getString("SearchURL");
+    // <FS:TJ> Get the correct SearchURL from the login response if available
+    //std::string url = gSavedSettings.getString("SearchURL");
+    std::string url = LFSimFeatureHandler::instance().searchURL();
+    if (url.empty())
+    {
+        url = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+    }
+    // </FS:TJ>
 
     LLSD subs;
     // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window

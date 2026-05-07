@@ -42,14 +42,14 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
     // in runtime. So, both settings are made as required restart.
     // <FS:CR>
     //mFlashCount = 2 * ((count > 0) ? count : LLUI::getInstance()->mSettingGroups["config"]->getS32("FlashCount"));
-    static LLCachedControl<S32> flash_count(*LLUI::getInstance()->mSettingGroups["config"], "FlashCount");
+    static LLUICachedControl<S32> flash_count("FlashCount");
     mFlashCount = 2 * ((count > 0) ? count : flash_count);
     // </FS:CR>
     if (mPeriod <= 0)
     {
         //mPeriod = LLUI::getInstance()->mSettingGroups["config"]->getF32("FlashPeriod");
         // <FS:CR>
-        static LLCachedControl<F32> flash_period(*LLUI::getInstance()->mSettingGroups["config"], "FlashPeriod");
+        static LLUICachedControl<F32> flash_period("FlashPeriod");
         mPeriod = flash_period;
         // </FS:CR>
     }

@@ -30,6 +30,10 @@
 #include "llurlregistry.h"
 #include "lluriparser.h"
 
+// <FS:PP> Option to disable square-bracket links
+#include "llui.h"
+// </FS:PP>
+
 #include <boost/algorithm/string/find.hpp> //for boost::ifind_first -KC
 
 // default dummy callback that ignores any label updates from the server
@@ -246,6 +250,17 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         {
             continue;
         }
+
+        // <FS:PP> Option to disable square-bracket links
+        if (!is_content_trusted && ((mUrlEntryHTTPLabel == *it) || (mUrlEntrySLLabel == *it)))
+        {
+            static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
+            if (sDisableLabeledLinks)
+            {
+                continue;
+            }
+        }
+        // </FS:PP>
 
         LLUrlEntryBase *url_entry = *it;
 

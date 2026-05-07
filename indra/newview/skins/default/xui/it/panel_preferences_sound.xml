@@ -187,7 +187,7 @@
 		<panel label="Generale" name="Media Sounds Panel">
 			<slider label="Volume Generale" name="System Volume"/>
 			<check_box label="Muta quando riduci ad icona" name="mute_when_minimized"/>
-			<slider label="Pulsanti" name="UI Volume"/>
+			<slider label="Interfaccia" name="UI Volume"/>
 			<slider label="Ambiente" name="Wind Volume"/>
 			<check_box name="collisions_audio_play_btn" tool_tip="Abilita i suoni predefiniti per le collisioni" label="Riproduci suoni collisioni"/>
 			<slider label="Effetti Sonori" name="SFX Volume"/>

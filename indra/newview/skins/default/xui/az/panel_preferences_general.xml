@@ -88,6 +88,6 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="'Uzaqda' olanda oturuş"/>
 	<text name="text_box3">
-		Avtomatik mesajlar Məxfilik / Avtomatik cavabda dəyişdirilə bilər
+		Avtomatik mesajlar [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Məxfilik / Avtomatik cavabda] dəyişdirilə bilər
 	</text>
 </panel>

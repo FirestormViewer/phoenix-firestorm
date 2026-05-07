@@ -83,6 +83,6 @@ permanecer ausente:
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Sentarme cuando estoy ausente" />
 	<text name="text_box3">
-		Configura los mensajes de autorrespuesta y no disponible en Privacidad &gt; Autorrespuesta
+		Configura los mensajes de autorrespuesta y no disponible en [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidad &gt; Autorrespuesta]
 	</text>
 </panel>

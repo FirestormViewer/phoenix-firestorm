@@ -188,7 +188,7 @@
 	<panel label="Klänge" name="Media Sounds Panel">
 		<slider label="Master-Lautstärke" name="System Volume"/>
 		<check_box name="mute_when_minimized" label="Stummschalten, wenn minimiert"/>
-		<slider label="Schaltflächen" name="UI Volume"/>
+		<slider label="Benutzeroberfläche" name="UI Volume"/>
 		<slider label="Umgebung" name="Wind Volume"/>
 		<check_box label="Klänge bei Kollisionen abspielen" name="collisions_audio_play_btn" tool_tip="Markieren, um Klänge bei Kollisionen zu hören"/>
 		<slider label="Klänge" name="SFX Volume"/>

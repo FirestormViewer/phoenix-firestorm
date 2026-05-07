@@ -474,7 +474,10 @@ void LLPanelDirBrowser::processDirPeopleReply(LLMessageSystem *msg, void**)
 
         content["type"] = AVATAR_CODE;
 
-        std::string fullname = first_name + " " + last_name;
+        // <FS:PP> Respect FSTrimLegacyNames setting
+        // std::string fullname = first_name + " " + last_name;
+        std::string fullname = LLCacheName::buildFullName(first_name, last_name);
+        // </FS:PP>
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"] = fullname;
         row["columns"][1]["font"] = "SANSSERIF";

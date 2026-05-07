@@ -70,11 +70,7 @@
 
 #include "llmenuoptionpathfindingrebakenavmesh.h"   // <FS:Zi> Pathfinding rebake functions
 #include "llfloaterreg.h"
-// <FS:CR> Don't show pathfinding icons in OpenSim
-#ifdef OPENSIM
-#include "llviewernetwork.h"
-#endif // OPENSIM
-// </FS:CR>
+#include "llviewernetwork.h" // <FS/> Access to GridManager
 #include "fsfloaterplacedetails.h"
 
 #include "llmenuoptionpathfindingrebakenavmesh.h"
@@ -784,8 +780,19 @@ void LLLocationInputCtrl::onLocationPrearrange(const LLSD& data)
                     value["global_pos"] = result->mGlobalPos.getValue();
                     std::string region_name = result->mTitle.substr(0, result->mTitle.find(','));
                     //TODO*: add Surl to teleportitem or parse region name from title
+                    // <FS:TJ> Fix Teleport and Location History for OpenSim
                     //value["tooltip"] = LLSLURL(region_name, result->mGlobalPos).getSLURLString();
-                    value["tooltip"] = LLSLURL(region_name, regionp->getOriginGlobal(), result->mGlobalPos).getSLURLString();
+                    if (LLGridManager::getInstance()->isInSecondLife())
+                    {
+                        value["tooltip"] = LLSLURL(region_name, regionp->getOriginGlobal(), result->mGlobalPos).getSLURLString();
+                    }
+                    else
+                    {
+                        std::string slurl = result->mSLURL.isValid() ? result->mSLURL.getSLURLString() : std::string();
+                        value["tooltip"] = slurl;
+                        value["slurl"] = slurl;
+                    }
+                    // </FS:TJ>
                     addLocationHistoryEntry(result->getTitle(), value);
                 }
                 else
@@ -1106,6 +1113,7 @@ void LLLocationInputCtrl::rebuildLocationHistory(const std::string& filter)
         //location history can contain only typed locations
         value["item_type"] = TYPED_REGION_SLURL;
         value["global_pos"] = it->mGlobalPos.getValue();
+        value["slurl"] = it->mSLURL.isValid() ? it->mSLURL.getSLURLString() : std::string(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
         addLocationHistoryEntry(it->getLocation(), value);
     }
 }
