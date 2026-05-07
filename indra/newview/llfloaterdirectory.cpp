@@ -106,6 +106,11 @@ bool LLFloaterDirectory::postBuild()
         });
     mDirectoryTabs  = getChild<LLTabContainer>("Directory Tabs");
     mDirectoryTabs->setCommitCallback([&](LLUICtrl*, const LLSD&) { updateProfileButtonVisibility(); });
+
+    if (!mDirectoryTabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
+    {
+        mDirectoryTabs->selectFirstTab();
+    }
     // </FS:Ansariel>
 
     // <FS:TJ> Always navigate if the SearchURL has changed
@@ -119,6 +124,12 @@ bool LLFloaterDirectory::postBuild()
 void LLFloaterDirectory::onOpen(const LLSD& key)
 {
     LLFloater::onOpen(key);
+
+    if (key.has("tab") && key["tab"].asString() == "groups")
+    {
+        mDirectoryTabs->selectTabByName("panel_dir_groups");
+        return;
+    }
 
     // <FS:TJ> Always navigate if the SearchURL has changed
     std::string search_url = LFSimFeatureHandler::instance().searchURL();
@@ -147,6 +158,16 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
     panel_dir_web->navigateToSearchPage(category, query, collection);
 }
 // </FS:PP>
+
+// <FS:Ansariel> Remember last selected tab across sessions
+void LLFloaterDirectory::onClose(bool app_quitting)
+{
+    if (mDirectoryTabs)
+    {
+        gSavedSettings.setS32("FSLastSearchTab", mDirectoryTabs->getCurrentPanelIndex());
+    }
+}
+// </FS:Ansariel>
 
 void LLFloaterDirectory::hideAllDetailPanels()
 {
