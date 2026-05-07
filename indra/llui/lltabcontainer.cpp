@@ -1351,6 +1351,31 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         mScrollPos = mMaxScrollPos;
     }
 
+    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+    // If the text of the button or textbox is truncated, we want to set the tool tip of the UI element
+    // to the label of the button/textbox.
+    if (tuple) // Only if the tuple if valid (Should always be)
+    {
+        // If the button label is truncated, then we want to try to use the tool
+        if (tuple->mButton->isLabelTruncated())
+        {
+            // Only change the tool tip if it is currently empty.
+            if (tuple->mButton->getToolTip().compare("") == 0)
+            {
+                tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
+            }
+        }
+        // Check if the place holder text exists, and if it too is truncated.
+        if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
+        {
+            // Only change the tool tip if it is currently empty.
+            if (tuple->mPlaceholderText->getToolTip().compare("") == 0)
+            {
+                tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
+            }
+        }
+    }
+    // </FS:minerjr> [FIRE-36603]
 }
 
 void LLTabContainer::addPlaceholder(LLPanel* child, const std::string& label)
@@ -1913,6 +1938,31 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         // tabs have changed size, might need to scroll to see current tab
         updateMaxScrollPos();
     }
+    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+    // If the text of the button or textbox is truncated, we want to set the tool tip of the UI element
+    // to the label of the button/textbox.
+    if (tuple) // Only if the tuple if valid (Should always be)
+    {
+        // If the button label is truncated, then we want to try to use the tool
+        if (tuple->mButton->isLabelTruncated())
+        {
+            // Only change the tool tip if it is currently empty.
+            if (tuple->mButton->getToolTip().compare("") == 0)
+            {
+                tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
+            }
+        }
+        // Check if the place holder text exists, and if it too is truncated.
+        if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
+        {
+            // Only change the tool tip if it is currently empty.
+            if (tuple->mPlaceholderText->getToolTip().compare("") == 0)
+            {
+                tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
+            }
+        }
+    }
+    // </FS:minerjr> [FIRE-36603]
 }
 
 void LLTabContainer::setTitle(const std::string& title)
