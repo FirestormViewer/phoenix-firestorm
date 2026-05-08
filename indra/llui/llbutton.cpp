@@ -1228,16 +1228,15 @@ bool LLButton::isLabelTruncated() const
 
         F32 scale_factor = llmin((F32)getRect().getWidth() / (F32)overlay_width, (F32)getRect().getHeight() / (F32)overlay_height, 1.f);
         overlay_width    = ll_round((F32)overlay_width * scale_factor);
-        switch(mImageOverlayAlignment)
+        if (mImageOverlayAlignment == LLFontGL::LEFT)
         {
-            case LLFontGL::LEFT:
-                text_left += overlay_width + mImgOverlayLabelSpace;
-                usable_text_width -= overlay_width + mImgOverlayLabelSpace;
-                break;
-            case LLFontGL::RIGHT:
-                text_right -= overlay_width + mImgOverlayLabelSpace;
-                usable_text_width -= overlay_width + mImgOverlayLabelSpace;
-                break;
+            text_left += overlay_width + mImgOverlayLabelSpace;
+            usable_text_width -= overlay_width + mImgOverlayLabelSpace;
+        }
+        else if (mImageOverlayAlignment == LLFontGL::RIGHT)
+        {
+            text_right -= overlay_width + mImgOverlayLabelSpace;
+            usable_text_width -= overlay_width + mImgOverlayLabelSpace;
         }
     }
 
