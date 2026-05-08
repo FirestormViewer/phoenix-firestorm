@@ -301,6 +301,12 @@ std::string LLUI::getUILanguage(bool ignore_enabled_languages /*= false*/)
             language = "en";
         }
 
+        // Canonical UI language folder is xui/pt/ ; treat legacy persisted "pt_BR" as "pt" (LlGetAgentLanguage / SL parity).
+        if (language == "pt_BR")
+        {
+            language = "pt";
+        }
+
         // <FS:Ansariel> Limit available languages
         if (ignore_enabled_languages)
         {
@@ -311,7 +317,12 @@ std::string LLUI::getUILanguage(bool ignore_enabled_languages /*= false*/)
         LLSD enabled_languages = mSettingGroups["config"]->getLLSD("FSEnabledLanguages");
         for (LLSD::array_const_iterator it = enabled_languages.beginArray(); it != enabled_languages.endArray(); ++it)
         {
-            if ((*it).asString() == language)
+            std::string enabled = (*it).asString();
+            if (enabled == "pt_BR")
+            {
+                enabled = "pt";
+            }
+            if (enabled == language)
             {
                 language_enabled = true;
                 break;

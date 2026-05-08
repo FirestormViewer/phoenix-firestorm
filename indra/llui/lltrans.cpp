@@ -296,7 +296,7 @@ std::string LLTrans::getCountString(std::string_view language, std::string_view 
             form = "C";
         }
     }
-    else if (language == "fr" || language == "pt_BR") // French, Brazilian Portuguese
+    else if (language == "fr" || language == "pt" || language == "pt_BR") // French; Portuguese plural rules (canonical "pt", legacy pt_BR if ever passed)
     {
         // French and Portuguese treat zero as a singular "0 item" not "0 items"
         if (count == 0 || count == 1)

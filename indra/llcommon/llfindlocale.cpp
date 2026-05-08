@@ -399,7 +399,7 @@ static const IDToCode primary_to_code[] = {
   {LANG_NORWEGIAN,  "no"},/* unofficial? */
   {LANG_PUNJABI,    "pa"},
   {LANG_POLISH,     "pl"},
-  {LANG_PORTUGUESE, "pt_BR"},
+  {LANG_PORTUGUESE, "pt"},
   {LANG_ROMANIAN,   "ro"},
   {LANG_RUSSIAN,    "ru"},
   {LANG_SLOVAK,     "sk"},

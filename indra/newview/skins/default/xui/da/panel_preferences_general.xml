@@ -10,7 +10,7 @@
 		<combo_box.item label="Español (Spansk) - Beta" name="Spanish"/>
 		<combo_box.item label="Français (Fransk)" name="French"/>
 		<combo_box.item label="Polski (Polsk)" name="Polish"/>
-		<combo_box.item label="Português (Portugisisk) - Beta" name="Portuguese(Brazil)" value="pt_BR"/>
+		<combo_box.item label="Português (Portugisisk) - Beta" name="Portuguese(Brazil)" value="pt"/>
 		<combo_box.item label="日本語 (Japansk) - Beta" name="(Japanese)"/>
 	</combo_box>
 	<text name="language_textbox2">

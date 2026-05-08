@@ -12,7 +12,7 @@
 		<combo_box.item label="Français (Fransız dili)" name="French"/>
 		<combo_box.item label="Italiano (İtalyan dili)" name="Italian"/>
 		<combo_box.item label="Polski (Polonya dili)" name="Polish"/>
-		<combo_box.item label="Português (Portugal dili) - Beta" name="Portuguese(Brazil)" value="pt_BR"/>
+		<combo_box.item label="Português (Portugal dili) - Beta" name="Portuguese(Brazil)" value="pt"/>
 		<combo_box.item label="Русский (Rus dili)" name="Russian"/>
 		<combo_box.item label="Türkçe (Türkcə) - Beta" name="Turkish"/>
 		<combo_box.item label="日本語 (Yapon dili) - Beta" name="(Japanese)"/>
