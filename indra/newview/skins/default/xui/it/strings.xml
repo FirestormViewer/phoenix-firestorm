@@ -555,7 +555,7 @@ Se ritieni che si tratti di un errore, contatta support@secondlife.com
 	</string>
 	<string name="TooltipPrice" value="L$ [AMOUNT]:"/>
 	<string name="TooltipSLIcon">
-		Collegamento ad una pagina sul sito ufficiale SecondLife.com o LindenLab.com.
+		Collegamento ad una pagina sul sito ufficiale SecondLife.com, LindenLab.com o firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Script

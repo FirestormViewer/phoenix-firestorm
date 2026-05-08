@@ -491,7 +491,7 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="TooltipPrice" value="L$ [AMOUNT]："/>
 	<string name="TooltipSLIcon">
-		これは、SecondLife.com または LindenLab.com の公式ドメイン上のページにリンクします。
+		これは、SecondLife.com、LindenLab.com、または firestormviewer.org の公式ドメイン上のページにリンクします。
 	</string>
 	<string name="TooltipFlagScript">スクリプト</string>
 	<string name="TooltipFlagPhysics">物理効果</string>

@@ -492,7 +492,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]:"/>
 	<string name="TooltipSLIcon">
-		Bu bağlantı, resmi SecondLife.com ya da LindenLab.com etki alanındaki bir sayfaya gider.
+		Bu bağlantı, resmi SecondLife.com, LindenLab.com ya da firestormviewer.org etki alanındaki bir sayfaya gider.
 	</string>
 	<string name="TooltipOutboxDragToWorld">
 		Pazaryeri İlanları klasöründen öğe oluşturamazsınız
