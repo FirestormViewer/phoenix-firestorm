@@ -1238,6 +1238,8 @@ bool LLButton::isLabelTruncated() const
                 text_right -= overlay_width + mImgOverlayLabelSpace;
                 usable_text_width -= overlay_width + mImgOverlayLabelSpace;
                 break;
+            case LLFontGL::HCENTER:
+                break;
         }
     }
 
