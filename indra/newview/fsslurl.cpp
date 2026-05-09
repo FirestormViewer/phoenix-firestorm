@@ -413,11 +413,14 @@ LLSLURL::LLSLURL(const std::string& slurl)
 
             LL_DEBUGS("SLURL") << "mRegion: "  << mRegion << LL_ENDL;
 
-            // parse the x, y, z
-            if(path_array.size() >= 3)
+            // parse the x, y, and optionally z
+            // Match LL behavior from llslurl.cpp - allow SLURLs with only x/y components (z defaults to 0). LLVector3(LLSD) handles missing components by defaulting them to 0.f
+            if (path_array.size() >= 2)
             {
                 mPosition = LLVector3(path_array);
 // AW: the simulator should care of this
+//     Bounds checking against REGION_WIDTH_METERS / REGION_HEIGHT_METERS is intentionally disabled in Firestorm because OpenSim var-regions can be
+//     larger than 256m, and the viewer can't know the region's true size at parse time. The simulator validates the destination on teleport.
 //              if((F32(mPosition[VX]) < 0.f) ||
 //              (mPosition[VX] > REGION_WIDTH_METERS) ||
 //              (F32(mPosition[VY]) < 0.f) ||
