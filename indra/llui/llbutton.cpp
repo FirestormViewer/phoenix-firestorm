@@ -1210,60 +1210,39 @@ bool LLButton::labelIsTruncated() const
 }
 
 // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-// Helper function to detemine if the text is truncated, based upon the calculations from the Draw method.
-// The above function only works after rendering, and does not work when first loading the button.
+// Check if the place holder text exists, and if it too is visually clipped.
+// Note: LLTextBase::truncate() tests UTF-8 byte length vs mMaxTextByteLength (storage limit), not visual ellipsing
 bool LLButton::isLabelTruncated() const
 {
     // let overlay image and text play well together
-    S32 text_left  = mLeftHPad;
-    S32 text_right = getRect().getWidth() - mRightHPad;
     S32 usable_text_width = getRect().getWidth() - mLeftHPad - mRightHPad;
 
     // Handle an image overlay taking up the text space.
-    if (mImageOverlay.notNull())
+    if (mImageOverlay.notNull() && (mImageOverlayAlignment < LLFontGL::HCENTER))
     {
         // get max width and height (discard level 0)
         S32 overlay_width = mImageOverlay->getWidth();
-        S32 overlay_height = mImageOverlay->getHeight();
 
-        F32 scale_factor = llmin((F32)getRect().getWidth() / (F32)overlay_width, (F32)getRect().getHeight() / (F32)overlay_height, 1.f);
-        overlay_width    = ll_round((F32)overlay_width * scale_factor);
-        if (mImageOverlayAlignment == LLFontGL::LEFT)
-        {
-            text_left += overlay_width + mImgOverlayLabelSpace;
-            usable_text_width -= overlay_width + mImgOverlayLabelSpace;
-        }
-        else if (mImageOverlayAlignment == LLFontGL::RIGHT)
-        {
-            text_right -= overlay_width + mImgOverlayLabelSpace;
-            usable_text_width -= overlay_width + mImgOverlayLabelSpace;
-        }
+        F32 scale_factor =
+            llmin((F32)getRect().getWidth() / (F32)overlay_width, (F32)getRect().getHeight() / (F32)mImageOverlay->getHeight(), 1.f);
+        overlay_width = ll_round((F32)overlay_width * scale_factor);
+        
+        usable_text_width -= (overlay_width + mImgOverlayLabelSpace);
     }
 
     // Handle the text starting position on the button
     if (!getCurrentLabel().empty()) // Unselected label assignments
     {
-        S32 x_offset;
-        switch (mHAlign)
+        LL_DEBUGS() << "Tab Button: " << getCurrentLabel().getString() << " SL"
+                   << mGLFont->maxDrawableChars(getCurrentLabel().getWString().c_str(), static_cast<F32>(usable_text_width)) << " UTW "
+                   << getCurrentLabel().length() << LL_ENDL;
+        // Find the max number of drawable characters for the string, with the usable text width, compared to the
+        // total number of characters in the label text.
+        if (mGLFont->maxDrawableChars(getCurrentLabel().getWString().c_str(), static_cast<F32>(usable_text_width)) <
+            getCurrentLabel().length())
         {
-            case LLFontGL::RIGHT:
-                x_offset = text_right;
-                break;
-            case LLFontGL::HCENTER:
-                x_offset = text_left + (usable_text_width / 2);
-                break;
-            case LLFontGL::LEFT:
-            default:
-                x_offset = text_left;
-                break;
+            return true;
         }
-        usable_text_width -= x_offset;
-    }
-
-    // Finally check if the current label's width is great then the usable text width
-    if (mGLFont->getWidth(getCurrentLabel()) > usable_text_width)
-    {
-        return true;
     }
 
     return false;

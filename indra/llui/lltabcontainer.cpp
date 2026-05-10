@@ -1365,15 +1365,6 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
                 tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
             }
         }
-        // Check if the place holder text exists, and if it too is truncated.
-        if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
-        {
-            // Only change the tool tip if it is currently empty.
-            if (tuple->mPlaceholderText->getToolTip().empty())
-            {
-                tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
-            }
-        }
     }
     // </FS:minerjr> [FIRE-36603]
 }
@@ -1950,15 +1941,6 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
             if (tuple->mButton->getToolTip().empty())
             {
                 tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-            }
-        }
-        // Check if the place holder text exists, and if it too is truncated.
-        if (tuple->mPlaceholderText && tuple->mPlaceholderText->truncate())
-        {
-            // Only change the tool tip if it is currently empty.
-            if (tuple->mPlaceholderText->getToolTip().empty())
-            {
-                tuple->mPlaceholderText->setToolTip(tuple->mPlaceholderText->getText());
             }
         }
     }
