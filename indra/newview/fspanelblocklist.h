@@ -87,6 +87,7 @@ private:
     void updateButtons();
     void removePicker();
     void onSortChanged();
+    void updateNoItemsCommentText();
 
     // UI callbacks
     void removeMutes();
@@ -113,6 +114,8 @@ private:
     LLHandle<LLFloater> mObjectPicker;
     std::string mFilterSubString;
     std::string mFilterSubStringOrig;
+    std::string mLoadingItemsMsg;
+    std::string mFailedItemsMsg;
 };
 
 #endif // FS_PANELBLOCKLIST_H

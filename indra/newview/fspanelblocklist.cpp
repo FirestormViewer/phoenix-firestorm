@@ -96,6 +96,10 @@ bool FSPanelBlockList::postBuild()
     mBlockedList->setFilterColumn(COL_NAME);
     mBlockedList->setSortChangedCallback(boost::bind(&FSPanelBlockList::onSortChanged, this));
 
+    mLoadingItemsMsg = getString("loading_blocked");
+    mFailedItemsMsg = getString("failed_blocked");
+    updateNoItemsCommentText();
+
     getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&FSPanelBlockList::removeMutes, this));
     getChild<LLFilterEditor>("blocked_filter_input")->setCommitCallback(boost::bind(&FSPanelBlockList::onFilterEdit, this, _2));
 
@@ -183,6 +187,7 @@ void FSPanelBlockList::refreshBlockedList()
         mBlockedList->addRow(item_p, ADD_BOTTOM);
     }
     mBlockedList->refreshLineHeight();
+    updateNoItemsCommentText();
 
     LLUICtrl* block_limit = getChild<LLUICtrl>("block_limit");
     block_limit->setTextArg("[COUNT]", llformat("%d", LLMuteList::getInstance()->getMutes().size()));
@@ -503,6 +508,23 @@ void FSPanelBlockList::onSortChanged()
         {
             gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
         }
+    }
+}
+
+void FSPanelBlockList::updateNoItemsCommentText()
+{
+    const LLMuteList* mute_list = LLMuteList::getInstance();
+    if (!mute_list->isLoaded() && !mute_list->isFailed())
+    {
+        mBlockedList->setCommentText(mLoadingItemsMsg);
+    }
+    else if (mute_list->isFailed())
+    {
+        mBlockedList->setCommentText(mFailedItemsMsg);
+    }
+    else
+    {
+        mBlockedList->setCommentText("");
     }
 }
 
