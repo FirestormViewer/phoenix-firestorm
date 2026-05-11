@@ -1357,8 +1357,8 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
     // to the label of the button/textbox.
     if (tuple && !getTabsHidden() &&
         tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName().compare("placeholder") != 0 &&
-        tuple->mPlaceholderText == NULL &&
+        tuple->mButton->getName() != "placeholder" &&
+        tuple->mPlaceholderText == nullptr &&
         tuple->mButton->getVisible() &&
         tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
     {
@@ -1936,8 +1936,8 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
     // to the label of the button/textbox.
     if (tuple && !getTabsHidden() &&
         tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName().compare("placeholder") != 0 &&
-        tuple->mPlaceholderText == NULL &&
+        tuple->mButton->getName() != "placeholder" &&
+        tuple->mPlaceholderText == nullptr &&
         tuple->mButton->getVisible() &&
         tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
     {
