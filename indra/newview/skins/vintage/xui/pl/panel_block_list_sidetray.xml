@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="Brak zablokowanych rezydentów lub obiektów." />
+	<string name="no_filtered_blocked" value="Brak zablokowanych rezydentów lub obiektów pasujących do wyszukiwania." />
+	<string name="loading_blocked" value="Ładowanie zablokowanych rezydentów i obiektów..." />
+	<string name="failed_blocked" value="Lista zablokowanych jest obecnie niedostępna." />
 	<block_list name="blocked" tool_tip="Lista zablokowanych osób" />
 	<text name="block_limit">
 		Zablokowano: [COUNT] ([LIMIT] maks.)
