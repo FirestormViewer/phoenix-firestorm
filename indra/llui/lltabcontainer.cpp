@@ -842,6 +842,7 @@ bool LLTabContainer::handleToolTip( S32 x, S32 y, MASK mask)
                 if (!tab_button->getVisible()) continue;
                 S32 local_x = x - tab_button->getRect().mLeft;
                 S32 local_y = y - tab_button->getRect().mBottom;
+                if (tab_button->getRect().pointInRect(x, y)) // <FS:minerjr> [FIRE-36603] - The handleToolTip will display a tool tip always if not empty and does not do a bounds check.
                 handled = tab_button->handleToolTip(local_x, local_y, mask);
                 if( handled )
                 {
