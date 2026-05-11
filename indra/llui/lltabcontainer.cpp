@@ -1352,18 +1352,19 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
     }
 
     // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button or textbox is truncated, we want to set the tool tip of the UI element
+    // If the text of the button is truncated, we want to set the tool tip of the UI element
     // to the label of the button/textbox.
-    if (tuple) // Only if the tuple if valid (Should always be)
+    if (tuple && !getTabsHidden() &&
+        tuple->mButton->getToolTip().empty() &&
+        tuple->mButton->getName().compare("placeholder") != 0 &&
+        tuple->mPlaceholderText == NULL &&
+        tuple->mButton->getVisible() &&
+        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
     {
-        // If the button label is truncated, then we want to try to use the tool
+        // If the button label is truncated, then we want to try to use the tool tip.
         if (tuple->mButton->isLabelTruncated())
         {
-            // Only change the tool tip if it is currently empty.
-            if (tuple->mButton->getToolTip().empty())
-            {
-                tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-            }
+            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
         }
     }
     // </FS:minerjr> [FIRE-36603]
@@ -1930,18 +1931,19 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         updateMaxScrollPos();
     }
     // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button or textbox is truncated, we want to set the tool tip of the UI element
+    // If the text of the button is truncated, we want to set the tool tip of the UI element
     // to the label of the button/textbox.
-    if (tuple) // Only if the tuple if valid (Should always be)
+    if (tuple && !getTabsHidden() &&
+        tuple->mButton->getToolTip().empty() &&
+        tuple->mButton->getName().compare("placeholder") != 0 &&
+        tuple->mPlaceholderText == NULL &&
+        tuple->mButton->getVisible() &&
+        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
     {
-        // If the button label is truncated, then we want to try to use the tool
+        // If the button label is truncated, then we want to try to use the tool tip.
         if (tuple->mButton->isLabelTruncated())
         {
-            // Only change the tool tip if it is currently empty.
-            if (tuple->mButton->getToolTip().empty())
-            {
-                tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-            }
+            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
         }
     }
     // </FS:minerjr> [FIRE-36603]
