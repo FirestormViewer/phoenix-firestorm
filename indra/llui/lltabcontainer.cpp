@@ -842,7 +842,6 @@ bool LLTabContainer::handleToolTip( S32 x, S32 y, MASK mask)
                 if (!tab_button->getVisible()) continue;
                 S32 local_x = x - tab_button->getRect().mLeft;
                 S32 local_y = y - tab_button->getRect().mBottom;
-                if (tab_button->getRect().pointInRect(x, y)) // <FS:minerjr> [FIRE-36603] - The handleToolTip will display a tool tip always if not empty and does not do a bounds check.
                 handled = tab_button->handleToolTip(local_x, local_y, mask);
                 if( handled )
                 {
@@ -1352,23 +1351,6 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         mScrollPos = mMaxScrollPos;
     }
 
-    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button is truncated, we want to set the tool tip of the UI element
-    // to the label of the button/textbox.
-    if (tuple && !getTabsHidden() &&
-        tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName() != "placeholder" &&
-        tuple->mPlaceholderText == nullptr &&
-        tuple->mButton->getVisible() &&
-        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
-    {
-        // If the button label is truncated, then we want to try to use the tool tip.
-        if (tuple->mButton->isLabelTruncated())
-        {
-            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-        }
-    }
-    // </FS:minerjr> [FIRE-36603]
 }
 
 void LLTabContainer::addPlaceholder(LLPanel* child, const std::string& label)
@@ -1931,23 +1913,6 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         // tabs have changed size, might need to scroll to see current tab
         updateMaxScrollPos();
     }
-    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button is truncated, we want to set the tool tip of the UI element
-    // to the label of the button/textbox.
-    if (tuple && !getTabsHidden() &&
-        tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName() != "placeholder" &&
-        tuple->mPlaceholderText == nullptr &&
-        tuple->mButton->getVisible() &&
-        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
-    {
-        // If the button label is truncated, then we want to try to use the tool tip.
-        if (tuple->mButton->isLabelTruncated())
-        {
-            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-        }
-    }
-    // </FS:minerjr> [FIRE-36603]
 }
 
 void LLTabContainer::setTitle(const std::string& title)
