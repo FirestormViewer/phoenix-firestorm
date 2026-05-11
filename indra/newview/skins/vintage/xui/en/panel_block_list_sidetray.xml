@@ -6,6 +6,18 @@
 	name="block_list_panel"
 	help_topic="blocked_list"
 	width="304">
+   <string
+    name="no_blocked"
+    value="No blocked residents or objects." />
+   <string
+    name="no_filtered_blocked"
+    value="No blocked residents or objects match your search." />
+   <string
+    name="loading_blocked"
+    value="Loading blocked residents and objects..." />
+   <string
+    name="failed_blocked"
+    value="Blocked list is currently unavailable." />
 
 	<block_list
 		follows="all"
