@@ -114,8 +114,8 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification, 
                                 && gSavedSettings.getBOOL("PlayModeUISndInventoryOffer"))
                                 || ((notif_name == "TeleportOffered" || notif_name == "TeleportOffered_SLUrl" ||
                                     notif_name == "TeleportOffered_MaturityExceeded" || notif_name == "TeleportOffered_MaturityExceeded_SLUrl" ||
-                                    notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl") ||
-                                    notif_name == "TeleportRequest"
+                                    notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl" ||
+                                    notif_name == "TeleportRequest")
                                 && gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"));
                 // </FS:Ansariel>
 
