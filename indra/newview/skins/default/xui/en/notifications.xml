@@ -8859,7 +8859,8 @@ However, this region contains content accessible to adults only.
    name="TeleportRequest"
    log_to_im="true"
    fade_toast="false"
-   type="offer">
+   type="offer"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] is requesting to be teleported to your location.
 [MESSAGE]
 
