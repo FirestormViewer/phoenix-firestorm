@@ -3703,10 +3703,6 @@ void LLIMMgr::addMessage(
                 }
             }
 
-            // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
-            // NOTE: The primary ignore logic has been moved before newSession() to prevent
-            // focus stealing. This block is kept as a safety net for any sessions that
-            // slip through (e.g. existing sessions receiving the first message).
             // </FS:PP>
 
             // <FS:PP> Configurable IM sounds
