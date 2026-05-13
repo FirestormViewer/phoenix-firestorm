@@ -170,7 +170,8 @@ void FSPanelBlockList::refreshBlockedList()
 {
     mBlockedList->deleteAllItems();
 
-    for (const auto& mute : LLMuteList::getInstance()->getMutes())
+    const LLMuteList* mute_list = LLMuteList::getInstance();
+    for (const auto& mute : mute_list->getMutes())
     {
         LLScrollListItem::Params item_p;
         item_p.enabled(true);
@@ -185,8 +186,32 @@ void FSPanelBlockList::refreshBlockedList()
     mBlockedList->refreshLineHeight();
 
     LLUICtrl* block_limit = getChild<LLUICtrl>("block_limit");
-    block_limit->setTextArg("[COUNT]", llformat("%d", LLMuteList::getInstance()->getMutes().size()));
+    block_limit->setTextArg("[COUNT]", llformat("%d", mute_list->getMutes().size()));
     block_limit->setTextArg("[LIMIT]", llformat("%d", gSavedSettings.getS32("MuteListLimit")));
+
+    updateEmptyListMessage();
+}
+
+void FSPanelBlockList::updateEmptyListMessage()
+{
+    static std::string no_blocked_msg = getString("no_blocked");
+    static std::string no_filtered_msg = getString("no_filtered_blocked");
+    static std::string loading_msg = getString("loading_blocked");
+    static std::string failed_msg = getString("failed_blocked");
+
+    const LLMuteList* mute_list = LLMuteList::getInstance();
+    if (!mute_list->isLoaded() && !mute_list->isFailed())
+    {
+        mBlockedList->setCommentText(loading_msg);
+    }
+    else if (mute_list->isFailed())
+    {
+        mBlockedList->setCommentText(failed_msg);
+    }
+    else
+    {
+        mBlockedList->setCommentText(mBlockedList->isFiltered() ? no_filtered_msg : no_blocked_msg);
+    }
 }
 
 void FSPanelBlockList::updateButtons()
@@ -475,6 +500,8 @@ void FSPanelBlockList::onFilterEdit(std::string search_string)
 
     // Apply new filter.
     mBlockedList->setFilterString(mFilterSubStringOrig);
+
+    updateEmptyListMessage();
 }
 
 void FSPanelBlockList::onSortChanged()

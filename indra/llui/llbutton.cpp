@@ -1209,6 +1209,46 @@ bool LLButton::labelIsTruncated() const
     return getCurrentLabel().getString().size() > mLastDrawCharsCount;
 }
 
+// <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+// Check if the place holder text exists, and if it too is visually clipped.
+// Note: LLTextBase::truncate() tests UTF-8 byte length vs mMaxTextByteLength (storage limit), not visual ellipsing
+bool LLButton::isLabelTruncated() const
+{
+    // let overlay image and text play well together
+    S32 usable_text_width = getRect().getWidth() - mLeftHPad - mRightHPad;
+
+    // Handle an image overlay taking up the text space.
+    if (mImageOverlay.notNull() && (mImageOverlayAlignment < LLFontGL::HCENTER))
+    {
+        // get max width and height (discard level 0)
+        S32 overlay_width = mImageOverlay->getWidth();
+
+        F32 scale_factor =
+            llmin((F32)getRect().getWidth() / (F32)overlay_width, (F32)getRect().getHeight() / (F32)mImageOverlay->getHeight(), 1.f);
+        overlay_width = ll_round((F32)overlay_width * scale_factor);
+        
+        usable_text_width -= (overlay_width + mImgOverlayLabelSpace);
+    }
+
+    // Handle the text starting position on the button
+    if (!getCurrentLabel().empty()) // Unselected label assignments
+    {
+        LL_DEBUGS() << "Tab Button: " << getCurrentLabel().getString() << " SL"
+                   << mGLFont->maxDrawableChars(getCurrentLabel().getWString().c_str(), static_cast<F32>(usable_text_width)) << " UTW "
+                   << getCurrentLabel().length() << LL_ENDL;
+        // Find the max number of drawable characters for the string, with the usable text width, compared to the
+        // total number of characters in the label text.
+        if (mGLFont->maxDrawableChars(getCurrentLabel().getWString().c_str(), static_cast<F32>(usable_text_width)) <
+            getCurrentLabel().length())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+// </FS:minerjr> [FIRE-36603]
+
 const LLUIString& LLButton::getCurrentLabel() const
 {
     return getToggleState() ? mSelectedLabel : mUnselectedLabel;

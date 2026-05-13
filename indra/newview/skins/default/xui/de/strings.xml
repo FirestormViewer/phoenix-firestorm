@@ -594,7 +594,7 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$"/>
 	<string name="TooltipSLIcon">
-		Führt zu einer Seite in der offiziellen Domäne SecondLife.com oder LindenLab.com.
+		Führt zu einer Seite in der offiziellen Domäne SecondLife.com, LindenLab.com oder firestormviewer.org.
 	</string>
 	<string name="TooltipOutboxDragToWorld">
 		Sie können keine Objekte aus dem Marktplatz-Auflistungsordner rezzen

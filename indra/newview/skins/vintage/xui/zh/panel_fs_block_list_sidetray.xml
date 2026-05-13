@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="沒有被封鎖的居民或物件。"/>
+	<string name="no_filtered_blocked" value="沒有符合搜尋條件的被封鎖居民或物件。"/>
+	<string name="loading_blocked" value="正在載入被封鎖的居民和物件..."/>
+	<string name="failed_blocked" value="目前無法取得封鎖清單。"/>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名稱" />
 		<fs_scroll_list.columns name="item_type" label="類型" />

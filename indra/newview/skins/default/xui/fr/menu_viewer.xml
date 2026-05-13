@@ -89,7 +89,7 @@
 			<menu label="Conférences ad hoc" name="Ad-hoc conferences">
 				<menu_item_check label="Tout ignorer et quitter automatiquement" name="FSIgnoreAdHocSessions"/>
 				<menu_item_check label="Signaler les ignorés dans le Chat local" name="FSReportIgnoredAdHocSession"/>
-				<menu_item_check label="Ne pas ignorer de mes amis" name="FSDontIgnoreAdHocFromFriends"/>
+				<menu_item_check label="Ne pas ignorer mes amis" name="FSDontIgnoreAdHocFromFriends"/>
 			</menu>
 		</menu>
 		<menu_item_call label="Amis" name="My Friends"/>

@@ -5232,7 +5232,7 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
     if (!avatarp)
     {
         // no agent by this ID...error?
-        if (!gSavedSettings.getBOOL("FSRenderFriendsOnly")) // <FS:Ansariel> FIRE-32520: Prevent log spam when show friends only is enabled
+        if (!gSavedPerAccountSettings.getBOOL("FSRenderFriendsOnly")) // <FS:Ansariel> FIRE-32520: Prevent log spam when show friends only is enabled
             LL_WARNS("Messaging") << "Received animation state for unknown avatar " << uuid << LL_ENDL;
         return;
     }

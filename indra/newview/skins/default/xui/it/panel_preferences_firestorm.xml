@@ -39,6 +39,7 @@
         </panel>
         <panel label="Protezione" name="ProtectionTab">
             <check_box label="Blocca seduta tramite tasto sinistro del mouse" name="FSBlockClickSit" />
+            <check_box label="Disabilita i link tra parentesi quadre nella chat (l'URL resta visibile)" name="FSDisableLabeledChatLinks" tool_tip="Quando attivo, i link tra parentesi quadre ricevuti tramite chat, IM, avvisi di gruppo e testi degli oggetti da altri residenti non vengono compressi in una singola etichetta. Viene mostrato e reso cliccabile l'URL reale. Aiuta a ridurre il phishing dove il testo visibile nasconde una destinazione diversa. I testi integrati nel viewer (notifiche, preferenze, ecc.) non sono interessati."/>
             <check_box label="Consente agli script di aprire la mappa (llMapDestination)" name="ScriptsCanShowUI" />
             <text name="revokepermissions_txt">
                 Rimuovi autorizzazioni:

@@ -295,7 +295,7 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
 	<string name="TooltipTooManyWearables">You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
-	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com or LindenLab.com domain.</string>
+	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com, LindenLab.com, or firestormviewer.org domain.</string>
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Physics</string>
 	<string name="TooltipFlagTouch">Touch</string>
