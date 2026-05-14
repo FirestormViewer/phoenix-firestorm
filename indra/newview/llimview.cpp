@@ -3624,8 +3624,8 @@ void LLIMMgr::addMessage(
         // </FS:Ansariel>
 
         // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
-        // This check must happen before newSession() to prevent the conversations floater
-        // from stealing focus when the invite is immediately rejected.
+        // Moved before newSession() to prevent the conversations floater from stealing focus when the invite is immediately rejected.
+        
         static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
         if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
         {
@@ -3648,7 +3648,6 @@ void LLIMMgr::addMessage(
                 return;
             }
         }
-        // </FS:PP>
 
         LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, LLSD(), is_offline_msg);
 
