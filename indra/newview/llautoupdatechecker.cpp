@@ -17,7 +17,7 @@
 #include <sstream>
 
 // Update check URL
-const std::string UPDATE_CHECK_URL = "https://chonks.net/soapstorm-updates/update_info.json";
+const std::string UPDATE_CHECK_URL = "https://chonks.net/soapstorm/update_info.json";
 
 LLAutoUpdateChecker::LLAutoUpdateChecker()
 :   mUpdateAvailable(false),
