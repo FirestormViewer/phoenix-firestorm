@@ -53,6 +53,7 @@
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
 #include "llviewernetwork.h" // <FS:AW hypergrid support >
+#include "lfsimfeaturehandler.h" // <FS/> Access to hyperGridURL
 #include "llviewerparcelmgr.h"
 #include "llworldmapmessage.h"
 #include "llappviewer.h"
@@ -575,6 +576,49 @@ void LLNavigationBar::onLocationSelection()
         case TYPED_REGION_SLURL:
             if(value.has("global_pos"))
             {
+            // <FS:TJ> Fix Teleport and Location History for OpenSim
+            #ifdef OPENSIM
+                if (LLGridManager::getInstance()->isInOpenSim())
+                {
+                    LLSLURL slurl = LLSLURL();
+                    if (value.has("slurl") && !value["slurl"].asString().empty())
+                    {
+                        slurl = LLSLURL(value["slurl"].asString());
+                    }
+                    else if (value.has("tooltip") && !value["tooltip"].asString().empty())
+                    {
+                        // Try get the slurl from the tooltip as a fallback if it exists
+                        slurl = LLSLURL(value["tooltip"].asString());
+                    }
+
+                    std::string grid = slurl.getGrid();
+                    std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+                    std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+
+                    LL_INFOS("Hecklezz") << "grid: " << grid << ", current_grid: " << current_grid << ", gatekeeper: " << gatekeeper << LL_ENDL;
+
+                    // Requesting region information from the server is only required when changing grid
+                    if (slurl.isValid() && grid != current_grid)
+                    {
+                        if (!gatekeeper.empty())
+                        {
+                            slurl = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
+                        }
+
+                        LLWorldMapMessage::getInstance()->sendNamedRegionRequest(
+                            slurl.getRegion(),
+                            boost::bind(&LLNavigationBar::onRegionNameResponse,
+                            this, std::string(), slurl.getRegion(), slurl.getPosition(), _1, _2, _3, _4),
+                            slurl.getSLURLString(),
+                            true
+                        );
+
+                        return; // The teleport will occur in the callback with the correct global position
+                    }
+                }
+            #endif
+            // </FS:TJ>
+
                 gAgent.teleportViaLocation(LLVector3d(value["global_pos"]));
                 return;
             }
@@ -685,11 +729,32 @@ void LLNavigationBar::onTeleportFinished(const LLVector3d& global_agent_pos)
                     gAgent.getPosAgentFromGlobal(global_agent_pos));
     // <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
     //std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), global_agent_pos).getSLURLString());
-    std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos).getSLURLString());
+    std::string grid = LLGridManager::getInstance()->getGrid();
+    std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+    LLSLURL slurl = LLSLURL(gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos);
+#ifdef OPENSIM
+    if (!LLGridManager::getInstance()->isInSecondLife() && grid != current_grid)
+    {
+        slurl = LLSLURL(current_grid, gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos, true);
+    }
+#endif
+    std::string tooltip(slurl.getSLURLString());
     // </FS:Beq pp Oren>
 
-    LLLocationHistoryItem item (location,
-            global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //LLLocationHistoryItem item (location,
+    //        global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    LLLocationHistoryItem item;
+    if (LLGridManager::getInstance()->isInSecondLife()) {
+        item = LLLocationHistoryItem(location,
+                global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    }
+    else
+    {
+        item = LLLocationHistoryItem(location,
+                global_agent_pos, tooltip, TYPED_REGION_SLURL, slurl);// we can add into history only TYPED location
+    }
+    // </FS:TJ>
     //Touch it, if it is at list already, add new location otherwise
     if ( !lh->touchItem(item) ) {
         lh->addItem(item);
@@ -780,7 +845,10 @@ void LLNavigationBar::onRegionNameResponse(
         // </FS:Beq pp Oren>
         gAgent.teleportViaLocation(global_pos);
     }
-    else if (gSavedSettings.getBOOL("SearchFromAddressBar"))
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //else if (gSavedSettings.getBOOL("SearchFromAddressBar"))
+    else if (!typed_location.empty() && gSavedSettings.getBOOL("SearchFromAddressBar"))
+    // </FS:TJ>
     {
         invokeSearch(typed_location);
     }

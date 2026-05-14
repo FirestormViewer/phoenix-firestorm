@@ -18,6 +18,7 @@
 		</panel>
 		<panel label="Protección" name="ProtectionTab">
 			<check_box label="Impedir que pueda sentarme con un clic del botón izquierdo del ratón" name="FSBlockClickSit"/>
+			<check_box label="Desactivar enlaces entre corchetes en el chat (la URL sigue visible)" name="FSDisableLabeledChatLinks" tool_tip="Cuando se activa, los enlaces entre corchetes recibidos en chat, MI, avisos de grupo y texto de objetos de otros residentes no se contraen en una sola etiqueta. Se muestra y enlaza la URL real. Ayuda a reducir el phishing donde el texto visible oculta un destino distinto. El texto integrado del visor (notificaciones, preferencias, etc.) no se ve afectado."/>
 			<check_box label="Permitir a los scripts que muestren el IU del mapa (llMapDestination)" name="ScriptsCanShowUI"/>
 			<text name="revokepermissions_txt">
 				Revocar permisos:

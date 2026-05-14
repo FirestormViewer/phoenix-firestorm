@@ -99,7 +99,21 @@ bool LLTextUtil::processUrlMatch(LLUrlMatch* match,LLTextBase* text_base, bool i
             // Text will be replaced during rendering with the icon,
             // but string cannot be empty or the segment won't be
             // added (or drawn).
-            text_base->appendImageSegment(icon);
+
+            // <FS:PP> Preserve plain-text chat behavior, except for the trusted-host hand icon that marks official domains
+            // text_base->appendImageSegment(icon);
+            const bool allow_trusted_hand_icon_in_plain_text = text_base->getPlainText() && match->isTrusted() && (match->getIcon() == "Hand");
+            if (allow_trusted_hand_icon_in_plain_text)
+            {
+                text_base->setPlainText(false);
+                text_base->appendImageSegment(icon);
+                text_base->setPlainText(true);
+            }
+            else
+            {
+                text_base->appendImageSegment(icon);
+            }
+            // </FS:PP>
 
             return true;
         }

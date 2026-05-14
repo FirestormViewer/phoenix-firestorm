@@ -196,7 +196,7 @@ void LLPanelDirBrowser::updateResultCount()
         // <FS:Ansariel> Make this localizable
         //result_text = llformat("%d found", result_count);
         LLStringUtil::format_map_t args;
-        args["COUNT"] = llformat("%d", mResultsPerPage);
+        args["COUNT"] = llformat("%d", result_count);
         result_text = getString("found_text", args);
     }
 
@@ -474,7 +474,10 @@ void LLPanelDirBrowser::processDirPeopleReply(LLMessageSystem *msg, void**)
 
         content["type"] = AVATAR_CODE;
 
-        std::string fullname = first_name + " " + last_name;
+        // <FS:PP> Respect FSTrimLegacyNames setting
+        // std::string fullname = first_name + " " + last_name;
+        std::string fullname = LLCacheName::buildFullName(first_name, last_name);
+        // </FS:PP>
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"] = fullname;
         row["columns"][1]["font"] = "SANSSERIF";

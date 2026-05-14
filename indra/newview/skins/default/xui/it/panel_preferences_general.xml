@@ -88,6 +88,6 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Siedi quando assente"/>
 	<text name="text_box3">
-		I messaggi per Non disponibile e Autorisposta si trovano in Riservatezza/Autorisposte.
+		I messaggi per Non disponibile e Autorisposta si trovano in [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Riservatezza / Autorisposte].
 	</text>
 </panel>

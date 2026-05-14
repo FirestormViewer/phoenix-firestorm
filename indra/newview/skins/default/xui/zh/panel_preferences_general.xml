@@ -64,7 +64,7 @@
 	<text name="time_format_textbox">
 		時間格式：
 	</text>
-	<combo_box name="time_format_combobox">
+	<combo_box name="time_format_combobox" tool_tip="此設定控制本地聊天、姿勢編輯器、聊天歷史記錄、私聊、檢查物件、土地資訊、區域重新啟動計劃、通知、環境、群組公告、地標、瞬間傳送歷史和群組通知。">
 		<combo_box.item label="下午1:00" name="12H"/>
 		<combo_box.item label="13:00" name="24H"/>
 	</combo_box>
@@ -72,7 +72,7 @@
 		（需重新啟動）
 	</text>
 	<text name="time_format_clock_note">
-		頂部列時鐘格式請至「使用者介面」-「頂部列」設定。
+		頂部列時鐘格式請至 [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars 使用者介面 - 頂部列] 設定。
 	</text>
 	<text name="title_afk_text">離開：</text>
 	<text name="title_afk_quit_text">離開多久後斷開連線：</text>
@@ -92,5 +92,5 @@
 		<combo_box.item label="30 分鐘" name="item3" />
 		<combo_box.item label="永不" name="item4" />
 	</combo_box>
-	<text name="text_box3">自動回復可以在隱私選項中設定</text>
+	<text name="text_box3">自動回覆可以在 [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 隱私 ＞ 自動回覆] 選項中設定</text>
 </panel>

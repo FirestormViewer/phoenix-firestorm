@@ -570,7 +570,7 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipSLIcon">
-		Это ссылка на страницу официального домена SecondLife.com или LindenLab.com.
+		Это ссылка на страницу официального домена SecondLife.com, LindenLab.com или firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Скрипт

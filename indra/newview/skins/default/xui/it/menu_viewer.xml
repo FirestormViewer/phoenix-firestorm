@@ -83,6 +83,11 @@
 			<menu_item_check label="Respingi offerte e richieste di teleport" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Respingi inviti ai gruppi" name="Reject all group invites"/>
 			<menu_item_check label="Respingi offerte di amicizia" name="Reject all friendship requests"/>
+			<menu label="Conferenze ad-hoc" name="Ad-hoc conferences">
+				<menu_item_check label="Ignora e chiudi automaticamente tutte" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Segnala gli ignorati in chat locale" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Non ignorare dai miei amici" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Amici" name="My Friends"/>
 		<menu_item_check label="Contatti" name="Contacts"/>

@@ -988,14 +988,18 @@ void LLPanelProfileSecondLife::updateData()
 #ifdef OPENSIM
     if (LLGridManager::instance().isInOpenSim() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
-    LLUUID avatar_id = getAvatarId();
-        if (!getStarted() && avatar_id.notNull() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && !getSelfProfile())
-    {
-        setIsLoading();
+        LLUUID avatar_id = getAvatarId();
+        if (!getStarted() && avatar_id.notNull())
+        {
+            setIsLoading();
+            if (!getSelfProfile())
+            {
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
             }
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(avatar_id);
+        }
     }
-            else
+    else
 #endif
     {
         LLPanelProfilePropertiesProcessorTab::updateData();
@@ -1080,8 +1084,8 @@ void LLPanelProfileSecondLife::resetData()
     mGroupInviteButton->setVisible(!own_profile);
     if (own_profile && LLAvatarName::useDisplayNames())
     {
-        mDisplayNameButton->setVisible(true);
-        mDisplayNameButton->setEnabled(true);
+        mDisplayNameButton->setVisible(mAllowEdit);
+        mDisplayNameButton->setEnabled(mAllowEdit);
     }
     mShowOnMapButton->setVisible(!own_profile);
     mPayButton->setVisible(!own_profile);
@@ -1185,19 +1189,17 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     if (LLGridManager::instance().isInOpenSim())
     {
         LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
-        if (!floater_profile)
+        if (floater_profile)
         {
-            // floater is dead, so panels are dead as well
-            return;
-        }
-        LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, true);
-        if (panel_profile)
-        {
-            panel_profile->setAvatarData(avatar_data);
-        }
-        else
-        {
-            LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, true);
+            if (panel_profile)
+            {
+                panel_profile->setAvatarData(avatar_data);
+            }
+            else
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
         }
     }
 #endif
@@ -1862,11 +1864,11 @@ void LLPanelProfileSecondLife::setLoaded()
         //if (mHideAgeCombo->getVisible())
         //{
         //    mHideAgeCombo->setEnabled(true);
-        mShowInSearchCheckbox->setEnabled(true);
-        mPreviewButton->setEnabled(true); // <AS:Chanayane> Preview button
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit); // <AS:Chanayane> Preview button
         if (mHideAgeCheckbox->getVisible())
         {
-            mHideAgeCheckbox->setEnabled(true);
+            mHideAgeCheckbox->setEnabled(mAllowEdit);
         // </FS:Ansariel>
         }
         mDescriptionEdit->setEnabled(mAllowEdit);
@@ -1878,13 +1880,13 @@ void LLPanelProfileSecondLife::updateButtons()
 {
     if (getSelfProfile())
     {
-        mShowInSearchCheckbox->setVisible(true);
-        mShowInSearchCheckbox->setEnabled(true);
+        mShowInSearchCheckbox->setVisible(mAllowEdit);
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
 // <AS:Chanayane> Preview button
-        mPreviewButton->setVisible(true);
-        mPreviewButton->setEnabled(true);
+        mPreviewButton->setVisible(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit);
 // </AS:Chanayane>
-        mDescriptionEdit->setEnabled(true);
+        mDescriptionEdit->setEnabled(mAllowEdit);
     }
     else
     {
@@ -3462,19 +3464,13 @@ void LLPanelProfile::updateData()
         mPanelNotes->setIsLoading();
         } // <FS:Beq/> restore udp profiles
 
-// <FS:Beq> Restore UDP profiles
+        // <FS:Beq> Restore UDP profiles
         //LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
         if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
         }
-#ifdef OPENSIM
-        else if (LLGridManager::instance().isInOpenSim())
-        {
-            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(avatar_id);
-        }
-#endif
-// </FS:Beq>
+        // </FS:Beq>
     }
 }
 

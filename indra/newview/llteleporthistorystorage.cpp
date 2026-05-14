@@ -39,6 +39,11 @@
 #include "rlvactions.h"
 // [/RLVa:KB]
 
+#include "llviewernetwork.h" // <FS/> Access to GridManager
+#include "lfsimfeaturehandler.h" // <FS/> Access to hyperGridURL
+#include "llworldmapmessage.h" // <FS/> Access to sendNamedRegionRequest
+#include "llregionhandle.h" // <FS/> Access to from_region_handle
+
 // Max offset for two global positions to consider them as equal
 const F64 MAX_GLOBAL_POS_OFFSET = 5.0f;
 
@@ -47,6 +52,16 @@ LLTeleportHistoryPersistentItem::LLTeleportHistoryPersistentItem(const LLSD& val
     mTitle = val["title"].asString();
     mGlobalPos.setValue(val["global_pos"]);
     mDate = val["date"];
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    if (val.has("slurl") && !val["slurl"].asString().empty())
+    {
+        mSLURL = LLSLURL(val["slurl"].asString());
+    }
+    else
+    {
+        mSLURL = LLSLURL();
+    }
+    // </FS:TJ>
 }
 
 LLSD LLTeleportHistoryPersistentItem::toLLSD() const
@@ -56,6 +71,7 @@ LLSD LLTeleportHistoryPersistentItem::toLLSD() const
     val["title"]        = mTitle;
     val["global_pos"]   = mGlobalPos.getValue();
     val["date"]     = mDate;
+    val["slurl"]    = mSLURL.isValid() ? mSLURL.getSLURLString() : std::string(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
 
     return val;
 }
@@ -105,7 +121,10 @@ void LLTeleportHistoryStorage::onTeleportHistoryChange()
     }
 // [/RLVa:KB]
 
-    addItem(item.mTitle, item.mGlobalPos);
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //addItem(item.mTitle, item.mGlobalPos);
+    addItem(item.mTitle, item.mGlobalPos, item.mSLURL);
+    // </FS:TJ>
     save();
 }
 
@@ -115,10 +134,14 @@ void LLTeleportHistoryStorage::purgeItems()
     mHistoryChangedSignal(-1);
 }
 
-void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos)
+// <FS:TJ> Fix Teleport and Location History for OpenSim
+//void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos)
+void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLSLURL& slurl)
 {
-    addItem(title, global_pos, LLDate::now());
+    //addItem(title, global_pos, LLDate::now());
+    addItem(title, global_pos, LLDate::now(), slurl);
 }
+// </FS:TJ>
 
 
 bool LLTeleportHistoryStorage::compareByTitleAndGlobalPos(const LLTeleportHistoryPersistentItem& a, const LLTeleportHistoryPersistentItem& b)
@@ -126,7 +149,9 @@ bool LLTeleportHistoryStorage::compareByTitleAndGlobalPos(const LLTeleportHistor
     return a.mTitle == b.mTitle && (a.mGlobalPos - b.mGlobalPos).length() < MAX_GLOBAL_POS_OFFSET;
 }
 
-void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
+// <FS:TJ> Fix Teleport and Location History for OpenSim
+//void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
+void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date, const LLSLURL& slurl)
 {
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
     if (!RlvActions::canShowLocation())
@@ -135,7 +160,9 @@ void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d
     }
 // [/RLVa:KB]
 
-    LLTeleportHistoryPersistentItem item(title, global_pos, date);
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //LLTeleportHistoryPersistentItem item(title, global_pos, date);
+    LLTeleportHistoryPersistentItem item(title, global_pos, date, slurl);
 
     slurl_list_t::iterator item_iter = std::find_if(mItems.begin(), mItems.end(),
                                 boost::bind(&LLTeleportHistoryStorage::compareByTitleAndGlobalPos, this, _1, item));
@@ -260,6 +287,7 @@ void LLTeleportHistoryStorage::dump() const
         line << i << ": " << mItems[i].mTitle;
         line << " global pos: " << mItems[i].mGlobalPos;
         line << " date: " << mItems[i].mDate;
+        line << " slurl: " << mItems[i].mSLURL.asString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
 
         LL_INFOS() << line.str() << LL_ENDL;
     }
@@ -279,6 +307,36 @@ void LLTeleportHistoryStorage::goToItem(S32 idx)
         dump();
         return;
     }
+
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+#ifdef OPENSIM
+    if (LLGridManager::getInstance()->isInOpenSim())
+    {
+        LLSLURL slurl = LLSLURL(mItems[idx].mSLURL);
+        std::string grid = slurl.getGrid();
+        std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+        std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+
+        // Requesting region information from the server is only required when changing grid
+        if (slurl.isValid() && grid != current_grid)
+        {
+            if (!gatekeeper.empty())
+            {
+                slurl = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
+            }
+
+            LLWorldMapMessage::getInstance()->sendNamedRegionRequest(
+                slurl.getRegion(),
+                boost::bind(&LLTeleportHistoryStorage::regionNameCallback, this, idx, _1, _2, _3, _4),
+                slurl.getSLURLString(),
+                true
+            );
+
+            return; // The teleport will occur in the callback with the correct global position
+        }
+    }
+#endif
+    // </FS:TJ>
 
     // Attempt to teleport to the requested item.
     gAgent.teleportViaLocation(mItems[idx].mGlobalPos);
@@ -304,3 +362,27 @@ void LLTeleportHistoryStorage::showItemOnMap(S32 idx)
     }
 }
 
+// <FS:TJ> Fix Teleport and Location History for OpenSim
+void LLTeleportHistoryStorage::regionNameCallback(int idx, U64 region_handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport)
+{
+    if (region_handle)
+    {
+        // Sanity checks again just in case since time has passed since the request was made
+        if (idx < 0 ||idx >= (int)mItems.size())
+        {
+            LL_WARNS() << "Invalid teleport history storage index (" << idx << ") specified" << LL_ENDL;
+            return;
+        }
+
+        LLVector3d origin_pos = from_region_handle(region_handle);
+        LLVector3d global_pos(origin_pos + LLVector3d(slurl.getPosition()));
+
+        // Attempt to teleport to the target grids region
+        gAgent.teleportViaLocation(global_pos);
+    }
+    else
+    {
+        LL_WARNS() << "Invalid teleport history storage region handle" << LL_ENDL;
+    }
+}
+// </FS:TJ>

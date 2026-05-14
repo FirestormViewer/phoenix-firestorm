@@ -1395,19 +1395,23 @@ void LLPanelGroupMembersSubTab::activate()
     LLPanelGroupSubTab::activate();
     if (!mActivated)
     {
-        if (!gdatap || !gdatap->isMemberDataComplete())
-        {
-            static LLCachedControl<bool> enable_pagination(gSavedSettings, "UseGroupMemberPagination", false);
-            const U32 page_size = enable_pagination() ? 50 : 0;
-            std::string sort_column_name = mMembersList->getSortColumnName();
-            bool sort_descending = !mMembersList->getSortAscending();
-            LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mGroupID, page_size, 0, sort_column_name, sort_descending);
-        }
+        // <FS:TJ> Don't send requests on the nobody group and fix group member list being empty
+        if (mGroupID.notNull())
+        { // </FS:TJ>
+            if (!gdatap || !gdatap->isMemberDataComplete())
+            {
+                static LLCachedControl<bool> enable_pagination(gSavedSettings, "UseGroupMemberPagination", false);
+                const U32 page_size = enable_pagination() ? 50 : 0;
+                std::string sort_column_name = mMembersList->getSortColumnName();
+                bool sort_descending = !mMembersList->getSortAscending();
+                LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mGroupID, page_size, 0, sort_column_name, sort_descending);
+            }
 
-        if (!gdatap || !gdatap->isRoleMemberDataComplete())
-        {
-            LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(mGroupID);
-        }
+            if (!gdatap || !gdatap->isRoleMemberDataComplete())
+            {
+                LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(mGroupID);
+            }
+        } // <FS:TJ/>
 
         update(GC_ALL);
         mActivated = true;

@@ -70,7 +70,7 @@
 	</button>
 	<slider
 	 name="UI Volume"
-	 label="Buttons"
+	 label="Interface"
 	 top_pad="6"
 	 left="10"
 	 height="15"

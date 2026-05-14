@@ -16,7 +16,7 @@
 		Double-cliquez pour ouvrir la carte
 	</floater.string>
 	<floater.string name="AltToolTipHintMsg">
-		Double-clicquez pour vous téléporter
+		Double-cliquez pour vous téléporter
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		Mini-carte

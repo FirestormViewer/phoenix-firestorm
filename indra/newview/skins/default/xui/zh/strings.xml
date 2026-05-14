@@ -593,7 +593,7 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$: " />
 	<string name="TooltipSLIcon">
-		該連結指向 SecondLife.com 或者 LindenLab.com 官方頁面.
+		該連結指向 SecondLife.com、LindenLab.com 或 firestormviewer.org 官方頁面.
 	</string>
 	<string name="TooltipFlagScript">
 		指令碼

@@ -648,7 +648,6 @@ void LLScriptEdCore::processKeywords()
     mFunctions->clearRows();
     mEditor->clearSegments();
     mEditor->initKeywords();
-    mEditor->loadKeywords();
 
     // <FS:Ansariel> Re-add legacy format support
     std::vector<std::string> funcs;
@@ -719,6 +718,8 @@ void LLScriptEdCore::processKeywords()
 #endif // OPENSIM
     // </FS:Ansariel>
 
+    mEditor->loadKeywords();
+
     string_vec_t primary_keywords;
     string_vec_t secondary_keywords;
     LLKeywordToken *token;
@@ -751,7 +752,6 @@ void LLScriptEdCore::processKeywords()
     {
         mPostEditor->clearSegments();
         mPostEditor->initKeywords();
-        mPostEditor->loadKeywords();
 
         mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 #ifdef OPENSIM
@@ -760,6 +760,8 @@ void LLScriptEdCore::processKeywords()
         if (LLGridManager::getInstance()->isInAuroraSim())
             mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
+
+        mPostEditor->loadKeywords();
     }
     // NaCl End
 }

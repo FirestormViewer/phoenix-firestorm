@@ -41,6 +41,7 @@
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
+        <check_box label="Wyłącz linki w nawiasach kwadratowych w czacie (URL pozostaje widoczny)" name="FSDisableLabeledChatLinks" tool_tip="Po włączeniu linki w nawiasach kwadratowych otrzymywane w czacie, IM, ogłoszeniach grup i tekstach obiektów od innych rezydentów nie są zwijane do pojedynczej etykiety. Wyświetlany i klikalny jest rzeczywisty URL. Pomaga ograniczyć phishing, w którym widoczny tekst ukrywa inne miejsce docelowe. Wbudowane teksty przeglądarki (powiadomienia, preferencje itp.) pozostają bez zmian."/>
         <check_box label="Pozwól skryptom na pokazywanie interfejsu mapy (llMapDestination)" name="ScriptsCanShowUI" />
         <text name="revokepermissions_txt">
          Cofnij zezwolenia do animowania:

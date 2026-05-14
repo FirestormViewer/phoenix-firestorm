@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="Keine blockierten Einwohner oder Objekte."/>
+	<string name="no_filtered_blocked" value="Keine blockierten Einwohner oder Objekte entsprechen den Filterkriterien."/>
+	<string name="loading_blocked" value="Blockierte Einwohner und Objekte werden geladen..."/>
+	<string name="failed_blocked" value="Blockliste ist derzeit nicht verfügbar."/>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="Name"/>
 		<fs_scroll_list.columns name="item_type" label="Typ"/>

@@ -508,6 +508,7 @@
     top_pad="-2"
     max_chars="135"
     name="time_format_combobox"
+    tool_tip="This setting controls nearby chat, poser, conversation logs, IMs, inspect floater, land floater, region restart scheduler, notifications, environment panel, group notices, landmarks, teleport history and group notifications."
     width="90">
        <combo_box.item
         enabled="true"
@@ -543,10 +544,10 @@
     height="13"
     layout="topleft"
     left="30"
-    mouse_opaque="false"
     name="time_format_clock_note"
+    parse_urls="true"
     width="500">
-      Clock format for the top bar is in Interface - Top Bars.
+      Clock format for the top bar is in [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interface - Top Bars].
    </text>
 
 <!--away/logout-->
@@ -668,7 +669,7 @@
      name="text_box3"
      top_pad="3"
      width="500">
-       Unavailable and Autoresponse messages can be found under Privacy / Autoresponse
+       Unavailable and Autoresponse messages can be found under [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacy / Autoresponse].
     </text>
 
 </panel>

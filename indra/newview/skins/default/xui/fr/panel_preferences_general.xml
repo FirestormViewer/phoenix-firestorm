@@ -51,11 +51,15 @@
 	<text name="time_format_textbox">
 		Format de l'heure :
 	</text>
+	<combo_box name="time_format_combobox" tool_tip="Ce réglage contrôle le chat près de moi, le Poseur, l'historique de conversations, les messages instantanés, la fenêtre Inspecter les objets, À propos du terrain, le planning de redémarrage de la région, les notifications, le panneau Environnement, les notices de groupe, les repères, l'historique de téléportation et les notifications de groupe.">
+		<combo_box.item label="1:00 PM" name="12H" />
+		<combo_box.item label="13:00" name="24H" />
+	</combo_box>
 	<text name="time_format_textbox2">
 		(Redémarrage requis)
 	</text>
 	<text name="time_format_clock_note">
-		Le format de l'heure pour la barre supérieure se trouve dans Interface - Barres supérieures.
+		Le format de l'heure pour la barre supérieure se trouve dans [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interface - Barres supérieures].
 	</text>
 	<text name="title_afk_text">Absent après :</text>
 	<text name="title_afk_quit_text">Déconnecter après avoir été absent :</text>
@@ -75,5 +79,5 @@
 		<combo_box.item label="30 minutes" name="item3"/>
 		<combo_box.item label="Jamais" name="item4"/>
 	</combo_box>
-	<text name="text_box3">Les réponses automatiques peuvent être définies dans les options de Confidentialité</text>
+	<text name="text_box3">Les réponses automatiques peuvent être définies dans [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 les options de Confidentialité]</text>
 </panel>

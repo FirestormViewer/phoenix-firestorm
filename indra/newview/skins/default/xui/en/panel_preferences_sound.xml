@@ -329,7 +329,7 @@
          height="15"
          increment="0.025"
          initial_value="0.5"
-         label="Buttons"
+         label="Interface"
          label_width="120"
          layout="topleft"
          left="0"

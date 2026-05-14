@@ -540,7 +540,7 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT]L$: "/>
 	<string name="TooltipSLIcon">
-		Link do strony znajdującej się w oficjalnej domenie SecondLife.com lub LindenLab.com.
+		Link do strony znajdującej się w oficjalnej domenie SecondLife.com, LindenLab.com lub firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Skrypt

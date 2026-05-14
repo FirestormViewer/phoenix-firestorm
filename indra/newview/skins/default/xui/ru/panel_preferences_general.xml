@@ -87,6 +87,6 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Сесть, когда 'Отошел'"/>
 	<text name="text_box3">
-		Автоматические сообщения можно изменить в Приватность / Автоответ
+		Автоматические сообщения можно изменить в [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Приватность / Автоответ]
 	</text>
 </panel>

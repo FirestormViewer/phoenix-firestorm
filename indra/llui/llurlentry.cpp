@@ -586,7 +586,15 @@ LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
                             "|"
                             "(https://([-\\w\\.]*\\.)?secondlifegrid\\.net(:\\d{1,5})?)"
                             "|"
-                            "(https?://([-\\w\\.]*\\.)?secondlife\\.io(:\\d{1,5})?))"
+                            "(https?://([-\\w\\.]*\\.)?secondlife\\.io(:\\d{1,5})?)"
+                            "|"
+                            // <FS:PP> Add trusted domains
+                            "(http://([-\\w\\.]*\\.)?firestormviewer\\.org)"
+                            "|"
+                            "(https://([-\\w\\.]*\\.)?firestormviewer\\.org(:\\d{1,5})?)"
+                            "|"
+                            "(https?://([-\\w\\.]*\\.)?secondlife-status\\.statuspage\\.io(:\\d{1,5})?))"
+                            // </FS:PP>
                             "\\/\\S*",
         boost::regex::perl|boost::regex::icase);
 
@@ -630,7 +638,15 @@ LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
     mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)"
                             "|"
-                            "https?://([-\\w\\.]*\\.)?secondlifegrid\\.net(?!\\S)",
+                            "https?://([-\\w\\.]*\\.)?secondlifegrid\\.net(?!\\S)"
+                            // <FS:PP> Add trusted domains
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?secondlife\\.io(?!\\S)"
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?firestormviewer\\.org(?!\\S)"
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?secondlife-status\\.statuspage\\.io(?!\\S)",
+                            // </FS:PP>
                             boost::regex::perl|boost::regex::icase);
 
     mIcon = "Hand";
