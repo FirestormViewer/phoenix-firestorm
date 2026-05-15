@@ -1352,23 +1352,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
         mScrollPos = mMaxScrollPos;
     }
 
-    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button is truncated, we want to set the tool tip of the UI element
-    // to the label of the button/textbox.
-    if (tuple && !getTabsHidden() &&
-        tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName() != "placeholder" &&
-        tuple->mPlaceholderText == nullptr &&
-        tuple->mButton->getVisible() &&
-        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
-    {
-        // If the button label is truncated, then we want to try to use the tool tip.
-        if (tuple->mButton->isLabelTruncated())
-        {
-            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-        }
-    }
-    // </FS:minerjr> [FIRE-36603]
+    addLabelToolTip(tuple); // <FS:minerjr> [FIRE-36603] - Attempt to add label tool tip for truncated labels.
 }
 
 void LLTabContainer::addPlaceholder(LLPanel* child, const std::string& label)
@@ -1594,6 +1578,7 @@ void LLTabContainer::setCurrentTabName(const std::string& name)
 
     mTabList[mCurrentTabIdx]->mButton->setLabelSelected(name);
     mTabList[mCurrentTabIdx]->mButton->setLabelUnselected(name);
+    addLabelToolTip(mTabList[mCurrentTabIdx]); // <FS:minerjr> [FIRE-36603] - Attempt to add label tool tip for truncated labels.
 }
 
 void LLTabContainer::selectFirstTab()
@@ -1931,23 +1916,7 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
         // tabs have changed size, might need to scroll to see current tab
         updateMaxScrollPos();
     }
-    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
-    // If the text of the button is truncated, we want to set the tool tip of the UI element
-    // to the label of the button/textbox.
-    if (tuple && !getTabsHidden() &&
-        tuple->mButton->getToolTip().empty() &&
-        tuple->mButton->getName() != "placeholder" &&
-        tuple->mPlaceholderText == nullptr &&
-        tuple->mButton->getVisible() &&
-        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
-    {
-        // If the button label is truncated, then we want to try to use the tool tip.
-        if (tuple->mButton->isLabelTruncated())
-        {
-            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
-        }
-    }
-    // </FS:minerjr> [FIRE-36603]
+    addLabelToolTip(tuple); // <FS:minerjr> [FIRE-36603] - Attempt to add label tool tip for truncated labels.
 }
 
 void LLTabContainer::setTitle(const std::string& title)
@@ -1999,6 +1968,7 @@ void LLTabContainer::setPanelTitle(S32 index, const std::string& title)
         mTotalTabWidth += tab_button->getRect().getWidth();
         tab_button->setLabelSelected(title);
         tab_button->setLabelUnselected(title);
+        addLabelToolTip(tuple); // <FS:minerjr> [FIRE-36603] - Attempt to add label tool tip for truncated labels.
     }
     updateMaxScrollPos();
 }
@@ -2531,3 +2501,27 @@ boost::signals2::connection LLTabContainer::setRearrangeCallback(const tab_rearr
     return mRearrangeSignal->connect(cb);
 }
 // [/SL:KB]
+
+// <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+// Helper method to check if the label can be used as a tool tip if the label is truncated.
+bool LLTabContainer::addLabelToolTip(LLTabTuple* tuple)
+{
+    // If the text of the button is truncated, we want to set the tool tip of the UI element
+    // to the label of the button/textbox.
+    if (tuple && !getTabsHidden() &&
+        tuple->mButton->getToolTip().empty() &&
+        tuple->mButton->getName() != "placeholder" &&
+        tuple->mPlaceholderText == nullptr &&
+        tuple->mButton->getVisible() &&
+        tuple->mButton->getEnabled()) // Only if it is a valid button to apply the tool tip to.
+    {
+        // If the button label is truncated, then we want to try to use the tool tip.
+        if (tuple->mButton->isLabelTruncated())
+        {
+            tuple->mButton->setToolTip(tuple->mButton->getLabelSelected());
+            return true;
+        }
+    }
+    return false;
+}
+// </FS:minerjr> [FIRE-36603]
