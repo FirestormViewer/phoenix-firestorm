@@ -440,8 +440,11 @@ bool FSFloaterIMContainer::hasFloater(LLFloater* floaterp)
 
 void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
+    LLFloater* session_floater = mSessions[id];
+    bool was_session_shown = session_floater && session_floater->isShown();
+
     mSessions.erase(id);
-    if (isShown())
+    if (was_session_shown && isShown())
     {
         setFocus(true);
     }
