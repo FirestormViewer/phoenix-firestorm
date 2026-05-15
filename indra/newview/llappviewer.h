@@ -113,6 +113,8 @@ public:
                    const LLSD& substitutions = LLSD()); // Display an error dialog and forcibly quit.
     void earlyExitNoNotify(); // Do not display error dialog then forcibly quit.
     void abortQuit();  // Called to abort a quit request.
+    void limitFramesPerSecond(LLTimer& frameTimer); // Limits frames per second using sleep and busy-wait for precision
+    void frameLimiterBusyLoop(const U64& sleep_us_remaining); // Busy loop for the fps limiter
 
     bool quitRequested() { return mQuitRequested; }
     bool logoutRequestSent() { return mLogoutRequestSent; }
