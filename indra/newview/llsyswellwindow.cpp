@@ -792,7 +792,10 @@ void LLIMWellWindow::delIMRow(const LLUUID& sessionId)
     //But I didn't find why this happen..
     gFocusMgr.clearLastFocusForGroup(this);
 
-    if (mMessageList->removeItemByValue(sessionId))
+    LLPanel* session_panel = mMessageList->getItemByValue(sessionId);
+    bool was_session_shown = session_panel && session_panel->isInVisibleChain();
+
+    if (mMessageList->removeItem(session_panel))
     {
         mSysWellChiclet->updateWidget(isWindowEmpty());
     }
@@ -811,7 +814,7 @@ void LLIMWellWindow::delIMRow(const LLUUID& sessionId)
     {
         setVisible(false);
     }
-    else
+    else if (was_session_shown)
     {
         setFocus(true);
     }
