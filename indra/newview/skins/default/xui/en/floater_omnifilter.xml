@@ -197,7 +197,8 @@
 		 follows="left|right|top"
 		 height="20"
 		 left_pad="4"
-		 right="-110"/>
+		 right="-110"
+		 tool_tip="The avatar or object name the message comes from"/>
 		<check_box
 		 name="sender_case"
 		 layout="topleft"
@@ -264,7 +265,8 @@
 		 height="74"
 		 left_pad="4"
 		 right="-4"
-		 top_delta="0"/>
+		 top_delta="0"
+		 tool_tip="The actual text of the message"/>
 		<check_box
 		 name="content_case"
 		layout="topleft"
@@ -273,14 +275,16 @@
 		width="30"
 		right="-76"
 		top_pad="4"
-		label="Aa"/>
+		label="Aa"
+		tool_tip="Case Sensitivity"/>
 		<combo_box
 		 name="content_match_type"
 		 layout="topleft"
 		 follows="right|bottom"
 		 height="20"
 		 left_pad="8"
-		 right="-4">
+		 right="-4"
+		 tool_tip="Matching Mode">
 			<combo_item
 			 name="content_exact"
 			 value="0">
@@ -339,7 +343,6 @@
 		 height="20"
 		 width="100"
 		 left="0"
-		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."
 		 top_pad="2"
 		 valign="center"
 		 value="Owner Key:"/>
@@ -350,7 +353,8 @@
 		 height="20"
 		 label="00000000-0000-0000-0000-000000000000"
 		 left_pad="4"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."/>
 		<text
 		 name="match_source_label"
 		 layout="topleft"
@@ -549,7 +553,8 @@
 		 follows="left|right|bottom"
 		 left_pad="4"
 		 height="20"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="Replacement text that can be used to alter how the message is displayed"/>
 		<text
 		 name="button_reply_label"
 		 layout="topleft"
@@ -566,7 +571,8 @@
 		 follows="left|right|bottom"
 		 left_pad="4"
 		 height="20"
-		 right="-4"/>
+		 right="-4"
+         tool_tip="The label of a button to &quot;click&quot; on the scripted dialog, including &quot;Ignore&quot;"/>
 		<text
 		 name="text_box_reply_label"
 		 layout="topleft"
@@ -584,6 +590,7 @@
 		 left_pad="4"
 		 height="60"
 		 right="-4"
-		 top_delta="0"/>
+		 top_delta="0"
+		 tool_tip="A reply text, as if it had been typed manually into the scripted dialog text box"/>
 	</panel>
 </floater>
