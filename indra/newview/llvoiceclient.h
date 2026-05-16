@@ -252,6 +252,8 @@ public:
     virtual void setMuteMic(bool muted)=0;      // Set the mute state of the local mic.
     //@}
 
+    virtual void notifyVoiceConnected() {}; // <FS:TJ/> Fix Nearby Voice when changing voice device settings
+
     //////////////////////////
     /// @name nearby speaker accessors
     //@{
@@ -467,6 +469,8 @@ public:
     void toggleUserPTTState(void);
     void inputUserControlState(bool down);  // interpret any sort of up-down mic-open control input according to ptt-toggle prefs
     static void setVoiceEnabled(bool enabled);
+
+    void notifyVoiceConnected(); // <FS:TJ/> Fix Nearby Voice when changing voice device settings
 
     void setUsePTT(bool usePTT);
     void setPTTIsToggle(bool PTTIsToggle);
