@@ -518,6 +518,7 @@ void LLManip::renderXYZ(const LLVector3 &vec)
 
         // render drop shadowed text (manually because of bigger 'distance')
         F32 right_x;
+        // <FS:Ansariel> Reduce llformat calls in render path
         //feedback_string = llformat("X: %.3f", vec.mV[VX]);
         //font->render(utf8str_to_wstring(feedback_string), 0, window_center_x - 102.f + 1.f, (F32)(window_center_y + vertical_offset) - 2.f, LLColor4::black,
         //    LLFontGL::LEFT, LLFontGL::BASELINE,
@@ -584,6 +585,7 @@ void LLManip::renderXYZ(const LLVector3 &vec)
         font->render(feedback_stringZ, 0, window_center_x + 48.f, (F32)(window_center_y + vertical_offset), LLColor4(0.5f, 0.5f, 1.f, 1.f),
             LLFontGL::LEFT, LLFontGL::BASELINE,
             LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, &right_x);
+        // </FS:Ansariel>
     }
     gGL.popMatrix();
 
