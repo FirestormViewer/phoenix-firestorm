@@ -651,6 +651,15 @@ void LLVoiceClient::setVoiceEnabled(bool enabled)
     }
 }
 
+// <FS:TJ> Fix Nearby Voice when changing voice device settings
+void LLVoiceClient::notifyVoiceConnected()
+{
+#ifndef DISABLE_WEBRTC
+    LLWebRTCVoiceClient::getInstance()->notifyVoiceConnected();
+#endif
+}
+// </FS:TJ>
+
 void LLVoiceClient::updateMicMuteLogic()
 {
     // If not configured to use PTT, the mic should be open (otherwise the user will be unable to speak).
