@@ -150,6 +150,7 @@
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
 #include <filesystem>
+#include "llscriptfloater.h" // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 #if LL_WINDOWS
 #include <VersionHelpers.h>
 #endif
@@ -829,6 +830,10 @@ bool LLFloaterPreference::postBuild()
     onAvatarTagSettingsChanged();
     // </FS:Ansariel>
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    gSavedSettings.getControl("FSSDUseDockFloater")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateScriptDialogsPosition, this));
+    updateScriptDialogsPosition();
+    // </FS:minerjr> [FIRE-35859]
     // <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
     gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
     updateAnimatedScriptDialogs();
@@ -3338,6 +3343,34 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
     childSetEnabled("FSAnimatedScriptDialogs", position == 2 || position == 3);
 }
 // </FS:Ansariel>
+
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+void LLFloaterPreference::updateScriptDialogsPosition()
+{
+    // Get the state of the use script dialog dock floater flag
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    // If the feature is enabled, we need to backup the current Script Dialog Position,
+    // set it to docked, 
+    if (use_container_window)
+    {
+        // Back up the position value
+        gSavedSettings.setS32("FSSDPositionBackup", gSavedSettings.getS32("ScriptDialogsPosition"));
+        // Change the position value to DOCKED = 1
+        gSavedSettings.setS32("ScriptDialogsPosition", 1);
+        // Need to enable the ScriptDialogsPosition UI combobox first
+        childSetEnabled("ScriptDialogsPositionDropdown", !use_container_window);
+    }
+    // If disabled, we need to restore the setting from the back up
+    else
+    {
+        // Need to enable the ScriptDialogsPosition UI combobox first
+        childSetEnabled("ScriptDialogsPositionDropdown", !use_container_window);
+        // Restore the Script Dialog Position from the backup value
+        gSavedSettings.setS32("ScriptDialogsPosition", gSavedSettings.getS32("FSSDPositionBackup"));
+    }
+}
+// </FS:minerjr> [FIRE-35859]
 
 //------------------------------Updater---------------------------------------
 

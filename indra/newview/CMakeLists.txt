@@ -136,6 +136,7 @@ set(viewer_SOURCE_FILES
     fsfloaterposestand.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
+    fsfloaterscriptdialogcontainer.cpp
     fsfloatersearch.cpp
     fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
@@ -997,6 +998,7 @@ set(viewer_HEADER_FILES
     fsfloaterposestand.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
+    fsfloaterscriptdialogcontainer.h
     fsfloatersearch.h
     fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
