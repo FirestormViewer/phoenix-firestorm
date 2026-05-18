@@ -53,7 +53,8 @@ FSFloaterScriptDialogContainer::FSFloaterScriptDialogContainer(const LLSD& seed)
     LLMultiFloater(seed),
     mIsAddingNewSession(false),
     mInitialWidth(0),
-    mInitialHeight(0)
+    mInitialHeight(0),
+    mCloseAllBtn(nullptr)
 {
     LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::DOCKED, this);
 }
@@ -78,6 +79,10 @@ bool FSFloaterScriptDialogContainer::postBuild()
     mTabContainer->setRearrangeCallback(boost::bind(&FSFloaterScriptDialogContainer::onScriptTabRearrange, this, _1, _2));
     //mTabContainer->setDoubleClickCallback(boost::bind(&FSFloaterScriptDialogContainer::onDoubleClick, this));
     setDoubleClickCallback(boost::bind(&FSFloaterScriptDialogContainer::onDoubleClick, this));
+
+    // Store pointer to the CLose All button and bind the commit callback to method to verify the user whishes to close all the Script Dialgs that are docked.
+    mCloseAllBtn = getChild<LLButton>("CloseAll");
+    mCloseAllBtn->setCommitCallback(boost::bind(&FSFloaterScriptDialogContainer::onClickCloseAll, this));
 
     return true;
 }
@@ -142,6 +147,44 @@ void FSFloaterScriptDialogContainer::onClickMinimize()
 {
     LLFloater::onClickMinimize(this);
 }
+
+void FSFloaterScriptDialogContainer::onClickCloseAll()
+{
+    // Bring up a confirmation dialog to ask the user if they want to close all the Script Dialog floaters.
+    LLNotificationsUtil::add("SDConfirmCloseAll", LLSD(), LLSD(),
+                             boost::bind(&FSFloaterScriptDialogContainer::confirmCloseAllCallback, this, _1, _2));
+}
+
+// Handles closing all the tabs/Script Dialogs of the multi-folater
+void FSFloaterScriptDialogContainer::closeAllImpl()
+{
+    S32 lastTabCount = mTabContainer->getTabCount();
+
+    // Go in reverse order so that you get ride of the last item first as you don't want to have the
+    // list cause possible errors with invalid pointers.
+    for (S32 index = lastTabCount - 1; index >= 0; index--)
+    {
+        LLScriptFloater* last_floater = (LLScriptFloater*)mTabContainer->getPanelByIndex(index);
+        removeFloater(last_floater);
+        last_floater->closeFloater();
+    }
+}
+
+// Handle the user confirmation they want to close all the Script Dialog floaters.
+bool FSFloaterScriptDialogContainer::confirmCloseAllCallback(const LLSD& notification, const LLSD& response)
+{
+    // Get the confirmation choice picked by the user.
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    // If set to 0 - Yes, then close all the Script Dialog floaters.
+    if (option == 0)
+    {
+        closeAllImpl();
+        return true;
+    }
+    //Otherwise, the user picked No, so return false.
+    return false;
+}
+
 
 void FSFloaterScriptDialogContainer::addFloater(LLFloater* floaterp, bool select_added_floater, LLTabContainer::eInsertionPoint insertion_point)
 {
@@ -419,6 +462,7 @@ void FSFloaterScriptDialogContainer::computeResizeLimits(S32& new_min_width, S32
     const LLFloater::Params& default_params = LLFloater::getDefaultParams();
     S32 floater_header_size = default_params.header_height;
     S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+    S32 close_all_button_height = mCloseAllBtn->getRect().getHeight() + 7;
     // Add the min width of the tab control if the tab is to the left of the floater
     S32 tabcntr_min_width = 0;
     if (mTabContainer->getTabPosition() == LLTabContainer::TabPosition::LEFT)
@@ -437,7 +481,7 @@ void FSFloaterScriptDialogContainer::computeResizeLimits(S32& new_min_width, S32
         {
             //new_min_width = llmax(new_min_width, floaterp->getMinWidth() + LLPANEL_BORDER_WIDTH * 2);
             new_min_width = llmax(new_min_width, floaterp->getMinWidth() + LLPANEL_BORDER_WIDTH * 2 + tabcntr_min_width);
-            new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height);
+            new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height + close_all_button_height);
         }
     }
 }
@@ -448,6 +492,7 @@ void FSFloaterScriptDialogContainer::growToFit(S32 content_width, S32 content_he
     const LLFloater::Params& default_params = LLFloater::getDefaultParams();
     S32 floater_header_size = default_params.header_height;
     S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+    S32 close_all_button_height = mCloseAllBtn->getRect().getHeight() + 7;
     // Add the min width of the tab control if the tab is to the left of the floater
     S32 tabcntr_min_width = 0;
     // There is bug in how the total tab width is calculated as it adds the width, even if the buttons are vertical.
@@ -462,7 +507,7 @@ void FSFloaterScriptDialogContainer::growToFit(S32 content_width, S32 content_he
         tabcntr_min_width = mTabContainer->getTotalTabWidth();
     }
     S32 new_width = llmax(getRect().getWidth(), content_width + LLPANEL_BORDER_WIDTH * 2 + tabcntr_min_width);
-    S32 new_height = llmax(getRect().getHeight(), content_height + floater_header_size + tabcntr_header_height);
+    S32 new_height = llmax(getRect().getHeight(), content_height + floater_header_size + tabcntr_header_height + close_all_button_height);
 
     if (isMinimized())
     {

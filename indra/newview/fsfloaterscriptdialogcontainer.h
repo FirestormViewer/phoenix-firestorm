@@ -54,6 +54,10 @@ public:
     void             onDoubleClick();
     void             onCloseFloater(LLUUID& id);
     void             onClickMinimize();
+    void             onClickCloseAll();
+
+    void closeAllImpl();
+    bool confirmCloseAllCallback(const LLSD& notification, const LLSD& response);
 
     /*virtual*/ void draw();
     /*virtual*/ void growToFit(S32 content_width, S32 content_height) override;
@@ -102,6 +106,8 @@ private:
     S32 mInitialWidth;
 
     std::map<LLFloater*, bool> mFlashingTabStates;
+
+    LLButton* mCloseAllBtn;
 
     /*virtual*/ void computeResizeLimits(S32& new_min_width, S32& new_min_height) override;
     // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
