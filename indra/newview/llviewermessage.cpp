@@ -3487,6 +3487,21 @@ void process_teleport_start(LLMessageSystem *msg, void**)
 
     if( gAgent.getTeleportState() == LLAgent::TELEPORT_NONE )
     {
+        // <FS:DS> FIRE-TP-DEDUP: The SL server is known to send two TeleportStart packets for some
+        // teleports (e.g. landmark TPs, and some llTeleportAgent calls). If a TeleportStart arrives
+        // shortly after a TP just completed (within a 3-second grace window), treat it as a stale
+        // duplicate and discard it — otherwise it would re-activate the progress screen with no
+        // corresponding TeleportFinish, leaving the viewer stuck in TELEPORT_REQUESTED until timeout.
+        constexpr F32 TP_DUPLICATE_START_GRACE_SECONDS = 3.0f;
+        if (gTeleportCompletionTimer.getElapsedTimeF32() < TP_DUPLICATE_START_GRACE_SECONDS)
+        {
+            LL_WARNS("Teleport","Messaging") << "Discarding TeleportStart within " << TP_DUPLICATE_START_GRACE_SECONDS
+                << "s of last teleport completion (elapsed: " << gTeleportCompletionTimer.getElapsedTimeF32()
+                << "s). Likely a duplicate packet." << LL_ENDL;
+            return;
+        }
+        // </FS:DS>
+
         gTeleportDisplay = true;
         gAgent.setTeleportState( LLAgent::TELEPORT_START );
         make_ui_sound("UISndTeleportOut");
@@ -7861,6 +7876,14 @@ void process_teleport_local(LLMessageSystem *msg,void**)
             gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
         }
     }
+    // <FS:DS> FIRE-TP-DEDUP: Record that a same-region TP just completed so that
+    // process_teleport_start() can discard the late TeleportStart packet the server
+    // sends alongside every TeleportLocal. When TeleportLocal arrives before
+    // TeleportStart (a 50/50 UDP race), the TP is already done and any subsequent
+    // TeleportStart within the grace window must be suppressed to avoid a stuck
+    // progress screen.
+    gTeleportCompletionTimer.reset();
+    // </FS:DS>
 
     // Sim tells us whether the new position is off the ground
     // <FS:Ansariel> Always fly after TP option

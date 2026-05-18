@@ -126,6 +126,10 @@ F32         gLastDrawDistanceStep = 0.0f;
 // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 LLFrameTimer gPostTeleportFinishKillObjectDelayTimer;
 
+// <FS:DS> FIRE-TP-DEDUP: Tracks when the last teleport completed. Used in
+// process_teleport_start() to reject late duplicate TeleportStart packets.
+LLFrameTimer gTeleportCompletionTimer;
+
 bool gForceRenderLandFence = false;
 bool gDisplaySwapBuffers = false;
 bool gDepthDirty = false;
@@ -430,6 +434,10 @@ static void update_tp_display(bool minimized)
                 //LLFirstUse::useTeleport();
                 LL_INFOS("Teleport") << "arrival_fraction is " << arrival_fraction << " changing state to TELEPORT_NONE" << LL_ENDL;
                 gAgent.setTeleportState(LLAgent::TELEPORT_NONE);
+                // <FS:DS> FIRE-TP-DEDUP: Record TP completion time so process_teleport_start()
+                // can reject late duplicate TeleportStart packets within a grace window.
+                gTeleportCompletionTimer.reset();
+                // </FS:DS>
             }
             if (!minimized)
             {
@@ -454,6 +462,9 @@ static void update_tp_display(bool minimized)
                                      << "; setting state to TELEPORT_NONE"
                                      << LL_ENDL;
                 gAgent.setTeleportState(LLAgent::TELEPORT_NONE);
+                // <FS:DS> FIRE-TP-DEDUP: Record local TP completion for duplicate TeleportStart guard.
+                gTeleportCompletionTimer.reset();
+                // </FS:DS>
             }
             break;
         }
