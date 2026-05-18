@@ -1985,6 +1985,56 @@ void LLTabContainer::onTabBtn( const LLSD& data, LLPanel* panel )
     }
 }
 
+// <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+void LLTabContainer::setTabPadding(S32 index, S32 padding)
+{
+    if (index < 0 || index >= getTabCount())
+    {
+        return;
+    }
+
+    LLTabTuple* tuple = getTab(index);
+    if (!tuple || !tuple->mButton)
+    {
+        return;
+    }
+
+    static LLUICachedControl<S32> tab_padding("UITabPadding", 0);
+    mTotalTabWidth -= tuple->mButton->getRect().getWidth();
+    tuple->mPadding = padding;
+    tuple->mButton->reshape(llclamp(mFont->getWidth(tuple->mButton->getLabelSelected()) + tab_padding + tuple->mPadding, mMinTabWidth, mMaxTabWidth), tuple->mButton->getRect().getHeight());
+    mTotalTabWidth += tuple->mButton->getRect().getWidth();
+    updateMaxScrollPos();
+}
+
+S32 LLTabContainer::getTabContainedAtPoint(S32 x, S32 y) const
+{
+    if (getTabsHidden())
+    {
+        return -1;
+    }
+
+    const LLButton* arrows[] = { mPrevArrowBtn, mNextArrowBtn, mJumpPrevArrowBtn, mJumpNextArrowBtn };
+    for (const auto* arrow : arrows)
+    {
+        if (arrow && arrow->getVisible() && arrow->getRect().pointInRect(x, y))
+        {
+            return -1;
+        }
+    }
+
+    for (size_t i = 0; i < mTabList.size(); ++i)
+    {
+        const auto* tuple = mTabList[i];
+        if (tuple && tuple->mButton && tuple->mButton->getVisible() && tuple->mButton->getRect().pointInRect(x, y))
+        {
+            return static_cast<S32>(i);
+        }
+    }
+    return -1;
+}
+// </FS:PP>
+
 void LLTabContainer::onNextBtn( const LLSD& data )
 {
     if (!mScrolled)

@@ -1292,6 +1292,16 @@
 			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
+	<notification label="Переименовать вкладку фильтра" name="FSInventoryCustomTabRename">
+		Новое имя вкладки:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
 	<notification label="Переименовать жест" name="RenameGesture">
 		Новое имя жеста:
 		<form name="form">

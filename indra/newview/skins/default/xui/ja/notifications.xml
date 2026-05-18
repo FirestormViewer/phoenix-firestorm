@@ -1372,6 +1372,16 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
+	<notification label="フィルタータブの名前変更" name="FSInventoryCustomTabRename">
+		新しいタブ名：
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
 	<notification label="ジェスチャーの名前変更" name="RenameGesture">
 		新しいジェスチャー名：
 		<form name="form">

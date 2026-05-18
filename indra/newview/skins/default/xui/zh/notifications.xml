@@ -1398,6 +1398,16 @@
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
+	<notification label="重新命名過濾器分頁" name="FSInventoryCustomTabRename">
+		新分頁名稱：
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
 	<notification label="重新命名手勢" name="RenameGesture">
 		新的手勢名稱：
 		<form name="form">

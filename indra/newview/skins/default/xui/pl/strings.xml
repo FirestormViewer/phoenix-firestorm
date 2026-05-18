@@ -1689,6 +1689,9 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="InventoryNoMatchingFavorites">
 		Nie oznaczyłeś/aś jeszcze żadnych elementów jako ulubione.
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Własny
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Aby dodać miejsce do landmarków, kliknij gwiazdkę po prawej stronie nazwy lokalizacji.
 	</string>

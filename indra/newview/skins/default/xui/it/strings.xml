@@ -1663,6 +1663,9 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	<string name="InventoryNoMatchingRecentItems">
 		Non riesci a trovare quello che cerchi? Mostra i [secondlife:///app/inventory/filters Filtri].
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Filtro
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/places/[SEARCH_TERM] Cerca].
 	</string>

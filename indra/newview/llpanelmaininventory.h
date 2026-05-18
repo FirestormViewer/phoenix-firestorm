@@ -36,6 +36,8 @@
 
 #include "llfolderview.h"
 
+#include <memory> // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+
 class LLComboBox;
 class LLFolderViewItem;
 class LLInventoryPanel;
@@ -65,6 +67,7 @@ class LLPanelMainInventory : public LLPanel, LLInventoryObserver
 {
 public:
     friend class LLFloaterInventoryFinder;
+    friend class FSInventoryCustomTabs; // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 
     LLPanelMainInventory(const LLPanel::Params& p = getDefaultParams());
     ~LLPanelMainInventory();
@@ -79,6 +82,11 @@ public:
     };
 
     virtual bool handleKeyHere(KEY key, MASK mask);
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
+    void refreshFinderFromFilter();
+    // </FS:PP>
 
     // Inherited functionality
     /*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
@@ -266,6 +274,8 @@ private:
     std::map<std::string,U64>   mFilterMap;         // contains name-to-number mapping for dropdown filter types
     U64                         mFilterMask;        // contains the cumulated bit filter for all dropdown filter types
     // </FS:Zi> Filter dropdown
+
+    std::unique_ptr<class FSInventoryCustomTabs> mCustomTabs; // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 
     boost::signals2::connection mListViewRootUpdatedConnection;
     boost::signals2::connection mGalleryRootUpdatedConnection;

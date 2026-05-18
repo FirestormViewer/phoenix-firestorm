@@ -241,6 +241,11 @@ public:
     void        setRightTabBtnOffset( S32 offset );
     void        setPanelTitle(S32 index, const std::string& title);
 
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    S32         getTabContainedAtPoint(S32 x, S32 y) const;
+    void        setTabPadding(S32 index, S32 padding);
+    // </FS:PP>
+
     TabPosition getTabPosition() const { return mTabPosition; }
     void        setMinTabWidth(S32 width) { mMinTabWidth = width; }
     void        setMaxTabWidth(S32 width) { mMaxTabWidth = width; }
