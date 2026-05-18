@@ -12670,6 +12670,21 @@ void initialize_menus()
             F32 new_fov_rad = mMult ? LLViewerCamera::getInstance()->getDefaultFOV() * mVal : mVal;
             LLViewerCamera::getInstance()->setDefaultFOV(new_fov_rad);
             gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // setView may have clamped it.
+
+            // When resetting to a fixed FOV (Ctrl+9 / View.ZoomDefault), also reset the
+            // mouselook right-click zoom target so subsequent right-clicks use the new value.
+            if (!mMult)
+            {
+                LLVector3 mlFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+                mlFovValues.mV[VY] = LLViewerCamera::getInstance()->getView();
+                gSavedSettings.setVector3("_NACL_MLFovValues", mlFovValues);
+
+                // If currently zoomed in mouselook, snap back immediately.
+                if (gAgentCamera.cameraMouselook())
+                {
+                    LLToolCompGun::getInstance()->resetZoom();
+                }
+            }
             return true;
         }
     private:

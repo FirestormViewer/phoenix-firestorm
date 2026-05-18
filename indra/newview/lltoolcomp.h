@@ -248,9 +248,9 @@ public:
     virtual LLTool*         getOverrideTool(MASK mask) override { return NULL; }
 
     bool                    isZoomed() const { return mIsZoomed; }
+    void                    resetZoom(); // Reset zoom state when exiting mouselook
 
 protected:
-    void                    resetZoom(); // Reset zoom state when exiting mouselook
     
     LLToolGun*          mGun;
     LLToolGrabBase*     mGrab;

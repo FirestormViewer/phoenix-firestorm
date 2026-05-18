@@ -111,4 +111,82 @@
          parameter="MouselookZoomTransitionSpeed"/>
     </button>
 
+    <!-- ===== RMB Script Events ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="18"
+     width="520">
+        Right Mouse Button Script Events
+    </text>
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="26"
+     layout="topleft"
+     left="10"
+     top_pad="6"
+     width="520">
+        When in mouselook, right mouse button presses are sent to your attachments as LSL listen events on the configured channel.
+    </text>
+
+    <check_box
+     control_name="FSRMBScriptEnabled"
+     follows="left|top"
+     height="16"
+     label="Enable RMB script events in mouselook"
+     layout="topleft"
+     left="10"
+     name="rmb_script_enabled"
+     tool_tip="When checked, right mouse button presses in mouselook send RMBD/RMBU messages to your attachments on the channel below."
+     top_pad="8"
+     width="360" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left="10"
+     name="RMBScriptChannelLabel"
+     top_pad="10"
+     width="80">
+        Channel:
+    </text>
+    <line_editor
+     control_name="FSRMBScriptChannel"
+     enabled_control="FSRMBScriptEnabled"
+     follows="left|top"
+     height="19"
+     layout="topleft"
+     left_pad="5"
+     max_length_bytes="12"
+     name="rmb_script_channel"
+     tool_tip="Negative channel number on which RMBD/RMBU events are sent to your attachments. Must be negative. Scripts listen with: llListen(channel, &quot;&quot;, NULL_KEY, &quot;&quot;)"
+     top_delta="-4"
+     width="100" />
+    <button
+     enabled_control="FSRMBScriptEnabled"
+     follows="left|top"
+     name="Def_FSRMBScriptChannel"
+     height="20"
+     label="D"
+     layout="topleft"
+     left_pad="2"
+     top_delta="-1"
+     width="20"
+     tool_tip="Reset channel to default (-9999)">
+        <button.commit_callback
+         function="ResetControl"
+         parameter="FSRMBScriptChannel"/>
+    </button>
+
 </panel>

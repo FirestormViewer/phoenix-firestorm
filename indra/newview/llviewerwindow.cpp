@@ -67,6 +67,7 @@
 
 // linden library includes
 #include "llaudioengine.h"      // mute on minimize
+#include "llchat.h"
 #include "llchatentry.h"
 #include "indra_constants.h"
 #include "llassetstorage.h"
@@ -250,6 +251,7 @@ extern bool gDepthDirty;
 extern bool gResizeScreenTexture;
 extern bool gCubeSnapshot;
 extern bool gSnapshotNoPost;
+extern void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
 
 LLViewerWindow  *gViewerWindow = NULL;
 
@@ -1305,12 +1307,24 @@ bool LLViewerWindow::handleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 }
 bool LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
+    static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
+    static LLCachedControl<S32> rmbChannel(gSavedSettings, "FSRMBScriptChannel", -9999);
+    if (rmbEnabled && rmbChannel < 0 && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    {
+        send_chat_from_viewer("RMBD", CHAT_TYPE_WHISPER, (S32)rmbChannel);
+    }
     bool down = true;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
 }
 
 bool LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
+    static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
+    static LLCachedControl<S32> rmbChannel(gSavedSettings, "FSRMBScriptChannel", -9999);
+    if (rmbEnabled && rmbChannel < 0 && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    {
+        send_chat_from_viewer("RMBU", CHAT_TYPE_WHISPER, (S32)rmbChannel);
+    }
     bool down = false;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
 }
