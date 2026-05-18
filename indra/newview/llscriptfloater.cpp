@@ -506,6 +506,7 @@ void LLScriptFloater::dockToContainer(bool dock)
 
         if (script_dialog_containerp)
         {
+            static LLCachedControl<bool> show_on_docked(gSavedSettings, "FSSDShowOnDocked", false);
             // Stop saving position while we dock floater
             bool save = getSavePosition();
             setSavePosition(false);
@@ -516,8 +517,18 @@ void LLScriptFloater::dockToContainer(bool dock)
                 script_dialog_containerp->addNewSession(this);
             }
 
-            openFloater(getKey());
-            setFocus(true);
+            // Open the LLScriptFloater in the TabContainer of the FSFloaterScriptDialogContainer
+            // Keep the current floater visible
+            if (!show_on_docked && dock)
+            {
+                this->getHost()->setVisible(true);
+            }
+            // If flagged to show Jump to the floater
+            else
+            {
+                openFloater(getKey());
+                setFocus(true);
+            }
 
             // Restore saving
             setSavePosition(save);
