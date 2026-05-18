@@ -52,6 +52,7 @@
 #include "llnavigationbar.h"
 #include "omnifilterengine.h"   // Omnifilter support
 // </FS:Zi>
+#include "fsfloaterscriptdialogcontainer.h" // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -78,6 +79,7 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
 : LLDockableFloater(NULL, gSavedSettings.getS32("FSChatWindow") != 1, key)
 // </FS:Ansariel>
 , mScriptForm(NULL)
+, mApplyRect(true) // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 , mSaveFloaterPosition(false)
 {
     setMouseDownCallback(boost::bind(&LLScriptFloater::onMouseDown, this));
@@ -85,11 +87,55 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
     // <FS:Ansariel> FIRE-13459: Script dialogs ignore opening position in mouselook
     //mIsDockedStateForcedCallback = boost::bind(&LLAgentCamera::cameraMouselook, &gAgentCamera);
     mNoTransparency = gSavedSettings.getBOOL("FSScriptDialogNoTransparency");
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    if (use_container_window)
+    {
+        // If we are using a multi-floater to store the floater, we need to set it to not allow minimize and can dock.
+        // Helps hide buttons which cause issues.
+        setCanMinimize(false);
+        setCanDock(false);
+    }
+    // </FS:minerjr> [FIRE-35859]
 }
 
 bool LLScriptFloater::toggle(const LLUUID& notification_id)
 {
     LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", notification_id);
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    FSFloaterScriptDialogContainer* script_dialog_containerp = FSFloaterScriptDialogContainer::getInstance();
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    if (script_dialog_containerp)
+    {
+        if (script_dialog_containerp->getFloaterCount() == 0 || !use_container_window)
+        {
+            script_dialog_containerp->setVisible(false);
+        }
+        else if (use_container_window && floater && !floater->isTornOff())
+        {
+            script_dialog_containerp->setVisible(true);
+
+            if (floater == script_dialog_containerp->getActiveFloater())
+            {
+                script_dialog_containerp->selectNextFloater();
+            }
+            else
+            {
+                script_dialog_containerp->selectFloater(floater);
+            }
+
+            LLChicletPanel* chiclet_panelp = LLChicletBar::getInstance()->getChicletPanel();
+            if (NULL != chiclet_panelp)
+            {
+                chiclet_panelp->setChicletToggleState(notification_id, true);
+            }
+
+            return true;
+        }
+    }
+    // </FS:minerjr> [FIRE-35859]
 
     // show existing floater
     if(floater)
@@ -256,6 +302,17 @@ void LLScriptFloater::onClose(bool app_quitting)
 
 void LLScriptFloater::setDocked(bool docked, bool pop_on_undock /* = true */)
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    // If using the container window, need to disable the CanMinimize UI elements of the float when being docked.
+    if (use_container_window)
+    {
+        if (docked)
+        {
+            setCanMinimize(false);
+        }
+    }
+    // </FS:minerjr> [FIRE-35859]
     LLDockableFloater::setDocked(docked, pop_on_undock);
 
     savePosition();
@@ -316,8 +373,17 @@ void LLScriptFloater::savePosition()
 void LLScriptFloater::restorePosition()
 {
     LLScriptFloaterManager::FloaterPositionInfo fpi;
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false); // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     if(LLScriptFloaterManager::getInstance()->getFloaterPosition(mObjectId, fpi))
     {
+        // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+        // If using the container window, need to reset the dock to the container window.
+        if (use_container_window)
+        {
+            dockToContainer(fpi.mDockState);
+        }
+        else
+        // </FS:minerjr> [FIRE-35859]
         dockToChiclet(fpi.mDockState);
         if(!fpi.mDockState)
         {
@@ -327,6 +393,14 @@ void LLScriptFloater::restorePosition()
     }
     else
     {
+        // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+        // Else, we want to dock to the container floater
+        if (use_container_window)
+        {
+            dockToContainer(true);
+        }
+        else
+        // </FS:minerjr> [FIRE-35859]
         dockToChiclet(true);
     }
 }
@@ -421,6 +495,36 @@ void LLScriptFloater::dockToChiclet(bool dock, bool scroll_to_chiclet /* = true 
         }
     }
 }
+
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+// Allow docking to FSFloaterScriptDialogContainer multi-floater.
+void LLScriptFloater::dockToContainer(bool dock)
+{
+    if (getDockControl() == nullptr)
+    {
+        FSFloaterScriptDialogContainer* script_dialog_containerp = FSFloaterScriptDialogContainer::getInstance();
+
+        if (script_dialog_containerp)
+        {
+            // Stop saving position while we dock floater
+            bool save = getSavePosition();
+            setSavePosition(false);
+
+            // do not add existed floaters to avoid adding torn off instances
+            if (!script_dialog_containerp->hasFloater(this) && dock)
+            {
+                script_dialog_containerp->addNewSession(this);
+            }
+
+            openFloater(getKey());
+            setFocus(true);
+
+            // Restore saving
+            setSavePosition(save);
+        }
+    }
+}
+// </FS:minerjr> [FIRE-35859]
 
 void LLScriptFloater::hideToastsIfNeeded()
 {
@@ -714,6 +818,20 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 set_new_message |= !floater->hasFocus();
             }
 
+            // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+            static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+            if (use_container_window)
+            {
+                FSFloaterScriptDialogContainer* script_dialog_containerp = FSFloaterScriptDialogContainer::getInstance();
+
+                if (script_dialog_containerp)
+                {
+                    script_dialog_containerp->removeFloater(old_id);
+                }
+            }
+            // </FS:minerjr> [FIRE-35859]
+
             removeNotification(old_id);
         }
     }
@@ -772,6 +890,13 @@ void LLScriptFloaterManager::onRemoveNotification(const LLUUID& notification_id)
         return;
     }
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    static LLCachedControl<S32> dialog_position(gSavedSettings, "ScriptDialogsPosition", 1);
+
+    if (!use_container_window && dialog_position > static_cast<S32>(LLScriptFloater::eDialogPosition::POS_DOCKED))
+    // </FS:minerjr> [FIRE-35859]
     DialogStack::instance().pop(notification_id);   // <FS:Zi> Dialog Stacking browser
 
     // remove related chiclet
@@ -1071,6 +1196,37 @@ void LLScriptFloater::draw()
 }
 // </FS:Zi>
 
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+// Borrowed from the fsfloaterim.cpp
+bool LLScriptFloater::applyRectControl()
+{
+    bool res = true;
+
+    // We need to do some sort of hack here to prevent torn-off floaters from
+    // jumping around if clicking on the IM chiclets: Clicking on a chiclet to
+    // switch to a particular IM floater will call FSFloaterIM::show() and in
+    // the process LLFloater::applyControlsAndPosition(). Depending on the result
+    // of the call to applyRectControl(), applyPositioning() positioning is
+    // called that will ultimately set the position of the floater depending
+    // of the position of the last floater in the group. However, this doesn't
+    // work properly and will cause floaters to jump. To prevent this, we only
+    // apply the rect if not called by FSFloaterIM::show(). To prevent an
+    // additionally misplaced floater caused by cascading a group of IM floaters,
+    // we force LLFloater::applyRectControl() into the path where no cascaded
+    // position is going to be applied by temporarily clear the instance name
+    // of the floater. -AH
+    if (mApplyRect)
+    {
+        std::string name = mInstanceName;
+        mInstanceName.clear();
+        res           = LLFloater::applyRectControl();
+        mInstanceName = name;
+    }
+
+    return res;
+}
+// </FS:minerjr> [FIRE-35859]
+
 // <FS:Zi> script dialogs position
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
@@ -1081,6 +1237,22 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
     //LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
     floater->setAutoFocus(false);
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    if (use_container_window)
+    {
+        LLNotificationPtr notification = LLNotifications::getInstance()->find(notification_id);
+        if (notification != NULL)
+        {
+            // floater->setTitle(LLScriptFloaterManager::getObjectName(notification_id));
+            floater->setShortTitle(LLScriptFloaterManager::getObjectName(notification_id));
+        }
+        // Call self contained dock to container method off of the new floater and return the container docked floater.
+        floater->dockToContainer(true);
+        return floater;
+    }
+    // </FS:minerjr> [FIRE-35859]
     eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
     bool chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");

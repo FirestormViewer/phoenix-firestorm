@@ -231,6 +231,11 @@ protected:
     //void dockToChiclet(bool dock);
     void dockToChiclet(bool dock, bool scroll_to_chiclet = true);
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    void dockToContainer(bool dock);
+    bool applyRectControl() override;
+    // </FS:minerjr> [FIRE-35859]
+
 private:
     bool isScriptTextbox(LLNotificationPtr notification);
 
@@ -240,6 +245,7 @@ private:
     bool mSaveFloaterPosition;
     bool mNoTransparency;
 
+    bool mApplyRect; // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 // <FS:Zi> Animated menus
 public:
     S32 mCurrentHeight;
