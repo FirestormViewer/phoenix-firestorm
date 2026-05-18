@@ -2766,6 +2766,10 @@ void LLAgent::endAnimationUpdateUI()
                 skip_list.insert(LLFloaterReg::findInstance("stats"));
             }
             // <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
+            // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+            // Also exclude the script dialog container so script dialgs are also visible if in it.
+            skip_list.insert(LLFloaterReg::findInstance("fs_script_dialog_container"));
+            // </FS:minerjr> [FIRE-35859]
             for (LLFloater *tmp : LLFloaterReg::getFloaterList("script_floater"))
             {
                 skip_list.insert(tmp);
@@ -2939,6 +2943,10 @@ void LLAgent::endAnimationUpdateUI()
             skip_list.insert(LLFloaterReg::findInstance("stats"));
         }
         // <FS:LO> //FIRE-6385: Show all script dialogs still when entering mouselook
+        // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+        // Also exclude the script dialog container so script dialgs are also visible if in it.
+        skip_list.insert(LLFloaterReg::findInstance("fs_script_dialog_container"));
+        // </FS:minerjr> [FIRE-35859]
         for (LLFloater* tmp : LLFloaterReg::getFloaterList("script_floater"))
         {
             skip_list.insert(tmp);
