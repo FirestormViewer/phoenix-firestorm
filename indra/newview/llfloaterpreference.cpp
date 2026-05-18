@@ -3374,6 +3374,12 @@ void LLFloaterPreference::updateScriptDialogsPosition()
         // Restore the Script Dialog Position from the backup value
         gSavedSettings.setS32("ScriptDialogsPosition", gSavedSettings.getS32("FSSDPositionBackup"));
     }
+
+    // Reload all of the script dialog floaters to reposition
+    if (LLScriptFloaterManager::getInstance())
+    {
+        LLScriptFloaterManager::getInstance()->reloadFloaters();
+    }
 }
 // </FS:minerjr> [FIRE-35859]
 
