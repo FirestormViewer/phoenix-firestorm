@@ -1117,6 +1117,55 @@ S32 LLScriptFloaterManager::getTopPad()
 }
 // </FS:Zi>
 
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+// Reload floaters when changing the preferences setting "Use Script Dialog Dock Window"
+void LLScriptFloaterManager::reloadFloaters()
+{
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    FSFloaterScriptDialogContainer* script_dialog_containerp = FSFloaterScriptDialogContainer::getInstance();
+    LLChicletPanel* chiclet_panelp = LLChicletBar::getInstance()->getChicletPanel();
+
+    if (chiclet_panelp)
+    {
+        // Get the total number of script dialogs assigned to the chicklets
+        S32 number_of_floaters = chiclet_panelp->getChicletCount();
+
+        std::vector<LLUUID> ordered_notification_ids;
+
+        // Loop over all the script dialog floaters
+        for (S32 index = 0; index < number_of_floaters; index++)
+        {
+            LLChiclet* chicletp = chiclet_panelp->getChiclet(index);
+            if (chicletp)
+            {
+                // If the session ID in the chiclet is stored in the notification map, then
+                if (mNotifications.contains(chicletp->getValue()))
+                {
+                    ordered_notification_ids.push_back(chicletp->getValue());
+                }
+            }
+        }
+        // Do a second loop so that the new pointers used above being trashed won't crash the application.
+        for (auto id : ordered_notification_ids)
+        {
+            // Try to find the script floater from the notification's object ID.
+            LLScriptFloater* floater =
+                LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", id);
+            if (floater)
+            {
+                floater->savePosition();
+                floater->setNotificationId(LLUUID::null);
+                floater->closeFloater();
+                //DialogStack::instance().pop(id); // <FS:Zi> Dialog Stacking browser
+            }
+
+            // Then re-toggle the script floater
+            toggleScriptFloater(id, false);
+        }
+    }
+}
+// </FS:minerjr> [FIRE-35859]
+
 //////////////////////////////////////////////////////////////////
 
 bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
