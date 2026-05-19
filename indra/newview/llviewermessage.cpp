@@ -3503,6 +3503,7 @@ void process_teleport_start(LLMessageSystem *msg, void**)
         // </FS:DS>
 
         gTeleportDisplay = true;
+        gTeleportDisplayTimer.reset();
         gAgent.setTeleportState( LLAgent::TELEPORT_START );
         make_ui_sound("UISndTeleportOut");
 
