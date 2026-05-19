@@ -879,6 +879,7 @@ void LLPanelMainInventory::onSelectSearchType()
     {
         setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 void LLPanelMainInventory::setSearchType(LLInventoryFilter::ESearchType type)
@@ -3064,6 +3065,7 @@ void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
     {
         getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 bool LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
