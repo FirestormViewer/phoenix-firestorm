@@ -29,6 +29,7 @@
 #include "llpaneldirgroups.h"
 
 #include "llagent.h"
+#include "llnotificationsutil.h" // <FS:TJ/>
 #include "llqueryflags.h"
 #include "llviewercontrol.h"
 #include "llsearcheditor.h"
@@ -81,10 +82,34 @@ void LLPanelDirGroups::performQuery()
     U32 scope = DFQ_GROUPS;
 
     // Check group mature filter.
-    if ( !gSavedSettings.getBOOL("ShowMatureGroups")  || gAgent.isTeen() )
+    // <FS:TJ> Fix legacy group search to better support maturity settings
+    //if ( !gSavedSettings.getBOOL("ShowMatureGroups")  || gAgent.isTeen() )
+    //{
+    //    scope |= DFQ_FILTER_MATURE;
+    //}
+    bool adult_enabled = gAgent.canAccessAdult();
+    bool mature_enabled = gAgent.canAccessMature();
+
+    static LLUICachedControl<U32> search_maturity("FSSearchGroupMaturity", SIM_ACCESS_PG);
+    if (!search_maturity())
     {
-        scope |= DFQ_FILTER_MATURE;
+        LLNotificationsUtil::add("NoContentToSearch");
+        return;
     }
+
+    if (search_maturity >= SIM_ACCESS_PG)
+    {
+        scope |= DFQ_INC_PG;
+    }
+    if (mature_enabled && search_maturity >= SIM_ACCESS_MATURE)
+    {
+        scope |= DFQ_INC_MATURE;
+    }
+    if (adult_enabled && search_maturity >= SIM_ACCESS_ADULT)
+    {
+        scope |= DFQ_INC_ADULT;
+    }
+    // </FS:TJ>
 
     mCurrentSortColumn = "score";
     mCurrentSortAscending = false;
