@@ -48,24 +48,22 @@ public:
     FSFloaterScriptDialogContainer(const LLSD& seed);
     virtual ~FSFloaterScriptDialogContainer();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ void onClose(bool app_quitting);
-    void             onDoubleClick();
-    void             onCloseFloater(LLUUID& id);
+    /*virtual*/ bool postBuild() override;
+    /*virtual*/ void onOpen(const LLSD& key) override;
+    /*virtual*/ void onClose(bool app_quitting) override;
+    void             onCloseFloater(const LLUUID& id);
     void             onClickMinimize();
     void             onClickCloseAll();
 
     void closeAllImpl();
     bool confirmCloseAllCallback(const LLSD& notification, const LLSD& response);
 
-    /*virtual*/ void draw();
     /*virtual*/ void growToFit(S32 content_width, S32 content_height) override;
-    /*virtual*/ bool applyRectControl() override;
+    /*virtual*/ void draw() override;
     /*virtual*/ void addFloater(LLFloater* floaterp, bool select_added_floater, LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END) override;
 
     // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-    /*virtual*/ void removeFloater(LLFloater* floaterp);
+    /*virtual*/ void removeFloater(LLFloater* floaterp) override;
     void removeFloater(const LLUUID& id);
     // [/SL:KB]
     bool hasFloater(LLFloater* floaterp) const;
@@ -77,13 +75,9 @@ public:
     static FSFloaterScriptDialogContainer* findInstance();
     static FSFloaterScriptDialogContainer* getInstance();
 
-    virtual void     setVisible(bool b);
-    /*virtual*/ void setMinimized(bool b);
+    /*virtual*/ void setMinimized(bool b) override;
 
     void onNewMessageReceived(const LLSD& msg); // public so nearbychat can call it directly. TODO: handle via callback. -AO
-
-    static void reloadEmptyFloaters();
-    void        initTabs();
 
     void addFlashingSession(const LLUUID& session_id);
 

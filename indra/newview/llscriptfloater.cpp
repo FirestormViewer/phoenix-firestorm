@@ -1305,7 +1305,6 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
         LLNotificationPtr notification = LLNotifications::getInstance()->find(notification_id);
         if (notification != NULL)
         {
-            // floater->setTitle(LLScriptFloaterManager::getObjectName(notification_id));
             floater->setShortTitle(LLScriptFloaterManager::getObjectName(notification_id));
         }
         // Call self contained dock to container method off of the new floater and return the container docked floater.
