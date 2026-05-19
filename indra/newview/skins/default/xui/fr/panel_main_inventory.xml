@@ -48,6 +48,7 @@
 			<inventory_panel label="Inventaire" name="All Items" sort_order_setting="InventorySortOrder"/>
 			<recent_inventory_panel label="Récent" sort_order_setting="RecentItemsSortOrder" name="Recent Items"/>
 			<worn_inventory_panel label="Porté" name="Worn Items"/>
+			<favorites_inventory_panel label="Favoris" name="Favorites"/>
 		</tab_container>
 	</panel>
 	<panel name="bottom_panel">
