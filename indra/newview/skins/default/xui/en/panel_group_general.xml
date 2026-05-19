@@ -64,8 +64,7 @@ Hover your mouse over the options for more help.
      use_ellipses="true"
      width="168" />
     <text
-    font="SansSerifMedium"
-    text_color="white"
+     text_color="white"
      type="string"
      follows="left|top"
      height="16"
@@ -84,6 +83,15 @@ Hover your mouse over the options for more help.
      height="23"
      label="Join group"
      name="btn_join"
+     visible="true"
+     width="120" />
+    <button
+     follows="left|top"
+     left_pad="6"
+     top_delta="0"
+     height="23"
+     label="Activate"
+     name="btn_activate"
      visible="true"
      width="120" />
     </panel>

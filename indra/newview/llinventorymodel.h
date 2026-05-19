@@ -201,13 +201,13 @@ private:
     // the inventory using several different identifiers.
     // mInventory member data is the 'master' list of inventory, and
     // mCategoryMap and mItemMap store uuid->object mappings.
-    typedef std::map<LLUUID, LLPointer<LLViewerInventoryCategory> > cat_map_t;
-    typedef std::map<LLUUID, LLPointer<LLViewerInventoryItem> > item_map_t;
+    typedef std::unordered_map<LLUUID, LLPointer<LLViewerInventoryCategory> > cat_map_t;
+    typedef std::unordered_map<LLUUID, LLPointer<LLViewerInventoryItem>>     item_map_t;
     cat_map_t mCategoryMap;
     item_map_t mItemMap;
     // This last set of indices is used to map parents to children.
-    typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;
-    typedef std::map<LLUUID, item_array_t*> parent_item_map_t;
+    typedef std::unordered_map<LLUUID, cat_array_t*> parent_cat_map_t;
+    typedef std::unordered_map<LLUUID, item_array_t*> parent_item_map_t;
     parent_cat_map_t mParentChildCategoryTree;
     parent_item_map_t mParentChildItemTree;
 
@@ -329,6 +329,8 @@ public:
     // user specified one or it does not exist, creates default category if it is missing.
     const LLUUID findUserDefinedCategoryUUIDForType(LLFolderType::EType preferred_type) const;
 
+    const LLUUID getMarketplaceListingsUUID();
+
     // Get whatever special folder this object is a child of, if any.
     const LLViewerInventoryCategory *getFirstNondefaultParent(const LLUUID& obj_id) const;
 
@@ -360,6 +362,8 @@ public:
 
 private:
     mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups
+
+    LLUUID mMarketplaceListingsUUID;
 
     //--------------------------------------------------------------------
     // Count

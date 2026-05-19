@@ -489,6 +489,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>RecentJumpThresholdSecs</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds after a jump input during which finish-anim is suppressed to avoid interrupting rapid successive jumps.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
     <key>AvatarAxisDeadZone0</key>
     <map>
       <key>Comment</key>
@@ -4601,6 +4612,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>MapShowGridCoords</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows/hides the grid coordinates of each region on the world map.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>MiniMapAutoCenter</key>
     <map>
       <key>Comment</key>
@@ -5872,6 +5894,17 @@
       <key>Value</key>
       <integer>90</integer>
     </map>
+    <key>ScriptToastButtonWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>Default width of buttons in the Script dialog toast.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>110</integer>
+    </map>
     <key>NotificationChannelRightMargin</key>
     <map>
       <key>Comment</key>
@@ -6102,6 +6135,39 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>OpenDebugStatVoice</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Voice (WebRTC) stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatVoiceOutgoing</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Outgoing audio (Voice) stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatVoiceIncoming</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Incoming audio (Voice) stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>OutBandwidth</key>
     <map>
@@ -10634,6 +10700,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>GroupTitlesTagMode</key>
+    <map>
+      <key>Comment</key>
+      <string>Select Group Titles tag mode: 0 - no group tags, 1 - only my group tag, 2 - all group tags</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
     <key>ShowAxes</key>
     <map>
       <key>Comment</key>
@@ -12271,17 +12348,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>UIFloaterTitleVPad</key>
-    <map>
-      <key>Comment</key>
-      <string>Distance from top of floater to top of title string, pixels</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <real>7</real>
     </map>
     <key>UIImgDefaultEyesUUID</key>
     <map>
@@ -16408,6 +16474,39 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>InventoryShowRecentTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Recent tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>InventoryShowWornTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Worn tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>InventoryShowFavoritesTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Favorites tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>StatsReportMaxDuration</key>
   <map>
     <key>Comment</key>
@@ -16561,6 +16660,17 @@
       <string>F32</string>
       <key>Value</key>
       <integer>2</integer>
+    </map>
+    <key>PurgeDiskCacheOnStartup</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not to LRU purge the disk cache during startup on main thread</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 </map>
 </llsd>

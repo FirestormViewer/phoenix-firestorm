@@ -2734,6 +2734,10 @@ void LLPipeline::clearRebuildGroups()
     {
         LLSpatialGroup* group = *iter;
 
+        if (!group || group->isDead())
+        {
+            continue;
+        }
         // If the group contains HUD objects, save the group
         if (group->isHUDGroup())
         {
@@ -5525,7 +5529,7 @@ static F32 calc_light_dist(LLVOVolume* light, const LLVector3& cam_pos, F32 max_
     if (light->mDrawable.notNull() && light->mDrawable->isState(LLDrawable::ACTIVE))
     {
         // moving lights get a little higher priority (too much causes artifacts)
-        dist = llmax(dist - light->getLightRadius()*0.25f, 0.f);
+        dist = llmax(dist - radius * 0.25f, 0.f);
     }
     return dist;
 }

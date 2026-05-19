@@ -48,6 +48,7 @@
 #include "llfloaterimnearbychat.h"
 #include "llgroupiconctrl.h"
 #include "lllayoutstack.h"
+#include "llnotificationsutil.h"
 #include "llpanelemojicomplete.h"
 #include "lltoolbarview.h"
 
@@ -934,7 +935,7 @@ void LLFloaterIMSessionTab::hideOrShowTitle()
 
 void LLFloaterIMSessionTab::updateSessionName(const std::string& name)
 {
-    mInputEditor->setLabel(LLTrans::getString("IM_to_label") + " " + name);
+    mInputEditor->setLabel(name);
 }
 
 void LLFloaterIMSessionTab::updateChatIcon(const LLUUID& id)
@@ -1416,4 +1417,21 @@ bool LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
         }
     }
     return handled;
+}
+
+void LLFloaterIMSessionTab::onClickCloseBtn(bool app_quitting)
+{
+    bool is_ad_hoc = (mSession ? mSession->isAdHocSessionType() : false);
+    if (is_ad_hoc && !app_quitting)
+    {
+        LLNotificationsUtil::add("ConfirmLeaveAdhoc", LLSD(), LLSD(), [this](const LLSD& notification, const LLSD& response)
+        {
+            if (0 == LLNotificationsUtil::getSelectedOption(notification, response))
+                closeFloater();
+        });
+    }
+    else
+    {
+        closeFloater();
+    }
 }

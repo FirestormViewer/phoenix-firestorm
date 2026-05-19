@@ -702,6 +702,16 @@ bool LLViewerParcelMgr::allowAgentVoice() const
     return allowAgentVoice(gAgent.getRegion(), mAgentParcel);
 }
 
+bool LLViewerParcelMgr::isVoiceRestricted() const
+{
+    return mAgentParcel && !mAgentParcel->getParcelFlagUseEstateVoiceChannel();
+}
+
+bool LLViewerParcelMgr::allowVoiceModeration() const
+{
+    return isVoiceRestricted() && isParcelOwnedByAgent(mAgentParcel, GP_SESSION_MODERATOR);
+}
+
 bool LLViewerParcelMgr::allowAgentVoice(const LLViewerRegion* region, const LLParcel* parcel) const
 {
     return region && region->isVoiceEnabled()
@@ -881,7 +891,8 @@ LLParcel* LLViewerParcelMgr::getCollisionParcel() const
 
 void LLViewerParcelMgr::render()
 {
-    if (mSelected && mRenderSelection && gSavedSettings.getBOOL("RenderParcelSelection") && !gDisconnected)
+    static LLCachedControl<bool> render_parcel_selection(gSavedSettings, "RenderParcelSelection");
+    if (mSelected && mRenderSelection && render_parcel_selection() && !gDisconnected)
     {
         // Rendering is done in agent-coordinates, so need to supply
         // an appropriate offset to the render code.
