@@ -77,18 +77,12 @@ bool FSFloaterScriptDialogContainer::postBuild()
 
     mTabContainer->setAllowRearrange(true);
     mTabContainer->setRearrangeCallback(boost::bind(&FSFloaterScriptDialogContainer::onScriptTabRearrange, this, _1, _2));
-    //mTabContainer->setDoubleClickCallback(boost::bind(&FSFloaterScriptDialogContainer::onDoubleClick, this));
-    setDoubleClickCallback(boost::bind(&FSFloaterScriptDialogContainer::onDoubleClick, this));
 
     // Store pointer to the CLose All button and bind the commit callback to method to verify the user whishes to close all the Script Dialgs that are docked.
     mCloseAllBtn = getChild<LLButton>("CloseAll");
     mCloseAllBtn->setCommitCallback(boost::bind(&FSFloaterScriptDialogContainer::onClickCloseAll, this));
 
     return true;
-}
-
-void FSFloaterScriptDialogContainer::initTabs()
-{
 }
 
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
@@ -111,7 +105,6 @@ void FSFloaterScriptDialogContainer::onScriptTabRearrange(S32 tab_index, LLPanel
 void FSFloaterScriptDialogContainer::onOpen(const LLSD& key)
 {
     LLMultiFloater::onOpen(key);
-    initTabs();
     LLFloater* active_floater = getActiveFloater();
     if (active_floater && !active_floater->hasFocus())
     {
@@ -134,17 +127,10 @@ void FSFloaterScriptDialogContainer::onClose(bool app_quitting)
     }
 }
 
-// Have the double click on a message to move on to the next title
-void FSFloaterScriptDialogContainer::onDoubleClick()
-{
-
-    // If we don't do something for the double click, the title will become blank...
-    //mTabContainer->selectNextTab();
-}
-
 
 void FSFloaterScriptDialogContainer::onClickMinimize()
 {
+    // Call static method
     LLFloater::onClickMinimize(this);
 }
 
@@ -364,7 +350,7 @@ LLScriptFloater* FSFloaterScriptDialogContainer::getFloater(const LLUUID& id) co
     return nullptr;
 }
 
-void FSFloaterScriptDialogContainer::onCloseFloater(LLUUID& id)
+void FSFloaterScriptDialogContainer::onCloseFloater(const LLUUID& id)
 {
     mSessions.erase(id);
     if (isShown())
@@ -400,11 +386,6 @@ FSFloaterScriptDialogContainer* FSFloaterScriptDialogContainer::getInstance()
     return LLFloaterReg::getTypedInstance<FSFloaterScriptDialogContainer>("fs_script_dialog_container");
 }
 
-void FSFloaterScriptDialogContainer::setVisible(bool b)
-{
-    LLMultiFloater::setVisible(b);
-}
-
 void FSFloaterScriptDialogContainer::setMinimized(bool b)
 {
     LLMultiFloater::setMinimized(b);
@@ -419,13 +400,12 @@ void FSFloaterScriptDialogContainer::setMinimized(bool b)
     }
 }
 
-void FSFloaterScriptDialogContainer::reloadEmptyFloaters()
-{
-}
-
 // virtual
 void FSFloaterScriptDialogContainer::draw()
 {
+    // Need to bypass the LLMulti-Floater draw as it closes the window during draw
+    // if there are 0 tabs, but need to handle the removal in the remove code
+    // as it caused issues with the Script Dialogs in testing.
     LLFloater::draw();
 }
 
@@ -523,21 +503,6 @@ void FSFloaterScriptDialogContainer::growToFit(S32 content_width, S32 content_he
         translate(0, old_height - new_height);
     }
 }
-
-bool FSFloaterScriptDialogContainer::applyRectControl()
-{
-    bool saved_rect = LLFloater::applyRectControl();
-
-    //LLRect current_rect;
-
-    //current_rect.setLeftTopAndSize(getRect().mTop, getRect().mLeft, mInitalWidth, mInitalHeight);
-
-    
-    
-
-    return saved_rect;
-}
-
 void FSFloaterScriptDialogContainer::tabOpen(LLFloater* opened_floater, bool from_click)
 {
     LLEmojiHelper::instance().hideHelper(nullptr, true);
