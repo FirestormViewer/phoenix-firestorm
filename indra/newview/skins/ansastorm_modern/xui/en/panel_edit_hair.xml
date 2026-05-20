@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel
+     background_visible="true"
+	 follows="all"
+	 height="400"
+	 layout="topleft"
+	 left="0"
+	 name="edit_hair_panel"
+	 top_pad="10"
+	 width="363" >
+
+	 <panel
+	  border="false"
+	  follows="top|left|right"
+	  height="300"
+	  left="0"
+	  layout="topleft"
+	  name="avatar_hair_color_panel"
+	  top="110"
+	  width="100" >
+            <texture_picker
+             can_apply_immediately="true"
+             default_image_name="Default"
+             follows="left|top"
+             height="80"
+             label="Texture"
+             layout="topleft"
+             left="15"
+             name="Texture"
+             tool_tip="Click to choose a picture"
+             top="0"
+             width="64" >
+              <texture_picker.commit_callback
+                  function="TexturePicker.Commit" />
+            </texture_picker>
+     </panel>
+
+     <tab_container
+       name="wearable_accordion"
+       layout="topleft"
+       follows="all"
+       tab_position="left"
+       top="0"
+       left="0"
+       height="400"
+       width="363">
+
+      <!-- Begin Color Panel -->
+      <panel
+       name="hair_color_tab_holder"
+       title="Color"
+       layout="topleft"
+       follows="left"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="hair_color_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="hair_color_tab"
+       fit_panel="false"
+       title="Color">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="hair_color_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Color Panel -->
+
+      <!-- Begin Style Panel -->
+      <panel
+       name="hair_style_tab_holder"
+       title="Style"
+       layout="topleft"
+       follows="left"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="hair_style_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="hair_style_tab"
+       fit_panel="false"
+       title="Style">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="hair_style_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Style Panel -->
+
+      <!-- Begin Eyebrows Panel -->
+      <panel
+       name="hair_eyebrows_tab_holder"
+       title="Eyebrows"
+       layout="topleft"
+       follows="left"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="hair_eyebrows_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="hair_eyebrows_tab"
+       fit_panel="false"
+       title="Eyebrows">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="hair_eyebrows_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Eyebrows Panel -->
+
+      <!-- Begin Facial Panel -->
+      <panel
+       name="hair_facial_tab_holder"
+       title="Facial"
+       layout="topleft"
+       follows="left"
+       height="400"
+       width="263">
+      <text name="hair_facial_not_available"
+       invisibility_control="AvatarSex"
+       follows="top|left"
+       layout="topleft"
+       top="0"
+       left="10"
+       height="50">
+          Face options are only available
+for male avatars.
+       </text>
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="hair_facial_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="hair_facial_tab"
+       fit_panel="false"
+       title="Facial">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="hair_facial_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Facial Panel -->
+
+    </tab_container>
+</panel>
+

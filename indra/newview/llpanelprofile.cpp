@@ -1084,8 +1084,8 @@ void LLPanelProfileSecondLife::resetData()
     mGroupInviteButton->setVisible(!own_profile);
     if (own_profile && LLAvatarName::useDisplayNames())
     {
-        mDisplayNameButton->setVisible(true);
-        mDisplayNameButton->setEnabled(true);
+        mDisplayNameButton->setVisible(mAllowEdit);
+        mDisplayNameButton->setEnabled(mAllowEdit);
     }
     mShowOnMapButton->setVisible(!own_profile);
     mPayButton->setVisible(!own_profile);
@@ -1864,11 +1864,11 @@ void LLPanelProfileSecondLife::setLoaded()
         //if (mHideAgeCombo->getVisible())
         //{
         //    mHideAgeCombo->setEnabled(true);
-        mShowInSearchCheckbox->setEnabled(true);
-        mPreviewButton->setEnabled(true); // <AS:Chanayane> Preview button
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit); // <AS:Chanayane> Preview button
         if (mHideAgeCheckbox->getVisible())
         {
-            mHideAgeCheckbox->setEnabled(true);
+            mHideAgeCheckbox->setEnabled(mAllowEdit);
         // </FS:Ansariel>
         }
         mDescriptionEdit->setEnabled(mAllowEdit);
@@ -1880,13 +1880,13 @@ void LLPanelProfileSecondLife::updateButtons()
 {
     if (getSelfProfile())
     {
-        mShowInSearchCheckbox->setVisible(true);
-        mShowInSearchCheckbox->setEnabled(true);
+        mShowInSearchCheckbox->setVisible(mAllowEdit);
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
 // <AS:Chanayane> Preview button
-        mPreviewButton->setVisible(true);
-        mPreviewButton->setEnabled(true);
+        mPreviewButton->setVisible(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit);
 // </AS:Chanayane>
-        mDescriptionEdit->setEnabled(true);
+        mDescriptionEdit->setEnabled(mAllowEdit);
     }
     else
     {

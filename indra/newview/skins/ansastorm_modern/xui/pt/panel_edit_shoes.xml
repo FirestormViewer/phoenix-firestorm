@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shoes_panel">
+	<panel name="avatar_shoes_color_panel">
+		<texture_picker label="Textura" name="Fabric" tool_tip="Toque para escolher uma imagem"/>
+		<color_swatch label="Cor" name="Cor/Tonalid" tool_tip="Toque para abrir o seletor de cor"/>
+	</panel>
+	<panel name="shoes_main_tab_holder">
+		<accordion name="shoes_main_accordion">
+			<accordion_tab name="shoes_main_tab" title="Sapatos"/>
+		</accordion>
+	</panel>
+</panel>

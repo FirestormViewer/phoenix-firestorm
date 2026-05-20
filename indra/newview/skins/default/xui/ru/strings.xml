@@ -570,7 +570,7 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipSLIcon">
-		Это ссылка на страницу официального домена SecondLife.com или LindenLab.com.
+		Это ссылка на страницу официального домена SecondLife.com, LindenLab.com или firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Скрипт
@@ -1715,6 +1715,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InventoryNoMatchingFavorites">
 		Вы не отметили ни один элемент как избранный.
+	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Свой
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Чтобы добавить место в список достопримечательностей, нажмите на звездочку справа от названия местоположения.

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Texture" name="Texture" tool_tip="Clicca per scegliere una texture"/>
+	</panel>
+	<accordion name="wearable_accordion">
+		<panel name="hair_color_tab_holder" title="Colore">
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="Colore"/>
+			</accordion>
+		</panel>
+		<panel name="hair_style_tab_holder" title="Stile">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="Stile"/>
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="Sopracciglia">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="Sopracciglia"/>
+			</accordion>
+		</panel>
+		<panel name="hair_facial_tab_holder" title="Viso">
+			<text name="hair_facial_not_available">
+				Le opzioni del viso sono disponibili
+solo per gli avatar maschili.
+			</text>
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="Viso"/>
+			</accordion>
+		</panel>
+	</accordion>
+</panel>

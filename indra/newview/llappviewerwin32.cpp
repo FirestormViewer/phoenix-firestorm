@@ -203,7 +203,21 @@ namespace
 
             // LL_ERRS message, when there is one
             // <FS:Beq> Improve bugsplpat reporting with attributes
-           // sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //if (!sBugsplatDesriptionField.empty())
+            //{
+            //    // Can be set by watchdog or other code that detects a problem
+            //    // and wants to add some context to the crash report.
+            //    // Will be visible in the BugSplat web UI.
+            //    sBugSplatSender->setDefaultUserDescription(WCSTR(sBugsplatDescriptionField));
+            //    // This type of crash is not nessesarily a crash, or final.
+            //    // Prepare for the next one.
+            //    sBugsplatDesriptionField.clear();
+            //}
+            //else
+            //{
+            //    // LL_ERRS message, when there is one
+            //    sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
+            //}
             // sBugSplatSender->setAttribute(WCSTR(L"OS"), WCSTR(LLOSInfo::instance().getOSStringSimple())); // In case we ever stop using email for this
             // sBugSplatSender->setAttribute(WCSTR(L"AppState"), WCSTR(LLStartUp::getStartupStateString()));
             // sBugSplatSender->setAttribute(WCSTR(L"GLVendor"), WCSTR(gGLManager.mGLVendor));
@@ -514,22 +528,8 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
     // commands and exit the process before we do anything else.
     if (!velopack_initialize())
     {
+        // Obsolete? Always return true
         // Velopack handled the invocation (install/uninstall hook)
-
-        // Drop install related settings
-        gDirUtilp->initAppDirs("SecondLife");
-
-        std::string user_settings_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings.xml");
-        LLControlGroup settings("global");
-        if (settings.loadFromFile(user_settings_path))
-        {
-            // If user reinstalls or updates, we want to recheck for nsis leftovers.
-            if (settings.controlExists("PreviousInstallChecked"))
-            {
-                settings.setBOOL("PreviousInstallChecked", false);
-            }
-            settings.saveToFile(user_settings_path, true);
-        }
         return 0;
     }
 #endif

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel
+     background_visible="true"
+	 follows="all"
+	 height="400"
+	 layout="topleft"
+	 left="0"
+	 name="edit_shape_panel"
+	 top_pad="10"
+	 width="363" >
+     <string name="meters">Meters</string>
+     <string name="feet">Feet</string>
+     <string name="height">Height:</string>
+     <string name="height_label_color" translate="false">White_50</string>
+     <string name="height_value_label_color" translate="false">White</string>
+     <text
+         follows="top|left|right"
+         font="SansSerifSmallBold"
+         halign="right"
+         height="12"
+         layout="topleft"
+         left="0"
+         name="avatar_height"
+         top="0"
+         width="353">
+     </text>
+
+    <tab_container
+       name="wearable_accordion"
+       layout="topleft"
+       follows="all"
+       tab_position="left"
+       height="384"
+       width="363">
+
+      <!-- Begin Body Panel -->
+      <panel
+       name="shape_body_tab_holder"
+       title="Body"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_body_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_body_tab"
+       fit_panel="false"
+       title="Body">
+      <!-- Viewer will replace things here with tiled editing views -->
+	  <scrolling_panel_list
+       layout="topleft"
+	     follows="all"
+       left="0"
+       name="shape_body_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Body Panel -->
+
+      <!-- Begin Head Panel -->
+      <panel
+       name="shape_head_tab_holder"
+       title="Head"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_head_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_head_tab"
+       fit_panel="false"
+       title="Head">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_head_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Head Panel -->
+
+      <!-- Begin Eyes Panel -->
+      <panel
+       name="shape_eyes_tab_holder"
+       title="Eyes"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_eyes_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_eyes_tab"
+       fit_panel="false"
+       title="Eyes">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_eyes_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Eyes Panel -->
+
+      <!-- Begin Ears Panel -->
+      <panel
+       name="shape_ears_tab_holder"
+       title="Ears"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_ears_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_ears_tab"
+       fit_panel="false"
+       title="Ears">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_ears_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Ears Panel -->
+
+      <!-- Begin Nose Panel -->
+      <panel
+       name="shape_nose_tab_holder"
+       title="Nose"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_nose_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_nose_tab"
+       fit_panel="false"
+       title="Nose">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_nose_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Nose Panel -->
+
+      <!-- Begin Mouth Panel -->
+      <panel
+       name="shape_mouth_tab_holder"
+       title="Mouth"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_mouth_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_mouth_tab"
+       fit_panel="false"
+       title="Mouth">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_mouth_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Mouth Panel -->
+
+      <!-- Begin Chin Panel -->
+      <panel
+       name="shape_chin_tab_holder"
+       title="Chin"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_chin_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_chin_tab"
+       fit_panel="false"
+       title="Chin">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_chin_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Chin Panel -->
+
+      <!-- Begin Torso Panel -->
+      <panel
+       name="shape_torso_tab_holder"
+       title="Torso"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_torso_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_torso_tab"
+       fit_panel="false"
+       title="Torso">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_torso_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Torso Panel -->
+
+      <!-- Begin Legs Panel -->
+      <panel
+       name="shape_legs_tab_holder"
+       title="Legs"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="384"
+       left="0"
+       name="shape_legs_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="shape_legs_tab"
+       fit_panel="false"
+       title="Legs">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="shape_legs_param_list"
+       top="0"
+       height="384"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Legs Panel -->
+
+      </tab_container>
+</panel>
+

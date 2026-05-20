@@ -906,23 +906,63 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         LLLocale locale(LLLocale::USER_LOCALE);
         LLGLDepthTest gls_depth(GL_FALSE);
 
-        auto renderTextWithShadow = [&](const std::string& text, F32 x, F32 y, const LLColor4& color) {
-            font->render(utf8str_to_wstring(text), 0, x + 1.f, y - 2.f, LLColor4::black,
-                LLFontGL::LEFT, LLFontGL::BASELINE,
-                LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
-            font->render(utf8str_to_wstring(text), 0, x, y, color,
-                LLFontGL::LEFT, LLFontGL::BASELINE,
-                LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
-        };
-
         F32 base_y = (F32)(window_center_y + vertical_offset);
-        renderTextWithShadow(llformat("X: %.3f", mLastEuler.mV[VX]), window_center_x - 122.f, base_y, LLColor4(1.f, 0.5f, 0.5f, 1.f));
-        renderTextWithShadow(llformat("Y: %.3f", mLastEuler.mV[VY]), window_center_x - 47.f, base_y, LLColor4(0.5f, 1.f, 0.5f, 1.f));
-        renderTextWithShadow(llformat("Z: %.3f", mLastEuler.mV[VZ]), window_center_x + 28.f, base_y, LLColor4(0.5f, 0.5f, 1.f, 1.f));
-        renderTextWithShadow(llformat("⟳: %.3f", mLastAngle * RAD_TO_DEG), window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
+
+        static LLVector3 current_euler = mLastEuler;
+        static F32 current_angle = mLastAngle;
+        static LLJoint* current_joint = mJoint;
+        static LLManip::EManipPart current_part = mManipPart;
+        static bool current_cam_edge_on = mCamEdgeOn;
+        static LLWString current_eulerX_str = utf8string_to_wstring(llformat("X: %.3f", mLastEuler.mV[VX]));
+        static LLWString current_eulerY_str = utf8string_to_wstring(llformat("Y: %.3f", mLastEuler.mV[VY]));
+        static LLWString current_eulerZ_str = utf8string_to_wstring(llformat("Z: %.3f", mLastEuler.mV[VZ]));
+        static LLWString current_angle_str = utf8string_to_wstring(llformat("⟳: %.3f", mLastAngle * RAD_TO_DEG));
+        static LLWString current_joint_str = utf8string_to_wstring(llformat("Joint: %s", mJoint->getName().c_str()));
+        static LLWString current_part_str = utf8string_to_wstring(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mCamEdgeOn ? '*' : ' '));
+
+        if (current_euler != mLastEuler)
+        {
+            current_eulerX_str = utf8string_to_wstring(llformat("X: %.3f", mLastEuler.mV[VX]));
+            current_eulerY_str = utf8string_to_wstring(llformat("Y: %.3f", mLastEuler.mV[VY]));
+            current_eulerZ_str = utf8string_to_wstring(llformat("Z: %.3f", mLastEuler.mV[VZ]));
+            current_euler = mLastEuler;
+        }
+
+        if (current_angle != mLastAngle)
+        {
+            current_angle_str = utf8string_to_wstring(llformat("⟳: %.3f", mLastAngle * RAD_TO_DEG));
+            current_angle = mLastAngle;
+        }
+
+        if (current_joint != mJoint)
+        {
+            current_joint_str = utf8string_to_wstring(llformat("Joint: %s", mJoint->getName().c_str()));
+            current_joint = mJoint;
+        }
+
+        if (current_part != mManipPart || current_cam_edge_on != mCamEdgeOn)
+        {
+            current_part_str = utf8string_to_wstring(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mCamEdgeOn ? '*' : ' '));
+            current_part = mManipPart;
+            current_cam_edge_on = mCamEdgeOn;
+        }
+
+        auto renderTextWithShadow = [&](const LLWString& text, F32 x, F32 y, const LLColor4& color) {
+            font->render(text, 0, x + 1.f, y - 2.f, LLColor4::black,
+                LLFontGL::LEFT, LLFontGL::BASELINE,
+                LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
+            font->render(text, 0, x, y, color,
+                LLFontGL::LEFT, LLFontGL::BASELINE,
+                LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
+            };
+
+        renderTextWithShadow(current_eulerX_str, window_center_x - 122.f, base_y, LLColor4(1.f, 0.5f, 0.5f, 1.f));
+        renderTextWithShadow(current_eulerY_str, window_center_x - 47.f, base_y, LLColor4(0.5f, 1.f, 0.5f, 1.f));
+        renderTextWithShadow(current_eulerZ_str, window_center_x + 28.f, base_y, LLColor4(0.5f, 0.5f, 1.f, 1.f));
+        renderTextWithShadow(current_angle_str, window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
         base_y += 20.f;
-        renderTextWithShadow(llformat("Joint: %s", mJoint->getName().c_str()), window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
-        renderTextWithShadow(llformat("Manip: %s%c", getManipPartString(mManipPart).c_str(), mCamEdgeOn?'*':' '), window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
+        renderTextWithShadow(current_joint_str, window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
+        renderTextWithShadow(current_part_str, window_center_x + 30.f, base_y, LLColor4(1.f, 1.f, .1f, 1.f));
     }
     gGL.popMatrix();
 

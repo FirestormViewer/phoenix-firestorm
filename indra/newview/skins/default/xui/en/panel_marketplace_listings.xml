@@ -109,7 +109,6 @@
           left="2"
           width="306"
           halign="center"
-          font="SansSerifMedium"
           font_shadow="hard"
           valign="top">
           Drop folders here to create new listings

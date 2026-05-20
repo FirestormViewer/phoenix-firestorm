@@ -11,7 +11,6 @@
  width="200">
 
 <progress_bar
- color_bar="1 1 1 0.96"
  follows="left|right|top"
  height="20"
  layout="topleft"

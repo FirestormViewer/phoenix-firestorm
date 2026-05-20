@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ default_tab_group="1"
+ follows="all"
+ height="423"
+ label="Things"
+ layout="topleft"
+ min_height="300"
+ min_width="240"
+ name="main inventory panel">
+  <panel.string
+   name="Itemcount">
+  </panel.string>
+  <panel.string
+   name="ItemcountFetching">
+    Fetching [ITEM_COUNT] Elements... [FILTER]
+  </panel.string>
+  <panel.string
+   name="ItemcountCompleted">
+    [ITEM_COUNT] Elements [FILTER]
+  </panel.string>
+  <panel.string
+   name="ItemcountUnknown">
+    Fetched [ITEM_COUNT] Elements [FILTER]
+  </panel.string>
+  <panel.string name="inventory_title">Inventory</panel.string>
+  <panel.string name="default_mode_btn">Multi_Folder_Mode</panel.string>
+  <panel.string name="single_folder_mode_btn">Single_Folder_Mode</panel.string>
+  
+	<menu_bar
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		opaque="false"
+		top="3"
+		left="1"
+		name="inventory_menu_bar"
+		width="200">
+
+	<menu
+		label="Inventory"
+		tear_off="true"
+		name="inventory_inventory_menu">
+		<menu_item_call
+			name="inventory_open"
+			label="Open">
+			<menu_item_call.on_click
+				function="Inventory.DoToSelected"
+				parameter="open" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_share"
+			label="Share">
+			<menu_item_call.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="share" />
+		</menu_item_call>
+		<menu_item_call
+			name="replace_links"
+			label="Replace Links">
+			<menu_item_call.on_click
+				function="Inventory.DoToSelected"
+				parameter="replace_links" />
+		</menu_item_call>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_new_window"
+			label="New Window">
+			<menu_item_call.on_click
+				function="Inventory.NewWindow" />
+		</menu_item_call>
+		<menu_item_check
+			label="Protected Folders"
+			name="Protected Folders">
+			<menu_item_check.on_check
+				function="Floater.Visible"
+				parameter="fs_protectedfolders" />
+			<menu_item_check.on_click
+				function="Floater.Toggle"
+				parameter="fs_protectedfolders" />
+		</menu_item_check>
+		<menu_item_check
+			label="Inventory settings..."
+			name="inv_settings">
+			<menu_item_check.on_check
+				function="Floater.Visible"
+				parameter="inventory_settings" />
+			<menu_item_check.on_click
+				function="Floater.Toggle"
+				parameter="inventory_settings" />
+		</menu_item_check>
+		<menu_item_separator/>
+		<menu_item_check
+			label="Show Recent tab"
+			name="show_recent_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_recent_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="recent_tab" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Show Worn tab"
+			name="show_worn_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_worn_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="worn_tab" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Show Favorites tab"
+			name="show_favorites_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_favorites_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="favorites_tab" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_separator/>
+		<menu_item_check
+			label="List view"
+			layout="topleft"
+			name="list_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="list_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="list_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Gallery view"
+			layout="topleft"
+			name="gallery_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="gallery_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="gallery_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Combination view"
+			layout="topleft"
+			name="combination_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="combination_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="combination_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			label="Add objects on double click"
+			name="add_inv_toggle">
+			<menu_item_check.on_check
+				function="CheckControl"
+				parameter="FSDoubleClickAddInventoryObjects" />
+			<menu_item_check.on_click
+				function="ToggleControl"
+				parameter="FSDoubleClickAddInventoryObjects" />
+		</menu_item_check>
+		<menu_item_check
+			label="Add clothes on double click"
+			name="add_invclothing_toggle">
+			<menu_item_check.on_check
+				function="CheckControl"
+				parameter="FSDoubleClickAddInventoryClothing" />
+			<menu_item_check.on_click
+				function="ToggleControl"
+				parameter="FSDoubleClickAddInventoryClothing" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_call
+			name="inventory_show_filters"
+			label="Show Filters">
+			<menu_item_call.on_click
+				function="Inventory.ShowFilters" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_reset_filters"
+			label="Reset Filters">
+			<menu_item_call.on_click
+				function="Inventory.ResetFilters" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_close_all_folders"
+			label="Collapse All Folders">
+			<menu_item_call.on_click
+				function="Inventory.CloseAllFolders" />
+			<menu_item_call.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_call>
+		<menu_item_separator>
+			<menu_item_separator.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_separator>
+		<menu_item_call
+			name="inventory_empty_trash"
+			label="Empty Trash">
+			<menu_item_call.on_click
+				function="Inventory.EmptyTrash" />
+			<menu_item_call.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_call>
+	</menu>
+
+	<menu
+		label="Create"
+		tear_off="true"
+		name="inventory_create_menu">
+		<menu_item_call
+			name="inventory_new_folder"
+			label="New Folder">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="category" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_script"
+			label="New Script">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="lsl" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_note"
+			label="New Note">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="notecard" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_gesture"
+			label="New Gesture">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="gesture" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_material"
+			label="New Material">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="material" />
+		</menu_item_call>
+		<menu
+			name="inventory_new_clothes"
+			label="New Clothes">
+			<menu_item_call
+				name="inventory_new_shirt"
+				label="New Shirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_pants"
+				label="New Pants">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="pants" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_shoes"
+				label="New Shoes">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shoes" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_socks"
+				label="New Socks">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="socks" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_jacket"
+				label="New Jacket">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="jacket" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_skirt"
+				label="New Skirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="skirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_gloves"
+				label="New Gloves">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="gloves" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_undershirt"
+				label="New Undershirt">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="undershirt" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_underpants"
+				label="New Underpants">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="underpants" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_tattoo"
+				label="New Tattoo">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="tattoo" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_universal"
+				label="New Universal">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="universal" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_alpha"
+				label="New Alpha">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="alpha" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_physics"
+				label="New Physics">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="physics" />
+			</menu_item_call>
+		</menu>
+		<menu
+			name="inventory_new_body_parts"
+			label="New Body Parts">
+			<menu_item_call
+				name="inventory_new_shape"
+				label="New Shape">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="shape" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_skin"
+				label="New Skin">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="skin" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_hair"
+				label="New Hair">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="hair" />
+			</menu_item_call>
+			<menu_item_call
+				name="inventory_new_eyes"
+				label="New Eyes">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="eyes" />
+			</menu_item_call>
+		</menu>
+		<menu
+			label="New Settings"
+			name="New Settings">
+			<menu_item_call
+				label="New Sky"
+				name="New Sky">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="sky"/>
+				<menu_item_call.on_enable
+					function="Inventory.EnvironmentEnabled" />
+			</menu_item_call>
+			<menu_item_call
+				label="New Water"
+				name="New Water">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="water"/>
+				<menu_item_call.on_enable
+					function="Inventory.EnvironmentEnabled" />
+			</menu_item_call>
+			<menu_item_call
+				label="New Day Cycle"
+				name="New Day Cycle">
+				<menu_item_call.on_click
+					function="Inventory.DoCreate"
+					parameter="daycycle"/>
+				<menu_item_call.on_enable
+					function="Inventory.EnvironmentEnabled" />
+			</menu_item_call>
+		</menu>
+	</menu>
+
+	<!-- TODO: try to make these check items that actually reflect their state -Zi -->
+	<menu
+		label="Sort"
+		name="inventory_sort_menu"
+		tear_off="true"
+		top="0">
+		<menu_item_check
+			name="inventory_sort_by_name"
+			label="By Name">
+			<on_click
+				function="Inventory.SortBy.Set"
+				parameter="name" />
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="name" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_sort_by_date"
+			label="By Date">
+			<on_click
+				function="Inventory.SortBy.Set"
+				parameter="date" />
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="date" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_sort_folders_by_name"
+			label="Folders Always By Name">
+			<on_click
+				function="Inventory.SortBy.Set"
+				parameter="foldersalwaysbyname" />
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="foldersalwaysbyname" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_sort_system_on_top"
+			label="System Folders To Top">
+			<on_click
+				function="Inventory.SortBy.Set"
+				parameter="systemfolderstotop" />
+			<on_check
+				function="Inventory.SortBy.Check"
+				parameter="systemfolderstotop" />
+			<on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+	</menu>
+
+	<menu
+		label="Search"
+		name="inventory_search_menu"
+		tear_off="true"
+		top="0">
+		<menu_item_check
+			name="inventory_search_by_name"
+			label="By Name">
+			<on_click
+				function="Inventory.SearchType.Set"
+				parameter="search_by_name" />
+			<on_check
+				function="Inventory.SearchType.Check"
+				parameter="search_by_name" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_creator"
+			label="By Creator">
+			<on_click
+				function="Inventory.SearchType.Set"
+				parameter="search_by_creator" />
+			<on_check
+				function="Inventory.SearchType.Check"
+				parameter="search_by_creator" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_description"
+			label="By Description">
+			<on_click
+				function="Inventory.SearchType.Set"
+				parameter="search_by_description" />
+			<on_check
+				function="Inventory.SearchType.Check"
+				parameter="search_by_description" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_search_by_uuid"
+			label="By UUID">
+			<on_click
+				function="Inventory.SearchType.Set"
+				parameter="search_by_UUID" />
+			<on_check
+				function="Inventory.SearchType.Check"
+				parameter="search_by_UUID" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_search_by_all"
+			label="By All">
+			<on_click
+				function="Inventory.SearchType.Set"
+				parameter="search_by_all" />
+			<on_check
+				function="Inventory.SearchType.Check"
+				parameter="search_by_all" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_filter_show_links"
+			label="Show Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="show_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="show_links" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_only_links"
+			label="Show Only Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="only_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="only_links" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_hide_links"
+			label="Hide Links">
+			<on_click
+				function="Inventory.FilterLinks.Set"
+				parameter="hide_links" />
+			<on_check
+				function="Inventory.FilterLinks.Check"
+				parameter="hide_links" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_filter_only_modify"
+			label="Only Modifiable">
+			<on_click
+				function="Inventory.FilterPermissions.Set"
+				parameter="only_modify" />
+			<on_check
+				function="Inventory.FilterPermissions.Check"
+				parameter="only_modify" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_only_copy"
+			label="Only Copyable">
+			<on_click
+				function="Inventory.FilterPermissions.Set"
+				parameter="only_copy" />
+			<on_check
+				function="Inventory.FilterPermissions.Check"
+				parameter="only_copy" />
+		</menu_item_check>
+		<menu_item_check
+			name="inventory_filter_only_transfer"
+			label="Only Transferable">
+			<on_click
+				function="Inventory.FilterPermissions.Set"
+				parameter="only_transfer" />
+			<on_check
+				function="Inventory.FilterPermissions.Check"
+				parameter="only_transfer" />
+		</menu_item_check>
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_filter_coalesced_objects_only"
+			label="Only Coalesced">
+			<on_click
+				function="Inventory.CoalescedObjects.Toggle"
+				parameter="coalesced_objects_only" />
+			<on_check
+				function="Inventory.CoalescedObjects.Check"
+				parameter="coalesced_objects_only" />
+		</menu_item_check>
+	</menu>
+	</menu_bar>
+  
+  <layout_stack
+   follows="left|top|right"
+   height="25"
+   animate="false"
+   top_pad="0"
+   left="4"
+   right="-5"
+   orientation="horizontal"
+   name="top_stack">
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     auto_resize="false"
+     height="25"
+     width="62"
+     name="nav_buttons"
+     visible="false">
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Back"
+      image_pressed="Single_Folder_Back"
+      image_unselected="Single_Folder_Back"
+      scale_image="false"
+      layout="topleft"
+      left="0"
+      top="2"
+      name="back_btn"
+      tool_tip="Back"
+      width="20" />
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Forward"
+      image_pressed="Single_Folder_Forward"
+      image_unselected="Single_Folder_Forward"
+      scale_image="false"
+      layout="topleft"
+      left_pad="1"
+      name="forward_btn"
+      tool_tip="Forward"
+      width="20" />
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Up"
+      image_pressed="Single_Folder_Up"
+      image_unselected="Single_Folder_Up"
+      scale_image="false"
+      layout="topleft"
+      left_pad="1"
+      name="up_btn"
+      tool_tip="Go up one level"
+      width="20" />
+    </layout_panel>
+    <layout_panel
+      border="false"
+      bevel_style="in"
+      user_resize="false"
+      height="25"
+      width="324"
+      name="filter_panel"
+      visible="true">
+      <filter_editor
+       text_pad_left="4"
+       follows="left|top|right"
+       height="23"
+       label="Filter Inventory"
+       layout="topleft"
+       left="0"
+       max_length_chars="300"
+       highlight_text_field="true"
+       name="inventory search editor"
+       tool_tip="Type in one or more words to search for, separated by '+' "
+       top_pad="0"
+       right="-1" />
+    </layout_panel>
+  </layout_stack>
+
+  <layout_stack
+   follows="left|top|right"
+   height="18"
+   animate="false"
+   top_pad="0"
+   left="4"
+   right="-5"
+   name="ctrl_stack"
+   orientation="horizontal">
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     auto_resize="false"
+     height="18"
+     width="38"
+     name="collapse_expand_buttons">
+
+      <button
+       name="collapse_btn"
+       image_overlay="MinusItem_Off"
+       width="18"
+       height="18"
+       left="0"
+       top="0"
+       follows="top|left"
+       layout="topleft"/>
+
+      <button
+       name="expand_btn"
+       image_overlay="AddItem_Off"
+       width="18"
+       height="18"
+       left_pad="2"
+       follows="top|left"
+       layout="topleft" />
+
+    </layout_panel>
+
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     height="18"
+     width="200"
+     name="filter_ctrls">
+
+      <text
+       name="filter_label"
+       value="Filter:"
+       width="40"
+       height="18"
+       left="2"
+       top="2"
+       follows="top|left"
+       layout="topleft" />
+
+      <combo_box
+       name="filter_combo_box"
+       right="-75"
+       height="18"
+       left_pad="4"
+       top_delta="-2"
+       follows="top|left|right"
+       layout="topleft">
+        <combo_box.item value="filter_type_all" label="All Types" />
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_animations" label="Animations" />
+        <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+        <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+        <combo_box.item value="filter_type_gestures" label="Gestures" />
+        <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+        <combo_box.item value="filter_type_notecards" label="Notecards" />
+        <combo_box.item value="filter_type_objects" label="Objects" />
+        <combo_box.item value="filter_type_scripts" label="Scripts" />
+        <combo_box.item value="filter_type_sounds" label="Sounds" />
+        <combo_box.item value="filter_type_textures" label="Textures" />
+        <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+        <combo_box.item value="filter_type_materials" label="Materials" />
+        <combo_box.item value="filter_type_settings" label="Settings" />
+        <!-- [AS:Chanayane] Search folders only -->
+        <combo_box.item value="filter_type_folders" label="Folders" />
+        <!-- [/AS:Chanayane] -->
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_coalesced" label="Only Coalesced"/>
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_custom" label="Custom..." />
+      </combo_box>
+
+      <button
+       commit_callback.function="Inventory.ShowFilters"
+       name="filteroptions_btn"
+       image_overlay="Script_Config"
+       width="18"
+       height="18"
+       right="-54"
+       top_delta="0"
+       follows="top|right"
+       layout="topleft"/>
+
+      <menu_button
+       follows="top|right"
+       tool_tip="Show search visibility options"
+       height="18"
+       image_overlay="Inv_Toolbar_SearchVisibility"
+       layout="topleft"
+       right="-21"
+       top_delta="0"
+       name="options_visibility_btn"
+       width="31" />
+
+      <button
+       commit_callback.function="Inventory.ResetFilters"
+       name="resetfilters_btn"
+       image_overlay="StopReload_Off"
+       width="18"
+       height="18"
+       right="-1"
+       top_delta="0"
+       follows="top|right"
+       layout="topleft"/>
+    </layout_panel>
+  </layout_stack>
+
+  <panel
+   follows="all"
+   halign="center"
+   height="314"
+   layout="topleft"
+   left="2"
+   right="-3"
+   name="default_inventory_panel"
+   top_pad="4">
+    <tab_container
+       bg_alpha_color="DkGray"
+       bg_opaque_color="DkGray"
+       background_visible="false"
+       background_opaque="false"
+       follows="all"
+       halign="center"
+       height="314"
+       layout="topleft"
+       left="0"
+       name="inventory filter tabs"
+       open_tabs_on_drag_and_drop="true"
+       tab_group="1"
+       tab_position="top"
+       top="0">
+      <inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Inventory"
+       help_topic="my_inventory_tab"
+       layout="topleft"
+       name="All Items"
+       sort_order_setting="InventorySortOrder"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </inventory_panel>
+      <recent_inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Recent"
+       sort_order_setting="RecentItemsSortOrder"
+       help_topic="recent_inventory_tab"
+       layout="topleft"
+       name="Recent Items"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </recent_inventory_panel>
+      <worn_inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Worn"
+       help_topic="worn_inventory_tab"
+       layout="topleft"
+       name="Worn Items"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </worn_inventory_panel>
+        <favorites_inventory_panel
+         border="false"
+         bevel_style="none"
+         follows="all"
+         label="Favorites"
+         help_topic="favorites_inventory_tab"
+         layout="topleft"
+         name="Favorites"
+         show_item_link_overlays="true"
+         preinitialize_views="false"
+         scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+        </favorites_inventory_panel>
+    </tab_container>
+  </panel>
+    <panel
+     follows="all"
+     halign="center"
+     height="313"
+     layout="topleft"
+     left="4"
+     right="-4"
+     name="combination_view_inventory"
+     top_delta="0"
+     visible="false">
+     <layout_stack
+      follows="all"
+      height="313"
+      name="combination_view_stack"
+      animate="false"
+      drag_handle_thickness="6"
+      drag_handle_first_indent="18"
+      drag_handle_second_indent="18"
+      drag_handle_color="PanelGray"
+      drag_handle_shift="5"
+      show_drag_handle="true"
+      top="0"
+      left="0"
+      orientation="vertical">
+       <layout_panel
+        border="false"
+        bevel_style="in"
+        user_resize="true"
+        auto_resize="true"
+        height="203"
+        min_width="150"
+        name="comb_gallery_layout">
+        <panel
+         class="inventory_gallery"
+         filename="panel_inventory_gallery.xml"
+         left="0"
+         top_pad="0"
+         height="203"
+         name="comb_gallery_view_inv"
+         background_visible="true"
+         follows="all"
+         layout="topleft">
+        </panel>
+       </layout_panel>
+       <layout_panel
+        border="false"
+        bevel_style="in"
+        user_resize="true"
+        auto_resize="true"
+        height="110"
+        name="comb_inventory_layout">
+        <single_folder_inventory_panel
+         name="comb_single_folder_inv"
+         follows="all"
+         left="0"
+         top="0"
+         height="110"
+         layout="topleft"
+         show_item_link_overlays="true"
+         background_visible="true"
+         border="false"
+         bevel_style="none"
+         scroll.reserve_scroll_corner="false">
+         <item
+          single_folder_mode="true"
+          folder_indentation="-8"/>
+         <folder
+          single_folder_mode="true"
+          folder_indentation="-8"/>
+        </single_folder_inventory_panel>
+       </layout_panel>
+     </layout_stack>
+    </panel>
+  <panel
+   follows="left|right|bottom"
+   height="33"
+   layout="topleft"
+   bottom="-5"
+   left="4"
+   name="bottom_panel"
+   right="-4">
+      <panel
+       visible="false"
+       follows="top|left"
+       height="25"
+       left="0"
+       layout="topleft"
+       name="options_gear_btn_panel"
+       width="0">
+          <menu_button
+           follows="top|left"
+           tool_tip="Show additional options"
+           height="25"
+           image_hover_unselected="Toolbar_Left_Over"
+           image_overlay="OptionsMenu_Off"
+           image_selected="Toolbar_Left_Selected"
+           image_unselected="Toolbar_Left_Off"
+           layout="topleft"
+           left="0"
+           name="options_gear_btn"
+           top="0"
+           width="31" />
+      </panel>
+      <panel
+       visible="false"
+       follows="top|left"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="add_btn_panel"
+       width="0">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="AddItem_Off"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="add_btn"
+           tool_tip="Add new item"
+           top="0"
+           width="31" />
+      </panel>
+      <panel
+       follows="top|left"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="new_inventory_panel"
+       width="32">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Left_Over"
+           image_overlay="inventory_18"
+           image_selected="Toolbar_Left_Selected"
+           image_unselected="Toolbar_Left_Off"
+           layout="topleft"
+           left="0"
+           name="new_inv_btn"
+           tool_tip="Additional Inventory Window"
+           top="0"
+           width="31">
+           <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="secondary_inventory" />
+           </button>
+      </panel>
+      <panel
+       follows="top|left"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="view_mode_panel"
+       width="32">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="Single_Folder_Mode"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="view_mode_btn"
+           tool_tip="Switch between views"
+           top="0"
+           width="31"/>
+      </panel>
+      <panel
+       follows="top|left|right"
+       height="25"
+       left_pad="0"
+       right="-33"
+       layout="topleft"
+       name="dummy_panel">
+          <text
+           type="string"
+           length="1"
+           height="13"
+           layout="topleft"
+           left="8"
+           name="ItemcountText"
+           font="SansSerifMedium"
+           top_pad="6"
+           tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
+           use_ellipses="true"
+           follows="bottom|left|right"
+           right="-8">
+          Elements
+          </text>
+          <icon
+           follows="top|left|right"
+           height="25"
+           image_name="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           top="0"
+           right="-1"
+           name="dummy_icon" />
+      </panel>
+      <panel
+       follows="top|right"
+       height="25"
+       left_pad="0"
+       right="-1"
+       layout="topleft"
+       name="trash_btn_panel"
+       width="32">
+          <dnd_button
+           follows="top|right"
+           height="25"
+           image_hover_unselected="Toolbar_Right_Over"
+           image_overlay="TrashItem_Off"
+           image_selected="Toolbar_Right_Selected"
+           image_unselected="Toolbar_Right_Off"
+           left="0"
+           layout="topleft"
+           name="trash_btn"
+           tool_tip="Remove selected item"
+           top="0"
+           width="31"/>
+       </panel>
+	</panel>
+</panel>

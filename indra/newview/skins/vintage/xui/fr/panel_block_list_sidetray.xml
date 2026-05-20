@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="Aucun résident ni objet n'est bloqué."/>
+	<string name="no_filtered_blocked" value="Aucun résident ou objet bloqué ne correspond à votre recherche."/>
+	<string name="loading_blocked" value="Chargement des résidents et des objets bloqués..."/>
+	<string name="failed_blocked" value="La liste des blocages est actuellement indisponible."/>
 	<block_list name="blocked" tool_tip="Liste des personnes bloquées" />
 	<text name="block_limit">
 		Bloqués : [COUNT] ([LIMIT] max.)

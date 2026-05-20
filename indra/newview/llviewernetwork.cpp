@@ -131,7 +131,7 @@ void LLGridManager::initialize(const std::string& grid_file)
                   MAIN_GRID_WEB_PROFILE_URL,
                   "Agni");
     addSystemGrid(SECOND_LIFE_BETA_LABEL,
-                  "util.aditi.lindenlab.com",
+                  BETAGRID,
                   "https://login.aditi.lindenlab.com/cgi-bin/login.cgi",
                   "https://secondlife.aditi.lindenlab.com/helpers/",
                   DEFAULT_LOGIN_PAGE,

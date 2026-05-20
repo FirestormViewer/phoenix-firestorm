@@ -526,7 +526,7 @@
              height="16"
              label="Disable Physics"
              layout="topleft"
-             left_delta="120"
+             left_delta="136"
              name="disable physics"
              tool_tip="Set this to disable all physics in this region"
              top_delta="0"

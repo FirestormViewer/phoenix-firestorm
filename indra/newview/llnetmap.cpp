@@ -331,6 +331,7 @@ void LLNetMap::draw()
     // <FS:Ansariel> Aurora Sim
 
     static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
+    //static LLUIColor map_avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white); // <FS:CR>
     static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
     //static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
     static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
@@ -728,13 +729,18 @@ void LLNetMap::draw()
         for (U32 i = 0; i < sorted_avatar_ids.size(); i++)
         {
             // <FS:Ansariel> Performance improvement
-            //LLUUID uuid = avatar_ids[i];
-            const LLUUID& uuid = avatar_ids.at(i);
+            //LLUUID uuid = sorted_avatar_ids[i];
+            const LLUUID& uuid = sorted_avatar_ids.at(i);
 
             // Skip self, we'll draw it later
             if (uuid == gAgent.getID()) continue;
 
             pos_map = globalPosToView(sorted_positions[i]);
+
+            // <FS:CR>
+            //LLColor4 color = LLAvatarActions::isFriend(uuid) ? map_avatar_friend_color : map_avatar_color;
+            LLColor4 color = getAvatarColor(uuid);
+            // </FS:CR>
 
             // <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
             //unknown_relative_z = sorted_positions[i].mdV[VZ] >= COARSEUPDATE_MAX_Z &&
@@ -757,8 +763,6 @@ void LLNetMap::draw()
                 }
             }
             // </FS:Ansariel>
-
-            LLColor4 color = getAvatarColor(uuid);  // <FS:CR>
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f | FS-Specific
             LLWorldMapView::drawAvatar(
