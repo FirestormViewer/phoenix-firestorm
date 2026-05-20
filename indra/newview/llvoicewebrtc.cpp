@@ -361,9 +361,16 @@ void LLWebRTCVoiceClient::updateVersion()
     {
         // A WebRTC session can be connected to multiple servers at once. To more easily disambiguate which server version is being printed, show the connection type. In most cases, this shouldn't matter and the Janus version should be the same for all connections. Janus versions are also logged for each connection.
         mVoiceVersion.serverVersion = session->getVersion();
-        if (session->isCallbackPossible())
+        if (dynamic_cast<adhocSessionState*>(session.get()))
         {
-            mVoiceVersion.mBuildVersion = "ad-hoc";
+            if (session->mHangupOnLastLeave)
+            {
+                mVoiceVersion.mBuildVersion = "p2p";
+            }
+            else
+            {
+                mVoiceVersion.mBuildVersion = "ad-hoc";
+            }
         }
         else if (session->isEstate())
         {
