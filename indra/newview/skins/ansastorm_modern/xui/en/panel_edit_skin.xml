@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel
+     background_visible="true"
+	 follows="all"
+	 height="400"
+	 layout="topleft"
+	 left="0"
+	 name="edit_skin_panel"
+	 top_pad="10"
+	 width="363" >
+
+     <panel
+      border="false"
+      follows="top|left|right"
+      height="300"
+      left="0"
+      layout="topleft"
+      name="avatar_skin_color_panel"
+      top="110"
+      width="100" >
+       <texture_picker
+        allow_no_texture="true"
+        can_apply_immediately="true"
+        default_image_name="Default"
+        follows="left|top"
+        height="80"
+        label="Head Tattoos"
+        layout="topleft"
+        left="15"
+        name="Head"
+        tool_tip="Click to choose a picture"
+        top="0"
+        width="64" >
+         <texture_picker.commit_callback
+             function="TexturePicker.Commit" />
+       </texture_picker>
+       <texture_picker
+        allow_no_texture="true"
+        can_apply_immediately="true"
+        default_image_name="Default"
+        follows="left|top"
+        height="80"
+        label="Upper Tattoos"
+        layout="topleft"
+        left="15"
+        name="Upper Body"
+        tool_tip="Click to choose a picture"
+        top_pad="0"
+        width="64" >
+         <texture_picker.commit_callback
+             function="TexturePicker.Commit" />
+       </texture_picker>
+       <texture_picker
+        allow_no_texture="true"
+        can_apply_immediately="true"
+        default_image_name="Default"
+        follows="left|top"
+        height="80"
+        label="Lower Tattoos"
+        layout="topleft"
+        left="15"
+        name="Lower Body"
+        tool_tip="Click to choose a picture"
+        top_pad="0"
+        width="64" >
+         <texture_picker.commit_callback
+             function="TexturePicker.Commit" />
+       </texture_picker>
+     </panel>
+
+     <tab_container
+       name="wearable_accordion"
+       layout="topleft"
+       follows="all"
+       tab_position="left"
+       top="0"
+       left="0"
+       height="400"
+       width="363">
+
+      <!-- Begin Skin Color Panel -->
+      <panel
+       name="skin_color_tab_holder"
+       title="Skin Color"
+       layout="topleft"
+       follows="all"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="skin_color_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="skin_color_tab"
+       fit_panel="false"
+       title="Skin Color">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="skin_color_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Skin Color Panel -->
+
+      <!-- Begin Face Detail Panel -->
+      <panel
+       name="skin_face_tab_holder"
+       title="Face Detail"
+       layout="topleft"
+       follows="all"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="skin_face_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="skin_face_tab"
+       fit_panel="false"
+       title="Face Detail">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="skin_face_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Face Detail Panel -->
+
+      <!-- Begin Makeup Panel -->
+      <panel
+       name="skin_makeup_holder"
+       title="Makeup"
+       layout="topleft"
+       follows="all"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="skin_makeup_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="skin_makeup_tab"
+       fit_panel="false"
+       title="Makeup">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="skin_makeup_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Makeup Panel -->
+
+      <!-- Begin Body Detail Panel -->
+      <panel
+       name="skin_body_holder"
+       title="Body Detail"
+       layout="topleft"
+       follows="all"
+       height="400"
+       width="263">
+      <!-- Viewer demands an accordion here, so we provide one -->
+      <accordion
+       layout="topleft"
+       follows="all"
+       height ="400"
+       left="0"
+       name="skin_body_accordion"
+       top="0"
+       single_expansion="true"
+       fit_parent="true"
+       width="263">
+      <accordion_tab
+       header_visible="false"
+       layout="topleft"
+       min_height="150"
+       name="skin_body_tab"
+       fit_panel="false"
+       title="Body Detail">
+      <!-- Viewer will replace things here with tiled editing views -->
+      <scrolling_panel_list
+       layout="topleft"
+       follows="all"
+       left="0"
+       name="skin_body_param_list"
+       top="0"
+       height="400"
+       width="263" />
+      </accordion_tab>
+      </accordion>
+      </panel>
+      <!-- End Body Detail Panel -->
+
+    </tab_container>
+</panel>
+

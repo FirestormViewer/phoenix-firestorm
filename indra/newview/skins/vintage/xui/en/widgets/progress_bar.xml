@@ -4,7 +4,7 @@
               color_bar.red="1"
               color_bar.green="1"
               color_bar.blue="1"
-              color_bar.alpha="1" 
+              color_bar.alpha="0.96" 
               color_bg.red="1"
               color_bg.green="1"
               color_bg.blue="1"

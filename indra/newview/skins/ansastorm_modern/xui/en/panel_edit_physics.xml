@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel
+     background_visible="true"
+	 follows="all"
+	 height="400"
+	 layout="topleft"
+	 left="0"
+	 name="edit_physics_panel"
+	 top_pad="10"
+	 width="363" >
+	 
+     <tab_container
+       name="wearable_accordion"
+       layout="topleft"
+       follows="all"
+       tab_position="left"
+       top="0"
+       left="0"
+       height="400"
+       width="363">
+	 
+      <panel
+       name="physics_breast_updown_tab_holder"
+       title="Breast Bounce"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <text name="physics_breast_updown_not_available"
+       visibility_control="AvatarSex"
+       follows="top|left"
+       layout="topleft"
+       top="0"
+       left="10"
+       height="50">
+          Breast bounce is only available
+for female avatars.
+       </text>
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_breast_updown_accordion"
+        top="0"
+        width="313">
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_breasts_updown_tab"
+			title="Breasts Bounce">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="10"
+				name="physics_breasts_updown_param_list"
+				top="10"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+	
+      <panel
+       name="physics_breast_inout_tab_holder"
+       title="Breast Cleavage"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <text name="physics_breast_inout_not_available"
+       visibility_control="AvatarSex"
+       follows="top|left"
+       layout="topleft"
+       top="0"
+       left="10"
+       height="50">
+          Breast cleavage is only available
+for female avatars.
+       </text>
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_breast_inout_accordion"
+        top="0"
+        width="313">
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_breasts_inout_tab"
+			title="Breasts Cleavage">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_breasts_inout_param_list"
+				top_pad="50"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+		
+		
+      <panel
+       name="physics_breast_leftright_tab_holder"
+       title="Breast Sway"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+      <text name="physics_breast_leftright_not_available"
+       visibility_control="AvatarSex"
+       follows="top|left"
+       layout="topleft"
+       top="0"
+       left="10"
+       height="50">
+          Breast sway is only available
+for female avatars.
+       </text>
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_breast_leftright_accordion"
+        top="0"
+        width="313">		
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_breasts_leftright_tab"
+			title="Breasts Sway">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_breasts_leftright_param_list"
+				top_pad="50"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+
+	
+      <panel
+       name="physics_belly_tab_holder"
+       title="Belly Bounce"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_belly_accordion"
+        top="0"
+        width="313">		
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_belly_tab"
+			title="Belly Bounce">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_belly_updown_param_list"
+				top_pad="40"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+
+		
+		
+      <panel
+       name="physics_butt_tab_holder"
+       title="Butt Bounce"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_butt_accordion"
+        top="0"
+        width="313">		
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_butt_tab"
+			title="Butt Bounce">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_butt_updown_param_list"
+				top_pad="30"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+
+		
+		
+      <panel
+       name="physics_butt_leftright_tab_holder"
+       title="Butt Sway"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_butt_leftright_accordion"
+        top="0"
+        width="313">
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_butt_leftright_tab"
+			title="Butt Sway">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_butt_leftright_param_list"
+				top_pad="20"
+				width="303" />
+		</accordion_tab>
+    </accordion>
+    </panel>
+
+		
+		
+      <panel
+       name="physics_advanced_tab_holder"
+       title="Adv. Parameters"
+       top_pad="0"
+       left="0"
+       layout="topleft"
+       follows="all"
+       height="384"
+       width="263">
+     <accordion
+        follows="all"
+        height ="388"
+        layout="topleft"
+        left="0"
+	    single_expansion="true"
+        fit_parent="true"
+        name="physics_advanced_accordion"
+        top="0"
+        width="313">
+		<accordion_tab
+            header_visible="false"
+			layout="topleft"
+			fit_panel="false"
+			min_height="50"
+			name="physics_advanced_tab"
+			title="Advanced Parameters">
+			<scrolling_panel_list
+				follows="all"
+				layout="topleft"
+				left="0"
+				name="physics_advanced_param_list"
+				top_pad="10"
+				width="303" />
+		</accordion_tab>
+	</accordion>
+    </panel>
+	
+	</tab_container>
+</panel>
+

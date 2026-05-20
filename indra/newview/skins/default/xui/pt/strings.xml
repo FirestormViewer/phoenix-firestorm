@@ -1414,6 +1414,9 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 	<string name="InventoryNoMatchingRecentItems">
 		Não encontrou o que procura? Tente [secondlife:///app/inventory/filters Show filters].
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Filtro
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Não encontrou o que procura? Tente buscar no [secondlife:///app/search/groups/[SEARCH_TERM] Search].
 	</string>

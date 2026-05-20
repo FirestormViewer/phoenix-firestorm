@@ -177,9 +177,10 @@ public:
 
         Optional<LLFloaterEnums::EOpenPositioning>  positioning;
 
+        Optional<const LLFontGL*> header_font;
         Optional<S32>           header_height,
-                                label_v_padding,    // <FS:Zi> Make vertical label padding a per-skin option
-                                legacy_header_height; // HACK see initFromXML()
+                                legacy_header_height, // HACK see initFromXML()
+                                header_vpad;
 
         Optional<F32>           rel_x,
                                 rel_y;
@@ -462,7 +463,7 @@ private:
     bool            offerClickToButton(S32 x, S32 y, MASK mask, EFloaterButton index);
     void            addResizeCtrls();
     void            layoutResizeCtrls();
-    void            addDragHandle();
+    void            addDragHandle(const LLFloater::Params& p);
     void            layoutDragHandle();     // repair layout
 
     static void     updateActiveFloaterTransparency();
@@ -515,7 +516,6 @@ private:
     //std::string       mInstanceName;        // Store the instance name so we can remove ourselves from the list
 
     bool            mDropShadow;        // ## Zi: Optional Drop Shadows
-    S32             mLabelVPadding; // <FS:Zi> Make vertical label padding a per-skin option
     bool            mCanTearOff;
     bool            mCanMinimize;
     bool            mCanClose;

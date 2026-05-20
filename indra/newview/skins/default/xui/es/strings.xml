@@ -1507,6 +1507,9 @@ pueden adjuntarse a las notas.
 	<string name="InventoryNoMatchingRecentItems">
 		¿No encuentras lo que buscas? Intenta [secondlife:///app/inventory/filters Show filters].
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Filtro
+	</string>
 	<string name="PlacesNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/places/[SEARCH_TERM] Búsqueda].
 	</string>

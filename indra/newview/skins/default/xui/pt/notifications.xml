@@ -1204,6 +1204,16 @@ Consulte https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
+	<notification label="Renomear aba de filtro" name="FSInventoryCustomTabRename">
+		Novo nome da aba:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Deseja remover &lt;nolink&gt;[NAME]&lt;/nolink&gt; da sua lista de amigos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Remover"/>

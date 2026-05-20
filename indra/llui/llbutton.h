@@ -112,6 +112,7 @@ public:
         //image overlay paddings
         Optional<S32>           image_top_pad;
         Optional<S32>           image_bottom_pad;
+        Optional<S32>           image_overlay_right_delta;
 
         /**
          * Space between image_overlay and label
@@ -134,7 +135,9 @@ public:
         Optional<F32>               hover_glow_amount;
         Optional<TimeIntervalParam> held_down_delay;
 
-        Optional<bool>              use_draw_context_alpha;
+        Optional<bool>              use_draw_context_alpha,
+                                    draw_focus_border,
+                                    hover_hand_cursor;
 
         Optional<LLBadge::Params>   badge;
 
@@ -396,11 +399,15 @@ protected:
     S32                         mImageOverlayBottomPad;
 
     bool                        mUseDrawContextAlpha;
+    bool                        mDrawFocusBorder;
+    bool                        mHoverHandCursor;
 
     /*
      * Space between image_overlay and label
      */
     S32                         mImgOverlayLabelSpace;
+
+    S32                         mImageOverlayRightDelta;
 
     F32                         mHoverGlowStrength;
     F32                         mCurGlowStrength;

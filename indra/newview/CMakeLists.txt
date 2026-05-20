@@ -116,6 +116,7 @@ set(viewer_SOURCE_FILES
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
     fsfavoritegroups.cpp
+    fsinventorycustomtabs.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravataralign.cpp
     fsfloateravatarrendersettings.cpp
@@ -549,6 +550,7 @@ set(viewer_SOURCE_FILES
     llfloaterimnearbychat.cpp
     llfloaterimnearbychathandler.cpp
     llfloaterimnearbychatlistener.cpp
+    llnearbyvoicemoderation.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
     llnotificationgrouphandler.cpp
@@ -973,6 +975,7 @@ set(viewer_HEADER_FILES
     fsexportperms.h
     fsfloateraddtocontactset.h
     fsfavoritegroups.h
+    fsinventorycustomtabs.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
     fsfloaterbigpreview.h
@@ -1408,6 +1411,7 @@ set(viewer_HEADER_FILES
     llnameeditor.h
     llnamelistctrl.h
     llnavigationbar.h
+    llnearbyvoicemoderation.h
     llnetmap.h
     llnotificationhandler.h
     llnotificationlistitem.h

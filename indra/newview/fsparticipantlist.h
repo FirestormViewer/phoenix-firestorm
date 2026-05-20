@@ -180,6 +180,7 @@ protected:
         bool enableContextMenuItem(const LLSD& userdata);
         bool enableModerateContextMenuItem(const LLSD& userdata);
         bool checkContextMenuItem(const LLSD& userdata);
+        bool visibleContextMenuItem(const LLSD& userdata);
 
         void sortParticipantList(const LLSD& userdata);
         void allowTextChat(const LLSD& userdata);
@@ -246,6 +247,8 @@ protected:
         // mentions support
         void copyURLToClipboard(const LLUUID& avatar_id);
         void insertMentionAtCursor(const LLUUID& avatar_id);
+
+        bool isNearbyChatSession() const;
     };
 
     /**

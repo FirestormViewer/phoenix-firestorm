@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		Texture: [NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		Copia in inventario
+	</floater.string>
+	<floater.string name="DateTime">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime"/>
+	<text name="desc txt">
+		Descrizione:
+	</text>
+	<text name="uploader_label">
+		Caricata da:
+	</text>
+ 	<button label="Profilo" name="openprofile"/>
+	<text name="upload_time_label">
+		Data:
+	</text>
+	<button name="copyuuid" label="Copia"/>
+	<panel name="dimensions_panel">
+		<text name="dimensions">
+			[WIDTH] x [HEIGHT] pixel
+		</text>
+		<text name="aspect_ratio">
+			Proporzioni
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="Visualizza anteprima con proporzioni fisse">
+			<combo_item name="Unconstrained">
+				Senza vincoli
+			</combo_item>
+			<combo_item name="1:1" tool_tip="Foto del gruppo o sezione delle informazioni aggiuntive sul profilo"/>
+			<combo_item name="4:3" tool_tip="Profilo [CURRENT_GRID]"/>
+			<combo_item name="10:7" tool_tip="Inserzioni, risultati di ricerca e segnaposto"/>
+			<combo_item name="3:2" tool_tip="Informazioni sul Terreno"/>
+			<combo_item name="16:9" tool_tip="Preferiti sul profilo"/>
+		</combo_box>
+	</panel>
+	<panel name="button_panel">
+		<button label="OK" name="Keep"/>
+		<button label="Elimina" name="Discard"/>
+		<flyout_button label="Salva..." name="save_tex_btn">
+			<flyout_button.item label="Salva TGA" name="save_item_tga"/>
+			<flyout_button.item label="Salva PNG" name="save_item_png"/>
+		</flyout_button>
+	</panel>
+</floater>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Meter
+	</string>
+	<string name="feet">
+		Fuß
+	</string>
+	<string name="height">
+		Höhe:
+	</string>
+	<text name="avatar_height"/>
+	
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Körper">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Körper"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Kopf">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Kopf"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Augen">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Augen"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Ohren">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="Ohren"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Nase">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Nase"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Mund">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Mund"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Kinn">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Kinn"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Oberkörper">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Oberkörper"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Beine">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Beine"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

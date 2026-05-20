@@ -69,7 +69,6 @@
                      <button
                         control_name="InventoryInboxToggleState"
                         label="Received items"
-                        font="SansSerifMedium"
                         name="inbox_btn"
                         height="35"
                         image_unselected="MarketplaceBtn_Off"
@@ -100,7 +99,6 @@
                         top="10"
                         right="-58"
                         name="inbox_fresh_new_count"
-                        font="SansSerifMedium"
                         halign="right"
                         top_pad="0">
                         [NUM] new

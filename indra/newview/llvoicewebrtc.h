@@ -186,6 +186,8 @@ public:
     void setMuteMic(bool muted) override;        // Set the mute state of the local mic.
     //@}
 
+    void notifyVoiceConnected() override; // <FS:TJ/> Fix Nearby Voice when changing voice device settings
+
     //////////////////////////
     /// @name nearby speaker accessors
     std::string getDisplayName(const LLUUID& id) override;
@@ -542,6 +544,8 @@ private:
     static bool sShuttingDown;
 
     LLEventMailDrop mWebRTCPump;
+
+    LLSD mLastWebRTCStats;
 };
 
 
@@ -605,6 +609,8 @@ class LLVoiceWebRTCConnection :
     //@{
     void OnDataReceived(const std::string &data, bool binary) override;
     void OnDataChannelReady(llwebrtc::LLWebRTCDataInterface *data_interface) override;
+
+    void OnStatsDelivered(const llwebrtc::LLWebRTCStatsMap& stats_data) override;
     //@}
 
     void OnDataReceivedImpl(const std::string &data, bool binary);
@@ -641,6 +647,8 @@ class LLVoiceWebRTCConnection :
     }
 
     void OnVoiceConnectionRequestSuccess(const LLSD &body);
+
+    void resetConnectionStats();
 
   protected:
     typedef enum e_voice_connection_state

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Metros
+	</string>
+	<string name="feet">
+		Pies
+	</string>
+	<string name="height">
+		Altura:
+	</string>
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Cuerpo">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Cuerpo"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Cabeza">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Cabeza"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Ojos">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Ojos"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Orejas">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="Orejas"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Nariz">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Nariz"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Boca">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Boca"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Barbilla">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Barbilla"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Torso">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Torso"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Piernas">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Piernas"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

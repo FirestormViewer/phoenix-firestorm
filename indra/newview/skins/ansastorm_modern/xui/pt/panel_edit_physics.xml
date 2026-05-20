@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Seios - movimento vertical">
+			<text name="physics_breast_updown_not_available">
+				O movimento dos seios está disponível
+apenas para avatares femininos.
+			</text>
+			<accordion name="physics_breast_updown_accordion">
+				<accordion_tab name="physics_breasts_updown_tab" title="Seios - movimento vertical"/>
+			</accordion>
+		</panel>				
+		<panel name="physics_breast_inout_tab_holder" title="Seios - decote">
+			<text name="physics_breast_inout_not_available">
+				O decote está disponível
+apenas para avatares femininos.
+			</text>
+			<accordion name="physics_breast_inout_accordion">
+				<accordion_tab name="physics_breasts_inout_tab" title="Seios - decote"/>
+			</accordion>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Seios - movimento horizontal">
+			<text name="physics_breast_leftright_not_available">
+				O movimento dos seios está disponível
+apenas para avatares femininos.
+			</text>
+			<accordion name="physics_breast_leftright_accordion">
+				<accordion_tab name="physics_breasts_leftright_tab" title="Seios - movimento horizontal"/>
+			</accordion>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Barriga - movimento vertical">
+			<accordion name="physics_belly_accordion">
+				<accordion_tab name="physics_belly_tab" title="Barriga - movimento vertical"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_tab_holder" title="Nádegas - movimento vertical">
+			<accordion name="physics_butt_accordion">
+				<accordion_tab name="physics_butt_tab" title="Nádegas - movimento vertical"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_leftright_tab_holder" title="Nádegas - movimento horizontal">
+			<accordion name="physics_butt_leftright_accordion">
+				<accordion_tab name="physics_butt_leftright_tab" title="Nádegas - movimento horizontal"/>
+			</accordion>
+		</panel>
+		<panel name="physics_advanced_tab_holder" title="Parâmetros avançados">
+			<accordion name="physics_advanced_accordion">
+				<accordion_tab name="physics_advanced_tab" title="Parâmetros avançados"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

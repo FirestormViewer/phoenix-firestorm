@@ -1297,6 +1297,16 @@ do
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Zmień nazwę zakładki filtra" name="FSInventoryCustomTabRename">
+		Nowa nazwa zakładki:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 	<notification label="Zmień nazwę gestu" name="RenameGesture">
 		Nowa nazwa gestu:
 		<form name="form">

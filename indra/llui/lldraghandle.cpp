@@ -51,7 +51,6 @@ S32 LLDragHandle::sSnapMargin = 5;
 
 LLDragHandle::LLDragHandle(const LLDragHandle::Params& p)
 :   LLView(p),
-    mLabelVPadding(p.label_v_padding),  // <FS:Zi> Make vertical label padding a per-skin option
     mDragLastScreenX( 0 ),
     mDragLastScreenY( 0 ),
     mLastMouseScreenX( 0 ),
@@ -60,7 +59,9 @@ LLDragHandle::LLDragHandle(const LLDragHandle::Params& p)
     mMaxTitleWidth( 0 ),
     mForeground( true ),
     mDragHighlightColor(p.drag_highlight_color()),
-    mDragShadowColor(p.drag_shadow_color())
+    mDragShadowColor(p.drag_shadow_color()),
+    mFont(p.font),
+    mLabelVPad(p.label_vpad())
 
 {
     static LLUICachedControl<S32> snap_margin ("SnapMargin", 0);
@@ -99,14 +100,13 @@ void LLDragHandleTop::setTitle(const std::string& title)
     }
     else
     {
-        const LLFontGL* font = LLFontGL::getFontSansSerif();
         LLTextBox::Params params;
         params.name("Drag Handle Title");
         params.rect(getRect());
         params.initial_value(trimmed_title);
-        params.font(font);
+        params.font(mFont);
         params.follows.flags(FOLLOWS_TOP | FOLLOWS_LEFT | FOLLOWS_RIGHT);
-        params.font_shadow(LLFontGL::DROP_SHADOW_SOFT);
+        params.font_shadow(LLFontGL::NO_SHADOW);
         params.use_ellipses = true;
         params.parse_urls = false; //cancel URL replacement in floater title
         mTitleBox = LLUICtrlFactory::create<LLTextBox> (params);
@@ -237,15 +237,6 @@ void LLDragHandleLeft::draw()
 
 void LLDragHandleTop::reshapeTitleBox()
 {
-    //  <FS:Zi> Make vertical label padding a per-skin option
-    //  static LLUICachedControl<S32> title_vpad("UIFloaterTitleVPad", 0);
-    static LLUICachedControl<S32> default_title_vpad("UIFloaterTitleVPad", 0);
-    S32 title_vpad=mLabelVPadding;
-    if(title_vpad==-1)
-    {
-        title_vpad=default_title_vpad;
-    }
-    //  </FS:Zi>
     if( ! mTitleBox)
     {
         return;
@@ -257,7 +248,7 @@ void LLDragHandleTop::reshapeTitleBox()
     LLRect title_rect;
     title_rect.setLeftTopAndSize(
         LEFT_PAD,
-        getRect().getHeight() - title_vpad,
+        getRect().getHeight() - mLabelVPad,
         title_width,
         title_height);
 

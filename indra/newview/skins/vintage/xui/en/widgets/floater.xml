@@ -7,6 +7,7 @@
 	bg_alpha_image_overlay="White"
 	background_visible="true"
  name="floater" 
+ header_font="SansSerif"
  header_height="20"
  close_image="Icon_Close_Foreground"
  snooze_image="Icon_Snooze_Foreground"
@@ -23,5 +24,5 @@
  dock_pressed_image="Icon_Dock_Press"
  help_pressed_image="Icon_Help_Press"
  focus_root="true"
- label_v_padding="3"
+ header_vpad="2"
   />

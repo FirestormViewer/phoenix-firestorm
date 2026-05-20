@@ -1716,6 +1716,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="InventoryNoMatchingFavorites">
 		Вы не отметили ни один элемент как избранный.
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Свой
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Чтобы добавить место в список достопримечательностей, нажмите на звездочку справа от названия местоположения.
 	</string>

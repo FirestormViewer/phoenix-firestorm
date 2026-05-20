@@ -226,7 +226,8 @@
        name="inventory filter tabs"
        open_tabs_on_drag_and_drop="true"
        tab_position="top"
-       top="0">
+       top="0"
+       use_ellipses="true">
       <inventory_panel
        border="false"
        bevel_style="none"

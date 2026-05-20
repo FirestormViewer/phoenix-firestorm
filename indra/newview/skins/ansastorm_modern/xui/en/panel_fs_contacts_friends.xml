@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ height="300"
+ layout="topleft"
+ mouse_opaque="true"
+ name="friends"
+ width="355">
+	<panel.string name="FontName" value="SANSSERIF_SMALL"/>
+	<layout_stack
+	 default_tab_group="2"
+	 border_size="0"
+	 animate="true"
+	 follows="all"
+	 clip="false"
+	 bottom="-2"
+	 right="-84"
+	 left="4"
+	 layout="topleft"
+	 orientation="vertical"
+	 name="ls_friend_list"
+	 top="0">
+		<layout_panel
+		 name="lp_search"
+		 auto_resize="false"
+		 user_resize="false"
+		 visibility_control="FSContactListShowSearch"
+		 top="0"
+		 layout="topleft"
+		 height="27"
+		 follows="left|top|right">
+			<filter_editor
+			 follows="left|top|right"
+			 height="23"
+			 layout="topleft"
+			 left="1"
+			 label="Filter Friends"
+			 max_length_chars="300"
+			 name="friend_filter_input"
+			 top="3"
+			 right="-1" />
+		</layout_panel>
+		<layout_panel
+		 name="lp_friend_list"
+		 tab_group="2"
+		 auto_resize="true"
+		 user_resize="false"
+		 top="0"
+		 layout="topleft"
+		 bottom="-2"
+		 follows="all">
+			<fs_scroll_list
+			 desired_line_height="14"
+			 left="0"
+			 right="-1"
+			 top="0"
+			 bottom="-1"
+			 follows="all"
+			 layout="topleft"
+			 column_padding="0"
+			 draw_heading="true"
+			 heading_height="20"
+			 multi_select="true"
+			 content_type="Agents"
+			 name="friend_list">
+				<fs_scroll_list.column
+				 name="icon_online_status"
+				 tool_tip="Online status"
+				 width="16" />
+				<fs_scroll_list.column
+				 dynamicwidth="true"
+				 label="Username"
+				 name="user_name"
+				 tool_tip="This contact's username."/>
+				<fs_scroll_list.column
+				 dynamicwidth="true"
+				 label="Display name"
+				 name="display_name"
+				 tool_tip="This contact's display name."/>
+				<fs_scroll_list.column
+				 dynamicwidth="true"
+				 label="Name"
+				 name="full_name"
+				 tool_tip="This contact's chosen name." />
+				<fs_scroll_list.column
+				 image="Permission_Visible_Online_h"
+				 name="icon_visible_online"
+				 tool_tip="Friend can see when you&apos;re online"
+				 width="16" />
+				<fs_scroll_list.column
+				 image="Permission_Visible_Map_h"
+				 name="icon_visible_map"
+				 tool_tip="Friend can locate you on the map"
+				 width="16" />
+				<fs_scroll_list.column
+				 image="Permission_Edit_Objects_Mine_h"
+				 name="icon_edit_mine"
+				 tool_tip="Friend can edit, delete or take objects"
+				 width="16" />
+				<fs_scroll_list.column
+				 image="Permission_Visible_Map_h"
+				 name="icon_visible_map_theirs"
+				 tool_tip="You can locate them on the map"
+				 width="16" />
+				<fs_scroll_list.column
+				 image="Permission_Edit_Objects_Theirs_h"
+				 name="icon_edit_theirs"
+				 tool_tip="You can edit this friend&apos;s objects"
+				 width="16" />
+				<fs_scroll_list.column
+				 name="friend_last_update_generation"
+				 width="-1" />
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button
+	 top="2"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="IM/Call"
+	 left_delta="270"
+	 name="im_btn"
+	 tool_tip="Open Instant Message session"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Profile"
+	 name="profile_btn"
+	 tool_tip="Show picture, groups, and other information"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Teleport..."
+	 name="offer_teleport_btn"
+	 tool_tip="Offer this friend a teleport to your current location"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Map..."
+	 name="map_btn"
+	 tool_tip="Show current location of friend on the map"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Pay..."
+	 name="pay_btn"
+	 tool_tip="Give Linden dollars (L$) to this friend"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Remove..."
+	 name="remove_btn"
+	 tool_tip="Remove this person from your friends list"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Add..."
+	 name="add_btn"
+	 tool_tip="Offer friendship to a resident"
+	 width="80" />
+	<text
+	 top_pad="10"
+	 left_delta="2"
+	 follows="top|right"
+	 layout="topleft"
+	 height="20"
+	 name="friend_count"
+	 width="80">
+	 Friends: [COUNT]
+	</text>
+</panel>

@@ -139,6 +139,8 @@ Voice Server Version: [VOICE_VERSION]
 	
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
+    <string name="AgniGridLabelShort">Agni (production)</string>
+    <string name="AditiGridLabelShort">Aditi (beta)</string>
 	
 	<string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="LoginFailedViewerNotPermitted">
@@ -798,7 +800,8 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
 	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
-  <string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="FSInventoryCustomTabDefaultName">Custom</string>
 	<string name="PlacesNoMatchingItems">To add a place to your landmarks, click the star to the right of the location name.</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoListing">You have no listings yet.</string>
@@ -1522,6 +1525,9 @@ If this message persists, restart your computer.
 		[APP_NAME] appears to have frozen or crashed on the previous run.
 Would you like to send a crash report?
 	</string>
+    <string name="MBFreezeDetected">
+        [APP_NAME] appears to have frozen. If this issue occurs regularly, please contact support at https://www.firestormviewer.org/support.
+    </string>
 	<string name="MBAlert">Notification</string>
 	<string name="MBNoDirectX">
 		[APP_NAME] is unable to detect DirectX 9.0b or greater.
@@ -3304,13 +3310,14 @@ Your current position: [AVATAR_POS]
   <string name="Nametag_Texture_Area_Label">Texture Area: [TEXTURE_AREA] m²</string>
 
   <string name="font_unknown">Unknown Font</string>
-  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts.xml">Inter</string>
   <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
   <string name="font_fonts_liberation.xml">Liberation</string>
   <string name="font_fonts_droid.xml">Droid Sans</string>
   <string name="font_fonts_mobi.xml">Mobi Sans</string>
   <string name="font_fonts_roboto.xml">Roboto</string>
   <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu.xml">Deja Vu</string>
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>

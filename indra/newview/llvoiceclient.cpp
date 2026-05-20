@@ -39,6 +39,7 @@
 #include "llagent.h"
 #include "lltrans.h"
 #include "lluiusage.h"
+#include "llnearbyvoicemoderation.h"
 
 const F32 LLVoiceClient::OVERDRIVEN_POWER_LEVEL = 0.7f;
 
@@ -651,6 +652,15 @@ void LLVoiceClient::setVoiceEnabled(bool enabled)
     }
 }
 
+// <FS:TJ> Fix Nearby Voice when changing voice device settings
+void LLVoiceClient::notifyVoiceConnected()
+{
+#ifndef DISABLE_WEBRTC
+    LLWebRTCVoiceClient::getInstance()->notifyVoiceConnected();
+#endif
+}
+// </FS:TJ>
+
 void LLVoiceClient::updateMicMuteLogic()
 {
     // If not configured to use PTT, the mic should be open (otherwise the user will be unable to speak).
@@ -689,6 +699,9 @@ void LLVoiceClient::setUserPTTState(bool ptt)
 {
     if (ptt)
     {
+        // Nearby chat is muted by moderator, don't toggle PTT
+        if (!mUserPTTState && LLNearbyVoiceModeration::getInstance()->showNotificationIfNeeded())
+            return;
         LLUIUsage::instance().logCommand("Agent.EnableMicrophone");
     }
     mUserPTTState = ptt;

@@ -64,6 +64,7 @@
      width="150">
         Enter search terms:
     </text>
+    <!-- <FS:TJ> Fix legacy group search to better support maturity settings
     <check_box
      top_delta="0"
      control_name="ShowMatureGroups"
@@ -76,7 +77,32 @@
      left="510"
      mouse_opaque="true"
      name="incmature"
-     width="100" />
+     width="100" /> -->
+    <combo_box
+     control_name="FSSearchGroupMaturity"
+     follows="right|top"
+     layout="topleft"
+     height="18"
+     allow_text_entry="false"
+     left="609"
+     top_delta="-2"
+     left_pad="2"
+     name="groups_maturity"
+     width="167">
+       <combo_box.item
+        label="General"
+        name="Desired_PG"
+        value="13" />
+       <combo_box.item
+        label="General and Moderate"
+        name="Desired_Mature"
+        value="21" />
+       <combo_box.item
+        label="General, Moderate, Adult"
+        name="Desired_Adult"
+        value="42" />
+		</combo_box>
+    <!-- </FS:TJ> -->
     <search_combo_box
      layout="topleft"
      follows="left|top|right"

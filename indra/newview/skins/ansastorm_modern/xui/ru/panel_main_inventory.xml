@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Вещи" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		Обнаружено [ITEM_COUNT] элементов... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] Элементов [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		Обнаружено [ITEM_COUNT] элементов [FILTER]
+	</panel.string>
+	<menu_bar name="inventory_menu_bar">
+		<menu label="Инвентарь" name="inventory_inventory_menu">
+			<menu_item_call name="inventory_open" label="Открыть" />
+			<menu_item_call name="inventory_share" label="Поделиться" />
+			<menu_item_call name="replace_links" label="Заменить ссылки" />
+			<menu_item_call name="inventory_new_window" label="Новое окно" />
+			<menu_item_check label="Защищенные Папки" name="Protected Folders"/>
+			<menu_item_check name="add_inv_toggle" label="Добавление объектов по двойному нажатию" />
+			<menu_item_check name="add_invclothing_toggle" label="Добавление одежды по двойному нажатию" />
+			<menu_item_call name="inventory_show_filters" label="Показать фильтры" />
+			<menu_item_call name="inventory_reset_filters" label="Сбросить фильтр" />
+			<menu_item_call name="inventory_close_all_folders" label="Закрыть все папки" />
+			<menu_item_call name="inventory_empty_trash" label="Очистить корзину" />
+		</menu>
+		<menu label="Создать" name="inventory_create_menu">
+			<menu_item_call name="inventory_new_folder" label="Новая папка" />
+			<menu_item_call name="inventory_new_script" label="Новый скрипт" />
+			<menu_item_call name="inventory_new_note" label="Новая заметка" />
+			<menu_item_call name="inventory_new_gesture" label="Новый жест" />
+			<menu name="inventory_new_clothes" label="Новая одежда">
+				<menu_item_call name="inventory_new_shirt" label="Новая рубашка" />
+				<menu_item_call name="inventory_new_pants" label="Новые штаны" />
+				<menu_item_call name="inventory_new_shoes" label="Новая обувь" />
+				<menu_item_call name="inventory_new_socks" label="Новые носки" />
+				<menu_item_call name="inventory_new_jacket" label="Новая куртка" />
+				<menu_item_call name="inventory_new_skirt" label="Новая юбка" />
+				<menu_item_call name="inventory_new_gloves" label="Новые перчатки" />
+				<menu_item_call name="inventory_new_undershirt" label="Новая майка" />
+				<menu_item_call name="inventory_new_underpants" label="Новые трусы" />
+				<menu_item_call name="inventory_new_tattoo" label="Новая татуировка" />
+				<menu_item_call name="inventory_new_universal" label="Новый универсальный"/>
+				<menu_item_call name="inventory_new_alpha" label="Новая альфа" />
+				<menu_item_call name="inventory_new_physics" label="Новая физика" />
+			</menu>
+			<menu name="inventory_new_body_parts" label="Новые части тела">
+				<menu_item_call name="inventory_new_shape" label="Новая фигура" />
+				<menu_item_call name="inventory_new_skin" label="Новая кожа" />
+				<menu_item_call name="inventory_new_hair" label="Новые волосы" />
+				<menu_item_call name="inventory_new_eyes" label="Новые глаза" />
+			</menu>
+			<menu label="Новые Настройки" name="New Settings">
+				<menu_item_call label="Новое Небо" name="New Sky"/>
+				<menu_item_call label="Новая Вода" name="New Water"/>
+				<menu_item_call label="Новый Цикл Дня" name="New Day Cycle"/>
+			</menu>
+		</menu>
+		<menu label="Сортировать" name="inventory_sort_menu">
+			<menu_item_check name="inventory_sort_by_name" label="По названию" />
+			<menu_item_check name="inventory_sort_by_date" label="По дате" />
+			<menu_item_check name="inventory_sort_folders_by_name" label="Папки по названию" />
+			<menu_item_check name="inventory_sort_system_on_top" label="Системные папки вверх" />
+		</menu>
+		<menu label="Поиск" name="inventory_search_menu">
+			<menu_item_check name="inventory_search_by_name" label="По названию" />
+			<menu_item_check name="inventory_search_by_creator" label="По создателю" />
+			<menu_item_check name="inventory_search_by_description" label="По описанию" />
+			<menu_item_check name="inventory_search_by_uuid" label="По UUID" />
+			<menu_item_check name="inventory_search_by_all" label="По всему" />
+			<menu_item_check name="inventory_filter_show_links" label="Показать ссылки" />
+			<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки" />
+			<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки" />
+			<menu_item_check name="inventory_filter_only_modify" label="Только изменяемое"/>
+			<menu_item_check name="inventory_filter_only_copy" label="Только копируемое"/>
+			<menu_item_check name="inventory_filter_only_transfer" label="Только передаваемое"/>
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Только объединенные"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="top_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" width="60" value="Фильтр:"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Все типы" />
+				<combo_box.item value="filter_type_animations" label="Анимации" />
+				<combo_box.item value="filter_type_calling_cards" label="Визитные карточки" />
+				<combo_box.item value="filter_type_clothing" label="Одежда / Части тела" />
+				<combo_box.item value="filter_type_gestures" label="Жесты" />
+				<combo_box.item value="filter_type_landmarks" label="Закладки" />
+				<combo_box.item value="filter_type_notecards" label="Заметки" />
+				<combo_box.item value="filter_type_objects" label="Объекты" />
+				<combo_box.item value="filter_type_scripts" label="Скрипты" />
+				<combo_box.item value="filter_type_sounds" label="Звуки" />
+				<combo_box.item value="filter_type_textures" label="Текстуры" />
+				<combo_box.item value="filter_type_snapshots" label="Снимки" />
+				<combo_box.item value="filter_type_settings" label="Настройки" />
+				<combo_box.item value="filter_type_custom" label="Другое..." />
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Инвентарь" name="All Items"/>
+			<recent_inventory_panel label="Недавние" name="Recent Items"/>
+			<worn_inventory_panel label="Надетые" name="Worn Items"/>
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Показать дополнительные настройки"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Добавить новый элемент"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Дополнительное окно инвентаря"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText" tool_tip="[ITEMS] предметов, [CATEGORIES] папок">
+				Элементов
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Удалить выбранный элемент"/>
+		</panel>
+	</panel>
+</panel>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Metri
+	</string>
+	<string name="feet">
+		Piedi
+	</string>
+	<string name="height">
+		Altezza:
+	</string>
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Corpo">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Corpo"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Testa">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Testa"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Occhi">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Occhi"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Orecchie">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="Orecchie"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Naso">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Naso"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Bocca">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Bocca"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Mento">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Mento"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Torso">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Torso"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Gambe">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Gambe"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

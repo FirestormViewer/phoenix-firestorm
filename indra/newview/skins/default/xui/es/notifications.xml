@@ -1254,6 +1254,16 @@ Consulta https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
+	<notification label="Renombrar pestaña de filtro" name="FSInventoryCustomTabRename">
+		Nuevo nombre de la pestaña:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		¿Quieres romper tu amistad con [NAME]?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
