@@ -1490,6 +1490,15 @@
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
+            <menu_item_check
+             label="Mute/unmute sound"
+             name="toggle_sound"
+             shortcut="control|alt|shift|M">
+                <menu_item_check.on_click
+                 function="World.ToggleMasterAudio"/>
+                <menu_item_check.on_check
+                 function="World.IsMasterAudioMuted"/>
+             </menu_item_check>
             <menu_item_separator/>
             <menu
              label="Bulk Import"

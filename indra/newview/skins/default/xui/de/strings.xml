@@ -1709,7 +1709,7 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		ESC drücken, um zur Normalansicht zurückzukehren
 	</string>
 	<string name="InventoryNoMatchingItems">
-		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/all/[SEARCH_TERM] Suche].
+		Keine Treffer.
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		Sie haben nicht das Richtige gefunden? [secondlife:///app/inventory/filters Filter] anzeigen.
