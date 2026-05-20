@@ -196,6 +196,14 @@ bool FSInventoryCustomTabs::handleMouseDown(S32 x, S32 y)
 
 void FSInventoryCustomTabs::onFilterFocusLost()
 {
+    if (mParent)
+    {
+        auto* active = dynamic_cast<LLInventoryPanel*>(mParent->getActivePanel());
+        if (active && isCustomTab(active) && !mExplicitlyNamed.count(active))
+        {
+            updateAutoLabel(active);
+        }
+    }
     save();
 }
 
@@ -246,6 +254,10 @@ void FSInventoryCustomTabs::noteActivePanel(LLInventoryPanel* panel)
 {
     if (mLastActivePanel && mLastActivePanel != panel && isCustomTab(mLastActivePanel))
     {
+        if (!mExplicitlyNamed.count(mLastActivePanel))
+        {
+            updateAutoLabel(mLastActivePanel);
+        }
         save();
     }
     if (panel && panel != mAddTabPanel && mTabs && mTabs->getIndexForPanel(panel) >= 0)
@@ -262,15 +274,6 @@ void FSInventoryCustomTabs::onClosePressed(LLInventoryPanel* panel)
     }
     mContextPanel = panel;
     onCloseClicked();
-}
-
-void FSInventoryCustomTabs::onActiveFilterChanged(LLPanel* active_panel)
-{
-    auto* inv_panel = dynamic_cast<LLInventoryPanel*>(active_panel);
-    if (inv_panel && mPanels.count(inv_panel) && !mExplicitlyNamed.count(inv_panel))
-    {
-        updateAutoLabel(inv_panel);
-    }
 }
 
 void FSInventoryCustomTabs::notifyActiveFilterStateChanged()
@@ -333,14 +336,6 @@ void FSInventoryCustomTabs::noteActivePanel(LLPanelMainInventory* parent, LLInve
     if (auto* self = instanceFor(parent))
     {
         self->noteActivePanel(panel);
-    }
-}
-
-void FSInventoryCustomTabs::onActiveFilterChanged(LLPanelMainInventory* parent, LLPanel* active)
-{
-    if (auto* self = instanceFor(parent))
-    {
-        self->onActiveFilterChanged(active);
     }
 }
 

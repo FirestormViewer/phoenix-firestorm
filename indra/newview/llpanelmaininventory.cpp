@@ -1114,7 +1114,10 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 
     if (mInboxPanel)
     {
-        mInboxPanel->onFilterEdit(search_string);
+        // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+        // mInboxPanel->onFilterEdit(search_string);
+        mInboxPanel->onFilterEdit(search_for);
+        // </FS:PP>
     }
 }
 
@@ -1322,6 +1325,12 @@ void LLPanelMainInventory::onFilterSelected()
     }
     updateFilterDropdown(&filter);  // <FS:Zi> Filter dropdown
     setFilterTextFromFilter();
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    if (mInboxPanel && mActivePanel)
+    {
+        mInboxPanel->onFilterEdit(mActivePanel->getFilter().getFilterSubStringOrig());
+    }
+    // </FS:PP>
 }
 
 const std::string LLPanelMainInventory::getFilterSubString()
@@ -1332,7 +1341,6 @@ const std::string LLPanelMainInventory::getFilterSubString()
 void LLPanelMainInventory::setFilterSubString(const std::string& string)
 {
     mActivePanel->setFilterSubString(string);
-    FSInventoryCustomTabs::onActiveFilterChanged(this, mActivePanel); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 bool LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
