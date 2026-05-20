@@ -1169,34 +1169,32 @@ void FSPanelSearchGroups::find()
         return;
     }
 
-    static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
-    static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
-    static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
-    if (!(inc_pg || inc_mature || inc_adult))
+    static LLUICachedControl<U32> search_maturity("FSSearchGroupMaturity", SIM_ACCESS_PG);
+    if (!search_maturity())
     {
         LLNotificationsUtil::add("NoContentToSearch");
         return;
     }
-    U32 scope = 0;
+
+    U32 scope = DFQ_GROUPS;
     if (gAgent.wantsPGOnly())
     {
         scope |= DFQ_PG_SIMS_ONLY;
     }
     bool adult_enabled = gAgent.canAccessAdult();
     bool mature_enabled = gAgent.canAccessMature();
-    if (inc_pg)
+    if (search_maturity >= SIM_ACCESS_PG)
     {
         scope |= DFQ_INC_PG;
     }
-    if (inc_mature && mature_enabled)
+    if (mature_enabled && search_maturity >= SIM_ACCESS_MATURE)
     {
         scope |= DFQ_INC_MATURE;
     }
-    if (inc_adult && adult_enabled)
+    if (adult_enabled && search_maturity >= SIM_ACCESS_ADULT)
     {
         scope |= DFQ_INC_ADULT;
     }
-    scope |= DFQ_GROUPS;
 
     mResultsReceived = 0;
     if (mQueryID.notNull())

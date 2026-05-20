@@ -68,6 +68,7 @@
 #include "llviewernetwork.h"
 // </FS:AW opensim currency support>
 #include "fscommon.h"
+#include "fsinventorycustomtabs.h" // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 
 // <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
 bool LLPanelMainInventory::sSaveFilters = true;
@@ -202,6 +203,8 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
     mCommitCallbackRegistrar.add("Inventory.SearchType.Set", boost::bind(&LLPanelMainInventory::onSearchTypeChecked, this, _2));
     mEnableCallbackRegistrar.add("Inventory.SearchType.Check", boost::bind(&LLPanelMainInventory::isSearchTypeChecked, this, _2));
     // </FS:Zi> Extended Inventory Search
+
+    FSInventoryCustomTabs::registerCommitCallbacks(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 
     // <FS:Zi> Sort By menu handlers
     // we set up our own handlers here because the gear menu handlers are only set up
@@ -470,6 +473,7 @@ bool LLPanelMainInventory::postBuild()
     // Trigger callback for focus received so we can deselect items in inbox/outbox
     LLFocusableElement::setFocusReceivedCallback(boost::bind(&LLPanelMainInventory::onFocusReceived, this));
 
+    FSInventoryCustomTabs::install(this, mFilterEditor); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
     return true;
 }
 
@@ -781,6 +785,7 @@ void LLPanelMainInventory::resetFilters()
     }
 
     setFilterTextFromFilter();
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 void LLPanelMainInventory::resetAllItemsFilters()
@@ -878,6 +883,7 @@ void LLPanelMainInventory::onSelectSearchType()
     {
         setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 void LLPanelMainInventory::setSearchType(LLInventoryFilter::ESearchType type)
@@ -1069,11 +1075,20 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
         LLInventoryModelBackgroundFetch::instance().start();
     }
 
-    mFilterSubString = search_string;
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    // mFilterSubString = search_string;
+    const bool is_custom_tab = FSInventoryCustomTabs::activePanelIsCustom(this);
+    const bool per_tab_search = is_custom_tab || gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs");
+    if (!is_custom_tab)
+    {
+        mFilterSubString = search_string;
+    }
+    // </FS:PP>
+
     // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
     //if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
     std::string search_for;
-    if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+    if (per_tab_search)
     {
         search_for = search_string;
     }
@@ -1098,14 +1113,7 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
     // set new filter string
     // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
     //setFilterSubString(mFilterSubString);
-    if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
-    {
-        setFilterSubString(search_string);
-    }
-    else
-    {
-        setFilterSubString(mFilterSubString);
-    }
+    setFilterSubString(search_for);
     // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 
     if (mInboxPanel)
@@ -1183,6 +1191,7 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
     }
 
     setFilterTextFromFilter();
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 // reflect state of current filter selection in the dropdown list
@@ -1269,6 +1278,13 @@ void LLPanelMainInventory::updateFilterDropdown(const LLInventoryFilter* filter)
 
 void LLPanelMainInventory::onFilterSelected()
 {
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    if (FSInventoryCustomTabs::maybeHandleAddTabSelected(this))
+    {
+        return;
+    }
+    // </FS:PP>
+
     // Find my index
     setActivePanel();
 
@@ -1276,6 +1292,8 @@ void LLPanelMainInventory::onFilterSelected()
     {
         return;
     }
+
+    FSInventoryCustomTabs::noteActivePanel(this, mActivePanel); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 
     // <FS:Ansariel> Worn inventory panel; We do this at init and only once for performance reasons!
     //if (getActivePanel() == mWornItemsPanel)
@@ -1286,7 +1304,7 @@ void LLPanelMainInventory::onFilterSelected()
     updateSearchTypeCombo();
     // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
     //setFilterSubString(mFilterSubString);
-    if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+    if (!FSInventoryCustomTabs::activePanelIsCustom(this) && !gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
     {
         setFilterSubString(mFilterSubString);
     }
@@ -1318,6 +1336,7 @@ const std::string LLPanelMainInventory::getFilterSubString()
 void LLPanelMainInventory::setFilterSubString(const std::string& string)
 {
     mActivePanel->setFilterSubString(string);
+    FSInventoryCustomTabs::onActiveFilterChanged(this, mActivePanel); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 bool LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
@@ -1371,7 +1390,8 @@ void LLPanelMainInventory::draw()
         // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
         //mFilterEditor->setText(mFilterSubString);
         static LLCachedControl<bool> sfSplitInventorySearchOverTabs(gSavedSettings, "FSSplitInventorySearchOverTabs");
-        if (sfSplitInventorySearchOverTabs)
+        const bool show_per_tab = sfSplitInventorySearchOverTabs || FSInventoryCustomTabs::activePanelIsCustom(this);
+        if (show_per_tab)
         {
             mFilterEditor->setText(mActivePanel->getFilter().getFilterSubStringOrig());
         }
@@ -1392,6 +1412,7 @@ void LLPanelMainInventory::draw()
         mActivePanel->setSortOrder(order);
         mResortActivePanel = false;
     }
+    FSInventoryCustomTabs::onParentDraw(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
     LLPanel::draw();
     updateItemcountText();
     updateCombinationVisibility();
@@ -1722,7 +1743,12 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
     // update the ui elements
     // <FS:PP> Make floater title translatable
     // setTitle(mFilter->getName());
-    setTitle(LLTrans::getString(mFilter->getName()));
+    std::string filter_title;
+    if (!LLTrans::findString(filter_title, mFilter->getName()))
+    {
+        filter_title = (mPanelMainInventory && mPanelMainInventory->getActivePanel()) ? mPanelMainInventory->getActivePanel()->getLabel() : mFilter->getName();
+    }
+    setTitle(filter_title);
     // </FS:PP>
 
     mCheckAnimation->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
@@ -1777,6 +1803,7 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 
 void LLFloaterInventoryFinder::draw()
 {
+    const S32 prev_generation = FSInventoryCustomTabs::captureFilterGeneration(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
     U64 filter = 0xffffffffffffffffULL;
     bool filtered_by_all_types = true;
 
@@ -1926,6 +1953,7 @@ void LLFloaterInventoryFinder::draw()
         mPanelMainInventory->getPanel()->setDateSearchDirection(getDateSearchDirection());
     }
 
+    FSInventoryCustomTabs::notifyIfFilterChanged(mPanelMainInventory, prev_generation); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
     LLPanel::draw();
 }
 
@@ -1947,6 +1975,7 @@ void LLFloaterInventoryFinder::onCreatorSelfFilterCommit()
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_OTHERS);
         mCreatorOthers->set(true);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
@@ -1967,6 +1996,7 @@ void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_SELF);
         mCreatorSelf->set(true);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 // <FS:Zi> FIRE-1175 - Filter Permissions Menu
@@ -1990,6 +2020,7 @@ void LLFloaterInventoryFinder::onPermissionsChanged()
     }
 
     mFilter->setFilterPermissions(perms);
+    FSInventoryCustomTabs::notifyFilterStateChanged(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 // </FS:Zi>
 
@@ -2003,6 +2034,7 @@ void LLFloaterInventoryFinder::onOnlyCoalescedFilterCommit()
         // Set the mFilter's Filter Coalesced Objects value to the Only Coalesced Filter Checkbox value
         mFilter->setFilterCoalescedObjects(mOnlyCoalescedFilterCheck->getValue());        
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 // Callback method used to update the mFilter's Show Links filter and syncs with the main inventory filter
 void LLFloaterInventoryFinder::onShowLinksFilterCommit()
@@ -2014,6 +2046,7 @@ void LLFloaterInventoryFinder::onShowLinksFilterCommit()
         // The values match up to the bit values that are used by the filter (0 = Show Links, 1 = Show Links Only, 2 = Hide Links)
         mFilter->setFilterLinks((U64)mShowLinksFilterCombo->getSelectedValue().asInteger());
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(mPanelMainInventory); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 // </FS:minerjr> [FIRE-35042]
 
@@ -3072,6 +3105,7 @@ void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
     {
         getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
     }
+    FSInventoryCustomTabs::notifyFilterStateChanged(this); // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
 }
 
 bool LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
@@ -3552,6 +3586,30 @@ void LLPanelMainInventory::scrollToInvPanelSelection()
 {
     mCombinationInventoryPanel->getRootFolder()->scrollToShowSelection();
 }
+
+// <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+bool LLPanelMainInventory::handleRightMouseDown(S32 x, S32 y, MASK mask)
+{
+    return FSInventoryCustomTabs::handleRightMouseDown(this, x, y) || LLPanel::handleRightMouseDown(x, y, mask);
+}
+
+bool LLPanelMainInventory::handleMouseDown(S32 x, S32 y, MASK mask)
+{
+    if (FSInventoryCustomTabs::handleMouseDown(this, x, y))
+    {
+        return true;
+    }
+    return LLPanel::handleMouseDown(x, y, mask);
+}
+
+void LLPanelMainInventory::refreshFinderFromFilter()
+{
+    if (auto* finder = getFinder())
+    {
+        finder->updateElementsFromFilter();
+    }
+}
+// </FS:PP>
 
 // List Commands                                                              //
 ////////////////////////////////////////////////////////////////////////////////

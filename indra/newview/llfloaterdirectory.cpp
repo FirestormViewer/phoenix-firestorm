@@ -104,8 +104,13 @@ bool LLFloaterDirectory::postBuild()
         if (currentDirBrowserPanel)
             currentDirBrowserPanel->openProfile();
         });
-    mDirectoryTabs  = getChild<LLTabContainer>("Directory Tabs");
+    mDirectoryTabs = getChild<LLTabContainer>("Directory Tabs");
     mDirectoryTabs->setCommitCallback([&](LLUICtrl*, const LLSD&) { updateProfileButtonVisibility(); });
+
+    if (!mDirectoryTabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
+    {
+        mDirectoryTabs->selectFirstTab();
+    }
     // </FS:Ansariel>
 
     // <FS:TJ> Always navigate if the SearchURL has changed
@@ -119,6 +124,15 @@ bool LLFloaterDirectory::postBuild()
 void LLFloaterDirectory::onOpen(const LLSD& key)
 {
     LLFloater::onOpen(key);
+
+    if (auto currentPanel = mDirectoryTabs->getCurrentPanel())
+        currentPanel->focusFirstItem();
+
+    if (key.has("tab") && key["tab"].asString() == "groups")
+    {
+        mDirectoryTabs->selectTabByName("panel_dir_groups");
+        return;
+    }
 
     // <FS:TJ> Always navigate if the SearchURL has changed
     std::string search_url = LFSimFeatureHandler::instance().searchURL();
@@ -134,7 +148,7 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
     mLastSearchURL = search_url;
 
     LLPanelDirWeb* panel_dir_web = findChild<LLPanelDirWeb>("panel_dir_web");
-    if (!panel_dir_web || !mDirectoryTabs)
+    if (!panel_dir_web)
     {
         return;
     }
@@ -143,10 +157,23 @@ void LLFloaterDirectory::onOpen(const LLSD& key)
     const std::string query = key["query"].asString();
     const std::string collection = key.has("collection") ? key["collection"].asString() : "";
 
-    mDirectoryTabs->selectTabByName("panel_dir_web");
+    if (key.has("query"))
+    {
+        mDirectoryTabs->selectTabByName("panel_dir_web");
+    }
     panel_dir_web->navigateToSearchPage(category, query, collection);
 }
 // </FS:PP>
+
+// <FS:Ansariel> Remember last selected tab across sessions
+void LLFloaterDirectory::onClose(bool app_quitting)
+{
+    if (mDirectoryTabs)
+    {
+        gSavedSettings.setS32("FSLastSearchTab", mDirectoryTabs->getCurrentPanelIndex());
+    }
+}
+// </FS:Ansariel>
 
 void LLFloaterDirectory::hideAllDetailPanels()
 {

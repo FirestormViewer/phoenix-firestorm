@@ -297,7 +297,7 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
 	<string name="TooltipTooManyWearables">You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
-	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com or LindenLab.com domain.</string>
+	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com, LindenLab.com, or firestormviewer.org domain.</string>
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Physics</string>
 	<string name="TooltipFlagTouch">Touch</string>
@@ -800,7 +800,8 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
 	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
-  <string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="FSInventoryCustomTabDefaultName">Custom</string>
 	<string name="PlacesNoMatchingItems">To add a place to your landmarks, click the star to the right of the location name.</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoListing">You have no listings yet.</string>

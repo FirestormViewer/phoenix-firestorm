@@ -1396,6 +1396,19 @@
         <key>Value</key>
             <array></array>
         </map>
+     <key>FSInventoryCustomTabs</key>
+        <map>
+        <key>HideFromEditor</key>
+            <integer>1</integer>
+        <key>Comment</key>
+            <string>User-defined custom inventory filter tabs (array of maps with 'name', 'filter' and 'states' keys)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array></array>
+        </map>
      <key>FSMaxSharedMaturity</key>
         <map>
         <key>Comment</key>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="沒有被封鎖的居民或物件。"/>
+	<string name="no_filtered_blocked" value="沒有符合搜尋條件的被封鎖居民或物件。"/>
+	<string name="loading_blocked" value="正在載入被封鎖的居民和物件..."/>
+	<string name="failed_blocked" value="目前無法取得封鎖清單。"/>
 	<block_list name="blocked" tool_tip="當前被封鎖的居民列表" />
 	<text name="block_limit">
 		[COUNT] 個條目在您的封鎖列表中，限制為 [LIMIT]。

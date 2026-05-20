@@ -1780,6 +1780,13 @@ void LLWebRTCVoiceClient::setVoiceEnabled(bool enabled)
     }
 }
 
+// <FS:TJ> Fix Nearby Voice when changing voice device settings
+void LLWebRTCVoiceClient::notifyVoiceConnected()
+{
+    notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_JOINED);
+}
+// </FS:TJ>
+
 
 /////////////////////////////
 // Accessors for data related to nearby speakers

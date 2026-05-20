@@ -1367,6 +1367,16 @@ vers
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
+	<notification label="Renommer l&apos;onglet de filtre" name="FSInventoryCustomTabRename">
+		Nouveau nom de l&apos;onglet :
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
 	<notification name="RenameGesture">
 		Nouveau nom du geste :
 		<form name="form">

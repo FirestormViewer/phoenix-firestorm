@@ -2090,7 +2090,7 @@
     <key>RecentJumpThresholdSecs</key>
     <map>
       <key>Comment</key>
-      <string>Seconds after a jump input during which finish-anim is suppressed to avoid interrupting rapid successive jumps.</string>
+      <string>Seconds after jump input during which landing finish-anim is suppressed to avoid interrupting rapid successive jumps.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -14904,6 +14904,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+	<key>FSSearchGroupMaturity</key>
+    <map>
+      <key>Comment</key>
+      <string>Setting for the user's group search maturity level (consts in indra_constants.h)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+	  <key>HideFromEditor</key>
+	  <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+	  <integer>13</integer>
     </map>
     <key>ShowPGEvents</key>
     <map>

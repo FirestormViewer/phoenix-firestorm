@@ -87,6 +87,7 @@ private:
     void updateButtons();
     void removePicker();
     void onSortChanged();
+    void updateEmptyListMessage();
 
     // UI callbacks
     void removeMutes();

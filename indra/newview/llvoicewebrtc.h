@@ -185,6 +185,8 @@ public:
     void setMuteMic(bool muted) override;        // Set the mute state of the local mic.
     //@}
 
+    void notifyVoiceConnected() override; // <FS:TJ/> Fix Nearby Voice when changing voice device settings
+
     //////////////////////////
     /// @name nearby speaker accessors
     std::string getDisplayName(const LLUUID& id) override;

@@ -242,6 +242,11 @@ public:
     void        setRightTabBtnOffset( S32 offset );
     void        setPanelTitle(S32 index, const std::string& title);
 
+    // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
+    S32         getTabContainedAtPoint(S32 x, S32 y) const;
+    void        setTabPadding(S32 index, S32 padding);
+    // </FS:PP>
+
     TabPosition getTabPosition() const { return mTabPosition; }
     void        setMinTabWidth(S32 width) { mMinTabWidth = width; }
     void        setMaxTabWidth(S32 width) { mMaxTabWidth = width; }
@@ -268,6 +273,10 @@ public:
     typedef boost::signals2::signal<void(S32, LLPanel*)> tab_rearrange_signal_t;
     boost::signals2::connection setRearrangeCallback(const tab_rearrange_signal_t::slot_type& cb);
 // [/SL:KB]
+    // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
+    // Try to add the label tool tip if the label is truncated.
+    bool addLabelToolTip(LLTabTuple* tuple);
+    // </FS:minerjr> [FIRE-36603]
 
 private:
 
