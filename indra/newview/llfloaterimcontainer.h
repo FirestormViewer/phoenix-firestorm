@@ -180,6 +180,7 @@ private:
     void banSelectedMember(const LLUUID& participant_uuid);
     void openNearbyChat();
     bool isParticipantListExpanded();
+    bool isNearbyChatSpeakerSelected();
 
     void idleUpdate(); // for convenience (self) from static idle
     void idleProcessEvents();

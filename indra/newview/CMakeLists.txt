@@ -117,9 +117,11 @@ set(viewer_SOURCE_FILES
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
     fsfavoritegroups.cpp
+    fsinventorycustomtabs.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravataralign.cpp
     fsfloateravatarrendersettings.cpp
+    fsfloaterbigpreview.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -172,7 +174,7 @@ set(viewer_SOURCE_FILES
     fsparticipantlist.cpp
     fspose.cpp
     fsposeranimator.cpp
-	fsposestate.cpp
+    fsposestate.cpp
     fsposingmotion.cpp
     fsprimfeedauth.cpp
     fsradar.cpp
@@ -326,7 +328,6 @@ set(viewer_SOURCE_FILES
     llfloateravatartextures.cpp
     llfloaterbanduration.cpp
     llfloaterbeacons.cpp
-    llfloaterbigpreview.cpp
     llfloaterbuildoptions.cpp
     llfloaterbulkpermission.cpp
     llfloaterbulkupload.cpp
@@ -438,7 +439,6 @@ set(viewer_SOURCE_FILES
     llfloatersidepanelcontainer.cpp
     llfloaterslapptest.cpp
     llfloatersnapshot.cpp
-    llfloatersounddevices.cpp
     llfloaterspellchecksettings.cpp
     llfloatertelehub.cpp
     llfloatertestinspectors.cpp
@@ -450,7 +450,6 @@ set(viewer_SOURCE_FILES
     llfloatertranslationsettings.cpp
     llfloateruipreview.cpp
     llfloaterurlentry.cpp
-    llfloatervoiceeffect.cpp
     llfloatervoicevolume.cpp
     llfloaterwebcontent.cpp
     llfloaterwhitelistentry.cpp
@@ -553,6 +552,7 @@ set(viewer_SOURCE_FILES
     llfloaterimnearbychat.cpp
     llfloaterimnearbychathandler.cpp
     llfloaterimnearbychatlistener.cpp
+    llnearbyvoicemoderation.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
     llnotificationgrouphandler.cpp
@@ -646,7 +646,6 @@ set(viewer_SOURCE_FILES
     llpanelsnapshotprofile.cpp
     llpanelteleporthistory.cpp
     llpaneltiptoast.cpp
-    llpanelvoiceeffect.cpp
     #llpaneltopinfobar.cpp # <FS:Zi> unused
     llpanelpulldown.cpp
     llpanelvoicedevicesettings.cpp
@@ -979,8 +978,10 @@ set(viewer_HEADER_FILES
     fsexportperms.h
     fsfloateraddtocontactset.h
     fsfavoritegroups.h
+    fsinventorycustomtabs.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
+    fsfloaterbigpreview.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
@@ -1192,7 +1193,6 @@ set(viewer_HEADER_FILES
     llfloateravatartextures.h
     llfloaterbanduration.h
     llfloaterbeacons.h
-    llfloaterbigpreview.h
     llfloaterbuildoptions.h
     llfloaterbulkpermission.h
     llfloaterbulkupload.h
@@ -1308,7 +1308,6 @@ set(viewer_HEADER_FILES
     llfloatersidepanelcontainer.h
     llfloaterslapptest.h
     llfloatersnapshot.h
-    llfloatersounddevices.h
     llfloaterspellchecksettings.h
     llfloatertelehub.h
     llfloatertestinspectors.h
@@ -1320,7 +1319,6 @@ set(viewer_HEADER_FILES
     llfloatertranslationsettings.h
     llfloateruipreview.h
     llfloaterurlentry.h
-    llfloatervoiceeffect.h
     llfloatervoicevolume.h
     llfloaterwebcontent.h
     llfloaterwhitelistentry.h
@@ -1417,6 +1415,7 @@ set(viewer_HEADER_FILES
     llnameeditor.h
     llnamelistctrl.h
     llnavigationbar.h
+    llnearbyvoicemoderation.h
     llnetmap.h
     llnotificationhandler.h
     llnotificationlistitem.h
@@ -1502,7 +1501,6 @@ set(viewer_HEADER_FILES
     llpaneltiptoast.h
     llpanelpulldown.h
     llpanelvoicedevicesettings.h
-    llpanelvoiceeffect.h
     #llpaneltopinfobar.h # <FS:Zi> unused
     llpanelvolume.h
     llpanelvolumepulldown.h

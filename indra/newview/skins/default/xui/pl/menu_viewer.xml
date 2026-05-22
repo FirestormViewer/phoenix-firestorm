@@ -86,6 +86,11 @@
 			<menu_item_check label="Odrzucaj propozycje i prośby o teleport" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Odrzucaj zaproszenia do grup" name="Reject all group invites"/>
 			<menu_item_check label="Odrzucaj zaproszenia do znajomych" name="Reject all friendship requests"/>
+			<menu label="Czaty konferencji (ad-hoc)" name="Ad-hoc conferences">
+				<menu_item_check label="Automatycznie ignoruj i opuszczaj wszystkie" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Zgłaszaj ignorowane w czacie w pobliżu" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Nie ignoruj od moich znajomych" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Znajomi" name="My Friends"/>
 		<menu_item_check label="Kontakty" name="Contacts"/>

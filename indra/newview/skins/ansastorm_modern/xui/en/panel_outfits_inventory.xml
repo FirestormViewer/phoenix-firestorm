@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel name="Outfits"
+ bg_alpha_color="Transparent"
+ bg_opaque_color="Transparent"
+ background_opaque="false"
+ background_visible="false"
+  follows="all"
+ height="575"
+ label="Things"
+ layout="topleft"
+ min_height="350"
+ min_width="240"
+ width="415"
+ border="false">
+   <panel.string
+     name="wear_outfit_tooltip">
+     Wear selected outfit
+   </panel.string>
+   <panel.string
+     name="wear_items_tooltip">
+     Wear selected items
+   </panel.string>
+   <panel.string
+     name="cof_tab_label">
+     Wearing ([COUNT]/[MAX] Att.)
+   </panel.string>
+   <tab_container
+     follows="all"
+     height="539"
+     layout="topleft"
+     left="4"
+     name="appearance_tabs"
+     tab_position="top"
+     halign="center"
+     hide_scroll_arrows="true"
+     top="8"
+     right="-1">
+         <panel
+           class="outfit_gallery"
+           filename="panel_outfit_gallery.xml"
+           height="520"
+           name="outfit_gallery_tab"
+           background_visible="false"
+           bg_alpha_color="SL-Background_66"
+           help_topic="outfit_gallery_tab"
+           follows="all"
+           label="Outfit Gallery"
+           layout="topleft"
+           right="-1" />
+         <panel
+           class="outfits_list"
+           filename="panel_outfits_list.xml"
+           height="520"
+           name="outfitslist_tab"
+           background_visible="false"
+           bg_alpha_color="SL-Background_66"
+           help_topic="my_outfits_tab"
+           follows="all"
+           label="Outfits"
+           layout="topleft"
+           right="-1" />
+         <panel
+           background_visible="false"
+           bg_alpha_color="SL-Background_66"
+           class="panel_wearing"
+           filename="panel_outfits_wearing.xml"
+           follows="all"
+           height="520"
+           help_topic="now_wearing_tab"
+           label="Wearing"
+           layout="topleft"
+           name="cof_tab"
+           right="-1" />
+   </tab_container>
+
+   <panel
+       background_visible="false"
+       follows="bottom|left|right"
+       height="27"
+       layout="topleft"
+       left="0"
+       top_pad="1"
+       visible="true"
+       name="bottom_panel"
+       width="415">
+			<layout_stack
+     	         follows="bottom|left|right"
+		         height="23"
+		         layout="topleft"
+		         mouse_opaque="false"
+		         name="bottom_panel_ls"
+		         left="4"
+		         orientation="horizontal"
+		         top="0"
+                 width="410">
+			    <layout_panel
+			         follows="bottom|left|right"
+			         height="23"
+                     layout="bottomleft"
+                     left="0"
+                     mouse_opaque="false"
+                     name="save_btn_lp"
+                     user_resize="false"
+                     auto_resize="true"
+                     width="205">
+                    <button
+                         follows="bottom|left|right"
+                         height="23"
+                         label="Save"
+                         left="4"
+                         layout="topleft"
+                         name="save_btn"
+                         top="0"
+                         right="-1" />
+          </layout_panel>
+          <layout_panel
+               follows="bottom|left|right"
+               height="23"
+               layout="bottomleft"
+               left_pad="3"
+               mouse_opaque="false"
+               name="save_as_btn_lp"
+               auto_resize="true"
+               width="205">
+              <button
+                   follows="bottom|left|right"
+                   height="23"
+                   label="Save as..."
+                   layout="topleft"
+                   name="save_as_btn"
+                   top="0"
+                   left="1"
+                   right="-1" />
+          </layout_panel>
+          <layout_panel
+                     follows="bottom|left|right"
+                     height="23"
+                     layout="bottomleft"
+                     left_pad="4"
+                     mouse_opaque="false"
+                     name="wear_btn_lp"
+                     user_resize="false"
+                     auto_resize="true"
+                     width="205">
+                    <button
+                         follows="bottom|left|right"
+                         height="23"
+                         label="Wear"
+                         layout="topleft"
+                         name="wear_btn"
+                         left="1"
+                         top="0"
+                         right="-2" />
+			    </layout_panel>
+			</layout_stack>
+   </panel>
+</panel>

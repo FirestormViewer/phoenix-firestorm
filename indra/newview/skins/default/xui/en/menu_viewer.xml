@@ -775,6 +775,48 @@
                 <menu_item_check.on_click
                  function="World.SetRejectFriendshipRequests"/>
             </menu_item_check>
+            <menu
+             create_jump_keys="true"
+             label="Ad-hoc conferences"
+             name="Ad-hoc conferences"
+             tear_off="true">
+                <menu_item_check
+                 label="Automatically ignore and leave all"
+                 name="FSIgnoreAdHocSessions">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Report ignored in nearby chat"
+                 name="FSReportIgnoredAdHocSession">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSReportIgnoredAdHocSession" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSReportIgnoredAdHocSession" />
+                    <menu_item_check.on_enable
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Don't ignore from my friends"
+                 name="FSDontIgnoreAdHocFromFriends">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSDontIgnoreAdHocFromFriends" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSDontIgnoreAdHocFromFriends" />
+                    <menu_item_check.on_enable
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+            </menu>
         
         </menu>
         

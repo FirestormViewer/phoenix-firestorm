@@ -1098,8 +1098,8 @@ RMDir "$INSTDIR"
 IfFileExists "$INSTDIR" FOLDERFOUND NOFOLDER
 
 FOLDERFOUND:
+ifSilent NOFOLDER 0
 # Silent uninstall always removes all files (/SD IDYES)
-ifSilent +2 0
   MessageBox MB_YESNO $(DeleteProgramFilesMB) /SD IDYES IDNO NOFOLDER
   RMDir /r "$INSTDIR"
 
@@ -1187,7 +1187,10 @@ label_ask_launch:
         MessageBox MB_YESNO $(InstSuccesssQuestion) IDYES label_launch IDNO label_no_launch
 
 label_launch:
-        Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+        # <FS:TJ> Exec the viewer through explorer.exe so it's not ran as admin causing issues
+        #Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+        Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
+        # </FS:TJ>
 
 label_no_launch:
         # </FS:PP>

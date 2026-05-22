@@ -37,7 +37,9 @@
              name="color label"
              text_readonly_color="LabelDisabledColor"
              top="6"
-             width="64">
+             width="64"
+             font="DejaVu"
+             font.size="LSmall" >
                 Color
             </text>
             <!-- label is blank because control places it below the box -->
@@ -63,7 +65,9 @@
              name="color trans"
              text_readonly_color="LabelDisabledColor"
              top="6"
-             width="110">
+             width="110"
+             font="DejaVu"
+             font.size="LSmall" >
                 Transparency %
             </text>
             <spinner
@@ -77,7 +81,9 @@
              max_val="100"
              name="ColorTrans"
              top_pad="4"
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -88,7 +94,9 @@
              name="glow label"
              text_readonly_color="LabelDisabledColor"
              top="6"
-             width="80">
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" >
                 Glow
             </text>
             <spinner
@@ -100,7 +108,9 @@
              left_delta="0"
              name="glow"
              top_pad="4"
-             width="70" />
+             width="70"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="19"
              label="Full bright"
@@ -108,7 +118,9 @@
              left="7"
              name="checkbox fullbright"
              top_pad="4"
-             width="81" />
+             width="81"
+             font="DejaVu"
+             font.size="LSmall" />
             <check_box
              height="17"
              label="Hide water"
@@ -116,7 +128,9 @@
              left="7"
              name="checkbox_hide_water"
              top_pad="0"
-             width="81" />
+             width="81"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|right"
              height="23"
@@ -154,7 +168,9 @@
              left="12"
              top_pad="8"
              name="label_matmedia"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
                 Material
             </text>
             -->
@@ -164,7 +180,9 @@
              left="10"
              name="combobox matmedia"
              top="80"
-             width="100">
+             width="100"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Textures"
                  name="Materials"
@@ -185,7 +203,9 @@
             top_delta="-30"
             width="150"
             visible = "false"
-            name="radio_material_type">
+            name="radio_material_type"
+            font="DejaVu"
+            font.size="LSmall" >
                 <radio_item
                 label="Texture (diffuse)"
                 name="Texture (diffuse)"
@@ -215,7 +235,9 @@
             top_delta="0"
             width="150"
             visible = "false"
-            name="radio_pbr_type">
+            name="radio_pbr_type"
+            font="DejaVu"
+            font.size="LSmall" >
                 <radio_item
                 label="Complete material"
                 name="Complete material"
@@ -264,7 +286,9 @@
              name="checkbox_sync_settings"
              tool_tip="Adjust all maps repeats simultaneously"
              top_pad="-16"
-             width="160" />
+             width="160"
+             font="DejaVu"
+             font.size="LSmall" />
              -->
             <texture_picker
              can_apply_immediately="true"
@@ -277,7 +301,9 @@
              name="pbr_control"
              tool_tip="Click to choose a pbr material"
              top_pad="-29"
-             width="64" />
+             width="64"
+             caption_text.font="DejaVu"
+             caption_text.font.size="LSmall" />
 
 <!-- <FS:Zi> We don't need this button, clicking the texture picker does the same thing
             <button
@@ -288,7 +314,9 @@
              top_delta="0"
              name="pbr_from_inventory"
              label="Choose from inventory"
-             width="140"/>
+             width="140"
+             font="DejaVu"
+             font.size="LSmall" />
 -->
             <text
              visible="false"
@@ -301,7 +329,9 @@
              left_pad="10"
              name="material_permissions_loading_label"
              text_readonly_color="LabelDisabledColor"
-             width="160">
+             width="160"
+             font="DejaVu"
+             font.size="LSmall" >
                 Loading contents...
             </text>
             <button
@@ -312,7 +342,9 @@
              top_delta="0"
              name="edit_selected_pbr"
              label="Edit"
-             width="100"/>
+             width="100"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="left|top"
              height="23"
@@ -321,7 +353,9 @@
              left_pad="4"
              name="save_selected_pbr"
              label="Save"
-             width="100"/>
+             width="100"
+             font="DejaVu"
+             font.size="LSmall" />
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"
@@ -334,7 +368,9 @@
              name="texture control"
              tool_tip="Click to choose a picture"
              top_delta="-40"
-             width="64" />
+             width="64"
+             caption_text.font="DejaVu"
+             caption_text.font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -345,7 +381,9 @@
              name="label alphamode"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
                 Alpha mode
             </text>
             <combo_box
@@ -354,7 +392,9 @@
              left_delta="0"
              name="combobox alphamode"
              top_pad="4"
-             width="120">
+             width="120"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall">
                 <combo_box.item
                  label="None"
                  name="None"
@@ -382,7 +422,9 @@
              name="label maskcutoff"
              text_readonly_color="LabelDisabledColor"
              top_pad="4"
-             width="150">
+             width="150"
+             font="DejaVu"
+             font.size="LSmall" >
                 Mask cutoff
             </text>
             <spinner
@@ -397,7 +439,9 @@
              left_delta="0"
              increment="1"
              name="maskcutoff"
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <texture_picker
              allow_no_texture="true"
              can_apply_immediately="true"
@@ -411,7 +455,9 @@
              name="bumpytexture control"
              tool_tip="Click to choose a picture"
              top_delta="-55"
-             width="64" />
+             width="64"
+             caption_text.font="DejaVu"
+             caption_text.font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -422,7 +468,9 @@
              name="label bumpiness"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
                 Bumpiness
             </text>
             <combo_box
@@ -431,7 +479,9 @@
              left_delta="0"
              name="combobox bumpiness"
              top_pad="4"
-             width="150">
+             width="150"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="None"
                  name="None"
@@ -525,7 +575,9 @@
              name="shinytexture control"
              tool_tip="Click to choose a picture"
              top_delta="-14"
-             width="64" />
+             width="64"
+             caption_text.font="DejaVu"
+             caption_text.font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -536,7 +588,9 @@
              left_pad="30"
              text_readonly_color="LabelDisabledColor"
              top_delta="6"
-             width="70">
+             width="70"
+             font="DejaVu"
+             font.size="LSmall" >
                 Shininess
             </text>
             <combo_box
@@ -545,7 +599,9 @@
              left_pad="10"
              name="combobox shininess"
              top_delta="-6"
-             width="90">
+             width="90"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="None"
                  name="None"
@@ -580,7 +636,9 @@
              name="label glossiness"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="76">
+             width="76"
+             font="DejaVu"
+             font.size="LSmall" >
                 Glossiness
             </text>
             <spinner
@@ -595,7 +653,9 @@
              top_delta="-4"
              left_pad="30"
              name="glossiness"
-             width="64" />
+             width="64"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -606,7 +666,9 @@
              name="label environment"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="96">
+             width="96"
+             font="DejaVu"
+             font.size="LSmall" >
                 Environment
             </text>
             <spinner
@@ -621,7 +683,9 @@
              top_delta="-4"
              left_pad="10"
              name="environment"
-             width="64" />
+             width="64"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -632,7 +696,9 @@
              name="label shinycolor"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="96">
+             width="96"
+             font="DejaVu"
+             font.size="LSmall" >
                 Color
             </text>
             <!-- label is blank because control places it below the box -->
@@ -656,7 +722,9 @@
              use_ellipses="true"
 			 read_only="true"
 			 name="media_info"
-			 width="280">
+			 width="280"
+             font="DejaVu"
+             font.size="LSmall" >
 			 URL of chosen media, if any, goes here
 			 </text>
 			<button
@@ -668,7 +736,9 @@
 			 top_pad="4"
 			 tool_tip="Add Media"
 			 label="Choose..."
-			 width="85"/>
+			 width="85"
+             font="DejaVu"
+             font.size="LSmall" />
 			<button
 			 follows="top|left"
 			 height="18"
@@ -678,7 +748,9 @@
 			 tool_tip="Delete this media texture"
 			 top_delta="0"
 			 label="Remove"
-			 width="85"/>
+			 width="85"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
 			 follows="left|top"
 			 height="18"
@@ -689,7 +761,9 @@
 			 name="button align"
 			 top_delta="0"
 			 tool_tip="Align media texture (must load first)"
-			 width="85" />
+			 width="85"
+             font="DejaVu"
+             font.size="LSmall" />
             <text
              type="string"
              length="1"
@@ -700,7 +774,9 @@
              name="tex gen"
              text_readonly_color="LabelDisabledColor"
              top_pad="49"
-             width="140">
+             width="140"
+             font="DejaVu"
+             font.size="LSmall" >
                 Mapping
             </text>
             <combo_box
@@ -709,7 +785,9 @@
              left_pad="0"
              name="combobox texgen"
              top_pad="-13"
-             width="125">
+             width="125"
+             drop_down_button.font="DejaVu"
+             drop_down_button.font.size="LSmall" >
                 <combo_box.item
                  label="Default"
                  name="Default"
@@ -732,7 +810,9 @@
              decimal_digits="5"
              name="TexScaleU"
              top_pad="5"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|left"
              height="18"
@@ -762,7 +842,9 @@
              max_val="10000"
              decimal_digits="5"
              name="TexScaleV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="top|left"
              height="18"
@@ -792,7 +874,9 @@
              max_val="100"
              min_val="-100"
              name="rptctrl"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
            <spinner
              decimal_digits="2"
              follows="left|top"
@@ -806,7 +890,9 @@
              max_val="360"
              min_val="-360"
              name="TexRot"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -819,7 +905,9 @@
              max_val="1"
              decimal_digits="5"
              name="TexOffsetU"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -832,7 +920,9 @@
              max_val="1"
              decimal_digits="5"
              name="TexOffsetV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -846,7 +936,9 @@
              decimal_digits="5"
              name="bumpyScaleU"
              top_delta="-115"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -859,7 +951,9 @@
              max_val="10000"
              decimal_digits="5"
              name="bumpyScaleV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
            <spinner
              decimal_digits="2"
              follows="left|top"
@@ -874,7 +968,9 @@
              max_val="360"
              min_val="-360"
              name="bumpyRot"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -887,7 +983,9 @@
              max_val="1"
              decimal_digits="5"
              name="bumpyOffsetU"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -900,7 +998,9 @@
              max_val="1"
              decimal_digits="5"
              name="bumpyOffsetV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -914,7 +1014,9 @@
              decimal_digits="5"
              name="shinyScaleU"
              top_delta="-115"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -927,7 +1029,9 @@
              max_val="10000"
              decimal_digits="5"
              name="shinyScaleV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
            <spinner
              decimal_digits="2"
              follows="left|top"
@@ -942,7 +1046,9 @@
              max_val="360"
              min_val="-360"
              name="shinyRot"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -955,7 +1061,9 @@
              max_val="1"
              decimal_digits="5"
              name="shinyOffsetU"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -968,7 +1076,9 @@
              max_val="1"
              decimal_digits="5"
              name="shinyOffsetV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <!-- BEGIN PBR Material texture transform parameters -->
             <spinner
              follows="left|top"
@@ -982,7 +1092,9 @@
              max_val="10000"
              name="gltfTextureScaleU"
              top_delta="-115"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -994,7 +1106,9 @@
              min_val="-10000"
              max_val="10000"
              name="gltfTextureScaleV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              decimal_digits="1"
              follows="left|top"
@@ -1007,7 +1121,9 @@
              max_val="100"
              min_val="-100"
              name="gltfRptctrl"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -1019,7 +1135,9 @@
              min_val="-360"
              max_val="360"
              name="gltfTextureRotation"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -1031,7 +1149,9 @@
              min_val="-999"
              max_val="999"
              name="gltfTextureOffsetU"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <spinner
              follows="left|top"
              height="19"
@@ -1043,7 +1163,9 @@
              min_val="-999"
              max_val="999"
              name="gltfTextureOffsetV"
-             width="265" />
+             width="265"
+             font="DejaVu"
+             font.size="LSmall" />
             <!-- END PBR Material texture transform parameters -->
             <check_box
              follows="top|left"
@@ -1055,7 +1177,9 @@
              name="checkbox planar align"
              tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
              top_pad="2"
-             width="203" />
+             width="203"
+             font="DejaVu"
+             font.size="LSmall" />
             <!-- FS:Beq use Linden Lab control_name with FS control definition (also removes the typo in "syncronize" yay )-->
             <check_box
              control_name="SyncMaterialSettings"
@@ -1067,7 +1191,9 @@
              top_pad="0"
              name="checkbox_sync_settings"
              tool_tip="Synchronize texture map parameters"
-             width="199" />
+             width="199"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              layout="topleft"
              follows="right|top"
@@ -1077,7 +1203,9 @@
              label="Align"
              name="button align textures"
              tool_tip="Align current texture layers"
-             width="84" />
+             width="84"
+             font="DejaVu"
+             font.size="LSmall" />
             <web_browser
              visible="false"
              enabled="false"
@@ -1101,7 +1229,9 @@
              label="Find All"
              name="btn_select_same_diff"
              tool_tip="Select all faces with the same diffuse texture as this one"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
              <button.commit_callback
                function="BuildTool.SelectSameTexture"
                parameter="diffuse"/>
@@ -1115,7 +1245,9 @@
              label="Find All"
              name="btn_select_same_norm"
              tool_tip="Select all faces with the same normal map as this one"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
              <button.commit_callback
                function="BuildTool.SelectSameTexture"
                parameter="normal"/>
@@ -1129,7 +1261,9 @@
              label="Find All"
              name="btn_select_same_spec"
              tool_tip="Select all faces with the same specular map as this one"
-             width="90">
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" >
              <button.commit_callback
                function="BuildTool.SelectSameTexture"
                parameter="specular"/>

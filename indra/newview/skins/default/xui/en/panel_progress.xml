@@ -109,7 +109,6 @@
                          text_color="LoginProgressBoxTextColor"
                          word_wrap="true"/>
                         <progress_bar
-                         color_bar="1 1 1 0.96"
                          follows="left|right|top"
                          layout="topleft"
                          height="16"
@@ -162,7 +161,7 @@
                          line_spacing.pixels="2"
                          name="logos_lbl"
                          text_color="LoginProgressBoxTextColor">
-                          Second Life uses
+                          [APP_NAME] uses
                         </text>
                       </layout_panel>
                     </layout_stack>

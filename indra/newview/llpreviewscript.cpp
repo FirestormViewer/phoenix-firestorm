@@ -684,7 +684,6 @@ void LLScriptEdCore::processKeywords(bool luau_language)
     mFunctions->clearRows();
     mEditor->clearSegments();
     mEditor->initKeywords(luau_language);
-    mEditor->loadKeywords();
 
     // <FS:Ansariel> Re-add legacy format support
     std::vector<std::string> funcs;
@@ -755,6 +754,8 @@ void LLScriptEdCore::processKeywords(bool luau_language)
 #endif // OPENSIM
     // </FS:Ansariel>
 
+    mEditor->loadKeywords();
+
     string_vec_t primary_keywords;
     string_vec_t secondary_keywords;
     LLKeywordToken *token;
@@ -789,7 +790,6 @@ void LLScriptEdCore::processKeywords(bool luau_language)
     {
         mPostEditor->clearSegments();
         mPostEditor->initKeywords();
-        mPostEditor->loadKeywords();
 
         mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 #ifdef OPENSIM
@@ -798,6 +798,8 @@ void LLScriptEdCore::processKeywords(bool luau_language)
         if (LLGridManager::getInstance()->isInAuroraSim())
             mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
+
+        mPostEditor->loadKeywords();
     }
     // NaCl End
 }

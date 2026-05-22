@@ -196,7 +196,7 @@ void LLPanelDirBrowser::updateResultCount()
         // <FS:Ansariel> Make this localizable
         //result_text = llformat("%d found", result_count);
         LLStringUtil::format_map_t args;
-        args["COUNT"] = llformat("%d", mResultsPerPage);
+        args["COUNT"] = llformat("%d", result_count);
         result_text = getString("found_text", args);
     }
 

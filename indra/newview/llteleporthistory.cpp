@@ -102,7 +102,7 @@ void LLTeleportHistory::goToItem(int idx)
         return;
     }
 
-    // <FS> [FIRE-35355] OpenSim global position is dependent on the Grid you are on
+    // <FS:TJ> [FIRE-35355] OpenSim global position is dependent on the Grid you are on
     #ifdef OPENSIM
     if (LLGridManager::getInstance()->isInOpenSim())
     {
@@ -140,7 +140,7 @@ void LLTeleportHistory::goToItem(int idx)
         }
     }
     #endif
-    // </FS>
+    // </FS:TJ>
 
     // Attempt to teleport to the requested item.
     gAgent.teleportViaLocation(mItems[idx].mGlobalPos);
@@ -255,7 +255,7 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
         }
 // [/RLVa:KB]
 
-        // <FS> [FIRE-35355] OpenSim global position is dependent on the Grid you are on,
+        // <FS:TJ> [FIRE-35355] OpenSim global position is dependent on the Grid you are on,
         // so we need to store the slurl so we can request the global position later
         #ifdef OPENSIM
         if (LLGridManager::getInstance()->isInOpenSim())
@@ -269,7 +269,7 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
             }
         }
         #endif
-        // </FS>
+        // </FS:TJ>
     }
 
     //dump(); // LO - removing the dump from happening every time we TP.
@@ -344,11 +344,12 @@ void LLTeleportHistory::dump() const
         line << i << ": " << mItems[i].mTitle;
         line << " REGION_ID: " << mItems[i].mRegionID;
         line << ", pos: " << mItems[i].mGlobalPos;
+        line << ", slurl: " << mItems[i].mSLURL.asString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
         LL_INFOS() << line.str() << LL_ENDL;
     }
 }
 
-// <FS> [FIRE-35355] Callback for OpenSim so we can teleport to the correct global position on another grid
+// <FS:TJ> [FIRE-35355] Callback for OpenSim so we can teleport to the correct global position on another grid
 void LLTeleportHistory::regionNameCallback(int idx, U64 region_handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport)
 {
     if (region_handle)
@@ -378,4 +379,4 @@ void LLTeleportHistory::regionNameCallback(int idx, U64 region_handle, const LLS
         onTeleportFailed();
     }
 }
-// </FS>
+// </FS:TJ>

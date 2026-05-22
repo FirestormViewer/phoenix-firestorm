@@ -3493,6 +3493,29 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 
   <notification
    icon="alertmodal.tga"
+   label="Rename Filter Tab"
+   name="FSInventoryCustomTabRename"
+   type="alertmodal">
+    New tab name:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="new_name" type="text" width="300" default="true">
+        [NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    label="Rename Gesture"
    name="RenameGesture"
    type="alertmodal">
@@ -8859,7 +8882,8 @@ However, this region contains content accessible to adults only.
    name="TeleportRequest"
    log_to_im="true"
    fade_toast="false"
-   type="offer">
+   type="offer"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] is requesting to be teleported to your location.
 [MESSAGE]
 
@@ -9808,6 +9832,14 @@ Failed to save snapshot to [PATH]: Disk is full. [NEED_MEMORY]KB is required but
 Failed to save snapshot to [PATH]: Directory does not exist.
   </notification>
 
+  <notification icon="notifytip.tga"
+    name="SnapshotSavedToComputer" type="notifytip">
+Screenshot saved to:
+    [FILEPATH]
+
+Click to open folder.
+  </notification>
+
   <notification
     icon="notifytip.tga"
     name="PresetNotSaved"
@@ -9882,6 +9914,23 @@ Your voice has been muted by a moderator.
          yestext="OK"/>
     </notification>
 
+    <notification
+     icon="notifytip.tga"
+     name="NearbyVoiceMutedByModerator"
+     type="notifytip">
+        The moderator has muted your voice chat.
+People in this location will not hear you if you speak.
+     <tag>voice</tag>
+    </notification>
+
+    <notification
+     icon="notifytip.tga"
+     name="NearbyVoiceUnmutedByModerator"
+     type="notifytip">
+        Your voice chat can now be heard by people in this location.
+     <tag>voice</tag>
+    </notification>
+ 
     <notification
         icon="alertmodal.tga"
         name="FailedToGetBenefits"
@@ -10378,6 +10427,22 @@ Are you sure you want to leave this call?
     <tag>voice</tag>
     <usetemplate
      ignoretext="Confirm before I leave call"
+     name="okcancelignore"
+     notext="No"
+     yestext="Yes">
+      <unique/>
+    </usetemplate>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmLeaveAdhoc"
+   type="alertmodal">
+Are you sure you want to leave this conference chat?
+    <tag>confirm</tag>
+    <tag>voice</tag>
+    <usetemplate
+     ignoretext="Confirm before I leave conference chat"
      name="okcancelignore"
      notext="No"
      yestext="Yes">

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Metros
+	</string>
+	<string name="feet">
+		Pés
+	</string>
+	<string name="height">
+		Altura:
+	</string>
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Corpo">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Corpo"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Cabeça">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Cabeça"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Olhos">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Olhos"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Orelhas">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="Orelhas"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Nariz">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Nariz"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Boca">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Boca"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Queixo">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Queixo"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Tronco">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Tronco"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Pernas">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Pernas"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

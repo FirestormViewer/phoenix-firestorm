@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="volumepulldown_floater" width="215">
 	<slider label="Maestro" label_width="55" name="System Volume" width="155"/>
-	<slider label="Botones" label_width="55" name="UI Volume" width="155"/>
+	<slider label="Interfaz" label_width="55" name="UI Volume" width="155"/>
 	<slider label="Ambiente" label_width="55" name="Wind Volume" width="155"/>
 	<check_box name="collisions_audio_play_btn" tool_tip="Activa los sonidos por defecto para las colisiones"/>
 	<slider label="Sonidos" label_width="55" name="SFX Volume" width="155"/>

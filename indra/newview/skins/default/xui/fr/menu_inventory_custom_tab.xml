@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<menu name="menu_inventory_custom_tab">
+	<menu_item_call label="Renommer..." name="rename_tab" />
+	<menu_item_call label="Dupliquer" name="clone_tab" />
+	<menu_item_call label="Fermer" name="close_tab" />
+</menu>

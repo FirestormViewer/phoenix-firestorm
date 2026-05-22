@@ -4,7 +4,7 @@
   background_image="TextField_Off"
   background_image_disabled="TextField_Disabled"
   background_image_focused="TextField_Active"
-  h_pad="0"
+  h_pad="2"
   max_length="3070"
   v_pad="0"
   valign="center"

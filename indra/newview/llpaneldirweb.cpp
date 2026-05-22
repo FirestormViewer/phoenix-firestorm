@@ -62,6 +62,11 @@ bool LLPanelDirWeb::postBuild()
     mBtnForward->setClickedCallback([this](LLUICtrl*, const LLSD&) { mWebBrowser->navigateForward(); });
 
     mWebBrowser = findChild<LLMediaCtrl>("web_search");
+    // <FS:PP> Load openID cookie and log in the user
+    mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
+    // </FS:PP>
+
     navigateToDefaultPage();
     mWebBrowser->addObserver(this);
 

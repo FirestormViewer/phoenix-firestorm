@@ -1188,7 +1188,7 @@ bool LLFloaterSnapshot::postBuild()
     //getChild<LLComboBox>("profile_size_combo")->selectNthItem(0);
     //getChild<LLComboBox>("postcard_size_combo")->selectNthItem(0);
     //getChild<LLComboBox>("texture_size_combo")->selectNthItem(0);
-    //getChild<LLComboBox>("local_size_combo")->selectNthItem(8);
+    //getChild<LLComboBox>("local_size_combo")->selectNthItem(0);
     //getChild<LLComboBox>("local_format_combo")->selectNthItem(0);
     // </FS:Ansariel>
     mOriginalHeight = getRect().getHeight();

@@ -146,7 +146,7 @@ private:
     {
         EManipPart part;             // e.g. LL_ROT_Z, LL_ROT_Y, LL_ROT_X, etc.
         LLVector4 targetScale;       // Target scale for mManipulatorScales for this part.
-        float extraRotateAngle;      // Extra rotation angle (in degrees) to apply.
+        F32 extraRotateAngle;        // Extra rotation angle (in degrees) to apply.
         LLVector3 extraRotateAxis;   // Axis for the extra rotation.
         LLColor4 primaryColor;       // Primary ring color.
         LLColor4 secondaryColor;     // Secondary ring color.
@@ -158,15 +158,15 @@ private:
     void renderActiveRing( F32 radius, F32 width, const LLColor4& front_color, const LLColor4& back_color);
     void renderManipulatorRings(const LLVector3& center, const LLQuaternion& finalAlignment);
 
-    void renderCenterCircle(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f)); // <FS:minerjr> add missing f for float
-    void renderCenterSphere(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f)); // <FS:minerjr> add missing f for float
+    void renderCenterCircle(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f));
+    void renderCenterSphere(const F32 radius, const LLColor4& normal_color = LLColor4(0.7f,0.7f,0.7f,0.2f), const LLColor4& highlight_color = LLColor4(0.8f,0.8f,0.8f,0.3f));
     void renderRingPass(const RingRenderParams& params, float radius, float width, int pass);
     void renderAxes(const LLVector3& center, F32 size, const LLQuaternion& rotation);
 
     bool isAvatarJointSafeToUse();
     LLQuaternion getSelectedJointWorldRotation();
 
-    float mLastAngle = 0.f;
+    F32 mLastAngle = 0.f;
     LLVector3 mConstraintAxis;
     E_PoserReferenceFrame mReferenceFrame = POSER_FRAME_BONE;
     LLQuaternion mLastSetRotation;

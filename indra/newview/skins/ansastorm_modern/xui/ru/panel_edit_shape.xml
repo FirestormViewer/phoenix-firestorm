@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Метры
+	</string>
+	<string name="feet">
+		Футы
+	</string>
+	<string name="height">
+		Высота:
+	</string>
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Тело">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Тело"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Голова">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Голова"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Глаза">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Глаза"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Уши">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_ears_tab" title="Уши"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Нос">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Нос"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Рот">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Рот"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Подбородок">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Подбородок"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Торс">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Торс"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Ноги">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Ноги"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>
