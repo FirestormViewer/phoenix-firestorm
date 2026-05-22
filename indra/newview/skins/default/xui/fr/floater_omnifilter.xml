@@ -23,7 +23,9 @@
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Nom de la règle"/>
 		<text name="sender_name_label" value="Émetteur"/>
-		<combo_box name="sender_match_type">
+		<line_editor name="sender_name" tool_tip="Le nom de l'avatar ou de l'objet dont provient le message" />
+		<check_box name="sender_case" tool_tip="Sensibilité à la casse" />
+		<combo_box name="sender_match_type" tool_tip="Mode de correspondance">
 			<combo_item name="sender_exact">
 				<column name="longtext" label="Correspondance intégrale"/>
 			</combo_item>
@@ -35,7 +37,9 @@
 			</combo_item>
 		</combo_box>
 		<text name="content_label" value="Contenu"/>
-		<combo_box name="content_match_type">
+		<text_editor name="content" tool_tip="Le texte réel du message" />
+		<check_box name="content_case" tool_tip="Sensibilité à la casse" />
+		<combo_box name="content_match_type" tool_tip="Mode de correspondance">
 			<combo_item name="content_exact">
 				<column name="longtext" label="Correspondance intégrale"/>
 			</combo_item>
@@ -48,7 +52,8 @@
 		</combo_box>
 		<text name="region_name_label" value="Nom de la région"/>
 		<line_editor name="region_name" tool_tip="Nom de la région de la source. Disponible uniquement pour les offres d'inventaire."/>
-		<text name="owner_label" tool_tip="Pour les invitations de groupe : l'UUID du groupe. Pour le chat d'objet, le message du propriétaire, le chat de débogage ou le chat direct : l'UUID de l'objet. Pour les messages instantanés d'objet : l'UUID du propriétaire de l'objet. Pour tout le reste, l'UUID de l'avatar de l'expéditeur." value="Clé du propriétaire :"/>
+		<text name="owner_label" value="Clé du propriétaire :"/>
+		<line_editor name="owner_uuid" tool_tip="Pour les invitations de groupe : l'UUID du groupe. Pour le chat d'objet, le message du propriétaire, le chat de débogage ou le chat direct : l'UUID de l'objet. Pour les messages instantanés d'objet : l'UUID du propriétaire de l'objet. Pour tout le reste, l'UUID de l'avatar de l'expéditeur."/>
 		<text name="match_source_label" value="Correspond source :"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -77,7 +82,10 @@
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="Remplacer le chat"/>
+		<line_editor name="chat_replace" tool_tip="Texte de remplacement pouvant être utilisé pour modifier l'affichage du message" />
 		<text name="button_reply_label" value="Sélect. le bouton"/>
+		<line_editor name="button_reply" tool_tip="L'étiquette d'un bouton sur lequel &quot;cliquer&quot; dans la boîte de dialogue du script, y compris &quot;Ignorer&quot;" />
 		<text name="text_box_reply_label" value="Sélect. bte de texte"/>
+		<text_editor name="text_box_reply" tool_tip="Un texte de réponse, comme s'il avait été saisi manuellement dans la zone de texte de la boîte de dialogue du script" />
 	</panel>
 </floater>

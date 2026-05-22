@@ -206,14 +206,16 @@
 		 height="20"
 		 left_pad="4"
 		 width="30"
-		 label="Aa"/>
+		 label="Aa"
+		 tool_tip="Case Sensitivity"/>
 		<combo_box
 		 name="sender_match_type"
 		 layout="topleft"
 		 follows="right|top"
 		 height="20"
 		 left_pad="8"
-		 right="-4">
+		 right="-4"
+		 tool_tip="Matching Mode">
 			<combo_item
 			 name="sender_exact"
 			 value="0">
@@ -572,7 +574,7 @@
 		 left_pad="4"
 		 height="20"
 		 right="-4"
-         tool_tip="The label of a button to &quot;click&quot; on the scripted dialog, including &quot;Ignore&quot;"/>
+		 tool_tip="The label of a button to &quot;click&quot; on the scripted dialog, including &quot;Ignore&quot;"/>
 		<text
 		 name="text_box_reply_label"
 		 layout="topleft"
