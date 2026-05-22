@@ -2354,6 +2354,7 @@ void LLTextureCtrl::setImageAssetID( const LLUUID& asset_id )
         mImageItemID.setNull();
         mImageAssetID = asset_id;
         mLocalTrackingID.setNull();
+        LLView::setEnabled(!mOpenTexPreview || (asset_id.notNull() && !mIsPreviewDisabled)); // <FS:Ansariel> Texture preview mode
         LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mFloaterHandle.get();
         if( floaterp && getEnabled() )
         {
@@ -2705,12 +2706,7 @@ bool LLTextureCtrl::handleUnicodeCharHere(llwchar uni_char)
 
 void LLTextureCtrl::setValue( const LLSD& value )
 {
-    // <FS:Ansariel> Texture preview mode
-    //setImageAssetID(value.asUUID());
-    LLUUID uuid = value.asUUID();
-    setImageAssetID(uuid);
-    LLView::setEnabled(!mOpenTexPreview || (uuid.notNull() && !mIsPreviewDisabled));
-    // </FS:Ansariel>
+    setImageAssetID(value.asUUID());
 }
 
 LLSD LLTextureCtrl::getValue() const
