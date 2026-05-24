@@ -247,7 +247,7 @@
          left="4"
          name="ShadersText"
          top="60"
-         width="128">
+         width="185">
           Shaders:
         </text>
         <check_box
@@ -308,7 +308,7 @@
          top_pad="4"
          follows="top|left"
          height="12"
-         width="110"
+         width="185"
          word_wrap="true"
          layout="topleft"
          left_delta="-5"
@@ -348,7 +348,7 @@
          name="ReflectionDetailText"
          text_readonly_color="LabelDisabledColor"
          top_pad="4"
-         width="170">
+         width="185">
           Reflection Detail:
         </text>
         <combo_box
@@ -382,7 +382,7 @@
          name="ReflectionProbeText"
          text_readonly_color="LabelDisabledColor"
          top_pad="4"
-         width="170">
+         width="185">
           Reflection Coverage:
         </text>
         <combo_box
@@ -392,7 +392,7 @@
          left_delta="5"
          top_pad="3"
          name="ReflectionLevel"
-         width="150">
+         width="185">
           <combo_box.item
            label="None"
            name="0"
@@ -416,7 +416,7 @@
          top_pad="4"
          follows="top|left"
          height="12"
-         width="170"
+         width="185"
          word_wrap="false"
          layout="topleft"
          left_delta="-5"
@@ -457,7 +457,7 @@
          name="MirrorResolutionText"
          text_readonly_color="LabelDisabledColor"
          top_pad="4"
-         width="170">
+         width="185">
           Mirror Resolution:
         </text>
         <combo_box
@@ -496,7 +496,7 @@
          name="HeroProbeUpdateText"
          text_readonly_color="LabelDisabledColor"
          top_pad="4"
-         width="170">
+         width="185">
           Mirror Update Rate:
         </text>
         <combo_box
@@ -1362,7 +1362,7 @@ If you do not understand the distinction then leave this control alone."
          top_pad="3"
          follows="top|left"
          height="18"
-         width="150"
+         width="250"
          word_wrap="true"
          layout="topleft"
          left="22"
@@ -1374,7 +1374,7 @@ If you do not understand the distinction then leave this control alone."
          height="20"
          layout="topleft"
          follows="left|top"
-         left_pad="5"
+         left_pad="2"
          top_pad="-20"
          name="TextureDetail"
          width="150"

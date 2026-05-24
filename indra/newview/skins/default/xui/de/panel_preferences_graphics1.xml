@@ -2,7 +2,7 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
-		<text name="preset_label">
+		<text name="preset_label" width="140">
 			Aktuelle Voreinstellung:
 		</text>
 		<text name="QualitySpeed">
@@ -128,10 +128,10 @@
 		<slider label="   Avatare:" name="AvatarMeshDetail"/>
 		<slider label="   Terrain:" name="TerrainMeshDetail"/>
 		<slider label="   Himmel:" name="SkyMeshDetail"/>
-		<text name="Presets_Label" width="200">
+		<text name="Presets_Label" width="210">
 			Voreinstellungen:
 		</text>
-		<button label="Speichern" left="300" name="PrefSaveButton" width="72"/>
+		<button label="Speichern" left="310" name="PrefSaveButton" width="72"/>
 		<button label="Laden" left_pad="5" name="PrefLoadButton" width="72"/>
 		<button label="Löschen" left_pad="5" name="PrefDeleteButton" width="72"/>
 		<button tool_tip="Standardeinstellungen neu laden" name="Defaults"/>
@@ -198,8 +198,6 @@
 		<text name="Texture Rendering">
 			Textur-Darstellung:
 		</text>
-		<check_box label="Minimale Texturen laden" tool_tip="Diese Einstellung setzt den 'TextureDisable'-Parameter - lädt Texturen extrem langsam, eventuell nützlich für Computer mit langsamer GPU" name="TexturesLoaded"/>
-		<check_box label="HTTP für Laden von Texturen verwenden" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - deaktivieren wenn es Probleme mit schlecht oder nicht korrekt ladenden Texturen gibt und das veraltete UDP-Protokoll verwendet werden soll." name="TexturesHTTP"/>
 		<text name="FSRestrictMaxTextureSize">
 			Maximale Auflösung für Texturen:
 		</text>
@@ -208,8 +206,7 @@
 			<combo_box.item label="1024 Pixel" name="1024"/>
 			<combo_box.item label="2048 Pixel" name="2048"/>
 		</combo_box>
-		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
-		<text name="TextureDetailLabel" width="215">
+		<text name="TextureDetailLabel">
 			Maximales Qualitätslevel für Texturen:
 		</text>
 		<combo_box tool_tip="Qualitätslevel, auf das Texturen geladen werden. Beeinflusst die Einstellung TextureDiscardLevel" name="TextureDetail">
@@ -265,18 +262,17 @@
 		</combo_box>
 		<slider label="Tone Mapping Mix:" tool_tip="Mix zwischen linearen und tone-gemappten Farben" name="TonemapMix"/>
 	</panel>
-	
+
 	<panel label="Schärfentiefe" name="DOF panel">
 		<check_box label="Schärfentiefe aktivieren (Bereiche außerhalb des Kamerafokus erscheinen unscharf)" name="UseDoF"/>
 		<check_box label="Im Editier-Modus aktivieren" name="RenderDepthOfFieldInEditMode"/>
 		<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
-		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="195" width="409"/>
-		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="195" width="409"/>
-		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="195" width="409"/>
-		<slider label="Kamera-Bildseitenverhältnis:" name="CameraAspectRatio" tool_tip="Kamera-Bildseitenverhältnis für die Schärfentiefe" label_width="195" width="409"/>
-		<slider label="Fokus-Übergangszeit:" name="CameraFocusTrans" tool_tip="Zeit, die benötigt wird, um den Focus neu einzustellen" label_width="195" width="409"/>
-		<slider label="Schärfentiefe-Darstellungsqualität:" name="CameraDoFResScale" tool_tip="Beeinflusst die Qualität der Unschärfe und Geschwindigkeit der Darstellung (höher = bessere Qualität, niedriger = höhere Geschwindigkeit" label_width="195" width="409"/>
+		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="210" width="409"/>
+		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="210" width="409"/>
+		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="210" width="409"/>
+		<slider label="Kamera-Bildseitenverhältnis:" name="CameraAspectRatio" tool_tip="Kamera-Bildseitenverhältnis für die Schärfentiefe" label_width="210" width="409"/>
+		<slider label="Fokus-Übergangszeit:" name="CameraFocusTrans" tool_tip="Zeit, die benötigt wird, um den Focus neu einzustellen" label_width="210" width="409"/>
+		<slider label="Schärfentiefe-Darstellungsqualität:" name="CameraDoFResScale" tool_tip="Beeinflusst die Qualität der Unschärfe und Geschwindigkeit der Darstellung (höher = bessere Qualität, niedriger = höhere Geschwindigkeit" label_width="210" width="409"/>
 	</panel>
-	
 </tab_container>
 </panel>
