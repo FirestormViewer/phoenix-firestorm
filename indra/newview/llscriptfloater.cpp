@@ -488,6 +488,25 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
             haystack.mType = OmnifilterEngine::eType::ScriptDialog;
             haystack.mSenderName = notification->getPayload()["object_name"].asString();
             haystack.mOwnerID = notification->getPayload()["owner_id"];
+            // <FS:minerjr> [FIRE-36647] - Add Script Dialog Buttons to OmniFilter Content
+            // If there are form elements (Script Dialog Buttons), then we want to parse out the name of the button
+            // and add them to the mContent.
+            if (notification->hasFormElements())
+            {
+                LLNotificationFormPtr script_form = notification->getForm();
+                // Get the number of elements and loop over each of them.
+                S32 number_of_elements = script_form->getNumElements();
+                for (S32 element_idx = 0; element_idx < number_of_elements; element_idx++)
+                {
+                    LLSD element = script_form->getElement(element_idx);
+                    // If the element has a name, then append the name to the mContent.
+                    if (element.has("name"))
+                    {
+                        haystack.mContent += "\nbutton_name=" + element["name"].asString();
+                    }
+                }
+            }
+            // </FS:minerjr> [FIRE-36647]
         }
         else if (notification->getName() == "ObjectGiveItem")    // what about OwnObjectGiveItem?
         {

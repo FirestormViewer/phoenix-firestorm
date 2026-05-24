@@ -915,6 +915,7 @@ with the same filename but different name
   <texture name="skin ansastorm bright blue" file_name="skinspreview/ansa_blue.jpg" preload="true" />
   <texture name="skin ansastorm classic brown" file_name="skinspreview/ansa_brown.jpg" preload="true" />
   <texture name="skin ansastorm ectoplasma" file_name="skinspreview/ansa_ecto.jpg" preload="true" />
+  <texture name="skin ansastorm modern blue" file_name="skinspreview/ansa_modern_blue.jpg" preload="true" />
   <texture name="skin firestorm grey" file_name="skinspreview/fs_grey.jpg" preload="true" />
   <texture name="skin firestorm dark" file_name="skinspreview/fs_dark.jpg" preload="true" />
   <texture name="skin firestorm blue" file_name="skinspreview/fs_blue.jpg" preload="true" />

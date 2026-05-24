@@ -14,6 +14,11 @@
 		Szukana fraza:
 	</text>
 	<check_box label="Dołącz grupy dla dorosłych" name="incmature" />
+	<combo_box name="groups_maturity">
+		<combo_box.item label="General (dla wszystkich)" name="Desired_PG" />
+		<combo_box.item label="General (dla wszystkich) i Moderate (umiarkowanych)" name="Desired_Mature" />
+		<combo_box.item label="General (dla wszystkich), Moderate (umiarkowanych) i Adult (dla dorosłych)" name="Desired_Adult" />
+	</combo_box>
 	<scroll_list name="results">
 		<column label="Nazwa" name="name" />
 		<column label="Osób" name="members" />
