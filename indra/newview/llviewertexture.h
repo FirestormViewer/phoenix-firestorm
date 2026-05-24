@@ -208,6 +208,25 @@ protected:
     mutable S32  mMaxVirtualSizeResetInterval;
     LLFrameTimer mLastReferencedTimer;
 
+    // 0=Normal, 1=BaseColor, 2=Specular, 3=Emissive. -1 -> base color.
+    S8 mPriorityChannel = -1;
+
+    // Bind-staleness floor, 0..1. Per-interval increment is 1/max_discard
+    // so any texture saturates after interval x max_discard seconds idle.
+    F32 mStalenessFactor = 0.f;
+
+    // Closest face's face_distance / draw_distance, clamped 0..1.
+    // Defaults to 1 so never-measured textures resolve to deepest discard.
+    F32 mMinDistanceFactor = 1.f;
+
+    // Largest per-face screen-space coverage in pixels. Raw - no bias or
+    // channel-priority contamination.
+    F32 mMaxOnScreenSize = 0.f;
+
+    // Any face on the agent's avatar (rigged / animated). Drives the
+    // own-avatar quality boost in processTextureStats.
+    bool mOnAgentAvatar = false;
+
     ll_face_list_t    mFaceList[LLRender::NUM_TEXTURE_CHANNELS]; //reverse pointer pointing to the faces using this image as texture
     U32               mNumFaces[LLRender::NUM_TEXTURE_CHANNELS];
     LLFrameTimer      mLastFaceListUpdateTimer ;
@@ -229,17 +248,36 @@ public:
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
     static F32 sDesiredDiscardBias;
+    // Backgrounded-window discard floor, 0..1. Ramps while backgrounded,
+    // snaps to 0 in foreground. Avatar bakes exempt.
+    static F32 sBackgroundFactor;
+
+    // VRAM-pressure distance multiplier, >= 1. Compresses the distance
+    // signal: dist_factor = clamp(mMinDistanceFactor * mult, 0, 1).
+    // Grows geometrically while over budget; decays back to 1 when fitting.
+    static F32 sMemoryPressureMultiplier;
+    // Last-ditch global discard floor. Mirrors sDesiredDiscardBias once the
+    // multiplier is exhausted.
+    static F32 sLastDitchMinDiscard;
+
+    // 0..1 progress of the pressure multiplier from baseline (1) to its
+    // configured cap (TextureMemoryPressureMaxMultiplier). Used to gate
+    // bubble shrink and last-ditch engagement.
+    static F32 getMemoryPressureProgress();
     static U32 sBiasTexturesUpdated;
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
-    static bool sFreezeImageUpdates;
     static F32  sCurrentTime ;
     static LLUUID sInvisiprimTexture1 ;
     static LLUUID sInvisiprimTexture2 ;
 
     // estimated free memory for textures, by bias calculation
     static F32 sFreeVRAMMegabytes;
+
+    // Viewport pixel area, refreshed once per frame. Hoisted to keep the
+    // per-texture hot path out of gViewerWindow.
+    static F32 sWindowPixelArea;
 
     enum EDebugTexels
     {
@@ -285,6 +323,16 @@ public:
     LLViewerFetchedTexture(const LLUUID& id, FTType f_type, const LLHost& host = LLHost(), bool usemipmaps = true);
     LLViewerFetchedTexture(const LLImageRaw* raw, FTType f_type, bool usemipmaps);
     LLViewerFetchedTexture(const std::string& url, FTType f_type, const LLUUID& id, bool usemipmaps = true);
+
+    // Avatar bake/skin textures - exempt from non-visibility-driven discard
+    // (staleness, background, pressure) to avoid the universal-cloud bug.
+    static bool isAgentAvatarBoost(S32 boost_level)
+    {
+        return boost_level == BOOST_AVATAR
+            || boost_level == BOOST_AVATAR_BAKED
+            || boost_level == BOOST_AVATAR_SELF
+            || boost_level == BOOST_AVATAR_BAKED_SELF;
+    }
 
 public:
 
@@ -367,7 +415,7 @@ public:
 
     void updateVirtualSize() ;
 
-    S32  getDesiredDiscardLevel()            { return mDesiredDiscardLevel; }
+    S32  getDesiredDiscardLevel() const      { return mDesiredDiscardLevel; }
     void setMinDiscardLevel(S32 discard)    { mMinDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel,(S8)discard); }
 
     void setBoostLevel(S32 level) override;
@@ -494,6 +542,12 @@ protected:
     S8  mDesiredDiscardLevel;           // The discard level we'd LIKE to have - if we have it and there's space
     S8  mMinDesiredDiscardLevel;    // The minimum discard level we'd like to have
 
+    // Fetch-side discard cap from the J2C codestream's DWT level count
+    // (populated by the fetcher). Distinct from LLImageGL::mMaxDiscardLevel -
+    // scaleDown can still trim the GL pyramid past this.
+    static constexpr S8 sFallbackCodecMaxDiscardLevel = 5; // MIN_DECOMPOSITION_LEVELS
+    S8  mCodecMaxDiscardLevel = sFallbackCodecMaxDiscardLevel;
+
     bool mNeedsAux;                 // We need to decode the auxiliary channels
     bool mHasAux;                    // We have aux channels
     bool mDecodingAux;              // Are we decoding high components
@@ -577,7 +631,6 @@ public:
     S8 getType() const override;
     // Process image stats to determine priority/quality requirements.
     void processTextureStats() override;
-    bool isUpdateFrozen() ;
 
     bool scaleDown() override;
 

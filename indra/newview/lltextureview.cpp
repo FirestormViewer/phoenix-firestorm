@@ -657,9 +657,12 @@ void LLGLTexMemBar::draw()
     gl_rect_2d(left, top, right, bottom, color);
     // </FS:Beq>
 
-    text = llformat("Images: %d   Raw: %d (%.2f MB)  Saved: %d (%.2f MB) Aux: %d (%.2f MB)", image_count, raw_image_count, raw_image_bytes_MB,
+    text = llformat("Images: %d   Raw: %d (%.2f MB)  Saved: %d (%.2f MB) Aux: %d (%.2f MB)  Bubble: %.1fm  PressMult: %.1fx  LDMin: %.1f", image_count, raw_image_count, raw_image_bytes_MB,
         saved_raw_image_count, saved_raw_image_bytes_MB,
-        aux_raw_image_count, aux_raw_image_bytes_MB);
+        aux_raw_image_count, aux_raw_image_bytes_MB,
+        LLViewerTextureList::sCurrentBubbleMeters,
+        LLViewerTexture::sMemoryPressureMultiplier,
+        LLViewerTexture::sLastDitchMinDiscard);
     LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height * 7,
         text_color, LLFontGL::LEFT, LLFontGL::TOP);
 

@@ -1641,7 +1641,7 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
                 skin = mSkinInfo;
             }
 
-            //TODO -- cache this (check profile marker above)?
+            //TODO - cache this (check profile marker above)?
             glm::mat4 m = glm::make_mat4((F32*)skin->mBindShapeMatrix.getF32ptr());
             m = glm::transpose(glm::inverse(m));
             mat_normal.loadu(glm::value_ptr(m));
@@ -2385,7 +2385,18 @@ F32 LLFace::getTextureVirtualSize()
         face_area =  mPixelArea / llclamp(texel_area, 0.015625f, 128.f);
     }
 
-    face_area = LLFace::adjustPixelArea(mImportanceToCamera, face_area);
+    // Diffuse source area as the dim-aware hint for adjustPixelArea.
+    S32 source_area = 0;
+    if (mTexture[LLRender::DIFFUSE_MAP].notNull())
+    {
+        S32 sw = mTexture[LLRender::DIFFUSE_MAP]->getFullWidth();
+        S32 sh = mTexture[LLRender::DIFFUSE_MAP]->getFullHeight();
+        if (sw > 0 && sh > 0)
+        {
+            source_area = sw * sh;
+        }
+    }
+    face_area = LLFace::adjustPixelArea(mImportanceToCamera, face_area, source_area);
     if(face_area > LLViewerTexture::sMinLargeImageSize) //if is large image, shrink face_area by considering the partial overlapping.
     {
         if(mImportanceToCamera > LEAST_IMPORTANCE_FOR_LARGE_IMAGE && mTexture[LLRender::DIFFUSE_MAP].notNull() && mTexture[LLRender::DIFFUSE_MAP]->isLargeImage())
@@ -2509,6 +2520,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 
     F32 dist = lookAt.getLength3().getF32();
     dist = llmax(dist-size.getLength3().getF32(), 0.001f);
+    mDistanceToCamera = dist;
 
     lookAt.normalize3fast() ;
 
@@ -2633,8 +2645,16 @@ F32 LLFace::calcImportanceToCamera(F32 cos_angle_to_view_dir, F32 dist)
 }
 
 //static
-F32 LLFace::adjustPixelArea(F32 importance, F32 pixel_area)
+F32 LLFace::adjustPixelArea(F32 importance, F32 pixel_area, S32 source_area)
 {
+    // Dim-aware floor: source_area/256 lowers the "large but unimportant"
+    // clamp proportionally so smaller sources can be pushed past discard 4.
+    F32 large_floor = (F32)LLViewerTexture::sMinLargeImageSize;
+    if (source_area > 0)
+    {
+        large_floor = llmin(large_floor, (F32)source_area / 256.f);
+    }
+
     if(pixel_area > LLViewerTexture::sMaxSmallImageSize)
     {
         if(importance < LEAST_IMPORTANCE) //if the face is not important, do not load hi-res.
@@ -2642,11 +2662,11 @@ F32 LLFace::adjustPixelArea(F32 importance, F32 pixel_area)
             static const F32 MAX_LEAST_IMPORTANCE_IMAGE_SIZE = 128.0f * 128.0f ;
             pixel_area = llmin(pixel_area * 0.5f, MAX_LEAST_IMPORTANCE_IMAGE_SIZE) ;
         }
-        else if(pixel_area > LLViewerTexture::sMinLargeImageSize) //if is large image, shrink face_area by considering the partial overlapping.
+        else if(pixel_area > large_floor) //if is large image, shrink face_area by considering the partial overlapping.
         {
             if(importance < LEAST_IMPORTANCE_FOR_LARGE_IMAGE)//if the face is not important, do not load hi-res.
             {
-                pixel_area = (F32)LLViewerTexture::sMinLargeImageSize ;
+                pixel_area = large_floor ;
             }
         }
     }

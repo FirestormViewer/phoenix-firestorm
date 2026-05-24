@@ -51,6 +51,11 @@ class LLWindow;
 namespace LLImageGLMemory
 {
     void alloc_tex_image(U32 width, U32 height, U32 intformat, U32 count);
+
+    // Add mip 1..N bytes to existing accounting. Call after glGenerateMipmap
+    // when only the base mip was accounted; without this the bytes counter
+    // undercounts mipmap-generated textures by ~25%.
+    void account_extra_mip_bytes(U32 base_width, U32 base_height, U32 intformat);
     void free_tex_image(U32 texName);
     void free_tex_images(U32 count, const U32* texNames);
     void free_cur_tex_image();
@@ -151,6 +156,15 @@ public:
     S32  getDiscardLevel() const        { return mCurrentDiscardLevel; }
     S32  getMaxDiscardLevel() const     { return mMaxDiscardLevel; }
 
+    // floor(log2(max(w, h))) - deepest GL pyramid level (down to 1x1).
+    // Returns 0 for non-positive inputs.
+    static S32 dimDerivedMaxDiscard(S32 width, S32 height);
+
+    // Record the wall-clock bind time - every bind path that touches a
+    // streaming-managed texture must call this, or the staleness signal
+    // sees the texture as never-bound and ramps it toward eviction.
+    void stampBound() const;
+
     // override the current discard level
     // should only be used for local textures where you know exactly what you're doing
     void setDiscardLevel(S32 level) { mCurrentDiscardLevel = level; }
@@ -227,7 +241,8 @@ public:
 public:
     // Various GL/Rendering options
     S64Bytes mTextureMemory;
-    mutable F32  mLastBindTime; // last time this was bound, by discard level
+    mutable F32  mLastBindTime = 0.f; // wall-clock time at last stampBound; drives streaming staleness
+    F32          mGLCreateTime = 0.f; // wall-clock time the GL texture was created; staleness fallback for never-bound textures
 
 private:
     U32 createPickMask(S32 pWidth, S32 pHeight);

@@ -192,6 +192,48 @@ static bool handleRenderAvatarMouselookChanged(const LLSD& newvalue)
     return true;
 }
 
+static bool handleRenderTextureQualityChanged(const LLSD& newvalue)
+{
+    // 0=Low, 1=Medium, 2=High, 3=Ultra. Drives RenderMaxTextureResolution,
+    // the four TextureChannel* exponents (Normal/BaseColor/Spec/Emissive),
+    // and TextureDistanceDiscardPower.
+    U32 quality = (U32)newvalue.asInteger();
+    U32 max_res = 2048;
+    F32 ch_normal    = 1.0f;
+    F32 ch_basecolor = 0.75f;
+    F32 ch_specular  = 0.5f;
+    F32 ch_emissive  = 0.75f;
+    F32 distance_power = 0.5f;
+    switch (quality)
+    {
+    case 0: // Low
+        max_res = 1024;
+        ch_normal = 0.5f; ch_basecolor = 0.75f; ch_specular = 0.1f; ch_emissive = 0.5f;
+        distance_power = 0.15f;
+        break;
+    case 1: // Medium
+        ch_normal = 0.75f; ch_basecolor = 0.75f; ch_specular = 0.3f; ch_emissive = 0.75f;
+        distance_power = 0.25f;
+        break;
+    case 2: // High
+        // channel defaults above
+        distance_power = 0.35f;
+        break;
+    case 3: // Ultra
+    default:
+        ch_normal = 1.f; ch_basecolor = 1.f; ch_specular = 1.f; ch_emissive = 1.f;
+        distance_power = 0.5f;
+        break;
+    }
+    gSavedSettings.setU32("RenderMaxTextureResolution", max_res);
+    gSavedSettings.setF32("TextureChannelNormal", ch_normal);
+    gSavedSettings.setF32("TextureChannelBaseColor", ch_basecolor);
+    gSavedSettings.setF32("TextureChannelSpecular", ch_specular);
+    gSavedSettings.setF32("TextureChannelEmissive", ch_emissive);
+    gSavedSettings.setF32("TextureDistanceDiscardPower", distance_power);
+    return true;
+}
+
 static bool handleRenderFarClipChanged(const LLSD& newvalue)
 {
     if (LLStartUp::getStartupState() >= STATE_STARTED)
@@ -1302,6 +1344,7 @@ void settings_setup_listeners()
 {
     LL_PROFILE_ZONE_SCOPED;
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTextureQuality", handleRenderTextureQualityChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainScale", handleTerrainScaleChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRScale", handlePBRTerrainScaleChanged);

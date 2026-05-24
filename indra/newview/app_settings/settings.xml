@@ -11542,13 +11542,24 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderMaxTextureResolution</key>
   <map>
     <key>Comment</key>
-    <string>Maximum texture resolution to download for non-boosted textures.</string>
+    <string>Maximum texture resolution to download for non-boosted textures. Driven by RenderTextureQuality.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
     <integer>2048</integer>
+  </map>
+  <key>RenderTextureQuality</key>
+  <map>
+    <key>Comment</key>
+    <string>Texture quality preset: 0=Low, 1=Medium, 2=High, 3=Ultra. Drives RenderMaxTextureResolution, the four TextureChannel* exponents, and TextureDistanceDiscardPower.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2</integer>
   </map>
     <key>RenderDownScaleMethod</key>
     <map>
@@ -12867,7 +12878,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderReflectionDetail</key>
     <map>
       <key>Comment</key>
-      <string>DEPRECATED -- use RenderTransparentWater and RenderReflectionProbeDetail -- Detail of reflection render pass.</string>
+      <string>DEPRECATED - use RenderTransparentWater and RenderReflectionProbeDetail - Detail of reflection render pass.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -15620,48 +15631,316 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
-    <key>TextureChannelPriority</key>
+    <key>TextureChannelNormal</key>
     <map>
       <key>Comment</key>
-      <string>Per-channel texture streaming aggressiveness. X=normals, Y=diffuse, Z=specular/metallic, W=emissive. 1.0=baseline, higher=more aggressive downrez.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector4</string>
-      <key>Value</key>
-      <array>
-        <real>5</real>
-        <real>7.5</real>
-        <real>20</real>
-        <real>7.5</real>
-      </array>
-    </map>
-    <key>TextureCameraBoost</key>
-    <map>
-      <key>Comment</key>
-      <string>Amount to boost resolution of textures that are important to the camera.</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>7.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureBiasUnimportantFactor</key>
-    <map>
-      <key>Comment</key>
-      <string>When biasing textures to lower resolution due to lack of vram, the importance threshold below which is considered unimportant and getting an extra bias.</string>
+      <string>Per-channel discard exponent for normal maps. 1.0 = baseline; lower = more aggressive. Driven by the RenderTextureQuality preset.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.25</real>
-      <key>Backup</key>
+      <real>1.0</real>
+    </map>
+    <key>TextureChannelBaseColor</key>
+    <map>
+      <key>Comment</key>
+      <string>Per-channel discard exponent for base color / diffuse. 1.0 = baseline; lower = more aggressive. Driven by the RenderTextureQuality preset.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.75</real>
+    </map>
+    <key>TextureChannelSpecular</key>
+    <map>
+      <key>Comment</key>
+      <string>Per-channel discard exponent for specular / metallic-roughness. 1.0 = baseline; lower = more aggressive. Driven by the RenderTextureQuality preset.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureChannelEmissive</key>
+    <map>
+      <key>Comment</key>
+      <string>Per-channel discard exponent for emissive. 1.0 = baseline; lower = more aggressive. Driven by the RenderTextureQuality preset.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.75</real>
+    </map>
+    <key>TextureMaxDiscardOverride</key>
+    <map>
+      <key>Comment</key>
+      <string>When non-zero, overrides the per-texture codec-derived max discard cap. 0 = use codec-reported levels. Higher lets the streaming math push past the codec ceiling; scaleDown handles the GL side.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>TextureMemoryHighWaterMark</key>
+    <map>
+      <key>Comment</key>
+      <string>Fraction of budget (0..1) at which the pressure controller bypasses smoothing and slams to cap. Last-ditch min-discard also creeps without waiting for mult_progress.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.8</real>
+    </map>
+    <key>TextureMemoryPressureBackoffStart</key>
+    <map>
+      <key>Comment</key>
+      <string>Fraction of the VRAM target at which the pressure ramp starts (0..1). Lower = earlier headroom-building; 1.0 disables backoff (ramp only above target).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.85</real>
+    </map>
+    <key>TextureMemoryPressureMaxMultiplier</key>
+    <map>
+      <key>Comment</key>
+      <string>Upper bound on the VRAM-pressure distance multiplier (&gt;= 1). Mostly defensive -- at mult=64 the streaming ramp collapses to ~ramp_range/64, already extreme. Higher allows even more aggressive compression in tight-budget scenes.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>64.0</real>
+    </map>
+    <key>TextureLastDitchEngageProgress</key>
+    <map>
+      <key>Comment</key>
+      <string>mult_progress (0..1) at which the last-ditch floor starts creeping up. The floor only advances when mult is at or above this fraction of its cap AND prediction is still over budget. Decays back toward 0 whenever prediction is under budget.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.95</real>
+    </map>
+    <key>TextureLastDitchRampRate</key>
+    <map>
+      <key>Comment</key>
+      <string>Rate (discard levels/sec) at which sLastDitchMinDiscard creeps up while engaged. 0.5 = takes ~2 sec to add one discard level. Mirrors sDesiredDiscardBias ramp shape.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureLastDitchDecayRate</key>
+    <map>
+      <key>Comment</key>
+      <string>Rate (discard levels/sec) at which sLastDitchMinDiscard decays back to 0 when prediction is under budget.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureLastDitchMinDiscardMax</key>
+    <map>
+      <key>Comment</key>
+      <string>Hard ceiling on sLastDitchMinDiscard. At 13 the floor can climb all the way to the deepest meaningful mip; lower values cap how aggressive the last-ditch escalation can get before we are simply out of discards.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>13.0</real>
+    </map>
+    <key>TextureMemoryPressurePredictionGain</key>
+    <map>
+      <key>Comment</key>
+      <string>Power exponent mapping predicted-over-budget ratio to target multiplier. target_mult = pred_over^gain. Higher gain saturates faster.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>10.0</real>
+    </map>
+    <key>TextureMemoryPressureSmoothingRate</key>
+    <map>
+      <key>Comment</key>
+      <string>Lerp rate (1/sec) at which the pressure multiplier converges to its prediction-driven target. Higher = faster response, lower = smoother. Default 4 reaches ~63% in 0.25s.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>4.0</real>
+    </map>
+    <key>TextureTerrainDistanceFloor</key>
+    <map>
+      <key>Comment</key>
+      <string>Minimum distance factor for BOOST_TERRAIN textures. Keeps combined &gt; 0 so VRAM pressure can evict terrain. Lower = higher idle quality, less pressure response.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.01</real>
+    </map>
+    <key>TextureTerrainCoverageFraction</key>
+    <map>
+      <key>Comment</key>
+      <string>Synthetic on-screen coverage fraction for BOOST_TERRAIN textures (no faces are registered). Higher = higher idle quality, less pressure response.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.99</real>
+    </map>
+    <key>TextureAgentAvatarBoost</key>
+    <map>
+      <key>Comment</key>
+      <string>Quality boost (0..1) for textures on the agent's avatar (rigged mesh / animated objects). Lower = higher quality. Preference, not exemption - pressure can still evict.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureBackgroundFactorRatePerSec</key>
+    <map>
+      <key>Comment</key>
+      <string>Per-second ramp rate of the background-window discard floor (0..1). Snaps to 0 in foreground. Default 0.011 ~ 90s to saturate.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.011</real>
+    </map>
+    <key>TextureBackgroundDiscardOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Backgrounded textures will only discard up to (dim_max - offset). e.g. a 2048 texture (dim_max 11) with offset 2 caps the background floor at discard 9. 0 disables the cap (background can drive to max discard).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
+
+    <key>TextureCloseBubbleMeters</key>
+    <map>
+      <key>Comment</key>
+      <string>Close-camera bubble (meters). Faces inside this distance get dist_factor = 0 (no discard contribution); the ramp to 1 spans (bubble, draw_distance]. Shrinks toward TextureCloseBubbleMinMeters as VRAM pressure ramps the multiplier toward its cap.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>5.0</real>
+    </map>
+    <key>TextureCloseBubbleMinMeters</key>
+    <map>
+      <key>Comment</key>
+      <string>Floor (meters) for the close-camera bubble under maximum VRAM pressure. At sMemoryPressureMultiplier = TextureMemoryPressureMaxMultiplier the bubble collapses to this value, allowing eviction of even close textures when nothing else fits.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>3.0</real>
+    </map>
+    <key>TextureCloseBubbleShrinkThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Bubble stays at full size until mult_progress exceeds this fraction (0..1) of its range to the cap. Above that, bubble lerps from full to TextureCloseBubbleMinMeters. Keeps the bubble out of the normal feedback loop.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.8</real>
+    </map>
+    <key>TextureCloseBubbleTrackRate</key>
+    <map>
+      <key>Comment</key>
+      <string>Rate (1/sec) at which the actual bubble tracks its target. Lower = smoother, slower to react. Damps short-term multiplier swings so close textures don't yo-yo.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureDistanceDiscardPower</key>
+    <map>
+      <key>Comment</key>
+      <string>Exponent on the distance factor (face_distance / draw_distance). 1.0 = linear; lower = textures hit max discard sooner with distance. Default 0.5 = sqrt.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>TextureSizeDiscardPower</key>
+    <map>
+      <key>Comment</key>
+      <string>Exponent on the on-screen size factor (1 - coverage). 1.0 = linear; lower = small-on-screen textures attenuate sooner.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>TextureStalenessIntervalSeconds</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds per staleness step. Per-interval increment is 1/max_discard so any texture saturates after interval * max_discard seconds idle.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>5.0</real>
+    </map>
+    <key>TextureBindDecaySeconds</key>
+    <map>
+      <key>Comment</key>
+      <string>Grace seconds after a bind during which the staleness factor stays at 0. Prevents intermittently-bound textures from ramping. 0 disables the grace period.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>5.0</real>
+    </map>
+    <key>TextureFetchPressureScale</key>
+    <map>
+      <key>Comment</key>
+      <string>Pending-fetch divisor for the bias floor: bias floor = 1 + clamp(pending / scale, 0, 3). Lower = bias rises sooner under load floods.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1000.0</real>
+    </map>
+
     <key>TextureDecodeDisabled</key>
     <map>
       <key>Comment</key>
@@ -22369,7 +22648,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>EmulateCoreCount</key>
   <map>
     <key>Comment</key>
-    <string>For debugging -- number of cores to restrict the main process to, or 0 for no limit.  Requires restart.</string>
+    <string>For debugging - number of cores to restrict the main process to, or 0 for no limit.  Requires restart.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -23857,7 +24136,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 <key>MultiModeDoubleClickFolder</key>
 <map>
   <key>Comment</key>
-  <string>Sets the action for Double-click on folder in multi-folder view (0 - expands and collapses folder, 1 - opens a new window, 2 – stays in current floater but switches to SFV)</string>
+  <string>Sets the action for Double-click on folder in multi-folder view (0 - expands and collapses folder, 1 - opens a new window, 2 - stays in current floater but switches to SFV)</string>
   <key>Persist</key>
   <integer>1</integer>
   <key>Type</key>

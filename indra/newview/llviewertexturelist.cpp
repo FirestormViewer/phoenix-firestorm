@@ -47,6 +47,7 @@
 #include "message.h"
 
 #include "lldrawpoolbump.h" // to init bumpmap images
+#include "llagentcamera.h"
 #include "lltexturecache.h"
 #include "lltexturefetch.h"
 #include "llviewercontrol.h"
@@ -61,6 +62,8 @@
 #include "lltracerecording.h"
 #include "llviewerdisplay.h"
 #include "llviewerwindow.h"
+#include "llsurface.h"
+#include "llvoavatarself.h"
 #include "llprogressview.h"
 
 ////////////////////////////////////////////////////////////////////////////
@@ -68,6 +71,7 @@
 void (*LLViewerTextureList::sUUIDCallback)(void **, const LLUUID&) = NULL;
 
 S32 LLViewerTextureList::sNumImages = 0;
+F32 LLViewerTextureList::sCurrentBubbleMeters = 0.f;
 
 // <FS:Ansariel> Fast cache stats
 U32 LLViewerTextureList::sNumFastCacheReads = 0;
@@ -95,6 +99,20 @@ LLTextureKey::LLTextureKey(LLUUID id, ETexListType tex_type)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+// eTexIndex -> TextureChannel* index (0=Normal, 1=BaseColor, 2=Specular,
+// 3=Emissive). Single source of truth - route all channel-priority lookups
+// through this table.
+const S32 LLViewerTextureList::sChannelToPriority[LLRender::NUM_TEXTURE_CHANNELS] =
+{
+    1,  // DIFFUSE_MAP (0)             -> Y (diffuse)
+    0,  // NORMAL_MAP / ALT_DIFFUSE (1) -> X (normals)
+    2,  // SPECULAR_MAP (2)            -> Z (specular/metallic)
+    1,  // BASECOLOR_MAP (3)           -> Y (diffuse)
+    2,  // METALLIC_ROUGHNESS_MAP (4)  -> Z (specular/metallic)
+    0,  // GLTF_NORMAL_MAP (5)         -> X (normals)
+    3,  // EMISSIVE_MAP (6)            -> W (emissive)
+};
 
 LLViewerTextureList::LLViewerTextureList()
     : mForceResetTextureStats(false),
@@ -928,8 +946,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 {
     llassert(!gCubeSnapshot);
 
-    constexpr F32 BIAS_TRS_OUT_OF_SCREEN = 1.5f;
-    constexpr F32 BIAS_TRS_ON_SCREEN = 1.f;
+    constexpr F32 BIAS_TRS_ON_SCREEN = 1.f; // perf gate for face-loop early exit
 
     if (imagep->getBoostLevel() < LLViewerFetchedTexture::BOOST_HIGH)  // don't bother checking face list for boosted textures
     {
@@ -939,8 +956,66 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         F32 max_vsize = 0.f;
         bool on_screen = false;
 
+        // Accumulators for the per-texture signals published below.
+        // Defaults map to "deepest discard wanted" until evidence updates them.
+        F32 min_distance_factor = 1.f;
+        F32 max_on_screen_size = 0.f;
+        bool on_agent_avatar = false;
+        F32 draw_distance = llmax(gAgentCamera.mDrawDistance, 0.001f);
+
+        // Close-camera bubble: faces inside `bubble` meters resolve to
+        // dist_factor = 0, so the distance ramp spans (bubble, draw_distance].
+        static LLCachedControl<F32> close_bubble(gSavedSettings, "TextureCloseBubbleMeters", 5.f);
+        static LLCachedControl<F32> close_bubble_min(gSavedSettings, "TextureCloseBubbleMinMeters", 0.1f);
+        static LLCachedControl<F32> bubble_shrink_threshold(gSavedSettings, "TextureCloseBubbleShrinkThreshold", 0.8f);
+        static LLCachedControl<F32> bubble_track_rate(gSavedSettings, "TextureCloseBubbleTrackRate", 0.5f);
+        F32 bubble_full = llmax((F32)close_bubble, 0.f);
+        F32 bubble_min  = llclamp((F32)close_bubble_min, 0.f, bubble_full);
+        // Advance the slow-track once per frame, not per texture: this
+        // function runs once per texture so a naive per-call lerp converges
+        // in a single frame.
+        static F32 s_tracked_bubble = -1.f;
+        static U32 s_tracked_bubble_frame = 0;
+        if (s_tracked_bubble < 0.f) s_tracked_bubble = bubble_full;
+        if (s_tracked_bubble_frame != LLFrameTimer::getFrameCount())
+        {
+            s_tracked_bubble_frame = LLFrameTimer::getFrameCount();
+            F32 progress = LLViewerTexture::getMemoryPressureProgress();
+            F32 shrink_thresh = llclampf((F32)bubble_shrink_threshold);
+            F32 shrink_frac = (progress > shrink_thresh)
+                ? (progress - shrink_thresh) / llmax(1.f - shrink_thresh, 0.0001f)
+                : 0.f;
+            F32 target_bubble = bubble_full - (bubble_full - bubble_min) * shrink_frac;
+            F32 dt = (F32)gFrameIntervalSeconds;
+            F32 alpha = 1.f - expf(-llmax(dt, 0.f) * llmax((F32)bubble_track_rate, 0.f));
+            s_tracked_bubble += (target_bubble - s_tracked_bubble) * alpha;
+            s_tracked_bubble = llclamp(s_tracked_bubble, bubble_min, bubble_full);
+            sCurrentBubbleMeters = s_tracked_bubble;
+        }
+        F32 bubble = llclamp(s_tracked_bubble, 0.f, draw_distance - 0.001f);
+        F32 ramp_range = llmax(draw_distance - bubble, 0.001f);
+
         U32 face_count = 0;
         U32 max_faces_to_check = 1024;
+
+        // Pick the least-aggressive channel across all uses, so a texture
+        // used as both diffuse and normal isn't penalized by its harshest
+        // role. -1 sentinel keeps emissive-only textures (W=3) from being
+        // clobbered by a smaller init value.
+        S32 priority_channel = -1;
+        for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
+        {
+            if (imagep->getNumFaces(i) > 0)
+            {
+                S32 mapped = sChannelToPriority[i];
+                priority_channel = (priority_channel < 0) ? mapped : llmin(priority_channel, mapped);
+            }
+        }
+        if (priority_channel < 0)
+        {
+            priority_channel = 1; // no faces - default to diffuse
+        }
+        imagep->mPriorityChannel = (S8)priority_channel;
 
         // get adjusted bias based on image resolution
         LLImageGL* img = imagep->getGLTexture();
@@ -977,6 +1052,15 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
 
                     on_screen |= face->mInFrustum;
 
+                    F32 dist_above_bubble = llmax(face->mDistanceToCamera - bubble, 0.f);
+                    F32 dist_factor = llclampf(dist_above_bubble / ramp_range);
+                    min_distance_factor = llmin(min_distance_factor, dist_factor);
+
+                    if (face->mAvatar && face->mAvatar == gAgentAvatarp)
+                    {
+                        on_agent_avatar = true;
+                    }
+
                     // Scale desired texture resolution higher or lower depending on texture scale
                     //
                     // Minimum usage examples: a 1024x1024 texture with aplhabet (texture atlas),
@@ -992,18 +1076,15 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     min_scale = llclamp(min_scale * min_scale, texture_scale_min(), texture_scale_max());
                     vsize /= min_scale;
 
+                    // Raw screen-space coverage - taken before the bias /
+                    // camera-boost mutations below so the size signal is clean.
+                    max_on_screen_size = llmax(max_on_screen_size, vsize);
+
                     // apply bias to offscreen faces all the time, but only to onscreen faces when bias is large
                     // use mImportanceToCamera to make bias switch a bit more gradual
                     if (!face->mInFrustum || LLViewerTexture::sDesiredDiscardBias > 1.9f + face->mImportanceToCamera / 2.f)
                     {
                         vsize /= bias;
-                    }
-
-                    // boost resolution of textures that are important to the camera
-                    if (face->mInFrustum)
-                    {
-                        static LLCachedControl<F32> texture_camera_boost(gSavedSettings, "TextureCameraBoost", 8.f);
-                        vsize *= llmax(face->mImportanceToCamera*texture_camera_boost, 1.f);
                     }
 
                     max_vsize = llmax(max_vsize, vsize);
@@ -1024,57 +1105,95 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
             }
         }
 
-        if (face_count > max_faces_to_check)
+        bool used_face_fast_path = (face_count > max_faces_to_check);
+        if (used_face_fast_path)
         { // this texture is used in so many places we should just boost it and not bother checking its vsize
             // this is especially important because the above is not time sliced and can hit multiple ms for a single texture
             max_vsize = MAX_IMAGE_AREA;
         }
 
-        if (imagep->getType() == LLViewerTexture::LOD_TEXTURE && imagep->getBoostLevel() == LLViewerTexture::BOOST_NONE)
-        { // conditionally reset max virtual size for unboosted LOD_TEXTURES
-          // this is an alternative to decaying mMaxVirtualSize over time
-          // that keeps textures from continously downrezzing and uprezzing in the background
-
-            if (LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_OUT_OF_SCREEN ||
-                (!on_screen && LLViewerTexture::sDesiredDiscardBias > BIAS_TRS_ON_SCREEN))
-            {
-                imagep->mMaxVirtualSize = 0.f;
-            }
-        }
-
         imagep->addTextureStats(max_vsize);
 
-        // Derive stream priority channel from face lists.
-        // Map render texture channels to priority channels:
-        //   0 = normal, 1 = diffuse, 2 = specular, 3 = emissive
+        // Publish per-texture signals for processTextureStats. Closest face
+        // wins for distance (min); biggest face wins for size (max). Default
+        // distance=1, size=0 maps to "deepest discard wanted" - never-
+        // measured textures stay coarse until distance/size evidence arrives.
+        if (used_face_fast_path)
         {
-            static const S32 render_to_priority[] = {
-                1,  // DIFFUSE_MAP (0)
-                0,  // NORMAL_MAP / ALTERNATE_DIFFUSE_MAP (1)
-                2,  // SPECULAR_MAP (2)
-                1,  // BASECOLOR_MAP (3)
-                2,  // METALLIC_ROUGHNESS_MAP (4)
-                0,  // GLTF_NORMAL_MAP (5)
-                3,  // EMISSIVE_MAP (6)
-            };
+            // Fast path saw only a prefix of faces - force best-quality
+            // sentinels to match the MAX_IMAGE_AREA vsize boost above.
+            imagep->mMinDistanceFactor = 0.f;
+            imagep->mMaxOnScreenSize = (F32)MAX_IMAGE_AREA;
+        }
+        else if (face_count == 0 && imagep->getBoostLevel() == LLGLTexture::BOOST_TERRAIN)
+        {
+            // Terrain detail textures don't register faces with the texture
+            // (LLVOSurfacePatch addFace(NULL)). Drive distance from the LOD
+            // system; floor at a small nonzero value so pressure has
+            // something to bite into (pow(0, p) = 0).
+            static LLCachedControl<F32> terrain_distance_floor(gSavedSettings, "TextureTerrainDistanceFloor", 0.01f);
+            static LLCachedControl<F32> terrain_coverage(gSavedSettings, "TextureTerrainCoverageFraction", 0.99f);
+            F32 nearest = LLSurface::sNearestVisiblePatchDistance;
+            F32 nearest_above_bubble = (nearest < FLT_MAX) ? llmax(nearest - bubble, 0.f) : ramp_range;
+            F32 dist = llclampf(nearest_above_bubble / ramp_range);
+            imagep->mMinDistanceFactor = llmax(dist, llclampf((F32)terrain_distance_floor));
+            imagep->mMaxOnScreenSize = LLViewerTexture::sWindowPixelArea * llclampf((F32)terrain_coverage);
+        }
+        else
+        {
+            imagep->mMinDistanceFactor = min_distance_factor;
+            imagep->mMaxOnScreenSize = max_on_screen_size;
+        }
+        imagep->mOnAgentAvatar = on_agent_avatar;
 
-            S32 priority_channel = 1; // default to diffuse
-            for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
+        // Bind-staleness. Avatar bakes exempt (cloud-bug protection).
+        // Per-interval increment is 1/max_discard so saturation time is
+        // interval * max_discard seconds regardless of texture size.
+        // Never-bound textures defer to distance/size or initial fetch
+        // could never start.
+        if (LLViewerFetchedTexture::isAgentAvatarBoost(imagep->getBoostLevel()))
+        {
+            imagep->mStalenessFactor = 0.f;
+        }
+        else if (LLImageGL* gli = imagep->getGLTexture())
+        {
+            static LLCachedControl<F32> bind_decay_seconds(gSavedSettings, "TextureBindDecaySeconds", 5.f);
+            static LLCachedControl<F32> staleness_interval(gSavedSettings, "TextureStalenessIntervalSeconds", 5.f);
+            F32 grace = llmax((F32)bind_decay_seconds, 0.f);
+            F32 interval = llmax((F32)staleness_interval, 0.0001f);
+
+            // Clock starts at whichever is later: the last real bind or
+            // the GL-create time. The latter is the fallback for textures
+            // decoded into GL but never actually rendered - without it,
+            // mLastBindTime stays 0 forever and staleness can't evict.
+            F32 clock_time = llmax(gli->mLastBindTime, gli->mGLCreateTime);
+            bool has_clock = (clock_time > 0.f);
+            F32 time_since = has_clock ? (LLImageGL::sLastFrameTime - clock_time) : 0.f;
+
+            if (!has_clock || time_since <= grace)
             {
-                if (imagep->getNumFaces(i) > 0)
+                imagep->mStalenessFactor = 0.f;
+            }
+            else
+            {
+                S32 full_w = imagep->getFullWidth();
+                S32 full_h = imagep->getFullHeight();
+                S32 max_discard = (full_w > 0 && full_h > 0)
+                    ? LLImageGL::dimDerivedMaxDiscard(full_w, full_h)
+                    : (S32)gli->getMaxDiscardLevel();
+                if (max_discard > 0)
                 {
-                    priority_channel = llmin(priority_channel, render_to_priority[i]);
+                    F32 steps = (time_since - grace) / interval;
+                    F32 step_size = 1.f / (F32)max_discard;
+                    imagep->mStalenessFactor = llclampf(steps * step_size);
+                }
+                else
+                {
+                    imagep->mStalenessFactor = 0.f;
                 }
             }
-
-            static LLCachedControl<LLVector4> channel_priority(gSavedSettings, "TextureChannelPriority",
-                LLVector4(10.0f, 20.0f, 40.0f, 20.0f));
-            F32 factor = llmax(channel_priority().mV[priority_channel], 0.1f);
-            if (factor != 1.0f)
-            {
-                imagep->mMaxVirtualSize /= factor;
-            }
         }
+
     }
 
 #if 0
@@ -1183,8 +1302,7 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         imagep->postCreateTexture();
         imagep->mCreatePending = false;
 
-        if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel() &&
-           (imagep->getDesiredDiscardLevel() <= MAX_DISCARD_LEVEL))
+        if (imagep->hasGLTexture() && imagep->getDiscardLevel() < imagep->getDesiredDiscardLevel())
         {
             // NOTE: this may happen if the desired discard reduces while a decode is in progress and does not
             // necessarily indicate a problem, but if log occurrences excede that of dsiplay_stats: FPS,
@@ -1209,13 +1327,16 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
         gCopyProgram.bind();
         gPipeline.mScreenTriangleVB->setBuffer();
 
-        // give time to downscaling first -- if mDownScaleQueue is not empty, we're running out of memory and need
+        // give time to downscaling first - if mDownScaleQueue is not empty, we're running out of memory and need
         // to free up memory by discarding off screen textures quickly
 
-        // do at least 5 and make sure we don't get too far behind even if it violates
-        // the time limit.  If we don't downscale quickly the viewer will hit swap and may
-        // freeze.
-        S32 min_count = (S32)mCreateTextureList.size() / 20 + 5;
+        // Drain rate scales with both pending creates and the downscale
+        // queue itself. Without the queue term, a backlog of evictions
+        // could only drain 5/frame regardless of size, and the system
+        // can't actually free VRAM fast enough under pressure.
+        S32 min_count = (S32)mCreateTextureList.size() / 20
+                      + (S32)mDownScaleQueue.size() / 5
+                      + 5;
 
         create_timer.reset();
         while (!mDownScaleQueue.empty())
@@ -1320,12 +1441,15 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 
     //update MIN_UPDATE_COUNT or 5% of other textures, whichever is greater
     update_count = llmax((U32) MIN_UPDATE_COUNT, (U32) mUUIDMap.size()/20);
-    if (LLViewerTexture::sDesiredDiscardBias > 1.f
+    // Scale up the per-frame update window under VRAM pressure so eviction
+    // candidates get re-evaluated quickly. Both the legacy bias and the
+    // new pressure multiplier widen the window.
+    F32 pressure_scale = llmax(LLViewerTexture::sDesiredDiscardBias,
+                               LLViewerTexture::sMemoryPressureMultiplier);
+    if (pressure_scale > 1.f
         && LLViewerTexture::sBiasTexturesUpdated < (U32)mUUIDMap.size())
     {
-        // We are over memory target. Bias affects discard rates, so update
-        // existing textures agresively to free memory faster.
-        update_count = (S32)(update_count * LLViewerTexture::sDesiredDiscardBias);
+        update_count = (S32)(update_count * pressure_scale);
 
         // This isn't particularly precise and can overshoot, but it doesn't need
         // to be, just making sure it did a full circle and doesn't get stuck updating
