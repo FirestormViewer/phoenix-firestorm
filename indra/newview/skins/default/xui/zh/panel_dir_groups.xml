@@ -14,6 +14,11 @@
 		輸入搜尋關鍵字：
 	</text>
 	<check_box label="包含適度成人內容的群組" name="incmature"/>
+	<combo_box name="groups_maturity">
+		<combo_box.item label="普級" name="Desired_PG"/>
+		<combo_box.item label="普級與適度成人" name="Desired_Mature"/>
+		<combo_box.item label="普級、適度成人、完全成人" name="Desired_Adult"/>
+	</combo_box>
 	<scroll_list name="results">
 		<column label="名稱" name="name"/>
 		<column label="成員" name="members"/>

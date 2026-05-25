@@ -20,8 +20,8 @@
 	<panel name="panel_details">
 		<text name="needle_name_label" value="規則名稱:"/>
 		<text name="sender_name_label" value="傳送者名稱:"/>
-		<line_editor name="sender_name" tool_tip="消息来源的化身或物体名称" />
-		<check_box name="sender_case" label="區分大小寫" tool_tip="区分大小写" />
+		<line_editor name="sender_name" tool_tip="訊息來源的化身或物件名稱" />
+		<check_box name="sender_case" tool_tip="區分大小寫" />
 		<combo_box name="sender_match_type" tool_tip="匹配模式">
 			<combo_item name="sender_exact">
 				<column name="longtext" label="完全匹配"/>
@@ -34,8 +34,8 @@
 			</combo_item>
 		</combo_box>
 		<text name="content_label" value="內容:"/>
-		<text_editor name="content" tool_tip="消息的实际文本" />
-		<check_box name="content_case" label="區分大小寫" tool_tip="区分大小写"/>
+		<text_editor name="content" tool_tip="訊息的實際文本" />
+		<check_box name="content_case" tool_tip="區分大小寫" />
 		<combo_box name="content_match_type" tool_tip="匹配模式">
 			<combo_item name="content_exact">
 				<column name="longtext" label="完全匹配"/>
@@ -47,10 +47,10 @@
 				<column name="longtext" label="正規表示式"/>
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="区域名称：" tool_tip="来源的区域名称。仅适用于物件接收请求相关功能。"/>
-		<line_editor name="region_name" tool_tip="来源的地区名称。仅适用于库存给予。"/>
+		<text name="region_name_label" value="區域名稱：" tool_tip="來源的區域名稱。僅適用於物件接收請求相關功能。"/>
+		<line_editor name="region_name" tool_tip="來源的地區名稱。僅適用於庫存給予。"/>
 		<text name="owner_label" value="所有者UUID："/>
-		<line_editor name="owner_uuid" tool_tip="群组邀请场景：填写群组UUID&#10;物件聊天消息/所有者消息/调试消息/私聊消息：填写物品UUID&#10;物件私聊消息：填写物件所有者UUID&#10;其他所有场景：填写发送者的UUID"/>
+		<line_editor name="owner_uuid" tool_tip="群組邀請場景：填寫群組UUID&#10;物件聊天訊息／所有者訊息／除錯訊息／私聊訊息：填寫物件UUID&#10;物件私聊訊息：填寫物件所有者UUID&#10;其他所有場景：填寫發送者的UUID"/>
 		<text name="match_source_label" value="來源:"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -79,10 +79,10 @@
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="聊天訊息替換:"/>
-		<line_editor name="chat_replace" tool_tip="可用于更改消息显示方式的替换文本" />
+		<line_editor name="chat_replace" tool_tip="可用來變更訊息顯示方式的替换文字" />
 		<text name="button_reply_label" value="按鈕回覆:"/>
-		<line_editor name="button_reply" tool_tip="脚本对话框中要&quot;点击&quot;的按钮标签，包括&quot;忽略&quot;" />
+		<line_editor name="button_reply" tool_tip="要在指令碼對話框中「點擊」的按鈕標籤，包含「忽略」" />
 		<text name="text_box_reply_label" value="文字框回覆:"/>
-		<text_editor name="text_box_reply" tool_tip="回复文本，就像在脚本对话框文本框中手动输入的一样" />
+		<text_editor name="text_box_reply" tool_tip="如同在指令碼對話框的文字方塊中手動輸入的回覆文字" />
 	</panel>
 </floater>
