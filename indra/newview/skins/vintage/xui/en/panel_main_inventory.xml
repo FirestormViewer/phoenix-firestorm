@@ -830,7 +830,8 @@
 		tab_group="1"
 		tab_position="top"
 		top_pad="4"
-		width="328">
+		width="328"
+		use_ellipses="true">
 		<inventory_panel
 			border="true"
 			bevel_style="in"

@@ -1809,6 +1809,9 @@ support@secondlife.com.
 	<string name="InventoryNoMatchingFavorites">
 		您尚未將任何物件標記為收藏。
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		自訂
+	</string>
 	<string name="PlacesNoMatchingItems">
 		要將地點添加到您的地標，請點擊地點名稱右側的星形圖標。
 	</string>

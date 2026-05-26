@@ -1370,6 +1370,16 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Filter-Tab umbenennen" name="FSInventoryCustomTabRename">
+		Neuer Tab-Name:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification label="Geste umbenennen" name="RenameGesture">
 		Neuer Gesten-Name:
 		<form name="form">

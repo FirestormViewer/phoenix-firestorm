@@ -2938,12 +2938,19 @@ void LLFloaterPreference::onChangeMaturity()
         gSavedSettings.setBOOL("ShowMatureSims", false);
         gSavedSettings.setBOOL("ShowMatureLand", false);
         gSavedSettings.setBOOL("ShowMatureClassifieds", false);
+        gSavedSettings.setU32("FSSearchGroupMaturity", SIM_ACCESS_PG); // <FS:TJ/> Fix legacy group search to better support maturity settings
     }
     if (!can_access_adult)
     {
         gSavedSettings.setBOOL("ShowAdultSims", false);
         gSavedSettings.setBOOL("ShowAdultLand", false);
         gSavedSettings.setBOOL("ShowAdultClassifieds", false);
+        // <FS:TJ/> Fix legacy group search to better support maturity settings
+        if (can_access_mature)
+        {
+            gSavedSettings.setU32("FSSearchGroupMaturity", SIM_ACCESS_MATURE);
+        }
+        // </FS:TJ>
     }
 }
 

@@ -1645,6 +1645,9 @@ https://secondlife.com/viewer-access-faq
 	<string name="InventoryNoMatchingFavorites">
 		お気に入りとしてマークしたアイテムはありません。
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		カスタム
+	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
 	</string>

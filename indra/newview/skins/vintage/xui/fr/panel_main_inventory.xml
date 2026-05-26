@@ -101,6 +101,7 @@
 		<inventory_panel label="Tous" name="All Items"/>
 		<recent_inventory_panel label="Les plus récents" name="Recent Items"/>
 		<worn_inventory_panel label="Portés" name="Worn Items"/>
+		<favorites_inventory_panel label="Favoris" name="Favorites"/>
 	</tab_container>
 	<text name="ItemcountText" tool_tip="[ITEMS] éléments, [CATEGORIES] dossiers">
 		Éléments

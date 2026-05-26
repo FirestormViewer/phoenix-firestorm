@@ -39,7 +39,9 @@
 	<panel name="panel_details">
 		<text name="needle_name_label" value="ルール名："/>
 		<text name="sender_name_label" value="送信者名："/>
-		<combo_box name="sender_match_type">
+		<line_editor name="sender_name" tool_tip="メッセージの送信元であるアバターまたはオブジェクトの名前" />
+		<check_box name="sender_case" tool_tip="大文字・小文字の区別" />
+		<combo_box name="sender_match_type" tool_tip="一致モード">
 			<combo_item name="sender_exact">
 				<column name="longtext" label="全文一致"/>
 			</combo_item>
@@ -51,7 +53,9 @@
 			</combo_item>
 		</combo_box>
 		<text name="content_label" value="内容："/>
-		<combo_box name="content_match_type">
+		<text_editor name="content" tool_tip="メッセージの実際のテキスト" />
+		<check_box name="content_case" tool_tip="大文字・小文字の区別" />
+		<combo_box name="content_match_type" tool_tip="一致モード">
 			<combo_item name="content_exact">
 				<column name="longtext" label="全文一致"/>
 			</combo_item>
@@ -64,7 +68,8 @@
 		</combo_box>
 		<text name="region_name_label" value="リージョン名："/>
 		<line_editor name="region_name" tool_tip="ソースのリージョン名を入力します。インベントリのオファーでのみ使用できます。"/>
-		<text name="owner_label" value="所有者のキー：" tool_tip="グループ招待の場合：グループのＵＵＩＤを入力します。オブジェクトによるチャット、オブジェクト所有者の発言、デバッグチャット、またはダイレクトチャットの場合：オブジェクトのＵＵＩＤを入力します。オブジェクトＩＭの場合：オブジェクト所有者のＵＵＩＤを入力します。その他：送信者アバターのＵＵＩＤを入力します。"/>
+		<text name="owner_label" value="所有者のキー："/>
+		<line_editor name="owner_uuid" tool_tip="グループ招待の場合：グループのＵＵＩＤを入力します。オブジェクトによるチャット、オブジェクト所有者の発言、デバッグチャット、またはダイレクトチャットの場合：オブジェクトのＵＵＩＤを入力します。オブジェクトＩＭの場合：オブジェクト所有者のＵＵＩＤを入力します。その他：送信者アバターのＵＵＩＤを入力します。"/>
 		<text name="match_source_label" value="一致するソース："/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -93,7 +98,10 @@
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="チャットの置き換え："/>
+		<line_editor name="chat_replace" tool_tip="メッセージの表示方法を変更するために使用できる置換テキスト" />
 		<text name="button_reply_label" value="返信ボタン："/>
+		<line_editor name="button_reply" tool_tip="&quot;無視&quot;を含む、スクリプトダイアログで&quot;クリック&quot;するボタンのラベル" />
 		<text name="text_box_reply_label" value="返信テキストボックス："/>
+		<text_editor name="text_box_reply" tool_tip="スクリプトダイアログのテキストボックスに手動で入力されたかのような返信テキスト" />
 	</panel>
 </floater>
