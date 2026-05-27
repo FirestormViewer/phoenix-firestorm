@@ -84,7 +84,7 @@
 			<text name="req_restart_chattabs" width="120">
 				(Erfordert Neustart)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="IM-Tabs nach Typ sortieren:" tool_tip="Aktiviert automatische Sortierung für IM-Tabs innerhalb des „Gespräche“-Fensters." width="170"/>
+			<check_box name="FSAutoOrderIMTabs" label="IM-Tabs nach Typ sortieren:" tool_tip="Aktiviert automatische Sortierung für IM-Tabs innerhalb des „Gespräche“-Fensters." width="180"/>
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Gruppen, Konferenzen, IMs"/>
 				<combo_box.item name="group_im_conf" label="Gruppen, IMs, Konferenzen"/>
@@ -94,7 +94,7 @@
 				<combo_box.item name="im_conf_group" label="IMs, Konferenzen, Gruppen"/>
 			</combo_box>
 			<check_box name="FSAutoOrderIMTabsAtTop" label="Neue Tabs als erste einfügen"  tool_tip="Fügt neue IM-Tabs als erstes Tab in der jeweiligen Gruppe hinzu."/>
-			<text name="FSIMTabNameFormat_label">
+			<text name="FSIMTabNameFormat_label" width="180">
 				Namensformat für IM-Tabs:
 			</text>
 			<combo_box name="FSIMTabNameFormat">
@@ -149,7 +149,7 @@
 		<panel label="Eingabe" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
-			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
+			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="200"/>
 			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
 			<check_box label="Tippanimation auch bei Emotes abspielen" name="play_typing_animation_emote"/>
 			<check_box label="Tipp-Klang abspielen, wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
@@ -174,7 +174,7 @@
 				Tastatur-Shortcuts verwenden:
 			</text>
 			<check_box label="Strg + Return (Rufen)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Strg + Return zum Rufen im Chat in der Nähe verwendet werden soll." name="FSUseCtrlShout"/>
-			<check_box label="Umschalt + Return (Flüstern)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Umschalt + Return zum Flüstern im Chat in der Nähe verwendet werden soll." name="FSUseShiftWhisper"/>
+			<check_box label="Umschalt + Return (Flüstern)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Umschalt + Return zum Flüstern im Chat in der Nähe verwendet werden soll." name="FSUseShiftWhisper" width="180"/>
 			<check_box label="Alt + Return (OOC)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Alt + Return für OOC-Chat im Chat in der Nähe verwendet werden soll." name="FSUseAltOOC"/>
 		</panel>
 
@@ -290,7 +290,7 @@
 				Berechnen (Befehl: cmd SIN(2+2))
 			</text>
 			<text name="FSCmdLineDrawDistance_txt">
-				Draw Distance ändern (Befehl: cmd Meter)
+				Draw Distance änd. (Befehl: cmd Meter)
 			</text>
 			<text name="FSCmdLineBandWidth_txt">
 				Max. Bandbreite (Befehl: cmd kbps)
@@ -310,7 +310,7 @@
 			</text>
 			<line_editor tool_tip="Setzt den Medienstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMedia"/>
 			<text name="FSCmdLineMusic_txt">
-				Musikstream-URL setzen (Befehl: cmd URL)
+				Musikstream-URL set. (Befehl: cmd URL)
 			</text>
 			<line_editor tool_tip="Setzt die Musikstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMusic"/>
 			<text name="FSCmdLineRezPlatform_txt">
@@ -318,7 +318,7 @@
 			</text>
 			<slider name="FSCmdLinePlatformSize" label="Breite" label_width="37" tool_tip="Legt die Größe der zu rezzenden Plattform fest."/>
 			<text name="FSCmdLineKeyToName_txt">
-				Av.-Name via UUID bestimmen (Befehl: cmd key)
+				Av.-Name via UUID ermitteln (Befehl: cmd key)
 			</text>
 			<text name="FSCmdLineRollDice_txt">
 				Würfeln (Befehl: cmd Würfel Seiten mt mw)

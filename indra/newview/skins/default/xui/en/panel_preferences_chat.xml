@@ -429,7 +429,7 @@
              layout="topleft"
              left="20"
              height="12"
-             width="200"
+             width="210"
              top_pad="5">
                  Show new message notification for:
             </text>
@@ -1449,7 +1449,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarChatEnter"
 		 control_name="UISndRadarChatEnter"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportChatRangeEnter"
 		 follows="left|top"
@@ -1507,7 +1507,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarChatLeave"
 		 control_name="UISndRadarChatLeave"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportChatRangeLeave"
 		 follows="left|top"
@@ -1565,7 +1565,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarDrawEnter"
 		 control_name="UISndRadarDrawEnter"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportDrawRangeEnter"
 		 follows="left|top"
@@ -1623,7 +1623,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarDrawLeave"
 		 control_name="UISndRadarDrawLeave"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportDrawRangeLeave"
 		 follows="left|top"
@@ -1681,7 +1681,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarSimEnter"
 		 control_name="UISndRadarSimEnter"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportSimRangeEnter"
 		 follows="left|top"
@@ -1739,7 +1739,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarSimLeave"
 		 control_name="UISndRadarSimLeave"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarReportSimRangeLeave"
 		 follows="left|top"
@@ -1871,7 +1871,7 @@
 		 max_length_chars="256"
 		 name="UISndRadarAgeAlert"
 		 control_name="UISndRadarAgeAlert"
-		 width="220"/>
+		 width="255"/>
 		<button
 		 enabled_control="RadarAvatarAgeAlert"
 		 follows="left|top"
@@ -2319,7 +2319,7 @@
 	  bevel_style="none"
 	  border_thickness="1"
 	  top="30"
-	  left="245"
+	  left="249"
 	  bottom="-25"
 	  width="0"
 	  follows="top|left|bottom"
@@ -2328,7 +2328,7 @@
 	<!--key2name-->
 	<text
 	  top="30"
-	  left_delta="10"
+	  left_delta="5"
 	  follows="left|top"
 	  height="14"
 	  name="FSCmdLineKeyToName_txt"
@@ -2504,7 +2504,7 @@
 	  height="14"
 	  name="FSCmdLineMapTo_txt"
 	  width="280">
-	  Teleport to region (usage: cmd regionname | x y z)
+	  Teleport to region (usage: cmd region | x y z)
 	</text>
 	<line_editor
 	  enabled_control="FSCmdLine"

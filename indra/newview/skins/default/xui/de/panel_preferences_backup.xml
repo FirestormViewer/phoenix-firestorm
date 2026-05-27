@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel label="Sicherung" name="backup">
-	<text name="backup_path_label" width="90">
+	<text name="backup_path_label" width="100">
 		Sicherungspfad:
 	</text>
 	<button label="Setzen" name="set_backup_settings_path"/>
@@ -12,7 +12,7 @@
 		</layout_panel>
 		<layout_panel name="lp_buttons">
 			<text name="settings_restored_label">
-				Wiederherzustellende Gruppen von Einstellungen (Sicherung speichert immer alle):
+				Wiederherzustellende Einstellungsgruppen (Sicherung speichert immer alle):
 			</text>
 			<layout_stack name="ls_list_view_stack">
 				<layout_panel name="lp_restore_global_files">

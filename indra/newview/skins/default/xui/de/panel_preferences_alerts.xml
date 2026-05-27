@@ -9,7 +9,7 @@
 			<check_box label="Aktuelle Neuigkeiten von status.secondlifegrid.net beim Login abrufen" name="AutoQueryGridStatus"/>
 			<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
 			<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
-			<check_box label="Doppelte IM-Nachrichten filtern, wenn sie bereits als Schlüsselwort-Alarm angezeigt wurden" name="FSFilterGrowlKeywordDuplicateIMs"/>
+			<check_box label="Doppelte IM-Nachrichten filtern, wenn sie als Schlüsselwort-Alarm angezeigt wurden" name="FSFilterGrowlKeywordDuplicateIMs"/>
 		</panel>
 
 		<!-- People -->

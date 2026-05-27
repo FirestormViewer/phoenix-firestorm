@@ -224,14 +224,13 @@
          increment="0.25"
          label="Floating text fade distance (in m):"
          tool_tip="Sets the distance where floating text (hovertext) starts to fade"
-         label_width="200"
+         label_width="240"
          layout="topleft"
          left="10"
          min_val="0"
          max_val="64"
          name="FSHudTextFadeDistance"
-
-         width="481" />
+         width="500" />
         <slider
          control_name="FSHudTextFadeRange"
          decimal_digits="2"
@@ -240,14 +239,14 @@
          increment="0.25"
          label="Floating text fade range (in m):"
          tool_tip="Sets the range it takes for a floating text (hovertext) to fade from fully visible to completely invisible"
-         label_width="200"
+         label_width="240"
          layout="topleft"
          left="10"
          min_val="0.25"
          max_val="32"
          name="FSHudTextFadeRange"
          top_pad="2"
-         width="474" />
+         width="500" />
 	 <!-- Added new check box to disable the highlight floating text feature -->
         <check_box
         control_name="FSHudTextUseHoverHighlight"
@@ -363,7 +362,7 @@
        type="string"
        left="10"
        top_pad="15"
-       width="140"
+       width="150"
        follows="left|top"
        height="16"
        layout="topleft"
@@ -417,7 +416,7 @@
        type="string"
        left="10"
        top_pad="9"
-       width="140"
+       width="150"
        follows="left|top"
        height="16"
        layout="topleft"
@@ -593,11 +592,11 @@
          name="FSLegacyNotificationWell"
          tool_tip="If checked, Firestorm will use the legacy list view to display stored notifications."
          top_pad="3"
-         width="265" />
+         width="285" />
         <text
          type="string"
          left_pad="10"
-         top_pad="-15"
+         top_pad="-18"
          width="128"
          follows="left|top"
          height="12"
@@ -615,7 +614,7 @@
          left="5"
          name="FSLegacyNotificationWellAutoResize"
          tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items get added or removed."
-         top_pad="3"
+         top_pad="10"
          width="450" />
         <check_box
          control_name="FSRemapLinuxShortcuts"
@@ -840,7 +839,7 @@
 		 name="statusbar_timeformat_textbox"
 		 left="13"
 		 top_pad="8"
-		 width="75">
+		 width="85">
 		 Clock format:
 		</text>
 		<combo_box
@@ -1179,7 +1178,7 @@
 		 left="20"
 		 follows="left|top"
 		 name="textFriendListFullNameFormat"
-		 width="105">
+		 width="115">
 		 Show full name as:
 		</text>
 		<radio_group

@@ -33,7 +33,7 @@
 			<check_box label="Automatisch akzeptierte Notizkarten, Landmarken und Texturen anzeigen" name="Show_New_Inventory"/>
 			<check_box label="Automatisch Fotos nach dem Hochladen im Inventar anzeigen" name="FSOpenInventoryAfterSnapshot"/>
 			<check_box label="Partikeleffekte erzeugen, wenn Objekte an andere Avatare gegeben werden" name="FSCreateGiveInventoryParticleEffect"/>
-			<check_box label="Meine Lieblingslandmarken bei Anmeldung anzeigen (im Dropdown-Menü „Hier anfangen“)" name="favorites_on_login_check" />
+			<check_box label="Meine Lieblingslandmarken bei Anmeldung anz. (im Dropdown-Menü „Hier anfangen“)" name="favorites_on_login_check" />
 			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180" />
 		</panel>
 
@@ -104,13 +104,13 @@
 		<!--Autoresponse2-->
 		<panel label="Autom. Antwort 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
-				Automatische Antwort für Onlinestatus „Teleport-Angebote und -Anforderungen abweisen“:
+				Autom. Antwort für Onlinestatus „Teleport-Angebote und -Anforderungen abweisen“:
 			</text>
 			<check_box label="Teleport-Angebote und -Anforderungen von Freunden nicht abweisen" name="FSDontRejectTeleportOffersFromFriends"/>
 			<text name="autorespond_rfr_response_label">
 				Automatische Antwort für Onlinestatus „Alle Freundschaftsanfragen abweisen“:
 			</text>
-			<text name="autoresponse_item_label" width="150">
+			<text name="autoresponse_item_label" width="155">
 				Objekt für autom. Antwort:
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="-70" tool_tip="Hier Inventarobjekt via Drag&amp;Drop ablegen"/>

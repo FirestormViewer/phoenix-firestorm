@@ -206,6 +206,7 @@
 			<combo_box.item label="1024 Pixel" name="1024"/>
 			<combo_box.item label="2048 Pixel" name="2048"/>
 		</combo_box>
+		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
 		<text name="TextureDetailLabel">
 			Maximales Qualitätslevel für Texturen:
 		</text>
@@ -236,7 +237,7 @@
 		<text name="ExcludeAnimeshImposterLabel" width="255">
 			Animesh-Avatare immer vollständig anzeigen:
 		</text>
-		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
+		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird" tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay" label_width="335"/>
 		<text name="PrecachingDelayText" width="60">
 			Sekunden
 		</text>

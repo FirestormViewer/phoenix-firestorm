@@ -50,7 +50,7 @@
          follows="left|top"
          top_pad="6"
          left="10"
-         width="270"
+         width="290"
          height="20"
          name="checkMiscRLVa"
          label="Allow Remote Scripted Viewer Controls  (RLVa)"/>
@@ -346,7 +346,7 @@
          follows="left|top"
          height="16"
          name="RenderVolumeSAProtection"
-         width="380"
+         width="415"
          tool_tip="This protects you from objects with very large textures over large surface areas often designed to crash the viewer. Default is 5000 square meters, but if you find that some objects are not rendering and this option is enabled you may need to increase it."/>
         <spinner
          enabled_control="RenderVolumeSAProtection"
@@ -1387,7 +1387,7 @@
          max_val="359.99"
          min_val="0.01"
          name="RotationStep"
-         width="65"
+         width="55"
          tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
         <text
          left_pad="5"

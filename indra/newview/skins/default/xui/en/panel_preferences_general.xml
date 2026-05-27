@@ -573,7 +573,7 @@
      left_pad="0"
      top_delta="0"
      name="title_afk_quit_text"
-     width="200">
+     width="230">
         Log out after being marked away:
     </text>
 

@@ -216,18 +216,18 @@
 			<slider label="Deckkraft für Schwebe-Text:" name="FSHudTextBackgroundOpacity" tool_tip="Deckkraft für Hintergrund von Schwebe-Text festlegen"/>
 			<slider label="Menü-Hintergrund-Deckkraft:" name="menu_background_alpha" tool_tip="Deckkraft des Hintergrunds von Kontextmenüs und der oberen Menüleiste (0.0 = vollständig transparent, 1.0 = vollständig deckend)"/>
 			<text name="preferences_search_label">
-                Farben für Einstellungssuche:
-            </text>
+				Farben für Einstellungssuche:
+			</text>
 			<text name="preferences_search_bg_label" width ="75">
-                Hintergrund:
-            </text>
+				Hintergrund:
+			</text>
 			<color_swatch name="preferences_search_bg_color" tool_tip="Hintergrundfarbe für die Hervorhebung der Einstellungssuche"/>
 			<text name="preferences_search_font_label" width="60">
-                Schriftart:
-            </text>
+				Schriftart:
+			</text>
 			<color_swatch name="preferences_search_font_color" tool_tip="Schriftfarbe für die Hervorhebung der Einstellungssuche"/>
-			<text name="area_search_beacon_color_label" left="300">
-				Farbe für Markierung der Umgebungssuche:
+			<text name="area_search_beacon_color_label" left="320">
+				Markierung der Umgebungssuche:
 			</text>
 			
 			<text name="notecard_editor_color_label">
