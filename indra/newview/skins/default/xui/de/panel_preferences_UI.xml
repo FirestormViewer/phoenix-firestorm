@@ -33,7 +33,7 @@
 		<slider label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
 		<slider label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
 		<check_box name="FSHudTextUseHoverHighlight" label="Schwebetext von Objekten hervorheben:" tool_tip="Wenn mit der Maus über ein Objekt gefahren wird, wird der Schwebetext von Objekten (falls vorhanden) hervorgehoben, indem der Text in den Vordergrund geholt und der durchsichtige Hintergrund deaktiviert wird."/>
-		<text name="FSHudTextShowBackgroundLabel" width="220">
+		<text name="FSHudTextShowBackgroundLabel" width="235">
 			Hintergrund von Schwebetext anzeigen:
 		</text>
 		<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Zeigt einen schwarz/weißen Hintergrund hinter Schwebetext an, um ihn besser lesbar zu machen. Die Deckkraft kann unter Farben > Sonstige angepasst werden">
@@ -123,7 +123,7 @@
 		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Menüleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="statusbar_timeformat_textbox">
-			Uhrformat:
+			Uhrzeitformat:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Bestimmt das Zeitformat, das in der Menüleiste verwendet wird.">
 			<combo_box.item label="Standard ausgewählter Sprache" name="Language"/>
