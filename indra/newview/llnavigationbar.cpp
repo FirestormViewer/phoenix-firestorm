@@ -289,6 +289,7 @@ LLNavigationBar::LLNavigationBar()
     mFavoritePanel(NULL),
     mNavPanWidth(0),
     mSearchComboBox(NULL),
+    mHomeTooltipRetryCount(0), // <FS:PP> Show home location in the "teleport home" navbar button tooltip
     mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-11847
 {
     // buildFromFile( "panel_navigation_bar.xml");  // <FS:Zi> Make navigation bar part of the UI
@@ -519,6 +520,7 @@ void LLNavigationBar::setHomeBtnTooltip()
         LLViewerRegion* region = LLWorld::getInstance()->getRegionFromPosGlobal(home_global);
         if (region)
         {
+            mHomeTooltipRetryCount = 0;
             LLVector3 pos_region = region->getPosRegionFromGlobal(home_global);
             location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", region->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
         }
@@ -528,19 +530,26 @@ void LLNavigationBar::setHomeBtnTooltip()
             LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromHandle(region_handle);
             if (sim_info)
             {
+                mHomeTooltipRetryCount = 0;
                 LLVector3 pos_region = (LLVector3)(home_global - from_region_handle(region_handle));
                 location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", sim_info->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
             }
             else
             {
                 // 3. Not in cache, make a query
-                LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [region_handle](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
+                constexpr S32 MAX_TOOLTIP_RETRIES = 10;
+                LL_DEBUGS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
+                if (mHomeTooltipRetryCount < MAX_TOOLTIP_RETRIES)
                 {
-                    if (LLNavigationBar::instanceExists())
+                    ++mHomeTooltipRetryCount;
+                    LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [region_handle](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
                     {
-                        LLNavigationBar::getInstance()->setHomeBtnTooltip();
-                    }
-                }, std::string(), false);
+                        if (LLNavigationBar::instanceExists())
+                        {
+                            LLNavigationBar::getInstance()->setHomeBtnTooltip();
+                        }
+                    }, std::string(), false);
+                }
             }
         }
     }
