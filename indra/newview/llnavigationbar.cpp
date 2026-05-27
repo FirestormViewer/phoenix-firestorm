@@ -538,10 +538,10 @@ void LLNavigationBar::setHomeBtnTooltip()
             {
                 // 3. Not in cache, make a query
                 constexpr S32 MAX_TOOLTIP_RETRIES = 10;
-                LL_DEBUGS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
                 if (mHomeTooltipRetryCount < MAX_TOOLTIP_RETRIES)
                 {
                     ++mHomeTooltipRetryCount;
+                    LL_INFOS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
                     LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [region_handle](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
                     {
                         if (LLNavigationBar::instanceExists())

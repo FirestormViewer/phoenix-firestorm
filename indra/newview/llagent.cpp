@@ -4684,10 +4684,12 @@ void LLAgent::setHomePosRegion( const U64& region_handle, const LLVector3& pos_r
     mHaveHomePosition = true;
     mHomeRegionHandle = region_handle;
     mHomePosRegion = pos_region;
+    // <FS:PP> Show home location in the "teleport home" navbar button tooltip
     if (LLNavigationBar::instanceExists())
     {
         LLNavigationBar::getInstance()->setHomeBtnTooltip();
     }
+    // </FS:PP>
 }
 
 bool LLAgent::getHomePosGlobal( LLVector3d* pos_global )
