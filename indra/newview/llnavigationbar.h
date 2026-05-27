@@ -114,6 +114,7 @@ public:
 // </FS:Zi>
 
     bool isRebakeNavMeshAvailable();
+    void setHomeBtnTooltip(); // <FS:PP> Show home location in the "teleport home" navbar button tooltip
 
 // [RLVa:KB] - Checked: 2014-03-23 (RLVa-1.4.10)
     void refreshLocationCtrl();

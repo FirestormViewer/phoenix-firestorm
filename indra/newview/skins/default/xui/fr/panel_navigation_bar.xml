@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="Revenir à l'emplacement précédent"/>
 					<pull_button name="forward_btn" tool_tip="Aller à l'emplacement suivant"/>
-					<button name="home_btn" left_pad="5" tool_tip="Me téléporter jusqu'à mon domicile"/>
+					<button name="home_btn" left_pad="5" tool_tip="Me téléporter jusqu'à mon domicile[LOCATION]"/>
 					<button name="About_Land" label="Terrain" width="48" left_pad="5" tool_tip="Affiche les informations du terrain" />
 					<button name="Sky" label="Ciel" left_pad="5" tool_tip="Affiche l'éditeur de préréglage du ciel"/>
 				</layout_panel>
