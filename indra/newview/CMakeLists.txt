@@ -472,6 +472,7 @@ set(viewer_SOURCE_FILES
     llgltfmateriallist.cpp
     llgltfmaterialpreviewmgr.cpp
     llgroupactions.cpp
+    llgroupcolormap.cpp             # group-based nameplate tinting
     llgroupiconctrl.cpp
     llgrouplist.cpp
     llgroupmgr.cpp
@@ -1344,6 +1345,7 @@ set(viewer_HEADER_FILES
     llgltfmateriallist.h
     llgltfmaterialpreviewmgr.h
     llgroupactions.h
+    llgroupcolormap.h               # group-based nameplate tinting
     llgroupiconctrl.h
     llgrouplist.h
     llgroupmgr.h

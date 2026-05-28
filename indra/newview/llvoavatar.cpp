@@ -45,6 +45,7 @@
 #include "llanimationstates.h"
 #include "llavatarnamecache.h"
 #include "llavatarpropertiesprocessor.h"
+#include "llgroupcolormap.h"         // group-based nameplate tinting
 #include "llavatarrendernotifier.h"
 #include "llcontrolavatar.h"
 #include "llexperiencecache.h"
@@ -709,6 +710,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mNameAlpha(0.f),
     mRenderGroupTitles(sRenderGroupTitles),
     mNameCloud(false),
+    mActiveGroupID(),
+    mGroupFetchPending(false),
     mFirstTEMessageReceived( false ),
     mFirstAppearanceMessageReceived( false ),
     mCulled( false ),
@@ -4330,6 +4333,21 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
         mNameCloud = is_cloud;
         mNameColor=name_tag_color;
         mDistanceString = distance_string;
+
+        // Group-based nameplate tinting: when Title NV changes on a non-self avatar,
+        // their active group may have changed. Fire a profile request to resolve the UUID.
+        const std::string new_title = title ? title->getString() : "";
+        if (!isSelf() && new_title != mTitle)
+        {
+            mActiveGroupID.setNull();
+            if (!mGroupFetchPending)
+            {
+                mGroupFetchPending = true;
+                LLAvatarPropertiesProcessor::getInstance()->addObserver(getID(), this);
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(getID());
+            }
+        }
+
         mTitle = title ? title->getString() : "";
         mNameIsTyping = is_typing;
         // <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
@@ -4626,7 +4644,64 @@ LLColor4 LLVOAvatar::getNameTagColor()
 
     LLNetMap::getAvatarMarkColor(getID(), color);
 
+    // Group-based nameplate tinting: override with group color if one is set.
+    // Contact set colors are checked first above; group color applies on top of base
+    // but contact sets take priority if they produce a non-default color.
+    {
+        LLUUID active_group = isSelf() ? gAgent.getGroupID() : mActiveGroupID;
+        if (active_group.notNull())
+        {
+            LLColor4 group_color = LLGroupColorMap::getInstance()->getGroupColor(active_group);
+            if (group_color.mV[VW] >= 0.01f)
+            {
+                color = group_color;
+            }
+        }
+    }
+
     return color;
+}
+
+// ---------------------------------------------------------------------------
+// Group-based nameplate tinting: observer callback
+// ---------------------------------------------------------------------------
+
+void LLVOAvatar::processProperties(void* data, EAvatarProcessorType type)
+{
+    if (type != APT_GROUPS)
+        return;
+
+    LLAvatarGroups* groups = static_cast<LLAvatarGroups*>(data);
+    if (!groups || groups->avatar_id != getID())
+        return;
+
+    LLAvatarPropertiesProcessor::getInstance()->removeObserver(getID(), this);
+    mGroupFetchPending = false;
+
+    // The active group is the one whose GroupTitle matches the avatar's
+    // current Title NameValue (mTitle).
+    for (const auto& gd : groups->group_list)
+    {
+        if (gd.group_title == mTitle)
+        {
+            mActiveGroupID = gd.group_id;
+            clearNameTag();
+            return;
+        }
+    }
+
+    mActiveGroupID.setNull();
+    clearNameTag();
+}
+
+void LLVOAvatar::sendAvatarGroupsRequest()
+{
+    if (!isSelf() && !mGroupFetchPending)
+    {
+        mGroupFetchPending = true;
+        LLAvatarPropertiesProcessor::getInstance()->addObserver(getID(), this);
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(getID());
+    }
 }
 
 void LLVOAvatar::idleUpdateBelowWater()

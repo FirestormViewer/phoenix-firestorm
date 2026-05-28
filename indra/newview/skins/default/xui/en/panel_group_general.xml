@@ -2,7 +2,7 @@
 <panel
  label="General"
  width="470"
- height="410"
+ height="442"
  class="panel_group_general"
  name="general_tab"
  layout="topleft"
@@ -186,6 +186,52 @@ Hover your mouse over the options for more help.
          name="status"
          relative_width="0.2" />
     </name_list>
+
+    <!-- Group nameplate tinting: isolated panel with color swatch -->
+    <panel
+     name="nametag_color_panel"
+     follows="left|right|bottom"
+     layout="topleft"
+     left="0"
+     top_pad="4"
+     width="467"
+     height="28"
+     background_visible="false">
+        <text
+         type="string"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="5"
+         top="4"
+         width="160"
+         name="nametag_color_label"
+         text_color="EmphasisColor">
+          Nameplate Color:
+        </text>
+        <color_swatch
+         can_apply_immediately="false"
+         follows="left|top"
+         height="22"
+         label=""
+         label_height="0"
+         layout="topleft"
+         left="170"
+         top="2"
+         name="group_nametag_color"
+         tool_tip="Click to set nameplate color for this group"
+         width="54" />
+        <button
+         follows="left|top"
+         height="22"
+         label="Clear"
+         layout="topleft"
+         left="230"
+         top="2"
+         name="group_nametag_color_clear"
+         tool_tip="Remove the nameplate color for this group"
+         width="60" />
+    </panel>
 
     <layout_stack
      name="group_preferences_layout"

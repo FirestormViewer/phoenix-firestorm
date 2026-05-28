@@ -36,6 +36,7 @@
 #include <boost/signals2/trackable.hpp>
 
 #include "llavatarappearance.h"
+#include "llavatarpropertiesprocessor.h"  // LLAvatarPropertiesObserver (group tinting)
 #include "llchat.h"
 #include "lldrawpoolalpha.h"
 #include "llviewerobject.h"
@@ -87,6 +88,7 @@ extern U32 gFrameCount;
 class LLVOAvatar :
     public LLAvatarAppearance,
     public LLViewerObject,
+    public LLAvatarPropertiesObserver,  // group-based nameplate tinting
     public boost::signals2::trackable
 {
     LL_ALIGN_NEW;
@@ -297,6 +299,12 @@ public:
     LLColor4        getNameTagColor();
     // </FS:CR>
     void            clearNameTag();
+
+    // LLAvatarPropertiesObserver: receives APT_GROUPS reply for group-tint lookup
+    /*virtual*/ void processProperties(void* data, EAvatarProcessorType type) override;
+    void            sendAvatarGroupsRequest();
+    const LLUUID&   getActiveGroupID() const { return mActiveGroupID; }
+
     static void     invalidateNameTag(const LLUUID& agent_id);
     // force all name tags to rebuild, useful when display names turned on/off
     static void     invalidateNameTags();
@@ -1188,6 +1196,10 @@ private:
     U32             mNameArc;
     LLColor4        mNameArcColor;
     // </FS:Ansariel>
+
+    // Group-based nameplate tinting
+    LLUUID          mActiveGroupID;      // active group UUID; null until known
+    bool            mGroupFetchPending;  // true while AvatarPropertiesRequest is in flight
 
     //--------------------------------------------------------------------
     // Display the name (then optionally fade it out)
