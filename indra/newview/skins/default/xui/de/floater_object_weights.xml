@@ -33,4 +33,9 @@
 	<text name="lod_level_label" top_delta="0" value="LOD (Detail-Level)"/>
 	<text name="triangles_shown_label" value="Angezeigte Dreiecke"/>
 	<text name="pixel_area_label" value="Pixel Area"/>
+	<text name="lod_info_text" value="LOD-Info"/>
+	<text name="high_lod_tris_label" value="Hohe Dreiecke"/>
+	<text name="medium_lod_tris_label" value="Mittlere Dreiecke"/>
+	<text name="low_lod_tris_label" value="Niedrige Dreiecke"/>
+	<text name="lowest_lod_tris_label" value="Niedrigste Dreiecke"/>
 </floater>

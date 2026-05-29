@@ -36,7 +36,7 @@
   </menu_item_check>
     <menu_item_check
      label="Show blocked"
-     name="show_muted">
+     name="show_blocked">
         <on_click
          function="CallLog.Action"
          parameter="show_blocked" />
