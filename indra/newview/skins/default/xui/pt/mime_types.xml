@@ -2,24 +2,24 @@
 <mimetypes name="default">
 	<widgetset name="web">
 		<label name="web_label">
-			Conteúdo da Web
+			Conteúdo web
 		</label>
 		<tooltip name="web_tooltip">
-			Esta região possui Conteúdo da Web disponível.
+			Este local tem conteúdo web
 		</tooltip>
 		<playtip name="web_playtip">
-			Exibir Conteúdo da Web
+			Exibir conteúdo web
 		</playtip>
 	</widgetset>
 	<widgetset name="movie">
 		<label name="movie_label">
-			Filme
+			Video
 		</label>
 		<tooltip name="movie_tooltip">
-			Há um filme disponível para se assistir aqui
+			Um vídeo foi encontrado.
 		</tooltip>
 		<playtip name="movie_playtip">
-			Iniciar filme
+			Reproduzir vídeo
 		</playtip>
 	</widgetset>
 	<widgetset name="image">
@@ -27,21 +27,21 @@
 			Imagem
 		</label>
 		<tooltip name="image_tooltip">
-			Há uma imagem neste local
+			Este local tem conteúdo de imagem
 		</tooltip>
 		<playtip name="image_playtip">
-			Ver a imagem disponível deste local.
+			Exibir a imagem neste local
 		</playtip>
 	</widgetset>
 	<widgetset name="audio">
 		<label name="audio_label">
-			Áudio
+			Audio
 		</label>
 		<tooltip name="audio_tooltip">
-			Há um áudio neste local
+			Este local tem conteúdo de áudio
 		</tooltip>
 		<playtip name="audio_playtip">
-			Iniciar áudio disponível neste local
+			Reproduzir áudio neste local
 		</playtip>
 	</widgetset>
 	<widgetset name="none">
@@ -49,22 +49,22 @@
 			Sem conteúdo
 		</label>
 		<tooltip name="none_tooltip">
-			Sem mídia aqui
+			Nenhuma mídia encontrada
 		</tooltip>
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			Transmissão em tempo real
+			Streaming em tempo real
 		</label>
 	</scheme>
 	<scheme name="example">
 		<label name="example_label">
-			Exemplo Plugin scheme trigger
+			Acionar esquema de plugin de exemplo
 		</label>
 	</scheme>
 	<scheme name="libvlc">
 		<label name="libvlc_label">
-			Mídia com suporte a LibVLC
+			Mídia suportada pelo LibVLC
 		</label>
 	</scheme>
 	<mimetype name="blank">
@@ -79,12 +79,12 @@
 	</mimetype>
 	<mimetype name="audio/*">
 		<label name="audio2_label">
-			Áudio
+			Audio
 		</label>
 	</mimetype>
 	<mimetype name="video/*">
 		<label name="video2_label">
-			Vídeo
+			Video
 		</label>
 	</mimetype>
 	<mimetype name="image/*">
@@ -92,9 +92,9 @@
 			Imagem
 		</label>
 	</mimetype>
-	<mimetype name="video/vnd.secondlife.qt.legacy">
+	<mimetype menu="1" name="video/vnd.secondlife.qt.legacy">
 		<label name="vnd.secondlife.qt.legacy_label">
-			Filme (QuickTime)
+			Video (QuickTime)
 		</label>
 	</mimetype>
 	<mimetype name="application/javascript">
@@ -104,7 +104,7 @@
 	</mimetype>
 	<mimetype name="application/ogg">
 		<label name="application/ogg_label">
-			Áudio/Vídeo Ogg
+			Ogg Audio/Video
 		</label>
 	</mimetype>
 	<mimetype name="application/pdf">
@@ -114,7 +114,7 @@
 	</mimetype>
 	<mimetype name="application/postscript">
 		<label name="application/postscript_label">
-			Documento Postscript
+			Documento PostScript
 		</label>
 	</mimetype>
 	<mimetype name="application/rtf">
@@ -129,7 +129,7 @@
 	</mimetype>
 	<mimetype name="application/xhtml+xml">
 		<label name="application/xhtml+xml_label">
-			Página Web (XHTML)
+			Site (XHTML)
 		</label>
 	</mimetype>
 	<mimetype name="application/x-director">
@@ -139,40 +139,40 @@
 	</mimetype>
 	<mimetype name="audio/mid">
 		<label name="audio/mid_label">
-			Áudio (MIDI)
+			Audio (MIDI)
 		</label>
 	</mimetype>
 	<mimetype name="audio/mpeg">
 		<label name="audio/mpeg_label">
-			Áudio (MP3)
+			Audio (MP3)
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-aiff">
 		<label name="audio/x-aiff_label">
-			Áudio (AIFF)
+			Audio (AIFF)
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-wav">
 		<label name="audio/x-wav_label">
-			Áudio (WAV)
+			Audio (WAV)
 		</label>
 	</mimetype>
-	<mimetype name="image/bmp">
+	<mimetype menu="1" name="image/bmp">
 		<label name="image/bmp_label">
 			Imagem (BMP)
 		</label>
 	</mimetype>
-	<mimetype name="image/gif">
+	<mimetype menu="1" name="image/gif">
 		<label name="image/gif_label">
 			Imagem (GIF)
 		</label>
 	</mimetype>
-	<mimetype name="image/jpeg">
+	<mimetype menu="1" name="image/jpeg">
 		<label name="image/jpeg_label">
 			Imagem (JPEG)
 		</label>
 	</mimetype>
-	<mimetype name="image/png">
+	<mimetype menu="1" name="image/png">
 		<label name="image/png_label">
 			Imagem (PNG)
 		</label>
@@ -182,19 +182,19 @@
 			Imagem (SVG)
 		</label>
 	</mimetype>
-	<mimetype name="image/tiff">
+	<mimetype menu="1" name="image/tiff">
 		<label name="image/tiff_label">
 			Imagem (TIFF)
 		</label>
 	</mimetype>
-	<mimetype name="text/html">
+	<mimetype menu="1" name="text/html">
 		<label name="text/html_label">
-			Página Web
+			Site
 		</label>
 	</mimetype>
-	<mimetype name="text/plain">
+	<mimetype menu="1" name="text/plain">
 		<label name="text/plain_label">
-			Texto
+			Text
 		</label>
 	</mimetype>
 	<mimetype name="text/xml">
@@ -202,14 +202,14 @@
 			XML
 		</label>
 	</mimetype>
-	<mimetype name="video/mpeg">
+	<mimetype menu="1" name="video/mpeg">
 		<label name="video/mpeg_label">
-			Filme (MPEG)
+			Video (MPEG)
 		</label>
 	</mimetype>
 	<mimetype name="video/mp4">
 		<label name="video/mp4_label">
-			Filme (MP4)
+			Video (MP4)
 		</label>
 	</mimetype>
 	<mimetype name="application/octet-stream">
@@ -217,24 +217,24 @@
 			Filme
 		</label>
 	</mimetype>
-	<mimetype name="video/quicktime">
+	<mimetype menu="1" name="video/quicktime">
 		<label name="video/quicktime_label">
-			Filme (QuickTime)
+			Video (QuickTime)
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-asf">
 		<label name="video/x-ms-asf_label">
-			Filme (Windows Media ASF)
+			Video (Windows Media ASF)
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-wmv">
 		<label name="video/x-ms-wmv_label">
-			Filme (Windows Media WMV)
+			Video (Windows Media WMV)
 		</label>
 	</mimetype>
-	<mimetype name="video/x-msvideo">
+	<mimetype menu="1" name="video/x-msvideo">
 		<label name="video/x-msvideo_label">
-			Filme (AVI)
+			Video (AVI)
 		</label>
 	</mimetype>
 </mimetypes>

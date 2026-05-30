@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="track picker" title="ESCOLHER: RASTREAR">
+<floater name="track picker" title="Selecionar trilha">
 	<layout_stack name="adjuster">
 		<layout_panel name="pnl_desc">
 			<text name="select_description">
-				Selecionar o céu de origem:
+				Selecionar céu de origem:
 			</text>
 		</layout_panel>
 		<layout_panel name="pnl_traks">

@@ -1,94 +1,96 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <teleport_messages>
 	<message_set name="errors">
 		<message name="invalid_tport">
-			Houve um problema ao processar o teletransporte. Talvez seja preciso sair e entrar do Second Life para fazer o teletransporte.
-Se você continuar a receber esta mensagem, por favor consulte o [SUPPORT_SITE].
+			As solicitações de teleporte estão limitadas a 6 por minuto. Se tiver problemas, aguarde um minuto e tente de novo. Se persistir, entre novamente.
 		</message>
 		<message name="invalid_region_handoff">
-			Problema encontrado ao processar a passagem de regiões. Talvez seja preciso sair e entrar do Second Life atravessar regiões novamente.
-Se você continuar a receber esta mensagem, por favor consulte o [SUPPORT_SITE].
+			Ocorreu um problema ao processar a mudança de região. Pode ser necessário entrar de novo para mudar de região.
+Se esta mensagem continuar, acesse [SUPPORT_SITE].
 		</message>
 		<message name="blocked_tport">
-			Desculpe, teletransportes estão atualmente bloqueados. Tente novamente dentro de alguns instantes. Se você continuar com problemas de teletransporte, por favor tente deslogar e relogar para resolver o problema.
+			Não é possível teleportar no momento. Tente mais tarde.
+Se ainda não funcionar, saia e entre novamente.
 		</message>
 		<message name="nolandmark_tport">
-			Desculpe, mas o sistema não conseguiu localizar a landmark de destino.
+			O sistema não encontrou o destino do marco.
 		</message>
 		<message name="timeout_tport">
-			Desculpe, não foi possível para o sistema executar o teletransporte. Tente novamente dentro de alguns instantes.
+			O sistema não conseguiu estabelecer conexão de teleporte.
+Tente mais tarde.
 		</message>
 		<message name="NoHelpIslandTP">
-			Não é possível se teletransportar de volta à Ilha Welcome.
-Vá para a [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] para repetir o tutorial.
+			Você não pode voltar à Welcome Island.
+Acesse [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] para refazer o tutorial.
 		</message>
 		<message name="noaccess_tport">
-			Desculpe, você não tem acesso ao destino deste teletransporte.
+			Infelizmente você não tem acesso a este destino de teleporte.
 		</message>
 		<message name="missing_attach_tport">
-			Seu anexos ainda não chegaram. Tente esperar por alguns momentos ou deslogar e logar antes de tentar teleransportar-se novamente.
+			Seus anexos ainda não chegaram. Aguarde um pouco ou saia e entre de novo antes de tentar teleportar outra vez.
 		</message>
 		<message name="too_many_uploads_tport">
-			Afluxo nesta região é atualmente tão alto que seu pedido de teletransporte não será possível em tempo oportuno. Por favor, tente novamente em alguns minutos ou vá a uma área menos ocupada.
+			A fila de recursos nesta região está sobrecarregada.
+Sua solicitação de teleporte não pode ser processada agora. Tente em alguns minutos ou visite uma região menos cheia.
 		</message>
 		<message name="expired_tport">
-			Desculpe, mas o sistema não conseguiu concluir o seu pedido de teletransporte em tempo hábil. Por favor, tente novamente em alguns minutos.
+			O sistema não processou sua solicitação de teleporte a tempo. Tente em alguns minutos.
 		</message>
 		<message name="expired_region_handoff">
-			Desculpe, mas o sistema não pôde concluir a sua travessia de região em tempo hábil. Por favor, tente novamente em alguns minutos.
+			O sistema não processou a mudança de região a tempo. Tente em alguns minutos.
 		</message>
 		<message name="no_host">
-			Não foi possível encontrar o destino do teletransporte. O destino pode estar temporariamente indisponível ou não existir mais. Por favor, tente novamente em poucos minutos.
+			Destino de teleporte não encontrado. O destino pode estar indisponível ou não existir mais. Tente em alguns minutos.
 		</message>
 		<message name="no_inventory_host">
-			O sistema de inventário está indisponível no momento.
+			O sistema de inventário não está disponível no momento.
 		</message>
 		<message name="MustGetAgeRegion">
-			Você deve ter 18 anos ou mais para acessar esta região.
+			Você precisa ter pelo menos 18 anos para entrar nesta região.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Não é possível inserir a região. '[REGION_NAME]' é uma Região de Skill Gaming, portanto você deve atender certos critérios para poder entrar. Para maiores detalhes, consulte as [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+			Entrada na região não permitida. „[REGION_NAME]“ é uma região de jogos de habilidade. O acesso é restrito a residentes que atendem critérios específicos. Veja [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 		</message>
 		<message name="preexisting_tport">
-			Desculpe, mas o sistema falhou ao iniciar o seu teletransporte. Por favor, tente novamente dentro de alguns minutos.
+			Desculpe, o sistema não pôde iniciar seu teleporte. Tente novamente em alguns minutos.
 		</message>
 	</message_set>
 	<message_set name="progress">
 		<message name="sending_dest">
-			Enviando para o destino.
+			Transportando ao destino.
 		</message>
 		<message name="redirecting">
-			Redirecionando para uma localidade diferente.
+			Redirecionando para outro destino.
 		</message>
 		<message name="relaying">
-			Transferindo para o destino.
+			Encaminhando ao destino.
 		</message>
 		<message name="sending_home">
-			Enviando solicitação de localização de início.
+			Determinando posição em casa.
 		</message>
 		<message name="sending_landmark">
-			Enviando solicitação de localização de landmark.
+			Determinando posição do marco.
 		</message>
 		<message name="completing">
-			Completando teletransporte.
+			Concluindo teleporte.
 		</message>
 		<message name="completed_from">
-			Teletransporte de [T_SLURL] concluído
+			Teleporte de [T_SLURL] concluído com sucesso.
 		</message>
 		<message name="resolving">
-			Identificando destino.
+			Determinando destino.
 		</message>
 		<message name="contacting">
-			Contactando nova região.
+			Conectando à nova região.
 		</message>
 		<message name="arriving">
-			Chegando...
+			Chegando ao destino...
 		</message>
 		<message name="requesting">
-			Solicitando teletransporte...
+			Iniciando teleporte...
 		</message>
 		<message name="pending">
-			Teletransporte pendente...
+			Teleporte pendente...
 		</message>
 	</message_set>
 </teleport_messages>

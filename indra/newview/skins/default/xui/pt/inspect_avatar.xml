@@ -10,15 +10,16 @@
 	<string name="Details">
 		[SL_PROFILE]
 	</string>
+	<text name="user_subtitle" value="11 meses e 3 dias"/>
 	<text name="user_details">
-		Esta é a minha descrição no Second Life e acho ótima. Mas por algum motivo ela fica enorme porque gosto muito de escrever
+		Esta é minha descrição do Second Life e eu acho ela ótima! Minha descrição é longa porque gosto de conversar.
 	</text>
-	<slider name="volume_slider" tool_tip="Volume de Voz" value="0.5"/>
+	<slider name="volume_slider" tool_tip="Volume"/>
 	<button label="Adicionar amigo" name="add_friend_btn"/>
-	<button label="MI" name="im_btn"/>
+	<button label="IM" name="im_btn"/>
 	<button label="Perfil" name="view_profile_btn"/>
 	<panel name="moderator_panel">
-		<button label="Disabilitar Voz" name="disable_voice"/>
-		<button label="Habilitar Voz" name="enable_voice"/>
+		<button label="Desativar voz" name="disable_voice"/>
+		<button label="Ativar voz" name="enable_voice"/>
 	</panel>
 </floater>

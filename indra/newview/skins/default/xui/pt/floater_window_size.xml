@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="window_size" title="TAMANHO DA JANELA">
+<floater name="window_size" title="Tamanho da janela">
 	<string name="resolution_format">
 		[RES_X] x [RES_Y]
 	</string>
 	<text name="windowsize_text">
 		Definir tamanho da janela:
 	</text>
-	<combo_box name="window_size_combo" tool_tip="largura x altura">
+	<combo_box name="window_size_combo" tool_tip="Largura x altura">
 		<combo_box.item label="1000 x 700 (padrão)" name="item1"/>
 		<combo_box.item label="1024 x 768 (4:3 XGA)" name="item2"/>
 		<combo_box.item label="1280 x 720 (16:9 HD)" name="item3"/>
@@ -20,6 +20,7 @@
 		<combo_box.item label="1920 x 1080 (16:9 FHD)" name="item12"/>
 		<combo_box.item label="1920 x 1200 (16:10 WUXGA)" name="item13"/>
 		<combo_box.item label="2560 x 1440 (16:9 QHD)" name="item14"/>
+		<combo_box.item label="3840 x 2160 (16:9 4K UHD)" name="item15"/>
 	</combo_box>
 	<button label="Definir" name="set_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

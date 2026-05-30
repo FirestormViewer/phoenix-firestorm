@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_pathfinding_console" title="Visualização/teste do pathfinding">
+<floater name="floater_pathfinding_console" title="Visualização/teste de Pathfinding">
     <floater.string name="no_havok">
-        Visualização/teste do pathfinding
+        Visualização/teste de Pathfinding
     </floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
-		Impossível encontrar a implementação de biblioteca de pathing.
+		Implementação da biblioteca de Pathfinding não encontrada.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_region_not_enabled">
-		Esta região não está habilitada para pathfinding.
+		Pathfinding não está ativado nesta região.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_region_loading">
-		Aguardando a conclusão do carregamento da região.
+		Aguardando o carregamento da região.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_checking_version">
 		Verificando o status do navmesh.
@@ -19,59 +19,59 @@
 		Baixando o navmesh.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_updating">
-		O navmesh foi alterado no servidor. Baixando o navmesh mais recente.
+		O navmesh foi alterado no servidor. Baixando a versão mais recente.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_has_navmesh">
-		O navmesh mais recente foi baixado.
+		Navmesh mais recente baixado.
 	</floater.string>
 	<floater.string name="navmesh_viewer_status_error">
-		Impossível baixar o navmesh com êxito.
+		Não foi possível baixar o navmesh.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_pending">
 		O navmesh tem alterações pendentes.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_building">
-		O navmesh está compilando.
+		Navmesh em construção.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_some_pending">
-		Algumas regiões navmesh têm alterações pendentes.
+		Algumas regiões de navmesh têm alterações pendentes.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_some_building">
-		Algumas regiões navmesh estão compilando.
+		Algumas regiões de navmesh estão em construção.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_pending_and_building">
-		Algumas regiões navmesh têm alterações pendentes e outras estão compilando.
+		Algumas regiões de navmesh têm alterações pendentes e outras estão em construção.
 	</floater.string>
 	<floater.string name="navmesh_simulator_status_complete">
-		O navmesh está atualizado.
+		Navmesh está atualizado.
 	</floater.string>
 	<floater.string name="pathing_library_not_implemented">
-		Impossível encontrar a implementação de biblioteca de pathing.
+		Implementação da biblioteca de Pathfinding não encontrada.
 	</floater.string>
 	<floater.string name="pathing_region_not_enabled">
-		Esta região não está habilitada para pathfinding.
+		Pathfinding não está ativado nesta região.
 	</floater.string>
 	<floater.string name="pathing_choose_start_and_end_points">
-		Escolha os pontos inicial e final.
+		Selecione os pontos de início e fim.
 	</floater.string>
 	<floater.string name="pathing_choose_start_point">
-		Escolha o ponto inicial.
+		Selecione um ponto de início.
 	</floater.string>
 	<floater.string name="pathing_choose_end_point">
-		Escolha o ponto final.
+		Selecione um ponto de fim.
 	</floater.string>
 	<floater.string name="pathing_path_valid">
 		O caminho é exibido em laranja.
 	</floater.string>
 	<floater.string name="pathing_path_invalid">
-		Impossível encontrar um caminho entre os pontos escolhidos.
+		Não foi possível encontrar um caminho entre os pontos selecionados.
 	</floater.string>
 	<floater.string name="pathing_error">
-		Ocorreu um erro durante a geração do caminho.
+		Ocorreu um erro ao gerar o caminho.
 	</floater.string>
 	<panel name="pathfinding_console_main">
 		<text name="viewer_status_label">
-			Status do visualizador
+			Status do viewer
 		</text>
 	</panel>
 	<panel name="pathfinding_console_simulator">
@@ -85,10 +85,10 @@
 				Exibir:
 			</text>
 			<check_box label="Mundo" name="show_world"/>
-			<check_box label="Apenas móveis" name="show_world_movables_only"/>
+			<check_box label="Somente objetos móveis" name="show_world_movables_only"/>
 			<check_box label="Navmesh" name="show_navmesh"/>
 			<text name="show_walkability_label">
-				Exibir mapa de possibilidade de caminhar:
+				Exibir mapa de caminhabilidade:
 			</text>
 			<combo_box name="show_heatmap_mode">
 				<combo_box.item label="Não exibir" name="show_heatmap_mode_none"/>
@@ -97,19 +97,19 @@
 				<combo_box.item label="Tipo de personagem C" name="show_heatmap_mode_c"/>
 				<combo_box.item label="Tipo de personagem D" name="show_heatmap_mode_d"/>
 			</combo_box>
-			<check_box label="Caminháveis" name="show_walkables"/>
-			<check_box label="Volumes materiais" name="show_material_volumes"/>
+			<check_box label="Objetos caminháveis" name="show_walkables"/>
+			<check_box label="Volumes de material" name="show_material_volumes"/>
 			<check_box label="Obstáculos estáticos" name="show_static_obstacles"/>
 			<check_box label="Volumes de exclusão" name="show_exclusion_volumes"/>
-			<check_box label="Plano aquático" name="show_water_plane"/>
-			<check_box label="Com visão de raio X" name="show_xray"/>
+			<check_box label="Plano da água" name="show_water_plane"/>
+			<check_box label="Com visão de raio-X" name="show_xray"/>
 		</panel>
 		<panel label="Testar caminho" name="test_panel">
-			<text name="ctrl_click_label">
-				Aperte a tecla Ctrl e clique com o mouse para selecionar o ponto inicial.
+			<text name="ctrl_click_label" height="28">
+				Ctrl+clique para selecionar o ponto de início.
 			</text>
-			<text name="shift_click_label">
-				Aperte a tecla Shift e clique com o mouse para selecionar o ponto final.
+			<text name="shift_click_label" height="28">
+				Shift+clique para selecionar o ponto de fim.
 			</text>
 			<text name="character_width_label">
 				Largura do personagem

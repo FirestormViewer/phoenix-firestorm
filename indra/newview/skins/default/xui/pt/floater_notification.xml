@@ -1,2 +1,7 @@
-<?xml version="1.0" ?>
-<floater name="notification" title="PAINEL DE NOTIFICAÇÕES"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notification" title="Mensagens">
+	<text_editor name="payload">
+		Carregando...
+	</text_editor>
+	<combo_box label="Resposta" name="response"/>
+</floater>

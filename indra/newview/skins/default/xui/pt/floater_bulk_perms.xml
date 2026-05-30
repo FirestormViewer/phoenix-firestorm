@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterbulkperms" title="AJUSTAR PERMISSÕES DE CONTEÚDO">
-  <floater.string name="nothing_to_modify_text">
-		A seleção não contém nenhum conteúdo editável.
+<floater name="floaterbulkperms" title="Ajustar permissões de conteúdo">
+	<floater.string name="nothing_to_modify_text">
+		A seleção não contém conteúdo editável.
 	</floater.string>
-  <floater.string name="status_text">
+	<floater.string name="status_text">
 		Definindo permissões em [NAME]
 	</floater.string>
-  <floater.string name="start_text">
-		Solicitando mudança de permissão...
+	<floater.string name="start_text">
+		Iniciando solicitações de alteração de permissão...
 	</floater.string>
-  <floater.string name="done_text">
-		Solicitação de mudança de permissão concluída.
+	<floater.string name="done_text">
+		Solicitações de alteração de permissão concluídas.
 	</floater.string>
-  <check_box label="Animação" name="check_animation" />
-  <icon name="icon_animation" tool_tip="Animação" />
-  <check_box label="Partes do corpo" name="check_bodypart" />
-  <icon name="icon_bodypart" tool_tip="Partes do corpo" />
-  <check_box label="Roupas" name="check_clothing" />
-  <icon name="icon_clothing" tool_tip="Vestuário" />
-  <check_box label="Gestos" name="check_gesture" />
-  <icon name="icon_gesture" tool_tip="Gestos" />
-  <check_box label="Anotações" name="check_notecard" />
-  <icon name="icon_notecard" tool_tip="Anotações" />
-  <check_box label="Objetos" name="check_object" />
-  <icon name="icon_object" tool_tip="Objetos" />
-  <check_box label="Roteiros" name="check_script" />
-  <icon name="icon_script" tool_tip="Roteiros" />
-  <check_box label="Filhos" name="check_sound" />
-  <icon name="icon_sound" tool_tip="Filhos" />
-  <check_box label="Texturas" name="check_texture" />
-  <icon name="icon_texture" tool_tip="Texturas" />
-  <icon name="icon_setting" tool_tip="Configurações de ambiente" />
-  <button label="Tudo" label_selected="Tudo" name="check_all" />
-  <button label="Limpar" label_selected="Nenhuma" name="check_none" />
-  <text name="newperms">
+	<check_box label="Animação" name="check_animation"/>
+	<icon name="icon_animation" tool_tip="Animação"/>
+	<check_box label="Partes do corpo" name="check_bodypart"/>
+	<icon name="icon_bodypart" tool_tip="Partes do corpo"/>
+	<check_box label="Roupas" name="check_clothing"/>
+	<icon name="icon_clothing" tool_tip="Roupas"/>
+	<check_box label="Gestos" name="check_gesture"/>
+	<icon name="icon_gesture" tool_tip="Gestos"/>
+	<check_box label="Notecards" name="check_notecard"/>
+	<icon name="icon_notecard" tool_tip="Notecards"/>
+	<check_box label="Objetos" name="check_object"/>
+	<icon name="icon_object" tool_tip="Objetos"/>
+	<check_box label="Scripts" name="check_script"/>
+	<icon name="icon_script" tool_tip="Scripts"/>
+	<check_box label="Sons" name="check_sound"/>
+	<icon name="icon_sound" tool_tip="Sons"/>
+	<check_box label="Texturas" name="check_texture"/>
+	<icon name="icon_texture" tool_tip="Texturas"/>
+	<icon name="icon_setting" tool_tip="Configurações de ambiente"/>
+	<icon name="icon_materials" tool_tip="Materiais"/>
+	<button label="√ Todos" label_selected="Todos" name="check_all"/>
+	<button label="Limpar" label_selected="Nenhum" name="check_none"/>
+	<text name="newperms">
 		Ajustar permissões de conteúdo para
 	</text>
-  <text name="GroupLabel">
+	<text name="GroupLabel">
 		Grupo:
 	</text>
-  <check_box label="Compartilhar" name="share_with_group" tool_tip="Permitir que todos os membros do grupo tenham suas permissões de modificação para este objeto. Faça uma doação para ativar restrições de função." />
-  <text name="AnyoneLabel">
-		Todos:
+	<check_box label="Compartilhar" name="share_with_group" tool_tip="Permite que todos os membros do grupo definido compartilhem suas permissões de modificação para este objeto. Você deve ceder o objeto para ativar restrições de função."/>
+	<text name="AnyoneLabel">
+		Qualquer um:
 	</text>
-  <check_box label="Copiar" name="everyone_copy" tool_tip="Qualquer um pode fazer uma cópia do objeto. O objeto e todos os conteúdos devem ter permissão para cópia e transferência." />
-  <text name="NextOwnerLabel">
-		Próximo proprietário:
+	<check_box label="Copiar" name="everyone_copy" tool_tip="Qualquer pessoa pode obter uma cópia do objeto. O objeto e todo o seu conteúdo devem permitir cópia e transferência."/>
+	<text name="NextOwnerLabel">
+		Próx. prop.:
 	</text>
-  <check_box label="Modificar" name="next_owner_modify" tool_tip="O próximo proprietário pode editar as propriedades, como o nome do item ou escala desse objeto." />
-  <check_box label="Copiar" name="next_owner_copy" tool_tip="O próximo proprietário pode fazer cópias ilimitadas desse objeto. As cópias mantêm as informações do criador e nunca podem ser mais permissivo do que o item copiado." />
-  <check_box initial_value="true" label="Transferir" name="next_owner_transfer" tool_tip="O próximo dono poderá revender ou dar este objeto" />
-  <button label="OK" name="ok" />
-  <button label="Aplicar" name="apply" />
-  <button label="Cancelar" name="close" />
+	<check_box label="Modificar" name="next_owner_modify" tool_tip="O próximo proprietário pode editar propriedades como o nome do item ou a escala deste objeto."/>
+	<check_box label="Copiar" name="next_owner_copy" tool_tip="O próximo proprietário pode criar cópias ilimitadas deste objeto. As cópias mantêm as informações do criador e nunca podem ser mais permissivas que o item copiado."/>
+	<check_box initial_value="true" label="Transferir" name="next_owner_transfer" tool_tip="O próximo proprietário pode dar ou revender este objeto."/>
+	<button label="OK" name="ok"/>
+	<button label="Aplicar" name="apply"/>
+	<button label="Cancelar" name="close"/>
 </floater>

@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Vestível" name="panel_edit_wearable">
 	<string name="edit_shape_title">
-		Editando forma
+		Editar forma
 	</string>
 	<string name="edit_skin_title">
-		Editando pele
+		Editar pele
 	</string>
 	<string name="edit_hair_title">
-		Editando cabelo
+		Editar cabelo
 	</string>
 	<string name="edit_eyes_title">
-		Editando os olhos
+		Editar olhos
 	</string>
 	<string name="edit_shirt_title">
-		Editando camisa
+		Editar camisa
 	</string>
 	<string name="edit_pants_title">
-		Editando calças
+		Editar calça
 	</string>
 	<string name="edit_shoes_title">
-		Editando sapatos
+		Editar sapato
 	</string>
 	<string name="edit_socks_title">
-		Editando meias
+		Editar meias
 	</string>
 	<string name="edit_jacket_title">
-		Editando jaqueta
+		Editar casaco
 	</string>
 	<string name="edit_skirt_title">
-		Editando saia
+		Editar saia
 	</string>
 	<string name="edit_gloves_title">
-		Editando luvas
+		Editar luvas
 	</string>
 	<string name="edit_undershirt_title">
-		Editando camiseta
+		Editar camiseta
 	</string>
 	<string name="edit_underpants_title">
-		Editando roupa de baixo
+		Editar cueca
 	</string>
 	<string name="edit_alpha_title">
-		Editando máscara Alpha
+		Editar máscara alpha
 	</string>
 	<string name="edit_tattoo_title">
-		Editando tatuagem
+		Editar tatuagem
 	</string>
 	<string name="edit_universal_title">
-		Edição Universal
+		Editar universal
 	</string>
 	<string name="edit_physics_title">
-		Editando o físico
+		Editar física
 	</string>
 	<string name="shape_desc_text">
 		Forma:
@@ -67,16 +67,16 @@
 		Camisa:
 	</string>
 	<string name="pants_desc_text">
-		Calças:
+		Calça:
 	</string>
 	<string name="shoes_desc_text">
-		Sapatos:
+		Sapato:
 	</string>
 	<string name="socks_desc_text">
 		Meias:
 	</string>
 	<string name="jacket_desc_text">
-		Jaqueta:
+		Casaco:
 	</string>
 	<string name="skirt_desc_text">
 		Saia:
@@ -88,7 +88,7 @@
 		Camiseta:
 	</string>
 	<string name="underpants_desc_text">
-		Roupa de baixo:
+		Cueca:
 	</string>
 	<string name="alpha_desc_text">
 		Máscara alpha:
@@ -100,11 +100,11 @@
 		Universal:
 	</string>
 	<string name="physics_desc_text">
-		Físico:
+		Física:
 	</string>
-	<labeled_back_button label="Salvar" name="back_btn" tool_tip="Voltar à edição de look"/>
-	<text name="edit_wearable_title" value="Editando forma"/>
-	<panel label="Camisa" name="wearable_type_panel">
+	<labeled_back_button label="Salvar" name="back_btn" tool_tip="Voltar para editar visual"/>
+	<text name="edit_wearable_title" value="Editar forma"/>
+	<panel label="Forma" name="wearable_type_panel">
 		<text name="description_text" value="Forma:"/>
 		<radio_group name="sex_radio">
 			<radio_item label="" name="sex_male" tool_tip="Masculino" value="1"/>
@@ -119,7 +119,10 @@
 				<button label="Salvar como" name="save_as_button"/>
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="Desfazer mudanças" name="revert_button"/>
+				<button label="Redefinir" name="revert_button"/>
+			</layout_panel>
+			<layout_panel name="import_btn_lp">
+				<button label="Importar" name="import_btn"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

@@ -1,2531 +1,356 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel
- border="true"
- follows="all"
- height="480"
- layout="topleft"
- left="1"
- top="1"
- width="540"
- label="Bate-papo por texto"
- name="chat">
+<panel label="Chat de texto" name="chat">
+	<tab_container name="tabs">
 
-<tab_container
- label="Preferências Firestorm"
- layout="topleft"
- follows="all"
- top="5"
- bottom="-1"
- left="1"
- right="-1"
- name="tabs"
- tab_min_width="50"
- tab_position="top" >
-
-        <!-- Chat: Visuals -->
-        <panel
-         top_pad="1"
-         bottom="-1"
-         left="1"
-         right="-1"
-         follows="all"
-         label="Visuais"
-         name="ChatVisuals" >
-
-            <text
-             follows="left|top"
-             layout="topleft"
-             left="20"
-             height="12"
-             name="console_font_size"
-             width="150"
-             top="10">
-                Tamanho da fonte da console na tela:
-            </text>
-            <radio_group
-             height="20"
-             layout="topleft"
-             left_delta="170"
-             control_name="ChatConsoleFontSize"
-             name="chat_console_font_size"
-             top="10"
-             width="280">
-                <radio_item
-                 height="16"
-                 label="Pequeno"
-                 layout="topleft"
-                 left="0"
-                 name="consradio"
-                 value="0"
-                 top_delta="20"
-                 width="60" />
-                <radio_item
-                 height="16"
-                 label="Médio"
-                 layout="topleft"
-                 left_delta="60"
-                 name="consradio2"
-                 value="1"
-                 top_delta="0"
-                 width="75" />
-                <radio_item
-                 height="16"
-                 label="Grande"
-                 layout="topleft"
-                 left_delta="75"
-                 name="consradio3"
-                 value="2"
-                 top_delta="0"
-                 width="60" />
-                <radio_item
-                 height="16"
-                 label="Enorme"
-                 layout="topleft"
-                 left_delta="75"
-                 name="consradio4"
-                 value="3"
-                 top_delta="0"
-                 width="60" />
-            </radio_group>
-
-			<check_box
-			 control_name="PlayChatAnim"
-			 follows="left|top"
-			 height="16"
-			 label="Reproduzir animações do avatar (como gritar)"
-			 layout="topleft"
-			 left="20"
-			 top_pad="5"
-			 name="play_avatar_animations"
-			 width="400" />
-            <check_box
-             control_name="FSIMSystemMessageBrackets"
-             enabled_control="PlainTextChatHistory"
-             name="FSIMSystemMessageBrackets"
-             label="Envolver mensagens de sistema do chat entre parêntesis (só cabeçalhos estilo V1)"
-             layout="topleft"
-             top_pad="1"
-             height="16"
-             width="400" />
-            <check_box
-             control_name="FSChatHistoryShowYou"
-             name="FSChatHistoryShowYou"
-             label="Mostrar «You» na transcrição em vez do seu nome"
-             layout="topleft"
-             top_pad="1"
-             height="16"
-             width="400" />
-			<check_box
-			 control_name="EmotesUseItalic"
-			 name="EmotesUseItalic"
-			 label="Emotes em itálico"
-			 layout="topleft"
-			 top_pad="1"
-			 height="16"
-			 width="400" />
-			<check_box
-			 control_name="FSEmphasizeShoutWhisper"
-			 name="FSEmphasizeShoutWhisper"
-			 label="Negrito ao gritar, itálico ao sussurrar"
-			 layout="topleft"
-			 top_pad="1"
-			 height="16"
-			 width="400" />
-			<check_box
-			 layout="topleft"
-			 top_pad="1"
-			 height="16"
-			 width="400"
-			 name="FSMarkObjects"
-			 control_name="FSMarkObjects"
-			 label="Marcar objetos com (sem nome) quando falam para evitar falsificação"/>
-            <check_box
-             control_name="FSllOwnerSayToScriptDebugWindow"
-             enabled="false"
-             height="16"
-             label="Encaminhar llOwnerSay para a janela de depuração de scripts"
-             layout="topleft"
-             name="FSllOwnerSayToScriptDebugWindow_checkbox"
-             top_pad="1"
-             width="400" />
-            <check_box
-             control_name="UseChatBubbles"
-             follows="left|top"
-             height="16"
-             label="Mostrar chat em balões sobre os avatars"
-             layout="topleft"
-             top_pad="1"
-             name="bubble_text_chat"
-             width="150" />
-            <check_box
-             control_name="FSBubblesHideConsoleAndToasts"
-             enabled_control="UseChatBubbles"
-             follows="left|top"
-             height="16"
-             label="Não mostrar chat no console de chat próximo nem em toasts"
-             layout="topleft"
-             left="30"
-             top_pad="1"
-             name="FSBubblesHideConsoleAndToasts"
-             width="150" />
-            <check_box
-             control_name="UseTypingBubbles"
-             follows="left|top"
-             height="16"
-             label="Mostrar indicador de digitação em balões sobre os avatars"
-             layout="topleft"
-             left="20"
-             top_pad="1"
-             name="bubble_text_typing"
-             width="150" />
-            <check_box
-             control_name="FSShowTypingStateInNameTag"
-             follows="left|top"
-             height="16"
-             label="Mostrar indicador de digitação no letreiro sobre os avatars"
-             layout="topleft"
-             top_pad="1"
-             name="FSShowTypingStateInNameTag"
-             width="150" />
-
-            <check_box
-             control_name="FSSecondsinChatTimestamps"
-             name="FSSecondsinChatTimestamps"
-             label="Mostrar segundos nas marcas de tempo [HH:MM:SS]"
-             follows="left|top"
-             layout="topleft"
-             top_pad="15"
-             height="16"
-             width="400" />
-            <text
-             name="show_timestamps_label"
-             follows="left|top"
-             layout="topleft"
-             top_pad="2"
-             left="25"
-             height="12"
-             width="120">
-             Mostrar marca de tempo em:
-            </text>
-            <check_box
-             control_name="FSShowTimestampsNearbyChat"
-             height="16"
-             label="Chat próximo"
-             layout="topleft"
-             left_pad="4"
-             top_delta="0"
-             name="show_timestamps_nearby_chat"
-             width="100" />
-            <check_box
-             control_name="FSShowTimestampsIM"
-             height="16"
-             label="IMs"
-             layout="topleft"
-             name="show_timestamps_im"
-             left_pad="4"
-             width="50" />
-            <check_box
-             control_name="FSShowTimestampsTranscripts"
-             height="16"
-             label="Transcrição"
-             layout="topleft"
-             name="show_timestamps_transcripts"
-             left_pad="4"
-             width="100" />
-
-            <check_box
-             control_name="FSShowOnscreenConsole"
-             follows="left|top"
-             height="18"
-             top_pad="15"
-             label="Mostrar console de chat na tela"
-             tool_tip="Mostrar ou ocultar o texto do console de chat quando a janela Conversas não está aberta."
-             layout="topleft"
-             left="20"
-             name="FSShowOnscreenConsole"
-             width="400" />
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="-2"
-             left="20"
-             width="200"
-             height="18"
-             name="FSConsoleClassicDrawMode"
-             control_name="FSConsoleClassicDrawMode"
-             label="Usar modo clássico de desenho do console"
-             tool_tip="O modo clássico desenha o fundo do console num único bloco com a largura da linha mais longa."/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="-2"
-             left="20"
-             width="200"
-             height="18"
-             name="ChatFullWidth"
-             control_name="ChatFullWidth"
-             label="Usar toda a largura da tela para o console"/>
-            <spinner
-             top_pad="2"
-             control_name="ChatPersistTime"
-             decimal_digits="0"
-             follows="left|top"
-             height="20"
-             increment="1"
-             initial_value="20"
-             label="Esmaecer chat após:"
-             label_width="90"
-             left="25"
-             max_val="60"
-             min_val="2"
-             name="fade_chat_time"
-             width="130" />
-            <text
-             follows="left|top"
-             height="20"
-             left_pad="3"
-             name="text_box4"
-             width="70">
-                (segundos)
-            </text>
-            <spinner
-             decimal_digits="0"
-             control_name="ConsoleMaxLines"
-             follows="left|top"
-             height="20"
-             increment="1"
-             initial_value="10"
-             left_pad="0"
-             max_val="50"
-             min_val="0"
-             name="max_chat_count"
-             width="60" />
-            <text
-             follows="left|top"
-             height="20"
-             left_pad="3"
-             name="text_box5"
-             width="60">
-                (n.º de linhas)
-            </text>
-
-        </panel>
-
-        <!-- Chat: Chat Windows -->
-        <panel
-         top_pad="1"
-         bottom="-1"
-         left="1"
-         right="-1"
-         follows="all"
-         label="Janelas de bate-papo"
-         name="ChatWindows">
-
-            <text
-             top="10"
-             follows="left|top"
-             layout="topleft"
-             left="20"
-             height="12"
-             name="font_size"
-             width="130">
-                Tamanho da fonte da janela de bate-papo:
-            </text>
-            <radio_group
-             height="20"
-             layout="topleft"
-             left_delta="170"
-             control_name="ChatFontSize"
-             name="chat_font_size"
-             top="10"
-             width="280">
-                <radio_item
-                 height="16"
-                 label="Pequeno"
-                 layout="topleft"
-                 left="0"
-                 name="radio"
-                 value="0"
-                 top_delta="20"
-                 width="60" />
-                <radio_item
-                 height="16"
-                 label="Médio"
-                 layout="topleft"
-                 left_delta="60"
-                 name="radio2"
-                 value="1"
-                 top_delta="0"
-                 width="75" />
-                <radio_item
-                 height="16"
-                 label="Grande"
-                 layout="topleft"
-                 left_delta="75"
-                 name="radio3"
-                 value="2"
-                 top_delta="0"
-                 width="60" />
-                <radio_item
-                 height="16"
-                 label="Enorme"
-                 layout="topleft"
-                 left_delta="75"
-                 name="radio4"
-                 value="3"
-                 top_delta="0"
-                 width="60" />
-            </radio_group>
-
-            <check_box
-             control_name="IMShowNamesForP2PConv"
-             name="IMShowNamesForP2PConv"
-             label="Mostrar nomes nas MIs diretas"
-             layout="topleft"
-             left="20"
-             top_pad="5"
-             height="16"
-             width="400" />
-            <check_box
-             control_name="PlainTextChatHistory"
-             enabled="true"
-             height="16"
-             label="Usar cabeçalhos de chat estilo V1"
-             layout="topleft"
-             name="plain_text_chat_history"
-             top_pad="1"
-             width="400" />
-            <check_box
-             disabled_control="PlainTextChatHistory"
-             control_name="ShowChatMiniIcons"
-             height="16"
-             initial_value="false"
-             label="Com cabeçalhos estilo [SHORT_VIEWER_GENERATION], mostrar mini-ícones"
-             layout="topleft"
-             name="ShowChatMiniIcons"
-             top_pad="1"
-             width="400" />
-            <check_box
-             enabled="false"
-             control_name="LogShowHistory"
-             height="16"
-             initial_value="true"
-             label="Mostrar o fim da última conversa"
-             layout="topleft"
-             name="LogShowHistory"
-             top_pad="1"
-             width="400" />
-            <check_box
-             layout="topleft"
-             top_pad="1"
-             height="16"
-             width="400"
-             name="FSTypingChevronPrefix"
-             control_name="FSTypingChevronPrefix"
-             label="Acrescentar chevron adicional (&gt;) como indicador de digitação nas MIs"/>
-            <text
-             name="show_unread_messages_label"
-             follows="left|top"
-             layout="topleft"
-             left="20"
-             height="12"
-             width="200"
-             top_pad="5">
-                 Notificar novas mensagens em:
-            </text>
-            <check_box
-             layout="topleft"
-             left_pad="5"
-             top_delta="0"
-             height="16"
-             width="100"
-             name="FSNotifyUnreadChatMessages"
-             control_name="FSNotifyUnreadChatMessages"
-             label="Chat próximo"
-             tool_tip="Mostra o número de mensagens novas por ler na janela de chat próximo quando chegam mensagens enquanto a vista está deslocada para o histórico."/>
-            <check_box
-             layout="topleft"
-             left_pad="10"
-             top_delta="0"
-             height="16"
-             width="200"
-             name="FSNotifyUnreadIMMessages"
-             control_name="FSNotifyUnreadIMMessages"
-             label="Mensagens instantâneas e de grupo"
-             tool_tip="Mostra o número de mensagens novas por ler na janela de MI/grupo quando chegam mensagens enquanto a vista está deslocada para o histórico."/>
-
-            <text
-             name="show_ims_in_label"
-             follows="left|top"
-             layout="topleft"
-             left="20"
-             height="16"
-             width="110"
-             top_pad="15">
-                 Mostrar MIs em:
-            </text>
-            <radio_group
-             height="16"
-             layout="topleft"
-             left_pad="10"
-             top_delta="-1"
-             control_name="FSChatWindow"
-             name="chat_window"
-             tool_tip="Mostrar mensagens instantâneas em janelas separadas ou numa única janela com várias guias. (Requer reinício)"
-             width="190">
-                <radio_item
-                 top="0"
-                 left="0"
-                 height="16"
-                 label="Janelas separadas"
-                 layout="topleft"
-                 name="radio"
-                 value="0"
-                 width="50" />
-                <radio_item
-                 top="0"
-                 left="130"
-                 height="16"
-                 label="Guias"
-                 layout="topleft"
-                 name="radio2"
-                 value="1"
-                 width="150" />
-            </radio_group>
-            <text
-             name="req_restart_ims"
-             follows="left|top"
-             layout="topleft"
-             left_pad="10"
-             top_delta="0"
-             text_color="White_50"
-             height="16"
-             width="100">
-                 (requer reinício)
-            </text>
-
-            <text
-             follows="left|top"
-             layout="topleft"
-             left="20"
-             height="16"
-             name="tab_direction_label"
-             width="150"
-             top_pad="3">
-              Orientação das guias de bate-papo:
-            </text>
-            <radio_group
-             left_pad="10"
-             top_delta="-3"
-             height="16"
-             layout="topleft"
-             control_name="ChatTabDirection"
-             name="chat_tab_direction"
-             tool_tip="Alterna o fluxo das guias de chat/MI entre horizontal e vertical no modo de guias reunidas. (Requer reinício)"
-             width="150">
-                <radio_item
-                 top="2"
-                 left="0"
-                 height="16"
-                 label="Horizontal"
-                 layout="topleft"
-                 name="radio_horizontal"
-                 value="0"
-                 width="90" />
-                <radio_item
-                 top="2"
-                 left_pad="1"
-                 height="16"
-                 label="Vertical"
-                 layout="topleft"
-                 name="radio_vertical"
-                 value="1"
-                 width="90" />
-            </radio_group>
-            <text
-             name="req_restart_chattabs"
-             follows="left|top"
-             layout="topleft"
-             left_pad="10"
-             top_delta="2"
-             text_color="White_50"
-             height="16"
-             width="100">
-                 (requer reinício)
-            </text>
-
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="3"
-             left="20"
-             width="150"
-             height="20"
-             control_name="FSAutoOrderIMTabs"
-             name="FSAutoOrderIMTabs"
-             label="Ordenar guias de MI por tipo:"
-             tool_tip="Usa ordenação automática das guias de MI na janela Conversas." />
-
-            <combo_box
-             control_name="FSAutoOrderIMTabsPriorities"
-             enabled_control="FSAutoOrderIMTabs"
-             layout="topleft"
-             follows="left|top"
-             height="16"
-             left_pad="10"
-             top_delta="4"
-             name="FSAutoOrderIMTabsPriorities"
-             width="180">
-                <combo_box.item
-                 name="group_conf_im"
-                 label="Grupos, conferências, MIs"
-                 value="210" />
-                <combo_box.item
-                 name="group_im_conf"
-                 label="Grupos, MIs, conferências"
-                 value="201" />
-                <combo_box.item
-                 name="conf_group_im"
-                 label="Conferências, grupos, MIs"
-                 value="120" />
-                <combo_box.item
-                 name="conf_im_group"
-                 label="Conferências, MIs, grupos"
-                 value="021" />
-                <combo_box.item
-                 name="im_group_conf"
-                 label="MIs, grupos, conferências"
-                 value="102" />
-                <combo_box.item
-                 name="im_conf_group"
-                 label="MIs, conferências, grupos"
-                 value="012" />
-            </combo_box>
-
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             left="30"
-             width="150"
-             height="20"
-             top_pad="0"
-             control_name="FSAutoOrderIMTabsAtTop"
-             name="FSAutoOrderIMTabsAtTop"
-             enabled_control="FSAutoOrderIMTabs"
-             label="Novas guias em primeiro"
-             tool_tip="Coloca novas guias de MI no início do respetivo tipo." />
-
-			<text
-			 name="FSIMTabNameFormat_label"
-			 follows="left|top"
-			 layout="topleft"
-			 left="20"
-			 height="16"
-			 width="150"
-			 top_pad="3">
-				Formato do nome nas guias de MI:
+		<!-- Chat: Visuals -->
+		<panel label="Exibição" name="ChatVisuals">
+			<text name="console_font_size">
+				Tamanho da fonte do console:
 			</text>
-			<combo_box
-			 control_name="FSIMTabNameFormat"
-			 enabled_control="UseDisplayNames"
-			 layout="topleft"
-			 follows="left|top"
-			 height="16"
-			 left_pad="10"
-			 top_delta="0"
-			 name="FSIMTabNameFormat"
-			 width="200">
-				<combo_box.item
-				 label="Nome de exibição"
-				 name="display_name"
-				 value="0" />
-				<combo_box.item
-				 label="Nome de usuário"
-				 name="user_name"
-				 value="1" />
-				<combo_box.item
-				 label="Nome de exibição (nome de usuário)"
-				 name="display_user_name"
-				 value="2" />
-				<combo_box.item
-				 label="Nome de usuário (nome de exibição)"
-				 name="user_display_name"
-				 value="3" />
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Pequeno" name="consradio"/>
+				<radio_item label="Médio" name="consradio2"/>
+				<radio_item label="Grande" name="consradio3"/>
+				<radio_item label="Enorme" name="consradio4"/>
+			</radio_group>
+			<check_box label="Reproduzir animação do avatar ao conversar, ex.: ao gritar" name="play_avatar_animations"/>
+			<check_box label="Incluir mensagens do sistema entre parênteses (só no histórico estilo V1)" name="FSIMSystemMessageBrackets"/>
+			<check_box label="Mostrar „Você“ em vez do seu nome no histórico de chat" name="FSChatHistoryShowYou"/>
+			<check_box name="EmotesUseItalic" label="Usar itálico para emotes"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Destacar grito em negrito e sussurro em itálico"/>
+			<check_box name="FSMarkObjects" label="Mostrar nome de objeto como (sem nome) para evitar falsificação"/>
+			<check_box label="Encaminhar llOwnerSay para a janela de depuração de scripts" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
+			<check_box label="Chat em balões" name="bubble_text_chat"/>
+			<check_box label="Não mostrar chat próximo no console nem em toasts" name="FSBubblesHideConsoleAndToasts"/>
+			<check_box label="Mostrar indicador de digitação no balão acima do avatar" name="bubble_text_typing"/> 
+			<check_box label="Mostrar indicador de digitação no nome acima do avatar" name="FSShowTypingStateInNameTag"/> 
+			<check_box label="Mostrar segundos nos carimbos de data/hora [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
+			<text name="show_timestamps_label" width="75">
+				Mostrar em:
+			</text>
+			<check_box label="Chat próximo" name="show_timestamps_nearby_chat" width="120"/>
+			<check_box label="Mensagens instantâneas" name="show_timestamps_im" width="120"/>
+			<check_box label="Histórico" name="show_timestamps_transcripts"/>
+			<check_box label="Mostrar console de chat" tool_tip="Mostrar/ocultar chat no console quando a janela Conversas não estiver visível" name="FSShowOnscreenConsole"/>
+			<check_box name="FSConsoleClassicDrawMode" label="Usar modo de exibição clássico do console" tool_tip="No modo clássico, o fundo do console é um bloco único com a largura da linha mais longa."/>
+			<check_box name="ChatFullWidth" label="Usar largura total da tela para o console" width="240"/>
+			<spinner label="Ocultar chat após:" label_width="130" name="fade_chat_time" width="180" />
+			<text name="text_box4">
+				(segundos)
+			</text>
+			<text name="text_box5">
+				(nº de linhas)
+			</text>
+		</panel>
+
+		<!-- Chat: Windows -->
+		<panel label="Janelas de chat" name="ChatWindows">
+			<text name="font_size">
+				Tamanho da fonte:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Pequeno" name="radio"/>
+				<radio_item label="Médio" name="radio2"/>
+				<radio_item label="Grande" name="radio3"/>
+				<radio_item label="Enorme" name="radio4"/>
+			</radio_group>
+			<check_box label="Mostrar nomes em IMs diretas" name="IMShowNamesForP2PConv"/>
+			<check_box label="Usar estilo V1 para histórico de IM e chat de texto" name="plain_text_chat_history"/>
+			<check_box label="Mostrar mini-ícones se o estilo de chat [SHORT_VIEWER_GENERATION] estiver ativo" name="ShowChatMiniIcons"/>	
+			<check_box label="Mostrar fim da última conversa" name="LogShowHistory"/>
+			<check_box name="FSTypingChevronPrefix" label="Mostrar seta extra (&gt;) como indicador de digitação nas janelas de IM"/>
+			<text name="show_unread_messages_label" width="245">
+				Aviso de novas mensagens para:
+			</text>
+			<check_box width="110" name="FSNotifyUnreadChatMessages" label="Chat próximo" tool_tip="Mostra a contagem de mensagens não lidas na janela quando novas mensagens chegam enquanto você está lendo o histórico com scroll para cima."/>
+			<check_box width="200" name="FSNotifyUnreadIMMessages" label="IMs e chats de grupo" tool_tip="Mostra a contagem de mensagens não lidas na janela quando novas mensagens chegam enquanto você está lendo o histórico com scroll para cima."/>
+			<text name="show_ims_in_label" width="115">
+				Mostrar IMs em:
+			</text>
+			<radio_group name="chat_window" tool_tip="Exibir mensagens instantâneas em janelas separadas ou em uma única janela com abas (requer reinício).">
+				<radio_item label="Janelas separadas" name="radio"/>
+				<radio_item label="Abas" name="radio2"/>
+			</radio_group>
+			<text name="req_restart_ims" left_pad="55" width="120">
+				(Requer reinício)
+			</text>
+			<text name="tab_direction_label" width="160">
+				Orientação das abas de chat:
+			</text>
+			<radio_group name="chat_tab_direction" tool_tip="Altera a orientação das abas de chat/IM entre horizontal e vertical quando o chat compacto está ativo. (Requer reinício)">
+				<radio_item label="Horizontal" name="radio_horizontal"/>
+				<radio_item label="Vertical" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs" width="120">
+				(Requer reinício)
+			</text>
+			<check_box name="FSAutoOrderIMTabs" label="Ordenar abas de IM por tipo:" tool_tip="Ativa ordenação automática das abas de IM na janela Conversas." width="170"/>
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="Grupos, conferências, IMs"/>
+				<combo_box.item name="group_im_conf" label="Grupos, IMs, conferências"/>
+				<combo_box.item name="conf_group_im" label="Conferências, grupos, IMs"/>
+				<combo_box.item name="conf_im_group" label="Conferências, IMs, grupos"/>
+				<combo_box.item name="im_group_conf" label="IMs, grupos, conferências"/>
+				<combo_box.item name="im_conf_group" label="IMs, conferências, grupos"/>
 			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="Inserir novas abas no início"  tool_tip="Coloca novas abas de IM como primeira aba do respectivo grupo."/>
+			<text name="FSIMTabNameFormat_label">
+				Formato do nome nas abas de IM:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Nome de exibição" name="display_name"/>
+				<combo_box.item label="Nome de usuário" name="user_name"/>
+				<combo_box.item label="Nome de exibição (usuário)" name="display_user_name"/>
+				<combo_box.item label="Usuário (nome de exibição)" name="user_display_name"/>
+			</combo_box>
+			<check_box name="FSHighlightGroupMods" label="Destacar mensagens de moderadores de grupo"/>
+			<text name="Moderator Name Style">
+				Nome:
+			</text>
+			<combo_box name="mod_name_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Negrito" name="BOLD"/>
+				<combo_box.item label="Itálico" name="ITALIC"/>
+				<combo_box.item label="Negrito e itálico" name="BOLDITALIC"/>
+				<combo_box.item label="Sublinhado" name="UNDERLINE"/>
+				<combo_box.item label="Negrito e sublinhado" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Itálico e sublinhado" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Negrito, itálico e sublinhado" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Texto:
+			</text>
+			<combo_box name="mod_text_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Negrito" name="BOLD"/>
+				<combo_box.item label="Itálico" name="ITALIC"/>
+				<combo_box.item label="Negrito e itálico" name="BOLDITALIC"/>
+				<combo_box.item label="Sublinhado" name="UNDERLINE"/>
+				<combo_box.item label="Negrito e sublinhado" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Itálico e sublinhado" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Negrito, itálico e sublinhado" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="Desativar TODOS os chats de grupo"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Desativar avisos de grupo também silencia o chat do grupo"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Ignorar e sair automaticamente de todas as conferências"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Reportar conferências ignoradas no chat próximo"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Não ignorar convites de conferência de amigos"/>
+			<text name="group_snooze_time_label" tool_tip="Define por quanto tempo o chat de grupo fica silenciado ao clicar em „Silenciar temporariamente“. Com 0, a janela fecha até a próxima mensagem." width="185">
+				Duração do silêncio do chat de grupo:
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Define por quanto tempo o chat de grupo fica silenciado ao clicar em „Silenciar temporariamente“. Com 0, a janela fecha até a próxima mensagem."/>
+			<text name="group_snooze_time_seconds_label" tool_tip="Define por quanto tempo o chat de grupo fica silenciado ao clicar em „Silenciar temporariamente“. Com 0, a janela fecha até a próxima mensagem.">
+				segundos
+			</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="Definir duração de silêncio temporário por grupo"/>
+		</panel>
 
-          <!--<FS:HG> FS-1734 seperate name and text styles for moderator--> 
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="10"
-             left="20"
-             width="50"
-             height="20"
-             control_name="FSHighlightGroupMods"
-             name="FSHighlightGroupMods"
-             label="Ativar destaque de mensagens de moderadores de grupo"/>
-            <text
-             name="Moderator Name Style"
-             layout="topleft"
-             follows="left|top"             
-             top_pad="3"
-             left="30"
-             height="16"
-             width="50">
-              Nomes:
-            </text>
-            <combo_box
-             enabled_control="FSHighlightGroupMods"
-             control_name="FSModNameStyle"
-             layout="topleft"
-             follows="left|top"
-             height="16"
-             left_pad="1"
-             top_delta="0"
-             name="mod_name_style"
-             width="150">
-            <combo_box.item
-             label="Normal"
-             name="normal"
-             value="0" />
-            <combo_box.item
-             label="Negrito"
-             name="BOLD"
-             value="1" />
-            <combo_box.item
-             label="Itálico"
-             name="ITALIC"
-             value="2" />
-            <combo_box.item
-             label="Negrito e itálico"
-             name="BOLDITALIC"
-             value="3" />
-            <combo_box.item
-             label="Sublinhado"
-             name="UNDERLINE"
-             value="4" />
-            <combo_box.item
-             label="Negrito e sublinhado"
-             name="BOLDUNDERLINE"
-             value="5" />
-            <combo_box.item
-             label="Itálico e sublinhado"
-             name="ITALICUNDERLINE"
-             value="6" />
-            <combo_box.item
-             label="Negrito, itálico e sublinhado"
-             name="BOLDITALICUNDERLINE"
-             value="7" />
-            </combo_box>
-            <text
-             name="Moderator Text Style"
-             layout="topleft"
-             follows="left|top"
-             left_pad="10"
-             top_delta="0"
-             height="16"
-             width="40">
-              Texto:
-            </text>
-            <combo_box
-             enabled_control="FSHighlightGroupMods"
-             control_name="FSModTextStyle"
-             layout="topleft"
-             follows="left|top"
-             height="16"
-             left_pad="1"
-             top_delta="0"
-             name="mod_text_style"
-             width="150">
-            <combo_box.item
-              label="Normal"
-              name="normal"
-              value="0" />
-            <combo_box.item
-              label="Negrito"
-              name="BOLD"
-              value="1" />
-            <combo_box.item
-              label="Itálico"
-              name="ITALIC"
-              value="2" />
-            <combo_box.item
-              label="Negrito e itálico"
-              name="BOLDITALIC"
-              value="3" />
-            <combo_box.item
-              label="Sublinhado"
-              name="UNDERLINE"
-              value="4" />
-            <combo_box.item
-              label="Negrito e sublinhado"
-              name="BOLDUNDERLINE"
-              value="5" />
-            <combo_box.item
-              label="Itálico e sublinhado"
-              name="ITALICUNDERLINE"
-              value="6" />
-            <combo_box.item
-              label="Negrito, itálico e sublinhado"
-              name="BOLDITALICUNDERLINE"
-              value="7" />
-            </combo_box>
-          <!--</FS:HG> FS-1734 seperate name and text styles for moderator-->
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="10"
-             left="20"
-             width="30"
-             height="18"
-             control_name="FSMuteAllGroups"
-             name="FSMuteAllGroups"
-             label="Desativar todo o bate-papo de grupo"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="-1"
-             width="30"
-             height="18"
-             control_name="FSMuteGroupWhenNoticesDisabled"
-             name="FSMuteGroupWhenNoticesDisabled"
-             label="Se «Receber avisos de grupo» estiver desativado, desativar também o bate-papo de grupo"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="-1"
-             width="30"
-             height="18"
-             name="FSIgnoreAdHocSessions"
-             control_name="FSIgnoreAdHocSessions"
-             label="Ignorar e sair automaticamente de todas as conferências ad hoc"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             left_delta="10"
-             enabled_control="FSIgnoreAdHocSessions"
-             top_pad="-1"
-             width="30"
-             height="18"
-             name="FSReportIgnoredAdHocSession"
-             control_name="FSReportIgnoredAdHocSession"
-             label="Reportar conferências ignoradas no chat próximo"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             enabled_control="FSIgnoreAdHocSessions"
-             top_pad="-1"
-             width="30"
-             height="18"
-             name="FSDontIgnoreAdHocFromFriends"
-             control_name="FSDontIgnoreAdHocFromFriends"
-             label="Não ignorar convites de conferência vindos dos meus amigos"/>
-            <text
-             name="group_snooze_time_label"
-             layout="topleft"
-             left="20"
-             follows="left|top"
-             top_pad="8"
-             height="16"
-             tool_tip="Tempo em que o bate-papo de grupo fica silenciado ao premir «Adiar». O valor 0 só fecha a janela até a próxima mensagem do grupo."
-             width="160">
-              Duração do adiamento do bate-papo de grupo:
-            </text>
-            <spinner
-             decimal_digits="0"
-             control_name="GroupSnoozeTime"
-             follows="left|top"
-             height="20"
-             increment="1"
-             left_pad="10"
-             min_val="0"
-             max_val="2147483647"
-             name="GroupSnoozeTime"
-             tool_tip="Tempo em que o bate-papo de grupo fica silenciado ao premir «Adiar». O valor 0 só fecha a janela até a próxima mensagem do grupo."
-             width="60" />
-            <text
-             follows="left|top"
-             height="20"
-             left_pad="3"
-             top_delta="4"
-             name="group_snooze_time_seconds_label"
-             tool_tip="Tempo em que o bate-papo de grupo fica silenciado ao premir «Adiar». O valor 0 só fecha a janela até a próxima mensagem do grupo."
-             width="70">
-                segundos
-            </text>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             left="20"
-             top_pad="-1"
-             width="400"
-             height="18"
-             name="FSEnablePerGroupSnoozeDuration"
-             control_name="FSEnablePerGroupSnoozeDuration"
-             label="Definir duração do adiamento por grupo"/>
-        </panel>
+		<!-- Chat: Typing -->
+		<panel label="Entrada" name="ChatTyping">
+			<button name="autoreplace_showgui" label="Substituição automática..."/>
+			<button name="spellcheck_showgui" label="Verificação ortográfica..." width="145"/>
+			<button label="Configurações de tradução do chat" name="translation_settings_btn" width="190"/>
+			<check_box label="Reproduzir animação de digitação ao conversar" name="play_typing_animation"/>
+			<check_box label="Reproduzir animação de digitação também em emotes" name="play_typing_animation_emote"/>
+			<check_box label="Tocar som de digitação quando outros digitam no chat próximo" name="play_typing_sound"/> 
+			<check_box label="Avisar outros avatares durante IM quando estou digitando" name="FSSendTypingState"/>
+			<check_box label="Ativar autocompletar de gestos no chat próximo" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Ativar previsão automática de nomes na barra do chat próximo" name="FSChatbarNamePrediction"/>
+			<check_box name="AllowMUpose" label="Usar „:“ como sinônimo de &quot;/me&quot;"/>
+			<check_box name="AutoCloseOOC" label="Fechar parênteses ((OOC)) automaticamente"/>
+			<check_box name="FSUseChatMentionAutoComplete" label="Ativar menções @ automáticas ao digitar"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Abrir seletor de emoji automaticamente ao digitar"/>
+			<check_box name="FSShowEmojiButton" label="Mostrar botão de emoji na barra do chat local e IMs"/>
+			<check_box name="FSShowIMSendButton" label="Mostrar botão Enviar na barra de IMs"/>
+			<check_box name="FSNearbyChatbar" label="Adicionar barra de entrada à janela de chat local"/>
+			<check_box name="FSShowChatChannel" label="Mostrar seleção de canal na barra de entrada"/>
+			<check_box name="FSShowChatType" label="Mostrar tipo de chat/botão Enviar"/>
+			<check_box label="Ocultar barra principal de chat automaticamente" name="AutohideChatBar" tool_tip="Ocultar a barra na toolbar inferior e mostrá-la só ao digitar"/>
+			<check_box label="Desativar barra de chat após enviar" name="CloseChatOnReturn"/>
+			<check_box label="Somente no mouselook" name="FSCloseChatOnReturnInMouselook" tool_tip="Se „Desativar barra após enviar“ estiver ativo, aplicar só no mouselook."/>
+			<check_box label="Somente para chat próximo" name="FSCloseChatOnReturnOnlyForNearbyChatControl" tool_tip="Se „Desativar barra após enviar“ estiver ativo, aplicar só ao chat próximo."/>
+			<check_box label="Também desativar foco no histórico de chat" name="FSUnfocusChatHistoryOnReturn"/>
+			<text name="textUseKeyboardShortcuts">
+				Usar atalhos de teclado:
+			</text>
+			<check_box label="Ctrl + Enter (gritar)" tool_tip="Ativar se Ctrl + Enter deve gritar no chat próximo." name="FSUseCtrlShout"/>
+			<check_box label="Shift + Enter (sussurrar)" tool_tip="Ativar se Shift + Enter deve sussurrar no chat próximo." name="FSUseShiftWhisper"/>
+			<check_box label="Alt + Enter (OOC)" tool_tip="Ativar se Alt + Enter deve enviar OOC no chat próximo." name="FSUseAltOOC"/>
+		</panel>
 
-        <!-- Chat: Typing -->
-	  <panel
-	   top_pad="1"
-	   bottom="-1"
-	   left="1"
-	   right="-1"
-	   follows="all"
-	   label="Digitação"
-	   name="ChatTyping" >
-		<button
-		 layout="topleft"
-		 follows="left|top"
-		 top="10"
-		 left="20"
-		 width="160"
-		 height="23"
-		 name="autoreplace_showgui"
-		 commit_callback.function="Pref.AutoReplace"
-		 label="Substituição automática...">
-		</button>
-		<button
-		 follows="top|left"
-		 height="23"
-		 layout="topleft"
-		 left_pad="5"
-		 name="spellcheck_showgui"
-		 commit_callback.function="Pref.SpellChecker"
-		 label="Verificação ortográfica..."
-		 width="160">
-		</button>
-		<button
-		 follows="top|left"
-		 height="23"
-		 layout="topleft"
-		 left_pad="5"
-		 name="translation_settings_btn"
-		 width="160"
-		 commit_callback.function="Pref.TranslationSettings"
-		 label="Tradução...">
-		</button>
-		<check_box
-		 control_name="PlayTypingAnim"
-		 height="16"
-		 initial_value="true"
-		 label="Reproduzir animação de digitação ao conversar"
-		 layout="topleft"
-		 top="45"
-		 left="20"
-		 name="play_typing_animation"
-		 width="400" />
-		<check_box
-		 enabled_control="PlayTypingAnim"
-		 control_name="FSTypeDuringEmote"
-		 height="16"
-		 initial_value="true"
-		 label="Reproduzir animação de digitação também ao emote"
-		 layout="topleft"
-		 top_pad="1"
-		 left="30"
-		 name="play_typing_animation_emote"
-		 width="400" />
-		<check_box
-		 control_name="PlayModeUISndTyping"
-		 follows="left|top"
-		 height="16"
-		 label="Ouvir som de digitação quando outros escrevem no chat próximo"
-		 layout="topleft"
-		 left="20"
-		 top_pad="1"
-		 name="play_typing_sound"
-		 width="400" />
-		<check_box
-		 control_name="FSSendTypingState"
-		 follows="left|top"
-		 top_pad="1"
-		 height="16"
-		 label="Enviar notificação de digitação a outros avatars durante sessões de MI"
-		 layout="topleft"
-		 name="FSSendTypingState"
-		 width="400" />
-		<check_box
-		 control_name="FSChatbarGestureAutoCompleteEnable"
-		 name="FSChatbarGestureAutoCompleteEnable"
-		 label="Ativar conclusão automática de gestos na barra de chat próximo"
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400" />
-		<check_box
-		 control_name="FSChatbarNamePrediction"
-		 name="FSChatbarNamePrediction"
-		 label="Ativar previsão automática de nomes na barra de chat próximo"
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400" />
-		<check_box
-		 control_name="AllowMUpose"
-		 name="AllowMUpose"
-		 label="«:» como sinônimo de «/me»"
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400" />
-		<check_box
-		 control_name="AutoCloseOOC"
-		 name="AutoCloseOOC"
-		 label="Fechar automaticamente parênteses ((OOC))"
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400" />
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSUseChatMentionAutoComplete"
-		 name="FSUseChatMentionAutoComplete"
-		 label="Ativar janela automática de menções @ ao digitar nas barras de chat"/>
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSEnableEmojiWindowPopupWhileTyping"
-		 name="FSEnableEmojiWindowPopupWhileTyping"
-		 label="Ativar janela automática de emojis ao digitar nas barras de chat"/>
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSShowEmojiButton"
-		 name="FSShowEmojiButton"
-		 label="Mostrar botão de emoji na barra de chat em MIs e no chat próximo"/>
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSShowIMSendButton"
-		 name="FSShowIMSendButton"
-		 label="Mostrar botão de envio na barra de chat nas sessões de MI"/>
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSNearbyChatbar"
-		 name="FSNearbyChatbar"
-		 label="Adicionar barra de chat na janela de chat próximo"/>
-		<check_box
-		 layout="topleft"
-		 left="30"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSShowChatChannel"
-		 enabled_control="FSNearbyChatbar"
-		 name="FSShowChatChannel"
-		 label="Mostrar seleção de canal na barra de chat"/>
-		<check_box
-		 layout="topleft"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 control_name="FSShowChatType"
-		 enabled_control="FSNearbyChatbar"
-		 name="FSShowChatType"
-		 label="Mostrar tipo de chat e botão de enviar na barra"/>
-		<check_box
-		 left="20"
-		 control_name="AutohideChatBar"
-		 top_pad="1"
-		 height="16"
-		 width="400"
-		 initial_value="false"
-		 label="Ocultar automaticamente a barra de chat principal"
-		 layout="topleft"
-		 name="AutohideChatBar"
-		 tool_tip="Oculta a barra de chat da barra inferior e só a mostra sobreposta quando necessário." />
- 		<check_box
- 		 control_name="CloseChatOnReturn"
- 		 label="Anular foco do chat após enviar"
- 		 layout="topleft"
- 		 top_pad="1"
- 		 height="16"
- 		 width="400"
- 		 name="CloseChatOnReturn" />
-		<check_box
-		 control_name="FSCloseChatOnReturnInMouselook"
-		 label="Só em mouselook"
-		 layout="topleft"
-		 top_pad="1"
-		 left="30"
-		 height="16"
-		 width="400"
-		 name="FSCloseChatOnReturnInMouselook"
-		 tool_tip="Se «Anular foco do chat após enviar» estiver marcado, só anula o foco no modo rato (mouselook)."
-		 enabled_control="CloseChatOnReturn" />
-		<check_box
-		 control_name="FSCloseChatOnReturnOnlyForNearbyChatControl"
-		 label="Só na barra de chat próximo"
-		 layout="topleft"
-		 top_pad="1"
-		 left="30"
-		 height="16"
-		 width="400"
-		 name="FSCloseChatOnReturnOnlyForNearbyChatControl"
-		 tool_tip="Se «Anular foco do chat após enviar» estiver marcado, aplica-se só à barra de chat próximo."
-		 enabled_control="CloseChatOnReturn" />
- 		<check_box
- 		 control_name="FSUnfocusChatHistoryOnReturn"
- 		 label="Retirar foco do histórico também"
- 		 layout="topleft"
- 		 top_pad="1"
- 		 left="30"
-		 height="16"
-		 width="400"
-		 name="FSUnfocusChatHistoryOnReturn"
-		 enabled_control="CloseChatOnReturn" />
-		<text
-		 top_pad="15"
-		 left="20"
-		 height="14"
-		 width="400"
-		 name="textUseKeyboardShortcuts"
-		 follows="left|top"
-		 layout="topleft">
-			  Atalhos de teclado:
-		</text>
-		<check_box
-		 control_name="FSUseCtrlShout"
-		 name="FSUseCtrlShout"
-		 label="Ctrl+Enter (Gritar)"
-		 layout="topleft"
-		 top_pad="5"
-		 left_delta="10"
-		 height="18"
-		 tool_tip="Ative para usar Ctrl+Enter para gritar no chat próximo."
-		 width="155" />
-		<check_box
-		 control_name="FSUseShiftWhisper"
-		 name="FSUseShiftWhisper"
-		 label="Shift+Enter (Sussurrar)"
-		 layout="topleft"
-		 left_pad="10"
-		 height="18"
-		 tool_tip="Ative para usar Shift+Enter para sussurrar no chat próximo."
-		 width="170" />
-		<check_box
-		 control_name="FSUseAltOOC"
-		 name="FSUseAltOOC"
-		 label="Alt+Enter ((OOC))"
-		 layout="topleft"
-		 left_pad="10"
-		 height="18"
-		 tool_tip="Ative para usar Alt+Enter para enviar mensagens ((OOC)) no chat próximo."
-		 width="110" />
-	  </panel>
+		<!-- Chat: Notices -->
+		<panel label="Notificações" name="ChatNotices">
+			<text name="disable_toast_label">
+				Ativar pop-ups de chat para:
+			</text>
+			<check_box name="EnableGroupChatPopups" label="Chats de grupo" tool_tip="Ativar para mostrar pop-ups quando chegarem novas mensagens de grupo"/>
+			<check_box name="EnableIMChatPopups" label="Chats de IM" tool_tip="Ativar para mostrar pop-ups quando chegarem mensagens instantâneas"/>
+			<check_box name="FSUseNearbyChatConsole" label="Usar console de chat em vez de toasts para pop-ups (estilo Viewer 1.x)"/>
+			<check_box name="FSLogImToChatConsole" label="Mostrar mensagens instantâneas no console de chat"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Mostrar chats de grupo no console de chat"/>
+			<text name="FSShowGroupNameLength_label" width="365">
+				Comprimento do nome do grupo exibido no histórico
+			</text>
+			<spinner tool_tip="-1 para nome completo do grupo, 0 para desativado" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Abrir Conversas ao receber mensagem offline"/>
+			<check_box name="FSRestoreOpenIMs" label="Restaurar IMs abertas da última sessão ao iniciar"/>
+			<check_box label="Enviar IMs por e-mail quando estiver offline ([EMAIL])" name="send_im_to_email"/>
+			<text name="email_settings">
+				[https://accounts.secondlife.com/change_email?lang=pt Abrir configurações de e-mail para IMs offline]
+			</text>
+			<text name="email_settings_login_to_change">
+				Entre para ajustar notificação de IM offline por e-mail
+			</text>
+			<check_box name="FSShowIMInChatHistory" label="Mostrar IMs e chats de grupo no chat local"/>
+			<check_box name="FSLogIMInChatHistory" label="Salvar IMs e chats de grupo no chat local" width="190"/>
+			<text name="FSIMChatHistoryFade_label" width="320">
+				Esmaecer texto de IM sobre o fundo do histórico de chat
+			</text>
+			<spinner tool_tip="0,25–1,0: 0,25 = máximo esmaecimento; 1 = sem esmaecimento" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Mostrar contagem de IMs não lidas no título da janela do Firestorm"/>
+			<check_box name="FSAnnounceIncomingIM" label="Anunciar IM recebida assim que o remetente começar a digitar"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Piscar abas de IM quando amigos entram ou saem"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Piscar botão de chat na barra quando chegar chat próximo" tool_tip="O botão de chat na barra pisca com novo chat próximo. A janela de chat próximo deve estar encaixada em Conversas e Conversas não pode estar visível."/>
+			<check_box name="FSNotifyIMFlash" label="Piscar botão de chat na barra quando chegar nova IM (de grupo)" tool_tip="O botão pisca com nova IM ou chat de grupo. A janela correspondente deve estar encaixada em Conversas e Conversas não visível. Só disponível com IMs em abas, não em janelas separadas (ver aba Geral)."/>
+			<check_box name="FSReportMutedGroupChat" label="Reportar chat de grupo silenciado no chat próximo"/>
+			<check_box name="FSGroupNoticesToIMLog" label="Mostrar avisos de grupo no chat de grupo além do toast"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Mostrar também assunto e autor"/>
+		</panel>
 
-	<!-- Chat: Notices -->
-	<!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
-	<panel
-	 top_pad="1"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Avisos"
-	 name="ChatNotices" >
+		<!-- Chat: Radar -->
+		<panel label="Radar" name="ChatRadar">
+			<check_box name="reportChatRangeEnter" label="Radar avisa quando avatares entram no alcance do chat"/>
+			<check_box width="140" name="PlayModeUISndRadarChatEnter" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarChatEnter" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarChatEnter" tool_tip="Restaurar valor padrão."/>
+			<check_box name="reportChatRangeLeave" label="Radar avisa quando avatares saem do alcance do chat"/>
+			<check_box width="140" name="PlayModeUISndRadarChatLeave" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarChatLeave" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarChatLeave" tool_tip="Restaurar valor padrão."/>
+			<check_box name="reportDrawRangeEnter" label="Radar avisa quando avatares entram na draw distance"/>
+			<check_box width="140" name="PlayModeUISndRadarDrawEnter" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarDrawEnter" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarDrawEnter" tool_tip="Restaurar valor padrão."/>
+			<check_box name="reportDrawRangeLeaave" label="Radar avisa quando avatares saem da draw distance"/>
+			<check_box width="140" name="PlayModeUISndRadarDrawLeave" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarDrawLeave" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarDrawLeave" tool_tip="Restaurar valor padrão."/>
+			<check_box name="RadarReportSimRangeEnter" label="Radar avisa quando avatares entram na região"/>
+			<check_box width="140" name="PlayModeUISndRadarSimEnter" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarSimEnter" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarSimEnter" tool_tip="Restaurar valor padrão."/>
+			<check_box name="RadarReportSimRangeLeave" label="Radar avisa quando avatares saem da região"/>
+			<check_box width="140" name="PlayModeUISndRadarSimLeave" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarSimLeave" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarSimLeave" tool_tip="Restaurar valor padrão."/>
+			<check_box name="RadarEnterChannelAlert" label="Encaminhar avisos de entrada para scripts"/>
+			<check_box name="RadarLeaveChannelAlert" label="Encaminhar avisos de saída para scripts"/>
+			<check_box name="FSRadarEnhanceByBridge" label="Usar ponte LSL para melhorar precisão do radar" tool_tip="Se ativo, usa a ponte LSL para medir distância a avatares acima de 1020 m e fora da draw distance."/>
+			<text name="AgeAlertLabel">
+				Alerta de idade:
+			</text>
+			<text name="RadarAvatarAgeAlertValueLabel">
+				Limite:
+			</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Também colore a coluna de idade no radar. Use -1 para desativar."/>
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">
+				dias
+			</text>
+			<check_box name="RadarAvatarAgeAlert" label="Radar avisa quando avatares são mais novos que a idade indicada"/>
+			<check_box width="140" name="PlayModeUISndRadarAgeAlert" label="Reproduzir UUID do som:"/>
+			<button label="V" name="Prev_UISndRadarAgeAlert" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndRadarAgeAlert" tool_tip="Restaurar valor padrão."/>
+		</panel>
 
-		<text
-		 top="10"
-		 left="20"
-		 height="14"
-		 width="400"
-		 name="disable_toast_label"
-		 follows="left|top"
-		 layout="topleft">
-			 Ativar popups de bate-papo recebidos:
-		</text>
-		<check_box
-		 control_name="EnableGroupChatPopups"
-		 name="EnableGroupChatPopups"
-		 label="Bate-papos de grupo"
-		 layout="topleft"
-		 top_pad="1"
-		 left_delta="10"
-		 height="18"
-		 tool_tip="Mostrar popup quando chegar mensagem de bate-papo de grupo"
-		 width="100" />
-		<check_box
-		 control_name="EnableIMChatPopups"
-		 name="EnableIMChatPopups"
-		 label="MIs"
-		 layout="topleft"
-		 left_pad="10"
-		 height="18"
-		 tool_tip="Mostrar popup quando chegar mensagem instantânea"
-		 width="100" />
+		<!-- Chat: Keyword Alerts -->
+		<panel label="Palavras-chave" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Ativar alertas por palavra-chave"/>
+			<check_box name="FSKeywordInChat" label="Verificar chat local por palavras-chave"/>
+			<check_box name="FSKeywordInIM" label="Verificar IMs e chats de grupo por palavras-chave"/>
+			<check_box name="FSKeywordSpeakersName" label="Verificar nome do remetente por palavras-chave"/>
+			<check_box name="FSKeywordCaseSensitive" label="Diferenciar maiúsculas e minúsculas"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Verificar apenas palavras inteiras"/>
+			<text name="textFSKeywords">
+				Palavras-chave (separadas por vírgula):
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Ativar destaque por cor"/>
+			<color_swatch name="colorswatch" left="220" tool_tip="Clique para abrir o seletor de cores"/>
+			<check_box name="FSKeywordPlaySound" label="Reproduzir som"/>
+			<text name="textFSKeywordSound" width="200">
+				UUID do som de alerta:
+			</text>
+			<button label="V" name="Prev_UISndFSKeywordSound" tool_tip="Pré-visualizar este som."/>
+			<button label="S" name="Def_UISndFSKeywordSound" tool_tip="Restaurar valor padrão."/>
+		</panel>
 
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="5"
-		 left="20"
-		 width="400"
-		 height="18"
-		 name="FSUseNearbyChatConsole"
-		 control_name="FSUseNearbyChatConsole"
-		 label="Usar o console para popups de chat em vez de toasts (estilo Viewers 1.x)"/>
+		<!-- Chat: CmdLine -->
+		<panel label="CmdLine" name="tab-CmdLine">
+			<check_box label="Usar barra de chat para comandos" name="chat_cmd_toggle"/>
+			<text name="FSCmdLineCalc_txt">
+				Calcular (comando: cmd SIN(2+2))
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Alterar draw distance (comando: cmd metros)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Largura de banda máx. (comando: cmd kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Copiar posição da câmera para a área de transferência
+			</text>
+			<text name="FSCmdLineAO_txt">
+				Ligar/desligar AO (comando: cmd on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Limpar histórico de chat (comando: cmd)
+			</text>
+			<line_editor tool_tip="Limpa o histórico de chat para evitar lag por spammers." name="FSCmdLineClearChat"/>
+			<text name="FSCmdLineMedia_txt">
+				Definir URL de mídia (comando: cmd URL tipo)
+			</text>
+			<line_editor tool_tip="Define o stream de mídia para a URL indicada e reproduz." name="FSCmdLineMedia"/>
+			<text name="FSCmdLineMusic_txt">
+				Definir URL do stream de música (comando: cmd URL)
+			</text>
+			<line_editor tool_tip="Define o stream de música para a URL indicada e reproduz." name="FSCmdLineMusic"/>
+			<text name="FSCmdLineRezPlatform_txt">
+				Rezar plataforma (comando: cmd 0 - 64)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Largura" label_width="37" tool_tip="Define o tamanho da plataforma a rezar."/>
+			<text name="FSCmdLineKeyToName_txt">
+				Nome do avatar pela UUID (comando: cmd key)
+			</text>
+			<text name="FSCmdLineRollDice_txt">
+				Rolar dados (comando: cmd dados lados mod valor)
+			</text>
+			<line_editor tool_tip="Rola dados — cmd [qtd] [lados] [tipo mod (opcional)] [valor mod (opcional)]. Ex.: cmd 1 20, cmd 1 20 + 5. Sem parâmetros = cmd 1 6 (dado padrão)" name="FSCmdLineRollDice"/>
+			<text name="FSCmdLinePos_txt">
+				Teleporte na região (comando: cmd x z y)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Teleporte à superfície (comando: cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Teleporte à altura (comando: cmd z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Teleporte à posição da câmera (comando: cmd)
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Oferecer teleporte a avatar (comando: cmd key)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Teleporte até avatar (comando: cmd nome)
+			</text>
+			<line_editor tool_tip="Permite nomes parciais de avatar, sem diferenciar maiúsculas/minúsculas." name="FSCmdLineTP2"/>		
+			<text name="FSCmdLineTeleportHome_txt">
+				Teleporte para casa (comando: cmd)
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Teleporte para região (cmd nomeregiao | x y z)
+			</text>
+			<check_box label="Mesma posição na nova região" name="toggle"/>
+		</panel>
 
-		<check_box
-		 enabled_control="FSUseNearbyChatConsole"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 left_delta="10"
-		 width="400"
-		 height="18"
-		 name="FSLogImToChatConsole"
-		 control_name="FSLogImToChatConsole"
-		 label="Mostrar MIs no console de chat"/>
-
-		<check_box
-		 enabled_control="FSUseNearbyChatConsole"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSLogGroupImToChatConsole"
-		 control_name="FSLogGroupImToChatConsole"
-		 label="Mostrar bate-papo de grupo no console"/>
-
-		<text
-		 follows="left|top"
-		 height="15"
-		 top_pad="3"
-		 left_delta="4"
-		 name="FSShowGroupNameLength_label"
-		 width="290">
-			Comprimento do nome do grupo na transcrição de chat
-		</text>
-		<spinner
-		 decimal_digits="0"
-		 enabled_control="FSUseNearbyChatConsole"
-		 control_name="FSShowGroupNameLength"
-		 follows="left|top"
-		 height="20"
-		 increment="1"
-		 initial_value="0"
-		 tool_tip="-1 = nome completo do grupo, 0 = desativado"
-		 left_pad="3"
-		 max_val="63"
-		 min_val="-1"
-		 name="FSShowGroupNameLength"
-		 width="40" />
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="4"
-		 left="20"
-		 width="400"
-		 height="18"
-		 name="FSOpenIMContainerOnOfflineMessage"
-		 control_name="FSOpenIMContainerOnOfflineMessage"
-		 label="Abrir Conversas ao receber mensagem em modo offline"/>
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-2"
-		 left="20"
-		 width="400"
-		 height="18"
-		 name="FSRestoreOpenIMs"
-		 control_name="FSRestoreOpenIMs"
-		 label="Repor conversas com residentes da sessão anterior"/>
-		<check_box
-		 enabled="false"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 label="Enviar MIs por email quando estiver offline ([EMAIL])"
-		 name="send_im_to_email" />
-		<text
-		 font="SansSerifSmall"
-		 follows="left|top"
-		 height="18"
-		 layout="topleft"
-		 left_delta="5"
-		 length="1"
-		 name="email_settings"
-		 skip_link_underline="true"
-		 top_delta="5"
-		 type="string"
-		 width="400">
-		 [https://accounts.secondlife.com/change_email Abrir definições de notificação por email de MIs offline]
-		</text>
-		<text
-		 font="SansSerifSmall"
-		 follows="left|top"
-		 height="18"
-		 layout="topleft"
-		 length="1"
-		 name="email_settings_login_to_change"
-		 skip_link_underline="true"
-		 top_delta="0"
-		 type="string"
-		 width="400">
-		 Inicie sessão para alterar o envio de MIs por email offline
-		</text>
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 left_delta="-5"
-		 width="400"
-		 height="18"
-		 name="FSShowIMInChatHistory"
-		 control_name="FSShowIMInChatHistory"
-		 label="Mostrar MIs e bate-papo de grupo na janela de chat próximo"/>
-		<check_box
-		 enabled_control="FSShowIMInChatHistory"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 left_delta="10"
-		 width="155"
-		 height="18"
-		 name="FSLogIMInChatHistory"
-		 control_name="FSLogIMInChatHistory"
-		 label="Guardar MIs e bate-papo de grupo no chat próximo"/>
-		<text
-		 top_pad="0"
-		 follows="left|top"
-		 height="15"
-		 left="34"
-		 name="FSIMChatHistoryFade_label"
-		 width="340">
-			Esbater texto de MI no fundo da janela de transcrição
-		</text>
-		<spinner
-		 decimal_digits="2"
-		 control_name="FSIMChatHistoryFade"
-		 follows="left|top"
-		 height="20"
-		 increment="0.01"
-		 initial_value="0.5"
-		 tool_tip="0,25–1,0: 0,25 muito esbatido, 1 sem esbatimento"
-		 left_pad="3"
-		 max_val="1.0"
-		 min_val="0.25"
-		 name="FSIMChatHistoryFade"
-		 width="47" />
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="6"
-		 left="20"
-		 width="400"
-		 height="18"
-		 name="FSShowMessageCountInWindowTitle"
-		 control_name="FSShowMessageCountInWindowTitle"
-		 label="Mostrar número de MIs não lidas no título da janela do Firestorm"/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 left="20"
-		 width="400"
-		 height="18"
-		 name="FSAnnounceIncomingIM"
-		 control_name="FSAnnounceIncomingIM"
-		 label="Anunciar MIs recebidas assim que o remetente começar a escrever"/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSIMChatFlashOnFriendStatusChange"
-		 control_name="FSIMChatFlashOnFriendStatusChange"
-		 label="Piscar guias de MI quando amigos entram ou saem"/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSNotifyNearbyChatFlash"
-		 control_name="FSNotifyNearbyChatFlash"
-		 label="Piscar o botão de chat na barra se chegar novo chat próximo"
-		 tool_tip="Pisca o botão do chat na barra se chegar novo bate-papo próximo. A janela de chat próximo deve estar acoplada à Conversas e esta deve estar fechada."/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSNotifyIMFlash"
-		 control_name="FSNotifyIMFlash"
-		 label="Piscar o botão de chat na barra se chegar nova MI"
-		 tool_tip="Pisca o botão do chat na barra se chegar nova MI (ou de grupo). A janela de MI deve estar acoplada à janela Conversas e esta deve estar fechada para o botão piscar. Só disponível se as MIs forem mostradas em guias em vez de janelas separadas (ver separador «Geral»)."/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSReportMutedGroupChat"
-		 control_name="FSReportMutedGroupChat"
-		 label="Reportar bate-papo de grupo silenciado no chat próximo"/>
-
-		<check_box
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 width="400"
-		 height="18"
-		 name="FSGroupNoticesToIMLog"
-		 control_name="FSGroupNoticesToIMLog"
-		 label="Mostrar avisos de grupo nos chats de grupo, além dos toasts"/>
-		<check_box
-		 enabled_control="FSGroupNoticesToIMLog"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="-1"
-		 left_delta="10"
-		 width="400"
-		 height="18"
-		 name="FSBetterGroupNoticesToIMLog"
-		 control_name="FSBetterGroupNoticesToIMLog"
-		 label="Mostrar também assunto e autor"/>
-
-	</panel>
-
-	<!-- Chat: Radar -->
-	<panel
-	 top_pad="5"
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Radar"
-	 name="ChatRadar" >
-
-		<check_box
-		 control_name="RadarReportChatRangeEnter"
-		 name="reportChatRangeEnter"
-		 label="O radar avisa quando avatars entram no alcance de chat"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportChatRangeEnter"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarChatEnter"
-		 name="PlayModeUISndRadarChatEnter"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportChatRangeEnter"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarChatEnter"
-		 control_name="UISndRadarChatEnter"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportChatRangeEnter"
-		 follows="left|top"
-		 name="Prev_UISndRadarChatEnter"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarChatEnter"/>
-		</button>
-		<button
-		 enabled_control="RadarReportChatRangeEnter"
-		 follows="left|top"
-		 name="Def_UISndRadarChatEnter"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarChatEnter"/>
-		</button>
-
-		<check_box
-		 control_name="RadarReportChatRangeLeave"
-		 name="reportChatRangeLeave"
-		 label="O radar avisa quando avatars saem do alcance de chat"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportChatRangeLeave"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarChatLeave"
-		 name="PlayModeUISndRadarChatLeave"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportChatRangeLeave"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarChatLeave"
-		 control_name="UISndRadarChatLeave"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportChatRangeLeave"
-		 follows="left|top"
-		 name="Prev_UISndRadarChatLeave"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarChatLeave"/>
-		</button>
-		<button
-		 enabled_control="RadarReportChatRangeLeave"
-		 follows="left|top"
-		 name="Def_UISndRadarChatLeave"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarChatLeave"/>
-		</button>
-	  
-		<check_box
-		 control_name="RadarReportDrawRangeEnter"
-		 name="reportDrawRangeEnter"
-		 label="O radar avisa quando avatars entram na distância de renderização"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportDrawRangeEnter"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarDrawEnter"
-		 name="PlayModeUISndRadarDrawEnter"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportDrawRangeEnter"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarDrawEnter"
-		 control_name="UISndRadarDrawEnter"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportDrawRangeEnter"
-		 follows="left|top"
-		 name="Prev_UISndRadarDrawEnter"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarDrawEnter"/>
-		</button>
-		<button
-		 enabled_control="RadarReportDrawRangeEnter"
-		 follows="left|top"
-		 name="Def_UISndRadarDrawEnter"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarDrawEnter"/>
-		</button>
-	  
-		<check_box
-		 control_name="RadarReportDrawRangeLeave"
-		 name="reportDrawRangeLeaave"
-		 label="O radar avisa quando avatars saem da distância de renderização"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportDrawRangeLeave"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarDrawLeave"
-		 name="PlayModeUISndRadarDrawLeave"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportDrawRangeLeave"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarDrawLeave"
-		 control_name="UISndRadarDrawLeave"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportDrawRangeLeave"
-		 follows="left|top"
-		 name="Prev_UISndRadarDrawLeave"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarDrawLeave"/>
-		</button>
-		<button
-		 enabled_control="RadarReportDrawRangeLeave"
-		 follows="left|top"
-		 name="Def_UISndRadarDrawLeave"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarDrawLeave"/>
-		</button>
-	  
-		<check_box
-		 control_name="RadarReportSimRangeEnter"
-		 name="RadarReportSimRangeEnter"
-		 label="O radar avisa quando avatars entram na região"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportSimRangeEnter"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarSimEnter"
-		 name="PlayModeUISndRadarSimEnter"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportSimRangeEnter"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarSimEnter"
-		 control_name="UISndRadarSimEnter"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportSimRangeEnter"
-		 follows="left|top"
-		 name="Prev_UISndRadarSimEnter"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarSimEnter"/>
-		</button>
-		<button
-		 enabled_control="RadarReportSimRangeEnter"
-		 follows="left|top"
-		 name="Def_UISndRadarSimEnter"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarSimEnter"/>
-		</button>
-	  
-		<check_box
-		 control_name="RadarReportSimRangeLeave"
-		 name="RadarReportSimRangeLeave"
-		 label="O radar avisa quando avatars saem da região"
-		 layout="topleft"
-		 left="20"
-		 top_pad="5"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarReportSimRangeLeave"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarSimLeave"
-		 name="PlayModeUISndRadarSimLeave"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarReportSimRangeLeave"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarSimLeave"
-		 control_name="UISndRadarSimLeave"
-		 width="220"/>
-		<button
-		 enabled_control="RadarReportSimRangeLeave"
-		 follows="left|top"
-		 name="Prev_UISndRadarSimLeave"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarSimLeave"/>
-		</button>
-		<button
-		 enabled_control="RadarReportSimRangeLeave"
-		 follows="left|top"
-		 name="Def_UISndRadarSimLeave"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarSimLeave"/>
-		</button>
-
-	  <check_box
-	   control_name="RadarEnterChannelAlert"
-	   name="RadarEnterChannelAlert"
-	   label="Reportar entradas para scripts"
-	   layout="topleft"
-	   left="20"
-	   top_pad="5"
-	   height="20"
-	   width="400" />
-
-	  <check_box
-	   control_name="RadarLeaveChannelAlert"
-	   name="RadarLeaveChannelAlert"
-	   label="Reportar saídas para scripts"
-	   layout="topleft"
-	   top_pad="0"
-	   height="20"
-	   width="400" />
-
-	  <check_box
-	   enabled_control="UseLSLBridge"
-	   control_name="FSRadarEnhanceByBridge"
-	   name="FSRadarEnhanceByBridge"
-	   label="Melhorar o radar com a ponte LSL–cliente"
-	   tool_tip="Se ativado, funções do radar que localizam avatars em grande altura são assistidas pela ponte LSL–cliente, em especial quando estão para além da distância de renderização."
-	   layout="topleft"
-	   top_pad="0"
-	   height="20"
-	   width="400" />
-
-	  <text
-	   layout="topleft"
-	   follows="left|top"
-	   top_pad="10"
-	   left="20"
-	   height="14"
-	   width="175"
-	   name="AgeAlertLabel">
-		Age Alert:
-	  </text>
-
-		<text
-		 follows="left|top"
-		 height="20"
-		 top_pad="7"
-		 left="28"
-		 name="RadarAvatarAgeAlertValueLabel"
-		 width="70">
-			Limite:
-		</text>
-		<spinner
-		 top_delta="-4"
-		 decimal_digits="0"
-		 control_name="RadarAvatarAgeAlertValue"
-		 follows="left|top"
-		 height="20"
-		 increment="1"
-		 initial_value="7"
-		 left_pad="0"
-		 min_val="-1"
-		 max_val="100000"
-		 name="RadarAvatarAgeAlertValue"
-		 tool_tip="Também colore a coluna de idade no radar. -1 desativa."
-		 width="60" />
-		<text
-		 top_delta="4"
-		 follows="left|top"
-		 height="20"
-		 left_pad="5"
-		 name="RadarAvatarAgeAlertValueLabelSuffix"
-		 width="70">
-			Dias
-		</text>
-
-		<check_box
-		 control_name="RadarAvatarAgeAlert"
-		 name="RadarAvatarAgeAlert"
-		 label="O radar avisa avatars mais novos do que a idade indicada"
-		 layout="topleft"
-		 left="20"
-		 top_pad="0"
-		 height="20"
-		 width="400" />
-		<check_box
-		 enabled_control="RadarAvatarAgeAlert"
-		 layout="topleft"
-		 top_pad="-2"
-		 left="25"
-		 width="115"
-		 height="20"
-		 control_name="PlayModeUISndRadarAgeAlert"
-		 name="PlayModeUISndRadarAgeAlert"
-		 label="UUID do som:"/>
-		<line_editor
-		 enabled_control="RadarAvatarAgeAlert"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="UISndRadarAgeAlert"
-		 control_name="UISndRadarAgeAlert"
-		 width="220"/>
-		<button
-		 enabled_control="RadarAvatarAgeAlert"
-		 follows="left|top"
-		 name="Prev_UISndRadarAgeAlert"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndRadarAgeAlert"/>
-		</button>
-		<button
-		 enabled_control="RadarAvatarAgeAlert"
-		 follows="left|top"
-		 name="Def_UISndRadarAgeAlert"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetControl"
-			  parameter="UISndRadarAgeAlert"/>
-		</button>
-
-	</panel>
-
-	<!-- Chat: Keyword Alerts -->
-	<panel
-	 bottom="-1"
-	 left="1"
-	 right="-1"
-	 follows="all"
-	 label="Alertas por palavras-chave"
-	 name="ChatKeywordAlerts">
-
-		<check_box
-		 enabled="false"
-		 layout="topleft"
-		 follows="left|top"
-		 top="5"
-		 left="20"
-		 width="50"
-		 height="20"
-		 control_name="FSKeywordOn"
-		 name="FSKeywordOn"
-		 label="Ativar alertas por palavras-chave"/>
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="25"
-		 left="20"
-		 width="50"
-		 height="20"
-		 control_name="FSKeywordInChat"
-		 name="FSKeywordInChat"
-		 label="Procurar palavras-chave no chat próximo"/>
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="25"
-		 left="20"
-		 width="150"
-		 height="20"
-		 control_name="FSKeywordInIM"
-		 name="FSKeywordInIM"
-		 label="Procurar palavras-chave em MIs e bate-papo de grupo"/>
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="25"
-		 left="20"
-		 width="150"
-		 height="20"
-		 control_name="FSKeywordSpeakersName"
-		 name="FSKeywordSpeakersName"
-		 label="Verificar o nome do remetente por palavras-chave"/>
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="25"
-		 left="20"
-		 width="150"
-		 height="20"
-		 control_name="FSKeywordCaseSensitive"
-		 name="FSKeywordCaseSensitive"
-		 label="Todas as palavras-chave diferenciam maiúsculas/minúsculas"/>
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="25"
-		 left="20"
-		 width="150"
-		 height="20"
-		 control_name="FSKeywordMatchWholeWords"
-		 name="FSKeywordMatchWholeWords"
-		 label="Só coincidir palavras inteiras"/>
-		<text
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="30"
-		 left="20"
-		 height="20"
-		 width="250"
-		 name="textFSKeywords">
-		  Palavras-chave (separadas por vírgula):
-		</text>
-		<text_editor
-		 enabled="false"
-		 border_visible="true"
-		 bg_readonly_color="MouseGray"
-		 enabled_control="FSKeywordOn"
-		 commit_on_focus_lost="true"
-		 follows="left|top"
-		 top_delta="25"
-		 layout="topleft"
-		 left="20"
-		 max_length="20480"
-		 height="55"
-		 name="FSKeywords"
-		 control_name="FSKeywords"
-		 right="-10"
-		 use_ellipses="false"
-		 word_wrap="true"/>
-
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_pad="10"
-		 left="20"
-		 width="50"
-		 height="20"
-		 control_name="FSKeywordChangeColor"
-		 name="FSKeywordChangeColor"
-		 label="Ativar alerta de cor"/>
-
-		<color_swatch
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 control_name="FSKeywordColor"
-		 border.border_thickness="0"
-		 label_height="0"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="2"
-		 left="150"
-		 height="15"
-		 width="15"
-		 name="colorswatch"
-		 tool_tip="Clicar para abrir o seletor de cor"/>
-
-		<check_box
-		 enabled="false"
-		 enabled_control="FSKeywordOn"
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="23"
-		 left="20"
-		 width="50"
-		 height="20"
-		 control_name="PlayModeUISndFSKeywordSound"
-		 name="FSKeywordPlaySound"
-		 label="Reproduzir som de alerta"/>
-
-		<text
-		 layout="topleft"
-		 follows="left|top"
-		 top_delta="30"
-		 left="20"
-		 height="14"
-		 width="120"
-		 name="textFSKeywordSound">
-		  UUID do som de alerta:
-		</text>
-		<line_editor
-		 enabled="false"
-		 enabled_control="PlayModeUISndFSKeywordSound"
-		 follows="left|top"
-		 left_pad="5"
-		 height="20"
-		 max_length_chars="256"
-		 name="FSKeywordSound"
-		 control_name="UISndFSKeywordSound"
-		 width="250"/>
-		<button
-		 enabled="false"
-		 enabled_control="PlayModeUISndFSKeywordSound"
-		 follows="left|top"
-		 name="Prev_UISndFSKeywordSound"
-		 height="20"
-		 label="P"
-		 layout="topleft"
-		 top_delta="-1"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Pré-ouvir este som.">
-			 <button.commit_callback
-			  function="PreviewUISound"
-			  parameter="UISndFSKeywordSound"/>
-		</button>
-		<button
-		 enabled="false"
-		 enabled_control="PlayModeUISndFSKeywordSound"
-		 follows="left|top"
-		 name="Def_UISndFSKeywordSound"
-		 height="20"
-		 label="D"
-		 layout="topleft"
-		 left_pad="1"
-		 width="17"
-		 tool_tip="Repor o UUID predefinido.">
-			 <button.commit_callback
-			  function="ResetPerAccountControl"
-			  parameter="UISndFSKeywordSound"/>
-		</button>
-		 
-	</panel>
-
-  <!-- Chat: CmdLine -->
-  <panel
-	  top_pad="3"
-	  bottom="-1"
-	  left="1"
-	  right="-1"
-	  follows="all"
-	  label="Linha de comandos"
-	  name="tab-CmdLine" >
-	<check_box
-	  top="10"
-	  follows="left|top"
-	  height="16"
-	  label="Usar a barra de chat como linha de comandos"
-	  left="5"
-	  name="chat_cmd_toggle"
-	  width="350"
-	  control_name="FSCmdLine"/>.
-	<!--calc-->
-	<text
-	  top="30"
-	  follows="left|top"
-	  height="14"
-	  left="10"
-	  name="FSCmdLineCalc_txt"
-	  width="235">
-	  Expressões de cálculo (uso: cmd SIN(2+2))
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineCalc"
-	  tool_tip=""
-	  control_name="FSCmdLineCalc"
-	  width="200"/>
-	<!--drawdistance-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineDrawDistance_txt"
-	  width="235">
-	  Alterar distância de renderização (uso: cmd metros)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineDrawDistance"
-	  tool_tip=""
-	  control_name="FSCmdLineDrawDistance"
-	  width="200"/>
-	<!--bandwidth-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineBandWidth_txt"
-	  width="235">
-	  Largura de banda máx. (uso: cmd kbps)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineBandWidth"
-	  tool_tip=""
-	  control_name="FSCmdLineBandWidth"
-	  width="200"/>
-	<!--cpcampos-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineCopyCam_txt"
-	  width="235">
-	  Copiar posição da câmara para a área de transferência
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineCopyCam"
-	  tool_tip=""
-	  control_name="FSCmdLineCopyCam"
-	  width="200"/>
-	<!--cao-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineAO_txt"
-	  width="235">
-	  Ligar/desligar AO (uso: cmd on/off)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineAO"
-	  tool_tip=""
-	  control_name="FSCmdLineAO"
-	  width="200"/>
-	<!--clrchat-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineClearChat_txt"
-	  width="235">
-	  Limpar transcrição de chat (uso: cmd)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  tool_tip="Limpa a transcrição de chat para reduzir atraso causado por spam."
-	  name="FSCmdLineClearChat"
-	  control_name="FSCmdLineClearChat"
-	  width="200"/>
-	<!--media-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineMedia_txt"
-	  width="235">
-	  Definir URL multimédia (uso: cmd url tipo)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  tool_tip="Define e reproduz o stream multimédia com o URL indicado"
-	  name="FSCmdLineMedia"
-	  control_name="FSCmdLineMedia"
-	  width="200"/>
-	<!--music-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineMusic_txt"
-	  width="235">
-	  Definir URL do stream de música (uso: cmd url)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  tool_tip="Define e reproduz o stream de música com o URL indicado"
-	  name="FSCmdLineMusic"
-	  control_name="FSCmdLineMusic"
-	  width="200"/>
-	<!--rezplat-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineRezPlatform_txt"
-	  width="235">
-	  Rezzar plataforma (uso: cmd 0 - 64)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineRezPlatform"
-	  tool_tip=""
-	  control_name="FSCmdLineRezPlatform"
-	  width="200"/>
-	<slider
-	  enabled_control="FSCmdLine"
-	  top_pad="2"
-	  name="FSCmdLinePlatformSize"
-	  control_name="FSCmdLinePlatformSize"
-	  decimal_digits="1"
-	  follows="left|top"
-	  height="18"
-	  increment="0.5"
-	  initial_value="5"
-	  label="Largura"
-	  label_width="64"
-	  max_val="64"
-	  min_val="5"
-	  show_text="true"
-	  width="200"
-	  tool_tip="Tamanho aparente da plataforma."/>
-
-	<view_border
-	  bevel_style="none"
-	  border_thickness="1"
-	  top="30"
-	  left="245"
-	  bottom="-25"
-	  width="0"
-	  follows="top|left|bottom"
-	  name="EmDivisor"/>
-
-	<!--key2name-->
-	<text
-	  top="30"
-	  left_delta="10"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineKeyToName_txt"
-	  width="280">
-	  Obter nome do avatar a partir da chave (uso: cmd UUID)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineKeyToName"
-	  tool_tip=""
-	  control_name="FSCmdLineKeyToName"
-	  width="200"/>
-	<!--dice-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineRollDice_txt"
-	  width="280">
-	  Lançar dados (uso: cmd dados faces mod tipo mod valor)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  tool_tip="Lança dados — cmd [n.º de dados] [n.º de faces] [tipo de modificador (opcional)] [valor (opcional)]. Ex.: cmd 1 20, cmd 2 40 + 5. Sem parâmetros equivale a cmd 1 6 (dado normal)."
-	  name="FSCmdLineRollDice"
-	  control_name="FSCmdLineRollDice"
-	  width="200"/>
-	<!--gtp-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLinePos_txt"
-	  width="280">
-	  Teletransporte na região (uso: cmd x y z)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLinePos"
-	  tool_tip=""
-	  control_name="FSCmdLinePos"
-	  width="200"/>
-	<!--flr-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineGround_txt"
-	  width="280">
-	  Teletransporte para o chão (uso: cmd)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineGround"
-	  tool_tip=""
-	  control_name="FSCmdLineGround"
-	  width="200"/>
-	<!--gth-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineHeight_txt"
-	  width="280">
-	  Teletransporte para altitude (uso: cmd z)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineHeight"
-	  tool_tip=""
-	  control_name="FSCmdLineHeight"
-	  width="200"/>
-	<!--tp2cam-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdTeleportToCam_txt"
-	  width="280">
-	  Teletransporte para posição da câmara (uso: cmd)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdTeleportToCam"
-	  tool_tip=""
-	  control_name="FSCmdTeleportToCam"
-	  width="200"/>
-	<!--offertp-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineOfferTp_txt"
-	  width="280">
-	  Oferecer teletransporte ao avatar (uso: cmd UUID)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineOfferTp"
-	  tool_tip=""
-	  control_name="FSCmdLineOfferTp"
-	  width="200"/>
-	<!--tp2-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineTP2_txt"
-	  width="280">
-	  Teletransporte para o avatar (uso: cmd nome)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  tool_tip="A sintaxe aceita nomes parciais e ignora maiúsculas/minúsculas. Funciona melhor com o Radar aberto."
-	  name="FSCmdLineTP2"
-	  control_name="FSCmdLineTP2"
-	  width="200"/>
-	<!--tphome-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineTeleportHome_txt"
-	  width="280">
-	  Teletransporte para casa (uso: cmd)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineTeleportHome"
-	  tool_tip=""
-	  control_name="FSCmdLineTeleportHome"
-	  width="200"/>
-	<!--mapto-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineMapTo_txt"
-	  width="280">
-	  Teletransporte para região (uso: cmd nome | x y z)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineMapTo"
-	  tool_tip=""
-	  control_name="FSCmdLineMapTo"
-	  width="200"/>
-	<check_box
-	  enabled_control="FSCmdLine"
-	  top_pad="2"
-	  follows="left|top"
-	  height="14"
-	  label="Manter a mesma posição entre regiões"
-	  name="toggle"
-	  width="270"
-	  control_name="FSCmdLineMapToKeepPos"/>
-  </panel>
-
-</tab_container>
+	</tab_container>
 </panel>

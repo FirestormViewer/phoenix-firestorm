@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_buy_contents" title="COMPRAR CONTEÚDO">
-  <text name="contains_text">
+<floater min_width="300" name="floater_buy_contents" title="Comprar conteúdo">
+	<text name="contains_text">
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; contém:
 	</text>
-  <text name="buy_text">
+	<text name="buy_text">
 		Comprar por L$[AMOUNT] de [NAME]?
 	</text>
-  <button label="Cancelar" label_selected="Cancelar" name="cancel_btn" width="73" />
-  <button label="Comprar" label_selected="Comprar" left_delta="-77" name="buy_btn" width="73" />
-  <check_box label="Vestir roupa agora" left_delta="-130" name="wear_check" />
-  <string name="no_copy_text">
+	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn" width="73"/>
+	<button label="Comprar" label_selected="Comprar" name="buy_btn"/>
+	<check_box label="Vestir roupa agora" name="wear_check"/>
+	<text name="no_copy_text">
 		(sem copiar)
-	</string>
-  <string name="no_modify_text">
+	</text>
+	<text name="no_modify_text">
 		(sem modificar)
-	</string>
-  <string name="no_transfer_text">
+	</text>
+	<text name="no_transfer_text">
 		(sem transferir)
-	</string>
+	</text>
 </floater>

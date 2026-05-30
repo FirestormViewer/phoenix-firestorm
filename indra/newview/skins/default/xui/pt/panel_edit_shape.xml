@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_shape_panel">
 	<string name="meters">
-		Metros
+		Meter
 	</string>
 	<string name="feet">
 		Pés
@@ -10,7 +10,7 @@
 		Altura:
 	</string>
 	<text name="avatar_height"/>
-	<panel label="Camisa" name="accordion_panel">
+	<panel label="Forma" name="accordion_panel">
 		<accordion name="wearable_accordion">
 			<accordion_tab name="shape_body_tab" title="Corpo"/>
 			<accordion_tab name="shape_head_tab" title="Cabeça"/>

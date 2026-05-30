@@ -4,10 +4,23 @@
 		Animação: [NAME]
 	</floater.string>
 	<panel name="basic_info_panel">
-		<text name="desc txt">
+		<text name="desc txt" width="90">
 			Descrição:
 		</text>
-		<button label="Tocar inworld" label_selected="Parar" name="Inworld" tool_tip="Executar essa animação de forma que outros possam ver"/>
-		<button label="Tocar localmente" label_selected="Parar" name="Locally" tool_tip="Executar animação de forma que apenas você possa ver"/>
+		<button label="Reproduzir inworld" label_selected="Parar" name="Inworld" tool_tip="Reproduzir esta animação para que outros possam vê-la."/>
+		<button label="Reproduzir localmente" label_selected="Parar" name="Locally" tool_tip="Reproduzir esta animação apenas para você."/>
+		<button name="btn_expand" tool_tip="Expandir para ver informações avançadas sobre esta animação."/>
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
+Prioridade: [PRIORITY]
+Duração: [DURATION]s
+Loop: [IS_LOOP]
+		</text>
+		<text name="AdvancedStatsRight">
+Entrada suave: [EASE_IN]s
+Saída suave: [EASE_OUT]s
+Articulações: [NUM_JOINTS]
+		</text>
 	</panel>
 </floater>

@@ -6,7 +6,7 @@
 	</panel>
 	<panel name="underpants_main_tab_holder">
 		<accordion name="underpants_main_accordion">
-			<accordion_tab name="underpants_main_tab" title="Roupa de baixo"/>
+			<accordion_tab name="underpants_main_tab" title="Unterhose"/>
 		</accordion>
 	</panel>
 </panel>

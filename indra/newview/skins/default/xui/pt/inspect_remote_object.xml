@@ -4,10 +4,22 @@
   Single instance - only have one at a time, recycle it each spawn
 -->
 <floater name="inspect_remote_object">
+	<text name="object_name">
+		Nome de objeto bem longo como teste
+	</text>
 	<text name="object_owner_label">
-		Proprietário:
+		Dono:
+	</text>
+	<text name="object_owner">
+		Longoavatarname Johnsonlongstonnammer
+	</text>
+	<text name="object_slurl_label">
+		Local:
+	</text>
+	<text name="object_slurl">
+		http://slurl.com/Ahern/50/50/50
 	</text>
 	<button label="Mapa" name="map_btn"/>
-	<button label="Bloquear" name="block_btn"/>
+	<button label="Ignorar" name="block_btn"/>
 	<button label="Fechar" name="close_btn"/>
 </floater>

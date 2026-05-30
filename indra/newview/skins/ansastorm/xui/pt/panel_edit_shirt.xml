@@ -6,7 +6,7 @@
 	</panel>
 	<panel name="shirt_main_tab_holder">
 		<accordion name="shirt_main_accordion">
-			<accordion_tab name="shirt_main_tab" title="Camisa"/>
+			<accordion_tab name="shirt_main_tab" title="Hemd"/>
 		</accordion>
 	</panel>
 </panel>

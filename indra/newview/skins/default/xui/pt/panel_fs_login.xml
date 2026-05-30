@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
 	<panel.string name="create_account_url">
-		http://secondlife.com/registration/?lang=pt-BR
+		http://de.secondlife.com/registration/
 	</panel.string>
 	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=pt-BR
+		http://secondlife.com/account/request.php?lang=pt
 	</panel.string>
 	<string name="ServerComboTooltip">
-		Um grid existente ou uma URI de grid
+		Um grid conhecido ou URI do grid
 	</string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
@@ -17,48 +17,48 @@
 			<text name="username_text">
 				Nome de usuário:
 			</text>
-			<combo_box name="username_combo" tool_tip="O nome de usuário escolhido no cadastro, como zecazc12 ou Magia Solar"/>
-			<button tool_tip="Remover este nome de usuário" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="Nome de usuário escolhido no cadastro, como berndschmidt12 ou Nome Sobrenome"/>
+			<button tool_tip="Excluir este nome de usuário" name="remove_user_btn"/>
 			<text name="password_text">
 				Senha:
 			</text>
 		</layout_panel>
 		<layout_panel name="start_location_panel">
 			<text name="start_location_text">
-				Começar em:
+				Iniciar em:
 			</text>
 			<combo_box name="start_location_combo">
-				<combo_box.item label="Última posição" name="MyLastLocation"/>
-				<combo_box.item label="Minha casa" name="MyHome"/>
-				<combo_box.item label="&lt;Digite o nome da região&gt;" name="Typeregionname"/>
+				<combo_box.item label="Último local" name="MyLastLocation"/>
+				<combo_box.item label="Casa" name="MyHome"/>
+				<combo_box.item label="&lt;Digite a região&gt;" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
 		<layout_panel name="grid_panel">
 			<text name="grid_builder_text">
-				+ Clique para adicionar mais grids
+				+ Clique para adicionar grids
 			</text>
 			<text name="grid_login_text">
-				Entrar no Grid:
+				Seleção de grid:
 			</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">
-				Criar uma conta
+				Cadastrar
 			</text>
 			<text name="forgot_password_text">
-				Esqueceu seu nome ou senha?
+				Esqueceu usuário ou senha?
 			</text>
 			<button label="Entrar" name="connect_btn"/>
-			<check_box label="Lembrar nome de usuário" name="remember_username_check"/>
-			<check_box label="Lembrar senha" name="remember_check"/>
+			<check_box label="Salvar nome de usuário" name="remember_username_check"/>
+			<check_box label="Salvar senha" name="remember_check"/>
 			<button name="password_show_btn" tool_tip="Mostrar senha"/>
 			<button name="password_hide_btn" tool_tip="Ocultar senha"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">
-				SELECIONAR MODO
+				MODO
 			</text>
-			<combo_box name="mode_combo" tool_tip="Escolha o estilo de viewer com o qual você está mais familiarizado para definir os padrões adequadamente.">
+			<combo_box name="mode_combo" tool_tip="Escolha o estilo de viewer mais familiar para ajustar os padrões às suas necessidades.">
 				<combo_box.item label="Hybrid" name="Hybrid"/>
 				<combo_box.item label="Text" name="Text"/>
 			</combo_box>

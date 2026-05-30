@@ -1,233 +1,234 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy land" title="COMPRAR TERRENO">
-  <floater.string name="can_resell">
-		Pode ser vingança.
+<floater name="buy land" title="Comprar terreno">
+	<floater.string name="can_resell">
+		Pode ser revendido.
 	</floater.string>
-  <floater.string name="can_not_resell">
-		Não pode ser revendida.
+	<floater.string name="can_not_resell">
+		Não pode ser revendido.
 	</floater.string>
-  <floater.string name="can_change">
-		Pode ser unida ou subdividida.
+	<floater.string name="can_change">
+		Pode ser unido ou subdividido.
 	</floater.string>
-  <floater.string name="can_not_change">
-		Não pode ser unida ou subdividida.
+	<floater.string name="can_not_change">
+		Não pode ser unido ou subdividido.
 	</floater.string>
-  <floater.string name="cant_buy_for_group">
-		Você não tem permissão para comprar terra para seu grupo ativo.
+	<floater.string name="cant_buy_for_group">
+		Você não tem permissão para comprar terreno para o grupo ativo.
 	</floater.string>
-  <floater.string name="no_land_selected">
-		Nenhuma terra selecionada.
+	<floater.string name="no_land_selected">
+		Nenhum terreno selecionado.
 	</floater.string>
-  <floater.string name="multiple_parcels_selected">
-		Múltiplos e diferentes lotes selecionados. Tente selecionar uma área menor.
-	</floater.string>
-  <floater.string name="no_permission">
-		Você não tem permissão para comprar uma terra para seu grupo ativo.
-	</floater.string>
-  <floater.string name="parcel_not_for_sale">
-		O lote selecionado não está a venda.
-	</floater.string>
-  <floater.string name="group_already_owns">
-		O grupo já possui o lote.
-	</floater.string>
-  <floater.string name="you_already_own">
-		Você já possui o lote.
-	</floater.string>
-  <floater.string name="set_to_sell_to_other">
-		O lote selecionado está configurado para ser vendido para outro grupo.
-	</floater.string>
-  <floater.string name="no_public_land">
-		A área selecionada não tem terras públicas.
-	</floater.string>
-  <floater.string name="not_owned_by_you">
-		Terrenos de outros residentes foram selecionados. 
+	<floater.string name="multiple_parcels_selected">
+		Várias parcelas diferentes selecionadas.
 Tente selecionar uma área menor.
 	</floater.string>
-  <floater.string name="processing">
+	<floater.string name="no_permission">
+		Você não tem permissão para comprar terreno para o grupo ativo.
+	</floater.string>
+	<floater.string name="parcel_not_for_sale">
+		A parcela selecionada não está à venda.
+	</floater.string>
+	<floater.string name="group_already_owns">
+		O grupo já possui a parcela.
+	</floater.string>
+	<floater.string name="you_already_own">
+		Você já possui a parcela.
+	</floater.string>
+	<floater.string name="set_to_sell_to_other">
+		A parcela selecionada está configurada para venda a outra parte.
+	</floater.string>
+	<floater.string name="no_public_land">
+		A área selecionada não possui terreno público.
+	</floater.string>
+	<floater.string name="not_owned_by_you">
+		Terreno de outro residente selecionado.
+Tente selecionar uma área menor.
+	</floater.string>
+	<floater.string name="processing">
 		Processando sua compra...
- 
-(Isso pode levar um minuto.)
+
+(Isso pode levar um ou dois minutos.)
 	</floater.string>
-  <floater.string name="fetching_error">
-		Houve um erro ao buscar informações sobre compra de terras.
+	<floater.string name="fetching_error">
+		Ocorreu um erro ao buscar informações de compra de terreno.
 	</floater.string>
-  <floater.string name="buying_will">
-		Comprar esta terra irá:
+	<floater.string name="buying_will">
+		Comprar este terreno irá:
 	</floater.string>
-  <floater.string name="buying_for_group">
-		Ao comprar terra para o grupo:
+	<floater.string name="buying_for_group">
+		Comprar terreno para o grupo irá:
 	</floater.string>
-  <floater.string name="cannot_buy_now">
-		Não foi possível comprar agora:
+	<floater.string name="cannot_buy_now">
+		Não é possível comprar agora:
 	</floater.string>
-  <floater.string name="not_for_sale">
-		Não disponível para venda:
+	<floater.string name="not_for_sale">
+		Não está à venda:
 	</floater.string>
-  <floater.string name="none_needed">
-		nada necessário
+	<floater.string name="none_needed">
+		não necessário
 	</floater.string>
-  <floater.string name="must_upgrade">
-		Sua conta deve ser evoluída para adquirir um lote.
+	<floater.string name="must_upgrade">
+		Sua conta precisa ser atualizada para possuir terreno.
 	</floater.string>
-  <floater.string name="cant_own_land">
-		Sua conta pode possuir uma terra.
+	<floater.string name="cant_own_land">
+		Sua conta pode possuir terreno.
 	</floater.string>
-  <floater.string name="land_holdings">
-		Você tem [BUYER] m².
+	<floater.string name="land_holdings">
+		Você possui [BUYER] m² de terreno.
 	</floater.string>
-  <floater.string name="pay_to_for_land">
-		Pagar L$ [AMOUNT] para [SELLER] por esta terra
+	<floater.string name="pay_to_for_land">
+		Pagar [AMOUNT] L$ a [SELLER] por este terreno
 	</floater.string>
-  <floater.string name="buy_for_US">
-		Compre L$ [AMOUNT] perto de [LOCAL_AMOUNT],
+	<floater.string name="buy_for_US">
+		Comprar [AMOUNT] L$ por aprox. [LOCAL_AMOUNT],
 	</floater.string>
-  <floater.string name="parcel_meters">
-		É lote tem [AMOUNT] m²
+	<floater.string name="parcel_meters">
+		Esta parcela tem [AMOUNT] m².
 	</floater.string>
-  <floater.string name="premium_land">
-		Esse é um terreno premium e custa o equivalente a [AMOUNT] m².
+	<floater.string name="premium_land">
+		Este terreno é premium e será cobrado como [AMOUNT] m².
 	</floater.string>
-  <floater.string name="discounted_land">
-		Esse é um terreno com desconto, e custa o equivalente a [AMOUNT] m².
+	<floater.string name="discounted_land">
+		Este terreno tem desconto e será cobrado como [AMOUNT] m².
 	</floater.string>
-  <floater.string name="meters_supports_object">
+	<floater.string name="meters_supports_object">
 		[AMOUNT] m²
 suporta [AMOUNT2] objetos
 	</floater.string>
-  <floater.string name="sold_with_objects">
+	<floater.string name="sold_with_objects">
 		vendido com objetos
 	</floater.string>
-  <floater.string name="sold_without_objects">
+	<floater.string name="sold_without_objects">
 		objetos não incluídos
 	</floater.string>
-  <floater.string name="info_price_string">
-		L$[PRICE]
-(L$[PRICE_PER_SQM]/m²)
+	<floater.string name="info_price_string">
+		[PRICE] L$
+([PRICE_PER_SQM] L$/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
-  <floater.string name="insufficient_land_credits">
-		O grupo [GROUP] precisará de fundos suficientes de terras
-contribuídas para cobrir este lote antes da aquisição se completar.
+	<floater.string name="insufficient_land_credits">
+		O grupo [GROUP] precisará de créditos de uso de terreno contribuídos suficientes para cobrir esta parcela antes que a compra seja concluída.
 	</floater.string>
-  <floater.string name="have_enough_lindens">
-		Você tem L$ [AMOUNT], suficiente para comprar este lote.
+	<floater.string name="have_enough_lindens">
+		Você tem [AMOUNT] L$, o suficiente para comprar este terreno.
 	</floater.string>
-  <floater.string name="not_enough_lindens">
-		Você tem somente L$ [AMOUNT], e precisa de mais L$ [AMOUNT2].
+	<floater.string name="not_enough_lindens">
+		Você tem apenas [AMOUNT] L$ e precisa de mais [AMOUNT2] L$.
 	</floater.string>
-  <floater.string name="balance_left">
-		Após a compra, restará L$ [AMOUNT].
+	<floater.string name="balance_left">
+		Após a compra, você terá [AMOUNT] L$ restantes.
 	</floater.string>
-  <floater.string name="balance_needed">
-		Você precisa comprar pelo menos L$ [AMOUNT] para ter recursos para este lote.
+	<floater.string name="balance_needed">
+		Você precisa comprar pelo menos [AMOUNT] L$ para pagar este terreno.
 	</floater.string>
-  <floater.string name="no_parcel_selected">
-		(nenhum lote selecionado)
+	<floater.string name="no_parcel_selected">
+		(nenhuma parcela selecionada)
 	</floater.string>
-  <text name="region_name_label">
+	<text name="region_name_label">
 		Região:
 	</text>
-  <text name="region_name_text">
+	<text name="region_name_text">
 		(desconhecido)
 	</text>
-  <text name="region_type_label">
+	<text name="region_type_label">
 		Tipo:
 	</text>
-  <text name="region_type_text">
+	<text name="region_type_text">
 		(desconhecido)
 	</text>
-  <text name="estate_name_label">
-		Propriedade:
+	<text name="estate_name_label">
+		Estate:
 	</text>
-  <text name="estate_name_text">
+	<text name="estate_name_text">
 		(desconhecido)
 	</text>
-  <text name="estate_owner_label">
-		Dono da propriedade:
+	<text name="estate_owner_label">
+		Proprietário do estate:
 	</text>
-  <text name="estate_owner_text">
+	<text name="estate_owner_text">
 		(desconhecido)
 	</text>
-  <text name="resellable_changeable_label">
-		Adquiriu um terreno nesta região:
+	<text name="resellable_changeable_label">
+		Terreno comprado nesta região:
 	</text>
-  <text name="resellable_clause">
-		Pode ou não ser revendida.
+	<text name="resellable_clause">
+		Pode ou não ser revendido.
 	</text>
-  <text name="changeable_clause">
-		Pode ou não ser unida ou sub-dividida.
+	<text name="changeable_clause">
+		Pode ou não ser unido/subdividido.
 	</text>
-  <text name="covenant_text">
-		Você deve concordar com o Corretor da Propriedade:
+	<text name="covenant_text">
+		Você deve concordar com o contrato do estate:
 	</text>
-  <text name="covenant_timestamp_text" />
-  <text_editor name="covenant_editor">
+	<text name="covenant_timestamp_text"/>
+	<text_editor name="covenant_editor">
 		Carregando...
 	</text_editor>
-  <check_box label="Eu concordo com as definições do Corretor feitas acima." name="agree_covenant" left="-330" />
-  <text name="info_parcel_label">
-		Muito:
+	<check_box label="Concordo com o contrato acima." name="agree_covenant"/>
+	<text name="info_parcel_label">
+		Parcela:
 	</text>
-  <text name="info_parcel">
-		Scotoptérix 138.204
+	<text name="info_parcel">
+		Scotopteryx 138,204
 	</text>
-  <text name="info_size_label">
+	<text name="info_size_label">
 		Tamanho:
 	</text>
-  <text name="info_size">
+	<text name="info_size">
 		1.024 m²
 	</text>
-  <text name="info_price_label">
+	<text name="info_price_label">
 		Preço:
 	</text>
-  <text name="info_price">
-		1500$
-(L$ 1,1/m²) incluindo objetos
+	<text name="info_price">
+		1500 L$
+(1,1 L$/m²)
+vendido com objetos
 	</text>
-  <text name="info_action">
-		Comprar este lote irá:
+	<text name="info_action">
+		Comprar este terreno irá:
 	</text>
-  <text name="error_message">
-		Algo ainda não está correto.
+	<text name="error_message">
+		Algo não está certo.
 	</text>
-  <button label="Ir para a página da web" name="error_web" width="150" />
-  <text name="account_action">
-		Evoluir sua conta para membro Premium
+	<button label="Ir ao site" name="error_web" />
+	<text name="account_action">
+		Atualizar você para assinatura premium.
 	</text>
-  <text name="account_reason">
-		Somente membros Premium podem possuir terra.
+	<text name="account_reason">
+		Apenas membros premium podem possuir terreno.
 	</text>
-  <combo_box name="account_level">
-    <combo_box.item label="US$9.95/mês, pagamento mensal" name="US$9.95/month,billedmonthly" />
-    <combo_box.item label="US$7,50/mês, pagamento trimestral" name="US$7.50/month,billedquarterly" />
-    <combo_box.item label="US$6.00/mês, pagamento trimestral" name="US$6.00/month,billedannually" />
-  </combo_box>
+	<combo_box name="account_level">
+		<combo_box.item label="US$ 9,95/mês, cobrança mensal" name="US$9.95/month,billedmonthly"/>
+		<combo_box.item label="US$ 7,50/mês, cobrança trimestral" name="US$7.50/month,billedquarterly"/>
+		<combo_box.item label="US$ 6,00/mês, cobrança anual" name="US$6.00/month,billedannually"/>
+	</combo_box>
 	<text name="land_use_action">
-		Aumente sua taxa de locação de terra para US$ 40/mês.
+		Aumentar suas taxas mensais de uso de terreno para US$ 40/mês.
 	</text>
-  <text name="land_use_reason">
-		Você tem 1309 m².
-Este lote mede 512 m².
+	<text name="land_use_reason">
+		Você possui 1309 m² de terreno.
+Esta parcela tem 512 m².
 	</text>
-  <text name="purchase_action">
-		Pagar ao Residente Joe L$4000 pela terra
+	<text name="purchase_action">
+		Pagar 4000 L$ a Joe Resident pelo terreno
 	</text>
-  <text name="currency_reason">
-		Você tem L$2,100.
+	<text name="currency_reason">
+		Você tem 2.100 L$.
 	</text>
-  <text name="currency_action" width="116">
-		Compre L$ adicionais
+	<text name="currency_action">
+		Comprar mais L$
 	</text>
-  <line_editor left="190" name="currency_amt" width="65">
+	<line_editor name="currency_amt">
 		1000
 	</line_editor>
-  <text name="currency_est">
-		perto de [LOCAL_AMOUNT]
+	<text name="currency_est">
+		por aprox. [LOCAL_AMOUNT]
 	</text>
-  <text name="currency_balance">
-		Você tem L$2,100.
+	<text name="currency_balance">
+		Você tem 2.100 L$.
 	</text>
-  <check_box label="Subtrair [AMOUNT] m² da minha contribuição." name="remove_contribution" />
-  <button label="Adquirir" name="buy_btn" />
-  <button label="Cancelar" name="cancel_btn" />
+	<check_box label="Remover [AMOUNT] m² de contribuição do grupo." name="remove_contribution"/>
+	<button label="Comprar" name="buy_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
 </floater>

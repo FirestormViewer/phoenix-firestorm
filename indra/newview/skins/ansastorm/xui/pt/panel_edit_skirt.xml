@@ -6,7 +6,7 @@
 	</panel>
 	<panel name="skirt_main_tab_holder">
 		<accordion name="skirt_main_accordion">
-			<accordion_tab name="skirt_main_tab" title="Saia"/>
+			<accordion_tab name="skirt_main_tab" title="Rock"/>
 		</accordion>
 	</panel>
 </panel>

@@ -6,7 +6,7 @@
 	</panel>
 	<panel name="gloves_main_tab_holder">
 		<accordion name="gloves_main_accordion">
-			<accordion_tab name="gloves_main_tab" title="Luvas"/>
+			<accordion_tab name="gloves_main_tab" title="Handschuhe"/>
 		</accordion>
 	</panel>
 </panel>

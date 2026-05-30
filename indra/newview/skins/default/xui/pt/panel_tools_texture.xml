@@ -1,64 +1,101 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Textura" name="Texture">
+	<panel.string name="string repeats per meter">
+		Repetições por metro
+	</panel.string>
+	<panel.string name="string repeats per face">
+		Repetições por face
+	</panel.string>
+	<panel.string name="paste_error_face_selection_mismatch">
+		Se várias faces forem copiadas, o objeto de destino deve ter o mesmo número de faces selecionadas.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Se todas as faces de um objeto forem copiadas, o objeto de destino deve ter o mesmo número de faces.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Uma ou mais texturas não foram encontradas no inventário.
+	</panel.string>
+	<panel.string name="paste_options">
+		Copiar parâmetros de textura
+	</panel.string>
 	<text name="color label">
 		Cor
 	</text>
-	<color_swatch label="" name="colorswatch" tool_tip="Selecionar a cor"/>
+	<color_swatch label="" name="colorswatch" tool_tip="Clique para abrir o seletor de cores"/>
 	<text name="color trans">
-		% de transparência
+		Transparência %
 	</text>
 	<text name="glow label">
 		Brilho
 	</text>
-	<check_box label="Completamente luminoso" name="checkbox fullbright"/>
+	<check_box label="Brilho total" name="checkbox fullbright"/>
+	<check_box label="Ocultar água" name="checkbox_hide_water"/>
+	<button name="copy_face_btn" tool_tip="Copiar parâmetros de textura"/>
+	<button name="paste_face_btn" tool_tip="Colar parâmetros de textura"/>
+	<menu_button name="paste_face_gear_btn" tool_tip="Opções de colar"/>
 	<combo_box name="combobox matmedia">
-		<combo_box.item label="Materiais" name="Materials"/>
+		<combo_box.item label="Texturas" name="Materials"/>
+		<combo_box.item label="PBR metal/aspereza" name="PBR"/>
 		<combo_box.item label="Mídia" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
-		<radio_item label="Textura (difusa)" name="Texture (diffuse)" value="0"/>
-		<radio_item label="Relevo (normal)" name="Bumpiness (normal)" value="1"/>
-		<radio_item label="Brilho (especular)" name="Shininess (specular)" value="2"/>
+		<radio_item label="Textura (difusa)" name="Texture (diffuse)"/>
+		<radio_item label="Relevo (normal)" name="Bumpiness (normal)"/>
+		<radio_item label="Brilho (especular)" name="Shininess (specular)"/>
 	</radio_group>
-	<check_box initial_value="false" label="Sincronizar materiais" name="checkbox_sync_settings" tool_tip="Sincronizar os parâmetros dos mapas de textura"/>
-	<texture_picker label="Textura" name="texture control" tool_tip="Selecionar imagem"/>
+	<radio_group name="radio_pbr_type">
+		<radio_item label="Material completo" name="Complete material"/>
+		<radio_item label="Cor base" name="Base color"/>
+		<radio_item label="Metálico/aspereza" name="Metallic/roughness"/>
+		<radio_item label="Emissivo" name="Emissive"/>
+		<radio_item label="Normal" name="Normal"/>
+	</radio_group>
+	<texture_picker label="Material" name="pbr_control" tool_tip="Clique para escolher um material PBR"/>
+	<!-- <button name="pbr_from_inventory" label="Escolher do inventário"/> -->
+	<text name="material_permissions_loading_label">
+		Carregando conteúdo...
+	</text>
+	<button name="edit_selected_pbr" label="Editar"/>
+	<button name="save_selected_pbr" label="Salvar"/>
+	<texture_picker label="Textura" name="texture control" tool_tip="Clique para escolher uma imagem"/>
 	<text name="label alphamode">
 		Modo alpha
 	</text>
 	<combo_box name="combobox alphamode">
 		<combo_box.item label="Nenhum" name="None"/>
-		<combo_box.item label="Mistura alpha" name="Alpha blending"/>
-		<combo_box.item label="Máscara alpha" name="Alpha masking"/>
-		<combo_box.item label="Máscara emissiva" name="Emissive mask"/>
+		<combo_box.item label="Alpha blending" name="Alpha blending"/>
+		<combo_box.item label="Alpha masking" name="Alpha masking"/>
+		<combo_box.item label="Emissive mask" name="Emissive mask"/>
 	</combo_box>
 	<text name="label maskcutoff">
-		Corte da máscara
+		Limite da máscara
 	</text>
-	<texture_picker label="Textura" name="bumpytexture control" tool_tip="Selecionar imagem"/>
+	<texture_picker label="Textura" name="bumpytexture control" tool_tip="Clique para escolher uma imagem"/>
 	<text name="label bumpiness">
 		Relevo
 	</text>
 	<combo_box name="combobox bumpiness">
 		<combo_box.item label="Nenhum" name="None"/>
-		<combo_box.item label="Luminosidade" name="Brightness"/>
+		<combo_box.item label="Clareza" name="Brightness"/>
 		<combo_box.item label="Escuridão" name="Darkness"/>
-		<combo_box.item label="grão de madeira" name="woodgrain"/>
-		<combo_box.item label="casca de árvore" name="bark"/>
-		<combo_box.item label="tijolos" name="bricks"/>
-		<combo_box.item label="quadriculado" name="checker"/>
-		<combo_box.item label="concreto" name="concrete"/>
-		<combo_box.item label="ladrilho ríspido" name="crustytile"/>
-		<combo_box.item label="pedra talhada" name="cutstone"/>
-		<combo_box.item label="discos" name="discs"/>
-		<combo_box.item label="cascalho" name="gravel"/>
-		<combo_box.item label="placa de petri" name="petridish"/>
-		<combo_box.item label="desvio" name="siding"/>
-		<combo_box.item label="ladrilho de pedra" name="stonetile"/>
-		<combo_box.item label="estuque" name="stucco"/>
-		<combo_box.item label="sucção" name="suction"/>
-		<combo_box.item label="tecelagem" name="weave"/>
+		<combo_box.item label="Veio de madeira" name="woodgrain"/>
+		<combo_box.item label="Casca" name="bark"/>
+		<combo_box.item label="Tijolos" name="bricks"/>
+		<combo_box.item label="Xadrez" name="checker"/>
+		<combo_box.item label="Concreto" name="concrete"/>
+		<combo_box.item label="Azulejo gasto" name="crustytile"/>
+		<combo_box.item label="Pedra cortada" name="cutstone"/>
+		<combo_box.item label="Discos" name="discs"/>
+		<combo_box.item label="Cascalho" name="gravel"/>
+		<combo_box.item label="Placa de Petri" name="petridish"/>
+		<combo_box.item label="Revestimento" name="siding"/>
+		<combo_box.item label="Laje de pedra" name="stonetile"/>
+		<combo_box.item label="Estuque" name="stucco"/>
+		<combo_box.item label="Sucção" name="suction"/>
+		<combo_box.item label="Trama" name="weave"/>
+		<combo_box.item label="Usar textura" name="Use texture"/>
 	</combo_box>
-	<texture_picker label="Textura" name="shinytexture control" tool_tip="Selecionar imagem"/>
+	<texture_picker label="Textura" name="shinytexture control" tool_tip="Clique para escolher uma imagem"/>
 	<text name="label shininess">
 		Brilho
 	</text>
@@ -67,9 +104,10 @@
 		<combo_box.item label="Baixo" name="Low"/>
 		<combo_box.item label="Médio" name="Medium"/>
 		<combo_box.item label="Alto" name="High"/>
+		<combo_box.item label="Usar textura" name="Use texture"/>
 	</combo_box>
 	<text name="label glossiness">
-		Acetinação
+		Gloss
 	</text>
 	<text name="label environment">
 		Ambiente
@@ -77,13 +115,13 @@
 	<text name="label shinycolor">
 		Cor
 	</text>
-	<color_swatch label="" name="shinycolorswatch" tool_tip="Selecionar a cor"/>
+	<color_swatch label="" name="shinycolorswatch" tool_tip="Clique para abrir o seletor de cores"/>
 	<text name="media_info">
-		A URL da mídia escolhida, caso haja, é inserida aqui
+		URL de mídia selecionada
 	</text>
-	<button label="Selecionar..." name="add_media" tool_tip="Adicionar mídia"/>
-	<button label="Remover" name="delete_media" tool_tip="Excluir esta textura de mídia"/>
-	<button label="Alinhar" label_selected="Alinhar mídia" name="button align" tool_tip="Alinhar texturas de mídia (após carregar mídia)"/>
+	<button name="add_media" tool_tip="Adicionar mídia" label="Escolher..."/>
+	<button name="delete_media" tool_tip="Remover esta textura de mídia" label="Remover"/>
+	<button label="Alinhar" label_selected="Alinhar mídia" name="button align" tool_tip="Alinhar texturas de mídia (precisam estar carregadas)"/>
 	<text name="tex gen">
 		Mapeamento
 	</text>
@@ -92,21 +130,33 @@
 		<combo_box.item label="Planar" name="Planar"/>
 	</combo_box>
 	<spinner label="Escala horizontal" name="TexScaleU"/>
+	<button name="flipTextureScaleU" tool_tip="Inverter"/>
 	<spinner label="Escala vertical" name="TexScaleV"/>
-	<spinner label="Repetições por metro" name="rptctrl"/>
-	<spinner label="Graus de rotação" name="TexRot"/>
-	<spinner label="Offset horizontal" name="TexOffsetU"/>
-	<spinner label="Offset vertical" name="TexOffsetV"/>
+	<button name="flipTextureScaleV" tool_tip="Inverter"/>
+	<spinner label="Repet./metro" name="rptctrl"/>
+	<spinner label="Rotação˚" name="TexRot"/>
+	<spinner label="Desloc. horizontal" name="TexOffsetU"/>
+	<spinner label="Desloc. vertical" name="TexOffsetV"/>
 	<spinner label="Escala horizontal" name="bumpyScaleU"/>
 	<spinner label="Escala vertical" name="bumpyScaleV"/>
-	<spinner label="Graus de rotação" name="bumpyRot"/>
-	<spinner label="Offset horizontal" name="bumpyOffsetU"/>
-	<spinner label="Offset vertical" name="bumpyOffsetV"/>
+	<spinner label="Rotação˚" name="bumpyRot"/>
+	<spinner label="Desloc. horizontal" name="bumpyOffsetU"/>
+	<spinner label="Desloc. vertical" name="bumpyOffsetV"/>
 	<spinner label="Escala horizontal" name="shinyScaleU"/>
 	<spinner label="Escala vertical" name="shinyScaleV"/>
-	<spinner label="Graus de rotação" name="shinyRot"/>
-	<spinner label="Offset horizontal" name="shinyOffsetU"/>
-	<spinner label="Offset vertical" name="shinyOffsetV"/>
-	<check_box initial_value="false" label="Alinhar faces planares" name="checkbox planar align" tool_tip="Alinha texturas em todas as faces selecionadas com a última face selecionada. Exige mapeamento de textura planar."/>
-	<button label="Alinhar" label_selected="Alinhar camadas de textura atual" name="button align textures" tool_tip="Alinhar camadas de textura atual"/>
+	<spinner label="Rotação˚" name="shinyRot"/>
+	<spinner label="Desloc. horizontal" name="shinyOffsetU"/>
+	<spinner label="Desloc. vertical" name="shinyOffsetV"/>
+	<spinner label="Escala u" name="gltfTextureScaleU"/>
+	<spinner label="Escala v" name="gltfTextureScaleV"/>
+	<spinner label="Repet./metro" name="gltfRptctrl"/>
+	<spinner label="Rotação˚" name="gltfTextureRotation"/>
+	<spinner label="Desloc. u" name="gltfTextureOffsetU"/>
+	<spinner label="Desloc. v" name="gltfTextureOffsetV"/>
+	<check_box label="Alinhar faces planas" name="checkbox planar align" tool_tip="Alinha texturas em todas as faces selecionadas como a última face. Requer mapeamento planar."/>
+	<check_box label="Sincronizar materiais" name="checkbox_sync_settings" tool_tip="Sincronizar parâmetros de mapeamento de textura"/>
+	<button name="button align textures" label="Alinhar" tool_tip="Alinhar camada de textura atual"/>
+	<button label="Selecionar iguais" name="btn_select_same_diff" tool_tip="Seleciona todas as faces com a mesma textura (difusa) que a atual"/>
+	<button label="Selecionar iguais" name="btn_select_same_norm" tool_tip="Seleciona todas as faces com o mesmo relevo (normal) que a atual"/>
+	<button label="Selecionar iguais" name="btn_select_same_spec" tool_tip="Seleciona todas as faces com o mesmo brilho (especular) que a atual"/>
 </panel>

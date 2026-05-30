@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Mercado" name="Marketplace Panel">
 	<panel name="tool_panel">
-		<menu_button name="sort_btn" tool_tip="Opções de exibição/ordenação"/>
-		<button name="add_btn" tool_tip="Cria uma nova pasta de listagem"/>
-		<button label="Verificar erros" name="audit_btn" tool_tip="Verificar suas listagens do Marketplace"/>
+		<menu_button name="sort_btn" tool_tip="Opções de exibição e ordenação"/>
+		<button name="add_btn" tool_tip="Criar nova pasta de anúncio"/>
+		<button label="Verificar erros" name="audit_btn" tool_tip="Verificar anúncios do Marketplace" width="105" left_pad="137"/>
 	</panel>
 	<panel name="tab_container_panel">
-		<filter_editor label="Filtrar listagens do Marketplace" name="filter_editor"/>
+		<filter_editor label="Filtrar anúncios do Marketplace" name="filter_editor"/>
+	</panel>
+	<panel name="marketplace_drop_zone">
+		<text name="drop_zone_label">
+			Solte uma pasta para criar anúncios
+		</text>
 	</panel>
 </panel>

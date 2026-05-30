@@ -6,7 +6,7 @@
 	</panel>
 	<panel name="undershirt_main_tab_holder">
 		<accordion name="undershirt_main_accordion">
-			<accordion_tab name="undershirt_main_tab" title="Camiseta"/>
+			<accordion_tab name="undershirt_main_tab" title="Unterhemd"/>
 		</accordion>
 	</panel>
 </panel>

@@ -1,661 +1,114 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel
- border="true"
- follows="all"
- height="480"
- layout="topleft"
- left="1"
- top="1"
- width="540"
- name="general_panel"
- label="Geral">
- <!--language-->
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="30"
-     name="language_textbox"
-     top="10"
-     width="200">
-        Idioma:
-    </text>
-    <combo_box
-     control_name="Language"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left="30"
-     top_pad="-2"
-     max_chars="135"
-     name="language_combobox"
-     width="150">
-        <combo_box.item
-         enabled="true"
-         label="English (Inglês)"
-         name="English"
-         value="en" />
-        <combo_box.item
-         enabled="true"
-         label="Azərbaycanca (Azerbaijano)"
-         name="Azerbaijani"
-         value="az" />
-        <!--
-        <combo_box.item
-         enabled="true"
-         label="Dansk (Danish) - Beta"
-         name="Danish"
-         value="da" />
-        -->
-        <combo_box.item
-         enabled="true"
-         label="Deutsch (Alemão)"
-         name="Deutsch(German)"
-         value="de" />
-        <combo_box.item
-         enabled="true"
-         label="Español (Espanhol) - Beta"
-         name="Spanish"
-         value="es" />
-        <combo_box.item
-         enabled="true"
-         label="Français (Francês)"
-         name="French"
-         value="fr" />
-        <combo_box.item
-         enabled="true"
-         label="Italiano"
-         name="Italian"
-         value="it" />        
-        <combo_box.item
-         enabled="true"
-         label="Polski (Polonês)"
-         name="Polish"
-         value="pl" />
-        <combo_box.item
-         enabled="true"
-         label="Português (Brasil) - Beta"
-         name="Portuguese(Brazil)"
-         value="pt" />
-        <combo_box.item
-         enabled="true"
-         label="Русский (Russo)"
-         name="Russian"
-         value="ru" />
-        <!--
-        <combo_box.item
-         enabled="true"
-         label="Türkçe (Turkish) - Beta"
-         name="Turkish"
-         value="tr" />
-        -->
-        <combo_box.item
-         enabled="true"
-         label="日本語 (Japonês) - Beta"
-         name="(Japanese)"
-         value="ja" />
-        <combo_box.item
-         enabled="true"
-         label="正體中文 (Chinês tradicional)"
-         name="Traditional Chinese"
-         value="zh" />
-    </combo_box>
-    <text
-     top_delta="4"
-     font="SansSerifSmall"
-     type="string"
-     text_color="White_50"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="5"
-     name="language_textbox2"
-     width="130">
-        (Reinicie o visualizador)
-    </text>
-<!--maturity-->
-     <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="30"
-     top_pad="10"
-     name="maturity_desired_prompt"
-     width="200">
-        Quero acessar conteúdo classificado:
-    </text>
-    <combo_box
-     control_name="PreferredMaturity"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left="30"
-     top_pad="-2"
-     name="maturity_desired_combobox"
-     width="200">
-        <combo_box.item
-         label="Geral, Moderado e Adulto"
-         name="Desired_Adult"
-         value="42" />
-        <combo_box.item
-         label="Geral e Moderado"
-         name="Desired_Mature"
-         value="21" />
-        <combo_box.item
-         label="Geral"
-         name="Desired_PG"
-         value="13" />
-        <combo_box.commit_callback
-         function="Pref.MaturitySettings"/>
-    </combo_box>
-    <!-- Este texto nunca aparece ao mesmo tempo que o combo acima; podem sobrepor-se -->
-    <text
-     top_delta="4"
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     name="maturity_desired_textbox"
-     width="200">
-    </text>
-    <icon
-     follows="left|top"
-     height="16"
-     image_name="Parcel_PG_Dark"
-     layout="topleft"
-     left_pad="5"
-     name="rating_icon_general"
-     top_delta="-1"
-     width="18"/>
-    <icon
-     follows="left|top"
-     height="16"
-     image_name="Parcel_M_Dark"
-     layout="topleft"
-     left_pad="5"
-     name="rating_icon_moderate"
-     width="18"/>
-    <icon
-     follows="left|top"
-     height="16"
-     image_name="Parcel_R_Dark"
-     layout="topleft"
-     left_pad="5"
-     name="rating_icon_adult"
-     width="18"/>
-    <check_box
-     control_name="SDL2IMEEnabled"
-     height="16"
-     label="Mostrar entrada de texto IME"
-     layout="topleft"
-     left_pad="48"
-     name="use_ime"
-     width="256"
-     visible="true"
-     tool_tip="Usar o editor IME (método de entrada internacional), sobretudo para japonês, chinês, etc." />
-<!--start location-->
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="30"
-     name="start_location_textbox"
-     top_pad="8"
-     width="200">
-        Posição inicial:
-    </text>
-    <combo_box
-     control_name="LoginLocation"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     name="start_location_combo"
-     left="30"
-     top_pad="-2"
-     width="150">
-        <combo_box.item
-         label="Última localização"
-         name="MyLastLocation"
-         value="last" />
-        <combo_box.item
-         label="Meu início"
-         name="MyHome"
-         value="home" />
-    </combo_box>
-    <check_box
-     control_name="ShowStartLocation"
-     height="16"
-     initial_value="true"
-     label="Mostrar ao entrar"
-     layout="topleft"
-     left_pad="5"
-     name="show_location_checkbox"
-     top_delta="5"
-     width="256"
-	 tool_tip="" />
-<!--name tags-->
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left="30"
-     name="name_tags_textbox"
-     top_pad="15"
-     width="200">
-       Nomes (etiquetas):
-    </text>
-    <radio_group
-     control_name="AvatarNameTagMode"
-     height="20"
-     width="200"
-     layout="topleft"
-     left="30"
-     top_pad="0"
-     name="Name_Tag_Preference">
-        <radio_item
-         label="Desligar"
-         name="radio"
-         top_delta="20"
-         layout="topleft"
-         height="16"
-         left="0"
-         value="0"
-         width="50" />
-        <radio_item
-         label="Ligar"
-         left_pad="0"
-         layout="topleft"
-         top_delta="0"
-         height="16"
-         name="radio2"
-         value="1"
-         width="50" />
-        <radio_item
-         label="Brevemente"
-         left_pad="0"
-         name="radio3"
-         height="16"
-         layout="topleft"
-         top_delta="0"
-         value="2"
-         width="75" />
-    </radio_group>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="0"
-     name="RenderNameShowTime_LabelPrefix"
-     top_delta="0"
-     width="5">
-       (
-    </text>
-    <spinner
-     allow_text_entry="true"
-     control_name="RenderNameShowTime"
-     decimal_digits="0"
-     follows="left|top"
-     height="20"
-     increment="1"
-     layout="topleft"
-     left_pad="0"
-     max_val="60"
-     min_val="1"
-     name="RenderNameShowTime"
-     top_delta="-4"
-     width="40"/>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="15"
-     layout="topleft"
-     left_pad="3"
-     name="RenderNameShowTime_LabelSuffix"
-     top_delta="4"
-     width="80">
-       segundos)
-    </text>
-    <check_box
-     enabled_control="AvatarNameTagMode"
-     control_name="RenderNameShowSelf"
-     height="16"
-     label="Meu nome"
-     layout="topleft"
-     left="30"
-     name="show_my_name_checkbox1"
-     top_pad="8"
-     width="140"
-	 tool_tip="" />
-    <check_box
-     control_name="NameTagShowUsernames"
-     height="16"
-     label="Nomes de usuário"
-     layout="topleft"
-     left_pad="50"
-     name="show_slids"
-     tool_tip="Mostrar nome de usuário, ex.: zecazc123"
-     width="100"
-     top_delta="0" />
+<panel label="Geral" name="general_panel">
+	<text name="language_textbox">
+		Idioma:
+	</text>
+	<combo_box name="language_combobox">
+		<combo_box.item label="English (inglês)" name="English"/>
+		<combo_box.item label="Dansk (dinamarquês) - Beta" name="Danish"/>
+		<combo_box.item label="Deutsch (alemão)" name="Deutsch(German)"/>
+		<combo_box.item label="Español (espanhol) - Beta" name="Spanish"/>
+		<combo_box.item label="Français (francês)" name="French"/>
+		<combo_box.item label="Italiano (italiano)" name="Italian"/>
+		<combo_box.item label="Polski (polonês)" name="Polish"/>
+		<combo_box.item label="Português - Beta" name="Portugese"/>
+		<combo_box.item label="Русский (russo)" name="Russian"/>
+		<combo_box.item label="Türkçe (turco) – Beta" name="Turkish"/>
+		<combo_box.item label="日本語 (japonês) - Beta" name="(Japanese)"/>
+		<combo_box.item label="正體中文 (Traditionelles Chinesisch)" name="Traditional Chinese"/>
+	</combo_box>
+	<text name="language_textbox2">
+		(Requer reinício)
+	</text>
+	<text name="maturity_desired_prompt" width="320">
+		Acessar conteúdo com a classificação:
+	</text>
+	<text name="maturity_desired_textbox" width="200"/>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Geral, Moderado, Adulto" name="Desired_Adult"/>
+		<combo_box.item label="Geral e Moderado" name="Desired_Mature"/>
+		<combo_box.item label="Geral" name="Desired_PG"/>
+	</combo_box>
+	<check_box label="Ativar entrada de texto IME" name="use_ime" tool_tip="Ativa o Editor de Método de Entrada — necessário apenas para idiomas como japonês ou chinês."/>
+	<text name="start_location_textbox">
+		Local de início:
+	</text>
+	<combo_box name="start_location_combo">
+		<combo_box.item label="Meu último local" name="MyLastLocation" tool_tip="Entrar por padrão no último local."/>
+		<combo_box.item label="Minha casa" name="MyHome" tool_tip="Entrar por padrão em casa."/>
+	</combo_box>
+	<check_box initial_value="true" label="Mostrar ao entrar" name="show_location_checkbox"/>
+	<text name="name_tags_textbox">
+		Nomes dos avatares:
+	</text>
+	<radio_group name="Name_Tag_Preference" width="210">
+		<radio_item label="Desligado" name="radio"/>
+		<radio_item label="Ligado" name="radio2"/>
+		<radio_item label="Resumido" name="radio3"/>
+	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		segundos)
+	</text>
+	<check_box label="Meu nome" name="show_my_name_checkbox1"/>
+	<check_box label="Nome de usuário" name="show_slids" tool_tip="Mostrar nome de usuário como berndschmidt123" />
+	<check_box label="Título do grupo" name="show_all_title_checkbox1" tool_tip="Títulos de grupo como Oficial ou Membro"/>
+	<check_box label="Ocultar meu título de grupo" name="RenderHideGroupTitle" tool_tip="Mostrar ou ocultar seu título de grupo para você e para outros."/>
+	<check_box label="Mostrar nome de exibição" name="display_names_check" tool_tip="Ative para usar nomes de exibição no chat, IM, tags de avatar etc."/>
+	<check_box label="Mostrar identificador do viewer" name="show_viewerID" tool_tip="Mostra o nome do viewer detectado ao lado do nome do avatar (com atraso)"/>
+	<check_box label="Formato antigo em vez de nome de usuário" name="FSshow_legacyun" tool_tip="Mostra o nome do avatar no formato antigo (Nome Sobrenome) em vez do usuário (nome.sobrenome)" />
+	<check_box label="Destacar amigos" name="show_friends" tool_tip="Destaca os nomes dos avatares dos seus amigos"/>
+	<check_box label="Remover Resident no formato antigo" name="legacy_trim_check" tool_tip="Remove o sobrenome Resident no formato antigo de nome." />
+	<check_box label="Posição antiga para nomes de avatar" name="FSLegacyNametagPosition" tool_tip="Se ativado, o nome fica fixo na posição do avatar e não segue o movimento da cabeça nas animações." />
+	<check_box label="Mostrar modo de resposta automática" name="FSShowAutorespondInNameTag" tool_tip="Se ativado, exibe o modo de resposta automática no seu próprio nome de avatar."/>
+	<check_box label="Mostrar complexidade" name="FSTagShowARW" tool_tip="Se ativado, mostra a complexidade atual do avatar."/>
+	<check_box label="Somente se muito complexo" name="FSTagShowTooComplexOnlyARW" tool_tip="Se ativado, mostra a complexidade apenas quando o avatar é muito complexo e vira JellyDoll."/>
+	<check_box label="Mostrar minha complexidade" name="FSTagShowOwnARW" tool_tip="Se ativado, mostra a complexidade do seu próprio avatar."/>
 
-    <check_box
-     control_name="NameTagShowGroupTitles"
-     enabled_control="AvatarNameTagMode"
-     height="16"
-     label="Cargos do grupo"
-     layout="topleft"
-     left="30"
-     width="140"
-     name="show_all_title_checkbox1"
-     tool_tip="Mostrar cargos do grupo, como Oficial ou Membro"
-     top_pad="3" />
+	<text name="time_format_textbox">
+		Formato de hora:
+	</text>
+	<combo_box name="time_format_combobox" tool_tip="Controla chat próximo, Poser, histórico de conversas, IMs, Inspecionar objetos, info do terreno, reinício da região, notificações, ambiente, avisos de grupo, marcos, lista de teleporte e toasts de grupo.">
+		<combo_box.item label="1:00 PM" name="12H"/>
+		<combo_box.item label="13:00" name="24H"/>
+	</combo_box>
+	<text name="time_format_textbox2">
+		(Requer reinício)
+	</text>
+	<text name="time_format_clock_note">
+		Formato do relógio na barra superior em [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interface - Barras superiores].
+	</text>
 
-    <check_box
-     control_name="RenderHideGroupTitle"
-     height="16"
-     label="Ocultar o meu título de grupo"
-     layout="topleft"
-     left_pad="50"
-     name="RenderHideGroupTitle"
-     tool_tip="Mostra ou oculta o seu título de grupo para si e para os outros."/>
-
-    <check_box
-     control_name="UseDisplayNames"
-     follows="top|left"
-     height="16"
-     label="Ver nomes de exibição"
-     layout="topleft"
-     left="30"
-     name="display_names_check"
-     width="140"
-     tool_tip="Usar nomes de exibição no chat, MI, etiquetas de nome, etc."
-     top_pad="3"/>
-   <check_box
-     control_name="FSNameTagShowLegacyUsernames"
-     height="16"
-     label="Nomes legados em vez de nomes de usuário"
-     layout="topleft"
-     left_pad="50"
-     name="FSshow_legacyun"
-     tool_tip="Mostrar nome legado (Nome Apelido) em vez do nome de usuário (nome.apelido)"
-     top_delta="0" />
-    
-   <check_box
-     control_name="NameTagShowFriends"
-     enabled_control="AvatarNameTagMode"
-     height="16"
-     label="Realçar amigos"
-     layout="topleft"
-     left="30"
-     width="140"
-     top_pad="3"
-     name="show_friends"
-     tool_tip="Realçar as etiquetas de nome dos seus amigos."
-     top_delta="0" />
-
-  <check_box
-   enabled_control="FSNameTagShowLegacyUsernames"
-   control_name="FSTrimLegacyNames"
-   height="16"
-   label="Omitir «Resident» nos nomes legados"
-   layout="topleft"
-   left_pad="50"
-   name="legacy_trim_check"
-   width="100"
-   tool_tip="Remove a palavra «Resident» dos nomes legados quando aplicável"
-   top_delta="0"/>
-    
-   <check_box
-     control_name="FSLegacyNametagPosition"
-     enabled_control="AvatarNameTagMode"
-     height="16"
-     label="Posição legada da etiqueta de nome"
-     layout="topleft"
-     left="30"
-     width="140"
-     top_pad="3"
-     name="FSLegacyNametagPosition"
-     tool_tip="Se ativado, a etiqueta de nome fixa na posição do avatar e não segue a cabeça quando esta se move com animações."
-     top_delta="0" />
-
-  <check_box
-   enabled_control="AvatarNameTagMode"
-   control_name="FSShowAutorespondInNametag"
-   height="16"
-   label="Mostrar modo de resposta automática na etiqueta"
-   layout="topleft"
-   left_pad="50"
-   name="FSShowAutorespondInNameTag"
-   width="100"
-   tool_tip="Mostra na sua etiqueta se o modo de resposta automática está ativo."
-   top_delta="0"/>
-    
-   <check_box
-     control_name="FSTagShowARW"
-     enabled_control="AvatarNameTagMode"
-     height="16"
-     label="Mostrar complexidade do avatar"
-     layout="topleft"
-     left="30"
-     width="140"
-     top_pad="3"
-     name="FSTagShowARW"
-     tool_tip="Se ativado, a etiqueta mostra a complexidade atual do avatar."/>
-   <check_box
-     control_name="FSTagShowTooComplexOnlyARW"
-     height="16"
-     label="Só se for muito complexo"
-     layout="topleft"
-     left="40"
-     width="140"
-     top_pad="3"
-     name="FSTagShowTooComplexOnlyARW"
-     tool_tip="Se ativado, só mostra a complexidade quando o avatar é muito complexo (boneco de gelatina)."/>
-   <check_box
-     control_name="FSTagShowOwnARW"
-     height="16"
-     label="Mostrar a minha complexidade"
-     layout="topleft"
-     left="40"
-     width="140"
-     top_pad="3"
-     name="FSTagShowOwnARW"
-     tool_tip="Se ativado, a sua etiqueta mostra a complexidade atual do seu avatar."/>
-
-   <text
-    type="string"
-    length="1"
-    follows="left|top"
-    height="15"
-    layout="topleft"
-    left="30"
-    name="time_format_textbox"
-    top_pad="10"
-    width="200">
-       Formato da hora:
-   </text>
-   <combo_box
-    follows="left|top"
-    height="23"
-    layout="topleft"
-    left="30"
-    top_pad="-2"
-    max_chars="135"
-    name="time_format_combobox"
-    tool_tip="Afeta o chat próximo, poser, registos, MI, janela inspecionar, terreno, agendador de reinício da região, notificações, ambiente, avisos de grupo, marcos, histórico de teletransporte e notificações de grupo."
-    width="90">
-       <combo_box.item
-        enabled="true"
-        label="1:00 PM"
-        name="12H"
-        value="0" />
-       <combo_box.item
-        enabled="true"
-        label="13:00"
-        name="24H"
-        value="1" />
-   </combo_box>
-   <text
-    top_delta="4"
-    font="SansSerifSmall"
-    type="string"
-    text_color="White_50"
-    length="1"
-    follows="left|top"
-    height="15"
-    layout="topleft"
-    left_pad="3"
-    name="time_format_textbox2"
-    width="130">
-       (Reinicie o visualizador)
-   </text>
-   <text
-    top_pad="7"
-    font="SansSerifSmall"
-    type="string"
-    length="1"
-    follows="left|top"
-    height="13"
-    layout="topleft"
-    left="30"
-    name="time_format_clock_note"
-    parse_urls="true"
-    width="500">
-      O formato do relógio da barra superior está em [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interface — Barras superiores].
-   </text>
-
-<!--away/logout-->
-	 <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="13"
-     layout="topleft"
-     left="30"
-     top_pad="12"
-     name="title_afk_text"
-     width="260">
-        Tempo para modo ausente:
-    </text>
-
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="13"
-     layout="topleft"
-     left_pad="0"
-     top_delta="0"
-     name="title_afk_quit_text"
-     width="200">
-        Terminar sessão após ausência:
-    </text>
-
-    <combo_box
-     height="23"
-     layout="topleft"
-     control_name="AFKTimeout"
-     left="30"
-     top_pad="1"
-	 label="Tempo para modo ausente:"
-     top_delta="0"
-     name="afk"
-     width="100"
-	 tool_tip="">
-        <combo_box.item
-         label="2 minutos"
-         name="item0"
-         value="120" />
-        <combo_box.item
-         label="5 minutos"
-         name="item1"
-         value="300" />
-        <combo_box.item
-         label="10 minutos"
-         name="item2"
-         value="600" />
-        <combo_box.item
-         label="30 minutos"
-         name="item3"
-         value="1800" />
-        <combo_box.item
-         label="60 minutos"
-         name="item4"
-         value="3600" />
-        <combo_box.item
-         label="nunca"
-         name="item5"
-         value="0" />
-    </combo_box>
-
-    <check_box
-     control_name="AvatarSitOnAway"
-     name="AvatarSitOnAway"
-     follows="top|left"
-     height="16"
-     label="Sentar quando ausente"
-     layout="topleft"
-     left_pad="5"
-     top_delta="4"
-     width="150"
-	 tool_tip=""/>
-
-    <combo_box
-     height="23"
-     layout="topleft"
-     control_name="QuitAfterSecondsOfAFK"
-     left_pad="5"
-     top_delta="-4"
-     name="quitafk"
-     width="100"
-	 tool_tip="">
-        <combo_box.item
-         label="2 minutos"
-         name="item0"
-         value="120" />
-        <combo_box.item
-         label="5 minutos"
-         name="item1"
-         value="300" />
-        <combo_box.item
-         label="10 minutos"
-         name="item2"
-         value="600" />
-        <combo_box.item
-         label="30 minutos"
-         name="item3"
-         value="1800" />
-		<combo_box.item
-		 label="nunca"
-		 name="item4"
-		 value="0" />
-    </combo_box>
-
-    <text
-     type="string"
-     font="SansSerifSmall"
-     length="1"
-     follows="left|top"
-     height="13"
-     layout="topleft"
-     left="30"
-     mouse_opaque="false"
-     name="text_box3"
-     top_pad="3"
-     width="500">
-       As mensagens de indisponível e resposta automática estão em [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidade / Resposta automática].
-    </text>
+	<text name="title_afk_text" width="275">
+		Tempo até ficar ausente:
+	</text>
+	<text name="title_afk_quit_text">
+		Sair ao ficar ausente após:
+	</text> 
+	<combo_box label="Tempo para ausência:" name="afk">
+		<combo_box.item label="2 minutos" name="item0"/>
+		<combo_box.item label="5 minutos" name="item1"/>
+		<combo_box.item label="10 minutos" name="item2"/>
+		<combo_box.item label="30 minutos" name="item3"/>
+		<combo_box.item label="60 minutos" name="item4"/>
+		<combo_box.item label="nunca" name="item5"/>
+	</combo_box>
+	<combo_box  layout="topleft" left_pad="20" name="quitafk">
+		<combo_box.item label="2 minutos" name="item0"/>
+		<combo_box.item label="5 minutos" name="item1"/>
+		<combo_box.item label="10 minutos" name="item2"/>
+		<combo_box.item label="30 minutos" name="item3"/>
+		<combo_box.item label="nunca" name="item4"/>
+	</combo_box>
+	<check_box name="AvatarSitOnAway" label="Sentar quando ausente"/>
+	<text name="text_box3" height="30">
+		Mensagens de Não perturbe e de ausência podem ser configuradas em
+[secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidade / Resposta automática].
+	</text>
+	<text_editor name="do_not_disturb_response">
+		log_in_to_change
+	</text_editor>
 
 </panel>

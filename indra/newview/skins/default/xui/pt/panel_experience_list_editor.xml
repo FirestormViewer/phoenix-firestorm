@@ -21,7 +21,7 @@
 	<name_list name="experience_list">
 		<name_list.columns label="Nome" name="experience_name"/>
 	</name_list>
-	<button label="Adicionar..." name="btn_add"/>
+	<button label="Adicionar" name="btn_add"/>
 	<button label="Remover" name="btn_remove"/>
 	<button label="Perfil..." name="btn_profile"/>
 </panel>

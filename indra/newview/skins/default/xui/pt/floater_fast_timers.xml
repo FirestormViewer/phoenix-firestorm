@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fast_timers">
-  <string name="pause">
-		Quebrar
+	<string name="pause">
+		Pausar
 	</string>
-  <string name="run">
-		Correr
+	<string name="run">
+		Iniciar
 	</string>
-  <combo_box name="time_scale_combo">
-    <item label="2x mídia" name="2x Average" />
-    <item label="Máx." name="Max" />
-    <item label="Máx. recente" name="Recent Max" />
-    <item label="100ms" name="100ms" />
-  </combo_box>
+	<combo_box name="time_scale_combo">
+		<item label="2x média" name="2x Average"/>
+		<item label="Valor máximo" name="Max"/>
+		<item label="Máximo recente" name="Recent Max"/>
+		<item label="100 ms" name="100ms"/>
+	</combo_box>
 	<combo_box name="metric_combo">
-    <item label="hora" name="Time" />
-    <item label="Número de chamadas" name="Number of Calls" />
-    <item label="Hz" name="Hz" />
-  </combo_box>
-	<button label="Quebrar" name="pause_btn" />
+		<item label="Tempo" name="Time"/>
+		<item label="Número de chamadas" name="Number of Calls"/>
+		<item label="Hz" name="Hz"/>
+	</combo_box>
+	<button label="Pausar" name="pause_btn"/>
 </floater>

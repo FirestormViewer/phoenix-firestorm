@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Preferences" title="Preferências">
+<floater name="Preferences" title="Configurações">
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
 	<panel name="search_panel">
-		<search_editor label="Buscar configurações" name="search_prefs_edit" tool_tip="Digite aqui o termo que deseja buscar. Os resultados mostram correspondências parciais no nome ou na descrição da configuração."/>
-		<button name="copy_search_slurl_btn" tool_tip="Copiar a pesquisa como SLURL"/>
+		<search_editor label="Buscar configurações" name="search_prefs_edit" tool_tip="Digite o termo de busca aqui. Os resultados mostram correspondências parciais no nome ou comentário da configuração."/>
+		<button name="copy_search_slurl_btn" tool_tip="Copiar termo de busca como SLURL"/>
 	</panel>
 	<tab_container name="pref core">
 		<panel label="Geral" name="general"/>
-		<panel label="Bate-papo" name="chat"/>
+		<panel label="Chat" name="chat"/>
 		<panel label="Cores" name="colors"/>
 		<panel label="Gráficos" name="display"/>
 		<panel label="Som e mídia" name="audio"/>
 		<panel label="Rede e arquivos" name="input"/>
-		<panel label="Mover e ver" name="move"/>
-		<panel label="Controles" name="controls"/>
-		<panel label="Notificações" name="msgs"/>
+		<panel label="Movimento/Exibição" name="move"/>
+		<panel label="Atalhos" name="controls"/>
+		<panel label="Alertas" name="msgs"/>
 		<panel label="Privacidade" name="im"/>
 		<panel label="Avançado" name="advanced1"/>
-		<panel label="Interface do usuário" name="ui"/>
-		<panel label="Skins" name="skins"/>
-		<panel label="Relatórios de falhas" name="crashreports"/>
+		<panel label="Interface" name="ui"/>
+		<panel label="Aparência" name="skins"/>
+		<panel label="Relatórios de falha" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="OpenSim" name="opensim"/>
-		<panel label="Backup e restauração" name="backup"/>
+		<panel label="Cópia de segurança" name="backup"/>
 	</tab_container>
 </floater>

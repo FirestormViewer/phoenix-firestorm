@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel label="Envios" name="uploads">
 	<text name="title">
-		Pastas de destino atuais para envios
+		Pastas de destino atuais para uploads
 	</text>
 	<text name="title_models">
 		Imagens
@@ -16,7 +16,6 @@
 		Modelos
 	</text>
 	<text name="upload_help">
-		Para alterar a pasta de destino, clique com o botão direito nela no inventário e selecione
-&quot;Usar como padrão para&quot;
+		Para alterar a pasta de destino, clique com o botão direito na pasta no inventário e escolha „Usar como padrão para“.
 	</text>
 </panel>

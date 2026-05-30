@@ -12,22 +12,22 @@
 	<floater.string name="expand_icon" value="Conv_toolbar_expand"/>
 	<floater.string name="tear_off_icon" value="Conv_toolbar_arrow_ne"/>
 	<floater.string name="return_icon" value="Conv_toolbar_arrow_sw"/>
-	<floater.string name="participant_added" value="[NAME] foi convidado para a conversa."/>
-	<floater.string name="multiple_participants_added" value="[NAME] foram convidados para a conversa."/>
+	<floater.string name="participant_added" value="[NAME] foi convidado(a) para a conversa."/>
+	<floater.string name="multiple_participants_added" value="[NAME] foram convidados(as) para a conversa."/>
 	<floater.string name="tooltip_to_separate_window" value="Mover esta conversa para uma janela separada"/>
-	<floater.string name="tooltip_to_main_window" value="Mover esta conversa para a janela principal"/>
-	<floater.string name="start_call_button_tooltip" value="Abrir conexão por voz"/>
-	<floater.string name="end_call_button_tooltip" value="Encerrar conexão por voz"/>
+	<floater.string name="tooltip_to_main_window" value="Mover esta conversa de volta para a janela principal"/>
+	<floater.string name="start_call_button_tooltip" value="Abrir conexão de voz"/>
+	<floater.string name="end_call_button_tooltip" value="Fechar conexão de voz"/>
 	<floater.string name="expcol_button_not_tearoff_tooltip" value="Recolher este painel"/>
 	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="Recolher lista de participantes"/>
-	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="Expandir a lista de participantes"/>
+	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="Expandir lista de participantes"/>
 	<view name="contents_view">
 		<layout_stack name="main_stack">
 			<layout_panel name="toolbar_panel">
 				<menu_button name="view_options_btn" tool_tip="Opções de exibição/ordenação"/>
-				<menu_button name="gear_btn" tool_tip="Ações nas pessoas selecionadas"/>
+				<menu_button name="gear_btn" tool_tip="Ações da pessoa selecionada"/>
 				<button name="add_btn" tool_tip="Adicionar alguém a esta conversa"/>
-				<button name="voice_call_btn" tool_tip="Abrir conexão por voz"/>
+				<button name="voice_call_btn" tool_tip="Abrir conexão de voz"/>
 				<button name="close_btn" tool_tip="Encerrar esta conversa"/>
 				<button name="expand_collapse_btn" tool_tip="Recolher/expandir este painel"/>
 			</layout_panel>

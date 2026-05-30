@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_linksets" title="Objetos da região">
 	<floater.string name="messaging_get_inprogress">
-		Procurando por linksets do pathfinding...
-	</floater.string>
-	<floater.string name="messaging_get_error">
-		Erro detectado ao procurar por linksets do pathfinding.
+		Buscando linksets de Pathfinding...
 	</floater.string>
 	<floater.string name="messaging_set_inprogress">
-		Modificando os linksets do pathfinding selecionados...
+		Alterando linksets de Pathfinding selecionados...
 	</floater.string>
 	<floater.string name="messaging_set_error">
-		Erro detectado ao modificar os linksets do pathfinding selecionados.
+		Erro ao alterar os linksets de Pathfinding selecionados.
+	</floater.string>
+	<floater.string name="messaging_get_error">
+		Erro ao buscar linksets de Pathfinding.
 	</floater.string>
 	<floater.string name="messaging_complete_none_found">
-		Nenhum linkset do pathfinding.
+		Nenhum linkset de Pathfinding.
 	</floater.string>
 	<floater.string name="messaging_complete_available">
-		[NUM_SELECTED] selecionado de [NUM_TOTAL].
+		[NUM_SELECTED] de [NUM_TOTAL] selecionados.
 	</floater.string>
 	<floater.string name="messaging_not_enabled">
-		Esta região não está habilitada para pathfinding.
+		Pathfinding não está ativado nesta região.
 	</floater.string>
 	<floater.string name="linkset_terrain_name">
 		[Terreno]
@@ -46,7 +46,7 @@
 		[Desconhecido]
 	</floater.string>
 	<floater.string name="linkset_owner_group">
-		[grupo]
+		[Grupo]
 	</floater.string>
 	<floater.string name="linkset_is_scripted">
 		Sim
@@ -67,7 +67,7 @@
 		Obstáculo móvel
 	</floater.string>
 	<floater.string name="linkset_use_material_volume">
-		Volume material
+		Volume de material
 	</floater.string>
 	<floater.string name="linkset_use_exclusion_volume">
 		Volume de exclusão
@@ -76,7 +76,7 @@
 		Fantasma móvel
 	</floater.string>
 	<floater.string name="linkset_is_terrain">
-		[inalterável]
+		[não modificável]
 	</floater.string>
 	<floater.string name="linkset_is_restricted_state">
 		[restrito]
@@ -88,24 +88,26 @@
 		[restrito,côncavo]
 	</floater.string>
 	<floater.string name="linkset_choose_use">
-		Escolher uso do linkset...
+		Selecionar uso do linkset...
 	</floater.string>
 	<panel name="pathfinding_linksets_main">
-		<text name="linksets_filter_label">
+		<text name="linksets_filter_label" width="70">
 			Filtrar por:
 		</text>
 		<text name="linksets_name_label">
 			Nome
 		</text>
+		<search_editor label="Objetos por nome" name="filter_by_name"/>
 		<text name="linksets_desc_label">
 			Descrição
 		</text>
+		<search_editor label="Objetos por descrição" name="filter_by_description"/>
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="Filtrar por uso do linkset..." name="filter_by_linkset_use_none"/>
 			<combo_box.item label="Caminhável" name="filter_by_linkset_use_walkable"/>
 			<combo_box.item label="Obstáculo estático" name="filter_by_linkset_use_static_obstacle"/>
 			<combo_box.item label="Obstáculo móvel" name="filter_by_linkset_use_dynamic_obstacle"/>
-			<combo_box.item label="Volume material" name="filter_by_linkset_use_material_volume"/>
+			<combo_box.item label="Volume de material" name="filter_by_linkset_use_material_volume"/>
 			<combo_box.item label="Volume de exclusão" name="filter_by_linkset_use_exclusion_volume"/>
 			<combo_box.item label="Fantasma móvel" name="filter_by_linkset_use_dynamic_phantom"/>
 		</combo_box>
@@ -118,62 +120,62 @@
 			<scroll_list.columns label="Com script" name="scripted"/>
 			<scroll_list.columns label="Impacto" name="land_impact"/>
 			<scroll_list.columns label="Distância" name="dist_from_you"/>
-			<scroll_list.columns label="Uso de pathfinding" name="linkset_use"/>
-			<scroll_list.columns label="Grupo A (%)" name="a_percent"/>
-			<scroll_list.columns label="Grupo B (%)" name="b_percent"/>
-			<scroll_list.columns label="Grupo C (%)" name="c_percent"/>
-			<scroll_list.columns label="Grupo D (%)" name="d_percent"/>
+			<scroll_list.columns label="Uso de Pathfinding" name="linkset_use"/>
+			<scroll_list.columns label="A %" name="a_percent"/>
+			<scroll_list.columns label="B %" name="b_percent"/>
+			<scroll_list.columns label="C %" name="c_percent"/>
+			<scroll_list.columns label="D %" name="d_percent"/>
 		</scroll_list>
 		<text name="messaging_status">
 			Linksets:
 		</text>
 		<button label="Atualizar lista" name="refresh_objects_list"/>
 		<button label="Selecionar tudo" name="select_all_objects"/>
-		<button label="Selecionar nenhum" name="select_none_objects"/>
+		<button label="Desmarcar tudo" name="select_none_objects"/>
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
-			Ações sobre o selecionado
+			Ações na seleção
 		</text>
-		<check_box label="Exibir baliza" name="show_beacon"/>
+		<check_box label="Exibir sinalizador" name="show_beacon"/>
 		<button label="Pegar" name="take_objects"/>
-		<button label="Pegar uma cópia" name="take_copy_objects"/>
-		<button label="Teletransportar-me até ele" name="teleport_me_to_object"/>
+		<button label="Pegar cópia" name="take_copy_objects"/>
+		<button label="Teleportar até ele" name="teleport_me_to_object"/>
 		<button label="Devolver" name="return_objects"/>
 		<button label="Excluir" name="delete_objects"/>
 	</panel>
 	<panel name="pathfinding_linksets_attributes">
 		<text name="linksets_attributes_label">
-			Editar atributos do pathfinding
+			Editar atributos de Pathfinding
 		</text>
 		<text name="walkability_coefficients_label">
-			Possibilidade de caminhar:
+			Caminhabilidade:
 		</text>
 		<text name="edit_a_label">
 			A
 		</text>
-		<line_editor name="edit_a_value" tool_tip="Possibilidade de caminhar para os personagens do tipo A. Por exemplo: o tipo do personagem é humano."/>
+		<line_editor name="edit_a_value" tool_tip="Caminhabilidade para personagens do tipo A. Um exemplo seria humanoide."/>
 		<text name="edit_b_label">
 			B
 		</text>
-		<line_editor name="edit_b_value" tool_tip="Possibilidade de caminhar para os personagens do tipo B. Por exemplo: o tipo do personagem é criatura."/>
+		<line_editor name="edit_b_value" tool_tip="Caminhabilidade para personagens do tipo B. Um exemplo seria criatura."/>
 		<text name="edit_c_label">
 			C
 		</text>
-		<line_editor name="edit_c_value" tool_tip="Possibilidade de caminhar para os personagens do tipo C. Por exemplo: o tipo do personagem é robô."/>
+		<line_editor name="edit_c_value" tool_tip="Caminhabilidade para personagens do tipo C. Um exemplo seria mecânico."/>
 		<text name="edit_d_label">
 			D
 		</text>
-		<line_editor name="edit_d_value" tool_tip="Possibilidade de caminhar para os personagens do tipo D. Por exemplo: o tipo do personagem é outro."/>
-		<button label="Aplicar alterações" name="apply_edit_values"/>
+		<line_editor name="edit_d_value" tool_tip="Caminhabilidade para personagens do tipo D. Um exemplo seria outro."/>
+		<button label="Aplicar alterações" name="apply_edit_values" width="160"/>
 		<text name="suggested_use_a_label">
-			(Humano)
+			(Humanoide)
 		</text>
 		<text name="suggested_use_b_label">
 			(Criatura)
 		</text>
 		<text name="suggested_use_c_label">
-			(Robô)
+			(Mecânico)
 		</text>
 		<text name="suggested_use_d_label">
 			(Outro)

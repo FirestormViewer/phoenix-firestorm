@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_places" title="LUGARES">
+<floater name="floater_places" title="Lugares">
 	<panel label="Lugares" name="main_panel"/>
 </floater>

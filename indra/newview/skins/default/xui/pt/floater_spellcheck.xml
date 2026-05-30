@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="spellcheck_floater" title="Configurações do verificador ortográfico">
-	<check_box label="Habilitar verificador ortográfico" name="spellcheck_enable"/>
-	<text name="spellcheck_main">
+<floater name="spellcheck_floater" title="Configurações do corretor ortográfico">
+	<check_box label="Ativar corretor ortográfico" name="spellcheck_enable"/>
+	<text name="spellcheck_main" width="110">
 		Dicionário principal:
 	</text>
-	<text label="Logs:" name="spellcheck_additional">
+	<text label="Protokolle:" name="spellcheck_additional">
 		Dicionários adicionais:
 	</text>
 	<text name="spellcheck_available">

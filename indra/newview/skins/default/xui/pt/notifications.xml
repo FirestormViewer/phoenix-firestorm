@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <notifications>
 	<global name="skipnexttime">
-		Não exibir isto novamente
+		Não mostrar novamente
 	</global>
 	<global name="skipnexttimesessiononly">
-		Não exibir isto novamente 
+		Não mostrar novamente 
 (para a sessão atual)
 	</global>
 	<global name="alwayschoose">
@@ -55,7 +55,7 @@
 		</form>
 	</template>
 	<notification functor="GenericAcknowledge" label="Notificação desconhecida" name="MissingAlert">
-		Esta versão do [APP_NAME] não consegue exibir o aviso recebido.  Verifique se você possui a versão mais recente do Visualizador.
+		Esta versão do [APP_NAME] não consegue exibir o aviso recebido.  Verifique se você possui a versão mais recente do viewer.
 
 Detalhes do erro: O aviso &apos;[_NAME]&apos; não foi localizado no arquivo notifications.xml.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -81,7 +81,7 @@ Detalhes do erro: O aviso &apos;[_NAME]&apos; não foi localizado no arquivo not
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Um erro ocorreu ao atualizar o [APP_NAME].  [https://www.firestormviewer.org/downloads Baixe a versão atual] do Visualizador.
+		Um erro ocorreu ao atualizar o [APP_NAME].  [https://www.firestormviewer.org/downloads Baixe a versão atual] do viewer.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
@@ -99,23 +99,23 @@ Verifique se a conexão à internet está funcionando.
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não salvar" yestext="Salvar"/>
 	</notification>
 	<notification name="ConfirmNoCopyToOutbox">
-		Você não possui permissão para copiar um ou mais destes itens para a Caixa de saída do lojista.  Você pode movê-los ou abandoná-los.
+		Você não possui permissão para copiar um ou mais destes itens para a Caixa de saída do comerciante.  Você pode movê-los ou abandoná-los.
 		<usetemplate name="okcancelbuttons" notext="Não mover item(ns)" yestext="Mover item(ns)"/>
 	</notification>
 	<notification name="OutboxFolderCreated">
-		Uma nova pasta foi criada para cada item transferido para o nível superior de sua Caixa de saída do lojista.
-		<usetemplate ignoretext="Uma nova pasta foi criada na Caixa de saída do lojista" name="okignore" yestext="OK"/>
+		Uma nova pasta foi criada para cada item transferido para o nível superior de sua Caixa de saída do comerciante.
+		<usetemplate ignoretext="Uma nova pasta foi criada na Caixa de saída do comerciante" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportComplete">
-		Êxito
+		Sucesso
 
-Todas as pastas foram enviadas para o Mercado com êxito.
-		<usetemplate ignoretext="Todas as pastas enviadas para o Mercado" name="okignore" yestext="OK"/>
+Todas as pastas foram enviadas para o Marketplace com êxito.
+		<usetemplate ignoretext="Todas as pastas enviadas para o Marketplace" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportHadErrors">
 		Algumas pastas não foram transferidas
 
-Erro ao enviar algumas pastas para o Mercado.  Estas pastas ainda estão na sua Caixa de saída do lojista.
+Erro ao enviar algumas pastas para o Marketplace.  Estas pastas ainda estão na sua Caixa de saída do comerciante.
 
 Consulte o [[MARKETPLACE_IMPORTS_URL] log de erros] para mais informações.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -1362,18 +1362,18 @@ Pense em usar outra região como seu início.
 	</notification>
 	<notification name="ClothingLoading">
 		As suas roupas estão sendo transferidas. 
-Enquando isso, use o [CURRENT_GRID] normalmente. Seu visual será exibido corretamente.
+Enquanto isso, use o [CURRENT_GRID] normalmente. Seu visual será exibido corretamente.
 		<form name="form">
 			<ignore name="ignore" text="A roupa está demorando para chegar"/>
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
-		Sua [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] é [AGENT_COMPLEXITY].
+		Sua [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complexidade de renderização do avatar] é [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
 		<usetemplate ignoretext="Avise-me se a complexidade do meu avatar for muito alta" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
-		Sua [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] é [AGENT_COMPLEXITY].
+		Sua [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complexidade de renderização do avatar] é [AGENT_COMPLEXITY].
 		<usetemplate ignoretext="Avise-me se a complexidade do meu avatar for alterada" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
@@ -1409,7 +1409,7 @@ Por favor, escolha se o seu avatar é feminino ou masculino. Você pode mudar de
 		<usetemplate name="okcancelbuttons" notext="Feminino" yestext="Masculino"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
-		Não foi possível ir para [SLURL], que fica em outro grid ([GRID]) em relação ao grid atual, ([CURRENT_GRID]).  Feche o Visualizador e tente novamente.
+		Não foi possível ir para [SLURL], que fica em outro grid ([GRID]) em relação ao grid atual, ([CURRENT_GRID]).  Feche o viewer e tente novamente.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GeneralCertificateError">
@@ -2285,7 +2285,7 @@ Fazer uma descrição precisa nos ajuda a arquivar e processar as reportagens de
 
 Aparentemente você fez uma denúncia de infranção de propriedade intelectual.  Certifique-se de que sua denúncia está correta: 
 
-(1) Procedimento do abuso Se você tem motivos para acreditar que um residente está burlando o sistema de autorização do [CURRENT_GRID] usando o CopyBot ou ferramentas parecidas para infringir direitos de propriedade intelectual, envie um relatório de abuso.  A equipe anti-abuso investiga e impõe sanções em casos de infranção dos [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Termos de Serviço] ou das [http://secondlife.com/corporate/cs.php Normas da Comunidade]. Entretando, a equipe anti-abuso não lida com pedidos de remoção de conteúdo do [CURRENT_GRID]. Tais pedidos não serão atendidos. 
+(1) Procedimento do abuso Se você tem motivos para acreditar que um residente está burlando o sistema de autorização do [CURRENT_GRID] usando o CopyBot ou ferramentas parecidas para infringir direitos de propriedade intelectual, envie um relatório de abuso.  A equipe anti-abuso investiga e impõe sanções em casos de infranção dos [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Termos de Serviço] ou das [http://secondlife.com/corporate/cs.php Normas da Comunidade]. Entretanto, a equipe anti-abuso não lida com pedidos de remoção de conteúdo do [CURRENT_GRID]. Tais pedidos não serão atendidos. 
 
 (2) Procedimentos DMCA ou remoção de conteúdo.  Para solicitar a remoção de conteúdo do [CURRENT_GRID], é imprescindível enviar uma notificação de infração elaborada conforme as disposicões da [http://secondlife.com/corporate/dmca.php Política DMCA].
 
@@ -2979,7 +2979,7 @@ Do objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, proprietário: [NAME_SLURL
 		Falhou ao procurar [TYPE] nomeado [DESC] no banco de dados.
 	</notification>
 	<notification name="InvalidWearable">
-		O item que você está tentando usar tem um recurso que seu Visualizador não consegue ler.  Atualize o [APP_NAME] para poder vestir esse item.
+		O item que você está tentando usar tem um recurso que seu viewer não consegue ler.  Atualize o [APP_NAME] para poder vestir esse item.
 	</notification>
 	<notification name="ScriptQuestion">
 		&apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, pertencente a &apos;[NAME]&apos;, gostaria de:
@@ -3371,7 +3371,7 @@ Avatar &apos;[NAME]&apos; entrou no modo aparência.
 	</notification>
 	<notification name="AvatarRezLeftAppearanceNotification">
 		( [EXISTENCE] segundos de vida )
-Avatar &apos;[NAME]&apos; sair do modo aparecer.
+Avatar &apos;[NAME]&apos; saiu do modo aparência.
 	</notification>
 	<notification name="NoConnect">
 		Detectamos um problema de conexão com [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
