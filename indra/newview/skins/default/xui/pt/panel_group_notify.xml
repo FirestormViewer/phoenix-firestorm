@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="instant_message" name="panel_group_notify">
-	<panel label="header" name="header">
-		<text name="title" value="Nome do remetente / grupo"/>
+	<panel label="Cabeçalho" name="header">
+		<text name="title" value="Remetente/Nome do grupo"/>
 	</panel>
 	<text name="attachment" value="Anexo"/>
+	<text name="group_notice" value="Aviso do grupo"/>
 	<button label="OK" name="btn_ok"/>
+	<button label="Avisos do grupo" name="btn_notices" width="130" />
+	<button label="Chat do grupo" name="btn_groupchat" />
 </panel>

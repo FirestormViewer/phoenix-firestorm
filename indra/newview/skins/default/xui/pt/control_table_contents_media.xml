@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="media_actions">
+		<columns label="Som e mídia" name="lst_action"/>
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Reproduzir/pausar mídia" />
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Reproduzir/parar toda mídia" />
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Voz" />
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Alternar voz" />
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Iniciar Chat" />
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Iniciar gesto" />
+	</rows>
+	<rows name="script_trigger_lbutton">
+		<columns name="lst_action" value="Interagir (LMB)" />
+	</rows>
+</contents>

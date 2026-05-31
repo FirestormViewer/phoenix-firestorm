@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Configurações rápidas" width="280">
+	<panel name="quickprefs" width="280">
+		<layout_stack name="options_stack" width="280"/>
+		<layout_stack name="wl_options_stack" width="280">
+			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" width="105" tool_tip="Define a altura de flutuação do seu avatar.">
+					Altura de flutuação:
+				</text>
+				<slider name="HoverHeightSlider"/>
+				<text name="Maximum bandwidth" width="105" tool_tip="Define a largura de banda máxima da rede em Kbps (quilobits por segundo).">
+					Largura de banda máx.:
+				</text>
+				<slider name="max_bandwidth"/>
+				<text name="Maximum complexity" width="105" tool_tip="Define a partir de qual valor um avatar visualmente complexo será exibido como JellyDoll.">
+					Complexidade máx.:
+				</text>
+				<slider name="IndirectMaxComplexity" right="-68"/>
+				<text name="IndirectMaxComplexityText" width="60">
+					Sem limite
+				</text>
+				<text name="WL Sky" width="67" tool_tip="Predefinições de céu.">
+					Céu:
+				</text>
+				<combo_box left_delta="77" name="WLPresetsCombo"/>
+				<text name="WL Water" width="67" tool_tip="Predefinições de água.">
+					Água:
+				</text>
+				<combo_box left_delta="77" name="WaterPresetsCombo"/>
+				<text name="Day Cycle" width="67" tool_tip="Predefinições de ciclo do dia.">
+					Ciclo do dia:
+				</text>
+				<combo_box left_delta="77" name="DCPresetsCombo"/>
+				<button name="btn_personal_lighting" label="Iluminação pessoal..." width="227"/>
+				<button name="ResetToRegionDefault" tool_tip="Redefine as configurações de ambiente para o ambiente compartilhado." left="234"/>
+				<button name="button_edit" tool_tip="Configurar ajustes rápidos" left="255"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Mover configuração para cima"/>
+		<line_editor name="label_edit" tool_tip="Texto exibido para a configuração" label="Rótulo:" width="205"/>
+		<combo_box name="control_name_combo" tool_tip="Escolha a configuração na lista de opções disponíveis" width="245">
+			<combo_box.item label="== Selecionar ==" name="control_name_list_header"/>
+		</combo_box>
+		<button name="move_down_button" tool_tip="Mover configuração para baixo"/>
+		<button name="add_new_button" tool_tip="Adicionar nova configuração"/>
+		<text name="control_type_label">
+			Tipo:
+		</text>
+		<combo_box name="control_type_combo_box" tool_tip="Defina o tipo de controle que será usado nesta configuração." width="148">
+			<combo_box.item label="Checkbox" name="Checkbox"/>
+			<combo_box.item label="Text" name="Text"/>
+			<combo_box.item label="Seletor numérico" name="Spinner"/>
+			<combo_box.item label="Controle deslizante" name="Slider"/>
+			<combo_box.item label="Botão de opção" name="Radio"/>
+			<combo_box.item label="Cor 3" name="Color 3"/>
+			<combo_box.item label="Cor 4" name="Color 4"/>
+		</combo_box>
+
+		<check_box name="control_integer_checkbox" tool_tip="Ative se a configuração for um valor inteiro, ou seja, apenas números sem casas decimais" label="Inteiro"/>
+		<spinner name="control_min_edit" tool_tip="Menor valor que pode ser selecionado" label="Mín:"/>
+		<spinner name="control_max_edit" tool_tip="Maior valor que pode ser selecionado" label="Máx:"/>
+		<spinner name="control_increment_edit" tool_tip="Tamanho do incremento usado para aumentar ou diminuir o valor ao clicar nas setas do controle." label="Passo:" label_width="40" width="90"/>
+		<button name="Restore_Btn" tool_tip="Restaurar configurações padrão" label="Redefinir" />
+		<button name="button_close" tool_tip="Sair do modo de edição"/>
+	</panel>
+</floater>

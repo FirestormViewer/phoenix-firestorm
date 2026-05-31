@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_search_visibility">
+	<menu_item_check label="Buscar pastas de outfit" name="search_outfits"/>
+	<menu_item_check label="Buscar na lixeira" name="search_trash"/>
+	<menu_item_check label="Buscar na biblioteca" name="search_library"/>
+	<menu_item_check label="Incluir links" name="include_links"/>
+</toggleable_menu>

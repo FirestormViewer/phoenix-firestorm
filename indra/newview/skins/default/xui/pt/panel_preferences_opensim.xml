@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="OpenSim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel name="grid_management_panel" label="Gerenciador de grid">
+			<text name="add_grid_text">
+				Adicionar novo grid
+			</text>
+			<line_editor name="add_grid" label="Inserir URI de login"/>
+			<button label="Limpar" label_selected="Limpar" name="clear_grid" width="60"/>
+			<button label="Aplicar" name="apply_new_grid" width="70"/>
+			<text name="add_grid_text">
+				Gerenciamento de grids
+			</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Nome" name="grid_label"/>
+				<scroll_list.columns label="Login URI" name="login_uri"/>
+			</scroll_list>
+			<button label="Atualizar" name="refresh_grid" width="80"/>
+			<button label="Remover" name="remove_grid" width="80"/>
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text" width="110">
+					Nome do grid:
+				</text>
+				<text name="grid_uri_text" width="110">
+					URI do grid:
+				</text>
+				<text name="login_page_text" width="110">
+					Página de login:
+				</text>
+				<button label="Salvar" name="save_grid" width="68"/>
+				<text name="helper_uri_text" width="110">
+					URI auxiliar:
+				</text>
+				<text name="website_text" width="110">
+					Site do grid:
+				</text>
+				<text name="support_text" width="110">
+					Suporte do grid:
+				</text>
+				<text name="register_text" width="110">
+					Registro do grid:
+				</text>
+				<text name="password_text" width="110">
+					URI de senha do grid:
+				</text>
+				<text name="search_text" width="110">
+					Busca do grid:
+				</text>
+				<text name="message_text" width="110">
+					URI de mensagens do grid:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Diversos" name="opensim_misc_panel">
+			<check_box label="Depurar busca" name="DebugSearch"/>
+			<text name="search_url_debug_text">
+				Sobrescrever URL atual da busca: (não sobrescrever se estiver vazio)
+			</text>
+			<button label="Limpar" label_selected="Limpar" width="60" name="clear_search_url_debug"/>
+			<button label="Definir" name="pick_current_search_url"/>
+		</panel>
+	</tab_container>
+</panel>

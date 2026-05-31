@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Teleport History Gear Context Menu">
+<toggleable_menu name="Teleport History Gear Context Menu">
 	<menu_item_call label="Expandir todas as pastas" name="Expand all folders"/>
 	<menu_item_call label="Recolher todas as pastas" name="Collapse all folders"/>
-	<menu_item_call label="Limpar histórico de teletransporte" name="Clear Teleport History"/>
-</menu>
+	<menu name="TPHistoryTimeZone" label="Selecionar fuso horário...">
+		<menu_item_check name="teleport_history_tz_utc" label="UTC"/>
+		<menu_item_check name="teleport_history_tz_slt" label="SLT"/>
+		<menu_item_check name="teleport_history_tz_local" label="Local"/>
+	</menu>
+	<menu name="Show Menu" label="Mostrar...">
+		<menu_item_check name="Show Position" label="Posição"/>
+		<menu_item_check name="Show Date" label="Data"/>
+	</menu>
+	<menu_item_call label="Limpar histórico de teleportes" name="Clear Teleport History"/>
+</toggleable_menu>

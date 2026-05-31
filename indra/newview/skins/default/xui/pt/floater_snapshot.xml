@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="FOTO">
+<floater name="Snapshot" title="Captura de imagem">
 	<floater.string name="unknown">
 		desconhecido
 	</floater.string>
@@ -7,22 +7,22 @@
 		Enviando e-mail
 	</string>
 	<string name="facebook_progress_str">
-		Como publicar no Facebook
+		Publicando no Facebook
 	</string>
 	<string name="profile_progress_str">
-		Postando
+		Publicando
 	</string>
 	<string name="inventory_progress_str">
 		Salvando no inventário
 	</string>
 	<string name="local_progress_str">
-		Salvo no computador
+		Salvando no computador
 	</string>
 	<string name="facebook_succeeded_str">
-		Imagem carregada
+		Imagem enviada
 	</string>
 	<string name="profile_succeeded_str">
-		Imagem carregada
+		Imagem enviada
 	</string>
 	<string name="postcard_succeeded_str">
 		E-mail enviado!
@@ -34,21 +34,21 @@
 		Salvo no computador!
 	</string>
 	<string name="facebook_failed_str">
-		Falha ao carregar a imagem na sua linha do tempo no Facebook.
+		Falha ao enviar a imagem para sua linha do tempo do Facebook.
 	</string>
 	<string name="profile_failed_str">
-		Falha ao carregar a imagem no feed do seu perfil.
+		Falha ao enviar a imagem para o seu perfil.
 	</string>
 	<string name="postcard_failed_str">
-		Falha ao enviar e-mail.
+		Falha ao enviar o e-mail.
 	</string>
 	<string name="inventory_failed_str">
-		Falha ao salvar no inventário.
+		Falha ao salvar.
 	</string>
 	<string name="local_failed_str">
-		Falha ao salvar no computador.
+		Falha ao salvar.
 	</string>
-	<button label="ATUALIZAR" name="new_snapshot_btn"/>
+	<button label="Atualizar" name="new_snapshot_btn"/>
 	<view name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
@@ -60,7 +60,7 @@
 		</combo_box>
 		<check_box label="Interface" name="ui_check"/>
 		<check_box label="HUDs" name="hud_check"/>
-		<check_box label="Gerar quadro (tela inteira)" name="freeze_frame_check"/>
+		<check_box label="Congelar quadro (tela cheia)" name="freeze_frame_check"/>
 		<check_box label="Atualização automática" name="auto_snapshot_check"/>
 		<text name="filter_list_label">
 			Filtro:
@@ -74,6 +74,6 @@
 		[WIDTH]px (largura) x [HEIGHT]px (altura)
 	</text>
 	<text name="file_size_label">
-		[TAMANHO] KB
+		[SIZE] KB
 	</text>
 </floater>

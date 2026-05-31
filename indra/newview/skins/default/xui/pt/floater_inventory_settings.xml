@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inventory_settings" title="Configurações de inventário">
+	<text name="multi_folder_txt">
+		Duplo clique em pastas na visualização com múltiplas pastas:
+	</text>
+	<radio_group name="multi_double_click_setting">
+		<radio_item label="Expandir/Recolher pasta" name="0"/>
+		<radio_item label="Abrir nova janela" name="1"/>
+		<radio_item label="Alternar visualização" name="2"/>
+	</radio_group>
+	<text name="single_folder_txt">
+		Duplo clique em pastas na visualização de pasta única:
+	</text>
+	<radio_group name="single_double_click_setting">
+		<radio_item label="Permanecer na janela atual" name="false"/>
+		<radio_item label="Abrir nova janela" name="true"/>
+	</radio_group>
+	<text name="find_original_txt">
+		&quot;Mostrar no inventário&quot; ou &quot;Abrir original&quot;:
+	</text>
+	<radio_group name="find_original_settings">
+		<radio_item label="Mostrar na janela principal do inventário" name="false"/>
+		<radio_item label="Mostrar em nova visualização de pasta única" name="true"/>
+	</radio_group>
+	<text name="favorites_txt">
+		Favoritos
+	</text>
+	<check_box label="Mostrar estrela quando o item for favorito" name="favorite_star"/>
+	<check_box label="Mostrar estrela em pastas que contêm favoritos" name="favorite_hollow_star"/>
+	<check_box label="Texto colorido" name="favorites_color"/>
+	<text name="attachment_return_txt">
+		Ao pressionar Enter em um anexo de avatar
+	</text>
+	<combo_box name="attach_combo">
+		<combo_box.item label="Adicionar anexo (recomendado)" name="1"/>
+		<combo_box.item label="Anexar (remove o anexo atual no mesmo ponto)" name="0"/>
+	</combo_box>
+</floater>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Object List popup">
+	<menu_item_call label="Info do script" name="script_info"/>
+	<menu_item_call label="Tocar" name="touch_object"/>
+	<menu_item_call label="Sentar" name="sit_on_object"/>
+	<menu_item_call label="Teleportar para" name="teleport_to_object"/>
+	<menu_item_call label="Zoom" name="look_at_object"/>
+	<menu_item_call label="Inspecionar" name="inspect_object"/>
+	<menu_item_call label="Editar" name="edit_object"/>
+	<menu_item_call label="Devolver" name="return_object"/>
+	<menu_item_call label="Excluir" name="delete_object"/>
+	<menu_item_call label="Lista de bloqueio" name="blacklist_object"/>
+	<menu_item_call label="Comprar objeto" name="object_buy"/>
+	<menu_item_call label="Filtrar meus objetos" name="filter_my_objects" />
+	<menu_item_call label="Selecionar tudo" name="select_all" />
+	<menu_item_call label="Limpar seleção" name="clear_selection" />
+</context_menu>

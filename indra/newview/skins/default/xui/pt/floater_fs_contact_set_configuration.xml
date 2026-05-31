@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Configurações de conjuntos de contatos">
+	<floater.string name="title">
+		Configurações de [NAME]
+	</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">
+			Configurações do conjunto de contatos:
+		</text>
+		<line_editor name="set_name_editor" right="-100"/>
+		<button name="rename_btn" width="85" label="Renomear"/>
+		<color_swatch label="Selecionar cor" name="set_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<check_box label="Mostrar notificações" name="show_set_notifications"/>
+		<check_box label="Ordenar por status online" name="sort_by_online_status"/>
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">
+			Configurações globais:
+		</text>
+		<color_swatch label="Cor" name="global_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<text name="label_online">
+			Notificações de online:
+		</text>
+		<check_box label="Mostrar notificações de online de TODOS os amigos como toast" name="ChatOnlineNotification"/>
+		<check_box label="Mostrar notificações de online de TODOS os amigos no chat" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="Mostrar notificações de online de conjuntos específicos como toast" name="FSContactSetsNotificationToast"/>
+		<check_box label="Mostrar notificações de online de conjuntos específicos no chat" name="FSContactSetsNotificationNearbyChat"/>
+		<text name="label_colors">
+			Cores personalizadas:
+		</text>
+		<check_box label="Colorir ícone do minimapa com base no conjunto de contatos" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="Colorir tag de nome com base no conjunto de contatos" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="Colorir radar e lista de proximidade com base no conjunto de contatos" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Colorir chat com base no conjunto de contatos" name="FSContactSetsColorizeChat"/>
+		<check_box label="Colorir lista de amigos com base no conjunto de contatos" name="FSContactSetsColorizeFriends"/>
+	</panel>
+	<panel name="side_panel">
+		<check_box label="Usar resposta de ocupado personalizada para este conjunto" name="set_autoresponse_busy_enabled"/>
+		<check_box label="Usar mensagem de resposta automática personalizada para este conjunto" name="set_autoresponse_mode_enabled"/>
+		<check_box label="Usar resposta automática personalizada para não amigos neste conjunto" name="set_autoresponse_nonfriends_enabled"/>
+	</panel>
+</floater>

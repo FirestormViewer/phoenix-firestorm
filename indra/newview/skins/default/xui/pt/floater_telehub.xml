@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater height="310" min_height="310" name="telehub" title="TELEHUB" width="286">
+<floater height="310" min_height="310" name="telehub" title="Telehub">
 	<text name="status_text_connected">
 		Telehub conectado ao objeto [OBJECT]
 	</text>
 	<text name="status_text_not_connected">
-		Sem telehub conectado.
+		Nenhum Telehub conectado.
 	</text>
-	<text name="help_text_connected">
-		Para remover, clique em Desconectar.
+	<text name="help_text_connected" width="300">
+		Clique em "Desconectar" para remover.
 	</text>
-	<text name="help_text_not_connected">
-		Selecione um objeto e clique em Conectar Telehub.
+	<text bottom_delta="-18" height="38" name="help_text_not_connected">
+		Selecione um objeto e clique em
+"Conectar ao Telehub".
 	</text>
-	<button label="Conectar Telehub" name="connect_btn"/>
-	<button label="Desconectar" name="disconnect_btn"/>
-	<text name="spawn_points_text" width="265">
-		Pontos de Nascimento (posições, não objetos):
+	<button label="Conectar ao Telehub" name="connect_btn" width="134"/>
+	<button label="Desconectar" left="152" name="disconnect_btn" width="88"/>
+	<text name="spawn_points_text" width="230">
+		Pontos de spawn (posições, não objetos):
 	</text>
-	<scroll_list name="spawn_points_list" width="265"/>
-	<button label="Adicionar Nascimento" name="add_spawn_point_btn" width="135"/>
-	<button label="Remover Nascimento" left="150" name="remove_spawn_point_btn" width="130"/>
+	<button label="Adicionar spawn" name="add_spawn_point_btn"/>
+	<button label="Remover spawn" name="remove_spawn_point_btn"/>
 	<text name="spawn_point_help">
-		Selecione o objeto e clique em &apos;Adicionar spawn&apos; para especificar a posição. 
-O objeto pode ser excluído ou movido posteriormente. 
-As posições são definidas em relação ao centro do telehub. 
-Selecione um item da lista para realçá-lo inworld.
+		Selecione um objeto e clique em Adicionar spawn para definir a posição.
+Depois, você pode mover ou excluir o objeto.
+As posições são relativas ao centro do Telehub.
+Selecione um objeto da lista para destacá-lo no mundo.
 	</text>
 </floater>

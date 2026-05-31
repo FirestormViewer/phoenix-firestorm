@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Escondido)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Parcela oculta)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Região Oculta)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>***IM foi bloqueado pelo seu visualizador.</string>
+			<key>description</key>
+			<string>Mostrado no lugar da mensagem original quando uma mensagem instantânea recebida é bloqueada.</string>
+			<key>label</key>
+			<string>Mensagens instantâneas recebidas bloqueadas (local)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>***A mensagem instantânea foi bloqueada pelo visualizador do remetente.</string>
+			<key>description</key>
+			<string>Exibido (e enviado para a outra parte) quando uma mensagem instantânea de saída é bloqueada.</string>
+			<key>label</key>
+			<string>IM de saída bloqueado (local + remoto)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>O piloto automático não pode ser usado devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>A ação não pôde ser executada devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>O grupo ativo não pode ser alterado devido a restrições de RLV. Redefinir para "[GROUP_SLURL]".</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>As ações de inventário desejadas não podem ser executadas devido a uma pasta bloqueada por RLV.</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Avatares próximos não podem ser visualizados devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>A tentativa de anexar "[OBJECT]" foi negada devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>"[OBJECT]" teve seu teletransporte negado devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>A caixa de diálogo ou caixa de texto do script não pode ser exibida devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Não foi possível compartilhar o inventário com [RECIPIENT] devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Não foi possível compartilhar o inventário devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>A sessão de IM com [RECIPIENT] falhou ao iniciar devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>A conferência não pôde ser iniciada devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>O teleporte falhou ao inicializar devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>O teletransporte não pode ser oferecido devido às restrições do RLV.</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>[TYPE] não pôde ser aberto devido a restrições de RLV.</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>O modo Grid não pôde ser ativado devido a restrições de RLV.</string>
+		</map>
+
+		<!-- System messages -->
+		<key>message_toggle_restart</key>
+		<map>
+			<key>value</key>
+			<string>O suporte do RestrainedLove será %s após a reinicialização.</string>
+		</map>
+		<key>message_toggle_restart_pending</key>
+		<map>
+			<key>value</key>
+			<string> (reinicialização pendente)</string>
+		</map>
+		<key>message_toggle_restart_enabled</key>
+		<map>
+			<key>value</key>
+			<string>ativado</string>
+		</map>
+		<key>message_toggle_restart_disabled</key>
+		<map>
+			<key>value</key>
+			<string>desabilitado</string>
+		</map>
+	</map>
+</map>
+</llsd>

@@ -1,2 +1,5 @@
-<?xml version="1.0" ?>
-<floater name="groups" title="NOMES DE USUÁRIOS SALVOS"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="groups" title="Nomes de usuário lembrados">
+	<button label="Esquecer" label_selected="Esquecer" name="forget"/>
+	<check_box label="Excluir também os dados locais deste nome de usuário" name="delete_data" tool_tip="Exclui arquivos locais: histórico de chat, captura da última sessão, cookies do navegador, histórico de teletransportes, configurações da barra de ferramentas etc. Alguns arquivos locais são compartilhados entre grids."/>
+</floater>

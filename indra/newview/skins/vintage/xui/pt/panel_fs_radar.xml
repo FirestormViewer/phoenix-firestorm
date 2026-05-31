@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string
+		name="MiniMapToolTipMsg"
+		value="[REGION] (Clique duplo para abrir o mapa; mantenha Shift pressionado e arraste para mover)"/>
+	<string
+		name="AltMiniMapToolTipMsg"
+		value="[REGION] (Clique duplo para teleportar; mantenha Shift pressionado e arraste para mover)"/>
+	<string
+		name="avatar_name_count"
+		value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<layout_stack name="radar_ls">
+			<layout_panel name="radarlayout">
+				<radar_list name="radar_list">
+					<radar_list.columns label="Nome" tool_tip="[TOTAL] avatares, [IN_REGION] na mesma região, [IN_CHAT_RANGE] no alcance do chat" name="name"/>
+					<radar_list.columns label="" tool_tip="Está falando no voice" name="voice_level"/>
+					<radar_list.columns label="" tool_tip="Está na mesma região (verde) ou na mesma parcela (verde/amarelo)" name="in_region"/>
+					<radar_list.columns label="" tool_tip="Está digitando" name="typing_status"/>
+					<radar_list.columns label="" tool_tip="Está sentado" name="sitting_status"/>
+					<radar_list.columns label="" tool_tip="Status das informações de pagamento" name="flags"/>
+					<radar_list.columns label="Idade" name="age"/>
+					<radar_list.columns label="Visto" name="seen"/>
+					<radar_list.columns label="Dist." name="range"/>
+				</radar_list>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

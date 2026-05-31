@@ -5,10 +5,10 @@
 -->
 <floater name="inspect_object">
 	<string name="Creator">
-		Autor: [CREATOR]
+		De [CREATOR]
 	</string>
 	<string name="CreatorAndOwner">
-		Autor [CREATOR]
+		De [CREATOR]
 Proprietário [OWNER]
 	</string>
 	<string name="Price">
@@ -23,16 +23,23 @@ Proprietário [OWNER]
 	<string name="Sit">
 		Sentar
 	</string>
-	<text name="object_name" value="Test Object Name That Is actually two lines and Really Long"/>
+	<text name="object_name" value="Teste de um nome de objeto bem longo, que ocupa mais de uma linha."/>
+	<text name="object_creator">
+		de secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
+proprietário secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
+	</text>
 	<text name="price_text">
-		L$30.000
+		30.000 L$
 	</text>
 	<text name="object_description">
-		This is a really long description for an object being as how it is at least 80 characters in length and so but maybe more like 120 at this point. Who knows, really?
+		Esta é uma descrição bem longa de um objeto, com pelo menos 80 caracteres, ou talvez já mais de 120, e maior que o texto original em inglês. Ninguém sabe ao certo.
+	</text>
+	<text name="object_media_url">
+		http://www.superdupertest.com
 	</text>
 	<button label="Comprar" name="buy_btn"/>
 	<button label="Pagar" name="pay_btn"/>
-	<button label="Pegar uma cópia" name="take_free_copy_btn"/>
+	<button label="Pegar cópia" name="take_free_copy_btn" width="100"/>
 	<button label="Tocar" name="touch_btn"/>
 	<button label="Sentar" name="sit_btn"/>
 	<button label="Abrir" name="open_btn"/>

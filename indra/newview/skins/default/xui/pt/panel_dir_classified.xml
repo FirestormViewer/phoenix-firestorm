@@ -1,0 +1,35 @@
+<panel label="Classificados" name="panel_dir_classified">
+    <string name="searching_text">
+        Buscando...
+    </string>
+    <string name="not_found_text">
+        Nada encontrado.
+    </string>
+    <string name="found_text">
+        [COUNT] encontrado(s).
+    </string>
+    <text name="find">
+        Digite os termos da busca:
+    </text>
+    <combo_box name="Category">
+        <combo_item name="AnyCategory" label="Todas as categorias"/>
+        <combo_item name="Shopping" label="Compras"/>
+        <combo_item name="LandRental" label="Aluguel de terreno"/>
+        <combo_item name="PropertyRental" label="Aluguel de imóvel"/>
+        <combo_item name="SpecialAttraction" label="Atrações especiais"/>
+        <combo_item name="NewProducts" label="Produtos novos"/>
+        <combo_item name="Employment" label="Emprego"/>
+        <combo_item name="Wanted" label="Procura-se"/>
+        <combo_item name="Service" label="Serviços"/>
+        <combo_item name="Personal" label="Pessoal"/>
+     </combo_box>
+    <icon tool_tip="Geral" name="rating_icon_general"/>
+    <icon tool_tip="Moderado" name="rating_icon_moderate"/>
+    <icon tool_tip="Adulto" name="rating_icon_adult"/>
+    <scroll_list name="results">
+        <column label="Nome" name="name" width="215"/>
+        <column label="Preço do anúncio" name="price" width="91"/>
+    </scroll_list>
+    <button tool_tip="Página anterior" name="prev_btn"/>
+    <button tool_tip="Próxima página" name="next_btn"/>
+</panel>
