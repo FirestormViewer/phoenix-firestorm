@@ -6,6 +6,7 @@
  can_resize="false"
  legacy_header_height="18"
  name="floater_fs_contact_set_configure"
+ help_topic="contact_sets"
  title="Contact set settings">
     <floater.string
      name="title">
