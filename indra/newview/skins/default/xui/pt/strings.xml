@@ -433,10 +433,10 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 		Sepia
 	</string>
 	<string name="Spotlight">
-		Spotlight
+		Refletor
 	</string>
 	<string name="Video">
-		Video
+		Vídeo
 	</string>
 	<string name="Autocontrast">
 		Autocontraste
@@ -454,7 +454,7 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 		Antigo
 	</string>
 	<string name="Badtrip">
-		Bad Trip
+		Viagem ruim
 	</string>
 	<string name="Blownhighlights">
 		Realces estourados
@@ -466,7 +466,7 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 		Clarear
 	</string>
 	<string name="Cartoon">
-		Cartoon
+		Desenho animado
 	</string>
 	<string name="Darken">
 		Escurecer
@@ -562,7 +562,7 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 		Largar inventário
 	</string>
 	<string name="TooltipFlagPhantom">
-		Phantom
+		Fantasma
 	</string>
 	<string name="TooltipFlagTemporary">
 		Temporário
@@ -942,7 +942,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		gesto
 	</string>
 	<string name="simstate">
-		simstate
+		estado da sim
 	</string>
 	<string name="favorite">
 		favorito
@@ -1437,18 +1437,6 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Arquivos de programas executáveis
 	</string>
 	<string name="recompile_script_verb">Recompilar</string>
-	<string name="AvatarSetNotAutorespond">
-		Resposta automática DESLIGADA
-	</string>
-	<string name="AvatarSetAutorespond">
-		Resposta automática
-	</string>
-	<string name="AvatarSetNotAutorespondNonFriends">
-		Resposta automática para não amigos DESLIGADA
-	</string>
-	<string name="AvatarSetAutorespondNonFriends">
-		Resposta automática para não amigos
-	</string>
 	<string name="shape">
 		Forma
 	</string>
@@ -5782,9 +5770,6 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_AboutLand_Label">
 		Informações sobre o terreno
 	</string>
-	<string name="Command_AboutLand_Label">
-		Informações sobre o terreno
-	</string>
 	<string name="Command_360_Capture_Label">Captura 360°</string>
 	<string name="Command_Avatar_Label">
 		Pacote de boas-vindas para avatares
@@ -5835,9 +5820,6 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_Move_Label">
 		Andar/Correr/Voar
 	</string>
-	<string name="Command_Outbox_Label">
-		Caixa de saída do revendedor
-	</string>
 	<string name="Command_People_Label">
 		Pessoas
 	</string>
@@ -5863,11 +5845,9 @@ Coloque o caminho do editor entre aspas
 		Procurar
 	</string>
 	<string name="Command_Snapshot_Label">Captura</string>
-	<string name="Command_Social_Label">Social</string>
 	<string name="Command_Speak_Label">
 		Falar
 	</string>
-	<string name="Command_Twitter_Label">Twitter</string>
 	<string name="Command_View_Label">
 		Controles da câmera
 	</string>
@@ -6050,9 +6030,6 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_Move_Tooltip">
 		Mova seu avatar
 	</string>
-	<string name="Command_Outbox_Tooltip">
-		Transferir itens para o mercado para venda
-	</string>
 	<string name="Command_People_Tooltip">
 		Amigos, grupo e pessoas próximas
 	</string>
@@ -6080,13 +6057,9 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_Snapshot_Tooltip">
 		Tirar uma foto (Ctrl+Shift+S)
 	</string>
-	<string name="Command_Social_Tooltip">
-		Postar no Facebook
-	</string>
 	<string name="Command_Speak_Tooltip">
 		Fale com pessoas próximas usando seu microfone
 	</string>
-	<string name="Command_Twitter_Tooltip">Compartilhar no Twitter</string>
 	<string name="Command_View_Tooltip">
 		Alterar o ângulo da câmera
 	</string>

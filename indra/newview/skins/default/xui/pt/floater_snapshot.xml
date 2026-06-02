@@ -6,9 +6,6 @@
 	<string name="postcard_progress_str">
 		Enviando e-mail
 	</string>
-	<string name="facebook_progress_str">
-		Publicando no Facebook
-	</string>
 	<string name="profile_progress_str">
 		Publicando
 	</string>
@@ -17,9 +14,6 @@
 	</string>
 	<string name="local_progress_str">
 		Salvando no computador
-	</string>
-	<string name="facebook_succeeded_str">
-		Imagem enviada
 	</string>
 	<string name="profile_succeeded_str">
 		Imagem enviada
@@ -33,9 +27,6 @@
 	<string name="local_succeeded_str">
 		Salvo no computador!
 	</string>
-	<string name="facebook_failed_str">
-		Falha ao enviar a imagem para sua linha do tempo do Facebook.
-	</string>
 	<string name="profile_failed_str">
 		Falha ao enviar a imagem para o seu perfil.
 	</string>
@@ -48,32 +39,52 @@
 	<string name="local_failed_str">
 		Falha ao salvar.
 	</string>
-	<button label="Atualizar" name="new_snapshot_btn"/>
 	<view name="controls_container">
-	<panel name="advanced_options_panel">
-		<text name="layer_type_label">
-			Capturar:
+		<button label="Atualizar" name="new_snapshot_btn" />
+		<panel name="advanced_options_panel">
+			<text name="layer_type_label">
+				Capturar:
+			</text>
+			<combo_box label="Camadas da imagem" name="layer_types">
+				<combo_box.item label="Cores" name="Colors" />
+				<combo_box.item label="Profundidade" name="Depth" />
+				<combo_box.item label="Profundidade (24 bits)" name="Depth24" />
+			</combo_box>
+			<check_box label="Interface" name="ui_check" />
+			<check_box label="Saldo L$" name="currency_check"/>
+			<check_box label="HUDs" name="hud_check" />
+			<check_box label="Moldura da captura" tool_tip="Mostra uma moldura na tela ao redor da área da captura. Partes da cena fora da captura ficam dessaturadas e levemente desfocadas." name="show_frame" />
+			<check_box label="Guias de composição" tool_tip="Mostra guias de composição (regra dos terços) dentro da área da captura." name="show_guides" />
+			<button tool_tip="Abrir configurações do guia da moldura" name="guide_settings_btn" />
+			<check_box label="Congelar quadro (tela cheia)" name="freeze_frame_check" />
+			<check_box label="Atualização automática" name="auto_snapshot_check" />
+			<check_box label="Sem pós-processamento" name="no_post_check" />
+			<text name="filter_list_label">
+				Filtro:
+			</text>
+			<combo_box name="filters_combobox" tool_tip="Filtros de imagem">
+				<combo_box.item label="Sem filtro" name="NoFilter" />
+			</combo_box>
+		</panel>
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				Sucesso
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				Falha
+			</text>
+		</panel>
+		<text name="working_lbl">
+			Processando...
 		</text>
-		<combo_box label="Camadas da imagem" name="layer_types">
-			<combo_box.item label="Cores" name="Colors"/>
-			<combo_box.item label="Profundidade" name="Depth"/>
-		</combo_box>
-		<check_box label="Interface" name="ui_check"/>
-		<check_box label="HUDs" name="hud_check"/>
-		<check_box label="Congelar quadro (tela cheia)" name="freeze_frame_check"/>
-		<check_box label="Atualização automática" name="auto_snapshot_check"/>
-		<text name="filter_list_label">
-			Filtro:
+		<text name="refresh_lbl">
+			Nova captura
 		</text>
-		<combo_box name="filters_combobox" tool_tip="Filtros de imagem">
-			<combo_box.item label="Sem filtro" name="NoFilter"/>
-		</combo_box>
-	</panel>
 	</view>
 	<text name="image_res_text">
 		[WIDTH]px (largura) x [HEIGHT]px (altura)
 	</text>
-	<text name="file_size_label">
-		[SIZE] KB
-	</text>
+	<button label="Captura 360°" name="360_label" />
 </floater>

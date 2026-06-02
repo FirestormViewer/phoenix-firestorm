@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_hair_panel">
 	<panel name="avatar_hair_color_panel">
 		<texture_picker label="Textura" name="Texture" tool_tip="Clique aqui para escolher uma imagem"/>

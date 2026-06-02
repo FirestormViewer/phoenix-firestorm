@@ -2,10 +2,7 @@
 <panel name="panel_flickr_photo">
 	<combo_box name="resolution_combobox" tool_tip="Resolução da imagem">
 		<combo_box.item label="Janela atual" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="personalizado" name="custom"/>
+		<combo_box.item label="Personalizado" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Filtros de imagem">
 		<combo_box.item label="Sem filtro" name="NoFilter"/>
@@ -19,8 +16,6 @@
 		<check_box label="Mostrar guia de composição" name="show_guides" tool_tip="Mostra o guia de composição (regra dos terços) dentro da área da captura."/>
 		<button tool_tip="Abrir configurações do guia da moldura" name="guide_settings_btn"/>
 	</panel>
-	<check_box label="Mostrar moldura" name="show_frame" tool_tip="Mostra uma moldura na tela ao redor da área da captura. Partes da cena fora da captura ficam dessaturadas e levemente desfocadas."/>
-	<check_box label="Mostrar guia" name="show_guides" tool_tip="Mostra o guia de composição (regra dos terços) dentro da área da captura."/>
 	<button label="Atualizar" name="new_snapshot_btn" tool_tip="Clique para atualizar"/>
 	<button label="Pré-visualização" name="big_preview_btn" tool_tip="Clique para alternar a pré-visualização"/>
 	<text name="title_label">

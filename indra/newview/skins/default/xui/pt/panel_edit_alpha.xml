@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_alpha_panel">
 	<scroll_container name="avatar_alpha_color_panel_scroll">
 		<panel name="avatar_alpha_color_panel">
