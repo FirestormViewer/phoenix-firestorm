@@ -542,7 +542,7 @@ void LLNavigationBar::setHomeBtnTooltip()
                 {
                     ++mHomeTooltipRetryCount;
                     LL_INFOS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
-                    LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [region_handle](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
+                    LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
                     {
                         if (LLNavigationBar::instanceExists())
                         {
