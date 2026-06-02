@@ -235,7 +235,7 @@
 		<check_box label="Exibir a cena como um wireframe" name="Wireframe" />
 		<check_box label="Renderizar luzes anexadas" tool_tip="Esta opção ativa todas as luzes que os avatares possuem, como facelights. Útil, por exemplo, para desativar facelights se necessário." name="Render Attached Lights" />
 		<check_box label="Renderizar partículas anexadas" name="Render Attached Particles" />
-		<check_box label="Reduzir distância de renderização quando a VRAM estiver cheia" tool_tip="Se ativado, a distância de renderização será reduzida automaticamente quando a VRAM não estiver mais disponível." name="Reduce distância de renderização when VRAM is full" />
+		<check_box label="Reduzir distância de renderização quando a VRAM estiver cheia" tool_tip="Se ativado, a distância de renderização será reduzida automaticamente quando a VRAM não estiver mais disponível." name="Reduce Draw Distance when VRAM is full" />
 		<text name="ExcludeAnimeshImposterLabel" width="255">
 			Sempre exiba os avatares do Animesh por completo:
 		</text>
