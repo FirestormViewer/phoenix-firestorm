@@ -107,11 +107,9 @@
             </menu>
         </menu>
         <menu_item_check label="Gestos" name="Gestures"/>
-		<menu_item_call label="Twitter..." name="Twitter"/>
 		<menu_item_call label="Flickr..." name="Flickr"/>
 		<menu_item_call label="Primfeed..." name="Primfeed"/>
 		<menu_item_call label="Discord..." name="Discord"/>
-		<menu_item_check label="Gestos..." name="Gestures"/>
 		<menu_item_check label="Log de conversas..." name="Conversation Log..."/>
 		<menu_item_check label="Voz local" name="Nearby Voice"/>
 		<menu_item_call label="Lista de bloqueio" name="Block List"/>
@@ -388,26 +386,7 @@
 			<menu_item_check label="Testar FRInfo" name="Test FRInfo"/>
 			<menu_item_check label="Objetos flexíveis" name="Flexible Objects"/>
 		</menu>
-		<menu label="RLVa" name="RLVa Embedded">
-			<menu label="Debug" name="Debug">
-				<menu_item_check label="Mostrar menu RLVa na barra de menus" name="Show Top-level RLVa Menu"/>
-				<menu_item_check label="Mostrar mensagens de debug" name="Show Debug Messages"/>
-				<menu_item_check label="Ocultar mensagens desativadas ou duplicadas" name="Hide Unset or Duplicate Messages"/>
-				<menu_item_check label="Mostrar falhas de asserção" name="Show Assertion Failures"/>
-				<menu_item_check label="Usar esquema de nomes legado" name="Enable Legacy Naming"/>
-				<menu_item_check label="Ativar compartilhamento de roupas" name="Enable Shared Wear"/>
-				<menu_item_check label="Renomear itens compartilhados ao vestir" name="Rename Shared Items on Wear"/>
-				<menu_item_check label="Bloqueios..." name="Locks"/>
-			</menu>
-			<menu_item_check label="Ocultar camadas bloqueadas" name="Hide Locked Layers"/>
-			<menu_item_check label="Ocultar anexos bloqueados" name="Hide Locked Attachments"/>
-			<menu_item_check label="Permitir chat OOC" name="Allow OOC Chat"/>
-			<menu_item_check label="Proibir entrega para pasta #RLV" name="Forbid Give to #RLV"/>
-			<menu_item_check label="Mostrar chat filtrado" name="Show Filtered Chat"/>
-			<menu_item_check label="Mostrar tags de nome" name="Show Name Tags"/>
-			<menu_item_check label="Vestir substitui roupas não bloqueadas" name="Wear Replaces Unlocked"/>
-			<menu_item_check label="Restrições..." name="Restrictions"/>
-		</menu>
+		<menu label="RLVa" name="RLVa Embedded"/>
 		<menu label="Backup de stream de mídia" name="media_stream_import_export">
 			<menu_item_call label="Importar XML com stream de mídia..." name="media_stream_import"/>
 			<menu_item_call label="Exportar stream de mídia como XML..." name="media_stream_export"/>
@@ -626,7 +605,7 @@
 			<menu_item_check label="Depurar cliques" name="Debug Clicks"/>
 			<menu_item_check label="Depurar views" name="Debug Views"/>
 			<menu_item_check label="Depurar Unicode" name="Debug Unicode"/>
-			<menu_item_check label="Depurar controles da câmera" name="Debug Unicode"/>
+			<menu_item_check label="Depurar controles da câmera" name="Debug Camera Controls"/>
 			<menu_item_check label="Dicas: nomes de debug" name="Debug Name Tooltips"/>
 			<menu_item_check label="Depurar eventos do mouse" name="Debug Mouse Events"/>
 			<menu_item_check label="Depurar teclas" name="Debug Keys"/>

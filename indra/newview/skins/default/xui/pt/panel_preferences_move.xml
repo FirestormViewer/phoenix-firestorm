@@ -40,7 +40,7 @@
 		</panel>
 
 		
-		<panel label="Olhar do rato" name="tab-mouselook">
+		<panel label="Modo Mouselook" name="tab-mouselook">
 			<check_box label="Habilitar a funcionalidade Mouselook" name="EnableMouselook" tool_tip="Ativa perspectiva em primeira pessoa e controle com o mouse." />
 			<check_box label="Mostre-me com aparência de mouse" name="first_person_avatar_visible" />
 			<check_box label="Mostrar interface do usuário na aparência do mouse" name="first_person_ui_visible" />
@@ -53,7 +53,7 @@
 			<check_box label="Ativar marcadores de alvo" name="ExodusMouselookIFF" />
 			<slider label="Alcance (m)" name="ExodusMouselookIFFRange" />
 			<text name="Mouse Sensitivity" width="195">
-				Sensibilidade do mouse para Mouselook:
+				Sensibilidade do Mouse:
 			</text>
 			<check_box label="Reverter" name="invert_mouse" />
 		</panel>
@@ -61,21 +61,21 @@
 		
 		<panel label="Movimento" name="tab-movement">
 			<check_box label="Mova-se com as teclas de seta" name="arrow_keys_move_avatar_check" tool_tip="Aplica-se exclusivamente à janela “Bate-papo por proximidade” na parte inferior do visualizador, e não à guia correspondente na janela “Conversas”." />
-			<check_box label="A entrada de letras afeta o movimento (por exemplo, WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
+			<check_box label="Mova-se com as letras (por exemplo, WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="Pressione-pressione-segure para executar" name="tap_tap_hold_to_run" />
 			<check_box label="Voar/pousar ao pressionar para cima (pular) / para baixo (rastejar)" name="automatic_fly" />
-			<check_box label="Ativar modo de comutação lenta" name="crouch_toggle_mode" />
+			<check_box label="Ativar modo de alternância de agachamento." name="crouch_toggle_mode" />
 			<check_box label="Desative a espera pelas animações de salto e pouso" name="FSIgnoreFinishAnimation" />
 			<check_box label="Permitir que os avatares retrocedam na visualização local (padrão SL)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Se ativado, os avatares em sua própria tela andarão para trás ao andar para trás, em vez de se virarem e depois caminharem para frente. Esta opção tem apenas um efeito local e não afeta o que os outros veem. Esta é a configuração padrão no Visualizador do Second Life e pode ser substituída pelo AO do avatar." />
 			<check_box label="Girar avatar para objeto selecionado" name="FSTurnAvatarToSelectedObject" tool_tip="Gira o avatar para ficar de frente para o objeto atualmente selecionado." />
 			<slider label_width="180" label="Velocidade de rotação do avatar:" name="av_turn_spd" tool_tip="Alterada a taxa de rotação do avatar. 0 - 100 como uma porcentagem estimada da taxa de rotação máxima (padrão: 0). Valores altos levam a movimentos irregulares e espasmódicos." width="305" />
-			<check_box label="Desative a conexão com regiões vizinhas (Atenção: leia a dica!)" name="FSDisableNeighbourRegionConnections" tool_tip="Mostra/carrega apenas a região em que você está. Isso pode melhorar o desempenho e a estabilidade da rede, mas mudanças de região a pé ou em veículos são menos confiáveis ​​e o teletransporte manual pode ser necessário." />
+			<check_box label="Desative a conexão com regiões vizinhas (Atenção: leia a dica!)" name="FSDisableNeighbourRegionConnections" tool_tip="Mostra/carrega apenas a região em que você está. Isso pode melhorar o desempenho e a estabilidade da rede, mas mudanças de região a pé ou em veículos são menos confiáveis ​e o teletransporte manual pode ser necessário." />
 			<text name="Region_Crossing_Movement_Label" width="245">
 				Previsão de movimento ao mudar de região:
 			</text>
 			<radio_group name="Region_Crossing_Movement">
 				<radio_item label="Ilimitado" name="move_predict" width="85" />
-				<radio_item label="Pare se o erro for muito grande." name="move_stop" width="85" />
+				<radio_item label="Pare se o erro for muito grande" name="move_stop" width="85" />
 			</radio_group>
 			<text name="movelock_lbl">
 				Se o Movelock estiver ativado na ponte LSL...
@@ -127,7 +127,7 @@
 				<combo_box.item label="Abrir mapa-múndi" name="1" />
 				<combo_box.item label="Teleporte para o local" name="2" />
 			</combo_box>
-			<slider label="Tamanho do raio de seleção:" tool_tip="Controla o raio da área de seleção no minimapa. A cor e a opacidade podem ser configuradas usando as configurações de cor e opacidade do raio de seleção." name="FSMinimapPickScale" />
+			<slider label="Raio de seleção:" tool_tip="Controla o raio da área de seleção no minimapa. A cor e a opacidade podem ser configuradas usando as configurações de cor e opacidade do raio de seleção." name="FSMinimapPickScale" />
 			<text name="world_map_options_label">
 			   Opções do mapa-múndi:
 			</text>

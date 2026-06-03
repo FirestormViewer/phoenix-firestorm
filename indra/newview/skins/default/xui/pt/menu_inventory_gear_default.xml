@@ -44,5 +44,4 @@
 	<!-- ## Zi: Filter Links Menu -->
 	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Somente objetos vinculados"/>
 	<menu_item_call label="Esvaziar lixeira" name="empty_trash"/>
-	<menu_item_check label="Configuracoes do inventario..." name="inv_settings"/>
 </toggleable_menu>

@@ -248,7 +248,7 @@
 			<text name="notecard_editor_writable_selection_color_label">
 				Seleção:
 			</text>
-			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Cor do texto selecionado em cartões de nota" />
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Cor do texto selecionado em cartões de nota" />
 			<color_swatch name="area_search_beacon_color" tool_tip="Cor da marcação de pesquisa circundante" />
 			<check_box label="Mostrar caixas de diálogo de script em um fundo opaco" name="FSScriptDialogNoTransparency" />
 			<check_box name="FSGroupNotifyNoTransparency" label="Mostrar mensagens de grupo em um fundo opaco" />

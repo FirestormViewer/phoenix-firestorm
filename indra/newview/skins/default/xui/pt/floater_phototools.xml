@@ -439,7 +439,7 @@
 				<text name="T_Antialiasing_Type" tool_tip="Alterar esta opção pode exigir reinício em certos hardwares.">
 					Tipo de antialiasing:
 				</text>
-				<combo_box name="fsaa">
+				<combo_box name="CB_Antialiasing_Type">
 					<combo_box.item label="Desativado" name="FSAADisabled"/>
 					<combo_box.item label="FXAA" name="FXAA"/>
 					<combo_box.item label="SMAA" name="SMAA"/>

@@ -103,8 +103,5 @@
 	<text name="text_box3" height="30">
 		Configure mensagens de Não Perturbe e Ausente em [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidade / Resposta automática].
 	</text>
-	<text_editor name="do_not_disturb_response">
-		log_in_to_change
-	</text_editor>
 
 </panel>
