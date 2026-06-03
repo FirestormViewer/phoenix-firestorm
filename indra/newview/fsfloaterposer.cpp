@@ -2950,6 +2950,11 @@ void FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
     if (!joint)
         return;
 
+    // Collision volumes are physics shapes, not deforming bones; exclude them from BVH export.
+    // The UI already marks these joints with icon_rotation_does_not_export when in BVH save mode.
+    if (joint->boneType() == COL_VOLUMES)
+        return;
+
     auto saveAxis = getBvhJointTranslation(joint->jointName());
 
     switch (joint->boneType())
@@ -3024,6 +3029,9 @@ void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FS
     if (!joint)
         return;
 
+    if (joint->boneType() == COL_VOLUMES)
+        return;
+
     switch (joint->boneType())
     {
         case WHOLEAVATAR:
@@ -3046,6 +3054,9 @@ void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FS
 void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint)
 {
     if (!joint)
+        return;
+
+    if (joint->boneType() == COL_VOLUMES)
         return;
 
     bool lockPelvisJoint = gSavedSettings.getBOOL(POSER_UNLOCKPELVISINBVH_SAVE_KEY);

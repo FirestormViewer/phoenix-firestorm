@@ -1308,10 +1308,13 @@ bool LLViewerWindow::handleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 bool LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
     static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
-    static LLCachedControl<S32> rmbChannel(gSavedSettings, "FSRMBScriptChannel", -9999);
-    if (rmbEnabled && rmbChannel < 0 && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
     {
-        send_chat_from_viewer("RMBD", CHAT_TYPE_WHISPER, (S32)rmbChannel);
+        // Signal RMB down by sending AGENT_CONTROL_LBUTTON_DOWN (the normal
+        // non-mouselook left-button control flag), so scripts can detect it
+        // via CONTROL_LBUTTON in a control event handler.
+        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+        send_agent_update(true);
     }
     bool down = true;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
@@ -1320,10 +1323,11 @@ bool LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK
 bool LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
     static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
-    static LLCachedControl<S32> rmbChannel(gSavedSettings, "FSRMBScriptChannel", -9999);
-    if (rmbEnabled && rmbChannel < 0 && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
     {
-        send_chat_from_viewer("RMBU", CHAT_TYPE_WHISPER, (S32)rmbChannel);
+        // Signal RMB up via AGENT_CONTROL_LBUTTON_UP.
+        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
+        send_agent_update(true);
     }
     bool down = false;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
