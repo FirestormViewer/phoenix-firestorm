@@ -80,7 +80,7 @@
 			Multiplicador para solicitações de pré-carregamento de som:
 		</text>
 		<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicador de eventos para solicitações de pré-carregamento de som [Padrão: 4]"/>
-		<button name="AntiSpamUnblock" label="Desbloquear todas as fontes de spam bloqueadas" width="250"/>
+		<button name="AntiSpamUnblock" label="Desbloquear todas as fontes de spam bloqueadas" width="280"/>
 		<check_box label="Confirmar antes de pagar. Limite:" name="FSConfirmPayments" width="235" tool_tip="Mostra uma caixa de confirmação antes de pagar valores acima do limite definido. Defina 0 para sempre confirmar pagamentos."/>
 		<spinner name="FSPaymentConfirmationThreshold" tool_tip="Mostra uma caixa de confirmação antes de pagar valores acima do limite definido. Defina 0 para sempre confirmar pagamentos."/>
 	</panel>
@@ -89,7 +89,7 @@
 	<!--Avatar-->
 	<panel label="Avatar" name="firestorm_avatar">
 		<text name="HeadMovement">
-			Amplitude em que a cabeça do avatar acompanha o movimento do mouse ('0' para sem movimento):
+			Amplitude do movimento da cabeça ao acompanhar o mouse ('0' para desativar)
 		</text>
 		<slider label="Faixa vertical do movimento da cabeça:" tool_tip="Faixa vertical, em graus, em que a cabeça do avatar acompanha o movimento do mouse." name="PitchFromMousePositionSlider"/>
 		<text name="PitchFromMousePositionText">
@@ -159,7 +159,7 @@
 		<color_swatch label="Cor" name="colorswatch" tool_tip="Clique para abrir o seletor de cor"/>
 		<spinner label="Alpha" label_width="60" name="alpha" width="110" />
 		<spinner label="Brilho" label_width="60" name="glow" width="110"/>
-		<check_box label="Totalmente brilhante" name="EmFBToggle"/>
+		<check_box label="Brilho total" name="EmFBToggle"/>
 		<combo_box name="combobox shininess" tool_tip="Define o quanto o objeto brilha">
 			<combo_item name="None" label="Nenhum"/>
 			<combo_item name="Low" label="Baixo"/>
@@ -173,7 +173,7 @@
 		<text name="build_item_add_disp_rect_txt">
 			Definido no momento: [ITEM]
 		</text>
-		<check_box name="FSBuildPrefs_UseCustomScript" label="Script personalizado para o botão &quot;Novo script&quot;"/>
+		<check_box name="FSBuildPrefs_UseCustomScript" label="Script personalizado no &quot;Novo script&quot;"/>
 		<fs_embedded_item_drop_target name="custom_script" tool_tip="Arraste e solte aqui um script do inventário.">
 			Solte o script aqui.
 		</fs_embedded_item_drop_target>
@@ -189,13 +189,13 @@
 		<check_box label="Limitar distância de arraste (metros):" name="LimitDragDistance" width="230"/>
 		<spinner name="MaxDragDistance" tool_tip="Distância máxima que um objeto pode ser movido de uma vez (em metros a partir do ponto inicial) [Padrão: 48.000]"/>
 		<text name="RotationStepText1" width="170">
-			Restringir rotações para múltiplos de
+			Restringir rotações a múltiplos de
 		</text>
 		<spinner name="RotationStep" tool_tip="Todas as rotações feitas com a ferramenta de rotação serão limitadas a múltiplos deste valor [Padrão: 1.0]"/>
 		<text name="RotationStepText2" width="290">
-			Restringir em graus se &quot;Alinhar à grade&quot; estiver desativado
+			quando "Alinhar à grade" estiver desativado
 		</text>
-		<check_box label="Confirmar desvinculação de objetos com pelo menos" name="FSUnlinkConfirmEnabled" width="295"/>
+		<check_box label="Confirmar desvinculação com pelo menos" name="FSUnlinkConfirmEnabled" width="295"/>
 		<text name="MinObjectsForUnlinkConfirmText2">
 			objetos individuais
 		</text>
@@ -209,13 +209,13 @@
 		<spinner label="Posição X" name="X pos" label_width="60" width="135"/>
 		<spinner label="Posição Y" name="Y pos" label_width="60" width="135"/>
 		<spinner label="Posição Z" name="Z pos" label_width="60" width="135"/>
-		<check_box label="Valores em porcentagem" tool_tip="Os valores padrão são percentuais, com valor 50 em cada eixo" name="FSPivotPercToggle"/>
+		<check_box label="Valores em %" tool_tip="Os valores padrão são percentuais, com valor 50 em cada eixo" name="FSPivotPercToggle"/>
 	</panel>
 
 	<!--Build 2-->
 	<panel label="Construção 2" name="BuildTab2">
 		<check_box label="Usar Ctrl+mouse para agarrar e manipular objetos" tool_tip="Se ativado, objetos podem ser agarrados e movidos com o mouse enquanto a tecla Ctrl estiver pressionada." name="FSEnableGrab"/>
-		<check_box label="Ativar clicar-arrastar ou clicar-escalar (com Caps Lock) em uma face de textura ao construir" tool_tip="Se ativado, habilita clicar-arrastar ou clicar-escalar (com Caps Lock) em uma face de textura no modo de construção. Este é um recurso experimental e deve ser usado com cautela." name="FSExperimentalDragTexture"/>
+		<check_box label="Ativar clicar-arrastar ou clicar-escalar (com Caps Lock) em uma face de textura ao construir." tool_tip="Se ativado, habilita clicar-arrastar ou clicar-escalar (com Caps Lock) em uma face de textura no modo de construção. Este é um recurso experimental e deve ser usado com cautela." name="FSExperimentalDragTexture"/>
 		<check_box label="Pré-visualizar animação no próprio avatar durante upload" tool_tip="Se ativado, as animações serão reproduzidas na pré-visualização no seu próprio avatar" name="FSUploadAnimationOnOwnAvatar"/>
 		<check_box label="Sempre mostrar informações avançadas de animações" tool_tip="Mostra informações avançadas de animação na janela de propriedades" name="FSAnimationPreviewExpanded"/>
 		<check_box label="Ativar informações avançadas de script" tool_tip="Se ativado, as informações de script serão complementadas com detalhes adicionais." name="FSScriptInfoExtended"/>
@@ -242,10 +242,10 @@
 		</combo_box>
 		<check_box label="Salvar como Mono scripts editados a partir do inventário" tool_tip="Salva scripts editados diretamente do inventário como Mono em vez de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="Ativar pré-processador LSL" tool_tip="Ativa suporte de pré-processador para scripts LSL" name="preproc_checkbox"/>
-		<check_box label="Otimizador de script" tool_tip="Otimiza o espaço necessário para scripts." name="preprocoptimizer_checkbox"/>
+		<check_box label="Otimizar Scripts" tool_tip="Otimiza o espaço necessário para scripts." name="preprocoptimizer_checkbox"/>
 		<check_box label="Comando switch()" tool_tip="Disponibiliza o comando switch() para controle de fluxo." name="preprocswitch_checkbox"/>
-		<check_box label="Listas preguiçosas" left_delta="110" tool_tip="Ativa uma sintaxe estendida para operações com listas." name="preproclazy_checkbox"/>
-		<check_box label="#includes do disco" tool_tip="Ativa comandos #include para incluir arquivos do disco local." name="preprocinclude_checkbox"/>
+		<check_box label="Listas lazy" tool_tip="Ativa uma sintaxe estendida para operações com listas." name="preproclazy_checkbox"/>
+		<check_box label="#Include disco" tool_tip="Ativa comandos #include para incluir arquivos do disco local." name="preprocinclude_checkbox"/>
 		<text name="lslpreprocinclude_textbox">
 			Diretório de include do pré-processador:
 		</text>

@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
-<panel label="Mover" name="move_panel">
-	<tab_container label="Mover e visualizar" name="tabs">
+<?xml version='1.0' encoding='utf-8' standalone="yes" ?>
+<panel label="Mover e ver" name="move_panel">
+	<tab_container label="Mover e ver" name="tabs">
 		
 		<panel label="Opinião" name="tab-view">
 			<slider label="Ângulo de visão" name="camera_fov" tool_tip="No mundo real, este é um recurso de zoom. Ele altera o ângulo de visão dentro da janela do visualizador. Tem a mesma função de pressionar Ctrl-0 ou Ctrl-8. NOTA: Este recurso não funciona quando o Flycam está ativado (3D SpaceNavigator)." />
@@ -23,7 +23,7 @@
 			<check_box label="Redefinir a posição da câmera após o teletransporte (dentro de uma região)" name="FSResetCameraOnTP" tool_tip="Normalmente a posição da câmera é redefinida durante o teletransporte. Esta opção evita esse comportamento." />
 			<check_box label="Redefinir a posição da câmera quando o avatar se move" name="FSResetCameraOnMovement" />
 			<check_box label="Ao redefinir a visualização, gire o avatar na direção da câmera" name="resetviewturnsavatar" tool_tip="Mantém a direção de visualização da câmera e gira o avatar quando a visualização é redefinida (ao pressionar ESC)." />
-			<check_box label="Permitir movimento da câmera através de objetos primitivos" name="ignorecameraconstraints" tool_tip="Ignora a restrição de que a câmera não pode ser movida por objetos primitivos." width="305" />
+			<check_box label="Permitir que a câmera atravesse objetos" name="ignorecameraconstraints" tool_tip="Ignora o empurrão aplicado pelo simulador para manter a câmera fora dos objetos." width="300" />
 			<text name="ignorecameraconstraints_requires_restart">
 				(Requer reinício)
 			</text>
@@ -75,13 +75,13 @@
 			</text>
 			<radio_group name="Region_Crossing_Movement">
 				<radio_item label="Ilimitado" name="move_predict" width="85" />
-				<radio_item label="Pare se o erro for muito grande" name="move_stop" width="85" />
+				<radio_item label="Pare se o erro for muito grande." name="move_stop" width="85" />
 			</radio_group>
 			<text name="movelock_lbl">
 				Se o Movelock estiver ativado na ponte LSL...
 			</text>
 			<check_box label="Reative o movelock após o teletransporte se estiver ativo anteriormente" name="RelockMoveLockAfterRegionChange" />
-			<check_box label="Depois que um movimento for interrompido ou iniciado, bloqueie ou desbloqueie a posição" name="RelockMoveLockAfterMovement" />
+			<check_box label="Depois que um movimento for interrompido ou iniciado, bloqueie ou desbloqueie a posição." name="RelockMoveLockAfterMovement" />
 			<text name="single_click_action_lbl">
 				Clique uma vez no país:
 			</text>

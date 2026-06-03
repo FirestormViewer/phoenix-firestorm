@@ -1,20 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <panel label="Bate-papo de texto" name="chat">
 	<tab_container name="tabs">
-
-		
 		<panel label="Anúncio" name="ChatVisuals">
-			<text name="console_font_size">
+			<text name="console_font_size" width="180">
 				Tamanho da fonte do console:
 			</text>
-			<radio_group name="chat_console_font_size">
-				<radio_item label="Pequeno" name="consradio" />
-				<radio_item label="Médio" name="consradio2" />
-				<radio_item label="Grande" name="consradio3" />
-				<radio_item label="Gigantesco" name="consradio4" />
+			<radio_group name="chat_console_font_size" left_delta="170">
+    			<radio_item label="Pequeno" name="consradio" width="72" />
+    			<radio_item label="Médio" name="consradio2" left_delta="75" />
+    			<radio_item label="Grande" name="consradio3" />
+    			<radio_item label="Gigantesco" name="consradio4" />
 			</radio_group>
 			<check_box label="Reproduza animação de avatar enquanto conversa, por exemplo. para gritar" name="play_avatar_animations" />
-			<check_box label="Incluir mensagens do sistema entre parênteses (somente histórico de bate-papo no estilo V1)" name="FSIMSystemMessageBrackets" />
+			<check_box label="Incluir mensagens do sistema entre parênteses &#10;(somente histórico de bate-papo no estilo V1)" name="FSIMSystemMessageBrackets" height="32" />
 			<check_box label="Mostrar “Você” em vez do seu próprio nome no histórico de bate-papo" name="FSChatHistoryShowYou" />
 			<check_box name="EmotesUseItalic" label="Use fonte em itálico para emotes" />
 			<check_box name="FSEmphasizeShoutWhisper" label="gritar negrito, sussurrar itálico destaque" />
@@ -28,13 +26,13 @@
 			<text name="show_timestamps_label" width="75">
 				Anúncios em:
 			</text>
-			<check_box label="Chat nas proximidades" name="show_timestamps_nearby_chat" width="120" />
-			<check_box label="Mensagens instantâneas" name="show_timestamps_im" width="120" />
+			<check_box label="Chat nas proximidades" name="show_timestamps_nearby_chat" top_delta="14" left_pad="-75" width="150" />
+			<check_box label="Mensagens instantâneas" name="show_timestamps_im" width="160" />
 			<check_box label="Transcrição" name="show_timestamps_transcripts" />
 			<check_box label="Mostrar console de bate-papo" tool_tip="Mostrar/ocultar bate-papo no console se a janela de conversas não for exibida" name="FSShowOnscreenConsole" />
 			<check_box name="FSConsoleClassicDrawMode" label="Usar o modo de exibição clássico para console" tool_tip="No modo de exibição clássico, o fundo do console é exibido como um único bloco em todas as linhas com a largura da linha mais longa." />
 			<check_box name="ChatFullWidth" label="Usar a largura da tela para console" width="240" />
-			<spinner label="Ocultar bate-papo depois:" label_width="130" name="fade_chat_time" width="180" />
+			<spinner label="Ocultar bate-papo depois:" label_width="190" name="fade_chat_time" width="190" />
 			<text name="text_box4">
 				(segundos)
 			</text>
@@ -45,25 +43,25 @@
 
 		
 		<panel label="Janela de bate-papo" name="ChatWindows">
-			<text name="font_size">
-				Tamanho da fonte:
+			<text name="font_size" width="180">
+				Tamanho da fonte do chat:
 			</text>
-			<radio_group name="chat_font_size">
-				<radio_item label="Pequeno" name="radio" />
-				<radio_item label="Médio" name="radio2" />
-				<radio_item label="Grande" name="radio3" />
-				<radio_item label="Gigantesco" name="radio4" />
+			<radio_group name="chat_font_size" left_delta="150">
+    			<radio_item label="Pequeno" name="radio" width="72" />
+    			<radio_item label="Médio" name="radio2" left_delta="75" />
+    			<radio_item label="Grande" name="radio3" />
+    			<radio_item label="Gigantesco" name="radio4" />
 			</radio_group>
 			<check_box label="Mostrar nomes em mensagens instantâneas diretas" name="IMShowNamesForP2PConv" />
 			<check_box label="Estilo V1 para usar histórico de mensagens instantâneas e bate-papo de texto" name="plain_text_chat_history" />
 			<check_box label="Mostrar ícones em miniatura se o estilo de bate-papo [SHORT_VIEWER_GENERATION] for usado" name="ShowChatMiniIcons" />	
 			<check_box label="Mostrar final da última conversa" name="LogShowHistory" />
-			<check_box name="FSTypingChevronPrefix" label="Mostrar seta adicional (&gt;) como indicador de gravação em janelas de mensagens instantâneas" />
-			<text name="show_unread_messages_label" width="245">
-				Mostrar notificação de novas mensagens para:
+			<check_box name="FSTypingChevronPrefix" label="Mostrar seta adicional (&gt;) como indicador de gravação em janelas de mensagens &#10; instantâneas" height="32" />
+			<text name="show_unread_messages_label" width="150">
+				Notificar novas mensagens de:
 			</text>
-			<check_box width="110" name="FSNotifyUnreadChatMessages" label="Chat nas proximidades" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
-			<check_box width="200" name="FSNotifyUnreadIMMessages" label="Mensagens instantâneas e bate-papos em grupo" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
+			<check_box width="150" name="FSNotifyUnreadChatMessages" label="Chat nas proximidades" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
+			<check_box width="200" name="FSNotifyUnreadIMMessages" label="IMs e grupos" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
 			<text name="show_ims_in_label" width="115">
 				Ver mensagens instantâneas em:
 			</text>
@@ -84,7 +82,7 @@
 			<text name="req_restart_chattabs" width="120">
 				(Requer reinício)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="Classifique as guias de mensagens instantâneas por tipo:" tool_tip="Ativa a classificação automática de guias de mensagens instantâneas na janela “Conversas”." width="170" />
+			<check_box name="FSAutoOrderIMTabs" label="Ordenar guias IM por tipo:" tool_tip="Ativa a classificação automática de guias de mensagens instantâneas na janela “Conversas”." width="150" />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Grupos, conferências, mensagens instantâneas" />
 				<combo_box.item name="group_im_conf" label="Grupos, mensagens instantâneas, conferências" />
@@ -94,8 +92,8 @@
 				<combo_box.item name="im_conf_group" label="Mensagens instantâneas, conferências, grupos" />
 			</combo_box>
 			<check_box name="FSAutoOrderIMTabsAtTop" label="Insira novas guias primeiro" tool_tip="Adiciona novas guias de mensagens instantâneas como a primeira guia em cada grupo." />
-			<text name="FSIMTabNameFormat_label">
-				Formato de nome para guias de mensagens instantâneas:
+			<text name="FSIMTabNameFormat_label" width="180">
+				Formato do nome das guias IM:
 			</text>
 			<combo_box name="FSIMTabNameFormat">
 				<combo_box.item label="Nome de exibição" name="display_name" />
@@ -153,14 +151,14 @@
 			<check_box label="Reproduza animação de digitação enquanto conversa" name="play_typing_animation" />
 			<check_box label="Reproduza animação de toque também com emotes" name="play_typing_animation_emote" />
 			<check_box label="Reproduzir som de toque quando as pessoas digitam no bate-papo nas proximidades" name="play_typing_sound" /> 
-			<check_box label="Notificar outros avatares durante sessões de mensagens instantâneas quando eu escrevo" name="FSSendTypingState" />
+			<check_box label="Notificar outros avatares durante sessões de mensagens instantâneas quando eu escrevo." name="FSSendTypingState" />
 			<check_box label="Ative o preenchimento automático para gestos no bate-papo próximo" name="FSChatbarGestureAutoCompleteEnable" />
 			<check_box label="Habilitar a previsão automática de nomes na linha de entrada “Chat nas proximidades”" name="FSChatbarNamePrediction" />
 			<check_box name="AllowMUpose" label="Use “:” como sinônimo de “/me”." />
 			<check_box name="AutoCloseOOC" label="Fechar colchetes automaticamente ((OOC))" />
 			<check_box name="FSUseChatMentionAutoComplete" label="Habilitar @-menções automáticas ao entrar no chat" />
 			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Habilitar a janela de seleção automática de emojis ao entrar no chat" />
-			<check_box name="FSShowEmojiButton" label="Botão Emoji na linha de entrada para sessões de bate-papo local Mostrar mensagens instantâneas" />
+			<check_box name="FSShowEmojiButton" label="Ativar seletor automático de emojis ao digitar no chat" />
 			<check_box name="FSShowIMSendButton" label="Botão Enviar na linha de entrada para sessões de IM" />
 			<check_box name="FSNearbyChatbar" label="Adicionar linha de entrada à janela de bate-papo local" />
 			<check_box name="FSShowChatChannel" label="Mostrar seleção de canal na linha de entrada" />
@@ -183,9 +181,9 @@
 			<text name="disable_toast_label">
 				Ative pop-ups de bate-papo para chamadas recebidas:
 			</text>
-			<check_box name="EnableGroupChatPopups" label="Bate-papos em grupo" tool_tip="Ative para mostrar pop-ups quando novas mensagens de grupo chegarem" />
+			<check_box name="EnableGroupChatPopups" width="150" label="Bate-papos em grupo" tool_tip="Ative para mostrar pop-ups quando novas mensagens de grupo chegarem" />
 			<check_box name="EnableIMChatPopups" label="Bate-papos de mensagens instantâneas" tool_tip="Ative para mostrar pop-ups quando mensagens instantâneas chegarem" />
-			<check_box name="FSUseNearbyChatConsole" label="Usar o console de bate-papo em vez de notificações pop-up para bate-papo (estilo Viewer 1.x)" />
+			<check_box name="FSUseNearbyChatConsole" label="Usar painel de bate-papo em vez de notificações flutuantes (Viewer 1.x)" />
 			<check_box name="FSLogImToChatConsole" label="Mostrar mensagens instantâneas no console de bate-papo" />
 			<check_box name="FSLogGroupImToChatConsole" label="Ver bate-papos em grupo no console de chat" />
 			<text name="FSShowGroupNameLength_label" width="365">
@@ -207,11 +205,11 @@
 				Ocultar texto de IM do plano de fundo do histórico de bate-papo
 			</text>
 			<spinner tool_tip="0,25-1,0, 0,25 para fade out máximo para 1 para sem fade out" name="FSIMChatHistoryFade" />
-			<check_box name="FSShowMessageCountInWindowTitle" label="Exiba instantaneamente o número de mensagens não lidas no título da janela do Firestorm" />
-			<check_box name="FSAnnounceIncomingIM" label="As mensagens recebidas são anunciadas instantaneamente assim que o remetente começa a escrever" />
+			<check_box name="FSShowMessageCountInWindowTitle" label="Exibir o número de mensagens não lidas no título da janela do Firestorm" />
+			<check_box name="FSAnnounceIncomingIM" label="Notificar mensagens recebidas assim que o remetente começar a escrever" />
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Guias de mensagens instantâneas piscando quando amigos fazem login ou logout" />
-			<check_box name="FSNotifyNearbyChatFlash" label="Botão da barra de ferramentas de bate-papo piscando quando um novo bate-papo chega nas proximidades" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando um novo bate-papo chega nas proximidades. A janela de bate-papo deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque." />
-			<check_box name="FSNotifyIMFlash" label="Botão da barra de ferramentas de bate-papo piscando quando uma nova mensagem instantânea (de grupo) chega" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando chega uma nova mensagem de emergência ou bate-papo em grupo. A janela correspondente deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque. Esta opção só está disponível se as janelas de mensagens instantâneas (de grupo) forem exibidas como guias em vez de janelas separadas (consulte a guia “Geral”)." />
+			<check_box name="FSNotifyNearbyChatFlash" label="Piscar o botão de bate-papo ao receber nova mensagem local" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando um novo bate-papo chega nas proximidades. A janela de bate-papo deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque." />
+			<check_box name="FSNotifyIMFlash" label="Piscar o botão de bate-papo para novas IMs" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando chega uma nova mensagem de emergência ou bate-papo em grupo. A janela correspondente deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque. Esta opção só está disponível se as janelas de mensagens instantâneas (de grupo) forem exibidas como guias em vez de janelas separadas (consulte a guia “Geral”)." />
 			<check_box name="FSReportMutedGroupChat" label="Denunciar bate-papo em grupo silenciado no Chat nas proximidades" />
 			<check_box name="FSGroupNoticesToIMLog" label="Mostrar mensagens de grupo no bate-papo em grupo, além do brinde" />
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Mostrar também assunto e autor" />

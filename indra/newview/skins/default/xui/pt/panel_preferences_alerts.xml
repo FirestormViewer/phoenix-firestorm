@@ -14,7 +14,7 @@
 
 		<!-- People -->
 		<panel label="Pessoas" name="tab-people">
-			<check_box label="Piscar ícone do aplicativo com novas mensagens quando o [APP_NAME] estiver sem foco" name="FSFlashOnMessage"/>
+			<check_box label="Piscar ícone do aplicativo com novas mensagens quando o [APP_NAME] estiver sem foco." name="FSFlashOnMessage"/>
 			<check_box label="Piscar ícone do aplicativo também para IMs recebidas de objetos" name="FSFlashOnObjectIM"/>
 			<check_box label="Notificar quando alguém mudar o nome de exibição" name="FSShowDisplayNameUpdateNotification"/>
 			<check_box label="Notificar quando eu bloquear ou desbloquear alguém" name="FSReportBlockToNearbyChat"/>
@@ -28,7 +28,7 @@
 
 		<!-- Objects & Scripts -->
 		<panel label="Objetos e scripts" name="tab-objects">
-			<check_box label="Piscar ícone do aplicativo com novos diálogos de script quando o [APP_NAME] estiver sem foco" name="FSFlashOnScriptDialog"/>
+			<check_box label="Piscar ícone do aplicativo com novos diálogos de script quando o [APP_NAME] estiver sem foco." name="FSFlashOnScriptDialog"/>
 			<check_box label="Mostrar mensagens de colisão no chat local" name="FSCollisionMessagesInChat"/>
 			<check_box label="Mostrar erros de script em:" name="show_script_errors"/>
 			<radio_group name="show_script_errors_location">

@@ -21,12 +21,12 @@ https://accounts.secondlife.com/change_email/?lang=pt-BR
 		<panel label="Gráficos" name="display"/>
 		<panel label="Som e mídia" name="audio"/>
 		<panel label="Rede e arquivos" name="input"/>
-		<panel label="Movimento e visualização" name="move"/>
+		<panel label="Mover e ver" name="move"/>
 		<panel label="Atalhos de teclado" name="controls"/>
 		<panel label="Notificações" name="msgs"/>
 		<panel label="Privacidade" name="im"/>
 		<panel label="Avançado" name="advanced1"/>
-		<panel label="Interface do usuário" name="ui"/>
+		<panel label="Interface gráfica" name="ui"/>
 		<panel label="Tema da interface" name="skins"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="OpenSim" name="opensim"/>

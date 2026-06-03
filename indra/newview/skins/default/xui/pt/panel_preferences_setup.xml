@@ -36,7 +36,7 @@
 				<combo_box.item label="Cinco janelas" name="web_5"/>
 				<combo_box.item label="Dez janelas" name="web_10"/>
 			</combo_box>
-			<button label="Limpar cache do navegador" name="ClearWebBrowserCache" width="160"/>
+			<button label="Limpar cache do navegador" name="ClearWebBrowserCache" width="170"/>
 			<check_box label="Ativar JavaScript" name="browser_javascript_enabled"/>
 			<check_box label="Ativar pop-ups do navegador de mídia" name="media_popup_enabled"/>
 			<button label="Alterar configurações de proxy" label_selected="Alterando configurações de proxy" name="set_proxy"/>
@@ -51,7 +51,7 @@
 			<text name="asset_cache_size_label_l">
 				Tamanho do cache de assets:
 			</text>
-			<button label="Limpar cache de inventário" width="137" name="ClearInventoryCache"/>
+			<button label="Limpar cache de inventário" width="170" name="ClearInventoryCache" left="350"/>
 			<text name="Cache location">
 				Local do cache:
 			</text>

@@ -213,7 +213,7 @@
 			<menu_item_call label="Salvar de volta no conteúdo do objeto" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 			<menu label="Salvar como" name="Export Menu">
-				<menu_item_call label="Backup" name="Backup"/>
+				<menu_item_call label="Backup / Restaurar" name="Backup"/>
 				<menu_item_call label="Collada" name="Collada"/>
 			</menu>
 		</menu>

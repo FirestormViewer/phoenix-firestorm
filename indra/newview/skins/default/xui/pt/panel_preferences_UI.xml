@@ -115,7 +115,7 @@
 		</text>
 		<check_box name="ShowNetStats" label="Ativar indicador de transferência de dados" tool_tip="Ativa o indicador de transferência de dados na barra de menu" />
 		<check_box label="Use média periódica para indicador de transferência de dados" name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o Firestorm usa o cálculo original para o indicador de transferência de dados e mostra a média periódica em vez do valor medido atualmente." />
-		<check_box name="FSUseStatsInsteadOfLagMeter" label="Clicar no indicador de transferência de dados abre a janela de estatísticas em vez do medidor de atraso" />
+		<check_box name="FSUseStatsInsteadOfLagMeter" label="Clicar no indicador de dados abre Estatísticas em vez do medidor de atraso" />
 		<check_box label="Mostrar controles de mídia na barra de menu" name="FSEnableVolumeControls" tool_tip="Se ativado, os ícones de controle de mídia serão exibidos na barra de menu no canto superior direito da tela. Útil se o design da interface já tiver seus próprios ícones para controle de mídia." />
 		<check_box label="Mostrar posição na barra de menu" name="ShowMenuBarLocation" />
 		<check_box label="Mostrar versão do simulador na barra de menu" name="FSStatusbarShowSimulatorVersion" tool_tip="Exibe a versão do simulador executando a região atual." />

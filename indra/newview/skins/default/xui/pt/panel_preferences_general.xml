@@ -41,16 +41,13 @@
 	<text name="name_tags_textbox">
 		Nomes de avatar:
 	</text>
-	<radio_group name="Name_Tag_Preference" width="210">
-		<radio_item label="Desativado" name="radio"/>
-		<radio_item label="Ativado" name="radio2"/>
-		<radio_item label="Mostrar abreviado" name="radio3"/>
+	<radio_group name="Name_Tag_Preference" width="300">
+		<radio_item label="Desativado" name="radio" width="80" />
+		<radio_item label="Ativado" name="radio2" width="65" />
+		<radio_item label="Mostrar abreviado" name="radio3" width="140" />
 	</radio_group>
-	<text name="RenderNameShowTime_LabelPrefix">
-		(
-	</text>
-	<text name="RenderNameShowTime_LabelSuffix">
-		segundos)
+	<text name="RenderNameShowTime_LabelSuffix" width="100">
+		segundos
 	</text>
 	<check_box label="Meu nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nome de usuário" name="show_slids" tool_tip="Mostrar nomes de usuário como berndschmidt123" />
@@ -61,7 +58,7 @@
 	<check_box label="Formato de nome antigo em vez de nome de usuário" name="FSshow_legacyun" tool_tip="Mostra o nome de avatar no formato antigo (Nome Sobrenome) em vez do nome de usuário (nome.sobrenome)" />
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Destacar os nomes de avatar dos seus amigos"/>
 	<check_box label="Remover “Resident” no formato antigo de nome" name="legacy_trim_check" tool_tip="Remove o sobrenome “Resident” no formato antigo de nome." />
-	<check_box label="Usar posição antiga para nomes de avatar" name="FSLegacyNametagPosition" tool_tip="Se ativado, o nome do avatar fica fixo na posição do avatar e não acompanha o movimento da cabeça durante animações." />
+	<check_box label="Posição antiga dos nomes de avatar" name="FSLegacyNametagPosition" width="170" tool_tip="Se ativado, o nome do avatar fica fixo na posição do avatar e não acompanha o movimento da cabeça durante animações." />
 	<check_box label="Mostrar modo “Resposta automática”" name="FSShowAutorespondInNameTag" tool_tip="Se ativado, o modo “Resposta automática” será exibido no seu próprio nome de avatar."/>
 	<check_box label="Mostrar complexidade" name="FSTagShowARW" tool_tip="Se ativado, mostra a complexidade atual do avatar."/>
 	<check_box label="Apenas se estiver muito complexo" name="FSTagShowTooComplexOnlyARW" tool_tip="Se ativado, mostra a complexidade atual do avatar apenas quando ele estiver complexo demais e for exibido como JellyDoll."/>
@@ -81,11 +78,11 @@
 		Formato do relógio da barra superior em [secondlife:///app/openfloater/preferences?tab=ui&amp;subtab=UI-interface-top-bars Interface - Barras superiores].
 	</text>
 
-	<text name="title_afk_text" width="275">
+	<text name="title_afk_text" width="300">
 		Tempo até ficar ausente:
 	</text>
 	<text name="title_afk_quit_text">
-		Sair automaticamente no modo ausente após:
+		Entrar em modo ausente após:
 	</text> 
 	<combo_box label="Tempo limite para ausente:" name="afk">
 		<combo_box.item label="2 minutos" name="item0"/>
@@ -102,10 +99,9 @@
 		<combo_box.item label="30 minutos" name="item3"/>
 		<combo_box.item label="nunca" name="item4"/>
 	</combo_box>
-	<check_box name="AvatarSitOnAway" label="Sentar quando estiver ausente"/>
+	<check_box name="AvatarSitOnAway" label="Sentar quando estiver ausente" width="175"/>
 	<text name="text_box3" height="30">
-		As mensagens de Não Perturbe e de Ausente podem ser configuradas em
-[secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidade / Resposta automática].
+		Configure mensagens de Não Perturbe e Ausente em [secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1 Privacidade / Resposta automática].
 	</text>
 	<text_editor name="do_not_disturb_response">
 		log_in_to_change
