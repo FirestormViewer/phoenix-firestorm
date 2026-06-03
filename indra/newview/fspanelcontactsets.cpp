@@ -281,7 +281,7 @@ bool FSPanelContactSets::shouldSortByOnlineStatus() const
     const std::string selected_set = mContactSetCombo->getValue().asString();
     if (LGGContactSets::getInstance()->isInternalSetName(selected_set))
     {
-        return false;
+        return true;
     }
 
     return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(selected_set);

@@ -1988,7 +1988,7 @@ bool LLPanelPeople::shouldSortByOnlineStatusForCurrentSet() const
     const std::string set_name = mContactSetCombo->getValue().asString();
     if (LGGContactSets::getInstance()->isInternalSetName(set_name))
     {
-        return false;
+        return true;
     }
 
     return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(set_name);
