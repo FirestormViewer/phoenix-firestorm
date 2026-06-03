@@ -441,8 +441,6 @@
 				</text>
 				<combo_box name="CB_Antialiasing_Type">
 					<combo_box.item label="Desativado" name="FSAADisabled"/>
-					<combo_box.item label="FXAA" name="FXAA"/>
-					<combo_box.item label="SMAA" name="SMAA"/>
 				</combo_box>
 				<text name="T_Anti-aliasing" tool_tip="Define quão suaves ou nítidas as bordas dos objetos são exibidas. Em placas high-end, valores altos quase não impactam desempenho; em placas low-end, podem reduzir performance.">
 					Antialiasing
