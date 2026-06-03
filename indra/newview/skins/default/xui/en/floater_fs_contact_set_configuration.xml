@@ -101,8 +101,27 @@ Global Settings:
      name="global_swatch"
      tool_tip="Click to open Color Picker"
      width="100" />
+    <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="55"
+     label=""
+     top_delta="0"
+     left_delta="120"
+     name="offline_swatch"
+     tool_tip="Color used for offline contacts in Contact Sets lists that do not belong to any Contact Set. A custom Contact Set color takes precedence."
+     width="100" />
+    <check_box
+     follows="left|top"
+     top_pad="-16"
+     height="12"
+     initial_value="false"
+     label="Custom offline contact color"
+     name="FSContactSetsListColorizeOffline"
+     width="120"
+     control_name="FSContactSetsListColorizeOffline"/>
     <text
-     top_pad="-2"
+     top_pad="2"
      follows="left|top"
      height="16"
      left="15"

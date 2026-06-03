@@ -487,6 +487,33 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSContactSetsListColorizeOffline</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to use a custom color for offline contacts in Contact Sets lists. A custom contact set color takes precedence when set.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSContactSetsListOfflineColor</key>
+    <map>
+      <key>Comment</key>
+      <string>Custom color for offline contacts in Contact Sets lists when FSContactSetsListColorizeOffline is enabled.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Color4</string>
+      <key>Value</key>
+      <array>
+        <real>0.5</real>
+        <real>0.5</real>
+        <real>0.5</real>
+        <real>1.0</real>
+      </array>
+    </map>
   <key>FSMuteAllGroups</key>
   <map>
     <key>Comment</key>

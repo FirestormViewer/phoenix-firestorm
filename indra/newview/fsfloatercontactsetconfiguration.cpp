@@ -66,6 +66,9 @@ bool FSFloaterContactSetConfiguration::postBuild()
     mGlobalSwatch = getChild<LLColorSwatchCtrl>("global_swatch");
     mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
 
+    mOfflineSwatch = getChild<LLColorSwatchCtrl>("offline_swatch");
+    mOfflineSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitOfflineColor, this));
+
     mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
     mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
 
@@ -103,6 +106,7 @@ void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
 
     mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
     mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
+    mOfflineSwatch->set(gSavedSettings.getColor4("FSContactSetsListOfflineColor"), true);
     mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
     mSortByOnlineStatusCheckBox->set(LGGContactSets::getInstance()->getSortByOnlineStatusForSet(mContactSet));
 
@@ -138,6 +142,11 @@ void FSFloaterContactSetConfiguration::onCommitSetSortByOnlineStatus()
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()
 {
     LGGContactSets::getInstance()->setDefaultColor(mGlobalSwatch->get());
+}
+
+void FSFloaterContactSetConfiguration::onCommitOfflineColor()
+{
+    gSavedSettings.setColor4("FSContactSetsListOfflineColor", mOfflineSwatch->get());
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetAutoresponseBusy()
