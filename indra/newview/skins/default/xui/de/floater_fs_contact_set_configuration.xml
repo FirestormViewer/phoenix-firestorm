@@ -7,8 +7,8 @@
 		<text name="set_label">
 			Kontakt-Set-Einstellungen:
 		</text>
-		<line_editor name="set_name_editor" right="-100"/>
-		<button name="rename_btn" width="85" label="Umbenennen"/>
+		<line_editor name="set_name_editor" right="-110"/>
+		<button name="rename_btn" width="95" label="Umbenennen"/>
 		<color_swatch label="Farbwahl" name="set_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
 		<check_box label="Zeige Benachrichtigungen" name="show_set_notifications"/>
 		<check_box label="Nach Online-Status sortieren" name="sort_by_online_status"/>
@@ -39,6 +39,6 @@
 	<panel name="side_panel">
 		<check_box label="Benutzerdefinierte Busy-Antwort für dieses Set verwenden" name="set_autoresponse_busy_enabled"/>
 		<check_box label="Benutzerdefinierte Autoresponse-Nachricht für dieses Set verwenden" name="set_autoresponse_mode_enabled"/>
-		<check_box label="Benutzerdefinierte Autoresponse für Nicht-Freunde in diesem Set verwenden" name="set_autoresponse_nonfriends_enabled"/>
+		<check_box label="Benutzerdefinierte Autoresponse für Nicht-Freunde in diesem Set verw." name="set_autoresponse_nonfriends_enabled"/>
 	</panel>
 </floater>
