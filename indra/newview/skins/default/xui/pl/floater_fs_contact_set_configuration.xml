@@ -18,6 +18,8 @@
 			Ustawienia globalne:
 		</text>
 		<color_swatch label="Domyślny kolor" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
+		<color_swatch name="offline_swatch" tool_tip="Kolor używany dla kontaktów offline na listach zestawów kontaktów, które nie należą do żadnego zestawu. Kolor niestandardowego zestawu kontaktów ma pierwszeństwo." />
+		<check_box label="Własny kolor kontaktów offline" name="FSContactSetsListColorizeOffline" />
 		<text name="label_online">
 			Powiadomienia online:
 		</text>

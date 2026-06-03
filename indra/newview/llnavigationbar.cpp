@@ -61,6 +61,11 @@
 #include "llweb.h"
 #include "llhints.h"
 
+// <FS:PP> Show home location in the "teleport home" navbar button tooltip
+#include "llworld.h"
+#include "llworldmap.h"
+// </FS:PP>
+
 #include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "lllandmarkactions.h"
@@ -284,6 +289,7 @@ LLNavigationBar::LLNavigationBar()
     mFavoritePanel(NULL),
     mNavPanWidth(0),
     mSearchComboBox(NULL),
+    mHomeTooltipRetryCount(0), // <FS:PP> Show home location in the "teleport home" navbar button tooltip
     mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-11847
 {
     // buildFromFile( "panel_navigation_bar.xml");  // <FS:Zi> Make navigation bar part of the UI
@@ -501,6 +507,55 @@ void LLNavigationBar::onLandmarksButtonClicked()
     LLFloaterReg::toggleInstanceOrBringToFront("places");
     LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_landmark_tab"));
 }
+
+// <FS:PP> Show home location in the "teleport home" navbar button tooltip
+void LLNavigationBar::setHomeBtnTooltip()
+{
+    std::string location_arg;
+    LLVector3d home_global;
+    if (gAgent.getHomePosGlobal(&home_global))
+    {
+        // 1. Try to get region info from the live 3D world
+        U64 region_handle = to_region_handle(home_global);
+        LLViewerRegion* region = LLWorld::getInstance()->getRegionFromPosGlobal(home_global);
+        if (region)
+        {
+            mHomeTooltipRetryCount = 0;
+            LLVector3 pos_region = region->getPosRegionFromGlobal(home_global);
+            location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", region->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
+        }
+        else
+        {
+            // 2. Not in 3D world, try the map cache
+            LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromHandle(region_handle);
+            if (sim_info)
+            {
+                mHomeTooltipRetryCount = 0;
+                LLVector3 pos_region = (LLVector3)(home_global - from_region_handle(region_handle));
+                location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", sim_info->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
+            }
+            else
+            {
+                // 3. Not in cache, make a query
+                constexpr S32 MAX_TOOLTIP_RETRIES = 10;
+                if (mHomeTooltipRetryCount < MAX_TOOLTIP_RETRIES)
+                {
+                    ++mHomeTooltipRetryCount;
+                    LL_INFOS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
+                    LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
+                    {
+                        if (LLNavigationBar::instanceExists())
+                        {
+                            LLNavigationBar::getInstance()->setHomeBtnTooltip();
+                        }
+                    }, std::string(), false);
+                }
+            }
+        }
+    }
+    mBtnHome->setToolTipArg(LLStringExplicit("[LOCATION]"), location_arg);
+}
+// </FS:PP>
 
 void LLNavigationBar::onSearchCommit()
 {
