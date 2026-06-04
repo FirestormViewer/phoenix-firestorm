@@ -5858,6 +5858,14 @@ void LLAppViewer::idle()
         // actually sent or not) because these will be recomputed based on
         // real-time key/controller input and resubmitted next frame.
         gAgent.resetControlFlags();
+        // Re-apply LBUTTON_DOWN each frame while RMB is held in mouselook.
+        // resetControlFlags() strips all ephemeral bits, so we must re-set
+        // this before the next send_agent_update or the sim will see the
+        // bit drop to 0 and fire a spurious button-up control event.
+        if (gViewerWindow && gViewerWindow->getRMBHeldInMouselook())
+        {
+            gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+        }
     }
 
     //////////////////////////////////////

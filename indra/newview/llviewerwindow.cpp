@@ -1310,9 +1310,9 @@ bool LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK
     static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
     if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
     {
-        // Signal RMB down by sending AGENT_CONTROL_LBUTTON_DOWN (the normal
-        // non-mouselook left-button control flag), so scripts can detect it
-        // via CONTROL_LBUTTON in a control event handler.
+        // Track hold state so the main loop can re-apply LBUTTON_DOWN each
+        // frame (resetControlFlags() would otherwise clear it every tick).
+        mRMBHeldInMouselook = true;
         gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
         send_agent_update(true);
     }
@@ -1325,7 +1325,8 @@ bool LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK m
     static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
     if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
     {
-        // Signal RMB up via AGENT_CONTROL_LBUTTON_UP.
+        mRMBHeldInMouselook = false;
+        gAgent.clearControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
         gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
         send_agent_update(true);
     }
@@ -2001,6 +2002,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     mRightMouseDown(false),
     mMouseInWindow( false ),
     mAllowMouseDragging(true),
+    mRMBHeldInMouselook(false),
     mMouseDownTimer(),
     mLastMask( MASK_NONE ),
     mToolStored( NULL ),
