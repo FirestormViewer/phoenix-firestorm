@@ -5865,6 +5865,21 @@ class LLViewMouselook : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
+        // When OTS is enabled M toggles OTS mode (shoulder cam).
+        // When disabled M toggles normal first-person mouselook.
+        if (gSavedSettings.getBOOL("OTSEnabled"))
+        {
+            if (!gAgentCamera.cameraOTS())
+            {
+                gAgentCamera.changeCameraToOTS();
+            }
+            else
+            {
+                gAgentCamera.changeCameraFromOTS();
+            }
+            return true;
+        }
+
         if (!gAgentCamera.cameraMouselook())
         {
             gAgentCamera.changeCameraToMouselook();

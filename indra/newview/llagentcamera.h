@@ -43,7 +43,8 @@ enum ECameraMode
     CAMERA_MODE_THIRD_PERSON,
     CAMERA_MODE_MOUSELOOK,
     CAMERA_MODE_CUSTOMIZE_AVATAR,
-    CAMERA_MODE_FOLLOW
+    CAMERA_MODE_FOLLOW,
+    CAMERA_MODE_OTS          // Over-the-shoulder: mouselook input + third-person camera
 };
 
 /** Camera Presets for CAMERA_MODE_THIRD_PERSON */
@@ -103,10 +104,14 @@ public:
     void            changeCameraToThirdPerson(bool animate = true);
     void            changeCameraToCustomizeAvatar(); // Trigger transition animation
     void            changeCameraToFollow(bool animate = true);  // Ventrella
+    void            changeCameraToOTS();             // Over-the-shoulder aim mode
+    void            changeCameraFromOTS();           // Exit OTS back to third person
     bool            cameraThirdPerson() const       { return (mCameraMode == CAMERA_MODE_THIRD_PERSON && mLastCameraMode == CAMERA_MODE_THIRD_PERSON); }
-    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && mLastCameraMode == CAMERA_MODE_MOUSELOOK); }
+    // Also true for OTS — reuses mouselook input and UI behaviour; camera position handled separately.
+    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && mLastCameraMode == CAMERA_MODE_MOUSELOOK) || mCameraMode == CAMERA_MODE_OTS; }
     bool            cameraCustomizeAvatar() const   { return (mCameraMode == CAMERA_MODE_CUSTOMIZE_AVATAR /*&& !mCameraAnimating*/); }
     bool            cameraFollow() const            { return (mCameraMode == CAMERA_MODE_FOLLOW && mLastCameraMode == CAMERA_MODE_FOLLOW); }
+    bool            cameraOTS() const               { return mCameraMode == CAMERA_MODE_OTS; }
     ECameraMode     getCameraMode() const           { return mCameraMode; }
     ECameraMode     getLastCameraMode() const       { return mLastCameraMode; }
     void            updateCamera();                 // Call once per frame to update camera location/orientation

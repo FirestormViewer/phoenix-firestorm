@@ -195,6 +195,10 @@ private:
 
     boost::signals2::connection mRegionChangedSlot;
 
+    // OTS over-the-shoulder aim
+    LLCheckBoxCtrl* mOTSEnabledCheck { nullptr };
+    void onOTSEnabledChanged();
+
 public:
     void onClose(bool app_quitting) override;
 

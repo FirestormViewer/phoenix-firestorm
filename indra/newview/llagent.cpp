@@ -2563,6 +2563,13 @@ std::ostream& operator<<(std::ostream &s, const LLAgent &agent)
 //-----------------------------------------------------------------------------
 bool LLAgent::needsRenderAvatar()
 {
+    // OTS mode: always render avatar — we are in third-person even though
+    // mouselook input is active.
+    if (gAgentCamera.cameraOTS())
+    {
+        return mShowAvatar && mOutfitChosen;
+    }
+
 //  if (gAgentCamera.cameraMouselook() && !LLVOAvatar::sVisibleInFirstPerson)
 // [RLVa:KB] - Checked: RLVa-2.0.2
     if ( (gAgentCamera.cameraMouselook() && !LLVOAvatar::sVisibleInFirstPerson) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELF)) )
@@ -2577,6 +2584,11 @@ bool LLAgent::needsRenderAvatar()
 // true if we need to render your own avatar's head.
 bool LLAgent::needsRenderHead()
 {
+    // OTS mode: always render head — avatar is fully visible.
+    if (gAgentCamera.cameraOTS())
+    {
+        return mShowAvatar;
+    }
 // [RLVa:KB] - Checked: RLVa-2.0.2
     return ((LLVOAvatar::sVisibleInFirstPerson && LLPipeline::sReflectionRender) || (mShowAvatar && !gAgentCamera.cameraMouselook())) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELFHEAD));
 // [/RLVa:KB]
@@ -2706,7 +2718,8 @@ void LLAgent::endAnimationUpdateUI()
     }
 
     // clean up UI from mode we're leaving
-    if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK )
+    if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK
+        || gAgentCamera.getLastCameraMode() == CAMERA_MODE_OTS)
     {
         // <FS:Zi> Unhide chat bar, unless autohide is enabled
         gSavedSettings.setBOOL("MouseLookEnabled", false);
@@ -2868,7 +2881,8 @@ void LLAgent::endAnimationUpdateUI()
     //---------------------------------------------------------------------
     // Set up UI for mode we're entering
     //---------------------------------------------------------------------
-    if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
+    if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK
+        || gAgentCamera.getCameraMode() == CAMERA_MODE_OTS)
     {
         // <FS:PP> FIRE-8868: Show UI in mouselook
         if(!gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))
