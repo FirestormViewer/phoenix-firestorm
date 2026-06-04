@@ -14,8 +14,8 @@
 	<context_menu label="Aparência" name="AppearanceSubmenu">
 		<menu_item_call label="Usando agora..." name="NowWearing" />
 		<menu_item_call label="Trocar visual" name="Change Outfit" />
-		<menu_item_call label="Editar forma" name="Edit Shape" />
-		<menu_item_call label="Editar visual" name="Edit Outfit Parts" />
+		<menu_item_call label="Editar Corpo" name="Edit Shape" />
+		<menu_item_call label="Editar Roupas" name="Edit Outfit Parts" />
 		<menu_item_call label="Altura de flutuação" name="Hover Height"/>
 		<menu_item_call label="Redefinir esqueleto" name="Reset Skeleton"/>
 		<menu_item_call label="Redefinir esqueleto e animações" name="Reset Skeleton And Animations"/>

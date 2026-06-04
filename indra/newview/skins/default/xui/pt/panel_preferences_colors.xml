@@ -73,12 +73,12 @@
 				</text>
 			</panel>
 		</panel>
-		<panel label="plaquetas de nome" name="tab-nametag">
+		<panel label="Etiquetas de nome" name="tab-nametag">
 			<text name="nametag_colors">
-				Cores para plaquetas de nome:
+				Cores para etiquetas de nome:
 			</text>
 			<text name="self_tag_label">
-				Sinal próprio
+				Você
 			</text>
 			<text name="friend_tag_label">
 				Amigos
@@ -87,13 +87,13 @@
 				Bloqueado
 			</text>
 			<text name="linden_tag_label">
-				Laboratório Linden
+				Linden Lab
 			</text>
 			<text name="match_tag_label">
-				Acessos
+				Coincidência
 			</text>
 			<text name="mismatch_tag_label">
-				Nenhum acerto
+				Não coincidência
 			</text>
 			<check_box label="Use uma cor diferente para nomes de usuário" name="FSColorUsername" tool_tip="Mostra o nome de usuário em uma cor diferente" width="270" />
 			<check_box label="Use cores diferentes para amigos" name="NameTagShowFriends" tool_tip="Ative para exibir a cor da etiqueta de um amigo como uma cor diferente." />
@@ -101,13 +101,13 @@
 				nome de usuário
 			</text>
 			<text name="bubble_chat">
-				Cor de fundo para placas de nome e chat de bolha:
+				Cor de fundo para etiquetas de nome e chat de bolha:
 			</text>
-			<color_swatch name="background" tool_tip="Selecione a cor das plaquetas de nome" />
+			<color_swatch name="background" tool_tip="Selecione a cor das etiquetas de nome" />
 			<slider name="bubble_chat_opacity" label="Opacidade:" tool_tip="Selecione a opacidade para plaquetas de nome" />
 			<slider name="FSNameTagZOffsetCorrection" label="Correção Z-Offset:" tool_tip="Altera o deslocamento Z das tags de nome do avatar. O valor padrão é 0." />
 			<check_box label="Mostrar distância na etiqueta de nome" name="FSTagShowDistance" tool_tip="Habilita a exibição da distância de um avatar nas seguintes cores na placa de identificação." />
-			<check_box label="Cor da placa de identificação com base na distância" name="FSTagShowDistanceColors" tool_tip="Ative para definir a cor da placa de identificação de um avatar dependendo da distância (intervalo de bate-papo, alcance de chamada, fora do alcance de chamada). Substitui as cores da tag do visualizador, exceto as cores de destaque de amigos e do conjunto de contatos." />
+			<check_box label="Cor da etiqueta de identificação com base na distância" name="FSTagShowDistanceColors" tool_tip="Ative para definir a cor da placa de identificação de um avatar dependendo da distância (intervalo de bate-papo, alcance de chamada, fora do alcance de chamada). Substitui as cores da tag do visualizador, exceto as cores de destaque de amigos e do conjunto de contatos." />
 			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">
 					Alcance do bate-papo

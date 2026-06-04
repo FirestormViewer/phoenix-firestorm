@@ -33,7 +33,7 @@
 		<combo_box.item label="Magyar (Húngaro)" name="Hungarian"/>
 		<combo_box.item label="Nederlands (Holandês)" name="Dutch"/>
 		<combo_box.item label="Polski (Polonês)" name="Polish"/>
-		<combo_box.item label="Português (Português)" name="Portugese"/>
+		<combo_box.item label="Português (Brasil)" name="Portugese"/>
 		<combo_box.item label="Русский (Russo)" name="Russian"/>
 		<combo_box.item label="Türkçe (Turco)" name="Turkish"/>
 		<combo_box.item label="Українська (Ucraniano)" name="Ukrainian"/>

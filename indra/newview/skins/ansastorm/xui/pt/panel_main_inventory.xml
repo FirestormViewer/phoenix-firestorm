@@ -123,7 +123,7 @@
 		<tab_container name="inventory filter tabs">
 			<inventory_panel label="Inventário" name="All Items"/>
 			<recent_inventory_panel label="Recentes" name="Recent Items"/>
-			<worn_inventory_panel label="Vestidos" name="Worn Items"/>
+			<worn_inventory_panel label="Equipados" name="Worn Items"/>
 			<favorites_inventory_panel label="Favoritos" name="Favorites"/>
 		</tab_container>
 	</panel>

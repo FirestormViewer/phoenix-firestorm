@@ -30,10 +30,10 @@
 		<text name="FSHudTextLabel">
 			Opções de texto flutuante:
 		</text>
-		<slider label_width="230" label="Distância de esmaecimento do texto flutuante (em m):" tool_tip="Define a distância na qual o texto flutuante fica oculto." name="FSHudTextFadeDistance" />
-		<slider label_width="230" label="Área de ocultação de texto flutuante (em m):" tool_tip="Define a distância na qual um texto flutuante fica oculto, de completamente visível a completamente invisível." name="FSHudTextFadeRange" />
+		<slider label_width="230" label="Distância para ocultar texto flutuante (m):" tool_tip="Define a distância na qual o texto flutuante fica oculto." name="FSHudTextFadeDistance" />
+		<slider label_width="230" label="Faixa de ocultação do texto flutuante (m):" tool_tip="Define a distância na qual um texto flutuante fica oculto, de completamente visível a completamente invisível." name="FSHudTextFadeRange" />
 		<check_box name="FSHudTextUseHoverHighlight" label="Destaque texto flutuante em objetos:" tool_tip="Ao passar o mouse sobre um objeto, o texto flutuante do objeto (se houver) é destacado trazendo o texto para o primeiro plano e desativando o fundo transparente." />
-		<text name="FSHudTextShowBackgroundLabel" width="220">
+		<text name="FSHudTextShowBackgroundLabel" width="180">
 			Mostrar fundo de texto flutuante:
 		</text>
 		<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Exibe um fundo preto/branco atrás do texto flutuante para facilitar a leitura. A opacidade pode ser ajustada em Cores &gt; Outros">
@@ -52,7 +52,7 @@
 			Dimensionamento do HUD:
 		</text>
 		<text name="ScriptDialogsPerObjectLabel">
-			Caixa de diálogo Script para Objeto:
+			Diálogos por objeto:
 		</text>
 		<combo_box name="ScriptDialogPerObjectDropdown">
 			<combo_box.item label="Um por objeto" name="ScriptDialogOption_0" />
@@ -64,7 +64,7 @@
 		</combo_box>
 		<check_box label="Remover botão “Bloquear”" name="FSRemoveScriptBlockButton" />
 		<text name="ScriptDialogsPositionLabel">
-			Posição da caixa de diálogo do script:
+			Posição dos diálogos:
 		</text>
 		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Selecione onde as caixas de diálogo do script (menus) devem aparecer na tela.">
 			<combo_box.item label="Ancorado em Chiclet" name="ScriptDialogPositionOption_1" />
@@ -78,14 +78,14 @@
 		<check_box label="Ativar menu Torta" name="UsePieMenu" tool_tip="Ativa o menu de contexto clássico em forma de pizza V1 em vez do menu de contexto padrão." />
 		<check_box label="Ativar animação de texto" name="PieMenuPopupFontEffect" tool_tip="Habilita a animação dos textos dentro do menu de contexto clássico em forma de bolo V1 ao ser aberto." />
 		<check_box label="Ativar sombra do anel externo" name="PieMenuOuterRingShade" tool_tip="Ativa uma sombra adicional ao redor do anel externo do menu de contexto clássico em forma de bolo V1 para ajudar a visualizar os submenus." />
-		<text name="ShowGroupNoticesTopRightLabel">
+		<text name="ShowGroupNoticesTopRightLabel" width="300">
 			Posição intermediária do grupo e chiclets:
 		</text>
-		<radio_group name="ShowGroupNoticesTopRight" tool_tip="Determina onde as mensagens de grupo e os ícones chiclet aparecem na tela.">
-			<radio_item label="Canto inferior direito" name="radio" />
-			<radio_item label="Canto superior direito" name="radio1" />
+		<radio_group name="ShowGroupNoticesTopRight" tool_tip="Determina onde as mensagens de grupo e os ícones chiclet aparecem na tela." width="330" layout="horizontal">
+			<radio_item label="Canto inferior direito" name="radio" width="158" />
+			<radio_item label="Canto superior direito" name="radio1" width="158" left_pad="6" />
 		</radio_group>
-		<text name="GroupTopRightRequiresRestart" left_delta="280">
+		<text name="GroupTopRightRequiresRestart" left_pad="8" top_pad="-14" width="195">
 			(Requer reinicialização)
 		</text>
 		<check_box label="Desative chiclets para mensagens instantâneas e bate-papos em grupo" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
@@ -122,7 +122,7 @@
 		<check_box label="Mostrar pesquisa de menu" name="show_search_menu_check" />
 		<check_box label="Ver saldo da conta" name="FSShowCurrencyBalanceInStatusbar" />
 		<check_box label="Ative a janela pop-up ao passar o mouse sobre os ícones na barra de menu" name="FSStatusBarMenuButtonPopupOnRollover" />
-		<text name="statusbar_timeformat_textbox">
+		<text name="statusbar_timeformat_textbox" width="155">
 			Formato do relógio:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Determina o formato de hora usado na barra de menus.">
@@ -157,9 +157,9 @@
 		</text>
 		<check_box name="FSUseStandaloneGroupFloater" label="Perfis de grupo" tool_tip="Se ativado, os perfis de grupo serão abertos em suas próprias janelas." />
 		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Lista de teletransporte" tool_tip="Se ativado, usar o atalho para a lista de teletransporte irá abri-la em sua própria janela." />
-		<check_box name="FSUseStandaloneBlocklistFloater" label="Lista de residentes ignorados" tool_tip="Se ativado, a lista de residentes e objetos ignorados será aberta em uma janela separada." />
-		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Marcos, detalhes de localização e detalhes da lista de teletransporte" tool_tip="Se ativado, pontos de referência, detalhes de localização e detalhes sobre entradas na lista de teletransporte serão abertos em janelas separadas." />
-		<text name="ExtendedTeleportHistoryLabel" width="155">
+		<check_box name="FSUseStandaloneBlocklistFloater" width="180" label="Lista de residentes ignorados" tool_tip="Se ativado, a lista de residentes e objetos ignorados será aberta em uma janela separada." />
+		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarks e detalhes de locais / teletransportes" tool_tip="Se ativado, pontos de referência, detalhes de localização e detalhes sobre entradas na lista de teletransporte serão abertos em janelas separadas." />
+		<text name="ExtendedTeleportHistoryLabel" width="210">
 			Expanda a lista de teletransporte com:
 		</text>
 		<check_box name="FSTeleportHistoryShowPosition" label="Posição" tool_tip="Se ativado, a lista de teletransporte será expandida para incluir a posição dentro da região teletransportada." />
@@ -170,8 +170,8 @@
 		<text name="textFriendlistColumns" width="145">
 			Colunas de nome visíveis:
 		</text>
-		<check_box label="nome de usuário" name="FSFriendListColumnShowUserName" tool_tip="A lista de contatos exibe uma coluna com o nome de usuário do amigo." width="95" />
-		<check_box label="Nome de exibição" name="FSFriendListColumnShowDisplayName" tool_tip="A lista de contatos exibe uma coluna com o nome de exibição do amigo." />
+		<check_box label="nome de usuário" name="FSFriendListColumnShowUserName" tool_tip="A lista de contatos exibe uma coluna com o nome de usuário do amigo." width="105" />
+		<check_box label="Nome de exibição" name="FSFriendListColumnShowDisplayName" tool_tip="A lista de contatos exibe uma coluna com o nome de exibição do amigo." width="105" />
 		<check_box label="Nome completo" name="FSFriendListColumnShowFullName" tool_tip="A lista de contatos exibe uma coluna com o nome completo do amigo." />
 		<text name="textFriendListSortOrder" width="85">
 			Ordenar por:
@@ -199,9 +199,9 @@
 	</panel>
 
 	
-	<panel label="Brindes" name="UI-toasts-tab">
+	<panel label="notificações" name="UI-toasts-tab">
 		<text name="ToastSettings">
-			Configurações de notificação (pop-ups, console, brindes):
+			Configurações de notificação (pop-ups, console, notificações):
 		</text>
 		<slider label="Distância entre o brinde e a IU inferior:" tool_tip="Distância em pixels entre a parte inferior da IU e a notificação inferior" name="ToastSpace" />
 		<text name="ToastSpaceText">
@@ -215,15 +215,15 @@
 		<text name="TipToastLifetimeText">
 			segundos
 		</text>
-		<slider label="Tempo de exibição para notificações de chat próximo:" tool_tip="Número de segundos que uma notificação de chat próximo aparece antes de desaparecer." name="NearbyToastLifetime" />
+		<slider label="Tempo de exibição do chat local:" tool_tip="Número de segundos que uma notificação de chat próximo aparece antes de desaparecer." name="NearbyToastLifetime" />
 		<text name="NearbyToastLifetimeText">
 			segundos
 		</text>
-		<slider label="Distância vertical das notificações de chat próximo:" tool_tip="Distância vertical das notificações de chat próximo." name="FSNearbyChatToastsOffset" />
+		<slider label="Distância vertical do chat local:" tool_tip="Distância vertical das notificações de chat próximo." name="FSNearbyChatToastsOffset" />
 		<text name="FSNearbyChatToastsOffsetText">
 			Pixel
 		</text>
-		<slider label="Tempo de desvanecimento das notificações de chat próximo:" tool_tip="Número de segundos que leva para uma notificação de chat próximo ficar completamente oculta." name="NearbyToastFadingTime" />
+		<slider label="Tempo de desaparecimento do chat local:" tool_tip="Número de segundos que leva para uma notificação de chat próximo ficar completamente oculta." name="NearbyToastFadingTime" />
 		<text name="NearbyToastFadingTimeText">
 			segundos
 		</text>
@@ -250,7 +250,7 @@
 		<check_box label="Mostrar notificações em primeiro plano" name="FSShowToastsInFront" />
 		<check_box label="Usar nova mensagem de reinicialização de região" name="FSUseNewRegionRestartNotification" />
 		<check_box label="Não balance a tela quando houver uma mensagem de reinicialização da região" name="FSNoScreenShakeOnRegionRestart" />
-		<check_box label="Enviar mensagem de reinicialização da região para o canal:" width="265" name="FSReportRegionRestartToChat" />
+		<check_box label="Enviar mensagem de reinicialização da região para o canal:" width="355" name="FSReportRegionRestartToChat" />
 	</panel>
 	
 	<panel label="Escrita" name="UI-font-tab">
@@ -302,7 +302,7 @@ Padrão 0. Valores maiores podem não funcionar corretamente.
 			Configurações de fonte Emoji: (requer reinicialização)
 		</text>
 		<check_box label="Exibir emojis em monocromático" name="FSUseBWEmojis" />
-		<check_box label="Use um lindo botão emoji" name="FSUsePrettyEmojiButton" />
+		<check_box label="Use um botão de emoji" name="FSUsePrettyEmojiButton" />
 	</panel>
 </tab_container>
 </panel>

@@ -9,7 +9,6 @@
 		<panel label="Geral" name="general"/> 
 		<panel label="Chat" name="chat"/> 
 		<panel label="Cores" name="colors"/> 
-		<panel label="Cores personalizadas" name="custom_colors"/> 
 		<panel label="Gráficos" name="display"/> 
 		<panel label="Som e mídia" name="audio"/> 
 		<panel label="Rede e arquivos" name="input"/> 
@@ -20,6 +19,7 @@
 		<panel label="Avançado" name="advanced1"/> 
 		<panel label="Interface gráfica" name="ui"/> 
 		<panel label="Tema da interface" name="skins"/> 
+		<panel label="Relatórios de falha" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/> 
 		<panel label="OpenSim" name="opensim"/> 
 		<panel label="Backup / Restaurar" name="backup"/>

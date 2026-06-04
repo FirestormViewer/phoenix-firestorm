@@ -58,7 +58,7 @@
 		<!--LookAt-->
 		<panel label="Foco da câmera" name="tab-lookat">
 			<check_box label="Mostrar foco da câmera:" name="showlookat" tool_tip="O foco da câmera é usado pelos viewers para determinar a rotação dos olhos, da cabeça e do torso. Também pode ser usado para determinar o foco da câmera de outros avatares."/>
-			<text name="lookatshownames" tool_tip="Escolha o formato de nome em que os nomes dos avatares serão exibidos junto com a mira.">
+			<text name="lookatshownames" width="220" tool_tip="Escolha o formato de nome em que os nomes dos avatares serão exibidos junto com a mira.">
 				Exibição de nomes no foco da câmera:
 			</text>
 			<combo_box name="lookatshownames_combobox">
@@ -110,7 +110,7 @@
 			<text name="autorespond_rfr_response_label">
 				Resposta automática para status online &quot;Recusar todas as solicitações de amizade&quot;:
 			</text>
-			<text name="autoresponse_item_label" width="150">
+			<text name="autoresponse_item_label" width="165">
 				Objeto para resposta autom.:
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="-70" tool_tip="Solte aqui um item de inventário com arrastar e soltar"/>

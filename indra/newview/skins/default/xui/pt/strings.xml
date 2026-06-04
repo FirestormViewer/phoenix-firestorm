@@ -3157,7 +3157,7 @@ Reinstale o Viewer de [DOWNLOAD_URL] e entre em contato com [SUPPORT_SITE] se o 
 		Sardas corporais
 	</string>
 	<string name="Body Thick">
-		Corpo grosso
+		Corpo Gordo
 	</string>
 	<string name="Body Thickness">
 		Espessura corporal
@@ -5436,7 +5436,7 @@ Coloque o caminho do editor entre aspas
 		Barra de bate-papo
 	</string>
 	<string name="Command_Areasearch_Label">
-		Pesquisa circundante
+		Pesquisa na área
 	</string>
 	<string name="Command_Settings_Debug_Label">
 		Configurações de depuração

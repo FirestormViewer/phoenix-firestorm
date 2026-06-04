@@ -5,7 +5,7 @@
 	</floater.string>
 	<panel name="top_panel">
 		<text name="set_label">
-			Configurações do conjunto de contatos:
+			Configurações de conjuntos de contatos:
 		</text>
 		<line_editor name="set_name_editor" right="-100"/>
 		<button name="rename_btn" width="85" label="Renomear"/>
@@ -17,7 +17,10 @@
 		<text name="global_label">
 			Configurações globais:
 		</text>
-		<color_swatch label="Cor" name="global_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<check_box label="Mostrar ícones de perfil nas listas de conjuntos de contatos" name="FSContactSetsListShowIcons"/>
+		<color_swatch label="Cor padrão do conjunto" name="global_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="" name="offline_swatch" tool_tip="Cor usada para contatos offline em listas de conjuntos de contatos que não pertencem a nenhum conjunto. A cor personalizada de um conjunto tem prioridade."/>
+		<check_box label="Cor personalizada para contatos offline" name="FSContactSetsListColorizeOffline"/>
 		<text name="label_online">
 			Notificações de online:
 		</text>

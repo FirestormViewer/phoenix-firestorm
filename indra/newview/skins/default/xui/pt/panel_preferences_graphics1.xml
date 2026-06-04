@@ -180,9 +180,9 @@ Se você não compreende a diferença, não altere esta configuração." />
 			Atualização do Mundo:
 		</text>
 		<check_box label="Congelar atualizações do Mundo (pausar tudo)" tool_tip="Congela todas as atualizações recebidas do servidor - interrompe todas as ações no mundo, mas não afeta o chat, mensagens instantâneas ou voz." name="WorldPause" />
-		<check_box label="Limitar Taxa de Quadros" name="FSLimitFramerate" tool_tip="Limita a taxa de quadros a um valor definido pelo usuário. Pode reduzir o consumo de energia e o aquecimento da GPU/CPU." />
+		<check_box label="Limitar Taxa de Quadros(FPS)" name="FSLimitFramerate" tool_tip="Limita a taxa de quadros a um valor definido pelo usuário. Pode reduzir o consumo de energia e o aquecimento da GPU/CPU." />
 		<slider name="MaxFPS" label="FPS:" />
-		<check_box label="Limitar Taxa de Quadros à frequência do monitor (VSync)" name="vsync" tool_tip="Sincroniza a taxa de quadros à taxa de atualização do monitor. Pode resultar em maior gaguejamento e atraso de entrada." />
+		<check_box label="Limitar o FPS à frequência do monitor (VSync)" name="vsync" tool_tip="Sincroniza a taxa de quadros à taxa de atualização do monitor. Pode resultar em maior gaguejamento e atraso de entrada." />
 		<text name="Texture Rendering">
 			Renderização de Texturas:
 		</text>
@@ -224,7 +224,7 @@ Se você não compreende a diferença, não altere esta configuração." />
 			<combo_box.item label="Controle" name="2" />
 			<combo_box.item label="Ambos" name="3" />
 		</combo_box>
-		<slider label="Tempo de espera no pré-carregamento antes de exibir o mundo" tool_tip="Quanto tempo aguardar antes de exibir o mundo após você aparecer como online para os outros (padrão: 6 segundos)." name="PrecachingDelay" />
+		<slider label="Tempo de espera do pré-carregamento" tool_tip="Quanto tempo aguardar antes de exibir o mundo após você aparecer como online para os outros (padrão: 6 segundos)." name="PrecachingDelay" />
 		<text name="PrecachingDelayText" width="60">
 			segundos
 		</text>
@@ -257,7 +257,7 @@ Se você não compreende a diferença, não altere esta configuração." />
 		<check_box label="Foco da Profundidade de Campo segue o cursor" name="FSFocusPointFollowsPointer" tool_tip="O foco da profundidade de campo (DoF) seguirá o seu mouse, comportamento semelhante ao usar flycam. Use em conjunto com o bloqueio de foco do DoF." />
 		<slider label="Abertura da Câmera (Número f):" name="CameraFNum" tool_tip="Valor do número f da câmera para o efeito de profundidade de campo." label_width="195" width="409" />
 		<slider label="Distância Focal da Câmera (mm):" name="CameraFocal" tool_tip="Distância focal da câmera para o efeito de profundidade de campo (em milímetros)." label_width="195" width="409" />
-		<slider label="Campo de Visão da Câmera (graus):" name="Camera FOV" tool_tip="Campo de visão vertical da câmera para o efeito de profundidade de campo (em graus)." label_width="195" width="409" />
+		<slider label="Campo de Visão da Câmera(graus):" name="Camera FOV" tool_tip="Campo de visão vertical da câmera para o efeito de profundidade de campo (em graus)." label_width="195" width="409" />
 		<slider label="Tempo de Transição do Foco DoF:" name="CameraFocusTrans" tool_tip="Tempo necessário para alterar o foco de um ponto a outro." label_width="195" width="409" />
 		<slider label="Qualidade de Renderização do DoF:" name="CameraDoFResScale" tool_tip="Afeta a qualidade do desfoque e o desempenho da renderização. (maior = melhor qualidade, menor = melhor desempenho)" label_width="195" width="409" />
 	</panel>

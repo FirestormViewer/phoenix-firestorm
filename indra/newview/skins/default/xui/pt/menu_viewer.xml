@@ -281,7 +281,6 @@
 	</menu>
 	<menu label="Conteúdo" name="Content">
 		<menu_item_check label="Buscar" name="Search"/>
-		<menu_item_check label="SL Marketplace" name="SL Marketplace"/>
 		<menu_item_check label="Cotações do mercado L$" name="LindenXchange"/>
 		<menu_item_check label="Biblioteca de scripts" name="Script Library"/>
 		<menu_item_call label="Comunidade SL (blogs, fóruns, notícias)" name="SL Community Pages"/>
@@ -497,10 +496,12 @@
 			<menu_item_check label="Normais" name="Normals"/>
 			<menu_item_check label="Octree" name="Octree"/>
 			<menu_item_check label="Shadow Frusta" name="Shadow Frusta"/>
+			<menu_item_check label="Sondas de reflexão" name="Reflection Probes"/>
+			<menu_item_check label="Atualizações das sondas" name="Probe Updates"/>
 			<menu_item_check label="Formas físicas" name="Physics Shapes"/>
 			<menu_item_check label="Oclusão" name="Occlusion"/>
 			<menu_item_check label="Renderizar lotes" name="Render Batches"/>
-			<menu_item_check label="Typ atualizar" name="Update Type"/>
+			<menu_item_check label="Tipo de atualização" name="Update Type"/>
 			<menu_item_check label="Animação de textura" name="Texture Anim"/>
 			<menu_item_check label="Prioridade de textura" name="Texture Priority"/>
 			<menu_item_check label="Área de textura" name="Texture Area"/>
@@ -546,6 +547,7 @@
 			<menu_item_check label="Renderizar luzes anexadas" name="Render Attached Lights"/>
 			<menu_item_check label="Renderizar partículas anexadas" name="Render Attached Particles"/>
 			<menu_item_check label="Renderizar roupas do sistema do Avatar animadas" name="Render Avatar Cloth"/>
+			<menu_item_check label="Reduzir distância de renderização quando a VRAM estiver cheia" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="Ativar coleta de vertex buffers de fonte" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Ativar cache de shaders" name="Enable Shader Cache"/>
 			<menu_item_call label="Limpar cache de shaders" name="Shader Cache Clear"/>
