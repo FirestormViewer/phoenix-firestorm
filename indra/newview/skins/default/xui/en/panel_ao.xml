@@ -63,7 +63,7 @@
 			follows="left|top"
 			layout="topleft" />
 
-		<button
+		<menu_button
 			name="ao_add"
 			tool_tip="Create a new animation set."
 			top_delta="0"
@@ -71,6 +71,7 @@
 			width="20"
 			height="20"
 			image_overlay="AddItem_Press"
+			menu_position="bottomright"
 			follows="right|top"
 			layout="topleft" />
 

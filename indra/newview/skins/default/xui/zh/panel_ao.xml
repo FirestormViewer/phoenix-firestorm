@@ -4,7 +4,7 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="選擇要編輯的動畫集。" />
 		<button name="ao_activate" tool_tip="立即啟用此動畫集。" />
 		<check_box name="ao_default" label="預設" tool_tip="將此動畫集設為登入時預設播放的動畫集。如果沒有設定預設動畫集，則使用上次的登入會話中的動畫集。" />
-		<button name="ao_add" tool_tip="建立一個新的動畫集。" />
+		<menu_button name="ao_add" tool_tip="建立一個新的動畫集。" />
 		<button name="ao_remove" tool_tip="刪除此動畫集。" />
 		<check_box name="ao_sit_override" label="替換坐姿動畫" tool_tip="啟用此選項，使動畫覆蓋器中的動畫優先於物件的動畫。" />
 		<check_box name="ao_smart" label="智慧" left_pad="20" tool_tip="智慧模式確定替換坐姿是否與物件動畫衝突，並暫時停止替換。" />

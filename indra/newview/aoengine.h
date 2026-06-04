@@ -99,6 +99,7 @@ public:
     const LLUUID& getAOFolder() const;
 
     void addSet(const std::string& name, inventory_func_type callback, bool reload = true);
+    bool cloneSet(AOSet* sourceSet, const std::string& newName);
     bool removeSet(AOSet* set);
 
     void addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);
@@ -171,6 +172,9 @@ protected:
     void updateSortOrder(AOSet::AOState* state);
     void saveSet(const AOSet* set);
     void saveState(const AOSet::AOState* state);
+
+    std::string getSetFolderName(const AOSet* set) const;
+    std::string getStateFolderName(const AOSet::AOState* state) const;
 
     bool createAnimationLink(AOSet::AOState* state, const LLInventoryItem* item);
     bool findForeignItems(const LLUUID& uuid) const;

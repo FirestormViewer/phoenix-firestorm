@@ -7,7 +7,7 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="Animationsset zum Editieren auswählen."/>
 		<button	name="ao_activate" tool_tip="Aktiviere aktuelles Animationsset."/>
 		<check_box name="ao_default" label="Standard" tool_tip="Dieses Animationsset als Standard definieren, das nach dem Einloggen verwendet wird. Falls kein Standard definiert ist, wird die zuletzt verwendete Animation des zuletzt verwendeten Sets der vorherigen Session verwendet."/>
-		<button	name="ao_add" tool_tip="Neues Animationsset erstellen."/>
+		<menu_button name="ao_add" tool_tip="Neues Animationsset erstellen."/>
 		<button	name="ao_remove" tool_tip="Dieses Animationsset löschen."/>
 		<check_box name="ao_sit_override" label="Sitzen überst." tool_tip="Aktiviert die Übersteuerung von Sitzanimationen."/>
 		<check_box name="ao_smart" label="Smart-Modus" tool_tip="Smart-Modus versucht zu erkennen, ob das Übersteuern von Sitzanimationen mit der des Objektes, auf dem gesessen wird, kollidiert. In diesem Fall wird der Animation Overrider temporär deaktiviert." left_pad="-6"/>

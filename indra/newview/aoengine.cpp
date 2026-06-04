@@ -1173,6 +1173,50 @@ void AOEngine::addSet(const std::string& name, inventory_func_type callback, boo
     }
 }
 
+bool AOEngine::cloneSet(AOSet* sourceSet, const std::string& newName)
+{
+    if (!sourceSet)
+    {
+        return false;
+    }
+
+    if (mImportSet)
+    {
+        LL_WARNS("AOEngine") << "Set import or clone already running, ignoring clone request." << LL_ENDL;
+        return false;
+    }
+
+    if (mAOFolder.isNull())
+    {
+        LL_WARNS("AOEngine") << ROOT_AO_FOLDER << " folder not there yet. Requesting recreation." << LL_ENDL;
+        tick();
+        return false;
+    }
+
+    LL_INFOS("AOEngine") << "cloning set " << sourceSet->getName() << " into " << newName << LL_ENDL;
+    mImportSet = new AOSet(sourceSet->getInventoryUUID());
+    mImportSet->setName(newName);
+    mImportSet->setSitOverride(sourceSet->getSitOverride());
+    mImportSet->setSmart(sourceSet->getSmart());
+    mImportSet->setMouselookStandDisable(sourceSet->getMouselookStandDisable());
+
+    for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
+    {
+        const AOSet::AOState* sourceState = sourceSet->getState(index);
+        AOSet::AOState* newState = mImportSet->getState(index);
+        newState->mCycle = sourceState->mCycle;
+        newState->mRandom = sourceState->mRandom;
+        newState->mCycleTime = sourceState->mCycleTime;
+        newState->mAnimations = sourceState->mAnimations;
+    }
+
+    mImportSet->setInventoryUUID(LLUUID::null);
+    mTimerCollection.enableImportTimer(true);
+    mImportRetryCount = 0;
+    processImport(false);
+    return true;
+}
+
 bool AOEngine::createAnimationLink(AOSet::AOState* state, const LLInventoryItem* item)
 {
     LL_DEBUGS("AOEngine") << "Asset ID " << item->getAssetUUID() << " inventory id " << item->getUUID() << " category id " << state->mInventoryUUID << LL_ENDL;
@@ -1852,19 +1896,7 @@ void AOEngine::saveSet(const AOSet* set)
         return;
     }
 
-    std::string setParams=set->getName();
-    if (set->getSitOverride())
-    {
-        setParams += ":SO";
-    }
-    if (set->getSmart())
-    {
-        setParams += ":SM";
-    }
-    if (set->getMouselookStandDisable())
-    {
-        setParams += ":DM";
-    }
+    std::string setParams = getSetFolderName(set);
     if (set == mDefaultSet)
     {
         setParams += ":**";
@@ -1902,22 +1934,45 @@ bool AOEngine::renameSet(AOSet* set, std::string_view name)
     return true;
 }
 
-void AOEngine::saveState(const AOSet::AOState* state)
+std::string AOEngine::getSetFolderName(const AOSet* set) const
 {
-    std::string stateParams = state->mName;
+    std::string params = set->getName();
+    if (set->getSitOverride())
+    {
+        params += ":SO";
+    }
+    if (set->getSmart())
+    {
+        params += ":SM";
+    }
+    if (set->getMouselookStandDisable())
+    {
+        params += ":DM";
+    }
+    return params;
+}
+
+std::string AOEngine::getStateFolderName(const AOSet::AOState* state) const
+{
+    std::string params = state->mName;
     if (state->mCycleTime > 0.0f)
     {
-        stateParams += llformat(":CT%.2f", state->mCycleTime);
+        params += llformat(":CT%.2f", state->mCycleTime);
     }
     if (state->mCycle)
     {
-        stateParams += ":CY";
+        params += ":CY";
     }
     if (state->mRandom)
     {
-        stateParams += ":RN";
+        params += ":RN";
     }
+    return params;
+}
 
+void AOEngine::saveState(const AOSet::AOState* state)
+{
+    std::string stateParams = getStateFolderName(state);
     bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
     gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
     rename_category(&gInventory, state->mInventoryUUID, stateParams);
@@ -2399,7 +2454,7 @@ void AOEngine::processImport(bool from_timer)
     if (mImportSet->getInventoryUUID().isNull())
     {
         // create new inventory folder for this AO set, the next timer tick should pick it up
-        addSet(mImportSet->getName(), [this](const LLUUID& new_cat_id)
+        addSet(getSetFolderName(mImportSet), [this](const LLUUID& new_cat_id)
         {
             mImportSet->setInventoryUUID(new_cat_id);
         }, false);
@@ -2440,7 +2495,7 @@ void AOEngine::processImport(bool from_timer)
             allComplete = false;
             LL_DEBUGS("AOEngine") << "state " << state->mName << " still has animations to link." << LL_ENDL;
 
-            gInventory.createNewCategory(mImportSet->getInventoryUUID(), LLFolderType::FT_NONE, state->mName, [this, state](const LLUUID& new_cat_id)
+            gInventory.createNewCategory(mImportSet->getInventoryUUID(), LLFolderType::FT_NONE, getStateFolderName(state), [this, state](const LLUUID& new_cat_id)
             {
                 LL_DEBUGS("AOEngine") << "new_cat_id: " << new_cat_id << LL_ENDL;
                 state->mInventoryUUID = new_cat_id;

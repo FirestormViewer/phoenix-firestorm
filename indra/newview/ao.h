@@ -35,6 +35,8 @@
 class LLButton;
 class LLComboBox;
 class LLCheckBoxCtrl;
+class LLMenuButton;
+class LLMenuItemCallGL;
 class LLScrollListCtrl;
 class LLScrollListItem;
 class LLSpinCtrl;
@@ -71,7 +73,9 @@ class FloaterAO
         void onSelectState();
         void onChangeAnimationSelection();
         void onClickReload();
-        void onClickAdd();
+        void buildAddMenu();
+        void onAddMenuShow();
+        void onAddSet(bool clone);
         void onClickRemove();
         void onClickActivate();
         void onCheckDefault();
@@ -119,7 +123,8 @@ class FloaterAO
 
         LLComboBox* mSetSelector;
         LLButton* mActivateSetButton;
-        LLButton* mAddButton;
+        LLMenuButton* mAddButton;
+        LLMenuItemCallGL* mCloneSetItem;
         LLButton* mRemoveButton;
         LLCheckBoxCtrl* mDefaultCheckBox;
         LLCheckBoxCtrl* mOverrideSitsCheckBox;
