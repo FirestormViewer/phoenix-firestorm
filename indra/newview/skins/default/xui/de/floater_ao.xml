@@ -6,6 +6,12 @@
 	<floater.string name="ao_no_animations_loaded">
 		Keine Animationen geladen
 	</floater.string>
+	<floater.string name="ao_add_blank_label">
+		Neues leeres Set...
+	</floater.string>
+	<floater.string name="ao_add_clone_label">
+		Aktuelles Set klonen...
+	</floater.string>
 	<floater.string name="ao_dnd_only_on_full_interface">
 		Notizkarten mit AO-Konfigurationen können per Drag&amp;Drop nur auf maximierte Fenster gezogen werden. Auf das Werkzeug-Symbol klicken, um das Fenster zu maximieren.
 	</floater.string>
