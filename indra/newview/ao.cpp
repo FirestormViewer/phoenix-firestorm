@@ -32,8 +32,12 @@
 #include "aoset.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
+#include "llmenubutton.h"
+#include "llmenugl.h"
 #include "llnotificationsutil.h"
 #include "llspinctrl.h"
+#include "lltoggleablemenu.h"
+#include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 #include "utilitybar.h"
 
@@ -42,6 +46,7 @@ FloaterAO::FloaterAO(const LLSD& key)
     mSetList(0),
     mSelectedSet(0),
     mSelectedState(0),
+    mCloneSetItem(nullptr),
     mCanDragAndDrop(false),
     mImportRunning(false),
     mCurrentBoldItem(nullptr),
@@ -217,7 +222,7 @@ bool FloaterAO::postBuild()
 
     mSetSelector = mMainInterfacePanel->getChild<LLComboBox>("ao_set_selection_combo");
     mActivateSetButton = mMainInterfacePanel->getChild<LLButton>("ao_activate");
-    mAddButton = mMainInterfacePanel->getChild<LLButton>("ao_add");
+    mAddButton = mMainInterfacePanel->getChild<LLMenuButton>("ao_add");
     mRemoveButton = mMainInterfacePanel->getChild<LLButton>("ao_remove");
     mDefaultCheckBox = mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_default");
     mOverrideSitsCheckBox = mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_sit_override");
@@ -248,7 +253,7 @@ bool FloaterAO::postBuild()
     mSetSelector->setCommitCallback(boost::bind(&FloaterAO::onSelectSet, this));
     mSetSelector->setFocusLostCallback(boost::bind(&FloaterAO::onSelectSet, this));
     mActivateSetButton->setCommitCallback(boost::bind(&FloaterAO::onClickActivate, this));
-    mAddButton->setCommitCallback(boost::bind(&FloaterAO::onClickAdd, this));
+    buildAddMenu();
     mRemoveButton->setCommitCallback(boost::bind(&FloaterAO::onClickRemove, this));
     mDefaultCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckDefault, this));
     mOverrideSitsCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckOverrideSits, this));
@@ -511,15 +516,54 @@ void FloaterAO::onClickReload()
     updateList();
 }
 
-void FloaterAO::onClickAdd()
+void FloaterAO::buildAddMenu()
 {
-    LLNotificationsUtil::add("NewAOSet", LLSD(), LLSD(), boost::bind(&FloaterAO::newSetCallback, this, _1, _2));
+    LLToggleableMenu::Params menu_params;
+    menu_params.name("ao_add_menu");
+    menu_params.visible(false);
+    LLToggleableMenu* addMenu = LLUICtrlFactory::create<LLToggleableMenu>(menu_params);
+
+    LLMenuItemCallGL::Params blank_params;
+    blank_params.name("ao_add_blank");
+    blank_params.label(getString("ao_add_blank_label"));
+    blank_params.on_click.function(boost::bind(&FloaterAO::onAddSet, this, false));
+    addMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(blank_params));
+
+    LLMenuItemCallGL::Params clone_params;
+    clone_params.name("ao_add_clone");
+    clone_params.label(getString("ao_add_clone_label"));
+    clone_params.on_click.function(boost::bind(&FloaterAO::onAddSet, this, true));
+    mCloneSetItem = LLUICtrlFactory::create<LLMenuItemCallGL>(clone_params);
+    addMenu->addChild(mCloneSetItem);
+
+    mAddButton->setMenu(addMenu, LLMenuButton::MP_BOTTOM_RIGHT, true);
+    mAddButton->setMouseDownCallback(boost::bind(&FloaterAO::onAddMenuShow, this));
+}
+
+void FloaterAO::onAddMenuShow()
+{
+    if (mCloneSetItem)
+    {
+        mCloneSetItem->setEnabled(mSelectedSet != nullptr);
+    }
+}
+
+void FloaterAO::onAddSet(bool clone)
+{
+    if (clone && !mSelectedSet)
+    {
+        return;
+    }
+    LLSD payload;
+    payload["clone"] = clone;
+    LLNotificationsUtil::add("NewAOSet", LLSD(), payload, boost::bind(&FloaterAO::newSetCallback, this, _1, _2));
 }
 
 bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
 {
     std::string newSetName = response["message"].asString();
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    bool clone = notification["payload"]["clone"].asBoolean();
 
     LLStringUtil::trim(newSetName);
 
@@ -547,10 +591,20 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
             return false;
         }
 
-        AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
+        if (clone)
         {
-            reloading(true);
-        });
+            if (mSelectedSet && AOEngine::instance().cloneSet(mSelectedSet, newSetName))
+            {
+                reloading(true);
+            }
+        }
+        else
+        {
+            AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
+            {
+                reloading(true);
+            });
+        }
     }
     return false;
 }

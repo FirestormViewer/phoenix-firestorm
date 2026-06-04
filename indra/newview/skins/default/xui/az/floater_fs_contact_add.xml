@@ -9,6 +9,12 @@
 	<floater.string name="text_add_multiple">
 		[COUNT] avatarı hansı dəstə əlavə etmək istəyirsiniz?
 	</floater.string>
+	<floater.string name="title_add">
+		Kontakt dəstinə əlavə et...
+	</floater.string>
+	<floater.string name="button_add">
+		Əlavə et
+	</floater.string>
 	<button label="Əlavə et" name="add_btn" />
 	<button label="Ləğv et" name="cancel_btn" />
 </floater>

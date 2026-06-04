@@ -66,6 +66,7 @@
 #include "lltoolmgr.h"
 #include "rlvhandler.h"
 #include "llclipboard.h"
+#include "lluri.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 constexpr S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -218,7 +219,179 @@ bool FSAreaSearch::postBuild()
 
 void FSAreaSearch::onOpen(const LLSD& key)
 {
+    if (key.isMap() && key.size() > 0)
+    {
+        applySlappParams(key);
+        return;
+    }
     mTab->selectTab(1);
+}
+
+namespace
+{
+    constexpr const char* CLICK_ACTION_NAMES[] = {"blank", "any", "touch", "sit", "buy", "pay", "open", "play", "open_media", "zoom"};
+    constexpr S32 CLICK_ACTION_COUNT = (S32)(sizeof(CLICK_ACTION_NAMES) / sizeof(*CLICK_ACTION_NAMES));
+    constexpr S32 RANGE_MIN_DEFAULT = 0;
+    constexpr S32 RANGE_MAX_DEFAULT = 999999;
+    constexpr S32 RANGE_VALUE_CAP = 999999999; // matches spinner max_val in floater_fs_area_search.xml
+    constexpr S32 MAX_FIELD_CHARS = 256; // matches line_editor max_length_chars
+}
+
+const FSAreaSearch::SlappBoolEntry FSAreaSearch::sBoolFilters[] = {
+    {"fl", &FSPanelAreaSearchFilter::mCheckboxLocked, &FSAreaSearch::setFilterLocked, &FSAreaSearch::mFilterLocked},
+    {"fp", &FSPanelAreaSearchFilter::mCheckboxPhysical, &FSAreaSearch::setFilterPhysical, &FSAreaSearch::mFilterPhysical},
+    {"ft", &FSPanelAreaSearchFilter::mCheckboxTemporary, &FSAreaSearch::setFilterTemporary, &FSAreaSearch::mFilterTemporary},
+    {"fh", &FSPanelAreaSearchFilter::mCheckboxPhantom, &FSAreaSearch::setFilterPhantom, &FSAreaSearch::mFilterPhantom},
+    {"fa", &FSPanelAreaSearchFilter::mCheckboxAttachment, &FSAreaSearch::setFilterAttachment, &FSAreaSearch::mFilterAttachment},
+    {"fm", &FSPanelAreaSearchFilter::mCheckboxMoaP, &FSAreaSearch::setFilterMoaP, &FSAreaSearch::mFilterMoaP},
+    {"fr", &FSPanelAreaSearchFilter::mCheckboxReflectionProbe, &FSAreaSearch::setFilterReflectionProbe, &FSAreaSearch::mFilterReflectionProbe},
+    {"pc", &FSPanelAreaSearchFilter::mCheckboxPermCopy, &FSAreaSearch::setFilterPermCopy, &FSAreaSearch::mFilterPermCopy},
+    {"pm", &FSPanelAreaSearchFilter::mCheckboxPermModify, &FSAreaSearch::setFilterPermModify, &FSAreaSearch::mFilterPermModify},
+    {"pt", &FSPanelAreaSearchFilter::mCheckboxPermTransfer, &FSAreaSearch::setFilterPermTransfer, &FSAreaSearch::mFilterPermTransfer},
+    {"ap", &FSPanelAreaSearchFilter::mCheckboxAgentParcelOnly, &FSAreaSearch::setFilterAgentParcelOnly, &FSAreaSearch::mFilterAgentParcelOnly},
+    {"xa", &FSPanelAreaSearchFilter::mCheckboxExcludeAttachment, &FSAreaSearch::setExcludeAttachment, &FSAreaSearch::mExcludeAttachment},
+    {"xp", &FSPanelAreaSearchFilter::mCheckboxExcludePhysics, &FSAreaSearch::setExcludePhysics, &FSAreaSearch::mExcludePhysics},
+    {"xt", &FSPanelAreaSearchFilter::mCheckboxExcludetemporary, &FSAreaSearch::setExcludetemporary, &FSAreaSearch::mExcludeTemporary},
+    {"xr", &FSPanelAreaSearchFilter::mCheckboxExcludeReflectionProbes, &FSAreaSearch::setExcludeReflectionProbe, &FSAreaSearch::mExcludeReflectionProbe},
+    {"xc", &FSPanelAreaSearchFilter::mCheckboxExcludeChildPrim, &FSAreaSearch::setExcludeChildPrims, &FSAreaSearch::mExcludeChildPrims},
+    {"xn", &FSPanelAreaSearchFilter::mCheckboxExcludeNeighborRegions, &FSAreaSearch::setExcludeNeighborRegions, &FSAreaSearch::mExcludeNeighborRegions},
+};
+
+const FSAreaSearch::SlappTextEntry FSAreaSearch::sTextFields[] = {
+    {"nm", &FSPanelAreaSearchFind::mNameLineEditor, &FSAreaSearch::mSearchName},
+    {"ds", &FSPanelAreaSearchFind::mDescriptionLineEditor, &FSAreaSearch::mSearchDescription},
+    {"ow", &FSPanelAreaSearchFind::mOwnerLineEditor, &FSAreaSearch::mSearchOwner},
+    {"gr", &FSPanelAreaSearchFind::mGroupLineEditor, &FSAreaSearch::mSearchGroup},
+    {"cr", &FSPanelAreaSearchFind::mCreatorLineEditor, &FSAreaSearch::mSearchCreator},
+    {"lo", &FSPanelAreaSearchFind::mLastOwnerLineEditor, &FSAreaSearch::mSearchLastOwner},
+};
+
+void FSAreaSearch::applySlappParams(const LLSD& params)
+{
+    auto as_bool = [](const LLSD& v)
+    {
+        std::string s = v.asString();
+        LLStringUtil::toLower(s);
+        return s == "1" || s == "true" || s == "on" || s == "yes";
+    };
+
+    for (const auto& t : sTextFields)
+    {
+        const std::string value = params.has(t.key) ? params[t.key].asString() : std::string();
+        (mPanelFind->*t.editor)->setText(LLStringExplicit(utf8str_symbol_truncate(value, MAX_FIELD_CHARS)));
+    }
+
+    const bool regex_on = params.has("rx") && as_bool(params["rx"]);
+    mPanelFind->mCheckboxRegex->set(regex_on);
+    mRegexSearch = regex_on;
+
+    for (const auto& b : sBoolFilters)
+    {
+        const bool v = params.has(b.key) && as_bool(params[b.key]);
+        (mPanelFilter->*b.ctl)->set(v);
+        (this->*b.setter)(v);
+    }
+
+    auto apply_range = [&](const char* flag_k, const char* min_k, const char* max_k, LLCheckBoxCtrl* ctl, LLSpinCtrl* min_s, LLSpinCtrl* max_s, void (FSAreaSearch::*set_flag)(bool), void (FSAreaSearch::*set_min)(S32), void (FSAreaSearch::*set_max)(S32))
+    {
+        const bool has_min = params.has(min_k);
+        const bool has_max = params.has(max_k);
+        const bool has_flag = params.has(flag_k);
+        const bool enabled = has_flag ? as_bool(params[flag_k]) : (has_min || has_max);
+        const S32 vmin = llclamp(has_min ? params[min_k].asInteger() : RANGE_MIN_DEFAULT, RANGE_MIN_DEFAULT, RANGE_VALUE_CAP);
+        const S32 vmax = llclamp(has_max ? params[max_k].asInteger() : RANGE_MAX_DEFAULT, RANGE_MIN_DEFAULT, RANGE_VALUE_CAP);
+        min_s->set((F32)vmin); (this->*set_min)(vmin);
+        max_s->set((F32)vmax); (this->*set_max)(vmax);
+        ctl->set(enabled); (this->*set_flag)(enabled);
+    };
+
+    apply_range("fs", "smn", "smx", mPanelFilter->mCheckboxForSale, mPanelFilter->mSpinForSaleMinValue, mPanelFilter->mSpinForSaleMaxValue, &FSAreaSearch::setFilterForSale, &FSAreaSearch::setFilterForSaleMin, &FSAreaSearch::setFilterForSaleMax);
+    apply_range("fd", "dmn", "dmx", mPanelFilter->mCheckboxDistance, mPanelFilter->mSpinDistanceMinValue, mPanelFilter->mSpinDistanceMaxValue, &FSAreaSearch::setFilterDistance, &FSAreaSearch::setFilterDistanceMin, &FSAreaSearch::setFilterDistanceMax);
+
+    S32 action_idx = 0;
+    if (params.has("ca"))
+    {
+        const std::string action = params["ca"].asString();
+        for (S32 i = 1; i < CLICK_ACTION_COUNT; ++i)
+        {
+            if (action == CLICK_ACTION_NAMES[i]) {action_idx = i; break;}
+        }
+    }
+    mPanelFilter->mComboClickAction->setCurrentByIndex(action_idx);
+    setFilterClickAction(action_idx > 0);
+    setFilterClickActionType((U8)action_idx);
+
+    onButtonClickedSearch();
+}
+
+std::string FSAreaSearch::buildSlappLink() const
+{
+    std::ostringstream url;
+    url << "secondlife:///app/openfloater/area_search";
+    bool first = true;
+    auto add = [&](const char* k, const std::string& v)
+    {
+        url << (first ? '?' : '&');
+        first = false;
+        url << k << '=' << LLURI::escape(v);
+    };
+
+    for (const auto& t : sTextFields)
+    {
+        const std::string& v = this->*t.state;
+        if (!v.empty()) add(t.key, v);
+    }
+
+    if (mRegexSearch)
+    {
+        add("rx", "1");
+    }
+
+    for (const auto& b : sBoolFilters)
+    {
+        if (this->*b.state)
+        {
+            add(b.key, "1");
+        }
+    }
+
+    if (mFilterForSale)
+    {
+        add("fs", "1");
+        if (mFilterForSaleMin != RANGE_MIN_DEFAULT)
+        {
+            add("smn", std::to_string(mFilterForSaleMin));
+        }
+        if (mFilterForSaleMax != RANGE_MAX_DEFAULT)
+        {
+            add("smx", std::to_string(mFilterForSaleMax));
+        }
+    }
+    if (mFilterDistance)
+    {
+        add("fd", "1");
+        if (mFilterDistanceMin != RANGE_MIN_DEFAULT)
+        {
+            add("dmn", std::to_string(mFilterDistanceMin));
+        }
+        if (mFilterDistanceMax != RANGE_MAX_DEFAULT)
+        {
+            add("dmx", std::to_string(mFilterDistanceMax));
+        }
+    }
+    if (mFilterClickAction && mFilterClickActionType > 0 && (S32)mFilterClickActionType < CLICK_ACTION_COUNT)
+    {
+        add("ca", CLICK_ACTION_NAMES[mFilterClickActionType]);
+    }
+
+    return url.str();
+}
+
+void FSAreaSearch::onCopySlappLink()
+{
+    onCommitLine();
+    const std::string link = buildSlappLink();
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(link), 0, (S32)link.size());
 }
 
 void FSAreaSearch::draw()
@@ -2184,6 +2357,11 @@ bool FSPanelAreaSearchFind::postBuild()
 
     mSearchButton = getChild<LLButton>("search");
     mSearchButton->setClickedCallback(boost::bind(&FSAreaSearch::onButtonClickedSearch, mFSAreaSearch));
+
+    if (LLButton* copy_link = findChild<LLButton>("copy_link"))
+    {
+        copy_link->setClickedCallback(boost::bind(&FSAreaSearch::onCopySlappLink, mFSAreaSearch));
+    }
 
     mClearButton = getChild<LLButton>("clear");
     mClearButton->setClickedCallback(boost::bind(&FSPanelAreaSearchFind::onButtonClickedClear, this));
