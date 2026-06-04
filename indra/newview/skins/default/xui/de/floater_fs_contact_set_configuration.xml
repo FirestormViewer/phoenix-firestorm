@@ -17,6 +17,7 @@
 		<text name="global_label">
 			Globale Einstellungen:
 		</text>
+		<check_box label="Profilbilder in Kontakt-Set-Listen anzeigen" name="FSContactSetsListShowIcons"/>
 		<color_swatch label="Farbe" name="global_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
 		<color_swatch name="offline_swatch" tool_tip="Farbe für Offline-Kontakte in Kontakt-Set-Listen, die zu keinem Kontakt-Set gehören. Eine benutzerdefinierte Kontakt-Set-Farbe hat Vorrang."/>
 		<check_box label="Benutzerdefinierte Offline-Kontakt-Set-Farbe" name="FSContactSetsListColorizeOffline"/>

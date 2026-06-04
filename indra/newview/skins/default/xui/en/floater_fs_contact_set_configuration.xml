@@ -96,9 +96,9 @@ Global Settings:
      top_pad="10"
      height="12"
      initial_value="true"
-     label="Show people icons in Contact Sets lists"
+     label="Show profile icons in Contact Sets lists"
      name="FSContactSetsListShowIcons"
-     width="270"
+     width="300"
      control_name="FSContactSetsListShowIcons"/>
     <color_swatch
      can_apply_immediately="true"
