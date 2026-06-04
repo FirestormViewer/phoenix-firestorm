@@ -408,7 +408,12 @@ void LLGroupList::toggleIcons()
     getItems(items);
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
-        static_cast<LLGroupListItem*>(*it)->setGroupIconVisible(mShowIcons);
+        // <FS:PP> Group favorites / pinning
+        if (LLGroupListItem* item = dynamic_cast<LLGroupListItem*>(*it))
+        {
+            item->setGroupIconVisible(mShowIcons);
+        }
+        // </FS:PP>
     }
 }
 

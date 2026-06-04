@@ -93,7 +93,7 @@ Global Settings:
     </text>
     <check_box
      follows="left|top"
-     top_pad="8"
+     top_pad="10"
      height="12"
      initial_value="true"
      label="Show people icons in Contact Sets lists"
@@ -105,7 +105,7 @@ Global Settings:
      follows="left|top"
      height="55"
      label="Default Set Color"
-     top_pad="8"
+     top_pad="6"
      left_delta="4"
      name="global_swatch"
      tool_tip="Click to open Color Picker"
