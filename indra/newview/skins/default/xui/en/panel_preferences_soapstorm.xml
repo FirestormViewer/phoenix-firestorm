@@ -111,7 +111,7 @@
          parameter="MouselookZoomTransitionSpeed"/>
     </button>
 
-    <!-- ===== RMB Script Events ===== -->
+    <!-- ===== Over-the-Shoulder Camera ===== -->
     <text
      type="string"
      length="1"
@@ -122,71 +122,86 @@
      left="10"
      top_pad="18"
      width="520">
-        Right Mouse Button Script Events
-    </text>
-
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="26"
-     layout="topleft"
-     left="10"
-     top_pad="6"
-     width="520">
-        When in mouselook, right mouse button presses are sent to your attachments as LSL listen events on the configured channel.
+        Over-the-Shoulder Camera
     </text>
 
     <check_box
-     control_name="FSRMBScriptEnabled"
+     control_name="OTSEnabled"
      follows="left|top"
      height="16"
-     label="Enable RMB script events in mouselook"
+     label="Enable OTS Mode (replaces Mouselook — M key)"
      layout="topleft"
      left="10"
-     name="rmb_script_enabled"
-     tool_tip="When checked, right mouse button presses in mouselook send RMBD/RMBU messages to your attachments on the channel below."
+     name="ots_enabled_prefs"
      top_pad="8"
      width="360" />
-
-    <text
-     type="string"
-     length="1"
+    <slider
+     control_name="OTSCameraDistance"
+     can_edit_text="true"
+     decimal_digits="2"
      follows="left|top"
-     height="10"
+     height="15"
+     initial_value="3.0"
      layout="topleft"
+     label="Distance (m):"
+     label_width="120"
+     show_text="true"
      left="10"
-     name="RMBScriptChannelLabel"
-     top_pad="10"
-     width="80">
-        Channel:
-    </text>
-    <line_editor
-     control_name="FSRMBScriptChannel"
-     enabled_control="FSRMBScriptEnabled"
+     max_val="10.0"
+     min_val="0.5"
+     name="OTSCameraDistancePref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSCameraSide"
+     can_edit_text="true"
+     decimal_digits="2"
      follows="left|top"
-     height="19"
+     height="15"
+     initial_value="-0.5"
      layout="topleft"
-     left_pad="5"
-     max_length_bytes="12"
-     name="rmb_script_channel"
-     tool_tip="Negative channel number on which RMBD/RMBU events are sent to your attachments. Must be negative. Scripts listen with: llListen(channel, &quot;&quot;, NULL_KEY, &quot;&quot;)"
-     top_delta="-4"
-     width="100" />
-    <button
-     enabled_control="FSRMBScriptEnabled"
+     label="Side Offset (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="2.0"
+     min_val="-2.0"
+     name="OTSCameraSidePref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSCameraHeight"
+     can_edit_text="true"
+     decimal_digits="2"
      follows="left|top"
-     name="Def_FSRMBScriptChannel"
-     height="20"
-     label="D"
+     height="15"
+     initial_value="0.5"
      layout="topleft"
-     left_pad="2"
-     top_delta="-1"
-     width="20"
-     tool_tip="Reset channel to default (-9999)">
-        <button.commit_callback
-         function="ResetControl"
-         parameter="FSRMBScriptChannel"/>
-    </button>
+     label="Height (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="3.0"
+     min_val="-1.0"
+     name="OTSCameraHeightPref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSFocusDistance"
+     can_edit_text="true"
+     decimal_digits="1"
+     follows="left|top"
+     height="15"
+     initial_value="10.0"
+     layout="topleft"
+     label="Focus Distance (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="50.0"
+     min_val="2.0"
+     name="OTSFocusDistancePref"
+     top_pad="5"
+     width="333" />
 
 </panel>
