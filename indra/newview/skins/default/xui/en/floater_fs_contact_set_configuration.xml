@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="412"
+ height="432"
  width="900"
  layout="topleft"
  can_resize="false"
@@ -78,7 +78,7 @@ Contact Set Settings:
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="272"
+     height="292"
      width="450"
      border_visible="true"
      bevel_style="none">
@@ -91,6 +91,15 @@ Contact Set Settings:
      name="global_label">
 Global Settings:
     </text>
+    <check_box
+     follows="left|top"
+     top_pad="8"
+     height="12"
+     initial_value="true"
+     label="Show people icons in Contact Sets lists"
+     name="FSContactSetsListShowIcons"
+     width="270"
+     control_name="FSContactSetsListShowIcons"/>
     <color_swatch
      can_apply_immediately="true"
      follows="left|top"
@@ -214,7 +223,7 @@ Custom Colors:
      name="side_panel"
      top="18"
      left="450"
-     height="392"
+     height="412"
      width="448"
      border_visible="true"
      bevel_style="none">
@@ -245,7 +254,7 @@ Custom Colors:
      label="Use custom Autoresponse-mode message for this set"
      layout="topleft"
      left_delta="-15"
-     top_pad="6"
+     top_pad="12"
      initial_value="false"
      name="set_autoresponse_mode_enabled"
      width="520" />
@@ -266,7 +275,7 @@ Custom Colors:
      label="Use custom Non-friends autoresponse for this set"
      layout="topleft"
      left_delta="-15"
-     top_pad="6"
+     top_pad="12"
      initial_value="false"
      name="set_autoresponse_nonfriends_enabled"
      width="520" />
