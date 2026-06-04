@@ -99,7 +99,7 @@ public:
     const LLUUID& getAOFolder() const;
 
     void addSet(const std::string& name, inventory_func_type callback, bool reload = true);
-    bool cloneSet(AOSet* sourceSet, const std::string& newName);
+    bool cloneSet(AOSet* sourceSet, std::string_view newName);
     bool removeSet(AOSet* set);
 
     void addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);

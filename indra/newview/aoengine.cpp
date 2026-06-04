@@ -1173,7 +1173,7 @@ void AOEngine::addSet(const std::string& name, inventory_func_type callback, boo
     }
 }
 
-bool AOEngine::cloneSet(AOSet* sourceSet, const std::string& newName)
+bool AOEngine::cloneSet(AOSet* sourceSet, std::string_view newName)
 {
     if (!sourceSet)
     {
