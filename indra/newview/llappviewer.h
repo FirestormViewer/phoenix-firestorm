@@ -79,6 +79,7 @@ typedef enum
     LAST_EXEC_INIT,
     LAST_EXEC_UNKNOWN,
     LAST_EXEC_LOGOUT_UNKNOWN,
+    LAST_EXEC_OS_EVENT,
     LAST_EXEC_COUNT
 } eLastExecEvent;
 
@@ -113,6 +114,7 @@ public:
                    const LLSD& substitutions = LLSD()); // Display an error dialog and forcibly quit.
     void earlyExitNoNotify(); // Do not display error dialog then forcibly quit.
     void abortQuit();  // Called to abort a quit request.
+    void sendViewerStatistics(bool include_preferences);
 
     bool quitRequested() { return mQuitRequested; }
     bool logoutRequestSent() { return mLogoutRequestSent; }
@@ -268,6 +270,8 @@ public:
     // Note: mQuitRequested can be aborted by user.
     void outOfMemorySoftQuit();
 
+    virtual void setPermitOSHibernation(bool permit);
+
 #ifdef LL_DISCORD
     static void initDiscordSocial();
     static void updateDiscordActivity();
@@ -285,6 +289,14 @@ protected:
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
     virtual void bugsplatAddStaticAttributes(const LLSD& info) {/*empty*/}; // <FS:Beq/> create a NOOP base impl
+
+    typedef enum
+    {
+        LL_HIBERNATE_MODE_DEFAULT = 0, // Use the platform's default behavior.
+        LL_HIBERNATE_MODE_PREVENT = 1,
+        LL_HIBERNATE_MODE_PREVENT_SCREEN = 2,
+    } eHibernationMode;
+    virtual void setOSHibernationMode(eHibernationMode mode);
 
     virtual bool initParseCommandLine(LLCommandLineParser& clp)
         { return true; } // Allow platforms to specify the command line args.
@@ -400,6 +412,10 @@ private:
     LLAppCoreHttp mAppCoreHttp;
 
     bool mIsFirstRun;
+
+    eHibernationMode mCurrentHibernationMode = LL_HIBERNATE_MODE_DEFAULT;
+    boost::signals2::scoped_connection mOSHibernationModeChangeConnection;
+
     // <FS:Zi> Backup Settings
 public:
     void setSaveSettingsOnExit(bool state) {mSaveSettingsOnExit = state; };

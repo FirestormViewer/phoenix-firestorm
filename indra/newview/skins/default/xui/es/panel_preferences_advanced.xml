@@ -10,6 +10,14 @@
 	<check_box label="Permitir el inicio de sesión en otras redes (no todas las redes soportarán Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Mostrar el menú Avanzado" name="show_advanced_menu_check"/>
 	<check_box label="Mostrar el menú Desarrollo" name="show_develop_menu_check"/>
+	<text name="os_hibernation_mode">
+		Evitar que el sistema entre en hibernación si no está Ausente:
+	</text>
+	<combo_box name="os_hibernation_combobox" tool_tip="Solo evita que el sistema entre en suspensión si el usuario no está ausente">
+		<combo_box.item label="Puede hibernar" name="can_hibernate"/>
+		<combo_box.item label="No puede hibernar, puede apagar la pantalla" name="cant_hibernate"/>
+		<combo_box.item label="No puede hibernar, no puede apagar la pantalla" name="cant_hibernate_screen"/>
+	</combo_box>
 	<text name="BackgroundYieldTimeText">
 		Cantidad de tiempo, en milisegundos, para ceder cada cuadro a otras aplicaciones cuando [APP_NAME] no está en primer plano (por defecto: 40; 1 segundo = 1000 milisegundos):
 	</text>

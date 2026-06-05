@@ -48,6 +48,56 @@ set(viewer_HEADER_FILES
     llmousehandler.h
     )
 
+# Platform-specific files for IDE visibility (excluded from build on other platforms)
+set(macosx_SOURCE_FILES
+    llkeyboardmacosx.cpp
+    llwindowmacosx.cpp
+    llwindowmacosx-objc.mm
+    llopenglview-objc.mm
+    )
+
+set(macosx_HEADER_FILES
+    llkeyboardmacosx.h
+    llwindowmacosx.h
+    llwindowmacosx-objc.h
+    llopenglview-objc.h
+    llappdelegate-objc.h
+    )
+
+if (USE_SDL1)
+  list(APPEND linux_SOURCE_FILES
+          llkeyboardsdl.cpp
+          llwindowsdl.cpp
+          )
+  list(APPEND linux_HEADER_FILES
+          llkeyboardsdl.h
+          llwindowsdl.h
+          )
+else()
+  list(APPEND linux_SOURCE_FILES
+          llkeyboardsdl2.cpp
+          llwindowsdl2.cpp
+          )
+  list(APPEND linux_HEADER_FILES
+          llkeyboardsdl2.h
+          llwindowsdl2.h
+          )
+endif()
+
+set(windows_SOURCE_FILES
+    llwindowwin32.cpp
+    lldxhardware.cpp
+    llkeyboardwin32.cpp
+    lldragdropwin32.cpp
+    )
+
+set(windows_HEADER_FILES
+    llwindowwin32.h
+    lldxhardware.h
+    llkeyboardwin32.h
+    lldragdropwin32.h
+    )
+
 set(llwindow_LINK_LIBRARIES
         llcommon
         llimage
@@ -68,25 +118,9 @@ endif()
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
 if (LINUX)
-  if (USE_SDL1)
-    list(APPEND viewer_SOURCE_FILES
-            llkeyboardsdl.cpp
-            llwindowsdl.cpp
-            )
-    list(APPEND viewer_HEADER_FILES
-            llkeyboardsdl.h
-            llwindowsdl.h
-            )
-  else()
-    list(APPEND viewer_SOURCE_FILES
-            llkeyboardsdl2.cpp
-            llwindowsdl2.cpp
-            )
-    list(APPEND viewer_HEADER_FILES
-            llkeyboardsdl2.h
-            llwindowsdl2.h
-            )
-  endif()
+  list(APPEND viewer_SOURCE_FILES ${linux_SOURCE_FILES})
+  list(APPEND viewer_HEADER_FILES ${linux_HEADER_FILES})
+
   if (BUILD_HEADLESS)
     set(llwindowheadless_LINK_LIBRARIES
         ${LLCOMMON_LIBRARIES}
@@ -103,19 +137,8 @@ if (LINUX)
 endif (LINUX)
 
 if (DARWIN)
-  list(APPEND llwindow_SOURCE_FILES
-    llkeyboardmacosx.cpp
-    llwindowmacosx.cpp
-    llwindowmacosx-objc.mm
-    llopenglview-objc.mm
-    )
-  list(APPEND llwindow_HEADER_FILES
-    llkeyboardmacosx.h
-    llwindowmacosx.h
-    llwindowmacosx-objc.h
-    llopenglview-objc.h
-    llappdelegate-objc.h
-    )
+  list(APPEND llwindow_SOURCE_FILES ${macosx_SOURCE_FILES})
+  list(APPEND llwindow_HEADER_FILES ${macosx_HEADER_FILES})
 
   # We use a bunch of deprecated system APIs.
   set_source_files_properties(
@@ -128,18 +151,8 @@ endif (DARWIN)
 
 
 if (WINDOWS)
-  list(APPEND llwindow_SOURCE_FILES
-       llwindowwin32.cpp
-       lldxhardware.cpp
-       llkeyboardwin32.cpp
-       lldragdropwin32.cpp
-       )
-  list(APPEND llwindow_HEADER_FILES
-       llwindowwin32.h
-       lldxhardware.h
-       llkeyboardwin32.h
-       lldragdropwin32.h
-       )
+  list(APPEND llwindow_SOURCE_FILES ${windows_SOURCE_FILES})
+  list(APPEND llwindow_HEADER_FILES ${windows_HEADER_FILES})
   list(APPEND llwindow_LINK_LIBRARIES
        comdlg32     # Common Dialogs for ChooseColor
        ole32
@@ -182,10 +195,48 @@ endif (llwindow_HEADER_FILES)
 
   list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
 
+  # Collect all platform files for IDE visibility, excluding already-added current platform
+  set(ide_visibility_files "")
+  if (NOT DARWIN)
+    list(APPEND ide_visibility_files ${macosx_SOURCE_FILES} ${macosx_HEADER_FILES})
+  endif()
+  if (NOT LINUX)
+    list(APPEND ide_visibility_files ${linux_SOURCE_FILES} ${linux_HEADER_FILES})
+  endif()
+  if (NOT WINDOWS)
+    list(APPEND ide_visibility_files ${windows_SOURCE_FILES} ${windows_HEADER_FILES})
+  endif()
+
   add_library (llwindow
     ${llwindow_SOURCE_FILES}
     ${viewer_SOURCE_FILES}
+    # Add non-platform files for IDE visibility only
+    ${ide_visibility_files}
     )
+
+# Mark non-platform files as excluded from build
+if (WINDOWS)
+  set_source_files_properties(
+    ${macosx_SOURCE_FILES}
+    ${linux_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (DARWIN)
+  set_source_files_properties(
+    ${windows_SOURCE_FILES}
+    ${linux_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (LINUX)
+  set_source_files_properties(
+    ${macosx_SOURCE_FILES}
+    ${windows_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+endif()
 
   target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
   target_include_directories(llwindow INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

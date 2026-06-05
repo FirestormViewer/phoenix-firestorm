@@ -1787,6 +1787,8 @@ void LLAgent::setAFK()
         }
         // </FS:AO>
     }
+
+    LLAppViewer::instance()->setPermitOSHibernation(true);
 }
 
 //-----------------------------------------------------------------------------
@@ -1818,6 +1820,13 @@ void LLAgent::clearAFK()
 
     // <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
     gAgent.setIsAfkSitting(false);
+
+    if (isAgentAvatarValid())
+    {
+        // Only set this if agent is inworld, login screen
+        // shouldn't prevent hibernation.
+        LLAppViewer::instance()->setPermitOSHibernation(false);
+    }
 }
 
 //-----------------------------------------------------------------------------

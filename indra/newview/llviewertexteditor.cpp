@@ -289,6 +289,43 @@ public:
 
     /*virtual*/ bool            canEdit() const { return false; }
 
+    /*virtual*/ bool            handleRightMouseDown(S32 x, S32 y, MASK mask)
+    {
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+        //bool show_menu = !mEditor.hasSelection()
+        //    || (mEditor.mSelectionStart == mStart && mEditor.mSelectionEnd == mStart + 1);
+        //if (show_menu && mEditor.getShowContextMenu())
+        //{
+        //    // User clicked an item, user expects the menu to be
+        //    // in 'context' for the item. Change selection to match.
+        //    // Todo: Might be better to 'smartly' deselect here
+        //    // and to have an object specific menu.
+        //    mEditor.setCursorPos(mStart + 1);
+        //    mEditor.mSelectionStart = mStart;
+        //    mEditor.mSelectionEnd = mStart + 1;
+
+        //    mEditor.showContextMenu(x, y);
+        //    return true;
+        //}
+        //return false;
+        if (!mContextMenu)
+        {
+            LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+            registrar.add("Embedded.Open", boost::bind(&LLEmbeddedItemSegment::onOpen, this));
+            registrar.add("Embedded.CopyToInv", boost::bind(&LLEmbeddedItemSegment::onCopyToInventory, this));
+
+            mContextMenu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_embedded_item.xml",
+                LLMenuGL::sMenuContainer,
+                LLMenuHolderGL::child_registry_t::instance());
+        }
+
+        S32 screen_x, screen_y;
+        mEditor.localPointToScreen(x, y, &screen_x, &screen_y);
+        mContextMenu->show(screen_x, screen_y);
+
+        return true;
+// [/SL:KB]
+    }
 
     /*virtual*/ bool            handleHover(S32 x, S32 y, MASK mask)
     {
@@ -321,26 +358,6 @@ public:
     }
 
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
-    /*virtual*/ bool            handleRightMouseDown(S32 x, S32 y, MASK mask)
-    {
-        if (!mContextMenu)
-        {
-            LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-            registrar.add("Embedded.Open", boost::bind(&LLEmbeddedItemSegment::onOpen, this));
-            registrar.add("Embedded.CopyToInv", boost::bind(&LLEmbeddedItemSegment::onCopyToInventory, this));
-
-            mContextMenu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_embedded_item.xml",
-                                                                                    LLMenuGL::sMenuContainer,
-                                                                                    LLMenuHolderGL::child_registry_t::instance());
-        }
-
-        S32 screen_x, screen_y;
-        mEditor.localPointToScreen(x, y, &screen_x, &screen_y);
-        mContextMenu->show(screen_x, screen_y);
-
-        return true;
-    }
-
     void onOpen()
     {
         LLViewerTextEditor* pEditor = dynamic_cast<LLViewerTextEditor*>(&mEditor);

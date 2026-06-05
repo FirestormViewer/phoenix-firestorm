@@ -742,6 +742,12 @@ bool LLAppViewer::sendURLToOtherInstance(const std::string& url)
     return false;
 }
 
+//virtual
+void LLAppViewer::setOSHibernationMode(eHibernationMode mode)
+{
+    // See OS specific files
+}
+
 //----------------------------------------------------------------------------
 // LLAppViewer definition
 
@@ -4882,8 +4888,10 @@ void LLAppViewer::processMarkerFiles()
     // - Other Crash (SecondLife.error_marker present)
     // - Watchdog freeze (SecondLife.watchdog_marker present)
     // - Failed to initialize (SecondLife.inited_marker not present)
-    // - Potentially killed by task manager (SecondLife.close_marker present)
-    // These checks should also remove these files for the last 2 cases if they currently exist
+    // - Potentially killed by task manager or computer
+    // didn't recover from hibernation (SecondLife.close_marker present)
+    // These checks should also remove these files for the last 2 cases
+    // if they currently exist
 
     std::ostringstream marker_log_stream;
     bool marker_is_same_version = true;
@@ -5055,21 +5063,21 @@ void LLAppViewer::processMarkerFiles()
                 }
             }
             // If 'close' marker is found, viewer either started shutdown but
-            // failed, or viewer got killed by task manager.
+            // failed, OS did not recover from hibernation or viewer got
+            // killed by task manager.
             // Marker does not indicate that viewer was closed or is closing,
             // just that 'close' was requested before viewer died.
             else if (LLAPRFile::isExist(close_marker_file, NULL, LL_APR_RB))
             {
-                // For now treat as 'other' cause.
-                // Unfortunately we can't for certain distinguish task
-                // manager's case from other shutdown problems, so we
-                // have to report both.
-                // Todo: if this bears noticeable fruits, make a new state later.
-                // New categories need server/web side support.
+                // Unfortunately we can't reliably distinguish
+                // task manager's case from genuine shutdown, so we
+                // have to report all of them as the same thing.
+                // Todo: but we can distinguish hibernation, might want
+                // to simply not report it as an issue.
                 if (markerIsSameVersion(close_marker_file))
                 {
-                    gLastExecEvent = LAST_EXEC_UNKNOWN == gLastExecEvent ? LAST_EXEC_OTHER_CRASH : LAST_EXEC_LOGOUT_CRASH;
-                    LL_INFOS("MarkerFile") << "'Close' marker '" << close_marker_file << "' found, setting LastExecEvent to CRASH"
+                    gLastExecEvent = LAST_EXEC_OS_EVENT;
+                    LL_INFOS("MarkerFile") << "'Close' marker '" << close_marker_file << "' found, setting LastExecEvent to OS_EVENT"
                         << LL_ENDL;
                 }
             }
@@ -5311,6 +5319,14 @@ void LLAppViewer::abortQuit()
     LL_INFOS() << "abortQuit()" << LL_ENDL;
     mQuitRequested = false;
     mClosingFloaters = false;
+}
+
+void LLAppViewer::sendViewerStatistics(bool include_preferences)
+{
+    if (!gDisconnected)
+    {
+        send_viewer_stats(include_preferences);
+    }
 }
 
 void LLAppViewer::migrateCacheDirectory()
@@ -6833,6 +6849,29 @@ void LLAppViewer::outOfMemorySoftQuit()
     }
 }
 
+void LLAppViewer::setPermitOSHibernation(bool permit)
+{
+    if (permit)
+    {
+        if (mCurrentHibernationMode != LL_HIBERNATE_MODE_DEFAULT)
+        {
+            // Will call OS specific code to let OS hibernate when idle
+            setOSHibernationMode(LL_HIBERNATE_MODE_DEFAULT);
+            mCurrentHibernationMode = LL_HIBERNATE_MODE_DEFAULT;
+        }
+    }
+    else
+    {
+        static LLCachedControl<S32> os_hibernation_mode(gSavedSettings, "OSHibernationMode", 0);
+        eHibernationMode mode = static_cast<eHibernationMode>(os_hibernation_mode());
+        if (mode != LL_HIBERNATE_MODE_DEFAULT && mCurrentHibernationMode != mode)
+        {
+            setOSHibernationMode(mode);
+            mCurrentHibernationMode = mode;
+        }
+    }
+}
+
 void LLAppViewer::idleNameCache()
 {
     // Neither old nor new name cache can function before agent has a region
@@ -7058,6 +7097,9 @@ void LLAppViewer::disconnectViewer()
     // Pass the connection state to LLUrlEntryParcel not to attempt
     // parcel info requests while disconnected.
     LLUrlEntryParcel::setDisconnected(gDisconnected);
+
+    // Restore default OS hibernation mode
+    setPermitOSHibernation(true);
 }
 
 void LLAppViewer::forceErrorLLError()
@@ -7388,6 +7430,15 @@ void LLAppViewer::handleLoginComplete()
     // we logged in successfully, so save settings on logout
     LL_DEBUGS() << "Login successful, per account settings will be saved on log out." << LL_ENDL;
     mSavePerAccountSettings=true;
+
+    // Don't allow hibernation while we're running
+    setPermitOSHibernation(false);
+    // Track 'hibernation' mode changes
+    mOSHibernationModeChangeConnection = gSavedSettings.getControl("OSHibernationMode")->getSignal()->connect([](LLControlVariable* control, const LLSD& new_val, const LLSD& old_val)
+    {
+        // setPermitOSHibernation will sort itself out based on new mode.
+        LLAppViewer::instance()->setPermitOSHibernation(false);
+    });
 }
 
 //virtual

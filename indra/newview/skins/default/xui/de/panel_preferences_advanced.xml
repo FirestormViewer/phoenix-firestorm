@@ -9,6 +9,14 @@
 	<check_box label="Menü „Entwickler“ anzeigen (Benutzung auf eigene Gefahr!)" name="show_develop_menu_check"/>
 	<check_box label="VRAM-Ermittlung über WMI auf Windows-Systemen deaktivieren" name="FSDisableWMIProbing"/>
 	<check_box label="Zeitschritte für Animationen aktivieren (experimentell)" name="UseAnimationTimeSteps" tool_tip="Diese Einstellung kann die Render-Komplexität für entfernte Avatare verringen, aber dadurch können deren Animationen in falscher Geschwindigkeit abgespielt werden."/>
+	<text name="os_hibernation_mode">
+		OS-Ruhezustand verhindern, wenn nicht abwesend:
+	</text>
+	<combo_box name="os_hibernation_combobox" tool_tip="Verhindert den OS-Ruhezustand nur, wenn der Benutzer nicht abwesend ist">
+		<combo_box.item label="Ruhezustand möglich" name="can_hibernate"/>
+		<combo_box.item label="Kein Ruhezustand, Bildschirm kann ausgeschaltet werden" name="cant_hibernate"/>
+		<combo_box.item label="Kein Ruhezustand, Bildschirm kann nicht ausgeschaltet werden" name="cant_hibernate_screen"/>
+	</combo_box>
 	<text name="BackgroundYieldTimeText">
 		Zeit in Millisekunden, die pro Frame an andere Anwendungen abgegeben werden, wenn [APP_NAME] nicht im Vordergrund ist [Standard: 40; 1 Sekunde = 1000 Millisekunden]
 	</text>
