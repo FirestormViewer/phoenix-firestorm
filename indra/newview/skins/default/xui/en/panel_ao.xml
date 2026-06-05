@@ -207,7 +207,7 @@
 
 		<text
 			name="ao_cycle_time_seconds_label"
-			value="Cycle time (seconds):"
+			value="Cycle time (secs):"
 			left="0"
 			top_pad="4"
 			width="120"

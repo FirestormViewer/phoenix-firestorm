@@ -7,10 +7,7 @@
 		Endfarbe
 	</floater.string>
 	<text name="beamcolor_text">
-Bitte mit der Maus die Farben auszuwählen,
-bei denen die Rotation starten bzw. stoppen soll.
-Links-Klick ändert die Startfarbe.
-Rechts-Klick ändert die Endfarbe.
+		Bitte mit der Maus die Farben auszuwählen, bei denen die Rotation starten bzw. stoppen soll. Links-Klick ändert die Startfarbe. Rechts-Klick ändert die Endfarbe.
 	</text>
 	<color_swatch name="BeamColor_Preview" tool_tip="Klicken, um die Farbauswahl zu öffnen"/>
 	<text name="beamcolor_text2">
