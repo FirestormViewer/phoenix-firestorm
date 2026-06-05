@@ -44,6 +44,9 @@
 			<text name="direct_label">
 				Direkt
 			</text>
+			<text name="server_chat_history_label">
+				Gruppenchathistorie vom Server
+			</text>
 			<text name="header_colors">
 				Chatüberschriften:
 			</text>
