@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_login">
 	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=de
+		https://accounts.secondlife.com/forgot_password/?lang=pt-BR
 	</panel.string>
 	<panel.string name="sign_up_url">
-		https://join.secondlife.com/
+		https://join.secondlife.com/?lang=pt-BR
 	</panel.string>
 	<layout_stack name="logo_stack">
 		<layout_panel name="parent_panel2">

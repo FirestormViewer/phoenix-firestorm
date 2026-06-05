@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
 	<panel.string name="create_account_url">
-		http://de.secondlife.com/registration/
+		https://join.secondlife.com/?lang=pt-BR
 	</panel.string>
 	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=de
+		https://accounts.secondlife.com/forgot_password/?lang=pt-BR
 	</panel.string>
 	<string name="ServerComboTooltip">
 		Um grid existente ou um URI de grid

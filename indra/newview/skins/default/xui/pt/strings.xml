@@ -694,6 +694,7 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 	<string name="TooltipFSUrlEntryWear">
 		Clique para vestir o conteúdo de uma pasta do inventário
 	</string>
+	<string name="CurrentURL" value=" URL atual: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Clique para redigir um e-mail
 	</string>
@@ -1846,6 +1847,12 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="Unconstrained">
 		Irrestrito
 	</string>
+	<string name="active" value=" (ativo)"/>
+	<string name="no_transfer" value=" (não transferível)"/>
+	<string name="no_modify" value=" (não modificável)"/>
+	<string name="no_copy" value=" (não copiável)"/>
+	<string name="worn" value=" (vestido)"/>
+	<string name="broken_link" value=" (link_quebrado)"/>
 	<string name="no_transfer_lbl">
 		 não transferível
 	</string>
@@ -1861,15 +1868,47 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="NoContents">
 		Sem conteúdo
 	</string>
+	<string name="WornOnAttachmentPoint" value=" (vestido em [ATTACHMENT_POINT])"/>
 	<string name="AttachmentErrorMessage">
 		 ([ATTACHMENT_ERROR])
 	</string>
+	<string name="ActiveGesture" value="[GESLABEL] (ativo)"/>
 	<string name="PermYes">
 		Sim
 	</string>
 	<string name="PermNo">
 		Não
 	</string>
+	<string name="Chat Message" value=" Chat:"/>
+	<string name="Sound" value=" Som:"/>
+	<string name="Wait" value=" --- Aguardar:"/>
+	<string name="AnimFlagStop" value=" Parar animação:"/>
+	<string name="AnimFlagStart" value=" Iniciar animação:"/>
+	<string name="Wave" value=" Acenar"/>
+	<string name="GestureActionNone" value="Nenhum"/>
+	<string name="HelloAvatar" value=" Olá, avatar!"/>
+	<string name="ViewAllGestures" value=" Ver todos &gt;&gt;"/>
+	<string name="GetMoreGestures" value=" Mais gestos &gt;&gt;"/>
+	<string name="Animations" value=" Animações,"/>
+	<string name="Calling Cards" value=" Cartões de visita,"/>
+	<string name="Clothing" value=" Roupas,"/>
+	<string name="Gestures" value=" Gestos,"/>
+	<string name="Landmarks" value=" Landmarks,"/>
+	<string name="Materials" value=" Materiais,"/>
+	<string name="Notecards" value=" Notecards,"/>
+	<string name="Objects" value=" Objetos,"/>
+	<string name="Scripts" value=" Scripts,"/>
+	<string name="Sounds" value=" Sons,"/>
+	<string name="Textures" value=" Texturas,"/>
+	<string name="Settings" value=" Configurações,"/>
+	<string name="Snapshots" value=" Fotos,"/>
+	<string name="Folders" value=" Pastas,"/>
+	<string name="No Filters" value="Nenhum"/>
+	<string name="Since Logoff" value=" - Desde o logout"/>
+	<string name="Modifiable" value="Modificável"/>
+	<string name="Copyable" value="Copiável"/>
+	<string name="Transferable" value="Transferível"/>
+	<string name="PermissionsFilter" value=" - Apenas [PERMISSIONS]"/>
 	<string name="InvFolder My Inventory">
 		Inventário
 	</string>
@@ -2389,12 +2428,17 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="GroupsNone">
 		nenhum
 	</string>
+	<string name="Group" value=" (grupo)"/>
 	<string name="Unknown">
 		(Desconhecido)
 	</string>
+	<string name="SummaryForTheWeek" value="Resumo desta semana, começando em "/>
+	<string name="NextStipendDay" value="O próximo pagamento será em "/>
 	<string name="GroupPlanningDate">
 		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
 	</string>
+	<string name="GroupIndividualShare" value="                      Grupo       Participação individual"/>
+	<string name="GroupColumn" value="                      Grupo"/>
 	<string name="Balance">
 		Kontostand
 	</string>
@@ -2700,6 +2744,9 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="RegionNoCovenantOtherOwner">
 		Não há convênio fornecido para este estate. A terra neste estate está sendo vendida pelo proprietário do estate. Entre em contato com o proprietário do estate para detalhes de venda.
 	</string>
+	<string name="covenant_last_modified" value="Última modificação: "/>
+	<string name="none_text" value=" (nenhum) "/>
+	<string name="never_text" value=" (nunca) "/>
 	<string name="GroupOwned">
 		Em posse de grupo
 	</string>

@@ -624,7 +624,7 @@ Tem certeza de que deseja continuar?
 	<notification name="PromptGoToEventsPage">
 		Para o site de eventos [CURRENT_GRID]?
 		<url name="url">
-			http://secondlife.com/events/?lang=de-DE
+			https://secondlife.com/my/community/events/?lang=pt-BR
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
@@ -837,7 +837,7 @@ Mova todos os objetos afetados para a mesma região.
 
 Abrir [_URL] para obter informações sobre a compra de L$?
 		<url name="url">
-			http://secondlife.com/app/currency/?lang=de-DE
+			https://secondlife.com/my/lindex/?lang=pt-BR
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
@@ -1867,7 +1867,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Inicie meu navegador para visualizar uma página da web" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Gostaria de acessar seu [http://secondlife.com/account/ Startseite] para gerenciar sua conta?
+		Gostaria de acessar seu [https://secondlife.com/my/account/?lang=pt-BR Painel] para gerenciar sua conta?
 		<usetemplate ignoretext="Inicie meu navegador para gerenciar minha conta" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -2045,7 +2045,7 @@ permitir até [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.
 	<notification name="SetDisplayNameSuccess">
 		Olá [DISPLAY_NAME],
 
-Pedimos sua paciência enquanto seu nome é alterado no sistema. Pode levar alguns dias para que seu [http://wiki.secondlife.com/wiki/Setting_your_display_name neuer Name] apareça em objetos, scripts, pesquisas, etc.
+Pedimos sua paciência enquanto seu nome é alterado no sistema. Pode levar alguns dias para que seu [https://community.secondlife.com/knowledgebase/english/usernames-and-display-names-r79/ seu nome] apareça em objetos, scripts, pesquisas, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Infelizmente, seu nome de exibição não pode ser alterado. Se você acredita que recebeu esta mensagem por engano, entre em contato com o suporte da grade relevante.
@@ -2269,7 +2269,7 @@ Continuar?
 	<notification name="RegionEntryAccessBlocked">
 		A região que você deseja visitar tem uma classificação etária que excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.
 		
-Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
+Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/ aqui].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SLM_UPDATE_FOLDER">
@@ -2278,7 +2278,7 @@ Para obter informações completas sobre classificações etárias, consulte [ht
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		A região que você deseja visitar contém [REGIONMATURITY] conteúdo somente para adultos.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/
 		</url>
 		<usetemplate ignoretext="Mudança de região: a região que você deseja visitar contém conteúdo somente para adultos." name="okcancelignore" notext="Fechar" yestext="Vá para a Base de Conhecimento"/>
 	</notification>
@@ -2303,13 +2303,13 @@ Para obter informações completas sobre classificações etárias, consulte [ht
 	<notification name="TeleportEntryAccessBlocked">
 		A região que você deseja visitar tem uma classificação etária que excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.
 
-Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
+Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/ aqui].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		A região que você deseja visitar contém [REGIONMATURITY] conteúdo somente para adultos.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/
 		</url>
 		<usetemplate ignoretext="Teleporte: A região que você deseja visitar contém conteúdo somente para adultos." name="okcancelignore" notext="Fechar" yestext="Vá para a Base de Conhecimento"/>
 	</notification>
@@ -2354,13 +2354,13 @@ Para obter informações completas sobre classificações etárias, consulte [ht
 	<notification name="LandClaimAccessBlocked">
 		A classificação etária do país que você deseja possuir excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.
 
-Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
+Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/ aqui].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Somente os adultos podem tomar posse desta terra.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/
 		</url>
 		<usetemplate ignoretext="Somente os adultos podem tomar posse desta terra." name="okcancelignore" notext="Fechar" yestext="Vá para a Base de Conhecimento"/>
 	</notification>
@@ -2381,13 +2381,13 @@ Para obter informações completas sobre classificações etárias, consulte [ht
 	<notification name="LandBuyAccessBlocked">
 		A classificação etária do país que você deseja comprar excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.
 
-Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
+Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/ aqui].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Somente adultos podem comprar este terreno.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/
 		</url>
 		<usetemplate ignoretext="Somente adultos podem comprar este terreno." name="okcancelignore" notext="Fechar" yestext="Vá para a Base de Conhecimento"/>
 	</notification>
@@ -2597,7 +2597,7 @@ Mover itens de inventário?
 		Você não tem permissão para copiar itens neste objeto.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Gostaria de acessar seu [http://secondlife.com/account/ Startseite] para visualizar as estatísticas da sua conta?
+		Gostaria de acessar seu [https://secondlife.com/my/account/?lang=pt-BR Painel] para visualizar as estatísticas da sua conta?
 		<usetemplate ignoretext="Inicie meu navegador para visualizar as estatísticas da minha conta" name="okcancelignore" notext="Cancelar" yestext="Ir para a página"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2873,7 +2873,7 @@ As configurações não podem ser salvas com texturas locais.
 
 [_URL]
 		<url name="url" option="0">
-			https://secondlife.com/account/index.php?lang=de
+			https://secondlife.com/my/account/index.php?lang=pt-BR
 		</url>
 		<usetemplate ignoretext="Minhas informações de pagamento não foram salvas" name="okcancelignore" notext="Não" yestext="Sim"/>
 	</notification>
@@ -3192,7 +3192,7 @@ Somente scripts de propriedade do proprietário funcionarão aqui.
 	<notification name="RegionTPAccessBlocked">
 		A região que você deseja visitar tem uma classificação etária que excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.
 
-Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
+Para obter informações completas sobre classificações etárias, consulte [https://community.secondlife.com/knowledgebase/base-de-conhecimento/n%C3%ADveis-de-maturidade-r207/ aqui].
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		A região que você está prestes a entrar está sendo desligada.
@@ -3587,7 +3587,7 @@ Antes de permitir o acesso, você deve saber o que é o objeto, por que ele prec
 
 Seu saldo em L$ será atualizado assim que o processamento for concluído. Se o processamento demorar mais de 20 minutos, é possível que sua transação seja cancelada. Neste caso, o valor da compra em US$ será creditado em sua conta.
 
-O status do pagamento pode ser verificado em seu [http://secondlife.com/account/ Startseite] em Resumo da transação.
+O status do pagamento pode ser verificado em seu [https://secondlife.com/my/account/?lang=pt-BR Painel] em Resumo da transação.
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Suas teclas de movimento agora são controladas por um objeto.
