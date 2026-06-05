@@ -16,6 +16,7 @@
 		Chargement...
 	</text_editor>
 	<button label="Modifier..." label_selected="Modifier" name="Edit"/>
+	<text name="byte_counter" initial_value="Octets : [BYTES] / [MAX]"/>
 	<button label="Enregistrer" label_selected="Enregistrer" name="Save"/>
 	<button label="Supprimer" label_selected="Supprimer" name="Delete"/>
 </floater>
