@@ -35,7 +35,7 @@
 				<button name="Noon" label="Meio-dia" tool_tip="Ajusta a iluminação para simular brilho de meio-dia."/>
 				<button name="Sunset" label="Pôr do sol" tool_tip="Define iluminação de pôr do sol com tons quentes e dourados."/>
 				<button name="Midnight" label="Meia-noite" tool_tip="Muda para configuração noturna com baixa iluminação."/>
-				<button name="Revert to Region Default" label="Ambiente da região" tool_tip=""/>
+				<button name="Revert to Region Default" label="Ambiente da região" tool_tip="Redefine as configurações de ambiente para o ambiente compartilhado."/>
 			</panel>
 
 			<panel name="P_WL_Presets">

@@ -17,11 +17,11 @@
 			<panel name="panel_material_maps">
 				<texture_picker label="Material" name="pbr_control" tool_tip="Clique para escolher um material PBR"/>
 				<texture_picker label="Cor base" name="base_color_picker" tool_tip="Clique para escolher o mapa de cor base (albedo)"/>
-				<color_swatch label="" name="base_color_tint_picker" tool_tip="Clique para escolher o tom da cor base"/>
+				<color_swatch label="Tom" name="base_color_tint_picker" tool_tip="Clique para escolher o tom da cor base"/>
 				<button name="btn_select_same_gltf" tool_tip="Selecionar todas as faces com o mesmo material GLTF desta"/>
 				<texture_picker label="Normal" name="normal_map_picker" tool_tip="Clique para escolher o mapa normal"/>
 				<texture_picker label="Emissivo" name="emissive_map_picker" tool_tip="Clique para escolher o mapa de emissão"/>
-				<color_swatch label="" name="emissive_color_tint_picker" tool_tip="Clique para escolher o tom emissivo"/>
+				<color_swatch label="Tom" name="emissive_color_tint_picker" tool_tip="Clique para escolher o tom emissivo"/>
 				<texture_picker label="(O)RM" name="metallic_map_picker" tool_tip="Clique para escolher o mapa de metalicidade-rugosidade, que pode conter um canal de oclusão opcional"/>
 			</panel>
 
@@ -205,13 +205,13 @@
 			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
 				<layout_panel name="panel_blinn_phong_maps">
 					<texture_picker label="Textura" name="texture control" tool_tip="Clique para escolher uma imagem"/>
-					<color_swatch label="" name="colorswatch" tool_tip="Clique para abrir o seletor de cores"/>
+					<color_swatch label="Tom" name="colorswatch" tool_tip="Clique para abrir o seletor de cores"/>
 					<button name="btn_select_same_diff" tool_tip="Selecionar todas as faces com a mesma textura difusa desta"/>
 					<texture_picker label="Normal" name="bumpytexture control" tool_tip="Clique para escolher uma imagem"/>
 					<button name="btn_select_same_norm" tool_tip="Selecionar todas as faces com o mesmo mapa normal desta"/>
 					<texture_picker label="Especular" name="shinytexture control" tool_tip="Clique para escolher uma imagem"/>
 					<button name="btn_select_same_spec" tool_tip="Selecionar todas as faces com o mesmo mapa especular desta"/>
-					<color_swatch label="" name="shinycolorswatch" tool_tip="Clique para abrir o seletor de cores"/>
+					<color_swatch label="Cor" name="shinycolorswatch" tool_tip="Clique para abrir o seletor de cores"/>
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
 					<check_box label="Luz total" name="checkbox fullbright" width="70"/>

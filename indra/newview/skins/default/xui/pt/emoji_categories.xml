@@ -5,55 +5,55 @@
       <key>Name</key>
       <string>smileys and emotion</string>
       <key>Category</key>
-      <string>Smileys e emoções</string>
+      <string>sorrisos e emoção</string>
     </map>
     <map>
       <key>Name</key>
       <string>people and body</string>
       <key>Category</key>
-      <string>Pessoas e corpo</string>
+      <string>pessoas e corpo</string>
     </map>
     <map>
       <key>Name</key>
       <string>components</string>
       <key>Category</key>
-      <string>Componentes</string>
+      <string>componentes</string>
     </map>
     <map>
       <key>Name</key>
       <string>animals and nature</string>
       <key>Category</key>
-      <string>Animais e natureza</string>
+      <string>animais e natureza</string>
     </map>
     <map>
       <key>Name</key>
       <string>food and drink</string>
       <key>Category</key>
-      <string>Comida e bebida</string>
+      <string>comida e bebida</string>
     </map>
     <map>
       <key>Name</key>
       <string>travel and places</string>
       <key>Category</key>
-      <string>Viagens e lugares</string>
+      <string>viagens e lugares</string>
     </map>
     <map>
       <key>Name</key>
       <string>activities</string>
       <key>Category</key>
-      <string>Atividades</string>
+      <string>atividades</string>
     </map>
     <map>
       <key>Name</key>
       <string>objects</string>
       <key>Category</key>
-      <string>Objetos</string>
+      <string>objetos</string>
     </map>
     <map>
       <key>Name</key>
       <string>symbols</string>
       <key>Category</key>
-      <string>Símbolos</string>
+      <string>símbolos</string>
     </map>
   </array>
 </llsd>
