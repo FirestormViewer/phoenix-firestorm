@@ -488,13 +488,24 @@
          name="ExodusMouselookIFFRange"
          top_pad="5"
          width="333" />
+        <check_box
+         control_name="ExodusMouselookIFFLineOfSight"
+         follows="left|top"
+         height="16"
+         label="Require line of sight to identify target"
+         layout="topleft"
+         left_delta="-5"
+         name="ExodusMouselookIFFLineOfSight"
+         tool_tip="Don't show the name of the avatar under your crosshair when walls, floors or terrain block the view"
+         top_pad="5"
+         width="256" />
         <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="-10"
+         left_delta="-5"
          name="Mouse Sensitivity"
          top_pad="10"
          width="160">
