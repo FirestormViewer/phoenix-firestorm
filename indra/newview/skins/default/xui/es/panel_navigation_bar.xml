@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel" right="222">
 					<pull_button name="back_btn" tool_tip="Volver a la localización anterior"/>
 					<pull_button name="forward_btn" tool_tip="Ir una localización adelante"/>
-					<button name="home_btn" tool_tip="Teleportar a mi Base"/>
+					<button name="home_btn" tool_tip="Teleportar a mi Base[LOCATION]"/>
 					<button name="About_Land" label="Terreno" tool_tip="Muestra la ventana de información de la parcela" width="60"/>
 					<button name="Sky" label="Cielo" tool_tip="Muestra la ventana del Editor de Cielo" width="44"/>
 				</layout_panel>

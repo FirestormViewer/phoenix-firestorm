@@ -294,6 +294,16 @@
 			 left_pad="10"
 			 bottom="-6"
 			 follows="left|bottom"/>
+			<button
+			 name="copy_link"
+			 label="Copy as link"
+			 tool_tip="Copies a secondlife:///app/openfloater/area_search?... link reproducing the current search and filter settings."
+			 mouse_opaque="true"
+			 height="20"
+			 width="100"
+			 left_pad="10"
+			 bottom="-6"
+			 follows="left|bottom"/>
 		</panel>
 		<panel
 		 border="true"

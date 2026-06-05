@@ -218,6 +218,11 @@ LLAvatarList::LLAvatarList(const Params& p)
     // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     gSavedSettings.getControl("FSContactSetsColorizeFriends")->getSignal()->connect(boost::bind(&LLAvatarList::refreshNames, this));
 
+    // <FS:PP> FIRE-36707 Configurable color for offline contacts in contact sets lists
+    gSavedSettings.getControl("FSContactSetsListColorizeOffline")->getSignal()->connect(boost::bind(&LLAvatarList::refreshNames, this));
+    gSavedSettings.getControl("FSContactSetsListOfflineColor")->getSignal()->connect(boost::bind(&LLAvatarList::refreshNames, this));
+    // </FS:PP>
+
     // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLAvatarList::updateRlvRestrictions, this, _1, _2));
 }

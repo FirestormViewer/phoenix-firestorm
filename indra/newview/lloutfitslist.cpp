@@ -730,6 +730,7 @@ void LLOutfitsList::applyFilterToTab(
     }
     else
     {
+        tab->setVisible(true); // <FS:PP> FIRE-36651 Fix outfit search so accordion tabs become visible again when the filter matches the outfit name after a typo
         // Try restoring the tab selection.
         restoreOutfitSelection(tab, category_id);
     }

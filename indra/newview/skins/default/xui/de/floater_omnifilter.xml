@@ -23,8 +23,9 @@
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Regel-Name:"/>
 		<text name="sender_name_label" value="Sender-Name:"/>
-		<check_box name="sender_case" label="Aa"/>
-		<combo_box name="sender_match_type">
+		<line_editor name="sender_name" tool_tip="Der Name des Avatars oder Objekts, von dem die Nachricht stammt" />
+		<check_box name="sender_case" label="Aa" tool_tip="Groß-/Kleinschreibung" />
+		<combo_box name="sender_match_type" tool_tip="Abgleichmodus">
 			<combo_item name="sender_exact">
 				<column width="40" name="label" label="|Abc|"/>
 				<column name="longtext" label="Übereinstimmung ganzer Text"/>
@@ -39,8 +40,9 @@
 			</combo_item>
 		</combo_box>
 		<text name="content_label" value="Inhalt:"/>
-		<check_box name="content_case" label="Aa"/>
-		<combo_box name="content_match_type">
+		<text_editor name="content" tool_tip="Der eigentliche Text der Nachricht" />
+		<check_box name="content_case" label="Aa" tool_tip="Groß-/Kleinschreibung" />
+		<combo_box name="content_match_type" tool_tip="Abgleichmodus">
 			<combo_item name="content_exact">
 				<column name="label" label="|Abc|"/>
 				<column name="longtext" label="Übereinstimmung ganzer Text"/>
@@ -55,7 +57,9 @@
 			</combo_item>
 		</combo_box>
 		<text name="region_name_label" value="Name Region:" tool_tip="Der Regionsname der Quelle. Nur verfügbar für Inventar-Angebote."/>
-		<text name="owner_label" value="Eigentümer-UUID:" tool_tip="Für Gruppen-Einladungen: Die UUID der Gruppe. Für Objekt-Chat, Eigentümer-Nachrichten, Debug-Chat oder Direkt-Chat: Die UUID des Objekts. Für Objekt-IMs: Die UUID des Objekt-Eigentümers. Für alles andere: Die UUID des sendenden Einwohners."/>
+		<line_editor name="region_name" tool_tip="Der Regionsname der Quelle. Nur für Inventarangebote verfügbar."/>
+		<text name="owner_label" value="Eigentümer-UUID:"/>
+		<line_editor name="owner_uuid" tool_tip="Für Gruppen-Einladungen: Die UUID der Gruppe. Für Objekt-Chat, Eigentümer-Nachrichten, Debug-Chat oder Direkt-Chat: Die UUID des Objekts. Für Objekt-IMs: Die UUID des Objekt-Eigentümers. Für alles andere: Die UUID des sendenden Einwohners."/>
 		<text name="match_source_label" value="Quelle:"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
@@ -84,7 +88,10 @@
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="Chat-Ersetzung:"/>
+		<line_editor name="chat_replace" tool_tip="Ersatztext, mit dem die Anzeige der Nachricht geändert werden kann" />
 		<text name="button_reply_label" value="Button-Antwort:"/>
+		<line_editor name="button_reply" tool_tip="Die Beschriftung einer Schaltfläche, die im Skript-Dialog &quot;geklickt&quot; werden soll, einschließlich &quot;Ignorieren&quot;" />
 		<text name="text_box_reply_label" value="Textbox-Antwort:"/>
+		<text_editor name="text_box_reply" tool_tip="Ein Antworttext, als wäre er manuell in das Textfeld des Skript-Dialogs eingegeben worden" />
 	</panel>
 </floater>

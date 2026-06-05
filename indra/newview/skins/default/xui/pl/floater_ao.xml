@@ -3,4 +3,6 @@
 	<floater.string name="ao_no_sets_loaded">Brak załadowanych zestawów</floater.string>
 	<floater.string name="ao_no_animations_loaded">Brak załadowanych animacji</floater.string>
 	<floater.string name="ao_dnd_only_on_full_interface">Możesz przeciągać notkę z zestawami animacji tylko na pełne okno interfejsu Animatora. Kliknij na ikonce klucza francuskiego, aby je otworzyć.</floater.string>
+	<floater.string name="ao_add_blank_label">Nowy pusty zestaw...</floater.string>
+	<floater.string name="ao_add_clone_label">Sklonuj obecny zestaw...</floater.string>
 </floater>

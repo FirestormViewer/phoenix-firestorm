@@ -42,6 +42,7 @@
 #include "llnotificationsutil.h"
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
+#include "llviewercontrol.h"
 
 constexpr U32 MAX_SELECTIONS = 20;
 static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
@@ -109,6 +110,8 @@ bool FSPanelContactSets::postBuild()
     }
 
     mAvatarList = getChild<LLAvatarList>("contact_list");
+    mAvatarList->setShowIcons("FSContactSetsListShowIcons");
+    mAvatarListToggleIconsConnection = gSavedSettings.getControl("FSContactSetsListShowIcons")->getSignal()->connect(boost::bind(&LLAvatarList::toggleIcons, mAvatarList));
     mAvatarList->setUseContactSetColors(true);
     mAvatarList->setUseContactSetListStyle(true);
     mAvatarList->setAvatarDropCallback(boost::bind(&FSPanelContactSets::handleAvatarDrop, this, _1, _2));
@@ -281,7 +284,7 @@ bool FSPanelContactSets::shouldSortByOnlineStatus() const
     const std::string selected_set = mContactSetCombo->getValue().asString();
     if (LGGContactSets::getInstance()->isInternalSetName(selected_set))
     {
-        return false;
+        return true;
     }
 
     return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(selected_set);

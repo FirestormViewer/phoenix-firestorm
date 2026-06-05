@@ -5,7 +5,7 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="Düzəliş üçün animasiya dəstini seçin." />
 		<button name="ao_activate" tool_tip="Bu animasiya dəstini hazırda aktiv etmək." />
 		<check_box name="ao_default" label="Susmaya görə" tool_tip="Bu animasiya dəstini sistemə daxil olanda başlatmaq." width="20" />
-		<button name="ao_add" tool_tip="Yeni animasiya qrupu yaratmaq." />
+		<menu_button name="ao_add" tool_tip="Yeni animasiya qrupu yaratmaq." />
 		<button name="ao_remove" tool_tip="Bu animasiya dəstini silmək." />
 		<check_box name="ao_sit_override" label="Oturuş" tool_tip="Oturma animasiyasını yenidən təyin etmək istəyirsinizsə işarələyin." width="100" />
 		<check_box name="ao_smart" label="Ağıllı" tool_tip="Ağıllı rejim, oturmaq animasiyasının obyektin öz animasiyası ilə münaqişə edib-etməyəcəyini müəyyən etməyə çalışır və təyinatını müvəqqəti olaraq söndürür."

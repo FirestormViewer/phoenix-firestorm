@@ -166,9 +166,29 @@ public:
 
     void setFilterAgentParcelOnly(bool b) { mFilterAgentParcelOnly = b; }
 
+    void applySlappParams(const LLSD& params);
+    std::string buildSlappLink() const;
+    void onCopySlappLink();
+
     bool isActive() const { return mActive; }
 
 private:
+    struct SlappBoolEntry
+    {
+        const char* key;
+        LLCheckBoxCtrl* FSPanelAreaSearchFilter::* ctl;
+        void (FSAreaSearch::*setter)(bool);
+        bool FSAreaSearch::* state;
+    };
+    struct SlappTextEntry
+    {
+        const char* key;
+        LLLineEditor* FSPanelAreaSearchFind::* editor;
+        std::string FSAreaSearch::* state;
+    };
+    static const SlappBoolEntry sBoolFilters[];
+    static const SlappTextEntry sTextFields[];
+
     void requestObjectProperties(const std::vector<U32>& request_list, bool select, LLViewerRegion* regionp);
     void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
     void getNameFromUUID(const LLUUID& id, std::string& name, bool group, bool& name_requested);
@@ -368,6 +388,7 @@ class FSPanelAreaSearchFilter
 :   public LLPanel
 {
     LOG_CLASS(FSPanelAreaSearchFilter);
+    friend class FSAreaSearch;
 public:
     FSPanelAreaSearchFilter(FSAreaSearch* pointer);
     virtual ~FSPanelAreaSearchFilter() = default;

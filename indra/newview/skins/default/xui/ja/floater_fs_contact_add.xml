@@ -9,6 +9,12 @@
 	<floater.string name="text_add_multiple">
 		[COUNT]人のアバターを追加するコンタクトセットを選択して下さい。
 	</floater.string>
+	<floater.string name="title_add">
+		コンタクトセットに追加…
+	</floater.string>
+	<floater.string name="button_add">
+		セットに追加
+	</floater.string>
 	<button label="セットに追加" name="add_btn"/>
 	<button label="取り消し" name="cancel_btn"/>
 </floater>

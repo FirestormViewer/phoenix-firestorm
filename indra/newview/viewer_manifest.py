@@ -1996,12 +1996,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         if self.args.get('velopack', 'OFF') == 'ON':
             self.velopack_package_finish()
 
-        # Generate Velopack update packages if enabled
-        # This creates the nupkg and RELEASES files needed for auto-updates
-        # Distribution is still via DMG, but updates use Velopack
-        if self.args.get('velopack', 'OFF') == 'ON':
-            self.velopack_package_finish()
-
     def velopack_package_finish(self):
         """Generate Velopack update packages for macOS.
 

@@ -9,6 +9,18 @@
 	<floater.string name="text_add_multiple">
 		Wybierz, do którego Zestawu Kontaktów dodać [COUNT] awatarów:
 	</floater.string>
+	<floater.string name="title_add">
+		Dodaj do Zestawu Kontaktów...
+	</floater.string>
+	<floater.string name="button_add">
+		Dodaj
+	</floater.string>
+	<floater.string name="title_move">
+		Przenieś do Zestawu Kontaktów...
+	</floater.string>
+	<floater.string name="button_move">
+		Przenieś
+	</floater.string>
 	<button label="Dodaj" name="add_btn" />
 	<button label="Anuluj" name="cancel_btn" />
 </floater>

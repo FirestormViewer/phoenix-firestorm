@@ -17,6 +17,18 @@
 	<floater.string name="text_add_multiple">
 		Please select which contact set to add [COUNT] avatars to:
 	</floater.string>
+	<floater.string name="title_add">
+		Add to Contact Set...
+	</floater.string>
+	<floater.string name="button_add">
+		Add to set
+	</floater.string>
+	<floater.string name="title_move">
+		Move to Contact Set...
+	</floater.string>
+	<floater.string name="button_move">
+		Move to Set
+	</floater.string>
 	<text
 	 type="string"
 	 follows="left|top"

@@ -48,6 +48,7 @@
 			<check_box name="regular_expression" label="Użyj wyrażeń regularnych"/>
 			<button name="search" label="Szukaj"/>
 			<button name="clear" label="Wyczyść"/>
+			<button name="copy_link" label="Kopiuj jako link" tool_tip="Kopiuje link secondlife:///app/openfloater/area_search?... odtwarzający aktualne kryteria wyszukiwania i filtry."/>
 		</panel>
 		<panel label="Filtrowanie" name="area_search_filter_panel">
 			<text name="only_list">

@@ -53,7 +53,6 @@ public:
     bool handleMouseDown(S32 x, S32 y);
 
     void noteActivePanel(LLInventoryPanel* panel);
-    void onActiveFilterChanged(LLPanel* active_panel);
     void notifyActiveFilterStateChanged();
 
     static void registerCommitCallbacks(LLPanelMainInventory* parent);
@@ -74,7 +73,6 @@ public:
     static bool activePanelIsCustom(const LLPanelMainInventory* parent);
     static bool maybeHandleAddTabSelected(LLPanelMainInventory* parent);
     static void noteActivePanel(LLPanelMainInventory* parent, LLInventoryPanel* panel);
-    static void onActiveFilterChanged(LLPanelMainInventory* parent, LLPanel* active);
     static S32  captureFilterGeneration(const LLPanelMainInventory* parent);
     static void notifyIfFilterChanged(LLPanelMainInventory* parent, S32 prev_generation);
     static bool handleRightMouseDown(LLPanelMainInventory* parent, S32 x, S32 y);

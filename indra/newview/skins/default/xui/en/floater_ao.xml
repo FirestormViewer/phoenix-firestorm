@@ -32,6 +32,15 @@ No Animations Loaded
 You can only drag and drop an animation notecard on the full interface window. Click on the wrench icon to open it.
 	</floater.string>
 
+	<floater.string
+		name="ao_add_blank_label">
+New empty set...
+	</floater.string>
+	<floater.string
+		name="ao_add_clone_label">
+Clone current set...
+	</floater.string>
+
 	<panel
 		name="animation_overrider_outer_panel"
 		filename="panel_ao.xml"

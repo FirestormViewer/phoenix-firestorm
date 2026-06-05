@@ -2,6 +2,11 @@
 <panel label="Groupes" name="panel_ls_groups">
 	<panel name="panel_ls_input">
 		<text name="search_text">Critères de recherche :</text>
+		<combo_box name="groups_maturity">
+			<combo_box.item label="Général" name="Desired_PG"/>
+			<combo_box.item label="Général et Modéré" name="Desired_Mature"/>
+			<combo_box.item label="Général, Modéré, Adulte" name="Desired_Adult"/>
+		</combo_box>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_groups">
