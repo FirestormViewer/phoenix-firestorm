@@ -186,7 +186,7 @@ void LLPreviewNotecard::updateByteCounter()
     std::string text = mEditor->getText();
     size_t bytes = text.size(); // Assumes UTF-8 encoding where size() == bytes
 
-    auto getColorForByteCount = [MAX_BYTES, bytes]() -> LLColor4
+    auto getColorForByteCount = [bytes]() -> LLColor4
     {
         if (bytes >= MAX_BYTES)
             return LLColor4::red;
