@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="item properties" title="PROPRIEDADES DE ITEM NO INVENTÁRIO">
+<floater name="item properties" title="Propriedades: item do inventário">
+	<floater.string name="loading_experience">(carregando)</floater.string>
 	<floater.string name="unknown">(desconhecido)</floater.string>
 	<floater.string name="public">(público)</floater.string>
 	<floater.string name="you_can">Você pode:</floater.string>
-	<floater.string name="owner_can">Proprietário pode :</floater.string>
-	<floater.string name="acquiredDate">[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]</floater.string>
+	<floater.string name="owner_can">Proprietário pode:</floater.string>
+	<floater.string name="acquiredDate">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<floater.string name="acquiredDateAMPM">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]</floater.string>
 	<text name="LabelItemNameTitle">Nome:</text>
 	<text name="LabelItemDescTitle">Descrição:</text>
 	<text name="LabelCreatorTitle">Criador:</text>
 	<button label="Perfil..." label_selected="" name="BtnCreator"/>
-	<text name="LabelOwnerTitle">Dono:</text>
+	<text name="LabelOwnerTitle">Proprietário:</text>
 	<button label="Perfil..." label_selected="" name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">Adquirido:</text>
-	<text name="LabelAcquiredDate">Qua Mai 24 12:50:46 2006</text>
+	<text name="LabelAcquiredDate">quarta-feira, 24 de maio de 2006, 12:50:46</text>
 	<text name="OwnerLabel">Você:</text>
+	<text name="LabelItemExperienceTitle">Experiência:</text>
 	<check_box label="Editar" name="CheckOwnerModify"/>
 	<check_box label="Copiar" name="CheckOwnerCopy"/>
-	<check_box label="Revender" name="CheckOwnerTransfer"/>
-	<text name="AnyoneLabel">Todos:</text>
-	<check_box label="Cortar" name="CheckEveryoneCopy"/>
+	<check_box label="Transferir" name="CheckOwnerTransfer"/>
+	<check_box label="Exportar" name="CheckOwnerExport"/>
+	<text name="AnyoneLabel">Qualquer pessoa:</text>
+	<check_box label="Copiar" name="CheckEveryoneCopy"/>
 	<text name="GroupLabel">Grupo:</text>
 	<check_box label="Compartilhar" name="CheckShareWithGroup"/>
-	<text name="NextOwnerLabel" width="230">Próximo proprietário:</text>
+	<text name="NextOwnerLabel" width="150">Próximo proprietário:</text>
 	<check_box label="Editar" name="CheckNextOwnerModify"/>
 	<check_box label="Copiar" name="CheckNextOwnerCopy"/>
-	<check_box label="Revender" name="CheckNextOwnerTransfer"/>
-	<check_box label="À venda" name="CheckPurchase"/>
+	<check_box label="Transferir" name="CheckNextOwnerTransfer"/>
+	<check_box label="À venda" name="CheckPurchase" width="100"/>
 	<combo_box name="ComboBoxSaleType">
-		<combo_box.item label="Cortar" name="Copy"/>
+		<combo_box.item label="Cópia" name="Copy"/>
 		<combo_box.item label="Conteúdo" name="Contents"/>
 		<combo_box.item label="Original" name="Original"/>
 	</combo_box>

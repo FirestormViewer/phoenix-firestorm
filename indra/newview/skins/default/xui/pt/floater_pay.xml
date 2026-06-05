@@ -6,26 +6,23 @@
 	<string name="payee_resident">
 		Pagar residente
 	</string>
-	<text name="paying_text">
-		Você está pagando:
+	<text name="payee_label" width="130">
+		Pagar:
 	</text>
+	<icon name="icon_person" tool_tip="Person"/>
 	<text name="payee_name">
-		Test Name That Is Extremely Long To Check Clipping
+		Testando nome extremamente longo para verificar se sera cortado
+	</text>
+	<button label="1 L$" label_selected="1 L$" name="fastpay 1"/>
+	<button label="5 L$" label_selected="5 L$" name="fastpay 5"/>
+	<button label="10 L$" label_selected="10 L$" name="fastpay 10"/>
+	<button label="20 L$" label_selected="20 L$" name="fastpay 20"/>
+	<text name="amount text">
+		ou selecione um valor:
 	</text>
 	<text name="payment_message_label">
-		Descrição (opcional):
+		Mensagem (opcional):
 	</text>
-	<panel label="Buscar" name="PatternsPanel">
-		<button label="Pagar L$ 1" label_selected="Pagar L$ 1" name="fastpay 1"/>
-		<button label="Pagar L$ 5" label_selected="Pagar L$ 5" name="fastpay 5"/>
-		<button label="Pagar L$ 10" label_selected="Pagar L$ 10" name="fastpay 10"/>
-		<button label="Pagar L$ 20" label_selected="Pagar L$ 20" name="fastpay 20"/>
-	</panel>
-	<panel label="Buscar" name="InputPanel">
-		<text name="amount text">
-			Outro valor:
-		</text>
-		<button label="Pagar" label_selected="Pagar" name="pay btn"/>
-		<button label="Cancelar" label_selected="Cancelar" name="cancel btn"/>
-	</panel>
+	<button label="Pagar" label_selected="Pagar" name="pay btn"/>
+	<button label="Cancelar" label_selected="Cancelar" name="cancel btn"/>
 </floater>

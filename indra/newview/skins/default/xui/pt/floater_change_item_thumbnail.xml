@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="change_item_thumbnail" title="Alterar imagem">
+	<floater.string name="multiple_item_names">
+		Vários itens selecionados
+	</floater.string>
+	<floater.string name="title_item_thumbnail">
+		Alterar imagem do item
+	</floater.string>
+	<floater.string name="title_folder_thumbnail">
+		Alterar imagem da pasta
+	</floater.string>
+	<floater.string name="tooltip_upload_local">
+		Enviar do computador
+	</floater.string>
+	<floater.string name="tooltip_upload_snapshot">
+		Usar ferramenta de captura
+	</floater.string>
+	<floater.string name="tooltip_use_texture">
+		Escolher textura
+	</floater.string>
+	<floater.string name="tooltip_copy_to_clipboard">
+		Copiar para área de transferência
+	</floater.string>
+	<floater.string name="tooltip_paste_from_clipboard">
+		Colar da área de transferência
+	</floater.string>
+	<floater.string name="tooltip_remove_image">
+		Remover imagem
+	</floater.string>
+	<text name="multiple_lbl">
+		Várias imagens
+	</text>
+</floater>

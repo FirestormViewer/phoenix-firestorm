@@ -1,57 +1,87 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_translation_settings" title="CONFIGURAÇÕES DE TRADUÇÃO DE BATE-PAPO">
-	<string name="bing_api_key_not_verified">
-		appID do Bing não verificada. Tente novamente.
+<floater name="floater_translation_settings" title="Configurações de tradução do chat">
+	<string name="azure_api_key_not_verified">
+		Identificador de serviço do Azure não verificado. Status: [STATUS]. Verifique suas configurações e tente novamente.
 	</string>
 	<string name="google_api_key_not_verified">
-		Chave do API do Google não verificada. Tente novamente.
+		Chave da API do Google não verificada. Status: [STATUS]. Verifique sua chave e tente novamente.
 	</string>
-	<string name="bing_api_key_verified">
-		appID do Bing verificada.
+	<string name="deepl_api_key_not_verified">
+		Chave de autenticação do DeepL não verificada. Status: [STATUS]. Verifique sua chave e tente novamente.
+	</string>
+	<string name="azure_api_key_verified">
+		Identificador de serviço do Azure verificado.
 	</string>
 	<string name="google_api_key_verified">
-		Chave do API do Google verificada.
+		Chave da API do Google verificada.
 	</string>
-	<check_box label="Permitir a tradução de máquina durante o bate-papo" name="translate_chat_checkbox"/>
+	<string name="deepl_api_key_verified">
+		Chave de autenticação do DeepL verificada.
+	</string>
+	<check_box label="Ativar tradução automática no chat" name="translate_chat_checkbox"/>
 	<text name="translate_language_label">
-		Traduzir bate-papo para:
+		Traduzir chat para:
 	</text>
 	<combo_box name="translate_language_combo">
-		<combo_box.item label="Padrão" name="System Default Language"/>
-		<combo_box.item label="Inglês" name="English"/>
+		<combo_box.item label="Padrão do sistema" name="System Default Language"/>
+		<combo_box.item label="English (Inglês)" name="English"/>
 		<combo_box.item label="Dansk (Dinamarquês)" name="Danish"/>
-		<combo_box.item label="Deutsch (Alemão)" name="German"/>
+		<combo_box.item label="German (Alemão)" name="German"/>
 		<combo_box.item label="Español (Espanhol)" name="Spanish"/>
 		<combo_box.item label="Français (Francês)" name="French"/>
 		<combo_box.item label="Italiano (Italiano)" name="Italian"/>
 		<combo_box.item label="Magyar (Húngaro)" name="Hungarian"/>
 		<combo_box.item label="Nederlands (Holandês)" name="Dutch"/>
 		<combo_box.item label="Polski (Polonês)" name="Polish"/>
-		<combo_box.item label="Português (Português)" name="Portugese"/>
+		<combo_box.item label="Português (Brasil)" name="Portugese"/>
 		<combo_box.item label="Русский (Russo)" name="Russian"/>
 		<combo_box.item label="Türkçe (Turco)" name="Turkish"/>
 		<combo_box.item label="Українська (Ucraniano)" name="Ukrainian"/>
-		<combo_box.item label="中文 (简体) (Chinês)" name="Chinese"/>
+		<combo_box.item label="中文 (正體) (Chinês)" name="Chinese"/>
 		<combo_box.item label="日本語 (Japonês)" name="Japanese"/>
 		<combo_box.item label="한국어 (Coreano)" name="Korean"/>
 	</combo_box>
 	<text name="tip">
-		Escolha o serviço de tradução:
+		Selecionar serviço de tradução:
 	</text>
 	<radio_group name="translation_service_rg">
-		<radio_item initial_value="bing" label="Bing Translator" name="bing"/>
-		<radio_item initial_value="google" label="Google Translate" name="google"/>
+		<radio_item label="Azure Translator" name="bing"/>
+		<radio_item label="Google Translate" name="google"/>
+		<radio_item label="DeepL Translator" name="deepl"/>
 	</radio_group>
-	<text name="bing_api_key_label">
-		[http://www.bing.com/developers/createapp.aspx AppID] do Bing:
+	<text name="azure_links_text">
+		[https://learn.microsoft.com/de-de/azure/cognitive-services/translator/create-translator-resource Configuração]
 	</text>
-	<button label="Verificar" name="verify_bing_api_key_btn"/>
+	<text name="azure_api_endoint_label">
+		Endpoint:
+	</text>
+	<text name="azure_api_key_label">
+		Chave do Azure:
+	</text>
+	<line_editor default_text="Digite a chave da API e clique em &quot;Verificar&quot;" name="azure_api_key"/>
+	<text name="azure_api_region_label">
+		Região:
+	</text>
+	<line_editor default_text="Opcional para serviços globais" name="azure_api_region"/>
+	<button label="Verificar" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		[http://code.google.com/apis/language/translate/v2/getting_started.html#auth Chave API] do Google:
+		[http://code.google.com/apis/language/translate/v2/getting_started.html#auth Chave da API] do Google:
 	</text>
+	<line_editor default_text="Digite a chave da API e clique em &quot;Verificar&quot;" name="google_api_key"/>
 	<button label="Verificar" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
 		[http://code.google.com/apis/language/translate/v2/pricing.html Preços] | [https://code.google.com/apis/console Estatísticas]
+	</text>
+	<text name="deepl_api_domain_label">
+		Endpoint:
+	</text>
+	<text name="deepl_api_key_label">
+		Chave da API do DeepL:
+	</text>
+	<line_editor default_text="Digite a chave da API e clique em &quot;Verificar&quot;" name="deepl_api_key"/>
+	<button label="Verificar" name="verify_deepl_api_key_btn"/>
+	<text name="deepl_links_text">
+		[https://www.deepl.com/pro/select-country?cta=header-prices Preços]
 	</text>
 	<button label="OK" name="ok_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

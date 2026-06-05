@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Ponto de referência">
+	<string name="title_place">
+		Detalhes do local
+	</string>
+	<string name="title_remote_place">
+		Detalhes do local
+	</string>
+	<string name="title_remote_place_detail">
+		Detalhes do local: [NAME]
+	</string>
+	<string name="title_landmark">
+		Ponto de referência
+	</string>
+	<string name="title_landmark_detail">
+		Ponto de referência: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Criar ponto de referência
+	</string>
+	<string name="title_teleport_history_item">
+		Detalhes do histórico de teleporte: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+		       <layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleportar" name="teleport_btn" tool_tip="Teleportar para o local selecionado"/>
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Mapa" name="map_btn" tool_tip="Mostrar o local correspondente no mapa do mundo"/>
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Editar" name="edit_btn" tool_tip="Editar informações do ponto de referência"/>
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Mostrar opções adicionais"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Fechar" name="close_btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Salvar" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Cancelar" name="cancel_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

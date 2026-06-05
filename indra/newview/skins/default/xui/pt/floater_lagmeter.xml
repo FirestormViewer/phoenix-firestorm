@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_lagmeter" title="LAG - Índice">
+<floater name="floater_lagmeter" title="Medidor de Lag">
 	<floater.string name="max_title_msg">
-		Lag Meter
+		Medidor de Lag
 	</floater.string>
 	<floater.string name="max_width_px">
 		360
@@ -25,7 +25,7 @@
 		Normal, janela em segundo plano
 	</floater.string>
 	<floater.string name="client_frame_time_critical_msg">
-		Taxa de quadros do cliente menor que [CLIENT_FRAME_RATE_CRITICAL]
+		Taxa de quadros do cliente abaixo de [CLIENT_FRAME_RATE_CRITICAL]
 	</floater.string>
 	<floater.string name="client_frame_time_warning_msg">
 		Taxa de quadros do cliente entre [CLIENT_FRAME_RATE_CRITICAL] e [CLIENT_FRAME_RATE_WARNING]
@@ -34,10 +34,10 @@
 		Normal
 	</floater.string>
 	<floater.string name="client_draw_distance_cause_msg">
-		Possível causa: distância de desenho definida com um valor muito alto
+		Possível causa: distância de visão muito alta
 	</floater.string>
 	<floater.string name="client_texture_loading_cause_msg">
-		Possível causa: imagens em carregamento
+		Possível causa: imagens sendo carregadas
 	</floater.string>
 	<floater.string name="client_texture_memory_cause_msg">
 		Possível causa: muitas imagens na memória
@@ -55,10 +55,10 @@
 		5
 	</floater.string>
 	<floater.string name="network_packet_loss_critical_msg">
-		A conexão está caindo devido a [NETWORK_PACKET_LOSS_CRITICAL]% de pacotes
+		Perda de pacotes da conexão acima de [NETWORK_PACKET_LOSS_CRITICAL] %
 	</floater.string>
 	<floater.string name="network_packet_loss_warning_msg">
-		A conexão está caindo devido a [NETWORK_PACKET_LOSS_WARNING]%-[NETWORK_PACKET_LOSS_CRITICAL]% de pacotes
+		Perda de pacotes da conexão entre [NETWORK_PACKET_LOSS_WARNING]%-[NETWORK_PACKET_LOSS_CRITICAL] %
 	</floater.string>
 	<floater.string name="network_performance_normal_msg">
 		Normal
@@ -70,16 +70,16 @@
 		300
 	</floater.string>
 	<floater.string name="network_ping_critical_msg">
-		Ping time da conexão com mais de [NETWORK_PING_CRITICAL] ms
+		Tempo de ping da conexão acima de [NETWORK_PING_CRITICAL] ms
 	</floater.string>
 	<floater.string name="network_ping_warning_msg">
-		Ping time da conexão com mais de [NETWORK_PING_WARNING]-[NETWORK_PING_CRITICAL] ms
+		Tempo de ping da conexão entre [NETWORK_PING_WARNING]-[NETWORK_PING_CRITICAL] ms
 	</floater.string>
 	<floater.string name="network_packet_loss_cause_msg">
-		Possível conexão ruim ou pref de &apos;Banda larga&apos; muito alta
+		Possível conexão ruim ou valor de &apos;Largura de banda&apos; muito alto.
 	</floater.string>
 	<floater.string name="network_ping_cause_msg">
-		Possível conexão ruim ou app de compartilhamento de arquivo
+		Possível conexão ruim ou aplicativo de compartilhamento de arquivos.
 	</floater.string>
 	<floater.string name="server_text_msg">
 		Servidor
@@ -94,10 +94,10 @@
 		20
 	</floater.string>
 	<floater.string name="server_frame_time_critical_msg">
-		Taxa de quadros de simulador abaixo de [SERVER_FRAME_RATE_CRITICAL]
+		Taxa de quadros do simulador abaixo de [SERVER_FRAME_RATE_CRITICAL]
 	</floater.string>
 	<floater.string name="server_frame_time_warning_msg">
-		Taxa de quadros de simulador entre [SERVER_FRAME_RATE_CRITICAL] e [SERVER_FRAME_RATE_WARNING]
+		Taxa de quadros do simulador entre [SERVER_FRAME_RATE_CRITICAL] e [SERVER_FRAME_RATE_WARNING]
 	</floater.string>
 	<floater.string name="server_frame_time_normal_msg">
 		Normal
@@ -106,10 +106,10 @@
 		Possível causa: muitos objetos físicos
 	</floater.string>
 	<floater.string name="server_scripts_cause_msg">
-		Possível causa: muitos objetos de script
+		Possível causa: muitos objetos com script
 	</floater.string>
 	<floater.string name="server_net_cause_msg">
-		Possível causa: tráfego de rede intenso
+		Possível causa: muito tráfego de rede
 	</floater.string>
 	<floater.string name="server_agent_cause_msg">
 		Possível causa: muitas pessoas se movendo na região
@@ -118,7 +118,7 @@
 		Possível causa: muitos cálculos de imagem
 	</floater.string>
 	<floater.string name="server_generic_cause_msg">
-		Possível causa: carga do simulador muito pesada
+		Possível causa: carga do simulador muito alta
 	</floater.string>
 	<floater.string name="smaller_label">
 		&gt;&gt;
@@ -126,29 +126,26 @@
 	<floater.string name="bigger_label">
 		&lt;&lt;
 	</floater.string>
-	<button label="" label_selected="" name="client_lagmeter" tool_tip="Status do lag do cliente"/>
+	<button name="client_lagmeter" tool_tip="Status de lag do cliente"/>
 	<text name="client">
 		Cliente
 	</text>
-	<text font="SansSerifSmall" name="client_text">
+	<text name="client_text">
 		Normal
 	</text>
-	<text left="30" name="client_lag_cause" right="-10"/>
-	<button label="" label_selected="" name="network_lagmeter" tool_tip="Status do lag da rede"/>
+	<button name="network_lagmeter" tool_tip="Status de lag de rede"/>
 	<text name="network">
 		Rede
 	</text>
-	<text font="SansSerifSmall" name="network_text">
+	<text name="network_text">
 		Normal
 	</text>
-	<text left="30" name="network_lag_cause" right="-10"/>
-	<button label="" label_selected="" name="server_lagmeter" tool_tip="Status do lag do servidor"/>
+	<button name="server_lagmeter" tool_tip="Status de lag do servidor"/>
 	<text name="server">
 		Servidor
 	</text>
-	<text font="SansSerifSmall" name="server_text">
+	<text name="server_text">
 		Normal
 	</text>
-	<text left="30" name="server_lag_cause" right="-32"/>
-	<button label="&gt;&gt;" name="minimize" tool_tip="Alternar o tamanho da janela"/>
+	<button label="&gt;&gt;" name="minimize" tool_tip="Alternar tamanho da janela"/>
 </floater>

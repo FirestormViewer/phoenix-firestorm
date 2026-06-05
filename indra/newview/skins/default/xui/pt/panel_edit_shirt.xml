@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_shirt_panel">
 	<panel name="avatar_shirt_color_panel">
-		<texture_picker label="Textura" name="Fabric" tool_tip="Clique para escolher uma foto"/>
-		<color_swatch label="Cor/Matiz" name="Color/Tint" tool_tip="Clique para abrir o selecionador de cor"/>
+		<texture_picker label="Textura" name="Fabric" tool_tip="Clique para escolher uma imagem"/>
+		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique para abrir o seletor de cores"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">

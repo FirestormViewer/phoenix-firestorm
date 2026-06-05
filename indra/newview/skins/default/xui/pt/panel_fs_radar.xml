@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_radar">
+	<string name="NotesColumnIcon" value="radarbox_n"/>
+	<string name="SittingColumnIcon" value="radarbox_s"/>
+	<string name="TypingColumnIcon" value="radarbox_t"/>
+	<string
+		name="MiniMapToolTipMsg"
+		value="[REGION] (Clique duplo para abrir o mapa; mantenha Shift pressionado e arraste para mover)"/>
+	<string
+		name="AltMiniMapToolTipMsg"
+		value="[REGION] (Clique duplo para teleportar; mantenha Shift pressionado e arraste para mover)"/>
+	<string
+		name="avatar_name_count"
+		value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel name="nearby_buttons_panel">
+			<filter_editor label="Filtrar pessoas" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Ações nas pessoas selecionadas"/>
+			<menu_button name="options_btn" tool_tip="Opções do radar"/>
+			<button name="add_friend_btn" tool_tip="Adicionar o residente selecionado à lista de amigos"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Nome" tool_tip="[TOTAL] avatares, [IN_REGION] na mesma região, [IN_CHAT_RANGE] no alcance do chat" name="name"/>
+							<radar_list.columns tool_tip="Está falando no voice" name="voice_level"/>
+							<radar_list.columns tool_tip="Está na mesma região (verde) ou na mesma parcela (verde/amarelo)" name="in_region"/>
+							<radar_list.columns tool_tip="Está digitando" name="typing_status"/>
+							<radar_list.columns tool_tip="Está sentado" name="sitting_status"/>
+							<radar_list.columns tool_tip="Status das informações de pagamento" name="flags"/>
+							<radar_list.columns tool_tip="Tem notas" name="has_notes"/>
+							<radar_list.columns label="Idade" name="age"/>
+							<radar_list.columns label="Visto" name="seen"/>
+							<radar_list.columns label="Dist." name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout">
+				<slider label="Distância (m):" name="NearMeRange"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

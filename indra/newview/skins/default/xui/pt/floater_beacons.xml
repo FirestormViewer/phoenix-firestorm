@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="BALIZAS">
+<floater name="beacons" title="Marcadores">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			Mostrar:
 		</text>
-		<check_box label="Balizas" name="beacons"/>
-		<check_box label="Realce" name="highlights"/>
-		<text name="beacon_width_label" tool_tip="Largura da baliza">
+		<check_box label="Caixas delimitadoras de luzes" name="lights_bounding_boxes"/>
+		<check_box label="Cantos da região" name="fsregioncornerbeacons"/>
+		<check_box label="Alcance do chat" name="FSShowChatRangeSpheres"/>
+		<check_box label="Beacons" name="beacons"/>
+		<check_box label="Destaques" name="highlights"/>
+		<check_box label="Texto informativo dos beacons na janela" name="FSRenderBeaconText"/>
+		<text name="beacon_width_label" tool_tip="Largura do beacon">
 			Largura:
 		</text>
 		<text name="label_objects">
 			Para estes objetos:
 		</text>
-		<check_box label="Físicos" name="physical"/>
+		<check_box label="Físico" name="physical"/>
 		<check_box label="Com script" name="scripted"/>
-		<check_box label="Só tocar" name="touch_only"/>
+		<check_box label="Somente toque" name="touch_only"/>
 		<check_box label="Fontes de som" name="sounds"/>
 		<check_box label="Fontes de partículas" name="particles"/>
 		<check_box label="Fontes de mídia" name="moapbeacon"/>
-		<check_box label="Dom" name="sun"/>
+		<text name="label_direction">
+			Mostrar direção para:
+		</text>
+		<check_box label="Sol" name="sun"/>
 		<check_box label="Lua" name="moon"/>
 	</panel>
 </floater>

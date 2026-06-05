@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Itens" name="objects panel">
+	<panel name="sidepanel_inventory_panel">
+		<tab_container name="inventory_tab_container">
+			<panel label="Inventário" name="panel_main_inventory"/>
+			<panel label="Marketplace" name="marketplace_inbox">
+				<string name="InboxLabelWithArg">
+					Itens recebidos ([NUM])
+				</string>
+				<string name="InboxLabelNoArg">
+					Itens recebidos
+				</string>
+				<text value="Itens recebidos" name="inbox_label"/>
+				<text name="inbox_fresh_new_count">
+					[NUM] novo(s)
+				</text>
+				<panel name="inbox_inventory_placeholder_panel" tool_tip="Arraste itens para o seu inventário para usá-los">
+					<text name="inbox_inventory_placeholder">
+						Compras no Marketplace serão entregues aqui.
+					</text>
+				</panel>
+			</panel>
+		</tab_container>
+	</panel>
+</panel>

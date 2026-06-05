@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="DESTAQUE: TEXTURA">
+<floater name="texture picker" title="Escolher: Textura">
 	<floater.string name="choose_picture">
 		Clique para escolher uma imagem
 	</floater.string>
 	<floater.string name="pick title">
-		Pegar:
+		Escolher:
+	</floater.string>
+	<floater.string name="pick_material">
+		Escolher: Material
+	</floater.string>
+	<floater.string name="pick_texture">
+		Escolher: Textura
 	</floater.string>
 	<text name="Multiple">
-		Multiplas texturas
+		Várias texturas
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Inventário" name="inventory"/>
-		<radio_item label="Local" name="local"/>
-		<radio_item label="Assar" name="bake"/>
+		<radio_item label="Inventário" name="inventory" width="66"/>
+		<radio_item label="Local" name="local" width="47"/>
+		<radio_item label="Bake" name="bake"/>
 	</radio_group>
 	<text name="size_lbl">
 		Tamanho:
-[DIMENSÕES]
+[DIMENSIONS]
+	</text>
+	<text name="over_limit_lbl">
+		A textura selecionada é [TEXDIM]. A imagem de inventário deve ser quadrada e ficar entre [MINTEXDIM] e [MAXTEXDIM].
 	</text>
 	<button label="Padrão" label_selected="Padrão" name="Default"/>
-	<button label="Branco" label_selected="Branco" name="Blank"/>
-	<button label="Nenhum" label_selected="Nenhum" name="None"/>
-	<text name="preview_disabled" value="Visualização desativada"/>
+	<button label="Nenhuma" label_selected="Nenhuma" name="None"/>
+	<button label="Em branco" label_selected="Em branco" name="Blank"/>
+	<button label="Transparente" label_selected="Transparente" name="Transparent" tool_tip="Observação: se for escolhida uma textura transparente, ou outra textura com transparência parcial, a luz não será projetada."/>
+	<button label="" label_selected="" name="Pipette"/>
+	<text name="preview_disabled">
+		Pré-visualização desativada
+	</text>
 	<filter_editor label="Filtrar texturas" name="inventory search editor"/>
-	<check_box initial_value="false" label="Exibir pastas" name="show_folders_check"/>
 	<button label="Adicionar" label_selected="Adicionar" name="l_add_btn"/>
 	<button label="Remover" label_selected="Remover" name="l_rem_btn"/>
 	<button label="Enviar" label_selected="Enviar" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
-		<column label="Nome" name="unit_name"/>
-		<column label="ID" name="unit_id_HIDDEN"/>
+		<column name="unit_name" label="Name"/>
+		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
-	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Escolha a textura de assar">
-		<combo_box.item label="Nenhum" name="None"/>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Escolher textura bake">
+		<combo_box.item label="Nenhuma" name="None"/>
 		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD"/>
 		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER"/>
 		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER"/>
@@ -45,8 +57,9 @@
 		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
 		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
 	</combo_box>
-	<check_box initial_value="false" label="Ocultar região da mesh de base" name="hide_base_mesh_region"/>
-	<button label="OK" label_selected="OK" name="Select"/>
+	<line_editor name="TextureKey" tool_tip="UUID da textura"/>
+	<button name="TextureKeyApply" label="Aplicar UUID" tool_tip="Aplicar textura desta UUID"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
-	<check_box initial_value="true" label="Inscrever-se agora" name="apply_immediate_check"/>
+	<button label="OK" label_selected="OK" name="Select" left="135"/>
+	<check_box label="Aplicar agora" name="apply_immediate_check"/>
 </floater>

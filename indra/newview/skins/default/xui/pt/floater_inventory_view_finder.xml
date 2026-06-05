@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Inventory Finder" title="ITENS_DE_INVENTÁRIO_RECENTES">
+<floater name="Inventory Finder" title="INVENTORY_RECENT_ITEMS">
 	<check_box label="Animação" name="check_animation"/>
-	<check_box label="Cartões de chamadas" name="check_calling_card"/>
-	<check_box label="Roupas" name="check_clothing"/>
+	<check_box label="Cartões de visita" name="check_calling_card"/>
+	<check_box label="Vestíveis" name="check_clothing"/>
 	<check_box label="Gestos" name="check_gesture"/>
-	<check_box label="Landmarks" name="check_landmark"/>
-	<check_box label="Anotações" name="check_notecard"/>
-	<check_box label="Malhas" name="check_mesh"/>
+	<check_box label="Pontos de referência" name="check_landmark"/>
+	<check_box label="Materiais" name="check_material"/>
+	<check_box label="Notecards" name="check_notecard"/>
+	<check_box label="Meshes" name="check_mesh"/>
 	<check_box label="Objetos" name="check_object"/>
 	<check_box label="Scripts" name="check_script"/>
 	<check_box label="Sons" name="check_sound"/>
 	<check_box label="Texturas" name="check_texture"/>
-	<check_box label="Fotos" name="check_snapshot"/>
+	<check_box label="Capturas" name="check_snapshot"/>
 	<check_box label="Configurações" name="check_settings"/>
-	<button label="Tudo" label_selected="Tudo" name="All"/>
+	<button label="Todos" label_selected="Todos" name="All"/>
 	<button label="Nenhum" label_selected="Nenhum" name="None"/>
-	<check_box label="Sempre mostrar as pastas" name="check_show_empty"/>
-	<check_box label="Criado por mim" name="check_created_by_me"/>
-	<check_box label="Criado por outros" name="check_created_by_others"/>
-	<check_box label="Desde o Logoff" name="check_since_logoff"/>
+	<check_box label="Mod" name="check_modify"/>
+	<check_box label="Cop" name="check_copy"/>
+	<check_box label="Trans" name="check_transfer"/>
+	<check_box label="Sempre mostrar pastas" name="check_show_empty"/>
+	<check_box label="Apenas coalescidos" name="check_only_coalesced" width="110"/>
+	<combo_box tool_tip="Filtrar objetos vinculados" name="inventory_filter_show_links_combo">
+		<combo_box.item name="show_links" label="Mostrar vínculos"/>
+		<combo_box.item name="show_links_only" label="Mostrar apenas vínculos"/>
+		<combo_box.item name="hide_links" label="Ocultar vínculos"/>
+	</combo_box>
+	<check_box label="Criados por mim" name="check_created_by_me"/>
+	<check_box label="Criados por outros" name="check_created_by_others"/>
+	<check_box label="Desde o logout" name="check_since_logoff"/>
 	<text name="- OR -">
 		- OU -
 	</text>
 	<radio_group name="date_search_direction">
-		<radio_item label="Antes de" name="newer"/>
-		<radio_item label="Depois de" name="older"/>
+		<radio_item label="mais recente que" name="newer"/>
+		<radio_item label="mais antigo que" name="older"/>
 	</radio_group>
-	<spinner label="Horas Atrás" name="spin_hours_ago"/>
+	<spinner label="Horas atrás" label_width="80" name="spin_hours_ago"/>
 	<text name="label_hours">
-		Horas
+		horas
 	</text>
-	<spinner label="Dias Atrás" name="spin_days_ago"/>
+	<spinner label="Dias atrás" name="spin_days_ago"/>
 	<text name="label_days">
-		Dias
+		dias
 	</text>
+	<button label="Redefinir" label_selected="Redefinir" name="btnReset"/>
 	<button label="Fechar" label_selected="Fechar" name="Close"/>
 </floater>

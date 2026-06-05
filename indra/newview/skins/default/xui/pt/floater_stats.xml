@@ -1,108 +1,125 @@
-<?xml version="1.0" ?>
-<floater name="Statistics" title="ESTATÍSTICAS">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Statistics" title="Estatísticas">
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view label="Básico" name="basic">
 				<stat_bar label="FPS" name="fps"/>
-				<stat_bar label="Dados de UDP recebidos" name="bandwidth"/>
-				<stat_bar label="Bandwidth" name="packet_loss"/>
+				<stat_bar label="Frame (média)" name="frame_mean"/>
+				<stat_bar label="Frame (mediana)" name="frame_median"/>
+				<stat_bar label="Jitter" name="framet_jitter"/>
+				<stat_bar label="Jitter normalizado da sessão" name="normalized_cumulative_frametime"/>
+				<stat_bar label="Eventos de frame/minuto" name="frame_events_per_minute"/>
+				<stat_bar label="Eventos de frame no últ. min." name="frame_events_last_minute"/>
+				<stat_bar label="Dados UDP recebidos" name="bandwidth"/>
+				<stat_bar label="Perda de pacotes" name="packet_loss"/>
 				<stat_bar label="Ping Sim" name="ping"/>
 			</stat_view>
 			<stat_view label="Avançado" name="advanced">
-				<stat_view label="Render" name="render">
-					<stat_bar label="KTris por quadro" name="ktrisframe"/>
+				<stat_view label="Renderização" name="render">
+					<stat_bar label="Jitter acumulado" name="framet_cumulative"/>
+					<stat_bar label="Jitter percentil 99" name="framet_jitter_99th"/>
+					<stat_bar label="Jitter percentil 95" name="framet_jitter_95th"/>
+					<stat_bar label="Desvio padrão do jitter" name="framet_jitter_stddev"/>
+					<stat_bar label="Frametime percentil 99" name="framet_99th"/>
+					<stat_bar label="Frametime percentil 95" name="framet_95th"/>
+					<stat_bar label="Desvio padrão do frametime" name="framet_stddev"/>
+					<stat_bar label="Eventos de frametime" name="framet_events"/>
+					<stat_bar label="KTris por frame" name="ktrisframe"/>
 					<stat_bar label="KTris por segundo" name="ktrissec"/>
-					<stat_bar label="Objetos totais" name="totalobjs"/>
+					<stat_bar label="Total de objetos" name="totalobjs"/>
 					<stat_bar label="Objetos em cache" name="cachedobjs"/>
-					<stat_bar label="New Objects" name="newobjs"/>
-					<stat_bar label="Taxa de acertos do cache do objeto" name="object_cache_hits"/>
-					<stat_bar label="Consultas de oclusão realizadas" name="occlusion_queries"/>
-					<stat_bar label="Objetos ocultos" name="occluded"/>
-					<stat_bar label="Objeto não oculto" name="unoccluded"/>
+					<stat_bar label="Novos objetos" name="newobjs"/>
+					<stat_bar label="Taxa de acerto do cache de objetos" name="object_cache_hits"/>
+					<stat_bar label="Consultas de oclusão executadas" name="occlusion_queries"/>
+					<stat_bar label="Objetos ocluídos" name="occluded"/>
+					<stat_bar label="Objetos não ocluídos" name="unoccluded"/>
 				</stat_view>
-				<stat_view label="Texture" name="texture">
-					<stat_bar label="Taxa de acertos do cache" name="texture_cache_hits"/>
+				<stat_view label="Textura" name="texture">
+					<stat_bar label="Taxa de acerto do cache" name="texture_cache_hits"/>
 					<stat_bar label="Latência de leitura do cache" name="texture_cache_read_latency"/>
-					<stat_bar label="Count" name="numimagesstat"/>
-					<stat_bar label="Raw Count" name="numrawimagesstat"/>
+					<stat_bar label="Quantidade" name="numimagesstat"/>
+					<stat_bar label="Quantidade bruta" name="numrawimagesstat"/>
 					<stat_bar label="GL Mem" name="gltexmemstat"/>
-					<stat_bar label="Formatted Mem" name="formattedmemstat"/>
-					<stat_bar label="Raw Mem" name="rawmemstat"/>
-					<stat_bar label="Bound Mem" name="glboundmemstat"/>
+					<stat_bar label="Memória formatada" name="formattedmemstat"/>
+					<stat_bar label="Memória bruta" name="rawmemstat"/>
+					<stat_bar label="Memória alocada" name="glboundmemstat"/>
+				</stat_view>
+				<stat_view label="Materiais" name="material">
+					<stat_bar label="Quantidade" name="nummaterials"/>
 				</stat_view>
 				<stat_view label="Uso de memória" name="memory">
 					<stat_bar label="LLTrace" name="LLTrace"/>
-					<stat_bar label="Interface" name="LLView"/>
+					<stat_bar label="UI" name="LLView"/>
 					<stat_bar label="Fontes" name="LLFontFreetype"/>
 					<stat_bar label="Inventário" name="LLInventoryObject"/>
-					<stat_bar label="Objetos do visualizador" name="LLViewerObject"/>
-					<stat_bar label="Dados do grupo de octrees" name="LLViewerOctreeGroup"/>
-					<stat_bar label="Dados da octree" name="LLViewerOctreeEntry"/>
-					<stat_bar label="Cache de objetos do visualizador" name="LLVOCacheEntry"/>
-					<stat_bar label="Drawables" name="LLDrawable"/>
-					<stat_bar label="Dados do rosto" name="LLFace"/>
-					<stat_bar label="Informações de desenho" name="LLDrawInfo"/>
+					<stat_bar label="Objetos do viewer" name="LLViewerObject"/>
+					<stat_bar label="Dados de grupo Octree" name="LLViewerOctreeGroup"/>
+					<stat_bar label="Dados Octree" name="LLViewerOctreeEntry"/>
+					<stat_bar label="Cache de objetos do viewer" name="LLVOCacheEntry"/>
+					<stat_bar label="Objetos de desenho" name="LLDrawable"/>
+					<stat_bar label="Dados de face" name="LLFace"/>
+					<stat_bar label="Infos de desenho" name="LLDrawInfo"/>
 					<stat_bar label="Dados de textura" name="LLTexture"/>
 					<stat_bar label="Dados de imagem" name="LLImage"/>
-					<stat_bar label="Dados de imagem do GL" name="LLImageGL"/>
-					<stat_bar label="Buffers do Vertex" name="LLVertexBuffer"/>
+					<stat_bar label="Dados de imagem GL" name="LLImageGL"/>
+					<stat_bar label="Buffer de vértices" name="LLVertexBuffer"/>
 				</stat_view>
 				<stat_view label="Rede" name="network">
-					<stat_bar label="Packets In" name="packetsinstat"/>
-					<stat_bar label="Packets Out" name="packetsoutstat"/>
+					<stat_bar label="Pacotes recebidos" name="packetsinstat"/>
+					<stat_bar label="Pacotes enviados" name="packetsoutstat"/>
 					<stat_bar label="Objetos" name="objectdatareceived"/>
 					<stat_bar label="Textura" name="texturedatareceived"/>
 					<stat_bar label="Asset" name="assetudpdatareceived"/>
-					<stat_bar label="Layers" name="layersdatareceived"/>
-					<stat_bar label="Actual In" name="messagedatain"/>
-					<stat_bar label="Actual Out" name="messagedataout"/>
+					<stat_bar label="Camadas" name="layersdatareceived"/>
+					<stat_bar label="Entrada real" name="messagedatain"/>
+					<stat_bar label="Saída real" name="messagedataout"/>
 				</stat_view>
 			</stat_view>
-			<stat_view label="Simulator" name="sim">
-				<stat_bar label="Time Dilation" name="simtimedilation"/>
+			<stat_view label="Simulador" name="sim">
+				<stat_bar label="Dilatação do tempo" name="simtimedilation"/>
 				<stat_bar label="Sim FPS" name="simfps"/>
-				<stat_bar label="Physics FPS" name="simphysicsfps"/>
-				<stat_view label="Physics Details" name="physicsdetail">
-					<stat_bar label="Pinned Objects" name="physicspinnedtasks"/>
-					<stat_bar label="Low LOD Objects" name="physicslodtasks"/>
-					<stat_bar label="Memory Allocated" name="physicsmemoryallocated"/>
+				<stat_bar label="FPS de física" name="simphysicsfps"/>
+				<stat_view label="Detalhes de física" name="physicsdetail">
+					<stat_bar label="Objetos fixos" name="physicspinnedtasks"/>
+					<stat_bar label="Objetos LOD baixo" name="physicslodtasks"/>
+					<stat_bar label="Memória alocada" name="physicsmemoryallocated"/>
 				</stat_view>
+				<stat_bar label="Atualizações de agente/seg" name="simagentups"/>
+				<stat_bar label="Agentes principais" name="simmainagents"/>
+				<stat_bar label="Agentes filhos" name="simchildagents"/>
+				<stat_bar label="Objetos" name="simobjects"/>
+				<stat_bar label="Objetos ativos" name="simactiveobjects"/>
+				<stat_bar label="Scripts ativos" name="simactivescripts"/>
 				<stat_bar label="Scripts executados" name="simpctscriptsrun"/>
+				<stat_bar label="Eventos de script" name="simscripteps"/>
 				<stat_view label="Pathfinding" name="simpathfinding">
-					<stat_bar label="Tempo de etapa de AI" name="simsimaistepmsec"/>
-					<stat_bar label="Etapas de silhueta ignoradas" name="simsimskippedsilhouettesteps"/>
+					<stat_bar label="Tempo de passo da IA" name="simsimaistepmsec"/>
+					<stat_bar label="Passos de silhueta ignorados" name="simsimskippedsilhouettesteps"/>
 					<stat_bar label="Personagens atualizados" name="simsimpctsteppedcharacters"/>
 				</stat_view>
-				<stat_bar label="Total de dados não reconhecidos" name="simtotalunackedbytes"/>
-				<stat_view label="Hora" name="simperf">
-					<stat_bar label="Total Frame Time" name="simframemsec"/>
-					<stat_bar label="Net Time" name="simnetmsec"/>
-					<stat_bar label="Physics Time" name="simsimphysicsmsec"/>
-					<stat_bar label="Simulation Time" name="simsimothermsec"/>
-					<stat_bar label="Agent Time" name="simagentmsec"/>
-					<stat_bar label="Images Time" name="simimagesmsec"/>
-					<stat_bar label="Script Time" name="simscriptmsec"/>
+				<stat_bar label="Pacotes recebidos" name="siminpps"/>
+				<stat_bar label="Pacotes enviados" name="simoutpps"/>
+				<stat_bar label="Downloads pendentes" name="simpendingdownloads"/>
+				<stat_bar label="Uploads pendentes" name="simpendinguploads"/>
+				<stat_bar label="Total de dados não confirmados" name="simtotalunackedbytes"/>
+				<stat_view label="Tempo" name="simperf">
+					<stat_bar label="Tempo total do frame" name="simframemsec"/>
+					<stat_bar label="Tempo de rede" name="simnetmsec"/>
+					<stat_bar label="Tempo de física" name="simsimphysicsmsec"/>
+					<stat_bar label="Tempo de simulação" name="simsimothermsec"/>
+					<stat_bar label="Tempo de agente" name="simagentmsec"/>
+					<stat_bar label="Tempo de imagens" name="simimagesmsec"/>
+					<stat_bar label="Tempo de script" name="simscriptmsec"/>
 					<stat_bar label="Tempo restante" name="simsparemsec"/>
-					<stat_view label="Detalhes de hora" name="timedetails">
-						<stat_bar label="Etapa física" name="simsimphysicsstepmsec"/>
+					<stat_view label="Detalhes de tempo" name="timedetails">
+						<stat_bar label="Passo de física" name="simsimphysicsstepmsec"/>
 						<stat_bar label="Atualizar formas físicas" name="simsimphysicsshapeupdatemsec"/>
 						<stat_bar label="Física - outros" name="simsimphysicsothermsec"/>
 						<stat_bar label="Tempo de espera" name="simsleepmsec"/>
-						<stat_bar label="Bombear ES" name="simpumpiomsec"/>
+						<stat_bar label="Pump IO" name="simpumpiomsec"/>
 					</stat_view>
 				</stat_view>
 			</stat_view>
 		</container_view>
-		<stat_bar name="simpendinguploads" label="Uploads Pendentes"/>
-		<stat_bar name="simpendingdownloads" label="Downloads Pendentes"/>
-		<stat_bar name="simchildagents" label="Agentes Secundários"/>
-		<stat_bar name="simagentups" label="Atualização/Seg de Agente"/>
-		<stat_bar name="simscripteps" label="Eventos de Script"/>
-		<stat_bar name="simmainagents" label="Agentes Principais"/>
-		<stat_bar name="simactivescripts" label="Scripts Ativos"/>
-		<stat_bar name="simactiveobjects" label="Objetos Ativos"/>
-		<stat_bar name="simobjects" label="Objetos"/>
-		<stat_bar name="siminpps" label="Entrada de Pacotes"/>
-		<stat_bar name="simoutpps" label="Saída de Pacotes"/>
 	</scroll_container>
 </floater>
