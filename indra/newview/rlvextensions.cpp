@@ -48,6 +48,7 @@ RlvExtGetSet::RlvExtGetSet()
         m_DbgAllowed.insert(std::pair<std::string, S16>("OTSCameraSide", DBG_READ | DBG_WRITE));
         m_DbgAllowed.insert(std::pair<std::string, S16>("OTSCameraHeight", DBG_READ | DBG_WRITE));
         m_DbgAllowed.insert(std::pair<std::string, S16>("OTSFocusDistance", DBG_READ | DBG_WRITE));
+        m_DbgAllowed.insert(std::pair<std::string, S16>("OTSCameraCollision", DBG_READ | DBG_WRITE));
 
         // Cache persistance of every setting
         LLControlVariable* pSetting;

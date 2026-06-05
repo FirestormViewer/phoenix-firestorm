@@ -151,6 +151,7 @@ LLAgentCamera::LLAgentCamera() :
 
     mCurrentCameraDistance(2.f),        // meters, set in init()
     mTargetCameraDistance(2.f),
+    mOTSCollisionDistance(-1.f),
     mCameraZoomFraction(1.f),           // deprecated
     mThirdPersonHeadOffset(0.f, 0.f, 1.f),
     mSitCameraEnabled(false),
@@ -1951,8 +1952,58 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
         LLVector3 local_offset(-(F32)ots_dist, (F32)ots_side, (F32)ots_height);
         LLQuaternion agent_rot = gAgent.getFrameAgent().getQuaternion();
         LLVector3 world_offset = local_offset * agent_rot;
-        LLVector3d avatar_pos = gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
-        camera_position_global = avatar_pos + LLVector3d(world_offset);
+        LLVector3 avatar_pos_agent = getAvatarRootPosition();
+        LLVector3 cam_pos_agent = avatar_pos_agent + world_offset;
+
+        // Camera collision: the agent frame pitches with the look direction in OTS,
+        // so pitching up swings the shoulder camera down toward the ground (and
+        // strafing near walls swings it into geometry). Raycast from a pivot at
+        // shoulder height out to the desired camera position and pull the camera
+        // in just in front of anything solid. World geometry only; avatars and
+        // attachments never block the camera.
+        static LLCachedControl<bool> ots_collision(gSavedSettings, "OTSCameraCollision", true);
+        if (ots_collision)
+        {
+            const F32 OTS_COLLISION_MARGIN = 0.20f;          // keep the near clip plane out of the surface
+            const F32 OTS_MIN_CAMERA_DISTANCE = 0.30f;       // never pull in closer than just behind the head
+            const F32 OTS_COLLISION_EASE_OUT_HALF_LIFE = 0.15f; // seconds; recovery speed when an obstruction clears
+
+            LLVector3 pivot = avatar_pos_agent + LLVector3(0.f, 0.f, (F32)ots_height);
+            LLVector3 dir = cam_pos_agent - pivot;
+            F32 desired_dist = dir.normalize();
+            F32 target_dist = desired_dist;
+
+            LLVector4a ray_start, ray_end, hit_pos;
+            ray_start.load3(pivot.mV);
+            ray_end.load3(cam_pos_agent.mV);
+            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit_pos))
+            {
+                LLVector3 hit(hit_pos.getF32ptr());
+                F32 hit_dist = (hit - pivot).length();
+                target_dist = llclamp(hit_dist - OTS_COLLISION_MARGIN, OTS_MIN_CAMERA_DISTANCE, desired_dist);
+            }
+
+            // Asymmetric smoothing: snap in instantly so the camera never clips,
+            // but ease back out so uneven surfaces don't jitter the camera while
+            // turning or strafing.
+            if (mOTSCollisionDistance < 0.f || target_dist <= mOTSCollisionDistance)
+            {
+                mOTSCollisionDistance = target_dist;
+            }
+            else
+            {
+                F32 ease_amt = LLSmoothInterpolation::getInterpolant(OTS_COLLISION_EASE_OUT_HALF_LIFE);
+                mOTSCollisionDistance = lerp(mOTSCollisionDistance, target_dist, ease_amt);
+            }
+
+            cam_pos_agent = pivot + dir * llmin(mOTSCollisionDistance, desired_dist);
+        }
+        else
+        {
+            mOTSCollisionDistance = -1.f; // restart smoothing fresh if collision is re-enabled
+        }
+
+        camera_position_global = gAgent.getPosGlobalFromAgent(cam_pos_agent);
     }
     else if (mCameraMode == CAMERA_MODE_MOUSELOOK)
     {
@@ -2595,6 +2646,10 @@ void LLAgentCamera::changeCameraToOTS()
         // Override mCameraMode to OTS so position/focus calculations
         // use the shoulder offset instead of the eye position.
         mCameraMode = CAMERA_MODE_OTS;
+
+        // Restart collision smoothing fresh; a stale pull-in distance from the
+        // last OTS session would briefly hold the camera too close.
+        mOTSCollisionDistance = -1.f;
 
         // changeCameraToMouselook hid attachments via updateAttachmentVisibility
         // with CAMERA_MODE_MOUSELOOK. Restore full visibility for OTS mode.

@@ -187,6 +187,7 @@ private:
 
     F32             mCurrentCameraDistance;         // Current camera offset from avatar
     F32             mTargetCameraDistance;          // Target camera offset from avatar
+    F32             mOTSCollisionDistance;          // Smoothed OTS camera collision pull-in distance (<0 = unset)
     F32             mCameraFOVZoomFactor;           // Amount of fov zoom applied to camera when zeroing in on an object
     F32             mCameraCurrentFOVZoomFactor;    // Interpolated fov zoom
     LLVector4       mCameraCollidePlane;            // Colliding plane for camera

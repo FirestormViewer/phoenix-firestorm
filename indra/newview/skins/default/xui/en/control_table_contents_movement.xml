@@ -197,6 +197,17 @@
          value="Swap OTS Shoulder" />
     </rows>
     <rows
+     name="ots_toggle_view"
+     value="ots_toggle_view">
+        <columns
+         column="lst_action"
+         font="SansSerif"
+         halign="left"
+         name="lst_action"
+         tool_tip="Switch between the over-the-shoulder camera and first-person mouselook"
+         value="Toggle OTS / First Person" />
+    </rows>
+    <rows
      name="stop_moving"
      value="stop_moving">
         <columns

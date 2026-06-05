@@ -925,6 +925,23 @@ bool ots_swap_shoulder(EKeystate s)
     return true;
 }
 
+// OTS view toggle: switch between the over-the-shoulder camera and true
+// first-person mouselook without leaving aim mode (precision-aim style).
+// Checks cameraOTS() first because cameraMouselook() also reports true in OTS.
+bool ots_toggle_view(EKeystate s)
+{
+    if (KEYSTATE_DOWN != s) return true;
+    if (gAgentCamera.cameraOTS())
+    {
+        gAgentCamera.changeCameraToMouselook();
+    }
+    else if (gAgentCamera.cameraMouselook())
+    {
+        gAgentCamera.changeCameraToOTS();
+    }
+    return true;
+}
+
 bool toggle_pause_media(EKeystate s) // analogue of play/pause button in top bar
 {
     if (KEYSTATE_DOWN != s) return true;
@@ -1097,6 +1114,7 @@ REGISTER_KEYBOARD_ACTION("run_right", run_right);
 REGISTER_KEYBOARD_ACTION("toggle_run", toggle_run);
 REGISTER_KEYBOARD_ACTION("toggle_sit", toggle_sit);
 REGISTER_KEYBOARD_ACTION("ots_swap_shoulder", ots_swap_shoulder); // OTS shoulder swap
+REGISTER_KEYBOARD_ACTION("ots_toggle_view", ots_toggle_view);     // OTS <-> first person mouselook
 REGISTER_KEYBOARD_ACTION("toggle_pause_media", toggle_pause_media);
 REGISTER_KEYBOARD_ACTION("toggle_enable_media", toggle_enable_media);
 REGISTER_KEYBOARD_ACTION("teleport_to", teleport_to);
