@@ -186,6 +186,17 @@
          value="Sit/Stand" />
     </rows>
     <rows
+     name="ots_swap_shoulder"
+     value="ots_swap_shoulder">
+        <columns
+         column="lst_action"
+         font="SansSerif"
+         halign="left"
+         name="lst_action"
+         tool_tip="Mirror the over-the-shoulder camera to the avatar's other side"
+         value="Swap OTS Shoulder" />
+    </rows>
+    <rows
      name="stop_moving"
      value="stop_moving">
         <columns
