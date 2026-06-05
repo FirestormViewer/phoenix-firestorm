@@ -712,6 +712,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mNameCloud(false),
     mActiveGroupID(),
     mGroupFetchPending(false),
+    mGroupProbeWanted(false),
     mFirstTEMessageReceived( false ),
     mFirstAppearanceMessageReceived( false ),
     mCulled( false ),
@@ -4691,7 +4692,108 @@ void LLVOAvatar::processProperties(void* data, EAvatarProcessorType type)
     }
 
     mActiveGroupID.setNull();
+
+    // No match, but a group tag is showing: the profile group list omits
+    // groups the avatar has set to hidden, so read the active group from a
+    // worn attachment instead.
+    mGroupProbeWanted = true;
+    probeAttachmentGroups();
+
     clearNameTag();
+}
+
+// ---------------------------------------------------------------------------
+// Group-based nameplate tinting: attachment-group fallback
+// ---------------------------------------------------------------------------
+
+// object_id -> avatar_id for in-flight attachment group probes
+static std::map<LLUUID, LLUUID> sPendingAttachmentGroupProbes;
+
+// The profile group list omits hidden groups, so the title match in
+// processProperties can fail even though a group tag is clearly showing.
+// The sim keeps worn attachments' group in sync with the wearer's active
+// group, and their properties are publicly inspectable (same data as
+// Inspect), so the group of any worn attachment IS the active group.
+// Mesh/texture load state is irrelevant: the sim answers from its own object
+// data as soon as the attachment's ObjectUpdate has arrived.
+void LLVOAvatar::probeAttachmentGroups()
+{
+    if (!mGroupProbeWanted || isSelf())
+        return;
+
+    // No visible group tag implies no active group (nothing to infer), and
+    // without configured group tints there is no reason to generate traffic.
+    if (mTitle.empty() || !LLGroupColorMap::getInstance()->hasAnyColors())
+    {
+        mGroupProbeWanted = false;
+        return;
+    }
+
+    // Stale-entry backstop: replies the sim never sent would accumulate.
+    if (sPendingAttachmentGroupProbes.size() > 256)
+        sPendingAttachmentGroupProbes.clear();
+
+    // First reply is authoritative; ask two attachments only for redundancy
+    // against a dropped reply.
+    constexpr S32 MAX_GROUP_PROBES = 2;
+    S32 sent = 0;
+    for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+         iter != mAttachmentPoints.end() && sent < MAX_GROUP_PROBES;
+         ++iter)
+    {
+        LLViewerJointAttachment* attachment = iter->second;
+        // Note: no getValid() check here. mValid is a render/LOD flag set
+        // lazily on first LOD update; attachments are often fully bound but
+        // not yet "valid" during a login/teleport object flood, and we only
+        // need UUID + local id + region to query properties.
+        if (!attachment)
+            continue;
+
+        for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+             attachment_iter != attachment->mAttachedObjects.end() && sent < MAX_GROUP_PROBES;
+             ++attachment_iter)
+        {
+            LLViewerObject* attached_object = attachment_iter->get();
+            if (!attached_object || attached_object->isDead() || attached_object->isHUDAttachment() || !attached_object->getRegion())
+                continue;
+
+            sPendingAttachmentGroupProbes[attached_object->getID()] = getID();
+            // RequestObjectPropertiesFamily is not answered for attached
+            // objects; the brief select+deselect path is.
+            LLSelectMgr::getInstance()->requestObjectPropertiesViaSelect(attached_object);
+            ++sent;
+        }
+    }
+
+    if (sent > 0)
+    {
+        mGroupProbeWanted = false;
+    }
+    // else: the avatar's attachment ObjectUpdates haven't streamed in yet
+    // (still rezzing); attachObject() retries when the first one arrives.
+}
+
+// static
+bool LLVOAvatar::handleAttachmentGroupReply(const LLUUID& object_id, const LLUUID& group_id)
+{
+    std::map<LLUUID, LLUUID>::iterator it = sPendingAttachmentGroupProbes.find(object_id);
+    if (it == sPendingAttachmentGroupProbes.end())
+        return false;
+
+    LLUUID avatar_id = it->second;
+    sPendingAttachmentGroupProbes.erase(it);
+
+    LLViewerObject* obj = gObjectList.findObject(avatar_id);
+    LLVOAvatar* avatarp = obj ? obj->asAvatar() : nullptr;
+    if (!avatarp || avatarp->isDead())
+        return true;
+
+    if (group_id.notNull() && avatarp->mActiveGroupID != group_id)
+    {
+        avatarp->mActiveGroupID = group_id;
+        avatarp->clearNameTag();
+    }
+    return true;
 }
 
 void LLVOAvatar::sendAvatarGroupsRequest()
@@ -4699,6 +4801,9 @@ void LLVOAvatar::sendAvatarGroupsRequest()
     if (!isSelf() && !mGroupFetchPending)
     {
         mGroupFetchPending = true;
+        // A new groups fetch supersedes any pending probe retry; the fetch
+        // result decides whether a probe is needed again.
+        mGroupProbeWanted = false;
         LLAvatarPropertiesProcessor::getInstance()->addObserver(getID(), this);
         LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(getID());
     }
@@ -8642,6 +8747,11 @@ const LLViewerJointAttachment *LLVOAvatar::attachObject(LLViewerObject *viewer_o
         LLSelectMgr::getInstance()->updateSelectionCenter();
         LLSelectMgr::getInstance()->updatePointAt();
     }
+
+    // Group-based nameplate tinting: if the attachment-group probe was
+    // deferred because no attachments had streamed in yet, retry now that
+    // one arrived. No-op unless mGroupProbeWanted is set.
+    probeAttachmentGroups();
 
     viewer_object->refreshBakeTexture();
 

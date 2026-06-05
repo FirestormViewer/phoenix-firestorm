@@ -305,6 +305,11 @@ public:
     void            sendAvatarGroupsRequest();
     const LLUUID&   getActiveGroupID() const { return mActiveGroupID; }
 
+    // Attachment-group fallback: routes ObjectPropertiesFamily replies for
+    // probed attachments back to the owning avatar. Returns true if the
+    // object was one of ours. Called from LLSelectMgr::processObjectPropertiesFamily.
+    static bool     handleAttachmentGroupReply(const LLUUID& object_id, const LLUUID& group_id);
+
     static void     invalidateNameTag(const LLUUID& agent_id);
     // force all name tags to rebuild, useful when display names turned on/off
     static void     invalidateNameTags();
@@ -1200,6 +1205,12 @@ private:
     // Group-based nameplate tinting
     LLUUID          mActiveGroupID;      // active group UUID; null until known
     bool            mGroupFetchPending;  // true while AvatarPropertiesRequest is in flight
+
+    // Attachment-group fallback: when the profile group list hides the active
+    // group, read it from a worn attachment instead (the sim keeps worn
+    // attachments' group in sync with the wearer's active group).
+    void            probeAttachmentGroups();
+    bool            mGroupProbeWanted;   // profile match failed; probe when attachments are available
 
     //--------------------------------------------------------------------
     // Display the name (then optionally fade it out)

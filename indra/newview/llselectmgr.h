@@ -894,6 +894,7 @@ public:
     void sendSelect();
 
     void requestObjectPropertiesFamily(LLViewerObject* object); // asks sim for creator, permissions, resources, etc.
+    void requestObjectPropertiesViaSelect(LLViewerObject* object); // brief select+deselect to elicit a full ObjectProperties reply; also works for worn attachments
     static void processObjectProperties(LLMessageSystem *mesgsys, void **user_data);
     static void processObjectPropertiesFamily(LLMessageSystem *mesgsys, void **user_data);
     static void processForceObjectSelect(LLMessageSystem* msg, void**);
