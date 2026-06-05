@@ -3,7 +3,7 @@
 	<panel name="tool_panel">
 		<menu_button name="sort_btn" tool_tip="Anzeige-/Sortieroptionen"/>
 		<button name="add_btn" tool_tip="Neuen Auflistungsordner erstellen"/>
-		<button label="Auf Fehler prüfen" name="audit_btn" tool_tip="Marktplatz-Auflistungen überprüfen" width="105" left_pad="137"/>
+		<button label="Auf Fehler prüf." name="audit_btn" tool_tip="Marktplatz-Auflistungen überprüfen" width="105" left_pad="137"/>
 	</panel>
 	<panel name="tab_container_panel">
 		<filter_editor label="Marktplatz-Auflistungen filtern" name="filter_editor"/>
