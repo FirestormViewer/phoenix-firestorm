@@ -58,7 +58,7 @@
 		</combo_box>
 		<text name="region_name_label" value="Name Region:" tool_tip="Der Regionsname der Quelle. Nur verfügbar für Inventar-Angebote."/>
 		<line_editor name="region_name" tool_tip="Der Regionsname der Quelle. Nur für Inventarangebote verfügbar."/>
-		<text name="owner_label" value="Eigentümer-UUID:"/>
+		<text name="owner_label" value="Eigentüm.-UUID:"/>
 		<line_editor name="owner_uuid" tool_tip="Für Gruppen-Einladungen: Die UUID der Gruppe. Für Objekt-Chat, Eigentümer-Nachrichten, Debug-Chat oder Direkt-Chat: Die UUID des Objekts. Für Objekt-IMs: Die UUID des Objekt-Eigentümers. Für alles andere: Die UUID des sendenden Einwohners."/>
 		<text name="match_source_label" value="Quelle:"/>
 		<layout_stack name="buttons_stack">
@@ -70,7 +70,7 @@
 			<layout_panel name="buttons_group_2">
 				<button name="type_group_notice" label="Mitteilungen" tool_tip="Gruppen-Mitteilungen."/>
 				<button name="type_invite" label="Einladungen" tool_tip="Gruppen-Einladungen."/>
-				<button name="type_object_chat" label="Objekt-Chat" tool_tip="Chat in der Nähe von Objekten."/>
+				<button name="type_object_chat" label="Obj.-Chat" tool_tip="Chat in der Nähe von Objekten."/>
 			</layout_panel>
 			<layout_panel name="buttons_group_3">
 				<button name="type_object_im" label="Objekt-IM" tool_tip="Instant Messages von Objekten."/>
@@ -80,7 +80,7 @@
 			<layout_panel name="buttons_group_4">
 				<button name="type_inventory_offer" label="Inv.-Angeb." tool_tip="Übereinstimmung von Feldern in Inventar-Angeboten."/>
 				<button name="type_friendship" label="Freundsch." tool_tip="Freundschatsanfragen von Einwohnern."/>
-				<button name="type_lure" label="TP-Angebot" tool_tip="Teleport-Angebote von Einwohnern."/>
+				<button name="type_lure" label="TP-Angeb." tool_tip="Teleport-Angebote von Einwohnern."/>
 			</layout_panel>
 			<layout_panel name="buttons_group_5">
 				<button name="type_tp_request" label="TP-Anfrage" tool_tip="Anfragen von Einwohnern, ein Teleport-Angebot gesendet zu bekommen."/>
@@ -91,7 +91,7 @@
 		<line_editor name="chat_replace" tool_tip="Ersatztext, mit dem die Anzeige der Nachricht geändert werden kann" />
 		<text name="button_reply_label" value="Button-Antwort:"/>
 		<line_editor name="button_reply" tool_tip="Die Beschriftung einer Schaltfläche, die im Skript-Dialog &quot;geklickt&quot; werden soll, einschließlich &quot;Ignorieren&quot;" />
-		<text name="text_box_reply_label" value="Textbox-Antwort:"/>
+		<text name="text_box_reply_label" value="Textbox-Antw.:"/>
 		<text_editor name="text_box_reply" tool_tip="Ein Antworttext, als wäre er manuell in das Textfeld des Skript-Dialogs eingegeben worden" />
 	</panel>
 </floater>
