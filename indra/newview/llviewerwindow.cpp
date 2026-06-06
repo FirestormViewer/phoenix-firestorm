@@ -237,6 +237,7 @@
 #include "lggcontactsets.h"
 #include "llgroupcolormap.h"
 #include "fsfloaterkillfeed.h"
+#include "fscombathitmarker.h"
 #include "fspanellogin.h"
 
 #include "lltracerecording.h"
@@ -3062,6 +3063,12 @@ void LLViewerWindow::draw()
         // Feed settings floater. Renders in and out of mouselook.
         FSFloaterKillFeed::drawOverlay();
 
+        // Hitmarker flash and fading hit report for outgoing combat damage.
+        // Reset the crosshair tint each frame; the combat features pass
+        // below re-tints it when a target is identified under the crosshair.
+        FSCombatHitMarker::setCrosshairTint(LLColor4::white);
+        FSCombatHitMarker::draw();
+
         if (inMouselook && fsMouselookCombatFeatures)
         {
             S32 windowWidth = gViewerWindow->getWorldViewRectScaled().getWidth();
@@ -3185,11 +3192,21 @@ void LLViewerWindow::draw()
                                     }
                                 }
 
-                                LLFontGL::getFontSansSerifBold()->renderUTF8(
-                                    llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
-                                    0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, nameColor,
-                                    (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
-                                );
+                                // Feed the identified target's color to the custom
+                                // crosshair tint (LoS already verified above).
+                                FSCombatHitMarker::setCrosshairTint(nameColor);
+
+                                // The name text itself is optional; identification
+                                // still runs for the crosshair tint when disabled.
+                                static LLCachedControl<bool> renderIFFName(gSavedSettings, "ExodusMouselookIFFShowName", true);
+                                if (renderIFFName)
+                                {
+                                    LLFontGL::getFontSansSerifBold()->renderUTF8(
+                                        llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
+                                        0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, nameColor,
+                                        (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
+                                    );
+                                }
 
                                 crosshairRendered = true;
                             }

@@ -499,13 +499,48 @@
          tool_tip="Don't show the name of the avatar under your crosshair when walls, floors or terrain block the view"
          top_pad="5"
          width="256" />
+        <check_box
+         control_name="ExodusMouselookIFFShowName"
+         follows="left|top"
+         height="16"
+         label="Show target name"
+         layout="topleft"
+         left_delta="0"
+         name="ExodusMouselookIFFShowName"
+         tool_tip="Show the identified target's name under the crosshair. When off, identification still drives the crosshair color and combat feedback."
+         top_pad="5"
+         width="256" />
+        <check_box
+         control_name="FSHitMarkerEnabled"
+         follows="left|top"
+         height="16"
+         label="Hitmarker (flash + sound on hit)"
+         layout="topleft"
+         left_delta="0"
+         name="FSHitMarkerEnabledPref"
+         tool_tip="Combat 2.0 regions, via the LSL bridge"
+         top_pad="5"
+         width="256" />
+        <button
+         follows="left|top"
+         layout="topleft"
+         left_delta="260"
+         top_delta="-2"
+         height="20"
+         width="70"
+         label="Options..."
+         name="hit_marker_options_btn"
+         tool_tip="Hitmarker, crosshair, hit report and sound options">
+            <button.commit_callback
+             function="Pref.HitMarkerSettings" />
+        </button>
         <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="-5"
+         left_delta="-265"
          name="Mouse Sensitivity"
          top_pad="10"
          width="160">

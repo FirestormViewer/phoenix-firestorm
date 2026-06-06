@@ -210,6 +210,7 @@
 #include "fsfloatergroup.h"
 #include "fsfloatergrouptitles.h"
 #include "fsfloatergroupviewer.h"
+#include "fsfloaterhitmarker.h"
 #include "fsfloaterkillfeed.h"
 #include "fsfloaterimport.h"
 #include "fsfloaterim.h"
@@ -659,6 +660,8 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("fs_group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterGroupTitles>);
     LLFloaterReg::add("fs_group_viewer", "floater_fs_group_viewer.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterGroupViewer>);
     LLFloaterReg::add("fs_kill_feed", "floater_fs_kill_feed.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterKillFeed>);
+    LLFloaterReg::add("fs_hit_marker", "floater_fs_hit_marker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterHitMarker>);
+    LLFloaterReg::add("fs_hit_marker_emojis", "floater_fs_hit_marker_emojis.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterHitMarkerEmojis>);
     LLFloaterReg::add("fs_export", "floater_fs_export.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterObjectExport>);
     LLFloaterReg::add("fs_import", "floater_fs_import.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterImport>);
     LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);

@@ -125,6 +125,8 @@ set(viewer_SOURCE_FILES
     fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
     fsfloatergroup.cpp
+    fscombathitmarker.cpp
+    fsfloaterhitmarker.cpp
     fsfloatergrouptitles.cpp
     fsfloatergroupviewer.cpp
     fsfloaterkillfeed.cpp
@@ -992,6 +994,8 @@ set(viewer_HEADER_FILES
     fsfloatercontactsetconfiguration.h
     fsfloaterexport.h
     fsfloatergroup.h
+    fscombathitmarker.h
+    fsfloaterhitmarker.h
     fsfloatergrouptitles.h
     fsfloatergroupviewer.h
     fsfloaterkillfeed.h

@@ -7,7 +7,7 @@
 //
 
 // Bridge platform
-string BRIDGE_VERSION = "2.30"; // This should match fslslbridge.cpp
+string BRIDGE_VERSION = "2.31"; // This should match fslslbridge.cpp
 string gLatestURL;
 integer gViewerIsFirestorm;
 integer gTryHandshakeOnce = TRUE;
@@ -31,8 +31,10 @@ float FLIGHT_CHECK_NORMAL = 0.5;
 float FLIGHT_CHECK_SLOW = 3.0;
 float gFlightAssistPushForce;
 
-// Kill feed (Combat 2.0 combat log relay)
-integer gKillFeedListener;
+// Combat log relay (Combat 2.0): kill feed + hitmarker
+integer gCombatListener;    // shared llListen handle
+integer gKillFeedOn;        // forward all DEATH events (with weapon name)
+integer gCombatHitsOn;      // forward owner's own DAMAGE/DEATH events
 
 // OpenCollar/LockMeister AO interface
 integer gAO_EnabledOC;
@@ -71,6 +73,43 @@ kfForwardDeath(string ev)
     if (wname != "") ev = llJsonSetValue(ev, ["weapon_name"], wname);
 
     llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+}
+
+combatForward(string ev)
+{
+    string etype = llJsonGetValue(ev, ["event"]);
+    if (etype == "DEATH")
+    {
+        if (gKillFeedOn)
+        {
+            // Forwarded once; the viewer routes it to both features.
+            kfForwardDeath(ev);
+        }
+        else if (gCombatHitsOn && (key)llJsonGetValue(ev, ["owner"]) == gOwner)
+        {
+            llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+        }
+    }
+    else if (etype == "DAMAGE")
+    {
+        if (gCombatHitsOn && (key)llJsonGetValue(ev, ["owner"]) == gOwner)
+        {
+            llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+        }
+    }
+}
+
+updateCombatListen()
+{
+    if ((gKillFeedOn || gCombatHitsOn) && !gCombatListener)
+    {
+        gCombatListener = llListen(COMBAT_CHANNEL, "", COMBAT_LOG_ID, "");
+    }
+    else if (!gKillFeedOn && !gCombatHitsOn && gCombatListener)
+    {
+        llListenRemove(gCombatListener);
+        gCombatListener = 0;
+    }
 }
 
 requestBridgeURL()
@@ -585,18 +624,16 @@ default
                 // Kill feed: listen to the region combat log (Combat 2.0).
                 // Filtered to COMBAT_LOG_ID so only authentic system events
                 // arrive; scripts cannot forge their source UUID.
-                if (llList2Integer(commandList, 1))
-                {
-                    if (!gKillFeedListener)
-                    {
-                        gKillFeedListener = llListen(COMBAT_CHANNEL, "", COMBAT_LOG_ID, "");
-                    }
-                }
-                else if (gKillFeedListener)
-                {
-                    llListenRemove(gKillFeedListener);
-                    gKillFeedListener = 0;
-                }
+                gKillFeedOn = llList2Integer(commandList, 1);
+                updateCombatListen();
+            }
+
+            else if (cmd == "CombatHitsListen")
+            {
+                // Hitmarker: forward the owner's own outgoing DAMAGE/DEATH
+                // events. Shares the combat log listener with the kill feed.
+                gCombatHitsOn = llList2Integer(commandList, 1);
+                updateCombatListen();
             }
 
             else if (cmd == "RelockMoveLockAfterMovement")
@@ -643,11 +680,13 @@ default
     listen(integer fromChan, string senderName, key senderID, string msg)
     {
 
-        // Kill feed: combat log events. The listener is filtered to
-        // COMBAT_LOG_ID, so everything arriving here is sim-generated.
-        // Only DEATH events are forwarded; DAMAGE events are dropped to
-        // keep the event queue healthy in large battles. The simulator
-        // may batch several events into one JSON array.
+        // Combat log events. The listener is filtered to COMBAT_LOG_ID,
+        // so everything arriving here is sim-generated. Kill feed: all
+        // DEATH events (with weapon name resolution). Hitmarker: the
+        // owner's own DAMAGE events (and own DEATH kills when the kill
+        // feed is off). Other DAMAGE spam is dropped to keep the event
+        // queue healthy in large battles. The simulator may batch several
+        // events into one JSON array.
         if (fromChan == COMBAT_CHANNEL)
         {
             if (llGetSubString(msg, 0, 0) == "[")
@@ -656,16 +695,13 @@ default
                 string ev = llJsonGetValue(msg, [i]);
                 while (ev != JSON_INVALID)
                 {
-                    if (llJsonGetValue(ev, ["event"]) == "DEATH")
-                    {
-                        kfForwardDeath(ev);
-                    }
+                    combatForward(ev);
                     ev = llJsonGetValue(msg, [++i]);
                 }
             }
-            else if (llJsonGetValue(msg, ["event"]) == "DEATH")
+            else
             {
-                kfForwardDeath(msg);
+                combatForward(msg);
             }
             return;
         }

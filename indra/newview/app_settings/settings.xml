@@ -24981,6 +24981,160 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSCustomCrosshair</key>
+      <map>
+      <key>Comment</key>
+      <string>Draw the custom dot and arrows crosshair instead of the stock crosshair in mouselook and OTS</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSHitMarkerEnabled</key>
+      <map>
+      <key>Comment</key>
+      <string>Show a hitmarker flash and hit report for your outgoing combat damage (Combat 2.0, via LSL bridge)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSHitMarkerScale</key>
+      <map>
+      <key>Comment</key>
+      <string>Hitmarker and custom crosshair scale</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.75</real>
+    </map>
+    <key>FSHitMarkerTextScale</key>
+      <map>
+      <key>Comment</key>
+      <string>Hit report text scale (independent of the marker/crosshair scale)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>FSHitMarkerTextBold</key>
+      <map>
+      <key>Comment</key>
+      <string>Render the hit report text in bold</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSCrosshairTargetColor</key>
+      <map>
+      <key>Comment</key>
+      <string>Tint the custom crosshair with the identified target's contact set / group color (combat features)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSHitMarkerText</key>
+      <map>
+      <key>Comment</key>
+      <string>Show the fading hit report text under the crosshair</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerShowName</key>
+      <map>
+      <key>Comment</key>
+      <string>Include the target's name in the hit report</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerShortNames</key>
+      <map>
+      <key>Comment</key>
+      <string>Shorten names in the hit report (Orion Starchild becomes Orion S.)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerShowEmoji</key>
+      <map>
+      <key>Comment</key>
+      <string>Show the damage type emoji in the hit report</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerEmojiMap</key>
+      <map>
+      <key>Comment</key>
+      <string>JSON object overriding damage type emojis, keyed by type number, e.g. {"5":"X", "102":"BOOM"}; empty = built-in defaults</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+    <key>FSHitMarkerSounds</key>
+      <map>
+      <key>Comment</key>
+      <string>Play hit and kill sounds</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerHitSound</key>
+      <map>
+      <key>Comment</key>
+      <string>Sound UUID played when your damage lands</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>f1d28a45-da0e-8dc7-0de3-b94afd350c9c</string>
+    </map>
+    <key>FSHitMarkerKillSound</key>
+      <map>
+      <key>Comment</key>
+      <string>Sound UUID played when your damage kills</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>4cbf0d33-03ea-49b1-b671-fdfc37d98002</string>
+    </map>
     <key>FSKillFeedEnabled</key>
       <map>
       <key>Comment</key>
@@ -25095,6 +25249,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>20.0</real>
+    </map>
+    <key>ExodusMouselookIFFShowName</key>
+      <map>
+      <key>Comment</key>
+      <string>Show the identified target's name under the mouselook crosshair (identification still runs for crosshair coloring when disabled)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>ExodusMouselookIFFLineOfSight</key>
       <map>
