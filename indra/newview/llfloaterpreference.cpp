@@ -483,6 +483,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     // <FS:Ansariel> Clear web browser cache button
     mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",       boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
     // </FS:Ansariel>
+    mCommitCallbackRegistrar.add("Pref.BrowseSplashImage",          boost::bind(&LLFloaterPreference::onClickBrowseSplashImage, this));
+    mCommitCallbackRegistrar.add("Pref.BrowseLoginLogo",            boost::bind(&LLFloaterPreference::onClickBrowseLoginLogo, this));
     mCommitCallbackRegistrar.add("Pref.SetCache",               boost::bind(&LLFloaterPreference::onClickSetCache, this));
     mCommitCallbackRegistrar.add("Pref.ResetCache",             boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //  mCommitCallbackRegistrar.add("Pref.ClickSkin",              boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
@@ -1716,6 +1718,34 @@ void LLFloaterPreference::onClickWebBrowserClearCache()
     LLNotificationsUtil::add("ConfirmClearWebBrowserCache", LLSD(), LLSD(), callback_clear_web_browser_cache);
 }
 // </FS:Ansariel>
+
+// Offline login splash: pick a local image for the login background
+void LLFloaterPreference::onClickBrowseSplashImage()
+{
+    LLFilePickerReplyThread::startPicker(
+        [](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            if (!filenames.empty())
+            {
+                gSavedSettings.setString("FSLocalLoginSplashImage", filenames[0]);
+            }
+        },
+        LLFilePicker::FFLOAD_IMAGE, false);
+}
+
+// Login bar logo: pick a local replacement image
+void LLFloaterPreference::onClickBrowseLoginLogo()
+{
+    LLFilePickerReplyThread::startPicker(
+        [](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            if (!filenames.empty())
+            {
+                gSavedSettings.setString("FSLoginLogoImage", filenames[0]);
+            }
+        },
+        LLFilePicker::FFLOAD_IMAGE, false);
+}
 
 // Called when user changes language via the combobox.
 void LLFloaterPreference::onLanguageChange()

@@ -59,6 +59,7 @@
 #include "llversioninfo.h"
 #include "llviewerhelp.h"
 #include "llviewertexturelist.h"
+#include "lliconctrl.h"        // offline login splash background
 #include "llviewermenu.h"           // for handle_preferences()
 #include "llviewernetwork.h"
 #include "llviewerwindow.h"         // to link into child list
@@ -477,11 +478,16 @@ void FSPanelLogin::showLoginWidgets()
         // *NOTE: Mani - This may or may not be obselete code.
         // It seems to be part of the defunct? reg-in-client project.
         sInstance->getChildView("login_widgets")->setVisible( true);
-        LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
 
-        // *TODO: Append all the usual login parameters, like first_login=Y etc.
-        std::string splash_screen_url = LLGridManager::getInstance()->getLoginPage();
-        web_browser->navigateTo( splash_screen_url, HTTP_CONTENT_TEXT_HTML );
+        // Offline login splash: skip the web page entirely
+        if (!gSavedSettings.getBOOL("FSLocalLoginSplash"))
+        {
+            LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
+
+            // *TODO: Append all the usual login parameters, like first_login=Y etc.
+            std::string splash_screen_url = LLGridManager::getInstance()->getLoginPage();
+            web_browser->navigateTo( splash_screen_url, HTTP_CONTENT_TEXT_HTML );
+        }
         LLUICtrl* username_combo = sInstance->getChild<LLUICtrl>("username_combo");
         username_combo->setFocus(true);
     }
@@ -874,9 +880,72 @@ void FSPanelLogin::setAlwaysRefresh(bool refresh)
 
 
 
+// Trim whitespace and Windows "Copy as path" style quotes from a
+// user-entered image path.
+static std::string sanitize_image_path(std::string path)
+{
+    LLStringUtil::trim(path);
+    if (path.size() >= 2 && path.front() == '"' && path.back() == '"')
+    {
+        path = path.substr(1, path.size() - 2);
+    }
+    return path;
+}
+
 void FSPanelLogin::loadLoginPage()
 {
     if (!sInstance) return;
+
+    // Login bar logo: toggleable and user-replaceable (stock logo when
+    // no replacement image is set).
+    LLIconCtrl* bar_logo = sInstance->getChild<LLIconCtrl>("sl_logo_small");
+    bool show_logo = gSavedSettings.getBOOL("FSShowLoginLogo");
+    bar_logo->setVisible(show_logo);
+    if (show_logo)
+    {
+        const std::string logo_path = sanitize_image_path(gSavedSettings.getString("FSLoginLogoImage"));
+        LLViewerFetchedTexture* logo_tex = nullptr;
+        if (!logo_path.empty() && LLFile::isfile(logo_path))
+        {
+            logo_tex = LLViewerTextureManager::getFetchedTextureFromUrl(
+                "file://" + logo_path, FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI);
+        }
+        if (logo_tex)
+        {
+            bar_logo->setValue(LLSD(logo_tex->getID()));
+        }
+        else
+        {
+            bar_logo->setValue(LLSD(std::string("login_fs_logo")));
+        }
+    }
+
+    // Offline login splash: show a local image and never touch the web.
+    if (gSavedSettings.getBOOL("FSLocalLoginSplash"))
+    {
+        sInstance->getChildView("login_html")->setVisible(false);
+        sInstance->getChildView("login_splash_image")->setVisible(true);
+
+        // User-chosen background image (full bleed); plain black when
+        // unset or missing.
+        LLIconCtrl* background = sInstance->getChild<LLIconCtrl>("splash_background");
+        const std::string image_path = sanitize_image_path(gSavedSettings.getString("FSLocalLoginSplashImage"));
+        bool have_custom = false;
+        if (!image_path.empty() && LLFile::isfile(image_path))
+        {
+            LLViewerFetchedTexture* tex = LLViewerTextureManager::getFetchedTextureFromUrl(
+                "file://" + image_path, FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI);
+            if (tex)
+            {
+                background->setValue(LLSD(tex->getID()));
+                have_custom = true;
+            }
+        }
+        background->setVisible(have_custom);
+        return;
+    }
+    sInstance->getChildView("login_splash_image")->setVisible(false);
+    sInstance->getChildView("login_html")->setVisible(true);
 
     LLURI login_page = LLURI(LLGridManager::getInstance()->getLoginPage());
     LLSD params(login_page.queryMap());
