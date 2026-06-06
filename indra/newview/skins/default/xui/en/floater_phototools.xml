@@ -866,7 +866,7 @@
 				 height="16"
 				 left="5" 
 				 top_pad="7"
-				 width="135"
+				 width="140"
 				 word_wrap="false"
 				 layout="topleft"
 				 tool_tip="Controls the types of shadows rendered from light sources. Point lights without projection features create lighting effects but do not cast shadows. Projected light textures remain visible regardless of this setting.">
@@ -881,7 +881,7 @@
 				 left_pad="0"
 				 top_delta="-2"
 				 name="ShadowDetail"
-				 right="-5">
+				 right="-2">
 					<combo_box.item
 					 label="None"
 					 name="0"
@@ -901,7 +901,7 @@
 				 top_pad="5"
 				 follows="top|left"
 				 height="16"
-				 width="135"
+				 width="140"
 				 word_wrap="false"
 				 layout="topleft"
 				 left="5"
@@ -916,7 +916,7 @@
 				 left_pad="0"
 				 top_delta=""
 				 name="LocalLightsDetail"
-				 right="-5">
+				 right="-2">
 				  <combo_box.item
 				   label="Full (default)"
 				   name="3"
@@ -3798,7 +3798,7 @@
 				 left="3"
 				 tool_tip="Displays all HUD (Heads-Up Display) attachments currently worn by your avatar. Disabling this hides HUDs, which can be useful for reducing screen clutter or improving performance."
 				 top_pad="10"
-				 label="Show the HUD attached to Your Avatar"
+				 label="Show the HUD attached to your Avatar"
 				 name="Show HUD Attachments">
 					<check_box.on_check
 					 function="View.CheckHUDAttachments"/>
@@ -3807,7 +3807,7 @@
 				</check_box>
 				<check_box
 				 follows="top|left"
-				 label="Slow-mo Animation - Your Avatar and Viewer"
+				 label="Slow-mo Animation - Your Avatar &amp; Viewer"
 				 layout="topleft"
 				 left="3"
 				 top_pad="10"
@@ -4504,7 +4504,7 @@
 				<check_box
 				 name="CB_Move_Avatar"
 				 control_name="JoystickAvatarEnabled"
-				 label="Use the 3D Mouse to move the avatar"
+				 label="Use 3D Mouse to move the avatar"
 				 layout="topleft"
 				 left="3"
 				 top_pad="7"
@@ -4513,7 +4513,7 @@
 				<check_box
 				 name="CB_Move_Objects"
 				 control_name="JoystickBuildEnabled"
-				 label="Use the 3D Mouse to move objects (building)"
+				 label="Use 3D Mouse to move objects (building)"
 				 tool_tip="Enables the 3D mouse for object manipulation during building and editing."
 				 layout="topleft"
 				 left="3"

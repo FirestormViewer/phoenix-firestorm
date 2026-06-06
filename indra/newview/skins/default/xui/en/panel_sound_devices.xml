@@ -196,5 +196,5 @@
        name="unmute_btn"
        label="Unmute"
        top_delta="-6"
-       width="110" />
+       width="125" />
 </panel>

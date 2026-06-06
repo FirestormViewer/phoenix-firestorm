@@ -702,10 +702,10 @@
 				 name="T_Mouse_Sensitivity"
 				 follows="left|top"
 				 layout="topleft"
-				 left="10"
+				 left="5"
 				 top_pad="15"
 				 tool_tip="Controls responsiveness of mouse when in mouselook mode."
-				 width="100">
+				 width="105">
 					Mouse Sensitivity
 				</text>
 				<slider
@@ -741,7 +741,7 @@
 				 height="16"
 				 label="Display avatar in mouselook"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 tool_tip="Display avatar and attachments below neck while in mouselook. Default is OFF."
 				 name="first_person_avatar_visible"
 				 top_pad="10"
@@ -752,7 +752,7 @@
 				 height="16"
 				 label="Smooth Mouselook Movements"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 tool_tip="Smooths out motion of mouse when in mouselook mode."
 				 name="MouseSmooth"
 				 top_pad="2"
@@ -799,7 +799,7 @@
 				 height="16"
 				 label="Clicking your avatar keeps camera position"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 name="clickonavatarkeepscamera"
 				 width="250"
 				 control_name="ClickOnAvatarKeepsCamera"
@@ -810,7 +810,7 @@
 				 height="16"
 				 label="Reset camera position after teleport"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 name="FSResetCameraOnTP"
 				 width="250"
 				 control_name="FSResetCameraOnTP"
@@ -821,7 +821,7 @@
 				 height="16"
 				 label="Allow the camera to move w/o constraints"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 name="ignorecameraconstraints"
 				 width="250"
 				 control_name="FSIgnoreSimulatorCameraConstraints"
@@ -832,7 +832,7 @@
 				 height="16"
 				 label="Reset camera position on avatar movement"
 				 layout="topleft"
-				 left="5"
+				 left="0"
 				 name="resetcameraonmovement"
 				 width="250"
 				 control_name="FSResetCameraOnMovement"
@@ -1045,7 +1045,7 @@
 				<check_box
 				 name="CB_Auto_Leveling"
 				 control_name="AutoLeveling"
-				 label="Enable Auto Leveling (Prevents Camera Roll)"
+				 label="Auto Leveling (Prevents Camera Roll)"
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
@@ -1053,7 +1053,7 @@
 				<check_box
 				 name="CB_3D_Mouse_Avatar"
 				 control_name="JoystickAvatarEnabled"
-				 label="Use the 3D Mouse to move the avatar"
+				 label="Use 3D Mouse to move the avatar"
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
@@ -1061,7 +1061,7 @@
 				<check_box
 				 name="CB_3D_Mouse_Build"
 				 control_name="JoystickBuildEnabled"
-				 label="Use the 3D Mouse to move objects (building)"
+				 label="Use 3D Mouse to move objects (building)"
 				 tool_tip="Uses the 3D mouse to move objects when building and editing."
 				 layout="topleft"
 				 left="6"

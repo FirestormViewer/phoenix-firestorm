@@ -19,20 +19,20 @@
 				<text name="IndirectMaxComplexityText" width="60">
 					Kein Limit
 				</text>
-				<text name="WL Sky" width="67" tool_tip="Voreinstellungen für den Himmel.">
+				<text name="WL Sky" width="80" tool_tip="Voreinstellungen für den Himmel.">
 					Himmel:
 				</text>
-				<combo_box left_delta="77" name="WLPresetsCombo"/>
-				<text name="WL Water" width="67" tool_tip="Voreinstellungen für das Wasser.">
+				<combo_box name="WLPresetsCombo"/>
+				<text name="WL Water" width="80" tool_tip="Voreinstellungen für das Wasser.">
 					Wasser:
 				</text>
-				<combo_box left_delta="77" name="WaterPresetsCombo"/>
-				<text name="Day Cycle" width="67" tool_tip="Voreinstellungen für den Tageszyklus.">
+				<combo_box name="WaterPresetsCombo"/>
+				<text name="Day Cycle" width="80" tool_tip="Voreinstellungen für den Tageszyklus.">
 					Tageszyklus:
 				</text>
-				<combo_box left_delta="77" name="DCPresetsCombo"/>
-				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..." width="227"/>
-				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück." left="234"/>
+				<combo_box name="DCPresetsCombo"/>
+				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..." width="226"/>
+				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück." left="233"/>
 				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren" left="255"/>
 			</layout_panel>
 		</layout_stack>

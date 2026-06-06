@@ -5,7 +5,7 @@
 		Einträge, die für die Startseite nicht akzeptiert
 werden, sind markiert:
 	</text>
-	<button label="Hinzufügen" name="whitelist_add"/>
+	<button label="Hinzufügen" name="whitelist_add" width="80"/>
 	<button label="Löschen" name="whitelist_del"/>
 	<text name="home_url_fails_whitelist">
 		Achtung: Die auf der Registerkarte Allgemein festgelegte Startseite wird von der Whitelist nicht akzeptiert. Sie wurde deaktiviert bis ein gültiger Eintrag hinzugefügt wurde.

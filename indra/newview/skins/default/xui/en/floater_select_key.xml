@@ -9,7 +9,7 @@
  height="116"
  layout="topleft"
  name="modal container"
- width="280">
+ width="290">
   <floater.string
    name="keyboard">
     Keyboard
@@ -48,7 +48,7 @@ Allowed input: [INPUT].
      initial_value="false"
      label="Apply to all"
      layout="topleft"
-     left="90"
+     left="100"
      name="apply_all"
      tool_tip="Viewer uses different control combinations depending on what you are doing in world, setting this will apply your change to all combinations"
      top_pad="8"
@@ -58,7 +58,7 @@ Allowed input: [INPUT].
      height="23"
      label="Set Empty"
      layout="topleft"
-     left="8"
+     left="13"
      name="SetEmpty"
      top_pad="6"
      width="80" />
