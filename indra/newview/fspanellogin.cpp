@@ -60,6 +60,8 @@
 #include "llviewerhelp.h"
 #include "llviewertexturelist.h"
 #include "lliconctrl.h"        // offline login splash background
+#include "lldir.h"             // local login image decoding
+#include "llimagej2c.h"        // local login image decoding
 #include "llviewermenu.h"           // for handle_preferences()
 #include "llviewernetwork.h"
 #include "llviewerwindow.h"         // to link into child list
@@ -212,6 +214,35 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
     else
     {
         buildFromFile( "panel_fs_login.xml");
+    }
+
+    // Offline login splash: built at runtime instead of in XUI because
+    // skins (e.g. StarLight) override the login layout and would lack
+    // these widgets, silently turning the splash into a black screen
+    // (getChild would hand the code dummy widgets). Cloning the web
+    // page's rect and follows puts the splash exactly where the page
+    // would be on every skin, present or future.
+    {
+        LLView* html_view = getChildView("login_html");
+
+        LLPanel::Params panel_p;
+        panel_p.name("login_splash_image");
+        panel_p.rect(html_view->getRect());
+        panel_p.follows.flags(FOLLOWS_ALL);
+        panel_p.visible(false);
+        panel_p.background_visible(true);
+        panel_p.background_opaque(true);
+        panel_p.bg_opaque_color(LLColor4::black);
+        panel_p.bg_alpha_color(LLColor4::black);
+        LLPanel* splash_panel = LLUICtrlFactory::create<LLPanel>(panel_p);
+        addChild(splash_panel);
+
+        LLIconCtrl::Params icon_p;
+        icon_p.name("splash_background");
+        icon_p.rect(splash_panel->getLocalRect());
+        icon_p.follows.flags(FOLLOWS_ALL);
+        icon_p.visible(false);
+        splash_panel->addChild(LLUICtrlFactory::create<LLIconCtrl>(icon_p));
     }
 
     reshape(rect.getWidth(), rect.getHeight());
@@ -892,6 +923,75 @@ static std::string sanitize_image_path(std::string path)
     return path;
 }
 
+// Synchronously load, decode, and upload a user-chosen image file,
+// returning a texture ID usable by LLIconCtrl (null on any failure).
+// The async file:// fetch path aborts silently on files it can't
+// handle (oversized non-power-of-two snapshots, odd extensions),
+// leaving a black screen with no way to detect it; decoding here makes
+// failure observable so callers can fall back to bundled art. Modeled
+// on LLLocalBitmap::updateSelf/decodeBitmap. Results are cached per
+// file revision (path + mtime + size), so rebuilding the login panel
+// doesn't re-upload textures.
+// static
+LLUUID FSPanelLogin::loadLocalLoginImage(const std::string& path)
+{
+    if (path.empty() || !LLFile::isfile(path))
+    {
+        return LLUUID::null;
+    }
+
+    std::string cache_key = path;
+    llstat st;
+    if (LLFile::stat(path, &st) == 0)
+    {
+        cache_key += llformat("|%lld|%lld", (long long)st.st_mtime, (long long)st.st_size);
+    }
+
+    static std::map<std::string, LLUUID> s_cache;
+    auto found = s_cache.find(cache_key);
+    if (found != s_cache.end())
+    {
+        return found->second;
+    }
+    // Cache the failure result up front; overwritten on success.
+    LLUUID& cached_id = s_cache[cache_key];
+
+    const EImageCodec codec = LLImageBase::getCodecFromExtension(gDirUtilp->getExtension(path));
+    LLPointer<LLImageFormatted> image = LLImageFormatted::createFromType(codec);
+    if (image.isNull() || !image->load(path))
+    {
+        LL_WARNS() << "Could not load login image: " << path << LL_ENDL;
+        return LLUUID::null;
+    }
+    if (codec == IMG_CODEC_J2C)
+    {
+        static_cast<LLImageJ2C*>(image.get())->setDiscardLevel(0);
+    }
+    LLPointer<LLImageRaw> raw = new LLImageRaw;
+    if (!image->decode(raw, 0.0f))
+    {
+        LL_WARNS() << "Could not decode login image: " << path << LL_ENDL;
+        return LLUUID::null;
+    }
+    // The texture pipeline wants power-of-two images no larger than the
+    // viewer maximum; snapshots are usually neither.
+    raw->biasedScaleToPowerOfTwo(LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT);
+
+    LLUUID id;
+    id.generate();
+    LLPointer<LLViewerFetchedTexture> tex =
+        new LLViewerFetchedTexture("file://" + path, FTT_LOCAL_FILE, id, true);
+    if (!tex->createGLTexture(0, raw))
+    {
+        LL_WARNS() << "Could not create GL texture for login image: " << path << LL_ENDL;
+        return LLUUID::null;
+    }
+    tex->ref(); // keep alive for the session; released with gTextureList at shutdown
+    gTextureList.addImage(tex, TEX_LIST_STANDARD);
+    cached_id = id;
+    return id;
+}
+
 void FSPanelLogin::loadLoginPage()
 {
     if (!sInstance) return;
@@ -904,15 +1004,10 @@ void FSPanelLogin::loadLoginPage()
     if (show_logo)
     {
         const std::string logo_path = sanitize_image_path(gSavedSettings.getString("FSLoginLogoImage"));
-        LLViewerFetchedTexture* logo_tex = nullptr;
-        if (!logo_path.empty() && LLFile::isfile(logo_path))
+        const LLUUID logo_id = loadLocalLoginImage(logo_path);
+        if (logo_id.notNull())
         {
-            logo_tex = LLViewerTextureManager::getFetchedTextureFromUrl(
-                "file://" + logo_path, FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI);
-        }
-        if (logo_tex)
-        {
-            bar_logo->setValue(LLSD(logo_tex->getID()));
+            bar_logo->setValue(LLSD(logo_id));
         }
         else
         {
@@ -927,21 +1022,15 @@ void FSPanelLogin::loadLoginPage()
         sInstance->getChildView("login_splash_image")->setVisible(true);
 
         // User-chosen background image (full bleed); plain black when
-        // unset or missing.
+        // unset or undecodable.
         LLIconCtrl* background = sInstance->getChild<LLIconCtrl>("splash_background");
         const std::string image_path = sanitize_image_path(gSavedSettings.getString("FSLocalLoginSplashImage"));
-        bool have_custom = false;
-        if (!image_path.empty() && LLFile::isfile(image_path))
+        const LLUUID bg_id = loadLocalLoginImage(image_path);
+        if (bg_id.notNull())
         {
-            LLViewerFetchedTexture* tex = LLViewerTextureManager::getFetchedTextureFromUrl(
-                "file://" + image_path, FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI);
-            if (tex)
-            {
-                background->setValue(LLSD(tex->getID()));
-                have_custom = true;
-            }
+            background->setValue(LLSD(bg_id));
         }
-        background->setVisible(have_custom);
+        background->setVisible(bg_id.notNull());
         return;
     }
     sInstance->getChildView("login_splash_image")->setVisible(false);

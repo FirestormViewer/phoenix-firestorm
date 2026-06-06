@@ -90,6 +90,7 @@ class LLViewerTextureList
     friend class LLTextureView;
     friend class LLViewerTextureManager;
     friend class LLLocalBitmap;
+    friend class FSPanelLogin; // <FS> local login splash/logo images
 
 public:
     static bool createUploadFile(LLPointer<LLImageRaw> raw_image,

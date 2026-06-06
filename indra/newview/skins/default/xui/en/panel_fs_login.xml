@@ -36,29 +36,9 @@
       top="18"
       height="670"
       width="1024" />
-  <panel
-      name="login_splash_image"
-      follows="all"
-      layout="topleft"
-      left="0"
-      top="18"
-      height="670"
-      width="1024"
-      background_visible="true"
-      background_opaque="true"
-      bg_opaque_color="Black"
-      bg_alpha_color="Black"
-      visible="false">
-    <icon
-        name="splash_background"
-        follows="all"
-        layout="topleft"
-        left="0"
-        top="0"
-        height="670"
-        width="1024"
-        visible="false" />
-  </panel>
+  <!-- The offline login splash (login_splash_image / splash_background)
+       is created at runtime in FSPanelLogin so that skins overriding
+       this layout can't lose it. -->
   <layout_stack
       animate="false"
       clip="false"

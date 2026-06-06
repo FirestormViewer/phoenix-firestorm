@@ -414,11 +414,13 @@ Call CheckCPUFlags							# Make sure we have SSE2 support
 # Two checks here, if we are an AVX2 build we want to abort if no AVX2 support on this CPU.
 # If we are not an AVX2 build but the CPU can support it then we want to prompt them to download the AVX2 version
 # but also allow them to override.
+# <FS> Skip the "AVX2 build available" upsell on non-AVX2 builds: there is no
+# AVX2 build of this fork, so the download URL is a dead page (and accepting
+# the download quits the installer).
 ${If} ${ISAVX2} == 1
   Call CheckCPUFlagsAVX2
-${Else}
-  Call CheckCPUFlagsAVX2_Prompt
 ${EndIf}
+# </FS>
 
 Call CheckWindowsVersion					# Don't install On unsupported systems
     Push $0
