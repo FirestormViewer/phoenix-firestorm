@@ -7,7 +7,7 @@
 //
 
 // Bridge platform
-string BRIDGE_VERSION = "2.29"; // This should match fslslbridge.cpp
+string BRIDGE_VERSION = "2.30"; // This should match fslslbridge.cpp
 string gLatestURL;
 integer gViewerIsFirestorm;
 integer gTryHandshakeOnce = TRUE;
@@ -31,6 +31,9 @@ float FLIGHT_CHECK_NORMAL = 0.5;
 float FLIGHT_CHECK_SLOW = 3.0;
 float gFlightAssistPushForce;
 
+// Kill feed (Combat 2.0 combat log relay)
+integer gKillFeedListener;
+
 // OpenCollar/LockMeister AO interface
 integer gAO_EnabledOC;
 integer gAO_EnabledLM;
@@ -43,6 +46,32 @@ key gAO_CollarKey;
 //
 // Bridge platform helper functions
 //
+
+kfForwardDeath(string ev)
+{
+    // Resolve the weapon name while the objects still exist. Projectiles
+    // usually de-rez on impact, so fall back to the rezzing object (the
+    // gun), which normally persists as an attachment on the killer.
+    string wname = "";
+    key kfsource = (key)llJsonGetValue(ev, ["source"]);
+    if (kfsource)
+    {
+        list d = llGetObjectDetails(kfsource, [OBJECT_NAME]);
+        if (d != []) wname = llList2String(d, 0);
+    }
+    if (wname == "")
+    {
+        key kfrezzer = (key)llJsonGetValue(ev, ["rezzer"]);
+        if (kfrezzer)
+        {
+            list d = llGetObjectDetails(kfrezzer, [OBJECT_NAME]);
+            if (d != []) wname = llList2String(d, 0);
+        }
+    }
+    if (wname != "") ev = llJsonSetValue(ev, ["weapon_name"], wname);
+
+    llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+}
 
 requestBridgeURL()
 {
@@ -551,6 +580,25 @@ default
                 }
             }
 
+            else if (cmd == "KillFeedListen")
+            {
+                // Kill feed: listen to the region combat log (Combat 2.0).
+                // Filtered to COMBAT_LOG_ID so only authentic system events
+                // arrive; scripts cannot forge their source UUID.
+                if (llList2Integer(commandList, 1))
+                {
+                    if (!gKillFeedListener)
+                    {
+                        gKillFeedListener = llListen(COMBAT_CHANNEL, "", COMBAT_LOG_ID, "");
+                    }
+                }
+                else if (gKillFeedListener)
+                {
+                    llListenRemove(gKillFeedListener);
+                    gKillFeedListener = 0;
+                }
+            }
+
             else if (cmd == "RelockMoveLockAfterMovement")
             {
                 gRelockMoveLockAfterMovement = llList2Integer(commandList, 1);
@@ -594,6 +642,33 @@ default
 
     listen(integer fromChan, string senderName, key senderID, string msg)
     {
+
+        // Kill feed: combat log events. The listener is filtered to
+        // COMBAT_LOG_ID, so everything arriving here is sim-generated.
+        // Only DEATH events are forwarded; DAMAGE events are dropped to
+        // keep the event queue healthy in large battles. The simulator
+        // may batch several events into one JSON array.
+        if (fromChan == COMBAT_CHANNEL)
+        {
+            if (llGetSubString(msg, 0, 0) == "[")
+            {
+                integer i = 0;
+                string ev = llJsonGetValue(msg, [i]);
+                while (ev != JSON_INVALID)
+                {
+                    if (llJsonGetValue(ev, ["event"]) == "DEATH")
+                    {
+                        kfForwardDeath(ev);
+                    }
+                    ev = llJsonGetValue(msg, [++i]);
+                }
+            }
+            else if (llJsonGetValue(msg, ["event"]) == "DEATH")
+            {
+                kfForwardDeath(msg);
+            }
+            return;
+        }
 
         // OpenCollar AO interface listen handler
         if (fromChan == gAO_ChannelOC)

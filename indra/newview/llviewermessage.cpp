@@ -145,6 +145,7 @@
 #include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
+#include "fsfloaterkillfeed.h"
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "llattachmentsmgr.h"
@@ -3135,6 +3136,13 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                     return;
                 }
                 // </FS:KC>
+
+                // Kill Feed: combat log DEATH events relayed by a worn
+                // listener script (see doc/killfeed_relay.lsl)
+                if (FSFloaterKillFeed::handleChatMessage(mesg, from_id, owner_id))
+                {
+                    return;
+                }
 
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
                 // TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release

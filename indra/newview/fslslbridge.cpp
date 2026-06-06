@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscommon.h"
+#include "fsfloaterkillfeed.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
 
@@ -36,6 +37,7 @@
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
 #include "llavatarappearance.h"
+#include "llfloaterreg.h"
 #include "llinventoryfunctions.h"
 #include "llmaniptranslate.h"
 #include "llnotificationsutil.h"
@@ -55,7 +57,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 29;
+static const U32 FS_BRIDGE_MINOR_VERSION = 30;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -302,6 +304,14 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
         }
         // </FS:PP>
 
+        // Kill Feed: re-arm the bridge's combat log listener after any bridge
+        // handshake (login, recreation, region change) when the kill feed
+        // overlay is enabled.
+        if (gSavedSettings.getBOOL("FSKillFeedEnabled"))
+        {
+            viewerToLSL("KillFeedListen|1");
+        }
+
         return true;
     }
     else if (tag == "<bridgeRequestError/>")
@@ -516,6 +526,23 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
         }
     }
     // </FS:PP>
+
+    // Kill Feed: combat log DEATH event forwarded by the bridge
+    else if (tag == "<bridgeKillFeed>")
+    {
+        status = true;
+        static const std::string end_tag = "</bridgeKillFeed>";
+        size_t payload_start = tag.size();
+        size_t payload_end = message.find(end_tag);
+        if (payload_end != std::string::npos && payload_end > payload_start)
+        {
+            FSFloaterKillFeed::handleBridgeEvent(std::string(message.substr(payload_start, payload_end - payload_start)));
+        }
+        else
+        {
+            LL_WARNS("FSLSLBridge") << "KillFeed - Received malformed event from bridge (missing ending tag)" << LL_ENDL;
+        }
+    }
 
     // <FS:PP> Error responses handling
     else if (tag == "<bridgeError ")
