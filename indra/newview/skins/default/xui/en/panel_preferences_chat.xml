@@ -38,7 +38,7 @@
              left="20"
              height="12"
              name="console_font_size"
-             width="150"
+             width="163"
              top="10">
                 Onscreen console font size:
             </text>
@@ -274,12 +274,12 @@
              increment="1"
              initial_value="20"
              label="Fade chat after:"
-             label_width="90"
+             label_width="95"
              left="25"
              max_val="60"
              min_val="2"
              name="fade_chat_time"
-             width="130" />
+             width="140" />
             <text
              follows="left|top"
              height="20"
