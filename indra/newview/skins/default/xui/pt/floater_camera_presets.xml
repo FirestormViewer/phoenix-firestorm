@@ -1,2 +1,3 @@
-<?xml version="1.0" ?>
-<floater name="floater_camera_presets" title="MINHAS PREDEFINIÇÕES DE CÂMERA"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Predefinições de câmera" name="floater_camera_presets">
+</floater>

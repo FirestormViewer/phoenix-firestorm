@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Popups" name="popups" title="Popups">
-<tab_container name="tabs">
- 
-    <!-- World -->
-    <panel label="Mundo" name="tab-world">
-	<check_box label="Avisar: Quando eu gasto ou recebo L$" name="notify_money_change_checkbox"/>
-    </panel>
+<panel label="Notificações" name="popups" title="Notificações">
+	<tab_container name="tabs">
+		<!-- World -->
+		<panel label="Mundo" name="tab-world">
+			<check_box label="Notificar quando eu gastar ou receber L$" name="notify_money_change_checkbox"/>
+			<check_box name="FSPaymentInfoInChat" label="Notificar transações de L$ no chat local"/>
+			<check_box label="Notificar quando o canal do simulador mudar ao trocar de região" name="FSShowServerVersionChangeNotice" tool_tip="Mostra um aviso quando a versão do simulador da região mudar ao trocar de região ou se teleportar."/>
+			<check_box label="Buscar notícias atuais de status.secondlifegrid.net ao entrar" name="AutoQueryGridStatus"/>
+			<check_box label="Ativar notificações Growl" name="notify_growl_checkbox"/>
+			<check_box label="Usar Growl mesmo quando o Firestorm estiver ativo" name="notify_growl_always_checkbox"/>
+			<check_box label="Filtrar IMs duplicadas quando já exibidas como alerta de palavra-chave" name="FSFilterGrowlKeywordDuplicateIMs"/>
+		</panel>
 
-    <!-- Alerts -->
-    <panel label="Alerts" name="tab-alerts">
-	<text name="show_label">
-		Mostrar sempre:
-	</text>
-	<text name="dont_show_label">
-		Nunca mostrar:
-	</text>
-	</panel>
+		<!-- People -->
+		<panel label="Pessoas" name="tab-people">
+			<check_box label="Piscar ícone do aplicativo com novas mensagens quando o [APP_NAME] estiver sem foco." name="FSFlashOnMessage"/>
+			<check_box label="Piscar ícone do aplicativo também para IMs recebidas de objetos" name="FSFlashOnObjectIM"/>
+			<check_box label="Notificar quando alguém mudar o nome de exibição" name="FSShowDisplayNameUpdateNotification"/>
+			<check_box label="Notificar quando eu bloquear ou desbloquear alguém" name="FSReportBlockToNearbyChat"/>
+			<text name="friends_logon_label">
+				Mostrar quando meus amigos entram ou saem:
+			</text>
+			<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
+			<check_box name="OnlineOfflinetoNearbyChat" label="No chat local e no console"/>
+			<check_box label="Somente no chat local" name="OnlineOfflinetoNearbyChatHistory"/>
+		</panel>
 
-</tab_container>
+		<!-- Objects & Scripts -->
+		<panel label="Objetos e scripts" name="tab-objects">
+			<check_box label="Piscar ícone do aplicativo com novos diálogos de script quando o [APP_NAME] estiver sem foco." name="FSFlashOnScriptDialog"/>
+			<check_box label="Mostrar mensagens de colisão no chat local" name="FSCollisionMessagesInChat"/>
+			<check_box label="Mostrar erros de script em:" name="show_script_errors"/>
+			<radio_group name="show_script_errors_location">
+				<radio_item label="Chat local" name="script_0"/>
+				<radio_item label="Janela separada" name="script_1"/>
+			</radio_group>
+			<check_box label="Notificar quando a quantidade de scripts na região mudar:" name="FSReportTotalScriptCountChanges"/>
+			<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Limite a partir do qual mudanças na quantidade de scripts da região são notificadas (padrão: 100)"/>
+			<check_box label="Enviar mensagens de colisão para scripts. Canal:" name="FSReportCollisionMessages"/>
+			<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canal usado para enviar mensagens de colisão para scripts (padrão: -25000)"/>
+		</panel>
+
+		<!-- Inventory -->
+		<panel label="Inventário" name="tab-inventory">
+			<check_box label="Notificar quando eu precisar pagar ao enviar conteúdo" name="FSShowUploadPaymentToast"/>
+			<check_box label="Notificar quando uma landmark for criada" name="landmark_created_checkbox"/>
+			<check_box label="Desativar notificação de devolução de objeto" name="FSDisableReturnObjectNotification"/>
+			<check_box label="Registrar no chat local os nomes de arquivo de snapshots salvos" name="FSLogSnapshotsToLocal"/>
+			<check_box label="Notificar quando objetos chegarem rápido demais" name="FSNotifyIncomingObjectSpam"/>
+			<check_box label="Notificar quando objetos de outros residentes chegarem rápido demais" name="FSNotifyIncomingObjectSpamFrom"/>
+			<slider name="FSOfferThrottleMaxCount" label="Limite para objetos chegando rápido demais:" label_width="260" width="385" tool_tip="Define o limite de objetos recebidos em 10 segundos a partir do qual o bloqueio passa a ser aplicado. Padrão: 5"/>
+		</panel>
+
+		<!-- Alerts -->
+		<panel label="Alertas" name="tab-alerts">
+			<text name="show_label" tool_tip="Lista de todos os alertas. Marcado = sempre mostrar; desmarcado = nunca mostrar.">
+				Alertas que podem ser sempre ou nunca mostrados:
+			</text>
+			<filter_editor label="Filtrar alertas" name="popup_filter" tool_tip="Digite aqui um termo para filtrar a lista de alertas." />
+			<scroll_list name="all_popups">
+				<column label="Mostrar" name="alert_enabled_check" width="22" />
+				<column label="Alerta" name="alert_label" width="460" />
+			</scroll_list>
+		</panel>
+	</tab_container>
 </panel>

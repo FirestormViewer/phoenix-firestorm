@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Controles" name="controls">
+	<combo_box name="key_mode">
+		<combo_box.item label="Em terceira pessoa" name="third_person"/>
+		<combo_box.item label="Em primeira pessoa (Mouselook)" name="first_person"/>
+		<combo_box.item label="Ao editar avatar" name="edit_avatar"/>
+		<combo_box.item label="Ao sentar" name="sitting"/>
+	</combo_box>
+	<button width="170" label="Restaurar padrões" tool_tip="Restaura a atribuição de teclas padrão para todos os modos." name="restore_defaults"/>
+</panel>

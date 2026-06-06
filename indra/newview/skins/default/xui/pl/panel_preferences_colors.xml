@@ -41,6 +41,9 @@
 			<text name="direct_label">
 				Bezpośrednie
 			</text>
+			<text name="server_chat_history_label">
+				Historia czatu grupy z serwera
+			</text>
 			<text name="header_colors">
 				Nagłówki czatu:
 			</text>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Pessoas" name="people_panel">
+	<string name="no_recent_people" value="Não há ninguém recente. Procurando pessoas? Use a [secondlife:///app/search/people Busca] ou o [secondlife:///app/worldmap Mapa]." />
+	<string name="no_filtered_recent_people" value="Não encontrou o que procurava? Tente a [secondlife:///app/search/people/[SEARCH_TERM] Busca]." />
+	<string name="no_one_near" value="Não há ninguém por perto. Procurando pessoas? Use a [secondlife:///app/search/people Busca] ou o [secondlife:///app/worldmap Mapa]." />
+	<string name="no_one_filtered_near" value="Não encontrou o que procurava? Tente a [secondlife:///app/search/people/[SEARCH_TERM] Busca]." />
+	<string name="no_friends_online" value="Nenhum amigo online" />
+	<string name="no_friends" value="Sem amigos" />
+	<string name="no_friends_msg">
+		Encontre amigos usando a [secondlife:///app/search/people Busca] ou clique com o botão direito em um residente para adicioná-lo como amigo.
+Procurando pessoas? Use o [secondlife:///app/worldmap Mapa].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Não encontrou o que procurava? Tente a [secondlife:///app/search/people/[SEARCH_TERM] Busca].
+	</string>
+	<string name="people_filter_label" value="Filtrar pessoas" />
+	<string name="groups_filter_label" value="Filtrar grupos" />
+	<string name="no_filtered_groups_msg" value="Não encontrou o que procurava? Tente a [secondlife:///app/search/groups/[SEARCH_TERM] Busca]." />
+	<string name="no_groups_msg" value="Procurando grupos? Tente a [secondlife:///app/search/groups Busca]." />
+	<string name="MiniMapToolTipMsg" value="[REGION] (Duplo clique para abrir o mapa; Shift + arrastar para mover a visualização)" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Duplo clique para teleportar; Shift + arrastar para mover a visualização)" />
+	<string name="avatar_name_count" value="Nome [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string name="empty_list">
+		Este conjunto de contatos está vazio.
+	</panel.string>
+	<panel.string name="no_sets">
+		Sem conjuntos
+	</panel.string>
+	<panel.string name="all_sets">
+		Todos os conjuntos
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Apelidos
+	</panel.string>
+	<tab_container name="tabs">
+		<panel label="Por perto" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Lista" />
+				<panel name="radarmap_options_panel" label="Opções">
+					<scroll_container label="Opções" name="radarmap_options_scroll_container">
+						<container_view name="radarmap_options_container_view" label="Opções">
+							<panel name="radarmap_options_scrolled_panel">
+								<check_box label="Mostrar minimapa acima do radar" name="ShowRadarMinimap"/>
+								<check_box label="Mostrar avatares ignorados e na lista de bloqueio" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Avisar ao entrar na distância de renderização" name="RadarReportDrawRangeEnter"/>
+								<check_box label="Avisar ao sair da distância de renderização" name="RadarReportDrawRangeLeaving"/>
+								<check_box label="Avisar ao entrar no alcance do chat" name="RadarReportChatRangeEnter"/>
+								<check_box label="Avisar ao sair do alcance do chat" name="RadarReportChatRangeLeave"/>
+								<check_box label="Avisar ao entrar na região" name="RadarReportSimRangeEnter"/>
+								<check_box label="Avisar ao sair da região" name="RadarReportSimRangeLeave"/>
+								<check_box label="Enviar avisos de entrada para scripts" name="RadarEnterChannelAlert"/>
+								<check_box label="Enviar avisos de saída para scripts" name="RadarLeaveChannelAlert"/>
+								<check_box label="Usar ponte LSL" tool_tip="Se ativado, funções do radar que determinam a localização de avatares em grande altitude são auxiliadas pela ponte LSL, especialmente quando estão além da distância de renderização." name="FSRadarEnhanceByBridge"/>
+								<check_box label="Colorir nomes por distância" name="FSRadarColorNamesByDistance"/>
+								<check_box label="Alcance:" tool_tip="Limita os resultados a um raio definido" name="LimitRadarByRange" />
+								<text name="radarmap_range_label" value="Formato do nome:"/>
+								<combo_box name="RadarNameFormat">
+									<combo_box.item name="RadarNameFormat_display" label="Nome de exibição" />
+									<combo_box.item name="RadarNameFormat_user" label="Nome de usuário" />
+									<combo_box.item name="RadarNameFormat_displayuser" label="Nome de exibição (nome de usuário)" />
+									<combo_box.item name="RadarNameFormat_userdisplay" label="Nome de usuário (nome de exibição)" />
+								</combo_box>
+								<text name="columns_label" value="Colunas exibidas:" />
+								<check_box label="Voz" name="column_voice" />
+								<check_box label="Hora" name="column_seen" />
+								<check_box label="Idade" name="column_age" />
+								<check_box label="Mesma região" name="column_region" />
+								<check_box label="Status digitando" name="column_typing_status" />
+								<check_box label="Status sentado" name="column_sitting_status" />
+								<check_box label="Informações de pagamento" name="column_flags" />
+								<check_box label="Notas" name="notes_flags" />
+							</panel>
+						</container_view>
+					</scroll_container>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel label="Recentes" name="recent_panel" />
+		<panel label="Bloqueados" name="blocked_panel" />
+	</tab_container>
+</panel>

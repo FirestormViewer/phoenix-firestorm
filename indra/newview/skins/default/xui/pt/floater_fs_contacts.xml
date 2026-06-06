@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="imcontacts" title="Contatos">
+	<string name="no_friends" value="sem amigos"/>
+	<string name="no_filtered_groups_msg" value="Nenhum grupo encontrado para „[SEARCH_TERM]“."/>
+	<string name="no_groups_msg" value="Está procurando grupos para entrar? Tente a [secondlife:///app/search/groups busca]."/>
+	<string name="favorite_label">Fixar</string>
+	<string name="unfavorite_label">Desafixar</string>
+	<tab_container name="friends_and_groups">
+		<panel label="Amigos" name="friends_panel"/>
+		<panel label="Grupos" name="groups_panel"/>
+		<panel label="Conjuntos de contatos" name="contact_sets_panel"/>
+	</tab_container>
+</floater>

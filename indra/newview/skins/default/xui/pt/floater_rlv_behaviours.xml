@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlv_behaviours" title="Restrições RLV ativas">
+	<tab_container name="behaviour_tab">
+		<panel label="Restrições" name="behaviour_panel">
+			<scroll_list name="behaviour_list" tool_tip="Lista de todas as restrições RLVa atuais.">
+				<scroll_list.columns label="Restrição" name="behaviour"/>
+				<scroll_list.columns label="Nome do objeto" name="issuer"/>
+			</scroll_list>
+		</panel>
+		<panel label="Exceções" name="exception_panel">
+			<scroll_list name="exception_list" tool_tip="Lista de todas as exceções RLVa atuais.">
+				<scroll_list.columns label="Exceção" name="behaviour"/>
+				<scroll_list.columns label="Origem" name="option"/>
+				<scroll_list.columns label="Nome do objeto" name="issuer"/>
+			</scroll_list>
+		</panel>
+		<panel label="Modificadores" name="modifier_panel">
+			<scroll_list name="modifier_list" tool_tip="Lista de todos os modificadores RLVa atuais.">
+				<scroll_list.columns label="Modificador" name="modifier"/>
+				<scroll_list.columns label="Valor" name="value"/>
+				<scroll_list.columns label="Objeto principal" name="primary" />
+			</scroll_list>
+		</panel>
+	</tab_container>
+	<panel name="bottom_panel">
+		<button label="Copiar para a área de transferência" name="copy_btn" tool_tip="Copia as restrições para a área de transferência" width="181"/>
+		<icon name="dummy_icon" width="101"/>
+	</panel>
+</floater>

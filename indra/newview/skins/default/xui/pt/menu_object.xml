@@ -4,32 +4,59 @@
 		<menu_item_call.on_enable name="EnableTouch" parameter="Tocar"/>
 	</menu_item_call>
 	<menu_item_call label="Editar" name="Edit..."/>
+	<menu_item_call label="Editar material PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Construir" name="Build"/>
 	<menu_item_call label="Abrir" name="Open"/>
 	<menu_item_call label="Sentar aqui" name="Object Sit"/>
-	<menu_item_call label="Ficar de pé" name="Object Stand Up"/>
-	<menu_item_call label="Perfil do objeto" name="Object Inspect"/>
-	<menu_item_call label="Mais zoom" name="Zoom In"/>
-	<menu_item_call label="Exibir em linksets" name="show_in_linksets"/>
-	<menu_item_call label="Exibir em personagens" name="show_in_characters"/>
-	<context_menu label="Colocar no(a)" name="Put On">
+	<menu_item_call label="Levantar" name="Object Stand Up"/>
+	<context_menu label="Objeto" name="Object Features">
+		<menu_item_call label="Perfil do objeto" name="Object Inspect"/>
+		<menu_item_call label="Inspecionar" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Info de script (contador)" name="ScriptInfo"/>
+		<menu_item_call label="Vincular" name="Object Link"/>
+		<menu_item_call label="Desvincular" name="Object Unlink"/>
+		<menu_item_check label="Editar partes vinculadas" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Recompilar scripts (Mono)" name="Mono"/>
+		<menu_item_call label="Recompilar scripts (LSL)" name="LSL"/>
+		<menu_item_call label="Redefinir scripts" name="Object Reset Scripts"/>
+		<menu_item_call label="Iniciar scripts" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Parar scripts" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Remover scripts" name="Remove Scripts From Selection"/>
+	</context_menu>
+	<menu_item_call label="Aproximar" name="Zoom In"/>
+	<menu_item_call label="Mostrar em linksets" name="show_in_linksets"/>
+	<menu_item_call label="Mostrar em personagens" name="show_in_characters"/>
+	<context_menu label="Vestir" name="Put On">
 		<menu_item_call label="Vestir" name="Wear"/>
 		<menu_item_call label="Adicionar" name="Add"/>
 		<context_menu label="Anexar" name="Object Attach"/>
-		<context_menu label="Anexar o HUD" name="Object Attach HUD"/>
+		<context_menu label="Anexar HUD" name="Object Attach HUD"/>
 	</context_menu>
 	<context_menu label="Gerenciar" name="Remove">
 		<menu_item_call label="Denunciar abuso" name="Report Abuse..."/>
-		<menu_item_call label="Bloquear" name="Object Mute"/>
-		<menu_item_call label="Desbloquear" name="Object Unmute"/>
-		<menu_item_call label="Devolver" name="Return..."/>
+		<menu_item_call label="Silenciar" name="Object Mute"/>
+		<menu_item_call label="Remover silencio" name="Object Unmute"/>
 	</context_menu>
+	<menu_item_call label="Atualizar texturas" name="Texture Refresh"/>
+	<menu_item_call label="Nao renderizar" name="Derender"/>
+	<menu_item_call label="Nao renderizar + blacklist" name="DerenderPermanent"/>
+	<menu_item_call label="Devolver" name="Return..."/>
 	<menu_item_call label="Pegar" name="Pie Object Take"/>
-	<menu_item_call label="Pegar uma cópia" name="Take Copy"/>
+	<menu_item_call label="Pegar copia" name="Take Copy"/>
+	<context_menu label="Pegar varios" name="Take Multiple">
+		<menu_item_call label="Pegar como objeto combinado" name="Take combined"/>
+		<menu_item_call label="Pegar copia como objeto combinado" name="Take Copy combined"/>
+		<menu_item_call label="Pegar como objetos separados" name="Take Separate"/>
+		<menu_item_call label="Pegar copias como objetos separados" name="Take Copy Separate"/>
+	</context_menu>
 	<menu_item_call label="Pagar" name="Pay..."/>
 	<menu_item_call label="Comprar" name="Buy..."/>
+	<context_menu label="Salvar como" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Excluir" name="Delete"/>
-	<menu_item_call label="Bloquear proprietário da partícula" name="Mute Particle"/>
-	<menu_item_call label="Descartar XML" name="Dump XML"/>
+	<menu_item_call label="Bloquear dono de particulas" name="Mute Particle"/>
+	<menu_item_call label="Exportar XML" name="Dump XML"/>
 	<menu_item_call label="Redefinir esqueleto" name="Reset Skeleton"/>
 </context_menu>

@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script ed float" title="SCRIPT: NOVO SCRIPT">
+<floater name="script ed float" title="Script: Novo script">
 	<floater.string name="not_allowed">
-		Você não pode ver ou editar o script, uma vez que está definido como &quot;não&quot; copiar. Você precisa de permissões para ver ou editar um script dentro de um objeto.
+		Não é possível visualizar ou editar este script, pois ele possui permissões restritas. É necessário ter permissão total para visualizar ou editar um script dentro de um objeto.
 	</floater.string>
 	<floater.string name="script_running">
-		Executando
+		Em execução
 	</floater.string>
 	<floater.string name="Title">
-		SCRIPT: [NAME]
+		Script: [NAME]
 	</floater.string>
 	<floater.string name="experience_enabled">
-		Desmarque para remover a experiência atual
+		Desmarque para remover a experience atual
 	</floater.string>
 	<floater.string name="no_experiences">
-		Você não está autorizado a nenhuma experiência
+		Você não está autorizado em nenhuma experience
 	</floater.string>
 	<floater.string name="add_experiences">
-		Selecione para adicionar uma experiência
+		Selecione para adicionar uma experience
 	</floater.string>
 	<floater.string name="show_experience_profile">
-		Clique para visualizar o perfil da experiência
+		Clique para ver o perfil da experience
 	</floater.string>
 	<floater.string name="loading">
 		Carregando...
 	</floater.string>
-	<button label="Resetar" label_selected="Resetar" name="Reset"/>
-	<check_box initial_value="true" label="Correndo" name="running"/>
-	<check_box initial_value="true" label="Mono" left="86" name="mono"/>
-	<check_box label="Usar experiência:" name="enable_xp"/>
+	<text name="obj_name">Objeto de origem: [SOURCE_OBJECT]</text>
+	<button label="Redefinir" label_selected="Redefinir" name="Reset"/>
+	<check_box initial_value="true" label="Em execução" name="running"/>
+	<check_box initial_value="true" label="Mono" name="mono"/>
+	<check_box label="Usar experience:" name="enable_xp"/>
 	<button label="&gt;" name="view_profile"/>
 </floater>

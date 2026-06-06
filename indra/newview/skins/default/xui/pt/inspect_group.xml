@@ -8,15 +8,25 @@
 		Grupo privado
 	</string>
 	<string name="FreeToJoin">
-		Livre para ingressar
+		Entrada gratuita
 	</string>
 	<string name="CostToJoin">
-		[AMOUNT]L$ para ingressar
+		Entrada: L$[AMOUNT]
 	</string>
 	<string name="YouAreMember">
-		Você é um membro
+		Você é membro
 	</string>
-	<button label="Ingressar" name="join_btn"/>
-	<button label="Abandonar" name="leave_btn"/>
-	<button label="Visualizar Perfil" name="view_profile_btn"/>
+	<text name="group_subtitle">
+		123 membros
+	</text>
+	<text name="group_details">
+		Um grupo de pessoas encarregado de criar uma sala com um alce.
+Temam o alce! Temam! E também o mangusto!
+	</text>
+	<text name="group_cost">
+		Entrada: L$123
+	</text>
+	<button label="Entrar" name="join_btn"/>
+	<button label="Sair" name="leave_btn"/>
+	<button label="Ver perfil" name="view_profile_btn"/>
 </floater>

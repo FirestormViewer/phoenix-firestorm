@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Água" name="panel_settings_water">
 	<layout_stack name="water_stack1">
-		<layout_panel>
+		<layout_panel name="lp_top">
+			<text name="water_fog_label">
+				Névoa da água
+			</text>
+			<text name="color_label">
+				Cor:
+			</text>
+			<text name="density_exponent_label">
+				Expoente de densidade:
+			</text>
+			<text name="underwater_modifier_label">
+				Modificador subaquático:
+			</text>
+			<text name="FresnelScaleText">
+				Escala Fresnel:
+			</text>
 			<text name="FresnelOffsetText">
-				Offset fresnel:
+				Deslocamento Fresnel:
 			</text>
 		</layout_panel>
-		<layout_panel>
+		<layout_panel name="lp_bottom">
 			<layout_stack name="water_stack2">
-				<layout_panel>
-					<slider label="X" name="water_normal_scale_x"/>
+				<layout_panel name="lp_left">
+					<text name="normal_map_label">
+						Normal Map:
+					</text>
+					<text name="large_wave_speed_label">
+						Vel. onda grande:
+					</text>
+					<text name="small_wave_speed_label">
+						Vel. onda pequena:
+					</text>
+					<text name="reflection_wavelet_scale_label">
+						Escala da reflexão das ondas:
+					</text>
+					<slider label="X:" name="water_normal_scale_x"/>
 					<slider label="Y:" name="water_normal_scale_y"/>
 					<slider label="Z:" name="water_normal_scale_z"/>
+				</layout_panel>
+				<layout_panel name="lp_right">
+					<text name="refraction_and_blur_label">
+						Refração e desfoque
+					</text>
+					<text name="refraction_scale_above_label">
+						Escala de refração (acima):
+					</text>
+					<text name="refraction_scale_below_label">
+						Escala de refração (abaixo):
+					</text>
+					<text name="blur_multiplier_label">
+						Multiplicador de desfoque:
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

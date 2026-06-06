@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Anotações e Privacidade" name="panel_notes">
-	<text name="status_message" value="Notas particulares neste avatar:"/>
-	<text name="status_message2" value="Permitir que esse avatar:"/>
-	<check_box label="Ver quando eu estiver conectado" name="status_check"/>
-	<check_box label="Encontre-me no mapa-múndi" name="map_check"/>
-	<check_box label="Pegar, editar ou excluir objetos meus" name="objects_check"/>
+<panel label="Notas e privacidade" name="panel_notes">
+	<string name="header_symbol_limit">
+		Atenção: suas notas contêm mais de 1000 caracteres.
+	</string>
+	<string name="body_symbol_limit">
+		Apenas os primeiros 1000 caracteres são exibidos aqui. Se você editar suas notas e clicar em OK, os caracteres adicionais serão perdidos. Para manter esses caracteres adicionais, edite-as [[PROFILE_URL] na Web].
+	</string>
+	<text name="status_message" value="Anotações privadas sobre este avatar:"/>
+	<button name="notes_save_changes" label="Salvar"/>
+	<button name="notes_discard_changes" label="Descartar"/>
 </panel>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="perms default" title="PERMISSÕES DE CRIAÇÃO PADRÃO">
-	<panel label="Permissões padrão" name="default permissions">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="perms default" title="Permissões padrão de criação">
+	<panel name="default permissions" label="Permissões padrão">
 		<text name="label_1">
 			Próximo proprietário:
 		</text>
@@ -14,33 +14,35 @@
 			Transferir
 		</text>
 		<text name="label_5">
-			Dividir com o grupo
+			Compartilhar com grupo
 		</text>
 		<text name="label_6">
-			Permitir que qualquer um copie
+			Permitir cópia para todos
 		</text>
-		<text name="label_7" tool_tip="Definir permissões padrão para objetos criados">
+		<text name="label_7" tool_tip="Definir permissões padrão para criação de objetos">
 			Objetos
 		</text>
-		<text name="label_8" tool_tip="Definir permissões padrão para itens enviados">
-			Envios
+		<text name="label_8" tool_tip="Permissões padrão para objetos enviados">
+			Uploads
 		</text>
-		<text name="label_9" tool_tip="Definir permissões padrão para scripts criados">
+		<text name="label_9" tool_tip="Permissões padrão para scripts criados">
 			Scripts
 		</text>
-		<text name="label_10" tool_tip="Definir permissões padrão para anotações criadas">
-			Anotações
+		<text name="label_10" tool_tip="Definir permissões padrão para criação de notecards">
+			Notecards
 		</text>
-		<text name="label_11" tool_tip="Definir permissões padrão para gestos criados">
+		<text name="label_11" tool_tip="Definir permissões padrão para criação de gestos">
 			Gestos
 		</text>
-		<text name="label_12" tool_tip="Definir permissões padrão para roupas ou partes do corpo criadas">
-			Itens de vestuário
+		<text name="label_12" tool_tip="Definir permissões padrão para criação de roupas e partes do corpo">
+			Itens vestíveis
 		</text>
-		<text name="label_13" tool_tip="Definir permissões padrão para quando as configurações do Ambiente forem criadas">
+		<text name="label_13" tool_tip="Definir permissões padrão para criação de configurações de ambiente">
 			Configurações
 		</text>
-		<check_box name="env_settings_c" value="true"/>
+		<text name="label_14" tool_tip="Definir permissões padrão para criação de materiais GLTF">
+			Materiais
+		</text>
 	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel"/>

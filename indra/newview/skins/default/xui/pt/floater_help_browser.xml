@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_help_browser" title="NAVEGADOR DA AJUDA">
+<floater name="floater_help_browser" title="Navegador de ajuda">
 	<floater.string name="loading_text">
 		Carregando...
 	</floater.string>

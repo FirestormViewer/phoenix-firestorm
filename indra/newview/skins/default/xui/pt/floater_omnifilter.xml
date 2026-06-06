@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="omnifilter" title="Editor de regras do Omnifilter">
+	<floater.string name="OmnifilterNewNeedle">
+		NOVA REGRA
+	</floater.string>
+	<layout_stack name="needle_list_stack">
+		<layout_panel name="needle_list_layout">
+			<check_box name="enable_omnifilter" label="Ativar Omnifilter"/>
+			<fs_scroll_list name="needle_list">
+				<fs_scroll_list.columns name="enabled" label="Ligado"/>
+				<fs_scroll_list.columns name="needle_name" label="Regra"/>
+			</fs_scroll_list>
+			<button name="add_needle" label="Adicionar"/>
+			<button name="remove_needle" label="Remover"/>
+		</layout_panel>
+		<layout_panel name="filter_log_layout">
+			<fs_scroll_list name="filter_log">
+				<fs_scroll_list.columns name="timestamp" label="Hora (SLT)"/>
+				<fs_scroll_list.columns name="log_entry" label="Regra"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<panel name="panel_details">
+		<text name="needle_name_label" value="Nome da regra:"/>
+		<text name="sender_name_label" value="Remetente:"/>
+		<line_editor name="sender_name" tool_tip="Nome do avatar ou objeto de onde a mensagem vem" />
+		<check_box name="sender_case" label="Aa" tool_tip="Diferenciar maiúsculas/minúsculas" />
+		<combo_box name="sender_match_type" tool_tip="Modo de correspondência">
+			<combo_item name="sender_exact">
+				<column width="40" name="label" label="|Abc|"/>
+				<column name="longtext" label="Corresponder texto completo"/>
+			</combo_item>
+			<combo_item name="sender_substring">
+				<column name="label" label="*Abc*"/>
+				<column name="longtext" label="Corresponder trecho"/>
+			</combo_item>
+			<combo_item  name="sender_regex">
+				<column name="label" label="/ *. /"/>
+				<column name="longtext" label="Corresponder expressão regular"/>
+			</combo_item>
+		</combo_box>
+		<text name="content_label" value="Conteúdo:"/>
+		<text_editor name="content" tool_tip="Texto real da mensagem" />
+		<check_box name="content_case" label="Aa" tool_tip="Diferenciar maiúsculas/minúsculas" />
+		<combo_box name="content_match_type" tool_tip="Modo de correspondência">
+			<combo_item name="content_exact">
+				<column name="label" label="|Abc|"/>
+				<column name="longtext" label="Corresponder texto completo"/>
+			</combo_item>
+			<combo_item name="content_substring">
+				<column name="label" label="*Abc*"/>
+				<column name="longtext" label="Corresponder trecho"/>
+			</combo_item>
+			<combo_item name="content_regex">
+				<column name="label" label="/ *. /"/>
+				<column name="longtext" label="Corresponder expressão regular"/>
+			</combo_item>
+		</combo_box>
+		<text name="region_name_label" value="Nome da região:" tool_tip="Nome da região de origem. Disponível apenas para ofertas de inventário."/>
+		<line_editor name="region_name" tool_tip="Nome da região de origem. Disponível apenas para ofertas de inventário."/>
+		<text name="owner_label" value="UUID do propriet.:"/>
+		<line_editor name="owner_uuid" tool_tip="Para convites de grupo: UUID do grupo. Para chat de objeto, mensagem do proprietário, chat de debug ou chat direto: UUID do objeto. Para IM de objeto: UUID do proprietário do objeto. Para todo o resto: UUID do avatar remetente."/>
+		<text name="match_source_label" value="Fonte da corresp.:"/>
+		<layout_stack name="buttons_stack">
+			<layout_panel name="buttons_group_1">
+				<button name="type_nearby" label="Chat local" tool_tip="Chat público normal de avatares por perto."/>
+				<button name="type_im" label="IM" tool_tip="Mensagens instantâneas de residentes."/>
+				<button name="type_group_im" label="Grupo" tool_tip="Mensagens de grupo de residentes."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_2">
+				<button name="type_group_notice" label="Avisos" tool_tip="Avisos de grupo."/>
+				<button name="type_invite" label="Convites" tool_tip="Convites de grupo."/>
+				<button name="type_object_chat" label="Chat de objeto" tool_tip="Chat de objetos próximos."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_3">
+				<button name="type_object_im" label="IM de objeto" tool_tip="Mensagens instantâneas de objetos."/>
+				<button name="type_script_error" layout="topleft" label="Erro" tool_tip="Chat de depuração vindo de scripts."/>
+				<button name="type_dialog" label="Diálogo" tool_tip="Corresponder campos em diálogos de script."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_4">
+				<button name="type_inventory_offer" label="Oferta inv." tool_tip="Corresponder campos em ofertas de inventário."/>
+				<button name="type_friendship" label="Amizade" tool_tip="Pedidos de amizade de residentes."/>
+				<button name="type_lure" label="Oferta TP" tool_tip="Ofertas de teleporte de residentes."/>
+			</layout_panel>
+			<layout_panel name="buttons_group_5">
+				<button name="type_tp_request" label="Pedido TP" tool_tip="Pedidos de residentes para que você envie uma oferta de teleporte."/>
+				<button name="type_load_url" label="Abrir URL" tool_tip="Pedidos de scripts para visitar um site."/>
+			</layout_panel>
+		</layout_stack>
+		<text name="chat_replace_label" value="Substit. no chat:"/>
+		<line_editor name="chat_replace" tool_tip="Texto de substituição para alterar como a mensagem será exibida" />
+		<text name="button_reply_label" value="Resposta de botão:"/>
+		<line_editor name="button_reply" tool_tip="Rótulo de um botão para &quot;clicar&quot; no diálogo de script, incluindo &quot;Ignorar&quot;" />
+		<text name="text_box_reply_label">
+			Resposta da caixa
+de texto:
+		</text>
+		<text_editor name="text_box_reply" tool_tip="Texto de resposta, como se tivesse sido digitado manualmente na caixa de texto do diálogo de script" />
+	</panel>
+</floater>

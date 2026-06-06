@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Outfit">
-	<menu_item_call label="Vestir - Substituir look atual" name="wear_replace"/>
-	<menu_item_call label="Vestir - Sem tirar look atual" name="wear_add"/>
-	<menu_item_call label="Tirar - Tirar do look atual" name="take_off"/>
-	<menu_item_call label="Editar look" name="edit"/>
-	<menu_item_call label="Renomear look" name="rename"/>
-	<menu_item_call label="Excluir visual" name="delete"/>
+	<menu_item_call label="Substituir outfit atual" name="wear_replace"/>
+	<menu_item_call label="Adicionar ao outfit atual" name="wear_add"/>
+	<menu_item_call label="Remover do outfit atual" name="take_off"/>
+	<menu_item_call label="Imagem..." name="thumbnail"/>
+	<menu_item_call label="Adicionar aos favoritos" name="favorites_add"/>
+	<menu_item_call label="Remover dos favoritos" name="favorites_remove"/>
+	<menu_item_call label="Editar outfit" name="edit"/>
+	<menu_item_call label="Renomear outfit" name="rename"/>
+	<menu_item_call label="Salvar outfit" name="save"/>
+	<menu_item_call label="Excluir outfit" name="delete"/>
 </context_menu>

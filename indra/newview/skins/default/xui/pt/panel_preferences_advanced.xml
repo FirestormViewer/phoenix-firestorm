@@ -3,30 +3,14 @@
 	<panel.string name="aspect_ratio_text">
 		[NUM]:[DEN]
 	</panel.string>
-	<text name="Cache:">
-		Cache:
+	<check_box label="Permitir múltiplos viewers" name="allow_multiple_viewer_check"/>
+	<check_box label="Mostrar seleção de grid ao entrar" name="show_grid_selection_check"/>
+	<check_box label="Mostrar menu “Avançado”" name="show_advanced_menu_check"/>
+	<check_box label="Mostrar menu “Desenvolvedor” (use por sua conta e risco!)" name="show_develop_menu_check"/>
+	<check_box label="Desativar detecção de VRAM via WMI em sistemas Windows" name="FSDisableWMIProbing"/>
+	<check_box label="Ativar uso de passos de tempo em animações (experimental)" name="UseAnimationTimeSteps" tool_tip="Esta configuração pode reduzir a carga de renderização para avatares distantes, mas também pode fazer as animações deles serem reproduzidas em velocidade incorreta."/>
+	<text name="BackgroundYieldTimeText">
+		Tempo, em milissegundos, cedido por quadro para outros aplicativos quando o [APP_NAME] não estiver em primeiro plano (padrão: 40; 1 segundo = 1000 milissegundos):
 	</text>
-	<spinner label="Tamanho do cache (256 - 9984MB)" name="cachesizespinner"/>
-	<text name="text_box5">
-		MB
-	</text>
-	<button label="Limpar cache" label_selected="Limpar cache" name="clear_cache"/>
-	<text name="Cache location">
-		Localização do cache:
-	</text>
-	<button label="Navegar" label_selected="Navegar" name="set_cache"/>
-	<button label="Localização padrão" label_selected="Localização padrão" name="default_cache_location"/>
-	<text name="UI Size:">
-		Interface:
-	</text>
-	<check_box label="Mostrar erros de script" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="Bate-papo local" name="0"/>
-		<radio_item label="Janelas separadas" name="1"/>
-	</radio_group>
-	<check_box label="Permitir vários visualizadores" name="allow_multiple_viewer_check"/>
-	<check_box label="Mostrar grade selecionada ao entrar" name="show_grid_selection_check"/>
-	<check_box label="Exibir menu avançado" name="show_advanced_menu_check"/>
-	<check_box label="Exibir menu de desenvolvimento" name="show_develop_menu_check"/>
-	<button label="Permissões de criação padrão" name="default_creation_permissions"/>
+	<button label="Redefinir todas as configurações" label_selected="Redefinindo todas as configurações..." name="clear_settings"/>
 </panel>

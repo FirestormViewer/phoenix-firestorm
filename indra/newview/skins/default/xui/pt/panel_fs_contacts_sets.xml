@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Este conjunto de contatos está vazio.
+	</panel.string>
+	<panel.string name="no_sets">
+		Nenhum conjunto de contatos
+	</panel.string>
+	<panel.string name="all_sets">
+		Todos os conjuntos de contatos
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Aliases
+	</panel.string>
+	<panel.string name="non_friends">
+		Não-amigos
+	</panel.string>
+	<combo_box name="combo_sets" width="199"/>
+	<button name="config_btn" tool_tip="Configurar conjunto de contatos selecionado"/>
+	<button name="add_set_btn" tool_tip="Adicionar novo conjunto de contatos"/>
+	<button name="remove_set_btn" tool_tip="Remover conjunto de contatos selecionado"/>
+	<filter_editor label="Filtrar pessoas" name="contact_sets_filter_input"/>
+	<avatar_list name="contact_list" right="-90"/>
+	<button label="Adicionar..." name="add_btn" tool_tip="Adicionar um avatar ao conjunto de contatos atual" width="85" left_delta="265"/>
+	<button label="Mover..." name="move_btn" tool_tip="Mover este avatar para outro conjunto de contatos" width="85"/>
+	<button label="Remover..." name="remove_btn" tool_tip="Remover avatar do conjunto de contatos atual" width="85"/>
+	<button label="Perfil..." name="profile_btn" tool_tip="Abrir perfil do avatar" width="85"/>
+	<button label="IM..." name="start_im_btn" tool_tip="Iniciar conversa por IM" width="85"/>
+	<button label="Teletransporte" name="offer_teleport_btn" tool_tip="Oferecer teletransporte para sua localização atual" width="85"/>
+	<button label="+ Alias" name="set_pseudonym_btn" tool_tip="Define um pseudônimo para este avatar" width="85"/>
+	<button label="- Alias" name="remove_pseudonym_btn" tool_tip="Remover o pseudônimo de um avatar" width="85"/>
+	<button label="- Nome exib." name="remove_displayname_btn" tool_tip="Remover o nome exibido de um avatar" width="85"/>
+	<text name="member_count">
+		Membros: [COUNT]
+	</text>
+</panel>

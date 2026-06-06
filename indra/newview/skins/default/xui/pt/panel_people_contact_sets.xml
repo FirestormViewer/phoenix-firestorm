@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel name="contact_sets_buttons_panel">
+		<filter_editor label="Filtrar pessoas" name="contact_sets_filter_input"/>
+		<menu_button name="contact_sets_gear_btn" tool_tip="Ações na pessoa ou grupo selecionado"/>
+		<menu_button name="contact_sets_plus_btn" tool_tip="Adicionar grupo ou residente"/>
+		<menu_button name="contact_sets_remove_btn" tool_tip="Remover grupo ou residente"/>
+	</panel>
+</panel>
