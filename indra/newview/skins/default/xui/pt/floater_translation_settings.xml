@@ -65,7 +65,7 @@
 	<line_editor default_text="Opcional para serviços globais" name="azure_api_region"/>
 	<button label="Verificar" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		[http://code.google.com/apis/language/translate/v2/getting_started.html#auth Chave da API] do Google:
+		[http://code.google.com/apis/language/translate/v2/getting_started.html#auth API do Google]:
 	</text>
 	<line_editor default_text="Digite a chave da API e clique em &quot;Verificar&quot;" name="google_api_key"/>
 	<button label="Verificar" name="verify_google_api_key_btn"/>
@@ -76,7 +76,7 @@
 		Endpoint:
 	</text>
 	<text name="deepl_api_key_label">
-		Chave da API do DeepL:
+		API do DeepL:
 	</text>
 	<line_editor default_text="Digite a chave da API e clique em &quot;Verificar&quot;" name="deepl_api_key"/>
 	<button label="Verificar" name="verify_deepl_api_key_btn"/>

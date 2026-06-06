@@ -22,7 +22,7 @@
 	</layout_stack>
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Nome da regra:"/>
-		<text name="sender_name_label" value="Nome do remetente:"/>
+		<text name="sender_name_label" value="Remetente:"/>
 		<line_editor name="sender_name" tool_tip="Nome do avatar ou objeto de onde a mensagem vem" />
 		<check_box name="sender_case" label="Aa" tool_tip="Diferenciar maiúsculas/minúsculas" />
 		<combo_box name="sender_match_type" tool_tip="Modo de correspondência">
@@ -58,9 +58,9 @@
 		</combo_box>
 		<text name="region_name_label" value="Nome da região:" tool_tip="Nome da região de origem. Disponível apenas para ofertas de inventário."/>
 		<line_editor name="region_name" tool_tip="Nome da região de origem. Disponível apenas para ofertas de inventário."/>
-		<text name="owner_label" value="UUID do proprietário:"/>
+		<text name="owner_label" value="UUID do propriet.:"/>
 		<line_editor name="owner_uuid" tool_tip="Para convites de grupo: UUID do grupo. Para chat de objeto, mensagem do proprietário, chat de debug ou chat direto: UUID do objeto. Para IM de objeto: UUID do proprietário do objeto. Para todo o resto: UUID do avatar remetente."/>
-		<text name="match_source_label" value="Fonte da correspondência:"/>
+		<text name="match_source_label" value="Fonte da corresp.:"/>
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
 				<button name="type_nearby" label="Chat local" tool_tip="Chat público normal de avatares por perto."/>
@@ -87,11 +87,14 @@
 				<button name="type_load_url" label="Abrir URL" tool_tip="Pedidos de scripts para visitar um site."/>
 			</layout_panel>
 		</layout_stack>
-		<text name="chat_replace_label" value="Substituição no chat:"/>
+		<text name="chat_replace_label" value="Substit. no chat:"/>
 		<line_editor name="chat_replace" tool_tip="Texto de substituição para alterar como a mensagem será exibida" />
 		<text name="button_reply_label" value="Resposta de botão:"/>
 		<line_editor name="button_reply" tool_tip="Rótulo de um botão para &quot;clicar&quot; no diálogo de script, incluindo &quot;Ignorar&quot;" />
-		<text name="text_box_reply_label" value="Resposta da caixa de texto:"/>
+		<text name="text_box_reply_label">
+			Resposta da caixa
+de texto:
+		</text>
 		<text_editor name="text_box_reply" tool_tip="Texto de resposta, como se tivesse sido digitado manualmente na caixa de texto do diálogo de script" />
 	</panel>
 </floater>

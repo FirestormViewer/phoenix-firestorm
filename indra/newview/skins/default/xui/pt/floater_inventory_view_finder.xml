@@ -20,7 +20,7 @@
 	<check_box label="Cop" name="check_copy"/>
 	<check_box label="Trans" name="check_transfer"/>
 	<check_box label="Sempre mostrar pastas" name="check_show_empty"/>
-	<check_box label="Apenas coalescidos" name="check_only_coalesced" width="110"/>
+	<check_box label="Apenas coalesc." name="check_only_coalesced" width="110"/>
 	<combo_box tool_tip="Filtrar objetos vinculados" name="inventory_filter_show_links_combo">
 		<combo_box.item name="show_links" label="Mostrar vínculos"/>
 		<combo_box.item name="show_links_only" label="Mostrar apenas vínculos"/>

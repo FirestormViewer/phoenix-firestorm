@@ -55,7 +55,7 @@
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="Usar inventário" name="btn_select_inventory"/>
 							<button label="Editar ciclo diário" name="btn_edit"/>
-							<check_box label="Proprietários de parcela podem sobrescrever" name="chk_allow_override"/>
+							<check_box label="Proprietár. de parcela podem sobrescr." name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
 							<text name="day_settings_label">

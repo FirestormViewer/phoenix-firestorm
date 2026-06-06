@@ -39,13 +39,13 @@
 				Vel. máx. explosão:
 			</text>
 			<text name="Source_Max_Age_Label">
-				Idade máx. da fonte:
+				Idade máx. - fonte:
 			</text>
 			<text name="Start_Alpha_Label">
 				Alpha inicial:
 			</text>
 			<text name="Particles_Max_Age_Label">
-				Idade máx. das partículas:
+				Idade máx. - part.:
 			</text>
 			<text name="End_Alpha_Label">
 				Alpha final:

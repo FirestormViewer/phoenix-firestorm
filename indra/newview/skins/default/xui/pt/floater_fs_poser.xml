@@ -257,7 +257,7 @@
 					</panel>
 					<panel title="Config." name="settings_panel">
 						<text name="trackpad_sensitivity_label">
-							Sensibilidade da esfera de controle:
+							Sensibil. da esfera de controle:
 						</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Define a sensibilidade da esfera de controle"/>
 						<check_box name="stop_posing_on_close_checkbox" label="Parar ao fechar" tool_tip="Não parar a pose ao fechar pode ajudar a não perder o trabalho já feito."/>
@@ -265,7 +265,7 @@
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmar sobrescrita" tool_tip="Se a pose for salva com um nome já existente, o botão Salvar deve ser clicado novamente para confirmar a sobrescrita."/>
 						<check_box name="natural_direction_checkbox" label="Usar direção natural" tool_tip="O esqueleto usa rotações de juntas pouco naturais por padrão, o que dificulta a pose. Quando ativado, as juntas usam rotações mais naturais."/>
 						<check_box name="show_joint_markers_checkbox" label="Mostrar marcadores de juntas" tool_tip="Mostra indicadores para facilitar a seleção de juntas durante a pose."/>
-						<check_box name="dof_edit_mode_checkbox" label="Profundidade de campo no modo edição" tool_tip="Ao usar o manipulador, a profundidade de campo normalmente fica desativada. Com esta opção, ela permanece ativa ao editar poses ou prims."/>
+						<check_box name="dof_edit_mode_checkbox" label="Prof. de campo no modo ediç." tool_tip="Ao usar o manipulador, a profundidade de campo normalmente fica desativada. Com esta opção, ela permanece ativa ao editar poses ou prims."/>
 					</panel>
 				</tab_container>
 				<button name="toggleVisualManipulators" tool_tip="Ativar/desativar manipuladores visuais" />

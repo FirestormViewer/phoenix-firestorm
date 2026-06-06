@@ -9,7 +9,7 @@
 		</text>
 		<line_editor name="set_name_editor" right="-100"/>
 		<button name="rename_btn" width="85" label="Renomear"/>
-		<color_swatch label="Selecionar cor" name="set_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="Cor" name="set_swatch" tool_tip="Clique para abrir o seletor de cores"/>
 		<check_box label="Mostrar notificações" name="show_set_notifications"/>
 		<check_box label="Ordenar por status online" name="sort_by_online_status"/>
 	</panel>
@@ -18,7 +18,7 @@
 			Configurações globais:
 		</text>
 		<check_box label="Mostrar ícones de perfil nas listas de conjuntos de contatos" name="FSContactSetsListShowIcons"/>
-		<color_swatch label="Cor padrão do conjunto" name="global_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="Padrão do conjunto" name="global_swatch" tool_tip="Clique para abrir o seletor de cores"/>
 		<color_swatch label="" name="offline_swatch" tool_tip="Cor usada para contatos offline em listas de conjuntos de contatos que não pertencem a nenhum conjunto. A cor personalizada de um conjunto tem prioridade."/>
 		<check_box label="Cor personalizada para contatos offline" name="FSContactSetsListColorizeOffline"/>
 		<text name="label_online">

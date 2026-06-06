@@ -13,7 +13,7 @@
 		Descrição:
 	</text>
 	<text name="preview_label">
-		Visualizar imagem como:
+		Visualizar como:
 	</text>
 	<combo_box label="Tipo de vestível" name="clothing_type_combo">
 		<item label="Imagem" name="Image" value="Imagem"/>
@@ -38,7 +38,7 @@ Salve a imagem como Targa de 24 bits (.tga).
 	<text name="uploaded_size_text">
 		Tamanho enviado: [X_RES]x[Y_RES], [ALPHA]
 	</text>
-	<check_box label="Usar compressão sem perdas" name="lossless_check" left_delta="-5"/>
+	<check_box label="Compressão sem perdas" name="lossless_check" left_delta="-5"/>
 	<check_box name="temp_check" label="Temporário (grátis)" tool_tip="Envia a imagem temporariamente, ou seja, o upload é gratuito. Em contrapartida, ela será excluída automaticamente após algum tempo." />
 	<button label="Enviar ([AMOUNT] L$)" name="ok_btn" width="146"/>
 	<button label="Cancelar" name="cancel_btn"/>

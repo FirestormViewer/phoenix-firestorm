@@ -16,7 +16,7 @@
 		Várias texturas
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Inventário" name="inventory" width="66"/>
+		<radio_item label="Inventário" name="inventory" width="70"/>
 		<radio_item label="Local" name="local" width="47"/>
 		<radio_item label="Bake" name="bake"/>
 	</radio_group>
@@ -30,7 +30,7 @@
 	<button label="Padrão" label_selected="Padrão" name="Default"/>
 	<button label="Nenhuma" label_selected="Nenhuma" name="None"/>
 	<button label="Em branco" label_selected="Em branco" name="Blank"/>
-	<button label="Transparente" label_selected="Transparente" name="Transparent" tool_tip="Observação: se for escolhida uma textura transparente, ou outra textura com transparência parcial, a luz não será projetada."/>
+	<button label="Transpar." label_selected="Transparente" name="Transparent" tool_tip="Observação: se for escolhida uma textura transparente, ou outra textura com transparência parcial, a luz não será projetada."/>
 	<button label="" label_selected="" name="Pipette"/>
 	<text name="preview_disabled">
 		Pré-visualização desativada

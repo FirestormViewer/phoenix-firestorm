@@ -100,7 +100,7 @@
 				<button name="Reset_Camera_Lag" label="P" tool_tip="Redefinir para o valor padrão."/>
 
 				<text name="T_Camera_Offset" tool_tip="Define a distância da câmera em relação ao ponto de vista padrão.">
-					Deslocamento da câmera
+					Desloc. da câmera
 				</text>
 				<button name="Reset_Camera_Offset" label="P" tool_tip="Redefinir para o valor padrão."/>
 
@@ -149,7 +149,7 @@
 				<slider label="Inclinação" name="FlycamAxisScale4" tool_tip="Ajusta a sensibilidade do movimento de inclinação. Se estiver difícil mover com precisão, use valores menores."/>
 				<slider label="Guinada" name="FlycamAxisScale5" tool_tip="Ajusta a sensibilidade do movimento de guinada. Se estiver difícil mover com precisão, use valores menores."/>
 				<slider label="Rolagem" name="FlycamAxisScale3" tool_tip="Ajusta a sensibilidade do movimento de rolagem. Se estiver difícil mover com precisão, use valores menores."/>
-				<slider label="Velocidade do zoom" name="FlycamAxisScale6" tool_tip="Ajusta a sensibilidade do zoom. Se estiver difícil aproximar com precisão, use valores menores."/>
+				<slider label="Vel. do zoom" name="FlycamAxisScale6" tool_tip="Ajusta a sensibilidade do zoom. Se estiver difícil aproximar com precisão, use valores menores."/>
 				<slider label="Suavização" name="FlycamFeathering" tool_tip="Com o controle à direita, a câmera fica mais rígida e responde diretamente ao joystick. À esquerda, a câmera fica mais fluida e pesada."/>
 			</panel>
 
@@ -157,9 +157,9 @@
 				<spinner label="Mapeamento do eixo de zoom" name="JoystickAxis6" tool_tip="Define em qual eixo do mouse a função de zoom será aplicada."/>
 				<check_box label="Ativar mouse 3D" tool_tip="Ativa o mouse 3D." name="enable_joystick"/>
 				<check_box name="CB_Zoom_Control" label="Ativar controle de zoom (veja o tooltip)" tool_tip="Para o controle de zoom funcionar, o valor de mapeamento do eixo de zoom deve ser maior que 4."/>
-				<check_box name="CB_Auto_Leveling" label="Ativar nivelamento automático (sem rotação da câmera)" tool_tip="Se ativado, a câmera será nivelada automaticamente."/>
+				<check_box name="CB_Auto_Leveling" label="Ativar nivel. auto. (sem rotação da câmera)" tool_tip="Se ativado, a câmera será nivelada automaticamente."/>
 				<check_box name="CB_3D_Mouse_Avatar" label="Usar mouse 3D para mover avatar" tool_tip="Se ativado, o avatar será controlado pelo mouse 3D."/>
-				<check_box name="CB_3D_Mouse_Build" label="Usar mouse 3D para mover objetos (construção)" tool_tip="Se ativado, o mouse 3D poderá mover objetos ao construir e editar."/>
+				<check_box name="CB_3D_Mouse_Build" label="Usar mouse 3D para mover obj. (construção)" tool_tip="Se ativado, o mouse 3D poderá mover objetos ao construir e editar."/>
 			</panel>
 		</panel>
 	</tab_container>

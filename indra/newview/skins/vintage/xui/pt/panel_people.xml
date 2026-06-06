@@ -53,7 +53,7 @@ Procurando pessoas? Use o [secondlife:///app/worldmap Mapa].
 								<check_box label="Usar ponte LSL" tool_tip="Se ativado, funções do radar que determinam a localização de avatares em grande altitude são auxiliadas pela ponte LSL, especialmente quando estão além da distância de renderização." name="FSRadarEnhanceByBridge"/>
 								<check_box label="Colorir nomes por distância" name="FSRadarColorNamesByDistance"/>
 								<check_box label="Alcance:" tool_tip="Limita os resultados a um raio definido" name="LimitRadarByRange" />
-								<text name="radarmap_range_label" value="Formato do nome no radar:"/>
+								<text name="radarmap_range_label" value="Formato do nome:"/>
 								<combo_box name="RadarNameFormat">
 									<combo_box.item name="RadarNameFormat_display" label="Nome de exibição" />
 									<combo_box.item name="RadarNameFormat_user" label="Nome de usuário" />

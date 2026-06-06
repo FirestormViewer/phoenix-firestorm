@@ -35,5 +35,5 @@
 	</text>
 	<spinner name="restart_delay" left_delta="65"/>
 	<button label="Cancelar reinício" name="cancel_restart_btn" tool_tip="Cancelar o reinício da região"/>
-	<button label="Console de depuração da região" name="region_debug_console_btn" tool_tip="Abrir o console de depuração da região"/>
+	<button label="Console de dep. da região" name="region_debug_console_btn" tool_tip="Abrir o console de depuração da região"/>
 </panel>

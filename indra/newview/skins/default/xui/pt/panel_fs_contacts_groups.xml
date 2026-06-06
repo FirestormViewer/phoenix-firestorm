@@ -18,7 +18,7 @@
 	 name="info_btn"
 	 width="85" />
 	<button
-	 label="Títulos do grupo"
+	 label="Títulos..."
 	 name="titles_btn"
 	 width="85" />
 	<button

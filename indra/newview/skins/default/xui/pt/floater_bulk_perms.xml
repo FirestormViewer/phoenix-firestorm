@@ -42,7 +42,7 @@
 	</text>
 	<check_box label="Compartilhar" name="share_with_group" tool_tip="Permite que todos os membros do grupo definido compartilhem suas permissões de modificação para este objeto. Você precisa transferir para o grupo para ativar restrições de função."/>
 	<text name="AnyoneLabel">
-		Qualquer pessoa:
+		Qual. pessoa:
 	</text>
 	<check_box label="Copiar" name="everyone_copy" tool_tip="Qualquer pessoa pode obter uma cópia do objeto. O objeto e todo o seu conteúdo devem permitir cópia e transferência."/>
 	<text name="NextOwnerLabel">

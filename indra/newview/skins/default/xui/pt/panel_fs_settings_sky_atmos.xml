@@ -38,11 +38,11 @@
 		</text>
 		<slider name="haze_density" width="151"/>
 		<text name="density_multiplier_label" width="120">
-			Multiplicador de densidade:
+			Multiplic. de densid.:
 		</text>
 		<slider name="density_multip" width="151"/>
 		<text name="distance_multiplier_label" width="120">
-			Multiplicador de distância:
+			Multiplic. de dist.:
 		</text>
 		<slider name="distance_multip" width="151"/>
 		<text name="maximum_altitude_label" width="120">

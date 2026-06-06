@@ -10,7 +10,7 @@
 		<button	name="ao_add" tool_tip="Criar novo conjunto de animações."/>
 		<button	name="ao_remove" tool_tip="Excluir este conjunto de animações."/>
 		<check_box name="ao_sit_override" label="Subst. sentar" tool_tip="Ativa a substituição de animações de sentar."/>
-		<check_box name="ao_smart" label="Modo inteligente" tool_tip="O modo inteligente tenta detectar se a substituição de sentar conflita com a animação do objeto e desativa temporariamente o substitutor de animações." left_pad="-6"/>
+		<check_box name="ao_smart" label="Inteligente" tool_tip="O modo inteligente tenta detectar se a substituição de sentar conflita com a animação do objeto e desativa temporariamente o substitutor de animações." left_pad="-6"/>
 		<check_box name="ao_disable_stands_in_mouselook" label="Desativ. em pé no Mouselook" tool_tip="Desativa animações personalizadas de em pé no modo Mouselook."/>
 		<combo_box name="ao_state_selection_combo" tool_tip="Selecione o tipo de animação para editar."/>
 
@@ -20,7 +20,7 @@
 			<button	name="ao_trash"	tool_tip="Remover a animação selecionada da lista."/>
 		</panel>
 
-		<check_box name="ao_cycle" label="Rotacionar"	tool_tip="Alternar animações da lista ao reproduzir." width="63"/>
+		<check_box name="ao_cycle" label="Rotac." tool_tip="Alternar animações da lista ao reproduzir." width="63"/>
 		<check_box name="ao_randomize" label="Ordem aleatória" tool_tip="No modo de rotação, selecionar animação aleatoriamente."/>
 		<text name="ao_cycle_time_seconds_label" value="Tempo de rotação (seg.):"/>
 		<spinner name="ao_cycle_time" tool_tip="Tempo antes de reproduzir a próxima animação da lista. Defina 0 para desativar."/>

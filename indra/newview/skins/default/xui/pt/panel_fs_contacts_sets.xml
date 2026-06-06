@@ -26,10 +26,10 @@
 	<button label="Remover..." name="remove_btn" tool_tip="Remover avatar do conjunto de contatos atual" width="85"/>
 	<button label="Perfil..." name="profile_btn" tool_tip="Abrir perfil do avatar" width="85"/>
 	<button label="IM..." name="start_im_btn" tool_tip="Iniciar conversa por IM" width="85"/>
-	<button label="Teletransporte..." name="offer_teleport_btn" tool_tip="Oferecer teletransporte para sua localização atual" width="85"/>
-	<button label="Definir alias" name="set_pseudonym_btn" tool_tip="Define um pseudônimo para este avatar" width="85"/>
-	<button label="Rem. alias" name="remove_pseudonym_btn" tool_tip="Remover o pseudônimo de um avatar" width="85"/>
-	<button label="Rem. nome exib." name="remove_displayname_btn" tool_tip="Remover o nome exibido de um avatar" width="85"/>
+	<button label="Teletransporte" name="offer_teleport_btn" tool_tip="Oferecer teletransporte para sua localização atual" width="85"/>
+	<button label="+ Alias" name="set_pseudonym_btn" tool_tip="Define um pseudônimo para este avatar" width="85"/>
+	<button label="- Alias" name="remove_pseudonym_btn" tool_tip="Remover o pseudônimo de um avatar" width="85"/>
+	<button label="- Nome exib." name="remove_displayname_btn" tool_tip="Remover o nome exibido de um avatar" width="85"/>
 	<text name="member_count">
 		Membros: [COUNT]
 	</text>

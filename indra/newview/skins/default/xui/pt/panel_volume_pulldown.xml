@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="volumepulldown_floater" width="245">
-	<button left="222" name="prefs_btn"/>
-	<slider label="Volume mestre" label_width="85" name="System Volume" width="185"/>
-	<slider label="Interface" label_width="85" name="UI Volume" width="185"/>
-	<slider label="Ambiente" label_width="85" name="Wind Volume" width="185"/>
+<panel name="volumepulldown_floater">
+	<slider label="Mestre" name="System Volume" />
+	<slider label="Interface" name="UI Volume" />
+	<slider label="Ambiente" name="Wind Volume" />
 	<check_box name="collisions_audio_play_btn" tool_tip="Reproduzir sons de colisão"/>
-	<slider label="Sons" label_width="85" name="SFX Volume" width="185"/>
+	<slider label="Sons" name="SFX Volume" />
 	<check_box name="gesture_audio_play_btn" tool_tip="Ativar sons de gestos"/>
-	<slider label="Música" label_width="85" name="Music Volume" width="185"/>
+	<slider label="Música" name="Music Volume" />
 	<check_box name="enable_music" tool_tip="Ativar streaming de música"/>
-	<slider label="Mídia" label_width="85" name="Media Volume" width="185"/>
+	<slider label="Mídia" name="Media Volume" />
 	<check_box name="enable_media" tool_tip="Ativar streaming de mídia"/>
-	<slider label="Voz" label_width="85" name="Voice Volume" width="185"/>
+	<slider label="Voz" name="Voice Volume" />
 	<check_box name="enable_voice_check" tool_tip="Ativar chat de voz"/>
 </panel>
