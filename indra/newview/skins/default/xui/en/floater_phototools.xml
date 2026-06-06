@@ -45,7 +45,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="false"
 			 border_thickness="0"
 			 background_visible="true">
@@ -459,7 +459,7 @@
 			 left="0"
 			 right="-1"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -834,7 +834,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -1411,7 +1411,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -1818,7 +1818,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2257,7 +2257,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2401,7 +2401,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2674,7 +2674,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3635,7 +3635,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3880,7 +3880,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -4029,7 +4029,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -4559,7 +4559,7 @@
 			 left="0"
 			 width="288"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">

@@ -284,7 +284,7 @@
 						<commit_callback function="Camera.roll_right" />
 						<mouse_held_callback function="Camera.roll_right" />
 					</button>
-					<!-- </FS:Beq> -->						 
+					<!-- </FS:Beq> -->
 						<button
 						 follows="top|left"
 						 height="18"
@@ -429,7 +429,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -672,7 +672,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -767,7 +767,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="Phototools_Header"
+			 bg_alpha_color="HighlightPanelBackground"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
