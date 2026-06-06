@@ -46,6 +46,7 @@
 #include "llavatarnamecache.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llgroupcolormap.h"         // group-based nameplate tinting
+#include "llfloaterreg.h"            // group viewer floater visibility check
 #include "llavatarrendernotifier.h"
 #include "llcontrolavatar.h"
 #include "llexperiencecache.h"
@@ -713,6 +714,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mActiveGroupID(),
     mGroupFetchPending(false),
     mGroupProbeWanted(false),
+    mLastGroupProbeTime(0.0),
     mFirstTEMessageReceived( false ),
     mFirstAppearanceMessageReceived( false ),
     mCulled( false ),
@@ -4721,9 +4723,11 @@ void LLVOAvatar::probeAttachmentGroups()
     if (!mGroupProbeWanted || isSelf())
         return;
 
-    // No visible group tag implies no active group (nothing to infer), and
-    // without configured group tints there is no reason to generate traffic.
-    if (mTitle.empty() || !LLGroupColorMap::getInstance()->hasAnyColors())
+    // No visible group tag implies no active group (nothing to infer).
+    // Without configured group tints there is no reason to generate traffic,
+    // unless the Group Viewer floater is open and wants resolution anyway.
+    if (mTitle.empty() ||
+        (!LLGroupColorMap::getInstance()->hasAnyColors() && !LLFloaterReg::instanceVisible("fs_group_viewer")))
     {
         mGroupProbeWanted = false;
         return;
@@ -4771,6 +4775,29 @@ void LLVOAvatar::probeAttachmentGroups()
     }
     // else: the avatar's attachment ObjectUpdates haven't streamed in yet
     // (still rezzing); attachObject() retries when the first one arrives.
+}
+
+// Re-arm the probe for an avatar whose group never resolved (hidden group
+// with the probe disarmed at the time, lost replies, etc). Cooldown keeps
+// the Group Viewer's periodic refresh from generating repeated traffic for
+// avatars that genuinely cannot be resolved.
+void LLVOAvatar::requestGroupProbeIfUnresolved()
+{
+    constexpr F64 GROUP_PROBE_COOLDOWN = 30.0; // seconds
+    if (isSelf() || mActiveGroupID.notNull() || mTitle.empty() || mGroupFetchPending)
+    {
+        return;
+    }
+
+    const F64 now = LLFrameTimer::getTotalSeconds();
+    if (now - mLastGroupProbeTime < GROUP_PROBE_COOLDOWN)
+    {
+        return;
+    }
+    mLastGroupProbeTime = now;
+
+    mGroupProbeWanted = true;
+    probeAttachmentGroups();
 }
 
 // static

@@ -310,6 +310,11 @@ public:
     // object was one of ours. Called from LLSelectMgr::processObjectPropertiesFamily.
     static bool     handleAttachmentGroupReply(const LLUUID& object_id, const LLUUID& group_id);
 
+    // Re-arm the attachment-group probe for a still-unresolved avatar
+    // (cooldown-throttled). Used by the Group Viewer floater, which needs
+    // group resolution even when no nameplate tint colors are configured.
+    void            requestGroupProbeIfUnresolved();
+
     static void     invalidateNameTag(const LLUUID& agent_id);
     // force all name tags to rebuild, useful when display names turned on/off
     static void     invalidateNameTags();
@@ -1211,6 +1216,7 @@ private:
     // attachments' group in sync with the wearer's active group).
     void            probeAttachmentGroups();
     bool            mGroupProbeWanted;   // profile match failed; probe when attachments are available
+    F64             mLastGroupProbeTime; // throttles Group Viewer re-probe requests
 
     //--------------------------------------------------------------------
     // Display the name (then optionally fade it out)
