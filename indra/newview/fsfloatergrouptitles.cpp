@@ -128,7 +128,7 @@ bool FSFloaterGroupTitles::postBuild()
     mAssignmentsChangedConnection = FSGroupTitleRegionMgr::getInstance()->setAssignmentsChangedCallback([this]() { updateRegionColumn(); });
 
     mTitleList->sortByColumn("title_sort_column", true);
-    mTitleList->setFilterColumn(0);
+    mTitleList->setFilterColumn(mTitleList->getColumn("filter_text")->mIndex);
 
     refreshGroupTitles();
 
@@ -219,6 +219,9 @@ void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& rol
     item["columns"][6]["column"] = "name_sort_column";
     item["columns"][6]["type"] = "text";
     item["columns"][6]["value"] = (is_group ? ("1_" + group_name) : "0");
+    item["columns"][7]["column"] = "filter_text";
+    item["columns"][7]["type"] = "text";
+    item["columns"][7]["value"] = title + " " + group_name + " " + region_name;
 
     mTitleList->addElement(item);
 
@@ -450,6 +453,9 @@ void FSFloaterGroupTitles::onNoneOnUnassignedToggle()
 void FSFloaterGroupTitles::updateRegionColumn()
 {
     const auto region_col_idx   = mTitleList->getColumn("regionname")->mIndex;
+    const auto title_col_idx    = mTitleList->getColumn("grouptitle")->mIndex;
+    const auto group_col_idx    = mTitleList->getColumn("groupname")->mIndex;
+    const auto filter_col_idx   = mTitleList->getColumn("filter_text")->mIndex;
     const auto group_id_col_idx = mTitleList->getColumn("group_id")->mIndex;
     const auto role_id_col_idx  = mTitleList->getColumn("role_id")->mIndex;
     auto* mgr = FSGroupTitleRegionMgr::getInstance();
@@ -457,10 +463,18 @@ void FSFloaterGroupTitles::updateRegionColumn()
     {
         const auto group_id = item->getColumn(group_id_col_idx)->getValue().asUUID();
         const auto role_id  = item->getColumn(role_id_col_idx)->getValue().asUUID();
+        const std::string region_name = mgr->getRegionForTitle(group_id, role_id);
 
         if (auto* cell = item->getColumn(region_col_idx))
         {
-            cell->setValue(mgr->getRegionForTitle(group_id, role_id));
+            cell->setValue(region_name);
+        }
+
+        if (auto* filter_cell = item->getColumn(filter_col_idx))
+        {
+            const std::string title = item->getColumn(title_col_idx)->getValue().asString();
+            const std::string group_name = item->getColumn(group_col_idx)->getValue().asString();
+            filter_cell->setValue(title + " " + group_name + " " + region_name);
         }
     }
 }

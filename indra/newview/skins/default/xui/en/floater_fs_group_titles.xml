@@ -60,6 +60,9 @@
 		<column
 		 name="name_sort_column"
 		 width="-1"/>
+		<column
+		 name="filter_text"
+		 width="-1"/>
 	</scroll_list>
 
 	<button
