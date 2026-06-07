@@ -17,10 +17,7 @@
 	</text_editor>
 	<button tool_tip="尋找和替換" name="Search" />
 	<button label="編輯…" label_selected="編輯" name="Edit" />
-	<text
-		name="byte_counter"
-		initial_value="字节: [BYTES] / [MAX]"
-	/>
+	<text name="byte_counter" initial_value="位元組: [BYTES] / [MAX]" />
 	<button label="儲存" label_selected="儲存" name="Save" />
 	<button label="刪除" label_selected="刪除" name="Delete" />
 </floater>
