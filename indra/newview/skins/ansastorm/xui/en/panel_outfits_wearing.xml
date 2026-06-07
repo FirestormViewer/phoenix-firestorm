@@ -90,7 +90,7 @@
          font="SansSerifMedium"
          follows="bottom|right"
          halign="right"
-         v_pad="6"
+         valign="center"
          width="150">
             Complexity: [WEIGHT]
         </text>
