@@ -229,13 +229,6 @@ https://accounts.secondlife.com/change_email/
          help_topic="preferences_soapstorm_tab"
          name="soapstorm" />
         <panel
-         class="panel_preference"
-         filename="panel_preferences_combat.xml"
-         label="Combat"
-         layout="topleft"
-         help_topic="preferences_combat_tab"
-         name="combat" />
-        <panel
          class="panel_preference_opensim"
          filename="panel_preferences_opensim.xml"
          label="Opensim"
