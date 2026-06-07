@@ -1731,6 +1731,8 @@ void LLFloaterPreference::onClickHitMarkerSettings()
 void LLFloaterPreference::onClickKillFeedSettings()
 {
     LLFloaterReg::showInstance("fs_kill_feed");
+}
+
 // Offline login splash: pick a local image for the login background
 void LLFloaterPreference::onClickBrowseSplashImage()
 {
