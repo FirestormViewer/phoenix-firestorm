@@ -484,6 +484,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",       boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
     // </FS:Ansariel>
     mCommitCallbackRegistrar.add("Pref.HitMarkerSettings",          boost::bind(&LLFloaterPreference::onClickHitMarkerSettings, this));
+    mCommitCallbackRegistrar.add("Pref.BrowseSplashImage",          boost::bind(&LLFloaterPreference::onClickBrowseSplashImage, this));
+    mCommitCallbackRegistrar.add("Pref.BrowseLoginLogo",            boost::bind(&LLFloaterPreference::onClickBrowseLoginLogo, this));
     mCommitCallbackRegistrar.add("Pref.SetCache",               boost::bind(&LLFloaterPreference::onClickSetCache, this));
     mCommitCallbackRegistrar.add("Pref.ResetCache",             boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //  mCommitCallbackRegistrar.add("Pref.ClickSkin",              boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
@@ -1722,6 +1724,34 @@ void LLFloaterPreference::onClickWebBrowserClearCache()
 void LLFloaterPreference::onClickHitMarkerSettings()
 {
     LLFloaterReg::showInstance("fs_hit_marker");
+}
+
+// Offline login splash: pick a local image for the login background
+void LLFloaterPreference::onClickBrowseSplashImage()
+{
+    LLFilePickerReplyThread::startPicker(
+        [](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            if (!filenames.empty())
+            {
+                gSavedSettings.setString("FSLocalLoginSplashImage", filenames[0]);
+            }
+        },
+        LLFilePicker::FFLOAD_IMAGE, false);
+}
+
+// Login bar logo: pick a local replacement image
+void LLFloaterPreference::onClickBrowseLoginLogo()
+{
+    LLFilePickerReplyThread::startPicker(
+        [](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            if (!filenames.empty())
+            {
+                gSavedSettings.setString("FSLoginLogoImage", filenames[0]);
+            }
+        },
+        LLFilePicker::FFLOAD_IMAGE, false);
 }
 
 // Called when user changes language via the combobox.

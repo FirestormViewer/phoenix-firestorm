@@ -1150,6 +1150,16 @@ void velopack_check_for_updates(const std::string& required_version, const std::
         return;
     }
 
+    // User opted out of optional update reminders entirely. Required
+    // updates (blocked-version floor) never reach this point and still
+    // prompt; automatic installs (setting 3) are handled above.
+    if (gSavedSettings.getBOOL("FSNoUpdateReminders"))
+    {
+        LL_INFOS("Velopack") << "Optional update available (" << target_version
+                             << "), but optional update reminders are disabled" << LL_ENDL;
+        return;
+    }
+
     // Default / value 1: "Ask me when an optional update is ready to install"
     LL_INFOS("Velopack") << "Optional update available (" << target_version << "), prompting user" << LL_ENDL;
     LLSD args;
