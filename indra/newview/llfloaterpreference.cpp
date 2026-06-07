@@ -483,6 +483,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     // <FS:Ansariel> Clear web browser cache button
     mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",       boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
     // </FS:Ansariel>
+    mCommitCallbackRegistrar.add("Pref.HitMarkerSettings",          boost::bind(&LLFloaterPreference::onClickHitMarkerSettings, this));
     mCommitCallbackRegistrar.add("Pref.SetCache",               boost::bind(&LLFloaterPreference::onClickSetCache, this));
     mCommitCallbackRegistrar.add("Pref.ResetCache",             boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //  mCommitCallbackRegistrar.add("Pref.ClickSkin",              boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
@@ -1716,6 +1717,12 @@ void LLFloaterPreference::onClickWebBrowserClearCache()
     LLNotificationsUtil::add("ConfirmClearWebBrowserCache", LLSD(), LLSD(), callback_clear_web_browser_cache);
 }
 // </FS:Ansariel>
+
+// Hitmarker options floater
+void LLFloaterPreference::onClickHitMarkerSettings()
+{
+    LLFloaterReg::showInstance("fs_hit_marker");
+}
 
 // Called when user changes language via the combobox.
 void LLFloaterPreference::onLanguageChange()

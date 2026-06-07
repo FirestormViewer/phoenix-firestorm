@@ -203,5 +203,16 @@
      name="OTSFocusDistancePref"
      top_pad="5"
      width="333" />
+    <check_box
+     control_name="OTSCameraCollision"
+     follows="left|top"
+     height="16"
+     label="Camera collision (keep camera out of walls and floors)"
+     layout="topleft"
+     left="10"
+     name="ots_camera_collision_prefs"
+     tool_tip="Pull the camera in closer when world geometry is between you and it, instead of clipping through. Avatars never block the camera."
+     top_pad="8"
+     width="360" />
 
 </panel>

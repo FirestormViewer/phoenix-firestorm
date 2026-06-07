@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_minimize="false"
+ can_resize="true"
+ height="420"
+ min_height="300"
+ min_width="320"
+ layout="topleft"
+ name="floater_fs_hit_marker_emojis"
+ save_rect="true"
+ single_instance="true"
+ title="DAMAGE TYPE SYMBOLS"
+ width="360">
+    <scroll_list
+     name="type_list"
+     follows="all"
+     layout="topleft"
+     left="8"
+     top="20"
+     right="-8"
+     bottom="-86"
+     draw_heading="true"
+     multi_select="false">
+        <columns
+         name="type"
+         label="Damage type"
+         relative_width="0.55" />
+        <columns
+         name="symbol"
+         label="Symbol"
+         relative_width="0.35" />
+        <columns
+         name="customized"
+         label="*"
+         relative_width="0.1" />
+    </scroll_list>
+    <text
+     type="string"
+     length="1"
+     follows="left|bottom"
+     layout="topleft"
+     left="8"
+     bottom="-58"
+     height="14"
+     width="60"
+     name="symbol_label">
+        Symbol:
+    </text>
+    <line_editor
+     name="symbol_edit"
+     follows="left|right|bottom"
+     layout="topleft"
+     left_delta="62"
+     top_delta="-3"
+     height="20"
+     right="-86"
+     tool_tip="Symbol or short text shown for the selected damage type. Emoji work; so does plain text." />
+    <button
+     name="set_btn"
+     follows="right|bottom"
+     layout="topleft"
+     right="-8"
+     top_delta="0"
+     height="20"
+     width="70"
+     label="Set"
+     tool_tip="Assign this symbol to the selected damage type" />
+    <button
+     name="reset_btn"
+     follows="left|bottom"
+     layout="topleft"
+     left="8"
+     bottom="-8"
+     height="20"
+     width="120"
+     label="Reset selected"
+     tool_tip="Restore the built-in symbol for the selected type" />
+    <button
+     name="reset_all_btn"
+     follows="right|bottom"
+     layout="topleft"
+     right="-8"
+     top_delta="0"
+     height="20"
+     width="120"
+     label="Reset all"
+     tool_tip="Restore all built-in symbols" />
+</floater>

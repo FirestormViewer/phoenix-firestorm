@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_minimize="false"
+ can_resize="false"
+ height="286"
+ layout="topleft"
+ name="floater_fs_kill_feed"
+ save_rect="true"
+ single_instance="true"
+ title="KILL FEED"
+ width="320">
+    <check_box
+     control_name="FSKillFeedEnabled"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top="26"
+     height="16"
+     width="296"
+     label="Enable kill feed overlay"
+     tool_tip="Listen to the region combat log (Combat 2.0) and show kills as text on screen" />
+    <check_box
+     control_name="FSKillFeedShortNames"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="16"
+     width="296"
+     label="Shorten names (Orion Starchild = Orion S.)"
+     tool_tip="Display short avatar names in kill lines" />
+    <slider
+     control_name="FSKillFeedTextScale"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="10"
+     height="15"
+     width="296"
+     label="Text size:"
+     label_width="110"
+     min_val="0.5"
+     max_val="2.5"
+     increment="0.05"
+     decimal_digits="2"
+     can_edit_text="true"
+     show_text="true" />
+    <slider
+     control_name="FSKillFeedScreenX"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="15"
+     width="296"
+     label="Horizontal:"
+     label_width="110"
+     min_val="0.0"
+     max_val="1.0"
+     increment="0.01"
+     decimal_digits="2"
+     show_text="true"
+     tool_tip="Overlay position across the screen (0 = left, 1 = right)" />
+    <slider
+     control_name="FSKillFeedScreenY"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="15"
+     width="296"
+     label="Vertical:"
+     label_width="110"
+     min_val="0.0"
+     max_val="1.0"
+     increment="0.01"
+     decimal_digits="2"
+     show_text="true"
+     tool_tip="Overlay position up the screen (0 = bottom, 1 = top)" />
+    <slider
+     control_name="FSKillFeedMaxLines"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="15"
+     width="296"
+     label="Lines:"
+     label_width="110"
+     min_val="1"
+     max_val="10"
+     increment="1"
+     decimal_digits="0"
+     show_text="true"
+     tool_tip="Maximum kills shown at once" />
+    <text
+     type="string"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="10"
+     height="14"
+     width="106"
+     name="font_label">
+        Font:
+    </text>
+    <combo_box
+     control_name="FSKillFeedFontName"
+     follows="left|top"
+     layout="topleft"
+     left_delta="110"
+     top_delta="-3"
+     height="20"
+     width="120"
+     name="font_combo">
+        <combo_box.item
+         label="Small"
+         name="font_small"
+         value="SansSerifSmall" />
+        <combo_box.item
+         label="Normal"
+         name="font_normal"
+         value="SansSerif" />
+        <combo_box.item
+         label="Large"
+         name="font_large"
+         value="SansSerifBig" />
+        <combo_box.item
+         label="Huge"
+         name="font_huge"
+         value="SansSerifHuge" />
+        <combo_box.item
+         label="Monospace"
+         name="font_mono"
+         value="Monospace" />
+    </combo_box>
+    <color_swatch
+     control_name="FSKillFeedTextColor"
+     follows="left|top"
+     layout="topleft"
+     left_delta="130"
+     top_delta="-2"
+     height="24"
+     width="36"
+     name="text_color_swatch"
+     tool_tip="Kill feed text color" />
+    <check_box
+     control_name="FSKillFeedBoldText"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="8"
+     height="16"
+     width="296"
+     label="Bold text"
+     tool_tip="Render kill feed text in bold" />
+    <slider
+     control_name="FSKillFeedHoldTime"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="15"
+     width="296"
+     label="Hold (sec):"
+     label_width="110"
+     min_val="5"
+     max_val="120"
+     increment="1"
+     decimal_digits="0"
+     show_text="true"
+     tool_tip="How long each kill stays on screen" />
+</floater>

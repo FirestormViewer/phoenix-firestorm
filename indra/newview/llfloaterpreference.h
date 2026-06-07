@@ -250,6 +250,9 @@ public:
     // <FS:Ansariel> Clear web browser cache button
     void onClickWebBrowserClearCache();
 
+    // Hitmarker options floater
+    void onClickHitMarkerSettings();
+
     // <FS:Ansariel> Improved graphics preferences
     void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
     void updateMaxNonImpostorsLabel(const LLSD& newvalue);

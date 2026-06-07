@@ -235,6 +235,9 @@
 #include "utilitybar.h"     // <FS:Zi> Support for the classic V1 style buttons in some skins
 #include "llnetmap.h"
 #include "lggcontactsets.h"
+#include "llgroupcolormap.h"
+#include "fsfloaterkillfeed.h"
+#include "fscombathitmarker.h"
 #include "fspanellogin.h"
 
 #include "lltracerecording.h"
@@ -3055,6 +3058,17 @@ void LLViewerWindow::draw()
         // <exodus> Draw HUD stuff.
         bool inMouselook = gAgentCamera.cameraMouselook();
         static LLCachedControl<bool> fsMouselookCombatFeatures(gSavedSettings, "FSMouselookCombatFeatures", true);
+
+        // Kill feed: text-only overlay, positioned and scaled via the Kill
+        // Feed settings floater. Renders in and out of mouselook.
+        FSFloaterKillFeed::drawOverlay();
+
+        // Hitmarker flash and fading hit report for outgoing combat damage.
+        // Reset the crosshair tint each frame; the combat features pass
+        // below re-tints it when a target is identified under the crosshair.
+        FSCombatHitMarker::setCrosshairTint(LLColor4::white);
+        FSCombatHitMarker::draw();
+
         if (inMouselook && fsMouselookCombatFeatures)
         {
             S32 windowWidth = gViewerWindow->getWorldViewRectScaled().getWidth();
@@ -3122,20 +3136,80 @@ void LLViewerWindow::draw()
 
                         if (magicVector.mdV[VX] > -0.75 && magicVector.mdV[VX] < 0.75 && magicVector.mdV[VZ] > 0.0 && magicVector.mdV[VY] > -1.5 && magicVector.mdV[VY] < 1.5) // Do not fuck with these, cheater. :(
                         {
-                            LLAvatarName avatarName;
-                            std::string targetName = unknown_agent;
-                            if (LLAvatarNameCache::get(targetKey, &avatarName))
+                            // Line of sight: don't identify targets through walls, floors or
+                            // terrain. Two rays (avatar center, then head height) so a target
+                            // peeking over low cover still identifies. World geometry only;
+                            // avatars and attachments never block the check.
+                            static LLCachedControl<bool> renderIFFLineOfSight(gSavedSettings, "ExodusMouselookIFFLineOfSight", true);
+                            bool targetVisible = true;
+                            if (renderIFFLineOfSight)
                             {
-                                targetName = avatarName.getCompleteName();
+                                LLVector3 rayTarget = gAgent.getPosAgentFromGlobal(targetPosition);
+                                LLVector4a rayStart, rayEnd, rayHit;
+                                rayStart.load3(camera.getOrigin().mV);
+                                rayEnd.load3(rayTarget.mV);
+                                if (gPipeline.lineSegmentIntersectWorldGeometry(rayStart, rayEnd, &rayHit))
+                                {
+                                    rayTarget.mV[VZ] += 0.6f;
+                                    rayEnd.load3(rayTarget.mV);
+                                    targetVisible = !gPipeline.lineSegmentIntersectWorldGeometry(rayStart, rayEnd, &rayHit);
+                                }
                             }
 
-                            LLFontGL::getFontSansSerifBold()->renderUTF8(
-                                llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
-                                0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, targetColor,
-                                (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
-                            );
+                            if (targetVisible)
+                            {
+                                LLAvatarName avatarName;
+                                std::string targetName = unknown_agent;
+                                bool haveName = LLAvatarNameCache::get(targetKey, &avatarName);
+                                if (haveName)
+                                {
+                                    targetName = avatarName.getCompleteName();
+                                }
 
-                            crosshairRendered = true;
+                                // Name color: contact set color first, then group-based
+                                // nameplate tint, then the default nameplate color.
+                                LLColor4 nameColor;
+                                if (!contact_sets.hasFriendColorThatShouldShow(targetKey, ContactSetType::MINIMAP, nameColor))
+                                {
+                                    // Default nameplate color, same logic as LLVOAvatar::getNameTagColor()
+                                    nameColor = LLUIColorTable::instance().getColor("NameTagLegacy", LLColor4::white);
+                                    if (LLAvatarName::useDisplayNames())
+                                    {
+                                        nameColor = LLUIColorTable::instance().getColor(
+                                            (haveName && avatarName.isDisplayNameDefault()) ? "NameTagMatch" : "NameTagMismatch", LLColor4::white);
+                                    }
+
+                                    // Group-based nameplate tint
+                                    LLViewerObject* targetObject = gObjectList.findObject(targetKey);
+                                    LLVOAvatar* targetAvatar = targetObject ? targetObject->asAvatar() : nullptr;
+                                    if (targetAvatar && targetAvatar->getActiveGroupID().notNull())
+                                    {
+                                        LLColor4 groupColor = LLGroupColorMap::getInstance()->getGroupColor(targetAvatar->getActiveGroupID());
+                                        if (groupColor.mV[VW] >= 0.01f)
+                                        {
+                                            nameColor = groupColor;
+                                        }
+                                    }
+                                }
+
+                                // Feed the identified target's color to the custom
+                                // crosshair tint (LoS already verified above).
+                                FSCombatHitMarker::setCrosshairTint(nameColor);
+
+                                // The name text itself is optional; identification
+                                // still runs for the crosshair tint when disabled.
+                                static LLCachedControl<bool> renderIFFName(gSavedSettings, "ExodusMouselookIFFShowName", true);
+                                if (renderIFFName)
+                                {
+                                    LLFontGL::getFontSansSerifBold()->renderUTF8(
+                                        llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
+                                        0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, nameColor,
+                                        (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
+                                    );
+                                }
+
+                                crosshairRendered = true;
+                            }
                         }
                     }
 
