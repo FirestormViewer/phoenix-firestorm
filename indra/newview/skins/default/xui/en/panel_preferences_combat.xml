@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="480"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Combat"
+ name="combat">
+
+    <!-- ===== Target identification ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top="10"
+     width="520">
+        Target Identification
+    </text>
+    <check_box
+     control_name="FSMouselookCombatFeatures"
+     follows="left|top"
+     enabled_control="EnableMouselook"
+     height="16"
+     label="Enable combat features"
+     layout="topleft"
+     left="10"
+     name="FSMouselookCombatFeatures"
+     top_pad="8"
+     width="256" />
+    <check_box
+     control_name="ExodusMouselookIFF"
+     follows="left|top"
+     height="16"
+     label="Draw target markers"
+     layout="topleft"
+     left="28"
+     name="ExodusMouselookIFF"
+     top_pad="5"
+     width="256" />
+    <slider
+     control_name="ExodusMouselookIFFRange"
+     follows="left|top"
+     height="15"
+     can_edit_text="true"
+     decimal_digits="0"
+     increment="5"
+     layout="topleft"
+     label="Range (m):"
+     label_width="150"
+     show_text="true"
+     left="33"
+     max_val="500"
+     name="ExodusMouselookIFFRange"
+     top_pad="5"
+     width="333" />
+    <check_box
+     control_name="ExodusMouselookIFFLineOfSight"
+     follows="left|top"
+     height="16"
+     label="Require line of sight to identify target"
+     layout="topleft"
+     left="28"
+     name="ExodusMouselookIFFLineOfSight"
+     tool_tip="Don't show the name of the avatar under your crosshair when walls, floors or terrain block the view"
+     top_pad="5"
+     width="256" />
+    <check_box
+     control_name="ExodusMouselookIFFShowName"
+     follows="left|top"
+     height="16"
+     label="Show target name"
+     layout="topleft"
+     left="28"
+     name="ExodusMouselookIFFShowName"
+     tool_tip="Show the identified target's name under the crosshair. When off, identification still drives the crosshair color and combat feedback."
+     top_pad="5"
+     width="256" />
+
+    <!-- ===== Hit marker and crosshair ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="14"
+     width="520">
+        Hit Marker and Crosshair
+    </text>
+    <check_box
+     control_name="FSHitMarkerEnabled"
+     follows="left|top"
+     height="16"
+     label="Hitmarker (flash + sound on hit)"
+     layout="topleft"
+     left="10"
+     name="FSHitMarkerEnabledPref"
+     tool_tip="Combat 2.0 regions, via the LSL bridge"
+     top_pad="8"
+     width="256" />
+    <button
+     follows="left|top"
+     layout="topleft"
+     left_delta="260"
+     top_delta="-2"
+     height="20"
+     width="80"
+     label="Options..."
+     name="hit_marker_options_btn"
+     tool_tip="Hitmarker, crosshair, hit report and sound options">
+        <button.commit_callback
+         function="Pref.HitMarkerSettings" />
+    </button>
+
+    <!-- ===== Kill feed ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="14"
+     width="520">
+        Kill Feed
+    </text>
+    <check_box
+     control_name="FSKillFeedEnabled"
+     follows="left|top"
+     height="16"
+     label="Show kill feed overlay"
+     layout="topleft"
+     left="10"
+     name="kill_feed_enabled_pref"
+     tool_tip="Region-wide Combat 2.0 death events as an on-screen feed (via the LSL bridge)"
+     top_pad="8"
+     width="256" />
+    <button
+     follows="left|top"
+     layout="topleft"
+     left_delta="260"
+     top_delta="-2"
+     height="20"
+     width="80"
+     label="Options..."
+     name="kill_feed_options_btn"
+     tool_tip="Kill feed position, size, font and color options">
+        <button.commit_callback
+         function="Pref.KillFeedSettings" />
+    </button>
+
+    <!-- ===== Over-the-Shoulder camera ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="14"
+     width="520">
+        Over-the-Shoulder Camera
+    </text>
+    <check_box
+     control_name="OTSEnabled"
+     follows="left|top"
+     height="16"
+     label="Enable OTS Mode (replaces Mouselook — M key)"
+     layout="topleft"
+     left="10"
+     name="ots_enabled_prefs"
+     top_pad="8"
+     width="360" />
+    <slider
+     control_name="OTSCameraDistance"
+     can_edit_text="true"
+     decimal_digits="2"
+     follows="left|top"
+     height="15"
+     initial_value="3.0"
+     layout="topleft"
+     label="Distance (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="10.0"
+     min_val="0.5"
+     name="OTSCameraDistancePref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSCameraSide"
+     can_edit_text="true"
+     decimal_digits="2"
+     follows="left|top"
+     height="15"
+     initial_value="-0.5"
+     layout="topleft"
+     label="Side Offset (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="2.0"
+     min_val="-2.0"
+     name="OTSCameraSidePref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSCameraHeight"
+     can_edit_text="true"
+     decimal_digits="2"
+     follows="left|top"
+     height="15"
+     initial_value="0.5"
+     layout="topleft"
+     label="Height (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="3.0"
+     min_val="-1.0"
+     name="OTSCameraHeightPref"
+     top_pad="5"
+     width="333" />
+    <slider
+     control_name="OTSFocusDistance"
+     can_edit_text="true"
+     decimal_digits="1"
+     follows="left|top"
+     height="15"
+     initial_value="10.0"
+     layout="topleft"
+     label="Focus Distance (m):"
+     label_width="120"
+     show_text="true"
+     left="10"
+     max_val="50.0"
+     min_val="2.0"
+     name="OTSFocusDistancePref"
+     top_pad="5"
+     width="333" />
+    <check_box
+     control_name="OTSCameraCollision"
+     follows="left|top"
+     height="16"
+     label="Camera collision (keep camera out of walls and floors)"
+     layout="topleft"
+     left="10"
+     name="ots_camera_collision_prefs"
+     tool_tip="Pull the camera in closer when world geometry is between you and it, instead of clipping through. Avatars never block the camera."
+     top_pad="8"
+     width="360" />
+    <check_box
+     control_name="FSOTSReportEyeCamera"
+     follows="left|top"
+     height="16"
+     label="Fair-fire camera in OTS (scripts see your eye, not the shoulder camera)"
+     layout="topleft"
+     left="10"
+     name="ots_eye_camera_prefs"
+     tool_tip="While in OTS, report the mouselook-equivalent camera to the region so camera-position weapons fire from your avatar toward the crosshair instead of from the shoulder camera. Prevents shooting around cover your avatar is behind."
+     top_pad="8"
+     width="520" />
+
+</panel>

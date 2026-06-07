@@ -252,6 +252,8 @@ public:
 
     // Hitmarker options floater
     void onClickHitMarkerSettings();
+    // Kill feed floater
+    void onClickKillFeedSettings();
 
     // <FS:Ansariel> Improved graphics preferences
     void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);

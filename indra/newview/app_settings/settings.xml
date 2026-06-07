@@ -25047,6 +25047,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSOTSTrueAimDot</key>
+      <map>
+      <key>Comment</key>
+      <string>In OTS, slide the crosshair center dot to where a bullet fired from the avatar actually lands (eye-origin raycast); the chevrons stay on the camera ray</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSOTSReportEyeCamera</key>
+      <map>
+      <key>Comment</key>
+      <string>In OTS, report the mouselook-equivalent camera (avatar eye, aimed at the crosshair target) to the sim so campos weapons fire from the avatar instead of the shoulder camera</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>FSHitMarkerText</key>
       <map>
       <key>Comment</key>

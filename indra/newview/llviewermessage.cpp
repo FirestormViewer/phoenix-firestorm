@@ -4273,6 +4273,46 @@ void send_agent_update(bool force_send, bool send_reliable)
 
     LLVector3 camera_pos_agent = gAgentCamera.getCameraPositionAgent(); // local to avatar's region
     LLVector3 camera_at = LLViewerCamera::getInstance()->getAtAxis();
+    LLVector3 camera_left = LLViewerCamera::getInstance()->getLeftAxis();
+    LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
+
+    // OTS fair-fire camera: report the mouselook-equivalent camera to the
+    // sim. Campos weapons fire from llGetCameraPos along the camera's
+    // at-axis; with the real OTS shoulder camera that means bullets
+    // originate behind/offset from the avatar and can clear cover the
+    // avatar is hiding behind. Substitute the avatar's eye, aimed at the
+    // crosshair's world target, so scripts see exactly what mouselook
+    // would have told them. The render camera is untouched.
+    static LLCachedControl<bool> fs_ots_eye_camera(gSavedSettings, "FSOTSReportEyeCamera", true);
+    if (fs_ots_eye_camera && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    {
+        const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
+
+        // Converge on the crosshair: aim from the eye at whatever the
+        // camera ray hits, falling back to a far point for open sky so
+        // the direction degrades to camera-parallel.
+        const F32 CONVERGE_RANGE = 512.f; // meters
+        LLVector3 target = camera_pos_agent + camera_at * CONVERGE_RANGE;
+        LLVector4a ray_start, ray_end, hit;
+        ray_start.load3(camera_pos_agent.mV);
+        ray_end.load3(target.mV);
+        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
+        {
+            target.set(hit.getF32ptr());
+        }
+
+        LLVector3 at = target - eye;
+        if (at.normalize() > 0.f)
+        {
+            LLCoordFrame frame;
+            frame.lookDir(at);
+            camera_pos_agent = eye;
+            camera_at = frame.getAtAxis();
+            camera_left = frame.getLeftAxis();
+            camera_up = frame.getUpAxis();
+        }
+    }
+
     LLQuaternion body_rotation = gAgent.getFrameAgent().getQuaternion();
     LLQuaternion head_rotation = gAgent.getHeadRotation();
     U8 render_state = gAgent.getRenderState();
@@ -4397,8 +4437,8 @@ void send_agent_update(bool force_send, bool send_reliable)
 
     msg->addVector3Fast(_PREHASH_CameraCenter, camera_pos_agent);
     msg->addVector3Fast(_PREHASH_CameraAtAxis, camera_at);
-    msg->addVector3Fast(_PREHASH_CameraLeftAxis, LLViewerCamera::getInstance()->getLeftAxis());
-    msg->addVector3Fast(_PREHASH_CameraUpAxis, LLViewerCamera::getInstance()->getUpAxis());
+    msg->addVector3Fast(_PREHASH_CameraLeftAxis, camera_left);
+    msg->addVector3Fast(_PREHASH_CameraUpAxis, camera_up);
 
     static F32 last_draw_disatance_step = 1024;
     F32 memory_limited_draw_distance = gAgentCamera.mDrawDistance;
