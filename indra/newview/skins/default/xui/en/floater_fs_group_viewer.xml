@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_minimize="true"
+ can_resize="true"
+ height="320"
+ min_height="200"
+ min_width="240"
+ layout="topleft"
+ name="floater_fs_group_viewer"
+ save_rect="true"
+ single_instance="true"
+ title="GROUP VIEWER"
+ width="300">
+    <fs_scroll_list
+     name="group_list"
+     follows="all"
+     layout="topleft"
+     left="8"
+     top="20"
+     right="-8"
+     bottom="-60"
+     draw_heading="true"
+     multi_select="false"
+     sort_column="count"
+     sort_ascending="false">
+        <columns
+         name="group_name"
+         label="Group"
+         relative_width="0.75" />
+        <columns
+         name="count"
+         label="Worn"
+         relative_width="0.25" />
+    </fs_scroll_list>
+    <check_box
+     name="ignore_inactive_check"
+     follows="left|right|bottom"
+     layout="topleft"
+     left="8"
+     bottom="-34"
+     height="16"
+     width="280"
+     initial_value="false"
+     label="Ignore inactive avatars (stationary over 60s)"
+     tool_tip="Don't count avatars that haven't moved for more than a minute" />
+    <text
+     name="status_text"
+     type="string"
+     follows="left|right|bottom"
+     layout="topleft"
+     left="8"
+     bottom="-10"
+     height="14"
+     width="280">
+        0 avatars, 0 groups
+    </text>
+</floater>

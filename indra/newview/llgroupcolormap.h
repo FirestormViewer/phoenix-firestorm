@@ -43,6 +43,10 @@ public:
     /** True if a non-transparent color is stored for this group. */
     bool hasGroupColor(const LLUUID& group_id) const;
 
+    /** True if any group has a color configured; used to skip group lookups
+     *  (and the attachment-group probe) entirely when tinting is unused. */
+    bool hasAnyColors() const { return !mColors.empty(); }
+
     /** Remove the color entry for this group. */
     void clearGroupColor(const LLUUID& group_id);
 

@@ -250,6 +250,11 @@ public:
     // <FS:Ansariel> Clear web browser cache button
     void onClickWebBrowserClearCache();
 
+    // Hitmarker options floater
+    void onClickHitMarkerSettings();
+    // Kill feed floater
+    void onClickKillFeedSettings();
+
     // Offline login splash background picker
     void onClickBrowseSplashImage();
     // Login bar logo replacement picker

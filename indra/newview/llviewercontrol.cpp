@@ -874,6 +874,18 @@ static void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue)
 }
 // </FS:PP>
 
+// Kill Feed: bridge combat log listener follows the enable setting
+static void handleKillFeedEnabledChanged(const LLSD& newvalue)
+{
+    FSLSLBridge::instance().viewerToLSL(newvalue.asBoolean() ? "KillFeedListen|1" : "KillFeedListen|0");
+}
+
+// Hitmarker: bridge combat hits listener follows the enable setting
+static void handleHitMarkerEnabledChanged(const LLSD& newvalue)
+{
+    FSLSLBridge::instance().viewerToLSL(newvalue.asBoolean() ? "CombatHitsListen|1" : "CombatHitsListen|0");
+}
+
 // Offline login splash: re-apply immediately when changed at the login screen
 static void handleLoginSplashChanged(const LLSD& newvalue)
 {
@@ -1523,6 +1535,8 @@ void settings_setup_listeners()
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "UseLSLFlightAssist", handleFlightAssistOptionChanged);
     setting_setup_signal_listener(gSavedPerAccountSettings, "UseMoveLock", handleMovelockOptionChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSKillFeedEnabled", handleKillFeedEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSHitMarkerEnabled", handleHitMarkerEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "FSLocalLoginSplash", handleLoginSplashChanged);
     setting_setup_signal_listener(gSavedSettings, "FSLocalLoginSplashImage", handleLoginSplashChanged);
     setting_setup_signal_listener(gSavedSettings, "FSShowLoginLogo", handleLoginSplashChanged);

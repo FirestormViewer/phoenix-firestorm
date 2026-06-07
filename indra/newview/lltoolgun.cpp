@@ -28,6 +28,7 @@
 
 #include "lltoolgun.h"
 
+#include "fscombathitmarker.h"
 #include "llviewerwindow.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -172,6 +173,16 @@ void LLToolGun::draw()
     static LLCachedControl<bool> showCrosshairs(gSavedSettings, "ShowCrosshairs");
     if (showCrosshairs)
     {
+        // Custom composite crosshair (dot + arrows) replaces the stock one
+        static LLCachedControl<bool> customCrosshair(gSavedSettings, "FSCustomCrosshair", false);
+        if (customCrosshair)
+        {
+            FSCombatHitMarker::drawCrosshair(
+                gViewerWindow->getWorldViewRectScaled().getWidth(),
+                gViewerWindow->getWorldViewRectScaled().getHeight());
+            return;
+        }
+
         // <FS:Ansariel> Performance tweak
         //LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
         //crosshair->draw(

@@ -452,49 +452,14 @@
          tool_tip="Display crosshairs when in mouselook mode"
          top_pad="5"
          width="256" />
-        <check_box
-         control_name="FSMouselookCombatFeatures"
-         follows="left|top"
-         enabled_control="EnableMouselook"
-         height="16"
-         label="Enable combat features"
-         layout="topleft"
-         name="FSMouselookCombatFeatures"
-         top_pad="5"
-         width="256" />
-        <check_box
-         control_name="ExodusMouselookIFF"
-         follows="left|top"
-         height="16"
-         label="Draw target markers"
-         layout="topleft"
-         left_delta="10"
-         name="ExodusMouselookIFF"
-         top_pad="5"
-         width="256" />
-        <slider
-         control_name="ExodusMouselookIFFRange"
-         follows="left|top"
-         height="15"
-         can_edit_text="true"
-         decimal_digits="0"
-         increment="5"
-         layout="topleft"
-         label="Range (m):"
-         label_width="150"
-         show_text="true"
-         left_delta="5"
-         max_val="500"
-         name="ExodusMouselookIFFRange"
-         top_pad="5"
-         width="333" />
+        <!-- Combat features moved to Preferences > Combat -->
         <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="-10"
+         left_delta="5"
          name="Mouse Sensitivity"
          top_pad="10"
          width="160">
