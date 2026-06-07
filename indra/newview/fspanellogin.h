@@ -113,6 +113,7 @@ private:
     static void onClickGridBuilder(void*);
     static void onShowHidePasswordClick(void*);
     static std::string credentialName();
+    static LLUUID loadLocalLoginImage(const std::string& path);
 
 private:
     boost::signals2::connection mGridListChangedCallbackConnection;
