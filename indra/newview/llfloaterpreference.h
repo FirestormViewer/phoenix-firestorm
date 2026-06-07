@@ -252,6 +252,8 @@ public:
 
     // Hitmarker options floater
     void onClickHitMarkerSettings();
+    // Kill feed floater
+    void onClickKillFeedSettings();
 
     // Offline login splash background picker
     void onClickBrowseSplashImage();

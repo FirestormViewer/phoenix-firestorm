@@ -26,13 +26,18 @@
 #include "fscombathitmarker.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llaudioengine.h"
 #include "llavatarnamecache.h"
+#include "llcriticaldamp.h"
 #include "llrender.h"
 #include "llsdjson.h"
 #include "llui.h"
+#include "llviewercamera.h"
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
+#include "llvoavatarself.h"
+#include "pipeline.h"
 
 #include <boost/json.hpp>
 
@@ -443,11 +448,79 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
     static LLCachedControl<bool> target_color(gSavedSettings, "FSCrosshairTargetColor", false);
     const LLColor4 color = target_color ? sCrosshairTint : LLColor4::white;
 
+    // True-impact dot: the chevrons mark the camera ray, but a bullet
+    // travels from the avatar (which is what the sim is told), so near
+    // cover the two diverge in OTS. Cast the bullet's ray (eye origin,
+    // camera direction) against world geometry and slide the dot to where
+    // it actually lands. With nothing hit (open sky) the rays agree at
+    // infinity and the dot rests at center, so there is always a dot to
+    // aim with.
+    F32 offset_x = 0.f;
+    F32 offset_y = 0.f;
+    static LLCachedControl<bool> true_aim(gSavedSettings, "FSOTSTrueAimDot", true);
+    if (true_aim && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    {
+        const F32 TRUE_AIM_RANGE = 256.f; // meters; past this the parallax is subpixel
+        LLViewerCamera* camera = LLViewerCamera::getInstance();
+        const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
+        LLVector4a ray_start, ray_end, hit;
+
+        // Bullet direction mirrors what the sim is told. With the
+        // fair-fire camera on, scripts see the eye aimed at the camera
+        // ray's world target (converged); off, they see the real camera's
+        // at-axis (parallel from the avatar).
+        LLVector3 dir = camera->getAtAxis();
+        static LLCachedControl<bool> eye_camera(gSavedSettings, "FSOTSReportEyeCamera", true);
+        if (eye_camera)
+        {
+            const F32 CONVERGE_RANGE = 512.f;
+            LLVector3 target = camera->getOrigin() + dir * CONVERGE_RANGE;
+            ray_start.load3(camera->getOrigin().mV);
+            ray_end.load3(target.mV);
+            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
+            {
+                target.set(hit.getF32ptr());
+            }
+            LLVector3 converged = target - eye;
+            if (converged.normalize() > 0.f)
+            {
+                dir = converged;
+            }
+        }
+
+        const LLVector3 end = eye + dir * TRUE_AIM_RANGE;
+        ray_start.load3(eye.mV);
+        ray_end.load3(end.mV);
+        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
+        {
+            const LLRect& world_rect = gViewerWindow->getWorldViewRectScaled();
+            LLCoordGL screen(world_rect.getCenterX(), world_rect.getCenterY());
+            camera->projectPosAgentToScreen(LLVector3(hit.getF32ptr()), screen, true);
+            offset_x = (F32)(screen.mX - world_rect.getCenterX());
+            offset_y = (F32)(screen.mY - world_rect.getCenterY());
+        }
+    }
+
+    // Smooth the dot's travel (raycasts against rough geometry jitter) and
+    // snap to center inside a small deadzone so it doesn't shimmer at rest.
+    static F32 smoothed_x = 0.f;
+    static F32 smoothed_y = 0.f;
+    const F32 interp = LLSmoothInterpolation::getInterpolant(0.05f);
+    smoothed_x = lerp(smoothed_x, offset_x, interp);
+    smoothed_y = lerp(smoothed_y, offset_y, interp);
+    const F32 DEADZONE = 1.5f; // ui px
+    if (fabsf(smoothed_x) < DEADZONE && fabsf(smoothed_y) < DEADZONE &&
+        fabsf(offset_x) < DEADZONE && fabsf(offset_y) < DEADZONE)
+    {
+        smoothed_x = 0.f;
+        smoothed_y = 0.f;
+    }
+
     if (dot)
     {
         const S32 w = (S32)(dot->getWidth() * scale);
         const S32 h = (S32)(dot->getHeight() * scale);
-        dot->draw((view_width - w) / 2, (view_height - h) / 2, w, h, color);
+        dot->draw((view_width - w) / 2 + (S32)smoothed_x, (view_height - h) / 2 + (S32)smoothed_y, w, h, color);
     }
     if (arrows)
     {

@@ -484,6 +484,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",       boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
     // </FS:Ansariel>
     mCommitCallbackRegistrar.add("Pref.HitMarkerSettings",          boost::bind(&LLFloaterPreference::onClickHitMarkerSettings, this));
+    mCommitCallbackRegistrar.add("Pref.KillFeedSettings",           boost::bind(&LLFloaterPreference::onClickKillFeedSettings, this));
     mCommitCallbackRegistrar.add("Pref.BrowseSplashImage",          boost::bind(&LLFloaterPreference::onClickBrowseSplashImage, this));
     mCommitCallbackRegistrar.add("Pref.BrowseLoginLogo",            boost::bind(&LLFloaterPreference::onClickBrowseLoginLogo, this));
     mCommitCallbackRegistrar.add("Pref.SetCache",               boost::bind(&LLFloaterPreference::onClickSetCache, this));
@@ -1726,6 +1727,10 @@ void LLFloaterPreference::onClickHitMarkerSettings()
     LLFloaterReg::showInstance("fs_hit_marker");
 }
 
+// Kill feed floater (holds its own position/size/font options)
+void LLFloaterPreference::onClickKillFeedSettings()
+{
+    LLFloaterReg::showInstance("fs_kill_feed");
 // Offline login splash: pick a local image for the login background
 void LLFloaterPreference::onClickBrowseSplashImage()
 {

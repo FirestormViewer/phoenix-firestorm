@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="380"
+ height="402"
  layout="topleft"
  name="floater_fs_hit_marker"
  save_rect="true"
@@ -40,6 +40,16 @@
      width="300"
      label="Color crosshair by identified target"
      tool_tip="Tint the custom crosshair with the contact set / group color of the avatar under it (requires combat features)" />
+    <check_box
+     control_name="FSOTSTrueAimDot"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     height="16"
+     width="300"
+     label="True-aim dot in OTS"
+     tool_tip="Slide the center dot to where a shot fired from your avatar actually lands; the chevrons stay on the camera ray. Centered when nothing is in the way." />
     <slider
      control_name="FSHitMarkerScale"
      follows="left|top"
