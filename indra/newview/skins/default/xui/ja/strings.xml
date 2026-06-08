@@ -6611,4 +6611,10 @@ Rez時間：[OBJECT_REZ_TIME]
 
 	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
 
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">一般</string>
+    <string name="New Clothes">新しい衣装</string>
+    <string name="New Day Cycle">新しいデイサイクル</string>
+    <string name="New Body Parts">新しい身体部位</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

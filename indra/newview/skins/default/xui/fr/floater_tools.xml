@@ -503,6 +503,7 @@ Bas ↔ + bas
 		</panel>
 		<panel label="Contenu" name="Contents">
 			<button label="Nouveau script" label_selected="Nouveau script" name="button new script"/>
+			<button label="Ajouter" name="btn_add_item"/>
 			<button label="Droits" name="button permissions"/>
 			<button label="Rafraîchir" name="button refresh"/>
 			<button label="Réinit. scripts" name="btn_reset_scripts"/>

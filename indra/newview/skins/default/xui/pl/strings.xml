@@ -6726,4 +6726,10 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="FSAvatarAlignToggleFull">
 		Pełne
 	</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">Ogólne</string>
+    <string name="New Clothes">Nowe ubranie</string>
+    <string name="New Day Cycle">Nowy cykl dnia</string>
+    <string name="New Body Parts">Nowa część ciała</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

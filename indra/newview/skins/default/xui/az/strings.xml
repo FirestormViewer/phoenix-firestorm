@@ -6774,4 +6774,10 @@ Yerləşməniz: [AVATAR_POS]
 	<string name="FSObjectInventoryOneElement">1 element</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] element</string>
 	<string name="OpenSimInventoryValidationErrorGenericHelp">şəbəkə operatoru dəstək komandanız</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">Ümumi</string>
+    <string name="New Clothes">Yeni paltar</string>
+    <string name="New Day Cycle">Yeni Gün dövrü</string>
+    <string name="New Body Parts">Yeni bədən hissəsi</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

@@ -6907,5 +6907,11 @@ ID объекта: [INSPECTING_KEY]
 	<string name="NoValidUUIDs">В импортированном файле не найдено действительных UUID.</string>
 	<string name="ImportListTooLarge">Слишком много записей. CSV-файл содержит [COUNT] записей, а доступно [MAX] слотов.</string>
 	<string name="ImportSuccessful">Успешно обработано [COUNT] записей.</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">Общие</string>
+    <string name="New Clothes">Новая одежда</string>
+    <string name="New Day Cycle">Новый Цикл дня</string>
+    <string name="New Body Parts">Новая часть тела</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 
 </strings>

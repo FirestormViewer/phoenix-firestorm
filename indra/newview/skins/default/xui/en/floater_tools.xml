@@ -3290,6 +3290,7 @@ Low ↔ Lwst
          filename="panel_tools_texture.xml">
 	   </panel>
 -->
+       <string name="New Note">New Notecard</string>
        <panel
          border="false"
          follows="all"
@@ -3301,6 +3302,7 @@ Low ↔ Lwst
          name="Contents"
          top_delta="0"
          width="295">
+             <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
             <button
              follows="left|top"
              height="35"
@@ -3319,6 +3321,435 @@ Low ↔ Lwst
              left_pad="5"
              name="button permissions"
              width="80" />
+             -->
+            <icons_combo_box
+             height="20"
+             layout="topleft"
+             left="10"
+             follows="left|top"
+             name="cmb_set_item"
+             top="8"
+             width="175">
+                <icons_combo_box.drop_down_button
+                  image_overlay="Inv_Script"
+                  image_overlay_alignment="left"
+                  imgoverlay_label_space="3"
+                  name="cmb_set_item_drop_down"
+                  pad_left="3"/>
+                <icons_combo_box.item
+                 value="NewScript lsl"
+                 name="newscript">
+                     <item.columns
+                      value="Inv_Script"
+                      width="16"
+                      valign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Script"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value=""
+                 enabled="false"
+                 name="general">
+                     <item.columns
+                      value="Inv_Object"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="General"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate notecard"
+                 name="New Note">
+                     <item.columns
+                      value="Inv_Notecard"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Note"
+                      halign="left"
+                      valign="center" />
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate gesture"
+                 name="New Gesture">
+                     <item.columns
+                      value="Inv_Gesture"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Gesture"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate material"
+                 name="New Material">
+                     <item.columns
+                      value="Inv_Material"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Material"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value=""
+                 enabled="false"
+                 name="New Clothes">
+                     <item.columns
+                      value="Inv_Clothing"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Clothes"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate shirt"
+                 name="New Shirt">
+                     <item.columns
+                      value="Inv_Shirt"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Shirt"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate pants"
+                 name="New Pants">
+                     <item.columns
+                      value="Inv_Pants"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Pants"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate shoes"
+                 name="New Shoes">
+                     <item.columns
+                      value="Inv_Shoe"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Shoes"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate socks"
+                 name="New Socks">
+                     <item.columns
+                      value="Inv_Socks"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Socks"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate jacket"
+                 name="New Jacket">
+                     <item.columns
+                      value="Inv_Jacket"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Jacket"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate skirt"
+                 name="New Skirt">
+                     <item.columns
+                      value="Inv_Skirt"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Skirt"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate gloves"
+                 name="New Gloves">
+                     <item.columns
+                      value="Inv_Gloves"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Gloves"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate undershirt"
+                 name="New Undershirt">
+                     <item.columns
+                      value="Inv_Undershirt"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Undershirt"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate underpants"
+                 name="New Underpants">
+                     <item.columns
+                      value="Inv_Underpants"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Underpants"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate alpha"
+                 name="New Alpha">
+                     <item.columns
+                      value="Inv_Alpha"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Alpha"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate tattoo"
+                 name="New Tattoo">
+                     <item.columns
+                      value="Inv_Tattoo"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Tattoo"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate universal"
+                 name="New Universal">
+                     <item.columns
+                      value="Inv_Universal"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Universal"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate physics"
+                 name="New Physics">
+                     <item.columns
+                      value="Inv_Physics"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Physics"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value=""
+                 enabled="false"
+                 name="New Body Parts">
+                     <item.columns
+                      value="Inv_Skin"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Body Parts"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate shape"
+                 name="New Shape">
+                     <item.columns
+                      value="Inv_BodyShape"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Shape"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate skin"
+                 name="New Skin">
+                     <item.columns
+                      value="Inv_Skin"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Skin"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate hair"
+                 name="New Hair">
+                     <item.columns
+                      value="Inv_Hair"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Hair"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate eyes"
+                 name="New Eyes">
+                     <item.columns
+                      value="Inv_Eye"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Eyes"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value=""
+                 enabled="false"
+                 name="New Settings">
+                     <item.columns
+                      value="Inv_Settings"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Settings"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate sky"
+                 name="New Sky">
+                     <item.columns
+                      value="Inv_SettingsSky"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Sky"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate water"
+                 name="New Water">
+                     <item.columns
+                      value="Inv_SettingsWater"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Water"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+                <icons_combo_box.item
+                 value="DoCreate daycycle"
+                 name="New Day Cycle">
+                     <item.columns
+                      value="Inv_SettingsDay"
+                      width="16"
+                      valign="center"
+                      halign="center"
+                      type="icon"/>
+                     <item.columns
+                      value="New Day Cycle"
+                      halign="left"
+                      valign="center"/>
+                </icons_combo_box.item>
+             </icons_combo_box>
+            <button
+             follows="left|top"
+             height="16"
+             label="Add"
+             layout="topleft"
+             top_pad="1"
+             tool_tip="Click to add the selected item to the object contents."
+             name="btn_add_item"
+             width="90" />
+            <button
+             follows="left|top"
+             height="16"
+             label="Permissions"
+             layout="topleft"
+             left_pad="5"
+             name="button permissions"
+             width="80" />
+            <!-- </FS:minerjr> [FIRE-36685] -->
             <button
              top="8"
              follows="left|top"
