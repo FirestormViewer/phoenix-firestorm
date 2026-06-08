@@ -88,6 +88,15 @@ namespace
         // Gather parameters for VVM query
         std::string channel = LLVersionInfo::instance().getChannel();
 
+        // SkoomaStorm party build: never query for updates. The feed only
+        // knows Soapstorm builds, so any answer it gives would "upgrade"
+        // this install to stock Soapstorm.
+        if (channel.find("SkoomaStorm") != std::string::npos)
+        {
+            LL_INFOS("VVM") << "SkoomaStorm build, skipping update check" << LL_ENDL;
+            return;
+        }
+
         // We use this for dev testing when working with VVM and working on the updater.  Not advisable to uncomment it.
         // std::string channel = "QA Target for Velopack";
 
