@@ -1565,7 +1565,7 @@ void LLWebRTCVoiceClient::processChannels(bool process)
 
 bool LLWebRTCVoiceClient::inProximalChannel()
 {
-    // <FS:PP> Test for FIRE-36672, disabled by default
+    // <FS:PP> FIRE-36672: Voice status indicator behavior change
     // inSpatialChannel() defaults to true with no session (parcel voice disabled), which keeps the conversation voice indicator green
     // Only report proximal when a spatial session is established
     static LLCachedControl<bool> require_established_session(gSavedSettings, "DebugWebRTCRequireEstablishedSpatialSession", false);

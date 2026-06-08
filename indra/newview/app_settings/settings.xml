@@ -17924,15 +17924,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>DebugWebRTCRequireEstablishedSpatialSession</key>
     <map>
       <key>Comment</key>
-      <string>Test for FIRE-36672</string>
+      <string>Only report proximal channel when a spatial session is established (FIRE-36672)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>VivoxVoiceHost</key>
     <map>
