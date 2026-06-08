@@ -562,6 +562,7 @@ Aşğ. ↔ Əaşğ.
 		<panel label="Məzmun" name="Contents">
 			<button label="Skript yarat" label_selected="Skript yarat" name="button new script"/>
 			<button label="İcazələr" name="button permissions"/>
+			<button label="Əlavə et" name="btn_add_item"/>
 			<button label="Yenilə" name="button refresh" width="100"/>
 			<button label="Skriptləri sıfırla" name="btn_reset_scripts" width="100"/>
 		</panel>

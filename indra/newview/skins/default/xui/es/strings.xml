@@ -6160,4 +6160,10 @@ del sitio web Secondlife.com y genera un informe del problema.
 
 [https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base de conocimientos]
 	</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">General</string>
+    <string name="New Clothes">Ropas nuevas</string>
+    <string name="New Day Cycle">Nuevo Ciclo del día</string>
+    <string name="New Body Parts">Nuevas partes del cuerpo</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

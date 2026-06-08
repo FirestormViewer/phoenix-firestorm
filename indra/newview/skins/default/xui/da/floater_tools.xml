@@ -479,6 +479,7 @@
 		</panel>
 		<panel label="Indhold" name="Contents">
 			<button label="Nyt script" label_selected="Nyt script" name="button new script"/>
+			<button label="Tilføj" name="btn_add_item"/>
 			<button label="Rettigheder" name="button permissions"/>
 		</panel>
 	</tab_container>

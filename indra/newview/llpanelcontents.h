@@ -40,6 +40,10 @@ class LLPanelObjectInventory;
 class LLViewerObject;
 class LLCheckBoxCtrl;
 class LLSpinCtrl;
+// <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
+class LLIconsComboBox;
+class LLComboBox;
+// </FS:minerjr> [FIRE-36685]zX
 
 class LLPanelContents : public LLPanel
 {
@@ -51,6 +55,11 @@ public:
     void            refresh();
     void            clearContents();
 
+    // <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
+    void onCommitSetItem(); // Set the new item that can be added to the objec's Content Inventory
+    void onClickAddItemToObject(); // Adds the actual item to the object's Content Inventory.
+    void onFinishCreateItem();
+    // </FS:minerjr> [FIRE-36685]
 
     static void     onClickNewScript(void*);
     static void     onClickPermissions(void*);
@@ -78,6 +87,15 @@ public:
     class LLFilterEditor* mFilterEditor;
     LLSaveFolderState mSavedFolderState;
     LLPanelObjectInventory* mPanelInventoryObject;
+    // <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
+    LLComboBox* mCMBSetItem; // Used to keep track of the Set Item combo-box for selecting what new item to create.
+    LLButton*   mBTNAddItemToObject; // Used to keep track of the button which will actually add the new item.
+    std::string mCMBCommand; // Used to store what command is selected by the Set Item combo-box. Options are NewScript, DoCreate.
+    std::string mCMBItemName; // The name of the item to be added.
+    std::string mCMBLabel; // Stores the label assigned to the Set Item combo-box button. Needed for translations and selection changes.
+    const static S32 CMB_SET_ITEM_TEXT_COL = 1; // Column index used for the Text of the Set Item combo-box.
+    const static S32 CMB_SET_ITEM_ICON_COL = 0; // Column index used for the Icon of the Set Item combo-box.
+    // </FS:minerjr> [FIRE-36685]
 };
 
 #endif // LL_LLPANELCONTENTS_H

@@ -6712,4 +6712,10 @@ Assistenza nel sito SecondLife.com e segnala il problema.
 	<string name="Unlimited">
 		Senza limiti
 	</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">Generale</string>
+    <string name="New Clothes">Nuovo indumento</string>
+    <string name="New Day Cycle">Nuovo ciclo giornata</string>
+    <string name="New Body Parts">Nuova parte del corpo</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

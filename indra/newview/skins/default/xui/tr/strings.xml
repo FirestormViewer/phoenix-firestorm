@@ -5925,4 +5925,10 @@ gidin ve sorunu bildirin.
 
 [https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Bilgi Bankası]
 	</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">Genel</string>
+    <string name="New Clothes">Yeni Giysiler</string>
+    <string name="New Day Cycle">New Day Cycle</string>
+    <string name="New Body Parts">Yeni Vücut Bölümleri</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

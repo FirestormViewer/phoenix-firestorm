@@ -7596,4 +7596,10 @@ SecondLife.com網站的「支援」部分
 	<string name="OmnifilterDefaultName">
 		預設
 	</string>
+  <!-- <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab -->
+    <string name="General">一般設定</string>
+    <string name="New Clothes">新服裝</string>
+    <string name="New Day Cycle">新的晝夜循環</string>
+    <string name="New Body Parts">新身體部位</string>
+  <!-- </FS:minerjr> [FIRE-36685] -->
 </strings>

@@ -415,6 +415,7 @@
 		<panel label="Doku" name="Texture"/>
 		<panel label="İçerik" name="Contents">
 			<button label="Yeni Komut Dosyası" label_selected="Yeni Komut Dosyası" name="button new script"/>
+			<button label="Ekle" name="btn_add_item"/>
 			<button label="İzinler" name="button permissions"/>
 		</panel>
 	</tab_container>

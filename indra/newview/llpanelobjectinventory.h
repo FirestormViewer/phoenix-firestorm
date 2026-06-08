@@ -47,6 +47,9 @@ class LLViewerObject;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLPanelObjectInventory : public LLPanel, public LLVOInventoryListener
 {
+    // <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
+    friend class FSNewItemCtrl; // Need to declare FSNewItemCtrl a friend class to access the protected methods(getItemByID())
+    // </FS:minerjr> [FIRE-36685]
 public:
     struct Params : public LLInitParam::Block<Params, LLPanel::Params>
     {

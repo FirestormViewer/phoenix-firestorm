@@ -534,6 +534,9 @@ Baix ↔ Mín
 			<button label="Atualizar" name="button refresh" width="92" left_pad="3"/>
 			<button label="Reiniciar scripts" name="btn_reset_scripts" width="92"/>
 			<filter_editor label="Filtrar conteúdo" name="contents_filter"/>
+			<button label="Novo script" label_selected="Novo script" name="button new script"/>
+			<button label="Adicionar" name="btn_add_item"/>
+			<button label="Autorizações" name="button permissions"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
