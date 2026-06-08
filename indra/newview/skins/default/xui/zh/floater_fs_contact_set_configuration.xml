@@ -17,7 +17,10 @@
 		<text name="global_label">
 			全域設定：
 		</text>
+		<check_box label="在聯絡人分組列表中顯示個人檔案圖示" name="FSContactSetsListShowIcons" />
 		<color_swatch label="顏色" name="global_swatch" tool_tip="點擊以打開顏色選擇" />
+		<color_swatch name="offline_swatch" tool_tip="用於未歸入任何分組的聯絡人離線狀態顏色。在聯絡人自訂分組中，自訂的分組顏色具有更高優先權。" />
+		<check_box label="自訂離線聯絡人顏色" name="FSContactSetsListColorizeOffline" />
 		<text name="label_online">
 			在線通知：
 		</text>

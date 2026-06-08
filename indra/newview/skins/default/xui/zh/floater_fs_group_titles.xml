@@ -14,5 +14,4 @@
 	<button name="btnClearRegion" label="清除區域" tool_tip="移除所選頭銜的區域指派"/>
 	<button name="btnInfo" label="資訊" tool_tip="顯示目前所選頭銜所屬群組的資訊"/>
 	<button name="btnActivate" label="啟用" tool_tip="啟用目前選取的群組頭銜"/>
-	<check_box label="在未指派區域中顯示「無」" name="none_on_unassigned" />
 </floater>

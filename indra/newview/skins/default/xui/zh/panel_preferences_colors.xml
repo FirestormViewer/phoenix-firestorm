@@ -16,6 +16,7 @@
 			<text name="htmllink_label">網址</text>
 			<text name="uriquerypart_label">網址路徑</text>
 			<text name="direct_label">管理</text>
+			<text name="server_chat_history_label">來自伺服器的群組聊天記錄</text>
 			<text name="header_colors">發件人：</text>
 			<text name="chat_name_label">化身</text>
 			<text name="object_name_header_label">物件</text>

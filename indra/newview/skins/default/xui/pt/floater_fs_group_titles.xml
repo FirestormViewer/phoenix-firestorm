@@ -14,5 +14,4 @@
 	<button name="btnClearRegion" label="Limpar região" tool_tip="Remover atribuição de região do título selecionado"/>
 	<button name="btnInfo" label="Info" tool_tip="Mostrar informações do grupo do título selecionado"/>
 	<button name="btnActivate" label="Ativar" tool_tip="Ativar o título de grupo selecionado"/>
-	<check_box label="'Nenhum' em regiões sem atribuição" name="none_on_unassigned" />
 </floater>
