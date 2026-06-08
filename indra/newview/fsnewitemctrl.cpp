@@ -253,11 +253,13 @@ void FSNewItemCtrl::saveAndClearInventoryFlags()
     S32 backup_inventory_flags = 0;
     backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowNewInventory")) * SHOW_NEW_INVENTORY;
     backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowInInventory")) * SHOW_IN_INVENTORY;
+    backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowGestureInventory")) * SHOW_GESTURE_INVENTORY;
     gSavedSettings.setS32("BackupInventoryFlags", backup_inventory_flags);
 
     // do not pop up preview floaters when creating new and in inventory items.
     gSavedSettings.setBOOL("ShowNewInventory", false);
     gSavedSettings.setBOOL("ShowInInventory", false);
+    gSavedSettings.setBOOL("ShowGestureInventory", false);
 }
 
 // Restores the Show Inventory settings.xml flags.
@@ -265,6 +267,7 @@ void FSNewItemCtrl::restoreInventoryFlags()
 {
     // Restore the show new inventory current settings
     S32 backup_inventory_flags = gSavedSettings.getS32("BackupInventoryFlags");
+    gSavedSettings.setBOOL("ShowGestureInventory", bool(backup_inventory_flags & SHOW_GESTURE_INVENTORY));
     gSavedSettings.setBOOL("ShowNewInventory", bool(backup_inventory_flags & SHOW_NEW_INVENTORY));
     gSavedSettings.setBOOL("ShowInInventory", bool(backup_inventory_flags & SHOW_IN_INVENTORY));
 }

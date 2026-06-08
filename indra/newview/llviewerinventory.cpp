@@ -1156,9 +1156,14 @@ void create_gesture_cb(const LLUUID& inv_item)
             gInventory.updateItem(item);
             gInventory.notifyObservers();
 
+            // <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
+            if (gSavedSettings.getBOOL("ShowGestureInventory"))
+            {
+            // </FS:minerjr> [FIRE-36685]
             LLPreviewGesture* preview = LLPreviewGesture::show(inv_item,  LLUUID::null);
             // Force to be entirely onscreen.
             gFloaterView->adjustToFitScreen(preview, false);
+            }// <FS:minerjr> [FIRE-36685] - Toolbox Window - Add dropdown of new items to Content tab
         }
     }
 }
