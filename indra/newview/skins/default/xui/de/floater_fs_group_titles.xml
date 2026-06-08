@@ -14,5 +14,4 @@
 	<button name="btnClearRegion" label="Region löschen" tool_tip="Regionszuweisung des ausgewählten Titels entfernen"/>
 	<button name="btnInfo" label="Info" tool_tip="Informationen zur Gruppe des aktuell ausgewählten Titels anzeigen"/>
 	<button name="btnActivate" label="Aktivieren" tool_tip="Aktuell ausgewählten Gruppentitel aktivieren"/>
-	<check_box label="'Keiner' in Regionen ohne Zuweisung" name="none_on_unassigned" />
 </floater>

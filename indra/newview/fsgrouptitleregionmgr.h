@@ -59,8 +59,11 @@ public:
     std::string getRegionForTitle(const LLUUID& group_id, const LLUUID& role_id) const;
     std::vector<std::string> getRegionDisplayNamesForTitle(const LLUUID& group_id, const LLUUID& role_id) const;
     bool getAssignmentForRegion(const std::string& region_name, LLUUID& group_id, LLUUID& role_id) const;
-    void setNoneOnUnassigned(bool enabled);
-    bool getNoneOnUnassigned() const { return mNoneOnUnassigned; }
+    void setEnabled(bool enabled);
+    bool getEnabled() const { return mEnabled; }
+    void setDefaultTitle(const LLUUID& group_id, const LLUUID& role_id);
+    const LLUUID& getDefaultGroupID() const { return mDefaultGroupID; }
+    const LLUUID& getDefaultRoleID() const { return mDefaultRoleID; }
     void showRegionInputDialog(const LLUUID& group_id, const LLUUID& role_id);
     static std::string sanitizeRegionName(const std::string& input);
 
@@ -69,6 +72,7 @@ public:
 
 private:
     void validateAndSetAssignment(const LLUUID& group_id, const LLUUID& role_id, const std::string& region_name);
+    void applyGroupTitle(const LLUUID& group_id, const LLUUID& role_id);
     void onRegionChanged();
     void cancelPendingValidation();
     void onValidationResult(U64 region_handle);
@@ -76,7 +80,9 @@ private:
     std::string getFilename() const;
     static std::string normalizeRegionName(const std::string& name);
     static bool onRegionInputCallback(const LLSD& notification, const LLSD& response);
-    bool mNoneOnUnassigned = false;
+    bool mEnabled = false;
+    LLUUID mDefaultGroupID;
+    LLUUID mDefaultRoleID;
     bool mDataLoaded       = false;
     std::string mLastAppliedRegion;
 

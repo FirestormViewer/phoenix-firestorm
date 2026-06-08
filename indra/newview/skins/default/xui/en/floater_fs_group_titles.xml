@@ -37,6 +37,11 @@
 	 left="5"
 	 height="255">
 		<column
+		 name="default_marker"
+		 label="D"
+		 tool_tip="Default title worn in regions without an assignment"
+		 width="24" />
+		<column
 		 name="grouptitle"
 		 sort_column="title_sort_column"
 		 label="Title"/>
@@ -128,8 +133,21 @@
 	<check_box
 	 follows="left|bottom"
 	 height="16"
-	 label="Set to 'none' in unassigned regions"
 	 layout="topleft"
 	 left="5"
-	 name="none_on_unassigned" />
+	 top_pad="6"
+	 name="use_default_title"
+	 label="Use default title in regions without assignment"
+	 tool_tip="When you enter a region with no title assignment, switch to the title marked as default. A default of &lt;No group title&gt; wears no tag."
+	 width="350" />
+	<button
+	 name="btnSetDefault"
+	 label="Set as default"
+	 font="SansSerifSmall"
+	 tool_tip="Mark the selected title as the default for regions without an assignment"
+	 height="22"
+	 width="130"
+	 right="-4"
+	 top_delta="-3"
+	 follows="right|bottom"/>
 </floater>

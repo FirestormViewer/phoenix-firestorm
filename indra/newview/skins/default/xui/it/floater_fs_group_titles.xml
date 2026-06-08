@@ -14,5 +14,4 @@
 	<button name="btnClearRegion" label="Cancella reg." tool_tip="Rimuovi l'assegnazione della regione dal titolo selezionato" />
 	<button name="btnInfo" tool_tip="Mostra il profilo del gruppo del titolo selezionato" />
 	<button name="btnActivate" label="Attiva" tool_tip="Attiva il titolo selezionato" />
-	<check_box label="'Nessuno' nelle regioni senza preset" name="none_on_unassigned" />
 </floater>
