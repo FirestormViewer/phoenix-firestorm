@@ -162,8 +162,11 @@ bool FSFloaterPerformance::postBuild()
     mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxRenderTime, this));
 
     LLAvatarComplexityControls::setIndirectMaxArc();
+
+    // This seems counter intuitive, since what if a user wants to set this lower or higher than their currently set view distance,
+    // and also have it persist upon viewer startup? Commenting this out for now, so if it is desired it can be easily brought back.
     // store the current setting as the users desired reflection detail and DD
-    if(!LLPerfStats::tunables.userAutoTuneEnabled)
+    /*if(!LLPerfStats::tunables.userAutoTuneEnabled)
     {
         if (gSavedDrawDistance)
         {
@@ -173,7 +176,7 @@ bool FSFloaterPerformance::postBuild()
         {
             gSavedSettings.setF32("AutoTuneRenderFarClipTarget", LLPipeline::RenderFarClip);
         }
-    }
+    }*/
 
     return true;
 }
