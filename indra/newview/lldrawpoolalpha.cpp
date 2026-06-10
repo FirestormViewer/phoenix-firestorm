@@ -198,15 +198,31 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
     // explicitly unbind here so render loop doesn't make assumptions about the last shader
     // already being setup for rendering
     LLGLSLShader::unbind();
+    // <FS:Beq> ALPHA render fix. Identified by mayatonton (Ayastorm)
+    // if (!LLPipeline::sRenderingHUDs)
+    // {
+    //     // first pass, render rigged objects only and render to depth buffer
+    //     forwardRender(true);
+    // }
 
-    if (!LLPipeline::sRenderingHUDs)
+    // // second pass, regular forward alpha rendering
+    // forwardRender();
+    if (!LLPipeline::sRenderingHUDs &&
+    getType() == LLDrawPool::POOL_ALPHA_POST_WATER)
     {
-        // first pass, render rigged objects only and render to depth buffer
-        forwardRender(true);
+        // back-to-front: non-rigged background first, rigged foreground after
+        forwardRender();        // non-rigged (Rez Object alpha BLEND)
+        forwardRender(true);    // rigged (attachment alpha BLEND) — over the bg
     }
-
-    // second pass, regular forward alpha rendering
-    forwardRender();
+    else
+    {
+        // PRE_WATER / HUD: keep upstream order (water fog integrity).
+        if (!LLPipeline::sRenderingHUDs)
+        {
+            forwardRender(true);
+        }
+        forwardRender();
+    }
 
     // final pass, render to depth for depth of field effects
     if (!LLPipeline::sImpostorRender && LLPipeline::RenderDepthOfField && !gCubeSnapshot && !LLPipeline::sRenderingHUDs && getType() == LLDrawPool::POOL_ALPHA_POST_WATER)
