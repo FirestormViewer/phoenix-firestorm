@@ -1898,7 +1898,7 @@ bool LLAppViewer::doFrame()
                 LLLFSThread::sLocal->pause();
             }
 
-           limitFramesPerSecond(frameTimer);
+           limitFramesPerSecond(frameTimer); // </XenHat> More stable FPS Limiter
            frameTimer.reset();
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df resumeMainloopTimeout");
@@ -1978,6 +1978,7 @@ void LLAppViewer::flushLFSIO()
     }
 }
 
+// <XenHat> More stable FPS Limiter
 void inline LLAppViewer::frameLimiterBusyLoop(const U64& sleep_us_remaining)
 {
     const U64 start_count = get_clock_count();
@@ -2064,6 +2065,7 @@ void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
         // </FS:Ansariel>
     }
 }
+// </XenHat>
 
 bool LLAppViewer::cleanup()
 {
