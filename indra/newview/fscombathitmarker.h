@@ -30,6 +30,7 @@
 
 #include "llsd.h"
 #include "lluuid.h"
+#include "v3math.h"
 #include "v4color.h"
 
 class FSCombatHitMarker
@@ -57,6 +58,15 @@ public:
     // crosshair). White when nothing is identified. Only applied when
     // FSCrosshairTargetColor is enabled.
     static void setCrosshairTint(const LLColor4& color);
+
+    // OTS fair-fire convergence target: the world point under the render
+    // camera's crosshair that a bullet fired from the avatar's eye should
+    // aim at. Avatars are included (so aiming at a target converges on the
+    // target, not the world geometry behind it); the shooter's own body and
+    // attachments are excluded. Shared by the reported eye camera
+    // (send_agent_update) and the true-aim dot so the two cannot drift apart.
+    static LLVector3 getOTSConvergenceTarget(const LLVector3& cam_origin,
+                                             const LLVector3& cam_at);
 
     // --- Damage type symbol table (for the symbols editor) ---------------
 
