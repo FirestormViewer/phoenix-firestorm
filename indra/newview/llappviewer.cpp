@@ -66,6 +66,9 @@
 #include "llconversationlog.h"
 #if LL_WINDOWS
 #include "lldxhardware.h"
+#elif LL_LINUX || LL_DARWIN
+#include <errno.h>
+#include <time.h>
 #endif
 #include "lltexturestats.h"
 #include "lltrace.h"
@@ -1979,16 +1982,62 @@ void LLAppViewer::flushLFSIO()
 }
 
 // <XenHat> More stable FPS Limiter
+#if LL_WINDOWS
+// Waitable timer sleep for precise sub-millisecond waits on Windows.
+static void precise_wait_us(U64 us)
+{
+    // Use CreateWaitableTimerW for microsecond-precision sleeps.
+    HANDLE timer = CreateWaitableTimerW(NULL, TRUE, NULL);
+    if (timer)
+    {
+        // Relative time: -100ns units, negative means relative to current time.
+        LARGE_INTEGER li;
+        li.QuadPart = -(S64)(us * 100);
+        SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE);
+        WaitForSingleObject(timer, INFINITE);
+        CloseHandle(timer);
+    }
+}
+#endif
+
 void inline LLAppViewer::frameLimiterBusyLoop(const U64& sleep_us_remaining)
 {
     const U64 start_count = get_clock_count();
     const U64 target_ticks = start_count + (sleep_us_remaining * get_timer_info().mClockFrequency.value() / 1000000);
     // static LLFastTimer::DeclareTimer FTM_FRAME_LIMITER("Limiter Busy Loop");
     LL_PROFILE_ZONE_NAMED_CATEGORY_APP("sleep3");
+
+#if LL_LINUX || LL_DARWIN
+    struct timespec ts;
     while (get_clock_count() < target_ticks)
     {
-        sched_yield();
+        U64 now = get_clock_count();
+        U64 remaining_us = target_ticks - now;
+        if (remaining_us > 500)
+        {
+            // Use nanosleep for sub-millisecond precision.
+            ts.tv_sec = S64(remaining_us) / 1000000;
+            ts.tv_nsec = (S64(remaining_us) % 1000000) * 1000;
+            // Ignore EINTR — nanosleep already loops internally in _sleep_loop.
+            nanosleep(&ts, NULL);
+        }
     }
+#elif LL_WINDOWS
+    while (get_clock_count() < target_ticks)
+    {
+        U64 now = get_clock_count();
+        U64 remaining_us = target_ticks - now;
+        if (remaining_us > 100)
+        {
+            precise_wait_us(remaining_us);
+        }
+    }
+#else
+    while (get_clock_count() < target_ticks)
+    {
+        ms_sleep(1);
+    }
+#endif
 }
 
 void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
