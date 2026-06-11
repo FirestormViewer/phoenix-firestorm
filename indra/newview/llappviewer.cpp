@@ -66,10 +66,9 @@
 #include "llconversationlog.h"
 #if LL_WINDOWS
 #include "lldxhardware.h"
-#elif LL_LINUX || LL_DARWIN
-#include <errno.h>
-#include <time.h>
 #endif
+#include <chrono>       // for std::this_thread::sleep_for (FPS limiter)
+#include <thread>       // for std::this_thread::sleep_for (FPS limiter)
 #include "lltexturestats.h"
 #include "lltrace.h"
 #include "lltracethreadrecorder.h"
@@ -1984,6 +1983,8 @@ void LLAppViewer::flushLFSIO()
 // <XenHat> More stable FPS Limiter
 #if LL_WINDOWS
 // Waitable timer sleep for precise sub-millisecond waits on Windows.
+// This is required because the standard sleep function only provides us with a granularity of 1ms,
+// which is barely enough for the kind of precision we're looking for.
 static void sleep_remaining_us(U64 remaining_us)
 {
     // Use CreateWaitableTimerW for microsecond-precision sleeps.
@@ -2001,12 +2002,11 @@ static void sleep_remaining_us(U64 remaining_us)
 
 constexpr U64 SLEEP_THRESHOLD_US = 100;
 #elif LL_LINUX || LL_DARWIN
+// The standard sleep on unix-like platform. Provides micro-second granularity, therefore it can be used
+// as-is.
 static void sleep_remaining_us(U64 remaining_us)
 {
-    struct timespec ts;
-    ts.tv_sec = S64(remaining_us) / 1000000;
-    ts.tv_nsec = (S64(remaining_us) % 1000000) * 1000;
-    nanosleep(&ts, NULL);
+    std::this_thread::sleep_for(std::chrono::microseconds(remaining_us));
 }
 
 constexpr U64 SLEEP_THRESHOLD_US = 500;
