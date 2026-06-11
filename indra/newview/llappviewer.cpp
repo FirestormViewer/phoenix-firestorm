@@ -1984,7 +1984,7 @@ void LLAppViewer::flushLFSIO()
 // <XenHat> More stable FPS Limiter
 #if LL_WINDOWS
 // Waitable timer sleep for precise sub-millisecond waits on Windows.
-static void precise_wait_us(U64 us)
+static void sleep_remaining_us(U64 remaining_us)
 {
     // Use CreateWaitableTimerW for microsecond-precision sleeps.
     HANDLE timer = CreateWaitableTimerW(NULL, TRUE, NULL);
@@ -1992,53 +1992,28 @@ static void precise_wait_us(U64 us)
     {
         // Relative time: -100ns units, negative means relative to current time.
         LARGE_INTEGER li;
-        li.QuadPart = -(S64)(us * 100);
+        li.QuadPart = -(S64)(remaining_us * 100);
         SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE);
         WaitForSingleObject(timer, INFINITE);
         CloseHandle(timer);
     }
 }
-#endif
 
-void inline LLAppViewer::frameLimiterBusyLoop(const U64& sleep_us_remaining)
+constexpr U64 SLEEP_THRESHOLD_US = 100;
+#elif LL_LINUX || LL_DARWIN
+static void sleep_remaining_us(U64 remaining_us)
 {
-    const U64 start_count = get_clock_count();
-    const U64 target_ticks = start_count + (sleep_us_remaining * get_timer_info().mClockFrequency.value() / 1000000);
-    // static LLFastTimer::DeclareTimer FTM_FRAME_LIMITER("Limiter Busy Loop");
-    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("sleep3");
-
-#if LL_LINUX || LL_DARWIN
     struct timespec ts;
-    while (get_clock_count() < target_ticks)
-    {
-        U64 now = get_clock_count();
-        U64 remaining_us = target_ticks - now;
-        if (remaining_us > 500)
-        {
-            // Use nanosleep for sub-millisecond precision.
-            ts.tv_sec = S64(remaining_us) / 1000000;
-            ts.tv_nsec = (S64(remaining_us) % 1000000) * 1000;
-            // Ignore EINTR — nanosleep already loops internally in _sleep_loop.
-            nanosleep(&ts, NULL);
-        }
-    }
-#elif LL_WINDOWS
-    while (get_clock_count() < target_ticks)
-    {
-        U64 now = get_clock_count();
-        U64 remaining_us = target_ticks - now;
-        if (remaining_us > 100)
-        {
-            precise_wait_us(remaining_us);
-        }
-    }
-#else
-    while (get_clock_count() < target_ticks)
-    {
-        ms_sleep(1);
-    }
-#endif
+    ts.tv_sec = S64(remaining_us) / 1000000;
+    ts.tv_nsec = (S64(remaining_us) % 1000000) * 1000;
+    nanosleep(&ts, NULL);
 }
+
+constexpr U64 SLEEP_THRESHOLD_US = 500;
+#else
+static void sleep_remaining_us(U64 /* remaining_us */) { ms_sleep(1); }
+constexpr U64 SLEEP_THRESHOLD_US = 1;
+#endif
 
 void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
 {
@@ -2051,7 +2026,7 @@ void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
         static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
         // Account for overhead and sloppiness
         U32 fps_target = max_fps - 1;
-        if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && fps_target > F_APPROXIMATELY_ZERO)
+        if (LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && fps_target > F_APPROXIMATELY_ZERO)
         {
             // Sleep a while to limit frame rate.
             LL_PROFILE_ZONE_NAMED_CATEGORY_APP("sleep2");
@@ -2067,22 +2042,25 @@ void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
             {
                 const U64 SLEEP_TIME_US = TARGET_FRAME_TIME_US - ELAPSED_TIME_US - 100;  // 100us buffer
 
-                if (SLEEP_TIME_US >= 1000)
-                {
-                    // Sleep bulk milliseconds first
-                    const U32 sleep_ms = (U32)(SLEEP_TIME_US / 1000);
-                    ms_sleep(sleep_ms);
+                // Sleep bulk milliseconds, then busy-wait remainder for microsecond precision.
+                const U32 sleep_ms = (U32)(SLEEP_TIME_US / 1000);
+                if (sleep_ms) ms_sleep(sleep_ms);
 
-                    // Busy-wait for remaining microseconds with yield
-                    const U64 sleep_us_remaining = SLEEP_TIME_US % 1000;
-                    if (sleep_us_remaining > 100)
-                    {
-                        frameLimiterBusyLoop(sleep_us_remaining);
-                    }
-                }
-                else if (SLEEP_TIME_US > 0)
+                const U64 sleep_us_remaining = SLEEP_TIME_US % 1000;
+                if (sleep_us_remaining > 100)
                 {
-                    frameLimiterBusyLoop(SLEEP_TIME_US);
+                    const U64 start_count = get_clock_count();
+                    const U64 target_ticks = start_count + (sleep_us_remaining * get_timer_info().mClockFrequency.value() / 1000000);
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("sleep3");
+
+                    while (get_clock_count() < target_ticks)
+                    {
+                        U64 remaining_us = target_ticks - get_clock_count();
+                        if (remaining_us > SLEEP_THRESHOLD_US)
+                        {
+                            sleep_remaining_us(remaining_us);
+                        }
+                    }
                 }
             }
         }
@@ -2090,7 +2068,7 @@ void LLAppViewer::limitFramesPerSecond(LLTimer& frameTimer)
     else {
         // <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
         static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
-        if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
+        if (LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
         {
             // Sleep a while to limit frame rate.
             LLPerfStats::RecordSceneTime T ( LLPerfStats::StatType_t::RENDER_FPSLIMIT );
