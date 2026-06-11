@@ -5,4 +5,18 @@
 	<floater.string name="ao_dnd_only_on_full_interface">Możesz przeciągać notkę z zestawami animacji tylko na pełne okno interfejsu Animatora. Kliknij na ikonce klucza francuskiego, aby je otworzyć.</floater.string>
 	<floater.string name="ao_add_blank_label">Nowy pusty zestaw...</floater.string>
 	<floater.string name="ao_add_clone_label">Sklonuj obecny zestaw...</floater.string>
+	<floater.string name="ao_track_main">Główna</floater.string>
+	<floater.string name="ao_no_track_animations">Pusta ścieżka - upuść tutaj animację</floater.string>
+	<floater.string name="ao_group_tooltip">Grupa animacji - te animacje są odtwarzane razem:</floater.string>
+	<floater.string name="ao_member_tooltip">Element grupy animacji - odtwarza się razem z resztą swojej grupy. Kliknij dwukrotnie, aby wyświetlić podgląd samodzielnie.</floater.string>
+	<floater.string name="ao_cm_expand">Rozwiń</floater.string>
+	<floater.string name="ao_cm_collapse">Zwiń</floater.string>
+	<floater.string name="ao_cm_rename_group">Zmień nazwę grupy...</floater.string>
+	<floater.string name="ao_cm_move_out">Przenieś poza grupę</floater.string>
+	<floater.string name="ao_cm_delete">Usuń</floater.string>
+	<floater.string name="ao_dnd_merge">Upuść, aby zgrupować z tą animacją</floater.string>
+	<floater.string name="ao_dnd_add_to_group">Upuść, aby dodać do tej grupy</floater.string>
+	<floater.string name="ao_dnd_add_to_track">Upuść, aby dodać do tej ścieżki</floater.string>
+	<floater.string name="ao_dnd_folder_group">Upuść folder, aby utworzyć grupę animacji</floater.string>
+	<floater.string name="ao_dnd_folder_pour">Upuść folder, aby dodać jego animacje do tej ścieżki</floater.string>
 </floater>

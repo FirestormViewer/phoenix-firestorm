@@ -4149,6 +4149,23 @@ Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 		Nie można zmienić nazwy zestawu AO "[AO_SET_NAME]".
 Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 	</notification>
+	<notification name="RenameAOGroup">
+		Wpisz nazwę nowej grupy animacji:
+(Nazwa może zawierać każdy znak ASCII, za wyjątkiem ":" oraz "|")
+		<form name="form">
+			<input name="message">
+				[AO_GROUP_NAME]
+			</input>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		Nie można zmienić nazwy na "[AO_SET_NAME]".
+Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		Folder "[NAME]" nie zawiera żadnych animacji do dodania.
+	</notification>
 	<notification name="NewAONameCantExist">
 		Zestaw animacji o tej nazwie już istnieje.
 	</notification>

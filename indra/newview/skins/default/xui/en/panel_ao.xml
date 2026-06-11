@@ -4,7 +4,7 @@
 	left="0"
 	top="0"
 	width="200"
-	height="314"
+	height="338"
 	follows="all"
 	visible="true"
 	layout="topleft">
@@ -16,7 +16,7 @@
 		left="10"
 		top="4"
 		width="180"
-		height="306"
+		height="330"
 		follows="all"
 		visible="true"
 		layout="topleft">
@@ -154,23 +154,34 @@
 
 			<button
 				name="ao_move_up"
-				tool_tip="Move the selected animation up in the list."
+				tool_tip="Move the selected animation or animation group up in the list."
 				left="0"
 				top="0"
 				width="20"
-				height="32"
+				height="24"
 				image_overlay="Arrow_Up"
 				follows="left|top"
 				layout="topleft" />
 
 			<button
 				name="ao_move_down"
-				tool_tip="Move the selected animation down in the list."
+				tool_tip="Move the selected animation or animation group down in the list."
 				top_pad="4"
 				width="20"
-				height="32"
+				height="24"
 				image_overlay="Arrow_Down"
 				follows="left|top"
+				layout="topleft" />
+
+			<button
+				name="ao_rename"
+				tool_tip="Rename the selected animation group."
+				left_delta="0"
+				bottom="-25"
+				width="20"
+				height="20"
+				image_overlay="Edit_Wrench"
+				follows="left|bottom"
 				layout="topleft" />
 
 			<button
@@ -184,6 +195,26 @@
 				follows="left|bottom"
 				layout="topleft" />
 		</panel>
+
+		<combo_box
+			name="ao_track_selection_combo"
+			tool_tip="Select which animation track of this state to show. The main list plays as usual, additional tracks play and cycle independently alongside it, for example a tail wag next to all walking animations."
+			left="0"
+			top_pad="4"
+			right="-24"
+			height="20"
+			follows="left|right|bottom"
+			layout="topleft" />
+
+		<button
+			name="ao_track_add"
+			tool_tip="Add a new independent animation track to this state."
+			left_pad="4"
+			width="20"
+			height="20"
+			image_overlay="AddItem_Press"
+			follows="right|bottom"
+			layout="topleft" />
 
 		<check_box
 			name="ao_cycle"
@@ -303,6 +334,55 @@
 			follows="right|bottom"
 			layout="topleft" />
 
+		<panel
+			name="ao_drop_zone_panel"
+			left="0"
+			top="68"
+			right="-1"
+			height="44"
+			follows="left|right|top"
+			visible="false"
+			bg_alpha_color="Black_50"
+			bg_opaque_color="Black_50"
+			background_visible="true"
+			background_opaque="true"
+			mouse_opaque="false"
+			layout="topleft">
+
+			<view_border
+				name="ao_drop_zone_border"
+				left="0"
+				top="0"
+				right="-1"
+				bottom="-1"
+				follows="all" />
+
+			<text
+				name="ao_drop_zone_add_label"
+				left="2"
+				top="6"
+				right="-2"
+				height="16"
+				halign="center"
+				font.style="BOLD"
+				follows="left|right|top"
+				layout="topleft">
+				Drop here to add
+			</text>
+
+			<text
+				name="ao_drop_zone_group_label"
+				left="2"
+				top_pad="2"
+				right="-2"
+				height="16"
+				halign="center"
+				follows="left|right|top"
+				layout="topleft">
+				Drop on existing to group
+			</text>
+		</panel>
+
 	</panel>
 
 <!-- Reload Cover Panel -->
@@ -312,7 +392,7 @@
 		left="0"
 		top="0"
 		width="200"
-		height="315"
+		height="339"
 		follows="all"
 		visible="false"
 		bg_alpha_color="Black_50"
