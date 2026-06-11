@@ -30,16 +30,23 @@
 #include "ao.h"
 #include "aoengine.h"
 #include "aoset.h"
+#include "llcallbacklist.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
+#include "llinventorymodel.h"
 #include "llmenubutton.h"
 #include "llmenugl.h"
 #include "llnotificationsutil.h"
+#include "llscrolllistctrl.h"
 #include "llspinctrl.h"
 #include "lltoggleablemenu.h"
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
+#include "llviewerinventory.h"
+#include "llviewermenu.h"
 #include "utilitybar.h"
+
+#include <functional>
 
 FloaterAO::FloaterAO(const LLSD& key)
 :   LLTransientDockableFloater(nullptr, true, key), LLEventTimer(10.f),
@@ -50,9 +57,43 @@ FloaterAO::FloaterAO(const LLSD& key)
     mCanDragAndDrop(false),
     mImportRunning(false),
     mCurrentBoldItem(nullptr),
-    mMore(true)
+    mMore(true),
+    mRenameButton(nullptr),
+    mTrackSelector(nullptr),
+    mTrackAddButton(nullptr),
+    mDropZonePanel(nullptr),
+    mDropZoneHovered(false),
+    mRebuildPending(false),
+    mCurrentTrack(0)
 {
     mEventTimer.stop();
+}
+
+FloaterAO::~FloaterAO()
+{
+    if (auto menu = mContextMenuHandle.get())
+    {
+        menu->die();
+        mContextMenuHandle.markDead();
+    }
+}
+
+// virtual
+void FloaterAO::draw()
+{
+    if (mDropZonePanel && mDropZonePanel->getVisible())
+    {
+        if (mDropZoneHovered)
+        {
+            mDropZoneHovered = false;
+        }
+        else
+        {
+            mDropZonePanel->setVisible(false);
+        }
+    }
+
+    LLTransientDockableFloater::draw();
 }
 
 void FloaterAO::reloading(bool reload)
@@ -129,6 +170,8 @@ void FloaterAO::updateList()
 {
     mReloadButton->setEnabled(true);
     mImportRunning = false;
+    mSelectedSet = nullptr;
+    mSelectedState = nullptr;
 
     // Lambda provides simple Alpha sorting, note this is case sensitive.
     auto sortRuleLambda = [](const AOSet* s1, const AOSet* s2) -> bool
@@ -203,14 +246,115 @@ void FloaterAO::updateList()
     }
 }
 
-void FloaterAO::updateScrollListData()
+LLSD FloaterAO::encodeRowValue(const RowInfo& info)
 {
-    auto animationListData = mAnimationList->getAllData();
-    for (auto index = 0; index < mSelectedState->mAnimations.size(); ++index)
+    return LLSD(llformat("%s|%d|%d", info.mKind.c_str(), info.mIndex, info.mMember));
+}
+
+bool FloaterAO::getRowInfo(LLScrollListItem* item, RowInfo& info) const
+{
+    if (!item)
     {
-        LLScrollListItem* item = animationListData[index];
-        item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
+        return false;
     }
+
+    std::vector<std::string> tokens;
+    LLStringUtil::getTokens(item->getValue().asString(), tokens, "|");
+    if (tokens.size() != 3)
+    {
+        return false;
+    }
+
+    info.mKind = tokens[0];
+    if (!LLStringUtil::convertToS32(tokens[1], info.mIndex) || !LLStringUtil::convertToS32(tokens[2], info.mMember))
+    {
+        return false;
+    }
+    return true;
+}
+
+LLScrollListItem* FloaterAO::addRow(LLScrollListCtrl* list, const std::string& icon, const std::string& name, const RowInfo& info, const std::string& tooltip, bool indented, bool bold)
+{
+    LLSD row;
+    row["value"] = encodeRowValue(info);
+
+    row["columns"][0]["column"] = "icon";
+    row["columns"][0]["type"] = "icon";
+    row["columns"][0]["value"] = icon;
+
+    row["columns"][1]["column"] = "animation_name";
+    row["columns"][1]["type"] = "text";
+    row["columns"][1]["value"] = indented ? "      " + name : name;
+
+    LLScrollListItem* item = list->addElement(row);
+    if (item)
+    {
+        if (!tooltip.empty())
+        {
+            if (LLScrollListCell* cell = item->getColumn(1))
+            {
+                cell->setToolTip(tooltip);
+            }
+        }
+        if (bold)
+        {
+            if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(item->getColumn(1)))
+            {
+                text->setFontStyle(LLFontGL::BOLD);
+            }
+        }
+    }
+    return item;
+}
+
+// expansion memory is per set+state, for this floater session only
+std::string FloaterAO::expansionKey() const
+{
+    if (!mSelectedSet || !mSelectedState)
+    {
+        return std::string();
+    }
+    return mSelectedSet->getName() + "|" + mSelectedState->mName;
+}
+
+bool FloaterAO::isFolderExpanded(const LLUUID& folderID) const
+{
+    auto found = mExpandedFolders.find(expansionKey());
+    if (found == mExpandedFolders.end())
+    {
+        return false;
+    }
+    return found->second.count(folderID) > 0;
+}
+
+void FloaterAO::setFolderExpanded(const LLUUID& folderID, bool expanded)
+{
+    if (expanded)
+    {
+        mExpandedFolders[expansionKey()].insert(folderID);
+    }
+    else
+    {
+        mExpandedFolders[expansionKey()].erase(folderID);
+    }
+}
+
+void FloaterAO::requestListRebuild()
+{
+    if (mRebuildPending)
+    {
+        return;
+    }
+    mRebuildPending = true;
+    LLHandle<LLFloater> handle = getHandle();
+    doOnIdleOneTime([handle]()
+    {
+        if (FloaterAO* self = dynamic_cast<FloaterAO*>(handle.get()))
+        {
+            self->mRebuildPending = false;
+            self->rebuildAnimationList();
+        }
+    });
 }
 
 bool FloaterAO::postBuild()
@@ -233,11 +377,16 @@ bool FloaterAO::postBuild()
     mAnimationList = mMainInterfacePanel->getChild<LLScrollListCtrl>("ao_state_animation_list");
     mMoveUpButton = mMainInterfacePanel->getChild<LLButton>("ao_move_up");
     mMoveDownButton = mMainInterfacePanel->getChild<LLButton>("ao_move_down");
+    mRenameButton = mMainInterfacePanel->getChild<LLButton>("ao_rename");
     mTrashButton = mMainInterfacePanel->getChild<LLButton>("ao_trash");
     mCycleCheckBox = mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_cycle");
     mRandomizeCheckBox = mMainInterfacePanel->getChild<LLCheckBoxCtrl>("ao_randomize");
     mCycleTimeTextLabel = mMainInterfacePanel->getChild<LLTextBox>("ao_cycle_time_seconds_label");
     mCycleTimeSpinner = mMainInterfacePanel->getChild<LLSpinCtrl>("ao_cycle_time");
+
+    mTrackSelector = mMainInterfacePanel->getChild<LLComboBox>("ao_track_selection_combo");
+    mTrackAddButton = mMainInterfacePanel->getChild<LLButton>("ao_track_add");
+    mDropZonePanel = mMainInterfacePanel->getChild<LLPanel>("ao_drop_zone_panel");
 
     mReloadButton = mMainInterfacePanel->getChild<LLButton>("ao_reload");
     mPreviousButton = mMainInterfacePanel->getChild<LLButton>("ao_previous");
@@ -266,10 +415,15 @@ bool FloaterAO::postBuild()
     mAnimationList->setCommitCallback(boost::bind(&FloaterAO::onChangeAnimationSelection, this));
     mMoveUpButton->setCommitCallback(boost::bind(&FloaterAO::onClickMoveUp, this));
     mMoveDownButton->setCommitCallback(boost::bind(&FloaterAO::onClickMoveDown, this));
+    mRenameButton->setCommitCallback(boost::bind(&FloaterAO::onClickRename, this));
     mTrashButton->setCommitCallback(boost::bind(&FloaterAO::onClickTrash, this));
     mCycleCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckCycle, this));
     mRandomizeCheckBox->setCommitCallback(boost::bind(&FloaterAO::onCheckRandomize, this));
     mCycleTimeSpinner->setCommitCallback(boost::bind(&FloaterAO::onChangeCycleTime, this));
+
+    mAnimationList->setRightMouseDownCallback(boost::bind(&FloaterAO::onAnimationListRightClick, this, _1, _2, _3, _4));
+    mTrackSelector->setCommitCallback(boost::bind(&FloaterAO::onSelectTrackTab, this));
+    mTrackAddButton->setCommitCallback(boost::bind(&FloaterAO::onClickAddTrack, this));
 
     mReloadButton->setCommitCallback(boost::bind(&FloaterAO::onClickReload, this));
     mPreviousButton->setCommitCallback(boost::bind(&FloaterAO::onClickPrevious, this));
@@ -340,6 +494,8 @@ void FloaterAO::enableStateControls(bool enable)
         mCycleTimeTextLabel->setEnabled(enable);
         mCycleTimeSpinner->setEnabled(enable);
     }
+    mTrackSelector->setEnabled(enable);
+    mTrackAddButton->setEnabled(enable && mSelectedState && mSelectedState->mInventoryUUID.notNull());
     mPreviousButton->setEnabled(enable);
     mPreviousButtonSmall->setEnabled(enable);
     mNextButton->setEnabled(enable);
@@ -439,18 +595,171 @@ void FloaterAO::onClickActivate()
     AOEngine::instance().selectSet(mSelectedSet);
 }
 
-LLScrollListItem* FloaterAO::addAnimation(const std::string& name)
+void FloaterAO::rebuildAnimationList()
 {
-    LLSD row;
-    row["columns"][0]["column"] = "icon";
-    row["columns"][0]["type"] = "icon";
-    row["columns"][0]["value"] = "FSAO_Animation_Stopped";
+    S32 scrollPos = mAnimationList->getScrollPos();
+    LLSD selectedValue;
+    if (LLScrollListItem* selected = mAnimationList->getFirstSelected())
+    {
+        selectedValue = selected->getValue();
+    }
 
-    row["columns"][1]["column"] = "animation_name";
-    row["columns"][1]["type"] = "text";
-    row["columns"][1]["value"] = name;
+    mAnimationList->deleteAllItems();
+    mCurrentBoldItem = nullptr;
+    mAnimationList->setCommentText(getString("ao_no_animations_loaded"));
 
-    return mAnimationList->addElement(row);
+    if (!mSelectedSet || !mSelectedState)
+    {
+        return;
+    }
+
+    if (mCurrentTrack > 0)
+    {
+        if (mCurrentTrack > (S32)mSelectedState->mTracks.size())
+        {
+            mCurrentTrack = 0;
+        }
+        else
+        {
+            const AOSet::AOTrack& track = mSelectedState->mTracks[mCurrentTrack - 1];
+            mAnimationList->setCommentText(getString("ao_no_track_animations"));
+            for (S32 memberIndex = 0; memberIndex < (S32)track.mAnimations.size(); ++memberIndex)
+            {
+                bool isPlaying = track.mCurrentAnimationID.notNull() && ((S32)track.mCurrentAnimation == memberIndex);
+                RowInfo info;
+                info.mKind = "trackmember";
+                info.mIndex = mCurrentTrack - 1;
+                info.mMember = memberIndex;
+                LLScrollListItem* item = addRow(mAnimationList, isPlaying ? "FSAO_Animation_Playing" : "FSAO_Animation_Stopped", track.mAnimations[memberIndex].mName, info, "", false, isPlaying);
+                if (isPlaying)
+                {
+                    mCurrentBoldItem = item;
+                }
+            }
+
+            if (!track.mAnimations.empty())
+            {
+                mAnimationList->setCommentText("");
+            }
+
+            if (selectedValue.isDefined())
+            {
+                mAnimationList->setSelectedByValue(selectedValue, true);
+            }
+            mAnimationList->setScrollPos(scrollPos);
+            return;
+        }
+    }
+
+    bool stateIsActive = !mSelectedState->mCurrentAnimationIDs.empty() && (mSelectedState->mRemapID.isNull() || mSelectedSet->getMotion() == mSelectedState->mRemapID);
+
+    for (S32 index = 0; index < (S32)mSelectedState->mSteps.size(); ++index)
+    {
+        const AOSet::AOAnimationStep& step = mSelectedState->mSteps[index];
+        bool isPlaying = stateIsActive && ((S32)mSelectedState->mCurrentAnimation == index);
+
+        if (step.mIsGroup)
+        {
+            bool expanded = isFolderExpanded(step.mInventoryUUID);
+
+            std::string memberNames;
+            for (const auto& member : step.mMembers)
+            {
+                if (!memberNames.empty())
+                {
+                    memberNames += ", ";
+                }
+                memberNames += member.mName;
+            }
+
+            RowInfo info;
+            info.mKind = "group";
+            info.mIndex = index;
+
+            LLScrollListItem* item = addRow(mAnimationList, isPlaying ? "FSAO_Animation_Playing" : (expanded ? "Inv_FolderOpen" : "Inv_FolderClosed"),
+                (expanded ? "[-] " : "[+] ") + step.mName, info, getString("ao_group_tooltip") + " " + memberNames, false, isPlaying);
+
+            if (isPlaying)
+            {
+                mCurrentBoldItem = item;
+            }
+
+            if (expanded)
+            {
+                for (S32 memberIndex = 0; memberIndex < (S32)step.mMembers.size(); ++memberIndex)
+                {
+                    RowInfo memberInfo;
+                    memberInfo.mKind = "member";
+                    memberInfo.mIndex = index;
+                    memberInfo.mMember = memberIndex;
+                    addRow(mAnimationList, isPlaying ? "FSAO_Animation_Playing" : "FSAO_Animation_Stopped", step.mMembers[memberIndex].mName, memberInfo, getString("ao_member_tooltip"), true, isPlaying);
+                }
+            }
+        }
+        else
+        {
+            RowInfo info;
+            info.mKind = "single";
+            info.mIndex = index;
+
+            LLScrollListItem* item = addRow(mAnimationList, isPlaying ? "FSAO_Animation_Playing" : "FSAO_Animation_Stopped", step.mName, info, "", false, isPlaying);
+
+            if (isPlaying)
+            {
+                mCurrentBoldItem = item;
+            }
+        }
+    }
+
+    if (!mSelectedState->mSteps.empty())
+    {
+        mAnimationList->setCommentText("");
+    }
+
+    if (selectedValue.isDefined())
+    {
+        mAnimationList->setSelectedByValue(selectedValue, true);
+    }
+    mAnimationList->setScrollPos(scrollPos);
+}
+
+void FloaterAO::rebuildTrackSelector()
+{
+    mTrackSelector->removeall();
+    mTrackSelector->add(getString("ao_track_main"), LLSD(0), ADD_BOTTOM, true);
+
+    if (!mSelectedState)
+    {
+        mCurrentTrack = 0;
+    }
+    else
+    {
+        for (S32 index = 0; index < (S32)mSelectedState->mTracks.size(); ++index)
+        {
+            mTrackSelector->add(mSelectedState->mTracks[index].mName, LLSD(index + 1), ADD_BOTTOM, true);
+        }
+
+        if (!mPendingTrackSelection.empty())
+        {
+            for (S32 index = 0; index < (S32)mSelectedState->mTracks.size(); ++index)
+            {
+                if (mSelectedState->mTracks[index].mName == mPendingTrackSelection)
+                {
+                    mCurrentTrack = index + 1;
+                    break;
+                }
+            }
+            mPendingTrackSelection.clear();
+        }
+
+        if (mCurrentTrack > (S32)mSelectedState->mTracks.size())
+        {
+            mCurrentTrack = 0;
+        }
+    }
+
+    mTrackSelector->selectNthItem(mCurrentTrack);
+    mTrackAddButton->setEnabled(mCanDragAndDrop && mSelectedState && mSelectedState->mInventoryUUID.notNull());
 }
 
 void FloaterAO::onSelectState()
@@ -474,35 +783,19 @@ void FloaterAO::onSelectState()
     }
 
     mSelectedState = (AOSet::AOState*)mStateSelector->getCurrentUserdata();
-    if (mSelectedState->mAnimations.size())
+
+    const std::string stateKey = mSelectedSet->getName() + "|" + mSelectedState->mName;
+    if (mLastSelectedStateName != stateKey)
     {
-        for (auto index = 0; index < mSelectedState->mAnimations.size(); ++index)
-        {
-            LLScrollListItem* item = addAnimation(mSelectedState->mAnimations[index].mName);
-            if (item)
-            {
-                item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
-
-                // update currently playing animation if we are looking at the currently running state in the UI
-                if (mSelectedSet->getMotion() == mSelectedState->mRemapID &&
-                    mSelectedState->mCurrentAnimationID == mSelectedState->mAnimations[index].mAssetUUID)
-                {
-                    mCurrentBoldItem = item;
-                    ((LLScrollListIcon*)item->getColumn(0))->setValue("FSAO_Animation_Playing");
-                    ((LLScrollListText*)item->getColumn(1))->setFontStyle(LLFontGL::BOLD);
-                }
-            }
-        }
-
-        mAnimationList->setCommentText("");
-        mAnimationList->setEnabled(true);
+        mLastSelectedStateName = stateKey;
+        mCurrentTrack = 0;
     }
 
-    mCycleCheckBox->setValue(mSelectedState->mCycle);
-    mRandomizeCheckBox->setValue(mSelectedState->mRandom);
-    mCycleTimeSpinner->setValue(mSelectedState->mCycleTime);
+    rebuildTrackSelector();
+    rebuildAnimationList();
+    mAnimationList->setEnabled(true);
 
-    updateCycleParameters();
+    updateCycleControlValues();
 }
 
 void FloaterAO::onClickReload()
@@ -697,6 +990,15 @@ void FloaterAO::onChangeAnimationSelection()
 
     bool resortEnable = false;
     bool trashEnable = false;
+    bool renameEnable = false;
+
+    std::string selectedRowValue;
+    if (list.size() == 1)
+    {
+        selectedRowValue = list[0]->getValue().asString();
+    }
+    bool selectionTransition = (selectedRowValue != mLastSelectedRowValue);
+    mLastSelectedRowValue = selectedRowValue;
 
     // Linden Lab bug: scroll lists still select the first item when you click on them, even when they are disabled.
     // The control does not memorize it's enabled/disabled state, so mAnimationList->mEnabled() doesn't seem to work.
@@ -704,6 +1006,7 @@ void FloaterAO::onChangeAnimationSelection()
     if (!mCanDragAndDrop)
     {
         mAnimationList->deselectAllItems();
+        mLastSelectedRowValue.clear();
         LL_DEBUGS("AOEngine") << "Selection count now: " << list.size() << LL_ENDL;
     }
     else if (!list.empty())
@@ -711,12 +1014,27 @@ void FloaterAO::onChangeAnimationSelection()
         if (list.size() == 1)
         {
             resortEnable = true;
+            RowInfo info;
+            if (mSelectedState && getRowInfo(list[0], info) && info.mKind == "group")
+            {
+                renameEnable = true;
+                if (selectionTransition && info.mIndex < (S32)mSelectedState->mSteps.size() && !isFolderExpanded(mSelectedState->mSteps[info.mIndex].mInventoryUUID))
+                {
+                    setFolderExpanded(mSelectedState->mSteps[info.mIndex].mInventoryUUID, true);
+                    requestListRebuild();
+                }
+            }
         }
+        trashEnable = true;
+    }
+    else if (mCurrentTrack > 0 && mSelectedState && mCurrentTrack <= (S32)mSelectedState->mTracks.size() && mSelectedState->mTracks[mCurrentTrack - 1].mAnimations.empty())
+    {
         trashEnable = true;
     }
 
     mMoveDownButton->setEnabled(resortEnable);
     mMoveUpButton->setEnabled(resortEnable);
+    mRenameButton->setEnabled(renameEnable);
     mTrashButton->setEnabled(trashEnable);
 }
 
@@ -733,16 +1051,38 @@ void FloaterAO::onClickMoveUp()
         return;
     }
 
-    S32 currentIndex = mAnimationList->getFirstSelectedIndex();
-    if (currentIndex == -1)
+    RowInfo info;
+    if (!getRowInfo(list[0], info))
     {
         return;
     }
 
-    if (AOEngine::instance().swapWithPrevious(mSelectedState, currentIndex))
+    if (info.mKind == "trackmember")
     {
-        mAnimationList->swapWithPrevious(currentIndex);
-        updateScrollListData();
+        if (AOEngine::instance().swapTrackAnimationWithPrevious(mSelectedState, info.mIndex, info.mMember))
+        {
+            RowInfo newInfo = info;
+            newInfo.mMember--;
+            rebuildAnimationList();
+            mAnimationList->setSelectedByValue(encodeRowValue(newInfo), true);
+        }
+        return;
+    }
+
+    S32 memberIndex = (info.mKind == "member") ? info.mMember : -1;
+    if (AOEngine::instance().swapWithPrevious(mSelectedState, info.mIndex, memberIndex))
+    {
+        RowInfo newInfo = info;
+        if (memberIndex == -1)
+        {
+            newInfo.mIndex--;
+        }
+        else
+        {
+            newInfo.mMember--;
+        }
+        rebuildAnimationList();
+        mAnimationList->setSelectedByValue(encodeRowValue(newInfo), true);
     }
 }
 
@@ -759,16 +1099,38 @@ void FloaterAO::onClickMoveDown()
         return;
     }
 
-    S32 currentIndex = mAnimationList->getFirstSelectedIndex();
-    if (currentIndex >= (mAnimationList->getItemCount() - 1))
+    RowInfo info;
+    if (!getRowInfo(list[0], info))
     {
         return;
     }
 
-    if (AOEngine::instance().swapWithNext(mSelectedState, currentIndex))
+    if (info.mKind == "trackmember")
     {
-        mAnimationList->swapWithNext(currentIndex);
-        updateScrollListData();
+        if (AOEngine::instance().swapTrackAnimationWithNext(mSelectedState, info.mIndex, info.mMember))
+        {
+            RowInfo newInfo = info;
+            newInfo.mMember++;
+            rebuildAnimationList();
+            mAnimationList->setSelectedByValue(encodeRowValue(newInfo), true);
+        }
+        return;
+    }
+
+    S32 memberIndex = (info.mKind == "member") ? info.mMember : -1;
+    if (AOEngine::instance().swapWithNext(mSelectedState, info.mIndex, memberIndex))
+    {
+        RowInfo newInfo = info;
+        if (memberIndex == -1)
+        {
+            newInfo.mIndex++;
+        }
+        else
+        {
+            newInfo.mMember++;
+        }
+        rebuildAnimationList();
+        mAnimationList->setSelectedByValue(encodeRowValue(newInfo), true);
     }
 }
 
@@ -780,18 +1142,102 @@ void FloaterAO::onClickTrash()
     }
 
     std::vector<LLScrollListItem*> list = mAnimationList->getAllSelected();
+
+    if (mCurrentTrack > 0)
+    {
+        S32 trackIndex = mCurrentTrack - 1;
+        if (trackIndex >= (S32)mSelectedState->mTracks.size())
+        {
+            return;
+        }
+
+        if (list.empty())
+        {
+            if (mSelectedState->mTracks[trackIndex].mAnimations.empty())
+            {
+                AOEngine::instance().removeTrack(mSelectedState, trackIndex);
+                mCurrentTrack = 0;
+                rebuildTrackSelector();
+                rebuildAnimationList();
+                onChangeAnimationSelection();
+            }
+            return;
+        }
+
+        std::vector<S32> members;
+        for (LLScrollListItem* item : list)
+        {
+            RowInfo info;
+            if (getRowInfo(item, info) && info.mKind == "trackmember")
+            {
+                members.push_back(info.mMember);
+            }
+        }
+        std::sort(members.rbegin(), members.rend());
+
+        for (S32 memberIndex : members)
+        {
+            AOEngine::instance().removeTrackAnimation(mSelectedState, trackIndex, memberIndex);
+        }
+
+        if (trackIndex >= (S32)mSelectedState->mTracks.size())
+        {
+            mCurrentTrack = 0;
+        }
+
+        mAnimationList->deselectAllItems();
+        mCurrentBoldItem = nullptr;
+        rebuildTrackSelector();
+        rebuildAnimationList();
+        onChangeAnimationSelection();
+        return;
+    }
+
     if (list.empty())
     {
         return;
     }
 
-    for (auto index = list.size() - 1; index != -1; --index)
+    std::vector<RowInfo> rows;
+    std::set<S32> wholeSteps;
+    for (LLScrollListItem* item : list)
     {
-        AOEngine::instance().removeAnimation(mSelectedSet, mSelectedState, mAnimationList->getItemIndex(list[index]));
+        RowInfo info;
+        if (getRowInfo(item, info))
+        {
+            rows.emplace_back(info);
+            if (info.mKind != "member")
+            {
+                wholeSteps.insert(info.mIndex);
+            }
+        }
     }
 
-    mAnimationList->deleteSelectedItems();
+    rows.erase(std::remove_if(rows.begin(), rows.end(), [&wholeSteps](const RowInfo& info)
+    {
+        return info.mKind == "member" && wholeSteps.count(info.mIndex) > 0;
+    }), rows.end());
+
+    // bottom-up: higher step index first, higher member index before lower
+    std::sort(rows.begin(), rows.end(), [](const RowInfo& a, const RowInfo& b)
+    {
+        if (a.mIndex != b.mIndex)
+        {
+            return a.mIndex > b.mIndex;
+        }
+        return a.mMember > b.mMember;
+    });
+
+    for (const RowInfo& info : rows)
+    {
+        S32 memberIndex = (info.mKind == "member") ? info.mMember : -1;
+        AOEngine::instance().removeAnimation(mSelectedSet, mSelectedState, info.mIndex, memberIndex);
+    }
+
+    mAnimationList->deselectAllItems();
     mCurrentBoldItem = nullptr;
+    rebuildAnimationList();
+    onChangeAnimationSelection();
 }
 
 void FloaterAO::updateCycleParameters()
@@ -802,12 +1248,43 @@ void FloaterAO::updateCycleParameters()
     mCycleTimeSpinner->setEnabled(enabled);
 }
 
+void FloaterAO::updateCycleControlValues()
+{
+    if (!mSelectedState)
+    {
+        return;
+    }
+
+    if (mCurrentTrack > 0 && mCurrentTrack <= (S32)mSelectedState->mTracks.size())
+    {
+        const AOSet::AOTrack& track = mSelectedState->mTracks[mCurrentTrack - 1];
+        mCycleCheckBox->setValue(track.mCycle);
+        mRandomizeCheckBox->setValue(track.mRandom);
+        mCycleTimeSpinner->setValue(track.mCycleTime);
+    }
+    else
+    {
+        mCycleCheckBox->setValue(mSelectedState->mCycle);
+        mRandomizeCheckBox->setValue(mSelectedState->mRandom);
+        mCycleTimeSpinner->setValue(mSelectedState->mCycleTime);
+    }
+
+    updateCycleParameters();
+}
+
 void FloaterAO::onCheckCycle()
 {
     if (mSelectedState)
     {
         bool cycle = mCycleCheckBox->getValue().asBoolean();
-        AOEngine::instance().setCycle(mSelectedState, cycle);
+        if (mCurrentTrack > 0)
+        {
+            AOEngine::instance().setTrackCycle(mSelectedState, mCurrentTrack - 1, cycle);
+        }
+        else
+        {
+            AOEngine::instance().setCycle(mSelectedState, cycle);
+        }
         updateCycleParameters();
     }
 }
@@ -816,7 +1293,15 @@ void FloaterAO::onCheckRandomize()
 {
     if (mSelectedState)
     {
-        AOEngine::instance().setRandomize(mSelectedState, mRandomizeCheckBox->getValue().asBoolean());
+        bool randomize = mRandomizeCheckBox->getValue().asBoolean();
+        if (mCurrentTrack > 0)
+        {
+            AOEngine::instance().setTrackRandomize(mSelectedState, mCurrentTrack - 1, randomize);
+        }
+        else
+        {
+            AOEngine::instance().setRandomize(mSelectedState, randomize);
+        }
     }
 }
 
@@ -824,7 +1309,15 @@ void FloaterAO::onChangeCycleTime()
 {
     if (mSelectedState)
     {
-        AOEngine::instance().setCycleTime(mSelectedState, mCycleTimeSpinner->getValueF32());
+        F32 cycleTime = mCycleTimeSpinner->getValueF32();
+        if (mCurrentTrack > 0)
+        {
+            AOEngine::instance().setTrackCycleTime(mSelectedState, mCurrentTrack - 1, cycleTime);
+        }
+        else
+        {
+            AOEngine::instance().setCycleTime(mSelectedState, cycleTime);
+        }
     }
 }
 
@@ -845,14 +1338,15 @@ void FloaterAO::onDoubleClick()
     {
         return;
     }
-    LLUUID* animUUID = (LLUUID*)item->getUserdata();
-    if (!animUUID)
+
+    RowInfo info;
+    if (!getRowInfo(item, info))
     {
         return;
     }
 
     // do nothing if animation is for a different state than the active state
-    if (mSelectedState != AOEngine::instance().getCurrentState())
+    if (!mSelectedState || (mSelectedState->mRemapID.notNull() && mSelectedState != AOEngine::instance().getCurrentState()))
     {
         return;
     }
@@ -867,7 +1361,216 @@ void FloaterAO::onDoubleClick()
         AOEngine::instance().selectSet(mSelectedSet);
     }
 
-    AOEngine::instance().playAnimation(*animUUID);
+    if (info.mKind == "trackmember")
+    {
+        AOEngine::instance().playTrackAnimation(mSelectedState, info.mIndex, info.mMember);
+    }
+    else if (mSelectedState->mRemapID.isNull())
+    {
+        AOEngine::instance().playAlwaysAnimation(info.mIndex, info.mKind == "member" ? info.mMember : -1);
+    }
+    else
+    {
+        AOEngine::instance().playAnimation(info.mIndex, info.mKind == "member" ? info.mMember : -1);
+    }
+}
+
+void FloaterAO::onClickRename()
+{
+    std::vector<LLScrollListItem*> list = mAnimationList->getAllSelected();
+    if (list.size() != 1)
+    {
+        return;
+    }
+    RowInfo info;
+    if (getRowInfo(list[0], info))
+    {
+        onRenameRow(info);
+    }
+}
+
+void FloaterAO::onRenameRow(const RowInfo& info)
+{
+    if (!mSelectedState)
+    {
+        return;
+    }
+    if (info.mKind == "group" && info.mIndex < (S32)mSelectedState->mSteps.size())
+    {
+        LLSD args;
+        args["AO_GROUP_NAME"] = mSelectedState->mSteps[info.mIndex].mName;
+        LLNotificationsUtil::add("RenameAOGroup", args, LLSD(), boost::bind(&FloaterAO::renameGroupCallback, this, _1, _2, info.mIndex));
+    }
+}
+
+bool FloaterAO::renameGroupCallback(const LLSD& notification, const LLSD& response, S32 stepIndex)
+{
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0 || !mSelectedState)
+    {
+        return false;
+    }
+
+    std::string newName = response["message"].asString();
+    LLStringUtil::trim(newName);
+
+    LLUIString new_name_check = newName;
+    if (newName.empty() || !LLTextValidate::validateASCIIPrintableNoPipe.validate(new_name_check.getWString()) || newName.find_first_of(":|") != std::string::npos || !AOEngine::instance().renameGroup(mSelectedState, stepIndex, newName))
+    {
+        LLSD args;
+        args["AO_SET_NAME"] = newName;
+        LLNotificationsUtil::add("RenameAOEntryMustBeASCII", args);
+        return false;
+    }
+
+    rebuildAnimationList();
+    return true;
+}
+
+void FloaterAO::onAnimationListRightClick(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
+{
+    if (!mCanDragAndDrop)
+    {
+        return;
+    }
+    mAnimationList->selectItemAt(x, y, MASK_NONE);
+    showContextMenu(mAnimationList, x, y);
+}
+
+void FloaterAO::showContextMenu(LLScrollListCtrl* list, S32 x, S32 y)
+{
+    RowInfo info;
+    if (!mSelectedState || !getRowInfo(list->getFirstSelected(), info))
+    {
+        return;
+    }
+
+    if (auto oldMenu = mContextMenuHandle.get())
+    {
+        oldMenu->die();
+        mContextMenuHandle.markDead();
+    }
+
+    LLContextMenu::Params menu_params;
+    menu_params.name("ao_row_context_menu");
+    menu_params.visible(false);
+    LLContextMenu* menu = LLUICtrlFactory::create<LLContextMenu>(menu_params);
+
+    auto addItem = [&](const std::string& name, const std::string& label, const std::function<void()>& action)
+    {
+        LLMenuItemCallGL::Params item_params;
+        item_params.name(name);
+        item_params.label(label);
+        item_params.on_click.function([action](LLUICtrl*, const LLSD&) { action(); });
+        menu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
+    };
+
+    if (info.mKind == "group")
+    {
+        const LLUUID folderID = (info.mIndex < (S32)mSelectedState->mSteps.size()) ? mSelectedState->mSteps[info.mIndex].mInventoryUUID : LLUUID::null;
+        addItem("ao_cm_expand", isFolderExpanded(folderID) ? getString("ao_cm_collapse") : getString("ao_cm_expand"), [this, info]() { onToggleRowExpand(info); });
+        addItem("ao_cm_rename", getString("ao_cm_rename_group"), [this, info]() { onRenameRow(info); });
+    }
+    else if (info.mKind == "member")
+    {
+        addItem("ao_cm_move_out", getString("ao_cm_move_out"), [this, info]() { onExtractMember(info); });
+    }
+
+    addItem("ao_cm_delete", getString("ao_cm_delete"), [this, info]() { onDeleteRow(info); });
+
+    mContextMenuHandle = menu->getHandle();
+    gMenuHolder->addChild(menu);
+
+    S32 screen_x, screen_y;
+    list->localPointToScreen(x, y, &screen_x, &screen_y);
+    menu->show(screen_x, screen_y, list);
+}
+
+void FloaterAO::onToggleRowExpand(const RowInfo& info)
+{
+    if (!mSelectedState)
+    {
+        return;
+    }
+
+    LLUUID folderID;
+    if (info.mKind == "group" && info.mIndex < (S32)mSelectedState->mSteps.size())
+    {
+        folderID = mSelectedState->mSteps[info.mIndex].mInventoryUUID;
+    }
+
+    if (folderID.notNull())
+    {
+        setFolderExpanded(folderID, !isFolderExpanded(folderID));
+        requestListRebuild();
+    }
+}
+
+void FloaterAO::onExtractMember(const RowInfo& info)
+{
+    if (!mSelectedState || info.mKind != "member")
+    {
+        return;
+    }
+    AOEngine::instance().extractMemberFromGroup(mSelectedState, info.mIndex, info.mMember);
+    reloading(true);
+}
+
+void FloaterAO::onDeleteRow(const RowInfo& info)
+{
+    if (!mSelectedState)
+    {
+        return;
+    }
+
+    if (info.mKind == "trackmember")
+    {
+        AOEngine::instance().removeTrackAnimation(mSelectedState, info.mIndex, info.mMember);
+        if (mCurrentTrack > (S32)mSelectedState->mTracks.size())
+        {
+            mCurrentTrack = 0;
+        }
+        mCurrentBoldItem = nullptr;
+        rebuildTrackSelector();
+        rebuildAnimationList();
+        onChangeAnimationSelection();
+    }
+    else
+    {
+        S32 memberIndex = (info.mKind == "member") ? info.mMember : -1;
+        AOEngine::instance().removeAnimation(mSelectedSet, mSelectedState, info.mIndex, memberIndex);
+        mCurrentBoldItem = nullptr;
+        rebuildAnimationList();
+        onChangeAnimationSelection();
+    }
+}
+
+void FloaterAO::onSelectTrackTab()
+{
+    S32 track = mTrackSelector->getSelectedValue().asInteger();
+    if (track == mCurrentTrack)
+    {
+        return;
+    }
+    mCurrentTrack = track;
+    mAnimationList->deselectAllItems();
+    mCurrentBoldItem = nullptr;
+    rebuildAnimationList();
+    updateCycleControlValues();
+    onChangeAnimationSelection();
+}
+
+void FloaterAO::onClickAddTrack()
+{
+    if (!mSelectedState || mSelectedState->mInventoryUUID.isNull())
+    {
+        return;
+    }
+    std::string trackName = AOEngine::instance().createEmptyTrack(mSelectedState);
+    if (!trackName.empty())
+    {
+        mPendingTrackSelection = trackName;
+        reloading(true);
+    }
 }
 
 void FloaterAO::onClickMore()
@@ -917,35 +1620,27 @@ void FloaterAO::onClickLess()
     gSavedPerAccountSettings.setRect("floater_rect_animation_overrider_full", fullSize);
 }
 
-void FloaterAO::onAnimationChanged(const LLUUID& animation)
+static void setRowPlaying(LLScrollListItem* item, bool playing, const std::string& stoppedIcon)
 {
-    LL_DEBUGS("AOEngine") << "Received animation change to " << animation << LL_ENDL;
-
-    if (mCurrentBoldItem)
-    {
-        if (LLScrollListCell* icon_cell = mCurrentBoldItem->getColumn(0))
-        {
-            if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(icon_cell))
-            {
-                icon->setValue("FSAO_Animation_Stopped");
-            }
-        }
-
-        if (LLScrollListCell* text_cell = mCurrentBoldItem->getColumn(1))
-        {
-            if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(text_cell))
-            {
-                text->setFontStyle(LLFontGL::NORMAL);
-            }
-        }
-
-        mCurrentBoldItem = nullptr;
-    }
-
-    if (animation.isNull())
+    if (!item)
     {
         return;
     }
+
+    if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(item->getColumn(0)))
+    {
+        icon->setValue(playing ? "FSAO_Animation_Playing" : stoppedIcon);
+    }
+
+    if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(item->getColumn(1)))
+    {
+        text->setFontStyle(playing ? LLFontGL::BOLD : LLFontGL::NORMAL);
+    }
+}
+
+void FloaterAO::onAnimationChanged(const LLUUID& animation)
+{
+    LL_DEBUGS("AOEngine") << "Received animation change to " << animation << LL_ENDL;
 
     if (!mAnimationList)
     {
@@ -953,31 +1648,63 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
         return;
     }
 
-    // why do we have no LLScrollListCtrl::getItemByUserdata() ? -Zi
+    mCurrentBoldItem = nullptr;
+
+    if (!mSelectedSet || !mSelectedState)
+    {
+        return;
+    }
+
+    if (mCurrentTrack > 0)
+    {
+        if (mCurrentTrack > (S32)mSelectedState->mTracks.size())
+        {
+            return;
+        }
+
+        const AOSet::AOTrack& track = mSelectedState->mTracks[mCurrentTrack - 1];
+        for (LLScrollListItem* item : mAnimationList->getAllData())
+        {
+            RowInfo info;
+            if (!getRowInfo(item, info) || info.mKind != "trackmember")
+            {
+                continue;
+            }
+
+            bool playing = track.mCurrentAnimationID.notNull() && ((S32)track.mCurrentAnimation == info.mMember);
+            setRowPlaying(item, playing, "FSAO_Animation_Stopped");
+
+            if (playing)
+            {
+                mCurrentBoldItem = item;
+            }
+        }
+        return;
+    }
+
+    bool stateIsActive = !mSelectedState->mCurrentAnimationIDs.empty() && (mSelectedState->mRemapID.isNull() || mSelectedSet->getMotion() == mSelectedState->mRemapID);
+
     for (LLScrollListItem* item : mAnimationList->getAllData())
     {
-        LLUUID* id = static_cast<LLUUID*>(item->getUserdata());
-        if (id && *id == animation)
+        RowInfo info;
+        if (!getRowInfo(item, info) || info.mIndex < 0 || info.mIndex >= (S32)mSelectedState->mSteps.size())
+        {
+            continue;
+        }
+
+        const AOSet::AOAnimationStep& step = mSelectedState->mSteps[info.mIndex];
+        bool playing = stateIsActive && ((S32)mSelectedState->mCurrentAnimation == info.mIndex);
+
+        std::string stoppedIcon = "FSAO_Animation_Stopped";
+        if (info.mKind == "group")
+        {
+            stoppedIcon = isFolderExpanded(step.mInventoryUUID) ? "Inv_FolderOpen" : "Inv_FolderClosed";
+        }
+        setRowPlaying(item, playing, stoppedIcon);
+
+        if (playing && info.mKind != "member")
         {
             mCurrentBoldItem = item;
-
-            if (LLScrollListCell* icon_cell = mCurrentBoldItem->getColumn(0))
-            {
-                if (LLScrollListIcon* icon = dynamic_cast<LLScrollListIcon*>(icon_cell))
-                {
-                    icon->setValue("FSAO_Animation_Playing");
-                }
-            }
-
-            if (LLScrollListCell* text_cell = mCurrentBoldItem->getColumn(1))
-            {
-                if (LLScrollListText* text = dynamic_cast<LLScrollListText*>(text_cell))
-                {
-                    text->setFontStyle(LLFontGL::BOLD);
-                }
-            }
-
-            return;
         }
     }
 }
@@ -1022,14 +1749,122 @@ bool FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDr
             return true;
         }
         *accept = ACCEPT_YES_MULTI;
+
+        if (mCurrentTrack == 0 && mDropZonePanel)
+        {
+            mDropZonePanel->setVisible(true);
+            mDropZoneHovered = true;
+        }
+
+        if (mCurrentTrack > 0)
+        {
+            if (!drop)
+            {
+                tooltipMsg = getString("ao_dnd_add_to_track");
+            }
+            if (item && drop && mSelectedState && mCurrentTrack <= (S32)mSelectedState->mTracks.size())
+            {
+                AOEngine::instance().addAnimationToTrack(mSelectedState, mCurrentTrack - 1, item);
+                reloading(true);
+            }
+            return true;
+        }
+
+        RowInfo targetInfo;
+        bool haveTarget = false;
+
+        S32 list_x, list_y;
+        localPointToOtherView(x, y, &list_x, &list_y, mAnimationList);
+        if (mAnimationList->isInVisibleChain() && mAnimationList->pointInView(list_x, list_y))
+        {
+            haveTarget = getRowInfo(mAnimationList->hitItem(list_x, list_y), targetInfo);
+        }
+
+        if (!drop && haveTarget)
+        {
+            tooltipMsg = (targetInfo.mKind == "single") ? getString("ao_dnd_merge") : getString("ao_dnd_add_to_group");
+        }
+
         if (item && drop)
         {
-            AOEngine::instance().addAnimation(mSelectedSet, mSelectedState, item);
-            addAnimation(item->getName());
+            if (haveTarget)
+            {
+                if (targetInfo.mKind == "single")
+                {
+                    AOEngine::instance().createGroupFromMerge(mSelectedState, targetInfo.mIndex, item);
+                }
+                else
+                {
+                    AOEngine::instance().addAnimationToGroup(mSelectedState, targetInfo.mIndex, item);
+                }
+            }
+            else
+            {
+                AOEngine::instance().addAnimation(mSelectedSet, mSelectedState, item);
+            }
 
             // TODO: this would be the right thing to do, but it blocks multi drop
             // before final release this must be resolved
             reloading(true);
+        }
+    }
+    else if (type == DAD_CATEGORY)
+    {
+        if (!mSelectedSet || !mSelectedState || !mCanDragAndDrop || (mSelectedState->mInventoryUUID.isNull()))
+        {
+            *accept = ACCEPT_NO;
+            return true;
+        }
+        *accept = ACCEPT_YES_SINGLE;
+
+        bool overTrack = (mCurrentTrack > 0);
+
+        if (!drop)
+        {
+            tooltipMsg = overTrack ? getString("ao_dnd_folder_pour") : getString("ao_dnd_folder_group");
+        }
+
+        if (drop)
+        {
+            const LLInventoryCategory* category = (LLInventoryCategory*)data;
+            bool success = false;
+
+            if (overTrack)
+            {
+                // pour the folder's direct animations into the current track
+                if (category && mCurrentTrack <= (S32)mSelectedState->mTracks.size())
+                {
+                    LLInventoryModel::cat_array_t* cats;
+                    LLInventoryModel::item_array_t* items;
+                    gInventory.getDirectDescendentsOf(category->getUUID(), cats, items);
+                    if (items)
+                    {
+                        for (const auto& folderItem : *items)
+                        {
+                            if (folderItem->getInventoryType() == LLInventoryType::IT_ANIMATION)
+                            {
+                                AOEngine::instance().addAnimationToTrack(mSelectedState, mCurrentTrack - 1, folderItem);
+                                success = true;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                success = AOEngine::instance().createGroupFromFolder(mSelectedState, category);
+            }
+
+            if (success)
+            {
+                reloading(true);
+            }
+            else
+            {
+                LLSD args;
+                args["NAME"] = category ? category->getName() : LLStringUtil::null;
+                LLNotificationsUtil::add("AOFolderDropNoAnimations", args);
+            }
         }
     }
     else

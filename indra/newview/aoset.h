@@ -64,6 +64,7 @@ public:
         SwimmingForward,
         SwimmingUp,
         SwimmingDown,
+        Always,
         AOSTATES_MAX
     };
 
@@ -76,18 +77,41 @@ public:
         S32         mSortOrder;
     };
 
+    struct AOAnimationStep
+    {
+        std::string              mName;
+        LLUUID                   mInventoryUUID;
+        S32                      mSortOrder{ -1 };
+        bool                     mIsGroup{ false };
+        std::vector<AOAnimation> mMembers;
+    };
+
+    struct AOTrack
+    {
+        std::string              mName;
+        LLUUID                   mInventoryUUID;
+        bool                     mCycle{ false };
+        bool                     mRandom{ false };
+        F32                      mCycleTime{ 0.f };
+        std::vector<AOAnimation> mAnimations;
+        U32                      mCurrentAnimation{ 0 };
+        LLUUID                   mCurrentAnimationID;
+    };
+
     struct AOState
     {
         std::string                         mName;
         std::vector<std::string>            mAlternateNames;
         std::vector<const LLInventoryItem*> mAddQueue;
+        S32                                 mNum{ 0 };
         LLUUID                              mRemapID;
         bool                                mCycle;
         bool                                mRandom;
         F32                                 mCycleTime;
-        std::vector<AOAnimation>            mAnimations;
+        std::vector<AOAnimationStep>        mSteps;
+        std::vector<AOTrack>                mTracks;
         U32                                 mCurrentAnimation;
-        LLUUID                              mCurrentAnimationID;
+        uuid_vec_t                          mCurrentAnimationIDs;
         LLUUID                              mInventoryUUID;
         bool                                mDirty;
     };
@@ -119,7 +143,9 @@ public:
     AOState*      getState(S32 eName);
     AOState*      getStateByName(const std::string& name);
     AOState*      getStateByRemapID(const LLUUID& id);
-    const LLUUID& getAnimationForState(AOState* state) const;
+    void          getAnimationsForState(AOState* state, uuid_vec_t& animations) const;
+    LLUUID        getAnimationForTrack(AOTrack& track) const;
+    static LLUUID resolveAssetUUID(AOAnimation& anim);
 
     void startTimer(F32 timeout);
     void stopTimer();

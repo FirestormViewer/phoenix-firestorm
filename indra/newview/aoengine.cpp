@@ -76,10 +76,11 @@ AOEngine::~AOEngine()
         LLSD currentAnimations;
         for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
         {
-            if (auto state = mCurrentSet->getState(index); state && !state->mAnimations.empty())
+            // store the active step's first member asset as the shadow id
+            if (auto state = mCurrentSet->getState(index); state && state->mCurrentAnimation < state->mSteps.size() && !state->mSteps[state->mCurrentAnimation].mMembers.empty())
             {
-                LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Animation index " << state->mCurrentAnimation << LL_ENDL;
-                LLUUID shadow_id{ state->mAnimations[state->mCurrentAnimation].mAssetUUID };
+                LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Step index " << state->mCurrentAnimation << LL_ENDL;
+                LLUUID shadow_id{ state->mSteps[state->mCurrentAnimation].mMembers.front().mAssetUUID };
                 LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
                 cipher.encrypt(shadow_id.mData, UUID_BYTES);
                 currentAnimations.insert(state->mName, shadow_id);
@@ -153,6 +154,9 @@ void AOEngine::onPauseAO()
 
 void AOEngine::clear(bool fromTimer)
 {
+    stopActiveTracks();
+    stopAlwaysAnimations();
+
     std::move(mSets.begin(), mSets.end(), std::back_inserter(mOldSets));
     mSets.clear();
 
@@ -204,6 +208,296 @@ void AOEngine::stopAllSitVariants()
 
     gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND);
     gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND_CONSTRAINED);
+}
+
+void AOEngine::stopCurrentAnimations(AOSet::AOState* state, bool skipFirst)
+{
+    for (size_t index = skipFirst ? 1 : 0; index < state->mCurrentAnimationIDs.size(); ++index)
+    {
+        const LLUUID& animation = state->mCurrentAnimationIDs[index];
+        if (animation.notNull())
+        {
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
+            if (isAgentAvatarValid())
+            {
+                gAgentAvatarp->LLCharacter::stopMotion(animation);
+            }
+        }
+    }
+    state->mCurrentAnimationIDs.clear();
+}
+
+bool AOEngine::swapStateAnimations(AOSet::AOState* state, const uuid_vec_t& animations)
+{
+    uuid_vec_t oldAnimations = state->mCurrentAnimationIDs;
+    if (animations == oldAnimations)
+    {
+        return false;
+    }
+
+    state->mCurrentAnimationIDs = animations;
+
+    for (const LLUUID& animation : animations)
+    {
+        if (std::find(oldAnimations.begin(), oldAnimations.end(), animation) == oldAnimations.end())
+        {
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+        }
+    }
+
+    for (const LLUUID& oldAnimation : oldAnimations)
+    {
+        if (std::find(animations.begin(), animations.end(), oldAnimation) == animations.end())
+        {
+            gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
+            if (isAgentAvatarValid())
+            {
+                gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+            }
+        }
+    }
+
+    return true;
+}
+
+void AOEngine::startStateTracks(AOSet::AOState* state)
+{
+    stopActiveTracks();
+
+    if (!state || !mEnabled)
+    {
+        return;
+    }
+
+    for (size_t index = 0; index < state->mTracks.size(); ++index)
+    {
+        AOSet::AOTrack& track = state->mTracks[index];
+        if (track.mAnimations.empty())
+        {
+            continue;
+        }
+
+        track.mCurrentAnimationID = mCurrentSet ? mCurrentSet->getAnimationForTrack(track) : LLUUID::null;
+        if (track.mCurrentAnimationID.isNull())
+        {
+            continue;
+        }
+
+        gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_START);
+
+        // tracks with only one animation and no cycling don't need a timer at all
+        if (track.mCycle && track.mCycleTime > 0.0f && track.mAnimations.size() > 1)
+        {
+            mActiveTrackTimers.emplace_back(std::make_unique<AOTrackTimer>(state->mNum, static_cast<S32>(index), track.mCycleTime));
+        }
+    }
+
+    mActiveTrackState = state;
+    mAnimationChangedSignal(LLUUID::null);
+}
+
+void AOEngine::stopActiveTracks()
+{
+    mActiveTrackTimers.clear();
+
+    if (!mActiveTrackState)
+    {
+        return;
+    }
+
+    for (AOSet::AOTrack& track : mActiveTrackState->mTracks)
+    {
+        if (track.mCurrentAnimationID.notNull())
+        {
+            gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_STOP);
+            if (isAgentAvatarValid())
+            {
+                gAgentAvatarp->LLCharacter::stopMotion(track.mCurrentAnimationID);
+            }
+            track.mCurrentAnimationID.setNull();
+        }
+    }
+
+    mActiveTrackState = nullptr;
+}
+
+void AOEngine::startAlwaysAnimations()
+{
+    AOSet::AOState* state = (mEnabled && mCurrentSet) ? mCurrentSet->getState(AOSet::Always) : nullptr;
+
+    if (state && state == mActiveAlwaysState)
+    {
+        return;
+    }
+
+    stopAlwaysAnimations();
+
+    if (!state || (state->mSteps.empty() && state->mTracks.empty()))
+    {
+        return;
+    }
+
+    if (!state->mSteps.empty())
+    {
+        uuid_vec_t animations;
+        mCurrentSet->getAnimationsForState(state, animations);
+        state->mCurrentAnimationIDs = animations;
+        for (const LLUUID& animation : animations)
+        {
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+        }
+    }
+
+    for (AOSet::AOTrack& track : state->mTracks)
+    {
+        if (track.mAnimations.empty())
+        {
+            continue;
+        }
+
+        track.mCurrentAnimationID = mCurrentSet->getAnimationForTrack(track);
+        if (track.mCurrentAnimationID.notNull())
+        {
+            gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_START);
+        }
+    }
+
+    mActiveAlwaysState = state;
+    refreshAlwaysTimers();
+    mAnimationChangedSignal(LLUUID::null);
+}
+
+void AOEngine::stopAlwaysAnimations()
+{
+    mAlwaysTimers.clear();
+
+    if (!mActiveAlwaysState)
+    {
+        return;
+    }
+
+    stopCurrentAnimations(mActiveAlwaysState);
+
+    for (AOSet::AOTrack& track : mActiveAlwaysState->mTracks)
+    {
+        if (track.mCurrentAnimationID.notNull())
+        {
+            gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_STOP);
+            if (isAgentAvatarValid())
+            {
+                gAgentAvatarp->LLCharacter::stopMotion(track.mCurrentAnimationID);
+            }
+            track.mCurrentAnimationID.setNull();
+        }
+    }
+
+    mActiveAlwaysState = nullptr;
+}
+
+void AOEngine::refreshAlwaysTimers()
+{
+    mAlwaysTimers.clear();
+
+    AOSet::AOState* state = mActiveAlwaysState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (state->mCycle && state->mCycleTime > 0.0f && state->mSteps.size() > 1)
+    {
+        mAlwaysTimers.emplace_back(std::make_unique<AOTrackTimer>(state->mNum, AO_TRACK_INDEX_STEPS, state->mCycleTime));
+    }
+
+    for (size_t index = 0; index < state->mTracks.size(); ++index)
+    {
+        const AOSet::AOTrack& track = state->mTracks[index];
+        if (track.mCycle && track.mCycleTime > 0.0f && track.mAnimations.size() > 1)
+        {
+            mAlwaysTimers.emplace_back(std::make_unique<AOTrackTimer>(state->mNum, static_cast<S32>(index), track.mCycleTime));
+        }
+    }
+}
+
+void AOEngine::cycleAlwaysStep()
+{
+    AOSet::AOState* state = mActiveAlwaysState;
+    if (!mEnabled || !mCurrentSet || !state || state->mSteps.empty())
+    {
+        return;
+    }
+
+    uuid_vec_t animations;
+    mCurrentSet->getAnimationsForState(state, animations);
+
+    if (swapStateAnimations(state, animations))
+    {
+        mAnimationChangedSignal(LLUUID::null);
+    }
+}
+
+void AOEngine::trackTimeout(S32 stateNum, S32 trackIndex)
+{
+    if (!mEnabled || !mCurrentSet)
+    {
+        return;
+    }
+
+    AOSet::AOState* state = nullptr;
+    if (mActiveTrackState && mActiveTrackState->mNum == stateNum)
+    {
+        state = mActiveTrackState;
+    }
+    else if (mActiveAlwaysState && mActiveAlwaysState->mNum == stateNum)
+    {
+        state = mActiveAlwaysState;
+    }
+
+    if (!state)
+    {
+        return;
+    }
+
+    if (trackIndex == AO_TRACK_INDEX_STEPS)
+    {
+        if (state == mActiveAlwaysState)
+        {
+            cycleAlwaysStep();
+        }
+        return;
+    }
+
+    if (trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return;
+    }
+
+    AOSet::AOTrack& track = state->mTracks[trackIndex];
+
+    LLUUID oldAnimation = track.mCurrentAnimationID;
+    LLUUID animation = mCurrentSet->getAnimationForTrack(track);
+
+    if (animation == oldAnimation)
+    {
+        return;
+    }
+
+    track.mCurrentAnimationID = animation;
+    if (animation.notNull())
+    {
+        gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+    }
+
+    if (oldAnimation.notNull())
+    {
+        gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
+        if (isAgentAvatarValid())
+        {
+            gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+        }
+    }
+
+    mAnimationChangedSignal(LLUUID::null);
 }
 
 void AOEngine::setLastMotion(const LLUUID& motion)
@@ -317,7 +611,7 @@ void AOEngine::checkBelowWater(bool check_underwater)
 
     // only applies to motions that actually change underwater and have animations inside
     AOSet::AOState* mapped = mapSwimming(mLastMotion);
-    if (!mapped || mapped->mAnimations.empty())
+    if (!mapped || mapped->mSteps.empty())
     {
         // set underwater status but do nothing else
         mUnderWater = check_underwater;
@@ -378,7 +672,7 @@ AOSet::AOState* AOEngine::getStateForMotion(const LLUUID& motion) const
     }
 
     // check if the underwater state has any animations to play
-    if (mapped->mAnimations.empty())
+    if (mapped->mSteps.empty())
     {
         // no animations in underwater state, return default
         return defaultState;
@@ -408,7 +702,8 @@ void AOEngine::enable(bool enable)
     AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastMotion);
     if (mEnabled)
     {
-        if (state && !state->mAnimations.empty())
+        startAlwaysAnimations();
+        if (state && !state->mSteps.empty())
         {
             LL_DEBUGS("AOEngine") << "Enabling animation state " << state->mName << LL_ENDL;
 
@@ -464,7 +759,10 @@ void AOEngine::enable(bool enable)
             }
 
             gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
-            mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+            if (state->mCurrentAnimation < state->mSteps.size())
+            {
+                mAnimationChangedSignal(state->mSteps[state->mCurrentAnimation].mInventoryUUID);
+            }
 
             // remember to ignore this motion once in the overrider so stopping the Linden motion
             // will not trigger a stop of the override animation
@@ -473,25 +771,24 @@ void AOEngine::enable(bool enable)
     }
     else
     {
-        mAnimationChangedSignal(LLUUID::null);
-
         if (mLastOverriddenMotion == ANIM_AGENT_SIT)
         {
             // remove sit cycle cover up
             gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
         }
 
+        stopActiveTracks();
+        stopAlwaysAnimations();
+
         // stop all overriders, catch leftovers
         for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
         {
             if (auto state = mCurrentSet->getState(index))
             {
-                if (LLUUID animation = state->mCurrentAnimationID; animation.notNull())
+                if (!state->mCurrentAnimationIDs.empty())
                 {
-                    LL_DEBUGS("AOEngine") << "Stopping leftover animation from state " << state->mName << LL_ENDL;
-                    gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-                    gAgentAvatarp->LLCharacter::stopMotion(animation);
-                    state->mCurrentAnimationID.setNull();
+                    LL_DEBUGS("AOEngine") << "Stopping leftover animation(s) from state " << state->mName << LL_ENDL;
+                    stopCurrentAnimations(state);
                 }
             }
             else
@@ -499,6 +796,8 @@ void AOEngine::enable(bool enable)
                 LL_DEBUGS("AOEngine") << "state "<< index <<" returned NULL." << LL_ENDL;
             }
         }
+
+        mAnimationChangedSignal(LLUUID::null);
 
         // restore Linden animation if applicable
         if (mLastOverriddenMotion != ANIM_AGENT_SIT || !foreignAnimations())
@@ -533,7 +832,7 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
             {
                 setLastMotion(motion);
                 LL_DEBUGS("AOEngine") << "(disabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-                if (!state->mAnimations.empty())
+                if (!state->mSteps.empty())
                 {
                     setLastOverriddenMotion(motion);
                     LL_DEBUGS("AOEngine") << "(disabled AO) setting last overridden motion id to " <<  gAnimLibrary.animationName(mLastOverriddenMotion) << LL_ENDL;
@@ -641,17 +940,13 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
             // check if the next state is the one we are currently animating and skip that
             if (AOSet::AOState* stateToCheck = mCurrentSet->getState(stateNum); stateToCheck != state)
             {
-                // check if there is an animation left over for that state
-                if (!stateToCheck->mCurrentAnimationID.isNull())
+                // check if there are animations left over for that state
+                if (!stateToCheck->mCurrentAnimationIDs.empty())
                 {
-                    LL_WARNS() << "cleaning up animation in state " << stateToCheck->mName << LL_ENDL;
+                    LL_WARNS() << "cleaning up animation(s) in state " << stateToCheck->mName << LL_ENDL;
 
-                    // stop the leftover animation locally and in the region for everyone
-                    gAgent.sendAnimationRequest(stateToCheck->mCurrentAnimationID, ANIM_REQUEST_STOP);
-                    gAgentAvatarp->LLCharacter::stopMotion(stateToCheck->mCurrentAnimationID);
-
-                    // mark the state as clean
-                    stateToCheck->mCurrentAnimationID.setNull();
+                    // stop the leftover animations locally and in the region for everyone
+                    stopCurrentAnimations(stateToCheck);
                 }
             }
             index++;
@@ -663,6 +958,11 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
     mCurrentSet->stopTimer();
     if (start)
     {
+        if (motion != ANIM_AGENT_TYPE)
+        {
+            stopActiveTracks();
+        }
+
         setLastMotion(motion);
         LL_DEBUGS("AOEngine") << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 
@@ -701,7 +1001,7 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
             }
         }
 
-        if (!state->mAnimations.empty())
+        if (!state->mSteps.empty())
         {
             setLastOverriddenMotion(motion);
             LL_DEBUGS("AOEngine") << "(enabled AO) setting last overridden motion id to " <<  gAnimLibrary.animationName(mLastOverriddenMotion) << LL_ENDL;
@@ -713,27 +1013,29 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
             mCurrentSet->setMotion(motion);
         }
 
-        animation = mCurrentSet->getAnimationForState(state);
+        uuid_vec_t animations;
+        mCurrentSet->getAnimationsForState(state, animations);
 
-        if (state->mCurrentAnimationID.notNull())
+        if (!state->mCurrentAnimationIDs.empty())
         {
-            LL_DEBUGS("AOEngine")   << "Previous animation for state "
+            LL_DEBUGS("AOEngine")   << "Previous animation(s) for state "
                         << gAnimLibrary.animationName(motion)
-                        << " was not stopped, but we were asked to start a new one. Killing old animation." << LL_ENDL;
-            gAgent.sendAnimationRequest(state->mCurrentAnimationID, ANIM_REQUEST_STOP);
-            gAgentAvatarp->LLCharacter::stopMotion(state->mCurrentAnimationID);
+                        << " were not stopped, but we were asked to start a new one. Killing old animations." << LL_ENDL;
+            stopCurrentAnimations(state);
         }
 
-        state->mCurrentAnimationID = animation;
+        state->mCurrentAnimationIDs = animations;
+        animation = animations.empty() ? LLUUID::null : animations.front();
         LL_DEBUGS("AOEngine") << "overriding " <<  gAnimLibrary.animationName(motion)
                     << " with " << animation
+                    << " (" << animations.size() << " animation(s))"
                     << " in state " << state->mName
                     << " of set " << mCurrentSet->getName()
                     << " (" << mCurrentSet << ")" << LL_ENDL;
 
-        if (animation.notNull() && state->mCurrentAnimation < state->mAnimations.size())
+        if (animation.notNull() && state->mCurrentAnimation < state->mSteps.size())
         {
-            mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+            mAnimationChangedSignal(state->mSteps[state->mCurrentAnimation].mInventoryUUID);
         }
 
         setStateCycleTimer(state);
@@ -756,8 +1058,20 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
                 motion == ANIM_AGENT_LAND ||
                 motion == ANIM_AGENT_MEDIUM_LAND)
         {
-            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+            for (const LLUUID& animationId : animations)
+            {
+                gAgent.sendAnimationRequest(animationId, ANIM_REQUEST_START);
+            }
             return LLUUID::null;
+        }
+
+        for (size_t index = 1; index < animations.size(); ++index)
+        {
+            gAgent.sendAnimationRequest(animations[index], ANIM_REQUEST_START);
+        }
+        if (motion != ANIM_AGENT_TYPE)
+        {
+            startStateTracks(state);
         }
     }
     else
@@ -776,12 +1090,13 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
         // clear transition motion id here as well, to make sure there is no stray id left behind
         mTransitionId.setNull();
 
-        animation = state->mCurrentAnimationID;
-        state->mCurrentAnimationID.setNull();
+        animation = state->mCurrentAnimationIDs.empty() ? LLUUID::null : state->mCurrentAnimationIDs.front();
 
         // for typing animaiton, just return the stored animation, reset the state timer, and don't memorize anything else
         if (motion == ANIM_AGENT_TYPE)
         {
+            stopCurrentAnimations(state, true);
+            mAnimationChangedSignal(LLUUID::null);
             AOSet::AOState* previousState = mCurrentSet->getStateByRemapID(mLastMotion);
             if (previousState)
             {
@@ -801,10 +1116,13 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
         {
             LL_WARNS("AOEngine") << "trying to stop-override motion " <<  gAnimLibrary.animationName(motion)
                     << " but the current set has motion " <<  gAnimLibrary.animationName(mCurrentSet->getMotion()) << LL_ENDL;
+            stopCurrentAnimations(state, true);
+            mAnimationChangedSignal(LLUUID::null);
             return animation;
         }
 
         mCurrentSet->setMotion(LLUUID::null);
+        stopActiveTracks();
 
         // again, special treatment for "transient" animations to make sure our own animation gets stopped properly
         if (motion == ANIM_AGENT_SIT_GROUND ||
@@ -814,11 +1132,14 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
             motion == ANIM_AGENT_LAND ||
             motion == ANIM_AGENT_MEDIUM_LAND)
         {
-            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-            gAgentAvatarp->LLCharacter::stopMotion(animation);
+            stopCurrentAnimations(state);
+            mAnimationChangedSignal(LLUUID::null);
             setStateCycleTimer(state);
             return LLUUID::null;
         }
+
+        stopCurrentAnimations(state, true);
+        mAnimationChangedSignal(LLUUID::null);
     }
 
     return animation;
@@ -831,16 +1152,18 @@ void AOEngine::checkSitCancel()
 
     if (AOSet::AOState* aoState = mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT))
     {
-        if (LLUUID animation = aoState->mCurrentAnimationID; animation.notNull())
+        if (!aoState->mCurrentAnimationIDs.empty())
         {
             LL_DEBUGS("AOEngine") << "Stopping sit animation due to foreign animations running" << LL_ENDL;
-            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
+            stopCurrentAnimations(aoState);
             // remove cycle point cover-up
             gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
-            gAgentAvatarp->LLCharacter::stopMotion(animation);
             mSitCancelTimer.stop();
             // stop cycle tiemr
             mCurrentSet->stopTimer();
+            // sitting tracks make no sense when the sit override backs off
+            stopActiveTracks();
+            mAnimationChangedSignal(LLUUID::null);
         }
     }
 }
@@ -892,7 +1215,7 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
         return;
     }
 
-    if (!state->mAnimations.size())
+    if (state->mSteps.empty())
     {
         LL_DEBUGS("AOEngine") << "cycle without animations in state." << LL_ENDL;
         return;
@@ -905,12 +1228,12 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
         return;
     }
 
-    LLUUID oldAnimation = state->mCurrentAnimationID;
-    LLUUID animation;
+    uuid_vec_t oldAnimations = state->mCurrentAnimationIDs;
+    uuid_vec_t animations;
 
     if (cycleMode == CycleAny)
     {
-        animation = mCurrentSet->getAnimationForState(state);
+        mCurrentSet->getAnimationsForState(state, animations);
     }
     else
     {
@@ -918,7 +1241,7 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
         {
             if (state->mCurrentAnimation == 0)
             {
-                state->mCurrentAnimation = static_cast<U32>(state->mAnimations.size()) - 1;
+                state->mCurrentAnimation = static_cast<U32>(state->mSteps.size()) - 1;
             }
             else
             {
@@ -928,57 +1251,55 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
         else if (cycleMode == CycleNext)
         {
             state->mCurrentAnimation++;
-            if (state->mCurrentAnimation == state->mAnimations.size())
+            if (state->mCurrentAnimation >= state->mSteps.size())
             {
                 state->mCurrentAnimation = 0;
             }
         }
 
-        AOSet::AOAnimation& anim = state->mAnimations[state->mCurrentAnimation];
-
-        if (anim.mAssetUUID.isNull())
+        for (AOSet::AOAnimation& anim : state->mSteps[state->mCurrentAnimation].mMembers)
         {
-            LL_DEBUGS("AOEngine") << "Asset UUID for cycled animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
-
-            if (LLViewerInventoryItem* item = gInventory.getItem(anim.mOriginalUUID); item)
+            if (LLUUID assetId = AOSet::resolveAssetUUID(anim); assetId.notNull())
             {
-                LL_DEBUGS("AOEngine") << "Found asset UUID for cycled animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
-                anim.mAssetUUID = item->getAssetUUID();
-            }
-            else
-            {
-                LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mOriginalUUID << " for cycled animation " << anim.mName << " still returns no asset." << LL_ENDL;
+                animations.emplace_back(assetId);
             }
         }
-
-        animation = anim.mAssetUUID;
     }
 
     // don't do anything if the animation didn't change
-    if (animation == oldAnimation)
+    if (animations == oldAnimations)
     {
         return;
     }
 
+    state->mCurrentAnimationIDs = animations;
     mAnimationChangedSignal(LLUUID::null);
 
-    state->mCurrentAnimationID = animation;
-    if (animation.notNull())
+    if (!animations.empty())
     {
-        LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << animation << LL_ENDL;
-        gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
-        mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+        LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << animations.front() << " (" << animations.size() << " animation(s))" << LL_ENDL;
+        for (const LLUUID& animation : animations)
+        {
+            // don't restart animations that play in both the old and the new step
+            if (std::find(oldAnimations.begin(), oldAnimations.end(), animation) == oldAnimations.end())
+            {
+                gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+            }
+        }
     }
     else
     {
-        LL_DEBUGS("AOEngine") << "overrider came back with NULL animation for motion " << gAnimLibrary.animationName(mLastMotion) << "." << LL_ENDL;
+        LL_DEBUGS("AOEngine") << "overrider came back with no animations for motion " << gAnimLibrary.animationName(mLastMotion) << "." << LL_ENDL;
     }
 
-    if (oldAnimation.notNull())
+    for (const LLUUID& oldAnimation : oldAnimations)
     {
-        LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
-        gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
-        gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+        if (std::find(animations.begin(), animations.end(), oldAnimation) == animations.end())
+        {
+            LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
+            gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
+            gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
+        }
     }
 
     if (resetTimer)
@@ -987,7 +1308,7 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
     }
 }
 
-void AOEngine::playAnimation(const LLUUID& animation)
+void AOEngine::playAnimation(S32 stepIndex, S32 memberIndex)
 {
     if (!mEnabled)
     {
@@ -1018,89 +1339,76 @@ void AOEngine::playAnimation(const LLUUID& animation)
         return;
     }
 
-    if (state->mAnimations.empty())
+    if (stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
     {
-        LL_DEBUGS("AOEngine") << "cycle without animations in state." << LL_ENDL;
+        LL_WARNS("AOEngine") << "play request for step index " << stepIndex << " out of range." << LL_ENDL;
         return;
     }
 
-    LLViewerInventoryItem* item = gInventory.getItem(animation);
-    if (!item)
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+
+    uuid_vec_t animations;
+    if (memberIndex >= 0)
     {
-        LL_WARNS("AOEngine") << "Inventory item for animation " << animation << " not found." << LL_ENDL;
+        if (memberIndex >= (S32)step.mMembers.size())
+        {
+            LL_WARNS("AOEngine") << "play request for member index " << memberIndex << " out of range." << LL_ENDL;
+            return;
+        }
+        if (LLUUID assetId = AOSet::resolveAssetUUID(step.mMembers[memberIndex]); assetId.notNull())
+        {
+            animations.emplace_back(assetId);
+        }
+    }
+    else
+    {
+        for (AOSet::AOAnimation& anim : step.mMembers)
+        {
+            if (LLUUID assetId = AOSet::resolveAssetUUID(anim); assetId.notNull())
+            {
+                animations.emplace_back(assetId);
+            }
+        }
+    }
+
+    if (animations.empty())
+    {
+        LL_WARNS("AOEngine") << "no animation assets resolved for step " << step.mName << LL_ENDL;
         return;
     }
 
-    AOSet::AOAnimation anim;
-    anim.mName = item->getName();
-    anim.mInventoryUUID = item->getUUID();
-    anim.mOriginalUUID = item->getLinkedUUID();
-    anim.mAssetUUID.setNull();
-
-    // if we can find the original animation already right here, save its asset ID, otherwise this will
-    // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
-    LLUUID newAnimation;
-    if (item->getLinkedItem())
-    {
-        newAnimation = item->getAssetUUID();
-        //anim.mAssetUUID = item->getAssetUUID();
-    }
-
-    if (newAnimation.isNull())
-    {
-        LL_WARNS("AOEngine") << "New animation UUID is null for animation " << animation << LL_ENDL;
-        return;
-    }
-    anim.mAssetUUID = newAnimation;
-
-    //LLUUID newAnimation = anim.mAssetUUID;
-    LLUUID oldAnimation = state->mCurrentAnimationID;
+    uuid_vec_t oldAnimations = state->mCurrentAnimationIDs;
 
     // don't do anything if the animation didn't change
-    if (newAnimation == oldAnimation)
+    if (animations == oldAnimations)
     {
         return;
     }
 
     mAnimationChangedSignal(LLUUID::null);
 
-    // Searches for the index of the animation
-    S32 idx = -1;
-    for (U32 i = 0; i < state->mAnimations.size(); i++)
+    state->mCurrentAnimation = static_cast<U32>(stepIndex);
+    state->mCurrentAnimationIDs = animations;
+
+    for (const LLUUID& animation : animations)
     {
-        if (state->mAnimations[i].mAssetUUID == newAnimation)
+        if (std::find(oldAnimations.begin(), oldAnimations.end(), animation) == oldAnimations.end())
         {
-            idx = i;
-            break;
+            LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << animation << LL_ENDL;
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
         }
     }
-    if (idx == -1)
-    {
-        LL_WARNS("AOEngine") << "Animation index not found for animation " << animation << LL_ENDL;
-        return;
-    }
 
-    state->mCurrentAnimation = static_cast<U32>(idx);
-    state->mCurrentAnimationID = newAnimation;
-    if (newAnimation.notNull())
+    mAnimationChangedSignal(step.mInventoryUUID);
+
+    for (const LLUUID& oldAnimation : oldAnimations)
     {
-        LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(mLastMotion) << ": " << newAnimation << LL_ENDL;
-        gAgent.sendAnimationRequest(newAnimation, ANIM_REQUEST_START);
-        if (state->mCurrentAnimation < state->mAnimations.size())
+        if (std::find(animations.begin(), animations.end(), oldAnimation) == animations.end())
         {
-            mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+            LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
+            gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
+            gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
         }
-    }
-    else
-    {
-        LL_DEBUGS("AOEngine") << "overrider came back with NULL animation for motion " << gAnimLibrary.animationName(mLastMotion) << "." << LL_ENDL;
-    }
-
-    if (oldAnimation.notNull())
-    {
-        LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
-        gAgent.sendAnimationRequest(oldAnimation, ANIM_REQUEST_STOP);
-        gAgentAvatarp->LLCharacter::stopMotion(oldAnimation);
     }
 
     mCurrentSet->resetTimer();
@@ -1115,35 +1423,56 @@ const AOSet::AOState* AOEngine::getCurrentState() const
     return mCurrentSet->getStateByRemapID(mLastMotion);
 }
 
+void AOEngine::setItemDescription(const LLUUID& itemID, const std::string& description)
+{
+    LLViewerInventoryItem* item = gInventory.getItem(itemID);
+    if (!item)
+    {
+        LL_WARNS("AOEngine") << "NULL inventory item found while trying to copy " << itemID << LL_ENDL;
+        return;
+    }
+
+    LLPointer<LLViewerInventoryItem> newItem = new LLViewerInventoryItem(item);
+    newItem->setDescription(description);
+    newItem->setComplete(true);
+    newItem->updateServer(false);
+
+    gInventory.updateItem(newItem);
+}
+
+void AOEngine::updateMemberSortOrder(std::vector<AOSet::AOAnimation>& animations)
+{
+    for (U32 index = 0; index < animations.size(); ++index)
+    {
+        if (animations[index].mSortOrder != (S32)index)
+        {
+            LL_DEBUGS("AOEngine") << "member sort order is " << animations[index].mSortOrder << " but index is " << index << LL_ENDL;
+            animations[index].mSortOrder = index;
+            setItemDescription(animations[index].mInventoryUUID, llformat("%d", index));
+        }
+    }
+}
+
 void AOEngine::updateSortOrder(AOSet::AOState* state)
 {
-    for (U32 index = 0; index < state->mAnimations.size(); ++index)
+    for (U32 index = 0; index < state->mSteps.size(); ++index)
     {
-        U32 sortOrder = state->mAnimations[index].mSortOrder;
+        AOSet::AOAnimationStep& step = state->mSteps[index];
 
-        if (sortOrder != index)
+        if (step.mSortOrder != (S32)index)
         {
-            std::ostringstream numStr("");
-            numStr << index;
+            LL_DEBUGS("AOEngine") << "step sort order is " << step.mSortOrder << " but index is " << index << LL_ENDL;
 
-            LL_DEBUGS("AOEngine") << "sort order is " << sortOrder << " but index is " << index
-                        << ", setting sort order description: " << numStr.str() << LL_ENDL;
+            step.mSortOrder = index;
 
-            state->mAnimations[index].mSortOrder = index;
-
-            LLViewerInventoryItem* item = gInventory.getItem(state->mAnimations[index].mInventoryUUID);
-            if (!item)
+            if (step.mIsGroup)
             {
-                LL_WARNS("AOEngine") << "NULL inventory item found while trying to copy " << state->mAnimations[index].mInventoryUUID << LL_ENDL;
-                continue;
+                saveGroup(step);
             }
-
-            LLPointer<LLViewerInventoryItem> newItem = new LLViewerInventoryItem(item);
-            newItem->setDescription(numStr.str());
-            newItem->setComplete(true);
-            newItem->updateServer(false);
-
-            gInventory.updateItem(newItem);
+            else
+            {
+                setItemDescription(step.mInventoryUUID, llformat("%d", index));
+            }
         }
     }
 }
@@ -1207,7 +1536,8 @@ bool AOEngine::cloneSet(AOSet* sourceSet, std::string_view newName)
         newState->mCycle = sourceState->mCycle;
         newState->mRandom = sourceState->mRandom;
         newState->mCycleTime = sourceState->mCycleTime;
-        newState->mAnimations = sourceState->mAnimations;
+        newState->mSteps = sourceState->mSteps;
+        newState->mTracks = sourceState->mTracks;
     }
 
     mImportSet->setInventoryUUID(LLUUID::null);
@@ -1217,19 +1547,18 @@ bool AOEngine::cloneSet(AOSet* sourceSet, std::string_view newName)
     return true;
 }
 
-bool AOEngine::createAnimationLink(AOSet::AOState* state, const LLInventoryItem* item)
+bool AOEngine::createAnimationLink(const LLUUID& categoryID, const LLInventoryItem* item)
 {
-    LL_DEBUGS("AOEngine") << "Asset ID " << item->getAssetUUID() << " inventory id " << item->getUUID() << " category id " << state->mInventoryUUID << LL_ENDL;
-    LL_DEBUGS("AOEngine") << "state " << state->mName << " item " << item->getName() << LL_ENDL;
+    LL_DEBUGS("AOEngine") << "Asset ID " << item->getAssetUUID() << " inventory id " << item->getUUID() << " category id " << categoryID << LL_ENDL;
 
-    if (state->mInventoryUUID.isNull())
+    if (categoryID.isNull())
     {
-        LL_DEBUGS("AOEngine") << "state inventory UUID not found, failing." << LL_ENDL;
+        LL_DEBUGS("AOEngine") << "target category UUID not found, failing." << LL_ENDL;
         return false;
     }
 
     LLInventoryObject::const_object_list_t obj_array{ LLConstPointer<LLInventoryObject>(item) };
-    link_inventory_array(state->mInventoryUUID,
+    link_inventory_array(categoryID,
                             obj_array,
                             LLPointer<LLInventoryCallback>(nullptr));
 
@@ -1243,12 +1572,19 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
     anim.mInventoryUUID = item->getUUID();
     anim.mOriginalUUID = item->getLinkedUUID();
     anim.mName = item->getName();
-    anim.mSortOrder = static_cast<S32>(state->mAnimations.size()) + 1;
-    state->mAnimations.emplace_back(std::move(anim));
+    anim.mSortOrder = static_cast<S32>(state->mSteps.size()) + 1;
+
+    AOSet::AOAnimationStep step;
+    step.mName = anim.mName;
+    step.mInventoryUUID = anim.mInventoryUUID;
+    step.mSortOrder = anim.mSortOrder;
+    step.mIsGroup = false;
+    step.mMembers.emplace_back(std::move(anim));
+    state->mSteps.emplace_back(std::move(step));
 
     bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
     gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
-    bool success = createAnimationLink(state, item);
+    bool success = createAnimationLink(state->mInventoryUUID, item);
     gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
     if (success)
@@ -1277,7 +1613,7 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
             // add all queued animations to this state's folder and then clear the queue
             for (const auto item : state->mAddQueue)
             {
-                createAnimationLink(state, item);
+                createAnimationLink(state->mInventoryUUID, item);
             }
             state->mAddQueue.clear();
 
@@ -1289,6 +1625,611 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
             }
         });
     }
+}
+
+std::string AOEngine::sanitiseFolderName(const std::string& name, const std::string& fallback) const
+{
+    std::string clean;
+    clean.reserve(name.size());
+
+    for (char character : name)
+    {
+        if (character == ':' || character == '|')
+        {
+            continue;
+        }
+        if (static_cast<unsigned char>(character) < 0x20 || static_cast<unsigned char>(character) > 0x7E)
+        {
+            continue;
+        }
+        clean += character;
+    }
+
+    LLStringUtil::trim(clean);
+
+    if (clean.empty())
+    {
+        return fallback;
+    }
+    return clean;
+}
+
+std::string AOEngine::nextGroupName(const AOSet::AOState* state) const
+{
+    S32 number = 1;
+    while (true)
+    {
+        std::string candidate = llformat("Group %d", number);
+        bool taken = false;
+        for (const auto& step : state->mSteps)
+        {
+            if (step.mIsGroup && step.mName == candidate)
+            {
+                taken = true;
+                break;
+            }
+        }
+        if (!taken)
+        {
+            return candidate;
+        }
+        ++number;
+    }
+}
+
+std::string AOEngine::nextTrackName(const AOSet::AOState* state) const
+{
+    S32 number = 1;
+    while (true)
+    {
+        std::string candidate = llformat("Track %d", number);
+        bool taken = false;
+        for (const auto& track : state->mTracks)
+        {
+            if (track.mName == candidate)
+            {
+                taken = true;
+                break;
+            }
+        }
+        if (!taken)
+        {
+            return candidate;
+        }
+        ++number;
+    }
+}
+
+// group subfolder name: "<name>:OR<step order>" - categories have no description field, so order travels in the folder name
+std::string AOEngine::getGroupFolderName(const AOSet::AOAnimationStep& step) const
+{
+    return step.mName + llformat(":OR%d", step.mSortOrder);
+}
+
+// track subfolder name: "<name>:TR[:CT<time>][:CY][:RN]" - same scheme as state folders, with :TR marking the subfolder as a track
+std::string AOEngine::getTrackFolderName(const AOSet::AOTrack& track) const
+{
+    std::string params = track.mName + ":TR";
+    if (track.mCycleTime > 0.0f)
+    {
+        params += llformat(":CT%.2f", track.mCycleTime);
+    }
+    if (track.mCycle)
+    {
+        params += ":CY";
+    }
+    if (track.mRandom)
+    {
+        params += ":RN";
+    }
+    return params;
+}
+
+void AOEngine::saveGroup(const AOSet::AOAnimationStep& step)
+{
+    if (!step.mIsGroup || step.mInventoryUUID.isNull())
+    {
+        return;
+    }
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    rename_category(&gInventory, step.mInventoryUUID, getGroupFolderName(step));
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+}
+
+void AOEngine::saveTrack(const AOSet::AOTrack& track)
+{
+    if (track.mInventoryUUID.isNull())
+    {
+        return;
+    }
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    rename_category(&gInventory, track.mInventoryUUID, getTrackFolderName(track));
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+}
+
+void AOEngine::addAnimationToGroup(AOSet::AOState* state, S32 stepIndex, const LLInventoryItem* item)
+{
+    if (!state || stepIndex < 0 || stepIndex >= (S32)state->mSteps.size() || !item)
+    {
+        return;
+    }
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    if (!step.mIsGroup)
+    {
+        // dropped onto a single step - that is a merge
+        createGroupFromMerge(state, stepIndex, item);
+        return;
+    }
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    createAnimationLink(step.mInventoryUUID, item);
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+    mTimerCollection.enableReloadTimer(true);
+}
+
+void AOEngine::createGroupFromMerge(AOSet::AOState* state, S32 stepIndex, const LLInventoryItem* item)
+{
+    if (!state || stepIndex < 0 || stepIndex >= (S32)state->mSteps.size() || !item)
+    {
+        return;
+    }
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    if (step.mIsGroup)
+    {
+        addAnimationToGroup(state, stepIndex, item);
+        return;
+    }
+    const LLUUID targetLinkID = step.mInventoryUUID;
+
+    // queue the drop - more drops onto the same single may arrive while the subfolder is still being created asynchronously
+    auto& queue = mPendingGroupMerges[targetLinkID];
+    queue.push_back(item);
+    if (queue.size() > 1)
+    {
+        return;
+    }
+
+    std::string groupName = sanitiseFolderName(nextGroupName(state), "Group") + llformat(":OR%d", stepIndex);
+
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    gInventory.createNewCategory(state->mInventoryUUID, LLFolderType::FT_NONE, groupName, [this, targetLinkID, wasProtected](const LLUUID& new_cat_id)
+    {
+        gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+
+        // move the existing animation link into the new subfolder as first member
+        if (LLViewerInventoryItem* linkItem = gInventory.getItem(targetLinkID))
+        {
+            gInventory.changeItemParent(linkItem, new_cat_id, false);
+        }
+
+        // link all queued animations behind it
+        for (const auto queuedItem : mPendingGroupMerges[targetLinkID])
+        {
+            createAnimationLink(new_cat_id, queuedItem);
+        }
+        mPendingGroupMerges.erase(targetLinkID);
+
+        gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+        mTimerCollection.enableReloadTimer(true);
+    });
+}
+
+bool AOEngine::createGroupFromFolder(AOSet::AOState* state, const LLInventoryCategory* category)
+{
+    if (!state || !category || state->mInventoryUUID.isNull())
+    {
+        return false;
+    }
+
+    LLInventoryModel::cat_array_t* cats;
+    LLInventoryModel::item_array_t* items;
+    gInventory.getDirectDescendentsOf(category->getUUID(), cats, items);
+    std::vector<const LLInventoryItem*> animations;
+    if (items)
+    {
+        for (const auto& item : *items)
+        {
+            if (item->getInventoryType() == LLInventoryType::IT_ANIMATION)
+            {
+                animations.push_back(item);
+            }
+        }
+    }
+
+    if (animations.empty())
+    {
+        return false;
+    }
+
+    std::string groupName = sanitiseFolderName(category->getName(), nextGroupName(state)) + llformat(":OR%d", static_cast<S32>(state->mSteps.size()));
+
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    gInventory.createNewCategory(state->mInventoryUUID, LLFolderType::FT_NONE, groupName, [this, animations, wasProtected](const LLUUID& new_cat_id)
+    {
+        gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+        for (const auto animationItem : animations)
+        {
+            createAnimationLink(new_cat_id, animationItem);
+        }
+        gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+        mTimerCollection.enableReloadTimer(true);
+    });
+
+    return true;
+}
+
+void AOEngine::extractMemberFromGroup(AOSet::AOState* state, S32 stepIndex, S32 memberIndex)
+{
+    if (!state || stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
+    {
+        return;
+    }
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    if (!step.mIsGroup || memberIndex < 0 || memberIndex >= (S32)step.mMembers.size())
+    {
+        return;
+    }
+
+    LLViewerInventoryItem* linkItem = gInventory.getItem(step.mMembers[memberIndex].mInventoryUUID);
+    if (!linkItem)
+    {
+        LL_WARNS("AOEngine") << "group member link " << step.mMembers[memberIndex].mInventoryUUID << " not found, cannot move it out of group " << step.mName << LL_ENDL;
+        return;
+    }
+
+    const LLUUID oldLinkID = linkItem->getUUID();
+    const LLUUID groupFolderID = (step.mMembers.size() == 1) ? step.mInventoryUUID : LLUUID::null; // extracting the last member retires the whole subfolder, otherwise only the old link
+    const std::string sortOrder = llformat("%d", stepIndex); // place the extracted single right behind its former group
+
+    LLInventoryObject::const_object_list_t obj_array{ LLConstPointer<LLInventoryObject>(linkItem) };
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([this, oldLinkID, groupFolderID, sortOrder](const LLUUID& newItemID)
+    {
+        // only dispose of the old link when the replacement actually exists
+        if (newItemID.isNull())
+        {
+            return;
+        }
+        setItemDescription(newItemID, sortOrder);
+        if (groupFolderID.notNull())
+        {
+            purgeFolder(groupFolderID);
+        }
+        else
+        {
+            remove_inventory_object(oldLinkID, nullptr);
+            gInventory.notifyObservers();
+        }
+        mTimerCollection.enableReloadTimer(true);
+    });
+    link_inventory_array(state->mInventoryUUID, obj_array, cb);
+
+    step.mMembers.erase(step.mMembers.begin() + memberIndex);
+
+    if (step.mMembers.size() == 1)
+    {
+        collapseGroupToSingle(state, step);
+    }
+    else if (step.mMembers.empty())
+    {
+        state->mSteps.erase(state->mSteps.begin() + stepIndex);
+    }
+    else
+    {
+        updateMemberSortOrder(step.mMembers);
+    }
+}
+
+void AOEngine::collapseGroupToSingle(AOSet::AOState* state, AOSet::AOAnimationStep& step)
+{
+    if (!step.mIsGroup || step.mMembers.size() != 1)
+    {
+        return;
+    }
+
+    LLViewerInventoryItem* linkItem = gInventory.getItem(step.mMembers.front().mInventoryUUID);
+    if (!linkItem)
+    {
+        LL_WARNS("AOEngine") << "last group member link " << step.mMembers.front().mInventoryUUID << " not found, cannot dissolve group " << step.mName << LL_ENDL;
+        return;
+    }
+
+    const LLUUID groupFolderID = step.mInventoryUUID;
+    const std::string sortOrder = llformat("%d", step.mSortOrder);
+
+    LLInventoryObject::const_object_list_t obj_array{ LLConstPointer<LLInventoryObject>(linkItem) };
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([this, groupFolderID, sortOrder](const LLUUID& newItemID)
+    {
+        // only retire the subfolder when the replacement link actually exists
+        if (newItemID.isNull())
+        {
+            return;
+        }
+        setItemDescription(newItemID, sortOrder);
+        purgeFolder(groupFolderID);
+        mTimerCollection.enableReloadTimer(true);
+    });
+    link_inventory_array(state->mInventoryUUID, obj_array, cb);
+}
+
+bool AOEngine::renameGroup(AOSet::AOState* state, S32 stepIndex, std::string_view newName)
+{
+    if (!state || stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
+    {
+        return false;
+    }
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    if (!step.mIsGroup)
+    {
+        return false;
+    }
+    std::string cleanName = sanitiseFolderName(std::string(newName), "");
+    if (cleanName.empty())
+    {
+        return false;
+    }
+    step.mName = cleanName;
+    saveGroup(step);
+    mUpdatedSignal();
+    return true;
+}
+
+std::string AOEngine::createEmptyTrack(AOSet::AOState* state)
+{
+    if (!state || state->mInventoryUUID.isNull())
+    {
+        return std::string();
+    }
+    std::string trackName = sanitiseFolderName(nextTrackName(state), "Track");
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    gInventory.createNewCategory(state->mInventoryUUID, LLFolderType::FT_NONE, trackName + ":TR", [this, wasProtected](const LLUUID& new_cat_id)
+    {
+        gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+        mTimerCollection.enableReloadTimer(true);
+    });
+    return trackName;
+}
+
+void AOEngine::addAnimationToTrack(AOSet::AOState* state, S32 trackIndex, const LLInventoryItem* item)
+{
+    if (!state || trackIndex < 0 || trackIndex >= (S32)state->mTracks.size() || !item)
+    {
+        return;
+    }
+    bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", false);
+    createAnimationLink(state->mTracks[trackIndex].mInventoryUUID, item);
+    gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
+    mTimerCollection.enableReloadTimer(true);
+}
+
+void AOEngine::removeTrack(AOSet::AOState* state, S32 trackIndex)
+{
+    if (!state || trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return;
+    }
+
+    if (mActiveTrackState == state)
+    {
+        stopActiveTracks();
+    }
+    if (mActiveAlwaysState == state)
+    {
+        stopAlwaysAnimations();
+    }
+
+    purgeFolder(state->mTracks[trackIndex].mInventoryUUID);
+    state->mTracks.erase(state->mTracks.begin() + trackIndex);
+    mTimerCollection.enableReloadTimer(true);
+}
+
+void AOEngine::removeTrackAnimation(AOSet::AOState* state, S32 trackIndex, S32 memberIndex)
+{
+    if (!state || trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return;
+    }
+    AOSet::AOTrack& track = state->mTracks[trackIndex];
+    if (memberIndex < 0 || memberIndex >= (S32)track.mAnimations.size())
+    {
+        return;
+    }
+
+    if (mActiveTrackState == state)
+    {
+        stopActiveTracks();
+    }
+    if (mActiveAlwaysState == state)
+    {
+        stopAlwaysAnimations();
+    }
+
+    LL_DEBUGS("AOEngine") << "purging track member: " << track.mAnimations[memberIndex].mInventoryUUID << LL_ENDL;
+    remove_inventory_object(track.mAnimations[memberIndex].mInventoryUUID, nullptr);
+    gInventory.notifyObservers();
+    track.mAnimations.erase(track.mAnimations.begin() + memberIndex);
+    if (track.mAnimations.empty())
+    {
+        purgeFolder(track.mInventoryUUID);
+        state->mTracks.erase(state->mTracks.begin() + trackIndex);
+    }
+    else
+    {
+        updateMemberSortOrder(track.mAnimations);
+    }
+
+    mTimerCollection.enableReloadTimer(true);
+}
+
+bool AOEngine::swapTrackAnimationWithPrevious(AOSet::AOState* state, S32 trackIndex, S32 memberIndex)
+{
+    if (!state || trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return false;
+    }
+    AOSet::AOTrack& track = state->mTracks[trackIndex];
+    if (memberIndex < 1 || memberIndex >= (S32)track.mAnimations.size())
+    {
+        return false;
+    }
+    std::swap(track.mAnimations[memberIndex], track.mAnimations[memberIndex - 1]);
+    updateMemberSortOrder(track.mAnimations);
+    return true;
+}
+
+bool AOEngine::swapTrackAnimationWithNext(AOSet::AOState* state, S32 trackIndex, S32 memberIndex)
+{
+    if (!state || trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return false;
+    }
+    AOSet::AOTrack& track = state->mTracks[trackIndex];
+    if (memberIndex < 0 || memberIndex >= (S32)track.mAnimations.size() - 1)
+    {
+        return false;
+    }
+    std::swap(track.mAnimations[memberIndex], track.mAnimations[memberIndex + 1]);
+    updateMemberSortOrder(track.mAnimations);
+    return true;
+}
+
+void AOEngine::setTrackCycle(AOSet::AOState* state, S32 trackIndex, bool cycle)
+{
+    if (state && trackIndex >= 0 && trackIndex < (S32)state->mTracks.size())
+    {
+        state->mTracks[trackIndex].mCycle = cycle;
+        saveTrack(state->mTracks[trackIndex]);
+        if (state == mActiveAlwaysState)
+        {
+            refreshAlwaysTimers();
+        }
+    }
+}
+
+void AOEngine::setTrackRandomize(AOSet::AOState* state, S32 trackIndex, bool randomize)
+{
+    if (state && trackIndex >= 0 && trackIndex < (S32)state->mTracks.size())
+    {
+        state->mTracks[trackIndex].mRandom = randomize;
+        saveTrack(state->mTracks[trackIndex]);
+    }
+}
+
+void AOEngine::setTrackCycleTime(AOSet::AOState* state, S32 trackIndex, F32 time)
+{
+    if (state && trackIndex >= 0 && trackIndex < (S32)state->mTracks.size())
+    {
+        state->mTracks[trackIndex].mCycleTime = time;
+        saveTrack(state->mTracks[trackIndex]);
+        if (state == mActiveAlwaysState)
+        {
+            refreshAlwaysTimers();
+        }
+    }
+}
+
+void AOEngine::playTrackAnimation(AOSet::AOState* state, S32 trackIndex, S32 memberIndex)
+{
+    if (!mEnabled || !state || (mActiveTrackState != state && mActiveAlwaysState != state))
+    {
+        return;
+    }
+
+    if (trackIndex < 0 || trackIndex >= (S32)state->mTracks.size())
+    {
+        return;
+    }
+
+    AOSet::AOTrack& track = state->mTracks[trackIndex];
+    if (memberIndex < 0)
+    {
+        memberIndex = track.mCurrentAnimation;
+    }
+    if (memberIndex >= (S32)track.mAnimations.size())
+    {
+        return;
+    }
+
+    LLUUID animation = AOSet::resolveAssetUUID(track.mAnimations[memberIndex]);
+    if (animation.isNull() || animation == track.mCurrentAnimationID)
+    {
+        return;
+    }
+
+    if (track.mCurrentAnimationID.notNull())
+    {
+        gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_STOP);
+        if (isAgentAvatarValid())
+        {
+            gAgentAvatarp->LLCharacter::stopMotion(track.mCurrentAnimationID);
+        }
+    }
+
+    track.mCurrentAnimation = memberIndex;
+    track.mCurrentAnimationID = animation;
+    gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+    mAnimationChangedSignal(LLUUID::null);
+}
+
+void AOEngine::playAlwaysAnimation(S32 stepIndex, S32 memberIndex)
+{
+    AOSet::AOState* state = mActiveAlwaysState;
+    if (!mEnabled || !state)
+    {
+        return;
+    }
+
+    if (stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
+    {
+        LL_WARNS("AOEngine") << "always state play request for step index " << stepIndex << " out of range." << LL_ENDL;
+        return;
+    }
+
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    uuid_vec_t animations;
+    if (memberIndex >= 0)
+    {
+        if (memberIndex >= (S32)step.mMembers.size())
+        {
+            LL_WARNS("AOEngine") << "always state play request for member index " << memberIndex << " out of range." << LL_ENDL;
+            return;
+        }
+        if (LLUUID assetId = AOSet::resolveAssetUUID(step.mMembers[memberIndex]); assetId.notNull())
+        {
+            animations.emplace_back(assetId);
+        }
+    }
+    else
+    {
+        for (AOSet::AOAnimation& anim : step.mMembers)
+        {
+            if (LLUUID assetId = AOSet::resolveAssetUUID(anim); assetId.notNull())
+            {
+                animations.emplace_back(assetId);
+            }
+        }
+    }
+
+    if (animations.empty())
+    {
+        LL_WARNS("AOEngine") << "no animation assets resolved for always state step " << step.mName << LL_ENDL;
+        return;
+    }
+
+    if (animations == state->mCurrentAnimationIDs)
+    {
+        return;
+    }
+
+    state->mCurrentAnimation = static_cast<U32>(stepIndex);
+    swapStateAnimations(state, animations);
+    refreshAlwaysTimers();
+    mAnimationChangedSignal(LLUUID::null);
 }
 
 bool AOEngine::findForeignItems(const LLUUID& uuid) const
@@ -1390,51 +2331,86 @@ bool AOEngine::removeSet(AOSet* set)
     return true;
 }
 
-bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index)
+bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 stepIndex, S32 memberIndex)
 {
-    if (index < 0)
+    if (stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
     {
         return false;
     }
 
-    auto numOfAnimations = state->mAnimations.size();
-    if (numOfAnimations == 0)
+    AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+    if (memberIndex >= 0 && step.mIsGroup)
     {
-        return false;
-    }
-
-    LLViewerInventoryItem* item = gInventory.getItem(state->mAnimations[index].mInventoryUUID);
-    if (item)
-    {
-        // check if this item is actually an animation link
-        bool move = true;
-        if (item->getIsLinkType())
+        if (memberIndex >= (S32)step.mMembers.size())
         {
-            if (item->getInventoryType() == LLInventoryType::IT_ANIMATION)
+            return false;
+        }
+
+        LL_DEBUGS("AOEngine") << "purging group member: " << step.mMembers[memberIndex].mInventoryUUID << LL_ENDL;
+        remove_inventory_object(step.mMembers[memberIndex].mInventoryUUID, nullptr);
+        gInventory.notifyObservers();
+
+        step.mMembers.erase(step.mMembers.begin() + memberIndex);
+
+        if (step.mMembers.size() == 1)
+        {
+            collapseGroupToSingle(state, step);
+        }
+        else if (step.mMembers.empty())
+        {
+            purgeFolder(step.mInventoryUUID);
+            state->mSteps.erase(state->mSteps.begin() + stepIndex);
+        }
+        else
+        {
+            updateMemberSortOrder(step.mMembers);
+        }
+
+        return true;
+    }
+
+    if (step.mIsGroup)
+    {
+        LL_DEBUGS("AOEngine") << "purging group folder: " << step.mInventoryUUID << LL_ENDL;
+        purgeFolder(step.mInventoryUUID);
+        state->mSteps.erase(state->mSteps.begin() + stepIndex);
+    }
+    else
+    {
+        LLViewerInventoryItem* item = gInventory.getItem(step.mInventoryUUID);
+        if (item)
+        {
+            // check if this item is actually an animation link
+            bool move = true;
+            if (item->getIsLinkType())
             {
-                // it is an animation link, so mark it to be purged
-                move = false;
+                if (item->getInventoryType() == LLInventoryType::IT_ANIMATION)
+                {
+                    // it is an animation link, so mark it to be purged
+                    move = false;
+                }
+            }
+
+            // this item was not an animation link, move it to lost and found
+            if (move)
+            {
+                gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
+                LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
+                update();
+                return false;
             }
         }
 
-        // this item was not an animation link, move it to lost and found
-        if (move)
-        {
-            gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
-            LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
-            update();
-            return false;
-        }
+        // purge the item from inventory
+        LL_DEBUGS("AOEngine") << __LINE__ << " purging: " << step.mInventoryUUID << LL_ENDL;
+        remove_inventory_object(step.mInventoryUUID, nullptr);
+        gInventory.notifyObservers();
+
+        state->mSteps.erase(state->mSteps.begin() + stepIndex);
     }
 
-    // purge the item from inventory
-    LL_DEBUGS("AOEngine") << __LINE__ << " purging: " << state->mAnimations[index].mInventoryUUID << LL_ENDL;
-    remove_inventory_object(state->mAnimations[index].mInventoryUUID, nullptr); // item->getUUID());
-    gInventory.notifyObservers();
-
-    state->mAnimations.erase(state->mAnimations.begin() + index);
-
-    if (state->mAnimations.empty())
+    // count steps, not raw inventory items - group subfolders alone must not keep a state folder alive once its last step is gone
+    if (state->mSteps.empty() && state->mTracks.empty())
     {
         LL_DEBUGS("AOEngine") << "purging folder " << state->mName << " from inventory because it's empty." << LL_ENDL;
 
@@ -1476,48 +2452,79 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
     return true;
 }
 
-bool AOEngine::swapWithPrevious(AOSet::AOState* state, S32 index)
+// reorder steps (memberIndex -1) or members within a group; member moves are clamped to their group, they never leave it through the edges
+bool AOEngine::swapWithPrevious(AOSet::AOState* state, S32 stepIndex, S32 memberIndex)
 {
-    auto numOfAnimations = state->mAnimations.size();
-    if (numOfAnimations < 2 || index == 0)
+    if (stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
     {
         return false;
     }
 
-    AOSet::AOAnimation tmpAnim = state->mAnimations[index];
-    state->mAnimations.erase(state->mAnimations.begin() + index);
-    state->mAnimations.insert(state->mAnimations.begin() + index - 1, tmpAnim);
+    if (memberIndex >= 0)
+    {
+        AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+        if (!step.mIsGroup || memberIndex < 1 || memberIndex >= (S32)step.mMembers.size())
+        {
+            return false;
+        }
+        std::swap(step.mMembers[memberIndex], step.mMembers[memberIndex - 1]);
+        updateMemberSortOrder(step.mMembers);
+        return true;
+    }
 
+    if (state->mSteps.size() < 2 || stepIndex == 0)
+    {
+        return false;
+    }
+
+    std::swap(state->mSteps[stepIndex], state->mSteps[stepIndex - 1]);
     updateSortOrder(state);
 
     return true;
 }
 
-bool AOEngine::swapWithNext(AOSet::AOState* state, S32 index)
+bool AOEngine::swapWithNext(AOSet::AOState* state, S32 stepIndex, S32 memberIndex)
 {
-    auto numOfAnimations = state->mAnimations.size();
-    if (numOfAnimations < 2 || index == (numOfAnimations - 1))
+    if (stepIndex < 0 || stepIndex >= (S32)state->mSteps.size())
     {
         return false;
     }
 
-    AOSet::AOAnimation tmpAnim = state->mAnimations[index];
-    state->mAnimations.erase(state->mAnimations.begin() + index);
-    state->mAnimations.insert(state->mAnimations.begin() + index + 1, tmpAnim);
+    if (memberIndex >= 0)
+    {
+        AOSet::AOAnimationStep& step = state->mSteps[stepIndex];
+        if (!step.mIsGroup || memberIndex < 0 || memberIndex >= (S32)step.mMembers.size() - 1)
+        {
+            return false;
+        }
+        std::swap(step.mMembers[memberIndex], step.mMembers[memberIndex + 1]);
+        updateMemberSortOrder(step.mMembers);
+        return true;
+    }
 
+    if (state->mSteps.size() < 2 || stepIndex == (S32)state->mSteps.size() - 1)
+    {
+        return false;
+    }
+
+    std::swap(state->mSteps[stepIndex], state->mSteps[stepIndex + 1]);
     updateSortOrder(state);
 
     return true;
 }
 
-void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
+bool AOEngine::readAnimationLinks(const LLUUID& categoryID, std::vector<AOSet::AOAnimation>& animations)
 {
+    if (!gInventory.isCategoryComplete(categoryID))
+    {
+        LL_DEBUGS("AOEngine") << "category " << categoryID << " is incomplete, fetching descendents" << LL_ENDL;
+        gInventory.fetchDescendentsOf(categoryID);
+        return false;
+    }
     LLInventoryModel::item_array_t* items;
     LLInventoryModel::cat_array_t* dummy;
 
-    state->mAnimations.clear();
-
-    gInventory.getDirectDescendentsOf(state->mInventoryUUID, dummy, items);
+    gInventory.getDirectDescendentsOf(categoryID, dummy, items);
 
     if (items)
     {
@@ -1534,7 +2541,7 @@ void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
             anim.mAssetUUID.setNull();
 
             // if we can find the original animation already right here, save its asset ID, otherwise this will
-            // be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
+            // be tried again in AOSet::getAnimationsForState() and/or AOEngine::cycle()
             if (item->getLinkedItem())
             {
                 anim.mAssetUUID = item->getAssetUUID();
@@ -1552,17 +2559,17 @@ void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
             if (sortOrder == -1)
             {
                 LL_WARNS("AOEngine") << "sort order was unknown so append to the end of the list" << LL_ENDL;
-                state->mAnimations.emplace_back(std::move(anim));
+                animations.emplace_back(std::move(anim));
             }
             else
             {
                 bool inserted = false;
-                for (auto index = 0; index < state->mAnimations.size(); ++index)
+                for (size_t index = 0; index < animations.size(); ++index)
                 {
-                    if (state->mAnimations[index].mSortOrder > sortOrder)
+                    if (animations[index].mSortOrder > sortOrder)
                     {
                         LL_DEBUGS("AOEngine") << "inserting at index " << index << LL_ENDL;
-                        state->mAnimations.insert(state->mAnimations.begin() + index, anim);
+                        animations.insert(animations.begin() + index, anim);
                         inserted = true;
                         break;
                     }
@@ -1570,10 +2577,162 @@ void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
                 if (!inserted)
                 {
                     LL_DEBUGS("AOEngine") << "not inserted yet, appending to the list instead" << LL_ENDL;
-                    state->mAnimations.emplace_back(std::move(anim));
+                    animations.emplace_back(std::move(anim));
                 }
             }
-            LL_DEBUGS("AOEngine") << "Animation count now: " << state->mAnimations.size() << LL_ENDL;
+        }
+    }
+
+    return true;
+}
+
+bool AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
+{
+    LLInventoryModel::item_array_t* dummyItems;
+    LLInventoryModel::cat_array_t* cats;
+    bool allComplete = true;
+    state->mSteps.clear();
+    state->mTracks.clear();
+
+    auto insertStep = [state](AOSet::AOAnimationStep&& step)
+    {
+        if (step.mSortOrder == -1)
+        {
+            LL_WARNS("AOEngine") << "step sort order was unknown so append to the end of the list" << LL_ENDL;
+            state->mSteps.emplace_back(std::move(step));
+            return;
+        }
+
+        for (size_t index = 0; index < state->mSteps.size(); ++index)
+        {
+            if (state->mSteps[index].mSortOrder > step.mSortOrder)
+            {
+                state->mSteps.insert(state->mSteps.begin() + index, std::move(step));
+                return;
+            }
+        }
+        state->mSteps.emplace_back(std::move(step));
+    };
+
+    std::vector<AOSet::AOAnimation> directLinks;
+    if (!readAnimationLinks(state->mInventoryUUID, directLinks))
+    {
+        return false;
+    }
+
+    for (auto& anim : directLinks)
+    {
+        AOSet::AOAnimationStep step;
+        step.mName = anim.mName;
+        step.mInventoryUUID = anim.mInventoryUUID;
+        step.mSortOrder = anim.mSortOrder;
+        step.mIsGroup = false;
+        step.mMembers.emplace_back(std::move(anim));
+        insertStep(std::move(step));
+    }
+
+    gInventory.getDirectDescendentsOf(state->mInventoryUUID, cats, dummyItems);
+
+    if (cats)
+    {
+        for (const auto& cat : *cats)
+        {
+            std::vector<std::string> params;
+            LLStringUtil::getTokens(cat->getName(), params, ":");
+            if (params.empty())
+            {
+                LL_WARNS("AOEngine") << "Subfolder with empty name in state folder: " << cat->getName() << LL_ENDL;
+                continue;
+            }
+
+            bool isTrack = false;
+            for (size_t num = 1; num < params.size(); ++num)
+            {
+                if (params[num] == "TR")
+                {
+                    isTrack = true;
+                    break;
+                }
+            }
+
+            if (isTrack)
+            {
+                AOSet::AOTrack track;
+                track.mName = params[0];
+                track.mInventoryUUID = cat->getUUID();
+
+                for (size_t num = 1; num < params.size(); ++num)
+                {
+                    if (params[num] == "TR")
+                    {
+                        continue;
+                    }
+                    else if (params[num] == "CY")
+                    {
+                        track.mCycle = true;
+                    }
+                    else if (params[num] == "RN")
+                    {
+                        track.mRandom = true;
+                    }
+                    else if (params[num].substr(0, 2) == "CT")
+                    {
+                        LLStringUtil::convertToF32(params[num].substr(2), track.mCycleTime);
+                    }
+                    else
+                    {
+                        LL_WARNS("AOEngine") << "Unknown AO track option " << params[num] << LL_ENDL;
+                    }
+                }
+
+                if (!readAnimationLinks(track.mInventoryUUID, track.mAnimations))
+                {
+                    allComplete = false;
+                    continue;
+                }
+
+                updateMemberSortOrder(track.mAnimations);
+                state->mTracks.emplace_back(std::move(track));
+            }
+            else
+            {
+                AOSet::AOAnimationStep step;
+                step.mName = params[0];
+                step.mInventoryUUID = cat->getUUID();
+                step.mIsGroup = true;
+                step.mSortOrder = -1;
+
+                for (size_t num = 1; num < params.size(); ++num)
+                {
+                    if (params[num].substr(0, 2) == "OR")
+                    {
+                        S32 sortOrder;
+                        if (LLStringUtil::convertToS32(params[num].substr(2), sortOrder))
+                        {
+                            step.mSortOrder = sortOrder;
+                        }
+                    }
+                    else
+                    {
+                        LL_WARNS("AOEngine") << "Unknown AO group option " << params[num] << LL_ENDL;
+                    }
+                }
+
+                if (!readAnimationLinks(step.mInventoryUUID, step.mMembers))
+                {
+                    allComplete = false;
+                    continue;
+                }
+
+                if (step.mMembers.empty())
+                {
+                    LL_DEBUGS("AOEngine") << "ignoring empty group subfolder " << cat->getName() << LL_ENDL;
+                    continue;
+                }
+
+                updateMemberSortOrder(step.mMembers);
+                insertStep(std::move(step));
+            }
         }
     }
 
@@ -1587,15 +2746,26 @@ void AOEngine::reloadStateAnimations(AOSet* set, AOSet::AOState* state)
         LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
         cipher.decrypt(currentStateAnimId.mData, UUID_BYTES);
 
-        for (const auto& animation : state->mAnimations)
+        for (size_t stepIndex = 0; stepIndex < state->mSteps.size(); ++stepIndex)
         {
-            if (animation.mAssetUUID == currentStateAnimId)
+            bool found = false;
+            for (const auto& member : state->mSteps[stepIndex].mMembers)
             {
-                state->mCurrentAnimation = animation.mSortOrder;
+                if (member.mAssetUUID == currentStateAnimId)
+                {
+                    state->mCurrentAnimation = static_cast<U32>(stepIndex);
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
                 break;
             }
         }
     }
+
+    return allComplete;
 }
 
 void AOEngine::update()
@@ -1770,7 +2940,12 @@ void AOEngine::update()
                         newSet->setComplete(false);
                         continue;
                     }
-                    reloadStateAnimations(newSet, state);
+                    if (!reloadStateAnimations(newSet, state))
+                    {
+                        LL_DEBUGS("AOEngine") << "State " << stateName << " has incomplete subfolders, fetching" << LL_ENDL;
+                        allComplete = false;
+                        newSet->setComplete(false);
+                    }
                 }
             }
             else
@@ -1856,10 +3031,11 @@ void AOEngine::selectSet(AOSet* set)
 {
     if (mEnabled && mCurrentSet)
     {
+        stopActiveTracks();
+        stopAlwaysAnimations();
         if (AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion))
         {
-            gAgent.sendAnimationRequest(state->mCurrentAnimationID, ANIM_REQUEST_STOP);
-            state->mCurrentAnimationID.setNull();
+            stopCurrentAnimations(state);
             mCurrentSet->stopTimer();
         }
     }
@@ -1869,6 +3045,7 @@ void AOEngine::selectSet(AOSet* set)
     if (mEnabled)
     {
         LL_DEBUGS("AOEngine") << "enabling with motion " << gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+        startAlwaysAnimations();
         gAgent.sendAnimationRequest(override(mLastMotion, true), ANIM_REQUEST_START);
     }
 }
@@ -2040,14 +3217,12 @@ void AOEngine::inMouselook(bool mouselook)
             return;
         }
 
-        LLUUID animation = state->mCurrentAnimationID;
-        if (animation.notNull())
+        if (!state->mCurrentAnimationIDs.empty())
         {
-            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-            gAgentAvatarp->LLCharacter::stopMotion(animation);
-            state->mCurrentAnimationID.setNull();
-            LL_DEBUGS("AOEngine") << " stopped animation " << animation << " in state " << state->mName << LL_ENDL;
+            LL_DEBUGS("AOEngine") << " stopping animation(s) in state " << state->mName << LL_ENDL;
+            stopCurrentAnimations(state);
         }
+        stopActiveTracks();
         gAgent.sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
     }
     else
@@ -2099,12 +3274,12 @@ void AOEngine::setOverrideSits(AOSet* set, bool override_sit)
         AOSet::AOState* state = mCurrentSet->getState(AOSet::Sitting);
         if (state)
         {
-            LLUUID animation = state->mCurrentAnimationID;
-            if (animation.notNull())
+            if (!state->mCurrentAnimationIDs.empty())
             {
-                gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-                state->mCurrentAnimationID.setNull();
+                stopCurrentAnimations(state);
             }
+            stopActiveTracks();
+            mAnimationChangedSignal(LLUUID::null);
         }
 
         if (!foreignAnimations())
@@ -2160,6 +3335,10 @@ void AOEngine::setCycle(AOSet::AOState* state, bool cycle)
 {
     state->mCycle = cycle;
     state->mDirty = true;
+    if (state == mActiveAlwaysState)
+    {
+        refreshAlwaysTimers();
+    }
 }
 
 void AOEngine::setRandomize(AOSet::AOState* state, bool randomize)
@@ -2172,6 +3351,10 @@ void AOEngine::setCycleTime(AOSet::AOState* state, F32 time)
 {
     state->mCycleTime = time;
     state->mDirty = true;
+    if (state == mActiveAlwaysState)
+    {
+        refreshAlwaysTimers();
+    }
 }
 
 void AOEngine::tick()
@@ -2411,23 +3594,44 @@ void AOEngine::parseNotecard(const char* buffer)
         }
 
         std::string animationLine = line.substr(endTag + 1);
-        std::vector<std::string> animationList;
-        LLStringUtil::getTokens(animationLine, animationList, "|,");
+        std::vector<std::string> stepList;
+        LLStringUtil::getTokens(animationLine, stepList, "|");
 
-        for (auto animIndex = 0; animIndex < animationList.size(); ++animIndex)
+        for (auto stepIndex = 0; stepIndex < stepList.size(); ++stepIndex)
         {
-            AOSet::AOAnimation animation;
-            animation.mName = animationList[animIndex];
-            animation.mInventoryUUID = animationMap[animation.mName];
-            if (animation.mInventoryUUID.isNull())
+            std::vector<std::string> memberList;
+            LLStringUtil::getTokens(stepList[stepIndex], memberList, ",");
+            AOSet::AOAnimationStep step;
+            step.mSortOrder = static_cast<S32>(newState->mSteps.size());
+            for (auto memberIndex = 0; memberIndex < memberList.size(); ++memberIndex)
             {
-                LLSD args;
-                args["NAME"] = animation.mName;
-                LLNotificationsUtil::add("AOImportAnimationNotFound", args);
+                std::string animationName = memberList[memberIndex];
+                LLStringUtil::trim(animationName);
+                if (animationName.empty())
+                {
+                    continue;
+                }
+                AOSet::AOAnimation animation;
+                animation.mName = animationName;
+                animation.mInventoryUUID = animationMap[animation.mName];
+                if (animation.mInventoryUUID.isNull())
+                {
+                    LLSD args;
+                    args["NAME"] = animation.mName;
+                    LLNotificationsUtil::add("AOImportAnimationNotFound", args);
+                    continue;
+                }
+                animation.mSortOrder = static_cast<S32>(step.mMembers.size());
+                step.mMembers.emplace_back(std::move(animation));
+            }
+
+            if (step.mMembers.empty())
+            {
                 continue;
             }
-            animation.mSortOrder = animIndex;
-            newState->mAnimations.push_back(std::move(animation));
+            step.mIsGroup = step.mMembers.size() > 1;
+            step.mName = step.mIsGroup ? nextGroupName(newState) : step.mMembers.front().mName;
+            newState->mSteps.emplace_back(std::move(step));
             isValid = true;
         }
     }
@@ -2447,6 +3651,73 @@ void AOEngine::parseNotecard(const char* buffer)
     mTimerCollection.enableImportTimer(true);
     mImportRetryCount = 0;
     processImport(false);
+}
+
+void AOEngine::processImportState(AOSet::AOState* state)
+{
+    if (state->mInventoryUUID.isNull())
+    {
+        return;
+    }
+
+    for (S32 stepIndex = static_cast<S32>(state->mSteps.size()) - 1; stepIndex >= 0; --stepIndex)
+    {
+        AOSet::AOAnimationStep step = std::move(state->mSteps[stepIndex]);
+        state->mSteps.erase(state->mSteps.begin() + stepIndex);
+
+        if (!step.mIsGroup)
+        {
+            LL_DEBUGS("AOEngine") << "linking animation " << step.mName << LL_ENDL;
+            if (!createAnimationLink(state->mInventoryUUID, gInventory.getItem(step.mMembers.front().mInventoryUUID)))
+            {
+                LLSD args;
+                args["NAME"] = step.mName;
+                LLNotificationsUtil::add("AOImportLinkFailed", args);
+            }
+            continue;
+        }
+
+        std::string groupName = sanitiseFolderName(step.mName, "Group") + llformat(":OR%d", step.mSortOrder);
+        std::vector<AOSet::AOAnimation> members = std::move(step.mMembers);
+
+        LL_DEBUGS("AOEngine") << "creating group subfolder " << groupName << LL_ENDL;
+        gInventory.createNewCategory(state->mInventoryUUID, LLFolderType::FT_NONE, groupName, [this, members](const LLUUID& new_cat_id)
+        {
+            for (S32 memberIndex = static_cast<S32>(members.size()) - 1; memberIndex >= 0; --memberIndex)
+            {
+                if (!createAnimationLink(new_cat_id, gInventory.getItem(members[memberIndex].mInventoryUUID)))
+                {
+                    LLSD args;
+                    args["NAME"] = members[memberIndex].mName;
+                    LLNotificationsUtil::add("AOImportLinkFailed", args);
+                }
+            }
+        });
+    }
+
+    for (S32 trackIndex = static_cast<S32>(state->mTracks.size()) - 1; trackIndex >= 0; --trackIndex)
+    {
+        AOSet::AOTrack track = std::move(state->mTracks[trackIndex]);
+        state->mTracks.erase(state->mTracks.begin() + trackIndex);
+
+        track.mInventoryUUID.setNull();
+        std::string trackName = getTrackFolderName(track);
+        std::vector<AOSet::AOAnimation> members = std::move(track.mAnimations);
+
+        LL_DEBUGS("AOEngine") << "creating track subfolder " << trackName << LL_ENDL;
+        gInventory.createNewCategory(state->mInventoryUUID, LLFolderType::FT_NONE, trackName, [this, members](const LLUUID& new_cat_id)
+        {
+            for (S32 memberIndex = static_cast<S32>(members.size()) - 1; memberIndex >= 0; --memberIndex)
+            {
+                if (!createAnimationLink(new_cat_id, gInventory.getItem(members[memberIndex].mInventoryUUID)))
+                {
+                    LLSD args;
+                    args["NAME"] = members[memberIndex].mName;
+                    LLNotificationsUtil::add("AOImportLinkFailed", args);
+                }
+            }
+        });
+    }
 }
 
 void AOEngine::processImport(bool from_timer)
@@ -2474,12 +3745,12 @@ void AOEngine::processImport(bool from_timer)
         else if (mImportRetryCount == 5)
         {
             // NOTE: cleanup is the same as at the end of this function. Needs streamlining.
+            LLSD args;
+            args["NAME"] = mImportSet->getName();
             mTimerCollection.enableImportTimer(false);
             delete mImportSet;
             mImportSet = nullptr;
             mUpdatedSignal();
-            LLSD args;
-            args["NAME"] = mImportSet->getName();
             LLNotificationsUtil::add("AOImportAbortCreateSet", args);
         }
 
@@ -2490,38 +3761,24 @@ void AOEngine::processImport(bool from_timer)
     for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
     {
         AOSet::AOState* state = mImportSet->getState(index);
-        if (!state->mAnimations.empty())
+        if (!state->mSteps.empty() || !state->mTracks.empty())
         {
             allComplete = false;
             LL_DEBUGS("AOEngine") << "state " << state->mName << " still has animations to link." << LL_ENDL;
 
-            gInventory.createNewCategory(mImportSet->getInventoryUUID(), LLFolderType::FT_NONE, getStateFolderName(state), [this, state](const LLUUID& new_cat_id)
+            if (state->mInventoryUUID.isNull())
             {
-                LL_DEBUGS("AOEngine") << "new_cat_id: " << new_cat_id << LL_ENDL;
-                state->mInventoryUUID = new_cat_id;
-
-                S32 animationIndex = static_cast<S32>(state->mAnimations.size()) - 1;
-                while (!state->mAnimations.empty())
+                gInventory.createNewCategory(mImportSet->getInventoryUUID(), LLFolderType::FT_NONE, getStateFolderName(state), [this, state](const LLUUID& new_cat_id)
                 {
-                    LL_DEBUGS("AOEngine") << "linking animation " << state->mAnimations[animationIndex].mName << LL_ENDL;
-                    if (createAnimationLink(state, gInventory.getItem(state->mAnimations[animationIndex].mInventoryUUID)))
-                    {
-                        LL_DEBUGS("AOEngine") << "link success, size " << state->mAnimations.size() << ", removing animation "
-                            << state->mAnimations[animationIndex].mName << " from import state" << LL_ENDL;
-                        state->mAnimations.pop_back();
-                        LL_DEBUGS("AOEngine") << "deleted, size now: " << state->mAnimations.size() << LL_ENDL;
-                    }
-                    else
-                    {
-                        LLSD args;
-                        args["NAME"] = state->mAnimations[animationIndex].mName;
-                        LLNotificationsUtil::add("AOImportLinkFailed", args);
-                    }
-                    animationIndex--;
-                }
-
-                LL_DEBUGS("AOEngine") << "exiting lambda" << LL_ENDL;
-            });
+                    LL_DEBUGS("AOEngine") << "new_cat_id: " << new_cat_id << LL_ENDL;
+                    state->mInventoryUUID = new_cat_id;
+                    processImportState(state);
+                });
+            }
+            else
+            {
+                processImportState(state);
+            }
         }
     }
 
@@ -2579,7 +3836,7 @@ void AOEngine::onRegionChange()
         }
 
         // do nothing if no AO animation is playing (e.g. smart sit cancel)
-        if (LLUUID animation = state->mCurrentAnimationID; animation.isNull())
+        if (state->mCurrentAnimationIDs.empty())
         {
             return;
         }
@@ -2700,4 +3957,18 @@ void AOTimerCollection::updateTimers()
         LL_DEBUGS("AOEngine") << "timer needed, starting internal timer." << LL_ENDL;
         mEventTimer.start();
     }
+}
+
+AOTrackTimer::AOTrackTimer(S32 stateEnum, S32 trackIndex, F32 period)
+:   LLEventTimer(period),
+    mStateEnum(stateEnum),
+    mTrackIndex(trackIndex)
+{
+}
+
+bool AOTrackTimer::tick()
+{
+    AOEngine::instance().trackTimeout(mStateEnum, mTrackIndex);
+    // never self-delete, the engine owns this timer through mActiveTrackTimers
+    return false;
 }
