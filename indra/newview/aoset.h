@@ -64,7 +64,7 @@ public:
         SwimmingForward,
         SwimmingUp,
         SwimmingDown,
-        Always,
+        AlwaysPlay,
         AOSTATES_MAX
     };
 

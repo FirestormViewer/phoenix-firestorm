@@ -323,7 +323,7 @@ void AOEngine::stopActiveTracks()
 
 void AOEngine::startAlwaysAnimations()
 {
-    AOSet::AOState* state = (mEnabled && mCurrentSet) ? mCurrentSet->getState(AOSet::Always) : nullptr;
+    AOSet::AOState* state = (mEnabled && mCurrentSet) ? mCurrentSet->getState(AOSet::AlwaysPlay) : nullptr;
 
     if (state && state == mActiveAlwaysState)
     {
