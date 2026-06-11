@@ -15,4 +15,46 @@
 	<floater.string name="ao_dnd_only_on_full_interface">
 		Notizkarten mit AO-Konfigurationen können per Drag&amp;Drop nur auf maximierte Fenster gezogen werden. Auf das Werkzeug-Symbol klicken, um das Fenster zu maximieren.
 	</floater.string>
+	<floater.string name="ao_track_main">
+		Hauptspur
+	</floater.string>
+	<floater.string name="ao_no_track_animations">
+		Leere Spur - Animation her fallenlassen
+	</floater.string>
+	<floater.string name="ao_group_tooltip">
+		Animationsgruppe - diese werden zusammen abgespielt:
+	</floater.string>
+	<floater.string name="ao_member_tooltip">
+		Animationsgruppeneintrag - spielt zusammen mit dem Rest der Gruppe. Doppelklicken für Vorschau dieser Animation.
+	</floater.string>
+	<floater.string name="ao_cm_expand">
+		Ausklappen
+	</floater.string>
+	<floater.string name="ao_cm_collapse">
+		Einklappen
+	</floater.string>
+	<floater.string name="ao_cm_rename_group">
+		Gruppe umbenennen...
+	</floater.string>
+	<floater.string name="ao_cm_move_out">
+		Aus Gruppe bewegen
+	</floater.string>
+	<floater.string name="ao_cm_delete">
+		Löschen
+	</floater.string>
+	<floater.string name="ao_dnd_merge">
+		Um gruppieren mit dieser Animation fallenlassen
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_group">
+		Fallenlassen zum Hinzufügen zu dieser Gruppe
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_track">
+		Fallenlassen zum Hinzufügen zu dieser Spur
+	</floater.string>
+	<floater.string name="ao_dnd_folder_group">
+		Ordner fallenlassen um Animationsgruppe zu erstellen
+	</floater.string>
+	<floater.string name="ao_dnd_folder_pour">
+		Fallenlassen, um enthaltene Animationen zu dieser Spur hinzuzufügen
+	</floater.string>
 </floater>

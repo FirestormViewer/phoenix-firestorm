@@ -5233,6 +5233,26 @@ Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enha
      yestext="OK"/>
   </notification>
 
+ <notification name="RenameAOGroup">
+Name für diese neue Animationsgruppe angeben:
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
+    <form name="form">
+      <button name="OK" text="OK"/>
+      <button name="Cancel" text="Abbrechen"/>
+    </form>
+  </notification>
+
+  <notification name="RenameAOEntryMustBeASCII">
+Umbenennung zu „[AO_SET_NAME]“ nicht möglich.
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
+
+  <notification name="AOFolderDropNoAnimations">
+Der Ordner „[NAME]“ enthält keine Animationen zum Hinzufügen.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
+
   <notification name="NewAONameCantExist">
 Ein Animationsset mit diesem Namen existiert bereits.
   </notification>
