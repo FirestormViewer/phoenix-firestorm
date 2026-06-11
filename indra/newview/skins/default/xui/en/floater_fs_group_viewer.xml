@@ -30,7 +30,7 @@
          relative_width="0.75" />
         <columns
          name="count"
-         label="Worn"
+         label="Members"
          relative_width="0.25" />
     </fs_scroll_list>
     <check_box

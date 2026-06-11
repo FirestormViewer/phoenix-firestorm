@@ -272,5 +272,16 @@
      tool_tip="While in OTS, report the mouselook-equivalent camera to the region so camera-position weapons fire from your avatar toward the crosshair instead of from the shoulder camera. Prevents shooting around cover your avatar is behind."
      top_pad="8"
      width="520" />
+    <check_box
+     control_name="OTSRememberLastView"
+     follows="left|top"
+     height="16"
+     label="Remember last view (return to first person or OTS as last toggled)"
+     layout="topleft"
+     left="10"
+     name="ots_remember_view_prefs"
+     tool_tip="When entering aim mode, return to whichever view (over-the-shoulder or first person) you last switched to with the view toggle key, instead of always starting in OTS"
+     top_pad="8"
+     width="520" />
 
 </panel>

@@ -4284,7 +4284,8 @@ void send_agent_update(bool force_send, bool send_reliable)
     // crosshair's world target, so scripts see exactly what mouselook
     // would have told them. The render camera is untouched.
     static LLCachedControl<bool> fs_ots_eye_camera(gSavedSettings, "FSOTSReportEyeCamera", true);
-    if (fs_ots_eye_camera && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    if (fs_ots_eye_camera && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp
+        && tp_state == LLAgent::TELEPORT_NONE) // never raycast a world that is mid-teleport teardown
     {
         const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
 

@@ -65,6 +65,7 @@ public:
         LLUUID      mVictim;        // DEATH "target"
         LLUUID      mKiller;        // DEATH "owner" (falls back to "source")
         std::string mWeapon;        // relay-resolved "weapon_name", may be empty
+        S32         mType;          // bridge-cached damage type, -1000 unknown
         F32         mDamage;        // killing blow damage, <0 unknown
         F32         mDistance;      // meters between source_pos/target_pos, <0 unknown
     };

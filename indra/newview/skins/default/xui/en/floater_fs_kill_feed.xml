@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="286"
+ height="308"
  layout="topleft"
  name="floater_fs_kill_feed"
  save_rect="true"
@@ -30,6 +30,16 @@
      width="296"
      label="Shorten names (Orion Starchild = Orion S.)"
      tool_tip="Display short avatar names in kill lines" />
+    <check_box
+     control_name="FSKillFeedShowEmoji"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="6"
+     height="16"
+     width="296"
+     label="Show damage type symbol"
+     tool_tip="Show the killing blow's damage type symbol in kill lines. Symbols are customizable in the hit marker symbols editor." />
     <slider
      control_name="FSKillFeedTextScale"
      follows="left|top"

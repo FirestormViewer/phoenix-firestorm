@@ -2728,8 +2728,17 @@ void LLAgent::endAnimationUpdateUI()
         // </FS:Zi>
 
         gToolBarView->setToolBarsVisible(true);
-        // show mouse cursor
-        gViewerWindow->showCursor();
+        // show mouse cursor — but not when this transition lands in another
+        // aim mode (third person -> OTS routes through a brief mouselook
+        // state, and OTS <-> mouselook toggles pass through here too). The
+        // gun tool hid the cursor on purpose, and the same-frame toolset
+        // churn below never re-fires its handleSelect, so showing it here
+        // left a stray cursor in OTS until the mouse moved.
+        if (gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK
+            && gAgentCamera.getCameraMode() != CAMERA_MODE_OTS)
+        {
+            gViewerWindow->showCursor();
+        }
         // show menus
         gMenuBarView->setVisible(true);
         // <FS:Ansariel> Separate navigation and favorites panel

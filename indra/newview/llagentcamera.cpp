@@ -1962,7 +1962,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
         // in just in front of anything solid. World geometry only; avatars and
         // attachments never block the camera.
         static LLCachedControl<bool> ots_collision(gSavedSettings, "OTSCameraCollision", true);
-        if (ots_collision)
+        if (ots_collision && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE) // never raycast mid-teleport
         {
             const F32 OTS_COLLISION_MARGIN = 0.20f;          // keep the near clip plane out of the surface
             const F32 OTS_MIN_CAMERA_DISTANCE = 0.30f;       // never pull in closer than just behind the head
