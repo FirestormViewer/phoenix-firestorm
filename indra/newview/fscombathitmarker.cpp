@@ -435,6 +435,54 @@ void FSCombatHitMarker::setCrosshairTint(const LLColor4& color)
 }
 
 // static
+LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin,
+                                                     const LLVector3& cam_at)
+{
+    const F32 CONVERGE_RANGE = 512.f; // meters; open-sky fallback distance
+    LLVector3 target = cam_origin + cam_at * CONVERGE_RANGE;
+
+    LLVector4a ray_start, ray_end, hit;
+    ray_start.load3(cam_origin.mV);
+    ray_end.load3(target.mV);
+
+    // Cast the render (shoulder) camera's crosshair ray and converge on the
+    // first thing under it, AVATARS INCLUDED. The old world-geometry-only
+    // cast was blind to avatars, so aiming at a target converged on the wall
+    // behind them and the eye-origin bullet threaded past (and the dot, cast
+    // the same way, sat on that wall and read "on target"). pick_rigged so
+    // mesh bodies are hit too. The same cast still returns terrain/prims, so
+    // shooting structures is unchanged. Step past our own body/attachments,
+    // which the shoulder ray can graze on its way out, so self never becomes
+    // the convergence point. With nothing solid under the crosshair the far
+    // point stands and the direction degrades to camera-parallel.
+    for (S32 i = 0; i < 4; ++i)
+    {
+        S32 face_hit = -1;
+        LLViewerObject* obj = gPipeline.lineSegmentIntersectInWorld(
+            ray_start, ray_end,
+            false /*pick_transparent*/, true /*pick_rigged*/,
+            false /*pick_unselectable*/, false /*pick_reflection_probe*/,
+            &face_hit, nullptr, nullptr, &hit);
+        if (!obj)
+        {
+            break;
+        }
+        const bool is_self = isAgentAvatarValid() &&
+            (obj == gAgentAvatarp || obj->getAvatar() == gAgentAvatarp);
+        if (is_self)
+        {
+            LLVector3 past(hit.getF32ptr());
+            past += cam_at * 0.10f; // nudge just past the surface we grazed
+            ray_start.load3(past.mV);
+            continue;
+        }
+        target.set(hit.getF32ptr());
+        break;
+    }
+    return target;
+}
+
+// static
 void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
 {
     static LLCachedControl<F32> scale_setting(gSavedSettings, "FSHitMarkerScale", 1.0f);
@@ -471,27 +519,30 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
         // ray's world target (converged); off, they see the real camera's
         // at-axis (parallel from the avatar).
         LLVector3 dir = camera->getAtAxis();
+        LLVector3 aim_end = eye + dir * TRUE_AIM_RANGE; // parallel (true-fire) fallback end
         static LLCachedControl<bool> eye_camera(gSavedSettings, "FSOTSReportEyeCamera", true);
         if (eye_camera)
         {
-            const F32 CONVERGE_RANGE = 512.f;
-            LLVector3 target = camera->getOrigin() + dir * CONVERGE_RANGE;
-            ray_start.load3(camera->getOrigin().mV);
-            ray_end.load3(target.mV);
-            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
-            {
-                target.set(hit.getF32ptr());
-            }
+            // Mirror the reported eye camera exactly (send_agent_update uses
+            // the same helper): aim from the eye at whatever is under the
+            // crosshair, avatars included.
+            const LLVector3 target = getOTSConvergenceTarget(camera->getOrigin(), camera->getAtAxis());
             LLVector3 converged = target - eye;
             if (converged.normalize() > 0.f)
             {
                 dir = converged;
+                aim_end = target; // stop the cover test at the target, not past it
             }
         }
 
-        const LLVector3 end = eye + dir * TRUE_AIM_RANGE;
+        // Blocked-shot warning: solid world geometry between the eye and the
+        // aim point is cover the camera sees over (avatars never block, so
+        // they can't be mistaken for cover). With a clear path no hit is
+        // returned and the dot rests at center, which in convergence mode is
+        // the target under the crosshair. Casting only as far as aim_end is
+        // what keeps terrain *behind* the target from pulling the dot off it.
         ray_start.load3(eye.mV);
-        ray_end.load3(end.mV);
+        ray_end.load3(aim_end.mV);
         if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
         {
             const LLRect& world_rect = gViewerWindow->getWorldViewRectScaled();

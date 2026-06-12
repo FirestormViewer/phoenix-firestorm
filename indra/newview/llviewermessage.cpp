@@ -141,6 +141,7 @@
 #include "animationexplorer.h"      // <FS:Zi> Animation Explorer
 #include "fsareasearch.h"
 #include "fsassetblacklist.h"
+#include "fscombathitmarker.h"
 #include "fscommon.h"
 #include "fsfloaterplacedetails.h"
 #include "fsradar.h"
@@ -4289,18 +4290,12 @@ void send_agent_update(bool force_send, bool send_reliable)
     {
         const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
 
-        // Converge on the crosshair: aim from the eye at whatever the
-        // camera ray hits, falling back to a far point for open sky so
-        // the direction degrades to camera-parallel.
-        const F32 CONVERGE_RANGE = 512.f; // meters
-        LLVector3 target = camera_pos_agent + camera_at * CONVERGE_RANGE;
-        LLVector4a ray_start, ray_end, hit;
-        ray_start.load3(camera_pos_agent.mV);
-        ray_end.load3(target.mV);
-        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
-        {
-            target.set(hit.getF32ptr());
-        }
+        // Converge on the crosshair: aim from the eye at whatever is under
+        // the camera crosshair (avatars included, self excluded), falling
+        // back to a far point for open sky so the direction degrades to
+        // camera-parallel. Shared with the true-aim dot so the dot the
+        // shooter sees and the camera scripts receive cannot diverge.
+        const LLVector3 target = FSCombatHitMarker::getOTSConvergenceTarget(camera_pos_agent, camera_at);
 
         LLVector3 at = target - eye;
         if (at.normalize() > 0.f)
