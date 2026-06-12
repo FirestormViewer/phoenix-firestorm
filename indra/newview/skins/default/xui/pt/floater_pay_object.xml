@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Give Money" title="">
-	<string halign="left" name="payee_group" width="100">Pagar grupo</string>
-	<string halign="left" name="payee_resident" width="120">Pagar residente</string>
-	<text name="paying_text">Você está pagando:</text>
-	<text left="105" name="payee_name">Ericacita Moostopolison</text>
-	<text halign="left" left="5" name="object_name_label" width="95">Via objeto:</text>
-	<icon name="icon_object" tool_tip="Objects"/>
-	<text left="105" name="object_name_text">Meu objeto maravilho, fantástico e com nome comprido e imaginativo</text>
-	<panel label="Buscar" name="PatternsPanel">
-		<button label="Pagar L$ 1" label_selected="Pagar L$ 1" name="fastpay 1"/>
-		<button label="Pagar L$ 5" label_selected="Pagar L$ 5" name="fastpay 5"/>
-		<button label="Pagar L$ 10" label_selected="Pagar L$ 10" name="fastpay 10"/>
-		<button label="Pagar L$ 20" label_selected="Pagar L$ 20" name="fastpay 20"/>
-	</panel>
-	<panel label="Buscar" name="InputPanel">
-		<text name="amount text">Outro valor:</text>
-		<button label="Pagar" label_selected="Pagar" name="pay btn"/>
-		<button label="Cancelar" label_selected="Cancelar" name="cancel btn"/>
-	</panel>
+	<string name="payee_group" width="105">Pagar grupo</string>
+	<string name="payee_resident" width="118">Pagar residente</string>
+	<icon name="icon_person" tool_tip="Person"/>
+	<text left="10" name="payee_name" width="168">Ericacita Moostopolison</text>
+	<text halign="left" name="object_name_label">Sobre o objeto:</text>
+	<icon name="icon_object" tool_tip="Objetos"/>
+	<text name="object_name_text">...</text>
+	<button label="1 L$" label_selected="1 L$" name="fastpay 1"/>
+	<button label="5 L$" label_selected="5 L$" name="fastpay 5"/>
+	<button label="10 L$" label_selected="10 L$" name="fastpay 10"/>
+	<button label="20 L$" label_selected="20 L$" name="fastpay 20"/>
+	<text name="amount text">
+		ou selecione um valor:
+	</text>
+	<button label="Pagar" label_selected="Pagar" name="pay btn"/>
+	<button label="Cancelar" label_selected="Cancelar" name="cancel btn" width="76"/>
 </floater>

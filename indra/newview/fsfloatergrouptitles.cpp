@@ -106,7 +106,8 @@ bool FSFloaterGroupTitles::postBuild()
     mSetRegionButton = getChild<LLButton>("btnSetRegion");
     mSetRegionManualButton = getChild<LLButton>("btnSetRegionManual");
     mClearRegionButton = getChild<LLButton>("btnClearRegion");
-    mNoneOnUnassigned = getChild<LLCheckBoxCtrl>("none_on_unassigned");
+    mSetDefaultButton = getChild<LLButton>("btnSetDefault");
+    mUseDefaultCheck = getChild<LLCheckBoxCtrl>("use_default_title");
     mTitleList = getChild<LLScrollListCtrl>("title_list");
     mFilterEditor = getChild<LLFilterEditor>("filter_input");
 
@@ -116,19 +117,21 @@ bool FSFloaterGroupTitles::postBuild()
     mSetRegionButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onSetRegion, this));
     mSetRegionManualButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onSetRegionManual, this));
     mClearRegionButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onClearRegion, this));
-    mNoneOnUnassigned->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onNoneOnUnassignedToggle, this));
+    mSetDefaultButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onSetAsDefault, this));
+    mUseDefaultCheck->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onUseDefaultToggle, this));
     mTitleList->setDoubleClickCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
     mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
     mFilterEditor->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onFilterEdit, this, _2));
 
-    mNoneOnUnassigned->set(FSGroupTitleRegionMgr::getInstance()->getNoneOnUnassigned());
     mSetRegionButton->setEnabled(false);
     mSetRegionManualButton->setEnabled(false);
     mClearRegionButton->setEnabled(false);
+    mSetDefaultButton->setEnabled(false);
+    mUseDefaultCheck->set(FSGroupTitleRegionMgr::getInstance()->getEnabled());
     mAssignmentsChangedConnection = FSGroupTitleRegionMgr::getInstance()->setAssignmentsChangedCallback([this]() { updateRegionColumn(); });
 
     mTitleList->sortByColumn("title_sort_column", true);
-    mTitleList->setFilterColumn(0);
+    mTitleList->setFilterColumn(mTitleList->getColumn("filter_text")->mIndex);
 
     refreshGroupTitles();
 
@@ -219,6 +222,13 @@ void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& rol
     item["columns"][6]["column"] = "name_sort_column";
     item["columns"][6]["type"] = "text";
     item["columns"][6]["value"] = (is_group ? ("1_" + group_name) : "0");
+    item["columns"][7]["column"] = "filter_text";
+    item["columns"][7]["type"] = "text";
+    item["columns"][7]["value"] = title + " " + group_name + " " + region_name;
+    item["columns"][8]["column"] = "default_marker";
+    item["columns"][8]["type"] = "icon";
+    item["columns"][8]["halign"] = "center";
+    item["columns"][8]["value"] = LLStringUtil::null;
 
     mTitleList->addElement(item);
 
@@ -250,6 +260,7 @@ void FSFloaterGroupTitles::processGroupTitleResults(const LLGroupData& group_dat
     }
 
     mTitleList->scrollToShowSelected();
+    updateDefaultColumn();
 
     // Remove observer
     observer_map_t::iterator found_it = mGroupTitleObserverMap.find(group_data.mID);
@@ -297,6 +308,8 @@ void FSFloaterGroupTitles::refreshGroupTitles()
         mGroupTitleObserverMap[group_data.mID] = roleObserver;
         LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
     }
+
+    updateDefaultColumn();
 }
 
 void FSFloaterGroupTitles::selectedTitleChanged()
@@ -311,12 +324,14 @@ void FSFloaterGroupTitles::selectedTitleChanged()
         mSetRegionButton->setEnabled(true);
         mSetRegionManualButton->setEnabled(true);
         mClearRegionButton->setEnabled(has_region);
+        mSetDefaultButton->setEnabled(true);
     }
     else
     {
         mSetRegionButton->setEnabled(false);
         mSetRegionManualButton->setEnabled(false);
         mClearRegionButton->setEnabled(false);
+        mSetDefaultButton->setEnabled(false);
     }
 }
 
@@ -442,14 +457,65 @@ void FSFloaterGroupTitles::onClearRegion()
     menu->show(screen_x, screen_y, mClearRegionButton);
 }
 
-void FSFloaterGroupTitles::onNoneOnUnassignedToggle()
+void FSFloaterGroupTitles::onUseDefaultToggle()
 {
-    FSGroupTitleRegionMgr::getInstance()->setNoneOnUnassigned(mNoneOnUnassigned->get());
+    FSGroupTitleRegionMgr::getInstance()->setEnabled(mUseDefaultCheck->get());
+    updateDefaultColumn();
+}
+
+void FSFloaterGroupTitles::onSetAsDefault()
+{
+    LLScrollListItem* selected_item = mTitleList->getFirstSelected();
+    if (!selected_item)
+    {
+        return;
+    }
+    const LLUUID group_id = selected_item->getColumn(mTitleList->getColumn("group_id")->mIndex)->getValue().asUUID();
+    const LLUUID role_id  = selected_item->getColumn(mTitleList->getColumn("role_id")->mIndex)->getValue().asUUID();
+    auto* mgr = FSGroupTitleRegionMgr::getInstance();
+    mgr->setDefaultTitle(group_id, role_id);
+    mgr->setEnabled(true);
+    mUseDefaultCheck->set(true);
+    updateDefaultColumn();
+}
+
+void FSFloaterGroupTitles::updateDefaultColumn()
+{
+    LLScrollListColumn* default_col = mTitleList->getColumn("default_marker");
+    if (!default_col)
+    {
+        return;
+    }
+
+    const auto default_col_idx  = default_col->mIndex;
+    const auto group_id_col_idx = mTitleList->getColumn("group_id")->mIndex;
+    const auto role_id_col_idx  = mTitleList->getColumn("role_id")->mIndex;
+
+    auto* mgr = FSGroupTitleRegionMgr::getInstance();
+    const bool enabled = mgr->getEnabled();
+    const LLUUID default_group = mgr->getDefaultGroupID();
+    const LLUUID default_role = mgr->getDefaultRoleID();
+
+    for (auto* item : mTitleList->getAllData())
+    {
+        auto* cell = item->getColumn(default_col_idx);
+        if (!cell)
+        {
+            continue;
+        }
+        const LLUUID group_id = item->getColumn(group_id_col_idx)->getValue().asUUID();
+        const LLUUID role_id = item->getColumn(role_id_col_idx)->getValue().asUUID();
+        const bool is_default = enabled && group_id == default_group && role_id == default_role;
+        cell->setValue(is_default ? LLSD("Check_Mark") : LLSD(LLStringUtil::null));
+    }
 }
 
 void FSFloaterGroupTitles::updateRegionColumn()
 {
     const auto region_col_idx   = mTitleList->getColumn("regionname")->mIndex;
+    const auto title_col_idx    = mTitleList->getColumn("grouptitle")->mIndex;
+    const auto group_col_idx    = mTitleList->getColumn("groupname")->mIndex;
+    const auto filter_col_idx   = mTitleList->getColumn("filter_text")->mIndex;
     const auto group_id_col_idx = mTitleList->getColumn("group_id")->mIndex;
     const auto role_id_col_idx  = mTitleList->getColumn("role_id")->mIndex;
     auto* mgr = FSGroupTitleRegionMgr::getInstance();
@@ -457,10 +523,18 @@ void FSFloaterGroupTitles::updateRegionColumn()
     {
         const auto group_id = item->getColumn(group_id_col_idx)->getValue().asUUID();
         const auto role_id  = item->getColumn(role_id_col_idx)->getValue().asUUID();
+        const std::string region_name = mgr->getRegionForTitle(group_id, role_id);
 
         if (auto* cell = item->getColumn(region_col_idx))
         {
-            cell->setValue(mgr->getRegionForTitle(group_id, role_id));
+            cell->setValue(region_name);
+        }
+
+        if (auto* filter_cell = item->getColumn(filter_col_idx))
+        {
+            const std::string title = item->getColumn(title_col_idx)->getValue().asString();
+            const std::string group_name = item->getColumn(group_col_idx)->getValue().asString();
+            filter_cell->setValue(title + " " + group_name + " " + region_name);
         }
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Assistente de miniaturas do inventário">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Colar itens do seu inventário">
+		<scroll_list.columns label="Item do inventário" name="item_name"/>
+		<scroll_list.columns label="Textura existente" name="existing_texture"/>
+		<scroll_list.columns label="Nova textura" name="new_texture"/>
+	</scroll_list>
+	<button label="Colar itens do inventário" name="paste_items_btn"/>
+	<button label="Colar texturas do inventário" name="paste_textures_btn"/>
+	<button label="Gravar miniaturas" name="write_thumbnails_btn"/>
+	<button label="Registrar itens sem miniatura" name="log_missing_thumbnails_btn"/>
+	<button label="Remover miniaturas dos itens colados" name="clear_thumbnails_btn"/>
+</floater>

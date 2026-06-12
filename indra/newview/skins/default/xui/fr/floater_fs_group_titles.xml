@@ -13,5 +13,4 @@
 	<button name="btnClearRegion" label="Effacer région" tool_tip="Supprimer l'assignation de région du titre sélectionné"/>
 	<button name="btnInfo" label="Infos" tool_tip="Afficher les informations sur le groupe du titre sélectionné"/>
 	<button name="btnActivate" label="Activer" tool_tip="Activer le titre du groupe sélectionné"/>
-	<check_box label="'Aucun' pour régions sans préréglage" name="none_on_unassigned" />
 </floater>

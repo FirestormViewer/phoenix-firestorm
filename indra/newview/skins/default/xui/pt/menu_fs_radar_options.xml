@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Mostrar minimapa acima do Radar" name="ShowRadarMinimap"/>
+	<menu_item_check label="Limitar resultados a um raio específico" name="LimitRadarByRange"/>
+	<menu_item_check label="Mostrar avatares silenciados e na blacklist" name="FSRadarShowMutedAndDerendered"/>
+	<context_menu label="Formato de nome no Radar" name="radarNameFormat">
+		<menu_item_check label="Nome de exibição" name="radarFmtDN"/>
+		<menu_item_check label="Nome de usuário" name="radarFmtUN"/>
+		<menu_item_check label="Nome de exibição (nome de usuário)" name="radarFmtDNUN"/>
+		<menu_item_check label="Nome de usuário (nome de exibição)" name="radarFmtUNDN"/>
+	</context_menu>
+	<context_menu label="Colunas exibidas" name="visible_columns">
+		<menu_item_check label="Voice" name="voice_level"/>
+		<menu_item_check label="Mesma região" name="in_region"/>
+		<menu_item_check label="Status de digitação" name="typing_status"/>
+		<menu_item_check label="Status sentado" name="sitting_status"/>
+		<menu_item_check label="Sinalizadores" name="flags"/>
+		<menu_item_check label="Notas" name="has_notes"/>
+		<menu_item_check label="Idade" name="age"/>
+		<menu_item_check label="Visto" name="seen"/>
+	</context_menu>
+	<menu_item_check label="Colorir nomes com base na distância" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Reportar em" name="report_to_menu">
+		<menu_item_check label="Chat local" name="radar_nearby_chat"/>
+		<menu_item_check label="Toasts de notificação" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Anel de distância do chat no minimapa" name="MiniMapChatRing"/>
+	<menu_item_check label="Reportar entrada no alcance de renderização" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Reportar saída do alcance de renderização" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Reportar entrada no alcance do chat" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Reportar saída do alcance do chat" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Reportar entrada na sua região" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Reportar saída da sua região" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Reportar alerta de idade do avatar" name="RadarReportAgeAlert"/>
+	<menu_item_check label="Enviar alertas de entrada para scripts" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Enviar alertas de saída para scripts" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="Aprimorar Radar com ponte LSL-cliente" name="FSRadarEnhanceByBridge"/>
+	<menu_item_call label="Abrir lista de residentes e objetos bloqueados" name="show_blocked_list"/>
+</toggleable_menu>

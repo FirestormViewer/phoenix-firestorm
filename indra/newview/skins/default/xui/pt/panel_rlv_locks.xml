@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_rlvLocks" title="Bloqueios RLV ativos">
+	<scroll_list name="lock_list">
+		<scroll_list.columns label="Tipo de bloqueio" name="lock_type"/>
+		<scroll_list.columns label="Método" name="lock_addrem"/>
+		<scroll_list.columns label="Objeto / ponto alvo" name="lock_target"/>
+		<scroll_list.columns label="Origem do bloqueio" name="lock_origin"/>
+	</scroll_list>
+	<panel name="bottom_panel">
+		<button label="Atualizar" name="refresh_btn" width="100"/>
+		<icon name="dummy_icon" width="399" />
+	</panel>
+</panel>

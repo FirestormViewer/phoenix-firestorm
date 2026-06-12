@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Configurações da tela inicial">
+	<text name="description">
+		Configure aqui as opções de exibição da tela inicial. Essas configurações entram em vigor após a próxima reinicialização do viewer.
+	</text>
+	<text name="section_visibility">
+		Visibilidade das seções:
+	</text>
+	<check_box label="Ocultar barra superior" name="hide_top_bar" />
+	<check_box label="Ocultar seção de blogs" name="hide_blogs" />
+	<check_box label="Ocultar seção de destinos" name="hide_destinations" />
+	<text name="section_accessibility">
+		Opções de acessibilidade:
+	</text>
+	<check_box label="Ativar modo em escala de cinza" name="use_gray_mode" />
+	<check_box label="Ativar modo de alto contraste" name="use_high_contrast" />
+	<check_box label="Ativar modo MAIÚSCULAS" name="use_all_caps" />
+	<check_box label="Usar fontes maiores" name="use_larger_fonts"/>
+	<check_box label="Desativar efeitos de transparência" name="no_transparency" />
+</floater>

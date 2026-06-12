@@ -11,10 +11,13 @@
 		<check_box name="ao_disable_stands_in_mouselook" label="Wyłącz w trybie 1 osoby" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
 		<combo_box name="ao_state_selection_combo" tool_tip="Wybierz stan animacji do edycji." />
 		<panel name="ao_animation_move_trash_panel">
-			<button name="ao_move_up" tool_tip="Przenieś zaznaczoną animację do góry na liście." />
-			<button name="ao_move_down" tool_tip="Przenieś zaznaczoną animację w dół na liście." />
+			<button name="ao_move_up" tool_tip="Przenieś zaznaczoną animację lub grupę animacji do góry na liście." />
+			<button name="ao_move_down" tool_tip="Przenieś zaznaczoną animację lub grupę animacji w dół na liście." />
+			<button name="ao_rename" tool_tip="Zmień nazwę wybranej grupy animacji." />
 			<button name="ao_trash" tool_tip="Usuń zaznaczoną animację z listy." />
 		</panel>
+		<combo_box name="ao_track_selection_combo" tool_tip="Wybierz, która ścieżka animacji tego stanu ma być wyświetlana. Lista główna jest odtwarzana jak zwykle, natomiast dodatkowe ścieżki są odtwarzane i zapętlane niezależnie obok niej, na przykład machanie ogonem działa podczas wszystkich animacji chodzenia." />
+		<button name="ao_track_add" tool_tip="Dodaj nową niezależną ścieżkę animacji do tego stanu." />
 		<check_box name="ao_cycle" label="Cykl" tool_tip="Odtwarzaj inną animację z listy za każdym razem, gdy dany stan jest wywoływany." />
 		<check_box name="ao_randomize" label="Losowy porządek" tool_tip="Losuj porządek odtwarzania animacji w cyklu." />
 		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sekundy):" />
@@ -29,6 +32,14 @@
 			</layout_panel>
 		</layout_stack>
 		<button name="ao_less" tool_tip="Pokazuj mniejszy interfejs Animatora." />
+		<panel name="ao_drop_zone_panel">
+			<text name="ao_drop_zone_add_label">
+				Upuść tutaj, by dodać
+			</text>
+			<text name="ao_drop_zone_group_label">
+				Upuść na istniejącą, by zgrupować
+			</text>
+		</panel>
 	</panel>
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">

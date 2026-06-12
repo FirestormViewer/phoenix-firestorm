@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="Exceções de exibição de Avatar">
+	<floater.string name="av_render_never">
+		Nunca
+	</floater.string>
+	<floater.string name="av_render_always">
+		Sempre
+	</floater.string>
+	<filter_editor label="Filtrar Avatares" name="filter_input"/>
+	<menu_button name="plus_btn" tool_tip="Adicionar pessoa à lista"/>
+	<name_list name="avatar_list">
+		<name_list.columns label="Nome" name="name"/>
+		<name_list.columns label="Detalhe completo" name="render_setting" width="125"/>
+	</name_list>
+	<button name="close_btn" label="Fechar"/>
+</floater>

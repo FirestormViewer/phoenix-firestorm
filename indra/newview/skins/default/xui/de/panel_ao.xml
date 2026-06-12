@@ -15,11 +15,14 @@
 		<combo_box name="ao_state_selection_combo" tool_tip="Animationstyp zum Editieren auswählen."/>
 
 		<panel name="ao_animation_move_trash_panel">
-			<button	name="ao_move_up" tool_tip="Ausgewählte Animation in der Liste nach oben verschieben."/>
-			<button	name="ao_move_down"	tool_tip="Ausgewähte Animation in der Liste nach unten verschieben."/>
-			<button	name="ao_trash"	tool_tip="Ausgewählte Animation aus Liste löschen."/>
+			<button	name="ao_move_up" tool_tip="Ausgewählte Animation oder Animationsgruppe in der Liste nach oben verschieben."/>
+			<button	name="ao_move_down" tool_tip="Ausgewähte Animation oder Animationsgruppe in der Liste nach unten verschieben."/>
+			<button	name="ao_rename" tool_tip="Ausgewähte Animationsgruppe umbenennen."/>
+			<button	name="ao_trash" tool_tip="Ausgewählte Animation aus Liste löschen."/>
 		</panel>
 
+		<combo_box name="ao_track_selection_combo" tool_tip="Auswählen, welche Spur für diesen Zustand angezeigt wird. Die Hauptspur wird normal abgespielt, zusätzliche Spuren werden unabhängig neben der Hauptspur abgespielt und wiederholt, zum Beispiel ein Schwanzwedeln zu allen Geh-Animationen."/>
+		<button name="ao_track_add" tool_tip="Neue unabhängige Spur zu diesem Zustand hinzufügen."/>
 		<check_box name="ao_cycle" label="Rotieren"	tool_tip="Animation aus Liste beim Abspielen rotieren." width="63"/>
 		<check_box name="ao_randomize" label="Zufällige Reihenf." tool_tip="Im Rotationsmodus die Animation zufällig auswählen."/>
 		<text name="ao_cycle_time_seconds_label" value="Rotationszeit (Sek.):"/>
@@ -36,6 +39,15 @@
 		</layout_stack>
 
 		<button	name="ao_less" tool_tip="Kompaktes Fenster anzeigen."/>
+
+		<panel name="ao_drop_zone_panel">
+			<text name="ao_drop_zone_add_label">
+				Hier fallenlassen zum Hinzufügen
+			</text>
+			<text name="ao_drop_zone_group_label">
+				Auf bestehende fallenlassen zum Gruppieren
+			</text>
+		</panel>
 	</panel>
 
 <!-- Reload Cover Panel -->

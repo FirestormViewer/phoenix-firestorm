@@ -454,6 +454,37 @@
        width="95">
        Direct
      </text>
+     <color_swatch
+       can_apply_immediately="true"
+       color="ChatHistoryMessageFromServerLog"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       layout="topleft"
+       left="190"
+       name="server_chat_history"
+       top_pad="-15"
+       width="44" >
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="ChatHistoryMessageFromServerLog" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="ChatHistoryMessageFromServerLog" />
+     </color_swatch>
+     <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="10"
+       layout="topleft"
+       left_pad="5"
+       mouse_opaque="false"
+       name="server_chat_history_label"
+       top_delta="5"
+       width="280">
+       Group chat history from server
+     </text>
     <text
      follows="left|top"
      layout="topleft"

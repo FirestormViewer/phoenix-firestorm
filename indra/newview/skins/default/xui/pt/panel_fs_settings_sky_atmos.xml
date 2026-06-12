@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Atmosfera e iluminação" name="panel_fs_settings_sky_atmos">
+	<string name="hdr_string">
+		Escala HDR:
+	</string>
+	<string name="brightness_string">
+		Brilho:
+	</string>
+	<string name="hdr_tooltip">
+		Intensidade dos efeitos de exposição, como céu radiante realista e exposição dinâmica. 1.0 é o padrão, 0 desativa, e valores entre 0 e 1 misturam ambiente com HDR.
+	</string>
+
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Cores atmosféricas"/>
+	</panel>
+	<panel name="P_Atmos_Settings">
+		<text name="ambient_color_label">
+			Cor ambiente:
+		</text>
+		<text name="blue_horizon_label">
+			Horizonte azul:
+		</text>
+		<text name="blue_density_label">
+			Densidade azul:
+		</text>
+	</panel>
+
+	<panel name="P_Atmosphere_Header">
+		<text name="T_Atmosphere_Header" value="Configurações da atmosfera"/>
+	</panel>
+	<panel name="P_Atmosphere_OtherSettings">
+		<text name="haze_horizon_label" width="120">
+			Névoa no horizonte:
+		</text>
+		<slider name="haze_horizon" width="151"/>
+		<text name="haze_density_label" width="120">
+			Densidade da névoa:
+		</text>
+		<slider name="haze_density" width="151"/>
+		<text name="density_multiplier_label" width="120">
+			Multiplic. de densid.:
+		</text>
+		<slider name="density_multip" width="151"/>
+		<text name="distance_multiplier_label" width="120">
+			Multiplic. de dist.:
+		</text>
+		<slider name="distance_multip" width="151"/>
+		<text name="maximum_altitude_label" width="120">
+			Altitude máxima:
+		</text>
+		<slider name="max_alt" width="151"/>
+		<text name="scene_gamma_label" width="120">
+			Brilho:
+		</text>
+		<slider name="scene_gamma" width="151"/>
+		<text name="probe_ambiance_label" tool_tip="Intensidade de radiância. Ativa o modelo de iluminação HDR quando não for 0." width="120">
+			Ambiência da sonda de reflexão (HDR):
+		</text>
+		<slider name="probe_ambiance" tool_tip="Intensidade da iluminação indireta baseada no ambiente. Com HDR em 0, a escala vira brilho." width="151"/>
+	</panel>
+
+	<panel name="P_Rainbow_Header">
+		<text name="T_Rainbow_Header" value="Configurações de arco-íris e halo"/>
+	</panel>
+	<panel name="P_Rainbow_OtherSettings">
+		<text name="moisture_level_label" width="120">
+			Nível de umidade:
+		</text>
+		<slider name="moisture_level" width="151"/>
+		<text name="droplet_radius_label" width="120">
+			Raio da gotícula:
+		</text>
+		<slider name="droplet_radius" width="151"/>
+		<text name="ice_level_label" width="120">
+			Nível de gelo:
+		</text>
+		<slider name="ice_level" width="151"/>
+	</panel>
+</panel>

@@ -1,23 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="region_restarting" title="REINICIANDO REGIÃO">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_restarting" title="Reinício da região">
 	<string name="RegionName">
-		A região na qual você está ([NAME]) está prestes a ser reiniciada.
+		A região em que você está ([NAME]) será reiniciada em breve.
 
-Se permanecer aqui, você será desconectado.
+Se permanecer nesta região, você será desconectado.
 	</string>
 	<string name="RestartSeconds">
-		Segundos até o reinício
+		Segundos até reinício
 [SECONDS]
 	</string>
 	<panel name="layout_panel_1">
 		<text name="region_name">
-			A região na qual você está (-Nome mais longo da região-) está prestes a ser reiniciada.
+			A região em que você está (-nome mais longo da região-), será reiniciada em breve.
 
-Se permanecer aqui, você será desconectado.
+Se permanecer nesta região, você será desconectado.
 		</text>
 		<text name="restart_seconds">
-			Segundos até o reinício
+			Segundos até reinício
      32767
 		</text>
+		<combo_box label="Minhas landmarks" name="landmark combo">
+			<combo_box.item label="Minhas landmarks" name="item1"/>
+		</combo_box>
+		<button tool_tip="Teleportar para landmark" name="teleport_btn"/>
 	</panel>
-</floater>
+ </floater>

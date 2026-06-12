@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_add_payment_method">
+	<panel name="wrapper_panel">
+		<text name="title_txt">
+			Adicione um método de pagamento para comprar Linden dollars e aproveitar mais o Second Life.
+		</text>
+		<button label="Começar" name="continue_btn"/>
+		<button label="Mais tarde" name="close_btn"/>
+		<text name="image_left_desc">
+			Crie um avatar que você ama. Escolha entre milhões de itens em lojas e no Marketplace do Second Life. Seu estilo está aqui.
+		</text>
+		<text name="image_center_desc">
+			Doe aos seus artistas e anfitriões favoritos. Seu apoio ajuda a criar experiências incríveis.
+		</text>
+		<text name="image_right_desc">
+			Construa a casa dos seus sonhos. Com milhões de itens disponíveis para compra, você pode deixar seu refúgio único.
+		</text>
+	</panel>
+</floater>

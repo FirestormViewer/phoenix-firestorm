@@ -1,31 +1,48 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Eu" name="File">
-		<menu_item_call label="Preferências..." name="Preferences..."/>
+	<menu label="Visualizador" name="File">
+		<menu_item_call label="Configurações..." name="Preferences..."/>
 		<menu_item_call label="Fechar janela" name="Close Window"/>
-		<menu_item_check label="Exibir seletor da grade" name="Show Grid Picker"/>
+		<menu_item_check label="Mostrar seletor de grid" name="Show Grid Picker"/>
 		<menu_item_call label="Sair do [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Ajuda" name="Help">
+		<menu_item_call label="Wiki do Firestorm" name="Firestorm Wiki"/>
+		<menu_item_call label="Solução de problemas" name="Troubleshooting"/>
+		<menu_item_call label="Guia..." name="How To"/>
+		<menu_item_call label="Base de conhecimento" name="Knowledge Base"/>
+		<menu_item_call label="Wiki" name="Wiki"/>
+		<menu_item_call label="Fóruns da comunidade" name="Community Forums"/>
+		<menu_item_call label="Portal de suporte" name="Support portal"/>
+		<menu_item_call label="Notícias do [SECOND_LIFE]" name="Second Life News"/>
+		<menu_item_call label="Blogs do [SECOND_LIFE]" name="Second Life Blogs"/>
+		<menu_item_call label="Assistente da lista de permissões" name="whitelist_folders"/>
+		<menu_item_call label="Reportar problema" name="Report Bug"/>
 		<menu_item_call label="Ajuda do [APP_NAME]" name="Second Life Help"/>
-		<menu_item_call label="Sobre [APP_NAME]" name="About Second Life"/>
+		<menu_item_call label="Sobre o [APP_NAME]" name="About Second Life"/>
 	</menu>
-	<menu_item_check label="Exibir menu de depuração" name="Show Debug Menu"/>
-	<menu label="Depurar" name="Debug">
-		<menu_item_call label="Mostrar configurações" name="Debug Settings"/>
+	<menu_item_check label="Mostrar menu de depuração" name="Show Debug Menu"/>
+	<menu label="Depuração" name="Debug">
+		<menu_item_call label="Mostrar configurações de depuração" name="Debug Settings"/>
+		<menu_item_call label="Mostrar configurações de cores" name="Color Settings"/>
+		<menu label="Fontes" name="Fonts">
+			<menu_item_call label="Mostrar teste de fontes" name="Show Font Test"/>
+			<menu_item_call label="Registrar fontes" name="Dump Fonts"/>
+			<menu_item_call label="Registrar texturas de fontes" name="Dump Font Textures"/>
+		</menu>
+		<menu_item_call label="Ferramenta de pré-visualização XUI" name="UI Preview Tool"/>
 		<menu label="Testes de UI" name="UI Tests"/>
-		<menu_item_call label="Definir tamanho da janela:" name="Set Window Size..."/>
+		<menu_item_call label="Definir tamanho da janela..." name="Set Window Size..."/>
 		<menu_item_call label="Mostrar TOS" name="TOS"/>
 		<menu_item_call label="Mostrar mensagem crítica" name="Critical"/>
-		<menu_item_call label="Navegador de Mídia" name="Media Browser"/>
-		<menu label="Configurar nível de registro em log" name="Set Logging Level">
-			<menu_item_check label="Depurar" name="Debug"/>
+		<menu_item_call label="Navegador de mídia" name="Media Browser"/>
+		<menu label="Definir nível de log" name="Set Logging Level">
+			<menu_item_check label="Debug" name="Debug"/>
 			<menu_item_check label="Info" name="Info"/>
 			<menu_item_check label="Aviso" name="Warning"/>
 			<menu_item_check label="Erro" name="Error"/>
 			<menu_item_check label="Nenhum" name="None"/>
 		</menu>
-		<menu_item_call label="Exibir painel de notificações" name="Show Notifications Console"/>
-		<menu_item_call name="UI Preview Tool" label="Ferramenta de Visualização XUI"/>
+		<menu_item_call label="Mostrar console de notificações" name="Show Notifications Console"/>
 	</menu>
 </menu_bar>

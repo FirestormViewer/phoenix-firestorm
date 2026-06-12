@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Attachment Pie">
+	<pie_slice label="Perfil..." name="Profile..."/>
+	<pie_slice label="Soltar" name="Drop"/>
+	<pie_menu name="Attachment Pie More" label="Mais &gt;">
+		<pie_slice label="Atualizar texturas" name="Texture Refresh"/>
+		<pie_slice label="Info de script" name="ScriptInfo"/>
+		<pie_slice label="Tocar" name="Attachment Object Touch"/>
+		<pie_menu name="DerenderMenu" label="Não renderizar &gt;">
+			<pie_slice label="Temporário" name="Derender"/>
+			<pie_slice label="Blacklist" name="DerenderPermanent"/>
+		</pie_menu>
+		<pie_menu label="Salvar como &gt;" name="ExportMenu">
+			<pie_slice label="Backup" name="Backup"/>
+			<pie_slice label="Collada" name="Collada"/>
+		</pie_menu>
+		<pie_slice label="Inspecionar" name="Avatar Inspect"/>
+		<pie_slice label="Mostrar no inv." name="Show original"/>
+		<pie_slice label="Texturas" name="Debug..."/>
+	</pie_menu>
+	<pie_slice label="Sentar" name="Sit Down Here"/>
+	<pie_slice label="Levantar" name="Stand Up"/>
+	<pie_slice label="Remover" name="Detach"/>
+	<pie_slice label="Gestos..." name="Gestures"/>
+	<pie_menu label="Aparência &gt;" name="Appearance &gt;">
+		<pie_slice label="Editar forma" name="Edit My Shape"/>
+		<pie_menu label="Redefinir &gt;" name="ResetMenu">
+			<pie_slice label="Esquel. e anim." name="Reset Skeleton And Animations"/>
+			<pie_slice label="Esqueleto" name="Reset Skeleton"/>
+			<pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+		</pie_menu>
+		<pie_slice label="Editar traje" name="Edit My Outfit"/>
+		<pie_slice label="Exportar XML" name="Dump XML"/>
+		<pie_slice label="Altura de flutuação" name="Hover Height"/>
+	</pie_menu>
+	<pie_slice label="Editar" name="Edit..."/>
+</pie_menu>

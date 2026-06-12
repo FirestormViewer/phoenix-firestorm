@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Customizar" name="Media settings for controls">
+<panel label="Personalizar" name="Media settings for controls">
 	<text name="controls_label">
 		Controles:
 	</text>
@@ -14,16 +14,16 @@
 	<text name="owner_label">
 		Proprietário
 	</text>
-	<check_box initial_value="false" label="Permitir navegação &amp; interatividade" name="perms_owner_interact"/>
-	<check_box initial_value="false" label="Exibir barra de controle" name="perms_owner_control"/>
+	<check_box initial_value="false" label="Permitir navegação e interação" name="perms_owner_interact"/>
+	<check_box initial_value="false" label="Mostrar barra de controles" name="perms_owner_control"/>
 	<text name="group_label">
 		Grupo:
 	</text>
-	<check_box initial_value="false" label="Permitir navegação &amp; interatividade" name="perms_group_interact"/>
-	<check_box initial_value="false" label="Exibir barra de controle" name="perms_group_control"/>
+	<check_box initial_value="false" label="Permitir navegação e interação" name="perms_group_interact"/>
+	<check_box initial_value="false" label="Mostrar barra de controles" name="perms_group_control"/>
 	<text name="anyone_label">
-		Todos
+		Qualquer pessoa
 	</text>
-	<check_box initial_value="false" label="Permitir navegação &amp; interatividade" name="perms_anyone_interact"/>
-	<check_box initial_value="false" label="Exibir barra de controle" name="perms_anyone_control"/>
+	<check_box initial_value="false" label="Permitir navegação e interação" name="perms_anyone_interact"/>
+	<check_box initial_value="false" label="Mostrar barra de controles" name="perms_anyone_control"/>
 </panel>
