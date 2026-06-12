@@ -250,7 +250,7 @@
 		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 		<check_box label="Neue Regions-Neustart-Meldung verwenden" name="FSUseNewRegionRestartNotification"/>
 		<check_box label="Bei Regions-Neustart-Meldung Bildschirm nicht wackeln" name="FSNoScreenShakeOnRegionRestart"/>
-		<check_box label="Regions-Neustart-Meldung an Kanal senden:" width="265" name="FSReportRegionRestartToChat" />
+		<check_box label="Regions-Neustart-Meldung an Kanal senden:" width="285" name="FSReportRegionRestartToChat" />
 	</panel>
 	<!--Font-->
 	<panel label="Schrift" name="UI-font-tab">
@@ -272,14 +272,14 @@ Standard 0. Größere Werte können n. korrekt funktionieren.
 		</text>
 		<text name="tooltip_textbox4">
 			Pixel (Erfordert Neustart)
-[VIEWER_GENERATION]-Standard 0. Viewer 1-Standard 2.
+Second Life Viewer-Standard 0. Viewer 1-Standard 2.
 		</text>
 		<text name="Label_FolderItemViewHeight" width="125">
 			Höhe Ordner-Eintrag:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			Pixel (Erfordert Neustart)
-[VIEWER_GENERATION]-Standard 20. Viewer 1-Standard 18.
+Second Life Viewer-Standard 20. Viewer 1-Standard 18.
 		</text>
 		<text name="text_box_notecard_font" width="130">
 			Schrift für Notizkarten:

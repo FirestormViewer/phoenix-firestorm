@@ -48,7 +48,7 @@
              left_delta="170"
              control_name="ChatConsoleFontSize"
              name="chat_console_font_size"
-             top="10"
+             top="13"
              width="280">
                 <radio_item
                  height="16"
@@ -95,7 +95,7 @@
 			 label="Play avatar animations (such as shouting)"
 			 layout="topleft"
 			 left="20"
-			 top_pad="5"
+			 top_pad="2"
 			 name="play_avatar_animations"
 			 width="400" />
             <check_box
@@ -337,7 +337,7 @@
              left_delta="170"
              control_name="ChatFontSize"
              name="chat_font_size"
-             top="10"
+             top="13"
              width="280">
                 <radio_item
                  height="16"
@@ -383,7 +383,7 @@
              label="Show names in direct IMs"
              layout="topleft"
              left="20"
-             top_pad="5"
+             top_pad="2"
              height="16"
              width="400" />
             <check_box

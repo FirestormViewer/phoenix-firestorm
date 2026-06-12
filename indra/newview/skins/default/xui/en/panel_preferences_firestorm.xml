@@ -517,7 +517,7 @@
          follows="left|top"
          height="16"
          name="FSConfirmPayments"
-         width="205"
+         width="225"
          tool_tip="Show a confirmation dialog before paying sums greater than the threshold. To always show a confirmation, set the threshold to 0."/>
         <spinner
          enabled_control="FSConfirmPayments"
@@ -664,7 +664,7 @@
          tool_tip="Remove this preset"
          left="15"
          top_delta="10"
-         width="55"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -672,12 +672,12 @@
          enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          top_delta="0"
-         left_delta="60"
+         left_delta="95"
          follows="left|top"
          height="20"
          max_chars="20"
          name="BeamColor_combo"
-         width="170"
+         width="145"
          control_name="FSBeamColorFile"
          tool_tip="Select the color preset for the selection beam"/>
 
@@ -688,7 +688,7 @@
          tool_tip="Create a new color preset"
          left="15"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -699,16 +699,16 @@
          tool_tip="Refresh the preset list"
          left="15"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
         <button
          enabled_control="ShowSelectionBeam"
-         left="100"
+         left="112"
          top_delta="-25"
          follows="left|top"
-         width="130"
+         width="142"
          height="80"
          name="PhoenixBeamPrev_rainbow"
          label=""
@@ -733,7 +733,7 @@
          increment="1"
          initial_value="4"
          label="Beam updates/sec:"
-         label_width="100"
+         label_width="110"
          max_val="200"
          min_val="4"
          show_text="true"
@@ -780,12 +780,12 @@
          enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          bottom_delta="-150"
-         left="275"
+         left="265"
          follows="left|top"
          height="20"
          max_chars="20"
          name="FSBeamShape_combo"
-         width="170"
+         width="145"
          control_name="FSBeamShape"
          tool_tip="Select the shape for the particle beam" />
 
@@ -794,9 +794,9 @@
          name="delete_beam"
          label="Delete"
          tool_tip="Remove this beam"
-         left_delta="175"
+         left_delta="150"
          bottom_delta="0"
-         width="55"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -805,9 +805,9 @@
          name="custom_beam_btn"
          label="Create New"
          tool_tip="Customize the beam shape"
-         left_delta="-20"
+         left_delta="0"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top"/>
 
@@ -818,16 +818,16 @@
          tool_tip="Refresh the beam list"
          left_delta="0"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
         <button
          enabled_control="ShowSelectionBeam"
-         left="290"
+         left="266"
          top_delta="-25"
          follows="left|top"
-         width="130"
+         width="144"
          height="80"
          name="PhoenixBeamPrev_Phoenix"
          label=""
@@ -842,7 +842,7 @@
         <slider
          enabled_control="ShowSelectionBeam"
          bottom_delta="25"
-         left_delta="-15"
+         left_delta="0"
          name="FSBeamShapeScale"
          control_name="FSBeamShapeScale"
          decimal_digits="1"

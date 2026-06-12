@@ -909,7 +909,7 @@
          layout="topleft"
          left="260"
          name="PrefSaveButton"
-         top_delta="-5"
+         top_delta="-3"
          width="75">
          <button.commit_callback
           function="Pref.PrefSave"
@@ -1263,7 +1263,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="5"
          name="WorldPause"
-         top_pad="4"
+         top_pad="5"
          width="256"/>
 
          <check_box

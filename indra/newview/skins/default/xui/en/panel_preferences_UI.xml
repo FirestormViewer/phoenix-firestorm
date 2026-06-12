@@ -1647,7 +1647,7 @@
        left="15"
        name="FSReportRegionRestartToChat"
        top_pad="3"
-       width="215" />
+       width="220" />
       <spinner
        top_delta="-4"
        control_name="FSRegionRestartAnnounceChannel"
@@ -1789,7 +1789,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-[VIEWER_GENERATION] default 0. Viewer 1 default 2.
+Second Life viewer default 0. Viewer 1 default 2.
         </text>
 
         <text
@@ -1830,7 +1830,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-[VIEWER_GENERATION] default 20. Viewer 1 default 18.
+Second Life viewer default 20. Viewer 1 default 18.
         </text>
 
         <text
