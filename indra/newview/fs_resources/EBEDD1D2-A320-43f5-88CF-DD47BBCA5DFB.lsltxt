@@ -7,7 +7,7 @@
 //
 
 // Bridge platform
-string BRIDGE_VERSION = "2.31"; // This should match fslslbridge.cpp
+string BRIDGE_VERSION = "2.32"; // This should match fslslbridge.cpp
 string gLatestURL;
 integer gViewerIsFirestorm;
 integer gTryHandshakeOnce = TRUE;
@@ -35,6 +35,10 @@ float gFlightAssistPushForce;
 integer gCombatListener;    // shared llListen handle
 integer gKillFeedOn;        // forward all DEATH events (with weapon name)
 integer gCombatHitsOn;      // forward owner's own DAMAGE/DEATH events
+list    gKFTypes;           // [victim key, damage type] strided cache; DEATH
+                            // events carry no damage type, so remember each
+                            // victim's most recent DAMAGE type here
+integer KF_TYPE_CACHE_MAX = 16; // strided pairs kept
 
 // OpenCollar/LockMeister AO interface
 integer gAO_EnabledOC;
@@ -72,6 +76,15 @@ kfForwardDeath(string ev)
     }
     if (wname != "") ev = llJsonSetValue(ev, ["weapon_name"], wname);
 
+    // Attach the victim's last seen damage type (cached from DAMAGE events).
+    string kftgt = llJsonGetValue(ev, ["target"]);
+    integer kfidx = llListFindList(gKFTypes, [kftgt]);
+    if (kfidx != -1)
+    {
+        ev = llJsonSetValue(ev, ["type"], llList2String(gKFTypes, kfidx + 1));
+        gKFTypes = llDeleteSubList(gKFTypes, kfidx, kfidx + 1);
+    }
+
     llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
 }
 
@@ -92,6 +105,22 @@ combatForward(string ev)
     }
     else if (etype == "DAMAGE")
     {
+        if (gKillFeedOn)
+        {
+            // Cache victim -> damage type for the DEATH that may follow.
+            string tgt = llJsonGetValue(ev, ["target"]);
+            string dtype = llJsonGetValue(ev, ["type"]);
+            if (tgt != JSON_INVALID && dtype != JSON_INVALID)
+            {
+                integer idx = llListFindList(gKFTypes, [tgt]);
+                if (idx != -1) gKFTypes = llDeleteSubList(gKFTypes, idx, idx + 1);
+                gKFTypes += [tgt, dtype];
+                if (llGetListLength(gKFTypes) > KF_TYPE_CACHE_MAX * 2)
+                {
+                    gKFTypes = llDeleteSubList(gKFTypes, 0, 1);
+                }
+            }
+        }
         if (gCombatHitsOn && (key)llJsonGetValue(ev, ["owner"]) == gOwner)
         {
             llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");

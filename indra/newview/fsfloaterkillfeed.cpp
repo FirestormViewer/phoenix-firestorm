@@ -26,6 +26,7 @@
 
 #include "fsfloaterkillfeed.h"
 
+#include "fscombathitmarker.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llfloaterreg.h"
@@ -147,6 +148,9 @@ void FSFloaterKillFeed::addEntry(const LLSD& event)
         entry.mKiller = event["source"].asUUID();
     }
     entry.mWeapon = event["weapon_name"].asString();
+    // Damage type cached onto the DEATH by the bridge; -1 (Impact) is a
+    // valid type, so the unknown sentinel sits outside the real range.
+    entry.mType = event.has("type") ? (S32)event["type"].asInteger() : -1000;
     entry.mDamage = event.has("damage") ? (F32)event["damage"].asReal() : -1.f;
 
     entry.mDistance = -1.f;
@@ -173,13 +177,31 @@ void FSFloaterKillFeed::addEntry(const LLSD& event)
     }
 }
 
-// "Killer killed Victim with Weapon (100dmg, 50m)"
+// "Killer killed Victim with [symbol] Weapon (100dmg, 50m)"
 static std::string killfeed_line(const FSFloaterKillFeed::KillEntry& entry)
 {
     std::string text = killfeed_name(entry.mKiller, false) + " killed " + killfeed_name(entry.mVictim, false);
-    if (!entry.mWeapon.empty())
+
+    // Damage type symbol from the shared hit marker symbol table
+    // (customizable in the symbols editor).
+    static LLCachedControl<bool> show_emoji(gSavedSettings, "FSKillFeedShowEmoji", true);
+    std::string symbol;
+    if (show_emoji && entry.mType > -1000)
     {
-        text += " with " + entry.mWeapon;
+        symbol = FSCombatHitMarker::getEmojiForType(entry.mType);
+    }
+
+    if (!entry.mWeapon.empty() || !symbol.empty())
+    {
+        text += " with";
+        if (!symbol.empty())
+        {
+            text += " " + symbol;
+        }
+        if (!entry.mWeapon.empty())
+        {
+            text += " " + entry.mWeapon;
+        }
     }
 
     std::string stats;
@@ -249,9 +271,15 @@ void FSFloaterKillFeed::drawOverlay()
             return;
         }
         // Placeholder preview while the settings panel is open; runs
-        // through the same name shortening as real kill lines.
+        // through the same name shortening and symbol option as real lines.
+        static LLCachedControl<bool> example_emoji(gSavedSettings, "FSKillFeedShowEmoji", true);
+        std::string example_symbol;
+        if (example_emoji)
+        {
+            example_symbol = FSCombatHitMarker::getEmojiForType(5) + " "; // Fire
+        }
         const std::string example_line = killfeed_maybe_shorten("Example Resident") + " killed " +
-            killfeed_maybe_shorten("Guy Linden") + " with Death (100dmg, 0m)";
+            killfeed_maybe_shorten("Guy Linden") + " with " + example_symbol + "Death (100dmg, 0m)";
         lines.assign((size_t)llmax((U32)1, (U32)max_lines), example_line);
     }
 

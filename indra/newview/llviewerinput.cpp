@@ -934,10 +934,12 @@ bool ots_toggle_view(EKeystate s)
     if (gAgentCamera.cameraOTS())
     {
         gAgentCamera.changeCameraToMouselook();
+        gSavedSettings.setBOOL("OTSLastViewFirstPerson", true);
     }
     else if (gAgentCamera.cameraMouselook())
     {
         gAgentCamera.changeCameraToOTS();
+        gSavedSettings.setBOOL("OTSLastViewFirstPerson", false);
     }
     return true;
 }

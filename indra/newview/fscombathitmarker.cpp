@@ -458,7 +458,8 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
     F32 offset_x = 0.f;
     F32 offset_y = 0.f;
     static LLCachedControl<bool> true_aim(gSavedSettings, "FSOTSTrueAimDot", true);
-    if (true_aim && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    if (true_aim && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp
+        && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE) // never raycast mid-teleport
     {
         const F32 TRUE_AIM_RANGE = 256.f; // meters; past this the parallax is subpixel
         LLViewerCamera* camera = LLViewerCamera::getInstance();
