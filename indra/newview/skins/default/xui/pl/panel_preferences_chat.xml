@@ -271,7 +271,7 @@
 			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
 		</panel>
 		<panel label="Polecenia" name="tab-CmdLine">
-			<text name="FSCmdLineCalc_txt">
+			<text name="FSCmdLineDoc_txt">
 				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Dokumentacja]
 			</text>
 			<check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />

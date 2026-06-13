@@ -2122,7 +2122,7 @@
 	  follows="right|bottom"
 	  height="14"
 	  right="-10"
-	  name="FSCmdLineCalc_txt"
+	  name="FSCmdLineDoc_txt"
 	  width="150">
 	  [https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Documentation]
 	</text>
