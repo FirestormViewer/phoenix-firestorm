@@ -3061,6 +3061,9 @@ and report the problem.
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
+  <string name="FSCameraPositionPasted">Camera restored to [POS].</string>
+  <string name="FSCameraPositionParseError">Invalid camera position. Expected: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).</string>
+  <string name="FSCmdLineZOffsetUsage">Set avatar hover height (usage: /zoffset value or +delta).</string>
 
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>

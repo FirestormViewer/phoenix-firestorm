@@ -13,7 +13,7 @@
 	<text name="find">
 		Szukana fraza:
 	</text>
-	<check_box label="Dołącz grupy dla dorosłych" name="incmature" />
+	<!-- <check_box label="Dołącz grupy dla dorosłych" name="incmature" /> -->
 	<combo_box name="groups_maturity">
 		<combo_box.item label="General (dla wszystkich)" name="Desired_PG" />
 		<combo_box.item label="General (dla wszystkich) i Moderate (umiarkowanych)" name="Desired_Mature" />

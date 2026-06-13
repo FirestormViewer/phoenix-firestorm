@@ -4825,9 +4825,9 @@ Spróbuj ponownie za minutę.
 	<notification name="CantAttachObjectBeingRemoved">
 		Nie możesz odłączyć dodatku, ponieważ jest on już odłączony.
 	</notification>
-	<!-- <notification name="IllegalAttachment">
+	<notification name="IllegalAttachment">
 		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
-	</notification> -->
+	</notification>
 	<notification name="CantDropItemTrialUser">
 		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.
 	</notification>
@@ -5447,14 +5447,14 @@ Wynik testu kompresji pliku dla gzip na poziomie 6 z [FILE] o rozmiarze [SIZE] K
 Pakowanie: [PACK_TIME]s [PSIZE]KB
 Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	</notification>
-	<notification name="PromptMFAToken">
+	<notification name="PromptMFAToken" label="Monit o token MFA">
 		[MESSAGE]
 		<form name="form">
 			<button name="continue" text="Kontynuuj" />
 			<button name="cancel" text="Anuluj" />
 		</form>
 	</notification>
-	<notification name="PromptMFATokenWithSave">
+	<notification name="PromptMFATokenWithSave" label="Monit o token MFA">
 		[MESSAGE]
 		<form name="form">
 			<ignore name="ignore" text="Pamiętaj ten komputer przez 30 dni" />
