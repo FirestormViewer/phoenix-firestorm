@@ -92,7 +92,7 @@
 		無法取得優先度值。
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_LOOP">
-		無法取得迴圈值。
+		無法取得循環值。
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEIN">
 		無法取得緩入值。

@@ -4,6 +4,7 @@
 	<floater.string name="ClearAllRegions" value="清除所有區域"/>
 	<filter_editor label="依群組頭銜篩選" name="filter_input"/>
 	<scroll_list name="title_list">
+		<column name="default_marker" label="預" tool_tip="未指派區域時使用的預設頭銜"/>
 		<column name="grouptitle" label="頭銜"/>
 		<column name="groupname" label="群組"/>
 		<column name="regionname" label="自動區域"/>
@@ -14,4 +15,6 @@
 	<button name="btnClearRegion" label="清除區域" tool_tip="移除所選頭銜的區域指派"/>
 	<button name="btnInfo" label="資訊" tool_tip="顯示目前所選頭銜所屬群組的資訊"/>
 	<button name="btnActivate" label="啟用" tool_tip="啟用目前選取的群組頭銜"/>
+	<check_box name="use_default_title" label="在未指派區域中使用預設頭銜" tool_tip="進入未指派頭銜的區域時，將自動啟用標記的頭銜。如果預設值為「無頭銜」，則不會啟用任何頭銜。"/>
+	<button name="btnSetDefault" label="設為預設" tool_tip="將所選頭銜設為未指派區域使用的預設頭銜"/>
 </floater>

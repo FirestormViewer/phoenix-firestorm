@@ -6730,6 +6730,15 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	<string name="FSCameraPositionCopied">
 		Kameraposition [POS] wurde in Zwischenablage kopiert.
 	</string>
+	<string name="FSCameraPositionPasted">
+		Kamera wiederhegestellt zu Position [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Ungültige Kameraposition: Erwartet : &lt;x, y, z&gt; oder &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Setze Avatar-Schwebehöhe (Befehl: /zoffset value oder +delta).
+	</string>
 	<string name="FSCmdLineRollDiceTotal">
 		Ergenis für [DICE]d[FACES][MODIFIER]: [RESULT].
 	</string>

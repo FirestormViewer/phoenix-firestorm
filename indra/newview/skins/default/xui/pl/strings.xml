@@ -936,9 +936,6 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="mesh">
 		mesz
 	</string>
-    <string name="settings">
-        ustawień
-    </string>
 	<string name="AvatarEditingAppearance">
 		(Edycja wyglądu)
 	</string>
@@ -5724,6 +5721,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_RegionTracker_Tooltip">
 		Śledź statusy różnych regionów
 	</string>
+	<string name="Command_AvatarAlign_Tooltip">
+		Wyrównaj awatara do głównego kierunku świata lub zwróć go w stronę najbliższego awatara
+	</string>
+	<string name="Command_FaceNearest_Tooltip">
+		Obróć się w stronę najbliższego awatara w promieniu 20m
+	</string>
 	<string name="Command_Group_Titles_Tooltip">
 		Zmień aktywny tag grupy
 	</string>
@@ -6119,6 +6122,15 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 	</string>
 	<string name="FSCameraPositionCopied">
 		Pozycja kamery [POS] została skopiowana do schowka.
+	</string>
+	<string name="FSCameraPositionPasted">
+		Pozycja kamery została przywrócona do [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Niepoprawna pozycja kamery. Oczekiwano: &lt;x, y, z&gt; lub &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Ustawia wysokość unoszenia się awatara (użycie: /zoffset wartość lub +delta).
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.

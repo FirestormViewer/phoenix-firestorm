@@ -257,7 +257,15 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
             static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
             if (sDisableLabeledLinks)
             {
-                continue;
+                if (mUrlEntryHTTPLabel == *it)
+                {
+                    continue;
+                }
+                static LLUICachedControl<bool> sDisableLabeledSLURLs("FSDisableLabeledChatSLURLs", false);
+                if (mUrlEntrySLLabel == *it && sDisableLabeledSLURLs)
+                {
+                    continue;
+                }
             }
         }
         // </FS:PP>
