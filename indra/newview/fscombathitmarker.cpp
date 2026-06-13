@@ -439,6 +439,7 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
                                                      const LLVector3& cam_at)
 {
     const F32 CONVERGE_RANGE = 512.f; // meters; open-sky fallback distance
+
     LLVector3 target = cam_origin + cam_at * CONVERGE_RANGE;
 
     LLVector4a ray_start, ray_end, hit;
@@ -446,21 +447,19 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     ray_end.load3(target.mV);
 
     // Cast the render (shoulder) camera's crosshair ray and converge on the
-    // first thing under it, AVATARS INCLUDED. The old world-geometry-only
-    // cast was blind to avatars, so aiming at a target converged on the wall
-    // behind them and the eye-origin bullet threaded past (and the dot, cast
-    // the same way, sat on that wall and read "on target"). pick_rigged so
-    // mesh bodies are hit too. The same cast still returns terrain/prims, so
-    // shooting structures is unchanged. Step past our own body/attachments,
-    // which the shoulder ray can graze on its way out, so self never becomes
-    // the convergence point. With nothing solid under the crosshair the far
-    // point stands and the direction degrades to camera-parallel.
+    // first thing under it. Note: pick_rigged is intentionally false because
+    // rigged avatar meshes do not contribute to the physical hitbox and testing
+    // against them is too computationally expensive. The cast still returns
+    // terrain/prims, so shooting structures is unchanged. Step past our own
+    // body/attachments, which the shoulder ray can graze on its way out, so
+    // self never becomes the convergence point. With nothing solid under the
+    // crosshair the far point stands and the direction degrades to camera-parallel.
     for (S32 i = 0; i < 4; ++i)
     {
         S32 face_hit = -1;
         LLViewerObject* obj = gPipeline.lineSegmentIntersectInWorld(
             ray_start, ray_end,
-            false /*pick_transparent*/, true /*pick_rigged*/,
+            false /*pick_transparent*/, false /*pick_rigged*/,
             false /*pick_unselectable*/, false /*pick_reflection_probe*/,
             &face_hit, nullptr, nullptr, &hit);
         if (!obj)
@@ -479,6 +478,7 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
         target.set(hit.getF32ptr());
         break;
     }
+
     return target;
 }
 
