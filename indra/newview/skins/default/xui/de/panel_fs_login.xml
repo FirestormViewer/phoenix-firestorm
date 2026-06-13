@@ -59,6 +59,7 @@
 				MODUS-WAHL
 			</text>
 			<combo_box name="mode_combo" tool_tip="Wählen Sie, welcher Viewer-Style Ihnen am meisten vertraut ist, um die Standards Ihren Bedürfnissen anzupassen.">
+				<combo_box.item label="Modern" name="Modern"/>
 				<combo_box.item label="Hybrid" name="Hybrid"/>
 				<combo_box.item label="Text" name="Text"/>
 			</combo_box>
