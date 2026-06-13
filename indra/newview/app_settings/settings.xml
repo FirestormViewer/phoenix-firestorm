@@ -19247,13 +19247,24 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSCmdLineCopyCam</key>
 		<map>
 			<key>Comment</key>
-			<string>Copies the current camera location to a vector of the form &lt;x, y, z&gt; to the clipboard.</string>
+			<string>Copies the current camera location to the clipboard as pos|focus|roll</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
 			<string>cpcampos</string>
+		</map>
+		<key>FSCmdLinePasteCam</key>
+		<map>
+			<key>Comment</key>
+			<string>Restores the camera from a pos|focus|roll</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>pstcampos</string>
 		</map>
 		<key>FSCmdLineRollDice</key>
 		<map>

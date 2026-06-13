@@ -2116,6 +2116,16 @@
 	  follows="all"
 	  label="CmdLine"
 	  name="tab-CmdLine" >
+	<text
+	  bottom="5"
+	  halign="right"
+	  follows="right|bottom"
+	  height="14"
+	  right="-10"
+	  name="FSCmdLineCalc_txt"
+	  width="150">
+	  [https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Documentation]
+	</text>
 	<check_box
 	  top="10"
 	  follows="left|top"
@@ -2201,6 +2211,25 @@
 	  name="FSCmdLineCopyCam"
 	  tool_tip=""
 	  control_name="FSCmdLineCopyCam"
+	  width="200"/>
+	<!--pstcampos-->
+	<text
+	  top_pad="3"
+	  follows="left|top"
+	  height="14"
+	  name="FSCmdLinePasteCam_txt"
+	  width="235">
+	  Set cam params (cmd pos|focus|roll)
+	</text>
+	<line_editor
+	  enabled_control="FSCmdLine"
+	  top_pad="-2"
+	  follows="left|top"
+	  height="18"
+	  max_length_chars="256"
+	  name="FSCmdLinePasteCam"
+	  tool_tip=""
+	  control_name="FSCmdLinePasteCam"
 	  width="200"/>
 	<!--cao-->
 	<text

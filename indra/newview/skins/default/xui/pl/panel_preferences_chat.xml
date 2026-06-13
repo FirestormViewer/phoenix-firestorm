@@ -271,6 +271,9 @@
 			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
 		</panel>
 		<panel label="Polecenia" name="tab-CmdLine">
+			<text name="FSCmdLineCalc_txt">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Dokumentacja]
+			</text>
 			<check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />
 			<text name="FSCmdLineCalc_txt">
 				Kalkulator (użycie: cmd SIN(2+2))
@@ -282,7 +285,10 @@
 				Maks. przepustow. (użycie: cmd kbps)
 			</text>
 			<text name="FSCmdLineCopyCam_txt">
-				Kopiowanie pozycji kamery do schowka
+				Kopiowanie poz. kamery do schowka
+			</text>
+			<text name="FSCmdLinePasteCam_txt">
+				Ustaw pozycję kamery (cmd pos|focus|roll)
 			</text>
 			<text name="FSCmdLineAO_txt">
 				Włącz/wyłącz AO (użycie: cmd on/off)

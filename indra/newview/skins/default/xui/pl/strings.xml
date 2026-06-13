@@ -6123,6 +6123,15 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 	<string name="FSCameraPositionCopied">
 		Pozycja kamery [POS] została skopiowana do schowka.
 	</string>
+	<string name="FSCameraPositionPasted">
+		Pozycja kamery została przywrócona do [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Niepoprawna pozycja kamery. Oczekiwano: &lt;x, y, z&gt; lub &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Ustawia wysokość unoszenia się awatara (użycie: /zoffset wartość lub +delta).
+	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.
 	</string>

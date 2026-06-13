@@ -57,6 +57,10 @@
 #include "llviewerparcelmediaautoplay.h"
 #include "llviewerparcelmgr.h"
 #include "llvolumemessage.h"
+#include "llviewerjoystick.h"
+#include "llviewercamera.h"
+#include "llviewermenu.h"
+#include "llvoavatar.h"
 #include "llworld.h"
 #include "llworldmap.h"
 #include <boost/regex.hpp> // rand(min,max) in calc
@@ -542,6 +546,150 @@ static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
     FSCommon::report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
 }
 
+static bool parseAbsoluteOrRelativeF32(const std::string& token, F32 base, F32& out)
+{
+    if (token.empty())
+    {
+        return false;
+    }
+
+    F32 value = 0.f;
+    if (sscanf(token.c_str(), "%f", &value) != 1)
+    {
+        return false;
+    }
+
+    if (token[0] == '+' || token[0] == '-')
+    {
+        out = base + value;
+    }
+    else
+    {
+        out = value;
+    }
+    return true;
+}
+
+static bool parseTerrainOffsetF32(const std::string& token, F32& offset_out)
+{
+    if (token.empty())
+    {
+        return false;
+    }
+
+    return sscanf(token.c_str(), "%f", &offset_out) == 1;
+}
+
+static bool parseBracketVector3(const std::string& segment, LLVector3& out)
+{
+    std::string trimmed = segment;
+    LLStringUtil::trim(trimmed);
+    if (trimmed.size() < 5 || trimmed.front() != '<' || trimmed.back() != '>')
+    {
+        return false;
+    }
+
+    trimmed = trimmed.substr(1, trimmed.size() - 2);
+    LLStringUtil::replaceString(trimmed, ",", " ");
+    return LLVector3::parseVector3(trimmed, &out);
+}
+
+struct CmdlineCameraSpec
+{
+    LLVector3 pos;
+    LLVector3 focus;
+    bool has_focus = false;
+    F32 roll = 0.f;
+    bool has_roll = false;
+};
+
+static bool parseCameraPositionString(const std::string& params, CmdlineCameraSpec& out)
+{
+    size_t first_pipe = params.find('|');
+    std::string pos_segment = (first_pipe == std::string::npos) ? params : params.substr(0, first_pipe);
+    if (!parseBracketVector3(pos_segment, out.pos))
+    {
+        return false;
+    }
+
+    if (first_pipe == std::string::npos)
+    {
+        return true;
+    }
+
+    size_t second_pipe = params.find('|', first_pipe + 1);
+    std::string focus_segment = (second_pipe == std::string::npos)
+        ? params.substr(first_pipe + 1)
+        : params.substr(first_pipe + 1, second_pipe - first_pipe - 1);
+    if (!parseBracketVector3(focus_segment, out.focus))
+    {
+        return false;
+    }
+    out.has_focus = true;
+
+    if (second_pipe != std::string::npos)
+    {
+        std::string roll_segment = params.substr(second_pipe + 1);
+        LLStringUtil::trim(roll_segment);
+        if (sscanf(roll_segment.c_str(), "%f", &out.roll) != 1)
+        {
+            return false;
+        }
+        out.has_roll = true;
+    }
+
+    return true;
+}
+
+static std::string formatCameraPositionString(const LLVector3& pos, const LLVector3& focus, F32 roll)
+{
+    std::string result = llformat("<%.3f, %.3f, %.3f>", pos.mV[VX], pos.mV[VY], pos.mV[VZ]);
+    result += llformat("|<%.3f, %.3f, %.3f>", focus.mV[VX], focus.mV[VY], focus.mV[VZ]);
+    result += llformat("|%.3f", roll);
+    return result;
+}
+
+static void cmdline_apply_camera(const CmdlineCameraSpec& spec)
+{
+    LLVector3d camera_pos_global = gAgent.getPosGlobalFromAgent(spec.pos);
+    LLVector3d focus_global;
+    if (spec.has_focus)
+    {
+        focus_global = gAgent.getPosGlobalFromAgent(spec.focus);
+    }
+    else
+    {
+        const LLVector3d old_cam = gAgentCamera.getCameraPositionGlobal();
+        const LLVector3d old_focus = gAgentCamera.getFocusTargetGlobal();
+        focus_global = camera_pos_global + (old_focus - old_cam);
+    }
+
+    const F32 render_far_clip = gSavedSettings.getF32("RenderFarClip");
+    const F32 far_clip_squared = render_far_clip * render_far_clip;
+    if (dist_vec_squared(gAgent.getPositionGlobal(), camera_pos_global) > far_clip_squared)
+    {
+        FSCommon::report_to_nearby_chat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
+        return;
+    }
+
+    if (LLViewerJoystick::getInstance()->getOverrideCamera())
+    {
+        handle_toggle_flycam();
+        LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true);
+    }
+
+    gAgentCamera.unlockView();
+    gAgentCamera.setCameraPosAndFocusGlobal(camera_pos_global, focus_global, LLUUID::null);
+    if (spec.has_roll)
+    {
+        gAgentCamera.setRollAngle(spec.roll);
+    }
+
+    LLStringUtil::format_map_t args;
+    args["[POS]"] = formatCameraPositionString(spec.pos, gAgent.getPosAgentFromGlobal(focus_global), spec.has_roll ? spec.roll : gAgentCamera.getRollAngle());
+    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCameraPositionPasted", args));
+}
+
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
     static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
@@ -563,6 +711,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
     static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings, "FSCmdLineMedia");
     static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
     static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
+    static LLCachedControl<std::string> sFSCmdLinePasteCam(gSavedSettings, "FSCmdLinePasteCam");
     static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
     static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 
@@ -602,7 +751,8 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     return false;
                 }
                 F32 drawDist;
-                if (i >> drawDist)
+                std::string dist_token;
+                if (i >> dist_token && parseAbsoluteOrRelativeF32(dist_token, gSavedSettings.getF32("RenderFarClip"), drawDist))
                 {
                     gSavedSettings.setF32("RenderFarClip", drawDist);
                     gAgentCamera.mDrawDistance = drawDist;
@@ -840,6 +990,25 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", 0.f);
                 return false;
             }
+            else if (command == "/zoffset")
+            {
+                std::string offset_token;
+                if (i >> offset_token)
+                {
+                    F32 hover_z;
+                    if (parseAbsoluteOrRelativeF32(offset_token, gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ"), hover_z))
+                    {
+                        gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", llclamp(hover_z, MIN_HOVER_Z, MAX_HOVER_Z));
+                        LLStringUtil::format_map_t args;
+                        args["[VALUE]"] = llformat("%.3f", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ"));
+                    }
+                }
+                else
+                {
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCmdLineZOffsetUsage"));
+                }
+                return false;
+            }
             else if (command == sFSCmdLineOfferTp())
             {
                 LLUUID target_key;
@@ -867,7 +1036,18 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
             {
                 LLVector3 agentPos = gAgent.getPositionAgent();
                 U64 agentRegion = gAgent.getRegion()->getHandle();
-                LLVector3 targetPos(agentPos.mV[VX],agentPos.mV[VY], LLWorld::getInstance()->resolveLandHeightAgent(agentPos));
+                F32 terrain_z = LLWorld::getInstance()->resolveLandHeightAgent(agentPos);
+                F32 target_z = terrain_z;
+                std::string offset_token;
+                if (i >> offset_token)
+                {
+                    F32 offset = 0.f;
+                    if (parseTerrainOffsetF32(offset_token, offset))
+                    {
+                        target_z = llmax(terrain_z + offset, terrain_z);
+                    }
+                }
+                LLVector3 targetPos(agentPos.mV[VX], agentPos.mV[VY], target_z);
                 LLVector3d pos_global = from_region_handle(agentRegion);
                 pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
                 if (RlvActions::canTeleportToLocal(pos_global))
@@ -878,17 +1058,21 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
             }
             else if (command == sFSCmdLineHeight())
             {
-                F32 z;
-                if (i >> z)
+                std::string z_token;
+                if (i >> z_token)
                 {
                     LLVector3 agentPos = gAgent.getPositionAgent();
-                    U64 agentRegion = gAgent.getRegion()->getHandle();
-                    LLVector3 targetPos(agentPos.mV[VX], agentPos.mV[VY], z);
-                    LLVector3d pos_global = from_region_handle(agentRegion);
-                    pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
-                    if (RlvActions::canTeleportToLocal(pos_global))
+                    F32 z;
+                    if (parseAbsoluteOrRelativeF32(z_token, agentPos.mV[VZ], z))
                     {
-                        gAgent.teleportViaLocation(pos_global);
+                        U64 agentRegion = gAgent.getRegion()->getHandle();
+                        LLVector3 targetPos(agentPos.mV[VX], agentPos.mV[VY], z);
+                        LLVector3d pos_global = from_region_handle(agentRegion);
+                        pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
+                        if (RlvActions::canTeleportToLocal(pos_global))
+                        {
+                            gAgent.teleportViaLocation(pos_global);
+                        }
                     }
                     return false;
                 }
@@ -1548,9 +1732,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 LLViewerRegion* agentRegionp = gAgent.getRegion();
                 if (agentRegionp)
                 {
-                    LLVector3 cameraPosition = gAgentCamera.getCameraPositionAgent();
-                    std::string cameraPositionString = llformat("<%.3f, %.3f, %.3f>",
-                        cameraPosition.mV[VX], cameraPosition.mV[VY], cameraPosition.mV[VZ]);
+                    const LLVector3 cameraPosition = gAgentCamera.getCameraPositionAgent();
+                    const LLVector3d forward_global = LLVector3d(1.0, 0.0, 0.0) * LLViewerCamera::getInstance()->getQuaternion() + gAgentCamera.getCameraPositionGlobal();
+                    const LLVector3 focusPosition = gAgent.getPosAgentFromGlobal(forward_global);
+                    const F32 roll = gAgentCamera.getRollAngle();
+                    const std::string cameraPositionString = formatCameraPositionString(cameraPosition, focusPosition, roll);
                     LLUI::getInstance()->getWindow()->copyTextToClipboard(utf8str_to_wstring(cameraPositionString));
 
                     LLStringUtil::format_map_t args;
@@ -1560,6 +1746,28 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 else
                 {
                     FSCommon::report_to_nearby_chat("Could not get a valid region pointer.");
+                }
+                return false;
+            }
+            else if (command == sFSCmdLinePasteCam())
+            {
+                if (revised_text.length() > command.length() + 1)
+                {
+                    std::string params = static_cast<std::string>(revised_text.substr(command.length() + 1));
+                    LLStringUtil::trim(params);
+                    CmdlineCameraSpec spec;
+                    if (parseCameraPositionString(params, spec))
+                    {
+                        cmdline_apply_camera(spec);
+                    }
+                    else
+                    {
+                        FSCommon::report_to_nearby_chat(LLTrans::getString("FSCameraPositionParseError"));
+                    }
+                }
+                else
+                {
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("FSCameraPositionParseError"));
                 }
                 return false;
             }
