@@ -74,7 +74,7 @@
 			<text name="req_restart_ims" left_pad="55" width="120">
 				(Erfordert Neustart)
 			</text>
-			<text name="tab_direction_label" width="160">
+			<text name="tab_direction_label" width="180">
 				Chat-Tabmodus-Orientierung:
 			</text>
 			<radio_group name="chat_tab_direction" tool_tip="Ändert die Oriengierung von Chat/Instant-Message-Reiterkarten zwischen horizontal und vertikal wenn kompakter Chat aktiviert ist. (Erfordert Neustart)">
@@ -203,7 +203,7 @@
 			</text>
 			<check_box name="FSShowIMInChatHistory" label="Instant Messages und Gruppenchats im lokalem Chat anzeigen"/>
 			<check_box name="FSLogIMInChatHistory" label="IMs und Gruppenchats im lokalem Chat speichern" width="190"/>
-			<text name="FSIMChatHistoryFade_label" width="320">
+			<text name="FSIMChatHistoryFade_label" width="345">
 				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>

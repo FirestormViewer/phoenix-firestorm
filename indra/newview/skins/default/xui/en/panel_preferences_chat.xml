@@ -461,14 +461,14 @@
              left="20"
              height="16"
              width="110"
-             top_pad="15">
+             top_pad="10">
                  Show IMs in:
             </text>
             <radio_group
              height="16"
              layout="topleft"
              left_pad="10"
-             top_delta="-1"
+             top_delta="4"
              control_name="FSChatWindow"
              name="chat_window"
              tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
@@ -497,7 +497,7 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
-             top_delta="0"
+             top_delta="-2"
              text_color="White_50"
              height="16"
              width="100">
@@ -510,13 +510,13 @@
              left="20"
              height="16"
              name="tab_direction_label"
-             width="150"
+             width="160"
              top_pad="3">
               Chat Tab Mode Orientation:
             </text>
             <radio_group
              left_pad="10"
-             top_delta="-3"
+             top_delta="1"
              height="16"
              layout="topleft"
              control_name="ChatTabDirection"
@@ -547,7 +547,7 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
-             top_delta="2"
+             top_delta="0"
              text_color="White_50"
              height="16"
              width="100">
@@ -1153,7 +1153,7 @@
 		 name="EnableGroupChatPopups"
 		 label="Group Chats"
 		 layout="topleft"
-		 top_pad="1"
+		 top_pad="4"
 		 left_delta="10"
 		 height="18"
 		 tool_tip="Check to see popups when a Group Chat message arrives"
@@ -1208,7 +1208,7 @@
 		 top_pad="3"
 		 left_delta="4"
 		 name="FSShowGroupNameLength_label"
-		 width="290">
+		 width="310">
 			Length of group name to be printed in chat transcript
 		</text>
 		<spinner
@@ -1308,7 +1308,7 @@
 		 height="15"
 		 left="34"
 		 name="FSIMChatHistoryFade_label"
-		 width="340">
+		 width="370">
 			Fade IM text into the background of the chat transcript window
 		</text>
 		<spinner
