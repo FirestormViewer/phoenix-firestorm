@@ -6739,6 +6739,27 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	<string name="FSCmdLineZOffsetUsage">
 		Setze Avatar-Schwebehöhe (Befehl: /zoffset value oder +delta).
 	</string>
+	<string name="FSCmdLineNoValidRegion">
+		Es konnte keine gültige Region ermittelt werden.
+	</string>
+	<string name="FSCmdLineTrackPosUsage">
+		Position oder Avatar auf der Weltkarte verfolgen (Befehl: cmd &lt;x, y, z&gt; or cmd name).
+	</string>
+	<string name="FSCmdLineTrackPosParseError">
+		Ungültige Position: cpcampos-Format verwenden: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll.
+	</string>
+	<string name="FSCmdLineTrackPosLocation">
+		Verfolge [REGION] ([POS]).
+	</string>
+	<string name="FSCmdLineTrackPosAvatar">
+		Verfolge [NAME].
+	</string>
+	<string name="FSCmdLineTrackPosNotFound">
+		Es konnte kein Treffer für Avatar mit Namen „[NAME]“ auf dem Radar ermittelt werden.
+	</string>
+	<string name="FSCmdLineTrackPosMapError">
+		Weltkarte konnte nicht geöffnet werden.
+	</string>
 	<string name="FSCmdLineRollDiceTotal">
 		Ergenis für [DICE]d[FACES][MODIFIER]: [RESULT].
 	</string>

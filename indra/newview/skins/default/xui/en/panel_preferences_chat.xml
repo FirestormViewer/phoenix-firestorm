@@ -2399,7 +2399,7 @@
 	  follows="left|top"
 	  height="14"
 	  name="FSCmdLineTrackPos_txt"
-	  width="235">
+	  width="280">
 	  Track position or avatar (cmd pos or name)
 	</text>
 	<line_editor

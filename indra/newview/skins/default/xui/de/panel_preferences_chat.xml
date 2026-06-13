@@ -330,6 +330,10 @@
 				Würfeln (Befehl: cmd Würfel Seiten mt mw)
 			</text>
 			<line_editor tool_tip="Würfelt - cmd [Anzahl Würfel] [Seiten pro Würfel] [Modifizierer-Typ (optional)] [Modifizierer-Wert (optional). Beispiel: cmd 1 20, cmd 1 20 + 5. Auslassen der Parameter entspricht cmd 1 6 (Standardwürfel)" name="FSCmdLineRollDice"/>
+			<text  name="FSCmdLineTrackPos_txt">
+				Position oder Avatar verfolgen (cmd pos or name)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Setzt ein Leuchtsignal auf der Weltkarte an einer Position cpcampos format) oder zu einem partiellen Avatarnamen"/>
 			<text name="FSCmdLinePos_txt">
 				Teleport innerhalb Region (Befehl: cmd x z y)
 			</text>
