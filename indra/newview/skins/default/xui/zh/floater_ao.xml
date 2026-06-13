@@ -5,4 +5,19 @@
 	<floater.string name="ao_dnd_only_on_full_interface">帶有 AO 設定的記事卡&amp;只能拖放到最大化的視窗中。點擊工具圖示可最大化視窗。</floater.string>
 	<floater.string name="ao_add_blank_label">新建空白動畫集...</floater.string>
 	<floater.string name="ao_add_clone_label">複製目前動畫集...</floater.string>
+	<floater.string name="ao_track_main">主軌道</floater.string>
+	<floater.string name="ao_no_track_animations">空軌道 - 將動畫拖放到此處</floater.string>
+	<floater.string name="ao_group_tooltip">動畫組 - 這些動畫會同時播放：</floater.string>
+	<floater.string name="ao_member_tooltip">動畫組內容 - 會與同組中的其他動畫一起播放。雙擊可單獨預覽。</floater.string>
+	<floater.string name="ao_cm_expand">展開</floater.string>
+	<floater.string name="ao_cm_collapse">摺疊</floater.string>
+	<floater.string name="ao_cm_rename_group">重新命名組...</floater.string>
+	<floater.string name="ao_cm_move_out">移出組</floater.string>
+	<floater.string name="ao_cm_find_original">尋找原始動畫</floater.string>
+	<floater.string name="ao_cm_delete">刪除</floater.string>
+	<floater.string name="ao_dnd_merge">拖放以與此動畫建立動畫組</floater.string>
+	<floater.string name="ao_dnd_add_to_group">拖放以新增至此組</floater.string>
+	<floater.string name="ao_dnd_add_to_track">拖放以新增至此軌道</floater.string>
+	<floater.string name="ao_dnd_folder_group">拖放資料夾以建立動畫組</floater.string>
+	<floater.string name="ao_dnd_folder_pour">拖放資料夾以將其中的動畫新增至此軌道</floater.string>
 </floater>
