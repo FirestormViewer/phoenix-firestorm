@@ -2397,7 +2397,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineTrackPos_txt"
 	  width="280">
 	  Track position or avatar (cmd pos or name)
@@ -2566,7 +2566,7 @@
 	  width="200"/>
 	<check_box
 	  enabled_control="FSCmdLine"
-	  top_pad="2"
+	  top_pad="6"
 	  follows="left|top"
 	  height="14"
 	  label="Use same position between regions"
