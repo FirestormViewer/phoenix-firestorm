@@ -6132,6 +6132,27 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 	<string name="FSCmdLineZOffsetUsage">
 		Ustawia wysokość unoszenia się awatara (użycie: /zoffset wartość lub +delta).
 	</string>
+	<string name="FSCmdLineNoValidRegion">
+		Nie można uzyskać prawidłowego wskaźnika regionu.
+	</string>
+	<string name="FSCmdLineTrackPosUsage">
+		Śledź pozycję lub awatara na mapie świata (użycie: cmd &lt;x, y, z&gt; lub cmd imię).
+	</string>
+	<string name="FSCmdLineTrackPosParseError">
+		Niepoprawna pozycja. Użyj formatu cpcampos: &lt;x, y, z&gt; lub &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll.
+	</string>
+	<string name="FSCmdLineTrackPosLocation">
+		Śledzenie [REGION] ([POS]).
+	</string>
+	<string name="FSCmdLineTrackPosAvatar">
+		Śledzenie [NAME].
+	</string>
+	<string name="FSCmdLineTrackPosNotFound">
+		Nie znaleziono awatara pasującego do &apos;[NAME]&apos; na radarze.
+	</string>
+	<string name="FSCmdLineTrackPosMapError">
+		Nie można otworzyć mapy świata.
+	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.
 	</string>

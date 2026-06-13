@@ -338,6 +338,9 @@
 			<text name="FSCmdLineTeleportHome_txt">
 				Teleport do Miejsca Startu (użycie: cmd)
 			</text>
+			<text name="FSCmdLineTrackPos_txt">
+				Śledź pozycję lub awatara (cmd pos lub imię)
+			</text>
 			<text name="FSCmdLineMapTo_txt">
 				Teleport do regionu (użycie: cmd nazwa | x y z)
 			</text>

@@ -2526,6 +2526,25 @@
 	  tool_tip=""
 	  control_name="FSCmdLineTeleportHome"
 	  width="200"/>
+	<!--trkpos-->
+	<text
+	  top_pad="3"
+	  follows="left|top"
+	  height="14"
+	  name="FSCmdLineTrackPos_txt"
+	  width="235">
+	  Track position or avatar (cmd pos or name)
+	</text>
+	<line_editor
+	  enabled_control="FSCmdLine"
+	  top_pad="-2"
+	  follows="left|top"
+	  height="18"
+	  max_length_chars="256"
+	  name="FSCmdLineTrackPos"
+	  tool_tip="Sets a world map beacon at a position (cpcampos format) or partial avatar name"
+	  control_name="FSCmdLineTrackPos"
+	  width="200"/>
 	<!--mapto-->
 	<text
 	  top_pad="3"
