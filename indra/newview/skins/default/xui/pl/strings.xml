@@ -936,9 +936,6 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="mesh">
 		mesz
 	</string>
-    <string name="settings">
-        ustawień
-    </string>
 	<string name="AvatarEditingAppearance">
 		(Edycja wyglądu)
 	</string>
@@ -5723,6 +5720,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_RegionTracker_Tooltip">
 		Śledź statusy różnych regionów
+	</string>
+	<string name="Command_AvatarAlign_Tooltip">
+		Wyrównaj awatara do głównego kierunku świata lub zwróć go w stronę najbliższego awatara
+	</string>
+	<string name="Command_FaceNearest_Tooltip">
+		Obróć się w stronę najbliższego awatara w promieniu 20m
 	</string>
 	<string name="Command_Group_Titles_Tooltip">
 		Zmień aktywny tag grupy

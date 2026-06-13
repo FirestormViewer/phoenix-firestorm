@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="Konfiguracja joysticka">
-	<string name="JoystickDisabled">
+	<floater.string name="JoystickDisabled">
 		Brak
-	</string>
+	</floater.string>
 	<spinner label="Oś X" name="JoystickAxis1"/>
 	<spinner label="Oś Y" name="JoystickAxis2"/>
 	<spinner label="Oś Z" name="JoystickAxis0"/>

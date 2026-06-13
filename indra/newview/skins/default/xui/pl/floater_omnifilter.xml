@@ -50,8 +50,8 @@
 				<column name="longtext" label="Dopasuj wyraż. regularne" />
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="Region:" tool_tip="Nazwa regionu źródła. Dostępne tylko dla ofert przedmiotów." />
-		<line_editor name="region_name" tool_tip="Nazwa regionu źródłowego. Dostępne tylko dla ofert ekwipunku."/>
+		<text name="region_name_label" value="Region:" />
+		<line_editor name="region_name" tool_tip="Nazwa regionu źródłowego. Dostępne tylko dla ofert przedmiotów."/>
 		<text name="owner_label" value="UUID właściciela:" />
 		<line_editor name="owner_uuid" tool_tip="Dla zaproszeń do grupy: UUID grupy. Dla czatu obiektów, wypowiedzi właściciela, czatu debug lub czatu bezpośredniego: UUID obiektu. Dla IM-ów obiektów: UUID właściciela obiektu. Dla wszystkich pozostałych przypadków: UUID awatara nadawcy" />
 		<text name="match_source_label" value="Dopasuj z:" />
