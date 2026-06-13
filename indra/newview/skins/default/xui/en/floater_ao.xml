@@ -74,6 +74,10 @@ Rename group...
 Move out of group
 	</floater.string>
 	<floater.string
+		name="ao_cm_find_original">
+Find Original
+	</floater.string>
+	<floater.string
 		name="ao_cm_delete">
 Delete
 	</floater.string>

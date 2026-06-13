@@ -2,15 +2,19 @@
 <floater name="group_titles" title="Titres du groupe">
 	<floater.string name="NoGroupTitle" value="&lt;Aucun titre&gt;"/>
 	<floater.string name="ClearAllRegions" value="Effacer toutes les régions"/>
+	<filter_editor label="Filtrer les titres des groupes" name="filter_input"/>
 	<scroll_list name="title_list">
+		<column name="default_marker" label="D" tool_tip="Titre par défaut utilisé dans les régions sans assignation"/>
 		<column name="grouptitle" label="Titre"/>
 		<column name="groupname" label="Groupe"/>
-		<column name="regionname" label="Région auto"/>
+		<column name="regionname" label="Région"/>
 	</scroll_list>
-	<button tool_tip="Actualiser la liste des titres de groupe disponibles" name="btnRefresh"/>
-	<button name="btnSetRegion" label="Cette région" tool_tip="Assigner votre région actuelle au titre sélectionné"/>
-	<button name="btnSetRegionManual" label="Entrer région" tool_tip="Saisir un nom de région à assigner au titre sélectionné"/>
+	<button name="btnSetRegion" label="Cette région" tool_tip="Assigner la région actuelle au titre sélectionné"/>
+	<button name="btnSetRegionManual" label="Nom de région" tool_tip="Saisir un nom de région à assigner au titre sélectionné"/>
 	<button name="btnClearRegion" label="Effacer région" tool_tip="Supprimer l'assignation de région du titre sélectionné"/>
 	<button name="btnInfo" label="Infos" tool_tip="Afficher les informations sur le groupe du titre sélectionné"/>
 	<button name="btnActivate" label="Activer" tool_tip="Activer le titre du groupe sélectionné"/>
+	<button tool_tip="Actualiser la liste des titres de groupe disponibles" name="btnRefresh"/>
+	<check_box name="use_default_title" label="Utiliser le titre par défaut dans les régions sans assignation" tool_tip="Lorsque vous entrez dans une région sans titre assigné, le système bascule vers le titre défini par défaut. Si le titre par défaut est « &lt;Pas de titre de groupe&gt; », aucune étiquette n'est affichée."/>
+	<button name="btnSetDefault" label="Par défaut" tool_tip="Définir le titre sélectionné comme titre par défaut pour les régions n'ayant pas de titre assigné"/>
 </floater>

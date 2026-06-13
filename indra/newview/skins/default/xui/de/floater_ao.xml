@@ -39,6 +39,9 @@
 	<floater.string name="ao_cm_move_out">
 		Aus Gruppe bewegen
 	</floater.string>
+	<floater.string name="ao_cm_find_original">
+		Original suchen
+	</floater.string>
 	<floater.string name="ao_cm_delete">
 		Löschen
 	</floater.string>

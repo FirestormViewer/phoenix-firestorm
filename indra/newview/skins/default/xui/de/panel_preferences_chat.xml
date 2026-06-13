@@ -285,6 +285,9 @@
 
 		<!-- Chat: CmdLine -->
 		<panel label="CmdLine" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt" width="150">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Dokumentation]
+			</text>
 			<check_box label="Chat-Eingabezeile zur Kommandoeingabe verwenden" name="chat_cmd_toggle"/>
 			<text name="FSCmdLineCalc_txt">
 				Berechnen (Befehl: cmd SIN(2+2))
@@ -297,6 +300,9 @@
 			</text>
 			<text name="FSCmdLineCopyCam_txt">
 				Kamerapos. in Zwischenablage kopieren
+			</text>
+			<text  name="FSCmdLinePasteCam_txt">
+				Kameraparam. setzen (cmd pos|focus|roll)
 			</text>
 			<text name="FSCmdLineAO_txt">
 				AO ein-/ausschalten (Befehl: cmd on/off)
@@ -350,6 +356,7 @@
 				Teleport zu Region (cmd regionname | x y z)
 			</text>
 			<check_box label="Selbe Position auf neuer Region" name="toggle"/>
+			<check_box label="Befehlsausgabe an Kanal senden:" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 
 	</tab_container>

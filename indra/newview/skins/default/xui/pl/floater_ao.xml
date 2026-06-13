@@ -13,6 +13,7 @@
 	<floater.string name="ao_cm_collapse">Zwiń</floater.string>
 	<floater.string name="ao_cm_rename_group">Zmień nazwę grupy...</floater.string>
 	<floater.string name="ao_cm_move_out">Przenieś poza grupę</floater.string>
+	<floater.string name="ao_cm_find_original">Znajdź oryginał</floater.string>
 	<floater.string name="ao_cm_delete">Usuń</floater.string>
 	<floater.string name="ao_dnd_merge">Upuść, aby zgrupować z tą animacją</floater.string>
 	<floater.string name="ao_dnd_add_to_group">Upuść, aby dodać do tej grupy</floater.string>

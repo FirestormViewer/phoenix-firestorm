@@ -42,6 +42,7 @@
 #include "lltoggleablemenu.h"
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
+#include "llinventoryfunctions.h"
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
 #include "utilitybar.h"
@@ -1426,6 +1427,46 @@ bool FloaterAO::renameGroupCallback(const LLSD& notification, const LLSD& respon
     return true;
 }
 
+LLUUID FloaterAO::getRowInventoryUUID(const RowInfo& info) const
+{
+    if (!mSelectedState)
+    {
+        return LLUUID::null;
+    }
+
+    if (info.mKind == "single")
+    {
+        if (info.mIndex >= 0 && info.mIndex < (S32)mSelectedState->mSteps.size())
+        {
+            return mSelectedState->mSteps[info.mIndex].mInventoryUUID;
+        }
+    }
+    else if (info.mKind == "member")
+    {
+        if (info.mIndex >= 0 && info.mIndex < (S32)mSelectedState->mSteps.size())
+        {
+            const AOSet::AOAnimationStep& step = mSelectedState->mSteps[info.mIndex];
+            if (info.mMember >= 0 && info.mMember < (S32)step.mMembers.size())
+            {
+                return step.mMembers[info.mMember].mInventoryUUID;
+            }
+        }
+    }
+    else if (info.mKind == "trackmember")
+    {
+        if (info.mIndex >= 0 && info.mIndex < (S32)mSelectedState->mTracks.size())
+        {
+            const AOSet::AOTrack& track = mSelectedState->mTracks[info.mIndex];
+            if (info.mMember >= 0 && info.mMember < (S32)track.mAnimations.size())
+            {
+                return track.mAnimations[info.mMember].mInventoryUUID;
+            }
+        }
+    }
+
+    return LLUUID::null;
+}
+
 void FloaterAO::onAnimationListRightClick(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 {
     if (!mCanDragAndDrop)
@@ -1455,11 +1496,12 @@ void FloaterAO::showContextMenu(LLScrollListCtrl* list, S32 x, S32 y)
     menu_params.visible(false);
     LLContextMenu* menu = LLUICtrlFactory::create<LLContextMenu>(menu_params);
 
-    auto addItem = [&](const std::string& name, const std::string& label, const std::function<void()>& action)
+    auto addItem = [&](const std::string& name, const std::string& label, const std::function<void()>& action, bool enabled = true)
     {
         LLMenuItemCallGL::Params item_params;
         item_params.name(name);
         item_params.label(label);
+        item_params.enabled.set(enabled);
         item_params.on_click.function([action](LLUICtrl*, const LLSD&) { action(); });
         menu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
     };
@@ -1475,6 +1517,15 @@ void FloaterAO::showContextMenu(LLScrollListCtrl* list, S32 x, S32 y)
         addItem("ao_cm_move_out", getString("ao_cm_move_out"), [this, info]() { onExtractMember(info); });
     }
 
+    const LLUUID inventory_id = getRowInventoryUUID(info);
+    if (inventory_id.notNull())
+    {
+        const LLInventoryObject* obj = gInventory.getObject(inventory_id);
+        const bool find_enabled = obj && obj->getIsLinkType() && gInventory.getItem(gInventory.getLinkedItemID(inventory_id));
+        addItem("ao_cm_find_original", getString("ao_cm_find_original"), [inventory_id]() { show_item_original(inventory_id); }, find_enabled);
+    }
+
+    menu->addSeparator();
     addItem("ao_cm_delete", getString("ao_cm_delete"), [this, info]() { onDeleteRow(info); });
 
     mContextMenuHandle = menu->getHandle();

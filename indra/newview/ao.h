@@ -79,6 +79,7 @@ class FloaterAO
 
         LLScrollListItem* addRow(LLScrollListCtrl* list, const std::string& icon, const std::string& name, const RowInfo& info, const std::string& tooltip, bool indented, bool bold);
         bool getRowInfo(LLScrollListItem* item, RowInfo& info) const;
+        LLUUID getRowInventoryUUID(const RowInfo& info) const;
         static LLSD encodeRowValue(const RowInfo& info);
 
         void rebuildAnimationList();
