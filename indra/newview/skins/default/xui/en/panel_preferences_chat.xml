@@ -2139,7 +2139,7 @@
 	<text
 	  top="30"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  left="10"
 	  name="FSCmdLineCalc_txt"
 	  width="235">
@@ -2159,7 +2159,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineDrawDistance_txt"
 	  width="235">
 	  Change Draw Dist (usage: cmd meters)
@@ -2178,7 +2178,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineBandWidth_txt"
 	  width="235">
 	  Max. Bandwidth (usage: cmd kbps)
@@ -2197,7 +2197,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineCopyCam_txt"
 	  width="235">
 	  Copy camera position to clipboard
@@ -2216,7 +2216,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLinePasteCam_txt"
 	  width="235">
 	  Set cam params (cmd pos|focus|roll)
@@ -2235,7 +2235,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineAO_txt"
 	  width="235">
 	  Turn AO on/off (usage: cmd on/off)
@@ -2254,7 +2254,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineClearChat_txt"
 	  width="235">
 	  Clear the chat transcript (usage: cmd)
@@ -2273,7 +2273,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineMedia_txt"
 	  width="235">
 	  Set the media url (usage: cmd url type)
@@ -2292,7 +2292,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineMusic_txt"
 	  width="235">
 	  Set the music stream url (usage: cmd url)
@@ -2311,7 +2311,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineRezPlatform_txt"
 	  width="235">
 	  Rez a platform (usage: cmd 0 - 64)
@@ -2359,7 +2359,7 @@
 	  top="30"
 	  left_delta="5"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineKeyToName_txt"
 	  width="280">
 	  Get avatar name from key (usage: cmd key)
@@ -2378,7 +2378,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineRollDice_txt"
 	  width="280">
 	  Roll dice (usage: cmd dice faces mt mv)
@@ -2397,7 +2397,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLinePos_txt"
 	  width="280">
 	  Teleport within region (usage: cmd x y z)
@@ -2416,7 +2416,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineGround_txt"
 	  width="280">
 	  Teleport to ground (usage: cmd)
@@ -2435,7 +2435,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineHeight_txt"
 	  width="280">
 	  Teleport to altitude (usage: cmd z)
@@ -2454,7 +2454,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdTeleportToCam_txt"
 	  width="280">
 	  Teleport to cam position (usage: cmd)
@@ -2473,7 +2473,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineOfferTp_txt"
 	  width="280">
 	  Offer teleport to avatar (usage: cmd key)
@@ -2492,7 +2492,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineTP2_txt"
 	  width="280">
 	  Teleport to avatar (usage: cmd name)
@@ -2511,7 +2511,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineTeleportHome_txt"
 	  width="280">
 	  Teleport home (usage: cmd)
@@ -2530,7 +2530,7 @@
 	<text
 	  top_pad="3"
 	  follows="left|top"
-	  height="14"
+	  height="16"
 	  name="FSCmdLineMapTo_txt"
 	  width="280">
 	  Teleport to region (usage: cmd region | x y z)

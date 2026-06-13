@@ -302,7 +302,7 @@
 				Kamerapos. in Zwischenablage kopieren
 			</text>
 			<text  name="FSCmdLinePasteCam_txt">
-				Kameraparam. setzen (cmd pos|focus|roll)
+				Kam.-param. setzen (cmd pos|focus|roll)
 			</text>
 			<text name="FSCmdLineAO_txt">
 				AO ein-/ausschalten (Befehl: cmd on/off)
