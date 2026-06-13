@@ -316,6 +316,9 @@
 				Rzuć kostką (użycie: cmd kostki ścianki tm wm)
 			</text>
 			<line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
+			<text name="FSCmdLineTrackPos_txt">
+				Śledź pozycję lub awatara (cmd pos lub imię)
+			</text>
 			<text name="FSCmdLinePos_txt">
 				Teleport wewn. regionu (użycie: cmd x y z)
 			</text>
@@ -337,9 +340,6 @@
 			<line_editor tool_tip="Składnia tej komendy pozwala na imiona podawane w części i nie zwraca uwagi na wielkość liter. Lepsze wyniki będą osiągane z otwartym radarem." name="FSCmdLineTP2" />
 			<text name="FSCmdLineTeleportHome_txt">
 				Teleport do Miejsca Startu (użycie: cmd)
-			</text>
-			<text name="FSCmdLineTrackPos_txt">
-				Śledź pozycję lub awatara (cmd pos lub imię)
 			</text>
 			<text name="FSCmdLineMapTo_txt">
 				Teleport do regionu (użycie: cmd nazwa | x y z)
