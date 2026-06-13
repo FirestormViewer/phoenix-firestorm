@@ -342,6 +342,7 @@
 				Teleport do regionu (użycie: cmd nazwa | x y z)
 			</text>
 			<check_box label="Ta sama pozycja między regionami" name="toggle" />
+			<check_box label="Wyślij wynik poleceń na kanał:" name="FSCmdLineAnnounceToChannel" />
 		</panel>
 	</tab_container>
 </panel>

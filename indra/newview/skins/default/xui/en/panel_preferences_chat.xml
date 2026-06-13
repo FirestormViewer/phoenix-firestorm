@@ -2554,6 +2554,29 @@
 	  name="toggle"
 	  width="270"
 	  control_name="FSCmdLineMapToKeepPos"/>
+	<check_box
+	  bottom="-30"
+	  enabled_control="FSCmdLine"
+	  follows="left|bottom"
+	  height="16"
+	  label="Send commands output to channel:"
+	  left="5"
+	  name="FSCmdLineAnnounceToChannel"
+	  control_name="FSCmdLineAnnounceToChannel"
+	  width="280"/>
+	<spinner
+	  top_pad="2"
+	  control_name="FSCmdLineAnnounceChannel"
+	  decimal_digits="0"
+	  enabled_control="FSCmdLineAnnounceToChannel"
+	  follows="left|bottom"
+	  height="15"
+	  increment="1"
+	  initial_value="362395"
+	  max_val="2147483647"
+	  min_val="1"
+	  name="FSCmdLineAnnounceChannel"
+	  width="90"/>
   </panel>
 
 </tab_container>
