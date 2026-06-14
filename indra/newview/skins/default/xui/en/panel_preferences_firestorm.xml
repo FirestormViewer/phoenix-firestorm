@@ -262,13 +262,23 @@
         <check_box
          top_pad="4"
          left="10"
-         label="Disable square-bracket links in chat (URL stays visible)"
+         label="Disable square-bracket links in IMs, group chat and notices (URL stays visible)"
          control_name="FSDisableLabeledChatLinks"
          follows="left|top"
          height="16"
          name="FSDisableLabeledChatLinks"
          width="520"
-         tool_tip="When enabled, square-bracket links sent in chat, IM, group notices and object text from other residents are not collapsed into a single labeled link. The actual URL is shown and linked instead. Helps reduce phishing where the visible label hides a different destination. Built-in viewer text (notifications, preferences, etc.) is not affected."/>
+         tool_tip="When enabled, square-bracket links received in IMs, group chat, ad-hoc conferences and group notices from other residents are not collapsed into a single labeled link. The actual URL is shown and linked instead. Helps reduce phishing where the visible label hides a different destination. Nearby (local) chat is controlled by the separate option below. Built-in viewer text (notifications, preferences, etc.) is not affected."/>
+        <check_box
+         top_pad="4"
+         left="10"
+         label="Disable square-bracket links in nearby chat and object text (URL stays visible)"
+         control_name="FSDisableLabeledChatLinksNearbyChat"
+         follows="left|top"
+         height="16"
+         name="FSDisableLabeledChatLinksNearbyChat"
+         width="520"
+         tool_tip="When enabled, square-bracket links received in nearby (local) chat and object text are not collapsed into a single labeled link. The actual URL is shown and linked instead. Disabled by default."/>
 
         <check_box
          left="10"

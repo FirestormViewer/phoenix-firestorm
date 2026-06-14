@@ -2638,7 +2638,10 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
         LLUrlMatch match;
         std::string text = new_text;
         while (LLUrlRegistry::instance().findUrl(text, match,
-                boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3), isContentTrusted() || mAlwaysShowIcons, force_slurl))
+                // <FS:PP> Pass nearby-chat flag for labeled-link masking
+                // boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3), isContentTrusted() || mAlwaysShowIcons, force_slurl))
+                boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3), isContentTrusted() || mAlwaysShowIcons, force_slurl, mNearbyChatContent))
+                // </FS:PP>
         {
             start = match.getStart();
             end = match.getEnd()+1;

@@ -40,7 +40,7 @@
     </panel>
     <panel label="Qoruma" name="ProtectionTab">
         <check_box label="Sol maus düyməsi ilə basdıqda obyektə oturmaq bloku" name="FSBlockClickSit" />
-        <check_box label="Çatda kvadrat mötərizəli linkləri deaktiv edin (URL görünməyə davam edir)" name="FSDisableLabeledChatLinks" tool_tip="Aktivləşdirildikdə, digər sakinlərdən gələn çat, IM, qrup bildirişləri və obyekt mətnlərindəki kvadrat mötərizəli linklər tək bir etiketə daraldılmır. Bunun əvəzinə əsl URL göstərilir və əlaqələndirilir. Görünən mətnin fərqli təyinat yerini gizlətdiyi fişinq cəhdlərini azaltmağa kömək edir. Viewer-in daxili mətnləri (bildirişlər, parametrlər və s.) təsirlənmir."/>
+        <check_box label="IM, qrup çatı və bildirişlərdə kvadrat mötərizəli linkləri deaktiv edin (URL görünməyə davam edir)" name="FSDisableLabeledChatLinks" tool_tip="Aktivləşdirildikdə, digər sakinlərdən gələn IM, qrup çatı, ad-hoc konfranslar və qrup bildirişlərindəki kvadrat mötərizəli linklər tək bir etiketə daraldılmır. Bunun əvəzinə əsl URL göstərilir və əlaqələndirilir. Görünən mətnin fərqli təyinat yerini gizlətdiyi fişinq cəhdlərini azaltmağa kömək edir. Yaxınlıqdakı (lokal) çat aşağıdakı ayrıca seçimlə idarə olunur. Viewer-in daxili mətnləri (bildirişlər, parametrlər və s.) təsirlənmir."/>
         <check_box label="Skriptlərin (llMapDestination) istifadəsinə icazə verin" name="ScriptsCanShowUI" />
         <text name="revokepermissions_txt">
          Animasiya icazələrini ləğv edin:

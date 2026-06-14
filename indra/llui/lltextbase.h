@@ -478,6 +478,10 @@ public:
     bool                    isContentTrusted() const { return mTrustedContent; }
     void                    setContentTrusted(bool trusted_content) { mTrustedContent = trusted_content; }
 
+    // <FS:PP> Selects the nearby-chat labeled-link setting (FSDisableLabeledChatLinksNearbyChat) for this editor's content
+    void                    setNearbyChatContent(bool nearby_chat_content) { mNearbyChatContent = nearby_chat_content; }
+    // </FS:PP>
+
     // TODO: move into LLTextSegment?
     void                    createUrlContextMenu(S32 x, S32 y, const std::string &url); // create a popup context menu for the given Url
 
@@ -826,6 +830,7 @@ protected:
     bool                        mClip;              // clip text to widget rect
     bool                        mClipPartial;       // false if we show lines that are partially inside bounding rect
     bool                        mTrustedContent;    // if false, does not allow to execute SURL links from this editor
+    bool                        mNearbyChatContent { false }; // <FS:PP> if true, labeled-link masking uses the nearby chat setting
     bool                        mPlainText;         // didn't use Image or Icon segments
     bool                        mAutoIndent;
     S32                         mMaxTextByteLength; // Maximum length mText is allowed to be in bytes

@@ -225,7 +225,10 @@ static bool stringHasJira(const std::string &text)
             text.find("WEB") != std::string::npos);
 }
 
-bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+// <FS:PP> Option to disable bracket links needs is_nearby_chat here
+// bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions, bool is_nearby_chat)
+// </FS:PP>
 {
     // avoid costly regexes if there is clearly no URL in the text
     if (! (stringHasUrl(text) || stringHasJira(text)))
@@ -253,7 +256,8 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 
         // <FS:PP> Option to disable square-bracket links (intentionally ignores secondlife:// and hop://)
         static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
-        if (!is_content_trusted && (mUrlEntryHTTPLabel == *it) && sDisableLabeledLinks)
+        static LLUICachedControl<bool> sDisableLabeledLinksNearby("FSDisableLabeledChatLinksNearbyChat", false);
+        if (!is_content_trusted && (mUrlEntryHTTPLabel == *it) && (is_nearby_chat ? sDisableLabeledLinksNearby : sDisableLabeledLinks))
         {
             continue;
         }

@@ -19658,7 +19658,18 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSDisableLabeledChatLinks</key>
 		<map>
 			<key>Comment</key>
-			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs; mitigates misleading link text.</string>
+			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs in IMs, group chat, ad-hoc conferences and group notices; mitigates misleading link text.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>FSDisableLabeledChatLinksNearbyChat</key>
+		<map>
+			<key>Comment</key>
+			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs in nearby (local) chat and object text; mitigates misleading link text.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
