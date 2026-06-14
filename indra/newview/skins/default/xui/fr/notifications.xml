@@ -4283,6 +4283,23 @@ Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RenameAOGroup">
+		Indiquez un nouveau nom pour ce groupe d'animations :
+(Le nom peut contenir n'importe quel caractère ASCII, à l'exception de ":" ou "|")
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		Impossible de renommer en "[AO_SET_NAME]".
+Le nom ne peut contenir que des caractères ASCII, à l'exception de ":" et "|".
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		Le dossier "[NOM]" ne contient aucune animation à ajouter.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="NewAONameCantExist">
 		Un ensemble d'animations portant ce nom existe déjà.
 	</notification>

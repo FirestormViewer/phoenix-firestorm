@@ -12,8 +12,8 @@
 			</fs_scroll_list>
 			<button name="add_needle" label="Ajouter"/>
 			<button name="remove_needle" label="Supprimer"/>
-			<button name="up_needle" label="Haut"/>
-			<button name="down_needle" label="Bas"/>
+			<button name="up_needle" label="Haut" tool_tip="La règle sélectionnée est déplacée d'une position vers le haut."/>
+			<button name="down_needle" label="Bas" tool_tip="La règle sélectionnée est déplacée d'une position vers le bas."/>
 		</layout_panel>
 		<layout_panel name="filter_log_layout">
 			<fs_scroll_list name="filter_log">

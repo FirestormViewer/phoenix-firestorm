@@ -30,7 +30,8 @@
 		</panel>
 		<panel label="Protection" name="ProtectionTab">
 			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>
-			<check_box label="Aperçu de l'URL réelle des liens dans IM et chat de groupe (au survol)" name="FSDisableLabeledChatLinks" tool_tip="Une fois activé, les liens entre crochets dans les IM, le chat de groupe, les conférences ad-hoc et les notices de groupe conservent leur texte, mais le survol affiche instantanément l'URL de destination réelle dans une grande bulle. Aide à repérer le phishing où l'étiquette masque une autre destination. Le chat à proximité utilise l'option ci-dessous. Le texte intégré au viewer n'est pas affecté."/>
+			<check_box label="Aperçu de l'URL réelle des liens dans IM et chat de groupe (au survol)" name="FSDisableLabeledChatLinks" tool_tip="Une fois activé, les liens entre crochets dans les IM, le chat de groupe, les conférences ad-hoc et les notices de groupe conservent leur texte, mais le survol affiche instantanément l'URL de destination réelle dans une grande bulle. Aide à repérer le phishing où l'étiquette masque une autre destination. Le chat à proximité utilise l'option ci-dessous. Le texte intégré au client n'est pas affecté."/>
+			<check_box label="Aperçu de l'URL réelle des liens entre parenthèses dans le chat de proximité et le chat d'objet (au survol)" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="Lorsque cette option est activée, les liens entre crochets (étiquetés) dans le chat local et le texte des objets conservent leur libellé, mais un survol de la souris affiche instantanément l'URL de destination réelle dans une grande info-bulle. Désactivée par défaut."/>
 			<check_box label="Permettre aux scripts d'afficher la carte (llMapDestination)" name="ScriptsCanShowUI"/>
 			<text name="revokepermissions_txt">Révoquer les permissions :</text>
 			<radio_group name="FSRevokePerms">

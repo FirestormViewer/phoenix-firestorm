@@ -224,6 +224,7 @@
 			<text name="FSCmdLineDrawDistance_txt">Changer Dist Affichage (ex: cmd meters)</text>
 			<text name="FSCmdLineBandWidth_txt">Bande passante max. (ex: cmd kbps)</text>
 			<text name="FSCmdLineCopyCam_txt">Copier la position de la caméra</text>
+			<text name="FSCmdLinePasteCam_txt">Définir paramètres caméra (cmd pos|focus|roll)</text>
 			<text name="FSCmdLineAO_txt">Activer/désactiver l'AO (ex: cmd on/off)</text>
 			<text name="FSCmdLineClearChat_txt">Effacer les transcriptions (ex: cmd)</text>
 			<line_editor tool_tip="Effacer les transcriptions de conversation pour limiter les effets de spams." name="FSCmdLineClearChat"/>
@@ -235,6 +236,10 @@
 			<slider name="FSCmdLinePlatformSize" label="Largeur" tool_tip="De quelle taille voulez-vous que la plateforme soit ?"/>
 			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un av. via son UUID (ex: cmd key)</text>
 			<text name="FSCmdLineRollDice_txt">Lancer de dés (ex: cmd dice faces mt mv)</text>
+			<text name="FSCmdLineTrackPos_txt">
+				Suivre la position ou l'avatar (cmd pos ou nom)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Place une balise sur la carte du monde à une position (format cpcampos) ou à partir d'un nom d'avatar partiel"/>
 			<line_editor tool_tip="Lancer de dés - cmd [nombre de dés] [nombre de faces] [type de modificateur (optionnel)] [valeur du modificateur (optionnel)]. Exemple: cmd 1 20, cmd 2 40 + 5. L'absence de paramètres correspond à cmd 1 6 (dé standard)." name="FSCmdLineRollDice"/>
 			<text name="FSCmdLinePos_txt">Se téléporter dans la sim (ex: cmd x y z)</text>
 			<text name="FSCmdLineGround_txt">Se téléporter au sol (ex: cmd)</text>
