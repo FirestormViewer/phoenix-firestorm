@@ -33,7 +33,7 @@
 		<layout_panel
 		 name="needle_list_layout"
 		 layout="topleft"
-		 height="150"
+		 height="175"
 		 min_height="94"
 		 user_resize="true">
 			<check_box
@@ -104,6 +104,27 @@
 			 left_pad="0"
 			 width="96"
 			 label="Remove"/>
+<!-- <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter -->
+			<button
+			 name="up_needle"
+			 layout="topleft"
+			 follows="left|bottom"
+			 height="20"
+			left="0"
+			 top_pad="4"
+			 width="96"
+			tooltip="Selected needle is moved Up 1 position."
+			 label="Up"/>
+			<button
+			 name="down_needle"
+			 layout="topleft"
+			 follows="right|bottom"
+			 height="20"
+			 left_pad="0"
+			 width="96"
+			tooltip="Selected needle is moved Down 1 position."
+			 label="Down"/>
+<!-- </FS:minerjr> [FIRE-36649] -->
 		</layout_panel>
 		<layout_panel
 		 name="filter_log_layout"
