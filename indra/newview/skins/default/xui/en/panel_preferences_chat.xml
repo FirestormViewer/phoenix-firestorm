@@ -213,7 +213,7 @@
              label="Nearby Chat"
              layout="topleft"
              left_pad="4"
-             top_delta="0"
+             top_delta="3"
              name="show_timestamps_nearby_chat"
              width="100" />
             <check_box
@@ -328,7 +328,7 @@
              left="20"
              height="12"
              name="font_size"
-             width="130">
+             width="150">
                 Chat window font size:
             </text>
             <radio_group
@@ -436,7 +436,7 @@
             <check_box
              layout="topleft"
              left_pad="5"
-             top_delta="0"
+             top_delta="3"
              height="16"
              width="100"
              name="FSNotifyUnreadChatMessages"
@@ -1436,7 +1436,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarChatEnter"
 		 name="PlayModeUISndRadarChatEnter"
@@ -1494,7 +1494,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarChatLeave"
 		 name="PlayModeUISndRadarChatLeave"
@@ -1552,7 +1552,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarDrawEnter"
 		 name="PlayModeUISndRadarDrawEnter"
@@ -1610,7 +1610,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarDrawLeave"
 		 name="PlayModeUISndRadarDrawLeave"
@@ -1668,7 +1668,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarSimEnter"
 		 name="PlayModeUISndRadarSimEnter"
@@ -1726,7 +1726,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarSimLeave"
 		 name="PlayModeUISndRadarSimLeave"
@@ -1858,7 +1858,7 @@
 		 layout="topleft"
 		 top_pad="-2"
 		 left="25"
-		 width="115"
+		 width="125"
 		 height="20"
 		 control_name="PlayModeUISndRadarAgeAlert"
 		 name="PlayModeUISndRadarAgeAlert"

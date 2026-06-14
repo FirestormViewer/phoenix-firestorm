@@ -299,7 +299,7 @@
          Revoke Permissions:
          </text>
         <radio_group
-         top_pad="5"
+         top_pad="7"
          left="20"
          height="62"
          layout="topleft"
@@ -1341,7 +1341,7 @@
          label="Limit select distance (meters):"
          name="LimitSelectDistance"
          control_name="LimitSelectDistance"
-         width="190"/>
+         width="200"/>
         <spinner
          enabled_control="LimitSelectDistance"
          control_name="MaxSelectDistance"
@@ -1385,7 +1385,7 @@
          height="16"
          left="10"
          name="RotationStepText1"
-         width="190">
+         width="200">
           Constrain rotations to multiples of
         </text>
         <spinner
@@ -1418,7 +1418,7 @@
          label="Show unlink confirmation dialog if linkset has minimum"
          name="FSUnlinkConfirmEnabled"
          control_name="FSUnlinkConfirmEnabled"
-         width="325"/>
+         width="340"/>
         <spinner
          enabled_control="FSUnlinkConfirmEnabled"
          control_name="MinObjectsForUnlinkConfirm"

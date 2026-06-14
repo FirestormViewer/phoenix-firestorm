@@ -537,7 +537,7 @@
          initial_value="1"
          layout="topleft"
          left_pad="5"
-         top_delta="-1"
+         top_delta="1"
          name="ShowGroupNoticesTopRight"
          tool_tip="Choose where group notifications and chiclet icons will appear on the screen."
          width="200">
@@ -566,7 +566,7 @@
          left_pad="2"
          name="GroupTopRightRequiresRestart"
          text_color="White_50"
-         top_pad="-14"
+         top_pad="-16"
          type="string"
          width="128">
            (requires restart)
@@ -1102,7 +1102,7 @@
 			Visible name columns:
 		</text>
 		<check_box
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 follows="left|top"
 		 height="16"
@@ -1145,11 +1145,11 @@
 		 left="20"
 		 follows="left|top"
 		 name="textFriendListSortOrder"
-		 width="60">
+		 width="70">
 		 Sort list by:
 		</text>
 		<radio_group
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 height="16"
 		 layout="topleft"
@@ -1182,7 +1182,7 @@
 		 Show full name as:
 		</text>
 		<radio_group
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 height="16"
 		 layout="topleft"

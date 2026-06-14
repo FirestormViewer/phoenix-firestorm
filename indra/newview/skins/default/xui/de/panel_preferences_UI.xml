@@ -159,7 +159,7 @@
 		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport-Liste" tool_tip="Falls aktiviert, wird bei Verwendung des Shortcuts für die Teleport-Liste diese in einem eigenen Fenster geöffnet."/>
 		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste ignorierter Einwohner" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet." width="175"/>
 		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarken, Ortsdetails und Teleport-Listen-Details" tool_tip="Falls aktiviert, werden Landmarken, Ortsdetails und Details zu Einträgen in der Teleport-Liste in eigenen Fenstern geöffnet."/>
-		<text name="ExtendedTeleportHistoryLabel" width="155">
+		<text name="ExtendedTeleportHistoryLabel" width="170">
 			Teleport-Liste erweitern um:
 		</text>
 		<check_box name="FSTeleportHistoryShowPosition" label="Position" tool_tip="Falls aktiviert, wird die Teleport-Liste um die Position innerhalb der teleportierten Region erweitert."/>
