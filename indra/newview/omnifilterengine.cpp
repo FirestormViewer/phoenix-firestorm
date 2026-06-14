@@ -134,8 +134,13 @@ bool OmnifilterEngine::matchStrings(std::string_view needle_string, std::string_
 
 const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack)
 {
-    for (const auto& [needle_name, needle]: mNeedles)
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
+    for (const auto& needle_name : mOrderedNeedles)
+    //for (const auto& [needle_name, needle]: mNeedles)
     {
+        const auto& needle = mNeedles[needle_name];
+    // </FS:minerjr> [FIRE-36649]
         if (!needle.mEnabled)
         {
             continue;
@@ -193,6 +198,10 @@ OmnifilterEngine::Needle& OmnifilterEngine::newNeedle(const std::string& needle_
         mNeedles[needle_name] = new_needle;
     }
     setDirty(true);
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Add to the ordered needle vector the name of the new needle
+    mOrderedNeedles.push_back(needle_name);
+    // <F/S:minerjr> [FIRE-36649]
     return mNeedles[needle_name];
 }
 
@@ -202,12 +211,26 @@ void OmnifilterEngine::renameNeedle(const std::string& old_name, const std::stri
     auto node_handler = mNeedles.extract(old_name);
     node_handler.key() = new_name;
     mNeedles.insert(std::move(node_handler));
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Find the index of the given old name
+    S32 found_index = getOrderedNeedleIndex(old_name);
+    // If the name was found (-1 when not found), set the ordered needle vector at the found index to the new value
+    if (found_index >= 0)
+        mOrderedNeedles[found_index] = new_name;
+    // </FS:minerjr> [FIRE-36649]
 
     setDirty(true);
 }
 
 void OmnifilterEngine::deleteNeedle(const std::string& needle_name)
 {
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Find the index of the given needle name
+    S32 found_index = getOrderedNeedleIndex(needle_name);
+    // If the name was found (-1 when not found), erase the need based upon the offset
+    if (found_index >= 0)
+        mOrderedNeedles.erase(mOrderedNeedles.begin() + found_index);
+    // </FS:minerjr> [FIRE-36649]
     mNeedles.erase(needle_name);
     setDirty(true);
 }
@@ -216,6 +239,77 @@ OmnifilterEngine::needle_list_t& OmnifilterEngine::getNeedleList()
 {
     return mNeedles;
 }
+
+// <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+// Get the name from the vector of ordered needles at the specified index
+std::string_view OmnifilterEngine::getOrderedNeedleName(const S32 index) const
+{
+    // If the index is within the range of the vector, return the stored value
+    if (index >= 0 && index < mOrderedNeedles.size() && mOrderedNeedles.size() > 0)
+    {
+        return mOrderedNeedles[index];
+    }
+
+    // Return an empty string if not found.
+    return "";
+}
+
+// Get a needle at a specified index, returns nullptr if none is found ("")
+const OmnifilterEngine::Needle* OmnifilterEngine::getOrderedNeedle(const S32 index)
+{
+    std::string_view found_needle = getOrderedNeedleName(index);
+    if (found_needle.empty())
+    {
+        return nullptr;
+    }
+
+    return &mNeedles[std::string(found_needle)];
+}
+
+// Re-assigns a name to a specified needle location in the Ordered list
+bool OmnifilterEngine::setOrderedNeedleName(const S32 needle_index, std::string_view new_name)
+{
+    // If the index is invalid, return false
+    if (needle_index < 0 || needle_index > mOrderedNeedles.size())
+    {
+        return false;
+    }
+
+    // Otherwise assign the new name to the ordered needle at the specified index.
+    mOrderedNeedles[needle_index] = new_name;
+
+    return true;
+}
+
+S32 OmnifilterEngine::getOrderedNeedleIndex(std::string_view lookup_name)
+{
+    for (S32 index = 0; index < mOrderedNeedles.size(); index++)
+    {
+        if (mOrderedNeedles[index] == lookup_name)
+        {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+// Swaps 2 ordered needles
+bool OmnifilterEngine::swapNeedles(S32 index1, S32 index2)
+{
+    // Validation check to make sure the indexs are valid and if not to return false
+    if (index1 < 0 || index1 > mOrderedNeedles.size() || index2 < 0 || index2 > mOrderedNeedles.size() || index1 == index2)
+    {
+        return false;
+    }
+    // Perform the actual swap
+    std::swap(mOrderedNeedles[index1], mOrderedNeedles[index2]);
+    // Force a view update
+    setDirty(true);
+
+    return true;
+}
+// </FS:minerjr> [FIRE-36649]
 
 void OmnifilterEngine::setDirty(bool dirty)
 {
@@ -297,6 +391,12 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Clear the vector of filters
+    mOrderedNeedles.clear();
+    // Pre-allocate space for the list of needle names, so we can use an index into it for assignments down below
+    mOrderedNeedles.resize(needles_llsd.size());
+    // </FS:minerjr> [FIRE-36649]
     for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
     {
         Needle new_needle;
@@ -327,6 +427,13 @@ void OmnifilterEngine::loadNeedles()
         }
 
         mNeedles[new_needle_name] = new_needle;
+        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+        // Add the loaded needle name to the ordered needle list
+        // Needles are stored in order added to the map originally so use the
+        // order value stored to restore the order back to the user
+        // defined order.
+        mOrderedNeedles[needle_data["order"].asInteger()] = new_needle_name;
+        // <FS:minerjr> [/FIRE-36649]
     }
 }
 
@@ -353,8 +460,16 @@ void OmnifilterEngine::saveNeedles()
 
     LLSD needles_llsd;
 
-    for (const auto& [needle_name, needle] : mNeedles)
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
+    //for (const auto& [needle_name, needle] : mNeedles)
+    S32 order = 0;
+    for (const auto& needle_name : mOrderedNeedles)
     {
+        const auto& needle = mNeedles[needle_name];
+        // Store the order of the needle
+        needles_llsd[needle_name]["order"] = order++;
+    // </FS:minerjr> [FIRE-36649]
         needles_llsd[needle_name]["sender_name"] = needle.mSenderName;
         needles_llsd[needle_name]["content"] = needle.mContent;
         needles_llsd[needle_name]["region_name"] = needle.mRegionName;

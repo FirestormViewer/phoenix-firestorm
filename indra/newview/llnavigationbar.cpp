@@ -650,8 +650,6 @@ void LLNavigationBar::onLocationSelection()
                     std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
                     std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
 
-                    LL_INFOS("Hecklezz") << "grid: " << grid << ", current_grid: " << current_grid << ", gatekeeper: " << gatekeeper << LL_ENDL;
-
                     // Requesting region information from the server is only required when changing grid
                     if (slurl.isValid() && grid != current_grid)
                     {
