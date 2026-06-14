@@ -269,17 +269,7 @@
          name="FSDisableLabeledChatLinks"
          width="520"
          tool_tip="When enabled, square-bracket links sent in chat, IM, group notices and object text from other residents are not collapsed into a single labeled link. The actual URL is shown and linked instead. Helps reduce phishing where the visible label hides a different destination. Built-in viewer text (notifications, preferences, etc.) is not affected."/>
-        <check_box
-         top_pad="4"
-         left="20"
-         label="Also disable labeled secondlife:// and hop:// links"
-         control_name="FSDisableLabeledChatSLURLs"
-         enabled_control="FSDisableLabeledChatLinks"
-         follows="left|top"
-         height="16"
-         name="FSDisableLabeledChatSLURLs"
-         width="520"
-         tool_tip="When enabled along with the option above, square-bracket links using secondlife:// or hop:// are also shown as raw URLs instead of their custom labels. Leave disabled (recommended!) to keep SLURL menus readable while still unmasking web links."/>
+
         <check_box
          left="10"
          top_pad="4"

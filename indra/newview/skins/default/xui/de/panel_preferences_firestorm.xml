@@ -48,7 +48,6 @@
 	<panel label="Sicherheit" name="ProtectionTab">
 		<check_box label="Sitzen per Links-Klick auf Objekten blockieren" name="FSBlockClickSit"/>
 		<check_box label="Klammer-Links im Chat deaktivieren (URL bleibt sichtbar)" name="FSDisableLabeledChatLinks" tool_tip="Wenn aktiviert, werden Klammer-Links aus Chat, IM, Gruppen-Hinweisen und Objekttexten anderer Bewohner nicht zu einem einzelnen Label zusammengefasst. Stattdessen wird die tatsächliche URL angezeigt und verlinkt. Hilft gegen Phishing, bei dem der sichtbare Text ein anderes Ziel verbirgt. Eingebauter Viewer-Text (Benachrichtigungen, Einstellungen usw.) ist nicht betroffen."/>
-		<check_box label="Ebenfalls benannte secondlife:// und hop:// Links deaktivieren" name="FSDisableLabeledChatSLURLs" tool_tip="Wenn aktiviert im Zusammenspiel mit der obigen Einstellen, werden benannte Links mit secondlife:// oder hop:// Protokoll ebenfalls deaktiviert und stattdessen als URL angezeigt. Deaktiviert lassen, um SLurl-Menüs lesbar zu behalten, während Web-Links weiterhin als URL angezeigt werden."/>
 		<check_box label="Skripten erlauben, Ziele auf Karte anzuzeigen (llMapDestination)" name="ScriptsCanShowUI"/>
 		<text name="revokepermissions_txt">
 			Berechtigungen zurückziehen:

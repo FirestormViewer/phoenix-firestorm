@@ -251,22 +251,11 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
             continue;
         }
 
-        // <FS:PP> Option to disable square-bracket links
-        if (!is_content_trusted && ((mUrlEntryHTTPLabel == *it) || (mUrlEntrySLLabel == *it)))
+        // <FS:PP> Option to disable square-bracket links (intentionally ignores secondlife:// and hop://)
+        static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
+        if (!is_content_trusted && (mUrlEntryHTTPLabel == *it) && sDisableLabeledLinks)
         {
-            static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
-            if (sDisableLabeledLinks)
-            {
-                if (mUrlEntryHTTPLabel == *it)
-                {
-                    continue;
-                }
-                static LLUICachedControl<bool> sDisableLabeledSLURLs("FSDisableLabeledChatSLURLs", false);
-                if (mUrlEntrySLLabel == *it && sDisableLabeledSLURLs)
-                {
-                    continue;
-                }
-            }
+            continue;
         }
         // </FS:PP>
 
