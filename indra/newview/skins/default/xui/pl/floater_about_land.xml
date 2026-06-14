@@ -131,7 +131,7 @@
 			<text name="DwellText">
 				Wczytywanie...
 			</text>
-			<button label="Kup działkę" label_selected="Kup działkę" name="Buy Land..."/>
+			<button label="Kup działkę" name="Buy Land..."/>
 			<button label="Sprzedaż przez Lindenów" name="Linden Sale..." tool_tip="Działka musi mieć Właściciela, zawartość oraz nie może być wystawiona na Aukcję."/>
 			<button label="Skrypty" name="Scripts..."/>
 			<button label="Kup dla Grupy" name="Buy For Group..."/>
@@ -241,7 +241,7 @@
 				Właściciele:
 			</text>
 			<button name="Refresh List" tool_tip="Odśwież listę obiektów"/>
-			<button label="Zwróć obiekty" label_selected="Zwróć obiekty" name="Return objects..."/>
+			<button label="Zwróć obiekty" name="Return objects..."/>
 			<name_list name="owner list">
 				<name_list.columns label="Typ" name="type"/>
 				<name_list.columns label="Nazwa" name="name"/>

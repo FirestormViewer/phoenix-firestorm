@@ -319,6 +319,7 @@
 			<text name="FSCmdLineTrackPos_txt">
 				Śledź pozycję lub awatara (cmd pos lub imię)
 			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Ustawia znacznik na mapie świata na podstawie pozycji (format cpcampos) lub częściowej nazwy awatara" />
 			<text name="FSCmdLinePos_txt">
 				Teleport wewn. regionu (użycie: cmd x y z)
 			</text>

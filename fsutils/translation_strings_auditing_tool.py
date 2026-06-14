@@ -23,6 +23,9 @@ STRING_BODY_TAGS = frozenset({
     "global", "notification", "text", "string", "ignore", "button",
 })
 
+# Notification message text often follows a <tag> child, not elem.text.
+NOTIFICATION_INLINE_TAGS = frozenset({"tag", "ignore"})
+
 ONLY_PLACEHOLDERS_RE = re.compile(
     r"^(\[[A-Za-z0-9_,.:+\-]+\]|\$[A-Za-z_][A-Za-z0-9_]*|[ \t\r\n]+)+$",
 )
@@ -110,10 +113,11 @@ class PlaceholderIssue:
 
 
 @dataclass
-class ParseErrorRecord:
+class XmlFileIssue:
     skin: str
     locale: str
     rel: str
+    kind: str
     message: str
 
 
@@ -218,7 +222,15 @@ class SkinReport:
 @dataclass
 class AuditReport:
     skin_reports: list[SkinReport] = field(default_factory=list)
-    parse_errors: list[ParseErrorRecord] = field(default_factory=list)
+    xml_issues: list[XmlFileIssue] = field(default_factory=list)
+
+    @property
+    def parse_error_count(self) -> int:
+        return sum(1 for i in self.xml_issues if i.kind == "parse")
+
+    @property
+    def bom_count(self) -> int:
+        return sum(1 for i in self.xml_issues if i.kind == "bom")
 
 
 def normalise_text(text: str) -> str:
@@ -242,6 +254,35 @@ def tag_has_string_body(tag: str) -> bool:
 
 def direct_element_text(elem: ET.Element) -> str:
     return normalise_text(elem.text or "")
+
+
+def notification_body_text(elem: ET.Element) -> str:
+    parts: list[str] = []
+
+    def add(raw: str | None) -> None:
+        if not raw:
+            return
+        text = normalise_text(raw)
+        if text:
+            parts.append(text)
+
+    add(elem.text)
+    for child in elem:
+        child_tag = tag_name(child)
+        if child_tag in NOTIFICATION_INLINE_TAGS:
+            add(child.tail)
+        elif child_tag == "form":
+            add(child.tail)
+            break
+        else:
+            add(child.tail)
+    return " ".join(parts)
+
+
+def element_body_text(elem: ET.Element, tag: str) -> str:
+    if tag in {"notification", "global"}:
+        return notification_body_text(elem)
+    return direct_element_text(elem)
 
 
 def string_content(elem: ET.Element) -> str:
@@ -555,7 +596,7 @@ def extract_entries(root: ET.Element, rel: str) -> dict[str, Entry]:
                 key = entry_key(elem, attr)
                 entries[key] = Entry(key, value, attr)
 
-            body = direct_element_text(elem)
+            body = element_body_text(elem, tag)
             if ident and body and tag_has_string_body(tag):
                 key = entry_key(elem, "#text")
                 if key not in entries:
@@ -568,22 +609,60 @@ def extract_entries(root: ET.Element, rel: str) -> dict[str, Entry]:
     return entries
 
 
-def parse_xml(
-    path: Path,
-    parse_errors: list[ParseErrorRecord] | None = None,
-    skin: str = "",
-    locale: str = "",
-    rel: str = "",
-) -> ET.Element | None:
+def detect_bom(path: Path) -> str | None:
+    with path.open("rb") as handle:
+        head = handle.read(4)
+    if head[:3] == b"\xef\xbb\xbf":
+        return "UTF-8 byte order mark (BOM) at start of file"
+    if head[:2] == b"\xff\xfe":
+        return "UTF-16 LE byte order mark (BOM) at start of file"
+    if head[:2] == b"\xfe\xff":
+        return "UTF-16 BE byte order mark (BOM) at start of file"
+    return None
+
+
+def scan_skin_xml_issues(skin: str) -> list[XmlFileIssue]:
+    issues: list[XmlFileIssue] = []
+    xui = SKINS_ROOT / skin / "xui"
+    if not xui.is_dir():
+        return issues
+
+    for locale_dir in sorted(xui.iterdir()):
+        if not locale_dir.is_dir():
+            continue
+        locale = locale_dir.name
+        for path in locale_dir.rglob("*.xml"):
+            rel = path.relative_to(locale_dir).as_posix()
+            if rel in SKIP_FILES:
+                continue
+
+            bom_msg = detect_bom(path)
+            if bom_msg:
+                issues.append(XmlFileIssue(
+                    skin=skin, locale=locale, rel=rel, kind="bom", message=bom_msg,
+                ))
+
+            try:
+                ET.parse(path)
+            except ET.ParseError as exc:
+                issues.append(XmlFileIssue(
+                    skin=skin, locale=locale, rel=rel,
+                    kind="parse", message=str(exc),
+                ))
+            except (OSError, UnicodeDecodeError) as exc:
+                issues.append(XmlFileIssue(
+                    skin=skin, locale=locale, rel=rel,
+                    kind="parse", message=str(exc),
+                ))
+
+    return issues
+
+
+def parse_xml(path: Path) -> ET.Element | None:
     try:
         return ET.parse(path).getroot()
     except ET.ParseError as exc:
-        message = str(exc)
         print(f"Parse error in {path}: {exc}")
-        if parse_errors is not None:
-            parse_errors.append(ParseErrorRecord(
-                skin=skin, locale=locale, rel=rel or path.name, message=message,
-            ))
         return None
 
 
@@ -602,14 +681,11 @@ def compare_file(
     rel: str,
     en_path: Path,
     locale_path: Path | None,
-    parse_errors: list[ParseErrorRecord] | None = None,
     skin: str = "",
     locale: str = "",
 ) -> FileReport:
     report = FileReport(rel=rel)
-    en_root = parse_xml(
-        en_path, parse_errors, skin=skin, locale="en", rel=rel,
-    )
+    en_root = parse_xml(en_path)
     if en_root is None:
         return report
 
@@ -625,9 +701,7 @@ def compare_file(
         report.missing = list(en_entries.values())
         return report
 
-    locale_root = parse_xml(
-        locale_path, parse_errors, skin=skin, locale=locale, rel=rel,
-    )
+    locale_root = parse_xml(locale_path)
     if locale_root is None:
         report.missing = list(en_entries.values())
         return report
@@ -709,11 +783,7 @@ def discover_locales(skin: str) -> list[str]:
     )
 
 
-def audit_locale(
-    skin: str,
-    locale: str,
-    parse_errors: list[ParseErrorRecord],
-) -> LocaleReport:
+def audit_locale(skin: str, locale: str) -> LocaleReport:
     en_dir = SKINS_ROOT / skin / "xui" / "en"
     locale_dir = SKINS_ROOT / skin / "xui" / locale
 
@@ -734,15 +804,13 @@ def audit_locale(
     for rel in sorted(en_rels & locale_rels):
         file_report = compare_file(
             rel, en_files[rel], locale_files.get(rel),
-            parse_errors=parse_errors, skin=skin, locale=locale,
+            skin=skin, locale=locale,
         )
         if file_report.has_issues:
             report.file_reports.append(file_report)
 
     for rel in report.missing_files:
-        en_root = parse_xml(
-            en_files[rel], parse_errors, skin=skin, locale="en", rel=rel,
-        )
+        en_root = parse_xml(en_files[rel])
         if en_root is None:
             continue
         en_all = extract_entries(en_root, rel)
@@ -765,14 +833,11 @@ def audit_locale(
     return report
 
 
-def scan_en_duplicate_names(
-    skin: str,
-    parse_errors: list[ParseErrorRecord],
-) -> dict[str, list[DuplicateNameRecord]]:
+def scan_en_duplicate_names(skin: str) -> dict[str, list[DuplicateNameRecord]]:
     en_dir = SKINS_ROOT / skin / "xui" / "en"
     by_file: dict[str, list[DuplicateNameRecord]] = {}
     for rel, path in collect_files(en_dir).items():
-        root = parse_xml(path, parse_errors, skin=skin, locale="en", rel=rel)
+        root = parse_xml(path)
         if root is None:
             continue
         dupes = find_duplicate_names(root)
@@ -784,17 +849,12 @@ def scan_en_duplicate_names(
     return by_file
 
 
-def audit_skin(
-    skin: str,
-    parse_errors: list[ParseErrorRecord],
-) -> SkinReport:
+def audit_skin(skin: str) -> SkinReport:
     locales = discover_locales(skin)
     return SkinReport(
         skin=skin,
-        locale_reports=[
-            audit_locale(skin, loc, parse_errors) for loc in locales
-        ],
-        duplicate_names_by_file=scan_en_duplicate_names(skin, parse_errors),
+        locale_reports=[audit_locale(skin, loc) for loc in locales],
+        duplicate_names_by_file=scan_en_duplicate_names(skin),
     )
 
 
@@ -802,6 +862,13 @@ def badge(count: int, kind: str) -> str:
     if count == 0:
         return f"<span class='badge badge-ok'>{count}</span>"
     return f"<span class='badge badge-{kind}'>{count}</span>"
+
+
+def render_key_code(key: str) -> str:
+    escaped = html.escape(key)
+    if key.endswith("::value"):
+        return f"<code class='key-value'>{escaped}</code>"
+    return f"<code>{escaped}</code>"
 
 
 def render_file_report(report: FileReport, locale: str) -> str:
@@ -842,7 +909,7 @@ def render_file_report(report: FileReport, locale: str) -> str:
         )
         for entry in sorted(report.missing, key=lambda e: e.key):
             parts.append(
-                f"<tr><td><code>{html.escape(entry.key)}</code></td>"
+                f"<tr><td>{render_key_code(entry.key)}</td>"
                 f"<td>{html.escape(entry.value)}</td></tr>",
             )
         parts.append("</table></div>")
@@ -861,7 +928,7 @@ def render_file_report(report: FileReport, locale: str) -> str:
         )
         for entry in sorted(report.redundant, key=lambda e: e.key):
             parts.append(
-                f"<tr><td><code>{html.escape(entry.key)}</code></td>"
+                f"<tr><td>{render_key_code(entry.key)}</td>"
                 f"<td>{html.escape(entry.value)}</td></tr>",
             )
         parts.append("</table></div>")
@@ -896,7 +963,7 @@ def render_file_report(report: FileReport, locale: str) -> str:
         )
         for entry in sorted(report.unchanged, key=lambda e: e.key):
             parts.append(
-                f"<tr><td><code>{html.escape(entry.key)}</code></td>"
+                f"<tr><td>{render_key_code(entry.key)}</td>"
                 f"<td>{html.escape(entry.value)}</td></tr>",
             )
         parts.append("</table></div>")
@@ -910,7 +977,7 @@ def render_file_report(report: FileReport, locale: str) -> str:
         )
         for issue in sorted(report.placeholder_issues, key=lambda i: i.key):
             parts.append(
-                f"<tr><td><code>{html.escape(issue.key)}</code></td>"
+                f"<tr><td>{render_key_code(issue.key)}</td>"
                 f"<td>{html.escape(issue.en_value)}</td>"
                 f"<td>{html.escape(issue.locale_value)}</td>"
                 f"<td>{html.escape(', '.join(issue.missing))}</td>"
@@ -1141,22 +1208,26 @@ def render_matrix(skin_reports: list[SkinReport]) -> str:
     return "\n".join(parts)
 
 
-def render_parse_errors(parse_errors: list[ParseErrorRecord]) -> str:
-    if not parse_errors:
+def render_xml_issues(xml_issues: list[XmlFileIssue]) -> str:
+    if not xml_issues:
         return ""
     parts = [
-        "<h2>XML parse errors</h2>",
-        "<p class='note'>These files could not be parsed and were skipped "
-        "for that locale comparison.</p>",
+        "<h2>XML file issues</h2>",
+        "<p class='note'>Malformed XML cannot be audited. A leading BOM is "
+        "undesirable in XUI files and may break other tooling even when Python "
+        "parses the file successfully.</p>",
         "<table class='entries'>",
-        "<tr><th>Skin</th><th>Locale</th><th>File</th><th>Error</th></tr>",
+        "<tr><th>Skin</th><th>Locale</th><th>File</th><th>Kind</th><th>Detail</th></tr>",
     ]
-    for err in parse_errors:
+    for issue in xml_issues:
+        kind_label = "BOM" if issue.kind == "bom" else "Parse error"
+        kind_class = "issue-bom" if issue.kind == "bom" else "issue-parse"
         parts.append(
-            f"<tr><td><code>{html.escape(err.skin)}</code></td>"
-            f"<td>{html.escape(err.locale)}</td>"
-            f"<td><code>{html.escape(err.rel)}</code></td>"
-            f"<td>{html.escape(err.message)}</td></tr>",
+            f"<tr><td><code>{html.escape(issue.skin)}</code></td>"
+            f"<td>{html.escape(issue.locale)}</td>"
+            f"<td><code>{html.escape(issue.rel)}</code></td>"
+            f"<td class='{kind_class}'>{kind_label}</td>"
+            f"<td>{html.escape(issue.message)}</td></tr>",
         )
     parts.append("</table>")
     return "\n".join(parts)
@@ -1294,12 +1365,15 @@ def render_html(audit: AuditReport) -> str:
         ".unchanged h5{color:var(--unchanged);}",
         ".placeholder h5{color:var(--placeholder);}",
         ".locale-only h5{color:var(--locale-only);}",
+        "td.issue-bom{color:var(--parse-error);font-weight:600;}",
+        "td.issue-parse{color:var(--missing);font-weight:600;}",
         "table.entries{width:100%;border-collapse:collapse;font-size:.82rem;margin:8px 0;}",
         "table.entries th,table.entries td{border:1px solid var(--border);"
         "padding:4px 8px;vertical-align:top;}",
         "table.entries th{background:#f8fafc;text-align:left;}",
         "code{font-family:Consolas,monospace;font-size:.88em;background:#f1f5f9;"
         "padding:1px 5px;border-radius:4px;}",
+        "code.key-value{color:var(--muted);background:#f8fafc;}",
         "ul.files{margin:8px 0;padding-left:24px;columns:2;column-gap:24px;}",
         ".all-clear{color:var(--ok);font-size:.9rem;margin:8px 0;}",
         ".matrix-wrap{overflow-x:auto;}",
@@ -1342,9 +1416,9 @@ def render_html(audit: AuditReport) -> str:
         "ignored. Each locale element is also checked attribute-by-attribute against "
         "its EN counterpart. Elements with <code>translate=\"false\"</code> are skipped "
         "(direct content only, not children). Also flags unchanged EN copies, placeholder "
-        "token mismatches, locale-only widgets, duplicate widget names, and XML parse "
-        "errors.</p>",
-        render_parse_errors(audit.parse_errors),
+        "token mismatches, locale-only widgets, duplicate widget names, malformed "
+        "XML, and BOM markers.</p>",
+        render_xml_issues(audit.xml_issues),
         "<div class='global-summary'>",
         f"<div class='stat-card'><div class='value'>{len(skin_reports)}</div>"
         "<div class='label'>Skins scanned</div></div>",
@@ -1366,8 +1440,10 @@ def render_html(audit: AuditReport) -> str:
         "<div class='label'>Locale-only widgets</div></div>",
         f"<div class='stat-card'><div class='value'>{total_duplicate_names}</div>"
         "<div class='label'>Duplicate widget names</div></div>",
-        f"<div class='stat-card'><div class='value'>{len(audit.parse_errors)}</div>"
+        f"<div class='stat-card'><div class='value'>{audit.parse_error_count}</div>"
         "<div class='label'>XML parse errors</div></div>",
+        f"<div class='stat-card'><div class='value'>{audit.bom_count}</div>"
+        "<div class='label'>Files with BOM</div></div>",
         "</div>",
         render_matrix(skin_reports),
         "<h2>By skin</h2>",
@@ -1400,14 +1476,17 @@ def main() -> None:
         print(f"No skins with xui/en found under {SKINS_ROOT}")
         return
 
-    parse_errors: list[ParseErrorRecord] = []
-    skin_reports = [audit_skin(skin, parse_errors) for skin in skins]
-    audit = AuditReport(skin_reports=skin_reports, parse_errors=parse_errors)
+    skin_reports = [audit_skin(skin) for skin in skins]
+    xml_issues: list[XmlFileIssue] = []
+    for skin in skins:
+        xml_issues.extend(scan_skin_xml_issues(skin))
+    xml_issues.sort(key=lambda i: (i.skin, i.locale, i.rel, i.kind))
+    audit = AuditReport(skin_reports=skin_reports, xml_issues=xml_issues)
     output = render_html(audit)
     OUT_FILE.write_text(output, encoding="utf-8")
     print(
         f"Wrote {OUT_FILE} ({len(skins)} skins, "
-        f"{len(parse_errors)} parse errors)",
+        f"{audit.parse_error_count} parse errors, {audit.bom_count} BOM files)",
     )
 
 

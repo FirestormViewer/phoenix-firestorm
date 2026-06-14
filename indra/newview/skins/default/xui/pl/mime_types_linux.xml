@@ -196,7 +196,7 @@
 		</label>
 	</mimetype>
 	<mimetype name="application/octet-stream">
-		<label name="video/octet-stream">
+		<label name="application/octet-stream_label">
 			Film
 		</label>
 	</mimetype>
