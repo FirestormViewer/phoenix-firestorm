@@ -4297,7 +4297,7 @@ Le nom ne peut contenir que des caractères ASCII, à l'exception de ":" et "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AOFolderDropNoAnimations">
-		Le dossier "[NOM]" ne contient aucune animation à ajouter.
+		Le dossier "[NAME]" ne contient aucune animation à ajouter.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NewAONameCantExist">
