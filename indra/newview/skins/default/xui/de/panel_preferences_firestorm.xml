@@ -48,6 +48,7 @@
 	<panel label="Sicherheit" name="ProtectionTab">
 		<check_box label="Sitzen per Links-Klick auf Objekten blockieren" name="FSBlockClickSit"/>
 		<check_box label="Echte URL von Klammer-Links in IMs/Gruppenchat zeigen (beim Hovern)" name="FSDisableLabeledChatLinks" tool_tip="Wenn aktiviert, behalten Klammer-Links in IMs, Gruppenchat, Ad-hoc-Konferenzen und Gruppen-Hinweisen ihren Text, aber beim Hovern wird sofort die echte Ziel-URL als grosser Hinweis angezeigt. Hilft, Phishing zu erkennen, bei dem das Label ein anderes Ziel verbirgt. Chat in der Nähe nutzt die Option darunter. Eingebauter Viewer-Text ist nicht betroffen."/>
+		<check_box label="Echte URL von Klammer-Links für Chat in der Nähe und Objekt-Chat zeigen (beim Hovern)" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="Wenn aktiviert, behalten Klammer-Links im Chat in der Nähe udn von Objekten ihren Text, aber beim Hovern wird sofort die echte Ziel-URL als grosser Hinweis angezeigt. Standardmäßig deaktiviert."/>
 		<check_box label="Skripten erlauben, Ziele auf Karte anzuzeigen (llMapDestination)" name="ScriptsCanShowUI"/>
 		<text name="revokepermissions_txt">
 			Berechtigungen zurückziehen:

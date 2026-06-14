@@ -12,8 +12,8 @@
 			</fs_scroll_list>
 			<button name="add_needle" label="Hinzufügen"/>
 			<button name="remove_needle" label="Entfernen"/>
-			<button name="up_needle" label="Nach oben"/>
-			<button name="down_needle" label="Nach unten"/>
+			<button name="up_needle" label="Nach oben" tool_tip="Ausgewähle Regel um eine Position nach oben verschieben."/>
+			<button name="down_needle" label="Nach unten" tool_tip="Ausgewähle Regel um eine Position nach unten verschieben."/>
 		</layout_panel>
 		<layout_panel name="filter_log_layout">
 			<fs_scroll_list name="filter_log">

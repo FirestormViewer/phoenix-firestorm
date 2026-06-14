@@ -659,6 +659,12 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="TooltipSLURL">
 		Anklicken, um Informationen zu diesem Standort anzuzeigen
 	</string>
+	<string name="FSChatLinkTagTrusted">
+		[Vertraut]
+	</string>
+	<string name="FSChatLinkTagUntrusted">
+		[Link]
+	</string>
 	<string name="TooltipAgentUrl">
 		Anklicken, um das Profil dieses Einwohners anzuzeigen
 	</string>
