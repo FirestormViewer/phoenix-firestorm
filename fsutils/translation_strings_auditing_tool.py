@@ -127,6 +127,7 @@ class DuplicateNameRecord:
 @dataclass
 class FileReport:
     rel: str
+    entire_file_missing: bool = False
     missing: list[Entry] = field(default_factory=list)
     redundant: list[Entry] = field(default_factory=list)
     extra_attrs: list[AttrIssue] = field(default_factory=list)
@@ -137,7 +138,8 @@ class FileReport:
     @property
     def has_issues(self) -> bool:
         return bool(
-            self.missing or self.redundant or self.extra_attrs
+            self.entire_file_missing
+            or self.missing or self.redundant or self.extra_attrs
             or self.unchanged or self.placeholder_issues
             or self.locale_only_elements,
         )
@@ -751,7 +753,13 @@ def audit_locale(
             and not entry_is_non_translatable(e.key, en_no_translate)
         ]
         if missing:
-            report.file_reports.append(FileReport(rel=rel, missing=missing))
+            report.file_reports.append(FileReport(
+                rel=rel, missing=missing, entire_file_missing=True,
+            ))
+        else:
+            report.file_reports.append(FileReport(
+                rel=rel, entire_file_missing=True,
+            ))
 
     report.file_reports.sort(key=lambda r: r.rel)
     return report
@@ -802,6 +810,10 @@ def render_file_report(report: FileReport, locale: str) -> str:
         "<h4 class='file-heading'>",
         f"<code>{html.escape(report.rel)}</code>",
     ]
+    if report.entire_file_missing:
+        parts.append(
+            "<span class='file-absent-badge'>Entire file missing from locale</span>",
+        )
     if report.missing:
         parts.append(badge(len(report.missing), "missing"))
     if report.redundant:
@@ -818,7 +830,13 @@ def render_file_report(report: FileReport, locale: str) -> str:
 
     if report.missing:
         parts.append("<div class='missing'>")
-        parts.append(f"<h5>Missing in {html.escape(locale)}</h5>")
+        if report.entire_file_missing:
+            parts.append(
+                f"<h5>Entire file absent from {html.escape(locale)} "
+                f"(EN strings to translate)</h5>",
+            )
+        else:
+            parts.append(f"<h5>Missing in {html.escape(locale)}</h5>")
         parts.append(
             "<table class='entries'><tr><th>Key</th><th>EN value</th></tr>",
         )
@@ -828,6 +846,11 @@ def render_file_report(report: FileReport, locale: str) -> str:
                 f"<td>{html.escape(entry.value)}</td></tr>",
             )
         parts.append("</table></div>")
+
+    elif report.entire_file_missing:
+        parts.append(
+            "<p class='note'>No translatable EN strings were flagged for this file.</p>",
+        )
 
     if report.redundant:
         parts.append("<div class='redundant'>")
@@ -1249,6 +1272,8 @@ def render_html(audit: AuditReport) -> str:
         ".file-heading{margin:0;padding:10px 12px;font-size:.9rem;font-weight:600;"
         "display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-bottom:1px solid var(--border);"
         "background:#f8fafc;}",
+        ".file-absent-badge{background:var(--missing-bg);color:var(--missing);"
+        "font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:999px;}",
         ".file-body{padding:8px 12px 12px;}",
         ".mini-summary{border-collapse:collapse;width:100%;max-width:520px;"
         "font-size:.85rem;margin-bottom:12px;}",
