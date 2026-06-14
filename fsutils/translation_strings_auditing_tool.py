@@ -13,7 +13,14 @@ OUT_FILE = REPO / "_audit_result.html"
 
 TRANSLATABLE_ATTRS = frozenset({
     "label", "tool_tip", "title", "text", "yestext", "notext", "canceltext",
-    "message", "help_text", "short_desc", "long_desc",
+    "message", "help_text", "short_desc", "long_desc", "value",
+})
+
+NUMERIC_VALUE_RE = re.compile(r"^-?\d+(\.\d+)?$")
+PLACEHOLDER_TOKEN_RE = re.compile(r"\[[^\]]+\]|\$[A-Za-z_][A-Za-z0-9_]*")
+
+STRING_BODY_TAGS = frozenset({
+    "global", "notification", "text", "string", "ignore", "button",
 })
 
 ONLY_PLACEHOLDERS_RE = re.compile(
@@ -94,11 +101,46 @@ class AttrIssue:
 
 
 @dataclass
+class PlaceholderIssue:
+    key: str
+    en_value: str
+    locale_value: str
+    missing: list[str] = field(default_factory=list)
+    extra: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ParseErrorRecord:
+    skin: str
+    locale: str
+    rel: str
+    message: str
+
+
+@dataclass
+class DuplicateNameRecord:
+    rel: str
+    name: str
+    count: int
+
+
+@dataclass
 class FileReport:
     rel: str
     missing: list[Entry] = field(default_factory=list)
     redundant: list[Entry] = field(default_factory=list)
     extra_attrs: list[AttrIssue] = field(default_factory=list)
+    unchanged: list[Entry] = field(default_factory=list)
+    placeholder_issues: list[PlaceholderIssue] = field(default_factory=list)
+    locale_only_elements: list[str] = field(default_factory=list)
+
+    @property
+    def has_issues(self) -> bool:
+        return bool(
+            self.missing or self.redundant or self.extra_attrs
+            or self.unchanged or self.placeholder_issues
+            or self.locale_only_elements,
+        )
 
 
 @dataclass
@@ -123,6 +165,18 @@ class LocaleReport:
         return sum(len(r.extra_attrs) for r in self.file_reports)
 
     @property
+    def total_unchanged(self) -> int:
+        return sum(len(r.unchanged) for r in self.file_reports)
+
+    @property
+    def total_placeholder_issues(self) -> int:
+        return sum(len(r.placeholder_issues) for r in self.file_reports)
+
+    @property
+    def total_locale_only_elements(self) -> int:
+        return sum(len(r.locale_only_elements) for r in self.file_reports)
+
+    @property
     def files_with_missing(self) -> int:
         return sum(1 for r in self.file_reports if r.missing)
 
@@ -137,7 +191,8 @@ class LocaleReport:
     @property
     def has_issues(self) -> bool:
         return bool(
-            self.missing_files or self.redundant_files or self.file_reports,
+            self.missing_files or self.redundant_files
+            or any(r.has_issues for r in self.file_reports),
         )
 
 
@@ -145,16 +200,63 @@ class LocaleReport:
 class SkinReport:
     skin: str
     locale_reports: list[LocaleReport] = field(default_factory=list)
+    duplicate_names_by_file: dict[str, list[DuplicateNameRecord]] = field(
+        default_factory=dict,
+    )
 
     @property
     def en_count(self) -> int:
         return self.locale_reports[0].en_count if self.locale_reports else 0
+
+    @property
+    def total_duplicate_names(self) -> int:
+        return sum(len(v) for v in self.duplicate_names_by_file.values())
+
+
+@dataclass
+class AuditReport:
+    skin_reports: list[SkinReport] = field(default_factory=list)
+    parse_errors: list[ParseErrorRecord] = field(default_factory=list)
 
 
 def normalise_text(text: str) -> str:
     if text is None:
         return ""
     return " ".join(text.split())
+
+
+def is_numeric_value(value: str) -> bool:
+    v = normalise_text(value)
+    return bool(v) and bool(NUMERIC_VALUE_RE.match(v))
+
+
+def tag_name(elem: ET.Element) -> str:
+    return elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+
+
+def tag_has_string_body(tag: str) -> bool:
+    return tag in STRING_BODY_TAGS or tag.endswith(".string")
+
+
+def direct_element_text(elem: ET.Element) -> str:
+    return normalise_text(elem.text or "")
+
+
+def string_content(elem: ET.Element) -> str:
+    body = direct_element_text(elem)
+    if body:
+        return body
+    return normalise_text(elem.attrib.get("value", ""))
+
+
+def extract_placeholders(text: str) -> frozenset[str]:
+    return frozenset(PLACEHOLDER_TOKEN_RE.findall(text))
+
+
+def is_translatable_attr_value(attr: str, value: str) -> bool:
+    if attr == "value" and is_numeric_value(value):
+        return False
+    return True
 
 
 def is_trivial(value: str, key: str = "") -> bool:
@@ -219,7 +321,40 @@ def needs_translation_entry(value: str, key: str) -> bool:
         name = key[1:].split("::", 1)[0]
         if value == name:
             return False
+    if key.endswith("::value") and is_numeric_value(value):
+        return False
     return True
+
+
+def find_duplicate_names(root: ET.Element) -> list[DuplicateNameRecord]:
+    counts: dict[str, int] = {}
+    for elem in root.iter():
+        name = elem.attrib.get("name", "").strip()
+        if name:
+            counts[name] = counts.get(name, 0) + 1
+    return [
+        DuplicateNameRecord(name=name, count=count, rel="")
+        for name, count in sorted(counts.items())
+        if count > 1
+    ]
+
+
+def element_has_translatable_content(
+    ekey: str,
+    attrs: dict[str, str],
+    entries: dict[str, Entry],
+) -> bool:
+    prefix = f"{ekey}::"
+    for key, entry in entries.items():
+        if key.startswith(prefix) and needs_translation_entry(entry.value, key):
+            return True
+    for attr, value in attrs.items():
+        if not is_translatable_attr_value(attr, value):
+            continue
+        key = f"{ekey}::{attr}"
+        if needs_translation_entry(value, key):
+            return True
+    return False
 
 
 def is_translate_disabled(elem: ET.Element) -> bool:
@@ -301,6 +436,8 @@ def looks_translation_attr(attr: str) -> bool:
 
 
 def should_report_extra_attr(attr: str, value: str, en_attrs: dict[str, str]) -> bool:
+    if attr == "value" and is_numeric_value(value):
+        return False
     if attr in ATTR_TYPO_HINTS:
         return True
     if attr in TRANSLATABLE_ATTRS:
@@ -390,34 +527,34 @@ def extract_entries(root: ET.Element, rel: str) -> dict[str, Entry]:
 
     if rel == "strings.xml":
         for child in root:
-            tag = child.tag.split("}")[-1]
-            if tag != "string":
+            if tag_name(child) != "string":
                 continue
             if is_translate_disabled(child):
                 continue
             name = child.attrib.get("name", "").strip()
             if not name:
                 continue
-            value = normalise_text("".join(child.itertext()))
+            value = string_content(child)
             key = f"string:{name}"
             entries[key] = Entry(key, value, "#text")
         return entries
 
     def walk(elem: ET.Element) -> None:
-        tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+        tag = tag_name(elem)
         ident = element_identity(elem)
 
         if not is_translate_disabled(elem):
             for attr in TRANSLATABLE_ATTRS:
-                if attr in elem.attrib:
-                    value = normalise_text(elem.attrib[attr])
-                    key = entry_key(elem, attr)
-                    entries[key] = Entry(key, value, attr)
+                if attr not in elem.attrib:
+                    continue
+                value = normalise_text(elem.attrib[attr])
+                if not is_translatable_attr_value(attr, value):
+                    continue
+                key = entry_key(elem, attr)
+                entries[key] = Entry(key, value, attr)
 
-            body = normalise_text("".join(elem.itertext()))
-            if ident and body and tag in {
-                "global", "notification", "text", "string", "ignore", "button",
-            }:
+            body = direct_element_text(elem)
+            if ident and body and tag_has_string_body(tag):
                 key = entry_key(elem, "#text")
                 if key not in entries:
                     entries[key] = Entry(key, body, "#text")
@@ -429,11 +566,22 @@ def extract_entries(root: ET.Element, rel: str) -> dict[str, Entry]:
     return entries
 
 
-def parse_xml(path: Path) -> ET.Element | None:
+def parse_xml(
+    path: Path,
+    parse_errors: list[ParseErrorRecord] | None = None,
+    skin: str = "",
+    locale: str = "",
+    rel: str = "",
+) -> ET.Element | None:
     try:
         return ET.parse(path).getroot()
     except ET.ParseError as exc:
+        message = str(exc)
         print(f"Parse error in {path}: {exc}")
+        if parse_errors is not None:
+            parse_errors.append(ParseErrorRecord(
+                skin=skin, locale=locale, rel=rel or path.name, message=message,
+            ))
         return None
 
 
@@ -448,9 +596,18 @@ def collect_files(base: Path) -> dict[str, Path]:
     return files
 
 
-def compare_file(rel: str, en_path: Path, locale_path: Path | None) -> FileReport:
+def compare_file(
+    rel: str,
+    en_path: Path,
+    locale_path: Path | None,
+    parse_errors: list[ParseErrorRecord] | None = None,
+    skin: str = "",
+    locale: str = "",
+) -> FileReport:
     report = FileReport(rel=rel)
-    en_root = parse_xml(en_path)
+    en_root = parse_xml(
+        en_path, parse_errors, skin=skin, locale="en", rel=rel,
+    )
     if en_root is None:
         return report
 
@@ -466,19 +623,40 @@ def compare_file(rel: str, en_path: Path, locale_path: Path | None) -> FileRepor
         report.missing = list(en_entries.values())
         return report
 
-    locale_root = parse_xml(locale_path)
+    locale_root = parse_xml(
+        locale_path, parse_errors, skin=skin, locale=locale, rel=rel,
+    )
     if locale_root is None:
         report.missing = list(en_entries.values())
         return report
 
     locale_all = extract_entries(locale_root, rel)
     locale_entries = {
-        k: v for k, v in locale_all.items() if not is_trivial(v.value, k)
+        k: v for k, v in locale_all.items()
+        if needs_translation_entry(v.value, k)
     }
 
     for key, entry in en_entries.items():
         if key not in locale_all:
             report.missing.append(entry)
+            continue
+        loc_entry = locale_all[key]
+        if loc_entry.value == entry.value:
+            report.unchanged.append(entry)
+            continue
+        en_ph = extract_placeholders(entry.value)
+        if en_ph:
+            loc_ph = extract_placeholders(loc_entry.value)
+            missing_ph = sorted(en_ph - loc_ph)
+            extra_ph = sorted(loc_ph - en_ph)
+            if missing_ph or extra_ph:
+                report.placeholder_issues.append(PlaceholderIssue(
+                    key=key,
+                    en_value=entry.value,
+                    locale_value=loc_entry.value,
+                    missing=missing_ph,
+                    extra=extra_ph,
+                ))
 
     for key, entry in locale_entries.items():
         if key not in en_all:
@@ -495,6 +673,16 @@ def compare_file(rel: str, en_path: Path, locale_path: Path | None) -> FileRepor
         skip_keys=redundant_keys,
         skip_elements=en_no_translate,
     )
+
+    for ekey in sorted(locale_elements):
+        if ekey in en_elements:
+            continue
+        if ekey in en_no_translate:
+            continue
+        if element_has_translatable_content(
+            ekey, locale_elements[ekey], locale_all,
+        ):
+            report.locale_only_elements.append(ekey)
 
     return report
 
@@ -519,7 +707,11 @@ def discover_locales(skin: str) -> list[str]:
     )
 
 
-def audit_locale(skin: str, locale: str) -> LocaleReport:
+def audit_locale(
+    skin: str,
+    locale: str,
+    parse_errors: list[ParseErrorRecord],
+) -> LocaleReport:
     en_dir = SKINS_ROOT / skin / "xui" / "en"
     locale_dir = SKINS_ROOT / skin / "xui" / locale
 
@@ -538,30 +730,63 @@ def audit_locale(skin: str, locale: str) -> LocaleReport:
     )
 
     for rel in sorted(en_rels & locale_rels):
-        file_report = compare_file(rel, en_files[rel], locale_files.get(rel))
-        if file_report.missing or file_report.redundant or file_report.extra_attrs:
+        file_report = compare_file(
+            rel, en_files[rel], locale_files.get(rel),
+            parse_errors=parse_errors, skin=skin, locale=locale,
+        )
+        if file_report.has_issues:
             report.file_reports.append(file_report)
 
     for rel in report.missing_files:
-        en_root = parse_xml(en_files[rel])
+        en_root = parse_xml(
+            en_files[rel], parse_errors, skin=skin, locale="en", rel=rel,
+        )
         if en_root is None:
             continue
         en_all = extract_entries(en_root, rel)
-        entries = [
-            e for e in en_all.values() if needs_translation_entry(e.value, e.key)
+        en_no_translate = collect_no_translate_targets(en_root, rel)
+        missing = [
+            e for e in en_all.values()
+            if needs_translation_entry(e.value, e.key)
+            and not entry_is_non_translatable(e.key, en_no_translate)
         ]
-        if entries:
-            report.file_reports.append(FileReport(rel=rel, missing=entries))
+        if missing:
+            report.file_reports.append(FileReport(rel=rel, missing=missing))
 
     report.file_reports.sort(key=lambda r: r.rel)
     return report
 
 
-def audit_skin(skin: str) -> SkinReport:
+def scan_en_duplicate_names(
+    skin: str,
+    parse_errors: list[ParseErrorRecord],
+) -> dict[str, list[DuplicateNameRecord]]:
+    en_dir = SKINS_ROOT / skin / "xui" / "en"
+    by_file: dict[str, list[DuplicateNameRecord]] = {}
+    for rel, path in collect_files(en_dir).items():
+        root = parse_xml(path, parse_errors, skin=skin, locale="en", rel=rel)
+        if root is None:
+            continue
+        dupes = find_duplicate_names(root)
+        if dupes:
+            by_file[rel] = [
+                DuplicateNameRecord(rel=rel, name=d.name, count=d.count)
+                for d in dupes
+            ]
+    return by_file
+
+
+def audit_skin(
+    skin: str,
+    parse_errors: list[ParseErrorRecord],
+) -> SkinReport:
     locales = discover_locales(skin)
     return SkinReport(
         skin=skin,
-        locale_reports=[audit_locale(skin, loc) for loc in locales],
+        locale_reports=[
+            audit_locale(skin, loc, parse_errors) for loc in locales
+        ],
+        duplicate_names_by_file=scan_en_duplicate_names(skin, parse_errors),
     )
 
 
@@ -583,6 +808,12 @@ def render_file_report(report: FileReport, locale: str) -> str:
         parts.append(badge(len(report.redundant), "redundant"))
     if report.extra_attrs:
         parts.append(badge(len(report.extra_attrs), "extra-attr"))
+    if report.unchanged:
+        parts.append(badge(len(report.unchanged), "unchanged"))
+    if report.placeholder_issues:
+        parts.append(badge(len(report.placeholder_issues), "placeholder"))
+    if report.locale_only_elements:
+        parts.append(badge(len(report.locale_only_elements), "locale-only"))
     parts.append("</h4><div class='file-body'>")
 
     if report.missing:
@@ -632,6 +863,48 @@ def render_file_report(report: FileReport, locale: str) -> str:
             )
         parts.append("</table></div>")
 
+    if report.unchanged:
+        parts.append("<div class='unchanged'>")
+        parts.append(
+            f"<h5>Identical to EN in {html.escape(locale)} (likely untranslated)</h5>",
+        )
+        parts.append(
+            "<table class='entries'><tr><th>Key</th><th>Value</th></tr>",
+        )
+        for entry in sorted(report.unchanged, key=lambda e: e.key):
+            parts.append(
+                f"<tr><td><code>{html.escape(entry.key)}</code></td>"
+                f"<td>{html.escape(entry.value)}</td></tr>",
+            )
+        parts.append("</table></div>")
+
+    if report.placeholder_issues:
+        parts.append("<div class='placeholder'>")
+        parts.append(f"<h5>Placeholder mismatch in {html.escape(locale)}</h5>")
+        parts.append(
+            "<table class='entries'><tr><th>Key</th><th>EN value</th>"
+            f"<th>{html.escape(locale)} value</th><th>Missing</th><th>Extra</th></tr>",
+        )
+        for issue in sorted(report.placeholder_issues, key=lambda i: i.key):
+            parts.append(
+                f"<tr><td><code>{html.escape(issue.key)}</code></td>"
+                f"<td>{html.escape(issue.en_value)}</td>"
+                f"<td>{html.escape(issue.locale_value)}</td>"
+                f"<td>{html.escape(', '.join(issue.missing))}</td>"
+                f"<td>{html.escape(', '.join(issue.extra))}</td></tr>",
+            )
+        parts.append("</table></div>")
+
+    if report.locale_only_elements:
+        parts.append("<div class='locale-only'>")
+        parts.append(
+            f"<h5>Elements in {html.escape(locale)} not present in EN file</h5>",
+        )
+        parts.append("<ul class='files'>")
+        for ekey in report.locale_only_elements:
+            parts.append(f"<li><code>{html.escape(ekey)}</code></li>")
+        parts.append("</ul></div>")
+
     parts.append("</div></div>")
     return "\n".join(parts)
 
@@ -670,6 +943,21 @@ def render_locale_report(locale_report: LocaleReport) -> str:
             f"<span class='stat'>bad attributes: "
             f"{badge(locale_report.total_extra_attrs, 'extra-attr')}</span>",
         )
+    if locale_report.total_unchanged:
+        parts.append(
+            f"<span class='stat'>unchanged: "
+            f"{badge(locale_report.total_unchanged, 'unchanged')}</span>",
+        )
+    if locale_report.total_placeholder_issues:
+        parts.append(
+            f"<span class='stat'>placeholders: "
+            f"{badge(locale_report.total_placeholder_issues, 'placeholder')}</span>",
+        )
+    if locale_report.total_locale_only_elements:
+        parts.append(
+            f"<span class='stat'>locale-only widgets: "
+            f"{badge(locale_report.total_locale_only_elements, 'locale-only')}</span>",
+        )
     parts.append("</summary>")
     parts.append("<div class='locale-body'>")
 
@@ -686,6 +974,9 @@ def render_locale_report(locale_report: LocaleReport) -> str:
         ("Total redundant entries", locale_report.total_redundant),
         ("Bad attributes (not on EN element)", locale_report.total_extra_attrs),
         ("Files with bad attributes", locale_report.files_with_extra_attrs),
+        ("Unchanged (same as EN)", locale_report.total_unchanged),
+        ("Placeholder mismatches", locale_report.total_placeholder_issues),
+        ("Locale-only widgets", locale_report.total_locale_only_elements),
     ):
         parts.append(
             f"<tr><th>{html.escape(label)}</th><td>{value}</td></tr>",
@@ -744,6 +1035,27 @@ def render_skin_panel(skin_report: SkinReport, active: bool) -> str:
             "<p class='note'>No non-EN locales found for this skin.</p>",
         )
     else:
+        if skin_report.duplicate_names_by_file:
+            total_dupes = skin_report.total_duplicate_names
+            parts.append(
+                f"<h4 class='subsection-heading'>Duplicate widget names in EN "
+                f"({total_dupes} across {len(skin_report.duplicate_names_by_file)} files)</h4>",
+            )
+            parts.append(
+                "<p class='note'>Multiple elements share the same <code>name</code> "
+                "in one file; string matching may be unreliable for these.</p>",
+            )
+            parts.append("<table class='entries'>")
+            parts.append("<tr><th>File</th><th>Widget name</th><th>Count</th></tr>")
+            for rel in sorted(skin_report.duplicate_names_by_file):
+                for dup in skin_report.duplicate_names_by_file[rel]:
+                    parts.append(
+                        f"<tr><td><code>{html.escape(rel)}</code></td>"
+                        f"<td><code>{html.escape(dup.name)}</code></td>"
+                        f"<td>{dup.count}</td></tr>",
+                    )
+            parts.append("</table>")
+
         for locale_report in skin_report.locale_reports:
             parts.append(render_locale_report(locale_report))
 
@@ -792,6 +1104,9 @@ def render_matrix(skin_reports: list[SkinReport]) -> str:
                 extra = (
                     locale_report.total_redundant
                     + locale_report.total_extra_attrs
+                    + locale_report.total_unchanged
+                    + locale_report.total_placeholder_issues
+                    + locale_report.total_locale_only_elements
                 )
                 cell = f"{missing}"
                 if extra:
@@ -803,7 +1118,47 @@ def render_matrix(skin_reports: list[SkinReport]) -> str:
     return "\n".join(parts)
 
 
-def render_html(skin_reports: list[SkinReport]) -> str:
+def render_parse_errors(parse_errors: list[ParseErrorRecord]) -> str:
+    if not parse_errors:
+        return ""
+    parts = [
+        "<h2>XML parse errors</h2>",
+        "<p class='note'>These files could not be parsed and were skipped "
+        "for that locale comparison.</p>",
+        "<table class='entries'>",
+        "<tr><th>Skin</th><th>Locale</th><th>File</th><th>Error</th></tr>",
+    ]
+    for err in parse_errors:
+        parts.append(
+            f"<tr><td><code>{html.escape(err.skin)}</code></td>"
+            f"<td>{html.escape(err.locale)}</td>"
+            f"<td><code>{html.escape(err.rel)}</code></td>"
+            f"<td>{html.escape(err.message)}</td></tr>",
+        )
+    parts.append("</table>")
+    return "\n".join(parts)
+
+
+def locale_issue_total(locale_report: LocaleReport) -> int:
+    return (
+        locale_report.total_missing
+        + locale_report.total_redundant
+        + locale_report.total_extra_attrs
+        + locale_report.total_unchanged
+        + locale_report.total_placeholder_issues
+        + locale_report.total_locale_only_elements
+    )
+
+
+def skin_issue_total(skin_report: SkinReport) -> int:
+    return (
+        sum(locale_issue_total(lr) for lr in skin_report.locale_reports)
+        + skin_report.total_duplicate_names
+    )
+
+
+def render_html(audit: AuditReport) -> str:
+    skin_reports = audit.skin_reports
     audit_date = date.today().isoformat()
     total_missing = sum(
         lr.total_missing for sr in skin_reports for lr in sr.locale_reports
@@ -814,6 +1169,16 @@ def render_html(skin_reports: list[SkinReport]) -> str:
     total_extra_attrs = sum(
         lr.total_extra_attrs for sr in skin_reports for lr in sr.locale_reports
     )
+    total_unchanged = sum(
+        lr.total_unchanged for sr in skin_reports for lr in sr.locale_reports
+    )
+    total_placeholder = sum(
+        lr.total_placeholder_issues for sr in skin_reports for lr in sr.locale_reports
+    )
+    total_locale_only = sum(
+        lr.total_locale_only_elements for sr in skin_reports for lr in sr.locale_reports
+    )
+    total_duplicate_names = sum(sr.total_duplicate_names for sr in skin_reports)
     locale_count = sum(len(sr.locale_reports) for sr in skin_reports)
     skins_with_locales = sum(1 for sr in skin_reports if sr.locale_reports)
 
@@ -831,6 +1196,10 @@ def render_html(skin_reports: list[SkinReport]) -> str:
         "  --missing:#b91c1c;--missing-bg:#fef2f2;",
         "  --redundant:#b45309;--redundant-bg:#fffbeb;",
         "  --extra-attr:#7c3aed;--extra-attr-bg:#f5f3ff;",
+        "  --unchanged:#0369a1;--unchanged-bg:#e0f2fe;",
+        "  --placeholder:#c2410c;--placeholder-bg:#fff7ed;",
+        "  --locale-only:#0f766e;--locale-only-bg:#ccfbf1;",
+        "  --parse-error:#9f1239;--parse-error-bg:#fff1f2;",
         "  --ok:#15803d;--ok-bg:#f0fdf4;",
         "}",
         "*{box-sizing:border-box;}",
@@ -891,9 +1260,15 @@ def render_html(skin_reports: list[SkinReport]) -> str:
         ".badge-missing{background:var(--missing-bg);color:var(--missing);}",
         ".badge-redundant{background:var(--redundant-bg);color:var(--redundant);}",
         ".badge-extra-attr{background:var(--extra-attr-bg);color:var(--extra-attr);}",
+        ".badge-unchanged{background:var(--unchanged-bg);color:var(--unchanged);}",
+        ".badge-placeholder{background:var(--placeholder-bg);color:var(--placeholder);}",
+        ".badge-locale-only{background:var(--locale-only-bg);color:var(--locale-only);}",
         ".missing h5{color:var(--missing);}",
         ".redundant h5{color:var(--redundant);}",
         ".extra-attr h5{color:var(--extra-attr);}",
+        ".unchanged h5{color:var(--unchanged);}",
+        ".placeholder h5{color:var(--placeholder);}",
+        ".locale-only h5{color:var(--locale-only);}",
         "table.entries{width:100%;border-collapse:collapse;font-size:.82rem;margin:8px 0;}",
         "table.entries th,table.entries td{border:1px solid var(--border);"
         "padding:4px 8px;vertical-align:top;}",
@@ -936,13 +1311,15 @@ def render_html(skin_reports: list[SkinReport]) -> str:
         f"EN against every other locale present. Generated {audit_date}.</p>",
         "</header>",
         "<p class='note'>Entries are matched by widget <code>name</code> (viewer "
-        "layered-XML rules). Each locale element is also checked attribute-by-attribute "
-        "against its EN counterpart: attributes present in the translation but absent "
-        "on EN (e.g. <code>tooltip</code> instead of <code>tool_tip</code>) are flagged. "
-        "Elements with <code>translate=\"false\"</code> are skipped (direct content only, "
-        "not children). Omitted as trivial: integers, placeholder-only text, keyboard labels, slash "
-        "commands, font names, brand constants, and EN labels identical to the widget "
-        "name.</p>",
+        "layered-XML rules). Audits <code>value</code> attributes and "
+        "<code>panel.string</code> / <code>floater.string</code> bodies. Purely "
+        "numeric <code>value</code> attributes (sizes, combo indices, padding) are "
+        "ignored. Each locale element is also checked attribute-by-attribute against "
+        "its EN counterpart. Elements with <code>translate=\"false\"</code> are skipped "
+        "(direct content only, not children). Also flags unchanged EN copies, placeholder "
+        "token mismatches, locale-only widgets, duplicate widget names, and XML parse "
+        "errors.</p>",
+        render_parse_errors(audit.parse_errors),
         "<div class='global-summary'>",
         f"<div class='stat-card'><div class='value'>{len(skin_reports)}</div>"
         "<div class='label'>Skins scanned</div></div>",
@@ -956,6 +1333,16 @@ def render_html(skin_reports: list[SkinReport]) -> str:
         "<div class='label'>Total redundant strings</div></div>",
         f"<div class='stat-card'><div class='value'>{total_extra_attrs}</div>"
         "<div class='label'>Bad attributes (not on EN)</div></div>",
+        f"<div class='stat-card'><div class='value'>{total_unchanged}</div>"
+        "<div class='label'>Unchanged (same as EN)</div></div>",
+        f"<div class='stat-card'><div class='value'>{total_placeholder}</div>"
+        "<div class='label'>Placeholder mismatches</div></div>",
+        f"<div class='stat-card'><div class='value'>{total_locale_only}</div>"
+        "<div class='label'>Locale-only widgets</div></div>",
+        f"<div class='stat-card'><div class='value'>{total_duplicate_names}</div>"
+        "<div class='label'>Duplicate widget names</div></div>",
+        f"<div class='stat-card'><div class='value'>{len(audit.parse_errors)}</div>"
+        "<div class='label'>XML parse errors</div></div>",
         "</div>",
         render_matrix(skin_reports),
         "<h2>By skin</h2>",
@@ -964,10 +1351,7 @@ def render_html(skin_reports: list[SkinReport]) -> str:
 
     for index, skin_report in enumerate(skin_reports):
         skin = skin_report.skin
-        issue_count = sum(
-            lr.total_missing + lr.total_redundant + lr.total_extra_attrs
-            for lr in skin_report.locale_reports
-        )
+        issue_count = skin_issue_total(skin_report)
         active = " active" if index == 0 else ""
         parts.append(
             f"<button type='button' class='skin-tab{active}' data-skin='"
@@ -991,10 +1375,15 @@ def main() -> None:
         print(f"No skins with xui/en found under {SKINS_ROOT}")
         return
 
-    skin_reports = [audit_skin(skin) for skin in skins]
-    output = render_html(skin_reports)
+    parse_errors: list[ParseErrorRecord] = []
+    skin_reports = [audit_skin(skin, parse_errors) for skin in skins]
+    audit = AuditReport(skin_reports=skin_reports, parse_errors=parse_errors)
+    output = render_html(audit)
     OUT_FILE.write_text(output, encoding="utf-8")
-    print(f"Wrote {OUT_FILE} ({len(skins)} skins)")
+    print(
+        f"Wrote {OUT_FILE} ({len(skins)} skins, "
+        f"{len(parse_errors)} parse errors)",
+    )
 
 
 if __name__ == "__main__":
