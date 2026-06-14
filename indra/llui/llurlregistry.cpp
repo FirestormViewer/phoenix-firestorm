@@ -254,15 +254,6 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
             continue;
         }
 
-        // <FS:PP> Option to disable square-bracket links (intentionally ignores secondlife:// and hop://)
-        static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
-        static LLUICachedControl<bool> sDisableLabeledLinksNearby("FSDisableLabeledChatLinksNearbyChat", false);
-        if (!is_content_trusted && (mUrlEntryHTTPLabel == *it) && (is_nearby_chat ? sDisableLabeledLinksNearby : sDisableLabeledLinks))
-        {
-            continue;
-        }
-        // </FS:PP>
-
         LLUrlEntryBase *url_entry = *it;
 
         U32 start = 0, end = 0;
@@ -346,6 +337,31 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
                         match_entry->getUnderline(url),
                         match_entry->isTrusted(),
                         match_entry->getSkipProfileIcon(url));
+
+        // <FS:PP> Preview real URLs of bracket links
+        static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
+        static LLUICachedControl<bool> sDisableLabeledLinksNearby("FSDisableLabeledChatLinksNearbyChat", false);
+        if (!is_content_trusted && (match_entry == mUrlEntryHTTPLabel) && (is_nearby_chat ? sDisableLabeledLinksNearby : sDisableLabeledLinks) && match.getLabel() != match.getUrl())
+        {
+            match.setLabeledLinkMasked(true);
+            if (mUrlEntryTrustedUrl)
+            {
+                U32 trusted_start = 0, trusted_end = 0;
+                const std::string& real_url = match.getUrl();
+                bool url_trusted = matchRegex(real_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                if (!url_trusted)
+                {
+                    const std::string slashed_url = real_url + "/";
+                    url_trusted = matchRegex(slashed_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                }
+                if (url_trusted)
+                {
+                    match.setLabeledLinkTrusted(true);
+                }
+            }
+        }
+        // </FS:PP>
+
         return true;
     }
 

@@ -2700,6 +2700,12 @@ void LLTextBase::appendTextImpl(const std::string& new_text, const LLStyle::Para
             if (tooltip_required)
             {
                 setLastSegmentToolTip(match.getTooltip());
+                // <FS:PP> Preview real URLs of bracket links
+                if (match.getLabeledLinkMasked())
+                {
+                    setLastSegmentProminentUrlTooltip(match.getLabel(), match.getLabeledLinkTrusted());
+                }
+                // </FS:PP>
             }
 
             // show query part of url with gray color only for LLUrlEntryHTTP url entries
@@ -2762,6 +2768,18 @@ void LLTextBase::setLastSegmentToolTip(const std::string &tooltip)
         segment->setToolTip(tooltip);
     }
 }
+
+// <FS:PP> Preview real URLs of bracket links
+void LLTextBase::setLastSegmentProminentUrlTooltip(const std::string &label, bool trusted)
+{
+    segment_set_t::iterator it = getSegIterContaining(getLength()-1);
+    if (it != mSegments.end())
+    {
+        LLTextSegmentPtr segment = *it;
+        segment->setProminentUrlTooltip(label, trusted);
+    }
+}
+// </FS:PP>
 
 void LLTextBase::appendText(const std::string &new_text, bool prepend_newline, const LLStyle::Params& input_params)
 {
@@ -4150,6 +4168,41 @@ bool LLNormalTextSegment::handleMouseUp(S32 x, S32 y, MASK mask)
 
 bool LLNormalTextSegment::handleToolTip(S32 x, S32 y, MASK mask)
 {
+    // <FS:PP> Preview real URLs of bracket links
+    // Bypasses the BasicUITooltips preference and the normal hover delay on purpose
+    if (mForceProminentUrlTooltip && !mTooltip.empty())
+    {
+        LLToolTip::Params params;
+        params.font(LLFontGL::getFontSansSerifBig());
+        params.delay_time(0.f);
+        params.wrap(true);
+        params.max_width(700);
+        LLUIColorTable& colors = LLUIColorTable::instance();
+
+        if (mProminentUrlTrusted)
+        {
+            params.styled_message.add().text(LLTrans::getString("FSChatLinkTagTrusted") + " ").style.color(colors.getColor("LindenChatColor", LLColor4::green));
+        }
+        else
+        {
+            params.styled_message.add().text(LLTrans::getString("FSChatLinkTagUntrusted") + " ").style.color(colors.getColor("MutedChatColor", LLColor4::grey));
+        }
+
+        if (!mProminentUrlLabel.empty())
+        {
+            params.styled_message.add().text(mProminentUrlLabel + "\n").style.color(LLColor4::white);
+        }
+        else
+        {
+            params.styled_message.add().text("\n");
+        }
+
+        params.styled_message.add().text(mTooltip).style.color(colors.getColor("HTMLLinkColor", LLColor4::blue));
+        LLToolTipMgr::instance().show(params);
+        return true;
+    }
+    // </FS:PP>
+
     std::string msg;
     // do we have a tooltip for a loaded keyword (for script editor)?
     if (mToken && !mToken->getToolTip().empty())
@@ -4178,6 +4231,15 @@ void LLNormalTextSegment::setToolTip(const std::string& tooltip)
     }
     mTooltip = tooltip;
 }
+
+// <FS:PP> Preview real URLs of bracket links
+void LLNormalTextSegment::setProminentUrlTooltip(const std::string& label, bool trusted)
+{
+    mForceProminentUrlTooltip = true;
+    mProminentUrlLabel = label;
+    mProminentUrlTrusted = trusted;
+}
+// </FS:PP>
 
 // virtual
 LLTextSegmentPtr LLNormalTextSegment::clone(LLTextBase& target) const

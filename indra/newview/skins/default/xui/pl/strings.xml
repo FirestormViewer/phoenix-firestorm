@@ -638,6 +638,9 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	<string name="TooltipSLURL">
 		Kliknij aby zobaczyć szczegóły tego miejsca
 	</string>
+	<string name="FSChatLinkTagTrusted">
+		[Zaufany]
+	</string>
 	<string name="TooltipAgentUrl">
 		Kliknij aby zobaczyć profil Rezydenta
 	</string>

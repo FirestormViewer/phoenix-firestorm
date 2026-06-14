@@ -99,6 +99,7 @@ public:
     virtual void                setToken( LLKeywordToken* token );
     virtual LLKeywordToken*     getToken() const;
     virtual void                setToolTip(const std::string& tooltip);
+    virtual void                setProminentUrlTooltip(const std::string& label, bool trusted) { } // <FS:PP> Preview real URLs of bracket links
     virtual void                dump() const;
 
     // LLMouseHandler interface
@@ -151,6 +152,7 @@ public:
     /*virtual*/ void                setToken( LLKeywordToken* token )   { mToken = token; }
     /*virtual*/ LLKeywordToken*     getToken() const                    { return mToken; }
     /*virtual*/ void                setToolTip(const std::string& tooltip);
+    /*virtual*/ void                setProminentUrlTooltip(const std::string& label, bool trusted); // <FS:PP> Preview real URLs of bracket links
     /*virtual*/ void                dump() const;
 
     /*virtual*/ bool                handleHover(S32 x, S32 y, MASK mask);
@@ -174,6 +176,11 @@ protected:
     S32                 mFontHeight;
     LLKeywordToken*     mToken;
     std::string         mTooltip;
+    // <FS:PP> Preview real URLs of bracket links
+    bool                mForceProminentUrlTooltip { false };
+    bool                mProminentUrlTrusted { false };
+    std::string         mProminentUrlLabel;
+    // </FS:PP>
     boost::signals2::connection mImageLoadedConnection;
 
     bool mCanEdit { true };
@@ -506,6 +513,7 @@ public:
     const   LLWString&      getWlabel() { return mLabel.getWString();}
 
     void                    setLastSegmentToolTip(const std::string &tooltip);
+    void                    setLastSegmentProminentUrlTooltip(const std::string &label, bool trusted); // <FS:PP> Preview real URLs of bracket links
 
     /**
      * If label is set, draws text label (which is LLLabelTextSegment)

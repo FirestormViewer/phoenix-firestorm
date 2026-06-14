@@ -47,7 +47,7 @@
 		<!-- Protection -->
 		<panel label="保護" name="ProtectionTab">
 			<check_box label="左クリックで座らないようにする" name="FSBlockClickSit"/>
-			<check_box label="IM、グループチャット、通知の角括弧リンクを無効にする（URL は引き続き表示されます）" name="FSDisableLabeledChatLinks" tool_tip="有効にすると、他の住人から送信された IM、グループチャット、アドホック会議、グループ通知内の角括弧リンクが単一のラベルにまとめられず、実際の URL が表示されてリンクになります。表示テキストが異なる宛先を隠すフィッシングを軽減するのに役立ちます。近くの（ローカル）チャットは下の別のオプションで制御されます。ビューア内蔵のテキスト（通知、環境設定など）には影響しません。"/>
+			<check_box label="IM・グループチャットの角括弧リンクの実URLをプレビュー（ホバー時）" name="FSDisableLabeledChatLinks" tool_tip="有効にすると、IM、グループチャット、アドホック会議、グループ通知内の角括弧リンクはテキストを保ったまま、ホバーすると実際の宛先URLが大きなヒントで即座に表示されます。表示ラベルが異なる宛先を隠すフィッシングの発見に役立ちます。近くのチャットは下のオプションで制御します。ビューア内蔵のテキストには影響しません。"/>
 			<check_box label="ワールドマップを開くスクリプト（llMapDestinatin）を許可する" name="ScriptsCanShowUI"/>
 			<text name="revokepermissions_txt">
 				オブジェクトのアニメーション権限取消：

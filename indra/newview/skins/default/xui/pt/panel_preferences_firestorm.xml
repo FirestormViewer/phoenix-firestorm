@@ -47,7 +47,7 @@
 	<!--Protection-->
 	<panel label="Segurança" name="ProtectionTab">
 		<check_box label="Bloquear sentar com clique esquerdo em objetos" name="FSBlockClickSit"/>
-		<check_box label="Desativar links com rótulo no chat (URL visível)" name="FSDisableLabeledChatLinks" tool_tip="Se ativado, links com rótulo de chat, IM, avisos de grupo e textos de objetos de outros residentes não serão compactados em um único rótulo. Em vez disso, a URL real será exibida e vinculada. Isso ajuda contra phishing, quando o texto visível esconde outro destino. Textos internos do viewer (notificações, configurações etc.) não são afetados."/>
+		<check_box label="Pré-visualizar URL real de links em MIs e chat de grupo (ao passar)" name="FSDisableLabeledChatLinks" tool_tip="Quando ativado, os links entre colchetes em MIs, chat de grupo, conferências ad-hoc e avisos de grupo mantêm seu texto, mas ao passar o mouse mostram instantaneamente a URL de destino real em uma dica grande. Ajuda a detectar phishing onde o rótulo esconde outro destino. O chat por perto usa a opção abaixo. O texto interno do viewer não é afetado."/>
 		<check_box label="Permitir scripts mostrarem destinos no mapa (llMapDestination)" name="ScriptsCanShowUI"/>
 		<text name="revokepermissions_txt">
 			Revogar permissões:

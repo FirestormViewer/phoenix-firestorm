@@ -89,6 +89,13 @@ public:
 
     bool getSkipProfileIcon() const { return mSkipProfileIcon; }
 
+    // <FS:PP> Preview real URLs of bracket links
+    bool getLabeledLinkMasked() const { return mLabeledLinkMasked; }
+    void setLabeledLinkMasked(bool masked) { mLabeledLinkMasked = masked; }
+    bool getLabeledLinkTrusted() const { return mLabeledLinkTrusted; }
+    void setLabeledLinkTrusted(bool trusted) { mLabeledLinkTrusted = trusted; }
+    // </FS:PP>
+
     /// Change the contents of this match object (used by LLUrlRegistry)
     void setValues(U32 start, U32 end, const std::string &url, const std::string &label,
                    const std::string& query, const std::string &tooltip, const std::string &icon,
@@ -117,6 +124,10 @@ private:
     e_underline mUnderline;
     bool        mTrusted;
     bool mSkipProfileIcon;
+    // <FS:PP> Preview real URLs of bracket links
+    bool mLabeledLinkMasked { false };
+    bool mLabeledLinkTrusted { false };
+    // </FS:PP>
 };
 
 #endif
