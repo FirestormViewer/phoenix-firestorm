@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel">
+
+<!-- Main Panel -->
+
+	<panel name="animation_overrider_panel">
+		<combo_box name="ao_set_selection_combo" tool_tip="Selecione o conjunto de animações para editar."/>
+		<button	name="ao_activate" tool_tip="Ativar o conjunto de animações atual."/>
+		<check_box name="ao_default" label="Padrão" tool_tip="Definir este conjunto de animações como padrão ao entrar. Se nenhum for definido como padrão, usa o conjunto da sessão anterior."/>
+		<button	name="ao_add" tool_tip="Criar novo conjunto de animações."/>
+		<button	name="ao_remove" tool_tip="Excluir este conjunto de animações."/>
+		<check_box name="ao_sit_override" label="Subst. sentar" tool_tip="Ativa a substituição de animações de sentar."/>
+		<check_box name="ao_smart" label="Inteligente" tool_tip="O modo inteligente tenta detectar se a substituição de sentar conflita com a animação do objeto e desativa temporariamente o substitutor de animações." left_pad="-6"/>
+		<check_box name="ao_disable_stands_in_mouselook" label="Desativ. em pé no Mouselook" tool_tip="Desativa animações personalizadas de em pé no modo Mouselook."/>
+		<combo_box name="ao_state_selection_combo" tool_tip="Selecione o tipo de animação para editar."/>
+
+		<panel name="ao_animation_move_trash_panel">
+			<button	name="ao_move_up" tool_tip="Mover a animação selecionada para cima na lista."/>
+			<button	name="ao_move_down"	tool_tip="Mover a animação selecionada para baixo na lista."/>
+			<button	name="ao_trash"	tool_tip="Remover a animação selecionada da lista."/>
+		</panel>
+
+		<check_box name="ao_cycle" label="Rotac." tool_tip="Alternar animações da lista ao reproduzir." width="63"/>
+		<check_box name="ao_randomize" label="Ordem aleatória" tool_tip="No modo de rotação, selecionar animação aleatoriamente."/>
+		<text name="ao_cycle_time_seconds_label" value="Tempo de rotação (seg.):"/>
+		<spinner name="ao_cycle_time" tool_tip="Tempo antes de reproduzir a próxima animação da lista. Defina 0 para desativar."/>
+		<button	name="ao_reload" label="Recarregar" tool_tip="Recarregar configuração do substitutor de animações."/>
+
+		<layout_stack name="next_previous_buttons_stack">
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button	name="ao_previous" tool_tip="Reproduzir animação anterior da lista."/>
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button	name="ao_next" tool_tip="Reproduzir próxima animação da lista."/>
+			</layout_panel>
+		</layout_stack>
+
+		<button	name="ao_less" tool_tip="Exibir janela compacta."/>
+	</panel>
+
+<!-- Reload Cover Panel -->
+
+	<panel name="ao_reload_cover">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label">
+				Recarregando configuração
+			</text>
+			<text name="wait_label">
+				Aguarde
+			</text>
+		</panel>
+	</panel>
+
+<!-- Small Panel -->
+
+	<panel name="animation_overrider_panel_small">
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Selecione o conjunto de animações para editar."/>
+		<button	name="ao_more" tool_tip="Exibir janela completa de configuração."/>
+		<button	name="ao_previous_small" tool_tip="Reproduzir animação anterior da lista."/>
+		<button name="ao_next_small" tool_tip="Reproduzir próxima animação da lista."/>
+		<check_box name="ao_sit_override_small"	label="Sentar" tool_tip="Ativa a substituição de animações de sentar."/>
+	</panel>
+</panel>

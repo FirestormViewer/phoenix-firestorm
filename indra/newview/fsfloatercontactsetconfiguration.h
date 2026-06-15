@@ -53,6 +53,7 @@ private:
     void onCommitSetNotifications();
     void onCommitSetSortByOnlineStatus();
     void onCommitDefaultColor();
+    void onCommitOfflineColor();
     void onCommitSetAutoresponseBusy();
     void onCommitSetAutoresponseMode();
     void onCommitSetAutoresponseNonFriends();
@@ -74,6 +75,7 @@ private:
     LLTextEditor*       mAutoresponseNonFriendsEditor;
     LLColorSwatchCtrl*  mSetSwatch;
     LLColorSwatchCtrl*  mGlobalSwatch;
+    LLColorSwatchCtrl*  mOfflineSwatch;
     LLLineEditor*       mSetName;
     LLButton*           mRenameButton;
 

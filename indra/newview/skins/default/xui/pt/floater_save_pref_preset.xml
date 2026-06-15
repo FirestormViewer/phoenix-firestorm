@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="save_pref_preset" title="SALVAR PREDEFINIÇÃO PREF">
+<floater name="save_pref_preset" title="Salvar predefinicao grafica">
 	<text name="Preset">
-		Digite um nome para a predefinição ou escolha uma predefinição existente.
+		Digite um nome para a predefinicao ou selecione uma predefinicao existente.
 	</text>
-	<button label="Salvar" name="save"/>
+	<combo_box name="preset_combo" top_delta="45"/>
+	<button label="Salvar" name="save" top_delta="35"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>

@@ -10,13 +10,13 @@
 		Editando cabelo
 	</string>
 	<string name="edit_eyes_title">
-		Editando os olhos
+		Editando olhos
 	</string>
 	<string name="edit_shirt_title">
 		Editando camisa
 	</string>
 	<string name="edit_pants_title">
-		Editando calças
+		Editando calça
 	</string>
 	<string name="edit_shoes_title">
 		Editando sapatos
@@ -34,22 +34,22 @@
 		Editando luvas
 	</string>
 	<string name="edit_undershirt_title">
-		Editando camiseta
+		Editando regata
 	</string>
 	<string name="edit_underpants_title">
-		Editando roupa de baixo
+		Editando cueca
 	</string>
 	<string name="edit_alpha_title">
-		Editando máscara Alpha
+		Editando máscara alpha
 	</string>
 	<string name="edit_tattoo_title">
 		Editando tatuagem
 	</string>
 	<string name="edit_universal_title">
-		Edição Universal
+		Editando universal
 	</string>
 	<string name="edit_physics_title">
-		Editando o físico
+		Editando física
 	</string>
 	<string name="shape_desc_text">
 		Forma:
@@ -67,7 +67,7 @@
 		Camisa:
 	</string>
 	<string name="pants_desc_text">
-		Calças:
+		Calça:
 	</string>
 	<string name="shoes_desc_text">
 		Sapatos:
@@ -85,10 +85,10 @@
 		Luvas:
 	</string>
 	<string name="undershirt_desc_text">
-		Camiseta:
+		Regata:
 	</string>
 	<string name="underpants_desc_text">
-		Roupa de baixo:
+		Cueca:
 	</string>
 	<string name="alpha_desc_text">
 		Máscara alpha:
@@ -100,9 +100,9 @@
 		Universal:
 	</string>
 	<string name="physics_desc_text">
-		Físico:
+		Física:
 	</string>
-	<labeled_back_button label="Salvar" name="back_btn" tool_tip="Voltar à edição de look"/>
+	<labeled_back_button label="Salvar" name="back_btn" tool_tip="Voltar para editar visual"/>
 	<text name="edit_wearable_title" value="Editando forma"/>
 	<panel label="Camisa" name="wearable_type_panel">
 		<text name="description_text" value="Forma:"/>
@@ -119,7 +119,10 @@
 				<button label="Salvar como" name="save_as_button"/>
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="Desfazer mudanças" name="revert_button"/>
+				<button label="Desfazer alterações" name="revert_button"/>
+			</layout_panel>
+			<layout_panel name="import_btn_lp">
+				<button label="Importar" name="import_btn"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

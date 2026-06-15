@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="spellcheck_import" title="Wörterbuch importieren">
-	<text name="import_dict">
+	<text name="import_dict" width="72">
 		Wörterbuch:
 	</text>
+	<line_editor name="dictionary_path" width="193" />
 	<button label="Durchsuchen" label_selected="Durchsuchen" name="dictionary_path_browse" width="85"/>
-	<text name="import_name">
+	<text name="import_name" width="72">
 		Name:
 	</text>
-	<text name="import_lang">
+	<line_editor name="dictionary_name" width="193" />
+	<text name="import_lang" width="72">
 		Sprache:
 	</text>
+	<line_editor name="dictionary_language" width="193" />
 	<button label="Importieren" name="ok_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>
 </floater>

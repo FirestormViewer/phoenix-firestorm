@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="search replace" title="Suchen/Ersetzen">
-	<check_box label="Groß-/Kleinschreibung ignor." left="2" name="case_text" width="180"/>
+	<check_box label="Groß-/Kleinschreib. ignor." left="2" name="case_text" width="170"/>
 	<check_box label="Aufwärts suchen" left_pad="5" name="find_previous"/>
 	<button label="Suchen" label_selected="Suchen" name="search_btn"/>
 	<button label="Ersetzen" label_selected="Ersetzen" name="replace_btn"/>

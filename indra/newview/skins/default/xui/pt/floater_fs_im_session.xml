@@ -1,8 +1,85 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-	<layout_stack name="im_panels">
+	<floater.string name="participant_added" value="[NAME] foi convidado(a) para a conversa."/>
+	<floater.string name="multiple_participants_added" value="[NAME] foram convidados para a conversa."/>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Mostrar perfil do grupo"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="Mostrar perfil do residente"/>
+		</layout_panel>
+		<layout_panel name="trans_panel">
+			<button name="translate_btn" tool_tip="Traduzir chat com o serviço configurado"/>
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="Adicionar este residente como amigo"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="Oferecer ou solicitar teleporte"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="Enviar item para este residente"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="Enviar dinheiro para este residente"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="Adicionar voz a este chat"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="Encerrar chamada de voz"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="Propriedades de voz"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="Abrir histórico desta conversa"/>
+		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button name="add_participant_btn" tool_tip="Adicionar alguém a esta conversa"/>
+		</layout_panel>
+		<layout_panel name="send_sysinfo_btn_panel">
+			<button name="send_sysinfo_btn" tool_tip="Enviar informações do sistema"/>
+		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<button name="chat_options_btn" tool_tip="Opções do chat"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Pesquisar no chat"/>
+		</layout_panel>
+		<layout_panel name="support_panel">
+			<check_box label="Informar versão" name="FSSupportGroupChatPrefix_toggle" tool_tip="Adiciona no início de cada mensagem enviada a este grupo a versão atual do viewer, o skin do viewer, o sistema operacional e o status RLVa, ajudando a equipe de suporte a diagnosticar problemas com mais precisão."/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Informar build" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Adiciona no início de cada mensagem enviada a este grupo a versão atual do viewer, o skin do viewer, o sistema operacional e o status RLVa, ajudando a equipe de suporte a diagnosticar problemas com mais precisão. (Esta configuração é independente dos grupos de suporte.)"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="Para" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Mensagens não lidas: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Mostrar painel de emoji"/>
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Mostrar/ocultar emojis recentes"/>
+						</layout_panel>
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Enviar"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Emojis usados recentemente aparecerão aqui
+					</text>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </floater>

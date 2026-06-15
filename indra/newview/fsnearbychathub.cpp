@@ -249,6 +249,7 @@ FSNearbyChat::~FSNearbyChat()
 void FSNearbyChat::sendChat(LLWString text, EChatType type)
 {
     LLWStringUtil::trim(text);
+    LLWStringUtil::replaceChar(text, 182, '\n'); // Convert paragraph symbols back into newlines.
 
     if (!text.empty())
     {

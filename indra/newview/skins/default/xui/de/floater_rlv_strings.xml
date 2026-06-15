@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="rlva_strings" title="RLVa-Texte">
 	<panel name="bottom_panel">
-		<button label="Auf Standardwert zurücksetzen" name="default_btn" width="200"/>
+		<button label="Auf Standardwert zurücksetzen" name="default_btn" width="210"/>
 	</panel>
 </floater>

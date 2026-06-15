@@ -48,6 +48,7 @@
 			<check_box name="regular_expression" label="Reguläre Ausdrücke verwenden"/>
 			<button name="search" label="Suchen"/>
 			<button name="clear" label="Löschen"/>
+			<button name="copy_link" label="Als Link kopieren" tool_tip="Kopiert einen secondlife:///app/openfloater/area_search?... Link für die aktuelle Suche und Filter-Einstellungen." width="115"/>
 		</panel>
 		<panel label="Filter" name="area_search_filter_panel">
 			<text name="only_list">
@@ -63,7 +64,7 @@
 			<check_box name="filter_perm_modify" label="Bearbeiten"/>
 			<check_box name="filter_perm_transfer" label="Transferieren"/>
 			<check_box name="filter_reflection_probe" label="Reflexionstests" tool_tip="Beinhaltet nur manuelle Tests, nicht automatische. Beinhaltet nur Spiegel-Tests, falls Spiegel in den Grafik-Einstellungen aktiviert sind. Falls kein Reflexionsumfang gesetzt ist oder der Test nicht eingebacken ist, könnten Objekte nicht identifiert werden."/>
-			<check_box name="filter_for_sale" label="Zum Verkauf zwischen" width="150"/>
+			<check_box name="filter_for_sale" label="Zum Verkauf zwischen" width="160"/>
 			<text name="and">
 				und
 			</text>
@@ -82,7 +83,7 @@
 				<combo_box.item label="Medien öffnen" name="click_open_media"/>
 				<combo_box.item label="Zoomen" name="click_zoom"/>
 			</combo_box>
-			<check_box name="filter_distance" label="Entfernung zwischen" width="140"/>
+			<check_box name="filter_distance" label="Entfernung zwischen" width="150"/>
            <text name="and2">
 				und
 			</text>

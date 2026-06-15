@@ -9,6 +9,12 @@
 	<floater.string name="text_add_multiple">
 		Scegliere il set di contatti a cui aggiungere le [COUNT] persone selezionate:
 	</floater.string>
+	<floater.string name="title_add">
+		Aggiungi ad un Set
+	</floater.string>
+	<floater.string name="button_add">
+		Aggiungi
+	</floater.string>
 	<button label="Aggiungi" name="add_btn"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

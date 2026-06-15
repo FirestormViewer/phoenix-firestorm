@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_rlvLocks" title="Aktywne blokady RLV">
+<panel name="panel_rlvLocks" label="Aktywne blokady RLV">
   <scroll_list name="lock_list">
     <scroll_list.columns label="Typ blokady" name="lock_type" />
     <scroll_list.columns label="Metoda" name="lock_addrem" />

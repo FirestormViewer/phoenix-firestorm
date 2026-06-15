@@ -1,0 +1,19 @@
+<panel label="Pessoas" name="panel_dir_people">
+    <string name="searching_text">
+        Buscando...
+    </string>
+    <string name="not_found_text">
+        Nada encontrado.
+    </string>
+    <string name="found_text">
+        [COUNT] encontrado(s).
+    </string>
+    <text name="find">
+        Digite os termos de busca:
+    </text>
+    <scroll_list name="results">
+        <column label="Nome" name="name"/>
+    </scroll_list>
+    <button tool_tip="Página anterior" name="prev_btn"/>
+    <button tool_tip="Próxima página" name="next_btn"/>
+</panel>

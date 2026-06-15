@@ -2,41 +2,45 @@
 <menu name="Popup">
 	<menu_item_call label="Criar listagem" name="Marketplace Create Listing"/>
 	<menu_item_call label="Associar listagem" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Obter listagem (Atualizar)" name="Marketplace Get Listing"/>
+	<menu_item_call label="Obter (atualizar) listagem" name="Marketplace Get Listing"/>
 	<menu_item_call label="Verificar erros" name="Marketplace Check Listing"/>
 	<menu_item_call label="Editar listagem" name="Marketplace Edit Listing"/>
 	<menu_item_call label="Listar" name="Marketplace List"/>
-	<menu_item_call label="Parar de oferecer" name="Marketplace Unlist"/>
+	<menu_item_call label="Remover da listagem" name="Marketplace Unlist"/>
 	<menu_item_call label="Ativar" name="Marketplace Activate"/>
 	<menu_item_call label="Desativar" name="Marketplace Deactivate"/>
 	<menu_item_call label="Compartilhar" name="Share"/>
 	<menu_item_call label="Abrir" name="Task Open"/>
-	<menu_item_call label="Executar" name="Task Play"/>
+	<menu_item_call label="Reproduzir" name="Task Play"/>
 	<menu_item_call label="Propriedades" name="Task Properties"/>
 	<menu_item_call label="Renomear" name="Task Rename"/>
-	<menu_item_call label="Apagar" name="Task Remove"/>
-	<menu_item_call label="Limpar lixeira" name="Empty Trash"/>
-	<menu_item_call label="Limpar Achados &amp; perdidos" name="Empty Lost And Found"/>
+	<menu_item_call label="Excluir" name="Task Remove"/>
+	<menu_item_call label="Esvaziar Lixeira" name="Empty Trash"/>
+	<menu_item_call label="Esvaziar Achados e Perdidos" name="Empty Lost And Found"/>
 	<menu_item_call label="Nova pasta" name="New Folder"/>
+	<menu_item_call label="Nova pasta" name="New Listing Folder"/>
+	<menu_item_call label="Nova pasta" name="New Outfit Folder"/>
+	<menu_item_call label="Novo visual" name="New Outfit"/>
 	<menu_item_call label="Novo script" name="New Script"/>
-	<menu_item_call label="Nova anotação" name="New Note"/>
+	<menu_item_call label="Novo notecard" name="New Note"/>
 	<menu_item_call label="Novo gesto" name="New Gesture"/>
+	<menu_item_call label="Novo material" name="New Material"/>
 	<menu label="Novas roupas" name="New Clothes">
 		<menu_item_call label="Nova camisa" name="New Shirt"/>
 		<menu_item_call label="Nova calça" name="New Pants"/>
-		<menu_item_call label="Novos sapatos" name="New Shoes"/>
-		<menu_item_call label="Novas meias" name="New Socks"/>
+		<menu_item_call label="Novo sapato" name="New Shoes"/>
+		<menu_item_call label="Nova meia" name="New Socks"/>
 		<menu_item_call label="Nova jaqueta" name="New Jacket"/>
 		<menu_item_call label="Nova saia" name="New Skirt"/>
-		<menu_item_call label="Novas luvas" name="New Gloves"/>
-		<menu_item_call label="Nova anágua" name="New Undershirt"/>
-		<menu_item_call label="Nova roupa de baixo" name="New Underpants"/>
+		<menu_item_call label="Nova luva" name="New Gloves"/>
+		<menu_item_call label="Nova camiseta de baixo" name="New Undershirt"/>
+		<menu_item_call label="Nova roupa íntima" name="New Underpants"/>
 		<menu_item_call label="Nova máscara alfa" name="New Alpha Mask"/>
 		<menu_item_call label="Nova tatuagem" name="New Tattoo"/>
 		<menu_item_call label="Novo universal" name="New Universal"/>
-		<menu_item_call label="Novo físico" name="New Physics"/>
+		<menu_item_call label="Nova física" name="New Physics"/>
 	</menu>
-	<menu label="Nova parte do corpo" name="New Body Parts">
+	<menu label="Novas partes do corpo" name="New Body Parts">
 		<menu_item_call label="Nova forma" name="New Shape"/>
 		<menu_item_call label="Nova pele" name="New Skin"/>
 		<menu_item_call label="Novo cabelo" name="New Hair"/>
@@ -45,73 +49,98 @@
 	<menu label="Novas configurações" name="New Settings">
 		<menu_item_call label="Novo céu" name="New Sky"/>
 		<menu_item_call label="Nova água" name="New Water"/>
-		<menu_item_call label="Novo ciclo de dias" name="New Day Cycle"/>
+		<menu_item_call label="Novo ciclo diário" name="New Day Cycle"/>
 	</menu>
 	<menu label="Usar como padrão para" name="upload_def">
-		<menu_item_check label="Envios de imagem" name="Image uploads"/>
-		<menu_item_check label="Envios de som" name="Sound uploads"/>
-		<menu_item_check label="Envios de animação" name="Animation uploads"/>
-		<menu_item_check label="Envios de modelos" name="Model uploads"/>
+		<menu_item_check label="Uploads de imagem" name="Image uploads"/>
+		<menu_item_check label="Uploads de som" name="Sound uploads"/>
+		<menu_item_check label="Uploads de animação" name="Animation uploads"/>
+		<menu_item_check label="Uploads de modelo" name="Model uploads"/>
+		<menu_item_check label="Uploads de material PBR" name="PBR uploads"/>
 	</menu>
-	<menu label="Alterar fonte" name="Change Type">
+	<menu_item_call label="Definir como pasta de Favoritos" name="Set Favorites folder"/>
+	<menu_item_call label="Redefinir pasta de Favoritos" name="Reset Favorites folder"/>
+	<menu label="Alterar tipo" name="Change Type">
 		<menu_item_call label="Padrão" name="Default"/>
 		<menu_item_call label="Luvas" name="Gloves"/>
 		<menu_item_call label="Jaqueta" name="Jacket"/>
-		<menu_item_call label="Calças" name="Pants"/>
-		<menu_item_call label="Silhueta" name="Shape"/>
+		<menu_item_call label="Calça" name="Pants"/>
+		<menu_item_call label="Forma" name="Shape"/>
 		<menu_item_call label="Sapatos" name="Shoes"/>
 		<menu_item_call label="Camisa" name="Shirt"/>
 		<menu_item_call label="Saia" name="Skirt"/>
-		<menu_item_call label="Roupa de baixo" name="Underpants"/>
-		<menu_item_call label="Camiseta" name="Undershirt"/>
+		<menu_item_call label="Roupa íntima" name="Underpants"/>
+		<menu_item_call label="Camiseta de baixo" name="Undershirt"/>
 	</menu>
-	<menu_item_call label="Teletransporte" name="Landmark Open"/>
+	<menu_item_call label="Teleportar" name="Landmark Open"/>
 	<menu_item_call label="Abrir" name="Animation Open"/>
 	<menu_item_call label="Abrir" name="Sound Open"/>
-	<menu_item_call label="Substituir look" name="Replace Outfit"/>
-	<menu_item_call label="Adicionar a look" name="Add To Outfit"/>
-	<menu_item_call label="Tirar do look atual" name="Remove From Outfit"/>
-	<menu_item_call label="Copiar lista de looks para a área de transferência" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Substituir visual atual" name="Replace Outfit"/>
+	<menu_item_call label="Adicionar ao visual atual" name="Add To Outfit"/>
+    <menu_item_call label="Vestir itens" name="Wear Items"/>
+	<menu_item_call label="Remover do visual atual" name="Remove From Outfit"/>
+	<menu_item_call label="Copiar lista de visual para a área de transferência" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Encontrar original" name="Find Original"/>
-	<menu_item_call label="Remover item" name="Purge Item"/>
+	<menu_item_call label="Purgar item" name="Purge Item"/>
 	<menu_item_call label="Restaurar item" name="Restore Item"/>
 	<menu_item_call label="Abrir" name="Open"/>
 	<menu_item_call label="Abrir original" name="Open Original"/>
 	<menu_item_call label="Propriedades" name="Properties"/>
 	<menu_item_call label="Renomear" name="Rename"/>
-	<menu_item_call label="Copiar item UUID" name="Copy Asset UUID"/>
-	<menu_item_call label="Mostrar no Painel Principal" name="Show in Main Panel"/>
-	<menu_item_call label="Cortar" name="Cut"/>
+	<menu_item_call label="Imagem..." name="thumbnail"/>
+	<menu_item_call label="Proteger" name="ProtectFolder"/>
+	<menu_item_call label="Desproteger" name="UnprotectFolder"/>
+	<menu_item_call label="Recarregar pasta" name="ReloadFolder"/>
+	<menu_item_call label="Copiar UUID do asset" name="Copy Asset UUID"/>
+	<menu_item_call label="Copiar UUID" name="Copy UUID"/>
+	<menu_item_call label="Restaurar na última posição" name="Restore to Last Position"/>
+	<menu_item_call label="Recortar" name="Cut"/>
 	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Colar" name="Paste"/>
 	<menu_item_call label="Colar como link" name="Paste As Link"/>
-	<menu_item_call label="Links trocados" name="Replace Links"/>
-	<menu_item_call label="Apagar" name="Delete"/>
+	<menu_item_call label="Encontrar todos os links" name="Find Links"/>
+	<menu_item_call label="Substituir links" name="Replace Links"/>
+	<menu_item_call label="Excluir" name="Delete"/>
+	<menu_item_call label="Limpar links quebrados" name="Cleanup broken Links"/>
+	<menu_item_call label="Mover para a pasta padrão" name="Move to Default Folder"/>
+	<menu_item_call label="Mover para Achados e Perdidos" name="Move to Lost And Found"/>
 	<menu_item_call label="Excluir pasta do sistema" name="Delete System Folder"/>
-	<menu_item_call label="Pasta conversa em conferência" name="Conference Chat Folder"/>
-	<menu_item_call label="Executar som" name="Sound Play"/>
+	<menu_item_call label="Criar nova pasta com a seleção" name="New folder from selected"/>
+	<menu_item_call label="Desagrupar itens da pasta" name="Ungroup folder items"/>
+	<menu_item_call label="Adicionar aos Favoritos" name="Add to Favorites"/>
+	<menu_item_call label="Remover dos Favoritos" name="Remove from Favorites"/>
+	<menu_item_call label="Iniciar chat em conferência" name="Conference Chat Folder"/>
+	<menu_item_call label="Reproduzir" name="PlayGesture"/>
+	<menu_item_call label="Reproduzir" name="Sound Play"/>
 	<menu_item_call label="Copiar SLurl" name="url_copy"/>
 	<menu_item_call label="Sobre o marco" name="About Landmark"/>
 	<menu_item_call label="Mostrar no mapa" name="show_on_map"/>
-	<menu_item_call label="Executar animação" name="Animation Play"/>
-	<menu_item_call label="Executar áudio" name="Animation Audition"/>
-	<menu_item_call label="Mandar MI" name="Send Instant Message"/>
-	<menu_item_call label="Oferecer teletransporte..." name="Offer Teleport..."/>
-	<menu_item_call label="Bate-papo em conferência" name="Conference Chat"/>
+	<menu_item_call label="Reproduzir no mundo" name="Animation Play"/>
+	<menu_item_call label="Reproduzir localmente" name="Animation Audition"/>
+	<menu_item_call label="Enviar mensagem instantânea" name="Send Instant Message"/>
+	<menu_item_call label="Oferecer teleporte..." name="Offer Teleport..."/>
+	<menu_item_call label="Solicitar teleporte..." name="Request Teleport..."/>
+	<menu_item_call label="Iniciar chat em conferência" name="Conference Chat"/>
 	<menu_item_call label="Ativar" name="Activate"/>
 	<menu_item_call label="Desativar" name="Deactivate"/>
 	<menu_item_call label="Salvar como" name="Save As"/>
-	<menu_item_call label="Tirar de si mesmo" name="Detach From Yourself"/>
+	<menu_item_call label="Salvar em" name="Save Selected As"/>
+	<menu_item_call label="Desanexar de você" name="Detach From Yourself"/>
 	<menu_item_call label="Vestir" name="Wearable And Object Wear"/>
-	<menu label="Anexar a" name="Attach To"/>
+	<menu label="Anexar em" name="Attach To"/>
 	<menu label="Anexar ao HUD" name="Attach To HUD"/>
 	<menu_item_call label="Tocar" name="Attachment Touch" />
 	<menu_item_call label="Editar" name="Wearable Edit"/>
+	<menu_item_call label="Mostrar na visualização principal" name="Show in Main Panel"/>
+	<menu_item_call label="Mostrar em nova janela" name="Show in new Window"/>
+	<menu_item_call label="Abrir" name="open_in_current_window"/>
+	<menu_item_call label="Abrir em nova janela" name="open_in_new_window"/>
 	<menu_item_call label="Adicionar" name="Wearable Add"/>
+	<menu_item_call label="Atualizar textura" name="Texture Refresh Attachment"/>
 	<menu_item_call label="Tirar" name="Take Off"/>
 	<menu_item_call label="Aplicar somente a mim" name="Settings Apply Local"/>
-	<menu_item_call label="Aplicar ao lote" name="Settings Apply Parcel"/>
-	<menu_item_call label="Copiar para Listagens do Marketplace" name="Marketplace Copy"/>
-	<menu_item_call label="Mover para Listagens do Marketplace" name="Marketplace Move"/>
-	<menu_item_call label="--Sem opções--" name="--no options--"/>
+	<menu_item_call label="Aplicar à parcela" name="Settings Apply Parcel"/>
+	<menu_item_call label="Copiar para listagens do Marketplace" name="Marketplace Copy"/>
+	<menu_item_call label="Mover para listagens do Marketplace" name="Marketplace Move"/>
+	<menu_item_call label="--sem opções--" name="--no options--"/>
 </menu>

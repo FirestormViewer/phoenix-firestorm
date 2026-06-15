@@ -1,44 +1,264 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version='1.0' encoding='utf-8'?>
 <panel label="Cores" name="colors_panel">
-	<text name="effects_color_textbox">
-		Meus efeitos (raio de seleção):
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Selecionar a cor"/>
-	<text name="font_colors">
-		Cores no bate-papo:
-	</text>
-	<text name="text_box1">
-		Eu
-	</text>
-	<text name="text_box2">
-		Outros
-	</text>
-	<text name="text_box3">
-		Objects
-	</text>
-	<text name="text_box4">
-		Sistema
-	</text>
-	<text name="text_box5">
-		Erros
-	</text>
-	<text name="text_box10">
-		Direto
-	</text>
-	<text name="text_box7">
-		Proprietário
-	</text>
-	<text name="text_box9">
-		URLs
-	</text>
-	<text name="bubble_chat">
-		Cor de fundo do nome (e do balão do bate-papo):
-	</text>
-	<color_swatch name="background" tool_tip="Selecionar cor do nome"/>
-	<slider label="Opacidade:" name="bubble_chat_opacity" tool_tip="Selecionar cor do nome"/>
-	<text name="floater_opacity">
-		Opacidade:
-	</text>
-	<slider label="Ativo:" name="active"/>
-	<slider label="Inativo:" name="inactive"/>
+	<tab_container name="tabs">
+		<panel label="Geralmente" name="tab-chat">
+			<text name="font_colors">
+				Cores de origem do bate-papo:
+			</text>
+			<text name="user_label">
+				Texto próprio
+			</text>
+			<text name="others_label">
+				Outro
+			</text>
+			<text name="text_box3">
+				Objetos
+			</text>
+			<text name="friends_label">
+				Amigos
+			</text>
+			<text name="linden_label">
+				Laboratório Linden
+			</text>
+			<text name="muted_label">
+				Bloqueado
+			</text>
+			<text name="system_label">
+				Sistema
+			</text>
+			<text name="script_error_label">
+				Erro de script
+			</text>
+			<text name="object_im_label">
+				Mensagens instantâneas de objeto
+			</text>
+			<text name="llownersay_label">
+				proprietário
+			</text>
+			<text name="htmllink_label">
+				URLs
+			</text>
+			<text name="uriquerypart_label">
+				Parte de consulta de URL
+			</text>
+			<text name="direct_label">
+				Diretamente
+			</text>
+			<text name="header_colors">
+				Títulos de bate-papo:
+			</text>
+			<text name="chat_name_label">
+				Avatares
+			</text>
+			<text name="object_name_header_label">
+				Objetos
+			</text>
+			<text name="mention_colors">
+				Menções no bate-papo:
+			</text>
+			<text name="font_mention_label">
+				Escrita
+			</text>
+			<text name="resident_mention_label">
+				Residente
+			</text>
+			<text name="self_mention_label">
+				Ele mesmo
+			</text>
+			<slider label="Fator de mitigação fora do alcance do chat:" label_width="275" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Fator usado para diminuir a cor normal do bate-papo quando o remetente está fora do alcance normal do bate-papo (0 = escuro, 1 = claro)." />
+			<check_box name="FSColorIMsDistinctly" label="Colora o bate-papo de mensagens instantâneas/grupo de maneira diferente no console:" />
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					Mensagens instantâneas/bate-papo em grupo
+				</text>
+			</panel>
+		</panel>
+		<panel label="Etiquetas de nome" name="tab-nametag">
+			<text name="nametag_colors">
+				Cores para etiquetas de nome:
+			</text>
+			<text name="self_tag_label">
+				Você
+			</text>
+			<text name="friend_tag_label">
+				Amigos
+			</text>
+			<text name="muted_tag_label">
+				Bloqueado
+			</text>
+			<text name="linden_tag_label">
+				Linden Lab
+			</text>
+			<text name="match_tag_label">
+				Coincidência
+			</text>
+			<text name="mismatch_tag_label">
+				Não coincidência
+			</text>
+			<check_box label="Use uma cor diferente para nomes de usuário" name="FSColorUsername" tool_tip="Mostra o nome de usuário em uma cor diferente" width="270" />
+			<check_box label="Use cores diferentes para amigos" name="NameTagShowFriends" tool_tip="Ative para exibir a cor da etiqueta de um amigo como uma cor diferente." />
+			<text name="username_tag_label">
+				nome de usuário
+			</text>
+			<text name="bubble_chat">
+				Cor de fundo para etiquetas de nome e chat de bolha:
+			</text>
+			<color_swatch name="background" tool_tip="Selecione a cor das etiquetas de nome" />
+			<slider name="bubble_chat_opacity" label="Opacidade:" tool_tip="Selecione a opacidade para plaquetas de nome" />
+			<slider name="FSNameTagZOffsetCorrection" label="Correção Z-Offset:" tool_tip="Altera o deslocamento Z das tags de nome do avatar. O valor padrão é 0." />
+			<check_box label="Mostrar distância na etiqueta de nome" name="FSTagShowDistance" tool_tip="Habilita a exibição da distância de um avatar nas seguintes cores na placa de identificação." />
+			<check_box label="Cor da etiqueta de identificação com base na distância" name="FSTagShowDistanceColors" tool_tip="Ative para definir a cor da placa de identificação de um avatar dependendo da distância (intervalo de bate-papo, alcance de chamada, fora do alcance de chamada). Substitui as cores da tag do visualizador, exceto as cores de destaque de amigos e do conjunto de contatos." />
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">
+					Alcance do bate-papo
+				</text>
+				<text name="whisper_distance_tag_label">
+					Alcance de sussurro
+				</text>
+				<text name="shout_tag_label">
+					Intervalo de chamada
+				</text>
+				<text name="beyond_shout_distance_tag_label">
+					Fora do alcance de chamada
+				</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					Cores da tag do visualizador: (somente OpenSim/AuroraSim)
+				</text>
+				<text name="whattagstoshow">
+					Exibição de tags:
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label="Nenhuma tag de visualizador" />
+					<combo_box.item name="TPVD Viewer" label="Visualizador TPVD (usando uma lista)" />
+					<combo_box.item name="All known Viewers" label="Todos os espectadores conhecidos (com base em uma lista)" />
+					<combo_box.item name="All Viewers" label="Todos os visualizadores" />
+				</combo_box>
+				<text name="colorbasedonviewer">
+					Cor da tag com base no visualizador:
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Color not based on Viewer" label="Cor não baseada no visualizador" />
+					<combo_box.item name="Single color per Viewer" label="Uma cor por visualizador" />
+					<combo_box.item name="Multiple colors per Viewer" label="Várias cores por visualizador" />
+					<combo_box.item name="Userdefined color" label="Cor personalizada" />
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					Lista para exibir tags:
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Don't use a list" label="Usar nenhuma lista" />
+					<combo_box.item name="Local Clienttags" label="Lista de tags locais" />
+					<combo_box.item name="Download Clienttags" label="Baixe a lista de tags na inicialização" />
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="Minimapa" name="tab-minimap">
+			<slider name="FSMiniMapOpacity" label="Opacidade do fundo:" label_width="135" width="435" />
+			<text name="netmap_pickradius_color_textbox" width="135">
+				Cor do raio de seleção:
+			</text>
+			<color_swatch name="MapPickRadiusColor" tool_tip="Permite escolher a cor do raio de seleção no minimapa. O tamanho do raio de seleção pode ser configurado através da configuração do tamanho do raio de seleção." />
+			<text name="netmap_pickradius_opacity_textbox" width="60">
+				Opacidade:
+			</text>
+			<slider name="MapPickRadiusTransparency" width="163" tool_tip="Permite escolher a opacidade do raio de seleção no minimapa. O tamanho do raio de seleção pode ser configurado através da configuração do tamanho do raio de seleção." />
+			<text name="netmap_dots_textbox">
+				Pontos no minimapa:
+			</text>
+			<text name="MapAvatarSelfColor_label">
+				EU
+			</text>
+			<text name="MapAvatarColor_label">
+				Outro
+			</text>
+			<text name="MapAvatarFriendColor_label">
+				Amigos
+			</text>
+			<text name="MapAvatarLindenColor_label">
+				Laboratório Linden
+			</text>
+			<text name="MapAvatarMutedColor_label">
+				Bloqueado
+			</text>
+			<check_box name="MiniMapChatRing" label="Exibição de anéis no minimapa para renderização da faixa de fala e chamada" />
+			<text name="netmap_whisperring_color_label">
+				sussurrar
+			</text>
+			<text name="netmap_chatring_color_label">
+				falar
+			</text>
+			<text name="netmap_shoutring_color_label">
+				gritar
+			</text>
+		</panel>
+		<panel label="Outro" name="tab-misc">
+			<text name="effects_color_textbox">
+				Meus efeitos (raio de seleção):
+			</text>
+			<text name="ScriptDialogFgLabel" width="110">
+				Diálogo de script Vg/Hg
+			</text>
+			<text name="floater_opacity">
+				Opacidade da janela:
+			</text>
+			<slider label="Ativo:" name="active" />
+			<slider label="Inativo:" name="inactive" />
+			<slider label="câmera / Bewegung:" name="camera_movement" />
+			<slider label="Conversas:" name="conversations" />
+			<check_box name="override_im_active_opacity_checkbox" label="Use a opacidade ativa quando a janela Conversas estiver em foco" />
+			<text name="console_opacity">
+				Opacidade do console:
+			</text>
+			<color_swatch name="console_background" tool_tip="Selecione a cor de fundo do console" />
+			<slider name="console_background_opacity" label="Opacidade:" tool_tip="Selecione a opacidade do console" />
+			<slider label="Opacidade do texto suspenso:" name="FSHudTextBackgroundOpacity" tool_tip="Defina a opacidade do plano de fundo do texto flutuante" />
+			<slider label="Opacidade do fundo do menu:" name="menu_background_alpha" tool_tip="Opacidade do fundo dos menus de contexto e da barra de menu superior (0,0 = completamente transparente, 1,0 = completamente opaco)" />
+			<text name="preferences_search_label">
+                Cores de pesquisa de configurações:
+            </text>
+			<text name="preferences_search_bg_label" width="75">
+                Fundo:
+            </text>
+			<color_swatch name="preferences_search_bg_color" tool_tip="Cor de fundo para definir o destaque da pesquisa" />
+			<text name="preferences_search_font_label" width="60">
+                Fonte:
+            </text>
+			<color_swatch name="preferences_search_font_color" tool_tip="Cor da fonte para definir o destaque da pesquisa" />
+			<text name="area_search_beacon_color_label" left="300">
+				Cor do marcador de pesquisa de área:
+			</text>
+			
+			<text name="notecard_editor_color_label">
+				Cores para cartões de nota:
+			</text>
+			<text name="notecard_editor_writable_text_color_label">
+				Texto:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Cor do texto do cartão de nota" />
+			<text name="notecard_editor_writable_bg_color_label">
+				Fundo:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Cor de fundo do cartão de nota" />
+			<text name="notecard_editor_writable_cursor_color_label">
+				Cursor:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Cor do cursor do notecard" />
+			<text name="notecard_editor_writable_selection_color_label">
+				Seleção:
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Cor do texto selecionado em cartões de nota" />
+			<color_swatch name="area_search_beacon_color" tool_tip="Cor da marcação de pesquisa circundante" />
+			<check_box label="Mostrar caixas de diálogo de script em um fundo opaco" name="FSScriptDialogNoTransparency" />
+			<check_box name="FSGroupNotifyNoTransparency" label="Mostrar mensagens de grupo em um fundo opaco" />
+			<check_box label="Substituir cor de fundo e opacidade do menu Pie" name="override_pie_color_checkbox" />
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="Escolha a cor de fundo do menu Pie" />
+				<color_swatch name="pie_selected_color_override" tool_tip="Escolha a cor do menu circular" />
+				<slider label="Opacidade:" name="pie_menu_opacity" tool_tip="Escolha a opacidade do menu circular" />
+				<slider label="Esconder:" name="pie_menu_fade_out" tool_tip="Escolha o nível de transparência do menu circular" />
+			</panel>
+		</panel>
+	</tab_container>
 </panel>

@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Lugares" name="places panel">
-	<string name="landmarks_tab_title" value="MEUS MARCOS"/>
-	<string name="teleport_history_tab_title" value="TELETRANSPORTES"/>
-	<filter_editor label="Filtrar meus lugares" name="Filter"/>
+	<string name="landmarks_tab_title" value="Landmarks"/>
+	<string name="teleport_history_tab_title" value="Histórico de teleportes"/>
+	<string name="favorites_tab_title" value="Favoritos"/>
+	
+	<layout_stack name="places_layout_panel">
+		<layout_panel name="main_panel">
+			<layout_stack name="top_menu_panel">
+				<layout_panel name="filter_panel">
+					<filter_editor label="Filtrar meus lugares" name="Filter"/>
+				</layout_panel>
+				<layout_panel name="options_gear_btn_panel">
+					<menu_button tool_tip="Mostrar opções" name="options_gear_btn"/>
+				</layout_panel>
+				<layout_panel name="options_sort_btn_panel">
+					<menu_button tool_tip="Mostrar opções de ordenação" name="sorting_menu_btn"/>
+				</layout_panel>
+				<layout_panel name="add_btn_panel">
+					<menu_button name="add_menu_btn" tool_tip="Adicionar nova landmark ou pasta"/>
+				</layout_panel>
+				<layout_panel name="trash_btn_panel">
+					<dnd_button name="trash_btn" tool_tip="Remover landmark ou pasta selecionada"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+
+		<layout_panel name="button_layout_panel">
 	<panel name="button_panel">
 		<layout_stack name="bottom_bar_ls0">
 			<layout_panel name="lp1">
 				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
-						<button label="Teletransportar" name="teleport_btn" tool_tip="Teletransportar para a área selecionada"/>
+						<button label="Teleportar" name="teleport_btn" tool_tip="Teleportar para o local selecionado"/>
 					</layout_panel>
 					<layout_panel name="chat_btn_lp">
-						<button label="Mapa" name="map_btn" tool_tip="Exibir a área correspondente no Mapa Mundi"/>
+						<button label="Mapa" name="map_btn" tool_tip="Mostrar o local correspondente no mapa"/>
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>
+			<layout_panel name="lp_options">
+				<menu_button name="overflow_btn" tool_tip="Mostrar opções adicionais"/>
+			</layout_panel>
 			<layout_panel name="lp2">
-				<layout_stack name="bottom_bar_ls3">
-					<layout_panel name="edit_btn_lp">
-						<button label="Editar" name="edit_btn" tool_tip="Editar dados do marco"/>
-					</layout_panel>
-					<layout_panel name="overflow_btn_lp">
-						<menu_button label="▼" name="overflow_btn" tool_tip="Mostrar opções adicionais"/>
-					</layout_panel>
-				</layout_stack>
 				<layout_stack name="bottom_bar_profile_ls">
 					<layout_panel name="profile_btn_lp">
-						<button label="Perfil" name="profile_btn" tool_tip="Mostrar perfil do lugar"/>
+						<button label="Perfil" name="profile_btn" tool_tip="Mostrar perfil do local"/>
 					</layout_panel>
 				</layout_stack>
 				<layout_stack name="bottom_bar_close_ls3">
@@ -45,4 +63,6 @@
 			</layout_panel>
 		</layout_stack>
 	</panel>
+	</layout_panel>
+	</layout_stack>
 </panel>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="HoverHeight" title="DEFINIR ALTURA DE FOCO">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="HoverHeight" title="Definir altura de flutuação">
 	<slider label="Altura" name="HoverHeightSlider"/>
+	<check_box name="BindCameraCheck" label="Afetar visão da câmera"/>
 </floater>

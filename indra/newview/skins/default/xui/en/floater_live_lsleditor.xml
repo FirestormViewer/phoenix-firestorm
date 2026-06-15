@@ -78,9 +78,9 @@
     layout="topleft"
     name="Reset"
     left="10"
-    width="85" />
+    width="95" />
   <check_box
-    left_delta="90"
+    left_delta="105"
     top_delta="3"
     enabled="false"
     follows="left|bottom"

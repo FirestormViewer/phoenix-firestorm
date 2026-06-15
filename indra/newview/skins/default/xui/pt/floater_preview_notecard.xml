@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview notecard" title="Anotação:">
+<floater name="preview notecard" title="Notecard:">
 	<floater.string name="no_object">
-		O objeto com esta anotação não foi encontrado.
+		Não foi possível encontrar o objeto que contém esta notecard.
 	</floater.string>
 	<floater.string name="not_allowed">
-		Você não está autorizado a ler esta nota.
+		Você não tem permissão para visualizar esta notecard.
 	</floater.string>
 	<floater.string name="Title">
-		Anotação: [NAME]
+		Notecard: [NAME]
 	</floater.string>
 	<text name="desc txt">
 		Descrição:
@@ -15,6 +15,7 @@
 	<text_editor name="Notecard Editor">
 		Carregando...
 	</text_editor>
+	<button tool_tip="Buscar/substituir" name="Search"/>
 	<button label="Editar..." label_selected="Editar" name="Edit"/>
 	<button label="Salvar" label_selected="Salvar" name="Save"/>
 	<button label="Excluir" label_selected="Excluir" name="Delete"/>

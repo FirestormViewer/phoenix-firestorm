@@ -43,7 +43,7 @@
 		Float-Konstante
 	</text>
 	<text name="c_constant_label">
-		Compound-Konst.
+		Compound
 	</text>
 	<text name="flow_control_label">
 		Flusskontrolle
@@ -68,6 +68,6 @@
 		Erweiterte Optionen:
 	</text>
 	<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
-	<check_box label="Rekompilieren-Button akt. (u.a. für #include-Skripte)" name="FSScriptEditorRecompileButton_checkbox"/>
+	<check_box label="Rekompil.-Button akt. (u.a. für #include-Skripte)" name="FSScriptEditorRecompileButton_checkbox"/>
 	<button name="close_btn" label="OK"/>
 </floater>

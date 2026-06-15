@@ -15,6 +15,7 @@
 	<text_editor name="Notecard Editor">
 		Ładowanie...
 	</text_editor>
+	<text name="byte_counter" initial_value="Bajtów: [BYTES] / [MAX]" />
 	<button tool_tip="Szukaj / Zamień" name="Search"/>
 	<button label="Edytuj" label_selected="Edytuj" name="Edit" />
 	<button label="Zapisz" label_selected="Zapisz" name="Save"/>

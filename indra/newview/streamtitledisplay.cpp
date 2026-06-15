@@ -112,18 +112,5 @@ void StreamTitleDisplay::checkMetadata(const LLSD& metadata)
 void StreamTitleDisplay::sendStreamTitleToChat(std::string_view title)
 {
     static LLCachedControl<S32> streamMetadataAnnounceChannel(gSavedSettings, "StreamMetadataAnnounceChannel");
-    if (streamMetadataAnnounceChannel != 0)
-    {
-        LLMessageSystem* msg = gMessageSystem;
-        msg->newMessageFast(_PREHASH_ChatFromViewer);
-        msg->nextBlockFast(_PREHASH_AgentData);
-        msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-        msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-        msg->nextBlockFast(_PREHASH_ChatData);
-        msg->addStringFast(_PREHASH_Message, title.data());
-        msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
-        msg->addS32("Channel", streamMetadataAnnounceChannel);
-
-        gAgent.sendReliableMessage();
-    }
+    FSCommon::send_message_to_script_channel(title, streamMetadataAnnounceChannel);
 }

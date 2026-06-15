@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="Bússola">
+    <button name="btn_rotate_left_10" tool_tip="Girar avatar 10° para a esquerda"/>
+    <button name="btn_rotate_left_1" tool_tip="Girar avatar 1° para a esquerda"/>
+    <button name="btn_rotate_right_1" tool_tip="Girar avatar 1° para a direita"/>
+    <button name="btn_rotate_right_10" tool_tip="Girar avatar 10° para a direita"/>
+    <button name="btn_rotate_left_90" tool_tip="Girar avatar 90° para a esquerda"/>
+    <button name="btn_rotate_left_45" tool_tip="Girar avatar 45° para a esquerda"/>
+    <button name="btn_rotate_right_45" tool_tip="Girar avatar 45° para a direita"/>
+    <button name="btn_rotate_right_90" tool_tip="Girar avatar 90° para a direita"/>
+    <button name="btn_nearest" label="Girar para o ponto cardeal mais próximo" tool_tip="Girar avatar para o ponto cardeal mais próximo"/>
+    <button name="btn_avatar" label="Olhar para o avatar mais próximo" tool_tip="Olhar para o avatar mais próximo"/>
+</floater>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="simple_outfit_snapshot" title="Captura do item">
+	<button label="Tirar foto" name="new_snapshot_btn"/>
+	<button label="Salvar" name="save_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
+</floater>

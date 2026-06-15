@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
-	<menu_item_check label="Mostrar barra de navegação e de favoritos" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Mostrar barra de navegação e busca" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Mostrar barra de busca" name="ShowSearchTopBar"/>
 	<menu_item_check label="Mostrar barra de favoritos" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Mostrar minibarra de localização" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Mostrar barra de localização mini" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Mostrar localização" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Mostrar versão do simulador" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Mostrar busca no menu" name="FSMenuSearch"/>
+	<menu_item_check label="Mostrar saldo" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Mostrar controles de mídia" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Mostrar quadros por segundo" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Mostrar indicador de cor para FPS" name="FSStatusBarShowFPSColors"/>
+	<menu_item_check label="Mostrar indicador de tráfego de rede" name="ShowNetStats"/>
+	<menu_item_check label="Mostrar coordenadas" name="Coordinates"/>
+	<menu_item_check label="Mostrar permissões da parcela" name="Parcel Properties"/>
 </menu>

@@ -53,6 +53,7 @@
 #include "lfsimfeaturehandler.h"    // <FS:CR> Opensim
 #include "llavatarlist.h"
 #include "lggcontactsets.h" // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
+#include "llviewercontrol.h" // <FS:PP> FIRE-36707 Configurable color for offline contacts in contact sets lists
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -609,7 +610,14 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
         {
             avatar_name_style.font = params.group_moderator_style().font();
         }
-        if (params.online_style.isProvided() && params.online_style().color.isProvided())
+
+        static LLCachedControl<bool> fsContactSetsListColorizeOffline(gSavedSettings, "FSContactSetsListColorizeOffline", false);
+        if (fsContactSetsListColorizeOffline && mOnlineStatus != E_ONLINE)
+        {
+            static LLCachedControl<LLColor4> fsContactSetsListOfflineColor(gSavedSettings, "FSContactSetsListOfflineColor");
+            avatar_name_style.color = fsContactSetsListOfflineColor();
+        }
+        else if (params.online_style.isProvided() && params.online_style().color.isProvided())
         {
             avatar_name_style.color = params.online_style().color();
         }

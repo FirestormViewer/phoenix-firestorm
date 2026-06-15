@@ -1,7 +1,11 @@
-<?xml version="1.0" ?>
-<floater name="save_camera_preset" title="Salvar Predefinição de Câmera">
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="save_camera_preset" title="Salvar predefinicao de camera">
+	<string name="btn_label_save">Salvar</string>
+	<string name="btn_label_replace">Substituir</string>
 	<radio_group name="radio_save_preset">
-		<radio_item name="replace_preset" label="Substituir uma predefinição"/>
-		<radio_item name="new_preset" label="Salvar como nova predefinição"/>
-	</radio_group>
+		<radio_item label="Salvar como nova predefinicao" name="new_preset"/>
+		<radio_item label="Substituir predefinicao" name="replace_preset"/>
+	</radio_group> 
+	<button label="Salvar" name="save"/>
+	<button label="Cancelar" name="cancel"/>
 </floater>

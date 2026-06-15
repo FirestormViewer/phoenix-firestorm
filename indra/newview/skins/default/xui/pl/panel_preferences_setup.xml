@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sieć i pliki" name="Input panel">
-	<tab_container name="tabs">
+	<tab_container label="Sieć i pliki" name="tabs">
 		<panel label="Połączenie" name="tab-conn">
 			<text name="Maximum bandwidth">
 				Maksymalna przepustowość ([https://wiki.firestormviewer.org/fs_speedtest potrzebujesz sugestii?]):

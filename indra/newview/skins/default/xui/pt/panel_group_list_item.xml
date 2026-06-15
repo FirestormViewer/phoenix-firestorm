@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
 	<text name="group_name" value="Desconhecido"/>
+	<button name="notices_btn" tool_tip="Avisos do grupo"/>
 	<button name="info_btn" tool_tip="Mais informações"/>
 	<button name="profile_btn" tool_tip="Ver perfil"/>
 </panel>

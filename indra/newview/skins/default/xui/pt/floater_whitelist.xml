@@ -1,0 +1,17 @@
+<floater name="whitelist_floater" title="Lista de permissões para pastas e arquivos">
+	<text name="whitelist_intro">
+		Programas antivírus e antimalware são essenciais para usar a internet com segurança, mas podem causar diversos problemas no viewer.
+Para minimizar esse impacto e melhorar a estabilidade e o desempenho, recomendamos fortemente que todos os usuários configurem exceções (também conhecidas como lista de permissões) para pastas e programas importantes usados pelo viewer.
+
+Mais detalhes em:
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+		A caixa de texto abaixo mostra as pastas usadas pelo viewer.
+Adicione estas pastas às exceções de diretório.
+	</text>
+	<text name="whitelist_exe_instruction">
+		A caixa de texto abaixo mostra os nomes e os caminhos completos dos arquivos executáveis do viewer.
+Adicione esses arquivos às exceções de executáveis.
+	</text>
+</floater>

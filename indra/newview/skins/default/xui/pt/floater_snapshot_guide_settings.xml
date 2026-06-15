@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="snapshot_guide_settings" title="Configurações do guia de captura">
+	<text name="color_and_appearance_label">
+		Cor e aparência do guia
+	</text>
+	<spinner label="Espessura (px)" name="guide_thickness"/>
+	<slider label="Opacidade" name="guide_opacity"/>
+	<text name="style_label">
+		Estilo do guia
+	</text>
+	<combo_box name="guide_style_combo" tool_tip="Selecionar guia de captura">
+		<combo_box.item name="rule_of_thirds" label="Regra dos terços"/>
+		<combo_box.item name="golden_ratio_top_left" label="Proporção áurea (superior esquerdo)"/>
+		<combo_box.item name="golden_ratio_top_right" label="Proporção áurea (superior direito)"/>
+		<combo_box.item name="golden_ratio_bottom_left" label="Proporção áurea (inferior esquerdo)"/>
+		<combo_box.item name="golden_ratio_bottom_right" label="Proporção áurea (inferior direito)"/>
+		<combo_box.item name="diagonal" label="Diagonal"/>
+	</combo_box>
+</floater>

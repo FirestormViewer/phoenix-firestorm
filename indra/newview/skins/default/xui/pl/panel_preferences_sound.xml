@@ -217,7 +217,7 @@
 			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
 				Próg zmiany ilości L$:
 			</text>
-			<panel name="output_device_settings_panel">
+			<panel name="output_device_settings_panel" label="Ustawienia urządzenia">
 				<panel.string name="output_default_text">
 					Domyślne
 				</panel.string>

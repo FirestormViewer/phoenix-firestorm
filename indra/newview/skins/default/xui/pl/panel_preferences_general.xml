@@ -12,7 +12,7 @@
 		<combo_box.item label="Français (Francuski)" name="French"/>
 		<combo_box.item label="Italiano (Włoski)" name="Italian"/>
 		<combo_box.item label="Polski" name="Polish"/>
-		<!-- <combo_box.item label="Português (Portugalski) - Beta" name="Portugese"/> -->
+		<combo_box.item label="Português (Portugalski) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский (Rosyjski)" name="Russian"/>
 		<!-- <combo_box.item label="Türkçe (Turecki) - Beta" name="Turkish"/> -->
 		<combo_box.item label="日本語 (Japoński) - Beta" name="(Japanese)"/>
@@ -34,8 +34,8 @@
 		Miejsce Startu:
 	</text>
 	<combo_box name="start_location_combo">
-		<combo_box.item label="Ostatnie miejsce" name="MyLastLocation" tool_tip="Domyślnie loguj mnie w ostatnio odwiedzonym miejscu."/>
-		<combo_box.item label="Mój Start" name="MyHome" tool_tip="Domyślnie loguj mnie w moim Miejscu Startu."/>
+		<combo_box.item label="Ostatnie miejsce" name="MyLastLocation" />
+		<combo_box.item label="Mój Start" name="MyHome" />
 	</combo_box>
 	<check_box label="Pokaż na ekranie logowania" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
@@ -92,7 +92,7 @@
 		<combo_box.item label="60 minut" name="item4"/>
 		<combo_box.item label="Nigdy" name="item5"/>
 	</combo_box>
-	<combo_box label="Limit dla Wylogowania:" name="quitafk">
+	<combo_box name="quitafk">
 		<combo_box.item label="2 minuty" name="item0"/>
 		<combo_box.item label="5 minut" name="item1"/>
 		<combo_box.item label="10 minut" name="item2"/>

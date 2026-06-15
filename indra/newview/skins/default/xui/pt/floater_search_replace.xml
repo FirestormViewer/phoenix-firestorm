@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="search replace" title="Buscar/Substituir">
+	<check_box label="Ignorar maiúsc./minúsc." left="2" name="case_text" width="180"/>
+	<check_box label="Buscar para cima" left_pad="5" name="find_previous"/>
+	<button label="Buscar" label_selected="Buscar" name="search_btn"/>
+	<button label="Substituir" label_selected="Substituir" name="replace_btn"/>
+	<button label="Substituir tudo" label_selected="Substituir tudo" name="replace_all_btn"/>
+	<text name="txt">
+		Buscar
+	</text>
+	<text name="txt2">
+		Substituir
+	</text>
+</floater>

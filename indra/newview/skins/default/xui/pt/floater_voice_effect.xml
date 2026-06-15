@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Locais" name="voice_effects" title="Pré-visualização de modulação de voz">
+	<string name="no_voice_effect">
+		(Sem modulação de voz)
+	</string>
+	<string name="active_voice_effect">
+		(Ativo)
+	</string>
+	<string name="unsubscribed_voice_effect">
+		(não assinado)
+	</string>
+	<string name="new_voice_effect">
+		(Novo!)
+	</string>
+	<string name="effect_Arena">
+		Arena
+	</string>
+	<string name="effect_Beast">
+		Besta
+	</string>
+	<string name="effect_Buff">
+		Musculoso
+	</string>
+	<string name="effect_Buzz">
+		Buzz
+	</string>
+	<string name="effect_Camille">
+		Camille
+	</string>
+	<string name="effect_Creepy">
+		Assustador
+	</string>
+	<string name="effect_CreepyBot">
+		Bot assustador
+	</string>
+	<string name="effect_Cyber">
+		Cyber
+	</string>
+	<string name="effect_DeepBot">
+		Bot grave
+	</string>
+	<string name="effect_Demon">
+		Demônio
+	</string>
+	<string name="effect_Female Elf">
+		Elfa
+	</string>
+	<string name="effect_Flirty">
+		Sedutor
+	</string>
+	<string name="effect_Foxy">
+		Sensual
+	</string>
+	<string name="effect_Halloween 2010 Bonus">
+		Bonus_Halloween_2010
+	</string>
+	<string name="effect_Helium">
+		Hélio
+	</string>
+	<string name="effect_Husky">
+		Rouco
+	</string>
+	<string name="effect_Husky Whisper">
+		Sussurro rouco
+	</string>
+	<string name="effect_Intercom">
+		Interfone
+	</string>
+	<string name="effect_Julia">
+		Julia
+	</string>
+	<string name="effect_Lo Lilt">
+		Canto suave
+	</string>
+	<string name="effect_Macho">
+		Macho
+	</string>
+	<string name="effect_Micro">
+		Micro
+	</string>
+	<string name="effect_Mini">
+		Mini
+	</string>
+	<string name="effect_Model">
+		Modelo
+	</string>
+	<string name="effect_Nano">
+		Nano
+	</string>
+	<string name="effect_Nightmare">
+		Pesadelo
+	</string>
+	<string name="effect_PopBot">
+		PopBot
+	</string>
+	<string name="effect_Rachel">
+		Rachel
+	</string>
+	<string name="effect_Radio">
+		Rádio
+	</string>
+	<string name="effect_Robot">
+		Robô
+	</string>
+	<string name="effect_Roxanne">
+		Roxanne
+	</string>
+	<string name="effect_Rumble">
+		Tremor
+	</string>
+	<string name="effect_Sabrina">
+		Sabrina
+	</string>
+	<string name="effect_Samantha">
+		Samantha
+	</string>
+	<string name="effect_Sexy">
+		Sexy
+	</string>
+	<string name="effect_Shorty">
+		Shorty
+	</string>
+	<string name="effect_Smaller">
+		Menor
+	</string>
+	<string name="effect_Sneaky">
+		Sorrateiro
+	</string>
+	<string name="effect_Stallion">
+		Garanhão
+	</string>
+	<string name="effect_Sultry">
+		Sedutor
+	</string>
+	<string name="effect_Thunder">
+		Trovão
+	</string>
+	<string name="effect_Vixen">
+		Sedutora
+	</string>
+	<string name="effect_WhinyBot">
+		Bot reclamador
+	</string>
+	<text name="preview_text">
+		Para pré-visualizar
+	</text>
+	<text name="status_text">
+		Grave um exemplo e clique em um efeito para aplicá-lo à sua voz.
+	</text>
+	<button label="Gravar" name="record_btn" tool_tip="Grave um exemplo da sua voz."/>
+	<button label="Parar" name="record_stop_btn"/>
+	<text name="voice_morphing_link">
+		[[URL] Assinar agora]
+	</text>
+	<scroll_list name="voice_effect_list" tool_tip="Grave um exemplo da sua voz e clique em um efeito para testá-lo.">
+		<scroll_list.columns label="Nome" name="name"/>
+		<scroll_list.columns label="Expira em" name="expires"/>
+	</scroll_list>
+</floater>

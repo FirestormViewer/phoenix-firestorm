@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Terreno" name="Terrain">
+	<text name="region_text_lbl">
+		Região:
+	</text>
+	<text name="region_text">
+		desconhecido
+	</text>
+	<text name="detail_texture_text">
+		Texturas do terreno
+	</text>
+	<text name="detail_material_text">
+		Materiais do terreno
+	</text>
+	<check_box label="PBR metálico/rugosidade" name="terrain_material_type" tool_tip="Se ativado, usa materiais PBR metálico/rugosidade para o terreno. Caso contrário, usa texturas."/>
+	<text name="height_text_lbl">
+		1 (Baixo)
+	</text>
+	<text name="height_text_lbl2">
+		2
+	</text>
+	<text name="height_text_lbl3">
+		3
+	</text>
+	<text name="height_text_lbl4">
+		4 (Alto)
+	</text>
+	<layout_stack name="terrain_features_stack">
+		<layout_panel name="frame_settings_terrain">
+			<tab_container name="terrain_tabs">
+				<panel label="Elevação" name="terrain_elevation_panel" />
+				<panel label="Transformações" name="terrain_transform_panel" />
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+	<button label="Aplicar" name="apply_btn"/>
+</panel>

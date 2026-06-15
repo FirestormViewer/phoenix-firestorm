@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_poser" title="Poser para avatar e Animesh">
+	<!-- A matching bone name with the 'header_' prefix produces a sub-heading with the supplied name -->
+	<string name="header_mHead">Corpo</string>
+	<string name="header_mFaceForeheadLeft">Testa/Sobrancelhas</string>
+	<string name="header_mEyeLeft">Olhos/Pálpebras</string>
+	<string name="header_mFaceCheekUpperLeft">Bochechas/Lábios</string>
+	<string name="header_mHandThumb1Left">Mão esquerda</string>
+	<string name="header_mCollarLeft">Braço esquerdo</string>
+	<string name="header_mHandThumb1Right">Mão direita</string>
+	<string name="header_mCollarRight">Braço direito</string>
+	<string name="header_mHipLeft">Pernas</string>
+	<string name="header_mTail1">Cauda</string>
+	<string name="header_mHindLimbsRoot">Membros traseiros</string>
+	<string name="header_mWingsRoot">Asas</string>
+	<string name="header_mFaceEar1Left">Orelhas/Nariz</string>
+	<string name="header_mSkull">Corpo</string>
+	<string name="header_HEAD">Corpo</string>
+	<string name="header_L_UPPER_ARM">Braços</string>
+	<string name="header_L_UPPER_LEG">Pernas</string>
+
+	<!-- These are names to appear on the UI for the joints/bones/thingos -->
+	<string name="title_mPelvis">Avatar inteiro</string>
+	<string name="title_mTorso">Tronco</string>
+	<string name="title_mSpine1">Coluna 1</string>
+	<string name="title_mSpine2">Coluna 2</string>
+	<string name="title_mSpine3">Coluna 3</string>
+	<string name="title_mSpine4">Coluna 4</string>
+	<string name="title_mChest">Peito</string>
+	<string name="title_mNeck">Pescoço</string>
+	<string name="title_mHead">Cabeça</string>
+	<string name="title_mSkull">Crânio</string>
+	<string name="title_mEyeRight">Olho direito</string>
+	<string name="title_mEyeLeft">Olho esquerdo</string>
+	<string name="title_mFaceForeheadLeft">Ângulo esquerdo da testa</string>
+	<string name="title_mFaceForeheadRight">Ângulo direito da testa</string>
+	<string name="title_mFaceEyebrowOuterLeft">Sobrancelha esq. ext.</string>
+	<string name="title_mFaceEyebrowCenterLeft">Sobrancelha esq. centro</string>
+	<string name="title_mFaceEyebrowInnerLeft">Sobrancelha esq. int.</string>
+	<string name="title_mFaceEyebrowOuterRight">Sobrancelha dir. ext.</string>
+	<string name="title_mFaceEyebrowCenterRight">Sobrancelha dir. centro</string>
+	<string name="title_mFaceEyebrowInnerRight">Sobrancelha dir. int.</string>
+	<string name="title_mFaceEyeLidUpperLeft">Pálpebra superior esquerda</string>
+	<string name="title_mFaceEyecornerInnerLeft">Canto interno do olho esq.</string>
+	<string name="title_mFaceEyeLidLowerLeft">Pálpebra inferior esquerda</string>
+	<string name="title_mFaceEyeLidUpperRight">Pálpebra superior direita</string>
+	<string name="title_mFaceEyecornerInnerRight">Canto interno do olho dir.</string>
+	<string name="title_mFaceEyeLidLowerRight">Pálpebra inferior direita</string>
+	<string name="title_mFaceEar1Left">Orelha esquerda superior</string>
+	<string name="title_mFaceEar2Left">Orelha esquerda inferior</string>
+	<string name="title_mFaceEar1Right">Orelha direita superior</string>
+	<string name="title_mFaceEar2Right">Orelha direita inferior</string>
+	<string name="title_mFaceNoseBase">Base do nariz</string>
+	<string name="title_mFaceNoseBridge">Ponte do nariz</string>
+	<string name="title_mFaceNoseLeft">Nariz esquerdo</string>
+	<string name="title_mFaceNoseCenter">Centro do nariz</string>
+	<string name="title_mFaceNoseRight">Nariz direito</string>
+	<string name="title_mFaceCheekLowerLeft">Bochecha esquerda superior</string>
+	<string name="title_mFaceCheekUpperLeft">Bochecha esquerda inferior</string>
+	<string name="title_mFaceCheekLowerRight">Bochecha direita superior</string>
+	<string name="title_mFaceCheekUpperRight">Bochecha direita inferior</string>
+	<string name="title_mFaceJaw">Mandíbula</string>
+	<string name="title_mFaceTeethLower">Dentes inferiores</string>
+	<string name="title_mFaceLipLowerLeft">Lábio inferior esquerdo</string>
+	<string name="title_mFaceLipLowerRight">Lábio inferior direito</string>
+	<string name="title_mFaceLipLowerCenter">Lábio inferior central</string>
+	<string name="title_mFaceTongueBase">Base da língua</string>
+	<string name="title_mFaceTongueTip">Ponta da língua</string>
+	<string name="title_mFaceJawShaper">Formato da mandíbula</string>
+	<string name="title_mFaceForeheadCenter">Centro da testa</string>
+	<string name="title_mFaceTeethUpper">Dentes superiores</string>
+	<string name="title_mFaceLipUpperLeft">Lábio superior esquerdo</string>
+	<string name="title_mFaceLipUpperRight">Lábio superior direito</string>
+	<string name="title_mFaceLipCornerLeft">Canto esquerdo da boca</string>
+	<string name="title_mFaceLipCornerRight">Canto direito da boca</string>
+	<string name="title_mFaceLipUpperCenter">Lábio superior central</string>
+	<string name="title_mCollarLeft">Clavícula</string>
+	<string name="title_mShoulderLeft">Braço inteiro</string>
+	<string name="title_mElbowLeft">Antebraço</string>
+	<string name="title_mWristLeft">Pulso</string>
+	<string name="title_mHandMiddle1Left">Base do dedo médio</string>
+	<string name="title_mHandMiddle2Left">Meio do dedo médio</string>
+	<string name="title_mHandMiddle3Left">Ponta do dedo médio</string>
+	<string name="title_mHandIndex1Left">Base do indicador</string>
+	<string name="title_mHandIndex2Left">Meio do indicador</string>
+	<string name="title_mHandIndex3Left">Ponta do indicador</string>
+	<string name="title_mHandRing1Left">Base do anelar</string>
+	<string name="title_mHandRing2Left">Meio do anelar</string>
+	<string name="title_mHandRing3Left">Ponta do anelar</string>
+	<string name="title_mHandPinky1Left">Base do mindinho</string>
+	<string name="title_mHandPinky2Left">Meio do mindinho</string>
+	<string name="title_mHandPinky3Left">Ponta do mindinho</string>
+	<string name="title_mHandThumb1Left">Base do polegar</string>
+	<string name="title_mHandThumb2Left">Meio do polegar</string>
+	<string name="title_mHandThumb3Left">Ponta do polegar</string>
+	<string name="title_mCollarRight">Clavícula</string>
+	<string name="title_mShoulderRight">Braço inteiro</string>
+	<string name="title_mElbowRight">Antebraço</string>
+	<string name="title_mWristRight">Pulso</string>
+	<string name="title_mHandMiddle1Right">Base do dedo médio</string>
+	<string name="title_mHandMiddle2Right">Meio do dedo médio</string>
+	<string name="title_mHandMiddle3Right">Ponta do dedo médio</string>
+	<string name="title_mHandIndex1Right">Base do indicador</string>
+	<string name="title_mHandIndex2Right">Meio do indicador</string>
+	<string name="title_mHandIndex3Right">Ponta do indicador</string>
+	<string name="title_mHandRing1Right">Base do anelar</string>
+	<string name="title_mHandRing2Right">Meio do anelar</string>
+	<string name="title_mHandRing3Right">Ponta do anelar</string>
+	<string name="title_mHandPinky1Right">Base do mindinho</string>
+	<string name="title_mHandPinky2Right">Meio do mindinho</string>
+	<string name="title_mHandPinky3Right">Ponta do mindinho</string>
+	<string name="title_mHandThumb1Right">Base do polegar</string>
+	<string name="title_mHandThumb2Right">Meio do polegar</string>
+	<string name="title_mHandThumb3Right">Ponta do polegar</string>
+	<string name="title_mWingsRoot">Raiz</string>
+	<string name="title_mWing1Left">Esquerda 1</string>
+	<string name="title_mWing2Left">Esquerda 2</string>
+	<string name="title_mWing3Left">Esquerda 3</string>
+	<string name="title_mWing4Left">Esquerda 4</string>
+	<string name="title_mWing4FanLeft">Leque esquerdo</string>
+	<string name="title_mWing1Right">Direita 1</string>
+	<string name="title_mWing2Right">Direita 2</string>
+	<string name="title_mWing3Right">Direita 3</string>
+	<string name="title_mWing4Right">Direita 4</string>
+	<string name="title_mWing4FanRight">Leque direito</string>
+	<string name="title_mHipRight">Perna direita</string>
+	<string name="title_mKneeRight">Joelho direito</string>
+	<string name="title_mAnkleRight">Tornozelo direito</string>
+	<string name="title_mFootRight">Pé direito</string>
+	<string name="title_mToeRight">Dedo do pé direito</string>
+	<string name="title_mHipLeft">Perna esquerda</string>
+	<string name="title_mKneeLeft">Joelho esquerdo</string>
+	<string name="title_mAnkleLeft">Tornozelo esquerdo</string>
+	<string name="title_mFootLeft">Pé esquerdo</string>
+	<string name="title_mToeLeft">Dedo do pé esquerdo</string>
+	<string name="title_mTail1">Base da cauda</string>
+	<string name="title_mTail2">Cauda 2</string>
+	<string name="title_mTail3">Cauda 3</string>
+	<string name="title_mTail4">Cauda 4</string>
+	<string name="title_mTail5">Cauda 5</string>
+	<string name="title_mTail6">Ponta da cauda</string>
+	<string name="title_mGroin">Virilha</string>
+	<string name="title_mHindLimbsRoot">Raiz</string>
+	<string name="title_mHindLimb1Left">Base esquerda</string>
+	<string name="title_mHindLimb2Left">Esquerda 2</string>
+	<string name="title_mHindLimb3Left">Esquerda 3</string>
+	<string name="title_mHindLimb4Left">Esquerda 4</string>
+	<string name="title_mHindLimb1Right">Base direita</string>
+	<string name="title_mHindLimb2Right">Direita 2</string>
+	<string name="title_mHindLimb3Right">Direita 3</string>
+	<string name="title_mHindLimb4Right">Direita 4</string>
+	<string name="title_HEAD">Cabeça</string>
+	<string name="title_NECK">Nuca</string>
+	<string name="title_CHEST">Peito</string>
+	<string name="title_BUTT">Bumbum</string>
+	<string name="title_BELLY">Barriga</string>
+	<string name="title_LEFT_PEC">Peitoral esquerdo</string>
+	<string name="title_RIGHT_PEC">Peitoral direito</string>
+	<string name="title_L_CLAVICLE">Clavícula esq.</string>
+	<string name="title_R_CLAVICLE">Clavícula dir.</string>
+	<string name="title_L_UPPER_ARM">Braço superior esquerdo</string>
+	<string name="title_R_UPPER_ARM">Braço superior direito</string>
+	<string name="title_L_LOWER_ARM">Antebraço esquerdo</string>
+	<string name="title_R_LOWER_ARM">Antebraço direito</string>
+	<string name="title_L_HAND">Mão esquerda</string>
+	<string name="title_R_HAND">Mão direita</string>
+	<string name="title_UPPER_BACK">Costas superiores</string>
+	<string name="title_LEFT_HANDLE">Cintura esquerda</string>
+	<string name="title_RIGHT_HANDLE">Cintura direita</string>
+	<string name="title_PELVIS">Pelve</string>
+	<string name="title_L_UPPER_LEG">Coxa esquerda</string>
+	<string name="title_R_UPPER_LEG">Coxa direita</string>
+	<string name="title_L_LOWER_LEG">Perna esquerda inferior</string>
+	<string name="title_R_LOWER_LEG">Perna direita inferior</string>
+	<string name="title_L_FOOT">Pé esquerdo</string>
+	<string name="title_R_FOOT">Pé direito</string>
+	<string name="LoadPoseLabel">Carregar pose</string>
+	<string name="SavePoseLabel">Salvar pose</string>
+	<string name="LoadDiffLabel">Carregar dif.</string>
+	<string name="SaveDiffLabel">Salvar dif.</string>
+	<string name="OverWriteLabel">Sobrescrever?</string>
+
+	<floater.string name="FiledateFormat">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<floater.string name="FiledateFormatAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</floater.string>
+
+<!-- The layout is a vertical stack of 3 rows, and each row a horizontal stack of panels -->
+	<layout_stack name="poser_stack">
+		<layout_panel name="regular_controls_layout">
+			<panel name="joints_parent_panel">
+				<tab_container name="joints_tabs">
+					<panel title="Mov." name="positionRotation_panel">
+						<panel name="move_tab_panel">
+							<text name="av_position_updown_label">
+								Cima/Baixo:
+							</text>
+							<slider name="av_position_updown" tool_tip="Move o avatar selecionado para cima ou para baixo"/>
+							<text name="av_position_leftright_label">
+								Esq./Dir.:
+							</text>
+							<slider name="av_position_leftright" tool_tip="Move o avatar selecionado para a esquerda ou direita"/>
+							<text name="av_position_inout_label">
+								Para dentro/fora:
+							</text>
+							<slider name="av_position_inout" tool_tip="Move o avatar selecionado para dentro ou para fora"/>
+							<check_box name="unlock_pelvis_for_bvh_save_checkbox" label="Desbloquear pelve em BVH" tool_tip="Se esta pose for salva como BVH, a pelve não será &apos;travada&apos;. Isso permite que outras animações in-world movam o avatar inteiro. Use esta opção quando a pose for reproduzida &apos;por cima&apos; de outras animações." />
+							<!-- so this panel behaves like the others in the code behind, it has an invisible list... -->
+							<scroll_list name="entireAv_joint_scroll">
+								<scroll_list.columns label="Parte do corpo" name="joint"/>
+							</scroll_list>
+						</panel>
+					</panel>
+					<panel title="Corpo" name="body_joints_panel">
+						<scroll_list name="body_joints_scroll">
+							<scroll_list.columns label="Parte do corpo" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Rosto" name="face_joints_panel">
+						<scroll_list name="face_joints_scroll">
+							<scroll_list.columns label="Parte do corpo" name="joint"/>
+						</scroll_list>
+					</panel>
+					<tab_container title="Mãos" name="hands_tabs">
+						<panel title="Ajustar" name="hands_joints_panel">
+							<scroll_list name="hand_joints_scroll">
+								<scroll_list.columns label="Parte do corpo" name="joint"/>
+							</scroll_list>
+						</panel>
+						<panel title="Predefinidos" name="hands_presets_panel">
+							<scroll_list name="hand_presets_scroll">
+								<scroll_list.columns label="Nome predefinido" name="name"/>
+							</scroll_list>
+							<button label="Aplicar esquerda" name="button_loadHandPoseLeft" tool_tip="Clique para aplicar o predefinido selecionado na mão esquerda"/>
+							<button label="Aplicar direita" name="button_loadHandPoseRight" tool_tip="Clique para aplicar o predefinido selecionado na mão direita"/>
+						</panel>
+					</tab_container>
+					<panel title="Outros" name="misc_joints_panel">
+						<scroll_list name="misc_joints_scroll">
+							<scroll_list.columns label="Parte do corpo" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Física" name="collision_volumes_panel">
+						<scroll_list name="collision_volumes_scroll">
+							<scroll_list.columns label="Física" name="joint"/>
+						</scroll_list>
+					</panel>
+					<panel title="Modelo" name="avatarSelection_panel">
+						<scroll_list tool_tip="Selecione avatar ou Animesh para animar." name="avatarSelection_scroll">
+							<scroll_list.columns label="Seleção..." name="name"/>
+						</scroll_list>
+						<button name="refresh_avatars" tool_tip="Atualizar lista de avatares e Animesh"/>
+						<button label="Iniciar pose" label_selected="Parar pose" tool_tip="Iniciar pose no avatar ou Animesh selecionado, se permitido." name="start_stop_posing_button"/>
+						<button label="Aplicar T-pose" tool_tip="Clique para colocar o avatar selecionado em T-pose" name="set_t_pose_button"/>
+					</panel>
+					<panel title="Config." name="settings_panel">
+						<text name="trackpad_sensitivity_label">
+							Sensibil. da esfera de controle:
+						</text>
+						<slider name="trackpad_sensitivity_slider" tool_tip="Define a sensibilidade da esfera de controle"/>
+						<check_box name="stop_posing_on_close_checkbox" label="Parar ao fechar" tool_tip="Não parar a pose ao fechar pode ajudar a não perder o trabalho já feito."/>
+						<check_box name="also_save_bvh_checkbox" label="Criar BVH ao salvar" tool_tip="Ao salvar a pose, um arquivo BVH também será criado. Arquivos BVH podem ser enviados em Construir &gt; Upload &gt; Animação e usados para posar seu avatar ou outros avatares. Para isso, a base das juntas deve ser zerada, pois o BVH não é derivado de outras poses."/>
+						<check_box name="confirm_overwrite_on_save_checkbox" label="Confirmar sobrescrita" tool_tip="Se a pose for salva com um nome já existente, o botão Salvar deve ser clicado novamente para confirmar a sobrescrita."/>
+						<check_box name="natural_direction_checkbox" label="Usar direção natural" tool_tip="O esqueleto usa rotações de juntas pouco naturais por padrão, o que dificulta a pose. Quando ativado, as juntas usam rotações mais naturais."/>
+						<check_box name="show_joint_markers_checkbox" label="Mostrar marcadores de juntas" tool_tip="Mostra indicadores para facilitar a seleção de juntas durante a pose."/>
+						<check_box name="dof_edit_mode_checkbox" label="Prof. de campo no modo ediç." tool_tip="Ao usar o manipulador, a profundidade de campo normalmente fica desativada. Com esta opção, ela permanece ativa ao editar poses ou prims."/>
+					</panel>
+				</tab_container>
+				<button name="toggleVisualManipulators" tool_tip="Ativar/desativar manipuladores visuais" />
+			</panel>
+			<panel name="joint_manipulation_panel">
+				<tab_container name="modifier_tabs">
+					<panel label="Rotação" name="trackball_panel">
+						<fs_virtual_trackpad name="limb_rotation" tool_tip="Altera a rotação das partes do corpo selecionadas no momento. Segure CTRL para mudanças lentas. Use a roda do mouse para ajustar o 3º eixo. Use Shift ou Alt para alternar entre eixos."/>
+						<text name="limb_pitch_label">
+							Cima/Baixo:
+						</text>
+						<text name="limb_yaw_label">
+							Esq./Dir.:
+						</text>
+						<text name="limb_roll_label">
+							Rolar:
+						</text>
+					</panel>
+					<panel title="Pos. / Esc." name="position_panel">
+						<text name="pos_x_label">
+							Posição X:
+						</text>
+						<text name="pos_y_label">
+							Posição Y:
+						</text>
+						<text name="pos_z_label">
+							Posição Z:
+						</text>
+						<text name="scale_x_label">
+							Escala X:
+						</text>
+						<text name="scale_y_label">
+							Escala Y:
+						</text>
+						<text name="scale_z_label">
+							Escala Z:
+						</text>
+					</panel>
+				</tab_container>
+				<panel name="trackball_button_panel">
+					<button name="undo_change" tool_tip="Desfazer última alteração"/>
+					<button name="button_redo_change" tool_tip="Refazer última alteração de rotação"/>
+					<button name="poser_joint_reset" tool_tip="Clique para restaurar todas as partes selecionadas aos valores originais."/>
+					<button name="delta_mode_toggle" tool_tip="Ao editar várias juntas, aplicar o mesmo delta em vez de forçar a mesma rotação. Também ajuda a evitar gimbal lock."/>
+					<button name="toggle_LockWorldRotation" tool_tip="Bloquear rotação no mundo para os membros selecionados. Membros bloqueados mantêm a rotação quando os membros-pai se movem. Exemplo: com os olhos bloqueados, ao girar a cabeça os olhos continuam olhando quase na mesma direção."/>
+					<button label="Esp." name="button_toggleMirrorRotation" tool_tip="Espelhar mudanças na junta oposta."/>
+					<button label="Sim." name="button_toggleSympatheticRotation" tool_tip="Ajustar a junta oposta proporcionalmente."/>
+					<button label="W" name="poser_world_frame_toggle" tool_tip="Aplicar rotação relativa ao mundo"/>
+					<button label="A" name="poser_avatar_frame_toggle" tool_tip="Aplicar rotação relativa ao avatar"/>
+					<button label="B" name="poser_screen_frame_toggle" tool_tip="Aplicar rotação relativa à tela"/>
+					<button label="Copiar E &gt; D" name="button_symmetrize_left_to_right" tool_tip="Clique para copiar mudanças do lado esquerdo para o direito." />
+					<button label="Copiar D &gt; E" name="button_symmetrize_right_to_left" tool_tip="Clique para copiar mudanças do lado direito para o esquerdo." />
+				</panel>
+			</panel>
+			<panel name="poses_loadSave">
+				<scroll_list tool_tip="Carregar pose para o avatar selecionado." name="poses_scroll">
+					<scroll_list.columns label="Nome" name="load_file_name_column"/>
+					<scroll_list.columns label="Data" name="load_file_date_column"/>
+				</scroll_list>
+				<line_editor label="Digite um nome para salvar a pose..." name="pose_save_name"/>
+			</panel>
+		</layout_panel>
+		<layout_panel name="button_controls_layout">
+			<panel name="button_controls_panel">
+				<button name="FlipPose_avatar" tool_tip="Espelhar pose completa esquerda/direita"/>
+				<button name="FlipJoint_avatar" tool_tip="Espelhar partes selecionadas esquerda/direita"/>
+				<button label="Recap." name="button_RecaptureParts" tool_tip="Se as partes selecionadas não estiverem sendo posadas, captura os valores da pose atual."/>
+				<button label="Partes on/off" name="toggle_PosingSelectedBones" tool_tip="Ativa ou desativa o Poser para as partes selecionadas. Quando desativado, elas são animadas normalmente (ex.: AO, poseball etc.)."/>
+				<button label="Minhas poses" name="toggleLoadSavePanel" tool_tip="Carregar, salvar e gerenciar suas poses criadas"/>
+				<button tool_tip="Gerenciar pasta de poses" name="open_poseDir_button"/>
+				<menu_button label="Carregar pose" tool_tip="Carrega a pose atualmente selecionada." name="load_poses_button"/>
+				<button label="Salvar dif." tool_tip="Salva a diferença em relação a uma pose existente. Comece de uma T-pose para iniciar um novo trabalho." name="save_poses_button"/>
+			</panel>
+		</layout_panel>
+	</layout_stack>
+</floater>

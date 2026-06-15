@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_event_info" title="Evento">
+    <string name="none">
+        nenhum
+    </string>
+    <string name="notify">
+        Notificar
+    </string>
+    <string name="dont_notify">
+        Não notificar
+    </string>
+    <text name="event_name">
+        (nenhum)
+    </text>
+    <text name="event_category_label">
+        Tipo:
+    </text>
+    <text name="event_category">
+        (nenhum)
+    </text>
+    <text name="event_mature_label">
+        Conteúdo moderado:
+    </text>
+    <text name="event_mature_yes">
+        Sim
+    </text>
+    <text name="event_mature_no">
+        Não
+    </text>
+    <text name="event_date_label">
+        Data:
+    </text>
+    <text name="event_date">
+        (nenhuma)
+    </text>
+    <text name="event_duration_label">
+        Duração do evento:
+    </text>
+    <text name="event_duration">
+        (nenhuma)
+    </text>
+    <text name="event_runby_label">
+        Organizador:
+    </text>
+    <text name="event_runby">
+        (nenhum)
+    </text>
+    <text name="event_location_label">
+        Local:
+    </text>
+    <text name="event_location">
+        (nenhum)
+    </text>
+    <text name="event_cover_label">
+        Taxa de entrada:
+    </text>
+    <text name="event_cover">
+        (nenhuma)
+    </text>
+    <text name="event_desc_label">
+        Descrição:
+    </text>
+    <button label="Teleportar" name="teleport_btn"/>
+    <button label="Mostrar no mapa" name="map_btn"/>
+    <button label="Notificar" name="notify_btn"/>
+</panel>

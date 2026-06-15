@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Alerty" name="popups">
-<tab_container name="tabs">
+<tab_container label="Alerty" name="tabs">
 	<panel label="Świat" name="tab-world">
 		<check_box label="Powiadom mnie gdy wydaję lub dostaję L$" name="notify_money_change_checkbox"/>
 		<check_box name="FSPaymentInfoInChat" label="Zgłaszaj transakcje L$ w czacie w pobliżu - nie w tostach"/>

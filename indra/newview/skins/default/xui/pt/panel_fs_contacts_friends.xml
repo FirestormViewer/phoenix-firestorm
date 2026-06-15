@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="friends">
+	<layout_stack name="ls_friend_list" right="-90">
+		<layout_panel name="lp_search">
+			<filter_editor label="Filtrar amigos" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Status online"/>
+				<fs_scroll_list.column label="Nome de usuário" name="user_name" tool_tip="O nome de usuário deste amigo."/>
+				<fs_scroll_list.column label="Nome de exibição" name="display_name" tool_tip="O nome de exibição deste amigo."/>
+				<fs_scroll_list.column label="Nome" name="full_name" tool_tip="O nome deste amigo."/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="Este amigo pode ver quando você está online."/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="Este amigo pode ver sua posição no mapa."/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Este amigo pode editar, excluir ou pegar seus objetos."/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Você pode ver a posição deste amigo no mapa."/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Você pode editar os objetos deste amigo."/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button
+	 label="IM/Chamada"
+	 name="im_btn"
+	 tool_tip="Abre uma sessão de mensagem instantânea"
+	 left_delta="265"
+	 width="85" />
+	<button
+	 label="Perfil"
+	 name="profile_btn"
+	 tool_tip="Mostra fotos, grupos e outras informações"
+	 width="85" />
+	<button
+	 label="Teleportar..."
+	 name="offer_teleport_btn"
+	 tool_tip="Oferecer a este amigo um teleporte para sua localização atual"
+	 width="85" />
+	<button
+	 label="Mapa..."
+	 name="map_btn"
+	 tool_tip="Mostrar a localização atual deste amigo no mapa"
+	 width="85" />
+	<button
+	 label="Pagar..."
+	 name="pay_btn"
+	 tool_tip="Dar Linden dollars (L$) a este amigo"
+	 width="85" />
+	<button
+	 label="Remover..."
+	 name="remove_btn"
+	 tool_tip="Remover esta pessoa da sua lista de amigos"
+	 width="85" />
+	<button
+	 label="Adicionar..."
+	 name="add_btn"
+	 tool_tip="Oferecer amizade a um residente"
+	 width="85" />
+	<text name="friend_count" width="85">
+	 Amigos: [COUNT]
+	</text>
+</panel>

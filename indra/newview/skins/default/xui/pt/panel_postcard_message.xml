@@ -9,13 +9,11 @@
 	<text name="subject_label">
 		Assunto:
 	</text>
-	<line_editor label="Digite aqui o assunto." name="subject_form"/>
+	<line_editor label="Digite o assunto aqui." name="subject_form"/>
 	<text name="msg_label">
 		Mensagem:
 	</text>
 	<text_editor name="msg_form">
-		Digite aqui a mensagem.
+		Digite a mensagem aqui.
 	</text_editor>
-	<button label="Cancelar" name="cancel_btn"/>
-	<button label="Enviar" name="send_btn"/>
 </panel>

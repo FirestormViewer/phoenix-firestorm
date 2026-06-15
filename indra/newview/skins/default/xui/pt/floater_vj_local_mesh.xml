@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Mesh local">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="Assets de mesh local" title="Assets de mesh local">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_name" label="Estado" />
+				<column name="unit_lods" label="LODs" />
+				<column name="unit_objects" label="Objekte" />
+			</fs_scroll_list>
+		</panel>
+		<panel name="logs_panel" label="Log"/>
+		<panel name="local_mesh_settings_panel" label="Configurações">
+			<check_box name="local_mesh_scale_use_meters" label="Assumir escala em metros" tool_tip="Ignorar escala em centímetros usada por ferramentas como Maya." />
+			<check_box name="checkbox_apply_joint_offsets" label="Aplicar offsets de juntas" tool_tip="Aplicar quaisquer offsets de junta no mesh; por padrão eles são ignorados." />
+			<check_box name="checkbox_auto_reload" label="Recarregar arquivos alterados automaticamente" tool_tip="Monitorar arquivos de mesh local no disco e recarregar automaticamente quando mudarem." />
+			<text name="auto_reload_period_label">
+				Intervalo de varredura (s):
+			</text>
+			<spinner name="auto_reload_period" tool_tip="Com que frequência os arquivos monitorados devem ser verificados para mudanças." />
+			<text name="lod_suffix_label">
+				Sufixos de LOD:
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="Escolha um padrão ou edite manualmente... || Padrão SL - (Lowest é LOD0, High não tem sufixo). || Padrão engine de jogos - Unity/UE5 etc. (Lowest=LOD3, High=LOD0). || Nomes de LOD em inglês (Lowest='LOWEST', High='HIGH').">
+				<combo_item name="choose_one">Atual</combo_item>
+				<combo_item name="suff_sl">Padrão SL</combo_item>
+				<combo_item name="suff_unity">Padrão de engine de jogos</combo_item>
+				<combo_item name="suff_descriptive">Nomes de LOD</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				Lowest:
+			</text>
+			<line_editor name="suf_lowest" tool_tip="Sufixo usado para identificar o arquivo de LOD Lowest no disco e modelos dentro de um arquivo." />
+			<text name="suf_low_lab">
+				Low:
+			</text>
+			<line_editor name="suf_low" tool_tip="Sufixo usado para identificar o arquivo de LOD Low no disco e modelos dentro de um arquivo." />
+			<text name="suf_medium_lab">
+				Medium:
+			</text>
+			<line_editor name="suf_medium" tool_tip="Sufixo usado para identificar o arquivo de LOD Medium no disco e modelos dentro de um arquivo." />
+			<text name="suf_high_lab">
+				High:
+			</text>
+			<line_editor name="suf_high" tool_tip="Sufixo usado para identificar o arquivo de LOD High no disco e modelos dentro de um arquivo." />
+			<text name="suf_physics_lab">
+				Física:
+			</text>
+			<line_editor name="suf_physics" tool_tip="Sufixo usado para identificar o arquivo de física no disco e modelos dentro de um arquivo." />
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="Aplicar" />
+	<button name="btn_add" label="Adicionar" />
+	<button name="btn_remove" label="Remover" />
+	<button name="btn_reload" label="Recarregar" />
+	<button name="btn_clear" label="Limpar" />
+	<button name="btn_rez" label="Rezar selecionado" tool_tip="Cria um mesh doador no mundo e preenche com o mesh local selecionado. Isso cria um objeto vazio no mundo." />
+</floater>

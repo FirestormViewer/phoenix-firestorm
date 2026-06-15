@@ -3,7 +3,7 @@
 	<text name="import_dict">
 		Dicionário:
 	</text>
-	<button label="Procurar" label_selected="Procurar" name="dictionary_path_browse"/>
+	<button label="Procurar" label_selected="Procurar" name="dictionary_path_browse" width="85"/>
 	<text name="import_name">
 		Nome:
 	</text>

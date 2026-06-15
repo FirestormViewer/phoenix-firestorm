@@ -15,7 +15,7 @@
 			<button label="Melden" name="btn_report_xp"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
-			<check_box label="Alle Events benachrichtigen   Tage" name="notify_all" width="205"/>
+			<check_box label="Alle Events benachrichtigen   Tage" name="notify_all" width="219"/>
 			<button label="Entfernen" name="btn_clear"/>
 			<button label="&lt;" name="btn_prev"/>
 			<button label="&gt;" name="btn_next"/>

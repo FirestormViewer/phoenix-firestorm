@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="BOTÕES DA BARRA DE FERRAMENTAS">
+<floater name="Toybox" title="Botões da barra de ferramentas">
 	<text name="toybox label 1">
-		Adicione ou remova botões arrastando-os para dentro ou para fora das barras de ferramentas.
+		Você pode arrastar botões para adicionar ou remover das barras de ferramentas.
 	</text>
 	<text name="toybox label 2">
-		Os botões aparecerão como mostrado ou somente como ícone, dependendo das configurações de cada barra de ferramentas.
+		Dependendo da configuração, os botões aparecem completos ou apenas como ícone.
 	</text>
-	<button label="Limpar todas as barras de ferramentas" label_selected="Limpar todas as barras de ferramentas" name="btn_clear_all"/>
-	<button label="Restaurar padrão" label_selected="Restaurar padrão" name="btn_restore_defaults"/>
+	<button label="Limpar todas as barras" label_selected="Limpar todas as barras" name="btn_clear_all" left="165" width="150"/>
+	<button label="Restaurar padrões" label_selected="Restaurar padrões" name="btn_restore_defaults" width="160"/>
+	<check_box label="Bloqueado" name="check_toolbars_locked" tool_tip="Quando ativado, as barras ficam bloqueadas e os botões não podem ser movidos nem removidos."/>
 </floater>

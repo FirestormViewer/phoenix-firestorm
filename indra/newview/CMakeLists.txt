@@ -2184,6 +2184,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/scriptlibrary_preproc.xml
     app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
+    app_settings/settings_modern.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
     app_settings/settings_text.xml

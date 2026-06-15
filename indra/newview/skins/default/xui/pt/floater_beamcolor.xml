@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamColor" title="Rotação de cor do feixe">
+	<floater.string name="start_hue">
+		Matiz inicial
+	</floater.string>
+	<floater.string name="end_hue">
+		Matiz final
+	</floater.string>
+	<text name="beamcolor_text">
+Use o mouse para selecionar as cores em que
+o ciclo de cor do feixe deve iniciar e parar.
+Clique com o botão esquerdo para alterar o início.
+Clique com o botão direito para alterar o fim.
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="Clique para abrir o seletor de cores"/>
+	<text name="beamcolor_text2">
+		Pré-visualização
+	</text>
+	<slider name="BeamColor_Speed" label_width="100" label="Velocidade da rotação" tool_tip="Controla a velocidade do ciclo de cores"/>
+	<button label="Salvar" name="BeamColor_Save"/>
+	<button label="Carregar" name="BeamColor_Load"/>
+	<button label="Cancelar" name="BeamColor_Cancel"/>
+</floater>

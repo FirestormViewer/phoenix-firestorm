@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_voice_effect">
+	<string name="no_voice_effect">
+		Voice Morph desativado
+	</string>
+	<string name="preview_voice_effects">
+		Experimentar Voice Morph ▶
+	</string>
+	<string name="get_voice_effects">
+		Assinar Voice Morph ▶
+	</string>
+	<combo_box name="voice_effect" tool_tip="Selecione um efeito Voice Morph para alterar sua voz.">
+		<combo_box.item label="Voice Morph desativado" name="no_voice_effect"/>
+	</combo_box>
+</panel>

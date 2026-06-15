@@ -53,7 +53,7 @@
 							<text name="privileged">
 								Dieses Erlebnis ist für alle Einwohner aktiviert.
 							</text>
-							<button label="Missbrauch melden" name="report_btn" width="114" left="97"/>
+							<button label="Missbrauch melden" name="report_btn" width="124" left="92"/>
 						</layout_panel>
 					</layout_stack>
 				</panel>

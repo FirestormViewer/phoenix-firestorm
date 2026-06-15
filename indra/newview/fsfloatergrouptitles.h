@@ -85,7 +85,9 @@ private:
     void onSetRegion();
     void onSetRegionManual();
     void onClearRegion();
-    void onNoneOnUnassignedToggle();
+    void onUseDefaultToggle();
+    void onSetAsDefault();
+    void updateDefaultColumn();
     void updateRegionColumn();
 
     LLButton*           mActivateButton;
@@ -94,7 +96,8 @@ private:
     LLButton*           mSetRegionButton;
     LLButton*           mSetRegionManualButton;
     LLButton*           mClearRegionButton;
-    LLCheckBoxCtrl*     mNoneOnUnassigned;
+    LLButton*           mSetDefaultButton;
+    LLCheckBoxCtrl*     mUseDefaultCheck;
     LLScrollListCtrl*   mTitleList;
     LLFilterEditor*     mFilterEditor;
 

@@ -92,7 +92,9 @@ void FSGroupTitleRegionMgr::loadFromDisk()
     }
 
     mAssignments.clear();
-    mNoneOnUnassigned = false;
+    mEnabled = false;
+    mDefaultGroupID.setNull();
+    mDefaultRoleID.setNull();
     mLastAppliedRegion.clear();
 
     const auto filename = getFilename();
@@ -120,7 +122,20 @@ void FSGroupTitleRegionMgr::loadFromDisk()
     }
     file.close();
 
-    mNoneOnUnassigned = data["none_on_unassigned"].asBoolean();
+    if (data.has("none_on_unassigned"))
+    {
+        mEnabled = data["none_on_unassigned"].asBoolean();
+    }
+
+    if (data.has("default_group_id"))
+    {
+        mDefaultGroupID = data["default_group_id"].asUUID();
+    }
+
+    if (data.has("default_role_id"))
+    {
+        mDefaultRoleID = data["default_role_id"].asUUID();
+    }
 
     if (data.has("assignments") && data["assignments"].isMap())
     {
@@ -175,7 +190,9 @@ void FSGroupTitleRegionMgr::saveToDisk()
     }
 
     LLSD data;
-    data["none_on_unassigned"] = mNoneOnUnassigned;
+    data["none_on_unassigned"] = mEnabled;
+    data["default_group_id"]   = mDefaultGroupID;
+    data["default_role_id"]    = mDefaultRoleID;
     data["assignments"]        = assignments;
 
     llofstream file(filename.c_str());
@@ -305,9 +322,24 @@ bool FSGroupTitleRegionMgr::getAssignmentForRegion(const std::string& region_nam
 // Preferences
 // ---------------------------------------------------------------------------
 
-void FSGroupTitleRegionMgr::setNoneOnUnassigned(bool enabled)
+void FSGroupTitleRegionMgr::setEnabled(bool enabled)
 {
-    mNoneOnUnassigned = enabled;
+    if (enabled == mEnabled)
+    {
+        return;
+    }
+    mEnabled = enabled;
+    saveToDisk();
+}
+
+void FSGroupTitleRegionMgr::setDefaultTitle(const LLUUID& group_id, const LLUUID& role_id)
+{
+    if (group_id == mDefaultGroupID && role_id == mDefaultRoleID)
+    {
+        return;
+    }
+    mDefaultGroupID = group_id;
+    mDefaultRoleID  = role_id;
     saveToDisk();
 }
 
@@ -483,6 +515,41 @@ void FSGroupTitleRegionMgr::onValidationTimeout()
 // Region change handler
 // ---------------------------------------------------------------------------
 
+void FSGroupTitleRegionMgr::applyGroupTitle(const LLUUID& group_id, const LLUUID& role_id)
+{
+    if (group_id.notNull() && !gAgent.isInGroup(group_id))
+    {
+        LL_WARNS() << "Requested group title belongs to a group we are no longer in, skipping" << LL_ENDL;
+        return;
+    }
+
+    bool title_already_active = false;
+    if (group_id.notNull())
+    {
+        if (const auto* group_data = LLGroupMgr::getInstance()->getGroupData(group_id))
+        {
+            for (const auto& title : group_data->mTitles)
+            {
+                if (title.mRoleID == role_id && title.mSelected)
+                {
+                    title_already_active = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (group_id.notNull() && !title_already_active)
+    {
+        LLGroupMgr::getInstance()->sendGroupTitleUpdate(group_id, role_id);
+    }
+
+    if (gAgent.getGroupID() != group_id)
+    {
+        LLGroupActions::activate(group_id);
+    }
+}
+
 void FSGroupTitleRegionMgr::onRegionChanged()
 {
     if (!mDataLoaded)
@@ -518,43 +585,16 @@ void FSGroupTitleRegionMgr::onRegionChanged()
     LLUUID role_id;
     if (getAssignmentForRegion(region_name, group_id, role_id))
     {
-        if (group_id.notNull() && !gAgent.isInGroup(group_id))
-        {
-            LL_WARNS() << "Region '" << region->getName() << "' has a title assignment for a group we are no longer in, skipping" << LL_ENDL;
-            return;
-        }
-
-        bool title_already_active = false;
-        if (group_id.notNull())
-        {
-            if (const auto* group_data = LLGroupMgr::getInstance()->getGroupData(group_id))
-            {
-                for (const auto& title : group_data->mTitles)
-                {
-                    if (title.mRoleID == role_id && title.mSelected)
-                    {
-                        title_already_active = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        LL_INFOS() << "Region '" << region->getName() << "', switching to assigned group title" << LL_ENDL;
-
-        if (group_id.notNull() && !title_already_active)
-        {
-            LLGroupMgr::getInstance()->sendGroupTitleUpdate(group_id, role_id);
-        }
-
-        if (gAgent.getGroupID() != group_id)
-        {
-            LLGroupActions::activate(group_id);
-        }
+        LL_DEBUGS() << "Region '" << region->getName() << "' has an assigned group title, applying it" << LL_ENDL;
+        applyGroupTitle(group_id, role_id);
+        return;
     }
-    else if (mNoneOnUnassigned && gAgent.getGroupID().notNull())
+
+    if (!mEnabled)
     {
-        LL_INFOS() << "Region '" << region->getName() << "' has no title preset, deactivating group" << LL_ENDL;
-        LLGroupActions::activate(LLUUID::null);
+        return;
     }
+
+    LL_DEBUGS() << "Region '" << region->getName() << "' is unassigned, applying default group title" << LL_ENDL;
+    applyGroupTitle(mDefaultGroupID, mDefaultRoleID);
 }

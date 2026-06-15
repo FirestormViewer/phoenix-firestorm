@@ -5,21 +5,21 @@
 			Conteúdo web
 		</label>
 		<tooltip name="web_tooltip">
-			Este lugar possui conteúdo na web
+			Este local tem conteúdo web
 		</tooltip>
 		<playtip name="web_playtip">
-			Mostrar conteúdo na web
+			Mostrar conteúdo web
 		</playtip>
 	</widgetset>
 	<widgetset name="movie">
 		<label name="movie_label">
-			Filme
+			Vídeo
 		</label>
 		<tooltip name="movie_tooltip">
-			Aqui tem um vídeo para você assistir
+			Foi encontrado um vídeo.
 		</tooltip>
 		<playtip name="movie_playtip">
-			Mostrar vídeo
+			Reproduzir vídeo
 		</playtip>
 	</widgetset>
 	<widgetset name="image">
@@ -27,10 +27,10 @@
 			Imagem
 		</label>
 		<tooltip name="image_tooltip">
-			Aqui tem uma imagem para você ver
+			Este local tem conteúdo de imagem
 		</tooltip>
 		<playtip name="image_playtip">
-			Mostrar imagem
+			Mostrar a imagem deste local
 		</playtip>
 	</widgetset>
 	<widgetset name="audio">
@@ -38,10 +38,10 @@
 			Áudio
 		</label>
 		<tooltip name="audio_tooltip">
-			Aqui tem um clipe de áudio para você ouvir
+			Este local tem conteúdo de áudio
 		</tooltip>
 		<playtip name="audio_playtip">
-			Tocar clipe
+			Reproduzir o áudio deste local
 		</playtip>
 	</widgetset>
 	<widgetset name="none">
@@ -49,12 +49,12 @@
 			Sem conteúdo
 		</label>
 		<tooltip name="none_tooltip">
-			Sem mídia aqui
+			Nenhuma mídia encontrada
 		</tooltip>
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			Stream em tempo real
+			Streaming em tempo real
 		</label>
 	</scheme>
 	<mimetype name="blank">
@@ -94,17 +94,17 @@
 	</mimetype>
 	<mimetype name="application/ogg">
 		<label name="application/ogg_label">
-			Ogg Áudio/Vídeo
+			Ogg Audio/Video
 		</label>
 	</mimetype>
 	<mimetype name="application/pdf">
 		<label name="application/pdf_label">
-			Arquivo PDF
+			Documento PDF
 		</label>
 	</mimetype>
 	<mimetype name="application/postscript">
 		<label name="application/postscript_label">
-			Arquivo Postscript
+			Documento PostScript
 		</label>
 	</mimetype>
 	<mimetype name="application/rtf">

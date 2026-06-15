@@ -282,10 +282,6 @@
 	<color
 		name="ParcelHoverColor"
 		reference="White" />
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
-
   <!-- Script Editor Colors -->
   <color
       name="ScriptBackground"
@@ -321,4 +317,7 @@
   <color
      name="NotecardCursorColor"
      reference="TextCursorColor" />
+  <color
+    name="HighlightPanelBackground"
+    reference="EmphasisColor" />
 </colors>

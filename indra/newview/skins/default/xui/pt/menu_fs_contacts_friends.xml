@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Friends Popup">
+	<menu_item_call label="Ver perfil" name="show_agent"/>
+	<menu_item_call label="Enviar IM..." name="send_im"/>
+	<menu_item_call label="Ver histórico de conversa..." name="chat_history"/>
+	<menu_item_call label="Adicionar ao conjunto..." name="Add to Set"/>
+	<menu_item_call label="Aproximar do amigo" name="zoom_agent"/>
+	<menu_item_call label="Teleportar até amigo" name="teleportto_agent"/>
+	<menu_item_call label="Oferecer teleporte" name="offer_teleport"/>
+	<menu_item_call label="Solicitar teleporte" name="request_teleport"/>
+	<menu_item_call label="Pagar" name="pay"/>
+	<menu_item_call label="Rastrear amigo" name="track_agent"/>
+	<menu_item_call label="Remover amigo..." name="remove_friend"/>
+	<menu_item_call label="Copiar nome para a área de transferência" name="url_copy_label"/>
+	<menu_item_call label="Copiar URL para a área de transferência" name="url_copy"/>
+	<menu_item_call label="Copiar URI de menção para a área de transferência" name="mention_copy_label"/>
+	<menu name="options" label="Opções...">
+		<menu_item_check label="Mostrar coluna de nome de usuário" name="show_username"/>
+		<menu_item_check label="Mostrar coluna de nome de exibição" name="show_displayname"/>
+		<menu_item_check label="Mostrar coluna de nome completo" name="show_fullname"/>
+		<menu_item_check label="Mostrar colunas de permissões" name="show_permissions"/>
+		<menu_item_check label="Ordenar por nome de usuário" name="sort_by_username"/>
+		<menu_item_check label="Ordenar por nome de exibição" name="sort_by_displayname"/>
+		<menu_item_check label="Formato do nome completo: Nome de usuário (Nome de exibição)" name="format_username_displayname"/>
+		<menu_item_check label="Formato do nome completo: Nome de exibição (Nome de usuário)" name="format_displayname_username"/>
+		<menu_item_check label="Mostrar filtro de busca" name="friend_filter"/>
+	</menu>
+	<menu_item_check label="Status online dos amigos visível" name="GlobalOnlineStatusToggle"/>
+</context_menu>

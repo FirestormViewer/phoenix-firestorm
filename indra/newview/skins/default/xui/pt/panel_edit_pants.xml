@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_pants_panel">
 	<panel name="avatar_pants_color_panel">
-		<texture_picker label="Textura" name="Fabric" tool_tip="Selecionar imagem"/>
-		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Selecionar a cor"/>
+		<texture_picker label="Textura" name="Fabric" tool_tip="Clique aqui para escolher uma imagem"/>
+		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique aqui para abrir o seletor de cores"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="pants_main_tab" title="Calças"/>
+			<accordion_tab name="pants_main_tab" title="Calça"/>
 		</accordion>
 	</panel>
 </panel>

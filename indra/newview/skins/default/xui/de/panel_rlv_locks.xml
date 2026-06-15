@@ -7,7 +7,7 @@
 		<scroll_list.columns label="Gesetzt von" name="lock_origin"/>
 	</scroll_list>
 	<panel name="bottom_panel">
-		<button label="Aktualisieren" name="refresh_btn" width="100"/>
+		<button label="Aktualisieren" name="refresh_btn" width="110"/>
 		<icon name="dummy_icon" width="399" />
 	</panel>
 </panel>

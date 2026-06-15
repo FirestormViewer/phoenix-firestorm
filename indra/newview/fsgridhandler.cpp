@@ -74,15 +74,18 @@ void gridDownloadError(const LLSD& aData, LLGridManager* mOwner, GridEntry* mDat
     }
     else if (LLGridManager::TRYLEGACY == mState) // we did TRYLEGACY and faild
     {
-        LLSD args;
-        args["GRID"] = mData->grid[GRID_VALUE];
-        // Could not add [GRID] to the grid list.
-        std::string reason_dialog = "Server didn't provide grid info: ";
-        reason_dialog.append(mData->last_http_error);
-        reason_dialog.append("\nPlease check if the loginuri is correct and");
-        args["REASON"] = reason_dialog;
-        //[REASON] contact support of [GRID].
-        LLNotificationsUtil::add("CantAddGrid", args);
+        if (!mData->grid.has("FLAG_TEMPORARY"))
+        {
+            LLSD args;
+            args["GRID"] = mData->grid[GRID_VALUE];
+            // Could not add [GRID] to the grid list.
+            std::string reason_dialog = "Server didn't provide grid info: ";
+            reason_dialog.append(mData->last_http_error);
+            reason_dialog.append("\nPlease check if the loginuri is correct and");
+            args["REASON"] = reason_dialog;
+            //[REASON] contact support of [GRID].
+            LLNotificationsUtil::add("CantAddGrid", args);
+        }
 
         LL_WARNS() << "No legacy login page. Giving up for " << mData->grid[GRID_VALUE] << LL_ENDL;
         mOwner->addGrid(mData, LLGridManager::FAIL);
@@ -1327,15 +1330,19 @@ std::string LLGridManager::getSLURLBase(const std::string& grid)
     //<AW opensim>
     else
     {
-        LL_DEBUGS("GridManager") << "Trying to fetch info for:" << grid << LL_ENDL;
-        GridEntry* grid_entry        = new GridEntry;
-        grid_entry->set_current      = false;
-        grid_entry->grid             = LLSD::emptyMap();
-        grid_entry->grid[GRID_VALUE] = grid;
+        if (!mFetchedGridInfo.contains(grid))
+        {
+            LL_DEBUGS("GridManager") << "Trying to fetch info for:" << grid << LL_ENDL;
+            GridEntry* grid_entry        = new GridEntry;
+            grid_entry->set_current      = false;
+            grid_entry->grid             = LLSD::emptyMap();
+            grid_entry->grid[GRID_VALUE] = grid;
+            mFetchedGridInfo.insert(grid);
 
-        // add the grid with the additional values, or update the
-        // existing grid if it exists with the given values
-        addGrid(grid_entry, FETCHTEMP);
+            // add the grid with the additional values, or update the
+            // existing grid if it exists with the given values
+            addGrid(grid_entry, FETCHTEMP);
+        }
 
         // deal with hand edited entries
         std::string grid_norm = grid;

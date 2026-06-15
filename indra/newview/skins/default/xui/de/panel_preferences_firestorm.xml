@@ -47,7 +47,8 @@
 	<!--Protection-->
 	<panel label="Sicherheit" name="ProtectionTab">
 		<check_box label="Sitzen per Links-Klick auf Objekten blockieren" name="FSBlockClickSit"/>
-		<check_box label="Klammer-Links im Chat deaktivieren (URL bleibt sichtbar)" name="FSDisableLabeledChatLinks" tool_tip="Wenn aktiviert, werden Klammer-Links aus Chat, IM, Gruppen-Hinweisen und Objekttexten anderer Bewohner nicht zu einem einzelnen Label zusammengefasst. Stattdessen wird die tatsächliche URL angezeigt und verlinkt. Hilft gegen Phishing, bei dem der sichtbare Text ein anderes Ziel verbirgt. Eingebauter Viewer-Text (Benachrichtigungen, Einstellungen usw.) ist nicht betroffen."/>
+		<check_box label="Echte URL von Klammer-Links in IMs/Gruppenchat zeigen (beim Hovern)" name="FSDisableLabeledChatLinks" tool_tip="Wenn aktiviert, behalten Klammer-Links in IMs, Gruppenchat, Ad-hoc-Konferenzen und Gruppen-Hinweisen ihren Text, aber beim Hovern wird sofort die echte Ziel-URL als grosser Hinweis angezeigt. Hilft, Phishing zu erkennen, bei dem das Label ein anderes Ziel verbirgt. Chat in der Nähe nutzt die Option darunter. Eingebauter Viewer-Text ist nicht betroffen."/>
+		<check_box label="Echte URL von Klammer-Links für Chat i. d. Nähe &amp; Objekt-Chat zeigen (beim Hovern)" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="Wenn aktiviert, behalten Klammer-Links im Chat in der Nähe udn von Objekten ihren Text, aber beim Hovern wird sofort die echte Ziel-URL als grosser Hinweis angezeigt. Standardmäßig deaktiviert."/>
 		<check_box label="Skripten erlauben, Ziele auf Karte anzuzeigen (llMapDestination)" name="ScriptsCanShowUI"/>
 		<text name="revokepermissions_txt">
 			Berechtigungen zurückziehen:
@@ -81,7 +82,7 @@
 		</text>
 		<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Ereignis-Multplikator für Sound-Preload-Anfragen [Standard: 4]"/>
 		<button name="AntiSpamUnblock" label="Alle blockierten Spam-Quellen freigeben" width="250"/>
-		<check_box label="Vor Zahlungen bestätigen. Schwellwert:" name="FSConfirmPayments" width="235" tool_tip="Zeigt einen Bestätigungsdialog, bevor Summen größer als der definierte Schwellwert gezahlt werden. Schwellwert auf 0 setzen, um Zahlungen immer zu bestätigen."/>
+		<check_box label="Vor Zahlungen bestätigen. Schwellwert:" name="FSConfirmPayments" width="255" tool_tip="Zeigt einen Bestätigungsdialog, bevor Summen größer als der definierte Schwellwert gezahlt werden. Schwellwert auf 0 setzen, um Zahlungen immer zu bestätigen."/>
 		<spinner name="FSPaymentConfirmationThreshold" tool_tip="Zeigt einen Bestätigungsdialog, bevor Summen größer als der definierte Schwellwert gezahlt werden. Schwellwert auf 0 setzen, um Zahlungen immer zu bestätigen."/>
 	</panel>
 
@@ -184,18 +185,18 @@
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
 		<check_box label="Grenze der aktuell selektierten Parzelle hervorheben" name="RenderParcelSelection"/>
 		<check_box label="Hervorherbung bis zur maximalen Bauhöhe anzeigen" name="FSRenderParcelSelectionToMaxBuildHeight"/>
-		<check_box label="Auswahldistanz einschränken (Meter):" name="LimitSelectDistance" width="230"/>
+		<check_box label="Auswahldistanz einschränken (Meter):" name="LimitSelectDistance" width="245"/>
 		<spinner name="MaxSelectDistance" tool_tip="Maximale Distanz, innerhalb dessen ein Objekt ausgewählt werden kann (in Meter vom Avatar) [Standard: 128.000]"/>
 		<check_box label="Ziehdistanz einschränken (Meter):" name="LimitDragDistance" width="230"/>
 		<spinner name="MaxDragDistance" tool_tip="Maximale Distanz, die ein Objekt in einem Zug bewegt werden kann (in Meter vom Ausgangspunkt) [Standard: 48.000]"/>
-		<text name="RotationStepText1" width="170">
-			Rotationen auf Vielfaches von
+		<text name="RotationStepText1" width="150">
+			Rotation auf Vielfaches v.
 		</text>
 		<spinner name="RotationStep" tool_tip="Alle Rotationen mittels des Rotationstools werden auf ein Vielfaches dieses Wertes beschränkt [Standard: 1.0]"/>
-		<text name="RotationStepText2" width="290">
+		<text name="RotationStepText2" width="310">
 			Grad beschränken, falls „An Raster ausrichten“ deakt.
 		</text>
-		<check_box label="Trennen von Objekten bestehend aus mindestens" name="FSUnlinkConfirmEnabled" width="295"/>
+		<check_box label="Trennen von Objekten bestehend aus mind." name="FSUnlinkConfirmEnabled" width="285"/>
 		<text name="MinObjectsForUnlinkConfirmText2">
 			Einzelobjekten bestätigen
 		</text>
@@ -215,7 +216,7 @@
 	<!--Build 2-->
 	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
-		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
+		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
 		<check_box label="Vorschau von Animation beim Upload am eigenen Avatar" tool_tip="Falls aktiviert, werden Animationen in der Vorschau am eigenen Avatar abgespielt" name="FSUploadAnimationOnOwnAvatar"/>
 		<check_box label="Immer erweiterte Informationen zu Animationen anzeigen" tool_tip="Erweiterte Informationen zu Animation im Eigentschaftsfenster anzeigen" name="FSAnimationPreviewExpanded"/>
 		<check_box label="Erweiterte Skript-Informationen aktivieren" tool_tip="Falls aktiviert, werden die Skript-Informationen um weitergehende Details ergänzt." name="FSScriptInfoExtended"/>
@@ -224,7 +225,7 @@
 	</panel>
 
 	<panel label="Script Editor" name="BuildTabScriptEditor">
-		<text name="text_box_scripting_font" width="130">
+		<text name="text_box_scripting_font" width="140">
 			Schrift für Skript-Editor:
 		</text>
 		<combo_box name="FSScriptingFontName" tool_tip="Name der Schrift, die für den Skript-Editor verwendet wird">
@@ -277,8 +278,8 @@
 			PBR-Materialien
 		</text>
 		<text name="upload_help">
-			Um einen Zielordner zu ändern, im Inventar auf den gewünschten Ordner rechts-klicken und
-„Als Standard nutzen für“ auswählen.
+			Um einen Zielordner zu ändern, im Inventar auf den gewünschten Ordner
+rechts-klicken und „Als Standard nutzen für“ auswählen.
 		</text>
 		<button name="reset_default_folders" label="Standard-Ordner zurücksetzen"/>
 	</panel>

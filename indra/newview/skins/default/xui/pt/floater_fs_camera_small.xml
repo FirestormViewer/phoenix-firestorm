@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_camera_floater_small" title="Controles da câmera">
+	<floater.string name="rotate_tooltip">
+		Girar a câmera em torno do foco
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Aproximar a câmera ao foco
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Mover a câmera para cima, baixo, esquerda e direita
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Visualizar objeto
+	</floater.string>
+
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Orbitar a câmera em torno do foco"/>
+				<button name="roll_left" tool_tip="Inclinar a câmera para a esquerda" />
+				<button name="roll_right" tool_tip="Inclinar a câmera para a direita" />
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Aproximar a câmera ao foco"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Mover a câmera para cima, baixo, esquerda e direita"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="buttons_view">
+		<panel_camera_item name="front_view" tool_tip="Vista frontal">
+			<panel_camera_item.text name="front_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="group_view" tool_tip="Vista lateral">
+			<panel_camera_item.text name="side_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="rear_view" tool_tip="Vista traseira">
+			<panel_camera_item.text name="rear_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="tpp_view" tool_tip="Vista TPP">
+			<panel_camera_item.text name="tpp_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+	<panel name="buttons">
+		<panel_camera_item name="object_view" tool_tip="Vista de objeto">
+			<panel_camera_item.text name="object_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="mouselook_view" tool_tip="Mouselook">
+			<panel_camera_item.text name="mouselook_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="reset_view" tool_tip="Redefinir vista">
+			<panel_camera_item.text name="reset_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+</floater>

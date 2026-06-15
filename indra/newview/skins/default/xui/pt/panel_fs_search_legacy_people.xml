@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Pessoas" name="panel_ls_people">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Digite os termos de busca:
+		</text>
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<fs_scroll_list name="search_results_people">
+			<columns label="" name="icon"/>
+			<columns label="Nome" name="username"/>
+		</fs_scroll_list>
+		<button label="Voltar" name="people_back"/>
+		<button label="Avançar" name="people_next"/>
+	</panel>
+</panel>

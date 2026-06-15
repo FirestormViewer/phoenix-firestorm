@@ -62,13 +62,13 @@
 			<check_box name="bounce_checkbox" label="Abprallend"/>
 			<check_box name="emissive_checkbox" label="Aussendend"/>
 			<check_box name="follow_source_checkbox" label="Quelle folgen"/>
-			<check_box name="follow_velocity_checkbox" label="Geschwind. folgen"/>
-			<check_box name="interpolate_color_checkbox" label="Farbe interpolieren"/>
-			<check_box name="interpolate_scale_checkbox" label="Skalierung interpol."/>
+			<check_box name="follow_velocity_checkbox" label="Geschwind. folg."/>
+			<check_box name="interpolate_color_checkbox" label="Farbe interpolier."/>
+			<check_box name="interpolate_scale_checkbox" label="Skalierung interp."/>
 			<check_box name="target_position_checkbox" label="Position als Ziel"/>
 			<check_box name="target_linear_checkbox" label="Lineares Ziel"/>
 			<check_box name="wind_checkbox" label="Wind"/>
-			<button name="copy_button" label="Kopieren" tool_tip="Kopiert die Parameter des Partikelsystems als LSL-Skript in die Zwischenablage."/>
+			<button name="copy_button" label="Kopier." tool_tip="Kopiert die Parameter des Partikelsystems als LSL-Skript in die Zwischenablage."/>
 			<button name="inject_button" label="Injizieren" tool_tip="Injiziert dieses Partikelsystem in das ausgewählte Objekt."/>
 		</panel>
 

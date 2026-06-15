@@ -242,6 +242,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 
     mMsgText = getChild<LLChatMsgBox>("msg_text", false);
     mMsgText->setContentTrusted(false);
+    mMsgText->setNearbyChatContent(true); // <FS:PP> Nearby chat toast follows the nearby-chat labeled-link setting
     mMsgText->setIsFriendCallback(LLAvatarActions::isFriend);
 
     mMsgText->setText(std::string(""));

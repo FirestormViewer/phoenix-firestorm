@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="place_profile">
-	<string name="on" value="Ligar"/>
-	<string name="off" value="Desligar"/>
-	<string name="anyone" value="Todos"/>
+	<string name="on" value="Ligado"/>
+	<string name="off" value="Desligado"/>
+	<string name="anyone" value="Qualquer pessoa"/>
 	<string name="available" value="disponível"/>
-	<string name="allocated" value="alocados"/>
-	<string name="title_place" value="Perfil da região"/>
-	<string name="title_teleport_history" value="Teletransportes"/>
-	<string name="not_available" value="(N/A)"/>
-	<string name="unknown" value="(Desconhecido)"/>
+	<string name="allocated" value="alocado"/>
+	<string name="title_place" value="Perfil do local"/>
+	<string name="title_teleport_history" value="Histórico de teleporte"/>
+	<string name="not_available" value="n/d"/>
+	<string name="unknown" value="(desconhecido)"/>
 	<string name="public" value="(público)"/>
 	<string name="none_text" value="(nenhum)"/>
-	<string name="sale_pending_text" value="(Venda em andamento)"/>
-	<string name="group_owned_text" value="(Propriedade do grupo)"/>
+	<string name="sale_pending_text" value="(Venda pendente)"/>
+	<string name="group_owned_text" value="(Pertence a grupo)"/>
 	<string name="price_text" value="L$"/>
 	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="Todos os residentes"/>
 	<string name="group_text" value="Grupo"/>
 	<string name="can_resell">
-		Esta região permite a compra e venda de lotes.
+		Terreno comprado nesta região pode ser revendido.
 	</string>
 	<string name="can_not_resell">
-		Esta região não permite a compra e venda de lotes.
+		Terreno comprado nesta região não pode ser revendido.
 	</string>
 	<string name="can_change">
-		Esta região permite a junção ou subdivisão de lotes.
+		Terreno comprado nesta região pode ser unido e dividido.
 	</string>
 	<string name="can_not_change">
-		Esta região não permite a junção ou subdivisão de lotes.
+		Terreno comprado nesta região não pode ser unido e dividido.
 	</string>
 	<string name="server_update_text">
-		Dados sobre o local requerem atualização do servidor.
+		Sem atualização do servidor, as informações do local não estão disponíveis.
 	</string>
 	<string name="server_error_text">
-		Dados sobre o local não disponíveis no momento. Favor tentar mais tarde.
+		No momento não há informações sobre esta localização. Tente novamente mais tarde.
 	</string>
 	<string name="server_forbidden_text">
-		Dados sobre o local controlados por lista de acesso. Verifique se você está autorizado a acessá-los com o dono do lote.
+		As informações desta localização têm acesso restrito. Consulte o proprietário da parcela sobre suas permissões.
+	</string>
+	<string name="acquired_date_ampm">
+		[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
 	</string>
 	<string name="acquired_date">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+		[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
-
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
 
-	<button name="back_btn" tool_tip="Atrás"/>
-	<text name="title" value="Perfil da região"/>
+	<button name="back_btn" tool_tip="Voltar"/>
+	<text name="title" value="Perfil do local"/>
 
 		</layout_panel>
 		<layout_panel name="place_info_content">
 
+			<text name="parcel_title" value="desconhecido"/>
+			<text name="region_title">
+				Região: [REGIONAMEPOS]
+			</text>
+			<expandable_text name="description" value="desconhecido"/>
 			<text name="owner_label" value="Proprietário:"/>
-			<text name="maturity_value" value="(Desconhecido)"/>
+			<text name="parcel_owner" value="desconhecido"/>
+			<text name="maturity_value" value="desconhecido"/>
 			<accordion name="advanced_info_accordion">
-				<accordion_tab name="parcel_characteristics_tab" title="Lote">
+				<accordion_tab name="parcel_characteristics_tab" title="Parcela">
 					<panel name="parcel_characteristics_panel">
 						<text name="rating_label" value="Classificação:"/>
 						<text name="rating_value" value="desconhecido"/>
@@ -62,7 +70,7 @@
 						<text name="voice_value" value="Ligado"/>
 						<text name="fly_label" value="Voar:"/>
 						<text name="fly_value" value="Ligado"/>
-						<text name="push_label" value="Empurrões:"/>
+						<text name="push_label" value="Empurrão:"/>
 						<text name="push_value" value="Desligado"/>
 						<text name="build_label" value="Construir:"/>
 						<text name="build_value" value="Ligado"/>
@@ -71,20 +79,20 @@
 						<text name="damage_label" value="Dano:"/>
 						<text name="damage_value" value="Desligado"/>
 						<text name="see_avatars_label" value="Ver avatares:"/>
-						<text name="see_avatars_value" value="Desligar"/>
+						<text name="see_avatars_value" value="Desligado"/>
 						<button label="Sobre o terreno" name="about_land_btn"/>
 					</panel>
 				</accordion_tab>
 				<accordion_tab name="region_information_tab" title="Região">
 					<panel name="region_information_panel">
 						<text name="region_name_label" value="Região:"/>
-						<text name="region_name" value="Alcelândia"/>
+						<text name="region_name" value="Mooseland"/>
 						<text name="region_type_label" value="Tipo:"/>
-						<text name="region_type" value="Alce"/>
+						<text name="region_type" value="Moose"/>
 						<text name="region_rating_label" value="Classificação:"/>
 						<text name="region_rating" value="Adulto"/>
 						<text name="region_owner_label" value="Proprietário:"/>
-						<text name="region_owner" value="moose Van Moose extra long name moose"/>
+						<text name="region_owner" value="Nome muito longo do proprietário para teste"/>
 						<text name="region_group_label" value="Grupo:"/>
 						<text name="region_group">
 							The Mighty Moose of mooseville soundvillemoose
@@ -97,7 +105,7 @@
 						<text name="estate_name_label" value="Propriedade:"/>
 						<text name="estate_rating_label" value="Classificação:"/>
 						<text name="estate_owner_label" value="Proprietário:"/>
-						<text name="estate_owner" value="Testing owner name length with long name"/>
+						<text name="estate_owner" value="Teste de comprimento do nome do proprietário com nome longo"/>
 						<text name="covenant_label" value="Contrato:"/>
 					</panel>
 				</accordion_tab>
@@ -105,11 +113,11 @@
 					<panel name="sales_panel">
 						<text name="sales_price_label" value="Preço:"/>
 						<text name="area_label" value="Área:"/>
-						<text name="traffic_label" value="Trânsito:"/>
-						<text name="primitives_label" value="Prims:"/>
+						<text name="traffic_label" value="Tráfego:"/>
+						<text name="primitives_label" value="Primitivos:"/>
 						<text name="parcel_scripts_label" value="Scripts:"/>
-						<text name="terraform_limits_label" value="Limite de terraplenagem:"/>
-						<text name="subdivide_label" value="Capacidade de juntar/subdividir:"/>
+						<text name="terraform_limits_label" value="Limites de terraformação:"/>
+						<text name="subdivide_label" value="Dividir/Unir:"/>
 						<text name="resale_label" value="Revenda:"/>
 						<text name="sale_to_label" value="À venda para:"/>
 					</panel>

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Sound Preview" title="SOM.WAV">
+<floater name="Sound Preview" title="Sound.Wav">
 	<text name="name_label">
-		Nome:
+		Name:
 	</text>
 	<text name="description_label">
-		Descrição:
+		Descricao:
 	</text>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
-	<button label="Upload (L$[AMOUNT])" label_selected="Upload (L$[AMOUNT])" name="ok_btn"/>
+	<button label="Enviar ([AMOUNT] L$)" label_selected="Enviar ([AMOUNT] L$)" name="ok_btn"/>
+	<text name="text">
+		Bitrate (kbit/s):
+	</text>
+	<radio_group name="bitrate">
+		<radio_item label="32" name="32"/>
+		<radio_item label="64" name="64"/>
+		<radio_item label="96" name="96"/>
+		<radio_item label="128" name="128"/>
+	</radio_group>
 </floater>

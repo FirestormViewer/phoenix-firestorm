@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Convidar um membro" name="invite_panel" width="224">
+<panel label="Convidar membro" name="invite_panel">
 	<panel.string name="confirm_invite_owner_str">
-		Você tem certeza de que deseja convidar novo(s) proprietário(s)?  Esta ação é permanente!
+		Tem certeza de que deseja convidar novo(s) proprietário(s)? Isso não pode ser desfeito!
 	</panel.string>
 	<panel.string name="loading">
 		(carregando...)
 	</panel.string>
 	<panel.string name="already_in_group">
-		Alguns dos residentes selecionados já estão no grupo, portanto não receberam convite.
+		Alguns dos residentes selecionados já são membros do grupo e, por isso, não receberam convite.
 	</panel.string>
 	<panel.string name="invite_selection_too_large">
-		Os convites para o grupo não foram enviados: muitos residentes selecionados. Os convites para o grupo são limitados a 100 por solicitação.
+		Convites de grupo não enviados: residentes demais selecionados. Convites de grupo são limitados a 100 residentes por solicitação.
 	</panel.string>
-	<text name="help_text" width="214">
-		Selecione um ou mais residentes para convidar.  Clique em &apos;Abrir seletor de residentes&apos; para começar.
+	<text name="help_text">
+		Você pode convidar vários residentes para seu grupo. Para isso, clique em "Abrir lista de residentes".
 	</text>
-	<button label="Abrir Seletor de Residente" name="add_button" tool_tip=""/>
-	<name_list name="invitee_list" tool_tip="Pressione Ctrl enquanto clica nos nomes dos residentes"/>
-	<button label="Remove os selecionados acima da lista" left_delta="-7" name="remove_button" tool_tip="Exclui os residentes selecionados acima da lista de convidados" width="214"/>
+	<button label="Abrir lista de residentes" name="add_button" tool_tip=""/>
+	<name_list name="invitee_list" tool_tip="Para selecionar vários, mantenha Ctrl pressionado e clique nos nomes."/>
+	<button label="Remover seleção da lista" name="remove_button" tool_tip="Remover da lista de convite os residentes selecionados acima."/>
 	<text name="role_text">
-		Escolha que Função atribuir a eles:
+		Selecione uma função:
 	</text>
-	<combo_box name="role_name" tool_tip="Selecione o cargo da lista de cargos que você pode designar a membros"/>
+	<combo_box name="role_name" tool_tip="Escolha na lista uma função que você possa atribuir aos membros."/>
 	<button label="Enviar convites" name="invite_button"/>
 	<button label="Cancelar" name="cancel_button"/>
 	<string name="GroupInvitation">
-		Convite
+		Convite de grupo
 	</string>
 </panel>

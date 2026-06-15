@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Sol e lua" name="panel_fs_settings_sky_hbodies">
+		<panel name="P_Sun_Color">
+			<text name="T_Sun_Header" value="Cor do sol e da lua"/>
+		</panel>
+
+		<panel name="P_SM_Color">
+			<text name="color_label" width="140">
+					Cor do sol e da lua:
+				</text>
+		</panel>
+
+		<panel name="P_Sun_Header">
+			<text name="T_Sun_Header" value="Configurações do sol e estrelas"/>
+		</panel>
+
+		<panel name="P_Sun_Setting">
+			<text name="image_label" width="150">
+				Imagem:
+			</text>
+			<check_box label="Mostrar baliza" name="sunbeacon" />
+			<text name="glow_focus_label">
+				Foco do brilho:
+			</text>
+			<text name="glow_size_label">
+				Taman. do bril.:
+			</text>
+			<text name="star_brightness_label">
+				Brilho das estr.:
+			</text>
+			<text name="sun_scale_label">
+				Escala:
+			</text>	
+			<text name="sun_azimuth_label">
+				Azimute:
+			</text>
+			<text name="sun_elevation_label">
+				Elevação:
+			</text>
+		</panel>
+
+		<panel name="P_Moon_Header">
+			<text name="T_Moon_Header" value="Configurações da lua"/>
+		</panel>
+
+		<panel name="P_Moon_Setting">
+			<text name="moon_image_label" width="150">
+				Imagem:
+			</text>
+			<check_box label="Mostrar baliza" name="moonbeacon" />
+			<text name="moon_scale_label">
+				Escala:
+			</text>
+			<text name="brightness_label">
+				Brilho:
+			</text>
+			<text name="moon_azimuth_label">
+				Azimute:
+			</text>
+			<text name="moon_elevation_label">
+				Elevação:
+			</text>
+		</panel>
+</panel>

@@ -114,6 +114,7 @@ public:
 // </FS:Zi>
 
     bool isRebakeNavMeshAvailable();
+    void setHomeBtnTooltip(); // <FS:PP> Show home location in the "teleport home" navbar button tooltip
 
 // [RLVa:KB] - Checked: 2014-03-23 (RLVa-1.4.10)
     void refreshLocationCtrl();
@@ -190,6 +191,7 @@ private:
     boost::signals2::connection mHistoryMenuConnection;
     // if true, save location to location history when teleport finishes
     bool                        mSaveToLocationHistory;
+    S32                         mHomeTooltipRetryCount; // <FS:PP> Show home location in the "teleport home" navbar button tooltip
 
 // <FS:Zi> Make navigation bar part of the UI
 public:

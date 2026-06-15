@@ -1,60 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Scene Load Statistics" title="ESTATÍSTICAS DE CARREGAMENTO DE CENA">
+<floater name="Scene Load Statistics" title="Estatísticas de carregamento da cena">
 	<button label="Pausar" name="playpause"/>
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view label="Básico" name="basic">
-				<stat_bar label="Diferença de frame em pixels" name="frame difference"/>
-				<stat_bar label="Dados de UDP recebidos" name="bandwidth"/>
-				<stat_bar label="Bandwidth" name="packet_loss"/>
+				<stat_bar label="Diferença de pixels do frame" name="frame difference"/>
+				<stat_bar label="Dados UDP recebidos" name="bandwidth"/>
+				<stat_bar label="Perda de pacotes" name="packet_loss"/>
 			</stat_view>
 			<stat_view label="Avançado" name="advanced">
-				<stat_view label="Render" name="render">
-					<stat_bar label="Total Objects" name="objs"/>
-					<stat_bar label="New Objects" name="newobjs"/>
-					<stat_bar label="Taxa de acertos do cache do objeto" name="object_cache_hits"/>
+				<stat_view label="Renderização" name="render">
+					<stat_bar label="Quantidade de objetos" name="objs"/>
+					<stat_bar label="Novos objetos" name="newobjs"/>
+					<stat_bar label="Taxa de acerto do cache de objetos" name="object_cache_hits"/>
 				</stat_view>
 				<stat_view label="Textura" name="texture">
-					<stat_bar label="Taxa de acertos do cache" name="texture_cache_hits"/>
+					<stat_bar label="Taxa de acerto do cache" name="texture_cache_hits"/>
 					<stat_bar label="Latência de leitura do cache" name="texture_cache_read_latency"/>
-					<stat_bar label="Contagem" name="numimagesstat"/>
-					<stat_bar label="Raw Count" name="numrawimagesstat"/>
+					<stat_bar label="Latência de decodificação do cache" name="texture_decode_latency"/>
+					<stat_bar label="Latência de gravação do cache" name="texture_write_latency"/>
+					<stat_bar label="Quantidade" name="numimagesstat"/>
+					<stat_bar label="Quantidade bruta" name="numrawimagesstat"/>
 				</stat_view>
-				<stat_view label="Network" name="network">
-					<stat_bar label="Packets In" name="packetsinstat"/>
-					<stat_bar label="Packets Out" name="packetsoutstat"/>
+				<stat_view label="Rede" name="network">
+					<stat_bar label="Pacotes recebidos" name="packetsinstat"/>
+					<stat_bar label="Pacotes enviados" name="packetsoutstat"/>
 					<stat_bar label="Objetos" name="objectdatareceived"/>
 					<stat_bar label="Textura" name="texturedatareceived"/>
 					<stat_bar label="Asset" name="assetudpdatareceived"/>
-					<stat_bar label="Layers" name="layersdatareceived"/>
-					<stat_bar label="Actual In" name="messagedatain"/>
-					<stat_bar label="Actual Out" name="messagedataout"/>
+					<stat_bar label="Camadas" name="layersdatareceived"/>
+					<stat_bar label="Entrada real" name="messagedatain"/>
+					<stat_bar label="Saída real" name="messagedataout"/>
 				</stat_view>
 			</stat_view>
-			<stat_view label="Simulator" name="sim">
+			<stat_view label="Simulador" name="sim">
 				<stat_bar label="Objetos" name="simobjects"/>
-				<stat_bar label="Active Objects" name="simactiveobjects"/>
-				<stat_bar label="Active Scripts" name="simactivescripts"/>
-				<stat_bar label="Packets In" name="siminpps"/>
-				<stat_bar label="Packets Out" name="simoutpps"/>
-				<stat_bar label="Pending Downloads" name="simpendingdownloads"/>
-				<stat_bar label="Pending Uploads" name="simpendinguploads"/>
-				<stat_bar label="Total Unacked Bytes" name="simtotalunackedbytes"/>
-				<stat_view label="Time (ms)" name="simperf">
-					<stat_bar label="Total Frame Time" name="simframemsec"/>
-					<stat_bar label="Net Time" name="simnetmsec"/>
-					<stat_bar label="Physics Time" name="simsimphysicsmsec"/>
-					<stat_bar label="Simulation Time" name="simsimothermsec"/>
-					<stat_bar label="Agent Time" name="simagentmsec"/>
-					<stat_bar label="Images Time" name="simimagesmsec"/>
-					<stat_bar label="Script Time" name="simscriptmsec"/>
+				<stat_bar label="Objetos ativos" name="simactiveobjects"/>
+				<stat_bar label="Scripts ativos" name="simactivescripts"/>
+				<stat_bar label="Pacotes recebidos" name="siminpps"/>
+				<stat_bar label="Pacotes enviados" name="simoutpps"/>
+				<stat_bar label="Downloads pendentes" name="simpendingdownloads"/>
+				<stat_bar label="Uploads pendentes" name="simpendinguploads"/>
+				<stat_bar label="Total de bytes não confirmados" name="simtotalunackedbytes"/>
+				<stat_view label="Tempo (ms)" name="simperf">
+					<stat_bar label="Tempo total do frame" name="simframemsec"/>
+					<stat_bar label="Tempo de rede" name="simnetmsec"/>
+					<stat_bar label="Tempo de física" name="simsimphysicsmsec"/>
+					<stat_bar label="Tempo de simulação" name="simsimothermsec"/>
+					<stat_bar label="Tempo de agente" name="simagentmsec"/>
+					<stat_bar label="Tempo de imagens" name="simimagesmsec"/>
+					<stat_bar label="Tempo de script" name="simscriptmsec"/>
 					<stat_bar label="Tempo restante" name="simsparemsec"/>
 					<stat_view label="Detalhes de tempo (ms)" name="timedetails">
-						<stat_bar label="Etapa física" name="simsimphysicsstepmsec"/>
+						<stat_bar label="Passo de física" name="simsimphysicsstepmsec"/>
 						<stat_bar label="Atualizar formas físicas" name="simsimphysicsshapeupdatemsec"/>
 						<stat_bar label="Física - outros" name="simsimphysicsothermsec"/>
 						<stat_bar label="Tempo de espera" name="simsleepmsec"/>
-						<stat_bar label="Bombear ES" name="simpumpiomsec"/>
+						<stat_bar label="Pump IO" name="simpumpiomsec"/>
 					</stat_view>
 				</stat_view>
 			</stat_view>

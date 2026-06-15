@@ -134,6 +134,7 @@
 #include "fspanellogin.h"
 // <FS:Ansariel> [FS Login Panel]
 #include "llmutelist.h"
+#include "llnavigationbar.h" // <FS:PP> Show home location in the "teleport home" navbar button tooltip
 #include "llavatarpropertiesprocessor.h"
 #include "llpaneldirbrowser.h"
 #include "llpanelgrouplandmoney.h"
@@ -3456,6 +3457,13 @@ bool idle_startup()
             floater_imcontainer->restoreOpenIMs();
         }
         // </FS:PP>
+
+        // <FS:PP> Show home location in the "teleport home" navbar button tooltip
+        if (LLNavigationBar::instanceExists())
+        {
+            LLNavigationBar::getInstance()->setHomeBtnTooltip();
+        }
+        // <FS:PP>
 
         return true;
     }

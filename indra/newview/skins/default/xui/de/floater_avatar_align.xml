@@ -8,6 +8,6 @@
     <button name="btn_rotate_left_45" tool_tip="Avatar 45° nach links drehen"/>
     <button name="btn_rotate_right_45" tool_tip="Avatar 45° nach rechts drehen"/>
     <button name="btn_rotate_right_90" tool_tip="Avatar 90° nach rechts drehen"/>
-    <button name="btn_nearest" label="Zur nächsten Himmelsrichtung drehen" tool_tip="Avatar zur nächsten Himmelsrichtung drehen"/>
+    <button name="btn_nearest" label="Zur nächst. Himmelsricht. drehen" tool_tip="Avatar zur nächsten Himmelsrichtung drehen"/>
     <button name="btn_avatar" label="Zum nächstem Avatar drehen" tool_tip="Zum Avatar in der geringsten Entfernung drehen"/>
 </floater>

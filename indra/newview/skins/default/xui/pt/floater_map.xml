@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Map" title="MINI MAPA">
+<floater name="Map" title="Minimapa">
+	<floater.string name="ParcelSalePriceMsg">
+		Preço: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
+	</floater.string>
+	<floater.string name="ParcelSaleAreaMsg">
+		Área: [AREA]m²
+	</floater.string>
+	<floater.string name="ParcelOwnerMsg">
+		Proprietário: [PARCEL_OWNER]
+	</floater.string>
+	<floater.string name="RegionNameMsg">
+		Região: [REGION_NAME]
+	</floater.string>
+	<floater.string name="ToolTipHintMsg">
+		Clique duplo para abrir o mapa
+	</floater.string>
+	<floater.string name="AltToolTipHintMsg">
+		Clique duplo para teleportar
+	</floater.string>
 	<floater.string name="mini_map_caption">
-		Mini Mapa
+		Minimapa
 	</floater.string>
 	<text label="N" name="floater_map_north" text="N">
 		N

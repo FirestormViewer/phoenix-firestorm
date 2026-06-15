@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script_recover" title="Recuperar script">
+	<text name="txt2">
+		[APP_NAME] encontrou scripts que podem ter sido deixados por uma queda anterior do viewer.
+
+Ao escolher &quot;Recuperar&quot;, eles serão restaurados na pasta Achados e Perdidos do seu inventário.		
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="" name="script_check"/>
+		<scroll_list.columns label="Nome do script" name="script_name"/>
+	</scroll_list>
+	<button label="Recuperar" left="55" name="recover_btn" width="120"/>
+	<button label="Cancelar" name="cancel_btn"/>
+</floater>

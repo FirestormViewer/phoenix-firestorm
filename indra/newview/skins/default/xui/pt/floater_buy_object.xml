@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="contents" title="COMPRAR CÓPIA DO OBJETO">
+<floater name="contents" title="Comprar copia do objeto">
 	<floater.string name="title_buy_text">
 		Comprar
 	</floater.string>
 	<floater.string name="title_buy_copy_text">
-		Comprar uma cópia de
+		Comprar uma copia de
 	</floater.string>
 	<floater.string name="no_copy_text">
-		(sem copiar)
+		(sem copia)
 	</floater.string>
 	<floater.string name="no_modify_text">
 		(sem modificar)
 	</floater.string>
 	<floater.string name="no_transfer_text">
-		(sem transferir)
+		(sem transferencia)
+	</floater.string>
+	<floater.string name="multiple_selected">
+		Selecao multipla
 	</floater.string>
 	<text name="contents_text">
-		Contém:
+		Contem:
 	</text>
 	<text name="buy_text">
-		Comprar por L$[AMOUNT] de:
+		Comprar por [AMOUNT] L$ de:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?

@@ -92,7 +92,7 @@
 	<check_box label="Edytuj oś jak gł. obiekt" name="checkbox actual root"/>
 	<check_box label="Pokaż podświetlenie" name="checkbox show highlight"/>
 	<check_box label="Zazn. sondy refleksyjne" name="checkbox select probes" />
-	<button name="Options..." label="Opcje..." tool_tip="Więcej opcji siatki"/>
+	<button name="Options..." label="Opcje..." tool_tip="Więcej opcji siatki"/> <!-- label - for Vintage -->
 	<button name="ToolCube" tool_tip="Sześcian"/>
 	<button name="ToolPrism" tool_tip="Graniastosłup"/>
 	<button name="ToolPyramid" tool_tip="Ostrosłup"/>
@@ -290,8 +290,8 @@ Wklej obrót
 			<button name="copy_rot_btn" label="K" tool_tip="Kopiuj obrót"/>
 			<button name="paste_rot_btn" label="W" tool_tip="Wklej obrót"/>
 			<button name="paste_rot_clip_btn" label="w" tool_tip="Spróbuj wkleić obrót ze schowka"/>
-			<button label="Kopiuj" name="copy_params_btn" tool_tip="Kopiuj parametry obiektu do schowka"/>
-			<button label="Wklej" name="paste_params_btn" tool_tip="Wklej parametry obiektu ze schowka"/>
+			<button name="copy_params_btn" tool_tip="Kopiuj parametry obiektu do schowka"/>
+			<button name="paste_params_btn" tool_tip="Wklej parametry obiektu ze schowka"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Klocek" name="Box"/>
 				<combo_box.item label="Walec" name="Cylinder"/>
@@ -487,7 +487,7 @@ Nis ↔ Najniż
 			<spinner label="Gęstość w 100 kg/m^3" name="Physics Density"/>
 			<spinner label="Odbijanie" name="Physics Restitution"/>
 		</panel>
-		<panel label="Tekstura" name="Texture"/>
+		<!-- <panel label="Tekstura" name="Texture"/> -->
 		<panel label="Zawart." name="Contents">
 			<button label="Nowy skrypt" label_selected="Nowy skrypt" name="button new script"/>
 			<button label="Prawa" name="button permissions"/>

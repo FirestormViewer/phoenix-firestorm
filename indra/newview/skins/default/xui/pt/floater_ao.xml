@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider">
+	<floater.string name="ao_no_sets_loaded">
+		Nenhum conjunto carregado
+	</floater.string>
+	<floater.string name="ao_no_animations_loaded">
+		Nenhuma animação carregada
+	</floater.string>
+	<floater.string name="ao_dnd_only_on_full_interface">
+		Arraste e solte notecards com configurações de AO apenas na janela maximizada. Clique no ícone de chave inglesa para maximizar.
+	</floater.string>
+</floater>

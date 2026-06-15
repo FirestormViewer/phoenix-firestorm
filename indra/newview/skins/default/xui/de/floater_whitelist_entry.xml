@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="whitelist_entry" title="Whitelisten-Eintrag">
 	<text name="media_label">
-		Eine URL oder URL
+		Eine URL oder URL-Muster zu erlaubten Domänen hinzufügen
 	</text>
 	<line_editor name="whitelist_entry" tool_tip="Eine URL oder URL-Patten in die Whitelist eingeben"/>
 	<button label="OK" name="ok_btn"/>

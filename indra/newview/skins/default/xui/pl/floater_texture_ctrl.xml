@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="texture picker" title="Wybór: tekstura">
-	<string name="choose_picture">
+	<floater.string name="choose_picture">
 		Kliknij by wybrać obraz
-	</string>
-	<string name="pick title">
+	</floater.string>
+	<floater.string name="pick title">
 		Wybór:
-	</string>
+	</floater.string>
 	<floater.string name="pick_material">
 		Wybór: Materiał
 	</floater.string>

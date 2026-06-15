@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Relatórios de falha" name="crash_reports">
+	<check_box label="Enviar relatórios de falha para firestormviewer.org" name="checkSendCrashReports"/>
+	<check_box label="Sempre perguntar antes de enviar" name="checkSendCrashReportsAlwaysAsk"/>
+	<check_box label="Incluir arquivos de configuração do Firestorm" name="checkSendSettings"/>
+	<text name="textSendSettings">
+		(contém nome de usuário)
+	</text>
+	<check_box label="Incluir nome de usuário no relatório" name="checkSendName"/>
+	<text name="textSendName">
+		(para possíveis contatos de retorno)
+	</text>
+	<text name="textRestartRequired">
+		As alterações nas configurações só entram em vigor após reiniciar.
+	</text>
+	<text name="textInformation1">
+		Se não forem selecionadas, os relatórios conterão apenas informações relevantes para a falha.
+	</text>
+	<text name="textInformation2">
+		Arquivos de log não são enviados - revise o conteúdo e envie separadamente
+	</text>
+	<text name="textInformation3">
+		caso contenham informações adicionais sobre a falha.
+	</text>
+	<text name="textInformation4">
+		Política de privacidade: [URL]
+	</text>
+</panel>

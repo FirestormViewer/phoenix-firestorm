@@ -16,7 +16,7 @@
 		<scroll_list.columns label="Parzelle" name="parcel"/>
 		<scroll_list.columns label="Standort" name="location"/>
 	</scroll_list>
-	<button label="Liste aktualisieren" name="refresh_list_btn" width="110"/>
+	<button label="Liste aktualisieren" name="refresh_list_btn" width="120"/>
 	<button label="Markieren" name="highlight_btn"/>
 	<button label="Zurückgeben" name="return_btn"/>
 </panel>

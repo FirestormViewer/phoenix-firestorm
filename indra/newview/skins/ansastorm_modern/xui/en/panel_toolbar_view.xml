@@ -218,7 +218,7 @@
           height="24"
           left="5"
           top="3"
-          width="80">
+          width="88">
   <commit_callback
           function="Floater.Toggle"
           parameter="fs_nearby_chat" />

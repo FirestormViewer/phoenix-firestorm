@@ -40,6 +40,8 @@ constexpr F32 AVATAR_UNKNOWN_RANGE = -1.f;
 namespace FSCommon
 {
     void report_to_nearby_chat(std::string_view message);
+    void report_cmdline_result(std::string_view message);
+    void send_message_to_script_channel(std::string_view message, S32 channel);
     std::string format_string(std::string text, const LLStringUtil::format_map_t& args);
     bool is_irc_me_prefix(std::string_view text);
     std::string unescape_name(std::string_view name);

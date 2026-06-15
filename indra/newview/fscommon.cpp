@@ -49,6 +49,7 @@
 #include "llviewerobject.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+#include "message.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
@@ -74,6 +75,35 @@ void FSCommon::report_to_nearby_chat(std::string_view message)
     chat.mText = message;
     chat.mSourceType = CHAT_SOURCE_SYSTEM;
     LLNotificationsUI::LLNotificationManager::instance().onChat(chat, LLSD());
+}
+
+void FSCommon::send_message_to_script_channel(std::string_view message, S32 channel)
+{
+    if (channel == 0 || message.empty())
+    {
+        return;
+    }
+    LLMessageSystem* msg = gMessageSystem;
+    msg->newMessageFast(_PREHASH_ChatFromViewer);
+    msg->nextBlockFast(_PREHASH_AgentData);
+    msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+    msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+    msg->nextBlockFast(_PREHASH_ChatData);
+    msg->addStringFast(_PREHASH_Message, message.data());
+    msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
+    msg->addS32("Channel", channel);
+    gAgent.sendReliableMessage();
+}
+
+void FSCommon::report_cmdline_result(std::string_view message)
+{
+    report_to_nearby_chat(message);
+    static LLCachedControl<bool> cmdline_announce_to_channel(gSavedSettings, "FSCmdLineAnnounceToChannel");
+    if (cmdline_announce_to_channel)
+    {
+        static LLCachedControl<S32> cmdline_announce_channel(gSavedSettings, "FSCmdLineAnnounceChannel");
+        send_message_to_script_channel(message, cmdline_announce_channel);
+    }
 }
 
 std::string FSCommon::format_string(std::string text, const LLStringUtil::format_map_t& args)

@@ -1,0 +1,38 @@
+<panel label="Locais" name="panel_dir_places">
+    <string name="searching_text">
+        Buscando...
+    </string>
+    <string name="not_found_text">
+        Nada encontrado.
+    </string>
+    <string name="found_text">
+        [COUNT] encontrado(s).
+    </string>
+    <text name="find">
+        Digite os termos de busca:
+    </text>
+    <combo_box name="Category">
+        <combo_item name="AnyCategory" label="Todas as categorias"/>
+        <combo_item name="LindenLocation" vlabel="Local Linden"/>
+        <combo_item name="Arts&amp;Culture" label="Arte e cultura"/>
+        <combo_item name="Business" label="Negócios"/>
+        <combo_item name="Educational" label="Educação"/>
+        <combo_item name="Gaming" label="Jogos"/>
+        <combo_item name="Hangout" label="Ponto de encontro"/>
+        <combo_item name="NewcomerFriendly" label="Amigável para iniciantes"/>
+        <combo_item name="Parks&amp;Nature" label="Parques e natureza"/>
+        <combo_item name="Residential" label="Residencial"/>
+        <combo_item name="Shopping" label="Compras"/>
+        <combo_item name="Adult" label="Adulto"/>
+        <combo_item name="Other" label="Outros"/>
+    </combo_box>
+    <icon tool_tip="Geral" name="rating_icon_general"/>
+    <icon tool_tip="Moderado" name="rating_icon_moderate"/>
+    <icon tool_tip="Adulto" name="rating_icon_adult"/>
+    <scroll_list name="results">
+        <column label="Name" name="name"/>
+        <column label="Traffic" name="dwell"/>
+    </scroll_list>
+    <button tool_tip="Página anterior" name="prev_btn"/>
+    <button tool_tip="Próxima página" name="next_btn"/>
+</panel>

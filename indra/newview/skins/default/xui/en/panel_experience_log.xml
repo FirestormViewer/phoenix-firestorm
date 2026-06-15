@@ -104,7 +104,7 @@
         follows="top|left"
         height="26"
         label="Notify All Events   Days"
-        width="140"
+        width="152"
         name="notify_all" />
 
       <spinner

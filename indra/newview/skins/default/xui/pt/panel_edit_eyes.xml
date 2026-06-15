@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_eyes_panel">
 	<panel name="avatar_eye_color_panel">
-		<texture_picker label="Íris" name="Iris" tool_tip="Selecionar imagem"/>
+		<texture_picker label="Iris" name="Iris" tool_tip="Clique aqui para escolher uma imagem"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">

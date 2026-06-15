@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater min_width="450" name="inspect" title="EXAMINAR OBJETOS">
-	<floater.string name="timeStamp">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+<floater name="inspect" title="Inspecionar objetos">
+	<floater.string name="timeStampAMPM">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
 	</floater.string>
-	<scroll_list name="object_list" tool_tip="Selecione um objeto nesta lista para destacá-lo in-world">
-		<scroll_list.columns label="Nome do Objeto" name="object_name"/>
-		<scroll_list.columns label="Proprietário" name="owner_name"/>
+	<floater.string name="timeStamp">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</floater.string>
+	<floater.string name="Group">
+		(Grupo)
+	</floater.string>
+	<floater.string name="stats_list">
+		Estatísticas totais:
+
+[NUM_OBJECTS] objetos, [NUM_PRIMS] prims
+
+Faces: [NUM_FACES]
+Visíveis: [NUM_VISIBLE_FACES]
+Vértices: [NUM_VERTICES]
+Triângulos: [NUM_TRIANGLES]
+Complex.: [COMPLEXITY]
+
+Texturas: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] KB
+VRAM: [VRAM_USAGE] KB
+	</floater.string>
+	<text_editor name="linksetstats_text" value="(carregando...)"/>
+	<scroll_list name="object_list" tool_tip="Selecione um objeto desta lista para destacá-lo no mundo">
+		<scroll_list.columns label="Nome do objeto" name="object_name"/>
+		<scroll_list.columns label="Descrição" name="description"/>
+		<scroll_list.columns label="Proprietário" name="owner_name" />
 		<scroll_list.columns label="Criador" name="creator_name"/>
-		<scroll_list.columns label="Data de Criação" name="creation_date"/>
+		<scroll_list.columns label="Faces" name="facecount"/>
+		<scroll_list.columns label="Vértices" name="vertexcount"/>
+		<scroll_list.columns label="Triângulos" name="trianglecount"/>
+		<scroll_list.columns label="TMem" name="tramcount"/>
+		<scroll_list.columns label="VRAM" name="vramcount"/>
+		<scroll_list.columns label="Data de criação" name="creation_date"/>
 	</scroll_list>
-	<button label="Ver Perfil do Proprietário..." label_selected="" name="button owner" tool_tip="Veja o perfil do proprietário do objeto destacado" width="185"/>
-	<button label="Ver perfil do criador..." label_selected="" left="205" name="button creator" tool_tip="Veja o perfil do criador original do objeto destacado" width="165"/>
+	<button label="Ver perfil do proprietário..." name="button owner" tool_tip="Ver o perfil do proprietário do objeto selecionado" width="155"/>
+	<button label="Ver perfil do criador..." left="175" name="button creator" tool_tip="Ver o perfil do criador original do objeto selecionado" width="155"/>
+	<menu_button name="options_btn" tool_tip="Opções"/>
 </floater>

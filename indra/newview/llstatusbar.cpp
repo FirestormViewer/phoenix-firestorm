@@ -292,6 +292,7 @@ bool LLStatusBar::postBuild()
     gMenuBarView->setRightMouseDownCallback(boost::bind(&show_navbar_context_menu, _1, _2, _3));
 
     mTextTime = getChild<LLTextBox>("TimeText" );
+    mTextTime->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=StatusBarTimeFormat", true)); // <FS:PP> Open preferences page after clicking on the clock
 
     getChild<LLUICtrl>("buyL")->setCommitCallback(
         boost::bind(&LLStatusBar::onClickBuyCurrency, this));
@@ -489,7 +490,7 @@ bool LLStatusBar::postBuild()
     // <FS:Beq> Make FPS a clickable button with contextual colour
     // mFPSText = getChild<LLButton>("FPSText");
     mFPSText = getChild<LLTextBox>("FPSText");
-    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=limitframerate", true));
+    mFPSText->setClickedCallback(std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/openfloater/preferences?search=LimitFramerate", true));
     // </FS:Beq>
     mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 

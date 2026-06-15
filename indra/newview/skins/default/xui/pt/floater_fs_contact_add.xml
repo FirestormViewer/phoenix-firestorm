@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_add_contact" title="Adicionar ao conjunto de contatos...">
+	<floater.string name="no_sets">
+		Nenhum conjunto de contatos disponível.
+	</floater.string>
+	<floater.string name="text_add_single">
+		Escolha o conjunto de contatos ao qual [NAME] será adicionado:
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		Escolha o conjunto de contatos ao qual [COUNT] avatares serão adicionados:
+	</floater.string>
+	<text name="textfield">
+	</text>
+	<button label="Adicionar ao conjunto" name="add_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
+</floater>

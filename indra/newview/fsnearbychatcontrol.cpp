@@ -303,7 +303,16 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
         else if (mask == (MASK_SHIFT | MASK_CONTROL))
         {
             // linefeed
-            addChar(llwchar(182));
+            if ((wstring_utf8_length(getWText()) + wchar_utf8_length(llwchar(182))) > getMaxTextLength())
+            {
+                LLUI::getInstance()->reportBadKeystroke();
+            }
+            else
+            {
+                LLWString line_break(1, llwchar(182));
+                insertText(line_break);
+            }
+
             return true;
         }
         else

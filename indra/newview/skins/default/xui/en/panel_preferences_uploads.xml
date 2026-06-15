@@ -157,8 +157,8 @@
    left="33"
    name="upload_help"
    top_pad="6"
-   width="387">
-    To change a destination folder, right click on it in inventory and choose
- "Use as default for"
+   width="420">
+    To change a destination folder, right click on it in inventory and
+ choose "Use as default for"
   </text>
 </panel>

@@ -7,19 +7,22 @@
 		(desconhecido)
 	</panel.string>
 	<panel.string name="unknown_multiple">
-		(desconhecido / múltiplo)
+		(desconhecido / múltiplos)
 	</panel.string>
 	<panel.string name="public">
 		(público)
 	</panel.string>
 	<panel.string name="you_can">
-		você pode:
+		Você pode:
 	</panel.string>
 	<panel.string name="owner_can">
 		Proprietário pode:
 	</panel.string>
 	<panel.string name="acquiredDate">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</panel.string>
+	<panel.string name="acquiredDateAMPM">
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt]
 	</panel.string>
 	<panel.string name="origin_inventory">
 		(Inventário)
@@ -27,62 +30,84 @@
 	<panel.string name="origin_inworld">
 		(Inworld)
 	</panel.string>
-	<text name="title" value="Perfil do item"/>
-	<text name="origin" value="(Inventário)"/>
-	<scroll_container name="item_profile_scroll">
-		<panel label="" name="item_profile">
-			<text name="LabelItemNameTitle">
-				Nome:
-			</text>
-			<line_editor name="LabelItemName" tool_tip="O nome está limitado em 63 caracteres. Nomes prim maior são cortados. Os nomes podem consistir em caracteres impressos encontrados no conjunto de caracteres ASCII-7 (não estendido), com a exceção da barra/tupo vertical ‘|’."/>
-			<text name="LabelItemDescTitle">
-				Descrição:
-			</text>
-			<line_editor name="LabelItemDesc" tool_tip="Quando as pessoas selecionam &apos;Passe o mouse em todos os objetos’ na configuração de visualização, eles verão a descrição dos objetos em uma janela pop-up sempre que passar o mouse por cima. A descrição prim é limitada em 127 bytes, qualquer string maior ficará truncada."/>
-			<text name="LabelCreatorTitle">
-				Criador:
-			</text>
+
+	<layout_stack name="main_stack">
+		<layout_panel name="layout_item_name">
+				<line_editor name="LabelItemName" tool_tip="O nome é limitado a 63 caracteres. Nomes mais longos serão cortados. Os nomes só podem conter caracteres imprimíveis do conjunto ASCII-7 (não estendido), com exceção da barra vertical &quot;|&quot;."/>
+		</layout_panel>
+		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
 				Proprietário:
+			</text>
+			<text name="LabelCreatorTitle">
+				Criador:
 			</text>
 			<text name="LabelAcquiredTitle">
 				Adquirido:
 			</text>
+			<button label="Imagem..." name="change_thumbnail_btn"/>
+		</layout_panel>
+
+		<layout_panel name="layout_item_description">
+			<text name="LabelItemDescTitle">
+				Descrição:
+			</text>
+			<line_editor name="LabelItemDesc" tool_tip="Quando a opção &quot;Dicas ao passar o mouse em todos os objetos&quot; estiver ativa nas configurações do viewer, a descrição do objeto será mostrada para qualquer objeto sob o cursor. A descrição é limitada a 127 bytes; textos maiores serão truncados."/>
 			<text name="LabelItemExperienceTitle">
 				Experiência:
 			</text>
-			<panel name="perms_inv">
-				<text name="perm_modify">
-					Você pode:
-				</text>
-				<check_box label="Modificar" name="CheckOwnerModify"/>
-				<check_box label="Copiar" name="CheckOwnerCopy"/>
-				<check_box label="Transferir" name="CheckOwnerTransfer"/>
-				<text name="AnyoneLabel">
-					Todos:
-				</text>
-				<check_box label="Copiar" name="CheckEveryoneCopy" tool_tip="Qualquer um pode fazer uma cópia do objeto. O objeto e todos os conteúdos devem ter permissão para cópia e transferência."/>
-				<text name="GroupLabel">
-					Grupo:
-				</text>
-				<check_box label="Compartilhar" name="CheckShareWithGroup" tool_tip="Permitir que todos os membros do grupo tenhas suas permissões de modificação para este objeto. Faça uma doação para ativar restrições de função."/>
-				<text name="NextOwnerLabel">
-					Próximo proprietário:
-				</text>
-				<check_box label="Modificar" name="CheckNextOwnerModify" tool_tip="O próximo proprietário pode editar as propriedades, como o nome do item ou escala desse objeto."/>
-				<check_box label="Copiar" name="CheckNextOwnerCopy" tool_tip="O próximo proprietário pode fazer cópias ilimitadas desse objeto. As cópias mantêm as informações do criador e nunca podem ser mais permissivo do que o item copiado."/>
-				<check_box label="Transferir" name="CheckNextOwnerTransfer" tool_tip="O próximo dono poderá revender ou dar este objeto"/>
-			</panel>
-			<check_box label="À venda" name="CheckPurchase" tool_tip="Permita que as pessoas comprem esse objeto, seu conteúdo ou copiá-lo no mundo virtual por um preço específico."/>
-			<combo_box name="ComboBoxSaleType" tool_tip="Selecione se o comprador receberá uma cópia. A cópia do conteúdo ou o próprio item.">
-				<combo_box.item label="Cortar" name="Copy"/>
+		</layout_panel>
+
+		<layout_panel name="layout_item_permissions_sale">
+			<text name="perm_modify">
+				Permissões
+			</text>
+			<text name="you_perm_modify">
+				Você pode:
+			</text>
+			<check_box label="Modificar" name="CheckOwnerModify"/>
+			<check_box label="Copiar" name="CheckOwnerCopy"/>
+			<check_box label="Transferir" name="CheckOwnerTransfer"/>
+			<text name="AnyoneLabel">
+				Todos:
+			</text>
+			<check_box label="Copiar" name="CheckEveryoneCopy" tool_tip="Qualquer pessoa pode receber uma cópia do objeto. O objeto e todo o seu conteúdo precisam permitir cópia e transferência."/>
+			<text name="GroupLabel">
+				Grupo:
+			</text>
+			<check_box label="Compartilhar" name="CheckShareWithGroup" tool_tip="Permite que todos os membros do grupo definido compartilhem sua permissão de modificar este objeto. É necessário transferir a posse para o grupo para ativar restrições por função."/>
+			<text name="NextOwnerLabel">
+				Próximo proprietário:
+			</text>
+			<check_box label="Modificar" name="CheckNextOwnerModify" tool_tip="O próximo proprietário pode editar propriedades como o nome do item ou a escala deste objeto."/>
+			<check_box label="Copiar" name="CheckNextOwnerCopy" tool_tip="O próximo proprietário pode criar cópias ilimitadas deste objeto. As cópias mantêm os dados do criador e nunca podem ter mais permissões que o item copiado."/>
+			<check_box label="Transferir" name="CheckNextOwnerTransfer" tool_tip="O próximo proprietário pode doar ou revender este objeto."/>
+
+			<check_box label="À venda" name="CheckPurchase" tool_tip="Permite que as pessoas comprem este objeto, seu conteúdo ou uma cópia dele no mundo pelo preço definido."/>
+			<combo_box name="ComboBoxSaleType" tool_tip="Selecione se o comprador receberá uma cópia, uma cópia do conteúdo ou o item original.">
+				<combo_box.item label="Cópia" name="Copy"/>
 				<combo_box.item label="Conteúdo" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Preço: L$" name="Edit Cost" tool_tip="Custo do objeto."/>
-		</panel>
-	</scroll_container>
-	<panel name="button_panel">
-		<button label="Cancelar" name="cancel_btn"/>
-	</panel>
+			<spinner label="Preço: L$" name="Edit Cost" tool_tip="Preço do objeto."/>
+		</layout_panel>
+
+		<layout_panel name="layout_debug_permissions">
+			<text name="BaseMaskDebug">
+				B:
+			</text>
+			<text name="OwnerMaskDebug">
+				O:
+			</text>
+			<text name="GroupMaskDebug">
+				G:
+			</text>
+			<text name="EveryoneMaskDebug">
+				E:
+			</text>
+			<text name="NextMaskDebug">
+				N:
+			</text>
+		</layout_panel>
+	</layout_stack>
 </panel>

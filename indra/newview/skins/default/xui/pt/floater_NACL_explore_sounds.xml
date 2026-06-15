@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Explorador de sons">
+	<floater.string name="Playing">
+		Reproduzindo
+	</floater.string>
+	<floater.string name="NotPlaying">
+		[TIME] min atrás
+	</floater.string>
+	<floater.string name="Type_UI">
+		UI
+	</floater.string>
+	<floater.string name="Type_Avatar">
+		Avatar
+	</floater.string>
+	<floater.string name="Type_llTriggerSound">
+		llTriggerSound
+	</floater.string>
+	<floater.string name="Type_llLoopSound">
+		llLoopSound
+	</floater.string>
+	<floater.string name="Type_llPlaySound">
+		llPlaySound
+	</floater.string>
+	<check_box name="avatars_chk" label="Avatares"/>
+	<check_box name="objects_chk" label="Objetos"/>
+	<check_box name="collision_chk" label="Sons de colisão padrão"/>
+	<check_box name="repeated_asset_chk" label="Asset repetido" left_delta="165" width="120"/>
+	<check_box name="pause_chk" label="Pausar log" left_delta="125"/>
+	<scroll_list name="sound_list">
+		<columns label="Reproduzindo" name="playing" width="95"/>
+		<columns label="Tipo" name="type"/>
+		<columns label="Proprietário" name="owner"/>
+		<columns label="Som" name="sound"/>
+	</scroll_list>
+	<button label="Reproduzir localmente" name="play_locally_btn" />
+	<button label="Parar localmente" name="stop_locally_btn" />
+	<button label="Focar" name="look_at_btn" />
+	<button label="Parar" name="stop_btn"/>
+	<button label="Lista de bloqueio" name="bl_btn"/>
+	<button label="Bloquear sons de AV vestido" name="block_avatar_worn_sounds_btn" />
+	<button label="Bloquear sons de AV rezzado" name="block_avatar_rezzed_sounds_btn" />
+	<button label="Bloquear sons de gesto de AV" name="block_avatar_gesture_sounds_btn" />
+</floater>

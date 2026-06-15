@@ -6940,7 +6940,7 @@ SecondLife.com網站的「支援」部分
 		重新投擲
 	</string>
 	<string name="FSCmdLineRollDiceFreezeGuard">
-		此操作無法完成，因為檢視器在無限捲動迴圈中停止。請更改條件。
+		此操作無法完成，因為檢視器在無限捲動循環中停止。請更改條件。
 	</string>
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' RAND不是正確的表達式(min,max). MAX 必須大於 MIN, 且兩者應處於 -10000 與 10000 之間。

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_gltf_material">
+	<check_box label="Dupla face" name="double sided"/>
+	<panel name="base_color_texture_pnl">
+		<text name="base_color_lbl">
+			Cor base:
+		</text>
+		<texture_picker name="base_color_texture" tool_tip="Mapa de cor base. O canal alpha é opcional e usado para transparência."/>
+		<text name="base_color_upload_fee">
+			Sem taxa de upload
+		</text>
+		<text name="base_color_tint_lbl">
+			Tom
+		</text>
+		<text name="base_color_transparency_lbl">
+			Alpha
+		</text>
+		<text name="alpha_mode_lbl">
+			Modo alpha
+		</text>
+		<combo_box name="alpha mode">
+			<combo_box.item label="Opaco" name="None"/>
+			<combo_box.item label="Mistura" name="Alpha blending"/>
+			<combo_box.item label="Máscara" name="Alpha masking"/>
+		</combo_box>
+		<text name="alpha_cutoff_lbl">
+			Corte alpha
+		</text>
+	</panel>
+	<panel name="metallic_texture_pnl">
+		<text name="metallic_roughness_lbl">
+			Metalicidade-Rugosidade:
+		</text>
+		<texture_picker name="metallic_roughness_texture" tool_tip="Mapa GLTF de metalicidade-rugosidade com oclusão opcional. O canal vermelho é oclusão, o verde é rugosidade e o azul é metalicidade."/>
+		<text name="metallic_upload_fee">
+			Sem taxa de upload
+		</text>
+		<text name="metallic_factor_lbl">
+			Fator de metalicidade
+		</text>
+		<text name="roughness_factor_lbl">
+			Fator de rugosidade
+		</text>
+	</panel>
+	<panel name="emissive_texture_pnl">
+		<text name="emissive_lbl">
+			Emissivo:
+		</text>
+		<text name="emissive_upload_fee">
+			Sem taxa de upload
+		</text>
+		<text name="emissive_tint_lbl">
+			Tom
+		</text>
+	</panel>
+	<panel name="normal_texture_pnl">
+		<text name="normal_lbl">
+			Normal:
+		</text>
+		<text name="normal_upload_fee">
+			Sem taxa de upload
+		</text>
+	</panel>
+</panel>

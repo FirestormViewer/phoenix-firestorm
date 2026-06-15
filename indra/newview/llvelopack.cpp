@@ -646,10 +646,12 @@ void clear_nsis_links(const std::string& nsis_folder_path)
     // Name might also be different based on method of creation.
     if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, path)))
     {
-        update_taskbar_shortcut(nsis_folder_path, path, app_name, L"Second Life.lnk"); // Window class name
-        update_taskbar_shortcut(nsis_folder_path, path, app_name, L"Second Life(1).lnk"); // Just in case user somehow did it twice and removed first
-        update_taskbar_shortcut(nsis_folder_path, path, app_name, L"SecondLifeViewer.lnk"); // Executable name
-        update_taskbar_shortcut(nsis_folder_path, path, app_name, L"secondlife-bin.lnk"); // Debug builds
+        // <FS:TJ> Don't update Second Life Viewer shortcuts to Firestorm shortcuts
+        //update_taskbar_shortcut(nsis_folder_path, path, app_name, L"Second Life.lnk"); // Window class name
+        //update_taskbar_shortcut(nsis_folder_path, path, app_name, L"Second Life(1).lnk"); // Just in case user somehow did it twice and removed first
+        //update_taskbar_shortcut(nsis_folder_path, path, app_name, L"SecondLifeViewer.lnk"); // Executable name
+        //update_taskbar_shortcut(nsis_folder_path, path, app_name, L"secondlife-bin.lnk"); // Debug builds
+        // </FS:TJ>
         update_taskbar_shortcut(nsis_folder_path, path, app_name, app_name + L".lnk"); // Default name
     }
 }

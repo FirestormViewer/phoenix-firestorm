@@ -37,12 +37,11 @@
 	 name="beamcolor_text"
 	 follows="left|top"
 	 left="15"
-	 bottom_delta="50"
-	 height="40">
-Please use the mouse to select the colors for which
-you wish your beam color to start and stop on.
-Left click changes start position.
-Right click changes end position.
+	 bottom_delta="70"
+	 width="275"
+	 wrap="true"
+	 height="60">
+		Please use the mouse to select the colors for which you wish your beam color to start and stop on. Left click changes start position. Right click changes end position.
 	</text>
 	<color_swatch
 	 border_color="0.45098, 0.517647, 0.607843, 1"

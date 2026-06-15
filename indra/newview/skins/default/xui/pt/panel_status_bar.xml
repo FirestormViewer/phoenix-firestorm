@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel.string name="packet_loss_tooltip">
-		Perda de pacote
+		Perda de pacotes
 	</panel.string>
 	<panel.string name="bandwidth_tooltip">
-		Banda
+		Largura de banda
 	</panel.string>
-	<panel.string name="time_ampm">
-		[hour12, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
+	<panel.string name="time">
+		[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		L$ [AMT]
+		[AMT] L$
 	</panel.string>
-	<panel name="menu_search_panel">
-		<search_editor label="Buscar Menus" name="search_menu_edit" tool_tip="Digite o termo de busca que você se interessar aqui. Os resultados serão exibidos para correspondências parciais de texto completo no menu."/>
+	<panel name="menu_search_panel" left="-463">
+		<search_editor label="Buscar menus" name="search_menu_edit" tool_tip="Digite aqui o termo de busca desejado. Os resultados serão exibidos para correspondências parciais de texto completo no menu."/>
 	</panel>
-	<panel name="balance_bg">
-		<text name="balance" tool_tip="Atualizar saldo de L$" value="L$??"/>
-		<button label="Comprar L$" name="buyL" tool_tip="Comprar mais L$"/>
-		<button label="Comprar" name="goShop" tool_tip="Abrir Mercado do Second Life" width="80"/>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Esta parcela está à venda."/>
+		<text name="parcel_info_text" value="(carregando...)" tool_tip="Nome da parcela em que você está. Clique para abrir as informações do terreno."/>
 	</panel>
-	<panel name="time_and_media_bg">
-		<text name="TimeText" tool_tip="Hora atual (Pacífico)">
-			24:00:00 AM PST
+	<panel name="balance_bg" left="-331">
+		<text name="balance" tool_tip="Clique para atualizar seu saldo em L$" value="?? L$"/>
+		<button label="COMPRAR L$" name="buyL" tool_tip="Clique para comprar mais L$"/>
+	</panel>
+	<panel name="time_and_media_bg" width="229">
+		<text name="TimeText" tool_tip="Hora atual (Pacífico)" width="78">
+			24:00:00 PST
 		</text>
-		<button name="media_toggle_btn" tool_tip="Tocar/Pausar todas mídias (música, vídeo, páginas web)"/>
-		<button name="volume_btn" tool_tip="Volume geral"/>
+		<button name="stream_toggle_btn" tool_tip="Iniciar/parar o stream de áudio da parcela"/>
+		<button name="media_toggle_btn" tool_tip="Iniciar/parar todas as mídias (música, vídeo, páginas web)"/>
+		<button name="volume_btn" tool_tip="Controle do volume geral"/>
+		<text name="FPSText" tool_tip="Quadros por segundo (clique para ajustar o limite)">
+			200.0
+		</text>
 	</panel>
 </panel>

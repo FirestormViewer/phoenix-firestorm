@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="menu_group_plus">
-	<menu_item_call label="Ver dados" name="View Info"/>
-	<menu_item_call label="Bate-papo" name="Chat"/>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_call label="Ver informações" name="View Info"/>
+	<menu_item_call label="Copiar SLurl para a área de transferência" name="Copy SLurl to clipboard"/>
+	<menu_item_call label="Chat" name="Chat"/>
 	<menu_item_call label="Chamada de voz" name="Call"/>
 	<menu_item_call label="Ativar" name="Activate"/>
+	<menu_item_call label="Fixar grupo" name="Favorite"/>
+	<menu_item_call label="Desafixar grupo" name="Unfavorite"/>
 	<menu_item_call label="Sair" name="Leave"/>
-</menu>
+</toggleable_menu>

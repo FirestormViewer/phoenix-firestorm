@@ -25,4 +25,5 @@
 	<text name="wait_text">
 		Bitte warten
 	</text>
+	<button name="unmute_btn" label="Stummsch. aufheb."/>
 </panel>

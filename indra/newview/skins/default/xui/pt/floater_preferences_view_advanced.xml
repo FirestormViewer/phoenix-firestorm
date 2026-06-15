@@ -1,2 +1,14 @@
-<?xml version="1.0" ?>
-<floater name="floaterpreferencesviewadvanced" title="POSIÇÃO DA CÂMERA"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Posição da câmera">
+	<text name="camera_offset_lbl">
+		Deslocamento da câmera:
+	</text>
+	<text name="focus_offset_lbl">
+		Deslocamento do foco:
+	</text>
+	<text name="offset_scale_lbl">
+		Escala do deslocamento da câmera:
+	</text>
+	<button label="Salvar como predefinição..." name="save_preset_btn" width="180"/>
+	<button label="Fechar" name="close_btn" width="70"/>
+</floater>

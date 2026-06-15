@@ -217,6 +217,7 @@ private:
 
     void                    updateContactSets(LGGContactSets::EContactSetUpdate type);
     boost::signals2::connection mContactSetChangedConnection;
+    boost::signals2::connection mContactSetListToggleIconsConnection;
     LLComboBox* mContactSetCombo;
     // [/FS:CR]
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Settings">
+	<menu_item_call label="Carregar seletivamente" tool_tip="Carrega apenas as juntas desativadas e as ativa." name="load_selective"/>
+	<menu_item_call label="Carregar seletivamente - apenas rotações" tool_tip="Carrega apenas rotações das juntas desativadas e as ativa." name="rotations_positions"/>
+	<menu_item_call label="Carregar - apenas rotações" tool_tip="Carrega somente as rotações. Bom para poses criadas para outros avatares/formatos de corpo." name="rotations"/>
+	<menu_item_call label="Carregar" tool_tip="Carrega rotações, posições e escalas." name="load_all"/>
+</toggleable_menu>

@@ -16,6 +16,7 @@
 			<text name="htmllink_label">URLs</text>
 			<text name="uriquerypart_label" width="130">Chemin d'URL</text>
 			<text name="direct_label">Direct</text>
+			<text name="server_chat_history_label">Historique discussions groupe provenant du serveur</text>
 			<text name="header_colors">Émetteur :</text>
 			<text name="chat_name_label">Avatars</text>
 			<text name="object_name_header_label">Objets</text>

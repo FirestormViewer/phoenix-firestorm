@@ -136,16 +136,16 @@
     </tab_container>
     
     <layout_stack left="0" right="-1" height="26" enabled="true" orientation="horizontal"  follows="left|right" name="ButtonsStack">
-      <layout_panel width="97" height="30" enabled="true" name="CondenseAllButtonPanel" auto_resize="false">
-        <button width="93" height="21" left="2" label="Collapse all" name="collapse_all_button">
+      <layout_panel width="103" height="30" enabled="true" name="CondenseAllButtonPanel" auto_resize="false">
+        <button width="100" height="21" left="2" label="Collapse all" name="collapse_all_button">
         </button>
       </layout_panel>
-      <layout_panel width="336" height="30" enabled="true" name="GapLayoutPanel" auto_resize="true">
+      <layout_panel width="324" height="30" enabled="true" name="GapLayoutPanel" auto_resize="true">
         <panel width="90" height="21" left="2" label="Gap Panel" border="false" name="GapPanel">
         </panel>
       </layout_panel>
-      <layout_panel width="97" height="30" enabled="true" name="DeleteAllButtonPanel" auto_resize="false">
-        <button width="93" height="21" left="2" label="Delete all" name="delete_all_button">
+      <layout_panel width="103" height="30" enabled="true" name="DeleteAllButtonPanel" auto_resize="false">
+        <button width="100" height="21" left="2" label="Delete all" name="delete_all_button">
         </button>
       </layout_panel>
     </layout_stack>

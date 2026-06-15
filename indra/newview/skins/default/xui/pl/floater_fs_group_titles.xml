@@ -4,6 +4,7 @@
 	<floater.string name="ClearAllRegions" value="Wyczyść wszystkie regiony"/>
 	<filter_editor label="Filtruj tytuły grup" name="filter_input" />
 	<scroll_list name="title_list">
+		<column name="default_marker" tool_tip="Domyślny tytuł włączony w regionach bez przypisania" />
 		<column name="grouptitle" label="Tytuł" />
 		<column name="groupname" label="Grupa" />
 		<column name="regionname" label="Auto-region" />
@@ -14,5 +15,6 @@
 	<button name="btnClearRegion" label="Wyczyść region" tool_tip="Usuń przypisanie regionu z wybranego tytułu" />
 	<button name="btnInfo" label="Info" tool_tip="Pokaż informacje o grupie związanej z wybranym tytułem" />
 	<button name="btnActivate" label="Aktywuj" tool_tip="Aktywuj wybrany tytuł grupy" />
-	<check_box label="Ustaw 'brak' w regionach bez przypisania" name="none_on_unassigned" />
+	<check_box name="use_default_title" label="Użyj domyślnego tytułu w regionach bez przypisania" tool_tip="Gdy pojawisz się w regionie do którego nie przypisano tytułu, to przełącz się na tytuł oznaczony jako domyślny. Domyślne &lt;Brak tytułu grupy&gt; nie dodaje żadnego taga grupy." />
+	<button name="btnSetDefault" label="Ustaw jako domyślny" tool_tip="Oznacz wybrany tytuł jako domyślny dla regionów bez przypisania" />
 </floater>

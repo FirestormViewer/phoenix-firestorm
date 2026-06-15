@@ -217,6 +217,66 @@ void Omnifilter::onRemoveNeedleClicked()
     onSelectNeedle();
 }
 
+// <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+// Handles re-ordering the list of needle names when the UI is sorted.
+void Omnifilter::onSortChanged()
+{
+    static OmnifilterEngine* omni_filter_engine = OmnifilterEngine::getInstance();
+    if (!omni_filter_engine)
+    {
+        return;
+    }
+    // Loop over the list of thems
+    for (S32 index = 0; index < mNeedleListCtrl->getItemCount(); index++)
+    {
+        const LLScrollListItem* needle_item = mNeedleListCtrl->getAllData()[index];
+        if (needle_item)
+        {
+            const LLScrollListCell* needle_name_cell = needle_item->getColumn(NEEDLE_NAME_COLUMN);
+            if (needle_name_cell)
+            {
+                const std::string& needle_name = needle_name_cell->getValue().asString();
+                if (!needle_name.empty())
+                {
+                    omni_filter_engine->setOrderedNeedleName(index, needle_name);
+                }
+            }
+        }
+    }
+    // Flag as dirty the system will save the changes to the order.
+    omni_filter_engine->setDirty(true);
+}
+
+// Moves an selected filter up on place
+void Omnifilter::onUpNeedleClicked()
+{
+    static OmnifilterEngine* omni_filter_engine = OmnifilterEngine::getInstance();
+    S32 current_index = mNeedleListCtrl->getFirstSelectedIndex();
+
+    // Don't try to move the first item up.
+    if (current_index > 0)
+    {
+        // Order is based upon 0 is the top of the screen in the list, so have to subtract 1 to get up visually.
+        omni_filter_engine->swapNeedles(current_index, current_index - 1);
+        mNeedleListCtrl->swapWithPrevious(current_index);
+    }
+}
+
+void Omnifilter::onDownNeedleClicked()
+{
+    static OmnifilterEngine* omni_filter_engine = OmnifilterEngine::getInstance();
+    S32 current_index = mNeedleListCtrl->getFirstSelectedIndex();
+
+    // If the value is within range of the filter list, prevents from going past the end of the list
+    if (omni_filter_engine->getOrderedNeedleListSize()  > 1 && current_index < omni_filter_engine->getOrderedNeedleListSize() - 1)
+    {
+        // Order is based upon 0 is the top of the screen in the list, so have to add 1 to get down visually.
+        omni_filter_engine->swapNeedles(current_index, current_index + 1);
+        mNeedleListCtrl->swapWithNext(current_index);
+    }
+}
+// </FS:minerjr> [FIRE-36649]
+
 void Omnifilter::onNeedleNameChanged()
 {
     const std::string& old_name = mNeedleListCtrl->getSelectedItemLabel(NEEDLE_NAME_COLUMN);
@@ -309,6 +369,11 @@ bool Omnifilter::postBuild()
     mNeedleListCtrl = getChild<FSScrollListCtrl>("needle_list");
     mAddNeedleBtn = getChild<LLButton>("add_needle");
     mRemoveNeedleBtn = getChild<LLButton>("remove_needle");
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Add the up and down buttons for re-aranging the order of the needles
+    mUpNeedleBtn = getChild<LLButton>("up_needle");
+    mDownNeedleBtn = getChild<LLButton>("down_needle");
+    // </FS:minerjr> [FIRE-36649]
     mFilterLogCtrl = getChild<FSScrollListCtrl>("filter_log");
     mPanelDetails = getChild<LLPanel>("panel_details");
     mNeedleNameCtrl = getChild<LLLineEditor>("needle_name");
@@ -347,8 +412,13 @@ bool Omnifilter::postBuild()
     mFilterLogCtrl->deleteAllItems();
 
     auto& instance = OmnifilterEngine::instance();
-    for (const auto& [needle_name, needle] : instance.getNeedleList())
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    //for (const auto& [needle_name, needle] : instance.getNeedleList())
+    // Loop over the  ordered list 
+    for (const auto& needle_name : instance.getOrderedNeedleList())
     {
+        const auto& needle = instance.getNeedleList()[needle_name];
+    // </FS:minerjr> [FIRE-36649]
         addNeedle(needle_name, needle);
     }
 
@@ -370,6 +440,12 @@ bool Omnifilter::postBuild()
     mNeedleListCtrl->setCommitCallback(boost::bind(&Omnifilter::onSelectNeedle, this));
     mAddNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onAddNeedleClicked, this));
     mRemoveNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveNeedleClicked, this));
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    // Add the callbacks for the up and down buttons to re-order the filter list
+    mNeedleListCtrl->setSortChangedCallback(boost::bind(&Omnifilter::onSortChanged, this));
+    mUpNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onUpNeedleClicked, this));
+    mDownNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onDownNeedleClicked, this));
+    // </FS:minerjr> [FIRE-36649]
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
     mSenderNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mSenderCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));

@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="build options floater" title="OPÇÕES DE GRADE">
-	<floater.string name="grid_screen_text">
-		Tela
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Local
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Mundo
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referência
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Anexo
-	</floater.string>
-	<text name="grid_mode_label" tool_tip="Opacidade da grade">
-		Modo
+<floater name="build options floater" title="Opções da grade">
+	<spinner label="Unidades (m)" name="GridResolution"/>
+	<spinner label="Extensão da grade (m)" name="GridDrawSize"/>
+	<spinner label="Casas decimais" name="DecimalPrecision"/>
+	<spinner label="Ângulo (graus)" name="RotationStep" tool_tip="Todas as rotações pela ferramenta de rotação são múltiplos deste valor (padrão: 1.0)"/>
+	<check_box label="Alinhar a subunidades" name="GridSubUnit"/>
+	<check_box label="Ver seções transversais" name="GridCrossSection"/>
+	<text name="Snap on">
+		Encaixar em:
 	</text>
-	<combo_box name="combobox grid mode" tool_tip="Selecione o tipo de régua da grade onde o objeto será colocado">
-		<combo_box.item label="Grid SL" name="World"/>
-		<combo_box.item label="Grid local" name="Local"/>
-		<combo_box.item label="Grid de referência" name="Reference"/>
-	</combo_box>
-	<spinner label="Unidades (metros):" name="GridResolution"/>
-	<spinner label="Extensões (metros)" name="GridDrawSize"/>
-	<check_box label="Encaixar em sub-unidades" name="GridSubUnit"/>
-	<check_box label="Ver corte transversal" name="GridCrossSection"/>
+	<radio_group name="FSSnapDomain">
+		<radio_item name="radio inside" label="Interior" tool_tip="Encaixa na face interna da grade."/>
+		<radio_item name="radio outside" label="Exterior" tool_tip="Encaixa na face externa da grade (comportamento clássico)."/>
+	</radio_group>
 	<text name="grid_opacity_label" tool_tip="Opacidade da grade">
 		Opacidade:
 	</text>

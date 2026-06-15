@@ -37,7 +37,7 @@
      top_delta="40"
      left="20"
      name="ok"
-     width="70"/>
+     width="80"/>
     <button
      follows="top|left"
      height="23"
@@ -45,5 +45,5 @@
      layout="topleft"
      left_pad="20"
      name="cancel"
-     width="70"/>
+     width="80"/>
 </floater>

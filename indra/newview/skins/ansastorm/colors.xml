@@ -1271,10 +1271,6 @@
   <color
       name="CurrencyColor"
       reference="LabelTextColor" />
-	  
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
 
   <!-- syntax highlighting (LSL Scripts) -->
   <color
@@ -1439,5 +1435,8 @@
     value="1 1 0.383 1" />
   <color
     name="MentionFlashBgColor"
+    reference="EmphasisColor" />
+  <color
+    name="HighlightPanelBackground"
     reference="EmphasisColor" />
 </colors>

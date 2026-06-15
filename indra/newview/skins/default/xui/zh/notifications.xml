@@ -4387,8 +4387,26 @@ https://wiki.firestormviewer.org/fs_voice
 名稱只能包含ASCII字元，不包括「:」和「|」。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="RenameAOGroup">
+		為這個新的動畫組指定名稱：
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		無法重新命名為「[AO_SET_NAME]」。
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		資料夾「[NAME]」不包含可新增的動畫。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
 	<notification name="NewAONameCantExist">
 		已經存在同名的動畫集。
+		<usetemplate name="okbutton" yestext="确定"/>
 	</notification>
 	<notification name="RemoveAOSet">
 		刪除名為「[AO_SET_NAME]」的動畫覆蓋集？

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Cores personalizadas" name="custom_colors_panel">
+	<text name="custom_colors_text">
+		Cores especiais da interface do usuário:
+	</text>
+	<text name="text_boxc1">
+		Botões, barras de rolagem etc.
+	</text>
+	<text name="text_boxc3">
+		Destaques
+	</text>
+	<text name="text_boxc4">
+		Texto do botão — normal
+	</text>
+	<text name="text_boxc6">
+		Texto do botão — selecionado
+	</text>
+	<text name="text_boxbn">
+		Fundo da janela — normal
+	</text>
+	<text name="text_boxbn_restart">
+		(Requer reinício)
+	</text>
+	<text name="text_boxbl">
+		Fundo da janela — mais claro
+	</text>
+	<text name="text_boxb1_restart">
+		(Requer reinício)
+	</text>
+</panel>

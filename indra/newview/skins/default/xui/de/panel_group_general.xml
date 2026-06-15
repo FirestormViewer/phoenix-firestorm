@@ -13,15 +13,16 @@ Bewegen Sie die Maus über die Optionen, um weitere Informationen anzuzeigen.
 	</panel.string>
 	
 	<panel name="group_general_panel">
-		<text name="group_key_label" width="85">
+		<text name="group_key_label" width="95">
 			Gruppen-UUID:
 		</text>
-		<text_editor name="group_key" label="Gruppen-UUID:" initial_value="(wird geladen...)"/>
+		<view_border name="info_border" width="262"/>
+		<text_editor name="group_key" label="Gruppen-UUID:" initial_value="(wird geladen...)" width="262"/>
 		<button name="copy_uri" label="URI kopieren"/>
-		<text name="prepend_founded_by" width="85">
+		<text name="prepend_founded_by" width="95">
 			Gründer:
 		</text>
-		<name_box initial_value="(wird geladen...)" name="founder_name"/>
+		<name_box initial_value="(wird geladen...)" name="founder_name" width="258"/>
 		<button name="copy_name" label="Name kopieren"/>
 		<text_editor name="charter">
 			Gruppencharta

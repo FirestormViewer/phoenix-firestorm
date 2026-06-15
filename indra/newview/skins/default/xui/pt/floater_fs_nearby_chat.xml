@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="Chat local">
+	<floater.string name="chatbox_label">
+		Para o chat local
+	</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_chat_history_btn">
+			<button name="chat_history_btn" tool_tip="Abrir histórico do chat local"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn">
+			<button name="chat_history_muted_btn" tool_tip="Mostrar chat silenciado no histórico do chat local"/>
+		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<button name="chat_options_btn" tool_tip="Opções de chat"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Buscar no chat local"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Mensagens não lidas: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_editor_layout_panel">
+							<chat_editor name="chat_box"/>
+						</layout_panel>
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Abrir seletor de emojis"/>
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Mostrar/ocultar emojis usados recentemente"/>
+						</layout_panel>
+						<layout_panel name="input_button_layout_panel">
+							<spinner name="ChatChannel" tool_tip="Canal para enviar o chat. Pode ser ativado em Preferências -> Chat -> Firestorm -> Mostrar seleção de canal na barra de chat." label_width="35"/>
+						</layout_panel>
+						<layout_panel name="chat_type_layout_panel">
+							<combo_box name="chat_type" tool_tip="Sussurro = 10 m, Falar = 20 m, Gritar = 100 m">
+								<combo_box.item name="chat_type_whisper" label="Sussurro"/>
+								<combo_box.item name="chat_type_say" label="Falar"/>
+								<combo_box.item name="chat_type_shout" label="Gritar"/>
+							</combo_box>
+							<button label="Enviar" name="send_chat" tool_tip="Sussurro = 10 m, Falar = 20 m, Gritar = 100 m"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Emojis usados recentemente aparecerão aqui
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

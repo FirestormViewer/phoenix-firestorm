@@ -166,16 +166,16 @@
 		</panel>
 		<panel label="Vertrag" name="land_covenant_panel">
 			<panel.string name="can_resell">
-				Gekauftes Land in dieser Region kann wiederverkauft werden.
+				Land in dieser Region kann wiederverkauft werden.
 			</panel.string>
 			<panel.string name="can_not_resell">
-				Gekauftes Land in dieser Region kann nicht wiederverkauft werden.
+				Land in dieser Region kann nicht wiederverkauft werden.
 			</panel.string>
 			<panel.string name="can_change">
-				Gekauftes Land in dieser Region kann zusammengelegt und geteilt werden.
+				Land in dieser Region kann zusammengelegt und geteilt werden.
 			</panel.string>
 			<panel.string name="can_not_change">
-				Gekauftes Land in dieser Region kann nicht zusammengelegt und geteilt werden.
+				Land in dieser Region kann nicht zusammengelegt und geteilt werden.
 			</panel.string>
 			<text name="estate_section_lbl">
 				Grundbesitz:
@@ -240,7 +240,7 @@ werden.
 			<text name="Simulator primitive usage:">
 				Regionskapazität:
 			</text>
-			<text left_delta="214" name="objects_available">
+			<text left_delta="214" name="objects_available" width="255">
 				[COUNT] von [MAX] ([AVAILABLE] verfügbar)
 			</text>
 			<text name="Primitives parcel supports:">
@@ -252,13 +252,13 @@ werden.
 			<text name="Primitives on parcel:">
 				Parzellenlandauswirkung:
 			</text>
-			<text left_delta="214" name="total_objects_text" width="48">
+			<text left_delta="214" name="total_objects_text">
 				[COUNT]
 			</text>
 			<text left="20" name="Owned by parcel owner:" width="200">
-				Im Eigentum des Parzellenbesitzers:
+				Im Eigentum d. Parzellenbesitzers:
 			</text>
-			<text left_delta="204"  name="owner_objects_text" width="48">
+			<text left_delta="204"  name="owner_objects_text">
 				[COUNT]
 			</text>
 			<button label="Anzeigen" label_selected="Anzeigen" name="ShowOwner" right="-135" width="60"/>
@@ -266,7 +266,7 @@ werden.
 			<text left="20" name="Set to group:">
 				Der Gruppe zugeordnet:
 			</text>
-			<text left_delta="204" name="group_objects_text" width="48">
+			<text left_delta="204" name="group_objects_text">
 				[COUNT]
 			</text>
 			<button label="Anzeigen" label_selected="Anzeigen" name="ShowGroup" right="-135" width="60"/>
@@ -274,7 +274,7 @@ werden.
 			<text left="20" name="Owned by others:" width="128">
 				Im Eigentum anderer:
 			</text>
-			<text left_delta="204" name="other_objects_text" width="48">
+			<text left_delta="204" name="other_objects_text">
 				[COUNT]
 			</text>
 			<button label="Anzeigen" label_selected="Anzeigen" name="ShowOther" right="-135" width="60"/>
@@ -286,7 +286,7 @@ werden.
 				[COUNT]
 			</text>
 			<text name="Autoreturn">
-				Objekte anderer Einwohner automatisch zurückgeben (Minuten, 0 für aus):
+				Objekte anderer Einwohner autom. zurückgeben (Minuten, 0 für aus):
 			</text>
 			<line_editor name="clean other time"/>
 			<text name="Object Owners:">
@@ -346,7 +346,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				Terrain bearbeiten:
 			</text>
 			<check_box label="Jeder" name="edit land check" tool_tip="Falls aktiviert, kann jeder Einwohner das Terrain bearbeiten. Es wird empfohlen, diese Einstellung deaktiviert zu lassen, da als Eigentümer das Terrain jederzeit bearbeitet werden kann."/>
-			<text name="caution_text" left_pad="-75">
+			<text name="caution_text" left_pad="-70">
 				(Mit Vorsicht anwenden!)
 			</text>
 			<text name="allow_label0">
@@ -395,16 +395,16 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				Avatare in anderen Parzellen können Avatare in dieser Parzelle sehen und mit ihnen chatten.
 			</text>
 			<check_box label="Avatare sehen" name="SeeAvatarsCheck" tool_tip="Gestattet sowohl Avataren auf anderen Parzellen, Avatare auf dieser Parzelle zu sehen und mit ihnen zu chatten, als auch Ihnen, diese Avatare auf anderen Parzellen zu sehen und mit ihnen zu chatten."/>
-			<text name="landing_point">
+			<text name="landing_point" left="234">
 				Landepunkt: [LANDING]
 			</text>
 			<button label="Festlegen" label_selected="Festlegen" left="234" name="Set" right="-88" tool_tip="Legt Ihren Standort als Landepunkt fest, an dem Besucher ankommen. Legt die Position Ihres Avatars innerhalb dieser Parzelle fest." width="70"/>
 			<button label="Löschen" label_selected="Löschen" left="312" name="Clear" tool_tip="Landepunkt löschen" width="70"/>
-			<button label="Teleportieren" label_selected="Teleportieren" left="390" name="teleport_to_landing_point" tool_tip="Zum Landepunkt teleportieren" width="80"/>
-			<text name="Teleport Routing: ">
+			<button label="Teleportieren" label_selected="Teleportieren" left="390" name="teleport_to_landing_point" tool_tip="Zum Landepunkt teleportieren" width="90"/>
+			<text name="Teleport Routing: " left="234">
 				Teleport-Route:
 			</text>
-			<combo_box name="landing type" tool_tip="Teleport-Route -- festlegen, wie Teleports auf Ihrem Land gehandhabt werden sollen">
+			<combo_box name="landing type" tool_tip="Teleport-Route -- festlegen, wie Teleports auf Ihrem Land gehandhabt werden sollen" left="234">
 				<combo_box.item label="Blockiert" name="Blocked"/>
 				<combo_box.item label="Landepunkt" name="LandingPoint"/>
 				<combo_box.item label="Überall" name="Anywhere"/>
@@ -428,7 +428,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</text>
 			<texture_picker label="" name="media texture" tool_tip="Klicken Sie hier, um ein Bild auszuwählen"/>
 			<text name="replace_texture_help">
-				Objekte, die diese Textur verwenden, werden den Film oder die Webseite anzeigen, nachdem Sie auf den Pfeil (Wiedergabe) klicken.  Wählen Sie das kleine Bild aus, um eine andere Textur auszuwählen.
+				Objekte mit dieser Textur werden den Film oder die Webseite anzeigen, nachdem Sie auf Wiedergabe klicken. Wählen Sie das kleine Bild aus, um eine andere Textur auszuwählen.
 			</text>
 			<check_box label="Automatisch skalieren" name="media_auto_scale" tool_tip="Aktivieren Sie diese Option, um den Inhalt für diese Parzelle automatisch zu skalieren. Dies ist eventuell langsamer und die Qualität ist schlechter, aber Sie müssen keine weitere Texturskalierung oder -anpassung vornehmen."/>
 			<text name="media_size" tool_tip="Darstellungsgröße von Webmedien, für Standard bei 0 belassen.">
@@ -454,7 +454,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<text name="Sound:">
 				Sound:
 			</text>
-			<check_box label="Gesten- und Objektgeräusche auf diese Parzelle beschränken" name="check sound local"/>
+			<check_box label="Gesten- &amp; Objektgeräusche auf diese Parzelle beschränken" name="check sound local"/>
 			<text name="Avatar Sounds:">
 				Avatarsounds:
 			</text>
@@ -497,7 +497,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 					Immer zulässig ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] aufgeführt, [MAX] max)"/>
-				<button label="Hinzufügen" name="add_allowed"/>
+				<button label="Hinzufüg." name="add_allowed"/>
 				<button label="Entfernen" label_selected="Entfernen" name="remove_allowed"/>
 				<button label="Exportieren" label_selected="Exportieren" name="export_allowed"/>
 				<button label="Importieren" label_selected="Importieren" name="import_allowed" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>
@@ -510,7 +510,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 					<columns label="Name" name="name"/>
 					<columns label="Dauer" name="duration"/>
 				</name_list>
-				<button label="Hinzufügen" name="add_banned"/>
+				<button label="Hinzufüg." name="add_banned"/>
 				<button label="Entfernen" label_selected="Entfernen" name="remove_banned"/>
 				<button label="Exportieren" label_selected="Exportieren" name="export_banned"/>
 				<button label="Importieren" label_selected="Importieren" name="import_banned" tool_tip="Importiert eine CSV-Datei mit ausschließlich gültigen UUIDs - eine pro Zeile ohne extra Zeichen oder Formatierung"/>

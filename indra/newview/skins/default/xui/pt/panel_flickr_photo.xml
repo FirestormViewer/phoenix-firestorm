@@ -2,28 +2,31 @@
 <panel name="panel_flickr_photo">
 	<combo_box name="resolution_combobox" tool_tip="Resolução da imagem">
 		<combo_box.item label="Janela atual" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="Personalizado" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Filtros de imagem">
 		<combo_box.item label="Sem filtro" name="NoFilter"/>
 	</combo_box>
+	<check_box label="Manter proporção" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Atualizando...
+	</text>
+	<panel name="options_panel">
+		<check_box label="Mostrar moldura da captura" name="show_frame" tool_tip="Mostra uma moldura na tela ao redor da área da captura. Partes da cena fora da captura ficam dessaturadas e levemente desfocadas."/>
+		<check_box label="Mostrar guia de composição" name="show_guides" tool_tip="Mostra o guia de composição (regra dos terços) dentro da área da captura."/>
+		<button tool_tip="Abrir configurações do guia da moldura" name="guide_settings_btn"/>
+	</panel>
 	<button label="Atualizar" name="new_snapshot_btn" tool_tip="Clique para atualizar"/>
-	<button label="Visualizar" name="big_preview_btn" tool_tip="Clique para alternar entre visualizações"/>
+	<button label="Pré-visualização" name="big_preview_btn" tool_tip="Clique para alternar a pré-visualização"/>
 	<text name="title_label">
 		Título:
 	</text>
 	<text name="description_label">
 		Descrição:
 	</text>
-	<check_box initial_value="true" label="Incluir localização do SL no final da descrição" name="add_location_cb"/>
-	<text name="tags_label">
+	<check_box initial_value="true" label="Incluir localização no fim da descrição" name="add_location_cb"/>
+	<text name="tags_label" tool_tip="Separe as tags com espaços. Use &quot;&quot; para tags com mais de uma palavra.">
 		Tags:
-	</text>
-	<text name="tags_help_label">
-		Separe as tags com espaços
-Use &quot;&quot; para tags com várias palavras
 	</text>
 	<combo_box name="rating_combobox" tool_tip="Classificação de conteúdo do Flickr">
 		<combo_box.item label="Classificação segura do Flickr" name="SafeRating"/>
