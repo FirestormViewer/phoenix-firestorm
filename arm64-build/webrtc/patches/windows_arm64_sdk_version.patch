@@ -1,0 +1,12 @@
+diff --git a/build/toolchain/win/setup_toolchain.py b/build/toolchain/win/setup_toolchain.py
+index 1234567..abcdefg 100644
+--- a/build/toolchain/win/setup_toolchain.py
++++ b/build/toolchain/win/setup_toolchain.py
+@@ -22,7 +22,7 @@ import gn_helpers
+
+ SCRIPT_DIR = os.path.dirname(__file__)
+-SDK_VERSION = '10.0.22621.0'
++SDK_VERSION = '10.0.26100.0'
+
+
+ def _ExtractImportantEnvironment(output_of_set):

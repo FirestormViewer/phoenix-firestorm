@@ -1,0 +1,11 @@
+diff --git a/BUILD.gn b/BUILD.gn
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -421,7 +421,8 @@
+     if (is_clang) {
+       cflags += [
+         "-Wc++11-narrowing",
++        "-Wno-c++11-narrowing-const-reference",
+         "-Wundef",
+         "-Wunused-lambda-capture",
+       ]
