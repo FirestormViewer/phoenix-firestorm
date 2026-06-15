@@ -4,7 +4,7 @@
 		<texture_picker label="Textura" name="Fabric" tool_tip="Clique aqui para escolher uma imagem"/>
 		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique aqui para abrir o seletor de cores"/>
 	</panel>
-	<panel name="gloves_main_tab_holder">
+	<panel name="gloves_main_tab_holder" title="Luvas">
 		<accordion name="gloves_main_accordion">
 			<accordion_tab name="gloves_main_tab" title="Luvas"/>
 		</accordion>

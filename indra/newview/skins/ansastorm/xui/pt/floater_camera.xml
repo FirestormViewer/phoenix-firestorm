@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="camera_floater" title="Controles da câmera">
+<floater name="camera_floater" title="Controles da Câmera">
 	<floater.string name="rotate_tooltip">
-		Girar câmera em torno do foco
+		Girar a câmera ao redor do foco
 	</floater.string>
 	<floater.string name="zoom_tooltip">
-		Aproximar câmera do foco
+		Zoom da câmera no foco
 	</floater.string>
 	<floater.string name="move_tooltip">
-		Mover câmera para cima, baixo, esquerda e direita
+		Mover a câmera para cima, baixo, esquerda e direita
 	</floater.string>
 	<floater.string name="free_mode_title">
-		Ver objeto
+		Visualizar objeto
 	</floater.string>
 	<string name="inactive_combo_text">
-		Usar predefinição...
+		Predefinição...
 	</string>
 
 	<panel name="controls">
 		<panel name="zoom">
-			<joystick_rotate name="cam_rotate_stick" tool_tip="Orbitar câmera em torno do foco"/>
-			<button name="roll_left" tool_tip="Inclinar câmera para esquerda" />
-			<button name="roll_right" tool_tip="Inclinar câmera para direita" />
-			<slider_bar name="zoom_slider" tool_tip="Aproximar câmera do foco"/>
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Girar câmera ao redor do foco"/>
+			<button name="roll_left" tool_tip="Inclinar câmera para a esquerda" />
+			<button name="roll_right" tool_tip="Inclinar câmera para a direita" />
+			<slider_bar name="zoom_slider" tool_tip="Zoom da câmera no foco"/>
 			<joystick_track name="cam_track_stick" tool_tip="Mover câmera para cima, baixo, esquerda e direita"/>
 		</panel>
 	</panel>
 	<panel name="buttons_panel">
-		<panel_camera_item name="front_view" tool_tip="Vista frontal">
+		<panel_camera_item name="front_view" tool_tip="Visão frontal">
 			<panel_camera_item.text name="front_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-		<panel_camera_item name="group_view" tool_tip="Vista lateral">
+		<panel_camera_item name="group_view" tool_tip="Visão lateral">
 			<panel_camera_item.text name="side_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-		<panel_camera_item name="rear_view" tool_tip="Vista traseira">
+
+		<panel_camera_item name="rear_view" tool_tip="Visão traseira">
 			<panel_camera_item.text name="rear_view_text">
 			</panel_camera_item.text>
-		<panel_camera_item name="tpp_view" tool_tip="Vista TPP">
+		<panel_camera_item name="tpp_view" tool_tip="Visão em terceira pessoa">
 			<panel_camera_item.text name="tpp_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
 		</panel_camera_item>
-		<panel_camera_item name="object_view" tool_tip="Vista do objeto">
+		<panel_camera_item name="object_view" tool_tip="Visão de objeto">
 			<panel_camera_item.text name="object_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-		<panel_camera_item name="mouselook_view" tool_tip="Mouselook">
+		<panel_camera_item name="mouselook_view" tool_tip="Visão em primeira pessoa">
 			<panel_camera_item.text name="mouselook_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-		<panel_camera_item name="reset_view" tool_tip="Redefinir vista">
+		<panel_camera_item name="reset_view" tool_tip="Redefinir visão">
 			<panel_camera_item.text name="reset_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
@@ -58,7 +59,7 @@
 	<combo_box name="preset_combo">
 		<combo_box.item label="Usar predefinição" name="Use preset"/>
 	</combo_box>
-	<button name="gear_btn" tool_tip="Predefinições de câmera"/>
+	<button name="gear_btn" tool_tip="Predefinições da câmera"/>
 	<button label="Posição..." name="camera_position_btn"/>
 	<button label="Salvar" name="save_btn"/>
 </floater>

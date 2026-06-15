@@ -48,16 +48,5 @@
 	<text label="S" name="floater_map_south" text="S">
 		S
 	</text>
-	<text label="SE" name="floater_map_southeast" text="SE">
-		SE
-	</text>
-	<text label="NE" name="floater_map_northeast" text="NE">
-		NE
-	</text>
-	<text label="SO" name="floater_map_southwest" text="SO">
-		SO
-	</text>
-	<text label="NO" name="floater_map_northwest" text="NO">
-		NO
-	</text>
-</panel>
+	</panel>
+	

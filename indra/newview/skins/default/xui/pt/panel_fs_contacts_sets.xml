@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="contact_sets_panel">
 	<panel.string name="empty_list">
 		Este conjunto de contatos está vazio.
@@ -10,7 +10,7 @@
 		Todos os conjuntos de contatos
 	</panel.string>
 	<panel.string name="pseudonyms">
-		Aliases
+		Apelidos
 	</panel.string>
 	<panel.string name="non_friends">
 		Não-amigos

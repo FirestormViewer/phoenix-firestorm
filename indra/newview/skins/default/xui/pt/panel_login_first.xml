@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
 	<panel.string name="forgot_password_url">
 		https://accounts.secondlife.com/forgot_password/?lang=pt-BR
@@ -32,7 +32,7 @@
 					<text name="image_caption_right">
 						Depois, explore a Social Island e conheça outros residentes!
 					</text>
-				</layout_panel>
+					</layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_view_default">
+	<menu_item_check name="sort_by_name" label="Ordenar por nome" />
+	<menu_item_check name="sort_by_recent" label="Ordenar por mais recentes" />
+	<menu_item_check name="sort_folders_by_name" label="Sempre ordenar pastas por nome" />
+	<menu_item_check name="sort_system_folders_to_top" label="Pastas do sistema no topo" />
+	<menu_item_check name="list_view" label="Visualização em lista" />
+	<menu_item_check name="gallery_view" label="Visualização em galeria" />
+	<menu_item_check name="combination_view" label="Visualização combinada" />
+</toggleable_menu>

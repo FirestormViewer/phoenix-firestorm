@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">Voltar</text>
+
+	<text name="huds_title">Seus HUDs ativos</text>
+
+	<text name="huds_desc1">
+		Desanexar HUDs que você não usa economiza memória e pode deixar o viewer mais rápido.
+	</text>
+
+	<text name="huds_desc2">
+		HUDs geralmente têm muitos scripts e também contribuem para o lag no servidor.
+	</text>
+
+	<text name="huds_desc3">
+		Nota: minimizar o HUD não o desanexa. Use o "X" para removê-lo.
+	</text>
+
+	<name_list.columns name="art_value" label="Tempo (μs)" tool_tip="Tempo necessário para renderizar este HUD (microssegundos)" />
+
+	<name_list.columns name="name" label="Nome" tool_tip="Clique em "X" para desanexar" />
+</panel>
