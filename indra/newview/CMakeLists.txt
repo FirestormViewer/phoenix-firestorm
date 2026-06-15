@@ -2342,13 +2342,17 @@ if (WINDOWS)
       ${CMAKE_CURRENT_SOURCE_DIR}/licenses-win32.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt
       ${viewer_APPSETTINGS_FILES}
-      ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
-      ${SHARED_LIB_STAGING_DIR}/glod.dll # <FS:Beq> Restore GLOD build dependencies
       SLPlugin
-      media_plugin_cef
-      media_plugin_libvlc
-      #media_plugin_example # <FS:Ansariel> Don't package example plugin
       )
+
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+      list(APPEND COPY_INPUT_DEPENDENCIES
+        ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
+        ${SHARED_LIB_STAGING_DIR}/glod.dll
+        media_plugin_cef
+        media_plugin_libvlc
+        )
+    endif()
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
@@ -2358,17 +2362,19 @@ if (WINDOWS)
     endif (NOT USE_KDU)
     # </FS:Ansariel>
 
-    if (ADDRESS_SIZE EQUAL 64)
-       list(APPEND COPY_INPUT_DEPENDENCIES
-               ${SHARED_LIB_STAGING_DIR}/vivoxsdk_x64.dll
-               ${SHARED_LIB_STAGING_DIR}/ortp_x64.dll
-               )
-    else (ADDRESS_SIZE EQUAL 64)
-       list(APPEND COPY_INPUT_DEPENDENCIES
-               ${SHARED_LIB_STAGING_DIR}/vivoxsdk.dll
-               ${SHARED_LIB_STAGING_DIR}/ortp.dll
-               )
-    endif (ADDRESS_SIZE EQUAL 64)
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+      if (ADDRESS_SIZE EQUAL 64)
+         list(APPEND COPY_INPUT_DEPENDENCIES
+                 ${SHARED_LIB_STAGING_DIR}/vivoxsdk_x64.dll
+                 ${SHARED_LIB_STAGING_DIR}/ortp_x64.dll
+                 )
+      else (ADDRESS_SIZE EQUAL 64)
+         list(APPEND COPY_INPUT_DEPENDENCIES
+                 ${SHARED_LIB_STAGING_DIR}/vivoxsdk.dll
+                 ${SHARED_LIB_STAGING_DIR}/ortp.dll
+                 )
+      endif (ADDRESS_SIZE EQUAL 64)
+    endif()
 
     if (TARGET ll::discord_sdk)
         list(APPEND COPY_INPUT_DEPENDENCIES
@@ -2384,9 +2390,9 @@ if (WINDOWS)
     endif ()
 
     if (TARGET ll::openal)
+      # ALUT removed; only the OpenAL runtime is needed.
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/OpenAL32.dll
-           ${SHARED_LIB_STAGING_DIR}/alut.dll
           )
     endif ()
 

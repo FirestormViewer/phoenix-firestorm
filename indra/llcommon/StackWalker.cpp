@@ -1100,6 +1100,14 @@ bool StackWalker::ShowCallstack(bool verbose, HANDLE hThread, const CONTEXT *con
   s.AddrBStore.Mode = AddrModeFlat;
   s.AddrStack.Offset = c.IntSp;
   s.AddrStack.Mode = AddrModeFlat;
+#elif _M_ARM64
+  imageType = IMAGE_FILE_MACHINE_ARM64;
+  s.AddrPC.Offset = c.Pc;
+  s.AddrPC.Mode = AddrModeFlat;
+  s.AddrFrame.Offset = c.Fp;
+  s.AddrFrame.Mode = AddrModeFlat;
+  s.AddrStack.Offset = c.Sp;
+  s.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Platform not supported!"
 #endif

@@ -48,8 +48,10 @@
 #include "llviewercontrol.h"
 #include "lldxhardware.h"
 
+#ifndef _M_ARM64
 #include "nvapi/nvapi.h"
 #include "nvapi/NvApiDriverSettings.h"
+#endif
 
 #include <stdlib.h>
 
@@ -292,6 +294,7 @@ LONG WINAPI catchallCrashHandler(EXCEPTION_POINTERS * /*ExceptionInfo*/)
 }
 
 
+#ifndef _M_ARM64
 /*
     This function is used to print to the command line a text message
     describing the nvapi error and quits
@@ -305,6 +308,7 @@ void nvapi_error(NvAPI_Status status)
     //should always trigger when asserts are enabled
     //llassert(status == NVAPI_OK);
 }
+#endif
 
 // Create app mutex creates a unique global windows object.
 // If the object can be created it returns true, otherwise
@@ -327,6 +331,7 @@ bool create_app_mutex()
     return result;
 }
 
+#ifndef _M_ARM64
 void ll_nvapi_init(NvDRSSessionHandle hSession)
 {
     // (2) load all the system settings into the session
@@ -481,6 +486,7 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
         return;
     }
 }
+#endif // _M_ARM64
 
 //#define DEBUGGING_SEH_FILTER 1
 #if DEBUGGING_SEH_FILTER
@@ -583,6 +589,7 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
         return -1;
     }
 
+#ifndef _M_ARM64
     NvDRSSessionHandle hSession = 0;
     static LLCachedControl<bool> use_nv_api(gSavedSettings, "NvAPICreateApplicationProfile", true);
     if (use_nv_api)
@@ -607,6 +614,7 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
             }
         }
     }
+#endif
 
     // Have to wait until after logging is initialized to display LFH info
     if (num_heaps > 0)
@@ -664,12 +672,14 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
     delete viewer_app_ptr;
     viewer_app_ptr = NULL;
 
+#ifndef _M_ARM64
     // (NVAPI) (6) We clean up. This is analogous to doing a free()
     if (hSession)
     {
         NvAPI_DRS_DestroySession(hSession);
         hSession = 0;
     }
+#endif
 
     return 0;
 }

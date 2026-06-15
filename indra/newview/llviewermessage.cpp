@@ -5034,6 +5034,14 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 
 void process_attached_sound(LLMessageSystem *msg, void **user_data)
 {
+    if (!gAudiop)
+    {
+#if !LL_LINUX
+        LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+#endif
+        return;
+    }
+
     F32 gain = 0;
     LLUUID sound_id;
     LLUUID object_id;

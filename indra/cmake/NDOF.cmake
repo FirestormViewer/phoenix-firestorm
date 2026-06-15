@@ -1,7 +1,11 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-set(NDOF ON CACHE BOOL "Use NDOF space navigator joystick library.")
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  set(NDOF OFF CACHE BOOL "Use NDOF space navigator joystick library." FORCE)
+else()
+  set(NDOF ON CACHE BOOL "Use NDOF space navigator joystick library.")
+endif()
 
 include_guard()
 add_library( ll::ndof INTERFACE IMPORTED )

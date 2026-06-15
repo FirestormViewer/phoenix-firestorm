@@ -62,8 +62,10 @@ public:
     // Call initClass() at startup to avoid 15,000+ cycle penalties from denormalized numbers
     static void initClass()
     {
+#ifndef _M_ARM64
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_NEAREST);
+#endif
     }
 
     // Return a vector of all zeros

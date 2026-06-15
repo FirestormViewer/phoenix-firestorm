@@ -990,6 +990,7 @@ void LLTextureCache::setReadOnly(bool read_only)
 
 // Called in the main thread.
 // Returns the unused amount of max_size if any
+
 S64 LLTextureCache::initCache(ELLPath location, S64 max_size, bool texture_cache_mismatch)
 {
     llassert_always(getPending() == 0) ; //should not start accessing the texture cache before initialized.

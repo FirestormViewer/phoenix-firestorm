@@ -1231,6 +1231,7 @@ bool LLAppViewer::init()
 
 #if defined(LL_X86) || defined(LL_X86_64)
     // Without SSE2 support we will crash almost immediately, warn here.
+    // ARM64 has no SSE2; the viewer uses soft intrinsics there, so skip the check.
     if (!gSysCPU.hasSSE2())
     {
         // can't use an alert here since we're exiting and

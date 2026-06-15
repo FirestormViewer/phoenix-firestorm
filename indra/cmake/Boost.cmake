@@ -14,7 +14,11 @@ use_prebuilt_binary(boost)
 
 # As of sometime between Boost 1.67 and 1.72, Boost libraries are suffixed
 # with the address size.
-set(addrsfx "-x${ADDRESS_SIZE}")
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  set(addrsfx "-a${ADDRESS_SIZE}")
+else()
+  set(addrsfx "-x${ADDRESS_SIZE}")
+endif()
 
 find_library(BOOST_CONTEXT_LIBRARY
     NAMES

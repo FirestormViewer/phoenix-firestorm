@@ -41,7 +41,11 @@
 #endif
 
 #define LL_FAST_TIMER_ON 1
+#if defined(_M_ARM64)
+#define LL_FASTTIMER_USE_RDTSC 0
+#else
 #define LL_FASTTIMER_USE_RDTSC 1
+#endif
 
 // NOTE: Also see llprofiler.h
 #if !defined(LL_PROFILER_CONFIGURATION)

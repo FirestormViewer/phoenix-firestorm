@@ -382,6 +382,55 @@ private:
 // LL_MSVC and not LLWINDOWS because some of the following code
 // uses the MSVC compiler intrinsics __cpuid() and __rdtsc().
 
+#if defined(_M_ARM64)
+
+// ARM64 Windows implementation — no CPUID/RDTSC available
+class LLProcessorInfoWindowsImpl : public LLProcessorInfoImpl
+{
+public:
+    LLProcessorInfoWindowsImpl()
+    {
+        getCPUInfo();
+    }
+
+private:
+    void getCPUInfo()
+    {
+        SYSTEM_INFO si;
+        GetNativeSystemInfo(&si);
+
+        setInfo(eVendor, "ARM");
+        setInfo(eBrandName, "ARM64 Processor");
+        setInfo(eFamilyName, "ARM64");
+        setConfig(eMaxID, 0);
+        setConfig(eMaxExtID, 0);
+
+        // Use registry to get CPU frequency
+        HKEY hKey;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+            "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
+            0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            DWORD mhz = 0;
+            DWORD size = sizeof(mhz);
+            if (RegQueryValueExA(hKey, "~MHz", NULL, NULL, (LPBYTE)&mhz, &size) == ERROR_SUCCESS)
+            {
+                setInfo(eFrequency, (F64)mhz);
+            }
+
+            char brand[256] = {};
+            size = sizeof(brand);
+            if (RegQueryValueExA(hKey, "ProcessorNameString", NULL, NULL, (LPBYTE)brand, &size) == ERROR_SUCCESS)
+            {
+                setInfo(eBrandName, brand);
+            }
+            RegCloseKey(hKey);
+        }
+    }
+};
+
+#else // x86/x64
+
 // Delays for the specified amount of milliseconds
 static void _Delay(unsigned int ms)
 {
@@ -625,6 +674,8 @@ private:
         }
     }
 };
+
+#endif // !_M_ARM64
 
 #elif LL_DARWIN
 

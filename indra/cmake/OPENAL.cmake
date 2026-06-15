@@ -24,9 +24,12 @@ endif()
 
 if (USE_OPENAL)
   add_library( ll::openal INTERFACE IMPORTED )
-  target_include_directories( ll::openal SYSTEM INTERFACE "${LIBS_PREBUILT_DIR}/include/AL")
+  target_include_directories( ll::openal SYSTEM INTERFACE "${LIBS_PREBUILT_DIR}/include")
   target_compile_definitions( ll::openal INTERFACE LL_OPENAL=1)
-  use_prebuilt_binary(openal)
+  # ARM64: OpenAL Soft is built locally; the prebuilt (x64) package isn't applicable.
+  if (NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    use_prebuilt_binary(openal)
+  endif()
 
   find_library(OPENAL_LIBRARY
       NAMES
@@ -36,13 +39,8 @@ if (USE_OPENAL)
       libopenal.so
       PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
-  find_library(ALUT_LIBRARY
-      NAMES
-      alut
-      libalut.dylib
-      libalut.so
-      PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
-
-  target_link_libraries(ll::openal INTERFACE ${OPENAL_LIBRARY} ${ALUT_LIBRARY})
+  # ALUT dependency removed: the OpenAL backend now uses raw ALC + a built-in WAV
+  # loader, so freealut (alut) is no longer linked on any platform.
+  target_link_libraries(ll::openal INTERFACE ${OPENAL_LIBRARY})
 
 endif ()

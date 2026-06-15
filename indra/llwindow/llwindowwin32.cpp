@@ -487,7 +487,6 @@ private:
     std::unique_ptr<LLWatchdogTimeout> mWindowTimeout;
 };
 
-
 LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
                              const std::string& title, const std::string& name, S32 x, S32 y, S32 width,
                              S32 height, U32 flags,
@@ -505,10 +504,11 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     mMaxCores(max_cores)
 {
     sMainThreadId = LLThread::currentID();
+
     mWindowThread = new LLWindowWin32Thread();
 
     //MAINT-516 -- force a load of opengl32.dll just in case windows went sideways
-    LoadLibrary(L"opengl32.dll");
+    HMODULE hGL = LoadLibrary(L"opengl32.dll");
 
 
     if (mMaxCores != 0)
@@ -663,7 +663,6 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     HDEVNOTIFY deviceNotification = RegisterDeviceNotification(mWindowHandle, &notificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE | DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
     // </FS>
     // Init Direct Input - needed for joystick / Spacemouse
-
     LPDIRECTINPUT8 di8_interface;
     HRESULT status = DirectInput8Create(
         mhInstance, // HINSTANCE hinst,
@@ -1338,13 +1337,6 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
 
     // create window
-    LL_DEBUGS("Window") << "Creating window with X: " << window_rect.left
-        << " Y: " << window_rect.top
-        << " Width: " << (window_rect.right - window_rect.left)
-        << " Height: " << (window_rect.bottom - window_rect.top)
-        << " Fullscreen: " << mFullscreen
-        << LL_ENDL;
-
     recreateWindow(window_rect, dw_ex_style, dw_style);
 
     if (mWindowHandle)

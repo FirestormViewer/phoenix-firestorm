@@ -31,7 +31,7 @@
 #include "lllistener.h"
 
 #include "AL/al.h"
-#include "AL/alut.h"
+#include "AL/alc.h"
 #include "AL/alext.h"
 
 class LLListener_OpenAL  : public LLListener

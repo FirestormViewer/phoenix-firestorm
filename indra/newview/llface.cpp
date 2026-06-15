@@ -1419,6 +1419,16 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
         LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - indices");
         mVertexBuffer->getIndexStrider(indicesp, mIndicesIndex, mIndicesCount);
 
+#if defined(_M_ARM64)
+        // ARM64: scalar index copy. The x86 SSE2 fast path below routes through the
+        // soft-intrinsics shim, which crashes here (write past the destination).
+        // The scalar copy is correct and the perf difference is negligible.
+        U16* idx = (U16*) indicesp.get();
+        for (S32 i = 0; i < num_indices; ++i)
+        {
+            *idx++ = vf.mIndices[i] + index_offset;
+        }
+#else
         volatile __m128i* dst = (__m128i*) indicesp.get();
         __m128i* src = (__m128i*) vf.mIndices;
         __m128i offset = _mm_set1_epi16(index_offset);
@@ -1440,6 +1450,7 @@ bool LLFace::getGeometryVolume(const LLVolume& volume,
                 *idx++ = vf.mIndices[i]+index_offset;
             }
         }
+#endif
     }
 
 

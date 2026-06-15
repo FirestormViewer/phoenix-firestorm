@@ -173,13 +173,15 @@ class FSViewerManifest:
     def fs_copy_windows_manifest(self):
         from shutil import copyfile
         self.fs_strip_windows_manifest( "%s/slplugin.exe" % self.args['configuration'].lower() )
-        self.fs_strip_windows_manifest( "%s/llplugin/dullahan_host.exe" % self.args['configuration'].lower() )
+        if self.args['arch'] != 'aarch64':
+            self.fs_strip_windows_manifest( "%s/llplugin/dullahan_host.exe" % self.args['configuration'].lower() )
         if self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'tools', 'manifests')):
             self.path( "compatibility.manifest", "slplugin.exe.manifest" )
             self.end_prefix()
-        if self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'tools', 'manifests'), dst="llplugin"):
-            self.path( "compatibility.manifest", "dullahan_host.exe.manifest" )
-            self.end_prefix()
+        if self.args['arch'] != 'aarch64':
+            if self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'tools', 'manifests'), dst="llplugin"):
+                self.path( "compatibility.manifest", "dullahan_host.exe.manifest" )
+                self.end_prefix()
 
     def fs_save_osx_symbols( self ):
         self.fs_save_symbols("darwin")

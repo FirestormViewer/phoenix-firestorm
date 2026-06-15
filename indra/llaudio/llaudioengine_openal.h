@@ -66,6 +66,10 @@ class LLAudioEngine_OpenAL : public LLAudioEngine
         ALuint mWindSource;
         int mNumEmptyWindALBuffers;
 
+        // ARM64/no-ALUT: manage device+context directly (replaces alutInit/alutExit)
+        ALCdevice* mDevice;
+        ALCcontext* mContext;
+
         static const int MAX_NUM_WIND_BUFFERS = 80;
         static const float WIND_BUFFER_SIZE_SEC; // 1/20th sec
 };

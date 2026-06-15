@@ -33,6 +33,7 @@ if(WINDOWS)
     # VIVOX - *NOTE: no debug version
     set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
 
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
     # ND, it seems there is no such thing defined. At least when building a viewer
     # Does this maybe matter on some LL buildserver? Otherwise this and the snippet using slvoice_src_dir
     # can all go
@@ -51,6 +52,7 @@ if(WINDOWS)
             ortp.dll
             )
     endif (ADDRESS_SIZE EQUAL 64)
+    endif()
 
     #*******************************
     # Misc shared libs 
@@ -58,8 +60,10 @@ if(WINDOWS)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
-        glod.dll # <FS:Beq> restore GLOD
         )
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+        list(APPEND release_files glod.dll) # <FS:Beq> restore GLOD
+    endif()
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
@@ -85,7 +89,9 @@ if(WINDOWS)
         list(APPEND release_files discord_partner_sdk.dll)
     endif ()
 
-    set(release_files ${release_files} growl++.dll growl.dll )
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+        set(release_files ${release_files} growl++.dll growl.dll )
+    endif()
     if (TARGET ll::fmodstudio)
         # fmodL is included for logging, only one should be picked by manifest
         #set(release_files ${release_files} fmodL.dll)
@@ -93,7 +99,8 @@ if(WINDOWS)
     endif ()
 
     if (TARGET ll::openal)
-        list(APPEND release_files openal32.dll alut.dll)
+        # ALUT removed; only the OpenAL runtime is needed.
+        list(APPEND release_files openal32.dll)
     endif ()
 
     #*******************************
@@ -123,9 +130,11 @@ if(WINDOWS)
     if (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})
         if(ADDRESS_SIZE EQUAL 32)
             set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x86\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
-        else(ADDRESS_SIZE EQUAL 32)
+        elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+            set(redist_find_path "$ENV{VCTOOLSREDISTDIR}arm64\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
+        else()
             set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x64\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
-        endif(ADDRESS_SIZE EQUAL 32)
+        endif()
         get_filename_component(redist_path "${redist_find_path}" ABSOLUTE)
         MESSAGE(STATUS "VC Runtime redist path: ${redist_path}")
     endif (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})

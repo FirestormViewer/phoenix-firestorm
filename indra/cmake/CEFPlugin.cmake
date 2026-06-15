@@ -5,25 +5,28 @@ include(Prebuilt)
 include_guard()
 add_library( ll::cef INTERFACE IMPORTED )
 
-use_prebuilt_binary(dullahan)
-target_include_directories( ll::cef SYSTEM INTERFACE  ${LIBS_PREBUILT_DIR}/include/cef)
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  # CEF/Dullahan not yet available for ARM64
+else()
+  use_prebuilt_binary(dullahan)
+  target_include_directories( ll::cef SYSTEM INTERFACE  ${LIBS_PREBUILT_DIR}/include/cef)
 
-if (WINDOWS)
-    target_link_libraries( ll::cef INTERFACE
-        libcef.lib
-        libcef_dll_wrapper.lib
-        dullahan.lib
-    )
-elseif (DARWIN)
-    FIND_LIBRARY(APPKIT_LIBRARY AppKit)
-    if (NOT APPKIT_LIBRARY)
-        message(FATAL_ERROR "AppKit not found")
-    endif()
+  if (WINDOWS)
+      target_link_libraries( ll::cef INTERFACE
+          libcef.lib
+          libcef_dll_wrapper.lib
+          dullahan.lib
+      )
+  elseif (DARWIN)
+      FIND_LIBRARY(APPKIT_LIBRARY AppKit)
+      if (NOT APPKIT_LIBRARY)
+          message(FATAL_ERROR "AppKit not found")
+      endif()
 
-    set(CEF_LIBRARY "'${ARCH_PREBUILT_DIRS_RELEASE}/Chromium\ Embedded\ Framework.framework'")
-    if (NOT CEF_LIBRARY)
-        message(FATAL_ERROR "CEF not found")
-    endif()
+      set(CEF_LIBRARY "'${ARCH_PREBUILT_DIRS_RELEASE}/Chromium\ Embedded\ Framework.framework'")
+      if (NOT CEF_LIBRARY)
+          message(FATAL_ERROR "CEF not found")
+      endif()
 
     target_link_libraries( ll::cef INTERFACE
         ${ARCH_PREBUILT_DIRS_RELEASE}/libcef_dll_wrapper.a
@@ -31,10 +34,11 @@ elseif (DARWIN)
         ${APPKIT_LIBRARY}
        )
 
-elseif (LINUX)
-    target_link_libraries( ll::cef INTERFACE
-        dullahan
-        cef
-        cef_dll_wrapper.a
-    )
-endif (WINDOWS)
+  elseif (LINUX)
+      target_link_libraries( ll::cef INTERFACE
+          dullahan
+          cef
+          cef_dll_wrapper.a
+      )
+  endif (WINDOWS)
+endif()

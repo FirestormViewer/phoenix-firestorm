@@ -15,3 +15,6 @@ find_library(NGHTTP2_LIBRARY
 
 target_link_libraries(ll::nghttp2 INTERFACE ${NGHTTP2_LIBRARY})
 target_include_directories( ll::nghttp2 SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/nghttp2)
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  target_compile_definitions(ll::nghttp2 INTERFACE NGHTTP2_STATICLIB)
+endif()

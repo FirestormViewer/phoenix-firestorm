@@ -71,7 +71,10 @@ LL_COMMON_API void ll_assert_aligned_func(uintptr_t ptr,U32 alignment);
 #define ll_assert_aligned(ptr,alignment)
 #endif
 
-#if LL_ARM64
+#if defined(_M_ARM64)
+// Windows ARM64: x86 SSE intrinsics are provided by Microsoft's soft-intrinsics (softintrin).
+#include <intrin.h>
+#elif LL_ARM64
 #include "sse2neon.h"
 #else
 #include <xmmintrin.h>

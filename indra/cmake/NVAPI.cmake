@@ -1,7 +1,11 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-set(NVAPI ON CACHE BOOL "Use NVAPI.")
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  set(NVAPI OFF CACHE BOOL "Use NVAPI." FORCE)
+else()
+  set(NVAPI ON CACHE BOOL "Use NVAPI.")
+endif()
 
 if (NVAPI)
   if (WINDOWS)

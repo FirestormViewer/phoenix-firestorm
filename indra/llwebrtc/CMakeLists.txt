@@ -32,7 +32,7 @@ if (WINDOWS)
         PROPERTIES
         LINK_FLAGS "/debug /LARGEADDRESSAWARE"
         )
-	target_link_libraries(llwebrtc PRIVATE ll::webrtc 
+	target_link_libraries(llwebrtc PRIVATE ll::webrtc
                                        secur32
                                        winmm
                                        dmoguids
@@ -40,7 +40,14 @@ if (WINDOWS)
                                        msdmo
                                        strmiids
                                        iphlpapi
-                                       libcmt)
+                                       libcmt
+                                       libucrt
+                                       libvcruntime
+                                       kernel32
+                                       ntdll
+                                       ole32
+                                       advapi32
+                                       oldnames)
     # as the webrtc libraries are release, build this binary as release as well.
     target_compile_options(llwebrtc PRIVATE "/MT" "/Zc:wchar_t")
     if (USE_BUGSPLAT)
@@ -60,7 +67,7 @@ target_include_directories( llwebrtc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 if (WINDOWS)
     set_property(TARGET llwebrtc PROPERTY
-        MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
     target_compile_options(llwebrtc PRIVATE -Wno-deprecated-declarations) # webrtc::CreateAudioDeviceWithDataObserver is deprecated
 endif (WINDOWS)

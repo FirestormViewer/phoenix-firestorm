@@ -366,8 +366,30 @@ then
 
     # load autobuild provided shell functions and variables
     eval "$("$AUTOBUILD_EXEC" source_environment)"
+
     # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
     load_vsvars
+
+    # Override platform variables for ARM64 builds.
+    # Autobuild hardcodes x64 paths in load_vsvars. The batch file sets
+    # FS_BUILD_ARM64=1 to signal we need ARM64 platform instead.
+    if [ "$FS_BUILD_ARM64" = "1" ]; then
+        export AUTOBUILD_WIN_VSPLATFORM="ARM64"
+        export PLATFORM="ARM64"
+        export VSCMD_ARG_HOST_ARCH="arm64"
+        export VSCMD_ARG_TGT_ARCH="arm64"
+
+        MSVC_VER="$VCTOOLSVERSION"
+        MSVC_DIR="$VCTOOLSINSTALLDIR"
+        SDK_VER="$UCRTVERSION"
+
+        # Fix PATH: replace HostX64/x64 with Hostarm64/arm64
+        export PATH=$(echo "$PATH" | sed "s|HostX64/x64|Hostarm64/arm64|g" | sed "s|Llvm/x64|Llvm/ARM64|g" | sed "s|bin/${SDK_VER}/x64|bin/${SDK_VER}/arm64|g" | sed "s|bin/x64|bin/arm64|g")
+
+        # Fix LIB paths: replace lib/x64 with lib/arm64
+        export LIB=$(echo "$LIB" | sed "s|lib\\\\x64|lib\\\\arm64|g" | sed "s|lib/x64|lib/arm64|g")
+        export LIBPATH=$(echo "$LIBPATH" | sed "s|lib\\\\x64|lib\\\\arm64|g" | sed "s|lib/x64|lib/arm64|g")
+    fi
 fi
 
 if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
@@ -573,6 +595,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         if [ $AUTOBUILD_ADDRSIZE == 32 ]
         then
             CMAKE_ARCH="-A Win32"
+        elif [ "$FS_BUILD_ARM64" = "1" ]
+        then
+            CMAKE_ARCH="-A ARM64"
         fi
         UNATTENDED="-DUNATTENDED=ON"
     fi

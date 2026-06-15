@@ -1,3 +1,5 @@
 include (Prebuilt)
-use_prebuilt_binary(viewer-manager)
+if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+  use_prebuilt_binary(viewer-manager)
+endif()
 

@@ -174,7 +174,7 @@ U64 BlockTimer::countsPerSecond()
         QueryPerformanceFrequency((LARGE_INTEGER*)&sCPUClockFrequency);
         firstcall = false;
     }
-    return sCPUClockFrequency.value();
+    return sCPUClockFrequency;
 #endif
 }
 #endif

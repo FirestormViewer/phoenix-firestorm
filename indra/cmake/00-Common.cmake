@@ -34,7 +34,19 @@ add_compile_definitions(BOOST_BIND_GLOBAL_PLACEHOLDERS)
 
 # Force enable SSE2 instructions in GLM per the manual
 # https://github.com/g-truc/glm/blob/master/manual.md#section2_10
-add_compile_definitions(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES=1 GLM_ENABLE_EXPERIMENTAL=1)
+if(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    # Windows ARM64: use Microsoft's x86-intrinsics shim + soft intrinsics, the Windows
+    # Fiber API for Boost.Context, and sign return addresses for Pointer Authentication.
+    add_compile_definitions(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES=1 GLM_ENABLE_EXPERIMENTAL=1)
+    add_compile_definitions(USE_SOFT_INTRINSICS)
+    add_compile_definitions(BOOST_USE_WINFIB)
+    include_directories(SYSTEM ${CMAKE_SOURCE_DIR}/cmake/arm64_stubs)
+    link_libraries(softintrin ntdll)
+    # ARM64 Pointer Authentication: sign return addresses to satisfy Windows PAC checks
+    add_compile_options(/guard:signret)
+else()
+    add_compile_definitions(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES=1 GLM_ENABLE_EXPERIMENTAL=1)
+endif()
 
 # SSE2NEON throws a pointless warning when compiler optimizations are enabled
 add_compile_definitions(SSE2NEON_SUPPRESS_WARNINGS=1)
@@ -111,16 +123,18 @@ if (WINDOWS)
       )
 
   # <FS:Ansariel> AVX/AVX2 support
-  if (USE_AVX_OPTIMIZATION)
-    add_compile_options(/arch:AVX)
-  elseif (USE_AVX2_OPTIMIZATION)
-    add_compile_options(/arch:AVX2)
-  else (USE_AVX_OPTIMIZATION)
-    # Nicky: x64 implies SSE2
-    if (ADDRESS_SIZE EQUAL 32)
-      add_compile_options(/arch:SSE2)
-    endif()
-  endif (USE_AVX_OPTIMIZATION)
+  if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    if (USE_AVX_OPTIMIZATION)
+      add_compile_options(/arch:AVX)
+    elseif (USE_AVX2_OPTIMIZATION)
+      add_compile_options(/arch:AVX2)
+    else (USE_AVX_OPTIMIZATION)
+      # Nicky: x64 implies SSE2
+      if (ADDRESS_SIZE EQUAL 32)
+        add_compile_options(/arch:SSE2)
+      endif()
+    endif (USE_AVX_OPTIMIZATION)
+  endif()
   # </FS:Ansariel> AVX/AVX2 support
 
   # Are we using the crummy Visual Studio KDU build workaround?
