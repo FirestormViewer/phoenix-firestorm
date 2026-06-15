@@ -449,6 +449,8 @@ LLInventoryModel::LLInventoryModel()
 :   // These are now ordered, keep them that way.
     mBacklinkMMap(),
     mIsAgentInvUsable(false),
+    mLibrarySkeletonLoadTime(0.f),
+    mAgentSkeletonLoadTime(0.f),
     mRootFolderID(),
     mLibraryRootFolderID(),
     mLibraryOwnerID(),
@@ -3238,6 +3240,16 @@ bool LLInventoryModel::loadSkeleton(
                       << " categories and " << cached_item_count << " items from cache"
                       << " after " << timer.getElapsedTimeF32() << " seconds."
                       << LL_ENDL;
+
+    const F32 elapsed = timer.getElapsedTimeF32();
+    if (owner_id == mLibraryOwnerID)
+    {
+        mLibrarySkeletonLoadTime = elapsed;
+    }
+    else
+    {
+        mAgentSkeletonLoadTime = elapsed;
+    }
 
     return rv;
 }
