@@ -99,6 +99,7 @@ public:
     virtual void                setToken( LLKeywordToken* token );
     virtual LLKeywordToken*     getToken() const;
     virtual void                setToolTip(const std::string& tooltip);
+    virtual void                setProminentUrlTooltip(const std::string& label, bool trusted) { } // <FS:PP> Preview real URLs of bracket links
     virtual void                dump() const;
 
     // LLMouseHandler interface
@@ -151,6 +152,7 @@ public:
     /*virtual*/ void                setToken( LLKeywordToken* token )   { mToken = token; }
     /*virtual*/ LLKeywordToken*     getToken() const                    { return mToken; }
     /*virtual*/ void                setToolTip(const std::string& tooltip);
+    /*virtual*/ void                setProminentUrlTooltip(const std::string& label, bool trusted); // <FS:PP> Preview real URLs of bracket links
     /*virtual*/ void                dump() const;
 
     /*virtual*/ bool                handleHover(S32 x, S32 y, MASK mask);
@@ -174,6 +176,11 @@ protected:
     S32                 mFontHeight;
     LLKeywordToken*     mToken;
     std::string         mTooltip;
+    // <FS:PP> Preview real URLs of bracket links
+    bool                mForceProminentUrlTooltip { false };
+    bool                mProminentUrlTrusted { false };
+    std::string         mProminentUrlLabel;
+    // </FS:PP>
     boost::signals2::connection mImageLoadedConnection;
 
     bool mCanEdit { true };
@@ -478,6 +485,10 @@ public:
     bool                    isContentTrusted() const { return mTrustedContent; }
     void                    setContentTrusted(bool trusted_content) { mTrustedContent = trusted_content; }
 
+    // <FS:PP> Selects the nearby-chat labeled-link setting (FSDisableLabeledChatLinksNearbyChat) for this editor's content
+    void                    setNearbyChatContent(bool nearby_chat_content) { mNearbyChatContent = nearby_chat_content; }
+    // </FS:PP>
+
     // TODO: move into LLTextSegment?
     void                    createUrlContextMenu(S32 x, S32 y, const std::string &url); // create a popup context menu for the given Url
 
@@ -502,6 +513,7 @@ public:
     const   LLWString&      getWlabel() { return mLabel.getWString();}
 
     void                    setLastSegmentToolTip(const std::string &tooltip);
+    void                    setLastSegmentProminentUrlTooltip(const std::string &label, bool trusted); // <FS:PP> Preview real URLs of bracket links
 
     /**
      * If label is set, draws text label (which is LLLabelTextSegment)
@@ -826,6 +838,7 @@ protected:
     bool                        mClip;              // clip text to widget rect
     bool                        mClipPartial;       // false if we show lines that are partially inside bounding rect
     bool                        mTrustedContent;    // if false, does not allow to execute SURL links from this editor
+    bool                        mNearbyChatContent { false }; // <FS:PP> if true, labeled-link masking uses the nearby chat setting
     bool                        mPlainText;         // didn't use Image or Icon segments
     bool                        mAutoIndent;
     S32                         mMaxTextByteLength; // Maximum length mText is allowed to be in bytes

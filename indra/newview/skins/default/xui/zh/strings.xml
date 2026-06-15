@@ -6915,6 +6915,36 @@ SecondLife.com網站的「支援」部分
 	<string name="FSCameraPositionCopied">
 		相機位置 [POS] 已複製到剪貼簿。
 	</string>
+	<string name="FSCameraPositionPasted">
+		攝影機已恢復至 [POS]。
+	</string>
+	<string name="FSCameraPositionParseError">
+		無效的攝影機位置。格式應為：&lt;x, y, z&gt; 或 &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll（本地座標）。
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		設定化身懸浮高度（用法：/zoffset value 或 +delta）。
+	</string>
+	<string name="FSCmdLineNoValidRegion">
+		無法取得有效的區域指標。
+	</string>
+	<string name="FSCmdLineTrackPosUsage">
+		在世界地圖上追蹤位置或化身（用法：cmd &lt;x, y, z&gt; 或 cmd 名稱）。
+	</string>
+	<string name="FSCmdLineTrackPosParseError">
+		無效位置。請使用 cpcampos 格式：&lt;x, y, z&gt; 或 &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll。
+	</string>
+	<string name="FSCmdLineTrackPosLocation">
+		正在追蹤 [REGION] ([POS])。
+	</string>
+	<string name="FSCmdLineTrackPosAvatar">
+		正在追蹤 [NAME]。
+	</string>
+	<string name="FSCmdLineTrackPosNotFound">
+		無法在雷達中找到符合「[NAME]」的化身。
+	</string>
+	<string name="FSCmdLineTrackPosMapError">
+		無法開啟世界地圖。
+	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		繪製距離設定為 [DISTANCE] 米。
 	</string>

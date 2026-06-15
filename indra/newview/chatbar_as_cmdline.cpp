@@ -45,6 +45,7 @@
 #include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llfloaterreg.h"
+#include "llfloaterworldmap.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
 #include "llparcel.h"
@@ -690,6 +691,79 @@ static void cmdline_apply_camera(const CmdlineCameraSpec& spec)
     FSCommon::report_cmdline_result(LLTrans::getString("FSCameraPositionPasted", args));
 }
 
+void cmdline_track(std::string_view params)
+{
+    std::string arg = static_cast<std::string>(params);
+    LLStringUtil::trim(arg);
+    if (arg.empty())
+    {
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosUsage"));
+        return;
+    }
+
+    if (arg.front() == '<')
+    {
+        CmdlineCameraSpec spec;
+        if (!parseCameraPositionString(arg, spec))
+        {
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosParseError"));
+            return;
+        }
+
+        LLViewerRegion* region = gAgent.getRegion();
+        if (!region)
+        {
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineNoValidRegion"));
+            return;
+        }
+
+        LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+        if (!world_map)
+        {
+            world_map = LLFloaterReg::showTypedInstance<LLFloaterWorldMap>("world_map");
+        }
+        if (!world_map)
+        {
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosMapError"));
+            return;
+        }
+
+        const S32 x = ll_round(spec.pos.mV[VX]);
+        const S32 y = ll_round(spec.pos.mV[VY]);
+        const S32 z = ll_round(spec.pos.mV[VZ]);
+        world_map->trackURL(region->getName(), x, y, z);
+
+        LLStringUtil::format_map_t args;
+        args["[POS]"] = llformat("<%d, %d, %d>", x, y, z);
+        args["[REGION]"] = region->getName();
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosLocation", args));
+        return;
+    }
+
+    const LLUUID avatar_id = cmdline_partial_name2key(arg);
+    if (avatar_id.isNull())
+    {
+        LLStringUtil::format_map_t args;
+        args["[NAME]"] = arg;
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosNotFound", args));
+        return;
+    }
+
+    if (auto entry = FSRadar::getInstance()->getEntry(avatar_id))
+    {
+		LLAvatarActions::track(avatar_id);
+        LLStringUtil::format_map_t args;
+        args["[NAME]"] = entry->getName();
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosAvatar", args));
+    }
+    else
+    {
+        LLStringUtil::format_map_t args;
+        args["[NAME]"] = arg;
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosNotFound", args));
+    }
+}
+
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
     static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
@@ -710,6 +784,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
     static LLCachedControl<std::string> sFSCmdLineClearChat(gSavedSettings, "FSCmdLineClearChat");
     static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings, "FSCmdLineMedia");
     static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
+    static LLCachedControl<std::string> sFSCmdLineTrackPos(gSavedSettings, "FSCmdLineTrackPos");
     static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
     static LLCachedControl<std::string> sFSCmdLinePasteCam(gSavedSettings, "FSCmdLinePasteCam");
     static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
@@ -1215,6 +1290,18 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 {
                     std::string_view name = revised_text.substr(command.length() + 1);
                     cmdline_tp2name(name);
+                }
+                return false;
+            }
+            else if (command == sFSCmdLineTrackPos())
+            {
+                if (revised_text.length() > command.length() + 1)
+                {
+                    cmdline_track(revised_text.substr(command.length() + 1));
+                }
+                else
+                {
+                    FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosUsage"));
                 }
                 return false;
             }
@@ -1745,7 +1832,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 }
                 else
                 {
-                    FSCommon::report_cmdline_result("Could not get a valid region pointer.");
+                    FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineNoValidRegion"));
                 }
                 return false;
             }

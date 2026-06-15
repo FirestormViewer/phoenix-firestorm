@@ -5,4 +5,19 @@
 	<floater.string name="ao_dnd_only_on_full_interface">Vous pouvez seulement glisser une animation vers l'interface complète. Cliquez sur l'icône de l'outil pour l'ouvrir.</floater.string>
 	<floater.string name="ao_add_blank_label">Nouvel ensemble vide...</floater.string>
 	<floater.string name="ao_add_clone_label">Cloner l'ensemble actuel...</floater.string>
+	<floater.string name="ao_track_main">Principale</floater.string>
+	<floater.string name="ao_no_track_animations">Piste vide - déposez une animation ici</floater.string>
+	<floater.string name="ao_group_tooltip">Groupe d'animations - elles sont jouées ensembles :</floater.string>
+	<floater.string name="ao_member_tooltip">Saisie groupée d'animations - jouée avec le reste de son groupe. Double-cliquez pour la prévisualiser seule.</floater.string>
+	<floater.string name="ao_cm_expand">Développer</floater.string>
+	<floater.string name="ao_cm_collapse">Réduire</floater.string>
+	<floater.string name="ao_cm_rename_group">Renommer le groupe...</floater.string>
+	<floater.string name="ao_cm_move_out">Enlever du groupe</floater.string>
+	<floater.string name="ao_cm_delete">Supprimer</floater.string>
+	<floater.string name="ao_cm_find_original">Trouver l'original</floater.string>
+	<floater.string name="ao_dnd_merge">Déposer pour grouper avec cette animation</floater.string>
+	<floater.string name="ao_dnd_add_to_group">Déposer pour ajouter à ce groupe</floater.string>
+	<floater.string name="ao_dnd_add_to_track">Déposer pour ajouter à cette piste</floater.string>
+	<floater.string name="ao_dnd_folder_group">Déposer le dossier pour créer un groupe d'animation</floater.string>
+	<floater.string name="ao_dnd_folder_pour">Déposer le dossier pour ajouter ses animations à cette piste</floater.string>
 </floater>

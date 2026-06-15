@@ -6586,6 +6586,15 @@ correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez v
 	<string name="FSCameraPositionCopied">
 		Position de la caméra [POS] copiée dans le presse-papiers.
 	</string>
+	<string name="FSCameraPositionPasted">
+		Caméra restaurée à [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Position de la caméra incorrecte. Attendu : &lt;x, y, z&gt; ou &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Définir la hauteur de l'avatar au survol (utilisation : /zoffset value ou +delta).
+	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Distance d'affichage réglèe [DISTANCE]m.
 	</string>

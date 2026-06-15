@@ -33,7 +33,7 @@
 		<layout_panel
 		 name="needle_list_layout"
 		 layout="topleft"
-		 height="150"
+		 height="175"
 		 min_height="94"
 		 user_resize="true">
 			<check_box
@@ -104,6 +104,25 @@
 			 left_pad="0"
 			 width="96"
 			 label="Remove"/>
+			<button
+			 name="up_needle"
+			 layout="topleft"
+			 follows="left|bottom"
+			 height="20"
+			 left="0"
+			 top_pad="4"
+			 width="96"
+			 tool_tip="Selected rule is moved up one position."
+			 label="Up"/>
+			<button
+			 name="down_needle"
+			 layout="topleft"
+			 follows="right|bottom"
+			 height="20"
+			 left_pad="0"
+			 width="96"
+			 tool_tip="Selected rule is moved down one position."
+			 label="Down"/>
 		</layout_panel>
 		<layout_panel
 		 name="filter_log_layout"

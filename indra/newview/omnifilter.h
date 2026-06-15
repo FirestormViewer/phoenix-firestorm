@@ -55,6 +55,11 @@ protected:
     void onNeedleChanged();
     void onAddNeedleClicked();
     void onRemoveNeedleClicked();
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    void onSortChanged();
+    void onUpNeedleClicked();
+    void onDownNeedleClicked();
+    // </FS:minerjr> [FIRE-36649]
     void onNeedleNameChanged();
     void onNeedleCheckboxChanged(LLUICtrl* ctrl);
     void onOwnerChanged();
@@ -64,6 +69,10 @@ protected:
     FSScrollListCtrl* mNeedleListCtrl{ nullptr };
     LLButton*         mAddNeedleBtn{ nullptr };
     LLButton*         mRemoveNeedleBtn{ nullptr };
+    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+    LLButton*         mUpNeedleBtn{ nullptr };
+    LLButton*         mDownNeedleBtn{ nullptr };
+    // </FS:minerjr> [FIRE-36649]
     FSScrollListCtrl* mFilterLogCtrl{ nullptr };
     LLPanel*          mPanelDetails{ nullptr };
     LLLineEditor*     mNeedleNameCtrl{ nullptr };

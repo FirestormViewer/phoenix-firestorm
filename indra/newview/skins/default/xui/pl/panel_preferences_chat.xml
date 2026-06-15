@@ -316,6 +316,10 @@
 				Rzuć kostką (użycie: cmd kostki ścianki tm wm)
 			</text>
 			<line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
+			<text name="FSCmdLineTrackPos_txt">
+				Śledź pozycję lub awatara (cmd pos lub imię)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Ustawia znacznik na mapie świata na podstawie pozycji (format cpcampos) lub częściowej nazwy awatara" />
 			<text name="FSCmdLinePos_txt">
 				Teleport wewn. regionu (użycie: cmd x y z)
 			</text>

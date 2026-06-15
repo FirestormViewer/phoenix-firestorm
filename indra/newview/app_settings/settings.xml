@@ -19356,6 +19356,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<string>tp2</string>
 		</map>
+		<key>FSCmdLineTrackPos</key>
+		<map>
+			<key>Comment</key>
+			<string>Track a position or avatar on the world map.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>trkpos</string>
+		</map>
 		<key>FSCmdLineCopyCam</key>
 		<map>
 			<key>Comment</key>
@@ -19737,7 +19748,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSDisableLabeledChatLinks</key>
 		<map>
 			<key>Comment</key>
-			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs; mitigates misleading link text.</string>
+			<string>When true, wiki-style bracketed links ([https://host label]) in IMs, group chat, ad-hoc conferences and group notices keep their label, but hovering shows an instant large hint previewing the real destination URL; helps spot misleading link text.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -19745,10 +19756,10 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<integer>0</integer>
 		</map>
-		<key>FSDisableLabeledChatSLURLs</key>
+		<key>FSDisableLabeledChatLinksNearbyChat</key>
 		<map>
 			<key>Comment</key>
-			<string>When true along with FSDisableLabeledChatLinks, also unmask wiki-style bracketed secondlife:// and hop:// links.</string>
+			<string>When true, wiki-style bracketed links ([https://host label]) in nearby (local) chat and object text keep their label, but hovering shows an instant large hint previewing the real destination URL; helps spot misleading link text.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>

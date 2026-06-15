@@ -39,7 +39,11 @@ LLUrlMatch::LLUrlMatch() :
     mLocation(""),
     mUnderline(e_underline::UNDERLINE_ALWAYS),
     mTrusted(false),
-    mSkipProfileIcon(false)
+    mSkipProfileIcon(false),
+    // <FS:PP> Preview real URLs of bracket links
+    mLabeledLinkMasked(false),
+    mLabeledLinkTrusted(false)
+    // <FS:PP>
 {
 }
 
@@ -68,4 +72,8 @@ void LLUrlMatch::setValues(U32 start, U32 end, const std::string &url, const std
     mSkipProfileIcon = skip_icon;
     // <FS:Ansariel> Store matched text
     mMatchedText = matched_text;
+    // <FS:PP> Preview real URLs of bracket links
+    mLabeledLinkMasked = false;
+    mLabeledLinkTrusted = false;
+    // </FS:PP>
 }

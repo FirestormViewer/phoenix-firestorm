@@ -103,6 +103,18 @@ class OmnifilterEngine
 
         typedef std::map<std::string, OmnifilterEngine::OmnifilterEngine::Needle, std::less<>> needle_list_t;
         needle_list_t& getNeedleList();
+        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+        // Typedef for the ordered list which is a vector of strings, used to keep track of the map order, which uses strings to lookup the
+        // needles.
+        typedef std::vector<std::string> needle_ordered_list_t;
+        needle_ordered_list_t& getOrderedNeedleList() { return mOrderedNeedles; };
+        S32 getOrderedNeedleListSize() const { return static_cast<S32>(mOrderedNeedles.size()); };
+        std::string_view getOrderedNeedleName(const S32 index) const;
+        S32 getOrderedNeedleIndex(std::string_view);
+        bool setOrderedNeedleName(const S32 needle_index, std::string_view new_name);
+        const Needle* getOrderedNeedle(const S32 index);
+        bool swapNeedles(const S32 index1, const S32 index2);
+        // </FS:minerjr> [FIRE-36649]
 
         Needle& newNeedle(const std::string& needle_name);
         void renameNeedle(const std::string& old_name, const std::string& new_name);
@@ -129,6 +141,9 @@ class OmnifilterEngine
 
     protected:
         needle_list_t mNeedles;
+        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+        needle_ordered_list_t mOrderedNeedles;
+        // </FS:minerjr> [FIRE-36649]
 
         std::string mNeedlesXMLPath;
 

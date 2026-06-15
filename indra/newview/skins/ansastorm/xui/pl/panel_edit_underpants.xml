@@ -4,7 +4,7 @@
 		<texture_picker label="Tekstura" name="Fabric" tool_tip="Kliknij aby wybrać teksturę"/>
 		<color_swatch label="Kolor" name="Color/Tint" tool_tip="Kliknij aby wybrać kolor"/>
 	</panel>
-	<panel name="underpants_main_tab_holder">
+	<panel name="underpants_main_tab_holder" title="Bielizna">
 		<accordion name="underpants_main_accordion">
 			<accordion_tab name="underpants_main_tab" title="Bielizna"/>
 		</accordion>
