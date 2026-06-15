@@ -229,7 +229,12 @@
 #endif
 
 #if LL_ARM64
+#if defined(_MSC_VER)
+// MSVC ARM64: GLM's NEON SIMD specializations don't compile under MSVC; use scalar math.
+#define GLM_FORCE_PURE 1
+#else
 #define GLM_FORCE_NEON 1
+#endif
 #else
 #define GLM_FORCE_SSE2 1
 #endif

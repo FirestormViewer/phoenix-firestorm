@@ -154,10 +154,12 @@
 #include "stringize.h"
 #include "llcoros.h"
 #include "llexception.h"
+#if !defined(_M_ARM64)
 #include "cef/dullahan_version.h"
-#if !LL_LINUX
+#endif // CEF not available on ARM64
+#if !LL_LINUX && !defined(_M_ARM64)
 #include "vlc/libvlc_version.h"
-#endif // LL_LINUX
+#endif // LL_LINUX / VLC not available on ARM64
 
 #if LL_DARWIN
 #include "llwindowmacosx.h"
@@ -4133,7 +4135,7 @@ LLSD LLAppViewer::getViewerInfo() const
         info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
     }
 
-//#if !LL_LINUX
+#if !defined(_M_ARM64)
     std::ostringstream cef_ver_codec;
     cef_ver_codec << "Dullahan: ";
     cef_ver_codec << DULLAHAN_VERSION_MAJOR;
@@ -4159,11 +4161,13 @@ LLSD LLAppViewer::getViewerInfo() const
     cef_ver_codec << CHROME_VERSION_PATCH;
 
     info["LIBCEF_VERSION"] = cef_ver_codec.str();
-//#else
-//  info["LIBCEF_VERSION"] = "Undefined";
-//#endif
+#else
+    info["LIBCEF_VERSION"] = "Not available (ARM64)";
+#endif
 
-#if !LL_LINUX
+#if defined(_M_ARM64)
+    info["LIBVLC_VERSION"] = "Not available (ARM64)";
+#elif !LL_LINUX
     std::ostringstream vlc_ver_codec;
     vlc_ver_codec << LIBVLC_VERSION_MAJOR;
     vlc_ver_codec << ".";
