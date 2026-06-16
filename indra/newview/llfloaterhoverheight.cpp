@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterhoverheight.h"
+#include "llkeyboard.h"
 #include "llsliderctrl.h"
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
@@ -40,7 +41,6 @@
 #endif
 
 LLFloaterHoverHeight::LLFloaterHoverHeight(const LLSD& key) : LLFloater(key)
-,   mModifiers(MASK_NONE)  // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
 {
 }
 
@@ -152,18 +152,6 @@ void LLFloaterHoverHeight::onFinalCommit()
 }
 
 // <FS:Zi> FIRE-33859 - Add +/- and reset buttons to hover height slider
-bool LLFloaterHoverHeight::handleKey(KEY key, MASK mask, bool called_from_parent)
-{
-    mModifiers = mask;
-    return LLUICtrl::handleKey(key, mask, called_from_parent);
-}
-
-bool LLFloaterHoverHeight::handleKeyUp(KEY key, MASK mask, bool called_from_parent)
-{
-    mModifiers = mask;
-    return LLUICtrl::handleKeyUp(key, mask, called_from_parent);
-}
-
 void LLFloaterHoverHeight::onResetButtonClicked()
 {
     onButtonClicked(0.0f);
@@ -189,19 +177,15 @@ void LLFloaterHoverHeight::onButtonClicked(F32 value)
     }
     else
     {
-        switch (mModifiers)
+        MASK mask = gKeyboard ? gKeyboard->currentMask(true) : MASK_NONE;
+
+        if (mask & MASK_ALT)
         {
-            case MASK_ALT:
-            {
-                value *= 10.0f;
-                break;
-            }
-            case MASK_CONTROL:
-            case MASK_SHIFT:
-            {
-                value *= 0.1f;
-                break;
-            }
+            value *= 10.0f;
+        }
+        else if (mask & (MASK_CONTROL | MASK_SHIFT))
+        {
+            value *= 0.1f;
         }
         sldrCtrl->setValue(sldrCtrl->getValueF32() + value);
     }
@@ -257,5 +241,3 @@ void LLFloaterHoverHeight::updateEditEnabled()
         syncFromPreferenceSetting(this);
     }
 }
-
-
