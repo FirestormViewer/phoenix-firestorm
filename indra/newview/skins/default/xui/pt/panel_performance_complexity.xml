@@ -22,5 +22,5 @@
 
 	<name_list.columns name="complex_value" label="ARC" tool_tip="Complexidade do item (ARC)" />
 
-	<name_list.columns name="name" label="Nome do anexo" tool_tip="Clique em "X" para desanexar" />
+	<name_list.columns name="name" label="Nome do anexo" tool_tip="Clique em &quot;X&quot; para desanexar" />
 </panel>

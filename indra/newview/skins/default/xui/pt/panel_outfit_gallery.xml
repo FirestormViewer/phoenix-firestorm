@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="Galeria de Looks">
+<panel name="Outfit Gallery">
 	<string name="outfit_photo_string">
 		Foto do look "[OUTFIT_NAME]"
 	</string>

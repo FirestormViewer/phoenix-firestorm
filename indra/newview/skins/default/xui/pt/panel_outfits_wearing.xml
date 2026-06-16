@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="Vestindo">
+<panel name="Wearing">
 	<panel.string name="no_attachments">
 		Nenhum objeto anexado.
 	</panel.string>

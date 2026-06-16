@@ -18,5 +18,5 @@
 
 	<name_list.columns name="art_value" label="Tempo (μs)" tool_tip="Tempo necessário para renderizar este HUD (microssegundos)" />
 
-	<name_list.columns name="name" label="Nome" tool_tip="Clique em "X" para desanexar" />
+	<name_list.columns name="name" label="Nome" tool_tip="Clique em &quot;X&quot; para desanexar" />
 </panel>
