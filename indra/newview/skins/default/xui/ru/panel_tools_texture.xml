@@ -18,8 +18,8 @@
 	</text>
 	<check_box label="Собств. яркость" name="checkbox fullbright"/>
 	<check_box label="Скрыть воду" name="checkbox_hide_water"/>
-	<button tool_tip="Копировать" name="copy_face_btn" tool_tip="Копировать параметры текстуры в буфер обмена"/>
-	<button tool_tip="Вставить" name="paste_face_btn" tool_tip="Вставить параметры текстуры из буфера обмена"/>
+	<button name="copy_face_btn" tool_tip="Копировать параметры текстуры в буфер обмена"/>
+	<button name="paste_face_btn" tool_tip="Вставить параметры текстуры из буфера обмена"/>
 	<!-- <text name="label_matmedia">Материал</text> -->
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Материалы" name="Materials"/>

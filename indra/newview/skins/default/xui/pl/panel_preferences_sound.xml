@@ -217,7 +217,7 @@
 			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
 				Próg zmiany ilości L$:
 			</text>
-			<panel name="output_device_settings_panel" label="Ustawienia urządzenia">
+			<panel name="output_device_settings_panel">
 				<panel.string name="output_default_text">
 					Domyślne
 				</panel.string>
@@ -323,6 +323,7 @@
 				<item label="Maksymalne" name="noise_suppression_max" />
 			</combo_box>
 			<button label="Ustawienia sprzętowe audio" name="device_settings_btn"/>
+			<panel label="Ustawienia urządzenia" name="device_settings_panel" />
 		</panel>
 		<panel label="Dźwięki interfejsu" name="UI Sounds tab">
 			<text name="textFSExplanation_tab1">
@@ -336,7 +337,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			</scroll_list>
 			<button name="ui_sound_preview" tool_tip="Podgląd dźwięku." />
 			<button name="ui_sound_default" tool_tip="Resetuj do domyślnego UUID." />
+			<check_box label="Odtwarzaj dźwięk" name="ui_sound_play_checkbox" />
+			<combo_box name="ui_sound_play_combo">
+				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1" />
+				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2" />
+				<combo_box.item label="Odtw. dźwięk tylko gdy okno jest w tle" name="3" />
+				<combo_box.item label="Wycisz dźwięk" name="0" />
+			</combo_box>
 		</panel>
-
 	</tab_container>
 </panel>

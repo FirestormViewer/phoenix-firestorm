@@ -51,7 +51,7 @@
 	<text name="antialiasing quality label">
 		Jakość antyaliasingu:
 	</text>
-	<combo_box name="fsaa quality">
+	<combo_box label="Antyaliasing" name="fsaa quality">
 		<combo_box.item label="Niska" name="Low" />
 		<combo_box.item label="Średnia" name="Medium" />
 		<combo_box.item label="Wysoka" name="High" />

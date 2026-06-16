@@ -396,6 +396,7 @@ void OmnifilterEngine::loadNeedles()
     mOrderedNeedles.clear();
     // Pre-allocate space for the list of needle names, so we can use an index into it for assignments down below
     mOrderedNeedles.resize(needles_llsd.size());
+    S32 index = 0;
     // </FS:minerjr> [FIRE-36649]
     for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
     {
@@ -432,7 +433,15 @@ void OmnifilterEngine::loadNeedles()
         // Needles are stored in order added to the map originally so use the
         // order value stored to restore the order back to the user
         // defined order.
-        mOrderedNeedles[needle_data["order"].asInteger()] = new_needle_name;
+        if (needle_data.has("order"))
+        {
+            mOrderedNeedles[needle_data["order"].asInteger()] = new_needle_name;
+        }
+        else
+        {
+
+            mOrderedNeedles[index++] = new_needle_name;
+        }
         // <FS:minerjr> [/FIRE-36649]
     }
 }
