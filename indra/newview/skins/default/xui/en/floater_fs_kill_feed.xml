@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="308"
+ height="336"
  layout="topleft"
  name="floater_fs_kill_feed"
  save_rect="true"
@@ -155,6 +155,26 @@
      width="36"
      name="text_color_swatch"
      tool_tip="Kill feed text color" />
+    <check_box
+     control_name="FSKillFeedColorOwnName"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="8"
+     height="16"
+     width="250"
+     label="Color my own name"
+     tool_tip="Use the swatch color for your own name in the kill feed (overrides map mark / contact set / group / default for you)" />
+    <color_swatch
+     control_name="FSKillFeedOwnNameColor"
+     follows="left|top"
+     layout="topleft"
+     left_delta="256"
+     top_delta="-4"
+     height="24"
+     width="36"
+     name="own_name_color_swatch"
+     tool_tip="Color for your own name in the kill feed" />
     <check_box
      control_name="FSKillFeedBoldText"
      follows="left|top"

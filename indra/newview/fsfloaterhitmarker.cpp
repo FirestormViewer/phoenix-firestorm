@@ -45,6 +45,10 @@ bool FSFloaterHitMarker::postBuild()
 {
     getChild<LLButton>("customize_symbols_btn")->setCommitCallback(
         [](LLUICtrl*, const LLSD&) { LLFloaterReg::showInstance("fs_hit_marker_emojis"); });
+    getChild<LLButton>("test_hit_sound_btn")->setCommitCallback(
+        [](LLUICtrl*, const LLSD&) { FSCombatHitMarker::playHitSoundPreview(); });
+    getChild<LLButton>("test_kill_sound_btn")->setCommitCallback(
+        [](LLUICtrl*, const LLSD&) { FSCombatHitMarker::playKillSoundPreview(); });
     return true;
 }
 

@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="448"
+ height="480"
  layout="topleft"
  name="floater_fs_hit_marker"
  save_rect="true"
@@ -220,4 +220,24 @@
      width="216"
      name="kill_sound_uuid"
      tool_tip="Sound UUID played when your damage kills" />
+    <button
+     name="test_hit_sound_btn"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="10"
+     height="22"
+     width="145"
+     label="Test hit sound"
+     tool_tip="Play the hit sound at the current volume" />
+    <button
+     name="test_kill_sound_btn"
+     follows="left|top"
+     layout="topleft"
+     left_delta="155"
+     top_delta="0"
+     height="22"
+     width="145"
+     label="Test kill sound"
+     tool_tip="Play the kill sound at the current volume" />
 </floater>

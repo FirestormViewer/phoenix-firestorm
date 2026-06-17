@@ -59,6 +59,12 @@ public:
     // FSCrosshairTargetColor is enabled.
     static void setCrosshairTint(const LLColor4& color);
 
+    // Play the hit/kill sound at the current FSHitMarkerSoundGain, bypassing the
+    // master "Play sounds" toggle, so the floater's Test buttons can preview
+    // levels even with sounds otherwise off.
+    static void playHitSoundPreview();
+    static void playKillSoundPreview();
+
     // OTS fair-fire convergence target: the world point under the render
     // camera's crosshair that a bullet fired from the avatar's eye should aim
     // at. World geometry comes from a ray cast; nearby avatars are converged via

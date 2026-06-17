@@ -4819,16 +4819,6 @@
                  parameter="ShowAxes" />
             </menu_item_check>
             <menu_item_check
-             label="OTS Aim Convergence (debug lines)"
-             name="OTS Aim Convergence Debug">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="FSOTSConvergeDebugDraw" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="FSOTSConvergeDebugDraw" />
-            </menu_item_check>
-            <menu_item_check
              label="Tangent Basis"
              name="Tangent Basis">
                 <menu_item_check.on_check

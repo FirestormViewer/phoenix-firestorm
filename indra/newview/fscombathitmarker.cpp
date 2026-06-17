@@ -236,10 +236,17 @@ static std::string hitmarker_name(const LLUUID& id)
     return name;
 }
 
-static void play_sound_setting(const char* setting_name)
+static void play_sound_setting_impl(const char* setting_name, bool respect_toggle)
 {
-    static LLCachedControl<bool> sounds_on(gSavedSettings, "FSHitMarkerSounds", true);
-    if (!sounds_on || !gAudiop)
+    if (respect_toggle)
+    {
+        static LLCachedControl<bool> sounds_on(gSavedSettings, "FSHitMarkerSounds", true);
+        if (!sounds_on)
+        {
+            return;
+        }
+    }
+    if (!gAudiop)
     {
         return;
     }
@@ -249,6 +256,23 @@ static void play_sound_setting(const char* setting_name)
         static LLCachedControl<F32> gain(gSavedSettings, "FSHitMarkerSoundGain", 1.0f);
         gAudiop->triggerSound(sound_id, gAgent.getID(), llclamp((F32)gain, 0.f, 1.f), LLAudioEngine::AUDIO_TYPE_UI);
     }
+}
+
+static void play_sound_setting(const char* setting_name)
+{
+    play_sound_setting_impl(setting_name, true);
+}
+
+// static
+void FSCombatHitMarker::playHitSoundPreview()
+{
+    play_sound_setting_impl("FSHitMarkerHitSound", false);
+}
+
+// static
+void FSCombatHitMarker::playKillSoundPreview()
+{
+    play_sound_setting_impl("FSHitMarkerKillSound", false);
 }
 
 // Build the display text and arm the flash from the accumulated batch.
@@ -340,6 +364,16 @@ void FSCombatHitMarker::handleCombatEvent(const LLSD& event)
     if (target.isNull() || target == gAgent.getID())
     {
         return; // self-damage is not a "hit"
+    }
+
+    // Object targets (your damage landing on a prim, not an avatar) should not
+    // flash the marker or play a sound. The bridge tags each event with whether
+    // the target is an agent (llGetAgentSize). A missing tag means a pre-2.33
+    // bridge that hasn't re-created yet, so treat it as an agent and don't break.
+    static LLCachedControl<bool> agent_only(gSavedSettings, "FSHitMarkerAgentTargetsOnly", true);
+    if (agent_only && event.has("agent") && event["agent"].asInteger() == 0)
+    {
+        return;
     }
 
     const std::string type = event["event"].asString();
