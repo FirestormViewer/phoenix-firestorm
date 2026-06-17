@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="402"
+ height="448"
  layout="topleft"
  name="floater_fs_hit_marker"
  save_rect="true"
@@ -20,6 +20,16 @@
      width="316"
      label="Enable hitmarker"
      tool_tip="Flash a marker and play a sound when your combat damage lands (Combat 2.0 regions, via the LSL bridge)" />
+    <check_box
+     control_name="FSHitMarkerIgnoreCollision"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     height="16"
+     width="300"
+     label="Ignore collision and fall damage"
+     tool_tip="Skip generic Second Life physics damage (bumps, falls) so only scripted combat damage flashes a hitmarker" />
     <check_box
      control_name="FSCustomCrosshair"
      follows="left|top"
@@ -150,6 +160,22 @@
      width="316"
      label="Play sounds"
      tool_tip="Hit and kill sounds" />
+    <slider
+     control_name="FSHitMarkerSoundGain"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     height="15"
+     width="300"
+     label="Volume:"
+     label_width="100"
+     min_val="0.0"
+     max_val="1.0"
+     increment="0.05"
+     decimal_digits="2"
+     show_text="true"
+     tool_tip="Volume of the hit and kill sounds" />
     <text
      type="string"
      length="1"

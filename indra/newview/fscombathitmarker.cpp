@@ -246,7 +246,8 @@ static void play_sound_setting(const char* setting_name)
     LLUUID sound_id(gSavedSettings.getString(setting_name));
     if (sound_id.notNull())
     {
-        gAudiop->triggerSound(sound_id, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+        static LLCachedControl<F32> gain(gSavedSettings, "FSHitMarkerSoundGain", 1.0f);
+        gAudiop->triggerSound(sound_id, gAgent.getID(), llclamp((F32)gain, 0.f, 1.f), LLAudioEngine::AUDIO_TYPE_UI);
     }
 }
 
@@ -354,10 +355,21 @@ void FSCombatHitMarker::handleCombatEvent(const LLSD& event)
     }
     else if (type == "DAMAGE")
     {
+        const S32 dmg_type = (S32)event["type"].asInteger();
+
+        // Generic LL physics/collision damage (type -1, "Impact") comes from
+        // bumps and falls, not scripted combat. Optionally drop it so it does
+        // not flash a hitmarker or play a hit sound.
+        static LLCachedControl<bool> ignore_collision(gSavedSettings, "FSHitMarkerIgnoreCollision", true);
+        if (ignore_collision && dmg_type == -1)
+        {
+            return;
+        }
+
         sBatchDamage += (F32)event["damage"].asReal();
         ++sBatchHits;
         sLastTarget = target;
-        sLastType = (S32)event["type"].asInteger();
+        sLastType = dmg_type;
         if (!sBatching)
         {
             sBatching = true;
