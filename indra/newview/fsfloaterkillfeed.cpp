@@ -208,6 +208,12 @@ static LLColor4 killfeed_name_color(const LLUUID& id, const LLColor4& default_co
         }
     }
 
+    static LLCachedControl<bool> color_others(gSavedSettings, "FSKillFeedColorOtherNames", true);
+    if (!color_others)
+    {
+        return default_color;
+    }
+
     LLColor4 c;
     if (LLNetMap::getAvatarMarkColor(id, c))
     {
@@ -344,9 +350,13 @@ void FSFloaterKillFeed::drawOverlay()
         {
             example_symbol = FSCombatHitMarker::getEmojiForType(5) + " "; // Fire
         }
-        const std::string example_line = killfeed_maybe_shorten("Example Resident") + " killed " +
-            killfeed_maybe_shorten("Guy Linden") + " with " + example_symbol + "Death (100dmg, 0m)";
-        std::vector<KFSegment> example_segs(1, KFSegment{ example_line, default_color });
+        // Make the agent the killer so the own-name color shows live as it is
+        // tuned; the victim stays a generic example in the default color.
+        std::vector<KFSegment> example_segs;
+        example_segs.push_back({ killfeed_name(gAgent.getID(), false), killfeed_name_color(gAgent.getID(), default_color) });
+        example_segs.push_back({ " killed ", default_color });
+        example_segs.push_back({ killfeed_maybe_shorten("Guy Linden"), default_color });
+        example_segs.push_back({ " with " + example_symbol + "Death (100dmg, 0m)", default_color });
         seglines.assign((size_t)llmax((U32)1, (U32)max_lines), example_segs);
     }
 
