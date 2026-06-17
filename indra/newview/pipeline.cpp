@@ -85,6 +85,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h" // for audio debugging.
 #include "llviewerwindow.h" // For getSpinAxis
+#include "fscombathitmarker.h"
 #include "llvoavatarself.h"
 #include "llvocache.h"
 #include "llvosky.h"
@@ -5628,6 +5629,23 @@ void LLPipeline::renderDebug()
 
     gGL.flush();
     gUIProgram.unbind();
+
+    // <FS:SkoomaStorm> OTS aim-convergence debug visualization (Develop > Rendering)
+    {
+        static LLCachedControl<bool> ots_converge_debug(gSavedSettings, "FSOTSConvergeDebugDraw", false);
+        if (ots_converge_debug)
+        {
+            gDebugProgram.bind();
+            gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+            LLGLDepthTest depth(GL_FALSE); // draw through geometry so the rays stay visible
+            gGL.setLineWidth(2.f);
+            FSCombatHitMarker::renderOTSConvergenceDebug();
+            gGL.setLineWidth(1.f);
+            gGL.flush();
+            gDebugProgram.unbind();
+        }
+    }
+    // </FS:SkoomaStorm>
 }
 
 void LLPipeline::rebuildPools()

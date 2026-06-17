@@ -72,6 +72,12 @@ public:
     static LLVector3 getOTSConvergenceTarget(const LLVector3& cam_origin,
                                              const LLVector3& cam_at);
 
+    // Draw the last OTS convergence solve as 3D debug lines (camera ray, bullet
+    // ray, the converged point, and each nearby avatar capsule lit when detected
+    // under the crosshair). Called from LLPipeline::renderDebug when
+    // FSOTSConvergeDebugDraw is enabled (Develop > Rendering menu toggle).
+    static void renderOTSConvergenceDebug();
+
     // --- Damage type symbol table (for the symbols editor) ---------------
 
     struct DamageTypeInfo

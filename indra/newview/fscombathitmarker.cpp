@@ -493,6 +493,24 @@ static F32 closestSegmentSegmentSq(const LLVector3& p1, const LLVector3& q1,
     return diff * diff;
 }
 
+// Snapshot of the last convergence solve, captured when FSOTSConvergeDebugDraw is
+// on and drawn as 3D lines by renderOTSConvergenceDebug() from the render thread.
+// All points are agent-space (same frame as object render positions).
+namespace
+{
+    struct OTSDebugCapsule { LLVector3 p0; LLVector3 p1; bool hit; };
+    struct OTSConvergeDebug
+    {
+        U32       frame = 0;
+        LLVector3 cam_origin;
+        LLVector3 target;
+        bool      world_hit = false;
+        bool      avatar_hit = false;
+        std::vector<OTSDebugCapsule> caps;
+    };
+    OTSConvergeDebug sOTSConvergeDebug;
+}
+
 // static
 LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin,
                                                      const LLVector3& cam_at)
@@ -500,6 +518,13 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     const F32 CONVERGE_RANGE = 512.f; // meters; open-sky fallback distance
 
     LLVector3 target = cam_origin + cam_at * CONVERGE_RANGE;
+
+    // Debug-draw capture (cheap no-op unless the toggle is on).
+    static LLCachedControl<bool> debug_draw(gSavedSettings, "FSOTSConvergeDebugDraw", false);
+    const bool dbg = debug_draw;
+    std::vector<OTSDebugCapsule> dbg_caps;
+    bool world_hit_flag = false;
+    bool avatar_best = false;
 
     LLVector4a ray_start, ray_end, hit;
     ray_start.load3(cam_origin.mV);
@@ -533,6 +558,7 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
             continue;
         }
         target.set(hit.getF32ptr());
+        world_hit_flag = true;
         break;
     }
 
@@ -589,13 +615,19 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
 
             F32 s_ray = 0.f, t_seg = 0.f;
             const F32 d2 = closestSegmentSegmentSq(cam_origin, cam_far, p0, p1, s_ray, t_seg);
-            if (d2 <= radius * radius)
+            const bool cap_hit = (d2 <= radius * radius);
+            if (cap_hit)
             {
                 const F32 av_dist = s_ray * CONVERGE_RANGE; // closest-approach depth
                 if (av_dist > 0.1f && av_dist < best_dist)
                 {
                     best_dist = av_dist; // trusted target; exempt from the min clamp
+                    avatar_best = true;
                 }
+            }
+            if (dbg)
+            {
+                dbg_caps.push_back({ p0, p1, cap_hit });
             }
         }
     }
@@ -621,7 +653,74 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
         best_dist = smoothed_dist;
     }
 
-    return cam_origin + cam_at * best_dist;
+    const LLVector3 result = cam_origin + cam_at * best_dist;
+
+    if (dbg)
+    {
+        sOTSConvergeDebug.frame      = LLFrameTimer::getFrameCount();
+        sOTSConvergeDebug.cam_origin = cam_origin;
+        sOTSConvergeDebug.target     = result;
+        sOTSConvergeDebug.world_hit  = world_hit_flag;
+        sOTSConvergeDebug.avatar_hit = avatar_best;
+        sOTSConvergeDebug.caps       = std::move(dbg_caps);
+    }
+
+    return result;
+}
+
+// static
+void FSCombatHitMarker::renderOTSConvergenceDebug()
+{
+    // The caller (LLPipeline::renderDebug) binds gDebugProgram, unbinds textures,
+    // sets the depth/line state, and gates on FSOTSConvergeDebugDraw; here we only
+    // emit geometry. All points are agent-space, matching renderDebug.
+    const OTSConvergeDebug& d = sOTSConvergeDebug;
+
+    // Only while the convergence path is actually running (OTS) and the snapshot
+    // is fresh; otherwise we'd draw stale lines after leaving OTS.
+    if (!gAgentCamera.cameraOTS()) return;
+    if (LLFrameTimer::getFrameCount() - d.frame > 2) return;
+
+    LLVector3 eye = d.cam_origin;
+    if (isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    {
+        eye = gAgentAvatarp->mHeadp->getWorldPosition();
+    }
+
+    gGL.begin(LLRender::LINES);
+
+    // Camera crosshair ray (cyan): shoulder camera -> converged point.
+    gGL.diffuseColor4f(0.15f, 0.75f, 1.f, 1.f);
+    gGL.vertex3fv(d.cam_origin.mV);
+    gGL.vertex3fv(d.target.mV);
+
+    // Bullet ray (orange): avatar eye -> converged point. Where it meets the cyan
+    // ray is the convergence; the spread between them off-target is the parallax.
+    gGL.diffuseColor4f(1.f, 0.5f, 0.1f, 1.f);
+    gGL.vertex3fv(eye.mV);
+    gGL.vertex3fv(d.target.mV);
+
+    // Avatar capsule axes: bright green when detected under the crosshair, dim grey otherwise.
+    for (const OTSDebugCapsule& c : d.caps)
+    {
+        if (c.hit) { gGL.diffuseColor4f(0.1f, 1.f, 0.25f, 1.f); }
+        else       { gGL.diffuseColor4f(0.45f, 0.45f, 0.5f, 0.7f); }
+        gGL.vertex3fv(c.p0.mV);
+        gGL.vertex3fv(c.p1.mV);
+    }
+
+    // Target marker (3D cross): green = converged on an avatar, magenta = world
+    // geometry, yellow = open-sky fallback.
+    if (d.avatar_hit)     { gGL.diffuseColor4f(0.1f, 1.f, 0.25f, 1.f); }
+    else if (d.world_hit) { gGL.diffuseColor4f(1.f, 0.2f, 1.f, 1.f); }
+    else                  { gGL.diffuseColor4f(1.f, 1.f, 0.2f, 1.f); }
+    const F32 m = 0.18f;
+    const LLVector3& t = d.target;
+    gGL.vertex3f(t.mV[VX] - m, t.mV[VY], t.mV[VZ]); gGL.vertex3f(t.mV[VX] + m, t.mV[VY], t.mV[VZ]);
+    gGL.vertex3f(t.mV[VX], t.mV[VY] - m, t.mV[VZ]); gGL.vertex3f(t.mV[VX], t.mV[VY] + m, t.mV[VZ]);
+    gGL.vertex3f(t.mV[VX], t.mV[VY], t.mV[VZ] - m); gGL.vertex3f(t.mV[VX], t.mV[VY], t.mV[VZ] + m);
+
+    gGL.end();
 }
 
 // static
