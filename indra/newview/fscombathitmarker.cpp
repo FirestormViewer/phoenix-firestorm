@@ -30,6 +30,7 @@
 #include "llaudioengine.h"
 #include "llavatarnamecache.h"
 #include "llcriticaldamp.h"
+#include "llframetimer.h"
 #include "llrender.h"
 #include "llsdjson.h"
 #include "llui.h"
@@ -434,6 +435,64 @@ void FSCombatHitMarker::setCrosshairTint(const LLColor4& color)
     sCrosshairTint = color;
 }
 
+// Squared distance between segment [p1,q1] and segment [p2,q2], with the
+// parametric closest points returned in s (along p1->q1) and t (along p2->q2).
+// Standard clamped solution (Ericson, Real-Time Collision Detection). Used to
+// test the crosshair ray against an avatar's capsule axis cheaply.
+static F32 closestSegmentSegmentSq(const LLVector3& p1, const LLVector3& q1,
+                                   const LLVector3& p2, const LLVector3& q2,
+                                   F32& s, F32& t)
+{
+    const F32 EPS = 1e-6f;
+    LLVector3 d1 = q1 - p1; // direction and length of segment 1
+    LLVector3 d2 = q2 - p2; // direction and length of segment 2
+    LLVector3 r  = p1 - p2;
+    F32 a = d1 * d1; // squared length of segment 1 (dot)
+    F32 e = d2 * d2; // squared length of segment 2 (dot)
+    F32 f = d2 * r;
+
+    if (a <= EPS && e <= EPS)
+    {
+        s = t = 0.f;
+        return r * r;
+    }
+    if (a <= EPS)
+    {
+        s = 0.f;
+        t = llclamp(f / e, 0.f, 1.f);
+    }
+    else
+    {
+        F32 c = d1 * r;
+        if (e <= EPS)
+        {
+            t = 0.f;
+            s = llclamp(-c / a, 0.f, 1.f);
+        }
+        else
+        {
+            F32 b = d1 * d2;
+            F32 denom = a * e - b * b;
+            s = (denom > EPS) ? llclamp((b * f - c * e) / denom, 0.f, 1.f) : 0.f;
+            t = (b * s + f) / e;
+            if (t < 0.f)
+            {
+                t = 0.f;
+                s = llclamp(-c / a, 0.f, 1.f);
+            }
+            else if (t > 1.f)
+            {
+                t = 1.f;
+                s = llclamp((b - c) / a, 0.f, 1.f);
+            }
+        }
+    }
+    LLVector3 c1 = p1 + d1 * s;
+    LLVector3 c2 = p2 + d2 * t;
+    LLVector3 diff = c1 - c2;
+    return diff * diff;
+}
+
 // static
 LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin,
                                                      const LLVector3& cam_at)
@@ -446,14 +505,12 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     ray_start.load3(cam_origin.mV);
     ray_end.load3(target.mV);
 
-    // Cast the render (shoulder) camera's crosshair ray and converge on the
-    // first thing under it. Note: pick_rigged is intentionally false because
-    // rigged avatar meshes do not contribute to the physical hitbox and testing
-    // against them is too computationally expensive. The cast still returns
-    // terrain/prims, so shooting structures is unchanged. Step past our own
-    // body/attachments, which the shoulder ray can graze on its way out, so
-    // self never becomes the convergence point. With nothing solid under the
-    // crosshair the far point stands and the direction degrades to camera-parallel.
+    // World-geometry depth. pick_rigged stays false: rigged avatar meshes are
+    // not the physical hitbox and per-triangle picking them every frame is the
+    // cost we are avoiding. The cast returns terrain/prims; avatars are handled
+    // by the cheap capsule pass below. Step past our own body/attachments, which
+    // the shoulder ray can graze on its way out, so self never wins. With nothing
+    // solid under the crosshair the far point stands.
     for (S32 i = 0; i < 4; ++i)
     {
         S32 face_hit = -1;
@@ -479,7 +536,92 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
         break;
     }
 
-    return target;
+    // Convergence depth measured along the camera ray (target is colinear with
+    // cam_at, so the dot is its distance).
+    F32 world_dist = (target - cam_origin) * cam_at;
+    if (world_dist < 0.f)
+    {
+        world_dist = CONVERGE_RANGE;
+    }
+
+    // Lean guard: a convergence point right on top of the camera makes the
+    // eye->target angle blow up (~atan(shoulder_offset / dist)), which IS the
+    // shoulder-dependent swing. Clamp the *world* distance only; genuine avatar
+    // hits below are trusted and exempt, so close targets still converge dead on.
+    static LLCachedControl<F32> min_dist(gSavedSettings, "FSOTSConvergeMinDistance", 2.0f);
+    F32 best_dist = llmax(world_dist, (F32)min_dist);
+
+    // Cheap avatar convergence: approximate each nearby avatar as a vertical
+    // capsule and take the nearest one the crosshair ray pierces. Restores "aim
+    // converges on the player, not the wall behind them" without the rigged-mesh
+    // cost, and a capsule is steadier than mesh edges (no frame-to-frame flicker
+    // between a pauldron and the gap behind it). Taken as min() against the world
+    // depth, so a wall in front of the target still wins (you cannot shoot through it).
+    static LLCachedControl<bool> av_converge(gSavedSettings, "FSOTSAvatarConverge", true);
+    if (av_converge)
+    {
+        static LLCachedControl<F32> av_radius(gSavedSettings, "FSOTSAvatarConvergeRadius", 0.5f);
+        const F32 radius = llmax(0.1f, (F32)av_radius);
+        const F32 HALF_HEIGHT = 1.0f; // capsule half-extent about the render position
+        const LLVector3 cam_far = cam_origin + cam_at * CONVERGE_RANGE;
+
+        for (LLCharacter* character : LLCharacter::sInstances)
+        {
+            LLVOAvatar* avatar = (LLVOAvatar*)character;
+            if (!avatar || avatar->isDead() || avatar->isControlAvatar() || avatar->isSelf())
+            {
+                continue;
+            }
+
+            const LLVector3 center = avatar->getRenderPosition();
+            const LLVector3 to_av = center - cam_origin;
+            if (to_av * cam_at < 0.f)
+            {
+                continue; // behind the camera
+            }
+            if (to_av * to_av > CONVERGE_RANGE * CONVERGE_RANGE)
+            {
+                continue; // out of range
+            }
+
+            LLVector3 p0 = center; p0.mV[VZ] -= HALF_HEIGHT;
+            LLVector3 p1 = center; p1.mV[VZ] += HALF_HEIGHT;
+
+            F32 s_ray = 0.f, t_seg = 0.f;
+            const F32 d2 = closestSegmentSegmentSq(cam_origin, cam_far, p0, p1, s_ray, t_seg);
+            if (d2 <= radius * radius)
+            {
+                const F32 av_dist = s_ray * CONVERGE_RANGE; // closest-approach depth
+                if (av_dist > 0.1f && av_dist < best_dist)
+                {
+                    best_dist = av_dist; // trusted target; exempt from the min clamp
+                }
+            }
+        }
+    }
+
+    // Smooth the convergence DEPTH (a scalar along the ray), not the 3D point, so
+    // the target stays exactly under the crosshair while its depth eases across
+    // discontinuities instead of snapping, and rough-geometry jitter stops
+    // shaking the aim. Advanced once per frame: both callers (send_agent_update
+    // and the true-aim dot) invoke this every frame and must get the same value,
+    // so we key the lerp on the frame counter and reuse the result within a frame.
+    static LLCachedControl<F32> smooth_hl(gSavedSettings, "FSOTSConvergeSmoothingHalfLife", 0.06f);
+    if ((F32)smooth_hl > 0.f)
+    {
+        static U32 last_frame = 0;
+        static F32 smoothed_dist = CONVERGE_RANGE;
+        const U32 frame = LLFrameTimer::getFrameCount();
+        if (frame != last_frame)
+        {
+            last_frame = frame;
+            const F32 amt = LLSmoothInterpolation::getInterpolant((F32)smooth_hl);
+            smoothed_dist = lerp(smoothed_dist, best_dist, amt);
+        }
+        best_dist = smoothed_dist;
+    }
+
+    return cam_origin + cam_at * best_dist;
 }
 
 // static

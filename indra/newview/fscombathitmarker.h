@@ -60,11 +60,15 @@ public:
     static void setCrosshairTint(const LLColor4& color);
 
     // OTS fair-fire convergence target: the world point under the render
-    // camera's crosshair that a bullet fired from the avatar's eye should
-    // aim at. Avatars are included (so aiming at a target converges on the
-    // target, not the world geometry behind it); the shooter's own body and
-    // attachments are excluded. Shared by the reported eye camera
-    // (send_agent_update) and the true-aim dot so the two cannot drift apart.
+    // camera's crosshair that a bullet fired from the avatar's eye should aim
+    // at. World geometry comes from a ray cast; nearby avatars are converged via
+    // cheap vertical-capsule proxies (so aiming at a target lands on the target,
+    // not the wall behind it, without the rigged-mesh pick cost), the shooter's
+    // own body excluded. The depth is smoothed along the ray so it eases rather
+    // than snaps. Shared by the reported eye camera (send_agent_update) and the
+    // true-aim dot so the two cannot drift apart; smoothing is advanced once per
+    // frame so both callers receive the same value. Tunables: FSOTSAvatarConverge,
+    // FSOTSAvatarConvergeRadius, FSOTSConvergeMinDistance, FSOTSConvergeSmoothingHalfLife.
     static LLVector3 getOTSConvergenceTarget(const LLVector3& cam_origin,
                                              const LLVector3& cam_at);
 
