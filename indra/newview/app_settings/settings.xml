@@ -25147,13 +25147,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSOTSAvatarConvergeRadius</key>
       <map>
       <key>Comment</key>
-      <string>Radius (meters) of the vertical capsule used to converge OTS aim on avatars</string>
+      <string>Optional forgiveness (meters) added to each side of an avatar's hitbox when converging OTS aim; 0 = converge on the exact hitbox</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.0</real>
     </map>
     <key>FSOTSConvergeMinDistance</key>
       <map>
