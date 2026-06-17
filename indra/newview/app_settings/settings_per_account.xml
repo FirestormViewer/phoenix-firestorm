@@ -1563,5 +1563,49 @@
             <key>Value</key>
             <map/>
         </map>
+    <key>FSVoiceBoxTTSEnabled</key>
+        <map>
+            <key>Comment</key>
+            <string>Enable VoiceBox TTS for nearby chat</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>Boolean</string>
+            <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>FSVoiceBoxEndpoint</key>
+        <map>
+            <key>Comment</key>
+            <string>VoiceBox API endpoint URL</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string>http://localhost:17493</string>
+        </map>
+    <key>FSVoiceBoxProfileID</key>
+        <map>
+            <key>Comment</key>
+            <string>VoiceBox profile UUID to use for TTS</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string></string>
+        </map>
+    <key>FSVoiceBoxTTSLanguage</key>
+        <map>
+            <key>Comment</key>
+            <string>Language code for TTS (e.g. en, de, fr)</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string>en</string>
+        </map>
     </map>
 </llsd>

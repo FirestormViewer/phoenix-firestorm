@@ -52,6 +52,7 @@
 // [/RLVa:KB]
 
 #include "fsconsoleutils.h"
+#include "fschattts.h"
 #include "fsfloaternearbychat.h"
 #include "llviewernetwork.h"
 
@@ -530,6 +531,8 @@ LLFloaterIMNearbyChatHandler::LLFloaterIMNearbyChatHandler()
     channel->setCreatePanelCallback(callback);
 
     LLChannelManager::getInstance()->addChannel(channel);
+
+    addNewChatCallback(boost::bind(&FSChatTTS::onChatMessage, &FSChatTTS::instance(), _1));
 
     mChannel = channel->getHandle();
 }

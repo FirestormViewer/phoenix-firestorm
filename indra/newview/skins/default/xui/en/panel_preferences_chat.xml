@@ -2107,6 +2107,104 @@
 		 
 	</panel>
 
+  <!-- Chat: VoiceBox TTS -->
+  <panel
+    top_pad="1"
+    bottom="-1"
+    left="1"
+    right="-1"
+    follows="all"
+    label="VoiceBox TTS"
+    name="tab-VoiceBoxTTS" >
+
+    <check_box
+     control_name="FSVoiceBoxTTSEnabled"
+     follows="left|top"
+     height="16"
+     label="Enable VoiceBox TTS – read nearby chat aloud"
+     layout="topleft"
+     left="20"
+     top="15"
+     name="voicebox_tts_enable"
+     width="450" />
+
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="14"
+     name="voicebox_endpoint_label"
+     width="150"
+     top_pad="15">
+        VoiceBox API endpoint:
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxEndpoint"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left_pad="5"
+     max_length_chars="256"
+     name="voicebox_endpoint"
+     width="300"
+     top_delta="-2" />
+
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="14"
+     name="voicebox_profile_label"
+     width="150"
+     top_pad="10">
+        TTS Profile:
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxProfileID"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left_pad="5"
+     max_length_chars="256"
+     name="voicebox_profile"
+     width="300"
+     top_delta="-2" />
+
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="14"
+     name="voicebox_language_label"
+     width="150"
+     top_pad="10">
+        Language (e.g. en, de):
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxTTSLanguage"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left_pad="5"
+     max_length_chars="10"
+     name="voicebox_language"
+     width="100"
+     top_delta="-2" />
+
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="14"
+     name="voicebox_tts_note"
+     width="480"
+     top_pad="10">
+        Reads nearby chat from avatars aloud via VoiceBox TTS.
+        Requires a running VoiceBox backend at the endpoint URL.
+     </text>
+
+  </panel>
+
   <!-- Chat: CmdLine -->
   <panel
 	  top_pad="3"
