@@ -8894,6 +8894,83 @@
       <key>Value</key>
       <real>0</real>
     </map>
+    <key>FSDoubleTapADS</key>
+    <map>
+      <key>Comment</key>
+      <string>Tap then tap-and-hold the right mouse button to aim down sights (ADS) at a separate zoom; release to exit. Works in first person and OTS</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSZoomFOV</key>
+    <map>
+      <key>Comment</key>
+      <string>Aim-down-sights field of view (radians); lower = more zoom. Scroll while in ADS to adjust</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>FSADSZoomTransitionSpeed</key>
+    <map>
+      <key>Comment</key>
+      <string>Duration of the ADS zoom transition, in milliseconds (0 = instant)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>100</real>
+    </map>
+    <key>FSADSDoubleTapTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum time (seconds) between the two right-clicks to register a double-tap for ADS</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.3</real>
+    </map>
+    <key>FSADSVignetteFirstPerson</key>
+    <map>
+      <key>Comment</key>
+      <string>Darken the screen edges (vignette) while in ADS in first person</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSVignetteOTS</key>
+    <map>
+      <key>Comment</key>
+      <string>Darken the screen edges (vignette) while in ADS in over-the-shoulder</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSVignetteStrength</key>
+    <map>
+      <key>Comment</key>
+      <string>How dark the ADS screen-edge vignette is (0-1)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
     <key>MouseSmooth</key>
     <map>
       <key>Comment</key>

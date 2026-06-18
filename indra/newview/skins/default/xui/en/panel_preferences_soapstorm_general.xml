@@ -111,6 +111,116 @@
          parameter="MouselookZoomTransitionSpeed"/>
     </button>
 
+    <!-- ===== ADS (aim down sights) ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="18"
+     width="520">
+        Aim down sights (double-tap and hold right-click)
+    </text>
+    <check_box
+     control_name="FSDoubleTapADS"
+     follows="left|top"
+     height="16"
+     label="Enable double-tap right-click to ADS"
+     layout="topleft"
+     left="10"
+     top_pad="6"
+     width="400"
+     tool_tip="Tap, then tap-and-hold the right mouse button to aim down sights; release to exit. Works in first person and OTS." />
+    <slider
+     control_name="FSADSZoomFOV"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     label="ADS field of view:"
+     label_width="160"
+     min_val="0.175"
+     max_val="1.2"
+     increment="0.01"
+     decimal_digits="2"
+     can_edit_text="true"
+     show_text="true"
+     width="350"
+     tool_tip="Aim-down-sights zoom level in radians (lower = more zoom). Scroll while in ADS to adjust live." />
+    <slider
+     control_name="FSADSZoomTransitionSpeed"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     label="ADS zoom smoothing (ms):"
+     label_width="160"
+     min_val="0"
+     max_val="1000"
+     increment="10"
+     decimal_digits="0"
+     can_edit_text="true"
+     show_text="true"
+     width="350"
+     tool_tip="Duration of the ADS zoom transition, in milliseconds (0 = instant)." />
+    <slider
+     control_name="FSADSDoubleTapTime"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     label="Double-tap window (sec):"
+     label_width="160"
+     min_val="0.1"
+     max_val="0.6"
+     increment="0.05"
+     decimal_digits="2"
+     show_text="true"
+     width="350"
+     tool_tip="Maximum time between the two right-clicks to register a double-tap." />
+    <check_box
+     control_name="FSADSVignetteFirstPerson"
+     follows="left|top"
+     height="16"
+     label="ADS vignette in first person"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     width="400"
+     tool_tip="Darken the screen edges while in ADS in first person." />
+    <check_box
+     control_name="FSADSVignetteOTS"
+     follows="left|top"
+     height="16"
+     label="ADS vignette in OTS"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     width="400"
+     tool_tip="Darken the screen edges while in ADS in over-the-shoulder." />
+    <slider
+     control_name="FSADSVignetteStrength"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     label="Vignette strength:"
+     label_width="160"
+     min_val="0"
+     max_val="1"
+     increment="0.05"
+     decimal_digits="2"
+     show_text="true"
+     width="350"
+     tool_tip="How dark the ADS screen-edge vignette is." />
+
     <!-- ===== Viewer ===== -->
     <text
      type="string"

@@ -250,12 +250,14 @@ public:
     bool                    isZoomed() const { return mIsZoomed; }
     void                    resetZoom(); // Reset zoom state when exiting mouselook
 
+    virtual void            draw() override; // ADS vignette overlay, then the crosshair
+
 protected:
-    
+
     LLToolGun*          mGun;
     LLToolGrabBase*     mGrab;
     LLTool*             mNull;
-    
+
     // Smooth zoom transition
     F32 mTargetFOV;
     F32 mCurrentFOV;
@@ -266,6 +268,13 @@ protected:
     F32 mZoomedFOV; // Target zoomed FOV
     F32 mZoomProportion; // How far we got into the zoom (0-1)
     LLTimer mTransitionTimer; // Tracks elapsed time since transition start
+
+    // Double-tap-hold ADS (aim-down-sights): tap, then tap-and-hold the right
+    // button to zoom to a separate FOV with its own smoothing; release to exit.
+    bool    mIsADS;            // currently holding ADS
+    bool    mTransitionIsADS;  // current FOV transition uses ADS smoothing
+    F32     mADSFOV;           // ADS target FOV
+    LLTimer mLastRMBUpTimer;   // time since last right-button release (double-tap window)
 };
 
 // Subclass of LLToolComposite
