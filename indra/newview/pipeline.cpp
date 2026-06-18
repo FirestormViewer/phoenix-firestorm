@@ -77,6 +77,7 @@
 #include "lltracker.h"
 #include "lltool.h"
 #include "lltoolmgr.h"
+#include "lltoolcomp.h"     // LLToolCompGun::getADSVignetteAmount (ADS vignette)
 #include "llviewercamera.h"
 #include "llviewermediafocus.h"
 #include "llviewertexturelist.h"
@@ -8491,7 +8492,20 @@ void LLPipeline::combineGlow(LLRenderTarget* src, LLRenderTarget* dst)
 // <FS:Beq> updated Vignette code (based on original Exo Vignette)
 bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
-    if (RenderVignette.mV[0] > 0.f)
+    // Start from the user's persistent vignette, then let ADS contribute its own
+    // (radial, same shader) so aiming down sights darkens the screen edges without a
+    // separate blocky 2D overlay. ADS only raises the intensity (.x); when it
+    // dominates a disabled vignette we supply sane power/multiplier defaults.
+    LLVector3 vig = RenderVignette;
+    const F32 ads = LLToolCompGun::getInstance()->getADSVignetteAmount();
+    if (ads > vig.mV[0])
+    {
+        vig.mV[0] = ads;
+        if (vig.mV[1] <= 0.f) vig.mV[1] = 1.f;  // power
+        if (vig.mV[2] <= 0.f) vig.mV[2] = 1.f;  // multiplier
+    }
+
+    if (vig.mV[0] > 0.f)
     {
         LL_PROFILE_GPU_ZONE("Vignette");
         dst->bindTarget();
@@ -8517,7 +8531,7 @@ bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
         shader->uniform3fv(
             LLShaderMgr::RENDER_VIGNETTE,
             1,
-            RenderVignette.mV);
+            vig.mV);
 
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);

@@ -53,7 +53,6 @@
 #include "llfloatertools.h"
 #include "llviewercontrol.h"
 #include "llsmoothstep.h"
-#include "llrender2dutils.h"    // for gl_rect_2d (ADS vignette)
 
 // NaCl - Rightclick-mousewheel zoom
 #include "llviewercamera.h"
@@ -1085,64 +1084,37 @@ void LLToolCompGun::resetZoom()
     mZoomProportion = 1.f;
 }
 
-// Screen-edge darkening drawn under the crosshair while holding ADS, to mark the
-// state. Stacked edge bands, strongest at the edge and easing to zero inward;
-// corners overlap so they read darkest (vignette-like). No texture/shader needed.
-static void drawADSVignette(F32 strength)
+// Strength (0-1) of the ADS screen-edge vignette this frame. Applies while ADS is
+// held OR easing out, honors the per-mode (first-person / OTS) toggles, and scales
+// by how far the FOV has zoomed toward the ADS level so it creeps in and fades out
+// in lockstep with the zoom rather than popping. Rendered as a smooth radial
+// post-process in LLPipeline::renderVignette; returns 0 when no ADS vignette applies.
+F32 LLToolCompGun::getADSVignetteAmount() const
 {
-    const LLRect& view = gViewerWindow->getWorldViewRectScaled();
-    const S32 w = view.getWidth();
-    const S32 h = view.getHeight();
-    const F32 a0 = llclamp(strength, 0.f, 1.f);
-    if (w <= 0 || h <= 0 || a0 <= 0.f)
+    if (!(mIsADS || (mIsZoomTransitioning && mTransitionIsADS)))
     {
-        return;
+        return 0.f;
     }
 
-    const F32 depth = (F32)llmin(w, h) * 0.30f; // how far the darkening reaches inward
-    const S32 N = 24;                           // gradient steps
-    const F32 t = depth / (F32)N;
-
-    LLGLEnable blend(GL_BLEND);
-    for (S32 i = 0; i < N; ++i)
+    static LLCachedControl<bool> vig_fp(gSavedSettings, "FSADSVignetteFirstPerson", true);
+    static LLCachedControl<bool> vig_ots(gSavedSettings, "FSADSVignetteOTS", true);
+    const bool ots = gAgentCamera.cameraOTS();
+    if (!((ots && vig_ots) || (!ots && vig_fp)))
     {
-        const F32 f = 1.f - (F32)i / (F32)N;    // 1 at the edge -> 0 inward
-        const LLColor4 col(0.f, 0.f, 0.f, a0 * f * f);
-        const S32 lo = (S32)(i * t);
-        const S32 hi = (S32)((i + 1) * t);
-        gl_rect_2d(0, hi, w, lo, col);             // bottom
-        gl_rect_2d(0, h - lo, w, h - hi, col);     // top
-        gl_rect_2d(lo, h, hi, 0, col);             // left
-        gl_rect_2d(w - hi, h, w - lo, 0, col);     // right
+        return 0.f;
     }
-}
 
-void LLToolCompGun::draw()
-{
-    // Draw the ADS vignette while ADS is held OR easing out, scaling its darkness
-    // by how far the FOV has zoomed toward the ADS level. This makes it creep in
-    // and fade out smoothly in lockstep with the zoom (same FSADSZoomTransitionSpeed
-    // easing) rather than popping on/off.
-    if (mIsADS || (mIsZoomTransitioning && mTransitionIsADS))
+    // 0 at the base FOV, 1 at the full ADS FOV (which is the smaller value).
+    F32 progress = 1.f;
+    const F32 span = mBaseFOV - mADSFOV;
+    if (fabsf(span) > 0.0001f)
     {
-        static LLCachedControl<bool> vig_fp(gSavedSettings, "FSADSVignetteFirstPerson", true);
-        static LLCachedControl<bool> vig_ots(gSavedSettings, "FSADSVignetteOTS", true);
-        const bool ots = gAgentCamera.cameraOTS();
-        if ((ots && vig_ots) || (!ots && vig_fp))
-        {
-            // 0 at the base FOV, 1 at the full ADS FOV (which is the smaller value).
-            F32 progress = 1.f;
-            const F32 span = mBaseFOV - mADSFOV;
-            if (fabsf(span) > 0.0001f)
-            {
-                const F32 currentFOV = gSavedSettings.getF32("CameraAngle");
-                progress = llclamp((mBaseFOV - currentFOV) / span, 0.f, 1.f);
-            }
-            static LLCachedControl<F32> vig_strength(gSavedSettings, "FSADSVignetteStrength", 0.5f);
-            drawADSVignette((F32)vig_strength * progress);
-        }
+        const F32 currentFOV = gSavedSettings.getF32("CameraAngle");
+        progress = llclamp((mBaseFOV - currentFOV) / span, 0.f, 1.f);
     }
-    mCur->draw();
+
+    static LLCachedControl<F32> vig_strength(gSavedSettings, "FSADSVignetteStrength", 0.5f);
+    return llclamp((F32)vig_strength * progress, 0.f, 1.f);
 }
 
 bool LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)

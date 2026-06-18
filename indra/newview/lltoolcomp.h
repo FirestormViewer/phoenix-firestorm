@@ -251,7 +251,10 @@ public:
     bool                    isADS() const { return mIsADS; }
     void                    resetZoom(); // Reset zoom state when exiting mouselook
 
-    virtual void            draw() override; // ADS vignette overlay, then the crosshair
+    // Strength (0-1) of the ADS screen-edge vignette this frame, honoring the
+    // per-mode toggles and easing with the zoom; 0 when no ADS vignette applies.
+    // Consumed by the post-process pass in LLPipeline::renderVignette.
+    F32                     getADSVignetteAmount() const;
 
 protected:
 
