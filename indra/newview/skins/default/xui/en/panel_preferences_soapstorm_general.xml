@@ -217,6 +217,23 @@
      show_text="true"
      width="350"
      tool_tip="Scroll-wheel step for adjusting the ADS zoom level while held." />
+    <slider
+     control_name="FSADSMouseSensitivity"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     label="ADS mouse sensitivity:"
+     label_width="160"
+     min_val="0"
+     max_val="100"
+     increment="1"
+     decimal_digits="0"
+     can_edit_text="true"
+     show_text="true"
+     width="350"
+     tool_tip="Mouse look sensitivity while aiming down sights. Lower values make precision aiming easier. Independent of the normal and zoomed mouselook sensitivity." />
     <check_box
      control_name="FSADSVignetteFirstPerson"
      follows="left|top"

@@ -8883,6 +8883,17 @@
       <key>Value</key>
       <real>10.0</real>
     </map>
+    <key>FSADSMouseSensitivity</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls responsiveness of mouse while aiming down sights (fraction or multiple of default mouse sensitivity)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>7.0</real>
+    </map>
     <key>MouselookZoomTransitionSpeed</key>
     <map>
       <key>Comment</key>

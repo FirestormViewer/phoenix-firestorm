@@ -248,6 +248,7 @@ public:
     virtual LLTool*         getOverrideTool(MASK mask) override { return NULL; }
 
     bool                    isZoomed() const { return mIsZoomed; }
+    bool                    isADS() const { return mIsADS; }
     void                    resetZoom(); // Reset zoom state when exiting mouselook
 
     virtual void            draw() override; // ADS vignette overlay, then the crosshair
