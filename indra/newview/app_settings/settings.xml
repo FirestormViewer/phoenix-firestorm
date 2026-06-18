@@ -8938,6 +8938,28 @@
       <key>Value</key>
       <real>0.25</real>
     </map>
+    <key>FSADSSwapTransitionSpeed</key>
+    <map>
+      <key>Comment</key>
+      <string>Duration (ms) of the ADS camera swap between OTS and first person; lower is snappier, 0 is instant</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>150</real>
+    </map>
+    <key>FSADSZoomSensitivity</key>
+    <map>
+      <key>Comment</key>
+      <string>Scroll-wheel step (radians per click) for adjusting the ADS zoom level while held</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.1</real>
+    </map>
     <key>FSADSVignetteFirstPerson</key>
     <map>
       <key>Comment</key>

@@ -142,6 +142,7 @@ LLAgentCamera::LLAgentCamera() :
     mAnimationFocusStartGlobal(),
     mAnimationTimer(),
     mAnimationDuration(0.33f),
+    mNextAnimationDuration(-1.f),
 
     mCameraFOVZoomFactor(0.f),
     mCameraCurrentFOVZoomFactor(0.f),
@@ -2968,7 +2969,15 @@ void LLAgentCamera::startCameraAnimation()
 {
     mAnimationCameraStartGlobal = getCameraPositionGlobal();
     mAnimationFocusStartGlobal = mFocusGlobal;
-    setAnimationDuration(gSavedSettings.getF32("ZoomTime"));
+    if (mNextAnimationDuration >= 0.f)
+    {
+        setAnimationDuration(mNextAnimationDuration); // one-shot override (e.g. fast ADS swap)
+        mNextAnimationDuration = -1.f;
+    }
+    else
+    {
+        setAnimationDuration(gSavedSettings.getF32("ZoomTime"));
+    }
     mAnimationTimer.reset();
     mCameraAnimating = true;
 }

@@ -881,7 +881,10 @@ bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
             mADSFromOTS = gAgentCamera.cameraOTS();
             if (mADSFromOTS)
             {
-                gAgentCamera.changeCameraToMouselook(false); // snap into first person (ADS is fast)
+                // Fast but smooth, user-configurable transition into first person.
+                static LLCachedControl<F32> swap_ms(gSavedSettings, "FSADSSwapTransitionSpeed", 150.f);
+                gAgentCamera.setNextCameraAnimationDuration(llclamp((F32)swap_ms, 0.f, 2000.f) / 1000.f);
+                gAgentCamera.changeCameraToMouselook(true);
             }
 
             // mBaseFOV already holds the un-zoomed FOV from the first tap; only
@@ -946,10 +949,12 @@ bool LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
     // Releasing the held second tap exits ADS, easing back to the base FOV.
     if (mIsADS)
     {
-        // Return to OTS if ADS was entered from there.
+        // Return to OTS if ADS was entered from there (fast, configurable transition).
         if (mADSFromOTS)
         {
-            gAgentCamera.changeCameraToOTS(false); // snap back to OTS (ADS is fast)
+            static LLCachedControl<F32> swap_ms(gSavedSettings, "FSADSSwapTransitionSpeed", 150.f);
+            gAgentCamera.setNextCameraAnimationDuration(llclamp((F32)swap_ms, 0.f, 2000.f) / 1000.f);
+            gAgentCamera.changeCameraToOTS();
             mADSFromOTS = false;
         }
         F32 currentActualFOV = gSavedSettings.getF32("CameraAngle");
@@ -1145,9 +1150,10 @@ bool LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
     // NaCl - Rightclick-mousewheel zoom
     if (mIsADS)
     {
-        // Scroll adjusts the ADS zoom level while held, mirroring the normal zoom.
+        // Scroll adjusts the ADS zoom level while held, with its own sensitivity.
+        static LLCachedControl<F32> ads_sens(gSavedSettings, "FSADSZoomSensitivity", 0.1f);
         F32 currentFOV = gSavedSettings.getF32("CameraAngle");
-        F32 newFOV = llclamp(currentFOV + (F32)(clicks * 0.1f),
+        F32 newFOV = llclamp(currentFOV + (F32)clicks * (F32)ads_sens,
                              LLViewerCamera::getInstance()->getMinView(),
                              LLViewerCamera::getInstance()->getMaxView());
         gSavedSettings.setF32("CameraAngle", newFOV);

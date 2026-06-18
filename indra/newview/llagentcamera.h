@@ -228,11 +228,15 @@ public:
     void            setCameraAnimating(bool b)          { mCameraAnimating = b; }
     bool            getCameraAnimating()                { return mCameraAnimating; }
     void            setAnimationDuration(F32 seconds);
+    // One-shot override for the NEXT startCameraAnimation's duration (seconds);
+    // < 0 = use the default ZoomTime. Used by ADS for a fast, configurable swap.
+    void            setNextCameraAnimationDuration(F32 seconds) { mNextAnimationDuration = seconds; }
     void            startCameraAnimation();
     void            stopCameraAnimation();
 private:
     LLFrameTimer    mAnimationTimer;    // Seconds that transition animation has been active
     F32             mAnimationDuration; // In seconds
+    F32             mNextAnimationDuration; // one-shot override for the next animation (< 0 = use ZoomTime)
     bool            mCameraAnimating;                   // Camera is transitioning from one mode to another
     LLVector3d      mAnimationCameraStartGlobal;        // Camera start position, global coords
     LLVector3d      mAnimationFocusStartGlobal;         // Camera focus point, global coords
