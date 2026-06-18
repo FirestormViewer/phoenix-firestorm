@@ -8930,13 +8930,13 @@
     <key>FSADSDoubleTapTime</key>
     <map>
       <key>Comment</key>
-      <string>Maximum time (seconds) between the two right-clicks to register a double-tap for ADS</string>
+      <string>Maximum time (seconds) for each tap and the gap between them to register a double-tap for ADS; lower = tighter</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.3</real>
+      <real>0.25</real>
     </map>
     <key>FSADSVignetteFirstPerson</key>
     <map>

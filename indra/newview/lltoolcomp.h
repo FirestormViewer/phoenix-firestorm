@@ -274,7 +274,10 @@ protected:
     bool    mIsADS;            // currently holding ADS
     bool    mTransitionIsADS;  // current FOV transition uses ADS smoothing
     F32     mADSFOV;           // ADS target FOV
+    bool    mADSFromOTS;       // ADS entered from OTS -> restore OTS on release
+    bool    mLastTapWasQuick;  // previous right press was a quick tap (not a hold)
     LLTimer mLastRMBUpTimer;   // time since last right-button release (double-tap window)
+    LLTimer mRMBDownTimer;     // measures the current press's duration
 };
 
 // Subclass of LLToolComposite

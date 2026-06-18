@@ -715,7 +715,9 @@ LLToolCompGun::LLToolCompGun()
       mZoomProportion(1.f),
       mIsADS(false),
       mTransitionIsADS(false),
-      mADSFOV(0.f)
+      mADSFOV(0.f),
+      mADSFromOTS(false),
+      mLastTapWasQuick(false)
 {
     mGun = new LLToolGun(this);
     mGrab = new LLToolGrabBase(this);
@@ -856,6 +858,8 @@ bool LLToolCompGun::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+    mRMBDownTimer.reset(); // measure this press's duration (to tell a tap from a hold)
+
     // Returning true will suppress the context menu
     // NaCl - Rightclick-mousewheel zoom
     if (!(gKeyboard->currentMask(true) & MASK_ALT))
@@ -864,9 +868,22 @@ bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
         // window of the previous release is the held second tap. Zoom to the
         // separate ADS FOV (with ADS smoothing) instead of the normal zoom.
         static LLCachedControl<bool> ads_enable(gSavedSettings, "FSDoubleTapADS", true);
-        static LLCachedControl<F32> ads_window(gSavedSettings, "FSADSDoubleTapTime", 0.3f);
-        if (ads_enable && mLastRMBUpTimer.getElapsedTimeF32() < (F32)ads_window)
+        static LLCachedControl<F32> ads_window(gSavedSettings, "FSADSDoubleTapTime", 0.25f);
+        // Only the second of two genuine quick taps within the window counts: the
+        // first press must have been a tap (not a hold-zoom). Stops a normal
+        // hold-then-click, or two spaced-out clicks, from firing ADS by accident.
+        if (ads_enable && mLastTapWasQuick && mLastRMBUpTimer.getElapsedTimeF32() < (F32)ads_window)
         {
+            mLastTapWasQuick = false; // consume the gesture
+
+            // Core: from OTS, ADS dives into first-person mouselook (and pops back
+            // out on release); when already first person, it just applies the zoom.
+            mADSFromOTS = gAgentCamera.cameraOTS();
+            if (mADSFromOTS)
+            {
+                gAgentCamera.changeCameraToMouselook(true);
+            }
+
             // mBaseFOV already holds the un-zoomed FOV from the first tap; only
             // capture it if we somehow started from a clean state.
             if (!mIsZoomed && !mIsZoomTransitioning && !mIsADS)
@@ -920,11 +937,21 @@ bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 // NaCl - Rightclick-mousewheel zoom
 bool LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
+    // A press counts as a quick tap only if it was short (not a hold-zoom); the
+    // next press needs this to register a double-tap.
+    static LLCachedControl<F32> ads_window(gSavedSettings, "FSADSDoubleTapTime", 0.25f);
+    mLastTapWasQuick = (mRMBDownTimer.getElapsedTimeF32() < (F32)ads_window);
     mLastRMBUpTimer.reset(); // open the double-tap window for the next press
 
     // Releasing the held second tap exits ADS, easing back to the base FOV.
     if (mIsADS)
     {
+        // Return to OTS if ADS was entered from there.
+        if (mADSFromOTS)
+        {
+            gAgentCamera.changeCameraToOTS();
+            mADSFromOTS = false;
+        }
         F32 currentActualFOV = gSavedSettings.getF32("CameraAngle");
         F32 totalZoomDistance = fabsf(mBaseFOV - mADSFOV);
         mZoomProportion = (totalZoomDistance > 0.001f)
@@ -1020,6 +1047,8 @@ void LLToolCompGun::resetZoom()
     mIsZoomTransitioning = false;
     mIsZoomed = false;
     mIsADS = false;
+    mADSFromOTS = false;
+    mLastTapWasQuick = false;
     mTransitionIsADS = false;
     mTargetFOV = 0.f;
     mCurrentFOV = 0.f;
