@@ -2635,7 +2635,7 @@ void LLAgentCamera::changeCameraToDefault()
 // instead of the avatar's eye position.
 // Avatar rendering is handled explicitly in needsRenderAvatar() and needsRenderHead().
 //-----------------------------------------------------------------------------
-void LLAgentCamera::changeCameraToOTS()
+void LLAgentCamera::changeCameraToOTS(bool animate)
 {
     if (mCameraMode != CAMERA_MODE_OTS)
     {
@@ -2658,13 +2658,20 @@ void LLAgentCamera::changeCameraToOTS()
             gAgentAvatarp->updateAttachmentVisibility(CAMERA_MODE_THIRD_PERSON);
         }
 
-        // Start the camera animation LAST, after mCameraMode is OTS and after
-        // changeCameraToMouselook(false) has cleared mCameraAnimating via its
-        // animate=false branch. The rendered camera is still at the old
-        // (third-person) position this frame, so startCameraAnimation snapshots
-        // that as the start point and updateCamera lerps to the OTS shoulder
-        // target over ZoomTime seconds — matching the mouselook transition feel.
-        startCameraAnimation();
+        if (animate)
+        {
+            // Start the camera animation LAST, after mCameraMode is OTS. The
+            // rendered camera is still at the old position this frame, so
+            // startCameraAnimation snapshots it as the start and updateCamera
+            // lerps to the OTS shoulder target over ZoomTime seconds.
+            startCameraAnimation();
+        }
+        else
+        {
+            // Snap instantly (used by ADS so the mode swap is fast).
+            mCameraAnimating = false;
+            gAgent.endAnimationUpdateUI();
+        }
     }
 }
 

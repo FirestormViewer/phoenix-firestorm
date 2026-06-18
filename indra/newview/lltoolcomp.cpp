@@ -881,7 +881,7 @@ bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
             mADSFromOTS = gAgentCamera.cameraOTS();
             if (mADSFromOTS)
             {
-                gAgentCamera.changeCameraToMouselook(true);
+                gAgentCamera.changeCameraToMouselook(false); // snap into first person (ADS is fast)
             }
 
             // mBaseFOV already holds the un-zoomed FOV from the first tap; only
@@ -949,7 +949,7 @@ bool LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
         // Return to OTS if ADS was entered from there.
         if (mADSFromOTS)
         {
-            gAgentCamera.changeCameraToOTS();
+            gAgentCamera.changeCameraToOTS(false); // snap back to OTS (ADS is fast)
             mADSFromOTS = false;
         }
         F32 currentActualFOV = gSavedSettings.getF32("CameraAngle");
