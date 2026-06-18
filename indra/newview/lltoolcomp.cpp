@@ -1030,6 +1030,9 @@ void    LLToolCompGun::handleSelect()
 
 void    LLToolCompGun::handleDeselect()
 {
+    // Genuinely leaving mouselook: end ADS first so resetZoom restores the base FOV.
+    mIsADS = false;
+    mADSFromOTS = false;
     resetZoom(); // Clear zoom when exiting mouselook
     LLToolComposite::handleDeselect();
     setMouseCapture(false);
@@ -1037,8 +1040,19 @@ void    LLToolCompGun::handleDeselect()
 
 void LLToolCompGun::resetZoom()
 {
+    // While ADS is held it owns its own FOV and lifecycle. Entering ADS switches
+    // camera modes (changeCameraToMouselook), whose tool/capture/animation churn
+    // can incidentally call resetZoom mid-hold; honoring it would cancel the ADS
+    // zoom and drop the "return to OTS on release" state, stranding the player in
+    // first person. Ignore resets while ADS is active - it ends on button release
+    // (handleRightMouseUp) or genuine mouselook exit (handleDeselect clears it first).
+    if (mIsADS)
+    {
+        return;
+    }
+
     // Reset NaCl zoom state - immediately restore base FOV if zoomed
-    if (mIsZoomed || mIsZoomTransitioning || mIsADS)
+    if (mIsZoomed || mIsZoomTransitioning)
     {
         gSavedSettings.setF32("CameraAngle", mBaseFOV);
     }
