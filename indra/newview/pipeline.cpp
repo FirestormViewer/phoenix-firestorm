@@ -8494,15 +8494,18 @@ bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
     // Start from the user's persistent vignette, then let ADS contribute its own
     // (radial, same shader) so aiming down sights darkens the screen edges without a
-    // separate blocky 2D overlay. ADS only raises the intensity (.x); when it
-    // dominates a disabled vignette we supply sane power/multiplier defaults.
+    // separate blocky 2D overlay. ADS drives a stronger, broader look than the passive
+    // linear-intensity vignette: it fully activates the radial field (.x = 1) so the
+    // darkening reads across the whole edge rather than only the corners, and maps its
+    // strength to the falloff power (.y) so darkness ramps from a subtle creep to heavy.
+    // It takes over while aiming and reverts to the user's vignette on release.
     LLVector3 vig = RenderVignette;
     const F32 ads = LLToolCompGun::getInstance()->getADSVignetteAmount();
-    if (ads > vig.mV[0])
+    if (ads > 0.f)
     {
-        vig.mV[0] = ads;
-        if (vig.mV[1] <= 0.f) vig.mV[1] = 1.f;  // power
-        if (vig.mV[2] <= 0.f) vig.mV[2] = 1.f;  // multiplier
+        vig.mV[0] = 1.f;          // full radial field active
+        vig.mV[1] = ads * 2.f;    // falloff power: strength -> darkness
+        vig.mV[2] = 1.f;          // multiplier
     }
 
     if (vig.mV[0] > 0.f)
