@@ -1030,9 +1030,17 @@ void    LLToolCompGun::handleSelect()
 
 void    LLToolCompGun::handleDeselect()
 {
-    // Genuinely leaving mouselook: end ADS first so resetZoom restores the base FOV.
-    mIsADS = false;
-    mADSFromOTS = false;
+    // Only end ADS on a GENUINE exit out of mouselook input. An ADS-driven
+    // OTS<->mouselook switch ALSO deselects this tool (deferred), but stays in a
+    // mouselook input mode (MOUSELOOK or OTS); clearing ADS there would wipe the
+    // zoom + return state mid-hold and strand the player in first person.
+    const ECameraMode cam_mode = gAgentCamera.getCameraMode();
+    const bool still_mouselook_input = (cam_mode == CAMERA_MODE_MOUSELOOK || cam_mode == CAMERA_MODE_OTS);
+    if (mIsADS && !still_mouselook_input)
+    {
+        mIsADS = false;
+        mADSFromOTS = false;
+    }
     resetZoom(); // Clear zoom when exiting mouselook
     LLToolComposite::handleDeselect();
     setMouseCapture(false);
