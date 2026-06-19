@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="snapshot_guide_settings" title="Configurações do guia de captura">
 	<text name="color_and_appearance_label">
 		Cor e aparência do guia

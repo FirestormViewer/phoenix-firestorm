@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Menu de Copiar e Colar Luz">
+	<menu_item_call name="params_copy" label="Copiar" />
+	<menu_item_call name="params_paste" label="Colar" />
+</toggleable_menu>

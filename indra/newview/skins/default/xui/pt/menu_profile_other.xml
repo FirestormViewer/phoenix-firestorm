@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Menu de Perfil do Avatar">
+	<menu_item_call name="im" label="Mensagem instantânea (IM)" />
+	<menu_item_call name="offer_teleport" label="Oferecer teleporte" />
+	<menu_item_call name="request_teleport" label="Solicitar teleporte" />
+	<menu_item_call name="voice_call" label="Chamada de voz" />
+	<menu_item_call name="chat_history" label="Histórico de chat" />
+	<menu_item_call name="add_friend" label="Adicionar amigo" />
+	<menu_item_call name="remove_friend" label="Remover amigo" />
+	<menu_item_call name="invite_to_group" label="Convidar para grupo..." />
+	<menu_item_call name="agent_permissions" label="Permissões do agente" />
+	<menu_item_call name="map" label="Mapa" />
+	<menu_item_call name="share" label="Compartilhar" />
+	<menu_item_call name="pay" label="Pagar" />
+	<menu_item_check name="block_unblock" label="Bloquear/Desbloquear" />
+	<menu_item_call name="copy_display_name" label="Copiar nome de exibição" />
+	<menu_item_call name="copy_name" label="Copiar nome do avatar" />
+	<menu_item_call name="copy_id" label="Copiar ID do agente" />
+</toggleable_menu>

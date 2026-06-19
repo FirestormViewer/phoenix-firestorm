@@ -7,13 +7,13 @@
 		Configurações gráficas
 	</text>
 	<text name="quality_lbl">
-		Qualidade vs. velocidade
+		Qualidade ou velocidade
 	</text>
 	<text name="FasterText">
 		Rápido
 	</text>
 	<text name="BetterText">
-		Qualidade
+		Melhor qualidade
 	</text>
 	<text name="ShadersPrefText">
 		Baixo
@@ -28,10 +28,10 @@
 		Ultra
 	</text>
 	<text name="quality_desc">
-		Selecionar uma predefinição redefine todos os ajustes manuais.
+		Escolher uma predefinição redefine todas as alterações manuais.
 	</text>
 	<text name="distance_lbl">
-		Distância de visibilidade
+		Campo de visão
 	</text>
 	<text name="faster_lbl">
 		Rápido
@@ -40,36 +40,36 @@
 		Mais longe
 	</text>
 	<text name="distance_desc1">
-		Mantenha baixo para melhor desempenho; aumente para ver mais longe.
+		Mantenha baixo para melhor desempenho. Aumente para ver mais longe.
 	</text>
 	<text name="environment_lbl">
 		Ambiente
 	</text>
 	<text name="enhancements_desc">
-Reduzir ou remover sombras pode aumentar bastante o FPS,
-mas afeta o ambiente e a aparência da cena.
+		Reduzir/remover sombras pode aumentar a taxa de quadros,
+		mas afeta a atmosfera e o visual da cena.
 	</text>
 	<text name="RenderShadowDetailText">
-		Fontes de sombra:
+		Fonte das sombras:
 	</text>
 	<combo_box name="ShadowDetail">
 		<combo_box.item label="Nenhuma" name="0" />
 		<combo_box.item label="Sol/Lua" name="1" />
-		<combo_box.item label="Sol/Lua + projetores" name="2" />
+		<combo_box.item label="Sol/Lua + Projetores" name="2" />
 	</combo_box>
 	<text name="water_lbl">
 		Água
 	</text>
 	<text name="water_desc">
-		Reduzir a qualidade da água pode aumentar bastante o FPS.
+		Reduzir a qualidade dos efeitos da água melhora o desempenho.
 	</text>
 	<text name="ReflectionsText">
-		Reflexos da água:
+		Reflexos na água:
 	</text>
 	<combo_box name="Reflections">
 		<combo_box.item label="Nenhum (opaco)" name="-2" />
 		<combo_box.item label="Nenhum (transparente)" name="-1" />
-		<combo_box.item label="Minimal" name="0" />
+		<combo_box.item label="Mínimo" name="0" />
 		<combo_box.item label="Terreno e árvores" name="1" />
 		<combo_box.item label="Todos os objetos estáticos" name="2" />
 		<combo_box.item label="Todos os avatares e objetos" name="3" />
@@ -83,5 +83,5 @@ Fotógrafos precisam de alta qualidade,
 geralmente com custo de desempenho. As ferramentas
 de foto podem ajudar a encontrar o equilíbrio ideal.
 	</text>
-	<button name="open_phototools" label="Ferramentas de foto" tool_tip="Abre ferramentas de foto dedicadas para ajustes avançados." />
+	<button name="open_phototools" label="Ferramentas de foto" tool_tip="Abre ferramentas avançadas de fotografia para ajustar a imagem." />
 </panel>

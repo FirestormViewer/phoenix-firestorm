@@ -4,7 +4,7 @@
 		<texture_picker label="Textura" name="Fabric" tool_tip="Clique para escolher uma imagem"/>
 		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique para abrir o seletor de cores"/>
 	</panel>
-	<panel name="undershirt_main_tab_holder">
+	<panel name="undershirt_main_tab_holder" title="Camiseta">
 		<accordion name="undershirt_main_accordion">
 			<accordion_tab name="undershirt_main_tab" title="Regata"/>
 		</accordion>

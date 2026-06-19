@@ -93,7 +93,7 @@
 				Tipo:
 			</text>
 			<text name="LandTypeText">
-				Mainland / Homestead
+				Continente / Residencial
 			</text>
 			<text name="ContentRating">
 				Classificação:
@@ -205,7 +205,7 @@
 				Tipo:
 			</text>
 			<text name="region_landtype_text">
-				Mainland / Homestead
+				Continente / Residencial
 			</text>
 			<text name="region_maturity_lbl">
 				Classificação:

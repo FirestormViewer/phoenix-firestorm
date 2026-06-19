@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Menu de Copiar e Colar Tamanho">
+	<menu_item_call name="psr_copy" label="Copiar tudo" />
+	<menu_item_call name="size_copy" label="Copiar tamanho" />
+	<menu_item_call name="psr_paste" label="Colar tudo" />
+	<menu_item_call name="size_paste" label="Colar tamanho" />
+</toggleable_menu>
