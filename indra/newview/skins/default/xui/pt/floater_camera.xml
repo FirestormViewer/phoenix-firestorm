@@ -42,7 +42,7 @@
 	</panel>
 	<panel name="preset_buttons_panel">
 		<combo_box name="preset_combo">
-			<combo_box.item label="Usar predefinição" name="Use preset" value="default"/>
+			<combo_box.item label="Usar predefinição" name="Use preset" />
 		</combo_box>
 		<button name="gear_btn" tool_tip="Predefinições de câmera"/>
 		<button name="save_preset_btn" tool_tip="Salvar como predefinição"/>

@@ -278,7 +278,7 @@
 		<menu_item_call label="Desfazer" name="Undo"/>
 		<menu_item_call label="Refazer" name="Redo"/>
 		<menu_item_call label="Navegador de bitmap local" name="Local Bitmap Browser"/>
-		</menu>
+	</menu>
 	<menu label="Conteúdo" name="Content">
 		<menu_item_check label="Buscar" name="Search"/>
 		<menu_item_check label="Cotações do mercado L$" name="LindenXchange"/>
@@ -489,7 +489,7 @@
 			<menu_item_call label="Benchmark" name="Benchmark"/>
 			<menu_item_call label="Pré-visualização HDRI" name="HDRI Preview"/>
 			<menu_item_call label="Pré-visualização de cena GLTF" name="GLTF Scene Preview"/>
-			</menu>
+		</menu>
 		<menu label="Renderizar metadados" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
 			<menu_item_check label="Hitboxes do avatar" name="Avatar Hitboxes"/>
