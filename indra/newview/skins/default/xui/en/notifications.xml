@@ -15153,10 +15153,9 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
   <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
     <notification
      icon="alertmodal.tga"
-     label="New Rule Set"
      name="OmniFilterNewRuleSet"
      type="alertmodal">
-        Enter a name for the New Rule Set:
+        Enter a name for the new rule set:
         <tag>confirm</tag>
         <form name="form">
             <input name="new_name" type="text" width="300" default="true">
@@ -15181,8 +15180,7 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       type="alertmodal">
         Blank names are not allowed. Please try again with a name.
         <usetemplate
-            ignoretext="Warn me again when trying to add a New Rule Set with no name."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
     <notification
@@ -15193,17 +15191,15 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       type="alertmodal">
         Duplicate names are not allowed. Please try again with a different name.
         <usetemplate
-            ignoretext="Warn me again when trying to add a New Rule Set with a duplicate name."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
 
     <notification
      icon="alertmodal.tga"
-     label="Clone Rule Set"
      name="OmniFilterCloneRuleSet"
      type="alertmodal">
-        Enter a name to the Cloned Rule Set:
+        Enter a name to the cloned rule set:
         <tag>confirm</tag>
         <form name="form">
             <input name="new_name" type="text" width="300" default="true">
@@ -15228,8 +15224,7 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       type="alertmodal">
         Blank names are not allowed. Please try again with a name.
         <usetemplate
-            ignoretext="Warn me again when trying to add a Cloned Rule Set with no name."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
     <notification
@@ -15240,8 +15235,7 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       type="alertmodal">
         Duplicate names are not allowed. Please try again with a different name.
         <usetemplate
-            ignoretext="Warn me again when trying to add a Cloned Rule Set with a duplicate name."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
 
@@ -15252,7 +15246,7 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
         Are you sure you want to remove [RULESETNAME]?
         <tag>confirm</tag>
         <usetemplate
-        ignoretext="Confirm before I remove a Rule Set."
+        ignoretext="Confirm before I remove a rule set."
         name="okcancelignore"
         notext="Cancel"
         yestext="OK"/>
@@ -15263,10 +15257,9 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       sound="UISndAlert"
       persist="true"
       type="alertmodal">
-        Unable to remove the Default Rule Set.
+        Unable to remove the default rule ret.
         <usetemplate
-            ignoretext="Warn me again when trying to remove the Default Rule Set."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
     <notification
@@ -15275,10 +15268,9 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       sound="UISndAlert"
       persist="true"
       type="alertmodal">
-        Unable to remove the Rule Set due to index out of bounds.
+        Unable to remove the rule set due to index out of bounds.
         <usetemplate
-            ignoretext="Warn me again when trying to remove a Rule Set with an index [OUTOFBOUNDS] out of bounds."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
     <notification
@@ -15287,10 +15279,9 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
       sound="UISndAlert"
       persist="true"
       type="alertmodal">
-        Unable to remove the Rule Set due to name not found.
+        Unable to remove the rule set due to name not found.
         <usetemplate
-            ignoretext="Warn me again when trying to remove a Rule Set with an invalid name '[INVALIDNAME]'."
-            name="okignore"
+            name="okbutton"
             yestext="OK"/>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
