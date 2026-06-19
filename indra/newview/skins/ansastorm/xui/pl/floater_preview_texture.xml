@@ -16,7 +16,7 @@
 	<text name="uploader_label">
 		Przesłał/a:
 	</text>
- 	<button label="Profil" name="openprofile"/>
+	<button label="Profil" name="openprofile"/>
 	<text name="upload_time_label">
 		Data:
 	</text>
