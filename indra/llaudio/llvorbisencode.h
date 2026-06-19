@@ -56,7 +56,8 @@ const size_t LLVORBIS_CLIP_REJECT_SIZE                 = LLVORBIS_CLIP_MAX_SAMPL
 // <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
 //S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg);
 //S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname);
-S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg, bool is_in_secondlife);
+// <OTS> out_clip_length, when non-null, receives the clip length in seconds (used by the bulk sound->notecard upload)
+S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg, bool is_in_secondlife, F32* out_clip_length = nullptr);
 S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname, bool is_in_secondlife);
 // </FS:Ansariel>
 

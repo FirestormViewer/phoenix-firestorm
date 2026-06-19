@@ -732,6 +732,7 @@ set(viewer_SOURCE_FILES
     llsky.cpp
     #llslurl.cpp #<FS:AW optional opensim support>
     llsnapshotlivepreview.cpp
+    llsoundnotecardupload.cpp
     llspatialpartition.cpp
     llspeakers.cpp
     llspeakingindicatormanager.cpp
@@ -1596,6 +1597,7 @@ set(viewer_HEADER_FILES
     llslurl.h
     llsnapshotlivepreview.h
     llsnapshotmodel.h
+    llsoundnotecardupload.h
     llspatialpartition.h
     llspeakers.h
     llspeakingindicatormanager.h
