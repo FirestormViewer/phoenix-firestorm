@@ -20,10 +20,10 @@
 		NEW RULE
 	</floater.string>
 	<floater.string name="OmnifilterNewRuleSet">
-		New Rule Set
+		NEW RULE SET
 	</floater.string>
 	<floater.string name="OmnifilterCloneRuleSet">
-		Cloned Rule Set
+		CLONED RULE SET
 	</floater.string>
 
 	<panel
