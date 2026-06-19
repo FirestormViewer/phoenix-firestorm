@@ -477,7 +477,7 @@ LLSD OmnifilterEngine::exportToLLSD()
             const Needle &needle = export_rule_set.second.at(needle_name);
             // Store the order of the needle
             needles_llsd[needle_name]["order"] = order++;
-            // </FS:minerjr> [FIRE-36649]
+
             needles_llsd[needle_name]["sender_name"]            = needle.mSenderName;
             needles_llsd[needle_name]["content"]                = needle.mContent;
             needles_llsd[needle_name]["region_name"]            = needle.mRegionName;
@@ -765,7 +765,7 @@ void OmnifilterEngine::loadNeedles()
     // Pre-allocate space for the list of needle names, so we can use an index into it for assignments down below
     mOrderedNeedles.resize(needles_llsd.size());
     S32 index = 0;
-    // </FS:minerjr> [FIRE-36649]
+
     for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
     {
         Needle new_needle;
