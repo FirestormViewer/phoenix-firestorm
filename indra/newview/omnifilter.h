@@ -55,12 +55,9 @@ protected:
     void onNeedleChanged();
     void onAddNeedleClicked();
     void onRemoveNeedleClicked();
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     void onSortChanged();
     void onUpNeedleClicked();
     void onDownNeedleClicked();
-    // </FS:minerjr> [FIRE-36649]
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     void onNewRuleSetClicked();
     void onCloneRuleSetClicked();
     void onRemoveRuleSetClicked();
@@ -70,7 +67,6 @@ protected:
     void onRuleSetChanged();
     void reloadRules();
     void reloadRule();
-    // </FS:minerjr> [FIRE-36763]
     void onNeedleNameChanged();
     void onNeedleCheckboxChanged(LLUICtrl* ctrl);
     void onOwnerChanged();
@@ -80,16 +76,12 @@ protected:
     FSScrollListCtrl* mNeedleListCtrl{ nullptr };
     LLButton*         mAddNeedleBtn{ nullptr };
     LLButton*         mRemoveNeedleBtn{ nullptr };
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     LLButton*         mUpNeedleBtn{ nullptr };
     LLButton*         mDownNeedleBtn{ nullptr };
-    // </FS:minerjr> [FIRE-36649]
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     LLComboBox* mRuleSetsCmb{ nullptr };
     LLButton* mNewRuleSetBtn{ nullptr };
     LLButton* mCloneRuleSetBtn{ nullptr };
     LLButton* mRemoveRuleSetBtn{ nullptr };
-    // </FS:minerjr> [FIRE-36763]
     FSScrollListCtrl* mFilterLogCtrl{ nullptr };
     LLPanel*          mPanelDetails{ nullptr };
     LLLineEditor*     mNeedleNameCtrl{ nullptr };

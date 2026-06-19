@@ -103,7 +103,7 @@ class OmnifilterEngine
 
         typedef std::map<std::string, OmnifilterEngine::OmnifilterEngine::Needle, std::less<>> needle_list_t;
         needle_list_t& getNeedleList();
-        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
         // Typedef for the ordered list which is a vector of strings, used to keep track of the map order, which uses strings to lookup the
         // needles.
         typedef std::vector<std::string> needle_ordered_list_t;
@@ -114,7 +114,6 @@ class OmnifilterEngine
         bool setOrderedNeedleName(const S32 needle_index, std::string_view new_name);
         const Needle* getOrderedNeedle(const S32 index);
         bool swapNeedles(const S32 index1, const S32 index2);
-        // </FS:minerjr> [FIRE-36649]
 
         Needle& newNeedle(const std::string& needle_name);
         void renameNeedle(const std::string& old_name, const std::string& new_name);
@@ -125,7 +124,6 @@ class OmnifilterEngine
 
         void init();
 
-        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
         bool setCurrentRuleSet(std::string_view rule_set_name);
         S32 removeCurrentRuleSet();
         S32 addNewRuleSet(std::string_view new_name);
@@ -137,40 +135,34 @@ class OmnifilterEngine
         std::string_view getOrderedRuleSetName(const S32 index) const;
         S32 getOrderedRuleSetIndex(std::string_view lookup_name);
         S32 getOrderedRuleSetSize() { return static_cast<S32>(mOrderedRuleSets.size()); }
-        // </FS:minerjr> [FIRE-36763]
+
         typedef boost::signals2::signal<void(time_t, const std::string&)> log_signal_t;
         log_signal_t mLogSignal;
 
         std::vector<std::pair<time_t, std::string>> mLog;
 
-        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
         typedef std::pair<needle_ordered_list_t, needle_list_t> rule_set_t;
         typedef std::map<std::string, rule_set_t> rule_sets_t;
         rule_sets_t& getRuleSets() { return mNeedleRuleSets; }
-        // </FS:minerjr> [FIRE-36763]
+
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
         bool matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
 
-        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
         bool importFromLLSD(const LLSD& data);
         LLSD exportToLLSD();
-        // </FS:minerjr> [FIRE-36763]
         void loadNeedles();
         void saveNeedles();
 
         bool tick() override;
 
     protected:
-        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
         rule_sets_t mNeedleRuleSets;
         std::string mCurrentSelectedRuleSet;
         needle_ordered_list_t mOrderedRuleSets;
-        // </FS:minerjr> [FIRE-36763]
+
         needle_list_t mNeedles;
-        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
         needle_ordered_list_t mOrderedNeedles;
-        // </FS:minerjr> [FIRE-36649]
 
         std::string mNeedlesXMLPath;
 

@@ -38,18 +38,16 @@ OmnifilterEngine::OmnifilterEngine()
     : LLSingleton<OmnifilterEngine>()
     , LLEventTimer(5.0f)
     , mDirty(false)
-    , mCurrentSelectedRuleSet("Default")  // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    , mCurrentSelectedRuleSet("Default")
 {
     mEventTimer.stop();
 }
 
 OmnifilterEngine::~OmnifilterEngine()
 {
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     // If the user changed a setting and quickly closed the viewer, the changes would not be saved, but
     // the changes to the settings.xml would, which would cause issues. So save upon close just in case.
     saveNeedles();
-    // </FS:minerjr> [FIRE-36763]
 }
 
 void OmnifilterEngine::init()
@@ -139,13 +137,10 @@ bool OmnifilterEngine::matchStrings(std::string_view needle_string, std::string_
 
 const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack)
 {
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
     for (const auto& needle_name : mOrderedNeedles)
-    //for (const auto& [needle_name, needle]: mNeedles)
     {
         const auto& needle = mNeedles[needle_name];
-    // </FS:minerjr> [FIRE-36649]
         if (!needle.mEnabled)
         {
             continue;
@@ -203,10 +198,9 @@ OmnifilterEngine::Needle& OmnifilterEngine::newNeedle(const std::string& needle_
         mNeedles[needle_name] = new_needle;
     }
     setDirty(true);
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     // Add to the ordered needle vector the name of the new needle
     mOrderedNeedles.push_back(needle_name);
-    // <F/S:minerjr> [FIRE-36649]
+
     return mNeedles[needle_name];
 }
 
@@ -216,26 +210,24 @@ void OmnifilterEngine::renameNeedle(const std::string& old_name, const std::stri
     auto node_handler = mNeedles.extract(old_name);
     node_handler.key() = new_name;
     mNeedles.insert(std::move(node_handler));
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
     // Find the index of the given old name
     S32 found_index = getOrderedNeedleIndex(old_name);
     // If the name was found (-1 when not found), set the ordered needle vector at the found index to the new value
     if (found_index >= 0)
         mOrderedNeedles[found_index] = new_name;
-    // </FS:minerjr> [FIRE-36649]
 
     setDirty(true);
 }
 
 void OmnifilterEngine::deleteNeedle(const std::string& needle_name)
 {
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     // Find the index of the given needle name
     S32 found_index = getOrderedNeedleIndex(needle_name);
     // If the name was found (-1 when not found), erase the need based upon the offset
     if (found_index >= 0)
         mOrderedNeedles.erase(mOrderedNeedles.begin() + found_index);
-    // </FS:minerjr> [FIRE-36649]
+
     mNeedles.erase(needle_name);
     setDirty(true);
 }
@@ -245,7 +237,6 @@ OmnifilterEngine::needle_list_t& OmnifilterEngine::getNeedleList()
     return mNeedles;
 }
 
-// <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
 // Get the name from the vector of ordered needles at the specified index
 std::string_view OmnifilterEngine::getOrderedNeedleName(const S32 index) const
 {
@@ -314,7 +305,6 @@ bool OmnifilterEngine::swapNeedles(S32 index1, S32 index2)
 
     return true;
 }
-// </FS:minerjr> [FIRE-36649]
 
 void OmnifilterEngine::setDirty(bool dirty)
 {
@@ -330,7 +320,6 @@ void OmnifilterEngine::setDirty(bool dirty)
     }
 }
 
-// <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
 // Get the name from the vector of ordered rule sets at the specified index
 std::string_view OmnifilterEngine::getOrderedRuleSetName(const S32 index) const
 {
@@ -481,9 +470,7 @@ LLSD OmnifilterEngine::exportToLLSD()
         // Get the map of needles that have the name of the current ordered rule set
         const auto& export_rule_set = mNeedleRuleSets[export_rule_set_name];
 
-        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
         // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
-        // for (const auto& [needle_name, needle] : mNeedles)
         S32 order = 0;
         for (const auto& needle_name : export_rule_set.first)
         {
@@ -685,7 +672,6 @@ bool OmnifilterEngine::assignRuleSetNameFromSettings()
 
     return true;
 }
-// </FS:minerjr> [FIRE-36763]
 
 void OmnifilterEngine::loadNeedles()
 {
@@ -753,7 +739,6 @@ void OmnifilterEngine::loadNeedles()
         return;
     }
 
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     static LLCachedControl<S32> NeedlePresetIndex(gSavedSettings, "OmnifilterRuleSetID");
 
     // If this is not the first time loading, based upon the preset index being set
@@ -774,8 +759,7 @@ void OmnifilterEngine::loadNeedles()
         // If so, we still want to use the older load code to parse the older form and convert to the newer format.
     }
     // Load the file with the old code to get the old .xml file data loaded, to then be outputted in the new format
-    // <F/S:minerjr> [FIRE-36763]
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
     // Clear the vector of filters
     mOrderedNeedles.clear();
     // Pre-allocate space for the list of needle names, so we can use an index into it for assignments down below
@@ -812,7 +796,7 @@ void OmnifilterEngine::loadNeedles()
         }
 
         mNeedles[new_needle_name] = new_needle;
-        // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
         // Add the loaded needle name to the ordered needle list
         // Needles are stored in order added to the map originally so use the
         // order value stored to restore the order back to the user
@@ -826,9 +810,8 @@ void OmnifilterEngine::loadNeedles()
 
             mOrderedNeedles[index++] = new_needle_name;
         }
-        // <FS:minerjr> [/FIRE-36649]
     }
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
     // Create a default from the current version
     gSavedSettings.setS32("OmnifilterRuleSetID", 0);
     // The first rule set is always called Default.
@@ -840,7 +823,6 @@ void OmnifilterEngine::loadNeedles()
     assignRuleSet(false);
     // Save the changes back to the Omnifilter.xml file.
     saveNeedles();
-    // </FS:minerjr> [FIRE-36649]
 }
 
 void OmnifilterEngine::saveNeedles()
@@ -866,45 +848,10 @@ void OmnifilterEngine::saveNeedles()
 
     LLSD needles_llsd;
 
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     // First assign the current rule set back to the currently selected rule set.
     assignRuleSet(false);
     // Export the needles to LLSD storage
     needles_llsd = exportToLLSD();
-    /*
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
-    // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
-    //for (const auto& [needle_name, needle] : mNeedles)
-    S32 order = 0;
-    for (const auto& needle_name : mOrderedNeedles)
-    {
-        const auto& needle = mNeedles[needle_name];
-        // Store the order of the needle
-        needles_llsd[needle_name]["order"] = order++;
-    // </FS:minerjr> [FIRE-36649]
-        needles_llsd[needle_name]["sender_name"] = needle.mSenderName;
-        needles_llsd[needle_name]["content"] = needle.mContent;
-        needles_llsd[needle_name]["region_name"] = needle.mRegionName;
-        needles_llsd[needle_name]["chat_replace"] = needle.mChatReplace;
-        needles_llsd[needle_name]["button_reply"] = needle.mButtonReply;
-        needles_llsd[needle_name]["textbox_reply"] = needle.mTextBoxReply;
-        needles_llsd[needle_name]["sender_name_match_type"] = needle.mSenderNameMatchType;
-        needles_llsd[needle_name]["content_match_type"] = needle.mContentMatchType;
-        needles_llsd[needle_name]["owner_id"] = needle.mOwnerID;
-
-        LLSD types_llsd;
-        for (auto type : needle.mTypes)
-        {
-            types_llsd.append(static_cast<S32>(type));
-        }
-
-        needles_llsd[needle_name]["types"] = types_llsd;
-        needles_llsd[needle_name]["enabled"] = needle.mEnabled;
-        needles_llsd[needle_name]["sender_name_case_insensitive"] = needle.mSenderNameCaseInsensitive;
-        needles_llsd[needle_name]["content_case_insensitive"] = needle.mContentCaseInsensitive;
-    }
-    */
-    // </FS:minerjr> [FIRE-36763]
 
     LLSDSerialize::toXML(needles_llsd, file);
 

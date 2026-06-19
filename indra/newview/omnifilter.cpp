@@ -29,10 +29,8 @@
 #include "llcombobox.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
-// <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
 #include "llviewercontrol.h" // Needed for gSavedSettings
 #include "llnotificationsutil.h" // Needed for Notifications
-// </FS:minerjr> [FIRE-36763]
 
 #include "fsscrolllistctrl.h"
 
@@ -82,11 +80,8 @@ OmnifilterEngine::Needle* Omnifilter::getSelectedNeedle()
         if (needle_name_cell)
         {
             const std::string& needle_name = needle_name_cell->getValue().asString();
-            // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
-            //if (!needle_name.empty())
             // Only try to access the needle if the name is not empty and it is on the current needle list, otherwise it will cause an error
             if (!needle_name.empty() && OmnifilterEngine::getInstance()->getNeedleList().contains(needle_name))
-            // </FS:minerjr> [FIRE-36763]
             {
                 return &OmnifilterEngine::getInstance()->getNeedleList().at(needle_name);
             }
@@ -225,7 +220,6 @@ void Omnifilter::onRemoveNeedleClicked()
     onSelectNeedle();
 }
 
-// <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
 // Handles re-ordering the list of needle names when the UI is sorted.
 void Omnifilter::onSortChanged()
 {
@@ -283,9 +277,7 @@ void Omnifilter::onDownNeedleClicked()
         mNeedleListCtrl->swapWithNext(current_index);
     }
 }
-// </FS:minerjr> [FIRE-36649]
 
-// <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
 // Callback method for the New Rule Set button when clicked.
 // Creates an notification to the user to ask for the name of the new rule set.
 void Omnifilter::onNewRuleSetClicked()
@@ -514,8 +506,6 @@ void Omnifilter::reloadRule()
     onSelectNeedle();
 }
 
-// </FS:minerjr> [FIRE-36763]
-
 void Omnifilter::onNeedleNameChanged()
 {
     const std::string& old_name = mNeedleListCtrl->getSelectedItemLabel(NEEDLE_NAME_COLUMN);
@@ -608,11 +598,9 @@ bool Omnifilter::postBuild()
     mNeedleListCtrl = getChild<FSScrollListCtrl>("needle_list");
     mAddNeedleBtn = getChild<LLButton>("add_needle");
     mRemoveNeedleBtn = getChild<LLButton>("remove_needle");
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     // Add the up and down buttons for re-aranging the order of the needles
     mUpNeedleBtn = getChild<LLButton>("up_needle");
     mDownNeedleBtn = getChild<LLButton>("down_needle");
-    // </FS:minerjr> [FIRE-36649]
     mFilterLogCtrl = getChild<FSScrollListCtrl>("filter_log");
     mPanelDetails = getChild<LLPanel>("panel_details");
     mNeedleNameCtrl = getChild<LLLineEditor>("needle_name");
@@ -620,13 +608,11 @@ bool Omnifilter::postBuild()
     mSenderCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("sender_case");
     mSenderMatchTypeCombo = getChild<LLComboBox>("sender_match_type");
     mContentCtrl = getChild<LLTextEditor>("content");
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     // Add the preset controls
     mRuleSetsCmb = getChild<LLComboBox>("cmb_rule_sets"); // Rule Set Drop Down
     mNewRuleSetBtn = getChild<LLButton>("btn_rule_set_new"); // New Rule Set
     mCloneRuleSetBtn = getChild<LLButton>("btn_rule_set_clone"); // Clone Rule Set
     mRemoveRuleSetBtn = getChild<LLButton>("btn_rule_set_remove"); // Remove Rule Set
-    // <//FS:minerjr> [FIRE-36763]
     mContentCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("content_case");
     mContentMatchTypeCombo = getChild<LLComboBox>("content_match_type");
     mRegionNameCtrl = getChild<LLLineEditor>("region_name");
@@ -658,19 +644,16 @@ bool Omnifilter::postBuild()
     mFilterLogCtrl->deleteAllItems();
 
     auto& instance = OmnifilterEngine::instance();
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+
     // Reload the rules set UI elements, uses the settings stored rule set ID
     reloadRules();
     instance.assignRuleSetNameFromSettings();
     instance.assignRuleSet(true);
-    // </FS:minerjr> [FIRE-36763]
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
-    //for (const auto& [needle_name, needle] : instance.getNeedleList())
-    // Loop over the  ordered list 
+
+    // Loop over the ordered list
     for (const auto& needle_name : instance.getOrderedNeedleList())
     {
         const auto& needle = instance.getNeedleList()[needle_name];
-    // </FS:minerjr> [FIRE-36649]
         addNeedle(needle_name, needle);
     }
 
@@ -692,19 +675,17 @@ bool Omnifilter::postBuild()
     mNeedleListCtrl->setCommitCallback(boost::bind(&Omnifilter::onSelectNeedle, this));
     mAddNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onAddNeedleClicked, this));
     mRemoveNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveNeedleClicked, this));
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
+
     // Add the callbacks for the up and down buttons to re-order the filter list
     mNeedleListCtrl->setSortChangedCallback(boost::bind(&Omnifilter::onSortChanged, this));
     mUpNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onUpNeedleClicked, this));
     mDownNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onDownNeedleClicked, this));
-    // </FS:minerjr> [FIRE-36649]
-    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
     // Add the Rule Set controls
     mRuleSetsCmb->setCommitCallback(boost::bind(&Omnifilter::onRuleSetChanged, this)); // Rule Set Drop Down
     mNewRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onNewRuleSetClicked, this)); // New Rule Set
     mCloneRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onCloneRuleSetClicked, this)); // Clone Rule Set
     mRemoveRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveRuleSetClicked, this)); // Remove Rule Set
-    // <//FS:minerjr> [FIRE-36763]
+
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
     mSenderNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mSenderCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
