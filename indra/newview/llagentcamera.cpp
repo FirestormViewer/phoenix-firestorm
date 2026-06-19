@@ -1271,8 +1271,15 @@ void LLAgentCamera::updateLookAt(const S32 mouse_x, const S32 mouse_y)
             F32 y_from_center =
                 ((F32) mouse_y / (F32) gViewerWindow->getWorldViewHeightScaled() ) - 0.5f;
 
-            frameCamera.yaw( - x_from_center * gSavedSettings.getF32("YawFromMousePosition") * DEG_TO_RAD);
-            frameCamera.pitch( - y_from_center * gSavedSettings.getF32("PitchFromMousePosition") * DEG_TO_RAD);
+            // <FS:PP> Speed optimisation
+            // frameCamera.yaw( - x_from_center * gSavedSettings.getF32("YawFromMousePosition") * DEG_TO_RAD);
+            // frameCamera.pitch( - y_from_center * gSavedSettings.getF32("PitchFromMousePosition") * DEG_TO_RAD);
+            static LLCachedControl<F32> yaw_from_mouse_position(gSavedSettings, "YawFromMousePosition");
+            static LLCachedControl<F32> pitch_from_mouse_position(gSavedSettings, "PitchFromMousePosition");
+            frameCamera.yaw( - x_from_center * yaw_from_mouse_position() * DEG_TO_RAD);
+            frameCamera.pitch( - y_from_center * pitch_from_mouse_position() * DEG_TO_RAD);
+            // </FS:PP>
+
             lookAtType = LOOKAT_TARGET_FREELOOK;
         }
 
@@ -1569,7 +1576,11 @@ void LLAgentCamera::updateCamera()
         {
             const F32 SMOOTHING_HALF_LIFE = 0.02f;
 
-            F32 smoothing = LLSmoothInterpolation::getInterpolant(gSavedSettings.getF32("CameraPositionSmoothing") * SMOOTHING_HALF_LIFE, false);
+            // <FS:PP> Speed optimisation
+            // F32 smoothing = LLSmoothInterpolation::getInterpolant(gSavedSettings.getF32("CameraPositionSmoothing") * SMOOTHING_HALF_LIFE, false);
+            static LLCachedControl<F32> camera_position_smoothing(gSavedSettings, "CameraPositionSmoothing");
+            F32 smoothing = LLSmoothInterpolation::getInterpolant(camera_position_smoothing() * SMOOTHING_HALF_LIFE, false);
+            // </FS:PP>
 
             if (mFocusOnAvatar && !mFocusObject) // we differentiate on avatar mode
             {
