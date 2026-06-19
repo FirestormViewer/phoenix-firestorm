@@ -19,6 +19,12 @@
 	<floater.string name="OmnifilterNewNeedle">
 		NEW RULE
 	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		New Rule Set
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		Cloned Rule Set
+	</floater.string>
 
 	<panel
 	 name="needle_rule_set_controls"

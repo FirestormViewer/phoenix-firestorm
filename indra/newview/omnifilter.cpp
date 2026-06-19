@@ -284,7 +284,8 @@ void Omnifilter::onNewRuleSetClicked()
 {
     LLSD args;
     // Default name of the new rule set
-    args["RULESETNAME"] = "New Rule Set";
+    std::string new_rule_set_string = getString("OmnifilterNewRuleSet");
+    args["RULESETNAME"] = new_rule_set_string;
     // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
     LLNotificationsUtil::add("OmniFilterNewRuleSet", args, LLSD(),
                              boost::bind(&Omnifilter::onNewRuleSetNameSelectedCallback, this, _1, _2));
@@ -296,7 +297,8 @@ void Omnifilter::onCloneRuleSetClicked()
 {
     LLSD args;
     // Default name of the cloned rule set
-    args["RULESETNAME"] = "Cloned Rule Set";
+    std::string clone_rule_set_string = getString("OmnifilterCloneRuleSet");
+    args["RULESETNAME"] = clone_rule_set_string;
     // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
     LLNotificationsUtil::add("OmniFilterCloneRuleSet", args, LLSD(),
                              boost::bind(&Omnifilter::onCloneRuleSetNameSelectedCallback, this, _1, _2));
