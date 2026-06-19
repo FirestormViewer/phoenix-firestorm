@@ -4,10 +4,10 @@
 		NEUE REGEL
 	</floater.string>
 	<floater.string name="OmnifilterNewRuleSet">
-		Neues Regelset
+		NEUES REGELSET
 	</floater.string>
 	<floater.string name="OmnifilterCloneRuleSet">
-		Geklontes Regelset
+		GEKLONTES REGELSET
 	</floater.string>
 	<panel name="needle_rule_set_controls">
 		<text name="lbl_ruleset" value="Regelsets:"/>
