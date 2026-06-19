@@ -6051,5 +6051,51 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="OmniFilterNewRuleSet">
+		Name für neues Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Name für geklontes Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Sind Sie sicher, dass sie Regelset [RULESETNAME] löschen möchten?
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, bevor ein Regelset gelöscht wird." notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Standard-Regelset kann nicht geklöscht werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Regelset kann nicht gelöscht werden, da sich ein Index außerhalb des Wertebereichs befindet.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Regelset kann nicht gelöscht werden, da kein Set mit dem Namen gefunden wurde.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
 </notifications>
