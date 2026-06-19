@@ -2816,18 +2816,6 @@ Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com 
 	<string name="PicksClassifiedsLoadingText">
 		Yüklənir...
 	</string>
-	<string name="NoPicksText">
-		Seçilmiş yarartmamızınız.
-	</string>
-	<string name="NoAvatarPicksText">
-		İstifadəçinin seçilmişləri yoxdur
-	</string>
-	<string name="NoClassifiedsText">
-		Heç bir elan yaartmamızınız. Elan etmək üçün Yarat düyməsini basın.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		İstifadəçinin elanları yoxdur
-	</string>
 	<string name="MultiPreviewTitle">
 		Önizləmə
 	</string>

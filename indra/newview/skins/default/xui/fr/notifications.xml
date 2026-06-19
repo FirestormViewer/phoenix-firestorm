@@ -5391,7 +5391,7 @@ Vous ne pouvez pas annuler cette action.
 	</notification>
 	<notification name="RemoveContactsFromSet">
 		Êtes-vous sûr de vouloir supprimer ces avatars [TARGET] de [SET_NAME] ?
-		<usetemplate gnoretext="Confirmer avant de supprimer plusieurs avatars d'un groupe de contacts" name="okcancelignore" notext="Cancel" yestext="OK"/>
+		<usetemplate ignoretext="Confirmer avant de supprimer plusieurs avatars d'un groupe de contacts" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="AddToContactSetSingleSuccess">
 		[NAME] a été ajouté à [SET].
