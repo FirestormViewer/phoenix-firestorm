@@ -15150,4 +15150,155 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
      yestext="OK"/>
   </notification>
   <!-- </FS:TJ>-->
+  <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+    <notification
+     icon="alertmodal.tga"
+     label="New Rule Set"
+     name="OmniFilterNewRuleSet"
+     type="alertmodal">
+        Enter a name for the New Rule Set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterrNewRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            ignoretext="Warn me again when trying to add a New Rule Set with no name."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterNewRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            ignoretext="Warn me again when trying to add a New Rule Set with a duplicate name."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     label="Clone Rule Set"
+     name="OmniFilterCloneRuleSet"
+     type="alertmodal">
+        Enter a name to the Cloned Rule Set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            ignoretext="Warn me again when trying to add a Cloned Rule Set with no name."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            ignoretext="Warn me again when trying to add a Cloned Rule Set with a duplicate name."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+
+    <notification
+        icon="alertmodal.tga"
+        name="OmniFilterRemoveRuleSet"
+        type="alertmodal">
+        Are you sure you want to remove [RULESETNAME]?
+        <tag>confirm</tag>
+        <usetemplate
+        ignoretext="Confirm before I remove a Rule Set."
+        name="okcancelignore"
+        notext="Cancel"
+        yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetDefault"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the Default Rule Set.
+        <usetemplate
+            ignoretext="Warn me again when trying to remove the Default Rule Set."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetOutofBounds"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the Rule Set due to index out of bounds.
+        <usetemplate
+            ignoretext="Warn me again when trying to remove a Rule Set with an index [OUTOFBOUNDS] out of bounds."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetInvalidName"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the Rule Set due to name not found.
+        <usetemplate
+            ignoretext="Warn me again when trying to remove a Rule Set with an invalid name '[INVALIDNAME]'."
+            name="okignore"
+            yestext="OK"/>
+        <tag>voice</tag>
+    </notification>
+  <!-- </FS:minerjr> [FIRE-36763] -->
 </notifications>

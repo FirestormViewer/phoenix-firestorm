@@ -27530,6 +27530,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+    <key>OmnifilterRuleSetID</key>
+    <map>
+        <key>Comment</key>
+        <string>The id of the current rule set for the Omnifilter.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>-1</integer>
+    </map>
+    <!-- </FS:minerjr> [FIRE-36763] -->
     <key>FSAutoOrderIMTabs</key>
     <map>
       <key>Comment</key>

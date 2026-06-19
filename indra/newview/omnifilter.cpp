@@ -29,6 +29,10 @@
 #include "llcombobox.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
+// <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+#include "llviewercontrol.h" // Needed for gSavedSettings
+#include "llnotificationsutil.h" // Needed for Notifications
+// </FS:minerjr> [FIRE-36763]
 
 #include "fsscrolllistctrl.h"
 
@@ -78,7 +82,11 @@ OmnifilterEngine::Needle* Omnifilter::getSelectedNeedle()
         if (needle_name_cell)
         {
             const std::string& needle_name = needle_name_cell->getValue().asString();
-            if (!needle_name.empty())
+            // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+            //if (!needle_name.empty())
+            // Only try to access the needle if the name is not empty and it is on the current needle list, otherwise it will cause an error
+            if (!needle_name.empty() && OmnifilterEngine::getInstance()->getNeedleList().contains(needle_name))
+            // </FS:minerjr> [FIRE-36763]
             {
                 return &OmnifilterEngine::getInstance()->getNeedleList().at(needle_name);
             }
@@ -277,6 +285,237 @@ void Omnifilter::onDownNeedleClicked()
 }
 // </FS:minerjr> [FIRE-36649]
 
+// <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+// Callback method for the New Rule Set button when clicked.
+// Creates an notification to the user to ask for the name of the new rule set.
+void Omnifilter::onNewRuleSetClicked()
+{
+    LLSD args;
+    // Default name of the new rule set
+    args["RULESETNAME"] = "New Rule Set";
+    // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
+    LLNotificationsUtil::add("OmniFilterNewRuleSet", args, LLSD(),
+                             boost::bind(&Omnifilter::onNewRuleSetNameSelectedCallback, this, _1, _2));
+}
+
+// Callback method for the Clone Rule Set button when clicked.
+// Creates an notification to the user to ask for the name of the clone rule set.
+void Omnifilter::onCloneRuleSetClicked()
+{
+    LLSD args;
+    // Default name of the cloned rule set
+    args["RULESETNAME"] = "Cloned Rule Set";
+    // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
+    LLNotificationsUtil::add("OmniFilterCloneRuleSet", args, LLSD(),
+                             boost::bind(&Omnifilter::onCloneRuleSetNameSelectedCallback, this, _1, _2));
+}
+
+// Callback method for the Remove Rule Set button when clicked.
+// Creates a notification to the user to ask if they are sure they want to remove the specified Rule Set.
+void Omnifilter::onRemoveRuleSetClicked()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // IF the user tries to remove the Default rule set, send an error as that is not allowed.
+    if (mRuleSetsCmb->getCurrentIndex() == 0)
+    {
+        LLNotificationsUtil::add("OmniFilterRemoveRuleSetDefault", LLSD(), LLSD());
+    }
+    // Else prompt the user with a confirmation notification if they really want to remove the 
+    else
+    {
+        LLSD args;
+        args["RULESETNAME"] = instance->getCurrentSelectedRuleSet();
+        // Display the remove rule set notification and if the user presses the OK button, call the remove rule set confirm callback method
+        LLNotificationsUtil::add("OmniFilterRemoveRuleSet", args, LLSD(),
+                                 boost::bind(&Omnifilter::onRemoveRuleSetConfirmedCallback, this, _1, _2));
+    }
+}
+
+// New Rule Set callback, which does the actual cloning.
+void Omnifilter::onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+        // Try to perform the actual creating a new rule set. 
+        S32 return_value = instance->addNewRuleSet(new_name);
+
+        if (return_value == 1)
+        {
+            S32 new_rule_index = gSavedSettings.getS32("OmnifilterRuleSetID");
+            // Add the new rule set to the Rule Set Drop Down
+            mRuleSetsCmb->add(new_name, LLSD(new_rule_index));
+            // Select the new rule set
+            mRuleSetsCmb->setCurrentByIndex(new_rule_index);
+
+            // Clear the Rule list
+            mNeedleListCtrl->clear();
+            mNeedleListCtrl->clearRows();
+
+            // Add the new item.
+            onAddNeedleClicked();
+
+            // Save the state of the OmniFilter Window
+            instance->setDirty(true);
+        }
+        // Else the user tried to create a new rule set with a blank name, so show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onNewRuleSetClicked, this));
+        }
+        // Else the user tried to create a new rule set with a duplicate name, so show an error.
+        else if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onNewRuleSetClicked, this));
+        }
+    }
+}
+
+// Clone Rule Set callback, which does the actual cloning.
+void Omnifilter::onCloneRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+        // Try to perform the actual cloning of the rule set. 
+        S32 return_value = instance->addClonedRuleSet(new_name);
+        // If the cloning succeeded
+        if (return_value == 1)
+        {
+            // Get the index of the added rule set.
+            S32 new_rule_index = gSavedSettings.getS32("OmnifilterRuleSetID");
+            // Add the new rule set to the Rule Set Drop Down
+            mRuleSetsCmb->add(new_name, LLSD(new_rule_index));
+
+            // Select the new rule set
+            mRuleSetsCmb->setCurrentByIndex(new_rule_index);
+
+            // Save the state of the OmniFilter Window
+            instance->setDirty(true);
+        }
+        // Else the user tried to create a cloned rule set with a blank name, so show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterCloneRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onCloneRuleSetClicked, this));
+        }
+        // Else the user tried to create a cloned rule set with a duplicate name, so show an error.
+        else if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterCloneRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onCloneRuleSetClicked, this));
+        }
+    }
+}
+
+// Remove Rule Set callback, which does the actual removal.
+void Omnifilter::onRemoveRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // Get the user response
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string tooltip_msg;
+        // Get the index of the current rule set being removed.
+        S32 current_index = gSavedSettings.getS32("OmnifilterRuleSetID");
+        // Try to perform the actual removal. 
+        S32 return_value = instance->removeCurrentRuleSet();
+        // If the removal succeeded
+        if (return_value == 1)
+        {
+            // Remove the rule set from the Rule Set Drop Down
+            mRuleSetsCmb->remove(current_index);
+            // Reload the current rule set and switch the UI over to the Default rule set.
+            reloadRule();
+            mRuleSetsCmb->setCurrentByIndex(0);
+
+            // Save the state of the OmniFilter Window
+            instance->setDirty(true);
+        }
+        // Else the user tried to remove the default rule set, so show an error.
+        else if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterRemoveRuleSetDefault", LLSD(), LLSD());
+        }
+        // Else the user tried to remove a rule set that index was out of bounds, so show an error.
+        else if (return_value == -1)
+        {
+            LLSD args;
+            args["OUTOFBOUNDS"] = current_index;
+            LLNotificationsUtil::add("OmniFilterRemoveRuleSetOutofBounds", args, LLSD());
+        }
+        // Else the user tried to remove a rule set that had an name that does not exist in the map of rule sets, so show an error.
+        else if (return_value == -2)
+        {
+            LLSD args;
+            args["INVALIDNAME"] = instance->getCurrentSelectedRuleSet();
+            LLNotificationsUtil::add("OmniFilterRemoveRuleSetInvalidName", args, LLSD());
+        }
+    }
+}
+
+// Rule Set Drop Down on commit callback method
+void Omnifilter::onRuleSetChanged()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+
+    // Save the current
+    // Write the current rule set back to the storeage
+    instance->assignRuleSet(false);
+    // Store the current combo box index as the Needle Preset Index
+    gSavedSettings.setS32("OmnifilterRuleSetID", mRuleSetsCmb->getCurrentIndex());
+    // Assign and reload the current rule
+    instance->assignRuleSetNameFromSettings();
+    
+    instance->assignRuleSet(true);
+    reloadRule();
+}
+
+// Reloads the full rule sets drop down widget (combobox)
+void Omnifilter::reloadRules()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // Clear the current needles
+    mRuleSetsCmb->clear();
+    S32 current_rule_set_id = gSavedSettings.getS32("OmnifilterRuleSetID");
+    for (S32 index = 0; index < instance->getOrderedRuleSetSize(); index++)
+    {
+        // Get the name from the ordered list of rule sets.
+        const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
+        LLSD value(index);
+        // And add to the UI element. The value is the value that is passed along with the commit callback method.
+        mRuleSetsCmb->add(needle_rule_set_name, value);
+    }
+    // Finally, select the stored rule set
+    mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));
+}
+
+// Reloads the actual rule set UI elements, including the Rule scroll list and editor panel
+void Omnifilter::reloadRule()
+{
+    // Use static pointer for the instance so that don't have to keep requesting every time this code is touched.
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // Clear the current needles
+    mNeedleListCtrl->clearRows();
+    mNeedleListCtrl->clear();
+    
+    //  Loop over the ordered list
+    for (const auto& needle_name : instance->getOrderedNeedleList())
+    {
+        // Get the current needle and use the addNeedle method to add the the UI.
+        const auto& needle = instance->getNeedleList()[needle_name];
+        addNeedle(needle_name, needle);
+    }
+
+    mNeedleListCtrl->selectFirstItem();
+    onSelectNeedle();
+}
+
+// </FS:minerjr> [FIRE-36763]
+
 void Omnifilter::onNeedleNameChanged()
 {
     const std::string& old_name = mNeedleListCtrl->getSelectedItemLabel(NEEDLE_NAME_COLUMN);
@@ -381,6 +620,13 @@ bool Omnifilter::postBuild()
     mSenderCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("sender_case");
     mSenderMatchTypeCombo = getChild<LLComboBox>("sender_match_type");
     mContentCtrl = getChild<LLTextEditor>("content");
+    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    // Add the preset controls
+    mRuleSetsCmb = getChild<LLComboBox>("cmb_rule_sets"); // Rule Set Drop Down
+    mNewRuleSetBtn = getChild<LLButton>("btn_rule_set_new"); // New Rule Set
+    mCloneRuleSetBtn = getChild<LLButton>("btn_rule_set_clone"); // Clone Rule Set
+    mRemoveRuleSetBtn = getChild<LLButton>("btn_rule_set_remove"); // Remove Rule Set
+    // <//FS:minerjr> [FIRE-36763]
     mContentCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("content_case");
     mContentMatchTypeCombo = getChild<LLComboBox>("content_match_type");
     mRegionNameCtrl = getChild<LLLineEditor>("region_name");
@@ -412,6 +658,12 @@ bool Omnifilter::postBuild()
     mFilterLogCtrl->deleteAllItems();
 
     auto& instance = OmnifilterEngine::instance();
+    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    // Reload the rules set UI elements, uses the settings stored rule set ID
+    reloadRules();
+    instance.assignRuleSetNameFromSettings();
+    instance.assignRuleSet(true);
+    // </FS:minerjr> [FIRE-36763]
     // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     //for (const auto& [needle_name, needle] : instance.getNeedleList())
     // Loop over the  ordered list 
@@ -446,6 +698,13 @@ bool Omnifilter::postBuild()
     mUpNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onUpNeedleClicked, this));
     mDownNeedleBtn->setCommitCallback(boost::bind(&Omnifilter::onDownNeedleClicked, this));
     // </FS:minerjr> [FIRE-36649]
+    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    // Add the Rule Set controls
+    mRuleSetsCmb->setCommitCallback(boost::bind(&Omnifilter::onRuleSetChanged, this)); // Rule Set Drop Down
+    mNewRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onNewRuleSetClicked, this)); // New Rule Set
+    mCloneRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onCloneRuleSetClicked, this)); // Clone Rule Set
+    mRemoveRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveRuleSetClicked, this)); // Remove Rule Set
+    // <//FS:minerjr> [FIRE-36763]
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
     mSenderNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mSenderCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));

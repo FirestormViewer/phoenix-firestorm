@@ -125,21 +125,48 @@ class OmnifilterEngine
 
         void init();
 
+        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+        bool setCurrentRuleSet(std::string_view rule_set_name);
+        S32 removeCurrentRuleSet();
+        S32 addNewRuleSet(std::string_view new_name);
+        S32 addClonedRuleSet(std::string_view new_name);
+        bool assignRuleSet(const bool rule_set_to_internal = true);
+        bool assignRuleSetNameFromSettings();
+        std::string getCurrentSelectedRuleSet() { return mCurrentSelectedRuleSet; }
+        needle_ordered_list_t& getOrderedRuleSets() { return mOrderedRuleSets; }
+        std::string_view getOrderedRuleSetName(const S32 index) const;
+        S32 getOrderedRuleSetIndex(std::string_view lookup_name);
+        S32 getOrderedRuleSetSize() { return static_cast<S32>(mOrderedRuleSets.size()); }
+        // </FS:minerjr> [FIRE-36763]
         typedef boost::signals2::signal<void(time_t, const std::string&)> log_signal_t;
         log_signal_t mLogSignal;
 
         std::vector<std::pair<time_t, std::string>> mLog;
 
+        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+        typedef std::pair<needle_ordered_list_t, needle_list_t> rule_set_t;
+        typedef std::map<std::string, rule_set_t> rule_sets_t;
+        rule_sets_t& getRuleSets() { return mNeedleRuleSets; }
+        // </FS:minerjr> [FIRE-36763]
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
         bool matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
 
+        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+        bool importFromLLSD(const LLSD& data);
+        LLSD exportToLLSD();
+        // </FS:minerjr> [FIRE-36763]
         void loadNeedles();
         void saveNeedles();
 
         bool tick() override;
 
     protected:
+        // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+        rule_sets_t mNeedleRuleSets;
+        std::string mCurrentSelectedRuleSet;
+        needle_ordered_list_t mOrderedRuleSets;
+        // </FS:minerjr> [FIRE-36763]
         needle_list_t mNeedles;
         // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
         needle_ordered_list_t mOrderedNeedles;

@@ -4,7 +4,7 @@
  can_resize="true"
  can_minimize="true"
  can_close="true"
- height="400"
+ height="425"
  min_height="348"
  min_width="668"
  layout="topleft"
@@ -20,12 +20,71 @@
 		NEW RULE
 	</floater.string>
 
+	<!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->	<!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+	<panel
+	 name="needle_rule_set_controls"
+	 layout="topleft"
+	 follows="left|top|right"
+	 height="25"
+	 left="0"
+	 min_height="25"
+	 top="20"
+	 user_resize="false">
+    <text
+     name="lbl_ruleset"
+     layout="topleft"
+     follows="left|top"
+     height="20"
+     width="70"
+     left="8"
+     top="0"
+     valign="center"
+     value="Rule Sets:"/>
+	 <combo_box
+	  height="20"
+	  layout="topleft"
+	  left_pad="4"
+	  follows="left|top"
+	  name="cmb_rule_sets"
+	  tool_tip="Choose the Omnifilter Rule Set to use."
+	  width="150">
+	 </combo_box>
+	 <button
+	  name="btn_rule_set_new"
+	  layout="topleft"
+	  follows="left|top"
+	  width="150"
+	  height="20"
+	  left_pad="4"
+	  label="New Rule Set"
+	  tool_tip="Create a new blank Omnifilter Rule Set."/>
+	 <button
+	  name="btn_rule_set_clone"
+	  layout="topleft"
+	  follows="left|top"
+	  width= "150"
+	  height="20"
+	  left_pad="4"
+	  label="Clone Rule Set"
+	  tool_tip="Create a clone of the current Omnifilter Rule Set."/>
+	 <button
+	  name="btn_rule_set_remove"
+	  layout="topleft"
+	  follows="left|top"
+	  width= "150"
+	  height="20"
+	  left_pad="4"
+	  label="Remove Rule Set"
+	  tool_tip="Remove
+ the current Omnifilter Rule Set."/>
+	</panel>
+	<!-- </FS:minerjr> [FIRE-36763] -->
 	<layout_stack
 	 name="needle_list_stack"
 	 layout="topleft"
 	 follows="left|top|bottom"
 	 height="374"
-	 top="20"
+	 top="45"
 	 left="8"
 	 width="190"
 	 orientation="vertical"

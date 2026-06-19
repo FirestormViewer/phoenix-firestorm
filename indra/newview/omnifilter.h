@@ -60,6 +60,17 @@ protected:
     void onUpNeedleClicked();
     void onDownNeedleClicked();
     // </FS:minerjr> [FIRE-36649]
+    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    void onNewRuleSetClicked();
+    void onCloneRuleSetClicked();
+    void onRemoveRuleSetClicked();
+    void onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
+    void onCloneRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
+    void onRemoveRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response);
+    void onRuleSetChanged();
+    void reloadRules();
+    void reloadRule();
+    // </FS:minerjr> [FIRE-36763]
     void onNeedleNameChanged();
     void onNeedleCheckboxChanged(LLUICtrl* ctrl);
     void onOwnerChanged();
@@ -73,6 +84,12 @@ protected:
     LLButton*         mUpNeedleBtn{ nullptr };
     LLButton*         mDownNeedleBtn{ nullptr };
     // </FS:minerjr> [FIRE-36649]
+    // <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter
+    LLComboBox* mRuleSetsCmb{ nullptr };
+    LLButton* mNewRuleSetBtn{ nullptr };
+    LLButton* mCloneRuleSetBtn{ nullptr };
+    LLButton* mRemoveRuleSetBtn{ nullptr };
+    // </FS:minerjr> [FIRE-36763]
     FSScrollListCtrl* mFilterLogCtrl{ nullptr };
     LLPanel*          mPanelDetails{ nullptr };
     LLLineEditor*     mNeedleNameCtrl{ nullptr };
