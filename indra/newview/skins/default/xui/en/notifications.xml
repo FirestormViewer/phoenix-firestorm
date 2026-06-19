@@ -15184,7 +15184,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to add a New Rule Set with no name."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
     <notification
       icon="alertmodal.tga"
@@ -15197,7 +15196,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to add a New Rule Set with a duplicate name."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
 
     <notification
@@ -15233,7 +15231,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to add a Cloned Rule Set with no name."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
     <notification
       icon="alertmodal.tga"
@@ -15246,7 +15243,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to add a Cloned Rule Set with a duplicate name."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
 
     <notification
@@ -15272,7 +15268,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to remove the Default Rule Set."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
     <notification
       icon="alertmodal.tga"
@@ -15285,7 +15280,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to remove a Rule Set with an index [OUTOFBOUNDS] out of bounds."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
     <notification
       icon="alertmodal.tga"
@@ -15298,7 +15292,6 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             ignoretext="Warn me again when trying to remove a Rule Set with an invalid name '[INVALIDNAME]'."
             name="okignore"
             yestext="OK"/>
-        <tag>voice</tag>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
 </notifications>

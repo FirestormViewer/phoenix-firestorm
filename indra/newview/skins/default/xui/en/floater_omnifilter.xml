@@ -75,8 +75,7 @@
 	  height="20"
 	  left_pad="4"
 	  label="Remove Rule Set"
-	  tool_tip="Remove
- the current Omnifilter Rule Set."/>
+	  tool_tip="Remove the current Omnifilter Rule Set."/>
 	</panel>
 	<!-- </FS:minerjr> [FIRE-36763] -->
 	<layout_stack

@@ -5674,5 +5674,48 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 	<notification name="FSSetTitleRegionNotFound">
 		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
 	</notification>
-
+	<notification label="Nowy zestaw reguł" name="OmniFilterNewRuleSet">
+		Wprowadź nazwę dla nowego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie dodania nowego zestawu reguł bez nazwy." name="okignore" />
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie dodania nowego zestawu reguł ze zduplikowaną nazwą." name="okignore" />
+	</notification>
+	<notification label="Klonuj zestaw reguł" name="OmniFilterCloneRuleSet">
+		Wprowadź nazwę dla sklonowanego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie dodania sklonowanego zestawu reguł bez nazwy." name="okignore" />
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie dodania sklonowanego zestawu reguł ze zduplikowaną nazwą." name="okignore" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Czy na pewno chcesz usunąć [RULESETNAME]?
+		<usetemplate ignoretext="Wymagaj potwierdzenia przed usunięciem zestawu reguł." name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Nie można usunąć domyślnego zestawu reguł.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie usunięcia domyślnego zestawu reguł." name="okignore" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Nie można usunąć zestawu reguł, ponieważ indeks znajduje się poza zakresem.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie usunięcia zestawu reguł z indeksem [OUTOFBOUNDS] poza zakresem." name="okignore" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Nie można usunąć zestawu reguł, ponieważ nie znaleziono podanej nazwy.
+		<usetemplate ignoretext="Ostrzegaj mnie ponownie przy próbie usunięcia zestawu reguł o nieprawidłowej nazwie '[INVALIDNAME]'." name="okignore" />
+	</notification>
 </notifications>
