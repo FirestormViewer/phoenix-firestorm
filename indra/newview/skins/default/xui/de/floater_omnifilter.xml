@@ -3,6 +3,12 @@
 	<floater.string name="OmnifilterNewNeedle">
 		NEUE REGEL
 	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		Neues Regelset
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		Geklontes Regelset
+	</floater.string>
 	<panel name="needle_rule_set_controls">
 		<text name="lbl_ruleset" value="Regelsets:"/>
 		<combo_box name="cmb_rule_sets" tool_tip="Regelset für den Omni-Filter auswählen."/>
