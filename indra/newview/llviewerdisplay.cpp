@@ -306,9 +306,9 @@ static void update_tp_display(bool minimized)
     static LLCachedControl<F32> teleport_local_delay(gSavedSettings, "TeleportLocalDelay");
 
     // <FS:PP> Speed optimisation
-    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens", false);
-    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP", true);
-    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues", LLVector3(1.047197551f, 1.047197551f, 0.f));
+    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens");
+    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP");
+    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues");
     // </FS:PP>
 
     S32 attach_count = 0;
@@ -343,7 +343,10 @@ static void update_tp_display(bool minimized)
             const std::string& msg = LLAgent::sTeleportProgressMessages["pending"];
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !disable_teleport_screens()); // <FS:PP> Speed optimisation
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
             }
@@ -362,12 +365,18 @@ static void update_tp_display(bool minimized)
                 // If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
                 // replicating the behavior here. -Zi
                 LLViewerCamera::instance().setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
-                if (reset_camera_on_tp()) // <FS:PP> Speed optimisation
+                // <FS:PP> Speed optimisation
+                // if (gSavedSettings.getBOOL("FSResetCameraOnTP"))
+                if (reset_camera_on_tp())
+                // </FS:PP>
                 {
                     gSavedSettings.setF32("CameraAngle", LLViewerCamera::instance().getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
                 }
                 // also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
-                LLVector3 vTemp = nacl_ml_fov_values(); // <FS:PP> Speed optimisation
+                // <FS:PP> Speed optimisation
+                // LLVector3 vTemp = gSavedSettings.getVector3("_NACL_MLFovValues");
+                LLVector3 vTemp = nacl_ml_fov_values();
+                // </FS:PP>
                 vTemp.mV[VZ] = 0.0f;
                 gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
             }
@@ -380,7 +389,10 @@ static void update_tp_display(bool minimized)
             FSData::instance().selectNextMOTD();
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !disable_teleport_screens()); // <FS:PP> Speed optimisation
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
                 gViewerWindow->setProgressMessage(gAgent.mMOTD);

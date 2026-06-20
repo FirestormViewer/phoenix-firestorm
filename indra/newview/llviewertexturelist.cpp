@@ -2067,7 +2067,7 @@ bool LLUIImageList::initFromFile()
 
         // <FS:PP> Speed optimisation
         // if (!gSavedSettings.getBOOL("NoPreload"))
-        static LLCachedControl<bool> no_preload(gSavedSettings, "NoPreload", false);
+        static LLCachedControl<bool> no_preload(gSavedSettings, "NoPreload");
         if (!no_preload())
         // </FS:PP>
         {

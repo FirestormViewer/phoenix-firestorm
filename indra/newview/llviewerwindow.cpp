@@ -7369,10 +7369,10 @@ void LLViewerWindow::setUIVisibility(bool visible)
     }
 
     // <FS:Ansariel> Notification not showing if hiding the UI
-    static LLCachedControl<bool> autohide_chat_bar(gSavedSettings, "AutohideChatBar", false);
-    static LLCachedControl<bool> show_navbar_navigation_panel(gSavedSettings, "ShowNavbarNavigationPanel", false);
-    static LLCachedControl<bool> show_navbar_favorites_panel(gSavedSettings, "ShowNavbarFavoritesPanel", true);
-    static LLCachedControl<bool> internal_show_group_notices_top_right(gSavedSettings, "InternalShowGroupNoticesTopRight", true);
+    static LLCachedControl<bool> autohide_chat_bar(gSavedSettings, "AutohideChatBar");
+    static LLCachedControl<bool> show_navbar_navigation_panel(gSavedSettings, "ShowNavbarNavigationPanel");
+    static LLCachedControl<bool> show_navbar_favorites_panel(gSavedSettings, "ShowNavbarFavoritesPanel");
+    static LLCachedControl<bool> internal_show_group_notices_top_right(gSavedSettings, "InternalShowGroupNoticesTopRight");
     FSNearbyChat::instance().showDefaultChatBar(visible && !autohide_chat_bar());
     gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && show_navbar_navigation_panel());
     gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && show_navbar_favorites_panel());
