@@ -716,6 +716,7 @@ LLToolCompGun::LLToolCompGun()
       mZoomProportion(1.f),
       mIsADS(false),
       mTransitionIsADS(false),
+      mTransitionUseADSSmoothing(false),
       mADSFOV(0.f),
       mADSFromOTS(false),
       mLastTapWasQuick(false),
@@ -753,7 +754,7 @@ bool LLToolCompGun::handleHover(S32 x, S32 y, MASK mask)
         // uses the existing one. Both are milliseconds (0 = instant).
         static LLCachedControl<F32> mlTransition(gSavedSettings, "MouselookZoomTransitionSpeed");
         static LLCachedControl<F32> adsTransition(gSavedSettings, "FSADSZoomTransitionSpeed");
-        F32 duration = llclamp((F32)(mTransitionIsADS ? adsTransition : mlTransition), 0.f, 5000.f) / 1000.f;
+        F32 duration = llclamp((F32)(mTransitionUseADSSmoothing ? adsTransition : mlTransition), 0.f, 5000.f) / 1000.f;
 
         if (duration <= 0.f)
         {
@@ -904,30 +905,37 @@ bool LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
             mTransitionTimer.reset();
             mIsZoomTransitioning = true;
             mTransitionIsADS = true;
+            mTransitionUseADSSmoothing = true;
             mIsADS = true;
             mIsZoomed = false; // ADS supersedes the normal hold-zoom
             mZoomProportion = 1.f;
             return true;
         }
 
-        // Only capture base FOV if we're not zoomed AND not transitioning
-        // This prevents capturing mid-transition FOV if user clicks during zoom-out
+        // Are we interrupting an in-progress ADS-release zoom-out? If so, this
+        // normal zoom should flow out of the ADS motion smoothly rather than
+        // snapping with the (often snappier) normal-zoom timing.
+        const bool interrupting_ads_release = mIsZoomTransitioning && mTransitionIsADS;
+
+        // The normal-zoom target FOV is a setting, so read it fresh every time
+        // (valid even mid-transition). Only the un-zoomed base is captured from the
+        // live FOV, and only while idle, so clicking during a zoom-out can't bake a
+        // partial FOV in as the base.
+        LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+        mZoomedFOV = _NACL_MLFovValues.mV[VY];
         if (!mIsZoomed && !mIsZoomTransitioning)
         {
             mBaseFOV = gSavedSettings.getF32("CameraAngle");
-
-            // Get zoomed FOV from settings
-            LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
-            mZoomedFOV = _NACL_MLFovValues.mV[VY];
         }
 
-        // Start zoom-in transition
+        // Start zoom-in transition from wherever the FOV is right now.
         mTargetFOV = mZoomedFOV;
         mCurrentFOV = gSavedSettings.getF32("CameraAngle");
         mTransitionStartFOV = mCurrentFOV;
         mTransitionTimer.reset();
         mIsZoomTransitioning = true;
-        mTransitionIsADS = false;
+        mTransitionIsADS = false;                              // a normal zoom: no vignette
+        mTransitionUseADSSmoothing = interrupting_ads_release; // but keep the smooth ADS ease if we cut in on one
         mIsZoomed = true;
         mZoomProportion = 1.f; // Full zoom expected
 
@@ -971,6 +979,7 @@ bool LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
         mTransitionTimer.reset();
         mIsZoomTransitioning = true;
         mTransitionIsADS = true;
+        mTransitionUseADSSmoothing = true;
         mIsADS = false;
         return true;
     }
@@ -1002,6 +1011,7 @@ bool LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
         mTransitionTimer.reset();
         mIsZoomTransitioning = true;
         mTransitionIsADS = false;
+        mTransitionUseADSSmoothing = false;
         mIsZoomed = false;  // No longer in zoomed state
     }
     return true;
@@ -1080,6 +1090,7 @@ void LLToolCompGun::resetZoom()
     mADSFromOTS = false;
     mLastTapWasQuick = false;
     mTransitionIsADS = false;
+    mTransitionUseADSSmoothing = false;
     mTargetFOV = 0.f;
     mCurrentFOV = 0.f;
     mBaseFOV = 0.f;

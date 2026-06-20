@@ -278,7 +278,10 @@ protected:
     // Double-tap-hold ADS (aim-down-sights): tap, then tap-and-hold the right
     // button to zoom to a separate FOV with its own smoothing; release to exit.
     bool    mIsADS;            // currently holding ADS
-    bool    mTransitionIsADS;  // current FOV transition uses ADS smoothing
+    bool    mTransitionIsADS;  // current FOV transition is an ADS zoom (gates the vignette)
+    bool    mTransitionUseADSSmoothing; // FOV ease uses ADS smoothing, decoupled from the
+                                        // vignette gate so a normal zoom interrupting an ADS
+                                        // release can still ease smoothly (no vignette)
     F32     mADSFOV;           // ADS target FOV
     bool    mADSFromOTS;       // ADS entered from OTS -> restore OTS on release
     bool    mLastTapWasQuick;  // previous right press was a quick tap (not a hold)
