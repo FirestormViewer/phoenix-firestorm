@@ -252,9 +252,11 @@ public:
     void                    resetZoom(); // Reset zoom state when exiting mouselook
 
     // Strength (0-1) of the ADS screen-edge vignette this frame, honoring the
-    // per-mode toggles and easing with the zoom; 0 when no ADS vignette applies.
-    // Consumed by the post-process pass in LLPipeline::renderVignette.
-    F32                     getADSVignetteAmount() const;
+    // per-mode toggles. The displayed value eases toward the live ADS darkness on
+    // its own clock (so it fades smoothly on release even if a normal zoom
+    // interrupts, and does not depend on the FOV-zoom smoothing). Advanced once
+    // per frame; consumed by the post-process pass in LLPipeline::renderVignette.
+    F32                     getADSVignetteAmount();
 
 protected:
 
@@ -282,6 +284,12 @@ protected:
     bool    mLastTapWasQuick;  // previous right press was a quick tap (not a hold)
     LLTimer mLastRMBUpTimer;   // time since last right-button release (double-tap window)
     LLTimer mRMBDownTimer;     // measures the current press's duration
+
+    // Eased ADS vignette darkness (decoupled from the FOV-zoom smoothing so the
+    // release always fades smoothly and a normal zoom interrupting it can't snap
+    // it off). Advanced once per frame inside getADSVignetteAmount().
+    F32     mADSVignette;      // currently displayed darkness (0-1)
+    U32     mADSVignetteFrame; // frame counter of the last ease step
 };
 
 // Subclass of LLToolComposite

@@ -53,6 +53,8 @@
 #include "llfloatertools.h"
 #include "llviewercontrol.h"
 #include "llsmoothstep.h"
+#include "llframetimer.h"     // LLFrameTimer::getFrameCount (ADS vignette ease)
+#include "llcriticaldamp.h"   // LLSmoothInterpolation (frame-rate-independent ease)
 
 // NaCl - Rightclick-mousewheel zoom
 #include "llviewercamera.h"
@@ -716,7 +718,9 @@ LLToolCompGun::LLToolCompGun()
       mTransitionIsADS(false),
       mADSFOV(0.f),
       mADSFromOTS(false),
-      mLastTapWasQuick(false)
+      mLastTapWasQuick(false),
+      mADSVignette(0.f),
+      mADSVignetteFrame(0)
 {
     mGun = new LLToolGun(this);
     mGrab = new LLToolGrabBase(this);
@@ -1089,32 +1093,50 @@ void LLToolCompGun::resetZoom()
 // by how far the FOV has zoomed toward the ADS level so it creeps in and fades out
 // in lockstep with the zoom rather than popping. Rendered as a smooth radial
 // post-process in LLPipeline::renderVignette; returns 0 when no ADS vignette applies.
-F32 LLToolCompGun::getADSVignetteAmount() const
+F32 LLToolCompGun::getADSVignetteAmount()
 {
-    if (!(mIsADS || (mIsZoomTransitioning && mTransitionIsADS)))
+    // Live target: the FOV-driven ADS darkness while aiming (or during the
+    // ADS-release fade), else 0. Same gating and progress mapping as before.
+    F32 live = 0.f;
+    if (mIsADS || (mIsZoomTransitioning && mTransitionIsADS))
     {
-        return 0.f;
+        static LLCachedControl<bool> vig_fp(gSavedSettings, "FSADSVignetteFirstPerson", true);
+        static LLCachedControl<bool> vig_ots(gSavedSettings, "FSADSVignetteOTS", true);
+        const bool ots = gAgentCamera.cameraOTS();
+        if ((ots && vig_ots) || (!ots && vig_fp))
+        {
+            // 0 at the base FOV, 1 at the full ADS FOV (which is the smaller value).
+            F32 progress = 1.f;
+            const F32 span = mBaseFOV - mADSFOV;
+            if (fabsf(span) > 0.0001f)
+            {
+                const F32 currentFOV = gSavedSettings.getF32("CameraAngle");
+                progress = llclamp((mBaseFOV - currentFOV) / span, 0.f, 1.f);
+            }
+            static LLCachedControl<F32> vig_strength(gSavedSettings, "FSADSVignetteStrength", 0.5f);
+            live = llclamp((F32)vig_strength * progress, 0.f, 1.f);
+        }
     }
 
-    static LLCachedControl<bool> vig_fp(gSavedSettings, "FSADSVignetteFirstPerson", true);
-    static LLCachedControl<bool> vig_ots(gSavedSettings, "FSADSVignetteOTS", true);
-    const bool ots = gAgentCamera.cameraOTS();
-    if (!((ots && vig_ots) || (!ots && vig_fp)))
+    // Ease the displayed darkness toward the live target on its own clock, once
+    // per frame. This keeps the vignette smooth regardless of the FOV-zoom
+    // smoothing (FSADSZoomTransitionSpeed), and lets the release fade finish
+    // gracefully even when a normal mouselook zoom interrupts it and drops the
+    // live target straight to 0 (previously this snapped the vignette off).
+    const F32 VIGNETTE_FADE_HALF_LIFE = 0.09f; // seconds
+    const U32 frame = LLFrameTimer::getFrameCount();
+    if (frame != mADSVignetteFrame)
     {
-        return 0.f;
+        mADSVignetteFrame = frame;
+        const F32 amt = LLSmoothInterpolation::getInterpolant(VIGNETTE_FADE_HALF_LIFE);
+        mADSVignette = lerp(mADSVignette, live, amt);
+        if (fabsf(mADSVignette - live) < 0.001f)
+        {
+            mADSVignette = live; // settle exactly so it reaches a clean 0 / full
+        }
     }
 
-    // 0 at the base FOV, 1 at the full ADS FOV (which is the smaller value).
-    F32 progress = 1.f;
-    const F32 span = mBaseFOV - mADSFOV;
-    if (fabsf(span) > 0.0001f)
-    {
-        const F32 currentFOV = gSavedSettings.getF32("CameraAngle");
-        progress = llclamp((mBaseFOV - currentFOV) / span, 0.f, 1.f);
-    }
-
-    static LLCachedControl<F32> vig_strength(gSavedSettings, "FSADSVignetteStrength", 0.5f);
-    return llclamp((F32)vig_strength * progress, 0.f, 1.f);
+    return mADSVignette;
 }
 
 bool LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
