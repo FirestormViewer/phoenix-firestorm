@@ -7369,11 +7369,15 @@ void LLViewerWindow::setUIVisibility(bool visible)
     }
 
     // <FS:Ansariel> Notification not showing if hiding the UI
-    FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-    mRootView->getChildView("chiclet_container")->setVisible(visible && gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
-    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
+    static LLCachedControl<bool> autohide_chat_bar(gSavedSettings, "AutohideChatBar");
+    static LLCachedControl<bool> show_navbar_navigation_panel(gSavedSettings, "ShowNavbarNavigationPanel");
+    static LLCachedControl<bool> show_navbar_favorites_panel(gSavedSettings, "ShowNavbarFavoritesPanel");
+    static LLCachedControl<bool> internal_show_group_notices_top_right(gSavedSettings, "InternalShowGroupNoticesTopRight");
+    FSNearbyChat::instance().showDefaultChatBar(visible && !autohide_chat_bar());
+    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && show_navbar_navigation_panel());
+    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && show_navbar_favorites_panel());
+    mRootView->getChildView("chiclet_container")->setVisible(visible && internal_show_group_notices_top_right());
+    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !internal_show_group_notices_top_right());
     // </FS:Ansariel>
 
     // <FS:Zi> Is done inside XUI now, using visibility_control

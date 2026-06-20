@@ -2065,7 +2065,11 @@ bool LLUIImageList::initFromFile()
             preloadUIImage(image.name, file_name, image.use_mips, image.scale, image.clip, image.scale_type);
         }
 
-        if (!gSavedSettings.getBOOL("NoPreload"))
+        // <FS:PP> Speed optimisation
+        // if (!gSavedSettings.getBOOL("NoPreload"))
+        static LLCachedControl<bool> no_preload(gSavedSettings, "NoPreload");
+        if (!no_preload())
+        // </FS:PP>
         {
             if (cur_pass == PASS_DECODE_NOW)
             {
