@@ -1077,6 +1077,20 @@ void LLToolCompGun::resetZoom()
         return;
     }
 
+    // Same churn, one beat later: releasing ADS that was entered from OTS swaps the
+    // camera back to OTS, and that mode swap deselects this tool (handleDeselect ->
+    // resetZoom) a fraction of a second after ADS already ended. If a zoom is live
+    // at that moment (e.g. a normal zoom the player started during the ADS-release
+    // fade), snapping here yanks the FOV back to base mid-zoom. Only tear the zoom
+    // down on a GENUINE exit out of mouselook input (to third person); while we
+    // remain in a mouselook input mode, let the active zoom/transition continue.
+    const ECameraMode cam_mode = gAgentCamera.getCameraMode();
+    const bool still_mouselook_input = (cam_mode == CAMERA_MODE_MOUSELOOK || cam_mode == CAMERA_MODE_OTS);
+    if (still_mouselook_input && (mIsZoomed || mIsZoomTransitioning))
+    {
+        return;
+    }
+
     // Reset NaCl zoom state - immediately restore base FOV if zoomed
     if (mIsZoomed || mIsZoomTransitioning)
     {
