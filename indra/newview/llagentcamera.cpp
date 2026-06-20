@@ -345,7 +345,11 @@ void LLAgentCamera::resetView(bool reset_camera, bool change_camera, bool moveme
     {
     // </FS:CR>
 
-    if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    // <FS:PP> Speed optimisation
+    // if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime");
+    if (change_camera && !freeze_time)
+    // </FS:PP>
     {
         changeCameraToDefault();
 
@@ -373,7 +377,10 @@ void LLAgentCamera::resetView(bool reset_camera, bool change_camera, bool moveme
     }
 
 
-    if (reset_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    // <FS:PP> Speed optimisation
+    // if (reset_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    if (reset_camera && !freeze_time)
+    // </FS:PP>
     {
         if (!gViewerWindow->getLeftMouseDown() && cameraThirdPerson())
         {
@@ -1068,7 +1075,11 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 
         mCameraZoomFraction = (mTargetCameraDistance - meters) / camera_offset_dist;
 
-        if (!gSavedSettings.getBOOL("FreezeTime") && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        // <FS:PP> Speed optimisation
+        // if (!gSavedSettings.getBOOL("FreezeTime") && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime");
+        if (!freeze_time && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        // </FS:PP>
         {
             // No need to animate, camera is already there.
             changeCameraToMouselook(false);
@@ -2314,7 +2325,9 @@ LLVector3d LLAgentCamera::getFocusOffsetInitial()
 // [RLVa:KB] - @setcam_eyeoffsetscale
 F32 LLAgentCamera::getCameraOffsetScale() const
 {
-    return gSavedSettings.getF32( (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? "CameraOffsetScale" : "CameraOffsetScaleRLVa");
+    static LLCachedControl<F32> camera_offset_scale(gSavedSettings, "CameraOffsetScale");
+    static LLCachedControl<F32> camera_offset_scale_rlva(gSavedSettings, "CameraOffsetScaleRLVa");
+    return (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? camera_offset_scale() : camera_offset_scale_rlva();
 }
 // [/RLVa:KB]
 

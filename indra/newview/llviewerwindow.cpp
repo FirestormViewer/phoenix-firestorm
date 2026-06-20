@@ -4286,7 +4286,10 @@ void LLViewerWindow::updateLayout()
         && tool != gToolNull
         && tool != LLToolCompInspect::getInstance()
         && tool != LLToolDragAndDrop::getInstance()
-        && !gSavedSettings.getBOOL("FreezeTime"))
+        // <FS:PP> Speed optimisation
+        // && !gSavedSettings.getBOOL("FreezeTime"))
+        && !LLPipeline::FreezeTime)
+        // </FS:PP>
     {
         // Suppress the toolbox view if our source tool was the pie tool,
         // and we've overridden to something else.
