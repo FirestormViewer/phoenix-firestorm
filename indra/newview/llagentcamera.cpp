@@ -230,15 +230,12 @@ void LLAgentCamera::init()
     mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPresetType");
 
 // [RLVa:KB] - @setcam_eyeoffset, @setcam_focusoffset and @setcam_eyeoffsetscale
-    if (RlvActions::isRlvEnabled())
-    {
-        mRlvCameraOffsetInitialControl = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3::zero, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvCameraOffsetInitialControl->setHiddenFromSettingsEditor(true);
-        mRlvCameraOffsetScaleControl = gSavedSettings.declareF32("CameraOffsetScaleRLVa", 0.0f, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvCameraOffsetScaleControl->setHiddenFromSettingsEditor(true);
-        mRlvFocusOffsetInitialControl = gSavedSettings.declareVec3d("FocusOffsetRLVaView", LLVector3d::zero, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvFocusOffsetInitialControl->setHiddenFromSettingsEditor(true);
-    }
+    mRlvCameraOffsetInitialControl = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvCameraOffsetInitialControl->setHiddenFromSettingsEditor(true);
+    mRlvCameraOffsetScaleControl = gSavedSettings.declareF32("CameraOffsetScaleRLVa", 0.0f, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvCameraOffsetScaleControl->setHiddenFromSettingsEditor(true);
+    mRlvFocusOffsetInitialControl = gSavedSettings.declareVec3d("FocusOffsetRLVaView", LLVector3d::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvFocusOffsetInitialControl->setHiddenFromSettingsEditor(true);
 // [/RLVa:KB]
 
     mCameraCollidePlane.clearVec();
@@ -345,7 +342,11 @@ void LLAgentCamera::resetView(bool reset_camera, bool change_camera, bool moveme
     {
     // </FS:CR>
 
-    if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    // <FS:PP> Speed optimisation
+    // if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime", false);
+    if (change_camera && !freeze_time)
+    // </FS:PP>
     {
         changeCameraToDefault();
 
@@ -373,7 +374,10 @@ void LLAgentCamera::resetView(bool reset_camera, bool change_camera, bool moveme
     }
 
 
-    if (reset_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    // <FS:PP> Speed optimisation
+    // if (reset_camera && !gSavedSettings.getBOOL("FreezeTime"))
+    if (reset_camera && !freeze_time)
+    // </FS:PP>
     {
         if (!gViewerWindow->getLeftMouseDown() && cameraThirdPerson())
         {
@@ -1068,7 +1072,11 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 
         mCameraZoomFraction = (mTargetCameraDistance - meters) / camera_offset_dist;
 
-        if (!gSavedSettings.getBOOL("FreezeTime") && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        // <FS:PP> Speed optimisation
+        // if (!gSavedSettings.getBOOL("FreezeTime") && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime", false);
+        if (!freeze_time && mCameraZoomFraction < MIN_ZOOM_FRACTION && meters > 0.f)
+        // </FS:PP>
         {
             // No need to animate, camera is already there.
             changeCameraToMouselook(false);
@@ -1271,8 +1279,15 @@ void LLAgentCamera::updateLookAt(const S32 mouse_x, const S32 mouse_y)
             F32 y_from_center =
                 ((F32) mouse_y / (F32) gViewerWindow->getWorldViewHeightScaled() ) - 0.5f;
 
-            frameCamera.yaw( - x_from_center * gSavedSettings.getF32("YawFromMousePosition") * DEG_TO_RAD);
-            frameCamera.pitch( - y_from_center * gSavedSettings.getF32("PitchFromMousePosition") * DEG_TO_RAD);
+            // <FS:PP> Speed optimisation
+            // frameCamera.yaw( - x_from_center * gSavedSettings.getF32("YawFromMousePosition") * DEG_TO_RAD);
+            // frameCamera.pitch( - y_from_center * gSavedSettings.getF32("PitchFromMousePosition") * DEG_TO_RAD);
+            static LLCachedControl<F32> yaw_from_mouse_position(gSavedSettings, "YawFromMousePosition", 90.f);
+            static LLCachedControl<F32> pitch_from_mouse_position(gSavedSettings, "PitchFromMousePosition", 90.f);
+            frameCamera.yaw( - x_from_center * yaw_from_mouse_position() * DEG_TO_RAD);
+            frameCamera.pitch( - y_from_center * pitch_from_mouse_position() * DEG_TO_RAD);
+            // </FS:PP>
+
             lookAtType = LOOKAT_TARGET_FREELOOK;
         }
 
@@ -1569,7 +1584,11 @@ void LLAgentCamera::updateCamera()
         {
             const F32 SMOOTHING_HALF_LIFE = 0.02f;
 
-            F32 smoothing = LLSmoothInterpolation::getInterpolant(gSavedSettings.getF32("CameraPositionSmoothing") * SMOOTHING_HALF_LIFE, false);
+            // <FS:PP> Speed optimisation
+            // F32 smoothing = LLSmoothInterpolation::getInterpolant(gSavedSettings.getF32("CameraPositionSmoothing") * SMOOTHING_HALF_LIFE, false);
+            static LLCachedControl<F32> camera_position_smoothing(gSavedSettings, "CameraPositionSmoothing", 1.f);
+            F32 smoothing = LLSmoothInterpolation::getInterpolant(camera_position_smoothing() * SMOOTHING_HALF_LIFE, false);
+            // </FS:PP>
 
             if (mFocusOnAvatar && !mFocusObject) // we differentiate on avatar mode
             {
@@ -2303,7 +2322,9 @@ LLVector3d LLAgentCamera::getFocusOffsetInitial()
 // [RLVa:KB] - @setcam_eyeoffsetscale
 F32 LLAgentCamera::getCameraOffsetScale() const
 {
-    return gSavedSettings.getF32( (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? "CameraOffsetScale" : "CameraOffsetScaleRLVa");
+    static LLCachedControl<F32> camera_offset_scale(gSavedSettings, "CameraOffsetScale", 1.f);
+    static LLCachedControl<F32> camera_offset_scale_rlva(gSavedSettings, "CameraOffsetScaleRLVa", 0.f);
+    return (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? camera_offset_scale() : camera_offset_scale_rlva();
 }
 // [/RLVa:KB]
 

@@ -491,9 +491,17 @@ void update_statistics()
 
     record(LLStatViewer::TRIANGLES_DRAWN_PER_FRAME, last_frame_recording.getSum(LLStatViewer::TRIANGLES_DRAWN));
 
-    sample(LLStatViewer::ENABLE_VBO,      (F64)gSavedSettings.getBOOL("RenderVBOEnable"));
-    sample(LLStatViewer::DRAW_DISTANCE,   (F64)gSavedSettings.getF32("RenderFarClip"));
-    sample(LLStatViewer::CHAT_BUBBLES,    gSavedSettings.getBOOL("UseChatBubbles"));
+    // <FS:PP> Speed optimisation
+    // sample(LLStatViewer::ENABLE_VBO,      (F64)gSavedSettings.getBOOL("RenderVBOEnable"));
+    // sample(LLStatViewer::DRAW_DISTANCE,   (F64)gSavedSettings.getF32("RenderFarClip"));
+    // sample(LLStatViewer::CHAT_BUBBLES,    gSavedSettings.getBOOL("UseChatBubbles"));
+    static LLCachedControl<bool> render_vbo_enable(gSavedSettings, "RenderVBOEnable", true);
+    static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip", 256.f);
+    static LLCachedControl<bool> use_chat_bubbles(gSavedSettings, "UseChatBubbles", false);
+    sample(LLStatViewer::ENABLE_VBO,      (F64)render_vbo_enable());
+    sample(LLStatViewer::DRAW_DISTANCE,   (F64)render_far_clip());
+    sample(LLStatViewer::CHAT_BUBBLES,    use_chat_bubbles());
+    // </FS:PP>
 
     typedef LLTrace::StatType<LLTrace::TimeBlockAccumulator>::instance_tracker_t stat_type_t;
 

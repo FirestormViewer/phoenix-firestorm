@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">Voltar</text>
+
+	<text name="attachments_title">Complexidade dos anexos do avatar</text>
+
+	<text name="tot_att_count">Total: 50 (120000,10 μs)</text>
+
+	<text name="attachments_desc1">
+		Anexos tornam o avatar mais complexo e mais lento para renderizar.
+	</text>
+
+	<text name="attachments_desc2">
+		Esta tela exibe todos os anexos do seu avatar.
+	</text>
+
+	<text name="attachments_desc3">
+		Você pode remover seus próprios anexos facilmente clicando em "X".
+	</text>
+
+	<name_list.columns name="art_value" label="Tempo (μs)" tool_tip="Tempo necessário para renderizar este anexo (microssegundos)" />
+
+	<name_list.columns name="complex_value" label="ARC" tool_tip="Complexidade do item (ARC)" />
+
+	<name_list.columns name="name" label="Nome do anexo" tool_tip="Clique em &quot;X&quot; para desanexar" />
+</panel>

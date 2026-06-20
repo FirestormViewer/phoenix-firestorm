@@ -824,7 +824,7 @@ void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nr
 
     // <FS:PP> Attempt to speed up things a little
     // F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
-    static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
+    static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale", 64.f);
     F32 norm_scale = RenderNormalMapScale;
     // </FS:PP>
 
@@ -935,7 +935,11 @@ void LLBumpImageList::onSourceUpdated(LLViewerTexture* src, EBumpEffect bump_cod
             static LLStaticHashedString sStepY("stepY");
             static LLStaticHashedString sBumpCode("bump_code");
 
-            gNormalMapGenProgram.uniform1f(sNormScale, gSavedSettings.getF32("RenderNormalMapScale"));
+            // <FS:PP> Speed optimisation
+            // gNormalMapGenProgram.uniform1f(sNormScale, gSavedSettings.getF32("RenderNormalMapScale"));
+            static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale", 64.f);
+            gNormalMapGenProgram.uniform1f(sNormScale, RenderNormalMapScale());
+            // </FS:PP>
             gNormalMapGenProgram.uniform1f(sStepX, 1.f / bump->getWidth());
             gNormalMapGenProgram.uniform1f(sStepY, 1.f / bump->getHeight());
             gNormalMapGenProgram.uniform1i(sBumpCode, bump_code);

@@ -107,10 +107,14 @@ bool agent_jump( EKeystate s )
     }
     // </FS:Ansariel>
 
+    static LLCachedControl<bool> automatic_fly(gSavedSettings, "AutomaticFly", true); // <FS:PP> Speed optimisation
     if( time < FLY_TIME
         || frame_count <= FLY_FRAMES
         || gAgent.upGrabbed()
-        || !gSavedSettings.getBOOL("AutomaticFly"))
+        // <FS:PP> Speed optimisation
+        // || !gSavedSettings.getBOOL("AutomaticFly"))
+        || !automatic_fly())
+        // </FS:PP>
     {
         gAgent.moveUp(1);
     }
@@ -166,13 +170,17 @@ static void agent_check_temporary_run(LLAgent::EDoubleTapRunMode mode)
 
 static void agent_handle_doubletap_run(EKeystate s, LLAgent::EDoubleTapRunMode mode)
 {
+    static LLCachedControl<bool> allow_tap_tap_hold_run(gSavedSettings, "AllowTapTapHoldRun", true); // <FS:PP> Speed optimisation
     if (KEYSTATE_UP == s)
     {
         // Note: in case shift is already released, slide left/right run
         // will be released in agent_turn_left()/agent_turn_right()
         agent_check_temporary_run(mode);
     }
-    else if (gSavedSettings.getBOOL("AllowTapTapHoldRun") &&
+    // <FS:PP> Speed optimisation
+    // else if (gSavedSettings.getBOOL("AllowTapTapHoldRun") &&
+    else if (allow_tap_tap_hold_run() &&
+    // </FS:PP>
          KEYSTATE_DOWN == s &&
          !gAgent.getRunning())
     {
@@ -236,12 +244,16 @@ bool agent_push_backward( EKeystate s )
 {
     if(gAgent.isMovementLocked()) return true;
 
+    static LLCachedControl<bool> leave_mouselook(gSavedSettings, "LeaveMouselook", false); // <FS:PP> Speed optimisation
     //in free camera control mode we need to intercept keyboard events for avatar movements
     if (LLFloaterCamera::inFreeCameraMode())
     {
         camera_move_backward(s);
     }
-    else if (!gAgent.backwardGrabbed() && gAgentAvatarp->isSitting() && gSavedSettings.getBOOL("LeaveMouselook"))
+    // <FS:PP> Speed optimisation
+    // else if (!gAgent.backwardGrabbed() && gAgentAvatarp->isSitting() && gSavedSettings.getBOOL("LeaveMouselook"))
+    else if (!gAgent.backwardGrabbed() && gAgentAvatarp->isSitting() && leave_mouselook())
+    // </FS:PP>
     {
         gAgentCamera.changeCameraToThirdPerson();
     }

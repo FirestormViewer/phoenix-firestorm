@@ -91,6 +91,7 @@ private:
     void installAddTab();
     void onSettingChangedExternally();
     void onRenameConfirmed(const LLSD& notification, const LLSD& response);
+    void onCloseConfirmed(const LLSD& notification, const LLSD& response);
     void onFilterFocusLost();
     void onClosePressed(LLInventoryPanel* panel);
     void doLoad();
@@ -116,6 +117,7 @@ private:
     LLInventoryPanel* mAddTabPanel{ nullptr };
     LLInventoryPanel* mLastActivePanel{ nullptr };
     LLNotificationPtr mRenameNotification;
+    LLNotificationPtr mCloseNotification;
     boost::signals2::connection mSettingConnection;
     boost::signals2::connection mAddClickConnection;
     bool mSaving{ false };

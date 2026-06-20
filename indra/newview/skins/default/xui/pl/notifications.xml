@@ -1307,6 +1307,10 @@ do
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Zamknij zakładkę filtra" name="FSInventoryCustomTabClose">
+		Zamknąć zakładkę filtra &quot;[NAME]&quot;? Jej zapisane filtry zostaną usunięte.
+		<usetemplate name="okcancelignore" notext="Anuluj" yestext="Tak, zamknij" ignoretext="Potwierdzaj przed zamknięciem niestandardowej zakładki filtra szafy" />
+	</notification>
 	<notification label="Zmień nazwę gestu" name="RenameGesture">
 		Nowa nazwa gestu:
 		<form name="form">
@@ -5674,5 +5678,41 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 	<notification name="FSSetTitleRegionNotFound">
 		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
 	</notification>
-
+	<notification name="OmniFilterNewRuleSet">
+		Wprowadź nazwę dla nowego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Wprowadź nazwę dla sklonowanego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Czy na pewno chcesz usunąć [RULESETNAME]?
+		<usetemplate ignoretext="Wymagaj potwierdzenia przed usunięciem zestawu reguł." name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Nie można usunąć domyślnego zestawu reguł.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Nie można usunąć zestawu reguł, ponieważ indeks znajduje się poza zakresem.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Nie można usunąć zestawu reguł, ponieważ nie znaleziono podanej nazwy.
+	</notification>
 </notifications>

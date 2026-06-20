@@ -1385,7 +1385,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Escolha o diretório
 	</string>
 	<string name="script_files">
-		Scripts
+		Meus Scripts
 	</string>
 	<string name="dictionary_files">
 		Dicionários
@@ -1647,7 +1647,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Perna esquerda
 	</string>
 	<string name="BodyPartsTorso">
-		Torso
+		Tronco
 	</string>
 	<string name="BodyPartsRightLeg">
 		Perna direita
@@ -1928,7 +1928,7 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		Landmarks
 	</string>
 	<string name="InvFolder Scripts">
-		Scripts
+		Meus Scripts
 	</string>
 	<string name="InvFolder Clothing">
 		Roupas
@@ -1988,7 +1988,7 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		Roupas iniciais
 	</string>
 	<string name="InvFolder My Outfits">
-		Outfits
+		Meus Visuais
 	</string>
 	<string name="InvFolder Accessories">
 		Acessórios
@@ -4710,10 +4710,10 @@ Reinstale o Viewer de [DOWNLOAD_URL] e entre em contato com [SUPPORT_SITE] se o 
 		Conversa com [AGENT_NAME]
 	</string>
 	<string name="inventory_item_offered-im">
-		Oferta de item de inventário
+		Oferta de item de inventário &quot;[ITEM_NAME]&quot;
 	</string>
 	<string name="inventory_folder_offered-im">
-		Pasta do inventário „[ITEM_NAME]“ oferecida
+		Pasta do inventário &quot;[ITEM_NAME]&quot; oferecida
 	</string>
 	<string name="inventory_item_offered_rlv">
     Item de inventário oferecido a [NAME]
@@ -5199,10 +5199,10 @@ Se o erro persistir, verifique as configurações de rede e firewall.
 		Minha assinatura premium
 	</string>
 	<string name="DeleteItems">
-		Excluir itens selecionados?
+		Excluir itens selecionados? [COUNT_SELECTION] [COUNT_TOTAL]
 	</string>
 	<string name="DeleteItem">
-		Excluir item selecionado?
+		Excluir item selecionado? [COUNT_TOTAL]
 	</string>
 	<string name="EmptyOutfitText">
 		Este look não possui nenhuma peça
@@ -5572,7 +5572,9 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_Primfeed_Tooltip">
 		Postar no Primfeed
 	</string>
-	<string name="Command_Omnifilter_Label">Omnifilter</string>
+	<string name="Command_Omnifilter_Label">
+		Omnifilter
+	</string>
 	<string name="Command_AvatarAlign_Label">
 		Alinhamento de avatar
 	</string>
@@ -6632,7 +6634,7 @@ Sua posição atual: [AVATAR_POS]
 	<string name="CallingCardOnlineLabelSuffix">
 		(on-line)
 	</string>
-	<string name="GroupNoticesPanelDateString">[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</string>
+	<string name="GroupNoticesPanelDateString">[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</string>
 	<string name="GroupNoticesPanelDateStringAMPM">[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [timezone,datetime,local]</string>
 	<string name="GroupNoticesToastDateString">[wkday,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]</string>
 	<string name="GroupNoticesToastDateStringAMPM">[wkday,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]</string>

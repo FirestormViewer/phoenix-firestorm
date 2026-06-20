@@ -48,7 +48,7 @@
 								Modo:
 							</text>
 							<combo_box name="mode_combo" tool_tip="Escolha o estilo de viewer que você conhece melhor para ajustar os padrões às suas necessidades.">
-								<combo_box.item label="Hybrid" name="Hybrid"/>
+								<combo_box.item label="Hibrido" name="Hybrid"/>
 								<combo_box.item label="Texto" name="Text"/>
 							</combo_box>
 						</layout_panel>

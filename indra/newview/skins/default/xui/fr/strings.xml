@@ -2826,18 +2826,6 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 	<string name="PicksClassifiedsLoadingText">
 		Chargement...
 	</string>
-	<string name="NoPicksText">
-		Vous n'avez pas créé de favoris.
-	</string>
-	<string name="NoAvatarPicksText">
-		L'utilisateur n'a pas de favoris.
-	</string>
-	<string name="NoClassifiedsText">
-		Vous n'avez pas créé d'annonces. Cliquez sur le bouton Plus ci-dessous pour créer une annonce.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		L'utilisateur n'a pas d'annonces
-	</string>
 	<string name="MultiPreviewTitle">
 		Prévisualiser
 	</string>
@@ -4862,9 +4850,6 @@ Pour en savoir plus, rendez-vous sur https://second.life/scripted-agents.
 	</string>
 	<string name="share_alert">
 		Faire glisser les objets de l&apos;inventaire ici
-	</string>
-	<string name="facebook_post_success">
-		Vous avez publié sur Facebook.
 	</string>
 	<string name="flickr_post_success">
 		Vous avez publié sur Flickr.

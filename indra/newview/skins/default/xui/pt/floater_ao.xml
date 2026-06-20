@@ -6,7 +6,58 @@
 	<floater.string name="ao_no_animations_loaded">
 		Nenhuma animação carregada
 	</floater.string>
+	<floater.string name="ao_add_blank_label">
+		Novo conjunto vazio...
+	</floater.string>
+	<floater.string name="ao_add_clone_label">
+		Clonar conjunto atual...
+	</floater.string>
 	<floater.string name="ao_dnd_only_on_full_interface">
-		Arraste e solte notecards com configurações de AO apenas na janela maximizada. Clique no ícone de chave inglesa para maximizar.
+		Notecards com configurações de AO só podem ser arrastadas para janelas maximizadas. Clique no ícone de ferramenta para maximizar a janela.
+	</floater.string>
+	<floater.string name="ao_track_main">
+		Trilha principal
+	</floater.string>
+	<floater.string name="ao_no_track_animations">
+		Trilha vazia - solte uma animação aqui
+	</floater.string>
+	<floater.string name="ao_group_tooltip">
+		Grupo de animações - estas são reproduzidas juntas:
+	</floater.string>
+	<floater.string name="ao_member_tooltip">
+		Item do grupo de animações - reproduz junto com o restante do grupo. Clique duas vezes para pré-visualizar esta animação.
+	</floater.string>
+	<floater.string name="ao_cm_expand">
+		Expandir
+	</floater.string>
+	<floater.string name="ao_cm_collapse">
+		Recolher
+	</floater.string>
+	<floater.string name="ao_cm_rename_group">
+		Renomear grupo...
+	</floater.string>
+	<floater.string name="ao_cm_move_out">
+		Remover do grupo
+	</floater.string>
+	<floater.string name="ao_cm_find_original">
+		Encontrar original
+	</floater.string>
+	<floater.string name="ao_cm_delete">
+		Excluir
+	</floater.string>
+	<floater.string name="ao_dnd_merge">
+		Solte para agrupar com esta animação
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_group">
+		Solte para adicionar a este grupo
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_track">
+		Solte para adicionar a esta trilha
+	</floater.string>
+	<floater.string name="ao_dnd_folder_group">
+		Solte uma pasta para criar um grupo de animações
+	</floater.string>
+	<floater.string name="ao_dnd_folder_pour">
+		Solte para adicionar as animações contidas a esta trilha
 	</floater.string>
 </floater>
