@@ -630,6 +630,19 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
         static LLCachedControl<F32> av_inflate(gSavedSettings, "FSOTSAvatarConvergeRadius", 0.0f);
         const F32 inflate = llmax(0.f, (F32)av_inflate); // optional forgiveness; 0 = exact hitbox
 
+        // The shot originates at the player's eye, but the convergence ray starts at
+        // the (pulled-back OTS) camera. Someone standing behind the player is still in
+        // front of the camera, so the crosshair ray can graze their hitbox and steal
+        // convergence. Require an avatar box hit to be at least as far as the eye along
+        // the ray, so only targets genuinely in front of the shooter qualify. One dot
+        // product, computed once.
+        F32 eye_dist = 0.1f;
+        if (isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+        {
+            const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
+            eye_dist = llmax(0.1f, (eye - cam_origin) * cam_at);
+        }
+
         for (LLCharacter* character : LLCharacter::sInstances)
         {
             LLVOAvatar* avatar = (LLVOAvatar*)character;
@@ -655,7 +668,9 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
 
             F32 t_hit = 0.f;
             const bool box_hit = rayOBBIntersect(cam_origin, cam_at, center, rot, half, t_hit);
-            if (box_hit && t_hit > 0.1f && t_hit < best_dist)
+            // t_hit > eye_dist: the box must be in front of the eye, not in the
+            // over-the-shoulder gap or behind the player.
+            if (box_hit && t_hit > eye_dist && t_hit < best_dist)
             {
                 best_dist = t_hit; // trusted target; exempt from the min clamp
                 avatar_best = true;
