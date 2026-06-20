@@ -566,39 +566,19 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     ray_start.load3(cam_origin.mV);
     ray_end.load3(target.mV);
 
-    // World-geometry depth. pick_rigged stays false: rigged avatar meshes are
-    // not the physical hitbox and per-triangle picking them every frame is the
-    // cost we are avoiding. The cast returns terrain/prims; avatars are handled
-    // by the cheap capsule pass below. Step past our own body/attachments, which
-    // the shoulder ray can graze on its way out, so self never wins. With nothing
-    // solid under the crosshair the far point stands. Extra iterations leave room
-    // to also step past stacked phantom prims (which have no physics).
-    for (S32 i = 0; i < 12; ++i)
+    // World/static-geometry depth only (prims, linksets, terrain). Avatars, their
+    // attachments and nametags are deliberately NOT tested here -- they are handled
+    // exclusively by the hitbox pass below. Using lineSegmentIntersectInWorld here was
+    // the bug: it DOES test the avatar partition, so the crosshair grazing a bystander's
+    // mesh (or even their nametag) snapped convergence onto them. lineSegmentIntersectWorldGeometry
+    // never tests avatars/attachments, and also excludes our own body so the shoulder ray
+    // can't self-hit -- no step-past-self needed. skip_phantom steps past phantom prims
+    // (no physics, a bullet passes through). With nothing solid under the crosshair the
+    // far point stands.
+    if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit, true /*skip_phantom*/))
     {
-        S32 face_hit = -1;
-        LLViewerObject* obj = gPipeline.lineSegmentIntersectInWorld(
-            ray_start, ray_end,
-            false /*pick_transparent*/, false /*pick_rigged*/,
-            false /*pick_unselectable*/, false /*pick_reflection_probe*/,
-            &face_hit, nullptr, nullptr, &hit);
-        if (!obj)
-        {
-            break;
-        }
-        const bool is_self = isAgentAvatarValid() &&
-            (obj == gAgentAvatarp || obj->getAvatar() == gAgentAvatarp);
-        // Phantom prims have no physics: a bullet passes straight through them,
-        // so the convergence target must too. Step past and keep looking.
-        if (is_self || obj->flagPhantom())
-        {
-            LLVector3 past(hit.getF32ptr());
-            past += cam_at * 0.10f; // nudge just past the surface we grazed
-            ray_start.load3(past.mV);
-            continue;
-        }
         target.set(hit.getF32ptr());
         world_hit_flag = true;
-        break;
     }
 
     // Convergence depth measured along the camera ray (target is colinear with
