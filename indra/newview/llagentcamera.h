@@ -108,7 +108,12 @@ public:
     void            changeCameraFromOTS();           // Exit OTS back to third person
     bool            cameraThirdPerson() const       { return (mCameraMode == CAMERA_MODE_THIRD_PERSON && mLastCameraMode == CAMERA_MODE_THIRD_PERSON); }
     // Also true for OTS — reuses mouselook input and UI behaviour; camera position handled separately.
-    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && mLastCameraMode == CAMERA_MODE_MOUSELOOK) || mCameraMode == CAMERA_MODE_OTS; }
+    // The mLastCameraMode guard filters the third-person->mouselook entry animation, but it must NOT
+    // exclude the OTS<->mouselook ADS swap: during that swap mCameraMode is MOUSELOOK while
+    // mLastCameraMode is still OTS, and reporting third-person there flips the held movement keys from
+    // slide to turn (keys.xml first_person=slide vs third_person=turn) — yawing the avatar mid-swap.
+    // Treat "came from OTS" as still mouselook so the swap stays first-person input throughout.
+    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && (mLastCameraMode == CAMERA_MODE_MOUSELOOK || mLastCameraMode == CAMERA_MODE_OTS)) || mCameraMode == CAMERA_MODE_OTS; }
     bool            cameraCustomizeAvatar() const   { return (mCameraMode == CAMERA_MODE_CUSTOMIZE_AVATAR /*&& !mCameraAnimating*/); }
     bool            cameraFollow() const            { return (mCameraMode == CAMERA_MODE_FOLLOW && mLastCameraMode == CAMERA_MODE_FOLLOW); }
     bool            cameraOTS() const               { return mCameraMode == CAMERA_MODE_OTS; }
@@ -240,6 +245,12 @@ private:
     bool            mCameraAnimating;                   // Camera is transitioning from one mode to another
     LLVector3d      mAnimationCameraStartGlobal;        // Camera start position, global coords
     LLVector3d      mAnimationFocusStartGlobal;         // Camera focus point, global coords
+    // Avatar pose at animation start, used to re-anchor the start points to the
+    // avatar's frame each step so turning/strafing during the swap (e.g. the ADS
+    // OTS<->mouselook glide) keeps the view tracking the avatar instead of staying
+    // pinned to a stale world direction.
+    LLVector3d      mAnimationStartRootGlobal;          // avatar root pos at animation start
+    LLQuaternion    mAnimationStartAgentRot;            // agent frame rotation at animation start
 
     //--------------------------------------------------------------------
     // Focus

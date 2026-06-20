@@ -1066,33 +1066,28 @@ void    LLToolCompGun::handleDeselect()
 
 void LLToolCompGun::resetZoom()
 {
-    // While ADS is held it owns its own FOV and lifecycle. Entering ADS switches
-    // camera modes (changeCameraToMouselook), whose tool/capture/animation churn
-    // can incidentally call resetZoom mid-hold; honoring it would cancel the ADS
-    // zoom and drop the "return to OTS on release" state, stranding the player in
-    // first person. Ignore resets while ADS is active - it ends on button release
-    // (handleRightMouseUp) or genuine mouselook exit (handleDeselect clears it first).
-    if (mIsADS)
-    {
-        return;
-    }
-
-    // Same churn, one beat later: releasing ADS that was entered from OTS swaps the
-    // camera back to OTS, and that mode swap deselects this tool (handleDeselect ->
-    // resetZoom) a fraction of a second after ADS already ended. If a zoom is live
-    // at that moment (e.g. a normal zoom the player started during the ADS-release
-    // fade), snapping here yanks the FOV back to base mid-zoom. Only tear the zoom
-    // down on a GENUINE exit out of mouselook input (to third person); while we
-    // remain in a mouselook input mode, let the active zoom/transition continue.
+    // While we are STILL in an aim mode (mouselook or OTS), ADS owns its FOV and
+    // lifecycle and incidental tool/capture/animation churn must not tear it down:
+    //  - Entering ADS switches camera modes (changeCameraToMouselook); honoring a
+    //    reset mid-hold would cancel the ADS zoom and strand the player in first
+    //    person. ADS ends on button release (handleRightMouseUp) instead.
+    //  - Releasing ADS-from-OTS swaps the camera back to OTS, deselecting this tool a
+    //    beat later; snapping a live zoom there yanks the FOV back to base mid-zoom.
+    // But once the camera has LEFT the aim modes (e.g. to third person), fall through
+    // and force the full cleanup -- otherwise leaving mouselook while ADS-zoomed leaves
+    // the FOV zoom and vignette stuck on (mIsADS never clears, so the vignette never
+    // fades).
     const ECameraMode cam_mode = gAgentCamera.getCameraMode();
-    const bool still_mouselook_input = (cam_mode == CAMERA_MODE_MOUSELOOK || cam_mode == CAMERA_MODE_OTS);
-    if (still_mouselook_input && (mIsZoomed || mIsZoomTransitioning))
+    const bool in_aim_mode = (cam_mode == CAMERA_MODE_MOUSELOOK || cam_mode == CAMERA_MODE_OTS);
+    if (in_aim_mode && (mIsADS || mIsZoomed || mIsZoomTransitioning))
     {
         return;
     }
 
-    // Reset NaCl zoom state - immediately restore base FOV if zoomed
-    if (mIsZoomed || mIsZoomTransitioning)
+    // Reset NaCl zoom state - immediately restore base FOV if zoomed. Include mIsADS:
+    // a settled ADS zoom sets mIsADS (not mIsZoomed/transitioning), so without this the
+    // FOV stays stuck at the ADS level when leaving mouselook while aimed.
+    if (mIsZoomed || mIsZoomTransitioning || mIsADS)
     {
         gSavedSettings.setF32("CameraAngle", mBaseFOV);
     }
@@ -1120,6 +1115,15 @@ void LLToolCompGun::resetZoom()
 // post-process in LLPipeline::renderVignette; returns 0 when no ADS vignette applies.
 F32 LLToolCompGun::getADSVignetteAmount()
 {
+    // Per-frame safety net: this runs every frame from the render path, even when the
+    // gun tool is deselected. If the camera has left the aim modes (e.g. dropped to
+    // third person) but ADS/zoom state is still set, the normal cleanup path was missed
+    // — force it now so the FOV zoom and vignette can't stay stuck on.
+    if ((mIsADS || mIsZoomed || mIsZoomTransitioning) && !gAgentCamera.cameraMouselook())
+    {
+        resetZoom(); // cleans up because we are no longer in an aim mode
+    }
+
     // Live target: the FOV-driven ADS darkness while aiming (or during the
     // ADS-release fade), else 0. Same gating and progress mapping as before.
     F32 live = 0.f;

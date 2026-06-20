@@ -1530,8 +1530,30 @@ void LLAgentCamera::updateCamera()
 
             // ...adjust position for animation
             F32 smooth_fraction_of_animation = llsmoothstep(0.0f, 1.0f, fraction_of_animation);
-            camera_pos_global = lerp(mAnimationCameraStartGlobal, camera_target_global, smooth_fraction_of_animation);
-            mFocusGlobal = lerp(mAnimationFocusStartGlobal, focus_target_global, smooth_fraction_of_animation);
+
+            // In the aim modes (mouselook/OTS) the camera is rigidly attached to the
+            // avatar's frame, so a turn or strafe during the swap must carry the
+            // animation start with it. Otherwise the start stays pinned in world space
+            // while the live target tracks the yaw, and the look freezes/turns away
+            // from where you are aiming until the swap finishes. Re-anchor the start
+            // points to the avatar's current frame: translate by how far the root has
+            // moved and rotate by how far the agent has turned since the swap began.
+            LLVector3d cam_start = mAnimationCameraStartGlobal;
+            LLVector3d focus_start = mAnimationFocusStartGlobal;
+            if (mCameraMode == CAMERA_MODE_MOUSELOOK || mCameraMode == CAMERA_MODE_OTS)
+            {
+                const LLQuaternion delta_rot = ~mAnimationStartAgentRot * gAgent.getFrameAgent().getQuaternion();
+                const LLVector3d   root_now  = gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
+                LLVector3 cam_off(cam_start   - mAnimationStartRootGlobal); // explicit LLVector3(LLVector3d)
+                LLVector3 foc_off(focus_start - mAnimationStartRootGlobal);
+                cam_off = cam_off * delta_rot;                             // rotate offset with the avatar
+                foc_off = foc_off * delta_rot;
+                cam_start   = root_now + LLVector3d(cam_off);              // explicit LLVector3d(LLVector3)
+                focus_start = root_now + LLVector3d(foc_off);
+            }
+
+            camera_pos_global = lerp(cam_start, camera_target_global, smooth_fraction_of_animation);
+            mFocusGlobal = lerp(focus_start, focus_target_global, smooth_fraction_of_animation);
         }
         else
         {
@@ -2969,6 +2991,10 @@ void LLAgentCamera::startCameraAnimation()
 {
     mAnimationCameraStartGlobal = getCameraPositionGlobal();
     mAnimationFocusStartGlobal = mFocusGlobal;
+    // Snapshot the avatar pose so the start points can be re-anchored to the
+    // avatar's frame while the animation plays (see updateCamera).
+    mAnimationStartRootGlobal = gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
+    mAnimationStartAgentRot = gAgent.getFrameAgent().getQuaternion();
     if (mNextAnimationDuration >= 0.f)
     {
         setAnimationDuration(mNextAnimationDuration); // one-shot override (e.g. fast ADS swap)
