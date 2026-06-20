@@ -16,7 +16,7 @@
 		Residente
 	</floater.string>
 	<floater.string name="blacklist_flag_mute_avatar_worn_objects_sounds">
-		Sons de objetos vestidos pelo Avatar
+		Sons de objetos equipados pelo Avatar
 	</floater.string>
 	<floater.string name="blacklist_flag_mute_avatar_rezzed_objects_sounds">
 		Sons de objetos rezzados pelo Avatar
