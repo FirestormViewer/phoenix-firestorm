@@ -5209,8 +5209,8 @@ void LLSelectMgr::deselectAllIfTooFar()
 //  if (gSavedSettings.getBOOL("LimitSelectDistance")
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
     static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
-    static LLCachedControl<bool> limit_select_distance(gSavedSettings, "LimitSelectDistance");
-    static LLCachedControl<F32> max_select_distance(gSavedSettings, "MaxSelectDistance");
+    static LLCachedControl<bool> limit_select_distance(gSavedSettings, "LimitSelectDistance", true);
+    static LLCachedControl<F32> max_select_distance(gSavedSettings, "MaxSelectDistance", 128.f);
     bool fRlvFartouch = gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH) && LLToolMgr::instance().inEdit();
     if ( (limit_select_distance() || (fRlvFartouch) )
 // [/RLVa:KB]

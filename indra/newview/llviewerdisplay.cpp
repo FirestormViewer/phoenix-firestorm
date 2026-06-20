@@ -306,9 +306,9 @@ static void update_tp_display(bool minimized)
     static LLCachedControl<F32> teleport_local_delay(gSavedSettings, "TeleportLocalDelay");
 
     // <FS:PP> Speed optimisation
-    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens");
-    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP");
-    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues");
+    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens", false);
+    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP", true);
+    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues", LLVector3(1.047197551f, 1.047197551f, 0.f));
     // </FS:PP>
 
     S32 attach_count = 0;

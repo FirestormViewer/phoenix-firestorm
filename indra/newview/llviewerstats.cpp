@@ -481,9 +481,9 @@ void update_statistics()
     // sample(LLStatViewer::ENABLE_VBO,      (F64)gSavedSettings.getBOOL("RenderVBOEnable"));
     // sample(LLStatViewer::DRAW_DISTANCE,   (F64)gSavedSettings.getF32("RenderFarClip"));
     // sample(LLStatViewer::CHAT_BUBBLES,    gSavedSettings.getBOOL("UseChatBubbles"));
-    static LLCachedControl<bool> render_vbo_enable(gSavedSettings, "RenderVBOEnable");
-    static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip");
-    static LLCachedControl<bool> use_chat_bubbles(gSavedSettings, "UseChatBubbles");
+    static LLCachedControl<bool> render_vbo_enable(gSavedSettings, "RenderVBOEnable", true);
+    static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip", 256.f);
+    static LLCachedControl<bool> use_chat_bubbles(gSavedSettings, "UseChatBubbles", false);
     sample(LLStatViewer::ENABLE_VBO,      (F64)render_vbo_enable());
     sample(LLStatViewer::DRAW_DISTANCE,   (F64)render_far_clip());
     sample(LLStatViewer::CHAT_BUBBLES,    use_chat_bubbles());
