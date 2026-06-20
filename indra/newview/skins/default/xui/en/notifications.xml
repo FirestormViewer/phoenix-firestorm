@@ -9937,6 +9937,90 @@ Selected files can not be bulk-uploaded.
      yestext="OK"/>
    </notification>
 
+  <!-- <OTS> Bulk WAV upload that also writes a music-player notecard -->
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardNoFiles"
+   type="alertmodal">
+None of the selected files are valid uploadable sounds (must be 44.1kHz 16-bit PCM .wav within the length limit).
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardConfirm"
+   type="alertmodal">
+Upload [COUNT] sounds and create the notecard &quot;[NAME]&quot; for a total of L$[COST]?
+
+The sounds and notecard will be placed in a new folder inside your Sounds folder.
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Upload"
+     notext="Cancel"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardConfirmSkipped"
+   type="alertmodal">
+Upload [COUNT] sounds and create the notecard &quot;[NAME]&quot; for a total of L$[COST]?
+
+([SKIPPED] selected file(s) were not valid sounds and will be skipped.)
+
+The sounds and notecard will be placed in a new folder inside your Sounds folder.
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Upload"
+     notext="Cancel"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardFolderFailed"
+   type="alertmodal">
+Could not create the destination folder in your Sounds folder. The notecard upload was cancelled.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardAllFailed"
+   type="alertmodal">
+All sound uploads failed, so no notecard was created.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SoundNotecardCreateFailed"
+   type="alertmodal">
+The sounds uploaded, but the notecard could not be created.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="SoundNotecardCreated"
+   type="notify">
+Uploaded [COUNT] sounds and created the notecard &quot;[NAME]&quot; in your Sounds folder.
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="SoundNotecardCreatedWithErrors"
+   type="notify">
+Created the notecard &quot;[NAME]&quot; with [COUNT] sounds. [FAILED] sound(s) failed to upload and were left out.
+  </notification>
+  <!-- </OTS> -->
+
   <notification
    icon="alertmodal.tga"
    name="BulkUploadIncompatibleFiles"

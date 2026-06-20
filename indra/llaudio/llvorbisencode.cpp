@@ -36,7 +36,8 @@
 
 // <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
 //S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg)
-S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg, bool is_in_secondlife)
+// <OTS> added out_clip_length out-param
+S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg, bool is_in_secondlife, F32* out_clip_length)
 // </FS:Ansariel>
 {
     U16 num_channels = 0;
@@ -159,6 +160,13 @@ S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& erro
     }
 
     F32 clip_length = (F32)raw_data_length/(F32)bytes_per_sec;
+
+    // <OTS> hand the measured clip length back to the caller (bulk sound->notecard upload)
+    if (out_clip_length)
+    {
+        *out_clip_length = clip_length;
+    }
+    // </OTS>
 
     // <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
     //if (clip_length > LLVORBIS_CLIP_MAX_TIME)
