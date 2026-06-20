@@ -1075,220 +1075,220 @@
 		Mostrar dicas de ferramentas com o caminho XUI para o widget
 	</string>
 	<string name="DebugStatModeFPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da estatística FPS na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTFPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da estatística FPS na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeBandwidth">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Dados UDP recebidos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTBandwidth">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Largura de banda na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePacketLoss">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Perda de pacotes na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePingSim">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Ping Sim na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeKTrisDrawnFr">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de KTris por frame na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTKTrisDrawnFr">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de KTris por frame na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeKTrisDrawnSec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de KTris por segundo na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTKTrisDrawnSec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de KTris por segundo na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeTotalObjs">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Total de objetos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTTotalObjs">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Total de objetos na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeNewObjs">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Novos objetos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTNewObjs">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Novos objetos na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeCachedObjs">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos em cache na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatObjCacheMiss">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da taxa de acerto do cache de objetos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatTextureCacheHits">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da taxa de acerto do cache de texturas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatTextureCacheReadLatency">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da latência de leitura do cache de texturas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeTextureCount">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da quantidade de texturas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePTTextureCount">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da quantidade de texturas na janela Ferramentas de Foto (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeRawCount">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da quantidade bruta de texturas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeGLMem">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de GL Mem na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeFormattedMem">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Memória formatada na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeRawMem">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Memória bruta na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeBoundMem">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Memória alocada (GL) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePacketsIn">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Pacotes recebidos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePacketsOut">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Pacotes enviados na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeObjects">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos (rede) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeTexture">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Textura (rede) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeAsset">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Asset (rede) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeLayers">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Camadas (rede) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeActualIn">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Entrada real na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeActualOut">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Saída real na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeTimeDialation">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Dilatação do tempo na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimFPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Sim FPS na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePhysicsFPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de FPS de física na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModePinnedObjects">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos fixos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeLowLODObjects">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos LOD baixo na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeMemoryAllocated">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Memória alocada (física) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeAgentUpdatesSec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Atualizações de agente/seg na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeMainAgents">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Agentes principais na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeChildAgents">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Agentes filhos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimObjects">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos (simulador) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimActiveObjects">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos ativos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimActiveScripts">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Scripts ativos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimPCTScriptsRun">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Scripts executados na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimScriptEvents">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Eventos de script na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimInPPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Pacotes recebidos (simulador) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimOutPPS">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Pacotes enviados (simulador) na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimPendingDownloads">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Downloads pendentes na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimPendingUploads">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Uploads pendentes na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimTotalUnackedBytes">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Total de dados não confirmados na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimFrameMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo total do frame na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimNetMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de rede na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimAIStepMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de passo da IA na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimPhysicsMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de física na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimOtherMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de simulação na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimSkippedSilhouettSteps">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Passos de silhueta ignorados na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimPCTSteppedCharacters">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Personagens atualizados na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimAgentMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de agente na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimImagesMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de imagens na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimScriptMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de script na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSpareMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo restante na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimPhysicsStepMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Passo de física na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimPhysicsShapeUpdateMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Atualizar formas físicas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSimPhysicsOtherMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Física — outros na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimSleepMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Tempo de espera na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeSimPumpIOMsec">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Pump IO na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeOcclusionQueries">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Consultas de oclusão executadas na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeObjOccluded">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos ocluídos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeObjUnoccluded">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição de Objetos não ocluídos na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugStatModeMaterials">
-		Modo de estatística no janela de estatísticas
+		Modo de exibição da quantidade de materiais na janela Estatísticas (barra, histórico ou só valor).
 	</string>
 	<string name="DebugViews">
 		Exibir informações de depuração para visualizações.
