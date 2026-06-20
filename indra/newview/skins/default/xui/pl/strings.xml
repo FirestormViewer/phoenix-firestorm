@@ -211,6 +211,9 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="AditiGridLabel">
 		Second Life Beta: świat testowy (Aditi)
 	</string>
+	<string name="AgniGridLabelShort">
+		Agni (produkcja)
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
 https://www.firestormviewer.org/choose-your-platform/
@@ -1239,6 +1242,12 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="ScriptQuestionCautionChatDenied">
 		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], nie dostał zezwolenia na: [PERMISSIONS].
 	</string>
+	<string name="ScriptTakeMoneyCaution">
+		Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; żąda pełnego dostępu do Twojego konta Linden dolarów. Jeśli na to zezwolisz, może on w dowolnym momencie pobierać z niego środki lub całkowicie je opróżnić - w sposób ciągły i bez dodatkowych ostrzeżeń.
+	</string>
+	<string name="PrivilegedLandAccessCaution">
+		Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; żąda uprzywilejowanego dostępu do Twojej ziemi. Jeśli na to zezwolisz, może on sprzedać Twoją ziemię bez dodatkowych ostrzeżeń.
+	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		Jeśli zezwolisz na dostęp do konta, to obiekt będzie mógł także:
 	</string>
@@ -1289,6 +1298,9 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="ChangeEnvSettings">
 		Zmieniać Twoje ustawienia otoczenia
+	</string>
+	<string name="PrivilegedLandAccess">
+		Sprzedawać ziemię w Twoim imieniu.
 	</string>
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
@@ -3112,6 +3124,9 @@ Jeżeli nadal otrzymujesz ten komunikat, uruchom swój komputer ponownie.
 	<string name="MBFrozenCrashed">
 		Aplikacja [APP_NAME] znajduje się w trybie zatrzymania lub zawieszenia po poprzedniej próbie uruchomienia.
 Czy chcesz wysłać raport na temat zawieszenia?
+	</string>
+	<string name="MBFreezeDetected">
+		Wygląda na to, że [APP_NAME] zawiesił się. Jeśli ten problem występuje regularnie, skontaktuj się ze wsparciem technicznym pod adresem https://www.firestormviewer.org/support.
 	</string>
 	<string name="MBAlert">
 		Powiadomienie

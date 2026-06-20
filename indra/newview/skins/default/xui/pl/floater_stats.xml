@@ -105,6 +105,19 @@
 					</stat_view>
 				</stat_view>
 			</stat_view>
+			<stat_view name="voice" label="Głos">
+				<stat_bar name="webrtc_latency" label="Opóźnienie" />
+				<stat_bar name="webrtc_upload_bandwidth" label="Przepust. wysyłania" />
+				<stat_view name="incoming_audio" label="Dźwięk przychodzący">
+					<stat_bar name="incoming_packet_recv" label="Odebrane pakiety" />
+					<stat_bar name="packets_in_lost" label="Utracone pakiety" />
+					<stat_bar name="jitter_buffer" label="Bufor jittera" />
+				</stat_view>
+				<stat_view name="outgoing_audio" label="Dźwięk wychodzący">
+					<stat_bar name="packets_out_sent" label="Wysłane pakiety" />
+					<stat_bar name="packets_out_lost" label="Utracone pakiety" />
+				</stat_view>
+			</stat_view>
 		</container_view>
 	</scroll_container>
 </floater>

@@ -9,7 +9,6 @@
 	<floater.string name="DateTime">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
-	<floater.string name="UploaderDateTime"/>
 	<text name="desc txt">
 		Opis:
 	</text>

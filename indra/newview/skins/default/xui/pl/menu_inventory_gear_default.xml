@@ -6,6 +6,9 @@
 	<menu_item_check label="Widok listy" name="list_view" />
 	<menu_item_check label="Widok galerii" name="gallery_view" />
 	<menu_item_check label="Widok kombinowany" name="combination_view" />
+	<menu_item_check label="Pokaż kartę Ostatnie" name="recent_tab" />
+	<menu_item_check label="Pokaż kartę Założone" name="worn_tab" />
+	<menu_item_check label="Pokaż kartę Ulubione" name="favorites_tab" />
 	<menu_item_check label="Porządkuj według nazw" name="sort_by_name"/>
 	<menu_item_check label="Porządkuj według dat" name="sort_by_recent"/>
 	<menu_item_check label="Sortuj foldery zawsze wg. nazwy" name="sort_folders_by_name"/>

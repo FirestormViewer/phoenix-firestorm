@@ -7,4 +7,7 @@
 	<menu_item_check label="Widok listy" name="list_view" />
 	<menu_item_check label="Widok galerii" name="gallery_view" />
 	<menu_item_check label="Widok kombinowany" name="combination_view" />
+	<menu_item_check label="Karta Ostatnie" name="recent_tab" />
+	<menu_item_check label="Karta Założone" name="worn_tab" />
+	<menu_item_check label="Karta Ulubione" name="favorites_tab" />
 </toggleable_menu>
