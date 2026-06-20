@@ -47,13 +47,13 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutSystem">
 		CPU: [CPU]
 Memória: [MEMORY_MB] MB (Usado: [USED_RAM] MB)
-Concorrência: [CONCURRENCY]
+Threads: [CONCURRENCY]
 Versão do SO: [OS_VERSION]
 Fabricante da placa de vídeo: [GRAPHICS_CARD_VENDOR]
 Placa de vídeo: [GRAPHICS_CARD]
 Memória da placa de vídeo: [GRAPHICS_CARD_MEMORY] MB
 Memória da placa de vídeo (Detectada): [GRAPHICS_CARD_MEMORY_DETECTED] MB
-Memória da placa de vídeo (Orçamento): [VRAM_BUDGET]
+Memória da GPU (Limite): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Versão do driver gráfico do Windows: [GRAPHICS_DRIVER_VERSION]
@@ -113,19 +113,19 @@ Versão do servidor de voz: [VOICE_VERSION]
 		Fullbright (legado)
 	</string>
 	<string name="LoginInProgress">
-		Fazendo login. [APP_NAME] pode parecer travado. Aguarde.
+		Entrando no [APP_NAME]... Aguarde, pode levar alguns instantes.
 	</string>
 	<string name="LoginInProgressNoFrozen">
-		Fazendo login...
+		Entrando...
 	</string>
 	<string name="LoginAuthenticating">
 		Autenticando
 	</string>
 	<string name="LoginMaintenance">
-		Executando manutenção da conta...
+		Verificando sua conta...
 	</string>
 	<string name="LoginAttempt">
-		A tentativa anterior de login falhou. Fazendo login, tentativa [NUMBER]
+		Tentativa anterior falhou. Tentando novamente ([NUMBER])
 	</string>
 	<string name="LoginPrecaching">
 		Carregando mundo...
@@ -176,13 +176,13 @@ Versão do servidor de voz: [VOICE_VERSION]
 		Baixando roupas...
 	</string>
 	<string name="InvalidCertificate">
-		O servidor retornou um certificado inválido ou corrompido. Entre em contato com o administrador do grid.
+		Certificado do servidor inválido ou corrompido. Contate o administrador do grid.
 	</string>
 	<string name="CertInvalidHostname">
 		Um hostname inválido foi usado para acessar o servidor. Verifique sua SLURL ou o hostname do grid.
 	</string>
 	<string name="CertExpired">
-		O certificado retornado pelo grid parece estar expirado. Verifique o relógio do sistema ou entre em contato com o administrador do grid.
+		O certificado do grid parece expirado. Verifique o relógio do seu sistema ou contate o administrador do grid.
 	</string>
 	<string name="CertKeyUsage">
 		O certificado retornado pelo servidor não pôde ser usado para SSL. Entre em contato com o administrador do grid.
@@ -200,7 +200,7 @@ Versão do servidor de voz: [VOICE_VERSION]
 		Falha ao alocar memória do OpenSSL para o certificado.
 	</string>
 	<string name="LoginFailedNoNetwork">
-		Erro de rede: não foi possível estabelecer conexão. Verifique sua conexão de rede.
+		Sem conexão com a rede. Verifique sua internet e tente novamente.
 	</string>
 	<string name="LoginFailedHeader">
 		Falha no login
@@ -220,8 +220,8 @@ https://www.firestormviewer.org/choose-your-platform/
 Para mais informações, veja o FAQ abaixo:
 http://secondlife.com/viewer-access-faq
 	</string>
-	<string name="LoginFailed">O processo de login não foi concluído devido a problemas no sistema. Tente novamente em alguns minutos.
-Se você acredita que isso é um erro, entre em contato com o suporte do grid correspondente.
+	<string name="LoginFailed">Não foi possível completar o login por problemas no sistema. Tente novamente em alguns minutos.
+Se achar que é um erro, entre em contato com o suporte do grid.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Atualização opcional do viewer disponível: [VERSION]
@@ -230,7 +230,7 @@ Se você acredita que isso é um erro, entre em contato com o suporte do grid co
 		Atualização obrigatória do viewer: [VERSION]
 	</string>
 	<string name="LoginFailedAlreadyLoggedIn">
-		Este agente já está conectado.
+		Você já está conectado em outra sessão.
 	</string>
 	<string name="LoginFailedAuthenticationFailed">
 		Desculpe! Não foi possível fazer seu login.
@@ -241,16 +241,12 @@ Verifique se você digitou os dados corretos:
 Além disso, verifique se o Caps Lock está desativado.
 	</string>
 	<string name="LoginFailedPasswordChanged">
-		Por segurança, sua senha foi alterada.
-Acesse sua página de conta em http://secondlife.com/password
-e responda à pergunta de segurança para redefinir sua senha.
-Pedimos desculpas pelo transtorno.
+		Sua senha foi alterada por segurança.
+Acesse http://secondlife.com/password e responda à pergunta de segurança para redefinir sua senha.
 	</string>
 	<string name="LoginFailedPasswordReset">
-		Fizemos algumas mudanças no sistema e você precisará redefinir sua senha.
-Acesse sua página de conta em http://secondlife.com/password
-e responda à pergunta de segurança para redefinir sua senha.
-Pedimos desculpas pelo transtorno.
+		Atualizamos o sistema e você precisa redefinir sua senha.
+Acesse http://secondlife.com/password e responda à pergunta de segurança.
 	</string>
 	<string name="LoginFailedEmployeesOnly">
 		O Second Life está temporariamente fechado para manutenção.
@@ -258,8 +254,8 @@ No momento, o login está restrito apenas a funcionários.
 Veja atualizações em www.secondlife.com/status.
 	</string>
 	<string name="LoginFailedPremiumOnly">
-		Os logins no Second Life estão temporariamente restritos para garantir a melhor experiência possível para quem já está inworld.
-Pessoas com contas gratuitas não poderão acessar o Second Life durante este período, para liberar capacidade para quem possui conta Premium paga.
+		O login está temporariamente restrito a contas Premium para garantir a melhor experiência inworld.
+Contas gratuitas não podem acessar o Second Life neste momento.
 	</string>
 	<string name="LoginFailedComputerProhibited">
 		Não é possível acessar o Second Life deste computador.
@@ -270,9 +266,8 @@ support@secondlife.com.
 		Horário do Pacífico
 	</string>
 	<string name="LoginFailedAcountSuspended">
-		Sua conta não está acessível até
-[TIME].
-Se você acredita que isso é um erro, entre em contato com support@secondlife.com.
+		Sua conta está suspensa até [TIME].
+Se achar que é um erro, entre em contato com support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Não foi possível concluir sua solicitação neste momento.
@@ -283,16 +278,15 @@ Entre em contato com o suporte do Second Life em http://support.secondlife.com.
 Entre em contato com support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountMaintenance">
-		Sua conta está passando por manutenção leve.
-Sua conta não está acessível até
+Sua conta está em manutenção e ficará indisponível até 
 [TIME].
-Se você acredita que isso é um erro, entre em contato com support@secondlife.com.
+Se achar que é um erro, entre em contato com support@secondlife.com.
 	</string>
 	<string name="LoginFailedPendingLogoutFault">
 		A solicitação de logout retornou falha do simulador.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		O sistema está fazendo seu logout neste momento.
+		Sua sessão está sendo encerrada. Aguarde um momento antes de entrar novamente.
 Aguarde um minuto antes de tentar fazer login novamente.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
@@ -328,27 +322,27 @@ Tente fazer login novamente em um minuto.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LogoutFailedPendingLogin">
-		A região estava fazendo login de outra sessão.
+		A região estava processando o login de outra sessão.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LogoutFailedLoggingOut">
-		A região estava fazendo logout da sessão anterior.
+		A região ainda estava encerrando a sessão anterior.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LogoutFailedStillLoggingOut">
-		A região ainda está fazendo logout da sessão anterior.
+		A região ainda está encerrando a sessão anterior.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LogoutSucceeded">
-		A região encerrou a última sessão.
+		Sessão anterior encerrada com sucesso.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LogoutFailedLogoutBegun">
-		A região iniciou o processo de logout.
+		A região iniciou o encerramento da sessão.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LoginFailedLoggingOutSession">
-		O sistema começou a encerrar sua última sessão.
+		O sistema está encerrando sua última sessão.
 Tente fazer login novamente em um minuto.
 	</string>
 	<string name="LoginFailedAuthenticationMFARequired">
@@ -362,7 +356,7 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 		Salvando suas configurações...
 	</string>
 	<string name="LoggingOut">
-		Fazendo logout...
+		Saindo...
 	</string>
 	<string name="ShuttingDown">
 		Encerrando...
@@ -827,7 +821,7 @@ são permitidas.
 		Conexão perdida
 	</string>
 	<string name="AssetErrorPriceMismatch">
-		Viewer e servidor não concordam com o preço
+		Divergência de preço entre viewer e servidor
 	</string>
 	<string name="AssetErrorUnknownStatus">
 		Estado desconhecido
@@ -945,7 +939,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Ausente
 	</string>
 	<string name="AvatarDoNotDisturb">
-		Não perturbe
+		Ocupado
 	</string>
 	<string name="AvatarMuted">
 		Bloqueado
@@ -1044,7 +1038,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Pular de alegria
 	</string>
 	<string name="anim_kissmybutt">
-		LMA
+		Beija minha bunda
 	</string>
 	<string name="anim_express_kiss">
 		Beijo
@@ -1101,7 +1095,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Repulsa
 	</string>
 	<string name="anim_kick_roundhouse_r">
-		Patada giratoria
+		Chute giratório
 	</string>
 	<string name="anim_express_sad">
 		Triste
@@ -1134,7 +1128,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Estocada
 	</string>
 	<string name="anim_angry_tantrum">
-		Berrinche
+		Pirraça
 	</string>
 	<string name="anim_express_tongue_out">
 		Colocar a língua para fora
@@ -1146,7 +1140,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Sussurrar
 	</string>
 	<string name="anim_whistle">
-		Silbar
+		Assobiar
 	</string>
 	<string name="anim_express_wink">
 		Piscar
@@ -1242,7 +1236,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Se você permitir acesso à sua conta, também estará permitindo que o objeto:
 	</string>
 	<string name="ScriptTakeMoney">
-		Obtener de usted dólares Linden (L$)
+		Cobrar Lindens (L$) de você
 	</string>
 	<string name="ActOnControlInputs">
 		Agir conforme seus controles
@@ -1252,10 +1246,10 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 	</string>
 	<string name="AnimateYourAvatar">Animar seu avatar</string>
 	<string name="AttachToYourAvatar">
-		Anexe ao seu avatar
+		Anexar ao seu avatar
 	</string>
 	<string name="ReleaseOwnership">
-		Renunciar propriedade e tornar público
+		Ceder propriedade e tornar público
 	</string>
 	<string name="LinkAndDelink">
 		Vincular e desvincular objetos
@@ -1267,7 +1261,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Alterar suas permissões
 	</string>
 	<string name="TrackYourCamera">
-		Seguir tu cámara
+		Rastrear sua câmera
 	</string>
 	<string name="ControlYourCamera">
 		Controle sua câmera
@@ -1276,16 +1270,16 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Teleportar-se
 	</string>
 	<string name="ManageEstateSilently">
-		Gerenciar suas propriedades silenciosamente
+		Gerenciar seus estates silenciosamente
 	</string>
 	<string name="ChangeYourDefaultAnimations">
-		Altere suas animações padrão
+		Alterar suas animações padrão
 	</string>
 	<string name="ForceSitAvatar">
 		Forçar seu avatar a sentar
 	</string>
 	<string name="ChangeEnvSettings">
-		Altere as configurações do seu ambiente
+		Alterar as configurações do ambiente
 	</string>
 	<string name="SnapshotSavedToDisk">Captura salva: [FILENAME]</string>
 	<string name="NotConnected">
@@ -1295,13 +1289,13 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		(Você)
 	</string>
 	<string name="SilentlyManageEstateAccess">
-		Suprimir alertas ao gerenciar listas de acesso imobiliário
+		Gerenciar listas de acesso ao estate silenciosamente
 	</string>
 	<string name="OverrideYourAnimations">
-		Substituir suas animações padrão
+		Sobrescrever suas animações padrão
 	</string>
 	<string name="ScriptReturnObjects">
-		Devolva objetos em seu nome
+		Devolver objetos em seu nome
 	</string>
 	<string name="UnknownScriptPermission">
 		(desconhecido)!
@@ -1506,7 +1500,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Calças não vestidas
 	</string>
 	<string name="shoes_not_worn">
-		Sapatos não vestidos
+		Sapatos não equipados
 	</string>
 	<string name="socks_not_worn">
 		Meias não vestidas
@@ -1665,7 +1659,7 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Alto
 	</string>
 	<string name="LeaveMouselook">
-		Pressione ESC para retornar à Visão Mundial
+		Pressione ESC para sair do Mouselook
 	</string>
 	<string name="InventoryNoMatchingItems">
 		Não encontrou o que procura? Tente [secondlife:///app/search/all/[SEARCH_TERM] Buscar].
@@ -2282,13 +2276,13 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="AgeDaysB">[COUNT] dias</string>
 	<string name="AgeDaysC">[COUNT] dias</string>
 	<string name="GroupMembersA">
-		[COUNT] miembro
+		[COUNT] membro
 	</string>
 	<string name="GroupMembersB">
-		[COUNT] miembros
+		[COUNT] membros
 	</string>
 	<string name="GroupMembersC">
-		[COUNT] miembros
+		[COUNT] membros
 	</string>
 	<string name="AcctTypeResident">
 		Residente
@@ -2384,13 +2378,13 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		reiniciar
 	</string>
 	<string name="RunQueueTitle">
-		Definir progresso em execução
+		Progresso de execução
 	</string>
 	<string name="RunQueueStart">
 		definir em execução
 	</string>
 	<string name="NotRunQueueTitle">
-		Definir progresso de parada
+		Progresso de parada
 	</string>
 	<string name="NotRunQueueStart">
 		parar execução
@@ -2423,7 +2417,7 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		Script (removido do inventário)
 	</string>
 	<string name="GodToolsObjectOwnedBy">
-		El objeto [OBJECT] es propiedad de [OWNER]
+		O objeto [OBJECT] pertence a [OWNER]
 	</string>
 	<string name="GroupsNone">
 		nenhum
@@ -2440,7 +2434,7 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 	<string name="GroupIndividualShare" value="                      Grupo       Participação individual"/>
 	<string name="GroupColumn" value="                      Grupo"/>
 	<string name="Balance">
-		Kontostand
+		Saldo
 	</string>
 	<string name="Credits">
 		Créditos
@@ -2458,7 +2452,7 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		Você já é membro deste grupo.
 	</string>
 	<string name="IMParentEstate">
-		parent estate
+		estate principal
 	</string>
 	<string name="IMMainland">
 		continente
@@ -2471,13 +2465,13 @@ Se você continuar recebendo esta mensagem, entre em contato com o suporte do Se
 		erro
 	</string>
 	<string name="RegionInfoAllEstatesOwnedBy">
-		todas as propriedades de propriedade de [OWNER]
+		todos os estates de [OWNER]
 	</string>
 	<string name="RegionInfoAllEstatesYouOwn">
 		todos os estates que você possui
 	</string>
 	<string name="RegionInfoAllEstatesYouManage">
-		todas as propriedades que você gerencia para [OWNER]
+		todos os estates que você administra para [OWNER]
 	</string>
 	<string name="RegionInfoAllowedResidents">
 		Sempre permitido: ([ALLOWEDAGENTS], máx. [MAXACCESS])
@@ -4686,7 +4680,7 @@ Reinstale o Viewer de [DOWNLOAD_URL] e entre em contato com [SUPPORT_SITE] se o 
 		Você entrou na ligação
 	</string>
 	<string name="you_auto_rejected_call-im">
-		Você recusou automaticamente a chamada de voz enquanto &quot;Não perturbe&quot; estava ativado.
+		Você recusou automaticamente a chamada de voz enquanto &quot;Ocupado&quot; estava ativado.
 	</string>
 	<string name="name_started_call">
 		[NAME] iniciou uma ligação de voz
@@ -6539,10 +6533,10 @@ Sua posição atual: [AVATAR_POS]
 		Atenção: A saída do pré-processador foi reduzida devido ao comprimento excessivo do texto. O script provavelmente não funcionará.
 	</string>
 	<string name="skin_defaults_starlight_location">
-		A exibição da posição atual na barra de menu foi desativada como padrão para os temas da interface starlight.
+		A posição atual na barra de menu está desativada por padrão nos temas Starlight.
 	</string>
 	<string name="skin_defaults_starlight_navbar">
-		Uma exibição da barra de navegação foi habilitada como padrão para os testes da interface Starlight.
+		A barra de navegação está ativada por padrão nos temas Starlight.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		Há [SECONDS] segundos
@@ -6566,34 +6560,34 @@ Sua posição atual: [AVATAR_POS]
 		avatar desconhecido
 	</string>
 	<string name="groupcountstring">
-		Pertencem ao(s) Grupo(s) [COUNT] ([REMAINING] restantes).
+		Você pertence a [COUNT] grupo(s) ([REMAINING] restantes).
 	</string>
 	<string name="groupcountunlimitedstring">
-		Você pertence ao [COUNT] Grupo(n).
+		Você pertence a [COUNT] grupo(s).
 	</string>
 	<string name="SLGridStatusInvalidMsg">
-		Erro de status da grade SL: formato de mensagem inválido. Por favor, tente novamente mais tarde.
+		Erro de status do grid SL: formato de mensagem inválido. Tente novamente mais tarde.
 	</string>
 	<string name="SLGridStatusTimedOut">
-		Erro de status da grade SL: solicitação expirou.
+		Erro de status do grid SL: solicitação expirou.
 	</string>
 	<string name="SLGridStatusOtherError">
-		Erro de status da grid SL: [STATUS] ( https://pt.wikipedia.org/wiki/Anexo:Lista_de_c%C3%B3digos_HTTP ).
+		Erro de status do grid SL: [STATUS] ( https://pt.wikipedia.org/wiki/Anexo:Lista_de_c%C3%B3digos_HTTP ).
 	</string>
 	<string name="DoubleClickTeleportEnabled">
-		Clique duas vezes em teletransporte ativado.
+		Teletransporte com duplo clique: ativado.
 	</string>
 	<string name="DoubleClickTeleportDisabled">
-		Clique duas vezes em teletransporte desativado.
+		Teletransporte com duplo clique: desativado.
 	</string>
 	<string name="AlwaysRunEnabled">
-		Sempre execute ativado.
+		Sempre correr: ativado.
 	</string>
 	<string name="AlwaysRunDisabled">
-		Sempre execute desabilitado.
+		Sempre correr: desativado.
 	</string>
 	<string name="FSRegionRestartInLocalChat">
-		A região em que você está está prestes a reiniciar. Se você permanecer nesta região, você será desconectado.
+		Atenção: esta região está prestes a reiniciar. Você será desconectado se permanecer aqui.
 	</string>
 	<string name="Mute_Add">
 		“[NAME]” foi adicionado à lista de bloqueios.
@@ -6614,7 +6608,7 @@ Sua posição atual: [AVATAR_POS]
 		Solicitação rejeitada.
 	</string>
 	<string name="Reqsysinfo_Reason">
-		A saudação transmitida é: [REASON]
+		Motivo informado: [REASON]
 	</string>
 	<string name="All Items">
 		Todos os objetos
@@ -6623,7 +6617,7 @@ Sua posição atual: [AVATAR_POS]
 		Objetos atuais
 	</string>
 	<string name="Worn Items">
-		Itens vestidos
+		Itens equipados
 	</string>
 	<string name="Favorites">
 		Favoritos
@@ -6669,13 +6663,13 @@ Sua posição atual: [AVATAR_POS]
 		Não
 	</string>
 	<string name="FSUrlEntryWearLabel">
-		Atraia pastas de inventário
+		Arrastar pastas do inventário
 	</string>
 	<string name="TexturePickerOutfitHeader">
-		Foto do item
+		Foto do visual
 	</string>
 	<string name="unknown_script">
-		(Roteiro desconhecido)
+		(Script desconhecido)
 	</string>
 	<string name="FSAreaSearch_Cost_Label">L$[COST]</string>
 	<string name="ImportingWindlightBulk">
@@ -6703,10 +6697,10 @@ Sua posição atual: [AVATAR_POS]
 		Nenhum UUID válido encontrado no arquivo importado.
 	</string>
 	<string name="ImportListTooLarge">
-		Muitas entradas. O arquivo CSV possui entradas [COUNT], mas apenas locais [MAX] estão disponíveis.
+		Entradas demais. O arquivo CSV tem [COUNT] entradas, mas apenas [MAX] slots estão disponíveis.
 	</string>
 	<string name="ImportSuccessful">
-		Entradas [COUNT] processadas com sucesso.
+		[COUNT] entradas processadas com sucesso.
 	</string>
 	<string name="Flood">
 		Preencher
@@ -6724,7 +6718,7 @@ Sua posição atual: [AVATAR_POS]
 		máximo
 	</string>
 	<string name="OmnifilterReplacement">
-		Substituição do Filtro Omni: [REPLACEMENT]
+		Filtro Omni substituído por: [REPLACEMENT]
 	</string>
 	<string name="FSAvatarAlignToggleMini">
 	Pequeno
