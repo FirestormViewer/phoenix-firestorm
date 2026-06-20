@@ -226,8 +226,11 @@ public:
     // Skips avatars, attachments, trees and grass; used by the OTS shoulder
     // camera to pull the camera in front of walls/floors without colliding
     // with the wearer's own body or other avatars.
+    // skip_phantom: re-cast past phantom prims so they never block the camera
+    // or the aim convergence (phantom objects have no physics, so the bullet
+    // and the camera should pass straight through them).
     LLDrawable* lineSegmentIntersectWorldGeometry(const LLVector4a& start, const LLVector4a& end,
-                                                  LLVector4a* intersection);
+                                                  LLVector4a* intersection, bool skip_phantom = false);
 
     //get the closest particle to start between start and end, returns the LLVOPartGroup and particle index
     LLVOPartGroup* lineSegmentIntersectParticle(const LLVector4a& start, const LLVector4a& end, LLVector4a* intersection,

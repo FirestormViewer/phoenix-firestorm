@@ -1977,7 +1977,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
             LLVector4a ray_start, ray_end, hit_pos;
             ray_start.load3(pivot.mV);
             ray_end.load3(cam_pos_agent.mV);
-            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit_pos))
+            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit_pos, true /*skip_phantom*/))
             {
                 LLVector3 hit(hit_pos.getF32ptr());
                 F32 hit_dist = (hit - pivot).length();

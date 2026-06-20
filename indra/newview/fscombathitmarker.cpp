@@ -571,8 +571,9 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     // cost we are avoiding. The cast returns terrain/prims; avatars are handled
     // by the cheap capsule pass below. Step past our own body/attachments, which
     // the shoulder ray can graze on its way out, so self never wins. With nothing
-    // solid under the crosshair the far point stands.
-    for (S32 i = 0; i < 4; ++i)
+    // solid under the crosshair the far point stands. Extra iterations leave room
+    // to also step past stacked phantom prims (which have no physics).
+    for (S32 i = 0; i < 12; ++i)
     {
         S32 face_hit = -1;
         LLViewerObject* obj = gPipeline.lineSegmentIntersectInWorld(
@@ -586,7 +587,9 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
         }
         const bool is_self = isAgentAvatarValid() &&
             (obj == gAgentAvatarp || obj->getAvatar() == gAgentAvatarp);
-        if (is_self)
+        // Phantom prims have no physics: a bullet passes straight through them,
+        // so the convergence target must too. Step past and keep looking.
+        if (is_self || obj->flagPhantom())
         {
             LLVector3 past(hit.getF32ptr());
             past += cam_at * 0.10f; // nudge just past the surface we grazed
@@ -842,7 +845,7 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
         // what keeps terrain *behind* the target from pulling the dot off it.
         ray_start.load3(eye.mV);
         ray_end.load3(aim_end.mV);
-        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
+        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit, true /*skip_phantom*/))
         {
             const LLRect& world_rect = gViewerWindow->getWorldViewRectScaled();
             LLCoordGL screen(world_rect.getCenterX(), world_rect.getCenterY());
