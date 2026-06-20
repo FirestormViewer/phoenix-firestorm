@@ -222,6 +222,13 @@ public:
                                                 LLVector4a* tangent = NULL             // return the surface tangent at the intersection point
         );
 
+    // Raycast against static world geometry only (volumes, linksets, terrain).
+    // Skips avatars, attachments, trees and grass; used by the OTS shoulder
+    // camera to pull the camera in front of walls/floors without colliding
+    // with the wearer's own body or other avatars.
+    LLDrawable* lineSegmentIntersectWorldGeometry(const LLVector4a& start, const LLVector4a& end,
+                                                  LLVector4a* intersection);
+
     //get the closest particle to start between start and end, returns the LLVOPartGroup and particle index
     LLVOPartGroup* lineSegmentIntersectParticle(const LLVector4a& start, const LLVector4a& end, LLVector4a* intersection,
                                                         S32* face_hit);

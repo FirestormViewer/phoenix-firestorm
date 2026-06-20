@@ -86,6 +86,7 @@ if (WINDOWS)
           /IGNORE:4099)
 
   add_compile_definitions(
+      LL_WINDOWS=1
       WIN32_LEAN_AND_MEAN
       NOMINMAX
 #     DOM_DYNAMIC                     # For shared library colladadom
@@ -164,6 +165,7 @@ if (LINUX)
   # cause warnings due to our use of deprecated headers
 
   add_definitions(
+      -DLL_LINUX=1
       -D_REENTRANT
       )
   add_compile_options(
@@ -214,7 +216,7 @@ if (DARWIN)
   add_compile_options(-g --debug) # --debug is a clang synonym for -g that bypasses cmake behaviors
 
   # Silence GL deprecation warnings
-  add_compile_definitions(GL_SILENCE_DEPRECATION=1)
+  add_compile_definitions(LL_DARWIN=1 GL_SILENCE_DEPRECATION=1)
 
   set(ENABLE_SIGNING TRUE)
   set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )

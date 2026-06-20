@@ -47,6 +47,8 @@
 // Viewer includes
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llgroupcolormap.h"         // group-based dot tinting
+#include "llvoavatar.h"              // group-based dot tinting
 #include "llappviewer.h" // for gDisconnected
 #include "llavataractions.h"
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
@@ -2062,6 +2064,30 @@ LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
     if (auto found = sAvatarMarksMap.find(avatar_id); found != sAvatarMarksMap.end())
     {
         color = found->second;
+    }
+
+    // Group-based dot tinting: override with group color if one is set.
+    {
+        LLUUID active_group;
+        if (avatar_id == gAgent.getID())
+        {
+            active_group = gAgent.getGroupID();
+        }
+        else if (LLViewerObject* obj = gObjectList.findObject(avatar_id))
+        {
+            if (LLVOAvatar* av = dynamic_cast<LLVOAvatar*>(obj))
+            {
+                active_group = av->getActiveGroupID();
+            }
+        }
+        if (active_group.notNull())
+        {
+            LLColor4 group_color = LLGroupColorMap::getInstance()->getGroupColor(active_group);
+            if (group_color.mV[VW] >= 0.01f)
+            {
+                color = group_color;
+            }
+        }
     }
 
     return color;

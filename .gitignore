@@ -13,17 +13,23 @@
 *.depend
 *.stamp
 *.rc
+*.txt
+*.log
+*.ps1
 
+*.rpm
 *.tar.bz2
 *.code-workspace
 *~
 
 # Specific paths and/or names
+performanceroadmap.md
 CMakeCache.txt
 cmake_install.cmake
 LICENSES
 build-darwin-*
 build-linux-*
+build-recursive-perms/
 debian/files
 debian/secondlife-appearance-utility*
 debian/secondlife-viewer*
@@ -130,3 +136,4 @@ firestorm.code-workspace
 .github/release.yaml
 
 checks.json
+

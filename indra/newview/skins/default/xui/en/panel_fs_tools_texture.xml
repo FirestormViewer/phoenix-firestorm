@@ -2992,14 +2992,27 @@
    label="Synchronize materials"
    left="2"
    top_pad="10"
-   width="200"
+   width="140"
    name="checkbox_sync_settings"
    tool_tip="Synchronize texture map parameters"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   height="23"
+   left_pad="4"
+   top_delta="-4"
+   label="Sync"
+   name="button_sync_materials"
+   tool_tip="Copy diffuse texture settings (offset, repeats, rotation) to normal and specular for all selected faces"
+   width="52"
 />
 
 <check_box
    follows="left|top"
    layout="topleft"
+   left="2"
    top_pad="4"
    width="136"
    height="16"

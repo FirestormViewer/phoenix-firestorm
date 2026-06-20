@@ -28,6 +28,7 @@
 
 #include "lltoolgun.h"
 
+#include "fscombathitmarker.h"
 #include "llviewerwindow.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -46,6 +47,7 @@
 #include "lltoolmgr.h"
 #include "lltoolgrab.h"
 #include "lluiimage.h"
+#include "lltoolcomp.h"
 // Linden library includes
 #include "llwindow.h"           // setMouseClipping()
 
@@ -96,10 +98,16 @@ bool LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 
         // <FS:Ansariel> Use faster LLCachedControl
         //F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
+        // Check if we're zoomed and use appropriate sensitivity
+        bool is_zoomed = LLToolCompGun::getInstance()->isZoomed();
         static LLCachedControl<F32> mouseSensitivity(gSavedSettings, "MouseSensitivity");
-        F32 mouse_sensitivity = (F32)mouseSensitivity;
+        static LLCachedControl<F32> mouseSensitivityZoomed(gSavedSettings, "MouseSensitivityZoomed");
+        F32 mouse_sensitivity = (F32)(is_zoomed ? mouseSensitivityZoomed : mouseSensitivity);
         // </FS:Ansariel> Use faster LLCachedControl
-        mouse_sensitivity = clamp_rescale(mouse_sensitivity, 0.f, 15.f, 0.5f, 2.75f) * NOMINAL_MOUSE_SENSITIVITY;
+        
+        // Use extended lower range (0.05-2.75) for finer control at low sensitivities
+        // Rescale from 0-100 slider range to actual sensitivity multiplier
+        mouse_sensitivity = clamp_rescale(mouse_sensitivity, 0.f, 100.f, 0.05f, 2.75f) * NOMINAL_MOUSE_SENSITIVITY;
 
         // ...move the view with the mouse
 
@@ -165,6 +173,16 @@ void LLToolGun::draw()
     static LLCachedControl<bool> showCrosshairs(gSavedSettings, "ShowCrosshairs");
     if (showCrosshairs)
     {
+        // Custom composite crosshair (dot + arrows) replaces the stock one
+        static LLCachedControl<bool> customCrosshair(gSavedSettings, "FSCustomCrosshair", false);
+        if (customCrosshair)
+        {
+            FSCombatHitMarker::drawCrosshair(
+                gViewerWindow->getWorldViewRectScaled().getWidth(),
+                gViewerWindow->getWorldViewRectScaled().getHeight());
+            return;
+        }
+
         // <FS:Ansariel> Performance tweak
         //LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
         //crosshair->draw(

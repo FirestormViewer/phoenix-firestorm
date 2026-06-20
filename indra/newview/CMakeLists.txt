@@ -126,7 +126,11 @@ set(viewer_SOURCE_FILES
     fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
     fsfloatergroup.cpp
+    fscombathitmarker.cpp
+    fsfloaterhitmarker.cpp
     fsfloatergrouptitles.cpp
+    fsfloatergroupviewer.cpp
+    fsfloaterkillfeed.cpp
     fsgrouptitleregionmgr.cpp
     fsfloaterimport.cpp
     fsfloaterim.cpp
@@ -169,6 +173,7 @@ set(viewer_SOURCE_FILES
     fspanellogin.cpp
     fspanelpreferenceuisounds.cpp
     fspanelprefs.cpp
+    sspanelprefs.cpp
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
@@ -238,6 +243,7 @@ set(viewer_SOURCE_FILES
     llattachmentsmgr.cpp
     llaudiosourcevo.cpp
     llautoreplace.cpp
+    llautoupdatechecker.cpp
     llavataractions.cpp
     llavatariconctrl.cpp
     llavatarlist.cpp
@@ -447,6 +453,7 @@ set(viewer_SOURCE_FILES
     llfloatertoybox.cpp
     llfloatertranslationsettings.cpp
     llfloateruipreview.cpp
+    llfloaterupdateprogress.cpp
     llfloaterurlentry.cpp
     llfloatervoicevolume.cpp
     llfloaterwebcontent.cpp
@@ -466,6 +473,7 @@ set(viewer_SOURCE_FILES
     llgltfmateriallist.cpp
     llgltfmaterialpreviewmgr.cpp
     llgroupactions.cpp
+    llgroupcolormap.cpp             # group-based nameplate tinting
     llgroupiconctrl.cpp
     llgrouplist.cpp
     llgroupmgr.cpp
@@ -984,7 +992,11 @@ set(viewer_HEADER_FILES
     fsfloatercontactsetconfiguration.h
     fsfloaterexport.h
     fsfloatergroup.h
+    fscombathitmarker.h
+    fsfloaterhitmarker.h
     fsfloatergrouptitles.h
+    fsfloatergroupviewer.h
+    fsfloaterkillfeed.h
     fsgrouptitleregionmgr.h
     fsfloaterimport.h
     fsfloaterim.h
@@ -1029,6 +1041,7 @@ set(viewer_HEADER_FILES
     fspanellogin.h
     fspanelpreferenceuisounds.h
     fspanelprefs.h
+    sspanelprefs.h
     fspanelradar.h
     fsparticipantlist.h
     fspose.h
@@ -1101,6 +1114,7 @@ set(viewer_HEADER_FILES
     llattachmentsmgr.h
     llaudiosourcevo.h
     llautoreplace.h
+    llautoupdatechecker.h
     llavataractions.h
     llavatariconctrl.h
     llavatarlist.h
@@ -1314,6 +1328,7 @@ set(viewer_HEADER_FILES
     llfloatertoybox.h
     llfloatertranslationsettings.h
     llfloateruipreview.h
+    llfloaterupdateprogress.h
     llfloaterurlentry.h
     llfloatervoicevolume.h
     llfloaterwebcontent.h
@@ -1332,6 +1347,7 @@ set(viewer_HEADER_FILES
     llgltfmateriallist.h
     llgltfmaterialpreviewmgr.h
     llgroupactions.h
+    llgroupcolormap.h               # group-based nameplate tinting
     llgroupiconctrl.h
     llgrouplist.h
     llgroupmgr.h
@@ -1967,8 +1983,8 @@ if (LINUX)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.bmp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/soapstorm_256.bmp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/soapstorm_icon.BMP"
       )
 endif (LINUX)
 
@@ -2025,18 +2041,18 @@ if (WINDOWS)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_icon.ico"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/soapstorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/soapstorm_icon.ico"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/soapstorm_256.bmp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/soapstorm_icon.BMP"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/soapstorm_256.bmp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/soapstorm_icon.BMP"
       )
 
     # Add resource files to the project.
@@ -2072,9 +2088,9 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res/firestorm_icon.BMP
-        res/firestorm_icon.ico
-        res-sdl/firestorm_icon.BMP
+        res/soapstorm_icon.BMP
+        res/soapstorm_icon.ico
+        res-sdl/soapstorm_icon.BMP
         res/ll_icon_small.ico
         res/resource.h
         res/toolpickobject.cur

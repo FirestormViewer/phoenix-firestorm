@@ -41,6 +41,7 @@ class LLCheckBoxCtrl;
 class LLComboBox;
 class LLSpinCtrl;
 class LLAvatarName;
+class LLColorSwatchCtrl;   // group nameplate tinting
 
 class LLPanelGroupGeneral : public LLPanelGroupTab
 {
@@ -114,6 +115,13 @@ private:
     LLComboBox      *mComboActiveTitle;
     LLComboBox      *mComboMature;
     LLCheckBoxCtrl  *mCtrlReceiveGroupChat; // <exodus/>
+
+    // Group nameplate tinting
+    LLColorSwatchCtrl* mGroupColorSwatch { nullptr };
+    void onGroupColorChanged();
+    void onGroupColorCancelled();
+    void onGroupColorCleared();
+    void refreshGroupColorSwatch();
 
     LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
 

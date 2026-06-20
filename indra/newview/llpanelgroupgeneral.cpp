@@ -28,6 +28,9 @@
 
 #include "llpanelgroupgeneral.h"
 
+#include "llcolorswatch.h"        // LLColorSwatchCtrl – group nameplate tinting
+#include "llgroupcolormap.h"      // per-group nameplate tinting
+
 #include "llavatarnamecache.h"
 #include "llagent.h"
 #include "llagentbenefits.h"
@@ -250,6 +253,23 @@ bool LLPanelGroupGeneral::postBuild()
         mCtrlEnrollmentFee->setEnabled(true);
         mSpinEnrollmentFee->setEnabled(true);
 
+    }
+
+    // Group nameplate tinting: wire up color swatch
+    mGroupColorSwatch = getChild<LLColorSwatchCtrl>("group_nametag_color", recurse);
+    if (mGroupColorSwatch)
+    {
+        mGroupColorSwatch->setCanApplyImmediately(false);
+        mGroupColorSwatch->setEnabled(true);
+        mGroupColorSwatch->setCommitCallback([this](LLUICtrl*, const LLSD&) { onGroupColorChanged(); });
+        mGroupColorSwatch->setOnCancelCallback([this](LLUICtrl*, const LLSD&) { onGroupColorCancelled(); });
+        mGroupColorSwatch->setOnSelectCallback([this](LLUICtrl*, const LLSD&) { onGroupColorChanged(); });
+        refreshGroupColorSwatch();
+    }
+    LLButton* clear_color_btn = getChild<LLButton>("group_nametag_color_clear", recurse);
+    if (clear_color_btn)
+    {
+        clear_color_btn->setCommitCallback([this](LLUICtrl*, const LLSD&) { onGroupColorCleared(); });
     }
 
     return LLPanelGroupTab::postBuild();
@@ -940,6 +960,8 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 
     mInsignia->setImageAssetID(LLUUID::null);
 
+    refreshGroupColorSwatch();
+
     resetDirty();
 
     activate();
@@ -1126,3 +1148,45 @@ void LLPanelGroupGeneral::refreshInsigniaTexture()
 }
 // </FS:Ansariel>
 
+
+// ---------------------------------------------------------------------------
+// Group nameplate tinting callbacks
+// ---------------------------------------------------------------------------
+
+void LLPanelGroupGeneral::onGroupColorChanged()
+{
+    if (!mGroupColorSwatch || mGroupID.isNull())
+        return;
+    LLColor4 color = mGroupColorSwatch->get();
+    LLGroupColorMap::getInstance()->setGroupColor(mGroupID, color);
+}
+
+void LLPanelGroupGeneral::onGroupColorCancelled()
+{
+    refreshGroupColorSwatch();
+}
+
+void LLPanelGroupGeneral::onGroupColorCleared()
+{
+    if (mGroupID.isNull())
+        return;
+    LLGroupColorMap::getInstance()->clearGroupColor(mGroupID);
+    refreshGroupColorSwatch();
+}
+
+void LLPanelGroupGeneral::refreshGroupColorSwatch()
+{
+    if (!mGroupColorSwatch)
+        return;
+    mGroupColorSwatch->setEnabled(true);
+    if (mGroupID.isNull())
+    {
+        mGroupColorSwatch->set(LLColor4::white, false);
+        return;
+    }
+    LLColor4 stored = LLGroupColorMap::getInstance()->getGroupColor(mGroupID);
+    if (stored.mV[VW] >= 0.01f)
+        mGroupColorSwatch->set(stored, false);
+    else
+        mGroupColorSwatch->set(LLColor4::white, false);
+}

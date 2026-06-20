@@ -107,6 +107,7 @@
 #include "llvocache.h"
 #include "lldiskcache.h"
 #include "llvopartgroup.h"
+#include "llautoupdatechecker.h"
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 #include "llappearancemgr.h"
 // [/SL:KB]
@@ -5263,8 +5264,11 @@ bool LLAppViewer::initCache()
     constexpr U32 GB = 1024 * MB; // <FS:Beq/> Readability constant
     const uintmax_t MIN_CACHE_SIZE = 256 * MB;
     const uintmax_t MAX_CACHE_SIZE = 100ULL * GB; // <FS:Beq/> raise the cap to 100GB, UI will limit to a more sensible level of 20GB.
-    const uintmax_t setting_cache_total_size = uintmax_t(gSavedSettings.getU32("CacheSize")) * MB;
+    const U32 cache_size_setting = gSavedSettings.getU32("CacheSize");
+    LL_INFOS("InitInfo") << "CacheSize setting read as: " << cache_size_setting << " MB" << LL_ENDL;
+    const uintmax_t setting_cache_total_size = uintmax_t(cache_size_setting) * MB;
     const uintmax_t cache_total_size = llclamp(setting_cache_total_size, MIN_CACHE_SIZE, MAX_CACHE_SIZE);
+    LL_INFOS("InitInfo") << "Cache total size after clamp: " << (cache_total_size / MB) << " MB" << LL_ENDL;
     // <FS:Ansariel> Better cache size control
     //const F64 disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
     //const F6432 texture_cache_percent = 100.0 - disk_cache_percent;
@@ -5429,6 +5433,7 @@ bool LLAppViewer::initCache()
     const S64 texture_cache_size = (S64)cache_total_size;
     // </FS:Ansariel>
 
+    LL_INFOS("InitInfo") << "Initializing texture cache with size: " << (texture_cache_size / (1024 * 1024)) << " MB" << LL_ENDL;
     LLAppViewer::getTextureCache()->initCache(LL_PATH_CACHE, texture_cache_size, texture_cache_mismatch);
 
     const U32 CACHE_NUMBER_OF_REGIONS_FOR_OBJECTS = 128;
@@ -5958,6 +5963,7 @@ void LLAppViewer::idle()
         }
         gGLActive = false;
     }
+    // Note: Auto-update check moved to login screen (STATE_LOGIN_SHOW in llstartup.cpp)
 
 
     F32 yaw = 0.f;              // radians
@@ -5994,6 +6000,14 @@ void LLAppViewer::idle()
         // actually sent or not) because these will be recomputed based on
         // real-time key/controller input and resubmitted next frame.
         gAgent.resetControlFlags();
+        // Re-apply LBUTTON_DOWN each frame while RMB is held in mouselook.
+        // resetControlFlags() strips all ephemeral bits, so we must re-set
+        // this before the next send_agent_update or the sim will see the
+        // bit drop to 0 and fire a spurious button-up control event.
+        if (gViewerWindow && gViewerWindow->getRMBHeldInMouselook())
+        {
+            gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+        }
     }
 
     //////////////////////////////////////

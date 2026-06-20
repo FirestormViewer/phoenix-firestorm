@@ -49,6 +49,7 @@
 #include "llvoavatarself.h"
 #include "llwindow.h"
 #include "v4color.h"
+#include "llcallingcard.h"
 
 namespace
 {
@@ -1455,7 +1456,7 @@ void FSFloaterPoser::onPoseStartStop()
         if (!couldAnimateAvatar(avatar))
             return;
 
-        if (!havePermissionToAnimateAvatar(avatar))
+        if (!havePermissionToAnimateAvatar(avatar) && !havePermissionToAnimateOtherAvatar(avatar))
             return;
 
         mPoserAnimator.tryPosingAvatar(avatar);
@@ -1501,7 +1502,30 @@ bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) cons
     if (!avatar || avatar->isDead())
         return false;
 
-    return false;
+    // For animesh (control avatars) not owned by self, check if the object owner granted us mod rights
+    if (avatar->isControlAvatar())
+    {
+        LLControlAvatar*      control_av     = dynamic_cast<LLControlAvatar*>(avatar);
+        const LLVOVolume*     rootVolume     = control_av ? control_av->mRootVolp : nullptr;
+        const LLViewerObject* rootEditObject = rootVolume ? rootVolume->getRootEdit() : nullptr;
+        if (!rootEditObject)
+            return false;
+        if (rootEditObject->permYouOwner())
+            return false; // already covered by havePermissionToAnimateAvatar
+        // mOwnerID is null for objects we don't own; use getAttachedAvatar() for the owner ID
+        LLVOAvatar*  parentAv = const_cast<LLControlAvatar*>(control_av)->getAttachedAvatar();
+        LLUUID       ownerId  = (parentAv && !parentAv->isSelf()) ? parentAv->getID() : rootEditObject->mOwnerID;
+        if (ownerId.isNull())
+            return false;
+        const LLRelationship* buddy = LLAvatarTracker::instance().getBuddyInfo(ownerId);
+        return buddy && buddy->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
+    }
+
+    // For regular avatars: check if they've granted us modify-object rights
+    if (avatar->isSelf())
+        return false; // already covered by havePermissionToAnimateAvatar
+    const LLRelationship* buddy = LLAvatarTracker::instance().getBuddyInfo(avatar->getID());
+    return buddy && buddy->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
 }
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
@@ -2529,11 +2553,11 @@ void FSFloaterPoser::onAvatarSelect()
 
     bool arePosingSelected = mPoserAnimator.isPosingAvatar(avatar);
 
-    mStartStopPosingBtn->setEnabled(haveImplicitPermission);
+    mStartStopPosingBtn->setEnabled(haveImplicitPermission || haveExplicitPermission);
     mStartStopPosingBtn->setValue(arePosingSelected);
 
-    mSetToTposeButton->setEnabled(haveImplicitPermission && arePosingSelected);
-    poseControlsEnable(arePosingSelected && haveImplicitPermission);
+    mSetToTposeButton->setEnabled((haveImplicitPermission || haveExplicitPermission) && arePosingSelected);
+    poseControlsEnable(arePosingSelected && (haveImplicitPermission || haveExplicitPermission));
 
     refreshTextHighlightingOnAvatarScrollList();
     refreshTextHighlightingOnJointScrollLists();
@@ -2555,10 +2579,15 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
         if (isMuted)
             continue;
 
+        // Original logic: self and all control avatars (own animesh) always pass.
+        // Additionally include non-self regular avatars that have granted us mod rights.
         bool isSelfOrCtrl = avatar->isControlAvatar() || avatar->isSelf();
-
         if (!isSelfOrCtrl)
-            continue;
+        {
+            const LLRelationship* buddy = LLAvatarTracker::instance().getBuddyInfo(avatar->getID());
+            if (!buddy || !buddy->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
+                continue;
+        }
 
         avatar_ids.emplace_back(character->getID());
     }
@@ -2652,7 +2681,12 @@ void FSFloaterPoser::onAvatarsRefresh()
             continue;
 
         if (!avatar->isSelf())
-            continue;
+        {
+            // Allow non-self avatars only when they've granted us modify-object rights
+            const LLRelationship* buddy = LLAvatarTracker::instance().getBuddyInfo(uuid);
+            if (!buddy || !buddy->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
+                continue;
+        }
 
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
@@ -2720,19 +2754,37 @@ std::string FSFloaterPoser::getControlAvatarName(const LLControlAvatar* avatar)
     if (!avatar)
         return {};
 
-    const LLVOVolume* rootVolume = avatar->mRootVolp;
+    const LLVOVolume*     rootVolume     = avatar->mRootVolp;
     const LLViewerObject* rootEditObject = rootVolume ? rootVolume->getRootEdit() : nullptr;
     if (!rootEditObject)
         return {};
 
+    // Own animesh that is an attachment: use the inventory item name
     const LLViewerInventoryItem* attachedItem =
         (rootEditObject->isAttachment()) ? gInventory.getItem(rootEditObject->getAttachmentItemID()) : nullptr;
-
     if (attachedItem)
         return attachedItem->getName();
 
+    // Own free-standing animesh
     if (rootEditObject->permYouOwner())
         return avatar->getFullname();
+
+    // Others' animesh: only show if they've granted us mod rights.
+    // For animesh attached to an avatar, use that avatar's ID directly since
+    // mOwnerID may be null/unknown for objects we don't own.
+    LLVOAvatar* parentAv = const_cast<LLControlAvatar*>(avatar)->getAttachedAvatar();
+    LLUUID      ownerId  = (parentAv && !parentAv->isSelf()) ? parentAv->getID() : rootEditObject->mOwnerID;
+    if (ownerId.isNull())
+        return {};
+    const LLRelationship* buddy = LLAvatarTracker::instance().getBuddyInfo(ownerId);
+    if (buddy && buddy->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS))
+    {
+        LLUUID nameId = parentAv ? parentAv->getID() : ownerId;
+        LLAvatarName av_name;
+        if (LLAvatarNameCache::get(nameId, &av_name))
+            return av_name.getDisplayName() + " (animesh)";
+        return "(animesh)";
+    }
 
     return {};
 }
@@ -2898,6 +2950,11 @@ void FSFloaterPoser::writeBvhFragment(llofstream* fileStream, LLVOAvatar* avatar
     if (!joint)
         return;
 
+    // Collision volumes are physics shapes, not deforming bones; exclude them from BVH export.
+    // The UI already marks these joints with icon_rotation_does_not_export when in BVH save mode.
+    if (joint->boneType() == COL_VOLUMES)
+        return;
+
     auto saveAxis = getBvhJointTranslation(joint->jointName());
 
     switch (joint->boneType())
@@ -2972,6 +3029,9 @@ void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FS
     if (!joint)
         return;
 
+    if (joint->boneType() == COL_VOLUMES)
+        return;
+
     switch (joint->boneType())
     {
         case WHOLEAVATAR:
@@ -2994,6 +3054,9 @@ void FSFloaterPoser::writeFirstFrameOfBvhMotion(llofstream* fileStream, const FS
 void FSFloaterPoser::writeBvhMotion(llofstream* fileStream, LLVOAvatar* avatar, const FSPoserAnimator::FSPoserJoint* joint)
 {
     if (!joint)
+        return;
+
+    if (joint->boneType() == COL_VOLUMES)
         return;
 
     bool lockPelvisJoint = gSavedSettings.getBOOL(POSER_UNLOCKPELVISINBVH_SAVE_KEY);

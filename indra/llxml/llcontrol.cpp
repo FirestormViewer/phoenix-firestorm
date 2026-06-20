@@ -217,6 +217,16 @@ LLSD LLControlVariable::getComparableValue(const LLSD& value)
             storable_value = value;
         }
     }
+    else if (TYPE_U32 == type() || TYPE_S32 == type())
+    {
+        // Ensure integer types stay as integers even when set from float controls
+        storable_value = (LLSD::Integer)value.asInteger();
+    }
+    else if (TYPE_F32 == type())
+    {
+        // Ensure float types stay as floats
+        storable_value = (LLSD::Real)value.asReal();
+    }
     else
     {
         storable_value = value;

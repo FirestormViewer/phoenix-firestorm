@@ -7356,6 +7356,51 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
     return drawable ? drawable->getVObj().get() : NULL;
 }
 
+// Raycast against static world geometry only (volumes, linksets, terrain).
+// Unlike lineSegmentIntersectInWorld this never tests avatars, attachments,
+// trees, grass or nametags, so a ray starting inside the wearer's own body
+// is safe. Used by the OTS shoulder camera for collision.
+LLDrawable* LLPipeline::lineSegmentIntersectWorldGeometry(const LLVector4a& start, const LLVector4a& end,
+                                                          LLVector4a* intersection)
+{
+    LLDrawable* drawable = NULL;
+    LLVector4a local_end = end;
+    LLVector4a position;
+
+    for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
+            iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+    {
+        LLViewerRegion* region = *iter;
+
+        static const U32 world_partitions[] =
+        {
+            LLViewerRegion::PARTITION_VOLUME,
+            LLViewerRegion::PARTITION_BRIDGE,
+            LLViewerRegion::PARTITION_TERRAIN
+        };
+        for (U32 j : world_partitions)
+        {
+            LLSpatialPartition* part = region->getSpatialPartition(j);
+            if (part && hasRenderType(part->mDrawableType))
+            {
+                LLDrawable* hit = part->lineSegmentIntersect(start, local_end, false, false, false, false, NULL, &position);
+                if (hit)
+                {
+                    drawable = hit;
+                    local_end = position;
+                }
+            }
+        }
+    }
+
+    if (drawable && intersection)
+    {
+        *intersection = local_end;
+    }
+
+    return drawable;
+}
+
 LLViewerObject* LLPipeline::lineSegmentIntersectInHUD(const LLVector4a& start, const LLVector4a& end,
                                                       bool pick_transparent,
                                                       S32* face_hit,

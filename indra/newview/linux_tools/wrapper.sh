@@ -85,6 +85,18 @@ fi
 ## - Avoids an often-buggy X feature that doesn't really benefit us anyway.
 export SDL_VIDEO_X11_DGAMOUSE=0
 
+## - Forces SDL2 to use X11/XWayland instead of native Wayland.
+##   Forces GTK (used by FLTK's Fl_Native_File_Chooser) to also use X11.
+##   Under native Wayland, KWin auto-kills the viewer if the main thread
+##   is blocked (e.g. by the FLTK file picker modal dialog). With both SDL
+##   and GTK on X11/XWayland, KWin only shows a "Not Responding" prompt.
+export SDL_VIDEODRIVER=x11
+export GDK_BACKEND=x11
+
+## - Prevents GTK file dialogs from hanging on KDE Plasma by disabling
+##   the XDG desktop portal integration.
+export GTK_USE_PORTAL=0
+
 ## - Works around a problem with misconfigured 64-bit systems not finding GL
 exportMutliArchDRIPath "amd64"
 
@@ -104,8 +116,11 @@ if [ "$GTK_IM_MODULE" = "scim" ]; then
     export GTK_IM_MODULE=xim
 fi
 if [ "$XMODIFIERS" = "" ]; then
-    ## IME is valid only for fcitx, not when using ibus
-    export XMODIFIERS="@im=fcitx"
+    ## Only set fcitx if fcitx is actually running; otherwise leave unset
+    ## to avoid XOpenIM() failures when fcitx is not the active IME.
+    if pgrep -x fcitx > /dev/null 2>&1 || pgrep -x fcitx5 > /dev/null 2>&1; then
+        export XMODIFIERS="@im=fcitx"
+    fi
 fi
 
 ## - Automatically work around the ATI mouse cursor crash bug:

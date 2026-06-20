@@ -141,10 +141,12 @@
 #include "animationexplorer.h"      // <FS:Zi> Animation Explorer
 #include "fsareasearch.h"
 #include "fsassetblacklist.h"
+#include "fscombathitmarker.h"
 #include "fscommon.h"
 #include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
+#include "fsfloaterkillfeed.h"
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "llattachmentsmgr.h"
@@ -3136,6 +3138,13 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                 }
                 // </FS:KC>
 
+                // Kill Feed: combat log DEATH events relayed by a worn
+                // listener script (see doc/killfeed_relay.lsl)
+                if (FSFloaterKillFeed::handleChatMessage(mesg, from_id, owner_id))
+                {
+                    return;
+                }
+
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
                 // TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
                 if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) &&
@@ -3487,7 +3496,23 @@ void process_teleport_start(LLMessageSystem *msg, void**)
 
     if( gAgent.getTeleportState() == LLAgent::TELEPORT_NONE )
     {
+        // <FS:DS> FIRE-TP-DEDUP: The SL server is known to send two TeleportStart packets for some
+        // teleports (e.g. landmark TPs, and some llTeleportAgent calls). If a TeleportStart arrives
+        // shortly after a TP just completed (within a 3-second grace window), treat it as a stale
+        // duplicate and discard it — otherwise it would re-activate the progress screen with no
+        // corresponding TeleportFinish, leaving the viewer stuck in TELEPORT_REQUESTED until timeout.
+        constexpr F32 TP_DUPLICATE_START_GRACE_SECONDS = 3.0f;
+        if (gTeleportCompletionTimer.getElapsedTimeF32() < TP_DUPLICATE_START_GRACE_SECONDS)
+        {
+            LL_WARNS("Teleport","Messaging") << "Discarding TeleportStart within " << TP_DUPLICATE_START_GRACE_SECONDS
+                << "s of last teleport completion (elapsed: " << gTeleportCompletionTimer.getElapsedTimeF32()
+                << "s). Likely a duplicate packet." << LL_ENDL;
+            return;
+        }
+        // </FS:DS>
+
         gTeleportDisplay = true;
+        gTeleportDisplayTimer.reset();
         gAgent.setTeleportState( LLAgent::TELEPORT_START );
         make_ui_sound("UISndTeleportOut");
 
@@ -4249,6 +4274,41 @@ void send_agent_update(bool force_send, bool send_reliable)
 
     LLVector3 camera_pos_agent = gAgentCamera.getCameraPositionAgent(); // local to avatar's region
     LLVector3 camera_at = LLViewerCamera::getInstance()->getAtAxis();
+    LLVector3 camera_left = LLViewerCamera::getInstance()->getLeftAxis();
+    LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
+
+    // OTS fair-fire camera: report the mouselook-equivalent camera to the
+    // sim. Campos weapons fire from llGetCameraPos along the camera's
+    // at-axis; with the real OTS shoulder camera that means bullets
+    // originate behind/offset from the avatar and can clear cover the
+    // avatar is hiding behind. Substitute the avatar's eye, aimed at the
+    // crosshair's world target, so scripts see exactly what mouselook
+    // would have told them. The render camera is untouched.
+    static LLCachedControl<bool> fs_ots_eye_camera(gSavedSettings, "FSOTSReportEyeCamera", true);
+    if (fs_ots_eye_camera && gAgentCamera.cameraOTS() && isAgentAvatarValid() && gAgentAvatarp->mHeadp
+        && tp_state == LLAgent::TELEPORT_NONE) // never raycast a world that is mid-teleport teardown
+    {
+        const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
+
+        // Converge on the crosshair: aim from the eye at whatever is under
+        // the camera crosshair (avatars included, self excluded), falling
+        // back to a far point for open sky so the direction degrades to
+        // camera-parallel. Shared with the true-aim dot so the dot the
+        // shooter sees and the camera scripts receive cannot diverge.
+        const LLVector3 target = FSCombatHitMarker::getOTSConvergenceTarget(camera_pos_agent, camera_at);
+
+        LLVector3 at = target - eye;
+        if (at.normalize() > 0.f)
+        {
+            LLCoordFrame frame;
+            frame.lookDir(at);
+            camera_pos_agent = eye;
+            camera_at = frame.getAtAxis();
+            camera_left = frame.getLeftAxis();
+            camera_up = frame.getUpAxis();
+        }
+    }
+
     LLQuaternion body_rotation = gAgent.getFrameAgent().getQuaternion();
     LLQuaternion head_rotation = gAgent.getHeadRotation();
     U8 render_state = gAgent.getRenderState();
@@ -4373,8 +4433,8 @@ void send_agent_update(bool force_send, bool send_reliable)
 
     msg->addVector3Fast(_PREHASH_CameraCenter, camera_pos_agent);
     msg->addVector3Fast(_PREHASH_CameraAtAxis, camera_at);
-    msg->addVector3Fast(_PREHASH_CameraLeftAxis, LLViewerCamera::getInstance()->getLeftAxis());
-    msg->addVector3Fast(_PREHASH_CameraUpAxis, LLViewerCamera::getInstance()->getUpAxis());
+    msg->addVector3Fast(_PREHASH_CameraLeftAxis, camera_left);
+    msg->addVector3Fast(_PREHASH_CameraUpAxis, camera_up);
 
     static F32 last_draw_disatance_step = 1024;
     F32 memory_limited_draw_distance = gAgentCamera.mDrawDistance;
@@ -7872,6 +7932,14 @@ void process_teleport_local(LLMessageSystem *msg,void**)
             gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
         }
     }
+    // <FS:DS> FIRE-TP-DEDUP: Record that a same-region TP just completed so that
+    // process_teleport_start() can discard the late TeleportStart packet the server
+    // sends alongside every TeleportLocal. When TeleportLocal arrives before
+    // TeleportStart (a 50/50 UDP race), the TP is already done and any subsequent
+    // TeleportStart within the grace window must be suppressed to avoid a stuck
+    // progress screen.
+    gTeleportCompletionTimer.reset();
+    // </FS:DS>
 
     // Sim tells us whether the new position is off the ground
     // <FS:Ansariel> Always fly after TP option

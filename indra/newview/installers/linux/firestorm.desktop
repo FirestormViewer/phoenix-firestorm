@@ -3,6 +3,6 @@ Type=Application
 Name=Firestorm
 Exec=firestorm
 Comment=Client for virtual worlds
-Icon=firestorm_icon
+Icon=soapstorm_icon
 Categories=Development;
 Terminal=true

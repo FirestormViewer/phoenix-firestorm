@@ -3623,6 +3623,32 @@ void LLIMMgr::addMessage(
         }
         // </FS:Ansariel>
 
+        // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
+        // Moved before newSession() to prevent the conversations floater from stealing focus when the invite is immediately rejected.
+        
+        static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
+        if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
+        {
+            static LLCachedControl<bool> dontIgnoreAdHocFromFriends(gSavedSettings, "FSDontIgnoreAdHocFromFriends");
+            if (!dontIgnoreAdHocFromFriends || (dontIgnoreAdHocFromFriends && LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL))
+            {
+                static LLCachedControl<bool> reportIgnoredAdHocSession(gSavedSettings, "FSReportIgnoredAdHocSession");
+                //<FS:Beq> [FIRE-21385] Add inviter name/UUID to ad-hoc ignored messages
+                LLSD args;
+                args["AVATAR_NAME"] = LLSLURL("agent", other_participant_id, "about").getSLURLString();
+                LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << args["AVATAR_NAME"] << LL_ENDL;
+                clearPendingInvitation(new_session_id);
+                clearPendingAgentListUpdates(new_session_id);
+                LLIMModel::getInstance()->sendLeaveSession(new_session_id, other_participant_id);
+                if (reportIgnoredAdHocSession)
+                {
+                    FSCommon::report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession", args));
+                }
+                //</FS:Beq>
+                return;
+            }
+        }
+
         LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, LLSD(), is_offline_msg);
 
         LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(new_session_id);
@@ -3676,30 +3702,6 @@ void LLIMMgr::addMessage(
                 }
             }
 
-            // <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
-            static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
-            if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
-            {
-                static LLCachedControl<bool> dontIgnoreAdHocFromFriends(gSavedSettings, "FSDontIgnoreAdHocFromFriends");
-                if (!dontIgnoreAdHocFromFriends || (dontIgnoreAdHocFromFriends && LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL))
-                {
-                    static LLCachedControl<bool> reportIgnoredAdHocSession(gSavedSettings, "FSReportIgnoredAdHocSession");
-                    //<FS:Beq> [FIRE-21385] Add inviter name/UUID to ad-hoc ignored messages
-                    LLSD args;
-                    args["AVATAR_NAME"] = LLSLURL("agent", other_participant_id, "about").getSLURLString();
-                    LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << args["AVATAR_NAME"] << LL_ENDL;
-                    if (!gIMMgr->leaveSession(new_session_id))
-                    {
-                        LL_WARNS() << "Ad-hoc session " << new_session_id.asString() << " does not exist." << LL_ENDL;
-                    }
-                    else if (reportIgnoredAdHocSession)
-                    {
-                        FSCommon::report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession", args));
-                    }
-                    //</FS:Beq>
-                    return;
-                }
-            }
             // </FS:PP>
 
             // <FS:PP> Configurable IM sounds

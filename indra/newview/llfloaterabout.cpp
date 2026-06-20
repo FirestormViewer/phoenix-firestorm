@@ -201,6 +201,12 @@ bool LLFloaterAbout::postBuild()
         // this case will use the (out of date) hard coded value from the XUI
         LL_INFOS("AboutInit") << "Could not read licenses file at " << licenses_path << LL_ENDL;
     }
+#ifdef LL_FMODSTUDIO
+    // FMOD Indie license requires this attribution to appear in the About box.
+    licenses_widget->appendText("\nFMOD Studio by Firelight Technologies Pty Ltd.\n", false,
+                                LLStyle::Params().color(about_color));
+#endif
+
     licenses_widget->setEnabled(false);
     licenses_widget->startOfDoc();
 

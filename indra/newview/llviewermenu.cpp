@@ -5989,8 +5989,25 @@ class LLViewMouselook : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
+        // When OTS is enabled M toggles aim mode using the shoulder cam (or,
+        // with OTSRememberLastView, whichever view was last toggled into).
+        // When disabled M toggles normal first-person mouselook.
+        // M from EITHER aim view (OTS or toggled-to-first-person) exits.
+        if (gAgentCamera.cameraOTS())
+        {
+            gAgentCamera.changeCameraFromOTS();
+            return true;
+        }
+
         if (!gAgentCamera.cameraMouselook())
         {
+            if (gSavedSettings.getBOOL("OTSEnabled")
+                && !(gSavedSettings.getBOOL("OTSRememberLastView")
+                     && gSavedSettings.getBOOL("OTSLastViewFirstPerson")))
+            {
+                gAgentCamera.changeCameraToOTS();
+                return true;
+            }
             gAgentCamera.changeCameraToMouselook();
         }
         else
@@ -12786,6 +12803,21 @@ void initialize_menus()
             F32 new_fov_rad = mMult ? LLViewerCamera::getInstance()->getDefaultFOV() * mVal : mVal;
             LLViewerCamera::getInstance()->setDefaultFOV(new_fov_rad);
             gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // setView may have clamped it.
+
+            // When resetting to a fixed FOV (Ctrl+9 / View.ZoomDefault), also reset the
+            // mouselook right-click zoom target so subsequent right-clicks use the new value.
+            if (!mMult)
+            {
+                LLVector3 mlFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+                mlFovValues.mV[VY] = LLViewerCamera::getInstance()->getView();
+                gSavedSettings.setVector3("_NACL_MLFovValues", mlFovValues);
+
+                // If currently zoomed in mouselook, snap back immediately.
+                if (gAgentCamera.cameraMouselook())
+                {
+                    LLToolCompGun::getInstance()->resetZoom();
+                }
+            }
             return true;
         }
     private:

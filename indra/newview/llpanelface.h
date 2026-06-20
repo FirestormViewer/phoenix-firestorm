@@ -287,6 +287,7 @@ protected:
 
     // <FS:CR> Build tool enhancements
     void onClickMapsSync();
+    void onClickSyncMaterials();
     void alignMaterialsProperties();
 
 public:
@@ -395,6 +396,7 @@ private:
 
     LLButton* mBtnAlign { nullptr };
     LLButton* mBtnAlignTex { nullptr };
+    LLButton* mBtnSyncMaterials { nullptr };
     //LLButton* mBtnPbrFromInv { nullptr }; // <FS/> Done via texture picker
     LLButton* mBtnEditBbr { nullptr };
     LLButton* mBtnSaveBbr { nullptr };

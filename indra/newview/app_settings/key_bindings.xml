@@ -21,6 +21,10 @@
     <binding key="ENTER" mask="NONE" command="start_chat"/>
     <binding key="DIVIDE" mask="NONE" command="start_gesture"/>
 
+    <!-- OTS: first/third person aim toggle and shoulder swap -->
+    <binding key="SPACE" mask="CTL" command="ots_toggle_view"/>
+    <binding key="SPACE" mask="SHIFT" command="ots_swap_shoulder"/>
+
     <binding key="" mask="NONE" mouse="MMB" command="toggle_voice"/>
 
     <binding key="" mask="NONE" mouse="LMB" command="script_trigger_lbutton"/>

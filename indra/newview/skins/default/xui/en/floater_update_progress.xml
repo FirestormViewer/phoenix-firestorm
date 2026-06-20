@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ legacy_header_height="18"
+ can_close="false"
+ can_minimize="false"
+ can_resize="false"
+ title="Downloading Update"
+ height="120"
+ layout="topleft"
+ name="floater_update_progress"
+ width="400">
+ 
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  height="20"
+  layout="topleft"
+  left="10"
+  name="update_text"
+  top="30"
+  width="380">
+Downloading SoapStorm update...
+ </text>
+ 
+ <progress_bar
+  height="16"
+  follows="left|top|right"
+  layout="topleft"
+  left="10"
+  name="progress_bar"
+  top_pad="10"
+  width="380" />
+ 
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  height="20"
+  layout="topleft"
+  left="10"
+  name="progress_text"
+  top_pad="10"
+  width="380">
+0.0 MB / 0.0 MB
+ </text>
+ 
+</floater>
