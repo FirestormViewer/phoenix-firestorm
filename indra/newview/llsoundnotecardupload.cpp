@@ -49,6 +49,7 @@
 #include "llviewerassetupload.h"
 #include "llviewerinventory.h"
 #include "llviewermenufile.h"     // upload_new_resource()
+#include "llviewermessage.h"      // suppress_inventory_auto_open_for_folder()
 #include "llviewernetwork.h"      // LLGridManager
 #include "llviewerregion.h"
 #include "llvorbisencode.h"
@@ -243,6 +244,10 @@ namespace
                     self->onNotecardItemCreated(new_item_id, asset_text, sound_count, failed);
                 });
 
+            // Keep the freshly created notecard from popping a notecard editor
+            // window. Released in onNotecardItemCreated once the item has landed.
+            suppress_inventory_auto_open_for_folder(mFolderId, true);
+
             create_inventory_item(
                 gAgentID,
                 gAgentSessionID,
@@ -259,6 +264,9 @@ namespace
 
         void onNotecardItemCreated(const LLUUID& item_id, const std::string& asset_text, S32 sound_count, S32 failed)
         {
+            // The notecard has landed; stop suppressing auto-open for this folder.
+            suppress_inventory_auto_open_for_folder(mFolderId, false);
+
             if (item_id.isNull())
             {
                 LLNotificationsUtil::add("SoundNotecardCreateFailed");
