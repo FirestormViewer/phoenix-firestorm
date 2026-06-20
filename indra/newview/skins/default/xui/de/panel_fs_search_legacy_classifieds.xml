@@ -11,7 +11,7 @@
 		<scroll_list name="search_results_classifieds">
 			<columns label="" name="icon"/>
 			<columns label="Name" name="classified_name"/>
-			<columns label="Anzeigenpreis" name="price"/>
+			<columns label="Preis" name="price"/>
 		</scroll_list>
 		<button label="Zurück" name="classifieds_back"/>
 		<button	label="Vor" name="classifieds_next"/>

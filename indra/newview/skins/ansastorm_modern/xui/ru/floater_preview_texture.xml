@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		Текстура: [NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		Копировать в инвентарь
+	</floater.string>
+	<floater.string name="DateTime">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime"/>
+	<text name="desc txt">
+		Описание:
+	</text>
+	<text name="uploader_label">
+		Загрузил:
+	</text>
+ 	<button label="Профиль" name="openprofile"/>
+	<text name="upload_time_label">
+		Дата:
+	</text>
+	<button name="copyuuid" label="Копировать"/>
+	<panel name="dimensions_panel">
+		<text name="aspect_ratio">
+			Соотношение сторон
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="Просмотр изображения с другим соотношением сторон">
+			<combo_item name="Unconstrained">
+				Без ограничения
+			</combo_item>
+			<combo_item name="1:1" tool_tip="Символ группы или профиль в реальном мире"/>
+			<combo_item name="4:3" tool_tip="Профиль [CURRENT_GRID]"/>
+			<combo_item name="10:7" tool_tip="Реклама, поиск и закладки"/>
+			<combo_item name="3:2" tool_tip="О земле"/>
+			<combo_item name="16:9" tool_tip="Места"/>
+		</combo_box>
+	</panel>
+	<panel name="button_panel">
+		<button label="OK" name="Keep"/>
+		<button label="Отменить" name="Discard"/>
+		<flyout_button label="Сохранить..." name="save_tex_btn">
+			<flyout_button.item label="Сохранить как TGA" name="save_item_tga"/>
+			<flyout_button.item label="Сохранить как PNG" name="save_item_png"/>	 
+		</flyout_button>
+	</panel>
+</floater>

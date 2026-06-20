@@ -30,10 +30,10 @@
 		<text name="FSHudTextLabel">
 			Optionen für Schwebetext:
 		</text>
-		<slider label_width="230" label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
-		<slider label_width="230" label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
+		<slider label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
+		<slider label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
 		<check_box name="FSHudTextUseHoverHighlight" label="Schwebetext von Objekten hervorheben:" tool_tip="Wenn mit der Maus über ein Objekt gefahren wird, wird der Schwebetext von Objekten (falls vorhanden) hervorgehoben, indem der Text in den Vordergrund geholt und der durchsichtige Hintergrund deaktiviert wird."/>
-		<text name="FSHudTextShowBackgroundLabel" width="220">
+		<text name="FSHudTextShowBackgroundLabel" width="235">
 			Hintergrund von Schwebetext anzeigen:
 		</text>
 		<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Zeigt einen schwarz/weißen Hintergrund hinter Schwebetext an, um ihn besser lesbar zu machen. Die Deckkraft kann unter Farben > Sonstige angepasst werden">
@@ -62,7 +62,7 @@
 			<combo_box.item label="Unbeschränkt für HUDs" name="ScriptDialogOption_4"/>
 			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_5"/>
 		</combo_box>
-		<check_box label="„Blockieren“-Button entfernen" name="FSRemoveScriptBlockButton"/>
+		<check_box label="„Blockieren“-Button entf." name="FSRemoveScriptBlockButton"/>
 		<text name="ScriptDialogsPositionLabel">
 			Skriptdialog-Position:
 		</text>
@@ -85,15 +85,15 @@
 			<radio_item label="Rechts unten" name="radio" />
 			<radio_item label="Rechts oben" name="radio1" />
 		</radio_group>
-		<text name="GroupTopRightRequiresRestart" left_delta="280">
-			(Erfordert Neustart)
+		<text name="GroupTopRightRequiresRestart" left_delta="275">
+			(Erfordert Neust.)
 		</text>
 		<check_box label="Chiclets für IMs und Gruppenchats deaktivieren" name="FSDisableIMChiclets" tool_tip="Falls aktiviert, wird Firestorm keine Chiclets für IMs und Gruppenchats anzeigen (Icons für Gruppenmitteilungen und Anzahl an ungelesenen IMs werden weiterhin angezeigt)."/>
-		<check_box label="Alte Listendarstellung für Benachrichtigungsfenster verwenden" name="FSLegacyNotificationWell" tool_tip="Falls aktiviert, verwendet Firestorm die ursprüngliche Listendarstellung, um gespeicherte Benachrichtigungen anzuzeigen." width="355"/>
+		<check_box label="Alte Listendarstellung für Benachrichtigungsfenster verwenden" name="FSLegacyNotificationWell" tool_tip="Falls aktiviert, verwendet Firestorm die ursprüngliche Listendarstellung, um gespeicherte Benachrichtigungen anzuzeigen." width="385"/>
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Erfordert Neustart)
 		</text>
-		<check_box label="Größe des Unterhaltungen- und alten Benachrichtigungen-Fensters automatisch anpassen" name="FSLegacyNotificationWellAutoResize" tool_tip="Falls aktiviert, passt Firestorm die Größe der Unterhaltungen- und klassischen Benachrichtigungen-Fenster automatisch an, wenn Meldungen hinzugefügt oder entfernt werden."/>
+		<check_box label="Größe des Unterhaltungen- und alten Benachrichtigungen-Fensters autom. anpassen" name="FSLegacyNotificationWellAutoResize" tool_tip="Falls aktiviert, passt Firestorm die Größe der Unterhaltungen- und klassischen Benachrichtigungen-Fenster automatisch an, wenn Meldungen hinzugefügt oder entfernt werden."/>
 		<check_box label="Shortcuts anpassen, die von Linux verwendet werden (nur Linux; erfordert Neustart)" name="FSRemapLinuxShortcuts" tool_tip="Aktivieren, die Shortcuts umzudefinieren, die bereits durch das Linux-Betriebssystem verwendet werden, z.B. STRG-ALT-Fx."/>
 		<check_box label="Verhindern, dass Statistik-Fenster Fokus erhält" name="FSStatisticsNoFocus" tool_tip="Falls aktiviert, wird verhindert, dass das Statistik-Fenster den Fokus erhält, wenn ein anderes Fenster geschlossen wird (Aktionen wie das Ändern des Layouts sind auch weiterhin möglich)."/>
 		<check_box label="Abbildungen von Inventar-Objekten in Tooltips anzeigen" name="FSShowInventoryThumbnailTooltips" tool_tip="Falls aktiviert, werden die Abbildungen von Inventar-Objekten in Tooltips angezeigt."/>
@@ -101,8 +101,8 @@
 		<text name="FSInventoryThumbnailTooltipsDelayText">
 			Sek.
 		</text>
-		<slider label_width="230" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
-		<slider label_width="230" label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
+		<slider label_width="240" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
+		<slider label_width="240" label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Sek.
 		</text>
@@ -123,7 +123,7 @@
 		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Menüleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="statusbar_timeformat_textbox">
-			Uhrformat:
+			Uhrzeitformat:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Bestimmt das Zeitformat, das in der Menüleiste verwendet wird.">
 			<combo_box.item label="Standard ausgewählter Sprache" name="Language"/>
@@ -155,11 +155,11 @@
 		<text name="standalone_textbox">
 			Eigene Fenster verwenden für:
 		</text>
-		<check_box name="FSUseStandaloneGroupFloater" label="Gruppenprofile" tool_tip="Falls aktiviert, werden Gruppenprofile in eigenen Fenstern geöffnet."/>
+		<check_box name="FSUseStandaloneGroupFloater" label="Gruppenprofile" tool_tip="Falls aktiviert, werden Gruppenprofile in eigenen Fenstern geöffnet." width="175"/>
 		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport-Liste" tool_tip="Falls aktiviert, wird bei Verwendung des Shortcuts für die Teleport-Liste diese in einem eigenen Fenster geöffnet."/>
-		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste ignorierter Einwohner" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet."/>
+		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste ignorierter Einwohner" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet." width="175"/>
 		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarken, Ortsdetails und Teleport-Listen-Details" tool_tip="Falls aktiviert, werden Landmarken, Ortsdetails und Details zu Einträgen in der Teleport-Liste in eigenen Fenstern geöffnet."/>
-		<text name="ExtendedTeleportHistoryLabel" width="155">
+		<text name="ExtendedTeleportHistoryLabel" width="170">
 			Teleport-Liste erweitern um:
 		</text>
 		<check_box name="FSTeleportHistoryShowPosition" label="Position" tool_tip="Falls aktiviert, wird die Teleport-Liste um die Position innerhalb der teleportierten Region erweitert."/>
@@ -180,7 +180,7 @@
 			<radio_item label="Benutzername" name="username" width="95"/>
 			<radio_item label="Anzeigename" name="displayname" width="95"/>
 		</radio_group>
-		<text name="textFriendListFullNameFormat" width="155">
+		<text name="textFriendListFullNameFormat" width="165">
 			Format vollständiger Name:
 		</text>
 		<radio_group name="FSFriendListFullNameFormat">
@@ -203,54 +203,54 @@
 		<text name="ToastSettings">
 			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
 		</text>
-		<slider label="Abstand zwischen Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace"/>
+		<slider label="Abstand zwischen Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace" label_width="270"/>
 		<text name="ToastSpaceText">
 			Pixel
 		</text>
-		<slider label="Anzeige Toast-Benachrichtigung:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime"/>
+		<slider label="Anzeige Toast-Benachrichtigung:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime" label_width="270"/>
 		<text name="ToastLifetimeText">
 			Sekunden
 		</text>
-		<slider label="Anzeige Tipp-Toast:" tool_tip="Anzahl an Sekunden, die ein Tipp-Toast angezeigt wird, bevor es ausgeblendet wird." name="TipToastLifetime"/>
+		<slider label="Anzeige Tipp-Toast:" tool_tip="Anzahl an Sekunden, die ein Tipp-Toast angezeigt wird, bevor es ausgeblendet wird." name="TipToastLifetime" label_width="270"/>
 		<text name="TipToastLifetimeText">
 			Sekunden
 		</text>
-		<slider label="Anzeigedauer für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime"/>
+		<slider label="Anzeigedauer für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime" label_width="270"/>
 		<text name="NearbyToastLifetimeText">
 			Sekunden
 		</text>
-		<slider label="Höhenabstand für Toasts für Chat in der Nähe:" tool_tip="Höhenabstand von Toasts für Chat in der Nähe." name="FSNearbyChatToastsOffset"/>
+		<slider label="Höhenabstand für Toasts für Chat in der Nähe:" tool_tip="Höhenabstand von Toasts für Chat in der Nähe." name="FSNearbyChatToastsOffset" label_width="270"/>
 		<text name="FSNearbyChatToastsOffsetText">
 			Pixel
 		</text>
-		<slider label="Ausblendzeit für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime"/>
+		<slider label="Ausblendzeit für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime" label_width="270"/>
 		<text name="NearbyToastFadingTimeText">
 			Sekunden
 		</text>
-		<slider label="Anzeige Startup-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast beim Starten angezeigt wird, bevor es ausgeblendet wird." name="StartupToastLifetime"/>
+		<slider label="Anzeige Startup-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast beim Starten angezeigt wird, bevor es ausgeblendet wird." name="StartupToastLifetime" label_width="270"/>
 		<text name="StartupToastLifetimeText">
 			Sekunden
 		</text>
-		<slider label="Ausblendzeit normales Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime"/>
+		<slider label="Ausblendzeit normales Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime" label_width="270"/>
 		<text name="ToastFadingTimeText">
 			Sekunden
 		</text>
-		<slider label="Abstand zwischen Toasts:" tool_tip="Abstand zwischen zwei Toasts in Pixeln." name="ToastGap"/>
+		<slider label="Abstand zwischen Toasts:" tool_tip="Abstand zwischen zwei Toasts in Pixeln." name="ToastGap" label_width="270"/>
 		<text name="ToastGapText">
 			Pixel
 		</text>
-		<slider label="Höhe überlagerndes Toast:" tool_tip="Höhe eines überlagerndes Toast in Pixeln." name="OverflowToastHeight"/>
+		<slider label="Höhe überlagerndes Toast:" tool_tip="Höhe eines überlagerndes Toast in Pixeln." name="OverflowToastHeight" label_width="270"/>
 		<text name="OverflowToastHeightText">
 			Pixel
 		</text>
-		<slider label="Breite von Chat-Toasts:" tool_tip="Breite der Toasts für den Chat in der Nähe in Prozent der Bildschirmbreite." name="NearbyToastWidth"/>
+		<slider label="Breite von Chat-Toasts:" tool_tip="Breite der Toasts für den Chat in der Nähe in Prozent der Bildschirmbreite." name="NearbyToastWidth" label_width="270"/>
 		<text name="NearbyToastWidthText">
 			%
 		</text>
 		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 		<check_box label="Neue Regions-Neustart-Meldung verwenden" name="FSUseNewRegionRestartNotification"/>
 		<check_box label="Bei Regions-Neustart-Meldung Bildschirm nicht wackeln" name="FSNoScreenShakeOnRegionRestart"/>
-		<check_box label="Regions-Neustart-Meldung an Kanal senden:" width="265" name="FSReportRegionRestartToChat" />
+		<check_box label="Regions-Neustart-Meldung an Kanal senden:" width="285" name="FSReportRegionRestartToChat" />
 	</panel>
 	<!--Font-->
 	<panel label="Schrift" name="UI-font-tab">
@@ -260,28 +260,28 @@
 		<text name="tooltip_textbox2">
 			(Erfordert Neustart)
 		</text>
-		<text name="tooltip_textbox5">
+		<text name="tooltip_textbox5" width="125">
 			Größenanpassung:
 		</text>
 		<text name="tooltip_textbox6">
 			Punkt (Erfordert Neustart)
-Standard 0. Größere Werte können nicht korrekt funktionieren.
+Standard 0. Größere Werte können n. korrekt funktionieren.
 		</text>
-		<text name="tooltip_textbox3">
+		<text name="tooltip_textbox3" width="126">
 			Abstand Chatzeilen:
 		</text>
 		<text name="tooltip_textbox4">
 			Pixel (Erfordert Neustart)
-[VIEWER_GENERATION]-Standard 0. Viewer 1-Standard 2.
+Second Life Viewer-Standard 0. Viewer 1-Standard 2.
 		</text>
-		<text name="Label_FolderItemViewHeight">
+		<text name="Label_FolderItemViewHeight" width="125">
 			Höhe Ordner-Eintrag:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			Pixel (Erfordert Neustart)
-[VIEWER_GENERATION]-Standard 20. Viewer 1-Standard 18.
+Second Life Viewer-Standard 20. Viewer 1-Standard 18.
 		</text>
-		<text name="text_box_notecard_font" width="125">
+		<text name="text_box_notecard_font" width="130">
 			Schrift für Notizkarten:
 		</text>
 		<combo_box name="FSNotecardFontName" tool_tip="Name der Schrift, die für den Notizkarten-Editor verwendet wird">

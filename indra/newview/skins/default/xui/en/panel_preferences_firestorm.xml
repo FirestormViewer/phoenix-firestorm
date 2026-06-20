@@ -50,7 +50,7 @@
          follows="left|top"
          top_pad="6"
          left="10"
-         width="270"
+         width="290"
          height="20"
          name="checkMiscRLVa"
          label="Allow Remote Scripted Viewer Controls  (RLVa)"/>
@@ -299,7 +299,7 @@
          Revoke Permissions:
          </text>
         <radio_group
-         top_pad="5"
+         top_pad="7"
          left="20"
          height="62"
          layout="topleft"
@@ -358,7 +358,7 @@
          follows="left|top"
          height="16"
          name="RenderVolumeSAProtection"
-         width="380"
+         width="415"
          tool_tip="This protects you from objects with very large textures over large surface areas often designed to crash the viewer. Default is 5000 square meters, but if you find that some objects are not rendering and this option is enabled you may need to increase it."/>
         <spinner
          enabled_control="RenderVolumeSAProtection"
@@ -529,7 +529,7 @@
          follows="left|top"
          height="16"
          name="FSConfirmPayments"
-         width="205"
+         width="225"
          tool_tip="Show a confirmation dialog before paying sums greater than the threshold. To always show a confirmation, set the threshold to 0."/>
         <spinner
          enabled_control="FSConfirmPayments"
@@ -676,7 +676,7 @@
          tool_tip="Remove this preset"
          left="15"
          top_delta="10"
-         width="55"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -684,12 +684,12 @@
          enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          top_delta="0"
-         left_delta="60"
+         left_delta="95"
          follows="left|top"
          height="20"
          max_chars="20"
          name="BeamColor_combo"
-         width="170"
+         width="145"
          control_name="FSBeamColorFile"
          tool_tip="Select the color preset for the selection beam"/>
 
@@ -700,7 +700,7 @@
          tool_tip="Create a new color preset"
          left="15"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -711,16 +711,16 @@
          tool_tip="Refresh the preset list"
          left="15"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
         <button
          enabled_control="ShowSelectionBeam"
-         left="100"
+         left="112"
          top_delta="-25"
          follows="left|top"
-         width="130"
+         width="142"
          height="80"
          name="PhoenixBeamPrev_rainbow"
          label=""
@@ -745,7 +745,7 @@
          increment="1"
          initial_value="4"
          label="Beam updates/sec:"
-         label_width="100"
+         label_width="110"
          max_val="200"
          min_val="4"
          show_text="true"
@@ -792,12 +792,12 @@
          enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          bottom_delta="-150"
-         left="275"
+         left="265"
          follows="left|top"
          height="20"
          max_chars="20"
          name="FSBeamShape_combo"
-         width="170"
+         width="145"
          control_name="FSBeamShape"
          tool_tip="Select the shape for the particle beam" />
 
@@ -806,9 +806,9 @@
          name="delete_beam"
          label="Delete"
          tool_tip="Remove this beam"
-         left_delta="175"
+         left_delta="150"
          bottom_delta="0"
-         width="55"
+         width="90"
          height="20"
          follows="left|top" />
 
@@ -817,9 +817,9 @@
          name="custom_beam_btn"
          label="Create New"
          tool_tip="Customize the beam shape"
-         left_delta="-20"
+         left_delta="0"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top"/>
 
@@ -830,16 +830,16 @@
          tool_tip="Refresh the beam list"
          left_delta="0"
          bottom_delta="25"
-         width="80"
+         width="90"
          height="20"
          follows="left|top" />
 
         <button
          enabled_control="ShowSelectionBeam"
-         left="290"
+         left="266"
          top_delta="-25"
          follows="left|top"
-         width="130"
+         width="144"
          height="80"
          name="PhoenixBeamPrev_Phoenix"
          label=""
@@ -854,7 +854,7 @@
         <slider
          enabled_control="ShowSelectionBeam"
          bottom_delta="25"
-         left_delta="-15"
+         left_delta="0"
          name="FSBeamShapeScale"
          control_name="FSBeamShapeScale"
          decimal_digits="1"
@@ -1341,7 +1341,7 @@
          label="Limit select distance (meters):"
          name="LimitSelectDistance"
          control_name="LimitSelectDistance"
-         width="190"/>
+         width="200"/>
         <spinner
          enabled_control="LimitSelectDistance"
          control_name="MaxSelectDistance"
@@ -1385,7 +1385,7 @@
          height="16"
          left="10"
          name="RotationStepText1"
-         width="190">
+         width="200">
           Constrain rotations to multiples of
         </text>
         <spinner
@@ -1399,7 +1399,7 @@
          max_val="359.99"
          min_val="0.01"
          name="RotationStep"
-         width="65"
+         width="55"
          tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
         <text
          left_pad="5"
@@ -1418,7 +1418,7 @@
          label="Show unlink confirmation dialog if linkset has minimum"
          name="FSUnlinkConfirmEnabled"
          control_name="FSUnlinkConfirmEnabled"
-         width="325"/>
+         width="340"/>
         <spinner
          enabled_control="FSUnlinkConfirmEnabled"
          control_name="MinObjectsForUnlinkConfirm"

@@ -85,6 +85,50 @@
     <menu_item_separator
      layout="topleft" />
     <menu_item_check
+     label="Show Recent tab"
+     layout="topleft"
+     name="recent_tab">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="toggle_recent_tab" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="recent_tab" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_check>
+    <menu_item_check
+     label="Show Worn tab"
+     layout="topleft"
+     name="worn_tab">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="toggle_worn_tab" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="worn_tab" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_check>
+    <menu_item_check
+     label="Show Favorites tab"
+     layout="topleft"
+     name="favorites_tab">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="toggle_favorites_tab" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="favorites_tab" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_check>
+    <menu_item_separator
+     layout="topleft" />
+    <menu_item_check
      label="Sort by Name"
      layout="topleft"
      name="sort_by_name">

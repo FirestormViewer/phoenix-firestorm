@@ -40,6 +40,12 @@
 	<color
 	 name="EmphasisColor_35"
 	 value="0.950 0.412 0.173 0.35" />
+    <color
+     name="SelectionColor"
+     value="0.706 0.851 1 1" />
+    <color
+     name="ScrollHoveredColor"
+     value="0.18 0.26 0.33 1" />
 	<color
 	 name="BeaconColor"
     value="0.749 0.298 0 1" />	 
@@ -91,6 +97,9 @@
 	<color
 	 name="DkGray2"
 	 value="0.169 0.169 0.169 1" />
+    <color
+	 name="DkGrayLogin"
+	 value="0.129 0.133 0.137 1" />
 	<color
 	 name="MouseGray"
 	 value="0.191 0.191 0.191 1" />
@@ -341,9 +350,12 @@
     <color
      name="PropertyColorSelf"
      value="0 1 0 0.4" />
-  <color
+    <color
     name="ColorSwatchBorderColor"
     value="0.45098 0.517647 0.607843 1"/>
+    <color
+    name="ColorSwatchBorderColorGray"
+    value="0.329 0.329 0.329 1"/>
     <color
      name="TextEmbeddedItemColor"
      value="1.00 0.549 0.267 1" />
@@ -1032,6 +1044,9 @@
      name="SelectedOutfitTextColor"
      reference="EmphasisColor" />
     <color
+     name="WornOutfitTextColor"
+     value="0.54 0.73 0.87 1" />
+    <color
      name="SearchableControlHighlightFontColor"
      reference="Red" />
     <color
@@ -1062,6 +1077,9 @@
     <color
      name="SystemChatColor"
      reference="LtGray" />
+    <color
+     name="SelectedBgReadOnlyColor"
+     value="0.15 0.21 0.27 1" />
     <color
      name="TextBgFocusColor"
      reference="White" />
@@ -1139,6 +1157,9 @@
     <color
      name="ChatTimestampColor"
      reference="White" />
+    <color
+      name="MenuBarStreamingBgColor"
+      reference="DkGray" />
     <color
       name="MenuBarBetaBgColor"
       reference="DkBlue" />
@@ -1228,10 +1249,6 @@
   <color
       name="CurrencyColor"
       reference="LabelTextColor" />
-	  
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
 
   <!-- syntax highlighting (LSL Scripts) -->
   <color
@@ -1285,6 +1302,9 @@
   <color
     name="PanelGray"
     value="0.27 0.27 0.27 1" />
+  <color
+    name="PanelDark"
+    value="0.078 0.078 0.078 1" />
   <color
     name="PerformanceMid"
     value="1 0.8 0 1" />
@@ -1411,4 +1431,7 @@
   <color
     name="MentionFlashBgColor"
     value="1 1 0 0.5" />
+  <color
+    name="HighlightPanelBackground"
+    reference="EmphasisColor" />
 </colors>

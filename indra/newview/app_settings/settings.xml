@@ -9304,6 +9304,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>90</integer>
     </map>
+    <key>ScriptToastButtonWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>Default width of buttons in the Script dialog toast.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>110</integer>
+    </map>
     <key>ChannelBottomPanelMargin</key>
     <map>
       <key>Comment</key>
@@ -9561,6 +9572,39 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Expand Simulator Time Details performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatVoice</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Voice (WebRTC) stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatVoiceOutgoing</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Outgoing audio (Voice) stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatVoiceIncoming</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Incoming audio (Voice) stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -14421,6 +14465,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>GroupTitlesTagMode</key>
+    <map>
+      <key>Comment</key>
+      <string>Select Group Titles tag mode: 0 - no group tags, 1 - only my group tag, 2 - all group tags</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
+    </map>
     <key>ShowAxes</key>
     <map>
       <key>Comment</key>
@@ -16144,17 +16199,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>UIFloaterTitleVPad</key>
-    <map>
-      <key>Comment</key>
-      <string>Distance from top of floater to top of title string, pixels</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <real>7</real>
     </map>
     <key>UIImgDefaultEyesUUID</key>
     <map>
@@ -21182,7 +21226,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>2</integer>
+      <integer>0</integer>
     </map>
     <key>FSFontSizeAdjustment</key>
     <map>
@@ -23821,6 +23865,39 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>InventoryShowRecentTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Recent tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>InventoryShowWornTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Worn tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>InventoryShowFavoritesTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/hide Favorites tab in the Inventory floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>StatsReportMaxDuration</key>
   <map>
     <key>Comment</key>
@@ -23974,6 +24051,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <integer>2</integer>
+    </map>
+    <key>PurgeDiskCacheOnStartup</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not to LRU purge the disk cache during startup on main thread</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 
   <key>FSNetMapPhantomOpacity</key>

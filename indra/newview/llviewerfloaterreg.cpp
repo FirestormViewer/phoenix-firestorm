@@ -44,7 +44,6 @@
 //#include "llfloateravatarrendersettings.h" // <FS:Ansariel> [FS Persisted Avatar Render Settings]
 #include "llfloateravatartextures.h"
 #include "llfloaterbanduration.h"
-#include "llfloaterbigpreview.h"
 #include "llfloaterbeacons.h"
 #include "llfloaterbuildoptions.h"
 #include "llfloaterbulkpermission.h"
@@ -121,7 +120,6 @@
 // #include "llfloaterperformance.h" <FS:Beq/> restore fsperf  floater
 #include "fsfloaterperformance.h"
 #include "llfloaterperms.h"
-#include "llfloaterpostprocess.h"
 #include "llfloaterpreference.h"
 #include "llfloaterpreferencesgraphicsadvanced.h"
 #include "llfloaterpreferenceviewadvanced.h"
@@ -145,7 +143,6 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llfloaterslapptest.h"
 #include "llfloatersnapshot.h"
-#include "llfloatersounddevices.h"
 #include "llfloaterspellchecksettings.h"
 #include "llfloatertelehub.h"
 #include "llfloatertestinspectors.h"
@@ -156,7 +153,6 @@
 #include "llfloatertoybox.h"
 #include "llfloatertranslationsettings.h"
 #include "llfloateruipreview.h"
-#include "llfloatervoiceeffect.h"
 #include "llfloaterwebcontent.h"
 #include "llfloatervoicevolume.h"
 #include "llfloaterwhitelistentry.h"
@@ -201,6 +197,7 @@
 #include "fsfloateraddtocontactset.h"
 #include "fsfloaterassetblacklist.h"
 #include "fsfloateravatarrendersettings.h"
+#include "fsfloaterbigpreview.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatercontactsetconfiguration.h"
 #include "fsfloaterdiscord.h"
@@ -446,7 +443,6 @@ void LLViewerFloaterReg::registerFloaters()
 
     LLFloaterReg::add("emoji_picker", "floater_emoji_picker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEmojiPicker>);
     LLFloaterReg::add("emoji_complete", "floater_emoji_complete.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterEmojiComplete>);
-    LLFloaterReg::add("env_post_process", "floater_post_process.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPostProcess>);
 	
 	// <FS:William_W:EnvFileReplace> [PhotoTools] Use FS specific XML for Fixed Environment Floater
     //LLFloaterReg::add("env_fixed_environmentent_water", "floater_fixedenvironment.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFixedEnvironmentSky>);   // Commenting out original LL line
@@ -600,7 +596,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("sell_land", "floater_sell_land.xml", &LLFloaterSellLand::buildFloater);
     LLFloaterReg::add("settings_color", "floater_settings_color.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSettingsColor>);
     LLFloaterReg::add("settings_debug", "floater_settings_debug.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSettingsDebug>);
-    LLFloaterReg::add("sound_devices", "floater_sound_devices.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundDevices>);
     // <FS:LO> Add ability for the statistics window to not be able to receive focus
     //LLFloaterReg::add("stats", "floater_stats.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     LLFloaterReg::add("stats", "floater_stats.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStatistics>);
@@ -618,8 +613,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("guidebook", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHowTo>);
     LLFloaterReg::add("slapp_test", "floater_test_slapp.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSLappTest>);
 
-    LLFloaterReg::add("big_preview", "floater_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBigPreview>);
-
     LLFloaterUIPreviewUtil::registerFloater();
     LLFloaterReg::add("upload_anim_bvh", "floater_animation_bvh_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBvhPreview>, "upload");
     LLFloaterReg::add("upload_anim_anim", "floater_animation_anim_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAnimPreview>, "upload");
@@ -627,8 +620,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("upload_model", "floater_model_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterModelPreview>, "upload");
     LLFloaterReg::add("upload_script", "floater_script_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptPreview>, "upload");
     LLFloaterReg::add("upload_sound", "floater_sound_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundPreview>, "upload");
-
-    LLFloaterReg::add("voice_effect", "floater_voice_effect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterVoiceEffect>);
 
     LLFloaterReg::add("web_content", "floater_web_content.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
     LLFloaterReg::add("whitelist_entry", "floater_whitelist_entry.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterWhiteListEntry>);
@@ -646,6 +637,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("primfeed", "floater_primfeed.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPrimfeed>);
     LLFloaterReg::add("fs_asset_blacklist", "floater_fs_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAssetBlacklist>);
     LLFloaterReg::add("fs_avatar_render_settings", "floater_fs_avatar_render_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarRenderSettings>);
+    LLFloaterReg::add("fS_big_preview", "floater_fs_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBigPreview>);
     LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
     LLFloaterReg::add("fs_add_contact", "floater_fs_contact_add.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAddToContactSet>);
     LLFloaterReg::add("fs_contact_set_config", "floater_fs_contact_set_configuration.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContactSetConfiguration>);

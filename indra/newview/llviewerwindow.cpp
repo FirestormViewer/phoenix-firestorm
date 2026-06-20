@@ -34,7 +34,6 @@
 #include <fstream>
 #include <algorithm>
 #include <boost/filesystem.hpp>
-#include <boost/lambda/core.hpp>
 #include <boost/regex.hpp>
 
 #include "llagent.h"
@@ -2196,10 +2195,6 @@ void LLViewerWindow::initGLDefaults()
     gBox.prerender();
 }
 
-struct MainPanel : public LLPanel
-{
-};
-
 void LLViewerWindow::initBase()
 {
     S32 height = getWindowHeightScaled();
@@ -2259,6 +2254,8 @@ void LLViewerWindow::initBase()
     }
     main_view->setShape(full_window);
     getRootView()->addChild(main_view);
+
+    mMainView = main_view;
 
     // <FS:Zi> Moved this from the end of this function up here, so all context menus
     //         created right after this get the correct parent assigned.
@@ -2541,24 +2538,35 @@ void LLViewerWindow::initWorldUI()
         physical_mem = LLMemory::getMaxMemKB();
     }
 
-    if (!gNonInteractive && physical_mem > MIN_PHYSICAL_MEMORY)
+    if (!gNonInteractive)
     {
-        LL_INFOS() << "Preloading cef instances" << LL_ENDL;
+        if (physical_mem > MIN_PHYSICAL_MEMORY)
+        {
+            LL_INFOS() << "Preloading cef instances" << LL_ENDL;
 
-        LLFloaterReg::getInstance("destinations");
-        LLFloaterReg::getInstance("avatar_welcome_pack");
-        // <FS:TJ> Preload the CEF instance of the currently used legacy search floater
-        //LLFloaterReg::getInstance("search");
-        if (gSavedSettings.getBOOL("FSUseFSLegacySearch"))
-        {
-            LLFloaterReg::getInstance("search");
+            LLFloaterReg::getInstance("destinations");
+            LLFloaterReg::getInstance("avatar_welcome_pack");
+            // <FS:TJ> Preload the CEF instance of the currently used legacy search floater
+            //LLFloaterReg::getInstance("search");
+            if (gSavedSettings.getBOOL("FSUseFSLegacySearch"))
+            {
+                LLFloaterReg::getInstance("search");
+            }
+            else
+            {
+                LLFloaterReg::getInstance("legacy_search");
+            }
+            // </FS:TJ>
+            LLFloaterReg::getInstance("marketplace");
         }
-        else
+        // <FS:Ansariel> OpenSim support
+        //else if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+        else if (LLGridManager::instance().isInSecondLife() && gSavedSettings.getBOOL("FirstLoginThisInstall"))
+        // </FS:Ansariel>
         {
-            LLFloaterReg::getInstance("legacy_search");
+            // Preload the welcome pack for first-time login even on low end hardware
+            LLFloaterReg::getInstance("avatar_welcome_pack");
         }
-        // </FS:TJ>
-        LLFloaterReg::getInstance("marketplace");
     }
 
     // <FS:Zi> Autohide main chat bar if applicable
@@ -6005,11 +6013,24 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
     if (image->save(filepath))
     {
         playSnapshotAnimAndSound();
+
+        // Show clickable notification with filepath
+        LLSD args;
+        args["FILEPATH"] = filepath;
+
+        LLSD payload;
+        payload["filepath"] = filepath;
+
+        LLNotificationsUtil::add("SnapshotSavedToComputer",
+                                 args,
+                                 payload.with("respond_on_mousedown", true),
+                                 boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+
         if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
         {
-            LLStringUtil::format_map_t args;
-            args["FILENAME"] = filepath;
-            FSCommon::report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
+            LLStringUtil::format_map_t chatlog_args;
+            chatlog_args["FILENAME"] = filepath;
+            FSCommon::report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", chatlog_args));
         }
         success_cb();
     }
@@ -6022,6 +6043,16 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
 void LLViewerWindow::resetSnapshotLoc()
 {
     gSavedPerAccountSettings.setString("SnapshotBaseDir", std::string());
+}
+
+// static
+void LLViewerWindow::onSnapshotNotificationClick(const LLSD& notification, const LLSD& response)
+{
+    std::string filepath = notification["payload"]["filepath"].asString();
+    if (!filepath.empty())
+    {
+        gDirUtilp->openDir(filepath);
+    }
 }
 
 // static

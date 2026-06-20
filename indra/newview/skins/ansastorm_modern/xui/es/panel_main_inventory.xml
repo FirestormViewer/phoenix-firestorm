@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Sonstiges" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		Obteniendo [ITEM_COUNT] items... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] items [FILTER]
+	</panel.string>
+	<menu_bar name="inventory_menu_bar">
+		<menu label="Inventario" name="inventory_inventory_menu">
+			<menu_item_call name="inventory_open" label="Abrir"/>
+			<menu_item_call name="inventory_share" label="Compartir"/>
+			<menu_item_call name="inventory_new_window" label="Nueva ventana"/>
+			<menu_item_check name="add_inv_toggle" label="Vestir con doble clic"/>
+			<menu_item_call name="inventory_show_filters" label="Mostrar filtros"/>
+			<menu_item_call name="inventory_reset_filters" label="Restablecer filtros"/>
+			<menu_item_call name="inventory_close_all_folders" label="Cerrar todas las carpetas"/>
+			<menu_item_call name="inventory_empty_trash" label="Vaciar papelera"/>
+		</menu>
+		<menu label="Crear" name="inventory_create_menu">
+			<menu_item_call name="inventory_new_folder" label="Carpeta"/>
+			<menu_item_call name="inventory_new_script" label="Script"/>
+			<menu_item_call name="inventory_new_note" label="Nota"/>
+			<menu_item_call name="inventory_new_gesture" label="Gesto"/>
+			<menu name="inventory_new_clothes" label="Ropa">
+				<menu_item_call name="inventory_new_shirt" label="Camisa"/>
+				<menu_item_call name="inventory_new_pants" label="Pantalones"/>
+				<menu_item_call name="inventory_new_shoes" label="Zapatos"/>
+				<menu_item_call name="inventory_new_socks" label="Calcetines"/>
+				<menu_item_call name="inventory_new_jacket" label="Chaqueta"/>
+				<menu_item_call name="inventory_new_skirt" label="Falda"/>
+				<menu_item_call name="inventory_new_gloves" label="Guantes"/>
+				<menu_item_call name="inventory_new_undershirt" label="Camiseta"/>
+				<menu_item_call name="inventory_new_underpants" label="Ropa interior"/>
+				<menu_item_call name="inventory_new_tattoo" label="Tatuaje"/>
+				<menu_item_call name="inventory_new_alpha" label="Alpha"/>
+				<menu_item_call name="inventory_new_physics" label="Física"/>
+			</menu>
+			<menu name="inventory_new_body_parts" label="Partes del cuerpo">
+				<menu_item_call name="inventory_new_shape" label="Anatomía"/>
+				<menu_item_call name="inventory_new_skin" label="Piel"/>
+				<menu_item_call name="inventory_new_hair" label="Pelo"/>
+				<menu_item_call name="inventory_new_eyes" label="Ojos"/>
+			</menu>
+		</menu>
+		<menu label="Ordenar" name="inventory_sort_menu">
+			<menu_item_check name="inventory_sort_by_name" label="Por nombre"/>
+			<menu_item_check name="inventory_sort_by_date" label="Por fecha"/>
+			<menu_item_check name="inventory_sort_folders_by_name" label="Carpetas siempre por nombre"/>
+			<menu_item_check name="inventory_sort_system_on_top" label="Carpetas del sistema siempre arriba"/>
+		</menu>
+		<menu label="Buscar" name="inventory_search_menu">
+			<menu_item_check name="inventory_search_by_name" label="Por nombre"/>
+			<menu_item_check name="inventory_search_by_creator" label="Por creador"/>
+			<menu_item_check name="inventory_search_by_description" label="Por descripción"/>
+			<menu_item_check name="inventory_search_by_uuid" label="Por UUID"/>
+			<menu_item_check name="inventory_search_by_all" label="Por todo"/>
+			<menu_item_check name="inventory_filter_show_links" label="Mostrar enlaces"/>
+			<menu_item_check name="inventory_filter_only_links" label="Mostrar sólo enlaces"/>
+			<menu_item_check name="inventory_filter_hide_links" label="Ocultar enlaces"/>
+			<menu_item_check name="inventory_show_partial_results" label="Mostrar resultados parciales"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="top_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe una o más palabras a buscar, separadas por '+'"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="Filtro:"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Todo"/>
+				<combo_box.item value="filter_type_animations" label="Animaciones"/>
+				<combo_box.item value="filter_type_calling_cards" label="Tarjetas de visita"/>
+				<combo_box.item value="filter_type_clothing" label="Ropa / partes del cuerpo"/>
+				<combo_box.item value="filter_type_gestures" label="Gestos"/>
+				<combo_box.item value="filter_type_landmarks" label="Hitos"/>
+				<combo_box.item value="filter_type_notecards" label="Notas"/>
+				<combo_box.item value="filter_type_objects" label="Objetos"/>
+				<combo_box.item value="filter_type_scripts" label="Scripts"/>
+				<combo_box.item value="filter_type_sounds" label="Sonidos"/>
+				<combo_box.item value="filter_type_textures" label="Texturas"/>
+				<combo_box.item value="filter_type_snapshots" label="Fotos"/>
+				<combo_box.item value="filter_type_custom" label="Personalizar..."/>
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Inventario" name="All Items"/>
+			<recent_inventory_panel label="Reciente" name="Recent Items"/>
+			<worn_inventory_panel label="En uso" name="Worn Items"/>
+		</tab_container>
+	</panel>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Mostrar opciones adicionales"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Añadir nuevo ítem"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Ventana de inventario adicional"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				items
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Eliminar ítem seleccionado"/>
+		</panel>
+	</panel>
+</panel>

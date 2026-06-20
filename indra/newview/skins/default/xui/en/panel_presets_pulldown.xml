@@ -57,12 +57,12 @@
     width="215" />
   <button
     name="open_prefs_btn"
-    label="Graphics Preferences"
+    label="Preferences"
     tool_tip="Open graphics preferences"
     top_delta="3"
     left="4"
     height="22"
-    width="132">
+    width="106">
     <button.commit_callback
       function="Presets.GoGraphicsPrefs" />
   </button>
@@ -73,7 +73,7 @@
     top_delta="0"
     left_pad="5"
     height="22"
-    width="80">
+    width="106">
     <button.commit_callback
       function="Presets.GoAutofpsPrefs" />
   </button>

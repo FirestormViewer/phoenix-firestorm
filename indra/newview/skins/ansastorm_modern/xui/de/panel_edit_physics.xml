@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Brust: Hüpfen">
+			<text name="physics_breast_updown_not_available">
+				Brust-Hüpfen ist nur für weibliche Avatare
+verfügbar.
+			</text>
+		</panel>
+		<panel name="physics_breast_inout_tab_holder" title="Brust: Dekolleté">
+			<text name="physics_breast_inout_not_available">
+				Brust-Dekolleté ist nur für weibliche Avatare
+verfügbar.
+			</text>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Brust: Schwingen">
+			<text name="physics_breast_leftright_not_available">
+				Brust-Schwingen ist nur für weibliche Avatare
+verfügbar.
+			</text>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Bauch: Hüpfen"/>
+		<panel name="physics_butt_tab_holder" title="Po: Hüpfen"/>
+		<panel name="physics_butt_leftright_tab_holder" title="Po: Wiegen"/>
+		<panel name="physics_advanced_tab_holder" title="Erw. Parameter"/>
+	</tab_container>
+</panel>

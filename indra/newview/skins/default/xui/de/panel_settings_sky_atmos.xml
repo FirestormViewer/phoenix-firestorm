@@ -34,7 +34,7 @@
 						Feuchtigkeitslevel:
 					</text>
 					<text name="droplet_radius_label">
-						Tröpfchen-Radius:
+						Tröpfchen-Rad.:
 					</text>
 					<text name="ice_level_label">
 						Eis-Level:
@@ -54,7 +54,7 @@
 					</text>
 					<slider name="max_alt" width="199"/>
 					<text name="probe_ambiance_label" tool_tip="Strahlungsintensität. Aktiviert HDR-Beleuchtungsmodell, falls nicht 0." width="120">
-						Umgebung Reflexionstest (HDR):
+						Umgeb. Reflexionst. (HDR):
 					</text>
 					<slider name="probe_ambiance" tool_tip="Intensität von umgebungsbasierter indirekter Beleuchtung. Bei 0 HDR wird die Skala zu Helligkeit." width="187"/>
 					<text name="scene_gamma_label" width="120">

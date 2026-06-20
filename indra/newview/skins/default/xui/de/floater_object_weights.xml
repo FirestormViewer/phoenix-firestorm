@@ -26,7 +26,7 @@
 	<text name="rezzed_on_land" value="--"/>
 	<text name="rezzed_on_land_label" value="Auf Land gerezzt"/>
 	<text name="remaining_capacity" value="--"/>
-	<text name="remaining_capacity_label" value="Verbleibende Kapazität"/>
+	<text name="remaining_capacity_label" value="Verbleib. Kapazität"/>
 	<text name="total_capacity" value="--"/>
 	<text name="total_capacity_label" value="Gesamtkapazität"/>
 	<text name="rendering_info_text" value="Render-Info"/>

@@ -43,15 +43,17 @@ public:
     :   public LLInitParam::Block<Params, LLView::Params>
     {
         Optional<std::string> label;
+        Optional<S32> label_vpad;
         Optional<LLUIColor> drag_highlight_color;
         Optional<LLUIColor> drag_shadow_color;
-        Optional<S32> label_v_padding;      // <FS:Zi> Make vertical label padding a per-skin option
+        Optional<const LLFontGL*> font;
 
         Params()
         :   label("label"),
-            label_v_padding("label_v_padding", -1), // <FS:Zi> Make vertical label padding a per-skin option
+            label_vpad("label_vpad", 7),
             drag_highlight_color("drag_highlight_color", LLUIColorTable::instance().getColor("DefaultHighlightLight")),
-            drag_shadow_color("drag_shadow_color", LLUIColorTable::instance().getColor("DefaultShadowDark"))
+            drag_shadow_color("drag_shadow_color", LLUIColorTable::instance().getColor("DefaultShadowDark")),
+            font("font", LLFontGL::getFontSansSerif())
         {
             changeDefault(mouse_opaque, true);
             changeDefault(follows.flags, FOLLOWS_ALL);
@@ -84,6 +86,8 @@ protected:
 
 protected:
     LLTextBox*      mTitleBox;
+    const LLFontGL* mFont;
+    S32             mLabelVPad;
 
 private:
     LLRect          mButtonsRect;
@@ -99,9 +103,6 @@ private:
 
     // Pixels near the edge to snap floaters.
     static S32      sSnapMargin;
-
-protected:
-    S32             mLabelVPadding; // <FS:Zi> Make vertical label padding a per-skin option
 };
 
 

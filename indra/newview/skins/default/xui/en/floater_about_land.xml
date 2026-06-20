@@ -729,7 +729,7 @@ Loading...
              left_pad="10"
              mouse_opaque="false"
              name="region_name_text"
-             width="150">
+             width="300">
                 Loading...
             </text>
             <text
@@ -753,7 +753,7 @@ Loading...
              left_pad="10"
              mouse_opaque="false"
              name="region_landtype_text"
-             width="200">
+             width="300">
                 Mainland / Homestead
             </text>
             <text
@@ -779,7 +779,7 @@ Loading...
              mouse_opaque="false"
              name="region_maturity_text"
              valign="center" 
-             width="150">
+             width="300">
                 Adult
             </text>
             <text
@@ -885,7 +885,7 @@ Loading...
              left_delta="190"
              name="objects_available"
              top_delta="0"
-             width="260">
+             width="280">
                 [COUNT] out of [MAX] ([AVAILABLE] available)
             </text>
             <text
@@ -933,7 +933,7 @@ Loading...
              left_delta="190"
              name="total_objects_text"
              top_delta="0"
-             width="48">
+             width="60">
                 [COUNT]
             </text>
             <text
@@ -945,7 +945,7 @@ Loading...
              left="28"
              name="Owned by parcel owner:"
              top="84"
-             width="176">
+             width="170">
                 Owned by parcel owner:
             </text>
             <text
@@ -957,7 +957,7 @@ Loading...
              left_delta="172"
              name="owner_objects_text"
              top_delta="0"
-             width="48">
+             width="60">
                 [COUNT]
             </text>
             <button
@@ -992,8 +992,8 @@ Loading...
              layout="topleft"
              left="28"
              name="Set to group:"
-             top_pad="5"
-             width="176">
+             top_pad="9"
+             width="170">
                 Set to group:
             </text>
             <text
@@ -1005,7 +1005,7 @@ Loading...
              left_delta="172"
              name="group_objects_text"
              top_delta="0"
-             width="48">
+             width="60">
                 [COUNT]
             </text>
             <button
@@ -1040,8 +1040,8 @@ Loading...
              layout="topleft"
              left="28"
              name="Owned by others:"
-             top_pad="5"
-             width="176">
+             top_pad="9"
+             width="170">
                 Owned by others:
             </text>
             <text
@@ -1053,7 +1053,7 @@ Loading...
              left_delta="172"
              name="other_objects_text"
              top_delta="0"
-             width="48">
+             width="60">
                 [COUNT]
             </text>
             <button
@@ -1089,7 +1089,7 @@ Loading...
              left="28"
              name="Selected / sat upon:"
              top_pad="5"
-             width="230">
+             width="170">
                 Selected / sat upon:
             </text>
             <text
@@ -1098,10 +1098,10 @@ Loading...
              follows="left|top"
              height="23"
              layout="topleft"
-             left_delta="220"
+             left_delta="172"
              name="selected_objects_text"
              top_delta="0"
-             width="48">
+             width="60">
                 [COUNT]
             </text>
             <text
@@ -1113,7 +1113,7 @@ Loading...
              left="10"
              name="Autoreturn"
              top_pad="0"
-             width="412"
+             width="420"
              word_wrap="true">
                 Auto return other Residents&apos; objects (minutes, 0 for off):
             </text>
@@ -1138,7 +1138,7 @@ Loading...
              left="10"
              name="Object Owners:"
              top_pad="10"
-             width="104">
+             width="150">
                 Object Owners:
             </text>
              <button
@@ -1266,20 +1266,20 @@ Only large parcels can be listed in search.
              width="278">
                 Allow other Residents to:
             </text>
-	<!-- <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land -->
-          <text
-           type="string"
-           length="1"
-           follows="left|top"
-           height="16"
-           layout="topleft"
-           left="20"
-           name="allow_label1"
-           width="150">
-            Edit Terrain:
-          </text>
+           <!-- <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land -->
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left="20"
+             name="allow_label1"
+             width="150">
+              Edit Terrain:
+            </text>
 
-          <check_box
+            <check_box
              height="16"
              label="Everyone"
              layout="topleft"
@@ -1287,35 +1287,37 @@ Only large parcels can be listed in search.
              tool_tip="If checked, anyone can terraform your land. It is best to leave this unchecked, as you can always edit your own land."
              left_pad="2"
              width="130" />
-			 
-  	     <text
-          font="SansSerifSmall"
-          type="string"
-          text_color="White_50"
-          length="1"
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="-45"
-          name="caution_text"
-          width="200">
-           (Use with caution!)
-         </text>
-		 
-	<!-- <FS:WF> FIRE-6604 END -->
-          <text
-           type="string"
-           length="1"
-           follows="left|top"
-           height="16"
-           layout="topleft"
-           left="20"
-           name="allow_label0"
-           width="150">
-            Fly:
-          </text>
 
-          <check_box
+            <text
+             font="SansSerifSmall"
+             type="string"
+             text_color="White_50"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left_pad="-45"
+             top_delta="-2"
+             name="caution_text"
+             width="200">
+              (Use with caution!)
+            </text>
+            <!-- <FS:WF> FIRE-6604 END -->
+
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left="20"
+             name="allow_label0"
+             top_pad="6"
+             width="150">
+              Fly:
+            </text>
+
+            <check_box
              height="16"
              label="Everyone"
              layout="topleft"
@@ -1570,7 +1572,7 @@ Only large parcels can be listed in search.
              height="16"
              layout="topleft"
              left="245"
-             top="282"
+             top="270"
              text_color="White"
              name="landing_point"
              word_wrap="true"
@@ -1663,7 +1665,7 @@ Only large parcels can be listed in search.
              left="10"
              name="with media:"
              top="10"
-             width="100">
+             width="110">
                 Type:
             </text>
             <combo_box
@@ -1689,7 +1691,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="10"
              name="at URL:"
-             width="100"
+             width="110"
              top_pad="10">
                 Home Page:
             </text>
@@ -1701,7 +1703,7 @@ Only large parcels can be listed in search.
              max_length_bytes="255"
              name="media_url"
              select_on_focus="true"
-             width="300"
+             width="290"
              top_delta="0"/>
             <button
              follows="right|top"
@@ -1728,13 +1730,13 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="20"
              layout="topleft"
-             left="110"
+             left="120"
              max_length_bytes="255"
              name="url_description"
              select_on_focus="true"
              tool_tip="Text displayed next to play/load button"
              top_delta="0"
-             width="300" />
+             width="290" />
             <text
              type="string"
              length="1"
@@ -1754,7 +1756,7 @@ Only large parcels can be listed in search.
              follows="left|top"
              height="80"
              layout="topleft"
-             left="110"
+             left="120"
              name="media texture"
              tool_tip="Click to choose a picture"
              top_delta="0"
@@ -1767,7 +1769,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left_pad="8"
              name="replace_texture_help"
-             width="300"
+             width="290"
              word_wrap="true"
              top_delta="0">
              Objects using this texture will show the movie or web page after you click the play arrow.  Select the thumbnail to choose a different texture.
@@ -1776,7 +1778,7 @@ Only large parcels can be listed in search.
              height="16"
              label="Auto scale"
              layout="topleft"
-             left="107"
+             left="117"
              name="media_auto_scale"
              top_pad="-10"
              tool_tip="Checking this option will scale the content for this parcel automatically. It may be slightly slower and lower quality visually but no other texture scaling or alignment will be required."
@@ -1790,7 +1792,7 @@ Only large parcels can be listed in search.
              left="10"
              name="media_size"
              tool_tip="Size to render Web media, leave 0 for default."
-             width="100"
+             width="110"
              top_pad="10">
                 Size:
             </text>
@@ -1845,7 +1847,7 @@ Only large parcels can be listed in search.
              left="10"
              name="Options:"
              top_pad="10"
-             width="100">
+             width="110">
                 Options:
             </text>
             <check_box
@@ -1855,7 +1857,7 @@ Only large parcels can be listed in search.
              left_pad="-3"
              name="media_loop"
              tool_tip="Play media in a loop.  When the media has finished playing, it will restart from the beginning."
-             top_delta="-1"
+             top_delta="1"
              width="200" />
         </panel>
         <panel
@@ -2148,9 +2150,9 @@ Only large parcels can be listed in search.
              left="8"
              name="OwnerLimited"
              top_pad="5"
-             width="400">
+             width="450">
                 (The estate owner may have limited these choices)
-            </text>            
+            </text>
             <panel
             name="Allowed_layout_panel"
             follows="top|left"

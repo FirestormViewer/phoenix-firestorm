@@ -293,7 +293,7 @@
      left="8"
      name="check_only_coalesced"
      top_pad="6"
-     width="106" />
+     width="116" />
     <icon
      height="16"
      follows="left|top"

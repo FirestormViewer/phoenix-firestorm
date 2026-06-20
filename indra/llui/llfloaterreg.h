@@ -29,9 +29,11 @@
 /// llcommon
 #include "llrect.h"
 #include "llsd.h"
+#include "llstl.h"
 
 #include <functional>
 #include <list>
+#include <unordered_set>
 // [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
 #include <boost/signals2.hpp>
 #include "llboost.h"
@@ -58,7 +60,7 @@ public:
     // 2) We can change the key of a floater without altering the list.
     typedef std::list<LLFloater*> instance_list_t;
     typedef const instance_list_t const_instance_list_t;
-    typedef std::map<std::string, instance_list_t, std::less<>> instance_map_t;
+    typedef std::unordered_map<std::string, instance_list_t, ll::string_hash, std::equal_to<>> instance_map_t;
 
     struct BuildData
     {
@@ -68,19 +70,22 @@ public:
 // [/SL:KB]
         std::string mFile;
     };
-    typedef std::map<std::string, BuildData, std::less<>> build_map_t;
+    typedef std::unordered_map<std::string, BuildData, ll::string_hash, std::equal_to<>> build_map_t;
 
 private:
     friend class LLFloaterRegListener;
     static instance_list_t sNullInstanceList;
     static instance_map_t sInstanceMap;
     static build_map_t sBuildMap;
-    static std::map<std::string, std::string, std::less<>> sGroupMap;
+
+    using group_map_t = std::unordered_map<std::string, std::string, ll::string_hash, std::equal_to<>>;
+    static group_map_t sGroupMap;
     static bool sBlockShowFloaters;
     /**
      * Defines list of floater names that can be shown despite state of sBlockShowFloaters.
      */
-    static std::set<std::string, std::less<>> sAlwaysShowableList;
+    using always_showable_t = std::unordered_set<std::string, ll::string_hash, std::equal_to<>>;
+    static always_showable_t sAlwaysShowableList;
 
 // [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
     // Used to determine whether a floater can be shown

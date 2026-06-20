@@ -76,7 +76,7 @@
 	 font="SansSerifSmall"
 	 tool_tip="Assign the region you are currently in"
 	 height="22"
-	 width="80"
+	 width="85"
 	 left="5"
 	 follows="left|bottom"/>
 	<button

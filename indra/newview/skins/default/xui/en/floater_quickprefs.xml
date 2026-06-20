@@ -79,7 +79,7 @@
             tool_tip="Set the hover height of your avatar"
             mouse_opaque="false"
             top_pad="5"
-            width="90">
+            width="100">
             Hover Height:
         </text>
         <slider
@@ -96,7 +96,6 @@
             name="HoverHeightSlider"
             top_delta="-2"
             right="-7" />
-<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
             length="1"
@@ -108,7 +107,7 @@
             tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
             mouse_opaque="false"
             top_pad="5"
-            width="90">
+            width="100">
             Max Bandwidth:
         </text>
         <slider
@@ -138,7 +137,7 @@
             tool_tip="Controls at what point a visually complex avatar is drawn as a jelly doll"
             mouse_opaque="false"
             top_pad="5"
-            width="90">
+            width="100">
             Max Complexity:
         </text>
         <slider
@@ -170,7 +169,6 @@
             width="50">
             No Limit
         </text>
- <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
             length="1"
@@ -182,17 +180,17 @@
             tool_tip="Presets for your sky"
             mouse_opaque="false"
             top_delta="24"
-            width="90">
+            width="62">
             Sky:
         </text>
         <combo_box
             follows="left|top"
             height="20"
             layout="topleft"
-            left_delta="58"
+            left_pad="3"
             name="WLPresetsCombo"
             top_delta="-4"
-            width="150" />
+            width="143" />
         <button
             enabled="true"
             name="WLPrevPreset"
@@ -200,7 +198,7 @@
             height="20"
             width="20"
             bottom_delta="-0"
-            left_delta="152"
+            left_pad="2"
             label=""
             label_selected=""
             image_overlay="Arrow_Left_Off"
@@ -228,17 +226,17 @@
             tool_tip="Presets for your water"
             mouse_opaque="false"
             top_delta="25"
-            width="90">
+            width="62">
             Water:
         </text>
         <combo_box
             follows="left|top"
             height="20"
             layout="topleft"
-            left_delta="58"
+            left_pad="3"
             name="WaterPresetsCombo"
             top_delta="-4"
-            width="150" />
+            width="143" />
         <button
             enabled="true"
             name="WWPrevPreset"
@@ -246,7 +244,7 @@
             height="20"
             width="20"
             bottom_delta="-0"
-            left_delta="152"
+            left_pad="2"
             label=""
             label_selected=""
             image_overlay="Arrow_Left_Off"
@@ -273,18 +271,18 @@
             name="Day Cycle"
             tool_tip="Presets for your day cycle"
             mouse_opaque="false"
-            top_delta="24"
-            width="90">
+            top_delta="25"
+            width="62">
             Day Cycle:
         </text>
         <combo_box
             follows="left|top"
             height="20"
             layout="topleft"
-            left_delta="58"
+            left_pad="3"
             name="DCPresetsCombo"
             top_delta="-4"
-            width="150" />
+            width="143" />
         <button
             enabled="true"
             name="DCPrevPreset"
@@ -292,7 +290,7 @@
             height="20"
             width="20"
             bottom_delta="-0"
-            left_delta="152"
+            left_pad="2"
             label=""
             label_selected=""
             image_overlay="Arrow_Left_Off"

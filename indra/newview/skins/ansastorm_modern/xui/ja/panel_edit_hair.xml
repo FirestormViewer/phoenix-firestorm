@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="テクスチャ" name="Texture" tool_tip="クリックで画像を選択します。"/>
+	</panel>
+	<tab_container name="wearable_accordion">
+		<!-- Begin Color Panel -->
+		<panel name="hair_color_tab_holder" title="色">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="色">
+					<!-- Viewer will replace things here with tiled editing views -->
+					<scrolling_panel_list name="hair_color_param_list"/>
+				</accordion_tab>
+			</accordion>
+		</panel>
+		<!-- End Color Panel -->
+		<!-- Begin Style Panel -->
+		<panel name="hair_style_tab_holder" title="スタイル">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="スタイル">
+					<!-- Viewer will replace things here with tiled editing views -->
+					<scrolling_panel_list name="hair_style_param_list"/>
+				</accordion_tab>
+			</accordion>
+		</panel>
+		<!-- End Style Panel -->
+		<!-- Begin Eyebrows Panel -->
+		<panel name="hair_eyebrows_tab_holder" title="眉毛">
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="眉毛"/>
+			</accordion>
+		</panel>
+		<!-- End Eyebrows Panel -->
+		<!-- Begin Facial Panel -->
+		<panel name="hair_facial_tab_holder" title="顔面">
+			<text name="hair_facial_not_available">
+				顔のオプションは男性アバターに
+のみ利用可能です。
+			</text>
+			<!-- Viewer demands an accordion here, so we provide one -->
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="顔面"/>
+			</accordion>
+		</panel>
+		<!-- End Facial Panel -->
+	</tab_container>
+</panel>

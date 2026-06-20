@@ -2883,6 +2883,10 @@ void LLPipeline::clearRebuildGroups()
     {
         LLSpatialGroup* group = *iter;
 
+        if (!group || group->isDead())
+        {
+            continue;
+        }
         // If the group contains HUD objects, save the group
         if (group->isHUDGroup())
         {
