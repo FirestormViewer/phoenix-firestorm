@@ -2500,6 +2500,14 @@
                  function="Upload.CalculateCosts"
                  parameter="Bulk Upload" />
             </menu_item_call>
+           <menu_item_call
+             label="Bulk Scripts..."
+             layout="topleft"
+             name="Bulk Script Upload">
+                <menu_item_call.on_click
+                 function="File.UploadBulkScript"
+                 parameter="" />
+            </menu_item_call>
 	    <menu_item_call
              label="Import Linkset..."
              visibility_control="FSEnableObjectExports"

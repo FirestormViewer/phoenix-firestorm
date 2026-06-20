@@ -365,6 +365,11 @@ bool LLResourceUploadInfo::findAssetTypeAndCodecOfExtension(const std::string& e
         asset_type = LLAssetType::AT_SOUND;
         succ = true;
     }
+    else if (exten_lc == "lsl")
+    {
+        asset_type = LLAssetType::AT_LSL_TEXT;
+        succ = true;
+    }
     else if (exten_lc == "j2k")
     {
         asset_type = LLAssetType::AT_TEXTURE;

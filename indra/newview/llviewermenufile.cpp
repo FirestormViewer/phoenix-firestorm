@@ -81,6 +81,7 @@
 
 // system libraries
 #include <boost/tokenizer.hpp>
+#include <fstream>
 
 #include "llinventorydefines.h"
 
@@ -89,6 +90,8 @@
 // <FS:Ansariel> FIRE-30632: Bulk Windlight import
 #include "llenvironment.h"
 #include "llsettingsvo.h"
+
+#include "llviewerinventory.h"
 
 class LLFileEnableUpload : public view_listener_t
 {
@@ -1019,6 +1022,173 @@ class LLFileUploadBulk : public view_listener_t
     }
 };
 
+class LLFileUploadBulkScript : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        if (gAgentCamera.cameraMouselook())
+        {
+            gAgentCamera.changeCameraToDefault();
+        }
+        LLFilePickerReplyThread::startPicker([](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            upload_bulk_scripts(filenames, LLUUID::null);
+        }, LLFilePicker::FFLOAD_ALL, true);
+        return true;
+    }
+};
+
+class FSBulkScriptUploader : public std::enable_shared_from_this<FSBulkScriptUploader>
+{
+public:
+    static void start(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+    {
+        auto uploader = std::make_shared<FSBulkScriptUploader>(filenames, destFolder);
+        uploader->uploadNext();
+    }
+
+    FSBulkScriptUploader(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+        : mFiles(filenames), mDestFolder(destFolder), mCurrentIndex(0), mSuccessCount(0), mFailCount(0)
+        , mProgressDialog(NULL)
+    {
+        mProgressDialog = LLUploadDialog::modalUploadDialog("Bulk Script Upload");
+    }
+
+private:
+    void uploadNext()
+    {
+        if (mCurrentIndex >= mFiles.size())
+        {
+            finish();
+            return;
+        }
+
+        std::string filename = mFiles[mCurrentIndex];
+        std::string name = gDirUtilp->getBaseFileName(filename, true);
+
+        std::ifstream t(filename);
+        if (!t.is_open())
+        {
+            mFailCount++;
+            mCurrentIndex++;
+            uploadNext();
+            return;
+        }
+        mCurrentContent = std::string((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+        t.close();
+
+        if (mProgressDialog)
+        {
+            mProgressDialog->setMessage(llformat("Uploading script %d of %d: %s",
+                (int)mCurrentIndex + 1, (int)mFiles.size(), name.c_str()));
+        }
+
+        LLTransactionID tid;
+        tid.generate();
+
+        U32 perms = PERM_MOVE | PERM_COPY | PERM_TRANSFER | PERM_MODIFY;
+
+        auto self = shared_from_this();
+        auto cb = new LLBoostFuncInventoryCallback([self](const LLUUID& itemId)
+        {
+            self->onItemCreated(itemId);
+        });
+
+        create_inventory_item(gAgent.getID(), gAgent.getSessionID(), mDestFolder, tid, name, "",
+            LLAssetType::AT_LSL_TEXT, LLInventoryType::IT_LSL, NO_INV_SUBTYPE, perms, cb);
+    }
+
+    void onItemCreated(const LLUUID& itemId)
+    {
+        std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+        if (url.empty())
+        {
+            mFailCount++;
+            mCurrentIndex++;
+            uploadNext();
+            return;
+        }
+
+        auto self = shared_from_this();
+
+        LLBufferedAssetUploadInfo::invnUploadFinish_f finishFn =
+            [self](LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
+        {
+            bool compiled = response["compiled"].asBoolean();
+            if (compiled)
+                self->mSuccessCount++;
+            else
+                self->mFailCount++;
+            self->mCurrentIndex++;
+            self->uploadNext();
+        };
+
+        LLBufferedAssetUploadInfo::uploadFailed_f failFn =
+            [self](LLUUID itemId, LLUUID taskId, LLSD response, std::string reason)
+        {
+            self->mFailCount++;
+            self->mCurrentIndex++;
+            self->uploadNext();
+            return false;
+        };
+
+        LLResourceUploadInfo::ptr_t uploadInfo = std::make_shared<LLScriptAssetUpload>(itemId, mCurrentContent, finishFn, failFn);
+        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+    }
+
+    void finish()
+    {
+        mProgressDialog = NULL;
+        LLUploadDialog::modalUploadFinished();
+
+        if (mFailCount > 0)
+        {
+            LLSD args;
+            args["MESSAGE"] = llformat("Bulk script upload complete: %d succeeded, %d failed.",
+                mSuccessCount, mFailCount);
+            LLNotificationsUtil::add("BulkScriptUploadComplete", args);
+        }
+        else
+        {
+            LLSD args;
+            args["MESSAGE"] = llformat("All %d scripts uploaded successfully.", mSuccessCount);
+            LLNotificationsUtil::add("BulkScriptUploadComplete", args);
+        }
+    }
+
+    std::vector<std::string> mFiles;
+    size_t mCurrentIndex;
+    LLUUID mDestFolder;
+    S32 mSuccessCount;
+    S32 mFailCount;
+    std::string mCurrentContent;
+    LLUploadDialog* mProgressDialog;
+};
+
+void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+{
+    if (filenames.empty()) return;
+
+    std::vector<std::string> lsl_files;
+    for (const auto& filename : filenames)
+    {
+        std::string ext = gDirUtilp->getExtension(filename);
+        LLStringUtil::toLower(ext);
+        if (ext == "lsl")
+        {
+            lsl_files.push_back(filename);
+        }
+    }
+
+    if (lsl_files.empty())
+    {
+        LLNotificationsUtil::add("NoScriptsSelected");
+        return;
+    }
+
+    FSBulkScriptUploader::start(lsl_files, destFolder);
+}
+
 // <FS:CR> Import Linkset
 class FSFileImportLinkset : public view_listener_t
 {
@@ -1661,6 +1831,7 @@ void init_menu_file()
     view_listener_t::addCommit(new LLFileUploadModel(), "File.UploadModel");
     view_listener_t::addCommit(new LLFileUploadMaterial(), "File.UploadMaterial");
     view_listener_t::addCommit(new LLFileUploadBulk(), "File.UploadBulk");
+    view_listener_t::addCommit(new LLFileUploadBulkScript(), "File.UploadBulkScript");
     view_listener_t::addCommit(new LLFileCloseWindow(), "File.CloseWindow");
     view_listener_t::addCommit(new LLFileCloseAllWindows(), "File.CloseAllWindows");
     view_listener_t::addEnable(new LLFileEnableCloseWindow(), "File.EnableCloseWindow");

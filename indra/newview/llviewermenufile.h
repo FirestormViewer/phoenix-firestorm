@@ -86,6 +86,8 @@ void upload_bulk(
     bool allow_2k,
     const LLUUID& dest);
 
+void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID& destFolder);
+
 //consider moving all file pickers below to more suitable place
 class LLFilePickerThread : public LLThread
 { //multi-threaded file picker (runs system specific file picker in background and calls "notify" from main thread)

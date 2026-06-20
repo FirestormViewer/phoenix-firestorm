@@ -9926,6 +9926,26 @@ Your current balance of L$[BALANCE] is not enough to upload [COUNT] items at a t
      name="okbutton"
      yestext="OK"/>
    </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="BulkScriptUploadComplete"
+   type="alertmodal">
+[MESSAGE]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="NoScriptsSelected"
+   type="alertmodal">
+No .lsl script files were selected.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
   
    <notification
     icon="alertmodal.tga"
