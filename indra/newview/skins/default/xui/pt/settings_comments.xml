@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Comentários traduzidos para Configurações de debug (Avançado > Configurações de debug).
-     Cada <string name="..."> usa o mesmo nome da chave em app_settings/settings.xml.
-     Tom gamer / Second Life / Firestorm — PT-BR. -->
+<!-- Comentários traduzidos para as Configurações de debug
+     (Avançado → Mostrar configurações de debug).
+     Cada <string name="..."> mantém o mesmo nome usado em app_settings/settings.xml. -->
 <strings>
 	<string name="FSLandmarkCreatedNotification">
 		Exibe uma notificação se um marco for adicionado ao seu inventário.
