@@ -230,15 +230,12 @@ void LLAgentCamera::init()
     mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPresetType");
 
 // [RLVa:KB] - @setcam_eyeoffset, @setcam_focusoffset and @setcam_eyeoffsetscale
-    if (RlvActions::isRlvEnabled())
-    {
-        mRlvCameraOffsetInitialControl = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3::zero, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvCameraOffsetInitialControl->setHiddenFromSettingsEditor(true);
-        mRlvCameraOffsetScaleControl = gSavedSettings.declareF32("CameraOffsetScaleRLVa", 0.0f, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvCameraOffsetScaleControl->setHiddenFromSettingsEditor(true);
-        mRlvFocusOffsetInitialControl = gSavedSettings.declareVec3d("FocusOffsetRLVaView", LLVector3d::zero, "Declared in code", LLControlVariable::PERSIST_NO);
-        mRlvFocusOffsetInitialControl->setHiddenFromSettingsEditor(true);
-    }
+    mRlvCameraOffsetInitialControl = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvCameraOffsetInitialControl->setHiddenFromSettingsEditor(true);
+    mRlvCameraOffsetScaleControl = gSavedSettings.declareF32("CameraOffsetScaleRLVa", 0.0f, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvCameraOffsetScaleControl->setHiddenFromSettingsEditor(true);
+    mRlvFocusOffsetInitialControl = gSavedSettings.declareVec3d("FocusOffsetRLVaView", LLVector3d::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+    mRlvFocusOffsetInitialControl->setHiddenFromSettingsEditor(true);
 // [/RLVa:KB]
 
     mCameraCollidePlane.clearVec();
