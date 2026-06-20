@@ -6166,6 +6166,38 @@ void LLSelectMgr::requestObjectPropertiesFamily(LLViewerObject* object)
     msg->sendReliable( regionp->getHost() );
 }
 
+// Briefly select and deselect an object server-side to elicit a full
+// ObjectProperties reply. Unlike RequestObjectPropertiesFamily this also
+// works for worn attachments (same approach FSAreaSearch uses for bulk
+// property scans). The selection never enters the viewer-side selection
+// list, so user selection state is unaffected.
+void LLSelectMgr::requestObjectPropertiesViaSelect(LLViewerObject* object)
+{
+    LLViewerRegion* regionp = object->getRegion();
+    if (!regionp)
+    {
+        return;
+    }
+
+    LLMessageSystem* msg = gMessageSystem;
+
+    msg->newMessageFast(_PREHASH_ObjectSelect);
+    msg->nextBlockFast(_PREHASH_AgentData);
+    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->nextBlockFast(_PREHASH_ObjectData);
+    msg->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID());
+    msg->sendReliable(regionp->getHost());
+
+    msg->newMessageFast(_PREHASH_ObjectDeselect);
+    msg->nextBlockFast(_PREHASH_AgentData);
+    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->nextBlockFast(_PREHASH_ObjectData);
+    msg->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID());
+    msg->sendReliable(regionp->getHost());
+}
+
 
 // static
 void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data)
@@ -6193,6 +6225,11 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
         msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_CreatorID, creator_id, i);
         msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id, i);
         msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_GroupID, group_id, i);
+
+        // Group-based nameplate tinting: replies for attachment-group probes
+        // (see LLVOAvatar::probeAttachmentGroups). Probed objects are not in
+        // any selection, so also skip the missing-node warning below for them.
+        bool group_probe_reply = LLVOAvatar::handleAttachmentGroupReply(id, group_id);
         msg->getU64Fast(_PREHASH_ObjectData, _PREHASH_CreationDate, creation_date, i);
         msg->getU32Fast(_PREHASH_ObjectData, _PREHASH_BaseMask, base_mask, i);
         msg->getU32Fast(_PREHASH_ObjectData, _PREHASH_OwnerMask, owner_mask, i);
@@ -6261,7 +6298,7 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
         {
             // <FS:Techwolf Lupindo> area search
             FSAreaSearch* area_search_floater = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
-            if (!area_search_floater || !area_search_floater->isActive()) // Don't spam the log when areasearch is active.
+            if (!group_probe_reply && (!area_search_floater || !area_search_floater->isActive())) // Don't spam the log when areasearch is active or for group probe replies.
             {
             // </FS:Techwolf Lupindo>
             LL_WARNS() << "Couldn't find object " << id << " selected." << LL_ENDL;

@@ -321,7 +321,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
         #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        channel_base = CHANNEL_VENDOR_BASE
         if self.fs_is_opensim():
             channel_base = channel_base + "OS"
         #</FS:TS>
@@ -684,7 +684,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
             # Get fmodstudio dll if needed
             # if self.args['fmodstudio'] == 'ON':
-            if self.args['fmodstudio'].lower() == 'on':
+            if self.args['fmodstudio'].lower() in ('on', 'true', '1', 'yes'):
                 if(self.args['buildtype'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
@@ -2133,7 +2133,7 @@ class LinuxManifest(ViewerManifest):
         self.path("licenses-linux.txt","licenses.txt")
         self.path("VivoxAUP.txt")
         self.path("LGPL-license.txt")
-        self.path("res/firestorm_icon.png","firestorm_icon.png")
+        self.path("res/soapstorm_icon.png","soapstorm_icon.png")
         with self.prefix("linux_tools"):
             self.path("client-readme.txt","README-linux.txt")
             self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
@@ -2165,9 +2165,9 @@ class LinuxManifest(ViewerManifest):
         icon_path = self.icon_path()
         print("DEBUG: icon_path '%s'" % icon_path)
         with self.prefix(src=icon_path) :
-            self.path("firestorm_256.png","firestorm_48.png")
+            self.path("soapstorm_256.png","soapstorm_48.png")
             #with self.prefix(dst="res-sdl") :
-            #    self.path("firestorm_256.bmp","ll_icon.BMP")
+            #    self.path("soapstorm_256.bmp","ll_icon.BMP")
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
@@ -2400,7 +2400,7 @@ class Linux_i686_Manifest(LinuxManifest):
                 pass
 
             # if self.args['fmodstudio'] == 'ON':
-            if self.args['fmodstudio'].lower() == 'on':
+            if self.args['fmodstudio'].lower() in ('on', 'true', '1', 'yes'):
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")
@@ -2442,7 +2442,7 @@ class Linux_x86_64_Manifest(LinuxManifest):
             # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
 
             # if self.args['fmodstudio'] == 'ON':
-            if self.args['fmodstudio'].lower() == 'on':
+            if self.args['fmodstudio'].lower() in ('on', 'true', '1', 'yes'):
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")

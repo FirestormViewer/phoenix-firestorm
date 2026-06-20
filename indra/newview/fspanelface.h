@@ -223,6 +223,7 @@ protected:
     void onClickAutoFix();
     void onAlignTexture();
     void onClickMapsSync();
+    void onClickSyncMaterials();
 
     /*
      * Checks whether the selected texture from the LLFloaterTexturePicker can be applied to the currently selected object.
@@ -446,6 +447,7 @@ private:
     // Texture alignment and maps synchronization
     LLButton*           mBtnAlignMedia;
     LLButton*           mBtnAlignTextures;
+    LLButton*           mBtnSyncMaterials;
     LLCheckBoxCtrl*     mCheckSyncMaterials;
 
     // Media

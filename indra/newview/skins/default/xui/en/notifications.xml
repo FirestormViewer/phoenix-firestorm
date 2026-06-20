@@ -15339,4 +15339,109 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             yestext="OK"/>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
+
+  <!-- Auto-Update Notifications -->
+  <notification
+   icon="alertmodal.tga"
+   name="FSUpdateAvailable"
+   type="alertmodal">
+A new version of SoapStorm is available!
+
+Current Version: [CURRENT_VERSION]
+New Version: [VERSION]
+Size: [SIZE]
+
+Would you like to download and install the update?
+    <tag>confirm</tag>
+    <form>
+      <button
+       default="true"
+       index="0"
+       name="UpdateNow"
+       text="Update Now"/>
+      <button
+       index="1"
+       name="RemindLater"
+       text="Remind Me Later"/>
+      <button
+       index="2"
+       name="SkipVersion"
+       text="Skip This Version"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="FSUpdateDownloading"
+   type="alertmodal">
+Downloading update...
+
+Please wait while the installer is being downloaded. This may take a minute or two.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="FSUpdateDownloadComplete"
+   type="alertmodal">
+Update downloaded successfully!
+
+Version [VERSION] is ready to install.
+
+The viewer will close and the installer will launch.
+    <tag>confirm</tag>
+    <form>
+      <button
+       default="true"
+       index="0"
+       name="InstallNow"
+       text="Install Now"/>
+      <button
+       index="1"
+       name="InstallLater"
+       text="Install Later"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="FSUpdateDownloadFailed"
+   type="alert">
+Failed to download the update.
+
+Please try again later or download manually from the website.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="FSUpdateChecksumFailed"
+   type="alert">
+Update file verification failed!
+
+The downloaded file may be corrupted. Please try downloading again.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="FSUpdateLaunchFailed"
+   type="alert">
+Failed to launch the installer.
+
+Please run the installer manually from your temp folder.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
 </notifications>

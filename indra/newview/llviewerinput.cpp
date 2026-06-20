@@ -920,6 +920,42 @@ bool toggle_sit(EKeystate s)
     return true;
 }
 
+// OTS shoulder swap: mirror the over-the-shoulder camera to the avatar's
+// other side (TPS-style shoulder toggle). OTSCameraSide is read live via
+// LLCachedControl every frame, so negating it repositions the camera and
+// the focus point immediately; startCameraAnimation makes the move a smooth
+// lerp instead of a snap when OTS mode is active.
+bool ots_swap_shoulder(EKeystate s)
+{
+    if (KEYSTATE_DOWN != s) return true;
+    F32 side = gSavedSettings.getF32("OTSCameraSide");
+    gSavedSettings.setF32("OTSCameraSide", -side);
+    if (gAgentCamera.cameraOTS())
+    {
+        gAgentCamera.startCameraAnimation();
+    }
+    return true;
+}
+
+// OTS view toggle: switch between the over-the-shoulder camera and true
+// first-person mouselook without leaving aim mode (precision-aim style).
+// Checks cameraOTS() first because cameraMouselook() also reports true in OTS.
+bool ots_toggle_view(EKeystate s)
+{
+    if (KEYSTATE_DOWN != s) return true;
+    if (gAgentCamera.cameraOTS())
+    {
+        gAgentCamera.changeCameraToMouselook();
+        gSavedSettings.setBOOL("OTSLastViewFirstPerson", true);
+    }
+    else if (gAgentCamera.cameraMouselook())
+    {
+        gAgentCamera.changeCameraToOTS();
+        gSavedSettings.setBOOL("OTSLastViewFirstPerson", false);
+    }
+    return true;
+}
+
 bool toggle_pause_media(EKeystate s) // analogue of play/pause button in top bar
 {
     if (KEYSTATE_DOWN != s) return true;
@@ -1091,6 +1127,8 @@ REGISTER_KEYBOARD_ACTION("run_left", run_left);
 REGISTER_KEYBOARD_ACTION("run_right", run_right);
 REGISTER_KEYBOARD_ACTION("toggle_run", toggle_run);
 REGISTER_KEYBOARD_ACTION("toggle_sit", toggle_sit);
+REGISTER_KEYBOARD_ACTION("ots_swap_shoulder", ots_swap_shoulder); // OTS shoulder swap
+REGISTER_KEYBOARD_ACTION("ots_toggle_view", ots_toggle_view);     // OTS <-> first person mouselook
 REGISTER_KEYBOARD_ACTION("toggle_pause_media", toggle_pause_media);
 REGISTER_KEYBOARD_ACTION("toggle_enable_media", toggle_enable_media);
 REGISTER_KEYBOARD_ACTION("teleport_to", teleport_to);

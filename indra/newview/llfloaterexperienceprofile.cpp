@@ -401,19 +401,19 @@ void LLFloaterExperienceProfile::refreshExperience( const LLSD& experience )
         topPanel->setVisible(true);
     }
 
+    // Show privileged label but still allow permission management
     if(properties & LLExperienceCache::PROPERTY_PRIVILEGED)
     {
         child = getChild<LLTextBox>(TF_PRIVILEGED);
         child->setVisible(true);
     }
-    else
+    
+    // Always fetch experience permissions to enable leave/block functionality
+    LLViewerRegion* region = gAgent.getRegion();
+    if (region)
     {
-        LLViewerRegion* region = gAgent.getRegion();
-        if (region)
-        {
-            LLExperienceCache::instance().getExperiencePermission(mExperienceId, boost::bind(
-                &LLFloaterExperienceProfile::experiencePermissionResults, mExperienceId, _1));
-        }
+        LLExperienceCache::instance().getExperiencePermission(mExperienceId, boost::bind(
+            &LLFloaterExperienceProfile::experiencePermissionResults, mExperienceId, _1));
     }
 
     value=experience[LLExperienceCache::METADATA].asString();
@@ -478,11 +478,9 @@ void LLFloaterExperienceProfile::refreshExperience( const LLSD& experience )
 
 void LLFloaterExperienceProfile::setPreferences( const LLSD& content )
 {
-    S32 properties = mExperienceDetails[LLExperienceCache::PROPERTIES].asInteger();
-    if(properties & LLExperienceCache::PROPERTY_PRIVILEGED)
-    {
-        return;
-    }
+    // Allow users to manage permissions for all experiences including privileged ones
+    // S32 properties = mExperienceDetails[LLExperienceCache::PROPERTIES].asInteger();
+    // Removed privileged check to enable leaving any joined experience
 
     const LLSD& experiences = content["experiences"];
     const LLSD& blocked = content["blocked"];

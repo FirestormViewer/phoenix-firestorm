@@ -34,6 +34,7 @@
 
 #include "fscommon.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llappviewer.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -695,6 +696,14 @@ bool FloaterQuickPrefs::postBuild()
 
     updateAvatarZOffsetEditEnabled();
     onRegionChanged();
+
+    // OTS aim mode checkbox
+    mOTSEnabledCheck = getChild<LLCheckBoxCtrl>("ots_enabled", true);
+    if (mOTSEnabledCheck)
+    {
+        mOTSEnabledCheck->setCommitCallback(
+            boost::bind(&FloaterQuickPrefs::onOTSEnabledChanged, this));
+    }
 
     return LLTransientDockableFloater::postBuild();
 }
@@ -2216,4 +2225,17 @@ void FloaterQuickPrefs::updateMaxComplexityLabel(const LLSD& newvalue)
     U32 value = newvalue.asInteger();
 
     LLAvatarComplexityControls::setText(value, mMaxComplexityLabel);
+}
+
+void FloaterQuickPrefs::onOTSEnabledChanged()
+{
+    if (mOTSEnabledCheck)
+    {
+        gSavedSettings.setBOOL("OTSEnabled", mOTSEnabledCheck->get());
+        // If currently in OTS mode and checkbox was unchecked, exit OTS
+        if (!mOTSEnabledCheck->get() && gAgentCamera.cameraOTS())
+        {
+            gAgentCamera.changeCameraFromOTS();
+        }
+    }
 }

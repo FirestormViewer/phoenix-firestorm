@@ -50,4 +50,8 @@ extern F32 gLastDrawDistanceStep;
 // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 extern LLFrameTimer gPostTeleportFinishKillObjectDelayTimer;
 
+// <FS:DS> FIRE-TP-DEDUP: Timer reset when a teleport completes, used to detect
+// and discard late duplicate TeleportStart packets sent by the server.
+extern LLFrameTimer gTeleportCompletionTimer;
+
 #endif // LL_LLVIEWERDISPLAY_H

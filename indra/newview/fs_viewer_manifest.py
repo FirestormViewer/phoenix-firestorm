@@ -202,6 +202,7 @@ class FSViewerManifest:
             os.rename("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(), osname, self.address_size), sName)
 
     def fs_generate_breakpad_symbols_for_file( self, aFile ):
+        import os
         from os import makedirs, remove
         from os.path import join, isfile
         import subprocess
@@ -211,24 +212,44 @@ class FSViewerManifest:
         if not isfile( dumpSym ):
             return
 
+        # Skip directories
+        if not isfile( aFile ) and not os.path.islink( aFile ):
+            return
+
         symbolFile = aFile +".sym"
 
-        with open( symbolFile, "w") as outfile:
-            subprocess.call( [dumpSym, aFile ], stdout=outfile )
+        try:
+            with open( symbolFile, "w") as outfile:
+                subprocess.call( [dumpSym, aFile ], stdout=outfile, stderr=subprocess.DEVNULL )
+        except Exception:
+            return
 
-        firstline = open( symbolFile ).readline().strip()
+        if not isfile( symbolFile ):
+            return
 
-        if firstline != "":
-            module, os, bitness, hash, filename = firstline.split(" ")
+        try:
+            firstline = open( symbolFile ).readline().strip()
+        except Exception:
+            return
+
+        parts = firstline.split(" ")
+        if len(parts) == 5 and parts[0] == "MODULE":
+            module, os, bitness, hash, filename = parts
             symbolDir = join( "symbols", filename, hash )
             try:
                 makedirs( symbolDir )
-            except:
+            except Exception:
                 pass
-            move( symbolFile, symbolDir )
+            try:
+                move( symbolFile, symbolDir )
+            except Exception:
+                pass
 
         if isfile( symbolFile ):
-            remove( symbolFile )
+            try:
+                remove( symbolFile )
+            except Exception:
+                pass
 
     def fs_save_breakpad_symbols(self, osname):
         from glob import glob

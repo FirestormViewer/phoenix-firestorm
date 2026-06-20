@@ -11,15 +11,15 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
         string(REGEX REPLACE "^([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" VIEWER_VERSION_MAJOR ${VIEWER_SHORT_VERSION})
         string(REGEX REPLACE "^[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" VIEWER_VERSION_MINOR ${VIEWER_SHORT_VERSION})
         string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" VIEWER_VERSION_PATCH ${VIEWER_SHORT_VERSION})
-        if (DEFINED ENV{revision})
-           set(VIEWER_VERSION_REVISION $ENV{revision})
+        if (DEFINED ENV{VIEWER_REVISION})
+           set(VIEWER_VERSION_REVISION $ENV{VIEWER_REVISION})
            message(STATUS "Revision (from environment): ${VIEWER_VERSION_REVISION}")
 
         elseif (DEFINED ENV{AUTOBUILD_BUILD_ID})
            set(VIEWER_VERSION_REVISION $ENV{AUTOBUILD_BUILD_ID})
            message(STATUS "Revision (from autobuild environment): ${VIEWER_VERSION_REVISION}")
 
-        else (DEFINED ENV{revision})
+        else (DEFINED ENV{VIEWER_REVISION})
             find_program(GIT git)
             if (DEFINED GIT )
                 execute_process(
@@ -37,7 +37,7 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
                 message(STATUS "Revision not set: 'git' found; using 0")
                 set(VIEWER_VERSION_REVISION 0)
             endif (DEFINED GIT)
-        endif (DEFINED ENV{revision})
+        endif (DEFINED ENV{VIEWER_REVISION})
         message(STATUS "Building '${VIEWER_CHANNEL}' Version ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
     else ( EXISTS ${VIEWER_VERSION_BASE_FILE} )
         message(SEND_ERROR "Cannot get viewer version from '${VIEWER_VERSION_BASE_FILE}'") 

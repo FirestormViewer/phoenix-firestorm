@@ -720,11 +720,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2c81fa7aa03b427088ab54ce3b71088a0003126b</string>
+              <string>ed0f78bbcda35eeb50cb0562081897753f1c5cdb</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/dullahan/releases/download/v1.26.0-CEF_139.0.40/dullahan-1.26.0.202510161627_139.0.40_g465474a_chromium-139.0.7258.139-darwin64-18568015445.tar.zst</string>
+              <string>https://github.com/secondlife/dullahan/releases/download/v1.30.0-CEF_147.0.10/dullahan-1.30.0.202604261548_147.0.10_gd58e84d_chromium-147.0.7727.118-darwin64-24960603207.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -734,11 +734,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8e06d060729250c5bfcb993c8f818f36ea17de16</string>
+              <string>8c8a1de226fa912112d6e74a92930424665c4867</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/dullahan/releases/download/v1.26.0-CEF_139.0.40/dullahan-1.26.0.202510161627_139.0.40_g465474a_chromium-139.0.7258.139-linux64-18568015445.tar.zst</string>
+              <string>https://github.com/secondlife/dullahan/releases/download/v1.30.0-CEF_147.0.10/dullahan-1.30.0.202604261548_139.0.40_g465474a_chromium-139.0.7258.139-linux64-24960603207.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -748,11 +748,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7ca6db37f019b47e230c0861607c546d45535367</string>
+              <string>1adb3789132580356458c86731dfbd6b27355951</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/dullahan/releases/download/v1.26.0-CEF_139.0.40/dullahan-1.26.0.202510161628_139.0.40_g465474a_chromium-139.0.7258.139-windows64-18568015445.tar.zst</string>
+              <string>https://github.com/secondlife/dullahan/releases/download/v1.30.0-CEF_147.0.10/dullahan-1.30.0.202604261550_147.0.10_gd58e84d_chromium-147.0.7727.118-windows64-24960603207.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -765,7 +765,7 @@
         <key>copyright</key>
         <string>Copyright (c) 2017, Linden Research, Inc.</string>
         <key>version</key>
-        <string>1.26.0.202510161627_139.0.40_g465474a_chromium-139.0.7258.139</string>
+        <string>1.30.0.202604261550_147.0.10_gd58e84d_chromium-147.0.7727.118</string>
         <key>name</key>
         <string>dullahan</string>
         <key>description</key>
@@ -888,11 +888,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f9c203d45f22e3b448653d2f652806d8</string>
+              <string>74097f66856f1056fbec923d6965f7db</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.03.12-linux64-260671925.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.03.12-linux64-251121739.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -902,9 +902,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2b9a4903cb4413a09a4c2101e834d0d3</string>
+              <string>4a0da36b4a31332df62dadf6438f935e</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.03.12-windows64-260671934.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.03.07-windows64-251121127.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -917,7 +917,7 @@
         <key>copyright</key>
         <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>version</key>
-        <string>2.02.20</string>
+        <string>2.03.12</string>
         <key>name</key>
         <string>fmodstudio</string>
         <key>description</key>

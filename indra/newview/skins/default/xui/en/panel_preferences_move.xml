@@ -452,49 +452,14 @@
          tool_tip="Display crosshairs when in mouselook mode"
          top_pad="5"
          width="256" />
-        <check_box
-         control_name="FSMouselookCombatFeatures"
-         follows="left|top"
-         enabled_control="EnableMouselook"
-         height="16"
-         label="Enable combat features"
-         layout="topleft"
-         name="FSMouselookCombatFeatures"
-         top_pad="5"
-         width="256" />
-        <check_box
-         control_name="ExodusMouselookIFF"
-         follows="left|top"
-         height="16"
-         label="Draw target markers"
-         layout="topleft"
-         left_delta="10"
-         name="ExodusMouselookIFF"
-         top_pad="5"
-         width="256" />
-        <slider
-         control_name="ExodusMouselookIFFRange"
-         follows="left|top"
-         height="15"
-         can_edit_text="true"
-         decimal_digits="0"
-         increment="5"
-         layout="topleft"
-         label="Range (m):"
-         label_width="150"
-         show_text="true"
-         left_delta="5"
-         max_val="500"
-         name="ExodusMouselookIFFRange"
-         top_pad="5"
-         width="333" />
+        <!-- Combat features moved to Preferences > Combat -->
         <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="-10"
+         left_delta="5"
          name="Mouse Sensitivity"
          top_pad="10"
          width="160">
@@ -505,23 +470,39 @@
          follows="left|top"
          enabled_control="EnableMouselook"
          height="15"
-         initial_value="2"
+         initial_value="20"
          layout="topleft"
-         show_text="false"
+         show_text="true"
+         can_edit_text="true"
+         decimal_digits="0"
          left_pad="5"
-         max_val="15"
+         max_val="100"
          name="mouse_sensitivity"
          top_delta="1"
-         width="145" />
+         width="120" />
+        <button
+         follows="left|top"
+         name="Def_MouseSensitivity"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="2"
+         top_delta="-2"
+         width="20"
+         tool_tip="Reset to default value">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="MouseSensitivity"/>
+        </button>
         <check_box
          control_name="InvertMouse"
          enabled_control="EnableMouselook"
          height="16"
          label="Invert"
          layout="topleft"
-         left_pad="2"
+         left_pad="3"
          name="invert_mouse"
-         top_delta="0"
+         top_delta="2"
          width="128" />
 	</panel>
 

@@ -28,6 +28,7 @@
 
 #include "llappviewer.h"
 #include "llstartup.h"
+#include "llautoupdatechecker.h"
 
 #if LL_VELOPACK && LL_WINDOWS
 #include "llvelopack.h"
@@ -215,6 +216,7 @@
 #include "llstartuplistener.h"
 #include "lltoolbarview.h"
 #include "llexperiencelog.h"
+#include "llgroupcolormap.h"        // group-based nameplate tinting
 #include "llcleanup.h"
 
 #include "llenvironment.h"
@@ -1344,6 +1346,15 @@ bool idle_startup()
             //LLPanelLogin::giveFocus();
             FSPanelLogin::giveFocus();
             // </FS:Ansariel> [FS Login Panel]
+
+            // <FS:Beq/> Auto-update check - check once at login screen
+            static bool sHasCheckedForUpdates = false;
+            if (!sHasCheckedForUpdates)
+            {
+                sHasCheckedForUpdates = true;
+                LLAutoUpdateChecker::instance().checkForUpdate();
+            }
+            // </FS:Beq/>
 
             // MAINT-3231 Show first run dialog only for Desura viewer
             if (gSavedSettings.getString("sourceid") == "1208_desura")
@@ -4328,6 +4339,9 @@ void LLStartUp::initExperiences()
         boost::bind(&LLAgent::getRegionCapability, &gAgent, _1));
 
     LLExperienceLog::instance().initialize();
+
+    // Load per-group nameplate colors for this account
+    LLGroupColorMap::getInstance()->loadFromDisk();
 }
 
 void LLStartUp::cleanupNameCache()

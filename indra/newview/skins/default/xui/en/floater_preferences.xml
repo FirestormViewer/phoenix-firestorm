@@ -205,6 +205,13 @@
          help_topic="preferences_firestorm_tab"
          name="firestorm" />
         <panel
+         class="panel_preference_soapstorm"
+         filename="panel_preferences_soapstorm.xml"
+         label="Soapstorm"
+         layout="topleft"
+         help_topic="preferences_soapstorm_tab"
+         name="soapstorm" />
+        <panel
          class="panel_preference_opensim"
          filename="panel_preferences_opensim.xml"
          label="Opensim"

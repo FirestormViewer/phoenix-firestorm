@@ -1748,6 +1748,44 @@
     </menu>
     <menu
      create_jump_keys="true"
+     label="Combat"
+     name="Combat"
+     tear_off="true"
+     visible="true">
+        <menu_item_check
+         label="Kill Feed"
+         name="Kill Feed">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_kill_feed" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_kill_feed" />
+        </menu_item_check>
+        <menu_item_check
+         label="Group Viewer"
+         name="Group Viewer">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_group_viewer" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_group_viewer" />
+        </menu_item_check>
+        <menu_item_separator />
+        <menu_item_check
+         label="Hit Marker Options"
+         name="Hit Marker Options">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_hit_marker" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_hit_marker" />
+        </menu_item_check>
+    </menu>
+    <menu
+     create_jump_keys="true"
      label="Build"
      name="BuildTools"
      tear_off="true"
@@ -2427,8 +2465,7 @@
             <menu_item_call
              label="Image..."
              layout="topleft"
-             name="Upload Image"
-             shortcut="control|U">
+             name="Upload Image">
                 <menu_item_call.on_click
                  function="File.UploadImage"
                  parameter="" />
@@ -2489,7 +2526,8 @@
 	   <menu_item_call
              label="Bulk..."
              layout="topleft"
-             name="Bulk Upload">
+             name="Bulk Upload"
+             shortcut="control|U">
                 <menu_item_call.on_visible
                  function="Upload.CalculateCosts"
                  parameter="Bulk Upload,texture" />

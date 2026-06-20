@@ -154,6 +154,8 @@ static const U32 MAX_SNAPSHOT_IMAGE_SIZE = 7680; // max snapshot image size 7680
 class LLViewerWindow : public LLWindowCallbacks
 {
 public:
+    bool            getRMBHeldInMouselook() const { return mRMBHeldInMouselook; }
+
     //
     // CREATORS
     //
@@ -538,6 +540,7 @@ private:
     bool            mMouseInWindow;             // True if the mouse is over our window or if we have captured the mouse.
     bool            mFocusCycleMode;
     bool            mAllowMouseDragging;
+    bool            mRMBHeldInMouselook;    // True while RMB is held down in mouselook with FSRMBScriptEnabled
     LLFrameTimer    mMouseDownTimer;
     typedef std::set<LLHandle<LLView> > view_handle_set_t;
     view_handle_set_t mMouseHoverViews;

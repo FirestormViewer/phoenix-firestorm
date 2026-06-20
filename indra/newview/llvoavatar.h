@@ -36,6 +36,7 @@
 #include <boost/signals2/trackable.hpp>
 
 #include "llavatarappearance.h"
+#include "llavatarpropertiesprocessor.h"  // LLAvatarPropertiesObserver (group tinting)
 #include "llchat.h"
 #include "lldrawpoolalpha.h"
 #include "llviewerobject.h"
@@ -87,6 +88,7 @@ extern U32 gFrameCount;
 class LLVOAvatar :
     public LLAvatarAppearance,
     public LLViewerObject,
+    public LLAvatarPropertiesObserver,  // group-based nameplate tinting
     public boost::signals2::trackable
 {
     LL_ALIGN_NEW;
@@ -297,6 +299,22 @@ public:
     LLColor4        getNameTagColor();
     // </FS:CR>
     void            clearNameTag();
+
+    // LLAvatarPropertiesObserver: receives APT_GROUPS reply for group-tint lookup
+    /*virtual*/ void processProperties(void* data, EAvatarProcessorType type) override;
+    void            sendAvatarGroupsRequest();
+    const LLUUID&   getActiveGroupID() const { return mActiveGroupID; }
+
+    // Attachment-group fallback: routes ObjectPropertiesFamily replies for
+    // probed attachments back to the owning avatar. Returns true if the
+    // object was one of ours. Called from LLSelectMgr::processObjectPropertiesFamily.
+    static bool     handleAttachmentGroupReply(const LLUUID& object_id, const LLUUID& group_id);
+
+    // Re-arm the attachment-group probe for a still-unresolved avatar
+    // (cooldown-throttled). Used by the Group Viewer floater, which needs
+    // group resolution even when no nameplate tint colors are configured.
+    void            requestGroupProbeIfUnresolved();
+
     static void     invalidateNameTag(const LLUUID& agent_id);
     // force all name tags to rebuild, useful when display names turned on/off
     static void     invalidateNameTags();
@@ -1188,6 +1206,17 @@ private:
     U32             mNameArc;
     LLColor4        mNameArcColor;
     // </FS:Ansariel>
+
+    // Group-based nameplate tinting
+    LLUUID          mActiveGroupID;      // active group UUID; null until known
+    bool            mGroupFetchPending;  // true while AvatarPropertiesRequest is in flight
+
+    // Attachment-group fallback: when the profile group list hides the active
+    // group, read it from a worn attachment instead (the sim keeps worn
+    // attachments' group in sync with the wearer's active group).
+    void            probeAttachmentGroups();
+    bool            mGroupProbeWanted;   // profile match failed; probe when attachments are available
+    F64             mLastGroupProbeTime; // throttles Group Viewer re-probe requests
 
     //--------------------------------------------------------------------
     // Display the name (then optionally fade it out)

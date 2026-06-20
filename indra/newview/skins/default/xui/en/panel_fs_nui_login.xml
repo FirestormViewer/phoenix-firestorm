@@ -28,6 +28,9 @@
     top="18"
     height="598"
     width="1024" />
+  <!-- The offline login splash (login_splash_image / splash_background)
+       is created at runtime in FSPanelLogin so that skins overriding
+       this layout can't lose it. -->
   <layout_stack
   follows="left|right|bottom"
   height="152"

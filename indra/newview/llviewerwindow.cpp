@@ -66,6 +66,7 @@
 
 // linden library includes
 #include "llaudioengine.h"      // mute on minimize
+#include "llchat.h"
 #include "llchatentry.h"
 #include "indra_constants.h"
 #include "llassetstorage.h"
@@ -233,6 +234,9 @@
 #include "utilitybar.h"     // <FS:Zi> Support for the classic V1 style buttons in some skins
 #include "llnetmap.h"
 #include "lggcontactsets.h"
+#include "llgroupcolormap.h"
+#include "fsfloaterkillfeed.h"
+#include "fscombathitmarker.h"
 #include "fspanellogin.h"
 
 #include "lltracerecording.h"
@@ -249,6 +253,7 @@ extern bool gDepthDirty;
 extern bool gResizeScreenTexture;
 extern bool gCubeSnapshot;
 extern bool gSnapshotNoPost;
+extern void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
 
 LLViewerWindow  *gViewerWindow = NULL;
 
@@ -1304,12 +1309,29 @@ bool LLViewerWindow::handleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 }
 bool LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
+    static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
+    if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    {
+        // Track hold state so the main loop can re-apply LBUTTON_DOWN each
+        // frame (resetControlFlags() would otherwise clear it every tick).
+        mRMBHeldInMouselook = true;
+        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+        send_agent_update(true);
+    }
     bool down = true;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
 }
 
 bool LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
+    static LLCachedControl<bool> rmbEnabled(gSavedSettings, "FSRMBScriptEnabled", false);
+    if (rmbEnabled && gAgentCamera.cameraMouselook() && gAgent.getRegion())
+    {
+        mRMBHeldInMouselook = false;
+        gAgent.clearControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
+        send_agent_update(true);
+    }
     bool down = false;
     return gViewerInput.handleMouse(window, pos, mask, CLICK_RIGHT, down);
 }
@@ -1982,6 +2004,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     mRightMouseDown(false),
     mMouseInWindow( false ),
     mAllowMouseDragging(true),
+    mRMBHeldInMouselook(false),
     mMouseDownTimer(),
     mLastMask( MASK_NONE ),
     mToolStored( NULL ),
@@ -3043,6 +3066,17 @@ void LLViewerWindow::draw()
         // <exodus> Draw HUD stuff.
         bool inMouselook = gAgentCamera.cameraMouselook();
         static LLCachedControl<bool> fsMouselookCombatFeatures(gSavedSettings, "FSMouselookCombatFeatures", true);
+
+        // Kill feed: text-only overlay, positioned and scaled via the Kill
+        // Feed settings floater. Renders in and out of mouselook.
+        FSFloaterKillFeed::drawOverlay();
+
+        // Hitmarker flash and fading hit report for outgoing combat damage.
+        // Reset the crosshair tint each frame; the combat features pass
+        // below re-tints it when a target is identified under the crosshair.
+        FSCombatHitMarker::setCrosshairTint(LLColor4::white);
+        FSCombatHitMarker::draw();
+
         if (inMouselook && fsMouselookCombatFeatures)
         {
             S32 windowWidth = gViewerWindow->getWorldViewRectScaled().getWidth();
@@ -3110,20 +3144,80 @@ void LLViewerWindow::draw()
 
                         if (magicVector.mdV[VX] > -0.75 && magicVector.mdV[VX] < 0.75 && magicVector.mdV[VZ] > 0.0 && magicVector.mdV[VY] > -1.5 && magicVector.mdV[VY] < 1.5) // Do not fuck with these, cheater. :(
                         {
-                            LLAvatarName avatarName;
-                            std::string targetName = unknown_agent;
-                            if (LLAvatarNameCache::get(targetKey, &avatarName))
+                            // Line of sight: don't identify targets through walls, floors or
+                            // terrain. Two rays (avatar center, then head height) so a target
+                            // peeking over low cover still identifies. World geometry only;
+                            // avatars and attachments never block the check.
+                            static LLCachedControl<bool> renderIFFLineOfSight(gSavedSettings, "ExodusMouselookIFFLineOfSight", true);
+                            bool targetVisible = true;
+                            if (renderIFFLineOfSight)
                             {
-                                targetName = avatarName.getCompleteName();
+                                LLVector3 rayTarget = gAgent.getPosAgentFromGlobal(targetPosition);
+                                LLVector4a rayStart, rayEnd, rayHit;
+                                rayStart.load3(camera.getOrigin().mV);
+                                rayEnd.load3(rayTarget.mV);
+                                if (gPipeline.lineSegmentIntersectWorldGeometry(rayStart, rayEnd, &rayHit))
+                                {
+                                    rayTarget.mV[VZ] += 0.6f;
+                                    rayEnd.load3(rayTarget.mV);
+                                    targetVisible = !gPipeline.lineSegmentIntersectWorldGeometry(rayStart, rayEnd, &rayHit);
+                                }
                             }
 
-                            LLFontGL::getFontSansSerifBold()->renderUTF8(
-                                llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
-                                0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, targetColor,
-                                (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
-                            );
+                            if (targetVisible)
+                            {
+                                LLAvatarName avatarName;
+                                std::string targetName = unknown_agent;
+                                bool haveName = LLAvatarNameCache::get(targetKey, &avatarName);
+                                if (haveName)
+                                {
+                                    targetName = avatarName.getCompleteName();
+                                }
 
-                            crosshairRendered = true;
+                                // Name color: contact set color first, then group-based
+                                // nameplate tint, then the default nameplate color.
+                                LLColor4 nameColor;
+                                if (!contact_sets.hasFriendColorThatShouldShow(targetKey, ContactSetType::MINIMAP, nameColor))
+                                {
+                                    // Default nameplate color, same logic as LLVOAvatar::getNameTagColor()
+                                    nameColor = LLUIColorTable::instance().getColor("NameTagLegacy", LLColor4::white);
+                                    if (LLAvatarName::useDisplayNames())
+                                    {
+                                        nameColor = LLUIColorTable::instance().getColor(
+                                            (haveName && avatarName.isDisplayNameDefault()) ? "NameTagMatch" : "NameTagMismatch", LLColor4::white);
+                                    }
+
+                                    // Group-based nameplate tint
+                                    LLViewerObject* targetObject = gObjectList.findObject(targetKey);
+                                    LLVOAvatar* targetAvatar = targetObject ? targetObject->asAvatar() : nullptr;
+                                    if (targetAvatar && targetAvatar->getActiveGroupID().notNull())
+                                    {
+                                        LLColor4 groupColor = LLGroupColorMap::getInstance()->getGroupColor(targetAvatar->getActiveGroupID());
+                                        if (groupColor.mV[VW] >= 0.01f)
+                                        {
+                                            nameColor = groupColor;
+                                        }
+                                    }
+                                }
+
+                                // Feed the identified target's color to the custom
+                                // crosshair tint (LoS already verified above).
+                                FSCombatHitMarker::setCrosshairTint(nameColor);
+
+                                // The name text itself is optional; identification
+                                // still runs for the crosshair tint when disabled.
+                                static LLCachedControl<bool> renderIFFName(gSavedSettings, "ExodusMouselookIFFShowName", true);
+                                if (renderIFFName)
+                                {
+                                    LLFontGL::getFontSansSerifBold()->renderUTF8(
+                                        llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
+                                        0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, nameColor,
+                                        (LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
+                                    );
+                                }
+
+                                crosshairRendered = true;
+                            }
                         }
                     }
 
@@ -3487,6 +3581,18 @@ bool LLViewerWindow::handleKey(KEY key, MASK mask)
             return true;
         } else {
             LL_DEBUGS() << "LLviewerWindow::handleKey - in 'traverse up' - no loops seen... just called keyboard_focus->handleKey an it returned false" << LL_ENDL;
+            
+            // <FS> Prevent gestures from triggering when typing in text input controls
+            // Even if the control didn't explicitly consume the key (returned false),
+            // we should prevent gesture triggers to avoid keys like +/- activating gestures
+            // while typing in script editors, chat, etc.
+            LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(keyboard_focus);
+            if (cur_focus && cur_focus->acceptsTextInput())
+            {
+                LL_DEBUGS() << "LLviewerWindow::handleKey - blocking gesture trigger, text input has focus" << LL_ENDL;
+                return true;
+            }
+            // </FS>
         }
     }
 

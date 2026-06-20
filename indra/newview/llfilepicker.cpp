@@ -48,6 +48,9 @@
 
 #if LL_LINUX
 #include "llhttpconstants.h"    // file picker uses some of thes constants on Linux
+# include <unistd.h>
+# include <sys/wait.h>
+# include <sstream>
 #endif
 
 //
@@ -2025,25 +2028,117 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
         flDlg.filter(file_dialog_filter.c_str());
     }
 
-    int res = flDlg.show();
+    // Extract glob pattern from FLTK filter "Description \t *.ext" and expand
+    // brace syntax *.{a,b} → *.a *.b for use with kdialog/zenity.
+    auto extract_glob = [](const std::string& fltk_filter) -> std::string
+    {
+        size_t tab_pos = fltk_filter.rfind('\t');
+        std::string pat = (tab_pos != std::string::npos)
+            ? fltk_filter.substr(tab_pos + 1) : fltk_filter;
+        size_t s = pat.find_first_not_of(" \t");
+        size_t e = pat.find_last_not_of(" \t");
+        pat = (s == std::string::npos) ? "" : pat.substr(s, e - s + 1);
+        if (pat.empty()) return "*";
+        // Expand *.{a,b,c} → *.a *.b *.c
+        std::string result;
+        size_t pos = 0;
+        while (pos < pat.size())
+        {
+            size_t lb = pat.find('{', pos);
+            if (lb == std::string::npos) { if (!result.empty()) result += ' '; result += pat.substr(pos); break; }
+            std::string prefix = pat.substr(pos, lb - pos);
+            size_t rb = pat.find('}', lb);
+            if (rb == std::string::npos) { result += pat.substr(pos); break; }
+            std::istringstream ss(pat.substr(lb + 1, rb - lb - 1));
+            std::string ext;
+            while (std::getline(ss, ext, ',')) { if (!result.empty()) result += ' '; result += prefix + ext; }
+            pos = rb + 1;
+        }
+        return result.empty() ? "*" : result;
+    };
+
+    std::string glob = extract_glob(file_dialog_filter);
+    bool is_save  = (flType == Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+    bool is_multi = (flType == Fl_Native_File_Chooser::BROWSE_MULTI_FILE);
+
+    // Use kdialog (KDE) or zenity as subprocess to avoid GTK2 SIGABRT crash.
+    auto run_file_picker = [](const char* prog, std::vector<const char*> argv) -> std::vector<std::string>
+    {
+        argv.push_back(nullptr);
+        int pipefd[2];
+        if (::pipe(pipefd) != 0) return {};
+        pid_t pid = ::fork();
+        if (pid == 0)
+        {
+            ::close(pipefd[0]);
+            ::dup2(pipefd[1], STDOUT_FILENO);
+            ::close(pipefd[1]);
+            ::execvp(prog, const_cast<char* const*>(argv.data()));
+            ::_exit(1);
+        }
+        else if (pid < 0) { ::close(pipefd[0]); ::close(pipefd[1]); return {}; }
+        ::close(pipefd[1]);
+        std::string output;
+        char buf[4096];
+        ssize_t n;
+        while ((n = ::read(pipefd[0], buf, sizeof(buf))) > 0)
+            output.append(buf, (size_t)n);
+        ::close(pipefd[0]);
+        int status = 0;
+        ::waitpid(pid, &status, 0);
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return {};
+        // Split on newlines and pipes (kdialog --separate-output uses \n, zenity uses |)
+        std::vector<std::string> files;
+        std::string cur;
+        for (char c : output)
+        {
+            if (c == '\n' || c == '\r' || c == '|') { if (!cur.empty()) { files.push_back(cur); cur.clear(); } }
+            else { cur += c; }
+        }
+        if (!cur.empty()) files.push_back(cur);
+        return files;
+    };
+
+    std::vector<std::string> chosen;
+    if (::access("/usr/bin/kdialog", X_OK) == 0)
+    {
+        std::vector<const char*> argv = {"kdialog"};
+        argv.push_back(is_save ? "--getsavefilename" : "--getopenfilename");
+        argv.push_back(".");
+        argv.push_back(glob.c_str());
+        if (is_multi) { argv.push_back("--multiple"); argv.push_back("--separate-output"); }
+        chosen = run_file_picker("kdialog", argv);
+    }
+    else if (::access("/usr/bin/zenity", X_OK) == 0)
+    {
+        std::vector<const char*> argv = {"zenity", "--file-selection"};
+        if (is_save)  argv.push_back("--save");
+        if (is_multi) argv.push_back("--multiple");
+        std::string filter_arg = "--file-filter=" + glob;
+        argv.push_back(filter_arg.c_str());
+        chosen = run_file_picker("zenity", argv);
+    }
+    else
+    {
+        LL_WARNS() << "No kdialog or zenity found; falling back to FLTK file picker." << LL_ENDL;
+        int res = flDlg.show();
+        if (res == 0)
+        {
+            int32_t count = flDlg.count();
+            if (count < 0) count = 0;
+            for (int32_t i = 0; i < count; ++i)
+            {
+                char const* pFile = flDlg.filename(i);
+                if (pFile && strlen(pFile) > 0) mFiles.push_back(pFile);
+            }
+        }
+        else if (res == -1) { LL_WARNS() << "FLTK failed: " << flDlg.errmsg() << LL_ENDL; }
+    }
+
     gViewerWindow->getWindow()->afterDialog();
 
-    if( res == 0 )
-    {
-        int32_t count = flDlg.count();
-        if( count < 0 )
-            count = 0;
-        for( int32_t i = 0; i < count; ++i )
-        {
-            char const *pFile = flDlg.filename(i);
-            if( pFile && strlen(pFile) > 0 )
-                mFiles.push_back( pFile  );
-        }
-    }
-    else if( res == -1 )
-    {
-        LL_WARNS() << "FLTK failed: " <<  flDlg.errmsg() << LL_ENDL;
-    }
+    for (const auto& f : chosen)
+        mFiles.push_back(f);
 
     return mFiles.empty() ? false : true;
 }

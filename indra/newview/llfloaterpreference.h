@@ -250,6 +250,16 @@ public:
     // <FS:Ansariel> Clear web browser cache button
     void onClickWebBrowserClearCache();
 
+    // Hitmarker options floater
+    void onClickHitMarkerSettings();
+    // Kill feed floater
+    void onClickKillFeedSettings();
+
+    // Offline login splash background picker
+    void onClickBrowseSplashImage();
+    // Login bar logo replacement picker
+    void onClickBrowseLoginLogo();
+
     // <FS:Ansariel> Improved graphics preferences
     void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
     void updateMaxNonImpostorsLabel(const LLSD& newvalue);

@@ -402,6 +402,7 @@ bool LLPanelFace::postBuild()
 
     getChildSetClickedCallback(mBtnAlign, "button align", [&](LLUICtrl*, const LLSD&) { onClickAutoFix(); });
     getChildSetClickedCallback(mBtnAlignTex, "button align textures", [&](LLUICtrl*, const LLSD&) { onAlignTexture(); });
+    getChildSetClickedCallback(mBtnSyncMaterials, "button_sync_materials", [&](LLUICtrl*, const LLSD&) { onClickSyncMaterials(); });
     //getChildSetClickedCallback(mBtnPbrFromInv, "pbr_from_inventory", [&](LLUICtrl*, const LLSD&) { onClickBtnLoadInvPBR(); }); // <FS> Done via texture picker
     getChildSetClickedCallback(mBtnEditBbr, "edit_selected_pbr", [&](LLUICtrl*, const LLSD&) { onClickBtnEditPBR(); });
     getChildSetClickedCallback(mBtnSaveBbr, "save_selected_pbr", [&](LLUICtrl*, const LLSD&) { onClickBtnSavePBR(); });
@@ -5790,11 +5791,16 @@ void LLPanelFace::LLSelectedTE::getMaxDiffuseRepeats(F32& repeats, bool& identic
 // <FS:CR> Materials alignment
 void LLPanelFace::onClickMapsSync()
 {
-    getState();
-    if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+    // Get the current checkbox state directly to avoid timing issues
+    bool sync_enabled = mCheckSyncSettings->get();
+    gSavedSettings.setBOOL("SyncMaterialSettings", sync_enabled);
+    
+    if (sync_enabled)
     {
         alignMaterialsProperties();
     }
+    
+    getState();
 }
 
 void LLPanelFace::alignMaterialsProperties()
@@ -5848,6 +5854,77 @@ void LLPanelFace::alignMaterialsProperties()
     LLSelectedTEMaterial::setNormalOffsetX(this, tex_offset_u);
     LLSelectedTEMaterial::setNormalOffsetY(this, tex_offset_v);
     LLSelectedTEMaterial::setNormalRotation(this, tex_rot * DEG_TO_RAD);
+}
+
+void LLPanelFace::onClickSyncMaterials()
+{
+    // Iterate through all selected objects and faces, syncing diffuse to normal/specular for each face
+    struct SyncMaterialsFunctor : public LLSelectedTEFunctor
+    {
+        virtual bool apply(LLViewerObject* object, S32 te)
+        {
+            if (!object)
+                return false;
+            
+            // Get the diffuse texture parameters for this face
+            LLTextureEntry* tep = object->getTE(te);
+            if (!tep)
+                return false;
+            
+            F32 diff_offset_s = tep->getOffsetS();
+            F32 diff_offset_t = tep->getOffsetT();
+            F32 diff_scale_s = tep->getScaleS();
+            F32 diff_scale_t = tep->getScaleT();
+            F32 diff_rotation = tep->getRotation();
+            
+            // Normalize negative values as done in alignMaterialsProperties
+            F32 norm_offset_s = (diff_offset_s < 0.0f) ? 1.0f + diff_offset_s : diff_offset_s;
+            F32 norm_offset_t = (diff_offset_t < 0.0f) ? 1.0f + diff_offset_t : diff_offset_t;
+            F32 norm_rotation = diff_rotation;
+            if (norm_rotation < 0.0f)
+                norm_rotation = (F32)(2.0 * F_PI) + norm_rotation;
+            
+            // Get or create material for this face
+            LLMaterialPtr material = tep->getMaterialParams();
+            LLMaterialPtr new_material;
+            
+            if (material.isNull())
+            {
+                // Create new material with default values
+                new_material = new LLMaterial();
+            }
+            else
+            {
+                // Clone existing material
+                new_material = new LLMaterial(material->asLLSD());
+            }
+            
+            // Set normal map parameters
+            new_material->setNormalOffsetX(norm_offset_s);
+            new_material->setNormalOffsetY(norm_offset_t);
+            new_material->setNormalRepeatX(diff_scale_s);
+            new_material->setNormalRepeatY(diff_scale_t);
+            new_material->setNormalRotation(norm_rotation);
+            
+            // Set specular map parameters
+            new_material->setSpecularOffsetX(norm_offset_s);
+            new_material->setSpecularOffsetY(norm_offset_t);
+            new_material->setSpecularRepeatX(diff_scale_s);
+            new_material->setSpecularRepeatY(diff_scale_t);
+            new_material->setSpecularRotation(norm_rotation);
+            
+            // Apply the material to this face
+            object->setTEMaterialParams(te, new_material);
+            LLMaterialMgr::getInstance()->put(object->getID(), te, *new_material);
+            
+            return true;
+        }
+    } sync_functor;
+    
+    LLSelectMgr::getInstance()->getSelection()->applyToTEs(&sync_functor);
+    
+    // Refresh the UI to show the updated values
+    getState();
 }
 
 // <FS:CR> FIRE-11407 - Flip buttons

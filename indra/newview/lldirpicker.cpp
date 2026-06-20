@@ -46,6 +46,11 @@
   #include "FL/Fl_Native_File_Chooser.H"
 #endif
 
+#if LL_LINUX
+# include <unistd.h>
+# include <sys/wait.h>
+#endif
+
 #if LL_WINDOWS
 #include <shlobj.h>
 #endif
@@ -274,25 +279,70 @@ bool LLDirPicker::getDir(std::string* filename, bool blocking)
     return false;
 #else
     gViewerWindow->getWindow()->beforeDialog();
-    Fl_Native_File_Chooser flDlg;
-    flDlg.title(LLTrans::getString("choose_the_directory").c_str());
-    flDlg.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY );
 
-    int res = flDlg.show();
+    // Use kdialog (KDE) or zenity (GNOME/other) as a subprocess instead of
+    // FLTK's GTK2 file chooser, which crashes on modern Wayland/Fedora desktops
+    // due to GTK2 incompatibility with at-spi2 and other system libraries.
+    std::string start_dir = (filename && !filename->empty())
+        ? *filename : gDirUtilp->getLindenUserDir();
+
+    auto run_dir_picker = [](const char* prog, std::vector<const char*> argv) -> std::string
+    {
+        argv.push_back(nullptr);
+        int pipefd[2];
+        if (::pipe(pipefd) != 0) return "";
+        pid_t pid = ::fork();
+        if (pid == 0)
+        {
+            ::close(pipefd[0]);
+            ::dup2(pipefd[1], STDOUT_FILENO);
+            ::close(pipefd[1]);
+            ::execvp(prog, const_cast<char* const*>(argv.data()));
+            ::_exit(1);
+        }
+        else if (pid < 0)
+        {
+            ::close(pipefd[0]);
+            ::close(pipefd[1]);
+            return "";
+        }
+        ::close(pipefd[1]);
+        char buf[4096] = {};
+        ssize_t n = ::read(pipefd[0], buf, sizeof(buf) - 1);
+        ::close(pipefd[0]);
+        int status = 0;
+        ::waitpid(pid, &status, 0);
+        if (n > 0 && WIFEXITED(status) && WEXITSTATUS(status) == 0)
+        {
+            std::string result(buf, (size_t)n);
+            while (!result.empty() && (result.back() == '\n' || result.back() == '\r'))
+                result.pop_back();
+            return result;
+        }
+        return "";
+    };
+
+    std::string chosen;
+    if (::access("/usr/bin/kdialog", X_OK) == 0)
+    {
+        chosen = run_dir_picker("kdialog",
+            {"kdialog", "--getexistingdirectory", start_dir.c_str()});
+    }
+    else if (::access("/usr/bin/zenity", X_OK) == 0)
+    {
+        std::string dir_arg = "--filename=" + start_dir + "/";
+        chosen = run_dir_picker("zenity",
+            {"zenity", "--file-selection", "--directory", dir_arg.c_str()});
+    }
+    else
+    {
+        LL_WARNS() << "No kdialog or zenity found; cannot open directory picker." << LL_ENDL;
+    }
+
+    if (!chosen.empty())
+        mDir = chosen;
 
     gViewerWindow->getWindow()->afterDialog();
-
-    if( res == 0 )
-    {
-        char const *pDir = flDlg.filename(0);
-        if( pDir )
-            mDir = pDir;
-    }
-    else if( res == -1 )
-    {
-        LL_WARNS() << "FLTK failed: " <<  flDlg.errmsg() << LL_ENDL;
-    }
-
     return !mDir.empty();
 #endif
 }
