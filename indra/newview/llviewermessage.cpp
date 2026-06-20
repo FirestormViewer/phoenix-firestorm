@@ -4277,7 +4277,7 @@ void send_agent_update(bool force_send, bool send_reliable)
     LLVector3 camera_left = LLViewerCamera::getInstance()->getLeftAxis();
     LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
 
-    // OTS fair-fire camera: report the mouselook-equivalent camera to the
+    // OTS convergence camera: report the mouselook-equivalent camera to the
     // sim. Campos weapons fire from llGetCameraPos along the camera's
     // at-axis; with the real OTS shoulder camera that means bullets
     // originate behind/offset from the avatar and can clear cover the
@@ -4293,7 +4293,7 @@ void send_agent_update(bool force_send, bool send_reliable)
         // Converge on the crosshair: aim from the eye at whatever is under
         // the camera crosshair (avatars included, self excluded), falling
         // back to a far point for open sky so the direction degrades to
-        // camera-parallel. Shared with the true-aim dot so the dot the
+        // camera-parallel. Shared with the line-of-sight (LOS) dot so the dot the
         // shooter sees and the camera scripts receive cannot diverge.
         const LLVector3 target = FSCombatHitMarker::getOTSConvergenceTarget(camera_pos_agent, camera_at);
 

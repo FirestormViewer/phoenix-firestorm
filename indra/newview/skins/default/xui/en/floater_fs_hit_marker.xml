@@ -58,8 +58,8 @@
      top_pad="6"
      height="16"
      width="300"
-     label="True-aim dot in OTS"
-     tool_tip="Slide the center dot to where a shot fired from your avatar actually lands; the chevrons stay on the camera ray. Centered when nothing is in the way." />
+     label="Line-of-sight (LOS) dot in OTS"
+     tool_tip="Slide the center dot to where a shot fired from your avatar actually lands; the chevrons stay on the camera ray. Centered when your line of sight to the target is clear, and rides onto whatever is blocking the shot." />
     <slider
      control_name="FSHitMarkerScale"
      follows="left|top"

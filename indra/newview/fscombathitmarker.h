@@ -65,14 +65,14 @@ public:
     static void playHitSoundPreview();
     static void playKillSoundPreview();
 
-    // OTS fair-fire convergence target: the world point under the render
+    // OTS convergence target: the world point under the render
     // camera's crosshair that a bullet fired from the avatar's eye should aim
     // at. World geometry comes from a ray cast; nearby avatars are converged via
     // cheap vertical-capsule proxies (so aiming at a target lands on the target,
     // not the wall behind it, without the rigged-mesh pick cost), the shooter's
     // own body excluded. The depth is smoothed along the ray so it eases rather
     // than snaps. Shared by the reported eye camera (send_agent_update) and the
-    // true-aim dot so the two cannot drift apart; smoothing is advanced once per
+    // line-of-sight (LOS) dot so the two cannot drift apart; smoothing is advanced once per
     // frame so both callers receive the same value. Tunables: FSOTSAvatarConverge,
     // FSOTSAvatarConvergeRadius, FSOTSConvergeMinDistance, FSOTSConvergeSmoothingHalfLife.
     static LLVector3 getOTSConvergenceTarget(const LLVector3& cam_origin,

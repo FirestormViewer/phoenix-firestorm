@@ -671,7 +671,7 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
     // the target stays exactly under the crosshair while its depth eases across
     // discontinuities instead of snapping, and rough-geometry jitter stops
     // shaking the aim. Advanced once per frame: both callers (send_agent_update
-    // and the true-aim dot) invoke this every frame and must get the same value,
+    // and the line-of-sight (LOS) dot) invoke this every frame and must get the same value,
     // so we key the lerp on the frame counter and reuse the result within a frame.
     static LLCachedControl<F32> smooth_hl(gSavedSettings, "FSOTSConvergeSmoothingHalfLife", 0.06f);
     static U32 last_frame = 0;
@@ -817,7 +817,7 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
         LLVector4a ray_start, ray_end, hit;
 
         // Bullet direction mirrors what the sim is told. With the
-        // fair-fire camera on, scripts see the eye aimed at the camera
+        // convergence camera on, scripts see the eye aimed at the camera
         // ray's world target (converged); off, they see the real camera's
         // at-axis (parallel from the avatar).
         LLVector3 dir = camera->getAtAxis();
