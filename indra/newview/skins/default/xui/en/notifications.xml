@@ -3516,6 +3516,20 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 
   <notification
    icon="alertmodal.tga"
+   label="Close Filter Tab"
+   name="FSInventoryCustomTabClose"
+   type="alertmodal">
+    Close the &quot;[NAME]&quot; filter tab? Its saved filters will be removed.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Yes, close"
+     ignoretext="Confirm before I close a custom inventory filter tab"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    label="Rename Gesture"
    name="RenameGesture"
    type="alertmodal">

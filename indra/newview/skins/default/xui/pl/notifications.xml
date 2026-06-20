@@ -1307,6 +1307,10 @@ do
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Zamknij zakładkę filtra" name="FSInventoryCustomTabClose">
+		Zamknąć zakładkę filtra &quot;[NAME]&quot;? Jej zapisane filtry zostaną usunięte.
+		<usetemplate name="okcancelignore" notext="Anuluj" yestext="Tak, zamknij" ignoretext="Potwierdzaj przed zamknięciem niestandardowej zakładki filtra szafy" />
+	</notification>
 	<notification label="Zmień nazwę gestu" name="RenameGesture">
 		Nowa nazwa gestu:
 		<form name="form">
