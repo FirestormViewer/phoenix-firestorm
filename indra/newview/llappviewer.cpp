@@ -1057,6 +1057,9 @@ bool LLAppViewer::init()
 // [/SL:KB]
 //  gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), LLUI::getLanguage());
 
+    // Replace English debug-setting comments with xui/{locale}/settings_comments.xml.
+    loadLocalizedSettingsComments();
+
     // Setup LLTrans after LLUI::initClass has been called.
     initStrings();
 
@@ -3613,6 +3616,102 @@ bool LLAppViewer::initConfiguration()
 // [/RLVa:KB]
 
     return true; // Config was successful.
+}
+
+//----------------------------------------------------------------------------
+// Localized debug-setting comments (xui/{locale}/settings_comments.xml)
+//----------------------------------------------------------------------------
+
+struct SettingCommentDef : public LLInitParam::Block<SettingCommentDef>
+{
+    Mandatory<std::string> name;
+    Mandatory<std::string> value;
+
+    SettingCommentDef()
+    :   name("name"),
+        value("value")
+    {}
+};
+
+struct SettingCommentsTable : public LLInitParam::Block<SettingCommentsTable>
+{
+    Multiple<SettingCommentDef> strings;
+
+    SettingCommentsTable()
+    :   strings("string")
+    {}
+};
+
+// Summary: overlay localized comments onto Global (settings.xml and session
+// mode files such as settings_firestorm.xml) and PerAccount
+// (settings_per_account.xml) after the session language is set.
+void LLAppViewer::loadLocalizedSettingsComments()
+{
+    const std::string comments_file =
+        gDirUtilp->findSkinnedFilename(LLDir::XUI, "settings_comments.xml");
+    if (comments_file.empty() || !LLFile::isfile(comments_file))
+    {
+        return; // No locale file; keep English comments from settings.xml.
+    }
+
+    LLXMLNodePtr root;
+    if (!LLXMLNode::parseFile(comments_file, root, NULL))
+    {
+        LL_WARNS("Settings") << "Failed to parse localized settings comments from "
+                             << comments_file << LL_ENDL;
+        return;
+    }
+
+    if (!root->hasName("strings"))
+    {
+        LL_WARNS("Settings") << "Invalid settings_comments.xml root in "
+                             << comments_file << ": expected <strings>" << LL_ENDL;
+        return;
+    }
+
+    SettingCommentsTable comments_table;
+    LLXUIParser parser;
+    parser.readXUI(root, comments_table, comments_file);
+    if (!comments_table.validateBlock())
+    {
+        LL_WARNS("Settings") << "Invalid settings_comments.xml in "
+                             << comments_file << LL_ENDL;
+        return;
+    }
+
+    static const char* const kSettingsGroups[] = { "Global", "PerAccount" };
+
+    U32 applied = 0;
+    for (const char* group_name : kSettingsGroups)
+    {
+        std::shared_ptr<LLControlGroup> settings_group = LLControlGroup::getInstance(group_name);
+        if (!settings_group)
+        {
+            LL_WARNS("Settings") << "Settings group not found while loading "
+                                 << comments_file << ": " << group_name << LL_ENDL;
+            continue;
+        }
+
+        for (LLInitParam::ParamIterator<SettingCommentDef>::const_iterator
+                 comment_it = comments_table.strings.begin(),
+                 comment_end = comments_table.strings.end();
+             comment_it != comment_end;
+             ++comment_it)
+        {
+            LLControlVariable* control = settings_group->getControl(comment_it->name());
+            if (!control)
+            {
+                continue;
+            }
+
+            control->setComment(comment_it->value());
+            ++applied;
+        }
+    }
+
+    LL_INFOS("Settings") << "Applied " << applied
+                         << " localized setting comments from "
+                         << comments_file << LL_ENDL;
 }
 
 // The following logic is replicated in initConfiguration() (to be able to get

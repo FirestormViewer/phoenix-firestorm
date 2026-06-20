@@ -303,6 +303,7 @@ private:
     bool initThreads(); // Initialize viewer threads, return false on failure.
     bool initConfiguration(); // Initialize settings from the command line/config file.
     void initStrings();       // Initialize LLTrans machinery
+    void loadLocalizedSettingsComments(); // Overlay xui/{locale}/settings_comments.xml onto Global and PerAccount settings
     bool initCache(); // Initialize local client cache.
 
     // We have switched locations of both Mac and Windows cache, make sure
