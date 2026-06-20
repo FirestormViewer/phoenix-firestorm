@@ -251,6 +251,7 @@
 			<text name="FSCmdLineTeleportHome_txt">Se téléporter à son domicile (ex: cmd)</text>
 			<text name="FSCmdLineMapTo_txt">Se téléporter dans une sim (ex: cmd simname)</text>
 			<check_box label="Utilise la même position d'une sim à l'autre" name="toggle"/>
+			<check_box label="Envoyer la sortie des commandes vers le canal :" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 	</tab_container>
 </panel>

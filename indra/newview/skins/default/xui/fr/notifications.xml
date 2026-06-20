@@ -5792,6 +5792,54 @@ Message d'erreur :
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
 
+	<notification name="OmniFilterNewRuleSet">
+		Entrez le nom du nouveau jeu de règles :
+		<form name="form">
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
+	</notification>
+
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSet">
+		Saisissez un nom pour le jeu de règles cloné :
+		<form name="form">
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSet">
+		Êtes-vous sûr(e) de vouloir supprimer [RULESETNAME]?
+		<tag>confirm</tag>
+		<usetemplate ignoretext="Confirmez avant que je supprime un jeu de règles." name="okcancelignore" notext="Annuler" yestext="OK"/>
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Impossible de supprimer le jeu de règles par défaut.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Unable to remove the Rule Set due to index out of bounds.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Unable to remove the Rule Set due to name not found.>
+	</notification>
+
 	<notification name="FSSetTitleRegion">
 		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
 Le nom sera vérifié avant l'enregistrement de l'assignation.
