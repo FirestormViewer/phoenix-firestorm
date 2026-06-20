@@ -271,6 +271,17 @@
      width="300">
         Aim down sights
     </text>
+    <check_box
+     control_name="FSDoubleTapADS"
+     follows="left|top"
+     height="16"
+     label="Enable double-tap right-click to ADS"
+     layout="topleft"
+     left="10"
+     name="ads_enabled_prefs"
+     top_pad="6"
+     width="400"
+     tool_tip="Tap, then tap-and-hold the right mouse button to aim down sights; release to exit. Works in first person and OTS." />
     <button
      follows="left|top"
      layout="topleft"
@@ -284,17 +295,6 @@
         <button.commit_callback
          function="Pref.ADSSettings" />
     </button>
-    <check_box
-     control_name="FSDoubleTapADS"
-     follows="left|top"
-     height="16"
-     label="Enable double-tap right-click to ADS"
-     layout="topleft"
-     left="10"
-     name="ads_enabled_prefs"
-     top_pad="6"
-     width="400"
-     tool_tip="Tap, then tap-and-hold the right mouse button to aim down sights; release to exit. Works in first person and OTS." />
 
     <!-- ===== Over-the-Shoulder camera ===== -->
     <text
@@ -309,6 +309,16 @@
      width="300">
         Over-the-Shoulder Camera
     </text>
+    <check_box
+     control_name="OTSEnabled"
+     follows="left|top"
+     height="16"
+     label="Enable OTS Mode (replaces Mouselook — M key)"
+     layout="topleft"
+     left="10"
+     name="ots_enabled_prefs"
+     top_pad="6"
+     width="400" />
     <button
      follows="left|top"
      layout="topleft"
@@ -322,15 +332,5 @@
         <button.commit_callback
          function="Pref.OTSSettings" />
     </button>
-    <check_box
-     control_name="OTSEnabled"
-     follows="left|top"
-     height="16"
-     label="Enable OTS Mode (replaces Mouselook — M key)"
-     layout="topleft"
-     left="10"
-     name="ots_enabled_prefs"
-     top_pad="6"
-     width="400" />
 
 </panel>
