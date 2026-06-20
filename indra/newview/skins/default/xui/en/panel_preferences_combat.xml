@@ -313,7 +313,7 @@
      control_name="OTSEnabled"
      follows="left|top"
      height="16"
-     label="Enable OTS Mode (replaces Mouselook — M key)"
+     label="Enable OTS Mode (active in mouselook)"
      layout="topleft"
      left="10"
      name="ots_enabled_prefs"
