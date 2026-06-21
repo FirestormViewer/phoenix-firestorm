@@ -224,6 +224,10 @@ void start_new_inventory_observer();
 //void open_inventory_offer(const uuid_vec_t& items, const std::string& from_name);
 void open_inventory_offer(const uuid_vec_t& items, const std::string& from_name, bool from_agent_manual = false);
 
+// <OTS> Suppress/allow auto-opening a preview for items freshly created in a folder
+// (bulk sound->notecard upload keeps its generated notecard from popping open).
+void suppress_inventory_auto_open_for_folder(const LLUUID& folder_id, bool suppress);
+
 // Returns true if item is not in certain "quiet" folder which don't need UI
 // notification (e.g. trash, cof, lost-and-found) and agent is not AFK, false otherwise.
 // Returns false if item is not found.

@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="308"
+ height="400"
  layout="topleft"
  name="floater_fs_kill_feed"
  save_rect="true"
@@ -147,14 +147,74 @@
     </combo_box>
     <color_swatch
      control_name="FSKillFeedTextColor"
+     can_apply_immediately="true"
      follows="left|top"
      layout="topleft"
-     left_delta="130"
-     top_delta="-2"
+     left="12"
+     top_pad="10"
      height="24"
-     width="36"
+     label_height="0"
+     width="44"
      name="text_color_swatch"
-     tool_tip="Kill feed text color" />
+     tool_tip="Default kill feed text color, and the fallback color for names" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left_pad="6"
+     top_delta="6"
+     height="12"
+     mouse_opaque="false"
+     width="200"
+     name="text_color_label">
+        Text color
+    </text>
+    <check_box
+     control_name="FSKillFeedColorOwnName"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="10"
+     height="16"
+     width="296"
+     label="Color my own name"
+     tool_tip="Use the color below for your own name in the kill feed, overriding the map mark / contact set / group / default priority for yourself" />
+    <color_swatch
+     control_name="FSKillFeedOwnNameColor"
+     can_apply_immediately="true"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="4"
+     height="24"
+     label_height="0"
+     width="44"
+     name="own_name_color_swatch"
+     tool_tip="Your own name's color in the kill feed" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left_pad="6"
+     top_delta="6"
+     height="12"
+     mouse_opaque="false"
+     width="200"
+     name="own_name_color_label">
+        My name color
+    </text>
+    <check_box
+     control_name="FSKillFeedColorOtherNames"
+     follows="left|top"
+     layout="topleft"
+     left="12"
+     top_pad="10"
+     height="16"
+     width="296"
+     label="Color other names"
+     tool_tip="Tint other players' names: map mark, then contact set, then group color; falls back to the text color above" />
     <check_box
      control_name="FSKillFeedBoldText"
      follows="left|top"

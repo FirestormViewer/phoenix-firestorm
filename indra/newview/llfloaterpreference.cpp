@@ -485,6 +485,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     // </FS:Ansariel>
     mCommitCallbackRegistrar.add("Pref.HitMarkerSettings",          boost::bind(&LLFloaterPreference::onClickHitMarkerSettings, this));
     mCommitCallbackRegistrar.add("Pref.KillFeedSettings",           boost::bind(&LLFloaterPreference::onClickKillFeedSettings, this));
+    mCommitCallbackRegistrar.add("Pref.ADSSettings",                boost::bind(&LLFloaterPreference::onClickADSSettings, this));
+    mCommitCallbackRegistrar.add("Pref.OTSSettings",                boost::bind(&LLFloaterPreference::onClickOTSSettings, this));
     mCommitCallbackRegistrar.add("Pref.BrowseSplashImage",          boost::bind(&LLFloaterPreference::onClickBrowseSplashImage, this));
     mCommitCallbackRegistrar.add("Pref.BrowseLoginLogo",            boost::bind(&LLFloaterPreference::onClickBrowseLoginLogo, this));
     mCommitCallbackRegistrar.add("Pref.SetCache",               boost::bind(&LLFloaterPreference::onClickSetCache, this));
@@ -1729,6 +1731,18 @@ void LLFloaterPreference::onClickHitMarkerSettings()
 void LLFloaterPreference::onClickKillFeedSettings()
 {
     LLFloaterReg::showInstance("fs_kill_feed");
+}
+
+// Aim-down-sights options floater (FOV, smoothing, sensitivity, vignette)
+void LLFloaterPreference::onClickADSSettings()
+{
+    LLFloaterReg::showInstance("fs_ads_options");
+}
+
+// Over-the-shoulder camera options floater (distance, offset, height, focus, behavior)
+void LLFloaterPreference::onClickOTSSettings()
+{
+    LLFloaterReg::showInstance("fs_ots_options");
 }
 
 // Offline login splash: pick a local image for the login background

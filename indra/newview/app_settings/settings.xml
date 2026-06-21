@@ -8883,6 +8883,17 @@
       <key>Value</key>
       <real>10.0</real>
     </map>
+    <key>FSADSMouseSensitivity</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls responsiveness of mouse while aiming down sights (fraction or multiple of default mouse sensitivity)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>7.0</real>
+    </map>
     <key>MouselookZoomTransitionSpeed</key>
     <map>
       <key>Comment</key>
@@ -8893,6 +8904,105 @@
       <string>F32</string>
       <key>Value</key>
       <real>0</real>
+    </map>
+    <key>FSDoubleTapADS</key>
+    <map>
+      <key>Comment</key>
+      <string>Tap then tap-and-hold the right mouse button to aim down sights (ADS) at a separate zoom; release to exit. Works in first person and OTS</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSZoomFOV</key>
+    <map>
+      <key>Comment</key>
+      <string>Aim-down-sights field of view (radians); lower = more zoom. Scroll while in ADS to adjust</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+    </map>
+    <key>FSADSZoomTransitionSpeed</key>
+    <map>
+      <key>Comment</key>
+      <string>Duration of the ADS zoom transition, in milliseconds (0 = instant)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>100</real>
+    </map>
+    <key>FSADSDoubleTapTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum time (seconds) for each tap and the gap between them to register a double-tap for ADS; lower = tighter</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.25</real>
+    </map>
+    <key>FSADSSwapTransitionSpeed</key>
+    <map>
+      <key>Comment</key>
+      <string>Duration (ms) of the ADS camera swap between OTS and first person; lower is snappier, 0 is instant</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>150</real>
+    </map>
+    <key>FSADSZoomSensitivity</key>
+    <map>
+      <key>Comment</key>
+      <string>Scroll-wheel step (radians per click) for adjusting the ADS zoom level while held</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.1</real>
+    </map>
+    <key>FSADSVignetteFirstPerson</key>
+    <map>
+      <key>Comment</key>
+      <string>Darken the screen edges (vignette) while in ADS in first person</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSVignetteOTS</key>
+    <map>
+      <key>Comment</key>
+      <string>Darken the screen edges (vignette) while in ADS in over-the-shoulder</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSADSVignetteStrength</key>
+    <map>
+      <key>Comment</key>
+      <string>How dark the ADS screen-edge vignette is (0-1)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
     </map>
     <key>MouseSmooth</key>
     <map>
@@ -25202,7 +25312,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSOTSTrueAimDot</key>
       <map>
       <key>Comment</key>
-      <string>In OTS, slide the crosshair center dot to where a bullet fired from the avatar actually lands (eye-origin raycast); the chevrons stay on the camera ray</string>
+      <string>Line-of-sight (LOS) dot: in OTS, slide the crosshair center dot to where a bullet fired from the avatar actually lands (eye-origin raycast); the chevrons stay on the camera ray</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -25220,6 +25330,61 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSOTSAvatarConverge</key>
+      <map>
+      <key>Comment</key>
+      <string>In OTS, converge aim on nearby avatars using cheap capsule proxies so shots land on the target rather than the geometry behind it</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSOTSAvatarConvergeRadius</key>
+      <map>
+      <key>Comment</key>
+      <string>Optional forgiveness (meters) added to each side of an avatar's hitbox when converging OTS aim; 0 = converge on the exact hitbox</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>FSOTSConvergeMinDistance</key>
+      <map>
+      <key>Comment</key>
+      <string>Minimum OTS world convergence distance (meters); guards against the close-range shoulder-lean swing. Avatar capsule hits are exempt</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>2.0</real>
+    </map>
+    <key>FSOTSConvergeSmoothingHalfLife</key>
+      <map>
+      <key>Comment</key>
+      <string>Half-life (seconds) for smoothing the OTS convergence depth so aim eases across depth changes instead of snapping. 0 disables</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.06</real>
+    </map>
+    <key>FSOTSConvergeDebugDraw</key>
+      <map>
+      <key>Comment</key>
+      <string>Draw 3D debug lines for OTS aim convergence (camera ray, bullet ray, converged point, avatar capsules). Toggle via Develop &gt; Rendering menu</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>OTSRememberLastView</key>
       <map>
@@ -25331,6 +25496,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSHitMarkerSoundGain</key>
+      <map>
+      <key>Comment</key>
+      <string>Volume (0-1) for the combat hitmarker hit and kill sounds</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>FSHitMarkerIgnoreCollision</key>
+      <map>
+      <key>Comment</key>
+      <string>Skip generic Second Life physics/collision damage (type -1: bumps, falls) so only scripted combat damage triggers a hitmarker</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSHitMarkerAgentTargetsOnly</key>
+      <map>
+      <key>Comment</key>
+      <string>Only fire the hitmarker and sounds when your damage lands on an avatar, not an object (uses the bridge agent tag; requires bridge 2.33+)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>FSHitMarkerHitSound</key>
       <map>
       <key>Comment</key>
@@ -25362,7 +25560,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>FSLoginLogoImage</key>
       <map>
@@ -25487,6 +25685,44 @@ Change of this parameter will affect the layout of buttons in notification toast
         <real>1.0</real>
         <real>1.0</real>
         <real>1.0</real>
+        <real>1.0</real>
+      </array>
+    </map>
+    <key>FSKillFeedColorOwnName</key>
+      <map>
+      <key>Comment</key>
+      <string>Use your chosen color for your own name in the kill feed, overriding the map-mark/contact-set/group/default priority for yourself</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSKillFeedColorOtherNames</key>
+      <map>
+      <key>Comment</key>
+      <string>Tint other players' names in the kill feed by map mark, then contact set, then group color; falls back to the kill feed text color</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSKillFeedOwnNameColor</key>
+      <map>
+      <key>Comment</key>
+      <string>Color for your own name in the kill feed when FSKillFeedColorOwnName is on</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Color4</string>
+      <key>Value</key>
+      <array>
+        <real>1.0</real>
+        <real>0.9</real>
+        <real>0.4</real>
         <real>1.0</real>
       </array>
     </map>

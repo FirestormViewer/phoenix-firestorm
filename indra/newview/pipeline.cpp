@@ -77,6 +77,7 @@
 #include "lltracker.h"
 #include "lltool.h"
 #include "lltoolmgr.h"
+#include "lltoolcomp.h"     // LLToolCompGun::getADSVignetteAmount (ADS vignette)
 #include "llviewercamera.h"
 #include "llviewermediafocus.h"
 #include "llviewertexturelist.h"
@@ -85,6 +86,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h" // for audio debugging.
 #include "llviewerwindow.h" // For getSpinAxis
+#include "fscombathitmarker.h"
 #include "llvoavatarself.h"
 #include "llvocache.h"
 #include "llvosky.h"
@@ -5632,6 +5634,23 @@ void LLPipeline::renderDebug()
 
     gGL.flush();
     gUIProgram.unbind();
+
+    // <FS:SkoomaStorm> OTS aim-convergence debug visualization (Develop > Rendering)
+    {
+        static LLCachedControl<bool> ots_converge_debug(gSavedSettings, "FSOTSConvergeDebugDraw", false);
+        if (ots_converge_debug)
+        {
+            gDebugProgram.bind();
+            gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+            LLGLDepthTest depth(GL_FALSE); // draw through geometry so the rays stay visible
+            gGL.setLineWidth(2.f);
+            FSCombatHitMarker::renderOTSConvergenceDebug();
+            gGL.setLineWidth(1.f);
+            gGL.flush();
+            gDebugProgram.unbind();
+        }
+    }
+    // </FS:SkoomaStorm>
 }
 
 void LLPipeline::rebuildPools()
@@ -7361,44 +7380,84 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 // trees, grass or nametags, so a ray starting inside the wearer's own body
 // is safe. Used by the OTS shoulder camera for collision.
 LLDrawable* LLPipeline::lineSegmentIntersectWorldGeometry(const LLVector4a& start, const LLVector4a& end,
-                                                          LLVector4a* intersection)
+                                                          LLVector4a* intersection, bool skip_phantom)
 {
-    LLDrawable* drawable = NULL;
-    LLVector4a local_end = end;
-    LLVector4a position;
-
-    for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
-            iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+    static const U32 world_partitions[] =
     {
-        LLViewerRegion* region = *iter;
+        LLViewerRegion::PARTITION_VOLUME,
+        LLViewerRegion::PARTITION_BRIDGE,
+        LLViewerRegion::PARTITION_TERRAIN
+    };
 
-        static const U32 world_partitions[] =
+    // Phantom prims have no physics, so the camera and the aim ray pass straight
+    // through them. When skip_phantom is set, step the ray past each phantom hit
+    // and re-cast until we find solid geometry (or nothing). The cap bounds the
+    // pathological case of many stacked phantom layers.
+    const S32 MAX_PHANTOM_SKIPS = 16;
+
+    LLVector4a seg_start = start;
+
+    for (S32 attempt = 0; attempt <= MAX_PHANTOM_SKIPS; ++attempt)
+    {
+        LLDrawable* drawable = NULL;
+        LLVector4a local_end = end;
+        LLVector4a position;
+
+        for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
+                iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
         {
-            LLViewerRegion::PARTITION_VOLUME,
-            LLViewerRegion::PARTITION_BRIDGE,
-            LLViewerRegion::PARTITION_TERRAIN
-        };
-        for (U32 j : world_partitions)
-        {
-            LLSpatialPartition* part = region->getSpatialPartition(j);
-            if (part && hasRenderType(part->mDrawableType))
+            LLViewerRegion* region = *iter;
+
+            for (U32 j : world_partitions)
             {
-                LLDrawable* hit = part->lineSegmentIntersect(start, local_end, false, false, false, false, NULL, &position);
-                if (hit)
+                LLSpatialPartition* part = region->getSpatialPartition(j);
+                if (part && hasRenderType(part->mDrawableType))
                 {
-                    drawable = hit;
-                    local_end = position;
+                    LLDrawable* hit = part->lineSegmentIntersect(seg_start, local_end, false, false, false, false, NULL, &position);
+                    if (hit)
+                    {
+                        drawable = hit;
+                        local_end = position;
+                    }
                 }
             }
         }
+
+        if (!drawable)
+        {
+            // Nothing solid (or nothing non-phantom) left along the ray.
+            return NULL;
+        }
+
+        if (skip_phantom)
+        {
+            const LLViewerObject* obj = drawable->getVObj();
+            if (obj && obj->flagPhantom())
+            {
+                // Advance just past this phantom surface and keep looking.
+                LLVector3 s(seg_start.getF32ptr());
+                LLVector3 e(end.getF32ptr());
+                LLVector3 hit_pos(local_end.getF32ptr());
+                LLVector3 dir = e - s;
+                if (dir.normalize() <= 0.f)
+                {
+                    return NULL; // degenerate ray
+                }
+                LLVector3 next = hit_pos + dir * 0.05f; // 5 cm past the surface
+                seg_start.load3(next.mV);
+                continue;
+            }
+        }
+
+        if (intersection)
+        {
+            *intersection = local_end;
+        }
+        return drawable;
     }
 
-    if (drawable && intersection)
-    {
-        *intersection = local_end;
-    }
-
-    return drawable;
+    // Too many phantom layers; treat the path as clear.
+    return NULL;
 }
 
 LLViewerObject* LLPipeline::lineSegmentIntersectInHUD(const LLVector4a& start, const LLVector4a& end,
@@ -8477,7 +8536,23 @@ void LLPipeline::combineGlow(LLRenderTarget* src, LLRenderTarget* dst)
 // <FS:Beq> updated Vignette code (based on original Exo Vignette)
 bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
-    if (RenderVignette.mV[0] > 0.f)
+    // Start from the user's persistent vignette, then let ADS contribute its own
+    // (radial, same shader) so aiming down sights darkens the screen edges without a
+    // separate blocky 2D overlay. ADS drives a stronger, broader look than the passive
+    // linear-intensity vignette: it fully activates the radial field (.x = 1) so the
+    // darkening reads across the whole edge rather than only the corners, and maps its
+    // strength to the falloff power (.y) so darkness ramps from a subtle creep to heavy.
+    // It takes over while aiming and reverts to the user's vignette on release.
+    LLVector3 vig = RenderVignette;
+    const F32 ads = LLToolCompGun::getInstance()->getADSVignetteAmount();
+    if (ads > 0.f)
+    {
+        vig.mV[0] = 1.f;          // full radial field active
+        vig.mV[1] = ads * 2.f;    // falloff power: strength -> darkness
+        vig.mV[2] = 1.f;          // multiplier
+    }
+
+    if (vig.mV[0] > 0.f)
     {
         LL_PROFILE_GPU_ZONE("Vignette");
         dst->bindTarget();
@@ -8503,7 +8578,7 @@ bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
         shader->uniform3fv(
             LLShaderMgr::RENDER_VIGNETTE,
             1,
-            RenderVignette.mV);
+            vig.mV);
 
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);

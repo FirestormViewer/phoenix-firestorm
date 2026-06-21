@@ -3,7 +3,7 @@
  positioning="cascading"
  can_minimize="false"
  can_resize="false"
- height="402"
+ height="480"
  layout="topleft"
  name="floater_fs_hit_marker"
  save_rect="true"
@@ -20,6 +20,16 @@
      width="316"
      label="Enable hitmarker"
      tool_tip="Flash a marker and play a sound when your combat damage lands (Combat 2.0 regions, via the LSL bridge)" />
+    <check_box
+     control_name="FSHitMarkerIgnoreCollision"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     height="16"
+     width="300"
+     label="Ignore collision and fall damage"
+     tool_tip="Skip generic Second Life physics damage (bumps, falls) so only scripted combat damage flashes a hitmarker" />
     <check_box
      control_name="FSCustomCrosshair"
      follows="left|top"
@@ -48,8 +58,8 @@
      top_pad="6"
      height="16"
      width="300"
-     label="True-aim dot in OTS"
-     tool_tip="Slide the center dot to where a shot fired from your avatar actually lands; the chevrons stay on the camera ray. Centered when nothing is in the way." />
+     label="Line-of-sight (LOS) dot in OTS"
+     tool_tip="Slide the center dot to where a shot fired from your avatar actually lands; the chevrons stay on the camera ray. Centered when your line of sight to the target is clear, and rides onto whatever is blocking the shot." />
     <slider
      control_name="FSHitMarkerScale"
      follows="left|top"
@@ -150,6 +160,22 @@
      width="316"
      label="Play sounds"
      tool_tip="Hit and kill sounds" />
+    <slider
+     control_name="FSHitMarkerSoundGain"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="6"
+     height="15"
+     width="300"
+     label="Volume:"
+     label_width="100"
+     min_val="0.0"
+     max_val="1.0"
+     increment="0.05"
+     decimal_digits="2"
+     show_text="true"
+     tool_tip="Volume of the hit and kill sounds" />
     <text
      type="string"
      length="1"
@@ -194,4 +220,24 @@
      width="216"
      name="kill_sound_uuid"
      tool_tip="Sound UUID played when your damage kills" />
+    <button
+     name="test_hit_sound_btn"
+     follows="left|top"
+     layout="topleft"
+     left="28"
+     top_pad="10"
+     height="22"
+     width="145"
+     label="Test hit sound"
+     tool_tip="Play the hit sound at the current volume" />
+    <button
+     name="test_kill_sound_btn"
+     follows="left|top"
+     layout="topleft"
+     left_delta="155"
+     top_delta="0"
+     height="22"
+     width="145"
+     label="Test kill sound"
+     tool_tip="Play the kill sound at the current volume" />
 </floater>

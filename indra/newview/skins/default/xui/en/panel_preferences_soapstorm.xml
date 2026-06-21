@@ -24,19 +24,19 @@
 
     <panel
      class="panel_preference"
-     filename="panel_preferences_soapstorm_general.xml"
-     label="General"
-     layout="topleft"
-     help_topic="preferences_soapstorm_tab"
-     name="soapstorm_general" />
-
-    <panel
-     class="panel_preference"
      filename="panel_preferences_combat.xml"
      label="Combat"
      layout="topleft"
      help_topic="preferences_combat_tab"
      name="combat" />
+
+    <panel
+     class="panel_preference"
+     filename="panel_preferences_soapstorm_login.xml"
+     label="Login Options"
+     layout="topleft"
+     help_topic="preferences_soapstorm_tab"
+     name="soapstorm_login" />
 
 </tab_container>
 

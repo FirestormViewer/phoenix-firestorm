@@ -1021,8 +1021,8 @@ void FSPanelLogin::loadLoginPage()
         sInstance->getChildView("login_html")->setVisible(false);
         sInstance->getChildView("login_splash_image")->setVisible(true);
 
-        // User-chosen background image (full bleed); plain black when
-        // unset or undecodable.
+        // User-chosen background image (full bleed); SkoomaStorm bundled
+        // splash when unset or undecodable.
         LLIconCtrl* background = sInstance->getChild<LLIconCtrl>("splash_background");
         const std::string image_path = sanitize_image_path(gSavedSettings.getString("FSLocalLoginSplashImage"));
         const LLUUID bg_id = loadLocalLoginImage(image_path);
@@ -1030,7 +1030,13 @@ void FSPanelLogin::loadLoginPage()
         {
             background->setValue(LLSD(bg_id));
         }
-        background->setVisible(bg_id.notNull());
+        else
+        {
+            // SkoomaStorm: bundled Elsweyr background when no custom image
+            // is set or it can't be decoded
+            background->setValue(LLSD(std::string("SkoomaSplashBG")));
+        }
+        background->setVisible(true);
         return;
     }
     sInstance->getChildView("login_splash_image")->setVisible(false);

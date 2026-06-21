@@ -46,6 +46,15 @@ void LLAutoUpdateChecker::checkForUpdate()
         return;
     }
 
+    // SkoomaStorm party build: never check for updates. The feed only
+    // knows Soapstorm builds, so any offer would "upgrade" this install
+    // to stock Soapstorm.
+    if (LLVersionInfo::instance().getChannel().find("SkoomaStorm") != std::string::npos)
+    {
+        LL_INFOS("AutoUpdate") << "SkoomaStorm build, skipping update check" << LL_ENDL;
+        return;
+    }
+
     LL_INFOS("AutoUpdate") << "Starting update check" << LL_ENDL;
     mCheckInProgress = true;
     LLCoros::instance().launch("AutoUpdateCheck", 

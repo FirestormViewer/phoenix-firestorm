@@ -98,11 +98,14 @@ bool LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 
         // <FS:Ansariel> Use faster LLCachedControl
         //F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
-        // Check if we're zoomed and use appropriate sensitivity
+        // Check if we're zoomed and use appropriate sensitivity. ADS has its own
+        // sensitivity and takes priority over the plain zoomed value.
         bool is_zoomed = LLToolCompGun::getInstance()->isZoomed();
+        bool is_ads = LLToolCompGun::getInstance()->isADS();
         static LLCachedControl<F32> mouseSensitivity(gSavedSettings, "MouseSensitivity");
         static LLCachedControl<F32> mouseSensitivityZoomed(gSavedSettings, "MouseSensitivityZoomed");
-        F32 mouse_sensitivity = (F32)(is_zoomed ? mouseSensitivityZoomed : mouseSensitivity);
+        static LLCachedControl<F32> mouseSensitivityADS(gSavedSettings, "FSADSMouseSensitivity");
+        F32 mouse_sensitivity = (F32)(is_ads ? mouseSensitivityADS : (is_zoomed ? mouseSensitivityZoomed : mouseSensitivity));
         // </FS:Ansariel> Use faster LLCachedControl
         
         // Use extended lower range (0.05-2.75) for finer control at low sensitivities

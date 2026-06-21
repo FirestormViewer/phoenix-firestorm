@@ -1131,6 +1131,28 @@ void set_dad_inbox_object(const LLUUID& object_id)
     gInventory.addObserver(move_observer);
 }
 
+// <OTS> Folders whose freshly-created items should not auto-open a preview.
+// Used by the bulk sound->notecard upload so its generated notecard does not
+// pop a notecard editor window when it lands in inventory.
+static std::set<LLUUID> sSuppressAutoOpenFolders;
+void suppress_inventory_auto_open_for_folder(const LLUUID& folder_id, bool suppress)
+{
+    if (suppress)
+    {
+        sSuppressAutoOpenFolders.insert(folder_id);
+    }
+    else
+    {
+        sSuppressAutoOpenFolders.erase(folder_id);
+    }
+}
+static bool is_auto_open_suppressed_for_item(const LLInventoryItem* item)
+{
+    return item && !sSuppressAutoOpenFolders.empty()
+        && sSuppressAutoOpenFolders.count(item->getParentUUID()) > 0;
+}
+// </OTS>
+
 //unlike the FetchObserver for AgentOffer, we only make one
 //instance of the AddedObserver for TaskOffers
 //and it never dies.  We do this because we don't know the UUID of
@@ -1174,6 +1196,14 @@ protected:
                         }
                     }
                     // </FS:Ansariel>
+
+                    // <OTS> Items created in a suppressed folder (bulk sound->notecard
+                    // upload) must not auto-open a preview.
+                    if (!was_moved && is_auto_open_suppressed_for_item(added_item))
+                    {
+                        was_moved = true;
+                    }
+                    // </OTS>
                 }
             }
 
@@ -4277,7 +4307,7 @@ void send_agent_update(bool force_send, bool send_reliable)
     LLVector3 camera_left = LLViewerCamera::getInstance()->getLeftAxis();
     LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
 
-    // OTS fair-fire camera: report the mouselook-equivalent camera to the
+    // OTS convergence camera: report the mouselook-equivalent camera to the
     // sim. Campos weapons fire from llGetCameraPos along the camera's
     // at-axis; with the real OTS shoulder camera that means bullets
     // originate behind/offset from the avatar and can clear cover the
@@ -4293,7 +4323,7 @@ void send_agent_update(bool force_send, bool send_reliable)
         // Converge on the crosshair: aim from the eye at whatever is under
         // the camera crosshair (avatars included, self excluded), falling
         // back to a far point for open sky so the direction degrades to
-        // camera-parallel. Shared with the true-aim dot so the dot the
+        // camera-parallel. Shared with the line-of-sight (LOS) dot so the dot the
         // shooter sees and the camera scripts receive cannot diverge.
         const LLVector3 target = FSCombatHitMarker::getOTSConvergenceTarget(camera_pos_agent, camera_at);
 

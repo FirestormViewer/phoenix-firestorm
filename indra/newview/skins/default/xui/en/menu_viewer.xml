@@ -2538,6 +2538,18 @@
                  function="Upload.CalculateCosts"
                  parameter="Bulk Upload" />
             </menu_item_call>
+	    <!-- <OTS> Bulk WAV upload that also writes a music-player notecard -->
+	    <menu_item_call
+             label="Upload to Notecard..."
+             layout="topleft"
+             name="Upload Sound Notecard">
+                <menu_item_call.on_click
+                 function="File.UploadSoundNotecard"
+                 parameter="" />
+                <menu_item_call.on_enable
+                 function="File.EnableUpload" />
+            </menu_item_call>
+	    <!-- </OTS> -->
 	    <menu_item_call
              label="Import Linkset..."
              visibility_control="FSEnableObjectExports"

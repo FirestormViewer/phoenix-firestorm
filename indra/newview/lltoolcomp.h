@@ -248,14 +248,22 @@ public:
     virtual LLTool*         getOverrideTool(MASK mask) override { return NULL; }
 
     bool                    isZoomed() const { return mIsZoomed; }
+    bool                    isADS() const { return mIsADS; }
     void                    resetZoom(); // Reset zoom state when exiting mouselook
 
+    // Strength (0-1) of the ADS screen-edge vignette this frame, honoring the
+    // per-mode toggles. The displayed value eases toward the live ADS darkness on
+    // its own clock (so it fades smoothly on release even if a normal zoom
+    // interrupts, and does not depend on the FOV-zoom smoothing). Advanced once
+    // per frame; consumed by the post-process pass in LLPipeline::renderVignette.
+    F32                     getADSVignetteAmount();
+
 protected:
-    
+
     LLToolGun*          mGun;
     LLToolGrabBase*     mGrab;
     LLTool*             mNull;
-    
+
     // Smooth zoom transition
     F32 mTargetFOV;
     F32 mCurrentFOV;
@@ -266,6 +274,25 @@ protected:
     F32 mZoomedFOV; // Target zoomed FOV
     F32 mZoomProportion; // How far we got into the zoom (0-1)
     LLTimer mTransitionTimer; // Tracks elapsed time since transition start
+
+    // Double-tap-hold ADS (aim-down-sights): tap, then tap-and-hold the right
+    // button to zoom to a separate FOV with its own smoothing; release to exit.
+    bool    mIsADS;            // currently holding ADS
+    bool    mTransitionIsADS;  // current FOV transition is an ADS zoom (gates the vignette)
+    bool    mTransitionUseADSSmoothing; // FOV ease uses ADS smoothing, decoupled from the
+                                        // vignette gate so a normal zoom interrupting an ADS
+                                        // release can still ease smoothly (no vignette)
+    F32     mADSFOV;           // ADS target FOV
+    bool    mADSFromOTS;       // ADS entered from OTS -> restore OTS on release
+    bool    mLastTapWasQuick;  // previous right press was a quick tap (not a hold)
+    LLTimer mLastRMBUpTimer;   // time since last right-button release (double-tap window)
+    LLTimer mRMBDownTimer;     // measures the current press's duration
+
+    // Eased ADS vignette darkness (decoupled from the FOV-zoom smoothing so the
+    // release always fades smoothly and a normal zoom interrupting it can't snap
+    // it off). Advanced once per frame inside getADSVignetteAmount().
+    F32     mADSVignette;      // currently displayed darkness (0-1)
+    U32     mADSVignetteFrame; // frame counter of the last ease step
 };
 
 // Subclass of LLToolComposite

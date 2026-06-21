@@ -30,6 +30,8 @@
 #include "llaudioengine.h"
 #include "llavatarnamecache.h"
 #include "llcriticaldamp.h"
+#include "llframetimer.h"
+#include "llquaternion.h"
 #include "llrender.h"
 #include "llsdjson.h"
 #include "llui.h"
@@ -235,18 +237,43 @@ static std::string hitmarker_name(const LLUUID& id)
     return name;
 }
 
-static void play_sound_setting(const char* setting_name)
+static void play_sound_setting_impl(const char* setting_name, bool respect_toggle)
 {
-    static LLCachedControl<bool> sounds_on(gSavedSettings, "FSHitMarkerSounds", true);
-    if (!sounds_on || !gAudiop)
+    if (respect_toggle)
+    {
+        static LLCachedControl<bool> sounds_on(gSavedSettings, "FSHitMarkerSounds", true);
+        if (!sounds_on)
+        {
+            return;
+        }
+    }
+    if (!gAudiop)
     {
         return;
     }
     LLUUID sound_id(gSavedSettings.getString(setting_name));
     if (sound_id.notNull())
     {
-        gAudiop->triggerSound(sound_id, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+        static LLCachedControl<F32> gain(gSavedSettings, "FSHitMarkerSoundGain", 1.0f);
+        gAudiop->triggerSound(sound_id, gAgent.getID(), llclamp((F32)gain, 0.f, 1.f), LLAudioEngine::AUDIO_TYPE_UI);
     }
+}
+
+static void play_sound_setting(const char* setting_name)
+{
+    play_sound_setting_impl(setting_name, true);
+}
+
+// static
+void FSCombatHitMarker::playHitSoundPreview()
+{
+    play_sound_setting_impl("FSHitMarkerHitSound", false);
+}
+
+// static
+void FSCombatHitMarker::playKillSoundPreview()
+{
+    play_sound_setting_impl("FSHitMarkerKillSound", false);
 }
 
 // Build the display text and arm the flash from the accumulated batch.
@@ -340,6 +367,16 @@ void FSCombatHitMarker::handleCombatEvent(const LLSD& event)
         return; // self-damage is not a "hit"
     }
 
+    // Object targets (your damage landing on a prim, not an avatar) should not
+    // flash the marker or play a sound. The bridge tags each event with whether
+    // the target is an agent (llGetAgentSize). A missing tag means a pre-2.33
+    // bridge that hasn't re-created yet, so treat it as an agent and don't break.
+    static LLCachedControl<bool> agent_only(gSavedSettings, "FSHitMarkerAgentTargetsOnly", true);
+    if (agent_only && event.has("agent") && event["agent"].asInteger() == 0)
+    {
+        return;
+    }
+
     const std::string type = event["event"].asString();
     const F64 now = LLFrameTimer::getTotalSeconds();
 
@@ -353,10 +390,21 @@ void FSCombatHitMarker::handleCombatEvent(const LLSD& event)
     }
     else if (type == "DAMAGE")
     {
+        const S32 dmg_type = (S32)event["type"].asInteger();
+
+        // Generic LL physics/collision damage (type -1, "Impact") comes from
+        // bumps and falls, not scripted combat. Optionally drop it so it does
+        // not flash a hitmarker or play a hit sound.
+        static LLCachedControl<bool> ignore_collision(gSavedSettings, "FSHitMarkerIgnoreCollision", true);
+        if (ignore_collision && dmg_type == -1)
+        {
+            return;
+        }
+
         sBatchDamage += (F32)event["damage"].asReal();
         ++sBatchHits;
         sLastTarget = target;
-        sLastType = (S32)event["type"].asInteger();
+        sLastType = dmg_type;
         if (!sBatching)
         {
             sBatching = true;
@@ -434,6 +482,71 @@ void FSCombatHitMarker::setCrosshairTint(const LLColor4& color)
     sCrosshairTint = color;
 }
 
+// Ray (origin O, unit direction D) vs an oriented box (center C, rotation R,
+// half-extents H). Returns true and the entry distance t along the ray (>=0) when
+// it hits. Used to converge on an avatar's hitbox: transform the ray into the
+// box's local frame and run the standard slab test against an axis-aligned box.
+static bool rayOBBIntersect(const LLVector3& O, const LLVector3& D,
+                            const LLVector3& C, const LLQuaternion& R, const LLVector3& H,
+                            F32& t_out)
+{
+    const LLQuaternion inv = ~R;
+    const LLVector3 o = (O - C) * inv; // ray origin in box-local space
+    const LLVector3 d = D * inv;       // ray direction in box-local space (unit; rotation preserves length)
+
+    const F32 BIG = 1e30f;
+    F32 tmin = -BIG, tmax = BIG;
+    for (S32 a = 0; a < 3; ++a)
+    {
+        const F32 oa = o.mV[a];
+        const F32 da = d.mV[a];
+        const F32 ha = H.mV[a];
+        if (fabsf(da) < 1e-6f)
+        {
+            if (oa < -ha || oa > ha)
+            {
+                return false; // parallel to this slab and outside it
+            }
+        }
+        else
+        {
+            F32 t1 = (-ha - oa) / da;
+            F32 t2 = ( ha - oa) / da;
+            if (t1 > t2) { const F32 tmp = t1; t1 = t2; t2 = tmp; }
+            if (t1 > tmin) tmin = t1;
+            if (t2 < tmax) tmax = t2;
+            if (tmin > tmax)
+            {
+                return false;
+            }
+        }
+    }
+    if (tmax < 0.f)
+    {
+        return false; // box entirely behind the camera
+    }
+    t_out = (tmin >= 0.f) ? tmin : tmax; // near face, or exit face if the camera is inside
+    return true;
+}
+
+// Snapshot of the last convergence solve, captured when FSOTSConvergeDebugDraw is
+// on and drawn as 3D lines by renderOTSConvergenceDebug() from the render thread.
+// All points are agent-space (same frame as object render positions).
+namespace
+{
+    struct OTSDebugBox { LLVector3 center; LLQuaternion rot; LLVector3 half; bool hit; };
+    struct OTSConvergeDebug
+    {
+        U32       frame = 0;
+        LLVector3 cam_origin;
+        LLVector3 target;
+        bool      world_hit = false;
+        bool      avatar_hit = false;
+        std::vector<OTSDebugBox> boxes;
+    };
+    OTSConvergeDebug sOTSConvergeDebug;
+}
+
 // static
 LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin,
                                                      const LLVector3& cam_at)
@@ -442,44 +555,228 @@ LLVector3 FSCombatHitMarker::getOTSConvergenceTarget(const LLVector3& cam_origin
 
     LLVector3 target = cam_origin + cam_at * CONVERGE_RANGE;
 
+    // Debug-draw capture (cheap no-op unless the toggle is on).
+    static LLCachedControl<bool> debug_draw(gSavedSettings, "FSOTSConvergeDebugDraw", false);
+    const bool dbg = debug_draw;
+    std::vector<OTSDebugBox> dbg_boxes;
+    bool world_hit_flag = false;
+    bool avatar_best = false;
+
     LLVector4a ray_start, ray_end, hit;
     ray_start.load3(cam_origin.mV);
     ray_end.load3(target.mV);
 
-    // Cast the render (shoulder) camera's crosshair ray and converge on the
-    // first thing under it. Note: pick_rigged is intentionally false because
-    // rigged avatar meshes do not contribute to the physical hitbox and testing
-    // against them is too computationally expensive. The cast still returns
-    // terrain/prims, so shooting structures is unchanged. Step past our own
-    // body/attachments, which the shoulder ray can graze on its way out, so
-    // self never becomes the convergence point. With nothing solid under the
-    // crosshair the far point stands and the direction degrades to camera-parallel.
-    for (S32 i = 0; i < 4; ++i)
+    // World/static-geometry depth only (prims, linksets, terrain). Avatars, their
+    // attachments and nametags are deliberately NOT tested here -- they are handled
+    // exclusively by the hitbox pass below. Using lineSegmentIntersectInWorld here was
+    // the bug: it DOES test the avatar partition, so the crosshair grazing a bystander's
+    // mesh (or even their nametag) snapped convergence onto them. lineSegmentIntersectWorldGeometry
+    // never tests avatars/attachments, and also excludes our own body so the shoulder ray
+    // can't self-hit -- no step-past-self needed. skip_phantom steps past phantom prims
+    // (no physics, a bullet passes through). With nothing solid under the crosshair the
+    // far point stands.
+    if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit, true /*skip_phantom*/))
     {
-        S32 face_hit = -1;
-        LLViewerObject* obj = gPipeline.lineSegmentIntersectInWorld(
-            ray_start, ray_end,
-            false /*pick_transparent*/, false /*pick_rigged*/,
-            false /*pick_unselectable*/, false /*pick_reflection_probe*/,
-            &face_hit, nullptr, nullptr, &hit);
-        if (!obj)
-        {
-            break;
-        }
-        const bool is_self = isAgentAvatarValid() &&
-            (obj == gAgentAvatarp || obj->getAvatar() == gAgentAvatarp);
-        if (is_self)
-        {
-            LLVector3 past(hit.getF32ptr());
-            past += cam_at * 0.10f; // nudge just past the surface we grazed
-            ray_start.load3(past.mV);
-            continue;
-        }
         target.set(hit.getF32ptr());
-        break;
+        world_hit_flag = true;
     }
 
-    return target;
+    // Convergence depth measured along the camera ray (target is colinear with
+    // cam_at, so the dot is its distance).
+    F32 world_dist = (target - cam_origin) * cam_at;
+    if (world_dist < 0.f)
+    {
+        world_dist = CONVERGE_RANGE;
+    }
+
+    // Lean guard: a convergence point right on top of the camera makes the
+    // eye->target angle blow up (~atan(shoulder_offset / dist)), which IS the
+    // shoulder-dependent swing. Clamp the *world* distance only; genuine avatar
+    // hits below are trusted and exempt, so close targets still converge dead on.
+    static LLCachedControl<F32> min_dist(gSavedSettings, "FSOTSConvergeMinDistance", 2.0f);
+    F32 best_dist = llmax(world_dist, (F32)min_dist);
+
+    // Avatar convergence on the actual hitbox. We converge on the SAME oriented box
+    // the Avatar Hitboxes debug draws (DebugRenderHitboxes, lldrawpoolavatar.cpp):
+    // centered at getPositionAgent() (the object position, unaffected by viewer-side
+    // skeleton animation/extrapolation), sized by getScale(), oriented by
+    // getRotationRegion(). That box is what an LSL llCastRay weapon hits, so
+    // converging on it lines the crosshair up with what takes damage rather than the
+    // smoothly-rendered body, which leads the hitbox during fast movement. Taken as
+    // min() against world depth so a wall in front of the target still wins.
+    static LLCachedControl<bool> av_converge(gSavedSettings, "FSOTSAvatarConverge", true);
+    if (av_converge)
+    {
+        static LLCachedControl<F32> av_inflate(gSavedSettings, "FSOTSAvatarConvergeRadius", 0.0f);
+        const F32 inflate = llmax(0.f, (F32)av_inflate); // optional forgiveness; 0 = exact hitbox
+
+        // The shot originates at the player's eye, but the convergence ray starts at
+        // the (pulled-back OTS) camera. Someone standing behind the player is still in
+        // front of the camera, so the crosshair ray can graze their hitbox and steal
+        // convergence. Require an avatar box hit to be at least as far as the eye along
+        // the ray, so only targets genuinely in front of the shooter qualify. One dot
+        // product, computed once.
+        F32 eye_dist = 0.1f;
+        if (isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+        {
+            const LLVector3 eye = gAgentAvatarp->mHeadp->getWorldPosition();
+            eye_dist = llmax(0.1f, (eye - cam_origin) * cam_at);
+        }
+
+        for (LLCharacter* character : LLCharacter::sInstances)
+        {
+            LLVOAvatar* avatar = (LLVOAvatar*)character;
+            if (!avatar || avatar->isDead() || avatar->isControlAvatar() || avatar->isSelf())
+            {
+                continue;
+            }
+
+            const LLVector3 center = avatar->getPositionAgent();
+            const LLVector3 to_av = center - cam_origin;
+            if (to_av * cam_at < 0.f)
+            {
+                continue; // behind the camera
+            }
+            if (to_av * to_av > CONVERGE_RANGE * CONVERGE_RANGE)
+            {
+                continue; // out of range
+            }
+
+            const LLQuaternion rot = avatar->getRotationRegion();
+            LLVector3 half = avatar->getScale() * 0.5f;
+            half += LLVector3(inflate, inflate, inflate);
+
+            F32 t_hit = 0.f;
+            const bool box_hit = rayOBBIntersect(cam_origin, cam_at, center, rot, half, t_hit);
+            // t_hit > eye_dist: the box must be in front of the eye, not in the
+            // over-the-shoulder gap or behind the player.
+            if (box_hit && t_hit > eye_dist && t_hit < best_dist)
+            {
+                best_dist = t_hit; // trusted target; exempt from the min clamp
+                avatar_best = true;
+            }
+            if (dbg)
+            {
+                dbg_boxes.push_back({ center, rot, half, box_hit });
+            }
+        }
+    }
+
+    // Smooth the convergence DEPTH (a scalar along the ray), not the 3D point, so
+    // the target stays exactly under the crosshair while its depth eases across
+    // discontinuities instead of snapping, and rough-geometry jitter stops
+    // shaking the aim. Advanced once per frame: both callers (send_agent_update
+    // and the line-of-sight (LOS) dot) invoke this every frame and must get the same value,
+    // so we key the lerp on the frame counter and reuse the result within a frame.
+    static LLCachedControl<F32> smooth_hl(gSavedSettings, "FSOTSConvergeSmoothingHalfLife", 0.06f);
+    static U32 last_frame = 0;
+    static F32 smoothed_dist = CONVERGE_RANGE;
+    const U32 frame = LLFrameTimer::getFrameCount();
+    if ((F32)smooth_hl > 0.f && !avatar_best)
+    {
+        // World geometry only: rough surfaces jitter and depth edges snap.
+        if (frame != last_frame)
+        {
+            last_frame = frame;
+            const F32 amt = LLSmoothInterpolation::getInterpolant((F32)smooth_hl);
+            smoothed_dist = lerp(smoothed_dist, best_dist, amt);
+        }
+        best_dist = smoothed_dist;
+    }
+    else
+    {
+        // Avatar hit (a stable, authoritative box) bypasses smoothing for a snappy
+        // lock; keep the smoother in step so returning to world geometry is seamless.
+        last_frame = frame;
+        smoothed_dist = best_dist;
+    }
+
+    const LLVector3 result = cam_origin + cam_at * best_dist;
+
+    if (dbg)
+    {
+        sOTSConvergeDebug.frame      = LLFrameTimer::getFrameCount();
+        sOTSConvergeDebug.cam_origin = cam_origin;
+        sOTSConvergeDebug.target     = result;
+        sOTSConvergeDebug.world_hit  = world_hit_flag;
+        sOTSConvergeDebug.avatar_hit = avatar_best;
+        sOTSConvergeDebug.boxes      = std::move(dbg_boxes);
+    }
+
+    return result;
+}
+
+// static
+void FSCombatHitMarker::renderOTSConvergenceDebug()
+{
+    // The caller (LLPipeline::renderDebug) binds gDebugProgram, unbinds textures,
+    // sets the depth/line state, and gates on FSOTSConvergeDebugDraw; here we only
+    // emit geometry. All points are agent-space, matching renderDebug.
+    const OTSConvergeDebug& d = sOTSConvergeDebug;
+
+    // Only while the convergence path is actually running (OTS) and the snapshot
+    // is fresh; otherwise we'd draw stale lines after leaving OTS.
+    if (!gAgentCamera.cameraOTS()) return;
+    if (LLFrameTimer::getFrameCount() - d.frame > 2) return;
+
+    LLVector3 eye = d.cam_origin;
+    if (isAgentAvatarValid() && gAgentAvatarp->mHeadp)
+    {
+        eye = gAgentAvatarp->mHeadp->getWorldPosition();
+    }
+
+    gGL.begin(LLRender::LINES);
+
+    // Camera crosshair ray (cyan): shoulder camera -> converged point.
+    gGL.diffuseColor4f(0.15f, 0.75f, 1.f, 1.f);
+    gGL.vertex3fv(d.cam_origin.mV);
+    gGL.vertex3fv(d.target.mV);
+
+    // Bullet ray (orange): avatar eye -> converged point. Where it meets the cyan
+    // ray is the convergence; the spread between them off-target is the parallax.
+    gGL.diffuseColor4f(1.f, 0.5f, 0.1f, 1.f);
+    gGL.vertex3fv(eye.mV);
+    gGL.vertex3fv(d.target.mV);
+
+    // Avatar hitboxes: the same oriented box the convergence tests against (and
+    // that Develop > Render Metadata > Avatar Hitboxes draws). Bright green when
+    // detected under the crosshair, dim grey otherwise; enable both to confirm they
+    // overlay. Edge pattern matches lldrawpoolavatar's hitbox render.
+    for (const OTSDebugBox& b : d.boxes)
+    {
+        if (b.hit) { gGL.diffuseColor4f(0.1f, 1.f, 0.25f, 1.f); }
+        else       { gGL.diffuseColor4f(0.45f, 0.45f, 0.5f, 0.7f); }
+        const LLVector3 v1 = LLVector3( b.half.mV[VX],  b.half.mV[VY], b.half.mV[VZ]) * b.rot;
+        const LLVector3 v2 = LLVector3(-b.half.mV[VX],  b.half.mV[VY], b.half.mV[VZ]) * b.rot;
+        const LLVector3 v3 = LLVector3(-b.half.mV[VX], -b.half.mV[VY], b.half.mV[VZ]) * b.rot;
+        const LLVector3 v4 = LLVector3( b.half.mV[VX], -b.half.mV[VY], b.half.mV[VZ]) * b.rot;
+        const LLVector3& c = b.center;
+        gGL.vertex3fv((c + v1).mV); gGL.vertex3fv((c + v2).mV);
+        gGL.vertex3fv((c + v2).mV); gGL.vertex3fv((c + v3).mV);
+        gGL.vertex3fv((c + v3).mV); gGL.vertex3fv((c + v4).mV);
+        gGL.vertex3fv((c + v4).mV); gGL.vertex3fv((c + v1).mV);
+        gGL.vertex3fv((c - v1).mV); gGL.vertex3fv((c - v2).mV);
+        gGL.vertex3fv((c - v2).mV); gGL.vertex3fv((c - v3).mV);
+        gGL.vertex3fv((c - v3).mV); gGL.vertex3fv((c - v4).mV);
+        gGL.vertex3fv((c - v4).mV); gGL.vertex3fv((c - v1).mV);
+        gGL.vertex3fv((c + v1).mV); gGL.vertex3fv((c - v3).mV);
+        gGL.vertex3fv((c + v4).mV); gGL.vertex3fv((c - v2).mV);
+        gGL.vertex3fv((c + v2).mV); gGL.vertex3fv((c - v4).mV);
+        gGL.vertex3fv((c + v3).mV); gGL.vertex3fv((c - v1).mV);
+    }
+
+    // Target marker (3D cross): green = converged on an avatar, magenta = world
+    // geometry, yellow = open-sky fallback.
+    if (d.avatar_hit)     { gGL.diffuseColor4f(0.1f, 1.f, 0.25f, 1.f); }
+    else if (d.world_hit) { gGL.diffuseColor4f(1.f, 0.2f, 1.f, 1.f); }
+    else                  { gGL.diffuseColor4f(1.f, 1.f, 0.2f, 1.f); }
+    const F32 m = 0.18f;
+    const LLVector3& t = d.target;
+    gGL.vertex3f(t.mV[VX] - m, t.mV[VY], t.mV[VZ]); gGL.vertex3f(t.mV[VX] + m, t.mV[VY], t.mV[VZ]);
+    gGL.vertex3f(t.mV[VX], t.mV[VY] - m, t.mV[VZ]); gGL.vertex3f(t.mV[VX], t.mV[VY] + m, t.mV[VZ]);
+    gGL.vertex3f(t.mV[VX], t.mV[VY], t.mV[VZ] - m); gGL.vertex3f(t.mV[VX], t.mV[VY], t.mV[VZ] + m);
+
+    gGL.end();
 }
 
 // static
@@ -515,7 +812,7 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
         LLVector4a ray_start, ray_end, hit;
 
         // Bullet direction mirrors what the sim is told. With the
-        // fair-fire camera on, scripts see the eye aimed at the camera
+        // convergence camera on, scripts see the eye aimed at the camera
         // ray's world target (converged); off, they see the real camera's
         // at-axis (parallel from the avatar).
         LLVector3 dir = camera->getAtAxis();
@@ -543,7 +840,7 @@ void FSCombatHitMarker::drawCrosshair(S32 view_width, S32 view_height)
         // what keeps terrain *behind* the target from pulling the dot off it.
         ray_start.load3(eye.mV);
         ray_end.load3(aim_end.mV);
-        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit))
+        if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit, true /*skip_phantom*/))
         {
             const LLRect& world_rect = gViewerWindow->getWorldViewRectScaled();
             LLCoordGL screen(world_rect.getCenterX(), world_rect.getCenterY());

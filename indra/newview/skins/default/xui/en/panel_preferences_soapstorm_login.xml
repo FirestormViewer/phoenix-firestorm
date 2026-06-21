@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="480"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Login Options"
+ name="soapstorm_login">
+
+    <!-- ===== Login screen ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top="10"
+     width="520">
+        Login Screen
+    </text>
+    <check_box
+     control_name="FSLocalLoginSplash"
+     follows="left|top"
+     height="16"
+     label="Offline login screen (show an image instead of the web page)"
+     layout="topleft"
+     left="10"
+     name="local_login_splash_prefs"
+     tool_tip="Skip loading the web login page; takes effect the next time the login screen is shown"
+     top_pad="8"
+     width="500" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="14"
+     layout="topleft"
+     left="28"
+     name="splash_image_label"
+     top_pad="6"
+     width="110">
+        Background image:
+    </text>
+    <line_editor
+     control_name="FSLocalLoginSplashImage"
+     follows="left|top"
+     layout="topleft"
+     left_delta="114"
+     top_delta="-3"
+     height="20"
+     width="300"
+     name="splash_image_path"
+     tool_tip="Full path to a PNG or JPG to use as the offline login background. Leave empty for the bundled crest." />
+    <button
+     follows="left|top"
+     layout="topleft"
+     left_delta="306"
+     top_delta="0"
+     height="20"
+     width="64"
+     label="Browse"
+     name="splash_image_browse"
+     tool_tip="Pick an image file for the offline login background">
+        <button.commit_callback
+         function="Pref.BrowseSplashImage" />
+    </button>
+    <check_box
+     control_name="FSShowLoginLogo"
+     follows="left|top"
+     height="16"
+     label="Show logo on the login screen"
+     layout="topleft"
+     left="10"
+     name="show_login_logo_prefs"
+     tool_tip="Show or hide the viewer logo next to the login fields"
+     top_pad="8"
+     width="500" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="14"
+     layout="topleft"
+     left="28"
+     name="login_logo_label"
+     top_pad="6"
+     width="110">
+        Logo image:
+    </text>
+    <line_editor
+     control_name="FSLoginLogoImage"
+     follows="left|top"
+     layout="topleft"
+     left_delta="114"
+     top_delta="-3"
+     height="20"
+     width="300"
+     name="login_logo_path"
+     tool_tip="Full path to a PNG or JPG to replace the stock logo. Leave empty for the stock logo." />
+    <button
+     follows="left|top"
+     layout="topleft"
+     left_delta="306"
+     top_delta="0"
+     height="20"
+     width="64"
+     label="Browse"
+     name="login_logo_browse"
+     tool_tip="Pick an image file to replace the login screen logo">
+        <button.commit_callback
+         function="Pref.BrowseLoginLogo" />
+    </button>
+
+    <!-- ===== Updates ===== -->
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmallBold"
+     height="16"
+     layout="topleft"
+     left="10"
+     top_pad="18"
+     width="520">
+        Updates
+    </text>
+    <check_box
+     control_name="FSNoUpdateReminders"
+     follows="left|top"
+     height="16"
+     label="Don't remind me about optional updates"
+     layout="topleft"
+     left="10"
+     name="no_update_reminders_prefs"
+     tool_tip="Suppress optional update prompts. Required updates will still prompt, and automatic installation (if selected in Preferences) still works."
+     top_pad="8"
+     width="500" />
+
+</panel>

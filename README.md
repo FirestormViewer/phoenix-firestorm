@@ -5,5 +5,5 @@
 **This is a modified fork of the Firestorm viewer that I am using to mess with ideas and learning. If you've arrived here in search of the offical firestorm viewer you can find it at the [official website](https://www.firestormviewer.org/choose-your-platform/)**
 
 
-This repository is based on the official Firestorm viewer source code.
+This repository is based on the Soapstorm viewer source code, which is in turn based on the official Firestorm viewer source code.
 

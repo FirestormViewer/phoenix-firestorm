@@ -254,6 +254,10 @@ public:
     void onClickHitMarkerSettings();
     // Kill feed floater
     void onClickKillFeedSettings();
+    // Aim-down-sights options floater
+    void onClickADSSettings();
+    // Over-the-shoulder camera options floater
+    void onClickOTSSettings();
 
     // Offline login splash background picker
     void onClickBrowseSplashImage();

@@ -34,6 +34,11 @@
 #include "llsdjson.h"
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
+#include "lggcontactsets.h"
+#include "llgroupcolormap.h"
+#include "llnetmap.h"
+#include "llviewerobjectlist.h"
+#include "llvoavatar.h"
 
 #include <boost/json.hpp>
 
@@ -177,10 +182,71 @@ void FSFloaterKillFeed::addEntry(const LLSD& event)
     }
 }
 
-// "Killer killed Victim with [symbol] Weapon (100dmg, 50m)"
-static std::string killfeed_line(const FSFloaterKillFeed::KillEntry& entry)
+struct KFSegment
 {
-    std::string text = killfeed_name(entry.mKiller, false) + " killed " + killfeed_name(entry.mVictim, false);
+    std::string text;
+    LLColor4    color;
+};
+
+// Resolve a kill-feed name color. Your own name uses your chosen color when
+// FSKillFeedColorOwnName is on (kill feed only); everyone else - and you when
+// that toggle is off - follows map-mark > contact-set > group > default.
+static LLColor4 killfeed_name_color(const LLUUID& id, const LLColor4& default_color)
+{
+    if (id.isNull())
+    {
+        return default_color;
+    }
+
+    if (id == gAgent.getID())
+    {
+        static LLCachedControl<bool> color_own(gSavedSettings, "FSKillFeedColorOwnName", false);
+        if (color_own)
+        {
+            static LLCachedControl<LLColor4> own_color(gSavedSettings, "FSKillFeedOwnNameColor", LLColor4(1.f, 0.9f, 0.4f, 1.f));
+            return own_color;
+        }
+    }
+
+    static LLCachedControl<bool> color_others(gSavedSettings, "FSKillFeedColorOtherNames", true);
+    if (!color_others)
+    {
+        return default_color;
+    }
+
+    LLColor4 c;
+    if (LLNetMap::getAvatarMarkColor(id, c))
+    {
+        return c; // map mark
+    }
+    if (LGGContactSets::instance().hasFriendColorThatShouldShow(id, ContactSetType::MINIMAP, c))
+    {
+        return c; // contact set
+    }
+    LLViewerObject* obj = gObjectList.findObject(id);
+    LLVOAvatar* av = obj ? obj->asAvatar() : nullptr;
+    if (av && av->getActiveGroupID().notNull())
+    {
+        LLColor4 g = LLGroupColorMap::getInstance()->getGroupColor(av->getActiveGroupID());
+        if (g.mV[VW] >= 0.01f)
+        {
+            return g; // group
+        }
+    }
+    return default_color;
+}
+
+// "Killer killed Victim with [symbol] Weapon (100dmg, 50m)" split into colored
+// segments so the killer and victim names can be tinted independently of the
+// surrounding text (which uses default_color).
+static std::vector<KFSegment> killfeed_segments(const FSFloaterKillFeed::KillEntry& entry, const LLColor4& default_color)
+{
+    std::vector<KFSegment> segs;
+    segs.push_back({ killfeed_name(entry.mKiller, false), killfeed_name_color(entry.mKiller, default_color) });
+    segs.push_back({ " killed ", default_color });
+    segs.push_back({ killfeed_name(entry.mVictim, false), killfeed_name_color(entry.mVictim, default_color) });
+
+    std::string tail;
 
     // Damage type symbol from the shared hit marker symbol table
     // (customizable in the symbols editor).
@@ -193,14 +259,14 @@ static std::string killfeed_line(const FSFloaterKillFeed::KillEntry& entry)
 
     if (!entry.mWeapon.empty() || !symbol.empty())
     {
-        text += " with";
+        tail += " with";
         if (!symbol.empty())
         {
-            text += " " + symbol;
+            tail += " " + symbol;
         }
         if (!entry.mWeapon.empty())
         {
-            text += " " + entry.mWeapon;
+            tail += " " + entry.mWeapon;
         }
     }
 
@@ -219,9 +285,14 @@ static std::string killfeed_line(const FSFloaterKillFeed::KillEntry& entry)
     }
     if (!stats.empty())
     {
-        text += " (" + stats + ")";
+        tail += " (" + stats + ")";
     }
-    return text;
+
+    if (!tail.empty())
+    {
+        segs.push_back({ tail, default_color });
+    }
+    return segs;
 }
 
 // static
@@ -247,24 +318,25 @@ void FSFloaterKillFeed::drawOverlay()
     static LLCachedControl<bool> bold_text(gSavedSettings, "FSKillFeedBoldText", false);
 
     const F64 now = LLFrameTimer::getTotalSeconds();
+    const LLColor4 default_color = text_color;
 
-    // Collect the visible lines, newest first.
-    std::vector<std::string> lines;
+    // Collect the visible lines (newest first) as colored segments.
+    std::vector<std::vector<KFSegment>> seglines;
     if (enabled)
     {
         for (entries_t::const_reverse_iterator it = sEntries.rbegin();
-             it != sEntries.rend() && lines.size() < (size_t)max_lines;
+             it != sEntries.rend() && seglines.size() < (size_t)max_lines;
              ++it)
         {
             if (now - it->mReceivedTime > (F64)hold_time)
             {
                 break; // entries are time-ordered; everything older follows
             }
-            lines.push_back(killfeed_line(*it));
+            seglines.push_back(killfeed_segments(*it, default_color));
         }
     }
 
-    if (lines.empty())
+    if (seglines.empty())
     {
         if (!panel_open)
         {
@@ -278,9 +350,14 @@ void FSFloaterKillFeed::drawOverlay()
         {
             example_symbol = FSCombatHitMarker::getEmojiForType(5) + " "; // Fire
         }
-        const std::string example_line = killfeed_maybe_shorten("Example Resident") + " killed " +
-            killfeed_maybe_shorten("Guy Linden") + " with " + example_symbol + "Death (100dmg, 0m)";
-        lines.assign((size_t)llmax((U32)1, (U32)max_lines), example_line);
+        // Make the agent the killer so the own-name color shows live as it is
+        // tuned; the victim stays a generic example in the default color.
+        std::vector<KFSegment> example_segs;
+        example_segs.push_back({ killfeed_name(gAgent.getID(), false), killfeed_name_color(gAgent.getID(), default_color) });
+        example_segs.push_back({ " killed ", default_color });
+        example_segs.push_back({ killfeed_maybe_shorten("Guy Linden"), default_color });
+        example_segs.push_back({ " with " + example_symbol + "Death (100dmg, 0m)", default_color });
+        seglines.assign((size_t)llmax((U32)1, (U32)max_lines), example_segs);
     }
 
     const LLFontGL* font = LLFontGL::getFontSansSerif();
@@ -307,7 +384,6 @@ void FSFloaterKillFeed::drawOverlay()
     const S32 view_height = gViewerWindow->getWorldViewRectScaled().getHeight();
     const F32 line_height = (F32)(font->getLineHeight() + 2);
     const F32 scale = llclamp((F32)text_scale, 0.5f, 3.f);
-    const LLColor4 color = text_color;
 
     gGL.pushMatrix();
     gGL.translatef((F32)view_width * llclamp((F32)screen_x, 0.f, 1.f),
@@ -315,10 +391,15 @@ void FSFloaterKillFeed::drawOverlay()
     gGL.scalef(scale, scale, 1.f);
 
     F32 y = 0.f;
-    for (const std::string& line : lines)
+    for (const std::vector<KFSegment>& segs : seglines)
     {
-        font->renderUTF8(line, 0, 0.f, y, color,
-                         LLFontGL::LEFT, LLFontGL::TOP, font_style, LLFontGL::DROP_SHADOW_SOFT);
+        F32 x = 0.f;
+        for (const KFSegment& seg : segs)
+        {
+            font->renderUTF8(seg.text, 0, x, y, seg.color,
+                             LLFontGL::LEFT, LLFontGL::TOP, font_style, LLFontGL::DROP_SHADOW_SOFT);
+            x += font->getWidthF32(seg.text);
+        }
         y -= line_height;
     }
 

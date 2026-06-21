@@ -142,6 +142,7 @@ LLAgentCamera::LLAgentCamera() :
     mAnimationFocusStartGlobal(),
     mAnimationTimer(),
     mAnimationDuration(0.33f),
+    mNextAnimationDuration(-1.f),
 
     mCameraFOVZoomFactor(0.f),
     mCameraCurrentFOVZoomFactor(0.f),
@@ -1544,8 +1545,30 @@ void LLAgentCamera::updateCamera()
 
             // ...adjust position for animation
             F32 smooth_fraction_of_animation = llsmoothstep(0.0f, 1.0f, fraction_of_animation);
-            camera_pos_global = lerp(mAnimationCameraStartGlobal, camera_target_global, smooth_fraction_of_animation);
-            mFocusGlobal = lerp(mAnimationFocusStartGlobal, focus_target_global, smooth_fraction_of_animation);
+
+            // In the aim modes (mouselook/OTS) the camera is rigidly attached to the
+            // avatar's frame, so a turn or strafe during the swap must carry the
+            // animation start with it. Otherwise the start stays pinned in world space
+            // while the live target tracks the yaw, and the look freezes/turns away
+            // from where you are aiming until the swap finishes. Re-anchor the start
+            // points to the avatar's current frame: translate by how far the root has
+            // moved and rotate by how far the agent has turned since the swap began.
+            LLVector3d cam_start = mAnimationCameraStartGlobal;
+            LLVector3d focus_start = mAnimationFocusStartGlobal;
+            if (mCameraMode == CAMERA_MODE_MOUSELOOK || mCameraMode == CAMERA_MODE_OTS)
+            {
+                const LLQuaternion delta_rot = ~mAnimationStartAgentRot * gAgent.getFrameAgent().getQuaternion();
+                const LLVector3d   root_now  = gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
+                LLVector3 cam_off(cam_start   - mAnimationStartRootGlobal); // explicit LLVector3(LLVector3d)
+                LLVector3 foc_off(focus_start - mAnimationStartRootGlobal);
+                cam_off = cam_off * delta_rot;                             // rotate offset with the avatar
+                foc_off = foc_off * delta_rot;
+                cam_start   = root_now + LLVector3d(cam_off);              // explicit LLVector3d(LLVector3)
+                focus_start = root_now + LLVector3d(foc_off);
+            }
+
+            camera_pos_global = lerp(cam_start, camera_target_global, smooth_fraction_of_animation);
+            mFocusGlobal = lerp(focus_start, focus_target_global, smooth_fraction_of_animation);
         }
         else
         {
@@ -1995,7 +2018,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
             LLVector4a ray_start, ray_end, hit_pos;
             ray_start.load3(pivot.mV);
             ray_end.load3(cam_pos_agent.mV);
-            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit_pos))
+            if (gPipeline.lineSegmentIntersectWorldGeometry(ray_start, ray_end, &hit_pos, true /*skip_phantom*/))
             {
                 LLVector3 hit(hit_pos.getF32ptr());
                 F32 hit_dist = (hit - pivot).length();
@@ -2656,7 +2679,7 @@ void LLAgentCamera::changeCameraToDefault()
 // instead of the avatar's eye position.
 // Avatar rendering is handled explicitly in needsRenderAvatar() and needsRenderHead().
 //-----------------------------------------------------------------------------
-void LLAgentCamera::changeCameraToOTS()
+void LLAgentCamera::changeCameraToOTS(bool animate)
 {
     if (mCameraMode != CAMERA_MODE_OTS)
     {
@@ -2679,13 +2702,20 @@ void LLAgentCamera::changeCameraToOTS()
             gAgentAvatarp->updateAttachmentVisibility(CAMERA_MODE_THIRD_PERSON);
         }
 
-        // Start the camera animation LAST, after mCameraMode is OTS and after
-        // changeCameraToMouselook(false) has cleared mCameraAnimating via its
-        // animate=false branch. The rendered camera is still at the old
-        // (third-person) position this frame, so startCameraAnimation snapshots
-        // that as the start point and updateCamera lerps to the OTS shoulder
-        // target over ZoomTime seconds — matching the mouselook transition feel.
-        startCameraAnimation();
+        if (animate)
+        {
+            // Start the camera animation LAST, after mCameraMode is OTS. The
+            // rendered camera is still at the old position this frame, so
+            // startCameraAnimation snapshots it as the start and updateCamera
+            // lerps to the OTS shoulder target over ZoomTime seconds.
+            startCameraAnimation();
+        }
+        else
+        {
+            // Snap instantly (used by ADS so the mode swap is fast).
+            mCameraAnimating = false;
+            gAgent.endAnimationUpdateUI();
+        }
     }
 }
 
@@ -2982,7 +3012,19 @@ void LLAgentCamera::startCameraAnimation()
 {
     mAnimationCameraStartGlobal = getCameraPositionGlobal();
     mAnimationFocusStartGlobal = mFocusGlobal;
-    setAnimationDuration(gSavedSettings.getF32("ZoomTime"));
+    // Snapshot the avatar pose so the start points can be re-anchored to the
+    // avatar's frame while the animation plays (see updateCamera).
+    mAnimationStartRootGlobal = gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
+    mAnimationStartAgentRot = gAgent.getFrameAgent().getQuaternion();
+    if (mNextAnimationDuration >= 0.f)
+    {
+        setAnimationDuration(mNextAnimationDuration); // one-shot override (e.g. fast ADS swap)
+        mNextAnimationDuration = -1.f;
+    }
+    else
+    {
+        setAnimationDuration(gSavedSettings.getF32("ZoomTime"));
+    }
     mAnimationTimer.reset();
     mCameraAnimating = true;
 }

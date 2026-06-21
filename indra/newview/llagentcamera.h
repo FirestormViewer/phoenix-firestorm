@@ -104,11 +104,16 @@ public:
     void            changeCameraToThirdPerson(bool animate = true);
     void            changeCameraToCustomizeAvatar(); // Trigger transition animation
     void            changeCameraToFollow(bool animate = true);  // Ventrella
-    void            changeCameraToOTS();             // Over-the-shoulder aim mode
+    void            changeCameraToOTS(bool animate = true); // Over-the-shoulder aim mode (animate=false snaps, for ADS)
     void            changeCameraFromOTS();           // Exit OTS back to third person
     bool            cameraThirdPerson() const       { return (mCameraMode == CAMERA_MODE_THIRD_PERSON && mLastCameraMode == CAMERA_MODE_THIRD_PERSON); }
     // Also true for OTS — reuses mouselook input and UI behaviour; camera position handled separately.
-    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && mLastCameraMode == CAMERA_MODE_MOUSELOOK) || mCameraMode == CAMERA_MODE_OTS; }
+    // The mLastCameraMode guard filters the third-person->mouselook entry animation, but it must NOT
+    // exclude the OTS<->mouselook ADS swap: during that swap mCameraMode is MOUSELOOK while
+    // mLastCameraMode is still OTS, and reporting third-person there flips the held movement keys from
+    // slide to turn (keys.xml first_person=slide vs third_person=turn) — yawing the avatar mid-swap.
+    // Treat "came from OTS" as still mouselook so the swap stays first-person input throughout.
+    bool            cameraMouselook() const         { return (mCameraMode == CAMERA_MODE_MOUSELOOK && (mLastCameraMode == CAMERA_MODE_MOUSELOOK || mLastCameraMode == CAMERA_MODE_OTS)) || mCameraMode == CAMERA_MODE_OTS; }
     bool            cameraCustomizeAvatar() const   { return (mCameraMode == CAMERA_MODE_CUSTOMIZE_AVATAR /*&& !mCameraAnimating*/); }
     bool            cameraFollow() const            { return (mCameraMode == CAMERA_MODE_FOLLOW && mLastCameraMode == CAMERA_MODE_FOLLOW); }
     bool            cameraOTS() const               { return mCameraMode == CAMERA_MODE_OTS; }
@@ -228,14 +233,24 @@ public:
     void            setCameraAnimating(bool b)          { mCameraAnimating = b; }
     bool            getCameraAnimating()                { return mCameraAnimating; }
     void            setAnimationDuration(F32 seconds);
+    // One-shot override for the NEXT startCameraAnimation's duration (seconds);
+    // < 0 = use the default ZoomTime. Used by ADS for a fast, configurable swap.
+    void            setNextCameraAnimationDuration(F32 seconds) { mNextAnimationDuration = seconds; }
     void            startCameraAnimation();
     void            stopCameraAnimation();
 private:
     LLFrameTimer    mAnimationTimer;    // Seconds that transition animation has been active
     F32             mAnimationDuration; // In seconds
+    F32             mNextAnimationDuration; // one-shot override for the next animation (< 0 = use ZoomTime)
     bool            mCameraAnimating;                   // Camera is transitioning from one mode to another
     LLVector3d      mAnimationCameraStartGlobal;        // Camera start position, global coords
     LLVector3d      mAnimationFocusStartGlobal;         // Camera focus point, global coords
+    // Avatar pose at animation start, used to re-anchor the start points to the
+    // avatar's frame each step so turning/strafing during the swap (e.g. the ADS
+    // OTS<->mouselook glide) keeps the view tracking the avatar instead of staying
+    // pinned to a stale world direction.
+    LLVector3d      mAnimationStartRootGlobal;          // avatar root pos at animation start
+    LLQuaternion    mAnimationStartAgentRot;            // agent frame rotation at animation start
 
     //--------------------------------------------------------------------
     // Focus

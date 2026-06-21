@@ -7,7 +7,7 @@
 //
 
 // Bridge platform
-string BRIDGE_VERSION = "2.32"; // This should match fslslbridge.cpp
+string BRIDGE_VERSION = "2.33"; // This should match fslslbridge.cpp
 string gLatestURL;
 integer gViewerIsFirestorm;
 integer gTryHandshakeOnce = TRUE;
@@ -53,6 +53,15 @@ key gAO_CollarKey;
 // Bridge platform helper functions
 //
 
+// Tag the combat event with whether its target is an avatar (cheap agent test)
+// so the viewer can keep object hits out of the hitmarker, then forward it.
+combatSay(string ev)
+{
+    integer isAgent = (llGetAgentSize((key)llJsonGetValue(ev, ["target"])) != ZERO_VECTOR);
+    ev = llJsonSetValue(ev, ["agent"], (string)isAgent);
+    llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+}
+
 kfForwardDeath(string ev)
 {
     // Resolve the weapon name while the objects still exist. Projectiles
@@ -85,7 +94,7 @@ kfForwardDeath(string ev)
         gKFTypes = llDeleteSubList(gKFTypes, kfidx, kfidx + 1);
     }
 
-    llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+    combatSay(ev);
 }
 
 combatForward(string ev)
@@ -100,7 +109,7 @@ combatForward(string ev)
         }
         else if (gCombatHitsOn && (key)llJsonGetValue(ev, ["owner"]) == gOwner)
         {
-            llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+            combatSay(ev);
         }
     }
     else if (etype == "DAMAGE")
@@ -123,7 +132,7 @@ combatForward(string ev)
         }
         if (gCombatHitsOn && (key)llJsonGetValue(ev, ["owner"]) == gOwner)
         {
-            llOwnerSay("<bridgeKillFeed>" + ev + "</bridgeKillFeed>");
+            combatSay(ev);
         }
     }
 }

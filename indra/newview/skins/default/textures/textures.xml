@@ -781,6 +781,7 @@ with the same filename but different name
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
   <texture name="login_fs_logo"  file_name="windows/login_fs_logo.png" preload="true" />
+  <texture name="SkoomaSplashBG"  file_name="skooma_splash_bg.png" preload="true" />
   <texture name="FSCrosshairDot"  file_name="fs_crosshair_dot.png" preload="true" />
   <texture name="FSCrosshairArrows"  file_name="fs_crosshair_arrows.png" preload="true" />
   <texture name="FSHitMarker"  file_name="fs_hitmarker.png" preload="true" />
