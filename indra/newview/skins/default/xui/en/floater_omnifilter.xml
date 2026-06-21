@@ -15,7 +15,7 @@
  single_instance="true"
  reuse_instance="true"
  title="Omnifilter Rules Editor"
- width="700">
+ width="750">
 	<floater.string name="OmnifilterNewNeedle">
 		NEW RULE
 	</floater.string>
