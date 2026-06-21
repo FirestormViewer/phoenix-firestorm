@@ -11,10 +11,20 @@
 	</floater.string>
 	<panel name="needle_rule_set_controls">
 		<text name="lbl_ruleset" value="Zest. reguł:" />
-		<combo_box name="cmb_rule_sets" tool_tip="Wybierz zestaw reguł Wszystkofiltra, którego chcesz użyć." />
-		<button name="btn_rule_set_new" label="Nowy zestaw reguł" tool_tip="Utwórz nowy, pusty zestaw reguł Wszystkofiltra." />
-		<button name="btn_rule_set_clone" label="Klonuj zestaw reguł" tool_tip="Utwórz klon bieżącego zestawu reguł Wszystkofiltra." />
-		<button name="btn_rule_set_remove" label="Usuń zestaw reguł" tool_tip="Usuń bieżący zestaw reguł Wszystkofiltra."/>
+		<layout_stack name="rule_set_buttons_stack">
+			<layout_panel name="rule_set_group_1">
+				<combo_box name="cmb_rule_sets" tool_tip="Wybierz zestaw reguł Wszystkofiltra, którego chcesz użyć." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button name="btn_rule_set_new" label="Nowy zestaw reguł" tool_tip="Utwórz nowy, pusty zestaw reguł Wszystkofiltra." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button name="btn_rule_set_clone" label="Klonuj zestaw reguł" tool_tip="Utwórz klon bieżącego zestawu reguł Wszystkofiltra." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button name="btn_rule_set_remove" label="Usuń zestaw reguł" tool_tip="Usuń bieżący zestaw reguł Wszystkofiltra." />
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">

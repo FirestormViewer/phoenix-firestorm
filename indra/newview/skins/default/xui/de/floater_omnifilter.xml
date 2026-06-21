@@ -11,10 +11,20 @@
 	</floater.string>
 	<panel name="needle_rule_set_controls">
 		<text name="lbl_ruleset" value="Regelsets:"/>
-		<combo_box name="cmb_rule_sets" tool_tip="Regelset für den Omni-Filter auswählen."/>
-		<button name="btn_rule_set_new" label="Neues Regelset" tool_tip="Neues, leeres Regelset für den Omni-Filter erstellen."/>
-		<button name="btn_rule_set_clone" label="Regelset klonen" tool_tip="Erstellt einen Klon des aktuellen Omni-Filter-Regelsets."/>
-		<button name="btn_rule_set_remove" label="Regelset löschen" tool_tip="Löscht das aktuelle Omni-Filter-Regelset."/>
+		<layout_stack name="rule_set_buttons_stack">
+			<layout_panel name="rule_set_group_1">
+				<combo_box name="cmb_rule_sets" tool_tip="Regelset für den Omni-Filter auswählen." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button name="btn_rule_set_new" label="Neues Regelset" tool_tip="Neues, leeres Regelset für den Omni-Filter erstellen." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button name="btn_rule_set_clone" label="Regelset klonen" tool_tip="Erstellt einen Klon des aktuellen Omni-Filter-Regelsets." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button name="btn_rule_set_remove" label="Regelset löschen" tool_tip="Löscht das aktuelle Omni-Filter-Regelset." />
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
