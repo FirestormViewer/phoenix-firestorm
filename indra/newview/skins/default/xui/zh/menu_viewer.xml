@@ -101,7 +101,7 @@
 		<menu_item_check label="本地聊天" name="Nearby Chat" />
 		<menu_item_check label="人員" name="People" />
 		<menu_item_check label="聊天" name="Conversations" />
-		<menu_item_call label="全方位過濾器" name="Omnifilter" />
+		<menu_item_call label="萬能過濾器" name="Omnifilter" />
 		<menu_item_check label="快捷手勢" name="Gestures" />
 		<menu_item_call label="Flickr..." name="Flickr" />
 		<menu_item_call label="Primfeed..." name="Primfeed"/>

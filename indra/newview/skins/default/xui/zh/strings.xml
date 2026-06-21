@@ -6298,7 +6298,7 @@ support@secondlife.com.
 		直接發佈到您的Primfeed賬戶。
 	</string>
 	<string name="Command_Omnifilter_Label">
-		全方位過濾器
+		萬能過濾器
 	</string>
 	<string name="Command_AvatarAlign_Label">
 		化身對齊
@@ -6506,7 +6506,7 @@ support@secondlife.com.
 		顯示信標
 	</string>
 	<string name="Command_Omnifilter_Tooltip">
-		編輯全方位過濾器規則
+		編輯萬能過濾器規則
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		位於你的底部工具列
@@ -7591,6 +7591,6 @@ SecondLife.com網站的「支援」部分
 		最大值
 	</string>
 	<string name="OmnifilterReplacement">
-		全方位過濾器替換：[REPLACEMENT]
+		萬能過濾器替換：[REPLACEMENT]
 	</string>
 </strings>

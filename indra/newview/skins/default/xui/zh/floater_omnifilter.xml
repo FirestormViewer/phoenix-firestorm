@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="omnifilter" title="全方位過濾器規則編輯">
+<floater name="omnifilter" title="萬能過濾器規則編輯">
+	<floater.string name="OmnifilterNewNeedle">
+		新規則
+	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		新規則集
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		規則集副本
+	</floater.string>
+	<panel name="needle_rule_set_controls">
+		<text name="lbl_ruleset" value="規則集：" />
+		<combo_box name="cmb_rule_sets" tool_tip="選擇要使用的萬能過濾器規則集。" />
+		<button name="btn_rule_set_new" label="新增規則集" tool_tip="建立一個新的空白萬能過濾器規則集。" />
+		<button name="btn_rule_set_clone" label="複製規則集" tool_tip="建立目前萬能過濾器規則集的副本。" />
+		<button name="btn_rule_set_remove" label="刪除規則集" tool_tip="刪除目前的萬能過濾器規則集。"/>
+	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
-			<check_box name="enable_omnifilter" label="啟用全方位過濾器"/>
+			<check_box name="enable_omnifilter" label="啟用萬能過濾器"/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="啟用"/>
 				<fs_scroll_list.columns name="needle_name" label="規則"/>
