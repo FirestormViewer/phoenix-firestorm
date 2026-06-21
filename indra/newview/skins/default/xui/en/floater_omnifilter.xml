@@ -6,7 +6,7 @@
  can_close="true"
  height="425"
  min_height="348"
- min_width="668"
+ min_width="718"
  layout="topleft"
  name="omnifilter"
  help_topic="omnifilter"
@@ -15,7 +15,7 @@
  single_instance="true"
  reuse_instance="true"
  title="Omnifilter Rules Editor"
- width="750">
+ width="718">
 	<floater.string name="OmnifilterNewNeedle">
 		NEW RULE
 	</floater.string>
@@ -44,41 +44,65 @@
 		 top="0"
 		 valign="center"
 		 value="Rule Sets:"/>
-		<combo_box
-		 height="20"
-		 layout="topleft"
-		 left_pad="4"
-		 follows="left|top"
-		 name="cmb_rule_sets"
-		 tool_tip="Choose the Omnifilter Rule Set to use."
-		 width="150"/>
-		<button
-		 name="btn_rule_set_new"
-		 layout="topleft"
-		 follows="left|top"
-		 width="150"
-		 height="20"
-		 left_pad="4"
-		 label="New Rule Set"
-		 tool_tip="Create a new blank Omnifilter Rule Set."/>
-		<button
-		 name="btn_rule_set_clone"
-		 layout="topleft"
-		 follows="left|top"
-		 width= "150"
-		 height="20"
-		 left_pad="4"
-		 label="Clone Rule Set"
-		 tool_tip="Create a clone of the current Omnifilter Rule Set."/>
-		<button
-		 name="btn_rule_set_remove"
-		 layout="topleft"
-		 follows="left|top"
-		 width= "150"
-		 height="20"
-		 left_pad="4"
-		 label="Remove Rule Set"
-		 tool_tip="Remove the current Omnifilter Rule Set."/>
+		<layout_stack
+		 name="rule_set_buttons_stack"
+		 orientation="horizontal"
+		 left="84"
+		 top="0"
+		 right="-4"
+		 height="24"
+		 follows="left|right|top"
+		 layout="topleft">
+			<layout_panel
+			 width="150"
+			 layout="topleft"
+			 follows="all"
+			 name="rule_set_group_1">
+				<combo_box
+				 name="cmb_rule_sets"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width="150"
+				 height="20"
+				 left="0"
+				 top="0"
+				 tool_tip="Choose the Omnifilter Rule Set to use."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button
+				 name="btn_rule_set_new"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width="150"
+				 height="20"
+				 left="0"
+				 top="0"
+				 label="New Rule Set"
+				 tool_tip="Create a new blank Omnifilter Rule Set."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button
+				 name="btn_rule_set_clone"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "150"
+				 height="20"
+				 top="0"
+				 label="Clone Rule Set"
+				 tool_tip="Create a clone of the current Omnifilter Rule Set."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button
+				 name="btn_rule_set_remove"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "150"
+				 height="20"
+				 top="0"
+				 label="Remove Rule Set"
+				 tool_tip="Remove the current Omnifilter Rule Set."/>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<layout_stack
 	 name="needle_list_stack"
