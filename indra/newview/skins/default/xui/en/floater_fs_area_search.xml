@@ -329,21 +329,21 @@
 			 left="10"
 			 name="filter_locked"
 			 label="Locked"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 left_pad="0"
 			 name="filter_physical"
 			 label="Physical"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 name="filter_phantom"
 			 label="Phantom"
 			 left_pad="0"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 top_pad="10"
@@ -351,21 +351,21 @@
 			 name="filter_temporary"
 			 label="Temporary"
 			 left="10"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 name="filter_attachment"
 			 label="Attachment"
 			 left_pad="0"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 name="filter_moap"
 			 label="Shared Media"
 			 left_pad="0"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 top_pad="10"
@@ -373,21 +373,21 @@
 			 left="10"
 			 name="filter_perm_copy"
 			 label="Copy"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 left_pad="0"
 			 name="filter_perm_modify"
 			 label="Modify"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 left_pad="0"
 			 name="filter_perm_transfer"
 			 label="Transfer"
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 top_pad="10"
@@ -396,7 +396,7 @@
 			 name="filter_reflection_probe"
 			 label="Reflection Probes"
 			 tool_tip="Includes manual probes only, not auto-probes. Only includes mirror probes if mirrors are enabled in graphics preferences. If reflection coverage is set to 'none', or the probe is not baked, objects may not be identified."
-			 width="100"/>
+			 width="120"/>
 			<check_box
 			 follows="top|left"
 			 height="20"

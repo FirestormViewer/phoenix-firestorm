@@ -1407,7 +1407,7 @@
          follows="left|top"
          height="16"
          name="RotationStepText2"
-         width="270">
+         width="280">
           degrees, when not using 'snap to grid'
         </text>
         <check_box

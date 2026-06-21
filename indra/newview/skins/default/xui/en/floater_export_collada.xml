@@ -76,7 +76,7 @@
 	 layout="topleft"
 	 left="4"
 	 name="OptionsText"
-	 top_pad="42"
+	 top_pad="38"
 	 width="235">
 		Options:
 	</text>
@@ -88,7 +88,7 @@
 	 layout="topleft"
 	 left_delta="8"
 	 name="export_textures_check"
-	 top_pad="2"
+	 top_pad="6"
 	 width="235">
 		<check_box.commit_callback
 		 function="ColladaExport.TextureExport" />
