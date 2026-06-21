@@ -4,7 +4,7 @@
 		Kolor i wygląd
 	</text>
 	<spinner label="Grubość (px)" name="guide_thickness" />
-	<slider label="Przezroczystość" name="guide_opacity" />
+	<slider label="Przezr." name="guide_opacity" />
 	<text name="style_label">
 		Styl linii
 	</text>

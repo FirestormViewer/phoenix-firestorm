@@ -6,12 +6,6 @@
 	<floater.string name="Hour">
 		godz.
 	</floater.string>
-	<floater.string name="Minutes">
-		[MINUTES] min.
-	</floater.string>
-	<floater.string name="Minute">
-		min.
-	</floater.string>
 	<floater.string name="Seconds">
 		[SECONDS] sek.
 	</floater.string>
@@ -132,7 +126,7 @@
 				Wczytywanie...
 			</text>
 			<button label="Kup działkę" name="Buy Land..."/>
-			<button label="Sprzedaż przez Lindenów" name="Linden Sale..." tool_tip="Działka musi mieć Właściciela, zawartość oraz nie może być wystawiona na Aukcję."/>
+			<button label="Sprzedaż przez LL" name="Linden Sale..." tool_tip="Działka musi mieć Właściciela, zawartość oraz nie może być wystawiona na Aukcję."/>
 			<button label="Skrypty" name="Scripts..."/>
 			<button label="Kup dla Grupy" name="Buy For Group..."/>
 			<button label="Kup Przepustkę" name="Buy Pass..." tool_tip="Przepustka udostępnia tymczasowy wstęp na działkę."/>
@@ -405,28 +399,28 @@ teksturę:
 			</text>
 			<check_box label="Ogranicz dźwięki gestów i obiektów do obszaru tej działki" name="check sound local"/>
 			<text name="Avatar Sounds:">
-				Dźwięki awatarów:
+				Dźwięki osób:
 			</text>
 			<check_box label="Wszyscy" name="all av sound check"/>
 			<check_box label="Grupa" name="group av sound check"/>
 			<text name="Voice settings:">
-				Rozmowy głosowe:
+				Głos:
 			</text>
-			<check_box label="Rozmowy włączone" name="parcel_enable_voice_channel"/>
-			<check_box label="Rozmowy włączone (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
+			<check_box label="Włączony" name="parcel_enable_voice_channel"/>
+			<check_box label="Włączony (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Ogranicz komunikację głosową do obszaru tej działki" name="parcel_enable_voice_channel_local"/>
 			<check_box label="Ogranicz MOAP do obecnej działki" name="obscure_moap" tool_tip="Media na primach znajdujących się poza tą działką nie powinny odtwarzać się automatycznie dla rezydentów będących na niej - i odwrotnie." />
 		</panel>
 		<panel label="Dostęp" name="land_access_panel">
 			<panel.string name="access_estate_defined">
-				(Zdefiniowane przez Majątek)
+				(ustawione przez Majątek)
 			</panel.string>
 			<panel.string name="estate_override">
 				Jedna lub więcej z tych opcji ustawiona jest z poziomu Majątku
 			</panel.string>
 			<check_box label="Każdy może odwiedzać (brak zaznaczenia = widoczne linie zakazu)" name="public_access"/>
 			<check_box label="Osoba musi mieć 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
-			<check_box label="Osoba musi mieć dane płatnicze w systemie Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+			<check_box label="Osoba musi mieć dane płatnicze w systemie LL [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
 			<check_box label="Umożliwiaj wejście bez ograniczeń grupie [GROUP]" name="GroupCheck" tool_tip="Ustaw Grupę w głównej zakładce."/>
 			<check_box label="Sprzedaj przepustki:" name="PassCheck" tool_tip="Otwórz tymczasowy dostęp do tej działki"/>
 			<combo_box name="pass_combo">

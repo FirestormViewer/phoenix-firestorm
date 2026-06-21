@@ -29,14 +29,14 @@
 	<text name="bad_image_text">
 		Nie można wczytać obrazu.
 
-Spróbuj zapisać obraz jako 24 bitową Targa (.tga).
+Spróbuj zapisać plik jako 24-bit Targa (.tga).
 	</text>
 	<text name="uploaded_size_text">
 		Przesłano: [X_RES]x[Y_RES], [ALPHA]
 	</text>
 	<check_box label="Tryb bezstratny" name="lossless_check"/>
-	<check_box left_delta="158" name="temp_check" label="Tymczas. (darmowy)" tool_tip="Ustawia obraz na serwerze jako tymczasowy, a zatem jako darmowy, ale będzie on istnieć tylko przez krótki okres - po czym zostanie skasowany." />
+	<check_box left_delta="158" name="temp_check" label="Tymczas. (0 L$)" tool_tip="Ustawia obraz na serwerze jako tymczasowy, a zatem jako darmowy, ale będzie on istnieć tylko przez krótki okres - po czym zostanie skasowany." />
 	<button label="Prześlij ([AMOUNT]L$)" name="ok_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>
-	<text name="info_text" value="= tu pojawią się informacje o koszcie przesyłania =" />
+	<text name="info_text" value="= tu będzie info o koszcie przesyłania =" />
 </floater>

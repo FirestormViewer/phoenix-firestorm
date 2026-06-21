@@ -19,7 +19,7 @@
 	<text name="autoreplace_replacement_txt">
 		Zamiennik:
 	</text>
-	<button name="autoreplace_save_entry" label="Zapisz pozycję" tool_tip="Zapisz tą pozycję."/>
-	<button name="autoreplace_save_changes" label="Zapisz zmiany" tool_tip="Zapisz wszystkie zmiany."/>
+	<button name="autoreplace_save_entry" label="Zapisz słowo" tool_tip="Zapisz tą pozycję."/>
+	<button name="autoreplace_save_changes" label="Zapisz" tool_tip="Zapisz wszystkie zmiany."/>
 	<button name="autoreplace_cancel" label="Anuluj" tool_tip="Anuluj wszytkie zmiany."/>
 </floater>

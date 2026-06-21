@@ -52,5 +52,5 @@
 	<button name="btn_remove" label="Usuń" />
 	<button name="btn_reload" label="Przeładuj" />
 	<button name="btn_clear" label="Czyść" />
-	<button name="btn_rez" label="Rezuj wybrane" tool_tip="Utwórz czysty mesz w świecie i zastosuj na nim Twoim wybranym lokalnym meszem. Tworzy to pusty obiekt w świecie." />
+	<button name="btn_rez" label="Rezuj wybr." tool_tip="Utwórz czysty mesz w świecie i zastosuj na nim Twoim wybranym lokalnym meszem. Tworzy to pusty obiekt w świecie." />
 </floater>

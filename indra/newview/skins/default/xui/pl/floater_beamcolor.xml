@@ -13,7 +13,7 @@
 	<text name="beamcolor_text2">
 		Podgląd
 	</text>
-	<slider name="BeamColor_Speed" label="Prędkość rotacji:" tool_tip="Kontroluje szybkość cyklu zmiany kolorów" />
+	<slider name="BeamColor_Speed" label="Pręd. rotacji:" tool_tip="Kontroluje szybkość cyklu zmiany kolorów" />
 	<button label="Zapisz" name="BeamColor_Save" />
 	<button label="Wczytaj" name="BeamColor_Load" />
 	<button label="Anuluj" name="BeamColor_Cancel" />

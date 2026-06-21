@@ -7,7 +7,7 @@
 	<layout_stack name="ls_account_specific_label">
 		<layout_panel name="lp_account_specific_label">
 			<text name="account_specific_label">
-				Jesteś teraz wylogowany/y. Pamiętaj, że ustawienia specyficzne dla Twojego konta mogą być archiwizowane i przywracane tylko wtedy, gdy jesteś zalogowany/a. Niemniej, te odnoszące się do wszystkich użytkowników mogą być archiwizowane bez logowania się.
+				Jesteś teraz wylogowany/y. Ustawienia specyficzne dla Twojego konta mogą być archiwizowane i przywracane tylko wtedy, gdy jesteś zalogowany/a. Te odnoszące się do wszystkich użytkowników mogą być archiwizowane bez logowania się.
 			</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">
@@ -123,7 +123,7 @@
 			<check_box label="Przywróć ustawienia współdzielone" name="restore_global_settings_checkbox" />
 			<check_box label="Przywróć ustawienia przypisane do konta" name="restore_per_account_settings_checkbox" />
 			<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
-			<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
+			<button width="165" label="Przywróć z kopii" name="restore_settings" />
 		</layout_panel>
 	</layout_stack>
 </panel>

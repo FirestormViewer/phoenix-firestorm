@@ -16,8 +16,8 @@
 		Wiele tekstur
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Szafa" name="inventory" width="51" />
-		<radio_item label="Lokaln." name="local" width="60" />
+		<radio_item label="Szafa" name="inventory" width="55" />
+		<radio_item label="Lok." name="local" />
 		<radio_item label="BOM" name="bake" />
 	</radio_group>
 	<text name="size_lbl">

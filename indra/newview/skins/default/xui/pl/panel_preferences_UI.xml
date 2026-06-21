@@ -42,13 +42,13 @@
     </panel>
     <panel label="Nakładka 2D" name="ui-2d-overlay">
         <text name="UI Size:" width="120">
-            Skalowanie interfejsu:
+            Skala interfejsu:
         </text>
         <text name="HUD Size:" width="120">
-            Skalowanie HUD-ów:
+            Skala HUD-ów:
         </text>
         <text name="ScriptDialogsPerObjectLabel" width="185">
-            Komunikatów skryptów na obiekt:
+            Komunikaty skryptu na obiekt:
         </text>
         <combo_box name="ScriptDialogPerObjectDropdown">
             <combo_box.item label="Jeden na obiekt" name="ScriptDialogOption_0" />
@@ -58,7 +58,7 @@
             <combo_box.item label="Nieograniczone dla HUDów" name="ScriptDialogOption_4" />
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_5" />
         </combo_box>
-        <check_box label="Usuń przycisk &quot;Blokuj&quot;" name="FSRemoveScriptBlockButton" />
+        <check_box label="Usuń guzik &quot;Blokuj&quot;" name="FSRemoveScriptBlockButton" />
         <text name="ScriptDialogsPositionLabel" width="185">
             Pozycja komunikatów skryptów:
         </text>
@@ -237,7 +237,7 @@
         <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
         <check_box label="Nowy sposób powiadamiania o restarcie regionu" name="FSUseNewRegionRestartNotification" />
         <check_box label="Nie trzęś moim ekranem, gdy pojawia się informacja o restarcie regionu" name="FSNoScreenShakeOnRegionRestart" />
-        <check_box label="Wysyłaj info o restarcie regionu na kanał:" width="245" name="FSReportRegionRestartToChat" />
+        <check_box label="Info o restarcie regionu na kanał:" name="FSReportRegionRestartToChat" />
     </panel>
     <panel label="Czcionka" name="UI-font-tab">
         <text name="tooltip_textbox1">

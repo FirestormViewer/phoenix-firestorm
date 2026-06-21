@@ -12,7 +12,7 @@
 	<button tool_tip="Odśwież listę dostępnych tytułów grup" name="btnRefresh" />
 	<button name="btnSetRegion" label="Ten region" tool_tip="Przypisz bieżący region do wybranego tytułu" />
 	<button name="btnSetRegionManual" label="Wpisz region" tool_tip="Wpisz nazwę regionu do przypisania do wybranego tytułu" />
-	<button name="btnClearRegion" label="Wyczyść region" tool_tip="Usuń przypisanie regionu z wybranego tytułu" />
+	<button name="btnClearRegion" label="Czyść region" tool_tip="Usuń przypisanie regionu z wybranego tytułu" />
 	<button name="btnInfo" label="Info" tool_tip="Pokaż informacje o grupie związanej z wybranym tytułem" />
 	<button name="btnActivate" label="Aktywuj" tool_tip="Aktywuj wybrany tytuł grupy" />
 	<check_box name="use_default_title" label="Użyj domyślnego tytułu w regionach bez przypisania" tool_tip="Gdy pojawisz się w regionie do którego nie przypisano tytułu, to przełącz się na tytuł oznaczony jako domyślny. Domyślne &lt;Brak tytułu grupy&gt; nie dodaje żadnego taga grupy." />

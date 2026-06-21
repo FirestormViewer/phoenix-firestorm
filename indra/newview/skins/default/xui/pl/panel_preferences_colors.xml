@@ -226,8 +226,8 @@
                 Czcionka:
             </text>
 			<color_swatch name="preferences_search_font_color" tool_tip="Wybierz kolor czcionki dla podświetlenia wyników wyszukiwania w opcjach"/>
-			<text name="area_search_beacon_color_label" left="280">
-				Emiter śledzenia (np. przeszukiwania obszaru):
+			<text name="area_search_beacon_color_label">
+				Emiter śledzenia:
 			</text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Wybierz kolor emitera śledzenia, np. dla przeszukiwania obszaru" />
 			<text name="notecard_editor_color_label">

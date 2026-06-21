@@ -80,7 +80,7 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="Sortuj karty IM według typu:" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
+			<check_box name="FSAutoOrderIMTabs" label="Sortuj IM według typu:" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Grupy, Konferencje, IM" />
 				<combo_box.item name="group_im_conf" label="Grupy, IM, Konferencje" />
@@ -132,7 +132,7 @@
 			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie w pobliżu"/>
 			<check_box name="FSDontIgnoreAdHocFromFriends" label="Nie ignoruj zaproszeń do czatów konferencji od moich znajomych"/>
 			<text width="290" name="group_snooze_time_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
-				Długość tymczasowego wyciszenia czatu grupowego:
+				Długość tymczas. wyciszenia czatu grupowego:
 			</text>
 			<spinner name="GroupSnoozeTime" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi." />
 			<text name="group_snooze_time_seconds_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
