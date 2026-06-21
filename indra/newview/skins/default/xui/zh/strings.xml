@@ -6298,7 +6298,7 @@ support@secondlife.com.
 		直接發佈到您的Primfeed賬戶。
 	</string>
 	<string name="Command_Omnifilter_Label">
-		全方位過濾器
+		萬能過濾器
 	</string>
 	<string name="Command_AvatarAlign_Label">
 		化身對齊
@@ -6506,7 +6506,7 @@ support@secondlife.com.
 		顯示信標
 	</string>
 	<string name="Command_Omnifilter_Tooltip">
-		編輯全方位過濾器規則
+		編輯萬能過濾器規則
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		位於你的底部工具列
@@ -7495,38 +7495,11 @@ SecondLife.com網站的「支援」部分
 	<string name="font_unknown">
 		未知字型
 	</string>
-	<string name="font_fonts.xml">
-		Deja Vu
-	</string>
 	<string name="font_fonts_ubuntu.xml">
 		Ubuntu 字型家族
 	</string>
-	<string name="font_fonts_liberation.xml">
-		Liberation
-	</string>
-	<string name="font_fonts_droid.xml">
-		Droid Sans
-	</string>
-	<string name="font_fonts_mobi.xml">
-		Mobi Sans
-	</string>
-	<string name="font_fonts_roboto.xml">
-		Roboto
-	</string>
-	<string name="font_fonts_dyslexia.xml">
-		OpenDyslexic
-	</string>
 	<string name="font_fonts_deja_vu_all_caps.xml">
 		Deja Vu 全大寫
-	</string>
-	<string name="font_fonts_noto.xml">
-		Noto Sans
-	</string>
-	<string name="font_fonts_celestia_medium_redux.xml">
-		Celestia Medium Redux
-	</string>
-	<string name="font_fonts_cascadia_code.xml">
-		Cascadia Code
 	</string>
 	<string name="mode_unknown">
 		未知模式
@@ -7618,6 +7591,6 @@ SecondLife.com網站的「支援」部分
 		最大值
 	</string>
 	<string name="OmnifilterReplacement">
-		全方位過濾器替換：[REPLACEMENT]
+		萬能過濾器替換：[REPLACEMENT]
 	</string>
 </strings>

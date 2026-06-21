@@ -305,6 +305,12 @@ static void update_tp_display(bool minimized)
     static LLCachedControl<F32> teleport_arrival_delay(gSavedSettings, "TeleportArrivalDelay");
     static LLCachedControl<F32> teleport_local_delay(gSavedSettings, "TeleportLocalDelay");
 
+    // <FS:PP> Speed optimisation
+    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens");
+    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP");
+    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues");
+    // </FS:PP>
+
     S32 attach_count = 0;
     if (isAgentAvatarValid())
     {
@@ -337,7 +343,10 @@ static void update_tp_display(bool minimized)
             const std::string& msg = LLAgent::sTeleportProgressMessages["pending"];
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
             }
@@ -356,12 +365,18 @@ static void update_tp_display(bool minimized)
                 // If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
                 // replicating the behavior here. -Zi
                 LLViewerCamera::instance().setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
-                if (gSavedSettings.getBOOL("FSResetCameraOnTP"))
+                // <FS:PP> Speed optimisation
+                // if (gSavedSettings.getBOOL("FSResetCameraOnTP"))
+                if (reset_camera_on_tp())
+                // </FS:PP>
                 {
                     gSavedSettings.setF32("CameraAngle", LLViewerCamera::instance().getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
                 }
                 // also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
-                LLVector3 vTemp = gSavedSettings.getVector3("_NACL_MLFovValues");
+                // <FS:PP> Speed optimisation
+                // LLVector3 vTemp = gSavedSettings.getVector3("_NACL_MLFovValues");
+                LLVector3 vTemp = nacl_ml_fov_values();
+                // </FS:PP>
                 vTemp.mV[VZ] = 0.0f;
                 gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
             }
@@ -374,7 +389,10 @@ static void update_tp_display(bool minimized)
             FSData::instance().selectNextMOTD();
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
                 gViewerWindow->setProgressMessage(gAgent.mMOTD);
@@ -641,14 +659,14 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
     LLImageGL::updateStats(gFrameTimeSeconds);
 
     static LLCachedControl<S32> avatar_name_tag_mode(gSavedSettings, "AvatarNameTagMode", 1);
-    static LLCachedControl<bool> name_tag_show_group_titles(gSavedSettings, "NameTagShowGroupTitles", true);
+    static LLCachedControl<S32> name_tag_show_group_titles(gSavedSettings, "GroupTitlesTagMode", 2 /*all group tags*/);
 // <FS:CR> Aurora sim
     //LLVOAvatar::sRenderName = avatar_name_tag_mode;
-    //LLVOAvatar::sRenderGroupTitles = name_tag_show_group_titles && avatar_name_tag_mode > 0;
+    //LLVOAvatar::sRenderGroupTitles = avatar_name_tag_mode > 0 ? name_tag_show_group_titles : 0;;
     auto& world_instance = LLWorld::instance();
     LLVOAvatar::sRenderName = avatar_name_tag_mode > world_instance.getAllowRenderName() ? world_instance.getAllowRenderName() : avatar_name_tag_mode;
+    LLVOAvatar::sRenderGroupTitles = LLVOAvatar::sRenderName > 0 ? name_tag_show_group_titles : 0;
 // <FS:CR> Aurora sim
-    LLVOAvatar::sRenderGroupTitles = name_tag_show_group_titles && LLVOAvatar::sRenderName > 0;
 
     gPipeline.mBackfaceCull = true;
     gFrameCount++;

@@ -20,7 +20,7 @@
 		<button name="ao_track_add" tool_tip="Dodaj nową niezależną ścieżkę animacji do tego stanu." />
 		<check_box name="ao_cycle" label="Cykl" tool_tip="Odtwarzaj inną animację z listy za każdym razem, gdy dany stan jest wywoływany." />
 		<check_box name="ao_randomize" label="Losowy porządek" tool_tip="Losuj porządek odtwarzania animacji w cyklu." />
-		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sekundy):" />
+		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sek.):" />
 		<spinner name="ao_cycle_time" tool_tip="Czas, po jakim animacja zmienia się na następną z listy. Ustaw na 0, aby wyłączyć automatyczny cykl animacji." />
 		<button name="ao_reload" label="Przeładuj" tool_tip="Przeładuj konfigurację Animatora." />
 		<layout_stack name="next_previous_buttons_stack">

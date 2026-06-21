@@ -255,6 +255,9 @@ public:
     void createErrorMarker(eLastExecEvent error_code) const;
     bool errorMarkerExists() const;
 
+    void createWatchdogMarker() const;
+    void removeWatchdogMarker() const;
+
     // Attempt a 'soft' quit with disconnect and saving of settings/cache.
     // Intended to be thread safe.
     // Good chance of viewer crashing either way, but better than alternatives.
@@ -443,8 +446,6 @@ extern S32 gPendingMetricsUploads;
 
 extern F32 gSimLastTime;
 extern F32 gSimFrames;
-
-extern bool     gDisconnected;
 
 extern LLFrameTimer gRestoreGLTimer;
 extern bool         gRestoreGL;

@@ -9,7 +9,7 @@
 				(Brak)
 			</text>
 			<text name="QualitySpeed">
-				Jakość i szybkość:
+				Jakość obrazu:
 			</text>
 			<text name="FasterText">
 				Wydajność
@@ -32,7 +32,7 @@
 			</text>
 			<check_box label="Przezroczysta woda" name="TransparentWater"/>
 			<check_box label="Okluzja otoczenia (SSAO)" name="UseSSAO"/>
-			<check_box label="Odbicia obszaru ekranu (SSR)" name="ScreenSpaceReflections"/>
+			<check_box label="Odbicia obsz. ekranu (SSR)" name="ScreenSpaceReflections"/>
 			<check_box label="Lustra" name="Mirrors" />
 			<text name="shadows_label">
 				Cienie:
@@ -90,7 +90,7 @@
 				<combo_box.item label="Pokazuj tylko znajomych" name="2" />
 			</combo_box>
 			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" />
-			<slider label="Maks. il. wyświetlanych awatarów" name="IndirectMaxNonImpostors"/>
+			<slider label="Maks. il. widocznych awatarów" name="IndirectMaxNonImpostors"/>
 			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Niska
@@ -168,7 +168,6 @@
 			<text name="Texture Rendering">
 				Rendering tekstur:
 			</text>
-			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tę opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP" />
 			<text name="FSRestrictMaxTextureSize">
 				Ogranicz maks. rozdzielczość tekstur do:
 			</text>

@@ -151,7 +151,7 @@
 					<button name="btn_select_same_spec" tool_tip="Wybierz wszystkie powierzchnie z taką samą mapą lśnienia (specular) jak ta" />
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
-					<check_box label="Superjasna" name="checkbox fullbright" />
+					<check_box label="S-Jasna" name="checkbox fullbright" />
 					<spinner name="ColorTrans" label="Przezrocz." />
 					<text name="label alphamode">
 						Tryb alphy
@@ -162,9 +162,9 @@
 						<combo_box.item label="Maskowanie" name="Alpha masking" />
 						<combo_box.item label="Maska emisyjna" name="Emissive mask" />
 					</combo_box>
-					<spinner label="Odcięcie maski" name="maskcutoff" />
+					<spinner label="Odetn. maskę" name="maskcutoff" />
 					<text name="label bumpiness">
-						Powierzchnia
+						Powierzch.
 					</text>
 					<combo_box name="combobox bumpiness">
 						<combo_box.item label="Bez mapowania" name="None" />

@@ -14,7 +14,11 @@
             <pie_slice label="Kopia zapasowa" name="Backup"/>
             <pie_slice label="Collada" name="Collada"/>
         </pie_menu>
-        <pie_slice label="Pokaż w Szafie" name="Show original" />
+		<pie_menu name="Inventory" label="Szafa &gt;">
+			<pie_slice label="Dodaj ulubione" name="Add to favorites" />
+			<pie_slice label="Usuń ulubione" name="Remove from favorites" />
+			<pie_slice label="Pokaż w Szafie" name="Show original" />
+		</pie_menu>
         <pie_slice label="Inspekcja" name="Avatar Inspect" />
         <pie_slice label="Pokaż tekstury" name="Debug..."/>
     </pie_menu>

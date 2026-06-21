@@ -206,12 +206,13 @@ void LLColorSwatchCtrl::draw()
     F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
 
     mBorder->setKeyboardFocusHighlight(hasFocus());
-    // Draw border
-    LLRect border( 0, getRect().getHeight(), getRect().getWidth(), mLabelHeight );
-    gl_rect_2d( border, mBorderColor.get(), false );
 
-    LLRect interior = border;
+    LLRect gl_border(0, getRect().getHeight(), getRect().getWidth(), mLabelHeight);
+    LLColor4 gl_border_color = mBorderColor.get();
+    LLRect interior = gl_border;
     interior.stretch( -1 );
+
+    bool show_border_ctrl = true;
 
     // Check state
     if ( mValid )
@@ -245,7 +246,12 @@ void LLColorSwatchCtrl::draw()
     {
         if (mFallbackImage.notNull())
         {
-            mFallbackImage->draw(interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), LLColor4::white % alpha);
+            // <FS:Ansariel> Use interior width so the image gets actually scaled to fix the color swatch
+            //mFallbackImage->draw(interior.mLeft - 1, interior.mBottom - 1, mFallbackImage->getWidth(), mFallbackImage->getHeight(), LLColor4::white % alpha);
+            mFallbackImage->draw(interior.mLeft - 1, interior.mBottom - 1, interior.getWidth(), interior.getHeight(), LLColor4::white % alpha);
+            // </FS:Ansariel>
+            gl_border_color = LLUIColorTable::instance().getColor("ColorSwatchBorderColorGray").get();
+            show_border_ctrl = false;
         }
         else
         {
@@ -256,7 +262,12 @@ void LLColorSwatchCtrl::draw()
         }
     }
 
+    mBorder->setVisible(show_border_ctrl);
+
     mCaption->setEnabled(getEnabled() && isInEnabledChain());   // <FS:Zi> Add label/caption colors
+
+    // Draw border
+    gl_rect_2d(gl_border, gl_border_color, false);
 
     LLUICtrl::draw();
 }

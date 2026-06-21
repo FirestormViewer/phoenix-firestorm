@@ -990,10 +990,16 @@ void LLNavigationBar::resizeLayoutPanel()
 }
 void LLNavigationBar::invokeSearch(std::string search_text)
 {
+    LLSD key;
+    key["category"] = "standard";
+    key["query"] = search_text;
+    LLSD collections = LLSD::emptyArray();
+    collections.append("destinations");
+    collections.append("places");
+    key["collections"] = collections;
     // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
-    // LLFloaterReg::showInstance("search", LLSD().with("category", "standard").with("query", LLSD(search_text)));
-    const std::string search_floater_name = gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search";
-    LLFloaterReg::showInstance(search_floater_name, LLSD().with("category", "standard").with("query", LLSD(search_text)));
+    //LLFloaterReg::showInstance("search", key);
+    LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search", key);
     // </FS:PP>
 }
 

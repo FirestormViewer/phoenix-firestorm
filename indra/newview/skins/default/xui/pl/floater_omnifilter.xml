@@ -3,6 +3,29 @@
 	<floater.string name="OmnifilterNewNeedle">
 		NOWA REGUŁA
 	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		NOWY ZESTAW REGUŁ
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		SKLONOWANY ZESTAW REGUŁ
+	</floater.string>
+	<panel name="needle_rule_set_controls">
+		<text name="lbl_ruleset" value="Zest. reguł:" />
+		<layout_stack name="rule_set_buttons_stack">
+			<layout_panel name="rule_set_group_1">
+				<combo_box name="cmb_rule_sets" tool_tip="Wybierz zestaw reguł Wszystkofiltra, którego chcesz użyć." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button name="btn_rule_set_new" label="Nowy zestaw reguł" tool_tip="Utwórz nowy, pusty zestaw reguł Wszystkofiltra." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button name="btn_rule_set_clone" label="Klonuj zestaw reguł" tool_tip="Utwórz klon bieżącego zestawu reguł Wszystkofiltra." />
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button name="btn_rule_set_remove" label="Usuń zestaw reguł" tool_tip="Usuń bieżący zestaw reguł Wszystkofiltra." />
+			</layout_panel>
+		</layout_stack>
+	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="Włącz Wszystkofiltr" />
@@ -59,19 +82,19 @@
 		<text name="match_source_label" value="Dopasuj z:" />
 		<layout_stack name="buttons_stack">
 			<layout_panel name="buttons_group_1">
-				<button name="type_nearby" label="Czat lokalny" tool_tip="Zwykły publiczny czat awatarów w pobliżu." />
+				<button name="type_nearby" label="Czat lok." tool_tip="Zwykły publiczny czat awatarów w pobliżu." />
 				<button name="type_im" tool_tip="Wiadomości prywatne od użytkowników." />
-				<button name="type_group_im" label="Czat grupy" tool_tip="Czat grupowy od użytkowników." />
+				<button name="type_group_im" label="Czat grup" tool_tip="Czat grupowy od użytkowników." />
 			</layout_panel>
 			<layout_panel name="buttons_group_2">
 				<button name="type_group_notice" label="Ogłoszenie" tool_tip="Powiadomienia / ogłoszenia grupowe." />
-				<button name="type_invite" label="Zaproszenie" tool_tip="Zaproszenia do grupy." />
-				<button name="type_object_chat" label="Czat obiektu" tool_tip="Czat lokalny od obiektów." />
+				<button name="type_invite" label="Zaprosz." tool_tip="Zaproszenia do grupy." />
+				<button name="type_object_chat" label="Czat obktu" tool_tip="Czat lokalny od obiektów." />
 			</layout_panel>
 			<layout_panel name="buttons_group_3">
-				<button name="type_object_im" label="IM obiektu" tool_tip="Wiadomości IM od obiektów." />
+				<button name="type_object_im" label="IM obktu" tool_tip="Wiadomości IM od obiektów." />
 				<button name="type_script_error" label="Błąd" tool_tip="Komunikaty błędów ze skryptów." />
-				<button name="type_dialog" label="Okno skryptu" tool_tip="Dopasowuje pola w oknach dialogowych / komunikatach skryptów." />
+				<button name="type_dialog" label="Okno LSL" tool_tip="Dopasowuje pola w oknach dialogowych / komunikatach skryptów." />
 			</layout_panel>
 			<layout_panel name="buttons_group_4">
 				<button name="type_inventory_offer" label="Oferta" tool_tip="Dopasowuje pola w ofertach ekwipunku szafy." />

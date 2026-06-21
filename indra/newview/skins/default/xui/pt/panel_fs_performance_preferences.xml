@@ -46,8 +46,8 @@
 		Ambiente
 	</text>
 	<text name="enhancements_desc">
-		Reduzir/remover sombras pode aumentar a taxa de quadros,
-		mas afeta a atmosfera e o visual da cena.
+Reduzir/remover sombras pode aumentar a taxa de quadros,
+mas afeta a atmosfera e o visual da cena.
 	</text>
 	<text name="RenderShadowDetailText">
 		Fonte das sombras:

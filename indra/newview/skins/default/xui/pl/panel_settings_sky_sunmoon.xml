@@ -28,7 +28,7 @@
 				Skala blasku:
 			</text>
 			<text name="star_brightness_label">
-				Jasność gwiazd:
+				Gwiazdy:
 			</text>
 		</layout_panel>
 		<layout_panel name="moon_layout">

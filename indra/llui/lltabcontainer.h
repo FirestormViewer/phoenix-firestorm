@@ -205,6 +205,7 @@ public:
     LLPanel*    getCurrentPanel();
     S32         getCurrentPanelIndex() const;
     S32         getTabCount() const;
+    S32         getVisibleTabCount() const;
     LLPanel*    getPanelByIndex(S32 index) const;
     S32         getIndexForPanel(LLPanel* panel) const;
     S32         getPanelIndexByTitle(std::string_view title) const;
@@ -253,6 +254,7 @@ public:
     S32         getMaxTabWidth() const { return mMaxTabWidth; }
 
     void setTabVisibility( LLPanel const *aPanel, bool );
+    bool getTabVisibility(const LLPanel* panel) const;
 
     void        startDragAndDropDelayTimer() { mDragAndDropDelayTimer.start(); }
 

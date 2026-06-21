@@ -1161,9 +1161,6 @@
 	 reference="LabelTextColor" />
 
   <color
-      name="Phototools_Header"
-      reference="SchemeLightest_35" />
-  <color
       name="ScriptSelectedColor"
       reference="EmphasisColor" />
   <color
@@ -1193,4 +1190,7 @@
   <color
     name="MentionFlashBgColor"
     reference="EmphasisColor" />
+  <color
+    name="HighlightPanelBackground"
+    reference="SchemeLightest_35" />
 </colors>

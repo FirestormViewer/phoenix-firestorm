@@ -95,7 +95,8 @@ public:
                                         show_label_focused,
                                         is_password,
                                         allow_emoji,
-                                        use_bg_color;
+                                        use_bg_color,
+                                        draw_focus_border;
 
         // colors
         Optional<LLUIColor>             cursor_color,
@@ -104,7 +105,8 @@ public:
                                         text_readonly_color,
                                         text_tentative_color,
                                         highlight_color,
-                                        preedit_bg_color;
+                                        preedit_bg_color,
+                                        highlight_text_color; // <FS:Ansariel> Customizable text color for highlighted segments
 
         Optional<S32>                   text_pad_left,
                                         text_pad_right;
@@ -410,6 +412,7 @@ protected:
     LLUIColor   mTentativeFgColor;
     LLUIColor   mHighlightColor;        // background for selected text
     LLUIColor   mPreeditBgColor;        // preedit marker background color
+    std::optional<LLUIColor> mHighlightTextColor; // <FS:Ansariel> Customizable text color for highlighted segments
 
     S32         mBorderThickness;
 
@@ -428,6 +431,7 @@ protected:
 
     bool        mAllowEmoji;
     bool        mUseBgColor;
+    bool        mDrawFocusBorder;
 
     LLWString   mPreeditWString;
     LLWString   mPreeditOverwrittenWString;

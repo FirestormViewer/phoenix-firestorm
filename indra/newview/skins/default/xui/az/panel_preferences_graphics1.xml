@@ -140,14 +140,10 @@
 				<combo_box.item label="Aşağı (4)" name="4"/>
 				<combo_box.item label="Tekstur yoxdur (5)" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Şəffaflıq maskaları (alfa):
-			</text>
-			<check_box label="'Genişlənmiş İşıqlandırma Modeli' aktiv edilmədikdə alfa maskasının çəkilməsi" tool_tip="İşarələnəndə, genişləndirilmiş işıqlandırma modeli aktiv deyilsə, alfa maskasının düzgün çəkilməsinə imkan verir" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="'Genişlənmiş İşıqlandırma Modeli' aktiv edildikdə alfa maskasının çəkilməsi" tool_tip="İşarələnəndə, genişləndirilmiş işıqlandırma modeli aktiv olduqda alfa maskasının düzgün çəkilməsinə imkan verir" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Müxtəlif:
 			</text>
+			<check_box label="Alfa maskalarının çəkilməsi" tool_tip="İşarələnəndə, alfa maskalarının (şəffaf hissələr) düzgün çəkilməsinə imkan verir" name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="İşıqsaçma çəkilişi" tool_tip="İşıqsaçma çəkilişi. Nəzərə alın ki, kölgələr işə salındıqda işıqsaçmanı söndürmək üçün gücü sıfıra təyin etmək lazımdır." name="RenderGlow"/>
 			<slider label="Güc:" tool_tip="Güc. Yüksək = geniş və bulanıq (susmaya görə 2) " name="glow_strength"/>
 			<check_box label="Natamam yüklənmiş avatarları göstərin" name="RenderUnloadedAvatars"/>

@@ -37,6 +37,7 @@ const std::string MAINGRID = SINGLEGRID_URI;
 #else
 const std::string MAINGRID = "util.agni.lindenlab.com";
 #endif
+#define BETAGRID "util.aditi.lindenlab.com"
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM

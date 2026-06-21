@@ -2486,10 +2486,14 @@ void LLAgent::propagate(const F32 dt)
         LLVector3 land_vel = getVelocity();
         land_vel.mV[VZ] = 0.f;
 
+        static LLCachedControl<bool> automatic_fly(gSavedSettings, "AutomaticFly"); // <FS:PP> Speed optimisation
         if (!in_air
             && gAgentCamera.getUpKey() < 0
             && land_vel.magVecSquared() < MAX_VELOCITY_AUTO_LAND_SQUARED
-            && gSavedSettings.getBOOL("AutomaticFly"))
+            // <FS:PP> Speed optimisation
+            // && gSavedSettings.getBOOL("AutomaticFly"))
+            && automatic_fly())
+            // </FS:PP>
         {
             // land automatically
             setFlying(false);
@@ -5546,7 +5550,11 @@ void LLAgent::setTeleportState(ETeleportState state)
                           << teleportStateName(mTeleportState) << "(" << mTeleportState << ")"
                           << LL_ENDL;
     mTeleportState = state;
-    if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
+    // <FS:PP> Speed optimisation
+    // if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
+    static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime");
+    if (mTeleportState > TELEPORT_NONE && freeze_time())
+    // </FS:PP>
     {
         LLFloaterReg::hideInstance("snapshot");
     }
@@ -5966,6 +5974,8 @@ const std::string& LLAgent::getTeleportStateName() const
 
 void LLAgent::parseTeleportMessages(const std::string& xml_filename)
 {
+    LL_PROFILE_ZONE_SCOPED;
+
     LLXMLNodePtr root;
     bool success = LLUICtrlFactory::getLayeredXMLNode(xml_filename, root);
 

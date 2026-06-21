@@ -30,36 +30,29 @@
 #include "llfloatersnapshot.h" // <FS:Beq/> Fix share to flickr preview again
 #include "llfloaterflickr.h"
 
+#include "exoflickr.h"
+#include "exoflickrauth.h"
+#include "fsfloaterbigpreview.h"
 #include "llagent.h"
 #include "llagentui.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "llflickrconnect.h"
 #include "llfloaterreg.h"
-#include "lliconctrl.h"
 #include "llimagefiltersmanager.h"
-#include "llresmgr.h"       // LLLocale
+#include "llnotificationsutil.h"
 #include "llsdserialize.h"
-#include "llloadingindicator.h"
 #include "llslurl.h"
-#include "lltrans.h"
 #include "llsnapshotlivepreview.h"
-#include "llfloaterbigpreview.h"
-#include "llviewerregion.h"
-#include "llviewercontrol.h"
-#include "llviewermedia.h"
+#include "llspinctrl.h"
 #include "lltabcontainer.h"
+#include "lltrans.h"
+#include "llviewercontrol.h"
+#include "llviewernetwork.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
-#include <boost/regex.hpp>
-#include "llspinctrl.h"
 
-#include "llviewernetwork.h"
-#include "llnotificationsutil.h"
-#include "exoflickr.h"
-#include "exoflickrauth.h"
-#include "llnotificationsutil.h"
-#include "llviewernetwork.h"
+#include <boost/regex.hpp>
 
 static LLPanelInjector<LLFlickrPhotoPanel> t_panel_photo("llflickrphotopanel");
 static LLPanelInjector<LLFlickrAccountPanel> t_panel_account("llflickraccountpanel");
@@ -129,7 +122,7 @@ bool LLFlickrPhotoPanel::postBuild()
     mRatingComboBox = getChild<LLUICtrl>("rating_combobox");
     mPostButton = getChild<LLUICtrl>("post_photo_btn");
     mCancelButton = getChild<LLUICtrl>("cancel_photo_btn");
-    mBigPreviewFloater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+    mBigPreviewFloater = dynamic_cast<FSFloaterBigPreview*>(LLFloaterReg::getInstance("fs_big_preview"));
 
     // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
     getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
@@ -308,12 +301,12 @@ void LLFlickrPhotoPanel::onClickBigPreview()
     // Toggle the preview
     if (isPreviewVisible())
     {
-        LLFloaterReg::hideInstance("big_preview");
+        LLFloaterReg::hideInstance("fs_big_preview");
     }
     else
     {
         attachPreview();
-        LLFloaterReg::showInstance("big_preview");
+        LLFloaterReg::showInstance("fs_big_preview");
     }
 }
 
@@ -861,7 +854,7 @@ LLFloaterFlickr::LLFloaterFlickr(const LLSD& key) : LLFloater(key),
 
 void LLFloaterFlickr::onClose(bool app_quitting)
 {
-    LLFloaterBigPreview* big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+    FSFloaterBigPreview* big_preview_floater = dynamic_cast<FSFloaterBigPreview*>(LLFloaterReg::getInstance("fs_big_preview"));
     if (big_preview_floater)
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
@@ -871,7 +864,7 @@ void LLFloaterFlickr::onClose(bool app_quitting)
 
 void LLFloaterFlickr::onCancel()
 {
-    LLFloaterBigPreview* big_preview_floater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+    FSFloaterBigPreview* big_preview_floater = dynamic_cast<FSFloaterBigPreview*>(LLFloaterReg::getInstance("fs_big_preview"));
     if (big_preview_floater)
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);

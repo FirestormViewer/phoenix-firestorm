@@ -1220,18 +1220,22 @@ F32 LLViewerTextureList::updateImagesLoadingFastCache(F32 max_time)
 
     LLTimer timer;
     image_list_t::iterator enditer = mFastCacheList.begin();
-    for (image_list_t::iterator iter = mFastCacheList.begin();
-         iter != mFastCacheList.end();)
     {
-        image_list_t::iterator curiter = iter++;
-        enditer = iter;
-        LLViewerFetchedTexture *imagep = *curiter;
-        imagep->loadFromFastCache();
-        // <FS:Ansariel> Fast cache stats
-        sNumFastCacheReads++;
-        // </FS:Ansariel>
-        if (timer.getElapsedTimeF32() > max_time)
-            break;
+        // prelock fast cache mutex to avoid waiting multiple times.
+        LLMutexLock cache_lock(LLAppViewer::getTextureCache()->getFastCacheMutex());
+        for (image_list_t::iterator iter = mFastCacheList.begin();
+            iter != mFastCacheList.end();)
+        {
+            image_list_t::iterator curiter = iter++;
+            enditer = iter;
+            LLViewerFetchedTexture* imagep = *curiter;
+            imagep->loadFromFastCache();
+            // <FS:Ansariel> Fast cache stats
+            sNumFastCacheReads++;
+            // </FS:Ansariel>
+            if (timer.getElapsedTimeF32() > max_time)
+                break;
+        }
     }
     mFastCacheList.erase(mFastCacheList.begin(), enditer);
     return timer.getElapsedTimeF32();
@@ -2065,7 +2069,11 @@ bool LLUIImageList::initFromFile()
             preloadUIImage(image.name, file_name, image.use_mips, image.scale, image.clip, image.scale_type);
         }
 
-        if (!gSavedSettings.getBOOL("NoPreload"))
+        // <FS:PP> Speed optimisation
+        // if (!gSavedSettings.getBOOL("NoPreload"))
+        static LLCachedControl<bool> no_preload(gSavedSettings, "NoPreload");
+        if (!no_preload())
+        // </FS:PP>
         {
             if (cur_pass == PASS_DECODE_NOW)
             {

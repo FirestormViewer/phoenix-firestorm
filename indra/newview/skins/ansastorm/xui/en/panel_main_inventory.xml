@@ -89,11 +89,47 @@
 				function="Floater.Toggle"
 				parameter="inventory_settings" />
 		</menu_item_check>
-		<menu_item_separator>
-			<menu_item_separator.on_visible
+		<menu_item_separator/>
+		<menu_item_check
+			label="Show Recent tab"
+			name="show_recent_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_recent_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="recent_tab" />
+			<menu_item_check.on_visible
 				function="Inventory.GearDefault.Visible"
-				parameter="single_folder_view" />
-			</menu_item_separator>
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Show Worn tab"
+			name="show_worn_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_worn_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="worn_tab" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Show Favorites tab"
+			name="show_favorites_tab">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="toggle_favorites_tab" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="favorites_tab" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_check>
+		<menu_item_separator/>
 		<menu_item_check
 			label="List view"
 			layout="topleft"
@@ -1044,12 +1080,12 @@
           <text
            type="string"
            length="1"
-           height="13"
+           height="17"
            layout="topleft"
            left="8"
            name="ItemcountText"
            font="SansSerifMedium"
-           top_pad="6"
+           valign="center"
            tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
            use_ellipses="true"
            follows="bottom|left|right"

@@ -35,105 +35,142 @@
          function="Floater.Toggle"
          parameter="inventory_settings" />
     </menu_item_check>
-    <menu_item_separator>
-        <menu_item_separator.on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="single_folder_view" />
-    </menu_item_separator>
-    <menu_item_check
-     label="List view"
-     layout="topleft"
-     name="list_view">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="list_view" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="list_view" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="single_folder_view" />
-    </menu_item_check>
-    <menu_item_check
-     label="Gallery view"
-     layout="topleft"
-     name="gallery_view">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="gallery_view" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="gallery_view" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="single_folder_view" />
-    </menu_item_check>
-    <menu_item_check
-     label="Combination view"
-     layout="topleft"
-     name="combination_view">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="combination_view" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="combination_view" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="single_folder_view" />
-    </menu_item_check>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_check
-     label="Sort by Name"
-     layout="topleft"
-     name="sort_by_name">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="sort_by_name" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="sort_by_name" />
-    </menu_item_check>
-    <menu_item_check
-     label="Sort by Most Recent"
-     layout="topleft"
-     name="sort_by_recent">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="sort_by_recent" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="sort_by_recent" />
-    </menu_item_check>
-    <menu_item_check
-     label="Sort Folders Always by Name"
-     layout="topleft"
-     name="sort_folders_by_name">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="sort_folders_by_name" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="sort_folders_by_name" />
-    </menu_item_check>
-    <menu_item_check
-     label="Sort System Folders to Top"
-     layout="topleft"
-     name="sort_system_folders_to_top">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="sort_system_folders_to_top" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="sort_system_folders_to_top" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="multi_folder_view" />
-    </menu_item_check>
-    <menu_item_separator
-     layout="topleft" />
-
+    <menu_item_separator />
+    <context_menu label="Tabs &amp; Views" name="tabs_and_views_menu" top="0">
+        <menu_item_check
+         label="List view"
+         layout="topleft"
+         name="list_view">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="list_view" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="list_view" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="single_folder_view" />
+        </menu_item_check>
+        <menu_item_check
+         label="Gallery view"
+         layout="topleft"
+         name="gallery_view">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="gallery_view" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="gallery_view" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="single_folder_view" />
+        </menu_item_check>
+        <menu_item_check
+         label="Combination view"
+         layout="topleft"
+         name="combination_view">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="combination_view" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="combination_view" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="single_folder_view" />
+        </menu_item_check>
+        <menu_item_check
+         label="Show Recent tab"
+         layout="topleft"
+         name="recent_tab">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="toggle_recent_tab" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="recent_tab" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="multi_folder_view" />
+        </menu_item_check>
+        <menu_item_check
+         label="Show Worn tab"
+         layout="topleft"
+         name="worn_tab">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="toggle_worn_tab" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="worn_tab" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="multi_folder_view" />
+        </menu_item_check>
+        <menu_item_check
+         label="Show Favorites tab"
+         layout="topleft"
+         name="favorites_tab">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="toggle_favorites_tab" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="favorites_tab" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="multi_folder_view" />
+        </menu_item_check>
+    </context_menu>
+    <context_menu label="Sorting" name="sorting_menu" top="0">
+        <menu_item_check
+         label="Sort by Name"
+         layout="topleft"
+         name="sort_by_name">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="sort_by_name" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="sort_by_name" />
+        </menu_item_check>
+        <menu_item_check
+         label="Sort by Most Recent"
+         layout="topleft"
+         name="sort_by_recent">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="sort_by_recent" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="sort_by_recent" />
+        </menu_item_check>
+        <menu_item_check
+         label="Sort Folders Always by Name"
+         layout="topleft"
+         name="sort_folders_by_name">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="sort_folders_by_name" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="sort_folders_by_name" />
+        </menu_item_check>
+        <menu_item_check
+         label="Sort System Folders to Top"
+         layout="topleft"
+         name="sort_system_folders_to_top">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="sort_system_folders_to_top" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="sort_system_folders_to_top" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="multi_folder_view" />
+        </menu_item_check>
+    </context_menu>
 	<!-- <FS:Zi> Extended Inventory Search -->
 	<context_menu
 		label="Search By..."
@@ -191,50 +228,144 @@
 				parameter="search_by_all" />
 		</menu_item_check>
 	</context_menu>
-    <!-- </FS:Zi> Extended Inventory Search -->
-
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_check
-     label="Add objects on double click"
-     layout="topleft"
-     name="add_inv_toggle">
-       <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="add_objects_on_double_click" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="add_objects_on_double_click" />
-    </menu_item_check>
-    <menu_item_check
-     label="Add clothes on double click"
-     layout="topleft"
-     name="add_invclothing_toggle">
-       <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="add_clothing_on_double_click" />
-        <on_check
-         function="Inventory.GearDefault.Check"
-         parameter="add_clothing_on_double_click" />
-    </menu_item_check>
-    <menu_item_separator
-     layout="topleft" />
-    <menu_item_call
-     label="Show Filters..."
-     layout="topleft"
-     name="show_filters">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="show_filters" />
-    </menu_item_call>
-    <menu_item_call
-     label="Reset Filters"
-     layout="topleft"
-     name="reset_filters">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="reset_filters" />
-    </menu_item_call>
+	<!-- </FS:Zi> Extended Inventory Search -->
+    <context_menu label="Filters &amp; Permissions" name="filters_and_permissions_menu" top="0">
+        <menu_item_call
+         label="Show Filters..."
+         layout="topleft"
+         name="show_filters">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="show_filters" />
+        </menu_item_call>
+        <menu_item_call
+         label="Reset Filters"
+         layout="topleft"
+         name="reset_filters">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="reset_filters" />
+        </menu_item_call>
+        <menu_item_separator />
+        <menu_item_check
+            name="inventory_filter_only_modify"
+            label="Only Modifiable">
+            <on_click
+                function="Inventory.FilterPermissions.Set"
+                parameter="only_modify" />
+            <on_check
+                function="Inventory.FilterPermissions.Check"
+                parameter="only_modify" />
+        </menu_item_check>
+        <menu_item_check
+            name="inventory_filter_only_copy"
+            label="Only Copyable">
+            <on_click
+                function="Inventory.FilterPermissions.Set"
+                parameter="only_copy" />
+            <on_check
+                function="Inventory.FilterPermissions.Check"
+                parameter="only_copy" />
+        </menu_item_check>
+        <menu_item_check
+            name="inventory_filter_only_transfer"
+            label="Show Transferable">
+            <on_click
+                function="Inventory.FilterPermissions.Set"
+                parameter="only_transfer" />
+            <on_check
+                function="Inventory.FilterPermissions.Check"
+                parameter="only_transfer" />
+        </menu_item_check>
+        <menu_item_separator />
+        <menu_item_check
+            name="inventory_filter_coalesced_objects_only"
+            label="Only Coalesced">
+            <on_click
+                function="Inventory.CoalescedObjects.Toggle"
+                parameter="coalesced_objects_only" />
+            <on_check
+                function="Inventory.CoalescedObjects.Check"
+                parameter="coalesced_objects_only" />
+        </menu_item_check>
+    </context_menu>
+    <context_menu label="Links Management" name="links_management_menu" top="0">
+        <menu_item_call 
+         label="Find All Links"
+         layout="topleft"
+         name="Find All Links">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="find_links" />
+            <on_enable
+			 function="Inventory.GearDefault.Enable"
+			 parameter="find_links" />
+        </menu_item_call>
+        <menu_item_call 
+         label="Replace Links"
+         layout="topleft"
+         name="Replace Links">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="replace_links" />
+        </menu_item_call>
+        <menu_item_separator />
+        <menu_item_check
+            name="inventory_filter_show_links"
+            label="Show Links">
+            <on_click
+                function="Inventory.FilterLinks.Set"
+                parameter="show_links" />
+            <on_check
+                function="Inventory.FilterLinks.Check"
+                parameter="show_links" />
+        </menu_item_check>
+        <menu_item_check
+            name="inventory_filter_only_links"
+            label="Show Only Links">
+            <on_click
+                function="Inventory.FilterLinks.Set"
+                parameter="only_links" />
+            <on_check
+                function="Inventory.FilterLinks.Check"
+                parameter="only_links" />
+        </menu_item_check>
+        <menu_item_check
+            name="inventory_filter_hide_links"
+            label="Hide Links">
+            <on_click
+                function="Inventory.FilterLinks.Set"
+                parameter="hide_links" />
+            <on_check
+                function="Inventory.FilterLinks.Check"
+                parameter="hide_links" />
+        </menu_item_check>
+    </context_menu>
+    <context_menu label="Double-click Options" name="double_click_menu" top="0">
+        <menu_item_check
+         label="Add objects on double click"
+         layout="topleft"
+         name="add_inv_toggle">
+           <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="add_objects_on_double_click" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="add_objects_on_double_click" />
+        </menu_item_check>
+        <menu_item_check
+         label="Add clothes on double click"
+         layout="topleft"
+         name="add_invclothing_toggle">
+           <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="add_clothing_on_double_click" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="add_clothing_on_double_click" />
+        </menu_item_check>
+    </context_menu>
+    <menu_item_separator />
     <menu_item_call
      label="Collapse All Folders"
      layout="topleft"
@@ -254,27 +385,7 @@
          function="Inventory.GearDefault.Custom.Action"
          parameter="close_inv_windows" />
     </menu_item_call>
-    <menu_item_separator>
-        <menu_item_separator.on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="multi_folder_view" />
-    </menu_item_separator>
-    <menu_item_call
-     label="Empty Lost and Found"
-     layout="topleft"
-     name="empty_lostnfound">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="empty_lostnfound" />
-        <on_enable
-         function="Inventory.GearDefault.Enable"
-         parameter="empty_lostnfound" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="multi_folder_view" />
-    </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
+    <menu_item_separator />
     <menu_item_call 
          label="Save Texture As"
          layout="topleft"
@@ -285,7 +396,7 @@
             <on_enable
 			 function="Inventory.GearDefault.Enable"
 			 parameter="save_texture" />
-        </menu_item_call>
+    </menu_item_call>
     <menu_item_call
      label="Share"
      layout="topleft"
@@ -308,116 +419,27 @@
             <on_enable
 			 function="Inventory.GearDefault.Enable"
 			 parameter="find_original" />
-        </menu_item_call>
-    <menu_item_call 
-         label="Find All Links"
-         layout="topleft"
-         name="Find All Links">
-            <on_click
-             function="Inventory.GearDefault.Custom.Action"
-             parameter="find_links" />
-            <on_enable
-			 function="Inventory.GearDefault.Enable"
-			 parameter="find_links" />
-        </menu_item_call>
-    <menu_item_call 
-         label="Replace Links"
-         layout="topleft"
-         name="Replace Links">
-            <on_click
-             function="Inventory.GearDefault.Custom.Action"
-             parameter="replace_links" />
-        </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
-
-	<!-- ## Zi: Filter Links Menu -->
-	<menu_item_check
-		name="inventory_filter_show_links"
-		label="Show Links">
-		<on_click
-			function="Inventory.FilterLinks.Set"
-			parameter="show_links" />
-		<on_check
-			function="Inventory.FilterLinks.Check"
-			parameter="show_links" />
-	</menu_item_check>
-	<menu_item_check
-		name="inventory_filter_only_links"
-		label="Show Only Links">
-		<on_click
-			function="Inventory.FilterLinks.Set"
-			parameter="only_links" />
-		<on_check
-			function="Inventory.FilterLinks.Check"
-			parameter="only_links" />
-	</menu_item_check>
-	<menu_item_check
-		name="inventory_filter_hide_links"
-		label="Hide Links">
-		<on_click
-			function="Inventory.FilterLinks.Set"
-			parameter="hide_links" />
-		<on_check
-			function="Inventory.FilterLinks.Check"
-			parameter="hide_links" />
-	</menu_item_check>
-	<menu_item_separator />
-	<!-- ## Zi: Filter Links Menu -->
-
-	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
-	<menu_item_check
-		name="inventory_filter_only_modify"
-		label="Only Modifiable">
-		<on_click
-			function="Inventory.FilterPermissions.Set"
-			parameter="only_modify" />
-		<on_check
-			function="Inventory.FilterPermissions.Check"
-			parameter="only_modify" />
-	</menu_item_check>
-	<menu_item_check
-		name="inventory_filter_only_copy"
-		label="Only Copyable">
-		<on_click
-			function="Inventory.FilterPermissions.Set"
-			parameter="only_copy" />
-		<on_check
-			function="Inventory.FilterPermissions.Check"
-			parameter="only_copy" />
-	</menu_item_check>
-	<menu_item_check
-		name="inventory_filter_only_transfer"
-		label="Show Transferable">
-		<on_click
-			function="Inventory.FilterPermissions.Set"
-			parameter="only_transfer" />
-		<on_check
-			function="Inventory.FilterPermissions.Check"
-			parameter="only_transfer" />
-	</menu_item_check>
-	<menu_item_separator />
-	<!-- </FS:Zi> -->
-
-	<!-- <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects -->
-	<menu_item_check
-		name="inventory_filter_coalesced_objects_only"
-		label="Only Coalesced">
-		<on_click
-			function="Inventory.CoalescedObjects.Toggle"
-			parameter="coalesced_objects_only" />
-		<on_check
-			function="Inventory.CoalescedObjects.Check"
-			parameter="coalesced_objects_only" />
-	</menu_item_check>
+    </menu_item_call>
     <menu_item_separator>
         <menu_item_separator.on_visible
          function="Inventory.GearDefault.Visible"
          parameter="multi_folder_view" />
     </menu_item_separator>
-	<!-- </FS:Zi> -->
-
-	<menu_item_call
+    <menu_item_call
+     label="Empty Lost and Found"
+     layout="topleft"
+     name="empty_lostnfound">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="empty_lostnfound" />
+        <on_enable
+         function="Inventory.GearDefault.Enable"
+         parameter="empty_lostnfound" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_call>
+    <menu_item_call
      label="Empty Trash"
      layout="topleft"
      name="empty_trash">

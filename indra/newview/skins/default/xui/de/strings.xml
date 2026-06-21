@@ -1272,6 +1272,12 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="ScriptQuestionCautionChatDenied">
 		Dem Objekt „[OBJECTNAME]“, ein Objekt von „[OWNERNAME]“, in [REGIONNAME] [REGIONPOS], wurde folgende Berechtigung verweigert: [PERMISSIONS].
 	</string>
+	<string name="ScriptTakeMoneyCaution">
+		Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
+	</string>
+	<string name="PrivilegedLandAccessCaution">
+		Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht privilegierten Zugriff auf Ihr Land. Wenn Sie dies erlauben, kann es Ihr Land verkaufen ohne eine weitere Warnung.
+	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		Falls Sie den Zugriff auf Ihr Konto erlauben, erlauben Sie dem Objekt ebenfalls:
 	</string>
@@ -1316,6 +1322,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="ChangeEnvSettings">
 		Umgebungseinstellungen ändern
+	</string>
+	<string name="PrivilegedLandAccess">
+		Land in Ihrem Auftrag verkaufen
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
@@ -3230,6 +3239,9 @@ Falls diese Nachricht erneut angezeigt wird, starten Sie Ihren Computer bitte ne
 		[APP_NAME] scheint eingefroren zu sein oder ist abgestürzt.
 Möchten Sie einen Absturz-Bericht einschicken?
 	</string>
+	<string name="MBFreezeDetected">
+		[APP_NAME] scheint eingefroren zu sein. Falls dieses Problem regelmäßig auftritt, kontaktieren Sie den Support unter https://www.firestormviewer.org/support.
+	</string>
 	<string name="MBAlert">
 		Benachrichtigung
 	</string>
@@ -4915,12 +4927,6 @@ Erfahren Sie mehr unter https://second.life/scripted-agents.
 	<string name="share_alert">
 		Objekte aus dem Inventar hier her ziehen
 	</string>
-	<string name="facebook_post_success">
-		Sie haben auf Facebook gepostet.
-	</string>
-	<string name="facebook_post_success">
-		Sie haben auf Facebook gepostet.
-	</string>
 	<string name="flickr_post_success">
 		Sie haben auf Flickr gepostet.
 	</string>
@@ -5903,9 +5909,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="ParticleHiding">
 		Partikel werden ausgeblendet
-	</string>
-	<string name="Command_AboutLand_Label">
-		Landinformationen
 	</string>
 	<string name="Command_AboutLand_Label">
 		Landinformationen

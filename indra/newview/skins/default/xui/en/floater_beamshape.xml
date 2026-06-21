@@ -32,11 +32,11 @@ remove a ray. Press the Save button when done.
 	 follows="left|top"
 	 height="60"
 	 label="Beam Color"
-	 left_delta="325"
+	 left_delta="315"
 	 mouse_opaque="true"
 	 name="beam_color_swatch"
 	 tool_tip="Click to open Color Picker to change dot color"
-	 width="65" />
+	 width="75" />
 
 	<panel
 	 name="beamshape_draw"

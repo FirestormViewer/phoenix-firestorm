@@ -1212,7 +1212,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
     while (!sPump && !sShuttingDown)
     {   // Can't use the pump until we have it available.
-        llcoro::suspend();
+        llcoro::suspendUntilNextFrame();
     }
 
     if (sShuttingDown)

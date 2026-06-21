@@ -28,6 +28,7 @@
 #include "llflashtimer.h"
 
 #include "linden_common.h"
+#include "llapp.h"
 #include "llfolderviewitem.h"
 #include "llfolderview.h"
 #include "llfolderviewmodel.h"
@@ -169,9 +170,11 @@ LLFolderViewItem::Params::Params()
     icon_width("icon_width", 0),
     text_pad("text_pad", 0),
     text_pad_right("text_pad_right", 0),
+    text_pad_top("text_pad_top", 1),
     single_folder_mode("single_folder_mode", false),
     double_click_override("double_click_override", false),
     arrow_size("arrow_size", 0),
+    arrow_pad_top("arrow_pad_top", 1),
     max_folder_item_overlap("max_folder_item_overlap", 0),
     // <FS:Ansariel> Inventory specials
     for_inventory("for_inventory", false)
@@ -214,7 +217,9 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mIconWidth(p.icon_width),
     mTextPad(p.text_pad),
     mTextPadRight(p.text_pad_right),
+    mTextPadTop(p.text_pad_top),
     mArrowSize(p.arrow_size),
+    mArrowPadTop(p.arrow_pad_top),
     mSingleFolderMode(p.single_folder_mode),
     mMaxFolderItemOverlap(p.max_folder_item_overlap),
     mDoubleClickOverride(p.double_click_override),
@@ -876,7 +881,7 @@ void LLFolderViewItem::drawOpenFolderArrow()
     {
         gl_draw_scaled_rotated_image(
             // <FS:Ansariel> Inventory specials
-            mIndentation, getRect().getHeight() - mArrowSize - mTextPad - mItemTopPad,
+            mIndentation, getRect().getHeight() - mArrowSize - mArrowPadTop - mItemTopPad,
             mArrowSize, mArrowSize, mControlLabelRotation, sFolderArrowImg->getImage(), sFgColor);
     }
 }
@@ -1110,7 +1115,7 @@ void LLFolderViewItem::draw()
 
     S32 filter_string_length = mViewModelItem->hasFilterStringMatch() ? (S32)mViewModelItem->getFilterStringSize() : 0;
     F32 right_x  = 0;
-    F32 y = (F32)rect_height - line_height - (F32)mTextPad - (F32)mItemTopPad;
+    F32 y = (F32)rect_height - line_height - (F32)mTextPadTop - (F32)mItemTopPad;
     F32 text_left = (F32)getLabelXPos();
     LLWString combined_string = mLabel + mLabelSuffix;
 
@@ -1209,7 +1214,7 @@ void LLFolderViewItem::draw()
         if(mLabelSuffix.empty() || (font == sSuffixFont))
         {
             F32 match_string_left = text_left + font->getWidthF32(combined_string.c_str(), 0, filter_offset + filter_string_length) - font->getWidthF32(combined_string.c_str(), filter_offset, filter_string_length);
-            F32 yy = (F32)rect_height - line_height - (F32)mTextPad - (F32)mItemTopPad;
+            F32 yy = (F32)rect_height - line_height - (F32)mTextPadTop - (F32)mItemTopPad;
             font->render(combined_string, filter_offset, match_string_left, yy,
                 sFilterTextColor, LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
                 filter_string_length, S32_MAX, &right_x);
@@ -1220,7 +1225,7 @@ void LLFolderViewItem::draw()
             if(label_filter_length > 0)
             {
                 F32 match_string_left = text_left + font->getWidthF32(mLabel.c_str(), 0, filter_offset + label_filter_length) - font->getWidthF32(mLabel.c_str(), filter_offset, label_filter_length);
-                F32 yy = (F32)rect_height - line_height - (F32)mTextPad - (F32)mItemTopPad;
+                F32 yy = (F32)rect_height - line_height - (F32)mTextPadTop - (F32)mItemTopPad;
                 font->render(mLabel, filter_offset, match_string_left, yy,
                     sFilterTextColor, LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
                     label_filter_length, S32_MAX, &right_x);
@@ -1231,7 +1236,7 @@ void LLFolderViewItem::draw()
             {
                 S32 suffix_offset = llmax(0, filter_offset - (S32)mLabel.size());
                 F32 match_string_left = text_left + font->getWidthF32(mLabel.c_str(), 0, static_cast<S32>(mLabel.size())) + sSuffixFont->getWidthF32(mLabelSuffix.c_str(), 0, suffix_offset + suffix_filter_length) - sSuffixFont->getWidthF32(mLabelSuffix.c_str(), suffix_offset, suffix_filter_length);
-                F32 yy = (F32)rect_height - sSuffixFont->getLineHeight() - (F32)mTextPad - (F32)mItemTopPad;
+                F32 yy = (F32)rect_height - sSuffixFont->getLineHeight() - (F32)mTextPadTop - (F32)mItemTopPad;
                 sSuffixFont->render(mLabelSuffix, suffix_offset, match_string_left, yy, sFilterTextColor,
                     LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
                     suffix_filter_length, S32_MAX, &right_x);
@@ -1994,6 +1999,11 @@ void LLFolderViewFolder::updateHasFavorites(bool new_childs_value)
 void LLFolderViewFolder::onIdleUpdateFavorites(void* data)
 {
     LLFolderViewFolder* self = reinterpret_cast<LLFolderViewFolder*>(data);
+    if (gDisconnected || !self)
+    {
+        return;
+    }
+
     if (self->mFavoritesDirtyFlags == FAVORITE_CLEANUP)
     {
         // parent or child already processed the update, clean the callback
@@ -2469,9 +2479,10 @@ bool LLFolderViewFolder::handleDoubleClick( S32 x, S32 y, MASK mask )
         {
             // navigating is going to destroy views and change children
             // delay it untill handleDoubleClick processing is complete
-            doOnIdleOneTime([this]()
-                            {
-                                getViewModelItem()->navigateToFolder(false);
+            LLPointer<LLFolderViewModelItem> view_model_item = getViewModelItem();
+            doOnIdleOneTime([view_model_item]() mutable
+                            {;
+                                view_model_item->navigateToFolder(false);
                             });
         }
         return true;

@@ -30,7 +30,7 @@
 		- Sie können sich nicht selbst aus einer Gruppe verbannen.
 	</panel.string>
 	<text name="help_text">
-		Zum Verbannen mehrerer Einwohner auf „Einwohnerauswahl öffnen“ klicken.
+		Zum Verbannen mehrerer Einwohner „Einwohnerauswahl öffnen“ klicken.
 	</text>
 	<button label="Einwohnerauswahl öffnen" name="add_button"/>
 	<name_list name="banned_agent_list" tool_tip="Drücken Sie die STRG-Taste und klicken Sie auf die Namen der Einwohner, um mehrere auszuwählen."/>

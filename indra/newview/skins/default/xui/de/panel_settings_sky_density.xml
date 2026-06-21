@@ -17,11 +17,11 @@
 			<slider label="Mie-Maximalhöhe:" name="mie_max_altitude"/>
 		</layout_panel>
 		<layout_panel name="lp_3">
-			<slider label="Absorptions-Exponentialterm:" name="absorption_exponential"/>
-			<slider label="Absorptions-Exponentialskala:" name="absorption_exponential_scale"/>
-			<slider label="Absorptions-Linearterm:" name="absorption_linear"/>
-			<slider label="Absorptions-Konstantenterm:" name="absorption_constant"/>
-			<slider label="Absorptions-Maximalhöhe:" name="absorption_max_altitude"/>
+			<slider label="Absorpt.-Exponentialterm:" name="absorption_exponential"/>
+			<slider label="Absorpt.-Exponentialskala:" name="absorption_exponential_scale"/>
+			<slider label="Absorpt.-Linearterm:" name="absorption_linear"/>
+			<slider label="Absorpt.-Konstantenterm:" name="absorption_constant"/>
+			<slider label="Absorpt.-Maximalhöhe:" name="absorption_max_altitude"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

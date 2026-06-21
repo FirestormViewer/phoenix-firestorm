@@ -38,7 +38,7 @@ class LLCheckBoxCtrl;
 class LLComboBox;
 class LLSnapshotLivePreview;
 class LLSpinCtrl;
-class LLFloaterBigPreview;
+class FSFloaterBigPreview;
 
 /*
  * (TODO) Beq: Refactor this with Flickr
@@ -104,7 +104,7 @@ private:
     LLSpinCtrl*     mCustomSnapshotHeight{ nullptr };
     LLCheckBoxCtrl* mKeepAspectRatioCbx{ nullptr };
 
-    LLFloaterBigPreview* mBigPreviewFloater{ nullptr };
+    FSFloaterBigPreview* mBigPreviewFloater{ nullptr };
 };
 
 class FSPrimfeedAccountPanel : public LLPanel

@@ -132,15 +132,10 @@
 				<combo_box.item label="Calidad baja" name="4"/>
 				<combo_box.item label="Sin texturas" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Dibujo de máscara alfa:
-			</text>
-			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activado el modelo avanzado de iluminación" name="RenderAutoMaskAlphaNonDeferred"
-         top_pad="12"/>
-			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando está activado el modelo avanzado de iluminación" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>
+			<check_box label="Renderizar máscaras alfa" tool_tip="Cuando está marcado, hace que las máscaras alfa (partes transparentes) se muestren correctamente." name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Dibujar brillo" tool_tip="Dibujar brillo. Ten en cuenta que la intensidad debe configurarse a cero para desactivar el brillo cuando las sombras están activadas." name="RenderGlow"/>
 			<slider label="Intensidad:" tool_tip="Intensidad del brillo. Más alto = más amplio y suave (2 por defecto)." label_width="60" name="glow_strength" width="140"/>
 			<check_box label="Mostrar avatares que aún no se han terminado de cargar" name="RenderUnloadedAvatars"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="Taste festlegen" width="310">
+<floater name="modal container" title="Taste festlegen" width="330">
 	<floater.string name="keyboard">
 		Tastatur
 	</floater.string>
@@ -17,7 +17,7 @@ Zulässige Eingabe: [INPUT].
 		Taste oder Maustaste drücken, um Auslöser zu setzen.
 Zulässige Eingabe: [INPUT].
 	</text>
-	<check_box label="Für alle Modi festlegen" left="80" name="apply_all" tool_tip="Der Viewer verwendet verschiedene Tastenbelegungen, abhängig von Ihrer aktuellen Tätigkeit Inworld. Das Aktivieren dieser Option übernimmt Ihre Änderung für alle Modi."/>
+	<check_box label="Für alle Modi festlegen" left="95" name="apply_all" tool_tip="Der Viewer verwendet verschiedene Tastenbelegungen, abhängig von Ihrer aktuellen Tätigkeit Inworld. Das Aktivieren dieser Option übernimmt Ihre Änderung für alle Modi."/>
 	<button label="Löschen" name="SetEmpty" width="92"/>
 	<button label="Standard" name="Default" width="92"/>
 	<button label="Abbrechen" name="Cancel" width="92"/>

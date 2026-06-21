@@ -1380,6 +1380,10 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Filter-Tab schließen" name="FSInventoryCustomTabClose">
+		Filter-Tab „[NAME]“ schließen? Seine gespeicherten Filter werden entfernt.
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ja, schließen" ignoretext="Bestätigen, bevor ein benutzerdefinierter Filter-Tab geschlossen wird"/>
+	</notification>
 	<notification label="Geste umbenennen" name="RenameGesture">
 		Neuer Gesten-Name:
 		<form name="form">
@@ -3558,9 +3562,10 @@ Mit diesem Erlebnis verknüpfte Skripts können in Regionen, in denen dieses Erl
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
-  
-Bevor Sie den Zugriff erlauben, sollten Sie wissen, um was für ein Objekt es sich handelt, warum es den Zugriff benötigt und ob Sie dem Ersteller vertrauen. Falls Sie unsicher sind, klicken Sie auf Verweigern.
+		Warnung:
+[WARNING]
+
+Erlauben Sie keinen Zugriff wenn Sie sich nicht vollständig sicher sind, warum ein Zugriff auf Ihr Konto benötigt wird.
 		<form name="form">
 			<button name="Grant" text="Vollen Zugriff erlauben"/>
 			<button name="Deny" text="Verweigern"/>
@@ -3744,6 +3749,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="SnapshotToLocalDirNotExist">
 		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis existiert nicht.
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		Bildes gespeichert unter:
+[FILEPATH]
+
+Klicken, um Verzeichnis zu öffnen.
+	</notification>
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].
 	</notification>
@@ -3771,8 +3782,15 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
-		Sie wurden vom Moderator stummgeschaltet.
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
+Einwohner an diesem Ort werden Sie nicht hören können.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		Einwohner an diesem Ort können Ihren Sprachchat jetzt hören.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
@@ -6049,6 +6067,52 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 	</notification>
 	<notification name="FSSetTitleRegionNotFound">
 		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSet">
+		Name für neues Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Name für geklontes Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Sind Sie sicher, dass sie Regelset [RULESETNAME] löschen möchten?
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, bevor ein Regelset gelöscht wird." notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Standard-Regelset kann nicht geklöscht werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Regelset kann nicht gelöscht werden, da sich ein Index außerhalb des Wertebereichs befindet.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Regelset kann nicht gelöscht werden, da kein Set mit dem Namen gefunden wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 

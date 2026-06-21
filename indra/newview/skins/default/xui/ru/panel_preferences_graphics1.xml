@@ -193,15 +193,11 @@
 				<combo_box.item label="Низкое (4)" name="4"/>
 				<combo_box.item label="Нет текстур (5)" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Маски прозрачности (альфа):
-			</text>
-			<check_box label="Прорисовка альфа маски, когда 'Расширенная модель освещения' не включена" tool_tip="Когда отмечено позволяет альфа маске прорисовываться корректно, если расширенная модель освещения не включена" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="Прорисовка альфа маски, когда 'Расширенная модель освещения' включена" tool_tip="Когда отмечено позволяет альфа маске прорисовываться корректно, если расширенная модель освещения включена" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Разное:
 			</text>
 			<check_box label="HDR и Эмиссионные" tool_tip="Включает дополнительные функции конвейера рендеринга на новых компьютерах, такие как HDR и эмиссионные текстуры для PBR-контента." name="VintageMode" width="256"/>
+			<check_box label="Прорисовка альфа-масок" tool_tip="Когда отмечено, позволяет альфа-маскам (прозрачные части) отображаться корректно." name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Прорисовка свечения" tool_tip="Прорисовка свечения. Обратите внимание, что сила должна быть установлена на ноль, чтобы отключить свечение, когда тени включены." name="RenderGlow"/>
 			<slider label="Сила:" tool_tip="Сила. Выше = шире и размытей (по умолчанию 2) " name="glow_strength"/>
 			<check_box label="Показывать не полностью загруженные аватары" name="RenderUnloadedAvatars"/>

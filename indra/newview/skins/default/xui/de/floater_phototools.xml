@@ -35,7 +35,7 @@
 				<button name="Noon" label="Mittag" tool_tip="Beleuchtung anpassen, um die Helligkeit zur Mittagszeit zu simulieren."/>
 				<button name="Sunset" label="Sonnenuntergang" tool_tip="Beleuchtungsverhältnisse für Sonnenuntergang für warme, goldene Farbtöne setzen."/>
 				<button name="Midnight" label="Mitternacht" tool_tip="Auf Nacht-Einstellungen für Umgebung mit schwachen Lichtverhältnissen wechseln."/>
-				<button name="Revert to Region Default" label="Gemeinsame Umgebung" tool_tip=""/>
+				<button name="Revert to Region Default" label="Gemeinsame Umg." tool_tip=""/>
 			</panel>
 			
 			<panel name="P_WL_Presets">
@@ -134,7 +134,7 @@
 					<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
 				</combo_box>
 				<text name="local lights_label" tool_tip="Legt die Anzahl an gleichzeitig dargestellten Lichtquellen fest. Ein Wert von 0 deaktiviert alle lokalen Lichtqzellen. Höhere Werte können die Performance in komplexen Szene beeinträchtigen. Erfordert Neustart.">
-					Punkt. Beleucht. (Neust.)
+					Punkt. Beleuch. (Neust.)
 				</text>
 				<combo_box name="LocalLightsDetail">
 					<combo_box.item label="Vollständig (Standard)" name="3"/>
@@ -430,14 +430,14 @@
 			<panel name="P_Render">
 				<check_box label="Draw Distance aktivieren" name="UseFarClip" tool_tip="Aktiviert die Draw Distance. Wenn diese Einstellung deaktiviert wird, stellt der Viewer Objekte auch außerhalb der Draw Distance dar."/>
 				<check_box label="Detaillevel dynamisch anpassen" name="RednerLod1" tool_tip="Diese Einstellung bewirkt, dass der Viewer dynamisch das Detaillevel von Objekten anpasst, wenn der Abstand zu einem Objekt verändert wird. Hierdurch wird die Performance verbessert, allerdings kann auch die Darstellungsqualität von Objekten schlechter werden."/>
-				<check_box label="Nur Objekte im Sichtber. der Kamera rendern" name="UssOcclusion1" tool_tip="Falls diese Einstellung aktiviert wird, werden nur Objekte durch den Viewer verarbeitet/gerendered, die im aktuellen Sichtbereich der Kamera und die nicht durch andere Objekte verdeckt sind. Hierdurch wird normalerweise eine bessere Performance erreicht. Manchmal kann die Performance allerdings auch schlechter werden, wenn in der aktuellen Szenerie/Region wenig Objekte vorhanden sind. Ausprobieren, um diese Einstellung einen Vorteil bringt!"/>
+				<check_box label="Nur Objekte im Sichtber. d. Kamera rendern" name="UssOcclusion1" tool_tip="Falls diese Einstellung aktiviert wird, werden nur Objekte durch den Viewer verarbeitet/gerendered, die im aktuellen Sichtbereich der Kamera und die nicht durch andere Objekte verdeckt sind. Hierdurch wird normalerweise eine bessere Performance erreicht. Manchmal kann die Performance allerdings auch schlechter werden, wenn in der aktuellen Szenerie/Region wenig Objekte vorhanden sind. Ausprobieren, um diese Einstellung einen Vorteil bringt!"/>
 				<check_box label="Anisotropische Filterung" name="Anisotropic" tool_tip="Diese Einstellung erzeugt knusprigere Texturen."/>
 				<check_box label="Partikel von anderen Avataren anzeigen" name="Render Attached Particle" tool_tip="Falls diese Einstellung aktiviert ist, werden alle Arten von Partikeln angezeigt, die von Avataren ausgehen."/>
 			</panel>
 
 			<panel name="P_Anti-aliasing">
 				<text name="T_Antialiasing_Type" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
-					Anti-Aliasing-Typ:
+					Anti-Aliasing-Typ
 				</text>
 				<combo_box name="fsaa">
 					<combo_box.item label="Deaktiviert" name="FSAADisabled"/>
@@ -468,7 +468,7 @@
 					Max. Textur-Auflösung
 				</text>
 				<text name="T_AvatarDisplay" tool_tip="Legt fest, wie Avatar basierend auf Komplexität und Freundschaftsstatus dargestellt werden.">
-					Avatar-Anzeige:
+					Avatar-Anzeige
 				</text>
 				<combo_box name="AvatarComplexityModeSelection">
 					<combo_box.item label="Komplexitätsbegrenzung" name="0"/>
@@ -496,7 +496,7 @@
 				<check_box label="Transparente Objekte in rot hervorheben" name="Highlight Transparent"/>
 				<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
 				<check_box label="Angehängte HUD-Objekte anzeigen" name="Show HUD Attachments"/>
-				<check_box label="Avatar verlangsamen (nur in eigenem Viewer)" name="Slow Motion Animations"/>
+				<check_box label="Avatar verlangsamen (nur in eigenen Viewer)" name="Slow Motion Animations"/>
 				<button label="Aussehen aktualisieren (Rebake)" name="Rebake Texture"/>
 				<button label="Viewer-Fenstergröße festlegen..." name="Set Window Size..."/>
 				<button label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
@@ -627,7 +627,7 @@
 								Empfindlichkeit
 							</text>
 							<button name="Reset_Mouse_Sens" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-							<check_box label="Avatar und Anhänge in Mouselook anzeigen" tool_tip="Zeigt den Avatar und Anhänge unterhalb des Halses im Mouselook-Modus an. Standardwert is AUS." name="first_person_avatar_visible"/>
+							<check_box label="Avatar und Anhänge im Mouselook anzeig." tool_tip="Zeigt den Avatar und Anhänge unterhalb des Halses im Mouselook-Modus an. Standardwert is AUS." name="first_person_avatar_visible"/>
 							<check_box label="Weiche Mouselook-Bewegungen" tool_tip="Glättet die Bewegungen der Maus im Mouselook-Modus." name="MouseSmooth"/>
 						</panel>
 					</panel>
@@ -635,7 +635,7 @@
 					<panel name="P_Misc" label="Sonstiges">
 						<panel name="P_Misc_Settings">
 							<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-							<check_box label="Kameraposition nach Teleport zurücksetzen" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+							<check_box label="Kameraposition nach Teleport zurücksetz." name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 							<check_box label="Kamerabewegung durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
 							<check_box label="Kamera bei Avatarbewegung zurücksetzen" name="resetcamerapositiononmovement" tool_tip="Setzt die Kameraposition zurück, sobald der Avatar bewegt wird."/>
 						</panel>

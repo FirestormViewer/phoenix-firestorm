@@ -27,12 +27,13 @@
 #ifndef LL_LLFONTFREETYPE_H
 #define LL_LLFONTFREETYPE_H
 
-#include <boost/unordered_map.hpp>
 #include "llpointer.h"
 #include "llstl.h"
 
 #include "llimagegl.h"
 #include "llfontbitmapcache.h"
+
+#include <unordered_map>
 
 // Hack.  FT_Face is just a typedef for a pointer to a struct,
 // but there's no simple forward declarations file for FreeType,
@@ -42,6 +43,7 @@ struct FT_FaceRec_;
 typedef struct FT_FaceRec_* LLFT_Face;
 struct FT_StreamRec_;
 typedef struct FT_StreamRec_ LLFT_Stream;
+enum class EFontHinting : S32;
 
 namespace ll
 {
@@ -86,6 +88,8 @@ struct LLFontGlyphInfo
     S32 mYBitmapOffset; // Offset to the origin in the bitmap
     S32 mXBearing;  // Distance from baseline to left in pixels
     S32 mYBearing;  // Distance from baseline to top in pixels
+    S32 mLsbDelta;  // FreeType subpixel left side bearing delta (26.6 units)
+    S32 mRsbDelta;  // FreeType subpixel right side bearing delta (26.6 units)
     std::pair<EFontGlyphType, S32> mBitmapEntry; // Which bitmap in the bitmap cache contains this glyph
 };
 
@@ -99,7 +103,7 @@ public:
 
     // is_fallback should be true for fallback fonts that aren't used
     // to render directly (Unicode backup, primarily)
-    bool loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, bool is_fallback, S32 face_n);
+    bool loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags);
 
     S32 getNumFaces(const std::string& filename);
 
@@ -161,9 +165,14 @@ private:
     void resetBitmapCache();
     void setSubImageLuminanceAlpha(U32 x, U32 y, U32 bitmap_num, U32 width, U32 height, U8 *data, S32 stride = 0) const;
     bool setSubImageBGRA(U32 x, U32 y, U32 bitmap_num, U16 width, U16 height, const U8* data, U32 stride) const;
+    bool setVariationAxis(const std::string& axis_tag, F32 value);
     bool hasGlyph(llwchar wch) const;       // Has a glyph for this character
     LLFontGlyphInfo* addGlyph(llwchar wch, EFontGlyphType glyph_type) const;        // Add a new character to the font if necessary
-    LLFontGlyphInfo* addGlyphFromFont(const LLFontFreetype *fontp, llwchar wch, U32 glyph_index, EFontGlyphType bitmap_type) const; // Add a glyph from this font to the other (returns the glyph_index, 0 if not found)
+    LLFontGlyphInfo* addGlyphFromFont(
+        const LLFontFreetype *fontp,
+        llwchar wch,
+        U32 glyph_index,
+        EFontGlyphType bitmap_type) const; // Add a glyph from this font to the other (returns the glyph_index, 0 if not found)
     void renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index, llwchar wch) const;
     void insertGlyphInfo(llwchar wch, LLFontGlyphInfo* gi) const;
 
@@ -179,23 +188,20 @@ private:
     LLFT_Face mFTFace;
 
     bool mIsFallback;
+    EFontHinting mHinting;
+    S32 mFontFlags;
+    S32 mWeight = -1;
     typedef std::pair<LLPointer<LLFontFreetype>, char_functor_t> fallback_font_t;
     typedef std::vector<fallback_font_t> fallback_font_vector_t;
     fallback_font_vector_t mFallbackFonts; // A list of fallback fonts to look for glyphs in (for Unicode chars)
 
     // *NOTE: the same glyph can be present with multiple representations (but the pointer is always unique)
-    typedef boost::unordered_multimap<llwchar, LLFontGlyphInfo*> char_glyph_info_map_t;
+    typedef std::unordered_multimap<llwchar, LLFontGlyphInfo*> char_glyph_info_map_t;
     mutable char_glyph_info_map_t mCharGlyphInfoMap; // Information about glyph location in bitmap
 
     mutable LLFontBitmapCache* mFontBitmapCachep;
 
     mutable S32 mRenderGlyphCount;
-
-    // <FS:ND> Save X-kerning data, so far only for all glyphs with index small than 256 (to not waste too much memory)
-    // right now it is 256 slots with 256 glyphs each, maybe consider splitting it into smaller slices to use less memory if we
-    // we want to cache 0xFFFF glyphs
-    F32 **mKerningCache;
-    // </FS:ND<
 };
 
 #endif // LL_FONTFREETYPE_H

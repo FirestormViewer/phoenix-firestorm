@@ -656,6 +656,8 @@ class LLWebRTCPeerConnectionImpl : public LLWebRTCPeerConnectionInterface,
     void enableSenderTracks(bool enable);
     void enableReceiverTracks(bool enable);
 
+    void gatherConnectionStats() override;
+
   protected:
 
     LLWebRTCImpl * mWebRTCImpl;

@@ -10,7 +10,7 @@
  save_rect="true"
  single_instance="true"
  title="Preferences"
- width="662">
+ width="673">
     <button
      follows="right|bottom"
      height="23"
@@ -95,10 +95,10 @@
      name="pref core"
      tab_group="1"
      tab_position="left"
-     tab_width="114"
+     tab_width="125"
      tab_padding_right="4"
      top="42"
-     width="662">
+     width="673">
         <panel
          class="panel_preference"
          filename="panel_preferences_general.xml"

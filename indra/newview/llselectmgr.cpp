@@ -5209,9 +5209,10 @@ void LLSelectMgr::deselectAllIfTooFar()
 //  if (gSavedSettings.getBOOL("LimitSelectDistance")
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
     static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
-
+    static LLCachedControl<bool> limit_select_distance(gSavedSettings, "LimitSelectDistance");
+    static LLCachedControl<F32> max_select_distance(gSavedSettings, "MaxSelectDistance");
     bool fRlvFartouch = gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH) && LLToolMgr::instance().inEdit();
-    if ( (gSavedSettings.getBOOL("LimitSelectDistance") || (fRlvFartouch) )
+    if ( (limit_select_distance() || (fRlvFartouch) )
 // [/RLVa:KB]
         && (!mSelectedObjects->getPrimaryObject() || !mSelectedObjects->getPrimaryObject()->isAvatar())
         && (mSelectedObjects->getPrimaryObject() != LLViewerMediaFocus::getInstance()->getFocusedObject())
@@ -5220,7 +5221,7 @@ void LLSelectMgr::deselectAllIfTooFar()
     {
 //      F32 deselect_dist = gSavedSettings.getF32("MaxSelectDistance");
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
-        F32 deselect_dist = (!fRlvFartouch) ? gSavedSettings.getF32("MaxSelectDistance") : s_nFartouchDist;
+        F32 deselect_dist = (!fRlvFartouch) ? (F32)max_select_distance() : s_nFartouchDist;
 // [/RLVa:KB]
         F32 deselect_dist_sq = deselect_dist * deselect_dist;
 
@@ -6473,6 +6474,15 @@ void LLSelectMgr::processObjectPropertiesFamily(LLMessageSystem* msg, void** use
         node->mCategory = category;
         node->mName.assign(name);
         node->mDescription.assign(desc);
+
+        LLViewerObject* obj = node->getObject();
+        if (obj && LLViewerObject::isObjectInPendingUpdate(owner_id, obj))
+        {
+            // current response doesn't return modify permissions flags,
+            // so we should request it separately if needed
+            obj->requestObjectUpdate();
+        }
+
     }
 
     dialog_refresh_all();

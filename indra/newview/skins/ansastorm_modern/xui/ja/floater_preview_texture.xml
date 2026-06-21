@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		テクスチャ：[NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		インベントリにコピー
+	</floater.string>
+	<floater.string name="DateTime">
+		[year,datetime,slt]年[month,datetime,slt]月[day,datetime,slt]日（[weekday,datetime,slt]）　[ampm,datetime,slt]　[hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]
+	</floater.string>
+	<text name="desc txt">
+		説明：
+	</text>
+	<text name="uploader_label">
+		アップロード者：
+	</text>
+	<button label="プロフィール" name="openprofile"/>
+	<text name="upload_time_label">
+		日付：
+	</text>
+	<text name="uuid_label">
+		ＵＵＩＤ：
+	</text>
+	<button label="コピー" name="copyuuid"/>
+	<panel name="dimensions_panel">
+		<text name="dimensions">
+			[WIDTH]px×[HEIGHT]px
+		</text>
+		<text name="aspect_ratio">
+			縦横比のプレビュー
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="固定した縦横比でプレビューします。">
+			<combo_item name="Unconstrained">
+				制約なし
+			</combo_item>
+			<combo_item name="1:1" tool_tip="グループ憲章か、追加のプロフィール情報">
+				１：１
+			</combo_item>
+			<combo_item name="4:3" tool_tip="[CURRENT_GRID]のプロフィール">
+				４：３
+			</combo_item>
+			<combo_item name="10:7" tool_tip="クラシファイドや検索リスト、ランドマーク">
+				１０：７
+			</combo_item>
+			<combo_item name="3:2" tool_tip="土地について">
+				３：２
+			</combo_item>
+			<combo_item name="16:10">
+				１６：１０
+			</combo_item>
+			<combo_item name="16:9" tool_tip="プロフィールのピック">
+				１６：９
+			</combo_item>
+			<combo_item name="2:1">
+				２：１
+			</combo_item>
+		</combo_box>
+	</panel>
+	<panel name="button_panel">
+		<button name="btn_refresh"/>
+		<button label="ＯＫ" name="Keep"/>
+		<button label="破棄" name="Discard"/>
+		<flyout_button label="保存…" name="save_tex_btn">
+			<flyout_button.item label="TGAで保存" name="save_item_tga"/>
+			<flyout_button.item label="PNGで保存" name="save_item_png"/>
+		</flyout_button>
+	</panel>
+</floater>

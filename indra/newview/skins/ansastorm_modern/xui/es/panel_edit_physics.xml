@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Rebote pecho">
+			<text name="physics_breast_updown_not_available">
+				El rebote del pecho sólo está disponible
+para avatares femeninos.
+			</text>
+			<accordion name="physics_breast_updown_accordion">
+				<accordion_tab name="physics_breasts_updown_tab" title="Rebote del pecho"/>
+			</accordion>
+		</panel>				
+		<panel name="physics_breast_inout_tab_holder" title="Canalillo">
+			<text name="physics_breast_inout_not_available">
+				El canalillo sólo está disponible
+para avatares femeninos.
+			</text>
+			<accordion name="physics_breast_inout_accordion">
+				<accordion_tab name="physics_breasts_inout_tab" title="Canalillo"/>
+			</accordion>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Balanceo pecho">
+			<text name="physics_breast_leftright_not_available">
+				El balanceo del pecho sólo está disponible
+para avatares femeninos.
+			</text>
+			<accordion name="physics_breast_leftright_accordion">
+				<accordion_tab name="physics_breasts_leftright_tab" title="Balanceo del pecho"/>
+			</accordion>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Rebote barriga">
+			<accordion name="physics_belly_accordion">
+				<accordion_tab name="physics_belly_tab" title="Rebote de la barriga"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_tab_holder" title="Rebote culo">
+			<accordion name="physics_butt_accordion">
+				<accordion_tab name="physics_butt_tab" title="Rebote del culo"/>
+			</accordion>
+		</panel>
+		<panel name="physics_butt_leftright_tab_holder" title="Balanceo culo">
+			<accordion name="physics_butt_leftright_accordion">
+				<accordion_tab name="physics_butt_leftright_tab" title="Balanceo del culo"/>
+			</accordion>
+		</panel>
+		<panel name="physics_advanced_tab_holder" title="Avanzados">
+			<accordion name="physics_advanced_accordion">
+				<accordion_tab name="physics_advanced_tab" title="Parámetros avanzados"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>
