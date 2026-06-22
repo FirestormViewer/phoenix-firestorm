@@ -112,7 +112,8 @@
         <check_box label="Kliknięcie na wskaźniku ruchu sieciowego otwiera statystyki zamiast miernika lagów" name="FSUseStatsInsteadOfLagMeter" />
         <check_box label="Pokaż kontrolki mediów w menu na górze" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
         <check_box label="Pokaż lokalizację w menu na górze" name="ShowMenuBarLocation" />
-        <check_box label="Pokazuj wersję symulatora w menu na górze" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecną wersję symulatora na pasku statusu w stylu V1." />
+        <check_box label="Pokaż wersję symulatora w menu na górze" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokaż obecną wersję symulatora na pasku statusu w stylu V1." />
+		<check_box label="Pokaż kontrolki Wszystkofiltra" name="show_omnifilter_controls_check" tool_tip="Kontrolki obejmują włączanie/wyłączanie Wszystkofiltra, przełączanie edytora reguł Wszystkofiltra oraz zmianę aktywnego zestawu reguł." />
         <check_box label="Pokaż wyszukiwarkę pozycji w menu" name="show_search_menu_check" />
         <check_box label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar" />
         <check_box label="Włącz autorozwijanie menusów przy wskazywaniu ikon na pasku" name="FSStatusBarMenuButtonPopupOnRollover" />

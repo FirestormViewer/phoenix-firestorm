@@ -17,7 +17,7 @@
 					<button name="teleport_btn" label="Teleportuj" />
 				</layout_panel>
 				<layout_panel name="set_to_curr_location_btn_lp">
-					<button name="set_to_curr_location_btn" label="Ustaw lokalizację" tool_tip="Ustaw na obecną lokalizację" />
+					<button name="set_to_curr_location_btn" label="Ustaw lokację" tool_tip="Ustaw na obecną lokalizację" />
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
