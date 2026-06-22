@@ -5193,7 +5193,7 @@ Se o erro persistir, verifique as configurações de rede e firewall.
 		Minha assinatura premium
 	</string>
 	<string name="DeleteItems">
-		Excluir itens selecionados? [COUNT_SELECTION] [COUNT_TOTAL]
+		Deseja excluir [COUNT_SELECTION] objetos selecionados ([COUNT_TOTAL] no total)?
 	</string>
 	<string name="DeleteItem">
 		Excluir item selecionado? [COUNT_TOTAL]
