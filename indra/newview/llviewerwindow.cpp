@@ -6021,10 +6021,12 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         LLSD payload;
         payload["filepath"] = filepath;
 
-        LLNotificationsUtil::add("SnapshotSavedToComputer",
-                                 args,
-                                 payload.with("respond_on_mousedown", true),
-                                 boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// <FS:PP> We don't need forced SnapshotSavedToComputer notiification, since we have SnapshotSavedToDisk string already in place
+//         LLNotificationsUtil::add("SnapshotSavedToComputer",
+//                                  args,
+//                                  payload.with("respond_on_mousedown", true),
+//                                  boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// </FS:PP>
 
         if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
         {
