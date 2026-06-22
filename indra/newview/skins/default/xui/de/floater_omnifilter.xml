@@ -28,7 +28,7 @@
 	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
-			<check_box name="enable_omnifilter" label="Omnifilter aktivieren"/>
+			<check_box name="enable_omnifilter" label="Omni-Filter aktivieren"/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="Aktiv"/>
 				<fs_scroll_list.columns name="needle_name" label="Regel"/>
