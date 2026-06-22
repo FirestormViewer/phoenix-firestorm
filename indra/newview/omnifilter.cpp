@@ -819,7 +819,7 @@ void OmnifilterMenuPanel::onRuleSetChanged()
     instance->assignRuleSet(true);
 
     // Get the pointer to the actual Omnifilter Editor window.
-    Omnifilter* omnifilter_floaterp = dynamic_cast<Omnifilter*>(LLFloaterReg::getInstance("omnifilter"));
+    Omnifilter* omnifilter_floaterp = LLFloaterReg::findTypedInstance<Omnifilter>("omnifilter");
 
     // If the omnifilter floater is visbile
     if (omnifilter_floaterp && omnifilter_floaterp->getVisible())

@@ -212,7 +212,7 @@
     <panel
       class="panel_omnifilter_controls"
       height="18"
-      left="-695"
+      left="-678"
       width="190"
       top="0"
       follows="right|top"
@@ -227,7 +227,7 @@
          follows="left|top"
          height="18"
          top="2"
-         left="0"
+         left="3"
          tool_tip="Enable Omnifilter"
          control_name="OmnifilterEnabled"/>
         <button
