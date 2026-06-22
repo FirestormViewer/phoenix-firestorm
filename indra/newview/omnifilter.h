@@ -40,9 +40,12 @@ class LLTextEditor;
 class Omnifilter : public LLFloater
 {
     friend class LLFloaterReg;
+    friend class OmnifilterMenuPanel;
 
 private:
     Omnifilter(const LLSD& key);
+    void onVisibilityChange(bool visible) override;
+    ~Omnifilter();
 
 public:
     bool              postBuild() override final;
@@ -67,6 +70,8 @@ protected:
     void onRuleSetChanged();
     void reloadRules();
     void reloadRule();
+    void changeRuleSet(S32 new_rule_set_index);
+    void onRuleSetsUpdated();
     void onNeedleNameChanged();
     void onNeedleCheckboxChanged(LLUICtrl* ctrl);
     void onOwnerChanged();
@@ -113,4 +118,28 @@ protected:
     LLLineEditor* mButtonReplyCtrl{ nullptr };
     LLTextEditor* mTextBoxReplyCtrl{ nullptr };
 };
+
+/// <summary>
+/// Omnifilter Menu Panel - Used by panel_status_bar.xml's omnifilter_menu_panel
+/// </summary>
+
+class OmnifilterMenuPanel : public LLPanel
+{
+public:
+    OmnifilterMenuPanel();
+    /*virtual*/ bool postBuild();
+
+    virtual ~OmnifilterMenuPanel();
+
+protected:
+    void onRuleSetChanged();
+    void updateOmnifilterRuleSets(const LLSD& data);
+    void reloadRules();
+    void onRuleSetsUpdated();
+
+    LLComboBox*       mRuleSetsCmb{ nullptr };
+    boost::signals2::connection mControlConnection;
+    boost::signals2::connection mRuleSetUpdatedConnection;
+};
+
 #endif // OMNIFILTER_H

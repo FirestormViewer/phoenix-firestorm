@@ -31,6 +31,7 @@
 #include "lltexteditor.h"
 #include "llviewercontrol.h" // Needed for gSavedSettings
 #include "llnotificationsutil.h" // Needed for Notifications
+#include "llfloaterreg.h" // Needed for LLFloaterReg::showInstance
 
 #include "fsscrolllistctrl.h"
 
@@ -43,6 +44,12 @@ static constexpr S32 LOG_CONTENT_COLUMN = 1;
 Omnifilter::Omnifilter(const LLSD& key) :
     LLFloater(key)
 {
+}
+
+// Need deconstructor to be able to disconnect the control connection
+Omnifilter::~Omnifilter()
+{
+    mControlConnection.disconnect();
 }
 
 LLScrollListItem* Omnifilter::addNeedle(const std::string& needle_name, const OmnifilterEngine::Needle& needle)
@@ -473,7 +480,8 @@ void Omnifilter::reloadRules()
 {
     static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
     // Clear the current needles
-    mRuleSetsCmb->clear();
+    mRuleSetsCmb->clear(); // Clears the status of the combo-box only.
+    mRuleSetsCmb->clearRows(); // Clears the actual rows of the comnbo-box.
     S32 current_rule_set_id = gSavedSettings.getS32("OmnifilterRuleSetID");
     for (S32 index = 0; index < instance->getOrderedRuleSetSize(); index++)
     {
@@ -506,6 +514,16 @@ void Omnifilter::reloadRule()
 
     mNeedleListCtrl->selectFirstItem();
     onSelectNeedle();
+}
+
+void Omnifilter::changeRuleSet(S32 new_rule_set_index)
+{
+    // If able to select the stored rule set
+    if (mRuleSetsCmb->selectByValue(LLSD(new_rule_set_index)))
+    {
+        // Reload the UI
+        reloadRule();
+    }
 }
 
 void Omnifilter::onNeedleNameChanged()
@@ -687,6 +705,7 @@ bool Omnifilter::postBuild()
     mNewRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onNewRuleSetClicked, this)); // New Rule Set
     mCloneRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onCloneRuleSetClicked, this)); // Clone Rule Set
     mRemoveRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveRuleSetClicked, this)); // Remove Rule Set
+    setVisibleCallback(boost::bind(&Omnifilter::onVisibilityChange, this, _2)); // Add visiblity callback to reload any changes to which rule set is active
 
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
     mSenderNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
@@ -719,4 +738,128 @@ bool Omnifilter::postBuild()
     onSelectNeedle();
 
     return true;
+}
+
+// Callback for when the the floater becomes visible, as now there are more then one way to
+// change the active omnifilter.
+void Omnifilter::onVisibilityChange(bool visible)
+{
+    // Only bother to change when made visible.
+    if (visible)
+    {
+        // Select the stored rule set value and set the Rule Set Combo-box to the value stored
+        // automatically switch to the correct rule set.
+        mRuleSetsCmb->selectByValue(LLSD(gSavedSettings.getS32("OmnifilterRuleSetID")));
+        // Need to also reload the UI of the rules editor to match the change.
+        reloadRule();
+    }
+}
+
+/// <summary>
+/// Omnifilter Menu Panel
+/// Used by panel_status_bar.xml's Omnifilter_menu_panel
+/// Allows the main UI to control which Omnifilter rule set is being used
+/// as well as be able to enable/disable the omnifilter and display the editor.
+/// Prevents the need to add any code to the LLStatusBar class as it's all
+/// handled by the custom class instead.
+/// </summary>
+
+// Register the omnifilter controls panel for the top status bar. Prevents the need for having the status bar
+// from needing code added to handle the panel.
+static LLPanelInjector<OmnifilterMenuPanel> t_omnifilter_menu_panel("panel_omnifilter_controls");
+
+// Default constructor
+OmnifilterMenuPanel::OmnifilterMenuPanel() : LLPanel()
+{
+}
+
+// Deconstructor needed to disconnect the signals
+OmnifilterMenuPanel::~OmnifilterMenuPanel()
+{
+    // Disconnect from the changes to the omnifilter rule set ID changes
+    gSavedSettings.getControl("OmnifilterRuleSetID")->getCommitSignal()->disconnect(mControlConnection);
+    // Disconnect from the rule set updated state of the OmnifilterEngine.
+    mRuleSetUpdatedConnection.disconnect();
+}
+
+
+bool OmnifilterMenuPanel::postBuild()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // Store the pointers for the rule sets combobox
+    mRuleSetsCmb = getChild<LLComboBox>("cmb_omnifilter_rule_sets");
+    // For the rules to be reloaded as need to get the latest form the OmnifilerEngine.
+    reloadRules();
+
+    // Set a callback for when the rule set combobox is changed by the user, not by outside sources.
+    mRuleSetsCmb->setCommitCallback(boost::bind(&OmnifilterMenuPanel::onRuleSetChanged, this));
+
+    // Add signal callback for when the OmnifilterRuleSetID has been modified (Especially from an outside source. Changes the selected item in the
+    // Rule Set ComboBox
+    mControlConnection = gSavedSettings.getControl("OmnifilterRuleSetID")->getCommitSignal()->connect(boost::bind(&OmnifilterMenuPanel::updateOmnifilterRuleSets, this, _2));
+    // Add signal callback for when the actual contents of the Rule Sets changes in the OmnifilterEngine.
+    // In this case, the Omnifilter Rules Editor window.
+    mRuleSetUpdatedConnection = instance->setRuleSetUpdatedCallback(boost::bind(&OmnifilterMenuPanel::onRuleSetsUpdated, this));
+
+    return true;
+}
+
+// Callback for Rule Set ComboBox, when the user makes the changes
+void OmnifilterMenuPanel::onRuleSetChanged()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+
+    // Write the current rule set back to the storeage
+    instance->assignRuleSet(false);
+    // Store the current combo box index as the saved setting for the Rule Set ID.
+    gSavedSettings.setS32("OmnifilterRuleSetID", mRuleSetsCmb->getCurrentIndex());
+    // Assign and reload the current rule
+    instance->assignRuleSetNameFromSettings();
+    // Write the current rule back to the UI rule set.
+    instance->assignRuleSet(true);
+
+    // Get the pointer to the actual Omnifilter Editor window.
+    Omnifilter* omnifilter_floaterp = dynamic_cast<Omnifilter*>(LLFloaterReg::getInstance("omnifilter"));
+
+    // If the omnifilter floater is visbile
+    if (omnifilter_floaterp && omnifilter_floaterp->getVisible())
+    {
+        omnifilter_floaterp->changeRuleSet(mRuleSetsCmb->getCurrentIndex());
+    }
+}
+
+// Callback method to update which omnifilter rule set is selected.
+void OmnifilterMenuPanel::updateOmnifilterRuleSets(const LLSD& data)
+{
+    // Get the new index that the user selected
+    S32 new_id = data.asInteger();
+    // Set the control change rule set flag to true;
+    mRuleSetsCmb->selectNthItem(new_id);
+}
+
+// Releads the rules based upon the stored rule sets in the OmnifilterEngine.
+void OmnifilterMenuPanel::reloadRules()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    // Clear the current rule sets
+    mRuleSetsCmb->clear();
+    mRuleSetsCmb->clearRows();
+    S32 current_rule_set_id = gSavedSettings.getS32("OmnifilterRuleSetID");
+    for (S32 index = 0; index < instance->getOrderedRuleSetSize(); index++)
+    {
+        // Get the name from the ordered list of rule sets.
+        const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
+        LLSD value(index);
+        // And add to the UI element. The value is the value that is passed along with the commit callback method.
+        mRuleSetsCmb->add(needle_rule_set_name, value);
+    }
+    // Finally, select the stored rule set
+    mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));
+}
+
+// Callback used for when the OmnifilterEngine updates the Rule Sets. Includes, New, Clone and Remove.
+void OmnifilterMenuPanel::onRuleSetsUpdated()
+{
+    // Reload the rule sets for the Combo-box as the rules were changed from the Omnifilter Rules Editor.
+    reloadRules();
 }
