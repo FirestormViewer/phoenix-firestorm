@@ -1784,7 +1784,7 @@ void LLStatusBar::setBackgroundColor( const LLColor4& color )
     LLPanel::setBackgroundColor(color);
     mBalancePanel->setBackgroundColor(color);
     mTimeMediaPanel->setBackgroundColor(color);
-    getChild<LLPanel>("omnifilter_controls_panel")->setBackgroundColor(color);
+    mOmnifilterPanel->setBackgroundColor(color);
 }
 
 void LLStatusBar::updateNetstatVisibility(const LLSD& data)
