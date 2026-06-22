@@ -208,6 +208,58 @@
      name="buycurrencylabel">
         L$ [AMT]
     </panel.string>
+    <!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+    <panel
+      class="panel_omnifilter_controls"
+      height="18"
+      left="-695"
+      width="190"
+      top="0"
+      follows="right|top"
+      name="omnifilter_controls_panel"
+      visibility_control="OmnifilterControls"
+      background_opaque="true"
+      background_visible="true"
+      bg_opaque_color="MouseGray">
+        <check_box
+         name="enable_omnifilter"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         top="2"
+         left="0"
+         tool_tip="Enable Omnifilter"
+         control_name="OmnifilterEnabled"/>
+        <button
+         follows="left|top"
+         layout="topleft"
+         height="18"
+         hover_glow_amount="0.15"
+         image_disabled="omnifilter"
+         image_disabled_selected="omnifilter"
+         image_selected="omnifilter"
+         image_unselected="omnifilter"
+         left="18"
+         name="btn_show_omnifilter"
+         top="0"
+         tool_tip="Show Omnifilter"
+         is_toggle="true"
+         width="18">
+            <button.commit_callback
+                function="Floater.ToggleOrBringToFront"
+                parameter="omnifilter"/>
+        </button>
+        <combo_box
+         height="18"
+         layout="topleft"
+         left="36"
+         top="0"
+         follows="left|top"
+         name="cmb_omnifilter_rule_sets"
+         tool_tip="Choose the Omnifilter Rule Set to use."
+         width="150"/>
+    </panel>
+    <!-- </FS:MJR> [FIRE-36776] -->
 
 	<panel
 	 height="18"

@@ -578,6 +578,9 @@ S32 OmnifilterEngine::removeCurrentRuleSet()
             // Re-assign the current rule set name and reload the rule set from storage to the rule set
             assignRuleSetNameFromSettings();
             assignRuleSet();
+
+            // Signal all listeners that the rule sets have been updated
+            onRuleSetsUpdated();
             // Return 1 indicating that the removal worked correctly.
             return 1;
         }
@@ -616,6 +619,8 @@ S32 OmnifilterEngine::addNewRuleSet(std::string_view new_name)
     mCurrentSelectedRuleSet = str_new_name;
     // Add the rule set name to the list of ordered rule sets
     mOrderedRuleSets.push_back(mCurrentSelectedRuleSet);
+    // Signal all listeners that the rule sets have been updated
+    onRuleSetsUpdated();
 
     return 1;
 }
@@ -652,6 +657,8 @@ S32 OmnifilterEngine::addClonedRuleSet(std::string_view new_name)
     // Copy the internal rule set to the stored rulset
     assignRuleSet(false);
 
+    // Signal all listeners that the rule sets have been updated
+    onRuleSetsUpdated();
     return 1;
 }
 
@@ -876,4 +883,9 @@ bool OmnifilterEngine::tick()
     saveNeedles();
     setDirty(false);
     return false;
+}
+
+void OmnifilterEngine::onRuleSetsUpdated()
+{
+    mRuleSetUpdatedCallback();
 }
