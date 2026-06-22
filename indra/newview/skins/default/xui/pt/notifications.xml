@@ -1273,7 +1273,7 @@ Este é um erro temporário. Ajuste a roupa novamente em alguns minutos e guarde
 		Lamentamos! Você foi desconectado de [CURRENT_GRID].
 
 [MESSAGE]
-		<usetemplate name="okcancelbuttons" notext="Terminar" yestext="Ver bate-papo em &amp;"/>
+		<usetemplate name="okcancelbuttons" notext="Fechar" yestext="Ver bate-papo em &amp;"/>
 	</notification>
 	<notification name="InventoryUnusable">
 		Houve um problema com seu inventário. Por favor, tente fazer login novamente primeiro. Se você receber esta mensagem novamente, entre em contato com o suporte para corrigir a causa do problema.
@@ -1853,7 +1853,7 @@ Continuar?
 	</notification>
 	<notification name="LoginFailedUnknown">
 		Infelizmente, o registro falhou por motivos desconhecidos. Se você continuar vendo esta mensagem, visite [SUPPORT_SITE].
-		<usetemplate name="okbutton" yestext="Terminar"/>
+		<usetemplate name="okbutton" yestext="Fechar"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Quando este objeto é transferido, o grupo recebe:
@@ -2606,7 +2606,7 @@ Mover itens de inventário?
 	</notification>
 	<notification name="ConfirmQuit">
 		Realmente desistiu?
-		<usetemplate ignoretext="Confirme antes de encerrar a sessão" name="okcancelignore" notext="Não termine" yestext="Terminar"/>
+		<usetemplate ignoretext="Confirme antes de encerrar a sessão" name="okcancelignore" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification name="ConfirmRestoreToybox">
 		Esta ação irá restaurar seus botões e barras de ferramentas padrão.
@@ -2846,7 +2846,7 @@ As configurações não podem ser salvas com texturas locais.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ForceCloseChatterBoxSession">
-		Sua sessão de bate-papo com [NAME] precisa terminar.
+		Sua sessão de bate-papo com [NAME] precisa fechar.
 [REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -4115,47 +4115,47 @@ Alterar modo e sair?
 	</notification>
 	<notification label="" name="NoClassifieds">
 		A criação e edição de anúncios só é possível no modo Avançado. Gostaria de sair do programa e mudar de modo? A seleção do modo pode ser encontrada na tela de login.
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoGroupInfo">
 		A criação e edição de grupos só é possível no modo “Avançado”. Gostaria de sair do programa e mudar de modo? A seleção do modo pode ser encontrada na tela de login.
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoPlaceInfo">
 		A exibição do perfil de localização só é possível no modo “Avançado”. Gostaria de sair do programa e mudar de modo? A seleção do modo pode ser encontrada na tela de login.
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoPicks">
 		Criar e editar seleções só é possível no modo Avançado. Gostaria de sair do programa e mudar de modo? A seleção do modo pode ser encontrada na tela de login.
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoWorldMap">
 		A exibição do mapa mundial só é possível no modo “Avançado”. Gostaria de sair do programa e mudar de modo? A seleção do modo pode ser encontrada na tela de login.
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoVoiceCall">
 		As chamadas de voz só são possíveis no modo Avançado. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoAvatarShare">
 		O compartilhamento só é possível no modo “Avançado”. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoAvatarPay">
 		Pagar outros residentes só é possível no modo Avançado. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoInventory">
 		A exibição do inventário só é possível no modo “Avançado”. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoAppearance">
 		A janela de edição de aparência está disponível apenas no modo Avançado. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="NoSearch">
 		A pesquisa só é possível no modo “Avançado”. Gostaria de sair e mudar de modo?
-		<usetemplate name="okcancelbuttons" notext="Não termine" yestext="Terminar"/>
+		<usetemplate name="okcancelbuttons" notext="Não Fechar" yestext="Fechar"/>
 	</notification>
 	<notification label="" name="ConfirmHideUI">
 		Esta ação ocultará todos os itens e botões do menu. Para exibi-lo novamente, clique em [SHORTCUT] novamente.
@@ -5693,7 +5693,7 @@ A restauração das configurações requer a reinicialização do visualizador. 
 
 	<notification name="RestoreFinished">
 Restauração concluída! Por favor reinicie o visualizador!
-		<usetemplate name="okbutton" yestext="Terminar"/>
+		<usetemplate name="okbutton" yestext="Fechar"/>
 	</notification>
 	<notification name="ConfirmRestoreQuickPrefsDefaults">
 Esta ação redefinirá diretamente as Configurações rápidas para a configuração padrão.
