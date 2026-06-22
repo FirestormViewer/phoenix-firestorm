@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup" label="Botões da barra de ferramentas">
+	<menu_item_call label="Remover este botão" name="Remove button"/>
+	<menu_item_call label="Botões da barra de ferramentas..." name="Choose Buttons"/>
+	<menu_item_check label="Alinhar no topo" name="top_aligned"/>
+	<menu_item_check label="Alinhar ao centro" name="center_aligned"/>
+	<menu_item_check label="Alinhar embaixo" name="bottom_aligned"/>
+	<menu_item_check label="Icones e textos" name="icons_with_text"/>
+	<menu_item_check label="Somente icones" name="icons_only"/>
+	<menu_item_check label="Somente textos" name="text_only"/>
+	<menu_item_check label="Bloqueado" name="toolbars_locked"/>
+</context_menu>

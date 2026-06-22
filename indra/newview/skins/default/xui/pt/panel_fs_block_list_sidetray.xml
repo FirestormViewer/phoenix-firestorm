@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel" width="300">
+	<string name="no_blocked" value="Nenhum residente ou objeto bloqueado."/>
+	<string name="no_filtered_blocked" value="Nenhum residente ou objeto bloqueado corresponde à sua busca."/>
+	<string name="loading_blocked" value="Carregando residentes e objetos bloqueados..."/>
+	<string name="failed_blocked" value="A lista de bloqueados não está disponível no momento."/>
+	<panel label="bottom_panel" name="blocked_buttons_panel">
+		<filter_editor label="Filtrar" name="blocked_filter_input"/>
+		<menu_button name="blocked_gear_btn" tool_tip="Ações na pessoa ou objeto selecionado"/>
+		<menu_button name="view_btn" tool_tip="Opções de ordenação"/>
+		<menu_button name="plus_btn" tool_tip="Escolher um residente ou objeto para bloquear"/>
+		<button name="unblock_btn" tool_tip="Remover residente ou objeto da lista de bloqueados"/>
+	</panel>
+	<text name="block_limit">
+		Entradas bloqueadas: [COUNT] ([LIMIT] máx.)
+	</text>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Nome"/>
+		<fs_scroll_list.columns name="item_type" label="Tipo"/>
+	</fs_scroll_list>
+</panel>

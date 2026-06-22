@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Geral" name="Media Settings General">
 	<text name="home_label">
-		Página web:
+		Página inicial:
 	</text>
 	<text name="home_fails_whitelist_label">
-		(Esta página não atende à lista de páginas aprovadas)
+		(Esta página não está na whitelist especificada)
 	</text>
-	<line_editor name="home_url" tool_tip="Website desta mídia"/>
+	<line_editor name="home_url" tool_tip="A URL inicial desta fonte de mídia"/>
 	<text name="preview_label">
-		Visualizar
+		Pré-visualização
 	</text>
 	<text name="current_url_label">
 		Página atual:
 	</text>
-	<text name="current_url" tool_tip="Website desta mídia" value=""/>
+	<text name="current_url" tool_tip="A página atual desta fonte de mídia" value=""/>
 	<button label="Redefinir" name="current_url_reset_btn"/>
-	<check_box initial_value="false" label="Loop contínuo" name="auto_loop"/>
+	<check_box initial_value="false" label="Repetir automaticamente" name="auto_loop"/>
 	<check_box initial_value="false" label="Interagir no primeiro clique" name="first_click_interact"/>
 	<check_box initial_value="false" label="Zoom automático" name="auto_zoom"/>
-	<check_box initial_value="false" label="Mídia auto-executável" name="auto_play"/>
+	<check_box initial_value="false" label="Reproduzir mídia automaticamente" name="auto_play"/>
 	<text name="media_setting_note">
-		Nota: Residentes podem redefinir a configuração.
+		Nota: os residentes podem substituir esta configuração
 	</text>
-	<check_box initial_value="false" label="Dimensionamento automático na frente do objeto" name="auto_scale"/>
+	<check_box initial_value="false" label="Dimensionar mídia automaticamente na face do objeto" name="auto_scale"/>
 	<text name="size_label">
 		Tamanho:
 	</text>

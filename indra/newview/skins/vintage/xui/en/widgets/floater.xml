@@ -8,6 +8,7 @@
 	background_visible="true"
  name="floater" 
  header_font="SansSerif"
+ header_font_shadow="soft"
  header_height="20"
  close_image="Icon_Close_Foreground"
  snooze_image="Icon_Snooze_Foreground"
@@ -24,5 +25,5 @@
  dock_pressed_image="Icon_Dock_Press"
  help_pressed_image="Icon_Help_Press"
  focus_root="true"
- header_vpad="2"
+ header_vpad="4"
   />

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+	<text name="title">
+		Inventário
+	</text>
+	<text name="hint_lbl">
+		Salvar uma imagem no seu inventário custa L$[UPLOAD_COST].
+	</text>
+	<button label="Cancelar" name="cancel_btn"/>
+	<button label="Salvar" name="save_btn"/>
+</panel>

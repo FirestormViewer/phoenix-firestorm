@@ -1,27 +1,120 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Comunicação" name="im">
-	<panel.string name="log_in_to_change">
-		autentique-se para mudar
-	</panel.string>
-	<button label="Limpar histórico" name="clear_webcache" tool_tip="Apagar imagem do login, última localização, histórico de teletransporte, cache de texturas e web"/>
-	<text name="cache_size_label_l">
-		(Locações, imagens, web, histórico de busca)
-	</text>
-	<check_box label="Exibir meu perfil em resultados de Pesquisa" name="online_searchresults"/>
-	<check_box label="Apenas amigos e grupos sabem que estou online" name="online_visibility"/>
-	<check_box label="Apenas amigos e grupos podem me chamar ou enviar MI" name="voice_call_friends_only_check"/>
-	<check_box label="Desligar o microfone quando terminar chamadas" name="auto_disengage_mic_check"/>
-	<check_box label="Mostrar meus marcos preferidos na página de login (menu &apos;Começar em&apos;:)" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		Registro de bate-papos:
-	</text>
-	<check_box label="Salvar logs de bate- papo das proximidades no meu computador" name="log_nearby_chat"/>
-	<check_box label="Salvar logs de MI no meu computador" name="log_instant_messages"/>
-	<check_box label="Anotar horas de cada linha de bate-papo" name="show_timestamps_check_im"/>
-	<check_box label="Anotar a data ao arquivo." name="logfile_name_datestamp"/>
-	<button label="Procurar" label_selected="Procurar" name="log_path_button" width="120"/>
-	<button label="Lista de bloqueados" name="block_list"/>
-	<text name="block_list_label">
-		(Pessoas ou objetos que você bloqueou)
-	</text>
+	<string name="AutoresponseItemNotSet">
+		Nenhum objeto selecionado
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Objeto indisponível
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Não conectado
+	</string>
+	<tab_container label="Privacidade" name="tabs">
+		<!--General-->
+		<panel label="Geral" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Faça login para alterar
+			</panel.string>
+			<button label="Limpar cache" name="clear_webcache" tool_tip="Limpar histórico de busca, lista de teleporte, cache de internet e de texturas"/>
+			<text name="cache_size_label">
+				(localizações, imagens, web, histórico de busca)
+			</text>
+			<check_box label="Mostrar as informações do meu perfil nos resultados de busca" name="online_searchresults"/>
+			<check_box label="Somente amigos e grupos sabem que estou online" name="online_visibility"/>
+			<check_box label="Somente amigos e grupos podem me ligar ou me enviar IM" name="voice_call_friends_only_check"/>
+			<check_box label="Mostrar convites de grupos dos quais já participo" name="FSShowJoinedGroupInvitations"/>
+			<check_box label="Desligar o microfone quando as chamadas terminarem" name="auto_disengage_mic_check"/>
+			<check_box label="Permitir que objetos consultem a configuração atual de idioma" name="LanguageIsPublic"/>
+			<check_box label="Aceitar automaticamente ofertas de inventário" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Registrar no chat local as ofertas de inventário aceitas automaticamente" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="Mostrar notificação para novo inventário aceito automaticamente" name="FSShowAutoAcceptInventoryInNotifications"/>
+			<check_box label="Usar mensagens clássicas de aceitar/recusar para ofertas de inventário" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se ativado, as mensagens de aceitação ou recusa só serão enviadas depois que o botão correspondente for clicado. Se desativado, uma mensagem de aceitação será enviada automaticamente assim que o objeto oferecido chegar ao inventário. Esta opção não tem efeito quando as ofertas de inventário são aceitas automaticamente."/>
+			<check_box label="Mostrar no inventário os objetos recebidos automaticamente" name="Show_In_Inventory"/>
+			<check_box label="Mostrar notecards, landmarks e texturas aceitos automaticamente" name="Show_New_Inventory"/>
+			<check_box label="Mostrar automaticamente fotos no inventário após o upload" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Criar efeitos de partícula ao entregar objetos para outros avatares" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Mostrar meus landmarks favoritos no login (no menu suspenso &quot;Começar aqui&quot;)" name="favorites_on_login_check" />
+			<button label="Residentes/objetos ignorados" name="block_list" width="180" />
+		</panel>
+
+		<!--Logging-->
+		<panel label="Registro e históricos" name="tab-logging">
+			<text name="logging_label" width="100">
+				Salvar:
+			</text>
+			<combo_box name="conversation_log_combo" tool_tip="Registro: lista de conversas iniciadas por você ou por outra pessoa. Históricos: texto real exibido na tela.">
+				<item name="log_and_transcripts" label="Registro e históricos"/>
+				<item name="log_only" label="Somente registro"/>
+				<item name="no_log_or_transcript" label="Sem registro nem históricos"/>
+			</combo_box>
+			<button label="Limpar registro..." name="clear_log"/>
+			<button label="Excluir históricos..." name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Salvar chat local" tool_tip="Salvar no meu computador o histórico das conversas de chat local"/>
+			<check_box name="UseLegacyIMLogNames" label="Usar formato clássico de nome de arquivo para históricos" tool_tip="Se ativado, usa o formato antigo para nomes de arquivo de histórico (Nome Usuário) em vez do atual (nome_usuario)."/>
+			<check_box name="LogFileNamewithDate" label="Adicionar data ao nome do arquivo de histórico" tool_tip="Adiciona a data atual ao nome do arquivo de histórico no formato &quot;chat-AAAA-MM-DD&quot; ou &quot;nomehistorico-AAAA-MM-DD&quot;."/>
+			<check_box name="FSUseBuiltInHistory" label="Usar visualização de histórico integrada" tool_tip="Usa o visualizador integrado para históricos. Se desativado, será usado o editor de texto padrão do sistema operacional."/>
+		</panel>
+
+		<!--LookAt-->
+		<panel label="Foco da câmera" name="tab-lookat">
+			<check_box label="Mostrar foco da câmera:" name="showlookat" tool_tip="O foco da câmera é usado pelos viewers para determinar a rotação dos olhos, da cabeça e do torso. Também pode ser usado para determinar o foco da câmera de outros avatares."/>
+			<text name="lookatshownames" width="220" tool_tip="Escolha o formato de nome em que os nomes dos avatares serão exibidos junto com a mira.">
+				Exibição de nomes no foco da câmera:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Não exibir" name="None"/>
+				<combo_box.item label="Nome completo" name="Complete_Name"/>
+				<combo_box.item label="Nome de exibição" name="Display_Name"/>
+				<combo_box.item label="Sistema de nome antigo" name="Legacy_Name"/>
+				<combo_box.item label="Nome de usuário" name="User_Name"/>
+			</combo_box>
+			<check_box label="Não mostrar meu próprio foco da câmera" name="LookAtHideOwn" tool_tip="Não mostrar a mira do seu próprio foco de câmera."/>
+			<check_box label="Mostrar linhas até o foco da câmera" name="ExodusLookAtLines" tool_tip="Desenha uma linha do avatar até a mira do foco da câmera dele."/>
+
+			<text name="mylookat">
+				Meu foco da câmera:
+			</text>
+			<check_box label="Não enviar meu foco da câmera para outras pessoas" name="privatelookat" tool_tip="Impede que o seu foco de câmera seja enviado para outras pessoas."/>
+			<check_box label="Também não definir meu foco da câmera localmente" name="privateLocalLookat" tool_tip="Impede que a cabeça do seu avatar gire para o ponto focalizado pela câmera. O movimento da cabeça pode ainda não ser visível para outras pessoas, independentemente desta opção!"/>
+			<check_box label="Não enviar minha seleção de edição para outras pessoas" name="privatepointat" tool_tip="Impede que a sua seleção seja enviada para outras pessoas."/>
+			<check_box label="Limitar distância (a partir da minha cabeça):" name="LimitLookAt" width="270" tool_tip="Limita a distância para o valor informado, medido a partir da sua cabeça."/>
+			<text name="LimitLookAtDistanceMeterText">
+				m
+			</text>
+		</panel>
+
+		<!--Autoresponse1-->
+		<panel label="Resposta autom. 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Observação: para ativar respostas automáticas, defina seu status online no menu principal em Conversar &gt; Status online
+			</text>
+			<text name="text_box3">
+				Resposta automática no modo &quot;Ocupado&quot;:
+			</text>
+			<text name="autorespond_response_label">
+				Resposta automática para status online &quot;Resposta automática&quot;:
+			</text>
+			<text name="autorespond_nf_response_label">
+				Resposta automática para status online &quot;Resposta automática para não amigos&quot;:
+			</text>
+			<check_box label="Enviar resposta automática durante o modo &quot;Ausente&quot;:" name="send_away_av_response" tool_tip="Envia o texto abaixo para alguém quando essa pessoa enviar uma mensagem instantânea durante o modo &quot;Ausente&quot;."/>
+			<check_box label="Enviar resposta automática para avatares bloqueados:" name="send_muted_av_response" tool_tip="Envia o texto abaixo para a pessoa bloqueada quando ela enviar uma mensagem instantânea."/>
+		</panel>
+
+		<!--Autoresponse2-->
+		<panel label="Resposta autom. 2" name="tab-autoresponse-2">
+			<text name="autorespond_rto_response_label">
+				Resposta automática para status online &quot;Recusar ofertas e solicitações de teleporte&quot;:
+			</text>
+			<check_box label="Não recusar ofertas e solicitações de teleporte de amigos" name="FSDontRejectTeleportOffersFromFriends"/>
+			<text name="autorespond_rfr_response_label">
+				Resposta automática para status online &quot;Recusar todas as solicitações de amizade&quot;:
+			</text>
+			<text name="autoresponse_item_label" width="165">
+				Objeto para resposta autom.:
+			</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="-70" tool_tip="Solte aqui um item de inventário com arrastar e soltar"/>
+			<button label="Limpar" name="clear_autoresponse_item" width="60"/>
+		</panel>
+	</tab_container>
 </panel>

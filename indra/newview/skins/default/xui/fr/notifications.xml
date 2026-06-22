@@ -4283,6 +4283,23 @@ Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RenameAOGroup">
+		Indiquez un nouveau nom pour ce groupe d'animations :
+(Le nom peut contenir n'importe quel caractère ASCII, à l'exception de ":" ou "|")
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		Impossible de renommer en "[AO_SET_NAME]".
+Le nom ne peut contenir que des caractères ASCII, à l'exception de ":" et "|".
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		Le dossier "[NAME]" ne contient aucune animation à ajouter.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="NewAONameCantExist">
 		Un ensemble d'animations portant ce nom existe déjà.
 	</notification>
@@ -5374,7 +5391,7 @@ Vous ne pouvez pas annuler cette action.
 	</notification>
 	<notification name="RemoveContactsFromSet">
 		Êtes-vous sûr de vouloir supprimer ces avatars [TARGET] de [SET_NAME] ?
-		<usetemplate gnoretext="Confirmer avant de supprimer plusieurs avatars d'un groupe de contacts" name="okcancelignore" notext="Cancel" yestext="OK"/>
+		<usetemplate ignoretext="Confirmer avant de supprimer plusieurs avatars d'un groupe de contacts" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="AddToContactSetSingleSuccess">
 		[NAME] a été ajouté à [SET].
@@ -5773,6 +5790,54 @@ Message d'erreur :
 	<notification name="ChatHistoryIsMissing">
 		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
+	</notification>
+
+	<notification name="OmniFilterNewRuleSet">
+		Entrez le nom du nouveau jeu de règles :
+		<form name="form">
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
+	</notification>
+
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSet">
+		Saisissez un nom pour le jeu de règles cloné :
+		<form name="form">
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
+	</notification>
+
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSet">
+		Êtes-vous sûr(e) de vouloir supprimer [RULESETNAME]?
+		<tag>confirm</tag>
+		<usetemplate ignoretext="Confirmez avant que je supprime un jeu de règles." name="okcancelignore" notext="Annuler" yestext="OK"/>
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Impossible de supprimer le jeu de règles par défaut.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Unable to remove the Rule Set due to index out of bounds.
+	</notification>
+
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Unable to remove the Rule Set due to name not found.>
 	</notification>
 
 	<notification name="FSSetTitleRegion">

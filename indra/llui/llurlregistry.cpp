@@ -225,7 +225,10 @@ static bool stringHasJira(const std::string &text)
             text.find("WEB") != std::string::npos);
 }
 
-bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+// <FS:PP> Option to disable bracket links needs is_nearby_chat here
+// bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions, bool is_nearby_chat)
+// </FS:PP>
 {
     // avoid costly regexes if there is clearly no URL in the text
     if (! (stringHasUrl(text) || stringHasJira(text)))
@@ -250,17 +253,6 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         {
             continue;
         }
-
-        // <FS:PP> Option to disable square-bracket links
-        if (!is_content_trusted && ((mUrlEntryHTTPLabel == *it) || (mUrlEntrySLLabel == *it)))
-        {
-            static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
-            if (sDisableLabeledLinks)
-            {
-                continue;
-            }
-        }
-        // </FS:PP>
 
         LLUrlEntryBase *url_entry = *it;
 
@@ -345,6 +337,31 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
                         match_entry->getUnderline(url),
                         match_entry->isTrusted(),
                         match_entry->getSkipProfileIcon(url));
+
+        // <FS:PP> Preview real URLs of bracket links
+        static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
+        static LLUICachedControl<bool> sDisableLabeledLinksNearby("FSDisableLabeledChatLinksNearbyChat", false);
+        if (!is_content_trusted && (match_entry == mUrlEntryHTTPLabel) && (is_nearby_chat ? sDisableLabeledLinksNearby : sDisableLabeledLinks) && match.getLabel() != match.getUrl())
+        {
+            match.setLabeledLinkMasked(true);
+            if (mUrlEntryTrustedUrl)
+            {
+                U32 trusted_start = 0, trusted_end = 0;
+                const std::string& real_url = match.getUrl();
+                bool url_trusted = matchRegex(real_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                if (!url_trusted)
+                {
+                    const std::string slashed_url = real_url + "/";
+                    url_trusted = matchRegex(slashed_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                }
+                if (url_trusted)
+                {
+                    match.setLabeledLinkTrusted(true);
+                }
+            }
+        }
+        // </FS:PP>
+
         return true;
     }
 

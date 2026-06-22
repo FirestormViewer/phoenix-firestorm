@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="Wróć do poprzedniej lokalizacji"/>
 					<pull_button name="forward_btn" tool_tip="Idź do następnej lokalizacji"/>
-					<button name="home_btn" tool_tip="Teleportuj do miejsca startu"/>
+					<button name="home_btn" tool_tip="Teleportuj do miejsca startu[LOCATION]"/>
 					<button name="About_Land" tool_tip="Pokazuje okno informacyjne o działce"/>
 					<button name="PersonalLighting" tool_tip="Pokazuje okno własnego oświetlenia"/>
 				</layout_panel>

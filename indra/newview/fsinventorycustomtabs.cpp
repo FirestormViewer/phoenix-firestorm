@@ -51,6 +51,7 @@ namespace
     constexpr char SETTING_KEY[]        = "FSInventoryCustomTabs";
     constexpr char DEFAULT_NAME_KEY[]   = "FSInventoryCustomTabDefaultName";
     constexpr char RENAME_NOTIFY[]      = "FSInventoryCustomTabRename";
+    constexpr char CLOSE_NOTIFY[]       = "FSInventoryCustomTabClose";
     constexpr char MENU_FILE[]          = "menu_inventory_custom_tab.xml";
     constexpr char ADD_TAB_PANEL_NAME[] = "FSInventoryCustomTabAdd";
     constexpr char ADD_TAB_LABEL[]      = "+";
@@ -113,6 +114,11 @@ FSInventoryCustomTabs::~FSInventoryCustomTabs()
     {
         LLNotifications::instance().cancel(mRenameNotification);
         mRenameNotification.reset();
+    }
+    if (mCloseNotification)
+    {
+        LLNotifications::instance().cancel(mCloseNotification);
+        mCloseNotification.reset();
     }
     if (mAddClickConnection.connected())
     {
@@ -196,6 +202,14 @@ bool FSInventoryCustomTabs::handleMouseDown(S32 x, S32 y)
 
 void FSInventoryCustomTabs::onFilterFocusLost()
 {
+    if (mParent)
+    {
+        auto* active = dynamic_cast<LLInventoryPanel*>(mParent->getActivePanel());
+        if (active && isCustomTab(active) && !mExplicitlyNamed.count(active))
+        {
+            updateAutoLabel(active);
+        }
+    }
     save();
 }
 
@@ -246,6 +260,10 @@ void FSInventoryCustomTabs::noteActivePanel(LLInventoryPanel* panel)
 {
     if (mLastActivePanel && mLastActivePanel != panel && isCustomTab(mLastActivePanel))
     {
+        if (!mExplicitlyNamed.count(mLastActivePanel))
+        {
+            updateAutoLabel(mLastActivePanel);
+        }
         save();
     }
     if (panel && panel != mAddTabPanel && mTabs && mTabs->getIndexForPanel(panel) >= 0)
@@ -262,15 +280,6 @@ void FSInventoryCustomTabs::onClosePressed(LLInventoryPanel* panel)
     }
     mContextPanel = panel;
     onCloseClicked();
-}
-
-void FSInventoryCustomTabs::onActiveFilterChanged(LLPanel* active_panel)
-{
-    auto* inv_panel = dynamic_cast<LLInventoryPanel*>(active_panel);
-    if (inv_panel && mPanels.count(inv_panel) && !mExplicitlyNamed.count(inv_panel))
-    {
-        updateAutoLabel(inv_panel);
-    }
 }
 
 void FSInventoryCustomTabs::notifyActiveFilterStateChanged()
@@ -333,14 +342,6 @@ void FSInventoryCustomTabs::noteActivePanel(LLPanelMainInventory* parent, LLInve
     if (auto* self = instanceFor(parent))
     {
         self->noteActivePanel(panel);
-    }
-}
-
-void FSInventoryCustomTabs::onActiveFilterChanged(LLPanelMainInventory* parent, LLPanel* active)
-{
-    if (auto* self = instanceFor(parent))
-    {
-        self->onActiveFilterChanged(active);
     }
 }
 
@@ -616,8 +617,47 @@ void FSInventoryCustomTabs::onCloseClicked()
         return;
     }
 
-    auto* to_remove = mContextPanel;
-    mContextPanel = nullptr;
+    if (mCloseNotification)
+    {
+        LLNotifications::instance().cancel(mCloseNotification);
+        mCloseNotification.reset();
+    }
+
+    LLSD args;
+    args["NAME"] = mContextPanel->getLabel();
+    LLSD payload;
+    payload["panel_name"] = mContextPanel->getName();
+
+    auto handle = getHandle();
+    mCloseNotification = LLNotificationsUtil::add(CLOSE_NOTIFY, args, payload,
+        [handle](const LLSD& notification, const LLSD& response)
+        {
+            if (auto* self = handle.get())
+            {
+                self->onCloseConfirmed(notification, response);
+            }
+        });
+}
+
+void FSInventoryCustomTabs::onCloseConfirmed(const LLSD& notification, const LLSD& response)
+{
+    mCloseNotification.reset();
+
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+    {
+        return;
+    }
+
+    auto* to_remove = dynamic_cast<LLInventoryPanel*>(mTabs->getPanelByName(notification["payload"]["panel_name"].asString()));
+    if (!isCustomTab(to_remove) || !mTabs)
+    {
+        return;
+    }
+
+    if (mContextPanel == to_remove)
+    {
+        mContextPanel = nullptr;
+    }
     if (mLastActivePanel == to_remove)
     {
         mLastActivePanel = nullptr;

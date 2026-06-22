@@ -3516,6 +3516,20 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 
   <notification
    icon="alertmodal.tga"
+   label="Close Filter Tab"
+   name="FSInventoryCustomTabClose"
+   type="alertmodal">
+    Close the &quot;[NAME]&quot; filter tab? Its saved filters will be removed.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Yes, close"
+     ignoretext="Confirm before I close a custom inventory filter tab"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    label="Rename Gesture"
    name="RenameGesture"
    type="alertmodal">
@@ -4001,7 +4015,6 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
    icon="alertmodal.tga"
    name="FirstRun"
    type="alertmodal">
-
 [APP_NAME] installation is complete.
 
 If this is your first time using [CURRENT_GRID], you will need to create an account before you can log in.
@@ -11179,6 +11192,49 @@ The name may only contain ASCII characters, excluding ":" and "|".
 
   <notification
    icon="alertmodal.tga"
+   name="RenameAOGroup"
+   type="alertmodal">
+Specify a new name for this animation group:
+(The name may contain any ASCII character, except for ":" or "|")
+    <form name="form">
+      <input name="message" type="text" default="true">
+[AO_GROUP_NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RenameAOEntryMustBeASCII"
+   type="alertmodal">
+Could not rename to "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="AOFolderDropNoAnimations"
+   type="alertmodal">
+The folder "[NAME]" does not contain any animations to add.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="NewAONameCantExist"
    type="alertmodal">
 An animation set with this name already exists.
@@ -15147,4 +15203,139 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
      yestext="OK"/>
   </notification>
   <!-- </FS:TJ>-->
+  <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterNewRuleSet"
+     type="alertmodal">
+        Enter a name for the new rule set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterrNewRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterNewRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterCloneRuleSet"
+     type="alertmodal">
+        Enter a name to the cloned rule set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+
+    <notification
+        icon="alertmodal.tga"
+        name="OmniFilterRemoveRuleSet"
+        type="alertmodal">
+        Are you sure you want to remove [RULESETNAME]?
+        <tag>confirm</tag>
+        <usetemplate
+        ignoretext="Confirm before I remove a rule set."
+        name="okcancelignore"
+        notext="Cancel"
+        yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetDefault"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the default rule ret.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetOutofBounds"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the rule set due to index out of bounds.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetInvalidName"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the rule set due to name not found.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+  <!-- </FS:minerjr> [FIRE-36763] -->
 </notifications>

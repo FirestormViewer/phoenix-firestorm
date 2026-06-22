@@ -335,6 +335,9 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>
 	<string name="TooltipSLURL">Click to view this location's information</string>
+	<string name="FSChatLinkTagTrusted">[Trusted]</string>
+	<string name="FSChatLinkTagUntrusted">[Link]</string>
+
 	<string name="TooltipAgentUrl">Click to view this Resident's profile</string>
 	<string name="TooltipAgentInspect">Learn more about this Resident</string>
 	<string name="TooltipAgentMute">Click to mute this Resident</string>
@@ -3069,6 +3072,16 @@ and report the problem.
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
+  <string name="FSCameraPositionPasted">Camera restored to [POS].</string>
+  <string name="FSCameraPositionParseError">Invalid camera position. Expected: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).</string>
+  <string name="FSCmdLineZOffsetUsage">Set avatar hover height (usage: /zoffset value or +delta).</string>
+  <string name="FSCmdLineNoValidRegion">Could not get a valid region pointer.</string>
+  <string name="FSCmdLineTrackPosUsage">Track a position or avatar on the world map (usage: cmd &lt;x, y, z&gt; or cmd name).</string>
+  <string name="FSCmdLineTrackPosParseError">Invalid position. Use cpcampos format: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll.</string>
+  <string name="FSCmdLineTrackPosLocation">Tracking [REGION] ([POS]).</string>
+  <string name="FSCmdLineTrackPosAvatar">Tracking [NAME].</string>
+  <string name="FSCmdLineTrackPosNotFound">Could not find avatar matching &apos;[NAME]&apos; on radar.</string>
+  <string name="FSCmdLineTrackPosMapError">Could not open the world map.</string>
 
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>

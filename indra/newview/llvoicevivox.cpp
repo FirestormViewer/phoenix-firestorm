@@ -961,7 +961,10 @@ bool LLVivoxVoiceClient::endAndDisconnectSession()
 
 bool LLVivoxVoiceClient::callbackEndDaemon(const LLSD& data)
 {
-    if (!sShuttingDown && mVoiceEnabled)
+    // <FS:TJ> Fix WebRTC voice not working on Linux after 2 minutes
+    //if (!sShuttingDown && mVoiceEnabled)
+    if (!sShuttingDown && mVoiceEnabled && mIsInitialized)
+    // </FS:TJ>
     {
         LL_WARNS("Voice") << "SLVoice terminated " << ll_stream_notation_sd(data) << LL_ENDL;
         terminateAudioSession(false);

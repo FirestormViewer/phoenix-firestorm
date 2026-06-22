@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="RESETAR PROGRESSO">
+<floater name="queue" title="Progresso de redefinição">
 	<floater.string name="Starting">
-		Iniciando [START] de [COUNT] items.
+		Iniciando [START] de [COUNT] item(ns).
 	</floater.string>
 	<floater.string name="Done">
-		Pronto.
+		Concluído.
 	</floater.string>
 	<floater.string name="Resetting">
 		Redefinindo
 	</floater.string>
 	<floater.string name="Running">
-		Executando
+		Em execução
 	</floater.string>
 	<floater.string name="NotRunning">
-		Inerte
+		Não está em execução
 	</floater.string>
 	<floater.string name="Timeout">
-		Limite de tempo: [OBJECT_NAME]
+		Tempo esgotado: [OBJECT_NAME]
 	</floater.string>
 	<floater.string name="LoadingObjInv">
 		Carregando inventário de: [OBJECT_NAME]
 	</floater.string>
-	<button label="Fechar" label_selected="Fechar" name="close"/>
+	<floater.string name="Deleting">
+		Excluindo
+	</floater.string>
+	<floater.string name="SkippingPermissions">
+		Ignorado: [OBJECT_NAME] (Permissões)
+	</floater.string>
+	<floater.string name="Compiling">
+		Compilando "[OBJECT_NAME]"...
+	</floater.string>
+	<floater.string name="CompileSuccess">
+		Compilação de "[OBJECT_NAME]" concluída com sucesso
+	</floater.string>
+	<floater.string name="CompileFailure">
+		Compilação de "[OBJECT_NAME]" falhou:
+	</floater.string>
+	<button label="Fechar" label_selected="Fechar" left="215" name="close" width="72"/>
 </floater>

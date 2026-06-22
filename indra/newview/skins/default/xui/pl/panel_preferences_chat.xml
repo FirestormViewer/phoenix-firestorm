@@ -80,7 +80,7 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="Sortuj karty IM według typu:" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
+			<check_box name="FSAutoOrderIMTabs" label="Sortuj IM według typu:" tool_tip="Użyj automatycznego sortowania kart IM wewnątrz okna rozmów." />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Grupy, Konferencje, IM" />
 				<combo_box.item name="group_im_conf" label="Grupy, IM, Konferencje" />
@@ -132,7 +132,7 @@
 			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie w pobliżu"/>
 			<check_box name="FSDontIgnoreAdHocFromFriends" label="Nie ignoruj zaproszeń do czatów konferencji od moich znajomych"/>
 			<text width="290" name="group_snooze_time_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
-				Długość tymczasowego wyciszenia czatu grupowego:
+				Długość tymczas. wyciszenia czatu grupowego:
 			</text>
 			<spinner name="GroupSnoozeTime" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi." />
 			<text name="group_snooze_time_seconds_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
@@ -271,6 +271,9 @@
 			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
 		</panel>
 		<panel label="Polecenia" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Dokumentacja]
+			</text>
 			<check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />
 			<text name="FSCmdLineCalc_txt">
 				Kalkulator (użycie: cmd SIN(2+2))
@@ -282,7 +285,10 @@
 				Maks. przepustow. (użycie: cmd kbps)
 			</text>
 			<text name="FSCmdLineCopyCam_txt">
-				Kopiowanie pozycji kamery do schowka
+				Kopiowanie poz. kamery do schowka
+			</text>
+			<text name="FSCmdLinePasteCam_txt">
+				Ustaw pozycję kamery (cmd pos|focus|roll)
 			</text>
 			<text name="FSCmdLineAO_txt">
 				Włącz/wyłącz AO (użycie: cmd on/off)
@@ -310,6 +316,10 @@
 				Rzuć kostką (użycie: cmd kostki ścianki tm wm)
 			</text>
 			<line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
+			<text name="FSCmdLineTrackPos_txt">
+				Śledź pozycję lub awatara (cmd pos lub imię)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Ustawia znacznik na mapie świata na podstawie pozycji (format cpcampos) lub częściowej nazwy awatara" />
 			<text name="FSCmdLinePos_txt">
 				Teleport wewn. regionu (użycie: cmd x y z)
 			</text>
@@ -336,6 +346,7 @@
 				Teleport do regionu (użycie: cmd nazwa | x y z)
 			</text>
 			<check_box label="Ta sama pozycja między regionami" name="toggle" />
+			<check_box label="Wyślij wynik poleceń na kanał:" name="FSCmdLineAnnounceToChannel" />
 		</panel>
 	</tab_container>
 </panel>

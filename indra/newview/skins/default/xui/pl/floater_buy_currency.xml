@@ -70,7 +70,7 @@ ponownie dokonać zakupu.
 		</layout_panel>
 		<layout_panel name="layout_panel_buttons">
 			<text name="contacting">
-				Kontaktowanie z LindeX...
+				Łączenie z LindeX...
 			</text>
 			<button label="Kup teraz" name="buy_btn" />
 			<button label="Anuluj" name="cancel_btn" />

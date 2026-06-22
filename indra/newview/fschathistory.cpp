@@ -1942,9 +1942,11 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
         bool is_trusted = isContentTrusted();
         setContentTrusted(chat.mFromID.isNull() && is_p2p); // <FS:Ansariel> Set trusted content temporarily for system messages
+        setNearbyChatContent(is_local); // <FS:PP> Use the nearby-chat labeled-link setting for local/object chat
         setPlainText((use_plain_text_chat_history && is_p2p) ? chat.mFromID.notNull() : use_plain_text_chat_history);
         appendText(message, prependNewLineState, body_message_params);  // <FS:Zi> FIRE-8600: TAB out of chat history
         setContentTrusted(is_trusted);
+        setNearbyChatContent(false); // <FS:PP> Use the nearby-chat labeled-link setting for local/object chat
         setPlainText(use_plain_text_chat_history);
         // Uncomment this if we never need to append to the end of a message. [FS:CR]
         //prependNewLineState = false;

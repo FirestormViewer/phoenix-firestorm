@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Land Pie">
+	<pie_slice label="Informacoes do terreno..." name="Place Information..."/>
+	<pie_slice label="Criar" name="Create"/>
+	<pie_slice label="Ir para ca" name="Go Here"/>
+	<pie_slice label="Sentar aqui" name="Sit Here"/>
+	<pie_slice label="Bloq. dono de particulas" name="Mute Particle"/>
+	<pie_slice label="Comprar passe" name="Land Buy Pass Pie"/>
+	<pie_slice label="Editar terreno" name="Edit Terrain"/>
+	<pie_slice label="Comprar terreno" name="Land Buy Pie"/>
+</pie_menu>

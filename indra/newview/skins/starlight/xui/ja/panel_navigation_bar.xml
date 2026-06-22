@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="前の場所へ移動します。"/>
 					<pull_button name="forward_btn" tool_tip="次の場所へ移動します。"/>
-					<button name="home_btn" tool_tip="「ホーム」へテレポートします。"/>
+					<button name="home_btn" tool_tip="「ホーム」へテレポートします。[LOCATION]"/>
 					<button name="About_Land" tool_tip="土地情報のウィンドウを開きます。"/>
 					<button name="PersonalLighting" tool_tip="個人的光源エディタを開きます。"/>
 				</layout_panel>

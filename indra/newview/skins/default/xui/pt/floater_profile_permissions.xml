@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="profile_permissions">
+	<string name="description_string" value="Permitir que [AGENT_NAME]:" />
+	<text name="perm_description" value="Permitir que o residente:"/>
+	<check_box name="online_check" label="Ver quando estou online"/>
+	<check_box name="map_check" label="Me encontrar no mapa-mundi"/>
+	<check_box name="objects_check" label="Editar, excluir ou pegar meus objetos"/>
+	<button name="perms_btn_ok" label="OK"/>
+	<button name="perms_btn_cancel" label="Cancelar"/>
+</floater>

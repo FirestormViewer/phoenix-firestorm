@@ -4,9 +4,9 @@
  can_resize="true"
  can_minimize="true"
  can_close="true"
- height="400"
+ height="425"
  min_height="348"
- min_width="668"
+ min_width="718"
  layout="topleft"
  name="omnifilter"
  help_topic="omnifilter"
@@ -15,17 +15,101 @@
  single_instance="true"
  reuse_instance="true"
  title="Omnifilter Rules Editor"
- width="700">
+ width="718">
 	<floater.string name="OmnifilterNewNeedle">
 		NEW RULE
 	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		NEW RULE SET
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		CLONED RULE SET
+	</floater.string>
 
+	<panel
+	 name="needle_rule_set_controls"
+	 layout="topleft"
+	 follows="left|top|right"
+	 height="25"
+	 left="0"
+	 min_height="25"
+	 top="20">
+		<text
+		 name="lbl_ruleset"
+		 layout="topleft"
+		 follows="left|top"
+		 height="20"
+		 width="70"
+		 left="8"
+		 top="0"
+		 valign="center"
+		 value="Rule Sets:"/>
+		<layout_stack
+		 name="rule_set_buttons_stack"
+		 orientation="horizontal"
+		 left="84"
+		 top="0"
+		 right="-4"
+		 height="24"
+		 follows="left|right|top"
+		 layout="topleft">
+			<layout_panel
+			 width="150"
+			 layout="topleft"
+			 follows="all"
+			 name="rule_set_group_1">
+				<combo_box
+				 name="cmb_rule_sets"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width="150"
+				 height="20"
+				 left="0"
+				 top="0"
+				 tool_tip="Choose the Omnifilter Rule Set to use."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button
+				 name="btn_rule_set_new"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width="150"
+				 height="20"
+				 left="0"
+				 top="0"
+				 label="New Rule Set"
+				 tool_tip="Create a new blank Omnifilter Rule Set."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button
+				 name="btn_rule_set_clone"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "150"
+				 height="20"
+				 top="0"
+				 label="Clone Rule Set"
+				 tool_tip="Create a clone of the current Omnifilter Rule Set."/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button
+				 name="btn_rule_set_remove"
+				 layout="topleft"
+				 follows="left|right|top"
+				 width= "150"
+				 height="20"
+				 top="0"
+				 label="Remove Rule Set"
+				 tool_tip="Remove the current Omnifilter Rule Set."/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
 	<layout_stack
 	 name="needle_list_stack"
 	 layout="topleft"
 	 follows="left|top|bottom"
 	 height="374"
-	 top="20"
+	 top="45"
 	 left="8"
 	 width="190"
 	 orientation="vertical"
@@ -33,7 +117,7 @@
 		<layout_panel
 		 name="needle_list_layout"
 		 layout="topleft"
-		 height="150"
+		 height="175"
 		 min_height="94"
 		 user_resize="true">
 			<check_box
@@ -104,6 +188,25 @@
 			 left_pad="0"
 			 width="96"
 			 label="Remove"/>
+			<button
+			 name="up_needle"
+			 layout="topleft"
+			 follows="left|bottom"
+			 height="20"
+			 left="0"
+			 top_pad="4"
+			 width="96"
+			 tool_tip="Selected rule is moved up one position."
+			 label="Up"/>
+			<button
+			 name="down_needle"
+			 layout="topleft"
+			 follows="right|bottom"
+			 height="20"
+			 left_pad="0"
+			 width="96"
+			 tool_tip="Selected rule is moved down one position."
+			 label="Down"/>
 		</layout_panel>
 		<layout_panel
 		 name="filter_log_layout"
@@ -197,7 +300,8 @@
 		 follows="left|right|top"
 		 height="20"
 		 left_pad="4"
-		 right="-110"/>
+		 right="-110"
+		 tool_tip="The avatar or object name the message comes from"/>
 		<check_box
 		 name="sender_case"
 		 layout="topleft"
@@ -205,14 +309,16 @@
 		 height="20"
 		 left_pad="4"
 		 width="30"
-		 label="Aa"/>
+		 label="Aa"
+		 tool_tip="Case Sensitivity"/>
 		<combo_box
 		 name="sender_match_type"
 		 layout="topleft"
 		 follows="right|top"
 		 height="20"
 		 left_pad="8"
-		 right="-4">
+		 right="-4"
+		 tool_tip="Matching Mode">
 			<combo_item
 			 name="sender_exact"
 			 value="0">
@@ -264,7 +370,8 @@
 		 height="74"
 		 left_pad="4"
 		 right="-4"
-		 top_delta="0"/>
+		 top_delta="0"
+		 tool_tip="The actual text of the message"/>
 		<check_box
 		 name="content_case"
 		layout="topleft"
@@ -273,14 +380,16 @@
 		width="30"
 		right="-76"
 		top_pad="4"
-		label="Aa"/>
+		label="Aa"
+		tool_tip="Case Sensitivity"/>
 		<combo_box
 		 name="content_match_type"
 		 layout="topleft"
 		 follows="right|bottom"
 		 height="20"
 		 left_pad="8"
-		 right="-4">
+		 right="-4"
+		 tool_tip="Matching Mode">
 			<combo_item
 			 name="content_exact"
 			 value="0">
@@ -339,7 +448,6 @@
 		 height="20"
 		 width="100"
 		 left="0"
-		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."
 		 top_pad="2"
 		 valign="center"
 		 value="Owner Key:"/>
@@ -350,7 +458,8 @@
 		 height="20"
 		 label="00000000-0000-0000-0000-000000000000"
 		 left_pad="4"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="For group invites: The group's UUID. For object chat, owner say, debug chat or direct chat: The UUID of the object. For object IMs: The UUID of the object owner. For everything else, the UUID of the sender avatar."/>
 		<text
 		 name="match_source_label"
 		 layout="topleft"
@@ -435,7 +544,7 @@
 				 height="20"
 				 is_toggle="true"
 				 top_pad="4"
-				 label="Object Chat"
+				 label="Obj. Chat"
 				 tool_tip="Nearby chat from objects."/>
 			</layout_panel>
 			<layout_panel name="buttons_group_3">
@@ -549,7 +658,8 @@
 		 follows="left|right|bottom"
 		 left_pad="4"
 		 height="20"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="Replacement text that can be used to alter how the message is displayed"/>
 		<text
 		 name="button_reply_label"
 		 layout="topleft"
@@ -566,7 +676,8 @@
 		 follows="left|right|bottom"
 		 left_pad="4"
 		 height="20"
-		 right="-4"/>
+		 right="-4"
+		 tool_tip="The label of a button to &quot;click&quot; on the scripted dialog, including &quot;Ignore&quot;"/>
 		<text
 		 name="text_box_reply_label"
 		 layout="topleft"
@@ -584,6 +695,7 @@
 		 left_pad="4"
 		 height="60"
 		 right="-4"
-		 top_delta="0"/>
+		 top_delta="0"
+		 tool_tip="A reply text, as if it had been typed manually into the scripted dialog text box"/>
 	</panel>
 </floater>

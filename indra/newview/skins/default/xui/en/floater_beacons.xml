@@ -89,7 +89,7 @@
          top_pad="2"
          control_name="FSRenderBeaconText"
          height="16"
-         width="100"
+         width="110"
          label="Beacon info text in viewer window"
          layout="topleft"
          left="0"

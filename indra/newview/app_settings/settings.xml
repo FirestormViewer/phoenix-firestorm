@@ -487,6 +487,44 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSContactSetsListShowIcons</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/hide profile icons in Contact Sets lists</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSContactSetsListColorizeOffline</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to use a custom color for offline contacts in Contact Sets lists. A custom contact set color takes precedence when set.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSContactSetsListOfflineColor</key>
+    <map>
+      <key>Comment</key>
+      <string>Custom color for offline contacts in Contact Sets lists when FSContactSetsListColorizeOffline is enabled.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Color4</string>
+      <key>Value</key>
+      <array>
+        <real>0.5</real>
+        <real>0.5</real>
+        <real>0.5</real>
+        <real>1.0</real>
+      </array>
+    </map>
   <key>FSMuteAllGroups</key>
   <map>
     <key>Comment</key>
@@ -17927,6 +17965,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>DebugWebRTCRequireEstablishedSpatialSession</key>
+    <map>
+      <key>Comment</key>
+      <string>Only report proximal channel when a spatial session is established (FIRE-36672)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>VivoxVoiceHost</key>
     <map>
       <key>Comment</key>
@@ -19041,6 +19090,28 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<integer>1</integer>
 		</map>
+		<key>FSCmdLineAnnounceToChannel</key>
+		<map>
+			<key>Comment</key>
+			<string>Echo chat command output to a script channel.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>0</integer>
+		</map>
+		<key>FSCmdLineAnnounceChannel</key>
+		<map>
+			<key>Comment</key>
+			<string>Chat channel where chat command output is announced.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>S32</string>
+			<key>Value</key>
+			<integer>362395</integer>
+		</map>
 		<key>FSCmdLineMapToKeepPos</key>
 		<map>
 			<key>Comment</key>
@@ -19239,16 +19310,38 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<string>tp2</string>
 		</map>
+		<key>FSCmdLineTrackPos</key>
+		<map>
+			<key>Comment</key>
+			<string>Track a position or avatar on the world map.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>trkpos</string>
+		</map>
 		<key>FSCmdLineCopyCam</key>
 		<map>
 			<key>Comment</key>
-			<string>Copies the current camera location to a vector of the form &lt;x, y, z&gt; to the clipboard.</string>
+			<string>Copies the current camera location to the clipboard as pos|focus|roll</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
 			<string>cpcampos</string>
+		</map>
+		<key>FSCmdLinePasteCam</key>
+		<map>
+			<key>Comment</key>
+			<string>Restores the camera from a pos|focus|roll</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>pstcampos</string>
 		</map>
 		<key>FSCmdLineRollDice</key>
 		<map>
@@ -19609,13 +19702,24 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSDisableLabeledChatLinks</key>
 		<map>
 			<key>Comment</key>
-			<string>When true, do not treat wiki-style bracketed links ([https://host label]) as labeled URLs; mitigates misleading link text.</string>
+			<string>When true, wiki-style bracketed links ([https://host label]) in IMs, group chat, ad-hoc conferences and group notices keep their label, but hovering shows an instant large hint previewing the real destination URL; helps spot misleading link text.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
+		</map>
+		<key>FSDisableLabeledChatLinksNearbyChat</key>
+		<map>
+			<key>Comment</key>
+			<string>When true, wiki-style bracketed links ([https://host label]) in nearby (local) chat and object text keep their label, but hovering shows an instant large hint previewing the real destination URL; helps spot misleading link text.</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>Boolean</string>
+			<key>Value</key>
+			<integer>1</integer>
 		</map>
 		<key>FSRevokePerms</key>
 		<map>
@@ -21122,7 +21226,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>2</integer>
+      <integer>0</integer>
     </map>
     <key>FSFontSizeAdjustment</key>
     <map>
@@ -25658,6 +25762,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>it</string>
         <string>ja</string>
         <string>pl</string>
+        <string>pt</string>
         <string>ru</string>
         <string>zh</string>
       </array>
@@ -27513,6 +27618,32 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+    <key>OmnifilterRuleSetID</key>
+    <map>
+        <key>Comment</key>
+        <string>The id of the current rule set for the Omnifilter.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>-1</integer>
+    </map>
+    <!-- </FS:minerjr> [FIRE-36763] -->
+    <!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+    <key>OmnifilterControls</key>
+    <map>
+        <key>Comment</key>
+        <string>If true, Firestorm will show the omnifilter controls (enable, drop down) in upper right corner of the screen. Useful, if multiple omnifilter rule sets are being used.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
+    <!-- </FS:MJR> [FIRE-36776] -->
     <key>FSAutoOrderIMTabs</key>
     <map>
       <key>Comment</key>

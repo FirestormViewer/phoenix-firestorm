@@ -6298,7 +6298,7 @@ support@secondlife.com.
 		直接發佈到您的Primfeed賬戶。
 	</string>
 	<string name="Command_Omnifilter_Label">
-		全方位過濾器
+		萬能過濾器
 	</string>
 	<string name="Command_AvatarAlign_Label">
 		化身對齊
@@ -6506,7 +6506,7 @@ support@secondlife.com.
 		顯示信標
 	</string>
 	<string name="Command_Omnifilter_Tooltip">
-		編輯全方位過濾器規則
+		編輯萬能過濾器規則
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		位於你的底部工具列
@@ -6915,6 +6915,36 @@ SecondLife.com網站的「支援」部分
 	<string name="FSCameraPositionCopied">
 		相機位置 [POS] 已複製到剪貼簿。
 	</string>
+	<string name="FSCameraPositionPasted">
+		攝影機已恢復至 [POS]。
+	</string>
+	<string name="FSCameraPositionParseError">
+		無效的攝影機位置。格式應為：&lt;x, y, z&gt; 或 &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll（本地座標）。
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		設定化身懸浮高度（用法：/zoffset value 或 +delta）。
+	</string>
+	<string name="FSCmdLineNoValidRegion">
+		無法取得有效的區域指標。
+	</string>
+	<string name="FSCmdLineTrackPosUsage">
+		在世界地圖上追蹤位置或化身（用法：cmd &lt;x, y, z&gt; 或 cmd 名稱）。
+	</string>
+	<string name="FSCmdLineTrackPosParseError">
+		無效位置。請使用 cpcampos 格式：&lt;x, y, z&gt; 或 &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll。
+	</string>
+	<string name="FSCmdLineTrackPosLocation">
+		正在追蹤 [REGION] ([POS])。
+	</string>
+	<string name="FSCmdLineTrackPosAvatar">
+		正在追蹤 [NAME]。
+	</string>
+	<string name="FSCmdLineTrackPosNotFound">
+		無法在雷達中找到符合「[NAME]」的化身。
+	</string>
+	<string name="FSCmdLineTrackPosMapError">
+		無法開啟世界地圖。
+	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		繪製距離設定為 [DISTANCE] 米。
 	</string>
@@ -6940,7 +6970,7 @@ SecondLife.com網站的「支援」部分
 		重新投擲
 	</string>
 	<string name="FSCmdLineRollDiceFreezeGuard">
-		此操作無法完成，因為檢視器在無限捲動迴圈中停止。請更改條件。
+		此操作無法完成，因為檢視器在無限捲動循環中停止。請更改條件。
 	</string>
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' RAND不是正確的表達式(min,max). MAX 必須大於 MIN, 且兩者應處於 -10000 與 10000 之間。
@@ -7561,6 +7591,6 @@ SecondLife.com網站的「支援」部分
 		最大值
 	</string>
 	<string name="OmnifilterReplacement">
-		全方位過濾器替換：[REPLACEMENT]
+		萬能過濾器替換：[REPLACEMENT]
 	</string>
 </strings>

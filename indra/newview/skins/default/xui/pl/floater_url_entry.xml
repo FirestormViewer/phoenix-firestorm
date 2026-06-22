@@ -4,7 +4,7 @@
 		URL Mediów:
 	</text>
 	<button label="Anuluj" name="cancel_btn" />
-	<button label="Wyczyść" name="clear_btn" />
+	<button label="Czyść" name="clear_btn" />
 	<text name="loading_label">
 		Ładuję...
 	</text>

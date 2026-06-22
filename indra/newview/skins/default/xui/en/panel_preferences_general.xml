@@ -18,7 +18,7 @@
      layout="topleft"
      left="30"
      name="language_textbox"
-     top="10"
+     top="5"
      width="200">
         Language:
     </text>
@@ -28,7 +28,7 @@
      height="23"
      layout="topleft"
      left="30"
-     top_pad="-2"
+     top_pad="2"
      max_chars="135"
      name="language_combobox"
      width="150">
@@ -74,13 +74,11 @@
          label="Polski (Polish)"
          name="Polish"
          value="pl" />
-        <!--
         <combo_box.item
          enabled="true"
          label="Português (Portuguese) - Beta"
          name="Portugese"
          value="pt" />
-        -->
         <combo_box.item
          enabled="true"
          label="Русский (Russian)"
@@ -137,7 +135,7 @@
      height="23"
      layout="topleft"
      left="30"
-     top_pad="-2"
+     top_pad="2"
      name="maturity_desired_combobox"
      width="200">
         <combo_box.item
@@ -221,7 +219,7 @@
      layout="topleft"
      name="start_location_combo"
      left="30"
-     top_pad="-2"
+     top_pad="2"
      width="150">
         <combo_box.item
          label="My Last Location"
@@ -252,7 +250,7 @@
      layout="topleft"
      left="30"
      name="name_tags_textbox"
-     top_pad="15"
+     top_pad="10"
      width="200">
        Name tags:
     </text>
@@ -496,7 +494,7 @@
     layout="topleft"
     left="30"
     name="time_format_textbox"
-    top_pad="10"
+    top_pad="5"
     width="200">
        Time Format:
    </text>
@@ -505,7 +503,7 @@
     height="23"
     layout="topleft"
     left="30"
-    top_pad="-2"
+    top_pad="2"
     max_chars="135"
     name="time_format_combobox"
     tool_tip="This setting controls nearby chat, poser, conversation logs, IMs, inspect floater, land floater, region restart scheduler, notifications, environment panel, group notices, landmarks, teleport history and group notifications."
@@ -558,22 +556,22 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="12"
+     top_pad="8"
      name="title_afk_text"
      width="260">
         Away timeout:
     </text>
 
     <text
-     type="string"
      length="1"
+     type="string"
      follows="left|top"
      height="13"
      layout="topleft"
      left_pad="0"
      top_delta="0"
      name="title_afk_quit_text"
-     width="200">
+     width="230">
         Log out after being marked away:
     </text>
 
@@ -582,7 +580,7 @@
      layout="topleft"
      control_name="AFKTimeout"
      left="30"
-     top_pad="1"
+     top_pad="4"
 	 label="Away timeout:"
      top_delta="0"
      name="afk"

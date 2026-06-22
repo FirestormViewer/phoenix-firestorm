@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Marketplace" title="Marketplace">
+	<layout_stack name="stack1">
+		<layout_panel name="nav_controls">
+			<button name="back" tool_tip="Voltar"/>
+			<button name="forward" tool_tip="Avançar"/>
+			<button name="stop" tool_tip="Parar navegação"/>
+			<button name="reload" tool_tip="Recarregar página"/>
+			<combo_box name="address" tool_tip="Digite a URL aqui"/>
+			<icon name="media_secure_lock_flag" tool_tip="Navegação segura"/>
+			<button name="popexternal" tool_tip="Abrir URL atual no navegador do sistema"/>
+		</layout_panel>
+		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+O plugin do navegador web parece estar demorando para abrir.
+Se o plugin não carregar, consulte:
+
+https://wiki.firestormviewer.org/fs_search_issues
+
+e
+
+https://wiki.firestormviewer.org/fs_media
+
+para possíveis etapas de solução.
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

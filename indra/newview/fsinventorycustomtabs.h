@@ -53,7 +53,6 @@ public:
     bool handleMouseDown(S32 x, S32 y);
 
     void noteActivePanel(LLInventoryPanel* panel);
-    void onActiveFilterChanged(LLPanel* active_panel);
     void notifyActiveFilterStateChanged();
 
     static void registerCommitCallbacks(LLPanelMainInventory* parent);
@@ -74,7 +73,6 @@ public:
     static bool activePanelIsCustom(const LLPanelMainInventory* parent);
     static bool maybeHandleAddTabSelected(LLPanelMainInventory* parent);
     static void noteActivePanel(LLPanelMainInventory* parent, LLInventoryPanel* panel);
-    static void onActiveFilterChanged(LLPanelMainInventory* parent, LLPanel* active);
     static S32  captureFilterGeneration(const LLPanelMainInventory* parent);
     static void notifyIfFilterChanged(LLPanelMainInventory* parent, S32 prev_generation);
     static bool handleRightMouseDown(LLPanelMainInventory* parent, S32 x, S32 y);
@@ -93,6 +91,7 @@ private:
     void installAddTab();
     void onSettingChangedExternally();
     void onRenameConfirmed(const LLSD& notification, const LLSD& response);
+    void onCloseConfirmed(const LLSD& notification, const LLSD& response);
     void onFilterFocusLost();
     void onClosePressed(LLInventoryPanel* panel);
     void doLoad();
@@ -118,6 +117,7 @@ private:
     LLInventoryPanel* mAddTabPanel{ nullptr };
     LLInventoryPanel* mLastActivePanel{ nullptr };
     LLNotificationPtr mRenameNotification;
+    LLNotificationPtr mCloseNotification;
     boost::signals2::connection mSettingConnection;
     boost::signals2::connection mAddClickConnection;
     bool mSaving{ false };

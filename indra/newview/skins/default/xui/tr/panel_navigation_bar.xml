@@ -5,7 +5,7 @@
 			<panel name="navigation_panel">
 				<pull_button name="back_btn" tool_tip="Önceki konuma geri git"/>
 				<pull_button name="forward_btn" tool_tip="Bir konum ileri git"/>
-				<button name="home_btn" tool_tip="Ana konumuma ışınla"/>
+				<button name="home_btn" tool_tip="Ana konumuma ışınla[LOCATION]"/>
 				<location_input label="Konum" name="location_combo"/>
 			</panel>
 		</layout_panel>

@@ -4,20 +4,23 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="Wybierz zestaw animacji do edycji." />
 		<button name="ao_activate" tool_tip="Aktywuj ten zestaw animacji." />
 		<check_box name="ao_default" label="Domyślny" tool_tip="Ustaw ten zestaw animacji jako domyślnie uruchamiany po zalogowaniu się. Jeśli żaden zestaw nie jest ustawiony jako domyślny, to użyj tego ustawionego podczas ostatniej sesji." />
-		<button name="ao_add" tool_tip="Utwórz nowy zestaw animacji." />
+		<menu_button name="ao_add" tool_tip="Utwórz nowy zestaw animacji." />
 		<button name="ao_remove" tool_tip="Usuń ten zestaw animacji." />
 		<check_box name="ao_sit_override" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Animator ma też podmieniać animacje siedzenia." />
 		<check_box name="ao_smart" label="Sprytnie" tool_tip="Ten tryb próbuje zapobiegać sytuacjom, w których Animator koliduje z wewnętrznymi animacjami obiektu - i wyłącza tymczasowo podmienianie." />
 		<check_box name="ao_disable_stands_in_mouselook" label="Wyłącz w trybie 1 osoby" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
 		<combo_box name="ao_state_selection_combo" tool_tip="Wybierz stan animacji do edycji." />
 		<panel name="ao_animation_move_trash_panel">
-			<button name="ao_move_up" tool_tip="Przenieś zaznaczoną animację do góry na liście." />
-			<button name="ao_move_down" tool_tip="Przenieś zaznaczoną animację w dół na liście." />
+			<button name="ao_move_up" tool_tip="Przenieś zaznaczoną animację lub grupę animacji do góry na liście." />
+			<button name="ao_move_down" tool_tip="Przenieś zaznaczoną animację lub grupę animacji w dół na liście." />
+			<button name="ao_rename" tool_tip="Zmień nazwę wybranej grupy animacji." />
 			<button name="ao_trash" tool_tip="Usuń zaznaczoną animację z listy." />
 		</panel>
+		<combo_box name="ao_track_selection_combo" tool_tip="Wybierz, która ścieżka animacji tego stanu ma być wyświetlana. Lista główna jest odtwarzana jak zwykle, natomiast dodatkowe ścieżki są odtwarzane i zapętlane niezależnie obok niej, na przykład machanie ogonem działa podczas wszystkich animacji chodzenia." />
+		<button name="ao_track_add" tool_tip="Dodaj nową niezależną ścieżkę animacji do tego stanu." />
 		<check_box name="ao_cycle" label="Cykl" tool_tip="Odtwarzaj inną animację z listy za każdym razem, gdy dany stan jest wywoływany." />
 		<check_box name="ao_randomize" label="Losowy porządek" tool_tip="Losuj porządek odtwarzania animacji w cyklu." />
-		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sekundy):" />
+		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sek.):" />
 		<spinner name="ao_cycle_time" tool_tip="Czas, po jakim animacja zmienia się na następną z listy. Ustaw na 0, aby wyłączyć automatyczny cykl animacji." />
 		<button name="ao_reload" label="Przeładuj" tool_tip="Przeładuj konfigurację Animatora." />
 		<layout_stack name="next_previous_buttons_stack">
@@ -29,6 +32,14 @@
 			</layout_panel>
 		</layout_stack>
 		<button name="ao_less" tool_tip="Pokazuj mniejszy interfejs Animatora." />
+		<panel name="ao_drop_zone_panel">
+			<text name="ao_drop_zone_add_label">
+				Upuść tutaj, by dodać
+			</text>
+			<text name="ao_drop_zone_group_label">
+				Upuść na istniejącą, by zgrupować
+			</text>
+		</panel>
 	</panel>
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">

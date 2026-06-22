@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gui_preview_tool" title="Ferramenta de Visualização de XUI">
+	<string name="ExternalEditorNotSet">
+Selecione um editor definindo a variável de ambiente LL_XUI_EDITOR
+ou a configuração ExternalEditor
+ou especificando seu caminho no campo "Caminho do Editor".
+	</string>
+
+	<panel name="main_panel">
+		<text name="select_language_label">
+			Idioma principal:
+		</text>
+
+		<combo_box name="language_select_combo">
+			<combo_box.item label="en" name="item1" value="en"/>
+		</combo_box>
+
+		<button label="Exibir" label_selected="Exibir" name="display_floater" tool_tip="Exibe o floater XUI definido pelo arquivo XML selecionado"/>
+		<button label="Ocultar" label_selected="Ocultar" name="close_displayed_floater" tool_tip="Fecha o floater exibido atualmente, se existir."/>
+		<button label="Editar..." label_selected="Editar..." name="edit_floater" tool_tip="Edita o floater XUI definido pelo arquivo XML selecionado (abre um editor externo). Abre a versão em inglês caso não exista uma versão localizada."/>
+		<button label="Salvar" label_selected="Salvar" name="save_floater" tool_tip="Salva o floater XUI definido pelo arquivo XML selecionado"/>
+		<button label="Salvar Tudo" label_selected="Salvar Tudo" name="save_all_floaters" tool_tip="Salva todos os floaters XUI definidos para o idioma selecionado"/>
+		<button label="&gt; &gt;" label_selected="&lt; &lt;" name="toggle_overlap_panel" tool_tip="Alterna o destaque e o painel de exibição de elementos sobrepostos. Clique com o botão direito em um elemento para selecioná-lo para esta funcionalidade. O elemento selecionado será marcado com um retângulo vermelho."/>
+
+		<text name="select_language_label_2">
+			Idioma secundário:
+		</text>
+
+		<combo_box name="language_select_combo_2">
+			<combo_box.item label="en" name="item1" value="en" />
+		</combo_box>
+
+		<button label="Exibir" name="display_floater_2" tool_tip="Exibe o floater XUI definido pelo arquivo XML selecionado"/>
+		<button label="Ocultar" name="close_displayed_floater_2" tool_tip="Fecha o floater exibido atualmente, se existir."/>
+		<button label="Exportar Esquema" name="export_schema"/>
+		<button label="Atualizar" name="refresh_btn"/>
+		
+		<check_box label="Mostrar retângulos" name="show_rectangles"/>
+		<scroll_list label="Nome" name="name_list">
+			<scroll_list.columns label="Título" name="title_column"/>
+			<scroll_list.columns label="Arquivo" name="file_column"/>
+			<scroll_list.columns label="Nó de nível superior" name="top_level_node_column"/>
+		</scroll_list>
+
+		<panel name="editor_panel">
+			<text name="editor_path_label">
+				Caminho do editor:
+			</text>
+
+			<line_editor name="executable_path_field" tool_tip="Caminho completo para um editor (executável) usado para editar arquivos XML de floaters (aspas não são necessárias)."/>
+
+			<button label="Procurar..." label_selected="Procurar..." name="browse_for_executable" tool_tip="Procurar um editor (executável) para editar arquivos XML de floaters"/>
+
+			<text name="executable_args_label">
+				Argumentos do editor:
+			</text>
+
+			<line_editor name="executable_args_field" tool_tip="Argumentos da linha de comando do editor. Use &apos;%FILE%&apos; para referenciar o arquivo alvo. &apos;SeuPrograma.exe NomeDoArquivo.xml&apos; será executado se este campo estiver vazio."/>
+		</panel>
+
+		<panel name="vlt_panel">
+			<text name="diff_file_label">
+				Arquivo delta:
+			</text>
+
+			<line_editor name="vlt_diff_path_field" tool_tip="Caminho completo para um arquivo XML de diferenças de localização D0 ou D1 gerado pelo Localization Toolkit."/>
+			<button label="Procurar..." label_selected="Procurar..." name="browse_for_vlt_diffs" tool_tip="Procurar um arquivo de diferenças D0 ou D1 gerado pelo VLT para destacar arquivos e elementos modificados."/>
+			<button label="Destacar diferenças" label_selected="Não destacar diferenças" name="toggle_vlt_diff_highlight" tool_tip="Destaca arquivos e elementos que contêm dados de localização modificados."/>
+		</panel>
+	</panel>
+
+	<scroll_container name="overlap_scroll">
+		<panel name="overlap_dummy_panel">
+			<overlap_panel label="Painel de Sobreposição" name="overlap_panel" tool_tip="Este painel exibe o elemento atualmente selecionado e todos os elementos que o sobrepõem, separados por linhas horizontais."/>
+
+			<text name="overlap_panel_label">
+				Elementos sobrepostos:
+			</text>
+		</panel>
+	</scroll_container>
+</floater>

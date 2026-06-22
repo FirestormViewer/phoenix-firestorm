@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Vestíveis favoritos">
+	<floater.string name="empty_list">
+		Arraste vestíveis ou objetos aqui para adicionar à lista.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Nenhum item correspondente encontrado.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Filtrar vestíveis favoritos" name="wearable_filter_input"/>
+		<menu_button name="options_btn" tool_tip="Opções de vestíveis favoritos"/>
+		<button name="remove_btn" tool_tip="Remover vestível da lista de favoritos"/>
+	</panel>
+</floater>

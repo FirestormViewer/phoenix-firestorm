@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Avatar Context Menu">
-	<menu_item_call label="Exibir perfil" name="view_profile"/>
-	<menu_item_call label="MI" name="im"/>
-	<menu_item_call label="Oferecer teletransporte" name="offer_teleport"/>
+<context_menu name="Nearby People Context Menu">
+	<menu_item_call label="Ver perfil" name="view_profile"/>
+	<menu_item_call label="IM" name="im"/>
+	<menu_item_call label="Oferecer teleporte" name="offer_teleport"/>
+	<menu_item_call label="Solicitar teleporte" name="request_teleport"/>
 	<menu_item_call label="Chamada de voz" name="voice_call"/>
-	<menu_item_call label="Exibir histórico de bate-papo..." name="chat_history"/>
+	<menu_item_call label="Ver histórico de chat..." name="chat_history"/>
 	<menu_item_call label="Adicionar amigo" name="add_friend"/>
+	<menu_item_call label="Adicionar ao conjunto..." name="Add to Set"/>
 	<menu_item_call label="Remover amigo" name="remove_friend"/>
-	<menu_item_call label="Convidar para entrar no grupo..." name="invite_to_group"/>
-	<menu_item_call label="Mais zoom" name="zoom_in"/>
+	<menu_item_call label="Convidar para grupo..." name="invite_to_group"/>
+	<menu_item_call label="Aproximar" name="zoom_in"/>
 	<menu_item_call label="Mapa" name="map"/>
 	<menu_item_call label="Compartilhar" name="share"/>
 	<menu_item_call label="Pagar" name="pay"/>
-	<menu_item_check label="Bloquear/desbloquear" name="block_unblock"/>
+	<menu_item_check label="Bloquear/Desbloquear" name="block_unblock"/>
 	<menu_item_call label="Congelar" name="freeze"/>
-	<menu_item_call label="Expulsar" name="eject"/>
+	<menu_item_call label="Ejetar" name="eject"/>
 </context_menu>

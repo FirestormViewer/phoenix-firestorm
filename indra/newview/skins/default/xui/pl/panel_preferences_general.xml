@@ -12,7 +12,7 @@
 		<combo_box.item label="Français (Francuski)" name="French"/>
 		<combo_box.item label="Italiano (Włoski)" name="Italian"/>
 		<combo_box.item label="Polski" name="Polish"/>
-		<!-- <combo_box.item label="Português (Portugalski) - Beta" name="Portugese"/> -->
+		<combo_box.item label="Português (Portugalski) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский (Rosyjski)" name="Russian"/>
 		<!-- <combo_box.item label="Türkçe (Turecki) - Beta" name="Turkish"/> -->
 		<combo_box.item label="日本語 (Japoński) - Beta" name="(Japanese)"/>
@@ -34,8 +34,8 @@
 		Miejsce Startu:
 	</text>
 	<combo_box name="start_location_combo">
-		<combo_box.item label="Ostatnie miejsce" name="MyLastLocation" tool_tip="Domyślnie loguj mnie w ostatnio odwiedzonym miejscu."/>
-		<combo_box.item label="Mój Start" name="MyHome" tool_tip="Domyślnie loguj mnie w moim Miejscu Startu."/>
+		<combo_box.item label="Ostatnie miejsce" name="MyLastLocation" />
+		<combo_box.item label="Mój Start" name="MyHome" />
 	</combo_box>
 	<check_box label="Pokaż na ekranie logowania" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
@@ -54,7 +54,11 @@
 	</text>
 	<check_box label="Pokaż moje imię" name="show_my_name_checkbox1"/>
 	<check_box label="Nazwy użytkowników" name="show_slids" tool_tip="Pokaż nazwy kont użytkowników, np. bobsmith123"/>
-	<check_box label="Pokaż tytuły grupowe" name="show_all_title_checkbox1" tool_tip="Wyświetl tytuł grupowy np. Oficer"/>
+	<combo_box tool_tip="Wyświetl tytuł grupowy np. Oficer" name="group_title">
+		<combo_box.item label="Bez tagów grup" name="no_tags" />
+		<combo_box.item label="Tylko moje tagi grup" name="my_tag" />
+		<combo_box.item label="Wszystkie tagi grup" name="all_tags" />
+	</combo_box>
 	<check_box label="Ukryj własny tytuł grupowy" name="RenderHideGroupTitle" tool_tip="Pokaż lub ukryj własny tytuł grupowy dla Ciebie i wszystkich innych."/>
 	<check_box label="Imiona Wyświetlane" name="display_names_check" tool_tip="Pokaż Imiona Wyświetlane (Display Names) w czacie, IM, tagach ponad awatarami itd."/>
 	<check_box label="Stary sposób wyświetlania imion" name="FSshow_legacyun" tool_tip="Prezentuj imiona w stary sposób (Imię Nazwisko) zamiast w sposób kont użytkownika (imię.nazwisko)"/>
@@ -92,7 +96,7 @@
 		<combo_box.item label="60 minut" name="item4"/>
 		<combo_box.item label="Nigdy" name="item5"/>
 	</combo_box>
-	<combo_box label="Limit dla Wylogowania:" name="quitafk">
+	<combo_box name="quitafk">
 		<combo_box.item label="2 minuty" name="item0"/>
 		<combo_box.item label="5 minut" name="item1"/>
 		<combo_box.item label="10 minut" name="item2"/>

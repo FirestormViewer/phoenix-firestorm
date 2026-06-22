@@ -12,9 +12,7 @@
 	<check_box label="Optymalizacja oparta na odległości" name="FSAutoTuneImpostorByDistEnabled" tool_tip="Przeglądarka dostosuje ustawienie MaxNonImpostors, aby ograniczyć w pełni renderowane awatary do tych w sprecyzowanym promieniu." />
 	<spinner label="Najdalszy pełny awatar" name="ffa_autotune" />
 	<text name="distant_av_advice">
-Awatary w oddali mogą być optymalizowane niezależnie od kosztu renderowania.
-Określ odległość po której awatar zostanie zoptymalizowany.
-To ustawienie wymusi MaxNonImpostors do 1, jeśli nikogo nie będzie w pobliżu.
+		Awatary w oddali mogą być optymalizowane niezależnie od kosztu renderowania. Określ odległość po której awatar zostanie zoptymalizowany. To ustawienie wymusi MaxNonImpostors do 1, jeśli nikogo nie będzie w pobliżu.
 	</text>
 	<text name="distance_lbl">
 		Limity dostrajania pola widzenia

@@ -359,6 +359,10 @@
         name="Phoenix"
         value="settings_phoenix.xml" />
       <combo_box.item
+        label="Modern"
+        name="Modern"
+        value="settings_modern.xml" />
+      <combo_box.item
         label="[VIEWER_GENERATION]"
         name="V3"
         value="settings_v3.xml" />

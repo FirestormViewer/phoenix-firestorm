@@ -11,10 +11,10 @@
 		<combo_box.item label="1024x768" name="1024x768"/>
 		<combo_box.item label="1280x1024" name="1280x1024"/>
 		<combo_box.item label="1600x1200" name="1600x1200"/>
-		<combo_box.item label="Customizado" name="Custom"/>
+		<combo_box.item label="Personalizado" name="Custom"/>
 	</combo_box>
-	<spinner label="Largura X Altura" name="local_snapshot_width"/>
-	<check_box label="Limitar proporções" name="local_keep_aspect_check"/>
+	<spinner label="Largura x Altura" name="local_snapshot_width"/>
+	<check_box label="Manter proporções" name="local_keep_aspect_check"/>
 	<text name="local_format_label">
 		Formato:
 	</text>
@@ -24,7 +24,9 @@
 		<combo_box.item label="BMP (sem perda)" name="BMP"/>
 	</combo_box>
 	<slider label="Qualidade:" name="image_quality_slider"/>
-	<button label="Cancelar" name="cancel_btn"/>
+	<check_box name="local_remember_location_sessions" label="Lembrar local e nome do arquivo"/>
+	<check_box name="local_use_timestamp" label="Incluir data/hora no nome do arquivo"/>
+	<button label="&#x25B6; Seleção" name="cancel_btn"/>
 	<flyout_button label="Salvar" name="save_btn" tool_tip="Salvar imagem em um arquivo">
 		<flyout_button.item label="Salvar" name="save_item"/>
 		<flyout_button.item label="Salvar como..." name="saveas_item"/>

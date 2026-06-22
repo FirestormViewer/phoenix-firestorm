@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_hide_beacon">
+	<button name="hide_beacon_btn" label="Ocultar beacon" tool_tip="Parar o rastreamento e ocultar o beacon" />
+</panel>

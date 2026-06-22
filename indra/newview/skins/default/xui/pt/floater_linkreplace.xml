@@ -1,2 +1,39 @@
-<?xml version="1.0" ?>
-<floater name="linkreplace" title="SUBSTITUIR LINKS DE INVENTÁRIO"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="linkreplace" title="Substituir links de inventário">
+	<string name="Ready">
+		Pronto...
+	</string>
+	<string name="TargetNotFound">
+		Objeto de destino não encontrado.
+	</string>
+	<string name="ItemsIdentical">
+		Objetos de origem e destino são idênticos.
+	</string>
+	<string name="ItemsFound">
+		[NUM] links de inventário encontrados.
+	</string>
+	<string name="ItemsRemaining">
+		Objetos restantes: [NUM]
+	</string>
+	<string name="ReplaceFinished">
+		Substituição de links de inventário concluída.
+	</string>
+	<text name="source_label">
+		Antigo:
+	</text>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Arraste e solte aqui o objeto de origem do inventário."/>
+	<text name="delete_text">
+		Os links para este objeto serão removidos.
+	</text>
+	<text name="target_label">
+		Novo:
+	</text>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Arraste e solte aqui o objeto de destino do inventário."/>
+	<check_box label="Remover apenas links" name="delete_links_only"/>
+	<text name="status_text">
+		Pronto...
+	</text>
+	<button name="btn_refresh" label="Atualizar"/>
+	<button name="btn_start" label="Iniciar"/>
+	<button name="btn_stop" label="Parar"/>
+</floater>

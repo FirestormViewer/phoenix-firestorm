@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="create_landmark" title="Criar Landmark">
+	<string name="favorites_bar">
+		Barra de favoritos
+	</string>
+	<text name="title_label" value="Detalhes do Landmark"/>
+	<text name="name_label" value="Nome:"/>
+	<text name="folder_label" value="Salvar este Landmark em:"/>
+	<text name="new_folder_textbox">
+		[secondlife:/// Criar nova pasta]
+	</text>
+	<text name="notes_label" value="Minhas notas:"/>
+	<button label="OK" name="ok_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
+</floater>

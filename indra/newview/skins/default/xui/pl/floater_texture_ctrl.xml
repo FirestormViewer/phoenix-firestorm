@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="texture picker" title="Wybór: tekstura">
-	<string name="choose_picture">
+	<floater.string name="choose_picture">
 		Kliknij by wybrać obraz
-	</string>
-	<string name="pick title">
+	</floater.string>
+	<floater.string name="pick title">
 		Wybór:
-	</string>
+	</floater.string>
 	<floater.string name="pick_material">
 		Wybór: Materiał
 	</floater.string>
@@ -16,8 +16,8 @@
 		Wiele tekstur
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Szafa" name="inventory" width="51" />
-		<radio_item label="Lokaln." name="local" width="60" />
+		<radio_item label="Szafa" name="inventory" width="55" />
+		<radio_item label="Lok." name="local" />
 		<radio_item label="BOM" name="bake" />
 	</radio_group>
 	<text name="size_lbl">

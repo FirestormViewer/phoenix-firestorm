@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="media ctrl context menu">
-	<menu_item_call label="Cortar" name="Cut"/>
-	<menu_item_call label="Cortar" name="Copy"/>
+	<menu_item_call label="Recortar" name="Cut"/>
+	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Colar" name="Paste"/>
-	<menu_item_call label="Abrir o Web Inspector" name="open_webinspector"/>
+	<menu_item_call label="Abrir Web Inspector" name="open_webinspector"/>
+	<menu_item_call label="Mostrar código-fonte" name="show_page_source"/>
 </context_menu>

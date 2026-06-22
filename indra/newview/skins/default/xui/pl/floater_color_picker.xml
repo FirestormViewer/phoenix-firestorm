@@ -3,24 +3,24 @@
 	<tab_container name="scale_type_container">
 		<panel name="RGB">
 			<text name="r_val_text">
-				Czerwony:
+				Czerwień:
 			</text>
 			<text name="g_val_text">
-				Zielony:
+				Zieleń:
 			</text>
 			<text name="b_val_text">
-				Niebieski:
+				Błękit:
 			</text>
 		</panel>
 		<panel name="LSL">
 			<text name="r_val_text_lsl">
-				Czerwony:
+				Czerwień:
 			</text>
 			<text name="g_val_text_lsl">
-				Zielony:
+				Zieleń:
 			</text>
 			<text name="b_val_text_lsl">
-				Niebieski:
+				Błękit:
 			</text>
 		</panel>
 		<panel name="Hex">
@@ -33,10 +33,10 @@
 		Odcień:
 	</text>
 	<text name="s_val_text">
-		Nasycenie:
+		Nasyc.:
 	</text>
 	<text name="l_val_text">
-		Luminacja:
+		Lumin.:
 	</text>
 	<check_box label="Stosuj teraz" name="apply_immediate"/>
 	<button label="Kopia LSL" tool_tip="Kopiuje wartości koloru do formatu wektora kolorów LSL w postaci &lt;r, g, b&gt;." name="copy_lsl_btn"/>

@@ -1408,6 +1408,10 @@
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
+	<notification label="關閉過濾器分頁" name="FSInventoryCustomTabClose">
+		要關閉過濾器分頁「[NAME]」嗎？其儲存的過濾條件將會被刪除。
+		<usetemplate name="okcancelignore" notext="取消" yestext="是，關閉" ignoretext="關閉自訂庫存過濾器分頁前一律確認" />
+	</notification>
 	<notification label="重新命名手勢" name="RenameGesture">
 		新的手勢名稱：
 		<form name="form">
@@ -4387,8 +4391,26 @@ https://wiki.firestormviewer.org/fs_voice
 名稱只能包含ASCII字元，不包括「:」和「|」。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="RenameAOGroup">
+		為這個新的動畫組指定名稱：
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		無法重新命名為「[AO_SET_NAME]」。
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		資料夾「[NAME]」不包含可新增的動畫。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
 	<notification name="NewAONameCantExist">
 		已經存在同名的動畫集。
+		<usetemplate name="okbutton" yestext="确定"/>
 	</notification>
 	<notification name="RemoveAOSet">
 		刪除名為「[AO_SET_NAME]」的動畫覆蓋集？
@@ -5933,5 +5955,43 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		找不到區域「[REGION]」。請檢查名稱並再試一次。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
-
+	<notification name="OmniFilterNewRuleSet">
+		請輸入新規則集的名稱：
+		<form name="form">
+			<button name="OK" text="確定" />
+			<button name="Cancel" text="取消" />
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		名稱不能為空白。請輸入名稱後再試一次。
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		不允許使用重複名稱。請使用其他名稱再試一次。
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		請輸入規則集副本的名稱：
+		<form name="form">
+			<button name="OK" text="確定" />
+			<button name="Cancel" text="取消" />
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		名稱不能為空白。請輸入名稱後再試一次。
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		不允許使用重複名稱。請使用其他名稱再試一次。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		確定要刪除 [RULESETNAME] 嗎？
+		<usetemplate ignoretext="刪除規則集前要求確認。" name="okcancelignore" notext="取消" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		無法刪除預設規則集。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		無法刪除規則集，因為索引超出範圍。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		無法刪除規則集，因為找不到指定名稱。
+	</notification>
 </notifications>

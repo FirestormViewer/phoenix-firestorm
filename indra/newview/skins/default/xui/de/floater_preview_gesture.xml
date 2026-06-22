@@ -53,7 +53,7 @@
 		Schritte:
 	</text>
 	<button label="Nach oben" name="up_btn"/>
-	<button label="Nach unten" name="down_btn"/>
+	<button label="Nach unt." name="down_btn"/>
 	<button label="Entfernen" name="delete_btn"/>
 	<text name="options_text">
 		(Optionen)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">Voltar</text>
+	<text name="settings_title">Configurações de autoajuste</text>
+
+	<text name="quality_lbl">Avatares distantes</text>
+
+	<check_box name="FSAutoTuneImpostorByDistEnabled" label="Otimização por distância" tool_tip="Quando ativado, ajusta MaxNonImpostors para limitar avatares totalmente renderizados dentro do raio definido." />
+
+	<spinner name="ffa_autotune" label="Avatar mais distante complexo" />
+
+	<text name="distant_av_advice">
+		Avatares mais distantes podem ser otimizados automaticamente, independentemente do custo de renderização. Defina a distância da câmera a partir da qual um avatar será otimizado. Observação: esta configuração define MaxNonImpostors como 1 se não houver avatar por perto.
+	</text>
+
+	<text name="distance_lbl">Limite de distância para ajuste</text>
+
+	<spinner name="min_dd_autotune" label="Distância mínima" />
+	<spinner name="pref_dd_autotune" label="Distância preferida" />
+
+	<text name="distance_desc1">
+		Ao ajustar os parâmetros da cena, o autoajuste escolherá valores entre a distância mínima e a distância preferida.
+	</text>
+
+	<text name="sundry_lbl">Configurações diversas</text>
+
+	<check_box name="alow_self_impostor" label="Permitir otimização do próprio avatar" tool_tip="Quando ativado, o viewer pode exibir seu próprio avatar como impostor." />
+
+	<check_box name="show_tuned_art" label="Mostrar tempo de renderização otimizado" tool_tip="Quando ativado, a coluna de tempo mostra o tempo de renderização atual, e não o tempo anterior à otimização." />
+
+	<text name="sundry_desc1">
+		Essas opções controlam ajustes mais avançados. Consulte a ajuda online para mais detalhes sobre cada uma.
+	</text>
+</panel>

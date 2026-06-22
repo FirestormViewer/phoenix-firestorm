@@ -16,7 +16,7 @@
 		<panel label="Zulässig" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
 				<filter_editor label="Zulässige Agenten suchen" name="allowed_search_input"/>
-				<button label="Kopieren" name="copy_allowed_list_btn"/>
+				<button label="Kopieren" name="copy_allowed_list_btn" width="65"/>
 			</panel>
 			<text name="allow_resident_label">
 				Immer zugelassen:
@@ -32,7 +32,7 @@
 		<panel label="Zulässige Gruppen" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
 				<filter_editor label="Zulässige Gruppen suchen" name="allowed_group_search_input"/>
-				<button label="Kopieren" name="copy_allowed_group_list_btn"/>
+				<button label="Kopieren" name="copy_allowed_group_list_btn" width="65"/>
 			</panel>
 			<text name="allow_group_label">
 				Immer zugelassene Gruppen:
@@ -48,7 +48,7 @@
 		<panel label="Verbannt" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
 				<filter_editor label="Verbannte Agenten suchen" name="banned_search_input"/>
-				<button label="Kopieren" name="copy_banned_list_btn"/>
+				<button label="Kopieren" name="copy_banned_list_btn" width="65"/>
 			</panel>
 			<text name="ban_resident_label">
 				Immer verbannt:

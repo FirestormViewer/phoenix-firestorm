@@ -44,7 +44,7 @@
 							<text name="privileged">
 								Ta przygoda jest włączona dla wszystkich rezydentów.
 							</text>
-							<button width="100" left="104" label="Zgłoś nadużycie" name="report_btn" />
+							<button label="Zgłoś" name="report_btn" />
 						</layout_panel>
 					</layout_stack>
 				</panel>

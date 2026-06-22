@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
-	<menu_item_call label="Exibir perfil" name="show_agent"/>
-	<menu_item_call label="Enviar MI..." name="send_im"/>
+	<menu_item_call label="Ver perfil" name="show_agent"/>
+	<menu_item_call label="Enviar IM..." name="send_im"/>
+	<menu_item_call label="Ver histórico de chat..." name="chat_history"/>
 	<menu_item_call label="Adicionar amigo..." name="add_friend"/>
+	<menu_item_call label="Adicionar ao conjunto..." name="Add to Set"/>
+	<menu_item_call label="Zoom no residente" name="zoom_agent"/>
+	<menu_item_call label="Teleportar para residente" name="teleportto_agent"/>
+	<menu_item_call label="Oferecer teleporte" name="offer_teleport"/>
+	<menu_item_call label="Solicitar teleporte" name="request_teleport"/>
+	<menu_item_call label="Rastrear residente" name="track_agent"/>
 	<menu_item_call label="Remover amigo..." name="remove_friend"/>
-	<menu_item_call label="Copiar nome para área de transferência" name="url_copy_label"/>
-	<menu_item_call label="Copiar SLurl para área de transferência" name="url_copy"/>
+	<menu_item_call label="Denunciar abuso" name="report_abuse"/>
+	<menu_item_call label="Bloquear" name="Block"/>
+	<context_menu label="Opções de moderador" name="GroupModerationSubmenu">
+		<menu_item_call label="Permitir chat de texto" name="AllowGroupChat"/>
+		<menu_item_call label="Proibir chat de texto" name="ForbidGroupChat"/>
+		<menu_item_call label="Banir membro" name="BanGroupMember"/>
+		<menu_item_call label="Expulsar membro" name="BanEjectMember"/>
+	</context_menu>
+	<menu_item_call label="Copiar nome para a área de transferência" name="url_copy_label"/>
+	<menu_item_call label="Copiar URL para a área de transferência" name="url_copy"/>
+	<menu_item_call label="Copiar URI de menção para a área de transferência" name="mention_copy_label"/>
+	<menu_item_call label="Mencionar usuário no chat" name="mention_in_chat"/>
 </context_menu>

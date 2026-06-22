@@ -37,11 +37,12 @@
         </combo_box>
         <slider name="manual_environment_change_transition_period" label="Czas przejścia otoczenia:" tool_tip="Interwał w sekundach, w czasie którego ręczne zmiany środowiska będą zachodzić. Zero oznacza natychmiast." />
         <check_box name="EnvironmentPersistAcrossLogin" label="Trzymaj ustawienia otoczenia pomiędzy sesjami" tool_tip="Przywraca aktualne ustawienia otoczenia po następnym zalogowaniu." />
-        <check_box name="FSRepeatedEnvTogglesShared" label="Skróty klawiszowe zmiany otoczenia przy powtarzaniu przełączają na otoczenie współdzielone" tool_tip="Sprawia, że powielone używanie skrótów klawiszowych (np. ctrl+shift+y) przełącza między wybranym wstępnie zapisanym otoczeniem, a otoczeniem współdzielonym." />
+        <check_box name="FSRepeatedEnvTogglesShared" label="Skróty klawiszowe zmiany otocz. przy powtarzaniu przełączają na otocz. współdzielone" tool_tip="Sprawia, że powielone używanie skrótów klawiszowych (np. ctrl+shift+y) przełącza między wybranym wstępnie zapisanym otoczeniem, a otoczeniem współdzielonym." />
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
-        <check_box label="Wyłącz linki w nawiasach kwadratowych w czacie (URL pozostaje widoczny)" name="FSDisableLabeledChatLinks" tool_tip="Po włączeniu linki w nawiasach kwadratowych otrzymywane w czacie, IM, ogłoszeniach grup i tekstach obiektów od innych rezydentów nie są zwijane do pojedynczej etykiety. Wyświetlany i klikalny jest rzeczywisty URL. Pomaga ograniczyć phishing, w którym widoczny tekst ukrywa inne miejsce docelowe. Wbudowane teksty przeglądarki (powiadomienia, preferencje itp.) pozostają bez zmian."/>
+        <check_box label="Podgląd prawdziwego URL linków w nawiasach: IM, czat grupowy (po najechaniu)" name="FSDisableLabeledChatLinks" tool_tip="Po włączeniu linki w nawiasach kwadratowych w IM, czacie grupowym, konferencjach ad-hoc i ogłoszeniach grup zachowują swój tekst, ale najechanie kursorem natychmiast pokazuje prawdziwy adres docelowy w dużej podpowiedzi. Pomaga wykryć phishing, gdy etykieta ukrywa inny cel. Czat w pobliżu używa opcji poniżej. Wbudowany tekst przeglądarki nie jest zmieniany."/>
+        <check_box label="Podgląd prawdziwego URL linków w nawiasach: czat w pobliżu, obiekty (po najechaniu)" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="Po włączeniu linki w nawiasach kwadratowych w czacie w pobliżu (lokalnym) i tekstach obiektów zachowują swój tekst, ale najechanie kursorem natychmiast pokazuje prawdziwy adres docelowy w dużej podpowiedzi. Domyślnie wyłączone."/>
         <check_box label="Pozwól skryptom na pokazywanie interfejsu mapy (llMapDestination)" name="ScriptsCanShowUI" />
         <text name="revokepermissions_txt">
          Cofnij zezwolenia do animowania:
@@ -143,7 +144,7 @@
         <color_swatch label="Kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
         <spinner label="Przezr." name="alpha"/>
         <spinner label="Blask" name="glow"/>
-        <check_box label="Superjasność" name="EmFBToggle"/>
+        <check_box label="Superjasna" name="EmFBToggle"/>
         <combo_box name="combobox shininess" tool_tip="Określ, jak mocny połysk ma mieć obiekt">
           <combo_item name="None" label="Żaden"/>
           <combo_item name="Low" label="Niski"/>
@@ -157,7 +158,7 @@
         <text name="build_item_add_disp_rect_txt">
          Obecnie: [ITEM]
         </text>
-        <check_box name="FSBuildPrefs_UseCustomScript" label="Własny skrypt pod przyciskiem Nowy Skrypt"/>
+        <check_box name="FSBuildPrefs_UseCustomScript" label="Własny skrypt pod guzikiem Nowy Skrypt"/>
         <fs_embedded_item_drop_target name="custom_script" tool_tip="Upuść skrypt w tym miejscu.">
          Upuść skrypt w tym miejscu.
         </fs_embedded_item_drop_target>
@@ -172,18 +173,18 @@
         <spinner name="MaxSelectDistance" tool_tip="Maksymalna dozwolona odległość zaznaczania obiektów (metry od awatara) [Domyślnie: 128.000]" />
         <check_box label="Ogranicz dystans przeciągania (metry):" name="LimitDragDistance" width="237" />
         <spinner name="MaxDragDistance" tool_tip="Maksymalna dozwolona odległość przeciągnięcia obiektu narzędziem przesuwania w pojedynczej operacji (metry od punktu startu) [Domyślnie: 48.000]" />
-        <text name="RotationStepText1" width="175">
+        <text name="RotationStepText1" width="185">
           Stosuj rotację do wielokrotności
         </text>
         <spinner name="RotationStep" tool_tip="Wszystkie rotacje wykonywane przez narzędzie obracania są wymuszane do wielokrotności tej jednostki [Domyślnie: 1.0]"/>
         <text name="RotationStepText2">
           stopni, gdy 'przyciągaj do siatki' nie jest używane
         </text>
-        <check_box label="Pytaj o potwierdzenie przy rozłączaniu jeśli zbiór ma przynajmniej" name="FSUnlinkConfirmEnabled" width="380"/>
+        <check_box label="Pytaj o potwierdzenie przy rozłączaniu jeśli zbiór ma przynajmniej" name="FSUnlinkConfirmEnabled" width="385"/>
         <text name="MinObjectsForUnlinkConfirmText2">
           części
         </text>
-        <check_box label="Stare zachowanie &quot;ustaw obiekt na sprzedaż&quot; (zmiana ceny od razu, bez kliku na 'Zastosuj')" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Stare zachowanie &quot;ustaw na sprzedaż&quot; (zmiana ceny od razu, bez kliku na 'Zastosuj')" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
         <text name="text_box_pivotpoint">
           Punkt obracania osi
@@ -196,7 +197,7 @@
     </panel>
     <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
-        <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
+        <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
         <check_box label="Podgląd animacji na własnym awatarze podczas przesyłania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas przesyłania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
         <check_box label="Zawsze rozwijaj zaawansowane informacje o podglądzie animacji" tool_tip="Domyślnie rozwiń zaawansowane informacje o animacji w oknie podglądu animacji" name="FSAnimationPreviewExpanded" />
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
@@ -217,8 +218,8 @@
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
-        <check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
-        <check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
+        <check_box label="Proste listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
+        <check_box label="#includes z dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
         <text name="lslpreprocinclude_textbox">
           Ścieżka dołączania preprocesora:
         </text>

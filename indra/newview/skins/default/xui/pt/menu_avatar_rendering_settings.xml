@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Settings">
-	<menu_item_check label="Padrão" name="default"/>
-	<menu_item_check label="Sempre renderizar" name="always_render"/>
-	<menu_item_check label="Nunca renderizar" name="never_render"/>
+	<menu_item_check label="Sempre renderizar com detalhe total" name="always_render"/>
+	<menu_item_check label="Nunca renderizar com detalhe total" name="never_render"/>
+	<menu_item_check label="Remover das exceções" name="default"/>
 </context_menu>

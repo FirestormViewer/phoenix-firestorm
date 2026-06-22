@@ -24,13 +24,13 @@
 					</text>
 					<button label="Reset" tool_tip="Zamknij i zresetuj do otoczenia współdzielonego" name="btn_reset" />
 					<text name="sun_color_lbl">
-						Kolor Słońca:
+						Kolor słońca:
 					</text>
 					<text name="cloud_color_lbl">
 						Kolor chmur:
 					</text>
 					<text name="cloud_map_label">
-						Obraz chmur:
+						Obr. chmur:
 					</text>
 					<text name="water_map_label">
 						Obraz wody:
@@ -78,7 +78,7 @@
 						Rozmiar blasku:
 					</text>
 					<text name="star_brightness_label">
-						Jasność gwiazd:
+						Gwiazdy:
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_4">

@@ -238,7 +238,7 @@
      height="16"
      label="Share"
      layout="topleft"
-     top_pad="0"
+     top_pad="5"
      name="share_with_group"
      tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions."
      width="92" />
@@ -260,7 +260,7 @@
      height="16"
      label="Copy"
      layout="topleft"
-     top_pad="0"
+     top_pad="5"
      name="everyone_copy"
      tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive"
      width="92" />
@@ -284,7 +284,7 @@
      layout="topleft"
      name="next_owner_modify"
      tool_tip="Next owner can edit properties like item name or scale of this object."
-     top_pad="0"
+     top_pad="5"
      width="92" />
     <check_box
      control_name="BulkChangeNextOwnerCopy"

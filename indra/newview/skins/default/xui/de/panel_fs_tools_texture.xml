@@ -37,8 +37,8 @@
 					<combo_box.item label="Masking" name="Alpha masking"/>
 				</combo_box>
 				<spinner label="Abschalt." name="alpha cutoff"/>
-				<spinner label="Metalligkeit" name="metalness factor"/>
-				<spinner label="Unebenheit" name="roughness factor"/>
+				<spinner label="Metalligk." name="metalness factor"/>
+				<spinner label="Unebenh." name="roughness factor"/>
 				<button name="save_selected_pbr" label="Speichern"/>
 			</panel>
 
@@ -375,9 +375,7 @@
 		<spinner label="Wiederh. / Meter" name="rptctrl"/>
 		<check_box label="Materialien synchronisieren" name="checkbox_sync_settings" tool_tip="Synchronisiere Texture-Mapping-Parameter"/>
 		<check_box label="Planare Oberflächen ausrichten" name="checkbox planar align" tool_tip="Richtet Texturen auf allen ausgewählten Flächen wie die zuletzt ausgewählte Fläche aus. Erfordert planares Textur-Mapping."/>
-		<text name="tex gen">
-			Mapping
-		</text>
+		<check_box width="90" label="Wasser verst." name="checkbox_hide_water"/>
 		<combo_box name="combobox texgen">
 			<combo_box.item label="Standard" name="Default"/>
 			<combo_box.item label="Planar" name="Planar"/>

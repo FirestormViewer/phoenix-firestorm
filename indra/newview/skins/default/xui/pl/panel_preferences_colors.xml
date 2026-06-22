@@ -41,6 +41,9 @@
 			<text name="direct_label">
 				Bezpośrednie
 			</text>
+			<text name="server_chat_history_label">
+				Historia czatu grupy z serwera
+			</text>
 			<text name="header_colors">
 				Nagłówki czatu:
 			</text>
@@ -104,7 +107,7 @@
 			<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość tła tagów imion"/>
 			<slider name="FSNameTagZOffsetCorrection" label="Przesuń w pionie:" tool_tip="Zmienia przesunięcie w pionie dla tagów imion. Domyślnie 0" />
 			<check_box label="Pokazuj odległość w tagach imion" name="FSTagShowDistance" tool_tip="Pokazuj odległość od awatarów w ich tagach imion." />
-			<check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
+			<check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" />
 			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">
 					Zasięg czatu
@@ -223,8 +226,8 @@
                 Czcionka:
             </text>
 			<color_swatch name="preferences_search_font_color" tool_tip="Wybierz kolor czcionki dla podświetlenia wyników wyszukiwania w opcjach"/>
-			<text name="area_search_beacon_color_label" left="280">
-				Emiter śledzenia (np. przeszukiwania obszaru):
+			<text name="area_search_beacon_color_label">
+				Emiter śledzenia:
 			</text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Wybierz kolor emitera śledzenia, np. dla przeszukiwania obszaru" />
 			<text name="notecard_editor_color_label">

@@ -45,7 +45,7 @@
 			<text name="InstructSelectResident">
 				Wybierz osobę w pobliżu:
 			</text>
-			<slider label="Zasięg" name="near_me_range"/>
+			<slider label="Odl." name="near_me_range"/>
 			<text name="meters">
 				Metry
 			</text>

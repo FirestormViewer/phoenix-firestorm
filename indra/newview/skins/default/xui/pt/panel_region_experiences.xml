@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Experiências" name="Experiences">
 	<panel.string name="trusted_estate_text">
-		Qualquer experiência pode ser chave.
-
-Experiências-chave têm permissão para serem executadas nesse terreno.
-
-Além disso, se a propriedade não permitir acesso público, os residentes participantes de qualquer experiência-chave podem entrar e permanecer no terreno, desde que estejam na experiência-chave.
+		Qualquer experiência pode ser uma experiência-chave.
+Experiências-chave podem ser executadas nesta propriedade.
+Se a propriedade não permitir acesso público, os residentes poderão entrar e permanecer nela desde que estejam envolvidos em alguma experiência-chave.
 	</panel.string>
 	<panel.string name="allowed_estate_text">
-		Somente experiências dentro do terreno podem ser permitidas.
+		Apenas experiências com escopo de terreno podem ser permitidas.
 
-Experiências permitidas têm permissão para ser executadas nesse terreno.
+Experiências permitidas podem ser executadas nesta propriedade.
 	</panel.string>
 	<panel.string name="blocked_estate_text">
-		Somente experiências dentro da grade podem ser bloqueadas.
+		Apenas experiências com escopo de grid podem ser bloqueadas.
       
-É possível que as experiências bloqueadas não sejam executadas nesse terreno.
+Experiências bloqueadas não podem ser executadas nesta propriedade.
 	</panel.string>
 	<panel.string name="estate_caption">
-		Mudar as configurações desta guia afeta todas as regiões deste terreno.
+		As alterações afetam todas as regiões da propriedade.
 	</panel.string>
 	<panel.string name="allowed_parcel_text">
-		Somente experiências dentro do terreno podem ser permitidas.
+		Apenas experiências com escopo de terreno podem ser permitidas.
       
-Experiências permitidas têm permissão para ser executadas nesse terreno se não estiverem bloqueadas pela parcela.
+Experiências permitidas podem ser executadas nesta parcela, desde que não estejam bloqueadas pela propriedade.
 	</panel.string>
 	<panel.string name="blocked_parcel_text">
 		Qualquer experiência de residente pode ser bloqueada.
       
-É possível que as experiências bloqueadas não sejam executadas nesta parcela.
+Experiências bloqueadas não podem ser executadas nesta parcela.
 	</panel.string>
 </panel>

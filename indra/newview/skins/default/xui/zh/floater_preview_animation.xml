@@ -15,7 +15,7 @@
 		<text name="AdvancedStatsLeft">
 優先度：[PRIORITY]
 持續時間：[DURATION]秒
-迴圈：[IS_LOOP]
+循環：[IS_LOOP]
 		</text>
 		<text name="AdvancedStatsRight">
 淡入：[EASE_IN]秒

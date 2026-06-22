@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="412"
+ height="442"
  width="900"
  layout="topleft"
  can_resize="false"
  legacy_header_height="18"
  name="floater_fs_contact_set_configure"
+ help_topic="contact_sets"
  title="Contact set settings">
     <floater.string
      name="title">
@@ -77,7 +78,7 @@ Contact Set Settings:
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="272"
+     height="302"
      width="450"
      border_visible="true"
      bevel_style="none">
@@ -90,18 +91,46 @@ Contact Set Settings:
      name="global_label">
 Global Settings:
     </text>
+    <check_box
+     follows="left|top"
+     top_pad="14"
+     height="12"
+     initial_value="true"
+     label="Show profile icons in Contact Sets lists"
+     name="FSContactSetsListShowIcons"
+     width="300"
+     control_name="FSContactSetsListShowIcons"/>
     <color_swatch
      can_apply_immediately="true"
      follows="left|top"
      height="55"
      label="Default Set Color"
-     top_pad="8"
+     top_pad="6"
      left_delta="4"
      name="global_swatch"
      tool_tip="Click to open Color Picker"
      width="100" />
+    <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="55"
+     label=""
+     top_delta="0"
+     left_delta="120"
+     name="offline_swatch"
+     tool_tip="Color used for offline contacts in Contact Sets lists that do not belong to any Contact Set. A custom Contact Set color takes precedence."
+     width="100" />
+    <check_box
+     follows="left|top"
+     top_pad="-16"
+     height="12"
+     initial_value="false"
+     label="Custom offline contact color"
+     name="FSContactSetsListColorizeOffline"
+     width="120"
+     control_name="FSContactSetsListColorizeOffline"/>
     <text
-     top_pad="-2"
+     top_pad="2"
      follows="left|top"
      height="16"
      left="15"
@@ -110,7 +139,7 @@ Global Settings:
 Online notifications:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Show Online Notices for ALL friends as toasts"
@@ -151,7 +180,7 @@ Online notifications:
 Custom Colors:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Color mini map icon based on their Contact Set"
@@ -194,7 +223,7 @@ Custom Colors:
      name="side_panel"
      top="18"
      left="450"
-     height="392"
+     height="422"
      width="448"
      border_visible="true"
      bevel_style="none">
@@ -225,7 +254,7 @@ Custom Colors:
      label="Use custom Autoresponse-mode message for this set"
      layout="topleft"
      left_delta="-15"
-     top_pad="6"
+     top_pad="12"
      initial_value="false"
      name="set_autoresponse_mode_enabled"
      width="520" />
@@ -246,7 +275,7 @@ Custom Colors:
      label="Use custom Non-friends autoresponse for this set"
      layout="topleft"
      left_delta="-15"
-     top_pad="6"
+     top_pad="12"
      initial_value="false"
      name="set_autoresponse_nonfriends_enabled"
      width="520" />
