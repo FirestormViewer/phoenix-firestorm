@@ -4,7 +4,7 @@
 		Propriedade
 	</text>
 	<text name="estate_name_lbl">
-		Name:
+		Nome:
 	</text>
 	<text name="estate_name_text">
 		Mainland
@@ -21,7 +21,6 @@
 	<text name="covenant_timestamp_text" width="320">
 		Última alteração em quarta-feira, 31 de dez. de 1969, 16:00:00
 	</text>
-	<button label="?" name="covenant_help"/>
 	<text_editor bottom="-247" height="162" name="covenant_editor">
 		Não há convênio definido para esta propriedade.
 	</text_editor>
@@ -37,7 +36,7 @@ propriedade.
 		Região
 	</text>
 	<text name="region_name_lbl">
-		Name:
+		Nome:
 	</text>
 	<text name="region_name_text">
 		Erica
@@ -46,13 +45,13 @@ propriedade.
 		Tipo:
 	</text>
 	<text name="region_landtype_text">
-		Mainland / Homestead
+		Continente / Residencial
 	</text>
 	<text name="region_maturity_lbl">
 		Classificação:
 	</text>
 	<text name="region_maturity_text">
-		Adult
+		Adulto
 	</text>
 	<text name="resellable_lbl">
 		Revenda:

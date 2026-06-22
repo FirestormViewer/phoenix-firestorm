@@ -20,6 +20,9 @@
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
 			<menu_item_check name="Protected Folders" label="Foldery chronione" />
 			<menu_item_check label="Ustawienia..." name="inv_settings" />
+			<menu_item_check label="Pokaż kartę Ostatnie" name="show_recent_tab" />
+			<menu_item_check label="Pokaż kartę Założone" name="show_worn_tab" />
+			<menu_item_check label="Pokaż kartę Ulubione" name="show_favorites_tab" />
 			<menu_item_check label="Widok listy" name="list_view" />
 			<menu_item_check label="Widok galerii" name="gallery_view" />
 			<menu_item_check label="Widok kombinowany" name="combination_view" />

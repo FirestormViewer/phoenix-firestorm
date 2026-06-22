@@ -21,11 +21,13 @@ https://www.firestormviewer.org
 			</text_editor>
 		</panel>
 		<!-- Firestorm Credits -->
-		<panel label="Firestorm" name="fs_credits_panel" height="930">
+		<panel label="Firestorm" name="fs_credits_panel">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
-					<text name="firestorm_intro" height="120">
+					<text name="firestorm_intro">
 Firestorm是一個改善SecondLife(tm)檢視器體驗的社群檔案。 我們將社群開發人員的貢獻與林登實驗室的代碼以及我們自己的擴充結合起來， 以提供高品質、功能豐富的瀏覽器體驗。我們擁有一支龐大的志願者支援團隊。 Firestorm由非營利組織The Phoenix Firestorm Project, Inc提供。
+
+
 
 Firestorm開發團隊：
 					</text>
@@ -37,6 +39,7 @@ Firestorm開發團隊：
 					</text>
 					<text name="fs_art_intro">
 火風暴包含為火風暴修改的Starlight。它是由社群中的居民開發的設計的， 旨在提供一個更友好、更易於使用的界面。更多詳情，請參閱  &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
 
 UI 藝術家和設計師：
 					</text>

@@ -9,5 +9,5 @@
 	<button label="Wklej tekstury z szafy" name="paste_textures_btn" />
 	<button label="Zapisz miniatury" name="write_thumbnails_btn" />
 	<button label="Loguj elementy bez miniatury" name="log_missing_thumbnails_btn" />
-	<button label="Usuń miniatury z wklejonych elementów" name="clear_thumbnails_btn" />
+	<button label="Usuń miniatury z wklejonych rzeczy" name="clear_thumbnails_btn" />
 </floater>

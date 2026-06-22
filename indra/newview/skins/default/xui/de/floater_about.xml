@@ -21,10 +21,10 @@ mit Open-Source-Beiträgen von:
 			</text_editor>
 		</panel>
 <!-- Firestorm Credits -->
-		<panel label="Firestorm" name="fs_credits_panel" height="930">
+		<panel label="Firestorm" name="fs_credits_panel">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
-					<text name="firestorm_intro" height="120">
+					<text name="firestorm_intro">
 Firestorm ist ein Community-Projekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von Community-Entwicklern mit Code von Linden Lab sowie eigenen Erweiterungen, um ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Firestorm Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:

@@ -32,7 +32,7 @@
 			<text name="mouse_warp_lbl">
 				Deformação do mouse:
 			</text>
-			<combo_box name="mouse_warp_combo" tooltip="Controla o salto do mouse para o centro da tela durante o zoom alternativo e a aparência do mouse.">
+			<combo_box name="mouse_warp_combo" tool_tip="Controla o salto do mouse para o centro da tela durante o zoom alternativo e a aparência do mouse.">
 				<combo_box.item label="Automático" name="0" />
 				<combo_box.item label="Ligado" name="1" />
 				<combo_box.item label="Desligado" name="2" />

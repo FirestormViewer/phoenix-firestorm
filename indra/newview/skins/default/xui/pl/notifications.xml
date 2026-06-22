@@ -1307,6 +1307,10 @@ do
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Zamknij zakładkę filtra" name="FSInventoryCustomTabClose">
+		Zamknąć zakładkę filtra &quot;[NAME]&quot;? Jej zapisane filtry zostaną usunięte.
+		<usetemplate name="okcancelignore" notext="Anuluj" yestext="Tak, zamknij" ignoretext="Potwierdzaj przed zamknięciem niestandardowej zakładki filtra szafy" />
+	</notification>
 	<notification label="Zmień nazwę gestu" name="RenameGesture">
 		Nowa nazwa gestu:
 		<form name="form">
@@ -1502,7 +1506,6 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 		Instalacja [APP_NAME] zakończona.
 
 Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
-Czy chcesz przejść na stronę [https://www.firestormviewer.org/join-secondlife/ firestormviewer.org] żeby stworzyć nowe konto?
 		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Stwórz konto..."/>
 	</notification>
 	<notification name="LoginCantRemoveUsername">
@@ -3462,9 +3465,10 @@ Czy wyrażasz na to zgodę?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; chciałby uzyskać zgodę na pobieranie Linden Dolarów (L$) z Twojego konta. Jeśli zezwolisz, to będzie on mógł brać z niego wszystkie lub część środków, w dowolnej chwili, bez dodatkowych ostrzeżeń.
+Uwaga:
+[WARNINGS]
 
-Zanim zezwolisz na dostęp upewnij się, że wiesz jaki to obiekt i dlaczego pyta o zgodę - oraz że ufasz jego twórcy. Jeśli nie masz pewności kliknij na Odmów.
+Nie zezwalaj na dostęp, jeśli nie rozumiesz, dlaczego chce uzyskać dostęp do Twojego konta.
 		<form name="form">
 			<button name="Grant" text="Zezwól na dostęp"/>
 			<button name="Deny" text="Odmów"/>
@@ -3651,6 +3655,12 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	<notification name="SnapshotToLocalDirNotExist">
 		Nie można zapisać zrzutu ekranu do [PATH]: Katalog nie istnieje.
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		Zrzut ekranu zapisany do:
+[FILEPATH]
+
+Kliknij, aby otworzyć folder.
+	</notification>
 	<notification name="PresetNotSaved">
 		Błąd podczas zapisywania ustawienia [NAME].
 	</notification>
@@ -3676,6 +3686,13 @@ to ustawienie lub wybrać inną nazwę.
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
 		Twoja rozmowa głosowa została wyciszona przez moderatora.
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		Moderator wyciszył Twój czat głosowy.
+Osoby w tej lokalizacji nie usłyszą Cię, jeśli będziesz mówić.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		Twój czat głosowy mogą teraz usłyszeć osoby w tym miejscu.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
@@ -3885,6 +3902,10 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 	<notification name="ConfirmLeaveCall">
 		Czy jesteś pewien/pewna, że chcesz zakończyć rozmowę?
 		<usetemplate ignoretext="Potwierdź zanim rozmowa głosowa zostanie zakończona" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+		Czy na pewno chcesz opuścić tę konferencję?
+		<usetemplate ignoretext="Potwierdzaj przed opuszczeniem konferencji" name="okcancelignore" notext="Nie" yestext="Tak" />
 	</notification>
 	<notification name="ConfirmMuteAll">
 		Wybrano wyciszenie wszystkich uczestników rozmowy głosowej w grupie.
@@ -5674,5 +5695,41 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 	<notification name="FSSetTitleRegionNotFound">
 		Region '[REGION]' nie został znaleziony. Sprawdź nazwę i spróbuj ponownie.
 	</notification>
-
+	<notification name="OmniFilterNewRuleSet">
+		Wprowadź nazwę dla nowego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Wprowadź nazwę dla sklonowanego zestawu reguł:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Puste nazwy są niedozwolone. Spróbuj ponownie, wpisując nazwę.
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Zduplikowane nazwy są niedozwolone. Spróbuj ponownie z inną nazwą.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Czy na pewno chcesz usunąć [RULESETNAME]?
+		<usetemplate ignoretext="Wymagaj potwierdzenia przed usunięciem zestawu reguł." name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Nie można usunąć domyślnego zestawu reguł.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Nie można usunąć zestawu reguł, ponieważ indeks znajduje się poza zakresem.
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Nie można usunąć zestawu reguł, ponieważ nie znaleziono podanej nazwy.
+	</notification>
 </notifications>

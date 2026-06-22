@@ -40,9 +40,12 @@ class LLTextEditor;
 class Omnifilter : public LLFloater
 {
     friend class LLFloaterReg;
+    friend class OmnifilterMenuPanel;
 
 private:
     Omnifilter(const LLSD& key);
+    void onVisibilityChange(bool visible) override;
+    ~Omnifilter();
 
 public:
     bool              postBuild() override final;
@@ -55,11 +58,20 @@ protected:
     void onNeedleChanged();
     void onAddNeedleClicked();
     void onRemoveNeedleClicked();
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     void onSortChanged();
     void onUpNeedleClicked();
     void onDownNeedleClicked();
-    // </FS:minerjr> [FIRE-36649]
+    void onNewRuleSetClicked();
+    void onCloneRuleSetClicked();
+    void onRemoveRuleSetClicked();
+    void onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
+    void onCloneRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
+    void onRemoveRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response);
+    void onRuleSetChanged();
+    void reloadRules();
+    void reloadRule();
+    void changeRuleSet(S32 new_rule_set_index);
+    void onRuleSetsUpdated();
     void onNeedleNameChanged();
     void onNeedleCheckboxChanged(LLUICtrl* ctrl);
     void onOwnerChanged();
@@ -69,10 +81,12 @@ protected:
     FSScrollListCtrl* mNeedleListCtrl{ nullptr };
     LLButton*         mAddNeedleBtn{ nullptr };
     LLButton*         mRemoveNeedleBtn{ nullptr };
-    // <FS:minerjr> [FIRE-36649] - Add reordering to OmniFilter
     LLButton*         mUpNeedleBtn{ nullptr };
     LLButton*         mDownNeedleBtn{ nullptr };
-    // </FS:minerjr> [FIRE-36649]
+    LLComboBox* mRuleSetsCmb{ nullptr };
+    LLButton* mNewRuleSetBtn{ nullptr };
+    LLButton* mCloneRuleSetBtn{ nullptr };
+    LLButton* mRemoveRuleSetBtn{ nullptr };
     FSScrollListCtrl* mFilterLogCtrl{ nullptr };
     LLPanel*          mPanelDetails{ nullptr };
     LLLineEditor*     mNeedleNameCtrl{ nullptr };
@@ -104,4 +118,28 @@ protected:
     LLLineEditor* mButtonReplyCtrl{ nullptr };
     LLTextEditor* mTextBoxReplyCtrl{ nullptr };
 };
+
+/// <summary>
+/// Omnifilter Menu Panel - Used by panel_status_bar.xml's omnifilter_menu_panel
+/// </summary>
+
+class OmnifilterMenuPanel : public LLPanel
+{
+public:
+    OmnifilterMenuPanel();
+    /*virtual*/ bool postBuild();
+
+    virtual ~OmnifilterMenuPanel();
+
+protected:
+    void onRuleSetChanged();
+    void updateOmnifilterRuleSets(const LLSD& data);
+    void reloadRules();
+    void onRuleSetsUpdated();
+
+    LLComboBox*       mRuleSetsCmb{ nullptr };
+    boost::signals2::connection mControlConnection;
+    boost::signals2::connection mRuleSetUpdatedConnection;
+};
+
 #endif // OMNIFILTER_H

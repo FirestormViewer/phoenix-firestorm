@@ -1,15 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_gear_default">
 	<menu_item_call label="Новое окно инвентаря" name="new_window"/>
 	<menu_item_check label="Защищенные Папки" name="Protected Folders"/>
 	<menu_item_check label="Настройки инвентаря..." name="inv_settings"/>
-	<menu_item_check label="Посмотреть список" name="list_view"/>
-	<menu_item_check label="Просмотр галереи" name="gallery_view"/>
-	<menu_item_check label="Комбинированный вид" name="combination_view"/>
-	<menu_item_check label="Сортировать по имени" name="sort_by_name"/>
-	<menu_item_check label="Сортировать по использованию" name="sort_by_recent"/>
-	<menu_item_check label="Сортировать папки по имени" name="sort_folders_by_name"/>
-	<menu_item_check label="Сортировать системные папки сверху" name="sort_system_folders_to_top"/>
+	<context_menu label="Tabs &amp; Views" name="tabs_and_views_menu">
+		<menu_item_check name="list_view" label="Посмотреть список"/>
+		<menu_item_check name="gallery_view" label="Просмотр галереи"/>
+		<menu_item_check name="combination_view" label="Комбинированный вид"/>
+		<menu_item_check name="recent_tab" label="Show Recent tab"/>
+		<menu_item_check name="worn_tab" label="Show Worn tab"/>
+		<menu_item_check name="favorites_tab" label="Show Favorites tab"/>
+	</context_menu>
+	<context_menu label="Sorting" name="sorting_menu">
+		<menu_item_check name="sort_by_name" label="Сортировать по имени"/>
+		<menu_item_check name="sort_by_recent" label="Сортировать по использованию"/>
+		<menu_item_check name="sort_folders_by_name" label="Сортировать папки по имени"/>
+		<menu_item_check name="sort_system_folders_to_top" label="Сортировать системные папки сверху"/>
+	</context_menu>
 	<context_menu label="Поиск по..." name="inventory_search_menu">
 		<menu_item_check name="inventory_search_by_name" label="Названию"/>
 		<menu_item_check name="inventory_search_by_creator" label="Создателю"/>
@@ -17,24 +24,30 @@
 		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
 		<menu_item_check name="inventory_search_by_all" label="Всему"/>
 	</context_menu>
-	<menu_item_check label="Добавление объектов по двойному нажатию" name="add_inv_toggle"/>
-	<menu_item_check label="Добавление одежды по двойному нажатию" name="add_invclothing_toggle"/>
-	<menu_item_call label="Показать фильтры..." name="show_filters"/>
-	<menu_item_call label="Сбросить фильтр" name="reset_filters"/>
+	<context_menu label="Filters &amp; Permissions" name="filters_and_permissions_menu">
+		<menu_item_call label="Показать фильтры..." name="show_filters"/>
+		<menu_item_call label="Сбросить фильтр" name="reset_filters"/>
+		<menu_item_check name="inventory_filter_only_modify" label="Только изменяемое"/>
+		<menu_item_check name="inventory_filter_only_copy" label="Только копируемое"/>
+		<menu_item_check name="inventory_filter_only_transfer" label="Показать передаваемое"/>
+		<menu_item_check name="inventory_filter_coalesced_objects_only" label="Только объединенные"/>
+	</context_menu>
+	<context_menu label="Links Management" name="links_management_menu">
+		<menu_item_call label="Найти все ссылки" name="Find All Links"/>
+		<menu_item_call label="Заменить ссылки" name="Replace Links"/>
+		<menu_item_check name="inventory_filter_show_links" label="Показать ссылки"/>
+		<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки"/>
+		<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки"/>
+	</context_menu>
+	<context_menu label="Double-click Options" name="double_click_menu">
+		<menu_item_check name="add_inv_toggle" label="Добавление объектов по двойному нажатию"/>
+		<menu_item_check name="add_invclothing_toggle" label="Добавление одежды по двойному нажатию"/>
+	</context_menu>
 	<menu_item_call label="Закрыть все папки" name="close_folders"/>
 	<menu_item_call label="Закрыть все окна" name="close_windows"/>
-	<menu_item_call label="Очистить 'Найденные вещи'" name="empty_lostnfound"/>
 	<menu_item_call label="Сохранить текстуру как" name="Save Texture As"/>
 	<menu_item_call label="Поделиться" name="Share"/>
 	<menu_item_call label="Найти оригинал" name="Find Original"/>
-	<menu_item_call label="Найти все ссылки" name="Find All Links"/>
-	<menu_item_call label="Заменить ссылки" name="Replace Links"/>
-	<menu_item_check name="inventory_filter_show_links" label="Показать ссылки"/>
-	<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки"/>
-	<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки"/>
-	<menu_item_check name="inventory_filter_only_modify" label="Только изменяемое"/>
-	<menu_item_check name="inventory_filter_only_copy" label="Только копируемое"/>
-	<menu_item_check name="inventory_filter_only_transfer" label="Показать передаваемое"/>
-	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Только объединенные"/>
+	<menu_item_call label="Очистить 'Найденные вещи'" name="empty_lostnfound"/>
 	<menu_item_call label="Очистить корзину" name="empty_trash"/>
 </toggleable_menu>

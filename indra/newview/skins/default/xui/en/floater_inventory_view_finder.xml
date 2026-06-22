@@ -5,12 +5,12 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="598"
+ height="606"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
  title="Inventory Recent Items"
- width="160">
+ width="170">
     <!-- </FS:minerjr> [FIRE-35042] -->
     <icon
      height="16"
@@ -258,21 +258,21 @@
      left="8"
      name="check_modify"
      top_pad="6"
-     width="45" />
+     width="48" />
     <check_box
      height="16"
      label="Copy"
      layout="topleft"
      left_pad="2"
      name="check_copy"
-     width="45" />
+     width="49" />
     <check_box
      height="16"
      label="Trans"
      layout="topleft"
      left_pad="2"
      name="check_transfer"
-     width="45" />
+     width="48" />
     <!-- Changed top_pad from 6 to 0 in this block -->
     <check_box
      height="16"
@@ -367,7 +367,7 @@
      height="23"
      layout="topleft"
      name="date_search_direction"
-     top_pad="0"
+     top_pad="8"
      left="8"
      width="270">
      <radio_item

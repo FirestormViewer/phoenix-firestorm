@@ -61,6 +61,7 @@ LLDragHandle::LLDragHandle(const LLDragHandle::Params& p)
     mDragHighlightColor(p.drag_highlight_color()),
     mDragShadowColor(p.drag_shadow_color()),
     mFont(p.font),
+    mFontShadow(p.font_shadow),     // <FS:Zi> Allow skins to override drag handle font shadow
     mLabelVPad(p.label_vpad())
 
 {
@@ -106,7 +107,11 @@ void LLDragHandleTop::setTitle(const std::string& title)
         params.initial_value(trimmed_title);
         params.font(mFont);
         params.follows.flags(FOLLOWS_TOP | FOLLOWS_LEFT | FOLLOWS_RIGHT);
-        params.font_shadow(LLFontGL::NO_SHADOW);
+        // <FS:Zi> Allow skins to override drag handle font shadow
+        //         This can be controlled in xui/en/floater.xml -> font_shadow="none|soft|hard"
+        // params.font_shadow(LLFontGL::NO_SHADOW);
+        params.font_shadow(mFontShadow);
+        // </FS:Zi>
         params.use_ellipses = true;
         params.parse_urls = false; //cancel URL replacement in floater title
         mTitleBox = LLUICtrlFactory::create<LLTextBox> (params);

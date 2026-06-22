@@ -30,7 +30,7 @@
      layout="topleft"
      left="7"
      name="help_text"
-     top="28"
+     top="8"
      word_wrap="true"
      width="200">
         You can select multiple Residents to invite to your group. Click &apos;Open Resident Chooser&apos; to start.
@@ -41,7 +41,7 @@
      layout="topleft"
      left_delta="-2"
      name="add_button"
-     top_delta="44"
+     top_delta="64"
      width="200" />
     <name_list
      allow_calling_card_drop="true"

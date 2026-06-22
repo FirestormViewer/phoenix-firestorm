@@ -3,7 +3,7 @@
 	<panel name="avatar_eye_color_panel">
 		<texture_picker label="Tęczówka" name="Iris" tool_tip="Kliknij aby wybrać teksturę"/>
 	</panel>
-	<panel name="eyes_main_tab_holder">
+	<panel name="eyes_main_tab_holder" title="Oczy">
 		<accordion name="eyes_main_accordion">
 			<accordion_tab name="eyes_main_tab" title="Oczy"/>
 		</accordion>

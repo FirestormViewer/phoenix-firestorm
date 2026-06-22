@@ -31,11 +31,11 @@
 		<text name="label_colors">
 			Własne kolory:
 		</text>
-		<check_box label="Koloruj ikonę na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
-		<check_box label="Koloruj tag imienia bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
-		<check_box label="Koloruj wpisy w radarze i na liście w pobliżu bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
-		<check_box label="Koloruj czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
-		<check_box label="Koloruj wpis na liście znajomych bazując na zestawie kontaktów" name="FSContactSetsColorizeFriends" />
+		<check_box label="Ikony na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Tagi imion bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Wpisy w radarze i na liście w pobliżu bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
+		<check_box label="Czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
+		<check_box label="Wpisy na liście znajomych bazując na zestawie kontaktów" name="FSContactSetsColorizeFriends" />
 	</panel>
 	<panel name="side_panel">
 		<check_box label="Użyj niestandardowej autoodpowiedzi dla trybu Zajęty w tym zestawie" name="set_autoresponse_busy_enabled" />

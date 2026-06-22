@@ -32,7 +32,7 @@
 			<text name="mouse_warp_lbl">
 				Maus-Warp:
 			</text>
-			<combo_box name="mouse_warp_combo" tooltip="Kontrolliert das Springen der Maus zur Bildschirmmitte während Alt-Zoom und Mouselook.">
+			<combo_box name="mouse_warp_combo" tool_tip="Kontrolliert das Springen der Maus zur Bildschirmmitte während Alt-Zoom und Mouselook.">
 				<combo_box.item label="Automatisch" name="0"/>
 				<combo_box.item label="An" name="1"/>
 				<combo_box.item label="Aus" name="2"/>

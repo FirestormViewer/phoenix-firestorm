@@ -21,9 +21,7 @@
    type="string"
    word_wrap="true"
    width="330">
-      [APP_NAME] has detected recoverable scripts that may have been left over from a recent viewer crash.
-  
-If you choose to recover these scripts they will be placed in the 'Lost and Found' folder of your inventory.
+      [APP_NAME] has detected recoverable scripts that may have been left over from a recent viewer crash. If you choose to recover these scripts they will be placed in the 'Lost and Found' folder of your inventory.
   </text>
 
   <scroll_list

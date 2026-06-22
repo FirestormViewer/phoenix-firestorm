@@ -24,7 +24,7 @@
      follows="left|top|right"
      height="19"
      layout="topleft"
-     left_delta="70"
+     left_delta="80"
      max_chars="255"
      name="media_entry"
      top_delta="-4"

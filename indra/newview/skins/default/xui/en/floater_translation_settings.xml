@@ -177,7 +177,7 @@
    left="70"
    name="azure_api_endoint_label"
    top_pad="8"
-   width="85">
+   width="95">
     Endpoint:
   </text>
   
@@ -219,7 +219,7 @@
   left="70"
   name="azure_api_key_label"
   top_pad="10"
-  width="85">
+  width="95">
   Azure Key:
   </text>
  <line_editor
@@ -231,7 +231,7 @@
   max_length_chars="50"
   top_delta="-4"
   name="azure_api_key"
-  width="210" />
+  width="200" />
   <text
    type="string"
    length="1"
@@ -241,7 +241,7 @@
    left="70"
    name="azure_api_region_label"
    top_pad="11"
-   width="85">
+   width="95">
     Region:
   </text>
   <line_editor
@@ -253,7 +253,7 @@
    max_length_chars="50"
    top_delta="-4"
    name="azure_api_region"
-   width="210" />
+   width="200" />
   <button
    follows="left|top"
    height="23"
@@ -273,7 +273,7 @@
   name="google_api_key_label"
   top_pad="53"
   type="string"
-  width="85">
+  width="95">
   Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API key]:
  </text>
  <line_editor
@@ -285,7 +285,7 @@
   max_length_chars="50"
   top_delta="-4"
   name="google_api_key"
-  width="210" />
+  width="200" />
  <button
   follows="left|top"
   height="23"
@@ -318,7 +318,7 @@
      left="70"
      name="deepl_api_domain_label"
      top_pad="80"
-     width="85">
+     width="95">
         Endpoint:
     </text>
 
@@ -352,7 +352,7 @@
      name="deepl_api_key_label"
      top_pad="11"
      type="string"
-     width="85">
+     width="95">
       DeepL API key:
     </text>
 
@@ -365,7 +365,7 @@
      max_length_chars="50"
      top_delta="-4"
      name="deepl_api_key"
-     width="210" />
+     width="200" />
     
     <button
      follows="left|top"

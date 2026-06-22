@@ -3,49 +3,51 @@
 	<menu_item_call label="Neues Inventar-Fenster" name="new_window"/>
 	<menu_item_check label="Geschützte Ordner" name="Protected Folders"/>
 	<menu_item_check label="Inventar-Einstellungen..." name="inv_settings"/>
-	<menu_item_check label="Listen-Ansicht" name="list_view"/>
-	<menu_item_check label="Galerie-Ansicht" name="gallery_view"/>
-	<menu_item_check label="Kombinierte Ansicht" name="combination_view"/>
-	<menu_item_check label="Aktuell anzeigen" name="recent_tab"/>
-	<menu_item_check label="Angezogen anzeigen" name="worn_tab"/>
-	<menu_item_check label="Favoriten anzeigen" name="favorites_tab"/>
-	<menu_item_check label="Nach Name sortieren" name="favorites_tab"/>
-	<menu_item_check label="Nach aktuellsten Objekten sortieren" name="sort_by_recent"/>
-	<menu_item_check label="Ordner immer nach Namen sortieren" name="sort_folders_by_name"/>
-	<menu_item_check label="Systemordner nach oben" name="sort_system_folders_to_top"/>
-	<!-- ## Zi: Extended Inventory Search -->
+	<context_menu label="Tabs &amp; Views" name="tabs_and_views_menu">
+		<menu_item_check name="list_view" label="Listen-Ansicht"/>
+		<menu_item_check name="gallery_view" label="Galerie-Ansicht"/>
+		<menu_item_check name="combination_view" label="Kombinierte Ansicht"/>
+		<menu_item_check name="recent_tab" label="Aktuell anzeigen"/>
+		<menu_item_check name="worn_tab" label="Angezogen anzeigen"/>
+		<menu_item_check name="favorites_tab" label="Favoriten anzeigen"/>
+	</context_menu>
+	<context_menu label="Sorting" name="sorting_menu">
+		<menu_item_check name="sort_by_name" label="Nach Name sortieren"/>
+		<menu_item_check name="sort_by_recent" label="Nach aktuellsten Objekten sortieren"/>
+		<menu_item_check name="sort_folders_by_name" label="Ordner immer nach Namen sortieren"/>
+		<menu_item_check name="sort_system_folders_to_top" label="Systemordner nach oben"/>
+	</context_menu>
 	<context_menu label="Suchen nach..." name="inventory_search_menu">
 		<menu_item_check name="inventory_search_by_name" label="Name"/>
 		<menu_item_check name="inventory_search_by_creator" label="Ersteller"/>
 		<menu_item_check name="inventory_search_by_description" label="Beschreibung"/>
 		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
 		<menu_item_check name="inventory_search_by_all" label="Allem"/>
-<!-- Not implemented yet
-		<menu_item_check name="inventory_show_partial_results" label="Zeige unvollständige Suchergebnisse"/>
--->
 	</context_menu>
-	<!-- ## Zi: Extended Inventory Search -->
-	<menu_item_check label="Objekte hinzufügen per Doppelklick" name="add_inv_toggle"/>
-	<menu_item_check label="Kleidung hinzufügen per Doppelklick" name="add_invclothing_toggle"/>
-	<menu_item_call label="Filter anzeigen..." name="show_filters"/>
-	<menu_item_call label="Filter zurücksetzen" name="reset_filters"/>
+	<context_menu label="Filters &amp; Permissions" name="filters_and_permissions_menu">
+		<menu_item_call label="Filter anzeigen..." name="show_filters"/>
+		<menu_item_call label="Filter zurücksetzen" name="reset_filters"/>
+		<menu_item_check name="inventory_filter_only_modify" label="Nur modifizierbar"/>
+		<menu_item_check name="inventory_filter_only_copy" label="Nur kopierbar"/>
+		<menu_item_check name="inventory_filter_only_transfer" label="Nur transferierbar"/>
+		<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
+	</context_menu>
+	<context_menu label="Links Management" name="links_management_menu">
+		<menu_item_call label="Alle Links suchen" name="Find All Links"/>
+		<menu_item_call label="Links ersetzen" name="Replace Links"/>
+		<menu_item_check name="inventory_filter_show_links" label="Verknüpfungen anzeigen"/>
+		<menu_item_check name="inventory_filter_only_links" label="Nur Verknüpfungen anzeigen"/>
+		<menu_item_check name="inventory_filter_hide_links" label="Verknüpfungen verstecken"/>
+	</context_menu>
+	<context_menu label="Double-click Options" name="double_click_menu">
+		<menu_item_check name="add_inv_toggle" label="Objekte hinzufügen per Doppelklick"/>
+		<menu_item_check name="add_invclothing_toggle" label="Kleidung hinzufügen per Doppelklick"/>
+	</context_menu>
 	<menu_item_call label="Alle Ordner einklappen" name="close_folders"/>
 	<menu_item_call label="Alle Fenster schließen" name="close_windows"/>
-	<menu_item_call label="Fundbüro ausleeren" name="empty_lostnfound"/>
 	<menu_item_call label="Textur speichern als" name="Save Texture As"/>
 	<menu_item_call label="Teilen" name="Share"/>
 	<menu_item_call label="Original suchen" name="Find Original"/>
-	<menu_item_call label="Alle Links suchen" name="Find All Links"/>
-	<menu_item_call label="Links ersetzen" name="Replace Links"/>
-	<!-- ## Zi: Filter Links Menu -->
-	<menu_item_check name="inventory_filter_show_links" label="Verknüpfungen anzeigen"/>
-	<menu_item_check name="inventory_filter_only_links" label="Nur Verknüpfungen anzeigen"/>
-	<menu_item_check name="inventory_filter_hide_links" label="Verknüpfungen verstecken"/>
-	<menu_item_check name="inventory_filter_only_modify" label="Nur modifizierbar"/>
-	<menu_item_check name="inventory_filter_only_copy" label="Nur kopierbar"/>
-	<menu_item_check name="inventory_filter_only_transfer" label="Nur transferierbar"/>
-	<!-- ## Zi: Filter Links Menu -->
-	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
+	<menu_item_call label="Fundbüro ausleeren" name="empty_lostnfound"/>
 	<menu_item_call label="Papierkorb ausleeren" name="empty_trash"/>
-	<menu_item_check label="Inventar-Einstellungen..." name="inv_settings"/>
 </toggleable_menu>

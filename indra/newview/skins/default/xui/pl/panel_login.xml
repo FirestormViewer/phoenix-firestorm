@@ -1,23 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<layout_stack name="ui_stack">
-		<layout_panel name="ui_container">
-			<combo_box label="Użytkownik" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine" name="username_combo" />
-			<line_editor name="password_edit" label="Hasło" />
-			<combo_box label="Moje ulubione miejsca" name="start_location_combo">
-				<combo_box.item label="Ostatnia lokalizacja" name="MyLastLocation" />
-				<combo_box.item label="Moje miejsce startu" name="MyHome" />
-			</combo_box>
-			<button label="Zaloguj" name="connect_btn" />
-			<text name="sign_up_text">
-				Dołącz
-			</text>
-			<check_box label="Pamiętaj mnie" name="remember_name" tool_tip="Już zapamiętanego użytkownika można zapomnieć w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy." />
-			<check_box label="Pamiętaj hasło" name="remember_password" />
-			<combo_box label="Wybierz świat" name="server_combo" />
-			<text name="forgot_password_text">
-				Pomoc z hasłem
-			</text>
+	<layout_stack name="main_stack">
+		<layout_panel name="center_stage">
+			<layout_stack name="ui_stack">
+				<layout_panel name="ui_container">
+					<combo_box label="Nazwa użytkownika" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine" name="username_combo" />
+					<check_box label="Zapamiętaj nazwę użytkownika" name="remember_name" tool_tip="Zapamiętane nazwy użytkowników można usunąć w Ja &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętane nazwy użytkowników." />
+					<line_editor name="password_edit" label="Hasło" />
+					<check_box label="Zapamiętaj hasło" name="remember_password" />
+					<text name="location_text">
+						Zacznij
+					</text>
+					<combo_box label="Moje ulubione miejsca" name="start_location_combo">
+						<combo_box.item label="Ostatnia lokalizacja" name="MyLastLocation" />
+						<combo_box.item label="Moje miejsce startu" name="MyHome" />
+					</combo_box>
+					<layout_stack name="login_stack">
+						<layout_panel name="grid_panel">
+							<text name="grid_text">
+								Świat
+							</text>
+							<combo_box label="Wybierz świat" name="server_combo" />
+						</layout_panel>
+						<layout_panel name="login_panel">
+							<button label="Zaloguj" name="connect_btn" />
+							<text name="forgot_password_text">
+								Potrzebujesz pomocy z logowaniem?
+							</text>
+							<button label="Utwórz konto" name="sign_btn" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </panel>

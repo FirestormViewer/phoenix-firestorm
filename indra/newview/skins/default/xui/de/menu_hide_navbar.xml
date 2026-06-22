@@ -6,6 +6,7 @@
 	<menu_item_check label="Mini-Standortleiste anzeigen" name="ShowMiniLocationPanel"/>
 	<menu_item_check label="Position anzeigen" name="ShowMenuBarLocation"/>
 	<menu_item_check label="Simulator-Version anzeigen" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Omni-Filter-Steuerung anzeigen" name="FSOmnifilterControls"/>
 	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
 	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Mediensteuerung anzeigen" name="FSEnableVolumeControls"/>

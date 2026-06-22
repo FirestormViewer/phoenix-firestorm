@@ -54,7 +54,11 @@
 	</text>
 	<check_box label="Pokaż moje imię" name="show_my_name_checkbox1"/>
 	<check_box label="Nazwy użytkowników" name="show_slids" tool_tip="Pokaż nazwy kont użytkowników, np. bobsmith123"/>
-	<check_box label="Pokaż tytuły grupowe" name="show_all_title_checkbox1" tool_tip="Wyświetl tytuł grupowy np. Oficer"/>
+	<combo_box tool_tip="Wyświetl tytuł grupowy np. Oficer" name="group_title">
+		<combo_box.item label="Bez tagów grup" name="no_tags" />
+		<combo_box.item label="Tylko moje tagi grup" name="my_tag" />
+		<combo_box.item label="Wszystkie tagi grup" name="all_tags" />
+	</combo_box>
 	<check_box label="Ukryj własny tytuł grupowy" name="RenderHideGroupTitle" tool_tip="Pokaż lub ukryj własny tytuł grupowy dla Ciebie i wszystkich innych."/>
 	<check_box label="Imiona Wyświetlane" name="display_names_check" tool_tip="Pokaż Imiona Wyświetlane (Display Names) w czacie, IM, tagach ponad awatarami itd."/>
 	<check_box label="Stary sposób wyświetlania imion" name="FSshow_legacyun" tool_tip="Prezentuj imiona w stary sposób (Imię Nazwisko) zamiast w sposób kont użytkownika (imię.nazwisko)"/>

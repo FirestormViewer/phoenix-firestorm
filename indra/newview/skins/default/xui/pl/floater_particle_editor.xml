@@ -85,7 +85,7 @@ Wzór:
 <check_box name="bounce_checkbox" label="Odbijające"/>
 <check_box name="emissive_checkbox" label="Emisyjne"/>
 <check_box name="follow_source_checkbox" label="Śledzące źródło"/>
-<check_box name="follow_velocity_checkbox" label="Śledzące prędkość"/>
+<check_box name="follow_velocity_checkbox" label="Śledzące prędk."/>
 <check_box name="interpolate_color_checkbox" label="Interpoluj kolor"/>
 <check_box name="interpolate_scale_checkbox" label="Interpoluj rozmiar"/>
 <check_box name="target_position_checkbox" label="Celuj w obiekt"/>

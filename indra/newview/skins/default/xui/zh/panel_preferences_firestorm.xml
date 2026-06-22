@@ -31,7 +31,8 @@
 		</panel>
 		<panel label="保護" name="ProtectionTab">
 			<check_box label="阻止通過簡單點擊坐在物件上" name="FSBlockClickSit" />
-			<check_box label="預覽私聊和群組聊天中括號連結的真實URL（懸停時）" name="FSDisableLabeledChatLinks" tool_tip="啟用後，私聊、群組聊天、臨時會議和群組通知中的方括號連結會保留其文字，但懸停時會立即以大型提示顯示真實的目標URL。有助於發現標籤隱藏不同目標的釣魚攻擊。附近聊天使用下方的選項。檢視器內建文字不受影響。"/>
+			<check_box label="在私聊與群組聊天中預覽超連結的真實 URL（滑鼠懸停時）" name="FSDisableLabeledChatLinks" tool_tip="啟用後，私聊、群組聊天、臨時會議與群組通知中的超連結仍保持原文本，但滑鼠懸停時會立即以提示方式顯示真實目標 URL，用於識別可能隱藏真實位址的釣魚連結。附近聊天由下方選項控制。檢視器內建文字不受影響。"/>
+			<check_box label="在附近聊天與物件訊息中預覽超連結的真實 URL（滑鼠懸停時）" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="啟用後，附近（本地）聊天與物件文字中的超連結仍保持原文本，但滑鼠懸停時會立即以提示方式顯示真實目標 URL。預設關閉。"/>
 			<check_box label="允許指令碼顯示地圖 (llMapDestination)" name="ScriptsCanShowUI" />
 			<text name="revokepermissions_txt">復原權限：</text>
 			<radio_group name="FSRevokePerms">

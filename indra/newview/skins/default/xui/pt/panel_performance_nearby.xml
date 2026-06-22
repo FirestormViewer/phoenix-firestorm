@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">Voltar</text>
+
+	<text name="av_nearby_title">Avatares próximos</text>
+
+	<text name="av_nearby_desc">
+		Ocultar os avatares mais complexos para aumentar o desempenho
+	</text>
+
+	<slider name="RenderAvatarMaxART" label="Tempo máximo de renderização (μs)" tool_tip="Define quando um avatar é considerado complexo demais para renderização (em microssegundos)" />
+
+	<text name="RenderAvatarMaxARTText">Sem limite</text>
+
+	<text name="av_nearby_desc2">
+		Com clique direito em um avatar, também é possível ajustar a renderização.
+	</text>
+
+	<button name="exceptions_btn" label="Exceções..." />
+
+	<text name="AvatarComplexityModeLabel">Exibição de avatares:</text>
+
+	<combo_box.item name="0" label="Limitar por complexidade" />
+	<combo_box.item name="1" label="Sempre mostrar amigos" />
+	<combo_box.item name="2" label="Mostrar apenas amigos" />
+
+	<check_box name="hide_avatars" label="Ocultar avatares completamente (bom para fotos de paisagem)" />
+
+	<text name="name_tags_textbox">Nomes de avatar:</text>
+
+	<radio_item name="radio" label="Desligado" />
+	<radio_item name="radio2" label="Ligado" />
+	<radio_item name="radio3" label="Mostrar abreviado" />
+</panel>

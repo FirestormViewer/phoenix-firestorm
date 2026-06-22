@@ -322,7 +322,7 @@
          left_delta="5"
          top_pad="3"
          name="ShadowDetail"
-         width="150">
+         width="185">
           <combo_box.commit_callback
          function="Pref.RenderOptionUpdate" />
           <combo_box.item
@@ -358,7 +358,7 @@
          left_delta="5"
          top_pad="3"
          name="ReflectionDetail"
-         width="150">
+         width="185">
           <combo_box.item
            label="Static Only"
            name="0"
@@ -431,7 +431,7 @@
          left_delta="5"
          top_pad="3"
          name="LocalLightsDetail"
-         width="150">
+         width="185">
           <combo_box.item
            label="Full (default)"
            name="3"
@@ -468,7 +468,7 @@
          left_delta="5"
          top_pad="3"
          name="MirrorResolution"
-         width="150">
+         width="185">
           <combo_box.item
            label="256"
            name="0"
@@ -507,7 +507,7 @@
          left_delta="5"
          top_pad="3"
          name="HeroProbeUpdateRate"
-         width="150">
+         width="185">
           <combo_box.item
            label="Low"
            name="6"
@@ -1018,7 +1018,7 @@
          layout="topleft"
          left="10"
          name="fsaa"
-         top_pad="5"
+         top_pad="8"
          width="130">
             <combo_box.item
              label="Disabled"
@@ -1041,7 +1041,7 @@
          layout="topleft"
          left="300"
          name="fsaa quality"
-         top_delta="5"
+         top_delta="0"
          width="130">
             <combo_box.item
              label="Low"
@@ -1658,7 +1658,7 @@ If you do not understand the distinction then leave this control alone."
          left="10"
          name="ReflectionProbeCount"
          top_pad="2"
-         width="150">
+         width="170">
             Max. Reflection Probes:
         </text>
         <combo_box
@@ -1700,7 +1700,7 @@ If you do not understand the distinction then leave this control alone."
          left="10"
          name="TonemapTypeText"
          top_pad="6"
-         width="150">
+         width="170">
             Tone Mapper:
         </text>
         <combo_box
@@ -1729,7 +1729,7 @@ If you do not understand the distinction then leave this control alone."
          initial_value="1"
          label="Tone Mapping Mix:"
          tool_tip="Mix between linear and tone mapped colors"
-         label_width="150"
+         label_width="170"
          layout="topleft"
          left="10"
          min_val="0.0"
@@ -1737,7 +1737,7 @@ If you do not understand the distinction then leave this control alone."
          name="TonemapMix"
          show_text="true"
          top_pad="5"
-         width="310"/>
+         width="330"/>
         <!-- End of Tone Mapping Settings-->
     </panel>
 

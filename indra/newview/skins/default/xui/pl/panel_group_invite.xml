@@ -13,7 +13,7 @@
 		Zaproszenia nie zostały wysłane: wybrano zbyt wielu Rezydentów. Limit to 100 zaproszeń na jedno żądanie.
 	</panel.string>
 	<text name="help_text">
-		Możesz zaprosić kilku Rezydentów do swojej grupy. Wybierz &apos;Otwórz Katalog Osobisty&apos; aby rozpocząć.
+		Możesz zaprosić kilka osób do swojej grupy. Wybierz guzik poniżej aby zacząć.
 	</text>
 	<button label="Otwórz Katalog Osobisty" name="add_button"/>
 	<name_list name="invitee_list" tool_tip="Przytrzymaj klawisz Ctrl i kliknij imię Rezydenta aby wybrać kilka osób."/>

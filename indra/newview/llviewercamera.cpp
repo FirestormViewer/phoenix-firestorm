@@ -331,7 +331,11 @@ void LLViewerCamera::setPerspective(bool for_selection,
         if (limit_select_distance)
         {
             // ...select distance from control
-            z_far = gSavedSettings.getF32("MaxSelectDistance");
+            // <FS:PP> Speed optimisation
+            // z_far = gSavedSettings.getF32("MaxSelectDistance");
+            static LLCachedControl<F32> max_select_distance(gSavedSettings, "MaxSelectDistance");
+            z_far = max_select_distance();
+            // </FS:PP>
         }
         else
         {
@@ -841,7 +845,11 @@ bool LLViewerCamera::isDefaultFOVChanged()
     if(mPrevCameraFOVDefault != mCameraFOVDefault)
     {
         mPrevCameraFOVDefault = mCameraFOVDefault;
-        return !gSavedSettings.getBOOL("IgnoreFOVZoomForLODs");
+        // <FS:PP> Speed optimisation
+        // return !gSavedSettings.getBOOL("IgnoreFOVZoomForLODs");
+        static LLCachedControl<bool> ignore_fov_zoom_for_lods(gSavedSettings, "IgnoreFOVZoomForLODs");
+        return !ignore_fov_zoom_for_lods();
+        // </FS:PP>
     }
     return false;
 }

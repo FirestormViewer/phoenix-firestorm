@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">Voltar</text>
+
+	<text name="settings_title">Configurações gráficas</text>
+
+	<button name="advanced_btn" label="Abrir configurações avançadas" />
+	<button name="defaults_btn" label="Restaurar configurações recomendadas" />
+
+	<text name="quality_lbl">Qualidade e desempenho</text>
+
+	<text name="fastest_lbl">Mais rápido</text>
+	<text name="best_quality_lbl">Melhor qualidade</text>
+
+	<text name="quality_desc">
+		Escolher um atalho redefinirá todas as alterações manuais que você fez.
+	</text>
+
+	<text name="distance_lbl">Distância de visibilidade</text>
+
+	<text name="faster_lbl">Mais rápido</text>
+	<text name="farther_lbl">Mais longe</text>
+
+	<text name="distance_desc1">
+		Para ver mais terreno ao afastar o zoom, aumente a distância.
+	</text>
+
+	<text name="environment_lbl">Sombras</text>
+
+	<text name="enhancements_desc">
+		Sombras melhoram significativamente a qualidade visual, mas podem reduzir o desempenho.
+	</text>
+
+	<text name="RenderShadowDetailText">Detalhe das sombras:</text>
+
+	<combo_box.item name="0" label="Nenhum" />
+	<combo_box.item name="1" label="Sol/Lua" />
+	<combo_box.item name="2" label="Sol/Lua + Projetores" />
+
+	<text name="water_lbl">Água</text>
+
+	<text name="water_desc">
+		Reduzir ou desativar água transparente pode melhorar a taxa de quadros.
+	</text>
+
+	<check_box name="TransparentWater" label="Água transparente" />
+
+	<text name="photo_lbl">Fotografia</text>
+
+	<text name="photo_desc">
+		Detalhes máximos são bons para fotos, mas podem reduzir o desempenho.
+	</text>
+
+	<spinner name="render_volume_lod" label="Distância de detalhe:" />
+
+	<text name="photo_dist_det_desc">(Digite um valor entre 0,0 e 4,0)</text>
+</panel>

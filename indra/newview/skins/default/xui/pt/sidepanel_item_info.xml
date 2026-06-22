@@ -28,7 +28,7 @@
 		(Inventário)
 	</panel.string>
 	<panel.string name="origin_inworld">
-		(Inworld)
+		(No Mundo)
 	</panel.string>
 
 	<layout_stack name="main_stack">

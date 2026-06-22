@@ -806,6 +806,18 @@
 		 width="270"
 		 control_name="FSStatusbarShowSimulatorVersion"
 		 tool_tip="Shows the current simulator version in the V1-like status bar."/>
+		 <!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show onmifilter controls"
+		 left="10"
+		 name="show_omnifilter_controls_check"
+		 width="270"
+		 control_name="OmnifilterControls"
+		 tool_tip="Controls include enable|disable omnifilter, toggle omnifilter rules editor and change active rule set."/>
+		 <!-- <FS:MJR> [FIRE-36776] -->
 		<check_box
 		 top_pad="4"
 		 follows="left|top"

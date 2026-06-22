@@ -29,8 +29,8 @@
 					<panel name="timeline">
 						<layout_stack name="track_options_ls">
 							<layout_panel name="track_options_lp">
-								<button label="Klonuj ścieżkę z" name="copy_track" />
-								<button label="Wczytaj ścieżkę z" name="load_track" />
+								<button label="Klonuj ścieżkę" name="copy_track" />
+								<button label="Wczytaj ścieżkę" name="load_track" />
 								<button label="Czyść ścieżkę" name="clear_track" />
 							</layout_panel>
 							<layout_panel name="track_progress_lp">

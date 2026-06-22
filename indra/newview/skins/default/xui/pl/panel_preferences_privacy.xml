@@ -14,7 +14,7 @@
 			<panel.string name="log_in_to_change">
 				Zaloguj się, by zmienić
 			</panel.string>
-			<button label="Wyczyść historię" tool_tip="Wyczyść historię teleportów i wyszukiwania oraz pamięć podręczną stron internetowych i bufor danych tekstur" name="clear_webcache"/>
+			<button label="Czyść historię" tool_tip="Wyczyść historię teleportów i wyszukiwania oraz pamięć podręczną stron internetowych i bufor danych tekstur" name="clear_webcache"/>
 			<text name="cache_size_label">
 				(miejsca, obrazy, strony web, historia wyszukiwarki)
 			</text>
@@ -44,7 +44,7 @@
 				<item name="log_only" label="Tylko dziennik"/>
 				<item name="no_log_or_transcript" label="Nie zapisuj dziennika ani logów rozmów"/>
 			</combo_box>
-			<button label="Wyczyść dziennik" name="clear_log"/>
+			<button label="Czyść dziennik" name="clear_log"/>
 			<button label="Usuń logi rozmów" name="delete_transcripts"/>
 			<check_box name="LogNearbyChat" label="Zapisuj log czatu w pobliżu" tool_tip="Zapisuj wiadomości czatu w pobliżu na twardym dysku swojego komputera"/>
 			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
@@ -97,11 +97,11 @@
 			<text name="autorespond_rfr_response_label">
 				Do wszystkich awatarów, gdy włączony jest tryb odrzucania zaproszeń do znajomych:
 			</text>
-			<text name="autoresponse_item_label" width="300">
-				Przedmiot wysyłany ze wszystkimi autoodpowiedziami:
+			<text name="autoresponse_item_label" width="270">
+				Rzecz wysyłana ze wszystkimi odpowiedziami:
 			</text>
-			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Przeciągnij i upuść przedmiot z Szafy w tym miejscu."/>
-			<button label="Czyść" name="clear_autoresponse_item"/>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Przeciągnij i upuść przedmiot z Szafy w tym miejscu." right="-70" />
+			<button label="Czyść" name="clear_autoresponse_item" width="60" />
 		</panel>
 	</tab_container>
 </panel>

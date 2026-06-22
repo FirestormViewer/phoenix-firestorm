@@ -2826,18 +2826,6 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 	<string name="PicksClassifiedsLoadingText">
 		Chargement...
 	</string>
-	<string name="NoPicksText">
-		Vous n'avez pas créé de favoris.
-	</string>
-	<string name="NoAvatarPicksText">
-		L'utilisateur n'a pas de favoris.
-	</string>
-	<string name="NoClassifiedsText">
-		Vous n'avez pas créé d'annonces. Cliquez sur le bouton Plus ci-dessous pour créer une annonce.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		L'utilisateur n'a pas d'annonces
-	</string>
 	<string name="MultiPreviewTitle">
 		Prévisualiser
 	</string>
@@ -4863,9 +4851,6 @@ Pour en savoir plus, rendez-vous sur https://second.life/scripted-agents.
 	<string name="share_alert">
 		Faire glisser les objets de l&apos;inventaire ici
 	</string>
-	<string name="facebook_post_success">
-		Vous avez publié sur Facebook.
-	</string>
 	<string name="flickr_post_success">
 		Vous avez publié sur Flickr.
 	</string>
@@ -6585,6 +6570,15 @@ correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez v
 	</string>
 	<string name="FSCameraPositionCopied">
 		Position de la caméra [POS] copiée dans le presse-papiers.
+	</string>
+	<string name="FSCameraPositionPasted">
+		Caméra restaurée à [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Position de la caméra incorrecte. Attendu : &lt;x, y, z&gt; ou &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Définir la hauteur de l'avatar au survol (utilisation : /zoffset value ou +delta).
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Distance d'affichage réglèe [DISTANCE]m.

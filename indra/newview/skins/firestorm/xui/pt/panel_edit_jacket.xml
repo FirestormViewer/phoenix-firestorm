@@ -5,7 +5,7 @@
 		<texture_picker label="Textura inferior" name="Lower Fabric" tool_tip="Clique aqui para escolher uma imagem"/>
 		<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique aqui para abrir o seletor de cores"/>
 	</panel>
-	<panel name="jacket_main_tab_holder">
+	<panel name="jacket_main_tab_holder" title="Jaqueta">
 		<accordion name="jacket_main_accordion">
 			<accordion_tab name="jacket_main_tab" title="Jaqueta"/>
 		</accordion>

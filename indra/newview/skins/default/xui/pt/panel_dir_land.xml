@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Vendas de terreno" name="panel_dir_land">
     <string name="searching_text">
         Buscando...

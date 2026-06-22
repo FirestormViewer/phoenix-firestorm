@@ -300,7 +300,7 @@ TestString PleaseIgnore
         layout="topleft"
         left="20"
         name="CheckOwnerModify"
-        top_pad="0"
+        top_pad="4"
         width="90" />
       <check_box
         height="18"
@@ -324,7 +324,7 @@ TestString PleaseIgnore
         layout="topleft"
         left="10"
         name="AnyoneLabel"
-        top_pad="8"
+        top_pad="4"
         width="100">
         Anyone:
       </text>
@@ -335,7 +335,7 @@ TestString PleaseIgnore
         left_pad="0"
         name="CheckEveryoneCopy"
         tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive."
-        top_delta="-2"
+        top_delta="0"
         width="150" />
       <text
         type="string"
@@ -345,7 +345,7 @@ TestString PleaseIgnore
         layout="topleft"
         left="10"
         name="GroupLabel"
-        top_pad="8"
+        top_pad="4"
         width="100">
         Group:
       </text>
@@ -354,7 +354,7 @@ TestString PleaseIgnore
         label="Share"
         layout="topleft"
         left_pad="0"
-        top_delta="-2"
+        top_delta="0"
         name="CheckShareWithGroup"
         tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions."
         width="150" />
@@ -376,7 +376,7 @@ TestString PleaseIgnore
         label="Modify"
         layout="topleft"
         left="20"
-        top_pad="0"
+        top_pad="4"
         name="CheckNextOwnerModify"
         tool_tip="Next owner can edit properties like item name or scale of this object."
         width="90" />

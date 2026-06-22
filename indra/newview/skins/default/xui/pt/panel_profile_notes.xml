@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Notas e privacidade" name="panel_notes">
+<panel label="Notas e Privacidade" name="panel_notes">
 	<string name="header_symbol_limit">
 		Atenção: suas notas contêm mais de 1000 caracteres.
 	</string>
 	<string name="body_symbol_limit">
-		Apenas os primeiros 1000 caracteres são exibidos aqui. Se você editar suas notas e clicar em OK, os caracteres adicionais serão perdidos. Para manter esses caracteres adicionais, edite-as [[PROFILE_URL] na Web].
+		Apenas os primeiros 1000 caracteres serão exibidos aqui. Se você editar suas notas e clicar em OK, os caracteres excedentes serão perdidos. Para mantê-los, você precisa editar no site [[PROFILE_URL]].
 	</string>
-	<text name="status_message" value="Anotações privadas sobre este avatar:"/>
+	<text name="status_message" value="Notas privadas sobre este avatar:"/>
 	<button name="notes_save_changes" label="Salvar"/>
 	<button name="notes_discard_changes" label="Descartar"/>
 </panel>
