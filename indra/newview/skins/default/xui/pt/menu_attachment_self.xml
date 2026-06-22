@@ -1,21 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Tocar" name="Attachment Object Touch"/>
+	<menu_item_call label="Mostrar no inventário" name="Show original"/>
 	<menu_item_call label="Editar" name="Edit..."/>
-	<menu_item_call label="Tirar" name="Detach"/>
+	<menu_item_call label="Editar material PBR" name="EditGLTFMaterial"/>
+	<menu_item_call label="Desanexar" name="Detach"/>
+	<context_menu label="Salvar como" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Sentar" name="Sit Down Here"/>
-	<menu_item_call label="Ficar de pé" name="Stand Up"/>
-	<menu_item_call label="Minha aparência" name="Change Outfit"/>
-	<menu_item_call label="Editar meu look" name="Edit Outfit"/>
-	<menu_item_call label="Editar meu corpo" name="Edit My Shape"/>
-	<menu_item_call label="Altura de foco" name="Hover Height"/>
-	<menu_item_call label="Redefinir esqueleto" name="Reset Skeleton"/>
-	<menu_item_call label="Redefinir esqueleto e animações" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="Meus amigos" name="Friends..."/>
-	<menu_item_call label="Meus grupos" name="Groups..."/>
-	<menu_item_call label="Meu perfil" name="Profile..."/>
-	<menu_item_call label="Depurar texturas" name="Debug..."/>
-	<menu_item_call label="Descartar XML" name="Dump XML"/>
-	<menu_item_call label="Largar" name="Drop"/>
-	<menu_item_call label="Bloquear proprietário da partícula" name="Mute Particle"/>
+	<menu_item_call label="Levantar" name="Stand Up"/>
+	<context_menu label="Aparência" name="AppearanceSubmenu">
+		<menu_item_call label="Usando agora..." name="NowWearing" />
+		<menu_item_call label="Trocar visual" name="Change Outfit" />
+		<menu_item_call label="Editar Corpo" name="Edit Shape" />
+		<menu_item_call label="Editar Roupas" name="Edit Outfit Parts" />
+		<menu_item_call label="Altura de flutuação" name="Hover Height"/>
+		<menu_item_call label="Redefinir esqueleto" name="Reset Skeleton"/>
+		<menu_item_call label="Redefinir esqueleto e animações" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Redefinir LOD de mesh" name="Reset Mesh LOD"/>
+	</context_menu>
+	<context_menu label="Remover" name="Take Off &gt;">
+		<context_menu label="Roupas" name="Clothes &gt;">
+			<menu_item_call label="Camisa" name="Shirt"/>
+			<menu_item_call label="Calça" name="Pants"/>
+			<menu_item_call label="Saia" name="Skirt"/>
+			<menu_item_call label="Sapatos" name="Shoes"/>
+			<menu_item_call label="Meias" name="Socks"/>
+			<menu_item_call label="Jaqueta" name="Jacket"/>
+			<menu_item_call label="Luvas" name="Gloves"/>
+			<menu_item_call label="Camiseta" name="Self Undershirt"/>
+			<menu_item_call label="Cueca" name="Self Underpants"/>
+			<menu_item_call label="Tatuagem" name="Self Tattoo"/>
+			<menu_item_call label="Física" name="Self Physics"/>
+			<menu_item_call label="Alpha" name="Self Alpha"/>
+			<menu_item_call label="Todas as roupas" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="HUD" name="Detach Self HUD"/>
+		<context_menu label="Desanexar" name="Detach Self"/>
+		<menu_item_call label="Desanexar tudo" name="Detach All"/>
+	</context_menu>
+	<menu_item_call label="Sentar / levantar" name="Sit stand"/>
+	<menu_item_call label="Voar / pousar" name="Fly land"/>
+	<menu_item_call label="Parar animações" name="Stop Animating My Avatar"/>
+	<context_menu label="Comunidade" name="CommunitySubmenu">
+		<menu_item_call label="Amigos" name="Friends..."/>
+		<menu_item_call label="Grupos" name="Groups..."/>
+		<menu_item_call label="Perfil" name="Profile..."/>
+	</context_menu>
+	<menu_item_call label="Exportar XML" name="Dump XML"/>
+	<menu_item_call label="Perfil do objeto" name="Object Inspect"/>
+	<menu_item_call label="Inspecionar" name="Object_Inspect_Floater"/>
+	<menu_item_call label="Info do script" name="ScriptInfo"/>
+	<menu_item_call label="Ocultar" name="Derender"/>
+	<menu_item_call label="Ocultar + lista negra" name="DerenderPermanent"/>
+	<menu_item_call label="Mostrar texturas" name="Debug..."/>
+	<menu_item_call label="Atualizar texturas" name="Texture Refresh"/>
+	<menu_item_call label="Soltar" name="Drop"/>
+	<menu_item_call label="Bloquear dono de partículas" name="Mute Particle"/>
 </context_menu>

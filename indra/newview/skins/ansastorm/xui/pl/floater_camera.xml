@@ -9,9 +9,9 @@
 	<floater.string name="move_tooltip">
 		Poruszaj kamerą w górę, w dół, w lewo i w prawo
 	</floater.string>
-    <floater.string name="free_mode_title">
-        Pokaż obiekt
-    </floater.string>
+	<floater.string name="free_mode_title">
+		Pokaż obiekt
+	</floater.string>
 	<string name="inactive_combo_text">
 		Użyj ustawienia
 	</string>

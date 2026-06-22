@@ -20,7 +20,7 @@
 	<check_box initial_value="false" label="Automatisch zoomen" name="auto_zoom"/>
 	<check_box initial_value="false" label="Medien automatisch abspielen" name="auto_play"/>
 	<text name="media_setting_note">
-		Hinweis: Einwohner können diese Einstellung überschreiben
+		Hinweis: Einwohner können diese Einstellung überschreib.
 	</text>
 	<check_box initial_value="false" label="Medien automatisch auf Objektflächen skalieren" name="auto_scale"/>
 	<text name="size_label">

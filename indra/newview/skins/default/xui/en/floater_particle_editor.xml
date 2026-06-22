@@ -97,7 +97,7 @@ Pattern:
 	height="16"
 	left="0"
 	top="44"
-	width="100">
+	width="110">
 	Burst Rate:
 </text>
 
@@ -117,7 +117,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Burst Count:
 </text>
 
@@ -137,9 +137,9 @@ Pattern:
 	name="Burst_Radius_Label"
 	follows="right|top"
 	height="16"
-	left_pad="41"
+	left_pad="11"
 	top_delta="6"
-	width="100">
+	width="120">
 	Burst Radius:
 </text>
 
@@ -158,7 +158,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Angle Begin:
 </text>
 
@@ -175,9 +175,9 @@ Pattern:
 	name="Burst_Speed_Min_Label"
 	follows="right|top"
 	height="16"
-	left_pad="41"
+	left_pad="11"
 	top_delta="6"
-	width="100">
+	width="120">
 	Burst Speed Min:
 </text>
 
@@ -197,7 +197,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Angle End:
 </text>
 
@@ -214,9 +214,9 @@ Pattern:
 	name="Burst_Speed_Max_Label"
 	follows="right|top"
 	height="16"
-	left_pad="41"
+	left_pad="11"
 	top_delta="6"
-	width="100">
+	width="120">
 	Burst Speed Max:
 </text>
 
@@ -236,7 +236,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Source Max Age:
 </text>
 
@@ -253,9 +253,9 @@ Pattern:
 	name="Start_Alpha_Label"
 	follows="right|top"
 	height="16"
-	left_pad="41"
+	left_pad="11"
 	top_delta="6"
-	width="100">
+	width="120">
 	Start Alpha:
 </text>
 
@@ -275,7 +275,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Particles Max Age:
 </text>
 
@@ -293,9 +293,9 @@ Pattern:
 	name="End_Alpha_Label"
 	follows="right|top"
 	height="16"
-	left_pad="41"
+	left_pad="11"
 	top_delta="6"
-	width="100">
+	width="120">
 	End Alpha:
 </text>
 
@@ -315,7 +315,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="20"
-	width="100">
+	width="110">
 	Start Glow:
 </text>
 
@@ -333,9 +333,9 @@ Pattern:
 	name="blend_func_src_combo"
 	follows="right|top"
 	height="22"
-	left_pad="41"
+	left_pad="11"
 	top_delta="0"
-	width="160">
+	width="180">
 
 	<combo_box.item
 		label="Blend One"
@@ -384,7 +384,7 @@ Pattern:
 	height="16"
 	left="0"
 	top_pad="8"
-	width="100">
+	width="110">
 	End Glow:
 </text>
 
@@ -402,9 +402,9 @@ Pattern:
 	name="blend_func_dest_combo"
 	follows="right|top"
 	height="22"
-	left_pad="41"
+	left_pad="11"
 	top_delta="0"
-	width="160">
+	width="180">
 
 	<combo_box.item
 		label="Blend One"

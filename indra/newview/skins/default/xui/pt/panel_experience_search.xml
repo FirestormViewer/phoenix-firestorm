@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_search">
+<panel name="panel_experience_search" label="Busca">
 	<string name="not_found">
 		&apos;[TEXT]&apos; não encontrado
 	</string>
 	<string name="no_results">
-		Sem resultados
+		Nenhum resultado
 	</string>
 	<string name="searching">
-		Pesquisando...
+		Buscando...
 	</string>
 	<string name="loading">
 		Carregando...
@@ -22,7 +22,13 @@
 		&quot;Parcel_R_Light&quot;
 	</string>
 	<panel name="search_panel">
+		<text name="lbl name part">
+			Digite parte do nome:
+		</text>
 		<button label="Ir" name="find"/>
+		<text name="lbl max content rating">
+			Classificação máxima de conteúdo:
+		</text>
 		<icons_combo_box label="Moderado" name="maturity">
 			<icons_combo_box.item label="Adulto" name="Adult" value="42"/>
 			<icons_combo_box.item label="Moderado" name="Mature" value="21"/>
@@ -34,7 +40,7 @@
 		</scroll_list>
 		<button label="OK" label_selected="OK" name="ok_btn"/>
 		<button label="Cancelar" name="cancel_btn"/>
-		<button label="Exibir perfil" name="profile_btn"/>
+		<button label="Ver perfil" name="profile_btn"/>
 		<button label="&lt;" name="left_btn"/>
 		<button label="&gt;" name="right_btn"/>
 	</panel>

@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="">
-	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
-	<text name="Save item as:">
-		Pressione uma tecla para definir o seu botão Falar.
+<floater name="modal container" title="Definir tecla" width="310">
+	<floater.string name="keyboard">
+		Teclado
+	</floater.string>
+	<floater.string name="mouse">
+		Botões do mouse
+	</floater.string>
+	<floater.string name="basic_description">
+		Pressione uma tecla ou botão do mouse para definir o atalho.
+Entrada permitida: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+		A combinação [KEYSTR] está reservada pelo menu.
+	</floater.string>
+	<text name="description">
+		Pressione uma tecla ou botão do mouse para definir o atalho.
+Entrada permitida: [INPUT].
 	</text>
+	<check_box label="Aplicar a todos os modos" left="80" name="apply_all" tool_tip="O viewer usa mapeamentos de tecla diferentes, dependendo da sua atividade no mundo. Ativar esta opção aplica sua alteração a todos os modos."/>
+	<button label="Limpar" name="SetEmpty" width="92"/>
+	<button label="Padrão" name="Default" width="92"/>
+	<button label="Cancelar" name="Cancel" width="92"/>
 </floater>

@@ -14,5 +14,4 @@
 	<button name="btnClearRegion" label="Очистить рег." tool_tip="Удалить привязку региона для выбранного титула" />
 	<button name="btnInfo" label="инфо" tool_tip="Показать информацию о группе, связанную с выбранным титулом" />
 	<button name="btnActivate" label="Активировать" tool_tip="Активировать выбранный титул группы" />
-	<check_box label="«Нет» в регионах без назначения" name="none_on_unassigned" />
 </floater>

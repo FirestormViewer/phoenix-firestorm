@@ -85,13 +85,13 @@ with open source contributions from:
        max_length="65536"
        name="contrib_names"
        top_pad="5"
-       width="476"
+       width="489"
        word_wrap="true">
 Dummy Name replaced at run time
       </text_editor>
     </panel>
     <panel
-      height="920"
+      height="1250"
       border="true"
       label="Firestorm Credits"
       help_topic="about_fscredits_tab"
@@ -117,7 +117,7 @@ Dummy Name replaced at run time
              bottom="-1">
                 <text
                  follows="top|left|right"
-                 height="102"
+                 height="140"
                  layout="topleft"
                  left="5"
                  name="firestorm_intro"
@@ -131,7 +131,7 @@ The Firestorm Development Team:
                 <text
                  enabled="false"
                  follows="top|left"
-                 height="80"
+                 height="120"
                  bg_readonly_color="Transparent"
                  left="5"
                  text_color="LtGray"
@@ -144,7 +144,7 @@ Angeldark Raymaker, Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Ayane L
                 </text>
                 <text
                  follows="top|left"
-                 height="15"
+                 height="30"
                  layout="topleft"
                  left="5"
                  name="fs_contrib_intro"
@@ -156,7 +156,7 @@ Additional code generously contributed to Firestorm by:
                 <text
                  enabled="false"
                  follows="top|left"
-                 height="215"
+                 height="300"
                  bg_readonly_color="Transparent"
                  left="5"
                  text_color="LtGray"
@@ -169,7 +169,7 @@ Aira Yumi, Albatroz Hird, Alexie Birman, Andromeda Rage, Angus Boyd, Animats, Ar
                 </text>
                 <text
                  follows="top|left"
-                 height="35"
+                 height="45"
                  layout="topleft"
                  left="5"
                  name="fs_support_intro"
@@ -181,7 +181,7 @@ Special thanks to our Firestorm Support Team, Beta Testers, wiki editors, educat
                 <text
                  enabled="false"
                  follows="top|left"
-                 height="275"
+                 height="320"
                  bg_readonly_color="Transparent"
                  left="5"
                  text_color="LtGray"
@@ -194,7 +194,7 @@ Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Ang
                 </text>
                 <text
                  follows="top|left"
-                 height="78"
+                 height="100"
                  layout="topleft"
                  left="5"
                  name="fs_art_intro"
@@ -237,7 +237,7 @@ Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, D
        max_length="65536"
        name="licenses_editor"
        top="16"
-       width="474"
+       width="489"
        word_wrap="true">
 3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
 APR Copyright (C) 2011 The Apache Software Foundation

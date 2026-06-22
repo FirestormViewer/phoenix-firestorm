@@ -195,6 +195,7 @@ LLFloater::Params::Params()
     auto_close("auto_close", false),
     positioning("positioning", LLFloaterEnums::POSITIONING_RELATIVE),
     header_font("header_font", LLFontGL::getFontSansSerif()),
+    header_font_shadow("header_font_shadow", LLFontGL::NO_SHADOW),      // <FS:Zi> Allow skins to override drag handle font shadow
     header_height("header_height", 0),
     legacy_header_height("legacy_header_height", 0),
     header_vpad("header_vpad", 7),
@@ -375,6 +376,7 @@ void LLFloater::addDragHandle(const LLFloater::Params& floater_params)
             p.follows.flags(FOLLOWS_ALL);
             p.label(mTitle);
             p.font(floater_params.header_font);
+            p.font_shadow(floater_params.header_font_shadow);      // <FS:Zi> Allow skins to override drag handle font shadow
             p.label_vpad(floater_params.header_vpad);
             mDragHandle = LLUICtrlFactory::create<LLDragHandleLeft>(p);
         }
@@ -385,6 +387,7 @@ void LLFloater::addDragHandle(const LLFloater::Params& floater_params)
             p.follows.flags(FOLLOWS_ALL);
             p.label(mTitle);
             p.font(floater_params.header_font);
+            p.font_shadow(floater_params.header_font_shadow);      // <FS:Zi> Allow skins to override drag handle font shadow
             p.label_vpad(floater_params.header_vpad);
             mDragHandle = LLUICtrlFactory::create<LLDragHandleTop>(p);
         }

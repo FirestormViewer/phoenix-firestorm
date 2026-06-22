@@ -46,9 +46,9 @@
       tool_tip="Check your marketplace listings"
       layout="topleft"
       follows="top|right"
-      width="97"
+      width="110"
       height="26"
-      left_pad="143"/>
+      left_pad="130"/>
   </panel>
   <panel
     name="tab_container_panel"

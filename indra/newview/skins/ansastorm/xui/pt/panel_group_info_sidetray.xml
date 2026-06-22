@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Perfil do grupo" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Estas alterações não foram salvas.
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Deseja salvar estas alterações?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Entrar (L$[AMOUNT])
+	</panel.string>
+	<panel.string name="group_join_free">
+		Grátis
+	</panel.string>
+	<panel.string name="group_member">
+		Membro
+	</panel.string>
+	<panel.string name="join_txt">
+		Entrar
+	</panel.string>
+	<panel.string name="leave_txt">
+		Sair
+	</panel.string>
+	<panel name="group_info_top">
+		<text_editor name="group_name" value="(carregando...)"/>
+		<line_editor label="Digite aqui o novo nome do grupo" name="group_name_editor"/>
+	</panel>
+	<button label="Ativar" name="btn_activate"/>
+	<button label="Chat" name="btn_chat"/>
+	<button label="Chamada em grupo" name="btn_call" tool_tip="Ligar para este grupo"/>
+	<button label="Salvar" name="btn_apply"/>
+</panel>

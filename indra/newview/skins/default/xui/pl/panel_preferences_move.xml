@@ -69,7 +69,7 @@
 			</text>
 			<radio_group name="Region_Crossing_Movement">
 				<radio_item label="Bez limitu" name="move_predict" width="85" />
-				<radio_item label="Przestań, gdy za dużo rozbieżności" name="move_stop" />
+				<radio_item label="Stop, gdy za dużo rozbieżności" name="move_stop" />
 			</radio_group>
 			<text name="movelock_lbl">
 				Jeśli unieruchamianie wbudowane w Most LSL jest aktywne...

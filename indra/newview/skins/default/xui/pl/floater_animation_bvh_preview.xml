@@ -113,7 +113,7 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	<text name="description_label">
 		Opis:
 	</text>
-	<spinner label="Pierwszeństwo" name="priority" tool_tip="Kontroluj animacje, które mogą zostać zdominowane przez tą animację"/>
+	<spinner label="Priorytet:" name="priority" tool_tip="Kontroluj animacje, które mogą zostać zdominowane przez tą animację"/>
 	<check_box label="Powtarzaj" name="loop_check" tool_tip="Powtarzaj tą animację w pętli"/>
 	<text name="frames_label">
 		300 kl. 30 s. 10 FPS

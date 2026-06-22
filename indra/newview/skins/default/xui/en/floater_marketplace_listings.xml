@@ -45,7 +45,7 @@
           layout="topleft"
           top="10"
           left="0"
-          width="313"
+          width="300"
           height="25"
           wrap="true"
           halign="center"

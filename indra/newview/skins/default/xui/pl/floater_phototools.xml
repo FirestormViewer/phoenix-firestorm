@@ -427,7 +427,7 @@
 				</container_view>
 			</scroll_container>
 		</panel>
-		<panel name="P_Cam" label="Kamera">
+		<panel name="P_Cam" label="Kam.">
 			<panel name="PT_Cam">
 				<text name="T_Cam">
 					Ustawienia myszy 3D (joysticka)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Aparência da interface" name="skin_panel">
+	<text name="skin_textbox">
+        Aparência da interface:
+    </text>
+    <text name="skin_textbox1">
+        (Requer reinício)
+    </text>
+    <text name="theme_textbox">
+        Esquema de cores:
+    </text>
+    <text name="theme_textbox2">
+        (Requer reinício)
+    </text>
+    <check_box label="Redefinir botões para o layout padrão ao trocar de interface" tool_tip="Se ativado, ao trocar a interface os botões serão redefinidos para o layout padrão correspondente." name="reset_toolbar_settings"/>
+    <check_box label="Redefinir botões para o layout padrão ao trocar de modo" tool_tip="Se ativado, ao trocar o modo de login os botões serão redefinidos para o layout padrão correspondente." name="FSToolbarsResetOnModeChange"/>
+    <check_box label="Usar cursor no estilo Viewer 1" name="use_legacy_cursors"/>
+    <text name="theme_textbox3">
+        (Requer reinício)
+    </text>
+</panel>

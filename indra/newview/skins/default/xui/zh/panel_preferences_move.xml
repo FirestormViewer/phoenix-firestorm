@@ -27,7 +27,7 @@
 			<text name="mouse_warp_lbl">
 				滑鼠歸位：
 			</text>
-			<combo_box name="mouse_warp_combo" tooltip="控制在Alt縮放和滑鼠觀察模式下，滑鼠是否自動跳轉至螢幕中心。">
+			<combo_box name="mouse_warp_combo" tool_tip="控制在Alt縮放和滑鼠觀察模式下，滑鼠是否自動跳轉至螢幕中心。">
 				<combo_box.item label="自動" name="0"/>
 				<combo_box.item label="開啟" name="1"/>
 				<combo_box.item label="關閉" name="2"/>

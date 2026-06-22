@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="Criador de forma do feixe">
+	<text name="beamcreator_text">
+Para criar um novo feixe, clique com o botão esquerdo
+no painel abaixo para definir um raio na cor selecionada,
+ou clique com o botão direito para remover um raio.
+Pressione Salvar quando terminar.
+	</text>
+	<color_swatch label="Cor do feixe" name="beam_color_swatch" tool_tip="Clique para abrir o seletor de cores"/>
+	<button label="Salvar" name="beamshape_save"/>
+	<button label="Carregar" name="beamshape_load"/>
+	<button label="Limpar" name="beamshape_clear"/>
+	<button label="Cancelar" name="cancel"/>
+</floater>

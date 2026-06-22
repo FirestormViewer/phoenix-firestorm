@@ -28,7 +28,7 @@
     <icon tool_tip="Adult" name="rating_icon_adult"/>
     <scroll_list name="results">
         <column label="Name" name="name" width="215"/>
-        <column label="Anzeigenpreis" name="price" width="91"/>
+        <column label="Preis" name="price" width="91"/>
     </scroll_list>
     <button tool_tip="Vorherige Seite" name="prev_btn"/>
     <button tool_tip="Nächste Seite" name="next_btn"/>

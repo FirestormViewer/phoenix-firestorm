@@ -465,9 +465,6 @@ https://secondlife.com/viewer-access-faq
 	<string name="TooltipFlagNoEdit">
 		編集禁止
 	</string>
-	<string name="TooltipFlagNoEdit">
-		グループ作成
-	</string>
 	<string name="TooltipFlagNotSafe">
 		危険
 	</string>
@@ -1320,9 +1317,6 @@ https://secondlife.com/viewer-access-faq
 	<string name="xml_file">
 		XMLファイル
 	</string>
-	<string name="csv_files">
-		CSVファイル
-	</string>
 	<string name="raw_file">
 		RAWファイル
 	</string>
@@ -2000,9 +1994,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="InvFolder Materials">
 		マテリアル
-	</string>
-	<string name="InvFolder Settings">
-		自然環境の設定
 	</string>
 	<!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
 	<string name="InvFolder Friends">
@@ -2871,19 +2862,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		読み込んでいます…
-	</string>
-	<!-- FS:KC legacy profiles -->
-	<string name="NoPicksText">
-		ピックを作成していません。
-	</string>
-	<string name="NoAvatarPicksText">
-		このユーザーにはピックがありません。
-	</string>
-	<string name="NoClassifiedsText">
-		クラシファイド広告を作成していません。作成するには、下にある「＋」ボタンをクリックします。
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		このユーザーにはクラシファイド広告がありません。
 	</string>
 	<!-- Multi Preview Floater -->
 	<string name="MultiPreviewTitle">
@@ -5723,7 +5701,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Move_Lock_Label">移動ロック</string>
 	<string name="Command_Blocklist_Label">ブロックリスト</string>
 	<string name="Command_ResyncAnimations_Label">アニメーション再同期</string>
-	<string name="Command_RegionTracker_Label">リージョントラッカー</string>
 	<string name="Command_Group_Titles_Label">グループのタイトル</string>
 	<string name="Command_Wearable_Favorites_Label">お気に入りの着用物やＨＵＤ</string>
 	<string name="Command_RFO_Label">フレンドのみ表示</string>
@@ -5808,9 +5785,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Profile_Tooltip">
 		自分のプロフィールの表示や編集を行います。
-	</string>
-	<string name="Command_RegionTracker_Tooltip">
-		様々なリージョンの状況を追跡します。
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		嫌がらせを報告します。
@@ -6385,9 +6359,6 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="preproc_toggle_warning">プリプロセッサを切り替えても、このエディターを閉じて再度開くまで完全には有効になりません。</string>
 	<!-- <FS:Cron> FIRE-9335 -->
 	<!-- <LSL Preprocessor -->
-	<string name="preproc_toggle_warning">
-		プリプロセッサの切り替えは、このエディタを閉じて再度開くまで完全には有効になりません。
-	</string>
 	<string name="fs_preprocessor_starting">
 		[APP_NAME]プリプロセッサを開始しています…
 	</string>

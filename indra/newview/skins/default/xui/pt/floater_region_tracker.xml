@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_tracker" title="Rastreador de regiões">
+	<text name="region_label_text" value="Adicionar regiões no mapa"/>
+	<button name="refresh" tool_tip="Atualizar"/>
+	<button name="remove" tool_tip="Remover região(ões)"/>
+	<button name="open_map" tool_tip="Mostrar mapa"/>
+	<scroll_list name="region_list" tool_tip="Clique duas vezes em um item para mostrar a região no mapa.">
+		<scroll_list.columns name="region_label" label="Rótulo"/>
+		<scroll_list.columns name="region_name" label="Região"/>
+		<scroll_list.columns name="region_agent_count" label="#"/>
+	</scroll_list>
+</floater>

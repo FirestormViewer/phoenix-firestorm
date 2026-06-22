@@ -6,22 +6,33 @@
 				Podskakiwanie piersi jest dostępne tylko
 dla kobiecych awatarów.
 			</text>
+			<accordion_tab name="physics_breasts_updown_tab" title="Podskakiwanie piersi"/>
 		</panel>
 		<panel name="physics_breast_inout_tab_holder" title="Rowek m. piers.">
 			<text name="physics_breast_inout_not_available">
 				Rowek między piersiami jest dostępny tylko
 dla kobiecych awatarów.
 			</text>
+			<accordion_tab name="physics_breasts_inout_tab" title="Rowek między piersiami"/>
 		</panel>
 		<panel name="physics_breast_leftright_tab_holder" title="Koł. piersi">
 			<text name="physics_breast_leftright_not_available">
 				Kołysanie piersi jest dostępne tylko
 dla kobiecych awatarów.
 			</text>
+			<accordion_tab name="physics_breasts_leftright_tab" title="Kołysanie piersi"/>
 		</panel>
-		<panel name="physics_belly_tab_holder" title="Podsk. brzucha"/>
-		<panel name="physics_butt_tab_holder" title="Podsk. pośladk."/>
-		<panel name="physics_butt_leftright_tab_holder" title="Koł. pośladków"/>
-		<panel name="physics_advanced_tab_holder" title="Zaaw. parametry"/>
+		<panel name="physics_belly_tab_holder" title="Podsk. brzucha">
+			<accordion_tab name="physics_belly_tab" title="Podskakiwanie brzucha"/>
+		</panel>
+		<panel name="physics_butt_tab_holder" title="Podsk. pośladk.">
+			<accordion_tab name="physics_butt_tab" title="Podskakiwanie pośladków"/>
+		</panel>
+		<panel name="physics_butt_leftright_tab_holder" title="Koł. pośladków">
+			<accordion_tab name="physics_butt_leftright_tab" title="Kołysanie pośladków"/>
+		</panel>
+		<panel name="physics_advanced_tab_holder" title="Zaaw. parametry">
+			<accordion_tab name="physics_advanced_tab" title="Zaawansowane parametry"/>
+		</panel>
 	</tab_container>
 </panel>

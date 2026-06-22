@@ -13,14 +13,8 @@
 	<text name="textRestartRequired">
 		Zmiany w dowolnym ustawieniu wymagają ponownego uruchomienia.
 	</text>
-    <text name="textInformation1">
-        Dopóki nie określono inaczej, to raport zawiera tylko informacje związane z awarią.
-    </text>
-    <text name="textInformation2">
-        Logi nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
-    </text>
-    <text name="textInformation3">
-        jeśli uważasz, że mogą zawierać istotne informacje.
+    <text name="textInformation">
+        Dopóki nie określono inaczej, to raport zawiera tylko informacje związane z awarią. Logi nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail jeśli uważasz, że mogą zawierać istotne informacje.
     </text>
     <text name="textInformation4">
         Polityka prywatności: [URL]

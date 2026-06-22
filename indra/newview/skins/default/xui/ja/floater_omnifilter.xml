@@ -19,6 +19,8 @@
 			</fs_scroll_list>
 			<button name="add_needle" label="追加"/>
 			<button name="remove_needle" label="削除"/>
+			<button name="up_needle" label="上"/>
+			<button name="down_needle" label="下"/>
 		</layout_panel>
 		<layout_panel name="filter_log_layout">
 			<fs_scroll_list name="filter_log">

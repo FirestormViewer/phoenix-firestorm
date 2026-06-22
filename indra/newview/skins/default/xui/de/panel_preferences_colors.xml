@@ -44,6 +44,9 @@
 			<text name="direct_label">
 				Direkt
 			</text>
+			<text name="server_chat_history_label">
+				Gruppenchathistorie vom Server
+			</text>
 			<text name="header_colors">
 				Chatüberschriften:
 			</text>
@@ -65,7 +68,7 @@
 			<text name="self_mention_label">
 				Selbst
 			</text>
-			<slider label="Abschwächungsfaktor außerhalb Chat-Reichweite:" label_width="275" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Faktor, der dafür verwendet wird, die normale Chatfarbe abzuschwächen, wenn sich der Sender außerhalb der normalen Chatreichweite befindet (0 = dunkel, 1 = hell)."/>
+			<slider label="Abschwächungsfaktor außerhalb Chat-Reichweite:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Faktor, der dafür verwendet wird, die normale Chatfarbe abzuschwächen, wenn sich der Sender außerhalb der normalen Chatreichweite befindet (0 = dunkel, 1 = hell)."/>
 			<check_box name="FSColorIMsDistinctly" label="IM/Gruppenchat in Konsole unterschiedlich einfärben:"/>
 			<panel name="im_color_panel">
 				<text name="console_im_label">
@@ -156,7 +159,7 @@
 		</panel>
 		<panel label="Mini-Karte" name="tab-minimap">
 			<slider name="FSMiniMapOpacity" label="Hintergrund-Deckkraft:" label_width="135" width="435"/>
-			<text name="netmap_pickradius_color_textbox" width="135">
+			<text name="netmap_pickradius_color_textbox" width="140">
 				Selektionsradius-Farbe:
 			</text>
 			<color_swatch name="MapPickRadiusColor" tool_tip="Erlaubt die Auswahl der Farbe des Selektionsradius auf der Minikarte. Die Größe des Selektionsradius kann über die Selektionsradius-Größe-Einstellung konfiguriert werden." />
@@ -197,7 +200,7 @@
 			<text name="effects_color_textbox">
 				Meine Effekte (Auswahlstrahl):
 			</text>
-			<text name="ScriptDialogFgLabel" width="110">
+			<text name="ScriptDialogFgLabel" width="120">
 				Skript-Dialog Vg/Hg
 			</text>
 			<text name="floater_opacity">
@@ -216,20 +219,19 @@
 			<slider label="Deckkraft für Schwebe-Text:" name="FSHudTextBackgroundOpacity" tool_tip="Deckkraft für Hintergrund von Schwebe-Text festlegen"/>
 			<slider label="Menü-Hintergrund-Deckkraft:" name="menu_background_alpha" tool_tip="Deckkraft des Hintergrunds von Kontextmenüs und der oberen Menüleiste (0.0 = vollständig transparent, 1.0 = vollständig deckend)"/>
 			<text name="preferences_search_label">
-                Farben für Einstellungssuche:
-            </text>
-			<text name="preferences_search_bg_label" width ="75">
-                Hintergrund:
-            </text>
+				Farben für Einstellungssuche:
+			</text>
+			<text name="preferences_search_bg_label" width="75">
+				Hintergrund:
+			</text>
 			<color_swatch name="preferences_search_bg_color" tool_tip="Hintergrundfarbe für die Hervorhebung der Einstellungssuche"/>
 			<text name="preferences_search_font_label" width="60">
-                Schriftart:
-            </text>
-			<color_swatch name="preferences_search_font_color" tool_tip="Schriftfarbe für die Hervorhebung der Einstellungssuche"/>
-			<text name="area_search_beacon_color_label" left="300">
-				Farbe für Markierung der Umgebungssuche:
+				Schriftart:
 			</text>
-			
+			<color_swatch name="preferences_search_font_color" tool_tip="Schriftfarbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="area_search_beacon_color_label" left="320">
+				Markierung der Umgebungssuche:
+			</text>
 			<text name="notecard_editor_color_label">
 				Farben für Notizkarten:
 			</text>

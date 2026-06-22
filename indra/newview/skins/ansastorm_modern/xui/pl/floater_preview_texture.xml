@@ -9,14 +9,13 @@
 	<floater.string name="DateTime">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
-	<floater.string name="UploaderDateTime"/>
 	<text name="desc txt">
 		Opis:
 	</text>
 	<text name="uploader_label">
 		Przesłał/a:
 	</text>
- 	<button label="Profil" name="openprofile"/>
+	<button label="Profil" name="openprofile"/>
 	<text name="upload_time_label">
 		Data:
 	</text>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_actions">
+		<columns label="Ações de movimento" name="lst_action"/>
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Vai até a posição indicada pelo cursor do mouse" value="Ir para" />
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Teleporta para a posição indicada pelo cursor do mouse. Nem todos os destinos permitem teleporte direto; você pode ser teleportado para perto do destino." value="Teleportar para" />
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="Andar para frente" />
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Andar para trás" />
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Esquerda" />
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Direita" />
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Deslocar para esquerda" />
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Deslocar para direita" />
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Pular/Subir" />
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Descer" />
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="Correr para frente" />
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Correr para trás" />
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Correr para esquerda" />
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Correr para direita" />
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Alternar corrida" />
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Iniciar/parar voo" />
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="Sentar/levantar" />
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Parar movimento" />
+	</rows>
+</contents>

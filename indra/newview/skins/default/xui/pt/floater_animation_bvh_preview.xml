@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Animation Preview">
 	<floater.string name="failed_to_initialize">
-		Falha ao iniciar animação
+		Falha ao inicializar movimento
 	</floater.string>
 	<floater.string name="anim_too_long">
-		O arquivo de animação possui [LENGTH] segundos de duração.
+		O arquivo de animação tem [LENGTH] segundos.
 
-A duração máxima da animação é de [MAX_LENGTH] segundos.
+O máximo permitido é [MAX_LENGTH] segundos.
 	</floater.string>
 	<floater.string name="failed_file_read">
 		Não foi possível ler o arquivo de animação.
@@ -14,100 +14,103 @@ A duração máxima da animação é de [MAX_LENGTH] segundos.
 [STATUS]
 	</floater.string>
 	<floater.string name="E_ST_OK">
-		Ok
+		OK
 	</floater.string>
 	<floater.string name="E_ST_EOF">
 		Fim de arquivo prematuro.
 	</floater.string>
 	<floater.string name="E_ST_NO_CONSTRAINT">
-		Impossível ler definição constraint.
+		Não foi possível ler a definição de restrição.
 	</floater.string>
 	<floater.string name="E_ST_NO_FILE">
-		Impossível abrir arquivo BVH.
+		Não foi possível abrir o arquivo BVH.
 	</floater.string>
 	<floater.string name="E_ST_NO_HIER">
-		Invalid HIERARCHY header.
+		Cabeçalho HIERARCHY inválido.
 	</floater.string>
 	<floater.string name="E_ST_NO_JOINT">
-		RAIZ ou JUNTA não encontrados.
+		Não foi possível encontrar ROOT ou JOINT.
 	</floater.string>
 	<floater.string name="E_ST_NO_NAME">
-		Impossível obter nome JOINT.
+		Não foi possível obter o nome do JOINT.
 	</floater.string>
 	<floater.string name="E_ST_NO_OFFSET">
-		Impossível localizar OFFSET.
+		Não foi possível encontrar OFFSET.
 	</floater.string>
 	<floater.string name="E_ST_NO_CHANNELS">
-		Impossível localizar CHANNELS.
+		Não foi possível encontrar CHANNELS.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROTATION">
-		Impossível obter ordem de rotação.
+		Não foi possível obter a ordem de rotação.
 	</floater.string>
 	<floater.string name="E_ST_NO_AXIS">
-		Impossível obter eixo de rotação.
+		Não foi possível obter o eixo de rotação.
 	</floater.string>
 	<floater.string name="E_ST_NO_MOTION">
-		Impossível localizar MOTION.
+		Não foi possível encontrar MOTION.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAMES">
-		Impossível determinar número de quadros.
+		Não foi possível obter o número de frames.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAME_TIME">
-		Impossível determinar tempo dos quadros.
+		Não foi possível obter o tempo de frame.
 	</floater.string>
 	<floater.string name="E_ST_NO_POS">
-		Impossível definir posicionamento.
+		Não foi possível obter os valores de posição.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROT">
-		Impossível definir valores da rotação.
+		Não foi possível obter os valores de rotação.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_FILE">
-		Impossível abrir arquivo de tradução.
+		Não foi possível abrir o arquivo de tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HEADER">
-		Impossível ler cabeçalho de tradução.
+		Não foi possível ler o cabeçalho de tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_NAME">
-		Impossível ler nomes traduzidos.
+		Não foi possível ler os nomes de tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_IGNORE">
-		Impossível obter valor traduzido a ignorar.
+		Não foi possível ler o valor ignore da tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_RELATIVE">
-		Impossível obter valor traduzido relativo.
+		Não foi possível ler o valor relative da tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_OUTNAME">
-		Impossível obter valor traduzido.
+		Não foi possível ler o valor outname da tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MATRIX">
-		Impossível ler matriz de tradução.
+		Não foi possível ler a matriz de tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGECHILD">
-		Impossível obter nome mergechild.
+		Não foi possível obter o nome mergechild.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGEPARENT">
-		Impossível obter nome mergeparent.
+		Não foi possível obter o nome mergeparent.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_PRIORITY">
-		Impossível obter valor prioritário.
+		Não foi possível obter o valor de prioridade.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_LOOP">
-		Impossível obter valor do loop.
+		Não foi possível obter o valor de loop.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEIN">
-		Impossível obter valor easeIn.
+		Não foi possível obter os valores de easeIn.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
-		Impossível obter valor easeOut.
+		Não foi possível obter os valores de easeOut.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HAND">
-		Impossível obter valor de morph da mão.
+		Não foi possível obter o valor de morph da mão.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EMOTE">
-		Impossível ler nome do emote.
+		Não foi possível ler o nome do emote.
 	</floater.string>
 	<floater.string name="E_ST_BAD_ROOT">
-		Nome da junta incorreto, use &quot;quadril&quot;.
+		Nome do joint raiz incorreto, use &quot;hip&quot;.
+	</floater.string>
+	<floater.string name="FS_report_frames">
+		[F] frm.  [S] s. [FPS] FPS
 	</floater.string>
 	<text name="name_label">
 		Nome:
@@ -115,72 +118,76 @@ A duração máxima da animação é de [MAX_LENGTH] segundos.
 	<text name="description_label">
 		Descrição:
 	</text>
-	<spinner label="Prioridade" name="priority" tool_tip="Controla quais animações podem ser interrompidas por esta animação"/>
-	<check_box label="Loop" name="loop_check" tool_tip="Executa esta animação sem parar"/>
-	<spinner label="Dentro(%)" name="loop_in_point" tool_tip="Define o ponto em que a animação em loop reinicia"/>
-	<spinner label="Fora(%)" name="loop_out_point" tool_tip="Define o ponto em que a animação em loop acaba"/>
-	<text name="hand_label">
-		Pose das mãos
+	<spinner label="Prioridade" name="priority" tool_tip="Controla quais outras animações podem ser substituídas por esta animação"/>
+	<check_box label="Loop" name="loop_check" tool_tip="Faz esta animação repetir em loop"/>
+	<text name="frames_label">
+		300 frm. 30 s. 10 FPS
 	</text>
-	<combo_box name="hand_pose_combo" tool_tip="Controla os gestos das mãos durante a animação">
-		<combo_box.item label="Abrir" name="Spread"/>
-		<combo_box.item label="Relaxado" name="Relaxed"/>
+	<spinner label="Início (%)" name="loop_in_point" tool_tip="Define o ponto da animação para onde o loop retorna"/>
+	<spinner label="Fim (%)" name="loop_out_point" tool_tip="Define o ponto da animação em que o loop termina"/>
+	<spinner label="Início (frm)" name="loop_in_frames" tool_tip="Define o ponto da animação para onde o loop retorna (em frames)"/>
+	<spinner label="Fim (frm)" name="loop_out_frames" tool_tip="Define o ponto da animação em que o loop termina (em frames)"/>
+	<text name="hand_label">
+		Posição das mãos
+	</text>
+	<combo_box name="hand_pose_combo" tool_tip="Controla o que as mãos fazem durante a animação">
+		<combo_box.item label="Abertas" name="Spread"/>
+		<combo_box.item label="Relaxadas" name="Relaxed"/>
 		<combo_box.item label="Apontar ambas" name="PointBoth"/>
 		<combo_box.item label="Punho" name="Fist"/>
-		<combo_box.item label="E relaxada" name="RelaxedLeft"/>
-		<combo_box.item label="Apontar E" name="PointLeft"/>
-		<combo_box.item label="Punho E" name="FistLeft"/>
-		<combo_box.item label="D relaxada" name="RelaxedRight"/>
-		<combo_box.item label="Apontar D" name="PointRight"/>
-		<combo_box.item label="Punho D" name="FistRight"/>
-		<combo_box.item label="Saudação D" name="SaluteRight"/>
-		<combo_box.item label="Escrevendo" name="Typing"/>
-		<combo_box.item label="Paz D" name="PeaceRight"/>
+		<combo_box.item label="Relaxada esquerda" name="RelaxedLeft"/>
+		<combo_box.item label="Apontar esquerda" name="PointLeft"/>
+		<combo_box.item label="Punho esquerdo" name="FistLeft"/>
+		<combo_box.item label="Relaxada direita" name="RelaxedRight"/>
+		<combo_box.item label="Apontar direita" name="PointRight"/>
+		<combo_box.item label="Punho direito" name="FistRight"/>
+		<combo_box.item label="Saudar à direita" name="SaluteRight"/>
+		<combo_box.item label="Digitando" name="Typing"/>
+		<combo_box.item label="Paz à direita" name="PeaceRight"/>
 	</combo_box>
 	<text name="emote_label">
 		Expressão
 	</text>
-	<combo_box name="emote_combo" tool_tip="Controla as expressões faciais durante a animação">
-		<item label="(nenhum)" name="[None]"/>
+	<combo_box name="emote_combo" tool_tip="Controla o que o rosto faz durante a animação">
+		<item label="(Nenhuma)" name="[None]"/>
 		<item label="Aaaaah" name="Aaaaah"/>
-		<item label="Com medo" name="Afraid"/>
+		<item label="Assustado" name="Afraid"/>
 		<item label="Bravo" name="Angry"/>
-		<item label="Sorriso contagiante" name="BigSmile"/>
-		<item label="À toa" name="Bored"/>
+		<item label="Sorrisão" name="BigSmile"/>
+		<item label="Entediado" name="Bored"/>
 		<item label="Chorar" name="Cry"/>
-		<item label="Desdenho" name="Disdain"/>
-		<item label="Com vergonha" name="Embarrassed"/>
-		<item label="Franzir testa" name="Frown"/>
+		<item label="Desdém" name="Disdain"/>
+		<item label="Envergonhado" name="Embarrassed"/>
+		<item label="Carranca" name="Frown"/>
 		<item label="Beijo" name="Kiss"/>
 		<item label="Rir" name="Laugh"/>
-		<item label="Mostrar a língua" name="Plllppt"/>
-		<item label="Asco" name="Repulsed"/>
+		<item label="Plllppt" name="Plllppt"/>
+		<item label="Enojado" name="Repulsed"/>
 		<item label="Triste" name="Sad"/>
-		<item label="Encolher os ombros" name="Shrug"/>
+		<item label="Dar de ombros" name="Shrug"/>
 		<item label="Sorriso" name="Smile"/>
-		<item label="Surpresa" name="Surprise"/>
-		<item label="Piscar" name="Wink"/>
+		<item label="Surpreso" name="Surprise"/>
+		<item label="Piscada" name="Wink"/>
 		<item label="Preocupado" name="Worry"/>
 	</combo_box>
 	<text name="preview_label">
-		Visualizar enquanto
+		Pré-visualizar enquanto:
 	</text>
-	<combo_box name="preview_base_anim" tool_tip="Use para testar o comportamento de sua animação enquanto seu avatar executa ações comuns.">
-		<item label="Em pé" name="Standing"/>
-		<item label="Andar" name="Walking"/>
+	<combo_box name="preview_base_anim" tool_tip="Use isto para testar o comportamento da sua animação enquanto seu avatar executa ações comuns.">
+		<item label="Parado" name="Standing"/>
+		<item label="Caminhando" name="Walking"/>
 		<item label="Sentado" name="Sitting"/>
-		<item label="Voar" name="Flying"/>
+		<item label="Voando" name="Flying"/>
 	</combo_box>
-	<spinner label="Aproximação (seg)" name="ease_in_time" tool_tip="Tempo (em segundos) da transição inicial da animação"/>
-	<spinner label="Afastamento (seg)" name="ease_out_time" tool_tip="Tempo (em segundos) da transição de saída da animação"/>
-	<button name="play_btn" tool_tip="Executar animação"/>
-	<button name="pause_btn" tool_tip="Pausar a animação"/>
-	<button name="stop_btn" tool_tip="Interromper a execução da animação"/>
+	<spinner label="Suavizar entrada (s)" name="ease_in_time" tool_tip="Tempo (em segundos) para a animação entrar suavemente"/>
+	<spinner label="Suavizar saída (s)" name="ease_out_time" tool_tip="Tempo (em segundos) para a animação sair suavemente"/>
+	<button name="play_btn" tool_tip="Reproduzir animação"/>
+	<button name="pause_btn" tool_tip="Pausar animação"/>
+	<button name="stop_btn" tool_tip="Parar reprodução da animação"/>
 	<text name="bad_animation_text">
-		Não foi possível ler o arquivo de animação.
-
-Recomendamos que os arquivos BVH sejam exportados do Poser 4.
+		Não foi possível ler o arquivo de animação. Recomendamos arquivos BVH exportados do Poser 4.
 	</text>
-	<button label="Envio (L$[AMOUNT])" name="ok_btn"/>
+    <button label="Recarregar arquivo" name="reload_btn"/>
+	<button label="Enviar (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>
 </floater>

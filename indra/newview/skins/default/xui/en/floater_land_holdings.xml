@@ -50,17 +50,17 @@
      left="10"
      name="Teleport"
      tool_tip="Teleport to the center of this land."
-     width="80" />
+     width="90" />
     <button
      height="23"
      label="Map"
      label_selected="Map"
      layout="topleft"
      top="208"
-     left="95"
+     left="105"
      name="Show on Map"
      tool_tip="Show this land on the world map"
-     width="80" />
+     width="90" />
     <text
      type="string"
      length="1"

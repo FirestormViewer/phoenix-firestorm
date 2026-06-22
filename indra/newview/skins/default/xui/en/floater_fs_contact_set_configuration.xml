@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="432"
+ height="442"
  width="900"
  layout="topleft"
  can_resize="false"
@@ -78,7 +78,7 @@ Contact Set Settings:
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="292"
+     height="302"
      width="450"
      border_visible="true"
      bevel_style="none">
@@ -93,7 +93,7 @@ Global Settings:
     </text>
     <check_box
      follows="left|top"
-     top_pad="10"
+     top_pad="14"
      height="12"
      initial_value="true"
      label="Show profile icons in Contact Sets lists"
@@ -139,7 +139,7 @@ Global Settings:
 Online notifications:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Show Online Notices for ALL friends as toasts"
@@ -180,7 +180,7 @@ Online notifications:
 Custom Colors:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Color mini map icon based on their Contact Set"
@@ -223,7 +223,7 @@ Custom Colors:
      name="side_panel"
      top="18"
      left="450"
-     height="412"
+     height="422"
      width="448"
      border_visible="true"
      bevel_style="none">

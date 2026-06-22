@@ -30,6 +30,7 @@
 			<check_box name="regular_expression" label="Expression régulière"/>
 			<button name="search" label="Recherche"/>
 			<button name="clear" label="Effacer"/>
+			<button name="copy_link" label="Copier un lien" tool_tip="Copie un lien secondlife:///app/openfloater/area_search?... qui reproduit les paramètres de recherche et de filtrage actuels."/>
 		</panel>
 		<panel label="Filtrer" name="area_search_filter_panel">
 			<text name="only_list">Uniquement les objets :</text>

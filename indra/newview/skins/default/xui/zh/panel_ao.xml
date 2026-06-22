@@ -11,14 +11,17 @@
 		<check_box name="ao_disable_stands_in_mouselook" label="第一人稱視角下禁用站立動畫" tool_tip="如果您需要保留個人動畫以供第一人稱視角使用，請選中此框。" />
 		<combo_box name="ao_state_selection_combo" tool_tip="選擇要編輯的動畫狀態。" />
 		<panel name="ao_animation_move_trash_panel">
-			<button name="ao_move_up" tool_tip="在列表中將所選動畫上移。" />
-			<button name="ao_move_down" tool_tip="在列表中將所選動畫下移。" />
-			<button name="ao_trash" tool_tip="從列表中刪除所選動畫。" />
+			<button name="ao_move_up" tool_tip="將選中的動畫或動畫組在列表中上移。"/>
+			<button name="ao_move_down" tool_tip="將選中的動畫或動畫組在列表中下移。"/>
+			<button name="ao_rename" tool_tip="重新命名選中的動畫組。"/>
+			<button name="ao_trash" tool_tip="刪除選中的動畫。"/>
 		</panel>
-		<check_box name="ao_cycle" label="迴圈" tool_tip="每次呼叫動畫狀態時播放不同的動畫。" />
-		<check_box name="ao_randomize" label="隨機順序" left_pad="10" tool_tip="在迴圈模式下設定動畫的隨機順序。" />
-		<text name="ao_cycle_time_seconds_label" value="迴圈時間（秒）：" />
-		<spinner name="ao_cycle_time" tool_tip="切換到下一個動畫之前的延遲時間。設定為0以禁用自動迴圈動畫。" />
+		<combo_box name="ao_track_selection_combo" tool_tip="選擇此狀態顯示的軌道。主軌道會正常播放，附加軌道會在主軌道旁獨立播放並循環，例如在所有行走動畫中播放尾巴擺動。"/>
+		<button name="ao_track_add" tool_tip="為此狀態新增獨立軌道。"/>
+		<check_box name="ao_cycle" label="循環" tool_tip="每次呼叫動畫狀態時播放不同的動畫。" />
+		<check_box name="ao_randomize" label="隨機順序" left_pad="10" tool_tip="在循環模式下設定動畫的隨機順序。" />
+		<text name="ao_cycle_time_seconds_label" value="循環時間（秒）：" />
+		<spinner name="ao_cycle_time" tool_tip="切換到下一個動畫之前的延遲時間。設定為0以禁用自動循環動畫。" />
 		<button name="ao_reload" label="重新載入" tool_tip="重新載入動畫覆蓋設定。" />
 		<layout_stack name="next_previous_buttons_stack">
 			<layout_panel name="next_previous_buttons_stack_left">
@@ -29,6 +32,14 @@
 			</layout_panel>
 		</layout_stack>
 		<button name="ao_less" tool_tip="顯示簡化的動畫集視窗。" />
+		<panel name="ao_drop_zone_panel">
+			<text name="ao_drop_zone_add_label">
+				拖放到此處以新增
+			</text>
+			<text name="ao_drop_zone_group_label">
+				拖放到現有項目上以建立分組
+			</text>
+		</panel>
 	</panel>
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">

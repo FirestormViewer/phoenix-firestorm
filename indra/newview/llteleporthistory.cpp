@@ -344,7 +344,7 @@ void LLTeleportHistory::dump() const
         line << i << ": " << mItems[i].mTitle;
         line << " REGION_ID: " << mItems[i].mRegionID;
         line << ", pos: " << mItems[i].mGlobalPos;
-        line << ", slurl: " << mItems[i].mSLURL.asString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
+        line << ", slurl: " << mItems[i].mSLURL.getSLURLString(); // <FS:TJ/> Fix Teleport and Location History for OpenSim
         LL_INFOS() << line.str() << LL_ENDL;
     }
 }

@@ -224,14 +224,13 @@
          increment="0.25"
          label="Floating text fade distance (in m):"
          tool_tip="Sets the distance where floating text (hovertext) starts to fade"
-         label_width="200"
+         label_width="240"
          layout="topleft"
          left="10"
          min_val="0"
          max_val="64"
          name="FSHudTextFadeDistance"
-
-         width="481" />
+         width="500" />
         <slider
          control_name="FSHudTextFadeRange"
          decimal_digits="2"
@@ -240,14 +239,14 @@
          increment="0.25"
          label="Floating text fade range (in m):"
          tool_tip="Sets the range it takes for a floating text (hovertext) to fade from fully visible to completely invisible"
-         label_width="200"
+         label_width="240"
          layout="topleft"
          left="10"
          min_val="0.25"
          max_val="32"
          name="FSHudTextFadeRange"
          top_pad="2"
-         width="474" />
+         width="500" />
 	 <!-- Added new check box to disable the highlight floating text feature -->
         <check_box
         control_name="FSHudTextUseHoverHighlight"
@@ -363,7 +362,7 @@
        type="string"
        left="10"
        top_pad="15"
-       width="140"
+       width="150"
        follows="left|top"
        height="16"
        layout="topleft"
@@ -417,7 +416,7 @@
        type="string"
        left="10"
        top_pad="9"
-       width="140"
+       width="150"
        follows="left|top"
        height="16"
        layout="topleft"
@@ -538,7 +537,7 @@
          initial_value="1"
          layout="topleft"
          left_pad="5"
-         top_delta="-1"
+         top_delta="1"
          name="ShowGroupNoticesTopRight"
          tool_tip="Choose where group notifications and chiclet icons will appear on the screen."
          width="200">
@@ -567,7 +566,7 @@
          left_pad="2"
          name="GroupTopRightRequiresRestart"
          text_color="White_50"
-         top_pad="-14"
+         top_pad="-16"
          type="string"
          width="128">
            (requires restart)
@@ -593,11 +592,11 @@
          name="FSLegacyNotificationWell"
          tool_tip="If checked, Firestorm will use the legacy list view to display stored notifications."
          top_pad="3"
-         width="265" />
+         width="285" />
         <text
          type="string"
          left_pad="10"
-         top_pad="-15"
+         top_pad="-18"
          width="128"
          follows="left|top"
          height="12"
@@ -615,7 +614,7 @@
          left="5"
          name="FSLegacyNotificationWellAutoResize"
          tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items get added or removed."
-         top_pad="3"
+         top_pad="10"
          width="450" />
         <check_box
          control_name="FSRemapLinuxShortcuts"
@@ -807,6 +806,18 @@
 		 width="270"
 		 control_name="FSStatusbarShowSimulatorVersion"
 		 tool_tip="Shows the current simulator version in the V1-like status bar."/>
+		 <!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show onmifilter controls"
+		 left="10"
+		 name="show_omnifilter_controls_check"
+		 width="270"
+		 control_name="OmnifilterControls"
+		 tool_tip="Controls include enable|disable omnifilter, toggle omnifilter rules editor and change active rule set."/>
+		 <!-- <FS:MJR> [FIRE-36776] -->
 		<check_box
 		 top_pad="4"
 		 follows="left|top"
@@ -840,7 +851,7 @@
 		 name="statusbar_timeformat_textbox"
 		 left="13"
 		 top_pad="8"
-		 width="75">
+		 width="85">
 		 Clock format:
 		</text>
 		<combo_box
@@ -1103,7 +1114,7 @@
 			Visible name columns:
 		</text>
 		<check_box
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 follows="left|top"
 		 height="16"
@@ -1146,11 +1157,11 @@
 		 left="20"
 		 follows="left|top"
 		 name="textFriendListSortOrder"
-		 width="60">
+		 width="70">
 		 Sort list by:
 		</text>
 		<radio_group
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 height="16"
 		 layout="topleft"
@@ -1179,11 +1190,11 @@
 		 left="20"
 		 follows="left|top"
 		 name="textFriendListFullNameFormat"
-		 width="105">
+		 width="115">
 		 Show full name as:
 		</text>
 		<radio_group
-		 top_delta="0"
+		 top_delta="2"
 		 left_pad="15"
 		 height="16"
 		 layout="topleft"
@@ -1648,7 +1659,7 @@
        left="15"
        name="FSReportRegionRestartToChat"
        top_pad="3"
-       width="215" />
+       width="220" />
       <spinner
        top_delta="-4"
        control_name="FSRegionRestartAnnounceChannel"
@@ -1790,7 +1801,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-[VIEWER_GENERATION] default 0. Viewer 1 default 2.
+Second Life viewer default 0. Viewer 1 default 2.
         </text>
 
         <text
@@ -1831,7 +1842,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-[VIEWER_GENERATION] default 20. Viewer 1 default 18.
+Second Life viewer default 20. Viewer 1 default 18.
         </text>
 
         <text

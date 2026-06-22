@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel.string name="packet_loss_tooltip">Perda de pacotes</panel.string>
+	<panel.string name="bandwidth_tooltip">Largura de banda</panel.string>
+	<panel.string name="time">[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]</panel.string>
+	<panel.string name="timeTooltip">[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]</panel.string>
+	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Esta parcela está à venda."/>
+		<text name="parcel_info_text" value="(carregando...)" tool_tip="Nome da parcela em que você está. Clique para abrir as informações do terreno."/>
+	</panel>
+	<panel name="menu_search_panel" left="-586">
+		<search_editor label="Buscar menu" name="search_menu_edit" tool_tip="Digite aqui o termo de busca. Os resultados serão exibidos para correspondências no nome de um item de menu."/>
+	</panel>
+	<panel name="balance_bg" left="-454">
+		<text name="balance" tool_tip="Clique para atualizar seu saldo em L$" value="?? L$"/>
+		<button label="Comprar L$" name="buyL" tool_tip="Clique para comprar mais L$"/>
+	</panel>
+	<panel name="time_and_media_bg" width="351">
+		<icon name="dd_icon" tool_tip="Distância de renderização"/>
+		<slider tool_tip="Distância máxima da câmera a ser exibida (em metros)" name="drawdistance"/>
+		<text name="TimeText" tool_tip="Hora atual (Pacífico)" width="78">24:00:00 PST</text>
+		<button name="stream_toggle_btn" tool_tip="Iniciar/parar o stream de áudio da parcela"/>
+		<button name="media_toggle_btn" tool_tip="Iniciar/parar todas as mídias (música, vídeo, páginas web)"/>
+		<button name="volume_btn" tool_tip="Controle do volume geral"/>
+		<text name="FPSText" tool_tip="Quadros por segundo">
+			200.0
+		</text>
+	</panel>
+</panel>

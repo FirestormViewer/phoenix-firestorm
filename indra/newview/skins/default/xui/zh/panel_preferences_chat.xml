@@ -223,7 +223,40 @@
 			<button name="Def_UISndFSKeywordSound" label="↻" tool_tip="重設。" />
 		</panel>
 		<panel label="指令" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab 文件]
+			</text>
 			<check_box label="使用聊天欄傳送指令行" name="chat_cmd_toggle" />.
-			<text name="FSCmdLineCalc_txt">計算表達式（例如：cmd SIN(2+2)）</text><text name="FSCmdLineDrawDistance_txt">更改顯示距離（例如：cmd meters）</text><text name="FSCmdLineBandWidth_txt">最大頻寬（例如：cmd kbps）</text><text name="FSCmdLineCopyCam_txt">複製相機位置</text><text name="FSCmdLineAO_txt">啟用/禁用環境光遮蔽（例如：cmd on/off）</text><text name="FSCmdLineClearChat_txt">清除記錄（例如：cmd）</text><line_editor tool_tip="清除聊天記錄以減少垃圾影響。" name="FSCmdLineClearChat" /><text name="FSCmdLineMedia_txt">設定媒體 URL（例如：cmd url type）</text><line_editor tool_tip="設定並播放與輸入的 URL 對應的流。" name="FSCmdLineMedia" /><text name="FSCmdLineMusic_txt">設定音樂 URL（例如：cmd url）</text><line_editor tool_tip="設定並播放與輸入的 URL 對應的音樂流。" name="FSCmdLineMusic" /><text name="FSCmdLineRezPlatform_txt">建立平臺（例如：cmd 0 - 64）</text><slider name="FSCmdLinePlatformSize" label="寬度" tool_tip="您希望平臺有多大？" /><text name="FSCmdLineKeyToName_txt">通過 UUID 取得化身名稱（例如：cmd key）</text><text name="FSCmdLineRollDice_txt">擲骰子（例如：cmd dice faces mt mv）</text><line_editor tool_tip="擲骰子 - cmd [骰子數量] [面數] [修改類型（可選）] [修改值（可選）]。例如：cmd 1 20、cmd 2 40 + 5。如果沒有參數，則為 cmd 1 6（標準骰子）。" name="FSCmdLineRollDice" /><text name="FSCmdLinePos_txt">傳送到類比主機(sim)中（例如：cmd x y z）</text><text name="FSCmdLineGround_txt">傳送到地面（例如：cmd）</text><text name="FSCmdLineHeight_txt">傳送到指定高度..（例如：cmd z）</text><text name="FSCmdTeleportToCam_txt">傳送到相機位置（例如：cmd）</text><text name="FSCmdLineOfferTp_txt">傳送化身（例如：cmd key）</text><text name="FSCmdLineTP2_txt">傳送至化身（例如：cmd name）</text><line_editor tool_tip="此指令的語法允許部分名稱，並且不區分大小寫。 在打開雷達的情況下，結果更具相關性。" name="FSCmdLineTP2" /><text name="FSCmdLineTeleportHome_txt">傳送回家（例如：cmd）</text><text name="FSCmdLineMapTo_txt">傳送到類比主機(sim)（例如：cmd simname）</text><check_box label="在類比主機(sim)之間使用相同的位置" name="toggle" /></panel>
+			<text name="FSCmdLineCalc_txt">計算表達式（例如：cmd SIN(2+2)）</text>
+			<text name="FSCmdLineDrawDistance_txt">更改顯示距離（例如：cmd meters）</text>
+			<text name="FSCmdLineBandWidth_txt">最大頻寬（例如：cmd kbps）</text>
+			<text name="FSCmdLineCopyCam_txt">複製相機位置</text>
+			<text name="FSCmdLinePasteCam_txt">設定攝影機位置（例如：pos focus roll）</text>
+			<text name="FSCmdLineAO_txt">啟用/禁用環境光遮蔽（例如：cmd on/off）</text>
+			<text name="FSCmdLineClearChat_txt">清除記錄（例如：cmd）</text>
+			<line_editor tool_tip="清除聊天記錄以減少垃圾影響。" name="FSCmdLineClearChat" />
+			<text name="FSCmdLineMedia_txt">設定媒體 URL（例如：cmd url type）</text>
+			<line_editor tool_tip="設定並播放與輸入的 URL 對應的流。" name="FSCmdLineMedia" />
+			<text name="FSCmdLineMusic_txt">設定音樂 URL（例如：cmd url）</text>
+			<line_editor tool_tip="設定並播放與輸入的 URL 對應的音樂流。" name="FSCmdLineMusic" />
+			<text name="FSCmdLineRezPlatform_txt">建立平臺（例如：cmd 0 - 64）</text>
+			<slider name="FSCmdLinePlatformSize" label="寬度" tool_tip="您希望平臺有多大？" />
+			<text name="FSCmdLineKeyToName_txt">通過 UUID 取得化身名稱（例如：cmd key）</text>
+			<text name="FSCmdLineRollDice_txt">擲骰子（例如：cmd dice faces mt mv）</text>
+			<line_editor tool_tip="擲骰子 - cmd [骰子數量] [面數] [修改類型（可選）] [修改值（可選）]。例如：cmd 1 20、cmd 2 40 + 5。如果沒有參數，則為 cmd 1 6（標準骰子）。" name="FSCmdLineRollDice" />
+			<text name="FSCmdLineTrackPos_txt">追蹤位置或化身（指令：pos 或 名稱）</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="在世界地圖上為一個位置（cpcampos 格式）或部分化身名稱設定追蹤信標"/>
+			<text name="FSCmdLinePos_txt">傳送到類比主機(sim)中（例如：cmd x y z）</text>
+			<text name="FSCmdLineGround_txt">傳送到地面（例如：cmd）</text>
+			<text name="FSCmdLineHeight_txt">傳送到指定高度..（例如：cmd z）</text>
+			<text name="FSCmdTeleportToCam_txt">傳送到相機位置（例如：cmd）</text>
+			<text name="FSCmdLineOfferTp_txt">傳送化身（例如：cmd key）</text>
+			<text name="FSCmdLineTP2_txt">傳送至化身（例如：cmd name）</text>
+			<line_editor tool_tip="此指令的語法允許部分名稱，並且不區分大小寫。 在打開雷達的情況下，結果更具相關性。" name="FSCmdLineTP2" />
+			<text name="FSCmdLineTeleportHome_txt">傳送回家（例如：cmd）</text>
+			<text name="FSCmdLineMapTo_txt">傳送到類比主機(sim)（例如：cmd simname）</text>
+			<check_box label="在類比主機(sim)之間使用相同的位置" name="toggle" />
+			<check_box label="將指令結果傳送到頻道：" name="FSCmdLineAnnounceToChannel" />
+		</panel>
 	</tab_container>
 </panel>

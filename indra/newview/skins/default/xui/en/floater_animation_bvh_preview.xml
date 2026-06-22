@@ -597,11 +597,10 @@ Maximum animation length is [MAX_LENGTH] seconds.
      text_color="EmphasisColor"
      follows="top|left"
      layout="topleft"
-     left="70"
-     width="200"
+     left="10"
+     width="265"
      name="bad_animation_text">
-        Unable to read animation file.
-We recommend BVH files exported from Poser 4.
+        Unable to read animation file. We recommend BVH files exported from Poser 4.
     </text>
   <button
     bottom="-77"

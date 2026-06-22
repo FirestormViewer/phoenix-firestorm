@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Câmera" name="lst_action"/>
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Olhar para cima" />
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Olhar para baixo" />
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Câmera para frente" />
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Câmera para trás" />
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Câmera rápida para frente" />
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Câmera rápida para trás" />
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Girar câmera para cima" />
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Girar câmera para baixo" />
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Pan câmera para cima" />
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Pan câmera para baixo" />
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Pan câmera para esquerda" />
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Pan câmera para direita" />
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Pan câmera para dentro" />
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Pan câmera para fora" />
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="Girar câmera no sentido anti-horário" value="Anti-horário" />
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="Girar câmera no sentido horário" value="Horário" />
+	</rows>
+	<rows name="roll_left">
+		<columns name="lst_action" value="Inclinar câmera para esquerda" />
+	</rows>
+	<rows name="roll_right">
+		<columns name="lst_action" value="Inclinar câmera para direita" />
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Câmera para frente sentado" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Câmera para trás sentado" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Girar câmera para cima sentado" />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Girar câmera para baixo sentado" />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Girar câmera sentado no sentido anti-horário" value="Anti-horário sentado" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Girar câmera sentado no sentido horário" value="Horário sentado" />
+	</rows>
+</contents>

@@ -39,6 +39,7 @@
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture = false);
 void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.f);
 void cmdline_tp2name(std::string_view target);
+void cmdline_track(std::string_view params);
 LLUUID cmdline_partial_name2key(std::string name);
 
 bool cmdline_packager(std::string_view message, const LLUUID& fromID, const LLUUID& ownerID);

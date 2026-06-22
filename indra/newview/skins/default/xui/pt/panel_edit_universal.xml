@@ -2,18 +2,18 @@
 <panel name="edit_universal_panel">
 	<scroll_container name="avatar_universal_scroll">
 		<panel name="avatar_universal_color_panel">
-			<texture_picker label="Tatuagem na cabeça" name="Head Universal Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem parte de cima" name="Upper Universal Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem de baixo" name="Lower Universal Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem de saia" name="Skirt Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem de cabelo" name="Hair Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem de olhos" name="Eyes Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem no Braço esquerdo" name="Left Arm Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Tatuagem na perna esquerdo" name="Left Leg Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Aux1 Tatuagem" name="Aux1 Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Aux2 Tatuagem" name="Aux2 Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<texture_picker label="Aux3 Tatuagem" name="Aux3 Tattoo" tool_tip="Clique para selecionar uma imagem"/>
-			<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Selecionar a cor"/>
+			<texture_picker label="Tatuagem da cabeça" name="Head Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem superior" name="Upper Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem inferior" name="Lower Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem da saia" name="Skirt Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem do cabelo" name="Hair Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem dos olhos" name="Eyes Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem do braço esquerdo" name="Left Arm Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem da perna esquerda" name="Left Leg Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem AUX 1" name="Aux1 Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem AUX 2" name="Aux2 Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<texture_picker label="Tatuagem AUX 3" name="Aux3 Tattoo" tool_tip="Clique para escolher uma imagem"/>
+			<color_swatch label="Cor/Tonalidade" name="Color/Tint" tool_tip="Clique para abrir o seletor de cores"/>
 		</panel>
 	</scroll_container>
 </panel>

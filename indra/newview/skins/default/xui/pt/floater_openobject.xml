@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="objectcontents" title="CONTEÚDO DO OBJETO">
+<floater name="objectcontents" title="Conteúdo do objeto">
 	<text name="object_name">
 		[DESC]:
 	</text>
-	<text name="border_note">
-		Copiar para inventário e vestir
-	</text>
-	<button label="Adicionar ao look" label_selected="Adicionar ao look" left="152" name="copy_and_wear_button"/>
-	<button label="Substituir look" label_selected="Substituir look" name="copy_and_replace_button"/>
-	<button label="Apenas copiar para inventário" label_selected="Apenas copiar para inventário" name="copy_to_inventory_button" width="132"/>
-	<button label="Cancelar" label_selected="Cancelar" name="cancel_button"/>
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Copiar para o inventário" name="copy_flyout">
+				<flyout_button.item label="Substituir visual pelo conteúdo" name="replace"/>
+				<flyout_button.item label="Adicionar conteúdo ao visual" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Cancelar" label_selected="Cancelar" name="cancel_button"/>
+		</layout_panel>
+	</layout_stack>
 </floater>

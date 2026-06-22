@@ -1,22 +1,97 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="env_adjust_snapshot" title="Iluminação pessoal">
+	<string name="hdr_string">
+		Escala HDR:
+	</string>
+	<string name="brightness_string">
+		Brilho:
+	</string>
+	<string name="hdr_tooltip">
+		Intensidade dos efeitos de iluminação, como céus realistas e exposição dinâmica. 1.0 é o padrão, 0 desliga; valores entre 0 e 1 misturam Ambient com HDR.
+	</string>
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
-				<layout_panel>
-					<button label="Redefinir" name="btn_reset" tool_tip="Feche e redefina e Compartilhe o Ambiente"/>
+				<layout_panel name="lp_1">
+					<text name="ambient_lbl">
+						Ambiente:
+					</text>
+					<text name="blue_horizon_lbl">
+						Horiz. azul:
+					</text>
+					<text name="blue_density_lbl">
+						Dens. azul:
+					</text>
+					<button label="Restaurar" name="btn_reset" tool_tip="Fechar e restaurar o ambiente compartilhado"/>
+					<text name="sun_color_lbl">
+						Cor do sol:
+					</text>
+					<text name="cloud_color_lbl">
+						Cor das nuvens:
+					</text>
 					<text name="cloud_map_label">
-						Imagem de nuvem:
+						Imagem das nuvens:
+					</text>
+					<text name="water_map_label">
+						Imagem da água:
 					</text>
 				</layout_panel>
-				<layout_panel>
+				<layout_panel name="lp_2">
+					<text name="haze_horizon_label">
+						Horizonte de neblina:
+					</text>
+					<text name="haze_density_label">
+						Densidade da neblina:
+					</text>
+					<text name="cloud_coverage_label">
+						Cobertura de nuvens:
+					</text>
+					<text name="cloud_scale_label">
+						Escala das nuvens:
+					</text>
+					<text name="reflection_probe_ambiance_label">
+						Ambiente da sonda de reflexão:
+					</text>
+					<slider name="probe_ambiance" tool_tip="Intensidade da iluminação indireta baseada no ambiente. Com HDR em zero, a escala vira Brilho."/>
+					<text name="scene_gamma_label">
+						Brilho:
+					</text>
+				</layout_panel>
+				<layout_panel name="lp_3">
 					<text name="label">
-						Dom:
+						Sol:
 					</text>
-					<check_box label="Exibir baliza" name="sunbeacon"/>
+					<text name="scale_label">
+						Escala:
+					</text>
+					<text name="glow_focus_label">
+						Foco do brilho:
+					</text>
+					<text name="glow_size_label">
+						Tamanho do brilho:
+					</text>
+					<text name="star_brightness_label">
+						Brilho das estrelas:
+					</text>
+					<text name="sun_azimuth_label">
+						Azimute:
+					</text>
+					<text name="sun_elevation_label">
+						Elevação:
+					</text>
+					<check_box label="Mostrar beacon" name="sunbeacon"/>
 				</layout_panel>
-				<layout_panel>
-					<check_box label="Exibir baliza" name="moonbeacon"/>
+				<layout_panel name="lp_4">
+					<text name="label">
+						Lua:
+					</text>
+					<text name="moon_azimuth_label">
+						Azimute:
+					</text>
+					<text name="moon_elevation_label">
+						Elevação:
+					</text>
+					<check_box label="Mostrar beacon" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

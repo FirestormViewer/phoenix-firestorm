@@ -831,10 +831,6 @@
     <color
      name="CurrencyColor"
      reference="LabelTextColor" />
-
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
   <color
     name="OutfitGalleryItemSelected"
     reference="EmphasisColor" />
@@ -856,4 +852,7 @@
   <color
      name="NotecardCursorColor"
      reference="TextCursorColor" />
+  <color
+    name="HighlightPanelBackground"
+    reference="EmphasisColor" />
 </colors>

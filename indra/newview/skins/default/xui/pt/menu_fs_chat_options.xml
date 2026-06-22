@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Mostrar radar..." name="nearby_people"/>
+	<menu_item_check label="Mostrar voz próxima..." name="nearby_voice"/>
+	<menu_item_check label="Mostrar lista de bloqueio..." name="block_list"/>
+	<menu_item_check label="Usar cabeçalhos de chat no estilo V1" name="plain_text_chat_history"/>
+	<menu_item_check label="Mostrar ícones de perfil nos cabeçalhos do chat" name="chat_header_icons"/>
+	<context_menu label="Tamanho da fonte..." name="font_size">
+		<menu_item_check label="Pequena" name="font_size_small"/>
+		<menu_item_check label="Média" name="font_size_medium"/>
+		<menu_item_check label="Grande" name="font_size_large"/>
+		<menu_item_check label="Enorme" name="font_size_huge"/>
+	</context_menu>
+	<menu_item_check label="Mostrar chevron adicional (&gt;) como indicador de digitação" name="typing_chevron"/>
+	<menu_item_check label="Mostrar notificação de nova mensagem" name="new_message_notification"/>
+	<menu_item_check label="Mostrar barra de chat" name="show_chat_bar"/>
+	<menu_item_check label="Mostrar seleção de canal" name="show_channel_selection"/>
+	<menu_item_check label="Mostrar botão de emoji" name="show_emoji_button"/>
+	<menu_item_check label="Mostrar tipo de chat / botão enviar" name="show_send_button"/>
+	<menu_item_check label="Mostrar botão de enviar nas sessões de IM" name="show_im_send_button"/>
+</toggleable_menu>

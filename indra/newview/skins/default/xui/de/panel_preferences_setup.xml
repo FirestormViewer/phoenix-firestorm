@@ -36,7 +36,7 @@
 				<combo_box.item label="Fünf Fenster" name="web_5"/>
 				<combo_box.item label="Zehn Fenster" name="web_10"/>
 			</combo_box>
-			<button label="Webbrowser-Cache löschen" name="ClearWebBrowserCache" width="160"/>
+			<button label="Webbrowser-Cache löschen" name="ClearWebBrowserCache" width="180"/>
 			<check_box label="Javascript aktivieren" name="browser_javascript_enabled"/>
 			<check_box label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
 			<button label="Proxy-Einstellungen ändern" label_selected="Proxy-Einstellungen ändern" name="set_proxy"/>
@@ -55,25 +55,28 @@
 			<text name="Cache location">
 				Cache-Speicherort:
 			</text>
-			<button label="Öffnen" label_selected="Öffnen" name="open_cache"/>
-			<button label="Setzen" label_selected="Setzen" name="set_cache" width="45"/>
-			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_cache" width="82"/>
-			<button label="Löschen" label_selected="Löschen" name="clear_cache" width="53" left_pad="5"/>
+			<line_editor name="cache_location" width="250"/>
+			<button label="Öffnen" label_selected="Öffnen" name="open_cache" width="50"/>
+			<button label="Setzen" label_selected="Setzen" name="set_cache" width="50"/>
+			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_cache" width="87"/>
+			<button label="Löschen" label_selected="Löschen" name="clear_cache" width="57" left_pad="5"/>
 			<text name="Sound Cache location">
 				Sound-Cache-Speicherort:
 			</text>
-			<button label="Öffnen" label_selected="Öffnen" name="open_sound_cache"/>
-			<button label="Setzen" label_selected="Setzen" name="set_sound_cache" width="45"/>
-			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_sound_cache" width="82"/>
+			<line_editor name="FSSoundCacheLocation" width="250"/>
+			<button label="Öffnen" label_selected="Öffnen" name="open_sound_cache" width="50"/>
+			<button label="Setzen" label_selected="Setzen" name="set_sound_cache" width="50"/>
+			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_sound_cache" width="87"/>
 			<check_box label="DSF (Sound) Cache-Dateien beim Ausloggen nicht löschen" tool_tip="Falls aktiviert, werden entpackte Sound-Dateien beim Ausloggen nicht aus dem Cache gelöscht, wodurch das Abspielen von Sounds verbessert werden kann. ACHTUNG: Hierdurch kann die Cache-Größe sehr schnell ansteigen und zudem wird Cache-Größenlimit in diesem Fall NICHT beachtet, wodurch mehr als 10GB an Festplattenspeicher belegt werden kann! Diese Option ist in Firestorm standardmäßig deaktiviert." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Speicherort für Chatprotokoll und Verläufe:
 			</text>
-			<button label="Öffnen" label_selected="Öffnen" name="open_log_path_button-panelsetup"/>
-			<button label="Setzen" label_selected="Setzen" name="log_path_button-panelsetup" width="45"/>
-			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="82"/>
-			<button label="Öffne Viewer-Protokolle" label_selected="Öffne Viewer-Protokolle" name="browse_crashlogs" width="140"/>
-			<button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
+			<line_editor name="log_path_string-panelsetup" width="250"/>
+			<button label="Öffnen" label_selected="Öffnen" name="open_log_path_button-panelsetup" width="50"/>
+			<button label="Setzen" label_selected="Setzen" name="log_path_button-panelsetup" width="50"/>
+			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="87"/>
+			<button label="Öffne Viewer-Protokolle" label_selected="Öffne Viewer-Protokolle" name="browse_crashlogs" width="155"/>
+			<button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="200"/>
 		</panel>
 	</tab_container>
 </panel>

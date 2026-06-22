@@ -1,23 +1,33 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu name="Outfit">
-	<menu name="New Clothes" label="Novas Roupas">
-		<menu_item_call name="New Skirt" label="Nova Saia"/>
-		<menu_item_call name="New Underpants" label="Novas Roupas Íntimas"/>
-		<menu_item_call name="New Undershirt" label="Nova Camisa de Baixo"/>
-		<menu_item_call name="New Shirt" label="Nova Camisa"/>
-		<menu_item_call name="New Pants" label="Nova Calça"/>
-		<menu_item_call name="New Tattoo" label="Nova Tatuagem"/>
-		<menu_item_call name="New Physics" label="Novo Físico"/>
-		<menu_item_call name="New Jacket" label="Nova Jaqueta"/>
-		<menu_item_call name="New Shoes" label="Novos Sapatos"/>
-		<menu_item_call name="New Gloves" label="Novas Luvas"/>
-		<menu_item_call name="New Alpha" label="Novo Alpha"/>
-		<menu_item_call name="New Socks" label="Novas Meias"/>
+	<menu_item_call label="Substituir outfit atual" name="wear_replace"/>
+	<menu_item_call label="Adicionar ao outfit atual" name="wear_add"/>
+	<menu_item_call label="Remover do outfit atual" name="take_off"/>
+	<menu_item_call label="Imagem..." name="thumbnail"/>
+	<menu_item_call label="Adicionar aos favoritos" name="favorites_add"/>
+	<menu_item_call label="Remover dos favoritos" name="favorites_remove"/>
+	<menu_item_call label="Editar outfit" name="edit"/>
+	<menu_item_call label="Renomear outfit" name="rename"/>
+	<menu_item_call label="Salvar outfit" name="save"/>
+	<menu_item_call label="Excluir outfit" name="delete"/>
+	<menu label="Novas roupas" name="New Clothes">
+		<menu_item_call label="Nova camisa" name="New Shirt"/>
+		<menu_item_call label="Nova calça" name="New Pants"/>
+		<menu_item_call label="Novos sapatos" name="New Shoes"/>
+		<menu_item_call label="Novas meias" name="New Socks"/>
+		<menu_item_call label="Nova jaqueta" name="New Jacket"/>
+		<menu_item_call label="Nova saia" name="New Skirt"/>
+		<menu_item_call label="Novas luvas" name="New Gloves"/>
+		<menu_item_call label="Nova camiseta de baixo" name="New Undershirt"/>
+		<menu_item_call label="Nova roupa íntima inferior" name="New Underpants"/>
+		<menu_item_call label="Nova máscara alfa" name="New Alpha"/>
+		<menu_item_call label="Nova física" name="New Physics"/>
+		<menu_item_call label="Nova tatuagem" name="New Tattoo"/>
 	</menu>
-	<menu name="New Body Parts" label="Novas Partes do Corpo">
-		<menu_item_call name="New Hair" label="Novo Cabelo"/>
-		<menu_item_call name="New Eyes" label="Novos Olhos"/>
-		<menu_item_call name="New Shape" label="Novo Formato"/>
-		<menu_item_call name="New Skin" label="Nova Pele"/>
+	<menu label="Novas partes do corpo" name="New Body Parts">
+		<menu_item_call label="Nova forma" name="New Shape"/>
+		<menu_item_call label="Nova pele" name="New Skin"/>
+		<menu_item_call label="Novo cabelo" name="New Hair"/>
+		<menu_item_call label="Novos olhos" name="New Eyes"/>
 	</menu>
 </context_menu>

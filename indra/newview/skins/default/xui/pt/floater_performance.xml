@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="MELHORAR O DESEMPENHO GRÁFICO">
+	<string name="fps_text" value="quadros por segundo"/>
+	<string name="max_text" value=" (máximo)"/>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">quadros por segundo</text>
+			<text name="fps_desc1_lbl">Aguarde de 5 a 10 segundos</text>
+			<text name="fps_desc2_lbl">para que as alterações sejam aplicadas.</text>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="autoadjustments_subpanel">
+			<text name="auto_adj_lbl">Ajuste automático das configurações (recomendado)</text>
+			<text name="auto_adj_desc">Permita o ajuste automático para alcançar a taxa de quadros desejada.</text>
+		</panel>
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">Configurações gráficas</text>
+			<text name="settings_desc">Ajuste distância de renderização, água, iluminação e muito mais.</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">Avatares próximos</text>
+			<text name="avatars_nearby_desc">Controle a exibição completa dos avatares próximos.</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">Complexidade do seu avatar</text>
+			<text name="complexity_info">Reduza a complexidade do seu avatar se o FPS atual não estiver satisfatório.</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl" width="135">HUDs ativos</text>
+			<text name="huds_desc" width="395">Remover HUDs não utilizados pode melhorar o desempenho.</text>
+		</panel>
+	</panel>
+</floater>

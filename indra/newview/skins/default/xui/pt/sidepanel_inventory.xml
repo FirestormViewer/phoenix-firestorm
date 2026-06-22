@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Coisas" name="objects panel">
+<panel label="Outros" name="objects panel">
 	<panel label="" name="sidepanel_inventory_panel">
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_layout_panel">
@@ -11,32 +11,17 @@
 						Itens recebidos
 					</string>
 					<button label="Itens recebidos" name="inbox_btn"/>
+					<button tool_tip="Recarregar a lista de itens recebidos" name="reload_received_items_btn"/>
 					<text name="inbox_fresh_new_count">
 						[NUM] novo(s)
 					</text>
-					<panel name="inbox_inventory_placeholder_panel" tool_tip="Arraste e solte itens para o seu inventário para usá-los">
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="Arraste itens para o seu inventário para usá-los">
 						<text name="inbox_inventory_placeholder">
-							As compras do marketplace serão entregues aqui.
+							Compras no Marketplace serão entregues aqui.
 						</text>
 					</panel>
 				</panel>
 			</layout_panel>
 		</layout_stack>
-		<panel name="button_panel">
-			<layout_stack name="button_panel_ls">
-				<layout_panel name="info_btn_lp">
-					<button label="Perfil" name="info_btn" tool_tip="Mostrar perfil do objeto"/>
-				</layout_panel>
-				<layout_panel name="share_btn_lp">
-					<button label="Compartilhar" name="share_btn" tool_tip="Compartilhar item de inventário"/>
-				</layout_panel>
-				<layout_panel name="shop_btn_lp">
-					<button label="Comprar" name="shop_btn" tool_tip="Abrir página do Marketplace"/>
-					<button label="Vestir" name="wear_btn" tool_tip="Vestir visual selecionado"/>
-					<button label="Jogar" name="play_btn"/>
-					<button label="Teletransportar" name="teleport_btn" tool_tip="Teletransportar para a área selecionada"/>
-				</layout_panel>
-			</layout_stack>
-		</panel>
 	</panel>
 </panel>
