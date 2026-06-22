@@ -322,7 +322,7 @@
          left_delta="5"
          top_pad="3"
          name="ShadowDetail"
-         width="150">
+         width="185">
           <combo_box.commit_callback
          function="Pref.RenderOptionUpdate" />
           <combo_box.item
@@ -358,7 +358,7 @@
          left_delta="5"
          top_pad="3"
          name="ReflectionDetail"
-         width="150">
+         width="185">
           <combo_box.item
            label="Static Only"
            name="0"
@@ -431,7 +431,7 @@
          left_delta="5"
          top_pad="3"
          name="LocalLightsDetail"
-         width="150">
+         width="185">
           <combo_box.item
            label="Full (default)"
            name="3"
@@ -468,7 +468,7 @@
          left_delta="5"
          top_pad="3"
          name="MirrorResolution"
-         width="150">
+         width="185">
           <combo_box.item
            label="256"
            name="0"
@@ -507,7 +507,7 @@
          left_delta="5"
          top_pad="3"
          name="HeroProbeUpdateRate"
-         width="150">
+         width="185">
           <combo_box.item
            label="Low"
            name="6"
