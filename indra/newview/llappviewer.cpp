@@ -3976,6 +3976,12 @@ LLSD LLAppViewer::getViewerInfo() const
     info["SIMD"] = "SSE2";
 #endif
 
+// <FS:PP> LTO indicator
+#ifdef USE_LTO
+    info["SIMD"] = info["SIMD"].asString() + "-LTO";
+#endif
+// </FS:PP>
+
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
 #if defined OPENSIM
     info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");

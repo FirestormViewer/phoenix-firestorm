@@ -117,6 +117,14 @@ endif (USE_AVX_OPTIMIZATION)
 
 add_subdirectory(cmake)
 
+# <FS:PP> LTO indicator
+if (USE_LTO)
+  message(STATUS "Compiling with Link Time Optimization")
+else (USE_LTO)
+  message(STATUS "Compiling without Link Time Optimization")
+endif (USE_LTO)
+# </FS:PP> LTO indicator
+
 # <FS:Beq> Tracy Profiler support
 if (USE_TRACY)
   message(STATUS "Compiling with Tracy profiler")

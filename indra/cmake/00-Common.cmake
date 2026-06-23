@@ -54,6 +54,7 @@ endif()
 set(USE_LTO OFF CACHE BOOL "Enable Link Time Optimization")
 if(USE_LTO)
   set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  add_compile_definitions(USE_LTO) # <FS:PP> LTO indicator
 endif()
 
 # Don't bother with a MinSizeRel or Debug builds.
