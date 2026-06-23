@@ -53,6 +53,12 @@ endif()
 
 set(USE_LTO OFF CACHE BOOL "Enable Link Time Optimization")
 if(USE_LTO)
+  # <FS:PP> Force Clang and GCC to use full/monolithic LTO instead of thin/auto
+  if(NOT MSVC)
+    set(CMAKE_CXX_COMPILE_OPTIONS_IPO "-flto")
+    set(CMAKE_C_COMPILE_OPTIONS_IPO "-flto")
+  endif()
+  # </FS:PP>
   set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
   add_compile_definitions(USE_LTO) # <FS:PP> LTO indicator
 endif()
