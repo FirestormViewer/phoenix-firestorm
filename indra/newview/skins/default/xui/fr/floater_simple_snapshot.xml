@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="Photo de l'article">
+	<ui_ctrl name="thumbnail_placeholder"/>
+		<button label="Photographier" name="new_snapshot_btn"/>
+		<button label="Enregistrer" name="save_btn"/>
+		<button label="Annuler" name="cancel_btn"/>
+</floater>

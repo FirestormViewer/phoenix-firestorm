@@ -1377,6 +1377,10 @@ vers
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
+	<notification label="Fermer l'onglet de filtre" name="FSInventoryCustomTabClose">
+		Fermer l'onglet de filtre &quot;[NAME]&quot; ? Ses filtres enregistrés seront supprimés.
+		<usetemplate name="okcancelignore" notext="Annuler" yestext="Oui, fermer" ignoretext="Confirmer avant de fermer l'onglet d'un filtre d'inventaire personnalisé"/>
+	</notification>
 	<notification name="RenameGesture">
 		Nouveau nom du geste :
 		<form name="form">
@@ -3579,7 +3583,8 @@ Les scripts associés à cette expérience pourront effectuer les actions suivan
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Avertissement : l&apos;objet &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt; souhaite un accès total à votre compte en Linden dollars. Si vous autorisez cet accès, il pourra supprimer des fonds de votre compte à tout moment ou le vider entièrement de façon continue sans avis préalable.
+		Avertissement :
+[WARNINGS]
 
 N&apos;autorisez pas cet accès si vous ne comprenez pas entièrement pourquoi l&apos;objet souhaite accéder à votre compte.
 		<form name="form">
@@ -3761,6 +3766,12 @@ Elles vont être bloquées pendant quelques secondes pour votre sécurité.
 	<notification name="SnapshotToLocalDirNotExist">
 		Échec d’enregistrement de la photo dans [PATH] : Le répertoire n&apos;existe pas.
 	</notification>
+	<notification  name="SnapshotSavedToComputer" type="notifytip">
+Capture d'écran enregistrée dans :
+[FILEPATH]
+
+Cliquez pour ouvrir le dossier.
+	</notification>
 	<notification name="PresetNotSaved">
 		Erreur d’enregistrement du préréglage [NAME].
 	</notification>
@@ -3790,6 +3801,13 @@ ce préréglage ou choisir un autre nom.
 	<notification name="VoiceIsMutedByModerator">
 		Le modérateur ignore vos paroles.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		Le modérateur a désactivé votre micro.
+Les personnes à cet endroit ne vous entendront pas parler.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		Les personnes à cet endroit peuvent vous entendre parler.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Malheureusement, nous n'avons pas pu obtenir d'informations sur les avantages pour cette session. Cela ne devrait pas se produire dans un environnement de production normal. Veuillez contacter le service d'assistance. Cette session ne fonctionnera pas normalement et nous vous recommandons de recommencer.
@@ -3994,6 +4012,11 @@ Texture figée de [RESOLUTION] mise à jour localement pour [BODYREGION] au bout
 	<notification name="ConfirmLeaveCall">
 		Voulez-vous vraiment quitter cet appel ?
 		<usetemplate ignoretext="Confirmer avant de quitter l&apos;appel" name="okcancelignore" notext="Non" yestext="Oui"/>
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+		Êtes-vous sûr de vouloir quitter cette conférence ?
+		<usetemplate ignoretext="Confirmer avant de quitter la conférence" name="okcancelignore" notext="Non" yestext="Oui">
+		</usetemplate>
 	</notification>
 	<notification name="ConfirmMuteAll">
 		Vous avez choisi d&apos;ignorer l&apos;ensemble des participants de l&apos;appel du groupe.
@@ -5833,11 +5856,11 @@ Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; 
 	</notification>
 
 	<notification name="OmniFilterRemoveRuleSetOutofBounds">
-		Unable to remove the Rule Set due to index out of bounds.
+		Impossible de supprimer le jeu de règles en raison d'un index hors limites.
 	</notification>
 
 	<notification name="OmniFilterRemoveRuleSetInvalidName">
-		Unable to remove the Rule Set due to name not found.>
+		Impossible de supprimer le jeu de règles car le nom n'a pas été trouvé.
 	</notification>
 
 	<notification name="FSSetTitleRegion">

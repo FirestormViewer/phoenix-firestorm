@@ -3,15 +3,15 @@
 	<menu_item_call label="Nouvelle fenêtre d'inventaire" name="new_window"/>
 	<menu_item_check label="Dossiers protégés" name="Protected Folders"/>
 	<menu_item_check label="Paramètres de l'inventaire..." name="inv_settings"/>
-	<context_menu label="Tabs &amp; Views" name="tabs_and_views_menu">
+	<context_menu label="Onglets &amp; Vues" name="tabs_and_views_menu">
 		<menu_item_check name="list_view" label="Vue liste"/>
 		<menu_item_check name="gallery_view" label="Vue galerie"/>
 		<menu_item_check name="combination_view" label="Vue combinée"/>
-		<menu_item_check name="recent_tab" label="Show Recent tab"/>
-		<menu_item_check name="worn_tab" label="Show Worn tab"/>
-		<menu_item_check name="favorites_tab" label="Show Favorites tab"/>
+		<menu_item_check name="recent_tab" label="Aff. l'onglet Récent"/>
+		<menu_item_check name="worn_tab" label="Aff. l'onglet Portés"/>
+		<menu_item_check name="favorites_tab" label="Aff. l'onglet Favoris"/>
 	</context_menu>
-	<context_menu label="Sorting" name="sorting_menu">
+	<context_menu label="Tri" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="Trier par nom"/>
 		<menu_item_check name="sort_by_recent" label="Trier par date"/>
 		<menu_item_check name="sort_folders_by_name" label="Toujours trier les dossiers par nom"/>
@@ -24,7 +24,7 @@
 		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
 		<menu_item_check name="inventory_search_by_all" label="Tout"/>
 	</context_menu>
-	<context_menu label="Filters &amp; Permissions" name="filters_and_permissions_menu">
+	<context_menu label="Filtres &amp; Permissions" name="filters_and_permissions_menu">
 		<menu_item_call label="Afficher les filtres" name="show_filters"/>
 		<menu_item_call label="Réinitialiser les filtres" name="reset_filters"/>
 		<menu_item_check name="inventory_filter_only_modify" label="Uniquement les éléments modifiables"/>
@@ -32,14 +32,14 @@
 		<menu_item_check name="inventory_filter_only_transfer" label="Uniquement les éléments transférables"/>
 		<menu_item_check name="inventory_filter_coalesced_objects_only" label="Uniquement les objets groupés"/>
 	</context_menu>
-	<context_menu label="Links Management" name="links_management_menu">
+	<context_menu label="Gestion des liens" name="links_management_menu">
 		<menu_item_call label="Trouver tous les liens" name="Find All Links"/>
 		<menu_item_call label="Remplacer les liens" name="Replace Links"/>
 		<menu_item_check name="inventory_filter_show_links" label="Afficher les liens"/>
 		<menu_item_check name="inventory_filter_only_links" label="N'afficher que les liens"/>
 		<menu_item_check name="inventory_filter_hide_links" label="Masquer les liens"/>
 	</context_menu>
-	<context_menu label="Double-click Options" name="double_click_menu">
+	<context_menu label="Options du double-clic" name="double_click_menu">
 		<menu_item_check name="add_inv_toggle" label="Ajouter des objets au double-clic"/>
 		<menu_item_check name="add_invclothing_toggle" label="Ajouter des vêtements au double-clic"/>
 	</context_menu>

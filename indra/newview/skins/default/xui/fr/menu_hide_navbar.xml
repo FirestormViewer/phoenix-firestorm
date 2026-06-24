@@ -5,6 +5,7 @@
 	<menu_item_check label="Afficher la barre de recherche" name="ShowSearchTopBar"/>
 	<menu_item_check label="Afficher l'emplacement dans la barre supérieure" name="ShowMenuBarLocation"/>
 	<menu_item_check label="Afficher la version du simulateur dans la barre supérieure" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Afficher les contrôles Omnifiltre" name="FSOmnifilterControls"/>
 	<menu_item_check label="Afficher la recherche dans les menus" name="FSMenuSearch"/>
 	<menu_item_check label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Afficher les contrôles des médias" name="FSEnableVolumeControls"/>
