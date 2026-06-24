@@ -43,6 +43,7 @@
 #include "llvoiceclient.h"
 
 // <FS:PP> Restore open IMs from previous session
+#include "llavatarnamecache.h"
 #include "llconversationlog.h"
 #include "llimview.h"
 // </FS:PP>
@@ -765,28 +766,48 @@ void FSFloaterIMContainer::restoreOpenIMs()
 
     for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
     {
-        LLSD session_data = *it;
-        if (session_data.isMap())
+        const LLSD& session_data = *it;
+        if (!session_data.isMap())
         {
-            LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
-            std::string session_name = session_data["session_name"].asString();
-            if (other_participant_id.notNull())
-            {
-                LLUUID new_session_id;
-                new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_NOTHING_SPECIAL, other_participant_id);
-                if (new_session_id.notNull())
-                {
-                    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
-                    if (im_floater)
-                    {
-                        if (im_floater->getHost() != this)
-                        {
-                            addFloater(im_floater, false, IM_NOTHING_SPECIAL);
-                        }
-                    }
-                }
-            }
+            continue;
         }
+
+        const LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
+        if (other_participant_id.isNull())
+        {
+            continue;
+        }
+
+        LLAvatarNameCache::get(other_participant_id, boost::bind(&FSFloaterIMContainer::restoreOpenIMSession, _1));
+    }
+}
+
+void FSFloaterIMContainer::restoreOpenIMSession(const LLUUID& other_participant_id)
+{
+    if (other_participant_id.isNull())
+    {
+        return;
+    }
+
+    LLAvatarName av_name;
+    LLAvatarNameCache::get(other_participant_id, &av_name);
+
+    const LLUUID new_session_id = LLIMMgr::getInstance()->addSession(av_name.getDisplayName(), IM_NOTHING_SPECIAL, other_participant_id);
+    if (new_session_id.isNull())
+    {
+        return;
+    }
+
+    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
+    if (!im_floater)
+    {
+        return;
+    }
+
+    FSFloaterIMContainer* container = FSFloaterIMContainer::findInstance();
+    if (container && im_floater->getHost() != container)
+    {
+        container->addFloater(im_floater, false, IM_NOTHING_SPECIAL);
     }
 }
 // </FS:PP>
