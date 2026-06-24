@@ -7593,4 +7593,7 @@ SecondLife.com網站的「支援」部分
 	<string name="OmnifilterReplacement">
 		萬能過濾器替換：[REPLACEMENT]
 	</string>
+	<string name="OmnifilterDefaultName">
+		預設
+	</string>
 </strings>
