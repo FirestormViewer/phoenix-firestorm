@@ -52,7 +52,7 @@
 			<check_box label="Ativar funções de combate" name="FSMouselookCombatFeatures" />
 			<check_box label="Ativar marcadores de alvo" name="ExodusMouselookIFF" />
 			<slider label="Alcance (m)" name="ExodusMouselookIFFRange" />
-			<text name="Mouse Sensitivity" width="195">
+			<text name="Mouse Sensitivity" width="130">
 				Sensibilidade do Mouse:
 			</text>
 			<check_box label="Reverter" name="invert_mouse" />

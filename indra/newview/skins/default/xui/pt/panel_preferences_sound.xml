@@ -258,7 +258,7 @@
 			Distância de atenuação de volume para fontes de mídia:
 		</text>
 		<slider label="Começa a reduzir em:" name="MediaRollOffMin" tool_tip="Distância mínima da fonte sonora a partir da qual o volume começa a diminuir."/>
-		<text name="media_firstinteract_label" tool_tip="Esta configuração define quais mídias, depois de carregadas, não exigem um primeiro clique para interação. Assim, o evento de clique é repassado diretamente para a mídia sem precisar obter foco antes." width="140">
+		<text name="media_firstinteract_label" tool_tip="Esta configuração define quais mídias, depois de carregadas, não exigem um primeiro clique para interação. Assim, o evento de clique é repassado diretamente para a mídia sem precisar obter foco antes." width="180">
 			Primeira interação com mídia:
 		</text>
 		<check_box name="media_first_click_all" label="Toda mídia em objetos"/>
@@ -293,9 +293,9 @@
 			Mostrar título do stream de música:
 		</text>
 		<radio_group name="show_stream_metadata">
-			<radio_item label="Desativado" name="radio_off"/>
-			<radio_item label="Toasts" name="radio_toasts"/>
-			<radio_item label="Chat local" name="radio_chat"/>
+			<radio_item label="Desativado" name="radio_off" width="90"/>
+			<radio_item label="Toasts" name="radio_toasts" width="65"/>
+			<radio_item label="Chat local" name="radio_chat" width="90"/>
 		</radio_group>
 		<check_box name="StreamMetadataAnnounceToChat" label="Enviar título do stream para este canal:" width="230"/>
 	</panel>
