@@ -56,13 +56,13 @@
 			<check_box label="Estilo V1 para histórico de IMs e chat" name="plain_text_chat_history" />
 			<check_box label="Mostrar mini-ícones no estilo [SHORT_VIEWER_GENERATION]" name="ShowChatMiniIcons" />	
 			<check_box label="Exibir fim da última conversa" name="LogShowHistory" />
-			<check_box name="FSTypingChevronPrefix" label="Mostrar seta adicional (&gt;) como indicador de gravação em janelas de mensagens &#10; instantâneas" height="32" />
-			<text name="show_unread_messages_label" width="150">
-				Notificar novas mensagens de:
+			<check_box name="FSTypingChevronPrefix" label="Adicionar seta adicional (&gt;) como indicador de digitação nas sessões de MI"/>
+			<text name="show_unread_messages_label" width="155">
+				Notificar novas mensagens em:
 			</text>
 			<check_box width="150" name="FSNotifyUnreadChatMessages" label="Chat nas proximidades" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
 			<check_box width="200" name="FSNotifyUnreadIMMessages" label="IMs e grupos" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
-			<text name="show_ims_in_label" width="115">
+			<text name="show_ims_in_label" width="90">
 				Ver IMs em:
 			</text>
 			<radio_group name="chat_window" tool_tip="Visualize suas IMs em outra janela ou em uma única janela com diversas abas (é necessário reinício).">
@@ -72,8 +72,8 @@
 			<text name="req_restart_ims" left_pad="55" width="120">
 				(Requer reinício)
 			</text>
-			<text name="tab_direction_label" width="160">
-				Orientação do modo da guia Bate-papo:
+			<text name="tab_direction_label" width="180">
+				Orientação das abas do bate-papo:
 			</text>
 			<radio_group name="chat_tab_direction" tool_tip="Altera a orientação das guias de bate-papo/IMs entre horizontal e vertical quando o bate-papo compacto está ativado. (Requer reinício)">
 				<radio_item label="Horizontal" name="radio_horizontal" />
