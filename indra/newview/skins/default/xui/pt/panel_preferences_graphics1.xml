@@ -179,7 +179,7 @@ Se você não compreende a diferença, não altere esta configuração." />
 		<text name="World Updating">
 			Atualização do Mundo:
 		</text>
-		<check_box label="Congelar atualizações do mundo (pausar tudo)" tool_tip="Congela todas as atualizações recebidas do servidor - interrompe todas as ações no mundo, mas não afeta o chat, mensagens instantâneas ou voz." name="WorldPause" />
+		<check_box label="Congelar atualizações do mundo (pausar tudo)" tool_tip="Congela todas as atualizações recebidas do servidor - interrompe todas as ações no mundo, mas não afeta o chat, IMs ou voz." name="WorldPause" />
 		<check_box label="Limitar FPS" name="FSLimitFramerate" tool_tip="Limita a taxa de quadros a um valor definido pelo usuário. Pode reduzir o consumo de energia e o aquecimento da GPU/CPU." />
 		<slider name="MaxFPS" label="FPS:" />
 		<check_box label="VSync (limitar FPS à taxa do monitor)" name="vsync" tool_tip="Sincroniza a taxa de quadros à taxa de atualização do monitor. Pode resultar em maior gaguejamento e atraso de entrada." />

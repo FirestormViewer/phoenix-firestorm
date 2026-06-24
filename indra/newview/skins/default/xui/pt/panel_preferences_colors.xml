@@ -30,7 +30,7 @@
 				Erro de script
 			</text>
 			<text name="object_im_label">
-				Mensagens instantâneas de objeto
+				IMs de objeto
 			</text>
 			<text name="llownersay_label">
 				proprietário
@@ -69,7 +69,7 @@
 			<check_box name="FSColorIMsDistinctly" label="Cor diferente para IMs/grupos no console:" />
 			<panel name="im_color_panel">
 				<text name="console_im_label">
-					Mensagens instantâneas/bate-papo em grupo
+					IMs/bate-papo em grupo
 				</text>
 			</panel>
 		</panel>

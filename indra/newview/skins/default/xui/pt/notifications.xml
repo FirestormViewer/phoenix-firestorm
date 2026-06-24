@@ -241,7 +241,7 @@ Selecione um único objeto e tente novamente.
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não salvar" yestext="Salvar tudo"/>
 	</notification>
 	<notification name="FriendsAndGroupsOnly">
-		As pessoas que não estão na sua lista de amigos não serão informadas de que você está ignorando suas ligações e mensagens instantâneas.
+		As pessoas que não estão na sua lista de amigos não serão informadas de que você está ignorando suas ligações e IMs.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FavoritesOnLogin">
@@ -1954,12 +1954,12 @@ A adesão é atualmente gratuita.
 	</notification>
 	<notification name="AutorespondModeSet">
 		Resposta automática ativada.
-Os remetentes de mensagens instantâneas recebidas agora recebem a resposta automática configurada.
+Os remetentes de IMs recebidas agora recebem a resposta automática configurada.
 		<usetemplate ignoretext="Quando o status online está definido para resposta automática." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
 		Resposta automática ativada para quem não é amigo.
-As mensagens instantâneas recebidas de pessoas que não estão na lista de amigos agora serão respondidas com a mensagem automática configurada.
+As IMs recebidas de pessoas que não estão na lista de amigos agora serão respondidas com a mensagem automática configurada.
 		<usetemplate ignoretext="Quando a resposta automática está ativada para quem não é amigo." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="RejectTeleportOffersModeSet">
@@ -2961,7 +2961,7 @@ As texturas devem ter dimensões de potências de 2 e não podem exceder [MAX_SI
 		Nenhuma permissão para rez itens.
 	</notification>
 	<notification name="IMAcrossParentEstates">
-		Não é possível enviar mensagens instantâneas pelas propriedades pai.
+		Não é possível enviar IMs pelas propriedades pai.
 	</notification>
 	<notification name="TransferInventoryAcrossParentEstates">
 		Não é possível transferir inventário entre propriedades principais.
@@ -3438,7 +3438,7 @@ Oferecer teletransporte?
 	</notification>
 	<notification name="OfferCallingCard">
 		[NAME] oferece a você um cartão de visita.
-Um marcador será criado em seu inventário para que você possa enviar mensagens instantâneas rapidamente para este residente.
+Um marcador será criado em seu inventário para que você possa enviar IMs rapidamente para este residente.
 		<form name="form">
 			<button name="Accept" text="Aceitar"/>
 			<button name="Decline" text="Recusar"/>
@@ -3726,8 +3726,8 @@ Eles serão bloqueados por alguns segundos para garantir a segurança.
 		</form>
 	</notification>
 	<notification name="ConfirmCloseAll">
-		Tem certeza de que deseja fechar todas as mensagens instantâneas?
-		<usetemplate ignoretext="Confirme antes de fechar todas as mensagens instantâneas." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		Tem certeza de que deseja fechar todas as IMs?
+		<usetemplate ignoretext="Confirme antes de fechar todos os IMs." name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="AttachmentSaved">
 		O anexo foi salvo.

@@ -88,7 +88,7 @@
 		<text name="GroupTopRightRequiresRestart" left_pad="8" top_pad="-14" width="195">
 			(Requer reinicialização)
 		</text>
-		<check_box label="Desativar chiclets para IMs e grupos" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
+		<check_box label="Desativar chiclets para IMs e grupos" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para IMs e bate-papos em grupo (os ícones de mensagens de grupo e o número de IMs não lidas ainda serão exibidos)." />
 		<check_box label="Usar exibição de lista clássica para notificações" name="FSLegacyNotificationWell" tool_tip="Se ativado, o Firestorm usa a visualização de lista original para exibir notificações salvas." width="355" />
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Requer reinicialização)

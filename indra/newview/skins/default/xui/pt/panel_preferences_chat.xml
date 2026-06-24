@@ -27,7 +27,7 @@
 				Anúncios em:
 			</text>
 			<check_box label="Chat nas proximidades" name="show_timestamps_nearby_chat" top_delta="14" left_pad="-75" width="150" />
-			<check_box label="Mensagens instantâneas" name="show_timestamps_im" width="160" />
+			<check_box label="IMs" name="show_timestamps_im" width="160" />
 			<check_box label="Transcrição" name="show_timestamps_transcripts" />
 			<check_box label="Mostrar console de chat" tool_tip="Mostrar/ocultar o console de chat quando a janela de conversas não estiver visível" name="FSShowOnscreenConsole" />
 			<check_box name="FSConsoleClassicDrawMode" label="Modo de exibição clássico no console" tool_tip="No modo de exibição clássico, o fundo do console é exibido como um único bloco em todas as linhas com a largura da linha mais longa." />
@@ -52,7 +52,7 @@
     			<radio_item label="Grande" name="radio3" />
     			<radio_item label="Gigantesco" name="radio4" />
 			</radio_group>
-			<check_box label="Mostrar nomes em mensagens instantâneas diretas" name="IMShowNamesForP2PConv" />
+			<check_box label="Mostrar nomes em IMs diretas" name="IMShowNamesForP2PConv" />
 			<check_box label="Estilo V1 para histórico de IMs e chat" name="plain_text_chat_history" />
 			<check_box label="Mostrar mini-ícones no estilo [SHORT_VIEWER_GENERATION]" name="ShowChatMiniIcons" />	
 			<check_box label="Exibir fim da última conversa" name="LogShowHistory" />
@@ -63,9 +63,9 @@
 			<check_box width="150" name="FSNotifyUnreadChatMessages" label="Chat nas proximidades" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
 			<check_box width="200" name="FSNotifyUnreadIMMessages" label="IMs e grupos" tool_tip="Exibe um aviso com o número de mensagens novas e não lidas na janela se novas mensagens chegarem enquanto a visualização foi rolada para trás para ler o histórico." />
 			<text name="show_ims_in_label" width="115">
-				Ver mensagens instantâneas em:
+				Ver IMs em:
 			</text>
-			<radio_group name="chat_window" tool_tip="Visualize suas mensagens instantâneas (Mensagens instantâneas) em outra janela ou em uma única janela com diversas abas (é necessário reinício).">
+			<radio_group name="chat_window" tool_tip="Visualize suas IMs em outra janela ou em uma única janela com diversas abas (é necessário reinício).">
 				<radio_item label="Janelas separadas" name="radio" />
 				<radio_item label="Guias" name="radio2" />
 			</radio_group>
@@ -75,21 +75,21 @@
 			<text name="tab_direction_label" width="160">
 				Orientação do modo da guia Bate-papo:
 			</text>
-			<radio_group name="chat_tab_direction" tool_tip="Altera a orientação das guias de bate-papo/mensagens instantâneas entre horizontal e vertical quando o bate-papo compacto está ativado. (Requer reinício)">
+			<radio_group name="chat_tab_direction" tool_tip="Altera a orientação das guias de bate-papo/IMs entre horizontal e vertical quando o bate-papo compacto está ativado. (Requer reinício)">
 				<radio_item label="Horizontal" name="radio_horizontal" />
 				<radio_item label="Vertical" name="radio_vertical" />
 			</radio_group>
 			<text name="req_restart_chattabs" width="120">
 				(Requer reinício)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="Ordenar guias IM por tipo:" tool_tip="Ativa a classificação automática de guias de mensagens instantâneas na janela “Conversas”." width="150" />
+			<check_box name="FSAutoOrderIMTabs" label="Ordenar guias IM por tipo:" tool_tip="Ativa a classificação automática de guias de IMs na janela “Conversas”." width="150" />
 			<combo_box name="FSAutoOrderIMTabsPriorities">
-				<combo_box.item name="group_conf_im" label="Grupos, conferências, mensagens instantâneas" />
-				<combo_box.item name="group_im_conf" label="Grupos, mensagens instantâneas, conferências" />
-				<combo_box.item name="conf_group_im" label="Conferências, grupos, mensagens instantâneas" />
-				<combo_box.item name="conf_im_group" label="Conferências, mensagens instantâneas, grupos" />
-				<combo_box.item name="im_group_conf" label="Mensagens instantâneas, grupos, conferências" />
-				<combo_box.item name="im_conf_group" label="Mensagens instantâneas, conferências, grupos" />
+				<combo_box.item name="group_conf_im" label="Grupos, conferências, IMs" />
+				<combo_box.item name="group_im_conf" label="Grupos, IMs, conferências" />
+				<combo_box.item name="conf_group_im" label="Conferências, grupos, IMs" />
+				<combo_box.item name="conf_im_group" label="Conferências, IMs, grupos" />
+				<combo_box.item name="im_group_conf" label="IMs, grupos, conferências" />
+				<combo_box.item name="im_conf_group" label="IMs, conferências, grupos" />
 			</combo_box>
 			<check_box name="FSAutoOrderIMTabsAtTop" label="Inserir novas guias primeiro" />
 			<text name="FSIMTabNameFormat_label" width="180">
@@ -192,12 +192,12 @@
 			<spinner tool_tip="-1 para nome completo do grupo, 0 para desativado" name="FSShowGroupNameLength" />
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Abrir janela de conv. ao receber msg offline" />
 			<check_box name="FSRestoreOpenIMs" label="Restaurar IMs abertas ao iniciar" />
-			<check_box label="Enviar mensagens instantâneas por e-mail quando estou off-line ([EMAIL])" name="send_im_to_email" />
+			<check_box label="Enviar IMs por e-mail quando estou off-line ([EMAIL])" name="send_im_to_email" />
 			<text name="email_settings">
 				[https://accounts.secondlife.com/change_email Abrir configurações de notificação por e-mail para IMs offline]
 			</text>
 			<text name="email_settings_login_to_change">
-				Faça login para personalizar a notificação de mensagens instantâneas off-line por e-mail
+				Faça login para personalizar a notificação de IMs off-line por e-mail
 			</text>
 			<check_box name="FSShowIMInChatHistory" label="Ver IMs e grupos no chat local" />
 			<check_box name="FSLogIMInChatHistory" label="Salvar IMs e grupos no chat local" width="190" />
@@ -209,7 +209,7 @@
 			<check_box name="FSAnnounceIncomingIM" label="Notificar IM assim que remetente começar a digitar" />
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Piscar guias de IM em login/logout de amigos" />
 			<check_box name="FSNotifyNearbyChatFlash" label="Piscar botão de chat ao receber msg local" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando um novo bate-papo chega nas proximidades. A janela de bate-papo deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque." />
-			<check_box name="FSNotifyIMFlash" label="Piscar botão de chat para novas IMs" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando chega uma nova mensagem de emergência ou bate-papo em grupo. A janela correspondente deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque. Esta opção só está disponível se as janelas de mensagens instantâneas (de grupo) forem exibidas como guias em vez de janelas separadas (consulte a guia “Geral”)." />
+			<check_box name="FSNotifyIMFlash" label="Piscar botão de chat para novas IMs" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando chega uma nova mensagem de emergência ou bate-papo em grupo. A janela correspondente deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque. Esta opção só está disponível se as janelas de IMs (de grupo) forem exibidas como guias em vez de janelas separadas (consulte a guia “Geral”)." />
 			<check_box name="FSReportMutedGroupChat" label="Denunciar grupo silenciado no chat local" />
 			<check_box name="FSGroupNoticesToIMLog" label="Mostrar avisos de grupo também no chat do grupo" />
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Mostrar também assunto e autor" />

@@ -29,7 +29,7 @@
 			<key>description</key>
 			<string>Mostrado no lugar da mensagem original quando uma mensagem instantânea recebida é bloqueada.</string>
 			<key>label</key>
-			<string>Mensagens instantâneas recebidas bloqueadas (local)</string>
+			<string>IMs recebidas bloqueadas (local)</string>
 			<key>customizable</key>
 			<boolean>1</boolean>
 		</map>
