@@ -735,14 +735,11 @@ void FSFloaterIMContainer::saveOpenIMs()
     LLSD openIMs = LLSD::emptyArray();
     for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
     {
-        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
-        if (floater)
+        if (FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i)))
         {
-            LLUUID session_id = floater->getKey();
-            if (session_id.notNull())
+            if (LLUUID session_id = floater->getKey(); session_id.notNull())
             {
-                LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
-                if (session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
+                if (auto session = LLIMModel::getInstance()->findIMSession(session_id); session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
                 {
                     LLSD session_data = LLSD::emptyMap();
                     session_data["other_participant_id"] = session->mOtherParticipantID;
@@ -764,9 +761,8 @@ void FSFloaterIMContainer::restoreOpenIMs()
         return;
     }
 
-    for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
+    for (const auto& session_data : llsd::inArray(openIMs))
     {
-        const LLSD& session_data = *it;
         if (!session_data.isMap())
         {
             continue;
@@ -778,19 +774,16 @@ void FSFloaterIMContainer::restoreOpenIMs()
             continue;
         }
 
-        LLAvatarNameCache::get(other_participant_id, boost::bind(&FSFloaterIMContainer::restoreOpenIMSession, _1));
+        LLAvatarNameCache::get(other_participant_id, boost::bind(&FSFloaterIMContainer::restoreOpenIMSession, _1, _2));
     }
 }
 
-void FSFloaterIMContainer::restoreOpenIMSession(const LLUUID& other_participant_id)
+void FSFloaterIMContainer::restoreOpenIMSession(const LLUUID& other_participant_id, const LLAvatarName& av_name)
 {
     if (other_participant_id.isNull())
     {
         return;
     }
-
-    LLAvatarName av_name;
-    LLAvatarNameCache::get(other_participant_id, &av_name);
 
     const LLUUID new_session_id = LLIMMgr::getInstance()->addSession(av_name.getDisplayName(), IM_NOTHING_SPECIAL, other_participant_id);
     if (new_session_id.isNull())

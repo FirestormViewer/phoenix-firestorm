@@ -91,7 +91,7 @@ public:
     // <FS:PP> Restore open IMs from previous session
     void saveOpenIMs();
     void restoreOpenIMs();
-    static void restoreOpenIMSession(const LLUUID& other_participant_id);
+    static void restoreOpenIMSession(const LLUUID& other_participant_id, const LLAvatarName& av_name);
     // </FS:PP>
 
 private:
