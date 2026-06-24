@@ -3,14 +3,14 @@
 	<panel.string name="aspect_ratio_text">
 		[NUM]:[DEN]
 	</panel.string>
-	<check_box label="Permitir múltiplos viewers" name="allow_multiple_viewer_check"/>
+	<check_box label="Permitir múltiplos viewers abertos" name="allow_multiple_viewer_check"/>
 	<check_box label="Mostrar seleção de grid ao entrar" name="show_grid_selection_check"/>
 	<check_box label="Mostrar menu “Avançado”" name="show_advanced_menu_check"/>
 	<check_box label="Mostrar menu “Desenvolvedor” (use por sua conta e risco!)" name="show_develop_menu_check"/>
-	<check_box label="Desativar detecção de VRAM via WMI em sistemas Windows" name="FSDisableWMIProbing"/>
-	<check_box label="Ativar uso de passos de tempo em animações (experimental)" name="UseAnimationTimeSteps" tool_tip="Esta configuração pode reduzir a carga de renderização para avatares distantes, mas também pode fazer as animações deles serem reproduzidas em velocidade incorreta."/>
+	<check_box label="Desativar detecção de VRAM via WMI (Windows)" name="FSDisableWMIProbing"/>
+	<check_box label="Usar passos de tempo em animações (experimental)" name="UseAnimationTimeSteps" tool_tip="Esta configuração pode reduzir a carga de renderização para avatares distantes, mas também pode fazer as animações deles serem reproduzidas em velocidade incorreta."/>
 	<text name="BackgroundYieldTimeText">
 		Tempo, em milissegundos, cedido por quadro para outros aplicativos quando o [APP_NAME] não estiver em primeiro plano (padrão: 40; 1 segundo = 1000 milissegundos):
 	</text>
-	<button label="Redefinir todas as configurações" label_selected="Redefinindo todas as configurações..." name="clear_settings"/>
+	<button label="Redefinir todas as configurações" label_selected="Redefinindo..." name="clear_settings"/>
 </panel>

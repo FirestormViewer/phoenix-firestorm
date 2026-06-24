@@ -23,9 +23,9 @@
 				Navegador web:
 			</text>
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Usar o navegador padrão do sistema para todos os links" name="new_external" tool_tip="Usa o navegador padrão para ajuda, links da web etc. Não recomendado em tela cheia."/>
-				<radio_item label="Usar navegador interno apenas para links do Second Life" name="new_internal" tool_tip="Usa o navegador integrado para abrir ajuda, links da web etc. Esse navegador abre em uma nova janela dentro do [APP_NAME]."/>
-				<radio_item label="Usar navegador interno para todos os links" name="new_internal_all" tool_tip="Usa o navegador integrado para abrir ajuda, links da web etc. Esse navegador abre em uma nova janela dentro do [APP_NAME]."/>
+				<radio_item label="Usar navegador padrão do sistema" name="new_external" tool_tip="Usa o navegador padrão para ajuda, links da web etc. Não recomendado em tela cheia."/>
+				<radio_item label="Navegador interno para links do SL" name="new_internal" tool_tip="Usa o navegador integrado para abrir ajuda, links da web etc. Esse navegador abre em uma nova janela dentro do [APP_NAME]."/>
+				<radio_item label="Navegador interno para todos os links" name="new_internal_all" tool_tip="Usa o navegador integrado para abrir ajuda, links da web etc. Esse navegador abre em uma nova janela dentro do [APP_NAME]."/>
 			</radio_group>
 			<text name="numberwebfloaters_label">
 				Número máximo de janelas do navegador:
@@ -37,9 +37,9 @@
 				<combo_box.item label="Dez janelas" name="web_10"/>
 			</combo_box>
 			<button label="Limpar cache do navegador" name="ClearWebBrowserCache" width="170"/>
-			<check_box label="Ativar JavaScript" name="browser_javascript_enabled"/>
-			<check_box label="Ativar pop-ups do navegador de mídia" name="media_popup_enabled"/>
-			<button label="Alterar configurações de proxy" label_selected="Alterando configurações de proxy" name="set_proxy"/>
+			<check_box label="Habilitar JavaScript" name="browser_javascript_enabled"/>
+			<check_box label="Habilitar pop-ups do navegador de mídia" name="media_popup_enabled"/>
+			<button label="Config. de proxy" label_selected="Configurando proxy" name="set_proxy"/>
 			<text name="home_page_label_l">
 				Página inicial do navegador:
 			</text>
@@ -65,15 +65,15 @@
 			<button label="Abrir" label_selected="Abrir" name="open_sound_cache"/>
 			<button label="Definir" label_selected="Definir" name="set_sound_cache" width="45"/>
 			<button label="Redefinir" label_selected="Redefinir" name="reset_sound_cache" width="82"/>
-			<check_box label="Não excluir arquivos de cache DSF (som) ao desconectar" tool_tip="Se ativado, arquivos de som descompactados não serão removidos do cache ao sair, o que pode melhorar a reprodução de sons. ATENÇÃO: isso pode aumentar rapidamente o uso do cache e o limite de tamanho pode não ser respeitado nesse caso, podendo ocupar mais de 10 GB de disco. Esta opção vem desativada por padrão no Firestorm." name="keep_unpacked_cache"/>
+			<check_box label="Manter arquivos de som no cache ao desconectar" tool_tip="Se ativado, arquivos de som descompactados não serão removidos do cache ao sair, o que pode melhorar a reprodução de sons. ATENÇÃO: isso pode aumentar rapidamente o uso do cache e o limite de tamanho pode não ser respeitado nesse caso, podendo ocupar mais de 10 GB de disco. Esta opção vem desativada por padrão no Firestorm." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Local dos logs e históricos de chat:
 			</text>
 			<button label="Abrir" label_selected="Abrir" name="open_log_path_button-panelsetup"/>
 			<button label="Definir" label_selected="Definir" name="log_path_button-panelsetup" width="45"/>
 			<button label="Redefinir" label_selected="Redefinir" name="reset_logpath" width="82"/>
-			<button label="Abrir logs do viewer" label_selected="Abrir logs do viewer" name="browse_crashlogs" width="140"/>
-			<button label="Abrir pasta de configurações" label_selected="Abrir pasta de configurações" name="browse_settingsdir" width="190"/>
+			<button label="Abrir logs do viewer" label_selected="Abrindo..." name="browse_crashlogs" width="140"/>
+			<button label="Abrir pasta de configs." label_selected="Abrindo..." name="browse_settingsdir" width="190"/>
 		</panel>
 	</tab_container>
 </panel>
