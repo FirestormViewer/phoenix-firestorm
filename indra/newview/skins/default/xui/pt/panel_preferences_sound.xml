@@ -190,9 +190,9 @@
 		<check_box name="mute_when_minimized" label="Silenciar quando minimizado"/>
 		<slider label="Interface" name="UI Volume"/>
 		<slider label="Ambiente" name="Wind Volume"/>
-		<check_box label="Tocar sons de colisão" name="collisions_audio_play_btn" tool_tip="Marque para ouvir sons de colisão"/>
+		<check_box label="Sons de colisão" name="collisions_audio_play_btn" tool_tip="Marque para ouvir sons de colisão"/>
 		<slider label="Sons" name="SFX Volume"/>
-		<check_box label="Ativar sons de gestos" name="gesture_audio_play_btn" tool_tip="Marque para ouvir sons de gestos"/>
+		<check_box label="Sons de gestos" name="gesture_audio_play_btn" tool_tip="Marque para ouvir sons de gestos"/>
 		<slider label="Música" name="Music Volume"/>
 		<check_box label="Ativado" name="enable_music"/>
 		<slider label="Mídia" name="Media Volume"/>
@@ -261,7 +261,7 @@
 		<text name="media_firstinteract_label" tool_tip="Esta configuração define quais mídias, depois de carregadas, não exigem um primeiro clique para interação. Assim, o evento de clique é repassado diretamente para a mídia sem precisar obter foco antes." width="140">
 			Primeira interação com mídia:
 		</text>
-		<check_box name="media_first_click_all" label="Toda mídia em objetos (MOAP)"/>
+		<check_box name="media_first_click_all" label="Toda mídia em objetos"/>
 		<check_box name="media_first_click_any" label="Objetos de qualquer pessoa"/>
 		<check_box name="media_first_click_hud" label="Apenas HUDs vestíveis"/>
 		<check_box name="media_first_click_own" label="Meus objetos"/>
@@ -280,7 +280,7 @@
 	<!-- Music -->
 	<panel label="Música" name="Media Music Panel">
 		<check_box label="Permitir reprodução automática de áudio" name="audio_auto_play_btn" tool_tip="Ative para reproduzir streams de áudio automaticamente."/>
-		<check_box name="FSFadeAudioStream" tool_tip="Ativa fade quando o stream de áudio da parcela muda" label="Ativar fade no stream de áudio da parcela:"/>
+		<check_box name="FSFadeAudioStream" tool_tip="Ativa fade quando o stream de áudio da parcela muda" label="Fade no stream de áudio da parcela:"/>
 		<slider label="Fade in:" width="270" label_width="70" name="FSAudioMusicFadeIn" tool_tip="Duração do fade in para o stream de áudio da parcela."/>
 		<text left_delta="275" name="FSAudioMusicFadeInSeconds">
 			segundos
@@ -309,17 +309,17 @@
 			<radio_item label="Ouvir chat de voz na posição do avatar" name="1"/>
 			<radio_item label="Ouvir chat de voz local com volume uniforme (somente OpenSim)" name="2"/>
 		</radio_group>
-		<check_box label="Mover lábios do avatar ao falar" name="enable_lip_sync"/>
-		<check_box label="Mostrar indicador de voz sobre os avatares" name="FSShowVoiceVisualizer" tool_tip="Se ativado, o indicador de voz (ponto branco) será mostrado sobre os avatares."/>
-		<check_box label="Mostrar indicador de voz sobre meu avatar" name="FSShowMyOwnVoiceVisualizer"/>
-		<check_box label="Mostrar indicador de voz com ponto" name="FSShowVoiceVisualizerWithDot" tool_tip="Se ativado, o ponto branco também será exibido no indicador de voz. Se desativado, apenas os ícones de onda serão mostrados durante a fala."/>
-		<check_box label="Mostrar indicador de voz e movimento labial em chats P2P e de grupo" name="Show_Voice_Visualizers_In_Calls" tool_tip="Se ativado, o indicador de voz e os movimentos labiais também serão exibidos em chats P2P e de grupo."/>
-		<check_box label="Mostrar status do canal de voz nas abas de conversa" name="FSShowConversationVoiceStateIndicator" tool_tip="Mostra o status do canal de voz atual nas abas da janela de conversas"/>
-		<check_box label="Recusar automaticamente todas as chamadas de grupo recebidas" name="VoiceCallsRejectGroup"/>
-		<check_box label="Recusar automaticamente todas as chamadas de conferência recebidas" name="VoiceCallsRejectAdHoc"/>
-		<check_box label="Recusar automaticamente todas as chamadas privadas recebidas" name="VoiceCallsRejectP2P"/>
+		<check_box label="Sincronizar lábios do avatar ao falar" name="enable_lip_sync"/>
+		<check_box label="Indicador de voz sobre avatares" name="FSShowVoiceVisualizer" tool_tip="Se ativado, o indicador de voz (ponto branco) será mostrado sobre os avatares."/>
+		<check_box label="Indicador de voz sobre meu avatar" name="FSShowMyOwnVoiceVisualizer"/>
+		<check_box label="Indicador de voz com ponto branco" name="FSShowVoiceVisualizerWithDot" tool_tip="Se ativado, o ponto branco também será exibido no indicador de voz. Se desativado, apenas os ícones de onda serão mostrados durante a fala."/>
+		<check_box label="Indicador de voz e lábios em chats P2P e grupo" name="Show_Voice_Visualizers_In_Calls" tool_tip="Se ativado, o indicador de voz e os movimentos labiais também serão exibidos em chats P2P e de grupo."/>
+		<check_box label="Status do canal de voz nas abas" name="FSShowConversationVoiceStateIndicator" tool_tip="Mostra o status do canal de voz atual nas abas da janela de conversas"/>
+		<check_box label="Recusar chamadas de grupo automaticamente" name="VoiceCallsRejectGroup"/>
+		<check_box label="Recusar conferências automaticamente" name="VoiceCallsRejectAdHoc"/>
+		<check_box label="Recusar chamadas privadas automaticamente" name="VoiceCallsRejectP2P"/>
 		<check_box label="Alternar função de voz ao pressionar o botão na barra de ferramentas" name="push_to_talk_toggle_check" tool_tip="Se o modo de alternância estiver ativado, pressione a tecla de acionamento UMA VEZ para ligar ou desligar o microfone. Se não estiver ativado, o microfone só ficará ligado enquanto a tecla de acionamento estiver pressionada."/>
-		<check_box label="Controle automático de ganho" name="voice_automatic_gain_control"/>
+		<check_box label="Controle automático de volume" name="voice_automatic_gain_control"/>
 		<check_box label="Cancelamento de eco" name="enable_echo_cancellation"/>
 		<text name="noise_suppression_label" width="123">
 			Supressão de ruído:

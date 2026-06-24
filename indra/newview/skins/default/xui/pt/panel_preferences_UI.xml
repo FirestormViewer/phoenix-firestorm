@@ -9,13 +9,13 @@
 		</text>
 		<check_box label="Ver dicas de foco" name="ShowHoverTips" tool_tip="Ative para mostrar dicas instantâneas para avatares e outras coisas - ative esta opção primeiro" />
 		<check_box label="para todos os objetos" tool_tip="Ative para mostrar dicas de foco para objetos do mundo interno." name="ShowAllHoverTips" />
-		<check_box label="para o país" tool_tip="Ative para mostrar dicas de pairar sobre a terra." name="ShowLandHoverTips" />
-		<check_box name="FSAdvancedTooltips" label="Mostrar informações estendidas nas dicas flutuantes" />
-		<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupos de avatares em hovertips" />
+		<check_box label="para o terreno" tool_tip="Ative para mostrar dicas ao passar o mouse sobre o terreno." name="ShowLandHoverTips" />
+		<check_box name="FSAdvancedTooltips" label="Mostrar info. estendida nas dicas flutuantes" />
+		<check_box name="FSShowGroupTitleInTooltip" label="Mostrar título de grupo em hovertips" />
 		<text name="tooltip_textbox">
 			Atrasos na dica de foco:
 		</text>
-		<slider label="Dicas de ferramentas:" name="ToolTipDelay_slider" tool_tip="Atraso antes que as dicas de ferramentas para controles de UI apareçam. (Valor padrão: 0,7)" />
+		<slider label="Dicas de UI:" name="ToolTipDelay_slider" tool_tip="Atraso antes que as dicas de ferramentas para controles de UI apareçam. (Valor padrão: 0,7)" />
 		<text name="ToolTipDelay_text">
 			segundos
 		</text>
@@ -88,21 +88,21 @@
 		<text name="GroupTopRightRequiresRestart" left_pad="8" top_pad="-14" width="195">
 			(Requer reinicialização)
 		</text>
-		<check_box label="Desative chiclets para mensagens instantâneas e bate-papos em grupo" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
-		<check_box label="Use a exibição de lista antiga para janelas de notificação" name="FSLegacyNotificationWell" tool_tip="Se ativado, o Firestorm usa a visualização de lista original para exibir notificações salvas." width="355" />
+		<check_box label="Desativar chiclets para IMs e grupos" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
+		<check_box label="Usar exibição de lista clássica para notificações" name="FSLegacyNotificationWell" tool_tip="Se ativado, o Firestorm usa a visualização de lista original para exibir notificações salvas." width="355" />
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Requer reinicialização)
 		</text>
-		<check_box label="Redimensione automaticamente as conversas e a janela de notificações antigas" name="FSLegacyNotificationWellAutoResize" tool_tip="Se ativado, o Firestorm redimensiona automaticamente as janelas de conversa e de notificação clássica à medida que as mensagens são adicionadas ou removidas." />
-		<check_box label="Personalizar atalhos usados pelo Linux (somente Linux; requer reinicialização)" name="FSRemapLinuxShortcuts" tool_tip="Habilita a redefinição dos atalhos já utilizados pelo sistema operacional Linux, por exemplo CTRL-ALT-Fx." />
-		<check_box label="Impedir que a janela de estatísticas receba foco" name="FSStatisticsNoFocus" tool_tip="Se ativado, evita que a janela Estatísticas receba foco quando outra janela for fechada (ações como alterar o layout ainda são possíveis)." />
-		<check_box label="Mostrar imagens de itens de inventário em dicas de ferramentas" name="FSShowInventoryThumbnailTooltips" tool_tip="Se ativado, as imagens dos objetos do inventário serão exibidas em dicas de ferramentas." />
-		<slider label_width="230" label="Atraso na dica de ferramenta da figura:" tool_tip="Define o atraso após imagens de itens de inventário aparecerem nas dicas de ferramentas" name="FSInventoryThumbnailTooltipsDelay" />
+		<check_box label="Redimensionar automaticamente Conv. e notificações clássicas" name="FSLegacyNotificationWellAutoResize" tool_tip="Se ativado, o Firestorm redimensiona automaticamente as janelas de conversa e de notificação clássica à medida que as mensagens são adicionadas ou removidas." />
+		<check_box label="Remapear atalhos do Linux (somente Linux; requer reinício)" name="FSRemapLinuxShortcuts" tool_tip="Habilita a redefinição dos atalhos já utilizados pelo sistema operacional Linux, por exemplo CTRL-ALT-Fx." />
+		<check_box label="Impedir que Estatísticas receba foco" name="FSStatisticsNoFocus" tool_tip="Se ativado, evita que a janela Estatísticas receba foco quando outra janela for fechada (ações como alterar o layout ainda são possíveis)." />
+		<check_box label="Mostrar miniaturas de inventário nas dicas" name="FSShowInventoryThumbnailTooltips" tool_tip="Se ativado, as imagens dos objetos do inventário serão exibidas em dicas de ferramentas." />
+		<slider label_width="230" label="Atraso da miniatura na dica:" tool_tip="Define o atraso após imagens de itens de inventário aparecerem nas dicas de ferramentas" name="FSInventoryThumbnailTooltipsDelay" />
 		<text name="FSInventoryThumbnailTooltipsDelayText">
 			Sek.
 		</text>
-		<slider label_width="230" label="Repetições para guias de IM piscando:" name="ButtonsFlashCount" />
-		<slider label_width="230" label="Duração do flash para a guia IM:" tool_tip="Define quanto tempo, em segundos, dura um único flash de uma guia de IM - usado para notificações de IM" name="ButtonFlashRate" />
+		<slider label_width="230" label="Repetições de flash nas guias de IM:" name="ButtonsFlashCount" />
+		<slider label_width="230" label="Duração do flash da guia IM:" tool_tip="Define quanto tempo, em segundos, dura um único flash de uma guia de IM - usado para notificações de IM" name="ButtonFlashRate" />
 		<text name="ButtonFlashRateText">
 			Sek.
 		</text>
@@ -114,28 +114,28 @@
 			Barra de status:
 		</text>
 		<check_box name="ShowNetStats" label="Ativar indicador de transferência de dados" tool_tip="Ativa o indicador de transferência de dados na barra de menu" />
-		<check_box label="Use média periódica para indicador de transferência de dados" name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o Firestorm usa o cálculo original para o indicador de transferência de dados e mostra a média periódica em vez do valor medido atualmente." />
-		<check_box name="FSUseStatsInsteadOfLagMeter" label="Clicar no indicador de dados abre Estatísticas em vez do medidor de atraso" />
+		<check_box label="Usar média periódica no indicador de dados" name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o Firestorm usa o cálculo original para o indicador de transferência de dados e mostra a média periódica em vez do valor medido atualmente." />
+		<check_box name="FSUseStatsInsteadOfLagMeter" label="Indicador de dados abre Estatísticas (não medidor de lag)" />
 		<check_box label="Mostrar controles de mídia na barra de menu" name="FSEnableVolumeControls" tool_tip="Se ativado, os ícones de controle de mídia serão exibidos na barra de menu no canto superior direito da tela. Útil se o design da interface já tiver seus próprios ícones para controle de mídia." />
 		<check_box label="Mostrar posição na barra de menu" name="ShowMenuBarLocation" />
 		<check_box label="Mostrar versão do simulador na barra de menu" name="FSStatusbarShowSimulatorVersion" tool_tip="Exibe a versão do simulador executando a região atual." />
 		<check_box label="Mostrar controles do Omnifilter" name="show_omnifilter_controls_check" tool_tip="Os controles incluem ativar/desativar o Omnifilter, alternar o editor de regras e trocar o conjunto de regras ativo." />
 		<check_box label="Mostrar pesquisa de menu" name="show_search_menu_check" />
 		<check_box label="Ver saldo da conta" name="FSShowCurrencyBalanceInStatusbar" />
-		<check_box label="Ative a janela pop-up ao passar o mouse sobre os ícones na barra de menu" name="FSStatusBarMenuButtonPopupOnRollover" />
+		<check_box label="Pop-up ao passar o mouse nos ícones da barra de menu" name="FSStatusBarMenuButtonPopupOnRollover" />
 		<text name="statusbar_timeformat_textbox" width="155">
 			Formato do relógio:
 		</text>
 		<combo_box name="FSStatusBarTimeFormat" tool_tip="Determina o formato de hora usado na barra de menus.">
 			<combo_box.item label="Padrão do idioma selecionado" name="Language" />
 			<combo_box.item label="12 horas" name="12_Hour" />
-			<combo_box.item label="12 horas incluindo segundos" name="12_Hour_Seconds" />
-			<combo_box.item label="12 horas incluindo fuso horário" name="12_Hour_TZ" />
-			<combo_box.item label="12 horas incluindo segundos e fuso horário" name="12_Hour_TZ_Seconds" />
+			<combo_box.item label="12h (c/ segundos)" name="12_Hour_Seconds" />
+			<combo_box.item label="12h (c/ fuso horário)" name="12_Hour_TZ" />
+			<combo_box.item label="12h (c/ segundos e fuso)" name="12_Hour_TZ_Seconds" />
 			<combo_box.item label="24 horas" name="24_Hour" />
-			<combo_box.item label="24 horas incluindo segundos" name="24_Hour_Seconds" />
-			<combo_box.item label="24 horas incluindo fuso horário" name="24_Hour_TZ" />
-			<combo_box.item label="24 horas incluindo segundos e fuso horário" name="24_Hour_TZ_Seconds" />
+			<combo_box.item label="24h (c/ segundos)" name="24_Hour_Seconds" />
+			<combo_box.item label="24h (c/ fuso horário)" name="24_Hour_TZ" />
+			<combo_box.item label="24h (c/ segundos e fuso)" name="24_Hour_TZ_Seconds" />
 		</combo_box>
 		<text name="navfav_textbox">
 			Barra de navegação e favoritos:
@@ -147,12 +147,12 @@
 
 	
 	<panel label="Janela" name="UI-interface-windows-tab">
-		<check_box label="Abra o perfil diretamente ao clicar no nome do avatar" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Se ativado, clicar no link do nome de um avatar abrirá diretamente todo o seu perfil." />
-		<check_box label="Desative a abertura automática da lista de bloqueios" name="FSDisableBlockListAutoOpen" tool_tip="Desativa a abertura automática da lista de bloqueio quando avatares ou objetos são bloqueados." />
+		<check_box label="Abrir perfil ao clicar no nome do avatar" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Se ativado, clicar no link do nome de um avatar abrirá diretamente todo o seu perfil." />
+		<check_box label="Desativar abertura automática da lista de bloqueios" name="FSDisableBlockListAutoOpen" tool_tip="Desativa a abertura automática da lista de bloqueio quando avatares ou objetos são bloqueados." />
 		<check_box label="“Amigos” e “Grupos” no menu “Conversa” abrem a versão [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Se ativado, amigos ou grupos serão abertos na janela “Pessoas” – caso contrário, na janela “Contatos”." />
-		<check_box label="Use a versão original da janela de propriedades do objeto" name="FSUseLegacyObjectProperties" tool_tip="Se ativado, a versão original do estilo Viewer-1 da janela Propriedades do objeto será usada." />
-		<check_box label="Use uma janela menor para controle da câmera" name="FSUseSmallCameraFloater" tool_tip="Se ativado, a versão original menor da janela de controles da câmera será usada sem os controles de predefinições da câmera." />
-		<check_box label="Desative os botões de redefinição dos controles da câmera" name="DisableCameraJoystickCenterReset" tool_tip="Impede que o centro da órbita e os controles de movimento redefinam a câmera." />
+		<check_box label="Usar janela de propriedades de objeto clássica" name="FSUseLegacyObjectProperties" tool_tip="Se ativado, a versão original do estilo Viewer-1 da janela Propriedades do objeto será usada." />
+		<check_box label="Usar janela menor para controles da câmera" name="FSUseSmallCameraFloater" tool_tip="Se ativado, a versão original menor da janela de controles da câmera será usada sem os controles de predefinições da câmera." />
+		<check_box label="Desativar botões de reset nos controles da câmera" name="DisableCameraJoystickCenterReset" tool_tip="Impede que o centro da órbita e os controles de movimento redefinam a câmera." />
 		<text name="standalone_textbox">
 			Use janelas personalizadas para:
 		</text>
@@ -196,7 +196,7 @@
 		<check_box label="Ocultar pastas vazias do sistema no inventário" name="DebugHideEmptySystemFolders" tool_tip="Oculta pastas vazias do sistema, como favoritos ou pontos de referência, etc. nas janelas de inventário." />
 		<check_box label="Mostrar pasta de itens recebidos no inventário" name="FSShowInboxFolder" tool_tip="Se ativado, a pasta Itens Recebidos aparecerá como uma pasta normal no inventário." />
 		<check_box label="Sempre mostrar o botão “Itens Recebidos” no inventário" name="FSAlwaysShowInboxButton" tool_tip="Se ativado, o botão Itens Recebidos sempre aparecerá na janela do inventário, mesmo quando as pastas forem exibidas no inventário." />
-		<check_box label="Permitir diferentes termos de pesquisa por guia no inventário" name="FSSplitInventorySearchOverTabs" tool_tip="Se ativado, diferentes termos de pesquisa podem ser inseridos para cada guia da janela de inventário." />
+		<check_box label="Permitir termos de busca por guia no inventário" name="FSSplitInventorySearchOverTabs" tool_tip="Se ativado, diferentes termos de pesquisa podem ser inseridos para cada guia da janela de inventário." />
 	</panel>
 
 	
@@ -249,9 +249,9 @@
 			%
 		</text>
 		<check_box label="Mostrar notificações em primeiro plano" name="FSShowToastsInFront" />
-		<check_box label="Usar nova mensagem de reinicialização de região" name="FSUseNewRegionRestartNotification" />
-		<check_box label="Não balance a tela quando houver uma mensagem de reinicialização da região" name="FSNoScreenShakeOnRegionRestart" />
-		<check_box label="Enviar mensagem de reinicialização da região para o canal:" width="355" name="FSReportRegionRestartToChat" />
+		<check_box label="Usar nova notificação de reinício de região" name="FSUseNewRegionRestartNotification" />
+		<check_box label="Não sacudir a tela em reinício de região" name="FSNoScreenShakeOnRegionRestart" />
+		<check_box label="Enviar aviso de reinício de região ao canal:" width="355" name="FSReportRegionRestartToChat" />
 	</panel>
 	
 	<panel label="Escrita" name="UI-font-tab">
@@ -302,7 +302,7 @@ Padrão 0. Valores maiores podem não funcionar corretamente.
 		<text name="emoji_font_settings_label">
 			Configurações de fonte Emoji: (requer reinicialização)
 		</text>
-		<check_box label="Exibir emojis em monocromático" name="FSUseBWEmojis" />
+		<check_box label="Emojis em preto e branco" name="FSUseBWEmojis" />
 		<check_box label="Use um botão de emoji" name="FSUsePrettyEmojiButton" />
 	</panel>
 </tab_container>

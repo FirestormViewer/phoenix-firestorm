@@ -55,10 +55,10 @@
 	<check_box label="Ocultar meu próprio título de grupo" name="RenderHideGroupTitle" tool_tip="Mostra ou oculta seu próprio título de grupo para você e para os outros."/>
 	<check_box label="Mostrar nome de exibição" name="display_names_check" tool_tip="Ative para usar nomes de exibição no chat, IM, nomes de avatar etc."/>
 	<check_box label="Mostrar identificação do viewer" name="show_viewerID" tool_tip="Mostra o nome do viewer detectado ao lado do nome do avatar (efeito com atraso)"/>
-	<check_box label="Formato de nome antigo em vez de nome de usuário" name="FSshow_legacyun" tool_tip="Mostra o nome de avatar no formato antigo (Nome Sobrenome) em vez do nome de usuário (nome.sobrenome)" />
+	<check_box label="Formato de nome antigo (Nome Sobrenome)" name="FSshow_legacyun" tool_tip="Mostra o nome de avatar no formato antigo (Nome Sobrenome) em vez do nome de usuário (nome.sobrenome)" />
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Destacar os nomes de avatar dos seus amigos"/>
 	<check_box label="Remover “Resident” no formato antigo de nome" name="legacy_trim_check" tool_tip="Remove o sobrenome “Resident” no formato antigo de nome." />
-	<check_box label="Posição antiga dos nomes de avatar" name="FSLegacyNametagPosition" width="170" tool_tip="Se ativado, o nome do avatar fica fixo na posição do avatar e não acompanha o movimento da cabeça durante animações." />
+	<check_box label="Posição clássica das nametags" name="FSLegacyNametagPosition" width="170" tool_tip="Se ativado, o nome do avatar fica fixo na posição do avatar e não acompanha o movimento da cabeça durante animações." />
 	<check_box label="Mostrar modo “Resposta automática”" name="FSShowAutorespondInNameTag" tool_tip="Se ativado, o modo “Resposta automática” será exibido no seu próprio nome de avatar."/>
 	<check_box label="Mostrar complexidade" name="FSTagShowARW" tool_tip="Se ativado, mostra a complexidade atual do avatar."/>
 	<check_box label="Apenas se estiver muito complexo" name="FSTagShowTooComplexOnlyARW" tool_tip="Se ativado, mostra a complexidade atual do avatar apenas quando ele estiver complexo demais e for exibido como JellyDoll."/>
