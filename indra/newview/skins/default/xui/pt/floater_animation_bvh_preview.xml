@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Animation Preview">
 	<floater.string name="failed_to_initialize">
-		Falha ao inicializar movimento
+		Erro ao inicializar animação
 	</floater.string>
 	<floater.string name="anim_too_long">
-		O arquivo de animação tem [LENGTH] segundos.
+		A animação tem [LENGTH]s — 
 
-O máximo permitido é [MAX_LENGTH] segundos.
+O máximo permitido é de [MAX_LENGTH]s.
 	</floater.string>
 	<floater.string name="failed_file_read">
-		Não foi possível ler o arquivo de animação.
-
+		Erro ao ler arquivo de animação:
 [STATUS]
 	</floater.string>
 	<floater.string name="E_ST_OK">
@@ -20,7 +19,7 @@ O máximo permitido é [MAX_LENGTH] segundos.
 		Fim de arquivo prematuro.
 	</floater.string>
 	<floater.string name="E_ST_NO_CONSTRAINT">
-		Não foi possível ler a definição de restrição.
+		Falha ao ler definição de restrição.
 	</floater.string>
 	<floater.string name="E_ST_NO_FILE">
 		Não foi possível abrir o arquivo BVH.
@@ -35,31 +34,31 @@ O máximo permitido é [MAX_LENGTH] segundos.
 		Não foi possível obter o nome do JOINT.
 	</floater.string>
 	<floater.string name="E_ST_NO_OFFSET">
-		Não foi possível encontrar OFFSET.
+		OFFSET não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_CHANNELS">
-		Não foi possível encontrar CHANNELS.
+		CHANNELS não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROTATION">
-		Não foi possível obter a ordem de rotação.
+		Ordem de rotação não encontrada.
 	</floater.string>
 	<floater.string name="E_ST_NO_AXIS">
-		Não foi possível obter o eixo de rotação.
+		Eixo de rotação não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_MOTION">
-		Não foi possível encontrar MOTION.
+		MOTION não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAMES">
-		Não foi possível obter o número de frames.
+		Número de frames não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAME_TIME">
-		Não foi possível obter o tempo de frame.
+		Tempo de frame não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_POS">
-		Não foi possível obter os valores de posição.
+		Valores de posição não encontrados.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROT">
-		Não foi possível obter os valores de rotação.
+		Valores de rotação não encontrados.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_FILE">
 		Não foi possível abrir o arquivo de tradução.
@@ -68,46 +67,46 @@ O máximo permitido é [MAX_LENGTH] segundos.
 		Não foi possível ler o cabeçalho de tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_NAME">
-		Não foi possível ler os nomes de tradução.
+		Nomes XLT não encontrados.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_IGNORE">
 		Não foi possível ler o valor ignore da tradução.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_RELATIVE">
-		Não foi possível ler o valor relative da tradução.
+		Valor 'relative' XLT não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_OUTNAME">
-		Não foi possível ler o valor outname da tradução.
+		Valor 'outname' XLT não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MATRIX">
-		Não foi possível ler a matriz de tradução.
+		Matriz XLT não encontrada.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGECHILD">
-		Não foi possível obter o nome mergechild.
+		Nome 'mergechild' não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGEPARENT">
-		Não foi possível obter o nome mergeparent.
+		Nome 'mergeparent' não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_PRIORITY">
-		Não foi possível obter o valor de prioridade.
+		Valor de prioridade não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_LOOP">
-		Não foi possível obter o valor de loop.
+		Valor de loop não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEIN">
-		Não foi possível obter os valores de easeIn.
+		Valores de easeIn não encontrados.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
-		Não foi possível obter os valores de easeOut.
+		Valores de easeOut não encontrados.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HAND">
-		Não foi possível obter o valor de morph da mão.
+		Valor de morph da mão não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EMOTE">
-		Não foi possível ler o nome do emote.
+		Nome do emote não encontrado.
 	</floater.string>
 	<floater.string name="E_ST_BAD_ROOT">
-		Nome do joint raiz incorreto, use &quot;hip&quot;.
+		Nome do joint raiz inválido — use &quot;hip&quot;.
 	</floater.string>
 	<floater.string name="FS_report_frames">
 		[F] frm.  [S] s. [FPS] FPS
@@ -119,14 +118,14 @@ O máximo permitido é [MAX_LENGTH] segundos.
 		Descrição:
 	</text>
 	<spinner label="Prioridade" name="priority" tool_tip="Controla quais outras animações podem ser substituídas por esta animação"/>
-	<check_box label="Loop" name="loop_check" tool_tip="Faz esta animação repetir em loop"/>
+	<check_box label="Loop" name="loop_check" tool_tip="Faz a animação repetir em loop"/>
 	<text name="frames_label">
 		300 frm. 30 s. 10 FPS
 	</text>
-	<spinner label="Início (%)" name="loop_in_point" tool_tip="Define o ponto da animação para onde o loop retorna"/>
-	<spinner label="Fim (%)" name="loop_out_point" tool_tip="Define o ponto da animação em que o loop termina"/>
-	<spinner label="Início (frm)" name="loop_in_frames" tool_tip="Define o ponto da animação para onde o loop retorna (em frames)"/>
-	<spinner label="Fim (frm)" name="loop_out_frames" tool_tip="Define o ponto da animação em que o loop termina (em frames)"/>
+	<spinner label="Entrada (%)" name="loop_in_point" tool_tip="Ponto de entrada do loop"/>
+	<spinner label="Saída (%)" name="loop_out_point" tool_tip="Ponto de saída do loop"/>
+	<spinner label="Entrada (frm)" name="loop_in_frames" tool_tip="Ponto de entrada do loop (em frames)"/>
+	<spinner label="Saída (frm)" name="loop_out_frames" tool_tip="Ponto de saída do loop (em frames)"/>
 	<text name="hand_label">
 		Posição das mãos
 	</text>
@@ -148,7 +147,7 @@ O máximo permitido é [MAX_LENGTH] segundos.
 	<text name="emote_label">
 		Expressão
 	</text>
-	<combo_box name="emote_combo" tool_tip="Controla o que o rosto faz durante a animação">
+	<combo_box name="emote_combo" tool_tip="Controla a expressão facial durante a animação">
 		<item label="(Nenhuma)" name="[None]"/>
 		<item label="Aaaaah" name="Aaaaah"/>
 		<item label="Assustado" name="Afraid"/>
@@ -185,7 +184,7 @@ O máximo permitido é [MAX_LENGTH] segundos.
 	<button name="pause_btn" tool_tip="Pausar animação"/>
 	<button name="stop_btn" tool_tip="Parar reprodução da animação"/>
 	<text name="bad_animation_text">
-		Não foi possível ler o arquivo de animação. Recomendamos arquivos BVH exportados do Poser 4.
+		Não foi possível ler o arquivo de animação. Recomendamos exportar arquivos BVH do Poser 4.
 	</text>
     <button label="Recarregar arquivo" name="reload_btn"/>
 	<button label="Enviar (L$[AMOUNT])" name="ok_btn"/>

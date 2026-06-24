@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterland" title="Sobre o Terreno">
+<floater name="floaterland" title="Info do Terreno">
 	<floater.string name="maturity_icon_general">
 		&quot;Parcel_PG_Dark&quot;
 	</floater.string>
@@ -33,7 +33,7 @@
 	<tab_container name="landtab" width="489">
 		<panel label="Geral" name="land_general_panel">
 			<panel.string name="new users only">
-				Somente novos residentes
+				Só novos usuários
 			</panel.string>
 			<panel.string name="anyone">
 				Qualquer pessoa
@@ -48,7 +48,7 @@
 				ID do leilão: [ID]
 			</panel.string>
 			<panel.string name="need_tier_to_modify">
-				Você precisa aprovar sua compra para modificar este terreno.
+				Confirme a compra para poder modificar este terreno.
 			</panel.string>
 			<panel.string name="group_owned_text">
 				(Propriedade de grupo)
@@ -114,9 +114,9 @@
 				Carregando...
 			</text>
 			<button label="Definir" label_selected="Definindo..." name="Set..." width="90"/>
-			<check_box label="Permitir transferência para o grupo" name="check deed" tool_tip="Um oficial do grupo pode transferir este terreno para o grupo, para que ele seja mantido pela cota de terreno do grupo."/>
-			<button label="Transferir" label_selected="Transferindo..." name="Deed..." tool_tip="Você só pode transferir o terreno se for oficial no grupo selecionado."/>
-			<check_box label="Proprietário contribui com a transferência" name="check contrib" tool_tip="Quando o terreno é transferido para o grupo, o proprietário anterior contribui com cota de terreno suficiente para mantê-lo."/>
+			<check_box label="Permitir doação ao grupo" name="check deed" tool_tip="Um oficial do grupo pode transferir este terreno, que passará a consumir a cota do grupo."/>
+			<button label="Transferir" label_selected="Transferindo..." name="Deed..." tool_tip="Só é possível transferir se você for oficial do grupo selecionado."/>
+			<check_box label="Dono cede cota ao transferir" name="check contrib" tool_tip="Ao transferir, o dono anterior fornece cota suficiente para manter o terreno."/>
 			<text name="For Sale:">
 				À venda:
 			</text>
@@ -132,14 +132,14 @@
 				À venda para: [BUYER]
 			</text>
 			<text name="Sell with landowners objects in parcel.">
-				Objetos incluídos na venda
+				Vender com objetos
 			</text>
 			<text name="Selling with no objects in parcel.">
-				Objetos não incluídos na venda
+				Vender sem objetos
 			</text>
-			<button label="Cancelar venda do terreno" label_selected="Cancelar venda do terreno" name="Cancel Land Sale"/>
+			<button label="Cancelar venda" label_selected="Cancelar venda" name="Cancel Land Sale"/>
 			<text name="Claimed:">
-				Adquirido em:
+				Registrado em:
 			</text>
 			<text name="DateClaimText">
 				Ter 15 Ago 2006 13:47:25
@@ -453,7 +453,7 @@ Somente lotes grandes podem ser listados na busca.
 			<text name="Sound:">
 				Som:
 			</text>
-			<check_box label="Restringir sons de gestos e objetos a este lote" name="check sound local"/>
+			<check_box label="Limitar sons de gestos/objetos ao terreno" name="check sound local"/>
 			<text name="Avatar Sounds:">
 				Sons de avatar:
 			</text>
@@ -462,44 +462,44 @@ Somente lotes grandes podem ser listados na busca.
 			<text name="Voice settings:">
 				Voz:
 			</text>
-			<check_box label="Habilitar voz" name="parcel_enable_voice_channel"/>
-			<check_box label="Habilitar voz (definido pela propriedade)" name="parcel_enable_voice_channel_is_estate_disabled"/>
-			<check_box label="Restringir voz a este lote" name="parcel_enable_voice_channel_local"/>
+			<check_box label="Ativar voz" name="parcel_enable_voice_channel"/>
+			<check_box label="Ativar voz (definido pela propriedade)" name="parcel_enable_voice_channel_is_estate_disabled"/>
+			<check_box label="Limitar voz a este lote" name="parcel_enable_voice_channel_local"/>
 			<text name="media">
 				Mídia:
 			</text>
-			<check_box label="Restringir MOAP a este lote" name="obscure_moap" tool_tip="Mídia em um prim fora deste lote não deve ser reproduzida automaticamente para um avatar dentro deste lote, e vice-versa."/>
+			<check_box label="Limitar MOAP a este lote" name="obscure_moap" tool_tip="Mídia em prims fora deste lote não toca automaticamente para avatares dentro, e vice-versa."/>
 		</panel>
 		<panel label="Acesso" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Definido pela propriedade)
 			</panel.string>
 			<panel.string name="estate_override">
-				Uma ou mais destas opções estão definidas no nível da propriedade
+				Uma ou mais opções estão bloqueadas no nível da sim
 			</panel.string>
-			<check_box label="Qualquer pessoa pode visitar (desmarcar isso criará linhas de banimento)" name="public_access"/>
-			<check_box label="Deve ter 18+ [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Residentes devem ter 18 anos ou mais para acessar este lote. Consulte [SUPPORT_SITE] para mais informações."/>
-			<check_box label="Deve ter informações de pagamento cadastradas [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Residentes devem ter informações de pagamento cadastradas para acessar este lote. Consulte [SUPPORT_SITE] para mais informações."/>
+			<check_box label="Acesso público (desmarcar ativa linha de banimento)" name="public_access"/>
+			<check_box label="Deve ter 18+ [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Residentes devem ter 18+ anos para entrar. Veja [SUPPORT_SITE]."/>
+			<check_box label="Deve ter informações de pagamento cadastradas [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Residentes precisam ter pagamento cadastrado para entrar. Veja [SUPPORT_SITE]."/>
 			<check_box label="Permitir grupo [GROUP] sem restrições" name="GroupCheck" tool_tip="Defina o grupo na aba Geral."/>
-			<check_box label="Vender passes para:" name="PassCheck" tool_tip="Permite acesso temporário a este lote"/>
+			<check_box label="Vender passes para:" name="PassCheck" tool_tip="Libera acesso temporário ao lote"/>
 			<combo_box name="pass_combo">
 				<combo_box.item label="Qualquer pessoa" name="Anyone"/>
 				<combo_box.item label="Grupo" name="Group"/>
 			</combo_box>
 			<spinner label="Preço em L$:" name="PriceSpin"/>
-			<spinner label="Horas de acesso:" name="HoursSpin"/>
+			<spinner label="Horários de acesso:" name="HoursSpin"/>
 			<text name="OwnerLimited">
-				(O proprietário da propriedade pode ter limitado estas opções.)
+				(O dono da sim pode ter restringido algumas dessas opções.)
 			</text>
 			<panel name="Allowed_layout_panel">
 				<text label="Sempre permitir" name="AllowedText">
-					Sempre permitidos ([COUNT]/[MAX])
+					Permitidos ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] listados, [MAX] máximo)"/>
 				<button label="Adicionar" name="add_allowed"/>
 				<button label="Remover" label_selected="Remover" name="remove_allowed"/>
 				<button label="Exportar" label_selected="Exportar" name="export_allowed"/>
-				<button label="Importar" label_selected="Importar" name="import_allowed" tool_tip="Importa um arquivo CSV contendo apenas UUIDs válidos - um por linha, sem caracteres extras ou formatação"/>
+				<button label="Importar" label_selected="Importar" name="import_allowed" tool_tip="Importa CSV com UUIDs válidos — um por linha, sem formatação extra"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Banir" name="BanCheck">
@@ -512,7 +512,7 @@ Somente lotes grandes podem ser listados na busca.
 				<button label="Adicionar" name="add_banned"/>
 				<button label="Remover" label_selected="Remover" name="remove_banned"/>
 				<button label="Exportar" label_selected="Exportar" name="export_banned"/>
-				<button label="Importar" label_selected="Importar" name="import_banned" tool_tip="Importa um arquivo CSV contendo apenas UUIDs válidos - um por linha, sem caracteres extras ou formatação"/>
+				<button label="Importar" label_selected="Importar" name="import_banned" tool_tip="Importa CSV com UUIDs válidos — um por linha, sem formatação extra"/>
 			</panel>
 		</panel>
 		<panel label="Experiências" name="land_experiences_panel"/>
