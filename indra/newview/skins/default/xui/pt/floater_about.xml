@@ -46,7 +46,7 @@ For the latest information about Firestorm, visit
 https://www.firestormviewer.org
     		</text>
 			<button label="Copiar" name="copy_btn"/>
-			<button label="Verificar atualizações" name="update_btn"/>
+			<button label="Checar atualizações" name="update_btn"/>
 		</panel>
 		<panel label="Créditos" name="credits_panel">
 			<text name="linden_intro">
@@ -56,7 +56,7 @@ O Second Life é trazido a você pela Lindens,
 com contribuições de código aberto de:
 			</text>
 			<text_editor name="contrib_names">
-				Dummy Name substituído durante a execução
+				Carregando lista de contribuidores...
 			</text_editor>
 		</panel>
 		<panel label="Licenças" name="licenses_panel" />

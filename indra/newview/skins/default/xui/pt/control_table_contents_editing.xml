@@ -10,10 +10,10 @@
 		<columns name="lst_action" tool_tip="Gira a câmera ao redor do Avatar no sentido horário" value="Giro (horário)" />
 	</rows>
 	<rows name="edit_avatar_spin_over">
-		<columns name="lst_action" tool_tip="Gira a câmera sobre o Avatar" value="Girar câmera para cima" />
+		<columns name="lst_action" tool_tip="Gira a câmera sobre o Avatar" value="Girar câmera p/ cima" />
 	</rows>
 	<rows name="edit_avatar_spin_under">
-		<columns name="lst_action" tool_tip="Gira a câmera abaixo do Avatar" value="Girar câmera para baixo" />
+		<columns name="lst_action" tool_tip="Gira a câmera abaixo do Avatar" value="Girar câmera p/ baixo" />
 	</rows>
 	<rows name="edit_avatar_move_forward">
 		<columns name="lst_action" value="Câmera para frente" />
