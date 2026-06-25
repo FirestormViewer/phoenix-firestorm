@@ -1135,6 +1135,7 @@ void LLWearableItemsList::ContextMenu::show(LLView* spawning_view, LLWearableTyp
     mParent = NULL; // to avoid dereferencing an invalid pointer
 }
 
+// <FS:Amy> Favorite Wearables folder assignment
 static bool favorite_folder_contains_linked_item(const LLUUID& folder_id, const LLUUID& linked_id)
 {
     LLInventoryModel::item_array_t* items = nullptr;
@@ -1253,6 +1254,7 @@ static void populate_assign_to_folder_menu(LLContextMenu* menu)
         assign_menu->addChild(item);
     }
 }
+// </FS:Amy>
 
 // virtual
 LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
@@ -1285,14 +1287,14 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
                   //boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids, no_op)); // <FS:Ansariel> [SL:KB] - Patch: Appearance-Misc
                   boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
     registrar.add("Attachment.Favorite", boost::bind(toggle_favorites, ids));
-    registrar.add("Attachment.AssignFolder", boost::bind(assign_to_favorite_folder, ids, _2));
+    registrar.add("Attachment.AssignFolder", boost::bind(assign_to_favorite_folder, ids, _2)); // </FS:Amy> Favorite Wearables folder assignment
     registrar.add("Attachment.Touch", boost::bind(handle_attachment_touch, selected_id));
     registrar.add("Attachment.Profile", boost::bind(show_item_profile, selected_id));
     registrar.add("Object.Attach", boost::bind(LLViewerAttachMenu::attachObjects, ids, _2));
 
     // Create the menu.
     LLContextMenu* menu = createFromFile("menu_wearable_list_item.xml");
-    populate_assign_to_folder_menu(menu);
+    populate_assign_to_folder_menu(menu); // </FS:Amy> Favorite Wearables folder assignment submenu
 
     // Determine which items should be visible/enabled.
     updateItemsVisibility(menu);
@@ -1457,8 +1459,8 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     setMenuItemEnabled(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
 // </AS:Chanayane>
     setMenuItemVisible(menu, "favorites_add",       can_favorite);
-    setMenuItemVisible(menu, "favorites_assign_folder", true);
-    setMenuItemEnabled(menu, "favorites_assign_folder", true);
+    setMenuItemVisible(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
+    setMenuItemEnabled(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
     setMenuItemVisible(menu, "favorites_remove",    can_unfavorite);
     setMenuItemVisible(menu, "take_off",            mask == MASK_CLOTHING && n_worn == n_items);
     setMenuItemVisible(menu, "detach",              mask == MASK_ATTACHMENT && n_worn == n_items);
