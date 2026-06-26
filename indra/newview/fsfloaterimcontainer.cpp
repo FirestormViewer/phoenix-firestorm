@@ -743,7 +743,6 @@ void FSFloaterIMContainer::saveOpenIMs()
                 {
                     LLSD session_data = LLSD::emptyMap();
                     session_data["other_participant_id"] = session->mOtherParticipantID;
-                    session_data["session_name"] = session->mName;
                     openIMs.append(session_data);
                 }
             }
