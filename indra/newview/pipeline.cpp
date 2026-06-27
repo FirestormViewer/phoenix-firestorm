@@ -672,6 +672,16 @@ void LLPipeline::init()
     // <FS:PP> FIRE-33085 Region corner markers
     connectRefreshCachedSettingsSafe("fsregioncornerbeacons");
     // </FS:PP>
+    // <FS:PP> FIRE-36767 Sync beacon settings when changed via debug settings
+    connectRefreshCachedSettingsSafe("physicalbeacon");
+    connectRefreshCachedSettingsSafe("scriptsbeacon");
+    connectRefreshCachedSettingsSafe("scripttouchbeacon");
+    connectRefreshCachedSettingsSafe("soundsbeacon");
+    connectRefreshCachedSettingsSafe("particlesbeacon");
+    connectRefreshCachedSettingsSafe("moapbeacon");
+    connectRefreshCachedSettingsSafe("renderbeacons");
+    connectRefreshCachedSettingsSafe("renderhighlights");
+    // </FS:PP>
 
     LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl("CollectFontVertexBuffers");
     if (cntrl_ptr.notNull())
@@ -1180,6 +1190,16 @@ void LLPipeline::refreshCachedSettings()
     // </FS:Ansariel>
     // <FS:PP> FIRE-33085 Region corner markers
     LLPipeline::sRenderRegionCornerBeacons = gSavedSettings.getBOOL("fsregioncornerbeacons");
+    // </FS:PP>
+    // <FS:PP> FIRE-36767 Sync beacon settings when changed via debug settings
+    LLPipeline::sRenderPhysicalBeacons = gSavedSettings.getBOOL("physicalbeacon");
+    LLPipeline::sRenderScriptedBeacons = gSavedSettings.getBOOL("scriptsbeacon");
+    LLPipeline::sRenderScriptedTouchBeacons = gSavedSettings.getBOOL("scripttouchbeacon");
+    LLPipeline::sRenderSoundBeacons = gSavedSettings.getBOOL("soundsbeacon");
+    LLPipeline::sRenderParticleBeacons = gSavedSettings.getBOOL("particlesbeacon");
+    LLPipeline::sRenderMOAPBeacons = gSavedSettings.getBOOL("moapbeacon");
+    LLPipeline::sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
+    LLPipeline::sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
     // </FS:PP>
 
     LLPipeline::sUseOcclusion =
