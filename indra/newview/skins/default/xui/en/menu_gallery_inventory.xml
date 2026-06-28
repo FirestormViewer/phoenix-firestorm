@@ -197,6 +197,10 @@
          function="Inventory.DoToSelected"
          parameter="paste" />
     </menu_item_call>
+    <menu
+     label="Links"
+     layout="topleft"
+     name="Links">
     <menu_item_call
      label="Paste As Link"
      layout="topleft"
@@ -213,6 +217,7 @@
          function="Inventory.DoToSelected"
          parameter="replace_links" />
     </menu_item_call>
+    </menu>
     <menu_item_separator
      layout="topleft" 
      name="Paste Separator" />
@@ -841,9 +846,10 @@
        parameter="def_pbr_material" />
     </menu_item_check>
   </menu>
-	<menu_item_separator
-	 layout="topleft"
-	 name="Marketplace Separator" />
+	<menu
+        label="Marketplace"
+        layout="topleft"
+        name="Marketplace">
 	<menu_item_call
         label="Copy to Marketplace Listings"
         layout="topleft"
@@ -860,6 +866,7 @@
         function="Inventory.DoToSelected"
         parameter="move_to_marketplace_listings" />
 	</menu_item_call>
+	</menu>
 	<menu_item_call
      label="--no options--"
      layout="topleft"

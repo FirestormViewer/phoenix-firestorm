@@ -4,81 +4,6 @@
  layout="topleft"
  name="Popup"
  visible="false">
-	<menu_item_call
-        label="Create listing"
-        layout="topleft"
-        name="Marketplace Create Listing">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_create_listing" />
-	</menu_item_call>
-	<menu_item_call
-        label="Associate listing"
-        layout="topleft"
-        name="Marketplace Associate Listing">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_associate_listing" />
-	</menu_item_call>
-	<menu_item_call
-        label="Get (Refresh) listing"
-        layout="topleft"
-        name="Marketplace Get Listing">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_get_listing" />
-	</menu_item_call>
-	<menu_item_call
-        label="Check for errors"
-        layout="topleft"
-        name="Marketplace Check Listing">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_check_listing" />
-	</menu_item_call>
-	<menu_item_call
-        label="Edit listing"
-        layout="topleft"
-        name="Marketplace Edit Listing">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_edit_listing" />
-	</menu_item_call>
-	<menu_item_call
-        label="List"
-        layout="topleft"
-        name="Marketplace List">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_list" />
-	</menu_item_call>
-	<menu_item_call
-        label="Unlist"
-        layout="topleft"
-        name="Marketplace Unlist">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_unlist" />
-	</menu_item_call>
-	<menu_item_call
-        label="Activate"
-        layout="topleft"
-        name="Marketplace Activate">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_activate" />
-	</menu_item_call>
-	<menu_item_call
-        label="Deactivate"
-        layout="topleft"
-        name="Marketplace Deactivate">
-		<menu_item_call.on_click
-        function="Inventory.DoToSelected"
-        parameter="marketplace_deactivate" />
-	</menu_item_call>
-	<menu_item_separator
-    layout="topleft"
-    name="Marketplace Listings Separator" />
     <menu_item_call
      label="Share"
      layout="topleft"
@@ -788,6 +713,10 @@
          function="Inventory.DoToSelected"
          parameter="paste" />
     </menu_item_call>
+    <menu
+     label="Links"
+     layout="topleft"
+     name="Links">
     <menu_item_call
      label="Paste As Link"
      layout="topleft"
@@ -812,6 +741,15 @@
          function="Inventory.DoToSelected"
          parameter="replace_links" />
     </menu_item_call>
+    <menu_item_call
+     label="Cleanup broken Links"
+     layout="topleft"
+     name="Cleanup broken Links">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="cleanup_broken_links"/>
+    </menu_item_call>
+    </menu>
     <menu_item_separator
      layout="topleft" 
      name="Paste Separator" />
@@ -822,14 +760,6 @@
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="delete" />
-    </menu_item_call>
-    <menu_item_call
-     label="Cleanup broken Links"
-     layout="topleft"
-     name="Cleanup broken Links">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="cleanup_broken_links"/>
     </menu_item_call>
     <menu_item_call
      label="Move to Default Folder"
@@ -1125,9 +1055,82 @@
                 function="Inventory.DoToSelected"
                 parameter="apply_settings_parcel" />
     </menu_item_call>
-	<menu_item_separator
-	 layout="topleft"
-	 name="Marketplace Separator" />
+	<menu
+        label="Marketplace"
+        layout="topleft"
+        name="Marketplace">
+	<menu_item_call
+        label="Create listing"
+        layout="topleft"
+        name="Marketplace Create Listing">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_create_listing" />
+	</menu_item_call>
+	<menu_item_call
+        label="Associate listing"
+        layout="topleft"
+        name="Marketplace Associate Listing">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_associate_listing" />
+	</menu_item_call>
+	<menu_item_call
+        label="Get (Refresh) listing"
+        layout="topleft"
+        name="Marketplace Get Listing">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_get_listing" />
+	</menu_item_call>
+	<menu_item_call
+        label="Check for errors"
+        layout="topleft"
+        name="Marketplace Check Listing">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_check_listing" />
+	</menu_item_call>
+	<menu_item_call
+        label="Edit listing"
+        layout="topleft"
+        name="Marketplace Edit Listing">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_edit_listing" />
+	</menu_item_call>
+	<menu_item_call
+        label="List"
+        layout="topleft"
+        name="Marketplace List">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_list" />
+	</menu_item_call>
+	<menu_item_call
+        label="Unlist"
+        layout="topleft"
+        name="Marketplace Unlist">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_unlist" />
+	</menu_item_call>
+	<menu_item_call
+        label="Activate"
+        layout="topleft"
+        name="Marketplace Activate">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_activate" />
+	</menu_item_call>
+	<menu_item_call
+        label="Deactivate"
+        layout="topleft"
+        name="Marketplace Deactivate">
+		<menu_item_call.on_click
+        function="Inventory.DoToSelected"
+        parameter="marketplace_deactivate" />
+	</menu_item_call>
 	<menu_item_call
         label="Copy to Marketplace Listings"
         layout="topleft"
@@ -1144,6 +1147,7 @@
         function="Inventory.DoToSelected"
         parameter="move_to_marketplace_listings" />
 	</menu_item_call>
+	</menu>
 	<menu_item_call
      label="--no options--"
      layout="topleft"

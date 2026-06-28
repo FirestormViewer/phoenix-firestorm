@@ -23,8 +23,10 @@
 	<menu_item_call label="Kopiuj" name="Copy" />
 	<menu_item_call label="Kopiuj nazwę" name="Copy Name" />
 	<menu_item_call label="Wklej" name="Paste" />
-	<menu_item_call label="Wklej jako link" name="Paste As Link" />
-	<menu_item_call label="Zastępowanie linków" name="Replace Links" />
+	<menu label="Linki" name="Links">
+		<menu_item_call label="Wklej jako link" name="Paste As Link" />
+		<menu_item_call label="Zastępowanie linków" name="Replace Links" />
+	</menu>
 	<menu_item_call label="Usuń" name="Delete" />
 	<menu_item_call label="Usuń folder systemowy" name="Delete System Folder" />
 	<menu_item_call label="Odtwarzaj" name="Sound Play" />
@@ -102,7 +104,9 @@
 		<menu_item_check label="Dla nowych modeli" name="Model uploads" />
 		<menu_item_check label="Dla nowych materiałów PBR" name="PBR uploads" />
 	</menu>
-	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy" />
-	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move" />
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy" />
+		<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move" />
+	</menu>
 	<menu_item_call label="--brak opcji--" name="--no options--" />
 </context_menu>

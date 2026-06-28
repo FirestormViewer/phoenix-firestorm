@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="建立刊登" name="Marketplace Create Listing" />
-	<menu_item_call label="關聯刊登" name="Marketplace Associate Listing" />
-	<menu_item_call label="取得（更新）刊登" name="Marketplace Get Listing" />
-	<menu_item_call label="檢查是否有誤" name="Marketplace Check Listing" />
-	<menu_item_call label="編輯刊登" name="Marketplace Edit Listing" />
-	<menu_item_call label="刊登" name="Marketplace List" />
-	<menu_item_call label="停止刊登" name="Marketplace Unlist" />
-	<menu_item_call label="啟用" name="Marketplace Activate" />
-	<menu_item_call label="停用" name="Marketplace Deactivate" />
 	<menu_item_call label="分享" name="Share" />
 	<menu_item_call label="打開" name="Task Open" />
 	<menu_item_call label="播放" name="Task Play" />
@@ -98,11 +89,13 @@
 	<menu_item_call label="複製" name="Copy" />
 	<menu_item_call label="複製名稱" name="Copy Name" />
 	<menu_item_call label="黏貼" name="Paste" />
-	<menu_item_call label="以聯結格式黏貼" name="Paste As Link" />
-	<menu_item_call label="尋找所有聯結" name="Find Links" />
-	<menu_item_call label="替換聯結" name="Replace Links" />
+	<menu label="Links" name="Links">
+		<menu_item_call label="以聯結格式黏貼" name="Paste As Link" />
+		<menu_item_call label="尋找所有聯結" name="Find Links" />
+		<menu_item_call label="替換聯結" name="Replace Links" />
+		<menu_item_call label="清理損壞的聯結" name="Cleanup broken Links" />
+	</menu>
 	<menu_item_call label="刪除" name="Delete" />
-	<menu_item_call label="清理損壞的聯結" name="Cleanup broken Links" />
 	<menu_item_call label="移至預設檔案夾" name="Move to Default Folder" />
 	<menu_item_call label="移至失物招領" name="Move to Lost And Found" />
 	<menu_item_call label="刪除系統檔案夾" name="Delete System Folder" />
@@ -141,7 +134,18 @@
 	<menu_item_call label="脫下" name="Take Off" />
 	<menu_item_call label="僅應用到我自己" name="Settings Apply Local" />
 	<menu_item_call label="應用到地塊" name="Settings Apply Parcel" />
-	<menu_item_call label="複製到市場刊登" name="Marketplace Copy" />
-	<menu_item_call label="移到市場刊登" name="Marketplace Move" />
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="建立刊登" name="Marketplace Create Listing" />
+		<menu_item_call label="關聯刊登" name="Marketplace Associate Listing" />
+		<menu_item_call label="取得（更新）刊登" name="Marketplace Get Listing" />
+		<menu_item_call label="檢查是否有誤" name="Marketplace Check Listing" />
+		<menu_item_call label="編輯刊登" name="Marketplace Edit Listing" />
+		<menu_item_call label="刊登" name="Marketplace List" />
+		<menu_item_call label="停止刊登" name="Marketplace Unlist" />
+		<menu_item_call label="啟用" name="Marketplace Activate" />
+		<menu_item_call label="停用" name="Marketplace Deactivate" />
+		<menu_item_call label="複製到市場刊登" name="Marketplace Copy" />
+		<menu_item_call label="移到市場刊登" name="Marketplace Move" />
+	</menu>
 	<menu_item_call label="--無選項--" name="--no options--" />
 </menu>

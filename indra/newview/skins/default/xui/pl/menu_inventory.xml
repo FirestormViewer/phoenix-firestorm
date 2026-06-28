@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Utwórz nową rzecz" name="Marketplace Create Listing"/>
-	<menu_item_call label="Przypisz rzecz" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Pobierz ponownie (odśwież)" name="Marketplace Get Listing"/>
-	<menu_item_call label="Sprawdź pod kątem błędów" name="Marketplace Check Listing"/>
-	<menu_item_call label="Edytuj rzecz" name="Marketplace Edit Listing"/>
-	<menu_item_call label="Dodaj na listę" name="Marketplace List"/>
-	<menu_item_call label="Usuń z listy" name="Marketplace Unlist"/>
-	<menu_item_call label="Aktywuj" name="Marketplace Activate"/>
-	<menu_item_call label="Dezaktywuj" name="Marketplace Deactivate"/>
 	<menu_item_call label="Udostępnij" name="Share"/>
 	<menu_item_call label="Otwórz" name="Task Open"/>
 	<menu_item_call label="Odtwarzaj" name="Task Play"/>
@@ -100,11 +91,13 @@
 	<menu_item_call label="Kopiuj nazwę" name="Copy Name" />
 	<menu_item_call label="Wytnij" name="Cut"/>
 	<menu_item_call label="Wklej" name="Paste"/>
-	<menu_item_call label="Wklej jako link" name="Paste As Link"/>
-	<menu_item_call label="Znajdź wszystkie linki" name="Find Links"/>
-	<menu_item_call label="Zastępowanie linków" name="Replace Links"/>
+	<menu label="Linki" name="Links">
+		<menu_item_call label="Wklej jako link" name="Paste As Link"/>
+		<menu_item_call label="Znajdź wszystkie linki" name="Find Links"/>
+		<menu_item_call label="Zastępowanie linków" name="Replace Links"/>
+		<menu_item_call label="Wyczyść zepsute linki" name="Cleanup broken Links"/>
+	</menu>
 	<menu_item_call label="Usuń" name="Delete"/>
-	<menu_item_call label="Wyczyść zepsute linki" name="Cleanup broken Links"/>
 	<menu_item_call label="Przenieś do domyślnego folderu" name="Move to Default Folder"/>
 	<menu_item_call label="Przenieś do Zagubionych i odnalezionych" name="Move to Lost And Found"/>
 	<menu_item_call label="Usuń folder systemowy" name="Delete System Folder"/>
@@ -139,7 +132,18 @@
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
 	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
-	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
-	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Utwórz nową rzecz" name="Marketplace Create Listing"/>
+		<menu_item_call label="Przypisz rzecz" name="Marketplace Associate Listing"/>
+		<menu_item_call label="Pobierz ponownie (odśwież)" name="Marketplace Get Listing"/>
+		<menu_item_call label="Sprawdź pod kątem błędów" name="Marketplace Check Listing"/>
+		<menu_item_call label="Edytuj rzecz" name="Marketplace Edit Listing"/>
+		<menu_item_call label="Dodaj na listę" name="Marketplace List"/>
+		<menu_item_call label="Usuń z listy" name="Marketplace Unlist"/>
+		<menu_item_call label="Aktywuj" name="Marketplace Activate"/>
+		<menu_item_call label="Dezaktywuj" name="Marketplace Deactivate"/>
+		<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
+		<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>
 </menu>

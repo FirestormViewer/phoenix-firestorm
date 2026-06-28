@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Auflistung erstellen" name="Marketplace Create Listing"/>
-	<menu_item_call label="Auflistung verknüpfen" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Auflistung abrufen (aktualisieren)" name="Marketplace Get Listing"/>
-	<menu_item_call label="Auf Fehler prüfen" name="Marketplace Check Listing"/>
-	<menu_item_call label="Auflistung bearbeiten" name="Marketplace Edit Listing"/>
-	<menu_item_call label="Auflisten" name="Marketplace List"/>
-	<menu_item_call label="Entfernen" name="Marketplace Unlist"/>
-	<menu_item_call label="Aktivieren" name="Marketplace Activate"/>
-	<menu_item_call label="Deaktivieren" name="Marketplace Deactivate"/>
 	<menu_item_call label="Teilen" name="Share"/>
 	<menu_item_call label="Öffnen" name="Task Open"/>
 	<menu_item_call label="Abspielen" name="Task Play"/>
@@ -98,11 +89,13 @@
 	<menu_item_call label="Name kopieren" name="Copy Name"/>
 	<menu_item_call label="Ausschneiden" name="Cut"/>
 	<menu_item_call label="Einfügen" name="Paste"/>
-	<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
-	<menu_item_call label="Alle Links suchen" name="Find Links"/>
-	<menu_item_call label="Links ersetzen" name="Replace Links"/>
+	<menu label="Links" name="Links">
+		<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
+		<menu_item_call label="Alle Links suchen" name="Find Links"/>
+		<menu_item_call label="Links ersetzen" name="Replace Links"/>
+		<menu_item_call label="Defekte Links aufräumen" name="Cleanup broken Links"/>
+	</menu>
 	<menu_item_call label="Löschen" name="Delete"/>
-	<menu_item_call label="Defekte Links aufräumen" name="Cleanup broken Links"/>
 	<menu_item_call label="In Standardordner verschieben" name="Move to Default Folder"/>
 	<menu_item_call label="In Fundbüro verschieben" name="Move to Lost And Found"/>
 	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>
@@ -141,7 +134,18 @@
 	<menu_item_call label="Ausziehen" name="Take Off"/>
 	<menu_item_call label="Nur auf mich anwenden" name="Settings Apply Local"/>
 	<menu_item_call label="Auf Parzelle anwenden" name="Settings Apply Parcel"/>
-	<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>
-	<menu_item_call label="In Marktplatz-Auflistungen verschieben" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Auflistung erstellen" name="Marketplace Create Listing"/>
+		<menu_item_call label="Auflistung verknüpfen" name="Marketplace Associate Listing"/>
+		<menu_item_call label="Auflistung abrufen (aktualisieren)" name="Marketplace Get Listing"/>
+		<menu_item_call label="Auf Fehler prüfen" name="Marketplace Check Listing"/>
+		<menu_item_call label="Auflistung bearbeiten" name="Marketplace Edit Listing"/>
+		<menu_item_call label="Auflisten" name="Marketplace List"/>
+		<menu_item_call label="Entfernen" name="Marketplace Unlist"/>
+		<menu_item_call label="Aktivieren" name="Marketplace Activate"/>
+		<menu_item_call label="Deaktivieren" name="Marketplace Deactivate"/>
+		<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>
+		<menu_item_call label="In Marktplatz-Auflistungen verschieben" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="--keine Optionen--" name="--no options--"/>
 </menu>
