@@ -54,6 +54,7 @@ BRAND_STRINGS = frozenset({
     "CAPITALIZED_APP_NAME", "CURRENT_GRID", "SECOND_LIFE", "DOWNLOAD_URL",
 })
 SKIP_FILES = frozenset({"xui_version.xml"})
+SKIP_FILE_PREFIXES: tuple[str, ...] = ("floater_test_",)
 TRANSLATE_FALSE_VALUES = frozenset({"false", "0", "no"})
 
 # Common misspellings of real XUI translation attributes.
@@ -677,6 +678,11 @@ def collect_files(base: Path) -> dict[str, Path]:
     return files
 
 
+def file_is_skipped_audit(rel: str) -> bool:
+    name = Path(rel).name
+    return name.startswith(SKIP_FILE_PREFIXES)
+
+
 def compare_file(
     rel: str,
     en_path: Path,
@@ -685,6 +691,9 @@ def compare_file(
     locale: str = "",
 ) -> FileReport:
     report = FileReport(rel=rel)
+    if file_is_skipped_audit(rel):
+        return report
+
     en_root = parse_xml(en_path)
     if en_root is None:
         return report
@@ -797,11 +806,16 @@ def audit_locale(skin: str, locale: str) -> LocaleReport:
         locale=locale,
         en_count=len(en_files),
         locale_count=len(locale_files),
-        missing_files=sorted(en_rels - locale_rels),
+        missing_files=sorted(
+            rel for rel in en_rels - locale_rels
+            if not file_is_skipped_audit(rel)
+        ),
         redundant_files=sorted(locale_rels - en_rels),
     )
 
     for rel in sorted(en_rels & locale_rels):
+        if file_is_skipped_audit(rel):
+            continue
         file_report = compare_file(
             rel, en_files[rel], locale_files.get(rel),
             skin=skin, locale=locale,
@@ -810,6 +824,8 @@ def audit_locale(skin: str, locale: str) -> LocaleReport:
             report.file_reports.append(file_report)
 
     for rel in report.missing_files:
+        if file_is_skipped_audit(rel):
+            continue
         en_root = parse_xml(en_files[rel])
         if en_root is None:
             continue
