@@ -890,6 +890,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
             items.push_back(std::string("Copy Separator"));
         }
         items.push_back(std::string("Copy"));
+        items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
         if (!isItemCopyable() && !isItemLinkable())
 // [/SL:KB]
@@ -1964,6 +1965,18 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
         gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(buffer));
         return;
     }
+    // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
+    else if ("copy_name" == action)
+    {
+        // Single item only
+        LLViewerInventoryItem* item = static_cast<LLViewerInventoryItem*>(getItem());
+        if (item)
+        {
+            gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(item->getName()));
+        }
+        return;
+    }
+    // </FS:MJR> [FIRE-36793]
     else if ("show_in_main_panel" == action)
     {
         LLInventoryPanel::openInventoryPanelAndSetSelection(true, mUUID, true);
@@ -3863,6 +3876,18 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
         pasteLinkFromClipboard();
         return;
     }
+    // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
+    else if ("copy_name" == action)
+    {
+        // Single item only
+        LLFolderViewFolder* f = dynamic_cast<LLFolderViewFolder*>(mInventoryPanel.get()->getItemByID(mUUID));
+        if (f)
+        {
+            gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(f->getName()));
+        }
+        return;
+    }
+    // </FS:MJR> [FIRE-36793]
     else if ("properties" == action)
     {
         showProperties();
@@ -5131,6 +5156,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     getClipboardEntries(false, items, disabled_items, flags);
                 }
             }
+            items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
         }
 
         if (model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT) == mUUID)
@@ -5201,6 +5227,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 disabled_items.push_back(std::string("Copy"));
             }
         }
+        items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
     }
 
     // Preemptively disable system folder removal if more than one item selected.
