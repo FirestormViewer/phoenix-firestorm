@@ -853,7 +853,7 @@ bool OmnifilterEngine::validateImportNotecard(const LLUUID& notecard_uuid)
                         // Read in the actual rule set data, to be added after the user picks a valid name.
                         mImportNotecardRuleSet = importRuleSetFromLLSD(rule_set_llsd["rule_set"]);
                         // Store the name for the imported name
-                        mImportName = rule_set_llsd["name"];
+                        mImportName = rule_set_llsd["name"].asString();
                         // Close the viewer window
                         nc->closeFloater();
                         // Return that data was successfuly read in
