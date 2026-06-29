@@ -27,6 +27,7 @@
 
 #include "omnifilterengine.h"
 
+#include "lltextvalidate.h"
 #include "llfloater.h"
 
 class FSScrollListCtrl;
@@ -127,6 +128,8 @@ protected:
     LLLineEditor* mChatReplaceCtrl{ nullptr };
     LLLineEditor* mButtonReplyCtrl{ nullptr };
     LLTextEditor* mTextBoxReplyCtrl{ nullptr };
+
+    LLTextValidate::Validator mPrevalidator;
 };
 
 /// <summary>

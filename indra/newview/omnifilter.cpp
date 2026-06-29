@@ -46,6 +46,7 @@ static constexpr S32 LOG_CONTENT_COLUMN = 1;
 
 Omnifilter::Omnifilter(const LLSD& key) :
     LLFloater(key)
+    , mPrevalidator(LLTextValidate::validateASCIIPrintableNoPipe)
 {
 }
 
@@ -514,12 +515,12 @@ void Omnifilter::onImportRuleSetConfirmedCallback(const LLSD& notification, cons
         //else if the user tried to export a rule set with a blank name, then show an error.
         else if (return_value == -1)
         {
-            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onImportRuleSetClicked, this));
         }
         // Else if the user tried to create a new rule set with a duplicate name, then show an error.
         else if (return_value == 0)
         {
-            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onImportRuleSetClicked, this));
         }
     }
 }
@@ -588,6 +589,15 @@ void Omnifilter::onExportRuleSetConfirmedCallback(const LLSD& notification, cons
     if (option == 0) // YES
     {
         std::string new_name = response["new_name"].asString();
+
+        // Try to validate the string
+        if (!mPrevalidator.validate(response["new_name"].asString()))
+        {
+            LLSD args;
+            args["INPUTNAME"] = new_name;
+            LLNotificationsUtil::add("OmniFilterNonAscii", args, LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+            return;
+        }
 
         LLPointer<LLInventoryCallback> cb =
             new LLBoostFuncInventoryCallback(boost::bind(&Omnifilter::onExportRuleSetNotecardCallback, this, _1));
