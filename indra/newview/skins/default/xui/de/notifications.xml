@@ -6115,5 +6115,37 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		Regelset kann nicht gelöscht werden, da kein Set mit dem Namen gefunden wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-
+	<notification name="OmniFilterExportRuleSet">
+		Name für Notizkarte eingeben, in die das Regel-Set [RULESETNAME] exportiert wird:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		Der Ordner für Notizkarten ist nicht im Inventar vorhanden. Notizkarte kann nicht erstellt werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		Name für das importierte Regel-Set [IMPORTNAME] eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		Fehler: Die Notizkarte [IMPORTNAME] enthält kein gültiges Regel-Set. Import kann nicht durchgeführt werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		Fehler: Objekt ist keine Notizkarte.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="Omni-Filter-Import-Anleitung">
+		Um ein Regel-Set aus einer Notizkarte zu importieren, wählen Sie die entsprechende Notizkarte im Inventar aus und ziehen sie per Drag&amp;Drop in dieses Fenster.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<ignore name="ignore" text="Instruktionen für den Import von Regel-Sets des Omni-Filters anzeigen, wenn der Import-Button gedrückt wird"/>
+		</form>
+	</notification>
 </notifications>
