@@ -5759,4 +5759,10 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 			<ignore name="ignore" text="Pokazuj instrukcję importu dla Wszystkofiltra po naciśnięciu przycisku Importuj"/>
 		</form>
 	</notification>
+	<notification name="OmniFilterNonAscii">
+		Nazwa notki '[INPUTNAME]' nie jest obsługiwana ze względu na znaki niełacińskie.
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
 </notifications>
