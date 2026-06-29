@@ -15424,7 +15424,7 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
              index="0"
              name="OK"
              text="OK"/>
-            <ignore name="ignore" text="Show these instructions next time the Import button is pressed?"/>
+            <ignore name="ignore" text="Show Omnifilter import instructions when Import button is pressed"/>
         </form>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->

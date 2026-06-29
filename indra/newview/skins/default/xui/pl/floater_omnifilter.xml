@@ -44,6 +44,10 @@
 				<fs_scroll_list.columns name="log_entry" label="Reguła" />
 			</fs_scroll_list>
 		</layout_panel>
+		<layout_panel name="inport_export_layout">
+			<button name="btn_rule_set_export" tool_tip="Eksportuj zestaw reguł do notki." label="Eksport" />
+			<button name="btn_rule_set_import" tool_tip="Importuj zestaw reguł z notki." label="Import" />
+		</layout_panel>
 	</layout_stack>
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Nazwa reguły:" />

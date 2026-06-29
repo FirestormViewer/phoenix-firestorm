@@ -6774,6 +6774,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="OmnifilterDefaultName">
 		Domyślny
 	</string>
+	<string name="OmnifilterExportDescription">
+		Zestaw regul Wszystkofiltra: [REPLACEMENT]
+	</string>
 	<string name="FSAvatarAlignToggleMini">
 		Małe
 	</string>

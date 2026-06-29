@@ -5732,4 +5732,31 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 	<notification name="OmniFilterRemoveRuleSetInvalidName">
 		Nie można usunąć zestawu reguł, ponieważ nie znaleziono podanej nazwy.
 	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		Wpisz nazwę notki, aby wyeksportować zestaw reguł [RULESETNAME]:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		W szafie brakuje kategorii Notki. Nie można utworzyć notki.
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		Wpisz nazwę dla zaimportowanego zestawu reguł '[IMPORTNAME]':
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		Błąd: Notka [IMPORTNAME] nie jest prawidłowym zestawem reguł, importowanie niemożliwe.
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		Błąd: Obiekt nie jest notką.
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="Instrukcja importu Wszystkofiltra">
+		Aby zaimportować notkę, kliknij lewym przyciskiem myszy na notkę z zestawem reguł w szafie, która się pojawiła, i przytrzymaj go. Następnie przeciągnij mysz nad to okno i puść przycisk, aby rozpocząć proces importu.
+		<form name="form">
+			<ignore name="ignore" text="Pokazuj instrukcję importu dla Wszystkofiltra po naciśnięciu przycisku Importuj"/>
+		</form>
+	</notification>
 </notifications>
