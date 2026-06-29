@@ -6031,5 +6031,35 @@ O nome é verificado antes da tarefa ser salva.
 		A região '[REGION]' não foi encontrada. Verifique o nome e tente novamente.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Não é possível remover o conjunto de regras porque o nome especificado não foi encontrado.
+	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		Digite o nome de um notecard para exportar o conjunto de regras [RULESETNAME]:
+		<form name="form">
+			<button name="Cancel" text="Cancelar" />
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		A categoria Notecard está faltando no inventário. Não é possível criar o Notecard.
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		Digite um nome para o conjunto de regras importado '[IMPORTNAME]':
+		<form name="form">
+			<button name="Cancel" text="Cancelar" />
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		Erro: O Notecard [IMPORTNAME] não é um conjunto de regras válido, não é possível importar.
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		Erro: O objeto não é um notecard.
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="Instruções de Importação do Omnifilter">
+		Para importar um notecard, clique com o botão esquerdo em um notecard de conjunto de regras no inventário que apareceu e segure o botão esquerdo do mouse. Em seguida, arraste o mouse até esta janela e solte o botão do mouse para iniciar o processo de importação.
+		<form name="form">
+			<ignore name="ignore" text="Mostrar estas instruções da próxima vez que o botão Importar for pressionado?"/>
+		</form>
+	</notification>
 
 </notifications>

@@ -21,6 +21,10 @@
 				<fs_scroll_list.columns name="log_entry" label="Regra"/>
 			</fs_scroll_list>
 		</layout_panel>
+		<layout_panel name="inport_export_layout">
+			<button name="btn_rule_set_export" tool_tip="Exportar conjunto de regras para um Notecard." label="Exportar" />
+			<button name="btn_rule_set_import" tool_tip="Importar um conjunto de regras de um Notecard." label="Importar" />
+		</layout_panel>
 	</layout_stack>
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Nome da regra:"/>

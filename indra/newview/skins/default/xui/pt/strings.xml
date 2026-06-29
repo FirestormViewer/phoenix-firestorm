@@ -6720,6 +6720,12 @@ Sua posição atual: [AVATAR_POS]
 	<string name="OmnifilterReplacement">
 		Filtro Omni substituído por: [REPLACEMENT]
 	</string>
+	<string name="OmnifilterDefaultName">
+		Padrão
+	</string>
+	<string name="OmnifilterExportDescription">
+		Conjunto de Regras do Omnifilter: [REPLACEMENT]
+	</string>
 	<string name="FSAvatarAlignToggleMini">
 	Pequeno
 	</string>
