@@ -271,23 +271,23 @@
 
 	<color
 	 name="AnsaStormBlue_Dk"
-	 value="0 0.6211 0.8477 1" />
+	 value="0.258 0.363 0.472 1" />
 
 	<color
 	 name="AnsaStormBlue_Dk_86"
-	 value="0 0.6211 0.8477 0.86" />
+	 value="0.258 0.363 0.472 0.86" />
 
 	 <color
 	 name="AnsaStormBlue_Dk_66"
-	 value="0 0.6211 0.8477 0.66" />
+	 value="0.258 0.363 0.472 0.66" />
 
 	 <color
 	 name="AnsaStormBlue_Dk_33"
-	 value="0 0.6211 0.8477 0.33" />
+	 value="0.258 0.363 0.472 0.33" />
 
 	 <color
 	 name="AnsaStormBlue_Dk_13"
-	 value="0 0.6211 0.8477 0.13" />
+	 value="0.258 0.363 0.472 0.13" />
 
 	 <color
 	 name="AnsaStormBlue_Lt_13"
@@ -304,6 +304,10 @@
 	 <color
 	 name="AnsaStorm_HtmlLink_QueryPart"
 	 value="0.463 0.729 0.826 1" />
+
+	<color
+	 name="AvatarListForegroundRed"
+	 value="1 0.703 0.703 1" />
 
 	 <!-- END AnsaStorm Definitions -->
 
@@ -374,7 +378,7 @@
      reference="SL-White" />
     <color
      name="PieMenuSelectedColor"
-     reference="AnsaStormBlue_Dk_66" />
+     reference="AnsaStormBlue_Dk" />
     <color
      name="PieMenuSelectedColorOverride"
      reference="EmphasisColor" />
@@ -479,10 +483,10 @@
      reference="Yellow" />
     <color
      name="AvatarListItemBeyondShoutRange"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="AvatarListItemAgeAlert"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="BackgroundChatColor"
      reference="DkGray" />
@@ -1069,7 +1073,7 @@
      reference="EmphasisColor_13" />
     <color
      name="ScrollSelectedBGColor"
-     reference="AnsaStormBlue_Dk_66" />
+     reference="AnsaStormBlue_Dk" />
     <color
      name="ScrollSelectedFGColor"
      reference="White" />
@@ -1450,5 +1454,5 @@
     value="0.258 0.363 0.472 1" />
   <color
     name="HighlightPanelBackground"
-    value="0.258 0.363 0.472 1" />
+    reference="AnsaStormBlue_Dk" />
 </colors>

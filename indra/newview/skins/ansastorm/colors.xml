@@ -305,6 +305,10 @@
 	 name="AnsaStorm_HtmlLink_QueryPart"
 	 value="0.463 0.729 0.826 1" />
 
+	<color
+	 name="AvatarListForegroundRed"
+	 value="1 0.703 0.703 1" />
+
 	 <!-- END AnsaStorm Definitions -->
 
   <!-- This color name makes potentially unused colors show up bright purple.
@@ -479,10 +483,10 @@
      reference="Yellow" />
     <color
      name="AvatarListItemBeyondShoutRange"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="AvatarListItemAgeAlert"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="BackgroundChatColor"
      reference="DkGray" />
