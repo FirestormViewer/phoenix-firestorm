@@ -258,6 +258,29 @@
 				</row>
 			</fs_scroll_list>
 		</layout_panel>
+		<layout_panel
+		 name="inport_export_layout"
+		 min_height="20">
+			<button
+			 name="btn_rule_set_export"
+			 layout="topleft"
+			 follows="left|top"
+			 height="20"
+			 left="0"
+			 top_pad="0"
+			 width="96"
+			 tool_tip="Export rule set to a Notecard."
+			 label="Export"/>
+			<button
+			 name="btn_rule_set_import"
+			 layout="topleft"
+			 follows="right|top"
+			 height="20"
+			 left_pad="0"
+			 width="96"
+			 tool_tip="Import a rule set from a Notecard."
+			 label="Import"/>
+		</layout_panel>
 	</layout_stack>
 
 	<panel

@@ -15337,5 +15337,95 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             name="okbutton"
             yestext="OK"/>
     </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterExportRuleSet"
+     type="alertmodal">
+        Enter a notecard name to export rule set [RULESETNAME]:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterMissingCategory"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        The Notecard Category is missing from the inventory. Unable to create the Notecard.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterImportRuleSet"
+     type="alertmodal">
+        Enter a name for the imported rule set '[IMPORTNAME]':
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [IMPORTNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterInvalidImport"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Error: The Notecard [IMPORTNAME] is not a valid Rule Set, unable to import.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterNotANotecard"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Error: Object is not a notecard.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+     icon="notifytip.tga"
+     name="OmnifilterImportInstructions"
+     label="Omnifilter Import Instructions"
+     type="alertmodal">
+        To import a notecard, left click on a rule set notecard from the inventory that appeared and hold down the left mouse button. Next, drag the mouse over to this window and release the mouse button to begin the import process.
+        <form name="form">
+            <button
+             index="0"
+             name="OK"
+             text="OK"/>
+            <ignore name="ignore" text="Show these instructions next time the Import button is pressed?"/>
+        </form>
+    </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
 </notifications>

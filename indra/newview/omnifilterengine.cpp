@@ -30,6 +30,11 @@
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
+#include "lltrans.h" // Needed for LLTrans::getString
+#include "llinventorymodel.h" // gInventory
+#include "llagentdata.h" // gAgentID
+#include "llpreviewnotecard.h"
+#include "llfloaterreg.h"
 
 #include <fstream>
 #include <filesystem>
@@ -39,6 +44,9 @@ OmnifilterEngine::OmnifilterEngine()
     , LLEventTimer(5.0f)
     , mDirty(false)
     , mCurrentSelectedRuleSet("Default")
+    , mExportName("")
+    , mExportUICallback(nullptr)
+    , mExportNotecardUUID(LLUUID::null)
 {
     mEventTimer.stop();
 }
@@ -381,80 +389,89 @@ bool OmnifilterEngine::importFromLLSD(const LLSD& needle_rule_sets_llsd)
             // NOTE maps don't store data order added, but optimized order for storage.
             mOrderedRuleSets[rule_set_index++] = new_rule_set_name;
         }
-        // Generate a new rule set
-        rule_set_t new_rule_set = rule_set_t(needle_ordered_list_t(), needle_list_t());
-        // Apply the size of the rule set (number of rules) to the ordered rule set set.
-        // First = Ordered Rule Set Vector, Second = Actual Rule Set Map
-        new_rule_set.first.resize(new_rule_set_llsd["rule_set"].size());
-        // Set the current needles_llsd to the actual rule set stored.
-        // keeps old code valid.
-        LLSD needles_llsd = new_rule_set_llsd["rule_set"];
-        S32 index = 0;
-        // Now loop over the rule map stored in the rule set.
-        for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
-        {
-            Needle new_needle;
-            // Perform checks on all input values from the data format and skip any that don't exist.
-            if (needle_data.has("sender_name"))
-                new_needle.mSenderName = needle_data["sender_name"].asString();
-            if (needle_data.has("content"))
-                new_needle.mContent = needle_data["content"].asString();
-            if (needle_data.has("region_name"))
-                new_needle.mRegionName = needle_data["region_name"].asString();
-            if (needle_data.has("chat_replace"))
-                new_needle.mChatReplace = needle_data["chat_replace"].asString();
-            if (needle_data.has("button_reply"))
-                new_needle.mButtonReply = needle_data["button_reply"].asString();
-            if (needle_data.has("textbox_reply"))
-                new_needle.mTextBoxReply = needle_data["textbox_reply"].asString();
-            if (needle_data.has("sender_name_match_type"))
-                new_needle.mSenderNameMatchType = static_cast<OmnifilterEngine::eMatchType>(needle_data["sender_name_match_type"].asInteger());
-            if (needle_data.has("content_match_type"))
-                new_needle.mContentMatchType = static_cast<OmnifilterEngine::eMatchType>(needle_data["content_match_type"].asInteger());
+        // Import the rule set
+        rule_set_t new_rule_set(importRuleSetFromLLSD(new_rule_set_llsd["rule_set"]));
 
-            if (needle_data.has("types"))
-            {
-                LLSD types_llsd = needle_data["types"];
-
-                for (const auto& needle_type : llsd::inArray(types_llsd))
-                {
-                    new_needle.mTypes.insert(static_cast<OmnifilterEngine::eType>(needle_type.asInteger()));
-                }
-            }
-            if (needle_data.has("enabled"))
-                new_needle.mEnabled = needle_data["enabled"].asBoolean();
-            if (needle_data.has("sender_name_case_insensitive"))
-                new_needle.mSenderNameCaseInsensitive = needle_data["sender_name_case_insensitive"].asBoolean();
-            if (needle_data.has("content_case_insensitive"))
-                new_needle.mContentCaseInsensitive = needle_data["content_case_insensitive"].asBoolean();
-
-            if (needle_data.has("enabled"))
-            {
-                const std::string owner_id_str = needle_data["owner_id"].asString();
-                if (!owner_id_str.empty())
-                {
-                    new_needle.mOwnerID.set(owner_id_str);
-                }
-            }
-            // Assign the actuall new rule set to the parsed needle object
-            new_rule_set.second[new_needle_name] = new_needle;
-            // Add the loaded needle name to the ordered needle list
-            // Needles are stored in order added to the map originally so use the
-            // order value stored to restore the order back to the user
-            // defined order.
-            if (needle_data.has("order"))
-            {
-                new_rule_set.first[needle_data["order"].asInteger()] = new_needle_name;
-            }
-            else
-            {
-                new_rule_set.first[index++] = new_needle_name;
-            }
-        }
         mNeedleRuleSets[new_rule_set_name] = new_rule_set;
     }
 
     return true;
+}
+
+OmnifilterEngine::rule_set_t OmnifilterEngine::importRuleSetFromLLSD(const LLSD& data)
+{
+    // Generate a new rule set
+    rule_set_t new_rule_set = rule_set_t(needle_ordered_list_t(), needle_list_t());
+    // Apply the size of the rule set (number of rules) to the ordered rule set set.
+    // First = Ordered Rule Set Vector, Second = Actual Rule Set Map
+    new_rule_set.first.resize(data.size());
+    // Set the current needles_llsd to the actual rule set stored.
+    // keeps old code valid.
+    LLSD needles_llsd = data;
+    S32  index        = 0;
+    // Now loop over the rule map stored in the rule set.
+    for (const auto& [new_needle_name, needle_data] : llsd::inMap(needles_llsd))
+    {
+        Needle new_needle;
+        // Perform checks on all input values from the data format and skip any that don't exist.
+        if (needle_data.has("sender_name"))
+            new_needle.mSenderName = needle_data["sender_name"].asString();
+        if (needle_data.has("content"))
+            new_needle.mContent = needle_data["content"].asString();
+        if (needle_data.has("region_name"))
+            new_needle.mRegionName = needle_data["region_name"].asString();
+        if (needle_data.has("chat_replace"))
+            new_needle.mChatReplace = needle_data["chat_replace"].asString();
+        if (needle_data.has("button_reply"))
+            new_needle.mButtonReply = needle_data["button_reply"].asString();
+        if (needle_data.has("textbox_reply"))
+            new_needle.mTextBoxReply = needle_data["textbox_reply"].asString();
+        if (needle_data.has("sender_name_match_type"))
+            new_needle.mSenderNameMatchType = static_cast<OmnifilterEngine::eMatchType>(needle_data["sender_name_match_type"].asInteger());
+        if (needle_data.has("content_match_type"))
+            new_needle.mContentMatchType = static_cast<OmnifilterEngine::eMatchType>(needle_data["content_match_type"].asInteger());
+
+        if (needle_data.has("types"))
+        {
+            LLSD types_llsd = needle_data["types"];
+
+            for (const auto& needle_type : llsd::inArray(types_llsd))
+            {
+                new_needle.mTypes.insert(static_cast<OmnifilterEngine::eType>(needle_type.asInteger()));
+            }
+        }
+        if (needle_data.has("enabled"))
+            new_needle.mEnabled = needle_data["enabled"].asBoolean();
+        if (needle_data.has("sender_name_case_insensitive"))
+            new_needle.mSenderNameCaseInsensitive = needle_data["sender_name_case_insensitive"].asBoolean();
+        if (needle_data.has("content_case_insensitive"))
+            new_needle.mContentCaseInsensitive = needle_data["content_case_insensitive"].asBoolean();
+
+        if (needle_data.has("enabled"))
+        {
+            const std::string owner_id_str = needle_data["owner_id"].asString();
+            if (!owner_id_str.empty())
+            {
+                new_needle.mOwnerID.set(owner_id_str);
+            }
+        }
+        // Assign the actuall new rule set to the parsed needle object
+        new_rule_set.second[new_needle_name] = new_needle;
+        // Add the loaded needle name to the ordered needle list
+        // Needles are stored in order added to the map originally so use the
+        // order value stored to restore the order back to the user
+        // defined order.
+        if (needle_data.has("order"))
+        {
+            new_rule_set.first[needle_data["order"].asInteger()] = new_needle_name;
+        }
+        else
+        {
+            new_rule_set.first[index++] = new_needle_name;
+        }
+    }
+
+    return new_rule_set;
 }
 
 // Exports the current stored orered rules sets to an LLSD object and returns the object created.
@@ -467,6 +484,28 @@ LLSD OmnifilterEngine::exportToLLSD()
     for (const auto& export_rule_set_name : mOrderedRuleSets)
     {
         LLSD needles_llsd;
+        // Use ordered needle list to get the names of the needles in specified order and not the order added to the map.
+        needles_llsd = exportToLLSD(export_rule_set_name);
+        // Store the rule set into the otuput with the rule set store in the LLSD as well as the rule set order value
+        output[export_rule_set_name]["rule_set"] = needles_llsd;
+        output[export_rule_set_name]["order"] = rule_set_order++;
+    }
+
+    // Return the final LLSD which contains all the Rule Sets
+    return output;
+}
+
+LLSD OmnifilterEngine::exportToLLSD(const std::string& rule_set_name)
+{
+    LLSD needles_llsd;
+    // If the rule set name specified is empty, or is not contained within the rule sets, then return an empty LLSD.
+    if (rule_set_name.empty() || !mNeedleRuleSets.contains(rule_set_name))
+    {
+        return needles_llsd;
+    }
+    // Loop over the ordered rule set names
+    const auto& export_rule_set_name = rule_set_name;
+    {        
         // Get the map of needles that have the name of the current ordered rule set
         const auto& export_rule_set = mNeedleRuleSets[export_rule_set_name];
 
@@ -499,13 +538,10 @@ LLSD OmnifilterEngine::exportToLLSD()
             needles_llsd[needle_name]["sender_name_case_insensitive"] = needle.mSenderNameCaseInsensitive;
             needles_llsd[needle_name]["content_case_insensitive"]     = needle.mContentCaseInsensitive;
         }
-        // Store the rule set into the otuput with the rule set store in the LLSD as well as the rule set order value
-        output[export_rule_set_name]["rule_set"] = needles_llsd;
-        output[export_rule_set_name]["order"] = rule_set_order++;
     }
 
     // Return the final LLSD which contains all the Rule Sets
-    return output;
+    return needles_llsd;
 }
 
 // Assignes a rule set to either fron the internal variable to the stored map of rule sets, or
@@ -607,6 +643,9 @@ S32 OmnifilterEngine::addNewRuleSet(std::string_view new_name)
         return 0;
     }
 
+    // Save the current state of the rule set back, before changing to the new rule set.
+    assignRuleSet(false);
+
     // We want to clear the current rule set and ordered rules as a new rule set has only a single template rule that is disabled.
     mNeedles.clear();
     mOrderedNeedles.clear();
@@ -644,6 +683,9 @@ S32 OmnifilterEngine::addClonedRuleSet(std::string_view new_name)
 
     // This method is different in the new rule set method by not clearing the current rules and ordered rules.
 
+    // Save the current state of the rule set back, before changing to the new rule set.
+    assignRuleSet(false);
+
     // Set the rule set in the map to a new rule set pair.
     mNeedleRuleSets[str_new_name] = rule_set_t(needle_ordered_list_t(), needle_list_t());
     // Update the OmnifilterRuleSetID saved setting to store the location of the new rule set.
@@ -656,6 +698,209 @@ S32 OmnifilterEngine::addClonedRuleSet(std::string_view new_name)
 
     // Copy the internal rule set to the stored rulset
     assignRuleSet(false);
+
+    // Signal all listeners that the rule sets have been updated
+    onRuleSetsUpdated();
+    return 1;
+}
+
+// Attempt to create a notecard to export a rule set to, and validates the user select choices.
+S32 OmnifilterEngine::exportRuleSetToNotecard(std::string_view new_name, LLPointer<LLInventoryCallback> cb)
+{
+    // If the name is blank, return an error code, to then let the user know with a notification
+    if (new_name.empty())
+    {
+        return 0;
+    }
+
+    // Store the name for the exported rule set
+    mExportName = std::string(new_name);
+    // Store the UI callback method, which will be used to then open the inventory window
+    mExportUICallback = cb;
+
+    // Need to see if there is a notecard with the same name.
+    LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    
+    // If the notecard categroy is missing in the users inventory, return an error
+    if (notecard_category_uuid.isNull())
+    {
+        return -1;
+    }
+
+    // If the a notecard already exists with the given name, then return a duplicate name error
+    LLViewerInventoryCategory::cat_array_t cats;
+    LLViewerInventoryItem::item_array_t    items;
+    gInventory.collectDescendents(notecard_category_uuid, cats, items, false);
+    for (auto iter = items.begin(); iter != items.end(); iter++)
+    {
+        if ((*iter)->getName() == mExportName)
+        {
+            return -2;
+        }
+    }
+
+    // Create the new item using the menu system in the user's avatar inventory.
+    // The callback from omnifilter floater will copy the concents of the current rule set into the notecard.
+    std::function<void(const LLUUID&)> callback_function =
+        std::bind(&OmnifilterEngine::exportNotecardCreatedCallback, this, std::placeholders::_1);
+    menu_create_inventory_item(NULL, LLUUID::null, LLSD("notecard"), LLUUID::null, callback_function);
+
+    return 1;
+}
+
+void OmnifilterEngine::exportNotecardCreatedCallback(const LLUUID& notecard_uuid)
+{
+    // Get the generated preview notecard editor
+    LLPreviewNotecard* nc = dynamic_cast<LLPreviewNotecard*>(LLFloaterReg::getInstance("preview_notecard", LLSD(notecard_uuid)));
+    if (nc)
+    {
+        // Hide the notecard preview, as we want to automate the next actions with it and prevent the user from editing the notecard and
+        // introducting errors
+        nc->setVisible(false);
+        // Get the new notecard
+        LLInventoryItem* item = gInventory.getItem(notecard_uuid);
+        // Convert the current rule set to an LLSD to be exported
+        LLSD output_rule_set_llsd = exportToLLSD(mCurrentSelectedRuleSet);
+        
+        // If the rule set named was not found/exported, return an error code.
+        if (!output_rule_set_llsd.isMap())
+        {
+            // Call notification with error
+            return;
+        }
+
+        LLSD final_output_llsd;
+        // Add a header, version to a LLSD to be writen to the Notecard along with the actual exported rule set
+        final_output_llsd["header"] = HEADER; // Set simple header to validate that the notecard is for Omnifilters
+        final_output_llsd["version"] = VERSION; // May need to support multiple versions. Already actually 3 existing versions, but not labeled...
+                                          // version 1 = Original Omnifilter with no rule set
+                                          // version 2 = Original Omnifilter with no rule set, but with Order added to rule sets
+                                          // version 3 = Omnifilter with Rule Set and Order in the actual rules.
+        final_output_llsd["rule_set"] = output_rule_set_llsd;
+        final_output_llsd["name"] = mExportName;
+
+        // Convert the rule set to XML using a string stream
+        std::stringstream xml_out_stream;
+        LLSDSerialize::toXML(final_output_llsd, xml_out_stream);
+        // Format the string stream output for the notecard format
+        nc->getEditor()->setText(xml_out_stream.str());
+        // Save the change to the notecard
+        nc->saveItem();
+        // Close the viewer window
+        nc->closeFloater();
+
+        // Store the notecard UUID in the acessor method, for the UI.
+        mExportNotecardUUID = notecard_uuid;
+
+        // Rename the notecard to the name specified by the user that is already validated
+        LLSD updates;
+        updates["name"] = mExportName;
+        // Update the description to show that this notecard is for a omnifilter rule set
+        LLSD args;
+        args["REPLACEMENT"] = mExportName;
+        updates["desc"] = LLTrans::getString("OmnifilterExportDescription", args);
+        // Update the existing item, with the UI export callback to show the new item in the inveotory.
+        update_inventory_item(notecard_uuid, updates, mExportUICallback);
+    }
+}
+
+bool OmnifilterEngine::validateImportNotecard(const LLUUID& notecard_uuid)
+{
+    // Get the generated preview notecard editor
+    LLPreviewNotecard* nc = dynamic_cast<LLPreviewNotecard*>(LLFloaterReg::getInstance("preview_notecard", LLSD(notecard_uuid)));
+    if (nc)
+    {
+        // Hide the notecard preview, as we want to automate the next actions with it and prevent the user from editing the notecard and
+        // introducting errors
+        nc->setVisible(false);
+
+        // Get the imported notecard
+        LLInventoryItem* item = gInventory.getItem(notecard_uuid);
+
+        // If there is no item, return an error
+        if (!item)
+        {
+            // Close the viewer window
+            nc->closeFloater();
+
+            return false;
+        }
+
+        // Assign the imported notecard to the current preview notecard
+        nc->setItem(item);
+
+        // Get the text buffer from the notecard.
+        std::istringstream stream(nc->getEditor()->getText());
+
+        // LLSD to store the read in rule set
+        LLSD rule_set_llsd;
+
+        // Try to load the LLSD from the notecard text
+        S32 return_value = LLSDSerialize::fromXML(rule_set_llsd, stream);
+
+        // If the was valid data read in(0 empty file, -1 parsing error)
+        if (return_value > 0)
+        {
+            // If the rule set named was not found/exported, return an error code.
+            if (rule_set_llsd.isMap())
+            {
+                // Check if the rule_set_llsd contains a header, version and rule_set values
+                if (rule_set_llsd.has("header") && rule_set_llsd.has("version") && rule_set_llsd.has("rule_set") && rule_set_llsd.has("name"))
+                {
+                    // Check the actual value of the header and version, if they match, then
+                    if (rule_set_llsd["header"].asString() == HEADER && rule_set_llsd["version"].asInteger() == VERSION)
+                    {
+                        // Read in the actual rule set data, to be added after the user picks a valid name.
+                        mImportNotecardRuleSet = importRuleSetFromLLSD(rule_set_llsd["rule_set"]);
+                        // Store the name for the imported name
+                        mImportName = rule_set_llsd["name"];
+                        // Close the viewer window
+                        nc->closeFloater();
+                        // Return that data was successfuly read in
+                        return true;
+                    }
+                }
+            }
+        }
+        // Close the viewer window
+        nc->closeFloater();
+    }
+    // Return there was an error
+    return false;
+}
+
+S32 OmnifilterEngine::importRuleSetFromNotecard(std::string_view new_name)
+{
+    // If the name is blank, return an error code, to then let the user know with a notification
+    if (new_name.empty())
+    {
+        return -1;
+    }
+
+    std::string str_new_name(new_name);
+    // If the name already exists, return an error to let the user know
+    if (mNeedleRuleSets.contains(str_new_name))
+    {
+        return 0;
+    }
+
+    // Save the current state of the rule set back, before changing to the new rule set.
+    assignRuleSet(false);
+
+    // We want to clear the current rule set and ordered rules as a imported rule set has only a single template rule that is disabled.
+    mNeedles.clear();
+    mOrderedNeedles.clear();
+    // Set the rule set in the map to a new rule set pair.
+    mNeedleRuleSets[str_new_name] = mImportNotecardRuleSet;
+    // Update the OmnifilterRuleSetID saved setting to store the location of the imported rule set.
+    // We want to do this to support auto-selecting the new rule set.
+    gSavedSettings.setS32("OmnifilterRuleSetID", static_cast<S32>(mNeedleRuleSets.size() - 1));
+    // Set the current selcted rule set to the new rule set
+    mCurrentSelectedRuleSet = str_new_name;
+    // Add the rule set name to the list of ordered rule sets
+    mOrderedRuleSets.push_back(mCurrentSelectedRuleSet);
+    // Copy the imported rule set to the internal rule set
+    assignRuleSet(true);
 
     // Signal all listeners that the rule sets have been updated
     onRuleSetsUpdated();

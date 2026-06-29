@@ -33,6 +33,8 @@
 #include "llnotificationsutil.h" // Needed for Notifications
 #include "llfloaterreg.h" // Needed for LLFloaterReg::showInstance
 #include "lltrans.h" // Needed for LLTrans::getString
+#include "llpanelmaininventory.h" // Needed for LLPanelMainInventory::newFolderWindow
+#include "llviewerinventory.h"
 
 #include "fsscrolllistctrl.h"
 
@@ -333,6 +335,28 @@ void Omnifilter::onRemoveRuleSetClicked()
     }
 }
 
+void Omnifilter::onImportRuleSetClicked()
+{
+    // Get the notecard category UUID to open in the new inveotory window.
+    LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    // Show the inventory, showing only notecards and highlight the new notecard created.
+    LLPanelMainInventory::newFolderWindow(notecard_category_uuid);
+    
+    // Display an instruction notification to the end user.
+    LLNotificationsUtil::add("OmnifilterImportInstructions", LLSD(), LLSD());
+}
+
+void Omnifilter::onExportRuleSetClicked()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLSD args;
+    // Default name of the export rule set is the current rule set name
+    args["RULESETNAME"] = instance->getCurrentSelectedRuleSet();
+    // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
+    LLNotificationsUtil::add("OmniFilterExportRuleSet", args, LLSD(),
+                             boost::bind(&Omnifilter::onExportRuleSetConfirmedCallback, this, _1, _2));
+}
+
 // New Rule Set callback, which does the actual cloning.
 void Omnifilter::onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response)
 {
@@ -455,6 +479,137 @@ void Omnifilter::onRemoveRuleSetConfirmedCallback(const LLSD& notification, cons
             LLSD args;
             args["INVALIDNAME"] = instance->getCurrentSelectedRuleSet();
             LLNotificationsUtil::add("OmniFilterRemoveRuleSetInvalidName", args, LLSD());
+        }
+    }
+}
+
+void Omnifilter::onImportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+
+        // Try to perform the actual importing of the rule set.
+        S32 return_value = instance->importRuleSetFromNotecard(new_name);
+
+        // If the import was successful, we need to update the UI and select the newly import rule set.
+        if (return_value == 1)
+        {
+            // Get the index of the added rule set.
+            S32 new_rule_index = gSavedSettings.getS32("OmnifilterRuleSetID");
+            // Add the new rule set to the Rule Set Drop Down
+            mRuleSetsCmb->add(new_name, LLSD(new_rule_index));
+
+            // Select the new rule set
+            mRuleSetsCmb->setCurrentByIndex(new_rule_index);
+
+            // Need to force the UI to reload the rules.
+            reloadRule();
+
+            // Save the state of the OmniFilter Window
+            instance->setDirty(true);
+        }
+        //else if the user tried to export a rule set with a blank name, then show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set with a duplicate name, then show an error.
+        else if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+    }
+}
+
+void Omnifilter::onExportRuleSetNotecardCallback(const LLUUID& notecard_uuid)
+{
+    // The calling code does not pass in the item ID if an update was called as it did not change
+    // So need to get the stored UUID of the new notecard item isntead.
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLUUID actual_notecard_uuid = instance->getExportUUID();
+    // Get the notecard category UUID to open in the new inveotory window.
+    LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    LL_INFOS() << "Export Notecard UUID:" << actual_notecard_uuid.asString() << LL_ENDL;
+    // Show the inventory, showing only notecards and highlight the new notecard created.
+    LLPanelMainInventory::newFolderWindow(notecard_category_uuid, actual_notecard_uuid);
+}
+
+bool Omnifilter::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
+                                              EAcceptance* accept, std::string& tooltip_msg)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLInventoryItem* item = (LLInventoryItem*)cargo_data;
+    // If there is no item, return not accepted and exit
+    if (!item)
+    {
+        *accept = ACCEPT_NO;
+        LLNotificationsUtil::add("OmniFilterNotANotecard", LLSD(), LLSD());
+        return true;
+    }
+
+    if (cargo_type == DAD_NOTECARD)
+    {
+        *accept = ACCEPT_YES_SINGLE;
+        // Flag that the notecard will be accepted        
+        if (item && drop)
+        {
+            // Check to see if the notecard is valid first
+            if (!instance->validateImportNotecard(item->getUUID()))
+            {
+                LLSD args;
+                args["IMPORTNAME"] = item->getName();
+                LLNotificationsUtil::add("OmniFilterInvalidImport", args, LLSD());
+            }
+            else
+            {
+                LLSD args;
+                args["IMPORTNAME"] = instance->getImportName(); // Get the import name from the validated data
+                LLNotificationsUtil::add("OmniFilterImportRuleSet", args, LLSD(),
+                                         boost::bind(&Omnifilter::onImportRuleSetConfirmedCallback, this, _1, _2));
+            }
+        }
+    }
+    else
+    {
+        LLNotificationsUtil::add("OmniFilterNotANotecard", LLSD(), LLSD());
+        *accept = ACCEPT_NO;
+    }
+
+    return true;
+}
+
+void Omnifilter::onExportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+
+        LLPointer<LLInventoryCallback> cb =
+            new LLBoostFuncInventoryCallback(boost::bind(&Omnifilter::onExportRuleSetNotecardCallback, this, _1));
+
+        // Try to perform the actual exporting rule set.
+        S32 return_value = instance->exportRuleSetToNotecard(new_name, cb);
+
+        //If the user tried to export a rule set with a blank name, then show an error.
+        if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set no notecard category existing, then show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterMissingCategory", LLSD(), LLSD(),
+                                     boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set with a duplicate name, then show an error.
+        else if (return_value == -2)
+        {
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
         }
     }
 }
@@ -635,6 +790,8 @@ bool Omnifilter::postBuild()
     mNewRuleSetBtn = getChild<LLButton>("btn_rule_set_new"); // New Rule Set
     mCloneRuleSetBtn = getChild<LLButton>("btn_rule_set_clone"); // Clone Rule Set
     mRemoveRuleSetBtn = getChild<LLButton>("btn_rule_set_remove"); // Remove Rule Set
+    mImportRuleSetBtn = getChild<LLButton>("btn_rule_set_import"); // Clone Rule Set
+    mExportRuleSetBtn = getChild<LLButton>("btn_rule_set_export"); // Remove Rule Set
     mContentCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("content_case");
     mContentMatchTypeCombo = getChild<LLComboBox>("content_match_type");
     mRegionNameCtrl = getChild<LLLineEditor>("region_name");
@@ -707,6 +864,8 @@ bool Omnifilter::postBuild()
     mNewRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onNewRuleSetClicked, this)); // New Rule Set
     mCloneRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onCloneRuleSetClicked, this)); // Clone Rule Set
     mRemoveRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveRuleSetClicked, this)); // Remove Rule Set
+    mImportRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onImportRuleSetClicked, this));   // Import Rule Set
+    mExportRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onExportRuleSetClicked, this)); // Export Rule Set
     setVisibleCallback(boost::bind(&Omnifilter::onVisibilityChange, this, _2)); // Add visiblity callback to reload any changes to which rule set is active
 
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));

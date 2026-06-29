@@ -50,6 +50,9 @@ private:
 public:
     bool              postBuild() override final;
     LLScrollListItem* addNeedle(const std::string& name, const OmnifilterEngine::Needle& needle);
+    // Supports Notecard drag and drop for importing.
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept,
+                           std::string& tooltip_msg);
 
 protected:
     OmnifilterEngine::Needle* getSelectedNeedle();
@@ -64,9 +67,14 @@ protected:
     void onNewRuleSetClicked();
     void onCloneRuleSetClicked();
     void onRemoveRuleSetClicked();
+    void onExportRuleSetClicked();
+    void onImportRuleSetClicked();
     void onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
     void onCloneRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response);
     void onRemoveRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response);
+    void onExportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response);
+    void onImportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response);
+    void onExportRuleSetNotecardCallback(const LLUUID &notecard_uuid);
     void onRuleSetChanged();
     void reloadRules();
     void reloadRule();
@@ -83,6 +91,8 @@ protected:
     LLButton*         mRemoveNeedleBtn{ nullptr };
     LLButton*         mUpNeedleBtn{ nullptr };
     LLButton*         mDownNeedleBtn{ nullptr };
+    LLButton*         mExportRuleSetBtn{ nullptr };
+    LLButton*         mImportRuleSetBtn{ nullptr };
     LLComboBox* mRuleSetsCmb{ nullptr };
     LLButton* mNewRuleSetBtn{ nullptr };
     LLButton* mCloneRuleSetBtn{ nullptr };
