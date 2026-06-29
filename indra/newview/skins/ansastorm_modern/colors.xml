@@ -501,7 +501,7 @@
      reference="EmphasisColor" />
     <color
      name="ButtonFlashBgColor"
-     reference="EmphasisColor_35" />
+     reference="White_25" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
