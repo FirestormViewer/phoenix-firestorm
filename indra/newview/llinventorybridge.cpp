@@ -153,8 +153,7 @@ namespace
 
 void add_context_submenu_entry(menuentry_vec_t& items, std::string_view submenu, std::string_view item)
 {
-    const auto submenu_it = std::find(items.cbegin(), items.cend(), submenu);
-    if (submenu_it == items.cend())
+    if (std::ranges::find(items, submenu) == std::ranges::end(items))
     {
         items.emplace_back(submenu);
     }
