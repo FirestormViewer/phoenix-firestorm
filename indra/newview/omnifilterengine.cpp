@@ -684,12 +684,16 @@ void OmnifilterEngine::loadNeedles()
 {
     if (mNeedlesXMLPath.empty())
     {
+        addNewRuleSet("Default");
+        newNeedle(LLTrans::getString("OmnifilterDefaultName"));
         return;
     }
 
     if (!std::filesystem::exists(fsyspath(mNeedlesXMLPath)))
     {
         // file does not exist (yet), just return empty
+        addNewRuleSet("Default");
+        newNeedle(LLTrans::getString("OmnifilterDefaultName"));
         return;
     }
 
@@ -711,6 +715,8 @@ void OmnifilterEngine::loadNeedles()
         args["ERROR_MESSAGE"] = strerror(errno);
         args["FILE_NAME"] = mNeedlesXMLPath;
         LLNotificationsUtil::add("GenericFileEmptyError", args, LLSD());
+        addNewRuleSet("Default");
+        newNeedle(LLTrans::getString("OmnifilterDefaultName"));
         return;
     }
 
@@ -725,6 +731,8 @@ void OmnifilterEngine::loadNeedles()
         args["ERROR_MESSAGE"] = strerror(errno);
         args["FILE_NAME"] = mNeedlesXMLPath;
         LLNotificationsUtil::add("GenericFileOpenReadError", args, LLSD());
+        addNewRuleSet("Default");
+        newNeedle(LLTrans::getString("OmnifilterDefaultName"));
         return;
     }
 
