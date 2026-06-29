@@ -2805,7 +2805,7 @@ void AOEngine::update()
 
             if (setFolderName.empty())
             {
-                LL_WARNS("AOEngine") << "Folder with emtpy name in AO folder" << LL_ENDL;
+                LL_WARNS("AOEngine") << "Folder with empty name in AO folder" << LL_ENDL;
                 continue;
             }
 
@@ -2835,6 +2835,7 @@ void AOEngine::update()
                     continue;
                 }
                 LL_DEBUGS("AOEngine") << "Updating set " << setFolderName << " in AO." << LL_ENDL;
+                setsToWrite.emplace_back(currentCategory->getUUID(), newSet);
             }
             allComplete = false;
 
