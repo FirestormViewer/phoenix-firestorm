@@ -6066,7 +6066,7 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		</form>
 	</notification>
 	<notification name="FSSetTitleRegionNotFound">
-		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		Die Region „[REGION]“ konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterNewRuleSet">
@@ -6100,7 +6100,7 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterRemoveRuleSet">
-		Sind Sie sicher, dass sie Regelset [RULESETNAME] löschen möchten?
+		Sind Sie sicher, dass sie Regelset „[RULESETNAME]“ löschen möchten?
 		<usetemplate name="okcancelignore" ignoretext="Bestätigen, bevor ein Regelset gelöscht wird." notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterRemoveRuleSetDefault">
@@ -6116,7 +6116,7 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterExportRuleSet">
-		Name für Notizkarte eingeben, in die das Regel-Set [RULESETNAME] exportiert wird:
+		Name für Notizkarte eingeben, in die das Regel-Set „[RULESETNAME]“ exportiert wird:
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -6127,14 +6127,14 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterImportRuleSet">
-		Name für das importierte Regel-Set [IMPORTNAME] eingeben:
+		Name für das importierte Regel-Set „[IMPORTNAME]“ eingeben:
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
 	<notification name="OmniFilterInvalidImport">
-		Fehler: Die Notizkarte [IMPORTNAME] enthält kein gültiges Regel-Set. Import kann nicht durchgeführt werden.
+		Fehler: Die Notizkarte „[IMPORTNAME]“ enthält kein gültiges Regel-Set. Import kann nicht durchgeführt werden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterNotANotecard">
@@ -6146,6 +6146,13 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<ignore name="ignore" text="Instruktionen für den Import von Regel-Sets des Omni-Filters anzeigen, wenn der Import-Button gedrückt wird"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		Der gewählte Namen „[INPUTNAME]“ für die Notizkarte ist ungültig - es werden nur ASCII-Zeichen unterstützt.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
 </notifications>
