@@ -21239,6 +21239,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.0</real>
     </map>
+<!-- <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing -->
+    <key>FSFontLineSpacingAdjustment</key>
+    <map>
+        <key>Comment</key>
+        <string>Line spacing pixels for UI text (requires restart</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <real>0</real>
+    </map>
+<!-- </FS:MJR> [FIRE-36802] -->
     <key>StarLightShowMapDetails</key>
     <map>
       <key>Comment</key>

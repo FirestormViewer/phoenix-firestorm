@@ -49,6 +49,10 @@
 // [SL:KB] - Patch: Control-TextHighlight | Checked: 2013-12-30 (Catznip-3.6)
 #include <boost/algorithm/string.hpp>
 // [/SL:KB]
+// <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
+#include "llcontrol.h"
+extern LLControlGroup gSavedSettings;
+// </FS:MJR> [FIRE-36802]
 
 #include "fsregistrarutils.h"
 
@@ -1949,6 +1953,7 @@ S32 LLTextBase::getLeftOffset(S32 width)
 void LLTextBase::reflow()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
+    static LLCachedControl<S32> font_line_spacing_adjustment(gSavedSettings, "FSFontLineSpacingAdjustment", 0); // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
 
     updateSegments();
 
@@ -2077,6 +2082,7 @@ void LLTextBase::reflow()
 
                 line_start_index = segment->getStart() + seg_offset;
                 cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                 remaining_pixels = text_available_width;
                 line_height = 0;
             }
@@ -2089,6 +2095,7 @@ void LLTextBase::reflow()
                                             line_rect,
                                             line_count));
                 cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                 break;
             }
             // ...or finished a segment and there are segments remaining on this line
@@ -2104,6 +2111,7 @@ void LLTextBase::reflow()
                                                 line_count));
                     line_start_index = segment->getStart() + seg_offset;
                     cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                    cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                     line_height = 0;
                     remaining_pixels = text_available_width;
                 }
