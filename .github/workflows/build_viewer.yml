@@ -20,7 +20,7 @@ on:
     - cron: '00 03 * * *' # Run every day at 3am UTC
 env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
-  EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
+  EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting --lto
   build_secrets_checkout: ${{github.workspace}}/signing
   XZ_DEFAULTS: -T0
   FS_RELEASE_TYPE: Unknown
