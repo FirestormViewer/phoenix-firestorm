@@ -5,7 +5,7 @@
  can_resize="true"
  height="360"
  layout="topleft"
- min_height="330"
+ min_height="350"
  min_width="410"
  name="texture picker"
  help_topic="texture_picker"
@@ -97,28 +97,13 @@ Pick: Texture
      type="string"
      length="1"
      follows="left|top"
-     height="14"
+     height="32"
      layout="topleft"
      left="8"
      name="size_lbl"
      top_pad="1">
         Size:
 [DIMENSIONS]
-    </text>
-    <text
-     type="string"
-     text_color="Yellow"
-     length="1"
-     word_wrap="true"
-     follows="left|top"
-     height="56"
-     width="164"
-     layout="topleft"
-     left="8"
-     name="over_limit_lbl"
-     visible="false"
-     top_delta="0">
-        Selected texture is [TEXDIM]. Inventory image must be square, no less than [MINTEXDIM].
     </text>
     
 <!--  middle: inventory mode -->
@@ -173,7 +158,7 @@ Pick: Texture
      image_unselected="eye_button_inactive.tga"
      layout="topleft"
      left_delta="-80"
-     top_delta="-25"
+     top_delta="-15"
      name="Pipette"
      width="28" />
    <text
@@ -202,13 +187,29 @@ Pick: Texture
      bg_alpha_color="DkGray2"
      border="false"
      follows="all"
-     height="242"
+     height="256"
      layout="topleft"
      left_delta="0"
      name="inventory panel"
      top_pad="4"
      width="231"
      filter_asset_types="texture|material"/>
+    <text
+     bg_visible="true"
+     type="string"
+     text_color="Yellow"
+     length="1"
+     word_wrap="true"
+     follows="bottom|left|right"
+     height="56"
+     right="-1"
+     layout="topleft"
+     left_delta="0"
+     name="over_limit_lbl"
+     visible="false"
+     top_pad="-50">
+        Selected texture is [TEXDIM]. Inventory image must be square, no less than [MINTEXDIM].
+    </text>
 
 <!--  middle: local mode -->
     <button
@@ -323,9 +324,9 @@ Pick: Texture
          name="BAKED_AUX3"
          value="10" />
   </combo_box>
-<!-- bottom static -->
+  <!-- bottom static -->
     <line_editor
-        follows="bottom"
+        follows="bottom|left|right"
         height="20"
         left="7"
         top="-55"
@@ -334,36 +335,17 @@ Pick: Texture
         layout="topleft"
         label="00000000-0000-0000-0000-000000000000"
         tool_tip="Texture Key"
-        width="290"/>
+        width="292"/>
     <button
-        follows="bottom"
+        follows="bottom|right"
         name="TextureKeyApply"
         height="20"
         label="Apply UUID"
         layout="topleft"
-        left_pad="5"
+        top_delta="0"
+        right="-8"
         width="100"
         tool_tip="Apply this UUID"/>
-    <button
-     follows="bottom"
-     height="20"
-     label="OK"
-     label_selected="OK"
-     layout="topleft"
-     left="176"
-     top="-30"
-     name="Select"
-     width="100" />
-    <button
-     follows="bottom"
-     height="20"
-     label="Cancel"
-     label_selected="Cancel"
-     layout="topleft"
-     left_delta="120"
-     top_delta="0"
-     name="Cancel"
-     width="100" />
     <check_box
      follows="left|bottom"
      height="20"
@@ -372,6 +354,26 @@ Pick: Texture
      layout="topleft"
      left="5"
      name="apply_immediate_check"
-     top_delta="0"
+     top_pad="5"
      width="150" />
+    <button
+     follows="bottom|right"
+     height="20"
+     label="OK"
+     label_selected="OK"
+     layout="topleft"
+     right="-110"
+     top="-30"
+     name="Select"
+     width="100" />
+    <button
+     follows="bottom|right"
+     height="20"
+     label="Cancel"
+     label_selected="Cancel"
+     layout="topleft"
+     right="-8"
+     top_delta="0"
+     name="Cancel"
+     width="100" />
 </floater>
