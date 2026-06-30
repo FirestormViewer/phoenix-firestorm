@@ -78,7 +78,7 @@ class OmnifilterEngine
 
                 LLUUID mOwnerID;
 
-                eType mType;
+                eType mType = TYPES_MAX;
         };
 
         class Needle
@@ -104,8 +104,9 @@ class OmnifilterEngine
                 bool mContentCaseInsensitive = false;
         };
 
-        const S32 VERSION = 3; // Current version of Omnifilter xml format.
-        const std::string HEADER = "omnifilter_rule_set"; // Header used to verify the notecard xml data is valid
+        static const S32 VERSION; // Current version of Omnifilter xml format.
+        static const std::string HEADER; // Header used to verify the notecard xml data is valid
+        static const std::string FILTER_NAME; // Item name filter used to show only Omnifilter Notecards
 
         typedef std::map<std::string, OmnifilterEngine::OmnifilterEngine::Needle, std::less<>> needle_list_t;
         needle_list_t& getNeedleList();

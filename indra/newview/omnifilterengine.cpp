@@ -39,6 +39,10 @@
 #include <fstream>
 #include <filesystem>
 
+const S32 OmnifilterEngine::VERSION = 3; // Current version of Omnifilter xml format.
+const std::string OmnifilterEngine::HEADER = "omnifilter_rule_set"; // Header used to verify the notecard xml data is valid
+const std::string OmnifilterEngine::FILTER_NAME = "[Omnifilter]"; // Item name filter used to show only Omnifilter Notecards
+
 OmnifilterEngine::OmnifilterEngine()
     : LLSingleton<OmnifilterEngine>()
     , LLEventTimer(5.0f)
@@ -727,13 +731,16 @@ S32 OmnifilterEngine::exportRuleSetToNotecard(std::string_view new_name, LLPoint
         return -1;
     }
 
+    // Add [Omnifilter] to help find Omnifilter notecards.
+    std::string output_name = FILTER_NAME + " " + mExportName;
+
     // If the a notecard already exists with the given name, then return a duplicate name error
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t    items;
     gInventory.collectDescendents(notecard_category_uuid, cats, items, false);
     for (auto iter = items.begin(); iter != items.end(); iter++)
     {
-        if ((*iter)->getName() == mExportName)
+        if ((*iter)->getName() == output_name) // Compare notecard names with output name with [Omnifilter] added
         {
             return -2;
         }
@@ -794,7 +801,7 @@ void OmnifilterEngine::exportNotecardCreatedCallback(const LLUUID& notecard_uuid
 
         // Rename the notecard to the name specified by the user that is already validated
         LLSD updates;
-        updates["name"] = mExportName;
+        updates["name"] = FILTER_NAME + " " + mExportName; // Add [Omnifilter] to help find Omnifilter notecards.
         // Update the description to show that this notecard is for a omnifilter rule set
         LLSD args;
         args["REPLACEMENT"] = mExportName;

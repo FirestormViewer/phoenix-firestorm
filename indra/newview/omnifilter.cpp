@@ -342,6 +342,14 @@ void Omnifilter::onImportRuleSetClicked()
     LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
     // Show the inventory, showing only notecards and highlight the new notecard created.
     LLPanelMainInventory::newFolderWindow(notecard_category_uuid);
+
+    // Try to get the active inventory panel
+    LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+    if (active_panel)
+    {
+        // If found, assign the FILTER_NAME ([Omnifilter]) to the item names.
+        active_panel->setFilterSubString(OmnifilterEngine::FILTER_NAME);
+    }
     
     // Display an instruction notification to the end user.
     LLNotificationsUtil::add("OmnifilterImportInstructions", LLSD(), LLSD());
@@ -536,6 +544,14 @@ void Omnifilter::onExportRuleSetNotecardCallback(const LLUUID& notecard_uuid)
     LL_INFOS() << "Export Notecard UUID:" << actual_notecard_uuid.asString() << LL_ENDL;
     // Show the inventory, showing only notecards and highlight the new notecard created.
     LLPanelMainInventory::newFolderWindow(notecard_category_uuid, actual_notecard_uuid);
+
+    // Try to get the active inventory panel
+    LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+    if (active_panel)
+    {
+        // If found, assign the FILTER_NAME ([Omnifilter]) to the item names.
+        active_panel->setFilterSubString(OmnifilterEngine::FILTER_NAME);
+    }
 }
 
 bool Omnifilter::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
