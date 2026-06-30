@@ -5,6 +5,7 @@
 	</text>
 	<combo_box name="language_combobox">
 		<combo_box.item label="English (Inglês)" name="English"/>
+		<combo_box.item label="Azərbaycanca (Azerbaijani)" name="Azerbaijani"/>
 		<combo_box.item label="Dansk (Dinamarquês) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Alemão)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espanhol) - Beta" name="Spanish"/>
@@ -23,7 +24,7 @@
 	<text name="maturity_desired_prompt" width="320">
 		Acessar conteúdo com a seguinte classificação:
 	</text>
-	<text name="maturity_desired_textbox" width="200"/>
+	<text name="maturity_desired_textbox" width="100"/>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Geral, Moderado, Adulto" name="Desired_Adult"/>
 		<combo_box.item label="Geral e Moderado" name="Desired_Mature"/>
@@ -46,12 +47,19 @@
 		<radio_item label="Ativado" name="radio2" width="65" />
 		<radio_item label="Mostrar abreviado" name="radio3" width="140" />
 	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix" width="5">
+		(
+	</text>
 	<text name="RenderNameShowTime_LabelSuffix" width="100">
-		segundos
+		segundos)
 	</text>
 	<check_box label="Meu nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nome de usuário" name="show_slids" tool_tip="Mostrar nomes de usuário como berndschmidt123" />
-	<check_box label="Título de grupo" name="show_all_title_checkbox1" tool_tip="Título de grupo como “Líder” ou “Membro”"/>
+	<combo_box name="group_title" control_name="GroupTitlesTagMode" enabled_control="AvatarNameTagMode" tool_tip="Mostrar títulos de grupo, como Oficial ou Membro" width="180">
+		<combo_box.item label="Sem títulos de grupo" name="no_tags" value="0"/>
+		<combo_box.item label="Apenas meu título de grupo" name="my_tag" value="1"/>
+		<combo_box.item label="Todos os títulos de grupo" name="all_tags" value="2"/>
+	</combo_box>
 	<check_box label="Ocultar meu próprio título de grupo" name="RenderHideGroupTitle" tool_tip="Mostra ou oculta seu próprio título de grupo para você e para os outros."/>
 	<check_box label="Mostrar nome de exibição" name="display_names_check" tool_tip="Ative para usar nomes de exibição no chat, IM, nomes de avatar etc."/>
 	<check_box label="Mostrar identificação do viewer" name="show_viewerID" tool_tip="Mostra o nome do viewer detectado ao lado do nome do avatar (efeito com atraso)"/>

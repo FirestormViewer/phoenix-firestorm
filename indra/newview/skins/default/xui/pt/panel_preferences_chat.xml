@@ -27,7 +27,7 @@
 				Anúncios em:
 			</text>
 			<check_box label="Chat nas proximidades" name="show_timestamps_nearby_chat" top_delta="14" left_pad="-75" width="150" />
-			<check_box label="IMs" name="show_timestamps_im" width="160" />
+			<check_box label="IMs" name="show_timestamps_im" width="45" />
 			<check_box label="Transcrição" name="show_timestamps_transcripts" />
 			<check_box label="Mostrar console de chat" tool_tip="Mostrar/ocultar o console de chat quando a janela de conversas não estiver visível" name="FSShowOnscreenConsole" />
 			<check_box name="FSConsoleClassicDrawMode" label="Modo de exibição clássico no console" tool_tip="No modo de exibição clássico, o fundo do console é exibido como um único bloco em todas as linhas com a largura da linha mais longa." />
@@ -145,9 +145,9 @@
 
 		
 		<panel label="entrada" name="ChatTyping">
-			<button name="autoreplace_showgui" label="Substituição automática..." />
-			<button name="spellcheck_showgui" label="Verificação ortográfica..." width="145" />
-			<button label="Tradução de bate-papo de configurações" name="translation_settings_btn" width="190" />
+			<button name="autoreplace_showgui" label="Substituição automática" />
+			<button name="spellcheck_showgui" label="Verificação ortográfica" width="145" />
+			<button label="Config. Tradução de bate-papo" name="translation_settings_btn" width="190" />
 			<check_box label="Reproduzir animação de digitação" name="play_typing_animation" />
 			<check_box label="Animação de digitação também em emotes" name="play_typing_animation_emote" />
 			<check_box label="Som de digitação no chat local" name="play_typing_sound" /> 
