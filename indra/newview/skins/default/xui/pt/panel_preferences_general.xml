@@ -38,7 +38,7 @@
 		<combo_box.item label="Meu último local" name="MyLastLocation" tool_tip="Entrar por padrão no último local."/>
 		<combo_box.item label="Minha casa" name="MyHome" tool_tip="Entrar por padrão no local de casa."/>
 	</combo_box>
-	<check_box initial_value="true" label="Mostrar ao entrar" name="show_location_checkbox"/>
+	<check_box label="Mostrar ao entrar" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
 		Nomes de avatar:
 	</text>
@@ -56,13 +56,12 @@
 	<check_box label="Meu nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nome de usuário" name="show_slids" tool_tip="Mostrar nomes de usuário como berndschmidt123" />
 	<combo_box name="group_title" control_name="GroupTitlesTagMode" enabled_control="AvatarNameTagMode" tool_tip="Mostrar títulos de grupo, como Oficial ou Membro" width="180">
-		<combo_box.item label="Sem títulos de grupo" name="no_tags" value="0"/>
-		<combo_box.item label="Apenas meu título de grupo" name="my_tag" value="1"/>
-		<combo_box.item label="Todos os títulos de grupo" name="all_tags" value="2"/>
+		<combo_box.item label="Sem títulos de grupo" name="no_tags" />
+		<combo_box.item label="Apenas meu título de grupo" name="my_tag" />
+		<combo_box.item label="Todos os títulos de grupo" name="all_tags" />
 	</combo_box>
 	<check_box label="Ocultar meu próprio título de grupo" name="RenderHideGroupTitle" tool_tip="Mostra ou oculta seu próprio título de grupo para você e para os outros."/>
 	<check_box label="Mostrar nome de exibição" name="display_names_check" tool_tip="Ative para usar nomes de exibição no chat, IM, nomes de avatar etc."/>
-	<check_box label="Mostrar identificação do viewer" name="show_viewerID" tool_tip="Mostra o nome do viewer detectado ao lado do nome do avatar (efeito com atraso)"/>
 	<check_box label="Formato de nome antigo (Nome Sobrenome)" name="FSshow_legacyun" tool_tip="Mostra o nome de avatar no formato antigo (Nome Sobrenome) em vez do nome de usuário (nome.sobrenome)" />
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Destacar os nomes de avatar dos seus amigos"/>
 	<check_box label="Remover “Resident” no formato antigo de nome" name="legacy_trim_check" tool_tip="Remove o sobrenome “Resident” no formato antigo de nome." />
