@@ -24,9 +24,6 @@
 		Tamanho:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		A textura selecionada é [TEXDIM]. A imagem de inventário deve ser quadrada e ficar entre [MINTEXDIM] e [MAXTEXDIM].
-	</text>
 	<button label="Padrão" label_selected="Padrão" name="Default"/>
 	<button label="Nenhuma" label_selected="Nenhuma" name="None"/>
 	<button label="Em branco" label_selected="Em branco" name="Blank"/>
@@ -36,6 +33,9 @@
 		Pré-visualização desativada
 	</text>
 	<filter_editor label="Filtrar texturas" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		A textura selecionada é [TEXDIM]. A imagem de inventário deve ser quadrada e ficar entre [MINTEXDIM] e [MAXTEXDIM].
+	</text>
 	<button label="Adicionar" label_selected="Adicionar" name="l_add_btn"/>
 	<button label="Remover" label_selected="Remover" name="l_rem_btn"/>
 	<button label="Enviar" label_selected="Enviar" name="l_upl_btn"/>
@@ -59,7 +59,7 @@
 	</combo_box>
 	<line_editor name="TextureKey" tool_tip="UUID da textura"/>
 	<button name="TextureKeyApply" label="Aplicar UUID" tool_tip="Aplicar textura desta UUID"/>
+	<check_box label="Aplicar agora" name="apply_immediate_check"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
 	<button label="OK" label_selected="OK" name="Select" left="135"/>
-	<check_box label="Aplicar agora" name="apply_immediate_check"/>
 </floater>

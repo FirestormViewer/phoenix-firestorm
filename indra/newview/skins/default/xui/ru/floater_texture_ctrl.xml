@@ -22,9 +22,6 @@
 Размер:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		Выбрана текстура [TEXDIM]. Изображение инвентаря должно быть квадратным, не меньше [MINTEXDIM].
-	</text>
 
 	<!--  middle: inventory mode -->
 	<button label="По умолч." label_selected="По умолч." name="Default"/>
@@ -35,6 +32,9 @@
 
 	<!--  middle: local mode -->
 	<filter_editor label="Фильтровать текстуры" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		Выбрана текстура [TEXDIM]. Изображение инвентаря должно быть квадратным, не меньше [MINTEXDIM].
+	</text>
 	<check_box initial_value="false" label="Показывать папки" name="show_folders_check"/>
 	<button label="Добавить" label_selected="Добавить" name="l_add_btn"/>
 	<button label="Удалить" label_selected="Удалить" name="l_rem_btn"/>
@@ -64,7 +64,7 @@
 	<!-- bottom static -->
 	<line_editor name="TextureKey" tool_tip="Ключ Текстуры"/>
 	<button name="TextureKeyApply" label="Прим. UUID" width="100" tool_tip="Применить этот UUID"/>
+	<check_box label="Применить сейчас" name="apply_immediate_check" width="200"/>
 	<button label="Да" label_selected="Да" name="Select" left="150"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
-	<check_box initial_value="true" label="Применить сейчас" name="apply_immediate_check" width="200"/>
 </floater>

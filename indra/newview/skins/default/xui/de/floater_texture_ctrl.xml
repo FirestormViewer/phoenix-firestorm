@@ -24,9 +24,6 @@
 		Größe:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		Ausgewählte Textur ist [TEXDIM]. Inventar-Abbildung muss quadratisch und zwischen [MINTEXDIM] und [MAXTEXDIM] sein.
-	</text>
 	<button label="Standard" label_selected="Standard" name="Default"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<button label="Leer" label_selected="Leer" name="Blank"/>
@@ -36,6 +33,9 @@
 		Vorschau deaktiviert
 	</text>
 	<filter_editor label="Texturen filtern" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		Ausgewählte Textur ist [TEXDIM]. Inventar-Abbildung muss quadratisch und zwischen [MINTEXDIM] und [MAXTEXDIM] sein.
+	</text>
 	<button label="Hinzufügen" label_selected="Hinzufügen" name="l_add_btn"/>
 	<button label="Entfernen" label_selected="Entfernen" name="l_rem_btn"/>
 	<button label="Hochladen" label_selected="Hochladen" name="l_upl_btn"/>
@@ -59,7 +59,7 @@
 	</combo_box>
 	<line_editor name="TextureKey" tool_tip="Textur-UUID"/>
 	<button name="TextureKeyApply" label="UUID anwenden" tool_tip="Textur mit dieser UUID anwenden"/>
-	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
-	<button label="OK" label_selected="OK" name="Select" left="135"/>
 	<check_box label="Live-Vorschau" name="apply_immediate_check"/>
+	<button label="OK" label_selected="OK" name="Select" left="135"/>
+	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 </floater>

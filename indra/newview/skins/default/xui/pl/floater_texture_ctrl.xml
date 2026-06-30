@@ -24,15 +24,15 @@
 		Rozmiar:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		Wybrana tekstura: [TEXDIM]. Obraz w szafie musi być kwadratowy, minimum [MINTEXDIM].
-	</text>
 	<button label="Domyślna" label_selected="Domyślna" name="Default"/>
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
 	<button label="Przezrocz." label_selected="Przezrocz." tool_tip="Uwaga: Jeśli wybrano teksturę z częściową lub całkowitą przezroczystością, to światło nie będzie przez nią rzucane." name="Transparent"/>
 	<button label="Żadna" label_selected="Żadna" name="None"/>
 	<text name="preview_disabled" value="Podgląd wyłączony"/>
 	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		Wybrana tekstura: [TEXDIM]. Obraz w szafie musi być kwadratowy, minimum [MINTEXDIM].
+	</text>
 	<button label="Dodaj" label_selected="Dodaj" name="l_add_btn"/>
 	<button label="Usuń" label_selected="Usuń" name="l_rem_btn"/>
 	<button label="Prześlij" label_selected="Prześlij" name="l_upl_btn"/>
@@ -44,6 +44,6 @@
 	</combo_box>
 	<line_editor name="TextureKey" tool_tip="Klucz UUID tekstury" />
 	<button name="TextureKeyApply" label="Ustaw UUID" tool_tip="Ustaw ten UUID" />
-	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 	<check_box label="Podgląd" name="apply_immediate_check"/>
+	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 </floater>
