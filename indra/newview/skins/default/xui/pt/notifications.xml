@@ -6061,5 +6061,231 @@ O nome é verificado antes da tarefa ser salva.
 			<ignore name="ignore" text="Mostrar estas instruções da próxima vez que o botão Importar for pressionado?"/>
 		</form>
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		O [APP_NAME] encontrou uma instalação de uma versão mais antiga ([VERSION]). Para desinstalar a versão mais antiga, siga [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 este manual].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="LoginFailedToParse">
+		O visualizador recebeu uma resposta malformada do servidor. Verifique se sua conexão com a Internet está funcionando corretamente e tente novamente mais tarde.
+	
+	Se você acredita que isso é um erro, entre em contato com o Suporte.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="InvalidKeystroke">
+	Foi digitada uma tecla inválida.
+	[REASON].
+	Por favor, insira um texto válido.
+	</notification>
+	<notification name="AutoFPSConfirmDisable">
+	Alterar esta configuração desativará o ajuste automático e desligará as "Configurações automáticas".
+	Tem certeza de que deseja continuar?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Continuar"/>
+	</notification>
+	<notification name="AdvancedLightingConfirm">
+	Para ativar a iluminação avançada, precisamos aumentar a qualidade para o nível 4.
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
+	</notification>
+	<notification name="ShadowsConfirm">
+	Para ativar as sombras, precisamos aumentar a qualidade para o nível 4.
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
+	</notification>
+	<notification name="FreezeAvatarMultiple">
+	Congelar os seguintes avatares?
+	
+	[RESIDENTS]
+	
+	Eles ficarão temporariamente incapazes de se mover, conversar ou interagir com o mundo.
+		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Descongelar" yestext="Congelar"/>
+	</notification>
+	<notification name="EjectAvatarMultiple">
+	Expulsar os seguintes avatares da sua terra?
+	
+	[RESIDENTS]
+		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Expulsar e banir" yestext="Expulsar"/>
+	</notification>
+	<notification name="EjectAvatarMultipleNoBan">
+	Expulsar os seguintes avatares da sua terra?
+	
+	[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
+	<notification name="ParcelCanPlayMedia">
+	Este local oferece mídia em streaming, que pode exigir mais da sua largura de banda de rede.
+	
+	Reproduzir mídia em streaming quando disponível?
+	(Você pode alterar esta opção mais tarde em Preferências &gt; Som e Mídia.)
+		<form name="form">
+			<button name="Play Media Now" text="Reproduzir mídia agora"/>
+			<button name="Always Play Media" text="Sempre reproduzir mídia"/>
+			<button name="Do Not Play Media" text="Não reproduzir mídia"/>
+		</form>
+	</notification>
+	<notification label="Fechar aba de filtro" name="FSInventoryCustomTabClose">
+		Fechar a aba de filtro "[NAME]"? Seus filtros salvos serão removidos.
+		<usetemplate name="okcancelignore" notext="Cancelar" yestext="Sim, fechar" ignoretext="Confirmar antes de fechar uma aba de filtro de inventário personalizada"/>
+	</notification>
+	<notification name="LoginCantRemoveUsername">
+	O usuário já lembrado pode ser esquecido em Eu &gt; Preferências &gt; Avançado &gt; Nomes de usuário lembrados.
+	</notification>
+	<notification name="LoginCantRemoveCurUsername">
+	Esquecer o usuário conectado no momento requer que você encerre a sessão.
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Confirmar e sair"/>
+	</notification>
+	<notification name="LoginRemoveMultiGridUserData">
+	Os dados locais que você está excluindo são compartilhados entre várias grades. Tem certeza de que deseja excluí-los?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Confirmar"/>
+	</notification>
+	<notification name="DownloadingUpdate">
+	Baixando atualização [VERSION]...
+	O visualizador será reiniciado assim que o download for concluído.
+	</notification>
+	<notification name="CantModifyContentInNoModTask">
+	Você não tem permissão para modificar o conteúdo deste objeto.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailDimentionsLimit">
+		Apenas imagens quadradas de 64 a 256 pixels por lado são permitidas.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailInsufficientPermissions">
+		Apenas imagens livres de cópia e transferência podem ser atribuídas como miniaturas.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailOutfitPhoto">
+		Para adicionar uma imagem a um traje, use a janela Galeria de Trajes ou clique com o botão direito na pasta do traje e selecione "Imagem..."
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification label="O lote está reproduzindo mídia" name="ParcelPlayingMedia">
+	Este local reproduz mídia:
+	[URL]
+	Gostaria de reproduzi-la?
+		<form name="form">
+			<ignore name="ignore" text="Sempre escolher esta opção para este terreno."/>
+			<button name="Yes" text="Reproduzir"/>
+			<button name="No" text="Não reproduzir"/>
+		</form>
+	</notification>
+	<notification name="ChatSystemMessageTip">
+	[MESSAGE]
+	</notification>
+	<notification name="IncompleteInventoryItem">
+	O item que você está acessando ainda não está disponível localmente. Por favor, tente novamente em um minuto.
+	</notification>
+	<notification name="SnapshotSavedToComputer">
+	Captura de tela salva em:
+	[FILEPATH]
+	
+	Clique para abrir a pasta.
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+	O moderador silenciou seu chat de voz.
+	As pessoas neste local não conseguirão ouvi-lo se você falar.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+	Seu chat de voz agora pode ser ouvido pelas pessoas neste local.
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+	Tem certeza de que deseja sair deste chat em conferência?
+		<usetemplate ignoretext="Confirmar antes de sair do chat em conferência" name="okcancelignore" notext="Não" yestext="Sim"/>
+	</notification>
+	<notification name="RenameAOGroup">
+	Especifique um novo nome para este grupo de animações:
+	(O nome pode conter qualquer caractere ASCII, exceto ":" ou "|")
+		<form name="form">
+			<input name="message">
+	[AO_GROUP_NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+	Não foi possível renomear para "[AO_SET_NAME]".
+	O nome pode conter apenas caracteres ASCII, excluindo ":" e "|".
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+	A pasta "[NAME]" não contém nenhuma animação para adicionar.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AOImportComplete">
+	Importação do notecard do Animation Overrider concluída!
+	</notification>
+	<notification name="CantAddGrid">
+	Não foi possível adicionar [GRID] à lista de grades.
+	[REASON] Entre em contato com o suporte de [GRID].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ExportFailed">
+	A exportação falhou inesperadamente. Por favor, consulte o log para obter detalhes.
+	</notification>
+	<notification name="EnableAutoFPSWarning">
+	Você está prestes a ativar o AutoFPS. Todas as configurações de gráficos não salvas serão perdidas.
+	
+	Gostaria de salvá-las primeiro?
+		<usetemplate name="okcancelbuttons" notext="Não" yestext="Sim"/>
+	</notification>
+	<notification name="FSAOScriptedNotification">
+	Firestorm Animation Overrider: [AO_MESSAGE]
+		<usetemplate ignoretext="Avisar quando o Firestorm Animation Overrider for acessado por um objeto com script" name="notifyignore"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSet">
+		Digite um nome para o novo conjunto de regras:
+		<form name="form">
+			<input name="new_name">
+	[RULESETNAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+	Nomes em branco não são permitidos. Por favor, tente novamente com um nome.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+	Nomes duplicados não são permitidos. Por favor, tente novamente com um nome diferente.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Digite um nome para o conjunto de regras clonado:
+		<form name="form">
+			<input name="new_name">
+	[RULESETNAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+	Nomes em branco não são permitidos. Por favor, tente novamente com um nome.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+	Nomes duplicados não são permitidos. Por favor, tente novamente com um nome diferente.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Tem certeza de que deseja remover [RULESETNAME]?
+		<usetemplate ignoretext="Confirmar antes de remover um conjunto de regras." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+	Não é possível remover o conjunto de regras padrão.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+	Não foi possível remover o conjunto de regras: índice fora dos limites.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		O nome do notecard "[INPUTNAME]" não é suportado devido a caracteres não latinos.
+		<form name="form">
+			<input name="new_name">
+	[INPUTNAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
 
 </notifications>
