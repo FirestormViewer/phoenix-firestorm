@@ -117,7 +117,7 @@
 		<layout_panel
 		 name="needle_list_layout"
 		 layout="topleft"
-		 height="175"
+		 height="200"
 		 min_height="94"
 		 user_resize="true">
 			<check_box
@@ -129,6 +129,16 @@
 			 right="-1"
 			 label="Enable Omnifilter"
 			 control_name="OmnifilterEnabled"/>
+			<check_box
+			 name="show_omnifilter_controls"
+			 layout="topleft"
+			 follows="left|top"
+			 height="20"
+			 top_pat="4"
+			 right="-1"
+			 tool_tip="When enabled, shortcut controls are displayed on the top bar of the main UI."
+			 label="Show Top Bar Controls"
+			 control_name="OmnifilterControls"/>
 			<fs_scroll_list
 			 name="needle_list"
 			 layout="topleft"
@@ -211,7 +221,7 @@
 		<layout_panel
 		 name="filter_log_layout"
 		 layout="topleft"
-		 height="130"
+		 height="110"
 		 min_height="50">
 			<fs_scroll_list
 			 name="filter_log"
