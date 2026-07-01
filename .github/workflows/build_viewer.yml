@@ -57,7 +57,7 @@ jobs:
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
         if: matrix.container_image == 'ubuntu:22.04'
@@ -196,12 +196,12 @@ jobs:
         shell: bash
     
       - name: Get the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -532,7 +532,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: |
             fsutils/download_list.py
