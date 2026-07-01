@@ -7,7 +7,7 @@
 	<menu_item_call label="Zu Kontakt-Set hinzufügen" name="add_to_contact_set"/>
 	<menu_item_call label="Name kopieren" name="copy_name_to_clipboard"/>
 	<menu_item_call label="URI kopieren" name="copy_uri_to_clipboard"/>
-	<menu_item_call label="UUID kopieren" name="copy_key_to_clipboard"/>
+	<menu_item_call label="UUID / Schlüssel kopieren" name="copy_key_to_clipboard"/>
 	<menu_item_call label="Ignorieren" name="block"/>
 	<menu_item_call label="Freischalten" name="unblock"/>
 	<menu_item_call label="Hinauswerfen" name="kick"/>

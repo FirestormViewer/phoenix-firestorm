@@ -71,6 +71,7 @@
 		</combo_box>
 		<text name="content_label" value="Inhalt:"/>
 		<text_editor name="content" tool_tip="Der eigentliche Text der Nachricht" />
+		<button name="btn_match_dlg_btn_lbl" width="220" label="Text von Dialog-Button abgleichen" tool_tip="Erlaubt das Abgleichen mit einem Button-Text in Dialogfenstern. Kann zur automatisierten Auswahl eines Buttons verwendet werden."/>
 		<check_box name="content_case" label="Aa" tool_tip="Groß-/Kleinschreibung" />
 		<combo_box name="content_match_type" tool_tip="Abgleichmodus">
 			<combo_item name="content_exact">

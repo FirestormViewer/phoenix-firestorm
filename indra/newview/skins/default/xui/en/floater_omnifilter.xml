@@ -414,7 +414,7 @@
 		 left="100"
 		 bottom_pad="4"
 		 label="Match Dialog Button Label"
-		 tool_tip="Allows for matching a Dialog Window's button label. Can be used to auto responsd to a button."/>
+		 tool_tip="Allows for matching a dialog window's button label. Can be used to auto responsd to a button."/>
 		<check_box
 		 name="content_case"
 		layout="topleft"
