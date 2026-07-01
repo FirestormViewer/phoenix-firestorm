@@ -89,33 +89,44 @@ Contact Set Settings:
      left="10"
      height="12"
      name="global_label">
-Global Settings:
+        Global Settings:
+    </text>
+    <text
+     top_pad="7"
+     follows="left|top"
+     layout="topleft"
+     left="16"
+     height="12"
+     width="135"
+     name="FSContactSetsProfilePlacement_label">
+        Contact Sets in profile:
     </text>
     <combo_box
      control_name="FSContactSetsProfilePlacement"
      follows="left|top"
      height="23"
      layout="topleft"
-     left="15"
+     left_pad="5"
      name="FSContactSetsProfilePlacement"
-     top_pad="8"
-     width="350">
+     top_delta="-4"
+     width="175">
       <combo_box.item
-       label="Contact Sets in profile: Below groups list"
+       label="Below groups list"
        name="below"
        value="0"/>
       <combo_box.item
-       label="Contact Sets in profile: Above groups list"
+       label="Above groups list"
        name="above"
        value="2"/>
       <combo_box.item
-       label="Contact Sets in profile: Hidden"
+       label="Hidden"
        name="hidden"
        value="1"/>
     </combo_box>
     <check_box
      follows="left|top"
-     top_pad="8"
+     left="15"
+     top_pad="10"
      height="12"
      initial_value="true"
      label="Show profile icons in Contact Sets lists"
