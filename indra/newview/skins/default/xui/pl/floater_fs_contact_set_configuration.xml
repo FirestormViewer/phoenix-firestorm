@@ -17,10 +17,13 @@
 		<text name="global_label">
 			Ustawienia globalne:
 		</text>
+		<text width="170" name="FSContactSetsProfilePlacement_label">
+			Zestawy kontaktów w profilu:
+		</text>
 		<combo_box name="FSContactSetsProfilePlacement">
-			<combo_box.item name="below" label="Zestawy kontaktów w profilu: Poniżej listy grup" />
-			<combo_box.item name="above" label="Zestawy kontaktów w profilu: Powyżej listy grup" />
-			<combo_box.item name="hidden" label="Zestawy kontaktów w profilu: Ukryte" />
+			<combo_box.item name="below" label="Poniżej listy grup" />
+			<combo_box.item name="above" label="Powyżej listy grup" />
+			<combo_box.item name="hidden" label="Ukryte" />
 		</combo_box>
 		<check_box label="Pokazuj ikonki na listach zestawów kontaktów" name="FSContactSetsListShowIcons" />
 		<color_swatch label="Domyślny kolor" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />

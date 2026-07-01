@@ -21,7 +21,7 @@
 			Kontakt-Sets in Profilen:
 		</text>
 		<combo_box name="FSContactSetsProfilePlacement">
-			<combo_box.item label="Unterhalb Gruppenliste"/>
+			<combo_box.item label="Unterhalb Gruppenliste" name="below"/>
 			<combo_box.item label="Oberhalb Gruppenliste" name="above"/>
 			<combo_box.item label="Ausgeblendet" name="hidden"/>
 		</combo_box>
