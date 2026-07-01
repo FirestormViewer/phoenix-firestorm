@@ -29,6 +29,7 @@
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="Omni-Filter aktivieren"/>
+			<check_box name="show_omnifilter_controls" label="Steuerung in Menüzeile anz."/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="Aktiv"/>
 				<fs_scroll_list.columns name="needle_name" label="Regel"/>
