@@ -3714,7 +3714,13 @@ void LLAppViewer::loadLocalizedSettingsComments()
                 continue;
             }
 
-            control->setComment(comment_it->value());
+            const std::string& comment = comment_it->value();
+            if (comment.empty())
+            {
+                continue;
+            }
+
+            control->setComment(comment);
             ++applied;
         }
     }
