@@ -811,7 +811,7 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show onmifilter controls"
+		 label="Show omnifilter controls"
 		 left="10"
 		 name="show_omnifilter_controls_check"
 		 width="270"
