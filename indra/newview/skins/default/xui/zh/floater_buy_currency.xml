@@ -43,12 +43,6 @@
 			<text name="currency_action">
 				我想購買
 			</text>
-			<text name="currency_label">
-				L$
-			</text>
-			<line_editor label="L$" name="currency_amt">
-				1234
-			</line_editor>
 			<text name="currency_est">
 				約合 [LOCALAMOUNT]
 			</text>

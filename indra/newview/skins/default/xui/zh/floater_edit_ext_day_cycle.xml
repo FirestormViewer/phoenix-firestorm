@@ -12,9 +12,6 @@
 	<string name="hint_edit">
 		若要編輯你的晝夜循環，請調整下方各項控制，再點擊「儲存」。
 	</string>
-	<string name="time_label">
-		([HH]:[MM])
-	</string>
 	<string name="sky_track_label">
 		天空[ALT]
 	</string>

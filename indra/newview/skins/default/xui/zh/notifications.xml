@@ -5994,4 +5994,44 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="OmniFilterRemoveRuleSetInvalidName">
 		無法刪除規則集，因為找不到指定名稱。
 	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		請輸入用於匯出規則集「[RULESETNAME]」的記事卡名稱：
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		庫存中找不到記事卡資料夾，無法建立記事卡。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		請輸入匯入規則集「[IMPORTNAME]」的名稱：
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		錯誤：記事卡「[IMPORTNAME]」不包含有效的規則集，無法匯入。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		錯誤：該物件不是記事卡。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="萬能過濾器匯入說明">
+		若要從記事卡匯入規則集，請在庫存中選擇相應的記事卡，然後將其拖放到此視窗中。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<ignore name="ignore" text="按下匯入按鈕時顯示萬能過濾器規則集匯入說明"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		所選記事卡名稱「[INPUTNAME]」無效，僅支援 ASCII 字元。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
 </notifications>

@@ -44,6 +44,10 @@
 				<fs_scroll_list.columns name="log_entry" label="Règle"/>
 			</fs_scroll_list>
 		</layout_panel>
+		<layout_panel name="inport_export_layout">
+			<button name="btn_rule_set_export" tool_tip="Exporter le jeu de règles dans une notice." label="Exporter"/>
+			<button name="btn_rule_set_import" tool_tip="Importer un jeu de règles à partir d'une notice." label="Importer"/>
+		</layout_panel>
 	</layout_stack>
 	<panel name="panel_details">
 		<text name="needle_name_label" value="Nom de la règle"/>
@@ -89,7 +93,7 @@
 			<layout_panel name="buttons_group_2">
 				<button name="type_group_notice" label="Notice" tool_tip="Notice de groupe."/>
 				<button name="type_invite" label="Invitation" tool_tip="Invitation de groupe."/>
-				<button name="type_object_chat" label="Chat d'objet" tool_tip="Message à proximité à partir d'objets."/>
+				<button name="type_object_chat" label="Chat objet" tool_tip="Message à proximité à partir d'objets."/>
 			</layout_panel>
 			<layout_panel name="buttons_group_3">
 				<button name="type_object_im" label="IM d'objet" tool_tip="Message instantanés provenant d'objets."/>
@@ -102,8 +106,8 @@
 				<button name="type_lure" label="TP" tool_tip="Offres de téléportation proposées par les résidents."/>
 			</layout_panel>
 			<layout_panel name="buttons_group_5">
-				<button name="type_tp_request" label="Demande TP" tool_tip="Demandes des résidents pour leur envoyer une offre de téléportation."/>
-				<button name="type_load_url" label="Charger URL" tool_tip="Demandes générées par script pour visiter un site Web."/>
+				<button name="type_tp_request" label="Dmde TP" tool_tip="Demandes des résidents pour leur envoyer une offre de téléportation."/>
+				<button name="type_load_url" label="URL" tool_tip="Demandes générées par script pour visiter un site Web."/>
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="Remplacer le chat"/>

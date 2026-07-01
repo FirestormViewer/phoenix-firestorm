@@ -29,6 +29,7 @@
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="Włącz Wszystkofiltr" />
+			<check_box name="show_omnifilter_controls" tool_tip="Po włączeniu tej opcji kontrolki skrótów będą wyświetlane na górnym pasku głównego interfejsu." label="Kontrolki w menu na górze" />
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="Wł" />
 				<fs_scroll_list.columns name="needle_name" label="Reguła" />
@@ -67,6 +68,7 @@
 		</combo_box>
 		<text name="content_label" value="Treść:" />
 		<text_editor name="content" tool_tip="Faktyczna treść wiadomości" />
+		<button name="btn_match_dlg_btn_lbl" label="Dopasuj etyk. przycisku" tool_tip="Umożliwia dopasowanie etykiety przycisku okna dialogowego. Można użyć do automatycznej odpowiedzi." />
 		<check_box name="content_case" tool_tip="Rozróżnianie wielkości liter" />
 		<combo_box name="content_match_type" tool_tip="Tryb dopasowania">
 			<combo_item name="content_exact">

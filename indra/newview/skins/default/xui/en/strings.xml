@@ -3377,7 +3377,7 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
   <string name="OmnifilterDefaultName">Default</string>
   <string name="OmnifilterExportDescription">Omnifiler Rule Set: [REPLACEMENT]</string> <!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
-  <string name="OmnifilterButtonLabel">BUTTON_LABEL</string>
+  <string name="OmnifilterButtonLabel" translate="false">BUTTON_LABEL</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
 </strings>

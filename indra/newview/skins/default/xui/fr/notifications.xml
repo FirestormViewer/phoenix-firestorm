@@ -123,13 +123,13 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assist
 	<notification name="OutboxImportComplete">
 		Transfert réussi
 
-Tous les dossiers ont été envoyés vers la Place du marché.
-		<usetemplate ignoretext="Tous les dossiers envoyés vers la Place du marché" name="okignore" yestext="OK"/>
+Tous les dossiers ont été envoyés vers Marketplace.
+		<usetemplate ignoretext="Tous les dossiers envoyés vers Marketplace" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportHadErrors">
 		Impossible de transférer certains dossiers
 
-Des erreurs se sont produites lors de l&apos;envoi de certains dossiers vers la Place du marché. Ces dossiers sont toujours disponibles dans votre boîte d&apos;envoi vendeur.
+Des erreurs se sont produites lors de l&apos;envoi de certains dossiers vers Marketplace. Ces dossiers sont toujours disponibles dans votre boîte d&apos;envoi vendeur.
 
 Pour plus d&apos;informations, consultez le [[MARKETPLACE_IMPORTS_URL] journal des erreurs].
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -137,13 +137,13 @@ Pour plus d&apos;informations, consultez le [[MARKETPLACE_IMPORTS_URL] journal d
 	<notification name="OutboxImportFailed">
 		Échec du transfert avec l&apos;erreur « [ERROR_CODE] »
 
-Aucun dossier n&apos;a été envoyé vers la Place du marché en raison d&apos;une erreur système ou réseau.  Réessayez ultérieurement.
+Aucun dossier n&apos;a été envoyé vers Marketplace en raison d&apos;une erreur système ou réseau.  Réessayez ultérieurement.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxInitFailed">
-		Échec de l&apos;initialisation de la Place du marché avec l&apos;erreur « [ERROR_CODE] »
+		Échec de l&apos;initialisation de Marketplace avec l&apos;erreur « [ERROR_CODE] »
 
-L&apos;initialisation de la Place du marché a échoué en raison d&apos;une erreur système ou réseau.  Réessayez ultérieurement.
+L&apos;initialisation de Marketplace a échoué en raison d&apos;une erreur système ou réseau.  Réessayez ultérieurement.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="StockPasteFailed">
@@ -157,13 +157,13 @@ L&apos;initialisation de la Place du marché a échoué en raison d&apos;une err
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantPasteFailed">
-		Échec de la copie ou du déplacement vers les annonces Place du marché. Erreur :
+		Échec de la copie ou du déplacement vers les annonces de Marketplace. Erreur :
 
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantTransactionFailed">
-		La transaction avec la Place du marché a échoué en renvoyant l’erreur suivante :
+		La transaction avec Marketplace a échoué en renvoyant l’erreur suivante :
 
 [ERROR_REASON][ERROR_DESCRIPTION]
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -173,7 +173,7 @@ L&apos;initialisation de la Place du marché a échoué en raison d&apos;une err
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantListingFailed">
-		Échec de la publication d&apos;une annonce sur la Place du marché. Erreur :
+		Échec de la publication d&apos;une annonce sur Marketplace. Erreur :
 
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -195,35 +195,35 @@ Veuillez saisir un texte valide.
 	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Cette action va modifier le contenu actif de cette annonce. Voulez-vous continuer ?
-		<usetemplate ignoretext="Confirmer avant que je ne modifie une annonce active sur la Place du marché" name="okcancelignore" notext="Annuler" yestext="OK"/>
+		<usetemplate ignoretext="Confirmer avant que je ne modifie une annonce active sur Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmMerchantMoveInventory">
-		Les articles glissés vers la fenêtre Annonces de la Place du marché sont déplacés de leur emplacement d&apos;origine, et non copiés. Voulez-vous continuer ?
-		<usetemplate ignoretext="Confirmer avant que je ne déplace un article de l&apos;inventaire vers la Place du marché" name="okcancelignore" notext="Annuler" yestext="OK"/>
+		Les articles glissés vers la fenêtre Annonces de Marketplace sont déplacés de leur emplacement d&apos;origine, et non copiés. Voulez-vous continuer ?
+		<usetemplate ignoretext="Confirmer avant que je ne déplace un article de l&apos;inventaire vers Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmListingCutOrDelete">
-		Le déplacement ou la suppression d&apos;un dossier d&apos;annonces supprimera votre annonce de la Place du marché. Si vous souhaitez conserver l&apos;annonce de la Place du marché, déplacez ou supprimez le contenu du dossier de version que vous souhaitez modifier. Voulez-vous continuer ?
-		<usetemplate ignoretext="Confirmer avant que je déplace ou supprime une annonce de la Place du marché" name="okcancelignore" notext="Annuler" yestext="OK"/>
+		Le déplacement ou la suppression d&apos;un dossier d&apos;annonces supprimera votre annonce de Marketplace. Si vous souhaitez conserver l&apos;annonce de Marketplace, déplacez ou supprimez le contenu du dossier de version que vous souhaitez modifier. Voulez-vous continuer ?
+		<usetemplate ignoretext="Confirmer avant que je déplace ou supprime une annonce de Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmCopyToMarketplace">
-		Vous n&apos;êtes pas autorisé à copier un ou plusieurs de ces articles vers la Place du marché. Vous pouvez les déplacer ou les laisser.
-		<usetemplate canceltext="Annuler" ignoretext="Confirmer avant que je ne copie une sélection contenant des articles non reproductibles vers la Place du marché" name="yesnocancelbuttons" notext="Ne pas déplacer les articles" yestext="Déplacer les articles"/>
+		Vous n&apos;êtes pas autorisé à copier un ou plusieurs de ces articles vers Marketplace. Vous pouvez les déplacer ou les laisser.
+		<usetemplate canceltext="Annuler" ignoretext="Confirmer avant que je ne copie une sélection contenant des articles non reproductibles vers Marketplace" name="yesnocancelbuttons" notext="Ne pas déplacer les articles" yestext="Déplacer les articles"/>
 	</notification>
 	<notification name="ConfirmMerchantUnlist">
 		Cette action va annuler cette annonce. Voulez-vous continuer ?
-		<usetemplate ignoretext="Confirmer avant que j&apos;annule une annonce active sur la Place du marché" name="okcancelignore" notext="Annuler" yestext="OK"/>
+		<usetemplate ignoretext="Confirmer avant que j&apos;annule une annonce active sur Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmMerchantClearVersion">
 		Cette action va désactiver le dossier de version de l&apos;annonce active. Voulez-vous continuer ?
-		<usetemplate ignoretext="Confirmer avant que je ne désactive le dossier de version d&apos;une annonce de la Place du marché" name="okcancelignore" notext="Annuler" yestext="OK"/>
+		<usetemplate ignoretext="Confirmer avant que je ne désactive le dossier de version d&apos;une annonce de Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="AlertMerchantListingNotUpdated">
 		Impossible de mettre à jour cette annonce.
-[[URL] Cliquez ici] pour la modifier sur la Place du marché.
+[[URL] Cliquez ici] pour la modifier sur Marketplace.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AlertMerchantListingCannotWear">
-		Vous ne pouvez pas porter de vêtements ou des parties du corps se trouvant dans le dossier Annonces de la Place du marché.
+		Vous ne pouvez pas porter de vêtements ou des parties du corps se trouvant dans le dossier Annonces de Marketplace.
 	</notification>
 	<notification name="AlertMerchantListingInvalidID">
 		ID d&apos;annonce non valide.
@@ -4428,6 +4428,18 @@ Voulez-vous leur envoyer ces informations ?
 	<notification name="SettingsWillClear">
 		Les paramètres seront effacés après le redémarrage de [APP_NAME].
 	</notification>
+	<notification name="FSSetTitleRegion">
+		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
+Le nom sera vérifié avant l'enregistrement de l'assignation.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La région '[REGION]' n'a pas été trouvée. Veuillez vérifier le nom et réessayer.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CantAddGrid">
 		Impossible d'ajouter [GRID] à la liste de grilles.
 [REASON] contactez le support de [GRID].
@@ -5814,66 +5826,82 @@ Message d'erreur :
 		Le fichier contenant la transcription du chat est manquant. Soit il n'y a pas de transcription pour ce chat, soit les transcriptions ne sont pas enregistrées.
 Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; Confidentialité &gt; Journaux et transcriptions.
 	</notification>
-
 	<notification name="OmniFilterNewRuleSet">
 		Entrez le nom du nouveau jeu de règles :
 		<form name="form">
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
-
 	<notification name="OmniFilterrNewRuleSetBlank">
 		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
 	</notification>
-
 	<notification name="OmniFilterNewRuleSetDuplicate">
 		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
 	</notification>
-
 	<notification name="OmniFilterCloneRuleSet">
 		Saisissez un nom pour le jeu de règles cloné :
 		<form name="form">
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
-
 	<notification name="OmniFilterCloneRuleSetBlank">
 		Les noms vides ne sont pas autorisés. Veuillez réessayer.avec un nom.
 	</notification>
-
 	<notification name="OmniFilterCloneRuleSetDuplicate">
 		Les noms en doubles ne sont pas autorisés. Veuillez réessayer avec un nom différent.
 	</notification>
-
 	<notification name="OmniFilterRemoveRuleSet">
 		Êtes-vous sûr(e) de vouloir supprimer [RULESETNAME]?
 		<tag>confirm</tag>
 		<usetemplate ignoretext="Confirmez avant que je supprime un jeu de règles." name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
-
 	<notification name="OmniFilterRemoveRuleSetDefault">
 		Impossible de supprimer le jeu de règles par défaut.
 	</notification>
-
 	<notification name="OmniFilterRemoveRuleSetOutofBounds">
 		Impossible de supprimer le jeu de règles en raison d'un index hors limites.
 	</notification>
-
 	<notification name="OmniFilterRemoveRuleSetInvalidName">
 		Impossible de supprimer le jeu de règles car le nom n'a pas été trouvé.
 	</notification>
-
-	<notification name="FSSetTitleRegion">
-		Entrez le nom exact d'une région à assigner au titre de groupe sélectionné.
-Le nom sera vérifié avant l'enregistrement de l'assignation.
+	<notification name="OmniFilterExportRuleSet">
+		Entrez un nom de notice pour exporter le jeu de règles  [RULESETNAME]:
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
-	<notification name="FSSetTitleRegionNotFound">
-		La région '[REGION]' n'a pas été trouvée. Veuillez vérifier le nom et réessayer.
+	<notification name="OmniFilterMissingCategory">
+		La catégorie Notice n'existe pas dans l'inventaire. Impossible de créer la notice.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-
+	<notification name="OmniFilterImportRuleSet">
+		Entrez un nom pour le jeu de règles importé '[IMPORTNAME]':
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		Erreur : La notice [IMPORTNAME] n'est pas un jeu de règles valide. L'importation est impossible.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		Erreur : L'objet n'est pas une notice.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="Omnifilter Import Instructions">
+		Pour importer une notice de jeu de règles, cliquez gauche sur une notice de jeu de règles dans l'inventaire qui est apparu et maintenez pressé le bouton gauche. Puis, faites glisser la souris au dessus de cette fenêtre et relâchez le bouton de la souris pour lancer le processus d'importation.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<ignore name="ignore" text="Afficher les instrutions d'importation Omnifiltre lorsque le bouton Importer est pressé"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		Le nom de la notice '[INPUTNAME]' n'est pas accepté, car il contient des caractères non-latin.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
 </notifications>

@@ -548,7 +548,7 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 		Vous ne pouvez pas rezzer (charger) des articles du dossier Annonces de la Place de marché
 	</string>
 	<string name="TooltipOutboxWorn">
-		Vous ne pouvez pas mettre d&apos;articles que vous portez dans le dossier Annonces de la Place du marché
+		Vous ne pouvez pas mettre d&apos;articles que vous portez dans le dossier Annonces de Marketplace
 	</string>
 	<string name="TooltipOutboxFolderLevels">
 		Le niveau de dossiers imbriqués dépasse [AMOUNT]. Diminuez le nombre de niveaux de dossiers imbriqués dans d&apos;autres dossiers. Si nécessaire, placez certains articles dans une boîte.
@@ -569,19 +569,19 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 		Impossible de vendre ou de transférer un ou plusieurs de ces objets
 	</string>
 	<string name="TooltipOutboxNotInInventory">
-		Vous ne pouvez mettre sur la Place du marché que des articles de votre inventaire
+		Vous ne pouvez mettre sur Marketplace que des articles de votre inventaire
 	</string>
 	<string name="TooltipOutboxLinked">
-		Vous ne pouvez pas mettre des articles ou dossiers liés sur la Place du marché
+		Vous ne pouvez pas mettre des articles ou dossiers liés sur Marketplace
 	</string>
 	<string name="TooltipOutboxCallingCard">
-		Vous ne pouvez pas mettre des cartes de visite sur la Place du marché
+		Vous ne pouvez pas mettre des cartes de visite sur Marketplace
 	</string>
 	<string name="TooltipOutboxDragActive">
 		vous ne pouvez pas déplacer une annonce publiée
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		Vous ne pouvez pas déplacer le dossier racine des annonces de la Place du marché
+		Vous ne pouvez pas déplacer le dossier racine des annonces de Marketplace
 	</string>
 	<string name="TooltipOutboxMixedStock">
 		tous les articles d&apos;un dossier de stock doivent avoir le même type et droit
@@ -1668,7 +1668,7 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Vous n&apos;avez pas de copie de cette texture dans votre inventaire
 	</string>
 	<string name="InventoryInboxNoItems">
-		Les achats que vous avez effectués sur la Place du marché s&apos;affichent ici. Vous pouvez alors les faire glisser vers votre inventaire afin de les utiliser.
+		Les achats que vous avez effectués sur Marketplace s&apos;affichent ici. Vous pouvez alors les faire glisser vers votre inventaire afin de les utiliser.
 	</string>
 	<string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
@@ -1695,33 +1695,33 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Ouvrir la fenêtre avec les options Jeu
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
-		Tout le monde peut vendre des articles sur la Place du marché.
+		Tout le monde peut vendre des articles sur Marketplace.
 	</string>
 	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
-		Pour devenir vendeur, vous devez [[MARKETPLACE_CREATE_STORE_URL] créer une boutique sur la Place du marché].
+		Pour devenir vendeur, vous devez [[MARKETPLACE_CREATE_STORE_URL] créer une boutique sur Marketplace].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Votre boîte d&apos;envoi est vide.
 	</string>
 	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
-		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone et cliquez sur &quot;Envoyer vers la Place du marché&quot;.
+		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Marketplace], faites-les glisser vers cette zone et cliquez sur &quot;Envoyer vers Marketplace&quot;.
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
-		Initialisation de la Place du marché...
+		Initialisation de Marketplace...
 	</string>
 	<string name="InventoryOutboxInitializing">
-		Nous sommes en train d&apos;accéder à votre compte dans la [[MARKETPLACE_CREATE_STORE_URL] boutique de la Place du marché].
+		Nous sommes en train d&apos;accéder à votre compte dans la [[MARKETPLACE_CREATE_STORE_URL] boutique de Marketplace].
 	</string>
 	<string name="InventoryOutboxErrorTitle">
-		Erreurs de la Place du marché.
+		Erreurs de Marketplace.
 	</string>
 	<string name="InventoryOutboxError">
-		La [[MARKETPLACE_CREATE_STORE_URL] boutique de la Place du marché] renvoie des erreurs.
+		La [[MARKETPLACE_CREATE_STORE_URL] boutique de Marketplace] renvoie des erreurs.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Une erreur est survenue lors de l’ouverture des annonces de la Place du marché.
+		Une erreur est survenue lors de l’ouverture des annonces de Marketplace.
 Si vous continuez de recevoir ce message, contactez l’assistance Second Life à http://support.secondlife.com pour obtenir de l’aide.
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
@@ -1733,10 +1733,10 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
-		Votre dossier Annonces de la Place du marché est vide.
+		Votre dossier Annonces de Marketplace est vide.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItems">
-		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone.
+		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Marketplace], faites-les glisser vers cette zone.
 	</string>
 	<string name="InventoryItemsCount">
 		( [ITEMS]/[CATEGORIES] Articles )
@@ -1793,13 +1793,13 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 		Erreur :
 	</string>
 	<string name="Marketplace Error Not Merchant">
-		Avant d&apos;envoyer des articles vers la Place du marché, vous devez vous configurer comme vendeur (gratuit).
+		Avant d&apos;envoyer des articles vers Marketplace, vous devez vous configurer comme vendeur (gratuit).
 	</string>
 	<string name="Marketplace Error Not Accepted">
 		Impossible de déplacer l&apos;article dans ce dossier.
 	</string>
 	<string name="Marketplace Error Unsellable Item">
-		Cet article ne peut pas être vendu sur la Place du marché.
+		Cet article ne peut pas être vendu sur Marketplace.
 	</string>
 	<string name="MarketplaceNoID">
 		no Mkt ID
@@ -5842,10 +5842,10 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Carte
 	</string>
 	<string name="Command_Marketplace_Label">
-		Place du marché
+		Marketplace
 	</string>
 	<string name="Command_MarketplaceListings_Label">
-		Place du marché
+		Marketplace
 	</string>
 	<string name="Command_MiniMap_Label">
 		Mini-carte
@@ -7209,6 +7209,12 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="OmnifilterReplacement">
 		Remplacement omnifiltre : [REPLACEMENT]
 	</string>
+	<string name="OmnifilterDefaultName">
+		Par défaut
+	</string>
+	<string name="OmnifilterExportDescription">
+		Jeu de regles Omnifiltre : [REPLACEMENT]
+	</string> 
 	<string name="FSAvatarAlignToggleMini">
 		Mini
 	</string>

@@ -248,21 +248,28 @@
            (wymaga restartu)
         </text>
         <text name="tooltip_textbox5">
-           Dostrojenie rozmiaru:
+           Dostrój rozmiar:
         </text>
         <text name="tooltip_textbox6" >
            pt (wymaga restartu)
 Domyślnie 0. Większa wartość może sprawiać kłopoty.
         </text>
+        <text name="tooltip_textbox8">
+           Odstęp wierszy:
+        </text>
+        <text name="tooltip_textbox9">
+           pikseli (wymaga restartu)
+Domyślnie 0.
+        </text>
         <text name="tooltip_textbox3">
-           Odstępy w czatach:
+           Odstępy - czaty:
         </text>
         <text name="tooltip_textbox4">
           pikseli (wymaga restartu)
 Second Life viewer domyślnie 0. V1 domyślnie 2.
         </text>
         <text name="Label_FolderItemViewHeight">
-           Wysokość w folderach:
+           Wysokość - foldery:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           pikseli (wymaga restartu)

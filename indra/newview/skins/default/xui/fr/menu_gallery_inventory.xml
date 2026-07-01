@@ -21,8 +21,9 @@
 	<menu_item_call label="Renommer" name="Rename"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
+	<menu_item_call label="Copier le nom" name="Copy Name"/>
 	<menu_item_call label="Coller" name="Paste"/>
-	<menu label="Links" name="Links">
+	<menu label="Liens" name="Links">
 		<menu_item_call label="Coller en tant que lien" name="Paste As Link"/>
 		<menu_item_call label="Remplacer les liens" name="Replace Links"/>
 	</menu>
