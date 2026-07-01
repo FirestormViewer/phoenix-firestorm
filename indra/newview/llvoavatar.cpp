@@ -7010,6 +7010,13 @@ void LLVOAvatar::processAnimationStateChanges()
         }
     }
 
+    // <FS:PP> keep AO "Always" animations alive
+    if (isSelf() && AOEngine::instanceExists())
+    {
+        AOEngine::instance().reassertAlwaysAnimations(true);
+    }
+    // </FS:PP>
+
     stop_glerror();
 }
 
