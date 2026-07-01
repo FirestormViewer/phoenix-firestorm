@@ -118,5 +118,8 @@
 		<line_editor name="button_reply" tool_tip="Etykieta przycisku do &quot;kliknięcia&quot; w oknie dialogowym skryptu, w tym &quot;Ignoruj&quot;" />
 		<text name="text_box_reply_label" value="Odp. textboxem:" />
 		<text_editor name="text_box_reply" tool_tip="Tekst odpowiedzi, tak jakby został wpisany ręcznie w polu tekstowym okna dialogowego skryptu" />
+		<text name="reply_delay_label" value="Opóźnienie:" />
+		<spinner name="reply_delay_slider" tool_tip="Liczba sekund przed wysłaniem odpowiedzi na zdarzenie. Domyślne 0.0 oznacza brak opóźnienia." />
+		<text name="reply_delay_seconds_label" value="sekund" />
 	</panel>
 </floater>
