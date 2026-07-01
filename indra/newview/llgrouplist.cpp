@@ -163,6 +163,7 @@ LLGroupList::LLGroupList(const Params& p)
     {
         // shared groups first
         setComparator(&SHARED_GROUP_COMPARATOR);
+        mProfileContactSetsPlacementConnection = gSavedSettings.getControl("FSContactSetsProfilePlacement")->getSignal()->connect([this](LLControlVariable* control, const LLSD& value, const LLSD& previous) { setDirty(true); }); // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
     }
 
     if (mForAgent)
@@ -179,6 +180,12 @@ LLGroupList::~LLGroupList()
     if (mFavoritesChangedConnection.connected())
     {
         mFavoritesChangedConnection.disconnect();
+    }
+    // </FS:PP>
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    if (mProfileContactSetsPlacementConnection.connected())
+    {
+        mProfileContactSetsPlacementConnection.disconnect();
     }
     // </FS:PP>
 }
@@ -362,35 +369,7 @@ void LLGroupList::refresh()
 
         // Sort the list.
         sort();
-
-        // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
-        if (!mSecondaryGroups.empty())
-        {
-            bool contact_set_separator_added = false;
-            for (const std::string& name : mSecondaryGroups)
-            {
-                if (name.empty())
-                {
-                    continue;
-                }
-                if (!contact_set_separator_added && regular_group_count > 0)
-                {
-                    LLGroupListSeparator* separator = new LLGroupListSeparator();
-                    static const LLUUID SECONDARY_SEPARATOR_UUID("00000000-0000-0000-0000-000000000002");
-                    addItem(separator, SECONDARY_SEPARATOR_UUID, ADD_BOTTOM, false);
-                    contact_set_separator_added = true;
-                }
-                LLGroupListItem* item = addNewItem(LLUUID::null, name, LLUUID::null, ADD_BOTTOM);
-                if (item)
-                {
-                    if (auto color_it = mSecondaryGroupColors.find(name); color_it != mSecondaryGroupColors.end())
-                    {
-                        item->setCustomTextColor(color_it->second);
-                    }
-                }
-            }
-        }
-        // </FS:PP>
+        addSecondaryGroupItems(regular_group_count); // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
     }
 
     setDirty(false);
@@ -439,6 +418,80 @@ std::string LLGroupList::getSelectedGroupName()
         return selected_item->getGroupName();
     }
     return LLStringUtil::null;
+}
+
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+LLGroupListItem* LLGroupList::addSecondaryGroupItem(const std::string& name, EAddPosition pos)
+{
+    if (name.empty())
+    {
+        return nullptr;
+    }
+
+    LLGroupListItem* item = addNewItem(LLUUID::null, name, LLUUID::null, pos);
+    if (item)
+    {
+        if (auto color_it = mSecondaryGroupColors.find(name); color_it != mSecondaryGroupColors.end())
+        {
+            item->setCustomTextColor(color_it->second);
+        }
+    }
+    return item;
+}
+
+void LLGroupList::addSecondaryGroupItems(S32 regular_group_count)
+{
+    if (mSecondaryGroups.empty())
+    {
+        return;
+    }
+
+    static LLCachedControl<S32> profile_placement(gSavedSettings, "FSContactSetsProfilePlacement", 0);
+    const S32 placement = profile_placement;
+    if (placement == 1) // hidden
+    {
+        return;
+    }
+
+    static const LLUUID SECONDARY_SEPARATOR_UUID("00000000-0000-0000-0000-000000000002");
+
+    if (placement == 2) // above groups list
+    {
+        LLPanel* separator_anchor = nullptr;
+        for (auto it = mSecondaryGroups.rbegin(); it != mSecondaryGroups.rend(); ++it)
+        {
+            if (LLGroupListItem* item = addSecondaryGroupItem(*it, ADD_TOP))
+            {
+                if (!separator_anchor)
+                {
+                    separator_anchor = item;
+                }
+            }
+        }
+        if (separator_anchor && regular_group_count > 0)
+        {
+            LLGroupListSeparator* separator = new LLGroupListSeparator();
+            insertItemAfter(separator_anchor, separator, SECONDARY_SEPARATOR_UUID);
+        }
+    }
+    else // below groups list
+    {
+        bool separator_added = false;
+        for (const std::string& name : mSecondaryGroups)
+        {
+            if (name.empty())
+            {
+                continue;
+            }
+            if (!separator_added && regular_group_count > 0)
+            {
+                LLGroupListSeparator* separator = new LLGroupListSeparator();
+                addItem(separator, SECONDARY_SEPARATOR_UUID, ADD_BOTTOM, false);
+                separator_added = true;
+            }
+            addSecondaryGroupItem(name, ADD_BOTTOM);
+        }
+    }
 }
 // </FS:PP>
 

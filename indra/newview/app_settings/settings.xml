@@ -525,6 +525,17 @@
         <real>1.0</real>
       </array>
     </map>
+    <key>FSContactSetsProfilePlacement</key>
+    <map>
+      <key>Comment</key>
+      <string>Where to show contact sets in the profile groups list: 0=below groups, 1=hidden, 2=above groups</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>FSMuteAllGroups</key>
   <map>
     <key>Comment</key>
