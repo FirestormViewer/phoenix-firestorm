@@ -49,10 +49,6 @@
 // [SL:KB] - Patch: Control-TextHighlight | Checked: 2013-12-30 (Catznip-3.6)
 #include <boost/algorithm/string.hpp>
 // [/SL:KB]
-// <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
-#include "llcontrol.h"
-extern LLControlGroup gSavedSettings;
-// </FS:MJR> [FIRE-36802]
 
 #include "fsregistrarutils.h"
 
@@ -1953,7 +1949,7 @@ S32 LLTextBase::getLeftOffset(S32 width)
 void LLTextBase::reflow()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
-    static LLCachedControl<S32> font_line_spacing_adjustment(gSavedSettings, "FSFontLineSpacingAdjustment", 0); // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
+    static LLUICachedControl<S32> font_line_spacing_adjustment("FSFontLineSpacingAdjustment", 0); // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
 
     updateSegments();
 
