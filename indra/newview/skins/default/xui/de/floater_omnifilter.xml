@@ -124,5 +124,8 @@
 		<line_editor name="button_reply" tool_tip="Die Beschriftung einer Schaltfläche, die im Skript-Dialog &quot;geklickt&quot; werden soll, einschließlich &quot;Ignorieren&quot;" />
 		<text name="text_box_reply_label" value="Textbox-Antw.:"/>
 		<text_editor name="text_box_reply" tool_tip="Ein Antworttext, als wäre er manuell in das Textfeld des Skript-Dialogs eingegeben worden" />
+		<text name="reply_delay_label" value="Verzögerung Antwort:" width="135"/>
+		<spinner name="reply_delay_slider" tool_tip="Verzögerung in Sekunden, bevor die Antwort auf das auslösende Event gesendet wird. Standard ist 0.0 (keine Verzögerung)."/>
+		<text name="reply_delay_seconds_label" value="Sekunden"/>
 	</panel>
 </floater>
