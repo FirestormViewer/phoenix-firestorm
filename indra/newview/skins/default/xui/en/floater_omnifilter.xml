@@ -401,7 +401,7 @@
 		 layout="topleft"
 		 follows="all"
 		 height="74"
-		 left_pad="4"
+		 left_pad="5"
 		 right="-4"
 		 top_delta="0"
 		 tool_tip="The actual text of the message"/>
@@ -411,7 +411,7 @@
 		 follows="left|right|bottom"
 		 width="200"
 		 height="20"
-		 left="100"
+		 left="103"
 		 bottom_pad="4"
 		 label="Match Dialog Button Label"
 		 tool_tip="Allows for matching a dialog window's button label. Can be used to auto responsd to a button."/>
@@ -735,7 +735,7 @@
 		 name="text_box_reply"
 		 layout="topleft"
 		 follows="left|right|bottom"
-		 left_pad="4"
+		 left_pad="5"
 		 height="60"
 		 right="-4"
 		 top_delta="0"
@@ -762,7 +762,7 @@
 		 increment=".1"
 		 decimal_digits="1"
 		 initial_value="0"
-		 tool_tip="Amount of seconds before sending the reply the triggered event. Default is 0.0, which is no delay."
+		 tool_tip="Amount of seconds before sending the reply for the triggered event. Default is 0.0, which is no delay."
 		 min_val="0"
 		 max_val="3" />
 		<text
