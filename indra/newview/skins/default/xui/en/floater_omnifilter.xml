@@ -405,6 +405,16 @@
 		 right="-4"
 		 top_delta="0"
 		 tool_tip="The actual text of the message"/>
+		<button
+		 name="btn_match_dlg_btn_lbl"
+		 layout="topleft"
+		 follows="left|right|bottom"
+		 width="200"
+		 height="20"
+		 left="100"
+		 bottom_pad="4"
+		 label="Match Dialog Button Label"
+		 tool_tip="Allows for matching a Dialog Window's button label. Can be used to auto responsd to a button."/>
 		<check_box
 		 name="content_case"
 		layout="topleft"
@@ -412,7 +422,7 @@
 		height="20"
 		width="30"
 		right="-76"
-		top_pad="4"
+		top_pad="-20"
 		label="Aa"
 		tool_tip="Case Sensitivity"/>
 		<combo_box

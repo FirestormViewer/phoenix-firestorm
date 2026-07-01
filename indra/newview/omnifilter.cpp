@@ -811,6 +811,8 @@ bool Omnifilter::postBuild()
     mSenderCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("sender_case");
     mSenderMatchTypeCombo = getChild<LLComboBox>("sender_match_type");
     mContentCtrl = getChild<LLTextEditor>("content");
+    // Helper button to add match button label special string to the content editor
+    mMatchDialogButtonLabelBtn = getChild<LLButton>("btn_match_dlg_btn_lbl");
     // Add the preset controls
     mRuleSetsCmb = getChild<LLComboBox>("cmb_rule_sets"); // Rule Set Drop Down
     mNewRuleSetBtn = getChild<LLButton>("btn_rule_set_new"); // New Rule Set
@@ -901,6 +903,7 @@ bool Omnifilter::postBuild()
     mContentCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mContentCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mContentMatchTypeCombo->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
+    mMatchDialogButtonLabelBtn->setCommitCallback(boost::bind(&Omnifilter::onMatchDialogButtonLabelClicked, this));
     mRegionNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mChatReplaceCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mButtonReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
@@ -939,6 +942,25 @@ void Omnifilter::onVisibilityChange(bool visible)
         mRuleSetsCmb->selectByValue(LLSD(gSavedSettings.getS32("OmnifilterRuleSetID")));
         // Need to also reload the UI of the rules editor to match the change.
         reloadRule();
+    }
+}
+
+// Callback which will add the text "button_name=" which allows for the label text
+// to be searched for as content for matching. Allows buttons being present on Script
+// Dialog floaters to trigger an action.
+void Omnifilter::onMatchDialogButtonLabelClicked()
+{
+    // Get the current contents of the content editor
+    const std::string content = mContentCtrl->getText();
+    // If there is no content currently, want to add the button_name= with the translated BUTTON_NAME string.
+    if (content.empty())
+    {
+        mContentCtrl->setText("button_name=" + LLTrans::getString("OmnifilterButtonLabel"));
+    }
+    //  Else there is some text, so do the same as above, but just add a newline character at between the old content and the button_name=.
+    else
+    {
+        mContentCtrl->setText(content + "\nbutton_name=" + LLTrans::getString("OmnifilterButtonLabel"));
     }
 }
 
