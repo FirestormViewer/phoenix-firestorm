@@ -37,6 +37,7 @@ class LLComboBox;
 class LLLineEditor;
 class LLPanel;
 class LLTextEditor;
+class LLSpinCtrl;
 
 class Omnifilter : public LLFloater
 {
@@ -130,6 +131,7 @@ protected:
     LLLineEditor* mChatReplaceCtrl{ nullptr };
     LLLineEditor* mButtonReplyCtrl{ nullptr };
     LLTextEditor* mTextBoxReplyCtrl{ nullptr };
+    LLSpinCtrl*   mReplyDelayCtrl{ nullptr }; // For modifying the reply deplay
 
     LLTextValidate::Validator mPrevalidator;
 };

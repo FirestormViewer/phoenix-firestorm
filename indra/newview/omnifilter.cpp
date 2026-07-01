@@ -29,6 +29,7 @@
 #include "llcombobox.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
+#include "llspinctrl.h"
 #include "llviewercontrol.h" // Needed for gSavedSettings
 #include "llnotificationsutil.h" // Needed for Notifications
 #include "llfloaterreg.h" // Needed for LLFloaterReg::showInstance
@@ -157,6 +158,7 @@ void Omnifilter::onSelectNeedle()
     mChatReplaceCtrl->setText(needle->mChatReplace);
     mButtonReplyCtrl->setText(needle->mButtonReply);
     mTextBoxReplyCtrl->setText(needle->mTextBoxReply);
+    mReplyDelayCtrl->setValue(needle->mReplyDelay);
 
     mContentCtrl->setFocus(true);
 }
@@ -198,6 +200,7 @@ void Omnifilter::onNeedleChanged()
     needle->mChatReplace = mChatReplaceCtrl->getValue().asString();
     needle->mButtonReply = mButtonReplyCtrl->getValue().asString();
     needle->mTextBoxReply = mTextBoxReplyCtrl->getValue().asString();
+    needle->mReplyDelay = static_cast<F32>(mReplyDelayCtrl->getValue().asReal());
 
     OmnifilterEngine::getInstance()->setDirty(true);
 }
@@ -843,6 +846,7 @@ bool Omnifilter::postBuild()
     mChatReplaceCtrl = getChild<LLLineEditor>("chat_replace");
     mButtonReplyCtrl = getChild<LLLineEditor>("button_reply");
     mTextBoxReplyCtrl = getChild<LLTextEditor>("text_box_reply");
+    mReplyDelayCtrl = getChild<LLSpinCtrl>("reply_delay_slider");
 
     mNeedleListCtrl->setSearchColumn(NEEDLE_NAME_COLUMN);
     mNeedleListCtrl->deleteAllItems();
@@ -908,6 +912,7 @@ bool Omnifilter::postBuild()
     mChatReplaceCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mButtonReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mTextBoxReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
+    mReplyDelayCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mOwnerCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mOwnerCtrl->setKeystrokeCallback(boost::bind(&Omnifilter::onOwnerChanged, this), nullptr);
     mTypeNearbyBtn->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));

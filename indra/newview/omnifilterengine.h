@@ -72,11 +72,12 @@ class OmnifilterEngine
         class Haystack
         {
             public:
-                std::string mSenderName;
-                std::string mContent;
-                std::string mRegionName;
+                // Set all the default values
+                std::string mSenderName = "";
+                std::string mContent = "";
+                std::string mRegionName = "";
 
-                LLUUID mOwnerID;
+                LLUUID mOwnerID = LLUUID::null;
 
                 eType mType = TYPES_MAX;
         };
@@ -84,22 +85,24 @@ class OmnifilterEngine
         class Needle
         {
             public:
-                std::string mSenderName;
-                std::string mContent;
-                std::string mRegionName;
+                // Set all the default values
+                std::string mSenderName = "";
+                std::string mContent = "";
+                std::string mRegionName = "";
 
-                std::string mChatReplace;
-                std::string mButtonReply;
-                std::string mTextBoxReply;
+                std::string mChatReplace = "";
+                std::string mButtonReply = "";
+                std::string mTextBoxReply = "";
+                F32 mReplyDelay = 0.0f;
 
-                eMatchType mSenderNameMatchType;
-                eMatchType mContentMatchType;
+                eMatchType mSenderNameMatchType = eMatchType::Substring;
+                eMatchType mContentMatchType = eMatchType::Substring;
 
-                LLUUID mOwnerID;
+                LLUUID mOwnerID = LLUUID::null;
 
                 std::set<eType> mTypes;
 
-                bool mEnabled;
+                bool mEnabled = false;
                 bool mSenderNameCaseInsensitive = false;
                 bool mContentCaseInsensitive = false;
         };
@@ -168,6 +171,10 @@ class OmnifilterEngine
         }
         void onRuleSetsUpdated();
         rule_set_updated_signal_t mRuleSetUpdatedCallback;
+
+        // New delay response which is to fix issue FIRE-36590 - The Omnifilter Dialog Button Reply needs a 1 second delay
+        void createDelayedResponse(LLNotificationPtr notification, LLSD response, F32 delay);
+        void sendDelayedResponse(LLNotificationPtr notification, LLSD response);
 
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
