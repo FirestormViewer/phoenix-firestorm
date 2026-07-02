@@ -575,6 +575,9 @@
      name="HTMLLinkColor"
      reference="EmphasisColor" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="White" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color

@@ -595,6 +595,9 @@
      name="HTMLLinkColor"
      value="0.38 0.694 0.573 1" />
     <color
+     name="HTMLLinkColorHovertips"
+     value="0.38 0.694 0.573 1" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color

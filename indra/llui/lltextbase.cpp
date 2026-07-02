@@ -4197,14 +4197,14 @@ bool LLNormalTextSegment::handleToolTip(S32 x, S32 y, MASK mask)
 
         if (!mProminentUrlLabel.empty())
         {
-            params.styled_message.add().text(mProminentUrlLabel + "\n").style.color(LLColor4::white);
+            params.styled_message.add().text(mProminentUrlLabel + "\n").style.color(colors.getColor("ToolTipTextColor", LLColor4::white));
         }
         else
         {
             params.styled_message.add().text("\n");
         }
 
-        params.styled_message.add().text(mTooltip).style.color(colors.getColor("HTMLLinkColor", LLColor4::blue));
+        params.styled_message.add().text(mTooltip).style.color(colors.getColor("HTMLLinkColorHovertips", LLColor4::blue));
         LLToolTipMgr::instance().show(params);
         return true;
     }

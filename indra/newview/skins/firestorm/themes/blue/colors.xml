@@ -235,6 +235,9 @@
      name="HTMLLinkColor"
      reference="Blue4" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="MBlue" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color

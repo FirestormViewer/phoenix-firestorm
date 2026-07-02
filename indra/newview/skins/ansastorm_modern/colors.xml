@@ -719,6 +719,9 @@
      name="HTMLLinkColor"
      reference="AnsaStorm_HtmlLink" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="Black" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color
