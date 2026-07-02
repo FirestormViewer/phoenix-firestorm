@@ -52,7 +52,7 @@
 			<text name="asset_text_box5">
 				МБ
 			</text>
-			<button label="Очистить кэш инвентаря" name="ClearInventoryCache" left="380" width="150"/>
+			<button label="Очистить кэш инвентаря" name="ClearInventoryCache" left="370" width="160"/>
 			<text name="Cache location">
 				Расположение кэша:
 			</text>

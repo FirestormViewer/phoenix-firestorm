@@ -51,7 +51,7 @@
 			<text name="asset_cache_size_label_l">
 				Tamanho do cache de assets:
 			</text>
-			<button label="Limpar cache de inventário" width="170" name="ClearInventoryCache" left="350"/>
+			<button label="Limpar cache de inventário" width="170" name="ClearInventoryCache" left="358"/>
 			<text name="Cache location">
 				Local do cache:
 			</text>

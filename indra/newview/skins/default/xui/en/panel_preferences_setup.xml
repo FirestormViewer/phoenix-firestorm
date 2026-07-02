@@ -470,10 +470,10 @@
 		 height="23"
 		 label="Clear Inventory Cache"
 		 layout="topleft"
-		 left="398"
+		 left="388"
 		 name="ClearInventoryCache"
 		 top_delta="-1"
-		 width="130">
+		 width="140">
 			<button.commit_callback
 			 function="Pref.InvClearCache" />
 		</button>
