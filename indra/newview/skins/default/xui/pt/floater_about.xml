@@ -50,9 +50,9 @@ https://www.firestormviewer.org
 		</panel>
 		<panel label="Créditos" name="credits_panel">
 			<text name="linden_intro">
-				Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
+				Firestorm não seria possível sem a decisão da Linden Lab de disponibilizar o código-fonte do visualizador do Second Life.
 
-O Second Life é trazido a você pela Lindens,
+O Second Life é oferecido pela Linden Lab,
 com contribuições de código aberto de:
 			</text>
 			<text_editor name="contrib_names">
