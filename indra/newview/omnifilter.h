@@ -54,7 +54,7 @@ public:
     LLScrollListItem* addNeedle(const std::string& name, const OmnifilterEngine::Needle& needle);
     // Supports Notecard drag and drop for importing.
     bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept,
-                           std::string& tooltip_msg);
+                           std::string& tooltip_msg) override;
 
 protected:
     OmnifilterEngine::Needle* getSelectedNeedle();
