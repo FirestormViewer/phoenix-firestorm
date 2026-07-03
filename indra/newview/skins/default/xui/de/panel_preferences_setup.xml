@@ -51,7 +51,7 @@
 			<text name="asset_cache_size_label_l">
 				Asset-Cache-Größe :
 			</text>
-			<button label="Inventar-Cache löschen" width="137" name="ClearInventoryCache"/>
+			<button label="Inventar-Cache löschen" name="ClearInventoryCache"/>
 			<text name="Cache location">
 				Cache-Speicherort:
 			</text>

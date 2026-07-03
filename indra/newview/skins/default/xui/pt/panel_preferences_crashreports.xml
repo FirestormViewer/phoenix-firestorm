@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Relatórios de falha" name="crash_reports">
 	<check_box label="Enviar relatórios de falha para firestormviewer.org" name="checkSendCrashReports"/>
-	<check_box label="Sempre perguntar antes de enviar" name="checkSendCrashReportsAlwaysAsk"/>
+	<check_box label="Perguntar antes de enviar" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="Incluir arquivos de configuração do Firestorm" name="checkSendSettings"/>
 	<text name="textSendSettings">
 		(contém nome de usuário)

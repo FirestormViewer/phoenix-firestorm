@@ -580,6 +580,9 @@
      name="HTMLLinkColor"
      reference="EmphasisColor" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="SL-White" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color

@@ -12,23 +12,14 @@
 	<floater.string name="done_text">
 		權限變更要求已完成。
 	</floater.string>
-	<check_box label="動畫" name="check_animation" />
 	<icon name="icon_animation" tool_tip="動畫" />
-	<check_box label="身體部位" name="check_bodypart" />
 	<icon name="icon_bodypart" tool_tip="身體部位" />
-	<check_box label="裝扮" name="check_clothing" />
 	<icon name="icon_clothing" tool_tip="服裝" />
-	<check_box label="手勢" name="check_gesture" />
 	<icon name="icon_gesture" tool_tip="手勢" />
-	<check_box label="記事卡" name="check_notecard" />
 	<icon name="icon_notecard" tool_tip="記事卡" />
-	<check_box label="物件" name="check_object" />
 	<icon name="icon_object" tool_tip="物件" />
-	<check_box label="指令碼" name="check_script" />
 	<icon name="icon_script" tool_tip="指令碼" />
-	<check_box label="聲音" name="check_sound" />
 	<icon name="icon_sound" tool_tip="聲音" />
-	<check_box label="紋理" name="check_texture" />
 	<icon name="icon_texture" tool_tip="紋理" />
 	<icon name="icon_setting" tool_tip="環境設定" />
 	<icon name="icon_materials" tool_tip="材質" />
@@ -50,7 +41,7 @@
 	</text>
 	<check_box label="修改" name="next_owner_modify" tool_tip="下一個所有者可以編輯本物件的性質，如名稱或尺寸。" />
 	<check_box label="複製" name="next_owner_copy" tool_tip="下一個所有者可無限複製本物件。 副本將保留創作人的資料，其允許設定不能比原本物件更加放寬。" />
-	<check_box initial_value="true" label="轉讓" name="next_owner_transfer" tool_tip="下一個所有者可贈送或轉售這個物件。" />
+	<check_box label="轉讓" name="next_owner_transfer" tool_tip="下一個所有者可贈送或轉售這個物件。" />
 	<button label="確定" name="ok" />
 	<button label="應用" name="apply" />
 	<button label="取消" name="close" />

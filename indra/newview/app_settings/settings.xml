@@ -525,6 +525,17 @@
         <real>1.0</real>
       </array>
     </map>
+    <key>FSContactSetsProfilePlacement</key>
+    <map>
+      <key>Comment</key>
+      <string>Where to show contact sets in the profile groups list: 0=below groups, 1=hidden, 2=above groups</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>FSMuteAllGroups</key>
   <map>
     <key>Comment</key>
@@ -21545,6 +21556,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.0</real>
     </map>
+<!-- <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing -->
+    <key>FSFontLineSpacingAdjustment</key>
+    <map>
+        <key>Comment</key>
+        <string>Line spacing pixels for UI text (requires restart</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <real>0</real>
+    </map>
+<!-- </FS:MJR> [FIRE-36802] -->
     <key>StarLightShowMapDetails</key>
     <map>
       <key>Comment</key>
@@ -27922,7 +27946,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
     <key>OmnifilterRuleSetID</key>
@@ -27947,7 +27971,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Type</key>
         <string>Boolean</string>
         <key>Value</key>
-        <integer>1</integer>
+        <integer>0</integer>
     </map>
     <!-- </FS:MJR> [FIRE-36776] -->
     <key>FSAutoOrderIMTabs</key>

@@ -52,7 +52,7 @@
 			<text name="asset_text_box5">
 				MB
 			</text>
-			<button label="Avadanlıq siyahısının keşini təmizlə" name="ClearInventoryCache" left="380" width="150"/>
+			<button label="İnventar Keşini Təmizləyin" name="ClearInventoryCache" left="370" width="160"/>
 			<text name="Cache location">
 				Keş yerləşməsi:
 			</text>

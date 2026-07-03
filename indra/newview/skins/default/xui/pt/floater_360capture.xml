@@ -10,13 +10,13 @@
 			<radio_item label="Alta" name="high_quality" tool_tip="Qualidade alta"/>
 			<radio_item label="Máxima" name="maximum_quality" tool_tip="Qualidade máxima"/>
 		</radio_group>
-		<check_box label="Ocultar todos os avatares" name="360_hide_avatar"/>
-		<button label="Criar imagem 360°" name="capture_button"/>
+		<check_box label="Esconder avatares" name="360_hide_avatar"/>
+		<button label="Capturar imagem 360°" name="capture_button"/>
 		<button label="Salvar como..." name="save_local_button"/>
 	</panel>
 	<panel name="ui_panel_right">
 		<text name="statusbar">
-			Clique e arraste na imagem para panoramizar.
+			Clique e arraste para girar a imagem.
 		</text>
 	</panel>
 </floater>

@@ -160,16 +160,12 @@
 	<text name="covenant_text">
 		你必須同意領地契約：
 	</text>
-	<text name="covenant_timestamp_text" />
 	<text_editor name="covenant_editor">
 		載入中...
 	</text_editor>
 	<check_box label="我同意以上所訂契約。" name="agree_covenant" />
 	<text name="info_parcel_label">
 		地塊：
-	</text>
-	<text name="info_parcel">
-		Scotopteryx 138,204
 	</text>
 	<text name="info_size_label">
 		尺寸：
@@ -219,16 +215,13 @@
 	<text name="currency_action">
 		購買更多 L$
 	</text>
-	<line_editor name="currency_amt">
-		1000
-	</line_editor>
 	<text name="currency_est">
 		花費大約 [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
 		你有 2.100 L$。
 	</text>
-	<check_box label="從群組移除 [AMOUNT] 平方公尺的捐出地。" name="remove_contribution" />
 	<button label="購買" name="buy_btn" />
+	<check_box label="從群組移除 [AMOUNT] 平方公尺的捐出地。" name="remove_contribution" />
 	<button label="取消" name="cancel_btn" />
 </floater>

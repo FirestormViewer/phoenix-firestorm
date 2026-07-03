@@ -279,6 +279,7 @@ with the same filename but different name
   <texture name="Group_Notices" file_name="icons/Group_Notices.png" preload="false" />
 
   <texture name="Hand" file_name="icons/hand.png" preload="false" />
+  <texture name="fstrusted" file_name="icons/fstrusted.png" preload="false" />
   
   <texture name="Help_Press" file_name="navbar/Help_Press.png" preload="false" />
 

@@ -1477,7 +1477,7 @@ void LLGLSLShader::uniform4iv(U32 index, U32 count, const GLint* v)
             LLVector4 vec((F32)v[0], (F32)v[1], (F32)v[2], (F32)v[3]);
             if (iter == mValue.end() || shouldChange(iter->second, vec) || count != 1)
             {
-                glUniform1iv(mUniform[index], count, v);
+                glUniform4iv(mUniform[index], count, v); // <FS:Beq/>  Apparent copy/paste error.
                 mValue[mUniform[index]] = vec;
             }
         }

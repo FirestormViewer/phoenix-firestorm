@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Crear artículos" name="Marketplace Create Listing"/>
-	<menu_item_call label="Asociar artículos" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Obtener (actualizar) artículos" name="Marketplace Get Listing"/>
-	<menu_item_call label="Comprobar errores" name="Marketplace Check Listing"/>
-	<menu_item_call label="Editar artículos" name="Marketplace Edit Listing"/>
-	<menu_item_call label="Incluir en la lista" name="Marketplace List"/>
-	<menu_item_call label="Retirar de la lista" name="Marketplace Unlist"/>
-	<menu_item_call label="Activar" name="Marketplace Activate"/>
-	<menu_item_call label="Desactivar" name="Marketplace Deactivate"/>
 	<menu_item_call label="Compartir" name="Share"/>
 	<menu_item_call label="Abrir" name="Task Open"/>
 	<menu_item_call label="Ejecutar" name="Task Play"/>
@@ -85,7 +76,9 @@
 	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Cortar" name="Cut"/>
 	<menu_item_call label="Pegar" name="Paste"/>
-	<menu_item_call label="Pegar como enlace" name="Paste As Link"/>
+	<menu label="Links" name="Links">
+		<menu_item_call label="Pegar como enlace" name="Paste As Link"/>
+	</menu>
 	<menu_item_call label="Borrar" name="Delete"/>
 	<menu_item_call label="Mover a Objetos Perdidos" name="Move to Lost And Found"/>
 	<menu_item_call label="Borrar carpeta del sistema" name="Delete System Folder"/>
@@ -111,7 +104,18 @@
 	<menu_item_call label="Quitarse" name="Take Off"/>
 	<menu_item_call label="Aplicar sólo a Mi mismo" name="Settings Apply Local"/>
 	<menu_item_call label="Aplicar a la Parcela" name="Settings Apply Parcel"/>
-	<menu_item_call label="Copiar en artículos del Mercado" name="Marketplace Copy"/>
-	<menu_item_call label="Mover a artículos del Mercado" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Crear artículos" name="Marketplace Create Listing"/>
+		<menu_item_call label="Asociar artículos" name="Marketplace Associate Listing"/>
+		<menu_item_call label="Obtener (actualizar) artículos" name="Marketplace Get Listing"/>
+		<menu_item_call label="Comprobar errores" name="Marketplace Check Listing"/>
+		<menu_item_call label="Editar artículos" name="Marketplace Edit Listing"/>
+		<menu_item_call label="Incluir en la lista" name="Marketplace List"/>
+		<menu_item_call label="Retirar de la lista" name="Marketplace Unlist"/>
+		<menu_item_call label="Activar" name="Marketplace Activate"/>
+		<menu_item_call label="Desactivar" name="Marketplace Deactivate"/>
+		<menu_item_call label="Copiar en artículos del Mercado" name="Marketplace Copy"/>
+		<menu_item_call label="Mover a artículos del Mercado" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="--sin opciones--" name="--no options--"/>
 </menu>

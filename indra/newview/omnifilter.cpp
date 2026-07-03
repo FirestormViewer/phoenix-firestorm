@@ -29,9 +29,13 @@
 #include "llcombobox.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
+#include "llspinctrl.h"
 #include "llviewercontrol.h" // Needed for gSavedSettings
 #include "llnotificationsutil.h" // Needed for Notifications
 #include "llfloaterreg.h" // Needed for LLFloaterReg::showInstance
+#include "lltrans.h" // Needed for LLTrans::getString
+#include "llpanelmaininventory.h" // Needed for LLPanelMainInventory::newFolderWindow
+#include "llviewerinventory.h"
 
 #include "fsscrolllistctrl.h"
 
@@ -43,6 +47,7 @@ static constexpr S32 LOG_CONTENT_COLUMN = 1;
 
 Omnifilter::Omnifilter(const LLSD& key) :
     LLFloater(key)
+    , mPrevalidator(LLTextValidate::validateASCIIPrintableNoPipe)
 {
 }
 
@@ -153,6 +158,7 @@ void Omnifilter::onSelectNeedle()
     mChatReplaceCtrl->setText(needle->mChatReplace);
     mButtonReplyCtrl->setText(needle->mButtonReply);
     mTextBoxReplyCtrl->setText(needle->mTextBoxReply);
+    mReplyDelayCtrl->setValue(needle->mReplyDelay);
 
     mContentCtrl->setFocus(true);
 }
@@ -194,6 +200,7 @@ void Omnifilter::onNeedleChanged()
     needle->mChatReplace = mChatReplaceCtrl->getValue().asString();
     needle->mButtonReply = mButtonReplyCtrl->getValue().asString();
     needle->mTextBoxReply = mTextBoxReplyCtrl->getValue().asString();
+    needle->mReplyDelay = static_cast<F32>(mReplyDelayCtrl->getValue().asReal());
 
     OmnifilterEngine::getInstance()->setDirty(true);
 }
@@ -332,6 +339,36 @@ void Omnifilter::onRemoveRuleSetClicked()
     }
 }
 
+void Omnifilter::onImportRuleSetClicked()
+{
+    // Get the notecard category UUID to open in the new inveotory window.
+    LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    // Show the inventory, showing only notecards and highlight the new notecard created.
+    LLPanelMainInventory::newFolderWindow(notecard_category_uuid);
+
+    // Try to get the active inventory panel
+    LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+    if (active_panel)
+    {
+        // If found, assign the FILTER_NAME ([Omnifilter]) to the item names.
+        active_panel->setFilterSubString(OmnifilterEngine::FILTER_NAME);
+    }
+    
+    // Display an instruction notification to the end user.
+    LLNotificationsUtil::add("OmnifilterImportInstructions", LLSD(), LLSD());
+}
+
+void Omnifilter::onExportRuleSetClicked()
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLSD args;
+    // Default name of the export rule set is the current rule set name
+    args["RULESETNAME"] = instance->getCurrentSelectedRuleSet();
+    // Display the new rule set notification and if the user presses the OK button, call the new rule set name selected callback method
+    LLNotificationsUtil::add("OmniFilterExportRuleSet", args, LLSD(),
+                             boost::bind(&Omnifilter::onExportRuleSetConfirmedCallback, this, _1, _2));
+}
+
 // New Rule Set callback, which does the actual cloning.
 void Omnifilter::onNewRuleSetNameSelectedCallback(const LLSD& notification, const LLSD& response)
 {
@@ -458,6 +495,154 @@ void Omnifilter::onRemoveRuleSetConfirmedCallback(const LLSD& notification, cons
     }
 }
 
+void Omnifilter::onImportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+
+        // Try to perform the actual importing of the rule set.
+        S32 return_value = instance->importRuleSetFromNotecard(new_name);
+
+        // If the import was successful, we need to update the UI and select the newly import rule set.
+        if (return_value == 1)
+        {
+            // Get the index of the added rule set.
+            S32 new_rule_index = gSavedSettings.getS32("OmnifilterRuleSetID");
+            // Add the new rule set to the Rule Set Drop Down
+            mRuleSetsCmb->add(new_name, LLSD(new_rule_index));
+
+            // Select the new rule set
+            mRuleSetsCmb->setCurrentByIndex(new_rule_index);
+
+            // Need to force the UI to reload the rules.
+            reloadRule();
+
+            // Save the state of the OmniFilter Window
+            instance->setDirty(true);
+        }
+        //else if the user tried to export a rule set with a blank name, then show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onImportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set with a duplicate name, then show an error.
+        else if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onImportRuleSetClicked, this));
+        }
+    }
+}
+
+void Omnifilter::onExportRuleSetNotecardCallback(const LLUUID& notecard_uuid)
+{
+    // The calling code does not pass in the item ID if an update was called as it did not change
+    // So need to get the stored UUID of the new notecard item isntead.
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLUUID actual_notecard_uuid = instance->getExportUUID();
+    // Get the notecard category UUID to open in the new inveotory window.
+    LLUUID notecard_category_uuid = gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    LL_INFOS() << "Export Notecard UUID:" << actual_notecard_uuid.asString() << LL_ENDL;
+    // Show the inventory, showing only notecards and highlight the new notecard created.
+    LLPanelMainInventory::newFolderWindow(notecard_category_uuid, actual_notecard_uuid);
+
+    // Try to get the active inventory panel
+    LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+    if (active_panel)
+    {
+        // If found, assign the FILTER_NAME ([Omnifilter]) to the item names.
+        active_panel->setFilterSubString(OmnifilterEngine::FILTER_NAME);
+    }
+}
+
+bool Omnifilter::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
+                                              EAcceptance* accept, std::string& tooltip_msg)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    LLInventoryItem* item = (LLInventoryItem*)cargo_data;
+    // If there is no item, return not accepted and exit
+    if (!item)
+    {
+        *accept = ACCEPT_NO;
+        LLNotificationsUtil::add("OmniFilterNotANotecard", LLSD(), LLSD());
+        return true;
+    }
+
+    if (cargo_type == DAD_NOTECARD)
+    {
+        *accept = ACCEPT_YES_SINGLE;
+        // Flag that the notecard will be accepted        
+        if (item && drop)
+        {
+            // Check to see if the notecard is valid first
+            if (!instance->validateImportNotecard(item->getUUID()))
+            {
+                LLSD args;
+                args["IMPORTNAME"] = item->getName();
+                LLNotificationsUtil::add("OmniFilterInvalidImport", args, LLSD());
+            }
+            else
+            {
+                LLSD args;
+                args["IMPORTNAME"] = instance->getImportName(); // Get the import name from the validated data
+                LLNotificationsUtil::add("OmniFilterImportRuleSet", args, LLSD(),
+                                         boost::bind(&Omnifilter::onImportRuleSetConfirmedCallback, this, _1, _2));
+            }
+        }
+    }
+    else
+    {
+        LLNotificationsUtil::add("OmniFilterNotANotecard", LLSD(), LLSD());
+        *accept = ACCEPT_NO;
+    }
+
+    return true;
+}
+
+void Omnifilter::onExportRuleSetConfirmedCallback(const LLSD& notification, const LLSD& response)
+{
+    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0) // YES
+    {
+        std::string new_name = response["new_name"].asString();
+
+        // Try to validate the string
+        if (!mPrevalidator.validate(response["new_name"].asString()))
+        {
+            LLSD args;
+            args["INPUTNAME"] = new_name;
+            LLNotificationsUtil::add("OmniFilterNonAscii", args, LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+            return;
+        }
+
+        LLPointer<LLInventoryCallback> cb =
+            new LLBoostFuncInventoryCallback(boost::bind(&Omnifilter::onExportRuleSetNotecardCallback, this, _1));
+
+        // Try to perform the actual exporting rule set.
+        S32 return_value = instance->exportRuleSetToNotecard(new_name, cb);
+
+        //If the user tried to export a rule set with a blank name, then show an error.
+        if (return_value == 0)
+        {
+            LLNotificationsUtil::add("OmniFilterrNewRuleSetBlank", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set no notecard category existing, then show an error.
+        else if (return_value == -1)
+        {
+            LLNotificationsUtil::add("OmniFilterMissingCategory", LLSD(), LLSD(),
+                                     boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+        // Else if the user tried to create a new rule set with a duplicate name, then show an error.
+        else if (return_value == -2)
+        {
+            LLNotificationsUtil::add("OmniFilterNewRuleSetDuplicate", LLSD(), LLSD(), boost::bind(&Omnifilter::onExportRuleSetClicked, this));
+        }
+    }
+}
+
 // Rule Set Drop Down on commit callback method
 void Omnifilter::onRuleSetChanged()
 {
@@ -489,7 +674,8 @@ void Omnifilter::reloadRules()
         const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
         LLSD value(index);
         // And add to the UI element. The value is the value that is passed along with the commit callback method.
-        mRuleSetsCmb->add(needle_rule_set_name, value);
+        // If index is 0, use the translated Default text
+        mRuleSetsCmb->add(index == 0 ? LLTrans::getString("OmnifilterDefaultName") : needle_rule_set_name, value);
     }
     // Finally, select the stored rule set
     mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));
@@ -628,11 +814,15 @@ bool Omnifilter::postBuild()
     mSenderCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("sender_case");
     mSenderMatchTypeCombo = getChild<LLComboBox>("sender_match_type");
     mContentCtrl = getChild<LLTextEditor>("content");
+    // Helper button to add match button label special string to the content editor
+    mMatchDialogButtonLabelBtn = getChild<LLButton>("btn_match_dlg_btn_lbl");
     // Add the preset controls
     mRuleSetsCmb = getChild<LLComboBox>("cmb_rule_sets"); // Rule Set Drop Down
     mNewRuleSetBtn = getChild<LLButton>("btn_rule_set_new"); // New Rule Set
     mCloneRuleSetBtn = getChild<LLButton>("btn_rule_set_clone"); // Clone Rule Set
     mRemoveRuleSetBtn = getChild<LLButton>("btn_rule_set_remove"); // Remove Rule Set
+    mImportRuleSetBtn = getChild<LLButton>("btn_rule_set_import"); // Clone Rule Set
+    mExportRuleSetBtn = getChild<LLButton>("btn_rule_set_export"); // Remove Rule Set
     mContentCaseSensitiveCheck = getChild<LLCheckBoxCtrl>("content_case");
     mContentMatchTypeCombo = getChild<LLComboBox>("content_match_type");
     mRegionNameCtrl = getChild<LLLineEditor>("region_name");
@@ -656,6 +846,7 @@ bool Omnifilter::postBuild()
     mChatReplaceCtrl = getChild<LLLineEditor>("chat_replace");
     mButtonReplyCtrl = getChild<LLLineEditor>("button_reply");
     mTextBoxReplyCtrl = getChild<LLTextEditor>("text_box_reply");
+    mReplyDelayCtrl = getChild<LLSpinCtrl>("reply_delay_slider");
 
     mNeedleListCtrl->setSearchColumn(NEEDLE_NAME_COLUMN);
     mNeedleListCtrl->deleteAllItems();
@@ -705,6 +896,8 @@ bool Omnifilter::postBuild()
     mNewRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onNewRuleSetClicked, this)); // New Rule Set
     mCloneRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onCloneRuleSetClicked, this)); // Clone Rule Set
     mRemoveRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onRemoveRuleSetClicked, this)); // Remove Rule Set
+    mImportRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onImportRuleSetClicked, this));   // Import Rule Set
+    mExportRuleSetBtn->setCommitCallback(boost::bind(&Omnifilter::onExportRuleSetClicked, this)); // Export Rule Set
     setVisibleCallback(boost::bind(&Omnifilter::onVisibilityChange, this, _2)); // Add visiblity callback to reload any changes to which rule set is active
 
     mNeedleNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleNameChanged, this));
@@ -714,10 +907,12 @@ bool Omnifilter::postBuild()
     mContentCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mContentCaseSensitiveCheck->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mContentMatchTypeCombo->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
+    mMatchDialogButtonLabelBtn->setCommitCallback(boost::bind(&Omnifilter::onMatchDialogButtonLabelClicked, this));
     mRegionNameCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mChatReplaceCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mButtonReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mTextBoxReplyCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
+    mReplyDelayCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mOwnerCtrl->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
     mOwnerCtrl->setKeystrokeCallback(boost::bind(&Omnifilter::onOwnerChanged, this), nullptr);
     mTypeNearbyBtn->setCommitCallback(boost::bind(&Omnifilter::onNeedleChanged, this));
@@ -752,6 +947,25 @@ void Omnifilter::onVisibilityChange(bool visible)
         mRuleSetsCmb->selectByValue(LLSD(gSavedSettings.getS32("OmnifilterRuleSetID")));
         // Need to also reload the UI of the rules editor to match the change.
         reloadRule();
+    }
+}
+
+// Callback which will add the text "button_name=" which allows for the label text
+// to be searched for as content for matching. Allows buttons being present on Script
+// Dialog floaters to trigger an action.
+void Omnifilter::onMatchDialogButtonLabelClicked()
+{
+    // Get the current contents of the content editor
+    const std::string content = mContentCtrl->getText();
+    // If there is no content currently, want to add the button_name= with the translated BUTTON_NAME string.
+    if (content.empty())
+    {
+        mContentCtrl->setText("button_name=" + LLTrans::getString("OmnifilterButtonLabel"));
+    }
+    //  Else there is some text, so do the same as above, but just add a newline character at between the old content and the button_name=.
+    else
+    {
+        mContentCtrl->setText(content + "\nbutton_name=" + LLTrans::getString("OmnifilterButtonLabel"));
     }
 }
 
@@ -851,7 +1065,8 @@ void OmnifilterMenuPanel::reloadRules()
         const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
         LLSD value(index);
         // And add to the UI element. The value is the value that is passed along with the commit callback method.
-        mRuleSetsCmb->add(needle_rule_set_name, value);
+        // If index is 0, use the translated Default text
+        mRuleSetsCmb->add(index == 0 ? LLTrans::getString("OmnifilterDefaultName") : needle_rule_set_name, value);
     }
     // Finally, select the stored rule set
     mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));

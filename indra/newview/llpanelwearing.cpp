@@ -248,6 +248,10 @@ protected:
         menu->setItemVisible("edit_outfit_separator", false);
         menu->setItemVisible("show_original", false);
         menu->setItemVisible("edit_outfit", false);
+        // <FS:PP> FIRE-36770 Temp attachments are not inventory items
+        menu->setItemVisible("favorites_add", false);
+        menu->setItemVisible("favorites_remove", false);
+        // </FS:PP>
     }
 
     LLPanelWearing*         mPanelWearing;

@@ -117,6 +117,7 @@
 #include "fslslbridge.h"
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
+#include "aoengine.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -5672,6 +5673,13 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
             sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, ANIM_REQUEST_START);
         }
         // </FS:Zi>
+
+        // <FS:PP> keep AO "Always" animations alive
+        if (AOEngine::instanceExists())
+        {
+            AOEngine::instance().reassertAlwaysAnimations(false);
+        }
+        // </FS:PP>
     }
 }
 

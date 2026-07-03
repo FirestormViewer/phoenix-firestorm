@@ -157,6 +157,7 @@ public:
     void trackTimeout(S32 stateEnum, S32 trackIndex);
 
     void playAlwaysAnimation(S32 stepIndex, S32 memberIndex = -1);
+    void reassertAlwaysAnimations(bool onlyIfMissing);
 
     void                  playAnimation(S32 stepIndex, S32 memberIndex = -1);
     const AOSet*          getCurrentSet() const;

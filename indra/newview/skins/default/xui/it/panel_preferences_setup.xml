@@ -51,7 +51,7 @@
 			<text name="asset_cache_size_label_l">
 				Dimensione cache delle risorse:
 			</text>
-			<button label="Cancella cache inventario" name="ClearInventoryCache" left="350" width="150"/>
+			<button label="Cancella cache inventario" name="ClearInventoryCache" left="368" width="160"/>
 			<text name="Cache location">
 				Posizione cache:
 			</text>

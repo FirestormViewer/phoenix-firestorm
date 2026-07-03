@@ -3,15 +3,6 @@
 	<floater.string name="empty_slurl">
 		（無）
 	</floater.string>
-	<floater.string name="maturity_icon_general">
-		"Parcel_PG_Light"
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		"Parcel_M_Light"
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		"Parcel_R_Light"
-	</floater.string>
 	<text name="edit_title" value="體驗預覽" />
 	<tab_container name="tab_container">
 		<panel name="panel_experience_info">

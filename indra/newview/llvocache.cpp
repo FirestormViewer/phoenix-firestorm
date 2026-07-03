@@ -492,7 +492,7 @@ void LLVOCacheEntry::updateDebugSettings()
         }
         if( (U32)high_mem_bound_MB > 2048 )
         {
-            gSavedSettings.setU32("SceneLoadLowMemoryBound", 2048);
+            gSavedSettings.setU32("SceneLoadHighMemoryBound", 2048);
         }
     }
     // </FS:Beq>

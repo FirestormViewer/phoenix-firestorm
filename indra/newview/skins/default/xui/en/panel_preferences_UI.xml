@@ -476,7 +476,7 @@
          increment="1"
          initial_value="20"
          label="Visible rows per script dialog:"
-         label_width="160"
+         label_width="170"
          layout="topleft"
          max_val="50"
          min_val="2"
@@ -811,7 +811,7 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show onmifilter controls"
+		 label="Show omnifilter controls"
 		 left="10"
 		 name="show_omnifilter_controls_check"
 		 width="270"
@@ -1762,6 +1762,49 @@
            pt (requires restart)
 Default 0. Larger values may not work well.
         </text>
+
+<!-- <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="tooltip_textbox8"
+         top_pad="15"
+         width="120">
+           Line spacing:
+        </text>
+        <spinner
+         top_delta="-5"
+         left_pad="5"
+         height="18"
+         width="50"
+         control_name="FSFontLineSpacingAdjustment"
+         layout="topleft"
+         follows="left|top"
+         increment="1"
+         decimal_digits="0"
+         initial_value="7"
+         min_val="-10"
+         max_val="10"
+         name="font_line_spacing_slider" />
+        <text
+         name="tooltip_textbox9"
+         top_delta="5"
+         left_pad="3"
+         height="36"
+         width="335"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         line_spacing.pixels="5">
+          pixels (requires restart)
+default 0.
+        </text>
+<!-- </FS:MJR> [FIRE-36802] -->
 
         <text
          type="string"

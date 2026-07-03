@@ -149,4 +149,7 @@
 
 	<!-- Flat UI override -->
 	<texture name="PushButton_Selected" file_name="widgets/PushButton_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
+	<texture name="Toolbar_Left_IM_Unselected" file_name="containers/TabTop_First_Flat_Off.png"/>
+	<texture name="Toolbar_Middle_IM_Unselected" file_name="containers/TabTop_Middle_Flat_Off.png"/>
+	<texture name="Toolbar_Right_IM_Unselected" file_name="containers/TabTop_Last_Flat_Off.png"/>
 </textures>

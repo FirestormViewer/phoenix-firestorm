@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
-	<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
-	<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>
-	<menu_item_call label="エラーを確認" name="Marketplace Check Listing"/>
-	<menu_item_call label="出品リストを編集" name="Marketplace Edit Listing"/>
-	<menu_item_call label="出品リスト" name="Marketplace List"/>
-	<menu_item_call label="出品リストから取り除く" name="Marketplace Unlist"/>
-	<menu_item_call label="有効化" name="Marketplace Activate"/>
-	<menu_item_call label="無効化" name="Marketplace Deactivate"/>
 	<menu_item_call label="共有" name="Share"/>
 	<menu_item_call label="開く" name="Task Open"/>
 	<menu_item_call label="再生" name="Task Play"/>
@@ -92,12 +83,14 @@
 	<menu_item_call label="カット" name="Cut"/>
 	<menu_item_call label="コピー" name="Copy"/>
 	<menu_item_call label="ペースト" name="Paste"/>
-	<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
-	<menu_item_call label="すべてのリンクを探す" name="Find Links"/>
-	<menu_item_call label="リンクを置き換える" name="Replace Links"/>
+	<menu label="Links" name="Links">
+		<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
+		<menu_item_call label="すべてのリンクを探す" name="Find Links"/>
+		<menu_item_call label="リンクを置き換える" name="Replace Links"/>
+		<menu_item_call label="破損したリンクをクリーンアップ" name="Cleanup broken Links"/>
+	</menu>
 	<menu_item_call label="最後の位置に復元" name="Restore to Last Position"/>
 	<menu_item_call label="削除" name="Delete"/>
-	<menu_item_call label="破損したリンクをクリーンアップ" name="Cleanup broken Links"/>
 	<menu_item_call label="デフォルトのフォルダに移動" name="Move to Default Folder"/>
 	<menu_item_call label="遺失物に移動" name="Move to Lost And Found"/>
 	<menu_item_call label="システムフォルダを削除" name="Delete System Folder"/>
@@ -139,7 +132,18 @@
 		<menu_item_check label="モデルのアップロード" name="Model uploads"/>
 		<menu_item_check label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
 	</menu>
-	<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
-	<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
+		<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
+		<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>
+		<menu_item_call label="エラーを確認" name="Marketplace Check Listing"/>
+		<menu_item_call label="出品リストを編集" name="Marketplace Edit Listing"/>
+		<menu_item_call label="出品リスト" name="Marketplace List"/>
+		<menu_item_call label="出品リストから取り除く" name="Marketplace Unlist"/>
+		<menu_item_call label="有効化" name="Marketplace Activate"/>
+		<menu_item_call label="無効化" name="Marketplace Deactivate"/>
+		<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
+		<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="－オプション無し－" name="--no options--"/>
 </menu>

@@ -46,7 +46,7 @@
 		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
 		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
 	</combo_box>
+	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
 	<button label="Aceptar" label_selected="Aceptar" name="Select" width="80" left="115"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel" width="80" left_delta="100"/>
-	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
 </floater>

@@ -256,6 +256,13 @@
 				點（需要重新啟動）
 預設 0。較大的值可能無法正確工作。
 			</text>
+			<text name="tooltip_textbox8">
+				行間距：
+			</text>
+			<text name="tooltip_textbox9">
+				畫素（需重新啟動）
+預設值為 0。
+			</text>
 			<text name="tooltip_textbox3">
 				聊天行間距：
 			</text>

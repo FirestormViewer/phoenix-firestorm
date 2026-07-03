@@ -12,7 +12,7 @@
 			Desempenho
 		</text>
 		<text name="BetterText">
-			Qualidade
+			Máximo
 		</text>
 		<text name="ShadersPrefText">
 			Baixo
@@ -84,7 +84,7 @@
 			<combo_box.item label="Alta" name="1" />
 			<combo_box.item label="Ultra" name="0" />
 		</combo_box>
-		<check_box label="Modo Tela Cheia" name="Fullscreen Mode" tool_tip="Executa o Firestorm em modo de tela cheia. É necessário reiniciar para alterar o modo." />
+		<check_box label="Tela Cheia" name="Fullscreen Mode" tool_tip="Executa o Firestorm em modo de tela cheia. É necessário reiniciar para alterar o modo." />
 		<slider label="Distância de visão" name="DrawDistance" />
 		<text name="DrawDistanceMeterText2">
 			m
@@ -100,7 +100,7 @@
 		</combo_box>
 		<slider label="Complexidade máxima do avatar" name="IndirectMaxComplexity" tool_tip="Define o valor a partir do qual um avatar visualmente complexo é exibido como JellyDoll." />
 		<slider label="Máx. avatares sem impostor" name="IndirectMaxNonImpostors" />
-		<slider label="Qualidade de pós-processamento" name="RenderPostProcess" />
+		<slider label="Qual. de pós-processamento" name="RenderPostProcess" />
 		<text name="PostProcessText">
 			Baixa
 		</text>
@@ -126,8 +126,8 @@
 	</panel>
 
 	<panel label="Config. de Hardware" name="Hardware Settings" width="320">
-		<check_box label="Filtragem Anisotrópica (mais lenta quando ativada)" name="ani" tool_tip="Ativa a filtragem anisotrópica, um método que melhora a qualidade das texturas visualizadas em ângulos relativamente grandes em relação à posição da câmera. Geralmente faz com que pareçam menos borradas a distâncias maiores." />
-		<check_box label="Ativar Compressão de Textura com Perda (requer reinício)" name="texture compression" tool_tip="Comprime texturas na memória de vídeo, permitindo texturas com maior resolução e/ou mais texturas carregadas, com alguma perda de qualidade de cor." />
+		<check_box label="Filtragem Anisotrópica (mais lenta, quando ativado)" name="ani" tool_tip="Ativa a filtragem anisotrópica, um método que melhora a qualidade das texturas visualizadas em ângulos relativamente grandes em relação à posição da câmera. Geralmente faz com que pareçam menos borradas a distâncias maiores." />
+		<check_box label="Compressão de textura com perda (requer reinício)" name="texture compression" tool_tip="Comprime texturas na memória de vídeo, permitindo texturas com maior resolução e/ou mais texturas carregadas, com alguma perda de qualidade de cor." />
 		<check_box label="Ativar suporte a monitores HiDPI (somente macOS; requer reinício)" name="use HiDPI" tool_tip="Ativa OpenGL para renderização em alta resolução." />
 		<text name="antialiasing label" tool_tip="Alterações nesta configuração podem exigir reinício em alguns equipamentos.">
 			Antialiasing (reinício recomendado):
@@ -146,12 +146,12 @@
 			<combo_box.item label="Alta" name="High" />
 			<combo_box.item label="Ultra" name="Ultra" />
 		</combo_box>
-		<check_box label="Limitar uso de VRAM para texturas (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Limita a quantidade de VRAM usada para texturas. O uso total pode ser maior pois outros elementos também utilizam VRAM." />
+		<check_box label="Limitar VRAM para texturas (MB)" name="FSLimitTextureVRAMUsage" tool_tip="Limita a quantidade de VRAM usada para texturas. O uso total pode ser maior pois outros elementos também utilizam VRAM." />
 		<slider name="RenderMaxVRAMBudget" tool_tip="Quantidade máxima de VRAM em megabytes usada para texturas." />
 		<text name="advanced_settings">
 			Configurações Avançadas (requer reinício):
 		</text>
-		<check_box label="Substituir detecção de VRAM" name="FSOverrideVRAMDetection" tool_tip="Permite substituir a detecção de VRAM (use com extrema cautela)" />
+		<check_box label="Substituir detecção de VRAM (cuidado!)" name="FSOverrideVRAMDetection" tool_tip="Permite substituir a detecção de VRAM (use com extrema cautela)" />
 		<slider label="Substituir VRAM dedicada da GPU (GB):" name="FSForcedVideoMemory" tool_tip="Importante: Use com extrema cautela.
 Substitui a VRAM detectada na GPU.
 Este valor não deve incluir a VRAM compartilhada que faz parte da memória RAM do sistema.
@@ -179,10 +179,10 @@ Se você não compreende a diferença, não altere esta configuração." />
 		<text name="World Updating">
 			Atualização do Mundo:
 		</text>
-		<check_box label="Congelar atualizações do Mundo (pausar tudo)" tool_tip="Congela todas as atualizações recebidas do servidor - interrompe todas as ações no mundo, mas não afeta o chat, mensagens instantâneas ou voz." name="WorldPause" />
-		<check_box label="Limitar Taxa de Quadros(FPS)" name="FSLimitFramerate" tool_tip="Limita a taxa de quadros a um valor definido pelo usuário. Pode reduzir o consumo de energia e o aquecimento da GPU/CPU." />
+		<check_box label="Congelar atualizações do mundo (pausar tudo)" tool_tip="Congela todas as atualizações recebidas do servidor - interrompe todas as ações no mundo, mas não afeta o chat, IMs ou voz." name="WorldPause" />
+		<check_box label="Limitar FPS" name="FSLimitFramerate" tool_tip="Limita a taxa de quadros a um valor definido pelo usuário. Pode reduzir o consumo de energia e o aquecimento da GPU/CPU." />
 		<slider name="MaxFPS" label="FPS:" />
-		<check_box label="Limitar o FPS à frequência do monitor (VSync)" name="vsync" tool_tip="Sincroniza a taxa de quadros à taxa de atualização do monitor. Pode resultar em maior gaguejamento e atraso de entrada." />
+		<check_box label="VSync (limitar FPS à taxa do monitor)" name="vsync" tool_tip="Sincroniza a taxa de quadros à taxa de atualização do monitor. Pode resultar em maior gaguejamento e atraso de entrada." />
 		<text name="Texture Rendering">
 			Renderização de Texturas:
 		</text>
@@ -211,10 +211,10 @@ Se você não compreende a diferença, não altere esta configuração." />
 		<check_box label="Renderizar brilho (glow)" tool_tip="Renderiza o efeito de brilho. Observe que a intensidade precisa ser definida como zero para desativar o brilho quando as sombras estiverem ativas." name="RenderGlow" />
 		<slider label="Intensidade:" tool_tip="Intensidade do brilho. Maior = mais amplo e suave (padrão é 2)" name="glow_strength" />
 		<check_box label="Exibir avatares que ainda não terminaram de carregar" name="RenderUnloadedAvatars" />
-		<check_box label="Exibir a Cena como Wireframe" name="Wireframe" />
-		<check_box label="Ativar Luzes Anexadas (Face Lights)" tool_tip="Ativa todas as luzes que os avatares possuem anexadas, como face lights. Útil para desativar face lights quando necessário." name="Render Attached Lights" />
-		<check_box label="Renderizar Partículas Anexadas" name="Render Attached Particles" />
-		<check_box label="Reduzir Distância de Visão quando a VRAM estiver cheia" tool_tip="Ativa um recurso que reduz automaticamente a distância de visão quando a VRAM estiver cheia." name="Reduce Draw Distance when VRAM is full" />
+		<check_box label="Modo Wireframe" name="Wireframe" />
+		<check_box label="Ativar luzes anexadas (face lights)" tool_tip="Ativa todas as luzes que os avatares possuem anexadas, como face lights. Útil para desativar face lights quando necessário." name="Render Attached Lights" />
+		<check_box label="Renderizar partículas anexadas" name="Render Attached Particles" />
+		<check_box label="Reduzir dist. de visão quando VRAM estiver cheia" tool_tip="Ativa um recurso que reduz automaticamente a distância de visão quando a VRAM estiver cheia." name="Reduce Draw Distance when VRAM is full" />
 		<text name="ExcludeAnimeshImposterLabel" width="255">
 			Excluir Avatar Animesh do Impostor:
 		</text>
@@ -252,9 +252,9 @@ Se você não compreende a diferença, não altere esta configuração." />
 	</panel>
 	
 	<panel label="Profundidade de Campo" name="DOF panel">
-		<check_box label="Ativar Profundidade de Campo (desfoca a visão fora do ponto de foco da câmera)" name="UseDoF" />
+		<check_box label="Ativar Profundidade de Campo (DoF)" name="UseDoF" />
 		<check_box label="Ativar no modo de edição" name="RenderDepthOfFieldInEditMode" />
-		<check_box label="Foco da Profundidade de Campo segue o cursor" name="FSFocusPointFollowsPointer" tool_tip="O foco da profundidade de campo (DoF) seguirá o seu mouse, comportamento semelhante ao usar flycam. Use em conjunto com o bloqueio de foco do DoF." />
+		<check_box label="Foco do DoF segue o cursor" name="FSFocusPointFollowsPointer" tool_tip="O foco da profundidade de campo (DoF) seguirá o seu mouse, comportamento semelhante ao usar flycam. Use em conjunto com o bloqueio de foco do DoF." />
 		<slider label="Abertura da Câmera (Número f):" name="CameraFNum" tool_tip="Valor do número f da câmera para o efeito de profundidade de campo." label_width="195" width="409" />
 		<slider label="Distância Focal da Câmera (mm):" name="CameraFocal" tool_tip="Distância focal da câmera para o efeito de profundidade de campo (em milímetros)." label_width="195" width="409" />
 		<slider label="Campo de Visão da Câmera(graus):" name="Camera FOV" tool_tip="Campo de visão vertical da câmera para o efeito de profundidade de campo (em graus)." label_width="195" width="409" />

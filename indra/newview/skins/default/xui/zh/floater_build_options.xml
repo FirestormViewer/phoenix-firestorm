@@ -5,14 +5,6 @@
 	<spinner label="小數位" name="DecimalPrecision" />
 	<spinner label="角度（度數）" name="RotationStep" tool_tip="旋轉工具的所有旋轉都是該值的倍數（預設值：1.0）" />
 	<check_box label="貼齊至子單元" name="GridSubUnit" />
-	<check_box label="檢查橫截面" name="GridCrossSection" />
-	<text name="Snap on">
-		固定到:
-	</text>
-	<radio_group name="FSSnapDomain">
-		<radio_item name="radio inside" label="內部" tool_tip="固定到網格內部。" />
-		<radio_item name="radio outside" label="外部" tool_tip="固定到網格外部（傳統模式）" />
-	</radio_group>
 	<text name="grid_opacity_label" tool_tip="網格不透明度">
 		不透明度:
 	</text>

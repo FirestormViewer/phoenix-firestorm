@@ -1967,6 +1967,7 @@ S32 LLTextBase::getLeftOffset(S32 width)
 void LLTextBase::reflow()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
+    static LLUICachedControl<S32> font_line_spacing_adjustment("FSFontLineSpacingAdjustment", 0); // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
 
     updateSegments();
 
@@ -2095,6 +2096,7 @@ void LLTextBase::reflow()
 
                 line_start_index = segment->getStart() + seg_offset;
                 cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                 remaining_pixels = text_available_width;
                 line_height = 0;
             }
@@ -2107,6 +2109,7 @@ void LLTextBase::reflow()
                                             line_rect,
                                             line_count));
                 cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                 break;
             }
             // ...or finished a segment and there are segments remaining on this line
@@ -2122,6 +2125,7 @@ void LLTextBase::reflow()
                                                 line_count));
                     line_start_index = segment->getStart() + seg_offset;
                     cur_top -= ll_round((F32)line_height * mLineSpacingMult) + mLineSpacingPixels;
+                    cur_top -= font_line_spacing_adjustment; // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
                     line_height = 0;
                     remaining_pixels = text_available_width;
                 }
@@ -4229,14 +4233,14 @@ bool LLNormalTextSegment::handleToolTip(S32 x, S32 y, MASK mask)
 
         if (!mProminentUrlLabel.empty())
         {
-            params.styled_message.add().text(mProminentUrlLabel + "\n").style.color(LLColor4::white);
+            params.styled_message.add().text(mProminentUrlLabel + "\n").style.color(colors.getColor("ToolTipTextColor", LLColor4::white));
         }
         else
         {
             params.styled_message.add().text("\n");
         }
 
-        params.styled_message.add().text(mTooltip).style.color(colors.getColor("HTMLLinkColor", LLColor4::blue));
+        params.styled_message.add().text(mTooltip).style.color(colors.getColor("HTMLLinkColorHovertips", LLColor4::blue));
         LLToolTipMgr::instance().show(params);
         return true;
     }

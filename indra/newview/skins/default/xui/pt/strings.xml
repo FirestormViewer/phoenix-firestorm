@@ -5193,7 +5193,7 @@ Se o erro persistir, verifique as configurações de rede e firewall.
 		Minha assinatura premium
 	</string>
 	<string name="DeleteItems">
-		Excluir itens selecionados? [COUNT_SELECTION] [COUNT_TOTAL]
+		Deseja excluir [COUNT_SELECTION] objetos selecionados ([COUNT_TOTAL] no total)?
 	</string>
 	<string name="DeleteItem">
 		Excluir item selecionado? [COUNT_TOTAL]
@@ -6719,6 +6719,12 @@ Sua posição atual: [AVATAR_POS]
 	</string>
 	<string name="OmnifilterReplacement">
 		Filtro Omni substituído por: [REPLACEMENT]
+	</string>
+	<string name="OmnifilterDefaultName">
+		Padrão
+	</string>
+	<string name="OmnifilterExportDescription">
+		Conjunto de Regras do Omnifilter: [REPLACEMENT]
 	</string>
 	<string name="FSAvatarAlignToggleMini">
 	Pequeno

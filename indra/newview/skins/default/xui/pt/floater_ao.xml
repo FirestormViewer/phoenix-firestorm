@@ -22,7 +22,7 @@
 		Trilha vazia - solte uma animação aqui
 	</floater.string>
 	<floater.string name="ao_group_tooltip">
-		Grupo de animações - estas são reproduzidas juntas:
+		Grupo de animações — reproduzidas juntas:
 	</floater.string>
 	<floater.string name="ao_member_tooltip">
 		Item do grupo de animações - reproduz junto com o restante do grupo. Clique duas vezes para pré-visualizar esta animação.
@@ -37,7 +37,7 @@
 		Renomear grupo...
 	</floater.string>
 	<floater.string name="ao_cm_move_out">
-		Remover do grupo
+		Tirar do grupo
 	</floater.string>
 	<floater.string name="ao_cm_find_original">
 		Encontrar original
@@ -49,7 +49,7 @@
 		Solte para agrupar com esta animação
 	</floater.string>
 	<floater.string name="ao_dnd_add_to_group">
-		Solte para adicionar a este grupo
+		Solte para adicionar ao grupo
 	</floater.string>
 	<floater.string name="ao_dnd_add_to_track">
 		Solte para adicionar a esta trilha

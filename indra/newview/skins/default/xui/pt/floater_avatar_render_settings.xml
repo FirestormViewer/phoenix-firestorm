@@ -7,6 +7,6 @@
 		<name_list.columns label="Detalhes completos" name="setting"/>
 	</name_list>
 	<panel name="add_subpanel">
-		<menu_button name="plus_btn" label="Adicionar..." tool_tip="Ações para a pessoa selecionada"/>
+		<menu_button name="plus_btn" label="Adicionar..." tool_tip="Ações para o avatar selecionado"/>
 	</panel>
 </floater>

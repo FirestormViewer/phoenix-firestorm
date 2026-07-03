@@ -51,7 +51,7 @@
 			</text>
 			<button label="Pokaż" label_selected="Pokaż" name="open_cache"  width="50"/>
 			<button label="Ustaw" label_selected="Ustaw" name="set_cache" width="50" />
-			<button label="Czyść" label_selected="Czyść" name="clear_cache" left_pad="3" />
+			<button label="Czyść" label_selected="Czyść" name="clear_cache" width="70" left_pad="3" />
 			<text name="Sound Cache location">
 				Położenie buforu pamięci podręcznej dźwięków:
 			</text>

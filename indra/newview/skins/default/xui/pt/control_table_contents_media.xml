@@ -4,10 +4,10 @@
 		<columns label="Som e mídia" name="lst_action"/>
 	</rows>
 	<rows name="toggle_pause_media">
-		<columns name="lst_action" value="Reproduzir/pausar mídia" />
+		<columns name="lst_action" value="Play/Pause mídia" />
 	</rows>
 	<rows name="toggle_enable_media">
-		<columns name="lst_action" value="Reproduzir/parar toda mídia" />
+		<columns name="lst_action" value="Play/Stop toda mídia" />
 	</rows>
 	<rows name="voice_follow_key">
 		<columns name="lst_action" value="Voz" />
@@ -16,7 +16,7 @@
 		<columns name="lst_action" value="Alternar voz" />
 	</rows>
 	<rows name="start_chat">
-		<columns name="lst_action" value="Iniciar Chat" />
+		<columns name="lst_action" value="Abrir chat" />
 	</rows>
 	<rows name="start_gesture">
 		<columns name="lst_action" value="Iniciar gesto" />

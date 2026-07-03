@@ -312,10 +312,10 @@
 					<button name="delta_mode_toggle" tool_tip="Ao editar várias juntas, aplicar o mesmo delta em vez de forçar a mesma rotação. Também ajuda a evitar gimbal lock."/>
 					<button name="toggle_LockWorldRotation" tool_tip="Bloquear rotação no mundo para os membros selecionados. Membros bloqueados mantêm a rotação quando os membros-pai se movem. Exemplo: com os olhos bloqueados, ao girar a cabeça os olhos continuam olhando quase na mesma direção."/>
 					<button label="Esp." name="button_toggleMirrorRotation" tool_tip="Espelhar mudanças na junta oposta."/>
-					<button label="Sim." name="button_toggleSympatheticRotation" tool_tip="Ajustar a junta oposta proporcionalmente."/>
+					<button label="Cop." name="button_toggleSympatheticRotation" tool_tip="Copiar mudanças para a junta oposta."/>
 					<button label="W" name="poser_world_frame_toggle" tool_tip="Aplicar rotação relativa ao mundo"/>
 					<button label="A" name="poser_avatar_frame_toggle" tool_tip="Aplicar rotação relativa ao avatar"/>
-					<button label="B" name="poser_screen_frame_toggle" tool_tip="Aplicar rotação relativa à tela"/>
+					<button label="T" name="poser_screen_frame_toggle" tool_tip="Aplicar rotação relativa à tela"/>
 					<button label="Copiar E &gt; D" name="button_symmetrize_left_to_right" tool_tip="Clique para copiar mudanças do lado esquerdo para o direito." />
 					<button label="Copiar D &gt; E" name="button_symmetrize_right_to_left" tool_tip="Clique para copiar mudanças do lado direito para o esquerdo." />
 				</panel>

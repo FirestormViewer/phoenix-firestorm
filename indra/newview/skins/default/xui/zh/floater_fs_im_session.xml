@@ -9,9 +9,6 @@
 		<layout_panel name="profile_panel">
 			<button name="view_profile_btn" tool_tip="顯示居民資料" />
 		</layout_panel>
-		<layout_panel name="trans_panel">
-			<button name="translate_btn" tool_tip="使用設定的服務進行聊天翻譯" />
-		</layout_panel>
 		<layout_panel name="friend_panel">
 			<button name="add_friend_btn" tool_tip="將居民新增為朋友" />
 		</layout_panel>
