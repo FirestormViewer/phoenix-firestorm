@@ -964,7 +964,7 @@ LLSD LLMemoryInfo::loadStatsMap()
     state.dwLength = sizeof(state);
     GlobalMemoryStatusEx(&state);
 
-    DWORDLONG div = 1024;
+    static constexpr DWORDLONG div = 1024;
 
     stats.add("Percent Memory use", state.dwMemoryLoad/div);
     // <FS:Ansariel> Ugly, but prevent overflow
@@ -972,14 +972,18 @@ LLSD LLMemoryInfo::loadStatsMap()
     //stats.add("Avail Physical KB",  state.ullAvailPhys/div);
     //stats.add("Total page KB",      state.ullTotalPageFile/div);
     //stats.add("Avail page KB",      state.ullAvailPageFile/div);
-    //stats.add("Total Virtual KB",   state.ullTotalVirtual/div);
-    //stats.add("Avail Virtual KB",   state.ullAvailVirtual/div);
+
+    //static constexpr DWORDLONG mb_div = 1024 * 1024;
+    //stats.add("Total Virtual MB", state.ullTotalVirtual/mb_div);  // ~134 million MB
+    //stats.add("Avail Virtual MB", state.ullAvailVirtual/mb_div);
     stats.add("Total Physical KB",  llclamp(state.ullTotalPhys/div, U64(0), U64(S32_MAX)));
     stats.add("Avail Physical KB",  llclamp(state.ullAvailPhys/div, U64(0), U64(S32_MAX)));
     stats.add("Total page KB",      llclamp(state.ullTotalPageFile/div, U64(0), U64(S32_MAX)));
     stats.add("Avail page KB",      llclamp(state.ullAvailPageFile/div, U64(0), U64(S32_MAX)));
-    stats.add("Total Virtual KB",   llclamp(state.ullTotalVirtual/div, U64(0), U64(S32_MAX)));
-    stats.add("Avail Virtual KB",   llclamp(state.ullAvailVirtual/div, U64(0), U64(S32_MAX)));
+
+    static constexpr DWORDLONG mb_div = 1024 * 1024;
+    stats.add("Total Virtual MB", llclamp(state.ullTotalVirtual / mb_div, U64(0), U64(S32_MAX)));
+    stats.add("Avail Virtual MB", llclamp(state.ullAvailVirtual / mb_div, U64(0), U64(S32_MAX)));
     // </FS:Ansariel>
 
     // SL-12122 - Call to GetPerformanceInfo() was removed here. Took
