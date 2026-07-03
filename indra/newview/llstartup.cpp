@@ -2032,6 +2032,13 @@ bool idle_startup()
     {
         set_startup_status(0.30f, LLTrans::getString("LoginInitializingWorld"), gAgent.mMOTD);
         do_startup_frame();
+
+        // close login UI before world UI is initialized, if it is still visible
+        // <FS:Ansariel> [FS Login Panel]
+        //LLPanelLogin::closePanel();
+        FSPanelLogin::closePanel();
+        // </FS:Ansariel> [FS Login Panel]
+
         // We should have an agent id by this point.
         llassert(!(gAgentID == LLUUID::null));
 
