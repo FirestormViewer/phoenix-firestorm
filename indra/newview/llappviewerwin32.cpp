@@ -234,6 +234,12 @@ namespace
             BugSplatAttributes::instance().setAttribute("AppState", LLStartUp::getStartupStateString());
             // Location
             // </FS:Beq>
+            // Memory usage at crash time (can be 1s obsolete)
+            sBugSplatSender->setAttribute(WCSTR(L"MemAllocatedKB"), WCSTR(std::to_string(LLMemory::getAllocatedMemKB().value())));
+            sBugSplatSender->setAttribute(WCSTR(L"MemAvailableKB"), WCSTR(std::to_string(LLMemory::getAvailableMemKB().value())));
+            sBugSplatSender->setAttribute(WCSTR(L"MemMaxPhysicalKB"), WCSTR(std::to_string(LLMemory::getMaxMemKB().value())));
+            sBugSplatSender->setAttribute(WCSTR(L"MemAvailCommitMB"), WCSTR(std::to_string(LLMemory::getAvailableCommitMemMB().value())));
+
             if (gAgent.getRegion())
             {
                 // region location, when we have it
