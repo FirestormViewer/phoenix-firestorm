@@ -9,7 +9,7 @@
 			<check_box name="FSAdvancedTooltips" label="Afficher des informations plus détaillées dans les infobulles"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Afficher le titre de l'avatar dans son infobulle"/>
 			<text name="tooltip_textbox">Délais d'activation des infobulles :</text>
-			<slider label="Interface :" name="ToolTipDelay_slider" tool_tip="Délai d'affichage d'une infobulle après avoir passé la souris au-dessus de son élément parent. (Par défaut : 0.7s)"/>
+			<slider label="Infobulles :" name="ToolTipDelay_slider" tool_tip="Délai d'affichage d'une infobulle après avoir passé la souris au-dessus de son élément parent. (Par défaut : 0.7s)"/>
 			<text name="ToolTipDelay_text">secondes</text>
 			<slider label="Avatars :" name="AvatarInspectorTooltipDelay_slider" tool_tip="Délai d'affichage d'une infobulle après avoir passé la souris au-dessus d'un avatar. (Par défaut : 0.35s)"/>
 			<text name="AvatarInspectorTooltipDelay_text">secondes</text>
@@ -18,8 +18,8 @@
 			<text name="FSHudTextLabel">
 				Options du texte flottant :
 			</text>
-			<slider label="Distance d'atténuation des textes flottants (en mètres) :" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants commencent à s'atténuer" name="FSHudTextFadeDistance"/>
-			<slider label="Distance de disparition des textes flottants (en mètres) :" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants ne s'affichent plus" name="FSHudTextFadeRange"/>
+			<slider label="Distance atténuation des textes flottants (en mètres)" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants commencent à s'atténuer" name="FSHudTextFadeDistance"/>
+			<slider label="Distance disparition des textes flottants (en mètres)" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants ne s'affichent plus" name="FSHudTextFadeRange"/>
 			<check_box name="FSHudTextUseHoverHighlight" label="Survoler l'objet pour mettre en évidence le texte flottant :" tool_tip="Lorsqu'un objet est survolé, met en évidence le texte flottant (hovertext) en le déplaçant au premier plan et désactive son alpha."/>
 			<text name="FSHudTextShowBackgroundLabel">
 				Aff. arrière-plan texte flottant :
@@ -43,8 +43,8 @@
 				<combo_box.item label="Illimité pour les HUDs" name="ScriptDialogOption_4"/>
 				<combo_box.item label="Illimité" name="ScriptDialogOption_5"/>
 			</combo_box>
-			<check_box label="Supprimer le bouton 'Ignorer'" name="FSRemoveScriptBlockButton"/>
-			<text name="ScriptDialogsPositionLabel" width="180">Position des dialogues de scripts :</text>
+			<check_box label="Supprimer bouton 'Ignorer'" name="FSRemoveScriptBlockButton"/>
+			<text name="ScriptDialogsPositionLabel" width="180">Position dialogues de scripts :</text>
 			<combo_box name="ScriptDialogsPositionDropdown" width="150" tool_tip="Sélectionnez où les dialogues de scripts s'affichent à l'écran.">
 				<combo_box.item label="Liés aux Chiclets" name="ScriptDialogPositionOption_1"/>
 				<combo_box.item label="En haut à gauche" name="ScriptDialogPositionOption_2"/>
@@ -53,7 +53,7 @@
 				<combo_box.item label="En bas à droite" name="ScriptDialogPositionOption_5"/>
 			</combo_box>
 			<check_box label="Jouer une animation" name="FSAnimatedScriptDialogs" tool_tip="Activer cette option pour que les menus soient affichés de façon animée lorsqu'ils s'ouvrent. Ne fonctionne que si le menu est réglé pour s'afficher 'En haut'"/>
-			<slider label="Nombre de lignes par dialogue de script :" label_width="225" name="FSRowsPerScriptDialog" tool_tip="Le nombre maximum de lignes d'entête visibles par dialogue de script."/>
+			<slider label="Nombre lignes par dialogue de script :" label_width="225" name="FSRowsPerScriptDialog" tool_tip="Le nombre maximum de lignes d'entête visibles par dialogue de script."/>
 			<check_box label="Utiliser le menu circulaire" name="UsePieMenu" tool_tip="Utiliser le menu circulaire classique en camembert plutôt que le menu contextuel lorsque j'effectue un clic droit sur un élément du monde."/>
 			<check_box label="Activer l'animation du texte" name="PieMenuPopupFontEffect" tool_tip="Si cette option est activée, le texte dans le menu circulaire Fait partie de l'animation quand le menu s'ouvre."/>
 			<check_box label="Activer l'ombrage de l'anneau extérieur" name="PieMenuOuterRingShade" tool_tip="Ajoute à l'extérieur du cercle une ombre qui permet de mieux voir les sous-menus."/>
@@ -66,15 +66,15 @@
 			<check_box label="Masquer les chiclets de groupes et d'IM" name="FSDisableIMChiclets" tool_tip="Activer cette option masquera tous les mini-portraits de groupe et de conversation privée (l'enveloppe de notification et la bulle cumulative de messages non lus restera affichée à l'écran)."/>
 			<check_box label="Utiliser la liste de style V1 pour la fenêtre de notifications" name="FSLegacyNotificationWell" tool_tip="Activer cette option pour utiliser la disposition de liste originale pour afficher les notifications enregistrées."/>
 			<text name="FSLegacyNotificationWellRequiresRestart" left_pad="70">(Redémarrage requis)</text>
-			<check_box label="Redimensionnement automatique des listes de conversations et de notifications de style V1" name="FSLegacyNotificationWellAutoResize" tool_tip="Si cette case est cochée, Firestorm redimensionnera toujours automatiquement les listes de conversations et de notifications de style V1 lorsque des éléments sont ajoutés ou supprimés."/>
-			<check_box label="Redéfinit les réccourcis déjà utilisés par Linux (Linux seul; requires restart)" name="FSRemapLinuxShortcuts" tool_tip="Activée, cette option redéfinit les raccourcis déjà utilisés par Linux (par exemple : CTRL-ALT-Fx)."/>
+			<check_box label="Redimensionnement auto des listes de conversations et de notifications de style V1" name="FSLegacyNotificationWellAutoResize" tool_tip="Si cette case est cochée, Firestorm redimensionnera toujours automatiquement les listes de conversations et de notifications de style V1 lorsque des éléments sont ajoutés ou supprimés."/>
+			<check_box label="Redéfinit les réccourcis déjà utilisés par Linux (Linux seul; Redémarrage requis)" name="FSRemapLinuxShortcuts" tool_tip="Activée, cette option redéfinit les raccourcis déjà utilisés par Linux (par exemple : CTRL-ALT-Fx)."/>
 			<check_box label="Empêche le fenêtre de statistiques d'obtenir le focus" name="FSStatisticsNoFocus" tool_tip="Si cette option est activée, la fenêtre de statistiques n'obtiendra jamais le focus quand une autre fenêtre est fermée (des actions telles que la modification de la présentation des graphiques sont toujours possibles)."/>
 			<check_box label="Afficher les vignettes des articles d'inventaire dans les infobulles" name="FSShowInventoryThumbnailTooltips" tool_tip="Si cette option est activée, le survol d'éléments d'inventaire contenant une vignette affichera cette dernière dans une infobulle."/>
 			<slider label="Délai d'affichage de l'infobulle :" tool_tip="Délai d'affichage des vignettes des éléments d'inventaire dans les infobulles" name="FSInventoryThumbnailTooltipsDelay"/>
 			<text name="FSInventoryThumbnailTooltipsDelayText">
 				sec
 			</text>
-			<slider label="Nombre de flashs sur les onglets d'IM :" label_width="210" name="ButtonsFlashCount"/>
+			<slider label="Nombre flashs sur onglets d'IM :" label_width="210" name="ButtonsFlashCount"/>
 			<slider label="Durée de flash de l'avertissement :" label_width="210" tool_tip="Durée en secondes d'un flash utilisé pour notifier les notifications de message manqué" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">sec</text>
 		</panel>
@@ -82,7 +82,7 @@
 			<text name="statusbar_textbox">Barre de menus :</text>
 			<check_box tool_tip="Afficher l'indicateur de trafic en haut à droite de l'écran" label="Afficher l'indicateur de trafic utilisé en haut à droite de l'écran" name="ShowNetStats"/>
 			<check_box label="Afficher la moyenne pour les mises à jour de l'indicateur de trafic" name="FSStatbarLegacyMeanPerSec" tool_tip="Activer cette option ajustera à chaque seconde et non plus en temps réel la bande passante utilisée"/>
-			<check_box label="Cliquer sur l'indicateur de trafic ouvre la barre de statistiques au lieu de l'indicateur de lag" name="FSUseStatsInsteadOfLagMeter"/>
+			<check_box label="Cliquer sur l'indicateur de trafic ouvre la barre de stats au lieu de l'indicateur de lag" name="FSUseStatsInsteadOfLagMeter"/>
 			<check_box label="Afficher les contrôles média dans la barre supérieure" name="FSEnableVolumeControls" tool_tip="Activer cette option affichera les contrôles multimédia (Musique, médias et volume) dans l'angle supérieur droit de la barre supérieure"/>
 			<check_box label="Afficher la version du simulateur dans la barre supérieure" name="FSStatusbarShowSimulatorVersion" tool_tip="Activer cette option affichera la version du simulateur actuellement utilisée dans la région."/>
 			<check_box label="Afficher les contrôles Omnifiltre" name="show_omnifilter_controls_check" tool_tip="Les commandes permettent d'activer ou de désactiver l'Omnifiltre, d'afficher ou de masquer l'éditeur de règles de l'Omnifiltre et de modifier le jeu de règles actif."/>
@@ -118,8 +118,8 @@
 			<check_box name="FSUseStandaloneGroupFloater" width="150" label="Les profils de groupe" tool_tip="Si activé, les profils de groupes s'ouvriront dans une fenêtre séparée."/>
 			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="L'historique de téléportation" tool_tip="Si activé, utiliser le raccourci d'historique de téléportation ouvrira l'historique dans une fenêtre séparée."/>
 			<check_box name="FSUseStandaloneBlocklistFloater" width="150" label="Les éléments ignorés" tool_tip="Si activé, la liste des résidents et objets ignorés/muets s'ouvrira dans une fenêtre séparée."/>
-			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Les repères, les détails de l'historique de TP &amp; le profil du lieu" tool_tip="Si activé, les repères, détails de lieux et détails d'historique de téléportation s'ouvriront dans une fenêtre séparée."/>
-			<text name="ExtendedTeleportHistoryLabel">Afficher également dans l'historique de téléportation :</text>
+			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Repères, détails de l'historique de TP &amp; profil du lieu" tool_tip="Si activé, les repères, détails de lieux et détails d'historique de téléportation s'ouvriront dans une fenêtre séparée."/>
+			<text name="ExtendedTeleportHistoryLabel">Afficher aussi dans l'historique de téléportation :</text>
 			<check_box name="FSTeleportHistoryShowPosition" label="Position" tool_tip="Activer cette option affichera les coordonnées locales du repère."/>
 			<check_box name="FSTeleportHistoryShowDate" label="Date" tool_tip="Activer cette option affichera la date et l'heure de la téléportation dans l'historique."/>
 			<text name="textFriendlistOptions">Options de la liste de contacts :</text>
@@ -177,12 +177,21 @@
 		<panel label="Police" name="UI-font-tab">
 			<text name="tooltip_textbox1">Police d'écriture :</text>
 			<text name="tooltip_textbox2">(Redémarrage requis)</text>
-			<text name="tooltip_textbox5" width="195">Ajustement de la taille de la police :</text>
+			<text name="tooltip_textbox5" width="195">Ajustement taille de la police :</text>
 			<text name="tooltip_textbox6">
 				pt (Redémarrage requis)
 0 par défaut.
 			</text>
-			<text name="tooltip_textbox3" width="195">Espacement entre les lignes :</text>
+			<text name="tooltip_textbox8">
+				Interligne :
+			</text>
+			<text name="tooltip_textbox9">
+				pixels (Redémarrage requis)
+0 par défaut.
+			</text>
+			<text name="tooltip_textbox3" width="195">
+				Interligne dans le chat :
+			</text>
 			<text name="tooltip_textbox4">
 				pixels (Redémarrage requis)
 0 par défaut pour le [VIEWER_GENERATION], 2 pour le Client 1.
