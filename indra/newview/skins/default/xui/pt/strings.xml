@@ -5398,7 +5398,7 @@ Coloque o caminho do editor entre aspas
 		bússola
 	</string>
 	<string name="Command_Destinations_Label">
-		Metas
+		Destinos
 	</string>
 	<string name="Command_Environments_Label">
 		Ambientes
@@ -5513,7 +5513,7 @@ Coloque o caminho do editor entre aspas
 		Modo mouselook
 	</string>
 	<string name="Command_Landmark_Here_Label">
-		Criar ponto de referência
+		Criar Landmark
 	</string>
 	<string name="Command_Teleport_History_Label">
 		Lista de teletransporte
@@ -5573,7 +5573,7 @@ Coloque o caminho do editor entre aspas
 		Alinhamento de avatar
 	</string>
 	<string name="Command_FaceNearest_Label">
-		Girar para ou perto de avatar
+		Olhar para avatar próximo
 	</string>
 	<string name="Command_360_Capture_Tooltip">
 		360° Tire uma foto equirretangular
@@ -5675,7 +5675,7 @@ Coloque o caminho do editor entre aspas
 		Configurações rápidas para alterar configurações com frequência
 	</string>
 	<string name="Command_AO_Tooltip">
-		Substituidores de animação
+		Substituir animações
 	</string>
 	<string name="Command_Webbrowser_Tooltip">
 		Abra o navegador interno (Ctrl+Shift+Z)

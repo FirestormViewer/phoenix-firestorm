@@ -118,5 +118,8 @@
 		<line_editor name="button_reply" tool_tip="要在指令碼對話框中「點擊」的按鈕標籤，包含「忽略」" />
 		<text name="text_box_reply_label" value="文字框回覆:"/>
 		<text_editor name="text_box_reply" tool_tip="如同在指令碼對話框的文字方塊中手動輸入的回覆文字" />
+		<text name="reply_delay_label" value="延遲：" />
+		<spinner name="reply_delay_slider" tool_tip="觸發事件後等待傳送回覆的秒數。預設值為 0.0，表示不延遲。" />
+		<text name="reply_delay_seconds_label" value="秒" />
 	</panel>
 </floater>
