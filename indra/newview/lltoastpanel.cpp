@@ -37,7 +37,7 @@
 
 #include <boost/algorithm/string.hpp>
 // <FS:MJR> [FIRE-36802] - Adjust the max text height by the extra spacing
-#include "llcontrol.h"
+#include "llviewercontrol.h"
 // </FS:MJR> [FIRE-36802]
 
 //static
