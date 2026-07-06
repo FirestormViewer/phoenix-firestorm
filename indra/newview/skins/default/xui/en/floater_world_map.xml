@@ -582,6 +582,7 @@
     <search_editor
      follows="top|right"
      search_button_visible="false"
+     highlight_text_field="false"
      height="22"
      text_readonly_color="DkGray"
      label="Regions by Name"
