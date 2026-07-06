@@ -172,6 +172,7 @@ public:
     virtual void forceErrorLLErrorMsg();
     virtual void forceErrorBreakpoint();
     virtual void forceErrorBadMemoryAccess();
+    virtual void forceErrorImageAllocationFailure(); // <FS:Beq/> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
     virtual void forceErrorInfiniteLoop();
     virtual void forceErrorSoftwareException();
     virtual void forceErrorOSSpecificException();

@@ -347,6 +347,7 @@ void force_error_breakpoint();
 void force_error_llerror();
 void force_error_llerror_msg();
 void force_error_bad_memory_access();
+void force_error_image_allocation_failure(); // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 void force_error_infinite_loop();
 void force_error_software_exception();
 void force_error_os_exception();
@@ -2972,6 +2973,17 @@ class LLAdvancedForceErrorBadMemoryAccessCoro : public view_listener_t
         return true;
     }
 };
+
+// <FS:Beq> [FIRE-36494] Image allocation failure telemetry
+class LLAdvancedForceErrorImageAllocationFailure : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata) override
+    {
+        force_error_image_allocation_failure();
+        return true;
+    }
+};
+// </FS:Beq>
 
 class LLAdvancedForceErrorInfiniteLoop : public view_listener_t
 {
@@ -11375,6 +11387,13 @@ void force_error_bad_memory_access()
     LLAppViewer::instance()->forceErrorBadMemoryAccess();
 }
 
+// <FS:Beq> [FIRE-36494] Image allocation failure telemetry
+void force_error_image_allocation_failure()
+{
+    LLAppViewer::instance()->forceErrorImageAllocationFailure();
+}
+// </FS:Beq>
+
 void force_error_infinite_loop()
 {
     LLAppViewer::instance()->forceErrorInfiniteLoop();
@@ -13171,6 +13190,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedForceErrorLlerrorMsg(), "Advanced.ForceErrorLlerrorMsg");
     view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccess(), "Advanced.ForceErrorBadMemoryAccess");
     view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccessCoro(), "Advanced.ForceErrorBadMemoryAccessCoro");
+    view_listener_t::addMenu(new LLAdvancedForceErrorImageAllocationFailure(), "Advanced.ForceErrorImageAllocationFailure"); // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
     view_listener_t::addMenu(new LLAdvancedForceErrorInfiniteLoop(), "Advanced.ForceErrorInfiniteLoop");
     view_listener_t::addMenu(new LLAdvancedForceErrorSoftwareException(), "Advanced.ForceErrorSoftwareException");
     view_listener_t::addMenu(new LLAdvancedForceOSException(), "Advanced.ForceErrorOSException");

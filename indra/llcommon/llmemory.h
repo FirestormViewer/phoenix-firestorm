@@ -449,6 +449,10 @@ public:
 #endif
     static U32Kilobytes getAvailableMemKB() ;
     static U32Kilobytes getMaxMemKB() ;
+    // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+    // Active viewer budget used to cap available-memory readings.
+    static U32Kilobytes getMaxHeapSizeKB();
+    // </FS:Beq>
     static U32Kilobytes getAllocatedMemKB() ;
 private:
     static void updateFreeSystemMemory();

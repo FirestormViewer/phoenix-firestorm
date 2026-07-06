@@ -44,6 +44,7 @@
 #include "llagentlanguage.h"
 #include "llagentui.h"
 #include "llagentwearables.h"
+#include "llimage.h" // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 #include "lldirpicker.h"
 #include "llfloaterimcontainer.h"
 #include "llimprocessing.h"
@@ -6903,6 +6904,16 @@ void LLAppViewer::forceErrorBadMemoryAccess()
     *crash = 0xDEADBEEF;
     return;
 }
+
+// <FS:Beq> [FIRE-36494] Force a deliberate LLImageBase allocation failure
+void LLAppViewer::forceErrorImageAllocationFailure()
+{
+    LL_WARNS() << "Forcing a deliberate LLImageBase allocation failure" << LL_ENDL;
+    LLImageBase::forceNextAllocationFailureForTesting();
+    LLPointer<LLImageRaw> image_raw = new LLImageRaw(127, 127, 4);
+    llassert(!image_raw->getData());
+}
+// </FS:Beq>
 
 void LLAppViewer::forceErrorInfiniteLoop()
 {

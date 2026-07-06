@@ -303,6 +303,13 @@ U32Kilobytes LLMemory::getMaxMemKB()
 {
     return sMaxPhysicalMemInKB ;
 }
+// <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+//static
+U32Kilobytes LLMemory::getMaxHeapSizeKB()
+{
+    return sMaxHeapSizeInKB;
+}
+// </FS:Beq>
 
 //static
 U32Kilobytes LLMemory::getAllocatedMemKB()

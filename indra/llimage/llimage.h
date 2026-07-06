@@ -33,6 +33,8 @@
 #include "lltrace.h"
 #include "lluuid.h"
 
+#include <atomic> // <FS:Beq/> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+
 constexpr S32 MIN_IMAGE_MIP =  2; // 4x4, only used for expand/contract power of 2
 constexpr S32 MAX_IMAGE_MIP = 12; // 4096x4096
 
@@ -58,6 +60,17 @@ constexpr S32 MIN_IMAGE_AREA = MIN_IMAGE_SIZE * MIN_IMAGE_SIZE;
 constexpr S32 MAX_IMAGE_AREA = MAX_IMAGE_SIZE * MAX_IMAGE_SIZE;
 constexpr S32 MAX_IMAGE_COMPONENTS = 8;
 constexpr S32 MAX_IMAGE_DATA_SIZE = MAX_IMAGE_AREA * MAX_IMAGE_COMPONENTS; //4096 * 4096 * 8 = 128 MB
+
+// <FS:Beq> [FIRE-36494] Image allocation failure telemetry
+struct LLImageAllocationFailureInfo
+{
+    S32 mRequestedSize = 0;
+    S32 mWidth = 0;
+    S32 mHeight = 0;
+    S32 mComponents = 0;
+    S32 mErrno = 0;
+};
+// </FS:Beq>
 
 // Note!  These CANNOT be changed without modifying simulator code
 // *TODO: change both to 1024 when SIM texture fetching is deprecated
@@ -155,6 +168,14 @@ protected:
 public:
     static void generateMip(const U8 *indata, U8* mipdata, int width, int height, S32 nchannels);
 
+    // <FS:Beq> [FIRE-36494] Image allocation failure telemetry
+    using allocation_failure_callback_t = void (*)(const LLImageAllocationFailureInfo&);
+    static void setAllocationFailureCallback(allocation_failure_callback_t callback);
+    static void forceNextAllocationFailureForTesting();
+    // Process-lifetime count of allocation failures strictly larger than 4 MiB.
+    static U64 getNonFatalAllocationFailureCount();
+    // </FS:Beq>
+
     // Function for calculating the download priority for textures
     // <= 0 priority means that there's no need for more data.
     static F32 calc_download_priority(F32 virtual_size, F32 visible_area, S32 bytes_sent);
@@ -175,6 +196,13 @@ private:
     bool mBadBufferAllocation;
     bool mAllowOverSize;
 
+    // <FS:Beq> [FIRE-36494] Image allocation failure telemetry
+    // Registration can occur after image worker threads have started.
+    static std::atomic<allocation_failure_callback_t> sAllocationFailureCallback;
+    static thread_local bool sForceAllocationFailureForTesting;
+    static std::atomic<U64> sNonFatalAllocationFailureCount;
+    static constexpr S32 MAX_FATAL_ALLOCATION_SIZE = 4 * 1024 * 1024; // 4 MiB; shared by allocation and reallocation diagnostics.
+    // </FS:Beq>
 private:
     mutable LLSharedMutex mDataMutex;
 

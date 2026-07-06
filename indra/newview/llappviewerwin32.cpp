@@ -41,6 +41,7 @@
 
 #include <fcntl.h>      //_O_APPEND
 #include <io.h>         //_open_osfhandle()
+#include <psapi.h> // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 #include <WERAPI.H>     // for WerAddExcludedApplication()
 #include <process.h>    // _spawnl()
 #include <tchar.h>      // For TCHAR support
@@ -55,6 +56,7 @@
 
 #include "llweb.h"
 
+#include <cstdint> // <FS:Beq/> Add reliable telemetry for memory alloc pressure tracking in bugsplat
 #include "llnotificationsutil.h" // <FS:TJ/> Detect and notify if the viewer is trying to run as admin on Windows
 #include "llviewernetwork.h"
 #include "llmd5.h"
@@ -84,6 +86,7 @@
 #include "bugsplatattributes.h"
 #include "BugSplat.h"
 #include "boost/json.hpp"                 // Boost.Json
+#include "llimage.h" // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 #include "llagent.h"                // for agent location
 #include "llmemory.h"
 #include "llstartup.h"
@@ -100,6 +103,148 @@ namespace FS
 
 namespace
 {
+    // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_ERRNO = 1 << 0;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_MEMORY_STATUS = 1 << 1;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_COMMIT = 1 << 2;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_PROCESS_MEMORY = 1 << 3;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_VIRTUAL_ADDRESS = 1 << 4;
+
+    constexpr S64 UNKNOWN_MEMORY_VALUE = -1;
+
+    S64 bytesToKB(ULONGLONG bytes)
+    {
+        return static_cast<S64>(bytes / 1024);
+    }
+
+    S64 pagesToKB(SIZE_T pages, SIZE_T page_size)
+    {
+        return static_cast<S64>((static_cast<ULONGLONG>(pages) * static_cast<ULONGLONG>(page_size)) / 1024);
+    }
+
+    bool getLargestFreeVirtualAddressRegionKB(S64& largest_free_region_kb)
+    {
+        largest_free_region_kb = UNKNOWN_MEMORY_VALUE;
+
+        SIZE_T largest_free_region = 0;
+        std::uintptr_t address = 0;
+        MEMORY_BASIC_INFORMATION mbi = {};
+        bool queried_region = false;
+
+        while (VirtualQuery(reinterpret_cast<LPCVOID>(address), &mbi, sizeof(mbi)) == sizeof(mbi))
+        {
+            queried_region = true;
+            if (mbi.State == MEM_FREE && mbi.RegionSize > largest_free_region)
+            {
+                largest_free_region = mbi.RegionSize;
+            }
+
+            const auto base = reinterpret_cast<std::uintptr_t>(mbi.BaseAddress);
+            const auto next = base + mbi.RegionSize;
+            if (next <= address)
+            {
+                break;
+            }
+            address = next;
+        }
+
+        if (!queried_region)
+        {
+            return false;
+        }
+
+        largest_free_region_kb = bytesToKB(static_cast<ULONGLONG>(largest_free_region));
+        return true;
+    }
+
+    void recordImageAllocationFailure(const LLImageAllocationFailureInfo& info)
+    {
+        try
+        {
+            U32 telemetry_flags = IMAGE_ALLOC_TELEMETRY_ERRNO;
+
+            S64 avail_phys_kb = UNKNOWN_MEMORY_VALUE;
+            S64 memory_load_pct = UNKNOWN_MEMORY_VALUE;
+            S64 avail_process_commit_kb = UNKNOWN_MEMORY_VALUE;
+            MEMORYSTATUSEX memory_status = {};
+            memory_status.dwLength = sizeof(memory_status);
+            if (GlobalMemoryStatusEx(&memory_status))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_MEMORY_STATUS;
+                avail_phys_kb = bytesToKB(memory_status.ullAvailPhys);
+                memory_load_pct = memory_status.dwMemoryLoad;
+                avail_process_commit_kb = bytesToKB(memory_status.ullAvailPageFile);
+            }
+
+            S64 avail_system_commit_kb = UNKNOWN_MEMORY_VALUE;
+            PERFORMANCE_INFORMATION performance_info = {};
+            performance_info.cb = sizeof(performance_info);
+            if (GetPerformanceInfo(&performance_info, sizeof(performance_info))
+                && performance_info.PageSize > 0
+                && performance_info.CommitLimit >= performance_info.CommitTotal)
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_COMMIT;
+                avail_system_commit_kb = pagesToKB(performance_info.CommitLimit - performance_info.CommitTotal, performance_info.PageSize);
+            }
+
+            S64 process_private_kb = UNKNOWN_MEMORY_VALUE;
+            S64 process_working_set_kb = UNKNOWN_MEMORY_VALUE;
+            PROCESS_MEMORY_COUNTERS_EX process_memory = {};
+            process_memory.cb = sizeof(process_memory);
+            if (GetProcessMemoryInfo(GetCurrentProcess(),
+                                     reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&process_memory),
+                                     sizeof(process_memory)))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_PROCESS_MEMORY;
+                process_private_kb = bytesToKB(static_cast<ULONGLONG>(process_memory.PrivateUsage));
+                process_working_set_kb = bytesToKB(static_cast<ULONGLONG>(process_memory.WorkingSetSize));
+            }
+
+            const U32 heap_cap = LLMemory::getMaxHeapSizeKB().value();
+            const S64 heap_cap_kb = heap_cap == U32_MAX ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(heap_cap);
+            const S64 heap_budget_headroom_kb = heap_cap_kb != UNKNOWN_MEMORY_VALUE
+                && process_working_set_kb != UNKNOWN_MEMORY_VALUE
+                ? heap_cap_kb - process_working_set_kb : UNKNOWN_MEMORY_VALUE;
+
+            S64 largest_free_va_kb = UNKNOWN_MEMORY_VALUE;
+            if (getLargestFreeVirtualAddressRegionKB(largest_free_va_kb))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_VIRTUAL_ADDRESS;
+            }
+
+            auto& attributes = BugSplatAttributes::instance();
+            attributes.setAttribute("Viewer Working Set Budget KB", heap_cap_kb);
+            attributes.setAttribute("MemAvailCommitMB", avail_process_commit_kb == UNKNOWN_MEMORY_VALUE
+                ? UNKNOWN_MEMORY_VALUE : avail_process_commit_kb / 1024);
+            attributes.setAttribute("Non-Fatal Img Alloc Failures", LLImageBase::getNonFatalAllocationFailureCount());
+            attributes.setAttribute("ImageAlloc Diag Version", 2);
+            attributes.setAttribute("ImageAlloc Requested Bytes", info.mRequestedSize);
+            attributes.setAttribute("ImageAlloc Width", info.mWidth);
+            attributes.setAttribute("ImageAlloc Height", info.mHeight);
+            attributes.setAttribute("ImageAlloc Components", info.mComponents);
+            attributes.setAttribute("ImageAlloc Errno", info.mErrno);
+            attributes.setAttribute("ImageAlloc Telemetry Flags", telemetry_flags);
+            attributes.setAttribute("ImageAlloc Avail Phys KB", avail_phys_kb);
+            attributes.setAttribute("ImageAlloc Memory Load Pct", memory_load_pct);
+            attributes.setAttribute("ImageAlloc Avail System Commit KB", avail_system_commit_kb);
+            attributes.setAttribute("ImageAlloc Avail Process Commit KB", avail_process_commit_kb);
+            attributes.setAttribute("ImageAlloc Process Private KB", process_private_kb);
+            attributes.setAttribute("ImageAlloc Process Working Set KB", process_working_set_kb);
+            attributes.setAttribute("ImageAlloc Working Set Budget Headroom KB", heap_budget_headroom_kb);
+            attributes.setAttribute("ImageAlloc Largest Free VA KB", largest_free_va_kb);
+
+            const std::string& crash_context_file = BugSplatAttributes::getCrashContextFileName();
+            if (!crash_context_file.empty())
+            {
+                attributes.writeToFile(crash_context_file);
+            }
+        }
+        catch (...) // Diagnostics must not replace the original allocation failure.
+        {
+        }
+    }
+    // </FS:Beq>
+
     // MiniDmpSender's constructor is defined to accept __wchar_t* instead of
     // plain wchar_t*. That said, wunder() returns std::basic_string<__wchar_t>,
     // NOT plain __wchar_t*, despite the apparent convenience. Calling
@@ -229,6 +374,15 @@ namespace
             // sBugSplatSender->setAttribute(WCSTR(L"VRAM"), WCSTR(STRINGIZE(gGLManager.mVRAM)));
             // sBugSplatSender->setAttribute(WCSTR(L"RAM"), WCSTR(STRINGIZE(gSysMemory.getPhysicalMemoryKB().value())));
 
+            // const U32 avail_kb = LLMemory::getAvailableMemKB().value();
+            // if (avail_kb != U32_MAX) // filter out initial values, if one is not set, all are not set
+            // {
+            //     // Memory usage at crash time (can be 1s obsolete)
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAllocatedKB"), WCSTR(std::to_string(LLMemory::getAllocatedMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAvailableKB"), WCSTR(std::to_string(LLMemory::getAvailableMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemMaxPhysicalKB"), WCSTR(std::to_string(LLMemory::getMaxMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAvailCommitMB"), WCSTR(std::to_string(LLMemory::getAvailableCommitMemMB().value())));
+            // }
             auto fatal_message = LLError::getFatalMessage();
             sBugSplatSender->setDefaultUserDescription(WCSTR(fatal_message));
             BugSplatAttributes::instance().setAttribute("FatalMessage", fatal_message); // <FS:Beq/> Store this additionally as an attribute in case user overwrites.
@@ -236,15 +390,6 @@ namespace
             BugSplatAttributes::instance().setAttribute("AppState", LLStartUp::getStartupStateString());
             // Location
             // </FS:Beq>
-            const U32 avail_kb = LLMemory::getAvailableMemKB().value();
-            if (avail_kb != U32_MAX) // filter out initial values, if one is not set, all are not set
-            {
-                // Memory usage at crash time (can be 1s obsolete)
-                sBugSplatSender->setAttribute(WCSTR(L"MemAllocatedKB"), WCSTR(std::to_string(LLMemory::getAllocatedMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemAvailableKB"), WCSTR(std::to_string(LLMemory::getAvailableMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemMaxPhysicalKB"), WCSTR(std::to_string(LLMemory::getMaxMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemAvailCommitMB"), WCSTR(std::to_string(LLMemory::getAvailableCommitMemMB().value())));
-            }
 
             if (gAgent.getRegion())
             {
@@ -774,6 +919,11 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     LLMemory::updateMemoryInfo();
     bugSplatMap.setAttribute("Available RAM (KB)", LLMemory::getAvailableMemKB().value());
     bugSplatMap.setAttribute("Allocated RAM (KB)", LLMemory::getAllocatedMemKB().value());
+    const U32 heap_cap_kb = LLMemory::getMaxHeapSizeKB().value();
+    bugSplatMap.setAttribute("Viewer Working Set Budget KB", (heap_cap_kb == U32_MAX) ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(heap_cap_kb));
+    const U32 avail_commit_mb = LLMemory::getAvailableCommitMemMB().value();
+    bugSplatMap.setAttribute("MemAvailCommitMB", (avail_commit_mb == U32_MAX) ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(avail_commit_mb));
+    bugSplatMap.setAttribute("Non-Fatal Img Alloc Failures", LLImageBase::getNonFatalAllocationFailureCount());
     bugSplatMap.setAttribute("GPU VRAM (MB)", info["GRAPHICS_CARD_MEMORY"].asInteger());
 
 
@@ -1045,6 +1195,7 @@ bool LLAppViewerWin32::init()
                         dwFlags);
 
                     sBugSplatSender->setCallback(bugsplatSendLog);
+                    LLImageBase::setAllocationFailureCallback(recordImageAllocationFailure); // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 
                     //LL_DEBUGS("BUGSPLAT");
                     //if (needs_log_file)
