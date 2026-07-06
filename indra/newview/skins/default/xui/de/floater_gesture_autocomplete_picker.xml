@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gesture_autocomplete_picker" title="Geste auswählen">
+	<floater.string name="showing_count">
+		[COUNT] von [TOTAL] werden angezeigt
+	</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns name="trigger" label="Auslöser"/>
+		<scroll_list.columns name="name" label="Geste"/>
+	</scroll_list>
+</floater>

@@ -508,6 +508,9 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="Thematrix">
 		Die Matrix
 	</string>
+	<string name="ReorderClothingTooltip">
+		Ziehen oder Pfeile verwenden, um Kleidungsschichten umzuordnen.
+	</string>
 	<string name="TooltipPerson">
 		Person
 	</string>

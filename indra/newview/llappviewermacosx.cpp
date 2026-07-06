@@ -49,6 +49,7 @@
 #include "llerrorcontrol.h"
 #include "llvoavatarself.h"         // for gAgentAvatarp->getFullname()
 #include <ApplicationServices/ApplicationServices.h>
+#include "llwindowmacosx_iokit.h"
 #ifdef LL_CARBON_CRASH_HANDLER
 #include <Carbon/Carbon.h>
 #endif
@@ -447,7 +448,7 @@ std::string LLAppViewerMacOSX::generateSerialNumber()
 
     // JC: Sample code from http://developer.apple.com/technotes/tn/tn1103.html
     CFStringRef serialNumber = NULL;
-    io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
+    io_service_t    platformExpert = IOServiceGetMatchingService(kLLIOMainPort,
                                                                  IOServiceMatching("IOPlatformExpertDevice"));
     if (platformExpert)
     {

@@ -11,7 +11,7 @@
 	</floater.string>
 	<scroll_list name="gesture_list">
 		<scroll_list.columns label="Name" name="name"/>
-		<scroll_list.columns label="Chat" name="trigger"/>
+		<scroll_list.columns label="Auslöser" name="trigger"/>
 		<scroll_list.columns label="" name="key"/>
 		<scroll_list.columns label="Key" name="shortcut"/>
 	</scroll_list>

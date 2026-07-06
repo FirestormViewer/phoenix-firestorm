@@ -106,6 +106,12 @@ protected:
     void onSelectedTabChanged(const LLSD& param);
     // </FS:Ansariel>
 
+    // Clothing drag-to-reorder: only allow moves within the same wearable type,
+    // and translate a drop into a layer-order change.
+    bool canReorderClothing(const LLSD& dragged_value, const LLSD& neighbour_value);
+    void onClothingReordered(const LLSD& dragged_value, S32 new_index);
+    void onReorderEnded();
+
     LLPanelClothingListItem* buildClothingListItem(LLViewerInventoryItem* item, bool first, bool last);
     LLPanelBodyPartsListItem* buildBodypartListItem(LLViewerInventoryItem* item);
     LLPanelDeletableWearableListItem* buildAttachemntListItem(LLViewerInventoryItem* item);
@@ -149,6 +155,9 @@ protected:
 
     /* COF category version since last refresh */
     S32 mCOFVersion;
+
+    /* a refresh arrived mid-drag and was skipped; re-run it when the drag ends */
+    bool mRefreshPending;
 };
 
 

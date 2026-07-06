@@ -724,7 +724,6 @@ public:
 protected:
     void        updateVisibility();
 private:
-    F32         mVisibilityPreference;
     U32         mVisibilityRank;
     bool        mVisible;
 
@@ -796,10 +795,13 @@ private:
     // Culling
     //--------------------------------------------------------------------
 public:
+    static void setCullNeedsUpdate() { sAvatarCullNeedsUpdate = true; }
     static void cullAvatarsByPixelArea();
     bool        isCulled() const { return mCulled; }
 private:
     bool        mCulled;
+    static bool sAvatarCullNeedsUpdate;
+    static F64  sLastCullUpdateTime; // Time of last cull update
 
     //--------------------------------------------------------------------
     // Constants
@@ -1345,7 +1347,8 @@ protected:
 private:
     F32                 mMinPixelArea;
     F32                 mMaxPixelArea;
-    F32                 mAdjustedPixelArea;
+    F32                 mAdjustedPixelArea = 0.f;
+    F32                 mLastCulledPixelArea = -1.f; // Pixel area when last culled, for tracking significant changes
     std::string         mDebugText;
     std::string         mBakedTextureDebugText;
 

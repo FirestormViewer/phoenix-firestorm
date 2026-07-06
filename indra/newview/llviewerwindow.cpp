@@ -1650,6 +1650,9 @@ bool LLViewerWindow::handleSessionExit(LLWindow* window)
     {
         // Viewer received WM_ENDSESSION and app will be killed soon if it doesn't respond
         LLAppViewer* app = LLAppViewer::instance();
+        // Normally we'd include preferences, but serializing them can be expensive.
+        // There is also a chance this won't be processed if the logout request arrives first.
+        app->sendViewerStatistics(false /*no preferences*/);
         app->sendSimpleLogoutRequest();
         app->earlyExitNoNotify();
 

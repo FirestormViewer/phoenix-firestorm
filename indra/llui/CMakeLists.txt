@@ -43,6 +43,7 @@ set(llui_SOURCE_FILES
     llfloaterreglistener.cpp
     llflyoutbutton.cpp 
     llfocusmgr.cpp
+    llgestureautocompletehelper.cpp
     llfolderview.cpp
     llfolderviewitem.cpp
     llfolderviewmodel.cpp
@@ -158,6 +159,7 @@ set(llui_HEADER_FILES
     llfloaterreglistener.h
     llflyoutbutton.h 
     llfocusmgr.h
+    llgestureautocompletehelper.h
     llfolderview.h
     llfolderviewitem.h
     llfolderviewmodel.h
