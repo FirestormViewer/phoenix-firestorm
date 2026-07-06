@@ -161,7 +161,6 @@
      bg_visible="false"
      border_visible="false"
      bottom_delta="-20"
-     drop_shadow_visible="true"
      follows="left|bottom"
      font="SansSerifSmall"
      h_pad="0"
@@ -204,7 +203,6 @@
      width="32"/>
     <radio_group
      top="5"
-     draw_border="false"
      follows="top|left"
      layout="topleft"
      height="16"
@@ -255,7 +253,6 @@
      border_visible="false"
      left_pad="1"
      layout="topleft"
-     drop_shadow_visible="true"
      follows="left|top"
      font="SansSerif"
      h_pad="0"
