@@ -48,8 +48,8 @@
      enabled="false"
      follows="top|right"
      right="-60"
-     label="+"
-     name="PlusButton"
+     label="-"
+     name="MinusButton"
      height="15"
      top_delta="0"
      width="24"/>
@@ -67,8 +67,8 @@
      enabled="false"
      follows="top|right"
      left_pad="4"
-     label="-"
-     name="MinusButton"
+     label="+"
+     name="PlusButton"
      height="15"
      width="24"/>
 </floater>
