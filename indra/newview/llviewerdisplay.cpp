@@ -240,12 +240,12 @@ void display_update_camera()
     {
         final_far *= 0.5f;
     }
+    // When system memory is critically low or recovering, shrink draw distance.
     // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
-    //else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
-    else if (use_vram_optimization && LLViewerTexture::sDesiredDiscardBias > 2.f)
-    // </FS:TJ>
+    //else if (const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor(); mem_factor > 1.f)
+    else if (const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor(); use_vram_optimization && mem_factor > 1.f)
     {
-        final_far = llmax(32.f, final_far / (LLViewerTexture::sDesiredDiscardBias - 1.f));
+        final_far = llmax(32.f, final_far / mem_factor);
     }
 // <FS:CR> Aurora sim
     if(LLWorld::getInstance()->getLockedDrawDistance())
