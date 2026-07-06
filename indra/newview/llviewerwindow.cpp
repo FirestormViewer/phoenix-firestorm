@@ -217,6 +217,7 @@
 // </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
+#include "llstatslistener.h"
 #include "llcleanup.h"
 #include "llimview.h"
 
@@ -2056,6 +2057,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     LLWindowListener::KeyboardGetter getter = [](){ return gKeyboard; };
     mWindowListener = std::make_unique<LLWindowListener>(this, getter);
     mViewerWindowListener = std::make_unique<LLViewerWindowListener>(this);
+    mStatsListener = std::make_unique<LLStatsListener>();
 
     mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
     mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
@@ -6078,10 +6080,12 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         LLSD payload;
         payload["filepath"] = filepath;
 
-        LLNotificationsUtil::add("SnapshotSavedToComputer",
-                                 args,
-                                 payload.with("respond_on_mousedown", true),
-                                 boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// <FS:PP> We don't need forced SnapshotSavedToComputer notiification, since we have SnapshotSavedToDisk string already in place
+//         LLNotificationsUtil::add("SnapshotSavedToComputer",
+//                                  args,
+//                                  payload.with("respond_on_mousedown", true),
+//                                  boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// </FS:PP>
 
         if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
         {

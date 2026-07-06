@@ -18,15 +18,15 @@
 		Taille:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		La texture sélectionnée est [TEXDIM]. L'image d'inventaire doit être carrée et pas moins de [MINTEXDIM].
-	</text>
 	<button label="Défaut" label_selected="Défaut" name="Default" />
 	<button label="Vierge" label_selected="Vierge" name="Blank" />
 	<button label="Aucune" label_selected="Aucune" name="None" />
 	<button bottom="-240" label="" label_selected="" name="Pipette"/>
 	<text name="preview_disabled" value="Aperçu désactivé"/>
 	<filter_editor label="Filtrer les textures" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		La texture sélectionnée est [TEXDIM]. L'image d'inventaire doit être carrée et pas moins de [MINTEXDIM].
+	</text>
 	<check_box initial_value="false" label="Afficher les dossiers" name="show_folders_check"/>
 	<button label="Ajouter" label_selected="Ajouter" name="l_add_btn"/>
 	<button label="Supprimer" label_selected="Supprimer" name="l_rem_btn"/>
@@ -52,7 +52,7 @@
 	<check_box initial_value="false" label="Masquer la région maillée de base" name="hide_base_mesh_region"/>
 	<line_editor name="TextureKey" tool_tip="Clé de la texture"/>
 	<button name="TextureKeyApply" label="Appl. UUID" tool_tip="Appliquer cet UUID"/>
+	<check_box label="Appliquer" name="apply_immediate_check"/>
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
-	<check_box initial_value="true" label="Appliquer" name="apply_immediate_check"/>
 </floater>

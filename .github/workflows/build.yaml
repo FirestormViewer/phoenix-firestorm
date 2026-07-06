@@ -110,7 +110,7 @@ jobs:
       autobuild_configure_parameters: ${{ (contains(matrix.runner, 'windows') || contains(matrix.runner, 'macos')) && (github.event.inputs.installer_type || 'velopack') == 'velopack' && '-- -DUSE_VELOPACK:BOOL=ON' || '' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
@@ -119,14 +119,14 @@ jobs:
         with:
           python-version: "3.11"
       - name: Checkout build variables
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: secondlife/build-variables
           ref: master
           path: .build-variables
 
       - name: Checkout master-message-template
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: secondlife/master-message-template
           path: .master-message-template
@@ -136,7 +136,7 @@ jobs:
 
       - name: Cache autobuild packages
         id: cache-installables
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .autobuild-installables
           key: ${{ runner.os }}-64-${{ matrix.configuration }}-${{ hashFiles('autobuild.xml') }}
@@ -434,7 +434,7 @@ jobs:
           tar -xJf "${{ needs.build.outputs.viewer_channel }}.sym.tar.xz" -C _artifacts
       - name: Post Windows symbols
         if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@33f604b631df9b4be22a06c52e46acccd2db596b
+        uses: BugSplat-Git/symbol-upload@ab8a5097b50707645ed9b51d3191499f9bea6d34
         with:
           clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
           clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"
@@ -462,7 +462,7 @@ jobs:
           name: macOS-symbols
       - name: Post Mac symbols
         if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@33f604b631df9b4be22a06c52e46acccd2db596b
+        uses: BugSplat-Git/symbol-upload@ab8a5097b50707645ed9b51d3191499f9bea6d34
         with:
           clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
           clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"

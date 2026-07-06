@@ -475,6 +475,8 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
     LLUUID object_id = notification_id_to_object_id(notification_id);
 
     // <FS:Zi> Omnifilter support
+    // Cache the pointer to the omnifilter engine, as it should not change.
+    static OmnifilterEngine *instance = OmnifilterEngine::getInstance();
     static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
@@ -564,7 +566,7 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
             LL_WARNS("Omnifilter") << "unknown notification name: " << notification->getName() << LL_ENDL;
         }
 
-        const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+        const OmnifilterEngine::Needle* needle = instance->match(haystack);
         if (needle)
         {
             LLSD response = notification->getResponseTemplate();
@@ -587,9 +589,18 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 }
             }
 
-            // this will result in DialogStack complaining that there is no matching dialog to remove
-            // but that should not break anything
-            notification->respond(response);
+            // If the need contains a reply delay, we want to trigger a delay.
+            if (needle->mReplyDelay > 0.0f)
+            {
+                instance->createDelayedResponse(notification, response, needle->mReplyDelay);
+            }
+            // Else, there is no delay, so fire the message off normally.
+            else
+            {
+                // this will result in DialogStack complaining that there is no matching dialog to remove
+                // but that should not break anything
+                notification->respond(response);
+            }
             return;
         }
     }

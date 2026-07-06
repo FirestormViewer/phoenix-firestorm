@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Crea annuncio" name="Marketplace Create Listing"/>
-	<menu_item_call label="Associa annuncio" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Visualizza annuncio (aggiorna)" name="Marketplace Get Listing"/>
-	<menu_item_call label="Controlla che non ci siano errori" name="Marketplace Check Listing"/>
-	<menu_item_call label="Modifica annuncio" name="Marketplace Edit Listing"/>
-	<menu_item_call label="Elenca" name="Marketplace List"/>
-	<menu_item_call label="Rimuovi annuncio" name="Marketplace Unlist"/>
-	<menu_item_call label="Attiva" name="Marketplace Activate"/>
-	<menu_item_call label="Disattiva" name="Marketplace Deactivate"/>
 	<menu_item_call label="Condividi" name="Share"/>
 	<menu_item_call label="Apri" name="Task Open"/>
 	<menu_item_call label="Esegui" name="Task Play"/>
@@ -97,11 +88,13 @@
 	<menu_item_call label="Copia" name="Copy"/>
 	<menu_item_call label="Taglia" name="Cut"/>
 	<menu_item_call label="Incolla" name="Paste"/>
-	<menu_item_call label="Incolla come link" name="Paste As Link"/>
-	<menu_item_call label="Trova tutti i link" name="Find Links"/>
-	<menu_item_call label="Sostituisci link" name="Replace Links"/>
+	<menu label="Links" name="Links">
+		<menu_item_call label="Incolla come link" name="Paste As Link"/>
+		<menu_item_call label="Trova tutti i link" name="Find Links"/>
+		<menu_item_call label="Sostituisci link" name="Replace Links"/>
+		<menu_item_call label="Elimina link interrotti" name="Cleanup broken Links"/>
+	</menu>
 	<menu_item_call label="Elimina" name="Delete"/>
-	<menu_item_call label="Elimina link interrotti" name="Cleanup broken Links"/>
 	<menu_item_call label="Sposta nella cartella predefinita" name="Move to Default Folder"/>
 	<menu_item_call label="Sposta in Oggetti smarriti" name="Move to Lost And Found"/>
 	<menu_item_call label="Elimina cartella di sistema" name="Delete System Folder"/>
@@ -133,7 +126,18 @@
 	<menu_item_call label="Togli" name="Take Off"/>
 	<menu_item_call label="Applica solo a me stesso" name="Settings Apply Local" />
 	<menu_item_call label="Applica al lotto" name="Settings Apply Parcel" />
-	<menu_item_call label="Copia negli annunci Marketplace" name="Marketplace Copy"/>
-	<menu_item_call label="Sposta negli annunci Marketplace" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Crea annuncio" name="Marketplace Create Listing"/>
+		<menu_item_call label="Associa annuncio" name="Marketplace Associate Listing"/>
+		<menu_item_call label="Visualizza annuncio (aggiorna)" name="Marketplace Get Listing"/>
+		<menu_item_call label="Controlla che non ci siano errori" name="Marketplace Check Listing"/>
+		<menu_item_call label="Modifica annuncio" name="Marketplace Edit Listing"/>
+		<menu_item_call label="Elenca" name="Marketplace List"/>
+		<menu_item_call label="Rimuovi annuncio" name="Marketplace Unlist"/>
+		<menu_item_call label="Attiva" name="Marketplace Activate"/>
+		<menu_item_call label="Disattiva" name="Marketplace Deactivate"/>
+		<menu_item_call label="Copia negli annunci Marketplace" name="Marketplace Copy"/>
+		<menu_item_call label="Sposta negli annunci Marketplace" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="--nessuna opzione--" name="--no options--"/>
 </menu>

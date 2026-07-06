@@ -47,7 +47,7 @@
 					Busca do grid:
 				</text>
 				<text name="message_text" width="110">
-					URI de mensagens do grid:
+					URI de Msg. do grid:
 				</text>
 			</panel>
 		</panel>

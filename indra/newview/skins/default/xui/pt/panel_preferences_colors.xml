@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Cores" name="colors_panel">
 	<tab_container name="tabs">
-		<panel label="Geralmente" name="tab-chat">
+		<panel label="Geral" name="tab-chat">
 			<text name="font_colors">
 				Cores de origem do bate-papo:
 			</text>
@@ -30,7 +30,7 @@
 				Erro de script
 			</text>
 			<text name="object_im_label">
-				Mensagens instantâneas de objeto
+				IMs de objeto
 			</text>
 			<text name="llownersay_label">
 				proprietário
@@ -66,10 +66,10 @@
 				Ele mesmo
 			</text>
 			<slider label="Fator de mitigação fora do alcance do chat:" label_width="275" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Fator usado para diminuir a cor normal do bate-papo quando o remetente está fora do alcance normal do bate-papo (0 = escuro, 1 = claro)." />
-			<check_box name="FSColorIMsDistinctly" label="Colora o bate-papo de mensagens instantâneas/grupo de maneira diferente no console:" />
+			<check_box name="FSColorIMsDistinctly" label="Cor diferente para IMs/grupos no console:" />
 			<panel name="im_color_panel">
 				<text name="console_im_label">
-					Mensagens instantâneas/bate-papo em grupo
+					IMs/bate-papo em grupo
 				</text>
 			</panel>
 		</panel>
@@ -95,8 +95,8 @@
 			<text name="mismatch_tag_label">
 				Não coincidência
 			</text>
-			<check_box label="Use uma cor diferente para nomes de usuário" name="FSColorUsername" tool_tip="Mostra o nome de usuário em uma cor diferente" width="270" />
-			<check_box label="Use cores diferentes para amigos" name="NameTagShowFriends" tool_tip="Ative para exibir a cor da etiqueta de um amigo como uma cor diferente." />
+			<check_box label="Cor diferente para nomes de usuário" name="FSColorUsername" tool_tip="Mostra o nome de usuário em uma cor diferente" width="270" />
+			<check_box label="Cor diferente para amigos" name="NameTagShowFriends" tool_tip="Ative para exibir a cor da etiqueta de um amigo como uma cor diferente." />
 			<text name="username_tag_label">
 				nome de usuário
 			</text>
@@ -130,18 +130,18 @@
 					Exibição de tags:
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_box.item name="No Viewertags" label="Nenhuma tag de visualizador" />
-					<combo_box.item name="TPVD Viewer" label="Visualizador TPVD (usando uma lista)" />
-					<combo_box.item name="All known Viewers" label="Todos os espectadores conhecidos (com base em uma lista)" />
-					<combo_box.item name="All Viewers" label="Todos os visualizadores" />
+					<combo_box.item name="No Viewertags" label="Nenhuma tag de viewer" />
+					<combo_box.item name="TPVD Viewer" label="Viewers TPVD (por lista)" />
+					<combo_box.item name="All known Viewers" label="Todos os viewers conhecidos (por lista)" />
+					<combo_box.item name="All Viewers" label="Todos os viewers" />
 				</combo_box>
 				<text name="colorbasedonviewer">
 					Cor da tag com base no visualizador:
 				</text>
 				<combo_box name="ColorClienttags">
 					<combo_box.item name="Color not based on Viewer" label="Cor não baseada no visualizador" />
-					<combo_box.item name="Single color per Viewer" label="Uma cor por visualizador" />
-					<combo_box.item name="Multiple colors per Viewer" label="Várias cores por visualizador" />
+					<combo_box.item name="Single color per Viewer" label="Uma cor por viewer" />
+					<combo_box.item name="Multiple colors per Viewer" label="Várias cores por viewer" />
 					<combo_box.item name="Userdefined color" label="Cor personalizada" />
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
@@ -182,7 +182,7 @@
 			<text name="MapAvatarMutedColor_label">
 				Bloqueado
 			</text>
-			<check_box name="MiniMapChatRing" label="Exibição de anéis no minimapa para renderização da faixa de fala e chamada" />
+			<check_box name="MiniMapChatRing" label="Anéis de alcance no minimapa (sussurro/fala/grito)" />
 			<text name="netmap_whisperring_color_label">
 				sussurrar
 			</text>
@@ -205,9 +205,9 @@
 			</text>
 			<slider label="Ativo:" name="active" />
 			<slider label="Inativo:" name="inactive" />
-			<slider label="câmera / Bewegung:" name="camera_movement" />
+			<slider label="Câmera / Movimento:" name="camera_movement" />
 			<slider label="Conversas:" name="conversations" />
-			<check_box name="override_im_active_opacity_checkbox" label="Use a opacidade ativa quando a janela Conversas estiver em foco" />
+			<check_box name="override_im_active_opacity_checkbox" label="Opacidade ativa com janela Conversas em foco" />
 			<text name="console_opacity">
 				Opacidade do console:
 			</text>
@@ -252,7 +252,7 @@
 			<color_swatch name="area_search_beacon_color" tool_tip="Cor da marcação de pesquisa circundante" />
 			<check_box label="Mostrar caixas de diálogo de script em um fundo opaco" name="FSScriptDialogNoTransparency" />
 			<check_box name="FSGroupNotifyNoTransparency" label="Mostrar mensagens de grupo em um fundo opaco" />
-			<check_box label="Substituir cor de fundo e opacidade do menu Pie" name="override_pie_color_checkbox" />
+			<check_box label="Personalizar cor e opacidade do menu Pie" name="override_pie_color_checkbox" />
 			<panel name="tab-colorize">
 				<color_swatch name="pie_bg_color_override" tool_tip="Escolha a cor de fundo do menu Pie" />
 				<color_swatch name="pie_selected_color_override" tool_tip="Escolha a cor do menu circular" />

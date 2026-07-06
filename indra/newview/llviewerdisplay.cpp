@@ -241,14 +241,14 @@ void display_update_camera()
         final_far *= 0.5f;
     }
     // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
-    //else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
-    else if (use_vram_optimization && LLViewerTexture::sDesiredDiscardBias > 2.f)
+    //else if (LLViewerTexture::getSystemMemoryBudgetFactor() > 1.f)
+    else if (use_vram_optimization && LLViewerTexture::getSystemMemoryBudgetFactor() > 1.f)
     // </FS:TJ>
     {
-        final_far = llmax(32.f, final_far / (LLViewerTexture::sDesiredDiscardBias - 1.f));
+        final_far = llmax(32.f, final_far / LLViewerTexture::getSystemMemoryBudgetFactor());
     }
 // <FS:CR> Aurora sim
-    if(LLWorld::getInstance()->getLockedDrawDistance())
+    if (LLWorld::getInstance()->getLockedDrawDistance())
     {
         //Reset the draw distance and do not update with the new val
         final_far = LLViewerCamera::getInstance()->getFar();

@@ -436,6 +436,43 @@ void AOEngine::cycleAlwaysStep()
     }
 }
 
+void AOEngine::reassertAlwaysAnimations(bool onlyIfMissing)
+{
+    if (!mEnabled || !mActiveAlwaysState || (onlyIfMissing && !isAgentAvatarValid()))
+    {
+        return;
+    }
+
+    const auto needsRestart = [&](const LLUUID& id) -> bool
+    {
+        if (id.isNull())
+        {
+            return false;
+        }
+        if (!onlyIfMissing)
+        {
+            return true;
+        }
+        return gAgentAvatarp->mSignaledAnimations.find(id) == gAgentAvatarp->mSignaledAnimations.end();
+    };
+
+    for (const LLUUID& animation : mActiveAlwaysState->mCurrentAnimationIDs)
+    {
+        if (needsRestart(animation))
+        {
+            gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
+        }
+    }
+
+    for (const AOSet::AOTrack& track : mActiveAlwaysState->mTracks)
+    {
+        if (needsRestart(track.mCurrentAnimationID))
+        {
+            gAgent.sendAnimationRequest(track.mCurrentAnimationID, ANIM_REQUEST_START);
+        }
+    }
+}
+
 void AOEngine::trackTimeout(S32 stateNum, S32 trackIndex)
 {
     if (!mEnabled || !mCurrentSet)
@@ -2805,7 +2842,7 @@ void AOEngine::update()
 
             if (setFolderName.empty())
             {
-                LL_WARNS("AOEngine") << "Folder with emtpy name in AO folder" << LL_ENDL;
+                LL_WARNS("AOEngine") << "Folder with empty name in AO folder" << LL_ENDL;
                 continue;
             }
 
@@ -2835,6 +2872,7 @@ void AOEngine::update()
                     continue;
                 }
                 LL_DEBUGS("AOEngine") << "Updating set " << setFolderName << " in AO." << LL_ENDL;
+                setsToWrite.emplace_back(currentCategory->getUUID(), newSet);
             }
             allComplete = false;
 
@@ -3811,6 +3849,8 @@ void AOEngine::onRegionChange()
         LL_DEBUGS("AOEngine") << "Current set was NULL" << LL_ENDL;
         return;
     }
+
+    reassertAlwaysAnimations(false);
 
     // sitting needs special attention
     if (mLastMotion == ANIM_AGENT_SIT)

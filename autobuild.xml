@@ -2724,11 +2724,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05e30110611a8fd71c79eebe1fc33f429d98efb0</string>
+              <string>5339bc81283e7ac2c3852719c3b6ec7b65a093e9</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/viewer_fonts-1.1.2-common-260701806.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/viewer_fonts-1.1.3-common-261801750.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>

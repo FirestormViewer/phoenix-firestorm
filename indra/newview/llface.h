@@ -256,7 +256,9 @@ private:
     bool        calcPixelArea(F32& cos_angle_to_view_dir, F32& radius) ;
 public:
     static F32 calcImportanceToCamera(F32 to_view_dir, F32 dist);
-    static F32 adjustPixelArea(F32 importance, F32 pixel_area) ;
+    // source_area > 0 lowers the "large but unimportant" floor for
+    // moderate sources; 0 keeps the legacy sMinLargeImageSize floor.
+    static F32 adjustPixelArea(F32 importance, F32 pixel_area, S32 source_area = 0) ;
 
 public:
 
@@ -265,6 +267,9 @@ public:
 
     LLVector2       mTexExtents[2];
     F32             mDistance;
+    // Camera-to-face distance, cached by calcPixelArea; read by the
+    // streaming math's distance signal.
+    F32             mDistanceToCamera = 0.f;
     F32         mLastUpdateTime;
     F32         mLastSkinTime;
     F32         mLastMoveTime;

@@ -5,6 +5,7 @@
 	<menu_item_check label="Pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Lokalizacja" name="ShowMenuBarLocation"/>
 	<menu_item_check label="Wersja symulatora" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Kontrolki Wszystkofiltra" name="FSOmnifilterControls" />
 	<menu_item_check label="Wyszukiwarka pozycji w menu" name="FSMenuSearch"/>
 	<menu_item_check label="Stan konta" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Kontrolki mediów" name="FSEnableVolumeControls"/>

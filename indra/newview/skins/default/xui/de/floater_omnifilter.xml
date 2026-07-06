@@ -29,6 +29,7 @@
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="Omni-Filter aktivieren"/>
+			<check_box name="show_omnifilter_controls" label="Steuerung in Menüzeile anz."/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="Aktiv"/>
 				<fs_scroll_list.columns name="needle_name" label="Regel"/>
@@ -43,6 +44,10 @@
 				<fs_scroll_list.columns name="timestamp" label="Zeit (SLT)"/>
 				<fs_scroll_list.columns name="log_entry" label="Regel"/>
 			</fs_scroll_list>
+		</layout_panel>
+		<layout_panel name="inport_export_layout">
+			<button name="btn_rule_set_export" tool_tip="Exportiert das Regel-Set in eine Notizkarte." label="Export"/>
+			<button name="btn_rule_set_import" tool_tip="Importiert ein Regel-Set aus einer Notizkarte." label="Import"/>
 		</layout_panel>
 	</layout_stack>
 	<panel name="panel_details">
@@ -66,6 +71,7 @@
 		</combo_box>
 		<text name="content_label" value="Inhalt:"/>
 		<text_editor name="content" tool_tip="Der eigentliche Text der Nachricht" />
+		<button name="btn_match_dlg_btn_lbl" width="220" label="Text von Dialog-Button abgleichen" tool_tip="Erlaubt das Abgleichen mit einem Button-Text in Dialogfenstern. Kann zur automatisierten Auswahl eines Buttons verwendet werden."/>
 		<check_box name="content_case" label="Aa" tool_tip="Groß-/Kleinschreibung" />
 		<combo_box name="content_match_type" tool_tip="Abgleichmodus">
 			<combo_item name="content_exact">
@@ -118,5 +124,8 @@
 		<line_editor name="button_reply" tool_tip="Die Beschriftung einer Schaltfläche, die im Skript-Dialog &quot;geklickt&quot; werden soll, einschließlich &quot;Ignorieren&quot;" />
 		<text name="text_box_reply_label" value="Textbox-Antw.:"/>
 		<text_editor name="text_box_reply" tool_tip="Ein Antworttext, als wäre er manuell in das Textfeld des Skript-Dialogs eingegeben worden" />
+		<text name="reply_delay_label" value="Verzögerung Antwort:" width="135"/>
+		<spinner name="reply_delay_slider" tool_tip="Verzögerung in Sekunden, bevor die Antwort auf das auslösende Event gesendet wird. Standard ist 0.0 (keine Verzögerung)."/>
+		<text name="reply_delay_seconds_label" value="Sekunden"/>
 	</panel>
 </floater>

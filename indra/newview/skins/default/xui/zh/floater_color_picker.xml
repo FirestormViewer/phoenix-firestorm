@@ -39,7 +39,7 @@
 		亮度：
 	</text>
 	<check_box label="立即應用" name="apply_immediate" />
-	<button label="複製到 LSL" label_selected="複製到 LSL" name="copy_lsl_btn" tool_tip="將顏色代碼複製到 LSL 顏色向量中，格式為 &lt;r, g, b&gt;." />
+	<button label="複製到 LSL" name="copy_lsl_btn" tool_tip="將顏色代碼複製到 LSL 顏色向量中，格式為 &lt;r, g, b&gt;." />
 	<button label="確定" label_selected="確定" name="select_btn" />
 	<button label="取消" label_selected="取消" name="cancel_btn" />
 	<text name="Current color:">

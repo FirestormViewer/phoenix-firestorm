@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="442"
+ height="467"
  width="900"
  layout="topleft"
  can_resize="false"
@@ -78,7 +78,7 @@ Contact Set Settings:
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="302"
+     height="327"
      width="450"
      border_visible="true"
      bevel_style="none">
@@ -89,11 +89,44 @@ Contact Set Settings:
      left="10"
      height="12"
      name="global_label">
-Global Settings:
+        Global Settings:
     </text>
+    <text
+     top_pad="7"
+     follows="left|top"
+     layout="topleft"
+     left="16"
+     height="12"
+     width="135"
+     name="FSContactSetsProfilePlacement_label">
+        Contact Sets in profile:
+    </text>
+    <combo_box
+     control_name="FSContactSetsProfilePlacement"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     name="FSContactSetsProfilePlacement"
+     top_delta="-4"
+     width="175">
+      <combo_box.item
+       label="Below groups list"
+       name="below"
+       value="0"/>
+      <combo_box.item
+       label="Above groups list"
+       name="above"
+       value="2"/>
+      <combo_box.item
+       label="Hidden"
+       name="hidden"
+       value="1"/>
+    </combo_box>
     <check_box
      follows="left|top"
-     top_pad="14"
+     left="15"
+     top_pad="10"
      height="12"
      initial_value="true"
      label="Show profile icons in Contact Sets lists"
@@ -130,7 +163,7 @@ Global Settings:
      width="120"
      control_name="FSContactSetsListColorizeOffline"/>
     <text
-     top_pad="2"
+     top_pad="5"
      follows="left|top"
      height="16"
      left="15"
@@ -171,7 +204,7 @@ Online notifications:
      width="270"
      control_name="FSContactSetsNotificationNearbyChat"/>
     <text
-     top_pad="8"
+     top_pad="5"
      follows="left|top"
      height="16"
      left="15"
@@ -223,7 +256,7 @@ Custom Colors:
      name="side_panel"
      top="18"
      left="450"
-     height="422"
+     height="447"
      width="448"
      border_visible="true"
      bevel_style="none">
@@ -241,7 +274,7 @@ Custom Colors:
      use_ellipses="false"
      commit_on_focus_lost="true"
      follows="left|top|right"
-     height="100"
+     height="110"
      layout="topleft"
      left="25"
      top_pad="5"
@@ -262,7 +295,7 @@ Custom Colors:
      use_ellipses="false"
      commit_on_focus_lost="true"
      follows="left|top|right"
-     height="100"
+     height="110"
      layout="topleft"
      left_delta="15"
      top_pad="5"
@@ -283,7 +316,7 @@ Custom Colors:
      use_ellipses="false"
      commit_on_focus_lost="true"
      follows="left|top|right"
-     height="100"
+     height="110"
      layout="topleft"
      left_delta="15"
      top_pad="5"

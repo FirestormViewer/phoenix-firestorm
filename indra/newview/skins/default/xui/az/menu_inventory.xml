@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Siyahı yarat" name="Marketplace Create Listing"/>
-	<menu_item_call label="Siyahını bağla" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Siyahını (yeniləmək) almaq" name="Marketplace Get Listing"/>
-	<menu_item_call label="Xətalara yoxlanış" name="Marketplace Check Listing"/>
-	<menu_item_call label="Siyahını dəyişdir" name="Marketplace Edit Listing"/>
-	<menu_item_call label="Nəşr etmək" name="Marketplace List"/>
-	<menu_item_call label="Nəşri ləğv etmək" name="Marketplace Unlist"/>
-	<menu_item_call label="Aktivləşdirmək" name="Marketplace Activate"/>
-	<menu_item_call label="Deaktivləşdirmək" name="Marketplace Deactivate"/>
 	<menu_item_call label="Paylaş" name="Share"/>
 	<menu_item_call label="Aç" name="Task Open"/>
 	<menu_item_call label="Oynat" name="Task Play"/>
@@ -91,11 +82,13 @@
 	<menu_item_call label="Köçürt" name="Copy"/>
 	<menu_item_call label="Kəs" name="Cut"/>
 	<menu_item_call label="Yapışdır" name="Paste"/>
-	<menu_item_call label="Keçid kimi yapışdır" name="Paste As Link"/>
-	<menu_item_call label="Bütün keçidləri tap" name="Find Links"/>
-	<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
+	<menu label="Links" name="Links">
+		<menu_item_call label="Keçid kimi yapışdır" name="Paste As Link"/>
+		<menu_item_call label="Bütün keçidləri tap" name="Find Links"/>
+		<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
+		<menu_item_call label="İşləməyən keçidləri təmizlə" name="Cleanup broken Links"/>
+	</menu>
 	<menu_item_call label="Sil" name="Delete"/>
-	<menu_item_call label="İşləməyən keçidləri təmizlə" name="Cleanup broken Links"/>
 	<menu_item_call label="Susmaya görə olan qovluğa daşı" name="Move to Default Folder"/>
 	<menu_item_call label="'İtmiş və tapılmış'-a daşı" name="Move to Lost And Found"/>
 	<menu_item_call label="Sistem qovluğunu sil" name="Delete System Folder"/>
@@ -127,7 +120,18 @@
 	<menu_item_call label="Çıxart" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Yalnız özümə tətbiq et"/>
 	<menu_item_call name="Settings Apply Parcel" label="Sahəyə tətbiq et"/>
-	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına köçürt" name="Marketplace Copy"/>
-	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına daşı" name="Marketplace Move"/>
+	<menu label="Marketplace" name="Marketplace">
+		<menu_item_call label="Siyahı yarat" name="Marketplace Create Listing"/>
+		<menu_item_call label="Siyahını bağla" name="Marketplace Associate Listing"/>
+		<menu_item_call label="Siyahını (yeniləmək) almaq" name="Marketplace Get Listing"/>
+		<menu_item_call label="Xətalara yoxlanış" name="Marketplace Check Listing"/>
+		<menu_item_call label="Siyahını dəyişdir" name="Marketplace Edit Listing"/>
+		<menu_item_call label="Nəşr etmək" name="Marketplace List"/>
+		<menu_item_call label="Nəşri ləğv etmək" name="Marketplace Unlist"/>
+		<menu_item_call label="Aktivləşdirmək" name="Marketplace Activate"/>
+		<menu_item_call label="Deaktivləşdirmək" name="Marketplace Deactivate"/>
+		<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına köçürt" name="Marketplace Copy"/>
+		<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına daşı" name="Marketplace Move"/>
+	</menu>
 	<menu_item_call label="--seçim yoxdur--" name="--no options--"/>
 </menu>

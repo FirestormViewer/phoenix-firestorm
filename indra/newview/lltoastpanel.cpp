@@ -36,6 +36,10 @@
 #include "lltoastscriptquestion.h"
 
 #include <boost/algorithm/string.hpp>
+// <FS:MJR> [FIRE-36802] - Adjust the max text height by the extra spacing
+#include "llcontrol.h"
+extern LLControlGroup gSavedSettings;
+// </FS:MJR> [FIRE-36802]
 
 //static
 const S32 LLToastPanel::MIN_PANEL_HEIGHT = 40; // VPAD(4)*2 + ICON_HEIGHT(32)
@@ -79,6 +83,8 @@ S32 LLToastPanel::computeSnappedToMessageHeight(LLTextBase* message, S32 maxLine
     // <FS:Ansariel> Don't forget about line spacing!
     //S32 maxTextHeight = message->getFont()->getLineHeight() * maxLineCount;
     S32 maxTextHeight = (message->getFont()->getLineHeight() + message->getLineSpacingPixels()) * maxLineCount;
+    static LLCachedControl<S32> font_line_spacing_adjustment(gSavedSettings, "FSFontLineSpacingAdjustment", 0); // <FS:MJR> [FIRE-36802] - Font - Line and Paragraph spacing
+    maxTextHeight += font_line_spacing_adjustment * maxLineCount; // <FS:MJR> [FIRE-36802] - Adjust the max text height by the extra spacing
     // </FS:Ansariel>
 
     LLRect messageRect = message->getRect();

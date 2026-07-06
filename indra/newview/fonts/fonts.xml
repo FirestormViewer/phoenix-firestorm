@@ -233,7 +233,7 @@
          />
   <font_size name="Medium"
          comment="Size of medium font (points, or 1/72 of an inch)"
-         size="10"
+         size="10.2"
          />
   <font_size name="Small"
          comment="Size of small font (points, or 1/72 of an inch)"

@@ -476,6 +476,9 @@
      name="HTMLLinkColor"
      reference="AccentColor" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="AccentColor" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color

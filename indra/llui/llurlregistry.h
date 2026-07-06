@@ -107,6 +107,7 @@ private:
     LLUrlEntryBase* mUrlEntryAgentMention;
     // <FS:Ansariel> Normalize only trusted URL
     LLUrlEntryBase* mUrlEntryTrustedUrl;
+    LLUrlEntryBase* mUrlEntryFirestormTrustedUrl;
     // <FS:Ansariel> Wear folder SLUrl
     LLUrlEntryBase* mUrlEntryWear;
 };

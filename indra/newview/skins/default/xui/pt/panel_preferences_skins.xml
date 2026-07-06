@@ -12,8 +12,8 @@
     <text name="theme_textbox2">
         (Requer reinício)
     </text>
-    <check_box label="Redefinir botões para o layout padrão ao trocar de interface" tool_tip="Se ativado, ao trocar a interface os botões serão redefinidos para o layout padrão correspondente." name="reset_toolbar_settings"/>
-    <check_box label="Redefinir botões para o layout padrão ao trocar de modo" tool_tip="Se ativado, ao trocar o modo de login os botões serão redefinidos para o layout padrão correspondente." name="FSToolbarsResetOnModeChange"/>
+    <check_box label="Redefinir botões ao trocar de interface" tool_tip="Se ativado, ao trocar a interface os botões serão redefinidos para o layout padrão correspondente." name="reset_toolbar_settings"/>
+    <check_box label="Redefinir botões ao trocar de modo" tool_tip="Se ativado, ao trocar o modo de login os botões serão redefinidos para o layout padrão correspondente." name="FSToolbarsResetOnModeChange"/>
     <check_box label="Usar cursor no estilo Viewer 1" name="use_legacy_cursors"/>
     <text name="theme_textbox3">
         (Requer reinício)

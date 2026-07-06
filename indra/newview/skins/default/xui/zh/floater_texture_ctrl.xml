@@ -24,9 +24,6 @@
 		尺寸：
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		選擇的紋理是 [TEXDIM]。庫存圖像必須是正方形的，且尺寸介於 [MINTEXDIM] 和 [MAXTEXDIM] 之間。
-	</text>
 	<button label="標準" label_selected="標準" name="Default" />
 	<button label="無" label_selected="無" name="None" />
 	<button label="空" label_selected="空" name="Blank" />
@@ -36,6 +33,9 @@
 		預覽已禁用
 	</text>
 	<search_editor label="紋理過濾器" name="inventory search editor" />
+	<text name="over_limit_lbl">
+		選擇的紋理是 [TEXDIM]。庫存圖像必須是正方形的，且尺寸介於 [MINTEXDIM] 和 [MAXTEXDIM] 之間。
+	</text>
 	<button label="新增" label_selected="新增" name="l_add_btn" />
 	<button label="移除" label_selected="移除" name="l_rem_btn" />
 	<button label="上傳" label_selected="上傳" name="l_upl_btn" />
@@ -58,7 +58,7 @@
 	</combo_box>
 	<line_editor name="TextureKey" tool_tip="紋理UUID" />
 	<button name="TextureKeyApply" label="應用UUID" tool_tip="應用此UUID的紋理" />
+	<check_box label="即時預覽" name="apply_immediate_check" />
 	<button label="取消" label_selected="取消" name="Cancel" />
 	<button label="確定" label_selected="確定" name="Select" />
-	<check_box label="即時預覽" name="apply_immediate_check" />
 </floater>

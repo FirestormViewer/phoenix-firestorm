@@ -20,20 +20,20 @@
 				(localizações, imagens, web, histórico de busca)
 			</text>
 			<check_box label="Mostrar as informações do meu perfil nos resultados de busca" name="online_searchresults"/>
-			<check_box label="Somente amigos e grupos sabem que estou online" name="online_visibility"/>
-			<check_box label="Somente amigos e grupos podem me ligar ou me enviar IM" name="voice_call_friends_only_check"/>
-			<check_box label="Mostrar convites de grupos dos quais já participo" name="FSShowJoinedGroupInvitations"/>
+			<check_box label="Apenas amigos e grupos sabem que estou online" name="online_visibility"/>
+			<check_box label="Apenas amigos e grupos podem me ligar ou enviar IM" name="voice_call_friends_only_check"/>
+			<check_box label="Mostrar convites de grupos que já participo" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="Desligar o microfone quando as chamadas terminarem" name="auto_disengage_mic_check"/>
 			<check_box label="Permitir que objetos consultem a configuração atual de idioma" name="LanguageIsPublic"/>
-			<check_box label="Aceitar automaticamente ofertas de inventário" name="Auto_Accept_New_Inventory"/>
-			<check_box label="Registrar no chat local as ofertas de inventário aceitas automaticamente" name="FSLogAutoAcceptInventoryToChat"/>
-			<check_box label="Mostrar notificação para novo inventário aceito automaticamente" name="FSShowAutoAcceptInventoryInNotifications"/>
-			<check_box label="Usar mensagens clássicas de aceitar/recusar para ofertas de inventário" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se ativado, as mensagens de aceitação ou recusa só serão enviadas depois que o botão correspondente for clicado. Se desativado, uma mensagem de aceitação será enviada automaticamente assim que o objeto oferecido chegar ao inventário. Esta opção não tem efeito quando as ofertas de inventário são aceitas automaticamente."/>
-			<check_box label="Mostrar no inventário os objetos recebidos automaticamente" name="Show_In_Inventory"/>
-			<check_box label="Mostrar notecards, landmarks e texturas aceitos automaticamente" name="Show_New_Inventory"/>
-			<check_box label="Mostrar automaticamente fotos no inventário após o upload" name="FSOpenInventoryAfterSnapshot"/>
-			<check_box label="Criar efeitos de partícula ao entregar objetos para outros avatares" name="FSCreateGiveInventoryParticleEffect"/>
-			<check_box label="Mostrar meus landmarks favoritos no login (no menu suspenso &quot;Começar aqui&quot;)" name="favorites_on_login_check" />
+			<check_box label="Aceitar ofertas de inventário automaticamente" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Registrar no chat ofertas aceitas automaticamente" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="Notificar sobre novos itens aceitos automaticamente no inventário" name="FSShowAutoAcceptInventoryInNotifications"/>
+			<check_box label="Mensagens clássicas de aceitar/recusar inventário" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se ativado, as mensagens de aceitação ou recusa só serão enviadas depois que o botão correspondente for clicado. Se desativado, uma mensagem de aceitação será enviada automaticamente assim que o objeto oferecido chegar ao inventário. Esta opção não tem efeito quando as ofertas de inventário são aceitas automaticamente."/>
+			<check_box label="Mostrar objetos recebidos no inventário" name="Show_In_Inventory"/>
+			<check_box label="Mostrar notecards e landmarks aceitos auto." name="Show_New_Inventory"/>
+			<check_box label="Abrir inventário após upload de foto" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Efeitos de partícula ao entregar objetos" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Mostrar favoritos no login (&quot;Começar aqui&quot;)" name="favorites_on_login_check" />
 			<button label="Residentes/objetos ignorados" name="block_list" width="180" />
 		</panel>
 
@@ -50,9 +50,9 @@
 			<button label="Limpar registro..." name="clear_log"/>
 			<button label="Excluir históricos..." name="delete_transcripts"/>
 			<check_box name="LogNearbyChat" label="Salvar chat local" tool_tip="Salvar no meu computador o histórico das conversas de chat local"/>
-			<check_box name="UseLegacyIMLogNames" label="Usar formato clássico de nome de arquivo para históricos" tool_tip="Se ativado, usa o formato antigo para nomes de arquivo de histórico (Nome Usuário) em vez do atual (nome_usuario)."/>
-			<check_box name="LogFileNamewithDate" label="Adicionar data ao nome do arquivo de histórico" tool_tip="Adiciona a data atual ao nome do arquivo de histórico no formato &quot;chat-AAAA-MM-DD&quot; ou &quot;nomehistorico-AAAA-MM-DD&quot;."/>
-			<check_box name="FSUseBuiltInHistory" label="Usar visualização de histórico integrada" tool_tip="Usa o visualizador integrado para históricos. Se desativado, será usado o editor de texto padrão do sistema operacional."/>
+			<check_box name="UseLegacyIMLogNames" label="Formato clássico de nome nos históricos" tool_tip="Se ativado, usa o formato antigo para nomes de arquivo de histórico (Nome Usuário) em vez do atual (nome_usuario)."/>
+			<check_box name="LogFileNamewithDate" label="Adicionar data ao nome do histórico" tool_tip="Adiciona a data atual ao nome do arquivo de histórico no formato &quot;chat-AAAA-MM-DD&quot; ou &quot;nomehistorico-AAAA-MM-DD&quot;."/>
+			<check_box name="FSUseBuiltInHistory" label="Usar visualizador de histórico integrado" tool_tip="Usa o visualizador integrado para históricos. Se desativado, será usado o editor de texto padrão do sistema operacional."/>
 		</panel>
 
 		<!--LookAt-->
@@ -68,15 +68,15 @@
 				<combo_box.item label="Sistema de nome antigo" name="Legacy_Name"/>
 				<combo_box.item label="Nome de usuário" name="User_Name"/>
 			</combo_box>
-			<check_box label="Não mostrar meu próprio foco da câmera" name="LookAtHideOwn" tool_tip="Não mostrar a mira do seu próprio foco de câmera."/>
-			<check_box label="Mostrar linhas até o foco da câmera" name="ExodusLookAtLines" tool_tip="Desenha uma linha do avatar até a mira do foco da câmera dele."/>
+			<check_box label="Não mostrar meu próprio foco de câmera" name="LookAtHideOwn" tool_tip="Não mostrar a mira do seu próprio foco de câmera."/>
+			<check_box label="Desenhar linha até o foco da câmera" name="ExodusLookAtLines" tool_tip="Desenha uma linha do avatar até a mira do foco da câmera dele."/>
 
 			<text name="mylookat">
 				Meu foco da câmera:
 			</text>
-			<check_box label="Não enviar meu foco da câmera para outras pessoas" name="privatelookat" tool_tip="Impede que o seu foco de câmera seja enviado para outras pessoas."/>
-			<check_box label="Também não definir meu foco da câmera localmente" name="privateLocalLookat" tool_tip="Impede que a cabeça do seu avatar gire para o ponto focalizado pela câmera. O movimento da cabeça pode ainda não ser visível para outras pessoas, independentemente desta opção!"/>
-			<check_box label="Não enviar minha seleção de edição para outras pessoas" name="privatepointat" tool_tip="Impede que a sua seleção seja enviada para outras pessoas."/>
+			<check_box label="Não enviar meu foco de câmera para outros" name="privatelookat" tool_tip="Impede que o seu foco de câmera seja enviado para outras pessoas."/>
+			<check_box label="Também não definir foco localmente" name="privateLocalLookat" tool_tip="Impede que a cabeça do seu avatar gire para o ponto focalizado pela câmera. O movimento da cabeça pode ainda não ser visível para outras pessoas, independentemente desta opção!"/>
+			<check_box label="Não enviar seleção de edição para outros" name="privatepointat" tool_tip="Impede que a sua seleção seja enviada para outras pessoas."/>
 			<check_box label="Limitar distância (a partir da minha cabeça):" name="LimitLookAt" width="270" tool_tip="Limita a distância para o valor informado, medido a partir da sua cabeça."/>
 			<text name="LimitLookAtDistanceMeterText">
 				m

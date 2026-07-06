@@ -7011,6 +7011,13 @@ void LLVOAvatar::processAnimationStateChanges()
         }
     }
 
+    // <FS:PP> keep AO "Always" animations alive
+    if (isSelf() && AOEngine::instanceExists())
+    {
+        AOEngine::instance().reassertAlwaysAnimations(true);
+    }
+    // </FS:PP>
+
     stop_glerror();
 }
 
@@ -9699,6 +9706,10 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
 
     if (changed && isSelf())
     {
+        // Agent's own avatar doesn't track bakes the same way as other avatars.
+        // So just update here, on cloud removal.
+        markBodyPartsComplexityDirty();
+
         // to know about outfit switching
         LLAvatarRenderNotifier::getInstance()->updateNotificationState();
     }
@@ -11425,6 +11436,10 @@ void LLVOAvatar::onInitialBakedTextureLoaded( bool success, LLViewerFetchedTextu
     }
     if (final || !success )
     {
+        if (selfp)
+        {
+            selfp->markBodyPartsComplexityDirty();
+        }
         delete avatar_idp;
     }
 }
@@ -12787,7 +12802,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
     // Store results
     mVisualComplexity = total_cost;
 
-    // Call the existing reporting function with the aggregated lists
+    // Call the reporting function with the aggregated lists
     // <FS:Ansariel> Show per-item complexity in COF
     //processComplexityCostChange(hud_complexity_list, object_complexity_list);
     processComplexityCostChange(hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity, body_parts_complexity);

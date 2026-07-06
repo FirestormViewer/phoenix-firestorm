@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="animation_explorer" title="Explorador de animações">
 	<scroll_list name="animation_list">
-		<scroll_list.column label="Reproduzido por" name="played_by" />
-		<scroll_list.column label="Reproduzido" name="played" />
+		<scroll_list.column label="Ativado por" name="played_by" />
+		<scroll_list.column label="Executando" name="played" />
 		<scroll_list.column label="Prioridade" name="priority" />
 		<scroll_list.column label="Hora" name="timestamp" />
 		<scroll_list.column label="ID da animação" name="animation_id" />
@@ -11,7 +11,7 @@
 	<panel name="buttons_panel">
 		<button label="Parar" name="stop_btn" />
 		<button label="Parar e revogar" name="stop_and_revoke_btn" />
-		<button label="Lista negra" name="blacklist_btn" />
-		<check_box label="Sem animações próprias" name="no_owned_animations_check" tool_tip="Quando marcado, filtra animações pertencentes ao seu Avatar, como animações de AO ou animações padrão do sistema." />
+		<button label="Bloqueados" name="blacklist_btn" />
+		<check_box label="Sem animações próprias" name="no_owned_animations_check" tool_tip="Oculta animações do seu próprio avatar (AO, padrão do sistema etc.)." />
 	</panel>
 </floater>

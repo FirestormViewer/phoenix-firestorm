@@ -598,7 +598,10 @@
      reference="DkGray" />
     <color
      name="HTMLLinkColor"
-	 value="0.113 0.210 0.170 1" />
+     value="0.113 0.210 0.170 1" />
+    <color
+     name="HTMLLinkColorHovertips"
+     reference="SL-White" />
     <color
      name="HealthTextColor"
      reference="White" />

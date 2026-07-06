@@ -95,6 +95,8 @@ private:
     LLGroupListItem* addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool visible_in_profile = true, bool is_favorite = false);
     void addFavoritesSeparator();
     void onFavoritesChanged();
+    void addSecondaryGroupItems(S32 regular_group_count);
+    LLGroupListItem* addSecondaryGroupItem(const std::string& name, EAddPosition pos);
 // </FS:PP>
     bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
 
@@ -119,6 +121,7 @@ private:
     // </FS:PP>
 
     boost::signals2::connection mFavoritesChangedConnection; // <FS:PP> Group favorites / pinning
+    boost::signals2::connection mProfileContactSetsPlacementConnection; // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 };
 
 class LLButton;

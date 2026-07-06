@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <contents>
 	<rows name="move_actions">
-		<columns label="Ações de movimento" name="lst_action"/>
+		<columns label="Movimento" name="lst_action"/>
 	</rows>
 	<rows name="walk_to">
-		<columns name="lst_action" tool_tip="Vai até a posição indicada pelo cursor do mouse" value="Ir para" />
+		<columns name="lst_action" tool_tip="Move o avatar até onde o cursor apontar" value="Ir para" />
 	</rows>
 	<rows name="teleport_to">
-		<columns name="lst_action" tool_tip="Teleporta para a posição indicada pelo cursor do mouse. Nem todos os destinos permitem teleporte direto; você pode ser teleportado para perto do destino." value="Teleportar para" />
+		<columns name="lst_action" tool_tip="Teleporta para onde o cursor apontar. Nem todo lugar aceita TP direto; pode cair perto do destino." value="Teleportar para " />
 	</rows>
 	<rows name="push_forward">
 		<columns name="lst_action" value="Andar para frente" />
@@ -22,10 +22,10 @@
 		<columns name="lst_action" value="Direita" />
 	</rows>
 	<rows name="slide_left">
-		<columns name="lst_action" value="Deslocar para esquerda" />
+		<columns name="lst_action" value="Mover p/ esquerda" />
 	</rows>
 	<rows name="slide_right">
-		<columns name="lst_action" value="Deslocar para direita" />
+		<columns name="lst_action" value="Mover p/ direita" />
 	</rows>
 	<rows name="jump">
 		<columns name="lst_action" value="Pular/Subir" />
@@ -49,7 +49,7 @@
 		<columns name="lst_action" value="Alternar corrida" />
 	</rows>
 	<rows name="toggle_fly">
-		<columns name="lst_action" value="Iniciar/parar voo" />
+		<columns name="lst_action" value="Iniciar/parar vôo" />
 	</rows>
 	<rows name="toggle_sit">
 		<columns name="lst_action" value="Sentar/levantar" />

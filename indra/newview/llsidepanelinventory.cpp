@@ -485,8 +485,6 @@ void LLSidepanelInventory::onOpen(const LLSD& key)
     }
 #endif
 
-    gAgent.showLatestFeatureNotification("inventory");
-
     if(key.size() == 0)
     {
         // set focus on filter editor when side tray inventory shows up

@@ -5,7 +5,7 @@
     can_minimize="true"
     can_resize="true"
     height="379"
-    help_topic=""
+    help_topic="avatar_alignment"
     layout="topleft"
     legacy_header_height="15"
     min_height="379"
