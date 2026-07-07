@@ -5134,12 +5134,6 @@ Będziesz mógł/a dodać metodę płatności w kasie.
 			<button name="Cancel" text="Anuluj" />
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
-		<form name="form">
-			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps. Jest mało prawdopodobne, aby takie ustawienie nie sprawiało problemów i prawie na pewno nie spowoduje wzrostu wydajności.
 	</notification>

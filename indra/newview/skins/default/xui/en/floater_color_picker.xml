@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="380"
+ height="460"
  layout="topleft"
  name="ColorPicker"
  help_topic="colorpicker"
@@ -211,8 +211,8 @@
      layout="topleft"
      follows="left|top"
      font="Monospace"
-     name="hex_value"
-     max_length_bytes="6"
+     name="hex_color"
+     max_length_bytes="16"
      left_pad="0"
      height="20"
      width="80" />
@@ -294,39 +294,64 @@
      width="50" />
     <check_box
      follows="left|bottom"
-     height="20"
+     height="40"
      label="Apply now"
      layout="topleft"
      left="10"
      name="apply_immediate"
      bottom="-10"
-     width="90" />
+     width="120"
+     word_wrap="down"/>
     <button
-     follows="left|bottom"
+     follows="right|bottom"
      height="28"
      image_selected="eye_button_active.tga"
      image_unselected="eye_button_inactive.tga"
      layout="topleft"
-     left_pad="8"
+     right="-267"
+     top_delta="14"
      name="color_pipette"
      width="28" />
-    <button
+    <combo_box
+     control_name="CopyColorDestination"
      follows="right|bottom"
-     height="23"
-     label="Copy LSL"
-     tool_tip="Copies the color value into an LSL color vector in the format of &lt;r, g, b&gt;."
      layout="topleft"
-     right="-190"
-     top_delta="9"
-     name="copy_lsl_btn"
-     width="80" />
+     right="-175"
+     top_delta="6"
+     name="copy_color_combobox"
+     width="86">
+        <combo_box.item
+         label="Copy as..."
+         name="copy_as"
+         value="0" />
+        <combo_box.item
+         label="LSL"
+         name="lsl_color"
+         value="1" />
+        <combo_box.item
+         label="HEX"
+         name="hex_color"
+         value="2" />
+        <combo_box.item
+         label="RGB"
+         name="rgb_color"
+         value="3" />
+        <combo_box.item
+         label="HSL"
+         name="hsl_color"
+         value="4" />
+        <combo_box.item
+         label="CMYK"
+         name="cmyk_color"
+         value="5" />
+    </combo_box>
     <button
      follows="right|bottom"
      height="23"
      label="OK"
      label_selected="OK"
      layout="topleft"
-     right="-100"
+     right="-90"
      left_pad="5"
      name="select_btn"
      width="80" />
@@ -337,7 +362,7 @@
      label_selected="Cancel"
      layout="topleft"
      left_pad="5"
-     right="-10"
+     right="-5"
      name="cancel_btn"
      width="80" />
     <text

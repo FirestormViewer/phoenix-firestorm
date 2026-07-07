@@ -5364,12 +5364,6 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		LSL顏色程式碼已複製到剪貼簿。現在可以將其貼上到LSL指令碼中並使用。
-		<form name="form">
-			<ignore name="ignore" text="一個LSL顏色程式碼已被複制到剪貼簿。"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		建議不要將頻寬設定得高於1500 KBPS. Il est peu probable que cela fonctionne bien et cela n'améliorera presque certainement pas vos performances.
 		<usetemplate name="okbutton" yestext="確定"/>

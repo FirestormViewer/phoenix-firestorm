@@ -38,11 +38,18 @@
 	<text name="l_val_text">
 		Hell.:
 	</text>
-	<check_box label="Sofort übernehm." name="apply_immediate"/>
-	<button label="" label_selected="" name="color_pipette" left_pad="40"/>
+	<check_box label="Sofort übernehmen" name="apply_immediate" bottom="-18"/>
+	<button name="color_pipette" top_delta="22" right="-293"/>
+	<combo_box name="copy_color_combobox" width="110">
+		<combo_box.item label="Kopieren als..." name="copy_as"/>
+		<combo_box.item label="LSL" name="lsl_color"/>
+		<combo_box.item label="HEX" name="hex_color"/>
+		<combo_box.item label="RGB" name="rgb_color"/>
+		<combo_box.item label="HSL" name="hsl_color"/>
+		<combo_box.item label="CMYK" name="cmyk_color"/>
+	</combo_box>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
-	<button label="Kopiere LSL" label_selected="Kopiere LSL" name="copy_lsl_btn" tool_tip="Kopiert den Farbcode in einen LSL-Farbvektor im Format &lt;r, g, b&gt;."/>
 	<text name="Current color:">
 		^ Aktuelle Farbe ^
 	</text>

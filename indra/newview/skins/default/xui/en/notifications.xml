@@ -13751,19 +13751,6 @@ able to add a payment method at checkout.
        text="Cancel"/>
     </form>
   </notification>
-  
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-  <notification
-   icon="notify.tga"
-   name="LSLColorCopiedToClipboard"
-   type="alertmodal">
-The LSL color string has been copied to your clipboard. You can now paste it into your script to use it.
-   <form name="form">
-      <ignore name="ignore"
-       text="An LSL color string was copied to my clipboard"/>
-    </form>
-  </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
 
   <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   <!-- <FS:TS> FIRE-6795: Remove warning at every login -->

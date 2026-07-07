@@ -4940,12 +4940,6 @@ aggiungere un metodo di pagamento al checkout.
 			<button name="Cancel" text="Annulla" />
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		Il codice colore LSL è stato copiato negli appunti. Ora può essere incollato nello script.it.
-		<form name="form">
-			<ignore name="ignore" text="Un codice colore LSL è stato copiato negli appunti"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Raccomandiamo vivamente di non impostare la larghezza di banda a più di 1500 KBPS. E' improbabile che funzioni bene e quasi certamente non migliora le prestazioni.
 	</notification>

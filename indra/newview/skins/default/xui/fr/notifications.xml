@@ -5289,12 +5289,6 @@ la possibilité d'ajouter un mode de paiement à la caisse.
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		La chaîne de couleur LSL a été copiée dans votre presse-papiers. Vous pouvez maintenant la coller dans votre script pour l'utiliser.
-		<form name="form">
-			<ignore name="ignore" text="Une chaîne de couleurs LSL a été copiée dans le presse-papiers."/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Nous vous recommandons vivement de ne pas régler la bande passante au-dessus de 1500 KBPS. Il est peu probable que cela fonctionne bien et cela n'améliorera presque certainement pas vos performances.
 		<usetemplate name="okbutton" yestext="OK"/>

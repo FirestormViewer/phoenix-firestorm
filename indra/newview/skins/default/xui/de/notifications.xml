@@ -5619,15 +5619,6 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			yestext="OK"/>
 	</notification>
 
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
-		<form name="form">
-			<ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
-		</form>
-	</notification>
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-
 	<notification name="FSBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
 	</notification>

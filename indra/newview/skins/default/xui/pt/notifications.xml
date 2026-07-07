@@ -5580,15 +5580,6 @@ Os scripts nos objetos selecionados deveriam realmente ser modificados?
 			yestext="OK"/>
 	</notification>
 
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-O código de cores LSL foi copiado para a área de transferência. Agora pode ser inserido e usado em scripts LSL.
-		<form name="form">
-			<ignore name="ignore" text="Um código de cor LSL foi copiado para a área de transferência."/>
-		</form>
-	</notification>
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-
 	<notification name="FSBWTooHigh">
 Recomenda-se não definir a largura de banda superior a 1500 kbit/s! Uma largura de banda maior pode causar problemas e não melhorará o desempenho.
 	</notification>
