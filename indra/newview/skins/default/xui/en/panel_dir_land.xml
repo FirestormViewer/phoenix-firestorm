@@ -132,7 +132,7 @@
      font="SansSerifSmall"
      height="16"
      left_pad="1"
-     max_length="10"
+     max_length_chars="10"
      mouse_opaque="true"
      name="priceedit"
      width="50" />
@@ -171,7 +171,7 @@
      font="SansSerifSmall"
      height="16"
      left_pad="1"
-     max_length="10"
+     max_length_chars="10"
      mouse_opaque="true"
      name="areaedit"
      width="50" />
@@ -227,7 +227,6 @@
      bg_visible="false"
      border_visible="false"
      bottom_delta="-20"
-     drop_shadow_visible="true"
      follows="left|bottom"
      font="SansSerifSmall"
      h_pad="0"

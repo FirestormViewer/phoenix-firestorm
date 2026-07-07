@@ -3,11 +3,11 @@
 	<layout_stack name="navigation_favorites_bar_visibility_stack">
 		<layout_panel name="navigation_bar_visibility_panel">
 			<layout_stack name="location_search_layout">
-				<layout_panel name="navigation_buttons_visibility_panel" right="253">
+				<layout_panel name="navigation_buttons_visibility_panel" right="270">
 					<pull_button name="back_btn" tool_tip="Voltar ao local anterior"/>
 					<pull_button name="forward_btn" tool_tip="Avançar um local"/>
 					<button name="home_btn" tool_tip="Teleportar para minha casa[LOCATION]"/>
-					<button name="About_Land" label="Terreno" tool_tip="Abrir janela de informações do terreno"/>
+					<button name="About_Land" label="Terreno" tool_tip="Abrir janela de informações do terreno" width="60"/>
 					<button name="PersonalLighting" label="Iluminação" tool_tip="Abre a janela de iluminação pessoal" width="90"/>
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">
