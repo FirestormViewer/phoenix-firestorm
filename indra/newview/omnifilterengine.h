@@ -179,6 +179,7 @@ class OmnifilterEngine
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
         bool matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
+        bool searchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
 
         bool importFromLLSD(const LLSD& data);
         rule_set_t importRuleSetFromLLSD(const LLSD& data);

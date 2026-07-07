@@ -34,6 +34,7 @@
 #include "lltrans.h" // Needed for LLTrans::getString
 #include "llinventorymodel.h" // gInventory
 #include "llagentdata.h" // gAgentID
+#include "llregex.h"
 #include "llpreviewnotecard.h"
 #include "llfloaterreg.h"
 
@@ -116,8 +117,76 @@ bool OmnifilterEngine::matchStrings(std::string_view needle_string, std::string_
             {
                 re_flags |= boost::regex::icase;
             }
+            boost::regex re(std::string(needle_string), re_flags);            
+            if (ll_regex_match(std::string(haystack_string), re))
+            {
+                return true;
+            }
+            break;
+        }
+        case eMatchType::Substring:
+        {
+            if (haystack_content.find(needle_content) != haystack_content.npos)
+            {
+                return true;
+            }
+            break;
+        }
+        case eMatchType::Exact:
+        {
+            if (haystack_content == needle_content)
+            {
+                return true;
+            }
+            break;
+        }
+        default:
+        {
+            LL_DEBUGS("Omnifilter") << "match type " << match_type << " unknown!" << LL_ENDL;
+            break;
+        }
+    }
+    return false;
+}
+
+bool OmnifilterEngine::searchStrings(std::string_view needle_string,
+                                     std::string_view haystack_string,
+                                     eMatchType       match_type,
+                                     bool             case_insensitive)
+{
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
+    if (!use_omnifilter)
+    {
+        return false;
+    }
+
+    std::string_view needle_content   = needle_string;
+    std::string_view haystack_content = haystack_string;
+
+    std::string needle_lc_content;
+    std::string haystack_lc_content;
+    if (case_insensitive)
+    {
+        needle_lc_content   = needle_string;
+        haystack_lc_content = haystack_string;
+
+        LLStringUtil::toLower(needle_lc_content);
+        LLStringUtil::toLower(haystack_lc_content);
+        needle_content   = needle_lc_content;
+        haystack_content = haystack_lc_content;
+    }
+
+    switch (match_type)
+    {
+        case eMatchType::Regex:
+        {
+            boost::regbase::flag_type re_flags = boost::regex::normal;
+            if (case_insensitive)
+            {
+                re_flags |= boost::regex::icase;
+            }
             boost::regex re(std::string(needle_string), re_flags);
-            if (boost::regex_match(std::string(haystack_string), re))
+            if (ll_regex_search(std::string(haystack_string), re))
             {
                 return true;
             }
@@ -188,7 +257,7 @@ const OmnifilterEngine::Needle* OmnifilterEngine::match(const Haystack& haystack
             continue;
         }
 
-        if (needle.mContent.empty() || matchStrings(needle.mContent, haystack.mContent, needle.mContentMatchType, needle.mContentCaseInsensitive))
+        if (needle.mContent.empty() || searchStrings(needle.mContent, haystack.mContent, needle.mContentMatchType, needle.mContentCaseInsensitive))
         {
             return logMatch(needle_name, needle);
         }
