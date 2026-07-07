@@ -117,11 +117,6 @@ protected:
 public:
     static void initClass();
     static void updateClass();
-    static bool isSystemMemoryLow();
-    static bool isSystemMemoryCritical();
-
-    // Ranges from 1 (no RAM deficit) to 2 (RAM deficit)
-    static F32 getSystemMemoryBudgetFactor();
 
     LLViewerTexture(bool usemipmaps = true);
     LLViewerTexture(const LLUUID& id, bool usemipmaps) ;
@@ -152,6 +147,11 @@ public:
     S32 getMaxVirtualSizeResetCounter() const { return mMaxVirtualSizeResetCounter; }
 
     virtual F32  getMaxVirtualSize() ;
+
+    // Read-only debug access to the per-bucket coverage bounds (see
+    // mChannelCoverage) - used by the RENDER_DEBUG_TEXTURE_PRIORITY overlay.
+    F32 getChannelCoverage(S32 bucket) const { return (bucket >= 0 && bucket < 4) ? mChannelCoverage[bucket] : 0.f; }
+    F32 getChannelCoverageMin(S32 bucket) const { return (bucket >= 0 && bucket < 4) ? mChannelCoverageMin[bucket] : 0.f; }
 
     LLFrameTimer* getLastReferencedTimer() { return &mLastReferencedTimer; }
 
@@ -198,8 +198,6 @@ private:
     friend class LLBumpImageList;
     friend class LLUIImageList;
 
-    static U32Megabytes getFreeSystemMemory();
-
 protected:
     friend class LLViewerTextureList;
     LLUUID mID;
@@ -210,24 +208,17 @@ protected:
     mutable S32  mMaxVirtualSizeResetInterval;
     LLFrameTimer mLastReferencedTimer;
 
-    // 0=Normal, 1=BaseColor, 2=Specular, 3=Emissive. -1 -> base color.
-    S8 mPriorityChannel = -1;
-
-    // Bind-staleness floor, 0..1. Per-interval increment is 1/max_discard
-    // so any texture saturates after interval x max_discard seconds idle.
-    F32 mStalenessFactor = 0.f;
-
-    // Closest face's face_distance / draw_distance, clamped 0..1.
-    // Defaults to 1 so never-measured textures resolve to deepest discard.
-    F32 mMinDistanceFactor = 1.f;
-
-    // Largest per-face screen-space coverage in pixels. Raw - no bias or
-    // channel-priority contamination.
-    F32 mMaxOnScreenSize = 0.f;
-
-    // Any face on the agent's avatar (rigged / animated). Drives the
-    // own-avatar quality boost in processTextureStats.
-    bool mOnAgentAvatar = false;
+    // Screen-space pixel coverage bounds among the texture's faces, per
+    // priority bucket (0=Normal, 1=BaseColor, 2=Specular, 3=Emissive). 0 = the
+    // texture is not used in that channel (or hasn't been measured yet).
+    // Populated by LLViewerTextureList::updateImageDecodePriority; consumed by
+    // LLViewerLODTexture::computeDesiredDiscard. This is the only view-dependent
+    // streaming signal - distance, size, tiling, and channel role all collapse
+    // into it. Max = the most demanding use (lowest texels-per-pixel variant,
+    // the quality bound); Min = the least demanding positive use (highest
+    // texels-per-pixel, most oversampled - the downrez-bias end).
+    F32 mChannelCoverage[4] = { 0.f, 0.f, 0.f, 0.f };
+    F32 mChannelCoverageMin[4] = { 0.f, 0.f, 0.f, 0.f };
 
     ll_face_list_t    mFaceList[LLRender::NUM_TEXTURE_CHANNELS]; //reverse pointer pointing to the faces using this image as texture
     U32               mNumFaces[LLRender::NUM_TEXTURE_CHANNELS];
@@ -249,24 +240,17 @@ public:
     static S32 sRawCount;
     static S32 sAuxCount;
     static LLFrameTimer sEvaluationTimer;
-    static F32 sDesiredDiscardBias;
-    // Backgrounded-window discard floor, 0..1. Ramps while backgrounded,
-    // snaps to 0 in foreground. Avatar bakes exempt.
-    static F32 sBackgroundFactor;
 
-    // VRAM-pressure distance multiplier, >= 1. Compresses the distance
-    // signal: dist_factor = clamp(mMinDistanceFactor * mult, 0, 1).
-    // Grows geometrically while over budget; decays back to 1 when fitting.
-    static F32 sMemoryPressureMultiplier;
-    // Last-ditch global discard floor. Mirrors sDesiredDiscardBias once the
-    // multiplier is exhausted.
-    static F32 sLastDitchMinDiscard;
+    // The global max pixel:texel ratio (texels per screen pixel, the "R" in 1:R).
+    // The watermark controller in updateClass walks it between TexturePixelToTexelRatio
+    // and 0 as VRAM pressure changes; lower means coarser desired discards.
+    static F32 sPixelToTexelRatio;
 
-    // 0..1 progress of the pressure multiplier from baseline (1) to its
-    // configured cap (TextureMemoryPressureMaxMultiplier). Used to gate
-    // bubble shrink and last-ditch engagement.
-    static F32 getMemoryPressureProgress();
-    static U32 sBiasTexturesUpdated;
+    // Frame index the GC was last suspended (kept current while backgrounded).
+    // The foreground GC only runs once getFrameCount() is a grace window past
+    // this, so content can re-stamp after an alt-tab before anything is collected.
+    static U32 sGCSuspendedFrame;
+
     static S32 sMaxSculptRez ;
     static U32 sMinLargeImageSize ;
     static U32 sMaxSmallImageSize ;
@@ -277,7 +261,6 @@ public:
     // estimated free memory for textures, by bias calculation
     static F32 sFreeVRAMMegabytes;
 
-    static F32 sSysMemoryFactor;
     // Viewport pixel area, refreshed once per frame. Hoisted to keep the
     // per-texture hot path out of gViewerWindow.
     static F32 sWindowPixelArea;
@@ -336,48 +319,6 @@ public:
             || boost_level == BOOST_AVATAR_SELF
             || boost_level == BOOST_AVATAR_BAKED_SELF;
     }
-
-public:
-
-    struct Compare
-    {
-        // lhs < rhs
-        bool operator()(const LLPointer<LLViewerFetchedTexture> &lhs, const LLPointer<LLViewerFetchedTexture> &rhs) const
-        {
-            const LLViewerFetchedTexture* lhsp = (const LLViewerFetchedTexture*)lhs;
-            const LLViewerFetchedTexture* rhsp = (const LLViewerFetchedTexture*)rhs;
-
-            // greater priority is "less"
-            const F32 lpriority = lhsp->mMaxVirtualSize;
-            const F32 rpriority = rhsp->mMaxVirtualSize;
-
-            // <FS:ND> FIRE-4482
-            // It is hard to say why FIRE-4482 is really happenening. There are a few things that could cause it
-            //
-            // 1) Image not in texturelist: Then !image->isInImageList() would have caused to error out a few lines before. isInImageList should always be properly set IMO.
-            // 2) The set is bad, due to multithreading and race conditions: The set is only every access from one thread.
-            // 3) The ordering operator does not adhere to the requirement of strict weak ordering: This can be possible, due to float rounding and precision.
-            //
-            // 1&2 seem to be ruled out (can one ever be sure :)?), so it is viable to test 3 by rewriting this operator.
-
-            // if (lpriority > rpriority) // higher priority
-            //  return true;
-            // if (lpriority < rpriority)
-            //  return false;
-            // return lhsp < rhsp;
-
-            F32 fDiff = lpriority-rpriority;
-
-            if( llabs( fDiff ) < 0.001 ) // Very small difference, don't take the risk and just compare the pointers.
-                return lhsp < rhsp;
-            else if( fDiff > 0 ) // lhs is bigger, so by the priority queue it is 'less'
-                return true;
-            else
-                return false;
-
-            // </FS:ND>
-        }
-    };
 
 public:
     /*virtual*/ S8 getType() const override;
@@ -639,6 +580,16 @@ public:
 
 private:
     void init(bool firstinit) ;
+
+    // The whole streaming pipeline: desired discard from the pixel:texel ratio.
+    // For each channel bucket the texture is used in, the most-demanding
+    // (largest coverage) face sets that bucket's requirement at
+    // floor(log4(texels / (R_global * channelRatio[b] * coverage))); the sharpest
+    // requirement across buckets wins (one GL image serves all its channels).
+    // A per-mip hysteresis dead-band against the current discard level prevents
+    // fetch/scaleDown thrash. avatar_bake textures use the configured max ratio
+    // instead of the pressure-driven sPixelToTexelRatio (anti cloud-bug).
+    S32 computeDesiredDiscard(S32 dim_max_i, bool avatar_bake) const;
 };
 
 //

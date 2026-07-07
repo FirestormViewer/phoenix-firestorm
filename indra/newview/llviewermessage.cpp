@@ -4379,13 +4379,6 @@ void send_agent_update(bool force_send, bool send_reliable)
     static F32 last_draw_disatance_step = 1024;
     F32 memory_limited_draw_distance = gAgentCamera.mDrawDistance;
 
-    if (LLViewerTexture::getSystemMemoryBudgetFactor() > 1.f)
-    {
-        // We are critcally low on memory or recovering,
-        // limit requested draw distance
-        memory_limited_draw_distance = llmax(gAgentCamera.mDrawDistance / LLViewerTexture::getSystemMemoryBudgetFactor(), gAgentCamera.mDrawDistance / 2.f);
-    }
-
     if (tp_state == LLAgent::TELEPORT_ARRIVING || LLStartUp::getStartupState() < STATE_MISC)
     {
         // Inform interest list, prioritize closer area.

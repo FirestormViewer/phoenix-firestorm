@@ -192,45 +192,60 @@ static bool handleRenderAvatarMouselookChanged(const LLSD& newvalue)
     return true;
 }
 
+// Per-tier texture quality preset. Data-driven so adding a setting is
+// "add a column", and the tier values are visible side-by-side. Index is
+// RenderTextureQuality: 0=Low, 1=Medium, 2=High, 3=Ultra.
+namespace
+{
+    struct TexturePreset
+    {
+        const char* name;
+        U32 max_resolution;
+        F32 pixel_to_texel_ratio;       // TexturePixelToTexelRatio   (R_max, texels per pixel)
+        F32 pressure_tighten_rate;      // TexturePressureTightenRate  (ratio units/sec)
+        F32 pressure_relax_rate;        // TexturePressureRelaxRate    (ratio units/sec)
+        F32 channel_ratio_normal;       // TextureChannelRatioNormal
+        F32 channel_ratio_basecolor;    // TextureChannelRatioBaseColor
+        F32 channel_ratio_specular;     // TextureChannelRatioSpecular
+        F32 channel_ratio_emissive;     // TextureChannelRatioEmissive
+    };
+
+    // Tier values: Low (2-4GB), Medium (4-8GB), High (8-16GB), Ultra (16+GB).
+    // Quality ladder, expressed in pixel:texel (texels per pixel):
+    //  - pixel_to_texel_ratio is the baseline quality: how many texels per
+    //    screen pixel the tier allocates when VRAM is comfortable (1.0 = 1:1).
+    //    Under pressure the runtime drives the global ratio below this with no
+    //    floor (down to 0 = deepest mips), so there is no per-tier minimum.
+    //  - the channel ratios coarsen specular/emissive/normal relative to base
+    //    color (each is a multiplier on the global ratio).
+    // The pressure water marks (TexturePressureHighWater/LowWater) are NOT tiered - they're a
+    // physical "crossed the budget" threshold (0.90 / 0.70), constant across
+    // tiers. Lower tiers start blurrier (lower R_max) and tighten faster.
+    //                            max_res  Rmax   tight  relax  N      BC     S      E
+    static constexpr TexturePreset TEXTURE_PRESETS[4] = {
+        /* 0 Low    */ { "Low",    1024,   0.10f, 0.50f, 0.05f, 0.50f, 1.00f, 0.25f, 0.25f },
+        /* 1 Medium */ { "Medium", 2048,   0.40f, 0.35f, 0.08f, 1.00f, 1.00f, 0.50f, 0.50f },
+        /* 2 High   */ { "High",   2048,   0.80f, 0.25f, 0.10f, 1.00f, 1.00f, 0.50f, 1.00f },
+        /* 3 Ultra  */ { "Ultra",  2048,   1.00f, 0.15f, 0.12f, 1.00f, 1.00f, 1.00f, 1.00f },
+    };
+}
+
 static bool handleRenderTextureQualityChanged(const LLSD& newvalue)
 {
-    // 0=Low, 1=Medium, 2=High, 3=Ultra. Drives RenderMaxTextureResolution,
-    // the four TextureChannel* exponents (Normal/BaseColor/Spec/Emissive),
-    // and TextureDistanceDiscardPower.
     U32 quality = (U32)newvalue.asInteger();
-    U32 max_res = 2048;
-    F32 ch_normal    = 1.0f;
-    F32 ch_basecolor = 0.75f;
-    F32 ch_specular  = 0.5f;
-    F32 ch_emissive  = 0.75f;
-    F32 distance_power = 0.5f;
-    switch (quality)
-    {
-    case 0: // Low
-        max_res = 1024;
-        ch_normal = 0.5f; ch_basecolor = 0.75f; ch_specular = 0.1f; ch_emissive = 0.5f;
-        distance_power = 0.15f;
-        break;
-    case 1: // Medium
-        ch_normal = 0.75f; ch_basecolor = 0.75f; ch_specular = 0.3f; ch_emissive = 0.75f;
-        distance_power = 0.25f;
-        break;
-    case 2: // High
-        // channel defaults above
-        distance_power = 0.35f;
-        break;
-    case 3: // Ultra
-    default:
-        ch_normal = 1.f; ch_basecolor = 1.f; ch_specular = 1.f; ch_emissive = 1.f;
-        distance_power = 0.5f;
-        break;
-    }
-    gSavedSettings.setU32("RenderMaxTextureResolution", max_res);
-    gSavedSettings.setF32("TextureChannelNormal", ch_normal);
-    gSavedSettings.setF32("TextureChannelBaseColor", ch_basecolor);
-    gSavedSettings.setF32("TextureChannelSpecular", ch_specular);
-    gSavedSettings.setF32("TextureChannelEmissive", ch_emissive);
-    gSavedSettings.setF32("TextureDistanceDiscardPower", distance_power);
+    if (quality > 3) quality = 3;
+    const TexturePreset& p = TEXTURE_PRESETS[quality];
+
+    gSavedSettings.setU32("RenderMaxTextureResolution",     p.max_resolution);
+    gSavedSettings.setF32("TexturePixelToTexelRatio",       p.pixel_to_texel_ratio);
+    gSavedSettings.setF32("TexturePressureTightenRate",     p.pressure_tighten_rate);
+    gSavedSettings.setF32("TexturePressureRelaxRate",       p.pressure_relax_rate);
+    gSavedSettings.setF32("TextureChannelRatioNormal",      p.channel_ratio_normal);
+    gSavedSettings.setF32("TextureChannelRatioBaseColor",   p.channel_ratio_basecolor);
+    gSavedSettings.setF32("TextureChannelRatioSpecular",    p.channel_ratio_specular);
+    gSavedSettings.setF32("TextureChannelRatioEmissive",    p.channel_ratio_emissive);
+
+    LL_INFOS("TextureStream") << "Applied texture quality preset: " << p.name << LL_ENDL;
     return true;
 }
 
@@ -1356,7 +1371,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "OctreeMaxNodeCapacity", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "OctreeAlphaDistanceFactor", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "OctreeAttachmentSizeFactor", handleRepartition);
-    setting_setup_signal_listener(gSavedSettings, "RenderMaxTextureIndex", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderUIBuffer", handleWindowResized);
     setting_setup_signal_listener(gSavedSettings, "RenderDepthOfField", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderFSAAType", handleReleaseGLBufferChanged);

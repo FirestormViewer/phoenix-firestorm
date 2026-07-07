@@ -245,6 +245,11 @@ bool LLTexUnit::bind(LLTexture* texture, bool for_rendering, bool forceBind)
                         texture->setActive() ;
                         texture->updateBindStatsForTester() ;
                     }
+                    // updateBindStats only stamps time; the GC and fetch gate use
+                    // the frame stamp, so stamp it here too or bind()-drawn faces
+                    // (bump/material/media) oscillate. Admin/non-camera binds are
+                    // already suppressed via LLImageGLStampBypass / sStampBindFrame.
+                    gl_tex->stampBound();
                     mHasMipMaps = gl_tex->mHasMipMaps;
                     if (gl_tex->mTexOptionsDirty)
                     {
@@ -325,6 +330,8 @@ bool LLTexUnit::bind(LLImageGL* texture, bool for_rendering, bool forceBind, S32
         glBindTexture(sGLTextureType[texture->getTarget()], mCurrTexture);
         stop_glerror();
         texture->updateBindStats();
+        // Frame-stamp fresh binds too - see bind(LLTexture*) above.
+        texture->stampBound();
         mHasMipMaps = texture->mHasMipMaps;
         if (texture->mTexOptionsDirty)
         {

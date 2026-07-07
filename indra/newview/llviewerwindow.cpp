@@ -6746,7 +6746,13 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
 
         // actually render the scene
         gCubeSnapshot = true;
-        display_cube_face();
+        {
+            // Probe binds aren't visibility - otherwise every probe slice re-stamps
+            // behind-camera textures and cycles them evict->refetch. RAII so the
+            // nested shadow pass in display_cube_face doesn't re-enable stamping.
+            LLImageGLStampBypass stamp_bypass;
+            display_cube_face();
+        }
         gCubeSnapshot = false;
     }
 

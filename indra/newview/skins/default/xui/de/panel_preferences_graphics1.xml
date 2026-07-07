@@ -168,23 +168,6 @@
 		<slider name="RenderMaxVRAMBudget" tool_tip="Maximaler VRAM-Speicher in Megabytes, der für Texturen verwendet wird."/>
 		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
 		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
-		<text name="automatic_texture_downscale_settings">
-			Automatische Textur-Herunterskalierung:
-		</text>
-		<text name="TextureDiscardBackgroundedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt.">
-			Im Hintergrund (0 zum deaktivieren)
-		</text>
-		<spinner name="TextureDiscardBackgroundedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt."/>
-		<text name="TextureDiscardBackgroundedTime_seconds">
-			Sekunde(n)
-		</text>
-		<text name="TextureDiscardMinimizedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist.">
-			Minimiert (0 zum deaktivieren)
-		</text>
-		<spinner name="TextureDiscardMinimizedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist."/>
-		<text name="TextureDiscardMinimizedTime_seconds">
-			Sekunde(n)
-		</text>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
@@ -232,7 +215,6 @@
 		<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
 		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
 		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
-		<check_box label="Sichtweite reduzieren, falls VRAM voll" tool_tip="Falls aktiviert wird automatisch die Sichtweite reduziert, wenn kein VRAM mehr verfügbar ist." name="Reduce Draw Distance when VRAM is full"/>
 		<text name="ExcludeAnimeshImposterLabel" width="255">
 			Animesh-Avatare immer vollständig anzeigen:
 		</text>

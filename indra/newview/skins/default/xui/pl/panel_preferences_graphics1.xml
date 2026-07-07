@@ -140,23 +140,6 @@
 			</text>
 			<check_box label="Wyłącz autodetekcję VRAM" name="FSOverrideVRAMDetection" tool_tip="Zezwól na wyłączenie automatycznego wykrywania VRAM (używaj z zachowaniem szczególnej ostrożności)" />
 			<slider label="Zastąp dedykowaną VRAM dla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Ważne: używaj ze szczególną ostrożnością. || Zastąp wykrytą pamięć VRAM dla karty graficznej. || Nie może zawierać 'współdzielonej' pamięci VRAM, która jest częścią systemowej pamięci RAM. || Jeśli nie rozumiesz różnicy, zostaw tę opcję w spokoju." />
-			<text name="automatic_texture_downscale_settings">
-				Auto-zmniejszanie tekstur:
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne.">
-				Okno w tle (0 aby wyłączyć)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund, gdy okno nie jest aktywne." />
-			<text name="TextureDiscardBackgroundedTime_seconds">
-				sekund
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu.">
-				Zminimalizowane (0 aby wyłączyć)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Zmniejsza skalę tekstur po wybranej liczbie sekund po zminimalizowaniu." />
-			<text name="TextureDiscardMinimizedTime_seconds">
-				sekund
-			</text>
 		</panel>
 		<panel name="Rendering">
 			<text name="World Updating">
@@ -196,7 +179,6 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
-			<check_box label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" tool_tip="Włącza funkcję zmniejszającą odległość rysowania (pole widzenia), gdy pamięć VRAM jest pełna" />
 			<text name="ExcludeAnimeshImposterLabel">
 				Wyklucz zast. animesz. awatarów:
 			</text>

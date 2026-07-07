@@ -131,23 +131,6 @@
 Ignorer la VRAM détectée sur votre GPU.
 Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
 Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
-			<text name="automatic_texture_downscale_settings">
-				Réduction automatique de la taille des textures :
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active.">
-				En arrière-plan (0 pour désactiver)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active."/>
-			<text name="TextureDiscardBackgroundedTime_seconds">
-				Seconde(s)
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite.">
-			Réduite (0 pour désactiver)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite."/>
-			<text name="TextureDiscardMinimizedTime_seconds">
-				Seconde(s)
-			</text>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
@@ -170,7 +153,6 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			</combo_box>
 			<text name="Miscellaneous Rendering">Divers :</text>
 			<check_box label="HDR et émissivité" tool_tip="Permet des fonctionnalités supplémentaires du pipeline de rendu sur les machines plus récentes, telles que le HDR et les textures émissives sur le contenu PBR." name="VintageMode"/>
-			<check_box label="Réduire la distance d'affichage lorsque la VRAM est pleine" name="Reduce Draw Distance when VRAM is full" tool_tip="Active une fonctionnalité qui réduit la distance d'affichage lorsque la mémoire VRAM est saturée."/>
 			<text name="ExcludeAnimeshImposterLabel">
 				Exclure l'avatar Animesh imposteur :
 			</text>

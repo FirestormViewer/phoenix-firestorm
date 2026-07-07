@@ -253,10 +253,6 @@ private:
     bool mInitialized ;
     LLFrameTimer mForceDecodeTimer;
 
-public:
-    // Current close-camera bubble in meters (frame-coherent, slow-tracked).
-    static F32 sCurrentBubbleMeters;
-
 private:
     static S32 sNumImages;
     static void (*sUUIDCallback)(void**, const LLUUID &);

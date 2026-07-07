@@ -106,8 +106,6 @@
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
-		<string>TextureDiscardBackgroundedTime</string>
-		<string>TextureDiscardMinimizedTime</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>
