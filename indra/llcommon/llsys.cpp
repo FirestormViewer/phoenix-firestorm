@@ -965,30 +965,18 @@ LLSD LLMemoryInfo::loadStatsMap()
     static constexpr DWORDLONG div = 1024;
 
     stats.add("Percent Memory use", state.dwMemoryLoad);
-    // <FS:Ansariel> Ugly, but prevent overflow
-    //stats.add("Total Physical KB",  state.ullTotalPhys/div);
-    //stats.add("Avail Physical KB",  state.ullAvailPhys/div);
-    stats.add("Total Physical KB", llclamp(state.ullTotalPhys / div, U64(0), U64(S32_MAX)));
-    stats.add("Avail Physical KB", llclamp(state.ullAvailPhys / div, U64(0), U64(S32_MAX)));
-    // </FS:Ansariel>
+    stats.add("Total Physical KB",  state.ullTotalPhys/div);
+    stats.add("Avail Physical KB",  state.ullAvailPhys/div);
 
     // Despite the confusing naming "PageFile" , these values
     // actually represent the committed memory limit for
     // the system or the current process, whichever is smaller.
-    // <FS:Ansariel> Ugly, but prevent overflow
-    //stats.add("Total page KB",      state.ullTotalPageFile/div);
-    //stats.add("Avail page KB",      state.ullAvailPageFile/div);
-
-    //static constexpr DWORDLONG mb_div = 1024 * 1024;
-    //stats.add("Total Virtual MB", state.ullTotalVirtual/mb_div);  // ~134 million MB
-    //stats.add("Avail Virtual MB", state.ullAvailVirtual/mb_div);
-    stats.add("Total page KB", llclamp(state.ullTotalPageFile / div, U64(0), U64(S32_MAX)));
-    stats.add("Avail page KB", llclamp(state.ullAvailPageFile / div, U64(0), U64(S32_MAX)));
+    stats.add("Total page KB",      state.ullTotalPageFile/div);
+    stats.add("Avail page KB",      state.ullAvailPageFile/div);
 
     static constexpr DWORDLONG mb_div = 1024 * 1024;
-    stats.add("Total Virtual MB", llclamp(state.ullTotalVirtual / mb_div, U64(0), U64(S32_MAX)));
-    stats.add("Avail Virtual MB", llclamp(state.ullAvailVirtual / mb_div, U64(0), U64(S32_MAX)));
-    // </FS:Ansariel>
+    stats.add("Total Virtual MB", state.ullTotalVirtual/mb_div);  // ~134 million MB
+    stats.add("Avail Virtual MB", state.ullAvailVirtual/mb_div);
 
     LLMemory::sAvailPhysicalMemInKB = U32Kilobytes::convert(U64Bytes(state.ullAvailPhys));
     LLMemory::sAvailCommitMemInMB = U32Megabytes::convert(U64Bytes(state.ullAvailPageFile));
