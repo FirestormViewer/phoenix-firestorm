@@ -549,6 +549,7 @@
 			<menu_item_check label="Renderizar luzes anexadas" name="Render Attached Lights"/>
 			<menu_item_check label="Renderizar partículas anexadas" name="Render Attached Particles"/>
 			<menu_item_check label="Renderizar roupas do sistema do Avatar animadas" name="Render Avatar Cloth"/>
+			<menu_item_check label="Reduzir distância de renderização quando a VRAM estiver cheia" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="Ativar coleta de vertex buffers de fonte" name="Collect Font Vertex Buffers"/>
 			<menu_item_check label="Ativar cache de shaders" name="Enable Shader Cache"/>
 			<menu_item_call label="Limpar cache de shaders" name="Shader Cache Clear"/>

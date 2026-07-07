@@ -153,6 +153,7 @@ Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 			</combo_box>
 			<text name="Miscellaneous Rendering">Divers :</text>
 			<check_box label="HDR et émissivité" tool_tip="Permet des fonctionnalités supplémentaires du pipeline de rendu sur les machines plus récentes, telles que le HDR et les textures émissives sur le contenu PBR." name="VintageMode"/>
+			<check_box label="Réduire la distance d'affichage lorsque la VRAM est pleine" name="Reduce Draw Distance when VRAM is full" tool_tip="Active une fonctionnalité qui réduit la distance d'affichage lorsque la mémoire VRAM est saturée."/>
 			<text name="ExcludeAnimeshImposterLabel">
 				Exclure l'avatar Animesh imposteur :
 			</text>

@@ -185,6 +185,7 @@
 			<check_box label="Режим отображения скелета" name="Wireframe"/>
 			<check_box label="Включить прикрепленное освещение" tool_tip="Эта опция включает свет, прикрепленный к аватару, такой как освещение лица. " name="Render Attached Lights"/>
 			<check_box label="Отображать частицы других аватаров" name="Render Attached Particles"/>
+			<check_box label="Уменьшить дальность прорисовки при заполнении видеопамяти" name="Reduce Draw Distance when VRAM is full" tool_tip="Включает функцию, которая уменьшает дальность прорисовки при заполнении видеопамяти."/>
 			<text name="ExcludeAnimeshImposterLabel" width="200">
 				Исключить аватар Animesh Impostor:
 			</text>

@@ -1425,6 +1425,16 @@ If you do not understand the distinction then leave this control alone."
          function="Advanced.HandleAttachedLightParticles"
          parameter="RenderAttachedParticles"/>
         </check_box>
+        <check_box
+         control_name="FSDrawDistanceVRAMOptimization"
+         follows="top|left"
+         height="16"
+         layout="topleft"
+         left="20"
+         top_pad="1"
+         label="Reduce Draw Distance when VRAM is full"
+         name="Reduce Draw Distance when VRAM is full"
+         tool_tip="Enables a feature that reduces your draw distance when VRAM becomes full"/>
         <text
           type="string"
           length="1"
