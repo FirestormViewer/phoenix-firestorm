@@ -80,10 +80,10 @@
     </tab_container>
       <icon
         follows="left|top|right"
-        image_name="Toolbar_Middle_Off"
+        image_name="TabTop_Last_Flat_Off"
         left="274"
         name="dummy_icon"
         top="1"
-        height="21"
+        height="20"
         right="-4"/>
 </floater>
