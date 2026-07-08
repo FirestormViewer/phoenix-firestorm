@@ -1192,8 +1192,10 @@ LLFontGL* LLFontGL::getFontSansSerifSmallItalic()
 //static
 LLFontGL* LLFontGL::getFontSansSerif()
 {
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
     //static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Small", 0));
     static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Default", 0));
+    // </FS:Ansariel>
     return fontp;
 }
 
