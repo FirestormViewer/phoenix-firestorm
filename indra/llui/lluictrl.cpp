@@ -80,7 +80,10 @@ LLUICtrl::Params::Params()
     mouseenter_callback("mouseenter_callback"),
     mouseleave_callback("mouseleave_callback"),
     control_name("control_name"),
-    font("font", LLFontGL::getFontEmojiSmall()),
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+    //font("font", LLFontGL::getFontEmojiSmall()),
+    font("font", LLFontGL::getFontEmojiDefault()),
+    // </FS:Ansariel>
     font_halign("halign"),
     font_valign("valign"),
     length("length"),   // ignore LLXMLNode cruft
