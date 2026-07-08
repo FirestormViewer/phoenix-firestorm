@@ -16,7 +16,7 @@
 					我自己
 				</text>
 				<text name="person_label">
-					人
+					其他人
 				</text>
 				<text name="infohub_label">
 					資訊中心
@@ -66,10 +66,10 @@
 				<text name="events_label">
 					位置：
 				</text>
-				<button label="瞬間傳送" label_selected="瞬間" name="Teleport" tool_tip="傳送到選定位置" />
-				<button label="複製SLurl" name="copy_slurl" tool_tip="複製當前位置的SLurl以在網頁中使用。" width="88" />
-				<button label="刪除" name="Clear" tool_tip="關閉追蹤並重設地圖。" width="75" />
-				<button label="顯示選擇" label_selected="顯示目標" name="Show Destination" tool_tip="將地圖中心移到選定位置" />
+				<button label="瞬間傳送" name="Teleport" tool_tip="傳送到選定位置" />
+				<button label="複製SLurl" name="copy_slurl" tool_tip="複製當前位置的SLurl以在網頁中使用。"/>
+				<button label="刪除" name="Clear" tool_tip="關閉追蹤並重設地圖。"/>
+				<button label="顯示選擇" name="Show Destination" tool_tip="將地圖中心移到選定位置" />
 				<button label="追蹤區域" name="track_region" tool_tip="將區域新增到區域追蹤器" />
 			</panel>
 		</layout_panel>

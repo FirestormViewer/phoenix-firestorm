@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview">
-	<string name="with_alpha">
-		有 Alpha
-	</string>
-	<string name="no_alpha">
-		無 Alpha
-	</string>
+	<string name="with_alpha" value="有Alpha"/>
+	<string name="no_alpha" value="無Alpha"/>
 	<text name="name_label">
 		名稱：
 	</text>
@@ -16,16 +12,16 @@
 		預覽圖像為：
 	</text>
 	<combo_box label="服裝類型" name="clothing_type_combo">
-		<item label="圖像" name="Image" value="圖像" />
-		<item label="頭髮" name="Hair" value="頭髮" />
-		<item label="女性頭部" name="FemaleHead" value="女性頭部" />
-		<item label="女性上半身" name="FemaleUpperBody" value="女性上半身" />
-		<item label="女性下半身" name="FemaleLowerBody" value="女性下半身" />
-		<item label="男性頭部" name="MaleHead" value="男性頭部" />
-		<item label="男性上半身" name="MaleUpperBody" value="男性上半身" />
-		<item label="男性下半身" name="MaleLowerBody" value="男性下半身" />
-		<item label="裙子" name="Skirt" value="裙子" />
-		<item label="雕刻的元素" name="SculptedPrim" value="雕刻的元素" />
+		<item label="圖像" name="Image"/>
+		<item label="頭髮" name="Hair"/>
+		<item label="女性頭部" name="FemaleHead"/>
+		<item label="女性上半身" name="FemaleUpperBody"/>
+		<item label="女性下半身" name="FemaleLowerBody"/>
+		<item label="男性頭部" name="MaleHead"/>
+		<item label="男性上半身" name="MaleUpperBody"/>
+		<item label="男性下半身" name="MaleLowerBody"/>
+		<item label="裙子" name="Skirt"/>
+		<item label="雕刻的元素" name="SculptedPrim"/>
 	</combo_box>
 	<panel name="image_alpha_warning">
 		<check_box name="strip_alpha_check" label="移除空白 Alpha 通道" />
@@ -42,4 +38,5 @@
 	<check_box name="temp_check" label="臨時上傳（免費）" tool_tip="免費上傳臨時圖片，但是圖片將在一段時間後自動刪除。" />
 	<button label="上傳（[AMOUNT] L$）" name="ok_btn" />
 	<button label="取消" name="cancel_btn" />
+	<text name="info_text" value="= 此處將顯示上傳費用資訊 =" />
 </floater>

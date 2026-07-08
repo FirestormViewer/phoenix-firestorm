@@ -23,7 +23,6 @@
 		</panel>
 	</tab_container>
 	<panel name="bottom_panel">
-		<button label="複製到剪貼簿" name="copy_btn" tool_tip="將限制複製到剪貼簿" width="181" />
-		<icon name="dummy_icon" width="101" />
+		<button label="複製到剪貼簿" name="copy_btn"/>
 	</panel>
 </floater>

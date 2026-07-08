@@ -49,8 +49,6 @@
 		<menu_item_check label="模型上傳" name="Model uploads" />
 		<menu_item_check label="PBR材質上傳" name="PBR uploads" />
 	</menu>
-	<menu_item_call label="作為收藏夾使用" name="Set Favorites folder" />
-	<menu_item_call label="重設收藏夾" name="Reset Favorites folder" />
 	<menu label="變更類型" name="Change Type">
 		<menu_item_call label="預設" name="Default" />
 		<menu_item_call label="手套" name="Gloves" />

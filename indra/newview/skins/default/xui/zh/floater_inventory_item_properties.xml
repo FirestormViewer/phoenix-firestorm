@@ -36,5 +36,4 @@
 		<combo_box.item label="原件" name="Original" />
 	</combo_box>
 	<spinner label="價格：" name="Edit Cost" />
-	<text name="CurrencySymbol">L$</text>
 </floater>

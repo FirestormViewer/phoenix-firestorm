@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Proxy Settings Floater" title="代理伺服器設定">
-	<check_box initial_value="false" label="使用 HTTP 代理伺服器瀏覽網頁" name="web_proxy_enabled" />
+	<check_box label="使用 HTTP 代理伺服器瀏覽網頁" name="web_proxy_enabled" />
 	<text name="http_proxy_label">
 		HTTP 代理伺服器：
 	</text>
@@ -16,8 +16,8 @@
 		SOCKS 鑒認：
 	</text>
 	<radio_group name="socks5_auth_type">
-		<radio_item label="無驗證" name="Socks5NoAuth" tool_tip="Socks5 代理伺服器無需驗證。" value="無" />
-		<radio_item label="使用者名稱 / 密碼" name="Socks5UserPass" tool_tip="Socks5 代理伺服器需要透過使用者名稱 / 密碼鑒認。" value="UserPass" />
+		<radio_item label="無驗證" name="Socks5NoAuth" tool_tip="Socks5 代理伺服器無需驗證。"/>
+		<radio_item label="使用者名稱 / 密碼" name="Socks5UserPass" tool_tip="Socks5 代理伺服器需要透過使用者名稱 / 密碼鑒認。"/>
 	</radio_group>
 	<text name="socks5_username_label">
 		使用者名稱：
