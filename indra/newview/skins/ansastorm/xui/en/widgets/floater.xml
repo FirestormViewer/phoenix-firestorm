@@ -8,6 +8,7 @@
  bg_alpha_color="SL-Background_66"
  bg_opaque_image="Window_Foreground"
  bg_alpha_image="Window_Background"
+ header_font_shadow="soft"
  header_height="25"
  close_image="Icon_Close_Foreground"
  snooze_image="Icon_Snooze_Foreground"

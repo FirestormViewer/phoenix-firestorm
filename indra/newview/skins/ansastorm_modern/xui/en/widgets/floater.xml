@@ -9,6 +9,7 @@
  bg_opaque_image="Window_Foreground"
  bg_alpha_image="Window_Background"
  header_font="SansSerif"
+ header_font_shadow="none"
  header_height="25"
  header_vpad="5"
  close_image="Icon_Close_Foreground"

@@ -10,7 +10,7 @@
  background_visible="true"
  background_opaque="false"
  header_font="SansSerif"
- header_font_shadow="none"
+ header_font_shadow="soft"
  header_height="25"
  header_vpad="5"
  close_image="Icon_Close_Foreground"
