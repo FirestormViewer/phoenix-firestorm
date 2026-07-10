@@ -4,6 +4,7 @@
 	<menu label="プロフィールを閲覧" name="View Profiles"/>
 	<menu_item_call label="コンタクトセットに追加" name="Add to Set Multiple"/>
 	<menu_item_call label="カメラ" name="Cam"/>
+	<menu_item_call label="アバターの方を向く" name="Face towards avatar"/>
 	<menu name="MarkAvatar" label="マーク…">
 		<menu_item_call label="赤" name="MarkRed"/>
 		<menu_item_call label="緑" name="MarkGreen"/>

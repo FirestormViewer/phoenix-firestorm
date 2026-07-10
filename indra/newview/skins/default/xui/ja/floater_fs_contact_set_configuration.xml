@@ -16,7 +16,18 @@
 		<text name="global_label">
 			全体設定
 		</text>
+		<text name="FSContactSetsProfilePlacement_label">
+			プロフィール内のコンタクトセット：
+		</text>
+		<combo_box name="FSContactSetsProfilePlacement">
+			<combo_box.item label="下のグループ一覧" name="below"/>
+			<combo_box.item label="上のグループ一覧" name="above"/>
+			<combo_box.item label="隠す" name="hidden"/>
+		</combo_box>
+		<check_box label="コンタクトセットのリストにプロフィールアイコンを表示する" name="FSContactSetsListShowIcons"/>
 		<color_swatch label="デフォルトのセットの色" name="global_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+		<color_swatch name="offline_swatch" tool_tip="コンタクトセットリスト内で、どのコンタクトセットにも属さないオフラインのコンタクトで使用される色を指定します。カスタムコンタクトセットの色が優先されます。"/>
+		<check_box label="カスタムのオフラインのコンタクトの色" name="FSContactSetsListColorizeOffline"/>
 		<text name="label_online">
 			オンライン状態の通知：
 		</text>
@@ -25,7 +36,7 @@
 		<check_box label="指定したセットのメンバーのログイン状態をトーストで通知する" name="FSContactSetsNotificationToast"/>
 		<check_box label="指定したセットのメンバーのログイン状態を近くのチャットで通知する" name="FSContactSetsNotificationNearbyChat"/>
 		<text name="label_colors">
-			色の設定
+			カスタム色：
 		</text>
 		<check_box label="ミニマップのアイコンをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeMiniMap"/>
 		<check_box label="名前タグをコンタクトセットに指定した色で表示する" name="FSContactSetsColorizeNameTag"/>

@@ -14,7 +14,11 @@
 			<pie_slice label="バックアップ" name="Backup"/>
 			<pie_slice label="Collada" name="Collada"/>
 		</pie_menu>
-		<pie_slice label="オリジナルを表示" name="Show original"/>
+		<pie_menu name="Inventory" label="インベントリ　＞">
+			<pie_slice label="お気に入りに追加" name="Add to favorites"/>
+			<pie_slice label="お気に入りから削除" name="Remove from favorites"/>
+			<pie_slice label="オリジナルを表示" name="Show original"/>
+		</pie_menu>
 		<pie_slice label="アバターの調査" name="Avatar Inspect"/>
 		<pie_slice label="テクスチャ" name="Debug..."/>
 	</pie_menu>

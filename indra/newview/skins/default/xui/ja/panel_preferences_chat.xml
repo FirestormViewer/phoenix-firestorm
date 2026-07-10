@@ -278,6 +278,9 @@
 		</panel>
 		<!-- Chat: CmdLine -->
 		<panel label="コマンドライン" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab ドキュメント]
+			</text>
 			<check_box label="チャットバーをコマンドラインとして使用できるようにする" name="chat_cmd_toggle"/>
 			<!-- 計算機 -->
 			<text name="FSCmdLineCalc_txt">
@@ -327,6 +330,11 @@
 			<text name="FSCmdLineRollDice_txt">
 				サイコロを振る（使用法：cmd サイコロ番号 サイコロの面数 演算子 係数）
 			</text>
+			<!--trkpos-->
+			<text name="FSCmdLineTrackPos_txt">
+				位置かアバターを追跡（使用方法：cmd posかアバター名）
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="ワールドマップビーコンを、指定した位置（cpcampos形式）またはアバター名の一部に設定します。"/>
 			<line_editor tool_tip="サイコロを振ります。cmd [サイコロの番号] [サイコロの面数] [演算子の種類（任意）] [係数（任意）] の文法で記述します。例えば、cmd 1 20, cmd 2 40, + 5 のように表記します。これらのパラメータを省略すると、cmd 1 6 が適用され、つまり、普通のサイコロを１つ振ります。" name="FSCmdLineRollDice"/>
 			<!-- SIM内テレポート-->
 			<text name="FSCmdLinePos_txt">
@@ -362,6 +370,7 @@
 				指定したＳＩＭに移動（使用法：cmd SIM名 | x y z）
 			</text>
 			<check_box label="目標ＳＩＭの同じ座標に移動" name="toggle"/>
+			<check_box label="コマンド実行結果の送信先チャンネル：" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 	</tab_container>
 </panel>

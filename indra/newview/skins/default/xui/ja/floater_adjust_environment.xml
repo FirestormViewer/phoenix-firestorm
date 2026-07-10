@@ -31,10 +31,10 @@
 						雲の色：
 					</text>
 					<text name="cloud_map_label">
-						雲の画像：
+						雲の画像
 					</text>
 					<text name="water_map_label">
-						水面の画像：
+						水面の画像
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_2">

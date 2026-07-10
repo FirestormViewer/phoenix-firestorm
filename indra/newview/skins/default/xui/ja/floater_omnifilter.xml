@@ -3,9 +3,33 @@
 	<floater.string name="OmnifilterNewNeedle">
 		新しいルール
 	</floater.string>
+	<floater.string name="OmnifilterNewRuleSet">
+		新しいルールセット
+	</floater.string>
+	<floater.string name="OmnifilterCloneRuleSet">
+		ルールセットを複製
+	</floater.string>
+	<panel name="needle_rule_set_controls">
+		<text name="lbl_ruleset" value="ルールセット："/>
+		<layout_stack name="rule_set_buttons_stack">
+			<layout_panel name="rule_set_group_1">
+				<combo_box name="cmb_rule_sets" tool_tip="使用したい包括フィルタのルールセットを選択してください。"/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_2">
+				<button name="btn_rule_set_new" label="新しいルールセット" tool_tip="新しい空の包括フィルタのルールセットを作成します。"/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_3">
+				<button name="btn_rule_set_clone" label="ルールセットを複製" tool_tip="現在の包括フィルタのルールセットを作成したり複製します。"/>
+			</layout_panel>
+			<layout_panel name="rule_set_group_4">
+				<button name="btn_rule_set_remove" label="ルールセットを削除" tool_tip="現在の包括フィルタのルールセットを削除します。"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="包括フィルタを有効化"/>
+			<check_box name="show_omnifilter_controls" tool_tip="有効にすると、ショートカットコントロールがメインＵＩの上部バーに表示されます。" label="トップバーにコントロールを表示"/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="有効"/>
 				<fs_scroll_list.columns name="needle_name" label="ルール"/>
@@ -19,8 +43,8 @@
 			</fs_scroll_list>
 			<button name="add_needle" label="追加"/>
 			<button name="remove_needle" label="削除"/>
-			<button name="up_needle" label="上"/>
-			<button name="down_needle" label="下"/>
+			<button name="up_needle" label="上へ" tool_tip="選択したルールを一つ上に移動します。"/>
+			<button name="down_needle" label="下へ" tool_tip="選択したルールを一つ下に移動します。"/>
 		</layout_panel>
 		<layout_panel name="filter_log_layout">
 			<fs_scroll_list name="filter_log">
@@ -37,11 +61,15 @@
 				</row>
 			</fs_scroll_list>
 		</layout_panel>
+		<layout_panel name="inport_export_layout">
+			<button name="btn_rule_set_export" tool_tip="ノートカードへルールセットをエクスポートします。" label="エクスポート"/>
+			<button name="btn_rule_set_import" tool_tip="ノートカードからルールセットをインポートします。" label="インポート"/>
+		</layout_panel>
 	</layout_stack>
 	<panel name="panel_details">
 		<text name="needle_name_label" value="ルール名："/>
 		<text name="sender_name_label" value="送信者名："/>
-		<line_editor name="sender_name" tool_tip="メッセージの送信元であるアバターまたはオブジェクトの名前" />
+		<line_editor name="sender_name" tool_tip="メッセージの発信元となるアバターまたはオブジェクト名を入力します。"/>
 		<check_box name="sender_case" tool_tip="大文字・小文字の区別" />
 		<combo_box name="sender_match_type" tool_tip="一致モード">
 			<combo_item name="sender_exact">
@@ -56,6 +84,7 @@
 		</combo_box>
 		<text name="content_label" value="内容："/>
 		<text_editor name="content" tool_tip="メッセージの実際のテキスト" />
+		<button name="btn_match_dlg_btn_lbl" label="一致ダイアログのボタンのラベル" tool_tip="ダイアログウィンドウのボタンラベルを一致させることができます。ボタンへの自動応答に使用できます。"/>
 		<check_box name="content_case" tool_tip="大文字・小文字の区別" />
 		<combo_box name="content_match_type" tool_tip="一致モード">
 			<combo_item name="content_exact">
@@ -100,10 +129,13 @@
 			</layout_panel>
 		</layout_stack>
 		<text name="chat_replace_label" value="チャットの置き換え："/>
-		<line_editor name="chat_replace" tool_tip="メッセージの表示方法を変更するために使用できる置換テキスト" />
+		<line_editor name="chat_replace" tool_tip="メッセージの表示方法を変更するために使用できる置換テキスト。"/>
 		<text name="button_reply_label" value="返信ボタン："/>
-		<line_editor name="button_reply" tool_tip="&quot;無視&quot;を含む、スクリプトダイアログで&quot;クリック&quot;するボタンのラベル" />
+		<line_editor name="button_reply" tool_tip="スクリプトダイアログで「クリック」するボタンのラベル（「無視」を含む）。"/>
 		<text name="text_box_reply_label" value="返信テキストボックス："/>
-		<text_editor name="text_box_reply" tool_tip="スクリプトダイアログのテキストボックスに手動で入力されたかのような返信テキスト" />
+		<text_editor name="text_box_reply" tool_tip="スクリプト化されたダイアログのテキストボックスに手動で入力されたかのような返信テキスト。"/>
+		<text name="reply_delay_label" value="返信までの遅延時間："/>
+		<spinner name="reply_delay_slider" tool_tip="トリガーされたイベントに対する応答を送信するまでの秒数。デフォルト値は0.0で、遅延はありません。"/>
+		<text name="reply_delay_seconds_label" value="秒"/>
 	</panel>
 </floater>
