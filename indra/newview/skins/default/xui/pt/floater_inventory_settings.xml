@@ -28,7 +28,7 @@
 	<check_box label="Mostrar estrela quando o item for favorito" name="favorite_star"/>
 	<check_box label="Mostrar estrela em pastas que contêm favoritos" name="favorite_hollow_star"/>
 	<check_box label="Texto colorido" name="favorites_color"/>
-	<text name="attachment_return_txt">
+	<text name="avatar_attachment_action">
 		Ao pressionar Enter em um anexo de avatar
 	</text>
 	<combo_box name="attach_combo">

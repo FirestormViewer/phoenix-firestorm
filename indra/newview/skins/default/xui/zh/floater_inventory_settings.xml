@@ -28,7 +28,7 @@
 	<check_box label="在收藏物件旁顯示星標" name="favorite_star" />
 	<check_box label="在收藏資料夾旁顯示空心星標" name="favorite_hollow_star" />
 	<check_box label="文字顏色" name="favorites_color" />
-	<text name="attachment_return_txt">
+	<text name="avatar_attachment_action">
 		按下Enter鍵或雙擊化身附件
 	</text>
 	<combo_box name="attach_combo">

@@ -1073,6 +1073,8 @@ bool LLAppViewer::init()
 // [/SL:KB]
 //  gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), LLUI::getLanguage());
 
+    loadLocalizedSettingsComments();
+
     // Setup LLTrans after LLUI::initClass has been called.
     initStrings();
 
@@ -3755,6 +3757,57 @@ bool LLAppViewer::initConfiguration()
     return true; // Config was successful.
 }
 
+static void apply_localized_comments(LLControlGroup& group, const LLSD& comments)
+{
+    for (LLSD::map_const_iterator it = comments.beginMap(); it != comments.endMap(); ++it)
+    {
+        LLControlVariablePtr control = group.getControl(it->first);
+        if (control.notNull())
+        {
+            const std::string comment = it->second.asString();
+            if (!comment.empty())
+            {
+                control->setComment(comment);
+            }
+        }
+    }
+}
+
+void LLAppViewer::loadLocalizedSettingsComments()
+{
+    std::string lang = LLUI::getLanguage();
+    if (lang.empty() || lang == "en")
+    {
+        return;
+    }
+
+    std::string path = gDirUtilp->findSkinnedFilename(
+        LLDir::XUI, "settings_comments.xml", LLDir::CURRENT_SKIN);
+    if (path.empty())
+    {
+        return;
+    }
+
+    llifstream infile;
+    infile.open(path.c_str());
+    if (!infile.is_open())
+    {
+        return;
+    }
+
+    LLSD comments;
+    if (LLSDParser::PARSE_FAILURE == LLSDSerialize::fromXML(comments, infile))
+    {
+        infile.close();
+        LL_WARNS("Settings") << "Failed to parse localized settings comments file: " << path << LL_ENDL;
+        return;
+    }
+    infile.close();
+
+    apply_localized_comments(gSavedSettings, comments);
+    apply_localized_comments(gSavedPerAccountSettings, comments);
+}
+
 // The following logic is replicated in initConfiguration() (to be able to get
 // some initial strings before we've finished initializing enough to know the
 // current language) and also in init() (to initialize for real). Somehow it
@@ -6090,6 +6143,7 @@ void LLAppViewer::idle()
     static LLCachedControl<U32> downscale_method(gSavedSettings, "RenderDownScaleMethod");
     gGLManager.mDownScaleMethod = downscale_method;
     LLImageGL::updateClass();
+    LLUIImage::updateClass();
 
     // Service the WorkQueue we use for replies from worker threads.
     // Use function statics for the timeslice setting so we only have to fetch
