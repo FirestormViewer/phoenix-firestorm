@@ -245,6 +245,7 @@ public:
     // <FS:PP> FIRE-35598: Custom filters in inventory (feature idea: Catznip)
     S32         getTabContainedAtPoint(S32 x, S32 y) const;
     void        setTabPadding(S32 index, S32 padding);
+    void setTabButtonVisible(const LLPanel* panel, bool visible);
     // </FS:PP>
 
     TabPosition getTabPosition() const { return mTabPosition; }
