@@ -124,7 +124,7 @@ jobs:
         with: 
           swap-storage: false
 
-      - name: Install GCC-13
+      - name: Install GCC 14.1
         if: runner.os == 'Linux'
         run: |
           # Retry add-apt-repository up to 3 times with timeout
@@ -141,11 +141,11 @@ jobs:
             }
           done
           sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 install -y gcc-13 g++-13
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 130 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-13
-          echo "CC=gcc-13"  >> $GITHUB_ENV
-          echo "CXX=g++-13" >> $GITHUB_ENV
+          sudo apt-get -o Acquire::Retries=3 install -y gcc-14 g++-14
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 \
+            --slave /usr/bin/g++ g++ /usr/bin/g++-14
+          echo "CC=gcc-14"  >> $GITHUB_ENV
+          echo "CXX=g++-14" >> $GITHUB_ENV
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
         with:
