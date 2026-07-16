@@ -51,6 +51,10 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          # aws/tap is preinstalled on the runner but is not used by this workflow.
+          if brew tap | grep -qx 'aws/tap'; then
+            brew untap aws/tap
+          fi
           brew install bash
           brew install gnu-sed
 
