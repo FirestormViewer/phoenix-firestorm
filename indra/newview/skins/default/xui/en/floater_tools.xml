@@ -3719,6 +3719,8 @@ Low ↔ Lwst
              follows="left|top"
              name="cmb_set_item"
              top="8"
+             font="DejaVu"
+             font.size="LSmall"
              width="175">
                 <icons_combo_box.drop_down_button
                   image_overlay="Inv_Script"
@@ -4130,7 +4132,9 @@ Low ↔ Lwst
              top_pad="1"
              tool_tip="Click to add the selected item to the object contents."
              name="btn_add_item"
-             width="90" />
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
             <button
              follows="left|top"
              height="16"
@@ -4138,7 +4142,9 @@ Low ↔ Lwst
              layout="topleft"
              left_pad="5"
              name="button permissions"
-             width="80" />
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
             <!-- </FS:minerjr> [FIRE-36685] -->
             <button
              top="8"
@@ -4170,6 +4176,8 @@ Low ↔ Lwst
              max_length_chars="300"
              highlight_text_field="true"
              name="contents_filter"
+             font="DejaVu"
+             font.size="LSmall"
              height="23"
              width="275" />
            <panel_inventory_object
