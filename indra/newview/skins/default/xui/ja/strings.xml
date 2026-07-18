@@ -6600,7 +6600,6 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Maximum">最大</string>
 
 	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
-
 	<string name="OmnifilterDefaultName">デフォルト</string>
 	<string name="OmnifilterExportDescription">包括フィルタのルール設定：[REPLACEMENT]</string>	<!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
 	<string name="FSAvatarAlignToggleMini">最小</string>
