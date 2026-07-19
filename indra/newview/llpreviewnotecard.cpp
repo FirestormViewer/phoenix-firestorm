@@ -195,7 +195,7 @@ void LLPreviewNotecard::updateByteCounter()
         if (bytes > (MAX_BYTES * 8 / 10))
             return LLColor4::yellow;
 
-        return LLColor4::white;
+        return LLUIColorTable::getInstance()->getColor("LabelTextColor"); // Use the actual default color from the Widget.
     };
     mByteCounter->setColor(getColorForByteCount());
 
