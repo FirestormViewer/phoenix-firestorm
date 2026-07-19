@@ -125,12 +125,8 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     {
         getChildView("button new script")->setEnabled(false);
         getChildView("btn_reset_scripts")->setEnabled(false); // <FS> Script reset in edit floater
-		// <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
-		getChildView("button new notecard")->setEnabled(false);
-        // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
-        static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
-        // Want to clear the saved New Item UUID as we may click on another object
-        new_item_ctrl->setNewItemUUID(LLUUID::null);
+        // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+        getChildView("button new notecard")->setEnabled(false);
         // </FS:mjr> [FIRE-36685]
         return;
     }
@@ -274,8 +270,7 @@ void LLPanelContents::clearContents()
 void LLPanelContents::onClickNewScript(void *userdata)
 {
     // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
-    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
-    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
     // Get the Panel Contents from the userdata void pointer.
     LLPanelContents* self = (LLPanelContents*)userdata;
     // </FS:mjr> [FIRE-36685]
@@ -384,8 +379,7 @@ void LLPanelContents::onClickRefresh(void *userdata)
 // static
 void LLPanelContents::onClickNewNotecard(void* userdata)
 {
-    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
-    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
     // Get the Panel Contents from the userdata void pointer.
     LLPanelContents* self = (LLPanelContents*)userdata;
     // Maintain RLV support for notecard object type being added.
@@ -415,7 +409,6 @@ void LLPanelContents::onClickNewNotecard(void* userdata)
     self->mFilterEditor->setText(LLStringExplicit(""));
     // Update the filter state
     self->onFilterEdit();
-    // </FS:Ansariel>
     // Create the LLSD paramater for the new notecard
     LLSD component("notecard");
 
@@ -426,7 +419,7 @@ void LLPanelContents::onClickNewNotecard(void* userdata)
     std::function<void(const LLUUID&)> callback_item_created = [handle](const LLUUID& new_id)
     {
         // Call the on Create Inventory Done of the new item controller which will kick off next steps
-        new_item_ctrl->onCreateInvDone(handle, new_id, std::bind(&LLPanelContents::onFinishCreateItem, (LLPanelContents*)handle.get()));
+        FSNewItemCtrl::getInstance()->onCreateInvDone(handle, new_id, std::bind(&LLPanelContents::onFinishCreateItem, (LLPanelContents*)handle.get()));
     };
 
     // Save and clear the Show Inventroy flags used to prevent the floaters appearing

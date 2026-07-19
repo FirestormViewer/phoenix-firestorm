@@ -1799,8 +1799,7 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
     LLUIColor item_color = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
 
     // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
-    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
-    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
     // Reset the latest creation time, to allow for finding the newest item below.
     new_item_ctrl->resetLatestCreationTime();
     // </FS:mjr> [FIRE-36685]
@@ -1879,10 +1878,10 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
     // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
     // Switch to the next state if not already done so.
     // Check to see if the new item control is in the drag and drop inventory to object start state
-    if (new_item_ctrl->checkState(FSNewItemCtrl::DND_INV_TO_OBJECT_START))
+    if (new_item_ctrl->checkState(FSNewItemCtrl::EAddNewItemState::DND_INV_TO_OBJECT_START))
     {
         // If so, can move on to the next state
-        new_item_ctrl->setState(FSNewItemCtrl::DND_INV_TO_OBJECT);
+        new_item_ctrl->setState(FSNewItemCtrl::EAddNewItemState::DND_INV_TO_OBJECT);
     }
     // </FS:mjr> [FIRE-36685]
 }
@@ -2049,10 +2048,8 @@ void LLPanelObjectInventory::idle(void* user_data)
         self->updateInventory();
     }
     // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
-    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
-    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
     // Process the current state using the current LLPanelObjectInveotory
-    new_item_ctrl->processStates(self);
+    FSNewItemCtrl::getInstance()->processStates(self);
     // <FS:mjr> [FIRE-36685]
 }
 

@@ -25,139 +25,119 @@
 // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
 
 #include "fsnewitemctrl.h"
-#include "llinventory.h"
-#include "llviewerinventory.h"
-#include "llselectmgr.h"
-#include "llcontrol.h" // gSavedSettings
+#include "llagent.h" // gAgentID
 #include "llinventorymodel.h" // gInventory
-#include "llagentdata.h" // gAgentID
+#include "llselectmgr.h"
+#include "llviewercontrol.h"
+#include "llviewerinventory.h"
 
-extern LLControlGroup gSavedSettings;
-extern LLInventoryModel gInventory;
-extern LLUUID gAgentID;
+constexpr static S32 SHOW_NEW_INVENTORY = 1;
+constexpr static S32 SHOW_IN_INVENTORY = 2;
 
 FSNewItemCtrl::FSNewItemCtrl() : LLSingleton<FSNewItemCtrl>(),
     mState(EAddNewItemState::IDLE),
     mItemAssetType(LLAssetType::AT_NONE),
     mOriginalItemUUID(),
-    mNewItemUUID()
+    mNewItemUUID(),
+    mLatestCreationTime(),
+    mLatestCreatedItem(nullptr),
+    mCurrentInventoryFlags(0)
 {
-
-}
-
-FSNewItemCtrl::~FSNewItemCtrl()
-{
-    // delete Xxx;
-}
-
-void FSNewItemCtrl::init()
-{
-    mState = EAddNewItemState::IDLE;
-    mItemAssetType = LLAssetType::AT_NONE;
-    mOriginalItemUUID.setNull();
-    mNewItemUUID.setNull();
 }
 
 void FSNewItemCtrl::processStates(LLPanelObjectInventory* panel_object_inv)
 {
     // Check if the passed in panel object inventory is valid, and if not, return
-    if (panel_object_inv == nullptr)
+    if (!panel_object_inv)
     {
         return;
     }
 
-    LLFolderView* folders = panel_object_inv->getRootFolder();
-
-    // Idle state, just return as there is nothing to process
-    if (mState == EAddNewItemState::IDLE)
+    switch (mState)
     {
-        return;
-    }
-    // Handle the start of the drag and drop the item from avatar inventory to the object's inventory
-    // wait until the inventory movement has finished before handling the item appearing in the inventory
-    else if (mState == EAddNewItemState::DND_INV_TO_OBJECT)
-    {
-        if (LLViewerObject* objectp = gObjectList.findObject(panel_object_inv->getTaskUUID()))
-        {
-            // If the inveotory is not pending and not dirty, then we want to move to the next step.
-            if (objectp && !objectp->isInventoryPending() && !objectp->isInventoryDirty())
+        using enum EAddNewItemState;
+        case IDLE:
+            // Idle state, just return as there is nothing to process
+            return;
+        case DND_INV_TO_OBJECT:
+            // Handle the start of the drag and drop the item from avatar inventory to the object's inventory
+            // wait until the inventory movement has finished before handling the item appearing in the inventory
+            if (LLViewerObject* objectp = gObjectList.findObject(panel_object_inv->getTaskUUID()))
             {
-                mState = EAddNewItemState::DND_INV_TO_OBJECT_DONE;
-            }
-        }
-    }
-    // Handles when the item appears, will select the new item and set it to rename.
-    // If the item is able to be opened, it will be opened.
-    else if (mState == EAddNewItemState::DND_INV_TO_OBJECT_DONE)
-    {
-        bool inventory_has_focus = panel_object_inv->hasInventory() && folders && gFocusMgr.childHasKeyboardFocus(folders);
-
-        // Restore the show new inventory current settings
-        restoreInventoryFlags();
-
-        panel_object_inv->setFocusRoot(true);
-
-        if (!mNewItemUUID.isNull())
-        {
-            // Flag that item needs to be renamed, needs to be done once added to the actual folder.
-            LLFolderViewItem* current_item = panel_object_inv->getItemByID(mNewItemUUID);
-            if (current_item && folders)
-            {
-                // Set the found
-                folders->setSelection(current_item, true, inventory_has_focus);
-                // mFolders->requestArrange();
-                folders->startRenamingSelectedItem();
-                // If the item is a gesture, notecard, text or script, we need to re-open the item floater to allow floater to
-                // modify the object content's item and not the one generated in the avatar's inventory.
-                if (mItemAssetType == LLAssetType::AT_LSL_TEXT || mItemAssetType == LLAssetType::AT_NOTECARD ||
-                    mItemAssetType == LLAssetType::AT_GESTURE || mItemAssetType == LLAssetType::AT_MATERIAL)
+                // If the inveotory is not pending and not dirty, then we want to move to the next step.
+                if (!objectp->isInventoryPending() && !objectp->isInventoryDirty())
                 {
-                    current_item->openItem();
+                    mState = EAddNewItemState::DND_INV_TO_OBJECT_DONE;
                 }
             }
-        }
-        // Turn off the do action
-        mState = EAddNewItemState::MOVE_INT_TO_TRASH_START;
-    }
-    else if (mState == EAddNewItemState::MOVE_INT_TO_TRASH_START)
-    {
-        // Once the object's inventory is done being processed, can switch back to the idle state
-        if (LLViewerObject* objectp = gObjectList.findObject(panel_object_inv->getTaskUUID()))
-        {
-            // If there is no original item (LSL scripts), can go back to normal
-            if (mOriginalItemUUID.isNull())
+            break;
+        case DND_INV_TO_OBJECT_DONE:
             {
-                onRemoveItemDone();
+                // Handles when the item appears, will select the new item and set it to rename.
+                // If the item is able to be opened, it will be opened.
+                LLFolderView* folders = panel_object_inv->getRootFolder();
+                bool inventory_has_focus = panel_object_inv->hasInventory() && folders && gFocusMgr.childHasKeyboardFocus(folders);
+
+                // Restore the show new inventory current settings
+                restoreInventoryFlags();
+
+                panel_object_inv->setFocusRoot(true);
+
+                if (!mNewItemUUID.isNull())
+                {
+                    // Flag that item needs to be renamed, needs to be done once added to the actual folder.
+                    LLFolderViewItem* current_item = panel_object_inv->getItemByID(mNewItemUUID);
+                    if (current_item && folders)
+                    {
+                        // Set the found
+                        folders->setSelection(current_item, true, inventory_has_focus);
+                        folders->scrollToShowSelection();
+                        // If the item is a notecard or script, we need to re-open the item floater to allow floater to
+                        // modify the object content's item and not the one generated in the avatar's inventory.
+                        if (mItemAssetType == LLAssetType::AT_LSL_TEXT || mItemAssetType == LLAssetType::AT_NOTECARD)
+                        {
+                            current_item->openItem();
+                        }
+                    }
+                }
+                // Turn off the do action
+                mState = EAddNewItemState::MOVE_INT_TO_TRASH_START;
             }
-            // Else if the inveotory is not pending and not dirty, then we want to move to the next step.
-            else if (objectp && !objectp->isInventoryPending() && !objectp->isInventoryDirty())
+            break;
+        case MOVE_INT_TO_TRASH_START:
+            // Once the object's inventory is done being processed, can switch back to the idle state
+            if (LLViewerObject* objectp = gObjectList.findObject(panel_object_inv->getTaskUUID()))
             {
-                // Remove the original inventory item and do a callback to set the
-                // state to the next one once it finishes.
-                LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(FSNewItemCtrl::onRemoveItemDone));
-                remove_inventory_item(mOriginalItemUUID, cb);
-                // Set the state to the move iventory to trash, which will spin until the callback is triggered
-                mState = EAddNewItemState::MOVE_INT_TO_TRASH;
+                // If there is no original item (LSL scripts), can go back to normal
+                if (mOriginalItemUUID.isNull())
+                {
+                    onRemoveItemDone();
+                }
+                // Else if the inveotory is not pending and not dirty, then we want to move to the next step.
+                else if (!objectp->isInventoryPending() && !objectp->isInventoryDirty())
+                {
+                    // Remove the original inventory item and do a callback to set the
+                    // state to the next one once it finishes.
+                    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&FSNewItemCtrl::onRemoveItemDone, this));
+                    remove_inventory_item(mOriginalItemUUID, cb);
+                    // Set the state to the move iventory to trash, which will spin until the callback is triggered
+                    mState = EAddNewItemState::MOVE_INT_TO_TRASH;
+                }
             }
-        }
+            break;
+        case MOVE_INT_TO_TRASH:
+            // No need to MOVE_INT_TO_TRASH as it's handled by the onRemoveItemDone callback method.
+        default:
+            break;
     }
-    // No need to MOVE_INT_TO_TRASH as it's handled by the onRemoveItemDone callback method.
 }
 
-// <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
-// static
 // Callback method for when an item is removed from the avatar's inventory to reset the internal state
 void FSNewItemCtrl::onRemoveItemDone()
 {
-    // Store the pointer to the FSNewItemCtrl as a static value as it is a singleton and
-    // saves from having to be called all the time.
-    static FSNewItemCtrl* self = FSNewItemCtrl::getInstance();
-    if (self)
-    {
-        // Set the new item state back to idle
-        self->setState(FSNewItemCtrl::EAddNewItemState::IDLE);
-        self->callFinishNewItem();
-    }
+    // Set the new item state back to idle
+    setState(FSNewItemCtrl::EAddNewItemState::IDLE);
+    callFinishNewItem();
 }
 
 // Call the Finish New Item callback method if it is valid.
@@ -175,14 +155,13 @@ void FSNewItemCtrl::onCreateInvDone(LLHandle<LLPanel> handle, const LLUUID& new_
     if (panel && new_id.notNull())
     {
         // The the selected object's root object
-        const bool children_ok = true;
+        constexpr bool children_ok = true;
         LLPointer<LLViewerObject> object = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(children_ok);
 
         if (object && new_id.notNull())
         {
             // Get the Inventory Item from the new ID passed in
-            LLViewerInventoryItem* item = gInventory.getItem(new_id);
-            if (item)
+            if (LLViewerInventoryItem* item = gInventory.getItem(new_id))
             {
                 // If the item can move to the target object
                 if (LLToolDragAndDrop::isInventoryDropAcceptable(object, item))
@@ -213,7 +192,7 @@ void FSNewItemCtrl::startDNDInvToObject(const LLUUID& original_UUID, const void_
     mFinishNewItemCallback = cb;
 }
 
-bool FSNewItemCtrl::checkAgainstLatestObject(const LLPointer<LLInventoryObject> &obj)
+bool FSNewItemCtrl::checkAgainstLatestObject(const LLPointer<LLInventoryObject>& obj)
 {
     // If there is a need to do an action on the item, then
     if (mState == EAddNewItemState::DND_INV_TO_OBJECT_START)
@@ -221,8 +200,7 @@ bool FSNewItemCtrl::checkAgainstLatestObject(const LLPointer<LLInventoryObject> 
         // This is needed to be able to convert the LLPointer<LLInventoryObject> to an LLInventoryItem*.
         // Issue is the existing methods ends up returning a const pointer, which you then cannnot
         // act upon or return with a static method call.
-        LLInventoryObject* current_object = obj;
-        LLInventoryItem*   current_item   = dynamic_cast<LLInventoryItem*>(current_object);
+        LLInventoryItem* current_item = dynamic_cast<LLInventoryItem*>(obj.get());
 
         // Need to search for the newest item as the new item recieved a new UUID so the one
         // from the LLPanelContents.cpp no longer exists.
@@ -250,25 +228,20 @@ bool FSNewItemCtrl::checkAgainstLatestObject(const LLPointer<LLInventoryObject> 
 void FSNewItemCtrl::saveAndClearInventoryFlags()
 {
     // Save the show new, in and gesture inventory settings
-    S32 backup_inventory_flags = 0;
-    backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowNewInventory")) * SHOW_NEW_INVENTORY;
-    backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowInInventory")) * SHOW_IN_INVENTORY;
-    backup_inventory_flags |= S32(gSavedSettings.getBOOL("ShowGestureInventory")) * SHOW_GESTURE_INVENTORY;
-    gSavedSettings.setS32("BackupInventoryFlags", backup_inventory_flags);
+    mCurrentInventoryFlags = 0;
+    mCurrentInventoryFlags |= gSavedSettings.getBOOL("ShowNewInventory") ? SHOW_NEW_INVENTORY : 0;
+    mCurrentInventoryFlags |= gSavedSettings.getBOOL("ShowInInventory") ? SHOW_IN_INVENTORY : 0;
 
     // do not pop up preview floaters when creating new and in inventory items.
     gSavedSettings.setBOOL("ShowNewInventory", false);
     gSavedSettings.setBOOL("ShowInInventory", false);
-    gSavedSettings.setBOOL("ShowGestureInventory", false);
 }
 
 // Restores the Show Inventory settings.xml flags.
 void FSNewItemCtrl::restoreInventoryFlags()
 {
     // Restore the show new inventory current settings
-    S32 backup_inventory_flags = gSavedSettings.getS32("BackupInventoryFlags");
-    gSavedSettings.setBOOL("ShowGestureInventory", bool(backup_inventory_flags & SHOW_GESTURE_INVENTORY));
-    gSavedSettings.setBOOL("ShowNewInventory", bool(backup_inventory_flags & SHOW_NEW_INVENTORY));
-    gSavedSettings.setBOOL("ShowInInventory", bool(backup_inventory_flags & SHOW_IN_INVENTORY));
+    gSavedSettings.setBOOL("ShowNewInventory", (mCurrentInventoryFlags & SHOW_NEW_INVENTORY) == SHOW_NEW_INVENTORY);
+    gSavedSettings.setBOOL("ShowInInventory", (mCurrentInventoryFlags & SHOW_IN_INVENTORY) == SHOW_IN_INVENTORY);
 }
 // </FS:mjr> [FIRE-36685]
