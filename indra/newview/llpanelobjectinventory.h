@@ -47,6 +47,9 @@ class LLViewerObject;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLPanelObjectInventory : public LLPanel, public LLVOInventoryListener
 {
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    friend class FSNewItemCtrl; // Need to declare FSNewItemCtrl a friend class to access the protected methods(getItemByID())
+    // </FS:mjr> [FIRE-36685]
 public:
     struct Params : public LLInitParam::Block<Params, LLPanel::Params>
     {

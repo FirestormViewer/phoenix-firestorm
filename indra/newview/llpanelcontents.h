@@ -51,8 +51,13 @@ public:
     void            refresh();
     void            clearContents();
 
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    void onClickAddItemToObject(); // Adds the actual item to the object's Content Inventory.
+    void onFinishCreateItem();
+    // </FS:mjr> [FIRE-36685]
 
     static void     onClickNewScript(void*);
+    static void     onClickNewNotecard(void*); // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
     static void     onClickPermissions(void*);
     static void     onClickResetScripts(void*); // <FS> Script reset in edit floater
     static void     onClickRefresh(void*);

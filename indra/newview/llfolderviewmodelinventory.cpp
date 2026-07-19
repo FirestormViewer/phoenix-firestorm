@@ -31,6 +31,7 @@
 #include "llinventorypanel.h"
 #include "lltooldraganddrop.h"
 #include "llfavoritesbar.h"
+#include "fsnewitemctrl.h" // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
 
 //
 // class LLFolderViewModelInventory
@@ -333,6 +334,24 @@ bool LLFolderViewModelItemInventory::filter(LLFolderViewFilter& filter)
 
 bool LLInventorySort::operator()(const LLFolderViewModelItemInventory* const& a, const LLFolderViewModelItemInventory* const& b) const
 {
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
+    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    // When new items are created with the Build Widow, want the new item to appear at
+    // the top of the list so the user can edit the name.
+    // Stores the UUID of the new item as a static value in the LLPanelObjectInventory.
+    if (!new_item_ctrl->getNewItemUUID().isNull())
+    {
+        if (a->getUUID() == new_item_ctrl->getNewItemUUID())
+        {
+            return true;
+        }
+        else if (b->getUUID() == new_item_ctrl->getNewItemUUID())
+        {
+            return false;
+        }
+    }
+    // </FS:mjr> [FIRE-36685]
     // Ignore sort order for landmarks in the Favorites folder.
     // In that folder, landmarks should be always sorted as in the Favorites bar. See EXT-719
     if (a->getSortGroup() == SG_ITEM

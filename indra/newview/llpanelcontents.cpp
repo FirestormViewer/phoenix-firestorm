@@ -67,6 +67,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "fsnewitemctrl.h" // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
 
 //
 // Imported globals
@@ -89,6 +90,7 @@ bool LLPanelContents::postBuild()
     setMouseOpaque(false);
 
     childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
+    childSetAction("button new notecard", &LLPanelContents::onClickNewNotecard, this); // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
     childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
     childSetAction("btn_reset_scripts", &LLPanelContents::onClickResetScripts, this); // <FS> Script reset in edit floater
     childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
@@ -123,6 +125,13 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     {
         getChildView("button new script")->setEnabled(false);
         getChildView("btn_reset_scripts")->setEnabled(false); // <FS> Script reset in edit floater
+		// <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+		getChildView("button new notecard")->setEnabled(false);
+        // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
+        static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+        // Want to clear the saved New Item UUID as we may click on another object
+        new_item_ctrl->setNewItemUUID(LLUUID::null);
+        // </FS:mjr> [FIRE-36685]
         return;
     }
 
@@ -169,6 +178,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
     }
 
     getChildView("button new script")->setEnabled(objectIsOK);
+    getChildView("button new notecard")->setEnabled(objectIsOK); // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
     getChildView("btn_reset_scripts")->setEnabled(objectIsOK);
     // </FS:PP>
 
@@ -263,6 +273,12 @@ void LLPanelContents::clearContents()
 // static
 void LLPanelContents::onClickNewScript(void *userdata)
 {
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
+    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    // Get the Panel Contents from the userdata void pointer.
+    LLPanelContents* self = (LLPanelContents*)userdata;
+    // </FS:mjr> [FIRE-36685]
     const bool children_ok = true;
     LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(children_ok);
     if(object)
@@ -289,6 +305,10 @@ void LLPanelContents::onClickNewScript(void *userdata)
             {
                 if (auto custom_script = gInventory.getItem(custom_script_id); custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
                 {
+                    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+                    // Flag the new script to also needs to be scrolled to and opened if needed.
+                    new_item_ctrl->startDNDInvToObject(LLUUID::null, std::bind(&LLPanelContents::onFinishCreateItem, self));
+                    // </FS:mjr> [FIRE-36685]
                     LLToolDragAndDrop::dropScript(object, custom_script, true, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
                     return;
                 }
@@ -308,6 +328,10 @@ void LLPanelContents::onClickNewScript(void *userdata)
             PERM_MOVE | LLFloaterPerms::getNextOwnerPerms("Scripts"));
         std::string desc;
         LLViewerAssetType::generateDescriptionFor(LLAssetType::AT_LSL_TEXT, desc);
+        // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+        // Flag the new script to also needs to be scrolled to and opened if needed.
+        new_item_ctrl->startDNDInvToObject(LLUUID::null, std::bind(&LLPanelContents::onFinishCreateItem, self));
+        // </FS:mjr> [FIRE-36685]
         LLPointer<LLViewerInventoryItem> new_item =
             new LLViewerInventoryItem(
                 LLUUID::null,
@@ -355,3 +379,70 @@ void LLPanelContents::onClickRefresh(void *userdata)
     LLPanelContents* self = (LLPanelContents*)userdata;
     self->refresh();
 }
+
+// <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+// static
+void LLPanelContents::onClickNewNotecard(void* userdata)
+{
+    // Store a static pointer to the singleton FSNewItemCtrl so that it only has to be looked up once.
+    static FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    // Get the Panel Contents from the userdata void pointer.
+    LLPanelContents* self = (LLPanelContents*)userdata;
+    // Maintain RLV support for notecard object type being added.
+    const bool children_ok = true;
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject(children_ok);
+
+    // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.0.5a
+    if (rlv_handler_t::isEnabled()) // Fallback code [see LLPanelContents::getState()]
+    {
+        if (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit()))
+        {
+            return; // Disallow creating new scripts in a locked attachment
+        }
+        else if ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)))
+        {
+            if ((isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == object->getRootEdit()))
+                return; // .. or in a linkset the avie is sitting on under @unsit=n/@sittp=n
+        }
+    }
+    // [/RLVa:KB]
+
+    // Need to disable the new notecard button to prevent spaming the button and causing inventory issues
+    self->getChildView("button new notecard")->setEnabled(false);
+    // Need to save the filter first so it is not lost
+    std::string save_filter = self->mFilterEditor->getText();
+    // Clear the actual filter
+    self->mFilterEditor->setText(LLStringExplicit(""));
+    // Update the filter state
+    self->onFilterEdit();
+    // </FS:Ansariel>
+    // Create the LLSD paramater for the new notecard
+    LLSD component("notecard");
+
+    // Callback handle to allow for moving the new item to the object from the avatar inventory
+    // Also moves the new item in the users avatar inventory to the trash.
+    // Will also open up the dialog for Gesture and Notecards in the object's inventory.
+    LLHandle<LLPanel> handle = self->getHandle();
+    std::function<void(const LLUUID&)> callback_item_created = [handle](const LLUUID& new_id)
+    {
+        // Call the on Create Inventory Done of the new item controller which will kick off next steps
+        new_item_ctrl->onCreateInvDone(handle, new_id, std::bind(&LLPanelContents::onFinishCreateItem, (LLPanelContents*)handle.get()));
+    };
+
+    // Save and clear the Show Inventroy flags used to prevent the floaters appearing
+    // when items that have floaters like the Notecard, Gesture, Material and Script
+    // from opening the temp item in the avatars inventory.
+    new_item_ctrl->saveAndClearInventoryFlags();
+    // Create the new item using the menu system in the user's avatar inventory.
+    // The callback from above will move the item to the object and remove it from the user's inventory after.
+    menu_create_inventory_item(NULL, LLUUID::null, component, LLUUID::null, callback_item_created);
+    // Restore the filter
+    self->mFilterEditor->setText(LLStringExplicit(save_filter));
+}
+
+// Callback method for when the item finishes
+void LLPanelContents::onFinishCreateItem()
+{
+    getChildView("button new notecard")->setEnabled(true);
+}
+// </FS:mjr> [FIRE-36685]
