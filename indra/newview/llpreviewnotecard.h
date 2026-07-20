@@ -132,6 +132,10 @@ protected:
     boost::signals2::connection mFontSizeChangedCallbackConnection;
     void onFontChanged();
     // </FS:Ansariel>
+    // <FS:mjr>
+    // Callback method for the resizebar so the byte counter can become invisible if overlapped by the buttons
+    void onResizeFloater();
+    // </FS:mjr>
 
 protected:
     LLViewerTextEditor* mEditor = nullptr;
