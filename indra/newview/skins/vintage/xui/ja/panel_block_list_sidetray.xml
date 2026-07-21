@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="ブロックされた住民やオブジェクトはありません。"/>
+	<string name="no_filtered_blocked" value="検索条件に一致するブロックされた住民やオブジェクトはありません。"/>
+	<string name="loading_blocked" value="ブロックされた住民とオブジェクトを読み込んでいます…"/>
+	<string name="failed_blocked" value="ブロックリストは現在使用できません。"/>
 	<block_list name="blocked" tool_tip="現在ブロックされている住人一覧"/>
 	<layout_stack name="block_list_sidetray_main">
 		<!-- will be shown or hidden in code, depending on whether this

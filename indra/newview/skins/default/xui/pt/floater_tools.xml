@@ -530,6 +530,7 @@ Baix ↔ Mín
 		<panel label="Textura" name="Texture"/>
 		<panel label="Conteúdo" name="Contents">
 			<button label="Novo script" label_selected="Novo script" name="button new script" width="80"/>
+			<button label="Novo notecard" label_selected="Novo notecard" name="button new notecard" width="90"/>
 			<button label="Permissões" name="button permissions" width="95" left_pad="3"/>
 			<button label="Atualizar" name="button refresh" width="92" left_pad="3"/>
 			<button label="Reiniciar scripts" name="btn_reset_scripts" width="92"/>

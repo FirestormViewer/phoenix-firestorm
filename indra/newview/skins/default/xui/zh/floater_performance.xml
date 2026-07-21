@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="提升圖形速度">
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				每秒影格數
+			</text>
+			<text name="fps_desc1_lbl">
+				請等待 5-10 秒
+			</text>
+			<text name="fps_desc2_lbl">
+				讓更改完全生效。
+			</text>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="autoadjustments_subpanel">
+			<text name="auto_adj_lbl">
+				自動調整設定（推薦）
+			</text>
+			<text name="auto_adj_desc">
+				允許自動調整以達到您偏好的影格率。
+			</text>
+		</panel>
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				圖形設定
+			 </text>
+			 <text name="settings_desc">
+				選擇顯示距離、水面、光照等設定。
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				附近的化身
+			</text>
+			<text name="avatars_nearby_desc">
+				管理哪些附近的化身完全顯示。
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				您的化身複雜度
+			</text>
+			<text name="complexity_info">
+				如果您對當前影格率不滿意，請降低您化身的複雜度。
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				您當前使用的HUD
+			</text>
+			<text name="huds_desc">
+				移除未使用的HUD可以提高速度。
+			</text>
+		</panel>
+	</panel>
+</floater>

@@ -17,10 +17,7 @@
 	</text_editor>
 	<button name="Search" tool_tip="検索と置き換えを表示します。"/>
 	<button label="編集…" label_selected="編集" name="Edit"/>
-	<text
-		name="byte_counter"
-		initial_value="バイト: [BYTES] / [MAX]"
-	/>
+	<text name="byte_counter" initial_value="バイト数：[BYTES]／[MAX]"/>
 	<button label="保存" label_selected="保存" name="Save"/>
 	<button label="削除" label_selected="削除" name="Delete"/>
 </floater>

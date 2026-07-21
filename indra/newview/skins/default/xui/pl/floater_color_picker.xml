@@ -45,6 +45,6 @@
 		^ Obecny kolor ^
 	</text>
 	<text name="(Drag below to save.)">
-		(Przeciągnij by zapisać)
+		(Przeciągnij w dół)
 	</text>
 </floater>

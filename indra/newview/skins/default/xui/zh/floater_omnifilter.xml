@@ -29,7 +29,7 @@
 	<layout_stack name="needle_list_stack">
 		<layout_panel name="needle_list_layout">
 			<check_box name="enable_omnifilter" label="啟用萬能過濾器"/>
-			<check_box name="show_omnifilter_controls" label="在選單列顯示萬能過濾器工具"/>
+			<check_box name="show_omnifilter_controls" tool_tip="啟用後，將在主介面頂部選單列顯示快捷按鈕。" label="在選單列顯示萬能過濾器工具"/>
 			<fs_scroll_list name="needle_list">
 				<fs_scroll_list.columns name="enabled" label="啟用"/>
 				<fs_scroll_list.columns name="needle_name" label="規則"/>
@@ -68,8 +68,8 @@
 		</combo_box>
 		<text name="content_label" value="內容:"/>
 		<text_editor name="content" tool_tip="訊息的實際文本" />
-		<check_box name="content_case" tool_tip="區分大小寫" />
 		<button name="btn_match_dlg_btn_lbl" label="匹配對話方塊按鈕文字" tool_tip="允許匹配對話框視窗中的按鈕文字，可用於自動回應指定按鈕。"/>
+		<check_box name="content_case" tool_tip="區分大小寫" />
 		<combo_box name="content_match_type" tool_tip="匹配模式">
 			<combo_item name="content_exact">
 				<column name="longtext" label="完全匹配"/>
@@ -81,7 +81,7 @@
 				<column name="longtext" label="正規表示式"/>
 			</combo_item>
 		</combo_box>
-		<text name="region_name_label" value="區域名稱：" tool_tip="來源的區域名稱。僅適用於物件接收請求相關功能。"/>
+		<text name="region_name_label" value="區域名稱："/>
 		<line_editor name="region_name" tool_tip="來源的地區名稱。僅適用於庫存給予。"/>
 		<text name="owner_label" value="所有者UUID："/>
 		<line_editor name="owner_uuid" tool_tip="群組邀請場景：填寫群組UUID&#10;物件聊天訊息／所有者訊息／除錯訊息／私聊訊息：填寫物件UUID&#10;物件私聊訊息：填寫物件所有者UUID&#10;其他所有場景：填寫發送者的UUID"/>

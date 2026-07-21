@@ -16,6 +16,13 @@
 			<menu_item_call name="replace_links" label="リンクを修正"/>
 			<menu_item_call name="inventory_new_window" label="新しいインベントリウィンドウ"/>
 			<menu_item_check label="保護フォルダ" name="Protected Folders"/>
+			<menu_item_check label="インベントリ設定" name="inv_settings"/>
+			<menu_item_check label="最新タブを表示" name="show_recent_tab"/>
+			<menu_item_check label="着用中タブを表示" name="show_worn_tab"/>
+			<menu_item_check label="お気に入りタブを表示" name="show_favorites_tab"/>
+			<menu_item_check label="一覧表示" name="list_view"/>
+			<menu_item_check label="ギャラリー表示" name="gallery_view"/>
+			<menu_item_check label="複合表示" name="combination_view"/>
 			<menu_item_check label="ダブルクリックしてオブジェクトを追加装着" name="add_inv_toggle"/>
 			<menu_item_check label="ダブルクリックして服装を追加装着" name="add_invclothing_toggle"/>
 			<menu_item_call name="inventory_show_filters" label="フィルタを表示"/>
@@ -63,6 +70,13 @@
 			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上に並べ替え"/>
 		</menu>
 		<menu label="検索" name="inventory_search_menu">
+			<!-- search visibility settings -->
+			<menu_item_check label="アウトフィットを検索" name="search_outfits"/>
+			<menu_item_check label="ゴミ箱を検索" name="search_trash"/>
+			<menu_item_check label="ライブラリを検索" name="search_library"/>
+			<!-- this is already in our menu, further down
+			<menu_item_check label="リンクを含む" name="include_links"/>
+			-->
 			<menu_item_check name="inventory_search_by_name" label="名前"/>
 			<menu_item_check name="inventory_search_by_creator" label="制作者"/>
 			<menu_item_check name="inventory_search_by_description" label="説明"/>

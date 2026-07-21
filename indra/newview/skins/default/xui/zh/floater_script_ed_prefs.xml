@@ -54,7 +54,7 @@
 	<text name="prefs_label">
 		指令碼編輯器選項：
 	</text>
-	<check_box name="convert_tabs_to_spaces_checkbox" label="將製表符轉換為空格" tool_tip="如果啟用，當從外部編輯器黏貼指令碼時，製表符將被轉換為空格（通常是4個）。" />
+	<check_box name="convert_tabs_to_spaces_checkbox" label="將製表符轉換為空格"/>
 	<check_box label="啟用LSL前處理器" tool_tip="為LSL指令碼啟用前處理器支援" name="preproc_checkbox" />
 	<check_box label="指令碼最佳化器" tool_tip="最佳化指令碼所需的空間。" name="preprocoptimizer_checkbox" />
 	<check_box label="switch()指令" tool_tip="提供switch()指令進行流程控制。" name="preprocswitch_checkbox" />

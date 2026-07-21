@@ -8,7 +8,6 @@
 文字: [MSG_DESCRIPTION]
 	</floater.string>
 	<button name="refresh_screenshot" tool_tip="更新相片" />
-	<check_box label="使用這張快照" name="screen_check" />
 	<text name="reporter_title">
 		檢舉者：
 	</text>
@@ -20,9 +19,6 @@
 	</text>
 	<text name="pos_title">
 		位置：
-	</text>
-	<text name="pos_field">
-		{128.1, 128.1, 15.4}
 	</text>
 	<text name="select_object_label">
 		點擊按鈕，再點擊違規的物件：

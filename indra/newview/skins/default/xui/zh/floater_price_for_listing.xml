@@ -10,9 +10,6 @@
 	<text name="price_text">
 		刊登費：
 	</text>
-	<text name="price_symbol">
-		L$
-	</text>
 	<button label="確定" name="set_price_btn" />
 	<button label="取消" name="cancel_btn" />
 </floater>

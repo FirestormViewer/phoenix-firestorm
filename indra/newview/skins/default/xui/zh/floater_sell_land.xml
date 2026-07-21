@@ -23,12 +23,6 @@
 			<text name="price_text">
 				選擇適合的價格。
 			</text>
-			<text name="price_ld">
-				L$
-			</text>
-			<line_editor name="price">
-				0
-			</line_editor>
 			<text name="price_per_m">
 				（每平方公尺 [PER_METER] L$）
 			</text>

@@ -48,6 +48,7 @@
 			<check_box name="regular_expression" label="正規表現を使用"/>
 			<button name="search" label="検索"/>
 			<button name="clear" label="クリア"/>
+			<button name="copy_link" label="リンクとしてコピー" tool_tip="現在の検索およびフィルタ設定を再現する secondlife:///app/openfloater/area_search?... 形式でリンクをコピーします。"/>
 		</panel>
 		<panel label="フィルタ" name="area_search_filter_panel">
 			<text name="only_list">

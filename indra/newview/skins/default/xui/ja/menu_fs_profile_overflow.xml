@@ -12,7 +12,7 @@
 	<menu_item_call label="コンタクトセットに追加" name="add_to_contact_set"/>
 	<menu_item_call label="名前をコーピー" name="copy_name_to_clipboard"/>
 	<menu_item_call label="ＵＲＩをコピー" name="copy_uri_to_clipboard"/>
-	<menu_item_call label="ＵＵＩＤをコピー" name="copy_key_to_clipboard"/>
+	<menu_item_call label="ＵＵＩＤ／エージェントＩＤをコピー" name="copy_key_to_clipboard"/>
 	<menu_item_call label="キック" name="kick"/>
 	<menu_item_call label="フリーズ" name="freeze"/>
 	<menu_item_call label="フリーズ解除" name="unfreeze"/>

@@ -1673,6 +1673,9 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 	<string name="FSInventoryCustomTabDefaultName">
 		Personalizado
 	</string>
+	<string name="FSInventoryCustomTabShowHidden">
+		Mostrar abas ocultas
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Não encontrou o que procura? Tente [secondlife:///app/search/places/[SEARCH_TERM] Buscar].
 	</string>

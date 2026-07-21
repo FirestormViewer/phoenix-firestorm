@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="グループのタイトル">
 	<floater.string name="NoGroupTitle" value="＜グループタイトルなし＞"/>
-	<floater.string name="ClearAllRegions" value="全地域をクリア"/>
+	<floater.string name="ClearAllRegions" value="全リージョンをクリア"/>
 	<filter_editor label="グループのタイトルでフィルタ" name="filter_input"/>
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="タイトル"/>
 		<column name="groupname" label="グループ"/>
-		<column name="regionname" label="自動地域"/>
+		<column name="regionname" label="自動リージョン"/>
 	</scroll_list>
 	<button tool_tip="グループの使用可能なタイトル一覧を更新します。" name="btnRefresh" />
-	<button name="btnSetRegion" label="この地域" tool_tip="選択したタイトルに現在の地域を割り当てます"/>
-	<button name="btnSetRegionManual" label="地域を入力" tool_tip="選択したタイトルに割り当てる地域名を入力します"/>
-	<button name="btnClearRegion" label="地域を消去" tool_tip="選択したタイトルから地域の割り当てを削除します"/>
-	<button name="btnInfo" label="情報" tool_tip="選択したタイトルのグループに関する情報を表示します。" />
+	<button name="btnSetRegion" label="このリージョン" tool_tip="現在のリージョンに選択したタイトルを割り当てます。"/>
+	<button name="btnSetRegionManual" label="リージョン名を入力" tool_tip="割り当てたいリージョン名を手動で入力します。"/>
+	<button name="btnClearRegion" label="リージョンを消去" tool_tip="リージョンの割り当てを削除します。"/>
+	<button name="btnInfo" label="情報" tool_tip="選択したタイトルからリージョンの割り当てを削除します。" />
 	<button name="btnActivate" label="アクティブ" tool_tip="選択したグループのタイトルをアクティブにします。"/>
 </floater>

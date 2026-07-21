@@ -17,6 +17,9 @@
 		<pie_slice label="動けなくする" name="Freeze..."/>
 		<pie_slice label="コーリングカードを渡す" name="Give Calling Card"/>
 		<pie_slice label="グループに招待" name="Group Invite..."/>
+		<!-- [FS:Chanayane] Compass floater - face towards avatar from pie menu -->
+		<pie_slice label="顔を向ける" name="Face towards"/>
+		<!-- [/FS:Chanayane] -->
 		<pie_slice label="追放する…" name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="詳細　＞">
 			<!-- ## Zi: Is this the right thing to use for avatar textures? -->

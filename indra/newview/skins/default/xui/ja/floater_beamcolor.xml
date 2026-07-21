@@ -7,17 +7,14 @@
 		終了色
 	</floater.string>
 	<text name="beamcolor_text">
-		マウスを使用して、ビームカラーの開始と終了に使用する色を
-選択してください。
-左クリックで開始位置を変更します。
-右クリックで終了位置を変更します。
+		マウスを使用して、ビームカラーの開始と終了に使用する色を選択してください。左クリックで開始位置を変更します。右クリックで終了位置を変更します。
 	</text>
 	<color_swatch name="BeamColor_Preview" tool_tip="クリックでカラーピッカーを開きます。"/>
 	<text name="beamcolor_text2">
 		プレビュー
 	</text>
-	<slider name="BeamColor_Speed" label="回転速度：" tool_tip="カラーサイクルのスピードをコントロールできます"/>
+	<slider name="BeamColor_Speed" label="回転速度：" tool_tip="カラーサイクルのスピードをコントロールできます。"/>
 	<button label="保存" name="BeamColor_Save"/>
 	<button label="読み込む" name="BeamColor_Load" />
 	<button label="キャンセル" name="BeamColor_Cancel"/>
-</floater> 
+</floater>

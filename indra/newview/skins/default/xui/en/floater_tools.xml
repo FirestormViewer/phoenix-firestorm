@@ -3689,7 +3689,7 @@ Low ↔ Lwst
          width="295">
             <button
              follows="left|top"
-             height="35"
+             height="16"
              label="New Script"
              label_selected="New Script"
              layout="topleft"
@@ -3701,10 +3701,23 @@ Low ↔ Lwst
              font.size="LSmall" />
             <button
              follows="left|top"
+             height="16"
+             label="New Notecard"
+             label_selected="New Notecard"
+             layout="topleft"
+             left="10"
+             name="button new notecard"
+             top_pad="4"
+             width="90"
+             font="DejaVu"
+             font.size="LSmall" />
+            <button
+             follows="left|top"
              height="35"
              label="Permissions"
              layout="topleft"
              left_pad="5"
+			 top="8"
              name="button permissions"
              width="80"
              font="DejaVu"

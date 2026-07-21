@@ -13,47 +13,6 @@
 	<global name="implicitclosebutton">
 		關閉
 	</global>
-	<template name="okbutton">
-		<form>
-			<button name="OK_okbutton" text="$yestext"/>
-		</form>
-	</template>
-	<template name="okignore">
-		<form>
-			<button name="OK_okignore" text="$yestext"/>
-		</form>
-	</template>
-	<template name="okcancelbuttons">
-		<form>
-			<button name="OK_okcancelbuttons" text="$yestext"/>
-			<button name="Cancel_okcancelbuttons" text="$notext"/>
-		</form>
-	</template>
-	<template name="okcancelignore">
-		<form>
-			<button name="OK_okcancelignore" text="$yestext"/>
-			<button name="Cancel_okcancelignore" text="$notext"/>
-		</form>
-	</template>
-	<template name="okhelpbuttons">
-		<form>
-			<button name="OK_okhelpbuttons" text="$yestext"/>
-			<button name="Help" text="$helptext"/>
-		</form>
-	</template>
-	<template name="okhelpignore">
-		<form>
-			<button name="OK_okhelpignore" text="$yestext"/>
-			<button name="Help_okhelpignore" text="$helptext"/>
-		</form>
-	</template>
-	<template name="yesnocancelbuttons">
-		<form>
-			<button name="Yes" text="$yestext"/>
-			<button name="No" text="$notext"/>
-			<button name="Cancel_yesnocancelbuttons" text="$canceltext"/>
-		</form>
-	</template>
 	<notification label="未知的通知訊息" name="MissingAlert">
 		你的 [APP_NAME] 版本無法顯示它剛剛收到的通知。  請確定你安裝了最新版本的檢視器。
 
@@ -753,7 +712,7 @@
 		<url name="url">
 			[URL]
 		</url>
-		<usetemplate ignoretext="我的顯示驅動程式太老舊" name="okcancelignore" notext="取消" yestext="是"/>
+		<usetemplate ignoretext="我的顯示驅動程式太老舊" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>
 	<notification name="UnknownGPU">
 		你的系統含有一個 [APP_NAME] 無法辨認的顯示卡。
@@ -768,6 +727,19 @@
 為了避免一些典型的驅動錯誤，圖形品質將被設定為低。一些圖形功能將被關閉。
 我們建議您更新您的顯示卡驅動程式。
 您可以在偏好設定 &gt; 顯示中重新提高圖形品質。
+	</notification>
+	<notification name="AutoFPSConfirmDisable">
+		變更此設定將停用效能自動調校，並關閉「自動設定」。
+確定要繼續嗎？
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
+	</notification>
+	<notification name="AdvancedLightingConfirm">
+		若要啟用進階光照，必須將圖形品質提升至等級 4。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	</notification>
+	<notification name="ShadowsConfirm">
+		若要啟用陰影，必須將圖形品質提升至等級 4。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定" />
 	</notification>
 	<notification name="RegionNoTerraforming">
 		這個 [REGION] 區域並不允許變更地形。
@@ -1615,6 +1587,13 @@
 如果你是第一次使用 [CURRENT_GRID]，你將需要建立新帳號才可登錄。
 		<usetemplate name="okcancelbuttons" notext="繼續" yestext="建立帳號…"/>
 	</notification>
+	<notification name="LoginCantRemoveUsername">
+		已儲存的使用者名稱可以在我自己 &gt; 偏好設定 &gt; 進階 &gt; 記住的使用者名稱中刪除。
+	</notification>
+	<notification name="LoginCantRemoveCurUsername">
+		忘記目前登入的使用者名稱需要先登出。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確認並登出" />
+	</notification>
 	<notification name="LoginPacketNeverReceived">
 		連線出現問題。 問題可能出在你的網路連線或 [CURRENT_GRID]。
 
@@ -1724,13 +1703,13 @@ SHA1指紋：[MD5_DIGEST]
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="InvalidTerrainBitDepth">
-無法設定區域紋理：
+		無法設定區域紋理：
 地形紋理 [TEXTURE_NUM] 的位元深度 [TEXTURE_BIT_DEPTH] 無效。
 
 請將紋理 [TEXTURE_NUM] 替換成RGB [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點擊「應用」。
 	</notification>
 	<notification name="InvalidTerrainAlphaNotFullyLoaded">
-無法設定區域紋理:
+		無法設定區域紋理:
 地形紋理 [TEXTURE_NUM] 未完全載入,但由於位深度為 [TEXTURE_BIT_DEPTH],假定其包含透明度。目前不支援地形紋理的透明度。
 
 如果紋理 [TEXTURE_NUM] 是不透明的,請等待紋理完全載入後再次點擊"應用"。
@@ -1738,33 +1717,39 @@ SHA1指紋：[MD5_DIGEST]
 不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainAlpha">
-無法設定區域紋理:
+		無法設定區域紋理:
 地形紋理 [TEXTURE_NUM] 包含透明度。目前不支援地形紋理的透明度。
 
 請將紋理 [TEXTURE_NUM] 替換為不透明的RGB圖像,然後再次點擊"應用"。
 
 不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
+	<notification name="InvalidTerrainSize">
+		無法設定區域紋理：
+地形紋理 [TEXTURE_NUM] 過大 - [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y]。
+
+請將紋理 [TEXTURE_NUM] 替換為尺寸為 [MAX_SIZE]x[MAX_SIZE] 或更小的 RGB 紋理，然後再次點擊"應用"。
+	</notification>
 	<notification name="InvalidTerrainMaterialNotLoaded">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 未載入。
 
 請等待材質載入完成,或將材質 [MATERIAL_NUM] 替換為有效材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialLoadFailed">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 載入失敗。
 
 請將材質 [MATERIAL_NUM] 替換為有效材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialDoubleSided">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 是雙面材質。PBR地形目前不支援雙面材質。
 
 請將材質 [MATERIAL_NUM] 替換為 doubleSided=false 的材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialAlphaMode">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 使用了不支援的 alphaMode="[MATERIAL_ALPHA_MODE]"。
 
 請將材質 [MATERIAL_NUM] 替換為 alphaMode="OPAQUE" 或 alphaMode="MASK" 的材質。
@@ -2760,7 +2745,7 @@ URL:[UNTRUSTED_URL]
 			<button ignore="永不離開「請勿打擾」模式" name="No" text="取消"/>
 		</form>
 	</notification>
-	<notification name="ParcelPlayingMedia">
+	<notification label="此地塊正在播放媒體" name="ParcelPlayingMedia">
 		此地塊正在播放媒體：
 [URL]
 您想要播放嗎？
@@ -3385,7 +3370,7 @@ URL：[AUDIOURL]
 			<button name="Discard" text="丟棄"/>
 		</form>
 	</notification>
-	<notification name="UserGiveItem">
+	<notification name="UserGiveItem" label="[NAME_LABEL]傳送了一個物件">
 		[NAME_SLURL] 給了你這個 [OBJECTTYPE]：
 [ITEM_SLURL]
 		<form name="form">
@@ -3395,10 +3380,10 @@ URL：[AUDIOURL]
 			<button name="Mute" text="封鎖"/>
 		</form>
 	</notification>
-	<notification name="UserGiveItemLegacy">
+	<notification name="UserGiveItemLegacy" label="[NAME_LABEL]傳送了一個物件">
 		[NAME_SLURL] 給了你這個 [OBJECTTYPE]：
 [ITEM_SLURL]
-你想保留它嗎？」靜音」將封鎖 [NAME_SLURL] 今後的所有提議或訊息。
+你想保留它嗎？「封鎖」將封鎖 [NAME_SLURL] 今後的所有提議或訊息。
 		<form name="form">
 			<button name="Show" text="顯示"/>
 			<button name="Accept" text="保留"/>
@@ -3422,7 +3407,7 @@ URL：[AUDIOURL]
 			<button name="Info" text="資訊"/>
 		</form>
 	</notification>
-	<notification name="TeleportOffered">
+	<notification name="TeleportOffered" label="來自[NAME_LABEL]的瞬間傳送邀請">
 		[NAME_SLURL] 想要瞬間傳送你到他的地點：
 
 [MESSAGE]
@@ -3452,7 +3437,7 @@ URL：[AUDIOURL]
 
 可是，此區域含有僅限成人的內容。
 	</notification>
-	<notification name="TeleportOffered_SLUrl">
+	<notification name="TeleportOffered_SLUrl" label="來自[NAME_LABEL]的瞬間傳送邀請">
 		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 [MESSAGE]
@@ -3503,7 +3488,7 @@ URL：[AUDIOURL]
 			<button name="GoNow..." text="立即前往..."/>
 		</form>
 	</notification>
-	<notification name="OfferFriendship">
+	<notification name="OfferFriendship" label="來自[NAME_LABEL]的好友請求">
 		[NAME_SLURL] 想成為你的朋友。
 
 [MESSAGE]
@@ -3517,7 +3502,7 @@ URL：[AUDIOURL]
 	<notification name="FriendshipOffered">
 		已經邀請 [TO_NAME] 成為朋友
 	</notification>
-	<notification name="OfferFriendshipNoMessage">
+	<notification name="OfferFriendshipNoMessage" label="來自[NAME_LABEL]的好友請求">
 		[NAME_SLURL] 想成為你的朋友。
 
 （根據預設設定，你們將可看到彼此的在線狀態。）
@@ -3853,6 +3838,12 @@ URL：[AUDIOURL]
 	<notification name="SnapshotToLocalDirNotExist">
 		將快照儲存於[PATH]時失敗：目錄不存在。
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		快照已儲存至：
+[FILEPATH]
+
+點擊以開啟資料夾。
+	</notification>
 	<notification name="PresetNotSaved">
 		儲存預設名稱[NAME]時出錯。
 	</notification>
@@ -3882,6 +3873,13 @@ URL：[AUDIOURL]
 	<notification name="VoiceIsMutedByModerator">
 		主持人已將你的語音靜音。
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		管理員已將你的附近語音靜音。
+該區域的其他人將無法聽到你說話。
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		你現在可以被該區域的其他人聽到了。
 	</notification>
 	<notification name="FailedToGetBenefits">
 		很遺憾，我們無法為這次會話取得到福利資訊。在正常的生產環境中，這不應該發生。請聯繫支援部門。這次會話將無法正常進行，我們建議重新開始會話。
@@ -4107,7 +4105,11 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		你確定要結束這段通話？
-		<usetemplate ignoretext="我掛斷前進行確認" name="okcancelignore" notext="否" yestext="是"/>
+		<usetemplate ignoretext="掛斷前進行確認" name="okcancelignore" notext="否" yestext="是"/>
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+		你確定要離開此臨時會議嗎？
+		<usetemplate ignoretext="離開臨時會議前要求確認" name="okcancelignore" notext="否" yestext="是" />
 	</notification>
 	<notification name="ConfirmMuteAll">
 		你已選擇要將所有參與群組通話的人靜音。
@@ -5455,8 +5457,8 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	<notification name="ExportFinished">
 		匯出到 [FILENAME] 完成。
 	</notification>
-	<notification name="ExportCollada">
-		匯出意外失敗。有關詳細資訊，請檢視日誌檔案。
+	<notification name="ExportFailed">
+		匯出失敗。請查看日誌以取得更多詳細資訊。
 	</notification>
 	<notification name="ExportColladaSuccess">
 		[OBJECT] 成功儲存為 [FILENAME]。
@@ -5857,7 +5859,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		</form>
 	</notification>
 	<notification name="WhitelistReminder">
-提升 [APP_NAME] 的效能，請將其加入防毒軟體的白名單中。
+	为提升 [APP_NAME] 的效能，請將其加入防毒軟體的白名單中。
 
 某些防毒軟體可能會錯誤攔截 [APP_NAME] 的部分內容，導致效能下降並使部分功能異常。為避免這些問題，我們強烈建議您將 [APP_NAME] 加入防毒軟體的白名單（或排除清單）中。這樣可以確保程式的順暢運作。
 
@@ -5865,13 +5867,13 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
-	<notification name="ConfirmPoserOverwrite">
+	<notification label="確認覆蓋姿勢" name="ConfirmPoserOverwrite">
 		是否覆蓋現有的姿勢「[POSE_NAME]」？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		检测到大量装扮：[AMOUNT]。这可能会导致檢視器卡顿或连接断开。请考虑将装扮数量限制在[MAX]以内，以提升性能。 这只是一个建议，如果你的电脑运行正常，你可以放心忽略它。
-		<usetemplate ignoretext="装扮过多警告" name="okignore" yestext="确定" />
+		檢測到大量裝扮：[AMOUNT]。這可能會導致檢視器卡頓或連線中斷。請考慮將裝扮數量限制在[MAX]以內，以提升效能。 这只是一个建议，如果你的电脑运行正常，你可以放心忽略它。
+		<usetemplate ignoretext="裝扮過多警告" name="okignore" yestext="確定" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Primfeed 登錄請求被拒絕。

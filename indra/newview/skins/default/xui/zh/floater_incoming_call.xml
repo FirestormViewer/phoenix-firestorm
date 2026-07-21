@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="incoming call" title="來電">
-	<floater.string name="lifetime">
-		5
-	</floater.string>
+<floater name="incoming call">
 	<floater.string name="localchat">
 		附近的語音聊天
 	</floater.string>

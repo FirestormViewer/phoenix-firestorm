@@ -3,6 +3,6 @@
 	<text name="Graphic Presets">
 		グラフィックのプリセット
 	</text>
-	<button name="open_prefs_btn" label="グラフィック初期設定" tool_tip="グラフィック初期設定を開きます。"/>
+	<button name="open_prefs_btn" label="初期設定" tool_tip="グラフィック初期設定を開きます。"/>
 	<button name="open_autofps_btn" label="パフォーマンス" tool_tip="パフォーマンスウィンドウを開きます。"/>
 </panel>

@@ -227,12 +227,12 @@
 				<combo_box.item label="無" name="None" />
 			</combo_box>
 			<check_box label="出售中：" name="checkbox for sale" tool_tip="允許別人在虛擬世界裡以特定的價格購買此物件、其內容或其副本。" />
-			<spinner label="價格: L$" name="Edit Cost" tool_tip="物件成本。" />
 			<combo_box name="sale type" tool_tip="決定購買者會收到物件副本、物件內容副本、還是物件本身。">
 				<combo_box.item label="複製" name="Copy" />
 				<combo_box.item label="內容" name="Contents" />
 				<combo_box.item label="原件" name="Original" />
 			</combo_box>
+			<spinner label="價格: L$" name="Edit Cost" tool_tip="物件成本。" />
 			<button label="應用" name="button mark for sale" tool_tip="提供/更新出售的物件。" />
 			<button label="複製UUID" name="btnCopyKeys" tool_tip="複製根元素的金鑰到剪貼簿。按住Shift鍵點擊可複製物件的所有金鑰。" />
 			<check_box label="顯示在搜尋中" name="search_check" tool_tip="讓其他人可以在搜尋結果中檢視到此物件" />
@@ -252,24 +252,6 @@
 				<check_box label="修改" name="checkbox next owner can modify" tool_tip="下一個所有者可以編輯本物件的性質，如名稱或尺寸。" />
 				<check_box label="複製" name="checkbox next owner can copy" tool_tip="下一個所有者可無限複製本物件。 副本將保留創作人的資料，其允許設定不能比原本物件更加放寬。" />
 				<check_box label="轉讓" name="checkbox next owner can transfer" tool_tip="下一個所有者可贈送或轉售這個物件。" />
-				<text name="B:">
-					B:
-				</text>
-				<text name="O:">
-					O:
-				</text>
-				<text name="G:">
-					G:
-				</text>
-				<text name="E:">
-					E:
-				</text>
-				<text name="N:">
-					N:
-				</text>
-				<text name="F:">
-					F:
-				</text>
 			</panel>
 			<panel name="pathfinding_attrs_panel">
 				<text name="pathfinding_attributes_label">
@@ -472,7 +454,7 @@
 			<spinner label="衰減" name="Light Falloff" />
 			<spinner label="環境" name="Light Ambiance" />
 			<check_box label="反射探針" name="Reflection Probe" tool_tip="啟用 PBR 時，調整此體積內物件接收反射的方式" />
-			<combo_box label="探測體積類型" name="Probe Volume Type" tool_tip="選擇探測影響體積">
+			<combo_box name="Probe Volume Type" tool_tip="選擇探測影響體積">
 				<combo_box.item label="球體" name="Sphere" />
 				<combo_box.item label="盒子" name="Box" />
 			</combo_box>

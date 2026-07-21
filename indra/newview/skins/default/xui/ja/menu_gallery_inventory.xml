@@ -21,8 +21,11 @@
 	<menu_item_call label="名前変更" name="Rename"/>
 	<menu_item_call label="カット" name="Cut"/>
 	<menu_item_call label="コピー" name="Copy"/>
+	<!-- <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name" -->
+	<menu_item_call label="名前をコピー" name="Copy Name"/>
+	<!-- </FS:MJR> [FIRE-36793] -->
 	<menu_item_call label="ペースト" name="Paste"/>
-	<menu label="Links" name="Links">
+	<menu label="リンク" name="Links">
 		<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
 		<menu_item_call label="リンクを置き換え" name="Replace Links"/>
 	</menu>
@@ -103,7 +106,7 @@
 		<menu_item_check label="アップロードしたモデル" name="Model uploads"/>
 		<menu_item_check label="アップロードしたＰＢＲマテリアル" name="PBR uploads"/>
 	</menu>
-	<menu label="Marketplace" name="Marketplace">
+	<menu label="マーケットプレイス" name="Marketplace">
 		<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
 		<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
 	</menu>

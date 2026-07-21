@@ -5,6 +5,9 @@
 	<menu_item_check label="お気に入りバーを表示" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="現在地を表示" name="ShowMenuBarLocation"/>
 	<menu_item_check label="シミュレーターバージョンを表示" name="FSStatusbarShowSimulatorVersion"/>
+	<!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+	<menu_item_check label="包括フィルタのコントロールを表示" name="FSOmnifilterControls"/>
+	<!-- </FS:MJR> [FIRE-36776] -->
 	<menu_item_check label="メニュー検索を表示" name="FSMenuSearch"/>
 	<menu_item_check label="所持金を表示" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="メディア操作を表示" name="FSEnableVolumeControls"/>

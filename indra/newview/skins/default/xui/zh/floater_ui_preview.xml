@@ -7,9 +7,6 @@
 		<text name="select_language_label">
 			主要語言：
 		</text>
-		<combo_box name="language_select_combo">
-			<combo_box.item label="en" name="item1" value="en" />
-		</combo_box>
 		<button label="顯示" label_selected="顯示" name="display_floater" tool_tip="顯示由選定XML檔案定義的XUI浮動視窗" />
 		<button label="隱藏" label_selected="隱藏" name="close_displayed_floater" tool_tip="關閉當前顯示的浮動視窗（如果存在）。" />
 		<button label="編輯..." label_selected="編輯..." name="edit_floater" tool_tip="編輯由選定XML檔案定義的XUI浮動視窗（打開外部編輯器）。如果沒有在地化版本存在，則打開英文版本。" />
@@ -19,9 +16,6 @@
 		<text name="select_language_label_2">
 			次要語言：
 		</text>
-		<combo_box name="language_select_combo_2">
-			<combo_box.item label="en" name="item1" value="en" />
-		</combo_box>
 		<button label="顯示" name="display_floater_2" tool_tip="顯示由選定XML檔案定義的XUI浮動視窗" />
 		<button label="隱藏" name="close_displayed_floater_2" tool_tip="關閉當前顯示的浮動視窗（如果存在）。" />
 		<button label="匯出架構" name="export_schema" />

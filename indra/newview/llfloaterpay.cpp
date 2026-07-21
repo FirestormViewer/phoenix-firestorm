@@ -411,7 +411,16 @@ void LLFloaterPay::payViaObject(money_callback callback, LLSafeHandle<LLObjectSe
     bool is_group = false;
     node->mPermissions->getOwnership(owner_id, is_group);
 
-    floater->getChild<LLUICtrl>("object_name_text")->setValue(node->mName);
+    // <FS:PP> FIRE-36849: Add tooltip to object name, for long names
+    // floater->getChild<LLUICtrl>("object_name_text")->setValue(node->mName);
+    LLUICtrl* object_name_text = floater->getChild<LLUICtrl>("object_name_text");
+    if (object_name_text)
+    {
+        std::string object_name = node->mName;
+        object_name_text->setValue(object_name);
+        object_name_text->setToolTip(object_name);
+    }
+    // </FS:PP>
 
     floater->finishPayUI(owner_id, is_group);
 }

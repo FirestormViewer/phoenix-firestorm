@@ -146,9 +146,9 @@
 				<spinner label="ズーム軸のマッピング" name="JoystickAxis6" tool_tip="マウスのどの軸にズーム機能を割り当てるかを調整します。"/>
 				<check_box label="３Ｄマウスを有効にする" tool_tip="ここにチェックを入れることで３Ｄマウスが動作します。" name="enable_joystick"/>
 				<check_box name="CB_Zoom_Control" label="ズームコントロールを有効にする（ヒント参照！）" tool_tip="ズームコントロールの機能を利用するには、「ズーム軸のマッピング」の値を「4」以上に設定する必要があります。"/>
-				<check_box name="CB_Auto_Leveling" label="自動水平装置を有効にする（カメラの横揺れを回避）"/>
-				<check_box name="CB_3D_Mouse_Avatar" label="アバターの移動に３Ｄマウスを利用"/>
-				<check_box name="CB_3D_Mouse_Build" label="オブジェクトの移動（ビルド）に３Ｄマウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも３Ｄマウスを使用します。"/>
+				<check_box name="CB_Auto_Leveling" label="自動水平（カメラの横揺れを回避）"/>
+				<check_box name="CB_3D_Mouse_Avatar" label="アバター移動に３Ｄマウスを利用"/>
+				<check_box name="CB_3D_Mouse_Build" label="オブジェクト移動（ビルド）に３Ｄマウスを使用" tool_tip="オブジェクトを制作したり修正したりする時にも３Ｄマウスを使用します。"/>
 			</panel>
 		</panel>
 	</tab_container>

@@ -101,8 +101,21 @@
 						<stat_bar label="更新物理形狀" name="simsimphysicsshapeupdatemsec" />
 						<stat_bar label="物理（其他）" name="simsimphysicsothermsec" />
 						<stat_bar label="睡眠時間" name="simsleepmsec" />
-						<stat_bar label="Pump IO" name="simpumpiomsec" />
+						<stat_bar label="IO輪詢時間" name="simpumpiomsec" />
 					</stat_view>
+				</stat_view>
+			</stat_view>
+			<stat_view name="voice" label="語音">
+				<stat_bar name="webrtc_latency" label="延遲" />
+				<stat_bar name="webrtc_upload_bandwidth" label="上傳頻寬" />
+				<stat_view name="incoming_audio" label="傳入音訊">
+					<stat_bar name="incoming_packet_recv" label="已接收資料封包" />
+					<stat_bar name="packets_in_lost" label="遺失資料封包" />
+					<stat_bar name="jitter_buffer" label="抖動緩衝區" />
+				</stat_view>
+				<stat_view name="outgoing_audio" label="傳出音訊">
+					<stat_bar name="packets_out_sent" label="已傳送資料封包" />
+					<stat_bar name="packets_out_lost" label="遺失資料封包" />
 				</stat_view>
 			</stat_view>
 		</container_view>

@@ -68,6 +68,9 @@
           <menu_item_call.on_click
            function="Inventory.NewWindow"
            parameter="" />
+          <menu_item_call.on_enable
+           function="RLV.EnableIfNot"
+           parameter="showinv" />
         </menu_item_call>
         <menu_item_check
          label="Protected Folders"

@@ -11,6 +11,9 @@
 			<text name="whitelist_text">
 				允許的域名：
 			</text>
+			<scroll_list name="whitelist">
+				<column label="允許清單" name="list"/>
+			</scroll_list>
 			<layout_stack name="whitelist_buttons_layout_stack">
 				<layout_panel name="whitelist_buttons_panel_add">
 					<button label="新增..." label_selected="新增..." name="add_whitelist" />
@@ -24,6 +27,9 @@
 			<text name="blacklist_text">
 				被阻止的域名：
 			</text>
+			<scroll_list name="blacklist">
+				<column label="封鎖清單" name="list"/>
+			</scroll_list>
 			<layout_stack name="blacklist_buttons_layout_stack">
 				<layout_panel name="blacklist_buttons_panel_add">
 					<button label="新增..." label_selected="新增..." name="add_blacklist" />
