@@ -2417,6 +2417,8 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     // don't update every frame
     if (gFrameTimeSeconds - mLastPixelAreaUpdate < PIXEL_AREA_UPDATE_PERIOD)
     {
+        cos_angle_to_view_dir = mLastCosAngleToViewDir;
+        radius = mLastRadius;
         return true;
     }
 
@@ -2488,6 +2490,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
             // no rigged extents, zero out bounding box and skip update
             mRiggedExtents[0] = mRiggedExtents[1] = LLVector4a(0.f, 0.f, 0.f);
 
+            mInFrustum = false;
             return false;
         }
 
@@ -2542,6 +2545,7 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
         if(!camera->AABBInFrustum(center, size))
         {
             mImportanceToCamera = 0.f ;
+            mInFrustum = false;
             return false ;
         }
         if(cos_angle_to_view_dir > camera->getCosHalfFov()) //the center is within the view frustum
@@ -2569,6 +2573,24 @@ bool LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
     {
         mImportanceToCamera = LLFace::calcImportanceToCamera(cos_angle_to_view_dir, dist) ;
     }
+
+    // On-screen test: does the face's projected disc overlap the screen disc?
+    // (Same construction as adjustPartialOverlapPixelArea.) Behind-camera faces
+    // get acos(cos) near pi and fall out; the generous screen radius errs toward
+    // "on screen" so fetch admission never starves edge content. mFrustumOverflow
+    // is how far past the boundary the disc sits, as a fraction of screen size -
+    // 0 on screen, 0.1 = 10% of a screen out - and feeds the frustum allowance
+    // falloff in computeDesiredDiscard.
+    {
+        F32 center_px = acosf(llclamp(cos_angle_to_view_dir, -1.f, 1.f)) * LLDrawable::sCurPixelAngle;
+        F32 screen_radius = (F32)llmax(gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw());
+        F32 past_edge = center_px - radius - screen_radius;
+        mInFrustum = past_edge <= 5.f;
+        mFrustumOverflow = llmax(past_edge - 5.f, 0.f) / screen_radius;
+    }
+
+    mLastCosAngleToViewDir = cos_angle_to_view_dir;
+    mLastRadius = radius;
 
     return true ;
 }

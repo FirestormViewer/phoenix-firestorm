@@ -34,6 +34,7 @@
 #include "llviewertexture.h"
 #include "llui.h"
 #include <list>
+#include <map>
 #include <unordered_set>
 #include "lluiimage.h"
 
@@ -230,6 +231,10 @@ public:
 
     image_list_t mCallbackList;
     image_list_t mFastCacheList;
+
+    // In-flight fetches pumped every frame (additive to the round-robin
+    // sweep, which remains the universal pump). See updateImages.
+    std::vector<LLPointer<LLViewerFetchedTexture> > mFastFetchList;
 
     bool mForceResetTextureStats;
 

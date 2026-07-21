@@ -591,6 +591,20 @@ void LLViewerTexture::updateClass()
             sPixelToTexelRatio += llmax((F32)relax_rate, 0.f) * dt;
         }
         // else: hold in the hysteresis band.
+
+        // Allocation failures outrank the byte estimate: if setManualImage hit
+        // GL_OUT_OF_MEMORY since last frame, the CPU-side vram_used estimate has
+        // diverged from reality, so step the ratio down now regardless of the band.
+        static U32 last_oom_count = 0;
+        U32 oom_count = LLImageGL::sOOMErrorCount.load();
+        if (oom_count > last_oom_count)
+        {
+            U32 new_events = llmin(oom_count - last_oom_count, (U32)5);
+            sPixelToTexelRatio -= llmax((F32)tighten_rate, 0.f) * 1.0f * (F32)new_events;
+            last_oom_count = oom_count;
+            LL_WARNS_ONCE("Texture") << "GL out-of-memory during texture upload triggered a pixel:texel ratio backoff." << LL_ENDL;
+        }
+
         sPixelToTexelRatio = llclamp(sPixelToTexelRatio, 0.f, r_max);
 
         // Keep the GC-suspend frame current while backgrounded. This suppresses
@@ -1550,6 +1564,16 @@ void LLViewerFetchedTexture::postCreateTexture()
 
     setActive();
 
+    // Start the visibility-GC clock at creation. A texture fetched but never
+    // drawn (occluded, or the camera moved on) would otherwise keep
+    // mLastBindFrame == 0 forever, and the GC skips never-bound textures - it
+    // would hold residency indefinitely. Anchoring here means it ages out on
+    // the normal GC cooldown unless a real draw stamps it first.
+    if (mGLTexturep.notNull() && mGLTexturep->mLastBindFrame == 0)
+    {
+        mGLTexturep->mLastBindFrame = LLFrameTimer::getFrameCount();
+    }
+
     // rebuild any volumes that are using this texture for sculpts in case their LoD has changed
     for (U32 i = 0; i < mNumVolumes[LLRender::SCULPT_TEX]; ++i)
     {
@@ -2011,7 +2035,14 @@ bool LLViewerFetchedTexture::updateFetch()
 
     S32 current_discard = getCurrentDiscardLevelForFetching();
     S32 desired_discard = getDesiredDiscardLevel();
-    F32 decode_priority = mMaxVirtualSize;
+
+    // Two-tier fetch priority, constantly drained by the fetch worker (it
+    // sorts HTTP dispatch by this value): any on-screen texture outranks every
+    // off-screen one. Within the visible tier, coverage orders by size on
+    // screen; within the off-screen tier the same geometric coverage
+    // (area/dist^2) orders by proximity. addTextureStats clamps
+    // mMaxVirtualSize to sMaxVirtualSize, so the band offset is strict.
+    F32 decode_priority = mMaxVirtualSize + (mOnScreen ? sMaxVirtualSize : 0.f);
 
     if (mIsFetching)
     {
@@ -2072,6 +2103,29 @@ bool LLViewerFetchedTexture::updateFetch()
     // discards are served from the GL mip pyramid via scaleDown.
     desired_discard = llmin(desired_discard, (S32)mCodecMaxDiscardLevel);
 
+    // Progressive refinement: when resident data is much coarser than desired,
+    // fetch in steps of TextureFetchStepMips instead of jumping straight to the
+    // final discard. Each step is small, decodes fast, and shows on screen
+    // while the next chains behind it (the per-frame fast pump makes chaining
+    // nearly free). Without this, seen-before textures (dims known, so the
+    // coarse first-fetch fallback never applies) sat blurry for the whole
+    // full-file read+decode, then popped. Boosted/pinned content still jumps.
+    static LLCachedControl<U32> fetch_step(gSavedSettings, "TextureFetchStepMips", 2);
+    const S32 step = (S32)fetch_step;
+    if (step > 0
+        && current_discard >= 0
+        && desired_discard < current_discard - step
+        && mBoostLevel < LLGLTexture::BOOST_HIGH
+        && mUseMipMaps
+        && !mDontDiscard
+        && !isAgentAvatarBoost(mBoostLevel))
+    {
+        // Re-clamp: current can sit past codec max after scaleDown (GL
+        // pyramid goes deeper than the codestream) - a stepped request
+        // above codec max reaches the decoder with an invalid discard.
+        desired_discard = llmin(current_discard - step, (S32)mCodecMaxDiscardLevel);
+    }
+
     bool make_request = true;
     if (decode_priority <= 0)
     {
@@ -2097,30 +2151,9 @@ bool LLViewerFetchedTexture::updateFetch()
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - current < min");
         make_request = false;
     }
-    else
-    {
-        // Only fetch streamed world textures the renderer is actually drawing
-        // (mLastBindFrame is stamped per drawn frame). Out-of-view content gets
-        // no residency. Exempt: boosted/UI, avatar bakes, textures with loaded
-        // callbacks, and bake uploads.
-        static LLCachedControl<U32> vis_frames(gSavedSettings, "TextureFetchVisibilityFrames", 5);
-        const bool visibility_gated = mBoostLevel < LLGLTexture::BOOST_HIGH
-            && mUseMipMaps
-            && !mDontDiscard
-            && !isAgentAvatarBoost(mBoostLevel)
-            && !mForceToSaveRawImage
-            && mLoadedCallbackList.empty();
-        if (visibility_gated && mGLTexturep.notNull())
-        {
-            const U32 last = mGLTexturep->mLastBindFrame;
-            const U32 now = LLFrameTimer::getFrameCount();
-            if (last == 0 || now - last > llmax((U32)vis_frames, 1u))
-            {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - not visible");
-                make_request = false;
-            }
-        }
-    }
+    // No visibility gate here: off-screen content still fetches, just in the
+    // low-priority band (decode_priority above), so the worker services it only
+    // after visible work. Residency stays with the GC (computeDesiredDiscard).
 
     if (make_request)
     {
@@ -3111,6 +3144,23 @@ S32 LLViewerLODTexture::computeDesiredDiscard(S32 dim_max_i, bool avatar_bake) c
     // (a 2048 map can't hit its own resolution on a 1080p screen), which reads
     // as everything being blurry. Pressure still evicts by lowering R_global.
     ideal = llmax(ideal, 0.f);
+
+    // Frustum allowance: a falloff on how unloaded out-of-view content gets,
+    // by how far out it is. Grazing the edge keeps full resolution; at
+    // TextureFrustumAllowance (fraction of a screen) past the edge it reaches
+    // the deepest mip, lerped between. Keeps barely-out-of-view textures
+    // resident so a camera swing back doesn't refetch them. Applied to the
+    // continuous ideal so it shares the hysteresis dead-band below - applied
+    // after it, camera motion made desired flap a mip at a time and churned
+    // the fetch/scaleDown queues.
+    static LLCachedControl<F32> frustum_allowance(gSavedSettings, "TextureFrustumAllowance", 0.2f);
+    if (!avatar_bake && mFrustumOverflow > 0.f)
+    {
+        const F32 f = llclamp(mFrustumOverflow / llmax((F32)frustum_allowance, 0.01f), 0.f, 1.f);
+        ideal += f * ((F32)dim_max_i - ideal);
+        mLastOffScreenFrame = LLFrameTimer::getFrameCount();
+    }
+
     const S32 target = (S32)floor(ideal);
 
     // Hysteresis: a texture at discard C is "happy" while floor(ideal) == C,
@@ -3145,7 +3195,12 @@ S32 LLViewerLODTexture::computeDesiredDiscard(S32 dim_max_i, bool avatar_bake) c
     // mip by gc_step, walking gradually toward the deepest mip instead of slamming.
     // Content drawn within the last cooldown stays full-res, so a fast camera pan
     // finds it only a step or two coarse on the way back. Resets when drawn again.
-    if (!avatar_bake)
+    //
+    // Out-of-frustum content is governed by the frustum allowance above instead
+    // (spatial falloff, not bind staleness) - without this exclusion the GC would
+    // walk barely-out-of-view content to the deepest mip within a second and the
+    // allowance would protect nothing.
+    if (!avatar_bake && mFrustumOverflow <= 0.f)
     {
         if (LLImageGL* gli = getGLTexture())
         {
@@ -3153,8 +3208,9 @@ S32 LLViewerLODTexture::computeDesiredDiscard(S32 dim_max_i, bool avatar_bake) c
             static LLCachedControl<U32> gc_step_mips(gSavedSettings, "TextureGCStepMips", 1);
             constexpr U32 GC_RESUME_GRACE_FRAMES = 10;
             const U32 now = LLFrameTimer::getFrameCount();
-            if (gli->mLastBindFrame > 0                                  // drawn at least once
-                && now - sGCSuspendedFrame > GC_RESUME_GRACE_FRAMES)     // not just back from background
+            if (gli->mLastBindFrame > 0                                  // drawn, or anchored at creation (postCreateTexture)
+                && now - sGCSuspendedFrame > GC_RESUME_GRACE_FRAMES      // not just back from background
+                && now - mLastOffScreenFrame > GC_RESUME_GRACE_FRAMES)   // re-entering content gets one grace window to be drawn and re-stamp before staleness is judged
             {
                 const U32 cooldown = llmax((U32)gc_cooldown_frames, 1u);
                 const S32 periods = (S32)((now - gli->mLastBindFrame) / cooldown);

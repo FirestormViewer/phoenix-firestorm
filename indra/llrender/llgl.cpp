@@ -2452,6 +2452,12 @@ void clear_glerror()
     glGetError();
 }
 
+void drain_glerror()
+{
+    // bounded: a lost/reset context can return errors indefinitely
+    for (S32 i = 0; i < 16 && glGetError() != GL_NO_ERROR; ++i) {}
+}
+
 ///////////////////////////////////////////////////////////////
 //
 // LLGLState

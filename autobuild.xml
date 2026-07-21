@@ -2930,11 +2930,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7338377a9c6913bc8768d446fe627b8176bc89d4</string>
+              <string>c39d041c9b68d9ae477934df9c77c53111d79f65</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.23/webrtc-m137.7151.04.23.22004231636-darwin64-22004231636.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19/webrtc-m144.7559.06.19.29561257244-darwin64-29561257244.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2944,11 +2944,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a2df83ed8d7fc1374398d7a37633bae17f5d68a1</string>
+              <string>404775fa5ecd1d6eedbc34916df07cb70b8bbfdb</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.23/webrtc-m137.7151.04.23.22004231636-linux64-22004231636.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19/webrtc-m144.7559.06.19.29561257244-linux64-29561257244.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2958,11 +2958,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>665c2447c794a88542fab30638f0013bea58480c</string>
+              <string>28a8d62165fd9cdf0de921879b88b098c0cb7076</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.23/webrtc-m137.7151.04.23.22004231636-windows64-22004231636.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19/webrtc-m144.7559.06.19.29561257244-windows64-29561257244.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2975,7 +2975,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
         <key>version</key>
-        <string>m137.7151.04.23.22004231636</string>
+        <string>m144.7559.06.19.29561257244</string>
         <key>name</key>
         <string>webrtc</string>
         <key>vcs_branch</key>
@@ -3220,11 +3220,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>91abbc360640b5b2e0a4c001a36ad411a9a42602</string>
+              <string>df2260187110aa51c20101183e18a55f86e71090</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535/velopack-40232ef.23500976684-windows64-23500976684.tar.zst</string>
+              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535-r2/velopack-40232ef.24685318450-windows64-24685318450.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3234,11 +3234,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05563a79bdeb83d66a72ac1e97587dc2a8f64511</string>
+              <string>ead94386d7b9a143824d7ccedc86433127028a91</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535/velopack-40232ef.23500976684-darwin64-23500976684.tar.zst</string>
+              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535-r2/velopack-40232ef.24685318450-darwin64-24685318450.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3251,7 +3251,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Velopack Ltd.</string>
         <key>version</key>
-        <string>40232ef.23500976684</string>
+        <string>40232ef.24685318450</string>
         <key>name</key>
         <string>velopack</string>
         <key>description</key>

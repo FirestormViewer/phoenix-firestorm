@@ -1512,7 +1512,7 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
         // Drain stale GL errors so an OOM detected below belongs to this alloc.
         // Otherwise a failed glTexImage2D is swallowed in release while
         // alloc_tex_image still counts the bytes, inflating the used-VRAM figure.
-        while (glGetError() != GL_NO_ERROR) {}
+        drain_glerror();
 
         const bool use_sub_image = should_stagger_image_set(compress);
         if (!use_sub_image)
@@ -1924,7 +1924,8 @@ bool LLImageGL::readBackRaw(S32 discard_level, LLImageRaw* imageraw, bool compre
 
     //-----------------------------------------------------------------------------------------------
     GLenum error ;
-    while((error = glGetError()) != GL_NO_ERROR)
+    S32 error_count = 0 ;
+    while((error = glGetError()) != GL_NO_ERROR && ++error_count <= 16)
     {
         LL_WARNS() << "GL Error happens before reading back texture. Error code: " << error << LL_ENDL ;
     }
@@ -1984,7 +1985,8 @@ bool LLImageGL::readBackRaw(S32 discard_level, LLImageRaw* imageraw, bool compre
         LL_WARNS() << "GL Error happens after reading back texture. Error code: " << error << LL_ENDL ;
         imageraw->deleteData() ;
 
-        while((error = glGetError()) != GL_NO_ERROR)
+        error_count = 0 ;
+        while((error = glGetError()) != GL_NO_ERROR && ++error_count <= 16)
         {
             LL_WARNS() << "GL Error happens after reading back texture. Error code: " << error << LL_ENDL ;
         }
@@ -2556,8 +2558,10 @@ bool LLImageGL::scaleDown(S32 desired_discard)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 
-    // Don't let eviction re-arm visibility: the glGenerateMipmap re-bind below
-    // would otherwise stamp mLastBindFrame and keep the texture fetch-eligible.
+    // Don't let eviction re-arm the GC: the glGenerateMipmap re-bind below would
+    // otherwise stamp mLastBindFrame, so the next computeDesiredDiscard treats the
+    // just-evicted texture as freshly drawn, un-floors it, and re-fetches - the
+    // evict/refetch oscillation.
     LLImageGLStampBypass no_stamp;
 
     if (mTarget != GL_TEXTURE_2D
