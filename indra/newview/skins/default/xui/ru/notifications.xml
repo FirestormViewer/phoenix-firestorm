@@ -5364,9 +5364,6 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="ExodusFlickrUploadComplete">
 		Ваш снимок теперь может быть просмотрен [https://www.flickr.com/photos/me/[ID] тут].
 	</notification>
-	<notification name="ExodusFlickrUploadComplete">
-		Ваш снимок теперь можно просмотреть [https://www.flickr.com/photos/me/[ID] здесь].
-	</notification>
 	<notification name="FSPrimfeedUploadComplete">
 		Ваш пост Primfeed теперь можно просмотреть [[PF_POSTURL] здесь].
 	</notification>

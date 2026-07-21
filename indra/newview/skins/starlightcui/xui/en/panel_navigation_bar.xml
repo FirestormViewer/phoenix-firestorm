@@ -103,7 +103,7 @@
 	     layout="topleft"
 	     left_pad="6"
 	     name="home_btn"
-	     tool_tip="Teleport to home location"
+	     tool_tip="Teleport to home location[LOCATION]"
 	     top_delta="0"
 	     width="32" />
           <!-- About Land Button here -->         

@@ -4,7 +4,7 @@
 		<texture_picker label="Tekstura" name="Fabric" tool_tip="Kliknij by wybrać grafikę"/>
 		<color_swatch label="Kolor" name="Color/Tint" tool_tip="Kliknij by wybrać kolor"/>
 	</panel>
-	<panel name="gloves_main_tab_holder">
+	<panel name="gloves_main_tab_holder" title="Rękawiczki">
 		<accordion name="gloves_main_accordion">
 			<accordion_tab name="gloves_main_tab" title="Rękawiczki"/>
 		</accordion>

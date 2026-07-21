@@ -145,25 +145,6 @@
 			</text>
 			<check_box label="Переопределение обнаружения видеопамяти" name="FSOverrideVRAMDetection" tool_tip="Разрешить пользователю переопределять обнаружение видеопамяти (использовать с особой осторожностью)"/>
 			<slider label="Выделенная видеопамять GPU (ГБ):" name="FSForcedVideoMemory" tool_tip="Важно: используйте с особой осторожностью. Переопределите обнаруженную видеопамять в вашем графическом процессоре. Это не должно включать 'общую' видеопамять, которая является частью системной оперативной памяти. Если вы не понимаете разницы, оставьте этот элемент управления в покое."/>
-
-			<text name="automatic_texture_downscale_settings" width="308">
-				Автоматическое уменьшение масштаба текстуры:
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="275">
-				В фоновом режиме (0 отключить)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="100"/>
-			<text name="TextureDiscardBackgroundedTime_seconds" width="100">
-				Секунд(ы)
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="275">
-				Минимизировано (0 отключить)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="100"/>
-			<text name="TextureDiscardMinimizedTime_seconds" width="100">
-				Секунд(ы)
-			</text>
-
 		</panel>
 
 		<panel label="Прорисовка" name="Rendering">
@@ -193,15 +174,11 @@
 				<combo_box.item label="Низкое (4)" name="4"/>
 				<combo_box.item label="Нет текстур (5)" name="5"/>
 			</combo_box>
-			<text name="Alpha Mask Rendering">
-				Маски прозрачности (альфа):
-			</text>
-			<check_box label="Прорисовка альфа маски, когда 'Расширенная модель освещения' не включена" tool_tip="Когда отмечено позволяет альфа маске прорисовываться корректно, если расширенная модель освещения не включена" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="Прорисовка альфа маски, когда 'Расширенная модель освещения' включена" tool_tip="Когда отмечено позволяет альфа маске прорисовываться корректно, если расширенная модель освещения включена" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Разное:
 			</text>
 			<check_box label="HDR и Эмиссионные" tool_tip="Включает дополнительные функции конвейера рендеринга на новых компьютерах, такие как HDR и эмиссионные текстуры для PBR-контента." name="VintageMode" width="256"/>
+			<check_box label="Прорисовка альфа-масок" tool_tip="Когда отмечено, позволяет альфа-маскам (прозрачные части) отображаться корректно." name="RenderAutoMaskAlphaDeferred"/>
 			<check_box label="Прорисовка свечения" tool_tip="Прорисовка свечения. Обратите внимание, что сила должна быть установлена на ноль, чтобы отключить свечение, когда тени включены." name="RenderGlow"/>
 			<slider label="Сила:" tool_tip="Сила. Выше = шире и размытей (по умолчанию 2) " name="glow_strength"/>
 			<check_box label="Показывать не полностью загруженные аватары" name="RenderUnloadedAvatars"/>

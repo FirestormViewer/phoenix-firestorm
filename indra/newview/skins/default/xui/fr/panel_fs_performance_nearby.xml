@@ -27,6 +27,14 @@
 	<text name="av_nearby_desc3">
 		Votre avatar inclut le poids de la visionneuse. L'onglet des attachements montre l'effet sur les autres.
 	</text>
+	<text name="AvatarComplexityMode_Label">
+		Affichage avatar :
+	</text>
+	<combo_box name="AvatarComplexityMode">
+		<combo_box.item label="Limite par compléxité" name="complexity_limit_everone"/>
+		<combo_box.item label="Toujours afficher les ami(e)s" name="complexity_always_show_friends"/>
+		<combo_box.item label="N'afficher que les ami(e)s" name="complexity_only_show_friends"/>
+	</combo_box>
 	<button label="Exceptions..." name="exceptions_btn" />
 	<check_box label="Toujours afficher complètement les amis" name="display_friends" />
 	<check_box label="Masquer complètement les avatars." name="hide_avatars" />

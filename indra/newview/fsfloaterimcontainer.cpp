@@ -43,6 +43,7 @@
 #include "llvoiceclient.h"
 
 // <FS:PP> Restore open IMs from previous session
+#include "llavatarnamecache.h"
 #include "llconversationlog.h"
 #include "llimview.h"
 // </FS:PP>
@@ -734,18 +735,14 @@ void FSFloaterIMContainer::saveOpenIMs()
     LLSD openIMs = LLSD::emptyArray();
     for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
     {
-        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
-        if (floater)
+        if (FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i)))
         {
-            LLUUID session_id = floater->getKey();
-            if (session_id.notNull())
+            if (LLUUID session_id = floater->getKey(); session_id.notNull())
             {
-                LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
-                if (session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
+                if (auto session = LLIMModel::getInstance()->findIMSession(session_id); session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
                 {
                     LLSD session_data = LLSD::emptyMap();
                     session_data["other_participant_id"] = session->mOtherParticipantID;
-                    session_data["session_name"] = session->mName;
                     openIMs.append(session_data);
                 }
             }
@@ -763,30 +760,46 @@ void FSFloaterIMContainer::restoreOpenIMs()
         return;
     }
 
-    for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
+    for (const auto& session_data : llsd::inArray(openIMs))
     {
-        LLSD session_data = *it;
-        if (session_data.isMap())
+        if (!session_data.isMap())
         {
-            LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
-            std::string session_name = session_data["session_name"].asString();
-            if (other_participant_id.notNull())
-            {
-                LLUUID new_session_id;
-                new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_NOTHING_SPECIAL, other_participant_id);
-                if (new_session_id.notNull())
-                {
-                    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
-                    if (im_floater)
-                    {
-                        if (im_floater->getHost() != this)
-                        {
-                            addFloater(im_floater, false, IM_NOTHING_SPECIAL);
-                        }
-                    }
-                }
-            }
+            continue;
         }
+
+        const LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
+        if (other_participant_id.isNull())
+        {
+            continue;
+        }
+
+        LLAvatarNameCache::get(other_participant_id, boost::bind(&FSFloaterIMContainer::restoreOpenIMSession, _1, _2));
+    }
+}
+
+void FSFloaterIMContainer::restoreOpenIMSession(const LLUUID& other_participant_id, const LLAvatarName& av_name)
+{
+    if (other_participant_id.isNull())
+    {
+        return;
+    }
+
+    const LLUUID new_session_id = LLIMMgr::getInstance()->addSession(av_name.getDisplayName(), IM_NOTHING_SPECIAL, other_participant_id);
+    if (new_session_id.isNull())
+    {
+        return;
+    }
+
+    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
+    if (!im_floater)
+    {
+        return;
+    }
+
+    FSFloaterIMContainer* container = FSFloaterIMContainer::findInstance();
+    if (container && im_floater->getHost() != container)
+    {
+        container->addFloater(im_floater, false, IM_NOTHING_SPECIAL);
     }
 }
 // </FS:PP>

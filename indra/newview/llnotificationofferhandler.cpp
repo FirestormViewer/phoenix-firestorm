@@ -36,6 +36,7 @@
 #include "llscriptfloater.h"
 #include "llimview.h"
 #include "llnotificationsutil.h"
+#include "llchannelmanager.h"
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
 #include "rlvactions.h"
 // [/RLVa:KB]
@@ -160,7 +161,13 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification, 
 
             LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel.get());
             if(channel)
+            {
+                if (LLChannelManager::getInstance()->getStartUpToastInited() && notification->getOfferFromAgent())
+                {
+                    LLChannelManager::getInstance()->onStartUpToastClose();
+                }
                 channel->addToast(p);
+            }
 
         }
 

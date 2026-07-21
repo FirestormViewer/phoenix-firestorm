@@ -47,12 +47,14 @@ public:
         Optional<LLUIColor> drag_highlight_color;
         Optional<LLUIColor> drag_shadow_color;
         Optional<const LLFontGL*> font;
+        Optional<LLFontGL::ShadowType> font_shadow;     // <FS:Zi> Allow skins to override drag handle font shadow
 
         Params()
         :   label("label"),
             label_vpad("label_vpad", 7),
             drag_highlight_color("drag_highlight_color", LLUIColorTable::instance().getColor("DefaultHighlightLight")),
             drag_shadow_color("drag_shadow_color", LLUIColorTable::instance().getColor("DefaultShadowDark")),
+            font_shadow("font_shadow", LLFontGL::NO_SHADOW),    // <FS:Zi> Allow skins to override drag handle font shadow
             font("font", LLFontGL::getFontSansSerif())
         {
             changeDefault(mouse_opaque, true);
@@ -103,6 +105,11 @@ private:
 
     // Pixels near the edge to snap floaters.
     static S32      sSnapMargin;
+
+// <FS:Zi> Allow skins to override drag handle font shadow
+protected:
+    LLFontGL::ShadowType mFontShadow;
+// </FS:Zi>
 };
 
 

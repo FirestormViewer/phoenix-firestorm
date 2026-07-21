@@ -2,7 +2,7 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
-		<text name="preset_label">
+		<text name="preset_label" width="140">
 			Aktuelle Voreinstellung:
 		</text>
 		<text name="QualitySpeed">
@@ -131,10 +131,10 @@
         <text name="PostProcessText">
             Niedrig
         </text>
-        <text name="Presets_Label" width="200">
+        <text name="Presets_Label" width="210">
 			Voreinstellungen:
 		</text>
-		<button label="Speichern" left="300" name="PrefSaveButton" width="72"/>
+		<button label="Speichern" left="310" name="PrefSaveButton" width="72"/>
 		<button label="Laden" left_pad="5" name="PrefLoadButton" width="72"/>
 		<button label="Löschen" left_pad="5" name="PrefDeleteButton" width="72"/>
 		<button tool_tip="Standardeinstellungen neu laden" name="Defaults"/>
@@ -180,23 +180,6 @@
 		<slider name="RenderMaxVRAMBudget" tool_tip="Maximaler VRAM-Speicher in Megabytes, der für Texturen verwendet wird."/>
 		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
 		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
-		<text name="automatic_texture_downscale_settings">
-			Automatische Textur-Herunterskalierung:
-		</text>
-		<text name="TextureDiscardBackgroundedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt.">
-			Im Hintergrund (0 zum deaktivieren)
-		</text>
-		<spinner name="TextureDiscardBackgroundedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer nicht den Fokus besitzt."/>
-		<text name="TextureDiscardBackgroundedTime_seconds">
-			Sekunde(n)
-		</text>
-		<text name="TextureDiscardMinimizedTime_label" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist.">
-			Minimiert (0 zum deaktivieren)
-		</text>
-		<spinner name="TextureDiscardMinimizedTime" tool_tip="Texturen herunterskalieren nach Anzahl Sekunden, wenn der Viewer minimiert ist."/>
-		<text name="TextureDiscardMinimizedTime_seconds">
-			Sekunde(n)
-		</text>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
@@ -210,8 +193,15 @@
 		<text name="Texture Rendering">
 			Textur-Darstellung:
 		</text>
-		<check_box label="Minimale Texturen laden" tool_tip="Diese Einstellung setzt den 'TextureDisable'-Parameter - lädt Texturen extrem langsam, eventuell nützlich für Computer mit langsamer GPU" name="TexturesLoaded"/>
-		<check_box label="HTTP für Laden von Texturen verwenden" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - deaktivieren wenn es Probleme mit schlecht oder nicht korrekt ladenden Texturen gibt und das veraltete UDP-Protokoll verwendet werden soll." name="TexturesHTTP"/>
+		<text name="TextureQualityLabel">
+			Textur-Qualität:
+		</text>
+		<combo_box tool_tip="Steuert die maximale Auflösung von Texturen und wie aggressiv Texuren pro Kanal gestreamed werden. Höhere Qualität hält mehr Detail im Speicher" name="TextureQuality">
+			<combo_box.item label="Niedrid" name="Low"/>
+			<combo_box.item label="Mittel" name="Medium"/>
+			<combo_box.item label="Hoch" name="High"/>
+			<combo_box.item label="Ultra" name="Ultra"/>
+		</combo_box>
 		<text name="FSRestrictMaxTextureSize">
 			Maximale Auflösung für Texturen:
 		</text>
@@ -220,26 +210,10 @@
 			<combo_box.item label="1024 Pixel" name="1024"/>
 			<combo_box.item label="2048 Pixel" name="2048"/>
 		</combo_box>
-		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
-		<text name="TextureDetailLabel" width="215">
-			Maximales Qualitätslevel für Texturen:
-		</text>
-		<combo_box tool_tip="Qualitätslevel, auf das Texturen geladen werden. Beeinflusst die Einstellung TextureDiscardLevel" name="TextureDetail">
-			<combo_box.item label="Normale (0) Qualität" name="0"/>
-			<combo_box.item label="Mittlere (3) Qualität" name="3"/>
-			<combo_box.item label="Geringe (4) Qualität" name="4"/>
-			<combo_box.item label="Keine (5) Texturen" name="5"/>
-		</combo_box>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>
 		<check_box label="HDR und Emissive" tool_tip="Aktiviert zusätzliche Features der Rendering-Pipeline auf neueren Maschinen, wie HDR und Emissive-Texturen auf PBR-Materialien." name="VintageMode"/>
-		<combo_box tool_tip="Erlaubt es, dass Animesh Benutzer- oder Kontroll-Avatar immer vollständig angezeigt werden." name="FSImpostorAvatarExclude">
-			<combo_box.item label="Keine" name="0"/>
-			<combo_box.item label="Benutzer" name="1"/>
-			<combo_box.item label="Kontrolle"  name="2"/>
-			<combo_box.item label="Beide" name="3"/>
-		</combo_box>
 		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<check_box label="Leuchten anzeigen" tool_tip="Stellt Leuchteffekte dar. Stärke muss auf 0 gesetzt werden, um Leuchteffekte zu deaktiveren, falls Schatten aktiviert sind." name="RenderGlow"/>
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>
@@ -248,10 +222,16 @@
 		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
 		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 		<check_box label="Sichtweite reduzieren, falls VRAM voll" tool_tip="Falls aktiviert wird automatisch die Sichtweite reduziert, wenn kein VRAM mehr verfügbar ist." name="Reduce Draw Distance when VRAM is full"/>
-		<text name="ExcludeAnimeshImposterLabel" width="255">
+		<text name="ExcludeAnimeshImposterLabel" width="265">
 			Animesh-Avatare immer vollständig anzeigen:
 		</text>
-		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
+		<combo_box tool_tip="Erlaubt es, dass Animesh Benutzer- oder Kontroll-Avatar immer vollständig angezeigt werden." name="FSImpostorAvatarExclude">
+			<combo_box.item label="Keine" name="0"/>
+			<combo_box.item label="Benutzer" name="1"/>
+			<combo_box.item label="Kontrolle"  name="2"/>
+			<combo_box.item label="Beide" name="3"/>
+		</combo_box>
+		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird" tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay" label_width="335"/>
 		<text name="PrecachingDelayText" width="60">
 			Sekunden
 		</text>
@@ -277,18 +257,17 @@
 		</combo_box>
 		<slider label="Tone Mapping Mix:" tool_tip="Mix zwischen linearen und tone-gemappten Farben" name="TonemapMix"/>
 	</panel>
-	
+
 	<panel label="Schärfentiefe" name="DOF panel">
 		<check_box label="Schärfentiefe aktivieren (Bereiche außerhalb des Kamerafokus erscheinen unscharf)" name="UseDoF"/>
 		<check_box label="Im Editier-Modus aktivieren" name="RenderDepthOfFieldInEditMode"/>
 		<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
-		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="195" width="409"/>
-		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="195" width="409"/>
-		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="195" width="409"/>
-		<slider label="Kamera-Bildseitenverhältnis:" name="CameraAspectRatio" tool_tip="Kamera-Bildseitenverhältnis für die Schärfentiefe" label_width="195" width="409"/>
-		<slider label="Fokus-Übergangszeit:" name="CameraFocusTrans" tool_tip="Zeit, die benötigt wird, um den Focus neu einzustellen" label_width="195" width="409"/>
-		<slider label="Schärfentiefe-Darstellungsqualität:" name="CameraDoFResScale" tool_tip="Beeinflusst die Qualität der Unschärfe und Geschwindigkeit der Darstellung (höher = bessere Qualität, niedriger = höhere Geschwindigkeit" label_width="195" width="409"/>
+		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="210" width="409"/>
+		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="210" width="409"/>
+		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="210" width="409"/>
+		<slider label="Kamera-Bildseitenverhältnis:" name="CameraAspectRatio" tool_tip="Kamera-Bildseitenverhältnis für die Schärfentiefe" label_width="210" width="409"/>
+		<slider label="Fokus-Übergangszeit:" name="CameraFocusTrans" tool_tip="Zeit, die benötigt wird, um den Focus neu einzustellen" label_width="210" width="409"/>
+		<slider label="Schärfentiefe-Darstellungsqualität:" name="CameraDoFResScale" tool_tip="Beeinflusst die Qualität der Unschärfe und Geschwindigkeit der Darstellung (höher = bessere Qualität, niedriger = höhere Geschwindigkeit" label_width="210" width="409"/>
 	</panel>
-	
 </tab_container>
 </panel>

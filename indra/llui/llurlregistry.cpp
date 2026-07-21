@@ -45,7 +45,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //  mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-    mUrlEntry.reserve(31);
+    mUrlEntry.reserve(32);
 // [/RLVa:KB]
 
     // Urls are matched in the order that they were registered
@@ -63,6 +63,11 @@ LLUrlRegistry::LLUrlRegistry()
     mUrlEntryTrustedUrl = new LLUrlEntrySecondlifeURL();
     registerUrl(mUrlEntryTrustedUrl);
     // </FS:Ansariel>
+    // <FS:PP> Add trusted domains
+    mUrlEntryFirestormTrustedUrl = new LLUrlEntryFirestormURL();
+    registerUrl(mUrlEntryFirestormTrustedUrl);
+    registerUrl(new LLUrlEntrySimpleFirestormURL());
+    // </FS:PP>
     registerUrl(new LLUrlEntrySimpleSecondlifeURL());
 
     registerUrl(new LLUrlEntryHTTP());
@@ -173,18 +178,77 @@ static bool stringHasUrl(const std::string &text)
     // fast heuristic test for a URL in a string. This is used
     // to avoid lots of costly regex calls, BUT it needs to be
     // kept in sync with the LLUrlEntry regexes we support.
-    return (text.find("://") != std::string::npos ||
-            // text.find("www.") != std::string::npos ||
-            // text.find(".com") != std::string::npos ||
-            // allow ALLCAPS urls -KC
-            boost::ifind_first(text, "www.") ||
-            boost::ifind_first(text, ".com") ||
-            boost::ifind_first(text, ".net") ||
-            boost::ifind_first(text, ".edu") ||
-            boost::ifind_first(text, ".org") ||
-            text.find("<nolink>") != std::string::npos ||
-            text.find("<icon") != std::string::npos ||
-            text.find("@") != std::string::npos);
+
+    // Early exit for empty or very short strings
+    // Smallest url is 5 characters
+    if (text.length() < 3)
+    {
+        return false;
+    }
+
+    // Single pass search for common URL indicators
+    for (size_t i = 0; i < text.length(); ++i)
+    {
+        char c = text[i];
+
+        // Check for @ (email or mention)
+        if (c == '@')
+        {
+            return true;
+        }
+
+        if (i + 3 >= text.length())
+        {
+            // Nothing else is going to match or fit if we don't
+            // have at least 4 characters left
+            // Ex: expectation is that there is something after protocol delimiter
+            // and .com takes 4 characters.
+            return false;
+        }
+
+        // Check for protocol delimiter
+        if (c == ':' && text[i + 1] == '/' && text[i + 2] == '/')
+        {
+            return true;
+        }
+
+        // Check for www. at start of word
+        if (c == 'w'
+            && text[i + 1] == 'w'
+            && text[i + 2] == 'w'
+            && text[i + 3] == '.')
+        {
+            return true;
+        }
+
+        // Check for .com (and similar)
+        if (c == '.')
+        {
+            const char* suffix = text.c_str() + i + 1;
+            if ((suffix[0] == 'c' && suffix[1] == 'o' && suffix[2] == 'm') ||
+                (suffix[0] == 'n' && suffix[1] == 'e' && suffix[2] == 't') ||
+                (suffix[0] == 'o' && suffix[1] == 'r' && suffix[2] == 'g') ||
+                (suffix[0] == 'e' && suffix[1] == 'd' && suffix[2] == 'u'))
+            {
+                return true;
+            }
+        }
+
+        // Check for <nolink> or <icon
+        if (c == '<')
+        {
+            if (i + 7 < text.length() && text.compare(i + 1, 6, "nolink") == 0)
+            {
+                return true;
+            }
+            if (i + 4 < text.length() && text.compare(i + 1, 4, "icon") == 0)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 static bool stringHasJira(const std::string &text)
@@ -225,7 +289,10 @@ static bool stringHasJira(const std::string &text)
             text.find("WEB") != std::string::npos);
 }
 
-bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+// <FS:PP> Option to disable bracket links needs is_nearby_chat here
+// bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions)
+bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb, bool is_content_trusted, bool skip_non_mentions, bool is_nearby_chat)
+// </FS:PP>
 {
     // avoid costly regexes if there is clearly no URL in the text
     if (! (stringHasUrl(text) || stringHasJira(text)))
@@ -241,7 +308,10 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
     for (it = mUrlEntry.begin(); it != mUrlEntry.end(); ++it)
     {
         //Skip for url entry icon if content is not trusted
-        if((mUrlEntryIcon == *it) && ((text.find("Hand") != std::string::npos) || !is_content_trusted))
+        // <FS:PP> Add trusted domains
+        // if((mUrlEntryIcon == *it) && ((text.find("Hand") != std::string::npos) || !is_content_trusted))
+        if((mUrlEntryIcon == *it) && ((text.find("Hand") != std::string::npos) || (text.find("fstrusted") != std::string::npos) || !is_content_trusted))
+        // </FS:PP>
         {
             continue;
         }
@@ -250,17 +320,6 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         {
             continue;
         }
-
-        // <FS:PP> Option to disable square-bracket links
-        if (!is_content_trusted && ((mUrlEntryHTTPLabel == *it) || (mUrlEntrySLLabel == *it)))
-        {
-            static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
-            if (sDisableLabeledLinks)
-            {
-                continue;
-            }
-        }
-        // </FS:PP>
 
         LLUrlEntryBase *url_entry = *it;
 
@@ -320,7 +379,7 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         //        url = up.normalizedUri();
         //    }
         //}
-        if (match_entry != mUrlEntryNoLink && match_entry == mUrlEntryTrustedUrl)
+        if (match_entry != mUrlEntryNoLink && (match_entry == mUrlEntryTrustedUrl || match_entry == mUrlEntryFirestormTrustedUrl))
         {
             LLUriParser up(url);
             if (up.normalize())
@@ -345,6 +404,44 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
                         match_entry->getUnderline(url),
                         match_entry->isTrusted(),
                         match_entry->getSkipProfileIcon(url));
+
+        // <FS:PP> Preview real URLs of bracket links
+        static LLUICachedControl<bool> sDisableLabeledLinks("FSDisableLabeledChatLinks", false);
+        static LLUICachedControl<bool> sDisableLabeledLinksNearby("FSDisableLabeledChatLinksNearbyChat", false);
+        if (!is_content_trusted && (match_entry == mUrlEntryHTTPLabel) && (is_nearby_chat ? sDisableLabeledLinksNearby : sDisableLabeledLinks) && match.getLabel() != match.getUrl())
+        {
+            match.setLabeledLinkMasked(true);
+            if (mUrlEntryTrustedUrl || mUrlEntryFirestormTrustedUrl)
+            {
+                U32 trusted_start = 0, trusted_end = 0;
+                const std::string& real_url = match.getUrl();
+                bool url_trusted = false;
+                if (mUrlEntryTrustedUrl)
+                {
+                    url_trusted = matchRegex(real_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                    if (!url_trusted)
+                    {
+                        const std::string slashed_url = real_url + "/";
+                        url_trusted = matchRegex(slashed_url.c_str(), mUrlEntryTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                    }
+                }
+                if (!url_trusted && mUrlEntryFirestormTrustedUrl)
+                {
+                    url_trusted = matchRegex(real_url.c_str(), mUrlEntryFirestormTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                    if (!url_trusted)
+                    {
+                        const std::string slashed_url = real_url + "/";
+                        url_trusted = matchRegex(slashed_url.c_str(), mUrlEntryFirestormTrustedUrl->getPattern(), trusted_start, trusted_end) && (trusted_start == 0);
+                    }
+                }
+                if (url_trusted)
+                {
+                    match.setLabeledLinkTrusted(true);
+                }
+            }
+        }
+        // </FS:PP>
+
         return true;
     }
 

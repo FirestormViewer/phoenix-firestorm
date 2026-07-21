@@ -346,6 +346,14 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
             break;
         }
 
+        // Calculate horizontal offset for tabular numbers (center narrow digits)
+        F32 x_offset = 0.0f;
+        if (mFontFreetype->getFontWeight() > 0 && fgi->mChar >= '0' && fgi->mChar <= '9' && mFontFreetype->getMaxDigitWidth() > 0.0f)
+        {
+            // use mXAdvance directly here, since we don't want to get max width instead.
+            x_offset = (mFontFreetype->getMaxDigitWidth() - fgi->mXAdvance) * 0.5f;
+        }
+
         // Draw the text at the appropriate location
         //Specify vertices and texture coordinates
         LLRectf uv_rect((fgi->mXBitmapOffset) * inv_width,
@@ -353,9 +361,9 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
                 (fgi->mXBitmapOffset + fgi->mWidth) * inv_width,
                 (fgi->mYBitmapOffset - PAD_UVY) * inv_height);
         // snap glyph origin to whole screen pixel
-        LLRectf screen_rect((F32)ll_round(cur_render_x + (F32)fgi->mXBearing),
+        LLRectf screen_rect((F32)ll_round(cur_render_x + (F32)fgi->mXBearing + x_offset),
                     (F32)ll_round(cur_render_y + (F32)fgi->mYBearing),
-                    (F32)ll_round(cur_render_x + (F32)fgi->mXBearing) + (F32)fgi->mWidth,
+                    (F32)ll_round(cur_render_x + (F32)fgi->mXBearing + x_offset) + (F32)fgi->mWidth,
                     (F32)ll_round(cur_render_y + (F32)fgi->mYBearing) - (F32)fgi->mHeight);
 
         if (glyph_count >= GLYPH_BATCH_SIZE)
@@ -376,7 +384,7 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
                   col, style_to_add, shadow, drop_shadow_strength);
 
         chars_drawn++;
-        cur_x += fgi->mXAdvance;
+        cur_x += mFontFreetype->getXAdvance(fgi);
         cur_y += fgi->mYAdvance;
 
         llwchar next_char = wstr[i+1];
@@ -1147,6 +1155,20 @@ LLFontGL* LLFontGL::getFontEmojiHuge( bool useBW ) // <FS:Beq/> Add B&W emoji fo
     return fontp;;
 }
 
+// <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+//static
+LLFontGL* LLFontGL::getFontEmojiDefault(bool useBW)
+{
+    static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Default", 0));
+    static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Default", 0));
+    if (useBW)
+    {
+        return fontp_bw;
+    }
+    return fontp;
+}
+// </FS:Ansariel>
+
 //static
 LLFontGL* LLFontGL::getFontMonospace()
 {
@@ -1178,7 +1200,10 @@ LLFontGL* LLFontGL::getFontSansSerifSmallItalic()
 //static
 LLFontGL* LLFontGL::getFontSansSerif()
 {
-    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Small",0));
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+    //static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Small", 0));
+    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Default", 0));
+    // </FS:Ansariel>
     return fontp;
 }
 

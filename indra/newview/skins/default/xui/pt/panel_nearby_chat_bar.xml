@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="nearby_chat">
-	<line_editor label="Clique aqui para bater papo." name="chat_box" tool_tip="Tecle Enter para falar, Ctrl+Enter para gritar"/>
-	<button name="show_nearby_chat" tool_tip="Mostra/oculta o histórico do bate-papo local"/>
+	<line_editor label="Clique aqui para conversar." name="chat_box" tool_tip="Pressione Enter para falar, Ctrl+Enter para gritar."/>
+	<button name="show_nearby_chat" tool_tip="Mostrar/ocultar o histórico do chat nas proximidades"/>
 </panel>

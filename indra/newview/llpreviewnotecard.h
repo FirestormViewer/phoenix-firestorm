@@ -100,6 +100,9 @@ protected:
     void loadAsset() override;
     bool saveIfNeeded(LLInventoryItem* copyitem = NULL, bool sync = true);
 
+    // <FS> Byte Counter
+    void updateByteCounter();
+
     void deleteNotecard();
 
     static void onLoadComplete(const LLUUID& asset_uuid,
@@ -130,6 +133,10 @@ protected:
     boost::signals2::connection mFontSizeChangedCallbackConnection;
     void onFontChanged();
     // </FS:Ansariel>
+    // <FS:mjr>
+    // Callback method for the resizebar so the byte counter can become invisible if overlapped by the buttons
+    void onResizeFloater();
+    // </FS:mjr>
 
 protected:
     LLViewerTextEditor* mEditor = nullptr;
@@ -140,6 +147,12 @@ protected:
     LLUICtrl* mLockBtn = nullptr;
 
     std::string mNoteName;
+
+    // <FS> Byte counter
+    LLTextBox* mByteCounter = nullptr;
+    std::string mByteCounterTemplate;
+    bool mByteCounterDirty = false;
+    // </FS>
 
     LLUUID mAssetID;
 

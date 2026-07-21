@@ -2615,10 +2615,6 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	<string name="PicksClassifiedsLoadingText">
 		Cargando...
 	</string>
-	<string name="NoPicksText">No has creado ningún destacado.</string>
-	<string name="NoAvatarPicksText">El usuario no tiene destacados</string>
-	<string name="NoClassifiedsText">No has creado ningún clasificado. Pulsa el botón '+' para crear uno.</string>
-	<string name="NoAvatarClassifiedsText">El usuario no tiene clasificados</string>
 	<string name="MultiPreviewTitle">
 		Vista previa
 	</string>
@@ -4597,9 +4593,6 @@ Más información en https://second.life/scripted-agents.
 	</string>
 	<string name="share_alert">
 		Arrastra aquí items del inventario
-	</string>
-	<string name="facebook_post_success">
-		Has publicado en Facebook.
 	</string>
 	<string name="flickr_post_success">
 		Has publicado en Flickr.

@@ -187,6 +187,10 @@ LLFontDescriptor LLFontDescriptor::normalize() const
         new_size = "Large";
     if (removeSubString(new_name,"Huge"))
         new_size = "Huge";
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+    if (removeSubString(new_name, "Default"))
+        new_size = "Default";
+    // </FS:Ansariel>
 
     // HACK - Monospace is the only one we don't remove, so
     // name "Monospace" doesn't get taken down to ""
@@ -200,7 +204,10 @@ LLFontDescriptor LLFontDescriptor::normalize() const
         new_size = "Cascadia";
     // </FS:Ansariel>
     if (new_size.empty())
-        new_size = "Small";
+        // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+        //new_size = "Small";
+        new_size = "Default";
+        // </FS:Ansariel>
 
     if (removeSubString(new_name,"Bold"))
         new_style |= LLFontGL::BOLD;

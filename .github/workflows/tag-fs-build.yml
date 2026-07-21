@@ -50,7 +50,7 @@ jobs:
     steps:
       # Checkout the Repository
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0  # Necessary to fetch all history for tagging

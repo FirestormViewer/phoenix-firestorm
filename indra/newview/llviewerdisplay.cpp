@@ -157,6 +157,27 @@ void render_disconnected_background();
 void getProfileStatsContext(boost::json::object& stats);
 std::string getProfileStatsFilename();
 
+// Adaptive texture-pipeline budget: spend the frame-time headroom between the
+// frame we're rendering and TextureLoadTargetFPS, clamped [2ms, max]. Headroom
+// is measured (smoothed frame interval minus the pipeline's own last spend),
+// so fast machines get big budgets and machines already at target hold the
+// floor. Only consumed while queues have work - drain loops exit when empty.
+static F32 sTexturePipelineSpent = 0.f;
+static F32 texture_pipeline_budget()
+{
+    static LLCachedControl<F32> target_fps(gSavedSettings, "TextureLoadTargetFPS", 60.f);
+    static LLCachedControl<F32> max_ms(gSavedSettings, "TextureLoadBudgetMaxMS", 10.f);
+    static F32 smoothed_other = 0.008f;
+    F32 other = llmax(gFrameIntervalSeconds.value() - sTexturePipelineSpent, 0.f);
+    // A single multi-second hitch must not crater the budget for the following
+    // frames, so cap the sample before it enters the EMA.
+    other = llmin(other, 0.1f);
+    smoothed_other = smoothed_other * 0.9f + other * 0.1f;
+    F32 target_interval = 1.f / llclamp((F32)target_fps, 15.f, 240.f);
+    F32 headroom = target_interval - smoothed_other;
+    return llclamp(headroom, 0.002f, llclamp((F32)max_ms, 2.f, 50.f) * 0.001f);
+}
+
 void display_startup()
 {
     if (   !gViewerWindow
@@ -225,11 +246,9 @@ void display_update_camera()
     // Cut draw distance in half when customizing avatar,
     // but on the viewer only.
     F32 final_far = gAgentCamera.mDrawDistance;
-
     // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
     static LLCachedControl<bool> use_vram_optimization(gSavedSettings, "FSDrawDistanceVRAMOptimization", false);
     // </FS:TJ>
-
     if (gCubeSnapshot)
     {
         static LLCachedControl<F32> reflection_probe_draw_distance(gSavedSettings, "RenderReflectionProbeDrawDistance", 64.f);
@@ -239,15 +258,15 @@ void display_update_camera()
     {
         final_far *= 0.5f;
     }
+    // When system memory is critically low or recovering, shrink draw distance.
     // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
-    //else if (LLViewerTexture::sDesiredDiscardBias > 2.f)
-    else if (use_vram_optimization && LLViewerTexture::sDesiredDiscardBias > 2.f)
-    // </FS:TJ>
+    //else if (const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor(); mem_factor > 1.f)
+    else if (const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor(); use_vram_optimization && mem_factor > 1.f)
     {
-        final_far = llmax(32.f, final_far / (LLViewerTexture::sDesiredDiscardBias - 1.f));
+        final_far = llmax(32.f, final_far / mem_factor);
     }
 // <FS:CR> Aurora sim
-    if(LLWorld::getInstance()->getLockedDrawDistance())
+    if (LLWorld::getInstance()->getLockedDrawDistance())
     {
         //Reset the draw distance and do not update with the new val
         final_far = LLViewerCamera::getInstance()->getFar();
@@ -304,6 +323,12 @@ static void update_tp_display(bool minimized)
     static LLCachedControl<F32> teleport_arrival_delay(gSavedSettings, "TeleportArrivalDelay");
     static LLCachedControl<F32> teleport_local_delay(gSavedSettings, "TeleportLocalDelay");
 
+    // <FS:PP> Speed optimisation
+    static LLCachedControl<bool> disable_teleport_screens(gSavedSettings, "FSDisableTeleportScreens");
+    static LLCachedControl<bool> reset_camera_on_tp(gSavedSettings, "FSResetCameraOnTP");
+    static LLCachedControl<LLVector3> nacl_ml_fov_values(gSavedSettings, "_NACL_MLFovValues");
+    // </FS:PP>
+
     S32 attach_count = 0;
     if (isAgentAvatarValid())
     {
@@ -336,7 +361,10 @@ static void update_tp_display(bool minimized)
             const std::string& msg = LLAgent::sTeleportProgressMessages["pending"];
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
             }
@@ -355,12 +383,18 @@ static void update_tp_display(bool minimized)
                 // If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
                 // replicating the behavior here. -Zi
                 LLViewerCamera::instance().setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
-                if (gSavedSettings.getBOOL("FSResetCameraOnTP"))
+                // <FS:PP> Speed optimisation
+                // if (gSavedSettings.getBOOL("FSResetCameraOnTP"))
+                if (reset_camera_on_tp())
+                // </FS:PP>
                 {
                     gSavedSettings.setF32("CameraAngle", LLViewerCamera::instance().getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
                 }
                 // also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
-                LLVector3 vTemp = gSavedSettings.getVector3("_NACL_MLFovValues");
+                // <FS:PP> Speed optimisation
+                // LLVector3 vTemp = gSavedSettings.getVector3("_NACL_MLFovValues");
+                LLVector3 vTemp = nacl_ml_fov_values();
+                // </FS:PP>
                 vTemp.mV[VZ] = 0.0f;
                 gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
             }
@@ -373,7 +407,10 @@ static void update_tp_display(bool minimized)
             FSData::instance().selectNextMOTD();
             if (!minimized)
             {
-                gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                // <FS:PP> Speed optimisation
+                // gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableTeleportScreens"));
+                gViewerWindow->setShowProgress(true, !disable_teleport_screens());
+                // </FS:PP>
                 gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
                 gViewerWindow->setProgressString(msg);
                 gViewerWindow->setProgressMessage(gAgent.mMOTD);
@@ -560,9 +597,10 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("List");
-                F32 max_image_decode_time = 0.050f * gFrameIntervalSeconds.value();          // 50 ms/second decode time
-                max_image_decode_time     = llclamp(max_image_decode_time, 0.002f, 0.005f);  // min 2ms/frame, max 5ms/frame)
+                F32 max_image_decode_time = texture_pipeline_budget();
+                LLTimer tex_timer;
                 gTextureList.updateImages(max_image_decode_time);
+                sTexturePipelineSpent = tex_timer.getElapsedTimeF32();
             }
 
             {
@@ -969,9 +1007,10 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("List");
-                F32 max_image_decode_time = 0.050f*gFrameIntervalSeconds.value(); // 50 ms/second decode time
-                max_image_decode_time = llclamp(max_image_decode_time, 0.002f, 0.005f ); // min 2ms/frame, max 5ms/frame)
+                F32 max_image_decode_time = texture_pipeline_budget();
+                LLTimer tex_timer;
                 gTextureList.updateImages(max_image_decode_time);
+                sTexturePipelineSpent = tex_timer.getElapsedTimeF32();
             }
 
             {

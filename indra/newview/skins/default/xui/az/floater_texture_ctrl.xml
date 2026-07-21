@@ -32,7 +32,7 @@
 
 	<!--  middle: local mode -->
 	<filter_editor label="Teksturları filtrlə" name="inventory search editor"/>
-	<check_box initial_value="false" label="Qovluqları göstər" name="show_folders_check"/>
+	<check_box label="Qovluqları göstər" name="show_folders_check"/>
 	<button label="Əlavə et" label_selected="Əlavə et" name="l_add_btn"/>
 	<button label="Sil" label_selected="Sil" name="l_rem_btn"/>
 	<button label="Paylaş" label_selected="Paylaş" name="l_upl_btn"/>
@@ -61,7 +61,7 @@
 	<!-- bottom static -->
 	<line_editor name="TextureKey" tool_tip="Tekstur açarı"/>
 	<button name="TextureKeyApply" label="UUID Tətbiq et" width="100" tool_tip="Bu UUID tətbiq et"/>
+	<check_box label="İndi tətbiq et" name="apply_immediate_check" width="200"/>
 	<button label="Bəli" label_selected="Bəli" name="Select" left="150"/>
 	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
-	<check_box initial_value="true" label="İndi tətbiq et" name="apply_immediate_check" width="200"/>
 </floater>

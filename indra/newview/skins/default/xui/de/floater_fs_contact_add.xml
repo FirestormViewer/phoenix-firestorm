@@ -9,6 +9,12 @@
 	<floater.string name="text_add_multiple">
 		Kontakt-Set wählen, zu dem [COUNT] Avatare hinzugefügt werden sollen:
 	</floater.string>
+	<floater.string name="title_add">
+		Hinzufügen zu Kontakt-Set...
+	</floater.string>
+	<floater.string name="button_add">
+		Zu Set hinzufügen
+	</floater.string>
 	<text name="textfield">
 	</text>
 	<button label="Zu Set hinzufügen" name="add_btn"/>

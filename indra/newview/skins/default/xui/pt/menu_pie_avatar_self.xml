@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+	<pie_slice label="Perfil" name="Profile..."/>
+	<pie_slice label="Grupos" name="Groups..."/>
+	<pie_menu label="Tirar &gt;" name="Take Off &gt;">
+		<pie_menu label="Roupas &gt;" name="Clothes &gt;">
+			<pie_slice label="Camisa" name="Shirt"/>
+			<pie_slice label="Calça" name="Pants"/>
+			<pie_slice label="Sapatos" name="Shoes"/>
+			<pie_slice label="Meias" name="Socks"/>
+			<pie_slice label="Jaqueta" name="Jacket"/>
+			<pie_slice label="Luvas" name="Gloves"/>
+			<pie_menu label="Mais &gt;" name="Clothes More">
+				<pie_slice label="Camiseta de baixo" name="Self Undershirt"/>
+				<pie_slice label="Todas as roupas" name="All Clothes"/>
+				<pie_slice label="Roupa íntima de baixo" name="Self Underpants"/>
+				<pie_slice label="Tattoo" name="Self Tattoo"/>
+				<pie_slice label="Física" name="Self Physics"/>
+				<pie_slice label="Alpha" name="Self Alpha"/>
+			</pie_menu>
+			<pie_slice label="Saia" name="Skirt"/>
+		</pie_menu>
+		<pie_menu label="HUD &gt;" name="Pie Object Detach HUD"/>
+		<pie_menu label="Remover &gt;" name="Pie Object Detach">
+			<pie_menu label="Esquel. avançado &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Asa direita" name="Right Wing"/>
+				<pie_slice label="Virilha" name="Groin"/>
+				<pie_slice label="Base da cauda" name="Tail Base"/>
+				<pie_slice label="Ponta da cauda" name="Tail Tip"/>
+				<pie_slice label="Asa esquerda" name="Left Wing"/>
+				<pie_slice label="Pé traseiro esq." name="Left Hind Foot"/>
+				<pie_menu label="Mais &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Orelha dir. alt." name="Alt Right Ear"/>
+					<pie_slice label="Olho dir. alt." name="Alt Right Eye"/>
+					<pie_slice label="Língua" name="Tongue"/>
+					<pie_slice label="Olho esq. alt." name="Alt Left Eye"/>
+					<pie_slice label="Orelha esq. alt." name="Alt Left Ear"/>
+					<pie_slice label="Anelar esq." name="Left Ring Finger"/>
+					<pie_slice label="Mandíbula" name="Jaw"/>
+					<pie_slice label="Anelar dir." name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="Pé traseiro dir." name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
+		<pie_slice label="Desanexar tudo" name="Detach All"/>
+	</pie_menu>
+	<pie_slice label="Sentar" name="Sit Down Here"/>
+	<pie_slice label="Levantar" name="Stand Up"/>
+	<pie_slice label="Info de script" name="ScriptInfo"/>
+	<pie_slice label="Gestos..." name="Gestures"/>
+	<pie_menu label="Aparência &gt;" name="Appearance &gt;">
+		<pie_slice label="Editar forma" name="Edit My Shape"/>
+		<pie_menu label="Redefinir &gt;" name="ResetMenu">
+			<pie_slice label="Esquel. e anim." name="Reset Skeleton And Animations"/>
+			<pie_slice label="Esqueleto" name="Reset Skeleton"/>
+			<pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+		</pie_menu>
+		<pie_slice label="Atualizar texturas" name="Texture Refresh"/>
+		<pie_slice label="Editar traje" name="Edit My Outfit"/>
+		<pie_slice label="Exportar XML" name="Dump XML"/>
+		<pie_slice label="Altura de flutuação" name="Hover Height"/>
+	</pie_menu>
+	<pie_slice label="Texturas" name="Debug..."/>
+</pie_menu>

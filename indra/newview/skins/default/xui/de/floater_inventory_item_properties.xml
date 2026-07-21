@@ -8,7 +8,7 @@
 	<floater.string name="acquiredDate">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
 	<floater.string name="acquiredDateAMPM">[wkday,datetime,local]. [day,datetime,local]. [mth,datetime,local]. [year,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]</floater.string>
 	<text name="LabelItemNameTitle">Name:</text>
-	<text name="LabelItemDescTitle">Beschreibung:</text>
+	<text name="LabelItemDescTitle">Beschreib.:</text>
 	<text name="LabelCreatorTitle">Ersteller:</text>
 	<button label="Profil..." label_selected="" name="BtnCreator"/>
 	<text name="LabelOwnerTitle">Eigentümer:</text>

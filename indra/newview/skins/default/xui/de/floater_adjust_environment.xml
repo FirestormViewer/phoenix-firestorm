@@ -24,10 +24,10 @@
 					</text>
 					<button label="Zurücksetzen" name="btn_reset" tool_tip="Schließen und auf gemeinsame Umgebung zurücksetzen"/>
 					<text name="sun_color_lbl">
-						Farbe Sonne:
+						Farb. Sonne:
 					</text>
 					<text name="cloud_color_lbl">
-						Wolkenfarbe:
+						Wolkenfarb.:
 					</text>
 					<text name="cloud_map_label">
 						Wolkenbild:

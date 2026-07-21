@@ -21,7 +21,7 @@
 	<icon tool_tip="Moderate (umiarkowane)" name="rating_icon_moderate" />
 	<icon tool_tip="Adult (dla dorosłych)" name="rating_icon_adult" />
 	<check_box label="Cena &#8804; " name="pricecheck" />
-	<check_box label="Obszar &#8805; " name="areacheck" />
+	<check_box label="m² &#8805; " name="areacheck" />
 	<button label="Szukaj" name="Search" />
 	<scroll_list name="results">
 		<column label="Nazwa" name="name" />

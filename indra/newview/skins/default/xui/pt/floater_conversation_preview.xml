@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview_conversation" title="CONVERSA:">
+<floater name="preview_conversation" title="Conversa:">
 	<floater.string name="Title">
-		CONVERSA: [NAME]
+		Conversa: [NAME]
 	</floater.string>
 	<text name="page_label" value="Página"/>
+	<button name="open_external_btn" tool_tip="Abrir histórico do chat em janela externa"/>
+	<button name="search_btn" tool_tip="Pesquisar neste histórico"/>
 </floater>

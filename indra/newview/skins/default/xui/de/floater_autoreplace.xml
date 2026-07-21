@@ -20,7 +20,7 @@
 		Ersetzung:
 	</text>
 	<button label="Eintrag speich." name="autoreplace_save_entry" tool_tip="Diesen Eintrag speichern."/>
-	<button label="Änderungen speichern" name="autoreplace_save_changes" tool_tip="Alle Änderungen speichern." width="140"/>
+	<button label="Änderungen speichern" name="autoreplace_save_changes" tool_tip="Alle Änderungen speichern." width="150"/>
 	<button label="Abbrechen" name="autoreplace_cancel" tool_tip="Alle Änderungen löschen."/>
 </floater>
 <!--

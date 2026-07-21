@@ -61,7 +61,7 @@
 	<line_editor name="parcel_name_editor" width="560"/>
 	<button label="Filter" name="filter_parcel_btn" width="108"/>
 	<button label="Aktualisieren" name="refresh_btn" width="108"/>
-	<button label="Auswahl zurückgeben" name="return_selected_btn" width="134"/>
+	<button label="Auswahl zurückgeb." name="return_selected_btn" width="134"/>
 	<button label="Alle zurückgeben" name="return_all_btn" left_pad="5" width="110"/>
 	<button label="Teleportieren zu" name="teleport_to_btn" left_pad="5" width="110"/>
 	<button label="Profil" name="profile_btn" left_pad="5" width="80"/>

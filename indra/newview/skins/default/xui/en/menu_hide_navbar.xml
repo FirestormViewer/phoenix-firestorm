@@ -78,6 +78,18 @@
              function="CheckControl"
              parameter="ShowMenuBarLocation" />
     </menu_item_check>
+    <!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
+    <menu_item_check
+         label="Show Omnifilter Controls"
+         name="FSOmnifilterControls">
+        <on_click
+          function="ToggleControl"
+          parameter="OmnifilterControls" />
+        <on_check
+        function="CheckControl"
+        parameter="OmnifilterControls" />
+    </menu_item_check>
+    <!-- </FS:MJR> [FIRE-36776] -->
     <menu_item_check
          label="Show Menu Search"
          name="FSMenuSearch">

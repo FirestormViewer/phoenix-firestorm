@@ -34,6 +34,7 @@
 #include <unordered_set>
 
 class LLButton;
+class LLContextMenu;
 class LLFilterEditor;
 class LLInventoryPanel;
 class LLPanel;
@@ -53,7 +54,6 @@ public:
     bool handleMouseDown(S32 x, S32 y);
 
     void noteActivePanel(LLInventoryPanel* panel);
-    void onActiveFilterChanged(LLPanel* active_panel);
     void notifyActiveFilterStateChanged();
 
     static void registerCommitCallbacks(LLPanelMainInventory* parent);
@@ -62,19 +62,21 @@ public:
 
     bool isCustomTab(const LLPanel* panel) const;
     bool isAddTab(const LLPanel* panel) const;
+    bool isShowHiddenTab(const LLPanel* panel) const;
     void onAddTabSelected();
     void onAddClicked();
+    void onShowHiddenClicked();
 
     void onRenameClicked();
     void onCloneClicked();
     void onCloseClicked();
+    void onHideClicked();
 
     static void install(LLPanelMainInventory* parent, LLFilterEditor* filter_editor);
     static void notifyFilterStateChanged(LLPanelMainInventory* parent);
     static bool activePanelIsCustom(const LLPanelMainInventory* parent);
     static bool maybeHandleAddTabSelected(LLPanelMainInventory* parent);
     static void noteActivePanel(LLPanelMainInventory* parent, LLInventoryPanel* panel);
-    static void onActiveFilterChanged(LLPanelMainInventory* parent, LLPanel* active);
     static S32  captureFilterGeneration(const LLPanelMainInventory* parent);
     static void notifyIfFilterChanged(LLPanelMainInventory* parent, S32 prev_generation);
     static bool handleRightMouseDown(LLPanelMainInventory* parent, S32 x, S32 y);
@@ -91,8 +93,14 @@ private:
     bool isUnchangedSetting(const LLSD& array) const;
     void clearCustomTabs();
     void installAddTab();
+    void installShowHiddenTab();
+    void hideTab(LLInventoryPanel* panel);
+    void showTab(LLInventoryPanel* panel);
+    void updateShowHiddenTabVisibility();
+    void selectNearestVisibleTab(LLInventoryPanel* skip_panel);
     void onSettingChangedExternally();
     void onRenameConfirmed(const LLSD& notification, const LLSD& response);
+    void onCloseConfirmed(const LLSD& notification, const LLSD& response);
     void onFilterFocusLost();
     void onClosePressed(LLInventoryPanel* panel);
     void doLoad();
@@ -111,15 +119,20 @@ private:
     LLPanelMainInventory* mParent{ nullptr };
     LLTabContainer* mTabs{ nullptr };
     LLHandle<LLView> mMenuHandle;
+    LLHandle<LLContextMenu> mHiddenMenuHandle;
     std::set<LLInventoryPanel*> mPanels;
     std::unordered_set<LLInventoryPanel*> mExplicitlyNamed;
     std::unordered_set<LLInventoryPanel*> mPendingRootOpen;
+    std::unordered_set<LLInventoryPanel*> mHidden;
     LLInventoryPanel* mContextPanel{ nullptr };
     LLInventoryPanel* mAddTabPanel{ nullptr };
+    LLInventoryPanel* mShowHiddenTabPanel{ nullptr };
     LLInventoryPanel* mLastActivePanel{ nullptr };
     LLNotificationPtr mRenameNotification;
+    LLNotificationPtr mCloseNotification;
     boost::signals2::connection mSettingConnection;
     boost::signals2::connection mAddClickConnection;
+    boost::signals2::connection mShowHiddenClickConnection;
     bool mSaving{ false };
     bool mLoading{ false };
     bool mLoadedOk{ false };

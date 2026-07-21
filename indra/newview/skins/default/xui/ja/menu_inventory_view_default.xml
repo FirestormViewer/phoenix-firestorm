@@ -7,4 +7,7 @@
 	<menu_item_check label="リスト表示" name="list_view"/>
 	<menu_item_check label="ギャラリー表示" name="gallery_view"/>
 	<menu_item_check label="複合表示" name="combination_view"/>
+	<menu_item_check label="最新タブ" name="recent_tab"/>
+	<menu_item_check label="着用中タブ" name="worn_tab"/>
+	<menu_item_check label="お気に入りタブ" name="favorites_tab"/>
 </toggleable_menu>

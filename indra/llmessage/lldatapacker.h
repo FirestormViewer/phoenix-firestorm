@@ -51,7 +51,7 @@ public:
     virtual bool        unpackString(std::string& value, const char *name) = 0;
 
     virtual bool        packBinaryData(const U8 *value, S32 size, const char *name) = 0;
-    virtual bool        unpackBinaryData(U8 *value, S32 &size, const char *name) = 0;
+    virtual bool        unpackBinaryData(U8 *value, S32 value_size, S32 &out_size, const char *name) = 0;
 
     // Constant size binary data packing
     virtual bool        packBinaryDataFixed(const U8 *value, S32 size, const char *name) = 0;
@@ -137,7 +137,7 @@ public:
     /*virtual*/ bool        unpackString(std::string& value, const char *name);
 
     /*virtual*/ bool        packBinaryData(const U8 *value, S32 size, const char *name);
-    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 &size, const char *name);
+    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 value_size, S32 &out_size, const char *name);
 
     // Constant size binary data packing
     /*virtual*/ bool        packBinaryDataFixed(const U8 *value, S32 size, const char *name);
@@ -248,7 +248,7 @@ public:
     /*virtual*/ bool        unpackString(std::string& value, const char *name);
 
     /*virtual*/ bool        packBinaryData(const U8 *value, S32 size, const char *name);
-    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 &size, const char *name);
+    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 value_size, S32 &out_size, const char *name);
 
     // Constant size binary data packing
     /*virtual*/ bool        packBinaryDataFixed(const U8 *value, S32 size, const char *name);
@@ -380,7 +380,7 @@ public:
     /*virtual*/ bool        unpackString(std::string& value, const char *name);
 
     /*virtual*/ bool        packBinaryData(const U8 *value, S32 size, const char *name);
-    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 &size, const char *name);
+    /*virtual*/ bool        unpackBinaryData(U8 *value, S32 value_size, S32 &out_size, const char *name);
 
     /*virtual*/ bool        packBinaryDataFixed(const U8 *value, S32 size, const char *name);
     /*virtual*/ bool        unpackBinaryDataFixed(U8 *value, S32 size, const char *name);

@@ -15,6 +15,11 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
+	<panel left="-660" name="omnifilter_controls_panel">
+		<check_box name="enable_omnifilter" tool_tip="Omni-Filter aktivieren"/>
+		<button name="btn_show_omnifilter" tool_tip="Omni-Filter öffnen"/>
+		<combo_box name="cmb_omnifilter_rule_sets" tool_tip="Omni-Filter-Regel-Set auswählen, das verwendet werden soll."/>
+	</panel>
 	<panel name="menu_search_panel" left="-463">
 		<search_editor label="Menü durchs." name="search_menu_edit" tool_tip="Geben Sie hier den gewünschten Suchbegriff ein. Die Ergebnisse werden für teilweise Volltext-Treffer innerhalb des Menüs angezeigt."/>
 	</panel>

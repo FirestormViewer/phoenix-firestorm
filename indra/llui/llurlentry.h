@@ -230,6 +230,26 @@ public:
     LLUrlEntrySimpleSecondlifeURL();
 };
 
+// <FS:PP> Add trusted domains
+///
+/// LLUrlEntryFirestormURL Describes *firestormviewer.org/ and *phoenixviewer.com/ urls
+///
+class LLUrlEntryFirestormURL : public LLUrlEntrySecondlifeURL
+{
+public:
+    LLUrlEntryFirestormURL();
+};
+
+///
+/// LLUrlEntrySimpleFirestormURL Describes *firestormviewer.org and *phoenixviewer.com urls
+///
+class LLUrlEntrySimpleFirestormURL : public LLUrlEntryFirestormURL
+{
+public:
+    LLUrlEntrySimpleFirestormURL();
+};
+// </FS:PP>
+
 ///
 /// LLUrlEntryAgent Describes a Second Life agent Url, e.g.,
 /// secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about

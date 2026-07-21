@@ -4,7 +4,7 @@
 		<texture_picker label="Tekstura" name="Fabric" tool_tip="Kliknij, aby wybrać obrazek"/>
 		<color_swatch label="Kolor" name="Color/Tint" tool_tip="Kliknij, aby wybrać kolor"/>
 	</panel>
-	<panel name="shoes_main_tab_holder">
+	<panel name="shoes_main_tab_holder" title="Buty">
 		<accordion name="shoes_main_accordion">
 			<accordion_tab name="shoes_main_tab" title="Buty"/>
 		</accordion>

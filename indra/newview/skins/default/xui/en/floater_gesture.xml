@@ -137,7 +137,7 @@
                  left="10"
                  top="28"
                  name="FSShowOnlyActiveGestures"
-                 width="110">
+                 width="120">
                    <check_box.commit_callback
                     function="Gesture.Action.RefreshList" />
               </check_box>

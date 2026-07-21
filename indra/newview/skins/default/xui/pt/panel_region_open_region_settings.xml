@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Configurações da região" name="RegionSettings">
+	<spinner label="Distância de renderização padrão" name="draw_distance" tool_tip="Define a distância de renderização padrão desta região."/>
+	<check_box label="Forçar distância de renderização" name="force_draw_distance" tool_tip="Se ativado, a distância de renderização será forçada para todos os residentes nesta região. Observação: essa configuração pode causar lag para residentes com hardware mais antigo. (Padrão: desativado)"/>
+	<spinner label="Distância máxima de arraste" name="max_drag_distance" tool_tip="Define a distância máxima na qual um prim pode ser movido nesta região."/>
+	<spinner label="Escala máxima de prim" name="max_prim_scale" tool_tip="Define o tamanho máximo que um prim pode ter nesta região."/>
+	<spinner label="Escala mínima de prim" name="min_prim_scale" tool_tip="Define o tamanho mínimo que um prim pode ter nesta região."/>
+	<spinner label="Escala máxima de prim físico" name="max_phys_prim_scale" tool_tip="Define o tamanho máximo que um prim físico pode ter nesta região."/>
+	<spinner label="Tamanho máximo de oco" name="max_hollow_size" tool_tip="Define o tamanho máximo de oco que pode ser definido para um prim nesta região."/>
+	<spinner label="Tamanho mínimo de oco" name="min_hole_size" tool_tip="Define o tamanho mínimo de oco que pode ser definido para um prim nesta região."/>
+	<spinner label="Número máximo de links" name="max_link_count" tool_tip="Define o número máximo de prims não físicos que podem ser linkados nesta região."/>
+	<spinner label="Número máximo de links físicos" name="max_link_count_phys" tool_tip="Define o número máximo de prims físicos que podem ser linkados nesta região."/>
+	<spinner label="Máx. de itens de inventário por transferência" name="max_inventory_items_transfer" tool_tip="Define quantos objetos podem ser transferidos ao mesmo tempo. O valor -1 significa sem limite. (Padrão: -1)"/>
+	<spinner label="Escala de detalhe do terreno" name="terrain_detail_scale" tool_tip="Define a escala de detalhe do terreno para a região."/>
+	<spinner label="Exibição de tags" name="show_tags" tool_tip="Define como os nomes de avatar são exibidos sobre os avatares na região. (Sempre mostrar = 2, mostrar brevemente = 1, nunca mostrar = 0)"/>
+	<spinner label="Número máximo de grupos" name="max_groups" tool_tip="Define de quantos grupos um residente pode participar. O valor -1 significa sem limite. (Padrão: -1)"/>
+	<check_box label="Exibir água" name="render_water" tool_tip="Se ativado, a água será exibida na região. (Padrão: ativado)"/>
+	<check_box label="Permitir minimapa" name="allow_minimap" tool_tip="Permite o uso do minimapa na região quando ativado. (Padrão: ativado)"/>
+	<check_box label="Permitir prims físicos" name="allow_physical_prims" tool_tip="Permite a criação de prims físicos na região quando ativado. (Padrão: ativado)"/>
+	<check_box label="Aplicar restrições máximas de construção" name="enforce_max_build" tool_tip="Se ativado, as restrições máximas de construção serão forçadas pela região."/>
+	<check_box label="Permitir Windlight por parcela" name="allow_parcel_windlight" tool_tip="Se ativado, as configurações de Windlight por parcela serão habilitadas. (Padrão: ativado)"/>
+	<button label="Aplicar" name="apply_ors_btn"/>
+</panel>

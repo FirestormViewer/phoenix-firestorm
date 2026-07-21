@@ -74,7 +74,7 @@
 			<text name="req_restart_ims" left_pad="55" width="120">
 				(Erfordert Neustart)
 			</text>
-			<text name="tab_direction_label" width="160">
+			<text name="tab_direction_label" width="180">
 				Chat-Tabmodus-Orientierung:
 			</text>
 			<radio_group name="chat_tab_direction" tool_tip="Ändert die Oriengierung von Chat/Instant-Message-Reiterkarten zwischen horizontal und vertikal wenn kompakter Chat aktiviert ist. (Erfordert Neustart)">
@@ -84,7 +84,7 @@
 			<text name="req_restart_chattabs" width="120">
 				(Erfordert Neustart)
 			</text>
-			<check_box name="FSAutoOrderIMTabs" label="IM-Tabs nach Typ sortieren:" tool_tip="Aktiviert automatische Sortierung für IM-Tabs innerhalb des „Gespräche“-Fensters." width="170"/>
+			<check_box name="FSAutoOrderIMTabs" label="IM-Tabs nach Typ sortieren:" tool_tip="Aktiviert automatische Sortierung für IM-Tabs innerhalb des „Gespräche“-Fensters." width="180"/>
 			<combo_box name="FSAutoOrderIMTabsPriorities">
 				<combo_box.item name="group_conf_im" label="Gruppen, Konferenzen, IMs"/>
 				<combo_box.item name="group_im_conf" label="Gruppen, IMs, Konferenzen"/>
@@ -94,7 +94,7 @@
 				<combo_box.item name="im_conf_group" label="IMs, Konferenzen, Gruppen"/>
 			</combo_box>
 			<check_box name="FSAutoOrderIMTabsAtTop" label="Neue Tabs als erste einfügen"  tool_tip="Fügt neue IM-Tabs als erstes Tab in der jeweiligen Gruppe hinzu."/>
-			<text name="FSIMTabNameFormat_label">
+			<text name="FSIMTabNameFormat_label" width="180">
 				Namensformat für IM-Tabs:
 			</text>
 			<combo_box name="FSIMTabNameFormat">
@@ -149,7 +149,7 @@
 		<panel label="Eingabe" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
-			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
+			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="200"/>
 			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
 			<check_box label="Tippanimation auch bei Emotes abspielen" name="play_typing_animation_emote"/>
 			<check_box label="Tipp-Klang abspielen, wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
@@ -174,7 +174,7 @@
 				Tastatur-Shortcuts verwenden:
 			</text>
 			<check_box label="Strg + Return (Rufen)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Strg + Return zum Rufen im Chat in der Nähe verwendet werden soll." name="FSUseCtrlShout"/>
-			<check_box label="Umschalt + Return (Flüstern)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Umschalt + Return zum Flüstern im Chat in der Nähe verwendet werden soll." name="FSUseShiftWhisper"/>
+			<check_box label="Umschalt + Return (Flüstern)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Umschalt + Return zum Flüstern im Chat in der Nähe verwendet werden soll." name="FSUseShiftWhisper" width="180"/>
 			<check_box label="Alt + Return (OOC)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Alt + Return für OOC-Chat im Chat in der Nähe verwendet werden soll." name="FSUseAltOOC"/>
 		</panel>
 
@@ -203,7 +203,7 @@
 			</text>
 			<check_box name="FSShowIMInChatHistory" label="Instant Messages und Gruppenchats im lokalem Chat anzeigen"/>
 			<check_box name="FSLogIMInChatHistory" label="IMs und Gruppenchats im lokalem Chat speichern" width="190"/>
-			<text name="FSIMChatHistoryFade_label" width="320">
+			<text name="FSIMChatHistoryFade_label" width="345">
 				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
@@ -220,27 +220,27 @@
 		<!-- Chat: Radar -->
 		<panel label="Radar" name="ChatRadar">
 			<check_box name="reportChatRangeEnter" label="Radar meldet, wenn Avatare die Chatreichweite betreten"/>
-			<check_box width="140" name="PlayModeUISndRadarChatEnter" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarChatEnter" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarChatEnter" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarChatEnter" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="reportChatRangeLeave" label="Radar meldet, wenn Avatare die Chatreichweite verlassen"/>
-			<check_box width="140" name="PlayModeUISndRadarChatLeave" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarChatLeave" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarChatLeave" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarChatLeave" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="reportDrawRangeEnter" label="Radar meldet, wenn Avatare die Draw Distance betreten"/>
-			<check_box width="140" name="PlayModeUISndRadarDrawEnter" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarDrawEnter" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarDrawEnter" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarDrawEnter" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="reportDrawRangeLeaave" label="Radar meldet, wenn Avatare die Draw Distance verlassen"/>
-			<check_box width="140" name="PlayModeUISndRadarDrawLeave" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarDrawLeave" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarDrawLeave" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarDrawLeave" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="RadarReportSimRangeEnter" label="Radar meldet, wenn Avatare die Region betreten"/>
-			<check_box width="140" name="PlayModeUISndRadarSimEnter" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarSimEnter" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarSimEnter" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarSimEnter" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="RadarReportSimRangeLeave" label="Radar meldet, wenn Avatare die Region verlassen"/>
-			<check_box width="140" name="PlayModeUISndRadarSimLeave" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarSimLeave" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarSimLeave" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarSimLeave" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="RadarEnterChannelAlert" label="Betreten-Meldungen an Skripte weiterleiten"/>
@@ -249,7 +249,7 @@
 			<text name="AgeAlertLabel">
 				Alters-Alarm:
 			</text>
-			<text name="RadarAvatarAgeAlertValueLabel">
+			<text name="RadarAvatarAgeAlertValueLabel" width="90">
 				Schwellwert:
 			</text>
 			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Färbt ebenfalls die Alters-Spalte im Radar ein. Zum Deaktivieren auf -1 setzen."/>
@@ -257,7 +257,7 @@
 				Tage
 			</text>
 			<check_box name="RadarAvatarAgeAlert" label="Radar meldet, wenn Avatare jünger als das angegebene Alter sind"/>
-			<check_box width="140" name="PlayModeUISndRadarAgeAlert" label="Klang-UUID abspielen:"/>
+			<check_box width="160" name="PlayModeUISndRadarAgeAlert" label="Klang-UUID abspielen:"/>
 			<button label="V" name="Prev_UISndRadarAgeAlert" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndRadarAgeAlert" tool_tip="Auf Standardwert zurücksetzen."/>
 		</panel>
@@ -285,18 +285,24 @@
 
 		<!-- Chat: CmdLine -->
 		<panel label="CmdLine" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt" width="150">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Dokumentation]
+			</text>
 			<check_box label="Chat-Eingabezeile zur Kommandoeingabe verwenden" name="chat_cmd_toggle"/>
 			<text name="FSCmdLineCalc_txt">
 				Berechnen (Befehl: cmd SIN(2+2))
 			</text>
 			<text name="FSCmdLineDrawDistance_txt">
-				Draw Distance ändern (Befehl: cmd Meter)
+				Draw Distance änd. (Befehl: cmd Meter)
 			</text>
 			<text name="FSCmdLineBandWidth_txt">
 				Max. Bandbreite (Befehl: cmd kbps)
 			</text>
 			<text name="FSCmdLineCopyCam_txt">
-				Kamerapos. in Zwischenablage kopieren
+				Kamerapos. in Zwischenablage kopier.
+			</text>
+			<text  name="FSCmdLinePasteCam_txt">
+				Kam.-param. setzen (cmd pos|focus|roll)
 			</text>
 			<text name="FSCmdLineAO_txt">
 				AO ein-/ausschalten (Befehl: cmd on/off)
@@ -310,7 +316,7 @@
 			</text>
 			<line_editor tool_tip="Setzt den Medienstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMedia"/>
 			<text name="FSCmdLineMusic_txt">
-				Musikstream-URL setzen (Befehl: cmd URL)
+				Musikstream-URL set. (Befehl: cmd URL)
 			</text>
 			<line_editor tool_tip="Setzt die Musikstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMusic"/>
 			<text name="FSCmdLineRezPlatform_txt">
@@ -318,12 +324,16 @@
 			</text>
 			<slider name="FSCmdLinePlatformSize" label="Breite" label_width="37" tool_tip="Legt die Größe der zu rezzenden Plattform fest."/>
 			<text name="FSCmdLineKeyToName_txt">
-				Av.-Name via UUID bestimmen (Befehl: cmd key)
+				Av.-Name via UUID ermitteln (Befehl: cmd key)
 			</text>
 			<text name="FSCmdLineRollDice_txt">
 				Würfeln (Befehl: cmd Würfel Seiten mt mw)
 			</text>
 			<line_editor tool_tip="Würfelt - cmd [Anzahl Würfel] [Seiten pro Würfel] [Modifizierer-Typ (optional)] [Modifizierer-Wert (optional). Beispiel: cmd 1 20, cmd 1 20 + 5. Auslassen der Parameter entspricht cmd 1 6 (Standardwürfel)" name="FSCmdLineRollDice"/>
+			<text  name="FSCmdLineTrackPos_txt">
+				Position o. Avatar verfolgen (cmd pos od. name)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Setzt ein Leuchtsignal auf der Weltkarte an einer Position cpcampos format) oder zu einem partiellen Avatarnamen"/>
 			<text name="FSCmdLinePos_txt">
 				Teleport innerhalb Region (Befehl: cmd x z y)
 			</text>
@@ -349,7 +359,8 @@
 			<text name="FSCmdLineMapTo_txt">
 				Teleport zu Region (cmd regionname | x y z)
 			</text>
-			<check_box label="Selbe Position auf neuer Region" name="toggle"/>
+			<check_box label="Selbe Position für neue Region verwenden" name="toggle"/>
+			<check_box label="Befehlsausgabe an Kanal senden:" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 
 	</tab_container>

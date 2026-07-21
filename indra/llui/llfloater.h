@@ -178,6 +178,7 @@ public:
         Optional<LLFloaterEnums::EOpenPositioning>  positioning;
 
         Optional<const LLFontGL*> header_font;
+        Optional<LLFontGL::ShadowType> header_font_shadow;      // <FS:Zi> Allow skins to override drag handle font shadow
         Optional<S32>           header_height,
                                 legacy_header_height, // HACK see initFromXML()
                                 header_vpad;

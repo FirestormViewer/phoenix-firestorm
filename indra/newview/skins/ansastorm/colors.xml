@@ -305,6 +305,10 @@
 	 name="AnsaStorm_HtmlLink_QueryPart"
 	 value="0.463 0.729 0.826 1" />
 
+	<color
+	 name="AvatarListForegroundRed"
+	 value="1 0.703 0.703 1" />
+
 	 <!-- END AnsaStorm Definitions -->
 
   <!-- This color name makes potentially unused colors show up bright purple.
@@ -479,10 +483,10 @@
      reference="Yellow" />
     <color
      name="AvatarListItemBeyondShoutRange"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="AvatarListItemAgeAlert"
-     reference="Red" />
+     reference="AvatarListForegroundRed" />
     <color
      name="BackgroundChatColor"
      reference="DkGray" />
@@ -714,6 +718,9 @@
     <color
      name="HTMLLinkColor"
      reference="AnsaStorm_HtmlLink" />
+    <color
+     name="HTMLLinkColorHovertips"
+     reference="Black" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -1271,10 +1278,6 @@
   <color
       name="CurrencyColor"
       reference="LabelTextColor" />
-	  
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
 
   <!-- syntax highlighting (LSL Scripts) -->
   <color
@@ -1439,5 +1442,8 @@
     value="1 1 0.383 1" />
   <color
     name="MentionFlashBgColor"
+    reference="EmphasisColor" />
+  <color
+    name="HighlightPanelBackground"
     reference="EmphasisColor" />
 </colors>

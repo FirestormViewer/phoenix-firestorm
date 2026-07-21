@@ -482,7 +482,7 @@
 			<button label="Gewichte und Gebühr berechnen" name="calculate_btn" tool_tip="Gewichte und Gebühr berechnen" width="200"/>
 			<button label="Abbrechen" name="cancel_btn"/>
 			<button label="Hochladen" name="ok_btn" tool_tip="Auf Simulator hochladen"/>
-			<button label="Einstellungen löschen und Formular zurücksetzen" name="reset_btn" width="280"/>
+			<button label="Einstellungen löschen &amp; Formular zurücksetzen" name="reset_btn" width="290"/>
 			<text name="upload_fee">
 				Uploadkost.: [FEE] L$
 			</text>

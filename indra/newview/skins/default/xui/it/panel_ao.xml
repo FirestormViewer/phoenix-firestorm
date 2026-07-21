@@ -4,7 +4,7 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="Seleziona set di animazioni da modificare."/>
 		<button name="ao_activate" tool_tip="Attiva subito questo set."/>
 		<check_box name="ao_default" label="Predefinito" tool_tip="Attiva questo set all&apos;ingresso."/>
-		<button name="ao_add" tool_tip="Crea un nuovo set di animazioni."/>
+		<menu_button name="ao_add" tool_tip="Crea un nuovo set di animazioni."/>
 		<button name="ao_remove" tool_tip="Cancella questo set."/>
 		<check_box name="ao_sit_override" label="Sedute person." tool_tip="Attiva le sedute personali."/>
 		<check_box name="ao_smart" label="Intelligente" tool_tip="Cerca di capire se la seduta personale andrebbe in conflitto con le animazioni dell&apos;oggetto e in questo caso disabilita la propria seduta temporaneamente."/>

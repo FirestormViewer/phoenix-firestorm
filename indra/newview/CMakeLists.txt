@@ -163,6 +163,7 @@ set(viewer_SOURCE_FILES
     fsnearbychatcontrol.cpp
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
+    fsnewitemctrl.cpp
     fspanelblocklist.cpp
     fspanelcontactsets.cpp
     fspanelface.cpp
@@ -726,6 +727,7 @@ set(viewer_SOURCE_FILES
     #llslurl.cpp #<FS:AW optional opensim support>
     llsnapshotlivepreview.cpp
     llspatialpartition.cpp
+    llstatslistener.cpp
     llspeakers.cpp
     llspeakingindicatormanager.cpp
     llsplitbutton.cpp
@@ -1025,6 +1027,7 @@ set(viewer_HEADER_FILES
     fsnearbychatcontrol.h
     fsnearbychathub.h
     fsnearbychatvoicemonitor.h
+    fsnewitemctrl.h
     fspanelblocklist.h
     fspanelcontactsets.h
     fspanelface.h
@@ -1581,6 +1584,7 @@ set(viewer_HEADER_FILES
     llsnapshotlivepreview.h
     llsnapshotmodel.h
     llspatialpartition.h
+    llstatslistener.h
     llspeakers.h
     llspeakingindicatormanager.h
     llsplitbutton.h
@@ -2158,6 +2162,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/scriptlibrary_preproc.xml
     app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
+    app_settings/settings_modern.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
     app_settings/settings_text.xml

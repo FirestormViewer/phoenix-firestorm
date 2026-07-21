@@ -335,6 +335,9 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>
 	<string name="TooltipSLURL">Click to view this location's information</string>
+	<string name="FSChatLinkTagTrusted">[Trusted]</string>
+	<string name="FSChatLinkTagUntrusted">[Link]</string>
+
 	<string name="TooltipAgentUrl">Click to view this Resident's profile</string>
 	<string name="TooltipAgentInspect">Learn more about this Resident</string>
 	<string name="TooltipAgentMute">Click to mute this Resident</string>
@@ -802,6 +805,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
 	<string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
 	<string name="FSInventoryCustomTabDefaultName">Custom</string>
+	<string name="FSInventoryCustomTabShowHidden">Show hidden tabs</string>
 	<string name="PlacesNoMatchingItems">To add a place to your landmarks, click the star to the right of the location name.</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoListing">You have no listings yet.</string>
@@ -809,6 +813,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="InventorySingleFolderEmpty">Folder is empty.</string>
 	<string name="InventorySingleFolderNoMatches">No matches.</string>
 	<string name="InventoryNoTexture">You do not have a copy of this texture in your inventory</string>
+	<string name="InventoryNoMaterial">You do not have a copy of this material in your inventory</string>
 	<string name="InventoryInboxNoItems">Your Marketplace purchases will appear here. You may then drag them into your inventory to use them.</string>
 	<string name="MarketplaceURL">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/</string>
 	<string name="MarketplaceURL_CreateStore">http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3</string>
@@ -3069,6 +3074,16 @@ and report the problem.
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
+  <string name="FSCameraPositionPasted">Camera restored to [POS].</string>
+  <string name="FSCameraPositionParseError">Invalid camera position. Expected: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).</string>
+  <string name="FSCmdLineZOffsetUsage">Set avatar hover height (usage: /zoffset value or +delta).</string>
+  <string name="FSCmdLineNoValidRegion">Could not get a valid region pointer.</string>
+  <string name="FSCmdLineTrackPosUsage">Track a position or avatar on the world map (usage: cmd &lt;x, y, z&gt; or cmd name).</string>
+  <string name="FSCmdLineTrackPosParseError">Invalid position. Use cpcampos format: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll.</string>
+  <string name="FSCmdLineTrackPosLocation">Tracking [REGION] ([POS]).</string>
+  <string name="FSCmdLineTrackPosAvatar">Tracking [NAME].</string>
+  <string name="FSCmdLineTrackPosNotFound">Could not find avatar matching &apos;[NAME]&apos; on radar.</string>
+  <string name="FSCmdLineTrackPosMapError">Could not open the world map.</string>
 
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>
@@ -3310,6 +3325,7 @@ Your current position: [AVATAR_POS]
 
   <string name="font_unknown">Unknown Font</string>
   <string name="font_fonts.xml">Inter</string>
+  <string name="font_fonts_inter_tight.xml">Inter Tight</string>
   <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
   <string name="font_fonts_liberation.xml">Liberation</string>
   <string name="font_fonts_droid.xml">Droid Sans</string>
@@ -3361,6 +3377,9 @@ Your current position: [AVATAR_POS]
   <string name="Maximum">Maximum</string>
 
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
+  <string name="OmnifilterDefaultName">Default</string>
+  <string name="OmnifilterExportDescription">Omnifiler Rule Set: [REPLACEMENT]</string> <!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
+  <string name="OmnifilterButtonLabel" translate="false">BUTTON_LABEL</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
 </strings>

@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="Вернуться в предыдущую локацию"/>
 					<pull_button name="forward_btn" tool_tip="Идти вперед на одну локацию"/>
-					<button name="home_btn" tool_tip="Телепортироваться домой"/>
+					<button name="home_btn" tool_tip="Телепортироваться домой[LOCATION]"/>
 					<button name="About_Land" label="Земля" tool_tip="Открывает окно информации об участке"/>
 					<button name="PersonalLighting" label="Свет" tool_tip="Открывает окно Личного Освещения"/>
 				</layout_panel>

@@ -2,6 +2,8 @@
 <context_menu name="Attachment Pie">
 	<menu_item_call label="アイテムを触る" name="Attachment Object Touch"/>
 	<menu_item_call label="インベントリに表示" name="Show original"/>
+	<menu_item_call label="お気に入りに追加" name="Add to favorites"/>
+	<menu_item_call label="お気に入りから削除" name="Remove from favorites"/>
 	<menu_item_call label="編集…" name="Edit..."/>
 	<menu_item_call label="ＰＢＲマテリアルを編集" name="EditGLTFMaterial"/>
 	<menu_item_call label="取り外す" name="Detach"/>

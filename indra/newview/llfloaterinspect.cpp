@@ -167,6 +167,7 @@ void LLFloaterInspect::onOpen(const LLSD& key)
     LLSelectMgr::getInstance()->setForceSelection(forcesel);    // restore previouis value
     mObjectSelection = LLSelectMgr::getInstance()->getSelection();
     refresh();
+    mDirty = false;
 }
 
 // [RLVa:KB] - Checked: RLVa-2.0.1

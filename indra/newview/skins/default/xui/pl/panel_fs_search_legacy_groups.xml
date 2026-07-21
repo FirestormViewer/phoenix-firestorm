@@ -4,6 +4,11 @@
 		<text name="search_text">
 			Wpisz zapytanie:
 		</text>
+		<combo_box name="groups_maturity">
+			<combo_box.item label="General (dla wszystkich)" name="Desired_PG" />
+			<combo_box.item label="General (dla wszystkich) i Moderate (umiarkowanych)" name="Desired_Mature" />
+			<combo_box.item label="General (dla wszystkich), Moderate (umiarkowanych) i Adult (dla dorosłych)" name="Desired_Adult" />
+		</combo_box>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_groups">

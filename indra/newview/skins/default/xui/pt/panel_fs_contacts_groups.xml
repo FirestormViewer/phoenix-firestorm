@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="groups">
+	<filter_editor label="Filtrar grupos" name="group_filter_input" right="-91"/>
+	<view_border
+	 width="257"
+	 name="info_border" />
+	<group_list
+	 width="255"
+	 name="group_list" />
+	<button
+	 label="IM/Chamada"
+	 name="chat_btn"
+	 tool_tip="Abre uma sessão de mensagem instantânea"
+	 left_delta="262"
+	 width="85" />
+	<button
+	 label="Perfil"
+	 name="info_btn"
+	 width="85" />
+	<button
+	 label="Títulos..."
+	 name="titles_btn"
+	 width="85" />
+	<button
+	 label="Ativar"
+	 name="activate_btn"
+	 width="85" />
+	<button
+	 label="Fixar"
+	 name="favorite_btn"
+	 tool_tip="Adicionar ou remover grupo dos favoritos"
+	 width="85" />
+	<button
+	 label="Sair"
+	 name="leave_btn"
+	 width="85" />
+	<button
+	 label="Criar..."
+	 name="create_btn"
+	 width="85" />
+	<button
+	 label="Buscar..."
+	 name="search_btn"
+	 width="85" />
+	<button
+	 label="Convidar..."
+	 name="invite_btn"
+	 width="85" />
+</panel>

@@ -17,6 +17,10 @@
 	</text_editor>
 	<button name="Search" tool_tip="Поиск и Замена" />
 	<button label="Pедактировать..." label_selected="Редактировать" name="Edit"/>
+	<text
+		name="byte_counter"
+		initial_value="Байт: [BYTES] / [MAX]"
+	/>
 	<button label="Сохранить" label_selected="Сохранить" name="Save"/>
 	<button label="Удалить" label_selected="Удалить" name="Delete"/>
 </floater>

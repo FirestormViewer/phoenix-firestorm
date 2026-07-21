@@ -865,6 +865,8 @@ bool LLPanelPeople::postBuild()
     mContactSetList = getChild<LLAvatarList>("contact_list");
     if (mContactSetList)
     {
+        mContactSetList->setShowIcons("FSContactSetsListShowIcons");
+        mContactSetListToggleIconsConnection = gSavedSettings.getControl("FSContactSetsListShowIcons")->getSignal()->connect(boost::bind(&LLAvatarList::toggleIcons, mContactSetList));
         mContactSetList->setUseContactSetColors(true);
         mContactSetList->setUseContactSetListStyle(true);
         mContactSetList->setAvatarDropCallback(boost::bind(&LLPanelPeople::handleAvatarDropToCurrentContactSet, this, _1, _2));
@@ -1988,7 +1990,7 @@ bool LLPanelPeople::shouldSortByOnlineStatusForCurrentSet() const
     const std::string set_name = mContactSetCombo->getValue().asString();
     if (LGGContactSets::getInstance()->isInternalSetName(set_name))
     {
-        return false;
+        return true;
     }
 
     return LGGContactSets::getInstance()->getSortByOnlineStatusForSet(set_name);

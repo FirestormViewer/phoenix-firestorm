@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="material editor">
+	<string name="no_upload_fee_string">
+		Sem taxa de upload
+	</string>
+	<string name="upload_fee_string">
+		[FEE] L$ de taxa de upload
+	</string>
+	<string name="material_override_title">
+		Editando material
+	</string>
+
+	<panel name="button_panel">
+		<text name="unsaved_changes">
+			Alterações não salvas
+		</text>
+		<button label="Salvar" name="save"/>
+		<button label="Salvar como..." name="save_as"/>
+		<text name="total_upload_fee">
+			Taxa total de upload: [FEE] L$
+		</text>
+		<button label="Cancelar" name="cancel"/>
+	</panel>
+</floater>

@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Perfil" name="panel_profile_firstlife"/>
+<panel label="Perfil" name="panel_profile_firstlife">
+	<string name="texture_picker_label" value="Foto da vida real"/>
+	<button name="fl_upload_image" label="Enviar foto"/>
+	<button name="fl_change_image" label="Alterar foto"/>
+	<button name="fl_remove_image" label="Remover foto"/>
+	<button name="btn_preview" tool_tip="Alternar visualização da apresentação da vida real"/>
+	<button name="fl_save_changes" label="Salvar"/>
+	<button name="fl_discard_changes" label="Descartar"/>
+</panel>

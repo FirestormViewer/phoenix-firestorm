@@ -344,6 +344,10 @@ S32 calc_num_rapid_changes(LLTrace::PeriodicRecording& periodic_recording, const
     return num_rapid_changes;
 }
 
+#if LL_MSVC && USE_LTO
+#pragma warning(push)
+#pragma warning(disable : 4756)
+#endif
 void LLStatBar::draw()
 {
     LLLocalClipRect _(getLocalRect());
@@ -606,6 +610,9 @@ void LLStatBar::draw()
 
     LLView::draw();
 }
+#if LL_MSVC && USE_LTO
+#pragma warning(pop)
+#endif
 
 void LLStatBar::setStat(const std::string& stat_name)
 {

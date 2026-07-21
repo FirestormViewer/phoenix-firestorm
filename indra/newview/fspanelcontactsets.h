@@ -74,6 +74,7 @@ private:
 
     void updateSets(LGGContactSets::EContactSetUpdate type);
     boost::signals2::connection mContactSetChangedConnection;
+    boost::signals2::connection mAvatarListToggleIconsConnection;
 
     uuid_vec_t mAvatarSelections;
 

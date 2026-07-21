@@ -18,10 +18,10 @@
 		<menu_button name="gear_btn" tool_tip="詳細オプションを表示します。"/>
 		<button name="new_gesture_btn" tool_tip="新しいジェスチャーを作成します。"/>
 		<button name="activate_btn" tool_tip="選択したジェスチャーの有効化／無効化します。"/>
-		<filter_editor label="ジェスチャーを検索" name="filter_input"/>
+		<filter_editor label="ジェスチャをフィルタ" name="filter_input"/>
+		<button name="del_btn" tool_tip="このジェスチャを削除します。"/>
 		<check_box label="アクティブのみ表示" name="FSShowOnlyActiveGestures"/>
 		<check_box label="自分のジェスチャーを有効にする" name="FSGesturesEnabled"/>
-		<button name="del_btn" tool_tip="このジェスチャーを削除します。"/>
 	</panel>
 	<button label="編集" name="edit_btn" tool_tip="選択したジェスチャーの編集ウィンドウを開きます。"/>
 	<button label="再生" name="play_btn" tool_tip="インワールドで選択したジェスチャーを実行します。"/>

@@ -213,6 +213,7 @@
 // </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
+#include "llstatslistener.h"
 #include "llcleanup.h"
 #include "llimview.h"
 
@@ -1996,6 +1997,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     LLWindowListener::KeyboardGetter getter = [](){ return gKeyboard; };
     mWindowListener = std::make_unique<LLWindowListener>(this, getter);
     mViewerWindowListener = std::make_unique<LLViewerWindowListener>(this);
+    mStatsListener = std::make_unique<LLStatsListener>();
 
     mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
     mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
@@ -4286,7 +4288,10 @@ void LLViewerWindow::updateLayout()
         && tool != gToolNull
         && tool != LLToolCompInspect::getInstance()
         && tool != LLToolDragAndDrop::getInstance()
-        && !gSavedSettings.getBOOL("FreezeTime"))
+        // <FS:PP> Speed optimisation
+        // && !gSavedSettings.getBOOL("FreezeTime"))
+        && !LLPipeline::FreezeTime)
+        // </FS:PP>
     {
         // Suppress the toolbox view if our source tool was the pie tool,
         // and we've overridden to something else.
@@ -6006,10 +6011,12 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
         LLSD payload;
         payload["filepath"] = filepath;
 
-        LLNotificationsUtil::add("SnapshotSavedToComputer",
-                                 args,
-                                 payload.with("respond_on_mousedown", true),
-                                 boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// <FS:PP> We don't need forced SnapshotSavedToComputer notiification, since we have SnapshotSavedToDisk string already in place
+//         LLNotificationsUtil::add("SnapshotSavedToComputer",
+//                                  args,
+//                                  payload.with("respond_on_mousedown", true),
+//                                  boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// </FS:PP>
 
         if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
         {
@@ -6727,7 +6734,13 @@ bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
 
         // actually render the scene
         gCubeSnapshot = true;
-        display_cube_face();
+        {
+            // Probe binds aren't visibility - otherwise every probe slice re-stamps
+            // behind-camera textures and cycles them evict->refetch. RAII so the
+            // nested shadow pass in display_cube_face doesn't re-enable stamping.
+            LLImageGLStampBypass stamp_bypass;
+            display_cube_face();
+        }
         gCubeSnapshot = false;
     }
 
@@ -7375,11 +7388,15 @@ void LLViewerWindow::setUIVisibility(bool visible)
     }
 
     // <FS:Ansariel> Notification not showing if hiding the UI
-    FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-    mRootView->getChildView("chiclet_container")->setVisible(visible && gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
-    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
+    static LLCachedControl<bool> autohide_chat_bar(gSavedSettings, "AutohideChatBar");
+    static LLCachedControl<bool> show_navbar_navigation_panel(gSavedSettings, "ShowNavbarNavigationPanel");
+    static LLCachedControl<bool> show_navbar_favorites_panel(gSavedSettings, "ShowNavbarFavoritesPanel");
+    static LLCachedControl<bool> internal_show_group_notices_top_right(gSavedSettings, "InternalShowGroupNoticesTopRight");
+    FSNearbyChat::instance().showDefaultChatBar(visible && !autohide_chat_bar());
+    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && show_navbar_navigation_panel());
+    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && show_navbar_favorites_panel());
+    mRootView->getChildView("chiclet_container")->setVisible(visible && internal_show_group_notices_top_right());
+    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !internal_show_group_notices_top_right());
     // </FS:Ansariel>
 
     // <FS:Zi> Is done inside XUI now, using visibility_control

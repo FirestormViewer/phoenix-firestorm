@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Melhoria de desempenho gráfico">
+	<floater.string name="frame_stats">
+		Quadro: [TOT_FRAME_TIME]ms - Cena:[SCENERY_FRAME_PCT]% Avatares:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tarefas:[IDLE_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="limit_fps">
+		FPS limitado a [FPSCAP] FPS
+	</floater.string>
+	<floater.string name="tuning_fps">
+		Meta de autoajuste [FPSTARGET] FPS
+	</floater.string>
+	<floater.string name="av_frame_pct">
+		[AV_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="huds_frame_pct">
+		[HUDS_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="focus_fps">
+		Em segundo plano
+	</floater.string>
+	<floater.string name="info_waitforit">
+		Aguarde de 5 a 10 segundos para ver o efeito dos ajustes.
+	</floater.string>
+	<floater.string name="info_frozen">
+		As estatísticas são pausadas quando o FPS está limitado ou em segundo plano.
+	</floater.string>
+	<floater.string name="tot_av_template">
+		Total: [TOT_AV] ([TOT_AV_TIME]μs)
+	</floater.string>
+	<floater.string name="tot_att_template">
+		Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
+	</floater.string>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				Quadros por segundo
+			</text>
+			<text name="fps_desc1_lbl">
+				As estatísticas são pausadas quando o FPS está limitado ou em segundo plano.
+			</text>
+			<text name="frame_breakdown">
+				O detalhamento do frame aparece aqui.
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl" width="140" tool_tip="Ajustar automaticamente as configurações para manter o FPS. Defina a taxa desejada e o viewer tentará mantê-la ajustando as opções.">
+				Autoajuste:
+			</text>
+			<text name="targetfps_desc" width="75">
+				FPS alvo:
+			</text>
+			<spinner name="target_fps" tool_tip="FPS alvo - o viewer tentará atingir o FPS desejado ajustando as configurações." />
+			<check_box label="Autoaj." name="AutoTuneFPS" tool_tip="O viewer tentará automaticamente alcançar o FPS alvo." />
+			<check_box label="Contínuo" name="AutoTuneContinuous" tool_tip="O viewer ajustará continuamente as configurações para manter o FPS alvo, mesmo com esta janela fechada. Se desativado, o ajuste acontece uma única vez ao clicar no botão de autoajuste." />
+			<button name="PrefSaveButton" tool_tip="Salvar configurações atuais como padrão para uso futuro." />
+			<button name="PrefLoadButton" tool_tip="Carregar predefinição existente." />
+			<button tool_tip="Carregar configurações padrão para o hardware detectado." name="Defaults" />
+			<text name="settings_desc">
+				Estratégia de ajuste:
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="Somente avatares" name="av_only" />
+				<combo_box.item label="Avatar e cena" name="av_and_scene" />
+			</combo_box>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				Configurações gráficas
+			</text>
+			<text name="settings_desc">
+				Configurações de distância, água, iluminação e mais.
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				Avatares próximos
+			</text>
+			<text name="avatars_nearby_desc">
+				Defina quais avatares serão renderizados completamente.
+			</text>
+			<text name="avatars_frme_pct_lbl">
+Tempo de
+renderização
+de avatares
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				Complexidade do seu avatar
+			</text>
+			<text name="complexity_info">
+				Seja um bom residente - gerencie o impacto do seu próprio avatar.
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				HUDs ativos
+			</text>
+			<text name="huds_desc">
+				Remover HUDs pode melhorar o desempenho.
+			</text>
+			<text name="huds_frme_pct_lbl">
+Tempo de
+renderização
+de HUDs
+			</text>
+		</panel>
+	</panel>
+</floater>

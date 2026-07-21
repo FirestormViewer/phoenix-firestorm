@@ -52,8 +52,8 @@
 	<text name="height_text_lbl7">
 		Nordost
 	</text>
-	<spinner label="Niedrig" name="height_start_spin_1"/>
-	<spinner label="Niedrig" name="height_start_spin_3"/>
+	<spinner label="Niedr." name="height_start_spin_1"/>
+	<spinner label="Niedr." name="height_start_spin_3"/>
 	<spinner label="Hoch" name="height_range_spin_1"/>
 	<spinner label="Hoch" name="height_range_spin_3"/>
 	<text name="height_text_lbl8">
@@ -62,8 +62,8 @@
 	<text name="height_text_lbl9">
 		Südost
 	</text>
-	<spinner label="Niedrig" name="height_start_spin_0"/>
-	<spinner label="Niedrig" name="height_start_spin_2"/>
+	<spinner label="Niedr." name="height_start_spin_0"/>
+	<spinner label="Niedr." name="height_start_spin_2"/>
 	<spinner label="Hoch" name="height_range_spin_0"/>
 	<spinner label="Hoch" name="height_range_spin_2"/>
 	<button label="RAW-Terrain herunterladen..." name="download_raw_btn" tool_tip="Nur für Grundbesitzeigentümer verfügbar, nicht für Verwalter"/>

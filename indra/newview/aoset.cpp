@@ -70,7 +70,8 @@ AOSet::AOSet(const LLUUID& inventoryID)
         "Floating|Swim.H",
         "Swimming Forward|Swim.N",
         "Swimming Up|Swim.U",
-        "Swimming Down|Swim.D"
+        "Swimming Down|Swim.D",
+        "Always"
     };
 
     // keep number and order in sync with the enum in the declaration
@@ -100,7 +101,8 @@ AOSet::AOSet(const LLUUID& inventoryID)
         ANIM_AGENT_HOVER,       // needs special treatment
         ANIM_AGENT_FLY,         // needs special treatment
         ANIM_AGENT_HOVER_UP,    // needs special treatment
-        ANIM_AGENT_HOVER_DOWN   // needs special treatment
+        ANIM_AGENT_HOVER_DOWN,  // needs special treatment
+        LLUUID::null            // "Always" has no motion to override
     };
 
     for (S32 index = 0; index < AOSTATES_MAX; ++index)
@@ -110,10 +112,11 @@ AOSet::AOSet(const LLUUID& inventoryID)
 
         mStates[index].mName = stateNameList[0];            // for quick reference
         mStates[index].mAlternateNames = stateNameList;     // to get all possible names, including mName
+        mStates[index].mNum = index;
         mStates[index].mRemapID = stateUUIDs[index];
         mStates[index].mInventoryUUID = LLUUID::null;
         mStates[index].mCurrentAnimation = 0;
-        mStates[index].mCurrentAnimationID = LLUUID::null;
+        mStates[index].mCurrentAnimationIDs.clear();
         mStates[index].mCycle = false;
         mStates[index].mRandom = false;
         mStates[index].mCycleTime = 0;
@@ -151,6 +154,12 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 
 AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 {
+    // "Always" state has a null remap id and must never be picked up by motion mapping
+    if (id.isNull())
+    {
+        return nullptr;
+    }
+
     LLUUID remap_id = id;
     if (remap_id == ANIM_AGENT_SIT_GROUND)
     {
@@ -167,53 +176,99 @@ AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
     return nullptr;
 }
 
-const LLUUID& AOSet::getAnimationForState(AOState* state) const
+LLUUID AOSet::resolveAssetUUID(AOAnimation& anim)
 {
-    if (state)
+    if (anim.mAssetUUID.isNull())
     {
-        if (auto numOfAnimations = state->mAnimations.size(); numOfAnimations > 0)
+        LL_DEBUGS("AOEngine") << "Asset UUID for animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
+        if (LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID))
         {
-            if (state->mCycle)
-            {
-                if (state->mRandom)
-                {
-                    state->mCurrentAnimation = (U32)(ll_frand() * numOfAnimations);
-                    LL_DEBUGS("AOEngine") << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
-                }
-                else
-                {
-                    state->mCurrentAnimation++;
-                    if (state->mCurrentAnimation >= state->mAnimations.size())
-                    {
-                        state->mCurrentAnimation = 0;
-                    }
-                    LL_DEBUGS("AOEngine") << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
-                }
-            }
-
-            AOAnimation& anim = state->mAnimations[state->mCurrentAnimation];
-
-            if (anim.mAssetUUID.isNull())
-            {
-                LL_DEBUGS("AOEngine") << "Asset UUID for chosen animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
-
-                if (LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID))
-                {
-                    LL_DEBUGS("AOEngine") << "Found asset UUID for chosen animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
-                    anim.mAssetUUID = item->getAssetUUID();
-                }
-                else
-                {
-                    LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for chosen animation " << anim.mName << " still returns no asset." << LL_ENDL;
-                }
-            }
-
-            return anim.mAssetUUID;
+            LL_DEBUGS("AOEngine") << "Found asset UUID for animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
+            anim.mAssetUUID = item->getAssetUUID();
         }
         else
         {
-            LL_DEBUGS("AOEngine") << "animation state has no animations assigned" << LL_ENDL;
+            LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for animation " << anim.mName << " still returns no asset." << LL_ENDL;
         }
+    }
+    return anim.mAssetUUID;
+}
+
+void AOSet::getAnimationsForState(AOState* state, uuid_vec_t& animations) const
+{
+    if (!state)
+    {
+        return;
+    }
+
+    if (auto numOfSteps = state->mSteps.size(); numOfSteps > 0)
+    {
+        if (state->mCycle)
+        {
+            if (state->mRandom)
+            {
+                state->mCurrentAnimation = (U32)(ll_frand() * numOfSteps);
+                LL_DEBUGS("AOEngine") << "randomly chosen step " << state->mCurrentAnimation << " of " << numOfSteps << LL_ENDL;
+            }
+            else
+            {
+                state->mCurrentAnimation++;
+                if (state->mCurrentAnimation >= state->mSteps.size())
+                {
+                    state->mCurrentAnimation = 0;
+                }
+                LL_DEBUGS("AOEngine") << "cycle step " << state->mCurrentAnimation << " of " << numOfSteps << LL_ENDL;
+            }
+        }
+
+        // steps can shrink through editing, keep the index in range
+        if (state->mCurrentAnimation >= state->mSteps.size())
+        {
+            state->mCurrentAnimation = 0;
+        }
+
+        for (AOAnimation& anim : state->mSteps[state->mCurrentAnimation].mMembers)
+        {
+            if (LLUUID assetId = resolveAssetUUID(anim); assetId.notNull())
+            {
+                animations.emplace_back(assetId);
+            }
+        }
+    }
+    else
+    {
+        LL_DEBUGS("AOEngine") << "animation state has no animations assigned" << LL_ENDL;
+    }
+}
+
+LLUUID AOSet::getAnimationForTrack(AOTrack& track) const
+{
+    if (auto numOfAnimations = track.mAnimations.size(); numOfAnimations > 0)
+    {
+        if (track.mCycle)
+        {
+            if (track.mRandom)
+            {
+                track.mCurrentAnimation = (U32)(ll_frand() * numOfAnimations);
+                LL_DEBUGS("AOEngine") << "track " << track.mName << ": randomly chosen " << track.mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
+            }
+            else
+            {
+                track.mCurrentAnimation++;
+                if (track.mCurrentAnimation >= track.mAnimations.size())
+                {
+                    track.mCurrentAnimation = 0;
+                }
+                LL_DEBUGS("AOEngine") << "track " << track.mName << ": cycle " << track.mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
+            }
+        }
+
+        if (track.mCurrentAnimation >= track.mAnimations.size())
+        {
+            track.mCurrentAnimation = 0;
+        }
+
+        return resolveAssetUUID(track.mAnimations[track.mCurrentAnimation]);
     }
     return LLUUID::null;
 }

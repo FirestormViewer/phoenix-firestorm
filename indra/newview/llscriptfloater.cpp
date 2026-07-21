@@ -475,6 +475,8 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
     LLUUID object_id = notification_id_to_object_id(notification_id);
 
     // <FS:Zi> Omnifilter support
+    // Cache the pointer to the omnifilter engine, as it should not change.
+    static OmnifilterEngine *instance = OmnifilterEngine::getInstance();
     static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
@@ -488,6 +490,25 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
             haystack.mType = OmnifilterEngine::eType::ScriptDialog;
             haystack.mSenderName = notification->getPayload()["object_name"].asString();
             haystack.mOwnerID = notification->getPayload()["owner_id"];
+            // <FS:minerjr> [FIRE-36647] - Add Script Dialog Buttons to OmniFilter Content
+            // If there are form elements (Script Dialog Buttons), then we want to parse out the name of the button
+            // and add them to the mContent.
+            if (notification->hasFormElements())
+            {
+                LLNotificationFormPtr script_form = notification->getForm();
+                // Get the number of elements and loop over each of them.
+                S32 number_of_elements = script_form->getNumElements();
+                for (S32 element_idx = 0; element_idx < number_of_elements; element_idx++)
+                {
+                    LLSD element = script_form->getElement(element_idx);
+                    // If the element has a name, then append the name to the mContent.
+                    if (element.has("name"))
+                    {
+                        haystack.mContent += "\nbutton_name=" + element["name"].asString();
+                    }
+                }
+            }
+            // </FS:minerjr> [FIRE-36647]
         }
         else if (notification->getName() == "ObjectGiveItem")    // what about OwnObjectGiveItem?
         {
@@ -545,7 +566,7 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
             LL_WARNS("Omnifilter") << "unknown notification name: " << notification->getName() << LL_ENDL;
         }
 
-        const OmnifilterEngine::Needle* needle = OmnifilterEngine::getInstance()->match(haystack);
+        const OmnifilterEngine::Needle* needle = instance->match(haystack);
         if (needle)
         {
             LLSD response = notification->getResponseTemplate();
@@ -568,9 +589,18 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
                 }
             }
 
-            // this will result in DialogStack complaining that there is no matching dialog to remove
-            // but that should not break anything
-            notification->respond(response);
+            // If the need contains a reply delay, we want to trigger a delay.
+            if (needle->mReplyDelay > 0.0f)
+            {
+                instance->createDelayedResponse(notification, response, needle->mReplyDelay);
+            }
+            // Else, there is no delay, so fire the message off normally.
+            else
+            {
+                // this will result in DialogStack complaining that there is no matching dialog to remove
+                // but that should not break anything
+                notification->respond(response);
+            }
             return;
         }
     }

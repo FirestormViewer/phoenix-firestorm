@@ -46,6 +46,8 @@
 			<menu_item_check label="地面に座る" name="Force Toggle Sitting"/>
 			<menu_item_check label="移動ロック" name="Move Lock"/>
 			<menu_item_check label="アバターを身軽に" name="Avatar Ignore Prejump"/>
+			<menu_item_call label="最も近いアバターに顔を向ける" name="AvatarFaceNearest"/>
+			<menu_item_check label="アバターの配置" name="AvatarAlign"/>
 		</menu>
 		<menu_item_check label="移動操作" name="Movement Controls"/>
 		<menu_item_check label="カメラ操作" name="Camera Controls"/>
@@ -88,7 +90,7 @@
 			<menu_item_check label="テレポートのオファーとリクエストを拒否する" name="Automatically reject teleport offers"/>
 			<menu_item_check label="フレンドシップのリクエストを拒否する" name="Reject all friendship requests"/>
 			<menu_item_check label="すべてのグループの招待を拒否する" name="Reject all group invites"/>
-			<menu label="会議（アドホック）チャット" name="Ad-hoc conferences">
+			<menu label="アドホック会話" name="Ad-hoc conferences">
 				<menu_item_check label="すべてを自動的に無視して退出する" name="FSIgnoreAdHocSessions"/>
 				<menu_item_check label="近くのチャットで無視を報告する" name="FSReportIgnoredAdHocSession"/>
 				<menu_item_check label="フレンドからは無視しない" name="FSDontIgnoreAdHocFromFriends"/>
@@ -249,7 +251,7 @@
 			<menu_item_check label="透過をハイライトする" name="Highlight Transparent"/>
 			<menu_item_check label="－透過リグを含む" name="Include Transparent Rigged" />
 			<menu_item_check label="ポストプロセッシングを無効化" name="No Post"/>
-			<menu  label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
+			<menu label="ＬｏＤ（詳細レベル）の選択" name="Selection level of detail">
 				<menu_item_check label="デフォルト" name="Default lod setting"/>
 				<menu_item_check label="高" name="High lod setting"/>
 				<menu_item_check label="中" name="Medium lod setting"/>
@@ -438,7 +440,6 @@
 			<menu_item_check label="デバッグコンソール" name="Debug Console"/>
 			<menu_item_call label="通知コンソール" name="Notifications"/>
 			<menu_item_check label="ファーストタイマー" name="Fast Timers"/>
-			<menu_item_check label="メモリ" name="Memory"/>
 			<menu_item_check label="シーンの統計" name="Scene Statistics"/>
 			<menu_item_check label="シーンの読み込みモニター" name="Scene Loading Monitor"/>
 			<menu_item_check label="リージョンのデバッグコンソール" name="Region Debug Console"/>

@@ -123,7 +123,7 @@
 					Empfindlichkeit
 				</text>
 				<button name="Reset_Mouse_Sensitivity" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-				<check_box label="Avatar und Anhänge in Mouselook anzeigen" tool_tip="Zeigt den Avatar und Anhänge unterhalb des Halses im Mouselook-Modus an. Standardwert is AUS." name="first_person_avatar_visible"/>
+				<check_box label="Avatar und Anhänge in Mouselook anzeig." tool_tip="Zeigt den Avatar und Anhänge unterhalb des Halses im Mouselook-Modus an. Standardwert is AUS." name="first_person_avatar_visible"/>
 				<check_box label="Weiche Mouselook-Bewegungen" tool_tip="Glättet die Bewegungen der Maus im Mouselook-Modus." name="MouseSmooth"/>
 			</panel>
 
@@ -135,8 +135,8 @@
 
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-				<check_box label="Kameraposition nach Teleport zurücksetzen" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-				<check_box label="Kamerabewegung durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
+				<check_box label="Kameraposition nach Teleport zurücksetz." name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+				<check_box label="Kamerabeweg. durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
 				<check_box label="Kamera bei Avatarbewegung zurücksetzen" name="resetcameraonmovement" tool_tip="Setzt die Kameraposition zurück, sobald der Avatar bewegt wird."/>
 			</panel>
 		</panel>
@@ -156,10 +156,10 @@
 			<panel name="P_3D_Mouse_Settings2">
 				<spinner label="Zoom-Achsen-Mapping" name="JoystickAxis6" tool_tip="Legt fest, auf welcher Maus-Achse die die Zoom-Funktion gelegt ist."/>
 				<check_box label="3D-Maus aktivieren" tool_tip="Diese Einstellung aktiviert die 3D-Maus." name="enable_joystick"/>
-				<check_box name="CB_Zoom_Control" label="Zoom-Steuerung aktivieren (siehe Tooltip!)" tool_tip="Damit die Zoom-Steuerung funktioniert, muss „Zoom-Achsen-Mapping“ auf einen Wert größer als 4 gesetzt werden."/>
+				<check_box name="CB_Zoom_Control" label="Zoom-Steuerung aktivieren (s. Tooltip)" tool_tip="Damit die Zoom-Steuerung funktioniert, muss „Zoom-Achsen-Mapping“ auf einen Wert größer als 4 gesetzt werden."/>
 				<check_box name="CB_Auto_Leveling" label="Automatisch ausrichten (kein Kam.-Rollen)" tool_tip="Falls aktiviert, wird die Kamera automatisch ausgerichtet."/>
 				<check_box name="CB_3D_Mouse_Avatar" label="3D-Maus zur Avatarsteuerung verwenden" tool_tip="Falls aktiviert, wird der Avatar mit der Maus gesteuert."/>
-				<check_box name="CB_3D_Mouse_Build" label="3D-Maus zur Objektbewegung verwenden" tool_tip="Falls aktiviert, kann die 3D-Maus dazu benutzt werden, beim Bauen und Editieren Objekte zu bewegen."/>
+				<check_box name="CB_3D_Mouse_Build" label="3D-Maus zur Objektbewegung verwend-" tool_tip="Falls aktiviert, kann die 3D-Maus dazu benutzt werden, beim Bauen und Editieren Objekte zu bewegen."/>
 			</panel>
 		</panel>
 	</tab_container>

@@ -5,9 +5,6 @@
 	<string name="loading_blocked" value="Ładowanie zablokowanych rezydentów i obiektów..." />
 	<string name="failed_blocked" value="Lista zablokowanych jest obecnie niedostępna." />
 	<block_list name="blocked" tool_tip="Lista zablokowanych osób" />
-	<text name="block_limit">
-		Zablokowano: [COUNT] ([LIMIT] maks.)
-	</text>
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
 			<button tool_tip="Wróć do Ludzi" name="back"/>

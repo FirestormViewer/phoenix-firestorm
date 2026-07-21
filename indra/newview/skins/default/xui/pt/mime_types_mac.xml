@@ -2,24 +2,24 @@
 <mimetypes name="default">
 	<widgetset name="web">
 		<label name="web_label">
-			Conteúdo Web
+			Conteúdo web
 		</label>
 		<tooltip name="web_tooltip">
-			Esta localização tem conteúdo Web
+			Este local tem conteúdo web
 		</tooltip>
 		<playtip name="web_playtip">
-			Exibir conteúdo Web
+			Mostrar conteúdo web
 		</playtip>
 	</widgetset>
 	<widgetset name="movie">
 		<label name="movie_label">
-			Filme
+			Vídeo
 		</label>
 		<tooltip name="movie_tooltip">
-			Há um filme que vai passar aqui
+			Foi encontrado um vídeo.
 		</tooltip>
 		<playtip name="movie_playtip">
-			Começar filme
+			Reproduzir vídeo
 		</playtip>
 	</widgetset>
 	<widgetset name="image">
@@ -27,21 +27,21 @@
 			Imagem
 		</label>
 		<tooltip name="image_tooltip">
-			Ha uma imagem nesta localização
+			Este local tem conteúdo de imagem
 		</tooltip>
 		<playtip name="image_playtip">
-			Visualizar a imagem desta localização
+			Mostrar a imagem deste local
 		</playtip>
 	</widgetset>
 	<widgetset name="audio">
 		<label name="audio_label">
-			Audio
+			Áudio
 		</label>
 		<tooltip name="audio_tooltip">
-			Há áudio nesta localização
+			Este local tem conteúdo de áudio
 		</tooltip>
 		<playtip name="audio_playtip">
-			Tocar o áudio desta localização
+			Reproduzir o áudio deste local
 		</playtip>
 	</widgetset>
 	<widgetset name="none">
@@ -49,12 +49,12 @@
 			Sem conteúdo
 		</label>
 		<tooltip name="none_tooltip">
-			Sem mídia aqui
+			Nenhuma mídia encontrada
 		</tooltip>
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			Real Time Streaming
+			Streaming em tempo real
 		</label>
 	</scheme>
 	<mimetype name="blank">
@@ -84,7 +84,7 @@
 	</mimetype>
 	<mimetype name="video/vnd.secondlife.qt.legacy">
 		<label name="vnd.secondlife.qt.legacy_label">
-			Filme (QuickTime)
+			Vídeo (QuickTime)
 		</label>
 	</mimetype>
 	<mimetype name="application/javascript">
@@ -94,7 +94,7 @@
 	</mimetype>
 	<mimetype name="application/ogg">
 		<label name="application/ogg_label">
-			Ogg Áudio/Video
+			Ogg Audio/Video
 		</label>
 	</mimetype>
 	<mimetype name="application/pdf">
@@ -104,7 +104,7 @@
 	</mimetype>
 	<mimetype name="application/postscript">
 		<label name="application/postscript_label">
-			Documento Postscript
+			Documento PostScript
 		</label>
 	</mimetype>
 	<mimetype name="application/rtf">
@@ -114,12 +114,12 @@
 	</mimetype>
 	<mimetype name="application/smil">
 		<label name="application/smil_label">
-			Linguagem sincronizada de integração multimidia (SMIL)
+			Synchronized Multimedia Integration Language (SMIL)
 		</label>
 	</mimetype>
 	<mimetype name="application/xhtml+xml">
 		<label name="application/xhtml+xml_label">
-			Página Web (XHTML)
+			Página web (XHTML)
 		</label>
 	</mimetype>
 	<mimetype name="application/x-director">
@@ -179,7 +179,7 @@
 	</mimetype>
 	<mimetype name="text/html">
 		<label name="text/html_label">
-			Página Web
+			Página web
 		</label>
 	</mimetype>
 	<mimetype name="text/plain">
@@ -194,32 +194,32 @@
 	</mimetype>
 	<mimetype name="video/mpeg">
 		<label name="video/mpeg_label">
-			Filme (MPEG)
+			Vídeo (MPEG)
 		</label>
 	</mimetype>
 	<mimetype name="video/mp4">
 		<label name="video/mp4_label">
-			Filme (MP4)
+			Vídeo (MP4)
 		</label>
 	</mimetype>
 	<mimetype name="video/quicktime">
 		<label name="video/quicktime_label">
-			Filme (QuickTime)
+			Vídeo (QuickTime)
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-asf">
 		<label name="video/x-ms-asf_label">
-			Filme (Windows Media ASF)
+			Vídeo (Windows Media ASF)
 		</label>
 	</mimetype>
 	<mimetype name="video/x-ms-wmv">
 		<label name="video/x-ms-wmv_label">
-			Filme (Windows Media WMV)
+			Vídeo (Windows Media WMV)
 		</label>
 	</mimetype>
 	<mimetype name="video/x-msvideo">
 		<label name="video/x-msvideo_label">
-			Filme (AVI)
+			Vídeo (AVI)
 		</label>
 	</mimetype>
 </mimetypes>

@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel" right="265">
 					<pull_button name="back_btn" tool_tip="Torna al luogo precendente"/>
 					<pull_button name="forward_btn" tool_tip="Vai al luogo seguente"/>
-					<button name="home_btn" tool_tip="Teleport a casa"/>
+					<button name="home_btn" tool_tip="Teleport a casa[LOCATION]"/>
 					<button name="About_Land" label="Terreno" tool_tip="Mostra finestra delle informazioni sul terreno" width="55"/>
 					<button name="PersonalLighting" label="Illuminazione" tool_tip="Mostra finestra di illuminazione personalizzata" width="90"/>
 				</layout_panel>

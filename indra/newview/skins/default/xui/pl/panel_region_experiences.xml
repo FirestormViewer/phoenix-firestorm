@@ -2,7 +2,6 @@
 <panel label="Przygody" name="Experiences">
 	<panel.string name="trusted_estate_text">
 Każda przygoda może być kluczową.
-
 Przygody kluczowe są dozwolone w tym Majątku.
 
 Jeśli Majątek ma wyłączony dostęp publiczny, Rezydenci uczestniczący w dowolnej przygodzie kluczowej mogą wejść i pozostać tak długo, jak mają oni ją aktywną.

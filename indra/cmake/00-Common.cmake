@@ -60,7 +60,20 @@ endif()
 
 set(USE_LTO OFF CACHE BOOL "Enable Link Time Optimization")
 if(USE_LTO)
+  # <FS:PP> (revised by Beq to allow flto=auto on Linux/GCC to re-enable parallel builds with LTO enabled.)
+  if(NOT MSVC)
+    if(LINUX AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      set(CMAKE_C_COMPILE_OPTIONS_IPO "-flto=auto")
+      set(CMAKE_C_LINK_OPTIONS_IPO "-flto=auto")
+    else()
+      set(CMAKE_C_COMPILE_OPTIONS_IPO "-flto")
+      set(CMAKE_C_LINK_OPTIONS_IPO "-flto")
+    endif()
+    set(CMAKE_XCODE_ATTRIBUTE_LLVM_LTO "YES")
+  endif()
+  # </FS:PP>
   set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  add_compile_definitions(USE_LTO) # <FS:PP> LTO indicator
 endif()
 
 # Don't bother with a MinSizeRel or Debug builds.

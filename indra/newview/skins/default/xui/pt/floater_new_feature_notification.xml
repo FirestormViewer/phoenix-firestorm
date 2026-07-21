@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_new_feature_notification" title="NOVA FUNCIONALIDADE">
+	<floater.string name="title_txt_inventory">
+		Novos recursos do Inventário
+	</floater.string>
+	<floater.string name="description_txt_inventory">
+		Agora você pode marcar itens e pastas como favoritos. Os itens favoritos aparecerão na aba Favoritos do Inventário e, por padrão, serão destacados com uma estrela na visualização principal.
+	</floater.string>
+	<text name="title_txt">
+		Nova funcionalidade
+	</text>
+	<text name="description_txt">
+		Descrição da funcionalidade
+	</text>
+	<button label="Entendi" name="close_btn" />
+</floater>

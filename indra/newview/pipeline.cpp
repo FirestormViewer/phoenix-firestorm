@@ -683,13 +683,25 @@ void LLPipeline::init()
     // <FS:PP> FIRE-33085 Region corner markers
     connectRefreshCachedSettingsSafe("fsregioncornerbeacons");
     // </FS:PP>
+    // <FS:PP> FIRE-36767 Sync beacon settings when changed via debug settings
+    connectRefreshCachedSettingsSafe("physicalbeacon");
+    connectRefreshCachedSettingsSafe("scriptsbeacon");
+    connectRefreshCachedSettingsSafe("scripttouchbeacon");
+    connectRefreshCachedSettingsSafe("soundsbeacon");
+    connectRefreshCachedSettingsSafe("particlesbeacon");
+    connectRefreshCachedSettingsSafe("moapbeacon");
+    connectRefreshCachedSettingsSafe("renderbeacons");
+    connectRefreshCachedSettingsSafe("renderhighlights");
+    // </FS:PP>
 
     LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl("CollectFontVertexBuffers");
     if (cntrl_ptr.notNull())
     {
         cntrl_ptr->getCommitSignal()->connect([](LLControlVariable* control, const LLSD& value, const LLSD& previous)
         {
-            LLFontVertexBuffer::enableBufferCollection(control->getValue().asBoolean());
+            bool enable_buffers = control->getValue().asBoolean();
+            LLFontVertexBuffer::enableBufferCollection(enable_buffers);
+            LLFontWidthBuffer::enableBufferCollection(enable_buffers);
         });
     }
 }
@@ -1193,6 +1205,16 @@ void LLPipeline::refreshCachedSettings()
     // <FS:PP> FIRE-33085 Region corner markers
     LLPipeline::sRenderRegionCornerBeacons = gSavedSettings.getBOOL("fsregioncornerbeacons");
     // </FS:PP>
+    // <FS:PP> FIRE-36767 Sync beacon settings when changed via debug settings
+    LLPipeline::sRenderPhysicalBeacons = gSavedSettings.getBOOL("physicalbeacon");
+    LLPipeline::sRenderScriptedBeacons = gSavedSettings.getBOOL("scriptsbeacon");
+    LLPipeline::sRenderScriptedTouchBeacons = gSavedSettings.getBOOL("scripttouchbeacon");
+    LLPipeline::sRenderSoundBeacons = gSavedSettings.getBOOL("soundsbeacon");
+    LLPipeline::sRenderParticleBeacons = gSavedSettings.getBOOL("particlesbeacon");
+    LLPipeline::sRenderMOAPBeacons = gSavedSettings.getBOOL("moapbeacon");
+    LLPipeline::sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
+    LLPipeline::sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
+    // </FS:PP>
 
     LLPipeline::sUseOcclusion =
             (!gUseWireframe
@@ -1302,7 +1324,9 @@ void LLPipeline::refreshCachedSettings()
         LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
     }
 
-    LLFontVertexBuffer::enableBufferCollection(gSavedSettings.getBOOL("CollectFontVertexBuffers"));
+    bool enable_buffers = gSavedSettings.getBOOL("CollectFontVertexBuffers");
+    LLFontVertexBuffer::enableBufferCollection(enable_buffers);
+    LLFontWidthBuffer::enableBufferCollection(enable_buffers);
 }
 
 void LLPipeline::releaseGLBuffers()
@@ -10407,6 +10431,9 @@ void LLPipeline::renderShadow(const glm::mat4& view, const glm::mat4& proj, LLCa
     LL_PROFILE_GPU_ZONE("renderShadow");
 
     LLPipeline::sShadowRender = true;
+    // Shadow binds aren't visibility. RAII (not a hardcoded restore) so a shadow
+    // pass nested in a probe render doesn't re-enable stamping for the rest of it.
+    LLImageGLStampBypass stamp_bypass;
 
     // disable occlusion culling during shadow render
     U32 saved_occlusion = sUseOcclusion;
@@ -11791,6 +11818,9 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
 
     sShadowRender = true;
     sImpostorRender = true;
+    // Impostor binds aren't visibility. RAII so the nested shadow pass can't
+    // re-enable stamping mid-render.
+    LLImageGLStampBypass stamp_bypass;
 
     LLViewerCamera* viewer_camera = LLViewerCamera::getInstance();
 

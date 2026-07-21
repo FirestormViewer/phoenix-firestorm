@@ -672,6 +672,9 @@
      name="HTMLLinkColor"
      reference="AccentColor" />
     <color
+     name="HTMLLinkColorHovertips"
+     reference="Black" />
+    <color
      name="HealthTextColor"
      reference="White" />
     <color
@@ -1249,10 +1252,6 @@
   <color
       name="CurrencyColor"
       reference="LabelTextColor" />
-	  
-  <color
-      name="Phototools_Header"
-      reference="EmphasisColor" />
 
   <!-- syntax highlighting (LSL Scripts) -->
   <color
@@ -1435,4 +1434,7 @@
   <color
     name="MentionFlashBgColor"
     value="1 1 0 0.5" />
+  <color
+    name="HighlightPanelBackground"
+    reference="EmphasisColor" />
 </colors>
