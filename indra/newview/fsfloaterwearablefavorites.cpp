@@ -31,16 +31,20 @@
 #include "fscommon.h"
 #include "llappearancemgr.h"
 #include "llbutton.h"
+#include "llcombobox.h"
 #include "llfiltereditor.h"
 #include "llinventoryfunctions.h"
 #include "llinventoryobserver.h"
 #include "llmenugl.h"
 #include "llmenubutton.h"
+#include "llnotificationsutil.h"
 #include "lltoggleablemenu.h"
 #include "llviewercontrol.h"        // for gSavedSettings
+#include "llviewerinventory.h"
 #include "llviewermenu.h"           // for gMenuHolder
 #include "rlvactions.h"
 #include "rlvlocks.h"
+#include <set>
 
 // Hello Kokua! Have fun yoinking! ;)
 
@@ -88,6 +92,11 @@ LLUUID FSFloaterWearableFavorites::sFolderID = LLUUID();
 FSFloaterWearableFavorites::FSFloaterWearableFavorites(const LLSD& key)
     : LLFloater(key),
     mItemsList(nullptr),
+    mNewFolderBtn(nullptr),
+    mRenameFolderBtn(nullptr),
+    mDeleteFolderBtn(nullptr),
+    mFolderCombo(nullptr),
+    mSelectedFolderID(),
     mInitialized(false),
     mDADCallbackConnection()
 {
@@ -122,6 +131,18 @@ bool FSFloaterWearableFavorites::postBuild()
 
     mRemoveItemBtn = getChild<LLButton>("remove_btn");
     mRemoveItemBtn->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::handleRemove, this));
+
+    mNewFolderBtn = getChild<LLButton>("new_folder_btn");
+    mNewFolderBtn->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::onNewFolder, this));
+
+    mRenameFolderBtn = getChild<LLButton>("rename_folder_btn");
+    mRenameFolderBtn->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::onRenameFolder, this));
+
+    mDeleteFolderBtn = getChild<LLButton>("delete_folder_btn");
+    mDeleteFolderBtn->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::onDeleteFolder, this));
+
+    mFolderCombo = getChild<LLComboBox>("folder_combo");
+    mFolderCombo->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::onFolderChanged, this));
 
     mFilterEditor = getChild<LLFilterEditor>("wearable_filter_input");
     mFilterEditor->setCommitCallback(boost::bind(&FSFloaterWearableFavorites::onFilterEdit, this, _2));
@@ -176,12 +197,19 @@ void FSFloaterWearableFavorites::initialize()
     }
 
     gInventory.addObserver(mCategoriesObserver);
-    mCategoriesObserver->addCategory(sFolderID, boost::bind(&FSFloaterWearableFavorites::updateList, this, sFolderID));
-    mCategoriesObserver->addCategory(cof, boost::bind(&FSFloaterWearableFavorites::updateList, this, sFolderID));
+    mCategoriesObserver->addCategory(sFolderID, boost::bind(&FSFloaterWearableFavorites::refreshFolderCombo, this));
+    mCategoriesObserver->addCategory(
+        cof,
+        [this]()
+        {
+            const LLUUID folder_id = mSelectedFolderID.notNull() ? mSelectedFolderID : sFolderID;
+            updateList(folder_id);
+        });
     category->fetch();
 
     mItemsList->setSortOrder((LLWearableItemsList::ESortOrder)gSavedSettings.getU32("FSWearableFavoritesSortOrder"));
-    updateList(sFolderID);
+    mSelectedFolderID = sFolderID;
+    refreshFolderCombo();
     mItemsList->setDADCallback(boost::bind(&FSFloaterWearableFavorites::onItemDAD, this, _1));
 
     mInitialized = true;
@@ -193,6 +221,15 @@ void FSFloaterWearableFavorites::draw()
     LLFloater::draw();
 
     mRemoveItemBtn->setEnabled(mItemsList->numSelected() > 0);
+    const bool folder_action_enabled = mSelectedFolderID.notNull() && mSelectedFolderID != sFolderID;
+    if (mRenameFolderBtn)
+    {
+        mRenameFolderBtn->setEnabled(folder_action_enabled);
+    }
+    if (mDeleteFolderBtn)
+    {
+        mDeleteFolderBtn->setEnabled(folder_action_enabled);
+    }
 }
 
 //virtual
@@ -285,7 +322,62 @@ LLUUID FSFloaterWearableFavorites::getFavoritesFolder()
 
 void FSFloaterWearableFavorites::updateList(const LLUUID& folder_id)
 {
-    mItemsList->updateList(folder_id);
+    if (folder_id.isNull())
+    {
+        return;
+    }
+
+    // Favorite Wearables folders are implemented as inventory links.
+    // The root view collects descendants recursively, which means the same
+    // wearable can appear multiple times when it is linked into several
+    // folders.  Keep folder views unchanged, but de-duplicate the root
+    // "All Favorites" view by the original linked item UUID.
+    if (folder_id == sFolderID)
+    {
+        LLInventoryModel::cat_array_t cat_array;
+        LLInventoryModel::item_array_t item_array;
+
+        LLFindOutfitItems collector;
+        gInventory.collectDescendentsIf(
+            folder_id,
+            cat_array,
+            item_array,
+            LLInventoryModel::EXCLUDE_TRASH,
+            collector);
+
+        LLInventoryModel::item_array_t unique_items;
+        std::set<LLUUID> seen_linked_items;
+
+        for (const auto& item : item_array)
+        {
+            if (!item)
+            {
+                continue;
+            }
+
+            LLUUID linked_uuid = item->getLinkedUUID();
+            if (linked_uuid.isNull())
+            {
+                linked_uuid = item->getUUID();
+            }
+
+            if (seen_linked_items.insert(linked_uuid).second)
+            {
+                unique_items.push_back(item);
+            }
+        }
+
+        if (unique_items.empty() && gInventory.isCategoryComplete(folder_id))
+        {
+            mItemsList->setNoItemsCommentText(getString("empty_list"));
+        }
+
+        mItemsList->refreshList(unique_items);
+    }
+    else
+    {
+        mItemsList->updateList(folder_id);
+    }
 
     if (gInventory.isCategoryComplete(folder_id))
     {
@@ -293,9 +385,82 @@ void FSFloaterWearableFavorites::updateList(const LLUUID& folder_id)
     }
 }
 
+void FSFloaterWearableFavorites::refreshFolderCombo()
+{
+    if (!mFolderCombo || sFolderID.isNull())
+    {
+        return;
+    }
+
+    LLUUID selected_id = mSelectedFolderID;
+    if (selected_id.isNull())
+    {
+        selected_id = sFolderID;
+    }
+
+    mFolderCombo->clearRows();
+    mFolderCombo->add(getString("root_folder_label"), LLSD(sFolderID.asString()));
+
+    LLInventoryModel::item_array_t* items;
+    LLInventoryModel::cat_array_t* cats;
+    gInventory.getDirectDescendentsOf(sFolderID, cats, items);
+    if (cats)
+    {
+        std::vector<LLViewerInventoryCategory*> sorted_cats;
+        for (const auto& cat : *cats)
+        {
+            if (cat)
+            {
+                sorted_cats.push_back(cat);
+            }
+        }
+
+        std::sort(sorted_cats.begin(), sorted_cats.end(), [](const LLViewerInventoryCategory* lhs, const LLViewerInventoryCategory* rhs)
+        {
+            return LLStringUtil::compareDict(lhs->getName(), rhs->getName()) < 0;
+        });
+
+        for (const auto& cat : sorted_cats)
+        {
+            mFolderCombo->add(cat->getName(), LLSD(cat->getUUID().asString()));
+        }
+    }
+
+    if (!mFolderCombo->selectByValue(LLSD(selected_id.asString())))
+    {
+        selected_id = sFolderID;
+        mFolderCombo->selectByValue(LLSD(selected_id.asString()));
+    }
+
+    LLUUID previous_selected_id = mSelectedFolderID;
+
+    mSelectedFolderID = selected_id;
+
+    // Favorite Wearables v2.0.0:
+    // Preserve the visible folder when inventory updates arrive from Assign to Folder.
+    // This prevents assigning from a subfolder from bouncing the visible list back to All Favorites.
+    if (previous_selected_id != mSelectedFolderID)
+    {
+        updateList(mSelectedFolderID);
+    }
+}
+
 void FSFloaterWearableFavorites::onItemDAD(const LLUUID& item_id)
 {
-    link_inventory_object(sFolderID, item_id, LLPointer<LLInventoryCallback>(nullptr));
+    const LLUUID target_folder = mSelectedFolderID.notNull() ? mSelectedFolderID : sFolderID;
+    LLHandle<LLFloater> floater_handle = getHandle();
+
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([floater_handle, target_folder](const LLUUID& new_item_id)
+    {
+        LLFloater* floater = floater_handle.get();
+        FSFloaterWearableFavorites* self = dynamic_cast<FSFloaterWearableFavorites*>(floater);
+        if (self)
+        {
+            self->updateList(target_folder);
+        }
+    });
+
+    link_inventory_object(target_folder, item_id, cb);
 }
 
 void FSFloaterWearableFavorites::handleRemove()
@@ -303,10 +468,25 @@ void FSFloaterWearableFavorites::handleRemove()
     uuid_vec_t selected_item_ids;
     mItemsList->getSelectedUUIDs(selected_item_ids);
 
+    const LLUUID folder_id = mSelectedFolderID.notNull() ? mSelectedFolderID : sFolderID;
+    LLHandle<LLFloater> floater_handle = getHandle();
+
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([floater_handle, folder_id](const LLUUID& item_id)
+    {
+        LLFloater* floater = floater_handle.get();
+        FSFloaterWearableFavorites* self = dynamic_cast<FSFloaterWearableFavorites*>(floater);
+        if (self)
+        {
+            self->updateList(folder_id);
+        }
+    });
+
     for (const auto& id : selected_item_ids)
     {
-        remove_inventory_item(id, LLPointer<LLInventoryCallback>(nullptr));
+        remove_inventory_item(id, cb);
     }
+
+    updateList(folder_id);
 }
 
 void FSFloaterWearableFavorites::onFilterEdit(const std::string& search_string)
@@ -314,6 +494,221 @@ void FSFloaterWearableFavorites::onFilterEdit(const std::string& search_string)
     mItemsList->setFilterSubString(search_string, true);
     mItemsList->setNoItemsCommentText(getString("empty_list"));
     mItemsList->rearrange();
+}
+
+void FSFloaterWearableFavorites::onFolderChanged()
+{
+    if (!mFolderCombo)
+    {
+        return;
+    }
+
+    LLSD selected_value = mFolderCombo->getSelectedValue();
+    LLUUID selected_id(selected_value.asString());
+    if (selected_id.isNull())
+    {
+        selected_id = sFolderID;
+    }
+
+    LLUUID previous_selected_id = mSelectedFolderID;
+
+    mSelectedFolderID = selected_id;
+
+    // Favorite Wearables v2.0.0:
+    // Preserve the visible folder when inventory updates arrive from Assign to Folder.
+    // This prevents assigning from a subfolder from bouncing the visible list back to All Favorites.
+    if (previous_selected_id != mSelectedFolderID)
+    {
+        updateList(mSelectedFolderID);
+    }
+}
+
+void FSFloaterWearableFavorites::onNewFolder()
+{
+    LLNotificationsUtil::add("FSWearableFavoritesNewFolder", LLSD(), LLSD(), boost::bind(&FSFloaterWearableFavorites::onNewFolderCallback, this, _1, _2));
+}
+
+bool FSFloaterWearableFavorites::onNewFolderCallback(const LLSD& notification, const LLSD& response)
+{
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+    {
+        return false;
+    }
+
+    std::string folder_name = response["message"].asString();
+    LLStringUtil::trim(folder_name);
+
+    if (folder_name.empty())
+    {
+        return false;
+    }
+
+    if (folder_name.find_first_of("/\\") != std::string::npos)
+    {
+        LLSD args;
+        args["FOLDER_NAME"] = folder_name;
+        LLNotificationsUtil::add("FSWearableFavoritesFolderInvalidName", args);
+        return false;
+    }
+
+    gInventory.createNewCategory(sFolderID, LLFolderType::FT_NONE, folder_name, [this](const LLUUID& new_cat_id)
+    {
+        if (new_cat_id.notNull())
+        {
+            mSelectedFolderID = new_cat_id;
+            refreshFolderCombo();
+            if (mFolderCombo)
+            {
+                mFolderCombo->selectByValue(LLSD(new_cat_id.asString()));
+            }
+            updateList(mSelectedFolderID);
+        }
+    });
+
+    return true;
+}
+
+
+void FSFloaterWearableFavorites::onRenameFolder()
+{
+    if (mSelectedFolderID.isNull() || mSelectedFolderID == sFolderID)
+    {
+        return;
+    }
+
+    LLSD args;
+    if (LLViewerInventoryCategory* cat = gInventory.getCategory(mSelectedFolderID))
+    {
+        args["FOLDER_NAME"] = cat->getName();
+    }
+    LLNotificationsUtil::add("FSWearableFavoritesRenameFolder", args, LLSD(), boost::bind(&FSFloaterWearableFavorites::onRenameFolderCallback, this, _1, _2));
+}
+
+bool FSFloaterWearableFavorites::onRenameFolderCallback(const LLSD& notification, const LLSD& response)
+{
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+    {
+        return false;
+    }
+
+    if (mSelectedFolderID.isNull() || mSelectedFolderID == sFolderID)
+    {
+        return false;
+    }
+
+    std::string folder_name = response["message"].asString();
+    LLStringUtil::trim(folder_name);
+
+    if (folder_name.empty())
+    {
+        return false;
+    }
+
+    if (folder_name.find_first_of("/\\") != std::string::npos)
+    {
+        LLSD args;
+        args["FOLDER_NAME"] = folder_name;
+        LLNotificationsUtil::add("FSWearableFavoritesFolderInvalidName", args);
+        return false;
+    }
+
+    const LLUUID folder_id = mSelectedFolderID;
+    LLHandle<LLFloater> floater_handle = getHandle();
+
+    LLSD updates;
+    updates["name"] = folder_name;
+
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([floater_handle, folder_id](const LLUUID& cat_id)
+    {
+        LLFloater* floater = floater_handle.get();
+        FSFloaterWearableFavorites* self = dynamic_cast<FSFloaterWearableFavorites*>(floater);
+        if (self)
+        {
+            self->mSelectedFolderID = folder_id;
+            self->refreshFolderCombo();
+            if (self->mFolderCombo)
+            {
+                self->mFolderCombo->selectByValue(LLSD(folder_id.asString()));
+            }
+            self->updateList(folder_id);
+        }
+    });
+
+    update_inventory_category(folder_id, updates, cb);
+    refreshFolderCombo();
+    updateList(folder_id);
+
+    return true;
+}
+
+void FSFloaterWearableFavorites::onDeleteFolder()
+{
+    if (mSelectedFolderID.isNull() || mSelectedFolderID == sFolderID)
+    {
+        return;
+    }
+
+    LLSD args;
+    LLViewerInventoryCategory* cat = gInventory.getCategory(mSelectedFolderID);
+    if (cat)
+    {
+        args["FOLDER_NAME"] = cat->getName();
+    }
+    else
+    {
+        args["FOLDER_NAME"] = "Selected Folder";
+    }
+
+    LLInventoryModel::item_array_t* items = nullptr;
+    LLInventoryModel::cat_array_t* cats = nullptr;
+    gInventory.getDirectDescendentsOf(mSelectedFolderID, cats, items);
+
+    S32 item_count = items ? (S32)items->size() : 0;
+    S32 folder_count = cats ? (S32)cats->size() : 0;
+    args["ITEM_COUNT"] = item_count;
+    args["FOLDER_COUNT"] = folder_count;
+
+    LLNotificationsUtil::add("FSWearableFavoritesDeleteFolder", args, LLSD(), boost::bind(&FSFloaterWearableFavorites::onDeleteFolderCallback, this, _1, _2));
+}
+
+bool FSFloaterWearableFavorites::onDeleteFolderCallback(const LLSD& notification, const LLSD& response)
+{
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+    {
+        return false;
+    }
+
+    if (mSelectedFolderID.isNull() || mSelectedFolderID == sFolderID)
+    {
+        return false;
+    }
+
+    const LLUUID folder_id = mSelectedFolderID;
+    LLHandle<LLFloater> floater_handle = getHandle();
+
+    LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback([floater_handle](const LLUUID& deleted_id)
+    {
+        LLFloater* floater = floater_handle.get();
+        FSFloaterWearableFavorites* self = dynamic_cast<FSFloaterWearableFavorites*>(floater);
+        if (self)
+        {
+            self->mSelectedFolderID = FSFloaterWearableFavorites::sFolderID;
+            self->refreshFolderCombo();
+            if (self->mFolderCombo)
+            {
+                self->mFolderCombo->selectByValue(LLSD(FSFloaterWearableFavorites::sFolderID.asString()));
+            }
+            self->updateList(FSFloaterWearableFavorites::sFolderID);
+        }
+    });
+
+    remove_inventory_category(folder_id, cb);
+
+    mSelectedFolderID = sFolderID;
+    refreshFolderCombo();
+    updateList(sFolderID);
+
+    return true;
 }
 
 void FSFloaterWearableFavorites::onOptionsMenuItemClicked(const LLSD& userdata)

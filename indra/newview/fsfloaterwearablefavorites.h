@@ -34,6 +34,7 @@
 #include <optional>
 
 class LLButton;
+class LLComboBox;
 class LLFilterEditor;
 class LLMenuButton;
 class LLInventoryCategoriesObserver;
@@ -91,11 +92,19 @@ private:
     void initialize();
 
     void updateList(const LLUUID& folder_id);
+    void refreshFolderCombo();
 
     void onItemDAD(const LLUUID& item_id);
     void handleRemove();
     void onFilterEdit(const std::string& search_string);
     void onDoubleClick();
+    void onFolderChanged();
+    void onNewFolder();
+    bool onNewFolderCallback(const LLSD& notification, const LLSD& response);
+    void onRenameFolder();
+    bool onRenameFolderCallback(const LLSD& notification, const LLSD& response);
+    void onDeleteFolder();
+    bool onDeleteFolderCallback(const LLSD& notification, const LLSD& response);
 
     void onOptionsMenuItemClicked(const LLSD& userdata);
     bool onOptionsMenuItemChecked(const LLSD& userdata);
@@ -110,6 +119,11 @@ private:
 
     FSWearableFavoritesItemsList*   mItemsList;
     LLButton*                       mRemoveItemBtn;
+    LLButton*                       mNewFolderBtn;
+    LLButton*                       mRenameFolderBtn;
+    LLButton*                       mDeleteFolderBtn;
+    LLComboBox*                     mFolderCombo;
+    LLUUID                          mSelectedFolderID;
     LLFilterEditor*                 mFilterEditor;
     LLMenuButton*                   mOptionsButton;
     LLHandle<LLView>                mOptionsMenuHandle;
