@@ -119,7 +119,6 @@ public:
     static void updateClass();
     static bool isSystemMemoryLow();
     static bool isSystemMemoryCritical();
-    static F32 getSystemMemoryBudgetFactor();
 
     LLViewerTexture(bool usemipmaps = true);
     LLViewerTexture(const LLUUID& id, bool usemipmaps) ;
