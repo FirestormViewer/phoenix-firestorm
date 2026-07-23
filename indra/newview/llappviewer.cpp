@@ -67,6 +67,7 @@
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
+#include "lltexturememorybudget.h"
 #include "lltexturestats.h"
 #include "lltrace.h"
 #include "lltracethreadrecorder.h"
@@ -4310,17 +4311,19 @@ LLSD LLAppViewer::getViewerInfo() const
     // </FS:PP>
 
     // <FS:Ansariel> Include VRAM budget
-    if (gSavedSettings.getBOOL("FSLimitTextureVRAMUsage"))
+    U32 budget = gSavedSettings.getU32("RenderMaxVRAMBudget");
+    if (!gSavedSettings.getBOOL("FSLimitTextureVRAMUsage"))
     {
-        auto budget = gSavedSettings.getU32("RenderMaxVRAMBudget");
-        info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
-        info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
+        const U32 physical_memory_mb =
+            gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>();
+        budget = LLTextureMemoryBudget::getAutomaticBudgetMB(
+            gGLManager.mVRAM,
+            gSavedSettings.getU32("RenderTextureVRAMDivisor"),
+            physical_memory_mb,
+            LLTextureMemoryBudget::USES_UNIFIED_MEMORY);
     }
-    else
-    {
-        info["VRAM_BUDGET"] = LLTrans::getString("Unlimited");
-        info["VRAM_BUDGET_ENGLISH"] = "Unlimited";
-    }
+    info["VRAM_BUDGET"] = std::to_string(budget) + " MB";
+    info["VRAM_BUDGET_ENGLISH"] = std::to_string(budget) + " MB";
     // </FS:Ansariel>
 
     return info;
