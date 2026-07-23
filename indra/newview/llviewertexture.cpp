@@ -529,16 +529,19 @@ void LLViewerTexture::updateClass()
     F32 budget = (F32)max_vram_budget;
     if (!max_vram_budget_enabled)
     {
-        static const U32 physical_memory_mb =
-            gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>();
-        budget = (F32)LLTextureMemoryBudget::getAutomaticBudgetMB(
-            gGLManager.mVRAM,
-            tex_vram_divisor(),
-            physical_memory_mb,
-            LLTextureMemoryBudget::USES_UNIFIED_MEMORY);
+        budget = llmax(1024.f,
+                       (F32)gGLManager.mVRAM /
+                           (tex_vram_divisor() > 0 ? tex_vram_divisor() : 1));
 
         if (LLTextureMemoryBudget::USES_UNIFIED_MEMORY)
         {
+            static const U32 physical_memory_mb =
+                gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>();
+            budget = (F32)LLTextureMemoryBudget::getAutomaticBudgetMB(
+                gGLManager.mVRAM,
+                tex_vram_divisor(),
+                physical_memory_mb,
+                true);
             LL_INFOS_ONCE("TextureMemory")
                 << "Automatic unified-memory texture budget capped at "
                 << budget << " MB (detected VRAM: " << gGLManager.mVRAM
