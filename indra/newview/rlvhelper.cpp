@@ -1808,7 +1808,7 @@ void RlvForceWear::done()
 
     if (!remItems.empty())
     {
-        LLAppearanceMgr::instance().removeItemsFromAvatar(remItems, no_op, cb, true);
+        LLAppearanceMgr::instance().removeItemsFromAvatar(remItems, no_op, cb, false);
     }
 
     if ( (addBodyParts.empty()) && (!addClothing.empty()) && (m_addGestures.empty()) )
