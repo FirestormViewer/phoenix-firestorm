@@ -1135,6 +1135,101 @@ If you do not understand the distinction then leave this control alone."
           top_pad="5"
           width="475" 
         />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="automatic_texture_downscale_settings"
+         top_pad="10"
+         width="308">
+            Automatic Texture Downscaling:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardBackgroundedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when not the active window."
+         top_pad="10"
+         width="275">
+            In Background (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardBackgroundedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardBackgroundedTime"
+          tool_tip="Downscales textures after selected amount of seconds when not the active window."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardBackgroundedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="TextureDiscardMinimizedTime_label"
+         tool_tip="Downscales textures after selected amount of seconds when minimized."
+         top_pad="10"
+         width="275">
+            Minimized (0 to disable)
+        </text>
+        <spinner
+          control_name="TextureDiscardMinimizedTime"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="3600"
+          min_val="0"
+          name="TextureDiscardMinimizedTime"
+          tool_tip="Downscales textures after selected amount of seconds when minimized."
+          top_delta="-5"
+          width="100"
+        />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="TextureDiscardMinimizedTime_seconds"
+         top_delta="5"
+         width="100">
+            Second(s)
+        </text>
     </panel>
 
 <!--Rendering-->
@@ -1168,7 +1263,7 @@ If you do not understand the distinction then leave this control alone."
          layout="topleft"
          left_delta="5"
          name="WorldPause"
-         top_pad="5"
+         top_pad="4"
          width="256"/>
 
          <check_box
@@ -1227,52 +1322,12 @@ If you do not understand the distinction then leave this control alone."
 
         <text
          type="string"
-         top_pad="3"
-         follows="top|left"
-         height="18"
-         width="250"
-         word_wrap="true"
-         layout="topleft"
-         left_delta="10"
-         name="TextureQualityLabel">
-            Texture quality:
-        </text>
-        <combo_box
-         control_name="RenderTextureQuality"
-         height="20"
-         layout="topleft"
-         follows="left|top"
-         left_pad="5"
-         top_pad="-20"
-         name="TextureQuality"
-         width="150"
-         tool_tip="Controls maximum texture resolution and how aggressively textures stream by channel. Higher quality keeps more detail in memory.">
-            <combo_box.item
-             label="Low"
-             name="Low"
-             value="0"/>
-            <combo_box.item
-             label="Medium"
-             name="Medium"
-             value="1"/>
-            <combo_box.item
-             label="High"
-             name="High"
-             value="2"/>
-            <combo_box.item
-             label="Ultra"
-             name="Ultra"
-             value="3"/>
-        </combo_box>
-
-        <text
-         type="string"
          follows="left|top"
          height="16"
          layout="topleft"
-         left="22"
+         left_delta="10"
          name="FSRestrictMaxTextureSize"
-         top_pad="2"
+         top_pad="5"
          width="250">
             Restrict maximum texture resolution to:
         </text>
@@ -1298,6 +1353,48 @@ If you do not understand the distinction then leave this control alone."
            label="2048 pixels"
            name="2048"
            value="2048"/>
+        </combo_box>
+
+      <!-- New Texture detail 5 is lowest, 0 is highest -->
+        <text
+         type="string"
+         length="1"
+         top_pad="3"
+         follows="top|left"
+         height="18"
+         width="250"
+         word_wrap="true"
+         layout="topleft"
+         left="20"
+         name="TextureDetailLabel">
+            Max Texture Quality Level:
+        </text>
+        <combo_box
+         control_name="TextureDiscardLevel"
+         height="20"
+         layout="topleft"
+         follows="left|top"
+         left_pad="2"
+         top_pad="-20"
+         name="TextureDetail"
+         width="150"
+         tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
+            <combo_box.item
+             label="Normal (0) quality"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Mid (3) quality"
+             name="3"
+             value="3"/>
+            <combo_box.item
+             label="Low (4) quality"
+             name="4"
+             value="4"/>
+            <combo_box.item
+             label="No (5) textures"
+             name="5"
+             value="5"/>
         </combo_box>
 
         <text
