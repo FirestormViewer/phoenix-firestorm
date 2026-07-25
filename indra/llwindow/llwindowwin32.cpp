@@ -169,6 +169,21 @@ void show_window_creation_error(const std::string& title)
     LL_WARNS("Window") << title << LL_ENDL;
 }
 
+// <FS:volksec> Keep native dialog focus changes inside the viewer process.
+static bool is_thread_from_current_process(DWORD thread_id)
+{
+    HANDLE thread_handle = OpenThread(THREAD_QUERY_LIMITED_INFORMATION, FALSE, thread_id);
+    if (!thread_handle)
+    {
+        return false;
+    }
+
+    const DWORD process_id = GetProcessIdOfThread(thread_handle);
+    CloseHandle(thread_handle);
+    return process_id == GetCurrentProcessId();
+}
+// </FS:volksec>
+
 HGLRC SafeCreateContext(HDC &hdc)
 {
     __try
@@ -2464,7 +2479,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             {
                 initializeDeviceCLSIDArray();
             }
-            
+
             if (w_param == DBT_DEVICEARRIVAL || w_param == DBT_DEVICEREMOVECOMPLETE)
             {
                 DEV_BROADCAST_HDR* dtype = (DEV_BROADCAST_HDR*)l_param;
@@ -2479,7 +2494,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         {
                             bool deviceRemoved = (w_param == DBT_DEVICEREMOVECOMPLETE);
                             WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, deviceRemoved));
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -2540,6 +2555,14 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 {
                     // This message should be sent whenever the app gains or loses focus.
                     BOOL activating = (BOOL)w_param;
+
+                    // <FS:volksec> Native file dialogs run on a worker thread.
+                    // Do not minimize fullscreen when focus stays in this process.
+                    if (!activating && is_thread_from_current_process(static_cast<DWORD>(l_param)))
+                    {
+                        activating = TRUE;
+                    }
+                    // </FS:volksec>
 
                     if (window_imp->mFullscreen)
                     {
