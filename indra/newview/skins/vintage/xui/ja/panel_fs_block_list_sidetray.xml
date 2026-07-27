@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="ブロックされた住民やオブジェクトはありません。"/>
+	<string name="no_filtered_blocked" value="検索条件に一致するブロックされた住民やオブジェクトはありません。"/>
+	<string name="loading_blocked" value="ブロックされた住民とオブジェクトを読み込んでいます…"/>
+	<string name="failed_blocked" value="ブロックリストは現在使用できません。"/>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名前"/>
 		<fs_scroll_list.columns name="item_type" label="種類"/>

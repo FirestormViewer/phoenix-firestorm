@@ -1401,7 +1401,7 @@
         <key>HideFromEditor</key>
             <integer>1</integer>
         <key>Comment</key>
-            <string>User-defined custom inventory filter tabs (array of maps with 'name', 'filter' and 'states' keys)</string>
+            <string>User-defined custom inventory filter tabs (array of maps with 'name', 'filter', 'states' and 'tabhidden' keys)</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

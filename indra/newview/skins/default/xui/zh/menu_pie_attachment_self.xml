@@ -14,7 +14,11 @@
 			<pie_slice label="備份" name="Backup" />
 			<pie_slice label="Collada" name="Collada" />
 		</pie_menu>
-		<pie_slice label="在庫存中顯示" name="Show original" />
+		<pie_menu name="Inventory" label="庫存 &gt;">
+			<menu_item_call label="添加到收藏" name="Add to favorites" />
+			<menu_item_call label="從收藏中移除" name="Remove from favorites" />
+			<pie_slice label="在庫存中顯示" name="Show original" />
+		</pie_menu>
 		<pie_slice label="檢查化身" name="Avatar Inspect" />
 		<pie_slice label="除錯紋理" name="Debug..." />
 	</pie_menu>

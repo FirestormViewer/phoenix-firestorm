@@ -2047,6 +2047,26 @@ S32 LLTabContainer::getTabContainedAtPoint(S32 x, S32 y) const
     }
     return -1;
 }
+
+void LLTabContainer::setTabButtonVisible(const LLPanel* panel, bool visible)
+{
+    for (LLTabTuple* tuple : mTabList)
+    {
+        if (tuple->mTabPanel == panel)
+        {
+            if (tuple->mVisible != visible)
+            {
+                tuple->mVisible = visible;
+                if (tuple->mButton)
+                {
+                    tuple->mButton->setVisible(visible);
+                }
+                updateMaxScrollPos();
+            }
+            break;
+        }
+    }
+}
 // </FS:PP>
 
 void LLTabContainer::onNextBtn( const LLSD& data )

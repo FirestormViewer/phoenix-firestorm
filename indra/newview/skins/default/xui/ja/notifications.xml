@@ -42,6 +42,10 @@
 		[APP_NAME]のアップデート時にエラーが発生しました。[https://www.firestormviewer.org/downloads 最新バージョンのビューアをダウンロード]してください。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME]は、古いバージョン[VERSION]のインストールを見つけました。古いバージョンをアンインストールするには、[https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 このマニュアル]を参照してください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
 	<notification name="LoginFailedNoNetwork">
 		[CURRENT_GRID]に接続できませんでした。
 [DIAGNOSTIC]
@@ -1372,6 +1376,17 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
+	<notification label="フィルタタブの名前変更" name="FSInventoryCustomTabRename">
+		新しいタブ名
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification label="フィルタタブを閉じる" name="FSInventoryCustomTabClose">
+		「[NAME]」フィルタタブを閉じてもよろしいですか？保存されているフィルタは削除されます。
+		<usetemplate name="okcancelignore" notext="キャンセル" yestext="はい。閉じます" ignoretext="カスタムインベントリフィルタタブを閉じる前に確認してください。"/>
+	</notification>
 	<notification label="フィルタータブの名前変更" name="FSInventoryCustomTabRename">
 		新しいタブ名：
 		<form name="form">
@@ -1581,7 +1596,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		<usetemplate ignoretext="ＨＵＤが複雑すぎる場合の警告" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
-		[APP_NAME]のインストールが完了しました。
+[APP_NAME]のインストールが完了しました。
 
 [CURRENT_GRID]を使ったことがない場合は、ログインする前にアカウントの作成を行ってください。
 		<usetemplate name="okcancelbuttons" notext="続行" yestext="アカウントを作成…"/>
@@ -1797,6 +1812,10 @@ https://secondlife.com/support/downloads/
 
 ＯＫをクリックして、ダウンロードとインストールを開始します。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="DownloadingUpdate">
+更新[VERSION]をダウンロードしています…
+ビューアは、ダウンロード完了後に再起動します。
 	</notification>
 	<notification name="OptionalUpdateReady">
 		バージョン[VERSION]のダウンロードが完了し、インストールの準備ができました。
@@ -3493,9 +3512,10 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		オブジェクト「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」は、あなたのリンデンドルアカウントから資金を引き出すためのアクセスを要求しています。これを許可すると、警告や要求なしに、いつでもあなたの資金の一部または全部を引き出すことができます。
+警告：
+[WARNINGS]
 
-このアクセスを許可する前に、オブジェクトが何であるか、なぜこの要求を行っているのか、そして作成者を信頼できるかどうかを確認してください。確信が持てない場合は、「拒否」をクリックしてください。
+アカウントへのアクセスを要求する理由が、完全に把握できない場合は、アクセス許可しないでください。
 		<form name="form">
 			<button name="Grant" text="アクセス許可"/>
 			<button name="Deny" text="拒否"/>
@@ -3684,6 +3704,12 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="SnapshotToLocalDirNotExist">
 		スナップショットを[PATH]に保存できませんでした：ディレクトリは存在しません。
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+スナップショットは以下に保存されました：
+[FILEPATH]
+
+クリックでフォルダを開きます。
+	</notification>
 	<notification name="PresetNotSaved">
 		プリセット[NAME]の保存時にエラーが発生しました。
 	</notification>
@@ -3707,12 +3733,19 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="TextChatIsMutedByModerator">
-		モデレーターがあなたの文字チャットをミュートしました。
+		モデレーターは、あなたの文字チャットをミュートしました。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
-		モデレーターがあなたのボイスをミュートしました。
+		モデレーターは、あなたのボイスをミュートしました。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		モデレーターは、あなたのボイスチャットをミュートしました。
+この場所では、あなたが話しても誰も聞こえません。
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		あなたのボイスチャットは、この場所にいる人々に聞こえるようになりました。
 	</notification>
 	<notification name="FailedToGetBenefits">
 		残念ながら、このセッションで特典情報を得ることができませんでした。これは通常の本番環境で起こるものではありません。
@@ -3933,6 +3966,10 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="ConfirmLeaveCall">
 		このコールから抜けてもよろしいですか？
 		<usetemplate ignoretext="コールから抜ける前の確認" name="okcancelignore" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+		この会話から抜けてもよろしいですか？
+		<usetemplate ignoretext="会話から抜ける前の確認" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="ConfirmMuteAll">
 		グループコールの参加者全員をミュートしました。
@@ -4216,6 +4253,26 @@ https://wiki.firestormviewer.org/fs_voice
 名前には、「:」または「|」を除く任意のアスキー文字を含めることができます。
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
+	<notification name="RenameAOGroup">
+		このアニメーショングループに新しい名前を指定してください：
+（名前には、「:」または「|」を除く任意のアスキー文字を含めることができます。）
+		<form name="form">
+			<input name="message">
+[AO_GROUP_NAME]
+			</input>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		「[AO_SET_NAME]」に名前変更できませんでした。
+名前には、「:」または「|」を除く任意のアスキー文字を含めることができます。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		フォルダ「[NAME]」には追加するアニメーションが含まれていません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
 	<notification name="NewAONameCantExist">
 		すでにその名前のアニメーションセットは存在しています。
 	</notification>
@@ -4332,6 +4389,22 @@ https://wiki.firestormviewer.org/fs_voice
 		[APP_NAME]を再起動すると設定はクリアされます。
 	</notification>
 	<!-- Firestorm Reset Settings -->
+
+	<!-- Firestorm Region Group Titles -->
+	<notification name="FSSetTitleRegion">
+選択したグループタイトルに割り当てるリージョン名を正確に入力してください。
+割り当てを保存する前に、入力されたリージョン名が確認されます。
+		<form name="form">
+			<button dname="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+リージョン「[REGION]」が見つかりませんでした。リージョン名を確認して、もう一度お試しください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<!-- Firestorm Region Group Titles -->
+
 	<!-- AW: opensim -->
 	<notification name="CantAddGrid">
 		[GRID]をグリッド リストに追加できませんでした。
@@ -5305,7 +5378,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		スパム対策：[COUNT]行を超えるチャットメッセージを送信されたため[SOURCE]をブロックしました。
 	</notification>
 	<!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
-	<!--         The actual texts for the messages are in strings.xml -->
+	<!--		 The actual texts for the messages are in strings.xml -->
 	<notification name="SkinDefaultsChangeSettings">
 		[MESSAGE]
 		<form name="form">
@@ -5788,17 +5861,93 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 	<!-- </FS:TJ>-->
 
-	<notification name="FSSetTitleRegion">
-		選択したグループタイトルに割り当てる地域の正確な名前を入力してください。
-割り当てが保存される前に名前が確認されます。
+	<!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+	<notification name="OmniFilterNewRuleSet">
+		新しいルールセット名を入力してください：
 		<form name="form">
-			<button name="OK" text="OK"/>
+			<button name="OK" text="ＯＫ"/>
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
-	<notification name="FSSetTitleRegionNotFound">
-		地域 '[REGION]' が見つかりませんでした。名前を確認してもう一度お試しください。
-		<usetemplate name="okbutton" yestext="OK"/>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		名前を空欄にすることはできません。名前を入力して再度お試しください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		同じ名前は入力できません。別の名前で再度お試しください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSet" type="alertmodal">
+		複製したルールセットの名前を入力してください。
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<button index="1" name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		名前を空欄にすることはできません。名前を入力して再度お試しください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		同じ名前は入力できません。別の名前で再度お試しください。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		[RULESETNAME]を削除してもよろしいですか？
+		<usetemplate ignoretext="包括フィルタのルールセットを削除する前の確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		デフォルトのルールセットを削除できません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		インデックスが範囲外のため、ルールセットを削除できませんでした。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		名前が見つからないため、ルールセットを削除できません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		ルールセット「[RULESETNAME]」をエクスポートするノートカード名を入力してください：
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		インベントリに「メモカード」カテゴリがありません。メモカードを作成できません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		インポートするルールセットの名前「[IMPORTNAME]」を入力してください。
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		エラー：ノートカード「[IMPORTNAME]」は有効なルールセットではないため、インポートできません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		エラー：オブジェクトはノートカードではありません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="包括フィルタのインポート手順">
+		ノートカードをインポートするには、表示されたインベントリからルールセットのノートカードを左クリックし、マウスの左ボタンを押し続けます。次に、マウスをこのウィンドウまでドラッグし、マウスボタンを離すとインポート処理が開始されます。
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<ignore name="ignore" text="インポートボタンが押されたときに、包括フィルタのインポート手順を表示する"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		ノートカード名「[INPUTNAME]」は、ラテン文字以外の文字が含まれているためサポートされていません。
+		<form name="form">
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<!-- </FS:minerjr> [FIRE-36763] -->
 
 </notifications>

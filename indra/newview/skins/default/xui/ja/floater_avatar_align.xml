@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="コンパス">
+	<button name="btn_rotate_left_10" tool_tip="アバターを左に10度回転させます。" />
+	<button name="btn_rotate_left_1" tool_tip="アバターを左に1度回転させます。" />
+	<button name="btn_rotate_right_1" tool_tip="アバターを右に1度回転させます。" />
+	<button name="btn_rotate_right_10" tool_tip="アバターを右に10度回転させます。" />
+	<button name="btn_rotate_left_90" tool_tip="アバターを左に90度回転させます。" />
+	<button name="btn_rotate_left_45" tool_tip="アバターを左に45度回転させます。" />
+	<button name="btn_rotate_right_45" ltool_tip="アバターを右に45度回転させます。" />
+	<button name="btn_rotate_right_90" ltool_tip="アバターを右に90度回転させます。" />
+	<button name="btn_nearest" label="最も近い方位" tool_tip="アバターを最も近い方角に向けて回転させます。" />
+	<button name="btn_avatar" label="最も近いアバターに向ける" tool_tip="最も近いアバターの方に向けます。" />
+</floater>

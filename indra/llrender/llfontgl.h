@@ -204,6 +204,7 @@ public:
     static LLFontGL* getFontEmojiMedium(bool useBW = false);
     static LLFontGL* getFontEmojiLarge(bool useBW = false);
     static LLFontGL* getFontEmojiHuge(bool useBW = false);
+    static LLFontGL* getFontEmojiDefault(bool useBW = false); // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
     // </FS:Beq> Add B&W emoji font support
     static LLFontGL* getFontMonospace();
     static LLFontGL* getFontSansSerifSmall();

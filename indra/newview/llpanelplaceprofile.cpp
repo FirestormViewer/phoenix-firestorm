@@ -630,6 +630,11 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
     mSelectedParcelID = parcel->getLocalID();
     mLastSelectedRegionID = region->getRegionID();
+    // <FS:TJ> Set these fields so they aren't uninitialized and show random values in the UI
+    parcel_data.dwell = dwell;
+    parcel_data.actual_area = area;
+    parcel_data.sale_price = claim_price;
+    // </FS:TJ>
     LLPanelPlaceInfo::processParcelInfo(parcel_data);
 
 //  mYouAreHerePanel->setVisible(is_current_parcel);

@@ -1155,6 +1155,20 @@ LLFontGL* LLFontGL::getFontEmojiHuge( bool useBW ) // <FS:Beq/> Add B&W emoji fo
     return fontp;;
 }
 
+// <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+//static
+LLFontGL* LLFontGL::getFontEmojiDefault(bool useBW)
+{
+    static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Default", 0));
+    static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Default", 0));
+    if (useBW)
+    {
+        return fontp_bw;
+    }
+    return fontp;
+}
+// </FS:Ansariel>
+
 //static
 LLFontGL* LLFontGL::getFontMonospace()
 {
@@ -1186,7 +1200,10 @@ LLFontGL* LLFontGL::getFontSansSerifSmallItalic()
 //static
 LLFontGL* LLFontGL::getFontSansSerif()
 {
-    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Small",0));
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+    //static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Small", 0));
+    static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif", "Default", 0));
+    // </FS:Ansariel>
     return fontp;
 }
 

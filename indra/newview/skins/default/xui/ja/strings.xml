@@ -201,6 +201,8 @@ LibVLCのバージョン：[LIBVLC_VERSION]
 	</string>
 	<string name="AgniGridLabel">Second Lifeメイングリッド（Agni）</string>
 	<string name="AditiGridLabel">Second Lifeベータテストグリッド（Aditi）</string>
+	<string name="AgniGridLabelShort">Agni（本番）</string>
+	<string name="AditiGridLabelShort">Aditi（ベータ）</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：
 https://www.firestormviewer.org/choose-your-platform/
@@ -1177,6 +1179,12 @@ https://secondlife.com/viewer-access-faq
 	<string name="ScriptQuestionCautionChatDenied">
 		リージョン「[REGIONNAME]」の「[REGIONPOS]」という場所にある、「[OWNERNAME]」が所有する「[OBJECTNAME]」というオブジェクトは、以下の権限を拒否しました：[PERMISSIONS]
 	</string>
+	<string name="ScriptTakeMoneyCaution">
+		オブジェクト「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」は、あなたのリンデンドルアカウントへの完全なアクセスを要求しています。アクセスを許可すると、いつでもアカウントから資金を引き出したり、アカウントを完全に空にしたりすることができ、追加の警告なしに継続的に資金を引き出すことが可能になります。
+	</string>
+	<string name="PrivilegedLandAccessCaution">
+		オブジェクト「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」は、あなたの土地への特権的なアクセスを要求しています。アクセスを許可すると、追加の警告なしにあなたの土地を売却される可能性があります。
+	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		あなたのアカウントへのアクセスを許可すると、このオブジェクトには次の操作も許可されます：
 	</string>
@@ -1227,6 +1235,9 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="ChangeEnvSettings">
 		自然環境の設定を変更する
+	</string>
+	<string name="PrivilegedLandAccess">
+		代理で土地を売却する
 	</string>
 	<string name="SnapshotSavedToDisk">
 		スナップショットを保存しました：[FILENAME]
@@ -1645,6 +1656,12 @@ https://secondlife.com/viewer-access-faq
 	<string name="InventoryNoMatchingRecentItems">
 		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		お気に入りに登録されたアイテムがありません。
+	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		カスタム
+	</string>
 	<string name="PlacesNoMatchingItems">
 		お探しのものは見つかりましたか？[secondlife:///app/search/places/[SEARCH_TERM] 検索]をお試しください。
 	</string>
@@ -1954,8 +1971,8 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		お気に入り
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
-      Also, it can be written as "Favorite" or "Favorites".
-  We should localize all variants of them with the same value -->
+	Also, it can be written as "Favorite" or "Favorites".
+	We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
 		お気に入り
 	</string>
@@ -3202,6 +3219,9 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="MBFrozenCrashed">
 		[APP_NAME]は前回の実行時にフリーズしています。
 クラッシュ報告を送信しますか？
+	</string>
+	<string name="MBFreezeDetected">
+		[APP_NAME]がフリーズしたようです。この問題が頻繁に発生する場合は、https://www.firestormviewer.org/support からサポートにお問い合わせください。
 	</string>
 	<string name="MBAlert">
 		通知
@@ -5673,7 +5693,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		カメラ操作
 	</string>
 	<!-- Ansariel: Renamed for FS (FIRE-5019)
-  <string name="Command_Voice_Label">Voice settings</string>-->
+	<string name="Command_Voice_Label">Voice settings</string>-->
 	<string name="Command_Voice_Label">近くのボイス</string>
 	<!-- Firestorm commands -->
 	<string name="Command_Quickprefs_Label">簡易設定</string>
@@ -6208,7 +6228,17 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
 	<string name="LoadCameraPositionOutsideDrawDistance">カメラの位置が描画距離を超えているため、カメラビューを復元できません。</string>
 
 	<string name="DrawDistanceSteppingGestureObsolete">コードの変更により、このジェスチャーを使用する必要がなくなりました。プログレッシブ描画距離ステップが有効になりました。</string>
-	<string name="FSCameraPositionCopied">カメラ位置[POS]がクリップボードにコピーされました。</string>
+	<string name="FSCameraPositionCopied">カメラ位置の[POS]が、クリップボードにコピーされました。</string>
+	<string name="FSCameraPositionPasted">カメラ位置が、[POS]に復元されました。</string>
+	<string name="FSCameraPositionParseError">無効なカメラ位置です。期待値：&lt;x, y, z&gt;か、&lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll（エージェントのローカル）</string>
+	<string name="FSCmdLineZOffsetUsage">アバターのホバーする高さを設定（使用方法：/zoffset 値もしくは、+delta）</string>
+	<string name="FSCmdLineNoValidRegion">有効なリージョンポインタを取得できませんでした。</string>
+	<string name="FSCmdLineTrackPosUsage">ワールドマップ上での位置か、アバターを追跡する（使用方法：cmd &lt;x, y, z&gt; か cmd 名前）</string>
+	<string name="FSCmdLineTrackPosParseError">無効な位置です。cpcampos形式を使用してください。&lt;x, y, z&gt;か、&lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll</string>
+	<string name="FSCmdLineTrackPosLocation">[REGION]（[POS]）を追跡します。</string>
+	<string name="FSCmdLineTrackPosAvatar">[NAME]を追跡します。</string>
+	<string name="FSCmdLineTrackPosNotFound">レーダー上で「[NAME]」に一致するアバターが見つかりませんでした。</string>
+	<string name="FSCmdLineTrackPosMapError">ワールドマップを開くことができません。</string>
 
 	<string name="FSCmdLineDrawDistanceSet">描画距離が[DISTANCE]ｍに設定されました。</string>
 	<string name="FSCmdLineRollDiceTotal">[DICE]d[FACES][MODIFIER]の合計結果：[RESULT]</string>
@@ -6564,5 +6594,8 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Maximum">最大</string>
 
 	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
-
+	<string name="OmnifilterDefaultName">デフォルト</string>
+	<string name="OmnifilterExportDescription">包括フィルタのルール設定：[REPLACEMENT]</string>	<!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
+	<string name="FSAvatarAlignToggleMini">最小</string>
+	<string name="FSAvatarAlignToggleFull">完全</string>
 </strings>

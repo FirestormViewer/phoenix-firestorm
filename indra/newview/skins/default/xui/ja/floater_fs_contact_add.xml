@@ -15,6 +15,12 @@
 	<floater.string name="button_add">
 		セットに追加
 	</floater.string>
+	<floater.string name="title_move">
+		コンタクトセットを移動…
+	</floater.string>
+	<floater.string name="button_move">
+		セットを移動
+	</floater.string>
 	<button label="セットに追加" name="add_btn"/>
 	<button label="取り消し" name="cancel_btn"/>
 </floater>

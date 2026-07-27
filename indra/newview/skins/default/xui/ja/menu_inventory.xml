@@ -83,11 +83,12 @@
 	<menu_item_call label="カット" name="Cut"/>
 	<menu_item_call label="コピー" name="Copy"/>
 	<menu_item_call label="ペースト" name="Paste"/>
-	<menu label="Links" name="Links">
+	<menu label="リンク" name="Links">
 		<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
 		<menu_item_call label="すべてのリンクを探す" name="Find Links"/>
 		<menu_item_call label="リンクを置き換える" name="Replace Links"/>
 		<menu_item_call label="破損したリンクをクリーンアップ" name="Cleanup broken Links"/>
+		<menu_item_call label="削除" name="Delete"/>
 	</menu>
 	<menu_item_call label="最後の位置に復元" name="Restore to Last Position"/>
 	<menu_item_call label="削除" name="Delete"/>
@@ -132,7 +133,7 @@
 		<menu_item_check label="モデルのアップロード" name="Model uploads"/>
 		<menu_item_check label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
 	</menu>
-	<menu label="Marketplace" name="Marketplace">
+	<menu label="マーケットプレイス" name="Marketplace">
 		<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
 		<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
 		<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>

@@ -29,12 +29,15 @@
 		<combo_box.item label="最初の項目" name="item1" />
 		<combo_box.item label="２つ目の項目" name="item2" />
 	</combo_box>
-	<text type="string" length="1" height="16" layout="topleft" left_delta="0" top_pad="24" width="200">
-		２文字まで入力可能：
-	</text>
-	<combo_box name="state_combo">
-		<combo_box.item label="CA" name="item1" />
-		<combo_box.item label="NY" name="item2" />
-		<combo_box.item label="TX" name="item3" />
+	<combo_box name="multi_column_combo">
+		<combo_item name="combo_item1">
+			<column name="longtext" label="全文一致" />
+		</combo_item>
+		<combo_item name="combo_item2">
+			<column name="longtext" label="部分文字列に一致"/>
+		</combo_item>
+		<combo_item name="combo_item3">
+			<column name="longtext" label="正規表現に一致"/>
+		</combo_item>
 	</combo_box>
 </floater>

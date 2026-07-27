@@ -247,4 +247,8 @@
          comment="Size of pie menu font (points, or 1/72 of an inch)"
          size="8.5"
          />
+  <font_size name="Default"
+         comment="Size of default font (points, or 1/72 of an inch)"
+         size="9"
+         />
 </fonts>

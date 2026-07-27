@@ -684,8 +684,7 @@ void Omnifilter::reloadRules()
 // Reloads the actual rule set UI elements, including the Rule scroll list and editor panel
 void Omnifilter::reloadRule()
 {
-    // Use static pointer for the instance so that don't have to keep requesting every time this code is touched.
-    static OmnifilterEngine* instance = OmnifilterEngine::getInstance();
+    OmnifilterEngine* instance = OmnifilterEngine::getInstance();
     // Clear the current needles
     mNeedleListCtrl->clearRows();
     mNeedleListCtrl->clear();

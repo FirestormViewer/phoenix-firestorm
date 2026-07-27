@@ -148,8 +148,8 @@
 				<spinner label="縮放軸對映" name="JoystickAxis6" tool_tip="設定哪個滑鼠軸用於縮放功能。" />
 				<check_box label="啟用3D滑鼠" tool_tip="此設定啟用3D滑鼠。" name="enable_joystick" />
 				<check_box name="CB_Zoom_Control" label="啟用縮放控制（詳見工具提示！）" tool_tip="要使縮放控制有效，必須將「縮放軸對映」設定為大於4的值。" />
-				<check_box name="CB_Auto_Leveling" label="自動水平（無相機捲動）" tool_tip="如果啟用，相機將自動對齊。" />
-				<check_box name="CB_3D_Mouse_Avatar" label="使用3D滑鼠控制化身" tool_tip="如果啟用，化身將通過滑鼠控制。" />
+				<check_box name="CB_Auto_Leveling" label="自動水平（無相機捲動）" />
+				<check_box name="CB_3D_Mouse_Avatar" label="使用3D滑鼠控制化身" />
 				<check_box name="CB_3D_Mouse_Build" label="使用3D滑鼠移動物件" tool_tip="如果啟用，可以使用3D滑鼠在建造和編輯時移動物件。" />
 			</panel>
 		</panel>

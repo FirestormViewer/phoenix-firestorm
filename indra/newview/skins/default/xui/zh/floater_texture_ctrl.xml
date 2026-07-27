@@ -25,16 +25,13 @@
 [DIMENSIONS]
 	</text>
 	<button label="標準" label_selected="標準" name="Default" />
-	<button label="無" label_selected="無" name="None" />
 	<button label="空" label_selected="空" name="Blank" />
 	<button label="透明" label_selected="透明" name="Transparent" tool_tip="提示：如果選擇了透明紋理或其他部分透明的紋理，則不會投射光線。" />
-	<button label="" label_selected="" name="Pipette" />
-	<text name="preview_disabled">
-		預覽已禁用
-	</text>
-	<search_editor label="紋理過濾器" name="inventory search editor" />
+	<button label="無" label_selected="無" name="None" />
+	<text name="preview_disabled" value="預覽已禁用"/>
+	<filter_editor label="紋理過濾器" name="inventory search editor" />
 	<text name="over_limit_lbl">
-		選擇的紋理是 [TEXDIM]。庫存圖像必須是正方形的，且尺寸介於 [MINTEXDIM] 和 [MAXTEXDIM] 之間。
+		選擇的紋理是 [TEXDIM]。庫存圖像必須是正方形的，且尺寸不得小於 [MINTEXDIM]。
 	</text>
 	<button label="新增" label_selected="新增" name="l_add_btn" />
 	<button label="移除" label_selected="移除" name="l_rem_btn" />
@@ -44,17 +41,6 @@
 	</scroll_list>
 	<combo_box name="l_bake_use_texture_combo_box" tool_tip="選擇烘焙紋理">
 		<combo_box.item label="無" name="None" />
-		<combo_box.item label="頭部" name="BAKED_HEAD" />
-		<combo_box.item label="上身" name="BAKED_UPPER" />
-		<combo_box.item label="下身" name="BAKED_LOWER" />
-		<combo_box.item label="眼睛" name="BAKED_EYES" />
-		<combo_box.item label="裙子" name="BAKED_SKIRT" />
-		<combo_box.item label="頭髮" name="BAKED_HAIR" />
-		<combo_box.item label="左臂" name="BAKED_LEFTARM" />
-		<combo_box.item label="左腿" name="BAKED_LEFTLEG" />
-		<combo_box.item label="輔助1" name="BAKED_AUX1" />
-		<combo_box.item label="輔助2" name="BAKED_AUX2" />
-		<combo_box.item label="輔助3" name="BAKED_AUX3" />
 	</combo_box>
 	<line_editor name="TextureKey" tool_tip="紋理UUID" />
 	<button name="TextureKeyApply" label="應用UUID" tool_tip="應用此UUID的紋理" />
