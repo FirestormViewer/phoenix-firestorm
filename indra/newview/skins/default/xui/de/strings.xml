@@ -5541,6 +5541,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="ExternalEditorFailedToRun">
 		Externer Editor konnte nicht ausgeführt werden.
 	</string>
+	<string name="ExternalEditorFailedToStart">
+		WebSocket-Server konnte nicht gestartet werden. Stellen Sie sicher, dass die Einstellung ExternalWebsocketSyncEnable aktiviert ist.
+	</string>
+	<string name="VSCodeLaunchFailed">
+		VS Code konnte nicht gestartet werden. Stellen Sie sicher, dass der „code“-Befehl in den Pfaden der konfigurierten PATH-Umgebungsvariable verfügbar ist.
+	</string>
 	<string name="TranslationFailed">
 		Übersetzung fehlgeschlagen: [REASON]
 	</string>

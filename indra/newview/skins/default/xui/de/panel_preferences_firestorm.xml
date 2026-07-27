@@ -260,6 +260,7 @@
 			Externer Editor:
 		</text>
 		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetExternalEditor"/>
+		<check_box label="Enge VS Code Integration" name="tight_integration"/>
 	</panel>
 
 	<!--Uploads-->
