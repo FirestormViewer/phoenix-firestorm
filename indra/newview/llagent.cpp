@@ -4972,6 +4972,7 @@ void LLAgent::handleTeleportFinished()
     }
     clearTeleportRequest();
     mTeleportCanceled.reset();
+    LLVOAvatar::resetEarlyAppearanceList();
     if (mIsMaturityRatingChangingDuringTeleport)
     {
         // notify user that the maturity preference has been changed

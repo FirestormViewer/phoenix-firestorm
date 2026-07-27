@@ -807,13 +807,7 @@ LLSD LLAzureTranslationHandler::sendMessageAndSuspend(LLCoreHttpUtil::HttpCorout
     LLCore::BufferArray::ptr_t rawbody(new LLCore::BufferArray);
     LLCore::BufferArrayStream outs(rawbody.get());
 
-    static const std::string allowed_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
-                                             "0123456789"
-                                             "-._~";
-
-    outs << "[{\"text\":\"";
-    outs << LLURI::escape(msg, allowed_chars);
-    outs << "\"}]";
+    outs << boost::json::serialize(boost::json::array{ boost::json::object{{ "text", msg }} });
 
     return adapter->postRawAndSuspend(request, url, rawbody, options, headers);
 }

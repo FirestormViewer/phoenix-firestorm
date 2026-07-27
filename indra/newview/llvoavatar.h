@@ -984,9 +984,26 @@ protected:
  **                    APPEARANCE
  **/
 
+public:
+    // Used when an AvatarAppearance UDP message is received before the
+    // corresponding avatar could be created.
+    static void registerEarlyAppearance(const LLUUID& av_id)
+    {
+        sEarlyAppearanceList.emplace(av_id);
+    }
+
+    // Entries left behind by agents who never get instantiated (e.g. an
+    // AvatarAppearance message arrives for an avatar we never rez) are a
+    // small resource leak. Teleporting to another region invalidates the
+    // whole list, since it was only ever relevant to avatars in the region
+    // we're leaving, so clear it out at that point to bound the leak.
+    static void resetEarlyAppearanceList()
+    {
+        sEarlyAppearanceList.clear();
+    }
+
     LLPointer<LLAppearanceMessageContents>  mLastProcessedAppearance;
 
-public:
     void            parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMessageContents& msg);
     void            processAvatarAppearance(LLMessageSystem* mesgsys);
     void            applyParsedAppearanceMessage(LLAppearanceMessageContents& contents, bool slam_params);
@@ -1029,6 +1046,8 @@ private:
     bool            mUseLocalAppearance; // flag for if we're using a local composite
     // <FS:Ansariel> [Legacy Bake]
     bool            mUseServerBakes; // flag for if baked textures should be fetched from baking service (false if they're temporary uploads)
+
+    static uuid_list_t  sEarlyAppearanceList;
 
     //--------------------------------------------------------------------
     // Visibility
