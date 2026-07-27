@@ -313,10 +313,6 @@
 					Ağaclar
 				</text>
 				<button name="Reset_Tree_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
-				<text name="T_Sky_Detail" tool_tip="WindLight səmasının detallarına nəzarət edir. Aşağı rəqəmlər daha yaxşı performans və mükəmməl göydən daha az verir.">
-					Səma
-				</text>
-				<button name="Reset_Sky_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 			</panel>
 
 			<panel name="P_Vignetting">

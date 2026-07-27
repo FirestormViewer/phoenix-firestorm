@@ -284,10 +284,6 @@
 					Det. árboles
 				</text>
 				<button name="Reset_Tree_Detail" label="R" tool_tip="Restablecer valor por defecto."/>
-				<text name="T_Sky_Detail" tool_tip="Controla el nivel de detalle del cielo WindLight. Valores más bajos darán mejor rendimiento y cielos menos encantadores.">
-					Det. cielo
-				</text>
-				<button name="Reset_Sky_Detail" label="R" tool_tip="Restablecer valor por defecto."/>
 			</panel>
 			<panel name="P_Vignetting">
 				<text name="T_VignetteX">

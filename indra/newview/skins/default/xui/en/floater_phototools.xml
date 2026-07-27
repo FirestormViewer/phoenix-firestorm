@@ -2697,7 +2697,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="293"
+			 height="275"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -3191,54 +3191,6 @@
 				</button>
 
 				<text
-				 name="T_Sky_Detail"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Controls the vertex detail of the Enviroment sky, affecting the smoothness of gradients, cloud shapes, and atmospheric effects. Higher values enhance sky realism but may reduce performance. Lower values improve FPS but may make the sky appear blocky or less detailed."
-				 width="70">
-					Sky Detail
-				</text>
-				<slider_bar
-				 name="SB_Sky_Detail"
-				 control_name="WLSkyDetail"
-				 follows="left|top"
-				 height="16"
-				 increment="1"
-				 layout="topleft"
-				 left_pad="0"
-				 min_val="4"
-				 max_val="512"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Sky_Detail"
-				 control_name="WLSkyDetail"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="0"
-				 decimal_digits="0"
-				 follows="left|top"
-				 max_val="512"
-				 min_val="4"
-				 width="53"
-				 increment="4"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Sky_Detail"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="WLSkyDetail"/>
-				</button>
-				<text
 				 name="T_Sharpening"
 				 follows="left|top"
 				 layout="topleft"
@@ -3343,7 +3295,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="69"
+			 height="80"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3353,7 +3305,7 @@
 				 height="16"
 				 label="Enable Draw Distance"
 				 layout="topleft"
-				 top_pad="5" 
+				 top_pad="8" 
 				 left="3"
 				 name="UseFarClip"
 				 tool_tip="Enables the draw distance limit, restricting how far the viewer will render objects based on the set draw distance. Disabling this will cause the viewer to render objects beyond the defined distance, which can significantly decrease performance in large, detailed environments."
@@ -3367,7 +3319,7 @@
 				 left="3"
 				 name="RednerLod1"
 				 tool_tip="Allows the viewer to automatically adjust the level of detail (LOD) for objects based on your distance from them. This improves performance by reducing detail for distant objects while maintaining high detail for nearby ones. However, it may cause noticeable reductions in object quality when moving quickly or in large scenes."
-				 top_pad="0"
+				 top_pad="2"
 				 width="240"/>
 				<check_box
 				 follows="left|top"
@@ -3378,13 +3330,13 @@
 				 left="3"
 				 tool_tip="Enables occlusion culling, which optimizes performance by rendering only objects within the camera’s field of view and not hidden behind other objects. This can boost performance in complex scenes but may occasionally reduce performance in sparsely populated areas. Toggle this setting to see if it improves performance in your specific environment."
 				 name="UssOcclusion1"
-				 top_pad="0"
+				 top_pad="2"
 				 width="240"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="3"
-				 top_pad="0"
+				 top_pad="2"
 				 height="16"
 				 label="Render Particles Attached to other Avatars"
 				 tool_tip="Enables the rendering of particle effects that are attached to or emitted from other avatars, such as glow effects, particle trails, or avatar-based visual effects. This also includes particles attached to furniture or objects that avatars are sitting on. Disabling this can improve performance in crowded areas but will hide these particle effects from view."
@@ -3405,7 +3357,7 @@
 			 top_pad="1"
 			 left="3"
 			 right="-3"
-			 height="123"
+			 height="130"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3418,7 +3370,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="T_Antialiasing_Type"
-				 top_pad="5"
+				 top_pad="8"
 				 width="185"
 				 tool_tip="Selects the type of antialiasing used to smooth jagged edges on objects. FXAA (Fast Approximate Antialiasing) is a fast method with moderate quality. SMAA (Subpixel Morphological Antialiasing) offers better edge smoothing with slightly higher performance cost. Changes to this setting may require a viewer restart to take effect on some hardware.">
 				  Antialiasing Type (Restart)

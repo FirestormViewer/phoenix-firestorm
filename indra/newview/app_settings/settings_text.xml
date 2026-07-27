@@ -663,18 +663,6 @@
     <integer>0</integer>
   </map>
 
-  <key>WLSkyDetail</key>
-  <map>
-    <key>Comment</key>
-    <string>Controls vertex detail on the WindLight sky.  Lower numbers will give better performance and uglier skies.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>16</integer>
-  </map>
-
   <key>WindLightUseAtmosShaders</key>
   <map>
     <key>Comment</key>

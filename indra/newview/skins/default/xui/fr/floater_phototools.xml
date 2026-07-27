@@ -328,10 +328,6 @@
 					Détail vég.
 				</text>
 				<button name="Reset_Tree_Detail" tool_tip="Rétablir la valeur par défaut."/>
-				<text name="T_Sky_Detail" tool_tip="Contrôle le détail des vertices du ciel de l'environnement, ce qui affecte la fluidité des dégradés, la forme des nuages et les effets atmosphériques. Des valeurs élevées améliorent le réalisme du ciel mais peuvent réduire les performances. Des valeurs plus faibles améliorent les performances, mais peuvent donner au ciel un aspect moins détaillé.">
-					Détail ciel
-				</text>
-				<button name="Reset_Sky_Detail" tool_tip="Rétablir la valeur par défaut."/>
 				<text name="T_Sharpening" tool_tip="Règle la netteté de l'image globale à l'aide de la fonction d'accentuation des contrastes (CAS). Des valeurs élevées améliorent la clarté de l'image en augmentant le contraste sur les bords, ce qui peut améliorer les détails visuels. Une accentuation excessive de la netteté peut introduire des artefacts ou donner un aspect dur à l'image.">
 					Netteté
 				</text>

@@ -327,10 +327,6 @@
 					Det. drzew
 				</text>
 				<button name="Reset_Tree_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Sky_Detail" tool_tip="Kontroluje szczegółowość wierzchołków nieba w środowisku, wpływając na gładkość gradientów, kształty chmur i efekty atmosferyczne. Wyższe wartości zwiększają realizm nieba, ale mogą zmniejszać wydajność. Niższe wartości poprawiają liczbę klatek na sekundę, ale mogą sprawić, że niebo będzie wyglądało na mniej szczegółowe.">
-					Det. nieba
-				</text>
-				<button name="Reset_Sky_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Sharpening" tool_tip="Dostosowuje ostrość całego obrazu za pomocą funkcji wyostrzania z adaptacją do kontrastu (CAS). Wyższe wartości zwiększają klarowność obrazu poprzez zwiększenie kontrastu wokół krawędzi, co może poprawić szczegółowość obrazu. Nadmierne wyostrzanie może spowodować pojawienie się artefaktów lub sprawić, że obraz będzie wyglądał nieestetycznie.">
 					Wyostrzanie
 				</text>

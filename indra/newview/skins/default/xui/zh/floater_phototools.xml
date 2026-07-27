@@ -332,10 +332,6 @@
 					樹木細節
 				</text>
 				<button name="Reset_Tree_Detail" tool_tip="重設為預設值。" />
-				<text name="T_Sky_Detail" tool_tip="控制環境天空的頂點細節，影響漸變的平滑度、雲的形狀和大氣效果。較高的值增強天空的現實感，但可能降低效能。較低的值提高影格率，但可能使天空顯得塊狀或細節較少。">
-					天空細節
-				</text>
-				<button name="Reset_Sky_Detail" tool_tip="重設為預設值。" />
 			<text name="T_Sharpening" tool_tip="調整整體圖像的銳化程度，使用對比度自適應銳化（CAS）。較高的值通過增加邊緣對比度來增強圖像清晰度，改善視覺細節。過度銳化可能引入偽影或使圖像看起來過於生硬。">
 				銳化
 			</text>

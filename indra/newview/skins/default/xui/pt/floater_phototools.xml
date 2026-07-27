@@ -411,11 +411,6 @@
 				</text>
 				<button name="Reset_Tree_Detail" label="S" tool_tip="Redefinir para o padrão."/>
 
-				<text name="T_Sky_Detail" tool_tip="Define o nível de detalhe do céu Windlight. Valores mais baixos melhoram desempenho, mas com céu menos bonito.">
-					Det. céu
-				</text>
-				<button name="Reset_Sky_Detail" label="S" tool_tip="Redefinir para o padrão."/>
-
 				<text name="T_Sharpening" tool_tip="Define a nitidez da imagem usando Contrast-Adaptive Sharpening (CAS).">
 					Nitidez
 				</text>

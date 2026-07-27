@@ -411,11 +411,6 @@
 				</text>
 				<button name="Reset_Tree_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Sky_Detail" tool_tip="Legt den Detailgrad des Windlight-Himmels fest. Niedrigere Werte bedeuten bessere Performance, dafür aber nicht so schöne Himmel.">
-					Him-Det.
-				</text>
-				<button name="Reset_Sky_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-
 				<text name="T_Sharpening" tool_tip="Legt die schärfe des Gesamtbilds mit Hilfe von Contrast-Adaptive Sharpening (CAS) fest.">
 					Schärfung
 				</text>
