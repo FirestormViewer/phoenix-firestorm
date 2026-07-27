@@ -31,7 +31,8 @@
 	<icon tool_tip="完全成人" name="rating_icon_adult"/>
 	<scroll_list name="results">
 		<column label="名稱" name="name" />
-		<column label="時間 (PT)" name="date"/>
+		<column label="時間(PT)" name="date"/>
+		<column label="時間" name="time" />
 	</scroll_list>
 	<button tool_tip="上一頁" name="prev_btn"/>
 	<button tool_tip="下一頁" name="next_btn"/>
@@ -39,6 +40,6 @@
 		<radio_item name="current" label="目前及即將開始"/>
 		<radio_item name="date" label="日期"/>
 	</radio_group>
-	<button label="&lt;&lt;" label_selected="&lt;&lt;" name="back_btn" tool_tip="後退一天"/>
-	<button label="&gt;&gt;" label_selected="&gt;&gt;" name="forward_btn" tool_tip="前進一天"/>
+	<button name="back_btn" tool_tip="後退一天"/>
+	<button name="forward_btn" tool_tip="前進一天"/>
 </panel>
