@@ -56,6 +56,9 @@ protected:
 public:
     void draw() override;
 
+    // <FS:Ansariel> Fix flyout button rendering incorrect textures
+    bool postBuild() override;
+
     void setToggleState(bool state);
 
     void onActionButtonClick(const LLSD& data);
