@@ -602,6 +602,7 @@ public:
                     LLFolderView* root,
                     const LLUUID& uuid ) :
         LLItemBridge(inventory, root, uuid) {}
+    virtual LLUIImagePtr getIcon() const;
     virtual void openItem();
 };
 

@@ -3672,7 +3672,6 @@ Low ↔ Lwst
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture"
          filename="panel_tools_texture.xml">
 	   </panel>
 -->
@@ -3687,21 +3686,41 @@ Low ↔ Lwst
          name="Contents"
          top_delta="0"
          width="295">
-            <button
+            <flyout_button
              follows="left|top"
-             height="35"
+             height="18"
              label="New Script"
              label_selected="New Script"
              layout="topleft"
              left="10"
              name="button new script"
-             top="8"
+             top="6"
+             width="90"
+             font="DejaVu"
+             font.size="LSmall">
+                <flyout_button.item
+                 label="New LSL Script"
+                 name="new_lsl_script"
+                 value="lsl" />
+                <flyout_button.item
+                 label="New Lua Script"
+                 name="new_lua_script"
+                 value="lua" />
+            </flyout_button>
+            <button
+             follows="left|top"
+             height="18"
+             label="New Notecard"
+             layout="topleft"
+             name="button new notecard"
+             top_pad="1"
              width="90"
              font="DejaVu"
              font.size="LSmall" />
             <button
              follows="left|top"
-             height="35"
+             top="6"
+             height="18"
              label="Permissions"
              layout="topleft"
              left_pad="5"
@@ -3710,9 +3729,21 @@ Low ↔ Lwst
              font="DejaVu"
              font.size="LSmall" />
             <button
-             top="8"
              follows="left|top"
-             height="20"
+             height="18"
+             is_toggle="true"
+             label="Explore in IDE"
+             label_selected="Stop Exploring"
+             layout="topleft"
+             name="button publish"
+             top_pad="1"
+             width="80"
+             font="DejaVu"
+             font.size="LSmall" />
+            <button
+             top="6"
+             follows="left|top"
+             height="18"
              label="Refresh"
              layout="topleft"
              left_pad="5"
@@ -3722,7 +3753,7 @@ Low ↔ Lwst
              font.size="LSmall" />
             <button
              follows="left|top"
-             height="16"
+             height="18"
              label="Reset Scripts"
              layout="topleft"
              top_pad="1"
@@ -3741,7 +3772,7 @@ Low ↔ Lwst
              name="contents_filter"
              height="23"
              width="275" />
-           <panel_inventory_object
+            <panel_inventory_object
              border="true"
              border_visible="true"
              bevel_style="in"

@@ -3285,7 +3285,6 @@ Low ↔ Lwst
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture">
          filename="panel_tools_texture.xml">
 	   </panel>
 -->
@@ -3300,28 +3299,56 @@ Low ↔ Lwst
          name="Contents"
          top_delta="0"
          width="295">
-            <button
+            <flyout_button
              follows="left|top"
-             height="35"
+             height="18"
              label="New Script"
              label_selected="New Script"
              layout="topleft"
              left="10"
              name="button new script"
-             top="8"
-             width="90" />
+             top="6"
+             width="90">
+                <flyout_button.item
+                 label="New LSL Script"
+                 name="new_lsl_script"
+                 value="lsl" />
+                <flyout_button.item
+                 label="New Lua Script"
+                 name="new_lua_script"
+                 value="lua" />
+            </flyout_button>
             <button
              follows="left|top"
-             height="35"
+             height="18"
+             label="New Notecard"
+             layout="topleft"
+             name="button new notecard"
+             top_pad="1"
+             width="90"/>
+            <button
+             follows="left|top"
+             top="6"
+             height="18"
              label="Permissions"
              layout="topleft"
              left_pad="5"
              name="button permissions"
              width="80" />
             <button
-             top="8"
              follows="left|top"
-             height="20"
+             height="18"
+             is_toggle="true"
+             label="Explore in IDE"
+             label_selected="Stop Exploring"
+             layout="topleft"
+             name="button publish"
+             top_pad="1"
+             width="80"/>
+            <button
+             top="6"
+             follows="left|top"
+             height="18"
              label="Refresh"
              layout="topleft"
              left_pad="5"
@@ -3329,7 +3356,7 @@ Low ↔ Lwst
              width="90" />
             <button
              follows="left|top"
-             height="16"
+             height="18"
              label="Reset Scripts"
              layout="topleft"
              top_pad="1"

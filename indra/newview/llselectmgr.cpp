@@ -112,6 +112,7 @@
 #include "fsareasearch.h"
 #include "llglheaders.h"
 #include "llinventoryobserver.h"
+#include "llscripteditorws.h"
 #include "fscommon.h"
 
 LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
@@ -6389,6 +6390,11 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
             // <FS:ND> Fire for any observer interested in object properties
             LLSelectMgr::instance().firePropertyReceived( node );
             // </FS:ND>
+
+            if (auto ws_server = LLScriptEditorWSServer::getServer())
+            {
+                ws_server->onObjectPropertyChanged(id, name, desc);
+            }
         }
     }
 
@@ -6485,6 +6491,11 @@ void LLSelectMgr::processObjectPropertiesFamily(LLMessageSystem* msg, void** use
     }
 
     dialog_refresh_all();
+
+    if (auto ws_server = LLScriptEditorWSServer::getServer())
+    {
+        ws_server->onObjectPropertyChanged(id, name, desc);
+    }
 }
 
 

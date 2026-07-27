@@ -1719,7 +1719,7 @@
          border_thickness="1"
          top_pad="10"
          follows="top|left"
-         height="155"
+         height="175"
          left="10"
          name="PreprocBox"
          width="515" />
@@ -1842,6 +1842,16 @@
          <button.commit_callback
           function="Pref.SetExternalEditor" />
         </button>
+        <check_box
+         control_name="ExternalEditorTightIntegration"
+         follows="top|left"
+         height="20"
+         label="VS Code Tight Integration"
+         layout="topleft"
+         left="17"
+         name="tight_integration"
+         top_pad="7"
+         width="256" />
     </panel>
 
     <!--Uploads-->

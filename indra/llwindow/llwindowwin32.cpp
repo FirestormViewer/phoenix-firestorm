@@ -5168,6 +5168,13 @@ std::vector<std::string> LLWindowWin32::getDynamicFallbackFontList()
     // Fonts previously in getFontListSans() have moved to fonts.xml.
     return std::vector<std::string>();
 }
+
+LLFontFallbackMatch LLWindowWin32::findFallbackFontForChar(llwchar wch)
+{
+    // Not implemented on Windows; would use DirectWrite (IDWriteFontFallback::MapCharacters).
+    return LLFontFallbackMatch();
+}
+
 // <FS:ND> Allow to query for window chrome sizes.
 void LLWindowWin32::getWindowChrome( U32 &aChromeW, U32 &aChromeH )
 {
