@@ -95,7 +95,6 @@
 		<string>RenderTerrainPBRPlanarSampleCount</string>
 		<string>RenderTerrainPBRTriplanarBlendFactor</string>
 		<string>RenderTerrainScale</string>
-		<string>RenderTextureQuality</string>
 		<string>RenderTextureVRAMDivisor</string>
 		<string>RenderTonemapMix</string>
 		<string>RenderTonemapType</string>
@@ -108,5 +107,7 @@
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
+		<string>TextureDiscardBackgroundedTime</string>
+		<string>TextureDiscardMinimizedTime</string>
 	</array>
 </llsd>
