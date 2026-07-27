@@ -35,10 +35,10 @@ class LLPanelContents;
 class FSNewItemCtrl : public LLSingleton<FSNewItemCtrl>
 {
     LLSINGLETON(FSNewItemCtrl);
-    ~FSNewItemCtrl() = default;
+    ~FSNewItemCtrl();
 
 public:
-    enum class EAddNewItemState
+    enum EAddNewItemState
     {
         IDLE = 0,
         DND_INV_TO_OBJECT_START,
@@ -49,11 +49,17 @@ public:
         MOVE_INT_TO_TRASH_DONE
     };
 
-    using void_callback_t = std::function<void()>;
-    using panel_contents_callback_t = std::function<void(LLPanelContents*, const LLUUID& new_id)>;
+    static const S32 SHOW_NEW_INVENTORY     = 1;
+    static const S32 SHOW_IN_INVENTORY      = 2;
+    static const S32 SHOW_GESTURE_INVENTORY = 4;
+
+    typedef std::function<void()> void_callback_t;
+    typedef std::function<void(LLPanelContents *, const LLUUID &new_id)> panel_contents_callback_t;
+
+    void init();
 
     void processStates(LLPanelObjectInventory* panel_object_inv);
-    void onRemoveItemDone(); // Callback
+    static void onRemoveItemDone(); // Callback
     void callFinishNewItem();
     // Used by the LLPanelContents to let this class to enable rename, sticky sort location
     // and open the supported window if need be.
@@ -61,6 +67,15 @@ public:
     void startDNDInvToObject(const LLUUID& original_UUID, const void_callback_t& cb = nullptr); 
     void saveAndClearInventoryFlags(); // Saves the Show Inventory settings.xml flags and clears therm
     void restoreInventoryFlags();// Restores the Show Inventory settings.xml flags.
+    
+    const LLUUID& getNewItemUUID() const { return mNewItemUUID; }
+    void setNewItemUUID(const LLUUID &new_uuid) { mNewItemUUID = new_uuid; }
+
+    const LLUUID& getOriginalItemUUID() const { return mOriginalItemUUID; }
+    void setOriginalItemUUID(const LLUUID& new_uuid) { mOriginalItemUUID = new_uuid; }
+
+    const LLAssetType::EType getItemAssetType() const { return mItemAssetType; }
+    void setItemAssetType(LLAssetType::EType new_type) { mItemAssetType = new_type; }
 
     EAddNewItemState getState() const { return mState; }
     void setState(const EAddNewItemState new_state) { mState = new_state; }
@@ -68,7 +83,7 @@ public:
     bool isStateIdle() const { return mState == EAddNewItemState::IDLE; }
 
     void resetLatestCreationTime() { mLatestCreationTime = 0; }
-    bool checkAgainstLatestObject(const LLPointer<LLInventoryObject>& obj);
+    bool checkAgainstLatestObject(const LLPointer<LLInventoryObject> &obj);
 
     void setFinishNewItemCallback(void_callback_t cb) { mFinishNewItemCallback = cb; }
 
@@ -81,7 +96,6 @@ protected:
     time_t             mLatestCreationTime; // Stores the latest creation time, used for finding the object with the latest version.
     LLInventoryItem*   mLatestCreatedItem;  // Stores the pointer to the latest item found.
     void_callback_t    mFinishNewItemCallback; // Function pointer used as a callback for when the new item is finished.
-    S32                mCurrentInventoryFlags;
 };
 // </FS:mjr> [FIRE-36685]
 #endif
