@@ -675,11 +675,19 @@ S32 LLFontGL::maxDrawableChars(const llwchar* wchars, F32 max_pixels, S32 max_ch
         }
 
         // account for glyphs that run beyond the starting point for the next glyphs
-        width_padding = llmax(  0.f,                                                    // always use positive padding amount
-                                width_padding - fgi->mXAdvance,                         // previous padding left over after advance of current character
-                                (F32)(fgi->mWidth + fgi->mXBearing) - fgi->mXAdvance);  // difference between width of this character and advance to next character
+        // <FS:PP> FIRE-36857 Horizontal scroll bar in chat window
+        // width_padding = llmax(  0.f,                                                    // always use positive padding amount
+        //                         width_padding - fgi->mXAdvance,                         // previous padding left over after advance of current character
+        //                         (F32)(fgi->mWidth + fgi->mXBearing) - fgi->mXAdvance);  // difference between width of this character and advance to next character
+        //
+        // cur_x += fgi->mXAdvance;
 
-        cur_x += fgi->mXAdvance;
+        F32 advance = mFontFreetype->getXAdvance(fgi);
+        width_padding = llmax(  0.f,                                             // always use positive padding amount
+                                width_padding - advance,                         // previous padding left over after advance of current character
+                                (F32)(fgi->mWidth + fgi->mXBearing) - advance);  // difference between width of this character and advance to next character
+        cur_x += advance;
+        // </FS:PP>
 
         // clip if current character runs past scaled_max_pixels (using width_padding)
         if (scaled_max_pixels < cur_x + width_padding)
@@ -744,7 +752,10 @@ S32 LLFontGL::firstDrawableChar(const llwchar* wchars, F32 max_pixels, S32 text_
         // other characters just use advance
         F32 width = (i == start)
             ? (F32)(fgi->mWidth + fgi->mXBearing)   // use actual width for last character
-            : fgi->mXAdvance;                       // use advance for all other characters
+            // <FS:PP> FIRE-36857 Horizontal scroll bar in chat window
+            // : fgi->mXAdvance;                       // use advance for all other characters
+            : mFontFreetype->getXAdvance(fgi);      // use advance for all other characters
+            // </FS:PP>
 
         if( scaled_max_pixels < (total_width + width) )
         {
