@@ -31,7 +31,7 @@
 
 //static LLDefaultChildRegistry::Register<LLFlyoutButton> r2("flyout_button");
 
-const S32 FLYOUT_BUTTON_ARROW_WIDTH = 24;
+constexpr S32 FLYOUT_BUTTON_ARROW_WIDTH = 22;
 
 LLFlyoutButton::LLFlyoutButton(const Params& p)
 :   LLComboBox(p),
@@ -43,10 +43,13 @@ LLFlyoutButton::LLFlyoutButton(const Params& p)
     LLButton::Params bp(p.action_button);
     bp.name(p.label);
     bp.label(p.label);
-    bp.rect.left(0).bottom(0).width(getRect().getWidth() - FLYOUT_BUTTON_ARROW_WIDTH).height(getRect().getHeight());
+    bp.rect.left(0).bottom(0).width(getRect().getWidth() - FLYOUT_BUTTON_ARROW_WIDTH - 2 * BTN_DROP_SHADOW).height(getRect().getHeight());
     bp.click_callback.function(boost::bind(&LLFlyoutButton::onActionButtonClick, this, _2));
     bp.follows.flags(FOLLOWS_ALL);
-    bp.font(p.font);  // <FS:Ansariel> Allow font overriding for button
+    if (p.font.isProvided())
+    {
+        bp.font(p.font);
+    }
 
     mActionButton = LLUICtrlFactory::create<LLButton>(bp);
     addChild(mActionButton);
@@ -75,18 +78,16 @@ void LLFlyoutButton::setToggleState(bool state)
     mToggleState = state;
 }
 
-// <FS:Ansariel> Fix flyout button rendering incorrect textures
 bool LLFlyoutButton::postBuild()
 {
-    bool ret = LLComboBox::postBuild();
+    bool result = LLComboBox::postBuild();
 
     LLRect rect = getLocalRect();
-    S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : 0;
-    S32 shadow_size = BTN_DROP_SHADOW;
-    mButton->setRect(LLRect(getRect().getWidth() - llmax(8, arrow_width) - shadow_size,
+    S32 arrow_width = llmax(FLYOUT_BUTTON_ARROW_WIDTH, mArrowImage ? mArrowImage->getWidth() : 0);
+    mButton->setRect(LLRect(getRect().getWidth() - llmax(8, arrow_width) - 2 * BTN_DROP_SHADOW,
         rect.mTop, rect.mRight, rect.mBottom));
+    mButton->setFollows(FOLLOWS_BOTTOM | FOLLOWS_TOP | FOLLOWS_RIGHT);
 
-    return ret;
+    return result;
 }
-// </FS:Ansariel>
 
