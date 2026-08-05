@@ -90,14 +90,18 @@ void LLFontGL::destroyGL()
     mFontFreetype->destroyGL();
 }
 
-bool LLFontGL::loadFace(const std::string& filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags)
+// <FS:Ansariel> Optional tabular numeric font rendering
+//bool LLFontGL::loadFace(const std::string& filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags)
+bool LLFontGL::loadFace(const std::string & filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags, bool tabnum)
 {
     if(mFontFreetype == reinterpret_cast<LLFontFreetype*>(NULL))
     {
         mFontFreetype = new LLFontFreetype;
     }
 
-    return mFontFreetype->loadFace(filename, point_size, vert_dpi, horz_dpi, weight, is_fallback, face_n, hinting, flags);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //return mFontFreetype->loadFace(filename, point_size, vert_dpi, horz_dpi, weight, is_fallback, face_n, hinting, flags);
+    return mFontFreetype->loadFace(filename, point_size, vert_dpi, horz_dpi, weight, is_fallback, face_n, hinting, flags, tabnum);
 }
 
 S32 LLFontGL::getNumFaces(const std::string& filename)
@@ -348,7 +352,9 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
 
         // Calculate horizontal offset for tabular numbers (center narrow digits)
         F32 x_offset = 0.0f;
-        if (mFontFreetype->getFontWeight() > 0 && fgi->mChar >= '0' && fgi->mChar <= '9' && mFontFreetype->getMaxDigitWidth() > 0.0f)
+        // <FS:Ansariel> Optional tabular numeric font rendering
+        //if (mFontFreetype->getFontWeight() > 0 && fgi->mChar >= '0' && fgi->mChar <= '9' && mFontFreetype->getMaxDigitWidth() > 0.0f)
+        if (mFontFreetype->isTabnum() && mFontFreetype->getFontWeight() > 0 && fgi->mChar >= '0' && fgi->mChar <= '9' && mFontFreetype->getMaxDigitWidth() > 0.0f)
         {
             // use mXAdvance directly here, since we don't want to get max width instead.
             x_offset = (mFontFreetype->getMaxDigitWidth() - fgi->mXAdvance) * 0.5f;
@@ -1300,6 +1306,12 @@ LLFontGL* LLFontGL::getFontByName(const std::string& name)
         // Does "SMALL" mean "SERIF"?
         return getFontMonospace();
     }
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    else if (name == "Tabnum")
+    {
+        return getFont(LLFontDescriptor("SansSerif", "Default", 0, true));
+    }
+    // </FS:Ansariel>
     // <FS:CR> Advanced script editor
     else if (name == "OCRA")
     {

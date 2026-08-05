@@ -113,6 +113,18 @@ LLFontDescriptor::LLFontDescriptor(const std::string& name,
 {
 }
 
+// <FS:Ansariel> Optional tabular numeric font rendering
+LLFontDescriptor::LLFontDescriptor(const std::string& name,
+                                   const std::string& size,
+                                   const U8 style,
+                                   const bool tabnum) :
+    mName(name),
+    mSize(size),
+    mStyle(style),
+    mTabnum(tabnum)
+{}
+// </FS:Ansariel>
+
 bool LLFontDescriptor::operator<(const LLFontDescriptor& b) const
 {
     if (mName < b.mName)
@@ -127,8 +139,14 @@ bool LLFontDescriptor::operator<(const LLFontDescriptor& b) const
 
     if (mSize < b.mSize)
         return true;
-    else
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //else
+    //    return false;
+    else if (mSize > b.mSize)
         return false;
+
+    return mTabnum && !b.mTabnum;
+    // </FS:Ansariel>
 }
 
 static const std::string s_template_string("TEMPLATE");
@@ -519,6 +537,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 
     // First decipher the requested size.
     LLFontDescriptor norm_desc = desc.normalize();
+    norm_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     F32 point_size;
     bool found_size = nameToSize(norm_desc.getSize(),point_size);
     if (!found_size)
@@ -532,6 +551,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
     // Find corresponding font template (based on same descriptor with no size specified)
     LLFontDescriptor template_desc(norm_desc);
     template_desc.setSize(s_template_string);
+    template_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     const LLFontDescriptor *match_desc = getClosestFontTemplate(template_desc);
     if (!match_desc)
     {
@@ -543,6 +563,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
     // See whether this best-match font has already been instantiated in the requested size.
     LLFontDescriptor nearest_exact_desc = *match_desc;
     nearest_exact_desc.setSize(norm_desc.getSize());
+    nearest_exact_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     font_reg_map_t::iterator it = mFontMap.find(nearest_exact_desc);
     // If we fail to find a font in the fonts directory, it->second might be NULL.
     // We shouldn't construcnt a font with a NULL mFontFreetype.
@@ -555,6 +576,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
         LLFontGL *font = new LLFontGL;
         font->mFontDescriptor = desc;
         font->mFontFreetype = it->second->mFontFreetype;
+        font->mFontFreetype->setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
         mFontMap[desc] = font;
 
         return font;
@@ -639,7 +661,9 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
                     fontp = new LLFontGL;
                 }
                 if (fontp->loadFace(font_path, point_size_scale + font_file_it->mSizeDelta,
-                                 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, font_file_it->mWeight, is_fallback, i, font_file_it->mHinting, font_file_it->mFlags))
+                                 // <FS:Ansariel> Optional tabular numeric font rendering
+                                 //LLFontGL::sVertDPI, LLFontGL::sHorizDPI, font_file_it->mWeight, is_fallback, i, font_file_it->mHinting, font_file_it->mFlags))
+                                 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, font_file_it->mWeight, is_fallback, i, font_file_it->mHinting, font_file_it->mFlags, desc.isTabnum()))
                 {
                     is_font_loaded = true;
                     if (is_first_found)

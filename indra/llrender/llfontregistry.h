@@ -81,6 +81,8 @@ class LLFontDescriptor
 public:
     LLFontDescriptor();
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const bool tabnum);
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const font_file_info_vec_t& font_list);
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const font_file_info_vec_t& font_list, const font_file_info_vec_t& font_collection_list);
     LLFontDescriptor normalize() const;
@@ -104,12 +106,17 @@ public:
     const U8 getStyle() const { return mStyle; }
     void setStyle(U8 style) { mStyle = style; }
 
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    bool isTabnum() const { return mTabnum; }
+    void setTabnum(bool value) { mTabnum = value; }
+
 private:
     std::string mName;
     std::string mSize;
     font_file_info_vec_t mFontFiles;
     font_file_info_vec_t mFontCollectionFiles;
     U8 mStyle;
+    bool mTabnum{ false }; // <FS:Ansariel> Optional tabular numeric font rendering
 
     typedef std::map<std::string, std::function<bool(llwchar)>> char_functor_map_t;
     static char_functor_map_t mCharFunctors;

@@ -173,7 +173,9 @@ LLFontFreetype::~LLFontFreetype()
     // mFallbackFonts cleaned up by LLPointer destructor
 }
 
-bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags)
+// <FS:Ansariel> Optional tabular numeric font rendering
+//bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags)
+bool LLFontFreetype::loadFace(const std::string & filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags, bool tabnum)
 {
     // Don't leak face objects.  This is also needed to deal with
     // changed font file names.
@@ -200,6 +202,7 @@ bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
     mHinting = hinting;
     mFontFlags = flags;
     mWeight = weight;
+    mTabnum = tabnum; // <FS:Ansariel> Optional tabular numeric font rendering
 
     bool variable_font = false;
     if (weight >= 0)
@@ -346,7 +349,9 @@ F32 LLFontFreetype::getXAdvance(llwchar wch) const
     LLFontGlyphInfo* gi = getGlyphInfo(wch, EFontGlyphType::Unspecified);
     if (gi)
     {
-        if (wch >= '0' && wch <= '9' && mMaxDigitWidth > 0.0f)
+        // <FS:Ansariel> Optional tabular numeric font rendering
+        //if (wch >= '0' && wch <= '9' && mMaxDigitWidth > 0.0f)
+        if (mTabnum && wch >= '0' && wch <= '9' && mMaxDigitWidth > 0.0f)
         {
             return mMaxDigitWidth;
         }
@@ -371,7 +376,9 @@ F32 LLFontFreetype::getXAdvance(const LLFontGlyphInfo* glyph) const
         return 0.0;
 
     // Use max digit width for tabular numbers
-    if (mWeight > 0 && glyph->mChar >= '0' && glyph->mChar <= '9' && mMaxDigitWidth > 0.0f)
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //if (mWeight > 0 && glyph->mChar >= '0' && glyph->mChar <= '9' && mMaxDigitWidth > 0.0f)
+    if (mTabnum && mWeight > 0 && glyph->mChar >= '0' && glyph->mChar <= '9' && mMaxDigitWidth > 0.0f)
     {
         return mMaxDigitWidth;
     }
@@ -402,7 +409,9 @@ F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LL
 
     if (left_glyph_info)
     {
-        if (mWeight > 0 && left_glyph_info->mChar >= '0' && left_glyph_info->mChar <= '9')
+        // <FS:Ansariel> Optional tabular numeric font rendering
+        //if (mWeight > 0 && left_glyph_info->mChar >= '0' && left_glyph_info->mChar <= '9')
+        if (mTabnum && mWeight > 0 && left_glyph_info->mChar >= '0' && left_glyph_info->mChar <= '9')
         {
             // Disable kerning for digits when using tabular numbers
             return 0.0;
@@ -411,7 +420,9 @@ F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LL
     }
     if (right_glyph_info)
     {
-        if (mWeight > 0 && right_glyph_info->mChar >= '0' && right_glyph_info->mChar <= '9')
+        // <FS:Ansariel> Optional tabular numeric font rendering
+        //if (mWeight > 0 && right_glyph_info->mChar >= '0' && right_glyph_info->mChar <= '9')
+        if (mTabnum && mWeight > 0 && right_glyph_info->mChar >= '0' && right_glyph_info->mChar <= '9')
         {
             // Disable kerning for digits when using tabular numbers
             return 0.0;
@@ -597,7 +608,9 @@ LLFontGlyphInfo* LLFontFreetype::addGlyphFromFont(const LLFontFreetype *fontp, l
     gi->mXAdvance = fontp->mFTFace->glyph->advance.x / 64.f;
     gi->mYAdvance = fontp->mFTFace->glyph->advance.y / 64.f;
 
-    if (mWeight > 0 && wch >= '0' && wch <= '9')
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //if (mWeight > 0 && wch >= '0' && wch <= '9')
+    if (mTabnum && mWeight > 0 && wch >= '0' && wch <= '9')
     {
         // Digits are supposed to be preloaded, and buffers
         // refresh when new chars get added, so this lazy load
@@ -778,7 +791,9 @@ void LLFontFreetype::renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index, ll
 void LLFontFreetype::reset(F32 vert_dpi, F32 horz_dpi)
 {
     resetBitmapCache();
-    loadFace(mName, mPointSize, vert_dpi ,horz_dpi, mWeight, mIsFallback, 0, mHinting, mFontFlags);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //loadFace(mName, mPointSize, vert_dpi ,horz_dpi, mWeight, mIsFallback, 0, mHinting, mFontFlags);
+    loadFace(mName, mPointSize, vert_dpi, horz_dpi, mWeight, mIsFallback, 0, mHinting, mFontFlags, mTabnum);
     if (!mIsFallback)
     {
         // This is the head of the list - need to rebuild ourself and all fallbacks.
