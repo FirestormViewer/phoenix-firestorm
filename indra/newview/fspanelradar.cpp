@@ -330,7 +330,7 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
     mRadarList->clearRows();
     for (const auto& avdata : entries)
     {
-        constexpr char default_font[] = "SANSSERIF_SMALL";
+        constexpr char default_font[] = "SANSSERIF";
         constexpr char tabnum_font[] = "Tabnum";
 
         LLSD entry = avdata["entry"];
