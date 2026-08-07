@@ -360,7 +360,7 @@
     bg_opaque_color="MouseGray">
     <text
      type="string"
-     font="SansSerifSmall"
+     font="Tabnum"
      text_color="TimeTextColor"
      follows="right|top"
      halign="center"

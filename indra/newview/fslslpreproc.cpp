@@ -1602,7 +1602,7 @@ void FSLSLPreprocessor::display_error(std::string_view err)
     {
         LLSD row;
         row["columns"][0]["value"] = err.data();
-        row["columns"][0]["font"] = "SANSSERIF_SMALL";
+        row["columns"][0]["font"] = "SANSSERIF";
         mCore->mErrorList->addElement(row);
     }
 }

@@ -115,7 +115,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Checkout build variables
@@ -152,7 +152,7 @@ jobs:
 
       - name: Setup .NET for Velopack
         if: (runner.os == 'Windows' || runner.os == 'macOS') && (github.event.inputs.installer_type || 'velopack') == 'velopack'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
@@ -434,7 +434,7 @@ jobs:
           tar -xJf "${{ needs.build.outputs.viewer_channel }}.sym.tar.xz" -C _artifacts
       - name: Post Windows symbols
         if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@ab8a5097b50707645ed9b51d3191499f9bea6d34
+        uses: BugSplat-Git/symbol-upload@3857759bd957dadb075509a4e951f04f9baa5ea3
         with:
           clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
           clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"
@@ -462,7 +462,7 @@ jobs:
           name: macOS-symbols
       - name: Post Mac symbols
         if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@ab8a5097b50707645ed9b51d3191499f9bea6d34
+        uses: BugSplat-Git/symbol-upload@3857759bd957dadb075509a4e951f04f9baa5ea3
         with:
           clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
           clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"
