@@ -1128,7 +1128,7 @@ bool LLScriptEdCore::writeToFile(const std::string& filename, bool unprocessed)
 
         LLSD row;
         row["columns"][0]["value"] = "Error writing to local file. Is your hard drive full?";
-        row["columns"][0]["font"] = "SANSSERIF_SMALL";
+        row["columns"][0]["font"] = "SANSSERIF";
         mErrorList->addElement(row);
         return false;
     }

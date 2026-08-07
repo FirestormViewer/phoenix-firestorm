@@ -1027,7 +1027,7 @@ void LLPreviewGesture::loadUIFromGesture(LLMultiGesture* gesture)
         // Create an enabled item with this step
         LLSD row;
         row["columns"][0]["value"] = getLabel( new_step->getLabel());
-        row["columns"][0]["font"] = "SANSSERIF_SMALL";
+        row["columns"][0]["font"] = "SANSSERIF";
         LLScrollListItem* item = mStepList->addElement(row);
         item->setUserdata(new_step);
     }
@@ -1654,7 +1654,7 @@ LLScrollListItem* LLPreviewGesture::addStep( const EStepType step_type )
     // Create an enabled item with this step
     LLSD row;
     row["columns"][0]["value"] = getLabel(step->getLabel());
-    row["columns"][0]["font"] = "SANSSERIF_SMALL";
+    row["columns"][0]["font"] = "SANSSERIF";
     LLScrollListItem* step_item = mStepList->addElement(row);
     step_item->setUserdata(step);
 

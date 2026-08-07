@@ -1812,6 +1812,9 @@ support@secondlife.com.
 	<string name="FSInventoryCustomTabDefaultName">
 		自訂
 	</string>
+	<string name="FSInventoryCustomTabShowHidden">
+		顯示隱藏分頁
+	</string>
 	<string name="PlacesNoMatchingItems">
 		要將地點添加到您的地標，請點擊地點名稱右側的星形圖標。
 	</string>

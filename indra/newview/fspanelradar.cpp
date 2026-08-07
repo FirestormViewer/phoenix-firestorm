@@ -330,7 +330,8 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
     mRadarList->clearRows();
     for (const auto& avdata : entries)
     {
-        constexpr char font_name[] = "SANSSERIF_SMALL";
+        constexpr char default_font[] = "SANSSERIF";
+        constexpr char tabnum_font[] = "Tabnum";
 
         LLSD entry = avdata["entry"];
         LLSD options = avdata["options"];
@@ -339,12 +340,12 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
         row_data["value"] = entry["id"];
         row_data["columns"][0]["column"] = "name";
         row_data["columns"][0]["value"] = entry["name"];
-        row_data["columns"][0]["font"] = font_name;
+        row_data["columns"][0]["font"] = default_font;
 
         row_data["columns"][1]["column"] = "voice_level";
         row_data["columns"][1]["type"] = "icon";
         row_data["columns"][1]["value"] = ""; // Need to set it after the row has been created because it's to big for the row
-        row_data["columns"][1]["font"] = font_name;
+        row_data["columns"][1]["font"] = default_font;
 
         row_data["columns"][2]["column"] = "in_region";
         row_data["columns"][2]["type"] = "icon";
@@ -380,16 +381,17 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
         row_data["columns"][7]["column"] = "age";
         row_data["columns"][7]["value"] = entry["age"];
         row_data["columns"][7]["halign"] = "right";
-        row_data["columns"][7]["font"] = font_name;
+        row_data["columns"][7]["font"] = default_font;
 
         row_data["columns"][8]["column"] = "seen";
         row_data["columns"][8]["value"] = entry["seen"];
         row_data["columns"][8]["halign"] = "right";
-        row_data["columns"][8]["font"] = font_name;
+        row_data["columns"][8]["font"] = tabnum_font;
 
         row_data["columns"][9]["column"] = "range";
         row_data["columns"][9]["value"] = entry["range"];
-        row_data["columns"][9]["font"] = font_name;
+        row_data["columns"][9]["halign"] = "right";
+        row_data["columns"][9]["font"] = tabnum_font;
 
         row_data["columns"][10]["column"] = "seen_sort";
         row_data["columns"][10]["value"] = entry["seen"].asString() + "_" + entry["name"].asString();

@@ -21,9 +21,6 @@
 	<icon tool_tip="適度成人" name="rating_icon_moderate"/>
 	<icon tool_tip="完全成人" name="rating_icon_adult"/>
 	<check_box label="價格 &#8804; " name="pricecheck"/>
-	<text name="pricecheck_symbol">
-		L$
-	</text>
 	<check_box label="面積 &#8805; " name="areacheck"/>
 	<text name="areacheck_symbol">
 		平方米

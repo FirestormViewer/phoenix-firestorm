@@ -489,9 +489,9 @@
 			<spinner label="密度（100公斤/立方公尺）" name="Physics Density" />
 			<spinner label="彈性" name="Physics Restitution" />
 		</panel>
-		<!--<panel label="紋理" name="Texture"/>-->
 		<panel label="內容" name="Contents">
 			<button label="新指令碼" label_selected="新指令碼" name="button new script" />
+			<button label="新記事卡" label_selected="新記事卡" name="button new notecard" />
 			<button label="權限" name="button permissions" />
 			<button label="更新" name="button refresh" />
 			<button label="重設指令碼" name="btn_reset_scripts" />
