@@ -116,6 +116,7 @@ public:
 protected:
     virtual ~LLImageGL();
 
+    static bool analyzeAlphaData(const void* data_in, U32 w, U32 h, S8 alpha_offset, S8 alpha_stride);
     void analyzeAlpha(const void* data_in, U32 w, U32 h);
     void calcAlphaChannelOffsetAndStride();
 
@@ -260,6 +261,7 @@ private:
 
     bool mIsMask;
     bool mNeedsAlphaAndPickMask;
+    LLAtomicU32 mAlphaAnalysisSerial; // for request tracking.
     S8   mAlphaStride ;
     S8   mAlphaOffset ;
 
