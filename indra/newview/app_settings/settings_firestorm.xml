@@ -230,6 +230,42 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  
+  <key>AutoTuneRenderFarClipMin</key>
+  <map>
+    <key>Comment</key>
+    <string>The lowest draw distance that auto tune is allowed to use</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>32.0</real>
+  </map>
+  
+  <key>AutoTuneRenderFarClipTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>The draw distance that auto tune will try to achieve</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>256.0</real>
+  </map>
+  
+  <key>AutoTuneImpostorFarAwayDistance</key>
+  <map>
+    <key>Comment</key>
+    <string>Avatars beyond this range will automatically be optimized</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>64.0</real>
+  </map>
 
   <key>FSChatWindow</key>
   <map>
