@@ -219,6 +219,20 @@ bool FSInventoryCustomTabs::handleMouseDown(S32 x, S32 y)
     return true;
 }
 
+bool FSInventoryCustomTabs::handleDragAndDrop(S32 x, S32 y)
+{
+    S32 local_x = 0;
+    S32 local_y = 0;
+    auto* inv_panel = hitTestAddTab(x, y, local_x, local_y);
+    if (!inv_panel)
+    {
+        return false;
+    }
+    // Drag and drop onto the Add button should not do anything
+    // Return true here to prevent calling LLPanel::handleDragAndDrop
+    return true;
+}
+
 void FSInventoryCustomTabs::onFilterFocusLost()
 {
     if (mParent)
@@ -477,6 +491,12 @@ bool FSInventoryCustomTabs::handleMouseDown(LLPanelMainInventory* parent, S32 x,
 {
     auto* self = instanceFor(parent);
     return self && self->handleMouseDown(x, y);
+}
+
+bool FSInventoryCustomTabs::handleDragAndDrop(LLPanelMainInventory* parent, S32 x, S32 y)
+{
+    auto* self = instanceFor(parent);
+    return self && self->handleDragAndDrop(x, y);
 }
 
 void FSInventoryCustomTabs::onParentDraw(LLPanelMainInventory* parent)
@@ -1226,6 +1246,31 @@ LLInventoryPanel* FSInventoryCustomTabs::hitTestCustomTab(S32 x, S32 y, S32& tab
     }
     auto* inv_panel = dynamic_cast<LLInventoryPanel*>(mTabs->getPanelByIndex(idx));
     if (!inv_panel || !mPanels.count(inv_panel))
+    {
+        return nullptr;
+    }
+    return inv_panel;
+}
+
+LLInventoryPanel* FSInventoryCustomTabs::hitTestAddTab(S32 x, S32 y, S32& tab_local_x, S32& tab_local_y) const
+{
+    if (!mTabs || !mParent || !mAddTabPanel)
+    {
+        return nullptr;
+    }
+    tab_local_x = 0;
+    tab_local_y = 0;
+    if (!mParent->localPointToOtherView(x, y, &tab_local_x, &tab_local_y, mTabs))
+    {
+        return nullptr;
+    }
+    const S32 idx = mTabs->getTabContainedAtPoint(tab_local_x, tab_local_y);
+    if (idx < 0)
+    {
+        return nullptr;
+    }
+    auto* inv_panel = dynamic_cast<LLInventoryPanel*>(mTabs->getPanelByIndex(idx));
+    if (!isAddTab(inv_panel))
     {
         return nullptr;
     }
