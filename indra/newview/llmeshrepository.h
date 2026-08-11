@@ -895,6 +895,7 @@ public:
     void init();
     void unregisterAllMeshes();
     void shutdown();
+    void shutdownDecomposition();
     S32 update();
 
     void unregisterMesh(LLVOVolume* vobj, const LLVolumeParams& mesh_params, S32 detail);
@@ -1013,4 +1014,3 @@ const F32 ANIMATED_OBJECT_BASE_COST = 15.0f;
 const F32 ANIMATED_OBJECT_COST_PER_KTRI = 1.5f;
 
 #endif
-
