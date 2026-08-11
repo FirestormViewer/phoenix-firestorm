@@ -1643,8 +1643,14 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="InventoryNoMatchingRecentItems">
 		Avez-vous trouvé ce que vous cherchiez ? Essayez [secondlife:///app/inventory/filters Show filters].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		Vous n'avez ajouté aucun article à vos favoris.
+	</string>
 	<string name="FSInventoryCustomTabDefaultName">
 		Filtre
+	</string>
+	<string name="FSInventoryCustomTabShowHidden">
+		Afficher les onglets masqués
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/places/[SEARCH_TERM] Rechercher].

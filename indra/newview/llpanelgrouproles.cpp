@@ -615,7 +615,7 @@ void LLPanelGroupSubTab::buildActionCategory(LLScrollListCtrl* ctrl,
         row["columns"][1]["column"] = "action";
         row["columns"][1]["type"] = "text";
         row["columns"][1]["value"] = LLTrans::getString(action_set->mActionSetData->mName);
-        row["columns"][1]["font"]["name"] = "SANSSERIF_SMALL";
+        row["columns"][1]["font"]["name"] = "SANSSERIF";
 
 
         LLScrollListItem* title_row = ctrl->addElement(row, ADD_BOTTOM, action_set->mActionSetData);
@@ -701,7 +701,7 @@ void LLPanelGroupSubTab::buildActionCategory(LLScrollListCtrl* ctrl,
 
             row["columns"][column_index]["column"] = "action";
             row["columns"][column_index]["value"] = (*ra_it)->mDescription;
-            row["columns"][column_index]["font"] = "SANSSERIF_SMALL";
+            row["columns"][column_index]["font"] = "SANSSERIF";
 
             if(mHasGroupBanPower)
             {
@@ -1747,15 +1747,15 @@ void LLPanelGroupMembersSubTab::addMemberToList(LLGroupMemberData* data)
     LLNameListCtrl::NameItem item_params;
     item_params.value = data->getID();
 
-    item_params.columns.add().column("name").font.name("SANSSERIF_SMALL").style("NORMAL");
+    item_params.columns.add().column("name").font.name("SANSSERIF").style("NORMAL");
 
     item_params.columns.add().column("donated").value(donated.getString())
-            .font.name("SANSSERIF_SMALL").style("NORMAL");
+            .font.name("SANSSERIF").style("NORMAL");
 
     item_params.columns.add().column("online").value(data->getOnlineStatus())
-            .font.name("SANSSERIF_SMALL").style("NORMAL");
+            .font.name("SANSSERIF").style("NORMAL");
 
-    item_params.columns.add().column("title").value(data->getTitle()).font.name("SANSSERIF_SMALL").style("NORMAL");;
+    item_params.columns.add().column("title").value(data->getTitle()).font.name("SANSSERIF").style("NORMAL");;
 
     mMembersList->addNameItemRow(item_params);
 
@@ -3361,7 +3361,7 @@ void LLPanelGroupBanListSubTab::populateBanList()
         ban_entry.value = entry->first;
         LLGroupBanData bd = entry->second;
 
-        ban_entry.columns.add().column("name").font.name("SANSSERIF_SMALL").style("NORMAL");
+        ban_entry.columns.add().column("name").font.name("SANSSERIF").style("NORMAL");
 
         // Baker TODO: MAINT-
         // Check out utc_to_pacific_time()
@@ -3376,8 +3376,8 @@ void LLPanelGroupBanListSubTab::populateBanList()
         //LL_INFOS("BAKER") << "[BAKER] BAN_DATE: " << bd.mBanDate.toHTTPDateString("%Y/%m/%d") << LL_ENDL;
         //LL_INFOS("BAKER") << "[BAKER] BAN_DATE_MODIFIED: " << ban_date_str << LL_ENDL;
 
-        //ban_entry.columns.add().column("ban_date").value(ban_date_str.font.name("SANSSERIF_SMALL").style("NORMAL");
-        ban_entry.columns.add().column("ban_date").value(bd.mBanDate.toHTTPDateString("%Y/%m/%d")).font.name("SANSSERIF_SMALL").style("NORMAL");
+        //ban_entry.columns.add().column("ban_date").value(ban_date_str.font.name("SANSSERIF").style("NORMAL");
+        ban_entry.columns.add().column("ban_date").value(bd.mBanDate.toHTTPDateString("%Y/%m/%d")).font.name("SANSSERIF").style("NORMAL");
 
         mBanList->addNameItemRow(ban_entry);
     }

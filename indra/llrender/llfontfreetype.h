@@ -106,7 +106,9 @@ public:
 
     // is_fallback should be true for fallback fonts that aren't used
     // to render directly (Unicode backup, primarily)
-    bool loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //bool loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags);
+    bool loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags, bool tabnum);
 
     S32 getNumFaces(const std::string& filename);
 
@@ -152,6 +154,11 @@ public:
 
     F32 getMaxDigitWidth() const { return mMaxDigitWidth; }
     S32 getFontWeight() const { return mWeight; }
+
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    bool isTabnum() const { return mTabnum; }
+    void setTabnum(bool value) { mTabnum = value; }
+    // </FS:Ansariel>
 
     LLFontGlyphInfo* getGlyphInfo(llwchar wch, EFontGlyphType glyph_type) const;
 
@@ -202,6 +209,7 @@ private:
     S32 mFaceIndex = 0; // Face index within the (possibly collection) font file
     F32 mVertDPI = 0.f; // Kept so lazily-discovered fallback faces can be
     F32 mHorzDPI = 0.f; // opened at this font's size (see addGlyph)
+    bool mTabnum{ false }; // <FS:Ansariel> Optional tabular numeric font rendering
     typedef std::pair<LLPointer<LLFontFreetype>, char_functor_t> fallback_font_t;
     typedef std::vector<fallback_font_t> fallback_font_vector_t;
     // mutable: fallback fonts are also discovered lazily in addGlyph (const)

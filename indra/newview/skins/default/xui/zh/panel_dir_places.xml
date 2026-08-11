@@ -13,12 +13,12 @@
 	</text>
 	<combo_box name="Category">
 		<combo_item name="AnyCategory" label="所有分類"/>
-		<combo_item name="LindenLocation" vlabel="Linden地點"/>
+		<combo_item name="LindenLocation" label="Linden地點"/>
 		<combo_item name="Arts&amp;Culture" label="藝術與文化"/>
 		<combo_item name="Business" label="公司"/>
 		<combo_item name="Educational" label="教育"/>
 		<combo_item name="Gaming" label="遊戲"/>
-		<combo_item name="Hangout" label="聚會點"/>
+		<combo_item name="Hangout" label="聚會地點"/>
 		<combo_item name="NewcomerFriendly" label="適合新手"/>
 		<combo_item name="Parks&amp;Nature" label="公園與自然"/>
 		<combo_item name="Residential" label="住宅區"/>

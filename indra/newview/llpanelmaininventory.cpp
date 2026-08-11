@@ -1371,6 +1371,12 @@ bool LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
     }
 // [/SL:KB]
 
+    // <FS:TJ> [FIRE-36910] Fix crash when dragging onto the add button for custom inventory tabs
+    if (FSInventoryCustomTabs::handleDragAndDrop(this, x, y))
+    {
+        return true;
+    }
+    // </FS:TJ>
     bool handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
 
     return handled;

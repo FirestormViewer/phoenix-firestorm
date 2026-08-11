@@ -1641,17 +1641,15 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
             LLUIColor timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
             timestamp_style.color(timestamp_color);
             timestamp_style.readonly_color(timestamp_color);
+            LLFontDescriptor fdesc(body_message_params.font.name(), body_message_params.font.size(), moderator_style_active ? LLFontGL::getStyleFromString(moderator_timestamp_style) : LLFontGL::getStyleFromString(body_message_params.font.style()), true);
+            timestamp_style.font(LLFontGL::getFont(fdesc));
+
             if (message_from_log && !is_conversation_log)
             {
                 timestamp_style.color.alpha = FSIMChatHistoryFade;
                 timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
             }
-            //<FS:HG> FS-1734 seperate name and text styles for moderator
-            if ( moderator_style_active )
-            {
-                timestamp_style.font.style(moderator_timestamp_style);
-            }
-            //</FS:HG> FS-1734 seperate name and text styles for moderator
+
             appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
             prependNewLineState = false;
         }

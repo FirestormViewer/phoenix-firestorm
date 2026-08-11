@@ -389,7 +389,7 @@ things in this group. There&apos;s a broad variety of Abilities.
         <name_list.columns
          label="Resident"
          name="name"
-         font.name="SANSSERIF_SMALL"
+         font.name="SANSSERIF"
          font.style="NORMAL"
          relative_width="0.7" />
         <name_list.columns
