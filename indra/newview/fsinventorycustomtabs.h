@@ -52,6 +52,7 @@ public:
 
     bool handleRightMouseDown(S32 x, S32 y);
     bool handleMouseDown(S32 x, S32 y);
+    bool handleDragAndDrop(S32 x, S32 y);
 
     void noteActivePanel(LLInventoryPanel* panel);
     void notifyActiveFilterStateChanged();
@@ -81,6 +82,7 @@ public:
     static void notifyIfFilterChanged(LLPanelMainInventory* parent, S32 prev_generation);
     static bool handleRightMouseDown(LLPanelMainInventory* parent, S32 x, S32 y);
     static bool handleMouseDown(LLPanelMainInventory* parent, S32 x, S32 y);
+    static bool handleDragAndDrop(LLPanelMainInventory* parent, S32 x, S32 y);
     static void onParentDraw(LLPanelMainInventory* parent);
 
 private:
@@ -112,6 +114,7 @@ private:
     void updateAutoLabel(LLInventoryPanel* panel);
     std::string computeDisplayLabel(LLInventoryPanel* panel) const;
     LLInventoryPanel* hitTestCustomTab(S32 x, S32 y, S32& tab_local_x, S32& tab_local_y) const;
+    LLInventoryPanel* hitTestAddTab(S32 x, S32 y, S32& tab_local_x, S32& tab_local_y) const;
 
     static std::string getDefaultTabName();
     static std::string sanitizeTabName(std::string name);
