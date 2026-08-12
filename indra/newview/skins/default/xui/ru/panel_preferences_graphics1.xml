@@ -145,25 +145,6 @@
 			</text>
 			<check_box label="Переопределение обнаружения видеопамяти" name="FSOverrideVRAMDetection" tool_tip="Разрешить пользователю переопределять обнаружение видеопамяти (использовать с особой осторожностью)"/>
 			<slider label="Выделенная видеопамять GPU (ГБ):" name="FSForcedVideoMemory" tool_tip="Важно: используйте с особой осторожностью. Переопределите обнаруженную видеопамять в вашем графическом процессоре. Это не должно включать 'общую' видеопамять, которая является частью системной оперативной памяти. Если вы не понимаете разницы, оставьте этот элемент управления в покое."/>
-
-			<text name="automatic_texture_downscale_settings" width="308">
-				Автоматическое уменьшение масштаба текстуры:
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="275">
-				В фоновом режиме (0 отключить)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд, когда окно неактивно." width="100"/>
-			<text name="TextureDiscardBackgroundedTime_seconds" width="100">
-				Секунд(ы)
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="275">
-				Минимизировано (0 отключить)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Уменьшенные текстуры через выбранное количество секунд при сворачивании." width="100"/>
-			<text name="TextureDiscardMinimizedTime_seconds" width="100">
-				Секунд(ы)
-			</text>
-
 		</panel>
 
 		<panel label="Прорисовка" name="Rendering">

@@ -156,23 +156,6 @@
 Substitui a VRAM detectada na GPU.
 Este valor não deve incluir a VRAM compartilhada que faz parte da memória RAM do sistema.
 Se você não compreende a diferença, não altere esta configuração." />
-		<text name="automatic_texture_downscale_settings">
-			Redução Automática de Texturas:
-		</text>
-		<text name="TextureDiscardBackgroundedTime_label" tool_tip="Reduz as texturas após o número de segundos selecionado quando o visualizador não estiver em foco.">
-			Em Segundo Plano (0 para desativar)
-		</text>
-		<spinner name="TextureDiscardBackgroundedTime" tool_tip="Reduz as texturas após o número de segundos selecionado quando o visualizador não estiver em foco." />
-		<text name="TextureDiscardBackgroundedTime_seconds">
-			Segundo(s)
-		</text>
-		<text name="TextureDiscardMinimizedTime_label" tool_tip="Reduz as texturas após o número de segundos selecionado quando o visualizador estiver minimizado.">
-			Minimizado (0 para desativar)
-		</text>
-		<spinner name="TextureDiscardMinimizedTime" tool_tip="Reduz as texturas após o número de segundos selecionado quando o visualizador estiver minimizado." />
-		<text name="TextureDiscardMinimizedTime_seconds">
-			Segundo(s)
-		</text>
 	</panel>
 
 	<panel label="Renderização" name="Rendering">

@@ -601,6 +601,8 @@ void LLFloater::storeRectControl()
 
 void LLFloater::storeVisibilityControl()
 {
+    // Todo: this is a bit pricey, gets called each frame
+    // on LLAppViewer::idle(), optimize!
     if( !sQuitting && mVisibilityControl.size() > 1 )
     {
         // <FS:Zi> Make sure that hosted floaters always save "not visible", so they won't

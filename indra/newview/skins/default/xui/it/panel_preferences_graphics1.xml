@@ -140,23 +140,6 @@
 			</text>
 			<check_box label="Disabilita rilevamento automatico della VRAM" name="FSOverrideVRAMDetection" tool_tip="Consenti la disattivazione del rilevamento automatico della VRAM (da utilizzare con estrema cautela)" />
 			<slider label="Sostituisci VRAM dedicata alla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Importante: usare con estrema cautela. || Sostituisci la VRAM rilevata per la tua scheda grafica. || Non può contenere VRAM 'condivisa', che fa parte della RAM di sistema. || Se non capisci la differenza, lascia stare questa opzione." />
-			<text name="automatic_texture_downscale_settings">
-				Riduzione automatica delle texture:
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando la finestra del viewer non è in primo piano.">
-				In background (0 per disabilitare)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando la finestra del viewer non è in primo piano." />
-			<text name="TextureDiscardBackgroundedTime_seconds">
-				secondi
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando il viewer è ridotto a icona.">
-				Ridotto a icona (0 per disabilitare)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Riduci la scala delle texture dopo un determinato numero di secondi quando il viewer è ridotto a icona." />
-			<text name="TextureDiscardMinimizedTime_seconds">
-				secondi
-			</text>
 		</panel>
 		<panel label="Rendering" name="Rendering">
 			<text name="World Updating">

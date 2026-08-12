@@ -47,6 +47,7 @@ public:
     // This may mean that resources used by
     // isAlive and other method may need synchronization.
     virtual bool isAlive() const = 0;
+    virtual bool started() const = 0;
     virtual bool hasExpired() const = 0;
     virtual void reset() = 0;
     virtual void start();
@@ -67,6 +68,7 @@ public:
     virtual ~LLWatchdogTimeout();
 
     bool isAlive() const override;
+    bool started() const override;
     bool hasExpired() const override;
     void reset() override;
     void start() override { start(""); }

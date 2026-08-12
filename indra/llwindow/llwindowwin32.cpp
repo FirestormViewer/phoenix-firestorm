@@ -466,6 +466,16 @@ struct LLWindowWin32::LLWindowWin32Thread : public LL::ThreadPool
             }
         });
     }
+
+    // For mainWindowProc, it should not unpause watchdog if it was paused
+    void pingWindowTimeout(std::string_view state)
+    {
+        if (mWindowTimeout && mWindowTimeout->started())
+        {
+            mWindowTimeout->setTimeout(WINDOW_TIMEOUT_SEC);
+            mWindowTimeout->ping(state);
+        }
+    }
 private:
     // These timeout related functions are strictly for the thread.
     void resumeTimeout(std::string_view state)
@@ -2491,21 +2501,27 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DEVICECHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DEVICECHANGE");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DEVICECHANGE");
+
+            // Log detailed device change information
+            std::string change_type = "UNKNOWN";
+            switch (w_param)
+            {
+            case DBT_DEVICEARRIVAL:           change_type = "DBT_DEVICEARRIVAL"; break;
+            case DBT_DEVICEREMOVECOMPLETE:    change_type = "DBT_DEVICEREMOVECOMPLETE"; break;
+            case DBT_DEVNODES_CHANGED:        change_type = "DBT_DEVNODES_CHANGED"; break;
+            case DBT_DEVICEQUERYREMOVE:       change_type = "DBT_DEVICEQUERYREMOVE"; break;
+            case DBT_DEVICEQUERYREMOVEFAILED: change_type = "DBT_DEVICEQUERYREMOVEFAILED"; break;
+            case DBT_DEVICEREMOVEPENDING:     change_type = "DBT_DEVICEREMOVEPENDING"; break;
+            case DBT_CONFIGCHANGED:           change_type = "DBT_CONFIGCHANGED"; break;
+            }
 
             // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
-            // if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
-            // {
-            //    WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
-            //    return 1;
-            // }
-
-
             // Only bother initalizing when needed.
             if (deviceCLSIDWhitelist.empty())
             {
                 initializeDeviceCLSIDArray();
             }
-            
             if (w_param == DBT_DEVICEARRIVAL || w_param == DBT_DEVICEREMOVECOMPLETE)
             {
                 DEV_BROADCAST_HDR* dtype = (DEV_BROADCAST_HDR*)l_param;
@@ -2519,19 +2535,38 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         if (memcmp(&iface->dbcc_classguid, &guid, sizeof(GUID)) == 0)
                         {
                             bool deviceRemoved = (w_param == DBT_DEVICEREMOVECOMPLETE);
-                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, deviceRemoved));
-                            break; 
+                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, change_type, true, deviceRemoved));
+                            return 1;
                         }
                     }
                 }
             }
-            break;
             // </FS>
+
+            if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
+            {
+                WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, change_type, false, false)); // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
+
+                return 1;
+            }
+            else if (l_param)
+            {
+                const auto* hdr = reinterpret_cast<const DEV_BROADCAST_HDR*>(l_param);
+                if (hdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+                {
+                    // Might need to register for monitor device notifications
+                    // to get this message when monitor is suspended or resumed.
+                    // TODO: log monitor suspending and resuming.
+                    LL_INFOS("Window") << "DEVICEINTERFACE: " << change_type << LL_ENDL;
+                }
+            }
+            break;
         }
 
         case WM_PAINT:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_PAINT");
+            window_imp->mWindowThread->pingWindowTimeout("WM_PAINT");
             GetUpdateRect(window_imp->mWindowHandle, &update_rect, FALSE);
             update_width = update_rect.right - update_rect.left + 1;
             update_height = update_rect.bottom - update_rect.top + 1;
@@ -2580,6 +2615,15 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_EXITMENULOOP");
             WINDOW_IMP_POST(window_imp->mCallbacks->handleWindowUnblock(window_imp));
+            break;
+        }
+
+        case WM_POWERBROADCAST:
+        {
+            // Might need to register for power broadcast interface
+            // Todo: log monitor suspending and resuming.
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_POWERBROADCAST");
+            LL_INFOS("Window") << "Received WM_POWERBROADCAST with wParam: 0x" << std::hex << (uintptr_t)w_param << " lParam: 0x" << (uintptr_t)l_param << std::dec << LL_ENDL;
             break;
         }
 
@@ -2676,7 +2720,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_CLOSE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_CLOSE");
-
+            window_imp->mWindowThread->pingWindowTimeout("WM_CLOSE");
             window_imp->mCallbacks->handlePreCloseRequest(); // mark app as potentially closing
             if (!window_imp->mReceivedSCClose)
             {
@@ -2744,6 +2788,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             // Comes after WM_QUERYENDSESSION
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_ENDSESSION");
             LL_INFOS("Window") << "Received WM_ENDSESSION with wParam: " << (U32)w_param << " lParam: " << (U32)l_param << LL_ENDL;
+            window_imp->mWindowThread->pingWindowTimeout("WM_ENDSESSION");
             unsigned int end_session_flags = (U32)l_param;
 
             if (w_param == TRUE // if true, session is ending
@@ -3467,6 +3512,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DPICHANGED:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DPICHANGED");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DPICHANGED");
             LPRECT lprc_new_scale;
             F32 new_scale = F32(LOWORD(w_param)) / F32(USER_DEFAULT_SCREEN_DPI);
             lprc_new_scale = (LPRECT)l_param;
@@ -3488,6 +3534,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DISPLAYCHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DISPLAYCHANGE");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DISPLAYCHANGE");
             window_imp->post([=]() {
                 window_imp->mCallbacks->handleDisplayChanged();
                 // Note: WM_DISPLAYCHANGE was passing to WM_SETFOCUS
@@ -3550,6 +3597,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_SETTINGCHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_SETTINGCHANGE");
+            // Can be called on OS user switching
+            LL_INFOS("Window") << "WM_SETTINGCHANGE, with wParam: 0x" << std::hex << (uintptr_t)w_param << " lParam: 0x" << (uintptr_t)l_param << std::dec << LL_ENDL;
+            window_imp->mWindowThread->pingWindowTimeout("WM_SETTINGCHANGE");
             if (w_param == SPI_SETMOUSEVANISH)
             {
                 if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &window_imp->mMouseVanish, 0))
@@ -5452,6 +5502,13 @@ inline LLWindowWin32::LLWindowWin32Thread::LLWindowWin32Thread()
     : LL::ThreadPool("Window Thread", 1, MAX_QUEUE_SIZE, false)
 {
     LL::ThreadPool::start();
+
+    // Set thread name for the window thread
+    // This will make it distinguishable in Visual Studio debugger
+    post([this]()
+    {
+        SetThreadDescription(GetCurrentThread(), L"LLWindowWin32 Thread");
+    });
 }
 
 /**
@@ -5633,7 +5690,7 @@ void LLWindowWin32::LLWindowWin32Thread::run()
     }
 
     // Normally won't exist yet, but in case of re-init, make sure it's cleaned up
-    resumeTimeout("WindowThread");
+    resumeTimeout("Window:WindowThread");
 
     while (! getQueue().done())
     {
@@ -5644,23 +5701,25 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 
         if (mWindowHandleThrd != 0)
         {
-            pingTimeout("messages");
             MSG msg;
             BOOL status;
             if (mhDCThrd == 0)
             {
+                pingTimeout("Window:PeekMessage");
                 LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - PeekMessage");
                 logger.onChange("PeekMessage(", std::hex, mWindowHandleThrd, ")");
                 status = PeekMessage(&msg, mWindowHandleThrd, 0, 0, PM_REMOVE);
             }
             else
             {
+                pingTimeout("Window:GetMessage");
                 LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - GetMessage");
                 logger.always("GetMessage(", std::hex, mWindowHandleThrd, ")");
                 status = GetMessage(&msg, NULL, 0, 0);
             }
             if (status > 0)
             {
+                pingTimeout("Window:TranslateMessage");
                 logger.always("got MSG (", std::hex, msg.hwnd, ", ", msg.message,
                               ", ", msg.wParam, ")");
                 TranslateMessage(&msg);
@@ -5672,7 +5731,7 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - Function Queue");
-            pingTimeout("queue");
+            pingTimeout("Window:Queue");
             logger.onChange("runPending()");
             //process any pending functions
             getQueue().runPending();
