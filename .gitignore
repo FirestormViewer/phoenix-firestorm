@@ -19,10 +19,10 @@
 *~
 
 # Specific paths and/or names
-.venv
 /.autobuild-installables/
 /.build-variables/
 /.logs/
+.venv
 CMakeCache.txt
 cmake_install.cmake
 LICENSES

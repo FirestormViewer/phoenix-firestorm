@@ -73,12 +73,11 @@
 #include <fstream>
 #include <exception>
 
-#include "llversioninfovars.h"
-
 // Velopack installer and update framework
 #if LL_VELOPACK
 #include "llvelopack.h"
 #endif
+#include "llversioninfovars.h"
 
 // Bugsplat (http://bugsplat.com) crash reporting tool
 #ifdef LL_BUGSPLAT

@@ -27,6 +27,10 @@
 #ifndef LL_LLAPPVIEWERLINUX_H
 #define LL_LLAPPVIEWERLINUX_H
 
+extern "C" {
+# include <glib.h>
+}
+
 #ifndef LL_LLAPPVIEWER_H
 #include "llappviewer.h"
 #endif
@@ -36,8 +40,8 @@ class LLCommandLineParser;
 class LLAppViewerLinux final : public LLAppViewer
 {
 public:
-    LLAppViewerLinux() = default;
-    ~LLAppViewerLinux() override = default;
+    LLAppViewerLinux();
+    ~LLAppViewerLinux() override;
 
     //
     // Main application logic
@@ -56,7 +60,7 @@ protected:
 
     bool initSLURLHandler() override;
     bool sendURLToOtherInstance(const std::string& url) override;
-    virtual void setOSHibernationMode(eHibernationMode mode);
+    void setOSHibernationMode(eHibernationMode mode) override;
 
 private:
     // Power management state tracking

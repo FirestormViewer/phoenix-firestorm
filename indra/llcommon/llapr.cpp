@@ -240,7 +240,6 @@ bool LLVolatileAPRPool::isFull()
 bool _ll_apr_warn_status(apr_status_t status, const char* file, int line)
 {
     if(APR_SUCCESS == status) return false;
-
     char buf[MAX_STRING];
     apr_strerror(status, buf, sizeof(buf));
 

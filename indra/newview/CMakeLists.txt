@@ -1914,7 +1914,6 @@ set(macosx_viewer_HEADER_FILES
 
 set(linux_viewer_SOURCE_FILES
     llappviewerlinux.cpp
-    #llappviewerlinux_api_dbus.cpp
     )
 
 set(linux_viewer_HEADER_FILES

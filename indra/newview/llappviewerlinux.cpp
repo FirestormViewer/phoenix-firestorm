@@ -91,6 +91,7 @@ namespace
 // Initialize static members
 guint32 LLAppViewerLinux::sPowerInhibitCookie = 0;
 bool LLAppViewerLinux::sPowerInhibitActive = false;
+
 void check_vm_bloat()
 {
 #if LL_LINUX
@@ -294,6 +295,10 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     gViewerAppPtr = nullptr;
 }
 
+LLAppViewerLinux::LLAppViewerLinux()
+{
+}
+
 LLAppViewerLinux::~LLAppViewerLinux()
 {
     // Clean up any power management inhibition on exit
@@ -393,8 +398,6 @@ typedef struct
 {
         GObjectClass parent_class;
 } ViewerAppAPIClass;
-
-///
 
 static void viewerappapi_init(ViewerAppAPI *server);
 static void viewerappapi_class_init(ViewerAppAPIClass *klass);
@@ -540,6 +543,66 @@ bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 #endif // LL_GLIB
 
 
+#if LL_GLIB
+
+namespace
+{
+    // Session-bus sleep inhibitors, tried in order; both hand back a uint cookie.
+    struct PowerInhibitor
+    {
+        const char* service;
+        const char* path;
+        const char* iface;
+        const char* uninhibit;
+        bool gnome_args;
+    };
+
+    const PowerInhibitor POWER_INHIBITORS[] =
+    {
+        { "org.freedesktop.PowerManagement", "/org/freedesktop/PowerManagement/Inhibit",
+          "org.freedesktop.PowerManagement.Inhibit", "UnInhibit", false },
+        { "org.gnome.SessionManager", "/org/gnome/SessionManager",
+          "org.gnome.SessionManager", "Uninhibit", true }
+    };
+
+    const PowerInhibitor* sActiveInhibitor = nullptr;
+
+    // Returns the reply, or null on failure. Takes ownership of args.
+    GVariant* call_power_manager(const PowerInhibitor& inhibitor, const char* method, GVariant* args,
+                                 const GVariantType* reply_type)
+    {
+        g_variant_ref_sink(args);
+
+        GDBusConnection* bus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
+        if (!bus)
+        {
+            LL_WARNS("OS") << "Getting dbus failed." << LL_ENDL;
+            g_variant_unref(args);
+            return nullptr;
+        }
+
+        GError* error = nullptr;
+        GVariant* result = g_dbus_connection_call_sync(bus, inhibitor.service, inhibitor.path,
+                                                       inhibitor.iface, method, args, reply_type,
+                                                       G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error);
+        if (!result)
+        {
+            LL_DEBUGS("OS") << inhibitor.service << "." << method << " failed: "
+                            << (error ? error->message : "unknown error") << LL_ENDL;
+        }
+        if (error)
+        {
+            g_error_free(error);
+        }
+
+        g_variant_unref(args);
+        g_object_unref(bus);
+        return result;
+    }
+}
+
+#endif // LL_GLIB
+
 void LLAppViewerLinux::setOSHibernationMode(eHibernationMode mode)
 {
     if (mode == LL_HIBERNATE_MODE_DEFAULT)
@@ -592,244 +655,63 @@ void LLAppViewerLinux::setOSHibernationMode(eHibernationMode mode)
 // TODO: This is AI Generated!!!, needs review and testing.
 bool LLAppViewerLinux::inhibitPowerManagement(bool inhibit_display)
 {
-#if LL_DBUS_ENABLED
-    // Try to use D-Bus to inhibit power management via various desktop environment APIs
-    // This works with GNOME, KDE, XFCE, and most modern Linux desktop environments
+#if LL_GLIB
+    const char* reason = inhibit_display ?
+        "Viewer active - preventing system and display sleep" :
+        "Viewer active - preventing system sleep";
 
-    if (!grab_dbus_syms(DBUSGLIB_DYLIB_DEFAULT_NAME))
+    for (const PowerInhibitor& inhibitor : POWER_INHIBITORS)
     {
-        LL_WARNS("OS") << "Failed to load D-Bus symbols for power management" << LL_ENDL;
-        return false;
-    }
+        // Inhibit(app: s, reason: s) -> u, or GNOME's Inhibit(app: s, xid: u, reason: s, flags: u) -> u
+        // GNOME flags: 4 = suspend, 8 = idle (display), 12 = both
+        GVariant* args = inhibitor.gnome_args ?
+            g_variant_new("(susu)", "SecondLifeViewer", (guint32)0, reason,
+                          (guint32)(inhibit_display ? 12 : 4)) :
+            g_variant_new("(ss)", "Second Life Viewer", reason);
 
-    GError* error = nullptr;
-    DBusGConnection* bus = lldbus_g_bus_get(DBUS_BUS_SESSION, &error);
-
-    if (!bus)
-    {
-        LL_WARNS("OS") << "Failed to connect to D-Bus session bus: "
-            << (error ? error->message : "unknown error") << LL_ENDL;
-        if (error)
-            g_error_free(error);
-        return false;
-    }
-
-    // Try multiple power management services in order of preference
-    // 1. org.freedesktop.PowerManagement (older standard)
-    // 2. org.gnome.SessionManager (GNOME)
-    // 3. org.kde.Solid.PowerManagement (KDE)
-
-    const char* services[] = {
-        "org.freedesktop.PowerManagement",
-        "org.gnome.SessionManager",
-        "org.kde.Solid.PowerManagement"
-    };
-
-    const char* paths[] = {
-        "/org/freedesktop/PowerManagement/Inhibit",
-        "/org/gnome/SessionManager",
-        "/org/kde/Solid/PowerManagement"
-    };
-
-    const char* interfaces[] = {
-        "org.freedesktop.PowerManagement.Inhibit",
-        "org.gnome.SessionManager",
-        "org.kde.Solid.PowerManagement"
-    };
-
-    const char* methods[] = {
-        "Inhibit",
-        "Inhibit",
-        "inhibit"
-    };
-
-    bool success = false;
-
-    for (int i = 0; i < 3 && !success; ++i)
-    {
-        DBusGProxy* proxy = lldbus_g_proxy_new_for_name(
-            bus,
-            services[i],
-            paths[i],
-            interfaces[i]
-        );
-
-        if (!proxy)
+        GVariant* result = call_power_manager(inhibitor, "Inhibit", args, G_VARIANT_TYPE("(u)"));
+        if (!result)
+        {
             continue;
+        }
 
-        error = nullptr;
         guint32 cookie = 0;
+        g_variant_get(result, "(u)", &cookie);
+        g_variant_unref(result);
 
-        if (i == 0) // freedesktop.PowerManagement
-        {
-            // Inhibit(application_name: s, reason: s) -> cookie: u
-            success = lldbus_g_proxy_call(
-                proxy,
-                methods[i],
-                &error,
-                G_TYPE_STRING, "Second Life Viewer",
-                G_TYPE_STRING, inhibit_display ?
-                "Viewer active - preventing system and display sleep" :
-                "Viewer active - preventing system sleep",
-                G_TYPE_INVALID,
-                G_TYPE_UINT, &cookie,
-                G_TYPE_INVALID
-            );
-        }
-        else if (i == 1) // GNOME SessionManager
-        {
-            // Inhibit(app_id: s, toplevel_xid: u, reason: s, flags: u) -> cookie: u
-            // flags: 4 = suspend, 8 = idle (display), 12 = both
-            guint32 flags = inhibit_display ? 12 : 4;
-            success = lldbus_g_proxy_call(
-                proxy,
-                methods[i],
-                &error,
-                G_TYPE_STRING, "SecondLifeViewer",
-                G_TYPE_UINT, 0,  // toplevel_xid (0 = none)
-                G_TYPE_STRING, inhibit_display ?
-                "Viewer active - preventing system and display sleep" :
-                "Viewer active - preventing system sleep",
-                G_TYPE_UINT, flags,
-                G_TYPE_INVALID,
-                G_TYPE_UINT, &cookie,
-                G_TYPE_INVALID
-            );
-        }
-        else if (i == 2) // KDE Solid
-        {
-            // Different method signature for KDE
-            success = lldbus_g_proxy_call(
-                proxy,
-                methods[i],
-                &error,
-                G_TYPE_INVALID,
-                G_TYPE_INT, &cookie,
-                G_TYPE_INVALID
-            );
-        }
-
-        if (success)
-        {
-            sPowerInhibitCookie = cookie;
-            sPowerInhibitActive = true;
-            LL_INFOS("OS") << "Successfully inhibited power management using "
-                << services[i] << LL_ENDL;
-        }
-        else if (error)
-        {
-            LL_DEBUGS("OS") << "Failed to inhibit via " << services[i]
-                << ": " << error->message << LL_ENDL;
-            g_error_free(error);
-            error = nullptr;
-        }
-
-        g_object_unref(proxy);
+        sPowerInhibitCookie = cookie;
+        sPowerInhibitActive = true;
+        sActiveInhibitor = &inhibitor;
+        LL_INFOS("OS") << "Successfully inhibited power management using "
+            << inhibitor.service << LL_ENDL;
+        return true;
     }
+#endif // LL_GLIB
 
-    return success;
-
-#else // !LL_DBUS_ENABLED
-    LL_WARNS("OS") << "Power management control not available - D-Bus support not enabled" << LL_ENDL;
     return false;
-#endif
 }
 
 void LLAppViewerLinux::uninhibitPowerManagement()
 {
-#if LL_DBUS_ENABLED
-    if (!sPowerInhibitActive || sPowerInhibitCookie == 0)
+#if LL_GLIB
+    if (sPowerInhibitActive && sActiveInhibitor)
     {
-        return;
-    }
-
-    if (!grab_dbus_syms(DBUSGLIB_DYLIB_DEFAULT_NAME))
-    {
-        LL_WARNS("OS") << "Failed to load D-Bus symbols for power management uninhibit" << LL_ENDL;
-        return;
-    }
-
-    GError* error = nullptr;
-    DBusGConnection* bus = lldbus_g_bus_get(DBUS_BUS_SESSION, &error);
-
-    if (!bus)
-    {
-        if (error)
-            g_error_free(error);
-        return;
-    }
-
-    // Try to uninhibit using all services that might have been used
-    const char* services[] = {
-        "org.freedesktop.PowerManagement",
-        "org.gnome.SessionManager",
-        "org.kde.Solid.PowerManagement"
-    };
-
-    const char* paths[] = {
-        "/org/freedesktop/PowerManagement/Inhibit",
-        "/org/gnome/SessionManager",
-        "/org/kde/Solid/PowerManagement"
-    };
-
-    const char* interfaces[] = {
-        "org.freedesktop.PowerManagement.Inhibit",
-        "org.gnome.SessionManager",
-        "org.kde.Solid.PowerManagement"
-    };
-
-    const char* methods[] = {
-        "UnInhibit",
-        "Uninhibit",
-        "uninhibit"
-    };
-
-    bool success = false;
-
-    for (int i = 0; i < 3; ++i)
-    {
-        DBusGProxy* proxy = lldbus_g_proxy_new_for_name(
-            bus,
-            services[i],
-            paths[i],
-            interfaces[i]
-        );
-
-        if (!proxy)
-            continue;
-
-        error = nullptr;
-
-        if (lldbus_g_proxy_call(
-            proxy,
-            methods[i],
-            &error,
-            G_TYPE_UINT, sPowerInhibitCookie,
-            G_TYPE_INVALID,
-            G_TYPE_INVALID))
+        GVariant* result = call_power_manager(*sActiveInhibitor, sActiveInhibitor->uninhibit,
+                                              g_variant_new("(u)", (guint32)sPowerInhibitCookie),
+                                              nullptr);
+        if (result)
         {
-            success = true;
+            g_variant_unref(result);
             LL_INFOS("OS") << "Successfully uninhibited power management using "
-                << services[i] << LL_ENDL;
-        }
-        else if (error)
-        {
-            LL_DEBUGS("OS") << "Failed to uninhibit via " << services[i]
-                << ": " << error->message << LL_ENDL;
-            g_error_free(error);
-            error = nullptr;
+                << sActiveInhibitor->service << LL_ENDL;
         }
 
-        g_object_unref(proxy);
-
-        if (success)
-            break;
+        sActiveInhibitor = nullptr;
     }
+#endif // LL_GLIB
 
     sPowerInhibitCookie = 0;
     sPowerInhibitActive = false;
-
-#endif // LL_DBUS_ENABLED
 }
 
 void LLAppViewerLinux::initCrashReporting(bool reportFreeze)

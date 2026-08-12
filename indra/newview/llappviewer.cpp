@@ -1595,8 +1595,6 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
-    LL_RECORD_BLOCK_TIME(FTM_FRAME);
-    LL_PROFILE_GPU_ZONE("Frame");
     resumeMainloopTimeout("Main:doFrameStart");
 #ifdef LL_DISCORD
     {
@@ -1605,6 +1603,8 @@ bool LLAppViewer::doFrame()
     }
 #endif
 
+    LL_RECORD_BLOCK_TIME(FTM_FRAME);
+    LL_PROFILE_GPU_ZONE("Frame");
     {
     // and now adjust the visuals from previous frame.
     if(LLPerfStats::tunables.userAutoTuneEnabled && LLPerfStats::tunables.tuningFlag != LLPerfStats::Tunables::Nothing)
