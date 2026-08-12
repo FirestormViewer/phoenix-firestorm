@@ -118,14 +118,14 @@ bool LLWatchdogTimeout::isAlive() const
     return (mTimer.getStarted() && !mTimer.hasExpired());
 }
 
-bool LLWatchdogTimeout::started() const
-{
-    return mTimer.getStarted();
-}
-
 bool LLWatchdogTimeout::hasExpired() const
 {
     return mTimer.hasExpired();
+}
+
+bool LLWatchdogTimeout::started() const
+{
+    return mTimer.getStarted();
 }
 
 void LLWatchdogTimeout::reset()

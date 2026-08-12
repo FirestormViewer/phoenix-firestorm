@@ -2715,6 +2715,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_CLOSE");
             window_imp->mWindowThread->pingWindowTimeout("WM_CLOSE");
+
             window_imp->mCallbacks->handlePreCloseRequest(); // mark app as potentially closing
             if (!window_imp->mReceivedSCClose)
             {
@@ -2851,6 +2852,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 return TRUE;
 
             default:
+                LL_INFOS("Window") << "Received WM_POWERBROADCAST with wParam: 0x" << std::hex << (uintptr_t)w_param << " lParam: 0x" << (uintptr_t)l_param << std::dec << LL_ENDL;
                 break;
             }
             break;
