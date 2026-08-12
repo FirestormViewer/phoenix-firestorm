@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!--
-  Not can_close / no title to avoid window chrome
-  Single instance - only have one at a time, recycle it each spawn
--->
 <floater name="inspect_remote_object">
 	<text name="object_name">
 		測試很長很長、長到不可思議的、超超長的、長得不得了的、很長很長很長、長到我快發瘋、長之又長的物件名稱。
 	</text>
 	<text name="object_owner_label">
 		所有者：
-	</text>
-	<text name="object_owner">
-		Longavatarname Johnsonlongstonnammer
 	</text>
 	<button label="地圖" name="map_btn" />
 	<button label="封鎖" name="block_btn" />

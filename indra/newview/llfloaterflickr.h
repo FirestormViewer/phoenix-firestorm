@@ -29,12 +29,11 @@
 
 #include "llfloater.h"
 #include "lltextbox.h"
-#include "llviewertexture.h"
 
 class LLIconCtrl;
 class LLCheckBoxCtrl;
 class LLSnapshotLivePreview;
-class LLFloaterBigPreview;
+class FSFloaterBigPreview;
 
 class LLFlickrPhotoPanel : public LLPanel
 {
@@ -90,7 +89,7 @@ private:
     LLUICtrl * mCancelButton;
     LLButton * mBtnPreview;
 
-    LLFloaterBigPreview * mBigPreviewFloater;
+    FSFloaterBigPreview * mBigPreviewFloater;
 };
 
 class LLFlickrAccountPanel : public LLPanel

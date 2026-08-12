@@ -36,6 +36,7 @@
 
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llcallbacklist.h"
 #include "llcommandhandler.h"
 #include "llcommunicationchannel.h"
 #include "llfloaterreg.h"
@@ -213,6 +214,7 @@
 // </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
+#include "llstatslistener.h"
 #include "llcleanup.h"
 #include "llimview.h"
 
@@ -1563,12 +1565,68 @@ void LLViewerWindow::handleMouseLeave(LLWindow *window)
     LLToolTipMgr::instance().blockToolTips();
 }
 
+void LLViewerWindow::handlePreCloseRequest()
+{
+    // WINDOW THREAD! since we need this to act fast.
+    if (!LLApp::isExiting() && !LLApp::isStopped())
+    {
+        LLAppViewer::instance()->createCloseRequestMarker();
+    }
+}
+
+void LLViewerWindow::handleCloseRequestCanceled()
+{
+    // WINDOW THREAD! since we need this to act fast.
+    if (!LLApp::isExiting() && !LLApp::isStopped())
+    {
+        LLAppViewer::instance()->removeCloseRequestMarker();
+    }
+}
+
+void LLViewerWindow::handleSuspendRequest()
+{
+    static LLCachedControl<S32> os_hibernation_mode(gSavedSettings, "OSHibernationMode", 0);
+    if (os_hibernation_mode == 0)
+    {
+        LL_INFOS() << "Got a 'suspend' event from OS" << LL_ENDL;
+        // Viewer doesn't handle hibernation.
+        // Just send statistics.
+        LLAppViewer::instance()->sendViewerStatistics(false);
+    }
+    else
+    {
+        LL_INFOS() << "Got a 'suspend' event from OS, disconnecting" << LL_ENDL;
+        // Viewer is set to prevent hibernation if agent isn't away.
+        // If we got here, likely Agent 'went' away then viewer got
+        // a hibernation message.
+        // We have a limited timeframe. Sends stats then disconnect.
+        LLViewerRegion* region = gAgent.getRegion();
+        if (region)
+        {
+            LLAppViewer::instance()->sendViewerStatistics(true);
+            LLAppViewer::instance()->metricsSend(!gDisconnected);
+            // Make sure to show a message.
+            LLAppViewer::instance()->forceDisconnect(LLTrans::getString("YouHaveBeenDisconnected"));
+        }
+    }
+}
+
 bool LLViewerWindow::handleCloseRequest(LLWindow *window, bool from_user)
 {
     if (!LLApp::isExiting() && !LLApp::isStopped())
     {
         if (from_user)
         {
+            // Task naamger kills viewer after 1 second, 3 seconds
+            // is overkill, but decided to be on a safe side.
+            doAfterInterval([]()
+            {
+                // if user quits, marker will be cleaned by cleanup,
+                // if user cancels quit, marker will be cleaned here,
+                // but if task manager kills us, marker stays.
+                LLAppViewer::instance()->removeCloseRequestMarker();
+            }, 3.0f);
+
             // User has indicated they want to close, but we may need to ask
             // about modified documents.
             LLAppViewer::instance()->userQuit();
@@ -1589,6 +1647,9 @@ bool LLViewerWindow::handleSessionExit(LLWindow* window)
     {
         // Viewer received WM_ENDSESSION and app will be killed soon if it doesn't respond
         LLAppViewer* app = LLAppViewer::instance();
+        // Normally we'd include preferences, but serializing them can be expensive.
+        // There is also a chance this won't be processed if the logout request arrives first.
+        app->sendViewerStatistics(false /*no preferences*/);
         app->sendSimpleLogoutRequest();
         app->earlyExitNoNotify();
 
@@ -1873,25 +1934,17 @@ bool LLViewerWindow::handleTimerEvent(LLWindow *window)
     return false;
 }
 
-// <FS:Dax> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
-// bool LLViewerWindow::handleDeviceChange(LLWindow* window)
-// {
-//     if (!LLViewerJoystick::getInstance()->isJoystickInitialized())
-//     {
-//         LLViewerJoystick::getInstance()->init(true);
-//         return true;
-//     }
-//     return false;
-// }
-// </FS>
-
-bool LLViewerWindow::handleDeviceChange(LLWindow *window, bool deviceRemoved) 
+bool LLViewerWindow::handleDeviceChange(LLWindow *window, const std::string& change_type, bool deviceIsJoystick, bool deviceRemoved) // <FS:Dax> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
 {
     // give a chance to use a joystick after startup (hot-plugging)
-    if (!deviceRemoved && !LLViewerJoystick::getInstance()->isJoystickInitialized())
+    if (deviceIsJoystick && !deviceRemoved && !LLViewerJoystick::getInstance()->isJoystickInitialized()) // <FS:Dax> [FIRE-10419] Added deviceRemoved bool to prevent reinitialize on disconnect.
     {
         LLViewerJoystick::getInstance()->init(true);
         return true;
+    }
+    else
+    {
+        LL_INFOS("Window") << "Device change event: " << change_type << LL_ENDL;
     }
     return false;
 }
@@ -1914,6 +1967,7 @@ bool LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
 
 bool LLViewerWindow::handleDisplayChanged()
 {
+    LL_INFOS("Window") << "Display change event" << LL_ENDL;
     LLFontGL::sResolutionGeneration++;
     return false;
 }
@@ -1996,6 +2050,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     LLWindowListener::KeyboardGetter getter = [](){ return gKeyboard; };
     mWindowListener = std::make_unique<LLWindowListener>(this, getter);
     mViewerWindowListener = std::make_unique<LLViewerWindowListener>(this);
+    mStatsListener = std::make_unique<LLStatsListener>();
 
     mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
     mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
@@ -2530,14 +2585,35 @@ void LLViewerWindow::initWorldUI()
         physical_mem = LLMemory::getMaxMemKB();
     }
 
-    if (!gNonInteractive && physical_mem > MIN_PHYSICAL_MEMORY)
+    if (!gNonInteractive)
     {
-        LL_INFOS() << "Preloading cef instances" << LL_ENDL;
+        if (physical_mem > MIN_PHYSICAL_MEMORY)
+        {
+            LL_INFOS() << "Preloading cef instances" << LL_ENDL;
 
-        LLFloaterReg::getInstance("destinations");
-        LLFloaterReg::getInstance("avatar_welcome_pack");
-        LLFloaterReg::getInstance("search");
-        LLFloaterReg::getInstance("marketplace");
+            LLFloaterReg::getInstance("destinations");
+            LLFloaterReg::getInstance("avatar_welcome_pack");
+            // <FS:TJ> Preload the CEF instance of the currently used legacy search floater
+            //LLFloaterReg::getInstance("search");
+            if (gSavedSettings.getBOOL("FSUseFSLegacySearch"))
+            {
+                LLFloaterReg::getInstance("search");
+            }
+            else
+            {
+                LLFloaterReg::getInstance("legacy_search");
+            }
+            // </FS:TJ>
+            LLFloaterReg::getInstance("marketplace");
+        }
+        // <FS:Ansariel> OpenSim support
+        //else if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+        else if (LLGridManager::instance().isInSecondLife() && gSavedSettings.getBOOL("FirstLoginThisInstall"))
+        // </FS:Ansariel>
+        {
+            // Preload the welcome pack for first-time login even on low end hardware
+            LLFloaterReg::getInstance("avatar_welcome_pack");
+        }
     }
 
     // <FS:Zi> Autohide main chat bar if applicable
@@ -4265,7 +4341,10 @@ void LLViewerWindow::updateLayout()
         && tool != gToolNull
         && tool != LLToolCompInspect::getInstance()
         && tool != LLToolDragAndDrop::getInstance()
-        && !gSavedSettings.getBOOL("FreezeTime"))
+        // <FS:PP> Speed optimisation
+        // && !gSavedSettings.getBOOL("FreezeTime"))
+        && !LLPipeline::FreezeTime)
+        // </FS:PP>
     {
         // Suppress the toolbox view if our source tool was the pie tool,
         // and we've overridden to something else.
@@ -5977,11 +6056,26 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
     if (image->save(filepath))
     {
         playSnapshotAnimAndSound();
+
+        // Show clickable notification with filepath
+        LLSD args;
+        args["FILEPATH"] = filepath;
+
+        LLSD payload;
+        payload["filepath"] = filepath;
+
+// <FS:PP> We don't need forced SnapshotSavedToComputer notiification, since we have SnapshotSavedToDisk string already in place
+//         LLNotificationsUtil::add("SnapshotSavedToComputer",
+//                                  args,
+//                                  payload.with("respond_on_mousedown", true),
+//                                  boost::bind(&LLViewerWindow::onSnapshotNotificationClick, _1, _2));
+// </FS:PP>
+
         if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
         {
-            LLStringUtil::format_map_t args;
-            args["FILENAME"] = filepath;
-            FSCommon::report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
+            LLStringUtil::format_map_t chatlog_args;
+            chatlog_args["FILENAME"] = filepath;
+            FSCommon::report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", chatlog_args));
         }
         success_cb();
     }
@@ -5994,6 +6088,16 @@ void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_save
 void LLViewerWindow::resetSnapshotLoc()
 {
     gSavedPerAccountSettings.setString("SnapshotBaseDir", std::string());
+}
+
+// static
+void LLViewerWindow::onSnapshotNotificationClick(const LLSD& notification, const LLSD& response)
+{
+    std::string filepath = notification["payload"]["filepath"].asString();
+    if (!filepath.empty())
+    {
+        gDirUtilp->openDir(filepath);
+    }
 }
 
 // static
@@ -7331,11 +7435,15 @@ void LLViewerWindow::setUIVisibility(bool visible)
     }
 
     // <FS:Ansariel> Notification not showing if hiding the UI
-    FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-    mRootView->getChildView("chiclet_container")->setVisible(visible && gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
-    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
+    static LLCachedControl<bool> autohide_chat_bar(gSavedSettings, "AutohideChatBar");
+    static LLCachedControl<bool> show_navbar_navigation_panel(gSavedSettings, "ShowNavbarNavigationPanel");
+    static LLCachedControl<bool> show_navbar_favorites_panel(gSavedSettings, "ShowNavbarFavoritesPanel");
+    static LLCachedControl<bool> internal_show_group_notices_top_right(gSavedSettings, "InternalShowGroupNoticesTopRight");
+    FSNearbyChat::instance().showDefaultChatBar(visible && !autohide_chat_bar());
+    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && show_navbar_navigation_panel());
+    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && show_navbar_favorites_panel());
+    mRootView->getChildView("chiclet_container")->setVisible(visible && internal_show_group_notices_top_right());
+    mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !internal_show_group_notices_top_right());
     // </FS:Ansariel>
 
     // <FS:Zi> Is done inside XUI now, using visibility_control

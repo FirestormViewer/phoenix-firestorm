@@ -8,6 +8,15 @@
  mouse_opaque="false"
  name="panel_dir_groups"
  width="778">
+    <string name="searching_text">
+        Searching...
+    </string>
+    <string name="not_found_text">
+        None found.
+    </string>
+    <string name="found_text">
+        [COUNT] found.
+    </string>
     <button
      image_overlay="Arrow_Left_Off"
      image_disabled="PushButton_Disabled"
@@ -55,6 +64,7 @@
      width="150">
         Enter search terms:
     </text>
+    <!-- <FS:TJ> Fix legacy group search to better support maturity settings
     <check_box
      top_delta="0"
      control_name="ShowMatureGroups"
@@ -67,32 +77,40 @@
      left="510"
      mouse_opaque="true"
      name="incmature"
-     width="100" />
-    <line_editor
-     bevel_style="in"
-     border_style="line"
-     border_thickness="1"
-     top_pad="5"
-     follows="left|right|top"
-     font="SansSerif"
-     height="18"
-     left="5"
-     max_length="63"
-     mouse_opaque="true"
-     name="name"
-     width="650" />
-    <button
+     width="100" /> -->
+    <combo_box
+     control_name="FSSearchGroupMaturity"
      follows="right|top"
      layout="topleft"
-     font="SansSerif"
-     halign="center"
-     height="20"
-     label="Search"
-     top_delta="0"
-     left_pad="5"
-     mouse_opaque="true"
-     name="Search"
-     width="105" />
+     height="18"
+     allow_text_entry="false"
+     left="609"
+     top_delta="-2"
+     left_pad="2"
+     name="groups_maturity"
+     width="167">
+       <combo_box.item
+        label="General"
+        name="Desired_PG"
+        value="13" />
+       <combo_box.item
+        label="General and Moderate"
+        name="Desired_Mature"
+        value="21" />
+       <combo_box.item
+        label="General, Moderate, Adult"
+        name="Desired_Adult"
+        value="42" />
+		</combo_box>
+    <!-- </FS:TJ> -->
+    <search_combo_box
+     layout="topleft"
+     follows="left|top|right"
+     height="23"
+     left="5"
+     name="name"
+     top="26"
+     width="770"/>
     <scroll_list
      background_visible="true"
      layout="topleft"

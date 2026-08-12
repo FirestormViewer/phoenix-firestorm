@@ -41,6 +41,7 @@
 #include "lldiriterator.h"
 #include "stringize.h"
 #include "llstring.h"
+#include "llprocess.h"
 #include <boost/bind.hpp>
 #include <algorithm>
 
@@ -113,6 +114,36 @@ std::vector<std::string> LLDir::getFilesInDir(const std::string &dirname)
     }
     return v;
 }
+
+// <FS:TJ> For CEF cache purging in a background thread
+std::vector<std::string> LLDir::getDirectoriesInDir(const std::string& dirname)
+{
+    // Returns a vector of directory names.
+
+    std::filesystem::path    p = fsyspath(dirname);
+    std::vector<std::string> v;
+    std::error_code          ec;
+
+    if (!std::filesystem::exists(p, ec) || ec)
+        return{};
+
+    if (!std::filesystem::is_directory(p, ec) || ec)
+        return{};
+
+    std::filesystem::directory_iterator end_iter;
+    for (std::filesystem::directory_iterator dir_itr(p, ec); dir_itr != end_iter && !ec;)
+    {
+        if (auto status = dir_itr->status(ec); !ec && std::filesystem::is_directory(status))
+        {
+            v.push_back(dir_itr->path().filename().string());
+        }
+
+        dir_itr.increment(ec);
+    }
+
+    return v;
+}
+// </FS:TJ>
 
 S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 {
@@ -1248,6 +1279,61 @@ LLDir::SepOff LLDir::needSep(const std::string& path, const std::string& name) c
     // but not both. So don't add a separator, and don't skip any characters:
     // simple concatenation will do the trick.
     return SepOff(false, 0);
+}
+
+void LLDir::openDir(const std::string& filepath)
+{
+    if (filepath.empty())
+    {
+        LL_WARNS() << "Cannot open file browser: filepath is empty" << LL_ENDL;
+        return;
+    }
+
+    // Extract directory path from full filepath
+    std::string dir_path = getDirName(filepath);
+
+    LLProcess::Params params;
+
+#if LL_WINDOWS
+    // Windows: Use explorer.exe with /select flag to highlight the file
+    std::string system_root = LLStringUtil::getenv("SystemRoot");
+    if (system_root.empty())
+    {
+        system_root = LLStringUtil::getenv("WINDIR");
+    }
+    if (system_root.empty())
+    {
+        LL_WARNS() << "Neither SystemRoot nor WINDIR environment variable is set" << LL_ENDL;
+        system_root = "C:\\Windows"; // Last resort fallback
+    }
+    params.executable = system_root + "\\explorer.exe";
+    params.args.add("/select,");
+    params.args.add(filepath);
+#elif LL_DARWIN
+    // macOS: Use 'open' command with -R flag to reveal in Finder
+    params.executable = "/usr/bin/open";
+    params.args.add("-R");
+    params.args.add(filepath);
+#elif LL_LINUX
+    // Linux: Use xdg-open to open the directory
+    // Note: Most file managers don't support file selection, so we open the directory
+    params.executable = "/usr/bin/xdg-open";
+    params.args.add(dir_path);
+#else
+    LL_WARNS() << "Platform not supported for file browser opening" << LL_ENDL;
+    return;
+#endif
+
+    params.autokill = false; // Don't kill the file browser when viewer exits
+
+    if (!LLProcess::create(params))
+    {
+        LL_WARNS() << "Failed to open file browser for: " << filepath << LL_ENDL;
+    }
+    else
+    {
+        LL_INFOS() << "Opened file browser for: " << filepath << LL_ENDL;
+    }
 }
 
 void dir_exists_or_crash(const std::string &dir_name)

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="Brak zablokowanych rezydentów lub obiektów." />
+	<string name="no_filtered_blocked" value="Brak zablokowanych rezydentów lub obiektów pasujących do wyszukiwania." />
+	<string name="loading_blocked" value="Ładowanie zablokowanych rezydentów i obiektów..." />
+	<string name="failed_blocked" value="Lista zablokowanych jest obecnie niedostępna." />
 	<panel name="blocked_buttons_panel">
 		<filter_editor label="Filtruj" name="blocked_filter_input" />
 		<menu_button name="blocked_gear_btn" tool_tip="Akcje możliwe do wykonania dla wybranego Rezydenta lub obiektu" />

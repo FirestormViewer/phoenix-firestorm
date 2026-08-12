@@ -1210,7 +1210,8 @@ Etkin grubunuz adına arazi satın almak için gerekli izne sahip değilsiniz.
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Anahtar kelime tek bir kelime olmalıdır; değiştirme boş olamaz.
+		Anahtar kelime tek bir kelime olmalıdır; değiştirme boş olamaz. Anahtar kelimede izin verilen noktalama: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Bu değiştirme listesi geçerli değil.
@@ -1460,7 +1461,6 @@ Yeni bir ana konum ayarlamak isteyebilirsiniz.
 		Karakteriniz birazdan görünecek.
 
 Yürümek için ok tuşlarını kullanın.
-Yardım almak ya da [CURRENT_GRID] hakkında daha fazla bilgi edinmek için istediğiniz zaman F1 tuşuna basın.
 Lütfen bir erkek ya da kadın avatar seçin. Fikrinizi daha sonra değiştirebilirsiniz.
 		<usetemplate name="okcancelbuttons" notext="Kadın" yestext="Erkek"/>
 	</notification>
@@ -4543,4 +4543,16 @@ Lütfen kendi envanterinize kopyalayın ve yeniden deneyin.
 	<notification name="TrackLoadMismatch">
 		Rota [TRACK1] kaynağından [TRACK2] hedefine yüklenemiyor.
 	</notification>
+
+<!-- Firestorm Region Group Titles -->
+  <notification name="FSSetTitleRegion">
+Seçilen grup unvanına atamak için bir bölgenin tam adını girin.
+Atama kaydedilmeden önce ad doğrulanacaktır.
+  </notification>
+
+  <notification name="FSSetTitleRegionNotFound">
+'[REGION]' bölgesi bulunamadı. Lütfen adı kontrol edip tekrar deneyin.
+  </notification>
+<!-- Firestorm Region Group Titles -->
+
 </notifications>

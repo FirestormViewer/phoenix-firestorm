@@ -32,8 +32,14 @@
 #include "llbutton.h"
 #include "llfloaterdirectory.h"
 #include "lltextbox.h"
+#include "lluri.h" // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
 #include "llviewercontrol.h"
 #include "llweb.h"
+
+// <FS:TJ> Get the correct SearchURL from the login response if available
+#include "lfsimfeaturehandler.h"
+#include "llviewernetwork.h"
+// </FS:TJ>
 
 static LLPanelInjector<LLPanelDirWeb> t_panel_dir_web("panel_dir_web");
 
@@ -56,6 +62,11 @@ bool LLPanelDirWeb::postBuild()
     mBtnForward->setClickedCallback([this](LLUICtrl*, const LLSD&) { mWebBrowser->navigateForward(); });
 
     mWebBrowser = findChild<LLMediaCtrl>("web_search");
+    // <FS:PP> Load openID cookie and log in the user
+    mWebBrowser->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+    LLViewerMedia::getInstance()->getOpenIDCookie(mWebBrowser);
+    // </FS:PP>
+
     navigateToDefaultPage();
     mWebBrowser->addObserver(this);
 
@@ -89,11 +100,34 @@ void LLPanelDirWeb::onVisibilityChange(bool new_visibility)
 
 void LLPanelDirWeb::navigateToDefaultPage()
 {
-    std::string url = gSavedSettings.getString("SearchURL");
+// <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    navigateToSearchPage("standard", "");
+}
+
+void LLPanelDirWeb::navigateToSearchPage(const std::string& category, const std::string& query, const std::string& collection)
+{
+// </FS:PP>
+    // <FS:TJ> Get the correct SearchURL from the login response if available
+    //std::string url = gSavedSettings.getString("SearchURL");
+    std::string url = LFSimFeatureHandler::instance().searchURL();
+    if (url.empty())
+    {
+        url = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+    }
+    // </FS:TJ>
 
     LLSD subs;
-    subs["QUERY"] = "";
-    subs["TYPE"] = "standard";
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    // subs["QUERY"] = "";
+    // subs["TYPE"] = "standard";
+    subs["QUERY"] = LLURI::escape(query);
+    subs["TYPE"] = category.empty() ? "standard" : category;
+    subs["COLLECTION"] = "";
+    if (subs["TYPE"].asString() == "standard" && !collection.empty())
+    {
+        subs["COLLECTION"] = "&collection_chosen=" + collection;
+    }
+    // </FS:PP>
     // Default to PG
     std::string maturity = "g";
     if (gAgent.prefersAdult())
@@ -146,3 +180,11 @@ void LLPanelDirWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event
         mStatusBarText->setText(link);
     }
 }
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirWeb::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    mWebBrowser->setFocus(true);
+    return true;
+}
+// </FS:Ansariel>

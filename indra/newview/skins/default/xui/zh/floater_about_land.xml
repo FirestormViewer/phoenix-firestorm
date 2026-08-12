@@ -104,9 +104,9 @@
 			<text name="GroupText">
 				正在載入...
 			</text>
-			<button label="設定" label_selected="設定中..." name="Set..." width="90" />
+			<button label="設定" name="Set..."/>
 			<check_box label="允許轉讓給群組" name="check deed" tool_tip="群組工作人員可將這土地轉讓給群組，使其得到群組土地設定的支援." />
-			<button label="轉讓" label_selected="轉讓中..." name="Deed..." tool_tip="你必須是所選群組的工作人員才能轉讓土地." />
+			<button label="轉讓" name="Deed..." tool_tip="你必須是所選群組的工作人員才能轉讓土地." />
 			<check_box label="所有者透過轉讓操作進行捐獻" name="check contrib" tool_tip="將土地轉讓給群組，表示上一個所有者會捐獻足夠土地來支援轉讓" />
 			<text name="For Sale:">
 				出售：
@@ -118,7 +118,7 @@
 				價格：[PRICE] L$ ([PRICE_PER_SQM] L$/平方公尺）
 			</text>
 			<text name="SalePending" />
-			<button label="出售土地" label_selected="出售土地中..." name="Sell Land..." />
+			<button label="出售土地" name="Sell Land..." />
 			<text name="For sale to">
 				出售給：[BUYER]
 			</text>
@@ -130,7 +130,7 @@
 			</text>
 			<button label="取消土地出售" label_selected="取消土地出售" name="Cancel Land Sale" />
 			<text name="Claimed:">
-				已收取：
+				認領於：
 			</text>
 			<text name="DateClaimText">
 				星期二 8月 15 13:47:25 2006
@@ -147,13 +147,13 @@
 			<text name="DwellText">
 				載入中...
 			</text>
-			<button label="購買土地" label_selected="購買土地中..." name="Buy Land..." />
-			<button label="林登出售" label_selected="林登出售中..." name="Linden Sale..." tool_tip="土地必須有人擁有、已設有內容，並且不在拍賣中。" />
+			<button label="購買土地" name="Buy Land..." />
+			<button label="林登出售" name="Linden Sale..." tool_tip="土地必須有人擁有、已設有內容，並且不在拍賣中。" />
 			<button label="指令碼資訊" name="Scripts..." />
-			<button label="為群組購買" label_selected="為群組購買中..." name="Buy For Group..." />
-			<button label="購買通行權" label_selected="購買通行權中..." name="Buy Pass..." tool_tip="通行權允許你暫時可出入這塊土地。" />
-			<button label="放棄土地" label_selected="放棄土地中..." name="Abandon Land..." />
-			<button label="收回土地" label_selected="收回土地中..." name="Reclaim Land..." />
+			<button label="為群組購買" name="Buy For Group..." />
+			<button label="購買通行權" name="Buy Pass..." tool_tip="通行權允許你暫時可出入這塊土地。" />
+			<button label="放棄土地" name="Abandon Land..." />
+			<button label="收回土地" name="Reclaim Land..." />
 		</panel>
 		<panel label="契約" name="land_covenant_panel">
 			<panel.string name="can_resell">
@@ -240,37 +240,37 @@
 				[COUNT]
 			</text>
 			<text name="Primitives on parcel:">
-				地塊土地影響：
+				地塊土地佔用：
 			</text>
 			<text name="total_objects_text">
 				[COUNT]
 			</text>
 			<text name="Owned by parcel owner:">
-				地塊所有者所擁有：
+				地塊所有者佔用：
 			</text>
 			<text name="owner_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOwner" />
-			<button label="退回" label_selected="退回中..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnOwner..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Set to group:">
-				設定群組：
+				已設定的群組占用：
 			</text>
 			<text name="group_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowGroup" />
-			<button label="退回" label_selected="退回中..." name="ReturnGroup..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnGroup..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Owned by others:">
-				其他人所擁有：
+				其他人佔用：
 			</text>
 			<text name="other_objects_text">
 				[COUNT]
 			</text>
 			<button label="顯示" label_selected="顯示" name="ShowOther" />
-			<button label="退回" label_selected="退回中..." name="ReturnOther..." tool_tip="退回物件給它們的所有者。" />
+			<button label="退回" name="ReturnOther..." tool_tip="退回物件給它們的所有者。" />
 			<text name="Selected / sat upon:">
-				已選 / 坐在上面：
+				已選 / 被人坐著：
 			</text>
 			<text name="selected_objects_text">
 				[COUNT]
@@ -278,12 +278,11 @@
 			<text name="Autoreturn">
 				自動送返其他居民的物件（分鐘，設為 0 可取消自動）：
 			</text>
-			<line_editor name="clean other time" />
 			<text name="Object Owners:">
 				物件所有者：
 			</text>
-			<button label="更新清單" label_selected="更新清單" name="Refresh List" tool_tip="更新物件清單" />
-			<button label="退回物件" label_selected="退回物件中..." name="Return objects..." />
+			<button label="更新清單" name="Refresh List" tool_tip="更新物件清單" />
+			<button label="退回物件" name="Return objects..." />
 			<name_list name="owner list">
 				<name_list.columns label="類型" name="type" />
 				<name_list.columns label="名稱" name="name" />
@@ -384,7 +383,7 @@
 			<text name="allow_see_label">
 				其他地塊的化身可以看見本地塊裡的化身，並相互聊天
 			</text>
-			<check_box label="檢視化身" name="SeeAvatarsCheck" tool_tip="允許其他地塊的化身看到本地塊包括你在內的化身，並可互相聊天。" />
+			<check_box name="SeeAvatarsCheck" tool_tip="允許其他地塊的化身看到本地塊包括你在內的化身，並可互相聊天。" />
 			<text name="landing_point">
 				登陸點：[LANDING]
 			</text>

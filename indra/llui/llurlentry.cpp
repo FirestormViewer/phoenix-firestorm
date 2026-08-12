@@ -586,7 +586,9 @@ LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
                             "|"
                             "(https://([-\\w\\.]*\\.)?secondlifegrid\\.net(:\\d{1,5})?)"
                             "|"
-                            "(https?://([-\\w\\.]*\\.)?secondlife\\.io(:\\d{1,5})?))"
+                            "(https?://([-\\w\\.]*\\.)?secondlife\\.io(:\\d{1,5})?)"
+                            "|"
+                            "(https?://([-\\w\\.]*\\.)?secondlife-status\\.statuspage\\.io(:\\d{1,5})?))" // <FS:PP> Add trusted domains
                             "\\/\\S*",
         boost::regex::perl|boost::regex::icase);
 
@@ -630,12 +632,54 @@ LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
     mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)"
                             "|"
-                            "https?://([-\\w\\.]*\\.)?secondlifegrid\\.net(?!\\S)",
+                            "https?://([-\\w\\.]*\\.)?secondlifegrid\\.net(?!\\S)"
+                            // <FS:PP> Add trusted domains
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?secondlife\\.io(?!\\S)"
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?secondlife-status\\.statuspage\\.io(?!\\S)",
+                            // </FS:PP>
                             boost::regex::perl|boost::regex::icase);
 
     mIcon = "Hand";
     mMenuName = "menu_url_http.xml";
 }
+
+// <FS:PP> Add trusted domains
+//
+// LLUrlEntryFirestormURL Describes *firestormviewer.org/ and *phoenixviewer.com/ urls to substitute icon 'fstrusted.png' before link
+//
+LLUrlEntryFirestormURL::LLUrlEntryFirestormURL()
+{
+    mPattern = boost::regex("((http://([-\\w\\.]*\\.)?firestormviewer\\.org)"
+                            "|"
+                            "(https://([-\\w\\.]*\\.)?firestormviewer\\.org(:\\d{1,5})?)"
+                            "|"
+                            "(http://([-\\w\\.]*\\.)?phoenixviewer\\.com)"
+                            "|"
+                            "(https://([-\\w\\.]*\\.)?phoenixviewer\\.com(:\\d{1,5})?))"
+                            "\\/\\S*",
+                            boost::regex::perl|boost::regex::icase);
+
+    mIcon = "fstrusted";
+    mMenuName = "menu_url_http.xml";
+    mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+//
+// LLUrlEntrySimpleFirestormURL Describes *firestormviewer.org and *phoenixviewer.com urls to substitute icon 'fstrusted.png' before link
+//
+LLUrlEntrySimpleFirestormURL::LLUrlEntrySimpleFirestormURL()
+{
+    mPattern = boost::regex("https?://([-\\w\\.]*\\.)?firestormviewer\\.org(?!\\S)"
+                            "|"
+                            "https?://([-\\w\\.]*\\.)?phoenixviewer\\.com(?!\\S)",
+                            boost::regex::perl|boost::regex::icase);
+
+    mIcon = "fstrusted";
+    mMenuName = "menu_url_http.xml";
+}
+// </FS:PP>
 
 //
 // LLUrlEntryAgent Describes a Second Life agent Url, e.g.,

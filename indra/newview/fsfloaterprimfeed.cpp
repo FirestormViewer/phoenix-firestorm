@@ -28,34 +28,25 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "fsfloaterbigpreview.h"
 #include "fsfloaterprimfeed.h"
+#include "fsprimfeedauth.h"
 #include "fsprimfeedconnect.h"
-#include "llagent.h"
 #include "llagentui.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "llfloaterreg.h"
-#include "lliconctrl.h"
-#include "llimagefiltersmanager.h"
-#include "llresmgr.h" // LLLocale
-#include "llsdserialize.h"
-#include "llloadingindicator.h"
-#include "llslurl.h"
-#include "lltrans.h"
 #include "llfloatersnapshot.h"
-#include "llsnapshotlivepreview.h"
-#include "llfloaterbigpreview.h"
-#include "llviewerregion.h"
-#include "llviewercontrol.h"
-#include "llviewermedia.h"
-#include "lltabcontainer.h"
-#include "llviewerparcelmgr.h"
-#include <boost/regex.hpp>
-#include "llspinctrl.h"
-
-#include "llviewernetwork.h"
+#include "llfloaterreg.h"
+#include "llimagefiltersmanager.h"
 #include "llnotificationsutil.h"
-#include "fsprimfeedauth.h"
+#include "llsdserialize.h"
+#include "llslurl.h"
+#include "llsnapshotlivepreview.h"
+#include "llspinctrl.h"
+#include "lltrans.h"
+#include "lltabcontainer.h"
+#include "llviewercontrol.h"
+#include "llweb.h"
 
 static LLPanelInjector<FSPrimfeedPhotoPanel>   t_panel_photo("fsprimfeedphotopanel");
 static LLPanelInjector<FSPrimfeedAccountPanel> t_panel_account("fsprimfeedaccountpanel");
@@ -123,7 +114,7 @@ bool FSPrimfeedPhotoPanel::postBuild()
     mCustomSnapshotWidth   = getChild<LLSpinCtrl>("custom_snapshot_width");
     mCustomSnapshotHeight  = getChild<LLSpinCtrl>("custom_snapshot_height");
     mKeepAspectRatioCbx    = getChild<LLCheckBoxCtrl>("keep_aspect_ratio");
-    mBigPreviewFloater     = LLFloaterReg::getTypedInstance<LLFloaterBigPreview>("big_preview");
+    mBigPreviewFloater     = LLFloaterReg::getTypedInstance<FSFloaterBigPreview>("fs_big_preview");
 
     // Update custom resolution controls with lambdas
     mCustomSnapshotWidth->setCommitCallback([this](LLUICtrl*, const LLSD&) { updateResolution(true); });
@@ -290,12 +281,12 @@ void FSPrimfeedPhotoPanel::onClickBigPreview()
     // Toggle the preview
     if (isPreviewVisible())
     {
-        LLFloaterReg::hideInstance("big_preview");
+        LLFloaterReg::hideInstance("fs_big_preview");
     }
     else
     {
         attachPreview();
-        LLFloaterReg::showInstance("big_preview");
+        LLFloaterReg::showInstance("fs_big_preview");
     }
 }
 
@@ -826,7 +817,7 @@ FSFloaterPrimfeed::FSFloaterPrimfeed(const LLSD& key) :
 
 void FSFloaterPrimfeed::onClose(bool app_quitting)
 {
-    if (auto big_preview_floater = LLFloaterReg::getTypedInstance<LLFloaterBigPreview>("big_preview"))
+    if (auto big_preview_floater = LLFloaterReg::getTypedInstance<FSFloaterBigPreview>("fs_big_preview"))
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
     }
@@ -835,7 +826,7 @@ void FSFloaterPrimfeed::onClose(bool app_quitting)
 
 void FSFloaterPrimfeed::onCancel()
 {
-    if (auto big_preview_floater = LLFloaterReg::getTypedInstance<LLFloaterBigPreview>("big_preview"))
+    if (auto big_preview_floater = LLFloaterReg::getTypedInstance<FSFloaterBigPreview>("fs_big_preview"))
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
     }

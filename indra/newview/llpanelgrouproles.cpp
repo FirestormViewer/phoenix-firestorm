@@ -615,7 +615,7 @@ void LLPanelGroupSubTab::buildActionCategory(LLScrollListCtrl* ctrl,
         row["columns"][1]["column"] = "action";
         row["columns"][1]["type"] = "text";
         row["columns"][1]["value"] = LLTrans::getString(action_set->mActionSetData->mName);
-        row["columns"][1]["font"]["name"] = "SANSSERIF_SMALL";
+        row["columns"][1]["font"]["name"] = "SANSSERIF";
 
 
         LLScrollListItem* title_row = ctrl->addElement(row, ADD_BOTTOM, action_set->mActionSetData);
@@ -701,7 +701,7 @@ void LLPanelGroupSubTab::buildActionCategory(LLScrollListCtrl* ctrl,
 
             row["columns"][column_index]["column"] = "action";
             row["columns"][column_index]["value"] = (*ra_it)->mDescription;
-            row["columns"][column_index]["font"] = "SANSSERIF_SMALL";
+            row["columns"][column_index]["font"] = "SANSSERIF";
 
             if(mHasGroupBanPower)
             {
@@ -1395,19 +1395,23 @@ void LLPanelGroupMembersSubTab::activate()
     LLPanelGroupSubTab::activate();
     if (!mActivated)
     {
-        if (!gdatap || !gdatap->isMemberDataComplete())
-        {
-            static LLCachedControl<bool> enable_pagination(gSavedSettings, "UseGroupMemberPagination", false);
-            const U32 page_size = enable_pagination() ? 50 : 0;
-            std::string sort_column_name = mMembersList->getSortColumnName();
-            bool sort_descending = !mMembersList->getSortAscending();
-            LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mGroupID, page_size, 0, sort_column_name, sort_descending);
-        }
+        // <FS:TJ> Don't send requests on the nobody group and fix group member list being empty
+        if (mGroupID.notNull())
+        { // </FS:TJ>
+            if (!gdatap || !gdatap->isMemberDataComplete())
+            {
+                static LLCachedControl<bool> enable_pagination(gSavedSettings, "UseGroupMemberPagination", false);
+                const U32 page_size = enable_pagination() ? 50 : 0;
+                std::string sort_column_name = mMembersList->getSortColumnName();
+                bool sort_descending = !mMembersList->getSortAscending();
+                LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mGroupID, page_size, 0, sort_column_name, sort_descending);
+            }
 
-        if (!gdatap || !gdatap->isRoleMemberDataComplete())
-        {
-            LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(mGroupID);
-        }
+            if (!gdatap || !gdatap->isRoleMemberDataComplete())
+            {
+                LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(mGroupID);
+            }
+        } // <FS:TJ/>
 
         update(GC_ALL);
         mActivated = true;
@@ -1743,15 +1747,15 @@ void LLPanelGroupMembersSubTab::addMemberToList(LLGroupMemberData* data)
     LLNameListCtrl::NameItem item_params;
     item_params.value = data->getID();
 
-    item_params.columns.add().column("name").font.name("SANSSERIF_SMALL").style("NORMAL");
+    item_params.columns.add().column("name").font.name("SANSSERIF").style("NORMAL");
 
     item_params.columns.add().column("donated").value(donated.getString())
-            .font.name("SANSSERIF_SMALL").style("NORMAL");
+            .font.name("SANSSERIF").style("NORMAL");
 
     item_params.columns.add().column("online").value(data->getOnlineStatus())
-            .font.name("SANSSERIF_SMALL").style("NORMAL");
+            .font.name("SANSSERIF").style("NORMAL");
 
-    item_params.columns.add().column("title").value(data->getTitle()).font.name("SANSSERIF_SMALL").style("NORMAL");;
+    item_params.columns.add().column("title").value(data->getTitle()).font.name("SANSSERIF").style("NORMAL");;
 
     mMembersList->addNameItemRow(item_params);
 
@@ -2040,9 +2044,11 @@ LLPanelGroupRolesSubTab::LLPanelGroupRolesSubTab()
     mRolesList(NULL),
     mAssignedMembersList(NULL),
     mAllowedActionsList(NULL),
+    mActionDescription(NULL),
     mRoleName(NULL),
     mRoleTitle(NULL),
     mRoleDescription(NULL),
+    mMembersNotLoadedLbl(NULL),
     mMemberVisibleCheck(NULL),
     mDeleteRoleButton(NULL),
     mCopyRoleButton(NULL),
@@ -2071,6 +2077,7 @@ bool LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
     mAssignedMembersList = parent->getChild<LLNameListCtrl>("role_assigned_members");
     mAllowedActionsList = parent->getChild<LLScrollListCtrl>("role_allowed_actions");
     //mActionDescription  = parent->getChild<LLTextEditor>("role_action_description"); // <FS:Ansariel> Undo changes from MAINT-2929
+    mMembersNotLoadedLbl = parent->getChild<LLUICtrl>("members_not_loaded");
 
     mRoleName = parent->getChild<LLLineEditor>("role_name");
     mRoleTitle = parent->getChild<LLLineEditor>("role_title");
@@ -2303,12 +2310,18 @@ void LLPanelGroupRolesSubTab::update(LLGroupChange gc)
         }
     }
 
-    if ((GC_ROLE_MEMBER_DATA == gc || GC_MEMBER_DATA == gc)
-        && gdatap
-        && gdatap->isMemberDataComplete()
-        && gdatap->isRoleMemberDataComplete())
+    if (gdatap && gdatap->isMemberDataComplete())
     {
-        buildMembersList();
+        if ((GC_ROLE_MEMBER_DATA == gc || GC_MEMBER_DATA == gc)
+            && gdatap->isRoleMemberDataComplete())
+        {
+            buildMembersList();
+        }
+        mMembersNotLoadedLbl->setVisible(false);
+    }
+    else
+    {
+        mMembersNotLoadedLbl->setVisible(true);
     }
 }
 
@@ -3342,6 +3355,12 @@ void LLPanelGroupBanListSubTab::setBanCount(U32 ban_count)
 
 void LLPanelGroupBanListSubTab::populateBanList()
 {
+    if (mGroupID.isNull())
+    {
+        mBanList->deleteAllItems();
+        return;
+    }
+
     LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
     if(!gdatap)
     {
@@ -3357,7 +3376,7 @@ void LLPanelGroupBanListSubTab::populateBanList()
         ban_entry.value = entry->first;
         LLGroupBanData bd = entry->second;
 
-        ban_entry.columns.add().column("name").font.name("SANSSERIF_SMALL").style("NORMAL");
+        ban_entry.columns.add().column("name").font.name("SANSSERIF").style("NORMAL");
 
         // Baker TODO: MAINT-
         // Check out utc_to_pacific_time()
@@ -3372,8 +3391,8 @@ void LLPanelGroupBanListSubTab::populateBanList()
         //LL_INFOS("BAKER") << "[BAKER] BAN_DATE: " << bd.mBanDate.toHTTPDateString("%Y/%m/%d") << LL_ENDL;
         //LL_INFOS("BAKER") << "[BAKER] BAN_DATE_MODIFIED: " << ban_date_str << LL_ENDL;
 
-        //ban_entry.columns.add().column("ban_date").value(ban_date_str.font.name("SANSSERIF_SMALL").style("NORMAL");
-        ban_entry.columns.add().column("ban_date").value(bd.mBanDate.toHTTPDateString("%Y/%m/%d")).font.name("SANSSERIF_SMALL").style("NORMAL");
+        //ban_entry.columns.add().column("ban_date").value(ban_date_str.font.name("SANSSERIF").style("NORMAL");
+        ban_entry.columns.add().column("ban_date").value(bd.mBanDate.toHTTPDateString("%Y/%m/%d")).font.name("SANSSERIF").style("NORMAL");
 
         mBanList->addNameItemRow(ban_entry);
     }

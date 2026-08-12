@@ -1218,7 +1218,8 @@ Sizin aktiv qrupunuz üçün torpaq almaq hüququnuz yoxdur.
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz.
+		Açar söz tək sözdən ibarət olmalıdır və əvəzetmə sahəsi boş ola bilməz. Açar sözdə icazə verilən durğu işarələri: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Yanlış əvəzetmə siyahısı.
@@ -4002,6 +4003,9 @@ Davam edilsin?
 		"[AO_SET_NAME]" AO dəstinin adını dəyişmək mümkün deyil.
 (Ad ":" və ya "|" istisna olmaqla istənilən ASCII simvolunu ehtiva edə bilər)
 	</notification>
+	<notification name="NewAONameCantExist">
+		Bu adda animasiya dəsti artıq mövcuddur.
+	</notification>
 	<notification name="RemoveAOSet">
 		AO dəsti "[AO_SET_NAME]" siyahıdan silinsin?
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Sil"/>
@@ -4933,12 +4937,6 @@ Sifariş yerləşdir düyməsini basın. Ödəniş zamanı
 			<button name="Cancel" text="Ləğv et"/>
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		LSL rəngi buferə köçürüldü. İndi istifadə etmək üçün onu skriptə yapışdıra bilərsiniz.
-		<form name="form">
-			<ignore name="ignore" text="LSL rəngi buferə köçürüldü."/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Biz sizə kanal genişliyini 1500 KBPS-dən yuxarı təyin etməməyi tövsiyə edirik. Bunun yaxşı işləməsi ehtimalı azdır və performansınızı demək olar ki, yaxşılaşdırmayacaq.
 	</notification>
@@ -5079,6 +5077,13 @@ Bu əməliyyatı geri qaytara bilməzsiniz.
 		[AVATAR] üçün ləqəb daxil edin:
 		<form name="form">
 			<input name="message" type="text"/>
+			<button name="Create" text="Yarat"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		[COUNT] avatar üçün ləqəb daxil edin:
+		<form name="form">
 			<button name="Create" text="Yarat"/>
 			<button name="Cancel" text="Ləğv et"/>
 		</form>
@@ -5288,8 +5293,20 @@ URL defolt olaraq sıfırlansın?
 		<usetemplate name="okcancelbuttons" notext="Növbəti dəfə mənə xatırlat" yestext="Sıfırla"/>
 	</notification>
 	<notification name="WarnScriptedCamera">
-Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
+		Kameranın sıfırlanması aşağıdakı obyektlər tərəfindən bloklana bilər:
 
 [SOURCES]
+	</notification>
+	<notification name="FSSetTitleRegion">
+		Seçilmiş qrup başlığına təyin etmək üçün bölgənin dəqiq adını daxil edin.
+Ad təyinat saxlanmadan əvvəl yoxlanılacaq.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Ləğv et"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		'[REGION]' bölgəsi tapılmadı. Zəhmət olmasa adı yoxlayın və yenidən cəhd edin.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>

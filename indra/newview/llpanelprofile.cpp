@@ -81,6 +81,7 @@
 #include "llvoiceclient.h"
 #include "llweb.h"
 #include "llviewernetwork.h" // <FS:Beq> For LLGridManager
+#include "lggcontactsets.h" // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
 
 #include "fsdata.h"
 #include "fsradar.h"        // <FS:Zi> Update notes in radar when edited
@@ -117,77 +118,131 @@ LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::stri
     LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
     httpOpts->setFollowRedirects(true);
 
-    LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, first_data, httpOpts, httpHeaders);
+    // Retry stage-2 upload by re-requesting a fresh one-time uploader capability (up to 3 attempts total)
+    const S32 MAX_UPLOAD_RETRIES = 2;
+    S32 upload_retry_count = 0;
+    LLUUID result_uuid;
 
-    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    while (upload_retry_count <= MAX_UPLOAD_RETRIES)
+    {
+        // Stage 1: Request uploader URL
+        LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, first_data, httpOpts, httpHeaders);
 
-    if (!status)
-    {
-        // todo: notification?
-        LL_WARNS("AvatarProperties") << "Failed to get uploader cap " << status.toString() << LL_ENDL;
-        return LLUUID::null;
-    }
-    if (!result.has("uploader"))
-    {
-        // todo: notification?
-        LL_WARNS("AvatarProperties") << "Failed to get uploader cap, response contains no data." << LL_ENDL;
-        return LLUUID::null;
-    }
-    std::string uploader_cap = result["uploader"].asString();
-    if (uploader_cap.empty())
-    {
-        LL_WARNS("AvatarProperties") << "Failed to get uploader cap, cap invalid." << LL_ENDL;
-        return LLUUID::null;
-    }
+        LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
-    // Upload the image
-    LLCore::HttpRequest::ptr_t uploaderhttpRequest = std::make_shared<LLCore::HttpRequest>();
-    LLCore::HttpHeaders::ptr_t uploaderhttpHeaders = std::make_shared<LLCore::HttpHeaders>();
-    LLCore::HttpOptions::ptr_t uploaderhttpOpts = std::make_shared<LLCore::HttpOptions>();
-    S64 length;
-
-    {
-        llifstream instream(path_to_image.c_str(), std::iostream::binary | std::iostream::ate);
-        if (!instream.is_open())
+        if (!status)
         {
-            LL_WARNS("AvatarProperties") << "Failed to open file " << path_to_image << LL_ENDL;
+            // todo: notification?
+            LL_WARNS("AvatarProperties") << "Failed to get uploader cap " << status.toString() << LL_ENDL;
             return LLUUID::null;
         }
-        length = instream.tellg();
-    }
 
-    uploaderhttpHeaders->append(HTTP_OUT_HEADER_CONTENT_TYPE, "application/jp2"); // optional
-    uploaderhttpHeaders->append(HTTP_OUT_HEADER_CONTENT_LENGTH, llformat("%d", length)); // required!
-    uploaderhttpOpts->setFollowRedirects(true);
-
-    result = httpAdapter->postFileAndSuspend(uploaderhttpRequest, uploader_cap, path_to_image, uploaderhttpOpts, uploaderhttpHeaders);
-
-    httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-
-    LL_DEBUGS("AvatarProperties") << result << LL_ENDL;
-
-    if (!status)
-    {
-        LL_WARNS("AvatarProperties") << "Failed to upload image " << status.toString() << LL_ENDL;
-        return LLUUID::null;
-    }
-
-    if (result["state"].asString() != "complete")
-    {
-        if (result.has("message"))
+        if (!result.has("uploader"))
         {
-            LL_WARNS("AvatarProperties") << "Failed to upload image, state " << result["state"] << " message: " << result["message"] << LL_ENDL;
+            // todo: notification?
+            LL_WARNS("AvatarProperties") << "Failed to get uploader cap, response contains no data." << LL_ENDL;
+            return LLUUID::null;
         }
-        else
+
+        std::string uploader_cap = result["uploader"].asString();
+        if (uploader_cap.empty())
         {
-            LL_WARNS("AvatarProperties") << "Failed to upload image " << result << LL_ENDL;
+            LL_WARNS("AvatarProperties") << "Failed to get uploader cap, cap invalid." << LL_ENDL;
+            return LLUUID::null;
         }
-        return LLUUID::null;
+
+        // Stage 2: Upload the image
+        LLCore::HttpRequest::ptr_t uploaderhttpRequest = std::make_shared<LLCore::HttpRequest>();
+        LLCore::HttpHeaders::ptr_t uploaderhttpHeaders = std::make_shared<LLCore::HttpHeaders>();
+        LLCore::HttpOptions::ptr_t uploaderhttpOpts = std::make_shared<LLCore::HttpOptions>();
+        S64 length;
+
+        {
+            llifstream instream(path_to_image.c_str(), std::iostream::binary | std::iostream::ate);
+            if (!instream.is_open())
+            {
+                LL_WARNS("AvatarProperties") << "Failed to open file " << path_to_image << LL_ENDL;
+                return LLUUID::null;
+            }
+            length = instream.tellg();
+        }
+
+        uploaderhttpHeaders->append(HTTP_OUT_HEADER_CONTENT_TYPE, "application/jp2");
+        uploaderhttpHeaders->append(HTTP_OUT_HEADER_CONTENT_LENGTH, std::to_string(length));
+        uploaderhttpOpts->setFollowRedirects(true);
+
+        result = httpAdapter->postFileAndSuspend(uploaderhttpRequest, uploader_cap, path_to_image, uploaderhttpOpts, uploaderhttpHeaders);
+
+        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+        LL_DEBUGS("AvatarProperties") << result << LL_ENDL;
+
+        if (!status)
+        {
+            if (upload_retry_count < MAX_UPLOAD_RETRIES)
+            {
+                upload_retry_count++;
+                LL_WARNS("AvatarProperties") << "Failed to upload image (attempt " << upload_retry_count
+                                             << " of " << (MAX_UPLOAD_RETRIES + 1) << "): " << status.toString()
+                                             << ", re-requesting uploader..." << LL_ENDL;
+                llcoro::suspendUntilTimeout(1.0f);
+                continue;
+            }
+            else
+            {
+                LL_WARNS("AvatarProperties") << "Failed to upload image after " << (MAX_UPLOAD_RETRIES + 1)
+                                            << " attempts: " << status.toString() << LL_ENDL;
+                return LLUUID::null;
+            }
+        }
+
+        // Todo: should we really repeat if 'complete' not set?
+        if (result["state"].asString() != "complete")
+        {
+            if (upload_retry_count < MAX_UPLOAD_RETRIES)
+            {
+                upload_retry_count++;
+                if (result.has("message"))
+                {
+                    LL_WARNS("AvatarProperties") << "Failed to upload image, state " << result["state"]
+                                                 << " message: " << result["message"] << " (attempt "
+                                                 << upload_retry_count << " of " << (MAX_UPLOAD_RETRIES + 1)
+                                                 << "), re-requesting uploader..." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS("AvatarProperties") << "Failed to upload image (attempt " << upload_retry_count
+                                                 << " of " << (MAX_UPLOAD_RETRIES + 1)
+                                                 << "), re-requesting uploader..." << LL_ENDL;
+                }
+                llcoro::suspendUntilTimeout(1.0f);
+                continue;
+            }
+            else
+            {
+                if (result.has("message"))
+                {
+                    LL_WARNS("AvatarProperties") << "Failed to upload image after " << (MAX_UPLOAD_RETRIES + 1)
+                                                 << " attempts, state " << result["state"]
+                                                 << " message: " << result["message"] << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS("AvatarProperties") << "Failed to upload image after " << (MAX_UPLOAD_RETRIES + 1)
+                                                << " attempts" << LL_ENDL;
+                }
+                return LLUUID::null;
+            }
+        }
+
+        // Success!
+        result_uuid = result["new_asset"].asUUID();
+        break;
     }
 
-    return result["new_asset"].asUUID();
+    return result_uuid;
 }
 
 enum EProfileImageType
@@ -987,14 +1042,18 @@ void LLPanelProfileSecondLife::updateData()
 #ifdef OPENSIM
     if (LLGridManager::instance().isInOpenSim() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
-    LLUUID avatar_id = getAvatarId();
-        if (!getStarted() && avatar_id.notNull() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && !getSelfProfile())
-    {
-        setIsLoading();
+        LLUUID avatar_id = getAvatarId();
+        if (!getStarted() && avatar_id.notNull())
+        {
+            setIsLoading();
+            if (!getSelfProfile())
+            {
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
             }
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(avatar_id);
+        }
     }
-            else
+    else
 #endif
     {
         LLPanelProfilePropertiesProcessorTab::updateData();
@@ -1043,7 +1102,10 @@ void LLPanelProfileSecondLife::resetData()
 
     setDescriptionText(LLStringUtil::null);
     mGroups.clear();
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
 
     bool own_profile = getSelfProfile();
     mCanSeeOnlineIcon->setVisible(false);
@@ -1076,8 +1138,8 @@ void LLPanelProfileSecondLife::resetData()
     mGroupInviteButton->setVisible(!own_profile);
     if (own_profile && LLAvatarName::useDisplayNames())
     {
-        mDisplayNameButton->setVisible(true);
-        mDisplayNameButton->setEnabled(true);
+        mDisplayNameButton->setVisible(mAllowEdit);
+        mDisplayNameButton->setEnabled(mAllowEdit);
     }
     mShowOnMapButton->setVisible(!own_profile);
     mPayButton->setVisible(!own_profile);
@@ -1169,7 +1231,11 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
         mGroups[group_data.group_name] = group_data.group_id;
     }
 
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
+
     } // </FS>
 
 // <FS:Beq> Restore UDP profiles
@@ -1177,19 +1243,17 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     if (LLGridManager::instance().isInOpenSim())
     {
         LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
-        if (!floater_profile)
+        if (floater_profile)
         {
-            // floater is dead, so panels are dead as well
-            return;
-        }
-        LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, true);
-        if (panel_profile)
-        {
-            panel_profile->setAvatarData(avatar_data);
-        }
-        else
-        {
-            LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, true);
+            if (panel_profile)
+            {
+                panel_profile->setAvatarData(avatar_data);
+            }
+            else
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
         }
     }
 #endif
@@ -1213,15 +1277,73 @@ void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
         mGroups[group_data.group_name] = group_data.group_id;
     }
 
-    mGroupList->setGroups(mGroups);
+    // <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+    // mGroupList->setGroups(mGroups);
+    refreshGroupAndContactSetList();
+    // </FS:PP>
+
 }
 // </FS>
 
+// <FS:PP> FIRE-32401: Contact Sets on groups list in profile
+void LLPanelProfileSecondLife::refreshGroupAndContactSetList()
+{
+    std::vector<std::string> profile_contact_sets = LGGContactSets::instance().getFriendSets(getAvatarId());
+    std::vector<std::string> filtered_contact_sets;
+    std::map<std::string, LLColor4> profile_contact_set_colors;
+
+    mProfileContactSets.clear();
+    for (const std::string& set_name : profile_contact_sets)
+    {
+        if (set_name.empty() || LGGContactSets::instance().isInternalSetName(set_name))
+        {
+            continue;
+        }
+        filtered_contact_sets.push_back(set_name);
+        mProfileContactSets.insert(set_name);
+    }
+
+    static LLCachedControl<bool> fsContactSetsColorizeFriends(gSavedSettings, "FSContactSetsColorizeFriends", false);
+    if (fsContactSetsColorizeFriends)
+    {
+        for (const std::string& set_name : filtered_contact_sets)
+        {
+            profile_contact_set_colors[set_name] = LGGContactSets::instance().getSetColor(set_name);
+        }
+    }
+
+    mGroupList->setShowFavoritesSeparator(!getSelfProfile());
+    mGroupList->setGroups(mGroups);
+    mGroupList->setSecondaryGroups(filtered_contact_sets, profile_contact_set_colors);
+}
+
+// void LLPanelProfileSecondLife::openGroupProfile()
+// {
+//     LLUUID group_id = mGroupList->getSelectedUUID();
+//     LLGroupActions::show(group_id);
+// }
+
 void LLPanelProfileSecondLife::openGroupProfile()
 {
+    const std::string selected_name = mGroupList->getSelectedGroupName();
+    if (selected_name.empty())
+    {
+        return;
+    }
+
     LLUUID group_id = mGroupList->getSelectedUUID();
-    LLGroupActions::show(group_id);
+    if (group_id.notNull())
+    {
+        LLGroupActions::show(group_id);
+        return;
+    }
+
+    if (!selected_name.empty() && mProfileContactSets.find(selected_name) != mProfileContactSets.end())
+    {
+        LLFloaterReg::showInstance("imcontacts", LLSD("contact_sets"));
+    }
 }
+// </FS:PP>
 
 void LLPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
@@ -1796,11 +1918,11 @@ void LLPanelProfileSecondLife::setLoaded()
         //if (mHideAgeCombo->getVisible())
         //{
         //    mHideAgeCombo->setEnabled(true);
-        mShowInSearchCheckbox->setEnabled(true);
-        mPreviewButton->setEnabled(true); // <AS:Chanayane> Preview button
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit); // <AS:Chanayane> Preview button
         if (mHideAgeCheckbox->getVisible())
         {
-            mHideAgeCheckbox->setEnabled(true);
+            mHideAgeCheckbox->setEnabled(mAllowEdit);
         // </FS:Ansariel>
         }
         mDescriptionEdit->setEnabled(mAllowEdit);
@@ -1812,13 +1934,13 @@ void LLPanelProfileSecondLife::updateButtons()
 {
     if (getSelfProfile())
     {
-        mShowInSearchCheckbox->setVisible(true);
-        mShowInSearchCheckbox->setEnabled(true);
+        mShowInSearchCheckbox->setVisible(mAllowEdit);
+        mShowInSearchCheckbox->setEnabled(mAllowEdit);
 // <AS:Chanayane> Preview button
-        mPreviewButton->setVisible(true);
-        mPreviewButton->setEnabled(true);
+        mPreviewButton->setVisible(mAllowEdit);
+        mPreviewButton->setEnabled(mAllowEdit);
 // </AS:Chanayane>
-        mDescriptionEdit->setEnabled(true);
+        mDescriptionEdit->setEnabled(mAllowEdit);
     }
     else
     {
@@ -2307,6 +2429,13 @@ void LLPanelProfileSecondLife::onHideAgeCallback()
 
 void LLPanelProfileSecondLife::onSaveDescriptionChanges()
 {
+    // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+    if (mPreview)
+    {
+        onCommitMenu(LLSD("preview"));
+    }
+    // </FS:Trish>
+
     mDescriptionText = mDescriptionEdit->getValue().asString();
     if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
@@ -2972,6 +3101,13 @@ void LLPanelProfileFirstLife::onSetDescriptionDirty()
 
 void LLPanelProfileFirstLife::onSaveDescriptionChanges()
 {
+    // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+    if (mPreview)
+    {
+        onClickPreview();
+    }
+    // </FS:Trish>
+
     mCurrentDescription = mDescriptionEdit->getValue().asString();
     if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
@@ -3382,19 +3518,13 @@ void LLPanelProfile::updateData()
         mPanelNotes->setIsLoading();
         } // <FS:Beq/> restore udp profiles
 
-// <FS:Beq> Restore UDP profiles
+        // <FS:Beq> Restore UDP profiles
         //LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
         if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
         }
-#ifdef OPENSIM
-        else if (LLGridManager::instance().isInOpenSim())
-        {
-            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(avatar_id);
-        }
-#endif
-// </FS:Beq>
+        // </FS:Beq>
     }
 }
 

@@ -94,6 +94,11 @@
 			<menu_item_check label="Teleport təkliflərini rədd etmək" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Bütün qrup dəvətini rədd etmək" name="Reject all group invites"/>
 			<menu_item_check label="Bütün dostluq təkliflərini rədd etmək" name="Reject all friendship requests"/>
+			<menu label="Ad-Hoc konfransları" name="Ad-hoc conferences">
+				<menu_item_check label="Hamısını avtomatik olaraq rədd et və çıx" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Rədd edilənləri Ümumi söhbətə bildir" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Dostlarımdan gələni rədd etmə" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Dostlarım" name="My Friends"/>
 		<menu_item_check label="Əlaqələr" name="Contacts"/>
@@ -287,7 +292,6 @@
 		<menu_item_call label="Firestorm dəstək qrupuna qoşulun" name="firestorm_support_group"/>
 		<menu_item_call label="Firestorm təlimatlarının təqviminə bax" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestorm Hadisələr Təqvimi" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Necə ediləcəyinə dair" name="How To"/>
 		<!-- <menu_item_call label="Second Life Help" name="Second Life Help"/> -->
 		<menu_item_call label="[CURRENT_GRID] kömək" name="current_grid_help"/>
 		<menu_item_call label="[CURRENT_GRID] haqqında" name="current_grid_about"/>

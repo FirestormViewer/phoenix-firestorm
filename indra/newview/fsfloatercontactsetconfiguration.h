@@ -35,23 +35,30 @@
 class LLColorSwatchCtrl;
 class LLCheckBoxCtrl;
 class LLLineEditor;
+class LLTextEditor;
 class LLButton;
 
 class FSFloaterContactSetConfiguration : public LLFloater
 {
 public:
     FSFloaterContactSetConfiguration(const LLSD& target_set);
-    bool postBuild();
-    void onOpen(const LLSD& target_set);
-    void draw();
+    bool postBuild() override;
+    void onOpen(const LLSD& target_set) override;
+    void draw() override;
     void setFrustumOrigin(LLView* frustumOrigin);
 
 private:
-    ~FSFloaterContactSetConfiguration(){};
+    ~FSFloaterContactSetConfiguration() = default;
     void onCommitSetColor();
     void onCommitSetNotifications();
+    void onCommitSetSortByOnlineStatus();
     void onCommitDefaultColor();
+    void onCommitOfflineColor();
+    void onCommitSetAutoresponseBusy();
+    void onCommitSetAutoresponseMode();
+    void onCommitSetAutoresponseNonFriends();
     void onRenameSet();
+    void updateAutoresponseEditorEnabledState();
 
     void updateTitle();
 
@@ -59,8 +66,16 @@ private:
     std::string mContactSet;
 
     LLCheckBoxCtrl*     mNotificationCheckBox;
+    LLCheckBoxCtrl*     mSortByOnlineStatusCheckBox;
+    LLCheckBoxCtrl*     mAutoresponseBusyEnabledCheckBox;
+    LLTextEditor*       mAutoresponseBusyEditor;
+    LLCheckBoxCtrl*     mAutoresponseModeEnabledCheckBox;
+    LLTextEditor*       mAutoresponseModeEditor;
+    LLCheckBoxCtrl*     mAutoresponseNonFriendsEnabledCheckBox;
+    LLTextEditor*       mAutoresponseNonFriendsEditor;
     LLColorSwatchCtrl*  mSetSwatch;
     LLColorSwatchCtrl*  mGlobalSwatch;
+    LLColorSwatchCtrl*  mOfflineSwatch;
     LLLineEditor*       mSetName;
     LLButton*           mRenameButton;
 

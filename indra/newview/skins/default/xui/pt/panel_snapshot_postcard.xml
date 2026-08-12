@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_postcard">
 	<string name="default_subject">
-		Postal do [SECOND_LIFE].
+		Cartão-postal de [SECOND_LIFE].
 	</string>
 	<string name="default_message">
-		Confira!
+		Dá uma olhada!
 	</string>
 	<string name="upload_message">
 		Enviando...
 	</string>
 	<text name="title">
-		Email
+		E-mail
 	</text>
 	<tab_container name="postcard_tabs">
 		<panel label="Mensagem" name="panel_postcard_message"/>
 		<panel label="Configurações" name="panel_postcard_settings"/>
 	</tab_container>
-	<button label="Cancelar" name="cancel_btn"/>
+	<button label="&#x25B6; Seleção" name="cancel_btn"/>
 	<button label="Enviar" name="send_btn"/>
 </panel>

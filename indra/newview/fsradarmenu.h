@@ -39,13 +39,16 @@ namespace FSFloaterRadarMenu
 class FSRadarMenu : public LLListContextMenu
 {
 public:
-    /*virtual*/ LLContextMenu* createMenu();
+    LLContextMenu* createMenu() override;
+
 private:
     bool enableContextMenuItem(const LLSD& userdata);
     bool checkContextMenuItem(const LLSD& userdata);
     void offerTeleport();
     void teleportToAvatar();
     void onTrackAvatarMenuItemClick();
+    void onFaceTowardsAvatarMenuItemClick();
+    bool canFaceTowardsAvatar();
     void addToContactSet();
     void onSetRenderMode(const LLSD& userdata);
     bool checkSetRenderMode(const LLSD& userdata);

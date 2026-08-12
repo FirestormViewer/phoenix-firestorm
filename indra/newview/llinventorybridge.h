@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,6 +38,8 @@
 #include "lllandmarklist.h"
 #include "llfolderviewitem.h"
 #include "llsettingsbase.h"
+
+#include <string_view> // <FS:PP> Submenus grouping
 
 class LLInventoryFilter;
 class LLInventoryPanel;
@@ -87,7 +89,7 @@ public:
     virtual const LLUUID& getUUID() const { return mUUID; }
     virtual const LLUUID& getThumbnailUUID() const { return LLUUID::null; }
     virtual bool isFavorite() const { return false; }
-    virtual void clearDisplayName() { mDisplayName.clear(); }
+    virtual void clearSearchableName() { mSearchableName.clear(); }
     virtual void restoreItem() {}
     virtual void restoreToWorld() {}
 
@@ -217,12 +219,11 @@ protected:
     LLInventoryType::EType mInvType;
     bool                        mIsLink;
     LLTimer                     mTimeSinceRequestStart;
-    mutable std::string         mDisplayName;
     mutable std::string         mSearchableName;
 
     void purgeItem(LLInventoryModel *model, const LLUUID &uuid);
     void removeObject(LLInventoryModel *model, const LLUUID &uuid);
-    virtual void buildDisplayName() const {}
+    virtual void buildSearchableName() const {}
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,7 +285,7 @@ public:
 protected:
     bool confirmRemoveItem(const LLSD& notification, const LLSD& response);
     virtual bool isItemPermissive() const;
-    virtual void buildDisplayName() const;
+    virtual void buildSearchableName() const;
     void doActionOnCurSelectedLandmark(LLLandmarkList::loaded_callback_t cb);
 
 private:
@@ -305,7 +306,7 @@ public:
     void callback_dropItemIntoFolder(const LLSD& notification, const LLSD& response, LLInventoryItem* inv_item);
     void callback_dropCategoryIntoFolder(const LLSD& notification, const LLSD& response, LLInventoryCategory* inv_category);
 
-    virtual void buildDisplayName() const;
+    virtual void buildSearchableName() const;
 
     virtual void performAction(LLInventoryModel* model, std::string action);
     virtual void openItem();
@@ -908,6 +909,12 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
 void hide_context_entries(LLMenuGL& menu,
                           const menuentry_vec_t &entries_to_show,
                           const menuentry_vec_t &disabled_entries);
+
+// <FS:PP> Submenus grouping
+inline constexpr std::string_view INVENTORY_SUBMENU_MARKETPLACE{ "Marketplace" };
+inline constexpr std::string_view INVENTORY_SUBMENU_LINKS{ "Links" };
+void add_context_submenu_entry(menuentry_vec_t& items, std::string_view submenu, std::string_view item);
+// </FS:PP>
 
 // Helper functions to classify actions.
 bool isAddAction(const std::string& action);

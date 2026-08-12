@@ -58,12 +58,12 @@ void FSJointPose::setPublicPosition(const LLVector3& pos)
     mCurrentState.mPoserChangeType = POSER_CHANGE_DEFAULT;
 }
 
-void FSJointPose::setPublicRotation(bool zeroBase, E_PoserChangeType changeType, const LLQuaternion& rot)
+void FSJointPose::setPublicRotation(bool zeroBase, bool zeroBaseAsUser, E_PoserChangeType changeType, const LLQuaternion& rot)
 {
     addStateToUndo(mCurrentState);
 
     if (zeroBase)
-        zeroBaseRotation(true);
+        zeroBaseRotation(zeroBaseAsUser);
     else
         mCurrentState.mUserSpecifiedBaseZero = POSER_CHANGE_DEFAULT;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="volumepulldown_floater">
 	<slider label="Ümumi" name="System Volume"/>
-	<slider label="Düymələr" name="UI Volume"/>
+	<slider label="İnterfeys" name="UI Volume"/>
 	<slider label="Mühit" name="Wind Volume"/>
 	<check_box name="collisions_audio_play_btn" tool_tip="Toqquşma səslərini aktivləşdir"/>
 	<slider label="Səslər" name="SFX Volume"/>

@@ -40,6 +40,7 @@
 #include "llinventorydefines.h"
 #include "lllslconstants.h"
 #include "llmaterialtable.h"
+#include "llmemory.h"
 #include "llregionhandle.h"
 #include "llsd.h"
 #include "llsdserialize.h"
@@ -502,7 +503,26 @@ void send_complete_agent_movement(const LLHost& sim_host)
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
     msg->addU32Fast(_PREHASH_CircuitCode, msg->mOurCircuitCode);
-    msg->sendReliable(sim_host);
+
+    // build a lambda to be used as callback on ACK or timeout
+    void (*complete_agent_movement_callback)(void**, S32) = [](void**, S32 result)
+    {
+        if(LLApp::isExiting()) return;
+        if (result != LL_ERR_NOERR)
+        {
+            LL_WARNS("Messaging") << "CompleteAgentMovement failed with err=" << result << LL_ENDL;
+        }
+    };
+
+    // We use same retry strategy as UseCircuitCode because this is a crucial message
+    // that MUST arrive else we'll suffer a failed login/teleport/region-cross
+    msg->sendReliable(
+        sim_host,
+        gSavedSettings.getS32("UseCircuitCodeMaxRetries"),
+        false,
+        (F32Seconds)gSavedSettings.getF32("UseCircuitCodeTimeout"),
+        complete_agent_movement_callback,
+        NULL);
 }
 
 void process_logout_reply(LLMessageSystem* msg, void**)
@@ -2573,7 +2593,10 @@ void send_do_not_disturb_message (LLMessageSystem* msg, const LLUUID& from_id, c
     {
         std::string my_name;
         LLAgentUI::buildFullname(my_name);
-        std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+        // <FS> FS autoresponse feature
+        // std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+        std::string response = LLIMProcessing::getAutoresponseTextForAvatar(from_id, true, false, false, false, false, false);
+        // </FS>
         pack_instant_message(
             msg,
             gAgent.getID(),
@@ -3255,7 +3278,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
         }
 
         // <FS:Zi> Omnifilter support
-        static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+        static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
         if (use_omnifilter)
         {
             OmnifilterEngine::Haystack haystack;
@@ -3415,6 +3438,21 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
         if (mesg != "")
         {
+
+            // <FS:PP> FIRE-36367 Ability to play a sound when someone talks in Nearby Chat
+            if (chat.mSourceType == CHAT_SOURCE_AGENT &&
+                chat.mFromID.notNull() &&
+                chat.mFromID != gAgentID &&
+                !chat.mMuted &&
+                (chat.mChatType == CHAT_TYPE_WHISPER ||
+                 chat.mChatType == CHAT_TYPE_NORMAL ||
+                 chat.mChatType == CHAT_TYPE_SHOUT ||
+                 chat.mChatType == CHAT_TYPE_DIRECT))
+            {
+                make_ui_sound("UISndNearbyChat");
+            }
+            // </FS:PP>
+
             LLSD msg_notify = LLSD(LLSD::emptyMap());
             msg_notify["session_id"] = LLUUID();
             msg_notify["from_id"] = chat.mFromID;
@@ -4360,11 +4398,16 @@ void send_agent_update(bool force_send, bool send_reliable)
 
     static F32 last_draw_disatance_step = 1024;
     F32 memory_limited_draw_distance = gAgentCamera.mDrawDistance;
-
-    if (LLViewerTexture::isSystemMemoryCritical())
+    const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor();
+    // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
+    static LLCachedControl<bool> use_vram_optimization(gSavedSettings, "FSDrawDistanceVRAMOptimization", false);
+    //if (mem_factor > 1.f)
+    if (use_vram_optimization && mem_factor > 1.f)
+    // </FS:TJ>
     {
-        // If we are low on memory, reduce requested draw distance
-        memory_limited_draw_distance = llmax(gAgentCamera.mDrawDistance / LLViewerTexture::getSystemMemoryBudgetFactor(), gAgentCamera.mDrawDistance / 2.f);
+        // We are critically low on memory or recovering,
+        // limit requested draw distance
+        memory_limited_draw_distance = llmax(gAgentCamera.mDrawDistance / mem_factor, gAgentCamera.mDrawDistance / 2.f);
     }
 
     if (tp_state == LLAgent::TELEPORT_ARRIVING || LLStartUp::getStartupState() < STATE_MISC)
@@ -4543,6 +4586,7 @@ extern U32Bits gObjectData;
 
 void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // Update the data counters
     if (mesgsys->getReceiveCompressedSize())
     {
@@ -4564,6 +4608,7 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // Update the data counters
     if (mesgsys->getReceiveCompressedSize())
     {
@@ -4585,6 +4630,7 @@ void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data
 
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // Update the data counters
     if (mesgsys->getReceiveCompressedSize())
     {
@@ -4602,6 +4648,7 @@ void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if (mesgsys->getReceiveCompressedSize())
     {
         gObjectData += (U32Bytes)mesgsys->getReceiveCompressedSize();
@@ -5194,6 +5241,7 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 
 void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLUUID  animation_id;
     LLUUID  uuid;
     S32     anim_sequence_id;
@@ -5210,7 +5258,7 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
     if (!avatarp)
     {
         // no agent by this ID...error?
-        if (!gSavedSettings.getBOOL("FSRenderFriendsOnly")) // <FS:Ansariel> FIRE-32520: Prevent log spam when show friends only is enabled
+        if (!gSavedPerAccountSettings.getBOOL("FSRenderFriendsOnly")) // <FS:Ansariel> FIRE-32520: Prevent log spam when show friends only is enabled
             LL_WARNS("Messaging") << "Received animation state for unknown avatar " << uuid << LL_ENDL;
         return;
     }
@@ -5322,6 +5370,7 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 
 void process_object_animation(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLUUID  animation_id;
     LLUUID  uuid;
     S32     anim_sequence_id;
@@ -5387,6 +5436,7 @@ void process_object_animation(LLMessageSystem *mesgsys, void **user_data)
 
 void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLUUID uuid;
     mesgsys->getUUIDFast(_PREHASH_Sender, _PREHASH_ID, uuid);
 
@@ -5394,11 +5444,12 @@ void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data)
     if (avatarp)
     {
         avatarp->processAvatarAppearance( mesgsys );
+        return;
     }
-    else
-    {
-        LL_WARNS("Messaging") << "avatar_appearance sent for unknown avatar " << uuid << LL_ENDL;
-    }
+    // The avatar object doesn't exist yet.
+    // We will re-request its appearance data after it is created.
+    LLVOAvatar::registerEarlyAppearance(uuid);
+    LL_WARNS("Messaging") << "AvatarAppearance received for avatar " << uuid << " before object created" << LL_ENDL;
 }
 
 void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data)
@@ -7346,6 +7397,7 @@ void process_script_experience_details(const LLSD& experience_details, LLSD args
 
 void process_script_question(LLMessageSystem *msg, void **user_data)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // *TODO: Translate owner name -> [FIRST] [LAST]
 
     LLHost sender = msg->getSender();

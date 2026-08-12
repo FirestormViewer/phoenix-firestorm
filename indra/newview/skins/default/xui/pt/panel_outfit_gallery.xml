@@ -1,7 +1,25 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Outfit Gallery">
+	<string name="outfit_photo_string">
+		Foto do look "[OUTFIT_NAME]"
+	</string>
+	<string name="no_outfits_msg">
+		Você ainda não tem looks. Tente [secondlife:///app/search/all/ a busca].
+	</string>
+	<string name="no_matched_outfits_msg">
+		Não encontrou o que procurava? Tente [secondlife:///app/search/all/[SEARCH_TERM] a busca].
+	</string>
+	<text name="no_outfits_txt">
+		Buscando...
+	</text> 
 	<panel name="bottom_panel">
-		<menu_button name="options_gear_btn" tool_tip="Mostrar opções adicionais"/>
-		<button name="trash_btn" tool_tip="Apagar roupa selecionada"/>
+		<menu_button name="options_gear_btn" tool_tip="Opções"/>
+		<text name="OutfitcountText">
+			[COUNT] looks
+		</text>
+		<text name="avatar_complexity_label">
+			Complexidade: [WEIGHT]
+		</text>
+		<button name="trash_btn" tool_tip="Excluir look selecionado"/>
 	</panel>
 </panel>

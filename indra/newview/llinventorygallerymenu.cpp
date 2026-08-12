@@ -186,6 +186,16 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
             gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(buffer));
         }
     }
+    // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
+    else if ("copy_name" == action)
+    {
+        LLViewerInventoryItem* item = gInventory.getItem(mUUIDs.front());
+        if (item)
+        {
+            gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(item->getName()));
+        }
+    }
+    // </FS:MJR> [FIRE-36793]
     else if ("purge" == action)
     {
         for (LLUUID& selected_id : mUUIDs)
@@ -338,26 +348,29 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata)
         {
             LLVector3d global_pos;
             landmark->getGlobalPos(global_pos);
-            std::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
+            if (!global_pos.isExactlyZero())
             {
-               gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
-               LLSD args;
-               args["SLURL"] = slurl;
-               LLNotificationsUtil::add("CopySLURL", args);
-            };
-// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
-#if defined(__GNUC__) && (__GNUC__ >= 12)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuninitialized"
-#endif
-// </FS:Zi>
-            LLLandmarkActions::getSLURLfromPosGlobal(global_pos, copy_slurl_to_clipboard_cb, true);
-// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
-#if defined(__GNUC__) && (__GNUC__ >= 12)
-#pragma GCC diagnostic pop
-#endif
-// </FS:Zi>
+                std::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
+                {
+                    // <FS:Zi> FIRE-31645 - Copy SLURL can fail, let the user know
+                    if (slurl.empty())
+                    {
+                        LLNotificationsUtil::add("LandmarkLocationUnknown");
+                        return;
+                    }
+                    // </FS:Zi>
 
+                    gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
+                    LLSD args;
+                    args["SLURL"] = slurl;
+                    LLNotificationsUtil::add("CopySLURL", args);
+                };
+                LLLandmarkActions::getSLURLfromPosGlobal(global_pos, copy_slurl_to_clipboard_cb, true);
+            }
+            else
+            {
+                LLNotificationsUtil::add("LandmarkLocationUnknown");
+            }
         };
         LLLandmark* landmark = LLLandmarkActions::getLandmark(mUUIDs.front(), copy_slurl_cb);
         if (landmark)
@@ -706,7 +719,10 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
     {
         if (is_agent_inventory && (obj->getType() != LLAssetType::AT_LINK_FOLDER))
         {
-            items.push_back(std::string("Replace Links"));
+            // <FS:PP> Submenus grouping
+            // items.push_back(std::string("Replace Links"));
+            add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Replace Links");
+            // </FS:PP>
         }
         if (obj->getType() == LLAssetType::AT_LANDMARK)
         {
@@ -777,7 +793,10 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             static LLCachedControl<bool> inventory_linking(gSavedSettings, "InventoryLinking", true);
             if (inventory_linking)
             {
-                items.push_back(std::string("Paste As Link"));
+                // <FS:PP> Submenus grouping
+                // items.push_back(std::string("Paste As Link"));
+                add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Paste As Link");
+                // </FS:PP>
 
                 if (selected_item)
                 {
@@ -865,6 +884,7 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             {
                 items.push_back(std::string("Copy"));
             }
+            items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
         }
         else if(!is_folder)
         {
@@ -916,6 +936,7 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             {
                 disabled_items.push_back(std::string("Copy"));
             }
+            items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
         }
         if((obj->getType() == LLAssetType::AT_SETTINGS)
            || ((obj->getType() <= LLAssetType::AT_GESTURE)
@@ -1068,9 +1089,13 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
 
         if (can_list)
         {
-            items.push_back(std::string("Marketplace Separator"));
-            items.push_back(std::string("Marketplace Copy"));
-            items.push_back(std::string("Marketplace Move"));
+            // <FS:PP> Submenus grouping
+            // items.push_back(std::string("Marketplace Separator"));
+            // items.push_back(std::string("Marketplace Copy"));
+            // items.push_back(std::string("Marketplace Move"));
+            add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Copy");
+            add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Move");
+            // </FS:PP>
 
             if (!can_list_on_marketplace(selected_id))
             {

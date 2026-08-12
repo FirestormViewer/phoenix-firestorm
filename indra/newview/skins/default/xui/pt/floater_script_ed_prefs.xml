@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_script_colors" title="CORES DE SCRIPT">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_script_colors" title="Preferências do editor de script">
 	<text name="color_pickers_label">
 		Escolha as cores desejadas:
 	</text>
@@ -10,7 +10,10 @@
 		Cursor
 	</text>
 	<text name="background_label">
-		Segundo plano
+		Fundo
+	</text>
+	<text name="section_label">
+		Seções
 	</text>
 	<text name="datatype_label">
 		Tipos de dados
@@ -18,31 +21,53 @@
 	<text name="event_label">
 		Eventos
 	</text>
-	<text name="string_literal_label">
-		Sequência literal
-	</text>
-	<text name="constant_label">
-		Constante
-	</text>
-	<text name="flow_control_label">
-		Controle de fluxo
+	<text name="comment_label">
+		Comentário
 	</text>
 	<text name="function_label">
 		Função
 	</text>
-	<text name="comment_label">
-		Comentário
+	<text name="string_literal_label">
+		Literais de string
 	</text>
-	<script_editor name="Script Preview">
-		/* Um script de exemplo */
-default
-{
-    state_entry()
-    {
-        // Comment
-        string greeting = &quot;Olá&quot;;
-        llSay(PUBLIC_CHANNEL, greeting);
-    }
-}
-	</script_editor>
+	<text name="constant_label">
+		Constante
+	</text>
+	<text name="i_constant_label">
+		Const. inteira
+	</text>
+	<text name="s_constant_label">
+		Const. string
+	</text>
+	<text name="f_constant_label">
+		Const. float
+	</text>
+	<text name="c_constant_label">
+		Const. composta
+	</text>
+	<text name="flow_control_label">
+		Controle de fluxo
+	</text>
+	<text name="preprocessor_label">
+		Pré-processador
+	</text>
+	<text name="prefs_label">
+		Opções do editor de script:
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Converter tabulações em espaços" tool_tip="Se ativado, tabulações são convertidas em espaços (geralmente 4) quando um script é colado de um editor externo."/>
+	<check_box label="Ativar pré-processador LSL" tool_tip="Ativa o suporte ao pré-processador para scripts LSL" name="preproc_checkbox"/>
+	<check_box label="Otimizador de script" tool_tip="Otimiza o espaço usado pelos scripts." name="preprocoptimizer_checkbox"/>
+	<check_box label="Comando switch()" tool_tip="Disponibiliza o comando switch() para controle de fluxo." name="preprocswitch_checkbox"/>
+	<check_box label="Lazy Lists" tool_tip="Ativa uma sintaxe estendida para operações com listas." name="preproclazy_checkbox"/>
+	<check_box label="#includes do disco local" tool_tip="Ativa comandos #include para incluir arquivos do disco local." name="preprocinclude_checkbox"/>
+	<text name="lslpreprocinclude_textbox">
+		Diretório de include do pré-processador:
+	</text>
+	<button label="..." label_selected="Procurar" name="SetPreprocInclude"/>
+	<text name="advanced_label">
+		Opções avançadas:
+	</text>
+	<check_box label="Encaminhar llOwnerSay para a janela de debug de script" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
+	<check_box label="Ativar botão Recompilar (útil p/ scripts #include)" name="FSScriptEditorRecompileButton_checkbox"/>
+	<button name="close_btn" label="OK"/>
 </floater>

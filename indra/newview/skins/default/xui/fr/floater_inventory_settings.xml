@@ -28,7 +28,7 @@
 	<check_box label="Étoile sur les favoris" name="favorite_star"/>
 	<check_box label="Étoile sur les dossiers contenant un favori" name="favorite_hollow_star"/>
 	<check_box label="Texte coloré" name="favorites_color"/>
-	<text name="attachment_return_txt">
+	<text name="avatar_attachment_action">
 		Appuyer sur Entrée ou cliquer deux fois sur un élément attaché à l'avatar
 	</text>
 	<combo_box name="attach_combo">

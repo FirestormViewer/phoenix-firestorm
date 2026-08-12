@@ -43,6 +43,7 @@
 #include "llvoiceclient.h"
 
 // <FS:PP> Restore open IMs from previous session
+#include "llavatarnamecache.h"
 #include "llconversationlog.h"
 #include "llimview.h"
 // </FS:PP>
@@ -123,7 +124,7 @@ void FSFloaterIMContainer::initTabs()
         }
         else
         {
-            addFloater(floater_contacts, true);
+            addFloater(floater_contacts, true, IM_NOTHING_SPECIAL);
         }
     }
 
@@ -141,7 +142,7 @@ void FSFloaterIMContainer::initTabs()
         }
         else
         {
-            addFloater(floater_chat, true);
+            addFloater(floater_chat, true, IM_NOTHING_SPECIAL);
         }
     }
 }
@@ -195,6 +196,27 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
                                     LLTabContainer::eInsertionPoint insertion_point)
 {
     if (!floaterp)
+    {
+        return;
+    }
+
+    EInstantMessage type{ IM_NOTHING_SPECIAL };
+
+    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(floaterp->getKey());
+    if (session)
+    {
+        type = session->mType;
+    }
+
+    addFloater(floaterp, select_added_floater, type, insertion_point);
+}
+
+void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
+                                    bool select_added_floater,
+                                    EInstantMessage type,
+                                    LLTabContainer::eInsertionPoint no_auto_insertion_point)
+{
+    if (!floaterp)
         return;
 
     // already here
@@ -239,11 +261,79 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
         floaterp->setCanClose(false);
         return;
     }
+
+    LLTabContainer::eInsertionPoint insertion_point =  no_auto_insertion_point;
+
+    if (mIsAddingNewSession)
+    {
+        if (gSavedSettings.getBOOL("FSAutoOrderIMTabs"))
+        {
+            const std::string order_priorities = gSavedSettings.getString("FSAutoOrderIMTabsPriorities");
+
+            // sort order uses the ascii values for 0, 1 and 2, just to make it simpler to store as a string
+            // and the values can be easily compared via greater or less than
+            std::map<EInstantMessage, S32> sort_order;
+            sort_order[IM_SESSION_GROUP_START] = order_priorities[0];
+            sort_order[IM_SESSION_CONFERENCE_START] =  order_priorities[1];
+            sort_order[IM_NOTHING_SPECIAL] = order_priorities[2];
+
+            bool insert_at_top = gSavedSettings.getBOOL("FSAutoOrderIMTabsAtTop");
+
+            if (type == IM_SESSION_INVITE)
+            {
+                // make sure group IMs are always the same value
+                type = IM_SESSION_GROUP_START;
+            }
+            bool type_found{ false };
+
+            S32 index;
+            for (index = mTabContainer->getNumLockedTabs(); index < mTabContainer->getTabCount(); index++)
+            {
+                FSFloaterIM* tab = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(index));
+                if (!tab)
+                {
+                    continue;
+                }
+
+                const LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(tab->getKey());
+                if (!session)
+                {
+                    continue;
+                }
+
+                EInstantMessage session_type = session->mType;
+                if (session_type == IM_SESSION_INVITE)
+                {
+                    // make sure group IMs are always the same value
+                    session_type = IM_SESSION_GROUP_START;
+                }
+
+                if (session_type == type)
+                {
+                    if (insert_at_top)
+                    {
+                        break;
+                    }
+                    type_found = true;
+                }
+                else if (type_found)
+                {
+                    break;
+                }
+                else if (sort_order[session_type] < sort_order[type])
+                {
+                    break;
+                }
+            }
+
+            insertion_point = (LLTabContainer::eInsertionPoint)index;
+        }
+    }
     else
     {
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3.0)
         // If we're redocking a torn off IM floater, return it back to its previous place
-        if (!mIsAddingNewSession && (floaterp->isTornOff()) && (LLTabContainer::END == insertion_point) )
+        if (floaterp->isTornOff())
         {
             LLChicletPanel* pChicletPanel = LLChicletBar::instance().getChicletPanel();
 
@@ -276,18 +366,25 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 // [/SL:KB]
     }
 
+    LLFloater* active_floater = getActiveFloater();
+
     LLMultiFloater::addFloater(floaterp, select_added_floater, insertion_point);
+
+    if (!select_added_floater && active_floater)
+    {
+        selectFloater(active_floater);
+    }
 
     LLUUID session_id = floaterp->getKey();
     mSessions[session_id] = floaterp;
     floaterp->mCloseSignal.connect(boost::bind(&FSFloaterIMContainer::onCloseFloater, this, session_id));
 }
 
-void FSFloaterIMContainer::addNewSession(LLFloater* floaterp)
+void FSFloaterIMContainer::addNewSession(LLFloater* floaterp, EInstantMessage type)
 {
     // Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
     mIsAddingNewSession = true;
-    addFloater(floaterp, false, LLTabContainer::END);
+    addFloater(floaterp, false, type);
     mIsAddingNewSession = false;
 }
 
@@ -344,8 +441,11 @@ bool FSFloaterIMContainer::hasFloater(LLFloater* floaterp)
 
 void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
+    LLFloater* session_floater = mSessions[id];
+    bool was_session_shown = session_floater && session_floater->isShown();
+
     mSessions.erase(id);
-    if (isShown())
+    if (was_session_shown && isShown())
     {
         setFocus(true);
     }
@@ -635,18 +735,14 @@ void FSFloaterIMContainer::saveOpenIMs()
     LLSD openIMs = LLSD::emptyArray();
     for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
     {
-        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
-        if (floater)
+        if (FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i)))
         {
-            LLUUID session_id = floater->getKey();
-            if (session_id.notNull())
+            if (LLUUID session_id = floater->getKey(); session_id.notNull())
             {
-                LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
-                if (session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
+                if (auto session = LLIMModel::getInstance()->findIMSession(session_id); session && session->mSessionType == LLIMModel::LLIMSession::P2P_SESSION)
                 {
                     LLSD session_data = LLSD::emptyMap();
                     session_data["other_participant_id"] = session->mOtherParticipantID;
-                    session_data["session_name"] = session->mName;
                     openIMs.append(session_data);
                 }
             }
@@ -664,30 +760,46 @@ void FSFloaterIMContainer::restoreOpenIMs()
         return;
     }
 
-    for (LLSD::array_const_iterator it = openIMs.beginArray(); it != openIMs.endArray(); ++it)
+    for (const auto& session_data : llsd::inArray(openIMs))
     {
-        LLSD session_data = *it;
-        if (session_data.isMap())
+        if (!session_data.isMap())
         {
-            LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
-            std::string session_name = session_data["session_name"].asString();
-            if (other_participant_id.notNull())
-            {
-                LLUUID new_session_id;
-                new_session_id = LLIMMgr::getInstance()->addSession(session_name, IM_NOTHING_SPECIAL, other_participant_id);
-                if (new_session_id.notNull())
-                {
-                    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
-                    if (im_floater)
-                    {
-                        if (im_floater->getHost() != this)
-                        {
-                            addFloater(im_floater, false);
-                        }
-                    }
-                }
-            }
+            continue;
         }
+
+        const LLUUID other_participant_id = session_data["other_participant_id"].asUUID();
+        if (other_participant_id.isNull())
+        {
+            continue;
+        }
+
+        LLAvatarNameCache::get(other_participant_id, boost::bind(&FSFloaterIMContainer::restoreOpenIMSession, _1, _2));
+    }
+}
+
+void FSFloaterIMContainer::restoreOpenIMSession(const LLUUID& other_participant_id, const LLAvatarName& av_name)
+{
+    if (other_participant_id.isNull())
+    {
+        return;
+    }
+
+    const LLUUID new_session_id = LLIMMgr::getInstance()->addSession(av_name.getDisplayName(), IM_NOTHING_SPECIAL, other_participant_id);
+    if (new_session_id.isNull())
+    {
+        return;
+    }
+
+    FSFloaterIM* im_floater = FSFloaterIM::show(new_session_id);
+    if (!im_floater)
+    {
+        return;
+    }
+
+    FSFloaterIMContainer* container = FSFloaterIMContainer::findInstance();
+    if (container && im_floater->getHost() != container)
+    {
+        container->addFloater(im_floater, false, IM_NOTHING_SPECIAL);
     }
 }
 // </FS:PP>

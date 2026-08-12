@@ -160,23 +160,6 @@
 ＧＰＵで検出されたＶＲＡＭを上書きします。
 これには、システムＲＡＭの一部である「共有」ＶＲＡＭを含めないでください。
 違いがわからない場合は、このコントロールをそのままにしておいてください。"/>
-			<text name="automatic_texture_downscale_settings">
-				自動テクスチャダウンスケーリング：
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="ウィンドウがアクティブでない場合、選択した秒数後にテクスチャを縮小します。">
-				非アクティブ時（0は無効）
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="ウィンドウがアクティブでない場合、選択した秒数後にテクスチャを縮小します。"/>
-			<text name="TextureDiscardBackgroundedTime_seconds">
-				秒
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="最小化されると、選択した秒数後にテクスチャを縮小します。">
-				最小化時（0は無効）
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="最小化時に、選択した秒数後にテクスチャを縮小します。"/>
-			<text name="TextureDiscardMinimizedTime_seconds">
-				秒
-			</text>
 		</panel>
 		<!-- 描画 -->
 		<panel label="レンダリング" name="Rendering">

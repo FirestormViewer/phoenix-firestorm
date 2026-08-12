@@ -32,6 +32,8 @@
 #include "llviewervisualparam.h"
 #include <atomic>
 
+#include <atomic>	// <FS:Zi> fix compile for gcc
+
 class LLAvatarAppearance;
 class LLImageRaw;
 class LLImageTGA;

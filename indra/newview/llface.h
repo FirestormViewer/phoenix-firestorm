@@ -40,6 +40,7 @@
 #include "llviewertexture.h"
 #include "lldrawable.h"
 #include "lljoint.h"
+#include "llmodel.h"// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
 class LLFacePool;
 class LLVolume;
@@ -49,7 +50,7 @@ class LLVertexProgram;
 class LLViewerTexture;
 class LLGeometryManager;
 class LLDrawInfo;
-class LLMeshSkinInfo;
+// class LLMeshSkinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
 const F32 MIN_ALPHA_SIZE = 1024.f;
 // <FS:minerjr>
@@ -109,6 +110,8 @@ public:
     LLVector3       getPositionAgent()  const;
     LLVector2       surfaceToTexture(LLVector2 surface_coord, const LLVector4a& position, const LLVector4a& normal);
     void            getPlanarProjectedParams(LLQuaternion* face_rot, LLVector3* face_pos, F32* scale) const;
+    bool            calcAlignedPlanarGLTF(const LLFace* align_to, LLVector2* res_st_offset,
+                                        LLVector2* res_st_scale, F32* res_st_rot, S32 gltf_info_index = 0) const;
     bool            calcAlignedPlanarTE(const LLFace* align_to, LLVector2* st_offset,
                                         LLVector2* st_scale, F32* st_rot, LLRender::eTexIndex map = LLRender::DIFFUSE_MAP) const;
 
@@ -270,7 +273,7 @@ public:
     LLMatrix4*  mNormalMapMatrix;
     LLDrawInfo* mDrawInfo;
     LLVOAvatar* mAvatar = nullptr;
-    LLMeshSkinInfo* mSkinInfo = nullptr;
+    LLConstPointer<LLMeshSkinInfo> mSkinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
 
     // return mSkinInfo->mHash or 0 if mSkinInfo is null
     U64 getSkinHash();

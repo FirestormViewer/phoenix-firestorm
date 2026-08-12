@@ -11,7 +11,6 @@
  width="200">
 
 <progress_bar
- color_bar="1 1 1 0.96"
  follows="left|right|top"
  height="20"
  layout="topleft"
@@ -31,12 +30,13 @@
 
 <text
  follows="left|right|top"
- height="16"
+ height="20"
  layout="topleft"
  left="10"
  name="progress_text"
  right="-64"
- top="5"
+ top="0"
+ valign="center"
  value="Progress..." />
 
 </panel>

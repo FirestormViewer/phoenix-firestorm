@@ -32,6 +32,7 @@
 #include "lldrawable.h"
 #include "llviewerregion.h"
 #include "llagentcamera.h"
+#include "llmemory.h"
 #include "llsdserialize.h"
 #include "llagent.h" // <FS:Beq/> For gAgent
 #include "llworld.h" // For LLWorld::getInstance()
@@ -492,7 +493,7 @@ void LLVOCacheEntry::updateDebugSettings()
         }
         if( (U32)high_mem_bound_MB > 2048 )
         {
-            gSavedSettings.setU32("SceneLoadLowMemoryBound", 2048);
+            gSavedSettings.setU32("SceneLoadHighMemoryBound", 2048);
         }
     }
     // </FS:Beq>
@@ -505,11 +506,16 @@ void LLVOCacheEntry::updateDebugSettings()
     static const F32 MIN_RADIUS = 1.0f;
 
     F32 draw_radius = gAgentCamera.mDrawDistance;
-    if (LLViewerTexture::isSystemMemoryCritical())
+    const F32 mem_factor = LLMemory::getSystemMemoryBudgetFactor();
+    // <FS:TJ> [FIRE-35748] Only enable the LL Draw Distance VRAM optimization when the setting is enabled
+    static LLCachedControl<bool> use_vram_optimization(gSavedSettings, "FSDrawDistanceVRAMOptimization", false);
+    //if (mem_factor > 1.f)
+    if (use_vram_optimization && mem_factor > 1.f)
+    // </FS:TJ>
     {
         // Factor is intended to go from 1.0 to 2.0
         // For safety cap reduction at 50%, we don't want to go below half of draw distance
-        draw_radius = llmax(draw_radius / LLViewerTexture::getSystemMemoryBudgetFactor(), draw_radius / 2.f);
+        draw_radius = llmax(draw_radius / mem_factor, draw_radius / 2.f);
     }
     const F32 clamped_min_radius = llclamp((F32) min_radius, MIN_RADIUS, draw_radius); // [1, mDrawDistance]
     sNearRadius = MIN_RADIUS + ((clamped_min_radius - MIN_RADIUS) * adjust_factor);
@@ -1800,7 +1806,7 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 
     if(mReadOnly)
     {
-        LL_WARNS() << "Not writing cache for " << filename << " (handle:" << handle << "): Cache is currently in read-only mode." << LL_ENDL;
+        LL_INFOS() << "Not writing cache for " << filename << " (handle:" << handle << "): Cache is currently in read-only mode." << LL_ENDL;
         return ;
     }
 
@@ -1841,7 +1847,10 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 
     if(!dirty_cache)
     {
-        LL_WARNS() << "Skipping write to cache for " << filename << " (handle:" << handle << "): cache not dirty" << LL_ENDL;
+        if (!LLAppViewer::instance()->isQuitting())
+        {
+            LL_WARNS() << "Skipping write to cache for " << filename << " (handle:" << handle << "): cache not dirty" << LL_ENDL;
+        }
         return ; //nothing changed, no need to update.
     }
 

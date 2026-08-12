@@ -21,12 +21,14 @@
 				<panel name="fs_credits_scroll_container_content_panel">
 					<text name="firestorm_intro">
  Firestorm est un projet destiné à améliorer l'immersion dans SecondLife(tm). Nous avons mis en commun les contributions d'une communauté de plusieurs développeurs qui travaillent autour du code fourni par Linden Lab ainsi que du nôtre afin de vous apporter une interface riche en possibilités et soutenue par de nombreux volontaires. Firestorm vous est fourni par The Phoenix Firestorm Project, Inc., une organisation à but non lucratif.
+ 
  L'équipe de développement Firestorm :
 					</text>
 					<text name="fs_contrib_intro">Code additionnel pour Firestorm généreusement fourni par :</text>
 					<text name="fs_support_intro">Remerciements particuliers à notre équipe d'aide Firestorm, aux contributeurs wiki, éducateurs et traducteurs :</text>
-					<text name="fs_art_intro" height="70">
+					<text name="fs_art_intro">
  Firestorm intègre Starlight modifié pour Firestorm, développé par des résidents pour les résidents, dans le but d'offrir une interface alternative, plus claire et avec de la chance, plus simple à utiliser. Pour plus de détails, consulter &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;
+ 
  Création de l'interface :
 					</text>
 				</panel>

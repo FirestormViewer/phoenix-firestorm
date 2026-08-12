@@ -13,47 +13,6 @@
 	<global name="implicitclosebutton">
 		關閉
 	</global>
-	<template name="okbutton">
-		<form>
-			<button name="OK_okbutton" text="$yestext"/>
-		</form>
-	</template>
-	<template name="okignore">
-		<form>
-			<button name="OK_okignore" text="$yestext"/>
-		</form>
-	</template>
-	<template name="okcancelbuttons">
-		<form>
-			<button name="OK_okcancelbuttons" text="$yestext"/>
-			<button name="Cancel_okcancelbuttons" text="$notext"/>
-		</form>
-	</template>
-	<template name="okcancelignore">
-		<form>
-			<button name="OK_okcancelignore" text="$yestext"/>
-			<button name="Cancel_okcancelignore" text="$notext"/>
-		</form>
-	</template>
-	<template name="okhelpbuttons">
-		<form>
-			<button name="OK_okhelpbuttons" text="$yestext"/>
-			<button name="Help" text="$helptext"/>
-		</form>
-	</template>
-	<template name="okhelpignore">
-		<form>
-			<button name="OK_okhelpignore" text="$yestext"/>
-			<button name="Help_okhelpignore" text="$helptext"/>
-		</form>
-	</template>
-	<template name="yesnocancelbuttons">
-		<form>
-			<button name="Yes" text="$yestext"/>
-			<button name="No" text="$notext"/>
-			<button name="Cancel_yesnocancelbuttons" text="$canceltext"/>
-		</form>
-	</template>
 	<notification label="未知的通知訊息" name="MissingAlert">
 		你的 [APP_NAME] 版本無法顯示它剛剛收到的通知。  請確定你安裝了最新版本的檢視器。
 
@@ -82,11 +41,15 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] 更新時出錯。  請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		[APP_NAME] 更新時出錯。請在 [https://www.firestormviewer.org/downloads 下載] 最新版本的檢視器。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="FoundLegacyNsisInstallation">
+		[APP_NAME]偵測到已安裝舊版本[VERSION]。若要解除安裝舊版本，請依照此說明操作：[https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 資訊手冊]。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		無法連線到 [CURRENT_GRID]。
+		無法連線到[CURRENT_GRID]。
 '[DIAGNOSTIC]'
 請確定你的網路連線沒有問題。
 		<usetemplate name="okbutton" yestext="確定"/>
@@ -749,7 +712,7 @@
 		<url name="url">
 			[URL]
 		</url>
-		<usetemplate ignoretext="我的顯示驅動程式太老舊" name="okcancelignore" notext="取消" yestext="是"/>
+		<usetemplate ignoretext="我的顯示驅動程式太老舊" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>
 	<notification name="UnknownGPU">
 		你的系統含有一個 [APP_NAME] 無法辨認的顯示卡。
@@ -764,6 +727,19 @@
 為了避免一些典型的驅動錯誤，圖形品質將被設定為低。一些圖形功能將被關閉。
 我們建議您更新您的顯示卡驅動程式。
 您可以在偏好設定 &gt; 顯示中重新提高圖形品質。
+	</notification>
+	<notification name="AutoFPSConfirmDisable">
+		變更此設定將停用效能自動調校，並關閉「自動設定」。
+確定要繼續嗎？
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="繼續" />
+	</notification>
+	<notification name="AdvancedLightingConfirm">
+		若要啟用進階光照，必須將圖形品質提升至等級 4。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
+	</notification>
+	<notification name="ShadowsConfirm">
+		若要啟用陰影，必須將圖形品質提升至等級 4。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定" />
 	</notification>
 	<notification name="RegionNoTerraforming">
 		這個 [REGION] 區域並不允許變更地形。
@@ -990,6 +966,10 @@
 	</notification>
 	<notification name="LandmarkAlreadyExists">
 		你已經有這個位置的地標。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="LandmarkLocationUnknown">
+		無法確定該地區的位置。該地區可能暫時不可用或已被移除。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
@@ -1340,7 +1320,8 @@
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		關鍵字必須是一個字，替換字不得空白。
+		關鍵字必須是一個字，替換字不得空白。關鍵字允許的標點符號：
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		該替換清單無效。
@@ -1388,6 +1369,20 @@
 			<button name="OK" text="確定"/>
 			<button name="Cancel" text="取消"/>
 		</form>
+	</notification>
+	<notification label="重新命名過濾器分頁" name="FSInventoryCustomTabRename">
+		新分頁名稱：
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification label="關閉過濾器分頁" name="FSInventoryCustomTabClose">
+		要關閉過濾器分頁「[NAME]」嗎？其儲存的過濾條件將會被刪除。
+		<usetemplate name="okcancelignore" notext="取消" yestext="是，關閉" ignoretext="關閉自訂庫存過濾器分頁前一律確認" />
 	</notification>
 	<notification label="重新命名手勢" name="RenameGesture">
 		新的手勢名稱：
@@ -1592,6 +1587,13 @@
 如果你是第一次使用 [CURRENT_GRID]，你將需要建立新帳號才可登錄。
 		<usetemplate name="okcancelbuttons" notext="繼續" yestext="建立帳號…"/>
 	</notification>
+	<notification name="LoginCantRemoveUsername">
+		已儲存的使用者名稱可以在我自己 &gt; 偏好設定 &gt; 進階 &gt; 記住的使用者名稱中刪除。
+	</notification>
+	<notification name="LoginCantRemoveCurUsername">
+		忘記目前登入的使用者名稱需要先登出。
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確認並登出" />
+	</notification>
 	<notification name="LoginPacketNeverReceived">
 		連線出現問題。 問題可能出在你的網路連線或 [CURRENT_GRID]。
 
@@ -1619,9 +1621,7 @@
 		你的人物很快將會出現。
 
 用方向鍵行走。
-任何時候你都可按 F1 鍵檢視幫助，進一步瞭解 [CURRENT_GRID]。
-請選擇男性或女性化身。
-以後你仍可改變這個選擇。
+請選擇男性或女性化身。 以後你仍可改變這個選擇。
 		<usetemplate name="okcancelbuttons" notext="女性" yestext="男性"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
@@ -1701,13 +1701,13 @@ SHA1指紋：[MD5_DIGEST]
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="InvalidTerrainBitDepth">
-無法設定區域紋理：
+		無法設定區域紋理：
 地形紋理 [TEXTURE_NUM] 的位元深度 [TEXTURE_BIT_DEPTH] 無效。
 
 請將紋理 [TEXTURE_NUM] 替換成RGB [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點擊「應用」。
 	</notification>
 	<notification name="InvalidTerrainAlphaNotFullyLoaded">
-無法設定區域紋理:
+		無法設定區域紋理:
 地形紋理 [TEXTURE_NUM] 未完全載入,但由於位深度為 [TEXTURE_BIT_DEPTH],假定其包含透明度。目前不支援地形紋理的透明度。
 
 如果紋理 [TEXTURE_NUM] 是不透明的,請等待紋理完全載入後再次點擊"應用"。
@@ -1715,33 +1715,39 @@ SHA1指紋：[MD5_DIGEST]
 不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
 	<notification name="InvalidTerrainAlpha">
-無法設定區域紋理:
+		無法設定區域紋理:
 地形紋理 [TEXTURE_NUM] 包含透明度。目前不支援地形紋理的透明度。
 
 請將紋理 [TEXTURE_NUM] 替換為不透明的RGB圖像,然後再次點擊"應用"。
 
 不透明度僅在地形材質(PBR金屬粗糙度)中支援,且要求 alphaMode="MASK" 和 doubleSided=false。
 	</notification>
+	<notification name="InvalidTerrainSize">
+		無法設定區域紋理：
+地形紋理 [TEXTURE_NUM] 過大 - [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y]。
+
+請將紋理 [TEXTURE_NUM] 替換為尺寸為 [MAX_SIZE]x[MAX_SIZE] 或更小的 RGB 紋理，然後再次點擊"應用"。
+	</notification>
 	<notification name="InvalidTerrainMaterialNotLoaded">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 未載入。
 
 請等待材質載入完成,或將材質 [MATERIAL_NUM] 替換為有效材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialLoadFailed">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 載入失敗。
 
 請將材質 [MATERIAL_NUM] 替換為有效材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialDoubleSided">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 是雙面材質。PBR地形目前不支援雙面材質。
 
 請將材質 [MATERIAL_NUM] 替換為 doubleSided=false 的材質。
 	</notification>
 	<notification name="InvalidTerrainMaterialAlphaMode">
-無法設定區域材質:
+		無法設定區域材質:
 地形材質 [MATERIAL_NUM] 使用了不支援的 alphaMode="[MATERIAL_ALPHA_MODE]"。
 
 請將材質 [MATERIAL_NUM] 替換為 alphaMode="OPAQUE" 或 alphaMode="MASK" 的材質。
@@ -1832,13 +1838,17 @@ SHA1指紋：[MD5_DIGEST]
 點選「確定」開始下載並安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="DownloadingUpdate">
+		正在下載更新[VERSION]版本...
+下載完成後檢視器將重新啟動。
+	</notification>
 	<notification name="OptionalUpdateReady">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 點選「確定」開始安裝。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="PromptOptionalUpdate">
-		版本[VERSION]已下載，可以開始安裝。
+		[VERSION]版本已下載，可以開始安裝。
 繼續？
 		<usetemplate canceltext="暫時不要" name="yesnocancelbuttons" notext="略過" yestext="安裝"/>
 	</notification>
@@ -2733,7 +2743,7 @@ URL:[UNTRUSTED_URL]
 			<button ignore="永不離開「請勿打擾」模式" name="No" text="取消"/>
 		</form>
 	</notification>
-	<notification name="ParcelPlayingMedia">
+	<notification label="此地塊正在播放媒體" name="ParcelPlayingMedia">
 		此地塊正在播放媒體：
 [URL]
 您想要播放嗎？
@@ -2753,7 +2763,7 @@ URL:[UNTRUSTED_URL]
 	</notification>
 	<notification name="ConfirmEmptyTrash">
 		[COUNT]個物件與資料夾將會永久刪除。 你確定你要永久刪除垃圾桶中的內容？
-		<usetemplate name="okcancelignore" notext="取消" yestext="確定"/>
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="TrashIsFull">
 		你的垃圾桶快滿了。 這可能會造成登錄的問題。
@@ -3358,7 +3368,7 @@ URL：[AUDIOURL]
 			<button name="Discard" text="丟棄"/>
 		</form>
 	</notification>
-	<notification name="UserGiveItem">
+	<notification name="UserGiveItem" label="[NAME_LABEL]傳送了一個物件">
 		[NAME_SLURL] 給了你這個 [OBJECTTYPE]：
 [ITEM_SLURL]
 		<form name="form">
@@ -3368,10 +3378,10 @@ URL：[AUDIOURL]
 			<button name="Mute" text="封鎖"/>
 		</form>
 	</notification>
-	<notification name="UserGiveItemLegacy">
+	<notification name="UserGiveItemLegacy" label="[NAME_LABEL]傳送了一個物件">
 		[NAME_SLURL] 給了你這個 [OBJECTTYPE]：
 [ITEM_SLURL]
-你想保留它嗎？」靜音」將封鎖 [NAME_SLURL] 今後的所有提議或訊息。
+你想保留它嗎？「封鎖」將封鎖 [NAME_SLURL] 今後的所有提議或訊息。
 		<form name="form">
 			<button name="Show" text="顯示"/>
 			<button name="Accept" text="保留"/>
@@ -3395,7 +3405,7 @@ URL：[AUDIOURL]
 			<button name="Info" text="資訊"/>
 		</form>
 	</notification>
-	<notification name="TeleportOffered">
+	<notification name="TeleportOffered" label="來自[NAME_LABEL]的瞬間傳送邀請">
 		[NAME_SLURL] 想要瞬間傳送你到他的地點：
 
 [MESSAGE]
@@ -3425,7 +3435,7 @@ URL：[AUDIOURL]
 
 可是，此區域含有僅限成人的內容。
 	</notification>
-	<notification name="TeleportOffered_SLUrl">
+	<notification name="TeleportOffered_SLUrl" label="來自[NAME_LABEL]的瞬間傳送邀請">
 		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 [MESSAGE]
@@ -3476,7 +3486,7 @@ URL：[AUDIOURL]
 			<button name="GoNow..." text="立即前往..."/>
 		</form>
 	</notification>
-	<notification name="OfferFriendship">
+	<notification name="OfferFriendship" label="來自[NAME_LABEL]的好友請求">
 		[NAME_SLURL] 想成為你的朋友。
 
 [MESSAGE]
@@ -3490,7 +3500,7 @@ URL：[AUDIOURL]
 	<notification name="FriendshipOffered">
 		已經邀請 [TO_NAME] 成為朋友
 	</notification>
-	<notification name="OfferFriendshipNoMessage">
+	<notification name="OfferFriendshipNoMessage" label="來自[NAME_LABEL]的好友請求">
 		[NAME_SLURL] 想成為你的朋友。
 
 （根據預設設定，你們將可看到彼此的在線狀態。）
@@ -3633,9 +3643,14 @@ URL：[AUDIOURL]
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		警告：物件「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」要求全權存取你的林登幣帳戶。 你如果允許存取帳戶，它將可在任何時候從你帳戶取走資金，或完全加以清空，或定期取走部分資金，且不會發出警告。
+		警告：物件「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」請求訪問你的林登幣賬戶，以便從中提取資金。如果你允許，它將能夠隨時提取你賬戶中的部分或全部資金，而不會再給出任何警告或請求。
 
-如果你不完全瞭解它為何要求存取你的帳戶，請勿允許。
+在決定是否允許此訪問之前，請務必了解該物件的性質以及它為何提出這樣的請求。此外，仔細考慮你是否信任這個物件的創造者。如果你對此沒有把握，請點擊「拒絕」以防止任何未經授權的資金提取。
+
+
+
+
+
 		<form name="form">
 			<button name="Grant" text="允許全權存取"/>
 			<button name="Deny" text="拒絕"/>
@@ -3821,6 +3836,12 @@ URL：[AUDIOURL]
 	<notification name="SnapshotToLocalDirNotExist">
 		將快照儲存於[PATH]時失敗：目錄不存在。
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		快照已儲存至：
+[FILEPATH]
+
+點擊以開啟資料夾。
+	</notification>
 	<notification name="PresetNotSaved">
 		儲存預設名稱[NAME]時出錯。
 	</notification>
@@ -3850,6 +3871,13 @@ URL：[AUDIOURL]
 	<notification name="VoiceIsMutedByModerator">
 		主持人已將你的語音靜音。
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		管理員已將你的附近語音靜音。
+該區域的其他人將無法聽到你說話。
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		你現在可以被該區域的其他人聽到了。
 	</notification>
 	<notification name="FailedToGetBenefits">
 		很遺憾，我們無法為這次會話取得到福利資訊。在正常的生產環境中，這不應該發生。請聯繫支援部門。這次會話將無法正常進行，我們建議重新開始會話。
@@ -4075,7 +4103,11 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		你確定要結束這段通話？
-		<usetemplate ignoretext="我掛斷前進行確認" name="okcancelignore" notext="否" yestext="是"/>
+		<usetemplate ignoretext="掛斷前進行確認" name="okcancelignore" notext="否" yestext="是"/>
+	</notification>
+	<notification name="ConfirmLeaveAdhoc">
+		你確定要離開此臨時會議嗎？
+		<usetemplate ignoretext="離開臨時會議前要求確認" name="okcancelignore" notext="否" yestext="是" />
 	</notification>
 	<notification name="ConfirmMuteAll">
 		你已選擇要將所有參與群組通話的人靜音。
@@ -4358,6 +4390,27 @@ https://wiki.firestormviewer.org/fs_voice
 		無法將動畫覆蓋集重新命名為「[AO_SET_NAME]」。
 名稱只能包含ASCII字元，不包括「:」和「|」。
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="RenameAOGroup">
+		為這個新的動畫組指定名稱：
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="RenameAOEntryMustBeASCII">
+		無法重新命名為「[AO_SET_NAME]」。
+名稱只能包含ASCII字元，不包括「:」和「|」。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="AOFolderDropNoAnimations">
+		資料夾「[NAME]」不包含可新增的動畫。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="NewAONameCantExist">
+		已經存在同名的動畫集。
+		<usetemplate name="okbutton" yestext="确定"/>
 	</notification>
 	<notification name="RemoveAOSet">
 		刪除名為「[AO_SET_NAME]」的動畫覆蓋集？
@@ -5313,12 +5366,6 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 			<button name="Cancel" text="取消"/>
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		LSL顏色程式碼已複製到剪貼簿。現在可以將其貼上到LSL指令碼中並使用。
-		<form name="form">
-			<ignore name="ignore" text="一個LSL顏色程式碼已被複制到剪貼簿。"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		建議不要將頻寬設定得高於1500 KBPS. Il est peu probable que cela fonctionne bien et cela n'améliorera presque certainement pas vos performances.
 		<usetemplate name="okbutton" yestext="確定"/>
@@ -5402,8 +5449,8 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	<notification name="ExportFinished">
 		匯出到 [FILENAME] 完成。
 	</notification>
-	<notification name="ExportCollada">
-		匯出意外失敗。有關詳細資訊，請檢視日誌檔案。
+	<notification name="ExportFailed">
+		匯出失敗。請查看日誌以取得更多詳細資訊。
 	</notification>
 	<notification name="ExportColladaSuccess">
 		[OBJECT] 成功儲存為 [FILENAME]。
@@ -5462,6 +5509,13 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		為 [AVATAR] 輸入別名：
+		<form name="form">
+			<button name="Create" text="建立"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		為 [COUNT] 位化身輸入別名：
 		<form name="form">
 			<button name="Create" text="建立"/>
 			<button name="Cancel" text="取消"/>
@@ -5797,7 +5851,7 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 		</form>
 	</notification>
 	<notification name="WhitelistReminder">
-提升 [APP_NAME] 的效能，請將其加入防毒軟體的白名單中。
+	为提升 [APP_NAME] 的效能，請將其加入防毒軟體的白名單中。
 
 某些防毒軟體可能會錯誤攔截 [APP_NAME] 的部分內容，導致效能下降並使部分功能異常。為避免這些問題，我們強烈建議您將 [APP_NAME] 加入防毒軟體的白名單（或排除清單）中。這樣可以確保程式的順暢運作。
 
@@ -5805,13 +5859,13 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
-	<notification name="ConfirmPoserOverwrite">
+	<notification label="確認覆蓋姿勢" name="ConfirmPoserOverwrite">
 		是否覆蓋現有的姿勢「[POSE_NAME]」？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="FSLargeOutfitsWarningInThisSession">
-		检测到大量装扮：[AMOUNT]。这可能会导致檢視器卡顿或连接断开。请考虑将装扮数量限制在[MAX]以内，以提升性能。 这只是一个建议，如果你的电脑运行正常，你可以放心忽略它。
-		<usetemplate ignoretext="装扮过多警告" name="okignore" yestext="确定" />
+		檢測到大量裝扮：[AMOUNT]。這可能會導致檢視器卡頓或連線中斷。請考慮將裝扮數量限制在[MAX]以內，以提升效能。 这只是一个建议，如果你的电脑运行正常，你可以放心忽略它。
+		<usetemplate ignoretext="裝扮過多警告" name="okignore" yestext="確定" />
 	</notification>
 	<notification name="PrimfeedLoginRequestFailed">
 		Primfeed 登錄請求被拒絕。
@@ -5881,5 +5935,97 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		聊天記錄檔案缺失。目前會話可能尚未產生記錄，或未啟用儲存功能。
 請前往偏好設定 &gt; 隱私 &gt; 記錄與聊天內容中啟用聊天內容儲存功能
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+
+	<notification name="FSSetTitleRegion">
+		請輸入區域的正確名稱，以將其指派給所選的群組頭銜。
+在儲存指派之前將驗證該名稱。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		找不到區域「[REGION]」。請檢查名稱並再試一次。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSet">
+		請輸入新規則集的名稱：
+		<form name="form">
+			<button name="OK" text="確定" />
+			<button name="Cancel" text="取消" />
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		名稱不能為空白。請輸入名稱後再試一次。
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		不允許使用重複名稱。請使用其他名稱再試一次。
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		請輸入規則集副本的名稱：
+		<form name="form">
+			<button name="OK" text="確定" />
+			<button name="Cancel" text="取消" />
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		名稱不能為空白。請輸入名稱後再試一次。
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		不允許使用重複名稱。請使用其他名稱再試一次。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		確定要刪除 [RULESETNAME] 嗎？
+		<usetemplate ignoretext="刪除規則集前要求確認。" name="okcancelignore" notext="取消" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		無法刪除預設規則集。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		無法刪除規則集，因為索引超出範圍。
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		無法刪除規則集，因為找不到指定名稱。
+	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		請輸入用於匯出規則集「[RULESETNAME]」的記事卡名稱：
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		庫存中找不到記事卡資料夾，無法建立記事卡。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		請輸入匯入規則集「[IMPORTNAME]」的名稱：
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		錯誤：記事卡「[IMPORTNAME]」不包含有效的規則集，無法匯入。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		錯誤：該物件不是記事卡。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="萬能過濾器匯入說明">
+		若要從記事卡匯入規則集，請在庫存中選擇相應的記事卡，然後將其拖放到此視窗中。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<ignore name="ignore" text="按下匯入按鈕時顯示萬能過濾器規則集匯入說明"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		所選記事卡名稱「[INPUTNAME]」無效，僅支援 ASCII 字元。
+		<form name="form">
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
 	</notification>
 </notifications>

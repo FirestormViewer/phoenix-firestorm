@@ -9,6 +9,12 @@
 	<floater.string name="text_add_multiple">
 		Выберите, в какой набор контактов добавить [COUNT] аватаров:
 	</floater.string>
+	<floater.string name="title_add">
+		Добавить в набор контактов...
+	</floater.string>
+	<floater.string name="button_add">
+		Добавить
+	</floater.string>
 	<button label="Добавить" name="add_btn" />
 	<button label="Отмена" name="cancel_btn" />
 </floater>

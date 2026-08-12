@@ -402,7 +402,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                 font="SansSerifMedium"
                 follows="bottom|right"
                 halign="right"
-                v_pad="6"
+                valign="center"
                 width="150">
                     Complexity: [WEIGHT]
         </text>
@@ -492,7 +492,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                 font="SansSerifMedium"
                 follows="bottom|right"
                 halign="right"
-                v_pad="6"
+                valign="center"
                 width="150">
                     Complexity: [WEIGHT]
         </text>

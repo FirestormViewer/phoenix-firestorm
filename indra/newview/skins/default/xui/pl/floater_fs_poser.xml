@@ -176,6 +176,12 @@
 	<string name="LoadDiffLabel">Ładuj różn.</string>
 	<string name="SaveDiffLabel">Zapis różn.</string>
 	<string name="OverWriteLabel">Nadpisać?</string>
+	<floater.string name="FiledateFormat">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<floater.string name="FiledateFormatAMPM">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+	</floater.string>
 	<layout_stack name="poser_stack">
 		<layout_panel name="regular_controls_layout">
 			<panel name="joints_parent_panel">
@@ -219,6 +225,8 @@
 						<panel title="Ustawienia" name="hands_presets_panel">
 							<scroll_list name="hand_presets_scroll">
 								<scroll_list.columns label="Ustawienie" name="name" />
+								<scroll_list.columns label="Data" name="load_file_date_column" />
+								<scroll_list.columns label="Data" name="load_file_date_sort_column" />
 							</scroll_list>
 							<button label="Ustaw: Lewa" name="button_loadHandPoseLeft" tool_tip="Kliknij, aby ustawić lewą rękę na wybranym ustawieniu" />
 							<button label="Ustaw: Prawa" name="button_loadHandPoseRight" tool_tip="Kliknij, aby ustawić prawą rękę na wybranym ustawieniu" />
@@ -246,7 +254,7 @@
 						<text name="trackpad_sensitivity_label">Czułość trackpada:</text>
 						<slider name="trackpad_sensitivity_slider" tool_tip="Dostosowuje czułość trackballa / kółka" />
 						<check_box name="stop_posing_on_close_checkbox" label="Stop pozy po zamknięciu" tool_tip="Brak zatrzymywania pozy może być pomocny, jeśli nie chcesz jej przypadkowo stracić." />
-						<check_box name="also_save_bvh_checkbox" label="Twórz BVH podczas zapisu" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
+						<check_box name="also_save_bvh_checkbox" label="BVH podczas zapisu" tool_tip="Podczas zapisywania pozy twórz również plik BVH, który można przesłać za pomocą 'Buduj > Prześlij > Animację', aby móc ustawiać siebie lub innych w świecie. Należy zresetować 'bazę' stawów do zera, ponieważ BVH wymaga oryginalnej pracy." />
 						<check_box name="confirm_overwrite_on_save_checkbox" label="Potwierdź nadpisanie" tool_tip="Gdy zapisujesz pozę, a plik już istnieje, musisz kliknąć przycisk zapisu ponownie, aby potwierdzić, że na pewno chcesz ją nadpisać." />
 						<check_box name="natural_direction_checkbox" label="Naturalne wyrównanie" tool_tip="Szkielet ma domyślnie nienaturalne rotacje stawów. To utrudnia pozowanie. Po zaznaczeniu stawy będą się obracać w bardziej naturalny sposób." />
 						<check_box name="show_joint_markers_checkbox" label="Wskaźniki stawów" tool_tip="Pokaż małe wskaźniki ułatwiające wybór stawów podczas pozowania." />
@@ -307,7 +315,9 @@
 			</panel>
 			<panel name="poses_loadSave">
 				<scroll_list tool_tip="Załaduj pozę dla animowanej postaci." name="poses_scroll">
-					<scroll_list.columns label="Poza" name="name" />
+					<scroll_list.columns label="Nazwa" name="load_file_name_column" />
+					<scroll_list.columns label="Data" name="load_file_date_column" />
+					<scroll_list.columns label="Data" name="load_file_date_sort_column" />
 				</scroll_list>
 				<line_editor label="Nazwa pozy do zapisu..." name="pose_save_name" />
 			</panel>

@@ -343,7 +343,9 @@ void LLFilePickerReplyThread::startPicker(const file_picked_signal_t::slot_type 
 
 void LLFilePickerReplyThread::startPicker(const file_picked_signal_t::slot_type & cb, LLFilePicker::ESaveFilter filter, const std::string & proposed_name, const file_picked_signal_t::slot_type & failure_cb)
 {
-    (new LLFilePickerReplyThread(cb, filter, proposed_name, failure_cb))->getFile();
+    // Remove invalid characters
+    std::string sanitized_name = LLDir::getScrubbedFileName(proposed_name);
+    (new LLFilePickerReplyThread(cb, filter, sanitized_name, failure_cb))->getFile();
 }
 
 void LLFilePickerReplyThread::notify(const std::vector<std::string>& filenames)
@@ -651,6 +653,15 @@ void do_bulk_upload(std::vector<std::string> filenames, bool allow_2k, const LLU
                     LLAssetID new_asset_id = tid.makeAssetID(gAgent.getSecureSessionID());
 
                     LLPointer<LLImageJ2C> formatted = new LLImageJ2C;
+
+                    // <FS:TJ> [FIRE-36296] Bulk uploading small textures should use lossless by default
+                    static LLCachedControl<bool> lossless_j2c_upload(gSavedSettings, "LosslessJ2CUpload", true);
+                    if (lossless_j2c_upload &&
+                        (raw_image->getWidth() * raw_image->getHeight() <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF))
+                    {
+                        formatted->setReversible(true);
+                    }
+                    // </FS:TJ>
 
                     if (formatted->encode(raw_image, 0.0f))
                     {

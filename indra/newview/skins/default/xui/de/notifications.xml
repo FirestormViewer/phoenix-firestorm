@@ -977,6 +977,10 @@ Dem Viewer ist beim Öffnen der Datei der Speicher ausgegangen. Die Datei ist ve
 		Sie besitzen für diesen Standort bereits eine Landmarke.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LandmarkLocationUnknown">
+		Die Position der Region konnte nicht ermittelt werden. Die Region ist möglicherweise temporär nicht verfügbar oder wurde entfernt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Sie können hier keine Landmarke erstellen, da der Landeigentümer dies verboten hat.
 	</notification>
@@ -1315,7 +1319,8 @@ Sind Sie sicher, dass Sie diese Liste löschen möchten?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein.
+		Das Schlüsselwort muss ein einziges Wort sein; die Ersetzungszeichenfolge darf nicht leer sein. Erlaubte Satzzeichen im Schlüsselwort: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		Diese Ersetzungsliste ist nicht gültig.
@@ -1364,6 +1369,20 @@ nach
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
+	</notification>
+	<notification label="Filter-Tab umbenennen" name="FSInventoryCustomTabRename">
+		Neuer Tab-Name:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification label="Filter-Tab schließen" name="FSInventoryCustomTabClose">
+		Filter-Tab „[NAME]“ schließen? Seine gespeicherten Filter werden entfernt.
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ja, schließen" ignoretext="Bestätigen, bevor ein benutzerdefinierter Filter-Tab geschlossen wird"/>
 	</notification>
 	<notification label="Geste umbenennen" name="RenameGesture">
 		Neuer Gesten-Name:
@@ -1598,7 +1617,6 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 		Ihr Avatar erscheint jeden Moment.
 
 Benutzen Sie die Pfeiltasten, um sich fortzubewegen.
-Drücken Sie F1 für Hilfe oder für weitere Informationen über [CURRENT_GRID].
 Bitte wählen Sie einen männlichen oder weiblichen Avatar.
 Sie können sich später noch umentscheiden.
 		<usetemplate name="okcancelbuttons" notext="Weiblich" yestext="Männlich"/>
@@ -3730,6 +3748,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="SnapshotToLocalDirNotExist">
 		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis existiert nicht.
 	</notification>
+	<notification name="SnapshotSavedToComputer">
+		Bildes gespeichert unter:
+[FILEPATH]
+
+Klicken, um Verzeichnis zu öffnen.
+	</notification>
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].
 	</notification>
@@ -3757,8 +3781,15 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
-		Sie wurden vom Moderator stummgeschaltet.
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NearbyVoiceMutedByModerator">
+		Ihr Sprachchat wurde vom Moderator stummgeschaltet.
+Einwohner an diesem Ort werden Sie nicht hören können.
+	</notification>
+	<notification name="NearbyVoiceUnmutedByModerator">
+		Einwohner an diesem Ort können Ihren Sprachchat jetzt hören.
 	</notification>
 	<notification name="FailedToGetBenefits">
 		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
@@ -5219,6 +5250,30 @@ Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enha
      yestext="OK"/>
   </notification>
 
+ <notification name="RenameAOGroup">
+Name für diese neue Animationsgruppe angeben:
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
+    <form name="form">
+      <button name="OK" text="OK"/>
+      <button name="Cancel" text="Abbrechen"/>
+    </form>
+  </notification>
+
+  <notification name="RenameAOEntryMustBeASCII">
+Umbenennung zu „[AO_SET_NAME]“ nicht möglich.
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
+
+  <notification name="AOFolderDropNoAnimations">
+Der Ordner „[NAME]“ enthält keine Animationen zum Hinzufügen.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
+
+  <notification name="NewAONameCantExist">
+Ein Animationsset mit diesem Namen existiert bereits.
+  </notification>
+
 <notification name="RemoveAOSet">
 Animationsset „[AO_SET_NAME]“ aus Liste löschen?
     <usetemplate
@@ -5564,15 +5619,6 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			yestext="OK"/>
 	</notification>
 
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
-		<form name="form">
-			<ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
-		</form>
-	</notification>
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-
 	<notification name="FSBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
 	</notification>
@@ -5761,6 +5807,13 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Alias für [AVATAR] eingeben:
+		<form name="form">
+			<button name="Create" text="Erstellen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Alias für [COUNT] Avatare eingeben:
 		<form name="form">
 			<button name="Create" text="Erstellen"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -5992,5 +6045,104 @@ Fehlermeldung:
 	<notification name="ChatHistoryIsMissing">
 		Chat-Verlauf-Datei ist nicht vorhanden. Entweder existiert kein Verlauf für diesen Chat oder Verläufe werden nicht gespeichert.
 Sie können das Speichern von Verläufen einschalten unter Einstellungen &gt; Privatsphäre &gt; Protokoll und Verläufe
+	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Geben Sie den genauen Namen einer Region ein, um ihn dem ausgewählten Gruppentitel zuzuweisen.
+Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		Die Region „[REGION]“ konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSet">
+		Name für neues Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterrNewRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNewRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSet">
+		Name für geklontes Regelset eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetBlank">
+		Leere Namen sind nicht erlaubt. Bitte erneut mit einem Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterCloneRuleSetDuplicate">
+		Doppelte Namen sind nicht erlaubt. Bitte erneut mit einem anderen Namen versuchen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSet">
+		Sind Sie sicher, dass sie Regelset „[RULESETNAME]“ löschen möchten?
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, bevor ein Regelset gelöscht wird." notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetDefault">
+		Standard-Regelset kann nicht geklöscht werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetOutofBounds">
+		Regelset kann nicht gelöscht werden, da sich ein Index außerhalb des Wertebereichs befindet.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterRemoveRuleSetInvalidName">
+		Regelset kann nicht gelöscht werden, da kein Set mit dem Namen gefunden wurde.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterExportRuleSet">
+		Name für Notizkarte eingeben, in die das Regel-Set „[RULESETNAME]“ exportiert wird:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterMissingCategory">
+		Der Ordner für Notizkarten ist nicht im Inventar vorhanden. Notizkarte kann nicht erstellt werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterImportRuleSet">
+		Name für das importierte Regel-Set „[IMPORTNAME]“ eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterInvalidImport">
+		Fehler: Die Notizkarte „[IMPORTNAME]“ enthält kein gültiges Regel-Set. Import kann nicht durchgeführt werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmniFilterNotANotecard">
+		Fehler: Objekt ist keine Notizkarte.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OmnifilterImportInstructions" label="Omni-Filter-Import-Anleitung">
+		Um ein Regel-Set aus einer Notizkarte zu importieren, wählen Sie die entsprechende Notizkarte im Inventar aus und ziehen sie per Drag&amp;Drop in dieses Fenster.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<ignore name="ignore" text="Instruktionen für den Import von Regel-Sets des Omni-Filters anzeigen, wenn der Import-Button gedrückt wird"/>
+		</form>
+	</notification>
+	<notification name="OmniFilterNonAscii">
+		Der gewählte Namen „[INPUTNAME]“ für die Notizkarte ist ungültig - es werden nur ASCII-Zeichen unterstützt.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
 	</notification>
 </notifications>

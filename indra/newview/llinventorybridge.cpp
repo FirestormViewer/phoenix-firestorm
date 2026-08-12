@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -142,6 +142,25 @@ bool isMarketplaceSendAction(const std::string& action)
     return ("send_to_marketplace" == action);
 }
 
+// <FS:PP> Submenus grouping
+namespace
+{
+    constexpr bool is_context_submenu_branch(std::string_view name)
+    {
+        return (name == "More") || (name == "create_new") || (name == INVENTORY_SUBMENU_MARKETPLACE) || (name == INVENTORY_SUBMENU_LINKS);
+    }
+}
+
+void add_context_submenu_entry(menuentry_vec_t& items, std::string_view submenu, std::string_view item)
+{
+    if (std::ranges::find(items, submenu) == std::ranges::end(items))
+    {
+        items.emplace_back(submenu);
+    }
+    items.emplace_back(item);
+}
+// </FS:PP>
+
 bool isPanelActive(const std::string& panel_name)
 {
     LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(false);
@@ -272,11 +291,27 @@ const std::string& LLInvFVBridge::getName() const
 
 const std::string& LLInvFVBridge::getDisplayName() const
 {
-    if(mDisplayName.empty())
+    if(mSearchableName.empty())
     {
-        buildDisplayName();
+        // first request of display name, build search string and cache it for later use
+        buildSearchableName();
     }
-    return mDisplayName;
+
+    LLInventoryModel* model = getInventoryModel();
+    if (model)
+    {
+        LLViewerInventoryCategory* cat = model->getCategory(mUUID);
+        if (cat)
+        {
+            return cat->getDisplayName();
+        }
+        LLViewerInventoryItem* item = model->getItem(mUUID);
+        if (item)
+        {
+            return item->getName();
+        }
+    }
+    return LLStringUtil::null;
 }
 
 std::string LLInvFVBridge::getSearchableDescription() const
@@ -504,7 +539,10 @@ void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
         item = (LLViewerInventoryItem*)model->getItem(bridge->getUUID());
         if (item)
         {
-            if(LLAssetType::AT_GESTURE == item->getType())
+            // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+            // if(LLAssetType::AT_GESTURE == item->getType())
+            if(LLAssetType::AT_GESTURE == item->getType() && !item->getIsLinkType())
+            // </FS:PP>
             {
                 LLGestureMgr::instance().deactivateGesture(item->getUUID());
             }
@@ -520,7 +558,10 @@ void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
             gInventory.collectDescendents( cat->getUUID(), descendent_categories, descendent_items, false );
             for (j=0; j<descendent_items.size(); j++)
             {
-                if(LLAssetType::AT_GESTURE == descendent_items[j]->getType())
+                // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+                // if(LLAssetType::AT_GESTURE == descendent_items[j]->getType())
+                if(LLAssetType::AT_GESTURE == descendent_items[j]->getType() && !descendent_items[j]->getIsLinkType())
+                // </FS:PP>
                 {
                     LLGestureMgr::instance().deactivateGesture(descendent_items[j]->getUUID());
                 }
@@ -757,7 +798,10 @@ void disable_context_entries_if_present(LLMenuGL& menu,
 
         // descend into split menus:
         LLMenuItemBranchGL* branchp = dynamic_cast<LLMenuItemBranchGL*>(menu_item);
-        if ((name == "More") && branchp)
+        // <FS:PP> Submenus grouping
+        // if ((name == "More") && branchp)
+        if (is_context_submenu_branch(name) && branchp)
+        // </FS:PP>
         {
             disable_context_entries_if_present(*branchp->getBranch(), disabled_entries);
         }
@@ -803,7 +847,10 @@ void hide_context_entries(LLMenuGL& menu,
 
         // descend into split menus:
         LLMenuItemBranchGL* branchp = dynamic_cast<LLMenuItemBranchGL*>(menu_item);
-        if (((name == "More") || (name == "create_new")) && branchp)
+        // <FS:PP> Submenus grouping
+        // if (((name == "More") || (name == "create_new")) && branchp)
+        if (is_context_submenu_branch(name) && branchp)
+        // </FS:PP>
         {
             hide_context_entries(*branchp->getBranch(), entries_to_show, disabled_entries);
         }
@@ -884,6 +931,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
             items.push_back(std::string("Copy Separator"));
         }
         items.push_back(std::string("Copy"));
+        items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
         if (!isItemCopyable() && !isItemLinkable())
 // [/SL:KB]
@@ -940,7 +988,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
         {
             if (LLAssetType::lookupCanLink(obj->getType()))
             {
-                items.push_back(std::string("Find Links"));
+                // <FS:PP> Submenus grouping
+                // items.push_back(std::string("Find Links"));
+                add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Find Links");
+                // </FS:PP>
             }
 
             if (!is_inbox && !single_folder_root)
@@ -993,12 +1044,17 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
             if (canListOnMarketplace() && !isMarketplaceListingsFolder() && !isInboxFolder())
             {
-                items.push_back(std::string("Marketplace Separator"));
+                // <FS:PP> Submenus grouping (line commented out)
+                // items.push_back(std::string("Marketplace Separator"));
 
                 if (gMenuHolder->getChild<LLView>("MarketplaceListings")->getVisible())
                 {
-                    items.push_back(std::string("Marketplace Copy"));
-                    items.push_back(std::string("Marketplace Move"));
+                    // <FS:PP> Submenus grouping
+                    // items.push_back(std::string("Marketplace Copy"));
+                    // items.push_back(std::string("Marketplace Move"));
+                    add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Copy");
+                    add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Move");
+                    // </FS:PP>
                     if (!canListOnMarketplaceNow())
                     {
                         disabled_items.push_back(std::string("Marketplace Copy"));
@@ -1034,7 +1090,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
         // </FS:TT>
         )
     {
-        items.push_back(std::string("Paste As Link"));
+        // <FS:PP> Submenus grouping
+        // items.push_back(std::string("Paste As Link"));
+        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Paste As Link");
+        // </FS:PP>
         if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
         {
             disabled_items.push_back(std::string("Paste As Link"));
@@ -1185,6 +1244,7 @@ void LLInvFVBridge::addMarketplaceContextMenuOptions(U32 flags,
                                                 menuentry_vec_t &items,
                                                 menuentry_vec_t &disabled_items)
 {
+    items.emplace_back(INVENTORY_SUBMENU_MARKETPLACE); // <FS:PP> Submenus grouping
     S32 depth = depth_nesting_in_marketplace(mUUID);
     if (depth == 1)
     {
@@ -1303,7 +1363,8 @@ void LLInvFVBridge::addMarketplaceContextMenuOptions(U32 flags,
     }
 
     // Separator
-    items.push_back(std::string("Marketplace Listings Separator"));
+    // <FS:PP> Submenus grouping (line commented out)
+    // items.push_back(std::string("Marketplace Listings Separator"));
 }
 
 void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_vec_t& disabled_items)
@@ -1312,7 +1373,10 @@ void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_v
 
     if (isAgentInventory() && obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
     {
-        items.push_back(std::string("Replace Links"));
+        // <FS:PP> Submenus grouping
+        // items.push_back(std::string("Replace Links"));
+        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Replace Links");
+        // </FS:PP>
 
         if (mRoot->getSelectedCount() != 1)
         {
@@ -1958,6 +2022,18 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
         gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(buffer));
         return;
     }
+    // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
+    else if ("copy_name" == action)
+    {
+        // Single item only
+        LLViewerInventoryItem* item = static_cast<LLViewerInventoryItem*>(getItem());
+        if (item)
+        {
+            gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(item->getName()));
+        }
+        return;
+    }
+    // </FS:MJR> [FIRE-36793]
     else if ("show_in_main_panel" == action)
     {
         LLInventoryPanel::openInventoryPanelAndSetSelection(true, mUUID, true);
@@ -2015,7 +2091,14 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
             {
                 LLVector3d global_pos;
                 landmark->getGlobalPos(global_pos);
-                LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                if (!global_pos.isExactlyZero())
+                {
+                    LLLandmarkActions::getSLURLfromPosGlobal(global_pos, &copy_slurl_to_clipboard_callback_inv, true);
+                }
+                else
+                {
+                    LLNotificationsUtil::add("LandmarkLocationUnknown");
+                }
             }
         }
     }
@@ -2060,6 +2143,11 @@ void LLItemBridge::doShowOnMap(LLLandmark* landmark)
 
 void copy_slurl_to_clipboard_callback_inv(const std::string& slurl)
 {
+    if (slurl.empty())
+    {
+        LLNotificationsUtil::add("LandmarkLocationUnknown");
+        return;
+    }
     gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
     LLSD args;
     args["SLURL"] = slurl;
@@ -2225,22 +2313,22 @@ PermissionMask LLItemBridge::getPermissionMask() const
 }
 
 // virtual
-void LLItemBridge::buildDisplayName() const
+void LLItemBridge::buildSearchableName() const
 {
-    if (getItem())
+    LLViewerInventoryItem* item = getItem();
+    if (item)
     {
-        mDisplayName.assign(getItem()->getName());
+        // for items, display name matches item name
+        mSearchableName.assign(item->getName());
     }
     else
     {
-        mDisplayName.assign(LLStringUtil::null);
+        mSearchableName.assign(LLStringUtil::null);
     }
-
-    mSearchableName.assign(mDisplayName);
     mSearchableName.append(getLabelSuffix());
     LLStringUtil::toUpper(mSearchableName);
 
-    // Name set, so trigger a sort
+    // Searchable and name set, so trigger a sort
     LLInventorySort sorter = static_cast<LLFolderViewModelInventory&>(mRootViewModel).getSorter();
     if (mParent && !sorter.isByDate())
     {
@@ -2617,39 +2705,17 @@ void LLFolderBridge::selectItem()
     }
 }
 
-void LLFolderBridge::buildDisplayName() const
+void LLFolderBridge::buildSearchableName() const
 {
-    LLFolderType::EType preferred_type = getPreferredType();
-
-    // *TODO: to be removed when database supports multi language. This is a
-    // temporary attempt to display the inventory folder in the user locale.
-    // mantipov: *NOTE: be sure this code is synchronized with LLFriendCardsManager::findChildFolderUUID
-    //      it uses the same way to find localized string
-
-    // HACK: EXT - 6028 ([HARD CODED]? Inventory > Library > "Accessories" folder)
-    // Translation of Accessories folder in Library inventory folder
-    bool accessories = false;
-    if(getName() == "Accessories")
+    LLViewerInventoryCategory* cat = gInventory.getCategory(getUUID());
+    if (cat)
     {
-        //To ensure that Accessories folder is in Library we have to check its parent folder.
-        //Due to parent LLFolderViewFloder is not set to this item yet we have to check its parent via Inventory Model
-        LLInventoryCategory* cat = gInventory.getCategory(getUUID());
-        if(cat)
-        {
-            const LLUUID& parent_folder_id = cat->getParentUUID();
-            accessories = (parent_folder_id == gInventory.getLibraryRootFolderID());
-        }
+        mSearchableName.assign(cat->getDisplayName());
     }
-
-    //"Accessories" inventory category has folder type FT_NONE. So, this folder
-    //can not be detected as protected with LLFolderType::lookupIsProtectedType
-    mDisplayName.assign(getName());
-    if (accessories || LLFolderType::lookupIsProtectedType(preferred_type))
+    else
     {
-        LLTrans::findString(mDisplayName, std::string("InvFolder ") + getName(), LLSD());
+        mSearchableName.assign(LLStringUtil::null);
     }
-
-    mSearchableName.assign(mDisplayName);
     mSearchableName.append(getLabelSuffix());
     LLStringUtil::toUpper(mSearchableName);
 
@@ -2663,6 +2729,8 @@ void LLFolderBridge::buildDisplayName() const
 
 std::string LLFolderBridge::getLabelSuffix() const
 {
+    // Folders, unlike items, have context dependent suffixes
+    // that may change as the folder is loaded
     static LLCachedControl<bool> xui_debug(gSavedSettings, "DebugShowXUINames", 0);
 
     if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= FOLDER_LOADING_MESSAGE_DELAY)
@@ -3286,6 +3354,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
                 {
                     LLInventoryItem* item = descendent_items[i];
                     if (item->getType() == LLAssetType::AT_GESTURE
+                        && !item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                         && LLGestureMgr::instance().isGestureActive(item->getUUID()))
                     {
                         LLGestureMgr::instance().deactivateGesture(item->getUUID());
@@ -3841,6 +3910,18 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
         pasteLinkFromClipboard();
         return;
     }
+    // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
+    else if ("copy_name" == action)
+    {
+        // Single item only
+        LLFolderViewFolder* f = dynamic_cast<LLFolderViewFolder*>(mInventoryPanel.get()->getItemByID(mUUID));
+        if (f)
+        {
+            gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(f->getName()));
+        }
+        return;
+    }
+    // </FS:MJR> [FIRE-36793]
     else if ("properties" == action)
     {
         showProperties();
@@ -4117,7 +4198,7 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
     // <FS:Ansariel> Show folder in new window option
     else if ("show_in_new_window" == action)
     {
-        LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mDisplayName));
+        LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mSearchableName));
     }
     // </FS:Ansariel>
 
@@ -4879,10 +4960,12 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     const LLUUID& marketplace_listings_id = model->getMarketplaceListingsUUID();
     const LLUUID &outfits_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
 
+    const bool is_mp_listings_folder = isMarketplaceListingsFolder(); // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+
     // <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
     if (mUUID == AOEngine::instance().getAOFolder())
     {
-        items.push_back(std::string("Cleanup broken Links"));
+        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Cleanup broken Links");
     }
     // </FS:Ansariel>
 
@@ -4924,7 +5007,10 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     {
         disabled_items.push_back(std::string("New Folder"));
     }
-    if (isMarketplaceListingsFolder())
+    // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+    // if (isMarketplaceListingsFolder())
+    if (is_mp_listings_folder)
+    // </FS:PP>
     {
         addMarketplaceContextMenuOptions(flags, items, disabled_items);
         if (LLMarketplaceData::instance().isUpdating(mUUID))
@@ -5024,7 +5110,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 }
 
                 // <FS:Ansariel> FIRE-4595: Paste as Link missing for outfit folders
-                items.push_back(std::string("Paste As Link"));
+                add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Paste As Link");
                 if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
                 {
                     disabled_items.push_back(std::string("Paste As Link"));
@@ -5062,10 +5148,20 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                         // Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
                         if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
                         {
-                            items.push_back(std::string("New Folder"));
-                            menu_items_added = true;
+                            // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+                            // items.push_back(std::string("New Folder"));
+                            // menu_items_added = true;
+                            if (!is_mp_listings_folder)
+                            {
+                                items.push_back(std::string("New Folder"));
+                                menu_items_added = true;
+                            }
+                            // </FS:PP>
                         }
-                        if (!isMarketplaceListingsFolder())
+                        // <FS:PP> FIRE-36377 Do not show duplicated "new folder" in MP listings window context menu
+                        // if (!isMarketplaceListingsFolder())
+                        if (!is_mp_listings_folder)
+                        // </FS:PP>
                         {
                             items.push_back(std::string("upload_options"));
                             items.push_back(std::string("upload_def"));
@@ -5094,6 +5190,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     getClipboardEntries(false, items, disabled_items, flags);
                 }
             }
+            items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
         }
 
         if (model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT) == mUUID)
@@ -5164,6 +5261,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 disabled_items.push_back(std::string("Copy"));
             }
         }
+        items.push_back(std::string("Copy Name")); // <FS:MJR> [FIRE-36793] - Inventory Context Menu - Add "Copy Name"
     }
 
     // Preemptively disable system folder removal if more than one item selected.
@@ -6420,6 +6518,7 @@ bool LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
         if (accept && drop)
         {
             if (inv_item->getType() == LLAssetType::AT_GESTURE
+                && !inv_item->getIsLinkType() // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
                 && LLGestureMgr::instance().isGestureActive(inv_item->getUUID()) && move_is_into_trash)
             {
                 LLGestureMgr::instance().deactivateGesture(inv_item->getUUID());
@@ -7221,18 +7320,29 @@ void LLCallingCardBridge::refreshFolderViewItem()
 
 void LLCallingCardBridge::checkSearchBySuffixChanges()
 {
-    if (!mDisplayName.empty())
+    if (!mSearchableName.empty())
     {
-        // changes in mDisplayName are processed by rename function and here it will be always same
+        LLViewerInventoryItem* item = getItem();
+        if (!item)
+        {
+            // checkSearchBySuffixChanges is only used by friend list
+            // so if item is not found, we removed the calling card or
+            // are no longer friends.
+            mSearchableName.clear();
+            return;
+        }
+
+        // changes in display name are processed by rename function and here it will be always same
         // suffixes are also of fixed length, and we are processing change of one at a time,
         // so it should be safe to use length (note: mSearchableName is capitalized)
-        auto old_length = mSearchableName.length();
-        auto new_length = mDisplayName.length() + getLabelSuffix().length();
+        size_t old_length = mSearchableName.length();
+        const std::string& display_name = item->getName();
+        size_t new_length = display_name.length() + getLabelSuffix().length();
         if (old_length == new_length)
         {
             return;
         }
-        mSearchableName.assign(mDisplayName);
+        mSearchableName.assign(display_name);
         mSearchableName.append(getLabelSuffix());
         LLStringUtil::toUpper(mSearchableName);
         if (new_length<old_length)
@@ -7656,7 +7766,15 @@ bool LLGestureBridge::removeItem()
 
     // This will also force close the preview window, if it exists.
     // This may actually delete *this, if mUUID is in the COF.
-    LLGestureMgr::instance().deactivateGesture(item_id);
+
+    // <FS:PP> FIRE-36458 Prevent gesture from being deactivated when its link is moved to trash
+    // LLGestureMgr::instance().deactivateGesture(item_id);
+    LLViewerInventoryItem* item = getItem();
+    if (item && !item->getIsLinkType())
+    {
+        LLGestureMgr::instance().deactivateGesture(item_id);
+    }
+    // </FS:PP>
 
     // If deactivateGesture deleted *this, then return out immediately.
     if (!model->getObject(item_id))
@@ -8280,7 +8398,7 @@ bool LLObjectBridge::renameItem(const std::string& new_name)
         new_item->updateServer(false);
         model->updateItem(new_item);
         model->notifyObservers();
-        buildDisplayName();
+        buildSearchableName();
 
         if (isAgentAvatarValid())
         {
@@ -9437,8 +9555,8 @@ void LLFavoritesFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
     menuentry_vec_t disabled_items, items;
     buildContextMenuOptions(flags, items, disabled_items);
 
-    items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
-    // <FS:TJ> [FIRE-35996] Restore allowing creating folder from selected on recent and favorites panels
+    // <FS:TJ> [FIRE-35996] Restore allowing creating new folder and folder from selected on favorites panel
+    //items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
     //items.erase(std::remove(items.begin(), items.end(), std::string("New folder from selected")), items.end());
     // </FS:TJ>
 

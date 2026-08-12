@@ -28,7 +28,7 @@
 	<check_box name="favorite_star" label="Звезда на избранных товарах"/>
 	<check_box name="favorite_hollow_star" label="Отмечать звездочкой папки содержащие избранные файлы"/>
 	<check_box name="favorites_color" label="Цветной текст"/>
-	<text name="attachment_return_txt" width="350">
+	<text name="avatar_attachment_action" width="350">
 		Нажатие Enter при прикреплении аватара
 	</text>
 	<combo_box name="attach_combo" width="350">

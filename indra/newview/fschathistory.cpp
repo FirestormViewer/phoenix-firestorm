@@ -30,8 +30,6 @@
 
 #include "fschathistory.h"
 
-#include <boost/signals2.hpp>
-
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 
@@ -45,29 +43,22 @@
 #include "llavataractions.h"
 #include "llavatariconctrl.h"
 #include "llcallingcard.h" //for LLAvatarTracker
-#include "llgroupactions.h"
 #include "llgroupmgr.h"
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltrans.h"
 #include "llfloaterreg.h"
 #include "llfloaterreporter.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llstylemap.h"
 #include "llslurl.h"
 #include "lllayoutstack.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lltoastnotifypanel.h"
-#include "lltooltip.h"
 #include "llviewerregion.h"
-#include "llviewertexteditor.h"
 #include "llworld.h"
-#include "lluiconstants.h"
 #include "llstring.h"
 #include "llurlaction.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h"
-#include "llviewernetwork.h"
 
 #if LL_SDL2
 #include "llwindow.h"
@@ -79,7 +70,6 @@
 #include "llkeyboard.h"
 #include "llpanelblockedlist.h"
 #include "rlvactions.h"
-#include "rlvcommon.h"
 #include "rlvhandler.h"
 
 static LLDefaultChildRegistry::Register<FSChatHistory> r("fs_chat_history");
@@ -218,6 +208,49 @@ public:
         {
             LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
             LLPanelBlockedList::showPanelAndSelect(getAvatarId());
+        }
+        else if (level == "report_abuse")
+        {
+            std::string time_string;
+            if (mTime > 0) // have frame time
+            {
+                time_t current_time = time_corrected();
+                time_t message_time = (time_t)(current_time - LLFrameTimer::getElapsedSeconds() + mTime);
+
+                // Report abuse shouldn't use AM/PM, use 24-hour time
+                time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
+                    + LLTrans::getString("TimeDay") + "]/["
+                    + LLTrans::getString("TimeYear") + "] ["
+                    + LLTrans::getString("TimeHour") + "]:["
+                    + LLTrans::getString("TimeMin") + "]";
+
+                LLSD substitution;
+
+                substitution["datetime"] = (S32)message_time;
+                LLStringUtil::format(time_string, substitution);
+            }
+            else
+            {
+                // From history. This might be empty or not full.
+                // See LLChatLogParser::parse
+                time_string = getChild<LLTextBox>("time_box")->getValue().asString();
+
+                // Just add current date if not full.
+                // Should be fine since both times are supposed to be SLT.
+                if (!time_string.empty() && time_string.size() < 7)
+                {
+                    time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
+                        + LLTrans::getString("TimeDay") + "]/["
+                        + LLTrans::getString("TimeYear") + "] " + time_string;
+
+                    LLSD substitution;
+                    // To avoid adding today's date to yesterday's timestamp,
+                    // use creation time instead of current time
+                    substitution["datetime"] = (S32)mCreationTime;
+                    LLStringUtil::format(time_string, substitution);
+                }
+            }
+            LLFloaterReporter::showFromChatObj(getAvatarId(), time_string, mText);
         }
         else if (level == "unblock")
         {
@@ -524,7 +557,7 @@ public:
                 time_string = getChild<LLTextBox>("time_box")->getValue().asString();
 
                 // Just add current date if not full.
-                // Should be fine since both times are supposed to be stl
+                // Should be fine since both times are supposed to be SLT
                 if (!time_string.empty() && time_string.size() < 7)
                 {
                     time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
@@ -538,7 +571,7 @@ public:
                     LLStringUtil::format(time_string, substitution);
                 }
             }
-            LLFloaterReporter::showFromChat(mAvatarID, mFrom, time_string, mText);
+            LLFloaterReporter::showFromChatAv(mAvatarID, mFrom, time_string, mText);
         }
         else if (param == "block_unblock")
         {
@@ -1651,17 +1684,15 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
             LLUIColor timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
             timestamp_style.color(timestamp_color);
             timestamp_style.readonly_color(timestamp_color);
+            LLFontDescriptor fdesc(body_message_params.font.name(), body_message_params.font.size(), moderator_style_active ? LLFontGL::getStyleFromString(moderator_timestamp_style) : LLFontGL::getStyleFromString(body_message_params.font.style()), true);
+            timestamp_style.font(LLFontGL::getFont(fdesc));
+
             if (message_from_log && !is_conversation_log)
             {
                 timestamp_style.color.alpha = FSIMChatHistoryFade;
                 timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
             }
-            //<FS:HG> FS-1734 seperate name and text styles for moderator
-            if ( moderator_style_active )
-            {
-                timestamp_style.font.style(moderator_timestamp_style);
-            }
-            //</FS:HG> FS-1734 seperate name and text styles for moderator
+
             appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
             prependNewLineState = false;
         }
@@ -1952,9 +1983,11 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
         bool is_trusted = isContentTrusted();
         setContentTrusted(chat.mFromID.isNull() && is_p2p); // <FS:Ansariel> Set trusted content temporarily for system messages
+        setNearbyChatContent(is_local); // <FS:PP> Use the nearby-chat labeled-link setting for local/object chat
         setPlainText((use_plain_text_chat_history && is_p2p) ? chat.mFromID.notNull() : use_plain_text_chat_history);
         appendText(message, prependNewLineState, body_message_params);  // <FS:Zi> FIRE-8600: TAB out of chat history
         setContentTrusted(is_trusted);
+        setNearbyChatContent(false); // <FS:PP> Use the nearby-chat labeled-link setting for local/object chat
         setPlainText(use_plain_text_chat_history);
         // Uncomment this if we never need to append to the end of a message. [FS:CR]
         //prependNewLineState = false;

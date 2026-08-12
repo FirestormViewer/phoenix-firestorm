@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="block_list_panel">
+	<string name="no_blocked" value="Aucun résident ni objet n'est bloqué."/>
+	<string name="no_filtered_blocked" value="Aucun résident ou objet bloqué ne correspond à votre recherche."/>
+	<string name="loading_blocked" value="Chargement des résidents et des objets bloqués..."/>
+	<string name="failed_blocked" value="La liste des blocages est actuellement indisponible."/>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="Nom" />
 		<fs_scroll_list.columns name="item_type" label="Type" />

@@ -40,6 +40,8 @@ public:
     /*virtual*/ void performQuery();
 
     static void onClickSearch(void *userdata);
+
+    void openProfile(); // <FS:Ansariel> Add "open profile" button
 };
 
 #endif

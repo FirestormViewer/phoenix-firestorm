@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="400"
- width="380"
+ height="467"
+ width="900"
  layout="topleft"
  can_resize="false"
  legacy_header_height="18"
  name="floater_fs_contact_set_configure"
+ help_topic="contact_sets"
  title="Contact set settings">
     <floater.string
      name="title">
@@ -16,7 +17,7 @@
      top="18"
      left="0"
      height="120"
-     width="380"
+     width="450"
      border_visible="true"
      bevel_style="none">
     <text
@@ -64,12 +65,21 @@ Contact Set Settings:
      name="show_set_notifications"
      top_delta="0"
      width="400" />
+    <check_box
+     height="16"
+     label="Sort by online status"
+     layout="topleft"
+     left_delta="0"
+     initial_value="false"
+     name="sort_by_online_status"
+     top_pad="4"
+     width="400" />
     </panel>
     <panel
      name="bottom_panel"
      top_pad="0"
-     height="260"
-     width="380"
+     height="327"
+     width="450"
      border_visible="true"
      bevel_style="none">
     <text
@@ -79,20 +89,81 @@ Contact Set Settings:
      left="10"
      height="12"
      name="global_label">
-Global Settings:
+        Global Settings:
     </text>
+    <text
+     top_pad="7"
+     follows="left|top"
+     layout="topleft"
+     left="16"
+     height="12"
+     width="135"
+     name="FSContactSetsProfilePlacement_label">
+        Contact Sets in profile:
+    </text>
+    <combo_box
+     control_name="FSContactSetsProfilePlacement"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     name="FSContactSetsProfilePlacement"
+     top_delta="-4"
+     width="175">
+      <combo_box.item
+       label="Below groups list"
+       name="below"
+       value="0"/>
+      <combo_box.item
+       label="Above groups list"
+       name="above"
+       value="2"/>
+      <combo_box.item
+       label="Hidden"
+       name="hidden"
+       value="1"/>
+    </combo_box>
+    <check_box
+     follows="left|top"
+     left="15"
+     top_pad="10"
+     height="12"
+     initial_value="true"
+     label="Show profile icons in Contact Sets lists"
+     name="FSContactSetsListShowIcons"
+     width="300"
+     control_name="FSContactSetsListShowIcons"/>
     <color_swatch
      can_apply_immediately="true"
      follows="left|top"
      height="55"
      label="Default Set Color"
-     top_pad="8"
+     top_pad="6"
      left_delta="4"
      name="global_swatch"
      tool_tip="Click to open Color Picker"
      width="100" />
+    <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="55"
+     label=""
+     top_delta="0"
+     left_delta="120"
+     name="offline_swatch"
+     tool_tip="Color used for offline contacts in Contact Sets lists that do not belong to any Contact Set. A custom Contact Set color takes precedence."
+     width="100" />
+    <check_box
+     follows="left|top"
+     top_pad="-16"
+     height="12"
+     initial_value="false"
+     label="Custom offline contact color"
+     name="FSContactSetsListColorizeOffline"
+     width="120"
+     control_name="FSContactSetsListColorizeOffline"/>
     <text
-     top_pad="-2"
+     top_pad="5"
      follows="left|top"
      height="16"
      left="15"
@@ -101,7 +172,7 @@ Global Settings:
 Online notifications:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Show Online Notices for ALL friends as toasts"
@@ -133,7 +204,7 @@ Online notifications:
      width="270"
      control_name="FSContactSetsNotificationNearbyChat"/>
     <text
-     top_pad="8"
+     top_pad="5"
      follows="left|top"
      height="16"
      left="15"
@@ -142,7 +213,7 @@ Online notifications:
 Custom Colors:
     </text>
     <check_box
-     top_pad="4"
+     top_pad="8"
      follows="left|top"
      height="12"
      label="Color mini map icon based on their Contact Set"
@@ -160,7 +231,7 @@ Custom Colors:
     <check_box
      follows="left|top"
      height="12"
-     label="Color radar list entry based on their Contact Set"
+     label="Color radar and nearby people lists based on their Contact Set"
      name="FSContactSetsColorizeRadar"
      width="270"
      control_name="FSContactSetsColorizeRadar"/>
@@ -172,5 +243,86 @@ Custom Colors:
      name="FSContactSetsColorizeChat"
      width="270"
      control_name="FSContactSetsColorizeChat"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     initial_value="false"
+     label="Color friends list entry based on their Contact Set"
+     name="FSContactSetsColorizeFriends"
+     width="270"
+     control_name="FSContactSetsColorizeFriends"/>
+    </panel>
+    <panel
+     name="side_panel"
+     top="18"
+     left="450"
+     height="447"
+     width="448"
+     border_visible="true"
+     bevel_style="none">
+
+    <check_box
+     height="16"
+     label="Use custom Busy-mode autoresponse for this set"
+     layout="topleft"
+     left="10"
+     top="10"
+     initial_value="false"
+     name="set_autoresponse_busy_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="110"
+     layout="topleft"
+     left="25"
+     top_pad="5"
+     name="set_autoresponse_busy"
+     right="-12"
+     word_wrap="true" />
+
+    <check_box
+     height="16"
+     label="Use custom Autoresponse-mode message for this set"
+     layout="topleft"
+     left_delta="-15"
+     top_pad="12"
+     initial_value="false"
+     name="set_autoresponse_mode_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="110"
+     layout="topleft"
+     left_delta="15"
+     top_pad="5"
+     name="set_autoresponse_mode"
+     right="-12"
+     word_wrap="true" />
+
+    <check_box
+     height="16"
+     label="Use custom Non-friends autoresponse for this set"
+     layout="topleft"
+     left_delta="-15"
+     top_pad="12"
+     initial_value="false"
+     name="set_autoresponse_nonfriends_enabled"
+     width="520" />
+    <text_editor
+     use_ellipses="false"
+     commit_on_focus_lost="true"
+     follows="left|top|right"
+     height="110"
+     layout="topleft"
+     left_delta="15"
+     top_pad="5"
+     name="set_autoresponse_nonfriends"
+     right="-12"
+     word_wrap="true" />
+
     </panel>
 </floater>

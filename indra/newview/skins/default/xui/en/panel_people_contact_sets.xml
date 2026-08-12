@@ -11,7 +11,7 @@
  width="323">
      <panel
       follows="left|top|right"
-      height="27"
+     height="54"
       label="bottom_panel"
       layout="topleft"
       left="0"
@@ -71,11 +71,21 @@
           tool_tip="Remove a group or resident"
           top_delta="0"
           width="31"/>
+        <filter_editor
+         follows="left|top|right"
+         height="23"
+         layout="topleft"
+         left="6"
+         label="Filter People"
+         max_length_chars="300"
+         name="contact_sets_filter_input"
+         right="-6"
+         top="29" />
      </panel>
      <avatar_list
       left="3"
       right="-1"
-      top="31"
+      top="58"
       bottom="-3"
       follows="all"
       layout="topleft"

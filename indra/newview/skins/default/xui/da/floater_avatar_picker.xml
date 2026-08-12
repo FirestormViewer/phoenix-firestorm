@@ -51,6 +51,11 @@
 				<columns label="Brugernavn" name="username"/>
 			</fs_scroll_list>
 		</panel>
+		<panel label="Kontakt-sæt" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				Vælg et kontakt-sæt:
+			</text>
+		</panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Annullér" label_selected="Annullér" name="cancel_btn"/>

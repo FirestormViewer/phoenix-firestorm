@@ -31,7 +31,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: |
             fsutils/download_list.py
@@ -45,7 +45,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download Build Artifacts
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v21
         id: download
         with:
           workflow: build_viewer.yml

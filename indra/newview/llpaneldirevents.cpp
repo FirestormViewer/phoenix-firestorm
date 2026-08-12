@@ -66,8 +66,10 @@ bool LLPanelDirEvents::postBuild()
 
     childSetCommitCallback("mature", onCommitMature, this);
 
-    childSetAction("Search", LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn("Search");
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn("Search");
+    // </FS:Ansariel>
 
     onDateModeCallback(NULL, this);
 
@@ -143,17 +145,16 @@ void LLPanelDirEvents::performQueryOrDelete(U32 event_id)
     static LLUICachedControl<bool> incpg("ShowPGEvents", true);
     static LLUICachedControl<bool> incmature("ShowMatureEvents", false);
     static LLUICachedControl<bool> incadult("ShowAdultEvents", false);
+    if (!(incpg || incmature || incadult))
+    {
+        LLNotificationsUtil::add("NoContentToSearch");
+        return;
+    }
 
     U32 scope = DFQ_DATE_EVENTS;
     if (incpg) scope |= DFQ_INC_PG;
     if (incmature && gAgent.canAccessMature()) scope |= DFQ_INC_MATURE;
     if (incadult && gAgent.canAccessAdult()) scope |= DFQ_INC_ADULT;
-
-    if ( !( scope & (DFQ_INC_PG | DFQ_INC_MATURE | DFQ_INC_ADULT )))
-    {
-        LLNotificationsUtil::add("NoContentToSearch");
-        return;
-    }
 
     setupNewSearch();
 
@@ -174,7 +175,10 @@ void LLPanelDirEvents::performQueryOrDelete(U32 event_id)
     U32 cat_id = childGetValue("category_combo").asInteger();
 
     params << cat_id << "|";
-    params << childGetValue("event_search_text").asString();
+    // <FS:PP> FIRE-36501 Events don't have line_editor "event_search_text", but search_combo_box "name"
+    // params << childGetValue("event_search_text").asString();
+    params << childGetValue("name").asString();
+    // </FS:PP>
 
     // send the message
     if (0 == event_id)

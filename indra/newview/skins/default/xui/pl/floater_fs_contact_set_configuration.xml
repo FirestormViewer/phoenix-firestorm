@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_contact_set_configure" title="Ustawienia zestawu kontaktów" width="450">
+<floater name="floater_fs_contact_set_configure" title="Ustawienia zestawu kontaktów">
 	<floater.string name="title">
 		Ustawienia [NAME]
 	</floater.string>
-	<panel name="top_panel" width="450">
+	<panel name="top_panel">
 		<text name="set_label">
 			Ustawienia zestawu kontaktów:
 		</text>
@@ -11,12 +11,24 @@
 		<button name="rename_btn" width="85" label="Zmień nazwę"/>
 		<color_swatch label="Ustaw kolor" name="set_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
 		<check_box label="Pokazuj powiadomienia" name="show_set_notifications" />
+		<check_box label="Sortuj według statusu online" name="sort_by_online_status" />
 	</panel>
-	<panel name="bottom_panel" width="450">
+	<panel name="bottom_panel">
 		<text name="global_label">
 			Ustawienia globalne:
 		</text>
+		<text width="170" name="FSContactSetsProfilePlacement_label">
+			Zestawy kontaktów w profilu:
+		</text>
+		<combo_box name="FSContactSetsProfilePlacement">
+			<combo_box.item name="below" label="Poniżej listy grup" />
+			<combo_box.item name="above" label="Powyżej listy grup" />
+			<combo_box.item name="hidden" label="Ukryte" />
+		</combo_box>
+		<check_box label="Pokazuj ikonki na listach zestawów kontaktów" name="FSContactSetsListShowIcons" />
 		<color_swatch label="Domyślny kolor" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
+		<color_swatch name="offline_swatch" tool_tip="Kolor używany dla kontaktów offline na listach zestawów kontaktów, które nie należą do żadnego zestawu. Kolor niestandardowego zestawu kontaktów ma pierwszeństwo." />
+		<check_box label="Własny kolor kontaktów offline" name="FSContactSetsListColorizeOffline" />
 		<text name="label_online">
 			Powiadomienia online:
 		</text>
@@ -27,9 +39,15 @@
 		<text name="label_colors">
 			Własne kolory:
 		</text>
-		<check_box label="Koloruj ikonę na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
-		<check_box label="Koloruj tag imienia bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
-		<check_box label="Koloruj wpis w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
-		<check_box label="Koloruj czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
+		<check_box label="Ikony na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Tagi imion bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Wpisy w radarze i na liście w pobliżu bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
+		<check_box label="Czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
+		<check_box label="Wpisy na liście znajomych bazując na zestawie kontaktów" name="FSContactSetsColorizeFriends" />
+	</panel>
+	<panel name="side_panel">
+		<check_box label="Użyj niestandardowej autoodpowiedzi dla trybu Zajęty w tym zestawie" name="set_autoresponse_busy_enabled" />
+		<check_box label="Użyj niestandardowej wiadomości autoodpowiedzi w tym zestawie" name="set_autoresponse_mode_enabled" />
+		<check_box label="Użyj niestandardowej autoodpowiedzi dla nieznajomych w tym zestawie" name="set_autoresponse_nonfriends_enabled" />
 	</panel>
 </floater>

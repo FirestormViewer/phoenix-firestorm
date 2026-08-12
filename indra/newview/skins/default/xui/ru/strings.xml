@@ -40,6 +40,7 @@
 	<string name="AboutHeader">
 [APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]бит / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Соответствие Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>
 	<string name="AboutCompiler">
 		Использован компилятор [COMPILER], версия [COMPILER_VERSION]
@@ -569,7 +570,7 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipSLIcon">
-		Это ссылка на страницу официального домена SecondLife.com или LindenLab.com.
+		Это ссылка на страницу официального домена SecondLife.com, LindenLab.com или firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Скрипт
@@ -1714,6 +1715,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InventoryNoMatchingFavorites">
 		Вы не отметили ни один элемент как избранный.
+	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Свой
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Чтобы добавить место в список достопримечательностей, нажмите на звездочку справа от названия местоположения.
@@ -5621,9 +5625,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Command_Grid_Status_Label">
 		Статус Сетки
 	</string>
-	<string name="Command_HowTo_Label">
-		Инструкция
-	</string>
 	<string name="Command_Inventory_Label">
 		Инвентарь
 	</string>
@@ -5818,9 +5819,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Показать текущий статус сетки
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Выполнение типичных задач
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Просмотр и использование вашего имущества (CTRL+I)

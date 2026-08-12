@@ -110,6 +110,18 @@ LLFontDescriptor::LLFontDescriptor(const std::string& name,
 {
 }
 
+// <FS:Ansariel> Optional tabular numeric font rendering
+LLFontDescriptor::LLFontDescriptor(const std::string& name,
+                                   const std::string& size,
+                                   const U8 style,
+                                   const bool tabnum) :
+    mName(name),
+    mSize(size),
+    mStyle(style),
+    mTabnum(tabnum)
+{}
+// </FS:Ansariel>
+
 bool LLFontDescriptor::operator<(const LLFontDescriptor& b) const
 {
     if (mName < b.mName)
@@ -124,8 +136,14 @@ bool LLFontDescriptor::operator<(const LLFontDescriptor& b) const
 
     if (mSize < b.mSize)
         return true;
-    else
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //else
+    //    return false;
+    else if (mSize > b.mSize)
         return false;
+
+    return mTabnum && !b.mTabnum;
+    // </FS:Ansariel>
 }
 
 static const std::string s_template_string("TEMPLATE");
@@ -187,6 +205,10 @@ LLFontDescriptor LLFontDescriptor::normalize() const
         new_size = "Large";
     if (removeSubString(new_name,"Huge"))
         new_size = "Huge";
+    // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+    if (removeSubString(new_name, "Default"))
+        new_size = "Default";
+    // </FS:Ansariel>
 
     // HACK - Monospace is the only one we don't remove, so
     // name "Monospace" doesn't get taken down to ""
@@ -200,7 +222,10 @@ LLFontDescriptor LLFontDescriptor::normalize() const
         new_size = "Cascadia";
     // </FS:Ansariel>
     if (new_size.empty())
-        new_size = "Medium";
+        // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
+        //new_size = "Small";
+        new_size = "Default";
+        // </FS:Ansariel>
 
     if (removeSubString(new_name,"Bold"))
         new_style |= LLFontGL::BOLD;
@@ -211,16 +236,16 @@ LLFontDescriptor LLFontDescriptor::normalize() const
     return LLFontDescriptor(new_name,new_size,new_style, getFontFiles(), getFontCollectionFiles());
 }
 
-void LLFontDescriptor::addFontFile(const std::string& file_name, const std::string& char_functor)
+void LLFontDescriptor::addFontFile(const std::string& file_name, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight, const std::string& char_functor)
 {
     char_functor_map_t::const_iterator it = mCharFunctors.find(char_functor);
-    mFontFiles.push_back(LLFontFileInfo(file_name, (mCharFunctors.end() != it) ? it->second : nullptr));
+    mFontFiles.push_back(LLFontFileInfo(file_name, hinting, flags, size_delta, weight, (mCharFunctors.end() != it) ? it->second : nullptr));
 }
 
-void LLFontDescriptor::addFontCollectionFile(const std::string& file_name, const std::string& char_functor)
+void LLFontDescriptor::addFontCollectionFile(const std::string& file_name, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight, const std::string& char_functor)
 {
     char_functor_map_t::const_iterator it = mCharFunctors.find(char_functor);
-    mFontCollectionFiles.push_back(LLFontFileInfo(file_name, (mCharFunctors.end() != it) ? it->second : nullptr));
+    mFontCollectionFiles.push_back(LLFontFileInfo(file_name, hinting, flags, size_delta, weight, (mCharFunctors.end() != it) ? it->second : nullptr));
 }
 
 LLFontRegistry::LLFontRegistry(bool create_gl_textures, F32 size_mod)
@@ -348,10 +373,56 @@ bool font_desc_init_from_xml(LLXMLNodePtr node, LLFontDescriptor& desc)
         {
             std::string font_file_name = child->getTextContents();
             std::string char_functor;
+            EFontHinting hinting = EFontHinting::FORCE_AUTOHINT;
+            S32 flags = 0;
+            S32 weight = -1;
 
             if (child->hasAttribute("functor"))
             {
                 child->getAttributeString("functor", char_functor);
+            }
+
+            if (child->hasAttribute("font_hinting"))
+            {
+                std::string attr_hinting;
+                child->getAttributeString("font_hinting", attr_hinting);
+                LLStringUtil::toLower(attr_hinting);
+
+                if (attr_hinting == "default")
+                {
+                    hinting = EFontHinting::DEFAULT;
+                }
+                else if (attr_hinting == "force_auto")
+                {
+                    hinting = EFontHinting::FORCE_AUTOHINT;
+                }
+                else if (attr_hinting == "no_hinting")
+                {
+                    hinting = EFontHinting::NO_HINTING;
+                }
+            }
+
+            if (child->hasAttribute("flags"))
+            {
+                std::string attr_flags;
+                child->getAttributeString("flags", attr_flags);
+                LLStringUtil::toLower(attr_flags);
+
+                if (attr_flags == "bold")
+                {
+                    flags |= LLFontGL::BOLD;
+                }
+            }
+
+            F32 size_delta = 0.f;
+            if (child->hasAttribute("size_delta"))
+            {
+                child->getAttributeF32("size_delta", size_delta);
+            }
+
+            if (child->hasAttribute("font_weight"))
+            {
+                child->getAttributeS32("font_weight", weight);
             }
 
             if (child->hasAttribute("load_collection"))
@@ -360,11 +431,11 @@ bool font_desc_init_from_xml(LLXMLNodePtr node, LLFontDescriptor& desc)
                 child->getAttributeBOOL("load_collection", col);
                 if (col)
                 {
-                    desc.addFontCollectionFile(font_file_name, char_functor);
+                    desc.addFontCollectionFile(font_file_name, hinting, flags, size_delta, weight, char_functor);
                 }
             }
 
-            desc.addFontFile(font_file_name, char_functor);
+            desc.addFontFile(font_file_name, hinting, flags, size_delta, weight, char_functor);
         }
         else if (child->hasName("os"))
         {
@@ -463,6 +534,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 
     // First decipher the requested size.
     LLFontDescriptor norm_desc = desc.normalize();
+    norm_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     F32 point_size;
     bool found_size = nameToSize(norm_desc.getSize(),point_size);
     if (!found_size)
@@ -476,6 +548,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
     // Find corresponding font template (based on same descriptor with no size specified)
     LLFontDescriptor template_desc(norm_desc);
     template_desc.setSize(s_template_string);
+    template_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     const LLFontDescriptor *match_desc = getClosestFontTemplate(template_desc);
     if (!match_desc)
     {
@@ -487,6 +560,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
     // See whether this best-match font has already been instantiated in the requested size.
     LLFontDescriptor nearest_exact_desc = *match_desc;
     nearest_exact_desc.setSize(norm_desc.getSize());
+    nearest_exact_desc.setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
     font_reg_map_t::iterator it = mFontMap.find(nearest_exact_desc);
     // If we fail to find a font in the fonts directory, it->second might be NULL.
     // We shouldn't construcnt a font with a NULL mFontFreetype.
@@ -499,6 +573,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
         LLFontGL *font = new LLFontGL;
         font->mFontDescriptor = desc;
         font->mFontFreetype = it->second->mFontFreetype;
+        font->mFontFreetype->setTabnum(desc.isTabnum()); // <FS:Ansariel> Optional tabular numeric font rendering
         mFontMap[desc] = font;
 
         return font;
@@ -523,7 +598,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
     // Add ultimate fallback list - generated dynamically on linux,
     // null elsewhere.
     std::transform(getUltimateFallbackList().begin(), getUltimateFallbackList().end(), std::back_inserter(font_files),
-                   [](const std::string& file_name) { return LLFontFileInfo(file_name); });
+                   [](const std::string& file_name) { return LLFontFileInfo(file_name, EFontHinting::FORCE_AUTOHINT, 0, 0.f, -1); });
 
     // Load fonts based on names.
     if (font_files.empty())
@@ -582,8 +657,10 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
                 {
                     fontp = new LLFontGL;
                 }
-                if (fontp->loadFace(font_path, point_size_scale,
-                                 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, is_fallback, i))
+                if (fontp->loadFace(font_path, point_size_scale + font_file_it->mSizeDelta,
+                                 // <FS:Ansariel> Optional tabular numeric font rendering
+                                 //LLFontGL::sVertDPI, LLFontGL::sHorizDPI, font_file_it->mWeight, is_fallback, i, font_file_it->mHinting, font_file_it->mFlags))
+                                 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, font_file_it->mWeight, is_fallback, i, font_file_it->mHinting, font_file_it->mFlags, desc.isTabnum()))
                 {
                     is_font_loaded = true;
                     if (is_first_found)

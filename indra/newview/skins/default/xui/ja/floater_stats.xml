@@ -105,6 +105,21 @@
 					</stat_view>
 				</stat_view>
 			</stat_view>
+			<stat_view name="voice" label="ボイス">
+				<stat_bar name="webrtc_latency" label="遅延" unit_label="㎳"/>
+				<stat_bar name="webrtc_upload_bandwidth" label="アップロード帯域" unit_label="kbps"/>
+				<stat_view name="incoming_audio" label="受信オーディオ">
+					<stat_bar name="incoming_packet_recv" label="受信パケット"/>
+					<stat_bar name="packets_in_lost" label="パケットロス"/>
+					<stat_bar name="jitter_in" label="ジッタ" unit_label="㎳"/>
+					<stat_bar name="jitter_buffer" label="ジッタバッファ" unit_label="㎳"/>
+				</stat_view>
+				<stat_view name="outgoing_audio" label="送信オーディオ">
+					<stat_bar name="packets_out_sent" label="送信したパケット"/>
+					<stat_bar name="packets_out_lost" label="パケットロス"/>
+					<stat_bar name="jitter_out" label="ジッタ" unit_label="㎳"/>
+				</stat_view>
+			</stat_view>
 		</container_view>
 	</scroll_container>
 </floater>

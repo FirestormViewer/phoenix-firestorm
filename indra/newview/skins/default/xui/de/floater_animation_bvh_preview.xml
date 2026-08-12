@@ -185,7 +185,7 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 	<button name="pause_btn" tool_tip="Animation unterbrechen"/>
 	<button name="stop_btn" tool_tip="Animation anhalten"/>
 	<text name="bad_animation_text">
-		Animationsdatei kann nicht gelesen werden. Wir empfehlen exportierte BVH-Dateien aus Poser 4.
+		Datei kann nicht gelesen werden. Empfohlen: Exportierte BVH-Dateien aus Poser 4.
 	</text>
     <button label="Datei neu laden" name="reload_btn"/>
 	<button label="Hochladen (L$ [AMOUNT])" name="ok_btn"/>

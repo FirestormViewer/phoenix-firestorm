@@ -693,13 +693,15 @@ public:
     /// <param name="pos">The vector to store the position to save in.</param>
     /// <param name="scale">The vector to store the scale to save in.</param>
     /// <param name="baseRotationIsZero">The bool to store whether the base rotation is zero.</param>
+    /// <param name="userSetBaseRotZero">The bool indicating rotation was set to zero by user action.</param>
     /// <returns>True if the joint should be saved, otherwise false.</returns>
     /// <remarks>
     /// Our objective is to protect peoples novel work: the poses created with this, and poses from other sources, such as in-world.
     /// In all scenarios, this yeilds 'deltas' of rotation/position/scale.
     /// The deltas represent the user's novel work, and may be relative to some initial values (as from a pose), or to 'nothing' (such as all rotations == 0, or, the 'T-Pose').
     /// </remarks>
-    bool tryGetJointSaveVectors(LLVOAvatar* avatar, const FSPoserJoint& joint, LLVector3* rot, LLVector3* pos, LLVector3* scale, bool* baseRotationIsZero);
+    bool tryGetJointSaveVectors(LLVOAvatar* avatar, const FSPoserJoint& joint, LLVector3* rot, LLVector3* pos, LLVector3* scale,
+                                bool* baseRotationIsZero, bool* userSetBaseRotZero);
 
     /// <summary>
     /// Loads a joint rotation for the supplied joint on the supplied avatar.
@@ -707,13 +709,14 @@ public:
     /// <param name="avatar">The avatar to load the rotation for.</param>
     /// <param name="joint">The joint to load the rotation for.</param>
     /// <param name="setBaseToZero">Whether to start from a zero base rotation.</param>
+    /// <param name="userSetBaseToZero">Whether the user has set zero base rotation, such as by editing when BVH export enabled.</param>
     /// <param name="rotation">The rotation to load.</param>
     /// <remarks>
     /// All rotations we load are deltas to the current rotation the supplied joint has.
     /// Whether the joint already has a rotation because some animation is playing,
     /// or whether its rotation is zero, the result is always the same: just 'add' the supplied rotation to the existing rotation.
     /// </remarks>
-    void loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, bool setBaseToZero, LLVector3 rotation);
+    void loadJointRotation(LLVOAvatar* avatar, const FSPoserJoint* joint, bool setBaseToZero, bool userSetBaseToZero, LLVector3 rotation);
 
     /// <summary>
     /// Loads a joint position for the supplied joint on the supplied avatar.

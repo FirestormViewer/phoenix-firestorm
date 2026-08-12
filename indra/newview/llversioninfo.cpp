@@ -55,7 +55,7 @@ LLVersionInfo::LLVersionInfo():
     // need to turn it into a quoted string. LL_TO_STRING() does that.
     mWorkingChannelName(LL_TO_STRING(LL_VIEWER_CHANNEL)),
     // instantiate an LLEventMailDrop with canonical name to listen for news
-    // from SLVersionChecker
+    // from the Viewer Version Manager
     mPump{new LLEventMailDrop("relnotes")},
     // immediately listen on mPump, store arriving URL into mReleaseNotes
     mStore{new LLStoreListener<std::string>(*mPump, mReleaseNotes)}
@@ -127,6 +127,13 @@ std::string LLVersionInfo::getShortVersion() const
 {
     return short_version;
 }
+
+// <FS:PP>
+std::string LLVersionInfo::getLLViewerVersion() const
+{
+    return LL_VIEWER_VERSION_LL;
+}
+// </FS:PP>
 
 std::string LLVersionInfo::getChannelAndVersion()
 {

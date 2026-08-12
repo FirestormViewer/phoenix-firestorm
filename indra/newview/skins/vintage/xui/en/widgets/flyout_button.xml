@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<flyout_button list_position="below" height="23">
+  <action_button scale_image="true"
+          image_unselected="SplitButtonLeft_Off"
+          image_selected="SplitButtonLeft_Selected"
+          image_disabled="SplitButtonLeft_Disabled"
+/>
+  <drop_down_button
+          image_overlay="arrow_down.tga"
+          image_overlay_alignment="right"
+          image_unselected="SplitButtonRight_Off"
+          image_selected="SplitButtonRight_Selected"
+          image_disabled="SplitButtonRight_Disabled"
+          image_pressed="SplitButtonRight_Selected"
+          image_pressed_selected="SplitButtonRight_Selected"
+                    pad_right="6"
+                    tab_stop="false"
+  />
+</flyout_button>

@@ -79,6 +79,14 @@ find_library(BOOST_URL_LIBRARY
     boost_url-mt${addrsfx}
     PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
 
+# Add Boost.Process library
+find_library(BOOST_PROCESS_LIBRARY
+    NAMES
+    boost_process
+    boost_process-mt
+    boost_process-mt${addrsfx}
+    PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+
 # <FS:Ansariel> LSL Preprocessor support
 find_library(BOOST_WAVE_LIBRARY
     NAMES
@@ -98,7 +106,14 @@ target_link_libraries(ll::boost INTERFACE
     ${BOOST_PROGRAMOPTIONS_LIBRARY}
     ${BOOST_THREAD_LIBRARY} # <FS:Ansariel> LSL Preprocessor support
     ${BOOST_URL_LIBRARY}
+    ${BOOST_PROCESS_LIBRARY}
     ${BOOST_WAVE_LIBRARY}) # <FS:Ansariel> LSL Preprocessor support
+
+if (WINDOWS)
+    # Boost.Process v2 on Windows requires ntdll for NtSuspendProcess,
+    # NtResumeProcess and RtlNtStatusToDosError
+    target_link_libraries(ll::boost INTERFACE ntdll)
+endif (WINDOWS)
 
 if (LINUX)
     target_link_libraries(ll::boost INTERFACE rt)

@@ -18,6 +18,11 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	<string name="AboutHeader">
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Second Life Viewer との互換性: [VIEWER_VERSION_LL]
+	</string>
 	<string name="AboutCompiler">
 		コンパイラのバージョン：[COMPILER] [COMPILER_VERSION]
 	</string>
@@ -196,6 +201,8 @@ LibVLCのバージョン：[LIBVLC_VERSION]
 	</string>
 	<string name="AgniGridLabel">Second Lifeメイングリッド（Agni）</string>
 	<string name="AditiGridLabel">Second Lifeベータテストグリッド（Aditi）</string>
+	<string name="AgniGridLabelShort">Agni（本番）</string>
+	<string name="AditiGridLabelShort">Aditi（ベータ）</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：
 https://www.firestormviewer.org/choose-your-platform/
@@ -460,9 +467,6 @@ https://secondlife.com/viewer-access-faq
 	<string name="TooltipFlagNoEdit">
 		編集禁止
 	</string>
-	<string name="TooltipFlagNoEdit">
-		グループ作成
-	</string>
 	<string name="TooltipFlagNotSafe">
 		危険
 	</string>
@@ -486,7 +490,7 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="TooltipPrice" value="L$ [AMOUNT]："/>
 	<string name="TooltipSLIcon">
-		これは、SecondLife.com または LindenLab.com の公式ドメイン上のページにリンクします。
+		これは、SecondLife.com、LindenLab.com、または firestormviewer.org の公式ドメイン上のページにリンクします。
 	</string>
 	<string name="TooltipFlagScript">スクリプト</string>
 	<string name="TooltipFlagPhysics">物理効果</string>
@@ -1175,6 +1179,12 @@ https://secondlife.com/viewer-access-faq
 	<string name="ScriptQuestionCautionChatDenied">
 		リージョン「[REGIONNAME]」の「[REGIONPOS]」という場所にある、「[OWNERNAME]」が所有する「[OBJECTNAME]」というオブジェクトは、以下の権限を拒否しました：[PERMISSIONS]
 	</string>
+	<string name="ScriptTakeMoneyCaution">
+		オブジェクト「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」は、あなたのリンデンドルアカウントへの完全なアクセスを要求しています。アクセスを許可すると、いつでもアカウントから資金を引き出したり、アカウントを完全に空にしたりすることができ、追加の警告なしに継続的に資金を引き出すことが可能になります。
+	</string>
+	<string name="PrivilegedLandAccessCaution">
+		オブジェクト「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」は、あなたの土地への特権的なアクセスを要求しています。アクセスを許可すると、追加の警告なしにあなたの土地を売却される可能性があります。
+	</string>
 	<string name="AdditionalPermissionsRequestHeader">
 		あなたのアカウントへのアクセスを許可すると、このオブジェクトには次の操作も許可されます：
 	</string>
@@ -1225,6 +1235,9 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="ChangeEnvSettings">
 		自然環境の設定を変更する
+	</string>
+	<string name="PrivilegedLandAccess">
+		代理で土地を売却する
 	</string>
 	<string name="SnapshotSavedToDisk">
 		スナップショットを保存しました：[FILENAME]
@@ -1314,9 +1327,6 @@ https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="xml_file">
 		XMLファイル
-	</string>
-	<string name="csv_files">
-		CSVファイル
 	</string>
 	<string name="raw_file">
 		RAWファイル
@@ -1640,8 +1650,17 @@ https://secondlife.com/viewer-access-faq
 	<string name="InventoryNoMatchingFavorites">
 		お気に入りとしてマークしたアイテムはありません。
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		カスタム
+	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
+	</string>
+	<string name="InventoryNoMatchingFavorites">
+		お気に入りに登録されたアイテムがありません。
+	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		カスタム
 	</string>
 	<string name="PlacesNoMatchingItems">
 		お探しのものは見つかりましたか？[secondlife:///app/search/places/[SEARCH_TERM] 検索]をお試しください。
@@ -1952,8 +1971,8 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		お気に入り
 	</string>
 	<!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
-      Also, it can be written as "Favorite" or "Favorites".
-  We should localize all variants of them with the same value -->
+	Also, it can be written as "Favorite" or "Favorites".
+	We should localize all variants of them with the same value -->
 	<string name="InvFolder favorite">
 		お気に入り
 	</string>
@@ -1992,9 +2011,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	</string>
 	<string name="InvFolder Materials">
 		マテリアル
-	</string>
-	<string name="InvFolder Settings">
-		自然環境の設定
 	</string>
 	<!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
 	<string name="InvFolder Friends">
@@ -2864,19 +2880,6 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="PicksClassifiedsLoadingText">
 		読み込んでいます…
 	</string>
-	<!-- FS:KC legacy profiles -->
-	<string name="NoPicksText">
-		ピックを作成していません。
-	</string>
-	<string name="NoAvatarPicksText">
-		このユーザーにはピックがありません。
-	</string>
-	<string name="NoClassifiedsText">
-		クラシファイド広告を作成していません。作成するには、下にある「＋」ボタンをクリックします。
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		このユーザーにはクラシファイド広告がありません。
-	</string>
 	<!-- Multi Preview Floater -->
 	<string name="MultiPreviewTitle">
 		プレビュー
@@ -3216,6 +3219,9 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="MBFrozenCrashed">
 		[APP_NAME]は前回の実行時にフリーズしています。
 クラッシュ報告を送信しますか？
+	</string>
+	<string name="MBFreezeDetected">
+		[APP_NAME]がフリーズしたようです。この問題が頻繁に発生する場合は、https://www.firestormviewer.org/support からサポートにお問い合わせください。
 	</string>
 	<string name="MBAlert">
 		通知
@@ -5632,9 +5638,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Grid_Status_Label">
 		グリッド状況
 	</string>
-	<string name="Command_HowTo_Label">
-		ハウツー
-	</string>
 	<string name="Command_Inventory_Label">
 		インベントリ
 	</string>
@@ -5690,7 +5693,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		カメラ操作
 	</string>
 	<!-- Ansariel: Renamed for FS (FIRE-5019)
-  <string name="Command_Voice_Label">Voice settings</string>-->
+	<string name="Command_Voice_Label">Voice settings</string>-->
 	<string name="Command_Voice_Label">近くのボイス</string>
 	<!-- Firestorm commands -->
 	<string name="Command_Quickprefs_Label">簡易設定</string>
@@ -5718,7 +5721,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Move_Lock_Label">移動ロック</string>
 	<string name="Command_Blocklist_Label">ブロックリスト</string>
 	<string name="Command_ResyncAnimations_Label">アニメーション再同期</string>
-	<string name="Command_RegionTracker_Label">リージョントラッカー</string>
 	<string name="Command_Group_Titles_Label">グループのタイトル</string>
 	<string name="Command_Wearable_Favorites_Label">お気に入りの着用物やＨＵＤ</string>
 	<string name="Command_RFO_Label">フレンドのみ表示</string>
@@ -5768,9 +5770,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Grid_Status_Tooltip">
 		現在のグリッドステータスを表示します。
 	</string>
-	<string name="Command_HowTo_Tooltip">
-		一般的タスクの実行方法を表示します。
-	</string>
 	<string name="Command_Inventory_Tooltip">
 		インベントリの内容を表示したり使用したりします。
 	</string>
@@ -5806,9 +5805,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Profile_Tooltip">
 		自分のプロフィールの表示や編集を行います。
-	</string>
-	<string name="Command_RegionTracker_Tooltip">
-		様々なリージョンの状況を追跡します。
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		嫌がらせを報告します。
@@ -6232,7 +6228,17 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
 	<string name="LoadCameraPositionOutsideDrawDistance">カメラの位置が描画距離を超えているため、カメラビューを復元できません。</string>
 
 	<string name="DrawDistanceSteppingGestureObsolete">コードの変更により、このジェスチャーを使用する必要がなくなりました。プログレッシブ描画距離ステップが有効になりました。</string>
-	<string name="FSCameraPositionCopied">カメラ位置[POS]がクリップボードにコピーされました。</string>
+	<string name="FSCameraPositionCopied">カメラ位置の[POS]が、クリップボードにコピーされました。</string>
+	<string name="FSCameraPositionPasted">カメラ位置が、[POS]に復元されました。</string>
+	<string name="FSCameraPositionParseError">無効なカメラ位置です。期待値：&lt;x, y, z&gt;か、&lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll（エージェントのローカル）</string>
+	<string name="FSCmdLineZOffsetUsage">アバターのホバーする高さを設定（使用方法：/zoffset 値もしくは、+delta）</string>
+	<string name="FSCmdLineNoValidRegion">有効なリージョンポインタを取得できませんでした。</string>
+	<string name="FSCmdLineTrackPosUsage">ワールドマップ上での位置か、アバターを追跡する（使用方法：cmd &lt;x, y, z&gt; か cmd 名前）</string>
+	<string name="FSCmdLineTrackPosParseError">無効な位置です。cpcampos形式を使用してください。&lt;x, y, z&gt;か、&lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll</string>
+	<string name="FSCmdLineTrackPosLocation">[REGION]（[POS]）を追跡します。</string>
+	<string name="FSCmdLineTrackPosAvatar">[NAME]を追跡します。</string>
+	<string name="FSCmdLineTrackPosNotFound">レーダー上で「[NAME]」に一致するアバターが見つかりませんでした。</string>
+	<string name="FSCmdLineTrackPosMapError">ワールドマップを開くことができません。</string>
 
 	<string name="FSCmdLineDrawDistanceSet">描画距離が[DISTANCE]ｍに設定されました。</string>
 	<string name="FSCmdLineRollDiceTotal">[DICE]d[FACES][MODIFIER]の合計結果：[RESULT]</string>
@@ -6383,9 +6389,6 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="preproc_toggle_warning">プリプロセッサを切り替えても、このエディターを閉じて再度開くまで完全には有効になりません。</string>
 	<!-- <FS:Cron> FIRE-9335 -->
 	<!-- <LSL Preprocessor -->
-	<string name="preproc_toggle_warning">
-		プリプロセッサの切り替えは、このエディタを閉じて再度開くまで完全には有効になりません。
-	</string>
 	<string name="fs_preprocessor_starting">
 		[APP_NAME]プリプロセッサを開始しています…
 	</string>
@@ -6550,17 +6553,6 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Nametag_Texture_Area_Label">テクスチャ面積：[TEXTURE_AREA]㎡</string>
 
 	<string name="font_unknown">不明なフォント</string>
-	<string name="font_fonts.xml">Deja Vu</string>
-	<string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
-	<string name="font_fonts_liberation.xml">Liberation</string>
-	<string name="font_fonts_droid.xml">Droid Sans</string>
-	<string name="font_fonts_mobi.xml">Mobi Sans</string>
-	<string name="font_fonts_roboto.xml">Roboto</string>
-	<string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
-	<string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
-	<string name="font_fonts_noto.xml">Noto Sans</string>
-	<string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
-	<string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
 	<string name="mode_unknown">不明なモード</string>
 	<string name="mode_settings_firestorm.xml">[APP_NAME]</string>
 	<string name="mode_settings_phoenix.xml">Phoenix</string>
@@ -6602,5 +6594,8 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="Maximum">最大</string>
 
 	<string name="OmnifilterReplacement">包括フィルタ置き換え：[REPLACEMENT]</string>
-
+	<string name="OmnifilterDefaultName">デフォルト</string>
+	<string name="OmnifilterExportDescription">包括フィルタのルール設定：[REPLACEMENT]</string>	<!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
+	<string name="FSAvatarAlignToggleMini">最小</string>
+	<string name="FSAvatarAlignToggleFull">完全</string>
 </strings>

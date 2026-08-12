@@ -10,6 +10,7 @@
 		<button name="rename_btn" label="Rinomina"/>
 		<color_swatch name="set_swatch" tool_tip="Clic per scegliere colore"/>
 		<check_box label="Mostra notifiche" name="show_set_notifications"/>
+		<check_box label="Ordina per stato online" name="sort_by_online_status"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">
@@ -28,7 +29,13 @@
 		</text>
 		<check_box label="Colore icona mini-mappa in base al set" name="FSContactSetsColorizeMiniMap"/>
 		<check_box label="Colore tag nome in base al set" name="FSContactSetsColorizeNameTag"/>
-		<check_box label="Colore lista radar in base al set" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Colore liste radar e Nelle Vicinanze in base al set" name="FSContactSetsColorizeRadar"/>
 		<check_box label="Colore chat in base al set" name="FSContactSetsColorizeChat"/>
+		<check_box label="Colore lista amici in base al set" name="FSContactSetsColorizeFriends"/>
+	</panel>
+	<panel name="side_panel">
+		<check_box label="Usa risposta automatica personalizzata in modalità Occupato per questo set" name="set_autoresponse_busy_enabled"/>
+		<check_box label="Usa messaggio di risposta automatica personalizzato per questo set" name="set_autoresponse_mode_enabled"/>
+		<check_box label="Usa risposta automatica personalizzata per i non amici in questo set" name="set_autoresponse_nonfriends_enabled"/>
 	</panel>
 </floater>

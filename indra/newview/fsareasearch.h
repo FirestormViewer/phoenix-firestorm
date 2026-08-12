@@ -108,8 +108,8 @@ public:
     virtual ~FSAreaSearch();
 
     bool postBuild() override;
-    virtual void draw() override;
-    virtual void onOpen(const LLSD& key) override;
+    void draw() override;
+    void onOpen(const LLSD& key) override;
 
     void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
     void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
@@ -166,9 +166,29 @@ public:
 
     void setFilterAgentParcelOnly(bool b) { mFilterAgentParcelOnly = b; }
 
+    void applySlappParams(const LLSD& params);
+    std::string buildSlappLink() const;
+    void onCopySlappLink();
+
     bool isActive() const { return mActive; }
 
 private:
+    struct SlappBoolEntry
+    {
+        const char* key;
+        LLCheckBoxCtrl* FSPanelAreaSearchFilter::* ctl;
+        void (FSAreaSearch::*setter)(bool);
+        bool FSAreaSearch::* state;
+    };
+    struct SlappTextEntry
+    {
+        const char* key;
+        LLLineEditor* FSPanelAreaSearchFind::* editor;
+        std::string FSAreaSearch::* state;
+    };
+    static const SlappBoolEntry sBoolFilters[];
+    static const SlappTextEntry sTextFields[];
+
     void requestObjectProperties(const std::vector<U32>& request_list, bool select, LLViewerRegion* regionp);
     void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
     void getNameFromUUID(const LLUUID& id, std::string& name, bool group, bool& name_requested);
@@ -303,6 +323,9 @@ private:
     void buyObject(FSObjectProperties& details, LLViewerObject* objectp);
     void sitOnObject(FSObjectProperties& details, LLViewerObject* objectp);
     void onCommitCheckboxBeacons();
+	
+	void onCopyToClipboard();
+	bool handleKeyHere(KEY key, MASK mask) override;
 
     bool onContextMenuItemClick(const LLSD& userdata);
     bool onContextMenuItemEnable(const LLSD& userdata);
@@ -365,6 +388,7 @@ class FSPanelAreaSearchFilter
 :   public LLPanel
 {
     LOG_CLASS(FSPanelAreaSearchFilter);
+    friend class FSAreaSearch;
 public:
     FSPanelAreaSearchFilter(FSAreaSearch* pointer);
     virtual ~FSPanelAreaSearchFilter() = default;

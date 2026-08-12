@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ColorPicker" title="DESTAQUE DE COR">
+<floater name="ColorPicker" title="Seletor de cor">
+	<tab_container name="scale_type_container">
+		<panel name="RGB">
 	<text name="r_val_text">
 		Vermelho:
 	</text>
@@ -9,23 +11,42 @@
 	<text name="b_val_text">
 		Azul:
 	</text>
+		</panel>
+		<panel name="LSL">
+	<text name="r_val_text_lsl">
+		Vermelho:
+	</text>
+	<text name="g_val_text_lsl">
+		Verde:
+	</text>
+	<text name="b_val_text_lsl">
+		Azul:
+	</text>
+		</panel>
+		<panel name="Hex">
+			<text name="hex_text">
+				Codigo hex (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
 		Matiz:
 	</text>
 	<text name="s_val_text">
-		Sat:
+		Sat.:
 	</text>
 	<text name="l_val_text">
-		Lum:
+		Lum.:
 	</text>
-	<check_box label="inscrever-se agora" name="apply_immediate"/>
-	<button left_delta="150" name="color_pipette"/>
-	<button label="Cancelar" label_selected="Cancelar" left_delta="55" name="cancel_btn"/>
+	<check_box label="Aplicar agora" name="apply_immediate"/>
+	<button label="" label_selected="" name="color_pipette" left_pad="40"/>
+	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
+	<button label="Copiar LSL" label_selected="Copiar LSL" name="copy_lsl_btn" tool_tip="Copia o valor da cor para um vetor de cor LSL no formato &lt;r, g, b&gt;."/>
 	<text name="Current color:">
-		Cor atual:
+		^ Cor atual ^
 	</text>
 	<text name="(Drag below to save.)">
-		(Arrastar abaixo para salvar)
+		(Arraste para baixo para salvar)
 	</text>
 </floater>

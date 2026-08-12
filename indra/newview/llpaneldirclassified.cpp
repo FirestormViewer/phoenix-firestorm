@@ -61,8 +61,10 @@ bool LLPanelDirClassified::postBuild()
 {
     LLPanelDirBrowser::postBuild();
 
-    childSetAction("Search", onClickSearchCore, this);
-    setDefaultBtn("Search");
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", onClickSearchCore, this);
+    //setDefaultBtn("Search");
+    // </FS:Ansariel>
     return true;
 }
 

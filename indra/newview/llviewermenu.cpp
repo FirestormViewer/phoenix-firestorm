@@ -132,7 +132,6 @@
 #include "llviewertexturelist.h"
 #include "llvlcomposition.h"
 #include "llvoavatarself.h"
-#include "llvoicevivox.h"
 #include "llworld.h"
 #include "llworldmap.h"
 #include "pipeline.h"
@@ -161,6 +160,7 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "fsfloateravataralign.h" // <FS:Chanayane> Compass floater
 #include "fsassetblacklist.h"
 #include "fsdata.h"
 #include "fslslbridge.h"
@@ -790,7 +790,7 @@ void init_menus()
     menuBarRect.setLeftTopAndSize(0, menu_bar_holder->getRect().getHeight(), menuBarRect.getWidth(), menuBarRect.getHeight());
     gLoginMenuBarView->setRect(menuBarRect);
     // do not set colors in code, always lat the skin decide. -Zi
-    // gLoginMenuBarView->setBackgroundColor( color );
+    // gLoginMenuBarView->setBackgroundColor(LLColor4::black);
     menu_bar_holder->addChild(gLoginMenuBarView);
 
     // tooltips are on top of EVERYTHING, including menus
@@ -2616,7 +2616,7 @@ class LLAdvancedDropPacket : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        gMessageSystem->mPacketRing.dropPackets(1);
+        gMessageSystem->dropPackets(1);
         return true;
     }
 };
@@ -3711,6 +3711,41 @@ bool enable_object_show_original()
 }
 // </FS:Ansariel>
 
+void handle_object_set_favorite(const LLSD& userdata)
+{
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (!object)
+    {
+        return;
+    }
+    LLViewerObject *parent = (LLViewerObject*)object->getParent();
+    while (parent)
+    {
+        if(parent->isAvatar())
+        {
+            break;
+        }
+        object = parent;
+        parent = (LLViewerObject*)parent->getParent();
+    }
+    if (!object || object->isAvatar())
+    {
+        return;
+    }
+
+    LLUUID item_id = gInventory.getLinkedItemID(object->getAttachmentItemID());
+
+    std::string action = userdata.asString();
+    if (action == "Add")
+    {
+        set_favorite(item_id, true);
+    }
+    if (action == "Remove")
+    {
+        set_favorite(item_id, false);
+    }
+}
+
 static void init_default_item_label(LLUICtrl* ctrl)
 {
     const std::string& item_name = ctrl->getName();
@@ -3773,6 +3808,41 @@ bool enable_object_touch(LLUICtrl* ctrl)
 
     return new_value;
 };
+
+bool enable_object_favorite(const LLSD& userdata)
+{
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (!object)
+    {
+        return false;
+    }
+    LLViewerObject* parent = (LLViewerObject*)object->getParent();
+    while (parent)
+    {
+        if (parent->isAvatar())
+        {
+            break;
+        }
+        object = parent;
+        parent = (LLViewerObject*)parent->getParent();
+    }
+    if (!object || object->isAvatar())
+    {
+        return false;
+    }
+
+    std::string action = userdata.asString();
+    LLUUID item_id = gInventory.getLinkedItemID(object->getAttachmentItemID());
+    if (action == "Add")
+    {
+        return !get_is_favorite(item_id);
+    }
+    if (action == "Remove")
+    {
+        return get_is_favorite(item_id);
+    }
+    return false;
+}
 
 //void label_touch(std::string& label, void*)
 //{
@@ -4435,7 +4505,7 @@ class LLAvatarSetImpostorMode : public view_listener_t
                 return false;
         }
 
-        LLVOAvatar::cullAvatarsByPixelArea();
+        LLVOAvatar::setCullNeedsUpdate();
         return true;
     }   // handleEvent()
 };
@@ -6372,6 +6442,27 @@ void handle_link_objects()
     }
 }
 
+void handle_unlink_objects()
+{
+    if (LLSelectMgr::getInstance()->getSelection()->isEmpty())
+    {
+        LLPanel* visited_panel = LLFloaterSidePanelContainer::getPanel("places", "Teleport History");
+        if (visited_panel && visited_panel->isInVisibleChain())
+        {
+            LLFloaterReg::hideInstance("places");
+        }
+        else
+        {
+            LLFloaterReg::toggleInstanceOrBringToFront("places");
+            LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_teleport_history_tab"));
+        }
+    }
+    else
+    {
+        LLSelectMgr::getInstance()->unlinkObjects();
+    }
+}
+
 // You can return an object to its owner if it is on your land.
 class LLObjectReturn : public view_listener_t
 {
@@ -8221,6 +8312,30 @@ class LLAvatarInviteToGroup : public view_listener_t
     }
 };
 
+// <FS:Chanayane> Compass floater - face towards avatar from context menu
+class LLAvatarFaceTowards : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        if (!avatar) return true;
+        FSAvatarAlignBase* f = FSAvatarAlignBase::getActive();
+        if (f) f->faceAvatar(avatar);
+        return true;
+    }
+};
+
+class LLAvatarCanFaceTowards : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        return avatar && !avatar->isSelf() && !avatar->isDead() &&
+               dist_vec(avatar->getPositionAgent(), gAgent.getPositionAgent()) <= FSAvatarAlignBase::MAX_FACE_DISTANCE;
+    }
+};
+// </FS:Chanayane>
+
 class LLAvatarAddFriend : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -8352,11 +8467,8 @@ class LLAvatarEnableResetSkeleton : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        if (find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject())) // <FS:Beq/> set but unused.
-        {
-            return true;
-        }
-        return false;
+        LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        return obj && obj->getAvatar();
     }
 };
 
@@ -10692,15 +10804,6 @@ class LLToolsEnableSaveToObjectInventory : public view_listener_t
     }
 };
 
-class LLToggleHowTo : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        LLFloaterReg::toggleInstanceOrBringToFront("guidebook");
-        return true;
-    }
-};
-
 class LLViewEnableMouselook : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -11237,6 +11340,12 @@ LLVOAvatar* find_avatar_from_object(LLViewerObject* object)
         }
         else if( !object->isAvatar() )
         {
+            // Check for animesh objects (animated objects with a control avatar)
+            LLVOAvatar* avatar = object->getAvatar();
+            if (avatar)
+            {
+                return avatar;
+            }
             object = NULL;
         }
     }
@@ -12243,16 +12352,6 @@ class LLWorldEnableEnvPreset : public view_listener_t
     }
 };
 
-/// Post-Process callbacks
-class LLWorldPostProcess : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        LLFloaterReg::showInstance("env_post_process");
-        return true;
-    }
-};
-
 class LLWorldCheckBanLines : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12278,6 +12377,16 @@ void handle_flush_name_caches()
     LLAvatarNameCache::getInstance()->clearCache();
     // </FS:Ansariel>
     if (gCacheName) gCacheName->clear();
+}
+
+bool is_master_audio_muted()
+{
+    return LLAppViewer::instance()->getMasterSystemAudioMute();
+}
+
+void toggle_master_audio()
+{
+    LLAppViewer::instance()->setMasterSystemAudioMute(!is_master_audio_muted());
 }
 
 class LLUploadCostCalculator : public view_listener_t
@@ -12847,9 +12956,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLWorldEnableEnvSettings(), "World.EnableEnvSettings");
     view_listener_t::addMenu(new LLWorldEnvPreset(), "World.EnvPreset");
     view_listener_t::addMenu(new LLWorldEnableEnvPreset(), "World.EnableEnvPreset");
-    view_listener_t::addMenu(new LLWorldPostProcess(), "World.PostProcess");
     view_listener_t::addMenu(new LLWorldCheckBanLines() , "World.CheckBanLines");
     view_listener_t::addMenu(new LLWorldShowBanLines() , "World.ShowBanLines");
+    commit.add("World.ToggleMasterAudio", boost::bind(&toggle_master_audio));
+    enable.add("World.IsMasterAudioMuted", boost::bind(&is_master_audio_muted));
 
     // Tools menu
     view_listener_t::addMenu(new LLToolsSelectTool(), "Tools.SelectTool");
@@ -12866,7 +12976,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLToolsUseSelectionForGrid(), "Tools.UseSelectionForGrid");
     view_listener_t::addMenu(new LLToolsSelectNextPartFace(), "Tools.SelectNextPart");
     commit.add("Tools.Link", boost::bind(&handle_link_objects));
-    commit.add("Tools.Unlink", boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
+    commit.add("Tools.Unlink", boost::bind(&handle_unlink_objects));
     view_listener_t::addMenu(new LLToolsStopAllAnimations(), "Tools.StopAllAnimations");
     view_listener_t::addMenu(new LLToolsReleaseKeys(), "Tools.ReleaseKeys");
     view_listener_t::addMenu(new LLToolsEnableReleaseKeys(), "Tools.EnableReleaseKeys");
@@ -12896,10 +13006,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLToolsDoPathfindingRebakeRegion(), "Tools.DoPathfindingRebakeRegion");
     view_listener_t::addMenu(new LLToolsEnablePathfindingRebakeRegion(), "Tools.EnablePathfindingRebakeRegion");
     view_listener_t::addMenu(new LLToolsCheckSelectionLODMode(), "Tools.ToolsCheckSelectionLODMode");
-
-    // Help menu
-    // most items use the ShowFloater method
-    view_listener_t::addMenu(new LLToggleHowTo(), "Help.ToggleHowTo");
 
     // Advanced menu
     view_listener_t::addMenu(new LLAdvancedToggleConsole(), "Advanced.ToggleConsole");
@@ -13173,6 +13279,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarDebug(), "Avatar.Debug");
     view_listener_t::addMenu(new LLAvatarVisibleDebug(), "Avatar.VisibleDebug");
     view_listener_t::addMenu(new LLAvatarInviteToGroup(), "Avatar.InviteToGroup");
+// <FS:Chanayane> Compass floater - face towards avatar from context menu
+    view_listener_t::addMenu(new LLAvatarFaceTowards(),    "Avatar.FaceTowards");
+    view_listener_t::addMenu(new LLAvatarCanFaceTowards(), "Avatar.CanFaceTowards");
+// </FS:Chanayane>
     // <FS:Ansariel> FIRE-13515: Re-add give calling card
     view_listener_t::addMenu(new LLAvatarGiveCard(), "Avatar.GiveCard");
     // </FS:Ansariel> FIRE-13515: Re-add give calling card
@@ -13201,6 +13311,24 @@ void initialize_menus()
 
     commit.add("Avatar.OpenMarketplace", boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
 
+// <AS:Chanayane> Compass floater
+    commit.add("Avatar.AlignToggle", [](LLUICtrl*, const LLSD&) {
+        if (gSavedSettings.getBOOL("AvatarAlignMini"))
+            LLFloaterReg::toggleInstance("avatar_align_mini");
+        else
+            LLFloaterReg::toggleInstance("avatar_align");
+    });
+    enable.add("Avatar.AlignIsOpen", [](LLUICtrl*, const LLSD&) -> bool {
+        return gSavedSettings.getBOOL("AvatarAlignMini")
+            ? LLFloaterReg::instanceVisible("avatar_align_mini", LLSD())
+            : LLFloaterReg::instanceVisible("avatar_align",      LLSD());
+    });
+    commit.add("Avatar.FaceNearest", [](LLUICtrl*, const LLSD&) {
+        FSAvatarAlignBase* f = FSAvatarAlignBase::getActive();
+        if (f) f->onClickFaceNearestAvatar();
+    });
+// </AS:Chanayane>
+
     view_listener_t::addMenu(new LLAvatarEnableAddFriend(), "Avatar.EnableAddFriend");
     enable.add("Avatar.EnableFreezeEject", boost::bind(&enable_freeze_eject, _2));
 
@@ -13208,6 +13336,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLObjectBuild(), "Object.Build");
     commit.add("Object.Touch", boost::bind(&handle_object_touch));
     commit.add("Object.ShowOriginal", boost::bind(&handle_object_show_original));
+    commit.add("Object.SetFavorite", boost::bind(&handle_object_set_favorite, _2));
     commit.add("Object.SitOrStand", boost::bind(&handle_object_sit_or_stand));
     commit.add("Object.Delete", boost::bind(&handle_object_delete));
     view_listener_t::addMenu(new LLObjectAttachToAvatar(true), "Object.AttachToAvatar");
@@ -13242,6 +13371,7 @@ void initialize_menus()
     enable.add("Object.EnableEditGLTFMaterial", boost::bind(&enable_object_edit_gltf_material));
     enable.add("Object.EnableOpen", boost::bind(&enable_object_open));
     enable.add("Object.EnableTouch", boost::bind(&enable_object_touch, _1));
+    enable.add("Object.EnableFavorites", boost::bind(&enable_object_favorite, _2));
     enable.add("Object.EnableDelete", boost::bind(&enable_object_delete));
     enable.add("Object.EnableWear", boost::bind(&object_is_wearable));
 

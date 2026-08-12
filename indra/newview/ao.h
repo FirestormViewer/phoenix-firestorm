@@ -32,9 +32,15 @@
 #include "lltransientdockablefloater.h"
 #include "aoset.h"
 
+#include <map>
+#include <set>
+
 class LLButton;
 class LLComboBox;
 class LLCheckBoxCtrl;
+class LLContextMenu;
+class LLMenuButton;
+class LLMenuItemCallGL;
 class LLScrollListCtrl;
 class LLScrollListItem;
 class LLSpinCtrl;
@@ -51,19 +57,38 @@ class FloaterAO
         ~FloaterAO();
 
     public:
-        /*virtual*/ bool postBuild();
-        virtual void onOpen(const LLSD& key);
-        virtual void onClose(bool app_quitting);
+        bool postBuild() override;
+        void onOpen(const LLSD& key) override;
+        void onClose(bool app_quitting) override;
+        void draw() override;
         void updateList();
-        void updateScrollListData();
         void updateSetParameters();
         void updateAnimationList();
 
         bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
-                                  EAcceptance* accept, std::string& tooltip_msg);
+                                  EAcceptance* accept, std::string& tooltip_msg) override;
 
     protected:
-        LLScrollListItem* addAnimation(const std::string& name);
+
+        struct RowInfo
+        {
+            std::string mKind;          // "single", "group", "member", "trackmember"
+            S32         mIndex{ -1 };
+            S32         mMember{ -1 };  // member index within a group or track, -1 for the row itself
+        };
+
+        LLScrollListItem* addRow(LLScrollListCtrl* list, const std::string& icon, const std::string& name, const RowInfo& info, const std::string& tooltip, bool indented, bool bold);
+        bool getRowInfo(LLScrollListItem* item, RowInfo& info) const;
+        LLUUID getRowInventoryUUID(const RowInfo& info) const;
+        static LLSD encodeRowValue(const RowInfo& info);
+
+        void rebuildAnimationList();
+        void rebuildTrackSelector();
+
+        std::string expansionKey() const;
+        bool isFolderExpanded(const LLUUID& folderID) const;
+        void setFolderExpanded(const LLUUID& folderID, bool expanded);
+        void requestListRebuild();
 
         void onSelectSet();
         void onSelectSetSmall();
@@ -71,7 +96,9 @@ class FloaterAO
         void onSelectState();
         void onChangeAnimationSelection();
         void onClickReload();
-        void onClickAdd();
+        void buildAddMenu();
+        void onAddMenuShow();
+        void onAddSet(bool clone);
         void onClickRemove();
         void onClickActivate();
         void onCheckDefault();
@@ -90,10 +117,21 @@ class FloaterAO
 
         void onClickMore();
         void onClickLess();
-
-// <AS:Chanayane> Double click on animation in AO
         void onDoubleClick();
-// </AS:Chanayane>
+
+        void onClickRename();
+        bool renameGroupCallback(const LLSD& notification, const LLSD& response, S32 stepIndex);
+
+        void onAnimationListRightClick(LLUICtrl* ctrl, S32 x, S32 y, MASK mask);
+        void showContextMenu(LLScrollListCtrl* list, S32 x, S32 y);
+        void onToggleRowExpand(const RowInfo& info);
+        void onExtractMember(const RowInfo& info);
+        void onDeleteRow(const RowInfo& info);
+        void onRenameRow(const RowInfo& info);
+
+        void onSelectTrackTab();
+        void onClickAddTrack();
+        void updateCycleControlValues();
 
         void onAnimationChanged(const LLUUID& animation);
 
@@ -108,7 +146,7 @@ class FloaterAO
         bool newSetCallback(const LLSD& notification, const LLSD& response);
         bool removeSetCallback(const LLSD& notification, const LLSD& response);
 
-        virtual bool tick();
+        bool tick() override;
 
         std::vector<AOSet*> mSetList;
         AOSet* mSelectedSet;
@@ -122,7 +160,8 @@ class FloaterAO
 
         LLComboBox* mSetSelector;
         LLButton* mActivateSetButton;
-        LLButton* mAddButton;
+        LLMenuButton* mAddButton;
+        LLMenuItemCallGL* mCloneSetItem;
         LLButton* mRemoveButton;
         LLCheckBoxCtrl* mDefaultCheckBox;
         LLCheckBoxCtrl* mOverrideSitsCheckBox;
@@ -134,11 +173,17 @@ class FloaterAO
         LLScrollListItem* mCurrentBoldItem;
         LLButton* mMoveUpButton;
         LLButton* mMoveDownButton;
+        LLButton* mRenameButton;
         LLButton* mTrashButton;
         LLCheckBoxCtrl* mCycleCheckBox;
         LLCheckBoxCtrl* mRandomizeCheckBox;
         LLTextBox* mCycleTimeTextLabel;
         LLSpinCtrl* mCycleTimeSpinner;
+
+        LLComboBox* mTrackSelector;
+        LLButton* mTrackAddButton;
+        LLPanel* mDropZonePanel;
+        bool mDropZoneHovered;
 
         LLButton* mReloadButton;
 
@@ -159,6 +204,15 @@ class FloaterAO
         bool mCanDragAndDrop;
         bool mImportRunning;
         bool mMore;
+
+        bool mRebuildPending;
+        S32 mCurrentTrack;                      // 0 = main state list, N = mTracks[N-1]
+        std::string mLastSelectedStateName;     // "set|state" key, resets track tab on real switches
+        std::string mPendingTrackSelection;     // track to select after the next reload
+        std::string mLastSelectedRowValue;      // detects selection transitions for auto-expand
+        std::map<std::string, std::set<LLUUID>> mExpandedFolders;
+        LLHandle<LLContextMenu> mContextMenuHandle;
+
 };
 
 #endif // AO_H

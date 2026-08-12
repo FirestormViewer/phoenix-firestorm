@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -211,7 +211,6 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
     p.title = getLabel();
     p.rect = LLRect(0, 0, getRect().getWidth(), 0);
     p.parent_panel = this;
-    p.tool_tip = p.name;
     p.listener = mInvFVBridgeBuilder->createBridge( LLAssetType::AT_CATEGORY,
                                                                     LLAssetType::AT_CATEGORY,
                                                                     LLInventoryType::IT_CATEGORY,
@@ -234,7 +233,7 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
     // <FS:Ansariel> Inventory specials
     p.for_inventory = true;
 
-    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
     p.item_height = fsFolderViewItemHeight;
     p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -649,8 +648,9 @@ void LLInventoryPanel::itemChanged(const LLUUID& item_id, U32 mask, const LLInve
             LLInvFVBridge* bridge = (LLInvFVBridge*)view_item->getViewModelItem();
             if(bridge)
             {
-                // Clear the display name first, so it gets properly re-built during refresh()
-                bridge->clearDisplayName();
+                // Clear the searchable name first, so it gets
+                // properly re-built during refresh()
+                bridge->clearSearchableName();
 
                 view_item->refresh();
             }
@@ -1131,10 +1131,20 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 {
     LLFolderViewFolder::Params params(mParams.folder);
 
-    params.name = bridge->getDisplayName();
+#ifndef LL_RELEASE_FOR_DOWNLOAD
+    // Only usable for debug and first call has a large
+    // overhead from search string construction.
+    // As inventory names aren't unique and can change,
+    // there is little we can use them for in release builds.
+    params.name = bridge->getName();
+#else
+    // We don't have a source of unique names and inventory
+    // items can reach millions in quantity, just use
+    // a short descriptor
+    params.name = "fld";
+#endif
     params.root = mFolderRoot.get();
     params.listener = bridge;
-    //  params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
     params.allow_drop = allow_drop;
 
     // <FS:Ansariel> Inventory specials
@@ -1145,7 +1155,7 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 
     params.for_inventory = true;
 
-    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
     params.item_height = fsFolderViewItemHeight;
     params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -1158,12 +1168,23 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 {
     LLFolderViewItem::Params params(mParams.item);
 
-    params.name = bridge->getDisplayName();
+#ifndef LL_RELEASE_FOR_DOWNLOAD
+    // Only usable for debug and first call has a large
+    // overhead from search string construction.
+    // As inventory names aren't unique, are large and can change,
+    // there is little we can use them for in release builds.
+    // Prefer shorter
+    params.name = bridge->getName();
+#else
+    // We don't have a source of unique names and inventory
+    // items can reach millions in quantity, just use
+    // a short descriptor
+    params.name = "itm";
+#endif
     params.creation_date = bridge->getCreationDate();
     params.root = mFolderRoot.get();
     params.listener = bridge;
     params.rect = LLRect (0, 0, 0, 0);
-    //  params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
     // <FS:Ansariel> Inventory specials
     //params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
@@ -1173,7 +1194,7 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 
     params.for_inventory = true;
 
-    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
     params.item_height = fsFolderViewItemHeight;
     params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -1833,7 +1854,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
                     LLFolderBridge* prev_bridge = dynamic_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
                     if(prev_bridge)
                     {
-                        prev_bridge->clearDisplayName();
+                        prev_bridge->clearSearchableName();
                         prev_bridge->setShowDescendantsCount(false);
                         prev_folder_item->refresh();
                     }
@@ -1842,7 +1863,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
                 LLFolderBridge* bridge = dynamic_cast<LLFolderBridge*>(folder_item->getViewModelItem());
                 if(bridge)
                 {
-                    bridge->clearDisplayName();
+                    bridge->clearSearchableName();
                     bridge->setShowDescendantsCount(true);
                     folder_item->refresh();
                     mPreviousSelectedFolder = bridge->getUUID();
@@ -1857,7 +1878,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
             LLFolderBridge* prev_bridge = dynamic_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
             if(prev_bridge)
             {
-                prev_bridge->clearDisplayName();
+                prev_bridge->clearSearchableName();
                 prev_bridge->setShowDescendantsCount(false);
                 prev_folder_item->refresh();
             }
@@ -1877,7 +1898,7 @@ void LLInventoryPanel::updateFolderLabel(const LLUUID& folder_id)
         LLFolderBridge* bridge = dynamic_cast<LLFolderBridge*>(folder_item->getViewModelItem());
         if(bridge)
         {
-            bridge->clearDisplayName();
+            bridge->clearSearchableName();
             bridge->setShowDescendantsCount(true);
             folder_item->refresh();
         }

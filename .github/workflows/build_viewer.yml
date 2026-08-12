@@ -20,7 +20,7 @@ on:
     - cron: '00 03 * * *' # Run every day at 3am UTC
 env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
-  EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
+  EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting --lto
   build_secrets_checkout: ${{github.workspace}}/signing
   XZ_DEFAULTS: -T0
   FS_RELEASE_TYPE: Unknown
@@ -35,7 +35,7 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: ["macos-15","ubuntu-22.04","windows-2022"]
+        os: ["macos-15","ubuntu-24.04","windows-2022"]
         grid: ["sl","os"]
         variant: ["regular","avx"]
     runs-on: ${{ matrix.os }}
@@ -51,14 +51,17 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew update
+          # aws/tap is preinstalled on the runner but is not used by this workflow.
+          if brew tap | grep -qx 'aws/tap'; then
+            brew untap aws/tap
+          fi
           brew install bash
           brew install gnu-sed
 
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
         if: matrix.container_image == 'ubuntu:22.04'
@@ -73,7 +76,7 @@ jobs:
       - name: Set up Python (normal case)
         if: matrix.container_image != 'ubuntu:22.04'
         id: py311_setup
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           check-latest: true
@@ -125,16 +128,28 @@ jobs:
         with: 
           swap-storage: false
 
-      - name: Install GCC-13
+      - name: Install GCC 14.1
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-          sudo apt-get install -y gcc-13 g++-13
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 130 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-13
-          echo "CC=gcc-13"  >> $GITHUB_ENV
-          echo "CXX=g++-13" >> $GITHUB_ENV
+          # Retry add-apt-repository up to 3 times with timeout
+          for i in {1..3}; do
+            echo "Attempt $i to add toolchain repository..."
+            timeout 60 sudo add-apt-repository -y -n ppa:ubuntu-toolchain-r/test && break || {
+              if [ $i -lt 3 ]; then
+                echo "Attempt $i failed, retrying in 10 seconds..."
+                sleep 10
+              else
+                echo "Failed to add repository after 3 attempts"
+                exit 1
+              fi
+            }
+          done
+          sudo apt-get -o Acquire::Retries=3 update
+          sudo apt-get -o Acquire::Retries=3 install -y gcc-14 g++-14
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 \
+            --slave /usr/bin/g++ g++ /usr/bin/g++-14
+          echo "CC=gcc-14"  >> $GITHUB_ENV
+          echo "CXX=g++-14" >> $GITHUB_ENV
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
         with:
@@ -185,12 +200,12 @@ jobs:
         shell: bash
     
       - name: Get the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -440,9 +455,9 @@ jobs:
         id: version
         shell: bash
         run: |
-          if [ -r "indra/newview/VIEWER_VERSION.txt" ]
+          if [ -r "indra/newview/VIEWER_VERSION_FS.txt" ]
           then
-              viewer_version="$(<"indra/newview/VIEWER_VERSION.txt")"
+              viewer_version="$(<"indra/newview/VIEWER_VERSION_FS.txt")"
               echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
           fi
           viewer_build=$(git rev-list --count HEAD)
@@ -457,7 +472,7 @@ jobs:
       
 
       - name: Post Bugsplat Symbols
-        uses: BugSplat-Git/symbol-upload@main
+        uses: beqjanus/symbol-upload@main
         with:
           clientId: ${{ 
             steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || 
@@ -484,11 +499,11 @@ jobs:
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
           files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/Release/{Firestorm,*.dSYM}' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
-          node-version: "20"
+          node-version: "24"
           dumpSyms: false
       - name: Publish artifacts
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{ matrix.grid }}-artifacts.zip
           path: |
@@ -497,7 +512,7 @@ jobs:
 
       - name: publish Linux artifacts
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: | 
@@ -506,7 +521,7 @@ jobs:
 
       - name: publish MacOS artifacts
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: |
@@ -521,7 +536,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: |
             fsutils/download_list.py
@@ -535,7 +550,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         id: download
         with:
           path: to_deploy        
@@ -587,7 +602,7 @@ jobs:
 
       # Upload Build Info Artifact (note that this file is expected to be identical for each matrix run, so items like OS and VARIANT cannot be in this file.)
       - name: Upload Tag Info
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build_info
           path: build_info.json

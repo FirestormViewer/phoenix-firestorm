@@ -45,7 +45,7 @@
 			<text name="InstructSelectResident">
 				Wybierz osobę w pobliżu:
 			</text>
-			<slider label="Zasięg" name="near_me_range"/>
+			<slider label="Odl." name="near_me_range"/>
 			<text name="meters">
 				Metry
 			</text>
@@ -63,6 +63,11 @@
 				<columns label="Imię" name="nameUUID" />
 				<columns label="Nazwa użytkownika" name="usernameUUID" />
 			</fs_scroll_list>
+		</panel>
+		<panel label="Zestawy kontaktów" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				Wybierz zestaw kontaktów:
+			</text>
 		</panel>
 	</tab_container>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>

@@ -49,6 +49,9 @@
 			<menu_item_check label="Immer rennen" name="Always Run"/>
 			<menu_item_check label="Sitzen erzwingen" name="Force Toggle Sitting"/>
 			<menu_item_check label="Movelock" name="Move Lock"/>
+			<menu_item_check label="Pre-Sprung-Animation ignorieren" name="Avatar Ignore Prejump"/>
+			<menu_item_call label="Zu nächstem Avatar drehen" name="AvatarFaceNearest"/>
+			<menu_item_check label="Avatar-Ausrichtung" name="AvatarAlign"/>
 		</menu>
 		<menu_item_check label="Steuerung" name="Movement Controls"/>
 		<menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
@@ -97,6 +100,11 @@
             <menu_item_check label="Teleport-Angebote und -Anforderungen abweisen" name="Automatically reject teleport offers"/>
             <menu_item_check label="Alle Gruppeneinladungen abweisen" name="Reject all group invites"/>
             <menu_item_check label="Alle Freundschaftsanfragen abweisen" name="Reject all friendship requests"/>
+            <menu label="Ad-hoc-Konferenzen" name="Ad-hoc conferences">
+                <menu_item_check label="Alle automatisch ignorieren und verlassen" name="FSIgnoreAdHocSessions"/>
+                <menu_item_check label="Ignorierte im Chat in der Nähe melden" name="FSReportIgnoredAdHocSession"/>
+                <menu_item_check label="Von Freunden nicht ignorieren" name="FSDontIgnoreAdHocFromFriends"/>
+            </menu>
         </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
 		<menu_item_call label="Twitter..." name="Twitter"/>
@@ -152,6 +160,7 @@
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
 			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>
+			<menu_item_check label="Sound stummschalten/Stummschaltung aufheben" name="toggle_sound"/>
 			<menu label="Mehrfach-Import" name="WL Bulk Import">
 				<menu_item_call label="Tage..." name="WL Bulk Import Days"/>
 				<menu_item_call label="Himmel..." name="WL Bulk Import Skies"/>
@@ -288,7 +297,6 @@
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
 		<menu_item_call label="Stundenplan Firestorm-Klassen" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestorm-Eventkalender" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Anweisungen..." name="How To"/>
 		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Whitelist-Unterstützung" name="whitelist_folders"/>
@@ -559,6 +567,7 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Animierte Avatar-System-Kleidung rendern" name="Render Avatar Cloth"/>
 			<menu_item_check label="Sammeln von Vertex Buffern für Schrift aktivieren" name="Collect Font Vertex Buffers"/>
+			<menu_item_check label="Sammeln von Vertex Buffern für UI-Texturen aktivieren" name="Collect UI Image Vertex Buffers"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
 		</menu>

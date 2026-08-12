@@ -29,5 +29,5 @@
 	</text>
 	<button label="Annehmen" label_selected="Annehmen" name="Accept"/>
 	<button label="Ignorieren" label_selected="Ignorieren" name="Reject"/>
-	<button label="Stattdessen IM öffnen" name="Start IM"/>
+	<button label="Stattdessen IM öffnen" name="Start IM" width="140"/>
 </floater>

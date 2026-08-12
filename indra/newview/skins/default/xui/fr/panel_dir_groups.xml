@@ -1,0 +1,26 @@
+<panel label="Groupes" name="panel_dir_groups">
+	<button tool_tip="Page précédente" name="prev_btn"/>
+	<button tool_tip="Page suivante" name="next_btn"/>
+	<string name="searching_text">
+		Recherche en cours...
+	</string>
+	<string name="not_found_text">
+		Pas de résultats.
+	</string>
+	<string name="found_text">
+		[COUNT] trouvé(s).
+	</string>
+	<text name="find">
+		Termes de la recherche :
+	</text>
+	<check_box label="Inclure les groupes adultes" name="incmature"/>
+	<combo_box name="groups_maturity">
+		<combo_box.item label="Général" name="Desired_PG"/>
+		<combo_box.item label="Général et Modéré" name="Desired_Mature"/>
+		<combo_box.item label="Général, Modéré, Adulte" name="Desired_Adult"/>
+	</combo_box>
+	<scroll_list name="results">
+		<column label="Nom" name="name" dynamicwidth="true"/>
+		<column label="Membres" name="members"/>
+	</scroll_list>
+</panel>

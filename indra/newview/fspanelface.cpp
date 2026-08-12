@@ -472,9 +472,18 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
     LLSelectedTEGetmatId() :
         mHasFacesWithoutPBR(false),
         mHasFacesWithPBR(false),
+        mIdenticalMaterial(true),
+        mIdenticalBaseColor(true),
+        mIdenticalMetallic(true),
+        mIdenticalRoughness(true),
+        mIdenticalEmissive(true),
+        mIdenticalDoubleSided(true),
+        mIdenticalAlphaMode(true),
+        mIdenticalAlphaCutoff(true),
         mInitialized(false),
         mMaterial(nullptr)
     {
+        mIdenticalMap.fill(true);
     }
 
     bool apply(LLViewerObject* object, S32 te_index) override
@@ -567,17 +576,6 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
         }
         else
         {
-            LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000012 << LL_ENDL;
-
-            mIdenticalMaterial = true;
-            mIdenticalBaseColor = true;
-            mIdenticalMetallic = true;
-            mIdenticalRoughness = true;
-            mIdenticalEmissive = true;
-            mIdenticalDoubleSided = true;
-            mIdenticalAlphaMode = true;
-            mIdenticalAlphaCutoff = true;
-
             LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000013 << LL_ENDL;
 
             LLGLTFMaterial* mat = object->getTE(te_index)->getGLTFMaterial();
@@ -596,9 +594,6 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
 
             for(U32 map = 0; map < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; map++)
             {
-                // initialize array to say "all PBR maps are the same"
-                mIdenticalMap[map] = true;
-
                 LL_DEBUGS("GET_GLTF_MATERIAL_PARAMS") << 10000017 << " map:" << map << LL_ENDL;
 
                 if (override && override->mTextureId[map].notNull())
@@ -643,7 +638,7 @@ struct LLSelectedTEGetmatId : public LLSelectedTEFunctor
 
     bool mIdenticalMaterial;
 
-    bool mIdenticalMap[LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT];
+    std::array<bool, LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT> mIdenticalMap;
     bool mIdenticalBaseColor;
     bool mIdenticalMetallic;
     bool mIdenticalRoughness;
@@ -1457,6 +1452,27 @@ struct FSPanelFaceSetAlignedTEFunctor : public LLSelectedTEFunctor
                 FSPanelFace::LLSelectedTEMaterial::setSpecularOffsetY(mPanel, uv_offset.mV[VY], te, object->getID());
                 FSPanelFace::LLSelectedTEMaterial::setSpecularRepeatX(mPanel, uv_scale.mV[VX], te, object->getID());
                 FSPanelFace::LLSelectedTEMaterial::setSpecularRepeatY(mPanel, uv_scale.mV[VY], te, object->getID());
+            }
+
+            // Also align GLTF material if any
+            S32 gltf_info_index = 0; // base texture
+            LLVector2 gltf_offset, gltf_scale;
+            F32 gltf_rot;
+            if (facep->calcAlignedPlanarGLTF(mCenterFace, &gltf_offset, &gltf_scale, &gltf_rot, gltf_info_index))
+            {
+                LLGLTFMaterial new_override;
+                const LLTextureEntry* tep = object->getTE(te);
+                if (tep && tep->getGLTFMaterialOverride())
+                {
+                    new_override = *tep->getGLTFMaterialOverride();
+                }
+
+                LLGLTFMaterial::TextureTransform& transform = new_override.mTextureTransform[gltf_info_index];
+                transform.mOffset.set(gltf_offset.mV[0], gltf_offset.mV[1]);
+                transform.mScale.set(gltf_scale.mV[0], gltf_scale.mV[1]);
+                transform.mRotation = gltf_rot;
+
+                LLGLTFMaterialList::queueModify(object, te, &new_override);
             }
         }
         if (!set_aligned)

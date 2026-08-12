@@ -31,8 +31,11 @@
 
 #include "llagent.h"
 #include "llgroupmgr.h"
+#include <boost/signals2.hpp>
 
 class FSFloaterGroupTitles;
+class LLCheckBoxCtrl;
+class LLContextMenu;
 class LLFilterEditor;
 class LLScrollListCtrl;
 
@@ -43,7 +46,7 @@ public:
     FSGroupTitlesObserver(const LLGroupData& group_data, LLHandle<FSFloaterGroupTitles> parent);
     virtual ~FSGroupTitlesObserver();
 
-    virtual void changed(LLGroupChange gc);
+    void changed(LLGroupChange gc) override;
 
 protected:
     LLHandle<FSFloaterGroupTitles>  mParent;
@@ -57,13 +60,13 @@ public:
     FSFloaterGroupTitles(const LLSD &);
     virtual ~FSFloaterGroupTitles();
 
-    /*virtual*/ bool postBuild();
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask);
-    /*virtual*/ bool hasAccelerators() const { return true; }
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
 
-    virtual void changed(LLGroupChange gc);
-    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
+    void changed(LLGroupChange gc) override;
+    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata) override; // called on agent group list changes
 
     void processGroupTitleResults(const LLGroupData& group_data);
 
@@ -79,14 +82,30 @@ private:
     void openGroupInfo();
     void onFilterEdit(const std::string& search_string);
 
+    void onSetRegion();
+    void onSetRegionManual();
+    void onClearRegion();
+    void onUseDefaultToggle();
+    void onSetAsDefault();
+    void updateDefaultColumn();
+    void updateRegionColumn();
+
     LLButton*           mActivateButton;
     LLButton*           mRefreshButton;
     LLButton*           mInfoButton;
+    LLButton*           mSetRegionButton;
+    LLButton*           mSetRegionManualButton;
+    LLButton*           mClearRegionButton;
+    LLButton*           mSetDefaultButton;
+    LLCheckBoxCtrl*     mUseDefaultCheck;
     LLScrollListCtrl*   mTitleList;
     LLFilterEditor*     mFilterEditor;
 
     std::string         mFilterSubString;
     std::string         mFilterSubStringOrig;
+
+    boost::signals2::connection mAssignmentsChangedConnection;
+    LLHandle<LLContextMenu>     mClearRegionMenuHandle;
 
     typedef std::map<LLUUID, FSGroupTitlesObserver*> observer_map_t;
     observer_map_t      mGroupTitleObserverMap;

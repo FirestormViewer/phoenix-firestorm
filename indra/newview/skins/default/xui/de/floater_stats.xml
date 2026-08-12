@@ -120,6 +120,21 @@
 					</stat_view>
 				</stat_view>
 			</stat_view>
+			<stat_view name="voice" label="Sprachchat">
+				<stat_bar name="webrtc_latency" label="Latenz"/>
+				<stat_bar name="webrtc_upload_bandwidth" label="Bandbreite Upload"/>
+				<stat_view name="incoming_audio" label="Eingehendes Audio">
+					<stat_bar name="incoming_packet_recv" label="Empfangene Pakete"/>
+					<stat_bar name="packets_in_lost" label="Verlorene Pakete"/>
+					<stat_bar name="jitter_in" label="Jitter"/>
+					<stat_bar name="jitter_buffer" label="Jitter-Puffer"/>
+				</stat_view>
+				<stat_view name="outgoing_audio" label="Ausgehendes Audio">
+					<stat_bar name="packets_out_sent" label="Versendete Pakete"/>
+					<stat_bar name="packets_out_lost" label="Verlorene Pakete"/>
+					<stat_bar name="jitter_out" label="Jitter"/>
+				</stat_view>
+			</stat_view>
 		</container_view>
 	</scroll_container>
 </floater>

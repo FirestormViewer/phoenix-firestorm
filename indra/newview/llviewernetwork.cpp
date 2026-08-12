@@ -131,7 +131,7 @@ void LLGridManager::initialize(const std::string& grid_file)
                   MAIN_GRID_WEB_PROFILE_URL,
                   "Agni");
     addSystemGrid(SECOND_LIFE_BETA_LABEL,
-                  "util.aditi.lindenlab.com",
+                  BETAGRID,
                   "https://login.aditi.lindenlab.com/cgi-bin/login.cgi",
                   "https://secondlife.aditi.lindenlab.com/helpers/",
                   DEFAULT_LOGIN_PAGE,
@@ -149,7 +149,8 @@ void LLGridManager::initialize(const std::string& grid_file)
 #if 0 //<FS:AW disabled for meeting havok sublicense requirements/>
     LLSD other_grids;
     llifstream llsd_xml;
-    if (!grid_file.empty())
+    // grids.xml is not supplied by default
+    if (!grid_file.empty() && LLFile::isfile(grid_file))
     {
         LL_INFOS("GridManager")<<"Grid configuration file '"<<grid_file<<"'"<<LL_ENDL;
         llsd_xml.open( grid_file.c_str(), std::ios::in | std::ios::binary );
@@ -593,11 +594,19 @@ std::string LLGridManager::getGridLoginID()
 
 std::string LLGridManager::getUpdateServiceURL()
 {
+    auto env_update_service = LLStringUtil::getoptenv("SL_UPDATE_SERVICE");
     std::string update_url_base = gSavedSettings.getString("CmdLineUpdateService");;
     if ( !update_url_base.empty() )
     {
         LL_INFOS("UpdaterService","GridManager")
             << "Update URL base overridden from command line: " << update_url_base
+            << LL_ENDL;
+    }
+    else if (env_update_service && env_update_service->find("http") != std::string::npos)
+    {
+        update_url_base = *env_update_service;
+        LL_INFOS("UpdaterService", "GridManager")
+            << "Update URL base overridden from SL_UPDATE_SERVICE environment variable: " << update_url_base
             << LL_ENDL;
     }
     else if ( mGridList[mGrid].has(GRID_UPDATE_SERVICE_URL) )

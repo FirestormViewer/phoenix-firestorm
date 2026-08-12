@@ -380,7 +380,8 @@ public:
 
 // </FS:CR>
 #ifdef OPENSIM
-    const std::set<std::string, std::less<>>& getGods() const { return mGodNames; };
+    const std::set<std::string, std::less<>>& getGods() const { return mGodNames; }
+    const std::vector<std::string> getStunServers() const { return mStunServers; }
 #endif // OPENSIM
 // </FS:CR>
 
@@ -456,6 +457,8 @@ public:
     S32  getLastUpdate() const {return mLastUpdate;}
 
     std::string getSimHostName();
+
+    bool isRegionWebRTCEnabled();
 
     static bool isNewObjectCreationThrottleDisabled() {return sNewObjectCreationThrottle < 0;}
 
@@ -625,6 +628,7 @@ public:
     // <FS:CR> Opensim region capabilities
 #ifdef OPENSIM
     std::set<std::string, std::less<>> mGodNames;
+    std::vector<std::string> mStunServers;
 #endif
     // </FS:CR>
 

@@ -78,8 +78,6 @@ FSVirtualTrackpad::FSVirtualTrackpad(const FSVirtualTrackpad::Params &p)
     addChild(mTouchArea);
 }
 
-FSVirtualTrackpad::~FSVirtualTrackpad() {}
-
 bool FSVirtualTrackpad::postBuild()
 {
     return true;
@@ -553,6 +551,8 @@ bool FSVirtualTrackpad::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (isPointInTouchArea(x, y))
     {
+        mWheelClicksSinceLastDelta = 0;
+
         determineThumbClickError(x, y);
         updateClickErrorIfInfiniteScrolling();
         gFocusMgr.setMouseCapture(this);
@@ -606,6 +606,9 @@ bool FSVirtualTrackpad::handleScrollWheel(S32 x, S32 y, S32 clicks)
             changeAmount /= 5;
 
         mWheelClicksSinceLastDelta = -1 * clicks * changeAmount;
+
+        mValueDeltaX = mValueDeltaY = mValueDeltaZ = 0;
+        mPinchValueDeltaX = mPinchValueDeltaY = mPinchValueDeltaZ = 0;
 
         if (mDoingPinchMode)
         {

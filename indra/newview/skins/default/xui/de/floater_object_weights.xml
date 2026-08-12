@@ -26,11 +26,16 @@
 	<text name="rezzed_on_land" value="--"/>
 	<text name="rezzed_on_land_label" value="Auf Land gerezzt"/>
 	<text name="remaining_capacity" value="--"/>
-	<text name="remaining_capacity_label" value="Verbleibende Kapazität"/>
+	<text name="remaining_capacity_label" value="Verbleib. Kapazität"/>
 	<text name="total_capacity" value="--"/>
 	<text name="total_capacity_label" value="Gesamtkapazität"/>
 	<text name="rendering_info_text" value="Render-Info"/>
 	<text name="lod_level_label" top_delta="0" value="LOD (Detail-Level)"/>
 	<text name="triangles_shown_label" value="Angezeigte Dreiecke"/>
 	<text name="pixel_area_label" value="Pixel Area"/>
+	<text name="lod_info_text" value="LOD-Info"/>
+	<text name="high_lod_tris_label" value="Hohe Dreiecke"/>
+	<text name="medium_lod_tris_label" value="Mittlere Dreiecke"/>
+	<text name="low_lod_tris_label" value="Niedrige Dreiecke"/>
+	<text name="lowest_lod_tris_label" value="Niedrigste Dreiecke"/>
 </floater>

@@ -28,6 +28,7 @@
 	<string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Parité avec le client Second Life: [VIEWER_VERSION_LL]
 	</string>
 	<string name="AboutCompiler">
 		Compilé avec [COMPILER] version [COMPILER_VERSION]
@@ -508,7 +509,7 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$ :"/>
 	<string name="TooltipSLIcon">
-		Il s’agit d’un lien vers une page dans le domaine officiel SecondLife.com ou LindenLab.com.
+		Il s’agit d’un lien vers une page dans le domaine officiel SecondLife.com, LindenLab.com ou firestormviewer.org.
 	</string>
 	<string name="TooltipFlagScript">
 		Script
@@ -547,7 +548,7 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 		Vous ne pouvez pas rezzer (charger) des articles du dossier Annonces de la Place de marché
 	</string>
 	<string name="TooltipOutboxWorn">
-		Vous ne pouvez pas mettre d&apos;articles que vous portez dans le dossier Annonces de la Place du marché
+		Vous ne pouvez pas mettre d&apos;articles que vous portez dans le dossier Annonces de Marketplace
 	</string>
 	<string name="TooltipOutboxFolderLevels">
 		Le niveau de dossiers imbriqués dépasse [AMOUNT]. Diminuez le nombre de niveaux de dossiers imbriqués dans d&apos;autres dossiers. Si nécessaire, placez certains articles dans une boîte.
@@ -568,19 +569,19 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 		Impossible de vendre ou de transférer un ou plusieurs de ces objets
 	</string>
 	<string name="TooltipOutboxNotInInventory">
-		Vous ne pouvez mettre sur la Place du marché que des articles de votre inventaire
+		Vous ne pouvez mettre sur Marketplace que des articles de votre inventaire
 	</string>
 	<string name="TooltipOutboxLinked">
-		Vous ne pouvez pas mettre des articles ou dossiers liés sur la Place du marché
+		Vous ne pouvez pas mettre des articles ou dossiers liés sur Marketplace
 	</string>
 	<string name="TooltipOutboxCallingCard">
-		Vous ne pouvez pas mettre des cartes de visite sur la Place du marché
+		Vous ne pouvez pas mettre des cartes de visite sur Marketplace
 	</string>
 	<string name="TooltipOutboxDragActive">
 		vous ne pouvez pas déplacer une annonce publiée
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		Vous ne pouvez pas déplacer le dossier racine des annonces de la Place du marché
+		Vous ne pouvez pas déplacer le dossier racine des annonces de Marketplace
 	</string>
 	<string name="TooltipOutboxMixedStock">
 		tous les articles d&apos;un dossier de stock doivent avoir le même type et droit
@@ -732,6 +733,9 @@ peuvent être joints aux notes.
 	</string>
 	<string name="NoneFound">
 		Aucun résultat.
+	</string>
+	<string name="ServerUnavailable">
+		Service indisponible
 	</string>
 	<string name="RetrievingData">
 		En cours d&apos;extraction...
@@ -1639,6 +1643,15 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="InventoryNoMatchingRecentItems">
 		Avez-vous trouvé ce que vous cherchiez ? Essayez [secondlife:///app/inventory/filters Show filters].
 	</string>
+	<string name="InventoryNoMatchingFavorites">
+		Vous n'avez ajouté aucun article à vos favoris.
+	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Filtre
+	</string>
+	<string name="FSInventoryCustomTabShowHidden">
+		Afficher les onglets masqués
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/places/[SEARCH_TERM] Rechercher].
 	</string>
@@ -1661,7 +1674,7 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Vous n&apos;avez pas de copie de cette texture dans votre inventaire
 	</string>
 	<string name="InventoryInboxNoItems">
-		Les achats que vous avez effectués sur la Place du marché s&apos;affichent ici. Vous pouvez alors les faire glisser vers votre inventaire afin de les utiliser.
+		Les achats que vous avez effectués sur Marketplace s&apos;affichent ici. Vous pouvez alors les faire glisser vers votre inventaire afin de les utiliser.
 	</string>
 	<string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
@@ -1688,33 +1701,33 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Ouvrir la fenêtre avec les options Jeu
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
-		Tout le monde peut vendre des articles sur la Place du marché.
+		Tout le monde peut vendre des articles sur Marketplace.
 	</string>
 	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
-		Pour devenir vendeur, vous devez [[MARKETPLACE_CREATE_STORE_URL] créer une boutique sur la Place du marché].
+		Pour devenir vendeur, vous devez [[MARKETPLACE_CREATE_STORE_URL] créer une boutique sur Marketplace].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Votre boîte d&apos;envoi est vide.
 	</string>
 	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
-		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone et cliquez sur &quot;Envoyer vers la Place du marché&quot;.
+		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Marketplace], faites-les glisser vers cette zone et cliquez sur &quot;Envoyer vers Marketplace&quot;.
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
-		Initialisation de la Place du marché...
+		Initialisation de Marketplace...
 	</string>
 	<string name="InventoryOutboxInitializing">
-		Nous sommes en train d&apos;accéder à votre compte dans la [[MARKETPLACE_CREATE_STORE_URL] boutique de la Place du marché].
+		Nous sommes en train d&apos;accéder à votre compte dans la [[MARKETPLACE_CREATE_STORE_URL] boutique de Marketplace].
 	</string>
 	<string name="InventoryOutboxErrorTitle">
-		Erreurs de la Place du marché.
+		Erreurs de Marketplace.
 	</string>
 	<string name="InventoryOutboxError">
-		La [[MARKETPLACE_CREATE_STORE_URL] boutique de la Place du marché] renvoie des erreurs.
+		La [[MARKETPLACE_CREATE_STORE_URL] boutique de Marketplace] renvoie des erreurs.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Une erreur est survenue lors de l’ouverture des annonces de la Place du marché.
+		Une erreur est survenue lors de l’ouverture des annonces de Marketplace.
 Si vous continuez de recevoir ce message, contactez l’assistance Second Life à http://support.secondlife.com pour obtenir de l’aide.
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
@@ -1726,10 +1739,10 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
-		Votre dossier Annonces de la Place du marché est vide.
+		Votre dossier Annonces de Marketplace est vide.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItems">
-		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone.
+		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Marketplace], faites-les glisser vers cette zone.
 	</string>
 	<string name="InventoryItemsCount">
 		( [ITEMS]/[CATEGORIES] Articles )
@@ -1786,13 +1799,13 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 		Erreur :
 	</string>
 	<string name="Marketplace Error Not Merchant">
-		Avant d&apos;envoyer des articles vers la Place du marché, vous devez vous configurer comme vendeur (gratuit).
+		Avant d&apos;envoyer des articles vers Marketplace, vous devez vous configurer comme vendeur (gratuit).
 	</string>
 	<string name="Marketplace Error Not Accepted">
 		Impossible de déplacer l&apos;article dans ce dossier.
 	</string>
 	<string name="Marketplace Error Unsellable Item">
-		Cet article ne peut pas être vendu sur la Place du marché.
+		Cet article ne peut pas être vendu sur Marketplace.
 	</string>
 	<string name="MarketplaceNoID">
 		no Mkt ID
@@ -2818,18 +2831,6 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Chargement...
-	</string>
-	<string name="NoPicksText">
-		Vous n'avez pas créé de favoris.
-	</string>
-	<string name="NoAvatarPicksText">
-		L'utilisateur n'a pas de favoris.
-	</string>
-	<string name="NoClassifiedsText">
-		Vous n'avez pas créé d'annonces. Cliquez sur le bouton Plus ci-dessous pour créer une annonce.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		L'utilisateur n'a pas d'annonces
 	</string>
 	<string name="MultiPreviewTitle">
 		Prévisualiser
@@ -4856,9 +4857,6 @@ Pour en savoir plus, rendez-vous sur https://second.life/scripted-agents.
 	<string name="share_alert">
 		Faire glisser les objets de l&apos;inventaire ici
 	</string>
-	<string name="facebook_post_success">
-		Vous avez publié sur Facebook.
-	</string>
 	<string name="flickr_post_success">
 		Vous avez publié sur Flickr.
 	</string>
@@ -5840,9 +5838,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Grid_Status_Label">
 		État du réseau
 	</string>
-	<string name="Command_HowTo_Label">
-		Aide rapide
-	</string>
 	<string name="Command_Inventory_Label">
 		Inventaire
 	</string>
@@ -5850,10 +5845,10 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Carte
 	</string>
 	<string name="Command_Marketplace_Label">
-		Place du marché
+		Marketplace
 	</string>
 	<string name="Command_MarketplaceListings_Label">
-		Place du marché
+		Marketplace
 	</string>
 	<string name="Command_MiniMap_Label">
 		Mini-carte
@@ -6002,6 +5997,12 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Omnifilter_Label">
 		Omnifiltre
 	</string>
+	<string name="Command_AvatarAlign_Label">
+		Alignement de l'avatar
+	</string>
+	<string name="Command_FaceNearest_Label">
+		Face à l'avatar le plus proche
+	</string>
 	 <string name="Command_360_Capture_Tooltip">
 		Capturez une image équirectangulaire de 360°.
 	</string>
@@ -6040,9 +6041,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Afficher l’état actuel du réseau
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Comment effectuer les opérations courantes
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Afficher et utiliser vos possessions
@@ -6572,6 +6570,15 @@ correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez v
 	</string>
 	<string name="FSCameraPositionCopied">
 		Position de la caméra [POS] copiée dans le presse-papiers.
+	</string>
+	<string name="FSCameraPositionPasted">
+		Caméra restaurée à [POS].
+	</string>
+	<string name="FSCameraPositionParseError">
+		Position de la caméra incorrecte. Attendu : &lt;x, y, z&gt; ou &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).
+	</string>
+	<string name="FSCmdLineZOffsetUsage">
+		Définir la hauteur de l'avatar au survol (utilisation : /zoffset value ou +delta).
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Distance d'affichage réglèe [DISTANCE]m.
@@ -7201,5 +7208,17 @@ Votre position actuelle : [AVATAR_POS]
 	</string>
 	<string name="OmnifilterReplacement">
 		Remplacement omnifiltre : [REPLACEMENT]
+	</string>
+	<string name="OmnifilterDefaultName">
+		Par défaut
+	</string>
+	<string name="OmnifilterExportDescription">
+		Jeu de regles Omnifiltre : [REPLACEMENT]
+	</string> 
+	<string name="FSAvatarAlignToggleMini">
+		Mini
+	</string>
+	<string name="FSAvatarAlignToggleFull">
+		Complet
 	</string>
 </strings>

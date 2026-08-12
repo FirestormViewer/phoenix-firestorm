@@ -23,7 +23,7 @@
 		</panel>
 	</tab_container>
 	<panel name="bottom_panel">
-		<button label="In Zwischenablage kopieren" name="copy_btn" tool_tip="Kopiert die Restriktionen in die Zwischenablage" width="181"/>
-		<icon name="dummy_icon" width="101"/>
+		<button label="In Zwischenablage kopieren" name="copy_btn" tool_tip="Kopiert die Restriktionen in die Zwischenablage" width="191"/>
+		<icon name="dummy_icon" width="91"/>
 	</panel>
 </floater>

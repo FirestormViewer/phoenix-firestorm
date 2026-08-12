@@ -18,7 +18,7 @@ Możesz wybrać wiele osób naciskając Ctrl i klikając na ich imionach.
 				<name_list.columns label="Dotacje" name="donated"/>
 				<name_list.columns label="Tytuł" name="title"/>
 			</name_list>
-			<button label="Zaproś do grupy" name="member_invite"/>
+			<button label="Zaproś" name="member_invite"/>
 			<button label="Usuń z grupy" name="member_eject"/>
 			<button label="Zbanuj" name="member_ban"/>
 			<button name="export_list" label="Eksport listy"/>

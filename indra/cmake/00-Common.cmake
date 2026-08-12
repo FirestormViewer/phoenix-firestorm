@@ -25,6 +25,17 @@ include(Linking)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} $ENV{LL_BUILD_RELEASE}")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} $ENV{LL_BUILD_RELWITHDEBINFO}")
 
+
+if (DARWIN)
+  # LL_BUILD carries a literal -mmacosx-version-min=<ver> from
+  # viewer-build-variables. We derive the macOS deployment target in
+  # Variables.cmake (clamping up to the SDK's supported minimum when needed)
+  # and let CMAKE_OSX_DEPLOYMENT_TARGET emit the flag to both compiler and
+  # linker. Strip the verbatim flag here so it can't conflict with the
+  # clamped deployment target.
+  string(REGEX REPLACE "-mmacosx-version-min=[0-9.]+" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif (DARWIN)
+
 # Given that, all the flags you see added below are flags NOT present in
 # https://bitbucket.org/lindenlab/viewer-build-variables/src/tip/variables.
 # Before adding new ones here, it's important to ask: can this flag really be
@@ -60,7 +71,20 @@ endif()
 
 set(USE_LTO OFF CACHE BOOL "Enable Link Time Optimization")
 if(USE_LTO)
+  # <FS:PP> (revised by Beq to allow flto=auto on Linux/GCC to re-enable parallel builds with LTO enabled.)
+  if(NOT MSVC)
+    if(LINUX AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      set(CMAKE_C_COMPILE_OPTIONS_IPO "-flto=auto")
+      set(CMAKE_C_LINK_OPTIONS_IPO "-flto=auto")
+    else()
+      set(CMAKE_C_COMPILE_OPTIONS_IPO "-flto")
+      set(CMAKE_C_LINK_OPTIONS_IPO "-flto")
+    endif()
+    set(CMAKE_XCODE_ATTRIBUTE_LLVM_LTO "YES")
+  endif()
+  # </FS:PP>
   set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  add_compile_definitions(USE_LTO) # <FS:PP> LTO indicator
 endif()
 
 # Don't bother with a MinSizeRel or Debug builds.

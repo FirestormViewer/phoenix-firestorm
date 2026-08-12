@@ -74,6 +74,8 @@ public:
     /// return the viewer version as a string like "2.0.0"
     std::string getShortVersion() const;
 
+    std::string getLLViewerVersion() const; // <FS:PP>
+
     /// return the viewer version and channel as a string
     /// like "Second Life Release 2.0.0.200030"
     std::string getChannelAndVersion();
@@ -142,8 +144,8 @@ private:
     std::string mReleaseNotes;
     // Store unique_ptrs to the next couple things so we don't have to explain
     // to every consumer of this header file all the details of each.
-    // mPump is the LLEventMailDrop on which we listen for SLVersionChecker to
-    // post the release-notes URL from the Viewer Version Manager.
+    // mPump is the LLEventMailDrop on which we listen for the
+    // release-notes URL from the Viewer Version Manager.
     std::unique_ptr<LLEventMailDrop> mPump;
     // mStore is an adapter that stores the release-notes URL in mReleaseNotes.
     std::unique_ptr<LLStoreListener<std::string>> mStore;

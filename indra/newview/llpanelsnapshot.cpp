@@ -62,18 +62,14 @@ LLPanelSnapshot::LLPanelSnapshot()
 // virtual
 bool LLPanelSnapshot::postBuild()
 {
-    // <FS:Ansariel> Fix XUI parser warning
-    //S32 w = getTypedPreviewWidth();
-    //S32 h = getTypedPreviewHeight();
-    //getChild<LLUICtrl>("save_btn")->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost(w, h)));
-    LLUICtrl* save_btn = findChild<LLUICtrl>("save_btn");
+    S32 w = getTypedPreviewWidth();
+    S32 h = getTypedPreviewHeight();
+    LLUICtrl *save_btn = findChild<LLUICtrl>("save_btn");
     if (save_btn)
     {
-        S32 w = getTypedPreviewWidth();
-        S32 h = getTypedPreviewHeight();
+        // Not all snapshot floaters have a save button
         save_btn->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost(w, h)));
     }
-    // </FS:Ansariel>
     getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onResolutionComboCommit, this, _1));
     if (!getWidthSpinnerName().empty())
     {
@@ -209,14 +205,11 @@ void LLPanelSnapshot::updateImageQualityLevel()
         quality_lvl = LLTrans::getString("snapshot_quality_very_high");
     }
 
-    // <FS:Ansariel> Only update if it really exists
-    //getChild<LLTextBox>("image_quality_level")->setTextArg("[QLVL]", quality_lvl);
-    LLTextBox* image_quality_level_textbox = findChild<LLTextBox>("image_quality_level");
-    if (image_quality_level_textbox)
+    LLTextBox* quality_lvl_ctrl = findChild<LLTextBox>("image_quality_level");
+    if (quality_lvl_ctrl)
     {
-        image_quality_level_textbox->setTextArg("[QLVL]", quality_lvl);
+        quality_lvl_ctrl->setTextArg("[QLVL]", quality_lvl);
     }
-    // </FS:Ansariel>
 }
 
 void LLPanelSnapshot::goBack()

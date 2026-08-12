@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="delete_pref_preset" title="EXCLUIR PREDEFINIÇÃO PREF">
+<floater name="delete_pref_preset" title="Excluir predefinicao">
 	<string name="title_graphic">
-		Excluir predefinição de gráficos
+		Excluir predefinicao grafica
 	</string>
 	<string name="title_camera">
-		Excluir predefinição de câmera
+		Excluir predefinicao da camera
 	</string>
 	<text name="Preset">
-		Selecionar uma predefinição
+		Selecionar uma predefinicao:
 	</text>
 	<button label="Excluir" name="delete"/>
 	<button label="Cancelar" name="cancel"/>

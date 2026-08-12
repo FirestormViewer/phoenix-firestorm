@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="directory" title="Recherche">
+	<tab_container name="Directory Tabs">
+		<panel label="Personnes" name="panel_dir_people"/>
+		<panel label="Groupes" name="panel_dir_groups"/>
+		<panel label="Lieux" name="panel_dir_places"/>
+		<panel label="Ventes de terrains" name="panel_dir_land"/>
+		<panel label="Événements" name="panel_dir_events"/>
+		<panel label="Annonces" name="panel_dir_classified"/>
+		<panel label="Web" name="panel_dir_web"/>
+	</tab_container>
+	<button label="Afficher le profil" name="open_profile_btn"/>
+</floater>

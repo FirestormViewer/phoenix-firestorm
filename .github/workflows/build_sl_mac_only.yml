@@ -56,7 +56,7 @@ jobs:
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
         if: matrix.container_image == 'ubuntu:22.04'
@@ -71,7 +71,7 @@ jobs:
       - name: Set up Python (normal case)
         if: matrix.container_image != 'ubuntu:22.04'
         id: py311_setup
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           check-latest: true
@@ -183,12 +183,12 @@ jobs:
         shell: bash
     
       - name: Get the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -455,7 +455,7 @@ jobs:
       
 
       - name: Post Bugsplat Symbols
-        uses: BugSplat-Git/symbol-upload@main
+        uses: beqjanus/symbol-upload@main
         with:
           clientId: ${{ 
             steps.version.outputs.viewer_release_type == 'Release' && secrets.BUGSPLAT_RELEASE_ID || 
@@ -482,11 +482,11 @@ jobs:
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
           files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/Release/{Firestorm,*.dSYM}' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
-          node-version: "20"
+          node-version: "24"
           dumpSyms: false
       - name: Publish artifacts
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{ matrix.grid }}-artifacts.zip
           path: |
@@ -495,7 +495,7 @@ jobs:
 
       - name: publish Linux artifacts
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: | 
@@ -504,7 +504,7 @@ jobs:
 
       - name: publish MacOS artifacts
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
           path: |
@@ -519,7 +519,7 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: |
             fsutils/download_list.py
@@ -533,7 +533,7 @@ jobs:
         run: pip install discord-webhook
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         id: download
         with:
           path: to_deploy        
@@ -585,7 +585,7 @@ jobs:
 
       # Upload Build Info Artifact (note that this file is expected to be identical for each matrix run, so items like OS and VARIANT cannot be in this file.)
       - name: Upload Tag Info
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build_info
           path: build_info.json

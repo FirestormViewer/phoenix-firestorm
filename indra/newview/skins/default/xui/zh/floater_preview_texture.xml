@@ -7,16 +7,13 @@
 		複製到庫存
 	</floater.string>
 	<floater.string name="DateTime">
-		[year,datetime,slt], [month,datetime,slt] [day,datetime,slt] [weekday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+		[year,datetime,slt], [month,datetime,slt] [day,datetime,slt] [weekday,datetime,slt] [ampm,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
 	<floater.string name="UploaderDateTime">
 		由[UPLOADER]上傳於[DATE_TIME]。
 	</floater.string>
 	<text name="desc txt">
 		描述:
-	</text>
-	<text name="uploader_label">
-		上傳者:
 	</text>
 	<button label="檔案" name="openprofile" />
 	<panel name="dimensions_panel">

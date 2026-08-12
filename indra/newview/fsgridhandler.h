@@ -242,6 +242,8 @@ public:
     void setDirectoryFee(const S32 directory_fee) { mDirectoryFee = directory_fee; }
     S32  getDirectoryFee() const { return mDirectoryFee; }
 
+    std::string getUpdateServiceURL();
+
 private:
     friend class GridInfoRequestResponder;
 
@@ -255,6 +257,8 @@ private:
     void setGridData(const LLSD& grid_info) { mGridList[mGrid] = grid_info; }
     S32  mClassifiedFee;
     S32  mDirectoryFee;
+
+    std::unordered_set<std::string> mFetchedGridInfo;
 
 protected:
     void updateIsInProductionGrid();

@@ -263,7 +263,7 @@ void LLGroupActions::search()
 {
     // <FS:Ansariel> Open groups search panel instead of invoking presumed failed websearch
     //LLFloaterReg::showInstance("search", LLSD().with("collection", "groups"));
-    LLFloaterReg::showInstance("search", LLSD().with("tab", "groups"));
+    LLFloaterReg::showInstance((gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search"), LLSD().with("tab", "groups"));
     // </FS:Ansariel>
 }
 

@@ -28,7 +28,7 @@
 	<check_box label="Stern anzeigen, wenn Objekt ein Favorit ist" name="favorite_star"/>
 	<check_box label="Stern an Ordner anzeigen, die Favoriten enthalten" name="favorite_hollow_star"/>
 	<check_box label="Farbiger Text" name="favorites_color"/>
-	<text name="attachment_return_txt">
+	<text name="avatar_attachment_action">
 		Drücken von Eingabetaste bei einem Avatar-Anhang
 	</text>
 	<combo_box name="attach_combo">

@@ -143,6 +143,14 @@ endif (USE_AVX_OPTIMIZATION)
 
 add_subdirectory(cmake)
 
+# <FS:PP> LTO indicator
+if (USE_LTO)
+  message(STATUS "Compiling with Link Time Optimization")
+else (USE_LTO)
+  message(STATUS "Compiling without Link Time Optimization")
+endif (USE_LTO)
+# </FS:PP> LTO indicator
+
 if (USE_PRECOMPILED_HEADERS)
   add_subdirectory(${LIBS_OPEN_PREFIX}llprecompiled)
 endif ()

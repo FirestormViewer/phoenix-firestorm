@@ -45,6 +45,7 @@ include(TinyEXR)
 include(ThreeJS)
 include(Tracy)
 include(UI)
+include(Velopack)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
@@ -116,14 +117,18 @@ set(viewer_SOURCE_FILES
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
     fsfavoritegroups.cpp
+    fsinventorycustomtabs.cpp
     fsfloaterassetblacklist.cpp
+    fsfloateravataralign.cpp
     fsfloateravatarrendersettings.cpp
+    fsfloaterbigpreview.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
     fsfloatergroup.cpp
     fsfloatergrouptitles.cpp
+    fsgrouptitleregionmgr.cpp
     fsfloaterimport.cpp
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
@@ -158,17 +163,19 @@ set(viewer_SOURCE_FILES
     fsnearbychatcontrol.cpp
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
+    fsnewitemctrl.cpp
     fspanelblocklist.cpp
     fspanelcontactsets.cpp
     fspanelface.cpp
     fspanelimcontrolpanel.cpp
     fspanellogin.cpp
+    fspanelpreferenceuisounds.cpp
     fspanelprefs.cpp
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
     fsposeranimator.cpp
-	fsposestate.cpp
+    fsposestate.cpp
     fsposingmotion.cpp
     fsprimfeedauth.cpp
     fsradar.cpp
@@ -198,7 +205,9 @@ set(viewer_SOURCE_FILES
     llagentwearablesfetch.cpp
     vjlocalmesh.cpp
     vjfloaterlocalmesh.cpp
+    fslocalmeshimportbase.cpp
     vjlocalmeshimportdae.cpp
+    fslocalmeshimportgltf.cpp
 
     gltfscenemanager.cpp
     # <FS:Ansariel> Group GLTF files into their subfolders
@@ -320,7 +329,6 @@ set(viewer_SOURCE_FILES
     llfloateravatartextures.cpp
     llfloaterbanduration.cpp
     llfloaterbeacons.cpp
-    llfloaterbigpreview.cpp
     llfloaterbuildoptions.cpp
     llfloaterbulkpermission.cpp
     llfloaterbulkupload.cpp
@@ -356,6 +364,7 @@ set(viewer_SOURCE_FILES
     llfloaterfonttest.cpp
     llfloaterforgetuser.cpp
     llfloatergesture.cpp
+    llfloatergestureautocompletepicker.cpp
     llfloatergltfasseteditor.cpp
     llfloatergodtools.cpp
     llfloatergotoline.cpp
@@ -366,7 +375,6 @@ set(viewer_SOURCE_FILES
     llfloaterhandler.cpp
     llfloaterhelpbrowser.cpp
     llfloaterhoverheight.cpp
-    llfloaterhowto.cpp
     llfloaterhud.cpp
     llfloaterimagepreview.cpp
     llfloaterimsessiontab.cpp
@@ -431,7 +439,6 @@ set(viewer_SOURCE_FILES
     llfloatersidepanelcontainer.cpp
     llfloaterslapptest.cpp
     llfloatersnapshot.cpp
-    llfloatersounddevices.cpp
     llfloaterspellchecksettings.cpp
     llfloatertelehub.cpp
     llfloatertestinspectors.cpp
@@ -443,7 +450,6 @@ set(viewer_SOURCE_FILES
     llfloatertranslationsettings.cpp
     llfloateruipreview.cpp
     llfloaterurlentry.cpp
-    llfloatervoiceeffect.cpp
     llfloatervoicevolume.cpp
     llfloaterwebcontent.cpp
     llfloaterwhitelistentry.cpp
@@ -546,6 +552,7 @@ set(viewer_SOURCE_FILES
     llfloaterimnearbychat.cpp
     llfloaterimnearbychathandler.cpp
     llfloaterimnearbychatlistener.cpp
+    llnearbyvoicemoderation.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
     llnotificationgrouphandler.cpp
@@ -639,7 +646,6 @@ set(viewer_SOURCE_FILES
     llpanelsnapshotprofile.cpp
     llpanelteleporthistory.cpp
     llpaneltiptoast.cpp
-    llpanelvoiceeffect.cpp
     #llpaneltopinfobar.cpp # <FS:Zi> unused
     llpanelpulldown.cpp
     llpanelvoicedevicesettings.cpp
@@ -719,6 +725,7 @@ set(viewer_SOURCE_FILES
     #llslurl.cpp #<FS:AW optional opensim support>
     llsnapshotlivepreview.cpp
     llspatialpartition.cpp
+    llstatslistener.cpp
     llspeakers.cpp
     llspeakingindicatormanager.cpp
     llsplitbutton.cpp
@@ -787,6 +794,7 @@ set(viewer_SOURCE_FILES
     llurllineeditorctrl.cpp
     llurlwhitelist.cpp
     llversioninfo.cpp
+    llvvmquery.cpp
     llviewchildren.cpp
     llviewerassetstats.cpp
     llviewerassetstorage.cpp
@@ -970,18 +978,22 @@ set(viewer_HEADER_FILES
     fsexportperms.h
     fsfloateraddtocontactset.h
     fsfavoritegroups.h
+    fsinventorycustomtabs.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
+    fsfloaterbigpreview.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
     fsfloaterexport.h
     fsfloatergroup.h
     fsfloatergrouptitles.h
+    fsgrouptitleregionmgr.h
     fsfloaterimport.h
     fsfloaterim.h
     fsfloaterimcontainer.h
     fsfloaternearbychat.h
+    fsfloateravataralign.h
     fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
     fsfloaterposer.h
@@ -1013,11 +1025,13 @@ set(viewer_HEADER_FILES
     fsnearbychatcontrol.h
     fsnearbychathub.h
     fsnearbychatvoicemonitor.h
+    fsnewitemctrl.h
     fspanelblocklist.h
     fspanelcontactsets.h
     fspanelface.h
     fspanelimcontrolpanel.h
     fspanellogin.h
+    fspanelpreferenceuisounds.h
     fspanelprefs.h
     fspanelradar.h
     fsparticipantlist.h
@@ -1053,7 +1067,9 @@ set(viewer_HEADER_FILES
     omnifilterengine.h
     vjlocalmesh.h
     vjfloaterlocalmesh.h
+    fslocalmeshimportbase.h
     vjlocalmeshimportdae.h
+    fslocalmeshimportgltf.h
 
     gltfscenemanager.h
     groupchatlistener.h
@@ -1178,7 +1194,6 @@ set(viewer_HEADER_FILES
     llfloateravatartextures.h
     llfloaterbanduration.h
     llfloaterbeacons.h
-    llfloaterbigpreview.h
     llfloaterbuildoptions.h
     llfloaterbulkpermission.h
     llfloaterbulkupload.h
@@ -1214,6 +1229,7 @@ set(viewer_HEADER_FILES
     llfloaterfonttest.h
     llfloaterforgetuser.h
     llfloatergesture.h
+    llfloatergestureautocompletepicker.h
     llfloatergltfasseteditor.h
     llfloatergodtools.h
     llfloatergotoline.h
@@ -1224,7 +1240,6 @@ set(viewer_HEADER_FILES
     llfloaterhandler.h
     llfloaterhelpbrowser.h
     llfloaterhoverheight.h
-    llfloaterhowto.h
     llfloaterhud.h
     llfloaterimagepreview.h
     llfloaterimnearbychat.h
@@ -1293,7 +1308,6 @@ set(viewer_HEADER_FILES
     llfloatersidepanelcontainer.h
     llfloaterslapptest.h
     llfloatersnapshot.h
-    llfloatersounddevices.h
     llfloaterspellchecksettings.h
     llfloatertelehub.h
     llfloatertestinspectors.h
@@ -1305,7 +1319,6 @@ set(viewer_HEADER_FILES
     llfloatertranslationsettings.h
     llfloateruipreview.h
     llfloaterurlentry.h
-    llfloatervoiceeffect.h
     llfloatervoicevolume.h
     llfloaterwebcontent.h
     llfloaterwhitelistentry.h
@@ -1402,6 +1415,7 @@ set(viewer_HEADER_FILES
     llnameeditor.h
     llnamelistctrl.h
     llnavigationbar.h
+    llnearbyvoicemoderation.h
     llnetmap.h
     llnotificationhandler.h
     llnotificationlistitem.h
@@ -1487,7 +1501,6 @@ set(viewer_HEADER_FILES
     llpaneltiptoast.h
     llpanelpulldown.h
     llpanelvoicedevicesettings.h
-    llpanelvoiceeffect.h
     #llpaneltopinfobar.h # <FS:Zi> unused
     llpanelvolume.h
     llpanelvolumepulldown.h
@@ -1567,6 +1580,7 @@ set(viewer_HEADER_FILES
     llsnapshotlivepreview.h
     llsnapshotmodel.h
     llspatialpartition.h
+    llstatslistener.h
     llspeakers.h
     llspeakingindicatormanager.h
     llsplitbutton.h
@@ -1638,6 +1652,7 @@ set(viewer_HEADER_FILES
     llurllineeditorctrl.h
     llurlwhitelist.h
     llversioninfo.h
+    llvvmquery.h
     llviewchildren.h
     llviewerassetstats.h
     llviewerassetstorage.h
@@ -1824,6 +1839,8 @@ if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx-objc.h)
   LIST(APPEND viewer_SOURCE_FILES llfilepicker_mac.mm)
   LIST(APPEND viewer_HEADER_FILES llfilepicker_mac.h)
+  LIST(APPEND viewer_SOURCE_FILES llvelopack.cpp)
+  LIST(APPEND viewer_HEADER_FILES llvelopack.h)
 
   set_source_files_properties(
     llappviewermacosx-objc.mm
@@ -1881,6 +1898,38 @@ if (DARWIN)
   list(APPEND viewer_SOURCE_FILES ${viewer_RESOURCE_FILES})
 endif (DARWIN)
 
+# Platform-specific files for IDE visibility (excluded from build on other platforms)
+set(macosx_viewer_SOURCE_FILES
+    llappviewermacosx.cpp
+    llappviewermacosx-objc.mm
+    llfilepicker_mac.mm
+    llappdelegate-objc.mm
+    )
+
+set(macosx_viewer_HEADER_FILES
+    llappviewermacosx.h
+    llappviewermacosx-objc.h
+    llfilepicker_mac.h
+    )
+
+set(linux_viewer_SOURCE_FILES
+    llappviewerlinux.cpp
+    #llappviewerlinux_api_dbus.cpp
+    )
+
+set(linux_viewer_HEADER_FILES
+    )
+
+set(windows_viewer_SOURCE_FILES
+    llappviewerwin32.cpp
+    llwindebug.cpp
+    )
+
+set(windows_viewer_HEADER_FILES
+    llappviewerwin32.h
+    llwindebug.h
+    )
+
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
 
@@ -1935,6 +1984,7 @@ if (WINDOWS)
          growlmanager.cpp
          growlnotifierwin.cpp
          llappviewerwin32.cpp
+         llvelopack.cpp
          llwindebug.cpp
          )
 
@@ -1942,6 +1992,7 @@ if (WINDOWS)
 
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
+         llvelopack.h
          llwindebug.h
 # [FS] Growl libs
          growlmanager.h
@@ -2090,6 +2141,45 @@ if (WINDOWS)
 
 endif (WINDOWS)
 
+# Add all platform-specific files to the target for IDE visibility
+# Collect non-platform files for IDE visibility only
+set(ide_visibility_files "")
+if (NOT DARWIN)
+  list(APPEND ide_visibility_files ${macosx_viewer_SOURCE_FILES} ${macosx_viewer_HEADER_FILES})
+endif()
+if (NOT LINUX)
+  list(APPEND ide_visibility_files ${linux_viewer_SOURCE_FILES} ${linux_viewer_HEADER_FILES})
+endif()
+if (NOT WINDOWS)
+  list(APPEND ide_visibility_files ${windows_viewer_SOURCE_FILES} ${windows_viewer_HEADER_FILES})
+endif()
+
+list(APPEND viewer_SOURCE_FILES ${ide_visibility_files})
+
+# Mark non-platform files as excluded from build
+if (WINDOWS)
+  set_source_files_properties(
+    ${macosx_viewer_SOURCE_FILES}
+    ${linux_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (DARWIN)
+  set_source_files_properties(
+    ${windows_viewer_SOURCE_FILES}
+    ${linux_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (LINUX)
+  set_source_files_properties(
+    ${macosx_viewer_SOURCE_FILES}
+    ${windows_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+endif()
+
 # Add the xui files. This is handy for searching for xui elements
 # from within the IDE.
 file(GLOB_RECURSE viewer_XUI_FILES LIST_DIRECTORIES FALSE
@@ -2133,6 +2223,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/scriptlibrary_preproc.xml
     app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
+    app_settings/settings_modern.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
     app_settings/settings_text.xml
@@ -2459,6 +2550,7 @@ if (WINDOWS)
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
+              "--velopack=${USE_VELOPACK}"
               "--avx2=${USE_AVX2_OPTIMIZATION}"
               --build=${CMAKE_CURRENT_BINARY_DIR}
               --buildtype=$<CONFIG>
@@ -2589,6 +2681,10 @@ endif()
 
 if (USE_DISCORD)
     target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+endif ()
+
+if (TARGET ll::velopack)
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::velopack )
 endif ()
 
 if( TARGET ll::intel_memops )
@@ -2838,6 +2934,7 @@ if (DARWIN)
           --arch=${ARCH}
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
+          --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
           "--discord=${USE_DISCORD}"
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
@@ -3089,4 +3186,3 @@ if (LL_TESTS)
 endif (LL_TESTS)
 
 check_message_template(${VIEWER_BINARY_NAME})
-

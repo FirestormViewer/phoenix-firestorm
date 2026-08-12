@@ -30,11 +30,9 @@
 
 #include "indra_constants.h"        // for MASK_ALT etc.
 #include "message.h"                // for gMessageSystem
-//#include "stdenums.h"             // for ADD_TOP
 #include "llagent.h"                // for gAgent
 #include "llanimationstates.h"
 #include "llbutton.h"
-#include "llcachename.h"            // for gCacheName
 #include "llcheckboxctrl.h"
 #include "llfloater.h"
 #include "llfloaterreg.h"
@@ -64,9 +62,6 @@ RecentAnimationList::RecentAnimationList()
 {
 }
 
-RecentAnimationList::~RecentAnimationList()
-{
-}
 
 void RecentAnimationList::addAnimation(const LLUUID& id, const LLUUID& playedBy)
 {
@@ -241,7 +236,7 @@ void AnimationExplorer::onStopAndRevokePressed()
 
     if (mCurrentObject.notNull())
     {
-        if (LLViewerObject* vo = gObjectList.findObject(mCurrentObject); vo)
+        if (LLViewerObject* vo = gObjectList.findObject(mCurrentObject))
         {
             gAgentAvatarp->revokePermissionsOnObject(vo);
         }
@@ -287,8 +282,7 @@ void AnimationExplorer::draw()
 
     // update tiems and "Still playing" status in the list once every few seconds
     static F64 last_update = 0.0;
-    F64 time = LLTimer::getElapsedSeconds();
-    if (time - last_update > 5.0)
+    if (F64 time = LLTimer::getElapsedSeconds(); time - last_update > 5.0)
     {
         last_update = time;
         updateList(time);
@@ -313,11 +307,8 @@ void AnimationExplorer::updateList(F64 current_timestamp)
     S32 anim_id_column = mAnimationScrollList->getColumn("animation_id")->mIndex;
 
     // go through the full animation scroll list
-    std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
-    for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
+    for (auto item : mAnimationScrollList->getAllData())
     {
-        LLScrollListItem* item = *list_iter;
-
         // get a pointer to the "Played" column text
         LLScrollListText* played_text = dynamic_cast<LLScrollListText*>(item->getColumn(played_column));
 
@@ -385,8 +376,7 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
         // if it was an avatar, get the name here
         if (vo->isAvatar())
         {
-            LLAvatarName av_name;
-            if (LLAvatarNameCache::get(played_by, &av_name))
+            if (LLAvatarName av_name; LLAvatarNameCache::get(played_by, &av_name))
             {
                 playedByName = av_name.getCompleteName();
             }
@@ -404,10 +394,8 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
         // not an avatar, do a lookup by UUID
         else
         {
-            // find out if we know the name to this UUID already
-            std::map<LLUUID, std::string>::iterator iter = mKnownIDs.find(played_by);
-            // if we don't know it yet, start a lookup
-            if (iter == mKnownIDs.end())
+            // find out if we know the name to this UUID already; if we don't know it yet, start a lookup
+            if (!mKnownIDs.contains(played_by))
             {
                 // if we are not already looking up this object's name, send a request out
                 if (std::find(mRequestedIDs.begin(), mRequestedIDs.end(), played_by) == mRequestedIDs.end())

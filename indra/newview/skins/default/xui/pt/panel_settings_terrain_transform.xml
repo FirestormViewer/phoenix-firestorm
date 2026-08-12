@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Transformação" name="panel_settings_terrain_transform">
+	<text name="terrain0_label">
+		1
+	</text>
+	<text name="terrain1_label">
+		2
+	</text>
+	<text name="terrain2_label">
+		3
+	</text>
+	<text name="terrain3_label">
+		4
+	</text>
+	<text name="terrain0ScaleU_label">
+		Escala u
+	</text>
+	<spinner label="Escala u" name="terrain0ScaleU"/>
+	<spinner label="Escala u" name="terrain1ScaleU"/>
+	<spinner label="Escala u" name="terrain2ScaleU"/>
+	<spinner label="Escala u" name="terrain3ScaleU"/>
+	<text name="terrain0ScaleV_label">
+		Escala v
+	</text>
+	<spinner label="Escala v" name="terrain0ScaleV"/>
+	<spinner label="Escala v" name="terrain1ScaleV"/>
+	<spinner label="Escala v" name="terrain2ScaleV"/>
+	<spinner label="Escala v" name="terrain3ScaleV"/>
+	<text name="terrain0Rotation_label">
+		Rotação
+	</text>
+	<spinner label="Rotação" name="terrain0Rotation"/>
+	<spinner label="Rotação" name="terrain1Rotation"/>
+	<spinner label="Rotação" name="terrain2Rotation"/>
+	<spinner label="Rotação" name="terrain3Rotation"/>
+	<text name="terrain0OffsetU_label">
+		Deslocamento u
+	</text>
+	<spinner label="Deslocamento u" name="terrain0OffsetU"/>
+	<spinner label="Deslocamento u" name="terrain1OffsetU"/>
+	<spinner label="Deslocamento u" name="terrain2OffsetU"/>
+	<spinner label="Deslocamento u" name="terrain3OffsetU"/>
+	<text name="terrain0OffsetV_label">
+		Deslocamento v
+	</text>
+	<spinner label="Deslocamento v" name="terrain0OffsetV"/>
+	<spinner label="Deslocamento v" name="terrain1OffsetV"/>
+	<spinner label="Deslocamento v" name="terrain2OffsetV"/>
+	<spinner label="Deslocamento v" name="terrain3OffsetV"/>
+</panel>

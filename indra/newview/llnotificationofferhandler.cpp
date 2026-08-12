@@ -36,6 +36,7 @@
 #include "llscriptfloater.h"
 #include "llimview.h"
 #include "llnotificationsutil.h"
+#include "llchannelmanager.h"
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
 #include "rlvactions.h"
 // [/RLVa:KB]
@@ -114,7 +115,8 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification, 
                                 && gSavedSettings.getBOOL("PlayModeUISndInventoryOffer"))
                                 || ((notif_name == "TeleportOffered" || notif_name == "TeleportOffered_SLUrl" ||
                                     notif_name == "TeleportOffered_MaturityExceeded" || notif_name == "TeleportOffered_MaturityExceeded_SLUrl" ||
-                                    notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl")
+                                    notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl" ||
+                                    notif_name == "TeleportRequest")
                                 && gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"));
                 // </FS:Ansariel>
 
@@ -159,7 +161,13 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification, 
 
             LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel.get());
             if(channel)
+            {
+                if (LLChannelManager::getInstance()->getStartUpToastInited() && notification->getOfferFromAgent())
+                {
+                    LLChannelManager::getInstance()->onStartUpToastClose();
+                }
                 channel->addToast(p);
+            }
 
         }
 

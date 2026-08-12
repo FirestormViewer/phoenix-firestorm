@@ -83,6 +83,11 @@
 			<menu_item_check label="Respingi offerte e richieste di teleport" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Respingi inviti ai gruppi" name="Reject all group invites"/>
 			<menu_item_check label="Respingi offerte di amicizia" name="Reject all friendship requests"/>
+			<menu label="Conferenze ad-hoc" name="Ad-hoc conferences">
+				<menu_item_check label="Ignora e chiudi automaticamente tutte" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Segnala gli ignorati in chat locale" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Non ignorare dai miei amici" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Amici" name="My Friends"/>
 		<menu_item_check label="Contatti" name="Contacts"/>
@@ -286,7 +291,6 @@
 		<menu_item_call label="Gruppi di supporto di Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Calendario lezioni su Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Calendario eventi Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Guida in linea" name="How To"/>
 		<menu_item_call label="Aiuto su [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Informazioni su [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Whitelist File e Cartelle" name="whitelist_folders"/>

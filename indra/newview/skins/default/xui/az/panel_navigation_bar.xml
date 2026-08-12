@@ -6,7 +6,7 @@
 				<layout_panel name="navigation_buttons_visibility_panel">
 					<pull_button name="back_btn" tool_tip="Əvvəlki məkanə qayıt"/>
 					<pull_button name="forward_btn" tool_tip="İrəli məkana get"/>
-					<button name="home_btn" tool_tip="Evimə teleport ol"/>
+					<button name="home_btn" tool_tip="Evimə teleport ol[LOCATION]"/>
 					<button name="About_Land" label="Torpaq" tool_tip="Torpaq hissəsinin məlumat pəncərəsini göstər"/>
 					<button name="PersonalLighting" label="İşıq" tool_tip="Şəxsi işıqlandırma pəncərəsini göstər"/>
 				</layout_panel>

@@ -1410,7 +1410,35 @@ void LLVOVolume::updateSculptTexture()
 
 void LLVOVolume::updateVisualComplexity()
 {
-    LLVOAvatar* avatar = getAvatarAncestor();
+    LLVOAvatar* avatar = nullptr;
+    LLViewerObject* pobj = (LLViewerObject*)getParent();
+    LLViewerObject* lobj = this;
+    while (pobj)
+    {
+        avatar = pobj->asAvatar();
+        if (avatar)
+        {
+            break;
+        }
+        lobj = pobj;
+        pobj = (LLViewerObject*)pobj->getParent();
+    }
+
+    if (avatar)
+    {
+        // mark parent as dirty, complexity will be updated recursively.
+        avatar->markAttachmentComplexityDirty(lobj->getID());
+    }
+    LLVOAvatar* rigged_avatar = getAvatar();
+    if (rigged_avatar && (rigged_avatar != avatar))
+    {
+        // This might be wrong. Control avatars update each run,
+        // due to lack of dirty mechanics, and this might be
+        // where we should implement and call
+        // markControlAvatarComplexityDirty() if !isAttachment().
+        rigged_avatar->markAttachmentComplexityDirty(lobj->getID());
+    }
+    /*LLVOAvatar* avatar = getAvatarAncestor();
     if (avatar)
     {
         avatar->updateVisualComplexity();
@@ -1419,7 +1447,7 @@ void LLVOVolume::updateVisualComplexity()
     if(rigged_avatar && (rigged_avatar != avatar))
     {
         rigged_avatar->updateVisualComplexity();
-    }
+    }*/
 }
 
 void LLVOVolume::notifyMeshLoaded()
@@ -4617,40 +4645,6 @@ U32 LLVOVolume::getTriangleCount(S32* vcount) const
 
     return count;
 }
-// <FS:Beq> Generalise TriangleCount
-//U32 LLVOVolume::getHighLODTriangleCount()
-//{
-//  U32 ret = 0;
-//
-//  LLVolume* volume = getVolume();
-//
-//  if (!isSculpted())
-//  {
-//      LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
-//      ret = ref->getNumTriangles();
-//      LLPrimitive::getVolumeManager()->unrefVolume(ref);
-//  }
-//  else if (isMesh())
-//  {
-//      LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
-//      if (!ref->isMeshAssetLoaded() || ref->getNumVolumeFaces() == 0)
-//      {
-//          gMeshRepo.loadMesh(this, volume->getParams(), LLModel::LOD_HIGH);
-//      }
-//      ret = ref->getNumTriangles();
-//      LLPrimitive::getVolumeManager()->unrefVolume(ref);
-//  }
-//  else
-//  { //default sculpts have a constant number of triangles
-//      ret = 31*2*31;  //31 rows of 31 columns of quads for a 32x32 vertex patch
-//  }
-//
-//  return ret;
-//}
-U32 LLVOVolume::getHighLODTriangleCount()
-{
-    return (getLODTriangleCount(LLModel::LOD_HIGH));
-}
 
 U32 LLVOVolume::getLODTriangleCount(S32 lod)
 {
@@ -4676,13 +4670,18 @@ U32 LLVOVolume::getLODTriangleCount(S32 lod)
     }
     else
     { //default sculpts have a constant number of triangles
-        ret = (31 * 2 * 31)>>3*(3-lod);  //31 rows of 31 columns of quads for a 32x32 vertex patch (Beq: left shift by 2 for each lower LOD)
+        // <FS:Beq> Beq: left shift by 2 for each lower LOD
+        //ret = 31*2*31;  //31 rows of 31 columns of quads for a 32x32 vertex patch
+        ret = (31 * 2 * 31)>>3*(3-lod);  //31 rows of 31 columns of quads for a 32x32 vertex patch
     }
 
     return ret;
 }
-//</FS:Beq>
 
+U32 LLVOVolume::getHighLODTriangleCount()
+{
+    return getLODTriangleCount(LLModel::LOD_HIGH);
+}
 
 //static
 void LLVOVolume::preUpdateGeom()
@@ -6152,7 +6151,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     }
 
                     facep->setState(LLFace::RIGGED);
-                    facep->mSkinInfo = (LLMeshSkinInfo*) skinInfo; // TODO -- fix ugly de-consting here
+                    facep->mSkinInfo = skinInfo;// <FS:Beq/> be defensive about UAF with skinInfo during LocalMesh
                     facep->mAvatar = avatar;
                     any_rigged_face = true;
                 }
@@ -6300,7 +6299,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                                     bool should_render = true;
                                     if (gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_BLEND)
                                     {
-                                        if (gltf_mat->mBaseColor.mV[3] == 0.0f)
+                                        if (gltf_mat->mBaseColor.mV[3] == 0.0f && !LLDrawPoolAlpha::sShowDebugAlpha)
                                         {
                                             should_render = false;
                                         }

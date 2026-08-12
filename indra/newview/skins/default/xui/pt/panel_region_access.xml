@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Acesso" name="Access">
 	<tab_container name="tabs">
-		<panel label="GERENTES" name="estate_managers_panel">
+		<panel label="Gestores da propriedade" name="estate_managers_panel">
 			<text name="estate_manager_label">
-				Gerentes:
+				Gestores da propriedade:
 			</text>
 			<name_list name="estate_manager_name_list">
 				<columns label="Nome" name="name"/>
 			</name_list>
 			<button label="Adicionar..." name="add_estate_manager_btn"/>
 			<button label="Remover..." name="remove_estate_manager_btn"/>
+			<button label="Exportar..." name="export_estate_manager_btn"/>
+			<button label="Importar..." name="import_estate_manager_btn" tool_tip="Importa um arquivo CSV com apenas UUIDs válidos - um por linha, sem caracteres extras nem formatação"/>
 		</panel>
-		<panel label="PERMITIDO" name="allowed_panel">
+		<panel label="Permitidos" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
 				<filter_editor label="Buscar agentes permitidos" name="allowed_search_input"/>
 				<button label="Copiar" name="copy_allowed_list_btn"/>
 			</panel>
 			<text name="allow_resident_label">
-				Sempre permitido:
+				Sempre permitidos:
 			</text>
 			<name_list name="allowed_avatar_name_list">
 				<columns label="Nome" name="name"/>
 			</name_list>
 			<button label="Adicionar..." name="add_allowed_avatar_btn"/>
 			<button label="Remover..." name="remove_allowed_avatar_btn"/>
+			<button label="Exportar..." name="export_allowed_list_btn"/>
+			<button label="Importar..." name="import_allowed_list_btn" tool_tip="Importa um arquivo CSV com apenas UUIDs válidos - um por linha, sem caracteres extras nem formatação"/>
 		</panel>
-		<panel label="GRUPOS PERMITIDOS" name="allowed_groups_panel">
+		<panel label="Grupos permitidos" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
 				<filter_editor label="Buscar grupos permitidos" name="allowed_group_search_input"/>
 				<button label="Copiar" name="copy_allowed_group_list_btn"/>
@@ -38,23 +42,27 @@
 			</name_list>
 			<button label="Adicionar..." name="add_allowed_group_btn"/>
 			<button label="Remover..." name="remove_allowed_group_btn"/>
+			<button label="Exportar..." name="export_allowed_group_btn"/>
+			<button label="Importar..." name="import_allowed_group_btn" tool_tip="Importa um arquivo CSV com apenas UUIDs válidos - um por linha, sem caracteres extras nem formatação"/>
 		</panel>
-		<panel label="BANIDO" name="banned_panel">
+		<panel label="Banidos" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
 				<filter_editor label="Buscar agentes banidos" name="banned_search_input"/>
 				<button label="Copiar" name="copy_banned_list_btn"/>
 			</panel>
 			<text name="ban_resident_label">
-				Sempre banido:
+				Sempre banidos:
 			</text>
 			<name_list name="banned_avatar_name_list">
 				<columns label="Nome" name="name"/>
-				<columns label="Último acesso" name="last_login_date"/>
-				<columns label="Data do banimento" name="ban_date"/>
+				<columns label="Último login" name="last_login_date"/>
+				<columns label="Banido em" name="ban_date"/>
 				<columns label="Banido por" name="bannedby"/>
 			</name_list>
 			<button label="Adicionar..." name="add_banned_avatar_btn"/>
 			<button label="Remover..." name="remove_banned_avatar_btn"/>
+			<button label="Exportar..." name="export_banned_avatar_btn"/>
+			<button label="Importar..." name="import_banned_avatar_btn" tool_tip="Importa um arquivo CSV com apenas UUIDs válidos - um por linha, sem caracteres extras nem formatação"/>
 		</panel>
 	</tab_container>
 </panel>

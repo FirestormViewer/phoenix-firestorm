@@ -44,7 +44,6 @@
 //#include "llfloateravatarrendersettings.h" // <FS:Ansariel> [FS Persisted Avatar Render Settings]
 #include "llfloateravatartextures.h"
 #include "llfloaterbanduration.h"
-#include "llfloaterbigpreview.h"
 #include "llfloaterbeacons.h"
 #include "llfloaterbuildoptions.h"
 #include "llfloaterbulkpermission.h"
@@ -80,13 +79,13 @@
 #include "llfloaterfonttest.h"
 #include "llfloaterforgetuser.h"
 #include "llfloatergesture.h"
+#include "llfloatergestureautocompletepicker.h"
 #include "llfloatergltfasseteditor.h"
 #include "llfloatergodtools.h"
 #include "llfloatergridstatus.h"
 #include "llfloatergroups.h"
 #include "llfloaterhelpbrowser.h"
 #include "llfloaterhoverheight.h"
-#include "llfloaterhowto.h"
 #include "llfloaterhud.h"
 #include "llfloaterimagepreview.h"
 #include "llfloaterimsession.h"
@@ -144,7 +143,6 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llfloaterslapptest.h"
 #include "llfloatersnapshot.h"
-#include "llfloatersounddevices.h"
 #include "llfloaterspellchecksettings.h"
 #include "llfloatertelehub.h"
 #include "llfloatertestinspectors.h"
@@ -155,7 +153,6 @@
 #include "llfloatertoybox.h"
 #include "llfloatertranslationsettings.h"
 #include "llfloateruipreview.h"
-#include "llfloatervoiceeffect.h"
 #include "llfloaterwebcontent.h"
 #include "llfloatervoicevolume.h"
 #include "llfloaterwhitelistentry.h"
@@ -200,6 +197,7 @@
 #include "fsfloateraddtocontactset.h"
 #include "fsfloaterassetblacklist.h"
 #include "fsfloateravatarrendersettings.h"
+#include "fsfloaterbigpreview.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatercontactsetconfiguration.h"
 #include "fsfloaterdiscord.h"
@@ -241,6 +239,7 @@
 #include "vjfloaterlocalmesh.h" // local mesh
 #include "fsfloaterwhitelisthelper.h" // fs whitelist helper
 #include "omnifilter.h"               // Omnifilter support
+#include "fsfloateravataralign.h" // <FS:Chanayane> Compass floater
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 const std::string FLOATER_PROFILE("profile");
@@ -465,6 +464,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("font_test", "floater_font_test.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFontTest>);
     //LLFloaterReg::add("forget_username", "floater_forget_user.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterForgetUser>);
 
+    LLFloaterReg::add("gesture_autocomplete_picker", "floater_gesture_autocomplete_picker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGestureAutocompletePicker>);
     LLFloaterReg::add("gestures", "floater_gesture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGesture>);
     LLFloaterReg::add("gltf_asset_editor", "floater_gltf_asset_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGLTFAssetEditor>);
     LLFloaterReg::add("god_tools", "floater_god_tools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGodTools>);
@@ -597,7 +597,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("sell_land", "floater_sell_land.xml", &LLFloaterSellLand::buildFloater);
     LLFloaterReg::add("settings_color", "floater_settings_color.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSettingsColor>);
     LLFloaterReg::add("settings_debug", "floater_settings_debug.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSettingsDebug>);
-    LLFloaterReg::add("sound_devices", "floater_sound_devices.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundDevices>);
     // <FS:LO> Add ability for the statistics window to not be able to receive focus
     //LLFloaterReg::add("stats", "floater_stats.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloater>);
     LLFloaterReg::add("stats", "floater_stats.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStatistics>);
@@ -612,10 +611,7 @@ void LLViewerFloaterReg::registerFloaters()
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
     LLFloaterReg::add("legacy_search", "floater_directory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDirectory>);
     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
-    LLFloaterReg::add("guidebook", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHowTo>);
     LLFloaterReg::add("slapp_test", "floater_test_slapp.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSLappTest>);
-
-    LLFloaterReg::add("big_preview", "floater_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBigPreview>);
 
     LLFloaterUIPreviewUtil::registerFloater();
     LLFloaterReg::add("upload_anim_bvh", "floater_animation_bvh_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBvhPreview>, "upload");
@@ -624,8 +620,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("upload_model", "floater_model_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterModelPreview>, "upload");
     LLFloaterReg::add("upload_script", "floater_script_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptPreview>, "upload");
     LLFloaterReg::add("upload_sound", "floater_sound_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundPreview>, "upload");
-
-    LLFloaterReg::add("voice_effect", "floater_voice_effect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterVoiceEffect>);
 
     LLFloaterReg::add("web_content", "floater_web_content.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
     LLFloaterReg::add("whitelist_entry", "floater_whitelist_entry.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterWhiteListEntry>);
@@ -643,6 +637,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("primfeed", "floater_primfeed.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPrimfeed>);
     LLFloaterReg::add("fs_asset_blacklist", "floater_fs_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAssetBlacklist>);
     LLFloaterReg::add("fs_avatar_render_settings", "floater_fs_avatar_render_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarRenderSettings>);
+    LLFloaterReg::add("fs_big_preview", "floater_fs_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBigPreview>);
     LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
     LLFloaterReg::add("fs_add_contact", "floater_fs_contact_add.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAddToContactSet>);
     LLFloaterReg::add("fs_contact_set_config", "floater_fs_contact_set_configuration.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContactSetConfiguration>);
@@ -685,6 +680,10 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>(&LLFloaterReg::build<FSFloaterVRAMUsage>));
     LLFloaterReg::add("local_mesh_floater", "floater_vj_local_mesh.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalMesh>); // local mesh
     LLFloaterReg::add("fs_whitelist_floater", "floater_whitelist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWhiteListHelper>); // white list advisor
+    // <FS:Chanayane> Compass floater
+    LLFloaterReg::add("avatar_align",      "floater_avatar_align.xml",      (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlign>);
+    LLFloaterReg::add("avatar_align_mini", "floater_avatar_align_mini.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlignMini>);
+    // </FS:Chanayane>
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

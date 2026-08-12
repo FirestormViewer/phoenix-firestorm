@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <panel name="MediaControls">
-	<string name="min_width">300</string>
-	<string name="min_height">75</string>
-	<string name="zoom_medium_padding">1.1</string>
-	<string name="top_world_view_avoid_zone">50</string>
+	<string name="control_background_image_name">Inspector_Background</string>
+	<string name="skip_step">0.2</string>
 	<layout_stack name="progress_indicator_area">
 		<layout_panel name="media_progress_indicator">
 			<progress_bar name="media_progress_bar" tool_tip="Carregando mídia"/>
@@ -11,62 +9,59 @@
 	</layout_stack>
 	<layout_stack name="media_controls">
 		<layout_panel name="back">
-			<button name="back_btn" tool_tip="Navegar para trás"/>
+			<button name="back_btn" tool_tip="Voltar"/>
 		</layout_panel>
 		<layout_panel name="fwd">
-			<button name="fwd_btn" tool_tip="Navegar para frente"/>
+			<button name="fwd_btn" tool_tip="Avançar"/>
 		</layout_panel>
 		<layout_panel name="home">
-			<button name="home_btn" tool_tip="Página web:"/>
+			<button name="home_btn" tool_tip="Página inicial"/>
 		</layout_panel>
 		<layout_panel name="media_stop">
-			<button name="media_stop_btn" tool_tip="Parar mídia"/>
+			<button name="media_stop_btn" tool_tip="Parar reprodução de mídia"/>
 		</layout_panel>
 		<layout_panel name="reload">
 			<button name="reload_btn" tool_tip="Recarregar"/>
 		</layout_panel>
 		<layout_panel name="stop">
-			<button name="stop_btn" tool_tip="Parar de carregar"/>
+			<button name="stop_btn" tool_tip="Parar carregamento"/>
 		</layout_panel>
 		<layout_panel name="play">
-			<button name="play_btn" tool_tip="Tocar mídia"/>
+			<button name="play_btn" tool_tip="Reproduzir mídia"/>
 		</layout_panel>
 		<layout_panel name="pause">
 			<button name="pause_btn" tool_tip="Pausar mídia"/>
 		</layout_panel>
 		<layout_panel name="media_address">
 			<line_editor name="media_address_url" tool_tip="URL da mídia"/>
+			<icon name="media_secure_lock_flag" tool_tip="Navegação segura"/>
 			<layout_stack name="media_address_url_icons">
 				<layout_panel name="media_address_url_icons_wl">
-					<icon name="media_whitelist_flag" tool_tip="Lista ativada"/>
-				</layout_panel>
-				<layout_panel name="media_address_url_icons_sb">
-					<icon name="media_secure_lock_flag" tool_tip="Navegação segura"/>
+					<icon name="media_whitelist_flag" tool_tip="Whitelist ativada"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="media_play_position">
-			<slider_bar initial_value="0.5" name="media_play_slider" tool_tip="Andamento do vídeo"/>
+			<slider_bar initial_value="0.5" name="media_play_slider" tool_tip="Progresso da reprodução do vídeo"/>
 		</layout_panel>
 		<layout_panel name="skip_back">
-			<button name="skip_back_btn" tool_tip="Passo para trás"/>
+			<button name="skip_back_btn" tool_tip="Retroceder"/>
 		</layout_panel>
 		<layout_panel name="skip_forward">
-			<button name="skip_forward_btn" tool_tip="Passo para frente"/>
+			<button name="skip_forward_btn" tool_tip="Avançar"/>
 		</layout_panel>
 		<layout_panel name="media_volume">
-			<button name="media_mute_button" tool_tip="Silenciar esta mídia"/>
+			<button name="media_mute_button" tool_tip="Silenciar"/>
 			<slider name="volume_slider" tool_tip="Volume"/>
 		</layout_panel>
 		<layout_panel name="zoom_frame">
-			<button name="zoom_frame_btn" tool_tip="Enfocar mídia"/>
+			<button name="zoom_frame_btn" tool_tip="Ampliar mídia"/>
 		</layout_panel>
 		<layout_panel name="close">
-			<button name="close_btn" tool_tip="Menos zoom"/>
+			<button name="close_btn" tool_tip="Reduzir zoom"/>
 		</layout_panel>
 		<layout_panel name="new_window">
-			<button name="new_window_btn" tool_tip="Abrir URL em navegador"/>
+			<button name="new_window_btn" tool_tip="Abrir URL no navegador"/>
 		</layout_panel>
-		<icon name="media_secure_lock_flag" tool_tip="Navegador Seguro"/>
 	</layout_stack>
 </panel>

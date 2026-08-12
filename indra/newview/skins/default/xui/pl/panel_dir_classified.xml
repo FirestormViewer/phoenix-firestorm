@@ -1,0 +1,35 @@
+<panel label="Reklamy" name="panel_dir_classified">
+	<string name="searching_text">
+		Szukanie...
+	</string>
+	<string name="not_found_text">
+		Brak wyników.
+	</string>
+	<string name="found_text">
+		[COUNT] wyników.
+	</string>
+	<text name="find">
+		Szukana fraza:
+	</text>
+	<combo_box name="Category">
+		<combo_item name="AnyCategory" label="Każda kategoria"/>
+		<combo_item name="Shopping" label="Zakupy"/>
+		<combo_item name="LandRental" label="Wynajem ziemi"/>
+		<combo_item name="PropertyRental" label="Wynajem działek"/>
+		<combo_item name="SpecialAttraction" label="Specjalne oferty"/>
+		<combo_item name="NewProducts" label="Nowe produkty"/>
+		<combo_item name="Employment" label="Praca"/>
+		<combo_item name="Wanted" label="Poszukiwane"/>
+		<combo_item name="Service" label="Usługi"/>
+		<combo_item name="Personal" label="Personalne"/>
+	</combo_box>
+	<icon tool_tip="General (dla wszystkich)" name="rating_icon_general" />
+	<icon tool_tip="Moderate (umiarkowane)" name="rating_icon_moderate" />
+	<icon tool_tip="Adult (dla dorosłych)" name="rating_icon_adult" />
+	<scroll_list name="results">
+		<column label="Nazwa" name="name" />
+		<column label="Cena" name="price" />
+	</scroll_list>
+	<button tool_tip="Poprzednia strona" name="prev_btn" />
+	<button tool_tip="Następna strona" name="next_btn" />
+</panel>

@@ -36,6 +36,8 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone access is needed to allow connection to voice.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>WebRTC is used for voice chat, which may require local network access while establishing the voice connection.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>CFBundleDocumentTypes</key>

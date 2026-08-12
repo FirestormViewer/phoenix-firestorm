@@ -9,12 +9,6 @@
 	<floater.string name="tuning_fps">
 		自動調整影格率為 [FPSTARGET] FPS
 	</floater.string>
-	<floater.string name="av_frame_pct">
-		[AV_FRAME_PCT]%
-	</floater.string>
-	<floater.string name="huds_frame_pct">
-		[HUDS_FRAME_PCT]%
-	</floater.string>
 	<floater.string name="focus_fps">
 		背景執行
 	</floater.string>
@@ -59,12 +53,13 @@
 			<button name="PrefLoadButton" tool_tip="載入現有的預設設定。" />
 			<button tool_tip="載入適用於檢測到的硬體的預設設定。" name="Defaults" />
 			<text name="settings_desc">
-				調整策略：
+				效能調校策略：
 			</text>
 			<combo_box name="FSTuningFPSStrategy">
 				<combo_box.item label="僅化身" name="av_only" />
 				<combo_box.item label="化身和場景" name="av_and_scene" />
 			</combo_box>
+			<button name="target_btn" tool_tip="變更效能調校策略。"/>
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">

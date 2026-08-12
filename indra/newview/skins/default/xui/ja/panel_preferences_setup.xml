@@ -57,7 +57,7 @@
 			<text name="asset_text_box5">
 				㎆
 			</text>
-			<button label="インベントリのキャッシュクリア" name="ClearInventoryCache"/>
+			<button label="インベントリのキャッシュクリア" width="190" left="338" name="ClearInventoryCache"/>
 			<text name="Cache location">
 				キャッシュの場所：
 			</text>

@@ -44,6 +44,8 @@
 			<menu_item_check label="Usiądź na ziemi" name="Force Toggle Sitting" shortcut="control|alt|K"/>
 			<menu_item_check label="Unieruchom" name="Move Lock"/>
 			<menu_item_check label="Szybki skok" name="Avatar Ignore Prejump"/>
+			<menu_item_call label="Zwróć się w stronę najbliższego awatara" name="AvatarFaceNearest" />
+			<menu_item_check label="Wyrównanie awatara" name="AvatarAlign" />
 		</menu>
 		<menu_item_check label="Ustawienia ruchu" name="Movement Controls"/>
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>
@@ -84,6 +86,11 @@
 			<menu_item_check label="Odrzucaj propozycje i prośby o teleport" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Odrzucaj zaproszenia do grup" name="Reject all group invites"/>
 			<menu_item_check label="Odrzucaj zaproszenia do znajomych" name="Reject all friendship requests"/>
+			<menu label="Czaty konferencji (ad-hoc)" name="Ad-hoc conferences">
+				<menu_item_check label="Automatycznie ignoruj i opuszczaj wszystkie" name="FSIgnoreAdHocSessions"/>
+				<menu_item_check label="Zgłaszaj ignorowane w czacie w pobliżu" name="FSReportIgnoredAdHocSession"/>
+				<menu_item_check label="Nie ignoruj od moich znajomych" name="FSDontIgnoreAdHocFromFriends"/>
+			</menu>
 		</menu>
 		<menu_item_call label="Znajomi" name="My Friends"/>
 		<menu_item_check label="Kontakty" name="Contacts"/>
@@ -207,8 +214,6 @@
 			<menu_item_call label="Weź kopię" name="Take Copy"/>
 			<menu_item_call label="Duplikuj" name="Duplicate"/>
 			<menu_item_call label="Edytor cząsteczek" name="Menu Object Edit Particles"/>
-			<menu_item_call label="Zabierz z powrotem do Szafy" name="Save Object Back to My Inventory"/>
-			<menu_item_call label="Zapisz obiekt do Szafy" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Zapisz do zawartości obiektu" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
 			<menu label="Zapisz jako" name="Export Menu">
@@ -249,6 +254,7 @@
 			<menu_item_check label="Pokaż promień selekcji" name="Show Selection Beam"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent" />
 			<menu_item_check label="- Pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
+			<menu_item_check label="Pokaż sondy refleksyjne" name="Highlight Transparent Probes" />
 			<menu_item_check label="Bez obróbki końcowej" name="No Post" />
 			<menu label="Poziom szczegółów zaznaczenia" name="Selection level of detail">
 				<menu_item_check label="Domyślny" name="Default lod setting" />
@@ -297,7 +303,6 @@
 		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
 		<menu_item_call label="Harmonogram lekcji Firestorma" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Kalendarz wydarzeń Firestorma" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Samouczek" name="How To"/>
 		<!-- <menu_item_call label="Pomoc Second Life" name="Second Life Help"/> -->
 		<menu_item_call label="Pomoc: [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
@@ -432,7 +437,6 @@
 			<menu_item_check label="Konsola debugowania" name="Debug Console"/>
 			<menu_item_call label="Konsola powiadomień" name="Notifications"/>
 			<menu_item_check label="Podgląd procesów" name="Fast Timers"/>
-			<menu_item_check label="Pamięć" name="Memory"/>
 			<menu_item_check label="Statystyki sceny" name="Scene Statistics"/>
 			<menu_item_check label="Monitor obciążenia sceny" name="Scene Loading Monitor"/>
 			<menu_item_check label="Konsola debugowania regionu" name="Region Debug Console"/>
@@ -546,6 +550,7 @@
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
+			<menu_item_check label="Renderowanie animowanej odzieży systemowej" name="Render Avatar Cloth" />
 			<menu_item_check label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="Zbierz Vertex Buffer czcionek" name="Collect Font Vertex Buffers" />
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />

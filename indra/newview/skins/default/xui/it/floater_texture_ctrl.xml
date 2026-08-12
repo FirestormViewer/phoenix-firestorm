@@ -24,9 +24,6 @@
 		Dimensioni:
 [DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		La texture scelta è [TEXDIM]. L'immagine deve essere quadrata, minimo [MINTEXDIM].
-	</text>
 	<button label="Predefinita" label_selected="Predefinita" name="Default"/>
 	<button label="Vuota" label_selected="Vuota" name="Blank"/>
 	<button label="Trasparente" label_selected="Trasparente" name="Transparent" tool_tip="Nota: Se si sceglie la texture trasparente o un'altra texture parzialmente trasparente, la luce non verrà riflessa." width="75" />
@@ -36,6 +33,9 @@
 		Anteprima disabilitata
 	</text>
 	<filter_editor label="Filtra texture" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		La texture scelta è [TEXDIM]. L'immagine deve essere quadrata, minimo [MINTEXDIM].
+	</text>
 	<!-- <check_box label="Mostra cartelle" name="show_folders_check"/> -->
 	<button label="Aggiungi" label_selected="Aggiungi" name="l_add_btn"/>
 	<button label="Rimuovi" label_selected="Rimuovi" name="l_rem_btn"/>
@@ -50,7 +50,7 @@
 	<!-- <check_box label="Nascondi regione mesh di base" name="hide_base_mesh_region"/> -->
 	<line_editor name="TextureKey" tool_tip="La chiave UUID della texture" />
 	<button name="TextureKeyApply" label="Applica UUID" tool_tip="Applica questa UUID" />
+	<check_box label="Applica" name="apply_immediate_check"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<button label="Ok" label_selected="Ok" name="Select" />
-	<check_box label="Applica" name="apply_immediate_check"/>
 </floater>

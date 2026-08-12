@@ -30,8 +30,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloateraddtocontactset.h"
 
-#include "fsfloatercontacts.h"
-#include "fspanelcontactsets.h"
 #include "llnotificationsutil.h"
 #include "llslurl.h"
 
@@ -39,7 +37,26 @@ FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 :   LLFloater(target),
     mContactSetsCombo(nullptr)
 {
-    if (target.isArray())
+    if (target.isMap())
+    {
+        mIsMoveOperation = (target["operation"].asString() == "move");
+        mSourceSet = target["source_set"].asString();
+        const LLSD ids = target["ids"];
+        if (ids.isArray())
+        {
+            mHasMultipleAgents = true;
+            for (LLSD::array_const_iterator it = ids.beginArray(); it != ids.endArray(); ++it)
+            {
+                mAgentIDs.push_back((*it).asUUID());
+            }
+        }
+        else if (target.has("id"))
+        {
+            mHasMultipleAgents = false;
+            mAgentID = target["id"].asUUID();
+        }
+    }
+    else if (target.isArray())
     {
         mHasMultipleAgents = true;
         for (LLSD::array_const_iterator it = target.beginArray(); it != target.endArray(); ++it)
@@ -66,6 +83,17 @@ FSFloaterAddToContactSet::~FSFloaterAddToContactSet()
 
 bool FSFloaterAddToContactSet::postBuild()
 {
+    if (mIsMoveOperation)
+    {
+        setTitle(getString("title_move"));
+        getChild<LLButton>("add_btn")->setLabel(getString("button_move"));
+    }
+    else
+    {
+        setTitle(getString("title_add"));
+        getChild<LLButton>("add_btn")->setLabel(getString("button_add"));
+    }
+
     if (mHasMultipleAgents)
     {
         LLStringUtil::format_map_t args;
@@ -92,22 +120,41 @@ bool FSFloaterAddToContactSet::postBuild()
 void FSFloaterAddToContactSet::onClickAdd()
 {
     const std::string set = mContactSetsCombo->getSimple();
+    if (set.empty())
+    {
+        return;
+    }
 
     if (!mHasMultipleAgents)
     {
+        if (mAgentID.isNull())
+        {
+            return;
+        }
         mAgentIDs.push_back(mAgentID);
+    }
+    else if (mAgentIDs.empty())
+    {
+        return;
     }
 
     LGGContactSets::instance().addToSet(mAgentIDs, set);
+    if (mIsMoveOperation && set != mSourceSet)
+    {
+        for (const LLUUID& id : mAgentIDs)
+        {
+            LGGContactSets::instance().removeFriendFromSet(id, mSourceSet);
+        }
+    }
 
-    if (mHasMultipleAgents)
+    if (!mIsMoveOperation && mHasMultipleAgents)
     {
         LLSD args;
         args["COUNT"] = llformat("%d", mAgentIDs.size());
         args["SET"] = set;
         LLNotificationsUtil::add("AddToContactSetMultipleSuccess", args);
     }
-    else
+    else if (!mIsMoveOperation)
     {
         LLSD args;
         args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
@@ -144,6 +191,7 @@ void FSFloaterAddToContactSet::populateContactSets()
 
     mContactSetsCombo->clearRows();
     std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
+    bool isEmptySet = true;
     if (contact_sets.empty())
     {
         mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));
@@ -152,8 +200,13 @@ void FSFloaterAddToContactSet::populateContactSets()
     {
         for (auto const& set_name : contact_sets)
         {
+            if (mIsMoveOperation && set_name == mSourceSet)
+            {
+                continue;
+            }
             mContactSetsCombo->add(set_name);
+            isEmptySet = false;
         }
     }
-    getChild<LLButton>("add_btn")->setEnabled(!contact_sets.empty());
+    getChild<LLButton>("add_btn")->setEnabled(!isEmptySet);
 }

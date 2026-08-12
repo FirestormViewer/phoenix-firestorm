@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="camera_preset_item">
+	<text name="preset_name" value="Padrão"/>
+	<button name="delete_btn" tool_tip="Excluir predefinição"/>
+	<button name="reset_btn" tool_tip="Restaurar predefinição aos valores padrão"/>
+</panel>

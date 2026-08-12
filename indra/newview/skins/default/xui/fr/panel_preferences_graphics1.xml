@@ -131,23 +131,6 @@
 Ignorer la VRAM détectée sur votre GPU.
 Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
 Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
-			<text name="automatic_texture_downscale_settings">
-				Réduction automatique de la taille des textures :
-			</text>
-			<text name="TextureDiscardBackgroundedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active.">
-				En arrière-plan (0 pour désactiver)
-			</text>
-			<spinner name="TextureDiscardBackgroundedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque la fenêtre n'est pas active."/>
-			<text name="TextureDiscardBackgroundedTime_seconds">
-				Seconde(s)
-			</text>
-			<text name="TextureDiscardMinimizedTime_label" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite.">
-			Réduite (0 pour désactiver)
-			</text>
-			<spinner name="TextureDiscardMinimizedTime" tool_tip="Réduit la taille des textures au bout d'un certain nombre de secondes lorsque l'application est réduite."/>
-			<text name="TextureDiscardMinimizedTime_seconds">
-				Seconde(s)
-			</text>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>

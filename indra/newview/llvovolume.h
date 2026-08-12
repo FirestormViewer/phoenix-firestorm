@@ -157,10 +157,8 @@ public:
     /*virtual*/ bool getCostData(LLMeshCostData& costs) const override;
 
     /*virtual*/ U32     getTriangleCount(S32* vcount = NULL) const override;
+    /*virtual*/ U32     getLODTriangleCount(S32 lod) override;
     /*virtual*/ U32     getHighLODTriangleCount() override;
-    //<FS:Beq> Mesh Info in object panel
-    /*virtual*/ U32     getLODTriangleCount(S32 lod);
-    //</FS:Beq>
     /*virtual*/ bool lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
                                           S32 face = -1,                        // which face to check, -1 = ALL_SIDES
                                           bool pick_transparent = false,

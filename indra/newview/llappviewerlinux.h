@@ -56,6 +56,16 @@ protected:
 
     bool initSLURLHandler() override;
     bool sendURLToOtherInstance(const std::string& url) override;
+    virtual void setOSHibernationMode(eHibernationMode mode);
+
+private:
+    // Power management state tracking
+    static guint32 sPowerInhibitCookie;
+    static bool sPowerInhibitActive;
+
+    // Helper methods for power management
+    bool inhibitPowerManagement(bool inhibit_display);
+    void uninhibitPowerManagement();
 };
 
 #endif // LL_LLAPPVIEWERLINUX_H

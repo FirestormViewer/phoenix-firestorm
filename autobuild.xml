@@ -874,11 +874,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>19e40aa358c1784b49eccd547e704647</string>
+              <string>e474e018a7922d771eee789acf8d7182</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.03.07-darwin64-251121740.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.03.12-darwin64-260671926.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -888,11 +888,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a459e2967306ff56a835a321dc00718c</string>
+              <string>f9c203d45f22e3b448653d2f652806d8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.03.07-linux64-251121739.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.03.12-linux64-260671925.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -902,9 +902,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4a0da36b4a31332df62dadf6438f935e</string>
+              <string>2b9a4903cb4413a09a4c2101e834d0d3</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.03.07-windows64-251121127.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.03.12-windows64-260671934.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2608,11 +2608,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>52bfa9057a5d34cd841e93624c03a0cdcdf7b12a</string>
+              <string>5339bc81283e7ac2c3852719c3b6ec7b65a093e9</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/viewer_fonts-1.0.0.242151216-common-242151216.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/viewer_fonts-1.1.3-common-261801750.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -2623,13 +2623,45 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>license_file</key>
         <string>LICENSES/fonts.txt</string>
         <key>copyright</key>
-        <string>Copyright 2016-2022 Brad Erickson CC-BY-4.0/MIT, Copyright 2016-2022 Twitter, Inc. CC-BY-4.0, Copyright 2013 Joe Loughry and Terence Eden MIT</string>
+        <string>Copyright 2016-2022 Brad Erickson CC-BY-4.0/MIT, Copyright 2016-2022 Twitter, Inc. CC-BY-4.0, Copyright 2013 Joe Loughry and Terence Eden MIT, Copyright (c) 2003 by Bitstream, Inc., Copyright (c) 2006 by Tavmjong Bah.</string>
         <key>version</key>
         <string>1.0.0.242151216</string>
         <key>name</key>
         <string>viewer-fonts</string>
         <key>description</key>
         <string>Viewer fonts</string>
+      </map>
+      <key>google-fonts</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>common</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8de96fd083783b9f4df1d8d7028c8a713a7d7217</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-google-fonts/releases/download/v1.0.0-r6/google_fonts-1.0.0.24469773244-common-24469773244.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>common</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>SIL Open Font License, Version 1.1</string>
+        <key>license_file</key>
+        <string>LICENSES/google_inter.txt</string>
+        <key>copyright</key>
+        <string>Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)</string>
+        <key>version</key>
+        <string>1.0.0.22606339007</string>
+        <key>name</key>
+        <string>google-fonts</string>
+        <key>description</key>
+        <string>Google fonts</string>
       </map>
       <key>viewer-manager</key>
       <map>
@@ -2782,11 +2814,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a5e72a9d13b6c4646d1e02b5820f16560d204de7</string>
+              <string>9622dbeb12d1c9592de3ea3f83c2c1a95b3c0822</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.21/webrtc-m137.7151.04.21.18609120431-darwin64-18609120431.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19.hot-mic/webrtc-m144.7559.06.19.hot-mic.29761579711-darwin64-29761579711.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2796,11 +2828,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1030e5086f401d738463223da3ed99c225340f39</string>
+              <string>9113fdfafca5ca750e415abafaf080540346e068</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.21/webrtc-m137.7151.04.21.18609120431-linux64-18609120431.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19.hot-mic/webrtc-m144.7559.06.19.hot-mic.29761579711-linux64-29761579711.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2810,11 +2842,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d1cae9bc8866ca01aa9f5e72b36d12ef608b1998</string>
+              <string>1d8a82b72887abfb1c5014fcca4337703dfdcd25</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m137.7151.04.21/webrtc-m137.7151.04.21.18609120431-windows64-18609120431.tar.zst</string>
+              <string>https://github.com/secondlife/3p-webrtc-build/releases/download/m144.7559.06.19.hot-mic/webrtc-m144.7559.06.19.hot-mic.29761579711-windows64-29761579711.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2827,7 +2859,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright (c) 2011, The WebRTC project authors. All rights reserved.</string>
         <key>version</key>
-        <string>m137.7151.04.21.18609120431</string>
+        <string>m144.7559.06.19.hot-mic.29761579711</string>
         <key>name</key>
         <string>webrtc</string>
         <key>vcs_branch</key>
@@ -3062,6 +3094,52 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>vhacd</string>
         <key>description</key>
         <string>Voxelized Hierarchical Approximate Convex Decomposition</string>
+      </map>
+      <key>velopack</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>df2260187110aa51c20101183e18a55f86e71090</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535-r2/velopack-40232ef.24685318450-windows64-24685318450.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>ead94386d7b9a143824d7ccedc86433127028a91</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife-3p/3p-velopack/releases/download/v0.0.1535-r2/velopack-40232ef.24685318450-darwin64-24685318450.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/velopack.txt</string>
+        <key>copyright</key>
+        <string>Velopack Ltd.</string>
+        <key>version</key>
+        <string>40232ef.24685318450</string>
+        <key>name</key>
+        <string>velopack</string>
+        <key>description</key>
+        <string>Velopack C/C++ Library</string>
       </map>
     </map>
     <key>package_description</key>

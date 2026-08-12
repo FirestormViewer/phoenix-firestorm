@@ -888,18 +888,14 @@ void LLGroupMgr::removeObserver(LLGroupMgrObserver* observer)
     {
         return;
     }
-    observer_multimap_t::iterator it;
-    it = mObservers.find(observer->getID());
-    while (it != mObservers.end())
+    observer_multimap_t::iterator it = mObservers.lower_bound(observer->getID());
+    observer_multimap_t::iterator end = mObservers.upper_bound(observer->getID());
+    for (; it != end; ++it)
     {
         if (it->second == observer)
         {
             mObservers.erase(it);
             break;
-        }
-        else
-        {
-            ++it;
         }
     }
 }
@@ -1559,7 +1555,10 @@ void LLGroupMgr::notifyObservers(LLGroupChange gc)
             // notify LLParticularGroupObserver
             observer_map_t::iterator obs_it = mParticularObservers.find(group_id);
             if(obs_it == mParticularObservers.end())
-                return;
+                // <FS:PP> FIRE-36532 Don't skip groups without LLParticularGroupObserver - avoid  creating stale mChanged flags
+                // return;
+                continue;
+                // </FS:PP>
 
 //          observer_set_t& obs = obs_it->second;
 // [RLVa:KB] - Checked: RLVa-2.2 (General bugfix)

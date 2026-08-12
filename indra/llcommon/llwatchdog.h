@@ -47,6 +47,8 @@ public:
     // This may mean that resources used by
     // isAlive and other method may need synchronization.
     virtual bool isAlive() const = 0;
+    virtual bool started() const = 0;
+    virtual bool hasExpired() const = 0;
     virtual void reset() = 0;
     virtual void start();
     virtual void stop();
@@ -66,6 +68,8 @@ public:
     virtual ~LLWatchdogTimeout();
 
     bool isAlive() const override;
+    bool started() const override;
+    bool hasExpired() const override;
     void reset() override;
     void start() override { start(""); }
     void stop() override;
@@ -83,20 +87,29 @@ private:
 };
 
 class LLWatchdogTimerThread; // Defined in the cpp
-class LLWatchdog : public LLSingleton<LLWatchdog>
+class LLWatchdog : public LLSimpleton<LLWatchdog>
 {
-    LLSINGLETON(LLWatchdog);
+public:
+    LLWatchdog();
     ~LLWatchdog();
 
-public:
     // Add an entry to the watchdog.
     void add(LLWatchdogEntry* e);
     void remove(LLWatchdogEntry* e);
 
-    typedef std::function<void()> func_t;
-    void init(func_t set_error_state_callback);
+    typedef std::function<void(bool)> create_marker_func_t;
+    typedef std::function<void()> clear_marker_func_t;
+    typedef std::function<bool(std::string&)> report_func_t;
+    typedef std::function<void()> notify_func_t;
+    void init(
+        create_marker_func_t error_state_callback,
+        clear_marker_func_t clear_marker_callback,
+        report_func_t report_callback,
+        notify_func_t notify_callback,
+        bool crash_on_freeze);
     void run();
     void cleanup();
+    void shutdown();
 
 
 private:
@@ -105,14 +118,19 @@ private:
 
     typedef std::set<LLWatchdogEntry*> SuspectsRegistry;
     SuspectsRegistry mSuspects;
+    SuspectsRegistry mFrozeList;
     LLMutex* mSuspectsAccessMutex;
     LLWatchdogTimerThread* mTimer;
     U64 mLastClockCount;
+    bool mCrashOnFreeze;
 
     // At the moment watchdog expects app to set markers in mCreateMarkerFnc,
     // but technically can be used to set any error states or do some cleanup
     // or show warnings.
-    func_t mCreateMarkerFnc;
+    create_marker_func_t mCreateMarkerFnc;
+    clear_marker_func_t mClearMarkerFnc;
+    report_func_t mCrashReportFnc;
+    notify_func_t mNotifyFnc;
 };
 
 #endif // LL_LLTHREADWATCHDOG_H

@@ -18,7 +18,9 @@
 	<button name="config_btn" tool_tip="Seçilmiş dəstin seçimləri" />
 	<button name="add_set_btn" tool_tip="Yeni kontakt dəsti əlavə et" />
 	<button name="remove_set_btn" tool_tip="Seçilmiş kontakt dəstini sil" />
+	<filter_editor label="İnsanların filtri" name="contact_sets_filter_input" />
 	<button label="Əlavə et..." name="add_btn" tool_tip="Avatarı cari kontakt dəstinə əlavə et" />
+	<button label="Köçür..." name="move_btn" tool_tip="Bu avatarı başqa kontakt dəstinə köçür" />
 	<button label="Sil..." name="remove_btn" tool_tip="Avatarı cari kontakt dəstindən sil" />
 	<button label="Profil..." name="profile_btn" tool_tip="Avatarın profilini aç" />
 	<button label="İM..." name="start_im_btn" tool_tip="Səxsi mesaj göndər (İM)" />

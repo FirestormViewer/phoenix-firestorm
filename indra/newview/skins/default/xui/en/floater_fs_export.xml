@@ -79,7 +79,7 @@
 			 layout="topleft"
 			 left="4"
 			 name="OptionsText"
-			 top="82"
+			 top="80"
 			 width="235">
 				Options:
 			</text>
@@ -90,7 +90,7 @@
 			 label="Backup object contents to disk"
 			 layout="topleft"
 			 name="contents_check"
-			 top_pad="2"
+			 top_pad="4"
 			 width="235" />
 			<button
 			 layout="topleft"

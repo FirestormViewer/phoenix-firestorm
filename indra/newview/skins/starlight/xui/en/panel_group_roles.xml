@@ -339,7 +339,7 @@ things in this group. There&apos;s a broad variety of Abilities.
           <name_list.columns
            label="Resident"
            name="name"
-           font.name="SANSSERIF_SMALL"
+           font.name="SANSSERIF"
            font.style="NORMAL"
            relative_width="0.7" />
           <name_list.columns
@@ -573,6 +573,18 @@ things in this group. There&apos;s a broad variety of Abilities.
          multi_select="true"
          top_pad="0"
          width="300" />
+        <text
+         type="string"
+         height="125"
+         layout="topleft"
+         follows="left|top"
+         left="5"
+         name="members_not_loaded"
+         visible="false"
+         top_delta="3"
+         width="300">
+             Members are not loaded
+        </text>
         <check_box
          height="15"
          label="Reveal members"

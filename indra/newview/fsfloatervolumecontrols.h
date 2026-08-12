@@ -38,7 +38,7 @@ public:
     bool postBuild() override;
 
 private:
-    ~FSFloaterVolumeControls();
+    ~FSFloaterVolumeControls() = default;
 
     void onVisibilityChange(bool new_visibility) override;
 };

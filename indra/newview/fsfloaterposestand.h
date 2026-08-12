@@ -25,8 +25,9 @@ public:
     bool postBuild() override;
     void setLock(bool enabled);
     void onCommitCombo();
+
 private:
-    ~FSFloaterPoseStand();
+    ~FSFloaterPoseStand() = default;
     void onOpen(const LLSD& key) override;
     void onClose(bool app_quitting) override;
     void loadPoses();

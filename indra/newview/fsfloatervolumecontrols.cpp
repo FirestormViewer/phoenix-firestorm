@@ -40,8 +40,6 @@ FSFloaterVolumeControls::FSFloaterVolumeControls(const LLSD& key)
 {
 }
 
-FSFloaterVolumeControls::~FSFloaterVolumeControls() = default;
-
 bool FSFloaterVolumeControls::postBuild()
 {
     // <FS:PP> FIRE-9856: Mute sound effects disable plays sound from collisions and plays sound from gestures checkbox not disable after restart/relog

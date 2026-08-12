@@ -439,7 +439,7 @@ bool LLFloaterWorldMap::postBuild()
     mEventsMatureCheck = getChild<LLCheckBoxCtrl>("events_mature_chk");
     mEventsAdultCheck = getChild<LLCheckBoxCtrl>("events_adult_chk");
 
-    mAvatarIcon = getChild<LLUICtrl>("friends_icon"); // <FS:Ansariel> Used to be avatar_icon
+    mFriendAvatarIcon = getChild<LLUICtrl>("friends_icon");
     mLandmarkIcon = getChild<LLUICtrl>("landmark_icon");
     mLocationIcon = getChild<LLUICtrl>("location_icon");
 
@@ -632,10 +632,7 @@ void LLFloaterWorldMap::reshape( S32 width, S32 height, bool called_from_parent 
 void LLFloaterWorldMap::draw()
 {
     // <FS:Ansariel> Performance improvement
-    static LLView*   show_destination_btn = getChildView("Show Destination");
-    static LLUICtrl* zoom_slider          = getChild<LLUICtrl>("zoom slider");
     static LLButton* track_region_btn     = getChild<LLButton>("track_region");
-    // </FS:Ansariel> Performance improvement
 
     static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
     static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
@@ -653,11 +650,11 @@ void LLFloaterWorldMap::draw()
     LLTracker::ETrackingStatus tracking_status = LLTracker::getTrackingStatus();
     if (LLTracker::TRACKING_AVATAR == tracking_status)
     {
-        mAvatarIcon->setColor( map_track_color);
+        mFriendAvatarIcon->setColor( map_track_color);
     }
     else
     {
-        mAvatarIcon->setColor( map_track_disabled_color);
+        mFriendAvatarIcon->setColor( map_track_disabled_color);
     }
 
     if (LLTracker::TRACKING_LANDMARK == tracking_status)
@@ -1039,7 +1036,7 @@ void LLFloaterWorldMap::updateLocation()
                 mSetToUserPosition = false;
 
                 // Fill out the location field
-                getChild<LLUICtrl>("location")->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
+                mLocationEditor->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
 
                 // update the coordinate display with location of avatar in region
                 updateTeleportCoordsDisplay( agentPos );
@@ -1113,8 +1110,7 @@ void LLFloaterWorldMap::updateLocation()
         if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
         {
             mSLURL = LLSLURL();
-
-            childSetValue("location", RlvStrings::getString(RlvStringKeys::Hidden::Region));
+            mLocationEditor->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
         }
 // <FS:Beq pp Oren> FORE-30768 Slurls in Var regions are b0rked
         // else if (gotSimName)
@@ -1140,7 +1136,7 @@ void LLFloaterWorldMap::updateLocation()
 /*
         if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
         {
-            childSetValue("location", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+            mLocationEditor->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
             mSLURL.clear();
         }
 */
@@ -1969,8 +1965,15 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 
             LLSD value;
             value["id"] = info->getName();
-            value["columns"][0]["column"] = "sim_name";
-            value["columns"][0]["value"] = info->getName();
+            // <FS:Ansariel> Show region rating if there already is an icon column
+            //value["columns"][0]["column"] = "sim_name";
+            //value["columns"][0]["value"] = info->getName();
+            value["columns"][0]["column"] = "scroll_list_icon";
+            value["columns"][0]["value"] = info->getAccessIcon();
+            value["columns"][0]["type"] = "icon";
+            value["columns"][1]["column"] = "sim_name";
+            value["columns"][1]["value"] = info->getName();
+            // </FS:Ansariel>
             mSearchResults->addElement(value);
             num_results++;
         }

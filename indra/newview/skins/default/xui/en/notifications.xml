@@ -202,6 +202,16 @@ No tutorial is currently available.
 
   <notification
    icon="alertmodal.tga"
+   name="FoundLegacyNsisInstallation"
+   type="alertmodal">
+      [APP_NAME] found an installation of an older version [VERSION]. To uninstall the older version, please follow [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 this manual].
+      <usetemplate
+       name="okbutton"
+       yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="LoginFailedNoNetwork"
    type="alertmodal">
     <tag>fail</tag>
@@ -2564,7 +2574,7 @@ You already have a landmark for this location.
    icon="alert.tga"
    name="LandmarkLocationUnknown"
    type="alert">
-Viewer wasn't able to get region's location. Region might be temporarily unavailable, was removed or landmark failed to load.
+Viewer wasn't able to get region's location. Region might be temporarily unavailable or was removed.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -3367,7 +3377,8 @@ Are you sure you want to delete this list?
    icon="alertmodal.tga"
    name="InvalidAutoReplaceEntry"
    type="alertmodal">
-    The keyword must be a single word, and the replacement may not be empty.
+    The keyword must be a single word, and the replacement may not be empty. Allowed punctuation in keywords: 
+( ) . , - _
     <tag>fail</tag>
   </notification>
 
@@ -3478,6 +3489,43 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
        name="Cancel"
        text="Cancel"/>
     </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   label="Rename Filter Tab"
+   name="FSInventoryCustomTabRename"
+   type="alertmodal">
+    New tab name:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="new_name" type="text" width="300" default="true">
+        [NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   label="Close Filter Tab"
+   name="FSInventoryCustomTabClose"
+   type="alertmodal">
+    Close the &quot;[NAME]&quot; filter tab? Its saved filters will be removed.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Yes, close"
+     ignoretext="Confirm before I close a custom inventory filter tab"/>
   </notification>
 
   <notification
@@ -3967,7 +4015,6 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
    icon="alertmodal.tga"
    name="FirstRun"
    type="alertmodal">
-
 [APP_NAME] installation is complete.
 
 If this is your first time using [CURRENT_GRID], you will need to create an account before you can log in.
@@ -4070,7 +4117,6 @@ Local Data you are deleting is shared between multiple grids, are you sure you w
 Your character will appear in a moment.
 
 Use arrow keys to walk.
-Press the F1 key at any time for help or to learn more about [CURRENT_GRID].
 Please choose the male or female avatar. You can change your mind later.
     <usetemplate
      name="okcancelbuttons"
@@ -4549,6 +4595,14 @@ Click OK to download and install.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="DownloadingUpdate"
+   type="alertmodal">
+Downloading update [VERSION]...
+The viewer will restart once the download is complete.
   </notification>
 
   <notification
@@ -8181,7 +8235,7 @@ Message from [NAME]:
    type="notify">
     <unique/>
 This land has damage enabled.
-You can be hurt here. If you die, you will be teleported to your home location.
+You can be hurt here. If you die, you might be teleported to your home location, region telehub or parcel landing point.
   </notification>
 
   <notification
@@ -8840,7 +8894,8 @@ However, this region contains content accessible to adults only.
    name="TeleportRequest"
    log_to_im="true"
    fade_toast="false"
-   type="offer">
+   type="offer"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] is requesting to be teleported to your location.
 [MESSAGE]
 
@@ -9789,6 +9844,14 @@ Failed to save snapshot to [PATH]: Disk is full. [NEED_MEMORY]KB is required but
 Failed to save snapshot to [PATH]: Directory does not exist.
   </notification>
 
+  <notification icon="notifytip.tga"
+    name="SnapshotSavedToComputer" type="notifytip">
+Screenshot saved to:
+    [FILEPATH]
+
+Click to open folder.
+  </notification>
+
   <notification
     icon="notifytip.tga"
     name="PresetNotSaved"
@@ -9863,6 +9926,23 @@ Your voice has been muted by a moderator.
          yestext="OK"/>
     </notification>
 
+    <notification
+     icon="notifytip.tga"
+     name="NearbyVoiceMutedByModerator"
+     type="notifytip">
+        The moderator has muted your voice chat.
+People in this location will not hear you if you speak.
+     <tag>voice</tag>
+    </notification>
+
+    <notification
+     icon="notifytip.tga"
+     name="NearbyVoiceUnmutedByModerator"
+     type="notifytip">
+        Your voice chat can now be heard by people in this location.
+     <tag>voice</tag>
+    </notification>
+ 
     <notification
         icon="alertmodal.tga"
         name="FailedToGetBenefits"
@@ -10359,6 +10439,22 @@ Are you sure you want to leave this call?
     <tag>voice</tag>
     <usetemplate
      ignoretext="Confirm before I leave call"
+     name="okcancelignore"
+     notext="No"
+     yestext="Yes">
+      <unique/>
+    </usetemplate>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmLeaveAdhoc"
+   type="alertmodal">
+Are you sure you want to leave this conference chat?
+    <tag>confirm</tag>
+    <tag>voice</tag>
+    <usetemplate
+     ignoretext="Confirm before I leave conference chat"
      name="okcancelignore"
      notext="No"
      yestext="Yes">
@@ -11093,6 +11189,59 @@ The name may only contain ASCII characters, excluding ":" and "|".
      yestext="OK"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="RenameAOGroup"
+   type="alertmodal">
+Specify a new name for this animation group:
+(The name may contain any ASCII character, except for ":" or "|")
+    <form name="form">
+      <input name="message" type="text" default="true">
+[AO_GROUP_NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RenameAOEntryMustBeASCII"
+   type="alertmodal">
+Could not rename to "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="AOFolderDropNoAnimations"
+   type="alertmodal">
+The folder "[NAME]" does not contain any animations to add.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="NewAONameCantExist"
+   type="alertmodal">
+An animation set with this name already exists.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
 <notification
    icon="alertmodal.tga"
    name="RemoveAOSet"
@@ -11347,6 +11496,40 @@ Flight Assist is enabled
     Settings will be cleared after restarting [APP_NAME].
   </notification>
 <!-- Firestorm Reset Settings -->
+
+<!-- Firestorm Region Group Titles -->
+  <notification
+    icon="alertmodal.tga"
+    name="FSSetTitleRegion"
+    type="alertmodal">
+Enter the exact name of a region to assign to the selected group title.
+The name will be verified before the assignment is saved.
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="region_name" type="text">
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+    icon="alertmodal.tga"
+    name="FSSetTitleRegionNotFound"
+    type="alertmodal">
+The region '[REGION]' could not be found. Please check the name and try again.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+<!-- Firestorm Region Group Titles -->
 
 <!-- AW: opensim -->
   <notification icon="alertmodal.tga"
@@ -13568,19 +13751,6 @@ able to add a payment method at checkout.
        text="Cancel"/>
     </form>
   </notification>
-  
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-  <notification
-   icon="notify.tga"
-   name="LSLColorCopiedToClipboard"
-   type="alertmodal">
-The LSL color string has been copied to your clipboard. You can now paste it into your script to use it.
-   <form name="form">
-      <ignore name="ignore"
-       text="An LSL color string was copied to my clipboard"/>
-    </form>
-  </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
 
   <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   <!-- <FS:TS> FIRE-6795: Remove warning at every login -->
@@ -13944,6 +14114,27 @@ Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
    type="alertmodal">
     <tag>contact set</tag>
 Enter an alias for [AVATAR]:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true" />
+      <button
+       default="true"
+       index="0"
+       name="Create"
+       text="Create"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SetAvatarPseudonymMultiple"
+   type="alertmodal">
+    <tag>contact set</tag>
+Enter an alias for [COUNT] avatars:
     <tag>confirm</tag>
     <form name="form">
       <input name="message" type="text" default="true" />
@@ -14998,4 +15189,250 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
      yestext="OK"/>
   </notification>
   <!-- </FS:TJ>-->
+  <!-- <FS:minerjr> [FIRE-36763] - Add rule sets to Omnifilter -->
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterNewRuleSet"
+     type="alertmodal">
+        Enter a name for the new rule set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterrNewRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterNewRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterCloneRuleSet"
+     type="alertmodal">
+        Enter a name to the cloned rule set:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetBlank"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Blank names are not allowed. Please try again with a name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterCloneRuleSetDuplicate"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Duplicate names are not allowed. Please try again with a different name.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+
+    <notification
+        icon="alertmodal.tga"
+        name="OmniFilterRemoveRuleSet"
+        type="alertmodal">
+        Are you sure you want to remove [RULESETNAME]?
+        <tag>confirm</tag>
+        <usetemplate
+        ignoretext="Confirm before I remove a rule set."
+        name="okcancelignore"
+        notext="Cancel"
+        yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetDefault"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the default rule ret.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetOutofBounds"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the rule set due to index out of bounds.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterRemoveRuleSetInvalidName"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Unable to remove the rule set due to name not found.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterExportRuleSet"
+     type="alertmodal">
+        Enter a notecard name to export rule set [RULESETNAME]:
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [RULESETNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterMissingCategory"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        The Notecard Category is missing from the inventory. Unable to create the Notecard.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterImportRuleSet"
+     type="alertmodal">
+        Enter a name for the imported rule set '[IMPORTNAME]':
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [IMPORTNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterInvalidImport"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Error: The Notecard [IMPORTNAME] is not a valid Rule Set, unable to import.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+      icon="alertmodal.tga"
+      name="OmniFilterNotANotecard"
+      sound="UISndAlert"
+      persist="true"
+      type="alertmodal">
+        Error: Object is not a notecard.
+        <usetemplate
+            name="okbutton"
+            yestext="OK"/>
+    </notification>
+    <notification
+     icon="notifytip.tga"
+     name="OmnifilterImportInstructions"
+     label="Omnifilter Import Instructions"
+     type="alertmodal">
+        To import a notecard, left click on a rule set notecard from the inventory that appeared and hold down the left mouse button. Next, drag the mouse over to this window and release the mouse button to begin the import process.
+        <form name="form">
+            <button
+             index="0"
+             name="OK"
+             text="OK"/>
+            <ignore name="ignore" text="Show Omnifilter import instructions when Import button is pressed"/>
+        </form>
+    </notification>
+    <notification
+     icon="alertmodal.tga"
+     name="OmniFilterNonAscii"
+     type="alertmodal">
+        Notecard name '[INPUTNAME]' not supported due to non-latin characters.
+        <tag>confirm</tag>
+        <form name="form">
+            <input name="new_name" type="text" width="300" default="true">
+                [INPUTNAME]
+            </input>
+            <button
+             default="true"
+             index="0"
+             name="OK"
+             text="OK"/>
+            <button
+             index="1"
+             name="Cancel"
+             text="Cancel"/>
+        </form>
+    </notification>
+  <!-- </FS:minerjr> [FIRE-36763] -->
 </notifications>

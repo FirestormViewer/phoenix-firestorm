@@ -212,19 +212,6 @@
 			<text name="name_label">
 				模型名稱：
 			</text>
-			<text name="model_category_label">
-				這模型代表…
-			</text>
-			<combo_box name="model_category_combo">
-				<combo_item label="選擇一項…" name="Choose one" />
-				<combo_item label="化身形狀" name="Avatar shape" />
-				<combo_item label="化身附件" name="Avatar attachment" />
-				<combo_item label="會移動的物件（車輛、動物）" name="Moving object (vehicle, animal)" />
-				<combo_item label="建造元件" name="Building Component" />
-				<combo_item label="大型、不會移動等類型" name="Large, non moving etc" />
-				<combo_item label="較小型、不會移動等類型" name="Smaller, non-moving etc" />
-				<combo_item label="並非其中任何一個" name="Not really any of these" />
-			</combo_box>
 		</panel>
 		<tab_container name="import_tab">
 			<panel label="細節層次" name="lod_panel" title="細節層次">
@@ -406,38 +393,15 @@
 				<text name="scale_label">
 					比例（1 = 原比例）：
 				</text>
-				<spinner name="import_scale" value="1.0" />
 				<text name="dimensions_label">
 					規格：
-				</text>
-				<text name="import_dimensions">
-					[X] X [Y] X [Z]
 				</text>
 				<check_box label="包含紋理" name="upload_textures" />
 			</panel>
 			<panel label="覆蓋" title="已綁定" name="rigging_panel">
-				<text name="scale_label">
-					縮放比例 (1=無):
-				</text>
-				<text name="dimensions_label">
-					尺寸:
-				</text>
-				<text name="import_dimensions">
-					[X] X [Y] X [Z]
-				</text>
-				<check_box label="包括紋理" name="upload_textures" />
-				<text name="include_label">
-					僅限化身模型:
-				</text>
-				<check_box label="包括皮膚權重" name="upload_skin" top_pad="0" />
-				<check_box label="包括關節位置" name="upload_joints" top_pad="2" />
-				<check_box label="如果定義了關節位置則鎖定縮放" name="lock_scale_if_joint_position" top_pad="15" />
-				<check_box label="適應化身形狀" name="deform" />
-				<radio_group name="deform_base">
-					<radio_item label="男性" name="0" />
-					<radio_item label="女性" name="1" />
-					<radio_item label="男性（瘦身）" name="2" />
-				</radio_group>
+				<check_box label="包括皮膚權重" name="upload_skin"/>
+				<check_box label="包括關節位置" name="upload_joints"/>
+				<check_box label="如果定義了關節位置則鎖定縮放" name="lock_scale_if_joint_position"/>
 				<text name="pelvis_offset_label">
 					Z 偏距（升高或降低化身）：
 				</text>
@@ -487,7 +451,7 @@
 					較低：
 				</text>
 				<line_editor name="suf_low" tool_tip="標識檔案名中或檔案內模型的較低細節層次的後綴。" />
-				<text name="suf_medium_lab" width="45">
+				<text name="suf_medium_lab">
 					中等：
 				</text>
 				<line_editor name="suf_medium" tool_tip="標識檔案名中或檔案內模型的中等細節層次的後綴。" />
@@ -499,7 +463,7 @@
 					物理：
 				</text>
 				<line_editor name="suf_physics" tool_tip="標識檔案名中或檔案內模型的物理相關部分的後綴。" />
-				<text name="mesh_preview_ud_preset_label" width="190">
+				<text name="mesh_preview_ud_preset_label">
 					使用者自訂物理設定：
 				</text>
 				<line_editor name="ud_physics" tool_tip="用於物理的簡單Collada網格定義的檔案路徑。" />
@@ -599,7 +563,7 @@
 				<check_box label="關節位置覆蓋" name="show_joint_overrides" />
 				<check_box label="皮膚權重" name="show_skin_weight" />
 			</panel>
-			<text name="warning_title" width="60">
+			<text name="warning_title">
 				注意:
 			</text>
 			<text name="warning_message">

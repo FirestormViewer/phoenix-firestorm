@@ -60,6 +60,16 @@
 				<radio_item label="Verticale" name="radio_vertical"/>
 			</radio_group>
 			<text name="req_restart_chattabs" width="140">(Redémarrage requis)</text>
+			<check_box name="FSAutoOrderIMTabs" label="Trier les onglets IM par type:" tool_tip="Utilisez le classement automatique des onglets pour les onglets de messagerie instantanée dans la fenêtre flottante des conversations."/>
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="Groupes, Conférences, IMs" />
+				<combo_box.item name="group_im_conf" label="Groupes, IMs, Conférences" />
+				<combo_box.item name="conf_group_im" label="Conférences, Groupes, IMs" />
+				<combo_box.item name="conf_im_group" label="Conférences, IMs, Groupes" />
+				<combo_box.item name="im_group_conf" label="IMs, Groupes, Conférences" />
+				<combo_box.item name="im_conf_group" label="IMs, Conférences, Groupes" />
+			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="Nouveaux onglets au début" tool_tip="Ajouter les nouveaux onglets de messagerie instantanée en tant que premiers dans leur groupe de type de chat."/>
 			<text name="FSIMTabNameFormat_label" width="180">Format du nom sur les onglets :</text>
 			<combo_box name="FSIMTabNameFormat">
 				<combo_box.item label="Nom d'affichage" name="display_name"/>
@@ -122,8 +132,10 @@
 			<check_box name="FSShowChatChannel" label="Afficher la sélection du numéro canal dans la fenêtre du Chat local"/>
 			<check_box name="FSShowChatType" label="Afficher un bouton Parler / Chuchoter / Crier dans la fenêtre du Chat local"/>
 			<check_box label="Masquer la barre de conversation principale" name="AutohideChatBar" tool_tip="Masque la barre de conversation en bas à gauche de l'écran et l'affiche lorsque votre souris passe au-dessus de la zone."/>
-			<check_box label="Désélectionner la zone de saisie après l'envoi d'un message" name="CloseChatOnReturn"/>
-			<check_box label="Désélectionner l'historique du Chat également" name="FSUnfocusChatHistoryOnReturn"/>
+			<check_box label="Désélectionner la zone de chat après l'envoi d'un message" name="CloseChatOnReturn"/>
+			<check_box label="Seulement en vue subjective" name="FSCloseChatOnReturnInMouselook" tool_tip="Lorsque l'option 'Désélectionner la zone de chat après l'envoi d'un message' est cochée, ne déselectionner le chat que lorsque l'avatar est en vue subjective"/>
+			<check_box label="Seulement la barre de chat local" name="FSCloseChatOnReturnOnlyForNearbyChatControl" tool_tip="Lorsque l'option 'Désélectionner la zone de chat après l'envoi d'un message' est cochée, ne déselectionner que la barre de chat local"/>
+			<check_box label="Masquer également l'historique du chat" name="FSUnfocusChatHistoryOnReturn"/>
 			<text name="textUseKeyboardShortcuts">Utiliser les raccourcis clavier :</text>
 			<check_box name="FSUseCtrlShout" label="Ctrl+Entrée (Crier)" tool_tip="Utiliser le raccourci Ctrl+Entrée pour crier dans le Chat local."/>
 			<check_box name="FSUseShiftWhisper" label="Maj+Entrée (Chuchoter)" tool_tip="Utiliser le raccourci Shift+Entrée pour chuchoter dans le Chat local."/>
@@ -212,6 +224,7 @@
 			<text name="FSCmdLineDrawDistance_txt">Changer Dist Affichage (ex: cmd meters)</text>
 			<text name="FSCmdLineBandWidth_txt">Bande passante max. (ex: cmd kbps)</text>
 			<text name="FSCmdLineCopyCam_txt">Copier la position de la caméra</text>
+			<text name="FSCmdLinePasteCam_txt">Définir paramètres caméra (cmd pos|focus|roll)</text>
 			<text name="FSCmdLineAO_txt">Activer/désactiver l'AO (ex: cmd on/off)</text>
 			<text name="FSCmdLineClearChat_txt">Effacer les transcriptions (ex: cmd)</text>
 			<line_editor tool_tip="Effacer les transcriptions de conversation pour limiter les effets de spams." name="FSCmdLineClearChat"/>
@@ -223,6 +236,10 @@
 			<slider name="FSCmdLinePlatformSize" label="Largeur" tool_tip="De quelle taille voulez-vous que la plateforme soit ?"/>
 			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un av. via son UUID (ex: cmd key)</text>
 			<text name="FSCmdLineRollDice_txt">Lancer de dés (ex: cmd dice faces mt mv)</text>
+			<text name="FSCmdLineTrackPos_txt">
+				Suivre la position ou l'avatar (cmd pos ou nom)
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="Place une balise sur la carte du monde à une position (format cpcampos) ou à partir d'un nom d'avatar partiel"/>
 			<line_editor tool_tip="Lancer de dés - cmd [nombre de dés] [nombre de faces] [type de modificateur (optionnel)] [valeur du modificateur (optionnel)]. Exemple: cmd 1 20, cmd 2 40 + 5. L'absence de paramètres correspond à cmd 1 6 (dé standard)." name="FSCmdLineRollDice"/>
 			<text name="FSCmdLinePos_txt">Se téléporter dans la sim (ex: cmd x y z)</text>
 			<text name="FSCmdLineGround_txt">Se téléporter au sol (ex: cmd)</text>
@@ -234,6 +251,7 @@
 			<text name="FSCmdLineTeleportHome_txt">Se téléporter à son domicile (ex: cmd)</text>
 			<text name="FSCmdLineMapTo_txt">Se téléporter dans une sim (ex: cmd simname)</text>
 			<check_box label="Utilise la même position d'une sim à l'autre" name="toggle"/>
+			<check_box label="Envoyer la sortie des commandes vers le canal :" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 	</tab_container>
 </panel>

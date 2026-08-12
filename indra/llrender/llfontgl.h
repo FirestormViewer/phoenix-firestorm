@@ -87,7 +87,9 @@ public:
 
     void destroyGL();
 
-    bool loadFace(const std::string& filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, bool is_fallback, S32 face_n);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    //bool loadFace(const std::string& filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags);
+    bool loadFace(const std::string& filename, F32 point_size, const F32 vert_dpi, const F32 horz_dpi, S32 weight, bool is_fallback, S32 face_n, EFontHinting hinting, S32 flags, bool tabnum);
 
     S32 getNumFaces(const std::string& filename);
     S32 getCacheGeneration() const;
@@ -204,12 +206,14 @@ public:
     static LLFontGL* getFontEmojiMedium(bool useBW = false);
     static LLFontGL* getFontEmojiLarge(bool useBW = false);
     static LLFontGL* getFontEmojiHuge(bool useBW = false);
+    static LLFontGL* getFontEmojiDefault(bool useBW = false); // <FS:Ansariel> Add default font size to fix discrepancy between Inter and legacy fonts
     // </FS:Beq> Add B&W emoji font support
     static LLFontGL* getFontMonospace();
     static LLFontGL* getFontSansSerifSmall();
     static LLFontGL* getFontSansSerifSmallBold();
     static LLFontGL* getFontSansSerifSmallItalic();
     static LLFontGL* getFontSansSerif();
+    static LLFontGL* getFontSansSerifMedium();
     static LLFontGL* getFontSansSerifBig();
     static LLFontGL* getFontSansSerifHuge();
     static LLFontGL* getFontSansSerifBold();

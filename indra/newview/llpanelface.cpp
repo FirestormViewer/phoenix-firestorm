@@ -897,6 +897,59 @@ struct LLPanelFaceSetAlignedTEFunctor : public LLSelectedTEFunctor
                 LLPanelFace::LLSelectedTEMaterial::setSpecularRepeatX(mPanel, uv_scale.mV[VX], te, object->getID());
                 LLPanelFace::LLSelectedTEMaterial::setSpecularRepeatY(mPanel, uv_scale.mV[VY], te, object->getID());
             }
+
+            // Also align GLTF material if any
+            LLGLTFMaterial::TextureInfo gltf_info_index = mPanel->getPBRTextureInfo();
+            LLVector2 gltf_offset, gltf_scale;
+            F32 gltf_rot;
+
+            if (gltf_info_index == LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT)
+            {
+                // "Complete material" - update all texture transforms
+                LLGLTFMaterial new_override;
+                const LLTextureEntry* tep = object->getTE(te);
+                if (tep && tep->getGLTFMaterialOverride())
+                {
+                    new_override = *tep->getGLTFMaterialOverride();
+                }
+                bool any_changed = false;
+
+                for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
+                {
+                    if (facep->calcAlignedPlanarGLTF(mCenterFace, &gltf_offset, &gltf_scale, &gltf_rot, i))
+                    {
+                        LLGLTFMaterial::TextureTransform& transform = new_override.mTextureTransform[i];
+                        transform.mOffset.set(gltf_offset.mV[0], gltf_offset.mV[1]);
+                        transform.mScale.set(gltf_scale.mV[0], gltf_scale.mV[1]);
+                        transform.mRotation = gltf_rot;
+                        any_changed = true;
+                    }
+                }
+
+                if (any_changed)
+                {
+                    LLGLTFMaterialList::queueModify(object, te, &new_override);
+                }
+            }
+            else
+            {
+                if (facep->calcAlignedPlanarGLTF(mCenterFace, &gltf_offset, &gltf_scale, &gltf_rot, gltf_info_index))
+                {
+                    LLGLTFMaterial new_override;
+                    const LLTextureEntry* tep = object->getTE(te);
+                    if (tep && tep->getGLTFMaterialOverride())
+                    {
+                        new_override = *tep->getGLTFMaterialOverride();
+                    }
+
+                    LLGLTFMaterial::TextureTransform& transform = new_override.mTextureTransform[gltf_info_index];
+                    transform.mOffset.set(gltf_offset.mV[0], gltf_offset.mV[1]);
+                    transform.mScale.set(gltf_scale.mV[0], gltf_scale.mV[1]);
+                    transform.mRotation = gltf_rot;
+
+                    LLGLTFMaterialList::queueModify(object, te, &new_override);
+                }
+            }
         }
         if (!set_aligned)
         {
@@ -1096,6 +1149,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
         // only turn on auto-adjust button if there is a media renderer and the media is loaded
         mBtnAlign->setEnabled(editable);
+
+        // enable if needed before changing selection
+        mComboMatMedia->setEnabledByValue("Materials", !has_pbr_material);
 
         // <FS>
         bool enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
@@ -1722,7 +1778,6 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             mCheckFullbright->setValue((S32)(fullbright_flag != 0));
             mCheckFullbright->setEnabled(editable && !has_pbr_material);
             mCheckFullbright->setTentative(!identical_fullbright);
-            mComboMatMedia->setEnabledByValue("Materials", !has_pbr_material);
         }
 
         // Repeats per meter
@@ -1988,7 +2043,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         if (mColorSwatch)
         {
             mColorSwatch->setEnabled( false );
-            mColorSwatch->setFallbackImage(LLUI::getUIImage("locked_image.j2c") );
+            mColorSwatch->setFallbackImage(LLUI::getUIImage("locked_image") );
             mColorSwatch->setValid(false);
         }
 

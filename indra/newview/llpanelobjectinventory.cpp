@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -73,6 +73,7 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llfloaterproperties.h" // <FS:Ansariel> Keep legacy properties floater
+#include "fsnewitemctrl.h" // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
 
 const LLColor4U DEFAULT_WHITE(255, 255, 255);
 #include "tea.h" // <FS:AW opensim currency support>
@@ -1587,7 +1588,7 @@ void LLPanelObjectInventory::reset()
     // <FS:Ansariel> Inventory specials
     p.for_inventory = true;
 
-    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
     p.item_height = fsFolderViewItemHeight;
     p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -1762,7 +1763,7 @@ void LLPanelObjectInventory::createFolderViews(LLInventoryObject* inventory_root
         // <FS:Ansariel> Inventory specials
         p.for_inventory = true;
 
-        static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+        static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
         const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
         p.item_height = fsFolderViewItemHeight;
         p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -1797,6 +1798,11 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 {
     LLUIColor item_color = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
 
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    FSNewItemCtrl* new_item_ctrl = FSNewItemCtrl::getInstance();
+    // Reset the latest creation time, to allow for finding the newest item below.
+    new_item_ctrl->resetLatestCreationTime();
+    // </FS:mjr> [FIRE-36685]
     // Find all in the first pass
     std::vector<obj_folder_pair*> child_categories;
     for (const LLPointer<LLInventoryObject>& obj : *inventory)
@@ -1812,14 +1818,13 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
                     params.name = obj->getName();
                     params.root = mFolders;
                     params.listener = bridge;
-                    params.tool_tip = params.name;
                     params.font_color = item_color;
                     params.font_highlight_color = item_color;
 
                     // <FS:Ansariel> Inventory specials
                     params.for_inventory = true;
 
-                    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+                    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
                     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
                     params.item_height = fsFolderViewItemHeight;
                     params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -1836,20 +1841,23 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
                     params.listener = bridge;
                     params.creation_date = bridge->getCreationDate();
                     params.rect = LLRect();
-                    params.tool_tip = params.name;
                     params.font_color = item_color;
                     params.font_highlight_color = item_color;
 
                     // <FS:Ansariel> Inventory specials
                     params.for_inventory = true;
 
-                    static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
+                    static LLCachedControl<S32> fsFolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
                     const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
                     params.item_height = fsFolderViewItemHeight;
                     params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
                     // </FS:Ansariel>
 
                     view = LLUICtrlFactory::create<LLFolderViewItem>(params);
+                    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+                    // Check the current object against the existing newest item
+                    new_item_ctrl->checkAgainstLatestObject(obj);
+                    // </FS:mjr> [FIRE-36685]
                 }
 
                 view->addToFolder(folder);
@@ -1865,6 +1873,15 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
         delete pair;
     }
     folder->setChildrenInited(true);
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    // Switch to the next state if not already done so.
+    // Check to see if the new item control is in the drag and drop inventory to object start state
+    if (new_item_ctrl->checkState(FSNewItemCtrl::EAddNewItemState::DND_INV_TO_OBJECT_START))
+    {
+        // If so, can move on to the next state
+        new_item_ctrl->setState(FSNewItemCtrl::EAddNewItemState::DND_INV_TO_OBJECT);
+    }
+    // </FS:mjr> [FIRE-36685]
 }
 
 void LLPanelObjectInventory::refresh()
@@ -2028,6 +2045,10 @@ void LLPanelObjectInventory::idle(void* user_data)
     {
         self->updateInventory();
     }
+    // <FS:mjr> [FIRE-36685] - Toolbox Window - Add new notecard button to Content tab
+    // Process the current state using the current LLPanelObjectInveotory
+    FSNewItemCtrl::getInstance()->processStates(self);
+    // <FS:mjr> [FIRE-36685]
 }
 
 void LLPanelObjectInventory::onFocusLost()

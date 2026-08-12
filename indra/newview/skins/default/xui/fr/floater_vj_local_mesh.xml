@@ -12,6 +12,11 @@
 		<panel name="local_mesh_settings_panel" label="Paramètres">
 			<check_box name="local_mesh_scale_use_meters" label="Suppose que l'échelle est en mètres." tool_tip="Ignore les unités d'échelle en cm utilisées par des outils tels que Maya." />
 			<check_box name="checkbox_apply_joint_offsets" label="Appliquer les décalages de jointures." tool_tip="Appliquer les éventuels décalages de jointures dans le maillage ; par défaut, ces décalages sont ignorés." />
+			<check_box name="checkbox_auto_reload" label="Recharger autom. les fichiers modifiés." tool_tip="Vérifier les fichiers de maillage locaux sur le disque et les recharger automatiquement lorsqu'ils sont modifiés."/>
+			<text name="auto_reload_period_label">
+				Fréqu. contrôle (sec):
+			</text>
+			<spinner name="auto_reload_period" tool_tip="À quelle fréquence vérifier si des modifications ont été apportées aux fichiers de maillage locaux suivis."/>
 			<text name="lod_suffix_label">
 				Suffixes LOD :
 			</text>

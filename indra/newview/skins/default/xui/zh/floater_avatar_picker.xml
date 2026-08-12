@@ -15,7 +15,7 @@
 	<floater.string name="searching">
 		搜尋中...
 	</floater.string>
-	<string label="確定" label_selected="確定" name="Select">
+	<string name="Select">
 		選擇
 	</string>
 	<string name="Close">
@@ -63,6 +63,11 @@
 				<columns label="名稱" name="nameUUID" />
 				<columns label="使用者名稱" name="usernameUUID" />
 			</fs_scroll_list>
+		</panel>
+		<panel label="聯絡人分組" name="ContactSetsPanel">
+			<text name="SelectContactSetLabel">
+				選擇一個聯絡人分組：
+			</text>
 		</panel>
 	</tab_container>
 	<button label="確定" label_selected="確定" name="ok_btn" />

@@ -78,6 +78,7 @@ class LLDir
     virtual S32 deleteFilesInDir(const std::string &dirname, const std::string &mask);
     U32 deleteDirAndContents(const std::string& dir_name);
     std::vector<std::string> getFilesInDir(const std::string &dirname);
+    std::vector<std::string> getDirectoriesInDir(const std::string &dirname); // <FS:TJ/> For CEF cache purging in a background thread
 // pure virtual functions
     virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask) = 0;
 
@@ -250,6 +251,9 @@ class LLDir
     // </FS:Ansariel>
 
     virtual void dumpCurrentDirectories(LLError::ELevel level = LLError::LEVEL_DEBUG);
+
+    // Open the system file browser to reveal a file or directory
+    void openDir(const std::string& filepath);
 
     // Utility routine
     std::string buildSLOSCacheDir() const;

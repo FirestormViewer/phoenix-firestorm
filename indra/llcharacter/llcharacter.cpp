@@ -319,6 +319,35 @@ bool LLCharacter::setVisualParamWeight(S32 index, F32 weight, bool upload_bake)
 }
 
 //-----------------------------------------------------------------------------
+// setVisualParamWeight()
+//-----------------------------------------------------------------------------
+// <FS:Ansariel> [Legacy Bake]
+//bool LLCharacter::setVisualParamWeight(S32 index, S32 type, F32 weight)
+bool LLCharacter::setVisualParamWeight(S32 index, S32 type, F32 weight, bool upload_bake)
+{
+    visual_param_index_map_t::iterator index_iter = mVisualParamIndexMap.find(index);
+    if (index_iter != mVisualParamIndexMap.end())
+    {
+        LLVisualParam* param = index_iter->second;
+        if (param->getWearableType() == type)
+        {
+            // <FS:Ansariel> [Legacy Bake]
+            //param->setWeight(weight);
+            param->setWeight(weight, upload_bake);
+            return true;
+        }
+        else
+        {
+            // setVisualParamWeight at the moment is only used in writeToAvatar.
+            // The type is supposed to match since wearable is a subset of avatar by type.
+            llassert(false);
+            LL_WARNS() << "Visual param index " << index << " is not of type " << type << LL_ENDL;
+        }
+    }
+    return false;
+}
+
+//-----------------------------------------------------------------------------
 // getVisualParamWeight()
 //-----------------------------------------------------------------------------
 F32 LLCharacter::getVisualParamWeight(LLVisualParam *which_param)

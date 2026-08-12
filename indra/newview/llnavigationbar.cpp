@@ -53,12 +53,18 @@
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
 #include "llviewernetwork.h" // <FS:AW hypergrid support >
+#include "lfsimfeaturehandler.h" // <FS/> Access to hyperGridURL
 #include "llviewerparcelmgr.h"
 #include "llworldmapmessage.h"
 #include "llappviewer.h"
 #include "llviewercontrol.h"
 #include "llweb.h"
 #include "llhints.h"
+
+// <FS:PP> Show home location in the "teleport home" navbar button tooltip
+#include "llworld.h"
+#include "llworldmap.h"
+// </FS:PP>
 
 #include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
@@ -283,6 +289,7 @@ LLNavigationBar::LLNavigationBar()
     mFavoritePanel(NULL),
     mNavPanWidth(0),
     mSearchComboBox(NULL),
+    mHomeTooltipRetryCount(0), // <FS:PP> Show home location in the "teleport home" navbar button tooltip
     mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-11847
 {
     // buildFromFile( "panel_navigation_bar.xml");  // <FS:Zi> Make navigation bar part of the UI
@@ -501,6 +508,55 @@ void LLNavigationBar::onLandmarksButtonClicked()
     LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_landmark_tab"));
 }
 
+// <FS:PP> Show home location in the "teleport home" navbar button tooltip
+void LLNavigationBar::setHomeBtnTooltip()
+{
+    std::string location_arg;
+    LLVector3d home_global;
+    if (gAgent.getHomePosGlobal(&home_global))
+    {
+        // 1. Try to get region info from the live 3D world
+        U64 region_handle = to_region_handle(home_global);
+        LLViewerRegion* region = LLWorld::getInstance()->getRegionFromPosGlobal(home_global);
+        if (region)
+        {
+            mHomeTooltipRetryCount = 0;
+            LLVector3 pos_region = region->getPosRegionFromGlobal(home_global);
+            location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", region->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
+        }
+        else
+        {
+            // 2. Not in 3D world, try the map cache
+            LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromHandle(region_handle);
+            if (sim_info)
+            {
+                mHomeTooltipRetryCount = 0;
+                LLVector3 pos_region = (LLVector3)(home_global - from_region_handle(region_handle));
+                location_arg = llformat("\r\n%s (%.0f, %.0f, %.0f)", sim_info->getName().c_str(), pos_region.mV[VX], pos_region.mV[VY], pos_region.mV[VZ]);
+            }
+            else
+            {
+                // 3. Not in cache, make a query
+                constexpr S32 MAX_TOOLTIP_RETRIES = 10;
+                if (mHomeTooltipRetryCount < MAX_TOOLTIP_RETRIES)
+                {
+                    ++mHomeTooltipRetryCount;
+                    LL_INFOS("setHomeBtnTooltip") << "Sending a region query, attempt " << mHomeTooltipRetryCount << "/" << MAX_TOOLTIP_RETRIES << LL_ENDL;
+                    LLWorldMapMessage::getInstance()->sendHandleRegionRequest(region_handle, [](U64 handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
+                    {
+                        if (LLNavigationBar::instanceExists())
+                        {
+                            LLNavigationBar::getInstance()->setHomeBtnTooltip();
+                        }
+                    }, std::string(), false);
+                }
+            }
+        }
+    }
+    mBtnHome->setToolTipArg(LLStringExplicit("[LOCATION]"), location_arg);
+}
+// </FS:PP>
+
 void LLNavigationBar::onSearchCommit()
 {
     std::string search_query = mSearchComboBox->getSimple();
@@ -575,6 +631,47 @@ void LLNavigationBar::onLocationSelection()
         case TYPED_REGION_SLURL:
             if(value.has("global_pos"))
             {
+            // <FS:TJ> Fix Teleport and Location History for OpenSim
+            #ifdef OPENSIM
+                if (LLGridManager::getInstance()->isInOpenSim())
+                {
+                    LLSLURL slurl = LLSLURL();
+                    if (value.has("slurl") && !value["slurl"].asString().empty())
+                    {
+                        slurl = LLSLURL(value["slurl"].asString());
+                    }
+                    else if (value.has("tooltip") && !value["tooltip"].asString().empty())
+                    {
+                        // Try get the slurl from the tooltip as a fallback if it exists
+                        slurl = LLSLURL(value["tooltip"].asString());
+                    }
+
+                    std::string grid = slurl.getGrid();
+                    std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+                    std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+
+                    // Requesting region information from the server is only required when changing grid
+                    if (slurl.isValid() && grid != current_grid)
+                    {
+                        if (!gatekeeper.empty())
+                        {
+                            slurl = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
+                        }
+
+                        LLWorldMapMessage::getInstance()->sendNamedRegionRequest(
+                            slurl.getRegion(),
+                            boost::bind(&LLNavigationBar::onRegionNameResponse,
+                            this, std::string(), slurl.getRegion(), slurl.getPosition(), _1, _2, _3, _4),
+                            slurl.getSLURLString(),
+                            true
+                        );
+
+                        return; // The teleport will occur in the callback with the correct global position
+                    }
+                }
+            #endif
+            // </FS:TJ>
+
                 gAgent.teleportViaLocation(LLVector3d(value["global_pos"]));
                 return;
             }
@@ -685,11 +782,32 @@ void LLNavigationBar::onTeleportFinished(const LLVector3d& global_agent_pos)
                     gAgent.getPosAgentFromGlobal(global_agent_pos));
     // <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
     //std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), global_agent_pos).getSLURLString());
-    std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos).getSLURLString());
+    std::string grid = LLGridManager::getInstance()->getGrid();
+    std::string current_grid = LFSimFeatureHandler::instance().hyperGridURL();
+    LLSLURL slurl = LLSLURL(gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos);
+#ifdef OPENSIM
+    if (!LLGridManager::getInstance()->isInSecondLife() && grid != current_grid)
+    {
+        slurl = LLSLURL(current_grid, gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos, true);
+    }
+#endif
+    std::string tooltip(slurl.getSLURLString());
     // </FS:Beq pp Oren>
 
-    LLLocationHistoryItem item (location,
-            global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //LLLocationHistoryItem item (location,
+    //        global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    LLLocationHistoryItem item;
+    if (LLGridManager::getInstance()->isInSecondLife()) {
+        item = LLLocationHistoryItem(location,
+                global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
+    }
+    else
+    {
+        item = LLLocationHistoryItem(location,
+                global_agent_pos, tooltip, TYPED_REGION_SLURL, slurl);// we can add into history only TYPED location
+    }
+    // </FS:TJ>
     //Touch it, if it is at list already, add new location otherwise
     if ( !lh->touchItem(item) ) {
         lh->addItem(item);
@@ -780,7 +898,10 @@ void LLNavigationBar::onRegionNameResponse(
         // </FS:Beq pp Oren>
         gAgent.teleportViaLocation(global_pos);
     }
-    else if (gSavedSettings.getBOOL("SearchFromAddressBar"))
+    // <FS:TJ> Fix Teleport and Location History for OpenSim
+    //else if (gSavedSettings.getBOOL("SearchFromAddressBar"))
+    else if (!typed_location.empty() && gSavedSettings.getBOOL("SearchFromAddressBar"))
+    // </FS:TJ>
     {
         invokeSearch(typed_location);
     }
@@ -869,7 +990,17 @@ void LLNavigationBar::resizeLayoutPanel()
 }
 void LLNavigationBar::invokeSearch(std::string search_text)
 {
-    LLFloaterReg::showInstance("search", LLSD().with("category", "standard").with("query", LLSD(search_text)));
+    LLSD key;
+    key["category"] = "standard";
+    key["query"] = search_text;
+    LLSD collections = LLSD::emptyArray();
+    collections.append("destinations");
+    collections.append("places");
+    key["collections"] = collections;
+    // <FS:PP> FIRE-36483 Menu, navbar and toolbar button must open the same search window
+    //LLFloaterReg::showInstance("search", key);
+    LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseFSLegacySearch") ? "search" : "legacy_search", key);
+    // </FS:PP>
 }
 
 void LLNavigationBar::clearHistoryCache()

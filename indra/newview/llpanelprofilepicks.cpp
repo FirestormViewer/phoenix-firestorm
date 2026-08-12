@@ -682,6 +682,7 @@ bool LLPanelProfilePick::postBuild()
 {
     mPickName = getChild<LLLineEditor>("pick_name");
     mPickDescription = getChild<LLTextEditor>("pick_desc");
+    mPickLocation = getChild<LLLineEditor>("pick_location");
     mSaveButton = getChild<LLButton>("save_changes_btn");
     mCreateButton = getChild<LLButton>("create_changes_btn");
     mCancelButton = getChild<LLButton>("cancel_changes_btn");
@@ -712,9 +713,18 @@ bool LLPanelProfilePick::postBuild()
     mPickDescription->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1));
     mPickDescription->setFocusReceivedCallback(boost::bind(&LLPanelProfilePick::onDescriptionFocusReceived, this));
 
-    getChild<LLUICtrl>("pick_location")->setEnabled(false);
+    mPickLocation->setEnabled(false);
 
     return true;
+}
+
+void LLPanelProfilePick::reshape(S32 width, S32 height, bool called_from_parent)
+{
+    LLPanelProfilePropertiesProcessorTab::reshape(width, height, called_from_parent);
+    if (mPickLocation)
+    {
+        mPickLocation->setCursor(0);
+    }
 }
 
 void LLPanelProfilePick::onDescriptionFocusReceived()
@@ -784,6 +794,12 @@ void LLPanelProfilePick::apply()
 {
     if ((mNewPick || getIsLoaded()) && isDirty())
     {
+        // <FS:Trish> Fix applying changes when exiting profile causing the preview text to apply if preview mode is active
+        if (mPreview)
+        {
+            onClickPreview();
+        }
+        // </FS:Trish>
         sendUpdate();
     }
 }
@@ -825,7 +841,14 @@ void LLPanelProfilePick::reparseDescription(const std::string& desc)
 
 void LLPanelProfilePick::setPickLocation(const std::string& location)
 {
-    getChild<LLUICtrl>("pick_location")->setValue(location);
+    mPickLocation->setValue(location);
+    // Pick location can be set with a long 'substitute' value or
+    // just a long value.
+    // If user sets cursor at the end, application of the substitute
+    // value can shift text from visible are to the left. When text
+    // gets restored or set, text position isn't, so just drop cursor
+    // position.
+    mPickLocation->setCursor(0);
     mPickLocationStr = location;
     mLastRequestTimer.reset();
 }
@@ -847,6 +870,13 @@ void LLPanelProfilePick::onClickTeleport()
 
 void LLPanelProfilePick::enableSaveButton(bool enable)
 {
+    //<FS:Trish> Fix Save Buttons being enabled in various cases while preview mode is on
+    if (mPreview)
+    {
+        enable = false;
+    }
+    //</FS:Trish>
+    
     childSetVisible("save_changes_lp", enable);
 
     childSetVisible("save_btn_lp", enable && !mNewPick);
@@ -993,6 +1023,10 @@ void LLPanelProfilePick::sendParcelInfoRequest()
 
 void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
 {
+    // Region might have moved since the pick was saved; refresh the stored global position
+    // using the parcel info so map/teleport use the current location.
+    setPosGlobal(LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z));
+
     setPickLocation(createLocationText(LLStringUtil::null, parcel_data.name, parcel_data.sim_name, getPosGlobal()));
 
     // We have received parcel info for the requested ID so clear it now.

@@ -160,7 +160,7 @@
     follows="left|top|right"
     height="32"
     left="5"
-    max_length_bytes="16"
+    max_length_chars="16"
     text_pad_left="8"
     text_pad_right="8"
     name="password_edit"
@@ -322,6 +322,10 @@
         label="Phoenix"
         name="Phoenix"
         value="settings_phoenix.xml" />
+      <combo_box.item
+        label="Modern"
+        name="Modern"
+        value="settings_modern.xml" />
       <combo_box.item
         label="[VIEWER_GENERATION]"
         name="V3"

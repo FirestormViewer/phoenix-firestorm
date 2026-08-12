@@ -15,7 +15,7 @@
 		Inativo
 	</string>
 	<string name="status_uploading">
-		Carregando [NAME]
+		Enviando [NAME]
 	</string>
 	<string name="status_creating">
 		Criando objeto [NAME]

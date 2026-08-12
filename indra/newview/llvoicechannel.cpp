@@ -128,6 +128,12 @@ void LLVoiceChannel::onChange(EStatusType type, const LLSD& channelInfo, bool pr
     {
         mChannelInfo = channelInfo;
     }
+
+    if (!LLVoiceClient::instanceExists())
+    {
+        return;
+    }
+
     if (!LLVoiceClient::getInstance()->compareChannels(mChannelInfo, channelInfo))
     {
         return;
@@ -370,8 +376,12 @@ void LLVoiceChannel::resume()
         sSuspended = false; // needs to be before activate() so that observers will be able to read state
         if (LLVoiceClient::getInstance()->voiceEnabled())
         {
+            bool currentStateConnected = false; // <FS:TJ/> Fix nearby voice after changing audio device settings
             if (sSuspendedVoiceChannel)
             {
+                // <FS:TJ> Fix nearby voice after changing audio device settings
+                currentStateConnected = sSuspendedVoiceChannel->getState() == EState::STATE_CONNECTED;
+                // </FS:TJ>
                 if (sSuspendedVoiceChannel->callStarted())
                 {
                     // should have channel data already, restart
@@ -382,8 +392,18 @@ void LLVoiceChannel::resume()
             }
             else
             {
+                // <FS:TJ> Fix nearby voice after changing audio device settings
+                currentStateConnected = LLVoiceChannelProximal::getInstance()->getState() == EState::STATE_CONNECTED;
+                // </FS:TJ>
                 LLVoiceChannelProximal::getInstance()->activate();
             }
+
+            // <FS:TJ> Fix nearby voice after changing audio device settings
+            if (currentStateConnected)
+            {
+                LLVoiceClient::getInstance()->notifyVoiceConnected();
+            }
+            // </FS:TJ>
         }
     }
 }
@@ -472,10 +492,6 @@ void LLVoiceChannelGroup::activate()
                 }
             }
         }
-
-        // Mic default state is OFF on initiating/joining Ad-Hoc/Group calls.  It's on for P2P using the AdHoc infra.
-
-        LLVoiceClient::getInstance()->setUserPTTState(mIsP2P);
     }
 }
 
@@ -534,6 +550,10 @@ void LLVoiceChannelGroup::handleStatusChange(EStatusType type)
     case STATUS_JOINED:
         mRetries = 3;
         mIsRetrying = false;
+
+        // Mic default state is OFF on initiating/joining Ad-Hoc/Group calls. It's on for P2P using the AdHoc infra.
+        LLVoiceClient::getInstance()->setUserPTTState(mIsP2P);
+        break;
     default:
         break;
     }

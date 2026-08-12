@@ -61,10 +61,12 @@
 #include "llrand.h"
 #include "llviewerwindow.h"
 #include "llviewercamera.h"
+#include "llviewerstats.h"
 #include "llversioninfo.h"
 
 #include "llviewernetwork.h"
 #include "llnotificationsutil.h"
+#include "llnearbyvoicemoderation.h"
 
 #include "llcorehttputil.h"
 #include "lleventfilter.h"
@@ -80,9 +82,8 @@
 
 const std::string WEBRTC_VOICE_SERVER_TYPE = "webrtc";
 
-// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
-using namespace std::chrono_literals; // Needed for shared timed mutex to use time
-// </FS:minerjr> [FIRE-36022]
+const F32 STATS_TIMER_DELAY = 2.0;
+
 namespace {
 
     const F32      MAX_AUDIO_DIST           = 50.0f;
@@ -347,6 +348,46 @@ const LLVoiceVersionInfo& LLWebRTCVoiceClient::getVersion()
     return mVoiceVersion;
 }
 
+// --------------------------------------------------
+
+void LLWebRTCVoiceClient::updateVersion()
+{
+    sessionStatePtr_t session = mNextSession.get() ? mNextSession : mSession;
+
+    if (session)
+    {
+        // A WebRTC session can be connected to multiple servers at once. To more easily disambiguate which server version is being printed, show the connection type. In most cases, this shouldn't matter and the Janus version should be the same for all connections. Janus versions are also logged for each connection.
+        mVoiceVersion.serverVersion = session->getVersion();
+        if (dynamic_cast<adhocSessionState*>(session.get()))
+        {
+            if (session->mHangupOnLastLeave)
+            {
+                mVoiceVersion.mBuildVersion = "p2p";
+            }
+            else
+            {
+                mVoiceVersion.mBuildVersion = "ad-hoc";
+            }
+        }
+        else if (session->isEstate())
+        {
+            mVoiceVersion.mBuildVersion = "estate";
+        }
+        else if (session->isSpatial())
+        {
+            mVoiceVersion.mBuildVersion = "parcel";
+        }
+        else
+        {
+            mVoiceVersion.mBuildVersion = mVoiceVersion.serverVersion;
+        }
+    }
+    else
+    {
+        mVoiceVersion.serverVersion = mVoiceVersion.mBuildVersion = "";
+    }
+}
+
 //---------------------------------------------------
 
 void LLWebRTCVoiceClient::updateSettings()
@@ -509,12 +550,6 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
     try
     {
         LLMuteList::getInstance()->addObserver(this);
-        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
-        // Add a counter to check if the main thread locked up
-        // to prevent this thread/corutine form filling up
-        // the mMainQueue.
-        static U32 crash_check = 0;
-        // </FS:minerjr> [FIRE-36022]
         while (!sShuttingDown)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_VOICE("voiceConnectionCoroLoop")
@@ -600,26 +635,6 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                     // to send position updates.
                     updatePosition();
                 }
-                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
-                // If the device locked, count up by 1
-                if (gWebRTCUpdateDevices)
-                {
-                    crash_check++;
-                }
-                // Else if the device is not locked, then reset the counter back to 0
-                else
-                {
-                    crash_check = 0;
-                }
-                // If there are over 10 cycles of the devices being locked, there is a good
-                // chance that the thread failed due to hardware/audio engine issue.
-                if (crash_check > 10)
-                {
-                    LL_WARNS() << "WebRTC detected locked worker thread, will shutdown to prevent total viewer lockup." << LL_ENDL;
-                    // Exit out of the thread and flag WebRTC to shutdown, hopefully clearing the lock and allowing the viewer to continue.
-                    sShuttingDown = true;
-                }
-                // </FS:minerjr> [FIRE-36022]
             }
             LL::WorkQueue::postMaybe(mMainQueue,
                 [=, this] {
@@ -761,19 +776,6 @@ void LLWebRTCVoiceClient::OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceLi
 void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDeviceList &render_devices,
                                                const llwebrtc::LLWebRTCVoiceDeviceList &capture_devices)
 {
-    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
-    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
-    {
-    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
-    std::unique_lock lock(gAudioDeviceMutex, 1s);
-    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
-    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
-    if (!lock.owns_lock())
-    {
-        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
-        return;
-    }
-    // </FS:minerjr> [FIRE-36022]
     if (sShuttingDown)
     {
         return;
@@ -820,34 +822,6 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     }
 
     setDevicesListUpdated(true);
-    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
-    }
-    catch (const std::system_error& e)
-    {
-        if (e.code() == std::errc::resource_deadlock_would_occur)
-        {
-            // When trying to lock the same lock a second time
-            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
-        }
-        else if (e.code() == std::errc::operation_not_permitted)
-        {
-            // When the mutex is invalid
-            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
-        }
-        else
-        {
-            // Everything else
-            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
-        }
-
-        return;
-    }
-    catch (const std::exception& e)
-    {
-        LL_WARNS() << "Exception WebRTC: " << " " << e.what() << LL_ENDL;
-        return;
-    }
-    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCVoiceClient::clearRenderDevices()
@@ -1565,6 +1539,15 @@ void LLWebRTCVoiceClient::processChannels(bool process)
 
 bool LLWebRTCVoiceClient::inProximalChannel()
 {
+    // <FS:PP> FIRE-36672: Voice status indicator behavior change
+    // inSpatialChannel() defaults to true with no session (parcel voice disabled), which keeps the conversation voice indicator green
+    // Only report proximal when a spatial session is established
+    static LLCachedControl<bool> require_established_session(gSavedSettings, "DebugWebRTCRequireEstablishedSpatialSession", false);
+    if (require_established_session)
+    {
+        return mProcessChannels && mSession && mSession->isSpatial();
+    }
+    // </FS:PP>
     return inSpatialChannel();
 }
 
@@ -1713,6 +1696,10 @@ void LLWebRTCVoiceClient::setVoiceVolume(F32 volume)
 
 void LLWebRTCVoiceClient::predSetSpeakerVolume(const LLWebRTCVoiceClient::sessionStatePtr_t &session, F32 volume)
 {
+    if (session->mShuttingDown)
+    {
+        return;
+    }
     session->setSpeakerVolume(volume);
 }
 
@@ -1741,6 +1728,14 @@ void LLWebRTCVoiceClient::setVoiceEnabled(bool enabled)
         // use the status observer
         mVoiceEnabled = enabled;
         LLVoiceClientStatusObserver::EStatusType status;
+
+        // Gate the audio devices on voice being enabled: the capture mic and
+        // playout speaker only run while voice is on, and the mic isn't held
+        // open when voice is off.
+        if (mWebRTCDeviceInterface)
+        {
+            mWebRTCDeviceInterface->setVoiceEnabled(enabled);
+        }
 
         if (enabled)
         {
@@ -1775,6 +1770,13 @@ void LLWebRTCVoiceClient::setVoiceEnabled(bool enabled)
         LL_DEBUGS("Voice") << " no-op" << LL_ENDL;
     }
 }
+
+// <FS:TJ> Fix Nearby Voice when changing voice device settings
+void LLWebRTCVoiceClient::notifyVoiceConnected()
+{
+    notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_JOINED);
+}
+// </FS:TJ>
 
 
 /////////////////////////////
@@ -1941,6 +1943,10 @@ LLWebRTCVoiceClient::sessionState::sessionState() :
 
 void LLWebRTCVoiceClient::predUpdateOwnVolume(const LLWebRTCVoiceClient::sessionStatePtr_t &session, F32 audio_level)
 {
+    if (session->mShuttingDown)
+    {
+        return;
+    }
     participantStatePtr_t participant = session->findParticipantByID(gAgentID);
     if (participant)
     {
@@ -1969,9 +1975,16 @@ void LLWebRTCVoiceClient::sessionState::sendData(const std::string &data)
 void LLWebRTCVoiceClient::sessionState::setMuteMic(bool muted)
 {
     mMuted = muted;
+    if (mShuttingDown)
+    {
+        return;
+    }
     for (auto &connection : mWebRTCConnections)
     {
-        connection->setMuteMic(muted);
+        if (!connection->isShuttingDown())
+        {
+            connection->setMuteMic(muted);
+        }
     }
 }
 
@@ -1980,7 +1993,10 @@ void LLWebRTCVoiceClient::sessionState::setSpeakerVolume(F32 volume)
     mSpeakerVolume = volume;
     for (auto &connection : mWebRTCConnections)
     {
-        connection->setSpeakerVolume(volume);
+        if (!connection->isShuttingDown())
+        {
+            connection->setSpeakerVolume(volume);
+        }
     }
 }
 
@@ -1992,7 +2008,10 @@ void LLWebRTCVoiceClient::sessionState::setUserVolume(const LLUUID &id, F32 volu
     }
     for (auto &connection : mWebRTCConnections)
     {
-        connection->setUserVolume(id, volume);
+        if (!connection->isShuttingDown())
+        {
+            connection->setUserVolume(id, volume);
+        }
     }
 }
 
@@ -2004,7 +2023,10 @@ void LLWebRTCVoiceClient::sessionState::setUserMute(const LLUUID &id, bool mute)
     }
     for (auto &connection : mWebRTCConnections)
     {
-        connection->setUserMute(id, mute);
+        if (!connection->isShuttingDown())
+        {
+            connection->setUserMute(id, mute);
+        }
     }
 }
 /*static*/
@@ -2131,6 +2153,22 @@ void LLWebRTCVoiceClient::sessionState::shutdownAllConnections()
 void LLWebRTCVoiceClient::sessionState::revive()
 {
     mShuttingDown = false;
+}
+
+const std::string LLWebRTCVoiceClient::sessionState::getVersion() const
+{
+    // Prefer the version of a primary connection which has already received a version string over the data channel. If that does not make sense, fall back to any non-empty version string we can find.
+    bool primary = true;
+    do
+    {
+        for (auto& connection : mWebRTCConnections) {
+            if (connection->isPrimary() == primary && connection->getVersion().length()) {
+                return connection->getVersion();
+            }
+        }
+        primary = !primary;
+    } while (!primary);
+    return "";
 }
 
 //=========================================================================
@@ -2328,6 +2366,11 @@ void LLWebRTCVoiceClient::deleteSession(const sessionStatePtr_t &session)
     if (deleteNextAudioSession)
     {
         mNextSession.reset();
+    }
+
+    if (!sShuttingDown)
+    {
+        updateVersion();
     }
 }
 
@@ -2706,6 +2749,10 @@ void LLVoiceWebRTCConnection::sendData(const std::string &data)
     }
 }
 
+const std::string& LLVoiceWebRTCConnection::getVersion() {
+    return mServerVersion;
+}
+
 // Tell the simulator that we're shutting down a voice connection.
 // The simulator will pass this on to the Secondlife WebRTC server.
 void LLVoiceWebRTCConnection::breakVoiceConnectionCoro(connectionPtr_t connection)
@@ -2888,6 +2935,19 @@ static llwebrtc::LLWebRTCPeerConnectionInterface::InitOptions getConnectionOptio
     // TODO: Pull these from login
     std::string grid = LLGridManager::getInstance()->getGridLoginID();
     std::transform(grid.begin(), grid.end(), grid.begin(), [](unsigned char c){ return std::tolower(c); });
+    // <FS:TJ> [FIRE-36421] Add OpenSim STUN server support
+#ifdef OPENSIM
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        if (LLViewerRegion* regionp = gAgent.getRegion())
+        {
+            servers.mUrls = regionp->getStunServers();
+        }
+        options.mServers.push_back(servers);
+        return options;
+    }
+#endif
+    // </FS:TJ>
     int num_servers = 2;
     if (grid == "agni")
     {
@@ -2985,6 +3045,7 @@ bool LLVoiceWebRTCConnection::connectionStateMachine()
             }
             mWebRTCAudioInterface->setReceiveVolume(mSpeakerVolume);
             LLWebRTCVoiceClient::getInstance()->OnConnectionEstablished(mChannelID, mRegionID);
+            resetConnectionStats();
             setVoiceConnectionState(VOICE_STATE_WAIT_FOR_DATA_CHANNEL);
             break;
         }
@@ -3037,6 +3098,13 @@ bool LLVoiceWebRTCConnection::connectionStateMachine()
                         }
                         sendJoin();
                     }
+                }
+
+                static LLTimer stats_timer;
+                if (stats_timer.getElapsedTimeF32() > STATS_TIMER_DELAY)
+                {
+                    mWebRTCPeerConnectionInterface->gatherConnectionStats();
+                    stats_timer.reset();
                 }
             }
             break;
@@ -3129,6 +3197,7 @@ bool LLVoiceWebRTCConnection::connectionStateMachine()
 // An object where each key is an agent id.  (in the future, we may allow
 // integer indices into an agentid list, populated on join commands.  For size.
 // Each key will point to a json object with keys identifying what's updated.
+// 'V'  - voice server version (string)
 // 'p'  - audio source power (level/volume) (int8 as int)
 // 'j'  - object of join data (currently only a boolean 'p' marking a primary participant)
 // 'l'  - boolean, always true if exists.
@@ -3169,6 +3238,20 @@ void LLVoiceWebRTCConnection::OnDataReceivedImpl(const std::string &data, bool b
             LL_WARNS("Voice") << "Expected object from data channel:" << data << LL_ENDL;
             return;
         }
+
+        bool is_primary_region = mPrimary;
+        if (!mPrimary && isSpatial() && gAgent.getRegion())
+        {
+            is_primary_region = (mRegionID == gAgent.getRegion()->getRegionID());
+            if (is_primary_region)
+            {
+                LL_WARNS("Voice") << "mPrimary is false, expected: true, connection state: " << getVoiceConnectionState() << LL_ENDL;
+            }
+            else
+            {
+                LL_INFOS("Voice") << "mPrimary is false, expected: false, connection state: " << getVoiceConnectionState() << LL_ENDL;
+            }
+        }
         boost::json::object voice_data = voice_data_parsed.as_object();
         boost::json::object mute;
         boost::json::object user_gain;
@@ -3188,6 +3271,16 @@ void LLVoiceWebRTCConnection::OnDataReceivedImpl(const std::string &data, bool b
             }
 
             boost::json::object participant_obj = participant_elem.value().as_object();
+
+            if (participant_obj.contains("V") && participant_obj["V"].is_string() && agent_id == gAgentID)
+            {
+                // sendJoin was called on the connection. The voice server has responded with the new version string. Set it here.
+                mServerVersion = participant_obj["V"].as_string().c_str();
+                LLWebRTCVoiceClient::getInstance()->updateVersion();
+                LL_DEBUGS("Voice") << "Received version string \"" << participant_obj["V"].as_string().c_str()
+                                   << "\" for connection: primary=" << mPrimary << ", spatial=" << isSpatial()
+                                   << ", region=" << mRegionID << ", mChannelID=" << mChannelID << LL_ENDL;
+            }
 
             LLWebRTCVoiceClient::participantStatePtr_t participant =
                 LLWebRTCVoiceClient::getInstance()->findParticipantByID(mChannelID, agent_id);
@@ -3254,12 +3347,63 @@ void LLVoiceWebRTCConnection::OnDataReceivedImpl(const std::string &data, bool b
 
                     if (participant_obj.contains("m") && participant_obj["m"].is_bool())
                     {
-                        participant->mIsModeratorMuted = participant_obj["m"].as_bool();
+                        bool is_moderator_muted = participant_obj["m"].as_bool();
+                        if (isSpatial())
+                        {
+                            // ignore muted flags from non-primary server
+                            if (is_primary_region || primary)
+                            {
+                                participant->mIsModeratorMuted = is_moderator_muted;
+                                if (gAgentID == agent_id)
+                                {
+                                    LLNearbyVoiceModeration::getInstance()->setMutedInfo(mChannelID, is_moderator_muted);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            participant->mIsModeratorMuted = is_moderator_muted;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (isSpatial() && (is_primary_region || primary))
+                {
+                    // mute info message can be received before join message, so try to mute again later
+                    if (participant_obj.contains("m") && participant_obj["m"].is_bool())
+                    {
+                        LL_WARNS() << "Mute info msg received: " << participant_obj["m"].as_bool()
+                                   << " but participant " << agent_id
+                                   << " was not found in channel " << mChannelID << LL_ENDL;
+
+                        bool is_moderator_muted = participant_obj["m"].as_bool();
+                        std::string channel_id = mChannelID;
+                        F32 delay { 1.5f };
+                        doAfterInterval(
+                            [channel_id, agent_id, is_moderator_muted]()
+                            {
+                                LLWebRTCVoiceClient::participantStatePtr_t participant =
+                                    LLWebRTCVoiceClient::getInstance()->findParticipantByID(channel_id, agent_id);
+                                if (participant)
+                                {
+                                    participant->mIsModeratorMuted = is_moderator_muted;
+                                    LL_WARNS() << "Participant " << agent_id << " is found after delay, is_muted: " << is_moderator_muted << LL_ENDL;
+                                    if (gAgentID == agent_id)
+                                    {
+                                        LLNearbyVoiceModeration::getInstance()->setMutedInfo(channel_id, is_moderator_muted);
+                                    }
+                                }
+                                else
+                                {
+                                    LL_WARNS() << "Participant " << agent_id << " is still not found in channel " << channel_id << LL_ENDL;
+                                }
+                            }, delay);
                     }
                 }
             }
         }
-
         // tell the simulator to set the mute and volume data for this
         // participant, if there are any updates.
         boost::json::object root;
@@ -3329,6 +3473,114 @@ void LLVoiceWebRTCConnection::sendJoin()
     root["j"]             = join_obj;
     std::string json_data = boost::json::serialize(root);
     mWebRTCDataInterface->sendData(json_data, false);
+}
+
+void LLVoiceWebRTCConnection::OnStatsDelivered(const llwebrtc::LLWebRTCStatsMap& stats_data)
+{
+    LL::WorkQueue::postMaybe(mMainQueue, [=, this]
+    {
+        if (mShutDown)
+        {
+            return;
+        }
+        for (const auto& [stats_id, attributes] : stats_data)
+        {
+            if (attributes.contains("currentRoundTripTime"))
+            {
+                F32 rtt_seconds = 0.0f;
+                LLStringUtil::convertToF32(attributes.at("currentRoundTripTime"), rtt_seconds);
+                sample(LLStatViewer::WEBRTC_LATENCY, rtt_seconds * 1000.0f);
+            }
+            if (attributes.contains("availableOutgoingBitrate"))
+            {
+                F32 bitrate_bps = 0.0f;
+                LLStringUtil::convertToF32(attributes.at("availableOutgoingBitrate"), bitrate_bps);
+                sample(LLStatViewer::WEBRTC_UPLOAD_BANDWIDTH, bitrate_bps / 1000.0f);
+            }
+
+            // Stat type detection below is heuristic-based.
+            // It's relied on specific fields to distinguish outbound-rtp, remote-inbound-rtp, and inbound-rtp.
+            // This approach works with current WebRTC stats but may need updating later.
+
+            // Outbound RTP
+            if (attributes.contains("mediaSourceId"))
+            {
+                U32 out_packets_sent = 0;
+                LLStringUtil::convertToU32(attributes.at("packetsSent"), out_packets_sent);
+                sample(LLStatViewer::WEBRTC_PACKETS_OUT_SENT, out_packets_sent);
+            }
+            // Remote-Inbound RTP
+            else if (attributes.contains("localId"))
+            {
+                if (attributes.contains("packetsLost"))
+                {
+                    // packetsLost may be negative, clamp to zero for unsigned Viewer stats
+                    S32 out_packets_lost = 0;
+                    LLStringUtil::convertToS32(attributes.at("packetsLost"), out_packets_lost);
+                    sample(LLStatViewer::WEBRTC_PACKETS_OUT_LOST, static_cast<U32>(llmax(out_packets_lost, 0)));
+                }
+                if (attributes.contains("jitter"))
+                {
+                    F32 jitter_seconds = 0.0f;
+                    LLStringUtil::convertToF32(attributes.at("jitter"), jitter_seconds);
+                    sample(LLStatViewer::WEBRTC_JITTER_OUT, jitter_seconds * 1000.0f);
+                }
+            }
+            // Inbound RTP
+            else if (attributes.contains("jitterBufferDelay"))
+            {
+                if (attributes.contains("packetsLost"))
+                {
+                    // packetsLost may be negative, clamp to zero for unsigned Viewer stats
+                    S32 in_packets_lost = 0;
+                    LLStringUtil::convertToS32(attributes.at("packetsLost"), in_packets_lost);
+                    sample(LLStatViewer::WEBRTC_PACKETS_IN_LOST, static_cast<U32>(llmax(in_packets_lost, 0)));
+                }
+                if (attributes.contains("packetsReceived"))
+                {
+                    U32 in_packets_recv = 0;
+                    LLStringUtil::convertToU32(attributes.at("packetsReceived"), in_packets_recv);
+                    sample(LLStatViewer::WEBRTC_PACKETS_IN_RECEIVED, in_packets_recv);
+                }
+                if (attributes.contains("jitter"))
+                {
+                    F32 jitter_seconds = 0.0f;
+                    LLStringUtil::convertToF32(attributes.at("jitter"), jitter_seconds);
+                    sample(LLStatViewer::WEBRTC_JITTER_IN, jitter_seconds * 1000.0f);
+                }
+                if (attributes.contains("jitterBufferDelay") && attributes.contains("jitterBufferEmittedCount"))
+                {
+                    F32 total_delay_seconds = 0.0f;
+                    F32 emitted_count_f = 0.0f;
+
+                    // total delay in seconds
+                    LLStringUtil::convertToF32(attributes.at("jitterBufferDelay"), total_delay_seconds);
+
+                    // number of packets played out
+                    LLStringUtil::convertToF32(attributes.at("jitterBufferEmittedCount"), emitted_count_f);
+                    if (emitted_count_f > 0.0f)
+                    {
+                        F32 avg_delay_seconds = total_delay_seconds / emitted_count_f;
+                        F32 avg_delay_ms = avg_delay_seconds * 1000.0f;
+                        sample(LLStatViewer::WEBRTC_JITTER_BUFFER, avg_delay_seconds * 1000.0f);
+                    }
+                }
+            }
+        }
+    });
+}
+
+void LLVoiceWebRTCConnection::resetConnectionStats()
+{
+    sample(LLStatViewer::WEBRTC_JITTER_BUFFER, 0);
+    sample(LLStatViewer::WEBRTC_JITTER_IN, 0);
+    sample(LLStatViewer::WEBRTC_JITTER_OUT, 0);
+    sample(LLStatViewer::WEBRTC_LATENCY, 0);
+    sample(LLStatViewer::WEBRTC_PACKETS_IN_LOST, 0);
+    sample(LLStatViewer::WEBRTC_PACKETS_IN_RECEIVED, 0);
+    sample(LLStatViewer::WEBRTC_PACKETS_OUT_SENT, 0);
+    sample(LLStatViewer::WEBRTC_PACKETS_OUT_LOST, 0);
+    sample(LLStatViewer::WEBRTC_UPLOAD_BANDWIDTH, 0);
 }
 
 /////////////////////////////

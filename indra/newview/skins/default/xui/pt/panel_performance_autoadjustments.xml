@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+	<text name="back_lbl">Voltar</text>
+	<text name="settings_title">Ajuste automático de configurações</text>
+
+	<button name="defaults_btn" label="Restaurar configurações recomendadas" />
+
+	<text name="targetfps_desc">Taxa de quadros desejada</text>
+
+	<spinner name="target_fps" tool_tip="O viewer tentará atingir isso ajustando suas configurações gráficas." />
+
+	<text name="display_desc">Seu monitor suporta até [FPS_LIMIT] fps.</text>
+
+	<text name="settings_desc">As configurações afetam</text>
+
+	<combo_box.item name="av_only" label="Somente avatares" />
+	<combo_box.item name="av_and_scene" label="Avatares e mundo" />
+	<combo_box.item name="scene_only" label="Somente mundo" />
+
+	<button name="start_autotune" label="Iniciar ajuste automático" tool_tip="O viewer ajustará as configurações para atingir o FPS alvo e então parará." />
+
+	<button name="stop_autotune" label="Cancelar" tool_tip="Parar ajuste das configurações." />
+
+	<text name="wip_desc">Processando...</text>
+
+	<check_box name="AutoTuneContinuous" label="Ajuste contínuo" tool_tip="O viewer ajustará continuamente as configurações para manter o FPS alvo, mesmo com a janela fechada." />
+
+	<radio_item name="one_session_lock" label="Somente esta sessão de login" />
+	<radio_item name="next_session_lock" label="Próximas sessões de login" />
+
+	<check_box name="vsync" label="Ativar VSync" tool_tip="Ativa a sincronização vertical para reduzir cortes e travamentos na imagem." />
+
+	<text name="vsync_desc">Sincroniza a taxa de atualização do monitor com o FPS.</text>
+
+	<text name="vsync_desc_limit">Nota: Ativar VSync limita o FPS a [FPS_LIMIT].</text>
+
+	<text name="simplify_dist_desc">Reduzir o nível de detalhe de avatares distantes melhora o desempenho gráfico.</text>
+
+	<check_box name="AutoTuneImpostorByDistEnabled" label="Simplificar avatares além de" tool_tip="Quando ativado, ajusta MaxNonImpostors para limitar avatares totalmente renderizados dentro do raio definido." />
+
+	<text name="dist_meters">metros</text>
+
+	<text name="dist_limits_desc">Escolha o intervalo de distância que será afetado pelo ajuste automático.</text>
+
+	<text name="min_dist_lbl">Distância mínima</text>
+	<text name="pref_dist_lbl">Distância máxima</text>
+</panel>

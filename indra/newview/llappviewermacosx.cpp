@@ -49,6 +49,7 @@
 #include "llerrorcontrol.h"
 #include "llvoavatarself.h"         // for gAgentAvatarp->getFullname()
 #include <ApplicationServices/ApplicationServices.h>
+#include "llwindowmacosx_iokit.h"
 #ifdef LL_CARBON_CRASH_HANDLER
 #include <Carbon/Carbon.h>
 #endif
@@ -90,7 +91,13 @@ bool initViewer()
     bool ok = gViewerAppPtr->init();
     if(!ok)
     {
-        LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        // <FS:PP> FIRE-36191: A secondary helper process can intentionally quit after handing an external SLURL to the already-running viewer instance
+        // LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        if (!LLApp::isQuitting())
+        {
+            LL_WARNS("InitOSX") << "Application init failed." << LL_ENDL;
+        }
+        // </FS:PP>
     }
     else if (!gHandleSLURL.empty())
     {
@@ -125,6 +132,7 @@ bool pumpMainLoop()
 
 void cleanupViewer()
 {
+    set_os_hibernation_mode(0); // restore default OS hibernation behavior
     if(!LLApp::isError())
     {
         if (gViewerAppPtr)
@@ -133,6 +141,16 @@ void cleanupViewer()
 
     delete gViewerAppPtr;
     gViewerAppPtr = NULL;
+}
+
+void startWatchdog(std::string_view state)
+{
+    gViewerAppPtr->resumeMainloopTimeout(state);
+}
+
+void stopWatchdog()
+{
+    gViewerAppPtr->pauseMainloopTimeout();
 }
 
 void clearDumpLogsDir()
@@ -402,6 +420,27 @@ bool LLAppViewerMacOSX::restoreErrorTrap()
     return reset_count == 0;
 }
 
+bool LLAppViewerMacOSX::initSLURLHandler()
+{
+    if (isSecondInstance())
+    {
+        return false;
+    }
+    // Main secondlife:// registration is in info.plist, but macOS
+    // Launch Services caches URL scheme handlers, and a different
+    // viewer might still be registered.
+    // Register URL schemes with Launch Services on every launch
+    register_url_schemes();
+
+    return true;
+}
+
+void LLAppViewerMacOSX::setOSHibernationMode(eHibernationMode mode)
+{
+    // pass to objective-c++
+    set_os_hibernation_mode((int)mode);
+}
+
 std::string LLAppViewerMacOSX::generateSerialNumber()
 {
     char serial_md5[MD5HEX_STR_SIZE];       // Flawfinder: ignore
@@ -409,7 +448,7 @@ std::string LLAppViewerMacOSX::generateSerialNumber()
 
     // JC: Sample code from http://developer.apple.com/technotes/tn/tn1103.html
     CFStringRef serialNumber = NULL;
-    io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
+    io_service_t    platformExpert = IOServiceGetMatchingService(kLLIOMainPort,
                                                                  IOServiceMatching("IOPlatformExpertDevice"));
     if (platformExpert)
     {

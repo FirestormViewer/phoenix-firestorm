@@ -60,6 +60,7 @@
 #include "llmd5.h"
 #include "llmutelist.h"
 #include "llrecentpeople.h"
+#include "llimprocessing.h" // <FS> FS autoresponse feature
 #include "llviewermessage.h"
 #include "llviewerwindow.h"
 #include "llnotifications.h"
@@ -112,8 +113,7 @@ const S32 XL8_PADDING = 3;  // XL8_START_TAG.size() + XL8_END_TAG.size()
 const static U32 SESSION_INITIALIZATION_TIMEOUT = 30;
 
 // This enum corresponds to the sim's and adds P2P_CHAT_SESSION,
-// as webrtc uses the multiagent chat mechanism for p2p calls,
-// instead of relying on vivox calling.
+// as webrtc uses the multiagent chat mechanism for p2p calls.
 // Don't change this without consulting a server developer.
 enum EMultiAgentChatSessionType
 {
@@ -240,7 +240,10 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     bool store_dnd_message = false; // flag storage of a dnd message
     bool is_session_focused = session_floater->isTornOff() && session_floater->hasFocus();
     bool contains_mention = LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString());
-    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    // <FS:PP> UI Sounds
+    // static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
+    // </FS:PP>
     bool play_snd_mention = contains_mention && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT);
     if (!LLFloater::isVisible(im_box) || im_box->isMinimized())
     {
@@ -481,7 +484,10 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
             im_container->addFlashingSession(session_id);
         }
 
-        static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+        // <FS:PP> UI Sounds
+        // static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+        static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
+        // </FS:PP>
         if (!gAgent.isDoNotDisturb() && play_snd_mention_pref && (msg["source_type"].asInteger() != CHAT_SOURCE_OBJECT) && LLUrlRegistry::getInstance()->containsAgentMention(msg["message"].asString()))
         {
             make_ui_sound("UISndChatMention");
@@ -2188,12 +2194,6 @@ void deliverMessage(const std::string& utf8_text,
     info = LLAvatarTracker::instance().getBuddyInfo(other_participant_id);
 
     U8 offline = (!info || info->isOnline()) ? IM_ONLINE : IM_OFFLINE;
-    // Old call to send messages to SLim client,  no longer supported.
-    //if((offline == IM_OFFLINE) && (LLVoiceClient::getInstance()->isOnlineSIP(other_participant_id)))
-    //{
-    //  // User is online through the OOW connector, but not with a regular viewer.  Try to send the message via SLVoice.
-    //  sent = LLVoiceClient::getInstance()->sendTextMessage(other_participant_id, utf8_text);
-    //}
 
     if(!sent)
     {
@@ -3396,8 +3396,7 @@ void LLIncomingCallDialog::processCallResponse(S32 response, const LLSD &payload
     {
         if (type == IM_SESSION_P2P_INVITE)
         {
-            // decline p2p voice, either via the vivox-style call mechanism
-            // or via the webrtc-style "decline p2p" mechanism.
+            // decline p2p voice, via the webrtc-style "decline p2p" mechanism.
             LLVoiceP2PIncomingCallInterfacePtr call = LLVoiceClient::getInstance()->getIncomingCallInterface(payload["voice_channel_info"]);
             if (call)
             {
@@ -3482,7 +3481,7 @@ void LLIMMgr::addMessage(
     // <FS:Zi> Omnifilter support
     std::string msg = original_msg;
 
-    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled");
+    static LLCachedControl<bool> use_omnifilter(gSavedSettings, "OmnifilterEnabled", false);
     if (use_omnifilter)
     {
         // this is the type for new group IM sessions started - apparently this is the only place
@@ -3552,7 +3551,7 @@ void LLIMMgr::addMessage(
     static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
     static LLCachedControl<U32> PlayModeUISndNewIncomingConfIMSession(gSavedSettings, "PlayModeUISndNewIncomingConfIMSession");
-    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlaySoundChatMention", false);
+    static LLCachedControl<bool> play_snd_mention_pref(gSavedSettings, "PlayModeUISndChatMention", false);
     bool play_snd_mention = play_snd_mention_pref && LLUrlRegistry::getInstance()->containsAgentMention(msg);
     bool do_not_disturb = gAgent.isDoNotDisturb();
     bool is_group_chat = false;
@@ -3659,8 +3658,9 @@ void LLIMMgr::addMessage(
                 return;
             }
 
-            // Fetch group chat history, enabled by default.
-            if (gSavedPerAccountSettings.getBOOL("FetchGroupChatHistory"))
+            // Fetch group chat or ad-hoc history, enabled by default.
+            static LLCachedControl<bool> fetch_chat_history(gSavedPerAccountSettings, "FetchGroupChatHistory", true);
+            if (fetch_chat_history && !session->isP2PSessionType())
             {
                 std::string chat_url = gAgent.getRegionCapability("ChatSessionRequest");
                 if (!chat_url.empty())
@@ -4754,26 +4754,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
         std::string my_name;
         std::string response;
         LLAgentUI::buildFullname(my_name);
-        if (is_busy)
-        {
-            response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
-        }
-        else if (is_autorespond_nonfriends && !is_friend)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
-        }
-        else if (is_autorespond)
-        {
-            response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-        }
-        else if (is_afk && FSSendAwayAvatarResponse)
-        {
-            response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
-        }
-        else
-        {
-            LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
-        }
+        response = LLIMProcessing::getAutoresponseTextForAvatar(av_id, is_busy, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),
@@ -4915,8 +4896,9 @@ public:
                 {
                     //im_floater->processSessionUpdate(body["session_info"]); // <FS:Ansariel> Method does nothing
 
-                    // Send request for chat history, if enabled.
-                    if (gSavedPerAccountSettings.getBOOL("FetchGroupChatHistory"))
+                    // Send request for chat history, if enabled. Skip for peer-to-peer IMs.
+                    static LLCachedControl<bool> fetch_chat_history(gSavedPerAccountSettings, "FetchGroupChatHistory", true);
+                    if (fetch_chat_history && !im_floater->isP2PSessionType())
                     {
                         std::string url = gAgent.getRegionCapability("ChatSessionRequest");
                         if (!url.empty())

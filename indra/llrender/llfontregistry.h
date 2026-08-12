@@ -35,22 +35,45 @@ class LLFontGL;
 
 typedef std::vector<std::string> string_vec_t;
 
+enum class EFontHinting : S32
+{
+    DEFAULT = 0,
+    NO_HINTING = 0x8000U,
+    FORCE_AUTOHINT = 0x20,
+};
+
 struct LLFontFileInfo
 {
-    LLFontFileInfo(const std::string& file_name, const std::function<bool(llwchar)>& char_functor = nullptr)
+    LLFontFileInfo(const std::string& file_name, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight, const std::function<bool(llwchar)>& char_functor = nullptr)
         : FileName(file_name)
         , CharFunctor(char_functor)
+        , mHinting(hinting)
+        , mFlags(flags)
+        , mSizeDelta(size_delta)
+        , mWeight(weight)
     {
     }
 
-    LLFontFileInfo(const LLFontFileInfo& ffi)
+    LLFontFileInfo(const LLFontFileInfo& ffi, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight)
         : FileName(ffi.FileName)
         , CharFunctor(ffi.CharFunctor)
+        , mHinting(hinting)
+        , mFlags(flags)
+        , mSizeDelta(size_delta)
+        , mWeight(weight)
     {
     }
 
     std::string FileName;
     std::function<bool(llwchar)> CharFunctor;
+    EFontHinting mHinting;
+    S32 mFlags;
+    S32 mWeight; // -1 - default, whatever is in the file.
+
+    // Not all fonts are the same size, Ex: dejavu is bigger than inter,
+    // so in some cases we want to adjust relative sizes to make characters
+    // from different files match.
+    F32 mSizeDelta;
 };
 typedef std::vector<LLFontFileInfo> font_file_info_vec_t;
 
@@ -59,6 +82,8 @@ class LLFontDescriptor
 public:
     LLFontDescriptor();
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style);
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const bool tabnum);
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const font_file_info_vec_t& font_list);
     LLFontDescriptor(const std::string& name, const std::string& size, const U8 style, const font_file_info_vec_t& font_list, const font_file_info_vec_t& font_collection_list);
     LLFontDescriptor normalize() const;
@@ -72,10 +97,10 @@ public:
     const std::string& getSize() const { return mSize; }
     void setSize(const std::string& size) { mSize = size; }
 
-    void addFontFile(const std::string& file_name, const std::string& char_functor = LLStringUtil::null);
+    void addFontFile(const std::string& file_name, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight, const std::string& char_functor = LLStringUtil::null);
     const font_file_info_vec_t & getFontFiles() const { return mFontFiles; }
     void setFontFiles(const font_file_info_vec_t& font_files) { mFontFiles = font_files; }
-    void addFontCollectionFile(const std::string& file_name, const std::string& char_functor = LLStringUtil::null);
+    void addFontCollectionFile(const std::string& file_name, EFontHinting hinting, S32 flags, F32 size_delta, S32 weight, const std::string& char_functor = LLStringUtil::null);
     const font_file_info_vec_t& getFontCollectionFiles() const { return mFontCollectionFiles; }
     void setFontCollectionFiles(const font_file_info_vec_t& font_collection_files) { mFontCollectionFiles = font_collection_files; }
 
@@ -91,12 +116,17 @@ public:
     static is_using_bw_emoji_callback_t sIsUsingBWEmojiFunction;
     // </FS:Ansariel>
 
+    // <FS:Ansariel> Optional tabular numeric font rendering
+    bool isTabnum() const { return mTabnum; }
+    void setTabnum(bool value) { mTabnum = value; }
+
 private:
     std::string mName;
     std::string mSize;
     font_file_info_vec_t mFontFiles;
     font_file_info_vec_t mFontCollectionFiles;
     U8 mStyle;
+    bool mTabnum{ false }; // <FS:Ansariel> Optional tabular numeric font rendering
 
     typedef std::map<std::string, std::function<bool(llwchar)>> char_functor_map_t;
     static char_functor_map_t mCharFunctors;

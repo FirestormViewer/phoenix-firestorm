@@ -3,16 +3,36 @@
 	<text name="terrain0ScaleU_label">
 		Skala u
 	</text>
+	<spinner label="Skala u" name="terrain0ScaleU"/>
+	<spinner label="Skala u" name="terrain1ScaleU"/>
+	<spinner label="Skala u" name="terrain2ScaleU"/>
+	<spinner label="Skala u" name="terrain3ScaleU"/>
 	<text name="terrain0ScaleV_label">
 		Skala v
 	</text>
+	<spinner label="Skala v" name="terrain0ScaleV"/>
+	<spinner label="Skala u" name="terrain1ScaleV"/>
+	<spinner label="Skala u" name="terrain2ScaleV"/>
+	<spinner label="Skala u" name="terrain3ScaleV"/>
 	<text name="terrain0Rotation_label">
 		Obrót
 	</text>
+	<spinner label="Obrót" name="terrain0Rotation"/>
+	<spinner label="Skala u" name="terrain1Rotation"/>
+	<spinner label="Skala u" name="terrain2Rotation"/>
+	<spinner label="Skala u" name="terrain3Rotation"/>
 	<text name="terrain0OffsetU_label">
 		Przesun. u
 	</text>
+	<spinner label="Przesun. u" name="terrain0OffsetU"/>
+	<spinner label="Skala u" name="terrain1OffsetU"/>
+	<spinner label="Skala u" name="terrain2OffsetU"/>
+	<spinner label="Skala u" name="terrain3OffsetU"/>
 	<text name="terrain0OffsetV_label">
 		Przesun. v
 	</text>
+	<spinner label="Przesun. v" name="terrain0OffsetV"/>
+	<spinner label="Skala u" name="terrain1OffsetV"/>
+	<spinner label="Skala u" name="terrain2OffsetV"/>
+	<spinner label="Skala u" name="terrain3OffsetV"/>
 </panel>

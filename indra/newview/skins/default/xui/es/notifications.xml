@@ -1203,7 +1203,8 @@ no tienes permiso para comprar terreno para el grupo que tienes activado actualm
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La palabra clave debe ser una única palabra y el reemplazo no puede estar vacío.
+		La palabra clave debe ser una sola palabra y el reemplazo no puede estar vacío. Signos de puntuación permitidos en la palabra clave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista de reemplazo no es válida.
@@ -1245,6 +1246,16 @@ Consulta https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	</notification>
 	<notification label="Renombrar el vestuario" name="RenameOutfit">
 		Nuevo nombre del vestuario:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification label="Renombrar pestaña de filtro" name="FSInventoryCustomTabRename">
+		Nuevo nombre de la pestaña:
 		<form name="form">
 			<input name="new_name">
 				[NAME]
@@ -1456,7 +1467,6 @@ Puedes revisar tu conexión a Internet y volver a intentarlo en unos minutos, pu
 		Tu avatar aparecerá en un momento.
 
 Para caminar, usa las teclas del cursor.
-En cualquier momento, puedes pulsar la tecla F1 para obtener ayuda o para aprender más acerca de [CURRENT_GRID].
 Por favor, elige el avatar masculino o femenino.
 Puedes cambiar más adelante tu elección.
 		<usetemplate name="okcancelbuttons" notext="Mujer" yestext="Varón"/>
@@ -4654,15 +4664,18 @@ Por favor, copia a tu propio inventario y vuelve a intentarlo.
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
-	<notification name="NewAOCantContainColon">
+	<notification name="NewAOCantContainNonASCII">
 		No se ha podido crear el nuevo AO "[AO_SET_NAME]".
 El nombre NO puede contener los caracteres ":" o "|".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification name="RenameAOCantContainColon">
+	<notification name="RenameAOMustBeASCII">
 		No se ha podido renombrar el nueov AO a "[AO_SET_NAME]".
 El nombre NO puede contener los caracteres ":" o "|".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="NewAONameCantExist">
+		Ya existe una configuración de AO con ese nombre.
 	</notification>
 	<notification name="RemoveAOSet">
 		¿Eliminar la configuración de AO "[AO_SET_NAME]" de la lista?
@@ -4885,12 +4898,6 @@ Intento cancelado.
 		Vas a eliminar [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
 		<usetemplate ignoretext="Estás seguro/a de querer eliminar múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.
-		<form name="form">
-			<ignore name="ignore" text="Una cadena LSL se ha copiado a mi portapapeles"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps. Es improbable que funcione bien y casi seguro no mejorará el rendimiento.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
@@ -5003,4 +5010,18 @@ No se podrá deshacer.
 	<notification name="ExodusFlickrUploadComplete">
 		Tu instantánea puede ser vista ahora [https://www.flickr.com/photos/me/[ID] aquí].
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Ingrese el nombre exacto de una región para asignar al título de grupo seleccionado.
+El nombre será verificado antes de guardar la asignación.
+		<form name="form">
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		No se encontró la región '[REGION]'. Por favor, verifique el nombre e intente de nuevo.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+
 </notifications>

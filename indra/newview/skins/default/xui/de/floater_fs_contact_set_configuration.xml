@@ -7,16 +7,28 @@
 		<text name="set_label">
 			Kontakt-Set-Einstellungen:
 		</text>
-		<line_editor name="set_name_editor" right="-100"/>
-		<button name="rename_btn" width="85" label="Umbenennen"/>
+		<line_editor name="set_name_editor" right="-110"/>
+		<button name="rename_btn" width="95" label="Umbenennen"/>
 		<color_swatch label="Farbwahl" name="set_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
 		<check_box label="Zeige Benachrichtigungen" name="show_set_notifications"/>
+		<check_box label="Nach Online-Status sortieren" name="sort_by_online_status"/>
 	</panel>
 	<panel name="bottom_panel">
 		<text name="global_label">
 			Globale Einstellungen:
 		</text>
+		<text width="145" name="FSContactSetsProfilePlacement_label">
+			Kontakt-Sets in Profilen:
+		</text>
+		<combo_box name="FSContactSetsProfilePlacement">
+			<combo_box.item label="Unterhalb Gruppenliste" name="below"/>
+			<combo_box.item label="Oberhalb Gruppenliste" name="above"/>
+			<combo_box.item label="Ausgeblendet" name="hidden"/>
+		</combo_box>
+		<check_box label="Profilbilder in Kontakt-Set-Listen anzeigen" name="FSContactSetsListShowIcons"/>
 		<color_swatch label="Farbe" name="global_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
+		<color_swatch name="offline_swatch" tool_tip="Farbe für Offline-Kontakte in Kontakt-Set-Listen, die zu keinem Kontakt-Set gehören. Eine benutzerdefinierte Kontakt-Set-Farbe hat Vorrang."/>
+		<check_box label="Benutzerdefinierte Offline-Kontakt-Set-Farbe" name="FSContactSetsListColorizeOffline"/>
 		<text name="label_online">
 			Online-Benachrichtigungen:
 		</text>
@@ -29,7 +41,13 @@
 		</text>
 		<check_box label="Minimap-Icon basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeMiniMap"/>
 		<check_box label="Namens-Tag basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeNameTag"/>
-		<check_box label="Radar-Eintrag basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Radar- und In-der-Nähe-Liste basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeRadar"/>
 		<check_box label="Chat basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeChat"/>
+		<check_box label="Freundesliste basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeFriends"/>
+	</panel>
+	<panel name="side_panel">
+		<check_box label="Benutzerdefinierte Busy-Antwort für dieses Set verwenden" name="set_autoresponse_busy_enabled"/>
+		<check_box label="Benutzerdefinierte Autoresponse-Nachricht für dieses Set verwenden" name="set_autoresponse_mode_enabled"/>
+		<check_box label="Benutzerdefinierte Autoresponse für Nicht-Freunde in diesem Set verw." name="set_autoresponse_nonfriends_enabled"/>
 	</panel>
 </floater>

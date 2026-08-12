@@ -35,12 +35,14 @@
 #include "llcommandhandler.h"
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
+#include "llpanelblockedlist.h"
 #include "lltrans.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloaterimcontainer.h"
 // </FS:Ansariel> [FS communication UI]
+#include "llfloaterreporter.h"
 #include "llfloaterworldmap.h"
 #include "llviewermenu.h"
 
@@ -99,6 +101,32 @@ public:
                 LLFloaterWorldMap::getInstance()->trackURL(region_name, x, y, z);
                 LLFloaterReg::showInstance("world_map", "center");
             }
+            return true;
+        }
+        if (verb == "block")
+        {
+            if (params.size() > 2)
+            {
+                const std::string object_name = LLURI::unescape(params[2].asString());
+                LLMute mute(object_id, object_name, LLMute::OBJECT);
+                LLMuteList::getInstance()->add(mute);
+                LLPanelBlockedList::showPanelAndSelect(mute.mID);
+            }
+            return true;
+        }
+        if (verb == "unblock")
+        {
+            if (params.size() > 2)
+            {
+                const std::string object_name = params[2].asString();
+                LLMute mute(object_id, object_name, LLMute::OBJECT);
+                LLMuteList::getInstance()->remove(mute);
+            }
+            return true;
+        }
+        if (verb == "reportAbuse" && web == NULL)
+        {
+            LLFloaterReporter::showFromObject(object_id, LLUUID::null);
             return true;
         }
 
@@ -242,6 +270,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 
     mMsgText = getChild<LLChatMsgBox>("msg_text", false);
     mMsgText->setContentTrusted(false);
+    mMsgText->setNearbyChatContent(true); // <FS:PP> Nearby chat toast follows the nearby-chat labeled-link setting
     mMsgText->setIsFriendCallback(LLAvatarActions::isFriend);
 
     mMsgText->setText(std::string(""));

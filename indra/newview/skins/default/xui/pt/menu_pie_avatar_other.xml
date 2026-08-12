@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- *NOTE: See also menu_pie_attachment_other.xml -->
+
+<pie_menu name="Avatar Pie">
+	<pie_slice label="Perfil..." name="Profile..."/>
+	<pie_menu name="mute_menu" label="Bloquear &gt;">
+		<pie_slice label="Ignorar" name="Avatar Mute"/>
+		<pie_slice label="Silenciar part." name="Mute Particle"/>
+	</pie_menu>
+	<pie_slice label="Ir para" name="Go to"/>
+	<pie_slice label="Denunciar..." name="abuse"/>
+	<pie_menu label="Adicionar &gt;" name="add_avatar">
+		<pie_slice label="Como amigo" name="Add Friend"/>
+		<pie_slice label="Conj. de contatos" name="Add to set"/>
+	</pie_menu>
+	<pie_slice label="Pagar..." name="Pay..."/>
+	<pie_menu name="Avatar Pie More 1" label="Mais &gt;">
+		<pie_slice label="Congelar" name="Freeze..."/>
+		<pie_slice label="Entregar cartão" name="Give Calling Card"/>
+		<pie_slice label="Conv. para grupo" name="Group Invite..."/>
+		<pie_slice label="Virar para avatar"  name="Face towards"/>
+		<pie_slice label="Ejetar" name="Eject..."/>
+		<pie_menu name="Avatar Pie More 2" label="Mais &gt;">
+			<pie_slice label="Texturas" name="Debug..."/>
+			<pie_slice label="Info de script" name="ScriptInfo"/>
+			<pie_slice label="Ligar" name="Call"/>
+			<pie_slice label="Aproximar" name="Zoom In"/>
+			<pie_slice label="Atualizar texturas" name="Texture Refresh"/>
+			<pie_menu label="Redefinir &gt;" name="ResetMenu">
+				<pie_slice label="Esquel. e anim." name="Reset Skeleton And Animations"/>
+				<pie_slice label="Esqueleto" name="Reset Skeleton"/>
+				<pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+			</pie_menu>
+			<pie_slice label="Exportar XML" name="Dump XML"/>
+			<pie_menu name="RenderMenu" label="Renderização &gt;">
+				<pie_slice name="RenderNormally" label="Normal"/>
+				<pie_slice name="DoNotRender" label="Nunca"/>
+				<pie_slice name="AlwaysRenderFully" label="Completo"/>
+			</pie_menu>
+		</pie_menu>
+		<pie_menu name="DerenderMenu" label="Não renderizar &gt;">
+			<pie_slice label="Blacklist" name="DerenderPermanent"/>
+			<pie_slice label="Temporário" name="Derender"/>
+		</pie_menu>
+	</pie_menu>
+	<pie_slice label="IM" name="Send IM..."/>
+</pie_menu>

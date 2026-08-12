@@ -169,6 +169,11 @@ public:
 
     std::string getPluginVersion() { return mPlugin?mPlugin->getPluginVersion():std::string(""); };
 
+    int getProcessID() { return mPlugin ? (int)mPlugin->getProcessID() : 0; };
+
+    // 0 means remote debugging is disabled for this plugin instance.
+    U32 getCefRemoteDebuggingPort() const { return mCefRemoteDebuggingPort; };
+
     bool getDisableTimeout() { return mPlugin?mPlugin->getDisableTimeout():false; };
     void setDisableTimeout(bool disable) { if(mPlugin) mPlugin->setDisableTimeout(disable); };
 
@@ -354,6 +359,8 @@ public:
 
     std::shared_ptr<LLPluginClassMedia> getSharedPtr() { return std::dynamic_pointer_cast<LLPluginClassMedia>(shared_from_this()); } // due to enable_shared_from_this
 
+    void forceRenderRefresh();
+
 protected:
 
     LLPluginClassMediaOwner *mOwner;
@@ -435,6 +442,8 @@ protected:
     LLPluginClassMediaOwner::EMediaStatus mStatus;
 
     F64             mSleepTime;
+
+    U32             mCefRemoteDebuggingPort {0};
 
     bool            mCanUndo;
     bool            mCanRedo;

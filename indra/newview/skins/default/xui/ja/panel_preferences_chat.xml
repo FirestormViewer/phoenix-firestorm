@@ -82,6 +82,16 @@
 			<text name="req_restart_chattabs">
 				（要再起動）
 			</text>
+			<check_box name="FSAutoOrderIMTabs" label="ＩＭタブを種類別に並べ替える:" tool_tip="会話フローター内のＩＭタブに自動タブ順序を使用します。"/>
+			<combo_box name="FSAutoOrderIMTabsPriorities">
+				<combo_box.item name="group_conf_im" label="グループ、会話、ＩＭ"/>
+				<combo_box.item name="group_im_conf" label="グループ、ＩＭ、会話"/>
+				<combo_box.item name="conf_group_im" label="会話、グループ、ＩＭ"/>
+				<combo_box.item name="conf_im_group" label="会話、ＩＭ、グループ"/>
+				<combo_box.item name="im_group_conf" label="ＩＭ、グループ、会話"/>
+				<combo_box.item name="im_conf_group" label="ＩＭ、会話、グループ"/>
+			</combo_box>
+			<check_box name="FSAutoOrderIMTabsAtTop" label="新しいタブを先頭に追加する" tool_tip="新しいＩＭタブをそのチャットタイプのグループの先頭に追加します。"/>
 			<text name="FSIMTabNameFormat_label">
 				ＩＭタブの名前のフォーマット：
 			</text>
@@ -155,8 +165,9 @@
 			<check_box label="チャットバーにチャンネル選択を表示" name="FSShowChatChannel"/>
 			<check_box name="FSShowChatType" label="チャットバーにチャットの種類と送信ボタンを表示"/>
 			<check_box label="チャットバーを自動的に非表示にする" name="AutohideChatBar" tool_tip="チャットバーを画面下のボタンバーに表示しないようにし、必要な時だけ表示されるようにします。"/>
-			<check_box label="メッセージ送信後はチャットバーが選択されていない状態にする" name="CloseChatOnReturn"/>
-			<check_box label="メッセージ送信後はチャット履歴も選択されていない状態にする" name="FSUnfocusChatHistoryOnReturn"/>
+			<check_box label="メッセージ送信後はチャットバーの選択を解除する" name="CloseChatOnReturn"/>
+			<check_box label="マウスルック時のみ" name="FSCloseChatOnReturnInMouselook" tool_tip="「メッセージ送信後はチャットバーの選択を解除する」が有効な場合、マウスルック時のみチャットバーの選択を解除します。"/>
+			<check_box label="チャット履歴も選択解除する" name="FSUnfocusChatHistoryOnReturn"/>
 			<text name="textUseKeyboardShortcuts">
 				キーボードショートカットを利用
 			</text>
@@ -267,6 +278,9 @@
 		</panel>
 		<!-- Chat: CmdLine -->
 		<panel label="コマンドライン" name="tab-CmdLine">
+			<text name="FSCmdLineDoc_txt">
+				[https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab ドキュメント]
+			</text>
 			<check_box label="チャットバーをコマンドラインとして使用できるようにする" name="chat_cmd_toggle"/>
 			<!-- 計算機 -->
 			<text name="FSCmdLineCalc_txt">
@@ -316,6 +330,11 @@
 			<text name="FSCmdLineRollDice_txt">
 				サイコロを振る（使用法：cmd サイコロ番号 サイコロの面数 演算子 係数）
 			</text>
+			<!--trkpos-->
+			<text name="FSCmdLineTrackPos_txt">
+				位置かアバターを追跡（使用方法：cmd posかアバター名）
+			</text>
+			<line_editor name="FSCmdLineTrackPos" tool_tip="ワールドマップビーコンを、指定した位置（cpcampos形式）またはアバター名の一部に設定します。"/>
 			<line_editor tool_tip="サイコロを振ります。cmd [サイコロの番号] [サイコロの面数] [演算子の種類（任意）] [係数（任意）] の文法で記述します。例えば、cmd 1 20, cmd 2 40, + 5 のように表記します。これらのパラメータを省略すると、cmd 1 6 が適用され、つまり、普通のサイコロを１つ振ります。" name="FSCmdLineRollDice"/>
 			<!-- SIM内テレポート-->
 			<text name="FSCmdLinePos_txt">
@@ -351,6 +370,7 @@
 				指定したＳＩＭに移動（使用法：cmd SIM名 | x y z）
 			</text>
 			<check_box label="目標ＳＩＭの同じ座標に移動" name="toggle"/>
+			<check_box label="コマンド実行結果の送信先チャンネル：" name="FSCmdLineAnnounceToChannel"/>
 		</panel>
 	</tab_container>
 </panel>

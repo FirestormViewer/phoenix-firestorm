@@ -138,7 +138,9 @@ with the same filename but different name
   <texture name="Checkbox_Off_Disabled" file_name="widgets/Checkbox_Disabled.png" preload="true" />
   <texture name="Checkbox_On_Disabled" file_name="widgets/Checkbox_On_Disabled.png" preload="true" />
   <texture name="Checkbox_Off" file_name="widgets/Checkbox_Off.png" preload="true" />
+  <texture name="Checkbox_Slim_Off" file_name="widgets/Checkbox_Slim_Off.png" preload="true" />
   <texture name="Checkbox_On" file_name="widgets/Checkbox_On.png" preload="true" />
+  <texture name="Checkbox_Slim_On" file_name="widgets/Checkbox_Slim_On.png" preload="true" />
   <texture name="Checkbox_On_Press" file_name="widgets/Checkbox_On_Press.png" preload="true" />
   <texture name="Checkbox_Press" file_name="widgets/Checkbox_Press.png" preload="true" />
   <texture name="Check_Mark" file_name="icons/check_mark.png" preload="true" />
@@ -156,7 +158,6 @@ with the same filename but different name
   <texture name="Command_Flickr_Icon"       file_name="toolbar_icons/flickr.png"       preload="true" />
   <texture name="Command_Gestures_Icon"     file_name="toolbar_icons/gestures.png"     preload="true" />
   <texture name="Command_Grid_Status_Icon"  file_name="toolbar_icons/grid_status.png"  preload="true" />
-  <texture name="Command_HowTo_Icon"        file_name="toolbar_icons/howto.png"        preload="true" />
   <texture name="Command_Inventory_Icon"    file_name="toolbar_icons/inventory.png"    preload="true" />
   <texture name="Command_Map_Icon"          file_name="toolbar_icons/map.png"          preload="true" />
   <texture name="Command_Marketplace_Icon"  file_name="toolbar_icons/marketplace.png"  preload="true" />
@@ -175,6 +176,8 @@ with the same filename but different name
   <texture name="Command_Primfeed_Icon"     file_name="icons/primfeed_white.png"       preload="true" />     <!-- FS:Beq Primfeed support -->
   <texture name="Command_Profile_Icon"      file_name="toolbar_icons/profile.png"      preload="true" />
   <texture name="Command_Report_Abuse_Icon" file_name="toolbar_icons/report_abuse.png" preload="true" />
+  <texture name="Command_AvatarAlign_Icon"  file_name="toolbar_icons/compass.png"      preload="true" />     <!-- FS:Chanayane Compass floater -->
+  <texture name="Command_FaceNearest_Icon"  file_name="toolbar_icons/facenearest.png"  preload="true" />     <!-- FS:Chanayane Compass floater -->
   <texture name="Command_Search_Icon"       file_name="toolbar_icons/search.png"       preload="true" />
   <texture name="Command_Snapshot_Icon"     file_name="toolbar_icons/snapshot.png"     preload="true" />
   <texture name="Command_Speak_Icon"        file_name="toolbar_icons/speak.png"        preload="true" />
@@ -194,6 +197,8 @@ with the same filename but different name
   <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+  <texture name="ComboButton_Arrow" file_name="widgets/ComboButton_Arrow.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+  <texture name="ComboButton_Transparent" file_name="widgets/ComboButton_Transparent.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
 
   <texture name="Container" file_name="containers/Container.png" preload="false" />
 
@@ -273,6 +278,7 @@ with the same filename but different name
   <texture name="Group_Notices" file_name="icons/Group_Notices.png" preload="false" />
 
   <texture name="Hand" file_name="icons/hand.png" preload="false" />
+  <texture name="fstrusted" file_name="icons/fstrusted.png" preload="false" />
   
   <texture name="Help_Press" file_name="navbar/Help_Press.png" preload="false" />
 
@@ -682,7 +688,9 @@ with the same filename but different name
   <texture name="PushButton_Login" file_name="widgets/PushButton_Login.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
   <texture name="PushButton_Login_Over" file_name="widgets/PushButton_Login_Over.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
   <texture name="PushButton_Login_Pressed" file_name="widgets/PushButton_Login_Pressed.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-
+  <texture name="PushButton_Sign" file_name="widgets/PushButton_Sign.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
+  <texture name="PushButton_Sign_Over" file_name="widgets/PushButton_Sign_Over.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
+  <texture name="PushButton_Sign_Pressed" file_name="widgets/PushButton_Sign_Pressed.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
 
   <texture name="RadioButton_Press" file_name="widgets/RadioButton_Press.png" preload="true" />
   <texture name="RadioButton_On_Press" file_name="widgets/RadioButton_On_Press.png" preload="true" />
@@ -763,6 +771,8 @@ with the same filename but different name
   <texture name="OBJECT_Icon" file_name="icons/object_icon.png" preload="true" />
   <texture name="Unknown_Icon" file_name="icons/unknown_icon.png" preload="true" />
 
+  <texture name="Square_Selection" file_name="square_selection.png" preload="true" scale.left="16" scale.top="16" scale.right="112" scale.bottom="16" />
+
   <texture name="Snapshot_Off" file_name="bottomtray/Snapshot_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
   <texture name="Snapshot_Download" file_name="snapshot_download.png" preload="false" />
   <texture name="Snapshot_Email" file_name="snapshot_email.png" preload="false" />
@@ -772,6 +782,7 @@ with the same filename but different name
 
   <texture name="login_fs_logo"  file_name="windows/login_fs_logo.png" preload="true" />
   <texture name="login_sl_logo"  file_name="windows/login_sl_logo.png" preload="true" />
+  <texture name="login_sl_logo_horizontal"  file_name="windows/login_sl_logo_horizontal.png" preload="true" />
   <texture name="login_sl_logo_small"  file_name="windows/login_sl_logo_small.png" preload="true" />
   <texture name="first_login_image"  file_name="windows/first_login_image.jpg" preload="true" />
 
@@ -802,6 +813,15 @@ with the same filename but different name
   <texture name="TabIcon_Places_Off" file_name="taskpanel/TabIcon_Places_Off.png" preload="false" />
   <texture name="TabIcon_Things_Off" file_name="taskpanel/TabIcon_Things_Off.png" preload="false" />
 
+  <texture name="TabLeft_Flat_Off" file_name="containers/TabLeft_Flat_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="TabLeft_Flat_Selected" file_name="containers/TabLeft_Flat_Selected.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="TabTop_First_Flat_Off" file_name="containers/TabTop_First_Flat_Off.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+  <texture name="TabTop_Last_Flat_Off" file_name="containers/TabTop_Last_Flat_Off.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+  <texture name="TabTop_Middle_Flat_Off" file_name="containers/TabTop_Middle_Flat_Off.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+  <texture name="TabTop_First_Flat_Selected" file_name="containers/TabTop_First_Flat_Selected.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+  <texture name="TabTop_Last_Flat_Selected" file_name="containers/TabTop_Last_Flat_Selected.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+  <texture name="TabTop_Middle_Flat_Selected" file_name="containers/TabTop_Middle_Flat_Selected.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
+
   <texture name="TabTop_Right_Off" file_name="containers/TabTop_Right_Off.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
   <texture name="TabTop_Right_Selected" file_name="containers/TabTop_Right_Selected.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
   <texture name="TabTop_Right_Flashing" file_name="containers/TabTop_Right_Flashing.png" preload="false"  scale.left="8" scale.top="8" scale.right="62" scale.bottom="9" />
@@ -819,7 +839,9 @@ with the same filename but different name
   <texture name="TextField_Search_Off" file_name="widgets/TextField_Search_Off.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
   <texture name="TextField_Disabled" file_name="widgets/TextField_Disabled.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
   <texture name="TextField_Active" file_name="widgets/TextField_Active.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
+  <texture name="TextField_Highlight" file_name="widgets/TextField_Highlight.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
   <texture name="TextField_Search_Highlight" file_name="widgets/TextField_Search_Highlight.png" preload="true" scale.left="9" scale.top="12" scale.right="248" scale.bottom="12" />
+  <texture name="TextField_Transparent" file_name="widgets/TextField_Transparent.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
 
   <texture name="Thumbnail_Fallback" file_name="icons/thumbnail_fallback_icon.png" preload="true" />
 
@@ -893,6 +915,7 @@ with the same filename but different name
   <texture name="skin ansastorm bright blue" file_name="skinspreview/ansa_blue.jpg" preload="true" />
   <texture name="skin ansastorm classic brown" file_name="skinspreview/ansa_brown.jpg" preload="true" />
   <texture name="skin ansastorm ectoplasma" file_name="skinspreview/ansa_ecto.jpg" preload="true" />
+  <texture name="skin ansastorm modern blue" file_name="skinspreview/ansa_modern_blue.jpg" preload="true" />
   <texture name="skin firestorm grey" file_name="skinspreview/fs_grey.jpg" preload="true" />
   <texture name="skin firestorm dark" file_name="skinspreview/fs_dark.jpg" preload="true" />
   <texture name="skin firestorm blue" file_name="skinspreview/fs_blue.jpg" preload="true" />
@@ -1059,6 +1082,7 @@ with the same filename but different name
   <texture name="badge_warn.j2c" />
   <texture name="badge_ok.j2c" />
   <texture name="materials_ui_x_24.png" />
+  <texture name="locked_image" file_name="locked_image.j2c" preload="true"/>
 
   <texture name="Progress_1" file_name="icons/Progress_1.png" preload="true" />
   <texture name="Progress_2" file_name="icons/Progress_2.png" preload="true" />

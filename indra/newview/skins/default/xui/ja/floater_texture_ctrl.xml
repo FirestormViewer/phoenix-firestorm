@@ -24,9 +24,6 @@
 	<text name="size_lbl">
 		[DIMENSIONS]
 	</text>
-	<text name="over_limit_lbl">
-		選択されているテクスチャは[TEXDIM]です。インベントリ画像は[MINTEXDIM]以上の正方形である必要があります。
-	</text>
 	<!--  middle: inventory mode -->
 	<button label="デフォルト" label_selected="デフォルト" name="Default"/>
 	<button label="透明" label_selected="透明" name="Transparent" tool_tip="注意：透明なテクスチャ、または部分的に透明な別のテクスチャを選択した場合、光は投影されません。"/>
@@ -34,6 +31,9 @@
 	<button label="なし" label_selected="なし" name="None"/>
 	<text name="preview_disabled" value="プレビュー無効"/>
 	<filter_editor label="テクスチャをフィルタ" name="inventory search editor"/>
+	<text name="over_limit_lbl">
+		選択されているテクスチャは[TEXDIM]です。インベントリ画像は[MINTEXDIM]以上の正方形である必要があります。
+	</text>
 	<!--  middle: local mode -->
 	<button label="追加" label_selected="追加" name="l_add_btn"/>
 	<button label="削除" label_selected="削除" name="l_rem_btn"/>
@@ -48,7 +48,7 @@
 	<!-- bottom static -->
 	<line_editor name="TextureKey" tool_tip="テクスチャのキー"/>
 	<button name="TextureKeyApply" label="このＵＵＩＤを適用" tool_tip="このＵＵＩＤを適用"/>
+	<check_box label="すぐ反映" name="apply_immediate_check"/>
 	<button label="ＯＫ" label_selected="ＯＫ" name="Select"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>
-	<check_box label="すぐ反映" name="apply_immediate_check"/>
 </floater>

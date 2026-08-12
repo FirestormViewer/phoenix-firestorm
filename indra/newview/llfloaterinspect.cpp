@@ -54,6 +54,7 @@
 #include "llviewertexturelist.h"
 // PoundLife END
 #include "llvovolume.h"
+#include "llgltfmaterial.h"
 
 // <FS:Ansariel> FIRE-22292: Configurable columns
 #include "llmenugl.h"
@@ -135,18 +136,21 @@ LLFloaterInspect::~LLFloaterInspect(void)
     {
         mCreatorNameCacheConnection.disconnect();
     }
-    if(!LLFloaterReg::instanceVisible("build"))
+    if (!LLApp::isExiting())
     {
-        if(LLToolMgr::getInstance()->getBaseTool() == LLToolCompInspect::getInstance())
+        if (!LLFloaterReg::instanceVisible("build"))
         {
-            LLToolMgr::getInstance()->clearTransientTool();
+            if (LLToolMgr::getInstance()->getBaseTool() == LLToolCompInspect::getInstance())
+            {
+                LLToolMgr::getInstance()->clearTransientTool();
+            }
+            // Switch back to basic toolset
+            LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
         }
-        // Switch back to basic toolset
-        LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
-    }
-    else
-    {
-        LLFloaterReg::showInstance("build", LLSD(), true);
+        else
+        {
+            LLFloaterReg::showInstance("build", LLSD(), true);
+        }
     }
 
     // <FS:Ansariel> FIRE-22292: Configurable columns
@@ -166,6 +170,7 @@ void LLFloaterInspect::onOpen(const LLSD& key)
     LLSelectMgr::getInstance()->setForceSelection(forcesel);    // restore previouis value
     mObjectSelection = LLSelectMgr::getInstance()->getSelection();
     refresh();
+    mDirty = false;
 }
 
 // [RLVa:KB] - Checked: RLVa-2.0.1
@@ -648,32 +653,54 @@ void LLFloaterInspect::getObjectTextureMemory(LLViewerObject* object, U32& objec
 
     for (U8 j = 0; j < te_count; j++)
     {
-        LLViewerTexture* img = object->getTEImage(j);
-        if (img)
+        LLTextureEntry* te = object->getTE(j);
+        if (!te)
         {
-            calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+            continue;
         }
 
-        // materials per face
-        if (object->getTE(j)->getMaterialParams().notNull())
+        // If a PBR (GLTF) render material is present, count this instead of legacy textures.
+        if (LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial())
         {
-            uuid = object->getTE(j)->getMaterialParams()->getNormalID();
-            if (uuid.notNull())
+            for (U32 i = 0; i < LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT; ++i)
             {
-                LLViewerTexture* img = gTextureList.getImage(uuid);
-                if (img)
+                const LLUUID& tex_id = gltf_mat->mTextureId[i];
+                if (tex_id.notNull())
                 {
-                    calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    if (LLViewerTexture* img = gTextureList.getImage(tex_id))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
                 }
             }
-
-            uuid = object->getTE(j)->getMaterialParams()->getSpecularID();
-            if (uuid.notNull())
+        }
+        else
+        {
+            // Legacy diffuse per face
+            if (LLViewerTexture* img = object->getTEImage(j))
             {
-                LLViewerTexture* img = gTextureList.getImage(uuid);
-                if (img)
+                calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+            }
+
+            // Legacy materials per face (normal/specular)
+            if (te->getMaterialParams().notNull())
+            {
+                uuid = te->getMaterialParams()->getNormalID();
+                if (uuid.notNull())
                 {
-                    calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    if (LLViewerTexture* img = gTextureList.getImage(uuid))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
+                }
+
+                uuid = te->getMaterialParams()->getSpecularID();
+                if (uuid.notNull())
+                {
+                    if (LLViewerTexture* img = gTextureList.getImage(uuid))
+                    {
+                        calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
+                    }
                 }
             }
         }
@@ -697,6 +724,16 @@ void LLFloaterInspect::calculateTextureMemory(LLViewerTexture* texture, uuid_vec
     const LLUUID uuid = texture->getID();
     U32 vram_memory = (texture->getFullHeight() * texture->getFullWidth() * 32 / 8);
     U32 texture_memory = (texture->getFullHeight() * texture->getFullWidth() * texture->getComponents());
+
+    // Use actual GL memory instead of a fixed RGBA32 estimate if possible.
+    if (texture->hasGLTexture())
+    {
+        const S32 vram_bytes = texture->getTextureMemory().value();
+        if (vram_bytes > 0)
+        {
+            vram_memory = static_cast<U32>(vram_bytes);
+        }
+    }
 
     if (std::find(mTextureList.begin(), mTextureList.end(), uuid) == mTextureList.end())
     {

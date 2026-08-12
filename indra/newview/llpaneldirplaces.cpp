@@ -59,8 +59,10 @@ bool LLPanelDirPlaces::postBuild()
 
     //getChild<LLLineEditor>("name")->setKeystrokeCallback(boost::bind(&LLPanelDirBrowser::onKeystrokeName, _1, _2), NULL);
 
-    childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn("Search");
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn("Search");
+    // </FS:Ansariel>
 
     mCurrentSortColumn = "dwell";
     mCurrentSortAscending = false;
@@ -121,6 +123,11 @@ void LLPanelDirPlaces::performQuery()
     static LLUICachedControl<bool> inc_pg("ShowPGSims", true);
     static LLUICachedControl<bool> inc_mature("ShowMatureSims", false);
     static LLUICachedControl<bool> inc_adult("ShowAdultSims", false);
+    if (!(inc_pg || inc_mature || inc_adult))
+    {
+        LLNotificationsUtil::add("NoContentToSearch");
+        return;
+    }
 
     if (inc_pg)
     {
@@ -135,12 +142,6 @@ void LLPanelDirPlaces::performQuery()
     if (inc_adult && adult_enabled)
     {
         flags |= DFQ_INC_ADULT;
-    }
-
-    if (0x0 == flags)
-    {
-        LLNotificationsUtil::add("NoContentToSearch");
-        return;
     }
 
     queryCore(query_string, category, flags);

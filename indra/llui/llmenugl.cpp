@@ -74,7 +74,7 @@ S32 MENU_BAR_WIDTH = 410;
 /// Local function declarations, constants, enums, and typedefs
 ///============================================================================
 
-const S32 LABEL_BOTTOM_PAD_PIXELS = 2;
+const S32 LABEL_BOTTOM_PAD_PIXELS = 1;
 
 const U32 LEFT_PAD_PIXELS = 3;
 const U32 LEFT_WIDTH_PIXELS = 15;
@@ -540,21 +540,25 @@ void LLMenuItemGL::draw( void )
     }
     else
     {
+        // Munus are all of the same size, so fixed offset works here,
+        // but it won't work if somebody decides to use different font
+        // todo: adjust logic to work of rect and font height
+        F32 y = (F32)MENU_ITEM_PADDING / 2.f;
         if( !mDrawBoolLabel.empty() )
         {
-            mFont->render( mDrawBoolLabel.getWString(), 0, (F32)LEFT_PAD_PIXELS, ((F32)MENU_ITEM_PADDING / 2.f), color,
+            mFont->render( mDrawBoolLabel.getWString(), 0, (F32)LEFT_PAD_PIXELS, y, color,
                            LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false );
         }
-        mFont->render( mLabel.getWString(), 0, (F32)LEFT_PLAIN_PIXELS, ((F32)MENU_ITEM_PADDING / 2.f), color,
+        mFont->render( mLabel.getWString(), 0, (F32)LEFT_PLAIN_PIXELS, y, color,
                        LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false );
         if( !mDrawAccelLabel.empty() )
         {
-            mFont->render( mDrawAccelLabel.getWString(), 0, (F32)getRect().mRight - (F32)RIGHT_PLAIN_PIXELS, ((F32)MENU_ITEM_PADDING / 2.f), color,
+            mFont->render( mDrawAccelLabel.getWString(), 0, (F32)getRect().mRight - (F32)RIGHT_PLAIN_PIXELS, y, color,
                            LLFontGL::RIGHT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false );
         }
         if( !mDrawBranchLabel.empty() )
         {
-            mFont->render( mDrawBranchLabel.getWString(), 0, (F32)getRect().mRight - (F32)RIGHT_PAD_PIXELS, ((F32)MENU_ITEM_PADDING / 2.f), color,
+            mFont->render( mDrawBranchLabel.getWString(), 0, (F32)getRect().mRight - (F32)RIGHT_PAD_PIXELS, y, color,
                            LLFontGL::RIGHT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false );
         }
     }
@@ -1661,6 +1665,9 @@ void LLMenuItemBranchDownGL::draw( void )
     {
         color = mDisabledColor.get();
     }
+    // Munus are all of the same size, so fixed offset works here,
+    // but it won't work if somebody decides to use different font
+    // todo: adjust logic to work of rect and font height
     getFont()->render( mLabel.getWString(), 0, (F32)getRect().getWidth() / 2.f, (F32)LABEL_BOTTOM_PAD_PIXELS, color,
                    LLFontGL::HCENTER, LLFontGL::BOTTOM, LLFontGL::NORMAL);
 
@@ -3272,7 +3279,13 @@ void LLMenuGL::draw( void )
 
     if( mBgVisible )
     {
-        gl_rect_2d( 0, getRect().getHeight(), getRect().getWidth(), 0, mBackgroundColor.get() );
+        // <FS:PP> Semi-transparent menu backgrounds
+        // gl_rect_2d( 0, getRect().getHeight(), getRect().getWidth(), 0, mBackgroundColor.get() );
+        static LLUICachedControl<F32> menu_bg_alpha("FSMenuBackgroundAlpha");
+        LLColor4 bg_color = mBackgroundColor.get();
+        bg_color.mV[VALPHA] *= menu_bg_alpha;
+        gl_rect_2d(0, getRect().getHeight(), getRect().getWidth(), 0, bg_color);
+        // </FS:PP>
     }
     LLView::draw();
 }

@@ -30,7 +30,6 @@
 #include "fsdroptarget.h"
 
 #include "llinventoryfunctions.h"
-#include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
 
 static LLDefaultChildRegistry::Register<FSCopyTransInventoryDropTarget> r1("fs_copytrans_inventory_drop_target");
@@ -70,10 +69,10 @@ bool FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, 
 }
 
 bool FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                                EDragAndDropType cargo_type,
-                                                void* cargo_data,
-                                                EAcceptance* accept,
-                                                std::string& tooltip_msg)
+                                                 EDragAndDropType cargo_type,
+                                                 void* cargo_data,
+                                                 EAcceptance* accept,
+                                                 std::string& tooltip_msg)
 {
     LLInventoryItem* item = (LLInventoryItem*)cargo_data;
 

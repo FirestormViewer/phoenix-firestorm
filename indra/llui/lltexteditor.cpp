@@ -61,6 +61,7 @@
 #include "lltooltip.h"
 #include "llmenugl.h"
 #include "llchatmentionhelper.h"
+#include "llgestureautocompletehelper.h"
 
 #include <queue>
 #include "llcombobox.h"
@@ -2143,7 +2144,8 @@ bool LLTextEditor::handleKeyHere(KEY key, MASK mask )
     // not handled and let the parent take care of field movement.
     if (KEY_TAB == key && mTabsToNextField)
     {
-        return mShowChatMentionPicker && LLChatMentionHelper::instance().handleKey(this, key, mask);
+        return (mShowChatMentionPicker && LLChatMentionHelper::instance().handleKey(this, key, mask))
+            || LLGestureAutocompleteHelper::instance().handleKey(this, key, mask);
     }
 
     // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
@@ -2164,7 +2166,8 @@ bool LLTextEditor::handleKeyHere(KEY key, MASK mask )
         if (!mReadOnly)
         {
             if ((mShowEmojiHelper && LLEmojiHelper::instance().handleKey(this, key, mask)) ||
-                (mShowChatMentionPicker && LLChatMentionHelper::instance().handleKey(this, key, mask)))
+                (mShowChatMentionPicker && LLChatMentionHelper::instance().handleKey(this, key, mask)) ||
+                LLGestureAutocompleteHelper::instance().handleKey(this, key, mask))
             {
                 return true;
             }

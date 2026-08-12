@@ -66,6 +66,7 @@
 #include <utility>                  // std::pair
 
 #include <d3d9.h>
+#include <d3d11.h>
 #include <dxgi1_4.h>
 #include <timeapi.h>
 
@@ -116,7 +117,15 @@ static std::thread::id sMainThreadId;
 
 LPWSTR gIconResource = IDI_APPLICATION;
 LPWSTR gIconSmallResource = IDI_APPLICATION;
-LPDIRECTINPUT8 gDirectInput8;
+
+namespace
+{
+    LPDIRECTINPUT8 gDirectInput8;
+    ID3D11Device* gD3D11Device = nullptr;
+    ID3D11DeviceContext* gD3D11Context = nullptr;
+    LUID gExpectedAdapterLUID;
+    HMODULE gD3D11Library;
+}
 
 LLW32MsgCallback gAsyncMsgCallback = NULL;
 
@@ -167,6 +176,19 @@ typedef PREFERRED_APP_MODE(WINAPI* fnSetPreferredAppMode)(PREFERRED_APP_MODE mod
 void show_window_creation_error(const std::string& title)
 {
     LL_WARNS("Window") << title << LL_ENDL;
+}
+
+static bool is_thread_from_current_process(DWORD thread_id)
+{
+    HANDLE thread_handle = OpenThread(THREAD_QUERY_LIMITED_INFORMATION, FALSE, thread_id);
+    if (!thread_handle)
+    {
+        return false;
+    }
+
+    const DWORD process_id = GetProcessIdOfThread(thread_handle);
+    CloseHandle(thread_handle);
+    return process_id == GetCurrentProcessId();
 }
 
 HGLRC SafeCreateContext(HDC &hdc)
@@ -438,12 +460,22 @@ struct LLWindowWin32::LLWindowWin32Thread : public LL::ThreadPool
         {
             if (!mWindowTimeout)
             {
-                mWindowTimeout = std::make_unique<LLWatchdogTimeout>("mainloop");
+                mWindowTimeout = std::make_unique<LLWatchdogTimeout>("WindowThread");
                 // supposed to be executed within run(),
                 // so no point checking if thread is alive
                 resumeTimeout("TimeoutInit");
             }
         });
+    }
+
+    // For mainWindowProc, it should not unpause watchdog if it was paused
+    void pingWindowTimeout(std::string_view state)
+    {
+        if (mWindowTimeout && mWindowTimeout->started())
+        {
+            mWindowTimeout->setTimeout(WINDOW_TIMEOUT_SEC);
+            mWindowTimeout->ping(state);
+        }
     }
 private:
     // These timeout related functions are strictly for the thread.
@@ -502,6 +534,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     :
     LLWindow(callbacks, fullscreen, flags),
     mAbsoluteCursorPosition(false),
+    mReceivedSCClose(false),
     mMaxGLVersion(max_gl_version),
     mMaxCores(max_cores)
 {
@@ -511,6 +544,10 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
     //MAINT-516 -- force a load of opengl32.dll just in case windows went sideways
     sGLDLLHandle = LoadLibrary(L"opengl32.dll");
 
+    // Request high-performance GPU before creating OpenGL context
+    // This increases probability of discrete GPU being used when
+    // the context is created.
+    requestHighPerformanceGPU();
 
     if (mMaxCores != 0)
     {
@@ -525,6 +562,8 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 
         SetProcessAffinityMask(hProcess, mask);
     }
+
+    setThreadPriorityHigh();
 
 #if 0 // this is probably a bad idea, but keep it in your back pocket if you see what looks like
         // process deprioritization during profiles
@@ -547,41 +586,6 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
         }
     }
 #endif
-
-#if 0  // this is also probably a bad idea, but keep it in your back pocket for getting main thread off of background thread cores (see also LLThread::threadRun)
-    HANDLE hThread = GetCurrentThread();
-
-    SYSTEM_INFO sysInfo;
-
-    GetSystemInfo(&sysInfo);
-    U32 core_count = sysInfo.dwNumberOfProcessors;
-
-    if (max_cores != 0)
-    {
-        core_count = llmin(core_count, max_cores);
-    }
-
-    if (hThread)
-    {
-        int priority = GetThreadPriority(hThread);
-
-        if (priority < THREAD_PRIORITY_TIME_CRITICAL)
-        {
-            if (SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL))
-            {
-                LL_INFOS() << "Set thread priority to THREAD_PRIORITY_TIME_CRITICAL" << LL_ENDL;
-            }
-            else
-            {
-                LL_INFOS() << "Failed to set thread priority: " << std::hex << GetLastError() << LL_ENDL;
-            }
-
-            // tell main thread to prefer core 0
-            SetThreadIdealProcessor(hThread, 0);
-        }
-    }
-#endif
-
 
     mFSAASamples = fsaa_samples;
     mIconResource = gIconResource;
@@ -1019,6 +1023,7 @@ void LLWindowWin32::close()
     }
 
     mDragDrop->reset();
+    clearHighPerformanceGPURequest();
 
 
     // Go back to screen mode written in the registry.
@@ -1081,6 +1086,52 @@ void LLWindowWin32::close()
 bool LLWindowWin32::isValid()
 {
     return (mWindowHandle != NULL);
+}
+
+void LLWindowWin32::setThreadPriorityHigh()
+{
+    // Threads start at normal priority. But this is our main window/rendering thread,
+    // even if window handle belongs to another thread. So we can raise its priority
+    // to ensure better responsiveness and less blocking by lack of resources.
+    HANDLE hThread = GetCurrentThread();
+    if (hThread)
+    {
+        int priority = GetThreadPriority(hThread);
+
+        if (priority == THREAD_PRIORITY_ERROR_RETURN)
+        {
+            LL_WARNS_ONCE("Window") << "Failed to get thread priority: " << std::hex << GetLastError() << LL_ENDL;
+        }
+        else if (priority > THREAD_PRIORITY_HIGHEST)
+        {
+            // At the moment nothing should be setting 'critical' priority,
+            // but if that happens for some reason, we don't want to mess with it.
+            LL_WARNS("Window") << "setThreadPriorityHigh ignored, priority was " << (S32)priority << LL_ENDL;
+        }
+        else if (priority != THREAD_PRIORITY_HIGHEST)
+        {
+            if (SetThreadPriority(hThread, THREAD_PRIORITY_HIGHEST))
+            {
+                LL_DEBUGS("Window") << "Set thread priority to THREAD_PRIORITY_HIGHEST" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("Window") << "Failed to set thread priority: " << std::hex << GetLastError() << LL_ENDL;
+            }
+        }
+    }
+}
+
+void LLWindowWin32::setThreadPriorityNormal()
+{
+    HANDLE hThread = GetCurrentThread();
+    if (hThread)
+    {
+        if (!SetThreadPriority(hThread, THREAD_PRIORITY_NORMAL))
+        {
+            LL_WARNS_ONCE("Window") << "Failed to set thread priority: " << std::hex << GetLastError() << LL_ENDL;
+        }
+    }
 }
 
 bool LLWindowWin32::getVisible()
@@ -1405,7 +1456,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
     catch (...)
     {
         LOG_UNHANDLED_EXCEPTION("ChoosePixelFormat");
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1416,7 +1467,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
     if (!DescribePixelFormat(mhDC, pixel_format, sizeof(PIXELFORMATDESCRIPTOR),
         &pfd))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1454,7 +1505,7 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
     if (!SetPixelFormat(mhDC, pixel_format, &pfd))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1462,14 +1513,14 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
 
     if (!(mhRC = SafeCreateContext(mhDC)))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
 
     if (!wglMakeCurrent(mhDC, mhRC))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1675,14 +1726,14 @@ const   S32   max_format  = (S32)num_formats - 1;
 
         if (!mhDC)
         {
-            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBDevContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBDevContextErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
             close();
             return false;
         }
 
         if (!SetPixelFormat(mhDC, pixel_format, &pfd))
         {
-            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+            LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtSetErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
             close();
             return false;
         }
@@ -1714,7 +1765,7 @@ const   S32   max_format  = (S32)num_formats - 1;
     {
         LL_WARNS("Window") << "No wgl_ARB_pixel_format extension!" << LL_ENDL;
         // cannot proceed without wgl_ARB_pixel_format extension, shutdown same as any other gGLManager.initGL() failure
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1723,7 +1774,7 @@ const   S32   max_format  = (S32)num_formats - 1;
     if (!DescribePixelFormat(mhDC, pixel_format, sizeof(PIXELFORMATDESCRIPTOR),
         &pfd))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBPixelFmtDescErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1745,7 +1796,7 @@ const   S32   max_format  = (S32)num_formats - 1;
 
     if (!wglMakeCurrent(mhDC, mhRC))
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextActErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1754,7 +1805,7 @@ const   S32   max_format  = (S32)num_formats - 1;
 
     if (!gGLManager.initGL())
     {
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
         close();
         return false;
     }
@@ -1962,7 +2013,7 @@ void* LLWindowWin32::createSharedContext()
     if (!rc && !(rc = wglCreateContext(mhDC)))
     {
         close();
-        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBGLContextErr"), LLError::LLUserWarningMsg::ERROR_INIT_FAILED);
     }
 
     return rc;
@@ -2453,21 +2504,27 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DEVICECHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DEVICECHANGE");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DEVICECHANGE");
+
+            // Log detailed device change information
+            std::string change_type = "UNKNOWN";
+            switch (w_param)
+            {
+            case DBT_DEVICEARRIVAL:           change_type = "DBT_DEVICEARRIVAL"; break;
+            case DBT_DEVICEREMOVECOMPLETE:    change_type = "DBT_DEVICEREMOVECOMPLETE"; break;
+            case DBT_DEVNODES_CHANGED:        change_type = "DBT_DEVNODES_CHANGED"; break;
+            case DBT_DEVICEQUERYREMOVE:       change_type = "DBT_DEVICEQUERYREMOVE"; break;
+            case DBT_DEVICEQUERYREMOVEFAILED: change_type = "DBT_DEVICEQUERYREMOVEFAILED"; break;
+            case DBT_DEVICEREMOVEPENDING:     change_type = "DBT_DEVICEREMOVEPENDING"; break;
+            case DBT_CONFIGCHANGED:           change_type = "DBT_CONFIGCHANGED"; break;
+            }
 
             // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
-            // if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
-            // {
-            //    WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
-            //    return 1;
-            // }
-
-
             // Only bother initalizing when needed.
             if (deviceCLSIDWhitelist.empty())
             {
                 initializeDeviceCLSIDArray();
             }
-            
             if (w_param == DBT_DEVICEARRIVAL || w_param == DBT_DEVICEREMOVECOMPLETE)
             {
                 DEV_BROADCAST_HDR* dtype = (DEV_BROADCAST_HDR*)l_param;
@@ -2481,19 +2538,38 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         if (memcmp(&iface->dbcc_classguid, &guid, sizeof(GUID)) == 0)
                         {
                             bool deviceRemoved = (w_param == DBT_DEVICEREMOVECOMPLETE);
-                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, deviceRemoved));
-                            break; 
+                            WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, change_type, true, deviceRemoved));
+                            return 1;
                         }
                     }
                 }
             }
-            break;
             // </FS>
+
+            if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
+            {
+                WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp, change_type, false, false)); // <FS> [FIRE-10419] Prevent all devices from being scanned on each change
+
+                return 1;
+            }
+            else if (l_param)
+            {
+                const auto* hdr = reinterpret_cast<const DEV_BROADCAST_HDR*>(l_param);
+                if (hdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+                {
+                    // Might need to register for monitor device notifications
+                    // to get this message when monitor is suspended or resumed.
+                    // TODO: log monitor suspending and resuming.
+                    LL_INFOS("Window") << "DEVICEINTERFACE: " << change_type << LL_ENDL;
+                }
+            }
+            break;
         }
 
         case WM_PAINT:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_PAINT");
+            window_imp->mWindowThread->pingWindowTimeout("WM_PAINT");
             GetUpdateRect(window_imp->mWindowHandle, &update_rect, FALSE);
             update_width = update_rect.right - update_rect.left + 1;
             update_height = update_rect.bottom - update_rect.top + 1;
@@ -2501,6 +2577,15 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             WINDOW_IMP_POST(window_imp->mCallbacks->handlePaint(window_imp, update_rect.left, update_rect.top,
                 update_width, update_height));
             break;
+        }
+        case WM_ERASEBKGND:
+        {
+            RECT client_rect;
+            if (GetClientRect(h_wnd, &client_rect))
+            {
+                FillRect((HDC)w_param, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+            }
+            return 1;
         }
         case WM_PARENTNOTIFY:
         {
@@ -2539,10 +2624,23 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_ACTIVATEAPP:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_ACTIVATEAPP");
+            // Resolve ownership before deferring the work because thread IDs can
+            // be reused after a thread exits.
+            const bool activating_same_process_thread =
+                !w_param && is_thread_from_current_process(static_cast<DWORD>(l_param));
             window_imp->post([=]()
                 {
                     // This message should be sent whenever the app gains or loses focus.
                     BOOL activating = (BOOL)w_param;
+
+                    // Native dialogs run on a worker thread. Moving focus between
+                    // the viewer and one of those dialogs must not be treated as
+                    // switching to another application: in fullscreen that would
+                    // minimize the viewer and hide its owned dialog.
+                    if (!activating && activating_same_process_thread)
+                    {
+                        activating = TRUE;
+                    }
 
                     if (window_imp->mFullscreen)
                     {
@@ -2593,8 +2691,15 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_SYSCOMMAND:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_SYSCOMMAND");
-            switch (w_param)
+            switch (w_param & 0xFFF0)
             {
+            case SC_CLOSE:
+                // User clicked close from system menu/taskbar or 'end process' from task manager
+                // Do nothing, will cause WM_CLOSE.
+                // If we don't get this message before WM_CLOSE, we are likely getting
+                // a kill from some external program. Win11 task manager Does cause SC_CLOSE.
+                window_imp->mReceivedSCClose = true;
+                break;
             case SC_KEYMENU:
                 // Disallow the ALT key from triggering the default system menu.
                 return 0;
@@ -2609,9 +2714,30 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_CLOSE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_CLOSE");
-            // todo: WM_CLOSE can be caused by user and by task manager,
-            // distinguish these cases.
-            // For now assume it is always user.
+            window_imp->mWindowThread->pingWindowTimeout("WM_CLOSE");
+            window_imp->mCallbacks->handlePreCloseRequest(); // mark app as potentially closing
+            if (!window_imp->mReceivedSCClose)
+            {
+                // Some external program is trying to close the app.
+                // Assume that it's going to destroy process if it fails
+                // and try to fast-quit without confirmation or cleanup.
+                window_imp->post([=]()
+                {
+                    // Check if app needs cleanup or can be closed immediately.
+                    if (window_imp->mCallbacks->handleSessionExit(window_imp))
+                    {
+                        // Get the app to initiate cleanup.
+                        window_imp->mCallbacks->handleQuit(window_imp);
+                    }
+                });
+                return 0;
+            }
+            window_imp->mReceivedSCClose = false;
+
+            // There is no way to tell the difference between a user issued
+            // WM_CLOSE or task manager's WM_CLOSE.
+            // Assume it is a user and ask for confirmation, but create a marker file.
+            // If App keeps doing something after a second, or gets 'destroy' message clear the marker.
             window_imp->post([=]()
                 {
                     // Will the app allow the window to close?
@@ -2633,6 +2759,16 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             }
             return 0;
         }
+        case WM_NCDESTROY:
+            LL_INFOS("Window") << "Received WM_NCDESTROY" << LL_ENDL;
+            break;
+        case WM_WTSSESSION_CHANGE:
+        {
+            // Detects Remote Desktop disconnects, fast user switching, session logoff
+            // w_param: WTS_CONSOLE_CONNECT, WTS_CONSOLE_DISCONNECT, WTS_SESSION_LOGOFF, etc.
+            LL_INFOS("Window") << "Received WM_WTSSESSION_CHANGE with wParam: " << (U32)w_param << LL_ENDL;
+            break;
+        }
         case WM_QUERYENDSESSION:
         {
             // Generally means that OS is going to shut down or user is going to log off.
@@ -2646,6 +2782,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             // Comes after WM_QUERYENDSESSION
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_ENDSESSION");
             LL_INFOS("Window") << "Received WM_ENDSESSION with wParam: " << (U32)w_param << " lParam: " << (U32)l_param << LL_ENDL;
+            window_imp->mWindowThread->pingWindowTimeout("WM_ENDSESSION");
             unsigned int end_session_flags = (U32)l_param;
 
             if (w_param == TRUE // if true, session is ending
@@ -2654,8 +2791,10 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 || (end_session_flags & ENDSESSION_CRITICAL) // will shutdown regardless of app state
                 || (end_session_flags & ENDSESSION_LOGOFF)) // logoff, can delay shutdown
             {
+                window_imp->mCallbacks->handlePreCloseRequest(); // mark app as closing
                 window_imp->post([=]()
                 {
+                    LL_INFOS("Window") << "Shutting down due to session terminating" << LL_ENDL;
                     // Check if app needs cleanup or can be closed immediately.
                     if (window_imp->mCallbacks->handleSessionExit(window_imp))
                     {
@@ -2673,6 +2812,192 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             // Don't need to post quit or destroy window,
             // if session is ending OS is going to take care of it.
             return 0;
+        }
+        case WM_POWERBROADCAST:
+        {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_POWERBROADCAST");
+            switch (w_param)
+            {
+            case PBT_APMSUSPEND:
+                LL_INFOS("Window") << "System is suspending (sleep/hibernate)" << LL_ENDL;
+                // System is about to enter sleep or hibernation
+                // Viewer can't function in hibernation, try to shut down.
+                // The system allows approximately two seconds for an
+                // application to handle this notification.
+
+                // Mark app as potentially closing, to minimize issues if OS does not recover.
+                window_imp->mCallbacks->handlePreCloseRequest();
+                window_imp->post([=]()
+                {
+                    window_imp->mCallbacks->handleSuspendRequest();
+                });
+                // Window thread normally doesn't block main thread, but OS can suspend
+                // immediately if we don't wait.
+                // Keep OS from suspending to give a chance to send stats.
+                ms_sleep(1000);
+                return TRUE;
+
+            case PBT_APMRESUMESUSPEND:
+                LL_INFOS("Window") << "System is resuming from suspend" << LL_ENDL;
+                window_imp->mCallbacks->handleCloseRequestCanceled();
+                return TRUE;
+
+            case PBT_APMPOWERSTATUSCHANGE:
+                LL_INFOS("Window") << "Power status has changed" << LL_ENDL;
+                // Power status change (AC/battery)
+                // Viewer requires high performance, not much we can do.
+                // about it, but log for diagnostic purposes (example:
+                // OS trying to throw viewer at an iGPU after this message)
+                return TRUE;
+
+            default:
+                break;
+            }
+            break;
+        }
+        case WM_POST_UNINSTALL_:
+        {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_POST_UNINSTALL_");
+            // Other instance, likely velopack, requested we quit.
+            // Don't trust PID alone (can be spoofed), verify the
+            // path for security purposes before processing.
+            // Verifying path isn't a strong varranty, if this turns
+            // up to be a risk, we will want something more secure.
+            // See sendShutdownToOtherInstances for the sender.
+
+            // LPARAM contains message type.
+            DWORD message_type = static_cast<DWORD>(l_param);
+            if (message_type == WM_POST_UNINSTALL_MSG_SHUTDOWN || message_type == WM_POST_UNINSTALL_MSG_UPDATE)
+            {
+                DWORD sender_process_id = static_cast<DWORD>(w_param);
+
+                // Make sure something didn't just send us our own process
+                DWORD our_process_id = GetCurrentProcessId();
+                if (our_process_id == sender_process_id)
+                {
+                    LL_WARNS("Window") << "Received WM_POST_UNINSTALL_ from our own process, ignoring" << LL_ENDL;
+                    break;
+                }
+
+                if (sender_process_id == 0)
+                {
+                    LL_WARNS("Window") << "Received WM_POST_UNINSTALL_ but couldn't get sender process ID" << LL_ENDL;
+                    break;
+                }
+
+                // Open the existing sender process to verify its executable path
+                HANDLE hSenderProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, sender_process_id);
+                if (!hSenderProcess)
+                {
+                    LL_WARNS("Window") << "Received WM_POST_UNINSTALL_ but couldn't open sender process" << LL_ENDL;
+                    break;
+                }
+
+                // Get the actual executable path of the sender
+                wchar_t sender_exe_path[MAX_PATH];
+                DWORD size = MAX_PATH;
+                bool got_sender_path = QueryFullProcessImageNameW(hSenderProcess, 0, sender_exe_path, &size) != 0;
+                CloseHandle(hSenderProcess);
+
+                if (!got_sender_path)
+                {
+                    LL_WARNS("Window") << "Received WM_POST_UNINSTALL_ but couldn't query sender executable path" << LL_ENDL;
+                    break;
+                }
+
+                // Extract directory from sender's executable path
+                wchar_t sender_dir[MAX_PATH];
+                wchar_t* file_part = nullptr;
+                DWORD result = GetFullPathNameW(sender_exe_path, MAX_PATH, sender_dir, &file_part);
+
+                if (result == 0 || result >= MAX_PATH)
+                {
+                    LL_WARNS("Window") << "Failed to normalize sender executable path" << LL_ENDL;
+                    break;
+                }
+
+                // Remove the filename to get just directory
+                if (file_part)
+                {
+                    *file_part = L'\0';
+                }
+
+                // Remove trailing backslash
+                size_t sender_dir_len = wcslen(sender_dir);
+                if (sender_dir_len > 0 && sender_dir[sender_dir_len - 1] == L'\\')
+                {
+                    sender_dir[sender_dir_len - 1] = L'\0';
+                    sender_dir_len--;
+                }
+
+                // Remove "\current" suffix from sender's path if present
+                const std::wstring current_suffix = L"\\current";
+                std::wstring sender_normalized_str(sender_dir);
+                if (sender_normalized_str.length() >= current_suffix.length() &&
+                    _wcsicmp(sender_normalized_str.c_str() + sender_normalized_str.length() - current_suffix.length(),
+                        current_suffix.c_str()) == 0)
+                {
+                    sender_normalized_str.resize(sender_normalized_str.length() - current_suffix.length());
+                }
+
+                // Get our executable directory for comparison
+                std::wstring our_wide = ll_convert<std::wstring>(gDirUtilp->getExecutableDir());
+
+                // Normalize our path
+                wchar_t our_normalized[MAX_PATH];
+                file_part = nullptr;
+
+                DWORD result2 = GetFullPathNameW(our_wide.c_str(), MAX_PATH, our_normalized, &file_part);
+
+                if (result2 == 0 || result2 >= MAX_PATH)
+                {
+                    LL_WARNS("Window") << "Failed to normalize our executable path" << LL_ENDL;
+                    break;
+                }
+
+                // Remove trailing backslash
+                size_t our_len = wcslen(our_normalized);
+                if (our_len > 0 && our_normalized[our_len - 1] == L'\\')
+                {
+                    our_normalized[our_len - 1] = L'\0';
+                    our_len--;
+                }
+
+                // Remove "\current" suffix from our path if present
+                std::wstring our_normalized_str(our_normalized);
+                if (our_normalized_str.length() >= current_suffix.length() &&
+                    _wcsicmp(our_normalized_str.c_str() + our_normalized_str.length() - current_suffix.length(),
+                        current_suffix.c_str()) == 0)
+                {
+                    our_normalized_str.resize(our_normalized_str.length() - current_suffix.length());
+                }
+
+                // Compare the normalized base installation paths (case-insensitive)
+                if (_wcsicmp(sender_normalized_str.c_str(), our_normalized_str.c_str()) == 0)
+                {
+                    window_imp->post([=]()
+                    {
+                        LL_INFOS("Window") << "Received valid shutdown request from verified same installation directory" << LL_ENDL;
+                        // Check if app needs cleanup or can be closed immediately.
+                        if (window_imp->mCallbacks->handleCloseRequest(window_imp, false))
+                        {
+                            // Get the app to initiate cleanup.
+                            window_imp->mCallbacks->handleQuit(window_imp);
+                        }
+                    });
+                }
+                else
+                {
+                    LL_WARNS("Window") << "Rejected shutdown request - sender not from our installation directory. "
+                        << "Sender: " << ll_convert_wide_to_string(sender_normalized_str)
+                        << " Our: " << ll_convert_wide_to_string(our_normalized_str) << LL_ENDL;
+                }
+            }
+            else
+            {
+                LL_WARNS("Window") << "Received invalid WM_POST_UNINSTALL_ message" << LL_ENDL;
+            }
+            break;
         }
         case WM_COMMAND:
         {
@@ -3137,19 +3462,31 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             // means that the window was un-minimized.
             if (w_param == SIZE_RESTORED && window_imp->mLastSizeWParam != SIZE_RESTORED)
             {
-                WINDOW_IMP_POST(window_imp->mCallbacks->handleActivate(window_imp, true));
+                window_imp->post([=]()
+                {
+                    window_imp->setThreadPriorityHigh();
+                    window_imp->mCallbacks->handleActivate(window_imp, true);
+                });
             }
 
             // handle case of window being maximized from fully minimized state
             if (w_param == SIZE_MAXIMIZED && window_imp->mLastSizeWParam != SIZE_MAXIMIZED)
             {
-                WINDOW_IMP_POST(window_imp->mCallbacks->handleActivate(window_imp, true));
+                window_imp->post([=]()
+                {
+                    window_imp->setThreadPriorityHigh();
+                    window_imp->mCallbacks->handleActivate(window_imp, true);
+                });
             }
 
             // Also handle the minimization case
             if (w_param == SIZE_MINIMIZED && window_imp->mLastSizeWParam != SIZE_MINIMIZED)
             {
-                WINDOW_IMP_POST(window_imp->mCallbacks->handleActivate(window_imp, false));
+                window_imp->post([=]()
+                {
+                    window_imp->setThreadPriorityNormal();
+                    window_imp->mCallbacks->handleActivate(window_imp, false);
+                });
             }
 
             // Actually resize all of our views
@@ -3169,6 +3506,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DPICHANGED:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DPICHANGED");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DPICHANGED");
             LPRECT lprc_new_scale;
             F32 new_scale = F32(LOWORD(w_param)) / F32(USER_DEFAULT_SCREEN_DPI);
             lprc_new_scale = (LPRECT)l_param;
@@ -3189,7 +3527,19 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 
         case WM_DISPLAYCHANGE:
         {
-            WINDOW_IMP_POST(window_imp->mCallbacks->handleDisplayChanged());
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DISPLAYCHANGE");
+            window_imp->mWindowThread->pingWindowTimeout("WM_DISPLAYCHANGE");
+            window_imp->post([=]() {
+                window_imp->mCallbacks->handleDisplayChanged();
+                // Note: WM_DISPLAYCHANGE was passing to WM_SETFOCUS
+                // which might have been unintended and was messing with zones.
+                // handleFocus was copied over and return 0 added, but
+                // handleFocus might be not needed here.
+                // handleFocus resets mouse, closes popups and keys, which
+                // we probablt should do on 'display change'.
+                window_imp->mCallbacks->handleFocus(window_imp);
+            });
+            return 0;
         }
 
         case WM_SETFOCUS:
@@ -3241,6 +3591,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_SETTINGCHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_SETTINGCHANGE");
+            // Can be called on OS user switching
+            LL_INFOS("Window") << "WM_SETTINGCHANGE, with wParam: 0x" << std::hex << (uintptr_t)w_param << " lParam: 0x" << (uintptr_t)l_param << std::dec << LL_ENDL;
+            window_imp->mWindowThread->pingWindowTimeout("WM_SETTINGCHANGE");
             if (w_param == SPI_SETMOUSEVANISH)
             {
                 if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &window_imp->mMouseVanish, 0))
@@ -4766,6 +5119,248 @@ void LLWindowWin32::setDPIAwareness()
     }
 }
 
+void LLWindowWin32::requestHighPerformanceGPU() const
+{
+    // Try to load d3d11.dll and request high performance adapter
+    gD3D11Library = LoadLibraryA("d3d11.dll");
+    if (gD3D11Library)
+    {
+        typedef HRESULT(WINAPI* PFN_D3D11_CREATE_DEVICE)(
+            IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT,
+            const D3D_FEATURE_LEVEL*, UINT, UINT, ID3D11Device**,
+            D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
+
+        PFN_D3D11_CREATE_DEVICE pD3D11CreateDevice =
+            (PFN_D3D11_CREATE_DEVICE)GetProcAddress(gD3D11Library, "D3D11CreateDevice");
+
+        if (pD3D11CreateDevice)
+        {
+            // Try to enumerate adapters and select the best one
+            IDXGIFactory1* pFactory = nullptr;
+            IDXGIAdapter1* pSelectedAdapter = nullptr;
+            std::string selected_descr;
+            HRESULT hr = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&pFactory);
+
+            if (SUCCEEDED(hr) && pFactory)
+            {
+                IDXGIAdapter1* pAdapter = nullptr;
+                SIZE_T maxDedicatedMemory = 0;
+                UINT adapterIndex = 0;
+                S32 adapter_count = 0;
+
+                // Enumerate all adapters and find the one with the most dedicated video memory
+                while (pFactory->EnumAdapters1(adapterIndex, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+                {
+                    DXGI_ADAPTER_DESC1 desc;
+                    pAdapter->GetDesc1(&desc);
+
+                    std::wstring description_w(desc.Description);
+                    std::string description = ll_convert_wide_to_string(description_w);
+
+
+                    // Skip software adapters
+                    if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+                    {
+                        LL_DEBUGS("Window") << "Adapter " << adapterIndex << ": " << description
+                            << ", Dedicated VRAM: " << (desc.DedicatedVideoMemory / 1024 / 1024) << " MB"
+                            << ", Vendor: 0x" << std::hex << desc.VendorId << std::dec
+                            << ", Flags: " << desc.Flags << LL_ENDL;
+                    }
+                    // Skip Microsoft Basic Render Driver, it's a placeholder for missing drivers
+                    else if (description.find("Microsoft Basic Render Driver") != std::string::npos)
+                    {
+                        // User is likely missing drivers, so log a warning.
+                        // Don't consider this adapter as a valid selection.
+                        LL_WARNS("Window") << "Adapter " << adapterIndex << ": " << description
+                            << ", Dedicated VRAM: " << (desc.DedicatedVideoMemory / 1024 / 1024) << " MB"
+                            << ", Vendor: 0x" << std::hex << desc.VendorId << std::dec
+                            << ", Flags: " << desc.Flags << LL_ENDL;
+                    }
+                    else
+                    {
+                        LL_INFOS("Window") << "Adapter " << adapterIndex << ": " << description
+                            << ", Dedicated VRAM: " << (desc.DedicatedVideoMemory / 1024 / 1024) << " MB"
+                            << ", Vendor: 0x" << std::hex << desc.VendorId << std::dec
+                            << ", Flags: " << desc.Flags << LL_ENDL;
+
+                        adapter_count++;
+                        // Select adapter with most dedicated video memory (typically the discrete GPU)
+                        if (desc.DedicatedVideoMemory > maxDedicatedMemory)
+                        {
+                            if (pSelectedAdapter)
+                            {
+                                pSelectedAdapter->Release();
+                            }
+                            pSelectedAdapter = pAdapter;
+                            pSelectedAdapter->AddRef();
+                            maxDedicatedMemory = desc.DedicatedVideoMemory;
+                            gExpectedAdapterLUID = desc.AdapterLuid;
+                            selected_descr = description;
+                        }
+                    }
+
+                    pAdapter->Release();
+                    adapterIndex++;
+                }
+                pFactory->Release();
+
+                if (adapter_count < 2)
+                {
+                    // Only one adapter, no need to request high-performance GPU
+                    if (pSelectedAdapter)
+                    {
+                        pSelectedAdapter->Release();
+                    }
+                    gExpectedAdapterLUID = { 0, 0 };
+                    FreeLibrary(gD3D11Library);
+                    gD3D11Library = nullptr;
+                    return;
+                }
+
+                LL_INFOS("Window") << "Selected as preferred adapter (highest VRAM): " << selected_descr << LL_ENDL;
+            }
+
+            // Create a temporary device to ensure high-performance GPU is selected
+            // This initialization can help "wake up" the discrete GPU
+            D3D_FEATURE_LEVEL featureLevel;
+            D3D_FEATURE_LEVEL requestedLevels[] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_11_1 };
+
+            bool adapterSelected = (pSelectedAdapter != nullptr);
+            if (adapterSelected)
+            {
+                hr = pD3D11CreateDevice(
+                    pSelectedAdapter,
+                    D3D_DRIVER_TYPE_UNKNOWN,
+                    nullptr,
+                    0,
+                    requestedLevels,
+                    _countof(requestedLevels),
+                    D3D11_SDK_VERSION,
+                    &gD3D11Device,
+                    &featureLevel,
+                    &gD3D11Context
+                );
+                pSelectedAdapter->Release();
+
+                if (!SUCCEEDED(hr))
+                {
+                    LL_WARNS("Window") << "D3D11 failed to use preffered adapter " << selected_descr << LL_ENDL;
+                    gExpectedAdapterLUID = { 0, 0 };
+                    adapterSelected = false;
+                }
+            }
+
+            if (!adapterSelected)
+            {
+                // Either failed to select or didn't find an adapter.
+                hr = pD3D11CreateDevice(
+                    nullptr,
+                    D3D_DRIVER_TYPE_HARDWARE,
+                    nullptr,
+                    0,
+                    requestedLevels,
+                    _countof(requestedLevels),
+                    D3D11_SDK_VERSION,
+                    &gD3D11Device,
+                    &featureLevel,
+                    &gD3D11Context
+                );
+                if (!SUCCEEDED(hr))
+                {
+                    LL_WARNS("Window") << "D3D11 failed to use hardware adapter" << LL_ENDL;
+                    FreeLibrary(gD3D11Library);
+                    gD3D11Library = nullptr;
+                    // These shouldn't be set, but make sure they are null.
+                    gD3D11Device = nullptr;
+                    gD3D11Context = nullptr;
+                }
+            }
+        }
+        else
+        {
+            LL_WARNS("Window") << "Failed to get D3D11CreateDevice function from d3d11.dll. High-performance GPU request failed." << LL_ENDL;
+            FreeLibrary(gD3D11Library);
+            gD3D11Library = nullptr;
+        }
+    }
+}
+
+bool LLWindowWin32::detectGPUChange() const
+{
+    if (!gD3D11Device)
+    {
+        // Can't detect without D3D11 device
+        return false;
+    }
+
+    if (gExpectedAdapterLUID.LowPart == 0 && gExpectedAdapterLUID.HighPart == 0)
+    {
+        // No specific adapter was selected, can't detect changes.
+        return false;
+    }
+
+    IDXGIDevice* pDXGIDevice = nullptr;
+    HRESULT hr = gD3D11Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&pDXGIDevice);
+
+    if (SUCCEEDED(hr) && pDXGIDevice)
+    {
+        IDXGIAdapter* pCurrentAdapter = nullptr;
+        hr = pDXGIDevice->GetAdapter(&pCurrentAdapter);
+
+        if (SUCCEEDED(hr) && pCurrentAdapter)
+        {
+            DXGI_ADAPTER_DESC desc;
+            pCurrentAdapter->GetDesc(&desc);
+
+            std::wstring description_w(desc.Description);
+
+            bool changed = false;
+
+            // Check if LUID has changed
+            if (desc.AdapterLuid.LowPart != gExpectedAdapterLUID.LowPart ||
+                desc.AdapterLuid.HighPart != gExpectedAdapterLUID.HighPart)
+            {
+                changed = true;
+                std::string current_gpu_name = ll_convert_wide_to_string(description_w);
+                LL_WARNS("Window") << "GPU change detected! Current adapter: " << current_gpu_name << LL_ENDL;
+            }
+
+            pCurrentAdapter->Release();
+            pDXGIDevice->Release();
+
+            return changed;
+        }
+
+        if (pDXGIDevice)
+        {
+            pDXGIDevice->Release();
+        }
+    }
+
+    return false;
+}
+
+void LLWindowWin32::clearHighPerformanceGPURequest() const
+{
+    detectGPUChange();
+    gExpectedAdapterLUID = { 0, 0 };
+    if (gD3D11Context)
+    {
+        gD3D11Context->Release();
+        gD3D11Context = nullptr;
+    }
+    if (gD3D11Device)
+    {
+        gD3D11Device->Release();
+        gD3D11Device = nullptr;
+    }
+    if (gD3D11Library)
+    {
+        FreeLibrary(gD3D11Library);
+        gD3D11Library = nullptr;
+    }
+}
+
 void* LLWindowWin32::getDirectInput8()
 {
     return &gDirectInput8;
@@ -4794,6 +5389,12 @@ bool LLWindowWin32::getInputDevices(U32 device_type_filter,
 void LLWindowWin32::initWatchdog()
 {
     mWindowThread->initTimeout();
+
+    // Watchdog is effectively a 'login complete event', as the
+    // 'unstable' part is done and from now on we are tracking
+    // performance.
+    // No need to hold D3D11 context/device any more.
+    clearHighPerformanceGPURequest();
 }
 
 F32 LLWindowWin32::getSystemUISize()
@@ -4907,6 +5508,13 @@ inline LLWindowWin32::LLWindowWin32Thread::LLWindowWin32Thread()
     : LL::ThreadPool("Window Thread", 1, MAX_QUEUE_SIZE, false)
 {
     LL::ThreadPool::start();
+
+    // Set thread name for the window thread
+    // This will make it distinguishable in Visual Studio debugger
+    post([this]()
+    {
+        SetThreadDescription(GetCurrentThread(), L"LLWindowWin32 Thread");
+    });
 }
 
 /**
@@ -5088,7 +5696,7 @@ void LLWindowWin32::LLWindowWin32Thread::run()
     }
 
     // Normally won't exist yet, but in case of re-init, make sure it's cleaned up
-    resumeTimeout("WindowThread");
+    resumeTimeout("Window:WindowThread");
 
     while (! getQueue().done())
     {
@@ -5099,23 +5707,25 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 
         if (mWindowHandleThrd != 0)
         {
-            pingTimeout("messages");
             MSG msg;
             BOOL status;
             if (mhDCThrd == 0)
             {
+                pingTimeout("Window:PeekMessage");
                 LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - PeekMessage");
                 logger.onChange("PeekMessage(", std::hex, mWindowHandleThrd, ")");
                 status = PeekMessage(&msg, mWindowHandleThrd, 0, 0, PM_REMOVE);
             }
             else
             {
+                pingTimeout("Window:GetMessage");
                 LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - GetMessage");
                 logger.always("GetMessage(", std::hex, mWindowHandleThrd, ")");
                 status = GetMessage(&msg, NULL, 0, 0);
             }
             if (status > 0)
             {
+                pingTimeout("Window:TranslateMessage");
                 logger.always("got MSG (", std::hex, msg.hwnd, ", ", msg.message,
                               ", ", msg.wParam, ")");
                 TranslateMessage(&msg);
@@ -5127,7 +5737,7 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - Function Queue");
-            pingTimeout("queue");
+            pingTimeout("Window:Queue");
             logger.onChange("runPending()");
             //process any pending functions
             getQueue().runPending();

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_discord" title="Discord">
+	<string name="discord_connected">
+		Conectado ao Discord como:
+	</string>
+	<string name="discord_disconnected">
+		Não conectado ao Discord.
+	</string>
+	<string name="SocialDiscordConnecting">
+		Conectando ao Discord...
+	</string>
+	<string name="SocialDiscordErrorConnecting">
+		Problema ao conectar ao Discord
+	</string>
+	<string name="SocialDiscordDisconnecting">
+		Desconectando do Discord...
+	</string>
+	<text name="account_caption_label">
+		Não conectado ao Discord.
+	</text>
+	<check_box label="Conectar automaticamente no login" name="startup_check"/>
+	<check_box label="Compartilhar nome com o Discord" name="name_check"/>
+	<button label="Conectar..." name="connect_btn"/>
+	<button label="Desconectar" name="disconnect_btn"/>
+	<text name="rating_label">
+		Compartilhar no Discord nomes de regiões com a seguinte classificação:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Geral, Moderada, Adulta" name="Desired_Adult"/>
+		<combo_box.item label="Geral e Moderada" name="Desired_Mature"/>
+		<combo_box.item label="Geral" name="Desired_PG"/>
+		<combo_box.item label="Não compartilhar" name="Desired_None"/>
+	</combo_box>
+	<text name="dont_names_label">
+		Não compartilhar no Discord nomes das regiões listadas abaixo:
+	</text>
+	<text name="connection_status_text">
+		Carregando...
+	</text>
+</floater>

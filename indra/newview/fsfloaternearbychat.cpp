@@ -40,6 +40,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsnearbychathub.h"
 #include "llagent.h"            // gAgent
+#include "llagentcamera.h"  // gAgentCamera
 #include "llanimationstates.h"  // ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
 #include "llautoreplace.h"
 #include "llavatarnamecache.h"
@@ -58,6 +59,8 @@
 #include "llfocusmgr.h"
 #include "llgesturemgr.h"
 #include "lliconctrl.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
 #include "llkeyboard.h"
 #include "lllayoutstack.h"
 #include "lllogchat.h"
@@ -113,6 +116,11 @@ FSFloaterNearbyChat::~FSFloaterNearbyChat()
     }
 
     mEmojiCloseConn.disconnect();
+    
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
 
     LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
@@ -145,6 +153,9 @@ bool FSFloaterNearbyChat::postBuild()
     mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusReceived, this));
     mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
     mInputEditor->setPassDelete(true);
+    mInputEditor->setShowChatMentionPicker(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourToggleCallback(
+        boost::bind(&FSFloaterNearbyChat::updateRlvRestrictions, this, _1));
     mInputEditor->setFont(LLViewerChat::getChatFont());
     mInputEditor->setLabel(getString("chatbox_label"));
     mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -217,6 +228,24 @@ bool FSFloaterNearbyChat::postBuild()
     gSavedSettings.getControl("FSShowMutedChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
 
     return LLFloater::postBuild();
+}
+
+void FSFloaterNearbyChat::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+    if (behavior != RLV_BHVR_SHOWNAMES)
+    {
+        return;
+    }
+
+    setChatMentionPickerEnabled(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
+}
+
+void FSFloaterNearbyChat::setChatMentionPickerEnabled(bool enabled)
+{
+    if (mInputEditor)
+    {
+        mInputEditor->setShowChatMentionPicker(enabled);
+    }
 }
 
 static std::string appendTime()
@@ -496,7 +525,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
         }
         else
         {
-            floater_container->addFloater(this, false);
+            floater_container->addFloater(this, false, IM_NOTHING_SPECIAL);
         }
     }
 
@@ -895,7 +924,11 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 
     // If the user wants to stop chatting on hitting return, lose focus
     // and go out of chat mode.
-    if (gSavedSettings.getBOOL("CloseChatOnReturn") && gSavedSettings.getBOOL("FSUnfocusChatHistoryOnReturn"))
+    const bool in_mouselook = gAgentCamera.cameraMouselook();
+    const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn") 
+                         && !(!in_mouselook && gSavedSettings.getBOOL("FSCloseChatOnReturnInMouselook"))
+                         && !gSavedSettings.getBOOL("FSCloseChatOnReturnOnlyBar");
+    if (closeChatOnReturn && gSavedSettings.getBOOL("FSUnfocusChatHistoryOnReturn"))
     {
         stopChat();
     }

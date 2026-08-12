@@ -4,7 +4,7 @@
 		Caricamento...
 	</panel.string>
 	<panel.string name="can_not_view">
-		Non è possibile vedere o modificare questo script perché è stato impostato con permessi ristretti. Occorrono tutti i permessi per vedere o modificare uno script dentro ad un oggetto.
+		Questo script non può essere visualizzato né modificato, perché è impostato come &quot;non copiabile&quot; o &quot;non modificabile&quot;. Per visualizzare o modificare uno script, devi avere questi permessi.
 	</panel.string>
 	<panel.string name="public_objects_can_not_run">
 		Gli oggetti pubblici non possono eseguire script.

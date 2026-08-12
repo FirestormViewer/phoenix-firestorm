@@ -9,4 +9,55 @@
 	<floater.string name="ao_dnd_only_on_full_interface">
 		アニメーション設定の書かれたノートカードをドラッグ＆ドロップできるのは、フルサイズのインターフェース時のみです。レンチ（🔧）アイコンをクリックして切り替えてください。
 	</floater.string>
+	<floater.string name="ao_add_blank_label">
+		からのセットを作成
+	</floater.string>
+	<floater.string name="ao_add_clone_label">
+		現在のセットを複製…
+	</floater.string>
+	<floater.string name="ao_track_main">
+		メイン
+	</floater.string>
+	<floater.string name="ao_no_track_animations">
+		空のトラック‐アニメーションをここにドロップ
+	</floater.string>
+	<floater.string name="ao_group_tooltip">
+		アニメーショングループ‐これらを一緒に再生：
+	</floater.string>
+	<floater.string name="ao_member_tooltip">
+		アニメーショングループのエントリ‐グループの他のメンバーと一緒に演奏します。ダブルクリックすると、単独でプレビューできます。
+	</floater.string>
+	<floater.string name="ao_cm_expand">
+		拡げる
+	</floater.string>
+	<floater.string name="ao_cm_collapse">
+		折りたたむ
+	</floater.string>
+	<floater.string name="ao_cm_rename_group">
+		グループ名を変更…
+	</floater.string>
+	<floater.string name="ao_cm_move_out">
+		グループから抜け出す
+	</floater.string>
+	<floater.string name="ao_cm_find_original">
+		オリジナルを探す
+	</floater.string>
+	<floater.string name="ao_cm_delete">
+		削除
+	</floater.string>
+	<floater.string name="ao_dnd_merge">
+		このアニメーションでグループにドロップ
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_group">
+		ドロップでこのグループに追加
+	</floater.string>
+	<floater.string name="ao_dnd_add_to_track">
+		ドロップでこのトラックに追加
+	</floater.string>
+	<floater.string name="ao_dnd_folder_group">
+		フォルダをドロップで新しいアニメーショングループを作成
+	</floater.string>
+	<floater.string name="ao_dnd_folder_pour">
+		フォルダをドロップでこのトラックにアニメーションを追加
+	</floater.string>
 </floater>

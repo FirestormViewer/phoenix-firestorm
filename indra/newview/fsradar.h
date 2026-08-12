@@ -35,7 +35,7 @@
 class LLAvatarName;
 
 constexpr U32 FSRADAR_MAX_AVATARS_PER_ALERT{ 6 };   // maximum number of UUIDs we can cram into a single channel radar alert message
-constexpr U32 FSRADAR_COARSE_OFFSET_INTERVAL{ 7 };  // seconds after which we query the bridge for a coarse location adjustment
+constexpr S64 FSRADAR_COARSE_OFFSET_INTERVAL{ 7 };  // seconds after which we query the bridge for a coarse location adjustment
 constexpr U32 FSRADAR_MAX_OFFSET_REQUESTS{ 60 };    // 2048 / UUID size, leaving overhead space
 constexpr U32 FSRADAR_CHAT_MIN_SPACING{ 6 };        // minimum delay between radar chat messages
 
@@ -63,7 +63,7 @@ class FSRadar
     virtual ~FSRadar();
 
 public:
-    typedef std::unordered_map<LLUUID, std::shared_ptr<FSRadarEntry>> entry_map_t;
+    using entry_map_t = std::unordered_map<LLUUID, std::shared_ptr<FSRadarEntry>>;
     entry_map_t getRadarList() { return mEntryList; }
 
     void startTracking(const LLUUID& avatar_id);
@@ -86,13 +86,12 @@ public:
     class Updater
     {
     public:
-        typedef std::function<void()> callback_t;
+        using callback_t = std::function<void()>;
         Updater(callback_t cb)
         : mCallback(cb)
         { }
 
-        virtual ~Updater()
-        { }
+        virtual ~Updater() = default;
 
     protected:
         void update()
@@ -103,7 +102,7 @@ public:
         callback_t mCallback;
     };
 
-    typedef boost::signals2::signal<void(const std::vector<LLSD>& entries, const LLSD& stats)> radar_update_callback_t;
+    using radar_update_callback_t = boost::signals2::signal<void(const std::vector<LLSD>& entries, const LLSD& stats)>;
     boost::signals2::connection setUpdateCallback(const radar_update_callback_t::slot_type& cb)
     {
         return mUpdateSignal.connect(cb);
@@ -130,7 +129,7 @@ private:
         bool        lastIgnore;
     };
 
-    typedef std::unordered_map<LLUUID, RadarFields> radarfields_map_t;
+    using radarfields_map_t = std::unordered_map<LLUUID, RadarFields>;
     radarfields_map_t       mLastRadarSweep;
     entry_map_t             mEntryList;
 
@@ -142,7 +141,7 @@ private:
     S32                     mRadarFrameCount;
     bool                    mRadarAlertRequest;
     F32                     mRadarLastRequestTime;
-    U32                     mRadarLastBulkOffsetRequestTime;
+    time_t                  mRadarLastBulkOffsetRequestTime;
 
     LLUUID                  mTrackedAvatarId;
     LLSD                    mAvatarStats;

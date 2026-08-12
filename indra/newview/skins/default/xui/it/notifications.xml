@@ -1191,7 +1191,8 @@ Offri l&apos;amicizia a [NAME]?
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota.
+		La parola chiave deve essere una sola parola e la sostituzione non può essere vuota. Punteggiatura consentita nella parola chiave: 
+( ) . , - _
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista di sostituzione non è valida.
@@ -1233,6 +1234,16 @@ Vedi https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 		Nuovo nome per il vestiario:
 		<form name="form">
 			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification label="Rinomina scheda filtro" name="FSInventoryCustomTabRename">
+		Nuovo nome della scheda:
+		<form name="form">
+			<input name="new_name">
+				[NAME]
+			</input>
+			<button default="true" index="0" name="OK" text="OK"/>
+			<button index="1" name="Cancel" text="Annulla"/>
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
@@ -1429,7 +1440,6 @@ Controlla la tua connessione e riprova fra qualche minuto, oppure clicca su Aiut
 		Il tuo avatar apparirà fra un attimo.
 
 Usa le frecce per muoverti.
-Premi F1 in qualunque momento per la guida o per apprendere altre cose su [CURRENT_GRID].
 Scegli un avatar maschile o femminile. Puoi sempre cambiare idea più tardi.
 		<usetemplate name="okcancelbuttons" notext="Femminile" yestext="Maschile"/>
 	</notification>
@@ -3999,6 +4009,9 @@ Il nome può contenere solo caratteri ASCII esclusi : e | .
 		Impossibile rinominare il set AO "[AO_SET_NAME]".
 Il nome può contenere solo caratteri ASCII esclusi : e | .
 	</notification>
+	<notification name="NewAONameCantExist">
+		Esiste già un set AO con questo nome.
+	</notification>
 	<notification name="RemoveAOSet">
 		Rimuovere il set AO  "[AO_SET_NAME]" dalla lista?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Rimuovi"/>
@@ -4927,12 +4940,6 @@ aggiungere un metodo di pagamento al checkout.
 			<button name="Cancel" text="Annulla" />
 		</form>
 	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		Il codice colore LSL è stato copiato negli appunti. Ora può essere incollato nello script.it.
-		<form name="form">
-			<ignore name="ignore" text="Un codice colore LSL è stato copiato negli appunti"/>
-		</form>
-	</notification>
 	<notification name="FSBWTooHigh">
 		Raccomandiamo vivamente di non impostare la larghezza di banda a più di 1500 KBPS. E' improbabile che funzioni bene e quasi certamente non migliora le prestazioni.
 	</notification>
@@ -5070,6 +5077,13 @@ L'azione non può essere annullata.
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Inserire un alias per [AVATAR]:
+		<form name="form">
+			<button name="Create" text="Crea"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="SetAvatarPseudonymMultiple">
+		Inserire un alias per [COUNT] avatar:
 		<form name="form">
 			<button name="Create" text="Crea"/>
 			<button name="Cancel" text="Annulla"/>
@@ -5373,4 +5387,18 @@ Per istruzioni dettagliate su come autorizzare [APP_NAME], che includono l'elenc
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+
+	<notification name="FSSetTitleRegion">
+		Inserisci il nome esatto di una regione da assegnare al titolo del gruppo selezionato.
+Il nome verrà verificato prima di salvare l'assegnazione.
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="FSSetTitleRegionNotFound">
+		La regione '[REGION]' non è stata trovata. Controlla il nome e riprova.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 </notifications>

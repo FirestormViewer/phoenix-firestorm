@@ -20,6 +20,9 @@
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
 			<menu_item_check name="Protected Folders" label="Foldery chronione" />
 			<menu_item_check label="Ustawienia..." name="inv_settings" />
+			<menu_item_check label="Pokaż kartę Ostatnie" name="show_recent_tab" />
+			<menu_item_check label="Pokaż kartę Założone" name="show_worn_tab" />
+			<menu_item_check label="Pokaż kartę Ulubione" name="show_favorites_tab" />
 			<menu_item_check label="Widok listy" name="list_view" />
 			<menu_item_check label="Widok galerii" name="gallery_view" />
 			<menu_item_check label="Widok kombinowany" name="combination_view" />
@@ -85,7 +88,6 @@
 			<menu_item_check name="inventory_filter_only_copy" label="Tylko kopiowalne" />
 			<menu_item_check name="inventory_filter_only_transfer" label="Tylko transferowalne" />
 			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Tylko podniesione razem" />
-			<menu_item_check name="inventory_show_partial_results" label="Pokaż częściowe wyniki wyszukiwania" />
 		</menu>
 	</menu_bar>
 	<layout_stack name="nav_stack">

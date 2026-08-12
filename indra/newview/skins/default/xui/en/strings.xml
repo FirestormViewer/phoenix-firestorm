@@ -28,6 +28,7 @@
 	<string name="AboutHeader">
 [APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Parity with Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
     <string name="BuildConfig">Build Configuration [BUILD_CONFIG]</string>
@@ -138,6 +139,8 @@ Voice Server Version: [VOICE_VERSION]
 	
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
+    <string name="AgniGridLabelShort">Agni (production)</string>
+    <string name="AditiGridLabelShort">Aditi (beta)</string>
 	
 	<string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="LoginFailedViewerNotPermitted">
@@ -226,6 +229,8 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="AgentLostConnection">This region may be experiencing trouble.  Please check your connection to the Internet.</string>
 	<string name="SavingSettings">Saving your settings...</string>
 	<string name="LoggingOut">Logging out...</string>
+	<string name="CompressingInventoryCache">Compressing inventory cache...</string>
+	<string name="ShutdownCleanup">Releasing resources...</string>
 	<string name="ShuttingDown">Shutting down...</string>
 	<string name="YouHaveBeenDisconnected">You have been disconnected from the region you were in.</string>
 	<string name="SentToInvalidRegion">You were sent to an invalid region.</string>
@@ -277,6 +282,7 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	
 	
     <!-- Tooltip -->
+	<string name="ReorderClothingTooltip">Drag to reorder layers, or use the arrows</string> <!-- Hint shown on clothing rows that can be dragged to reorder -->
 	<string name="TooltipPerson">Person</string><!-- Object under mouse pointer is an avatar -->
 	<string name="TooltipNoName">(no name)</string> <!-- No name on an object -->
 	<string name="TooltipOwner">Owner:</string> <!-- Owner name follows -->
@@ -294,7 +300,7 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
 	<string name="TooltipTooManyWearables">You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
-	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com or LindenLab.com domain.</string>
+	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com, LindenLab.com, or firestormviewer.org domain.</string>
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Physics</string>
 	<string name="TooltipFlagTouch">Touch</string>
@@ -332,6 +338,9 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>
 	<string name="TooltipSLURL">Click to view this location's information</string>
+	<string name="FSChatLinkTagTrusted">[Trusted]</string>
+	<string name="FSChatLinkTagUntrusted">[Link]</string>
+
 	<string name="TooltipAgentUrl">Click to view this Resident's profile</string>
 	<string name="TooltipAgentInspect">Learn more about this Resident</string>
 	<string name="TooltipAgentMute">Click to mute this Resident</string>
@@ -688,7 +697,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
     <string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">Invalid character [NR]: '[CH]' (should only be a digit or an alpha-numeric ASCII character or a punctuation with no space)</string>
     <string name="Validator_ShouldBeDigitNotSpace">Invalid character [NR]: '[CH]' (should only be a digit with no space)</string>
     <string name="Validator_ShouldBeASCII">Invalid character [NR]: '[CH]' (should only be an ASCII character)</string>
-    <string name="Validator_ShouldBeNewLineOrASCII">Invalid character [NR]: '[CH]' (should only be an ASCII character or a new line)</string>
+    <string name="Validator_ShouldBeNewLineOrASCIINoPipe">Character [CH] at position [NR] should be printable ASCII (excluding pipe) or newline</string>
 
     <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>
@@ -795,9 +804,11 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="LeaveMouselook">Press ESC to return to World View</string>
 
 	<!-- inventory -->
-	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
+	<string name="InventoryNoMatchingItems">No matching items.</string>
 	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
-  <string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
+	<string name="FSInventoryCustomTabDefaultName">Custom</string>
+	<string name="FSInventoryCustomTabShowHidden">Show hidden tabs</string>
 	<string name="PlacesNoMatchingItems">To add a place to your landmarks, click the star to the right of the location name.</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoListing">You have no listings yet.</string>
@@ -805,6 +816,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="InventorySingleFolderEmpty">Folder is empty.</string>
 	<string name="InventorySingleFolderNoMatches">No matches.</string>
 	<string name="InventoryNoTexture">You do not have a copy of this texture in your inventory</string>
+	<string name="InventoryNoMaterial">You do not have a copy of this material in your inventory</string>
 	<string name="InventoryInboxNoItems">Your Marketplace purchases will appear here. You may then drag them into your inventory to use them.</string>
 	<string name="MarketplaceURL">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/</string>
 	<string name="MarketplaceURL_CreateStore">http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3</string>
@@ -1520,6 +1532,9 @@ If this message persists, restart your computer.
 		[APP_NAME] appears to have frozen or crashed on the previous run.
 Would you like to send a crash report?
 	</string>
+    <string name="MBFreezeDetected">
+        [APP_NAME] appears to have frozen. If this issue occurs regularly, please contact support at https://www.firestormviewer.org/support.
+    </string>
 	<string name="MBAlert">Notification</string>
 	<string name="MBNoDirectX">
 		[APP_NAME] is unable to detect DirectX 9.0b or greater.
@@ -2729,7 +2744,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Flickr_Label">Flickr</string>
   <string name="Command_Gestures_Label">Gestures</string>
   <string name="Command_Grid_Status_Label">Grid status</string>
-  <string name="Command_HowTo_Label">Guidebook</string>
   <string name="Command_Inventory_Label">Inventory</string>
   <string name="Command_Map_Label">Map</string>
   <string name="Command_Marketplace_Label">Marketplace</string>
@@ -2787,6 +2801,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Primfeed_Label">Primfeed</string>
   <string name="Command_Primfeed_Tooltip">Post directly to your Primfeed account.</string>
   <string name="Command_Omnifilter_Label">Omnifilter</string>
+  <string name="Command_AvatarAlign_Label">Avatar alignment</string>
+  <string name="Command_FaceNearest_Label">Face nearest avatar</string>
 
   <string name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -2801,7 +2817,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Flickr_Tooltip">Upload to Flickr</string>
   <string name="Command_Gestures_Tooltip">Gestures for your avatar (CTRL+G)</string>
   <string name="Command_Grid_Status_Tooltip">Show current Grid status</string>
-  <string name="Command_HowTo_Tooltip">How to do common tasks</string>
   <string name="Command_Inventory_Tooltip">View and use your belongings (CTRL+I)</string>
   <string name="Command_Map_Tooltip">Map of the world (CTRL+M)</string>
   <string name="Command_Marketplace_Tooltip">Go shopping</string>
@@ -2846,6 +2861,10 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Blocklist_Tooltip">Opens the block/mute list</string>
   <string name="Command_ResyncAnimations_Tooltip">Synchronizes avatar animations</string>
   <string name="Command_RegionTracker_Tooltip">Track various regions status</string>
+  <!-- [FS:Chanayane] Compass floater -->
+  <string name="Command_AvatarAlign_Tooltip">Align your avatar to a cardinal direction or face the nearest avatar</string>
+  <string name="Command_FaceNearest_Tooltip">Turn to face the nearest avatar within 20m</string>
+  <!-- [/FS:Chanayane] -->
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
   <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
   <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
@@ -3056,6 +3075,16 @@ and report the problem.
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
+  <string name="FSCameraPositionPasted">Camera restored to [POS].</string>
+  <string name="FSCameraPositionParseError">Invalid camera position. Expected: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll (agent-local).</string>
+  <string name="FSCmdLineZOffsetUsage">Set avatar hover height (usage: /zoffset value or +delta).</string>
+  <string name="FSCmdLineNoValidRegion">Could not get a valid region pointer.</string>
+  <string name="FSCmdLineTrackPosUsage">Track a position or avatar on the world map (usage: cmd &lt;x, y, z&gt; or cmd name).</string>
+  <string name="FSCmdLineTrackPosParseError">Invalid position. Use cpcampos format: &lt;x, y, z&gt; or &lt;x, y, z&gt;|&lt;fx, fy, fz&gt;|roll.</string>
+  <string name="FSCmdLineTrackPosLocation">Tracking [REGION] ([POS]).</string>
+  <string name="FSCmdLineTrackPosAvatar">Tracking [NAME].</string>
+  <string name="FSCmdLineTrackPosNotFound">Could not find avatar matching &apos;[NAME]&apos; on radar.</string>
+  <string name="FSCmdLineTrackPosMapError">Could not open the world map.</string>
 
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>
@@ -3296,13 +3325,15 @@ Your current position: [AVATAR_POS]
   <string name="Nametag_Texture_Area_Label">Texture Area: [TEXTURE_AREA] m²</string>
 
   <string name="font_unknown">Unknown Font</string>
-  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts.xml">Inter</string>
+  <string name="font_fonts_inter_tight.xml">Inter Tight</string>
   <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
   <string name="font_fonts_liberation.xml">Liberation</string>
   <string name="font_fonts_droid.xml">Droid Sans</string>
   <string name="font_fonts_mobi.xml">Mobi Sans</string>
   <string name="font_fonts_roboto.xml">Roboto</string>
   <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu.xml">Deja Vu</string>
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
@@ -3347,4 +3378,9 @@ Your current position: [AVATAR_POS]
   <string name="Maximum">Maximum</string>
 
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
+  <string name="OmnifilterDefaultName">Default</string>
+  <string name="OmnifilterExportDescription">Omnifiler Rule Set: [REPLACEMENT]</string> <!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
+  <string name="OmnifilterButtonLabel" translate="false">BUTTON_LABEL</string>
+  <string name="FSAvatarAlignToggleMini">Mini</string>
+  <string name="FSAvatarAlignToggleFull">Full</string>
 </strings>

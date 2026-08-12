@@ -33,6 +33,7 @@
 	<string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+Paridad con Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>
 	<string name="BuildConfig">
 		Configuración de constitución [BUILD_CONFIG]
@@ -1506,6 +1507,9 @@ pueden adjuntarse a las notas.
 	<string name="InventoryNoMatchingRecentItems">
 		¿No encuentras lo que buscas? Intenta [secondlife:///app/inventory/filters Show filters].
 	</string>
+	<string name="FSInventoryCustomTabDefaultName">
+		Filtro
+	</string>
 	<string name="PlacesNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/places/[SEARCH_TERM] Búsqueda].
 	</string>
@@ -2611,10 +2615,6 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	<string name="PicksClassifiedsLoadingText">
 		Cargando...
 	</string>
-	<string name="NoPicksText">No has creado ningún destacado.</string>
-	<string name="NoAvatarPicksText">El usuario no tiene destacados</string>
-	<string name="NoClassifiedsText">No has creado ningún clasificado. Pulsa el botón '+' para crear uno.</string>
-	<string name="NoAvatarClassifiedsText">El usuario no tiene clasificados</string>
 	<string name="MultiPreviewTitle">
 		Vista previa
 	</string>
@@ -4594,9 +4594,6 @@ Más información en https://second.life/scripted-agents.
 	<string name="share_alert">
 		Arrastra aquí items del inventario
 	</string>
-	<string name="facebook_post_success">
-		Has publicado en Facebook.
-	</string>
 	<string name="flickr_post_success">
 		Has publicado en Flickr.
 	</string>
@@ -5552,9 +5549,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Grid_Status_Label">
 		Estado del Grid
 	</string>
-	<string name="Command_HowTo_Label">
-		Cómo
-	</string>
 	<string name="Command_Inventory_Label">
 		Inventario
 	</string>
@@ -5719,9 +5713,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Mostrar el estado actual del Grid
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Cómo hacer las tareas habituales
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Ver y usar tus pertenencias

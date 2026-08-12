@@ -1063,6 +1063,13 @@ namespace action_give_inventory
                     break;
                 }
                 LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
+                if (!inv_item)
+                {
+                    shared = false;
+                    LL_WARNS() << "Failed to share an item " << *it
+                        << ". Item was not found in inventory." << LL_ENDL;
+                    continue;
+                }
                 if (!inv_item->getPermissions().allowCopyBy(gAgentID))
                 {
                     if (!noncopy_item_names.empty())
@@ -1633,6 +1640,31 @@ void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
         }
         LLFloaterReg::showInstance("fs_add_contact", data, true);
     }
+}
+
+void LLAvatarActions::moveToContactSet(const uuid_vec_t& agent_ids, const std::string& source_set)
+{
+    if (agent_ids.empty() || source_set.empty())
+    {
+        return;
+    }
+
+    LLSD data;
+    data["operation"] = "move";
+    data["source_set"] = source_set;
+    if (agent_ids.size() == 1)
+    {
+        data["id"] = agent_ids.front();
+    }
+    else
+    {
+        for (const LLUUID& id : agent_ids)
+        {
+            data["ids"].append(id);
+        }
+    }
+
+    LLFloaterReg::showInstance("fs_add_contact", data, true);
 }
 // [/FS:CR] Add to contact set
 

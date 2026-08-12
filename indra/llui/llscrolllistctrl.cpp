@@ -62,6 +62,7 @@
 #include <boost/bind.hpp>
 
 #include "fsregistrarutils.h"
+#include <ranges>
 
 static LLDefaultChildRegistry::Register<LLScrollListCtrl> r("scroll_list");
 
@@ -447,20 +448,11 @@ S32 LLScrollListCtrl::getItemCount() const
     // <FS:Ansariel> Fix for FS-specific people list (radar)
     if (mIsFiltered)
     {
-        S32 count(0);
-        item_list::const_iterator iter;
-        for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
-        {
-            LLScrollListItem* item  = *iter;
+        return (S32)std::ranges::count_if(mItemList, [&](const LLScrollListItem* item) {
             std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
             std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-            if (filterColumnValue.find(mFilterString) == std::string::npos)
-            {
-                continue;
-            }
-            count++;
-        }
-        return count;
+            return filterColumnValue.find(mFilterString) != std::string::npos;
+            });
     }
     // </FS:Ansariel> Fix for FS-specific people list (radar)
 
@@ -1911,7 +1903,10 @@ void LLScrollListCtrl::draw()
 
     updateColumns();
 
-    mCommentText->setVisible(mItemList.empty());
+    // <FS:Ansariel> Fix for FS-specific people list (radar)
+    //mCommentText->setVisible(mItemList.empty());
+    mCommentText->setVisible(getItemCount() == 0);
+    // </FS:Ansariel>
 
     drawItems();
 

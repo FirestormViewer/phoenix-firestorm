@@ -30,15 +30,9 @@
 #include "fsfloaterdiscord.h"
 
 #include "fsdiscordconnect.h"
-#include "llagent.h"
-#include "llagentui.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "llfloaterreg.h"
-#include "lltabcontainer.h"
-#include "lltrans.h"
 #include "llviewercontrol.h"
-#include "llviewerregion.h"
 
 #include "boost/algorithm/string/case_conv.hpp"
 

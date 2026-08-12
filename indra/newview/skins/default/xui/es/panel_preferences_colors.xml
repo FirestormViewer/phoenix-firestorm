@@ -181,6 +181,7 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Elige el color de la consola"/>
 			<slider label="Opacidad:" name="console_background_opacity" tool_tip="Configura la opacidad del fondo de la consola"/>
+			<slider label="Opacidad del fondo de los menús:" name="menu_background_alpha" tool_tip="Opacidad del fondo de los menús contextuales y la barra de menú superior (0.0 = totalmente transparente, 1.0 = totalmente opaco)"/>
 			<text name="preferences_search_label">
                 Colores de resaltado de búsqueda de preferencias:
             </text>

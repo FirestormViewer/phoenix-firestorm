@@ -34,10 +34,10 @@ static LLDefaultChildRegistry::Register<FSScrollListCtrl> r("fs_scroll_list");
 
 FSScrollListCtrl::FSScrollListCtrl(const Params& p)
 :   LLScrollListCtrl(p),
-    mContextMenu(NULL),
+    mContextMenu(nullptr),
     mDesiredLineHeight(p.desired_line_height),
     mContentType(p.content_type),
-    mHandleDaDCallback(NULL)
+    mHandleDaDCallback()
 {
 }
 
@@ -164,13 +164,8 @@ bool FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
     }
 }
 
-//virtual
-
-bool FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-                                            EDragAndDropType cargo_type,
-                                            void* cargo_data,
-                                            EAcceptance* accept,
-                                            std::string& tooltip_msg)
+bool FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void* cargo_data,
+                                         EAcceptance* accept, std::string& tooltip_msg)
 {
     if (mHandleDaDCallback)
     {
@@ -178,6 +173,4 @@ bool FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
     }
 
     return false;
-
 }
-

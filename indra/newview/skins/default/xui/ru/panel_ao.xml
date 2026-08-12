@@ -5,7 +5,7 @@
 		<combo_box name="ao_set_selection_combo" tool_tip="Выберите набор анимаций для редактирования." />
 		<button name="ao_activate" tool_tip="Активировать этот набор анимации сейчас." />
 		<check_box name="ao_default" label="По умолчанию" tool_tip="Сделать этот набор анимаций по запускающимся при входе в систему." width="20" />
-		<button name="ao_add" tool_tip="Создать новый набор анимаций." />
+		<menu_button name="ao_add" tool_tip="Создать новый набор анимаций." />
 		<button name="ao_remove" tool_tip="Удалить этот набор анимаций." />
 		<check_box name="ao_sit_override" label="Сидеть" tool_tip="Отметьте это, если вы хотите переопределить анимацию сидения." width="100" />
 		<check_box name="ao_smart" label="Умный" tool_tip="Интеллектуальный режим пытается определить, будет ли переопределение сидячего конфликтовать с собственной анимацией объекта, и временно отключит переопределение."

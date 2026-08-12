@@ -68,6 +68,9 @@
           <menu_item_call.on_click
            function="Inventory.NewWindow"
            parameter="" />
+          <menu_item_call.on_enable
+           function="RLV.EnableIfNot"
+           parameter="showinv" />
         </menu_item_call>
         <menu_item_check
          label="Protected Folders"
@@ -442,6 +445,24 @@
                 <menu_item_check.on_click
                    function="Self.toggleIgnorePreJump" />
 			</menu_item_check>
+			<menu_item_separator
+			 layout="topleft" />
+			<menu_item_call
+			 label="Face nearest avatar"
+			 layout="topleft"
+			 name="AvatarFaceNearest">
+				<menu_item_call.on_click
+				 function="Avatar.FaceNearest" />
+			</menu_item_call>
+			<menu_item_check
+			 label="Avatar alignment"
+			 layout="topleft"
+			 name="AvatarAlign">
+				<menu_item_check.on_check
+				 function="Avatar.AlignIsOpen" />
+				<menu_item_check.on_click
+				 function="Avatar.AlignToggle" />
+			</menu_item_check>
 		</menu>
 
 		<menu_item_check
@@ -757,6 +778,48 @@
                 <menu_item_check.on_click
                  function="World.SetRejectFriendshipRequests"/>
             </menu_item_check>
+            <menu
+             create_jump_keys="true"
+             label="Ad-hoc conferences"
+             name="Ad-hoc conferences"
+             tear_off="true">
+                <menu_item_check
+                 label="Automatically ignore and leave all"
+                 name="FSIgnoreAdHocSessions">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Report ignored in nearby chat"
+                 name="FSReportIgnoredAdHocSession">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSReportIgnoredAdHocSession" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSReportIgnoredAdHocSession" />
+                    <menu_item_check.on_enable
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Don't ignore from my friends"
+                 name="FSDontIgnoreAdHocFromFriends">
+                    <menu_item_check.on_check
+                     function="CheckControl"
+                     parameter="FSDontIgnoreAdHocFromFriends" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSDontIgnoreAdHocFromFriends" />
+                    <menu_item_check.on_enable
+                     function="CheckControl"
+                     parameter="FSIgnoreAdHocSessions" />
+                </menu_item_check>
+            </menu>
         
         </menu>
         
@@ -1384,7 +1447,8 @@
             </menu_item_check>
             <menu_item_check
              label="Use Shared Environment"
-             name="Use Shared Environment">
+             name="Use Shared Environment"
+             shortcut="control|shift|J">
                 <menu_item_check.on_click
                  function="World.EnvSettings"
                  parameter="region" />
@@ -1430,6 +1494,15 @@
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
+            <menu_item_check
+             label="Mute/unmute sound"
+             name="toggle_sound"
+             shortcut="control|alt|shift|M">
+                <menu_item_check.on_click
+                 function="World.ToggleMasterAudio"/>
+                <menu_item_check.on_check
+                 function="World.IsMasterAudioMuted"/>
+             </menu_item_check>
             <menu_item_separator/>
             <menu
              label="Bulk Import"
@@ -2673,17 +2746,6 @@
              parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
         </menu_item_call>
 
-        <menu_item_check
-         label="Guidebook"
-         name="How To">
-            <menu_item_check.on_click
-             function="Help.ToggleHowTo"
-             parameter="" />
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="guidebook" />
-        </menu_item_check>
-
 <!--       <menu_item_call
          label="Second Life Help"
          name="Second Life Help">
@@ -2714,7 +2776,6 @@
              function="Floater.Show"
              parameter="hud" />
         </menu_item_call>
-		<menu_item_separator/>
         <menu_item_call
              label="Knowledge Base"
              name="Knowledge Base">
@@ -4893,6 +4954,16 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="CollectFontVertexBuffers" />
+            </menu_item_check>
+            <menu_item_check
+             label="Collect UI Image Vertex Buffers"
+             name="Collect UI Image Vertex Buffers">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="CollectUIImageVertexBuffers" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="CollectUIImageVertexBuffers" />
             </menu_item_check>
           <menu_item_separator />
           <menu_item_check

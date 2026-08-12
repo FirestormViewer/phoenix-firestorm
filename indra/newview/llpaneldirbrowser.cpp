@@ -95,6 +95,15 @@ bool LLPanelDirBrowser::postBuild()
     mNextPageBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { nextPage(); });
     mNextPageBtn->setVisible(false);
 
+    // <FS:Ansariel> Port over search term history
+    mSearchComboBox = findChild<LLSearchComboBox>("name");
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setCommitCallback(boost::bind(&LLPanelDirBrowser::onClickSearchCore, this));
+        fillSearchComboBox();
+    }
+    // </FS:Ansariel>
+
     return true;
 }
 
@@ -176,11 +185,19 @@ void LLPanelDirBrowser::updateResultCount()
     {
         // Item count be off by a few if bogus items sent from database
         // Just use the number of results per page. JC
-        result_text = llformat(">%d found", mResultsPerPage);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat(">%d found", mResultsPerPage);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat(">%d", mResultsPerPage);
+        result_text = getString("found_text", args);
     }
     else
     {
-        result_text = llformat("%d found", result_count);
+        // <FS:Ansariel> Make this localizable
+        //result_text = llformat("%d found", result_count);
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat("%d", result_count);
+        result_text = getString("found_text", args);
     }
 
     childSetValue("result_text", result_text);
@@ -190,7 +207,9 @@ void LLPanelDirBrowser::updateResultCount()
         // add none found response
         if (list->getItemCount() == 0)
         {
-            list->setCommentText(std::string("None found.")); // *TODO: Translate
+            // <FS:Ansariel> Make this localizable
+            //list->setCommentText(std::string("None found.")); // *TODO: Translate
+            list->setCommentText(getString("not_found_text"));
             list->operateOnAll(LLCtrlListInterface::OP_DESELECT);
         }
     }
@@ -372,6 +391,10 @@ void LLPanelDirBrowser::showDetailPanel(S32 type, LLSD id)
         }
         break;
     }
+
+    // <FS:Ansariel> Add "open profile" button
+    mSelectedID = id;
+    mFloaterDirectory->updateProfileButtonVisibility();
 }
 
 
@@ -451,7 +474,10 @@ void LLPanelDirBrowser::processDirPeopleReply(LLMessageSystem *msg, void**)
 
         content["type"] = AVATAR_CODE;
 
-        std::string fullname = first_name + " " + last_name;
+        // <FS:PP> Respect FSTrimLegacyNames setting
+        // std::string fullname = first_name + " " + last_name;
+        std::string fullname = LLCacheName::buildFullName(first_name, last_name);
+        // </FS:PP>
         row["columns"][1]["column"] = "name";
         row["columns"][1]["value"] = fullname;
         row["columns"][1]["font"] = "SANSSERIF";
@@ -567,9 +593,6 @@ void LLPanelDirBrowser::processDirEventsReply(LLMessageSystem* msg, void**)
     LLUUID owner_id;
     std::string name;
     std::string date;
-    bool show_pg = gSavedSettings.getBOOL("ShowPGEvents");
-    bool show_mature = gSavedSettings.getBOOL("ShowMatureEvents");
-    bool show_adult = gSavedSettings.getBOOL("ShowAdultEvents");
 
     msg->getUUID("AgentData", "AgentID", agent_id);
     msg->getUUID("QueryData", "QueryID", query_id );
@@ -626,27 +649,6 @@ void LLPanelDirBrowser::processDirEventsReply(LLMessageSystem* msg, void**)
             LL_WARNS() << "skipped event due to owner_id null, event_id " << event_id << LL_ENDL;
             continue;
         }
-
-        // skip events that don't match the flags
-        // there's no PG flag, so we make sure neither adult nor mature is set
-        if (((event_flags & (EVENT_FLAG_ADULT | EVENT_FLAG_MATURE)) == EVENT_FLAG_NONE) && !show_pg)
-        {
-            //llwarns << "Skipped pg event because we're not showing pg, event_id " << event_id << llendl;
-            continue;
-        }
-
-        if ((event_flags & EVENT_FLAG_MATURE) && !show_mature)
-        {
-            //llwarns << "Skipped mature event because we're not showing mature, event_id " << event_id << llendl;
-            continue;
-        }
-
-        if ((event_flags & EVENT_FLAG_ADULT) && !show_adult)
-        {
-            //llwarns << "Skipped adult event because we're not showing adult, event_id " << event_id << llendl;
-            continue;
-        }
-
         LLSD content;
 
         content["type"] = EVENT_CODE;
@@ -1088,7 +1090,9 @@ void LLPanelDirBrowser::setupNewSearch()
 
     // ready the list for results
     list->operateOnAll(LLCtrlListInterface::OP_DELETE);
-    list->setCommentText(LLTrans::getString("Searching"));
+    // <FS:Ansariel> Make this localizable
+    //list->setCommentText(LLTrans::getString("Searching"));
+    list->setCommentText(getString("searching_text"));
     list->setEnabled(false);
 
     mResultsReceived = 0;
@@ -1107,6 +1111,13 @@ void LLPanelDirBrowser::onClickSearchCore(void* userdata)
 {
     LLPanelDirBrowser* self = (LLPanelDirBrowser*)userdata;
     if (!self) return;
+
+    // <FS:Ansariel> Port over search term history
+    if (self->mSearchComboBox && !self->mSearchComboBox->getValue().asString().empty())
+    {
+        LLSearchHistory::getInstance()->addEntry(self->mSearchComboBox->getValue().asString());
+    }
+    // </FS:Ansariel>
 
     self->resetSearchStart();
     self->performQuery();
@@ -1181,3 +1192,31 @@ S32 LLPanelDirBrowser::showNextButton(S32 rows)
     }
     return rows;
 }
+
+// <FS:Ansariel> Port over search term history
+void LLPanelDirBrowser::fillSearchComboBox()
+{
+    if (!mSearchComboBox)
+    {
+        return;
+    }
+
+    LLSearchHistory::getInstance()->load();
+    for (const auto& item : LLSearchHistory::getInstance()->getSearchHistoryList())
+    {
+        mSearchComboBox->add(item.search_query);
+    }
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Select default search element on tab change
+bool LLPanelDirBrowser::focusFirstItem(bool prefer_text_fields, bool focus_flash)
+{
+    if (mSearchComboBox)
+    {
+        mSearchComboBox->setFocus(true);
+        mSearchComboBox->focusTextEntry();
+    }
+    return true;
+}
+// </FS:Ansariel>

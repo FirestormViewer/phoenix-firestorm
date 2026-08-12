@@ -29,9 +29,12 @@
 #include "llpaneldirgroups.h"
 
 #include "llagent.h"
+#include "llnotificationsutil.h" // <FS:TJ/>
 #include "llqueryflags.h"
 #include "llviewercontrol.h"
 #include "llsearcheditor.h"
+
+#include "llgroupactions.h"
 
 static LLPanelInjector<LLPanelDirGroups> t_panel_dir_groups("panel_dir_groups");
 
@@ -48,8 +51,16 @@ bool LLPanelDirGroups::postBuild()
 
     //getChild<LLLineEditor>("name")->setKeystrokeCallback(boost::bind(&LLPanelDirBrowser::onKeystrokeName, _1, _2), NULL);
 
-    childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
-    setDefaultBtn( "Search" );
+    // <FS:Ansariel> Port over search term history
+    //childSetAction("Search", &LLPanelDirBrowser::onClickSearchCore, this);
+    //setDefaultBtn( "Search" );
+    // </FS:Ansariel>
+
+    if (gAgent.isTeen())
+    {
+        childSetEnabled("incmature", false);
+        gSavedSettings.setBOOL("ShowMatureGroups", false);
+    }
 
     return true;
 }
@@ -61,7 +72,12 @@ LLPanelDirGroups::~LLPanelDirGroups()
 // virtual
 void LLPanelDirGroups::performQuery()
 {
-    if (childGetValue("name").asString().length() < mMinSearchChars)
+    // <FS:PP> Improve query sanitization
+    // if (childGetValue("name").asString().length() < mMinSearchChars)
+    std::string search_text = childGetValue("name").asString();
+    LLStringUtil::trim(search_text);
+    if (search_text.length() < mMinSearchChars)
+    // </FS:PP>
     {
         return;
     }
@@ -72,10 +88,47 @@ void LLPanelDirGroups::performQuery()
     U32 scope = DFQ_GROUPS;
 
     // Check group mature filter.
-    if ( !gSavedSettings.getBOOL("ShowMatureGroups")  || gAgent.isTeen() )
+    // <FS:TJ> Fix legacy group search to better support maturity settings
+    //if ( gSavedSettings.getBOOL("ShowMatureGroups") && !gAgent.isTeen() )
+    //    // Supposed behavior:
+    //    // if nothing is set will search for <= mature
+    //    // if DFQ_INC_PG is set, will look for <= PG
+    //    // if DFQ_INC_MATURE is set, will look for == mature
+    //    // if DFQ_INC_ADULT is set, will look for >= adult
+    //    // Not compatible with legacy DFQ_FILTER_MATURE.
+    //    // But there appears to be a server bug, so we only use
+    //    // this to show all and use legacy setting for 'pg only'
+    //    scope |= DFQ_INC_PG;
+    //    scope |= DFQ_INC_MATURE;
+    //    scope |= DFQ_INC_ADULT;
+    //}
+    //else
+    //{
+    //    // DFQ_FILTER_MATURE is a legacy setting
+    //    scope |= DFQ_FILTER_MATURE;
+    //}
+    bool adult_enabled = gAgent.canAccessAdult();
+    bool mature_enabled = gAgent.canAccessMature();
+
+    static LLUICachedControl<U32> search_maturity("FSSearchGroupMaturity", SIM_ACCESS_PG);
+    if (!search_maturity())
     {
-        scope |= DFQ_FILTER_MATURE;
+        LLNotificationsUtil::add("NoContentToSearch");
+        return;
     }
+    if (search_maturity >= SIM_ACCESS_PG)
+    {
+        scope |= DFQ_INC_PG;
+    }
+    if (mature_enabled && search_maturity >= SIM_ACCESS_MATURE)
+    {
+        scope |= DFQ_INC_MATURE;
+    }
+    if (adult_enabled && search_maturity >= SIM_ACCESS_ADULT)
+    {
+        scope |= DFQ_INC_ADULT;
+    }
+    // </FS:TJ>
 
     mCurrentSortColumn = "score";
     mCurrentSortAscending = false;
@@ -84,7 +137,17 @@ void LLPanelDirGroups::performQuery()
     sendDirFindQuery(
         gMessageSystem,
         mSearchID,
-        childGetValue("name").asString(),
+        // <FS:PP> Search by UUID
+        // childGetValue("name").asString(),
+        search_text,
+        // </FS:PP>
         scope,
         mSearchStart);
 }
+
+// <FS:Ansariel> Add "open profile" button
+void LLPanelDirGroups::openProfile()
+{
+    LLGroupActions::show(mSelectedID);
+}
+// </FS:Ansariel>

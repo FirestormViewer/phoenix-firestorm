@@ -29,30 +29,49 @@
 
 #include "fsnearbychatcontrol.h"
 #include "fsnearbychathub.h"
+#include "lfsimfeaturehandler.h"
 #include "llagent.h"        // gAgent
 #include "llagentcamera.h"  // gAgentCamera
 #include "llautoreplace.h"
-#include "llfloaterimnearbychathandler.h"
+#include "llchatmentionhelper.h"
+#include "llemojihelper.h"
+#include "llfloaterchatmentionpicker.h"
+#include "llfocusmgr.h"
+#include "llscrollcontainer.h"
+#include "llworld.h"
+#include "rlvactions.h"
 
 static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");
 
 FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
-    LLLineEditor(p),
-    mDefault(p.is_default)
+    LLChatEntry(p),
+    mDefault(p.is_default),
+    mTextPadLeft(p.text_pad_left),
+    mTextPadRight(p.text_pad_right),
+    mBackgroundPad(p.background_pad),
+    mBgImage(p.background_image),
+    mBgImageDisabled(p.background_image_disabled),
+    mBgImageFocused(p.background_image_focused)
 {
     //<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
     setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
-    setKeystrokeCallback(onKeystroke, this);
+    setKeystrokeCallback([this](LLTextEditor* caller) { onKeystroke(caller); });
     FSNearbyChat::instance().registerChatBar(this);
 
-    setEnableLineHistory(true);
-    setIgnoreArrowKeys(false);
     setCommitOnFocusLost(false);
-    setRevertOnEsc(false);
-    setIgnoreTab(true);
-    setReplaceNewlinesWithSpaces(false);
     setPassDelete(true);
+    mBGVisible = false;
     setFont(LLViewerChat::getChatFont());
+    enableSingleLineMode(true);
+
+    setShowChatMentionPicker(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourToggleCallback(
+        boost::bind(&FSNearbyChatControl::updateRlvRestrictions, this, _1));
+
+    setShowEmojiHelper(gSavedSettings.getBOOL("FSEnableEmojiWindowPopupWhileTyping"));
+    mEmojiHelperSettingConnection =
+        gSavedSettings.getControl("FSEnableEmojiWindowPopupWhileTyping")->getSignal()->connect(
+            boost::bind(&FSNearbyChatControl::updateEmojiHelperSetting, this, _2));
 
     // Register for font change notifications
     LLViewerChat::setFontChangedCallback(boost::bind(&FSNearbyChatControl::setFont, this, _1));
@@ -60,42 +79,182 @@ FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 
 FSNearbyChatControl::~FSNearbyChatControl()
 {
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    if (mEmojiHelperSettingConnection.connected())
+    {
+        mEmojiHelperSettingConnection.disconnect();
+    }
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
 }
 
-void FSNearbyChatControl::onKeystroke(LLLineEditor* caller, void* userdata)
+void FSNearbyChatControl::onKeystroke(LLTextEditor* caller)
 {
     FSNearbyChat::handleChatBarKeystroke(caller);
+}
+
+void FSNearbyChatControl::paste()
+{
+    LLChatEntry::paste();
+
+    // Keep nearby chat on one visual line by flattening paragraph markers from paste.
+    S32 cursor_pos = getCursorPos();
+    LLWString content = getWText();
+    LLWStringUtil::replaceChar(content, llwchar(182), llwchar('\n'));
+    setWText(content);
+    setCursorPos(cursor_pos);
 }
 
 // send our focus status to the LLNearbyChat hub
 void FSNearbyChatControl::onFocusReceived()
 {
     FSNearbyChat::instance().setFocusedInputEditor(this, true);
-    LLLineEditor::onFocusReceived();
+    LLFloaterChatMentionPicker::updateParticipantSource(this);
+    LLChatEntry::onFocusReceived();
 }
 
 void FSNearbyChatControl::onFocusLost()
 {
     FSNearbyChat::instance().setFocusedInputEditor(this, false);
-    LLLineEditor::onFocusLost();
+    LLFloaterChatMentionPicker::removeParticipantSource(this);
+    LLChatEntry::onFocusLost();
 }
 
 void FSNearbyChatControl::setFocus(bool focus)
 {
     FSNearbyChat::instance().setFocusedInputEditor(this, focus);
-    LLLineEditor::setFocus(focus);
+    if (focus)
+    {
+        LLFloaterChatMentionPicker::updateParticipantSource(this);
+    }
+    else
+    {
+        LLFloaterChatMentionPicker::removeParticipantSource(this);
+    }
+    LLChatEntry::setFocus(focus);
 }
 
-void FSNearbyChatControl::autohide()
+void FSNearbyChatControl::draw()
+{
+    applyTextPadding();
+    drawBackground();
+    LLChatEntry::draw();
+}
+
+void FSNearbyChatControl::setTextPadding(S32 left, S32 right)
+{
+    mTextPadLeft = left;
+    mTextPadRight = right;
+    applyTextPadding();
+}
+
+void FSNearbyChatControl::drawBackground()
+{
+    LLUIImage* image = nullptr;
+
+    if (getReadOnly())
+    {
+        image = mBgImageDisabled;
+    }
+    else if (hasFocus())
+    {
+        image = mBgImageFocused;
+    }
+    else
+    {
+        image = mBgImage;
+    }
+
+    if (!image)
+    {
+        return;
+    }
+
+    LLRect background_rect = getLocalRect();
+    background_rect.stretch(-mBackgroundPad);
+    if (background_rect.getWidth() <= 0 || background_rect.getHeight() <= 0)
+    {
+        return;
+    }
+
+    const F32 alpha = getCurrentTransparency();
+    if (hasFocus())
+    {
+        LLColor4 focus_color = gFocusMgr.getFocusColor();
+        focus_color.setAlpha(alpha);
+        image->drawBorder(
+            background_rect.mLeft,
+            background_rect.mBottom,
+            background_rect.getWidth(),
+            background_rect.getHeight(),
+            focus_color,
+            gFocusMgr.getFocusFlashWidth());
+    }
+
+    LLColor4 image_color = LLColor4::white;
+    image_color.setAlpha(alpha);
+    image->draw(background_rect, image_color);
+
+    // LLLineEditor-style subtle inner shade ring.
+    if (background_rect.getWidth() > 2 && background_rect.getHeight() > 2)
+    {
+        LLRect inner_border_rect = background_rect;
+        inner_border_rect.stretch(-1);
+
+        LLColor4 inner_shade = LLColor4::black;
+        const F32 inner_alpha = getReadOnly() ? 0.12f : (hasFocus() ? 0.10f : 0.16f);
+        inner_shade.setAlpha(alpha * inner_alpha);
+
+        image->drawBorder(
+            inner_border_rect.mLeft,
+            inner_border_rect.mBottom,
+            inner_border_rect.getWidth(),
+            inner_border_rect.getHeight(),
+            inner_shade,
+            1);
+    }
+}
+
+void FSNearbyChatControl::applyTextPadding()
+{
+    LLRect base_rect = mScroller ? mScroller->getContentWindowRect() : getLocalRect();
+
+    const LLRect local_rect = getLocalRect();
+    if (base_rect.getHeight() < local_rect.getHeight())
+    {
+        base_rect.mTop = local_rect.mTop;
+        base_rect.mBottom = local_rect.mBottom;
+    }
+
+    base_rect.mLeft = llmin(base_rect.mRight, base_rect.mLeft + mTextPadLeft);
+    base_rect.mRight = llmax(base_rect.mLeft, base_rect.mRight - mTextPadRight);
+
+    if (base_rect != mVisibleTextRect)
+    {
+        mVisibleTextRect = base_rect;
+        needsReflow();
+    }
+}
+
+void FSNearbyChatControl::autohide(bool after_send)
 {
     if (isDefault())
     {
-        if (gSavedSettings.getBOOL("CloseChatOnReturn"))
+        const bool in_mouselook = gAgentCamera.cameraMouselook();
+        const bool show_interface_in_mouselook = gSavedSettings.getBOOL("FSShowInterfaceInMouselook");
+        const bool closeChatOnReturn = gSavedSettings.getBOOL("CloseChatOnReturn")
+                         && !(!in_mouselook && gSavedSettings.getBOOL("FSCloseChatOnReturnInMouselook"));
+        const bool autohideChatBar = gSavedSettings.getBOOL("AutohideChatBar");
+
+        if (closeChatOnReturn)
         {
             setFocus(false);
         }
 
-        if (gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
+        if ((!after_send || closeChatOnReturn) &&
+            ((in_mouselook && !show_interface_in_mouselook) || autohideChatBar))
         {
             FSNearbyChat::instance().showDefaultChatBar(false);
         }
@@ -108,11 +267,17 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
     bool handled = false;
     EChatType type = CHAT_TYPE_NORMAL;
 
+    if (LLChatMentionHelper::instance().isActive(this) ||
+        LLEmojiHelper::instance().isActive(this))
+    {
+        return LLChatEntry::handleKeyHere(key, mask);
+    }
+
     // autohide the chat bar if escape key was pressed and we're the default chat bar
     if (key == KEY_ESCAPE && mask == MASK_NONE)
     {
         // we let ESC key go through to the rest of the UI code, so don't set handled = true
-        autohide();
+        autohide(false);
         gAgent.stopTyping();
     }
     else if (KEY_RETURN == key)
@@ -138,7 +303,16 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
         else if (mask == (MASK_SHIFT | MASK_CONTROL))
         {
             // linefeed
-            addChar(llwchar(182));
+            if ((wstring_utf8_length(getWText()) + wchar_utf8_length(llwchar(182))) > getMaxTextLength())
+            {
+                LLUI::getInstance()->reportBadKeystroke();
+            }
+            else
+            {
+                LLWString line_break(1, llwchar(182));
+                insertText(line_break);
+            }
+
             return true;
         }
         else
@@ -152,16 +326,43 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
     if (handled)
     {
         // save current line in the history buffer
-        LLLineEditor::onCommit();
+        updateHistory();
 
         // send chat to nearby chat hub
         FSNearbyChat::instance().sendChat(getConvertedText(), type);
 
         setText(LLStringExplicit(""));
-        autohide();
+        autohide(true);
         return true;
     }
 
     // let the line editor handle everything we don't handle
-    return LLLineEditor::handleKeyHere(key, mask);
+    return LLChatEntry::handleKeyHere(key, mask);
+}
+
+uuid_vec_t FSNearbyChatControl::getSessionParticipants() const
+{
+    if (!isAgentAvatarValid() || !LLWorld::instanceExists() || !LFSimFeatureHandler::instanceExists())
+    {
+        return {};
+    }
+
+    uuid_vec_t avatar_ids;
+    LLWorld::instance().getAvatars(&avatar_ids, nullptr, gAgent.getPositionGlobal(), (F32)LFSimFeatureHandler::instance().sayRange());
+    return avatar_ids;
+}
+
+void FSNearbyChatControl::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+    if (behavior != RLV_BHVR_SHOWNAMES)
+    {
+        return;
+    }
+
+    setShowChatMentionPicker(!RlvActions::isRlvEnabled() || RlvActions::canShowName(RlvActions::SNC_DEFAULT));
+}
+
+void FSNearbyChatControl::updateEmojiHelperSetting(const LLSD& data)
+{
+    setShowEmojiHelper(data.asBoolean());
 }

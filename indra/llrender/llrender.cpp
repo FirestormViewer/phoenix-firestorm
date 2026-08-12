@@ -193,6 +193,7 @@ void LLTexUnit::bindFast(LLTexture* texture)
     glActiveTexture(GL_TEXTURE0 + mIndex);
     gGL.mCurrTextureUnitIndex = mIndex;
     mCurrTexture = gl_tex->getTexName();
+    mCurrTexType = gl_tex->getTarget();
     if (!mCurrTexture)
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("MISSING TEXTURE");
@@ -974,7 +975,7 @@ void LLRender::syncMatrices()
                 shader->uniformMatrix3fv(LLShaderMgr::NORMAL_MATRIX, 1, GL_FALSE, norm_mat);
             }
 
-            if (shader->getUniformLocation(LLShaderMgr::INVERSE_MODELVIEW_MATRIX))
+            if (shader->getUniformLocation(LLShaderMgr::INVERSE_MODELVIEW_MATRIX) >= 0)
             {
                 shader->uniformMatrix4fv(LLShaderMgr::INVERSE_MODELVIEW_MATRIX, 1, GL_FALSE, glm::value_ptr(cached_inv_mdv));
             }
@@ -1006,14 +1007,14 @@ void LLRender::syncMatrices()
             // GZ: This was previously disabled seemingly due to a bug involving the deferred renderer's regular pushing and popping of mats.
             // We're reenabling this and cleaning up the code around that - that would've been the appropriate course initially.
             // Anything beyond the standard proj and inv proj mats are special cases.  Please setup special uniforms accordingly in the future.
-            if (shader->getUniformLocation(LLShaderMgr::INVERSE_PROJECTION_MATRIX))
+            if (shader->getUniformLocation(LLShaderMgr::INVERSE_PROJECTION_MATRIX) >= 0)
             {
                 glm::mat4 inv_proj = glm::inverse(mat);
                 shader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, false, glm::value_ptr(inv_proj));
             }
 
             // Used by some full screen effects - such as full screen lights, glow, etc.
-            if (shader->getUniformLocation(LLShaderMgr::IDENTITY_MATRIX))
+            if (shader->getUniformLocation(LLShaderMgr::IDENTITY_MATRIX) >= 0)
             {
                 shader->uniformMatrix4fv(LLShaderMgr::IDENTITY_MATRIX, 1, GL_FALSE, glm::value_ptr(glm::identity<glm::mat4>()));
             }
@@ -1650,7 +1651,16 @@ LLVertexBuffer* LLRender::genBuffer(U32 attribute_mask, S32 count)
     LLVertexBuffer * vb = new LLVertexBuffer(attribute_mask);
     vb->allocateBuffer(count, 0);
 
-    vb->setBuffer();
+    // Non-Apple path uses glBufferSubData inside setXxxData, so the VBO
+    // must already be bound. On Apple, the VBO is lazily created in
+    // _unmapBuffer (LLAppleVBOPool); calling setBuffer() here would bind
+    // mGLBuffer == 0 and then setupVertexBuffer would issue
+    // glVertexAttribIPointer with a non-null offset against no bound
+    // GL_ARRAY_BUFFER -> GL_INVALID_OPERATION in core profile.
+    if (!gGLManager.mIsApple)
+    {
+        vb->setBuffer();
+    }
 
     vb->setPositionData(mVerticesp.get());
 
@@ -1665,6 +1675,9 @@ LLVertexBuffer* LLRender::genBuffer(U32 attribute_mask, S32 count)
     }
 
 #if LL_DARWIN
+    // unmapBuffer creates the GL buffer, uploads, and leaves it bound,
+    // drawBuffer's later setBuffer() then runs setupVertexBuffer against
+    // a valid VBO.
     vb->unmapBuffer();
 #endif
     vb->unbind();
@@ -1706,9 +1719,17 @@ void LLRender::vertex3f(const GLfloat& x, const GLfloat& y, const GLfloat& z)
         return;
     }
 
-    LLVector4a vert(x, y, z);
-    transform(vert);
-    mVerticesp[mCount] = vert;
+    if (mUIOffset.empty())
+    {
+        mVerticesp[mCount].set(x,y,z);
+    }
+    else
+    {
+        LLVector4a vert(x, y, z);
+        vert.add(mUIOffset.back());
+        vert.mul(mUIScale.back());
+        mVerticesp[mCount] = vert;
+    }
 
     mCount++;
     mVerticesp[mCount] = mVerticesp[mCount-1];
@@ -1716,54 +1737,7 @@ void LLRender::vertex3f(const GLfloat& x, const GLfloat& y, const GLfloat& z)
     mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
 }
 
-void LLRender::transform(LLVector3& vert)
-{
-    if (!mUIOffset.empty())
-    {
-        vert += LLVector3(mUIOffset.back().getF32ptr());
-        vert *= LLVector3(mUIScale.back().getF32ptr());
-    }
-}
-
-void LLRender::transform(LLVector4a& vert)
-{
-    if (!mUIOffset.empty())
-    {
-        vert.add(mUIOffset.back());
-        vert.mul(mUIScale.back());
-    }
-}
-
-void LLRender::untransform(LLVector3& vert)
-{
-    if (!mUIOffset.empty())
-    {
-        vert /= LLVector3(mUIScale.back().getF32ptr());
-        vert -= LLVector3(mUIOffset.back().getF32ptr());
-    }
-}
-
-void LLRender::batchTransform(LLVector4a* verts, U32 vert_count)
-{
-    if (!mUIOffset.empty())
-    {
-        const LLVector4a& offset = mUIOffset.back();
-        const LLVector4a& scale = mUIScale.back();
-
-        for (U32 i = 0; i < vert_count; ++i)
-        {
-            verts[i].add(offset);
-            verts[i].mul(scale);
-        }
-    }
-}
-
-void LLRender::vertexBatchPreTransformed(const std::vector<LLVector4a>& verts)
-{
-    vertexBatchPreTransformed(verts.data(), narrow(verts.size()));
-}
-
-void LLRender::vertexBatchPreTransformed(const LLVector4a* verts, S32 vert_count)
+void LLRender::vertexBatchPreTransformed(LLVector4a* verts, S32 vert_count)
 {
     if (mCount + vert_count > 4094)
     {
@@ -1784,7 +1758,7 @@ void LLRender::vertexBatchPreTransformed(const LLVector4a* verts, S32 vert_count
         mVerticesp[mCount] = mVerticesp[mCount-1];
 }
 
-void LLRender::vertexBatchPreTransformed(const LLVector4a* verts, const LLVector2* uvs, S32 vert_count)
+void LLRender::vertexBatchPreTransformed(LLVector4a* verts, LLVector2* uvs, S32 vert_count)
 {
     if (mCount + vert_count > 4094)
     {
@@ -1808,7 +1782,7 @@ void LLRender::vertexBatchPreTransformed(const LLVector4a* verts, const LLVector
     }
 }
 
-void LLRender::vertexBatchPreTransformed(const LLVector4a* verts, const LLVector2* uvs, const LLColor4U* colors, S32 vert_count)
+void LLRender::vertexBatchPreTransformed(LLVector4a* verts, LLVector2* uvs, LLColor4U* colors, S32 vert_count)
 {
     if (mCount + vert_count > 4094)
     {

@@ -17,7 +17,7 @@
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -76,9 +76,10 @@ typedef enum
     LAST_EXEC_LOGOUT_CRASH,
     LAST_EXEC_BAD_ALLOC,
     LAST_EXEC_MISSING_FILES,
-    LAST_EXEC_GRAPHICS_INIT,
+    LAST_EXEC_INIT,
     LAST_EXEC_UNKNOWN,
     LAST_EXEC_LOGOUT_UNKNOWN,
+    LAST_EXEC_OS_EVENT,
     LAST_EXEC_COUNT
 } eLastExecEvent;
 
@@ -113,13 +114,11 @@ public:
                    const LLSD& substitutions = LLSD()); // Display an error dialog and forcibly quit.
     void earlyExitNoNotify(); // Do not display error dialog then forcibly quit.
     void abortQuit();  // Called to abort a quit request.
+    void sendViewerStatistics(bool include_preferences);
 
     bool quitRequested() { return mQuitRequested; }
     bool logoutRequestSent() { return mLogoutRequestSent; }
     bool isSecondInstance() { return mSecondInstance; }
-    bool isUpdaterMissing(); // In use by tests
-    bool waitForUpdater();
-
     void writeDebugInfo(bool isStatic=true);
 
     void setServerReleaseNotesURL(const std::string& url) { mServerReleaseNotesURL = url; }
@@ -214,6 +213,7 @@ public:
     void pingMainloopTimeout(std::string_view state);
 
     F32 getMainloopTimeoutSec() const;
+    std::string getMainloopWatchdogState() const;
 
     // Handle the 'login completed' event.
     // *NOTE:Mani Fix this for login abstraction!!
@@ -258,11 +258,20 @@ public:
     void createErrorMarker(eLastExecEvent error_code) const;
     bool errorMarkerExists() const;
 
+    void createCloseRequestMarker() const;
+    void removeCloseRequestMarker() const;
+    void createInitedMarker() const;
+    void removeInitedMarker() const;
+    void createWatchdogMarker() const;
+    void removeWatchdogMarker() const;
+
     // Attempt a 'soft' quit with disconnect and saving of settings/cache.
     // Intended to be thread safe.
     // Good chance of viewer crashing either way, but better than alternatives.
     // Note: mQuitRequested can be aborted by user.
     void outOfMemorySoftQuit();
+
+    virtual void setPermitOSHibernation(bool permit);
 
 #ifdef LL_DISCORD
     static void initDiscordSocial();
@@ -275,11 +284,20 @@ protected:
     virtual bool initWindow(); // Initialize the viewer's window.
     virtual void initLoggingAndGetLastDuration(); // Initialize log files, logging system
     virtual void initConsole() {}; // Initialize OS level debugging console.
+    virtual void cleanupConsole() {}; // Cleanup OS level debugging console.
     virtual bool initHardwareTest() { return true; } // A false result indicates the app should quit.
     virtual void overrideDetectedHardware(); // <FS:Beq/> Override VRAM (and others in future?) consistently.
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
     virtual void bugsplatAddStaticAttributes(const LLSD& info) {/*empty*/}; // <FS:Beq/> create a NOOP base impl
+
+    typedef enum
+    {
+        LL_HIBERNATE_MODE_DEFAULT = 0, // Use the platform's default behavior.
+        LL_HIBERNATE_MODE_PREVENT = 1,
+        LL_HIBERNATE_MODE_PREVENT_SCREEN = 2,
+    } eHibernationMode;
+    virtual void setOSHibernationMode(eHibernationMode mode);
 
     virtual bool initParseCommandLine(LLCommandLineParser& clp)
         { return true; } // Allow platforms to specify the command line args.
@@ -290,6 +308,14 @@ protected:
 
     virtual void sendOutOfDiskSpaceNotification();
 
+protected:
+
+    // NSIS relies on this to detect if viewer is up.
+    // NSIS's method is somewhat unreliable since window
+    // can close long before cleanup is done.
+    // sendURLToOtherInstance also relies on this to detect if viewer is up.
+    static constexpr const char* sWindowClass = "Second Life";
+
 private:
 
     bool doFrame();
@@ -298,6 +324,7 @@ private:
     bool initThreads(); // Initialize viewer threads, return false on failure.
     bool initConfiguration(); // Initialize settings from the command line/config file.
     void initStrings();       // Initialize LLTrans machinery
+    void loadLocalizedSettingsComments(); // Override Debug Settings comments for current locale
     bool initCache(); // Initialize local client cache.
 
     // We have switched locations of both Mac and Windows cache, make sure
@@ -330,7 +357,6 @@ private:
     static LLAppViewer* sInstance;
 
     bool mSecondInstance; // Is this a second instance of the app?
-    bool mUpdaterNotFound; // True when attempt to start updater failed
 
     std::string mMarkerFileName;
     LLAPRFile mMarkerFile; // A file created to indicate the app is running.
@@ -378,6 +404,7 @@ private:
 
     // For performance and metric gathering
     class LLThread* mFastTimerLogThread;
+    class LLThread* mCefCachePurgeThread; // <FS:TJ/> For CEF cache purging in a background thread
 
     // for tracking viewer<->region circuit death
     bool mAgentRegionLastAlive;
@@ -387,6 +414,10 @@ private:
     LLAppCoreHttp mAppCoreHttp;
 
     bool mIsFirstRun;
+
+    eHibernationMode mCurrentHibernationMode = LL_HIBERNATE_MODE_DEFAULT;
+    boost::signals2::scoped_connection mOSHibernationModeChangeConnection;
+
     // <FS:Zi> Backup Settings
 public:
     void setSaveSettingsOnExit(bool state) {mSaveSettingsOnExit = state; };
@@ -397,6 +428,7 @@ private:
 
     // <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
     virtual void startCachePurge() {}
+    void startCefCachePurge(); // <FS:TJ/> Purge this in another thread to prevent very slow startup times
 };
 
 // Globals with external linkage. From viewer.h

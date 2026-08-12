@@ -38,9 +38,10 @@
 #include "llavatarnamecache.h"
 #include "llchatentry.h"
 #include "llcommandhandler.h"
+#include "llgestureautocompletehelper.h"
 #include "llgesturemgr.h"
 #include "lllineeditor.h"
-#include "llspinctrl.h"
+#include "llmultigesture.h"
 #include "llviewercontrol.h"
 #include "llviewerinput.h"
 #include "llviewerstats.h"
@@ -52,6 +53,7 @@ constexpr U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 
 // *HACK* chat bar cannot return its correct height for some reason
 constexpr S32 MAGIC_CHAT_BAR_PAD = 5;
+constexpr size_t MAX_GESTURE_AUTOCOMPLETE_ROWS = 50;
 
 struct LLChatTypeTrigger {
     std::string name;
@@ -63,6 +65,65 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
     { "/shout"      , CHAT_TYPE_SHOUT}
 };
 
+namespace
+{
+    bool buildGestureAutocompleteRows(
+        const std::string& prefix,
+        std::vector<LLGestureAutocompleteHelper::Row>& rows,
+        size_t& total)
+    {
+        rows.clear();
+        total = 0;
+
+        // Wait for at least one character after the slash before offering matches.
+        if (prefix.size() < 2 || prefix[0] != '/' || prefix.find_first_of(" \t") != std::string::npos)
+        {
+            return false;
+        }
+
+        std::string lower_prefix = prefix;
+        LLStringUtil::toLower(lower_prefix);
+
+        std::map<std::string, std::string> unique;
+        const LLGestureMgr::item_map_t& active = LLGestureMgr::instance().getActiveGestures();
+
+        for (const auto& entry : active)
+        {
+            LLMultiGesture* gesture = entry.second;
+
+            if (!gesture || gesture->getTrigger().empty() || gesture->getTrigger()[0] != '/')
+            {
+                continue;
+            }
+
+            std::string lower_trigger = gesture->getTrigger();
+            LLStringUtil::toLower(lower_trigger);
+
+            if (lower_trigger.compare(0, lower_prefix.size(), lower_prefix) != 0)
+            {
+                continue;
+            }
+
+            unique.emplace(
+                gesture->getTrigger(),
+                gesture->mName);
+        }
+
+        for (const auto& [trigger, name] : unique)
+        {
+            if (rows.size() >= MAX_GESTURE_AUTOCOMPLETE_ROWS)
+            {
+                break;
+            }
+
+            rows.push_back({ trigger, trigger, name });
+        }
+
+        total = unique.size();
+
+        return total > 0;
+    }
+}
 
 // This function just sends the message, with no other processing. Moved out
 // of send_chat_from_viewer.
@@ -250,6 +311,9 @@ FSNearbyChat::~FSNearbyChat()
 void FSNearbyChat::sendChat(LLWString text, EChatType type)
 {
     LLWStringUtil::trim(text);
+    LLWStringUtil::replaceChar(text, 182, '\n'); // Convert paragraph symbols back into newlines.
+
+    LLGestureAutocompleteHelper::instance().hideHelper();
 
     if (!text.empty())
     {
@@ -356,7 +420,7 @@ void FSNearbyChat::showDefaultChatBar(bool visible, const char* text) const
     if (mDefaultChatBar->getText().empty())
     {
         mDefaultChatBar->setText(LLStringExplicit(text));
-        mDefaultChatBar->setCursorToEnd();
+        mDefaultChatBar->setCursorAndScrollToEnd();
     }
     // </FS:KC> Fix for bad edge snapping
 }
@@ -631,8 +695,42 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
     KEY key = gKeyboard->currentKey();
     MASK mask = gKeyboard->currentMask(false);
 
+    static LLCachedControl<bool> autocomplete_gestures(gSavedSettings, "ChatAutocompleteGestures", true);
+
+    if (autocomplete_gestures)
+    {
+        std::vector<LLGestureAutocompleteHelper::Row> rows;
+        size_t total = 0;
+        const std::string utf8_trigger = wstring_to_utf8str(raw_text);
+
+        if (buildGestureAutocompleteRows(utf8_trigger, rows, total))
+        {
+            LLGestureAutocompleteHelper::instance().showHelper(
+                source,
+                rows,
+                total,
+                [&](std::string trigger)
+                {
+                    if (chat_entry)
+                    {
+                        chat_entry->setText(trigger + " ");
+                        chat_entry->endOfDoc();
+                    }
+                    else
+                    {
+                        line_editor->setText(trigger + " ");
+                        line_editor->setCursorToEnd();
+                    }
+                });
+            return;
+        }
+
+        LLGestureAutocompleteHelper::instance().hideHelper(source);
+    }
+
     // Ignore "special" keys, like backspace, arrows, etc.
-    if (length > 1
+    if (autocomplete_gestures
+        && length > 1
         && raw_text[0] == '/'
         && key < KEY_SPECIAL
         && gSavedSettings.getBOOL("FSChatbarGestureAutoCompleteEnable"))

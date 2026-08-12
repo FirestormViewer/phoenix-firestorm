@@ -1,0 +1,38 @@
+<panel label="Orte" name="panel_dir_places">
+    <string name="searching_text">
+        Suche...
+    </string>
+    <string name="not_found_text">
+        Nichts gefunden.
+    </string>
+    <string name="found_text">
+        [COUNT] gefunden.
+    </string>
+    <text name="find">
+        Suchbegriffe eingeben:
+    </text>
+    <combo_box name="Category">
+        <combo_item name="AnyCategory" label="Alle Kategorien"/>
+        <combo_item name="LindenLocation" vlabel="Lindenort"/>
+        <combo_item name="Arts&amp;Culture" label="Kunst &amp; Kultur"/>
+        <combo_item name="Business" label="Firmen"/>
+        <combo_item name="Educational" label="Bildung"/>
+        <combo_item name="Gaming" label="Spielen"/>
+        <combo_item name="Hangout" label="Treffpunkt"/>
+        <combo_item name="NewcomerFriendly" label="Anfängergerecht"/>
+        <combo_item name="Parks&amp;Nature" label="Parks und Natur"/>
+        <combo_item name="Residential" label="Wohngebiet"/>
+        <combo_item name="Shopping" label="Shopping"/>
+        <combo_item name="Adult" label="Adult"/>
+        <combo_item name="Other" label="Sonstige"/>
+    </combo_box>
+    <icon tool_tip="Generell" name="rating_icon_general"/>
+    <icon tool_tip="Moderat" name="rating_icon_moderate"/>
+    <icon tool_tip="Adult" name="rating_icon_adult"/>
+    <scroll_list name="results">
+        <column label="Name" name="name"/>
+        <column label="Traffic" name="dwell"/>
+    </scroll_list>
+    <button tool_tip="Vorherige Seite" name="prev_btn"/>
+    <button tool_tip="Nächste Seite" name="next_btn"/>
+</panel>

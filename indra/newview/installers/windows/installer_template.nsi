@@ -60,7 +60,7 @@ Unicode true                # Enable unicode support
 !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
 !include "%%SOURCE%%\installers\windows\lang_it.nsi"
 !include "%%SOURCE%%\installers\windows\lang_pl.nsi" ;<FS:Ansariel> Polish is supported
-##!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
+!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
 ##!include "%%SOURCE%%\installers\windows\lang_tr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
@@ -74,7 +74,7 @@ LangString LanguageCode ${LANG_FRENCH}   "fr"
 LangString LanguageCode ${LANG_JAPANESE} "ja"
 LangString LanguageCode ${LANG_ITALIAN}  "it"
 LangString LanguageCode ${LANG_POLISH}   "pl"
-##LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
+LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
 LangString LanguageCode ${LANG_RUSSIAN}  "ru"
 ##LangString LanguageCode ${LANG_TURKISH}  "tr"
 LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
@@ -976,8 +976,21 @@ Function un.UserSettingsFiles
 
 StrCmp $DO_UNINSTALL_V2 "true" Keep			# Don't remove user's settings files on auto upgrade
 
-# Ask if user wants to keep data files or not
-MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
+ClearErrors
+Push $0
+${GetParameters} $COMMANDLINE
+${GetOptionsS} $COMMANDLINE "/clrusrfiles" $0
+# GetOptionsS returns an error if option does not exist, jump past Goto.
+IfErrors +3 0
+  Pop $0
+  Goto Remove
+
+Pop $0
+ClearErrors
+
+ifSilent Keep 0
+  # Ask if user wants to keep data files or not
+  MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
 
 Remove:
 Push $0
@@ -1085,13 +1098,27 @@ RMDir "$INSTDIR"
 IfFileExists "$INSTDIR" FOLDERFOUND NOFOLDER
 
 FOLDERFOUND:
+ifSilent NOFOLDER 0
 # Silent uninstall always removes all files (/SD IDYES)
   MessageBox MB_YESNO $(DeleteProgramFilesMB) /SD IDYES IDNO NOFOLDER
   RMDir /r "$INSTDIR"
 
 NOFOLDER:
 
-MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
+ClearErrors
+Push $0
+${GetParameters} $COMMANDLINE
+${GetOptionsS} $COMMANDLINE "/clearreg" $0
+# GetOptionsS returns an error if option does not exist, jump past Goto.
+IfErrors +3 0
+  Pop $0
+  Goto DeleteKeys
+
+Pop $0
+ClearErrors
+
+ifSilent NoDelete 0
+	MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
@@ -1160,23 +1187,11 @@ label_ask_launch:
         MessageBox MB_YESNO $(InstSuccesssQuestion) IDYES label_launch IDNO label_no_launch
 
 label_launch:
-        # Assumes SetOutPath $INSTDIR
-        # Run INSTEXE (our updater), passing VIEWER_EXE plus the command-line
-        # arguments built into our shortcuts. This gives the updater a chance
-        # to verify that the viewer we just installed is appropriate for the
-        # running system -- or, if not, to download and install a different
-        # viewer. For instance, if a user running 32-bit Windows installs a
-        # 64-bit viewer, it cannot run on this system. But since the updater
-        # is a 32-bit executable even in the 64-bit viewer package, the
-        # updater can detect the problem and adapt accordingly.
-        # Once everything is in order, the updater will run the specified
-        # viewer with the specified params.
-        # Quote the updater executable and the viewer executable because each
-        # must be a distinct command-line token, but DO NOT quote the language
-        # string because it must decompose into separate command-line tokens.
-        # <FS:Ansariel> No updater, thanks!
-        # Exec '"$INSTDIR\$INSTEXE" precheck "$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
+        # <FS:TJ> Exec the viewer through explorer.exe so it's not ran as admin causing issues
+        #Exec '"$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
         Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
+        # </FS:TJ>
+
 label_no_launch:
         # </FS:PP>
 FunctionEnd
