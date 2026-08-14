@@ -384,7 +384,15 @@ void LLLandmarksPanel::doActionOnCurSelectedLandmark(LLLandmarkList::loaded_call
 
 LLFolderViewItem* LLLandmarksPanel::getCurSelectedItem() const
 {
-    return mCurrentSelectedList ?  mCurrentSelectedList->getRootFolder()->getCurSelectedItem() : NULL;
+    // <FS:TJ> [FIRE-36899] Fix crash when accessing a potentially null root folder
+    //return mCurrentSelectedList ?  mCurrentSelectedList->getRootFolder()->getCurSelectedItem() : NULL;
+    if (!mCurrentSelectedList)
+    {
+        return nullptr;
+    }
+    auto root_folder = mCurrentSelectedList->getRootFolder();
+    return root_folder ? root_folder->getCurSelectedItem() : nullptr;
+    // </FS:TJ>
 }
 
 LLFolderViewModelItemInventory* LLLandmarksPanel::getCurSelectedViewModelItem() const
