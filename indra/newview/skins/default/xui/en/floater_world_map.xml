@@ -644,7 +644,7 @@
       left="0"
       name="events_label"
       top_pad="16"
-      width="70">
+      width="65">
       Location:
       </text>
       <spinner
@@ -658,7 +658,7 @@
         max_val="8191"
         min_val="0"
         name="teleport_coordinate_x"
-        width="44" >
+        width="52" >
         <spinner.commit_callback 
           function="WMap.Coordinates"/>
       </spinner>
@@ -673,7 +673,7 @@
         max_val="8191"
         min_val="0"
         name="teleport_coordinate_y"
-		width="44">
+		width="52">
         <spinner.commit_callback
           function="WMap.Coordinates"/>
       </spinner>

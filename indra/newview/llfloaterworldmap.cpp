@@ -455,6 +455,13 @@ bool LLFloaterWorldMap::postBuild()
     mTeleportCoordSpinZ = getChild<LLSpinCtrl>("teleport_coordinate_z");
     // </FS>
 
+    // <FS:TJ> OpenSim max value for Z height can go well beyond 10k, U16_MAX should suffice
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        mTeleportCoordSpinZ->setMaxValue(U16_MAX);
+    }
+    // </FS:TJ>
+
     mFriendCombo = getChild<LLComboBox>("friend combo");
     mFriendCombo->selectFirstItem();
     mFriendCombo->setPrearrangeCallback(boost::bind(&LLFloaterWorldMap::onAvatarComboPrearrange, this));
@@ -1153,7 +1160,7 @@ void LLFloaterWorldMap::trackURL(const std::string& region_name, S32 x_coord, S3
     {
         LLViewerRegion* regionp = gAgent.getRegion();
         F32 min_sim_height = regionp ? regionp->getMinSimHeight() : 0.f;
-        z_coord = llclamp(z_coord, min_sim_height, 4096);
+        z_coord = llclamp(z_coord, min_sim_height, U16_MAX);
     }
     else
     {
