@@ -64,6 +64,7 @@
 #include "lltoolbarview.h"
 #include "lltracker.h"
 #include "lltrans.h"
+#include "llurlregistry.h" // <FS:TJ/> Access to isUrl
 #include "llviewerinventory.h"  // LLViewerInventoryItem
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
@@ -2041,6 +2042,19 @@ void LLFloaterWorldMap::onCommitSearchResult(bool from_search)
 
             constexpr F64 SIM_COORD_DEFAULT = 128.0;
             LLVector3 pos_local(SIM_COORD_DEFAULT, SIM_COORD_DEFAULT, 0.0f);
+            // <FS:TJ> [FIRE-36896] Set the teleport coordinates if provided in OpenSim
+        #ifdef OPENSIM
+            if (LLGridManager::getInstance()->isInOpenSim() && LLUrlRegistry::instance().isUrl(sim_name))
+            {
+                LLSLURL slurl = LLSLURL(sim_name);
+                if (slurl.getType() == LLSLURL::LOCATION)
+                {
+                    LLVector3 slurl_position = slurl.getPosition();
+                    pos_local.set(slurl_position);
+                }
+            }
+        #endif
+            // </FS:TJ>
 
             // Did this value come from a trackURL() request?
             if (!mCompletingRegionPos.isExactlyZero())
