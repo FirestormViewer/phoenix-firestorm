@@ -2886,6 +2886,15 @@ Die Einstellungen können nicht mit lokalen Texturen gespeichert werden.
 	<notification name="SystemMessageTip">
 		[MESSAGE]
 	</notification>
+	<notification name="ExternalEditorServerStarted">
+		Externer Editor-Server auf Port [PORT] gestartet.
+	</notification>
+	<notification name="ExternalEditorServerFailed">
+		Externer Editor-Server auf Port [PORT] konnte nicht gestartet werden.
+	</notification>
+	<notification name="ExternalEditorServerStopped">
+		Externer Editor-Server gestoppt.
+	</notification>
 	<notification name="IMSystemMessageTip">
 		[MESSAGE]
 	</notification>

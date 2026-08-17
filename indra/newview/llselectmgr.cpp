@@ -6392,7 +6392,7 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 
             if (auto ws_server = LLScriptEditorWSServer::getServer())
             {
-                ws_server->onObjectPropertyChanged(id, name, desc);
+                ws_server->onObjectPropertyChanged(id, name, desc, inv_serial);
             }
         }
     }

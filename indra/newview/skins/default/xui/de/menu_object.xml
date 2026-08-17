@@ -18,6 +18,8 @@
 		<menu_item_check label="Verknüpfte Teile bearbeiten" name="Object Edit Linked Parts"/>
 		<menu_item_call label="Skripte rekompilieren (Mono)" name="Mono"/>
 		<menu_item_call label="Skripte rekompilieren (LSL)" name="LSL"/>
+		<menu_item_call label="Skripte rekompilieren (Lua)" name="Lua"/>
+		<menu_item_call label="Skripte rekompilieren (LSL auf Luau)" name="LSL on Luau"/>
 		<menu_item_call label="Skripte zurücksetzen" name="Object Reset Scripts"/>
 		<menu_item_call label="Skripte ausführen" name="Object Set Scripts to Running"/>
 		<menu_item_call label="Skripte stoppen" name="Object Set Scripts to Not Running"/>

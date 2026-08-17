@@ -681,6 +681,7 @@ set(viewer_SOURCE_FILES
     llpreview.cpp
     llpreviewanim.cpp
     llpreviewgesture.cpp
+    llpublishedobjectmgr.cpp
     llpreviewnotecard.cpp
     llpreviewscript.cpp
     llpreviewsound.cpp
@@ -1535,6 +1536,7 @@ set(viewer_HEADER_FILES
     llpreview.h
     llpreviewanim.h
     llpreviewgesture.h
+    llpublishedobjectmgr.h
     llpreviewnotecard.h
     llpreviewscript.h
     llpreviewsound.h

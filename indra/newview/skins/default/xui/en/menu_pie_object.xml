@@ -484,31 +484,59 @@
             label="Scripts &gt;"
             name="ScriptsMenu">
             
-            <pie_slice
-                enabled="false"
-                label="Compile (Mono)"
-                name="CompileMono">
-                <pie_slice.on_click
-                    function="Tools.SelectedScriptAction"
-                    parameter="compile mono" />
-                <pie_slice.on_enable
-                    function="EditableSelectedMono" />
-            </pie_slice>
+            <pie_menu
+                label="Compile &gt;"
+                name="CompileScriptsMenu">
+
+                <pie_slice
+                    enabled="false"
+                    label="Mono"
+                    name="CompileMono">
+                    <pie_slice.on_click
+                        function="Tools.SelectedScriptAction"
+                        parameter="compile mono" />
+                    <pie_slice.on_enable
+                        function="EditableSelectedMono" />
+                </pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="LSL"
+                    name="CompileLSL">
+                    <pie_slice.on_click
+                        function="Tools.SelectedScriptAction"
+                        parameter="compile lsl" />
+                    <pie_slice.on_enable
+                        function="EditableSelected" />
+                </pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="Lua"
+                    name="CompileLua">
+                    <pie_slice.on_click
+                        function="Tools.SelectedScriptAction"
+                        parameter="compile lua" />
+                    <pie_slice.on_enable
+                        function="EditableSelected" />
+                </pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="LSL on Luau"
+                    name="CompileLSLonLuau">
+                    <pie_slice.on_click
+                        function="Tools.SelectedScriptAction"
+                        parameter="compile lsl-luau" />
+                    <pie_slice.on_enable
+                        function="EditableSelected" />
+                </pie_slice>
+
+            </pie_menu>
 
             <pie_slice
                 enabled="false"
-                label="Compile (LSL)"
-                name="CompileLSL">
-                <pie_slice.on_click
-                    function="Tools.SelectedScriptAction"
-                    parameter="compile lsl" />
-                <pie_slice.on_enable
-                    function="EditableSelected" />
-            </pie_slice>
-
-            <pie_slice
-                enabled="false"
-                label="Reset Scripts"
+                label="Reset"
                 name="Object Reset Scripts">
                 <pie_slice.on_click
                     function="Tools.SelectedScriptAction"
@@ -519,7 +547,7 @@
 
             <pie_slice
                 enabled="false"
-                label="Run Scripts"
+                label="Run"
                 name="Object Set Scripts to Running">
                 <pie_slice.on_click
                     function="Tools.SelectedScriptAction"
@@ -530,7 +558,7 @@
 
             <pie_slice
                 enabled="false"
-                label="Stop Scripts"
+                label="Stop"
                 name="Object Set Scripts to Not Running">
                 <pie_slice.on_click
                     function="Tools.SelectedScriptAction"
@@ -541,7 +569,7 @@
 
             <pie_slice
                 enabled="false"
-                label="Remove Scripts"
+                label="Remove"
                 name="Remove Scripts From Selection">
                 <pie_slice.on_click
                     function="Tools.SelectedScriptAction"
@@ -552,7 +580,7 @@
             
             <pie_slice
                 enabled="true"
-                label="Script Info"
+                label="Info"
                 name="ScriptInfo">
                 <pie_slice.on_click
                     function="Tools.ScriptInfo" />
