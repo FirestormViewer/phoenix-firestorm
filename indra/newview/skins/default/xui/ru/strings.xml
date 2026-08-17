@@ -5625,9 +5625,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Command_Grid_Status_Label">
 		Статус Сетки
 	</string>
-	<string name="Command_HowTo_Label">
-		Инструкция
-	</string>
 	<string name="Command_Inventory_Label">
 		Инвентарь
 	</string>
@@ -5822,9 +5819,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Показать текущий статус сетки
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Выполнение типичных задач
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Просмотр и использование вашего имущества (CTRL+I)

@@ -366,7 +366,7 @@
          name="notes_editor"
          read_only="true"
          spellcheck="true"
-         text_type="ascii_with_newline"
+         text_type="ascii_with_newline_no_pipe"
          top_pad="0"
          right="-1"
          wrap="true" />

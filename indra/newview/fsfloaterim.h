@@ -156,7 +156,7 @@ public:
 
     void loadInitialInvitedIDs();
 
-    bool isP2PChat() const { return mIsP2PChat; }
+    bool isP2PSessionType() const { return mIsP2PChat; }
 
     void handleMinimized(bool minimized);
 

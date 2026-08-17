@@ -23,4 +23,5 @@
 		<button label="Copiar" name="copy_btn" tool_tip="Copia o nome da configuração para a área de transferência." width="60"/>
 		<button label="Valor padrão" name="default_btn" tool_tip="Restaura o valor desta configuração para o padrão." width="85"/>
 	</panel>
+	<check_box label="Mostrar apenas configurações alteradas" name="hide_default"/>
 </floater>

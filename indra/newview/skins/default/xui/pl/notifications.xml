@@ -1540,7 +1540,6 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		Twoja postać pojawi się za moment.
 
 Używaj strzałek żeby się poruszać.
-Naciśnij F1 w dowolnej chwili po pomoc albo żeby dowiedzieć się więcej o [CURRENT_GRID].
 Wybierz awatara właściwej płci. Ten wybór będzie można później zmienić.
 		<usetemplate name="okcancelbuttons" notext="Kobieta" yestext="Mężczyzna"/>
 	</notification>
@@ -5133,12 +5132,6 @@ Będziesz mógł/a dodać metodę płatności w kasie.
 		<form name="form">
 			<button name="Continue" text="Kontynuuj" />
 			<button name="Cancel" text="Anuluj" />
-		</form>
-	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
-		<form name="form">
-			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
 		</form>
 	</notification>
 	<notification name="FSBWTooHigh">

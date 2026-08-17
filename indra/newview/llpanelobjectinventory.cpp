@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1824,7 +1824,6 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
                     params.name = obj->getName();
                     params.root = mFolders;
                     params.listener = bridge;
-                    params.tool_tip = params.name;
                     params.font_color = item_color;
                     params.font_highlight_color = item_color;
 
@@ -1848,7 +1847,6 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
                     params.listener = bridge;
                     params.creation_date = bridge->getCreationDate();
                     params.rect = LLRect();
-                    params.tool_tip = params.name;
                     params.font_color = item_color;
                     params.font_highlight_color = item_color;
 

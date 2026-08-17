@@ -160,6 +160,7 @@
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
 			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>
+			<menu_item_check label="Sound stummschalten/Stummschaltung aufheben" name="toggle_sound"/>
 			<menu label="Mehrfach-Import" name="WL Bulk Import">
 				<menu_item_call label="Tage..." name="WL Bulk Import Days"/>
 				<menu_item_call label="Himmel..." name="WL Bulk Import Skies"/>
@@ -297,7 +298,6 @@
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
 		<menu_item_call label="Stundenplan Firestorm-Klassen" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestorm-Eventkalender" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Anweisungen..." name="How To"/>
 		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Whitelist-Unterstützung" name="whitelist_folders"/>
@@ -568,6 +568,7 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Animierte Avatar-System-Kleidung rendern" name="Render Avatar Cloth"/>
 			<menu_item_check label="Sammeln von Vertex Buffern für Schrift aktivieren" name="Collect Font Vertex Buffers"/>
+			<menu_item_check label="Sammeln von Vertex Buffern für UI-Texturen aktivieren" name="Collect UI Image Vertex Buffers"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
 		</menu>

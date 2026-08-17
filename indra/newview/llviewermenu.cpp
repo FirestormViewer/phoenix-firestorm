@@ -2617,7 +2617,7 @@ class LLAdvancedDropPacket : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        gMessageSystem->mPacketRing.dropPackets(1);
+        gMessageSystem->dropPackets(1);
         return true;
     }
 };
@@ -4506,7 +4506,7 @@ class LLAvatarSetImpostorMode : public view_listener_t
                 return false;
         }
 
-        LLVOAvatar::cullAvatarsByPixelArea();
+        LLVOAvatar::setCullNeedsUpdate();
         return true;
     }   // handleEvent()
 };
@@ -4889,17 +4889,6 @@ void handle_avatar_eject(const LLSD& avatar_id)
 //              }
 //          }
 //      }
-}
-
-bool my_profile_visible()
-{
-    LLFloater* floaterp = LLAvatarActions::getProfileFloater(gAgentID);
-    return floaterp && floaterp->isInVisibleChain();
-}
-
-bool picks_tab_visible()
-{
-    return my_profile_visible() && LLAvatarActions::isPickTabSelected(gAgentID);
 }
 
 bool enable_freeze_eject(const LLSD& avatar_id)
@@ -6440,6 +6429,27 @@ void handle_link_objects()
     // </FS:Ansariel>
     {
         LLSelectMgr::getInstance()->linkObjects();
+    }
+}
+
+void handle_unlink_objects()
+{
+    if (LLSelectMgr::getInstance()->getSelection()->isEmpty())
+    {
+        LLPanel* visited_panel = LLFloaterSidePanelContainer::getPanel("places", "Teleport History");
+        if (visited_panel && visited_panel->isInVisibleChain())
+        {
+            LLFloaterReg::hideInstance("places");
+        }
+        else
+        {
+            LLFloaterReg::toggleInstanceOrBringToFront("places");
+            LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_teleport_history_tab"));
+        }
+    }
+    else
+    {
+        LLSelectMgr::getInstance()->unlinkObjects();
     }
 }
 
@@ -8411,7 +8421,7 @@ class LLAvatarTogglePicks : public view_listener_t
             instance->setFocus(true);
             LLAvatarActions::showPicks(gAgent.getID());
         }
-        else if (picks_tab_visible())
+        else if (LLAvatarActions::myPicksTabVisible())
         {
             instance->closeFloater();
         }
@@ -10825,15 +10835,6 @@ class LLToolsEnableSaveToObjectInventory : public view_listener_t
     }
 };
 
-class LLToggleHowTo : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        LLFloaterReg::toggleInstanceOrBringToFront("guidebook");
-        return true;
-    }
-};
-
 class LLViewEnableMouselook : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12409,6 +12410,16 @@ void handle_flush_name_caches()
     if (gCacheName) gCacheName->clear();
 }
 
+bool is_master_audio_muted()
+{
+    return LLAppViewer::instance()->getMasterSystemAudioMute();
+}
+
+void toggle_master_audio()
+{
+    LLAppViewer::instance()->setMasterSystemAudioMute(!is_master_audio_muted());
+}
+
 class LLUploadCostCalculator : public view_listener_t
 {
     std::string mCostStr;
@@ -12534,6 +12545,24 @@ void show_topinfobar_context_menu(LLView* ctrl, S32 x, S32 y)
     show_topbarinfo_context_menu->buildDrawLabels();
     show_topbarinfo_context_menu->updateParent(LLMenuGL::sMenuContainer);
     LLMenuGL::showPopup(ctrl, show_topbarinfo_context_menu, x, y);
+}
+
+static void register_agent_ui_callbacks()
+{
+    // These functions are used by menu and commands, they need to persist for the lifetime of the application
+    // Note: executes before LLToolBar::createButton and before menu builds
+    LLUICtrl::EnableCallbackRegistry::Registrar& global_enable = LLUICtrl::EnableCallbackRegistry::defaultRegistrar();
+    LLUICtrl::CommitCallbackRegistry::Registrar& global_commit = LLUICtrl::CommitCallbackRegistry::defaultRegistrar();
+    global_commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
+    global_enable.add("Agent.enableFlyLand", boost::bind(&enable_fly_land));
+    global_enable.add("Agent.enableFlying", boost::bind(&LLAgent::enableFlying)); // <FS:Ansariel> Keep this
+    global_commit.add("Agent.PressMicrophone", boost::bind(&LLAgent::pressMicrophone, _2));
+    global_commit.add("Agent.ReleaseMicrophone", boost::bind(&LLAgent::releaseMicrophone, _2));
+    global_commit.add("Agent.ToggleMicrophone", boost::bind(&LLAgent::toggleMicrophone, _2));
+    global_enable.add("Agent.IsMicrophoneOn", boost::bind(&LLAgent::isMicrophoneOn, _2));
+    global_enable.add("Agent.IsActionAllowed", boost::bind(&LLAgent::isActionAllowed, _2));
+    global_enable.add("Avatar.IsMyProfileOpen", boost::bind(&LLAvatarActions::myProfileVisible));
+    global_enable.add("Avatar.IsPicksTabOpen", boost::bind(&LLAvatarActions::myPicksTabVisible));
 }
 
 // <FS:Ansariel> For web browser toolbar button
@@ -12834,6 +12863,8 @@ void initialize_menus()
         bool mMult;
     };
 
+    register_agent_ui_callbacks();
+
     LLUICtrl::EnableCallbackRegistry::Registrar& enable = LLUICtrl::EnableCallbackRegistry::currentRegistrar();
     LLUICtrl::CommitCallbackRegistry::Registrar& commit = LLUICtrl::CommitCallbackRegistry::currentRegistrar();
 
@@ -12858,16 +12889,6 @@ void initialize_menus()
     enable.add("GridCheck", boost::bind(&checkIsGrid, _2)); // <FS:CR> Opensim menu item visibility control
     enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));
     commit.add("OpenGridStatus", boost::bind(&openGridStatus)); // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
-
-    // Agent
-    commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
-    enable.add("Agent.enableFlyLand", boost::bind(&enable_fly_land));
-    enable.add("Agent.enableFlying", boost::bind(&LLAgent::enableFlying)); // <FS:Ansariel> Keep this
-    commit.add("Agent.PressMicrophone", boost::bind(&LLAgent::pressMicrophone, _2));
-    commit.add("Agent.ReleaseMicrophone", boost::bind(&LLAgent::releaseMicrophone, _2));
-    commit.add("Agent.ToggleMicrophone", boost::bind(&LLAgent::toggleMicrophone, _2));
-    enable.add("Agent.IsMicrophoneOn", boost::bind(&LLAgent::isMicrophoneOn, _2));
-    enable.add("Agent.IsActionAllowed", boost::bind(&LLAgent::isActionAllowed, _2));
 
     // File menu
     init_menu_file();
@@ -12978,6 +12999,8 @@ void initialize_menus()
     view_listener_t::addMenu(new LLWorldEnableEnvPreset(), "World.EnableEnvPreset");
     view_listener_t::addMenu(new LLWorldCheckBanLines() , "World.CheckBanLines");
     view_listener_t::addMenu(new LLWorldShowBanLines() , "World.ShowBanLines");
+    commit.add("World.ToggleMasterAudio", boost::bind(&toggle_master_audio));
+    enable.add("World.IsMasterAudioMuted", boost::bind(&is_master_audio_muted));
 
     // Tools menu
     view_listener_t::addMenu(new LLToolsSelectTool(), "Tools.SelectTool");
@@ -12994,7 +13017,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLToolsUseSelectionForGrid(), "Tools.UseSelectionForGrid");
     view_listener_t::addMenu(new LLToolsSelectNextPartFace(), "Tools.SelectNextPart");
     commit.add("Tools.Link", boost::bind(&handle_link_objects));
-    commit.add("Tools.Unlink", boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
+    commit.add("Tools.Unlink", boost::bind(&handle_unlink_objects));
     view_listener_t::addMenu(new LLToolsStopAllAnimations(), "Tools.StopAllAnimations");
     view_listener_t::addMenu(new LLToolsReleaseKeys(), "Tools.ReleaseKeys");
     view_listener_t::addMenu(new LLToolsEnableReleaseKeys(), "Tools.EnableReleaseKeys");
@@ -13028,10 +13051,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLToolsCheckScriptEditorServer(), "Tools.CheckScriptEditorServer");
     view_listener_t::addMenu(new LLToolsEnableScriptEditorServer(), "Tools.EnableScriptEditorServer");
     view_listener_t::addMenu(new LLToolsToggleScriptEditorServer(), "Tools.ToggleScriptEditorServer");
-
-    // Help menu
-    // most items use the ShowFloater method
-    view_listener_t::addMenu(new LLToggleHowTo(), "Help.ToggleHowTo");
 
     // Advanced menu
     view_listener_t::addMenu(new LLAdvancedToggleConsole(), "Advanced.ToggleConsole");
@@ -13332,8 +13351,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
     view_listener_t::addMenu(new LLAvatarResetSelfSkeleton(), "Avatar.ResetSelfSkeleton");
     view_listener_t::addMenu(new LLAvatarResetSelfSkeletonAndAnimations(), "Avatar.ResetSelfSkeletonAndAnimations");
-    enable.add("Avatar.IsMyProfileOpen", boost::bind(&my_profile_visible));
-    enable.add("Avatar.IsPicksTabOpen", boost::bind(&picks_tab_visible));
 
     commit.add("Avatar.OpenMarketplace", boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
 

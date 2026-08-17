@@ -7,7 +7,6 @@
 		<menu_item_call label="[APP_NAME]&apos;den Çık" name="Quit"/>
 	</menu>
 	<menu label="Yardım" name="Help">
-		<menu_item_call label="Nasıl yapılır..." name="How To"/>
 		<menu_item_call label="Hızlı Başlangıç" name="Quickstart"/>
 		<menu_item_call label="Bilgi Bankası" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki"/>

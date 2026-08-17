@@ -5267,14 +5267,6 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 			<button name="Cancel" text="キャンセル"/>
 		</form>
 	</notification>
-	<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-		ＬＳＬのカラー文字列がクリップボードにコピーされました。これをスクリプトに貼り付けて使用できます。
-		<form name="form">
-			<ignore name="ignore" text="ＬＳＬカラー文字列がクリップボードにコピーされた時"/>
-		</form>
-	</notification>
-	<!-- <FS:Zi> Add float LSL color entry widgets -->
 	<!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 	<!-- <FS:TS> FIRE-6795: Remove warning at every login -->
 	<notification name="FSBWTooHigh">

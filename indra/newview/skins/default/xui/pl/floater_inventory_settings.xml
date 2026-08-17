@@ -28,7 +28,7 @@
 	<check_box label="Gwiazdka przy ulubionych przedmiotach" name="favorite_star" />
 	<check_box label="Gwiazdka przy folderach z ulubionymi" name="favorite_hollow_star" />
 	<check_box label="Kolor tekstu" name="favorites_color" />
-	<text name="attachment_return_txt">
+	<text name="avatar_attachment_action">
 		Naciśnięcie "Enter" lub podwójne klikanie na dodatku awatara
 	</text>
 	<combo_box name="attach_combo">

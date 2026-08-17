@@ -1440,7 +1440,6 @@ Controlla la tua connessione e riprova fra qualche minuto, oppure clicca su Aiut
 		Il tuo avatar apparirà fra un attimo.
 
 Usa le frecce per muoverti.
-Premi F1 in qualunque momento per la guida o per apprendere altre cose su [CURRENT_GRID].
 Scegli un avatar maschile o femminile. Puoi sempre cambiare idea più tardi.
 		<usetemplate name="okcancelbuttons" notext="Femminile" yestext="Maschile"/>
 	</notification>
@@ -4939,12 +4938,6 @@ aggiungere un metodo di pagamento al checkout.
 		<form name="form">
 			<button name="Continue" text="Continua" />
 			<button name="Cancel" text="Annulla" />
-		</form>
-	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		Il codice colore LSL è stato copiato negli appunti. Ora può essere incollato nello script.it.
-		<form name="form">
-			<ignore name="ignore" text="Un codice colore LSL è stato copiato negli appunti"/>
 		</form>
 	</notification>
 	<notification name="FSBWTooHigh">

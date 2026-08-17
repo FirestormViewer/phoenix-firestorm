@@ -95,14 +95,19 @@ protected:
  * selected grid.
  *
  **/
-class LLGridManager : public LLSingleton<LLGridManager>
+class LLGridManager : public LLSimpleton<LLGridManager>
 {
+public:
     // when the grid manager is instantiated, the default grids are automatically
     // loaded, and the grids favorites list is loaded from the xml file.
-    LLSINGLETON(LLGridManager);
+    LLGridManager();
     ~LLGridManager();
 
-public:
+    LLGridManager(const LLGridManager&) = delete;
+    LLGridManager(LLGridManager&&) = delete;
+    LLGridManager& operator=(const LLGridManager&) = delete;
+    LLGridManager& operator=(LLGridManager&&) = delete;
+
     typedef enum
     {
         FETCH,

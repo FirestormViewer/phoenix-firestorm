@@ -276,6 +276,7 @@ LLStatusBar::~LLStatusBar()
 // virtual
 void LLStatusBar::draw()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
     refresh();
     updateParcelInfoText();
     updateHealth();

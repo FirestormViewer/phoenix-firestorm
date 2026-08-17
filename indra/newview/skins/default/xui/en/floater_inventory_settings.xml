@@ -265,7 +265,7 @@
    layout="topleft"
    left_pad="12"
    top_delta="2"
-   name="attachment_return_txt"
+   name="avatar_attachment_action"
    text_color="White"
    width="420">
    Pressing enter or double clicking on an avatar attachment

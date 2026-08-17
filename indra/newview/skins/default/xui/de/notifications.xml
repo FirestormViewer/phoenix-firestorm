@@ -1617,7 +1617,6 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 		Ihr Avatar erscheint jeden Moment.
 
 Benutzen Sie die Pfeiltasten, um sich fortzubewegen.
-Drücken Sie F1 für Hilfe oder für weitere Informationen über [CURRENT_GRID].
 Bitte wählen Sie einen männlichen oder weiblichen Avatar.
 Sie können sich später noch umentscheiden.
 		<usetemplate name="okcancelbuttons" notext="Weiblich" yestext="Männlich"/>
@@ -5619,15 +5618,6 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			notext="Abbrechen"
 			yestext="OK"/>
 	</notification>
-
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
-		<form name="form">
-			<ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
-		</form>
-	</notification>
-<!-- <FS:Zi> Add float LSL color entry widgets -->
 
 	<notification name="FSBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.

@@ -7,6 +7,14 @@
 	<check_box label="Afficher le menu Développeur (Utilisez le à vos propres risques !)" name="show_develop_menu_check"/>
 	<check_box label="Désactiver la détection de VRAM par l'analyse WMI sur les systèmes Windows" name="FSDisableWMIProbing"/>
 	<check_box tool_tip="Ce paramètre réduira le chargement dû au rendu des avatars distants mais peut aussi provoquer des animations incorrectes pour ces mêmes avatars" label="Activer la temporisation d'animations (expérimental)" name="UseAnimationTimeSteps"/>
+	<text name="os_hibernation_mode">
+		Empêcher l’OS d’hiberner si vous n’êtes pas absent :
+	</text>
+	<combo_box name="os_hibernation_combobox" tool_tip="Empêche seulement la mise en veille de l’OS si l’utilisateur n’est pas absent">
+		<combo_box.item label="Peut hiberner" name="can_hibernate"/>
+		<combo_box.item label="Ne peut pas hiberner, peut éteindre l’écran" name="cant_hibernate"/>
+		<combo_box.item label="Ne peut pas hiberner, ne peut pas éteindre l’écran" name="cant_hibernate_screen"/>
+	</combo_box>
 	<text name="BackgroundYieldTimeText">Durée en millisecondes de temporisation des trames quand [APP_NAME] n'est pas au premier plan (40 par défaut) :</text>
 	<button label="Réinitialiser tous les paramètres" label_selected="Réinitialiser tous les paramètres..." name="clear_settings"/>
 </panel>

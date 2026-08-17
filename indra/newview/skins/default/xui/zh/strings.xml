@@ -6133,9 +6133,6 @@ support@secondlife.com.
 	<string name="Command_Grid_Status_Label">
 		類比網路狀態
 	</string>
-	<string name="Command_HowTo_Label">
-		簡易教學
-	</string>
 	<string name="Command_Inventory_Label">
 		庫存
 	</string>
@@ -6347,9 +6344,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		顯示當前類比網路狀態
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		如何完成常常見任務
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		檢視和使用你的物件 (CTRL+I)

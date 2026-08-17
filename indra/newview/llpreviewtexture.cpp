@@ -433,9 +433,10 @@ void LLPreviewTexture::saveAs(EFileformatType format, uuid_vec_t remaining_ids)
     }
 
     // <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
-    //std::string filename = getItem() ? LLDir::getScrubbedFileName(getItem()->getName()) : LLStringUtil::null;
+    //// startPicker will sanitize the name
+    //std::string filename = getItem() ? getItem()->getName() : LLStringUtil::null;
     //LLFilePickerReplyThread::startPicker(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1), LLFilePicker::FFSAVE_TGAPNG, filename);
-    std::string filename = getItem() ? checkFileExtension(LLDir::getScrubbedFileName(getItem()->getName()), format) : LLStringUtil::null;
+    std::string filename = getItem() ? checkFileExtension(getItem()->getName(), format) : LLStringUtil::null;
     LLFilePickerReplyThread::startPicker(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1, format, callback, remaining_ids), saveFilter, filename);
     // </FS:Ansariel>
 }

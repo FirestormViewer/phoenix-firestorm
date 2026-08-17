@@ -376,6 +376,12 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="LoggingOut">
 		Abmeldung erfolgt...
 	</string>
+	<string name="CompressingInventoryCache">
+		Komprimiere Inventar-Cache...
+	</string>
+	<string name="ShutdownCleanup">
+		Ressourcen werden freigeben...
+	</string>
 	<string name="ShuttingDown">
 		Programm wird beendet...
 	</string>
@@ -507,6 +513,9 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	</string>
 	<string name="Thematrix">
 		Die Matrix
+	</string>
+	<string name="ReorderClothingTooltip">
+		Ziehen oder Pfeile verwenden, um Kleidungsschichten umzuordnen.
 	</string>
 	<string name="TooltipPerson">
 		Person
@@ -1715,7 +1724,7 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		ESC drücken, um zur Normalansicht zurückzukehren
 	</string>
 	<string name="InventoryNoMatchingItems">
-		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/all/[SEARCH_TERM] Suche].
+		Keine Treffer.
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		Sie haben nicht das Richtige gefunden? [secondlife:///app/inventory/filters Filter] anzeigen.
@@ -5955,9 +5964,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Grid_Status_Label">
 		Grid-Status
 	</string>
-	<string name="Command_HowTo_Label">
-		Infos
-	</string>
 	<string name="Command_Inventory_Label">
 		Inventar
 	</string>
@@ -6177,9 +6183,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
 		Aktuellen Grid-Status anzeigen
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Wie führe ich gängige Aufgaben aus?
 	</string>
 	<string name="Command_Inventory_Tooltip">
 		Eigentum anzeigen und benutzen (Strg+I)

@@ -1467,7 +1467,6 @@ Puedes revisar tu conexión a Internet y volver a intentarlo en unos minutos, pu
 		Tu avatar aparecerá en un momento.
 
 Para caminar, usa las teclas del cursor.
-En cualquier momento, puedes pulsar la tecla F1 para obtener ayuda o para aprender más acerca de [CURRENT_GRID].
 Por favor, elige el avatar masculino o femenino.
 Puedes cambiar más adelante tu elección.
 		<usetemplate name="okcancelbuttons" notext="Mujer" yestext="Varón"/>
@@ -4898,12 +4897,6 @@ Intento cancelado.
 	<notification name="PathfindingDeleteMultipleItems">
 		Vas a eliminar [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
 		<usetemplate ignoretext="Estás seguro/a de querer eliminar múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
-	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.
-		<form name="form">
-			<ignore name="ignore" text="Una cadena LSL se ha copiado a mi portapapeles"/>
-		</form>
 	</notification>
 	<notification name="FSBWTooHigh">
 		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps. Es improbable que funcione bien y casi seguro no mejorará el rendimiento.

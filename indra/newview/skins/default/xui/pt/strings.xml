@@ -5617,9 +5617,6 @@ Coloque o caminho do editor entre aspas
 	<string name="Command_Grid_Status_Tooltip">
 		Ver o status atual da grade
 	</string>
-	<string name="Command_HowTo_Tooltip">
-		Como executo tarefas comuns?
-	</string>
 	<string name="Command_Inventory_Tooltip">
 		Mostrar propriedade e uso (Ctrl+I)
 	</string>

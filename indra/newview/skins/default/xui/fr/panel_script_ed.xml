@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="script panel">
 	<panel.string name="loading">Chargement...</panel.string>
-	<panel.string name="can_not_view">Vous ne pouvez pas afficher ou modifier ce script, car il a été créé avec des autorisations restreintes. Vous avez besoin des autorisations complètes pour afficher ou modifier un script à l'intérieur d'un objet.</panel.string>
+	<panel.string name="can_not_view">
+		Ce script ne peut pas être visualisé ou modifié, car il est défini comme « non copiable » ou « non modifiable ». Pour visualiser ou modifier un script, vous devez avoir ces permissions.
+	</panel.string>
 	<panel.string name="public_objects_can_not_run">Les objets publics ne peuvent pas exécuter de scripts</panel.string>
 	<panel.string name="script_running">En cours</panel.string>
 	<panel.string name="Title">Script : [NAME]</panel.string>

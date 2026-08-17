@@ -1610,7 +1610,6 @@ Vous pouvez soit vérifier votre connexion Internet et réessayer dans quelques 
 		Votre personnage va apparaître dans un moment.
 
 Pour marcher, utilisez les flèches de direction.
-Appuyez sur F1 pour obtenir de l&apos;aide ou en savoir plus sur [CURRENT_GRID].
 Choisissez un avatar homme ou femme.
 Vous pourrez revenir sur votre décision plus tard.
 		<usetemplate name="okcancelbuttons" notext="Femme" yestext="Homme"/>
@@ -5288,12 +5287,6 @@ la possibilité d'ajouter un mode de paiement à la caisse.
 		<form name="form">
 			<button name="Continue" text="Continuer"/>
 			<button name="Cancel" text="Annuler"/>
-		</form>
-	</notification>
-	<notification name="LSLColorCopiedToClipboard">
-		La chaîne de couleur LSL a été copiée dans votre presse-papiers. Vous pouvez maintenant la coller dans votre script pour l'utiliser.
-		<form name="form">
-			<ignore name="ignore" text="Une chaîne de couleurs LSL a été copiée dans le presse-papiers."/>
 		</form>
 	</notification>
 	<notification name="FSBWTooHigh">

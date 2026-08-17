@@ -425,6 +425,17 @@ Initialization with the Marketplace failed because of a system or network error.
     </notification>
 
     <notification
+        icon="alertmodal.tga"
+        name="CannotPasteFolderIntoSelf"
+        type="alertmodal">
+        You cannot paste a folder into itself or into one of its subfolders.
+        <tag>fail</tag>
+        <usetemplate
+          name="okbutton"
+          yestext="OK"/>
+    </notification>
+
+    <notification
      icon="notifytip.tga"
      name="InvalidKeystroke"
      type="notifytip">
@@ -4117,7 +4128,6 @@ Local Data you are deleting is shared between multiple grids, are you sure you w
 Your character will appear in a moment.
 
 Use arrow keys to walk.
-Press the F1 key at any time for help or to learn more about [CURRENT_GRID].
 Please choose the male or female avatar. You can change your mind later.
     <usetemplate
      name="okcancelbuttons"
@@ -8236,7 +8246,7 @@ Message from [NAME]:
    type="notify">
     <unique/>
 This land has damage enabled.
-You can be hurt here. If you die, you will be teleported to your home location.
+You can be hurt here. If you die, you might be teleported to your home location, region telehub or parcel landing point.
   </notification>
 
   <notification
@@ -13752,19 +13762,6 @@ able to add a payment method at checkout.
        text="Cancel"/>
     </form>
   </notification>
-  
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-  <notification
-   icon="notify.tga"
-   name="LSLColorCopiedToClipboard"
-   type="alertmodal">
-The LSL color string has been copied to your clipboard. You can now paste it into your script to use it.
-   <form name="form">
-      <ignore name="ignore"
-       text="An LSL color string was copied to my clipboard"/>
-    </form>
-  </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
 
   <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   <!-- <FS:TS> FIRE-6795: Remove warning at every login -->

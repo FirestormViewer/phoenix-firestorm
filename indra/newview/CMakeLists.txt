@@ -363,6 +363,7 @@ set(viewer_SOURCE_FILES
     llfloaterfonttest.cpp
     llfloaterforgetuser.cpp
     llfloatergesture.cpp
+    llfloatergestureautocompletepicker.cpp
     llfloatergltfasseteditor.cpp
     llfloatergodtools.cpp
     llfloatergotoline.cpp
@@ -373,7 +374,6 @@ set(viewer_SOURCE_FILES
     llfloaterhandler.cpp
     llfloaterhelpbrowser.cpp
     llfloaterhoverheight.cpp
-    llfloaterhowto.cpp
     llfloaterhud.cpp
     llfloaterimagepreview.cpp
     llfloaterimsessiontab.cpp
@@ -1229,6 +1229,7 @@ set(viewer_HEADER_FILES
     llfloaterfonttest.h
     llfloaterforgetuser.h
     llfloatergesture.h
+    llfloatergestureautocompletepicker.h
     llfloatergltfasseteditor.h
     llfloatergodtools.h
     llfloatergotoline.h
@@ -1239,7 +1240,6 @@ set(viewer_HEADER_FILES
     llfloaterhandler.h
     llfloaterhelpbrowser.h
     llfloaterhoverheight.h
-    llfloaterhowto.h
     llfloaterhud.h
     llfloaterimagepreview.h
     llfloaterimnearbychat.h
@@ -1900,6 +1900,37 @@ if (DARWIN)
   list(APPEND viewer_SOURCE_FILES ${viewer_RESOURCE_FILES})
 endif (DARWIN)
 
+# Platform-specific files for IDE visibility (excluded from build on other platforms)
+set(macosx_viewer_SOURCE_FILES
+    llappviewermacosx.cpp
+    llappviewermacosx-objc.mm
+    llfilepicker_mac.mm
+    llappdelegate-objc.mm
+    )
+
+set(macosx_viewer_HEADER_FILES
+    llappviewermacosx.h
+    llappviewermacosx-objc.h
+    llfilepicker_mac.h
+    )
+
+set(linux_viewer_SOURCE_FILES
+    llappviewerlinux.cpp
+    )
+
+set(linux_viewer_HEADER_FILES
+    )
+
+set(windows_viewer_SOURCE_FILES
+    llappviewerwin32.cpp
+    llwindebug.cpp
+    )
+
+set(windows_viewer_HEADER_FILES
+    llappviewerwin32.h
+    llwindebug.h
+    )
+
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
 
@@ -1957,12 +1988,6 @@ if (WINDOWS)
          llvelopack.cpp
          llwindebug.cpp
          )
-    set_source_files_properties(
-      llappviewerwin32.cpp
-      llvelopack.cpp
-      PROPERTIES
-      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
-      )
 
     set_source_files_properties( llappviewer.cpp llviewermenu.cpp PROPERTIES COMPILE_FLAGS /bigobj )
 
@@ -2116,6 +2141,45 @@ if (WINDOWS)
     # </FS:Ansariel>
 
 endif (WINDOWS)
+
+# Add all platform-specific files to the target for IDE visibility
+# Collect non-platform files for IDE visibility only
+set(ide_visibility_files "")
+if (NOT DARWIN)
+  list(APPEND ide_visibility_files ${macosx_viewer_SOURCE_FILES} ${macosx_viewer_HEADER_FILES})
+endif()
+if (NOT LINUX)
+  list(APPEND ide_visibility_files ${linux_viewer_SOURCE_FILES} ${linux_viewer_HEADER_FILES})
+endif()
+if (NOT WINDOWS)
+  list(APPEND ide_visibility_files ${windows_viewer_SOURCE_FILES} ${windows_viewer_HEADER_FILES})
+endif()
+
+list(APPEND viewer_SOURCE_FILES ${ide_visibility_files})
+
+# Mark non-platform files as excluded from build
+if (WINDOWS)
+  set_source_files_properties(
+    ${macosx_viewer_SOURCE_FILES}
+    ${linux_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (DARWIN)
+  set_source_files_properties(
+    ${windows_viewer_SOURCE_FILES}
+    ${linux_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+elseif (LINUX)
+  set_source_files_properties(
+    ${macosx_viewer_SOURCE_FILES}
+    ${windows_viewer_SOURCE_FILES}
+    PROPERTIES
+    HEADER_FILE_ONLY TRUE
+    )
+endif()
 
 # Add the xui files. This is handy for searching for xui elements
 # from within the IDE.

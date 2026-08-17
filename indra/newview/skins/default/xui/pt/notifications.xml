@@ -1612,11 +1612,9 @@ Verifique sua conexão com a Internet e tente novamente ou clique em Ajuda para 
 	<notification name="WelcomeChooseSex">
 		Seu avatar aparecerá a qualquer momento.
 
-Use as setas do teclado para se movimentar.
-Pressione F1 para obter ajuda ou obter mais informações sobre [CURRENT_GRID].
-Escolha um avatar masculino ou feminino.
-Você pode mudar de ideia mais tarde.
-		<usetemplate name="okcancelbuttons" notext="Fêmea" yestext="Masculino"/>
+Use as teclas de seta para andar.
+Por favor, escolha se o seu avatar é feminino ou masculino. Você pode mudar de idéia depois.
+		<usetemplate name="okcancelbuttons" notext="Feminino" yestext="Masculino"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
 		Não foi possível teletransportar-se para [SLURL] porque esse local está em uma grade diferente ([GRID]). Você está atualmente na grade ([CURRENT_GRID]).  Feche o visualizador e tente novamente.
@@ -5581,15 +5579,6 @@ Os scripts nos objetos selecionados deveriam realmente ser modificados?
 			notext="Cancelar"
 			yestext="OK"/>
 	</notification>
-
-<!-- <FS:Zi> Add float LSL color entry widgets -->
-	<notification name="LSLColorCopiedToClipboard">
-O código de cores LSL foi copiado para a área de transferência. Agora pode ser inserido e usado em scripts LSL.
-		<form name="form">
-			<ignore name="ignore" text="Um código de cor LSL foi copiado para a área de transferência."/>
-		</form>
-	</notification>
-<!-- <FS:Zi> Add float LSL color entry widgets -->
 
 	<notification name="FSBWTooHigh">
 Recomenda-se não definir a largura de banda superior a 1500 kbit/s! Uma largura de banda maior pode causar problemas e não melhorará o desempenho.

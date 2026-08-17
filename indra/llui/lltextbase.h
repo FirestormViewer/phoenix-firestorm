@@ -354,6 +354,7 @@ class LLTextBase
 public:
     friend class LLTextSegment;
     friend class LLNormalTextSegment;
+    friend class LLEmbeddedItemSegment;
     friend class LLUICtrlFactory;
 
     typedef boost::signals2::signal<bool (const LLUUID& user_id)> is_friend_signal_t;
