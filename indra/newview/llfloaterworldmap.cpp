@@ -64,6 +64,7 @@
 #include "lltoolbarview.h"
 #include "lltracker.h"
 #include "lltrans.h"
+#include "llurlregistry.h" // <FS:TJ/> Access to isUrl
 #include "llviewerinventory.h"  // LLViewerInventoryItem
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
@@ -453,6 +454,13 @@ bool LLFloaterWorldMap::postBuild()
     mTeleportCoordSpinY = getChild<LLSpinCtrl>("teleport_coordinate_y");
     mTeleportCoordSpinZ = getChild<LLSpinCtrl>("teleport_coordinate_z");
     // </FS>
+
+    // <FS:TJ> OpenSim max value for Z height can go well beyond 10k, U16_MAX should suffice
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        mTeleportCoordSpinZ->setMaxValue(U16_MAX);
+    }
+    // </FS:TJ>
 
     mFriendCombo = getChild<LLComboBox>("friend combo");
     mFriendCombo->selectFirstItem();
@@ -1152,7 +1160,7 @@ void LLFloaterWorldMap::trackURL(const std::string& region_name, S32 x_coord, S3
     {
         LLViewerRegion* regionp = gAgent.getRegion();
         F32 min_sim_height = regionp ? regionp->getMinSimHeight() : 0.f;
-        z_coord = llclamp(z_coord, min_sim_height, 4096);
+        z_coord = llclamp(z_coord, min_sim_height, U16_MAX);
     }
     else
     {
@@ -2041,6 +2049,19 @@ void LLFloaterWorldMap::onCommitSearchResult(bool from_search)
 
             constexpr F64 SIM_COORD_DEFAULT = 128.0;
             LLVector3 pos_local(SIM_COORD_DEFAULT, SIM_COORD_DEFAULT, 0.0f);
+            // <FS:TJ> [FIRE-36896] Set the teleport coordinates if provided in OpenSim
+        #ifdef OPENSIM
+            if (LLGridManager::getInstance()->isInOpenSim() && LLUrlRegistry::instance().isUrl(sim_name))
+            {
+                LLSLURL slurl = LLSLURL(sim_name);
+                if (slurl.getType() == LLSLURL::LOCATION)
+                {
+                    LLVector3 slurl_position = slurl.getPosition();
+                    pos_local.set(slurl_position);
+                }
+            }
+        #endif
+            // </FS:TJ>
 
             // Did this value come from a trackURL() request?
             if (!mCompletingRegionPos.isExactlyZero())
