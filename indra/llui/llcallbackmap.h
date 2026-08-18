@@ -39,9 +39,10 @@ public:
     // callback definition.
     typedef std::function<void* (void* data)> callback_t;
 
-    typedef std::unordered_map<std::string, LLCallbackMap> map_t;
-    typedef map_t::iterator map_iter_t;
-    typedef map_t::const_iterator map_const_iter_t;
+    // map_t/map_iter_t/map_const_iter_t are declared after the class (below), not
+    // as nested typedefs: unordered_map<std::string, LLCallbackMap> needs LLCallbackMap
+    // to be a complete type, which it never is within its own body. MSVC's STL
+    // tolerates the incomplete type here; libstdc++ does not.
 
     template <class T>
     static void* buildPanel(void* data)
@@ -56,5 +57,12 @@ public:
     callback_t  mCallback;
     void*       mData;
 };
+
+namespace LLCallbackMapTypes
+{
+    typedef std::unordered_map<std::string, LLCallbackMap> map_t;
+    typedef map_t::iterator map_iter_t;
+    typedef map_t::const_iterator map_const_iter_t;
+}
 
 #endif // LLCALLBACKMAP_H

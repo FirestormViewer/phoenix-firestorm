@@ -161,7 +161,7 @@ public:
 
     LLHandle<LLPanel>   getHandle() const { return getDerivedHandle<LLPanel>(); }
 
-    const LLCallbackMap::map_t& getFactoryMap() const { return mFactoryMap; }
+    const LLCallbackMapTypes::map_t& getFactoryMap() const { return mFactoryMap; }
 
     CommitCallbackRegistry::ScopedRegistrar& getCommitCallbackRegistrar() { return mCommitCallbackRegistrar; }
     EnableCallbackRegistry::ScopedRegistrar& getEnableCallbackRegistrar() { return mEnableCallbackRegistrar; }
@@ -224,14 +224,14 @@ public:
 protected:
     // Override to set not found list
     LLButton*       getDefaultButton() { return mDefaultBtn; }
-    LLCallbackMap::map_t mFactoryMap;
+    LLCallbackMapTypes::map_t mFactoryMap;
     CommitCallbackRegistry::ScopedRegistrar mCommitCallbackRegistrar;
     EnableCallbackRegistry::ScopedRegistrar mEnableCallbackRegistrar;
 
     commit_signal_t* mVisibleSignal;        // Called when visibility changes, passes new visibility as LLSD()
 
     std::string     mHelpTopic;         // the name of this panel's help topic to display in the Help Viewer
-    typedef std::deque<const LLCallbackMap::map_t*> factory_stack_t;
+    typedef std::deque<const LLCallbackMapTypes::map_t*> factory_stack_t;
     static factory_stack_t  sFactoryStack;
 
     // for setting the xml filename when building panel in context dependent cases

@@ -834,13 +834,13 @@ bool LLPanel::buildFromFile(const std::string& filename, const LLPanel::Params& 
 //-----------------------------------------------------------------------------
 LLPanel* LLPanel::createFactoryPanel(const std::string& name)
 {
-    std::deque<const LLCallbackMap::map_t*>::iterator itor;
+    std::deque<const LLCallbackMapTypes::map_t*>::iterator itor;
     for (itor = sFactoryStack.begin(); itor != sFactoryStack.end(); ++itor)
     {
-        const LLCallbackMap::map_t* factory_map = *itor;
+        const LLCallbackMapTypes::map_t* factory_map = *itor;
 
         // Look up this panel's name in the map.
-        LLCallbackMap::map_const_iter_t iter = factory_map->find( name );
+        LLCallbackMapTypes::map_const_iter_t iter = factory_map->find( name );
         if (iter != factory_map->end())
         {
             // Use the factory to create the panel, instead of using a default LLPanel.
