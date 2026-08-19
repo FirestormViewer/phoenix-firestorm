@@ -68,7 +68,7 @@
 #include "llmeshrepository.h"
 #include "u64.h"
 #include "llviewertexturelist.h"
-// <FS> PBR texture override for @setcam_textures
+// <FS> FIRE-34340-1 PBR texture override for @setcam_textures
 #include "llfetchedgltfmaterial.h"
 #include "lltextureentry.h"
 // </FS>
@@ -841,7 +841,7 @@ void LLViewerObjectList::setAllObjectDefaultTextures(U32 nChannel, bool fShowDef
 }
 // [/SL:KB]
 
-// <FS> PBR texture override for @setcam_textures
+// <FS> FIRE-34340-1 PBR texture override for @setcam_textures
 static std::map<std::pair<LLUUID, S32>, LLUUID> sOrigPBRBaseColorIDs;
 static std::map<LLGLTFMaterial*, LLUUID> sOrigBaseMaterialColorIDs;
 
