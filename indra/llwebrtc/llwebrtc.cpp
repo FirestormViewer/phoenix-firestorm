@@ -306,6 +306,8 @@ void LLWebRTCImpl::init()
     // Normal logging is rather spammy, so turn it off.
     webrtc::LogMessage::LogToDebug(webrtc::LS_NONE);
     webrtc::LogMessage::SetLogToStderr(true);
+    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
+    //webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
     webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
 
     // Create the native threads.
