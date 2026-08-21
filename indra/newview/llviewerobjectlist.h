@@ -127,6 +127,9 @@ public:
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
     void setAllObjectDefaultTextures(U32 nChannel, bool fShowDefault);
 // [/SL:KB]
+// <FS> FIRE-34340-1 PBR texture override for @setcam_textures
+    void setAllObjectPBRDefaultTextures(const LLUUID& override_id, bool fShowDefault);
+// </FS>
 
     void removeFromActiveList(LLViewerObject* objectp);
     void updateActive(LLViewerObject *objectp);
