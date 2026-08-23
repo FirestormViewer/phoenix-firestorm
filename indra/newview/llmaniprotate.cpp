@@ -236,7 +236,10 @@ void LLManipRotate::render()
             {
                 // selected part
                 gGL.scalef(mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ]);
-                renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f) , LLColor4( 0.f, 0.f, 1.f, 0.3f ));
+                // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f) , LLColor4( 0.f, 0.f, 1.f, 0.3f ));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VBLUE), getUserEditColor(VBLUE, 0.3f));
+                // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
         }
@@ -247,7 +250,10 @@ void LLManipRotate::render()
             {
                 gGL.rotatef( 90.f, 1.f, 0.f, 0.f );
                 gGL.scalef(mManipulatorScales.mV[VY], mManipulatorScales.mV[VY], mManipulatorScales.mV[VY]);
-                renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f), LLColor4( 0.f, 1.f, 0.f, 0.3f));
+                // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f), LLColor4( 0.f, 1.f, 0.f, 0.3f));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VGREEN), getUserEditColor(VGREEN, 0.3f));
+                // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
         }
@@ -258,7 +264,10 @@ void LLManipRotate::render()
             {
                 gGL.rotatef( 90.f, 0.f, 1.f, 0.f );
                 gGL.scalef(mManipulatorScales.mV[VX], mManipulatorScales.mV[VX], mManipulatorScales.mV[VX]);
-                renderActiveRing( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f), LLColor4( 1.f, 0.f, 0.f, 0.3f));
+                // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f), LLColor4( 1.f, 0.f, 0.f, 0.3f));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.3f));
+                // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
         }
@@ -289,12 +298,18 @@ void LLManipRotate::render()
                         mManipulatorScales = lerp(mManipulatorScales, LLVector4(1.f, 1.f, SELECTED_MANIPULATOR_SCALE, 1.f), LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE));
                         gGL.scalef(mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ]);
                         // hovering over part
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f ), LLColor4( 0.f, 0.f, 1.f, 0.5f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f ), LLColor4( 0.f, 0.f, 1.f, 0.5f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VBLUE), getUserEditColor(VBLUE, 0.5f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                     else
                     {
                         // default
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 0.8f, 0.8f ), LLColor4( 0.f, 0.f, 0.8f, 0.4f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 0.8f, 0.8f ), LLColor4( 0.f, 0.f, 0.8f, 0.4f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VBLUE, 0.8f), getUserEditColor(VBLUE, 0.4f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                 }
                 gGL.popMatrix();
@@ -307,12 +322,18 @@ void LLManipRotate::render()
                         mManipulatorScales = lerp(mManipulatorScales, LLVector4(1.f, SELECTED_MANIPULATOR_SCALE, 1.f, 1.f), LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE));
                         gGL.scalef(mManipulatorScales.mV[VY], mManipulatorScales.mV[VY], mManipulatorScales.mV[VY]);
                         // hovering over part
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f ), LLColor4( 0.f, 1.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f ), LLColor4( 0.f, 1.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VGREEN), getUserEditColor(VGREEN, 0.5f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                     else
                     {
                         // default
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.8f, 0.f, 0.8f ), LLColor4( 0.f, 0.8f, 0.f, 0.4f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.8f, 0.f, 0.8f ), LLColor4( 0.f, 0.8f, 0.f, 0.4f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VGREEN, 0.8f), getUserEditColor(VGREEN, 0.4f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                 }
                 gGL.popMatrix();
@@ -326,12 +347,18 @@ void LLManipRotate::render()
                         gGL.scalef(mManipulatorScales.mV[VX], mManipulatorScales.mV[VX], mManipulatorScales.mV[VX]);
 
                         // hovering over part
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f ), LLColor4( 1.f, 0.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f ), LLColor4( 1.f, 0.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.5f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                     else
                     {
                         // default
-                        gl_ring( mRadiusMeters, width_meters, LLColor4( 0.8f, 0.f, 0.f, 0.8f ), LLColor4( 0.8f, 0.f, 0.f, 0.4f ), CIRCLE_STEPS, i);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.8f, 0.f, 0.f, 0.8f ), LLColor4( 0.8f, 0.f, 0.f, 0.4f ), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.4f), CIRCLE_STEPS, i);
+                        // </FS:AR> [FIRE-36909]
                     }
                 }
                 gGL.popMatrix();
@@ -1206,6 +1233,9 @@ bool LLManipRotate::updateVisiblity()
         mRadiusMeters = RADIUS_PIXELS / (F32) LLViewerCamera::getInstance()->getViewHeightInPixels();
         mRadiusMeters /= gAgentCamera.mHUDCurZoom;
         mRadiusMeters *= ui_scale_factor;
+        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+        mRadiusMeters *= getUserEditHandleScaling();
+        // </FS:AR> [FIRE-36909]
 
         mCenterToProfilePlaneMag = mRadiusMeters * mRadiusMeters / mCenterToCamMag;
         mCenterToProfilePlane = -mCenterToProfilePlaneMag * mCenterToCamNorm;
@@ -1246,6 +1276,9 @@ bool LLManipRotate::updateVisiblity()
                 F32 apparent_angle = fraction_of_fov * LLViewerCamera::getInstance()->getView();  // radians
                 mRadiusMeters = z_dist * tan(apparent_angle);
                 mRadiusMeters *= ui_scale_factor;
+                // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                mRadiusMeters *= getUserEditHandleScaling();
+                // </FS:AR> [FIRE-36909]
 
                 mCenterToProfilePlaneMag = mRadiusMeters * mRadiusMeters / mCenterToCamMag;
                 mCenterToProfilePlane = -mCenterToProfilePlaneMag * mCenterToCamNorm;

@@ -148,8 +148,6 @@ private:
         LLVector4 targetScale;       // Target scale for mManipulatorScales for this part.
         F32 extraRotateAngle;        // Extra rotation angle (in degrees) to apply.
         LLVector3 extraRotateAxis;   // Axis for the extra rotation.
-        LLColor4 primaryColor;       // Primary ring color.
-        LLColor4 secondaryColor;     // Secondary ring color.
         int scaleIndex;              // Which component of mManipulatorScales to use (0: X, 1: Y, 2: Z, 3: Roll).
     };
 
