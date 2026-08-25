@@ -689,7 +689,14 @@ void LLVivoxVoiceClient::setLoginInfo(
         // we have an empty account server name
         // so we fall back to hardcoded defaults
 
-        if(!LLGridManager::getInstance()->isInSLBeta())
+        // <FS:TJ> In OpenSim fall back to their common default vivox server instead of LL's
+        //if(!LLGridManager::getInstance()->isInSLBeta())
+        if (!LLGridManager::getInstance()->isInSecondLife())
+        {
+            mVoiceSIPURIHostName = "osp.vivox.com";
+        }
+        else if(!LLGridManager::getInstance()->isInSLBeta())
+        // </FS:TJ>
         {
             // Use the release account server
             mVoiceSIPURIHostName = "bhr.vivox.com";

@@ -260,6 +260,7 @@ void FSFloaterGroupTitles::processGroupTitleResults(const LLGroupData& group_dat
     }
 
     mTitleList->scrollToShowSelected();
+    selectedTitleChanged();
     updateDefaultColumn();
 
     // Remove observer
@@ -328,6 +329,7 @@ void FSFloaterGroupTitles::selectedTitleChanged()
     }
     else
     {
+        mInfoButton->setEnabled(false);
         mSetRegionButton->setEnabled(false);
         mSetRegionManualButton->setEnabled(false);
         mClearRegionButton->setEnabled(false);
