@@ -1211,6 +1211,15 @@ void LLPanelEditWearable::revertChanges()
         // <FS:Ansariel> [Legacy Bake]
         //gAgentAvatarp->wearableUpdated(mWearablePtr->getType());
         gAgentAvatarp->wearableUpdated(mWearablePtr->getType(), false);
+
+        // <FS:AR> [FIRE-30703] Undo Changes does not undo (when hints disabled)
+        bool show_hints = gSavedSettings.getBOOL("FSAppearanceShowHints");
+        if (!show_hints)
+        {
+            mWearablePtr->writeToAvatar(gAgentAvatarp);
+            gAgentAvatarp->updateVisualParams();
+        }
+        // </FS:AR> [FIRE-30703]
 }
 
 void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, bool show, bool disable_camera_switch)
