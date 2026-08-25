@@ -128,7 +128,7 @@ std::string LLVoiceClientStatusObserver::status2string(LLVoiceClientStatusObserv
 
 LLVoiceModuleInterface *getVoiceModule(const std::string &voice_server_type)
 {
-    if (voice_server_type == VIVOX_VOICE_SERVER_TYPE || voice_server_type.empty())
+    if (voice_server_type == VIVOX_VOICE_SERVER_TYPE || (voice_server_type.empty() && !LLGridManager::instance().isInSecondLife()))
     {
         return (LLVoiceModuleInterface *) LLVivoxVoiceClient::getInstance();
     }
@@ -1105,7 +1105,7 @@ class LLViewerRequiredVoiceVersion : public LLHTTPNode
 
         LLVoiceModuleInterface *voiceModule = NULL;
 
-        if (voice_server_type == "vivox" || voice_server_type.empty())
+        if (voice_server_type == "vivox" || (voice_server_type.empty() && !LLGridManager::instance().isInSecondLife()))
         {
             voiceModule = (LLVoiceModuleInterface *) LLVivoxVoiceClient::getInstance();
         }
