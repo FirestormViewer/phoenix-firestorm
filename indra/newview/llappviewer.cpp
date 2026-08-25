@@ -336,6 +336,13 @@ extern bool gDebugGL;
 extern bool gHiDPISupport;
 #endif
 
+#if LL_WINDOWS
+extern bool gGPUBenchmarkMode;
+#else
+static constexpr bool gGPUBenchmarkMode = false;
+#endif // LL_WINDOWS
+
+
 ////////////////////////////////////////////////////////////
 // All from the last globals push...
 
@@ -2839,11 +2846,17 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
     if (mSecondInstance)
     {
-        LLFile::mkdir(gDirUtilp->getDumpLogsDirPath());
+        if (!gGPUBenchmarkMode)
+        {
+            LLFile::mkdir(gDirUtilp->getDumpLogsDirPath());
 
-        LLUUID uid;
-        uid.generate();
-        LLError::logToFile(gDirUtilp->getDumpLogsDirPath(uid.asString() + ".log"));
+            LLUUID uid;
+            uid.generate();
+            // Is this even useful?
+            // Originally this wa used to store states, but I don't think it's practical with bugsplat attributes.
+            // So it just spams files now.
+            LLError::logToFile(gDirUtilp->getDumpLogsDirPath(uid.asString() + ".log"));
+        }
     }
     else
     {
@@ -3678,15 +3691,18 @@ bool LLAppViewer::initConfiguration()
 
     // Display splash screen.  Must be after above check for previous
     // crash as this dialog is always frontmost.
-    std::string splash_msg;
-    LLStringUtil::format_map_t args;
-    //<FS:AW set the APP_NAME to Firestorm instead of the grid connected to>
-    // //args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
-    args["[APP_NAME]"] =  LLTrans::getString("APP_NAME");
-    //<FS:AW set the APP_NAME to Firestorm instead of the grid connected to>
-    splash_msg = LLTrans::getString("StartupLoading", args);
-    LLSplashScreen::show();
-    LLSplashScreen::update(splash_msg);
+    if (!gGPUBenchmarkMode)
+    {
+        std::string splash_msg;
+        LLStringUtil::format_map_t args;
+        //<FS:AW> set the APP_NAME to Firestorm instead of the grid connected to
+        // args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
+        args["[APP_NAME]"] = LLTrans::getString("APP_NAME");
+        //<FS:AW> set the APP_NAME to Firestorm instead of the grid connected to
+        splash_msg = LLTrans::getString("StartupLoading", args);
+        LLSplashScreen::show();
+        LLSplashScreen::update(splash_msg);
+    }
 
     //LLVolumeMgr::initClass();
     LLVolumeMgr* volume_manager = new LLVolumeMgr();
@@ -4976,6 +4992,13 @@ bool LLAppViewer::getMarkerData(const std::string& marker_name, std::string& dat
 
 void LLAppViewer::processMarkerFiles()
 {
+    if (gGPUBenchmarkMode)
+    {
+        // Skipping marker file processing in GPU benchmark mode
+        mSecondInstance = true;
+        initLoggingAndGetLastDuration();
+        return;
+    }
     //We've got 4 things to test for here
     // - Other Process Running (SecondLife.exec_marker present, locked)
     // - Freeze (SecondLife.exec_marker present, not locked)

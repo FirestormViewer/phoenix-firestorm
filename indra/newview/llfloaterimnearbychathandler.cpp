@@ -666,6 +666,23 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     // <FS:Ansariel> Add notification callback for new chat
     mNewChatSignal(chat);
 
+    if (LLScriptEditorWSServer::isEnabled() &&
+        gSavedSettings.getBOOL("ExternalWebsocketForwardDebug") &&
+        (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG ||
+         chat_msg.mChatType == CHAT_TYPE_OWNER))
+    {
+        LLScriptEditorWSServer::ptr_t server =
+            LLScriptEditorWSServer::getServer();
+        if (server)
+        {
+            const auto channel =
+                chat_msg.mChatType == CHAT_TYPE_OWNER
+                    ? LLPublishedObjectMgr::RuntimeEventAggregator::Channel::OWNER_SAY
+                    : LLPublishedObjectMgr::RuntimeEventAggregator::Channel::DEBUG;
+            server->forwardChatToIDE(chat_msg, channel);
+        }
+    }
+
     // don't show toast and add message to chat history on receive debug message
     // with disabled setting showing script errors or enabled setting to show script
     // errors in separate window.
@@ -681,15 +698,6 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         // if (!gSavedSettings.getBOOL("ShowScriptErrors"))
         if (!gSavedSettings.getBOOL("ShowScriptErrors") && chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
             return;
-
-        if (LLScriptEditorWSServer::isEnabled() && gSavedSettings.getBOOL("ExternalWebsocketForwardDebug"))
-        {
-            LLScriptEditorWSServer::ptr_t server = LLScriptEditorWSServer::getServer();
-            if (server)
-            {
-                server->forwardChatToIDE(chat_msg);
-            }
-        }
 
         // don't process debug messages from not owned objects, see EXT-7762
         // <FS:Ansariel> FIRE-15014: [OpenSim] osMessageObject(target, message) fails silently
@@ -729,16 +737,6 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 
         }
     }
-    else if ((chat_msg.mChatType == CHAT_TYPE_OWNER) && LLScriptEditorWSServer::isEnabled() &&
-        gSavedSettings.getBOOL("ExternalWebsocketForwardDebug"))
-    {
-        LLScriptEditorWSServer::ptr_t server = LLScriptEditorWSServer::getServer();
-        if (server)
-        {
-            server->forwardChatToIDE(chat_msg);
-        }
-    }
-
     // <FS:Beq> Hide Primfeed OAuth message from chat to prevent accidental leak of secret.
     const std::string primfeed_oauth = "#PRIMFEED_OAUTH: ";
     if( chat_msg.mText.compare(0, primfeed_oauth.length(), primfeed_oauth) == 0 && chat_msg.mChatType == CHAT_TYPE_IM && chat_msg.mSourceType == CHAT_SOURCE_OBJECT )

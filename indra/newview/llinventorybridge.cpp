@@ -8055,8 +8055,8 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
         if(item && gInventory.isObjectDescendentOf(object_id, gInventory.getRootFolderID()))
         {
             // <FS> Firestorm's replace on double click
-            // static LLCachedControl<bool> replace_item(gSavedSettings, "InventoryAddAttachmentBehavior", false);
-            // rez_attachment(item, NULL, ("attach" == action) ? replace_item() : true); // Replace if "Wear"ing.
+            //static LLCachedControl<U32> add_attachment_behavior(gSavedSettings, "InventoryAddAttachmentBehavior", 0);
+            //rez_attachment(item, NULL, ("attach" == action) ? (add_attachment_behavior() == 1) : true); // Replace if "Wear"ing.
             static LLCachedControl<bool> replace_item(gSavedSettings, "FSDoubleClickAddInventoryObjects", false);
             rez_attachment(item, NULL, ("attach" == action) ? !replace_item : true); // Replace if "Wear"ing.
             // </FS>
@@ -9332,8 +9332,8 @@ void LLObjectBridgeAction::attachOrDetach()
     else
     {
         // <FS:Ansariel> Double-click add/replace option
-        //static LLCachedControl<bool> inventory_linking(gSavedSettings, "InventoryAddAttachmentBehavior", false);
-        //LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, inventory_linking()); // Don't replace if adding.
+        //static LLCachedControl<U32> add_attachment_behavior(gSavedSettings, "InventoryAddAttachmentBehavior", 0);
+        //LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, add_attachment_behavior() == 1); // Don't replace if adding.
         static LLCachedControl<bool> replace_item(gSavedSettings, "FSDoubleClickAddInventoryObjects", false);
         LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, !replace_item); // Don't replace if adding.
         // </FS>
