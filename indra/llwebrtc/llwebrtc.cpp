@@ -324,9 +324,7 @@ void LLWebRTCImpl::init()
     //webrtc::LogMessage::LogToDebug(webrtc::LS_VERBOSE);
     // </FS:minerjr> [FIRE-36022]
     webrtc::LogMessage::SetLogToStderr(true);
-    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
-    //webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
-    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_WARNING);
+    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
 
     // Create the native threads.
     mNetworkThread = webrtc::Thread::CreateWithSocketServer();
