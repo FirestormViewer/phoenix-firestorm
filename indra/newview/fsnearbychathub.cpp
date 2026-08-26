@@ -709,7 +709,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                 source,
                 rows,
                 total,
-                [&](std::string trigger)
+                [chat_entry, line_editor](std::string trigger)
                 {
                     if (chat_entry)
                     {
