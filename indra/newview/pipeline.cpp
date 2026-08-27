@@ -12027,7 +12027,9 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
 
         LLGLDisable blend(GL_BLEND);
 
-        if (visually_muted || too_complex)
+        // <FS> FIRE-34340-2 RLV silhouettes need a solid color baked into the impostor too
+        if (visually_muted || too_complex || rlv_silhouette)
+        // </FS>
         {
             gGL.setColorMask(true, true);
         }
@@ -12052,8 +12054,8 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
 
         gDebugProgram.bind();
 
-        // <FS> FIRE-34340-2 Use getMutedAVColor() for all muted/complex/silhouette avatars
-        if (visually_muted || too_complex || rlv_silhouette)
+        // <FS> FIRE-34340-2 Use getMutedAVColor() for all muted/silhouette avatars
+        if (visually_muted || rlv_silhouette)
         // </FS>
         {   // Visually muted avatar
             LLColor4 muted_color(avatar->getMutedAVColor());
