@@ -722,10 +722,11 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
                         line_editor->setCursorToEnd();
                     }
                 });
-            return;
         }
-
-        LLGestureAutocompleteHelper::instance().hideHelper(source);
+        else
+        {
+            LLGestureAutocompleteHelper::instance().hideHelper(source);
+        }
     }
 
     // Ignore "special" keys, like backspace, arrows, etc.
