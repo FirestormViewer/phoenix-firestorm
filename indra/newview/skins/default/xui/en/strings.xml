@@ -3323,6 +3323,7 @@ Your current position: [AVATAR_POS]
 
   <string name="font_unknown">Unknown Font</string>
   <string name="font_fonts.xml">Inter</string>
+  <string name="font_fonts_inter_tight.xml">Inter Tight</string>
   <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
   <string name="font_fonts_liberation.xml">Liberation</string>
   <string name="font_fonts_droid.xml">Droid Sans</string>
