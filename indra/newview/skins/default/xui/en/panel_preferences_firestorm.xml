@@ -1629,10 +1629,8 @@
 		 Build X/Y/Z axis appearance:
 		</text>
 		<color_swatch
-         border_color="0.45098, 0.517647, 0.607843, 1"
          top_delta="16"
          can_apply_immediately="true"
-         color="1, 1, 1, 1"
          follows="left|top"
          height="50"
          label="X-Axis"
@@ -1640,12 +1638,16 @@
          mouse_opaque="true"
          name="colorswatchXaxis"
          tool_tip="Click to open Color Picker"
-         width="64"
-         control_name="FSBuildPrefs_RedAxisColor"/>
+         width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsXAxisColor" />
+			<color_swatch.commit_callback
+			 function="Pref.applyUIColor"
+			 parameter="BuildToolsXAxisColor" />
+		</color_swatch>
 		<color_swatch
-         border_color="0.45098, 0.517647, 0.607843, 1"
          can_apply_immediately="true"
-         color="1, 1, 1, 1"
          follows="left|top"
          height="50"
          label="Y-Axis"
@@ -1654,12 +1656,16 @@
          mouse_opaque="true"
          name="colorswatchYaxis"
          tool_tip="Click to open Color Picker"
-         width="64"
-         control_name="FSBuildPrefs_GreenAxisColor"/>
+         width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsYAxisColor" />
+			<color_swatch.commit_callback
+			 function="Pref.applyUIColor"
+			 parameter="BuildToolsYAxisColor" />
+		</color_swatch>
 		<color_swatch
-         border_color="0.45098, 0.517647, 0.607843, 1"
          can_apply_immediately="true"
-         color="1, 1, 1, 1"
          follows="left|top"
          height="50"
          label="Z-Axis"
@@ -1668,12 +1674,16 @@
          mouse_opaque="true"
          name="colorswatchZaxis"
          tool_tip="Click to open Color Picker"
-         width="64"
-         control_name="FSBuildPrefs_BlueAxisColor"/>
+         width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsZAxisColor" />
+			<color_swatch.commit_callback
+			 function="Pref.applyUIColor"
+			 parameter="BuildToolsZAxisColor" />
+		</color_swatch>
 		<color_swatch
-         border_color="0.45098, 0.517647, 0.607843, 1"
          can_apply_immediately="true"
-         color="1, 1, 1, 1"
          follows="left|top"
          height="50"
          label="Text BG"
@@ -1682,8 +1692,14 @@
          mouse_opaque="true"
          name="colorswatchEditTextBackgroundColor"
          tool_tip="Click to open Color Picker"
-         width="64"
-         control_name="FSBuildPrefs_EditTextBackgroundColor"/>
+         width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsTextBackgroundColor" />
+			<color_swatch.commit_callback
+			 function="Pref.applyUIColor"
+			 parameter="BuildToolsTextBackgroundColor" />
+		</color_swatch>
         <spinner
          top_delta="0"
          left_delta="85"
